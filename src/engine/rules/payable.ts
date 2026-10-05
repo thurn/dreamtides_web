@@ -3,23 +3,27 @@
  * ends one with the `payToEnd` special action. A duration-bearing effect
  * registers here and keys its changes by the returned id.
  */
-import type { AbilitySource, EffectId, Side } from "../state/ids";
+import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState, PayableEffect } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { spendEnergy } from "./resources";
 import { specialActionAllowed } from "./timing";
 
-/** Registers an effect `payer` may end by paying `cost`, and returns its id. */
+/**
+ * Registers an effect `payer` may end by paying `cost`, changing the
+ * characters in `affects`, and returns its id.
+ */
 export function registerPayable(
   ctx: StepContext,
   payer: Side,
   cost: number,
   source: AbilitySource,
+  affects: readonly InstanceId[],
 ): EffectId {
   const id: EffectId = `e${ctx.state.nextEffect}`;
   ctx.state.nextEffect += 1;
-  ctx.state.payable.push({ id, payer, cost, source });
-  ctx.emit({ kind: "payableEffectRegistered", effect: id, payer, cost, source });
+  ctx.state.payable.push({ id, payer, cost, source, affects: [...affects] });
+  ctx.emit({ kind: "payableEffectRegistered", effect: id, payer, cost, source, affects: [...affects] });
   return id;
 }
 

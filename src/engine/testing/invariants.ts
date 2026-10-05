@@ -20,8 +20,11 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
       for (const id of sideState[zone]) {
         record(id, zone);
         const instance = state.instances[id];
-        if (instance?.zone !== zone || instance.owner !== side) {
-          problems.push(`${id} listed in ${side} ${zone} but recorded as ${instance?.zone ?? "missing"}`);
+        if (instance?.zone !== zone || instance.controller !== side) {
+          problems.push(`${id} listed in ${side} ${zone} but recorded as ${instance?.zone ?? "missing"} of ${instance?.controller ?? "nobody"}`);
+        } else if (zone !== "hand" && instance.owner !== side) {
+          // Only a hand may hold a card the other side owns.
+          problems.push(`${id} listed in ${side} ${zone} but owned by ${instance.owner}`);
         }
       }
     }

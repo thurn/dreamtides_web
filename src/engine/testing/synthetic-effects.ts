@@ -85,7 +85,7 @@ export const PROMPTING = {
   /** "Dissolve an enemy character." A play-time target, so it cannot be played without one. */
   dissolveEnemy: event(104, 1, {
     play: (ctx, self) => {
-      const side = instanceOf(ctx.state, self).owner;
+      const side = instanceOf(ctx.state, self).controller;
       return {
         targets: [ctx.choose<ChooseTargetsPrompt>({
           kind: "chooseTargets",
@@ -128,7 +128,7 @@ export const PROMPTING = {
   /** "X: draw X cards," with X (from 0) chosen at play time. */
   drawX: event(106, [energyX(0)], {
     play: (ctx, self) => {
-      const side = instanceOf(ctx.state, self).owner;
+      const side = instanceOf(ctx.state, self).controller;
       return {
         x: ctx.choose<ChooseNumberPrompt>({
           kind: "chooseNumber",

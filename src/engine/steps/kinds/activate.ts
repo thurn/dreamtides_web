@@ -1,13 +1,14 @@
 import { chooseModes, chooseTargets, chosenModes, collectTargets, purposeOf } from "../../effects/interpreter";
 import { abilityOrigin, activatedAbilityAt, canActivate, oncePerTurnKey, originCardId, sourceController } from "../../rules/activation";
-import { chooseCostCards, chooseX, payCosts } from "../../rules/costs";
+import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import type { AbilitySource } from "../../state/ids";
 import { opponent } from "../../state/ids";
 import type { StepDefinition } from "../types";
 
 /**
  * Activates an ability of a card in play or an emblem: play-time choices
- * (X, then modes, then targets, then the cards that pay costs), then the commit point,
+ * (X, then modes, then targets, then the costs' alternatives, optional
+ * costs, and cards), then the commit point,
  * then the costs, then the ability goes on the stack and the opponent
  * receives priority (D13).
  */
@@ -35,13 +36,13 @@ export const activate: StepDefinition<ActivateStep> = {
     const modes = chooseModes(ctx, ability.effect, side, step.source, purpose("chooseOne"));
     const specs = collectTargets(ability.effect, chosenModes(ability.effect, modes));
     const targets = chooseTargets(ctx, specs, side, step.source, purpose("target"));
-    const cards = chooseCostCards(ctx, side, step.source, ability.costs, purpose, targets.flat());
+    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, targets.flat());
     ctx.commitPoint();
-    payCosts(ctx, side, step.source, ability.costs, x, cards);
+    payCosts(ctx, side, step.source, plan);
     if (ability.oncePerTurn === true) {
       state.oncePerTurn.push(oncePerTurnKey(step.source, step.ability));
     }
-    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, modes, targets, x });
+    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, modes, targets, x, optionalPaid: plan.optionalPaid });
     ctx.emit({ kind: "abilityActivated", side, source: step.source, ability: step.ability });
     state.priority = opponent(side);
   },

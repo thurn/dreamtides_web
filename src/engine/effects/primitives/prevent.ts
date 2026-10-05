@@ -9,7 +9,8 @@ import { definePrimitive } from "../types";
 /**
  * "Prevent a card": the chosen card leaves the stack without resolving and
  * goes to its owner's void, or to `destination` for the "put it on top of
- * its owner's deck" and "into its owner's hand" variants. With `unlessPays`,
+ * its owner's deck", "into its owner's hand", and "put that card into your
+ * hand" variants. With `unlessPays`,
  * the opponent of the prevent's controller may pay that much ● to keep the
  * card on the stack. Cards that cannot be prevented are never candidates.
  */
@@ -39,7 +40,7 @@ export const preventPrimitive = definePrimitive<PreventNode>({
           continue;
         }
       }
-      preventCard(ctx, id, node.destination);
+      preventCard(ctx, id, node.destination, env.controller);
     }
   },
 });

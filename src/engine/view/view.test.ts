@@ -9,30 +9,31 @@ import { boardState } from "../testing/board";
 import { fuzzEngineCatalog, fuzzInit } from "../testing/fuzz";
 import { SYNTHETIC } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
+import { AVATAR, DREAMSIGN } from "../testing/stack-cards";
 import { view } from "./view";
 
 const catalog = fuzzEngineCatalog();
 const v = SYNTHETIC;
 const p = PROMPTING;
 
-/** Places a new instance directly into a public zone list. */
-function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("void" | "banished" | "stack")): InstanceId {
+/** Places a new instance directly into a public zone list, or into `holder`'s hand. */
+function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("void" | "banished" | "stack" | "hand"), holder: Side = owner): InstanceId {
   const id: InstanceId = `i${state.nextInstance}`;
   state.nextInstance += 1;
   state.instances[id] = {
     id,
     cardId,
     owner,
-    controller: owner,
+    controller: holder,
     zone,
     variant: { amplified: false },
     status: { exhausted: false, gainedSpark: 1, turnSpark: 0, counters: 2, created: false, reclaimed: false, x: null },
     enteredZoneAt: 3,
   };
   if (zone === "stack") {
-    state.stack.push({ kind: "card", instance: id, controller: owner, modes: [], targets: [], x: null });
+    state.stack.push({ kind: "card", instance: id, controller: owner, modes: [], targets: [], x: null, optionalPaid: [] });
   } else {
-    state.sides[owner][zone].push(id);
+    state.sides[holder][zone].push(id);
   }
   return id;
 }
@@ -55,11 +56,29 @@ function fixture() {
   const enemyFront = ids.enemy.front[0];
   const playerFront = ids.player.front[0];
   if (enemyFront === null || playerFront === null) throw new Error("fixture has empty fronts");
-  state.stack[0] = { kind: "card", instance: stacked, controller: "player", modes: [], targets: [[enemyFront, ids.enemy.hand[0]]], x: 2 };
+  state.stack[0] = { kind: "card", instance: stacked, controller: "player", modes: [], targets: [[enemyFront, ids.enemy.hand[0]]], x: 2, optionalPaid: [] };
+  state.stack.push({
+    kind: "ability",
+    source: { kind: "dreamsign", side: "player", index: 0 },
+    ability: 0,
+    origin: { kind: "dreamsign", id: DREAMSIGN.points.id },
+    controller: "player",
+    modes: [],
+    targets: [],
+    x: null,
+    optionalPaid: [true],
+  });
+  // A card the enemy owns, held in the player's hand.
+  const held = place(state, "enemy", p.dissolveEnemy.id, "hand", "player");
+  state.sides.player.avatar = { id: AVATAR.drawer.id, exhausted: true };
+  state.sides.enemy.avatar = { id: AVATAR.rally.id, exhausted: false };
+  state.sides.player.dreamsigns = [{ id: DREAMSIGN.points.id }];
+  state.payable = [{ id: "e1", payer: "enemy", cost: 2, source: { kind: "avatar", side: "player" }, affects: [enemyFront] }];
+  state.nextEffect = 2;
   state.challenge = { challengers: [playerFront], blockers: { [playerFront]: enemyFront } };
   state.result = { kind: "victory", winner: "player", reason: "score" };
   state.rng["shuffle:player"] = 4;
-  return { state, ids };
+  return { state, ids, held };
 }
 
 /** Every string in a value, keys included. */
@@ -134,10 +153,13 @@ describe("view", () => {
     }
   });
 
-  it("counts hidden zones and lists the viewer's own hand", () => {
-    const { state, ids } = fixture();
+  it("counts hidden zones and lists the viewer's own hand, including a card the opponent owns", () => {
+    const { state, ids, held } = fixture();
     const seen = view(state, "player");
-    expect(seen.sides.player.hand).toEqual({ count: 2, known: ids.player.hand });
+    expect(seen.sides.player.hand).toEqual({ count: 3, known: [...ids.player.hand, held] });
+    expect(seen.instances[held]).toMatchObject({ owner: "enemy", controller: "player", zone: "hand" });
+    expect(view(state, "enemy").instances[held]).toBeUndefined();
+    expect(view(state, "enemy").sides.player.hand).toEqual({ count: 3, known: [] });
     expect(seen.sides.enemy.hand).toEqual({ count: 2, known: [] });
     expect(seen.sides.player.deck).toEqual({ count: 2, known: [] });
     expect(seen.sides.enemy.deck).toEqual({ count: 2, known: [] });
@@ -148,7 +170,7 @@ describe("view", () => {
       const { state } = fixture();
       const seen = view(state, viewer);
       const visible = Object.values(state.instances)
-        .filter((instance) => instance.zone !== "deck" && (instance.zone !== "hand" || instance.owner === viewer))
+        .filter((instance) => instance.zone !== "deck" && (instance.zone !== "hand" || instance.controller === viewer))
         .map((instance) => instance.id);
       expect(Object.keys(seen.instances).sort()).toEqual([...visible].sort());
       for (const id of visible) {
@@ -170,6 +192,29 @@ describe("view", () => {
       expect(seen.result).toEqual(state.result);
       const stacked = (items: readonly StackItem[]) => items.map((item) => (item.kind === "card" ? item.instance : null));
       expect(stacked(seen.stack)).toEqual(stacked(state.stack));
+      expect(seen.stack[1]).toEqual(state.stack[1]);
     }
+  });
+
+  it("shows each side's avatar and dreamsigns and the effects a side may pay to end, as snapshots", () => {
+    const { state } = fixture();
+    const enemyFront = state.sides.enemy.frontRank[0];
+    for (const viewer of SIDES) {
+      const seen = view(state, viewer);
+      expect(seen.sides.player.avatar).toEqual({ id: AVATAR.drawer.id, exhausted: true });
+      expect(seen.sides.enemy.avatar).toEqual({ id: AVATAR.rally.id, exhausted: false });
+      expect(seen.sides.player.dreamsigns).toEqual([{ id: DREAMSIGN.points.id }]);
+      expect(seen.sides.enemy.dreamsigns).toEqual([]);
+      expect(seen.payable).toEqual([
+        { id: "e1", controller: "player", payer: "enemy", cost: 2, source: { kind: "avatar", side: "player" }, affects: [enemyFront] },
+      ]);
+    }
+    const seen = view(state, "player");
+    state.sides.player.avatar = { id: AVATAR.drawer.id, exhausted: false };
+    state.sides.player.dreamsigns.push({ id: DREAMSIGN.points.id });
+    state.payable = [];
+    expect(seen.sides.player.avatar?.exhausted).toBe(true);
+    expect(seen.sides.player.dreamsigns).toHaveLength(1);
+    expect(seen.payable).toHaveLength(1);
   });
 });

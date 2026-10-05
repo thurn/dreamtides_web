@@ -11,6 +11,8 @@ export interface PreventedEvent {
   /** The prevented card's controller. */
   readonly side: Side;
   readonly to: "void" | "deck" | "hand" | "banished" | null;
+  /** The side whose zone it went to: its owner, or the preventing side for "into your hand"; `null` with `to`. */
+  readonly zoneOf: Side | null;
 }
 
 export const prevented = publicEvent<PreventedEvent>("prevented");

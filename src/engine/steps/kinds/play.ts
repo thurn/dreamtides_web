@@ -1,6 +1,6 @@
 import { eventAbilities } from "../../effects/abilities";
 import { chooseModes, chooseTargets, chosenModes, collectTargets, purposeOf } from "../../effects/interpreter";
-import { chooseX, payCosts } from "../../rules/costs";
+import { chooseX, payCosts, planCosts, playCosts } from "../../rules/costs";
 import { canPlayFromHand } from "../../rules/timing";
 import { instanceOf, moveToStack } from "../../rules/zones";
 import type { InstanceId } from "../../state/ids";
@@ -8,9 +8,11 @@ import { opponent } from "../../state/ids";
 import type { StepDefinition } from "../types";
 
 /**
- * Plays a card from hand: play-time choices (X, then each event ability's
- * modes, then its targets), then the commit point, then the costs (the fixed
- * part, then X), then the card moves to the stack and the opponent receives
+ * Plays a card from the hand of the side holding it: play-time choices (X,
+ * then each event ability's modes, then its targets, then the additional
+ * costs' alternatives, optional costs, and cards), then the commit point,
+ * then the costs in printed order (the fixed part, then X, then additional
+ * costs), then the card moves to the stack and the opponent receives
  * priority (D13).
  */
 export interface PlayStep {
@@ -20,15 +22,17 @@ export interface PlayStep {
 
 export const play: StepDefinition<PlayStep> = {
   kind: "play",
-  canceller: (state, step) => state.instances[step.card]?.owner ?? null,
+  canceller: (state, step) => state.instances[step.card]?.controller ?? null,
   run(ctx, step) {
     const { state, catalog } = ctx;
     const instance = instanceOf(state, step.card);
-    const side = instance.owner;
+    // A card in hand is played by the side holding it, which may not be its owner.
+    const side = instance.controller;
     if (!canPlayFromHand(state, catalog, side, step.card)) {
       throw new Error(`Card ${step.card} cannot be played now`);
     }
     const definition = catalog.card(instance.cardId);
+    const costs = playCosts(definition, instance.variant);
     const purpose = (ability: number, role: string) => purposeOf(step.card, instance.cardId, ability, role);
     let x: number | null;
     let modes: readonly number[];
@@ -39,7 +43,7 @@ export const play: StepDefinition<PlayStep> = {
       modes = choices.modes ?? [];
       targets = choices.targets ?? [];
     } else {
-      x = chooseX(ctx, side, definition.costs, purpose(0, "chooseX"));
+      x = chooseX(ctx, side, costs, purpose(0, "chooseX"));
       const abilities = eventAbilities(definition, instance.variant);
       const abilityModes = abilities.map((ability) =>
         chooseModes(ctx, ability.effect, side, step.card, purpose(ability.ability, "chooseOne")),
@@ -55,9 +59,11 @@ export const play: StepDefinition<PlayStep> = {
       );
       modes = abilityModes.flat();
     }
+    const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
+    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets.flat()]);
     ctx.commitPoint();
-    payCosts(ctx, side, step.card, definition.costs, x, []);
-    moveToStack(ctx, step.card, side, { modes, targets, x });
+    payCosts(ctx, side, step.card, plan);
+    moveToStack(ctx, step.card, side, { modes, targets, x, optionalPaid: plan.optionalPaid });
     ctx.emit({ kind: "cardPlayed", side, instance: step.card });
     if (definition.status === "pending") {
       ctx.emit({ kind: "pendingAbility", side, cardId: instance.cardId, instance: step.card, reason: "played" });

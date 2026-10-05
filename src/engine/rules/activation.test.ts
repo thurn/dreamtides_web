@@ -43,7 +43,7 @@ describe("activated abilities on the stack", () => {
     const { state, events } = activate(start, "player", source);
     expect(events.map((event) => event.kind)).toEqual(["energyChanged", "exhaustionChanged", "abilityActivated"]);
     expect(state.stack).toEqual([
-      { kind: "ability", source, ability: 0, origin: { kind: "card", cardId: STACK.drawForEnergyAndExhaust.id, variant: { amplified: false } }, controller: "player", modes: [], targets: [], x: null },
+      { kind: "ability", source, ability: 0, origin: { kind: "card", cardId: STACK.drawForEnergyAndExhaust.id, variant: { amplified: false } }, controller: "player", modes: [], targets: [], x: null, optionalPaid: [] },
     ]);
     expect(state.priority).toBe("enemy");
     expect(engine.decision(state)).toEqual({ kind: "respond", side: "enemy" });

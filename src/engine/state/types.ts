@@ -69,6 +69,11 @@ export interface CardInstance {
   readonly id: InstanceId;
   readonly cardId: CardId;
   readonly owner: Side;
+  /**
+   * The side controlling the card: in play or on the stack, its controller;
+   * in a hand, the side whose hand holds it, which may differ from its owner;
+   * in a deck, a void, or the Banished zone, its owner.
+   */
   controller: Side;
   zone: Zone;
   readonly variant: Variant;
@@ -85,6 +90,11 @@ interface StackItemBase {
   readonly targets: readonly (readonly InstanceId[])[];
   /** The value chosen for X, if the item has an X. */
   readonly x: number | null;
+  /**
+   * Whether each optional cost was paid when the item was played, in printed
+   * order. A copy of the item keeps this list (D15).
+   */
+  readonly optionalPaid: readonly boolean[];
 }
 
 /** A played card on the stack. */
@@ -134,6 +144,8 @@ export interface PayableEffect {
   /** Energy the payer pays to end the effect. */
   readonly cost: number;
   readonly source: AbilitySource;
+  /** The characters whose changes from this effect end with it. */
+  readonly affects: readonly InstanceId[];
 }
 
 export interface SideState {
@@ -144,6 +156,7 @@ export interface SideState {
   fatigueCount: number;
   /** Top of the deck is index 0. */
   deck: InstanceId[];
+  /** Cards this side holds, including any the opponent owns. */
   hand: InstanceId[];
   void: InstanceId[];
   banished: InstanceId[];

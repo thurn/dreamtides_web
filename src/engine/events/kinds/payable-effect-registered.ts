@@ -1,4 +1,4 @@
-import type { AbilitySource, EffectId, Side } from "../../state/ids";
+import type { AbilitySource, EffectId, InstanceId, Side } from "../../state/ids";
 import { publicEvent } from "../types";
 
 /** An effect lasting "until the opponent pays N●" began; `payer` may pay `cost` to end it (C7). */
@@ -8,6 +8,8 @@ export interface PayableEffectRegisteredEvent {
   readonly payer: Side;
   readonly cost: number;
   readonly source: AbilitySource;
+  /** The characters whose changes from the effect end with it. */
+  readonly affects: readonly InstanceId[];
 }
 
 export const payableEffectRegistered = publicEvent<PayableEffectRegisteredEvent>("payableEffectRegistered");

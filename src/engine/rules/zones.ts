@@ -75,8 +75,9 @@ function detach(state: BattleState, instance: CardInstance): void {
       return;
     }
     default: {
-      const owner = state.sides[instance.owner];
-      const list = owner[instance.zone];
+      // A hand belongs to the side holding the card; every other zone list to its owner, who controls it there.
+      const holder = state.sides[instance.controller];
+      const list = holder[instance.zone];
       const index = list.indexOf(instance.id);
       if (index < 0) {
         throw new Error(`Instance ${instance.id} is missing from ${instance.zone}`);
@@ -87,22 +88,25 @@ function detach(state: BattleState, instance: CardInstance): void {
 }
 
 /**
- * Moves an instance to a non-play zone of its owner. Every zone change except
- * entering play goes through here.
+ * Moves an instance to a non-play zone of `holder`, its owner unless a card
+ * goes into another side's hand. Leaving play clears its counters (rules §
+ * Counters).
  */
-export function moveInstance(
+function relocate(
   ctx: StepContext,
   id: InstanceId,
   to: Exclude<Zone, "play" | "stack">,
-  position: "top" | "bottom" = "top",
+  position: "top" | "bottom",
+  holder: Side,
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
+  const leavingPlay = instance.zone === "play";
   detach(state, instance);
-  instance.controller = instance.owner;
+  instance.controller = holder;
   instance.zone = to;
   instance.enteredZoneAt = ++state.clock;
-  const list = state.sides[instance.owner][to];
+  const list = state.sides[holder][to];
   if (position === "top") {
     list.unshift(id);
   } else {
@@ -111,7 +115,33 @@ export function moveInstance(
   if (to !== "deck" && to !== "hand") {
     instance.status.exhausted = false;
   }
+  if (leavingPlay) {
+    instance.status.counters = 0;
+  }
   instance.status.x = null;
+}
+
+/**
+ * Moves an instance to a non-play zone of its owner. Every zone change except
+ * entering play and going into another side's hand goes through here.
+ */
+export function moveInstance(
+  ctx: StepContext,
+  id: InstanceId,
+  to: Exclude<Zone, "play" | "stack">,
+  position: "top" | "bottom" = "top",
+): void {
+  relocate(ctx, id, to, position, instanceOf(ctx.state, id).owner);
+}
+
+/**
+ * Puts a card into `side`'s hand, at the bottom. Its owner is unchanged: a
+ * card in your hand is yours to play while its owner stays its owner, and it
+ * goes to its owner's deck, void, or Banished zone when it leaves (rules §
+ * Zones → Hand).
+ */
+export function moveToHand(ctx: StepContext, id: InstanceId, side: Side): void {
+  relocate(ctx, id, "hand", "bottom", side);
 }
 
 /** Moves an instance onto the top of the stack under `controller`, with its play-time choices. */
@@ -123,7 +153,8 @@ export function moveToStack(
     readonly modes: readonly number[];
     readonly targets: readonly (readonly InstanceId[])[];
     readonly x: number | null;
-  } = { modes: [], targets: [], x: null },
+    readonly optionalPaid: readonly boolean[];
+  } = { modes: [], targets: [], x: null, optionalPaid: [] },
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
@@ -138,6 +169,7 @@ export function moveToStack(
     modes: [...choices.modes],
     targets: choices.targets.map((list) => [...list]),
     x: choices.x,
+    optionalPaid: [...choices.optionalPaid],
   });
 }
 
@@ -186,7 +218,7 @@ export function dissolve(ctx: StepContext, id: InstanceId): void {
   ctx.emit({ kind: "dissolved", instance: id, side });
 }
 
-/** Banishes a card from play to its owner's Banished zone. */
+/** Banishes a card, from play or another zone, to its owner's Banished zone. */
 export function banish(ctx: StepContext, id: InstanceId): void {
   const instance = instanceOf(ctx.state, id);
   const side = instance.controller;

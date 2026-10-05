@@ -33,6 +33,7 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
       controller: item.controller,
       variant: instance.variant,
       x: item.x,
+      optionalPaid: item.optionalPaid,
       choices: choices[index] ?? { modes: [], targets: [] },
     });
   });
@@ -66,6 +67,7 @@ function resolveAbility(ctx: StepContext, item: AbilityStackItem): void {
     controller: item.controller,
     variant: item.origin.kind === "card" ? item.origin.variant : { amplified: false },
     x: item.x,
+    optionalPaid: item.optionalPaid,
     choices: item,
   });
 }

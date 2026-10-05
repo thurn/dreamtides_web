@@ -18,6 +18,8 @@ export interface EffectEnv {
   readonly variant: Variant;
   /** The value chosen for X, or `null`. */
   readonly x: number | null;
+  /** Whether each optional cost of the item was paid, in printed order (the `costPaid` condition). */
+  readonly optionalPaid: readonly boolean[];
   /** The mode chosen at play time for a modal node of this effect, or `null` for a node off the chosen path. */
   modeOf(node: EffectNode): number | null;
   /** The targets chosen at play time for a target spec in this effect, or `null` if none were chosen. */

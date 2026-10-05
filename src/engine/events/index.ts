@@ -14,6 +14,7 @@ import { cardDrawn, type CardDrawnEvent } from "./kinds/card-drawn";
 import { cardPlayed, type CardPlayedEvent } from "./kinds/card-played";
 import { ceasedToExist, type CeasedToExistEvent } from "./kinds/ceased-to-exist";
 import { challengersDesignated, type ChallengersDesignatedEvent } from "./kinds/challengers-designated";
+import { countersChanged, type CountersChangedEvent } from "./kinds/counters-changed";
 import { discarded, type DiscardedEvent } from "./kinds/discarded";
 import { dissolved, type DissolvedEvent } from "./kinds/dissolved";
 import { dreamwellDrawn, type DreamwellDrawnEvent } from "./kinds/dreamwell-drawn";
@@ -33,6 +34,7 @@ import { prevented, type PreventedEvent } from "./kinds/prevented";
 import { repositioned, type RepositionedEvent } from "./kinds/repositioned";
 import { resolved, type ResolvedEvent } from "./kinds/resolved";
 import { returnedToHand, type ReturnedToHandEvent } from "./kinds/returned-to-hand";
+import { revealed, type RevealedEvent } from "./kinds/revealed";
 import { sparkGained, type SparkGainedEvent } from "./kinds/spark-gained";
 import { turnStarted, type TurnStartedEvent } from "./kinds/turn-started";
 import type { EventDefinition } from "./types";
@@ -49,6 +51,7 @@ export type EngineEvent =
   | CardPlayedEvent
   | CeasedToExistEvent
   | ChallengersDesignatedEvent
+  | CountersChangedEvent
   | DiscardedEvent
   | DissolvedEvent
   | DreamwellDrawnEvent
@@ -68,6 +71,7 @@ export type EngineEvent =
   | RepositionedEvent
   | ResolvedEvent
   | ReturnedToHandEvent
+  | RevealedEvent
   | SparkGainedEvent
   | TurnStartedEvent;
 
@@ -87,6 +91,7 @@ export const EVENT_DEFINITIONS = {
   cardPlayed,
   ceasedToExist,
   challengersDesignated,
+  countersChanged,
   discarded,
   dissolved,
   dreamwellDrawn,
@@ -106,6 +111,7 @@ export const EVENT_DEFINITIONS = {
   repositioned,
   resolved,
   returnedToHand,
+  revealed,
   sparkGained,
   turnStarted,
 } as const satisfies { readonly [K in EngineEventKind]: EventDefinition<EventOf<K>> };

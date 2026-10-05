@@ -89,7 +89,14 @@ export type Duration = "permanent" | "untilEndOfTurn";
 /** A condition an effect checks when it resolves. */
 export type Condition =
   | { readonly cond: "controls"; readonly selector: CharacterSelector; readonly atLeast: number }
-  | { readonly cond: "energyAtLeast"; readonly amount: number };
+  | { readonly cond: "energyAtLeast"; readonly amount: number }
+  /**
+   * "If the additional cost was paid": whether the item's optional cost at
+   * index `optional` (in printed order) was paid when it was played. A copy
+   * counts the original's optional costs as paid (rules § Playing Cards and
+   * the Stack → Copies on the stack).
+   */
+  | { readonly cond: "costPaid"; readonly optional: number };
 
 /** Keywords printed on a card. */
 export type Keyword = "vengeful" | "awakened" | "cannotBePrevented";
@@ -116,19 +123,53 @@ export interface EnergyXCost {
 /** A cost paid to play a card: its printed energy, fixed and X parts in printed order ("2 X" pays 2● first, then X●). */
 export type CardCost = EnergyCost | EnergyXCost;
 
-/**
- * One cost of an activated ability or a card (engine-design § Costs). Choices
- * among costs are play-time prompts; payment happens after the commit point.
- */
-export type Cost =
+/** Which cards in a hidden or void zone a cost may use. */
+export interface CardFilter {
+  readonly cardType?: "character" | "event";
+  readonly subtype?: CardSubtype;
+}
+
+/** A cost that pays one fixed thing (no X and no choice between costs). */
+export type PaymentCost =
   | EnergyCost
-  | EnergyXCost
   /** ☾: exhausts the source, a ready back-rank character or the avatar. */
   | { readonly cost: "exhaustSelf" }
   /** Abandon characters you control that match the selector. */
   | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: number }
   /** Discard cards from your hand. */
-  | { readonly cost: "discard"; readonly count: number };
+  | { readonly cost: "discard"; readonly count: number }
+  /** N⧗: spend counters stored on the source (rules § Counters). */
+  | { readonly cost: "counters"; readonly amount: number }
+  /** Banish cards from your void that match the filter. */
+  | { readonly cost: "banishFromVoid"; readonly count: number; readonly filter: CardFilter }
+  /** Reveal cards from your hand that match the filter; they stay in hand. */
+  | { readonly cost: "reveal"; readonly count: number; readonly filter: CardFilter };
+
+/** "A or B": the player chooses one alternative and pays every cost in it. */
+export interface ChoiceCost {
+  readonly cost: "choice";
+  readonly options: readonly (readonly PaymentCost[])[];
+}
+
+/**
+ * "You may A": the player chooses whether to pay. Whether it was paid is
+ * recorded on the stack item, and effects read it with the `costPaid`
+ * condition.
+ */
+export interface OptionalCost {
+  readonly cost: "optional";
+  readonly costs: readonly PaymentCost[];
+}
+
+/** A card's additional cost ("To play this card, …"): anything but X. */
+export type AdditionalCost = PaymentCost | ChoiceCost | OptionalCost;
+
+/**
+ * One cost of an activated ability or a card (engine-design § Costs). X is
+ * only ever a top-level cost. Choices among costs are play-time prompts;
+ * payment happens after the commit point, in printed order.
+ */
+export type Cost = AdditionalCost | EnergyXCost;
 
 /** "Cost: Effect" — an ability its controller activates; it goes on the stack. */
 export interface ActivatedAbility {
@@ -139,8 +180,18 @@ export interface ActivatedAbility {
   readonly oncePerTurn?: boolean;
 }
 
+/**
+ * "To play this card, …" or "You may … to play this card": costs a card adds
+ * to its printed energy cost. They are chosen and paid with it, after it.
+ */
+export interface AdditionalCostAbility {
+  readonly kind: "additionalCost";
+  readonly costs: readonly AdditionalCost[];
+}
+
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
+  | AdditionalCostAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }
   | ActivatedAbility;
 

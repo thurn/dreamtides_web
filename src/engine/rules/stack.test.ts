@@ -19,7 +19,7 @@ function putOnStack(state: BattleState, id: InstanceId, priority: Side): void {
   if (instance === undefined) throw new Error(`no ${id}`);
   state.sides[instance.owner].hand = state.sides[instance.owner].hand.filter((card) => card !== id);
   instance.zone = "stack";
-  state.stack.push({ kind: "card", instance: id, controller: instance.owner, modes: [], targets: [], x: null });
+  state.stack.push({ kind: "card", instance: id, controller: instance.owner, modes: [], targets: [], x: null, optionalPaid: [] });
   state.priority = priority;
 }
 
@@ -171,7 +171,7 @@ describe("timing windows", () => {
       state.sides[side].hand.push(extra.id);
       putOnStack(state, extra.id, side);
     }
-    state.payable.push({ id: "e1", payer: side, cost: 1, source: ids[other].hand[0] });
+    state.payable.push({ id: "e1", payer: side, cost: 1, source: ids[other].hand[0], affects: [] });
 
     const legal = engine.legalActions(state, side);
     const speedOf = (cardId: CardId) => speedList.find((speed) => SPEED_CARDS[speed].card.id === cardId || SPEED_CARDS[speed].ability.id === cardId);
@@ -201,7 +201,7 @@ describe("paying to end an effect (C7)", () => {
       active: "player",
       phase: "day",
       player: { hand: [STACK.payableEffect.id, v.interruptEvent.id], energy: 1, deck: [v.vanilla1.id] },
-      enemy: { energy: 3, deck: [v.vanilla1.id] },
+      enemy: { energy: 3, deck: [v.vanilla1.id], back: [v.vanilla1.id] },
     });
     const { state, events } = play(start, "player", ids.player.hand[0]);
     return { state, events, ids };
@@ -209,8 +209,8 @@ describe("paying to end an effect (C7)", () => {
 
   it("registers a payable effect the opponent may end in its Dusk window, without using the stack", () => {
     const { state: day, events, ids } = registered();
-    expect(day.payable).toEqual([{ id: "e1", payer: "enemy", cost: 2, source: ids.player.hand[0] }]);
-    expect(events.some((event) => event.kind === "payableEffectRegistered")).toBe(true);
+    expect(day.payable).toEqual([{ id: "e1", payer: "enemy", cost: 2, source: ids.player.hand[0], affects: [ids.enemy.back[0]] }]);
+    expect(events).toContainEqual({ kind: "payableEffectRegistered", effect: "e1", payer: "enemy", cost: 2, source: ids.player.hand[0], affects: [ids.enemy.back[0]] });
     // Not during the player's Day.
     expect(engine.legalActions(day, "enemy")).toEqual([]);
     const dusk = apply(day, "player", { kind: "pass" }).state;

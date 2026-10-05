@@ -129,6 +129,13 @@ the Draw phase and by card effects.
 number of cards during the turn, but the active player discards down to 10
 during the Ending phase, choosing which cards to discard.
 
+An effect can put a card the opponent owns into your hand, as in "Prevent a
+played card, then put that card into your hand." That card is in your hand
+like any other: you may play it, discard it, or use it to pay a cost, and you
+control it when you play it. Its owner does not change, so whenever it would
+go to a deck, a void, the Banished zone, or its owner's hand, it goes to its
+owner's.
+
 **Stack** — A temporary zone for cards that have been played but not yet
 resolved. While a card is on the stack, an opponent may respond with Interrupts.
 Characters move into play when they resolve; events move to the void.
@@ -472,8 +479,20 @@ It does not use the stack and cannot be responded to.
 **Additional costs** are extra costs required to play a card, written as "To play
 this event, do X." The card cannot be played unless the additional cost is paid.
 
+An additional cost may offer alternatives, as in "To play this card, abandon a
+character or discard a card." The player chooses one alternative they can pay
+as they play the card and pays only that one. The card cannot be played if no
+alternative can be paid.
+
 **Optional additional costs** are written as "You may X to play this event",
-paired with "If the additional cost was paid, do Y."
+paired with "If the additional cost was paid, do Y." The player chooses whether
+to pay as they play the card, and can choose to pay only if they can pay the
+whole cost. Activated abilities may have alternative and optional costs in the
+same way.
+
+Other costs include spending counters stored on the card itself ("1⧗, ☾: …"),
+banishing cards from your void, and revealing cards from your hand. A revealed
+card stays in your hand.
 
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
@@ -596,9 +615,11 @@ it is still in hand, so it must be played the turn it is drawn.
 **Vengeful** — When this character loses a challenge, it dissolves the opposing
 enemy character. In effect both characters in the challenge are dissolved.
 
-**Prevent** — Counter a card on the stack, sending it to the void without
-resolving. Prevent effects are always Interrupts. Variants include conditional
-forms such as "Prevent an event unless the opponent pays 2●."
+**Prevent** — Counter a card on the stack, sending it to its owner's void
+without resolving. Prevent effects are always Interrupts. Variants include
+conditional forms such as "Prevent an event unless the opponent pays 2●," and
+forms that send the card elsewhere: on top of its owner's deck, into its
+owner's hand, or into your hand (see [Zones](#zones) → Hand).
 
 **Abandon** — Move one of your own characters from play to the void. Abandon
 cannot be prevented and targets only your own characters, and it fires the

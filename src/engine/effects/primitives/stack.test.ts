@@ -12,6 +12,7 @@ import { DSL, DSL_CARDS } from "../../testing/dsl-cards";
 import { invariantViolations } from "../../testing/invariants";
 import { STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "../../testing/stack-cards";
 import { SYNTHETIC, testCatalog } from "../../testing/synthetic-cards";
+import { view } from "../../view/view";
 
 const engine = createEngine(testCatalog([...DSL_CARDS, ...STACK_CARDS], SYNTHETIC_EMBLEMS));
 const v = SYNTHETIC;
@@ -38,7 +39,7 @@ function playAndAnswer(player: CardId, enemy: CardId, answers: readonly Answer[]
 describe("prevent", () => {
   it("sends a prevented event to its owner's void without resolving it", () => {
     const { state, events, played } = playAndAnswer(DSL.drawTwo.id, STACK.preventEvent.id);
-    expect(events).toContainEqual({ kind: "prevented", instance: played, side: "player", to: "void" });
+    expect(events).toContainEqual({ kind: "prevented", instance: played, side: "player", to: "void", zoneOf: "player" });
     expect(events.some((event) => event.kind === "resolved" && event.instance === played)).toBe(false);
     expect(state.sides.player.void).toEqual([played]);
     expect(state.sides.player.hand).toEqual([]);
@@ -51,6 +52,32 @@ describe("prevent", () => {
     expect(deckTop.state.sides.player.backRank.every((slot) => slot === null)).toBe(true);
     const hand = playAndAnswer(DSL.drawTwo.id, STACK.preventToHand.id);
     expect(hand.state.sides.player.hand).toEqual([hand.played]);
+    expect(hand.events).toContainEqual({ kind: "prevented", instance: hand.played, side: "player", to: "hand", zoneOf: "player" });
+  });
+
+  it("puts a prevented card into the preventing player's hand, who may play it while its owner stays its owner", () => {
+    const { state, events, played } = playAndAnswer(DSL.drawTwo.id, STACK.preventToYourHand.id);
+    expect(events).toContainEqual({ kind: "prevented", instance: played, side: "player", to: "hand", zoneOf: "enemy" });
+    expect(state.sides.player.hand).toEqual([]);
+    expect(state.sides.enemy.hand).toEqual([played]);
+    expect(state.instances[played]).toMatchObject({ zone: "hand", owner: "player", controller: "enemy" });
+    // The holder sees it in its hand; its owner does not.
+    expect(view(state, "enemy").sides.enemy.hand).toEqual({ count: 1, known: [played] });
+    expect(view(state, "player").sides.enemy.hand).toEqual({ count: 1, known: [] });
+    expect(view(state, "player").instances[played]).toBeUndefined();
+
+    const later = structuredClone(state);
+    later.turn = { ...later.turn, active: "enemy", phase: "day" };
+    later.sides.enemy.currentEnergy = 3;
+    expect(engine.legalActions(later, "enemy")).toContainEqual({ kind: "play", card: played, from: "hand" });
+    const { state: after, events: resolved } = engine.apply(later, "enemy", { kind: "play", card: played, from: "hand" }, NO_PROMPTS);
+    expect(invariantViolations(after, engine.catalog)).toEqual([]);
+    expect(resolved).toContainEqual({ kind: "cardPlayed", side: "enemy", instance: played });
+    // It resolves for the side that played it, then goes to its owner's void.
+    expect(after.sides.enemy.hand).toHaveLength(2);
+    expect(after.sides.enemy.void).toEqual(state.sides.enemy.void);
+    expect(after.sides.player.void).toEqual([played]);
+    expect(after.instances[played]).toMatchObject({ zone: "void", owner: "player", controller: "player" });
   });
 
   it("lets the opponent pay to keep the card, or decline and lose it", () => {
@@ -74,7 +101,7 @@ describe("prevent", () => {
       state.instances[played].status.created = true;
     });
     expect(created.state.instances[created.played]).toBeUndefined();
-    expect(created.events).toContainEqual({ kind: "prevented", instance: created.played, side: "player", to: null });
+    expect(created.events).toContainEqual({ kind: "prevented", instance: created.played, side: "player", to: null, zoneOf: null });
     expect(created.events).toContainEqual({ kind: "ceasedToExist", instance: created.played });
     expect(created.state.sides.player.hand).toEqual([]);
     expect(created.state.sides.player.void).toEqual([]);
@@ -109,13 +136,13 @@ describe("prevent", () => {
     const put = (id: InstanceId, controller: Side) => {
       state.sides[controller].hand = [];
       state.instances[id].zone = "stack";
-      state.stack.push({ kind: "card", instance: id, controller, modes: [], targets: [], x: null });
+      state.stack.push({ kind: "card", instance: id, controller, modes: [], targets: [], x: null, optionalPaid: [] });
     };
     const event = ids.player.hand[0];
     const character = ids.enemy.hand[0];
     put(event, "player");
     put(character, "enemy");
-    state.stack.push({ kind: "ability", source: ids.player.back[0]!, ability: 0, origin: { kind: "card", cardId: STACK.fastPump.id, variant: { amplified: false } }, controller: "player", modes: [], targets: [], x: null });
+    state.stack.push({ kind: "ability", source: ids.player.back[0]!, ability: 0, origin: { kind: "card", cardId: STACK.fastPump.id, variant: { amplified: false } }, controller: "player", modes: [], targets: [], x: null, optionalPaid: [] });
     const match = (selector: ReturnType<typeof stackItem>) => matchingStackItems(state, engine.catalog, selector, "player", "i999");
     expect(match(stackItem())).toEqual([character, event]);
     expect(match(stackItem({ controller: "opponent" }))).toEqual([character]);
@@ -138,7 +165,7 @@ describe("prevent", () => {
       start.sides[owner].hand = start.sides[owner].hand.filter((card) => card !== id);
       start.instances[id].zone = "stack";
       start.instances[id].controller = controller;
-      start.stack.push({ kind: "card", instance: id, controller, modes: [], targets: targets.map((list) => [...list]), x: null });
+      start.stack.push({ kind: "card", instance: id, controller, modes: [], targets: targets.map((list) => [...list]), x: null, optionalPaid: [] });
     }
     start.priority = "player";
     const { state, events } = engine.apply(start, "player", { kind: "pass" }, NO_PROMPTS);

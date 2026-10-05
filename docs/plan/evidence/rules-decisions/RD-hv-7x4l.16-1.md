@@ -1,0 +1,5 @@
+# RD-hv-7x4l.16-1: A card put into your hand is yours to play while its owner stays its owner
+- Ladder: 5 (simplest reading consistent with every affected card text; step 4, the MTG analog that a card always goes to its owner's hand, contradicts the printed "your hand"; steps 1–3 are silent: no decision covers it, the prototype has no such move, and the Rust engine does not implement the card)
+- rules.md: § Zones → Hand; § Keywords and Effects → Prevent
+- Affects: 1654d50f-815d-4172-b46b-8baa34a124db
+- Why: Overwhelm reads "Prevent a played card, then put that card into your hand." Sending the card to its owner's hand would make "your hand" meaningless and hand the card back to the opponent. The card goes to the preventing player's hand and is used there like any card in hand: that player may play, discard, or pay costs with it and controls it once played. Ownership never changes, so every later move to a deck, void, Banished zone, or "its owner's hand" goes to the owner's zone. The holder sees the card; the engine tracks a hand by the side holding each card, so hand lists may hold cards the other side owns.

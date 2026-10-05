@@ -1,20 +1,52 @@
 /**
  * Costs of cards and activated abilities (rules § Costs, Requirements, and
- * X). Cost choices are play-time prompts before the commit point; payment
- * happens after it, all before the item goes on the stack.
+ * X). Cost choices — X, which alternative of an "A or B" cost, whether to pay
+ * an optional cost, and the cards that pay — are play-time prompts before the
+ * commit point; payment happens after it, all before the item goes on the
+ * stack.
  */
+import type { EngineCardDefinition, EngineCatalog } from "../catalog";
 import { matchingCharacters } from "../dsl/selectors";
 import { fixedEnergy, minimumEnergy, xCost } from "../dsl/energy";
-import type { Cost } from "../dsl/types";
-import type { ChooseCardsPrompt, ChooseNumberPrompt, PromptPurpose } from "../prompts/types";
+import type { CardFilter, Cost, EnergyXCost, PaymentCost, Variant } from "../dsl/types";
+import type {
+  ChooseCardsPrompt,
+  ChooseModePrompt,
+  ChooseNumberPrompt,
+  ConfirmPrompt,
+  PromptPurpose,
+} from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { discardCard, spendEnergy } from "./resources";
-import { instanceOf, moveInstance, slotOf } from "./zones";
+import { banish, instanceOf, moveInstance, slotOf } from "./zones";
 
-/** Cards chosen to pay a list of costs, one list per cost in order (empty for costs without a choice). */
-export type CostCards = readonly (readonly InstanceId[])[];
+/** One cost to pay after the commit point, with the cards chosen for it. */
+export interface PlannedCost {
+  readonly cost: PaymentCost | EnergyXCost;
+  readonly cards: readonly InstanceId[];
+}
+
+/** How a list of costs will be paid, settled by play-time prompts before the commit point. */
+export interface CostPlan {
+  readonly x: number | null;
+  /** The costs to pay, in printed order, with each chosen alternative's costs in place of its choice. */
+  readonly payments: readonly PlannedCost[];
+  /** Whether each optional cost will be paid, in printed order. */
+  readonly optionalPaid: readonly boolean[];
+}
+
+/**
+ * Every cost of playing a card as `variant`: its printed energy, then each
+ * additional cost ("To play this card, …") in printed order.
+ */
+export function playCosts(definition: EngineCardDefinition, variant: Variant): Cost[] {
+  return [
+    ...definition.costs,
+    ...definition.abilities(variant).flatMap((ability) => (ability.kind === "additionalCost" ? ability.costs : [])),
+  ];
+}
 
 /**
  * Chooses X as a play-time prompt when the costs have an X part: from its
@@ -40,8 +72,8 @@ export function chooseX(
 
 /**
  * Whether `source` can pay a ☾ cost now: the avatar while ready, or a ready
- * character in its controller's back rank. Front-rank characters and
- * dreamsigns cannot pay ☾ (rules § Exhaust and Awaken).
+ * character in its controller's back rank. Front-rank characters, cards in
+ * other zones, and dreamsigns cannot pay ☾ (rules § Exhaust and Awaken).
  */
 export function canPayExhaust(state: BattleState, source: AbilitySource): boolean {
   if (typeof source !== "string") {
@@ -54,9 +86,19 @@ export function canPayExhaust(state: BattleState, source: AbilitySource): boolea
   );
 }
 
+/** Counters stored on `source`: a card's ⧗; an emblem stores none. */
+function storedCounters(state: BattleState, source: AbilitySource): number {
+  return typeof source === "string" ? (state.instances[source]?.status.counters ?? 0) : 0;
+}
+
+function sum(values: readonly number[]): number {
+  return values.reduce((total, value) => total + value, 0);
+}
+
 /**
- * Whether `side` could pay the costs, apart from the cards chosen for them:
- * the energy (with X at its minimum) and any ☾. The dry run checks the choices.
+ * Whether `side` could pay the mandatory costs that need no card choice:
+ * the energy (with X at its minimum), any ☾, and any ⧗. The dry run checks
+ * the card choices, alternatives, and optional costs.
  */
 export function costsPayable(
   state: BattleState,
@@ -65,50 +107,149 @@ export function costsPayable(
   costs: readonly Cost[],
 ): boolean {
   if (minimumEnergy(costs) > state.sides[side].currentEnergy) return false;
+  const counters = sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
+  if (counters > storedCounters(state, source)) return false;
   return costs.every((cost) => cost.cost !== "exhaustSelf" || canPayExhaust(state, source));
 }
 
+function matchesFilter(state: BattleState, catalog: EngineCatalog, id: InstanceId, filter: CardFilter): boolean {
+  const definition = catalog.card(instanceOf(state, id).cardId);
+  return (
+    (filter.cardType === undefined || definition.cardType === filter.cardType) &&
+    (filter.subtype === undefined || definition.subtype === filter.subtype)
+  );
+}
+
+/** A cost paid with chosen cards. */
+type ChoosingCost = Extract<PaymentCost, { readonly count: number }>;
+
+function choosesCards(cost: PaymentCost): cost is ChoosingCost {
+  return "count" in cost;
+}
+
+/** The cards that could pay a card-choosing cost, before excluding cards already used. */
+function cardCandidates(
+  state: BattleState,
+  catalog: EngineCatalog,
+  side: Side,
+  source: AbilitySource,
+  cost: ChoosingCost,
+): InstanceId[] {
+  switch (cost.cost) {
+    case "abandon":
+      return matchingCharacters(state, catalog, cost.selector, side, source);
+    case "discard":
+      return [...state.sides[side].hand];
+    case "reveal":
+      return state.sides[side].hand.filter((id) => matchesFilter(state, catalog, id, cost.filter));
+    case "banishFromVoid":
+      return state.sides[side].void.filter((id) => matchesFilter(state, catalog, id, cost.filter));
+  }
+}
+
+/** The role of the prompt choosing the cards for a cost. */
+const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], string>> = {
+  abandon: "abandonCost",
+  discard: "discardCost",
+  reveal: "revealCost",
+  banishFromVoid: "banishCost",
+};
+
 /**
- * Chooses the cards that pay each cost, as play-time prompts. Cards in
- * `excluded` (the ability's targets) and cards chosen for earlier costs are
- * not candidates: a card used to pay a cost is never also a target of the
- * same ability (rules § Targeting).
+ * Settles how the costs will be paid, as play-time prompts in printed order:
+ * which alternative of each "A or B" cost (an alternative is legal when it
+ * can be paid), whether to pay each optional cost (asked only when it can be
+ * paid), and the cards that pay each card-choosing cost. Cards in `excluded`
+ * — the card being played and the ability's targets — and cards chosen for
+ * earlier costs are not candidates: a card used to pay a cost is never also
+ * a target of the same ability (rules § Targeting). A mandatory cost that
+ * cannot be paid raises an empty prompt, which makes the play illegal.
  */
-export function chooseCostCards(
+export function planCosts(
   ctx: StepContext,
   side: Side,
   source: AbilitySource,
   costs: readonly Cost[],
+  x: number | null,
   purpose: (role: string) => PromptPurpose,
   excluded: readonly InstanceId[],
-): CostCards {
+): CostPlan {
+  const { state, catalog } = ctx;
   const used = [...excluded];
-  return costs.map((cost) => {
-    let candidates: InstanceId[];
-    let role: string;
-    switch (cost.cost) {
-      case "abandon":
-        candidates = matchingCharacters(ctx.state, ctx.catalog, cost.selector, side, source);
-        role = "abandonCost";
-        break;
-      case "discard":
-        candidates = [...ctx.state.sides[side].hand];
-        role = "discardCost";
-        break;
-      default:
-        return [];
+  let energyLeft = state.sides[side].currentEnergy - fixedEnergy(costs) - (x ?? 0);
+  let countersLeft = storedCounters(state, source) - sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
+  let exhaustFree = canPayExhaust(state, source) && !costs.some((cost) => cost.cost === "exhaustSelf");
+  const payments: PlannedCost[] = [];
+  const optionalPaid: boolean[] = [];
+
+  /** Whether every cost in a nested list could be paid on top of what is already committed. */
+  const affordable = (list: readonly PaymentCost[]): boolean => {
+    if (sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))) > energyLeft) return false;
+    if (sum(list.map((cost) => (cost.cost === "counters" ? cost.amount : 0))) > countersLeft) return false;
+    const exhausts = list.filter((cost) => cost.cost === "exhaustSelf").length;
+    if (exhausts > (exhaustFree ? 1 : 0)) return false;
+    const taken = new Set(used);
+    for (const cost of list) {
+      if (!choosesCards(cost)) continue;
+      const pool = cardCandidates(state, catalog, side, source, cost).filter((id) => !taken.has(id));
+      if (pool.length < cost.count) return false;
+      for (const id of pool.slice(0, cost.count)) taken.add(id);
     }
+    return true;
+  };
+
+  /** Plans one payment cost; `nested` costs are budgeted here, top-level fixed parts were budgeted up front. */
+  const plan = (cost: PaymentCost, nested: boolean): void => {
+    if (nested) {
+      if (cost.cost === "energy") energyLeft -= cost.amount;
+      if (cost.cost === "counters") countersLeft -= cost.amount;
+      if (cost.cost === "exhaustSelf") exhaustFree = false;
+    }
+    if (!choosesCards(cost)) {
+      payments.push({ cost, cards: [] });
+      return;
+    }
+    const candidates = cardCandidates(state, catalog, side, source, cost);
     const chosen = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
       side,
-      purpose: purpose(role),
+      purpose: purpose(CARD_ROLE[cost.cost]),
       candidates: candidates.filter((id) => !used.includes(id)),
       min: cost.count,
       max: cost.count,
     });
     used.push(...chosen);
-    return [...chosen];
-  });
+    payments.push({ cost, cards: [...chosen] });
+  };
+
+  for (const cost of costs) {
+    switch (cost.cost) {
+      case "energyX":
+        payments.push({ cost, cards: [] });
+        break;
+      case "choice": {
+        const choice = ctx.choose<ChooseModePrompt>({
+          kind: "chooseMode",
+          side,
+          purpose: purpose("chooseCost"),
+          options: cost.options.map((option, index) => ({ mode: index, legal: affordable(option) })),
+        });
+        for (const part of cost.options[choice] ?? []) plan(part, true);
+        break;
+      }
+      case "optional": {
+        const pays =
+          affordable(cost.costs) &&
+          ctx.choose<ConfirmPrompt>({ kind: "confirm", side, purpose: purpose("optionalCost") });
+        optionalPaid.push(pays);
+        if (pays) for (const part of cost.costs) plan(part, true);
+        break;
+      }
+      default:
+        plan(cost, false);
+    }
+  }
+  return { x, payments, optionalPaid };
 }
 
 /** Exhausts a source to pay a ☾ cost. */
@@ -124,39 +265,50 @@ function exhaustForCost(ctx: StepContext, source: AbilitySource): void {
   ctx.emit({ kind: "exhaustionChanged", instance: source, exhausted: true });
 }
 
+/** Spends ⧗ stored on a card to pay a cost. */
+function spendCounters(ctx: StepContext, source: AbilitySource, amount: number): void {
+  if (typeof source !== "string") throw new Error("an emblem stores no counters");
+  const status = instanceOf(ctx.state, source).status;
+  if (amount > status.counters) throw new Error(`${source} cannot pay ${String(amount)}⧗`);
+  status.counters -= amount;
+  ctx.emit({ kind: "countersChanged", instance: source, counters: status.counters });
+}
+
 /** Abandons a character `side` controls: it moves from play to its owner's void (rules § Abandon). */
 export function abandonCharacter(ctx: StepContext, side: Side, id: InstanceId): void {
   moveInstance(ctx, id, "void");
   ctx.emit({ kind: "abandoned", instance: id, side });
 }
 
-/** Pays every cost, in printed order, with X and the cards chosen before the commit point. */
-export function payCosts(
-  ctx: StepContext,
-  side: Side,
-  source: AbilitySource,
-  costs: readonly Cost[],
-  x: number | null,
-  cards: CostCards,
-): void {
-  costs.forEach((cost, index) => {
+/** Pays every planned cost, in order, after the commit point. */
+export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, plan: CostPlan): void {
+  for (const { cost, cards } of plan.payments) {
     switch (cost.cost) {
       case "energy":
         spendEnergy(ctx, side, cost.amount);
-        return;
+        break;
       case "energyX":
-        if (x === null) throw new Error("An X cost is paid only after X is chosen");
-        spendEnergy(ctx, side, x);
-        return;
+        if (plan.x === null) throw new Error("An X cost is paid only after X is chosen");
+        spendEnergy(ctx, side, plan.x);
+        break;
       case "exhaustSelf":
         exhaustForCost(ctx, source);
-        return;
+        break;
+      case "counters":
+        spendCounters(ctx, source, cost.amount);
+        break;
       case "abandon":
-        for (const id of cards[index] ?? []) abandonCharacter(ctx, side, id);
-        return;
+        for (const id of cards) abandonCharacter(ctx, side, id);
+        break;
       case "discard":
-        for (const id of cards[index] ?? []) discardCard(ctx, side, id);
-        return;
+        for (const id of cards) discardCard(ctx, side, id);
+        break;
+      case "banishFromVoid":
+        for (const id of cards) banish(ctx, id);
+        break;
+      case "reveal":
+        ctx.emit({ kind: "revealed", side, instances: [...cards] });
+        break;
     }
-  });
+  }
 }

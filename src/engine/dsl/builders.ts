@@ -4,12 +4,19 @@ import type { Effect } from "../effects/registry";
 import type {
   Ability,
   ActivatedAbility,
+  AdditionalCost,
+  AdditionalCostAbility,
   AllSpec,
+  CardFilter,
   CharacterSelector,
+  ChoiceCost,
+  Condition,
   Cost,
   EnergyCost,
   EnergyXCost,
   Keyword,
+  OptionalCost,
+  PaymentCost,
   SelfSpec,
   Speed,
   StackItemSelector,
@@ -47,18 +54,53 @@ export function energyX(min = 1): EnergyXCost {
 }
 
 /** "☾". */
-export function exhaustSelf(): Cost {
+export function exhaustSelf(): PaymentCost {
   return { cost: "exhaustSelf" };
 }
 
 /** "Abandon a character" (or N characters) matching the selector; always your own. */
-export function abandonCost(extra: Omit<CharacterSelector, "controller"> = {}, count = 1): Cost {
+export function abandonCost(extra: Omit<CharacterSelector, "controller"> = {}, count = 1): PaymentCost {
   return { cost: "abandon", selector: { controller: "you", ...extra }, count };
 }
 
 /** "Discard N cards" as a cost. */
-export function discardCost(count = 1): Cost {
+export function discardCost(count = 1): PaymentCost {
   return { cost: "discard", count };
+}
+
+/** "N⧗": spend counters stored on the source. */
+export function countersCost(amount: number): PaymentCost {
+  return { cost: "counters", amount };
+}
+
+/** "Banish N cards from your void" (matching the filter) as a cost. */
+export function banishFromVoidCost(count = 1, filter: CardFilter = {}): PaymentCost {
+  return { cost: "banishFromVoid", count, filter };
+}
+
+/** "Reveal N cards from your hand" (matching the filter) as a cost. */
+export function revealCost(count = 1, filter: CardFilter = {}): PaymentCost {
+  return { cost: "reveal", count, filter };
+}
+
+/** "A or B": each option is the list of costs paid when it is chosen. */
+export function choiceCost(...options: readonly (readonly PaymentCost[])[]): ChoiceCost {
+  return { cost: "choice", options };
+}
+
+/** "You may A": the costs are paid only if the player chooses to. */
+export function optionalCost(...costs: readonly PaymentCost[]): OptionalCost {
+  return { cost: "optional", costs };
+}
+
+/** "To play this card, …": costs added to the card's printed energy cost. */
+export function additionalCost(...costs: readonly AdditionalCost[]): AdditionalCostAbility {
+  return { kind: "additionalCost", costs };
+}
+
+/** "If the additional cost was paid": the item's optional cost at `optional` (printed order) was paid. */
+export function costPaid(optional = 0): Condition {
+  return { cond: "costPaid", optional };
 }
 
 /** Cards on the stack: by controller relative to the effect's controller, and card type. */

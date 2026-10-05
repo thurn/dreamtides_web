@@ -268,6 +268,8 @@ export function checkCondition(ctx: StepContext, condition: Condition, env: Effe
       );
     case "energyAtLeast":
       return ctx.state.sides[env.controller].currentEnergy >= condition.amount;
+    case "costPaid":
+      return env.optionalPaid[condition.optional] === true;
   }
 }
 
@@ -323,6 +325,8 @@ export interface ResolveOptions {
   readonly controller: Side;
   readonly variant: Variant;
   readonly x: number | null;
+  /** Whether each optional cost of the item was paid, in printed order. */
+  readonly optionalPaid: readonly boolean[];
   /** Modes and targets chosen at play time, in walk order. */
   readonly choices: EffectChoices;
 }
@@ -337,6 +341,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     controller: options.controller,
     variant: options.variant,
     x: options.x,
+    optionalPaid: options.optionalPaid,
     modeOf(node) {
       return chosen.get(node) ?? null;
     },

@@ -1,4 +1,5 @@
-import type { CardId, InstanceId, Side, Zone } from "../state/ids";
+import type { AbilitySource, AvatarId, CardId, DreamsignId, EffectId, InstanceId, Side, Zone } from "../state/ids";
+import { opponent } from "../state/ids";
 import type {
   BattleConfig,
   BattleResult,
@@ -33,6 +34,31 @@ export interface HiddenZoneView {
   readonly known: readonly InstanceId[];
 }
 
+/** A side's avatar: its identity and whether it is exhausted (P4). */
+export interface AvatarView {
+  readonly id: AvatarId;
+  readonly exhausted: boolean;
+}
+
+/** One of a side's dreamsigns. */
+export interface DreamsignView {
+  readonly id: DreamsignId;
+}
+
+/** An effect lasting "until the opponent pays N●" (C7). */
+export interface PayableEffectView {
+  readonly id: EffectId;
+  /** The side whose effect it is. */
+  readonly controller: Side;
+  /** The side that may pay to end it: the affected characters' controller. */
+  readonly payer: Side;
+  /** Energy the payer pays to end it. */
+  readonly cost: number;
+  readonly source: AbilitySource;
+  /** The characters whose changes from the effect end when it ends. */
+  readonly affects: readonly InstanceId[];
+}
+
 export interface SideView {
   readonly score: number;
   readonly currentEnergy: number;
@@ -46,6 +72,9 @@ export interface SideView {
   readonly backRank: readonly (InstanceId | null)[];
   /** `F0`–`F8`. */
   readonly frontRank: readonly (InstanceId | null)[];
+  readonly avatar: AvatarView | null;
+  /** In order. */
+  readonly dreamsigns: readonly DreamsignView[];
 }
 
 /**
@@ -53,7 +82,8 @@ export interface SideView {
  * AI read. It shares no objects with the state it was built from, carries no
  * seed or random-stream counters, and lists only instances the viewer can
  * see: those in public zones and those known to the viewer (for now, the
- * viewer's own hand). Every deck and the opponent's hand appear as counts.
+ * cards in the viewer's own hand, including any the opponent owns). Every
+ * deck and the opponent's hand appear as counts.
  */
 export interface BattleView {
   readonly viewer: Side;
@@ -67,6 +97,8 @@ export interface BattleView {
   /** The last element is the top. Targets the viewer cannot see are omitted. */
   readonly stack: readonly StackItem[];
   readonly priority: Side | null;
+  /** Effects a side may pay to end, in registration order. */
+  readonly payable: readonly PayableEffectView[];
   readonly dreamwell: { readonly remaining: number };
   readonly challenge: Readonly<ChallengeState> | null;
   readonly result: Readonly<BattleResult> | null;
@@ -78,7 +110,8 @@ function visibleTo(instance: CardInstance, viewer: Side): boolean {
     case "deck":
       return false;
     case "hand":
-      return instance.owner === viewer;
+      // The side holding a card sees it, whoever owns it.
+      return instance.controller === viewer;
     case "stack":
     case "play":
     case "void":
@@ -136,6 +169,8 @@ export function view(state: BattleState, viewer: Side): BattleView {
       banished: [...source.banished],
       backRank: [...source.backRank],
       frontRank: [...source.frontRank],
+      avatar: source.avatar === null ? null : { id: source.avatar.id, exhausted: source.avatar.exhausted },
+      dreamsigns: source.dreamsigns.map((dreamsign) => ({ id: dreamsign.id })),
     };
   };
   return {
@@ -146,11 +181,20 @@ export function view(state: BattleState, viewer: Side): BattleView {
     sides: { player: side("player"), enemy: side("enemy") },
     instances,
     stack: state.stack.map((item) => ({
-      ...item,
+      ...copy(item),
       modes: [...item.modes],
       targets: item.targets.map((list) => list.filter(visible)),
     })),
     priority: state.priority,
+    payable: state.payable.map((effect) => ({
+      id: effect.id,
+      // C7: the payer is the opponent of the effect's controller.
+      controller: opponent(effect.payer),
+      payer: effect.payer,
+      cost: effect.cost,
+      source: copy(effect.source),
+      affects: effect.affects.filter(visible),
+    })),
     dreamwell: { remaining: state.dreamwell.deck.length - state.dreamwell.next },
     challenge: copy(state.challenge),
     result: copy(state.result),

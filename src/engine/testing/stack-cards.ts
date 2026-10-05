@@ -13,7 +13,12 @@ import type {
 import {
   abandonCost,
   activated,
+  additionalCost,
+  banishFromVoidCost,
   characterYouControl,
+  choiceCost,
+  costPaid,
+  countersCost,
   discardCost,
   energy,
   energyX,
@@ -21,6 +26,8 @@ import {
   event,
   exhaustSelf,
   keyword,
+  optionalCost,
+  revealCost,
   self,
   stackItem,
   target,
@@ -29,6 +36,7 @@ import {
 import type { AbilityList } from "../dsl/types";
 import * as p from "../effects/primitives";
 import { registerPayable } from "../rules/payable";
+import { charactersInPlay } from "../rules/zones";
 import { opponent } from "../state/ids";
 import { parseAvatarId, parseDreamsignId } from "../../types/identifiers";
 import { syntheticId } from "./synthetic-cards";
@@ -64,7 +72,9 @@ export const STACK = {
   /** ❖❖ "Prevent a played character. Put it on top of its owner's deck." */
   preventCharacterToDeck: card(2, "event", 1, () => [event(p.prevent(stackItem({ cardType: "character" }), { destination: "deckTop" }))], "interrupt"),
   /** ❖❖ "Prevent a card the opponent played. Return it to its owner's hand." */
-  preventToHand: card(3, "event", 0, () => [event(p.prevent(stackItem({ controller: "opponent" }), { destination: "hand" }))], "interrupt"),
+  preventToHand: card(3, "event", 0, () => [event(p.prevent(stackItem({ controller: "opponent" }), { destination: "ownerHand" }))], "interrupt"),
+  /** ❖❖ "Prevent a played card, then put that card into your hand." */
+  preventToYourHand: card(17, "event", 0, () => [event(p.prevent(stackItem(), { destination: "yourHand" }))], "interrupt"),
   /** ❖❖ "Prevent a card the opponent played unless they pay 2●." */
   preventUnlessPays: card(4, "event", 1, () => [event(p.prevent(stackItem({ controller: "opponent" }), { unlessPays: 2 }))], "interrupt"),
   /** "This event cannot be prevented. Draw a card." */
@@ -91,15 +101,33 @@ export const STACK = {
   abandonToPump: card(14, "character", 1, () => [activated([abandonCost()], p.gainSpark(target(characterYouControl()), 2))]),
   /** "1●: Choose one: Dissolve an enemy; or gain 1⍟." */
   modalAbility: card(16, "character", 1, () => [activated([energy(1)], p.chooseOne(p.dissolve(target(enemyCharacter())), p.gainPoints(1)))]),
-  /** "Until the opponent pays 2●, …": registers a payable effect (C7). */
+  /** "Until the opponent pays 2●, each enemy …": registers a payable effect affecting every enemy (C7). */
   payableEffect: {
     ...card(15, "event", 0, () => []),
     synthetic: {
       resolve: (ctx, item) => {
-        registerPayable(ctx, opponent(item.controller), 2, item.instance);
+        const payer = opponent(item.controller);
+        registerPayable(ctx, payer, 2, item.instance, charactersInPlay(ctx.state, payer));
       },
     },
   },
+  /** "To play this card, abandon a character or discard a card. Draw 2 cards." */
+  abandonOrDiscardToDraw: card(18, "event", 1, () => [additionalCost(choiceCost([abandonCost()], [discardCost(1)])), event(p.draw(2))], "fast"),
+  /** "You may pay an additional 2● and discard a card to play this card. Gain 1⍟. If the additional cost was paid, gain 3⍟ more." */
+  optionalKicker: card(19, "event", 0, () => [
+    additionalCost(optionalCost(energy(2), discardCost(1))),
+    event(p.sequence(p.gainPoints(1), p.ifThen(costPaid(), p.gainPoints(3)))),
+  ]),
+  /** "To play this card, banish 2 cards from your void. Draw a card." */
+  banishVoidToDraw: card(20, "event", 0, () => [additionalCost(banishFromVoidCost(2)), event(p.draw(1))]),
+  /** "1⧗, ☾: Gain 2●." */
+  counterBattery: card(21, "character", 1, () => [activated([countersCost(1), exhaustSelf()], p.gainEnergy(2))]),
+  /** "Reveal a Warrior card from your hand: Gain 1●." (once per turn) */
+  revealWarrior: card(22, "character", 1, () => [activated([revealCost(1, { subtype: "Warrior" })], p.gainEnergy(1), { oncePerTurn: true })]),
+  /** "1●: Draw a card. You may abandon a character as you activate this; if you did, gain 2⍟." */
+  optionalAbandonAbility: card(23, "character", 1, () => [
+    activated([energy(1), optionalCost(abandonCost({ another: true }))], p.sequence(p.draw(1), p.ifThen(costPaid(), p.gainPoints(2)))),
+  ]),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 export const STACK_CARDS: readonly EngineCardDefinition[] = Object.values(STACK);

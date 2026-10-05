@@ -3,7 +3,7 @@ import type { Speed } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { minimumEnergy } from "../dsl/energy";
+import { costsPayable, playCosts } from "./costs";
 import { instanceOf, openBackSlots } from "./zones";
 
 /** Whether `side` has a Fast window now: its own Day or Night, or the opponent's Dusk. */
@@ -59,7 +59,7 @@ export function freeBackSlotsAfterStack(state: BattleState, catalog: EngineCatal
   return openBackSlots(state, side) - pending;
 }
 
-/** Whether `side` may play the card `id` from its hand now. */
+/** Whether `side` may play the card `id` from its hand now: a card in its hand, even one the opponent owns. */
 export function canPlayFromHand(
   state: BattleState,
   catalog: EngineCatalog,
@@ -67,15 +67,15 @@ export function canPlayFromHand(
   id: InstanceId,
 ): boolean {
   const instance = instanceOf(state, id);
-  if (instance.zone !== "hand" || instance.owner !== side) {
+  if (instance.zone !== "hand" || instance.controller !== side) {
     return false;
   }
   const definition = catalog.card(instance.cardId);
   if (!timingAllows(state, side, definition.speed)) {
     return false;
   }
-  // An X cost needs its minimum X; the X prompt checks the rest.
-  if (minimumEnergy(definition.costs) > state.sides[side].currentEnergy) {
+  // An X cost needs its minimum X; the play's prompts check the cost choices.
+  if (!costsPayable(state, side, id, playCosts(definition, instance.variant))) {
     return false;
   }
   return (
