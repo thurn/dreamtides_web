@@ -1,5 +1,6 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import enginePurity from "./eslint-rules/engine-purity.js";
 import noComposedTypeVoice from "./eslint-rules/no-composed-type-voice.js";
 import noHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
 import noNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
@@ -14,6 +15,7 @@ import validTokenReferences from "./eslint-rules/valid-token-references.js";
 // which files it governs.
 const dreamtides = {
   rules: {
+    "engine-purity": enginePurity,
     "no-composed-type-voice": noComposedTypeVoice,
     "no-hardcoded-values": noHardcodedValues,
     "no-name-keyed-cards": noNameKeyedCards,
@@ -135,6 +137,14 @@ export default tseslint.config(
             "src/rules/ must be deterministic. `new Date()` reads the live clock; pass a timestamp in as reducer input instead.",
         },
       ],
+    },
+  },
+  {
+    // The rules engine is pure: no clock, no ambient randomness, and no state
+    // shared across battles (engine-design § Goals and constraints).
+    files: ["src/engine/**/*.ts"],
+    rules: {
+      "dreamtides/engine-purity": "error",
     },
   },
   {

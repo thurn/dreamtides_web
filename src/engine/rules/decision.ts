@@ -1,0 +1,112 @@
+import type { EngineCatalog } from "../catalog";
+import type { Side, Slot } from "../state/ids";
+import { BACK_RANK_SIZE, FRONT_RANK_SIZE, opponent } from "../state/ids";
+import type { BattleState } from "../state/types";
+import type { Action, Decision } from "./actions";
+import { canPlayFromHand } from "./timing";
+import { charactersInPlay, instanceOf, occupant, slotOf } from "./zones";
+
+/** The side that acts in the current main window, or `null` outside Day, Dusk, and Night. */
+function mainWindowSide(state: BattleState): Side | null {
+  switch (state.turn.phase) {
+    case "day":
+    case "night":
+      return state.turn.active;
+    case "dusk":
+      return opponent(state.turn.active);
+    default:
+      return null;
+  }
+}
+
+/** Whether `side` may reposition now: its own Day, or the opponent's Dusk. */
+function canReposition(state: BattleState, side: Side): boolean {
+  if (state.stack.length > 0) {
+    return false;
+  }
+  const { active, phase } = state.turn;
+  return side === active ? phase === "day" : phase === "dusk";
+}
+
+function legalRepositions(state: BattleState, side: Side): Action[] {
+  if (!canReposition(state, side)) {
+    return [];
+  }
+  const actions: Action[] = [];
+  const slots: Slot[] = [
+    ...Array.from({ length: BACK_RANK_SIZE }, (_, index): Slot => ({ rank: "back", index })),
+    ...Array.from({ length: FRONT_RANK_SIZE }, (_, index): Slot => ({ rank: "front", index })),
+  ];
+  for (const card of charactersInPlay(state, side)) {
+    const from = slotOf(state, card);
+    if (from === null) {
+      continue;
+    }
+    const exhausted = instanceOf(state, card).status.exhausted;
+    for (const to of slots) {
+      if (to.rank === from.rank && to.index === from.index) {
+        continue;
+      }
+      // An exhausted character cannot be moved to the front rank, by either
+      // half of a swap.
+      if (exhausted && to.rank === "front") {
+        continue;
+      }
+      const other = occupant(state, side, to);
+      if (other !== null && from.rank === "front" && instanceOf(state, other).status.exhausted) {
+        continue;
+      }
+      actions.push({ kind: "reposition", card, to });
+    }
+  }
+  return actions;
+}
+
+function legalPlays(state: BattleState, catalog: EngineCatalog, side: Side): Action[] {
+  return state.sides[side].hand
+    .filter((card) => canPlayFromHand(state, catalog, side, card))
+    .map((card): Action => ({ kind: "play", card, from: "hand" }));
+}
+
+/**
+ * Every action `side` may take now, `pass` first. Empty unless `side` owns
+ * the pending decision.
+ */
+export function legalActions(state: BattleState, catalog: EngineCatalog, side: Side): Action[] {
+  if (state.result !== null) {
+    return [];
+  }
+  if (state.stack.length > 0) {
+    if (state.priority !== side) {
+      return [];
+    }
+    return [{ kind: "pass" }, ...legalPlays(state, catalog, side)];
+  }
+  if (mainWindowSide(state) !== side) {
+    return [];
+  }
+  return [
+    { kind: "pass" },
+    ...legalPlays(state, catalog, side),
+    ...legalRepositions(state, side),
+  ];
+}
+
+/**
+ * The pending top-level decision, derived from the state. A side holding
+ * priority with no legal response has no decision: it passes automatically (P1).
+ */
+export function decision(state: BattleState, catalog: EngineCatalog): Decision | null {
+  if (state.result !== null) {
+    return null;
+  }
+  if (state.stack.length > 0) {
+    const side = state.priority;
+    if (side === null || legalPlays(state, catalog, side).length === 0) {
+      return null;
+    }
+    return { kind: "respond", side };
+  }
+  const side = mainWindowSide(state);
+  return side === null ? null : { kind: "main", side };
+}

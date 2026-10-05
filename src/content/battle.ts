@@ -20,6 +20,9 @@ export const BATTLE = {
   // Maximum cards a side keeps when end-of-turn automation discards excess
   // cards from its hand.
   handLimit: 10,
+  // Consecutive automatic game actions after which a battle that no player can
+  // stop ends in a draw (rules § Mandatory Loops).
+  resolutionCap: 100000,
   // Side that takes the first turn. Valid values are `Player` and `Enemy`.
   startingSide: "player",
   // Whether the player omits the normal Draw phase on their first turn.

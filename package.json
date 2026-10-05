@@ -30,6 +30,7 @@
     "device-screenshots": "node scripts/device-screenshots.mjs",
     "screenshots:desktop": "node scripts/desktop-screenshots.mjs",
     "deploy": "bash scripts/deploy.sh",
+    "fuzz:engine": "tsx scripts/fuzz-engine.ts",
     "dev:status": "node scripts/dev-processes.mjs",
     "dev:stop": "node scripts/dev-processes.mjs --stop",
     "kill-dev-servers": "node scripts/dev-processes.mjs --stop --all",

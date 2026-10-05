@@ -231,7 +231,9 @@ lacks enough positions, use Battlefield Capacity.
 A player can have at most **10 characters** in their back rank and **9
 characters** in their front rank. If a player's back rank is full, they may no
 longer play any card or activate any ability which would cause a character to
-enter play. If a trigger attempts to put a character into play when the back
+enter play. Characters a player has already played that are still on the stack count
+toward their back rank for this purpose, so a played character always has a
+position to enter when it resolves. If a trigger attempts to put a character into play when the back
 rank is full, it instead stays in its previous zone. If a trigger attempts to
 create a figment or a copy of a character when the back rank is full, it is
 not created and an explanatory message is shown.

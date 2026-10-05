@@ -37,6 +37,7 @@ emulator, adds `?game=<room-id>` to the URL, and opens Avatar selection.
 | `npm run review:full` | Everything the Tollgate gate runs |
 | `npm run typecheck` | Incremental typecheck |
 | `npm run build` | Production build into `dist/` |
+| `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check |
 | `npm run prepare-workspace` | Refresh art links and generated adapters |
 
 `npm run review` plans its checks from the diff against `master`. Its
@@ -138,6 +139,13 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
   and lifecycle reducers. Generators live beside their domains: `src/atlas/`,
   `src/draft/` (tides4), `src/exploration/`, `src/journey_v2/` (Augury),
   `src/reward-selection/`, `src/shop/`, `src/transfiguration/`.
+- **Rules engine.** `src/engine/` is a headless, deterministic battle engine
+  (`docs/plan/engine-design.md`). Its state is plain JSON; a step runs rules
+  code from one committed state to the next, and `createEngine(catalog)`
+  exposes `createBattle`, `decision`, `legalActions`, `apply`, and `view`.
+  Step kinds (`steps/kinds/`) and engine events (`events/kinds/`) are each
+  registered from their own module. The `dreamtides/engine-purity` lint rule
+  bans the clock, ambient randomness, and module-level mutable state there.
 - **Battle.** `src/battle/` and `src/rules/battle/` hold the battle board,
   its structural automation, and the proposal-based AI.
 - **UI.** Screens are built from the Cumulus design system (`src/cumulus/`):
