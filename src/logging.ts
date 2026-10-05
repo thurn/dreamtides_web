@@ -66,12 +66,38 @@ let logContext: Record<string, unknown> = {};
 
 let logSink: LogSink | null = null;
 
+// Receives every journey-log line the dev-server sink receives — each
+// `logEvent` entry and each mirrored record — so the open game can keep its
+// own copy in every build (see `src/session/game-log-capture.ts`).
+let journeyLogCapture: JourneyLogMirror | null = null;
+
 /**
  * Install (or with `null`, remove) the {@link LogSink} that receives every
  * subsequent {@link logEvent} entry. Replaces any previously installed sink.
  */
 export function setLogSink(sink: LogSink | null): void {
   logSink = sink;
+}
+
+/**
+ * Install (or with `null`, remove) the capture that receives every subsequent
+ * journey-log record, exactly as the `/api/log` sink receives it. Best-effort:
+ * a throwing capture is swallowed.
+ */
+export function setJourneyLogCapture(capture: JourneyLogMirror | null): void {
+  journeyLogCapture = capture;
+}
+
+/** Deliver one journey-log record to the dev-server sink and the capture. */
+function deliverJourneyLogRecord(record: JourneyLogRecord): void {
+  postLogRecordToDevServer(record);
+  if (journeyLogCapture !== null) {
+    try {
+      journeyLogCapture(record);
+    } catch {
+      // Best-effort transport: a throwing capture must never break logging.
+    }
+  }
 }
 
 /**
@@ -125,7 +151,7 @@ export function logEvent(
   logAccumulator.push(entry);
   isLogSnapshotDirty = true;
   notifyLogListeners();
-  postLogRecordToDevServer(entry);
+  deliverJourneyLogRecord(entry);
   const frozen = Object.freeze({ ...entry });
   if (logSink !== null) {
     try {
@@ -178,21 +204,24 @@ export type JourneyLogMirror = (record: JourneyLogRecord) => void;
 export interface JourneyLogMirrorDeps {
   /** Console transport. Defaults to a single-line `console.log`. */
   log?: (line: string) => void;
-  /** Dev-server transport. Defaults to a best-effort `/api/log` POST. */
+  /**
+   * Dev-server transport. Defaults to a best-effort `/api/log` POST plus the
+   * installed journey-log capture.
+   */
   post?: (record: JourneyLogRecord) => void;
 }
 
 /**
  * Build the journey-log.jsonl mirror for records that carry their own `seq`
  * (the event log's seq), which {@link logEvent} would replace with its
- * per-session line counter. The record reaches the console and the dev-server
- * `/api/log` sink verbatim. Transports are injectable for tests.
+ * per-session line counter. The record reaches the console, the dev-server
+ * `/api/log` sink, and the journey-log capture verbatim. Transports are injectable for tests.
  */
 export function createJourneyLogMirror(
   deps: JourneyLogMirrorDeps = {},
 ): JourneyLogMirror {
   const log = deps.log ?? ((line: string) => console.log(line));
-  const post = deps.post ?? postLogRecordToDevServer;
+  const post = deps.post ?? deliverJourneyLogRecord;
   return (record) => {
     log(JSON.stringify(record));
     post(record);
@@ -536,26 +565,23 @@ export function resetLog(): void {
   isLogSnapshotDirty = false;
   logContext = {};
   logSink = null;
+  journeyLogCapture = null;
   notifyLogListeners();
 }
 
-/**
- * Downloads the accumulated log as a `.jsonl` file. Each entry is
- * serialized as a single JSON line. The filename includes an ISO
- * timestamp for uniqueness.
- */
-export function downloadLog(): void {
-  const lines = logAccumulator.map((entry) => JSON.stringify(entry));
-  const content = lines.join("\n") + "\n";
+/** The journey-log line of one record, as `logs/journey-log.jsonl` stores it. */
+export function journeyLogLine(record: JourneyLogRecord): string {
+  return JSON.stringify(record);
+}
+
+/** Downloads journey-log lines as a `.jsonl` file named `fileName`. */
+export function downloadJsonl(fileName: string, lines: readonly string[]): void {
+  const content = lines.map((line) => `${line}\n`).join("");
   const blob = new Blob([content], { type: "application/x-jsonlines" });
   const url = URL.createObjectURL(blob);
-
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const filename = `journey-log-${timestamp}.jsonl`;
-
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = filename;
+  anchor.download = fileName;
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);

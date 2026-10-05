@@ -1,7 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { logEvent } from "../logging";
 import { DefaultErrorBoundaryFallback } from "./ErrorBoundaryFallback";
-import { recoveryUrlFromLocation } from "../coop/room-recovery-url";
 
 /**
  * Render-prop signature for a custom fallback. Receives the captured error
@@ -49,7 +48,10 @@ interface ErrorBoundaryProps {
    * state so the consumer can decide whether to unmount or just dismiss.
    */
   onClose?: () => void;
-  /** Override for the cold shared-room recovery action. */
+  /**
+   * Override for the Recover Game action, which by default reloads the open
+   * local game from storage (see `LocalGameControls.recover`).
+   */
   onRecover?: () => void;
 }
 
@@ -146,21 +148,6 @@ export class ErrorBoundary extends Component<
     this.props.onClose?.();
   };
 
-  private readonly handleRecover = (): void => {
-    if (this.props.onRecover !== undefined) {
-      this.props.onRecover();
-      return;
-    }
-    const recoveryUrl = recoveryUrlFromLocation(window.location.href);
-    if (recoveryUrl === null) return;
-    logEvent("room_recovery_requested", {
-      source: "error_boundary",
-      scope: this.props.scope,
-      recoveryUrl,
-    });
-    window.location.assign(recoveryUrl);
-  };
-
   render(): ReactNode {
     const { error } = this.state;
     if (error === null) {
@@ -180,12 +167,7 @@ export class ErrorBoundary extends Component<
         scope={this.props.scope}
         onRetry={this.handleRetry}
         onClose={this.props.onClose === undefined ? undefined : this.handleClose}
-        onRecover={
-          this.props.onRecover !== undefined ||
-          recoveryUrlFromLocation(window.location.href) !== null
-            ? this.handleRecover
-            : undefined
-        }
+        onRecover={this.props.onRecover}
       />
     );
   }

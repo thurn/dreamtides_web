@@ -1,8 +1,11 @@
 // Selects the local game the app plays. `?game=<id>` resumes that game from
 // storage; without it, or on request, a new game is created and the URL gains
-// its `?game=` id so a reload resumes it.
+// its `?game=` id so a reload resumes it. A game opens only in the tab that
+// holds its lock (see `game-lock.ts`); another tab on it reports
+// `openElsewhere`. The open game's journey log is captured into storage.
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GAME_LOGS } from "../content/game-logs";
 import { generateRoomId, mintClientId } from "../eventlog/game-id";
 import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import { logEvent } from "../logging";
@@ -10,7 +13,18 @@ import type { FoldState } from "../rules/fold-state";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import type { RoomId } from "../types/identifiers";
 import { browserGameRepository } from "./browser-repository";
+import {
+  createLocalGameControls,
+  type LocalGameControls,
+} from "./game-controls";
 import { attachGameLog } from "./game-log";
+import { createGameLogCapture, type GameLogCapture } from "./game-log-capture";
+import {
+  acquireGameLock,
+  browserGameLockManager,
+  type GameLock,
+  type GameLockManager,
+} from "./game-lock";
 import {
   UnreadableLocalGameError,
   type GameRepository,
@@ -30,8 +44,13 @@ import {
 export type LocalGameStatus =
   | { kind: "opening" }
   | { kind: "creating" }
-  | { kind: "ready"; game: LocalGame<FoldState> }
+  | {
+      kind: "ready";
+      game: LocalGame<FoldState>;
+      controls: LocalGameControls;
+    }
   | { kind: "notFound"; gameId: RoomId }
+  | { kind: "openElsewhere"; gameId: RoomId }
   | { kind: "unreadable"; gameId: RoomId }
   | { kind: "versionGate" }
   | { kind: "configGate"; gameContentConfig: ContentConfig | undefined }
@@ -46,7 +65,21 @@ export interface UseLocalGameInput {
   frontDoorEntry?: FrontDoorEntry;
   /** Defaults to this browser's repository. */
   repository?: () => Promise<GameRepository>;
+  /** Defaults to this browser's Web Locks, where available. */
+  locks?: () => GameLockManager | undefined;
 }
+
+/** An opened game with what this tab holds for it until it closes. */
+interface OpenedGame {
+  kind: "ready";
+  game: LocalGame<FoldState>;
+  /** The game's one ready status, so re-reporting it is a no-op. */
+  status: Extract<LocalGameStatus, { kind: "ready" }>;
+  lock: GameLock;
+  logCapture: GameLogCapture;
+}
+
+type OpenResult = Exclude<LocalGameStatus, { kind: "ready" }> | OpenedGame;
 
 /** Attempts at drawing an unused game id before giving up. */
 const CREATE_GAME_MAX_ATTEMPTS = 3;
@@ -62,11 +95,33 @@ function persistOptions(gameId: RoomId): LocalGameOptions {
   };
 }
 
+function opened(
+  repository: GameRepository,
+  game: LocalGame<FoldState>,
+  lock: GameLock,
+): OpenedGame {
+  const logCapture = createGameLogCapture(repository, game.gameId, {
+    maxStoredCharacters: GAME_LOGS.maxStoredCharacters,
+  });
+  return {
+    kind: "ready",
+    game,
+    status: {
+      kind: "ready",
+      game,
+      controls: createLocalGameControls(game, repository, logCapture),
+    },
+    lock,
+    logCapture,
+  };
+}
+
 async function openGame(
   repository: GameRepository,
+  locks: GameLockManager | undefined,
   gameId: RoomId,
   contentConfig: PinnedContentConfig,
-): Promise<LocalGameStatus> {
+): Promise<OpenResult> {
   try {
     const stored = await repository.readGame(gameId);
     if (stored === null) return { kind: "notFound", gameId };
@@ -78,13 +133,25 @@ async function openGame(
         gameContentConfig: stored.genesis.contentConfig,
       };
     }
-    const game = await openLocalGame(
-      repository,
-      GAME_ENGINE_CONFIG,
-      gameId,
-      persistOptions(gameId),
-    );
-    return game === null ? { kind: "notFound", gameId } : { kind: "ready", game };
+    const lock = await acquireGameLock(gameId, locks);
+    if (lock === null) {
+      logEvent("local_game_open_elsewhere", { gameId });
+      return { kind: "openElsewhere", gameId };
+    }
+    try {
+      const game = await openLocalGame(
+        repository,
+        GAME_ENGINE_CONFIG,
+        gameId,
+        persistOptions(gameId),
+      );
+      if (game !== null) return opened(repository, game, lock);
+      lock.release();
+      return { kind: "notFound", gameId };
+    } catch (error) {
+      lock.release();
+      throw error;
+    }
   } catch (error) {
     if (error instanceof UnreadableLocalGameError) {
       logEvent("local_game_unreadable", { gameId, message: error.message });
@@ -96,21 +163,32 @@ async function openGame(
 
 async function createGame(
   repository: GameRepository,
+  locks: GameLockManager | undefined,
   contentConfig: PinnedContentConfig,
   frontDoorEntry: FrontDoorEntry | undefined,
-): Promise<LocalGameStatus> {
+): Promise<OpenResult> {
   for (let attempt = 0; attempt < CREATE_GAME_MAX_ATTEMPTS; attempt += 1) {
     const gameId = generateRoomId();
-    if ((await repository.readGame(gameId)) !== null) continue;
-    const genesis = createFreshGenesis(contentConfig, frontDoorEntry);
-    const game = await createLocalGame<FoldState>(
-      repository,
-      GAME_ENGINE_CONFIG,
-      { gameId, genesis, localPlayerId: mintClientId() },
-      persistOptions(gameId),
-    );
-    navigateToGame(gameId);
-    return { kind: "ready", game };
+    const lock = await acquireGameLock(gameId, locks);
+    if (lock === null) continue;
+    try {
+      if ((await repository.readGame(gameId)) !== null) {
+        lock.release();
+        continue;
+      }
+      const genesis = createFreshGenesis(contentConfig, frontDoorEntry);
+      const game = await createLocalGame<FoldState>(
+        repository,
+        GAME_ENGINE_CONFIG,
+        { gameId, genesis, localPlayerId: mintClientId() },
+        persistOptions(gameId),
+      );
+      navigateToGame(gameId);
+      return opened(repository, game, lock);
+    } catch (error) {
+      lock.release();
+      throw error;
+    }
   }
   throw new Error("Could not draw an unused game id.");
 }
@@ -125,16 +203,23 @@ function navigateToGame(gameId: RoomId): void {
   );
 }
 
+/** Stop writing `opened` and give up its lock. */
+function closeOpened(opened: OpenedGame): void {
+  void opened.game.close().finally(() => opened.lock.release());
+}
+
 /**
  * Opens or creates the local game and reports its status. The ready game is
- * logged (see `attachGameLog`) from before it first renders until another game
- * replaces it.
+ * logged (see `attachGameLog`) and its journey log captured from before it
+ * first renders until another game replaces it or the hook unmounts; until
+ * then this tab holds its lock.
  */
 export function useLocalGame({
   gameId,
   contentConfig,
   frontDoorEntry,
   repository = browserGameRepository,
+  locks = browserGameLockManager,
 }: UseLocalGameInput): {
   status: LocalGameStatus;
   createNewGame: () => void;
@@ -149,41 +234,60 @@ export function useLocalGame({
   // created or opened once.
   const requestRef = useRef<{
     key: string;
-    status: Promise<LocalGameStatus>;
+    result: Promise<OpenResult>;
   } | null>(null);
   const activeRef = useRef<{
-    game: LocalGame<FoldState>;
+    opened: OpenedGame;
     detachLog: () => void;
   } | null>(null);
+  const mountedRef = useRef(false);
 
   useEffect(() => {
     if (requestRef.current?.key !== requestKey) {
       setStatus({ kind: create ? "creating" : "opening" });
       requestRef.current = {
         key: requestKey,
-        status: repository().then((loaded) =>
+        result: repository().then((loaded) =>
           create || gameId === null
-            ? createGame(loaded, contentConfig, frontDoorEntry)
-            : openGame(loaded, gameId, contentConfig),
+            ? createGame(loaded, locks(), contentConfig, frontDoorEntry)
+            : openGame(loaded, locks(), gameId, contentConfig),
         ),
       };
     }
+    const request = requestRef.current;
     let cancelled = false;
-    requestRef.current.status.then(
+    request.result.then(
       (next) => {
-        if (cancelled) return;
-        if (next.kind === "ready" && activeRef.current?.game !== next.game) {
+        if (cancelled) {
+          // A game opened for a superseded request, or after unmounting, is
+          // never shown; release it.
+          if (
+            next.kind === "ready" &&
+            (requestRef.current !== request || !mountedRef.current) &&
+            activeRef.current?.opened !== next
+          ) {
+            closeOpened(next);
+          }
+          return;
+        }
+        if (next.kind !== "ready") {
+          setStatus(next);
+          return;
+        }
+        if (activeRef.current?.opened !== next) {
           const previous = activeRef.current;
           if (previous !== null) {
             previous.detachLog();
-            void previous.game.close();
+            closeOpened(previous.opened);
           }
           activeRef.current = {
-            game: next.game,
-            detachLog: attachGameLog(next.game),
+            opened: next,
+            detachLog: attachGameLog(next.game, {
+              capture: next.logCapture.capture,
+            }),
           };
         }
-        setStatus(next);
+        setStatus(next.status);
       },
       (error: unknown) => {
         if (cancelled) return;
@@ -196,7 +300,29 @@ export function useLocalGame({
     return () => {
       cancelled = true;
     };
-  }, [contentConfig, create, frontDoorEntry, gameId, repository, requestKey]);
+  }, [
+    contentConfig,
+    create,
+    frontDoorEntry,
+    gameId,
+    locks,
+    repository,
+    requestKey,
+  ]);
+
+  // Unmounting closes the game and frees its lock for another tab.
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      const active = activeRef.current;
+      if (active === null) return;
+      activeRef.current = null;
+      requestRef.current = null;
+      active.detachLog();
+      closeOpened(active.opened);
+    };
+  }, []);
 
   const createNewGame = useCallback(() => {
     setCreateRequests((count) => count + 1);

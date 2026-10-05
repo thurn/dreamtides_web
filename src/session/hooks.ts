@@ -25,6 +25,10 @@ import type { EventDraft } from "../eventlog/local-log";
 import type { EventOutcome, GameEvent } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
 import type { ClientId } from "../types/identifiers";
+import {
+  LocalGameControlsContext,
+  type LocalGameControls,
+} from "./game-controls";
 import type { LocalGame } from "./local-game";
 
 /** A committed event's outcome, delivered to `useEventOutcomes` subscribers. */
@@ -54,12 +58,17 @@ function useLocalGameContext(): LocalGameContextValue {
 /** How long the bounce toast stays up before auto-dismissing. */
 const BOUNCE_TOAST_MS = 4000;
 
-/** Provides `game` to the game hooks and shows a toast when an intent bounces. */
+/**
+ * Provides `game` to the game hooks, and its `controls` to
+ * `useLocalGameControls`, and shows a toast when an intent bounces.
+ */
 export function LocalGameProvider({
   game,
+  controls = null,
   children,
 }: {
   game: LocalGame<FoldState>;
+  controls?: LocalGameControls | null;
   children: ReactNode;
 }): ReactNode {
   const [bounce, setBounce] = useState<{ token: number; message: string }>({
@@ -107,16 +116,20 @@ export function LocalGameProvider({
   );
 
   return createElement(
-    LocalGameContext.Provider,
-    { value },
-    children,
-    showBounce
-      ? createElement(BounceToast, {
-          key: "game-bounce-toast",
-          message: bounce.message,
-          onDismiss: () => setShowBounce(false),
-        })
-      : null,
+    LocalGameControlsContext.Provider,
+    { value: controls },
+    createElement(
+      LocalGameContext.Provider,
+      { value },
+      children,
+      showBounce
+        ? createElement(BounceToast, {
+            key: "game-bounce-toast",
+            message: bounce.message,
+            onDismiss: () => setShowBounce(false),
+          })
+        : null,
+    ),
   );
 }
 

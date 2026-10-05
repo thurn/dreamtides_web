@@ -3,9 +3,12 @@
 //   games/<gameId>                 game record: genesis, local player, head
 //   game/<gameId>/checkpoint       latest fold checkpoint
 //   game/<gameId>/events/<seq>     one encoded event per seq (zero-padded)
+//   game/<gameId>/log/<chunk>      a batch of journey-log JSONL lines
+//   logs/<gameId>                  log record: chunk counter, size, last write
 //
 // Each game owns the `game/<gameId>/` keyspace. The `games/` records make the
-// recent-games listing one range read. Events and the genesis are stored as
+// recent-games listing one range read, and the `logs/` records make the stored
+// journey logs one range read, for capping their total size. Events and the genesis are stored as
 // the same JSON strings the event codec reads and writes, so a stored log
 // round-trips byte-exactly.
 
@@ -27,6 +30,8 @@ export const LOCAL_GAME_SCHEMA_VERSION = 1;
 
 const SEQ_KEY_DIGITS = 12;
 const RANGE_END = "￿";
+/** Sorts directly after its prefix, so `[key, key + EXACT_KEY_END)` is one key. */
+const EXACT_KEY_END = "\u0000";
 
 /** The listing view of one local game. */
 export interface LocalGameSummary {
@@ -56,6 +61,15 @@ export interface StoredLocalGame {
   checkpoint: StoredCheckpoint | null;
 }
 
+/** The listing view of one game's stored journey log. */
+export interface GameLogSummary {
+  gameId: RoomId;
+  /** Stored JSONL size in characters, one newline per line included. */
+  characters: number;
+  /** Epoch milliseconds of the newest log write. */
+  updatedAt: number;
+}
+
 /** One atomic write: new events, the updated summary, maybe a checkpoint. */
 export interface LocalGameWrite {
   summary: LocalGameSummary;
@@ -80,6 +94,21 @@ export interface GameRepository {
   write(gameId: RoomId, write: LocalGameWrite): Promise<void>;
   /** Every stored game, most recently updated first. */
   listGames(): Promise<LocalGameSummary[]>;
+  /**
+   * Append journey-log lines (serialized JSON records) to the game's stored
+   * log and return its updated summary. One writer per game.
+   */
+  appendLogLines(
+    gameId: RoomId,
+    lines: readonly string[],
+    updatedAt: number,
+  ): Promise<GameLogSummary>;
+  /** Every stored journey-log line of the game, oldest first. */
+  readLogLines(gameId: RoomId): Promise<string[]>;
+  /** Every stored journey log, least recently written first. */
+  listLogs(): Promise<GameLogSummary[]>;
+  /** Delete these games' stored journey logs; their games stay playable. */
+  deleteLogs(gameIds: readonly RoomId[]): Promise<void>;
 }
 
 const gameRecordKey = (gameId: RoomId): string => `games/${gameId}`;
@@ -87,6 +116,16 @@ const checkpointKey = (gameId: RoomId): string => `game/${gameId}/checkpoint`;
 const eventsPrefix = (gameId: RoomId): string => `game/${gameId}/events/`;
 const eventKey = (gameId: RoomId, seq: number): string =>
   `${eventsPrefix(gameId)}${String(seq).padStart(SEQ_KEY_DIGITS, "0")}`;
+const logRecordKey = (gameId: RoomId): string => `logs/${gameId}`;
+const logChunksPrefix = (gameId: RoomId): string => `game/${gameId}/log/`;
+const logChunkKey = (gameId: RoomId, chunk: number): string =>
+  `${logChunksPrefix(gameId)}${String(chunk).padStart(SEQ_KEY_DIGITS, "0")}`;
+
+interface StoredLogRecord extends GameLogSummary {
+  schemaVersion: typeof LOCAL_GAME_SCHEMA_VERSION;
+  /** Index of the next chunk to write. */
+  nextChunk: number;
+}
 
 interface StoredGameRecord extends LocalGameSummary {
   schemaVersion: typeof LOCAL_GAME_SCHEMA_VERSION;
@@ -152,6 +191,35 @@ function decodeCheckpoint(value: unknown): StoredCheckpoint | null {
     stateHash: parseStateHash(value.stateHash),
     intentKeys,
   };
+}
+
+function decodeLogRecord(value: unknown): StoredLogRecord | null {
+  if (!isRecord(value) || value.schemaVersion !== LOCAL_GAME_SCHEMA_VERSION) {
+    return null;
+  }
+  const gameId = roomIdFromUnknown(value.gameId);
+  const { characters, updatedAt, nextChunk } = value;
+  if (
+    gameId === null ||
+    !isSeq(characters) ||
+    typeof updatedAt !== "number" ||
+    !isSeq(nextChunk)
+  ) {
+    return null;
+  }
+  return {
+    schemaVersion: LOCAL_GAME_SCHEMA_VERSION,
+    gameId,
+    characters,
+    updatedAt,
+    nextChunk,
+  };
+}
+
+function isLogChunk(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) && value.every((line) => typeof line === "string")
+  );
 }
 
 function encodeGameRecord(
@@ -249,6 +317,60 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
           return decoded === null ? [] : [decoded.summary];
         })
         .sort((left, right) => right.updatedAt - left.updatedAt);
+    },
+
+    async appendLogLines(gameId, lines, updatedAt) {
+      const previous = decodeLogRecord(await store.get(logRecordKey(gameId)));
+      const nextChunk = previous?.nextChunk ?? 0;
+      const record: StoredLogRecord = {
+        schemaVersion: LOCAL_GAME_SCHEMA_VERSION,
+        gameId,
+        characters:
+          (previous?.characters ?? 0) +
+          lines.reduce((total, line) => total + line.length + 1, 0),
+        updatedAt,
+        nextChunk: nextChunk + 1,
+      };
+      await store.putAll([
+        [logChunkKey(gameId, nextChunk), [...lines]],
+        [logRecordKey(gameId), record],
+      ]);
+      const { characters } = record;
+      return { gameId, characters, updatedAt };
+    },
+
+    async readLogLines(gameId) {
+      const chunks = await store.getRange(
+        logChunksPrefix(gameId),
+        `${logChunksPrefix(gameId)}${RANGE_END}`,
+      );
+      return chunks.flatMap(([key, value]) => {
+        if (!isLogChunk(value)) {
+          throw new UnreadableLocalGameError(gameId, `invalid log chunk ${key}`);
+        }
+        return value;
+      });
+    },
+
+    async listLogs() {
+      const records = await store.getRange("logs/", `logs/${RANGE_END}`);
+      return records
+        .flatMap(([, value]) => {
+          const decoded = decodeLogRecord(value);
+          if (decoded === null) return [];
+          const { gameId, characters, updatedAt } = decoded;
+          return [{ gameId, characters, updatedAt }];
+        })
+        .sort((left, right) => left.updatedAt - right.updatedAt);
+    },
+
+    async deleteLogs(gameIds) {
+      await store.deleteRanges(
+        gameIds.flatMap((gameId) => [
+          [logRecordKey(gameId), `${logRecordKey(gameId)}${EXACT_KEY_END}`],
+          [logChunksPrefix(gameId), `${logChunksPrefix(gameId)}${RANGE_END}`],
+        ]),
+      );
     },
   };
 }

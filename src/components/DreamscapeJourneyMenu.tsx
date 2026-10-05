@@ -136,7 +136,7 @@ export function DreamscapeJourneyMenu({
 
   const model = useJourneyUtilityMenuController({
     actions,
-    builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
+    builtIns: ["saveJourney", "loadJourney", "buildSha", "exportLog"],
     onLoadJourneyState,
     saveSource: "dreamscape_menu_save_journey",
     loadSource: "dreamscape_menu_load_journey",

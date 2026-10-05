@@ -1,8 +1,8 @@
 // Journey-log records for a local game. Each committed event becomes one
 // `game_event` line carrying the log's own seq, plus an `event_bounced` or
 // `fold_error` line when it did not apply, so a game's flow can be rebuilt
-// from `logs/journey-log.jsonl` (development) by seq. Lines carry UUIDs and
-// seqs, never names.
+// from `logs/journey-log.jsonl` (development) or the game's exported log
+// (every build) by seq. Lines carry UUIDs and seqs, never names.
 
 import { settleDeferredOpponentLog } from "../coop/providers/battle-init-provider";
 import type { LocalLogRecord } from "../eventlog/local-log";
@@ -10,6 +10,7 @@ import {
   clearLogContext,
   createJourneyLogMirror,
   logEvent,
+  setJourneyLogCapture,
   setLogContext,
   type JourneyLogMirror,
 } from "../logging";
@@ -19,16 +20,28 @@ import type { LocalGame } from "./local-game";
 
 const INVARIANT_CODE_PATTERN = /(?:Fold invariant violation: |; )([a-z0-9_]+) \(/g;
 
+export interface AttachGameLogOptions {
+  /** Journey-log transports for the event records. */
+  mirror?: JourneyLogMirror;
+  /** Receives every journey-log record while attached, for the game's stored log. */
+  capture?: JourneyLogMirror;
+}
+
 /**
- * Logs `game` while attached: stamps its id onto every `logEvent` entry and
- * mirrors one record per committed event. Returns the detach function.
+ * Logs `game` while attached: stamps its id onto every `logEvent` entry,
+ * mirrors one record per committed event, and hands every journey-log record
+ * to `capture`. Returns the detach function.
  */
 export function attachGameLog(
   game: LocalGame<FoldState>,
-  mirror: JourneyLogMirror = createJourneyLogMirror(),
+  {
+    mirror = createJourneyLogMirror(),
+    capture,
+  }: AttachGameLogOptions = {},
 ): () => void {
   const { gameId } = game;
   setLogContext({ gameId });
+  setJourneyLogCapture(capture ?? null);
   logEvent("local_game_opened", {
     localPlayerId: game.localPlayerId,
     reducerVersion: game.genesis.reducerVersion,
@@ -90,6 +103,7 @@ export function attachGameLog(
   return () => {
     unsubscribe();
     clearLogContext();
+    setJourneyLogCapture(null);
   };
 }
 

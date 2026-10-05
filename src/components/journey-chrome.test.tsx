@@ -5,6 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderInCumulus } from "../cumulus/testing/render";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { logEvent } from "../logging";
+import {
+  LocalGameControlsContext,
+  type LocalGameControls,
+} from "../session/game-controls";
 import { createDefaultState, useJourney } from "../state/journey-context";
 import {
   chooseJourneySaveFile,
@@ -28,7 +32,6 @@ vi.mock("../state/journey-context", async (importOriginal) => ({
 }));
 vi.mock("../logging", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../logging")>()),
-  downloadLog: vi.fn(),
   logEvent: vi.fn(),
 }));
 vi.mock("../runtime/build-info", async (importOriginal) => ({
@@ -241,7 +244,7 @@ describe("buildJourneyUtilityMenuViewModel", () => {
   const handlers = {
     onSaveJourney: vi.fn(),
     onLoadJourney: vi.fn(),
-    onDownloadLog: vi.fn(),
+    onExportLog: vi.fn(),
     onViewBuildSha: vi.fn(),
   };
 
@@ -257,8 +260,9 @@ describe("buildJourneyUtilityMenuViewModel", () => {
           onCommand: vi.fn(),
         },
       ],
-      builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
+      builtIns: ["saveJourney", "loadJourney", "buildSha", "exportLog"],
       canLoadJourney: true,
+      canExportLog: true,
       status: "Fixture status.",
     });
 
@@ -268,16 +272,17 @@ describe("buildJourneyUtilityMenuViewModel", () => {
       "saveJourney",
       "loadJourney",
       "buildSha",
-      "downloadLog",
+      "exportLog",
     ]);
   });
 
-  it("omits load when the current context cannot replace journey state", () => {
+  it("omits load and export when the context cannot support them", () => {
     const model = buildJourneyUtilityMenuViewModel({
       ...handlers,
       actions: [],
-      builtIns: ["loadJourney"],
+      builtIns: ["loadJourney", "exportLog"],
       canLoadJourney: false,
+      canExportLog: false,
       status: null,
     });
     expect(model.actions).toEqual([]);
@@ -288,10 +293,15 @@ describe("useJourneyUtilityMenuController", () => {
   let latest: JourneyUtilityMenuViewModel | null = null;
   const loadJourneyState = vi.fn();
 
+  const gameControls: LocalGameControls = {
+    exportLog: vi.fn(() => Promise.resolve(3)),
+    recover: vi.fn(() => Promise.resolve()),
+  };
+
   function Probe(): null {
     latest = useJourneyUtilityMenuController({
       actions: [],
-      builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
+      builtIns: ["saveJourney", "loadJourney", "buildSha", "exportLog"],
       saveSource: parseJourneyMutationSource("menu-save"),
       loadSource: parseJourneyMutationSource("menu-load"),
       onLoadJourneyState: loadJourneyState,
@@ -299,8 +309,14 @@ describe("useJourneyUtilityMenuController", () => {
     return null;
   }
 
-  function command(id: "saveJourney" | "loadJourney"): () => void {
-    renderInCumulus(<Probe />);
+  function command(
+    id: "saveJourney" | "loadJourney" | "exportLog",
+  ): () => void {
+    renderInCumulus(
+      <LocalGameControlsContext.Provider value={gameControls}>
+        <Probe />
+      </LocalGameControlsContext.Provider>,
+    );
     const action = latest?.actions.find(
       (item) => item.kind === "action" && item.id === id,
     );
@@ -343,6 +359,16 @@ describe("useJourneyUtilityMenuController", () => {
       }),
     );
     expect(latest?.status).not.toBe("");
+  });
+
+  it("exports the open game's log and reports the result", async () => {
+    const exportLog = command("exportLog");
+    await act(async () => {
+      exportLog();
+      await Promise.resolve();
+    });
+    expect(gameControls.exportLog).toHaveBeenCalledWith({ source: "game_menu" });
+    expect(latest?.status).not.toBeNull();
   });
 
   it("loads a selected file through the shared journey mutation", async () => {

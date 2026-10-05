@@ -1,5 +1,30 @@
-import type { ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
+import { useLocalGameControls } from "../session/game-controls";
 
+type ExportState = "idle" | "exporting" | "exported" | "failed";
+
+const EXPORT_STATUS_COPY: Record<ExportState, string | null> = {
+  idle: null,
+  exporting: "Exporting the game log…",
+  exported: "Game log downloaded.",
+  failed: "The game log could not be exported.",
+};
+
+const SECONDARY_BUTTON_STYLE: CSSProperties = {
+  padding: "0.5rem 1rem",
+  borderRadius: "0.375rem",
+  background: "transparent",
+  color: "#fecaca",
+  border: "1px solid rgba(254, 202, 202, 0.45)",
+  fontWeight: 500,
+  cursor: "pointer",
+};
+
+/**
+ * The error boundary's default fallback. Inside a local game it also offers
+ * Export Log, which downloads the game's journey log, and Recover Game, which
+ * reloads the game from storage.
+ */
 export function DefaultErrorBoundaryFallback({
   scope,
   onRetry,
@@ -11,6 +36,24 @@ export function DefaultErrorBoundaryFallback({
   readonly onClose?: () => void;
   readonly onRecover?: () => void;
 }): ReactNode {
+  const controls = useLocalGameControls();
+  const [exportState, setExportState] = useState<ExportState>("idle");
+  const recover =
+    onRecover ??
+    (controls === null
+      ? undefined
+      : () => void controls.recover({ source: "error_boundary", scope }));
+  const exportLog =
+    controls === null
+      ? undefined
+      : () => {
+          setExportState("exporting");
+          controls.exportLog({ source: "error_boundary", scope }).then(
+            () => setExportState("exported"),
+            () => setExportState("failed"),
+          );
+        };
+  const exportStatus = EXPORT_STATUS_COPY[exportState];
   return (
     <div
       data-testid="error-boundary-fallback"
@@ -61,11 +104,11 @@ export function DefaultErrorBoundaryFallback({
         >
           {"Retry"}
         </button>
-        {onRecover !== undefined && (
+        {recover !== undefined && (
           <button
             type="button"
             data-testid="error-boundary-recover"
-            onClick={onRecover}
+            onClick={recover}
             style={{
               padding: "0.5rem 1rem",
               borderRadius: "0.375rem",
@@ -79,25 +122,38 @@ export function DefaultErrorBoundaryFallback({
             {"Recover Game"}
           </button>
         )}
+        {exportLog !== undefined && (
+          <button
+            type="button"
+            data-testid="error-boundary-export-log"
+            onClick={exportLog}
+            disabled={exportState === "exporting"}
+            style={SECONDARY_BUTTON_STYLE}
+          >
+            {"Export Log"}
+          </button>
+        )}
         {onClose !== undefined && (
           <button
             type="button"
             data-testid="error-boundary-close"
             onClick={onClose}
-            style={{
-              padding: "0.5rem 1rem",
-              borderRadius: "0.375rem",
-              background: "transparent",
-              color: "#fecaca",
-              border: "1px solid rgba(254, 202, 202, 0.45)",
-              fontWeight: 500,
-              cursor: "pointer",
-            }}
+            style={SECONDARY_BUTTON_STYLE}
           >
             {"Close"}
           </button>
         )}
       </div>
+      {exportStatus !== null && (
+        <p
+          data-testid="error-boundary-export-status"
+          data-export-state={exportState}
+          role="status"
+          style={{ margin: 0, marginTop: "0.75rem", opacity: 0.85 }}
+        >
+          {exportStatus}
+        </p>
+      )}
     </div>
   );
 }

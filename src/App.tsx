@@ -685,6 +685,25 @@ function LocalGameApp({
           }}
         />
       );
+    case "openElsewhere":
+      return (
+        <ApplicationStateScreen
+          view={{
+            kind: "unreachableRoom",
+            title: "Game Open in Another Tab",
+            message:
+              "This game is already open in another tab. Close that tab, then try again here.",
+            actions: [
+              {
+                id: "primary",
+                label: "Try Again",
+                onPress: () => window.location.reload(),
+              },
+              { ...createNewGameAction, id: "secondary" },
+            ],
+          }}
+        />
+      );
     case "unreadable":
       return (
         <ApplicationStateScreen
@@ -731,7 +750,7 @@ function LocalGameApp({
       );
     case "ready":
       return (
-        <LocalGameProvider game={status.game}>
+        <LocalGameProvider game={status.game} controls={status.controls}>
           {import.meta.env.VITE_FUZZ_TEST === "1" ? <FuzzProbe /> : null}
           <CoopJourneyProvider journeyContent={journeyContent}>
             <FrontDoorProvider>

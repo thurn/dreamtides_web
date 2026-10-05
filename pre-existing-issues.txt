@@ -7,3 +7,7 @@ QA scenes are not reproducible across loads: with `?goto=<scene>&seed=7`, 22 of 
 `src/battle/state/transition.ts` (`cloneBattleReducerTransition`) has no importers anywhere in the repository; it is dead code left in the sandbox battle state module.
 
 In `src/components/ScreenRouter.test.tsx`, every journey route renders `JourneyCardTutorialController`, which throws "Coop hooks must be used within a CoopProvider" because the router harness mounts without a `CoopProvider`; a nested error boundary catches it, so the tests pass while the controller never mounts and its errors show only as console noise.
+
+The `overlay:cumulus-journey-menu` error boundary's fallback renders beneath the dreamscape layer: when the corner menu crashes, its fallback panel paints under the dreamscape image, so its title is hidden and its buttons (Retry, Recover Game, Export Log) cannot be clicked. The app-shell and screen boundaries are unaffected.
+
+README.md's Architecture "Logging" bullet mentions only the development `logs/journey-log.jsonl` mirror; it does not describe the per-game journey log every build stores in IndexedDB and exports from the game menu and error fallback (D40).

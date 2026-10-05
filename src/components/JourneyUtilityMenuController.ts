@@ -3,8 +3,9 @@
 // Cumulus owns every rendered menu surface and interaction detail.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { downloadLog, logEvent } from "../logging";
+import { logEvent } from "../logging";
 import { BUILD_GIT_SHA } from "../runtime/build-info";
+import { useLocalGameControls } from "../session/game-controls";
 import {
   chooseJourneySaveFile,
   downloadJourneySaveFile,
@@ -26,7 +27,7 @@ import { GLYPHS } from "../cumulus/primitives/glyph";
 export type JourneyUtilityMenuAction = CommandMenuAction | CommandMenuGroup;
 
 export type JourneyUtilityMenuBuiltIn =
-  "saveJourney" | "loadJourney" | "downloadLog" | "buildSha";
+  "saveJourney" | "loadJourney" | "exportLog" | "buildSha";
 
 /** Plain command data supplied to the Cumulus corner utility-menu offering. */
 export interface JourneyUtilityMenuViewModel {
@@ -41,10 +42,12 @@ export interface BuildJourneyUtilityMenuViewModelInput {
   actions: readonly JourneyUtilityMenuAction[];
   builtIns: readonly JourneyUtilityMenuBuiltIn[];
   canLoadJourney: boolean;
+  /** Whether a local game is open, so its log can be exported. */
+  canExportLog: boolean;
   status: CommandMenuStatusCopy | null;
   onSaveJourney: () => void;
   onLoadJourney: () => void;
-  onDownloadLog: () => void;
+  onExportLog: () => void;
   onViewBuildSha: () => void;
 }
 
@@ -56,10 +59,11 @@ export function buildJourneyUtilityMenuViewModel({
   actions,
   builtIns,
   canLoadJourney,
+  canExportLog,
   status,
   onSaveJourney,
   onLoadJourney,
-  onDownloadLog,
+  onExportLog,
   onViewBuildSha,
 }: BuildJourneyUtilityMenuViewModelInput): JourneyUtilityMenuViewModel {
   const builtInActions = builtIns.flatMap(
@@ -87,16 +91,18 @@ export function buildJourneyUtilityMenuViewModel({
                 },
               ]
             : [];
-        case "downloadLog":
-          return [
-            {
-              kind: "action",
-              id: "downloadLog",
-              label: "Download Log",
-              glyph: GLYPHS.download,
-              onCommand: onDownloadLog,
-            },
-          ];
+        case "exportLog":
+          return canExportLog
+            ? [
+                {
+                  kind: "action",
+                  id: "exportLog",
+                  label: "Export Log",
+                  glyph: GLYPHS.download,
+                  onCommand: onExportLog,
+                },
+              ]
+            : [];
         case "buildSha":
           return [
             {
@@ -127,7 +133,7 @@ export interface JourneyUtilityMenuControllerOptions {
 }
 
 /**
- * Owns saved-journey persistence, logging, log download, build reporting, and
+ * Owns saved-journey persistence, logging, game-log export, build reporting, and
  * transient status timing. The returned view model has no presentation escape
  * hatch and is rendered by `CommandMenu` in app chrome.
  */
@@ -139,7 +145,7 @@ export function useJourneyUtilityMenuController({
   loadSource,
 }: JourneyUtilityMenuControllerOptions): JourneyUtilityMenuViewModel {
   const { state } = useJourney();
-  
+  const gameControls = useLocalGameControls();
   const [status, setStatus] = useState<CommandMenuStatusCopy | null>(null);
   const statusTimerRef = useRef<number | null>(null);
 
@@ -228,16 +234,25 @@ export function useJourneyUtilityMenuController({
     }
   }
 
+  function handleExportLog(): void {
+    if (gameControls === null) return;
+    gameControls.exportLog({ source: "game_menu" }).then(
+      () => flashStatus("Game log downloaded."),
+      () => flashStatus("Failed to export the game log."),
+    );
+  }
+
   return useMemo(
     () =>
       buildJourneyUtilityMenuViewModel({
         actions,
         builtIns,
         canLoadJourney: onLoadJourneyState !== undefined,
+        canExportLog: gameControls !== null,
         status,
         onSaveJourney: handleSaveJourney,
         onLoadJourney: () => void handleLoadJourney(),
-        onDownloadLog: downloadLog,
+        onExportLog: handleExportLog,
         onViewBuildSha: () => {
           logEvent("build_sha_viewed", {
             source: "dreamscape_menu",
@@ -248,6 +263,6 @@ export function useJourneyUtilityMenuController({
           );
         },
       }),
-    [actions, builtIns, onLoadJourneyState, status],
+    [actions, builtIns, gameControls, onLoadJourneyState, status],
   );
 }

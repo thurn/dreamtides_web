@@ -6,6 +6,10 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import { FrontDoorRouter } from "./FrontDoorRouter";
 import { getLogEntries, logEvent, resetLog } from "../logging";
 import { renderInCumulus } from "../cumulus/testing/render";
+import {
+  LocalGameControlsContext,
+  type LocalGameControls,
+} from "../session/game-controls";
 import { parseJourneyId, type JourneyId } from "../types/identifiers";
 
 vi.mock("../logging", async (importOriginal) => {
@@ -130,6 +134,48 @@ describe("ErrorBoundary", () => {
     expect(button).not.toBeNull();
     act(() => button?.click());
     expect(handler).toHaveBeenCalledTimes(1);
+  });
+
+  it("offers the open game's Export Log and Recover Game controls", async () => {
+    const controls: LocalGameControls = {
+      exportLog: vi.fn(() => Promise.resolve(2)),
+      recover: vi.fn(() => Promise.resolve()),
+    };
+    const { container } = renderInCumulus(
+      <LocalGameControlsContext.Provider value={controls}>
+        <ErrorBoundary scope="app-shell">
+          <Bomb message="in-game" />
+        </ErrorBoundary>
+      </LocalGameControlsContext.Provider>,
+    );
+    const button = (selector: string) =>
+      container.querySelector<HTMLButtonElement>(`[data-testid="${selector}"]`);
+
+    await act(async () => {
+      button("error-boundary-export-log")?.click();
+      await Promise.resolve();
+    });
+    expect(controls.exportLog).toHaveBeenCalledWith({
+      source: "error_boundary",
+      scope: "app-shell",
+    });
+    expect(container.querySelector('[data-export-state="exported"]')).not.toBeNull();
+
+    act(() => button("error-boundary-recover")?.click());
+    expect(controls.recover).toHaveBeenCalledWith({
+      source: "error_boundary",
+      scope: "app-shell",
+    });
+  });
+
+  it("offers no game controls outside a game", () => {
+    const { container } = renderInCumulus(
+      <ErrorBoundary scope="outside">
+        <Bomb message="no-game" />
+      </ErrorBoundary>,
+    );
+    expect(container.querySelector('[data-testid="error-boundary-export-log"]')).toBeNull();
+    expect(container.querySelector('[data-testid="error-boundary-recover"]')).toBeNull();
   });
 
   it("resets back to children when resetKey changes", () => {

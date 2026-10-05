@@ -23,4 +23,6 @@ import { renderRootRoute } from "./root-router";
 applyDeviceFrameFromSearch(window.location.search);
 
 const root = createRoot(document.getElementById("root")!);
-await renderRootRoute(root);
+// Not awaited: the lazily imported App chunk imports this entry chunk, so a
+// top-level await here would deadlock module evaluation in production builds.
+void renderRootRoute(root);

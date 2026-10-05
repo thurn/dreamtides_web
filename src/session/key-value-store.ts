@@ -6,6 +6,9 @@
 /** One key and its structured-cloneable value. */
 export type KeyValueEntry = readonly [key: string, value: unknown];
 
+/** The keys `lower <= key < upper`. */
+export type KeyRange = readonly [lower: string, upper: string];
+
 export interface KeyValueStore {
   /** The value stored at `key`, or `undefined`. */
   get(key: string): Promise<unknown>;
@@ -13,6 +16,8 @@ export interface KeyValueStore {
   getRange(lower: string, upper: string): Promise<KeyValueEntry[]>;
   /** Write every entry, all or nothing. */
   putAll(entries: readonly KeyValueEntry[]): Promise<void>;
+  /** Delete every key in every range, all or nothing. */
+  deleteRanges(ranges: readonly KeyRange[]): Promise<void>;
 }
 
 /**
@@ -39,6 +44,12 @@ export function createMemoryKeyValueStore(): KeyValueStore {
         ([key, value]) => [key, structuredClone(value)] as const,
       );
       for (const [key, value] of cloned) entries.set(key, value);
+      return Promise.resolve();
+    },
+    deleteRanges: (ranges) => {
+      for (const [lower, upper] of ranges) {
+        for (const key of keysInRange(lower, upper)) entries.delete(key);
+      }
       return Promise.resolve();
     },
   };
