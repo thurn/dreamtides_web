@@ -93,11 +93,46 @@ function makePoolData(tides4Decks: Tides4DecksJson): PoolData {
   };
 }
 
+const GOLDEN_COUNTS: readonly (readonly [string, number])[] = [
+  ["0658a361-5a20-4863-a630-0be158764b59", 2],
+  ["109549c3-d29e-4241-9264-6bcecd391530", 2],
+  ["63821260-5193-4dcb-8230-2d7a1db06647", 2],
+  ["8ebe6d7d-2619-4d17-a208-2eca4bdd30af", 2],
+  ["b4c0f2ef-e37a-4447-aa10-520a43c8af3c", 2],
+  ["bc4a8439-52d4-4d35-a116-0da36bd4c601", 2],
+];
+const GOLDEN_SELECTED: readonly string[] = [
+  "tides4",
+  "08a04bc5-c905-43e6-8f6c-1c8d9b1baaae",
+  "178eecd6-987d-4d6b-a6fd-5cc02384bd73",
+];
+
 function poolSize(counts: ReadonlyMap<CardId, number>): number {
   let s = 0;
   for (const v of counts.values()) s += v;
   return s;
 }
+
+describe("generateTides4 golden contract", () => {
+  // Pins the exact deal for a small synthetic catalog and fixed seed, so any
+  // change to how tides4 joins tides, draws facets, shuffles, or caps copies
+  // shows up as a diff here. Update the expectation only for an intended
+  // algorithm change.
+  it("deals the same pool and provenance for a fixed seed", () => {
+    const result = generateTides4(
+      makeRng(42),
+      makePoolData(makeTides4(3, 3, 1)),
+      AVATAR_A_ID,
+      { dealSize: 12, copyCap: 2, maxFacets: 2 },
+    );
+    expect(
+      [...result.counts.entries()]
+        .map(([id, count]) => [String(id), count] as const)
+        .sort(([a], [b]) => a.localeCompare(b)),
+    ).toEqual(GOLDEN_COUNTS);
+    expect(result.selected.map(String)).toEqual(GOLDEN_SELECTED);
+  });
+});
 
 describe("generateTides4", () => {
   it("is deterministic per seed", () => {

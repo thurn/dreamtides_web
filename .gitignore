@@ -48,3 +48,6 @@ cumulus/Assets/ThirdParty/
 data/**/*.toml
 
 .vscode
+
+# Developer filesystem journey saves written by the saved-journeys dev API.
+saved-journeys/
