@@ -10,7 +10,7 @@ import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
-} from "./__test-helpers__/atlas-fixtures";
+} from "./testing/atlas-fixtures";
 import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "./cumulus/CumulusRoot";
@@ -485,11 +485,6 @@ beforeEach(() => {
   vi.mocked(getFirebaseDatabase).mockReturnValue(
     {} as ReturnType<typeof getFirebaseDatabase>,
   );
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   // These specs exercise the desktop deck-viewer overlay (mocked as
   // `deckViewerMock`); report a desktop viewport so `useIsDesktop` selects the
   // `DesktopDeckViewerAdapter` rather than the narrow-viewport

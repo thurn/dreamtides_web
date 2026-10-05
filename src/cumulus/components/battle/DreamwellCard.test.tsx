@@ -3,18 +3,10 @@ import { assertLocalized } from "@trox/runtime";
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { DreamwellCard, type DreamwellCardModel } from "./DreamwellCard";
 import { testDreamwellCardId } from "../../../types/test-identities";
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 const MODEL: DreamwellCardModel = {
   cardId: testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),

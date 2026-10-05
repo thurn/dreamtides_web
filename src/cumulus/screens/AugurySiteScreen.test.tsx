@@ -167,9 +167,6 @@ function click(element: Element | null): void {
 }
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   globalThis.ResizeObserver = class {
     observe(): void {}
     unobserve(): void {}

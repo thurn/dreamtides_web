@@ -3,7 +3,7 @@ import { assertLocalized } from "@trox/runtime";
 
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GlossaryTerm } from "./GlossaryTerm";
 import { RulesText } from "./RulesText";
@@ -21,12 +21,6 @@ function mount(element: ReactElement): {
   act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
   return { container, root };
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

@@ -18,7 +18,7 @@ import {
   SYNTHETIC_ATLAS_DREAMSCAPES,
   EARLY_ATLAS_FILL_PROFILE_ID,
   LATE_ATLAS_FILL_PROFILE_ID,
-} from "../__test-helpers__/atlas-fixtures";
+} from "../testing/atlas-fixtures";
 import { gambleFixture } from "../testing/gamble-fixture";
 import type {
   AtlasNodeState,

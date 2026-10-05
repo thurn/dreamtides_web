@@ -52,11 +52,6 @@ function guidanceFields(
 
 describe("BattleTutorialGuidance", () => {
   beforeEach(() => {
-    (
-      globalThis as typeof globalThis & {
-        IS_REACT_ACT_ENVIRONMENT?: boolean;
-      }
-    ).IS_REACT_ACT_ENVIRONMENT = true;
     globalThis.ResizeObserver = ResizeObserverStub;
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: query.includes("min-width"),

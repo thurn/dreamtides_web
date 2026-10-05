@@ -111,11 +111,6 @@ function Harness({ cardIds }: { readonly cardIds: readonly CardId[] }) {
 
 beforeEach(() => {
   vi.useFakeTimers();
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
     x: 0,
     y: 0,

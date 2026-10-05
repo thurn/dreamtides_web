@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { reachableAtlasNodeIds } from "./atlas-generator";
-import { makeTestAtlasNode } from "../__test-helpers__/atlas-fixtures";
+import { makeTestAtlasNode } from "../testing/atlas-fixtures";
 import type { DreamAtlas, DreamscapeNode } from "../types/journey";
 import { LayerName } from "../types/layer-name";
 import { parseAtlasNodeId } from "../types/identifiers";

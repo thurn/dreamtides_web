@@ -14,7 +14,7 @@ import {
   buildDreamsignBazaarRestock,
   buildDreamsignBazaarSiteView,
 } from "./dreamsign-bazaar-view-model";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 
 function sign(idSeed: string, name: string): Dreamsign {
   return {

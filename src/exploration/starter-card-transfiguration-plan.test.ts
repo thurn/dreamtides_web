@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../__test-helpers__/atlas-fixtures";
+} from "../testing/atlas-fixtures";
 import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";

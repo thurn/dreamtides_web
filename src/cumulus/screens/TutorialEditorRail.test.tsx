@@ -79,9 +79,6 @@ function setTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
 
 beforeEach(() => {
   vi.spyOn(globalThis.crypto, "randomUUID").mockReturnValue(NEW_ACTION_ID);
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
 });
 
 afterEach(() => {

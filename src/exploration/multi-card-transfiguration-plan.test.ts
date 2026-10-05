@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../__test-helpers__/atlas-fixtures";
+} from "../testing/atlas-fixtures";
 import type { JourneyContent } from "../data/journey-content";
 import { createDefaultState } from "../state/journey-context";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";

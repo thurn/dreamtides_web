@@ -7,7 +7,7 @@ import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import {
   makeTutorialConfiguration,
   TEST_TUTORIAL_CARD_CONSTANTS,
-} from "../../test/tutorial-configuration-fixture";
+} from "../../testing/tutorial-configuration-fixture";
 import { getLogEntries, resetLog } from "../../logging";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -58,9 +58,6 @@ function card(cardNumber: number, idSeed: string): CardData {
 }
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,

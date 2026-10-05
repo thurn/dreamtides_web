@@ -14,12 +14,12 @@ import { LayerName } from "../../types/layer-name";
 import type { DreamscapeScreenProps } from "../../cumulus/screens/DreamscapeScreen";
 import { logEvent, logEventOnce } from "../../logging";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
-import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
+import { makeTutorialConfiguration } from "../../testing/tutorial-configuration-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
-} from "../../__test-helpers__/atlas-fixtures";
+} from "../../testing/atlas-fixtures";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
@@ -135,9 +135,6 @@ function setJourneyContext(
 
 beforeEach(() => {
   vi.clearAllMocks();
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
 });
 
 describe("DreamscapeScreenAdapter", () => {

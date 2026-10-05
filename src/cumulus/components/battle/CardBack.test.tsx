@@ -3,18 +3,10 @@
 import { act } from "react";
 import { assertLocalized } from "@trox/runtime";
 import { createRoot } from "react-dom/client";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CARD_ASPECT_RATIO } from "../card/card-aspect";
 import { CardBack } from "./CardBack";
 import { CumulusRoot } from "../../CumulusRoot";
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 describe("CardBack", () => {
   it("renders the canonical sprite as a non-interactive 5:7 card", () => {

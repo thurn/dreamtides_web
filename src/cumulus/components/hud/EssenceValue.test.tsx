@@ -2,19 +2,11 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { semanticEntityId } from "../../../types/semantic-identity";
 import { CumulusRoot } from "../../CumulusRoot";
 import { EssenceValue } from "./EssenceValue";
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 describe("EssenceValue", () => {
   it("owns the solid reward badge presentation", () => {

@@ -72,9 +72,6 @@ vi.mock("../screens/cumulus_adapters/TutorialBattleScreenAdapter", () => ({
 }));
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.spyOn(console, "log").mockImplementation(() => {});
   window.history.replaceState(null, "", "/main?game=room42#shared");
   stateMocks.frontDoor = { phase: "main", journeyId: null };

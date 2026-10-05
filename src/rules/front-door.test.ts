@@ -6,7 +6,7 @@ import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
 import {
   TEST_TUTORIAL_CARD_CONSTANTS,
   TEST_TUTORIAL_PLAYER_AVATAR_ID,
-} from "../test/tutorial-configuration-fixture";
+} from "../testing/tutorial-configuration-fixture";
 import { registerTutorialFrontDoorContentProvider } from "./front-door";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";

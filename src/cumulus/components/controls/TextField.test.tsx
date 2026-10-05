@@ -3,15 +3,9 @@
 import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { TextField } from "./TextField";
 import { CumulusRoot } from "../../CumulusRoot";
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

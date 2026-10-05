@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { parseCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
@@ -68,14 +68,6 @@ function mount(
   });
   return { container, root };
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

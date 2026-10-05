@@ -30,7 +30,7 @@ import {
   parseCardSubtype,
 } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import type {
   DraftPoolCopiesByCard,
   PoolDraftState,

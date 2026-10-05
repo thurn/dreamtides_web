@@ -25,9 +25,6 @@ vi.mock("../data/tutorial-actions", async (importOriginal) => {
 vi.mock("../logging", () => ({ logEvent: mocks.logEvent }));
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   mocks.loadTutorialActions.mockReset();
   mocks.logEvent.mockReset();
 });

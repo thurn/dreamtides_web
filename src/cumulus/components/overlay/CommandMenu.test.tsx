@@ -8,9 +8,6 @@ import { CommandMenu, type CommandMenuItem } from "./CommandMenu";
 import { GLYPHS } from "../../primitives/glyph";
 import { CumulusRoot } from "../../CumulusRoot";
 
-(
-  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 
 const actions: readonly CommandMenuItem[] = [
   {

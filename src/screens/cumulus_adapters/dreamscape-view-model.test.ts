@@ -14,7 +14,7 @@ import type {
 } from "../../types/journey";
 import { resolveArtRef } from "../../cumulus/primitives/art";
 import { createDefaultState } from "../../state/journey-context";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import {
   battleLabel,
   buildDreamscapeHudView,

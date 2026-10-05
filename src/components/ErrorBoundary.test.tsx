@@ -39,11 +39,6 @@ function mount(element: ReactElement): {
 beforeEach(() => {
   vi.clearAllMocks();
   resetLog();
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   // Suppress noisy React error logs from intentional throws during these
   // tests. The boundary still records the failure via logEvent + window.__caps.
   vi.spyOn(console, "error").mockImplementation(() => undefined);

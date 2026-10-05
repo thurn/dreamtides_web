@@ -75,9 +75,6 @@ function pointer(type: string, init: PointerEventInit): Event {
 
 beforeEach(() => {
   vi.mocked(extractMaterializedFigmentPreviews).mockReset().mockReturnValue([]);
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = (query: string) => ({
     matches: query.includes("pointer: fine"),
     media: query,

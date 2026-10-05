@@ -65,9 +65,6 @@ function active(
 }
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   Object.defineProperty(window, "visualViewport", {
     configurable: true,
     value: { width: 1200, height: 300, offsetLeft: 0, offsetTop: 0 },

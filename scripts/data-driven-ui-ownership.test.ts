@@ -33,7 +33,7 @@ function productionTypeScriptFiles(): string[] {
     .filter((path) => !path.includes("/src/cumulus/docs/"))
     .filter((path) => !path.includes("/src/debug/"))
     .filter((path) => !path.includes("/src/testing/"))
-    .filter((path) => !path.includes("/src/__test-helpers__/"))
+    .filter((path) => !path.includes("/src/testing/"))
     .filter((path) => !path.endsWith("/src/data/localization-messages.ts"));
 }
 

@@ -79,9 +79,6 @@ function stubViewport(desktop: boolean): void {
 }
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   globalThis.ResizeObserver = ResizeObserverStub;
   // Default to the mobile carousel; desktop tests opt in via stubViewport(true).
   stubViewport(false);

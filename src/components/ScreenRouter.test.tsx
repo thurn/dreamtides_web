@@ -101,11 +101,6 @@ vi.mock("./BattleSiteRoute", () => ({
 const roots: Root[] = [];
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   motionPreference.reduced = false;
   motionPreference.isPresent = true;
   globalThis.ResizeObserver = class ResizeObserverStub {

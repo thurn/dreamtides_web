@@ -13,9 +13,6 @@ const TIDES = requireGlossaryEntry(GLOSSARY_IDS.tides);
 
 describe("TideDisc", () => {
   it("derives its tide primary and definition secondary internally", () => {
-    (
-      globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-    ).IS_REACT_ACT_ENVIRONMENT = true;
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);

@@ -23,9 +23,6 @@ import {
   testOfferTileId,
 } from "../../../types/test-identities";
 
-(
-  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 
 function fixtureCard(
   cardId: CardId,

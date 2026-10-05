@@ -9,7 +9,7 @@ import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
-} from "../__test-helpers__/atlas-fixtures";
+} from "../testing/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { BattleSiteRoute } from "./BattleSiteRoute";
@@ -229,11 +229,6 @@ beforeEach(() => {
   (
     mockActions as unknown as { beginBattle: typeof beginBattleSpy }
   ).beginBattle = beginBattleSpy;
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   document.body.innerHTML = "";
 });
 

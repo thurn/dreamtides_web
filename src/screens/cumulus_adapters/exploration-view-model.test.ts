@@ -26,7 +26,7 @@ import { createDefaultState } from "../../state/journey-context";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../../__test-helpers__/atlas-fixtures";
+} from "../../testing/atlas-fixtures";
 import {
   buildExplorationActionEffect as buildExplorationActionEffectImpl,
   buildExplorationSiteView as buildExplorationSiteViewImpl,

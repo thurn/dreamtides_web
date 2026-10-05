@@ -10,7 +10,7 @@ import { getLogEntries, resetLog } from "../../logging";
 import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
 import type { TutorialScreenProps } from "../../cumulus/screens/TutorialScreen";
 import type { AvatarContent } from "../../types/content";
-import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
+import { makeTutorialConfiguration } from "../../testing/tutorial-configuration-fixture";
 import type { CardId } from "../../types/card-identity";
 import { parseBattleId } from "../../types/identifiers";
 import { parseTutorialRunId } from "../../types/identifiers";
@@ -227,9 +227,6 @@ vi.mock("../../cumulus/screens/TutorialScreen", () => ({
 }));
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.spyOn(console, "log").mockImplementation(() => {});
   mocks.beginTutorial.mockClear();
   mocks.beginTutorialBattle.mockClear();

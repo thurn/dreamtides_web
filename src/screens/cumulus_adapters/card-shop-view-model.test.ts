@@ -9,7 +9,7 @@ import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../../cumulus/primitives/art";
 import { economyFixture } from "../../testing/economy-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import type { ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildCardShopOffers,

@@ -10,7 +10,7 @@ import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../../__test-helpers__/atlas-fixtures";
+} from "../../testing/atlas-fixtures";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type {
   ExplorationActionContent,

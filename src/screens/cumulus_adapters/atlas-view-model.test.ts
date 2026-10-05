@@ -21,7 +21,7 @@ import type { JourneyContent } from "../../data/journey-content";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../../__test-helpers__/atlas-fixtures";
+} from "../../testing/atlas-fixtures";
 import {
   ATLAS_LAYOUT_DESKTOP,
   ATLAS_LAYOUT_MOBILE,

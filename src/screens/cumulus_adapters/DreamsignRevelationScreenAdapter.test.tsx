@@ -20,7 +20,7 @@ import type {
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { LayerName } from "../../types/layer-name";
 import { economyFixture } from "../../testing/economy-fixture";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { testDreamscapeId, testGuideId, testDreamsignId } from "../../types/test-identities";
@@ -183,9 +183,6 @@ beforeEach(() => {
   vi.clearAllMocks();
   loggingMock.emitted.length = 0;
   loggingMock.keys.clear();
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   setJourneyContext();
 });
 

@@ -11,7 +11,7 @@ import {
   loadTestDreamGuides,
   loadTestDreamscapes,
   makeTestAtlasNode,
-} from "../__test-helpers__/atlas-fixtures";
+} from "../testing/atlas-fixtures";
 import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
 import type {
@@ -23,7 +23,7 @@ import {
   buildTestCorpusCards,
   makeTestPoolContext,
   TEST_STARTER_CARD_NUMBERS,
-} from "../__test-helpers__/pool-context";
+} from "../testing/pool-context";
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import type { PoolDraftState } from "../types/draft";
 import { toJourneyAvatar } from "../data/avatar-selection";

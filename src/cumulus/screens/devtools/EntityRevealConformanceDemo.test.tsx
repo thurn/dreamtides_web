@@ -22,7 +22,6 @@ interface OpenLog extends Record<string, unknown> {
 }
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
     matches: query.includes("pointer: fine"), media: query, onchange: null,
     addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false,

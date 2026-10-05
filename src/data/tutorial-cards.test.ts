@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
 import { loadTutorialCards } from "./tutorial-cards";
-import { TEST_TUTORIAL_CARD_CONSTANTS } from "../test/tutorial-configuration-fixture";
+import { TEST_TUTORIAL_CARD_CONSTANTS } from "../testing/tutorial-configuration-fixture";
 import { testCardId } from "../types/test-identities";
 
 const TUTORIAL_OPPONENT_CARD_ID =

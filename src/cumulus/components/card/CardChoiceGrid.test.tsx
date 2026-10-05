@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { parseCardName } from "../../../types/card-identity";
 import { CardChoiceGrid } from "./CardChoiceGrid";
 import { CARD_CORNER_RADIUS } from "./card-aspect";
@@ -58,12 +58,6 @@ function model(name: string): GameCardModel {
     },
   };
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 describe("CardChoiceGrid", () => {
   it("renders a frameless named-column choice grid and routes stable ids", () => {

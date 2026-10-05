@@ -3,7 +3,7 @@ import { assertLocalized } from "@trox/runtime";
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import type { AvatarVisual } from "./AvatarPortrait";
 import { AvatarStage } from "./AvatarStage";
 import { CumulusRoot } from "../../CumulusRoot";
@@ -26,14 +26,6 @@ function mountInto(node: React.ReactElement): {
   });
   return { container, root };
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

@@ -2,18 +2,12 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { TidesInfoLabel } from "./TidesInfoLabel";
 import { GLOSSARY_IDS, requireGlossaryEntry } from "../../../data/glossary";
 
 const TIDES = requireGlossaryEntry(GLOSSARY_IDS.tides);
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

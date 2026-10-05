@@ -8,7 +8,7 @@ import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
-} from "../__test-helpers__/atlas-fixtures";
+} from "../testing/atlas-fixtures";
 import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
 import { parseQaSceneId } from "../types/identifiers";
@@ -41,7 +41,7 @@ import type {
 import {
   buildTestCorpusCards,
   makeTestPoolContext,
-} from "../__test-helpers__/pool-context";
+} from "../testing/pool-context";
 import {
   QA_SCENES,
   buildQaScene,
@@ -51,7 +51,7 @@ import {
 import {
   makeTutorialConfiguration,
   TEST_TUTORIAL_PLAYER_AVATAR_ID,
-} from "../test/tutorial-configuration-fixture";
+} from "../testing/tutorial-configuration-fixture";
 import { parseSiteId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { SiteId } from "../types/identifiers";

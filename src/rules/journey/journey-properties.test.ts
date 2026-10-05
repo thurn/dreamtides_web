@@ -52,7 +52,7 @@ import { testEventActor } from "../../types/test-identities";
 // proves the nullability checker fires on a deliberate non-carve-out nulling.
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 
 import { eventRng } from "../../eventlog/rng";
 import { foldEvents } from "../../eventlog/fold";

@@ -13,7 +13,7 @@ const EXCLUDED_PREFIXES = [
   "src/editor/",
   "src/debug/",
   "src/image_viewer/",
-  "src/__test-helpers__/",
+  "src/testing/",
   "src/battle/components/BattleContextMenu.tsx",
   "src/battle/test-support.ts",
   "src/components/AuguryJourneyMenu.ts",

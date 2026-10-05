@@ -58,11 +58,6 @@ function actionFor(id: TestedActionId) {
 beforeEach(() => {
   latest = null;
   vi.clearAllMocks();
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.mocked(useJourney).mockReturnValue({
     state: { screen: { type: "atlas" } },
   } as ReturnType<typeof useJourney>);

@@ -13,7 +13,7 @@ import {
 import {
   makeTutorialBattleConfiguration,
   TEST_TUTORIAL_CARD_CONSTANTS,
-} from "../test/tutorial-configuration-fixture";
+} from "../testing/tutorial-configuration-fixture";
 import {
   testCardId,
   testDreamwellCardId,

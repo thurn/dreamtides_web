@@ -5,7 +5,7 @@ import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../../CumulusRoot";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { ENERGY_ICON_COLOR } from "../controls/StandaloneGlyph";
 import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import { renderRulesSymbolsInline, RulesText } from "./RulesText";
@@ -28,14 +28,6 @@ function mount(element: ReactElement): {
   });
   return { container, root };
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

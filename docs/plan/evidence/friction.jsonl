@@ -5,3 +5,5 @@
 {"bead":"hv-b8ef.7","phase":1,"claimToCommitMin":20,"localValidationS":{"review":50.3,"focused":5},"reviewFindings":0,"prevBead":{"id":"hv-b8ef.4","gateS":427.3,"candidates":1,"ciRepairs":0},"friction":[]}
 {"bead":"hv-b8ef.8","phase":1,"claimToCommitMin":45,"localValidationS":{"review":57.1,"focused":6},"reviewFindings":0,"prevBead":{"id":"hv-b8ef.7","gateS":436.4,"candidates":1,"ciRepairs":0},"friction":[]}
 {"bead":"hv-b8ef.9","phase":1,"claimToCommitMin":55,"localValidationS":{"review":86.3,"focused":30},"reviewFindings":0,"prevBead":{"id":"hv-b8ef.8","gateS":432.9,"candidates":1,"ciRepairs":0},"friction":[{"tag":"host-load-noise","minutes":10,"note":"post-triage suite runtime could not be compared with the baseline at host load ~55"}]}
+{"bead":"hv-b8ef.6","phase":1,"claimToCommitMin":15,"localValidationS":{},"reviewFindings":0,"prevBead":{"id":"hv-b8ef.9","gateS":427.8,"candidates":1,"ciRepairs":0},"friction":[]}
+{"bead":"hv-b8ef.10","phase":1,"claimToCommitMin":35,"localValidationS":{"review":237.9,"focused":197},"reviewFindings":0,"prevBead":null,"friction":[]}

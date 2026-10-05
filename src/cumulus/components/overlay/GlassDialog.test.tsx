@@ -41,11 +41,6 @@ function stubMatchMedia(matches: boolean): void {
 
 beforeEach(() => {
   vi.mocked(hasInjectedDisplayCutout).mockReturnValue(false);
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   // Stub matchMedia → mobile: every query misses, so `useIsDesktop` is false
   // and the dialog renders its full-bleed idiom. Pressable's reduced-motion
   // probe reads the same API.

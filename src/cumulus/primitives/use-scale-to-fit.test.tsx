@@ -44,9 +44,6 @@ function renderHook(
 }
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   setViewport(1920, 1080);
 });
 

@@ -520,7 +520,7 @@ that state-machine vocabulary behind their `onPress` API.
 
 Real content wherever it exists: Card / RulesText demos render from real card
 UUIDs (a small curated, deterministic set); Atlas / SiteNode from the existing
-`__test-helpers__/atlas-fixtures` generators; mockups compose Cumulus components
+`src/testing/atlas-fixtures` generators; mockups compose Cumulus components
 around that real content and reuse production art already served from `public/`.
 Baked sample fixtures are used only where no real source exists. Full-screen
 mockups render at `100vw × 100vh`, responsive to the real viewport.

@@ -11,7 +11,7 @@ import { parseCardName } from "../../types/card-identity";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../../__test-helpers__/atlas-fixtures";
+} from "../../testing/atlas-fixtures";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { transfigurationFormFixture } from "../../testing/transfiguration-fixture";
 import type {
@@ -51,7 +51,7 @@ import { parseDeckEntryId } from "../../types/identifiers";
 import { parseAuguryTargetKey } from "../../types/identifiers";
 import { parseAuguryCategoryId } from "../../types/identifiers";
 import type { DreamGuideContent } from "../../types/content";
-import { makeTestPoolContext } from "../../__test-helpers__/pool-context";
+import { makeTestPoolContext } from "../../testing/pool-context";
 import {
   testCardId,
   testDreamscapeId,

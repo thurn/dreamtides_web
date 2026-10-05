@@ -4,7 +4,7 @@ import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { GlassButton } from "./GlassButton";
 import { GLYPHS } from "../../primitives/glyph";
 import { CumulusRoot } from "../../CumulusRoot";
@@ -21,27 +21,6 @@ function mount(element: ReactElement): {
   });
   return { container, root };
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-  // Pressable's usePrefersReducedMotion reads window.matchMedia; jsdom lacks it.
-  if (typeof window.matchMedia !== "function") {
-    window.matchMedia = (query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      addListener: () => {},
-      removeListener: () => {},
-      dispatchEvent: () => false,
-    });
-  }
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

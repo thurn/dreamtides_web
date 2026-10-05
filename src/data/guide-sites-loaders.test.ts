@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../testing/atlas-fixtures";
 import type { SiteType } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
 import { loadDreamGuides } from "./dreamscapes";

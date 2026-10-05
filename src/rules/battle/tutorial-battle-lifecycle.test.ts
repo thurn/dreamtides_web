@@ -18,13 +18,13 @@ import type { FoldState } from "../fold-state";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../../__test-helpers__/atlas-fixtures";
+} from "../../testing/atlas-fixtures";
 import type { TutorialAction } from "../../types/tutorial";
 import {
   makeTutorialBattleConfiguration,
   makeTutorialConfiguration,
   TEST_TUTORIAL_PLAYER_AVATAR_ID,
-} from "../../test/tutorial-configuration-fixture";
+} from "../../testing/tutorial-configuration-fixture";
 import { registerTutorialFrontDoorContentProvider } from "../front-door";
 import type { CardId } from "../../types/card-identity";
 import { parseBattleCardId } from "../../types/identifiers";

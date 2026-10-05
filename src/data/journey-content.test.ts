@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
-} from "../__test-helpers__/atlas-fixtures";
+} from "../testing/atlas-fixtures";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";

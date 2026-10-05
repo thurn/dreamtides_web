@@ -1,7 +1,7 @@
 import { testJourneySeed } from "../types/test-identities";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { makeTestPoolContext } from "../__test-helpers__/pool-context";
+import { makeTestPoolContext } from "../testing/pool-context";
 import { getLogEntries, resetLog } from "../logging";
 import type { AvatarContent } from "../types/content";
 import {

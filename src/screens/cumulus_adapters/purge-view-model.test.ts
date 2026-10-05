@@ -16,7 +16,7 @@ import {
   buildPurgeVisitCosts,
 } from "./purge-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { testCardId, testDreamscapeId, testGuideId } from "../../types/test-identities";

@@ -8,7 +8,6 @@ import { TroxLocalizationProvider } from "./context";
 import { requireSourceRuntime } from "./runtime";
 import { useLocalizer } from "./use-localizer";
 
-(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 function Fixture() {
   const resolve = useLocalizer();

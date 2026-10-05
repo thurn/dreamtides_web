@@ -3,7 +3,7 @@ import { testEventActor } from "../../types/test-identities";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
 import { gambleFixture } from "../../testing/gamble-fixture";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type {
   GravokGateId,

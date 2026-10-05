@@ -28,7 +28,6 @@ function mount(view: ApplicationStateView): void {
 }
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = vi.fn().mockImplementation(() => ({
     matches: false,
     addEventListener: vi.fn(),

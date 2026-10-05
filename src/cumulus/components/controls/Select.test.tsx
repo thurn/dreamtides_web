@@ -3,7 +3,7 @@
 import { assertLocalized } from "@trox/runtime";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { Select, type SelectOption } from "./Select";
 
@@ -36,26 +36,6 @@ function rect({ top, bottom }: { top: number; bottom: number }): DOMRect {
     toJSON: () => ({}),
   };
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-  if (typeof window.matchMedia !== "function") {
-    window.matchMedia = (query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      addListener: () => {},
-      removeListener: () => {},
-      dispatchEvent: () => false,
-    });
-  }
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

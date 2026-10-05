@@ -18,7 +18,7 @@ import type {
 import {
   makeTutorialBattleConfiguration,
   TEST_TUTORIAL_CARD_CONSTANTS,
-} from "../../test/tutorial-configuration-fixture";
+} from "../../testing/tutorial-configuration-fixture";
 import { parseTutorialRunId } from "../../types/identifiers";
 import { parseBattleSlotViewId } from "../../types/identifiers";
 import { testTutorialActionId, testAvatarId, testDreamwellCardId, testCardId } from "../../types/test-identities";

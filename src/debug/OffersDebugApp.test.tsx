@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { AUGURY_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
-import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../testing/atlas-fixtures";
 import OffersDebugApp, {
   buildOfferTileDebugModels,
   OFFER_TILE_DEBUG_ARCHETYPE_IDS,
@@ -37,9 +37,6 @@ afterEach(() => {
 describe("OffersDebugApp", () => {
   it("shows one OfferTile for every distinct Augury UI presentation", async () => {
     vi.stubEnv("MODE", "production");
-    (
-      globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-    ).IS_REACT_ACT_ENVIRONMENT = true;
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);

@@ -10,7 +10,7 @@ import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
-import { loadTestSitesData } from "../../__test-helpers__/atlas-fixtures";
+import { loadTestSitesData } from "../../testing/atlas-fixtures";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 //
 //   START_JOURNEY -> SELECT_AVATAR -> OPEN_SITE (every content-coupled site
@@ -26,7 +26,7 @@ import { gambleGameByRulesKind } from "../../data/gamble-data";
 //       task exists to prevent.
 //
 // Data-resilient per AGENTS.md: the JourneyContent is built from the shared
-// __test-helpers__ (live compiled dreamscape / atlas-data bundles) plus a
+// src/testing (live compiled dreamscape / atlas-data bundles) plus a
 // hand-authored card/dreamsign corpus. Site ids and the avatar id are
 // RESOLVED from the folded state / content, never hardcoded, and the assertions
 // are over OUTCOMES and HASHES, never TOML content — so a data edit cannot
@@ -55,12 +55,12 @@ import {
   loadTestAtlasData,
   loadTestDreamGuides,
   loadTestDreamscapes,
-} from "../../__test-helpers__/atlas-fixtures";
+} from "../../testing/atlas-fixtures";
 import {
   buildTestCorpusCards,
   makeTestPoolContext,
   TEST_STARTER_CARD_NUMBERS,
-} from "../../__test-helpers__/pool-context";
+} from "../../testing/pool-context";
 import { LayerName } from "../../types/layer-name";
 import { buildAuguryContext } from "../../journey_v2/context/buildAuguryContext";
 import { generateAuguryEncounter } from "../../journey_v2/encounter/generateAuguryEncounter";

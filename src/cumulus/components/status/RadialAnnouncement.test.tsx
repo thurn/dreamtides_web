@@ -12,9 +12,6 @@ import { GLYPHS } from "../../primitives/glyph";
 import { CumulusRoot } from "../../CumulusRoot";
 import { RadialAnnouncement } from "./RadialAnnouncement";
 
-(
-  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 
 describe("RadialAnnouncement", () => {
   it("renders a semantic reward with canonical Essence notation", () => {

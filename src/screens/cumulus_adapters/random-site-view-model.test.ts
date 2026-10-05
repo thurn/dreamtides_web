@@ -3,7 +3,7 @@ import { localizedStringSourceEquality } from "../../runtime/localization/testin
 import { resolveSource } from "../../runtime/localization/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode, SiteState } from "../../types/journey";
 import { buildRandomSiteView } from "./random-site-view-model";

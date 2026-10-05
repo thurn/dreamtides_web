@@ -8,7 +8,7 @@ import {
 } from "react";
 import { createRoot } from "react-dom/client";
 import { assertLocalized } from "@trox/runtime";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { parseCardName } from "../../../types/card-identity";
 import type { GameCardModel } from "../card/CardView";
 import type { DomElementId } from "../../types/dom";
@@ -89,14 +89,6 @@ const CARDS: readonly BattlePileCard[] = [
   },
   { face: "down", id: parseBattleCardId("instance-hidden") },
 ];
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 describe("CardPile", () => {
   it("renders the topmost three physical layers in stable identity order", () => {

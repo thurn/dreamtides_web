@@ -11,9 +11,6 @@ import { parseDeckEntryId } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
 import type { CardData } from "../../types/cards";
 
-(
-  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 Object.defineProperty(window, "matchMedia", {
   configurable: true,
   value: vi.fn().mockImplementation((query: string) => ({

@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { tx } from "@trox/runtime";
 import { CumulusRoot } from "../../CumulusRoot";
 import {
@@ -12,12 +12,6 @@ import {
 } from "./PlayingCard";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { testDreamsignId } from "../../../types/test-identities";
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   document.body.innerHTML = "";

@@ -47,9 +47,6 @@ function stubViewport(desktop: boolean, fine = true): void {
 }
 
 beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   originalInnerWidth = window.innerWidth;
   originalClientWidth = Object.getOwnPropertyDescriptor(
     HTMLElement.prototype,

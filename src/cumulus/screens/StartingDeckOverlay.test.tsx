@@ -145,9 +145,6 @@ function setDesktopViewport(isDesktop: boolean, roomy = false): void {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   // Narrow viewport by default so useIsDesktop() is false (full-bleed mobile).
   setDesktopViewport(false);
 });

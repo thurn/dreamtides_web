@@ -9,7 +9,7 @@ import {
 import {
   loadTestDreamscapes,
   loadTestAtlasData,
-} from "../src/__test-helpers__/atlas-fixtures";
+} from "../src/testing/atlas-fixtures";
 
 const dreamscapes = loadTestDreamscapes();
 const atlasData = loadTestAtlasData();

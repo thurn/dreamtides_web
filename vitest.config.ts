@@ -34,6 +34,7 @@ export default defineConfig({
       "**/.temp/**",
       "**/.claude/worktrees/**",
     ],
+    setupFiles: ["src/testing/setup-dom.ts"],
     pool: "threads",
     maxWorkers: Math.min(maxWorkers, availableParallelism()),
     testTimeout,

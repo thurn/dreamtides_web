@@ -3,7 +3,7 @@ import { assertLocalized } from "@trox/runtime";
 
 import { act, type ComponentProps } from "react";
 import { createRoot } from "react-dom/client";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { BattleStatusDisplay } from "./BattleStatusDisplay";
 import { testAvatarId } from "../../../types/test-identities";
@@ -17,14 +17,6 @@ function LocalizedBattleStatusDisplay(
     </CumulusRoot>
   );
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 describe("BattleStatusDisplay", () => {
   it("labels canonical ownership relative to the current perspective", () => {

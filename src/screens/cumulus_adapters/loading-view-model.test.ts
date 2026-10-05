@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { TEST_TUTORIAL_CARD_CONSTANTS } from "../../test/tutorial-configuration-fixture";
+import { TEST_TUTORIAL_CARD_CONSTANTS } from "../../testing/tutorial-configuration-fixture";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { buildLoadingView } from "./loading-view-model";

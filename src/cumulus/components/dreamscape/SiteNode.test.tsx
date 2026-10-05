@@ -26,9 +26,6 @@ const MODEL: DreamscapeSiteModel = {
 
 describe("SiteNode", () => {
   it("keeps an unavailable site focusable and descriptive while suppressing activation", () => {
-    (
-      globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-    ).IS_REACT_ACT_ENVIRONMENT = true;
     const activate = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
@@ -62,9 +59,6 @@ describe("SiteNode", () => {
   });
 
   it("owns distinct scene and reward presentation sizes", () => {
-    (
-      globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-    ).IS_REACT_ACT_ENVIRONMENT = true;
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);

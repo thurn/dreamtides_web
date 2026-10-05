@@ -60,11 +60,6 @@ function mockDesktop(matches: boolean): void {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
   mockDesktop(false);
   vi.mocked(useJourney).mockReturnValue({
     state: {},
