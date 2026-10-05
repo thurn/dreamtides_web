@@ -25,11 +25,23 @@ function character(
     subtype: options.subtype ?? "Warrior",
     speed: options.speed ?? "standard",
     keywords: options.keywords ?? [],
+    status: "vanilla",
+    abilities: () => [],
   };
 }
 
 function event(index: number, cost: number, speed: EngineCardDefinition["speed"]): EngineCardDefinition {
-  return { id: syntheticId(index), cardType: "event", cost, spark: null, subtype: "", speed, keywords: [] };
+  return {
+    id: syntheticId(index),
+    cardType: "event",
+    cost,
+    spark: null,
+    subtype: "",
+    speed,
+    keywords: [],
+    status: "vanilla",
+    abilities: () => [],
+  };
 }
 
 /** Synthetic definitions by role. */

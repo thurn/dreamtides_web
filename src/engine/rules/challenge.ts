@@ -2,6 +2,7 @@ import type { InstanceId, Side } from "../state/ids";
 import { FRONT_RANK_SIZE, opponent } from "../state/ids";
 import type { StepContext } from "../steps/types";
 import { gainPoints } from "./resources";
+import { hasKeyword } from "./keywords";
 import { effectiveSpark } from "./spark";
 import { dissolve, instanceOf } from "./zones";
 
@@ -46,9 +47,6 @@ export function designateBlockers(ctx: StepContext): void {
   ctx.emit({ kind: "blockersDesignated", side: defending, blockers });
 }
 
-function hasKeyword(ctx: StepContext, id: InstanceId, keyword: "vengeful"): boolean {
-  return ctx.catalog.card(instanceOf(ctx.state, id).cardId).keywords.includes(keyword);
-}
 
 /**
  * Resolves one front-rank lane. The challenger is the designated challenger
@@ -91,10 +89,10 @@ export function resolveLane(ctx: StepContext, lane: number): void {
   let challengerDissolves = challengerSpark <= blockerSpark;
   let blockerDissolves = blockerSpark <= challengerSpark;
   // Vengeful: a character that loses its challenge dissolves its opponent too.
-  if (challengerDissolves && hasKeyword(ctx, challenger, "vengeful")) {
+  if (challengerDissolves && hasKeyword(state, catalog, challenger, "vengeful")) {
     blockerDissolves = true;
   }
-  if (blockerDissolves && hasKeyword(ctx, blocker, "vengeful")) {
+  if (blockerDissolves && hasKeyword(state, catalog, blocker, "vengeful")) {
     challengerDissolves = true;
   }
   const scored =

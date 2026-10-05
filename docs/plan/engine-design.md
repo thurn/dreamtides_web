@@ -316,15 +316,19 @@ After each intent, the reducer **advances**:
 
 Properties that follow:
 
-- **Prompt IDs** are `${committed.version}:${answers.length}`. They are stable
-  across reloads and re-runs, so a stale UI answer bounces deterministically.
+- **Prompt IDs** are `${committed.version}:${attempt}:${answers.length}`, where
+  `attempt` is a persisted counter on the slice that every new in-flight step
+  and every cancel advance. They are stable across reloads and re-runs and
+  differ between attempts, so a stale UI answer bounces deterministically.
 - **Reload mid-prompt** replays the log and reaches the identical prompt.
   Local selection state in the UI is lost, which is acceptable.
 - **Re-run cost** is one step's execution per answer. Steps are small, so this
-  is microseconds. A non-persisted memo keyed by
-  `(committed.version, answers.length)` avoids redundant re-runs.
+  is microseconds. A non-persisted memo keyed by the committed state and the
+  in-flight record avoids redundant re-runs.
 - **Events are deterministic,** so re-runs regenerate an identical prefix. The
-  fold publishes only new events, and asserts prefix equality in development.
+  fold publishes only new events, and in development compares each re-run with
+  the same step's previous answer prefix; a mismatch, like any replay failure,
+  becomes an `engine_error` that keeps `committed`.
 - **Either side can be prompted at any time.** A human card can prompt the AI
   ("each player discards"), and an AI card can prompt the human. The UI and
   the AI host both just watch `pending.side`.
@@ -354,7 +358,7 @@ interface Prompt {
   candidates?: InstanceId[];           // complete legal set
   min?: number; max?: number;          // bounds
   options?: ModeOption[];              // modes, each with its own legality
-  arrangement?: ArrangeSpec;           // cards + destinations ("top", "bottom", "void", "hand")
+  cards?: InstanceId[]; destinations?: { to: "top" | "bottom" | "void" | "hand"; min: number; max: number }[];  // arrange
   cancellable: boolean;                // only before commitPoint of the acting side's own play/activate
   privateTo?: Side;                    // revealed cards visible only to the chooser (e.g. "look at the top 4")
 }
@@ -558,22 +562,27 @@ Each entity lives in a typed content module that holds its catalog data, its
 printed text, and its abilities together:
 
 ```ts
-// src/content/cards/windcutter-7be2e6d7.ts
+// src/content/cards/windcutter-7be2e6d7.ts (catalog fields abbreviated)
 export default card({
-  id: "7be2e6d7-abff-4c44-a0c3-35460da1693c",
   name: "Windcutter",
-  text: ["▸Challenge: Banish an enemy until end of turn."],
+  id: "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+  renderedText: "▸Challenge: Banish an enemy until end of turn.",
   amplifiedText: "▸Challenge: Banish an enemy until your next turn.",
-  cost: fixed(3),
-  kind: character({ subtype: "Warrior", spark: 1 }),
-  rarity: "Uncommon",
-  art: { image: 454095982, crop: { x: -0.426, y: 1.0, scale: 1.37 } },
+  energyCost: 3,
+  cardType: "Character",
+  subtype: "Warrior",
+  spark: 1,
+  // …rarity, art, and the other catalog fields…
   abilities: (v) => [
-    triggered(onChallenge(), banish(target(enemyCharacter()), v.amplified ? untilYourNextTurn() : untilEndOfTurn())),
+    triggered(onChallenge(), p.banish(target(enemyCharacter()), v.amplified ? untilYourNextTurn() : untilEndOfTurn())),
   ],
-  verifiedText: "<hash>",   // hash of text + amplifiedText that these abilities were verified against
+  verifiedText: "…",   // expectedVerifiedText(renderedText, amplifiedText) when these abilities were verified
 });
 ```
+
+An entity is exactly one of `pending: true`, `vanilla: true`, or authored
+`abilities` with `verifiedText` (`src/content/define.ts`). The engine reads
+catalog entries through `content-catalog.ts`; a pending card plays text-less.
 
 **Amplified text is stored expanded.** The RON catalogs author
 `amplified_text` as a compact fuzzy replacement ("until your next turn."),
@@ -602,8 +611,19 @@ can't use `import.meta.glob`.
 () => [event(forDuration(untilEndOfTurn(), sparkModifier(charactersYouControl(), lockedAtResolution(count(charactersYouControl())))))]
 ```
 
-**Primitive catalog.** Phase 3 starts with these. Phase 5 extends them, with
-tests for each.
+**Primitive registry.** Each primitive lives in its own module under
+`src/engine/effects/primitives/`, exporting its node type, its
+`PrimitiveDefinition` (op, optional children and play-time targets, and
+`resolve`), and its builder. `primitives/index.ts` lists one `export *` line
+per primitive and is the authoritative catalog; `effects/registry.ts` derives
+the `Effect` union and the op lookup from it, so adding a primitive touches
+only its module, its group's test file, and one index line. Flow primitives
+resolve children through the `run` callback in their environment. Play-time
+targets are collected by walking the effect tree; one target spec object used
+in several places is one target.
+
+**Primitive catalog.** Phase 3 starts with a subset of these. Phase 5 extends
+them, with tests for each.
 
 | Group | Primitives |
 | --- | --- |

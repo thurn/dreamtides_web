@@ -8,7 +8,8 @@ export interface SideSetup {
   /** Front-rank cards by lane index (`F0`…); `null` leaves a lane empty. */
   readonly front?: readonly (CardId | null)[];
   readonly back?: readonly (CardId | null)[];
-  readonly hand?: readonly CardId[];
+  /** Hand cards; `{ cardId, amplified: true }` places an amplified variant. */
+  readonly hand?: readonly (CardId | { readonly cardId: CardId; readonly amplified: boolean })[];
   readonly deck?: readonly CardId[];
   readonly energy?: number;
   readonly score?: number;
@@ -54,7 +55,7 @@ export function boardState(
     player: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[] },
     enemy: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[] },
   };
-  const mint = (side: Side, cardId: CardId, zone: CardInstance["zone"]): InstanceId => {
+  const mint = (side: Side, cardId: CardId, zone: CardInstance["zone"], amplified = false): InstanceId => {
     catalog.card(cardId);
     const id: InstanceId = `i${state.nextInstance}`;
     state.nextInstance += 1;
@@ -64,7 +65,8 @@ export function boardState(
       owner: side,
       controller: side,
       zone,
-      status: { exhausted: false, gainedSpark: 0, counters: 0, created: false },
+      variant: { amplified },
+      status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false },
       enteredZoneAt: 0,
     };
     return id;
@@ -85,8 +87,11 @@ export function boardState(
       sideState.backRank[index] = id;
       ids[side].back.push(id);
     });
-    for (const cardId of sideSetup.hand ?? []) {
-      const id = mint(side, cardId, "hand");
+    for (const entry of sideSetup.hand ?? []) {
+      const id =
+        typeof entry === "string"
+          ? mint(side, entry, "hand")
+          : mint(side, entry.cardId, "hand", entry.amplified);
       sideState.hand.push(id);
       ids[side].hand.push(id);
     }

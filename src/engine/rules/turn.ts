@@ -39,6 +39,7 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
       return;
     case "ending":
       discardToHandLimit(ctx);
+      expireUntilEndOfTurn(ctx);
       clearExhaustion(ctx);
       return;
     default:
@@ -65,6 +66,13 @@ function discardToHandLimit(ctx: StepContext): void {
   });
   for (const card of chosen) {
     discardCard(ctx, side, card);
+  }
+}
+
+/** Ending: effects that last until end of turn end, in every zone. */
+function expireUntilEndOfTurn(ctx: StepContext): void {
+  for (const instance of Object.values(ctx.state.instances)) {
+    instance.status.turnSpark = 0;
   }
 }
 

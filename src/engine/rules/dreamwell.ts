@@ -57,6 +57,9 @@ export function drawDreamwell(ctx: StepContext, side: Side): void {
   state.dreamwell.next += 1;
   const definition = ctx.catalog.dreamwellCard(card);
   ctx.emit({ kind: "dreamwellDrawn", side, card, energyAdded: definition.energyAdded });
+  if (definition.status === "pending") {
+    ctx.emit({ kind: "pendingAbility", side, cardId: card, instance: null, reason: "drawn" });
+  }
   const max = state.sides[side].maxEnergy + definition.energyAdded;
   setEnergy(ctx, side, max, max);
 }

@@ -62,8 +62,9 @@ export function canPlayFromHand(
   if (!timingAllows(state, side, definition)) {
     return false;
   }
-  // X costs need a prompt for the value of X, which this engine does not raise yet.
-  if (definition.cost === null || definition.cost > state.sides[side].currentEnergy) {
+  // An X cost needs at least 1● for X; the X prompt checks the rest.
+  const minimum = definition.cost ?? 1;
+  if (minimum > state.sides[side].currentEnergy) {
     return false;
   }
   return (

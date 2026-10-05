@@ -148,7 +148,12 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
   synchronous `ctx.choose(prompt)`. Inline runs (AI, fuzzer, tests) answer
   at once; interactive play suspends the step and replays it from its start
   with the recorded answers (`fold/slice.ts`), and a prompt fingerprint
-  check turns any nondeterminism into a loud `ReplayDivergence`. The `dreamtides/engine-purity` lint rule
+  check turns any nondeterminism into a loud `ReplayDivergence`. Abilities
+  are typed DSL data beside each entity's printed text in `src/content/`
+  (`abilities` plus a `verifiedText` hash, or `pending`/`vanilla`); each DSL
+  primitive lives in its own module under `effects/primitives/`, and the
+  content gates (`src/engine/content-gates.test.ts`) keep data and engine in
+  agreement. The `dreamtides/engine-purity` lint rule
   bans the clock, ambient randomness, and module-level mutable state there.
 - **Battle.** `src/battle/` and `src/rules/battle/` hold the battle board,
   its structural automation, and the proposal-based AI.

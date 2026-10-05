@@ -7,12 +7,13 @@
  * data: ids and names are strings here and are validated into branded domain
  * types where the runtime loads them. Printed text is canonical English.
  *
- * Every entity carries a content status until its abilities are authored:
- * `pending` (has rules text, not yet implemented) or `vanilla` (no rules
- * text).
+ * Every entity carries a content status: `pending` (has rules text, not yet
+ * implemented; it plays text-less), `vanilla` (no rules text), or authored
+ * `abilities` with the `verifiedText` hash of the text they implement.
  */
 import type { KnownCardSubtype } from "../types/card-identity";
 import type { CardRole, CardType, Rarity } from "../types/cards";
+import type { AbilityList } from "../engine/dsl/types";
 
 /**
  * A UUID as written in a content module. The literal shape rejects an empty or
@@ -23,8 +24,16 @@ export type Uuid = `${string}-${string}-${string}-${string}-${string}`;
 
 /** Whether an entity's rules text still awaits an ability implementation. */
 export type ContentStatus =
-  | { readonly pending: true; readonly vanilla?: never }
-  | { readonly vanilla: true; readonly pending?: never };
+  | { readonly pending: true; readonly vanilla?: never; readonly abilities?: never }
+  | { readonly vanilla: true; readonly pending?: never; readonly abilities?: never }
+  | {
+      /** The entity's abilities: its printed text's implementation (D5). */
+      readonly abilities: AbilityList;
+      /** expectedVerifiedText of the printed and amplified text these abilities were checked against. */
+      readonly verifiedText: string;
+      readonly pending?: never;
+      readonly vanilla?: never;
+    };
 
 /** Normalized art crop: `x`/`y` pan in -1..1, `scale` cover zoom. */
 export interface ArtCropDefinition {

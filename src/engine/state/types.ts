@@ -1,3 +1,4 @@
+import type { Variant } from "../dsl/types";
 import type {
   BattleSeed,
   CardId,
@@ -25,6 +26,8 @@ export interface BattleConfig {
 /** One journey deck entry as the battle receives it. */
 export interface DeckEntry {
   readonly cardId: CardId;
+  /** Played as its amplified text (the Amplified transfiguration). */
+  readonly amplified?: boolean;
 }
 
 /** Everything a battle needs to start. */
@@ -42,6 +45,8 @@ export interface CardStatus {
   exhausted: boolean;
   /** Permanent gained spark; travels with the card across zones. */
   gainedSpark: number;
+  /** Spark gained until end of turn; removed during Ending wherever the card is. */
+  turnSpark: number;
   counters: number;
   /** Created by an effect rather than drawn from a deck. */
   created: boolean;
@@ -53,6 +58,7 @@ export interface CardInstance {
   readonly owner: Side;
   controller: Side;
   zone: Zone;
+  readonly variant: Variant;
   status: CardStatus;
   /** Monotonic timestamp of the last zone entry, for layer ordering. */
   enteredZoneAt: number;
@@ -61,8 +67,8 @@ export interface CardInstance {
 export interface StackItem {
   readonly instance: InstanceId;
   readonly controller: Side;
-  /** Targets chosen when the item was played. */
-  readonly targets: readonly InstanceId[];
+  /** Targets chosen when the item was played, one list per target spec in walk order. */
+  readonly targets: readonly (readonly InstanceId[])[];
   /** The value chosen for X, if the item has an X. */
   readonly x: number | null;
 }

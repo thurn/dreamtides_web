@@ -9,6 +9,7 @@ import type {
   StackItem,
   TurnState,
 } from "../state/types";
+import type { Variant } from "../dsl/types";
 
 /** One instance the viewer can see, with its card identity. */
 export interface InstanceView {
@@ -17,6 +18,7 @@ export interface InstanceView {
   readonly owner: Side;
   readonly controller: Side;
   readonly zone: Zone;
+  readonly variant: Readonly<Variant>;
   readonly status: Readonly<CardStatus>;
   readonly enteredZoneAt: number;
 }
@@ -114,6 +116,7 @@ export function view(state: BattleState, viewer: Side): BattleView {
         owner: instance.owner,
         controller: instance.controller,
         zone: instance.zone,
+        variant: { ...instance.variant },
         status: { ...instance.status },
         enteredZoneAt: instance.enteredZoneAt,
       };
@@ -142,7 +145,10 @@ export function view(state: BattleState, viewer: Side): BattleView {
     turn: copy(state.turn),
     sides: { player: side("player"), enemy: side("enemy") },
     instances,
-    stack: state.stack.map((item) => ({ ...item, targets: item.targets.filter(visible) })),
+    stack: state.stack.map((item) => ({
+      ...item,
+      targets: item.targets.map((list) => list.filter(visible)),
+    })),
     priority: state.priority,
     dreamwell: { remaining: state.dreamwell.deck.length - state.dreamwell.next },
     challenge: copy(state.challenge),

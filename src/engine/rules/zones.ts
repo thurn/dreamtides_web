@@ -2,6 +2,7 @@ import type { InstanceId, Side, Slot, Zone } from "../state/ids";
 import { BACK_RANK_SIZE } from "../state/ids";
 import type { BattleState, CardInstance } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { hasKeyword } from "./keywords";
 
 export function instanceOf(state: BattleState, id: InstanceId): CardInstance {
   const instance = state.instances[id];
@@ -117,7 +118,10 @@ export function moveToStack(
   ctx: StepContext,
   id: InstanceId,
   controller: Side,
-  choices: { readonly targets: readonly InstanceId[]; readonly x: number | null } = { targets: [], x: null },
+  choices: {
+    readonly targets: readonly (readonly InstanceId[])[];
+    readonly x: number | null;
+  } = { targets: [], x: null },
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
@@ -125,7 +129,12 @@ export function moveToStack(
   instance.controller = controller;
   instance.zone = "stack";
   instance.enteredZoneAt = ++state.clock;
-  state.stack.push({ instance: id, controller, targets: [...choices.targets], x: choices.x });
+  state.stack.push({
+    instance: id,
+    controller,
+    targets: choices.targets.map((list) => [...list]),
+    x: choices.x,
+  });
 }
 
 /**
@@ -147,9 +156,7 @@ export function enterPlay(
   instance.controller = side;
   instance.zone = "play";
   instance.enteredZoneAt = ++state.clock;
-  instance.status.exhausted = !ctx.catalog
-    .card(instance.cardId)
-    .keywords.includes("awakened");
+  instance.status.exhausted = !hasKeyword(state, ctx.catalog, id, "awakened");
   setOccupant(state, side, slot, id);
   ctx.emit({ kind: "materialized", instance: id, side, slot });
 }
@@ -160,4 +167,19 @@ export function dissolve(ctx: StepContext, id: InstanceId): void {
   const side = instance.controller;
   moveInstance(ctx, id, "void");
   ctx.emit({ kind: "dissolved", instance: id, side });
+}
+
+/** Banishes a card from play to its owner's Banished zone. */
+export function banish(ctx: StepContext, id: InstanceId): void {
+  const instance = instanceOf(ctx.state, id);
+  const side = instance.controller;
+  moveInstance(ctx, id, "banished");
+  ctx.emit({ kind: "banished", instance: id, side });
+}
+
+/** Returns a card in play to its owner's hand. */
+export function returnToHand(ctx: StepContext, id: InstanceId): void {
+  const instance = instanceOf(ctx.state, id);
+  moveInstance(ctx, id, "hand", "bottom");
+  ctx.emit({ kind: "returnedToHand", instance: id, side: instance.owner });
 }

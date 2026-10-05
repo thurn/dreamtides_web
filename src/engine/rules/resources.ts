@@ -15,7 +15,7 @@ export function gainPoints(
   ctx: StepContext,
   side: Side,
   amount: number,
-  cause: "challenge" | "fatigue",
+  cause: "challenge" | "fatigue" | "effect",
 ): void {
   if (amount === 0) {
     return;
@@ -23,6 +23,26 @@ export function gainPoints(
   const state = ctx.state.sides[side];
   state.score = Math.max(0, state.score + amount);
   ctx.emit({ kind: "pointsScored", side, amount, cause });
+}
+
+/** `side` suffers Fatigue: the opponent gains 1⍟, then 2⍟, 4⍟, … (rules § Fatigue). */
+function suffersFatigue(ctx: StepContext, side: Side): void {
+  const sideState = ctx.state.sides[side];
+  const points = 2 ** sideState.fatigueCount;
+  sideState.fatigueCount += 1;
+  ctx.emit({ kind: "fatigue", side, points });
+  gainPoints(ctx, opponent(side), points, "fatigue");
+}
+
+/** Puts the top card of `side`'s deck into its void; from an empty deck, Fatigue instead. */
+export function erodeCard(ctx: StepContext, side: Side): void {
+  const top = ctx.state.sides[side].deck[0];
+  if (top === undefined) {
+    suffersFatigue(ctx, side);
+    return;
+  }
+  moveInstance(ctx, top, "void");
+  ctx.emit({ kind: "eroded", side, instance: top });
 }
 
 /**
@@ -33,14 +53,15 @@ export function drawCard(ctx: StepContext, side: Side): void {
   const sideState = ctx.state.sides[side];
   const top = sideState.deck[0];
   if (top === undefined) {
-    const points = 2 ** sideState.fatigueCount;
-    sideState.fatigueCount += 1;
-    ctx.emit({ kind: "fatigue", side, points });
-    gainPoints(ctx, opponent(side), points, "fatigue");
+    suffersFatigue(ctx, side);
     return;
   }
   moveInstance(ctx, top, "hand", "bottom");
   ctx.emit({ kind: "cardDrawn", side, instance: top });
+  const cardId = ctx.state.instances[top]?.cardId;
+  if (cardId !== undefined && ctx.catalog.card(cardId).status === "pending") {
+    ctx.emit({ kind: "pendingAbility", side, cardId, instance: top, reason: "drawn" });
+  }
 }
 
 /** Discards a card from `side`'s hand into its void. */

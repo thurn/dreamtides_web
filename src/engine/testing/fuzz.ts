@@ -16,6 +16,7 @@ import { invariantViolations } from "./invariants";
 import { PolicyRandom, randomAction } from "./random-policy";
 import { SYNTHETIC_CARDS, testCatalog } from "./synthetic-cards";
 import { PROMPTING_CARDS } from "./synthetic-effects";
+import { DSL_CARDS } from "./dsl-cards";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
 export interface RecordedAction {
@@ -43,21 +44,27 @@ export const DECK_SIZE = 30;
 /** Top-level actions after which a game counts as non-terminating. */
 export const ACTION_CAP = 20000;
 
-/** The fuzzer's catalog: synthetic vanilla and prompting cards plus the full card pool. */
+/** Every card the fuzzer draws from: synthetic vanilla, prompting, and DSL cards plus the full pool. */
 export function fuzzCatalogCards() {
-  return [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...contentCardDefinitions()];
+  return [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...contentCardDefinitions()];
 }
 
+/** The fuzzer's catalog: synthetic vanilla, prompting, and DSL cards plus the full card pool. */
 export function fuzzEngineCatalog() {
-  return testCatalog(PROMPTING_CARDS);
+  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS]);
 }
 
-/** A random deck mixing synthetic cards, prompting cards, and catalog cards (which play text-less). */
+/**
+ * A random deck mixing synthetic cards (vanilla, prompting, and DSL) with
+ * full-pool catalog cards, which play text-less while pending. A tenth of the
+ * entries are amplified.
+ */
 export function randomDeck(random: PolicyRandom): DeckEntry[] {
-  const synthetic = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS];
-  const pool = contentCardDefinitions().filter((card) => card.cost !== null);
+  const synthetic = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS];
+  const pool = contentCardDefinitions();
   return Array.from({ length: DECK_SIZE }, () => ({
     cardId: (random.next() < 0.5 ? random.pick(synthetic) : random.pick(pool)).id,
+    amplified: random.next() < 0.1,
   }));
 }
 

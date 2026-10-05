@@ -44,7 +44,18 @@ export function chooseAndDiscard(ctx: StepContext, side: Side, source: InstanceI
 }
 
 function event(index: number, cost: number, synthetic: SyntheticHooks, speed: EngineCardDefinition["speed"] = "standard"): EngineCardDefinition {
-  return { id: syntheticId(index), cardType: "event", cost, spark: null, subtype: "", speed, keywords: [], synthetic };
+  return {
+    id: syntheticId(index),
+    cardType: "event",
+    cost,
+    spark: null,
+    subtype: "",
+    speed,
+    keywords: [],
+    status: "authored",
+    abilities: () => [],
+    synthetic,
+  };
 }
 
 /** Synthetic prompting events, by role. */
@@ -69,18 +80,18 @@ export const PROMPTING = {
     play: (ctx, self) => {
       const side = instanceOf(ctx.state, self).owner;
       return {
-        targets: ctx.choose<ChooseTargetsPrompt>({
+        targets: [ctx.choose<ChooseTargetsPrompt>({
           kind: "chooseTargets",
           side,
           purpose: purpose(ctx, self, "dissolveEnemy"),
           candidates: charactersInPlay(ctx.state, opponent(side)),
           min: 1,
           max: 1,
-        }),
+        })],
       };
     },
     resolve: (ctx, item) => {
-      const target = item.targets[0];
+      const target = item.targets[0]?.[0];
       if (target !== undefined && instanceOf(ctx.state, target).zone === "play") {
         dissolve(ctx, target);
       } else {

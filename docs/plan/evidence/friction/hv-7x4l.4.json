@@ -1,0 +1,1 @@
+{"bead":"hv-7x4l.4","phase":3,"lane":2,"implementMin":95,"localValidationS":{"review":36,"focused":3,"fuzz200":35},"hostLoad":3.5,"testDelta":{"files":6,"lines":434,"jsdomFiles":0},"friction":[{"tag":"domain-string-audit-engine-ids","minutes":5,"note":"verifiedTextHash and a test id field flagged; renamed to expectedVerifiedText and typed the id as Uuid"}]}

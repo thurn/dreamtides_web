@@ -1,11 +1,12 @@
 import type { CardSubtype } from "../types/card-identity";
+import type { AbilityList } from "./dsl/types";
 import type { CardId, DreamwellCardId, InstanceId } from "./state/ids";
 import type { StackItem } from "./state/types";
 import type { StepContext } from "./steps/types";
 
 /** Choices made while playing a card, carried on its stack item. */
 export interface PlayChoices {
-  readonly targets?: readonly InstanceId[];
+  readonly targets?: readonly (readonly InstanceId[])[];
   readonly x?: number;
 }
 
@@ -26,6 +27,13 @@ export type Speed = "standard" | "fast" | "interrupt";
 /** Combat keywords the challenge rules read. */
 export type CombatKeyword = "vengeful" | "awakened";
 
+/**
+ * Whether an entity's abilities are implemented: `pending` entities play
+ * text-less (D36), `vanilla` ones have no rules text, `authored` ones carry
+ * abilities.
+ */
+export type ContentState = "pending" | "vanilla" | "authored";
+
 /** The engine's view of one card definition. */
 export interface EngineCardDefinition {
   readonly id: CardId;
@@ -36,7 +44,10 @@ export interface EngineCardDefinition {
   readonly spark: number | null;
   readonly subtype: CardSubtype;
   readonly speed: Speed;
+  /** Printed keywords; authored keyword abilities add to these. */
   readonly keywords: readonly CombatKeyword[];
+  readonly status: ContentState;
+  readonly abilities: AbilityList;
   readonly synthetic?: SyntheticHooks;
 }
 
@@ -45,6 +56,7 @@ export interface EngineDreamwellDefinition {
   /** Deck-construction tier; cards are shuffled only within their tier. */
   readonly order: number;
   readonly energyAdded: number;
+  readonly status: ContentState;
 }
 
 /** Card and Dreamwell definitions by UUID. */

@@ -1,3 +1,5 @@
+import { eventEffects, eventTargetSpecs } from "../../effects/abilities";
+import { resolveEffect } from "../../effects/interpreter";
 import { enterPlay, instanceOf, leftmostOpenBackSlot, moveInstance } from "../../rules/zones";
 import type { StepDefinition } from "../types";
 
@@ -24,6 +26,20 @@ export const resolveTop: StepDefinition<ResolveTopStep> = {
     const definition = catalog.card(instance.cardId);
     ctx.emit({ kind: "resolved", instance: item.instance });
     definition.synthetic?.resolve?.(ctx, item);
+    // Each event ability resolves with its own slice of the play-time targets.
+    const specs = eventTargetSpecs(definition, instance.variant);
+    let offset = 0;
+    eventEffects(definition, instance.variant).forEach((effect, index) => {
+      const count = specs[index]?.length ?? 0;
+      resolveEffect(ctx, effect, {
+        source: item.instance,
+        controller: item.controller,
+        variant: instance.variant,
+        x: item.x,
+        targets: item.targets.slice(offset, offset + count),
+      });
+      offset += count;
+    });
     if (definition.cardType === "character") {
       const slot = leftmostOpenBackSlot(state, item.controller);
       if (slot === null) {
