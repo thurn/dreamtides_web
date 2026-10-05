@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -47,9 +46,9 @@ describe("CharacterDialogue", () => {
           <CharacterDialogue
             dialogue={{
               portrait,
-              portraitAlt: assertLocalized("Mira"),
-              speakerName: assertLocalized("Mira"),
-              text: assertLocalized("Welcome, Dreamer."),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: "Welcome, Dreamer.",
             }}
             visible
             testId="welcome-dialogue"
@@ -97,11 +96,9 @@ describe("CharacterDialogue", () => {
           <CharacterDialogue
             dialogue={{
               portrait: artRef.characterPortrait("mira"),
-              portraitAlt: assertLocalized("Mira"),
-              speakerName: assertLocalized("Mira"),
-              text: assertLocalized(
-                "Welcome, [yellow]Dreamer[/yellow]. An [purple]event[purple] resolves once. Score ⍟ equal to your spark ✦.",
-              ),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: "Welcome, [yellow]Dreamer[/yellow]. An [purple]event[purple] resolves once. Score ⍟ equal to your spark ✦.",
             }}
             size="prominent"
             visible
@@ -159,11 +156,9 @@ describe("CharacterDialogue", () => {
           <CharacterDialogue
             dialogue={{
               portrait: artRef.characterPortrait("mira"),
-              portraitAlt: assertLocalized("Mira"),
-              speakerName: assertLocalized("Mira"),
-              text: assertLocalized(
-                "A ▸Dissolved ability may cost 1● and ☾, store 1⧗, gain 2⍟ and 1✦, spend ◆ essence, or use ❖.",
-              ),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: "A ▸Dissolved ability may cost 1● and ☾, store 1⧗, gain 2⍟ and 1✦, spend ◆ essence, or use ❖.",
             }}
             visible
           />
@@ -198,9 +193,9 @@ describe("CharacterDialogue", () => {
           <CharacterDialogue
             dialogue={{
               portrait: artRef.characterPortrait("mira"),
-              portraitAlt: assertLocalized("Mira"),
-              speakerName: assertLocalized("Mira"),
-              text: assertLocalized("Welcome, Dreamer."),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: "Welcome, Dreamer.",
             }}
             visible={false}
           />

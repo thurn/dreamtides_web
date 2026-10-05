@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { LocalizedString } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import type { JourneyState } from "../../types/journey";
@@ -122,6 +121,6 @@ describe("buildJourneyDebugEditorView", () => {
       actionId: "dreamsign:0",
       templateId: journey.dreamsigns[0]?.id,
     });
-    expect(view.dreamsigns[0]?.name).toBeInstanceOf(LocalizedString);
+    expect(view.dreamsigns[0]?.name).toEqual(expect.any(String));
   });
 });

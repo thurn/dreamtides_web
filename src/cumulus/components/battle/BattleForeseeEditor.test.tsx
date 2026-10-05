@@ -8,7 +8,6 @@ import {
   BattleForeseeEditor,
   type BattleForeseeEditorModel,
 } from "./BattleForeseeEditor";
-import { assertLocalized } from "@trox/runtime";
 import { parseBattleCardId } from "../../../types/identifiers";
 import type { BattleCardId } from "../../../types/identifiers";
 import { testCardId, testDreamwellCardId } from "../../../types/test-identities";
@@ -59,8 +58,8 @@ const SOURCE_DREAMWELL_CARD = {
   cardId: testDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
   displaySnapshot: {
     id: testDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
-    name: assertLocalized("Skypath"),
-    renderedText: assertLocalized("Foresee 1."),
+    name: "Skypath",
+    renderedText: "Foresee 1.",
     energyAdded: 1,
     imageNumber: 1897537165,
   },

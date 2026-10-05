@@ -2,7 +2,6 @@
 // These are interactive overlays, deliberately separate from InfoCard's
 // pointer-transparent entity-reveal contract.
 
-import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import {
   type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
@@ -30,10 +29,9 @@ import {
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
 } from "../../primitives/chrome-geometry";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
-export type CommandMenuCopy = LocalizedString;
-export type CommandMenuStatusCopy = LocalizedString;
+export type CommandMenuCopy = string;
+export type CommandMenuStatusCopy = string;
 
 /** A single command row. `id` is stable domain identity, never display copy. */
 export interface CommandMenuAction<Id extends string = string> {
@@ -67,11 +65,11 @@ export interface CommandMenuSignedInteger<Id extends string = string> {
   /** Stable domain identity for the field command. */
   id: Id;
   /** Visible label above the field. */
-  label: LocalizedString;
+  label: string;
   /** Optional example value shown while the field is empty. */
-  placeholder?: LocalizedString;
+  placeholder?: string;
   /** Label for the commit action beneath the field. */
-  commitLabel: LocalizedString;
+  commitLabel: string;
   /** Receives the validated signed, non-zero whole number. */
   onCommand: (value: number) => void;
 }
@@ -126,9 +124,9 @@ export interface CommandMenuAnchor {
 export interface CommandMenuContextModel<Id extends string = string> {
   kind: "context";
   /** Describes the card/pointer subject in the menu's header. */
-  title: LocalizedString;
+  title: string;
   /** Optional structured secondary location/context copy. */
-  subtitle?: LocalizedString;
+  subtitle?: string;
   /** Commands available for the activated card or pointer target. */
   actions: readonly CommandMenuItem<Id>[];
   /** Semantic location used to anchor the desktop pointer menu. */
@@ -172,7 +170,7 @@ function AppChromeCommandMenu<Id extends string>({
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const hostRef = useRef<HTMLDivElement>(null);
-  const resolve = useLocalizer();
+
   const isDesktop = useIsDesktop();
   const edgeInset = isDesktop
     ? MENU_EDGE_INSET_DESKTOP_PX
@@ -239,7 +237,7 @@ function AppChromeCommandMenu<Id extends string>({
             font: token("--t-caption"),
           }}
         >
-          {resolve(status.text)}
+          {status.text}
         </div>
       )}
     </div>
@@ -257,7 +255,7 @@ function ContextCommandMenu<Id extends string>({
 }): ReactElement {
   const { title, subtitle, actions, anchor, onDismiss, testId } = model;
   const isDesktop = useIsDesktop();
-  const resolve = useLocalizer();
+
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<{
     left: number;
@@ -306,10 +304,7 @@ function ContextCommandMenu<Id extends string>({
       <GlassDialog
         title={title}
         subtitle={subtitle}
-        closeLabel={tx(
-          "Close actions",
-          "[accessibility] [ui] Action name that closes a command menu.",
-        )}
+        closeLabel={"Close actions"}
         onClose={onDismiss}
       >
         <HierarchicalMenu items={actions} mobile onDismiss={onDismiss} />
@@ -336,7 +331,7 @@ function ContextCommandMenu<Id extends string>({
         <span
           style={{ font: token("--t-body"), color: token("--text-on-glass") }}
         >
-          {resolve(title)}
+          {title}
         </span>
         {subtitle !== undefined && (
           <span
@@ -345,7 +340,7 @@ function ContextCommandMenu<Id extends string>({
               color: token("--text-on-glass-muted"),
             }}
           >
-            {resolve(subtitle)}
+            {subtitle}
           </span>
         )}
       </div>
@@ -368,7 +363,6 @@ function HierarchicalMenu<Id extends string>({
   onDismiss: () => void;
   mobile?: boolean;
 }): ReactElement {
-  const resolve = useLocalizer();
   const [path, setPath] = useState<readonly Id[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
   const leafItems = items.filter((item) => item.kind !== "divider");
@@ -465,17 +459,11 @@ function HierarchicalMenu<Id extends string>({
           item={{
             kind: "group",
             id: "back",
-            label: tx(
-              meaning("command-menu-back", "Back"),
-              "[ui] Command-menu action that returns from a nested group to its parent command list.",
-            ),
+            label: "Back",
             glyph: GLYPHS.arrowLeft,
             actions: [],
           }}
-          label={tx(
-            meaning("command-menu-back", "Back"),
-            "[ui] Command-menu action that returns from a nested group to its parent command list.",
-          )}
+          label={"Back"}
           active
           mobile={mobile}
           onActivate={() => setPath((previous) => previous.slice(0, -1))}
@@ -512,12 +500,7 @@ function HierarchicalMenu<Id extends string>({
             color: token("--text-on-glass-muted"),
           }}
         >
-          {resolve(
-            tx(
-              "No actions available.",
-              "[ui] Empty-state message shown when a command menu has no available actions.",
-            ),
-          )}
+          {"No actions available."}
         </span>
       )}
     </div>
@@ -532,27 +515,17 @@ function SignedIntegerCommand({
   onDismiss: () => void;
 }): ReactElement {
   const [draft, setDraft] = useState("");
-  const [error, setError] = useState<LocalizedString>();
+  const [error, setError] = useState<string>();
 
   function commit(): void {
     const trimmed = draft.trim();
     if (!/^[+-]?\d+$/.test(trimmed)) {
-      setError(
-        tx(
-          "Enter a non-zero whole number.",
-          "[developer] Validation message for a command-menu field that requires a signed, nonzero whole number.",
-        ),
-      );
+      setError("Enter a non-zero whole number.");
       return;
     }
     const value = Number(trimmed);
     if (!Number.isSafeInteger(value) || value === 0) {
-      setError(
-        tx(
-          "Enter a non-zero whole number.",
-          "[developer] Validation message for a command-menu field that requires a signed, nonzero whole number.",
-        ),
-      );
+      setError("Enter a non-zero whole number.");
       return;
     }
     item.onCommand(value);
@@ -606,12 +579,11 @@ function CommandRow<Id extends string>({
   onActivate,
 }: {
   item: CommandMenuInteractiveItem<Id>;
-  label: LocalizedString;
+  label: string;
   active: boolean;
   mobile: boolean;
   onActivate: () => void;
 }): ReactElement {
-  const resolve = useLocalizer();
   const color =
     item.active === true ? token("--accent-bright") : token("--text-on-glass");
   return (
@@ -641,7 +613,7 @@ function CommandRow<Id extends string>({
       }}
     >
       <StandaloneGlyph glyph={item.glyph} color="text-primary" />
-      <span>{resolve(label)}</span>
+      <span>{label}</span>
       {item.kind === "group" && (
         <StandaloneGlyph glyph={GLYPHS.chevronRight} color="text-primary" />
       )}

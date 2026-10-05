@@ -16,10 +16,9 @@ import type {
   PoolViewerTitleKind,
   PoolViewerView,
 } from "../../cumulus/screens/PoolViewerScreen";
-import { txa } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import type { DeckEntryId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
+import { formatNumber } from "../../runtime/format-number";
 
 export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
   query: "",
@@ -269,11 +268,7 @@ function cardView(entry: PoolEntry): CardGalleryCardView {
         ? undefined
         : {
             kind: "text",
-            message: txa(
-              "×{copies}",
-              { copies: entry.copies },
-              "[pool-viewer] Compact Pool Viewer caption showing how many copies of one card are present. copies is a positive whole-number count.",
-            ),
+            message: `×${formatNumber(entry.copies)}`,
           },
     testId: `pool-card-${entry.entryId}`,
   };
@@ -292,7 +287,7 @@ function subtypeOptions(entries: readonly PoolEntry[]) {
     ),
   ]
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-    .map((value) => ({ value, label: localizedSourceText(value) }));
+    .map((value) => ({ value, label: value }));
 }
 
 function buildDisclosures(

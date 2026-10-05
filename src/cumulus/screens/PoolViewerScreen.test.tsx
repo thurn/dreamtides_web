@@ -3,7 +3,6 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { parseCardName } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
 import { PoolViewerScreen, type PoolViewerView } from "./PoolViewerScreen";
@@ -61,7 +60,7 @@ const view: PoolViewerView = {
   totalCount: 1,
   visibleCount: 1,
   sortOptions: ["name"],
-  subtypeOptions: [{ value: "Fixture", label: assertLocalized("Fixture") }],
+  subtypeOptions: [{ value: "Fixture", label: "Fixture" }],
   disclosures: [{ id: "algorithm", variant: "fixture" }],
 };
 

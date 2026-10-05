@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { testDreamwellCardName } from "../../types/test-identities";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import type { DreamwellCardDefinition } from "../types";
 import { dreamwellCardModel } from "./dreamwell-card-model";
 import { testDreamwellCardId } from "../../types/test-identities";

@@ -1,8 +1,7 @@
-import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -124,7 +123,7 @@ describe("buildPurgeGuideView", () => {
         dialogue: { site: ["First line."] },
         homeSpecialty: "Purge cards.",
       },
-      assertLocalized("Chosen line."),
+      "Chosen line.",
     );
 
     expect(view).toMatchObject({
@@ -163,7 +162,7 @@ describe("buildPurgeSiteView", () => {
         makeCard({ cardNumber: 10002 }),
       ),
       guide: GUIDE,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       economyData: economyFixture(),
     });
 

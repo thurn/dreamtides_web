@@ -1,8 +1,7 @@
-import { one, other, plural, tx, txa } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import { formatNumber } from "../../../runtime/format-number";
 
 export interface CoopPresenceStatusProps {
   /** Presence-derived connected client count, or null while it resolves. */
@@ -16,7 +15,6 @@ export function CoopPresenceStatus({
   count,
   visible,
 }: CoopPresenceStatusProps): ReactElement | null {
-  const resolve = useLocalizer();
   if (!visible) return null;
   return (
     <output
@@ -38,19 +36,10 @@ export function CoopPresenceStatus({
       }}
     >
       {count === null
-        ? resolve(
-            tx(
-              "Connecting…",
-              "[coop] Presence status while the shared room connection is unresolved.",
-            ),
-          )
-        : resolve(
-            txa(
-              plural(count, [one("1 Connected"), other("{count} Connected")]),
-              { count },
-              "[coop] Compact presence status showing the nonnegative number of connected clients; zero is possible.",
-            ),
-          )}
+        ? "Connecting…"
+        : count === 1
+          ? "1 Connected"
+          : `${formatNumber(count)} Connected`}
     </output>
   );
 }

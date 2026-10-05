@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { resolveSource } from "../../runtime/localization/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode, SiteState } from "../../types/journey";
@@ -58,14 +57,13 @@ describe("buildRandomSiteView", () => {
         homeSpecialty: "Fixture specialty",
       },
       sitesData,
-      guideLine: assertLocalized("Synthetic guide copy"),
+      guideLine: "Synthetic guide copy",
     });
 
-    expect(resolveSource(view.guide.line)).toBe("Synthetic guide copy");
+    expect(view.guide.line).toBe("Synthetic guide copy");
     expect(view.choices[0].icon).toBe(sitesData.siteTypes.Shop.icon);
   });
 });
-import { assertLocalized } from "@trox/runtime";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { testDreamscapeId } from "../../types/test-identities";

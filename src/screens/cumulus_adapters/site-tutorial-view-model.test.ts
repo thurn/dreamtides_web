@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import type { JourneyState, SiteState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";

@@ -1,13 +1,11 @@
 import type { CSSProperties, ReactElement } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { GLYPHS } from "../../primitives/glyph";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 interface CardChangeBadgeOptions {
   /** CSS length for the badge diameter, resolved by the owning card surface. */
   readonly sizeVar: string;
   /** Accessible description when the badge conveys meaning on its own. */
-  readonly ariaLabel?: LocalizedString;
+  readonly ariaLabel?: string;
 }
 
 /**
@@ -19,11 +17,10 @@ export function CardChangeBadge({
   sizeVar,
   ariaLabel,
 }: CardChangeBadgeOptions): ReactElement {
-  const resolve = useLocalizer();
   return (
     <span
       aria-hidden={ariaLabel === undefined ? "true" : undefined}
-      aria-label={ariaLabel === undefined ? undefined : resolve(ariaLabel)}
+      aria-label={ariaLabel === undefined ? undefined : ariaLabel}
       role={ariaLabel === undefined ? undefined : "img"}
       style={
         {

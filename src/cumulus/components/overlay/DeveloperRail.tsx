@@ -1,4 +1,3 @@
-import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import type { ReactElement, ReactNode } from "react";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
@@ -9,15 +8,15 @@ export interface DeveloperRailProps {
   /** DOM id targeted by the rail disclosure trigger. */
   readonly id: DomElementId;
   /** Developer tool name shown in the rail header. */
-  readonly title: LocalizedString;
+  readonly title: string;
   /** Optional concise tool context. */
-  readonly subtitle?: LocalizedString;
+  readonly subtitle?: string;
   /** Physical screen edge occupied by the docked rail. */
   readonly side: "left" | "right";
   /** Accessible close action. */
   readonly onClose: () => void;
   /** Accessible name for the close action. */
-  readonly closeLabel: LocalizedString;
+  readonly closeLabel: string;
   /** Scrollable tool content. */
   readonly children: ReactNode;
   /** Optional fixed rail footer. */
@@ -52,7 +51,7 @@ export function DeveloperRail({
     >
       <GlassPanel
         frame="edgeRail"
-        eyebrow={assertLocalized("Developer Tools")}
+        eyebrow={"Developer Tools"}
         title={title}
         subtitle={subtitle}
         headerSpacing="compact"

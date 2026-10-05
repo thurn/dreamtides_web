@@ -52,8 +52,6 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
-import { LocalizedString, SourceMessage, opaque } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import {
   buildTransfigurationDisplay,
   offeredTransfigurationForms,
@@ -62,7 +60,6 @@ import {
 import { AUGURY_TUNING } from "../../journey_v2/tuning";
 import { projectGuideView } from "./guide-view-model";
 import { transfigurationForm } from "../../data/transfiguration-data";
-import { tx, txa } from "@trox/runtime";
 import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 import type { GuideId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
@@ -75,6 +72,12 @@ import { parseDreamsignId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSelectionKey } from "../../types/identifiers";
 import { parseRewardCandidateKey } from "../../types/identifiers";
+import {
+  annotatedTextValue,
+  annotateText,
+  fillTemplate,
+  plainAnnotatedText,
+} from "../../runtime/text";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
@@ -434,8 +437,8 @@ function dreamsignFlowFollowup(
 }
 
 function deckEntryFollowup(
-  title: LocalizedString,
-  subtitle: LocalizedString,
+  title: string,
+  subtitle: string,
   cards: readonly ExplorationCardChoiceView<DeckEntryId>[],
   mode: "single" | "exact" | "purge-and-copy",
   selectionOperation: ExplorationCardSelectionOperation | undefined,
@@ -455,8 +458,8 @@ function deckEntryFollowup(
 }
 
 function catalogCardFollowup(
-  title: LocalizedString,
-  subtitle: LocalizedString,
+  title: string,
+  subtitle: string,
   cards: readonly ExplorationCardChoiceView<CardId>[],
   mode: "single" | "exact",
   selectionOperation: ExplorationCardSelectionOperation | undefined,
@@ -479,8 +482,8 @@ function configuredFollowupCopy(
   action: ExplorationActionContent,
   _content: JourneyContent,
   key: "followupTitle" | "followupSubtitle",
-  fallback?: string | LocalizedString | SourceMessage,
-): LocalizedString {
+  fallback?: string,
+): string {
   const template = action[key];
   const codeDefault =
     key === "followupSubtitle"
@@ -495,14 +498,14 @@ function configuredFollowupCopy(
       `Missing configured Exploration ${key} for action ${action.id}.`,
     );
   }
-  const valueFor = (name: string): number | LocalizedString => {
+  const valueFor = (name: string): number | string => {
     switch (name) {
       case "count":
         return action.count ?? 1;
       case "subtype":
-        return localizedSourceText(action.subtype ?? "Outsider");
+        return action.subtype ?? "Outsider";
       case "transfiguration":
-        return localizedSourceText(action.transfiguration ?? "Kindled");
+        return action.transfiguration ?? "Kindled";
       case "essence_per_spark":
         return authoredEssencePerSpark(action);
       default:
@@ -511,30 +514,13 @@ function configuredFollowupCopy(
         );
     }
   };
-  if (selected instanceof LocalizedString) return selected;
-  const names =
-    selected instanceof SourceMessage
-      ? Object.keys(selected.argumentSchemas)
-      : [...selected.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
-          (match) => match[1] ?? "",
-        );
+  const names = [...selected.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
+    (match) => match[1] ?? "",
+  );
   const values = Object.fromEntries(
     names.map((name) => [name, valueFor(name)]),
   );
-  if (selected instanceof SourceMessage) {
-    return selected.bind(
-      Object.fromEntries(
-        names.map((name) => {
-          const value = values[name];
-          return [
-            name,
-            value instanceof LocalizedString ? opaque(value) : value,
-          ];
-        }),
-      ),
-    );
-  }
-  return localizedSourceText(selected, values);
+  return fillTemplate(selected, values);
 }
 
 function authoredEssencePerSpark(action: ExplorationActionContent): number {
@@ -573,12 +559,8 @@ function siteTypeChoiceFollowup(
             isBattle: false,
             isLocked: false,
             isInteractive: true,
-            label: localizedSourceText(
-              siteTypeName(content.sitesData, choice.siteType),
-            ),
-            blurb: localizedSourceText(
-              siteTypeDescription(content.sitesData, choice.siteType),
-            ),
+            label: siteTypeName(content.sitesData, choice.siteType),
+            blurb: siteTypeDescription(content.sitesData, choice.siteType),
             icon: glyph(siteTypeIcon(content.sitesData, choice.siteType)),
           },
         },
@@ -1216,7 +1198,7 @@ function starterCardVariableTarget(
 function fixedTransfigurationDisclosure(
   action: ExplorationActionContent,
   content: JourneyContent,
-): LocalizedString | undefined {
+): string | undefined {
   if (
     (action.effectKind !== "transfigure-fixed-selected" &&
       action.effectKind !== "transfigure-all-for-essence" &&
@@ -1227,16 +1209,10 @@ function fixedTransfigurationDisclosure(
   ) {
     return undefined;
   }
-  return txa(
-    "({description})",
-    {
-      description: transfigurationForm(
-        content.transfigurationData,
-        action.transfiguration,
-      ).description,
-    },
-    "[exploration] [transfiguration] Parenthetical disclosure describing the fixed Transfiguration applied by an Exploration action. description is the canonical authored form description.",
-  );
+  return `(${
+    transfigurationForm(content.transfigurationData, action.transfiguration)
+      .description
+  })`;
 }
 
 function deckCardVariableTarget(
@@ -1391,70 +1367,46 @@ function explorationEffectArgumentNames(
   const message = action.effectText;
   if (message === undefined)
     return derivedExplorationEffectArgumentNames(action);
-  if (message instanceof SourceMessage)
-    return Object.keys(message.argumentSchemas);
-  if (message instanceof LocalizedString) return Object.keys(message.arguments);
-  if (typeof message === "string") {
-    return [...message.matchAll(/\{([a-z_]+)\}/g)].map(
-      (match) => match[1] ?? "",
-    );
-  }
-  return [];
+  return templateArgumentNames(message);
 }
 
-function localizedAuthoredMessage(
-  message: string | LocalizedString,
-): LocalizedString {
-  return message instanceof LocalizedString
-    ? message
-    : localizedSourceText(message);
+function templateArgumentNames(message: string): readonly string[] {
+  return [
+    ...new Set(
+      [...message.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
+        (match) => match[1] ?? "",
+      ),
+    ),
+  ];
 }
 
 function localizedUnpreparedEffect(
   message: ExplorationActionContent["effectText"],
-): LocalizedString {
-  if (message === undefined) {
-    return tx(
-      "Exploration effect resolved",
-      "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
-    );
+): string {
+  if (message === undefined || templateArgumentNames(message).length > 0) {
+    return "Exploration effect resolved";
   }
-  if (message instanceof LocalizedString) return message;
-  if (message instanceof SourceMessage) {
-    if (Object.keys(message.argumentSchemas).length === 0)
-      return message.bind({});
-    return tx(
-      "Exploration effect resolved",
-      "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
-    );
-  }
-  return localizedSourceText(message);
+  return message;
 }
 
 function localizedExplorationPredicate(
   predicate: ExplorationPredicate | undefined,
-): LocalizedString {
+): string {
   switch (predicate) {
     case "character":
-      return localizedSourceText("Character");
+      return "Character";
     case "event":
-      return localizedSourceText("Event");
+      return "Event";
     case "cheap-character":
-      return tx(
-        "≤2● cost Character",
-        "[exploration] Card predicate name in a derived mechanical effect.",
-      );
+      return "≤2● cost Character";
     case "legendary":
-      return tx(
-        "legendary",
-        "[exploration] Card predicate name in a derived mechanical effect.",
-      );
+      return "legendary";
     case "spirit-animal":
-      return localizedSourceText("Spirit Animal");
+      return "Spirit Animal";
     case "survivor":
-      return localizedSourceText("Survivor");
+      return "Survivor";
     case "warrior":
-      return localizedSourceText("Warrior");
+      return "Warrior";
     default:
       throw new Error(
         "Missing predicate for derived Exploration presentation.",
@@ -1477,11 +1429,11 @@ export function buildExplorationActionEffect(
     deckCardEntity,
     starterCardEntity,
   );
-  const localizedEffect = (
-    concealedTargets: Readonly<Record<string, LocalizedString>> = {},
-  ): LocalizedString => {
+  const effectValues = (
+    concealedTargets: Readonly<Record<string, string>> = {},
+  ): Record<string, string> => {
     const argumentNames = explorationEffectArgumentNames(action);
-    const localizedValues: Record<string, LocalizedString> = Object.fromEntries(
+    const localizedValues: Record<string, string> = Object.fromEntries(
       argumentNames.map((argumentName) => {
         const concealedTarget = concealedTargets[argumentName];
         if (concealedTarget !== undefined) {
@@ -1494,7 +1446,7 @@ export function buildExplorationActionEffect(
           switch (argumentName) {
             case "card_type":
               if (action.cardType !== undefined)
-                return [argumentName, localizedSourceText(action.cardType)];
+                return [argumentName, action.cardType];
               break;
             case "predicate":
               return [
@@ -1503,7 +1455,7 @@ export function buildExplorationActionEffect(
               ];
             case "subtype":
               if (action.subtype !== undefined)
-                return [argumentName, localizedSourceText(action.subtype)];
+                return [argumentName, action.subtype];
               break;
             case "transfiguration":
               if (action.transfiguration !== undefined) {
@@ -1526,40 +1478,26 @@ export function buildExplorationActionEffect(
         const entity = reference.entity;
         return [
           argumentName,
-          entity.kind === "card"
-            ? localizedSourceText(entity.card.name)
-            : entity.dreamsign.name,
+          entity.kind === "card" ? entity.card.name : entity.dreamsign.name,
         ];
       }),
     );
-    if (action.effectText instanceof SourceMessage) {
-      return action.effectText.bind(
-        Object.fromEntries(
-          Object.entries(localizedValues).map(([name, value]) => [
-            name,
-            opaque(value),
-          ]),
-        ),
-      );
-    }
-    if (action.effectText instanceof LocalizedString) return action.effectText;
-    if (typeof action.effectText === "string")
-      return localizedSourceText(action.effectText, localizedValues);
-    return derivedExplorationEffectText(action, localizedValues);
+    return localizedValues;
   };
+  const renderEffect = (values: Readonly<Record<string, string>>): string =>
+    action.effectText === undefined
+      ? derivedExplorationEffectText(action, values)
+      : fillTemplate(action.effectText, values);
   const argumentNames = explorationEffectArgumentNames(action);
   if (
     argumentNames.includes("deck_card") &&
     !references.some((reference) => reference.placeholder === "deck_card")
   ) {
-    const message = localizedEffect({
-      deck_card: tx(
-        "an eligible card",
-        "[exploration] Generic Exploration effect target shown while its exact eligible deck card is intentionally concealed.",
-      ),
-    });
+    const message = renderEffect(
+      effectValues({ deck_card: "an eligible card" }),
+    );
     return {
-      effectText: message.annotate({}),
+      effectText: plainAnnotatedText(message),
       effectFallback: { message },
     };
   }
@@ -1567,27 +1505,23 @@ export function buildExplorationActionEffect(
     argumentNames.includes("starter_card") &&
     !references.some((reference) => reference.placeholder === "starter_card")
   ) {
-    const message = localizedEffect({
-      starter_card: tx(
-        "a Starter card",
-        "[exploration] Generic Exploration effect target shown while its exact Starter card is intentionally concealed.",
-      ),
-    });
+    const message = renderEffect(
+      effectValues({ starter_card: "a Starter card" }),
+    );
     return {
-      effectText: message.annotate({}),
+      effectText: plainAnnotatedText(message),
       effectFallback: { message },
     };
   }
-  const message = localizedEffect();
+  const values = effectValues();
   return {
-    effectText: message.annotate(
+    effectText: annotateText(
+      renderEffect,
+      values,
       Object.fromEntries(
         references
           .filter((reference) =>
-            Object.prototype.hasOwnProperty.call(
-              message.arguments,
-              reference.placeholder,
-            ),
+            Object.prototype.hasOwnProperty.call(values, reference.placeholder),
           )
           .map((reference) => [reference.placeholder, reference.entity]),
       ),
@@ -2592,11 +2526,7 @@ function actionView(
   const effectDisclosure =
     fixedTransfigurationDisclosure(action, content) ??
     (action.effectKind === "add-site" && offer.offeredSiteType !== undefined
-      ? txa(
-          "{site_type}.",
-          { site_type: offer.offeredSiteType },
-          "[exploration] Parenthetical disclosure naming the authored site type offered by an Exploration action.",
-        )
+      ? `${offer.offeredSiteType}.`
       : undefined);
   return {
     id: action.id,
@@ -2653,7 +2583,7 @@ function actionView(
       ...(action.cardType === undefined ? {} : { cardType: action.cardType }),
       ...(action.siteType === undefined ? {} : { siteType: action.siteType }),
     },
-    label: localizedAuthoredMessage(action.label),
+    label: action.label,
     ...effect,
     ...(action.transfiguration === undefined
       ? {}
@@ -3888,12 +3818,10 @@ function rewardForResolution(
   );
   const resolvedEffectAnnouncement =
     resolvedActionView === undefined && resolvedAction === undefined
-      ? tx(
-          "Exploration effect resolved",
-          "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
-        )
-      : (resolvedActionView?.effectText.localized ??
-        localizedUnpreparedEffect(resolvedAction?.effectText ?? ""));
+      ? "Exploration effect resolved"
+      : resolvedActionView !== undefined
+        ? annotatedTextValue(resolvedActionView.effectText)
+        : localizedUnpreparedEffect(resolvedAction?.effectText ?? "");
   if (
     resolvedAction?.effectKind === "add-fixed-site" ||
     resolvedAction?.effectKind === "choose-site-type"
@@ -3956,12 +3884,8 @@ function rewardForResolution(
       isBattle: false,
       isLocked: false,
       isInteractive: false,
-      label: localizedSourceText(
-        siteTypeName(content.sitesData, insertedSite.type),
-      ),
-      blurb: localizedSourceText(
-        siteTypeDescription(content.sitesData, insertedSite.type),
-      ),
+      label: siteTypeName(content.sitesData, insertedSite.type),
+      blurb: siteTypeDescription(content.sitesData, insertedSite.type),
       icon: glyph(siteTypeIcon(content.sitesData, insertedSite.type)),
     };
     return {
@@ -4489,10 +4413,10 @@ function rewardForResolution(
         return {
           kind: "transfiguration" as const,
           transfiguration,
-          formName: localizedSourceText(
-            transfigurationForm(content.transfigurationData, transfiguration)
-              .name,
-          ),
+          formName: transfigurationForm(
+            content.transfigurationData,
+            transfiguration,
+          ).name,
           essenceSpent: resolution.essenceSpent ?? 0,
           announcement: resolvedEffectAnnouncement,
           cards,
@@ -4570,7 +4494,7 @@ export function buildExplorationSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Exploration" };
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   runtime: ExplorationSiteRuntime;
   state: JourneyState;
   content: JourneyContent;
@@ -4622,7 +4546,7 @@ export function buildExplorationSiteView(params: {
     fullArt: artRef.explorationCard(sourceCard.imageNumber),
     guide: projectGuideView(params.guide, params.guideLine),
     card: { cardId: sourceCard.id, displaySnapshot: sourceCard },
-    narrative: localizedAuthoredMessage(encounter.prose),
+    narrative: encounter.prose,
     actions,
     resolvedActionId: params.runtime.resolution?.actionId ?? null,
     reward,

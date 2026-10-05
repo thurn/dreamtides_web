@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { LocalizedString } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { LayerName } from "../../types/layer-name";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -104,9 +103,9 @@ describe("buildJourneyCompleteView", () => {
       id: journey.avatar?.id,
       imageNumber: "001",
     });
-    expect(view.avatar?.name).toBeInstanceOf(LocalizedString);
-    expect(view.avatar?.title).toBeInstanceOf(LocalizedString);
-    expect(view.avatar?.ability).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.name).toEqual(expect.any(String));
+    expect(view.avatar?.title).toEqual(expect.any(String));
+    expect(view.avatar?.ability).toEqual(expect.any(String));
     expect(view.stats.map(({ id, value }) => [id, value])).toEqual([
       ["battles", 7],
       ["dreamscapes", 2],

@@ -1,25 +1,24 @@
 import type { RandomSiteDestinationType, SiteType } from "./site-type";
-import type { SourceTransport } from "../runtime/localization/runtime";
 import type { DreamscapeId, GlossaryEntryId, GuideId } from "./identifiers";
 
 export type SitePresentation =
   | {
       kind: "battle";
-      label: SourceTransport;
-      finalBossLabel: SourceTransport;
+      label: string;
+      finalBossLabel: string;
     }
-  | { kind: "draft"; label: SourceTransport }
+  | { kind: "draft"; label: string }
   | {
       kind: "shop";
-      title: SourceTransport;
+      title: string;
     }
   | {
       kind: "purge";
-      title: SourceTransport;
+      title: string;
     }
   | {
       kind: "dreamsign-bazaar";
-      title: SourceTransport;
+      title: string;
     };
 
 export interface DuplicationSiteRules {

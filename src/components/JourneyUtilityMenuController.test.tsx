@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { assertLocalized } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseBuildGitSha } from "../types/build-identity";
@@ -75,21 +74,21 @@ describe("buildJourneyUtilityMenuViewModel", () => {
         {
           kind: "action",
           id: "deck",
-          label: assertLocalized("View Deck"),
+          label: "View Deck",
           glyph: GLYPHS.affiliationRow,
           onCommand: vi.fn(),
         },
       ],
       builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
       canLoadJourney: true,
-      status: assertLocalized("Saved journey."),
+      status: "Saved journey.",
       onSaveJourney: vi.fn(),
       onLoadJourney: vi.fn(),
       onDownloadLog: vi.fn(),
       onViewBuildSha: vi.fn(),
     });
 
-    expect(model.status?.entryId).not.toBe("");
+    expect(model.status).not.toBe("");
     expect(model.actions.map((item) => item.id)).toEqual([
       "deck",
       "saveJourney",
@@ -157,7 +156,7 @@ describe("useJourneyUtilityMenuController", () => {
         formatVersion: 1,
       }),
     );
-    expect(latest?.status?.entryId).not.toBe("");
+    expect(latest?.status).not.toBe("");
     act(() => root.unmount());
   });
 
@@ -197,7 +196,7 @@ describe("useJourneyUtilityMenuController", () => {
         fileName: "before-atlas.json",
       }),
     );
-    expect(latest?.status?.entryId).not.toBe("");
+    expect(latest?.status).not.toBe("");
     act(() => root.unmount());
   });
 
@@ -224,7 +223,7 @@ describe("useJourneyUtilityMenuController", () => {
       errorKind: "Error",
       message: "storage quota exhausted",
     });
-    expect(latest?.status?.entryId).not.toBe("");
+    expect(latest?.status).not.toBe("");
     act(() => root.unmount());
   });
 
@@ -253,7 +252,7 @@ describe("useJourneyUtilityMenuController", () => {
       errorKind: "Error",
       message: "save file is corrupt",
     });
-    expect(latest?.status?.entryId).not.toBe("");
+    expect(latest?.status).not.toBe("");
     act(() => root.unmount());
   });
 
@@ -275,7 +274,7 @@ describe("useJourneyUtilityMenuController", () => {
       source: "dreamscape_menu",
       gitSha: "abc123def456",
     });
-    expect(latest?.status?.entryId).not.toBe("");
+    expect(latest?.status).not.toBe("");
     act(() => root.unmount());
   });
 });

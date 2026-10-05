@@ -7,7 +7,6 @@ import {
   type ReactNode,
 } from "react";
 import { createRoot } from "react-dom/client";
-import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it, vi } from "vitest";
 import { parseCardName } from "../../../types/card-identity";
 import type { GameCardModel } from "../card/CardView";
@@ -100,7 +99,7 @@ describe("CardPile", () => {
       root.render(
         <LocalizedCardPile
           cards={CARDS}
-          label={assertLocalized("Enemy void")}
+          label={"Enemy void"}
           testId="enemy-void"
         />,
       );
@@ -165,7 +164,7 @@ describe("CardPile", () => {
       root.render(
         <LocalizedCardPile
           cards={[{ face: "down", id: parseBattleCardId("deck-top") }]}
-          label={assertLocalized("Player deck")}
+          label={"Player deck"}
         />,
       );
     });
@@ -200,7 +199,7 @@ describe("CardPile", () => {
               layoutMotion: "snap",
             },
           ]}
-          label={assertLocalized("Enemy void")}
+          label={"Enemy void"}
         />,
       );
     });
@@ -225,7 +224,7 @@ describe("CardPile", () => {
       root.render(
         <LocalizedCardPile
           cards={[{ face: "up", id: parseBattleCardId("void-top"), model: MODEL }]}
-          label={assertLocalized("Player void")}
+          label={"Player void"}
           onPress={onActivate}
         />,
       );
@@ -250,9 +249,9 @@ describe("CardPile", () => {
       root.render(
         <LocalizedCardPile
           cards={[]}
-          label={assertLocalized("Player void")}
+          label={"Player void"}
           emptyState="outlined"
-          emptyLabel={assertLocalized("Void")}
+          emptyLabel={"Void"}
         />,
       );
     });

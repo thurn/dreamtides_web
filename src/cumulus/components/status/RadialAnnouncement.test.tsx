@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { assertLocalized } from "@trox/runtime";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
 import {
@@ -22,8 +21,8 @@ describe("RadialAnnouncement", () => {
       root.render(
         <CumulusRoot>
           <RadialAnnouncement
-            headline={assertLocalized("Won!")}
-            detail={assertLocalized("A locked Dreamsign")}
+            headline={"Won!"}
+            detail={"A locked Dreamsign"}
             essenceGained={200}
             tone="reward"
             size="compact"
@@ -145,7 +144,7 @@ describe("RadialAnnouncement", () => {
         <CumulusRoot>
           <RadialAnnouncement
             variant="victory"
-            headline={assertLocalized("Victory")}
+            headline={"Victory"}
             announcementId="fixture-victory"
           />
         </CumulusRoot>,
@@ -216,7 +215,7 @@ describe("RadialAnnouncement", () => {
       root.render(
         <CumulusRoot>
           <RadialAnnouncement
-            headline={assertLocalized("Fast")}
+            headline={"Fast"}
             headlineGlyph={GLYPHS.bolt}
           />
         </CumulusRoot>,
@@ -248,8 +247,8 @@ describe("RadialAnnouncement", () => {
       root.render(
         <CumulusRoot>
           <RadialAnnouncement
-            headline={assertLocalized("−1 ●")}
-            detail={assertLocalized("All characters gain +1 ✦")}
+            headline={"−1 ●"}
+            detail={"All characters gain +1 ✦"}
           />
         </CumulusRoot>,
       );

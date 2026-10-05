@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { afterEach, describe, expect, it } from "vitest";
@@ -52,7 +51,7 @@ describe("RulesText", () => {
   it("renders recognized glossary terms as plain text without an underline", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("Reclaim this card.")}
+        text={"Reclaim this card."}
         owner={CARD_OWNER}
       />,
     );
@@ -71,7 +70,7 @@ describe("RulesText", () => {
 
   it("renders the energy glyph as the boxicons fire-alt icon", () => {
     const { container } = renderInCumulus(
-      <RulesText text={assertLocalized("Pay ●3.")} owner={CARD_OWNER} />,
+      <RulesText text={"Pay ●3."} owner={CARD_OWNER} />,
     );
 
     const flame = container.querySelector("i.bxf.bx-fire-alt");
@@ -88,7 +87,7 @@ describe("RulesText", () => {
   it("colors the inline energy flame with ENERGY_ICON_COLOR", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("Pay ●2 to draw a card.")}
+        text={"Pay ●2 to draw a card."}
         owner={CARD_OWNER}
       />,
     );
@@ -116,7 +115,7 @@ describe("RulesText", () => {
   it("renders the fast marker ❖ as one boxicons bolt icon", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("❖ – 1●: Move this character.")}
+        text={"❖ – 1●: Move this character."}
         owner={CARD_OWNER}
       />,
     );
@@ -133,7 +132,7 @@ describe("RulesText", () => {
   it("renders the interrupt marker ❖❖ as two bolt icons", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("❖❖ – Abandon an ally: Effect.")}
+        text={"❖❖ – Abandon an ally: Effect."}
         owner={CARD_OWNER}
       />,
     );
@@ -147,7 +146,7 @@ describe("RulesText", () => {
 
   it("does not wrap unknown words", () => {
     const { container } = renderInCumulus(
-      <RulesText text={assertLocalized("Deal 3 damage.")} owner={CARD_OWNER} />,
+      <RulesText text={"Deal 3 damage."} owner={CARD_OWNER} />,
     );
 
     const triggerSpans = Array.from(container.querySelectorAll("span")).filter(
@@ -159,7 +158,7 @@ describe("RulesText", () => {
   it("keeps the trigger keyword on one line and renders it as plain text", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("▸ Judgment: Draw a card.")}
+        text={"▸ Judgment: Draw a card."}
         owner={CARD_OWNER}
       />,
     );
@@ -186,7 +185,7 @@ describe("RulesText", () => {
   it("renders ▸ as compact Unicode text that inherits the surrounding style", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("▸ Judgment: Draw a card.")}
+        text={"▸ Judgment: Draw a card."}
         owner={CARD_OWNER}
       />,
     );
@@ -206,7 +205,7 @@ describe("RulesText", () => {
   it("renders points ⍟, lunar ☾, and memory ⧗ as filled marks", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("Gain 2⍟. ☾: Store 1⧗.")}
+        text={"Gain 2⍟. ☾: Store 1⧗."}
         owner={CARD_OWNER}
       />,
     );
@@ -233,9 +232,7 @@ describe("RulesText", () => {
   it("renders each ability separated by `\\n\\n` as its own paragraph block", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized(
-          "▸ Materialized: Banish an enemy until this character leaves play.\n\nAbandon this character: Foresee 2.",
-        )}
+        text={"▸ Materialized: Banish an enemy until this character leaves play.\n\nAbandon this character: Foresee 2."}
         owner={CARD_OWNER}
       />,
     );
@@ -254,7 +251,7 @@ describe("RulesText", () => {
   it("applies a top-margin to non-first ability paragraphs", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("Ability one.\n\nAbility two.")}
+        text={"Ability one.\n\nAbility two."}
         owner={CARD_OWNER}
       />,
     );
@@ -278,7 +275,7 @@ describe("RulesText", () => {
   it("renders a single ability as one paragraph with no extra spacing", () => {
     const { container } = renderInCumulus(
       <RulesText
-        text={assertLocalized("▸ Materialized: Foresee 1.")}
+        text={"▸ Materialized: Foresee 1."}
         owner={CARD_OWNER}
       />,
     );

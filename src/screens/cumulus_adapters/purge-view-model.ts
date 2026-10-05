@@ -1,6 +1,5 @@
 // Pure view-model builder for the Cumulus Purge site.
 
-import { tx, txa, type LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import {
   maxAffordablePurgeCount,
@@ -29,8 +28,8 @@ import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { SitesData } from "../../types/sites-data";
-import { bindSourceTransport } from "../../runtime/localization/runtime";
 import type { GuideId } from "../../types/identifiers";
+import { formatNumber } from "../../runtime/format-number";
 
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
@@ -43,7 +42,7 @@ export function resolvePurgeGuide(
 /** Build the guide slice shown at the top of the purge screen. */
 export function buildPurgeGuideView(
   guide: DreamGuideContent,
-  guideLine: LocalizedString,
+  guideLine: string,
 ): PurgeGuideView {
   return projectGuideView(guide, guideLine);
 }
@@ -86,7 +85,7 @@ export function buildPurgeSiteView(params: {
   cardDatabase: Map<number, CardData>;
   transfigurationData: TransfigurationData;
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   tutorialConfiguration?: TutorialSiteConfiguration;
   economyData: EconomyData;
   sitesData: SitesData;
@@ -118,17 +117,10 @@ export function buildPurgeSiteView(params: {
       >;
       return {
         kind: identity.kind,
-        title: bindSourceTransport(identity.title),
-        instruction: tx(
+        title: identity.title,
+        instruction:
           "Choose any number of cards to remove from your deck for an essence cost",
-          "[purge] Instruction above the deck explaining that selected cards can be removed by spending essence.",
-        ),
-        purgeAction: (count: number) =>
-          txa(
-            "Purge {count}",
-            { count },
-            "[purge] Confirmation button for removing selected cards. count is the number of cards selected.",
-          ),
+        purgeAction: (count: number) => `Purge ${formatNumber(count)}`,
       };
     })(),
     siteId: params.site.id,

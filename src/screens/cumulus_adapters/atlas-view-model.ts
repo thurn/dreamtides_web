@@ -45,11 +45,6 @@ import type {
 } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
 import {
-  bindSourceTransport,
-  localizedSourceText,
-} from "../../runtime/localization/runtime";
-import { opaque, tx, txa } from "@trox/runtime";
-import {
   siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
@@ -65,14 +60,9 @@ import { type LayerName, layerOrdinal } from "../../types/layer-name";
 import type { AtlasNodeId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
 
-const UNSEEN_DREAM_TITLE = tx(
-  "An Unseen Dream",
-  "[atlas] Title of the compact information card for an unrevealed or unreachable Dreamscape.",
-);
-const UNSEEN_DREAM_BODY = tx(
-  "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.",
-  "[atlas] Body of the compact information card explaining that an unrevealed Dreamscape becomes known as the player approaches it.",
-);
+const UNSEEN_DREAM_TITLE = "An Unseen Dream";
+const UNSEEN_DREAM_BODY =
+  "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.";
 
 /**
  * The portrait design canvas the mobile atlas stage scales to fit (letterboxed).
@@ -359,12 +349,12 @@ function buildDreamsignCard(
   }
   return {
     id: dreamsign.id,
-    name: localizedSourceText(dreamsign.name),
+    name: dreamsign.name,
     art:
       dreamsign.imageName != null
         ? artRef.dreamsign(dreamsign.imageName)
         : null,
-    rulesText: localizedSourceText(dreamsign.effectDescription),
+    rulesText: dreamsign.effectDescription,
   };
 }
 
@@ -374,11 +364,10 @@ function buildSignatureSiteCard(
   journeyContent: JourneyContent,
 ): AtlasNodeSite {
   return {
-    name: localizedSourceText(
-      siteTypeName(journeyContent.sitesData, dreamscape.signatureSite),
-    ),
-    blurb: localizedSourceText(
-      siteTypeDescription(journeyContent.sitesData, dreamscape.signatureSite),
+    name: siteTypeName(journeyContent.sitesData, dreamscape.signatureSite),
+    blurb: siteTypeDescription(
+      journeyContent.sitesData,
+      dreamscape.signatureSite,
     ),
     icon: glyph(
       siteTypeIcon(journeyContent.sitesData, dreamscape.signatureSite),
@@ -392,18 +381,8 @@ function buildAffiliationCard(
 ): AtlasNodeAffiliation | null {
   return affiliation !== null
     ? {
-        title: txa(
-          "Affiliation: {affiliation_name}",
-          { affiliation_name: opaque(localizedSourceText(affiliation.name)) },
-          "[atlas] Title of an Atlas Dreamscape's affiliation information card. affiliation_name is the canonical authored proper name of that Dreamscape's affiliation.",
-        ),
-        body: txa(
-          "{card_theme} cards are more likely here.",
-          {
-            card_theme: opaque(localizedSourceText(affiliation.atlasCardTheme)),
-          },
-          "[atlas] Body of an Atlas Dreamscape's affiliation information card. card_theme is the canonical authored invariant card-theme label associated with that affiliation.",
-        ),
+        title: `Affiliation: ${affiliation.name}`,
+        body: `${affiliation.atlasCardTheme} cards are more likely here.`,
       }
     : null;
 }
@@ -448,19 +427,15 @@ function buildNodeCard(
         sceneArt: artRef.dreamscapeScene(boss.sceneArtId),
         // The boss stands over the Limbo scene as its prominent figure.
         figureArt: artRef.dreamGuide(boss.figureArtId),
-        title: bindSourceTransport(
-          bossIncarnation?.title ?? boss.fallbackTitle,
-        ),
+        title: bossIncarnation?.title ?? boss.fallbackTitle,
         // Title with the run's chosen Apollyon incarnation (its full name, e.g.
         // "Apollyon, the World's End"), falling back to the default epithet when
         // no incarnation was assigned.
-        body: bindSourceTransport(
-          bossIncarnation?.description ?? boss.fallbackIntroduction,
-        ),
+        body: bossIncarnation?.description ?? boss.fallbackIntroduction,
         // The desktop hover card presents Limbo as the place with the chosen
         // incarnation as the guide-line; the boss has no site or affiliation.
-        placeName: localizedSourceText(boss.place),
-        guideName: localizedSourceText(bossIncarnation?.title ?? boss.name),
+        placeName: boss.place,
+        guideName: bossIncarnation?.title ?? boss.name,
       },
       dreamsign,
       site: null,
@@ -524,22 +499,22 @@ function buildNodeCard(
     primary: {
       sceneArt: artRef.dreamscapeScene(dreamscape.id),
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
-      title: localizedSourceText(guide?.name ?? dreamscape.name),
+      title: guide?.name ?? dreamscape.name,
       body: (() => {
         if (guide?.homeSpecialty !== undefined) {
-          return localizedSourceText(guide.homeSpecialty);
+          return guide.homeSpecialty;
         }
         if (dreamscape.atlasDescription === undefined) {
           throw new Error(
             `Starter Dreamscape ${dreamscape.id} has no Atlas description.`,
           );
         }
-        return bindSourceTransport(dreamscape.atlasDescription);
+        return dreamscape.atlasDescription;
       })(),
       // The large desktop hover card presents the place, its resident guide, the
       // signature site, and the dreamscape's affiliation as distinct fields.
-      placeName: localizedSourceText(dreamscape.name),
-      guideName: guide === null ? null : localizedSourceText(guide.name),
+      placeName: dreamscape.name,
+      guideName: guide === null ? null : guide.name,
     },
     dreamsign,
     site,
@@ -675,9 +650,9 @@ export function buildAtlasGuideDialogue(
     id: parsePresentationId(`${state.runId ?? state.seed}:atlas-guidance`),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
-      speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
-      text: localizedSourceText(speechBubble.text),
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: speechBubble.text,
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,

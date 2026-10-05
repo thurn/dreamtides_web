@@ -1,8 +1,7 @@
-import { assertLocalized, LocalizedString } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
@@ -162,18 +161,18 @@ describe("buildCardShopOffers", () => {
         {
           presentation: {
             kind: "shop",
-            title: assertLocalized("Shop"),
-            restocked: assertLocalized("Restocked"),
-            restockOffersAction: assertLocalized("Restock Offers"),
-            restockAction: assertLocalized("Restock"),
-            freePrice: assertLocalized("Free"),
+            title: "Shop",
+            restocked: "Restocked",
+            restockOffersAction: "Restock Offers",
+            restockAction: "Restock",
+            freePrice: "Free",
           },
           siteId: parseSiteId("shop-site"),
           scene: null,
           guide: {
             id: testGuideId("guide"),
-            name: assertLocalized("Guide"),
-            line: assertLocalized("Line"),
+            name: "Guide",
+            line: "Line",
             art: artRef.dreamGuide(testGuideId("guide")),
           },
           offers,
@@ -267,7 +266,7 @@ describe("buildCardShopSiteView", () => {
         dialogue: { site: ["Browse a while."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: assertLocalized("A chosen greeting."),
+      guideLine: "A chosen greeting.",
       economyData: economyFixture(),
       transfigurationData: transfigurationFixture(),
       sitesData: MINIMAL_SITES_DATA,
@@ -277,8 +276,8 @@ describe("buildCardShopSiteView", () => {
     expect(view.guide).toMatchObject({
       id: guideId,
     });
-    expect(view.guide.name).toBeInstanceOf(LocalizedString);
-    expect(view.guide.line).toBeInstanceOf(LocalizedString);
+    expect(view.guide.name).toEqual(expect.any(String));
+    expect(view.guide.line).toEqual(expect.any(String));
     expect(view.offers).toHaveLength(3);
   });
 
@@ -320,7 +319,7 @@ describe("buildCardShopSiteView", () => {
         dialogue: { site: ["Browse a while."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: assertLocalized("A chosen greeting."),
+      guideLine: "A chosen greeting.",
       economyData: economyFixture(),
       transfigurationData: transfigurationFixture(),
       sitesData: MINIMAL_SITES_DATA,

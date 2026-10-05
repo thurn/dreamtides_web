@@ -3,7 +3,6 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 import type { Database } from "firebase/database";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
-import { tx } from "@trox/runtime";
 
 interface VersionGateScreenProps {
   db: Database;
@@ -31,27 +30,13 @@ export function VersionGateScreen({
     <ApplicationStateScreen
       view={{
         kind: "versionGate",
-        title: tx(
-          "A New Version Was Deployed",
-          "[coop] Title for a shared-room gate when the room uses an incompatible reducer version.",
-        ),
-        message: tx(
+        title: "A New Version Was Deployed",
+        message:
           "This game was started on an earlier build. Start a fresh game on the current version.",
-          "[coop] Explanation that an incompatible shared room must be replaced with a fresh game on the current build.",
-        ),
         actions: [
           {
             id: "primary",
-            label:
-              status === "creating"
-                ? tx(
-                    "Starting…",
-                    "[coop] Disabled action label while a replacement shared room is being created.",
-                  )
-                : tx(
-                    "Create New Game",
-                    "[coop] Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
-                  ),
+            label: status === "creating" ? "Starting…" : "Create New Game",
             disabled: status === "creating",
             onPress: handleStartNewGame,
           },

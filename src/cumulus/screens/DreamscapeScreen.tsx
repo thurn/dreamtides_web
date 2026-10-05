@@ -28,11 +28,10 @@ import {
 } from "../components/overlay/DreamsignReplacementDialog";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
+import { formatNumber } from "../../runtime/format-number";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
 export type InlineRewardView =
@@ -51,7 +50,7 @@ export interface DreamscapeView {
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;
   /** Display title (used as the scene's alt text). */
-  title: LocalizedString;
+  title: string;
   /** The placed, seeded, labelled site nodes. */
   sites: DreamscapeSiteModel[];
   /** Generated Essence and Reward results, keyed by the site's stable id. */
@@ -98,7 +97,7 @@ export function DreamscapeScreen({
   onDeclineReward,
   onGuideDialogueShown,
 }: DreamscapeScreenProps) {
-  const resolve = useLocalizer();
+  
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const [collectingSiteId, setCollectingSiteId] = useState<string | null>(null);
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
@@ -161,7 +160,7 @@ export function DreamscapeScreen({
     <div
       className="cumulus"
       data-cumulus-dreamscape=""
-      data-dreamscape-title={resolve(view.title)}
+      data-dreamscape-title={view.title}
       style={{
         position: "fixed",
         inset: 0,
@@ -174,7 +173,7 @@ export function DreamscapeScreen({
       {sceneUrl !== null && (
         <img
           src={sceneUrl}
-          alt={resolve(view.title)}
+          alt={view.title}
           draggable={false}
           style={{
             position: "absolute",
@@ -298,29 +297,11 @@ export function DreamscapeScreen({
           key={collectingModel.id}
           role="status"
           aria-live="polite"
-          aria-label={resolve(
-            collectingReward.kind === "dreamsign"
+          aria-label={(collectingReward.kind === "dreamsign"
               ? collectingReward.requiresReplacement
-                ? txa(
-                    "Found dreamsign: {dreamsign_name}",
-                    {
-                      dreamsign_name: opaque(collectingReward.dreamsign.name),
-                    },
-                    "[accessibility] [dreamsign] [journey] Reward status when an authored Dreamsign is found and requires replacement. dreamsign_name is canonical authored content.",
-                  )
-                : txa(
-                    "Gained dreamsign: {dreamsign_name}",
-                    {
-                      dreamsign_name: opaque(collectingReward.dreamsign.name),
-                    },
-                    "[accessibility] [dreamsign] [journey] Reward status when an authored Dreamsign is gained. dreamsign_name is canonical authored content.",
-                  )
-              : txa(
-                  "Gained {amount} essence",
-                  { amount: collectingReward.amount },
-                  "[accessibility] [journey] Reward status when Essence is gained. amount is the non-negative Essence quantity.",
-                ),
-          )}
+                ? `Found dreamsign: ${collectingReward.dreamsign.name}`
+                : `Gained dreamsign: ${collectingReward.dreamsign.name}`
+              : `Gained ${formatNumber(collectingReward.amount)} essence`)}
           data-essence-collection={
             collectingModel.type === "Essence"
               ? collectingModel.id
@@ -407,17 +388,9 @@ export function DreamscapeScreen({
                   whiteSpace: "nowrap",
                 }}
               >
-                {resolve(
-                  collectingReward.requiresReplacement
-                    ? tx(
-                        "Dreamsign found",
-                        "[dreamsign] [journey] Visible status when a Dreamsign reward requires replacement.",
-                      )
-                    : tx(
-                        "Dreamsign gained",
-                        "[dreamsign] [journey] Visible status when a Dreamsign reward is collected.",
-                      ),
-                )}
+                {(collectingReward.requiresReplacement
+                    ? "Dreamsign found"
+                    : "Dreamsign gained")}
               </motion.div>
             </>
           ) : (
@@ -443,14 +416,8 @@ export function DreamscapeScreen({
         <DreamsignReplacementDialog
           model={{
             ...view.replacement,
-            dismissLabel: tx(
-              "Keep Current Dreamsigns",
-              "[dreamsign] [journey] Replacement keep current action.",
-            ),
-            closeLabel: tx(
-              "Decline Dreamsign reward",
-              "[dreamsign] [journey] Replacement decline reward action.",
-            ),
+            dismissLabel: "Keep Current Dreamsigns",
+            closeLabel: "Decline Dreamsign reward",
           }}
           onDreamsignPress={onReplaceDreamsign}
           onDismiss={onDeclineReward}

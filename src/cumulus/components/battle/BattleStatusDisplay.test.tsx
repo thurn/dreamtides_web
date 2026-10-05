@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ComponentProps } from "react";
@@ -55,8 +54,8 @@ describe("BattleStatusDisplay", () => {
           relationship="far"
           avatar={{
             imageNumber: "0042",
-            name: assertLocalized("Astra"),
-            title: assertLocalized("The Dawnbound"),
+            name: "Astra",
+            title: "The Dawnbound",
           }}
           currentEnergy={2}
           maxEnergy={3}
@@ -164,12 +163,12 @@ describe("BattleStatusDisplay", () => {
           relationship="near"
           avatar={{
             imageNumber: "0029",
-            name: assertLocalized("Tensho"),
-            title: assertLocalized("Daimyo of Lacquered Fury"),
+            name: "Tensho",
+            title: "Daimyo of Lacquered Fury",
           }}
           avatarProfile={{
             id: testAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
-            ability: assertLocalized("Avatar ability is not active"),
+            ability: "Avatar ability is not active",
             unavailable: true,
           }}
           currentEnergy={0}

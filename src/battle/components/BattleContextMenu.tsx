@@ -1,5 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import { useMemo } from "react";
 import {
   CommandMenu,
@@ -519,8 +517,8 @@ export function BattleContextMenu({
     <CommandMenu
       model={{
         kind: "context",
-        title: localizedSourceText(card.definition.name),
-        subtitle: assertLocalized(locationLabel),
+        title: card.definition.name,
+        subtitle: locationLabel,
         actions: toCommandMenuItems(items, battleCardId),
         anchor: { x, y },
         onDismiss: onClose,
@@ -618,11 +616,11 @@ function toCommandMenuItems(
       return {
         kind: "signed-integer",
         id,
-        label: assertLocalized(item.label),
+        label: item.label,
         ...(item.placeholder === undefined
           ? {}
-          : { placeholder: assertLocalized(item.placeholder) }),
-        commitLabel: assertLocalized(item.commitLabel),
+          : { placeholder: item.placeholder }),
+        commitLabel: item.commitLabel,
         onCommand: item.action,
       };
     }
@@ -630,7 +628,7 @@ function toCommandMenuItems(
       return {
         kind: "group",
         id,
-        label: assertLocalized(item.label),
+        label: item.label,
         glyph: item.glyph ?? GLYPHS.list,
         actions: toCommandMenuItems(item.submenu, battleCardId, id),
       };
@@ -638,7 +636,7 @@ function toCommandMenuItems(
     return {
       kind: "action",
       id,
-      label: assertLocalized(item.label),
+      label: item.label,
       glyph:
         item.glyph ??
         (item.label.includes("Note") ? GLYPHS.pencilSquare : GLYPHS.edit),

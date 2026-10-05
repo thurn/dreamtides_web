@@ -3,8 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { LocalizedString } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
@@ -32,7 +31,7 @@ import type {
 
 const TUTORIAL_CONFIGURATION = makeTutorialConfiguration();
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 
 const AVATARS: readonly AvatarContent[] = [
   {
@@ -403,9 +402,7 @@ describe("TutorialScreenAdapter", () => {
       wait: 0,
       trigger: "player-turn-announcement-complete",
     });
-    expect(adapterMocks.props?.view.howToPlay?.text).toBeInstanceOf(
-      LocalizedString,
-    );
+    expect(adapterMocks.props?.view.howToPlay?.text).toEqual(expect.any(String));
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -634,16 +631,14 @@ describe("TutorialScreenAdapter", () => {
         },
       },
     });
-    expect(adapterMocks.props?.view.howToPlay?.text).toBeInstanceOf(
-      LocalizedString,
-    );
+    expect(adapterMocks.props?.view.howToPlay?.text).toEqual(expect.any(String));
     expect(
       adapterMocks.props?.view.howToPlay?.companion?.displaySnapshot.name,
-    ).toBeInstanceOf(LocalizedString);
+    ).toEqual(expect.any(String));
     expect(
       adapterMocks.props?.view.howToPlay?.companion?.displaySnapshot
         .renderedText,
-    ).toBeInstanceOf(LocalizedString);
+    ).toEqual(expect.any(String));
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

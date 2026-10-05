@@ -1,12 +1,8 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import {
-  bindSourceTransport,
-  resolveSource,
-} from "../../runtime/localization/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -420,9 +416,7 @@ describe("buildAtlasMapNodes", () => {
     expect(items).toHaveLength(3);
     const boss = items.find((item) => item.model.id === "boss");
     expect(boss?.model.role).toBe("boss");
-    expect(resolveSource(boss!.model.primary.placeName!)).toBe(
-      "Synthetic boss place",
-    );
+    expect(boss!.model.primary.placeName!).toBe("Synthetic boss place");
     expect(boss?.model.primary.sceneArt).toEqual({
       kind: "dreamscape-scene",
       dreamscapeId: testDreamscapeId("synthetic-boss-scene"),
@@ -477,9 +471,7 @@ describe("buildAtlasMapNodes", () => {
       (item) => item.model.id === STARTER_NODE_ID,
     );
 
-    expect(starter?.model.primary.body).toEqual(
-      bindSourceTransport(atlasDescription),
-    );
+    expect(starter?.model.primary.body).toEqual(atlasDescription);
   });
 
   it("rejects a guideless starter without authored Atlas copy", () => {
@@ -570,10 +562,10 @@ describe("buildAtlasMapNodes", () => {
     const items = buildAtlasMapNodes(atlas, content);
     const middle = items.find((item) => item.model.id === "middle");
 
-    expect(resolveSource(middle!.model.site!.name)).toBe(
+    expect(middle!.model.site!.name).toBe(
       siteTypeName(content.sitesData, "Augury"),
     );
-    expect(resolveSource(middle!.model.site!.blurb).length).toBeGreaterThan(0);
+    expect(middle!.model.site!.blurb.length).toBeGreaterThan(0);
     expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
     expect(middle?.model.affiliation).not.toBeNull();
   });

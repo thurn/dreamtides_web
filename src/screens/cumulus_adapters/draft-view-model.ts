@@ -18,10 +18,10 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationData } from "../../types/transfiguration-data";
-import { txa } from "@trox/runtime";
 import type { SiteId } from "../../types/identifiers";
 import type { ExplorationActionId } from "../../types/identifiers";
 import { draftOfferKey } from "../../data/draft-site-bootstrap";
+import { formatNumber } from "../../runtime/format-number";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -103,11 +103,7 @@ export function buildDraftView(params: {
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
     pickNumber,
     pickTotal,
-    progressLabel: txa(
-      "Draft ({pick_number}/{pick_total})",
-      { pick_number: pickNumber, pick_total: pickTotal },
-      "[draft] Progress label above a Draft offer. pick_number is the current one-indexed pick and pick_total is the total picks required at this site; both are positive whole numbers.",
-    ),
+    progressLabel: `Draft (${formatNumber(pickNumber)}/${formatNumber(pickTotal)})`,
     tutorial:
       params.journeyState === undefined
         ? undefined

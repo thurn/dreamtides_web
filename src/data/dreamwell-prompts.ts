@@ -1,5 +1,4 @@
 import type { DreamwellCard } from "./dreamwell-database";
-import { tx, txa, type LocalizedString } from "@trox/runtime";
 import {
   dreamwellCardIdFromUnknown,
   dreamwellChoiceKeyFromUnknown,
@@ -8,6 +7,7 @@ import {
   type DreamwellChoiceKey,
   type DreamwellPromptKey,
 } from "../types/identifiers";
+import { formatNumber } from "../runtime/format-number";
 
 export type DreamwellPromptArgumentValue = string | number;
 export type DreamwellPromptArgumentKind =
@@ -237,7 +237,7 @@ export function isLegacyPromptText(value: unknown): value is LegacyPromptText {
 
 type PromptMessage = (
   arguments_: DreamwellPromptRef["arguments"],
-) => LocalizedString;
+) => string;
 
 export interface DreamwellAutomationPromptDefinition {
   readonly key: string;
@@ -275,93 +275,63 @@ const DREAMWELL_AUTOMATION_PROMPTS: DreamwellPromptDefinitions = {
     {
       key: "discard-drawn-card",
       title: () =>
-        tx("Choose a card to discard", "[battle] Dreamwell prompt title."),
+        "Choose a card to discard",
       subtitle: () =>
-        tx("Choose one card from your hand.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one card from your hand.",
       instructions: () =>
-        tx("Choose a card to discard.", "[battle] Dreamwell prompt instructions."),
+        "Choose a card to discard.",
     },
   ],
   "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5": [
     {
       key: "confirm-play-void-character",
       title: () =>
-        tx("Play a character from your void?", "[battle] Dreamwell prompt title."),
+        "Play a character from your void?",
       subtitle: () =>
-        tx(
-          "You may play a character without paying its energy cost.",
-          "[battle] Dreamwell prompt subtitle.",
-        ),
+        "You may play a character without paying its energy cost.",
       instructions: () =>
-        tx(
-          "Choose whether to play a character from your void.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose whether to play a character from your void.",
     },
     {
       key: "choose-void-character",
       title: () =>
-        tx("Choose a character to play", "[battle] Dreamwell prompt title."),
+        "Choose a character to play",
       subtitle: () =>
-        tx(
-          "Choose an eligible character from your void.",
-          "[battle] Dreamwell prompt subtitle.",
-        ),
+        "Choose an eligible character from your void.",
       instructions: () =>
-        tx("Choose a character to play.", "[battle] Dreamwell prompt instructions."),
+        "Choose a character to play.",
     },
   ],
   "14dec460-3ec6-40c1-978f-67e70cb0b227": [
     {
       key: "grant-reclaim",
       title: () =>
-        tx("Choose a void card to gain Reclaim", "[battle] Dreamwell prompt title."),
+        "Choose a void card to gain Reclaim",
       subtitle: () =>
-        tx(
-          "You may play it from your void this turn, then banish it.",
-          "[battle] Dreamwell prompt subtitle.",
-        ),
+        "You may play it from your void this turn, then banish it.",
       instructions: () =>
-        tx("Choose a card in your void.", "[battle] Dreamwell prompt instructions."),
+        "Choose a card in your void.",
     },
   ],
   "fa8704fe-759f-408d-992d-d8f9d5ffd760": [
     {
       key: "discard-and-draw",
       title: (arguments_) =>
-        txa(
-          "Discard {count} cards, then draw {count}?",
-          { count: numericArgument(arguments_, "count") },
-          "[battle] Dreamwell confirmation title. count is the number of cards exchanged.",
-        ),
+        `Discard ${formatNumber(numericArgument(arguments_, "count"))} cards, then draw ${formatNumber(numericArgument(arguments_, "count"))}?`,
       subtitle: () =>
-        tx(
-          "Choose whether to exchange cards from your hand.",
-          "[battle] Dreamwell prompt subtitle.",
-        ),
+        "Choose whether to exchange cards from your hand.",
       instructions: () =>
-        tx(
-          "Choose whether to discard and draw the same number of cards.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose whether to discard and draw the same number of cards.",
       arguments: [{ name: "count", kind: "Count" }],
     },
     {
       key: "choose-discards",
       title: (arguments_) =>
-        txa(
-          "Discard {count} cards",
-          { count: numericArgument(arguments_, "count") },
-          "[battle] Dreamwell selection title. count is the required number of cards.",
-        ),
+        `Discard ${formatNumber(numericArgument(arguments_, "count"))} cards`,
       subtitle: () =>
-        tx("Choose cards from your hand.", "[battle] Dreamwell prompt subtitle."),
+        "Choose cards from your hand.",
       instructions: (arguments_) =>
-        txa(
-          "Choose {count} cards to discard.",
-          { count: numericArgument(arguments_, "count") },
-          "[battle] Dreamwell instructions. count is the required number of cards.",
-        ),
+        `Choose ${formatNumber(numericArgument(arguments_, "count"))} cards to discard.`,
       arguments: [{ name: "count", kind: "Count" }],
     },
   ],
@@ -369,122 +339,85 @@ const DREAMWELL_AUTOMATION_PROMPTS: DreamwellPromptDefinitions = {
     {
       key: "return-void-card",
       title: () =>
-        tx("Return a void card to hand", "[battle] Dreamwell prompt title."),
+        "Return a void card to hand",
       subtitle: () =>
-        tx("Choose one card from your void.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one card from your void.",
       instructions: () =>
-        tx(
-          "Choose a card to return to your hand.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose a card to return to your hand.",
     },
   ],
   "9954cede-8a16-4053-b6e9-da745f4540f5": [
     {
       key: "banish-enemy-character",
       title: () =>
-        tx("Banish an enemy character", "[battle] Dreamwell prompt title."),
+        "Banish an enemy character",
       subtitle: () =>
-        tx("Choose an opposing character in play.", "[battle] Dreamwell prompt subtitle."),
+        "Choose an opposing character in play.",
       instructions: () =>
-        tx(
-          "Choose a character to banish until Ending.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose a character to banish until Ending.",
     },
   ],
   "3a4293da-55a1-4094-898a-df402ffa1c92": [
     {
       key: "pick-card-for-hand",
       title: () =>
-        tx("Pick a card for your hand", "[battle] Dreamwell prompt title."),
+        "Pick a card for your hand",
       subtitle: () =>
-        tx(
-          "The other revealed card goes to the bottom of your deck.",
-          "[battle] Dreamwell prompt subtitle.",
-        ),
+        "The other revealed card goes to the bottom of your deck.",
       instructions: () =>
-        tx(
-          "Choose one revealed card to put into your hand.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose one revealed card to put into your hand.",
     },
   ],
   "556057bb-b134-497e-86c2-c6f30049e9e3": [
     {
       key: "confirm-void-to-deck",
       title: () =>
-        tx("Put a void card on top of your deck?", "[battle] Dreamwell prompt title."),
+        "Put a void card on top of your deck?",
       subtitle: () =>
-        tx("Choose whether to return a card to your deck.", "[battle] Dreamwell prompt subtitle."),
+        "Choose whether to return a card to your deck.",
       instructions: () =>
-        tx(
-          "Choose whether to put a void card on top of your deck.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose whether to put a void card on top of your deck.",
     },
     {
       key: "choose-void-for-deck",
       title: () =>
-        tx("Choose a void card to put on top", "[battle] Dreamwell prompt title."),
+        "Choose a void card to put on top",
       subtitle: () =>
-        tx("Choose one card from your void.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one card from your void.",
       instructions: () =>
-        tx(
-          "Choose the card to put on top of your deck.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose the card to put on top of your deck.",
     },
   ],
   "20be0fdd-d691-40a9-b4f8-15689ea7ebaa": [
     {
       key: "confirm-abandon-and-draw",
       title: (arguments_) =>
-        txa(
-          "Abandon a character to draw {count}?",
-          { count: numericArgument(arguments_, "count") },
-          "[battle] Dreamwell confirmation title. count is the number of cards drawn.",
-        ),
+        `Abandon a character to draw ${formatNumber(numericArgument(arguments_, "count"))}?`,
       subtitle: () =>
-        tx(
-          "Choose whether to abandon a character you control.",
-          "[battle] Dreamwell prompt subtitle.",
-        ),
+        "Choose whether to abandon a character you control.",
       instructions: (arguments_) =>
-        txa(
-          "Choose whether to abandon a character and draw {count} cards.",
-          { count: numericArgument(arguments_, "count") },
-          "[battle] Dreamwell instructions. count is the number of cards drawn.",
-        ),
+        `Choose whether to abandon a character and draw ${formatNumber(numericArgument(arguments_, "count"))} cards.`,
       arguments: [{ name: "count", kind: "Count" }],
     },
     {
       key: "choose-character-to-abandon",
       title: () =>
-        tx("Choose a character to abandon", "[battle] Dreamwell prompt title."),
+        "Choose a character to abandon",
       subtitle: () =>
-        tx("Choose one character you control.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one character you control.",
       instructions: () =>
-        tx("Choose the character to abandon.", "[battle] Dreamwell prompt instructions."),
+        "Choose the character to abandon.",
     },
   ],
   "f61431f3-33bd-42ff-a229-b4013582e86e": [
     {
       key: "discover-card",
       title: (arguments_) =>
-        txa(
-          "Discover a ≤{maximum_cost}● cost card",
-          { maximum_cost: numericArgument(arguments_, "maximum_cost") },
-          "[battle] Dreamwell selection title. maximum_cost is the highest allowed energy cost.",
-        ),
+        `Discover a ≤${formatNumber(numericArgument(arguments_, "maximum_cost"))}● cost card`,
       subtitle: () =>
-        tx("Choose one of the sampled cards.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one of the sampled cards.",
       instructions: (arguments_) =>
-        txa(
-          "Choose a card costing at most {maximum_cost}●.",
-          { maximum_cost: numericArgument(arguments_, "maximum_cost") },
-          "[battle] Dreamwell instructions. maximum_cost is the highest allowed energy cost.",
-        ),
+        `Choose a card costing at most ${formatNumber(numericArgument(arguments_, "maximum_cost"))}●.`,
       arguments: [{ name: "maximum_cost", kind: "MaximumCost" }],
     },
   ],
@@ -492,37 +425,30 @@ const DREAMWELL_AUTOMATION_PROMPTS: DreamwellPromptDefinitions = {
     {
       key: "rematerialize-ally",
       title: () =>
-        tx("Rematerialize an ally", "[battle] Dreamwell prompt title."),
+        "Rematerialize an ally",
       subtitle: () =>
-        tx("Choose one character you control.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one character you control.",
       instructions: () =>
-        tx("Choose a character to rematerialize.", "[battle] Dreamwell prompt instructions."),
+        "Choose a character to rematerialize.",
     },
   ],
   "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c": [
     {
       key: "choose-benefit",
-      title: () => tx("Choose one", "[battle] Dreamwell prompt title."),
+      title: () => "Choose one",
       subtitle: () =>
-        tx("Choose a Dreamwell benefit.", "[battle] Dreamwell prompt subtitle."),
+        "Choose a Dreamwell benefit.",
       instructions: () =>
-        tx(
-          "Choose whether to draw a card or gain energy.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose whether to draw a card or gain energy.",
       choices: [
         {
           key: "draw-card",
-          label: () => tx("Draw a card", "[battle] Dreamwell prompt option."),
+          label: () => "Draw a card",
         },
         {
           key: "gain-energy",
           label: (arguments_) =>
-            txa(
-              "Gain {amount}●",
-              { amount: numericArgument(arguments_, "amount") },
-              "[battle] Dreamwell prompt option. amount is the energy gained.",
-            ),
+            `Gain ${formatNumber(numericArgument(arguments_, "amount"))}●`,
         },
       ],
       arguments: [{ name: "amount", kind: "Amount" }],
@@ -531,56 +457,44 @@ const DREAMWELL_AUTOMATION_PROMPTS: DreamwellPromptDefinitions = {
   "91deefd2-0400-4c78-ab9f-f6db864ff7e2": [
     {
       key: "discard-card",
-      title: () => tx("Discard a card", "[battle] Dreamwell prompt title."),
+      title: () => "Discard a card",
       subtitle: () =>
-        tx("Choose one card from your hand.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one card from your hand.",
       instructions: () =>
-        tx("Choose a card to discard.", "[battle] Dreamwell prompt instructions."),
+        "Choose a card to discard.",
     },
   ],
   "8f5f2e26-44b5-447b-90d0-eaf22ab29fed": [
     {
       key: "discover-character",
       title: () =>
-        tx(
-          "Discover a character",
-          "[battle] Reusable prompt title for choosing one Character card to discover during battle.",
-        ),
+        "Discover a character",
       subtitle: () =>
-        tx("Choose one of the sampled characters.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one of the sampled characters.",
       instructions: () =>
-        tx("Choose a character card.", "[battle] Dreamwell prompt instructions."),
+        "Choose a character card.",
     },
   ],
   "a0fbcbd9-96ee-4392-add7-e1d436f99553": [
     {
       key: "return-event",
       title: () =>
-        tx("Return an event from your void to hand", "[battle] Dreamwell prompt title."),
+        "Return an event from your void to hand",
       subtitle: () =>
-        tx("Choose one event from your void.", "[battle] Dreamwell prompt subtitle."),
+        "Choose one event from your void.",
       instructions: () =>
-        tx(
-          "Choose an event to return to your hand.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose an event to return to your hand.",
     },
   ],
   "446095b1-ec4d-40d7-8eed-a8221d339ea2": [
     {
       key: "redraw-hand",
       title: () =>
-        tx("Discard your hand and redraw?", "[battle] Dreamwell prompt title."),
+        "Discard your hand and redraw?",
       subtitle: () =>
-        tx(
-          "Draw the same number of cards you discard.",
-          "[battle] Dreamwell prompt subtitle.",
-        ),
+        "Draw the same number of cards you discard.",
       instructions: () =>
-        tx(
-          "Choose whether to discard your hand and draw replacements.",
-          "[battle] Dreamwell prompt instructions.",
-        ),
+        "Choose whether to discard your hand and draw replacements.",
     },
   ],
 };
@@ -613,7 +527,7 @@ export function resolveDreamwellPromptRef(
   ref: DreamwellPromptRef,
   cards: readonly DreamwellCard[],
   definitions: DreamwellPromptDefinitions = DREAMWELL_AUTOMATION_PROMPTS,
-): LocalizedString {
+): string {
   const card = cards.find((candidate) => candidate.id === ref.cardId);
   if (card === undefined)
     throw new Error(`Unknown Dreamwell prompt card ${ref.cardId}`);

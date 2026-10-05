@@ -1,43 +1,28 @@
-import { assertLocalized, opaque, txa } from "@trox/runtime";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { TroxLocalizationProvider } from "../../../runtime/localization/context";
-import { requireSourceRuntime } from "../../../runtime/localization/runtime";
 import { renderRichText, richText } from "./rich-text";
+import { annotatedFixture } from "../../testing/annotated-text";
 
 function renderValue(value: ReturnType<typeof richText.plain>): string {
-  const runtime = requireSourceRuntime();
-  return renderToStaticMarkup(
-    <TroxLocalizationProvider runtime={runtime}>
-      {renderRichText(value, (message) => runtime.localizer.resolve(message))}
-    </TroxLocalizationProvider>,
-  );
+  return renderToStaticMarkup(<>{renderRichText(value)}</>);
 }
 
 describe("RichText", () => {
   it("renders markup attached to a localized placeholder", () => {
-    const runtime = requireSourceRuntime();
-    const message = txa(
+    const message = annotatedFixture(
       "Before {entity} after",
-      { entity: opaque(assertLocalized("the entity")) },
-      "[test] Synthetic annotated rich text. entity is the marked subject.",
-    ).annotate({ entity: { kind: "subject" } as const });
+      { entity: "the entity" },
+      { entity: { kind: "subject" } as const },
+    );
 
     const markup = renderToStaticMarkup(
-      renderRichText(
-        richText.annotated(message),
-        (localized) => runtime.localizer.resolve(localized),
-        0,
-        {
-          resolveParts: (localized) =>
-            runtime.localizer.resolveParts(localized),
-          renderAnnotation: (annotation, value, key) => (
-            <mark key={key} data-annotation={annotation.kind}>
-              {value}
-            </mark>
-          ),
-        },
-      ),
+      renderRichText(richText.annotated(message), 0, {
+        renderAnnotation: (annotation, value, key) => (
+          <mark key={key} data-annotation={annotation.kind}>
+            {value}
+          </mark>
+        ),
+      }),
     );
 
     expect(markup).toContain("Before ");
@@ -51,16 +36,13 @@ describe("RichText", () => {
     const markup = renderValue(
       richText.definitions([
         {
-          term: assertLocalized("Bane"),
-          definition: assertLocalized(
+          term: "Bane",
+          definition:
             "The Nightmare card, a penalty card forced into your deck.",
-          ),
         },
         {
-          term: assertLocalized("Discover"),
-          definition: assertLocalized(
-            "Reveal three matching cards and choose one to draw.",
-          ),
+          term: "Discover",
+          definition: "Reveal three matching cards and choose one to draw.",
         },
       ]),
     );
@@ -90,24 +72,24 @@ describe("RichText", () => {
     const markup = renderValue(
       richText.definitions([
         {
-          term: assertLocalized("Fast"),
-          definition: assertLocalized("Fast definition."),
+          term: "Fast",
+          definition: "Fast definition.",
           symbol: "fast",
         },
         {
-          term: assertLocalized("Interrupt"),
-          definition: assertLocalized("Interrupt definition."),
+          term: "Interrupt",
+          definition: "Interrupt definition.",
           symbol: "interrupt",
         },
         {
-          term: assertLocalized("Exhaust Cost"),
-          definition: assertLocalized("Exhaust definition."),
+          term: "Exhaust Cost",
+          definition: "Exhaust definition.",
           symbol: "exhaust",
           termPresentation: "symbolOnly",
         },
         {
-          term: assertLocalized("Night"),
-          definition: assertLocalized("Night definition."),
+          term: "Night",
+          definition: "Night definition.",
           symbol: "trigger",
         },
       ]),
@@ -131,10 +113,9 @@ describe("RichText", () => {
     const markup = renderValue(
       richText.definitions([
         {
-          term: assertLocalized("Exhaust Cost"),
-          definition: assertLocalized(
+          term: "Exhaust Cost",
+          definition:
             "You may exhaust (☾) this character to activate this ability.",
-          ),
           symbol: "exhaust",
           termPresentation: "symbolOnly",
         },
@@ -148,8 +129,8 @@ describe("RichText", () => {
     const markup = renderValue(
       richText.definitions([
         {
-          term: assertLocalized("Points"),
-          definition: assertLocalized("The ⍟ symbol represents points."),
+          term: "Points",
+          definition: "The ⍟ symbol represents points.",
         },
       ]),
     );
@@ -162,10 +143,9 @@ describe("RichText", () => {
     const markup = renderValue(
       richText.definitions([
         {
-          term: assertLocalized("Points"),
-          definition: assertLocalized(
+          term: "Points",
+          definition:
             "Characters score points (⍟) when they challenge and are not blocked.",
-          ),
           termPresentation: "definitionOnly",
         },
       ]),

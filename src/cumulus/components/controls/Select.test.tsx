@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 
-import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { Select, type SelectOption } from "./Select";
@@ -8,7 +7,7 @@ import { renderInCumulus } from "../../testing/render";
 
 const OPTIONS: SelectOption[] = Array.from({ length: 10 }, (_, index) => ({
   value: String(index),
-  label: assertLocalized(`Option ${String(index + 1)}`),
+  label: `Option ${String(index + 1)}`,
 }));
 
 function rect({ top, bottom }: { top: number; bottom: number }): DOMRect {
@@ -37,11 +36,7 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = renderInCumulus(
-      <Select
-        options={OPTIONS}
-        value=""
-        ariaLabel={assertLocalized("Action")}
-      />,
+      <Select options={OPTIONS} value="" ariaLabel={"Action"} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -70,11 +65,7 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = renderInCumulus(
-      <Select
-        options={OPTIONS}
-        value=""
-        ariaLabel={assertLocalized("Action")}
-      />,
+      <Select options={OPTIONS} value="" ariaLabel={"Action"} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -96,11 +87,7 @@ describe("Select", () => {
 
   it("keeps the menu open while its options scroll", () => {
     const { container } = renderInCumulus(
-      <Select
-        options={OPTIONS}
-        value=""
-        ariaLabel={assertLocalized("Action")}
-      />,
+      <Select options={OPTIONS} value="" ariaLabel={"Action"} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -122,20 +109,16 @@ describe("Select", () => {
 
   it("navigates enabled options from the keyboard", () => {
     const options: SelectOption[] = [
-      { value: "first", label: assertLocalized("First tide") },
+      { value: "first", label: "First tide" },
       {
         value: "second",
-        label: assertLocalized("Second tide"),
+        label: "Second tide",
         disabled: true,
       },
-      { value: "third", label: assertLocalized("Third tide") },
+      { value: "third", label: "Third tide" },
     ];
     const { container } = renderInCumulus(
-      <Select
-        options={options}
-        value="first"
-        ariaLabel={assertLocalized("Tide")}
-      />,
+      <Select options={options} value="first" ariaLabel={"Tide"} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");

@@ -21,7 +21,6 @@
 import type { ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { DeckGalleryOverlay } from "./DeckGalleryOverlay";
-import { tx } from "@trox/runtime";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { DomTestId } from "../types/dom";
 
@@ -67,20 +66,11 @@ export function StartingDeckOverlay({
   return (
     <DeckGalleryOverlay
       isOpen={isOpen}
-      title={tx(
-        "Starting Deck",
-        "[ui] Copy for the modal that introduces the player's initial deck.",
-      )}
-      subtitle={tx(
-        "These are the cards you begin the journey with.",
-        "[ui] Starting deck subtitle.",
-      )}
+      title={"Starting Deck"}
+      subtitle={"These are the cards you begin the journey with."}
       cards={view.cards}
-      emptyLabel={tx(
-        "No cards in starting deck.",
-        "[ui] Starting deck empty state.",
-      )}
-      actionLabel={tx("Begin Journey", "[ui] Starting deck begin action.")}
+      emptyLabel={"No cards in starting deck."}
+      actionLabel={"Begin Journey"}
       onClose={onClose}
     />
   );

@@ -6,7 +6,6 @@ import {
   syntheticGameCard,
 } from "../../test-helpers/component-test-fixtures";
 import { localizedTransfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
-import { assertLocalized } from "@trox/runtime";
 import {
   TransfigurationDetailPanel,
   type TransfigurationDetailCandidate,
@@ -31,7 +30,7 @@ const candidate: TransfigurationDetailCandidate = {
       type: "Resonant",
       presentation: {
         ...localizedTransfigurationFormFixture("Resonant"),
-        name: assertLocalized("Resonant Across the Unending Luminous Horizon"),
+        name: "Resonant Across the Unending Luminous Horizon",
       },
       pricing: { kind: "essence", amount: 30, affordable: true },
       previewModel: syntheticGameCard(4),

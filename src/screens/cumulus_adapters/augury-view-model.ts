@@ -36,7 +36,6 @@ import {
 } from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
 import type { CardId } from "../../types/card-identity";
-import type { LocalizedString } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import type { DreamGuideContent } from "../../types/content";
 import type { SitesData } from "../../types/sites-data";
@@ -58,7 +57,6 @@ import type {
   OfferTileStarterCards,
 } from "../../cumulus/components/controls/OfferTile";
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import type {
   AuguryCardChoiceView,
   AuguryCardView,
@@ -69,7 +67,6 @@ import type {
 } from "../../cumulus/screens/AugurySiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { tx } from "@trox/runtime";
 import type { GuideId } from "../../types/identifiers";
 import type { OfferId } from "../../types/identifiers";
 import type { ChoiceId } from "../../types/identifiers";
@@ -103,7 +100,7 @@ export function resolveAuguryGuide(
 
 export function buildAuguryGuideView(
   guide: DreamGuideContent,
-  line: LocalizedString,
+  line: string,
 ): AuguryGuideView {
   return projectGuideView(guide, line);
 }
@@ -139,8 +136,8 @@ function sitePreviewModel(
     isBattle: siteType === "Battle",
     isLocked: false,
     isInteractive: false,
-    label: localizedSourceText(siteTypeName(sitesData, siteType)),
-    blurb: localizedSourceText(siteTypeDescription(sitesData, siteType)),
+    label: siteTypeName(sitesData, siteType),
+    blurb: siteTypeDescription(sitesData, siteType),
     icon: glyph(siteTypeIcon(sitesData, siteType)),
   };
 }
@@ -262,7 +259,7 @@ function tileDreamsign(
     object.dreamsignTemplate.imageName ?? `${object.dreamsignId}.png`;
   return {
     id: object.dreamsignId,
-    name: localizedSourceText(object.dreamsignTemplate.name),
+    name: object.dreamsignTemplate.name,
     art: artRef.dreamsign(imageName),
   };
 }
@@ -325,10 +322,10 @@ export function projectOfferTileCategory(
       return { kind: "fast" };
     default:
       if (category.id.startsWith("subtype:")) {
-        return { kind: "subtype", name: localizedSourceText(category.label) };
+        return { kind: "subtype", name: category.label };
       }
       if (category.id.startsWith("tide:")) {
-        return { kind: "package", name: localizedSourceText(category.label) };
+        return { kind: "package", name: category.label };
       }
       return unavailable("category_draft_known has an unsupported category id");
   }
@@ -433,9 +430,7 @@ export function buildAuguryOfferTileModel(
         kind: "add-site",
         site: {
           id: payload.siteType,
-          name: localizedSourceText(
-            siteTypeName(context.sitesData, payload.siteType),
-          ),
+          name: siteTypeName(context.sitesData, payload.siteType),
           glyph: glyph(siteTypeIcon(context.sitesData, payload.siteType)),
         },
       };
@@ -607,7 +602,7 @@ export function buildAugurySiteModel(params: {
   site: SiteState;
   journeyContent: JourneyContent;
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
 }): AuguryBuildResult {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
@@ -659,10 +654,8 @@ export function buildAugurySiteModel(params: {
         ...baseView,
         encounterSignature: null,
         offers: [],
-        unavailableMessage: tx(
+        unavailableMessage:
           "The visions are clouded. I cannot read these paths; walk on for now.",
-          "[augury] Augury unavailable guidance after its offer model cannot be constructed.",
-        ),
       },
       context: null,
       encounter: null,
@@ -799,7 +792,7 @@ export function buildAuguryLogEntries(
 
 export function auguryChoiceResult(
   result: AuguryOfferActionResult | void,
-): { ok: true } | { ok: false; message: LocalizedString } {
+): { ok: true } | { ok: false; message: string } {
   if (result?.ok !== false) return { ok: true };
   if (
     result.reason === "stale_encounter" ||
@@ -808,18 +801,12 @@ export function auguryChoiceResult(
   ) {
     return {
       ok: false,
-      message: tx(
-        "The visions shifted. Choose again.",
-        "[augury] Error visions shifted.",
-      ),
+      message: "The visions shifted. Choose again.",
     };
   }
   return {
     ok: false,
-    message: tx(
-      "That path is closed. Choose again.",
-      "[augury] Error path closed.",
-    ),
+    message: "That path is closed. Choose again.",
   };
 }
 
@@ -832,7 +819,7 @@ export function chooseAuguryOffer(
   ) => AuguryOfferActionResult | void,
   offerId: OfferId,
   choiceId: ChoiceId | null,
-): { ok: true } | { ok: false; message: LocalizedString } {
+): { ok: true } | { ok: false; message: string } {
   if (
     site === null ||
     result?.encounter === null ||
@@ -840,14 +827,14 @@ export function chooseAuguryOffer(
   ) {
     return {
       ok: false,
-      message: tx("The augury is clouded.", "[augury] Error clouded."),
+      message: "The augury is clouded.",
     };
   }
   const request = buildAuguryAcceptRequest(result.encounter, offerId, choiceId);
   if (request === null) {
     return {
       ok: false,
-      message: tx("Choose a vision first.", "[augury] Error choose vision."),
+      message: "Choose a vision first.",
     };
   }
   return auguryChoiceResult(acceptOffer(site.id, request));

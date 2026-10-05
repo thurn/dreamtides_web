@@ -6,15 +6,14 @@ import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-
 import type { BattleCardInstance } from "../../battle/types";
 import { buildMobileBattleView } from "./mobile-battle-view-model";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
-import { assertLocalized } from "@trox/runtime";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import { parseBattleId } from "../../types/identifiers";
 import { parseOpponentId } from "../../types/identifiers";
 import { parseBattleCardId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 
 vi.mock("./mobile-battle-view-model", async (importOriginal) => {
   const actual =
@@ -32,7 +31,7 @@ const player = {
     avatar: null,
     avatarProfile: {
       id: "player-avatar-uuid",
-      ability: assertLocalized("Player printed ability."),
+      ability: "Player printed ability.",
     },
     currentEnergy: 4,
     maxEnergy: 4,
@@ -47,7 +46,7 @@ const enemy = {
     avatar: null,
     avatarProfile: {
       id: "enemy-avatar-uuid",
-      ability: assertLocalized("Enemy printed ability."),
+      ability: "Enemy printed ability.",
     },
     currentEnergy: 4,
     maxEnergy: 4,

@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -12,10 +11,9 @@ const MODEL: DreamwellCardModel = {
   cardId: testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
   displaySnapshot: {
     id: testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
-    name: assertLocalized("Fixture Beacon"),
-    renderedText: assertLocalized(
+    name: "Fixture Beacon",
+    renderedText:
       "Look at the top 2 cards of your deck. Put one into your hand.",
-    ),
     energyAdded: 2,
     imageNumber: 42,
     art: { x: 0.25, y: -0.5, scale: 1.4 },
@@ -72,7 +70,7 @@ describe("DreamwellCard", () => {
       ...MODEL,
       displaySnapshot: {
         ...MODEL.displaySnapshot,
-        renderedText: assertLocalized("Reclaim this card."),
+        renderedText: "Reclaim this card.",
       },
     };
 

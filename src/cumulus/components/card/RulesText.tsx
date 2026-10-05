@@ -25,9 +25,6 @@ import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
-import { meaning, opaque, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
-import { localizedSourceText } from "../../../runtime/localization/runtime";
 import type { CardId } from "../../../types/card-identity";
 import type {
   AvatarId,
@@ -198,7 +195,7 @@ export type RulesTextOwner =
 
 export interface RulesTextProps {
   /** The rules text to render. */
-  readonly text: LocalizedString;
+  readonly text: string;
   /** Semantic owner required for context-sensitive glossary definitions. */
   readonly owner: RulesTextOwner;
   /**
@@ -292,7 +289,7 @@ function renderSegment(
         {segment.amount !== null ? segment.amount : null}
         <InlineGlyph
           glyph={symbol.glyph}
-          label={localizedSourceText(symbol.label)}
+          label={symbol.label}
         />
       </span>
     );
@@ -356,7 +353,7 @@ function renderSegment(
       >
         <InlineGlyph
           glyph={symbol.glyph}
-          label={localizedSourceText(symbol.label)}
+          label={symbol.label}
         />
       </span>
     );
@@ -382,7 +379,7 @@ function renderSegment(
       >
         <InlineGlyph
           glyph={symbol.glyph}
-          label={localizedSourceText(symbol.label)}
+          label={symbol.label}
         />
       </span>
     );
@@ -401,7 +398,7 @@ function renderSegment(
       <span key={key} style={{ color: symbol.color }}>
         <InlineGlyph
           glyph={symbol.glyph}
-          label={localizedSourceText(symbol.label)}
+          label={symbol.label}
         />
       </span>
     );
@@ -414,22 +411,14 @@ function renderSegment(
 }
 
 function RulesTextBolt({ count }: { readonly count: number }) {
-  const resolve = useLocalizer();
+  
   const label =
     count >= 2
-      ? txa(
-          meaning("rules-interrupt-marker-name", "Interrupt"),
-          {},
-          "[accessibility] Name for the paired rules-text bolt marker.",
-        )
-      : txa(
-          meaning("rules-fast-marker-name", "Fast"),
-          {},
-          "[accessibility] Name for the single rules-text bolt marker.",
-        );
+      ? "Interrupt"
+      : "Fast";
   return (
     <span
-      aria-label={resolve(label)}
+      aria-label={label}
       style={{ color: BOLT_ICON_COLOR, whiteSpace: "nowrap" }}
     >
       {Array.from({ length: count }, (_, index) => (
@@ -591,26 +580,14 @@ function rulesTextGlossaryOwner(
   return owner.kind;
 }
 
-function rulesTextAriaLabel(owner: RulesTextOwner, text: LocalizedString) {
+function rulesTextAriaLabel(owner: RulesTextOwner, text: string) {
   if (owner.kind === "card" || owner.kind === "dreamwellCard") {
-    return txa(
-      "Card rules: {rules_text}",
-      { rules_text: opaque(text) },
-      "[accessibility] Name for interactive authored card rules text.",
-    );
+    return `Card rules: ${text}`;
   }
   if (owner.kind === "avatar" || owner.kind === "opponentAvatar") {
-    return txa(
-      "Avatar ability: {rules_text}",
-      { rules_text: opaque(text) },
-      "[accessibility] [avatar] Name for interactive authored Avatar rules text.",
-    );
+    return `Avatar ability: ${text}`;
   }
-  return txa(
-    "Dreamsign ability: {rules_text}",
-    { rules_text: opaque(text) },
-    "[accessibility] [dreamsign] Name for interactive authored Dreamsign rules text.",
-  );
+  return `Dreamsign ability: ${text}`;
 }
 
 function RulesTextSource({
@@ -618,7 +595,7 @@ function RulesTextSource({
   owner,
   content,
 }: {
-  readonly text: LocalizedString;
+  readonly text: string;
   readonly owner: RulesTextOwner;
   readonly content: ReactNode;
 }) {
@@ -669,8 +646,8 @@ export function RulesText({
   owner,
   glossaryInteraction = "source",
 }: RulesTextProps) {
-  const resolve = useLocalizer();
-  const content = renderRulesText(resolve(text));
+  
+  const content = renderRulesText(text);
   const hasDefinitions = rulesTextDefinitionCards(
     text,
     rulesTextGlossaryOwner(owner),

@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
@@ -213,7 +212,7 @@ describe("RevealOverlay", () => {
                 kind: "galleryAction",
                 action: {
                   glyph: GLYPHS.spark,
-                  label: assertLocalized("Inspect"),
+                  label: "Inspect",
                 },
               },
               secondaries: [],
@@ -403,16 +402,16 @@ describe("RevealOverlay", () => {
         card: {
           variant: "atlasReveal",
           image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
-          title: assertLocalized("Wilderveil"),
+          title: "Wilderveil",
         },
       },
       secondaries: [
         {
           variant: "text",
-          title: assertLocalized("Affiliation"),
+          title: "Affiliation",
           body: {
             kind: "plain",
-            text: assertLocalized("Character cards are more likely here."),
+            text: "Character cards are more likely here.",
           },
         },
       ],
@@ -442,18 +441,18 @@ describe("RevealOverlay", () => {
     const spec: RevealSpec = {
       primary: {
         kind: "source",
-        description: assertLocalized("Complete ability text"),
+        description: "Complete ability text",
       },
       secondaries: [
         {
           variant: "text",
-          title: assertLocalized("First"),
-          body: { kind: "plain", text: assertLocalized("First definition") },
+          title: "First",
+          body: { kind: "plain", text: "First definition" },
         },
         {
           variant: "text",
-          title: assertLocalized("Second"),
-          body: { kind: "plain", text: assertLocalized("Second definition") },
+          title: "Second",
+          body: { kind: "plain", text: "Second definition" },
         },
       ],
     };

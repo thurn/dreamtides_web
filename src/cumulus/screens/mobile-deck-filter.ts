@@ -19,8 +19,6 @@
 
 import type { CardType } from "../../types/cards";
 import type { DeckCardView } from "./MobileDeckViewer";
-import type { LocalizedString } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /**
  * Which cards the grid is filtered to. `"all"` shows everything; `"type:<T>"`
@@ -57,7 +55,7 @@ export const DEFAULT_DECK_FILTER_SORT: DeckFilterSort = {
 export interface DeckControlOption<T extends string> {
   value: T;
   /** Authored subtype text, present only for subtype options. */
-  label?: LocalizedString;
+  label?: string;
 }
 
 /**
@@ -100,7 +98,7 @@ export function buildDeckTypeFilterOptions(
       value: `subtype:${subtype}`,
       // Subtype names are authored display values. Keep the semantic name
       // intact; English suffix rules cannot safely produce localized labels.
-      label: localizedSourceText(subtype),
+      label: subtype,
     }));
   return [...BASE_DECK_TYPE_FILTER_OPTIONS, ...subtypeOptions];
 }
@@ -126,10 +124,10 @@ export function deckSortLabel(sort: DeckSortId): DeckSortId {
 export function deckTypeFilterLabel(
   filter: DeckTypeFilter,
   options: readonly DeckControlOption<DeckTypeFilter>[],
-): LocalizedString {
+): string {
   return (
     options.find((option) => option.value === filter)?.label ??
-    localizedSourceText(filter.replace(/^subtype:/, ""))
+    filter.replace(/^subtype:/, "")
   );
 }
 

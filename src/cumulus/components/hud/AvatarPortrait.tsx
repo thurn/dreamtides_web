@@ -21,23 +21,14 @@ import { artRef, type ArtRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import type { RevealSpec } from "../../internal/reveal/model";
-import {
-  opaque,
-  select,
-  when,
-  otherwise,
-  txa,
-  type LocalizedString,
-} from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { AvatarId, OpponentId } from "../../../types/identifiers";
 
 /** The minimal avatar shape a portrait needs: which art to load and the
  * name/title that back the alt text and the fallback monogram. */
 export interface AvatarVisual {
   imageNumber: string;
-  name: LocalizedString;
-  title?: LocalizedString;
+  name: string;
+  title?: string;
   /** Normalized head position used to center subject-aware crops. */
   portraitFocus?: AvatarPortraitFocus;
 }
@@ -77,7 +68,7 @@ export interface AvatarPortraitProps {
   /** Semantic Avatar profile represented by this portrait. Omit for decorative art. */
   profile?: {
     id: AvatarId | OpponentId;
-    ability: LocalizedString;
+    ability: string;
   };
   /** Optional primary press action for selectable profile portraits. */
   onPress?: () => void;
@@ -88,7 +79,7 @@ export interface AvatarPortraitProps {
 /** Reveal contract for semantic Avatar portrait surfaces. */
 export function avatarRevealSpec(
   avatar: AvatarVisual,
-  ability: LocalizedString | undefined,
+  ability: string | undefined,
   image: ArtRef = artRef.avatar(avatar.imageNumber),
 ): RevealSpec {
   return {
@@ -205,19 +196,9 @@ function AvatarPortraitSurface({
   avatar,
   variant = "panel",
 }: Omit<AvatarPortraitProps, "profile" | "onPress" | "unavailable">) {
-  const resolve = useLocalizer();
+  
   const [broken, setBroken] = useState(false);
-  const alt = txa(
-    select(avatar.title === undefined ? "no" : "yes", [
-      when("yes", "{avatar_name}, {avatar_title}"),
-      otherwise("{avatar_name}"),
-    ]),
-    {
-      avatar_name: opaque(avatar.name),
-      avatar_title: opaque(avatar.title ?? avatar.name),
-    },
-    '[accessibility] [avatar] Name for Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is "yes" when the epithet is present and "no" when the artwork should be identified by the name alone.',
-  );
+  const alt = ((avatar.title === undefined ? "no" : "yes") === "yes" ? `${avatar.name}, ${avatar.title ?? avatar.name}` : `${avatar.name}`);
   const focus = avatarPortraitFocus(avatar);
 
   return (
@@ -231,13 +212,13 @@ function AvatarPortraitSurface({
               fontSize: variant === "thumb" ? 12 : 22,
             }}
           >
-            {resolve(avatar.name).charAt(0)}
+            {avatar.name.charAt(0)}
           </span>
         </div>
       ) : (
         <img
           src={avatarCutoutSrc(avatar.imageNumber)}
-          alt={resolve(alt)}
+          alt={alt}
           style={imageStyle(variant, focus)}
           onError={() => {
             setBroken(true);

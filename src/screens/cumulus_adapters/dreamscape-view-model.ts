@@ -21,11 +21,6 @@ import type {
 } from "../../cumulus/components/hud/JourneyStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
-import {
-  bindSourceTransport,
-  localizedSourceText,
-} from "../../runtime/localization/runtime";
-import { tx, type LocalizedString } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import type {
   DreamscapeGuideDialogueView,
@@ -46,14 +41,12 @@ import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bub
 import type { SiteId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
+import { fillTemplate } from "../../runtime/text";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
 
-const LOCKED_BATTLE_GUIDANCE = tx(
-  "You must visit the other sites in this dreamscape first.",
-  "[dreamscape] Guidance shown when the guardian Battle is locked until every other site has been visited.",
-);
+const LOCKED_BATTLE_GUIDANCE = "You must visit the other sites in this dreamscape first.";
 
 /** Fallback scatter point when a site index has no seeded position. */
 const FALLBACK_POS = { x: 50, y: 58 } as const;
@@ -121,16 +114,14 @@ export function resolveDreamscapeSiteSelection(
 export function battleLabel(
   completionLevel: number,
   sitesData: SitesData,
-): LocalizedString {
+): string {
   const presentation = sitesData.siteTypes.Battle.presentation as Extract<
     import("../../types/sites-data").SitePresentation,
     { kind: "battle" }
   >;
-  return bindSourceTransport(
-    completionLevel === FINAL_BOSS_COMPLETION_LEVEL
+  return (completionLevel === FINAL_BOSS_COMPLETION_LEVEL
       ? presentation.finalBossLabel
-      : presentation.label,
-  );
+      : presentation.label);
 }
 
 /**
@@ -159,10 +150,10 @@ export function buildSiteModels(
     const label = isBattle
       ? battleLabel(completionLevel, sitesData)
       : site.type === "Draft"
-        ? bindSourceTransport(draftPresentation.label, {
+        ? fillTemplate(draftPresentation.label, {
             pick_count: draftSitePickCount(site, defaultDraftPickCount),
           })
-        : localizedSourceText(siteTypeName(sitesData, site.type));
+        : siteTypeName(sitesData, site.type);
     return {
       id: site.id,
       type: site.type,
@@ -174,7 +165,7 @@ export function buildSiteModels(
       isInteractive,
       label,
       lockedGuidance: LOCKED_BATTLE_GUIDANCE,
-      blurb: localizedSourceText(siteTypeDescription(sitesData, site.type)),
+      blurb: siteTypeDescription(sitesData, site.type),
       icon: glyph(siteTypeIcon(sitesData, site.type)),
     };
   });
@@ -189,11 +180,11 @@ export function toQsbAvatar(
   }
   return {
     id: avatar.id,
-    name: localizedSourceText(avatar.name),
-    epithet: localizedSourceText(avatar.title),
+    name: avatar.name,
+    epithet: avatar.title,
     portrait: artRef.avatar(avatar.imageNumber),
     portraitFocus: avatar.portraitFocus,
-    ability: localizedSourceText(avatar.renderedText),
+    ability: avatar.renderedText,
   };
 }
 
@@ -246,19 +237,16 @@ export function dreamscapeSceneRef(node: DreamscapeNode): ArtRef | null {
 export function dreamscapeTitle(
   node: DreamscapeNode,
   journeyContent: JourneyContent,
-): LocalizedString {
+): string {
   if (node.dreamscapeId === journeyContent.atlasData.boss.dreamscapeId) {
-    return localizedSourceText(journeyContent.atlasData.boss.place);
+    return journeyContent.atlasData.boss.place;
   }
   const dreamscape = journeyContent.dreamscapes.find(
     (candidate) => candidate.id === node.dreamscapeId,
   );
   return dreamscape === undefined
-    ? tx(
-        "An Unknown Dream",
-        "[ui] Dreamscape title shown while its canonical identity is unavailable.",
-      )
-    : localizedSourceText(dreamscape.name);
+    ? "An Unknown Dream"
+    : dreamscape.name;
 }
 
 /**
@@ -267,7 +255,7 @@ export function dreamscapeTitle(
  */
 export function buildDreamscapeView(
   node: DreamscapeNode,
-  title: LocalizedString,
+  title: string,
   state: JourneyState,
   sitesData: SitesData,
   defaultDraftPickCount: number,
@@ -343,9 +331,9 @@ export function buildDreamscapeGuideDialogue(
     id: parsePresentationId(`${state.runId ?? state.seed}:dreamscape-guidance`),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
-      speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
-      text: localizedSourceText(speechBubble.text),
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: speechBubble.text,
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,

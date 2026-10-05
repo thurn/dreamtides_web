@@ -6,7 +6,6 @@
 // source; `JourneyStartScreen` picks between the two by viewport.
 // PURE: renders from a view-model and reports the chosen Avatar via `onPick`.
 
-import { tx, type LocalizedString } from "@trox/runtime";
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GlassButton } from "../components/controls/GlassButton";
@@ -15,7 +14,6 @@ import { GlassPanel } from "../components/overlay/GlassPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { AvatarStage } from "../components/hud/AvatarStage";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   ConsoleDivider,
   JourneyStartAbilityCopy,
@@ -40,7 +38,7 @@ function AvatarConsole({
   onChoose,
 }: {
   avatar: AvatarOfferView;
-  chooseLabel: LocalizedString;
+  chooseLabel: string;
   onChoose: () => void;
 }) {
   return (
@@ -90,7 +88,7 @@ function AvatarTitle({
 }: {
   avatar: AvatarOfferView;
 }) {
-  const resolve = useLocalizer();
+  
   return (
     <div
       style={{
@@ -112,7 +110,7 @@ function AvatarTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {resolve(avatar.name)}
+          {avatar.name}
         </span>
         <span
           style={{
@@ -123,7 +121,7 @@ function AvatarTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {resolve(avatar.title)}
+          {avatar.title}
         </span>
       </h1>
     </div>
@@ -132,7 +130,7 @@ function AvatarTitle({
 
 /** The screen's uppercase eyebrow, painted on the portrait at top-center. It
  * does not swipe on mobile and spans the full width on desktop. */
-function ScreenHeader({ title }: { readonly title: LocalizedString }) {
+function ScreenHeader({ title }: { readonly title: string }) {
   return (
     <div
       style={{
@@ -176,14 +174,8 @@ function EdgeChevron({
         glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
         label={
           dir === "left"
-            ? tx(
-                "Previous",
-                "[avatar] [journey] Command that moves to the previous Avatar offer.",
-              )
-            : tx(
-                "Next",
-                "[avatar] [journey] Command that moves to the next Avatar offer.",
-              )
+            ? "Previous"
+            : "Next"
         }
         onPress={onClick}
       />
@@ -277,10 +269,7 @@ export function CarouselSelect({
       onPointerCancel={onPointerUp}
     >
       <ScreenHeader
-        title={tx(
-          "Choose Your Avatar",
-          "[avatar] [journey] Title and actions on the Avatar selection screen.",
-        )}
+        title={"Choose Your Avatar"}
       />
       {guideDialogue !== undefined && (
         <JourneyStartGuideDialogue
@@ -292,7 +281,7 @@ export function CarouselSelect({
       {onReroll !== undefined && (
         <JourneyStartRerollControl
           onReroll={onReroll}
-          label={tx("Reroll Avatars", "[journey] Start reroll action.")}
+          label={"Reroll Avatars"}
         />
       )}
 
@@ -336,10 +325,7 @@ export function CarouselSelect({
         >
           <AvatarConsole
             avatar={activeAvatar}
-            chooseLabel={tx(
-              "Choose",
-              "[avatar] [journey] Command that chooses the currently selected Avatar or starting-deck option.",
-            )}
+            chooseLabel={"Choose"}
             onChoose={() => {
               onPick(activeAvatar.id);
             }}

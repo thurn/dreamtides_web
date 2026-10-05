@@ -1,10 +1,8 @@
-import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { DisclosureSection } from "../../components/controls/DisclosureSection";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { BattleHistoryCommandId } from "../../../types/identifiers";
 
 export type BattleRawLogEntryId = `${number}-${string}`;
@@ -20,13 +18,13 @@ export type BattleLogHistoryKind =
 
 export interface BattleLogHistoryEntryView {
   readonly id: BattleHistoryCommandId;
-  readonly title: LocalizedString;
+  readonly title: string;
   readonly kind: BattleLogHistoryKind;
-  readonly surface: LocalizedString;
-  readonly targets: LocalizedString;
-  readonly payloadText: LocalizedString | null;
-  readonly eventLabels: readonly LocalizedString[];
-  readonly aiChoiceLabels: readonly LocalizedString[];
+  readonly surface: string;
+  readonly targets: string;
+  readonly payloadText: string | null;
+  readonly eventLabels: readonly string[];
+  readonly aiChoiceLabels: readonly string[];
 }
 
 export interface BattleLogTurnView {
@@ -37,7 +35,7 @@ export interface BattleLogTurnView {
 export interface BattleRawLogEntryView {
   readonly id: BattleRawLogEntryId;
   readonly kind: "ai" | "debug" | "judgment" | "info";
-  readonly text: LocalizedString;
+  readonly text: string;
 }
 
 export interface BattleLogOverlayProps {
@@ -62,7 +60,6 @@ export function BattleLogOverlay({
   rawEntries,
   onClose,
 }: BattleLogOverlayProps): ReactElement {
-  const resolve = useLocalizer();
   const [expandedEntries, setExpandedEntries] = useState<
     ReadonlyMap<BattleHistoryCommandId, boolean>
   >(() => new Map());
@@ -97,11 +94,9 @@ export function BattleLogOverlay({
 
   return (
     <GlassDialog
-      title={assertLocalized("Battle Log")}
-      subtitle={assertLocalized(
-        "Folded battle history and raw diagnostic events.",
-      )}
-      closeLabel={assertLocalized("Close battle log")}
+      title={"Battle Log"}
+      subtitle={"Folded battle history and raw diagnostic events."}
+      closeLabel={"Close battle log"}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
@@ -121,7 +116,7 @@ export function BattleLogOverlay({
           {HISTORY_KINDS.map((kind) => (
             <GlassButton
               key={kind}
-              label={assertLocalized(kind)}
+              label={kind}
               placement="onGlass"
               variant={enabledKinds.has(kind) ? "accent" : "default"}
               testId={`battle-log-filter-${kind}`}
@@ -156,10 +151,8 @@ export function BattleLogOverlay({
               return (
                 <DisclosureSection
                   key={turnKey}
-                  title={assertLocalized(`Turn ${String(turnKey)}`)}
-                  summary={assertLocalized(
-                    `${String(turn.entries.length)} entries`,
-                  )}
+                  title={`Turn ${String(turnKey)}`}
+                  summary={`${String(turn.entries.length)} entries`}
                   expanded={isTurnExpanded}
                   placement="onGlass"
                   onExpandedChange={(expanded) =>
@@ -182,7 +175,7 @@ export function BattleLogOverlay({
                         <DisclosureSection
                           key={entry.id}
                           title={entry.title}
-                          summary={assertLocalized(entry.kind)}
+                          summary={entry.kind}
                           expanded={isExpanded}
                           placement="onGlass"
                           onExpandedChange={(expanded) =>
@@ -201,8 +194,8 @@ export function BattleLogOverlay({
                               font: token("--t-body-sm"),
                             }}
                           >
-                            <span>Surface: {resolve(entry.surface)}</span>
-                            <span>Targets: {resolve(entry.targets)}</span>
+                            <span>Surface: {entry.surface}</span>
+                            <span>Targets: {entry.targets}</span>
                             {entry.payloadText === null ? null : (
                               <pre
                                 style={{
@@ -212,17 +205,17 @@ export function BattleLogOverlay({
                                   font: token("--t-caption"),
                                 }}
                               >
-                                {resolve(entry.payloadText)}
+                                {entry.payloadText}
                               </pre>
                             )}
                             {entry.eventLabels.map((label, index) => (
                               <span key={`event-${String(index)}`}>
-                                {resolve(label)}
+                                {label}
                               </span>
                             ))}
                             {entry.aiChoiceLabels.map((label, index) => (
                               <span key={`ai-choice-${String(index)}`}>
-                                {resolve(label)}
+                                {label}
                               </span>
                             ))}
                           </div>
@@ -235,8 +228,8 @@ export function BattleLogOverlay({
             })
           )}
           <DisclosureSection
-            title={assertLocalized("Raw Events")}
-            summary={assertLocalized(`${String(rawEntries.length)} captured`)}
+            title={"Raw Events"}
+            summary={`${String(rawEntries.length)} captured`}
             expanded={expandedRaw}
             placement="onGlass"
             onExpandedChange={setExpandedRaw}
@@ -256,7 +249,7 @@ export function BattleLogOverlay({
               ) : (
                 rawEntries.map((entry) => (
                   <span key={entry.id} data-battle-log-raw-kind={entry.kind}>
-                    {resolve(entry.text)}
+                    {entry.text}
                   </span>
                 ))
               )}

@@ -1,13 +1,11 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { localizedStringSourceEquality } from "../../../runtime/localization/testing";
-import { resolveSource } from "../../../runtime/localization/runtime";
+import { annotatedTextEquality } from "../../testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { CumulusRoot } from "../../CumulusRoot";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
@@ -31,10 +29,10 @@ describe("atlasPrimaryInfoCard", () => {
       atlasPrimaryInfoCard({
         sceneArt: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
         figureArt: artRef.dreamGuide(testGuideId("aldric")),
-        placeName: assertLocalized("Wilderveil"),
-        guideName: assertLocalized("Aldric, the Seer"),
-        title: assertLocalized("Aldric, the Seer"),
-        body: assertLocalized("A curated vision."),
+        placeName: "Wilderveil",
+        guideName: "Aldric, the Seer",
+        title: "Aldric, the Seer",
+        body: "A curated vision.",
       }),
     ).toMatchObject({
       variant: "atlasReveal",
@@ -47,8 +45,8 @@ describe("atlasPrimaryInfoCard", () => {
         figureArt: null,
         placeName: null,
         guideName: null,
-        title: assertLocalized("An Unseen Dream"),
-        body: assertLocalized("Travel onward."),
+        title: "An Unseen Dream",
+        body: "Travel onward.",
       }),
     ).toMatchObject({ variant: "text", title: "An Unseen Dream" });
   });
@@ -60,7 +58,7 @@ function model(
 ): AtlasNodeModel {
   return {
     id: NODE_ID,
-    name: assertLocalized("Wilderveil"),
+    name: "Wilderveil",
     state,
     role: "regular",
     isReachable: true,
@@ -71,25 +69,25 @@ function model(
     primary: {
       sceneArt: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
       figureArt: artRef.dreamGuide(testGuideId("aldric")),
-      placeName: assertLocalized("Wilderveil"),
-      guideName: assertLocalized("Aldric, the Seer"),
-      title: assertLocalized("Aldric, the Seer"),
-      body: assertLocalized("Aldric offers curated visions of the future."),
+      placeName: "Wilderveil",
+      guideName: "Aldric, the Seer",
+      title: "Aldric, the Seer",
+      body: "Aldric offers curated visions of the future.",
     },
     dreamsign: {
       id: parseDreamsignId("00000000-0000-4000-8000-000000000052"),
-      name: assertLocalized("Known Sign"),
+      name: "Known Sign",
       art: artRef.dreamsign("known.png"),
-      rulesText: assertLocalized("Your first vision costs less."),
+      rulesText: "Your first vision costs less.",
     },
     site: {
-      name: assertLocalized("Augury"),
-      blurb: assertLocalized("Study a curated vision of what waits ahead."),
+      name: "Augury",
+      blurb: "Study a curated vision of what waits ahead.",
       icon: GLYPHS.water,
     },
     affiliation: {
-      title: assertLocalized("Fixture affiliation"),
-      body: assertLocalized("Fixture cards are more likely here."),
+      title: "Fixture affiliation",
+      body: "Fixture cards are more likely here.",
     },
     ...overrides,
   };
@@ -174,7 +172,7 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(source.dataset.revealPrimaryVariant).toBe("atlasReveal");
     expect(source.dataset.revealSecondaryTitles?.split("\u001f")).toEqual([
       "Augury",
-      resolveSource(value.affiliation!.title),
+      value.affiliation!.title,
     ]);
     expect(source.dataset.revealFeedback).toBe("measured");
     const description = document.getElementById(
@@ -183,9 +181,7 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(description?.textContent).toContain("Wilderveil");
     expect(description?.textContent).not.toContain("Known Sign");
     expect(description?.textContent).toContain("Augury");
-    expect(description?.textContent).toContain(
-      resolveSource(value.affiliation!.title),
-    );
+    expect(description?.textContent).toContain(value.affiliation!.title);
   });
 
   it("gives the known Dreamsign its own reveal target without activating the node", () => {
@@ -228,8 +224,8 @@ describe("AtlasNode semantic reveal contract", () => {
               figureArt: null,
               placeName: null,
               guideName: null,
-              title: assertLocalized("An Unseen Dream"),
-              body: assertLocalized("Travel onward to learn what waits here."),
+              title: "An Unseen Dream",
+              body: "Travel onward to learn what waits here.",
             }
           : model(state).primary,
     });

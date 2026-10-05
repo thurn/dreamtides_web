@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -48,8 +47,8 @@ const SITE: DreamscapeSiteModel = {
   isBattle: true,
   isLocked: true,
   isInteractive: false,
-  label: assertLocalized("Locked Fixture"),
-  blurb: assertLocalized("Fixed site detail."),
+  label: "Locked Fixture",
+  blurb: "Fixed site detail.",
   icon: glyph("bxf bx-lock"),
 };
 
@@ -141,7 +140,7 @@ describe("cross-family reveal competition", () => {
           <GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} />
           <GlossaryTerm
             entry={{ term: "Fixture", definition: "Fixed local definition." }}
-            text={assertLocalized("Fixture")}
+            text={"Fixture"}
           />
           <div style={{ width: 40, height: 40 }}>
             <Dreamsign dreamsign={SIGN} />

@@ -1,6 +1,5 @@
 // Pure view-model builder for Amunet's Cumulus Dreamsign Bazaar.
 
-import type { LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import {
@@ -34,8 +33,6 @@ import {
 } from "./shop-free-purchase-view-model";
 import type { GuideId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { bindSourceTransport } from "../../runtime/localization/runtime";
-import { tx } from "@trox/runtime";
 import { SHOP_FLOW_PRESENTATION } from "./shop-flow-presentation-view-model";
 
 /** Resolve Amunet, the resident Dream Guide for Dreamsign Bazaars. */
@@ -49,7 +46,7 @@ export function resolveDreamsignBazaarGuide(
 /** Build Amunet's guide slice for the shared character-gallery layout. */
 export function buildDreamsignBazaarGuideView(
   guide: DreamGuideContent,
-  guideLine: LocalizedString,
+  guideLine: string,
 ) {
   return projectGuideView(guide, guideLine);
 }
@@ -133,7 +130,7 @@ export function buildDreamsignBazaarSiteView(params: {
   site: SiteState;
   runtime: ShopSiteRuntime;
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   pendingDreamsign: Dreamsign | null;
   economyData: EconomyData;
   sitesData: SitesData;
@@ -153,12 +150,9 @@ export function buildDreamsignBazaarSiteView(params: {
       >;
       return {
         kind: identity.kind,
-        title: bindSourceTransport(identity.title),
+        title: identity.title,
         ...SHOP_FLOW_PRESENTATION,
-        replacementTitle: tx(
-          "Choose a Dreamsign to Replace",
-          "[dreamsign] Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
-        ),
+        replacementTitle: "Choose a Dreamsign to Replace",
       };
     })(),
     siteId: params.site.id,

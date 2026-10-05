@@ -6,7 +6,6 @@ import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { DesktopDeckViewer } from "./DesktopDeckViewer";
-import { assertLocalized } from "@trox/runtime";
 import { testTideId } from "../../types/test-identities";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
@@ -111,20 +110,20 @@ describe("DesktopDeckViewer", () => {
           tides: [
             {
               id: testTideId("tide-a"),
-              label: assertLocalized("First Tide"),
-              description: assertLocalized("First path."),
+              label: "First Tide",
+              description: "First path.",
               tide: "ember",
             },
             {
               id: testTideId("tide-b"),
-              label: assertLocalized("Second Tide"),
-              description: assertLocalized("Second path."),
+              label: "Second Tide",
+              description: "Second path.",
               tide: "vision",
             },
             {
               id: testTideId("tide-c"),
-              label: assertLocalized("Third Tide"),
-              description: assertLocalized("Third path."),
+              label: "Third Tide",
+              description: "Third path.",
               tide: "wild",
             },
           ],

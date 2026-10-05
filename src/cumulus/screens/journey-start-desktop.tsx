@@ -24,8 +24,6 @@ import {
   type AvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
-import { tx, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -94,8 +92,7 @@ function AlignedAbilityBox({ children }: { readonly children: ReactNode }) {
 
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
-function DesktopTitle({ title }: { readonly title: LocalizedString }) {
-  const resolve = useLocalizer();
+function DesktopTitle({ title }: { readonly title: string }) {
   return (
     <div
       style={{
@@ -109,7 +106,7 @@ function DesktopTitle({ title }: { readonly title: LocalizedString }) {
         textAlign: "center",
       }}
     >
-      {resolve(title)}
+      {title}
     </div>
   );
 }
@@ -117,7 +114,6 @@ function DesktopTitle({ title }: { readonly title: LocalizedString }) {
 /** The Avatar's name + epithet, floating on the portrait above the head.
  * On-media, so it earns legibility from the outline dilation, not a plate. */
 function PortraitName({ avatar }: { avatar: AvatarOfferView }) {
-  const resolve = useLocalizer();
   return (
     <div
       style={{
@@ -138,7 +134,7 @@ function PortraitName({ avatar }: { avatar: AvatarOfferView }) {
           lineHeight: 1.05,
         }}
       >
-        {resolve(avatar.name)}
+        {avatar.name}
       </div>
       <div
         style={{
@@ -148,7 +144,7 @@ function PortraitName({ avatar }: { avatar: AvatarOfferView }) {
           textShadow: token("--text-outline-media"),
         }}
       >
-        {resolve(avatar.title)}
+        {avatar.title}
       </div>
     </div>
   );
@@ -167,7 +163,7 @@ function AvatarCard({
   onChoose,
 }: {
   avatar: AvatarOfferView;
-  chooseLabel: LocalizedString;
+  chooseLabel: string;
   onChoose: () => void;
 }) {
   return (
@@ -233,7 +229,7 @@ function AvatarColumn({
   onChoose,
 }: {
   avatar: AvatarOfferView;
-  chooseLabel: LocalizedString;
+  chooseLabel: string;
   onChoose: () => void;
 }) {
   return (
@@ -311,7 +307,7 @@ export function DesktopSelect({
       {onReroll !== undefined && (
         <JourneyStartRerollControl
           onReroll={onReroll}
-          label={tx("Reroll Avatars", "[journey] Start reroll action.")}
+          label={"Reroll Avatars"}
         />
       )}
 
@@ -323,12 +319,7 @@ export function DesktopSelect({
           padding: `calc(${token("--safe-top")} + ${token("--space-l")}) ${token("--gutter")} 0`,
         }}
       >
-        <DesktopTitle
-          title={tx(
-            "Choose Your Avatar",
-            "[avatar] [journey] Title and actions on the Avatar selection screen.",
-          )}
-        />
+        <DesktopTitle title={"Choose Your Avatar"} />
       </div>
 
       {/* The offered Avatars, centered in the remaining space. The inner
@@ -359,10 +350,7 @@ export function DesktopSelect({
             <AvatarColumn
               key={avatar.id}
               avatar={avatar}
-              chooseLabel={tx(
-                "Choose",
-                "[avatar] [journey] Command that chooses the currently selected Avatar or starting-deck option.",
-              )}
+              chooseLabel={"Choose"}
               onChoose={() => {
                 onPick(avatar.id);
               }}

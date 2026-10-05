@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 
-import { assertLocalized } from "@trox/runtime";
 import { act, isValidElement, type ReactNode } from "react";
 import { createRoot as createReactRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -101,8 +100,8 @@ describe("CardBrowserPanel", () => {
       root.render(
         <CardBrowserPanel
           presentation="overlay"
-          title={assertLocalized("Starting Deck")}
-          subtitle={assertLocalized("Your cards")}
+          title={"Starting Deck"}
+          subtitle={"Your cards"}
           cards={[
             {
               entryId: parseDeckEntryId("entry-a"),
@@ -138,7 +137,7 @@ describe("CardBrowserPanel", () => {
       root.render(
         <CardBrowserPanel
           presentation="fullScreen"
-          title={assertLocalized("Pool")}
+          title={"Pool"}
           cards={[]}
         />,
       ),
@@ -164,7 +163,7 @@ describe("CardBrowserPanel", () => {
     act(() =>
       root.render(
         <CardBrowserPanel
-          title={assertLocalized("Your Void")}
+          title={"Your Void"}
           cards={[
             {
               entryId: parseDeckEntryId("physical-card"),
@@ -207,7 +206,7 @@ describe("CardBrowserPanel", () => {
       root.render(
         <CumulusRoot>
           <CardBrowserPanel
-            title={assertLocalized("Your Deck")}
+            title={"Your Deck"}
             cards={[
               {
                 entryId: parseDeckEntryId("physical-card"),
@@ -218,35 +217,31 @@ describe("CardBrowserPanel", () => {
             toolbar={{
               segmented: {
                 options: [
-                  { value: "viewer", label: assertLocalized("Your Cards · 1") },
+                  { value: "viewer", label: "Your Cards · 1" },
                   {
                     value: "opponent",
-                    label: assertLocalized("Opponent Cards · 2"),
+                    label: "Opponent Cards · 2",
                   },
                 ],
                 value: "viewer",
                 onChange: ownerChange,
               },
               search: {
-                label: assertLocalized("Search Cards"),
+                label: "Search Cards",
                 value: "",
                 onChange: vi.fn(),
                 testId: "search",
               },
               sort: {
-                ariaLabel: assertLocalized("Sort cards"),
+                ariaLabel: "Sort cards",
                 value: "current",
-                options: [
-                  { value: "current", label: assertLocalized("Current Order") },
-                ],
+                options: [{ value: "current", label: "Current Order" }],
                 onChange: vi.fn(),
               },
               filter: {
-                ariaLabel: assertLocalized("Filter cards"),
+                ariaLabel: "Filter cards",
                 value: "all",
-                options: [
-                  { value: "all", label: assertLocalized("All Types") },
-                ],
+                options: [{ value: "all", label: "All Types" }],
                 onChange: vi.fn(),
               },
             }}
@@ -291,15 +286,13 @@ describe("CardBrowserPanel", () => {
       root.render(
         <CumulusRoot>
           <CardBrowserPanel
-            title={assertLocalized("Your Void")}
+            title={"Your Void"}
             cards={[]}
             toolbar={{
               sort: {
-                ariaLabel: assertLocalized("Sort cards"),
+                ariaLabel: "Sort cards",
                 value: "current",
-                options: [
-                  { value: "current", label: assertLocalized("Current Order") },
-                ],
+                options: [{ value: "current", label: "Current Order" }],
                 onChange: vi.fn(),
               },
             }}
@@ -337,7 +330,7 @@ describe("CardPickerPanel", () => {
         <div data-testid="gallery-host">
           <div style={{ display: "contents" }}>
             <CardPickerPanel
-              title={assertLocalized("Transfiguration")}
+              title={"Transfiguration"}
               cards={Array.from({ length: 10 }, (_, index) => ({
                 entryId: parseDeckEntryId(`entry-${String(index)}`),
                 model: model(`Card ${String(index)}`),
@@ -368,7 +361,7 @@ describe("CardPickerPanel", () => {
     act(() =>
       root.render(
         <CardPickerPanel
-          title={assertLocalized("Shop")}
+          title={"Shop"}
           cards={[
             {
               entryId: parseDeckEntryId("available"),
@@ -424,7 +417,7 @@ describe("CardPickerPanel", () => {
     act(() =>
       root.render(
         <CardPickerPanel
-          title={assertLocalized("Shop")}
+          title={"Shop"}
           cards={[
             {
               entryId: parseDeckEntryId("reserved"),
@@ -454,13 +447,13 @@ describe("CardPickerPanel", () => {
       root.render(
         <CumulusRoot>
           <CardPickerPanel
-            title={assertLocalized("Card Shop")}
+            title={"Card Shop"}
             cards={[]}
             rightAccessory={{
               kind: "iconButton",
               button: {
                 glyph: GLYPHS.close,
-                label: assertLocalized("Close"),
+                label: "Close",
                 onPress: close,
                 testId: "close",
               },
@@ -468,7 +461,7 @@ describe("CardPickerPanel", () => {
             endAction={{
               entryId: parseDeckEntryId("restock"),
               glyph: GLYPHS.refresh,
-              label: assertLocalized("Restock"),
+              label: "Restock",
               caption: { kind: "essence", amount: 50 },
               testId: "restock",
             }}
@@ -510,11 +503,11 @@ describe("CardPickerPanel", () => {
       root.render(
         <CumulusRoot>
           <CardPickerPanel
-            title={assertLocalized("Transfiguration")}
+            title={"Transfiguration"}
             cards={[]}
             footerActions={[
               {
-                label: assertLocalized("Decline Offer"),
+                label: "Decline Offer",
                 onPress: decline,
                 testId: "decline",
               },
@@ -544,7 +537,7 @@ describe("CardPickerPanel", () => {
     const render = (shown: boolean) => (
       <CumulusRoot>
         <CardPickerPanel
-          title={assertLocalized("Duplication")}
+          title={"Duplication"}
           cards={[
             {
               entryId: parseDeckEntryId("selected"),
@@ -554,12 +547,12 @@ describe("CardPickerPanel", () => {
           ]}
           footerActions={[
             {
-              label: assertLocalized("Decline Offer"),
+              label: "Decline Offer",
               onPress: decline,
               testId: "decline",
             },
             {
-              label: assertLocalized("Duplicate"),
+              label: "Duplicate",
               onPress: confirm,
               variant: "accent",
               testId: "confirm",
@@ -595,7 +588,7 @@ describe("CardPickerPanel", () => {
       root.render(
         <CardPickerPanel
           presentation="overlay"
-          title={assertLocalized("Choose")}
+          title={"Choose"}
           cards={Array.from({ length: 5 }, (_, index) => ({
             entryId: parseDeckEntryId(String(index)),
             model: model(String(index)),
@@ -622,7 +615,7 @@ describe("CardPickerPanel", () => {
       root.render(
         <CardBrowserPanel
           presentation="overlay"
-          title={assertLocalized("Your Void")}
+          title={"Your Void"}
           cards={[]}
         />,
       ),

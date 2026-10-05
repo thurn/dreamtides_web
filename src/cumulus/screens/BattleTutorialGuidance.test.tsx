@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -40,9 +39,9 @@ function guidanceFields(
         kind: "character-portrait" as const,
         characterId: "mira" as const,
       },
-      portraitAlt: assertLocalized("Mira"),
-      speakerName: assertLocalized("Mira"),
-      text: assertLocalized(text),
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: text,
     },
     horizontalOffset: options.horizontalOffset ?? 0,
     verticalOffset: options.verticalOffset ?? 0,
@@ -103,8 +102,8 @@ describe("BattleTutorialGuidance", () => {
                     id: testDreamwellCardId(
                       "03e4e701-4720-4278-8198-9b7e0514d4cf",
                     ),
-                    name: assertLocalized("Shadow Passage"),
-                    renderedText: assertLocalized("Erode 3."),
+                    name: "Shadow Passage",
+                    renderedText: "Erode 3.",
                     energyAdded: 1,
                     imageNumber: 3,
                   },
@@ -178,8 +177,8 @@ describe("BattleTutorialGuidance", () => {
                     id: testDreamwellCardId(
                       "03e4e701-4720-4278-8198-9b7e0514d4cf",
                     ),
-                    name: assertLocalized("Shadow Passage"),
-                    renderedText: assertLocalized("Erode 3."),
+                    name: "Shadow Passage",
+                    renderedText: "Erode 3.",
                     energyAdded: 1,
                     imageNumber: 3,
                   },
@@ -380,9 +379,7 @@ describe("BattleTutorialGuidance", () => {
               messageCount: 2,
               dialogue: {
                 ...view.dialogue,
-                text: assertLocalized(
-                  "The same card stays here for the next explanation.",
-                ),
+                text: "The same card stays here for the next explanation.",
               },
             }}
             onDismiss={() => undefined}

@@ -1,5 +1,4 @@
 import type { ReactElement, ReactNode } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { glassContentControlSurface } from "../../internal/control-treatment";
 import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -7,13 +6,12 @@ import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 import type { DomTestId } from "../../types/dom";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface DisclosureSectionProps {
   /** Localized heading shown in the disclosure trigger. */
-  title: LocalizedString;
+  title: string;
   /** Optional localized context shown beside the heading. */
-  summary?: LocalizedString;
+  summary?: string;
   /** Controlled open state. */
   expanded: boolean;
   /** Reports the requested open state. */
@@ -40,7 +38,6 @@ export function DisclosureSection({
   placement = "onMedia",
   testId,
 }: DisclosureSectionProps): ReactElement {
-  const resolve = useLocalizer();
   return (
     <section
       data-testid={testId}
@@ -71,7 +68,7 @@ export function DisclosureSection({
       >
         <span style={{ minWidth: 0 }}>
           <span style={{ display: "block", font: token("--t-button-sm") }}>
-            {resolve(title)}
+            {title}
           </span>
           {summary === undefined ? null : (
             <span
@@ -82,7 +79,7 @@ export function DisclosureSection({
                 font: token("--t-caption"),
               }}
             >
-              {resolve(summary)}
+              {summary}
             </span>
           )}
         </span>

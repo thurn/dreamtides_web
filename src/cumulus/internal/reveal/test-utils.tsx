@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import type { RevealSpec } from "./model";
 
 export function makeTextRevealSpec(
@@ -11,14 +10,14 @@ export function makeTextRevealSpec(
       kind: "infoCard",
       card: {
         variant: "text",
-        title: assertLocalized(title),
-        body: { kind: "plain", text: assertLocalized(body) },
+        title: title,
+        body: { kind: "plain", text: body },
       },
     },
     secondaries: secondaries.map((text, index) => ({
       variant: "text",
-      title: assertLocalized(`Secondary ${String(index + 1)}`),
-      body: { kind: "plain" as const, text: assertLocalized(text) },
+      title: `Secondary ${String(index + 1)}`,
+      body: { kind: "plain" as const, text: text },
     })),
   };
 }

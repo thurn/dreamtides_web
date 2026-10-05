@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // InfoCard's public surface is visual content only.
 
 import * as React from "react";
@@ -78,7 +77,7 @@ describe("InfoCard shell treatment", () => {
       React.createElement(InfoCard, {
         variant: "icon",
         glyph: GLYPHS.copy,
-        title: assertLocalized("X".repeat(40)),
+        title: "X".repeat(40),
       }),
     );
 
@@ -88,7 +87,7 @@ describe("InfoCard shell treatment", () => {
 
   it("uses the shared liquid-glass material at the fixed fill opacity", () => {
     const html = renderToStaticMarkup(
-      React.createElement(InfoCard, { title: assertLocalized("Essence") }),
+      React.createElement(InfoCard, { title: "Essence" }),
     );
     const glass = glassSurfaceStyle();
 
@@ -106,7 +105,7 @@ describe("InfoCard shell treatment", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "text",
-        body: richText.plain(assertLocalized("Body only.")),
+        body: richText.plain("Body only."),
       }),
     );
 
@@ -120,11 +119,9 @@ describe("InfoCard shell treatment", () => {
         variant: "atlasReveal",
         image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
         figure: artRef.dreamGuide(testGuideId("aldric")),
-        title: assertLocalized("Wilderveil"),
-        subtitle: assertLocalized("Aldric, the Seer"),
-        body: richText.plain(
-          assertLocalized("Aldric offers curated visions of the future."),
-        ),
+        title: "Wilderveil",
+        subtitle: "Aldric, the Seer",
+        body: richText.plain("Aldric offers curated visions of the future."),
       }),
     );
 
@@ -168,16 +165,16 @@ describe("InfoCard shell treatment", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "text",
-        title: assertLocalized("Costs 2● and grants 1✦"),
-        subtitle: assertLocalized("Gain ⍏3, 4⍟, pay ☾, and store 1⧗"),
+        title: "Costs 2● and grants 1✦",
+        subtitle: "Gain ⍏3, 4⍟, pay ☾, and store 1⧗",
         body: richText.stack(
-          richText.plain(assertLocalized("▸Dawn")),
-          richText.plain(assertLocalized("❖ Fast")),
-          richText.note(assertLocalized("❖❖ Interrupt")),
+          richText.plain("▸Dawn"),
+          richText.plain("❖ Fast"),
+          richText.note("❖❖ Interrupt"),
           richText.definitions([
             {
-              term: assertLocalized("Reclaim 0●"),
-              definition: assertLocalized("Gain 1✦, 2⍟, and ⍏3."),
+              term: "Reclaim 0●",
+              definition: "Gain 1✦, 2⍟, and ⍏3.",
             },
           ]),
         ),
@@ -200,18 +197,18 @@ describe("InfoCard shell treatment", () => {
       React.createElement(InfoCard, {
         variant: "fullBleed",
         image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
-        title: assertLocalized("Gain 1● and score 2⍟"),
-        subtitle: assertLocalized("Store 1⧗"),
-        body: richText.plain(assertLocalized("Pay ☾.")),
+        title: "Gain 1● and score 2⍟",
+        subtitle: "Store 1⧗",
+        body: richText.plain("Pay ☾."),
       }),
     );
     const atlasReveal = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "atlasReveal",
         image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
-        title: assertLocalized("▸Dawn"),
-        subtitle: assertLocalized("❖ Fast"),
-        body: richText.plain(assertLocalized("Gain 1✦.")),
+        title: "▸Dawn",
+        subtitle: "❖ Fast",
+        body: richText.plain("Gain 1✦."),
       }),
     );
 

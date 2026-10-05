@@ -20,8 +20,8 @@ import type {
   DreamsignId,
   TideId,
 } from "./identifiers";
-import type { SourceTransport } from "../runtime/localization/runtime";
 import type { ContentHash } from "./content-hash";
+import type { DisplayText } from "../runtime/text";
 
 /** Normalized point locating an Avatar's head in its portrait artwork. */
 export interface AvatarPortraitFocus {
@@ -88,7 +88,7 @@ export interface DreamscapeContent {
   affiliationId: AffiliationId | null;
   isStarter: boolean;
   /** Authored Atlas reveal-card body for the guideless starter region. */
-  atlasDescription?: SourceTransport;
+  atlasDescription?: string;
   fixedSites?: SiteType[];
   avatarIds: AvatarId[];
 }
@@ -104,12 +104,7 @@ export interface DreamGuideContent {
   homeDreamscapeId: DreamscapeId;
   siteType: SiteType;
   portraitSource: string;
-  dialogue: Readonly<
-    Record<
-      string,
-      readonly import("../runtime/localization/runtime").SourceTransport[]
-    >
-  >;
+  dialogue: Readonly<Record<string, readonly string[]>>;
   homeSpecialty: string;
 }
 
@@ -130,7 +125,7 @@ export interface ApollyonIncarnationContent {
   id: ApollyonIncarnationId;
   title: string;
   description: string;
-  deckType: SourceTransport;
+  deckType: DisplayText;
 }
 
 /**

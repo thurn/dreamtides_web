@@ -1,8 +1,6 @@
 import type { ChangeEvent, ReactElement, Ref } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { controlChrome } from "../../internal/control-treatment";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DomTestId } from "../../types/dom";
 
 /** Named input modes supported by the shared text field. */
@@ -10,7 +8,7 @@ export type TextFieldKind = "text" | "search";
 
 export interface TextFieldProps {
   /** Localized field label. */
-  label: LocalizedString;
+  label: string;
   /** Controlled value. */
   value: string;
   /** Reports edited text. */
@@ -20,11 +18,11 @@ export interface TextFieldProps {
   /** Text or search semantics. Defaults to text. */
   kind?: TextFieldKind;
   /** Optional placeholder. */
-  placeholder?: LocalizedString;
+  placeholder?: string;
   /** Optional supporting copy beneath the control. */
-  supportingText?: LocalizedString;
+  supportingText?: string;
   /** Validation copy; also marks the input invalid. */
-  error?: LocalizedString;
+  error?: string;
   /** Prevent editing. */
   disabled?: boolean;
   /** Stable test id for the input. */
@@ -47,7 +45,6 @@ export function TextField({
   testId,
   inputRef,
 }: TextFieldProps): ReactElement {
-  const resolve = useLocalizer();
   const message = error ?? supportingText;
   const invalid = error !== undefined;
   const chrome = controlChrome("onGlass");
@@ -60,15 +57,13 @@ export function TextField({
           textTransform: "uppercase",
         }}
       >
-        {resolve(label)}
+        {label}
       </span>
       <input
         ref={inputRef}
         type={kind}
         value={value}
-        placeholder={
-          placeholder === undefined ? undefined : resolve(placeholder)
-        }
+        placeholder={placeholder === undefined ? undefined : placeholder}
         disabled={disabled}
         aria-invalid={invalid ? true : undefined}
         data-testid={testId}
@@ -103,7 +98,7 @@ export function TextField({
             font: token("--t-caption"),
           }}
         >
-          {resolve(message)}
+          {message}
         </span>
       )}
     </label>

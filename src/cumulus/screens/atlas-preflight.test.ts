@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode } from "../../types/journey";
@@ -34,7 +33,7 @@ function item(
 ): AtlasNodeModel {
   return {
     id: parseAtlasNodeId(idSeed),
-    name: assertLocalized(idSeed),
+    name: idSeed,
     state: node(idSeed).state,
     role: "regular",
     isReachable: true,
@@ -45,10 +44,10 @@ function item(
     primary: {
       sceneArt: null,
       figureArt: null,
-      title: assertLocalized("Guide"),
-      body: assertLocalized("A dreamscape."),
-      placeName: assertLocalized("Place"),
-      guideName: assertLocalized("Guide"),
+      title: "Guide",
+      body: "A dreamscape.",
+      placeName: "Place",
+      guideName: "Guide",
     },
     dreamsign: null,
     site: null,
@@ -75,9 +74,9 @@ describe("atlasPreflightImageUrls", () => {
         },
         dreamsign: {
           id: parseDreamsignId("00000000-0000-4000-8000-000000000099"),
-          name: assertLocalized("The Held Star"),
+          name: "The Held Star",
           art: dreamsign,
-          rulesText: assertLocalized("Gain 1 essence."),
+          rulesText: "Gain 1 essence.",
         },
       }),
       item("duplicate", {

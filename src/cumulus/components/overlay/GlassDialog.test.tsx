@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 
-import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlassBackdrop, GlassDialog } from "./GlassDialog";
@@ -49,7 +48,7 @@ describe("GlassBackdrop", () => {
 describe("GlassDialog", () => {
   it("omits the close control when the dialog is commit-gated", () => {
     const { container } = renderInCumulus(
-      <GlassDialog title={assertLocalized("Foresee 2")}>
+      <GlassDialog title={"Foresee 2"}>
         <div>content</div>
       </GlassDialog>,
     );
@@ -62,8 +61,8 @@ describe("GlassDialog", () => {
     const onClose = vi.fn();
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("Starting Deck")}
-        subtitle={assertLocalized("An intro line")}
+        title={"Starting Deck"}
+        subtitle={"An intro line"}
         onClose={onClose}
       >
         <p data-testid="body">body content</p>
@@ -96,9 +95,9 @@ describe("GlassDialog", () => {
   it("uses a custom closeLabel as the close control's aria-label", () => {
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("Title")}
+        title={"Title"}
         onClose={() => {}}
-        closeLabel={assertLocalized("Dismiss deck")}
+        closeLabel={"Dismiss deck"}
       >
         <div>content</div>
       </GlassDialog>,
@@ -112,7 +111,7 @@ describe("GlassDialog", () => {
 
   it("renders no subtitle <p> in the header when subtitle is omitted", () => {
     const { container } = renderInCumulus(
-      <GlassDialog title={assertLocalized("Title")} onClose={() => {}}>
+      <GlassDialog title={"Title"} onClose={() => {}}>
         <div data-testid="only-body">content</div>
       </GlassDialog>,
     );
@@ -125,7 +124,7 @@ describe("GlassDialog", () => {
   it("renders the desktop dialog without a full-screen frosted backdrop", () => {
     stubMatchMedia(true);
     const { container } = renderInCumulus(
-      <GlassDialog title={assertLocalized("Title")} onClose={() => {}}>
+      <GlassDialog title={"Title"} onClose={() => {}}>
         <div>content</div>
       </GlassDialog>,
     );
@@ -140,7 +139,7 @@ describe("GlassDialog", () => {
   it("renders the popup presentation as one panel on mobile", () => {
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("How to Play")}
+        title={"How to Play"}
         presentation="popup"
         onClose={() => {}}
       >
@@ -162,7 +161,7 @@ describe("GlassDialog", () => {
     stubMatchMedia(true);
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("How to Play")}
+        title={"How to Play"}
         presentation="popup"
         companion={<div data-testid="companion">card</div>}
         onClose={() => {}}
@@ -181,7 +180,7 @@ describe("GlassDialog", () => {
   it("centers a narrower companion above the prose panel on mobile", () => {
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("How to Play")}
+        title={"How to Play"}
         presentation="popup"
         companion={<div data-testid="companion">card</div>}
         onClose={() => {}}
@@ -204,7 +203,7 @@ describe("GlassDialog", () => {
   it("floats the close disc in body flow for prose wrapping", () => {
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("How to Play")}
+        title={"How to Play"}
         presentation="popup"
         chrome="flowing-close"
         onClose={() => {}}
@@ -250,7 +249,7 @@ describe("GlassDialog", () => {
 
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("Foresee 2")}
+        title={"Foresee 2"}
         desktopCenterTarget="battlefield"
       >
         <div>content</div>
@@ -272,7 +271,7 @@ describe("GlassDialog", () => {
     // stays on the header's trailing edge.
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("Title")}
+        title={"Title"}
         onClose={() => {}}
         cutoutAwareClose
       >
@@ -291,7 +290,7 @@ describe("GlassDialog", () => {
     const onClose = vi.fn();
     const { container } = renderInCumulus(
       <GlassDialog
-        title={assertLocalized("Title")}
+        title={"Title"}
         onClose={onClose}
         cutoutAwareClose
       >

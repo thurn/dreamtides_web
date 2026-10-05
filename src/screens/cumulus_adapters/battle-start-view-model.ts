@@ -4,8 +4,6 @@ import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
 import { artRef } from "../../cumulus/primitives/art";
 import type { BattleStartView } from "../../cumulus/screens/BattleStartScreen";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
-import { localizedSourceText } from "../../runtime/localization/runtime";
-import { tx } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import { parsePresentationId } from "../../types/identifiers";
 
@@ -48,10 +46,10 @@ export function buildBattleStartView(
         : null,
     avatar: {
       id: enemy.id,
-      name: localizedSourceText(enemy.name),
-      title: localizedSourceText(enemy.subtitle),
+      name: enemy.name,
+      title: enemy.subtitle,
       imageNumber: enemy.imageNumber ?? "001",
-      ability: localizedSourceText(enemy.abilityText.trim()),
+      ability: enemy.abilityText.trim(),
       abilityActive: init.opponentAbilityActive,
     },
     dreamsigns: (enemy.dreamsigns ?? []).flatMap((dreamsign) =>
@@ -83,11 +81,9 @@ export function buildBattleStartView(
                 kind: "character-portrait" as const,
                 characterId: "mira",
               },
-              portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
-              speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
-              text: localizedSourceText(
-                battleStartGuidance.speechBubble.text,
-              ),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: battleStartGuidance.speechBubble.text,
             },
             delaySeconds: tutorialSpeechBubbleDelaySeconds(
               battleStartGuidance.speechBubble,

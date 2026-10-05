@@ -1,7 +1,6 @@
 // GlassPanel — the shared titled liquid-glass content container.
 
 import { useEffect, useState, type ReactElement, type ReactNode } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -9,7 +8,6 @@ import { token } from "../../primitives/tokens";
 import type { DomTestId } from "../../types/dom";
 import { GlassButton, type GlassButtonProps } from "../controls/GlassButton";
 import { IconButton, type IconButtonProps } from "../controls/IconButton";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** GlassButton props available inside a panel-owned accessory placement. */
 export type GlassPanelGlassButtonProps = Omit<GlassButtonProps, "placement">;
@@ -56,11 +54,11 @@ export type GlassPanelTitleVoice = "standard" | "hero";
 
 export interface GlassPanelProps {
   /** Optional uppercase context line rendered above the title. */
-  eyebrow?: LocalizedString;
+  eyebrow?: string;
   /** Optional plain panel title. */
-  title?: LocalizedString;
+  title?: string;
   /** Optional supporting line rendered beneath the title. */
-  subtitle?: LocalizedString;
+  subtitle?: string;
   /** Semantic heading element for the title. Defaults to `h2`. */
   headingLevel?: "h1" | "h2";
   /** Title and subtitle typography. Defaults to `standard`. */
@@ -142,7 +140,6 @@ export function GlassPanel({
   footer,
   testId,
 }: GlassPanelProps): ReactElement {
-  const resolve = useLocalizer();
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
     setBesideCutout(cutoutAwareAccessory && hasInjectedDisplayCutout());
@@ -255,7 +252,7 @@ export function GlassPanel({
                   textTransform: "uppercase",
                 }}
               >
-                {resolve(eyebrow)}
+                {eyebrow}
               </span>
             )}
             {title !== undefined ? (
@@ -270,7 +267,7 @@ export function GlassPanel({
                   letterSpacing: 0,
                 }}
               >
-                {resolve(title)}
+                {title}
               </Heading>
             ) : null}
             {subtitle !== undefined && (
@@ -285,7 +282,7 @@ export function GlassPanel({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {resolve(subtitle)}
+                {subtitle}
               </p>
             )}
           </div>

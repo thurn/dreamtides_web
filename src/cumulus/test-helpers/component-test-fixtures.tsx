@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { assertLocalized } from "@trox/runtime";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { GameCardModel } from "../components/card/CardView";
@@ -40,7 +39,7 @@ export function syntheticGameCard(
 
 export const fixtureDialogue = {
   portrait: { kind: "character-portrait", characterId: "mira" } as const,
-  portraitAlt: assertLocalized("Guide"),
-  speakerName: assertLocalized("Guide"),
-  text: assertLocalized("Guidance"),
+  portraitAlt: "Guide",
+  speakerName: "Guide",
+  text: "Guidance",
 };

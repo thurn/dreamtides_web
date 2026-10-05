@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { assertLocalized, LocalizedString } from "@trox/runtime";
 import { testDreamwellCardName } from "../types/test-identities";
 import { parseDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
@@ -29,13 +28,13 @@ const PROMPTS: DreamwellPromptDefinitions = {
   [CARD_ID]: [
     {
       key: "choose-value",
-      title: () => assertLocalized("Fixture title"),
-      subtitle: () => assertLocalized("Fixture subtitle"),
-      instructions: () => assertLocalized("Fixture instructions"),
+      title: () => "Fixture title",
+      subtitle: () => "Fixture subtitle",
+      instructions: () => "Fixture instructions",
       choices: [
         {
           key: "confirm",
-          label: () => assertLocalized("Fixture choice"),
+          label: () => "Fixture choice",
         },
       ],
       arguments: [{ name: "count", kind: "Count" }],
@@ -57,7 +56,7 @@ describe("Dreamwell prompt references", () => {
         CATALOG,
         PROMPTS,
       ),
-    ).toBeInstanceOf(LocalizedString);
+    ).toEqual(expect.any(String));
     expect(
       resolveDreamwellPromptRef(
         dreamwellPromptRef(
@@ -70,7 +69,7 @@ describe("Dreamwell prompt references", () => {
         CATALOG,
         PROMPTS,
       ),
-    ).toBeInstanceOf(LocalizedString);
+    ).toEqual(expect.any(String));
   });
 
   it("rejects missing prompts and invalid semantic argument types", () => {

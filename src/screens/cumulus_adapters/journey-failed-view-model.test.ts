@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { LocalizedString } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { JourneyState } from "../../types/journey";
 import { buildJourneyFailedView } from "./journey-failed-view-model";
@@ -52,9 +51,9 @@ describe("buildJourneyFailedView", () => {
         imageNumber: "001",
       },
     });
-    expect(view?.avatar?.name).toBeInstanceOf(LocalizedString);
-    expect(view?.avatar?.title).toBeInstanceOf(LocalizedString);
-    expect(view?.avatar?.ability).toBeInstanceOf(LocalizedString);
+    expect(view?.avatar?.name).toEqual(expect.any(String));
+    expect(view?.avatar?.title).toEqual(expect.any(String));
+    expect(view?.avatar?.ability).toEqual(expect.any(String));
     expect(view?.stats.map(({ id, value }) => [id, value])).toEqual([
       ["battles", 2],
       ["round", 6],

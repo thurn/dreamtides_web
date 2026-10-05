@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { assertLocalized } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CommandMenu, type CommandMenuItem } from "./CommandMenu";
@@ -13,7 +12,7 @@ const actions: readonly CommandMenuItem[] = [
   {
     kind: "action",
     id: "save",
-    label: assertLocalized("Save"),
+    label: "Save",
     glyph: GLYPHS.check,
     onCommand: () => undefined,
   },
@@ -21,13 +20,13 @@ const actions: readonly CommandMenuItem[] = [
   {
     kind: "group",
     id: "more",
-    label: assertLocalized("More"),
+    label: "More",
     glyph: GLYPHS.chevronRight,
     actions: [
       {
         kind: "action",
         id: "load",
-        label: assertLocalized("Load"),
+        label: "Load",
         glyph: GLYPHS.arrowRight,
         onCommand: () => undefined,
       },
@@ -72,7 +71,7 @@ describe("CommandMenu app-chrome model", () => {
           kind: "appChrome",
           trigger: {
             glyph: GLYPHS.menu,
-            label: assertLocalized("Open utilities"),
+            label: "Open utilities",
             corner: "topStart",
           },
           actions: [
@@ -80,13 +79,13 @@ describe("CommandMenu app-chrome model", () => {
             {
               kind: "group",
               id: "more",
-              label: assertLocalized("More"),
+              label: "More",
               glyph: GLYPHS.chevronRight,
               actions: [
                 {
                   kind: "action",
                   id: "load",
-                  label: assertLocalized("Load"),
+                  label: "Load",
                   glyph: GLYPHS.arrowRight,
                   onCommand: command,
                 },
@@ -124,7 +123,7 @@ describe("CommandMenu app-chrome model", () => {
           kind: "appChrome",
           trigger: {
             glyph: GLYPHS.menu,
-            label: assertLocalized("Open utilities"),
+            label: "Open utilities",
             corner: "topEnd",
           },
           actions,
@@ -162,7 +161,7 @@ describe("CommandMenu context model", () => {
       <CommandMenu
         model={{
           kind: "context",
-          title: assertLocalized("Card"),
+          title: "Card",
           actions,
           anchor: { x: 12, y: 12 },
           onDismiss: () => undefined,
@@ -182,8 +181,8 @@ describe("CommandMenu context model", () => {
       <CommandMenu
         model={{
           kind: "context",
-          title: assertLocalized("Card"),
-          subtitle: assertLocalized("Player · Hand"),
+          title: "Card",
+          subtitle: "Player · Hand",
           actions,
           anchor: { x: 12, y: 12 },
           onDismiss,
@@ -226,15 +225,15 @@ describe("CommandMenu context model", () => {
       {
         kind: "group",
         id: "spark",
-        label: assertLocalized("Add Spark"),
+        label: "Add Spark",
         glyph: GLYPHS.edit,
         actions: [
           {
             kind: "signed-integer",
             id: "spark-amount",
-            label: assertLocalized("Amount"),
-            placeholder: assertLocalized("+3 or -2"),
-            commitLabel: assertLocalized("Apply"),
+            label: "Amount",
+            placeholder: "+3 or -2",
+            commitLabel: "Apply",
             onCommand,
           },
         ],
@@ -244,7 +243,7 @@ describe("CommandMenu context model", () => {
       <CommandMenu
         model={{
           kind: "context",
-          title: assertLocalized("Card"),
+          title: "Card",
           actions: integerActions,
           anchor: { x: 12, y: 12 },
           onDismiss,

@@ -29,7 +29,6 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./site-node.css";
-import type { LocalizedString } from "@trox/runtime";
 import type { SiteId } from "../../../types/identifiers";
 
 /** Compact diameter for site nodes placed over a dreamscape scene. */
@@ -63,10 +62,10 @@ export interface DreamscapeSiteModel {
   /** Clickable: not visited and not locked. */
   isInteractive: boolean;
   /** Display label (battle tier / `Draft Nx` / site type name). */
-  label: LocalizedString;
-  lockedGuidance?: LocalizedString;
+  label: string;
+  lockedGuidance?: string;
   /** One-line mechanic blurb shown in the reveal. */
-  blurb: LocalizedString;
+  blurb: string;
   /** The site {@link Glyph}. */
   icon: Glyph;
 }
@@ -74,8 +73,8 @@ export interface DreamscapeSiteModel {
 /** The status note (the lock note) shown under the blurb in the reveal. */
 function siteRevealNote(
   model: DreamscapeSiteModel,
-  lockedGuidance: LocalizedString | undefined,
-): LocalizedString | null {
+  lockedGuidance: string | undefined,
+): string | null {
   if (model.isLocked) {
     return lockedGuidance ?? null;
   }
@@ -86,7 +85,7 @@ function siteRevealNote(
  * muted lock note under it. */
 function siteRevealBody(
   model: DreamscapeSiteModel,
-  lockedGuidance: LocalizedString | undefined,
+  lockedGuidance: string | undefined,
 ): RichText {
   const note = siteRevealNote(model, lockedGuidance);
   const blurb = richText.plain(model.blurb);

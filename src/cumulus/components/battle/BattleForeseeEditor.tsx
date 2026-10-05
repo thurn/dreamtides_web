@@ -1,4 +1,3 @@
-import { meaning, txa, tx } from "@trox/runtime";
 import {
   useEffect,
   useRef,
@@ -15,11 +14,11 @@ import { GLYPHS } from "../../primitives/glyph";
 import { POINTER_MOVEMENT_SLOP_PX } from "../../primitives/pointer-gesture";
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import {
   battleCardIdFromUnknown,
   type BattleCardId,
 } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** Card width and the minimum empty travel lane before the Void indicator. */
 const FORESEE_CARD_WIDTH_DESKTOP_PX = 180;
@@ -90,7 +89,6 @@ export function BattleForeseeEditor({
   model,
   onConfirm,
 }: BattleForeseeEditorProps): ReactElement {
-  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const cardWidthPx = isDesktop
     ? FORESEE_CARD_WIDTH_DESKTOP_PX
@@ -318,13 +316,7 @@ export function BattleForeseeEditor({
         data-foresee-pointer-dragging="false"
         role="button"
         tabIndex={0}
-        aria-label={resolve(
-          txa(
-            "Foresee card {card_name}, in {zone}",
-            { card_name: card.card.displaySnapshot.name, zone },
-            "[accessibility] A staged Foresee card and its current destination.",
-          ),
-        )}
+        aria-label={`Foresee card ${card.card.displaySnapshot.name}, in ${zone}`}
         onKeyDown={(event) => {
           if (event.key === "ArrowLeft" && zone === "deck") {
             event.preventDefault();
@@ -430,11 +422,7 @@ export function BattleForeseeEditor({
 
   return (
     <GlassDialog
-      title={txa(
-        "Foresee {count}",
-        { count },
-        "[battle] Title of the Foresee overlay. count is the positive number of cards the player may inspect and reorder.",
-      )}
+      title={`Foresee ${formatNumber(count)}`}
       desktopCenterTarget="battlefield"
     >
       <div
@@ -458,7 +446,7 @@ export function BattleForeseeEditor({
                 textTransform: "uppercase",
               }}
             >
-              {resolve(tx("Triggered By", "[battle] Foresee triggered by."))}
+              {"Triggered By"}
             </span>
             <div style={{ width: sourceCardWidthPx, maxWidth: "100%" }}>
               <DreamwellCard model={model.source} />
@@ -477,7 +465,7 @@ export function BattleForeseeEditor({
           <IconButton
             glyph={GLYPHS.minus}
             size="sm"
-            label={tx("Foresee 1 fewer", "[battle] Foresee less action.")}
+            label={"Foresee 1 fewer"}
             placement="onGlass"
             disabled={count <= minimumCount}
             onPress={decrementCount}
@@ -485,7 +473,7 @@ export function BattleForeseeEditor({
           <IconButton
             glyph={GLYPHS.plus}
             size="sm"
-            label={tx("Foresee 1 more", "[battle] Foresee more action.")}
+            label={"Foresee 1 more"}
             placement="onGlass"
             disabled={!safeAllowedCounts.some((candidate) => candidate > count)}
             onPress={incrementCount}
@@ -505,7 +493,7 @@ export function BattleForeseeEditor({
             }}
           >
             <div data-foresee-indicator="deck" style={indicatorStyle}>
-              {resolve(tx("Deck", "[battle] Foresee deck destination."))}
+              {"Deck"}
             </div>
 
             <div
@@ -549,22 +537,14 @@ export function BattleForeseeEditor({
               data-foresee-zone="void"
               style={indicatorStyle}
             >
-              {resolve(
-                tx(
-                  meaning("foresee-void-destination", "Void"),
-                  "[battle] Foresee void destination.",
-                ),
-              )}
+              {"Void"}
             </div>
           </div>
         </div>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <GlassButton
-            label={tx(
-              "Confirm",
-              "[ui] Action confirming the current selection.",
-            )}
+            label={"Confirm"}
             placement="onGlass"
             variant="accent"
             testId="battle-foresee-confirm"

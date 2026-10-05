@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -97,8 +96,8 @@ function view(): TransfigurationSiteView {
     scene: null,
     guide: {
       id: testGuideId("durgan_forgehammer"),
-      name: assertLocalized("Durgan Forgehammer"),
-      line: assertLocalized("Any card, any temper you like."),
+      name: "Durgan Forgehammer",
+      line: "Any card, any temper you like.",
       art: artRef.dreamGuide(testGuideId("durgan_forgehammer")),
     },
     ready: true,

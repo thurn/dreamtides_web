@@ -18,8 +18,6 @@ import cumulusNoInlineGlass from "./eslint-rules/no-inline-glass.js";
 import cumulusNoNumericStyleProps from "./eslint-rules/no-numeric-style-props.js";
 import cumulusNoPurpleTextOnGlass from "./eslint-rules/no-purple-text-on-glass.js";
 import cumulusNoEntityRevealEscapeHatches from "./eslint-rules/no-entity-reveal-escape-hatches.js";
-import cumulusNoManualCountCopy from "./eslint-rules/no-manual-count-copy.js";
-import cumulusNoUnlocalizedPlayerCopy from "./eslint-rules/no-unlocalized-player-copy.js";
 import { baselineConfigEntries } from "./eslint-rules/ui-boundary-baselines.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
@@ -45,8 +43,6 @@ const cumulusPlugin = {
     "no-numeric-style-props": cumulusNoNumericStyleProps,
     "no-purple-text-on-glass": cumulusNoPurpleTextOnGlass,
     "no-entity-reveal-escape-hatches": cumulusNoEntityRevealEscapeHatches,
-    "no-manual-count-copy": cumulusNoManualCountCopy,
-    "no-unlocalized-player-copy": cumulusNoUnlocalizedPlayerCopy,
   },
 };
 
@@ -92,8 +88,6 @@ export default tseslint.config(
       "cumulus/no-name-keyed-cards": "error",
       "cumulus/no-raw-safe-area-env": "error",
       "cumulus/no-inline-glass": "error",
-      "cumulus/no-manual-count-copy": "error",
-      "cumulus/no-unlocalized-player-copy": "error",
     },
   },
   ...baselineConfigEntries(),

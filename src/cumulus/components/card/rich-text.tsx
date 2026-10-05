@@ -9,11 +9,7 @@
 // `InfoCard.body`) take a `RichText`, never a `ReactNode`.
 
 import { Fragment, type ReactNode } from "react";
-import type {
-  AnnotatedLocalizedString,
-  LocalizedString,
-  ResolvedLocalizedPart,
-} from "@trox/runtime";
+import type { AnnotatedText } from "../../../runtime/text";
 import { token } from "../../primitives/tokens";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
@@ -44,9 +40,9 @@ export function richTextDefinitionSymbolText(
 
 export interface RichTextDefinition {
   /** Canonical glossary term used as the compact row label. */
-  readonly term: LocalizedString;
+  readonly term: string;
   /** Rules-aware explanatory copy shown after the label. */
-  readonly definition: LocalizedString;
+  readonly definition: string;
   /** Optional rules symbol rendered directly before the glossary term. */
   readonly symbol?: RichTextDefinitionSymbol;
   /** Whether the row uses its term, its rules symbol, or definition copy alone. */
@@ -70,12 +66,12 @@ export interface RichTextDefinition {
  *    authored sentences may omit the label and colon.
  */
 export type RichText<TAnnotation = never> =
-  | { readonly kind: "plain"; readonly text: LocalizedString }
-  | { readonly kind: "rules"; readonly text: LocalizedString }
-  | { readonly kind: "note"; readonly text: LocalizedString }
+  | { readonly kind: "plain"; readonly text: string }
+  | { readonly kind: "rules"; readonly text: string }
+  | { readonly kind: "note"; readonly text: string }
   | {
       readonly kind: "annotated";
-      readonly text: AnnotatedLocalizedString<TAnnotation>;
+      readonly text: AnnotatedText<TAnnotation>;
     }
   | {
       readonly kind: "stack";
@@ -88,11 +84,11 @@ export type RichText<TAnnotation = never> =
 
 /** Ergonomic constructors for {@link RichText} values. */
 export const richText = {
-  plain: (text: LocalizedString): RichText => ({ kind: "plain", text }),
-  rules: (text: LocalizedString): RichText => ({ kind: "rules", text }),
-  note: (text: LocalizedString): RichText => ({ kind: "note", text }),
+  plain: (text: string): RichText => ({ kind: "plain", text }),
+  rules: (text: string): RichText => ({ kind: "rules", text }),
+  note: (text: string): RichText => ({ kind: "note", text }),
   annotated: <TAnnotation,>(
-    text: AnnotatedLocalizedString<TAnnotation>,
+    text: AnnotatedText<TAnnotation>,
   ): RichText<TAnnotation> => ({ kind: "annotated", text }),
   stack: <TAnnotation,>(
     ...parts: RichText<TAnnotation>[]
@@ -107,10 +103,6 @@ export const richText = {
 const STACK_GAP = token("--space-s");
 const INLINE_RULE_SYMBOL_RE = /[●✦◆▸⍟☾⧗❖]/;
 
-type ResolveAnnotatedParts = <T,>(
-  message: AnnotatedLocalizedString<T>,
-) => readonly ResolvedLocalizedPart<T>[];
-
 interface RichTextRenderOptions<TAnnotation> {
   /**
    * Route every textual RichText field through the canonical inline rules-text
@@ -119,8 +111,6 @@ interface RichTextRenderOptions<TAnnotation> {
    * plain, note, and definition-label copy.
    */
   readonly substituteRulesSymbols?: boolean;
-  /** Resolve a lazy annotated message only at this final rendering boundary. */
-  readonly resolveParts?: ResolveAnnotatedParts;
   /** Render application-owned markup attached to one localized placeholder. */
   readonly renderAnnotation?: (
     annotation: TAnnotation,
@@ -139,11 +129,10 @@ const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
 } as const;
 
 function renderDefinitionText(
-  definition: LocalizedString,
-  resolve: (message: LocalizedString) => string,
+  definition: string,
   options: RichTextRenderOptions<never>,
 ): ReactNode {
-  const text = resolve(definition);
+  const text = definition;
   return options.substituteRulesSymbols === true ||
     INLINE_RULE_SYMBOL_RE.test(text)
     ? options.substituteRulesSymbols === true
@@ -153,11 +142,10 @@ function renderDefinitionText(
 }
 
 function renderInlineText(
-  message: LocalizedString,
-  resolve: (message: LocalizedString) => string,
+  message: string,
   options: RichTextRenderOptions<never>,
 ): ReactNode {
-  const text = resolve(message);
+  const text = message;
   return options.substituteRulesSymbols === true
     ? renderRulesSymbolsInline(text)
     : text;
@@ -185,7 +173,7 @@ function DefinitionSymbol({
   trailingGap,
 }: {
   readonly symbol: RichTextDefinitionSymbol;
-  readonly title?: LocalizedString;
+  readonly title?: string;
   readonly trailingGap: boolean;
 }) {
   if (symbol === "trigger") {
@@ -224,18 +212,17 @@ function DefinitionSymbol({
  */
 export function renderRichText<TAnnotation = never>(
   value: RichText<TAnnotation>,
-  resolve: (message: LocalizedString) => string,
   key: string | number = 0,
   options: RichTextRenderOptions<TAnnotation> = {},
 ): ReactNode {
   switch (value.kind) {
     case "plain":
       return (
-        <span key={key}>{renderInlineText(value.text, resolve, options)}</span>
+        <span key={key}>{renderInlineText(value.text, options)}</span>
       );
     case "rules":
       return (
-        <Fragment key={key}>{renderRulesText(resolve(value.text))}</Fragment>
+        <Fragment key={key}>{renderRulesText(value.text)}</Fragment>
       );
     case "note":
       return (
@@ -243,16 +230,11 @@ export function renderRichText<TAnnotation = never>(
           key={key}
           style={{ color: token("--text-muted"), fontStyle: "italic" }}
         >
-          {renderInlineText(value.text, resolve, options)}
+          {renderInlineText(value.text, options)}
         </div>
       );
     case "annotated": {
-      if (options.resolveParts === undefined) {
-        throw new Error(
-          "Annotated RichText requires a placeholder-parts resolver.",
-        );
-      }
-      const parts = options.resolveParts(value.text);
+      const parts = value.text.parts;
       return (
         <Fragment key={key}>
           {parts.map((part, index) => {
@@ -286,7 +268,7 @@ export function renderRichText<TAnnotation = never>(
           style={{ display: "flex", flexDirection: "column", gap: STACK_GAP }}
         >
           {value.parts.map((part, i) =>
-            renderRichText(part, resolve, i, options),
+            renderRichText(part, i, options),
           )}
         </div>
       );
@@ -313,7 +295,7 @@ export function renderRichText<TAnnotation = never>(
               )}
               {entry.termPresentation === "definitionOnly" ? (
                 <dd style={{ display: "inline", margin: 0 }}>
-                  {renderDefinitionText(entry.definition, resolve, options)}
+                  {renderDefinitionText(entry.definition, options)}
                 </dd>
               ) : (
                 <>
@@ -336,11 +318,11 @@ export function renderRichText<TAnnotation = never>(
                     )}
                     {entry.termPresentation === "symbolOnly"
                       ? null
-                      : renderInlineText(entry.term, resolve, options)}
+                      : renderInlineText(entry.term, options)}
                   </dt>
                   <dd style={{ display: "inline", margin: 0 }}>
                     {": "}
-                    {renderDefinitionText(entry.definition, resolve, options)}
+                    {renderDefinitionText(entry.definition, options)}
                   </dd>
                 </>
               )}

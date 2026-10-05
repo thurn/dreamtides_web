@@ -1,4 +1,3 @@
-import { tx } from "@trox/runtime";
 import { useEffect, useRef, type ReactNode } from "react";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
@@ -10,7 +9,6 @@ import {
   useGameState,
 } from "./hooks";
 import "./hosted-playtest-shell.css";
-import { useLocalizer } from "../runtime/localization/use-localizer";
 
 /** Applies the hosted-room controller policy without hiding shared content. */
 export function HostedPlaytestShell({
@@ -25,7 +23,7 @@ export function HostedPlaytestShell({
   const clientId = useClientId();
   const connectedClientIds = useConnectedClientIds();
   const control = state.playtestControl;
-  const resolve = useLocalizer();
+
   const claimRequestedRef = useRef(false);
 
   useEffect(() => {
@@ -92,17 +90,11 @@ export function HostedPlaytestShell({
       {canTakeControl ? (
         <div className="cumulus hosted-playtest-shell__status">
           <GlassPanel
-            title={tx(
-              "Player Disconnected",
-              "[coop] Title shown when the controller of a hosted playtest disconnects.",
-            )}
+            title={"Player Disconnected"}
             headerSpacing="compact"
             footer={
               <GlassButton
-                label={tx(
-                  "Take Control",
-                  "[coop] Action that claims control of a paused hosted playtest.",
-                )}
+                label={"Take Control"}
                 variant="accent"
                 placement="onGlass"
                 onPress={takeControl}
@@ -111,12 +103,9 @@ export function HostedPlaytestShell({
             testId="hosted-playtest-status"
           >
             <p className="hosted-playtest-shell__message">
-              {resolve(
-                tx(
-                  "The playtest is paused. Take control when you are ready to continue.",
-                  "[coop] Status explaining that a hosted playtest paused after its controller disconnected.",
-                ),
-              )}
+              {
+                "The playtest is paused. Take control when you are ready to continue."
+              }
             </p>
           </GlassPanel>
         </div>

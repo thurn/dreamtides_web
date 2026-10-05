@@ -1,5 +1,3 @@
-import { assertLocalized, type LocalizedString } from "@trox/runtime";
-import { plural, one, other, txa } from "@trox/runtime";
 import type { ReactElement, Ref } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { NumberStepper } from "../../components/controls/NumberStepper";
@@ -9,9 +7,9 @@ import { TextField } from "../../components/controls/TextField";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { CardId } from "../../../types/card-identity";
 import type { BattlefieldSlotId } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 export type BattleFigmentSide = "player" | "enemy";
 export type BattleFigmentZone =
@@ -24,13 +22,13 @@ export interface BattleFigmentCreatorOverlayProps {
   readonly typeId: CardId;
   readonly typeOptions: readonly {
     readonly value: CardId;
-    readonly label: LocalizedString;
+    readonly label: string;
   }[];
-  readonly keywordText: LocalizedString;
+  readonly keywordText: string;
   readonly count: number;
   readonly maxCount: number;
   readonly sparkText: string;
-  readonly sparkError?: LocalizedString;
+  readonly sparkError?: string;
   readonly baseSpark: number;
   readonly side: BattleFigmentSide;
   readonly zone: BattleFigmentZone;
@@ -38,7 +36,7 @@ export interface BattleFigmentCreatorOverlayProps {
   readonly slot: BattlefieldSlotId;
   readonly slotOptions: readonly BattlefieldSlotId[];
   readonly canSubmit: boolean;
-  readonly disabledReason: LocalizedString | null;
+  readonly disabledReason: string | null;
   readonly onNameChange: (value: string) => void;
   readonly onCountChange: (value: number) => void;
   readonly onTypeChange: (value: CardId) => void;
@@ -90,7 +88,7 @@ export function BattleFigmentCreatorOverlay({
   onCancel,
   onSubmit,
 }: BattleFigmentCreatorOverlayProps): ReactElement {
-  const resolve = useLocalizer();
+  
   const fieldLabelStyle = {
     color: token("--text-on-glass-muted"),
     font: token("--t-caption"),
@@ -98,11 +96,9 @@ export function BattleFigmentCreatorOverlay({
 
   return (
     <GlassDialog
-      title={assertLocalized("Synthesize a Figment")}
-      subtitle={assertLocalized(
-        "Choose a figment type and a valid destination.",
-      )}
-      closeLabel={assertLocalized("Cancel figment creation")}
+      title={"Synthesize a Figment"}
+      subtitle={"Choose a figment type and a valid destination."}
+      closeLabel={"Cancel figment creation"}
       onClose={onCancel}
       desktopCenterTarget="battlefield"
     >
@@ -113,13 +109,11 @@ export function BattleFigmentCreatorOverlay({
       >
         <div data-battle-figment-field="name">
           <TextField
-            label={assertLocalized("Name")}
+            label={"Name"}
             value={name}
             onChange={onNameChange}
             inputRef={nameInputRef}
-            supportingText={assertLocalized(
-              "The displayed name for this created figment.",
-            )}
+            supportingText={"The displayed name for this created figment."}
           />
         </div>
         <div
@@ -127,7 +121,7 @@ export function BattleFigmentCreatorOverlay({
           style={{ display: "grid", gap: token("--space-xs") }}
         >
           <Select
-            ariaLabel={assertLocalized("Figment type")}
+            ariaLabel={"Figment type"}
             leadingGlyph={GLYPHS.spark}
             full
             options={[...typeOptions]}
@@ -135,28 +129,26 @@ export function BattleFigmentCreatorOverlay({
             onChange={onTypeChange}
           />
           <span data-battle-figment-keyword="" style={fieldLabelStyle}>
-            {resolve(keywordText)}
+            {keywordText}
           </span>
         </div>
         <div data-battle-figment-field="spark">
           <TextField
-            label={assertLocalized("Spark")}
+            label={"Spark"}
             value={sparkText}
             onChange={onSparkChange}
             error={
               sparkError
             }
-            supportingText={assertLocalized(
-              `Base spark ${String(baseSpark)} — editable.`,
-            )}
+            supportingText={`Base spark ${String(baseSpark)} — editable.`}
           />
         </div>
         <div data-battle-figment-field="count">
           <NumberStepper
-            label={assertLocalized("Quantity")}
+            label={"Quantity"}
             value={count}
-            decrementLabel={assertLocalized("Create fewer figments")}
-            incrementLabel={assertLocalized("Create more figments")}
+            decrementLabel={"Create fewer figments"}
+            incrementLabel={"Create more figments"}
             decrementDisabled={count <= 1}
             incrementDisabled={count >= maxCount}
             testId="battle-figment-count"
@@ -171,8 +163,8 @@ export function BattleFigmentCreatorOverlay({
           <span style={fieldLabelStyle}>Side</span>
           <SegmentedControl
             options={[
-              { value: "player", label: assertLocalized("Player") },
-              { value: "enemy", label: assertLocalized("Enemy") },
+              { value: "player", label: "Player" },
+              { value: "enemy", label: "Enemy" },
             ]}
             value={side}
             onChange={(value) => onSideChange(value as BattleFigmentSide)}
@@ -185,17 +177,17 @@ export function BattleFigmentCreatorOverlay({
         >
           <span style={fieldLabelStyle}>Destination</span>
           <Select
-            ariaLabel={assertLocalized("Figment destination")}
+            ariaLabel={"Figment destination"}
             leadingGlyph={GLYPHS.grid}
             full
             options={(Object.keys(ZONE_LABELS) as BattleFigmentZone[])
               .map((value) => ({ value, label: ZONE_LABELS[value] }))
               .map((option) => ({
                 ...option,
-                label: assertLocalized(option.label),
+                label: option.label,
                 ...("triggerLabel" in option &&
                 typeof option.triggerLabel === "string"
-                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  ? { triggerLabel: option.triggerLabel }
                   : {}),
               }))}
             value={zone}
@@ -210,8 +202,8 @@ export function BattleFigmentCreatorOverlay({
             <span style={fieldLabelStyle}>Deck Position</span>
             <SegmentedControl
               options={[
-                { value: "top", label: assertLocalized("Top") },
-                { value: "bottom", label: assertLocalized("Bottom") },
+                { value: "top", label: "Top" },
+                { value: "bottom", label: "Bottom" },
               ]}
               value={position}
               onChange={(value) =>
@@ -228,17 +220,17 @@ export function BattleFigmentCreatorOverlay({
           >
             <span style={fieldLabelStyle}>Slot</span>
             <Select
-              ariaLabel={assertLocalized("Figment battlefield slot")}
+              ariaLabel={"Figment battlefield slot"}
               leadingGlyph={GLYPHS.grid}
               full
               options={slotOptions
                 .map((value) => ({ value, label: value }))
                 .map((option) => ({
                   ...option,
-                  label: assertLocalized(option.label),
+                  label: option.label,
                   ...("triggerLabel" in option &&
                   typeof option.triggerLabel === "string"
-                    ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                    ? { triggerLabel: option.triggerLabel }
                     : {}),
                 }))}
               value={slot}
@@ -248,7 +240,7 @@ export function BattleFigmentCreatorOverlay({
         ) : null}
         {canSubmit || disabledReason === null ? null : (
           <p data-battle-figment-submit-hint="" style={fieldLabelStyle}>
-            {resolve(disabledReason)}
+            {disabledReason}
           </p>
         )}
         <div
@@ -259,20 +251,13 @@ export function BattleFigmentCreatorOverlay({
           }}
         >
           <GlassButton
-            label={assertLocalized("Cancel")}
+            label={"Cancel"}
             placement="onGlass"
             testId="battle-figment-cancel"
             onPress={onCancel}
           />
           <GlassButton
-            label={txa(
-              plural(count, [
-                one("Create Figment"),
-                other("Create {count} Figments"),
-              ]),
-              { count },
-              "[battle] [developer] Primary action that creates one or more configured Figments in the battle developer creation dialog. count is an integer from 1 through the dialog's configured maximum; activating the control creates exactly that many.",
-            )}
+            label={(count === 1 ? "Create Figment" : `Create ${formatNumber(count)} Figments`)}
             placement="onGlass"
             variant="accent"
             disabled={!canSubmit}

@@ -18,14 +18,12 @@
 // (components/pills/SegmentedControl.jsx / .d.ts).
 
 import type { ReactElement } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import {
   type ControlChrome,
   controlChrome,
 } from "../../internal/control-treatment";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Height/scale variants. */
 type SegmentedControlSize = "sm" | "md";
@@ -33,15 +31,15 @@ type SegmentedControlSize = "sm" | "md";
 /** One segment whose player-facing copy stays localized. */
 export interface SegmentedOption {
   value: string;
-  label: LocalizedString;
-  ariaLabel?: LocalizedString;
+  label: string;
+  ariaLabel?: string;
 }
 
 /** A language-neutral symbol with a localized accessible name. */
 export interface SymbolSegmentedOption {
   value: string;
   symbol: string;
-  ariaLabel: LocalizedString;
+  ariaLabel: string;
 }
 
 type RenderedSegmentedOption = SegmentedOption | SymbolSegmentedOption;
@@ -94,15 +92,12 @@ function Segment({
   onSelect,
 }: SegmentProps): ReactElement {
   const { pressed, hovered, bind } = usePress();
-  const resolve = useLocalizer();
 
   return (
     <button
       type="button"
       role="tab"
-      aria-label={
-        option.ariaLabel === undefined ? undefined : resolve(option.ariaLabel)
-      }
+      aria-label={option.ariaLabel === undefined ? undefined : option.ariaLabel}
       aria-selected={active}
       onClick={() => onSelect(option.value)}
       {...bind}
@@ -131,7 +126,7 @@ function Segment({
         ...(active ? chrome.segmentActive : chrome.segmentInactive),
       }}
     >
-      {"symbol" in option ? option.symbol : resolve(option.label)}
+      {"symbol" in option ? option.symbol : option.label}
     </button>
   );
 }

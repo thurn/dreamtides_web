@@ -19,7 +19,6 @@ import { Pressable } from "../../primitives/Pressable";
 import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
-import { opaque, txa, type LocalizedString } from "@trox/runtime";
 import type {
   TideId,
   TutorialJourneyTideId,
@@ -34,9 +33,9 @@ export interface TideDiscProps {
   /** Stable id (a tide deck id) for the `data-tide-disc` QA hook. */
   id: TideId | TutorialJourneyTideId;
   /** Display name used by the source and its tide card. */
-  label: LocalizedString;
+  label: string;
   /** Semantic description revealed by this tide source. */
-  description: LocalizedString;
+  description: string;
 }
 
 /**
@@ -69,11 +68,7 @@ export function TideDisc({ tide, id, label, description }: TideDiscProps) {
       ref={binding.ref}
       {...binding.sourceProps}
       data-tide-disc={id}
-      ariaLabelMessage={txa(
-        "Tide: {tide_name}",
-        { tide_name: opaque(label) },
-        "[accessibility] Name for an interactive Tide object. tide_name is its canonical authored display name and has unknown grammatical gender.",
-      )}
+      ariaLabelMessage={`Tide: ${label}`}
       tabIndex={0}
       style={{
         ...binding.sourceProps.style,

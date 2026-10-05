@@ -11,12 +11,8 @@ import {
   buildMobileBattleView,
 } from "./mobile-battle-view-model";
 import { rankSlotIds } from "../../battle/types";
-import { tx } from "@trox/runtime";
 
-const INACTIVE_TUTORIAL_AVATAR_ABILITY = tx(
-  "Avatar ability is not active",
-  "[battle] [tutorial] [avatar] Unavailable-state description for an Avatar whose ability is disabled during the tutorial battle.",
-);
+const INACTIVE_TUTORIAL_AVATAR_ABILITY = "Avatar ability is not active";
 
 function withInactiveTutorialAvatarAbility(
   side: MobileBattleSideView,

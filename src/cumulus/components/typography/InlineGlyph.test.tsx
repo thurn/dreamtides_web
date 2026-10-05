@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
@@ -18,7 +17,7 @@ describe("InlineGlyph", () => {
       <InlineGlyph
         glyph={GLYPHS.points}
         color="text-primary"
-        label={assertLocalized("points")}
+        label={"points"}
       />,
     );
 
@@ -45,7 +44,7 @@ describe("InlineGlyph", () => {
 
   it("constrains the memory mark to the one-em metric box", () => {
     const markup = renderLocalizedToStaticMarkup(
-      <InlineGlyph glyph={GLYPHS.memory} label={assertLocalized("memory")} />,
+      <InlineGlyph glyph={GLYPHS.memory} label={"memory"} />,
     );
 
     expect(markup).toContain('class="bxf bx-brain"');

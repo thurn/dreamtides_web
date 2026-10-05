@@ -1,4 +1,3 @@
-import type { LocalizedString } from "@trox/runtime";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -9,17 +8,12 @@ import type { SiteState, SiteType } from "../types/journey";
 import type { GuideId } from "../types/identifiers";
 import { SITE_TYPES } from "../types/site-type";
 import {
-  bindSourceTransport,
-  hydrateSourceTransport,
-  localizedSourceText,
-} from "../runtime/localization/runtime";
-import { localizedGuideDialogue } from "../runtime/localization/runtime-templates.generated";
-import {
   affiliationsDocument,
   apollyonIncarnationsDocument,
   dreamGuidesDocument,
   dreamscapesDocument,
 } from "../content/documents";
+import { fillTemplate, requireText } from "../runtime/text";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.
@@ -61,10 +55,7 @@ export function loadDreamscapes(): DreamscapeContent[] {
     ...(dreamscape.atlasDescription === undefined
       ? {}
       : {
-          atlasDescription: hydrateSourceTransport(
-            dreamscape.atlasDescription,
-            `Dreamscape ${dreamscape.id} Atlas description`,
-          ),
+          atlasDescription: requireText(dreamscape.atlasDescription, `Dreamscape ${dreamscape.id} Atlas description`),
         }),
   }));
 }
@@ -104,10 +95,7 @@ export function parseDreamGuides(catalog: unknown): DreamGuideContent[] {
       Object.entries(guide.dialogue).map(([context, lines]) => [
         context,
         lines.map((line, index) =>
-          hydrateSourceTransport(
-            line,
-            `Dream Guide ${guide.id} ${context}[${String(index)}]`,
-          ),
+          requireText(line, `Dream Guide ${guide.id} ${context}[${String(index)}]`),
         ),
       ]),
     ),
@@ -164,23 +152,12 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
       !Array.isArray(lines) ||
       lines.length === 0 ||
       lines.some(
-        (line: unknown) =>
-          (typeof line !== "string" || line.trim() === "") &&
-          !(
-            typeof line === "object" &&
-            line !== null &&
-            "format" in line &&
-            line.format === "trox-source-message-ref"
-          ),
+        (line: unknown) => typeof line !== "string" || line.trim() === "",
       )
     ) {
       return false;
     }
-    for (const line of lines) {
-      if (typeof line !== "string") {
-        if (context === "gamble-ladder-climb") hasWinEssenceSlot = true;
-        continue;
-      }
+    for (const line of lines as string[]) {
       const slots = [...line.matchAll(TEMPLATE_SLOT)].map((match) => match[1]);
       if (
         slots.some(
@@ -292,17 +269,13 @@ export function requireGuideForSiteType(
 export function guideDialogueLines(
   guide: DreamGuideContent,
   context: string,
-  values: Readonly<Record<string, LocalizedString | number>> = {},
-): readonly LocalizedString[] {
+  values: Readonly<Record<string, string | number>> = {},
+): readonly string[] {
   const lines = guide.dialogue[context];
   if (lines === undefined || lines.length === 0) {
     throw new Error(`Dream Guide ${guide.id} has no ${context} dialogue.`);
   }
-  return lines.map((line) => {
-    if (typeof line !== "string") return bindSourceTransport(line, values);
-    const staticDialogue = localizedGuideDialogue(line);
-    return staticDialogue ?? localizedSourceText(line, values);
-  });
+  return lines.map((line) => fillTemplate(line, values));
 }
 
 /** Resolve the guide for a concrete site, honoring Random Site hosting. */

@@ -1,7 +1,5 @@
-import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../../runtime/localization/testing";
-import { resolveSource } from "../../../runtime/localization/runtime";
+import { annotatedTextEquality } from "../../testing/annotated-text";
 import { parseCardName } from "../../../types/card-identity";
 import type { AuguryArchetypeData } from "../../../types/augury-data";
 import type { CardData } from "../../../types/cards";
@@ -13,7 +11,7 @@ import {
 } from "./offer-tile-descriptions";
 import { testCardId, testOfferTileId } from "../../../types/test-identities";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 
 const CARD: Readonly<CardData> = {
   id: testCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
@@ -46,10 +44,10 @@ describe("offer tile descriptions", () => {
       "Target {cardName}",
     );
 
-    expect(resolveSource(auguryOfferHeadline(model, presentation))).toBe(
+    expect(auguryOfferHeadline(model, presentation)).toBe(
       "Fixture headline",
     );
-    expect(resolveSource(offerTileDescription(model, presentation))).toBe(
+    expect(offerTileDescription(model, presentation)).toBe(
       "Target Fixture Card",
     );
   });
@@ -74,10 +72,10 @@ describe("offer tile descriptions", () => {
       cards: [CARD, CARD],
     };
 
-    expect(resolveSource(offerTileDescription(one, presentation))).toBe(
+    expect(offerTileDescription(one, presentation)).toBe(
       "Fixture singular 1",
     );
-    expect(resolveSource(offerTileDescription(two, presentation))).toBe(
+    expect(offerTileDescription(two, presentation)).toBe(
       "Fixture plural 2",
     );
   });
@@ -101,10 +99,10 @@ describe("offer tile descriptions", () => {
       id: testOfferTileId("category"),
       kind: "category-draft",
       cards: [CARD, CARD],
-      category: { kind: "subtype", name: assertLocalized("Spirit Animal") },
+      category: { kind: "subtype", name: "Spirit Animal" },
     };
 
-    expect(resolveSource(offerTileDescription(model, presentation))).toBe(
+    expect(offerTileDescription(model, presentation)).toBe(
       "Fixture subtype Spirit Animal",
     );
 
@@ -114,11 +112,11 @@ describe("offer tile descriptions", () => {
       cards: [CARD, CARD],
       category: {
         kind: "package",
-        name: assertLocalized("Fixture Tide package"),
+        name: "Fixture Tide package",
       },
     };
     expect(
-      resolveSource(offerTileDescription(packageModel, presentation)),
+      offerTileDescription(packageModel, presentation),
     ).toBe("Fixture package Fixture Tide package");
   });
 
@@ -134,7 +132,7 @@ describe("offer tile descriptions", () => {
     );
 
     expect(() =>
-      resolveSource(offerTileDescription(model, presentation)),
+      offerTileDescription(model, presentation),
     ).toThrow(/missing value for \{cardName\}/u);
   });
 
@@ -152,11 +150,11 @@ describe("offer tile descriptions", () => {
 
     expect(richDescription.kind).toBe("plain");
     if (richDescription.kind !== "plain") return;
-    expect(resolveSource(richDescription.text)).toBe(
-      resolveSource(auguryOfferHeadline(model, presentation)),
+    expect(richDescription.text).toBe(
+      auguryOfferHeadline(model, presentation),
     );
-    expect(resolveSource(richDescription.text)).not.toBe(
-      resolveSource(offerTileDescription(model, presentation)),
+    expect(richDescription.text).not.toBe(
+      offerTileDescription(model, presentation),
     );
   });
 

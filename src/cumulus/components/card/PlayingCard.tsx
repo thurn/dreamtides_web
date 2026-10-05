@@ -15,8 +15,6 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
-import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 type PrizeRevealSourceBinding = ReturnType<typeof useRevealSource>;
 
@@ -216,15 +214,8 @@ function PlayingCardRim({
   );
 }
 
-function frontAriaLabel(
-  rank: PlayingCardRank,
-  suit: PlayingCardSuit,
-): LocalizedString {
-  return txa(
-    "{rank} of {suit}",
-    { rank, suit },
-    "[accessibility] Name for a revealed standard playing card. rank and suit are its canonical authored display values.",
-  );
+function frontAriaLabel(rank: PlayingCardRank, suit: PlayingCardSuit): string {
+  return `${rank} of ${suit}`;
 }
 
 export interface PlayingCardSuitMarkProps {
@@ -379,7 +370,6 @@ export type PlayingCardProps =
  * Reprise uses its concealed suit-grid variant and built-in result flip.
  */
 export function PlayingCard(props: PlayingCardProps): ReactElement {
-  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const size = props.size ?? "standard";
   const emphasis = props.emphasis ?? "standard";
@@ -389,10 +379,7 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
   const visibleCard = showingDrawnCard ? props.drawnCard : null;
   const label =
     visibleCard === null
-      ? tx(
-          "Face-down four-suit playing card",
-          "[accessibility] [gamble] Name for a concealed Four-Suit Reprise playing card.",
-        )
+      ? "Face-down four-suit playing card"
       : frontAriaLabel(visibleCard.rank, visibleCard.suit);
   const state = showingDrawnCard ? "drawn" : "concealed";
   const surfaceStyle: CSSProperties = {
@@ -416,7 +403,7 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
   return (
     <div
       role="img"
-      aria-label={resolve(label)}
+      aria-label={label}
       data-playing-card={
         visibleCard === null
           ? props.variant === "faceDown"
@@ -507,11 +494,11 @@ export interface PlayingCardPrizeProps<ObjectId extends string> {
   /** Stable identity for this prize object. */
   objectId: ObjectId;
   /** Localized heading printed on the prize face. */
-  title: LocalizedString;
+  title: string;
   /** Localized supporting copy printed beneath the heading. */
-  description: LocalizedString;
+  description: string;
   /** Complete localized accessible name for the concealed prize face. */
-  accessibilityLabel: LocalizedString;
+  accessibilityLabel: string;
   /** Named compact or standard square size. Defaults to `standard`. */
   size?: PlayingCardSize;
   /** Committed card shown on the reverse face after a bet. */
@@ -586,7 +573,6 @@ function PlayingCardPrizeObject<ObjectId extends string>({
 }: PlayingCardPrizeProps<ObjectId> & {
   revealBinding?: PrizeRevealSourceBinding;
 }): ReactElement {
-  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
@@ -628,7 +614,7 @@ function PlayingCardPrizeObject<ObjectId extends string>({
               size === "standard" ? token("--t-title") : token("--t-title-sm"),
           }}
         >
-          {resolve(title)}
+          {title}
         </h2>
         <p
           data-playing-card-prize-description=""
@@ -646,7 +632,7 @@ function PlayingCardPrizeObject<ObjectId extends string>({
               relatedDreamsign === null ? undefined : ""
             }
           >
-            {resolve(description)}
+            {description}
           </span>
         </p>
       </div>
@@ -669,9 +655,7 @@ function PlayingCardPrizeObject<ObjectId extends string>({
   return (
     <div
       role={showingDrawnCard ? "img" : "group"}
-      aria-label={resolve(
-        showingDrawnCard ? drawnCardLabel : accessibilityLabel,
-      )}
+      aria-label={showingDrawnCard ? drawnCardLabel : accessibilityLabel}
       data-playing-card-prize={objectId}
       data-playing-card-prize-state={showingDrawnCard ? "drawn" : "prize"}
       data-playing-card-prize-size={size}
@@ -727,11 +711,7 @@ function PlayingCardPrizeObject<ObjectId extends string>({
             {...revealBinding.sourceProps}
             role="button"
             tabIndex={showingDrawnCard ? -1 : 0}
-            ariaLabelMessage={txa(
-              "Dreamsign: {dreamsign_name}",
-              { dreamsign_name: opaque(relatedDreamsign.name) },
-              "[accessibility] [dreamsign] Name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
-            )}
+            ariaLabelMessage={`Dreamsign: ${relatedDreamsign.name}`}
             aria-hidden={showingDrawnCard || undefined}
             pressFeedback="stationary"
             hoverFeedback="stationary"

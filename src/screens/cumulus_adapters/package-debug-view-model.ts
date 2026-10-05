@@ -13,21 +13,20 @@ import {
   extractDraftDebugInfo,
   extractPackageDebugInfo,
 } from "../debug-helpers";
-import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import type { DreamsignId } from "../../types/identifiers";
 
-const VALUE_LABELS: Readonly<Record<PackageDebugValueId, LocalizedString>> = {
-  "starting-essence": assertLocalized("Starting Essence"),
-  "draft-pool": assertLocalized("Draft Pool"),
-  "dreamsigns-left": assertLocalized("Dreamsigns Left"),
-  "dreamsigns-spent": assertLocalized("Dreamsigns Spent"),
-  pick: assertLocalized("Pick"),
-  remaining: assertLocalized("Remaining"),
-  unique: assertLocalized("Unique"),
-  mandatory: assertLocalized("Mandatory-only pool"),
-  doubled: assertLocalized("Doubled cards"),
-  legal: assertLocalized("Legal subsets"),
-  preferred: assertLocalized("Preferred subsets"),
+const VALUE_LABELS: Readonly<Record<PackageDebugValueId, string>> = {
+  "starting-essence": "Starting Essence",
+  "draft-pool": "Draft Pool",
+  "dreamsigns-left": "Dreamsigns Left",
+  "dreamsigns-spent": "Dreamsigns Spent",
+  pick: "Pick",
+  remaining: "Remaining",
+  unique: "Unique",
+  mandatory: "Mandatory-only pool",
+  doubled: "Doubled cards",
+  legal: "Legal subsets",
+  preferred: "Preferred subsets",
 };
 
 export function buildPackageDebugView(
@@ -63,7 +62,7 @@ export function buildPackageDebugView(
     avatar:
       pkg?.avatarName === undefined
         ? null
-        : assertLocalized(pkg.avatarName),
+        : pkg.avatarName,
     validation:
       pkg === null
         ? []
@@ -75,19 +74,19 @@ export function buildPackageDebugView(
           ],
     remainingDreamsigns: (pkg?.remainingDreamsigns ?? []).map((entry) => ({
       id: entry.id,
-      label: assertLocalized(entry.name),
+      label: entry.name,
     })),
     spentDreamsigns: (pkg?.spentDreamsigns ?? []).map((entry) => ({
       id: entry.id,
-      label: assertLocalized(entry.name),
+      label: entry.name,
     })),
     currentOffer: (draft?.currentOffer ?? []).map((card) => ({
       id: card.id,
-      label: assertLocalized(card.name),
+      label: card.name,
     })),
     topRemainingCards: (draft?.topRemainingCards ?? []).map((card) => ({
       id: packageDebugCardEntryId(card.cardNumber),
-      label: assertLocalized(`${card.name} ×${String(card.copiesRemaining)}`),
+      label: `${card.name} ×${String(card.copiesRemaining)}`,
     })),
   };
 }
@@ -96,7 +95,7 @@ function value(id: PackageDebugValueId, amount: number) {
   return {
     id,
     label: VALUE_LABELS[id],
-    value: assertLocalized(String(amount)),
+    value: String(amount),
   };
 }
 

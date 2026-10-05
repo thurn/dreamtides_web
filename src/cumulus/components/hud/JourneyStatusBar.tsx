@@ -37,21 +37,11 @@ import type { AvatarId } from "../../../types/identifiers";
 // embedded as a data URI (150×233, rendered at 63px tall) so there is no
 // separate asset to load.
 
-import {
-  meaning,
-  tx,
-  plural,
-  one,
-  other,
-  txa,
-  type LocalizedString,
-} from "@trox/runtime";
 import * as React from "react";
 import type { CSSProperties, ReactElement } from "react";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
@@ -76,6 +66,7 @@ import {
   BATTLE_HUD_START_CLEARANCE_PROPERTY,
 } from "../../primitives/battle-hud-layout";
 import "./journey-status-bar.css";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** Zooms the avatar bust render so the face fills the circular frame. A
  * bespoke crop factor, named so it reads as an intentional framing crop rather
@@ -130,13 +121,13 @@ export type QsbDreamsign = LocalizedDreamsign;
 export interface QsbAvatar {
   /** Stable Avatar UUID. */
   id: AvatarId;
-  name: LocalizedString;
-  epithet?: LocalizedString;
+  name: string;
+  epithet?: string;
   /** The portrait art as an {@link ArtRef}. Required — a docked Avatar always has art. */
   portrait: ArtRef;
   /** Normalized head position used to center the square HUD crop. */
   portraitFocus?: AvatarPortraitFocus;
-  ability?: LocalizedString;
+  ability?: string;
 }
 
 export interface JourneyStatusBarProps {
@@ -179,14 +170,7 @@ function QsbOverflowStack({
     <Pressable
       as="button"
       onClick={onOpenWindow}
-      ariaLabelMessage={txa(
-        plural(signs.length, [
-          one("View {count} Dreamsign"),
-          other("View {count} Dreamsigns"),
-        ]),
-        { count: signs.length },
-        "[accessibility] [dreamsign] [journey] Name for the Journey status-bar control that opens the player's Dreamsign gallery. count is the positive number of collected Dreamsigns.",
-      )}
+      ariaLabelMessage={(signs.length === 1 ? `View ${formatNumber(signs.length)} Dreamsign` : `View ${formatNumber(signs.length)} Dreamsigns`)}
       style={{
         display: "flex",
         alignItems: "center",
@@ -331,7 +315,7 @@ function QsbDreamsignWindow({
   signs: QsbDreamsign[];
   onClose: () => void;
 }): ReactElement {
-  const resolve = useLocalizer();
+  
   return (
     <div
       onClick={onClose}
@@ -373,20 +357,12 @@ function QsbDreamsignWindow({
               color: token("--text-primary"),
             }}
           >
-            {resolve(
-              tx(
-                "Dreamsigns",
-                "[dreamsign] Section label for the player's collected Dreamsigns.",
-              ),
-            )}
+            {"Dreamsigns"}
           </h2>
           <IconButton
             glyph={GLYPHS.close}
             size="sm"
-            label={tx(
-              meaning("dreamsign-window-close", "Close"),
-              "[dreamsign] [journey] Command that closes the Journey status-bar Dreamsign window.",
-            )}
+            label={"Close"}
             onPress={onClose}
           />
         </div>
@@ -419,7 +395,7 @@ function QsbAvatarBust({
   /** The docked Avatar, or undefined for the empty placeholder frame. */
   avatar?: QsbAvatar;
 }): ReactElement {
-  const resolve = useLocalizer();
+  
   const binding = useRevealSource({
     identity: {
       entityType: "avatar",
@@ -432,12 +408,9 @@ function QsbAvatarBust({
               kind: "infoCard",
               card: {
                 variant: "text",
-                title: tx(
-                  meaning("journey-avatar-label", "Avatar"),
-                  "[journey] Shared journey-status labels and controls.",
-                ),
+                title: "Avatar",
                 body: richText.plain(
-                  tx("No avatar is active.", "[journey] Status no avatar."),
+                  "No avatar is active.",
                 ),
               },
             },
@@ -466,10 +439,7 @@ function QsbAvatarBust({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      ariaLabelMessage={tx(
-        meaning("journey-avatar-control", "Avatar"),
-        "[accessibility] [avatar] [journey] Name for the active Avatar control in the Journey status bar.",
-      )}
+      ariaLabelMessage={"Avatar"}
       tabIndex={0}
       style={{
         // width/height are fixed by journey-status-bar.css (var(--qsb-dc-size),
@@ -495,7 +465,7 @@ function QsbAvatarBust({
       {avatar && (
         <img
           src={resolveArtRef(avatar.portrait)}
-          alt={resolve(avatar.name)}
+          alt={avatar.name}
           style={{
             position: "relative",
             left: `${String((0.5 - focusX) * 100)}%`,
@@ -544,10 +514,7 @@ function QsbEssence({
       {...binding.sourceProps}
       role="button"
       tabIndex={0}
-      ariaLabelMessage={tx(
-        "Essence Total",
-        "[accessibility] [journey] Status essence name.",
-      )}
+      ariaLabelMessage={"Essence Total"}
       style={{
         ...binding.sourceProps.style,
         display: "inline-flex",
@@ -623,14 +590,7 @@ function QsbHudBar({
         as="button"
         className="qsbDeck"
         data-journey-deck-target=""
-        ariaLabelMessage={txa(
-          plural(deck, [
-            one("View deck containing {count} Card"),
-            other("View deck containing {count} Cards"),
-          ]),
-          { count: deck },
-          "[accessibility] [journey] Name for the Journey status-bar control that opens the current player's deck. count is the non-negative current deck size and can be zero.",
-        )}
+        ariaLabelMessage={(deck === 1 ? `View deck containing ${formatNumber(deck)} Card` : `View deck containing ${formatNumber(deck)} Cards`)}
         onClick={onViewDeck}
         style={{
           height: Math.round(66 * scale),

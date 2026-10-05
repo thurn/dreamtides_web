@@ -1,5 +1,3 @@
-import { localizedSourceText } from "../../runtime/localization/runtime";
-import { tx } from "@trox/runtime";
 import type {
   MobileBattleCardView,
   MobileBattleInspectorSideView,
@@ -268,8 +266,8 @@ function tutorialDreamwellModel(card: DreamwellCard) {
     cardId,
     displaySnapshot: {
       id: cardId,
-      name: localizedSourceText(card.name),
-      renderedText: localizedSourceText(card.renderedText),
+      name: card.name,
+      renderedText: card.renderedText,
       energyAdded: card.energyAdded,
       imageNumber: card.imageNumber ?? 0,
       ...(card.art === undefined ? {} : { art: card.art }),
@@ -866,18 +864,15 @@ export function buildTutorialView(
       player: {
         visual: {
           imageNumber: playerAvatar.imageNumber,
-          name: localizedSourceText(playerAvatar.name),
-          title: localizedSourceText(playerAvatar.title),
+          name: playerAvatar.name,
+          title: playerAvatar.title,
           ...(playerAvatar.portraitFocus === undefined
             ? {}
             : { portraitFocus: playerAvatar.portraitFocus }),
         },
         profile: {
           id: battleConfiguration.playerAvatarId,
-          ability: tx(
-            "Avatar ability is not active",
-            "[battle] [tutorial] [avatar] Unavailable-state description for an Avatar whose ability is disabled during the tutorial battle.",
-          ),
+          ability: "Avatar ability is not active",
           unavailable: true,
         },
         settled: avatarSettled("player"),
@@ -885,18 +880,15 @@ export function buildTutorialView(
       enemy: {
         visual: {
           imageNumber: opponentAvatar.imageNumber,
-          name: localizedSourceText(opponentAvatar.name),
-          title: localizedSourceText(opponentAvatar.title),
+          name: opponentAvatar.name,
+          title: opponentAvatar.title,
           ...(opponentAvatar.portraitFocus === undefined
             ? {}
             : { portraitFocus: opponentAvatar.portraitFocus }),
         },
         profile: {
           id: battleConfiguration.enemyAvatarId,
-          ability: tx(
-            "Avatar ability is not active",
-            "[battle] [tutorial] [avatar] Unavailable-state description for an Avatar whose ability is disabled during the tutorial battle.",
-          ),
+          ability: "Avatar ability is not active",
           unavailable: true,
         },
         settled: avatarSettled("enemy"),
@@ -927,9 +919,9 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               speakerName:
                 dialogue.speechBubble.speaker === "player"
-                  ? localizedSourceText(playerAvatar.name)
-                  : localizedSourceText(opponentAvatar.name),
-              text: localizedSourceText(dialogue.speechBubble.text),
+                  ? playerAvatar.name
+                  : opponentAvatar.name,
+              text: dialogue.speechBubble.text,
             }
           : {
               actionId: dialogue.actionId,
@@ -948,15 +940,9 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
-                portraitAlt: tx(
-                  "Mira",
-                  "[tutorial] Name of the tutorial guide.",
-                ),
-                speakerName: tx(
-                  "Mira",
-                  "[tutorial] Name of the tutorial guide.",
-                ),
-                text: localizedSourceText(dialogue.speechBubble.text),
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: dialogue.speechBubble.text,
               },
             },
     playbackRunId: playback?.runId ?? null,
@@ -966,7 +952,7 @@ export function buildTutorialView(
         ? null
         : {
             actionId: currentAction.id,
-            text: localizedSourceText(currentAction.text),
+            text: currentAction.text,
             wait: currentAction.wait,
             trigger:
               currentAction.trigger ?? "player-turn-announcement-complete",

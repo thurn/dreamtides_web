@@ -6,7 +6,6 @@ import {
   type ApplicationStateComparisonValue,
 } from "../cumulus/screens/ApplicationStateScreen";
 import type { ContentConfig } from "../eventlog/types";
-import { tx, type LocalizedString } from "@trox/runtime";
 
 interface ConfigGateScreenProps {
   /** The content config pinned in the room's genesis, or undefined if the genesis predates config pinning. */
@@ -28,26 +27,14 @@ export function ConfigGateScreen({
     <ApplicationStateScreen
       view={{
         kind: "contentConfigGate",
-        title: tx(
-          "This Game Uses Different Settings",
-          "[coop] Title for a shared-room gate whose content settings differ from this client.",
-        ),
-        message: tx(
-          "Both players use the same content settings to play together.",
-          "[coop] Explanation that all participants in a shared room must use matching content settings.",
-        ),
+        title: "This Game Uses Different Settings",
+        message: "Both players use the same content settings to play together.",
         comparison: configComparisonRows(roomContentConfig, localContentConfig),
-        detail: tx(
-          "This game needs settings this build cannot adopt.",
-          "[coop] Detail explaining that this client cannot adopt the shared room's content settings.",
-        ),
+        detail: "This game needs settings this build cannot adopt.",
         actions: [
           {
             id: "primary",
-            label: tx(
-              "Create New Game",
-              "[coop] Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
-            ),
+            label: "Create New Game",
             onPress: onStartNewGame,
           },
         ],
@@ -84,48 +71,24 @@ function configComparisonKey(
   return value === undefined ? `unavailable:${kind}` : `hash:${value}`;
 }
 
-function configLabel(kind: ConfigKind): LocalizedString {
+function configLabel(kind: ConfigKind): string {
   switch (kind) {
     case "atlas":
-      return tx(
-        "Atlas Rules",
-        "[coop] Comparison-row label for the shared room's Atlas rules fingerprint.",
-      );
+      return "Atlas Rules";
     case "site":
-      return tx(
-        "Site Rules",
-        "[coop] Comparison-row label for the shared room's Site rules fingerprint.",
-      );
+      return "Site Rules";
     case "draft-rules":
-      return tx(
-        "Draft Rules",
-        "[coop] Comparison-row label for the shared room's Draft rules fingerprint.",
-      );
+      return "Draft Rules";
     case "economy":
-      return tx(
-        "Economy Rules",
-        "[coop] Comparison-row label for the shared room's economy rules fingerprint.",
-      );
+      return "Economy Rules";
     case "gamble":
-      return tx(
-        "Gamble Rules",
-        "[gamble] [coop] Comparison-row label for the shared room's Gamble rules fingerprint.",
-      );
+      return "Gamble Rules";
     case "transfiguration":
-      return tx(
-        "Transfiguration Rules",
-        "[transfiguration] [coop] Comparison-row label for the shared room's Transfiguration rules fingerprint.",
-      );
+      return "Transfiguration Rules";
     case "opponent":
-      return tx(
-        "Opponent Rules",
-        "[coop] Comparison-row label for the shared room's opponent rules fingerprint.",
-      );
+      return "Opponent Rules";
     case "tutorial":
-      return tx(
-        "Tutorial Rules",
-        "[tutorial] [coop] Comparison-row label for the shared room's tutorial rules fingerprint.",
-      );
+      return "Tutorial Rules";
   }
 }
 
@@ -135,17 +98,14 @@ function rawConfigValue(
   return value === undefined
     ? {
         kind: "message",
-        message: tx(
-          "Unavailable",
-          "[coop] Comparison-table value for content settings unavailable in a shared room.",
-        ),
+        message: "Unavailable",
       }
     : { kind: "raw", value };
 }
 
 function describeConfig(config: ContentConfig | undefined): readonly {
   readonly kind: ConfigKind;
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly value: ApplicationStateComparisonValue;
   readonly comparisonKey: ConfigComparisonKey;
 }[] {

@@ -18,7 +18,6 @@
 // press, up on hover); `disabled` dims the full control, marks it
 // `aria-disabled`, and detaches its click and press feedback.
 
-import type { LocalizedString } from "@trox/runtime";
 import type { DomTestId } from "../../types/dom";
 import type { ReactElement } from "react";
 import { StandaloneGlyph } from "./StandaloneGlyph";
@@ -31,7 +30,6 @@ import {
   controlChrome,
   glassAccentChrome,
 } from "../../internal/control-treatment";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Named control heights (px): standard aligns with the control cluster while
  * prominent supplies the larger primary-action target. */
@@ -49,14 +47,14 @@ export type GlassButtonSize = "prominent" | "standard" | "compact";
 
 /** One possible label/essence-cost state whose intrinsic width is reserved. */
 export interface GlassButtonWidthReservation {
-  label: LocalizedString;
+  label: string;
   essenceCost?: number | null;
 }
 
 /** Core GlassButton props shared by structured action models. */
 export interface GlassButtonAction {
   /** The button's text, centered by the component at every rendered width. */
-  label: LocalizedString;
+  label: string;
   /** Fires when the button is activated (no-op while disabled). */
   onPress: () => void;
   /** Optional leading glyph painted as a `StandaloneGlyph` before the label. */
@@ -120,7 +118,7 @@ interface GlassButtonOptions {
   /** Toggle state for controls whose action switches a persistent local mode. */
   pressed?: boolean;
   /** Accessible name when the visible label alone does not distinguish siblings. */
-  accessibilityLabel?: LocalizedString;
+  accessibilityLabel?: string;
 }
 
 export interface GlassButtonProps
@@ -147,7 +145,6 @@ export function GlassButton({
   accessibilityLabel,
   testId,
 }: GlassButtonProps): ReactElement {
-  const resolve = useLocalizer();
   const chrome = controlChrome(placement);
   const variantChrome = resolveVariantChrome(variant, placement);
   return (
@@ -157,9 +154,7 @@ export function GlassButton({
       data-glass-variant={variant}
       data-testid={testId}
       aria-label={
-        accessibilityLabel === undefined
-          ? undefined
-          : resolve(accessibilityLabel)
+        accessibilityLabel === undefined ? undefined : accessibilityLabel
       }
       aria-pressed={pressed}
       data-pressed={pressed === undefined ? undefined : String(pressed)}
@@ -250,11 +245,10 @@ function GlassButtonContent({
   essenceCost,
   essenceValue,
 }: {
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly essenceCost: number | null;
   readonly essenceValue: number | null;
 }): ReactElement {
-  const resolve = useLocalizer();
   return (
     <span
       data-glass-button-content=""
@@ -266,7 +260,7 @@ function GlassButtonContent({
         gap: 0,
       }}
     >
-      <span>{resolve(label)}</span>
+      <span>{label}</span>
       {essenceCost !== null && (
         <span
           data-glass-button-essence-cost=""

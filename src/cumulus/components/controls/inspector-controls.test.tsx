@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 
-import { assertLocalized } from "@trox/runtime";
 import { act, useState, type ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CardOrderEditor } from "./CardOrderEditor";
@@ -33,12 +32,12 @@ describe("inspector Cumulus controls", () => {
     const increment = vi.fn();
     const { container } = renderInCumulus(
       <NumberStepper
-        label={assertLocalized("Energy")}
+        label={"Energy"}
         value={2}
-        displayValue={assertLocalized("2/4")}
+        displayValue={"2/4"}
         resource="energy"
-        decrementLabel={assertLocalized("Decrease energy")}
-        incrementLabel={assertLocalized("Increase energy")}
+        decrementLabel={"Decrease energy"}
+        incrementLabel={"Increase energy"}
         onDecrement={decrement}
         onIncrement={increment}
       />,
@@ -68,7 +67,7 @@ describe("inspector Cumulus controls", () => {
       const [open, setOpen] = useState(false);
       return (
         <DisclosureSection
-          title={assertLocalized("Details")}
+          title={"Details"}
           expanded={open}
           onExpandedChange={setOpen}
         >
@@ -85,7 +84,7 @@ describe("inspector Cumulus controls", () => {
   it("owns placement-aware DisclosureSection surface chrome", () => {
     const { container } = renderInCumulus(
       <DisclosureSection
-        title={assertLocalized("Details")}
+        title={"Details"}
         expanded={false}
         onExpandedChange={vi.fn()}
         placement="onGlass"
@@ -103,7 +102,7 @@ describe("inspector Cumulus controls", () => {
     const onChange = vi.fn();
     const { container } = renderInCumulus(
       <TextField
-        label={assertLocalized("Search cards")}
+        label={"Search cards"}
         kind="search"
         value="moth"
         onChange={onChange}
@@ -125,10 +124,10 @@ describe("inspector Cumulus controls", () => {
     const onOrderChange = vi.fn();
     const { container } = renderInCumulus(
       <CardOrderEditor
-        label={assertLocalized("Deck order")}
+        label={"Deck order"}
         items={[
-          { id: "instance-a", label: assertLocalized("A") },
-          { id: "instance-b", label: assertLocalized("B") },
+          { id: "instance-a", label: "A" },
+          { id: "instance-b", label: "B" },
         ]}
         onOrderChange={onOrderChange}
       />,
@@ -148,8 +147,8 @@ describe("inspector Cumulus controls", () => {
   it("owns standalone CardOrderEditor surface chrome by default", () => {
     const { container } = renderInCumulus(
       <CardOrderEditor
-        label={assertLocalized("Deck order")}
-        items={[{ id: "instance-a", label: assertLocalized("A") }]}
+        label={"Deck order"}
+        items={[{ id: "instance-a", label: "A" }]}
         onOrderChange={vi.fn()}
       />,
     );

@@ -3,7 +3,6 @@ import type { CardId } from "../../types/card-identity";
 import type { JourneyState } from "../../types/journey";
 import type { JourneyCompleteView } from "../../cumulus/screens/JourneyCompleteScreen";
 import { buildStartingDeckCards } from "./starting-deck-view-model";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /** Build the victory statistics shown on the completion surface. */
 export function buildJourneyCompleteView(
@@ -18,9 +17,9 @@ export function buildJourneyCompleteView(
         ? null
         : {
             id: state.avatar.id,
-            name: localizedSourceText(state.avatar.name),
-            title: localizedSourceText(state.avatar.title),
-            ability: localizedSourceText(state.avatar.renderedText),
+            name: state.avatar.name,
+            title: state.avatar.title,
+            ability: state.avatar.renderedText,
             imageNumber: state.avatar.imageNumber,
             ...(state.avatar.portraitFocus === undefined
               ? {}

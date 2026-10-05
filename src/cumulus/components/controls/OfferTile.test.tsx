@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -15,14 +14,12 @@ import {
   type OfferTileModel,
 } from "./OfferTile";
 import { auguryOfferHeadline } from "./offer-tile-descriptions";
-import { resolveSource } from "../../../runtime/localization/runtime";
 import type { CardData } from "../../../types/cards";
 import {
   testCardId,
   testDreamsignId,
   testOfferTileId,
 } from "../../../types/test-identities";
-
 
 function fixtureCard(
   cardId: CardId,
@@ -336,7 +333,7 @@ describe("OfferTile", () => {
       "augury-offer-above-source",
     );
     expect(source.getAttribute("aria-label")).toBe(
-      resolveSource(auguryOfferHeadline(MODEL, PRESENTATION)),
+      auguryOfferHeadline(MODEL, PRESENTATION),
     );
 
     act(() => source.click());
@@ -360,7 +357,7 @@ describe("OfferTile", () => {
       kind: "dreamsign-gift",
       dreamsign: {
         id: testDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
-        name: assertLocalized("Amplified Acorn"),
+        name: "Amplified Acorn",
         art: { kind: "dreamsign", imageName: "acorn_gold.png" },
       },
     };
@@ -369,7 +366,7 @@ describe("OfferTile", () => {
       kind: "add-site",
       site: {
         id: "Duplication",
-        name: assertLocalized("Duplication"),
+        name: "Duplication",
         glyph: GLYPHS.copy,
       },
     };

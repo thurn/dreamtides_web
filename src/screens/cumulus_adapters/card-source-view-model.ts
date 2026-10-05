@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import type {
   CardSourceNarrativeLine,
   CardSourceView,
@@ -23,7 +22,7 @@ export function buildCardSourceView(
       const card = cardDatabase.get(entry.cardNumber);
       return {
         id: `card:${entry.cardNumber}:${index}`,
-        text: assertLocalized(copy(entry)),
+        text: copy(entry),
         card:
           card === undefined
             ? null
@@ -33,19 +32,17 @@ export function buildCardSourceView(
   const plain = (values: readonly string[]): CardSourceNarrativeLine[] =>
     values.map((text, index) => ({
       id: `copy:${index}`,
-      text: assertLocalized(text),
+      text: text,
       card: null,
     }));
 
   if (tides !== null) {
     return {
-      title: assertLocalized(debug.screenLabel),
-      subtitle: assertLocalized(
-        `${surface(debug.surface)} dealt from your Avatar's tides.`,
-      ),
+      title: debug.screenLabel,
+      subtitle: `${surface(debug.surface)} dealt from your Avatar's tides.`,
       construction: {
         id: "construction",
-        title: assertLocalized("How this pool was built"),
+        title: "How this pool was built",
         lines: plain([
           "Signature tide",
           ...tides.tides
@@ -59,7 +56,7 @@ export function buildCardSourceView(
       },
       cards: {
         id: "cards",
-        title: assertLocalized("The cards in front of you"),
+        title: "The cards in front of you",
         lines: lines((entry) =>
           tideLine(entry.cardNumber, entry.cardName, tides),
         ),
@@ -68,12 +65,12 @@ export function buildCardSourceView(
   }
 
   return {
-    title: assertLocalized(debug.screenLabel),
-    subtitle: assertLocalized("Why am I seeing these cards?"),
+    title: debug.screenLabel,
+    subtitle: "Why am I seeing these cards?",
     construction: null,
     cards: {
       id: "cards",
-      title: assertLocalized("The cards in front of you"),
+      title: "The cards in front of you",
       lines: lines(
         (entry) =>
           `${entry.cardName}: Pool card. Draft-pool card. ${String(entry.draftPoolCopies ?? 0)} copies in the pool.`,

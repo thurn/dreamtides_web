@@ -14,7 +14,6 @@
 // shows only its glyph; `label` is its accessible name.
 
 import type { ReactElement } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import type { DomTestId } from "../../types/dom";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 import { Pressable } from "../../primitives/Pressable";
@@ -71,7 +70,7 @@ export interface IconButtonProps {
   /** A `data-testid` for selecting the disc in tests. */
   testId?: DomTestId;
   /** Localized accessible name forwarded unresolved to the final button. */
-  label: LocalizedString;
+  label: string;
 }
 
 /**

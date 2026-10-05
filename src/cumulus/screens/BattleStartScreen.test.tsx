@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -72,10 +71,10 @@ function makeView(): BattleStartView {
     scene: artRef.dreamscapeScene(testDreamscapeId("test_dreamscape")),
     avatar: {
       id: testOpponentId("opponent-uuid"),
-      name: assertLocalized("Aeris, the Prism Guide"),
-      title: assertLocalized("Storm Archivist"),
+      name: "Aeris, the Prism Guide",
+      title: "Storm Archivist",
       imageNumber: "001",
-      ability: assertLocalized("Whenever an event resolves, gain momentum."),
+      ability: "Whenever an event resolves, gain momentum.",
       abilityActive: true,
     },
     dreamsigns: [
@@ -208,11 +207,9 @@ describe("Cumulus BattleStartScreen", () => {
         id: testPresentationId("first-battle-guidance"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: assertLocalized("Mira"),
-          speakerName: assertLocalized("Mira"),
-          text: assertLocalized(
-            "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
-          ),
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
         },
         delaySeconds: 1,
         horizontalOffset: 0,

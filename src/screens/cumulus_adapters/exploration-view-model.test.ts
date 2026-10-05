@@ -1,8 +1,6 @@
-import { assertLocalized, opaque, txa } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
 import { stableDigest } from "../../reward-selection/stable";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { resolveSource } from "../../runtime/localization/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import type { JourneyContent } from "../../data/journey-content";
 import type { ExplorationActionContent } from "../../data/exploration";
 import type { ExplorationActionView } from "../../cumulus/screens/ExplorationSiteScreen";
@@ -67,8 +65,9 @@ import {
   testGuideId,
   testCardId,
 } from "../../types/test-identities";
+import { annotatedTextValue } from "../../runtime/text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 
 function withTransfiguration(content: JourneyContent): JourneyContent {
   return { ...content, transfigurationData: transfigurationFixture() };
@@ -219,7 +218,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -373,7 +372,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -474,7 +473,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: {
         kind: "exploration",
         encounterCardId: source.id,
@@ -517,7 +516,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: {
         kind: "exploration",
         encounterCardId: source.id,
@@ -664,7 +663,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -676,7 +675,7 @@ describe("exploration-view-model", () => {
       selectionOperation: "transfigure",
       cards: [{ entryId: parseDeckEntryId("entry-eligible") }],
     });
-    expect(resolveSource(view.actions[0].effectText.localized)).toBe(
+    expect(annotatedTextValue(view.actions[0].effectText)).toBe(
       "Apply Empowered to a chosen card.",
     );
     expect(view.actions[0].transfigurationGlossaryId).toBe(
@@ -759,11 +758,7 @@ describe("exploration-view-model", () => {
               {
                 id: testExplorationActionId("inspire-event"),
                 label: "Present a Written Charm",
-                effectText: txa(
-                  "Apply Inspired to {deck_card}",
-                  { deck_card: opaque(assertLocalized(target.name)) },
-                  "[exploration] Synthetic effect applying a fixed Transfiguration to one disclosed deck card. deck_card is the proper card name.",
-                ),
+                effectText: "Apply Inspired to {deck_card}",
                 effectKind: "transfigure-fixed-selected",
                 deckTarget: "offered",
                 predicate: "event",
@@ -786,7 +781,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -875,11 +870,7 @@ describe("exploration-view-model", () => {
               {
                 id: testExplorationActionId("become-survivor"),
                 label: "Fit a matching hood",
-                effectText: txa(
-                  "Change {deck_card} to become a Survivor",
-                  { deck_card: opaque(assertLocalized(target.name)) },
-                  "[exploration] Synthetic effect changing one disclosed deck card's subtype. deck_card is the proper card name.",
-                ),
+                effectText: "Change {deck_card} to become a Survivor",
                 effectKind: "change-subtype-selected",
                 deckTarget: "offered",
                 predicate: "cheap-character",
@@ -902,7 +893,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -918,7 +909,7 @@ describe("exploration-view-model", () => {
     expect(view.actions[0].effectText.annotations).toMatchObject({
       deck_card: { kind: "card", card: { id: target.id } },
     });
-    expect(resolveSource(view.actions[0].effectText.localized)).not.toContain(
+    expect(annotatedTextValue(view.actions[0].effectText)).not.toContain(
       "{deck_card}",
     );
 
@@ -926,7 +917,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: {
         ...runtime,
         resolution: {
@@ -1039,7 +1030,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1158,7 +1149,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: unresolvedRuntime,
       state: { ...createDefaultState(), essence: 99, deck: startingDeck },
       content,
@@ -1167,7 +1158,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: unresolvedRuntime,
       state: { ...createDefaultState(), essence: 100, deck: startingDeck },
       content,
@@ -1184,7 +1175,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: {
         ...unresolvedRuntime,
         resolution: {
@@ -1317,7 +1308,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1444,7 +1435,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1530,11 +1521,7 @@ describe("exploration-view-model", () => {
               {
                 id: testExplorationActionId("gain-offered"),
                 label: "Invite someone through",
-                effectText: txa(
-                  "Gain {offered_card}",
-                  { offered_card: opaque(assertLocalized(offered.name)) },
-                  "[exploration] Synthetic effect gaining one offered card. offered_card is the proper card name.",
-                ),
+                effectText: "Gain {offered_card}",
                 effectKind: "gain-offered-card",
                 predicate: "cheap-character",
               },
@@ -1555,7 +1542,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1627,11 +1614,7 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("fixed-card"),
         label: "Gain a card",
-        effectText: txa(
-          "Gain {fixed_card}",
-          { fixed_card: opaque(assertLocalized(fixedCard.name)) },
-          "[exploration] Synthetic effect gaining one fixed card. fixed_card is the proper card name.",
-        ),
+        effectText: "Gain {fixed_card}",
         effectKind: "gain-card",
         cardId: fixedCard.id,
       },
@@ -1642,11 +1625,7 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("nightmare-card"),
         label: "Accept the cost",
-        effectText: txa(
-          "Gain 3 {nightmare_card} cards.",
-          { nightmare_card: opaque(assertLocalized(nightmareCard.name)) },
-          "[exploration] Synthetic effect gaining three Nightmare cards. nightmare_card is the proper card name.",
-        ),
+        effectText: "Gain 3 {nightmare_card} cards.",
         effectKind: "reduce-cost-all-and-gain-nightmares",
         nightmareCount: 3,
       },
@@ -1657,11 +1636,7 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("fixed-dreamsign"),
         label: "Take the sign",
-        effectText: txa(
-          "Gain {dreamsign}",
-          { dreamsign: opaque(assertLocalized("Fixture Sign")) },
-          "[exploration] Synthetic effect gaining one fixed Dreamsign. dreamsign is the proper Dreamsign name.",
-        ),
+        effectText: "Gain {dreamsign}",
         effectKind: "gain-dreamsign",
         dreamsignId: testDreamsignId(dreamsignId),
       },
@@ -1672,10 +1647,8 @@ describe("exploration-view-model", () => {
     expect(fixed.effectText.annotations).toMatchObject({
       fixed_card: { kind: "card", card: { id: fixedCard.id } },
     });
-    expect(resolveSource(fixed.effectText.localized)).not.toContain(
-      "{fixed_card}",
-    );
-    expect(resolveSource(nightmare.effectText.localized)).not.toContain(
+    expect(annotatedTextValue(fixed.effectText)).not.toContain("{fixed_card}");
+    expect(annotatedTextValue(nightmare.effectText)).not.toContain(
       "{nightmare_card}",
     );
     expect(nightmare.effectText.annotations).toMatchObject({
@@ -1775,7 +1748,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -1811,11 +1784,7 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("starter-disclosed"),
         label: "Release",
-        effectText: txa(
-          "Purge {starter_card}.",
-          { starter_card: opaque(assertLocalized(starter.name)) },
-          "[exploration] Synthetic effect purging one disclosed Starter card. starter_card is the proper card name.",
-        ),
+        effectText: "Purge {starter_card}.",
         effectKind: "purge-starter-card",
       },
       preparation("purge-starter-card"),
@@ -1832,9 +1801,9 @@ describe("exploration-view-model", () => {
         card: { id: starter.id },
       },
     });
-    expect(
-      resolveSource(disclosed!.actions[0].effectText.localized),
-    ).not.toContain("{starter_card}");
+    expect(annotatedTextValue(disclosed!.actions[0].effectText)).not.toContain(
+      "{starter_card}",
+    );
 
     for (const kind of [
       "purge-random-starter-card",
@@ -1967,7 +1936,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -2001,7 +1970,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: {
         ...runtime,
         resolution: {
@@ -2146,7 +2115,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         runtime: {
           kind: "exploration",
           encounterCardId: source.id,
@@ -2448,7 +2417,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -2500,7 +2469,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: {
         ...runtime,
         actionOffers: runtime.actionOffers.map((offer) =>
@@ -2561,7 +2530,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: { ...runtime, resolution },
       state: {
         ...state,
@@ -2590,7 +2559,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       runtime: {
         ...runtime,
         actionOffers: runtime.actionOffers.map((offer) =>
@@ -2709,7 +2678,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -3616,7 +3585,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -3709,11 +3678,7 @@ describe("exploration-view-model", () => {
     const disclosedAction: ExplorationActionContent = {
       id: testExplorationActionId("compound-disclosed"),
       label: "Purge the disclosed card",
-      effectText: txa(
-        "Purge {deck_card} and transfigure its companions.",
-        { deck_card: opaque(assertLocalized(deckCards[0].name)) },
-        "[exploration] Synthetic compound effect purging one disclosed card and transforming related cards. deck_card is the proper card name.",
-      ),
+      effectText: "Purge {deck_card} and transfigure its companions.",
       effectKind: "purge-disclosed-and-transfigure-same-type",
       transfiguration: "Kindled",
     };
@@ -3994,7 +3959,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state: {
           ...createDefaultState(),
           activeSiteId: explorationSite.id,
@@ -4217,7 +4182,7 @@ describe("exploration-view-model", () => {
           sceneNode: null,
           site: explorationSite,
           guide,
-          guideLine: assertLocalized("Fixture line."),
+          guideLine: "Fixture line.",
           state,
           content,
           runtime: {
@@ -4568,7 +4533,7 @@ describe("exploration-view-model", () => {
           sceneNode: null,
           site: explorationSite,
           guide,
-          guideLine: assertLocalized("Fixture line."),
+          guideLine: "Fixture line.",
           state,
           content,
           runtime: {
@@ -4825,7 +4790,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -4965,12 +4930,12 @@ describe("exploration-view-model", () => {
 
   it("requires explicit followup titles for selected-card replacements", () => {
     const encounter = card(sourceId, 17);
-    const replacementTitle = assertLocalized("Fixture replacement title.");
+    const replacementTitle = "Fixture replacement title.";
     const action: ExplorationActionContent = {
       id: testExplorationActionId("replacement-title-contract"),
-      label: assertLocalized("Fixture replacement action."),
-      effectText: assertLocalized("Fixture replacement effect."),
-      followupSubtitle: assertLocalized("Fixture replacement subtitle."),
+      label: "Fixture replacement action.",
+      effectText: "Fixture replacement effect.",
+      followupSubtitle: "Fixture replacement subtitle.",
       effectKind: "replace-selected",
       predicate: "character",
       count: 1,
@@ -5003,7 +4968,7 @@ describe("exploration-view-model", () => {
         encounters: [
           {
             cardId: encounter.id,
-            prose: assertLocalized("Fixture replacement encounter."),
+            prose: "Fixture replacement encounter.",
             actions: [action],
           },
         ],
@@ -5014,7 +4979,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content: {
           ...content,
@@ -5023,7 +4988,7 @@ describe("exploration-view-model", () => {
             encounters: [
               {
                 cardId: encounter.id,
-                prose: assertLocalized("Fixture replacement encounter."),
+                prose: "Fixture replacement encounter.",
                 actions: [candidate],
               },
             ],
@@ -5168,7 +5133,7 @@ describe("exploration-view-model", () => {
           sceneNode: null,
           site: explorationSite,
           guide,
-          guideLine: assertLocalized("Fixture line."),
+          guideLine: "Fixture line.",
           state,
           content,
           runtime: {
@@ -5368,11 +5333,7 @@ describe("exploration-view-model", () => {
     const action: ExplorationActionContent = {
       id: testExplorationActionId("random-fixed-replacement-action"),
       label: "Replace one card",
-      effectText: txa(
-        "Replace a random Character with {fixed_card}",
-        { fixed_card: opaque(assertLocalized(replacement.name)) },
-        "[exploration] Synthetic effect replacing a concealed card with one fixed card. fixed_card is the replacement card's proper name.",
-      ),
+      effectText: "Replace a random Character with {fixed_card}",
       effectKind: "replace-random-with-card",
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
@@ -5442,7 +5403,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -5519,14 +5480,7 @@ describe("exploration-view-model", () => {
     const action: ExplorationActionContent = {
       id: testExplorationActionId("disclosed-type-action"),
       label: "Change the revealed card",
-      effectText: txa(
-        "Change {deck_card} to become a {card_type}",
-        {
-          deck_card: opaque(assertLocalized(event.name)),
-          card_type: opaque(assertLocalized("Character")),
-        },
-        "[exploration] Synthetic effect changing one disclosed deck card's card type. deck_card is the proper card name and card_type is the canonical destination card type.",
-      ),
+      effectText: "Change {deck_card} to become a {card_type}",
       effectKind: "change-card-type-selected",
       canonicalMechanicId: "change-entry-card-type",
       selectionPolicyId: "deck-entry-centrality",
@@ -5594,7 +5548,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -5618,7 +5572,7 @@ describe("exploration-view-model", () => {
         card: { id: event.id },
       },
     });
-    expect(resolveSource(preparedAction!.effectText.localized)).not.toContain(
+    expect(annotatedTextValue(preparedAction!.effectText)).not.toContain(
       "{card_type}",
     );
     expect(Object.keys(preparedAction!.effectText.annotations)).toEqual([
@@ -5771,7 +5725,7 @@ describe("exploration-view-model", () => {
       sceneNode: node,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       state: beforeState,
       content,
       runtime: {
@@ -5822,7 +5776,7 @@ describe("exploration-view-model", () => {
       sceneNode: resolvedNode,
       site: explorationSite,
       guide,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
       state: resolvedState,
       content,
       runtime: {
@@ -5855,7 +5809,7 @@ describe("exploration-view-model", () => {
         sceneNode: resolvedNode,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state: resolvedState,
         content,
         runtime: {
@@ -6017,7 +5971,7 @@ describe("exploration-view-model", () => {
         sceneNode: state.atlas.nodes[nodeId] ?? null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -6239,7 +6193,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
-        guideLine: assertLocalized("Fixture line."),
+        guideLine: "Fixture line.",
         state: createDefaultState(),
         content,
         runtime,

@@ -1,9 +1,8 @@
 import { useMemo } from "react";
 import { BattleDeckOrderOverlay } from "../../cumulus/screens/battle-overlays/BattleDeckOrderOverlay";
 import type { BattleMutableState, BattleSide } from "../types";
-import { tx, txa } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import type { BattleCardId } from "../../types/identifiers";
+import { formatNumber } from "../../runtime/format-number";
 
 export type BattleDeckOrderPickerScope = "top-N" | "full";
 
@@ -33,26 +32,12 @@ export function BattleDeckOrderPicker({
               id,
               ...(instance === undefined
                 ? {
-                    label: tx(
-                      "Missing card instance",
-                      "[battle] Fallback label in the battle deck-order list when a persisted battle card instance cannot be found.",
-                    ),
-                    summary: txa(
-                      "{card_instance_id}",
-                      { card_instance_id: id },
-                      "[battle] Technical battle card-instance UUID shown as the complete secondary row detail when the corresponding persisted card object is unavailable.",
-                    ),
+                    label: "Missing card instance",
+                    summary: `${id}`,
                   }
                 : {
-                    label: localizedSourceText(instance.definition.name),
-                    summary: txa(
-                      "{subtype} · Spark {spark}",
-                      {
-                        subtype: instance.definition.subtype,
-                        spark: instance.definition.printedSpark ?? 0,
-                      },
-                      "[battle] Secondary detail beneath one card in the battle deck-order list. subtype is the card's authored subtype and remains grammatically opaque; spark is its non-negative printed Spark value.",
-                    ),
+                    label: instance.definition.name,
+                    summary: `${instance.definition.subtype} · Spark ${formatNumber(instance.definition.printedSpark ?? 0)}`,
                   }),
             },
           ] as const;
@@ -66,35 +51,13 @@ export function BattleDeckOrderPicker({
       title={
         scopeLabel === "full"
           ? side === "player"
-            ? tx(
-                "Reorder Player Deck",
-                "[battle] Title of the full-deck ordering dialog for the Player side in a locally controlled battle.",
-              )
-            : tx(
-                "Reorder Opponent Deck",
-                "[battle] Title of the full-deck ordering dialog for the Opponent side in a locally controlled battle.",
-              )
+            ? "Reorder Player Deck"
+            : "Reorder Opponent Deck"
           : side === "player"
-            ? tx(
-                "Reorder Revealed Cards of Player Deck",
-                "[battle] Title of the partial deck-ordering dialog for revealed cards from the Player side's deck.",
-              )
-            : tx(
-                "Reorder Revealed Cards of Opponent Deck",
-                "[battle] Title of the partial deck-ordering dialog for revealed cards from the Opponent side's deck.",
-              )
+            ? "Reorder Revealed Cards of Player Deck"
+            : "Reorder Revealed Cards of Opponent Deck"
       }
-      label={
-        side === "player"
-          ? tx(
-              "Player deck order",
-              "[accessibility] [battle] Name for the ordered Player deck card list.",
-            )
-          : tx(
-              "Opponent deck order",
-              "[accessibility] [battle] Name for the ordered Opponent deck card list.",
-            )
-      }
+      label={side === "player" ? "Player deck order" : "Opponent deck order"}
       scope={scopeLabel}
       side={side}
       initialOrder={initialOrder}

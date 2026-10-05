@@ -3,7 +3,6 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
-import { tx } from "@trox/runtime";
 import { CumulusRoot } from "../../CumulusRoot";
 import {
   PLAYING_CARD_DESIGN,
@@ -34,15 +33,9 @@ describe("PlayingCardPrize", () => {
         <CumulusRoot>
           <PlayingCardPrize
             objectId="fixture-prize"
-            title={tx("Fixture prize", "[test] Fixture prize title.")}
-            description={tx(
-              "Fixture reward",
-              "[test] Fixture prize description.",
-            )}
-            accessibilityLabel={tx(
-              "Fixture prize and reward",
-              "[test] Fixture accessible prize name.",
-            )}
+            title={"Fixture prize"}
+            description={"Fixture reward"}
+            accessibilityLabel={"Fixture prize and reward"}
             relatedDreamsign={dreamsign}
             size="compact"
             drawnCard={{ rank: "Q", suit: "hearts" }}
@@ -85,15 +78,9 @@ describe("PlayingCardPrize", () => {
         <CumulusRoot>
           <PlayingCardPrize
             objectId="fixture-prize"
-            title={tx("Fixture prize", "[test] Fixture prize title.")}
-            description={tx(
-              "Fixture reward",
-              "[test] Fixture prize description.",
-            )}
-            accessibilityLabel={tx(
-              "Fixture prize and reward",
-              "[test] Fixture accessible prize name.",
-            )}
+            title={"Fixture prize"}
+            description={"Fixture reward"}
+            accessibilityLabel={"Fixture prize and reward"}
             relatedDreamsign={dreamsign}
             size="compact"
             drawnCard={{ rank: "Q", suit: "hearts" }}
@@ -219,15 +206,9 @@ describe("PlayingCardPrize", () => {
         <CumulusRoot>
           <PlayingCardPrize
             objectId="fixture-prize"
-            title={tx("Fixture prize", "[test] Fixture prize title.")}
-            description={tx(
-              "Fixture reward",
-              "[test] Fixture prize description.",
-            )}
-            accessibilityLabel={tx(
-              "Fixture prize and reward",
-              "[test] Fixture accessible prize name.",
-            )}
+            title={"Fixture prize"}
+            description={"Fixture reward"}
+            accessibilityLabel={"Fixture prize and reward"}
             relatedDreamsign={null}
             drawnCard={null}
             emphasis="current"
@@ -254,15 +235,9 @@ describe("PlayingCardPrize", () => {
         <CumulusRoot>
           <PlayingCardPrize
             objectId="fixture-prize"
-            title={tx("Fixture prize", "[test] Fixture prize title.")}
-            description={tx(
-              "Fixture reward",
-              "[test] Fixture prize description.",
-            )}
-            accessibilityLabel={tx(
-              "Fixture prize and reward",
-              "[test] Fixture accessible prize name.",
-            )}
+            title={"Fixture prize"}
+            description={"Fixture reward"}
+            accessibilityLabel={"Fixture prize and reward"}
             relatedDreamsign={null}
             drawnCard={{ rank: "3", suit: "clubs" }}
             revealDrawnCard

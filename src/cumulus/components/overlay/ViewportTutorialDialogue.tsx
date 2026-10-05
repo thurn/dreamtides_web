@@ -12,8 +12,6 @@ import {
   type TutorialSafeAreaInsets,
   type TutorialPlacementAnchorId,
 } from "./tutorial-placement";
-import { tx } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type {
   PresentationId,
   TutorialTriggerId,
@@ -96,7 +94,6 @@ export function ViewportTutorialDialogue({
   visible,
   diagnostics,
 }: ViewportTutorialDialogueProps): ReactElement {
-  const resolve = useLocalizer();
   const coordinator = useTutorialPlacementSnapshot();
   const viewportRef = useRef<HTMLElement | null>(null);
   const layoutRef = useRef<HTMLDivElement | null>(null);
@@ -219,16 +216,13 @@ export function ViewportTutorialDialogue({
   return (
     <section
       ref={viewportRef}
-      aria-label={resolve(
+      aria-label={
         context === "battle"
-          ? tx(
-              "Battle tutorial",
-              "[accessibility] [tutorial] Tutorial region names.",
-            )
+          ? "Battle tutorial"
           : context === "card"
-            ? tx("Card tutorial", "[tutorial] Region card.")
-            : tx("Site tutorial", "[tutorial] Region site."),
-      )}
+            ? "Card tutorial"
+            : "Site tutorial"
+      }
       aria-live={visible ? "polite" : "off"}
       aria-hidden={visible ? undefined : "true"}
       data-card-tutorial-guidance={context === "card" ? "" : undefined}

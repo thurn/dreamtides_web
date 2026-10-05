@@ -18,8 +18,6 @@ import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { token } from "../../primitives/tokens";
-import { opaque, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DreamsignId } from "../../../types/identifiers";
 import type { DomTestId } from "../../types/dom";
 
@@ -74,13 +72,13 @@ export interface LocalizedDreamsign {
   /** Stable Dreamsign UUID. */
   readonly id: DreamsignId;
   /** Canonical localized display name. */
-  readonly name: LocalizedString;
+  readonly name: string;
   /** Canonical localized effect copy, or null when the object has no rules. */
-  readonly effectDescription: LocalizedString | null;
+  readonly effectDescription: string | null;
   /** Hosted art key. */
   readonly imageName?: string;
   /** Localized alternative text for the art. */
-  readonly imageAlt: LocalizedString;
+  readonly imageAlt: string;
 }
 
 export interface DreamsignProps {
@@ -116,7 +114,6 @@ export function Dreamsign({
   unavailable = false,
   variant = "flat",
 }: DreamsignProps): React.ReactElement {
-  const resolve = useLocalizer();
   const [imageBroken, setImageBroken] = React.useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   const dreamsignId = requireDreamsignId(dreamsign, "Dreamsign tile");
@@ -169,11 +166,7 @@ export function Dreamsign({
       aria-disabled={unavailable || undefined}
       data-testid={testid}
       data-dreamsign-id={dreamsignId}
-      ariaLabelMessage={txa(
-        "Dreamsign: {dreamsign_name}",
-        { dreamsign_name: opaque(dreamsign.name) },
-        "[accessibility] [dreamsign] Name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
-      )}
+      ariaLabelMessage={`Dreamsign: ${dreamsign.name}`}
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;
         pointerDown?.(event);
@@ -196,7 +189,7 @@ export function Dreamsign({
       {showImage ? (
         <img
           src={dreamsignArtUrl(String(dreamsign.imageName))}
-          alt={resolve(dreamsign.imageAlt)}
+          alt={dreamsign.imageAlt}
           draggable={false}
           style={{ height: "100%", width: "100%", objectFit: "cover" }}
           onError={() => {

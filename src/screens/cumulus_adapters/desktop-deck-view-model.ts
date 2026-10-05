@@ -1,4 +1,3 @@
-import { localizedSourceText } from "../../runtime/localization/runtime";
 // Pure view-model builder for the desktop deck viewer. Resolves the deck to the
 // cards the player actually holds (reusing the shared mobile resolution so both
 // viewers show a card identically), and pairs them with the run profile the
@@ -30,9 +29,9 @@ function toAvatarView(
   return {
     id: avatar.id,
     imageNumber: avatar.imageNumber,
-    name: localizedSourceText(avatar.name),
-    title: localizedSourceText(avatar.title),
-    renderedText: localizedSourceText(avatar.renderedText),
+    name: avatar.name,
+    title: avatar.title,
+    renderedText: avatar.renderedText,
   };
 }
 

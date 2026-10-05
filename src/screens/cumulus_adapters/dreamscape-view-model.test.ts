@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { resolveSource } from "../../runtime/localization/runtime";
-import { assertLocalized } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import type { JourneyContent } from "../../data/journey-content";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import type {
   Avatar,
   Dreamsign,
@@ -46,7 +44,7 @@ const buildDreamscapeView = (
 ) =>
   buildDreamscapeViewImpl(
     dreamscapeNode,
-    assertLocalized("Fixture Dreamscape"),
+    "Fixture Dreamscape",
     state,
     sitesData,
     5,
@@ -83,11 +81,11 @@ function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
 
 describe("battleLabel", () => {
   it("identifies the final boss at the last completion level", () => {
-    expect(resolveSource(battleLabel(6, MINIMAL_SITES_DATA))).toBe(
+    expect(battleLabel(6, MINIMAL_SITES_DATA)).toBe(
       "Final Boss",
     );
-    expect(resolveSource(battleLabel(0, MINIMAL_SITES_DATA))).toBe("Battle");
-    expect(resolveSource(battleLabel(3, MINIMAL_SITES_DATA))).toBe("Battle");
+    expect(battleLabel(0, MINIMAL_SITES_DATA)).toBe("Battle");
+    expect(battleLabel(3, MINIMAL_SITES_DATA)).toBe("Battle");
   });
 });
 
@@ -126,8 +124,8 @@ describe("buildSiteModels", () => {
     const models = buildSiteModels(node(), 6);
     const battle = models.find((m) => m.isBattle);
     const draft = models.find((m) => m.type === "Draft");
-    expect(resolveSource(battle!.label)).toBe("Final Boss");
-    expect(resolveSource(draft!.label)).toBe("Draft 5x");
+    expect(battle!.label).toBe("Final Boss");
+    expect(draft!.label).toBe("Draft 5x");
   });
 });
 
@@ -147,9 +145,9 @@ describe("toQsbAvatar", () => {
       startingEssence: 200,
     };
     const qsb = toQsbAvatar(avatar);
-    expect(resolveSource(qsb!.name)).toBe("Drusus Calvus");
-    expect(resolveSource(qsb!.epithet!)).toBe("Triumphator");
-    expect(resolveSource(qsb!.ability!)).toBe("Gain 1 essence.");
+    expect(qsb!.name).toBe("Drusus Calvus");
+    expect(qsb!.epithet!).toBe("Triumphator");
+    expect(qsb!.ability!).toBe("Gain 1 essence.");
     expect(qsb?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
     expect(resolveArtRef(qsb!.portrait)).toContain("0007");
   });
@@ -170,8 +168,8 @@ describe("toQsbDreamsigns", () => {
     const docked = toQsbDreamsigns(signs);
     expect(docked).toHaveLength(1);
     expect(docked[0]?.id).toBe(orbId);
-    expect(resolveSource(docked[0].name)).toBe("Dreaming Orb");
-    expect(resolveSource(docked[0].effectDescription!)).toBe(
+    expect(docked[0].name).toBe("Dreaming Orb");
+    expect(docked[0].effectDescription!).toBe(
       "At Dawn, foresee 1.",
     );
     expect(docked[0]?.imageName).toBe("magic-ball.png");
@@ -189,10 +187,10 @@ describe("dreamscapeSceneRef / dreamscapeTitle", () => {
       dreamscapes: [{ id: "ember_wood", name: "Fixture Dreamscape" }],
       atlasData: { boss: { dreamscapeId: "fixture-boss", place: "Limbo" } },
     } as unknown as JourneyContent;
-    expect(resolveSource(dreamscapeTitle(node(), content))).toBe(
+    expect(dreamscapeTitle(node(), content)).toBe(
       "Fixture Dreamscape",
     );
-    expect(resolveSource(dreamscapeTitle(node({ dreamscapeId: null }), content))).toBe(
+    expect(dreamscapeTitle(node({ dreamscapeId: null }), content)).toBe(
       "An Unknown Dream",
     );
   });
@@ -283,7 +281,7 @@ describe("buildDreamscapeView", () => {
       completionLevel: 2,
     } as unknown as JourneyState;
     const view = buildDreamscapeView(node(), state, MINIMAL_SITES_DATA);
-    expect(resolveSource(view.title)).toBe("Fixture Dreamscape");
+    expect(view.title).toBe("Fixture Dreamscape");
     expect(view.sites).toHaveLength(3);
     expect(view.inlineRewards).toEqual({});
   });

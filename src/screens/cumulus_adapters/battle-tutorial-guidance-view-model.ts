@@ -4,8 +4,6 @@ import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
 import { tutorialGuidanceMessageDurationSeconds } from "../../battle/tutorial-presentation-timing";
-import { tx } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 
 function guidanceDialogue(
   battle: BattleFoldState,
@@ -19,20 +17,10 @@ function guidanceDialogue(
         imageNumber: avatar?.imageNumber ?? "001",
       },
       portraitAlt:
-        avatar === null || avatar === undefined
-          ? tx(
-              "Player Avatar",
-              "[battle] [tutorial] [avatar] Fallback name for the player's Avatar.",
-            )
-          : localizedSourceText(avatar.name),
+        avatar === null || avatar === undefined ? "Player Avatar" : avatar.name,
       speakerName:
-        avatar === null || avatar === undefined
-          ? tx(
-              "Dreamer",
-              "[battle] [tutorial] Fallback speaker name for the player.",
-            )
-          : localizedSourceText(avatar.name),
-      text: localizedSourceText(message.text),
+        avatar === null || avatar === undefined ? "Dreamer" : avatar.name,
+      text: message.text,
     };
   }
   if (message.speaker === "enemy") {
@@ -42,16 +30,16 @@ function guidanceDialogue(
         kind: "avatar",
         imageNumber: enemy.imageNumber ?? "001",
       },
-      portraitAlt: localizedSourceText(enemy.name),
-      speakerName: localizedSourceText(enemy.name),
-      text: localizedSourceText(message.text),
+      portraitAlt: enemy.name,
+      speakerName: enemy.name,
+      text: message.text,
     };
   }
   return {
     portrait: { kind: "character-portrait", characterId: "mira" },
-    portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
-    speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
-    text: localizedSourceText(message.text),
+    portraitAlt: "Mira",
+    speakerName: "Mira",
+    text: message.text,
   };
 }
 

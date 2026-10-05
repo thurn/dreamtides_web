@@ -14,7 +14,6 @@ import {
   type Ref,
 } from "react";
 import type { DomTestId } from "../../types/dom";
-import { type LocalizedString, tx } from "@trox/runtime";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
@@ -38,7 +37,6 @@ import {
   type GlassPanelIconButtonAccessory,
 } from "../overlay/GlassPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import {
   CardChoiceGrid,
   type CardChoiceGridActionView,
@@ -77,13 +75,13 @@ export interface CardPickerFooterAction extends Omit<
 /** Controlled search field shown in the gallery's browser toolbar. */
 export interface CardBrowserSearchControl {
   /** Localized visible label for the search field. */
-  label: LocalizedString;
+  label: string;
   /** Current search text. */
   value: string;
   /** Reports search edits. */
   onChange: (value: string) => void;
   /** Optional empty-field hint. */
-  placeholder?: LocalizedString;
+  placeholder?: string;
   /** Optional stable test id for the native input. */
   testId?: DomTestId;
   /** Optional ref used by an overlay to focus search on open. */
@@ -93,7 +91,7 @@ export interface CardBrowserSearchControl {
 /** Controlled dropdown shown in the gallery's browser toolbar. */
 export interface CardBrowserSelectControl {
   /** Localized accessible name for the dropdown trigger. */
-  ariaLabel: LocalizedString;
+  ariaLabel: string;
   /** Current option value. */
   value: string;
   /** Dropdown choices. */
@@ -132,15 +130,15 @@ export type CardPickerPresentation = "embedded" | "overlay";
 
 interface CardPanelBaseProps<EntryId extends string> {
   /** Header title, rendered as an `<h2>`. */
-  title: LocalizedString;
+  title: string;
   /** Optional intro line under the title. */
-  subtitle?: LocalizedString;
+  subtitle?: string;
   /** Optional trailing header action. */
   rightAccessory?: CardPanelAccessory;
   /** Resolved cards rendered in order. */
   cards: readonly CardGalleryCardView<EntryId>[];
   /** Empty-state copy shown when `cards` is empty. */
-  emptyLabel?: LocalizedString;
+  emptyLabel?: string;
   /** Test id for the panel root. */
   testId?: DomTestId;
 }
@@ -560,7 +558,7 @@ function CardGallerySurface<EntryId extends string>({
   endAction,
   onEndActionPress,
 }: CardGallerySurfaceProps<EntryId>): ReactElement {
-  const resolve = useLocalizer();
+  
   const pendingCardTapsRef = useRef(new Map<EntryId, number>());
   const cancelPendingCardTap = (entryId: EntryId): void => {
     const timer = pendingCardTapsRef.current.get(entryId);
@@ -817,13 +815,8 @@ function CardGallerySurface<EntryId extends string>({
                   color: token("--text-on-glass"),
                 }}
               >
-                {resolve(
-                  emptyLabel ??
-                    tx(
-                      "No cards.",
-                      "[battle] Empty state shared by card galleries and battle-zone browsers.",
-                    ),
-                )}
+                {(emptyLabel ??
+                    "No cards.")}
               </p>
             </div>
           ) : (

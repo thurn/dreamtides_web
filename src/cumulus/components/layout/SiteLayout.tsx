@@ -5,8 +5,6 @@ import {
   useState,
   type ReactElement,
 } from "react";
-import type { LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
@@ -88,9 +86,9 @@ export interface SiteLayoutGuideView {
   /** Stable Dream Guide identity. */
   readonly id: GuideId;
   /** Localized guide name used by visible and accessible presentation. */
-  readonly name: LocalizedString;
+  readonly name: string;
   /** Localized line spoken by the guide when present. */
-  readonly line: LocalizedString;
+  readonly line: string;
   /** Transparent resident-guide artwork. */
   readonly art: ArtRef;
 }
@@ -243,7 +241,7 @@ export function SiteLayout({
   composition,
   children,
 }: SiteLayoutProps): ReactElement {
-  const resolve = useLocalizer();
+  
   const desktop = useIsDesktop();
   const compactDesktop = useMedia(COMPACT_DESKTOP_QUERY);
   const sceneUrl = scene === null ? null : resolveArtRef(scene);
@@ -406,7 +404,7 @@ export function SiteLayout({
           <img
             ref={guideArtRef}
             src={guideUrl}
-            alt={resolve(guide.name)}
+            alt={guide.name}
             draggable={false}
             style={{
               position: "absolute",

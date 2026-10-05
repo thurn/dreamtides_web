@@ -5,20 +5,14 @@ import {
   type GlossaryCatalogEntry,
   type GlossaryProjection,
 } from "./glossary";
-import { LocalizedString, SourceMessage } from "@trox/runtime";
-import {
-  bindSourceTransport,
-  localizedSourceText,
-  resolveSource,
-  type SourceTransport,
-} from "../runtime/localization/runtime";
+import { fillTemplate } from "../runtime/text";
 
 /** The semantic owner whose rules text is being explained. */
 export type RulesTextGlossaryOwner = "card" | "avatar" | "dreamsign";
 
 export interface ProjectedGlossaryCatalogEntry extends GlossaryCatalogEntry {
-  readonly localizedTerm: LocalizedString;
-  readonly localizedDefinition: LocalizedString;
+  readonly localizedTerm: string;
+  readonly localizedDefinition: string;
 }
 
 /**
@@ -88,18 +82,16 @@ function projectionMatches(
 }
 
 function projectionValues(
-  template: SourceTransport,
+  template: string,
   entry: GlossaryCatalogEntry,
   match: readonly string[],
-): Readonly<Record<string, number | LocalizedString>> {
-  const values: Record<string, number | LocalizedString> = {};
-  const names = typeof template === "string"
-    ? [...template.matchAll(/\{([a-z][a-z0-9_]*|\d+)\}/gu)].map((value) => value[1] ?? "")
-    : template instanceof SourceMessage
-      ? Object.keys(template.argumentSchemas)
-      : [];
+): Readonly<Record<string, number | string>> {
+  const values: Record<string, number | string> = {};
+  const names = [...template.matchAll(/\{([a-z][a-z0-9_]*|\d+)\}/gu)].map(
+    (value) => value[1] ?? "",
+  );
   for (const name of names) {
-    if (name === "term") values.term = localizedSourceText(entry.term);
+    if (name === "term") values.term = entry.term;
     else if (name === "amount" || name === "1") {
       values[name] = Number(match[1] ?? 0);
     }
@@ -125,30 +117,24 @@ export function projectGlossaryEntry(
     if (match === undefined) continue;
     const localizedTerm =
         projection.term === undefined
-          ? localizedSourceText(entry.term)
-          : bindSourceTransport(
-              projection.term,
-              projectionValues(projection.term, entry, match),
-            );
+          ? entry.term
+          : fillTemplate(projection.term, projectionValues(projection.term, entry, match));
     const localizedDefinition =
         projection.definition === undefined
-          ? localizedSourceText(entry.definition)
-          : bindSourceTransport(
-              projection.definition,
-              projectionValues(projection.definition, entry, match),
-            );
+          ? entry.definition
+          : fillTemplate(projection.definition, projectionValues(projection.definition, entry, match));
     return {
       ...entry,
-      term: resolveSource(localizedTerm),
-      definition: resolveSource(localizedDefinition),
+      term: localizedTerm,
+      definition: localizedDefinition,
       localizedTerm,
       localizedDefinition,
     };
   }
   return {
     ...entry,
-    localizedTerm: localizedSourceText(entry.term),
-    localizedDefinition: localizedSourceText(entry.definition),
+    localizedTerm: entry.term,
+    localizedDefinition: entry.definition,
   };
 }
 

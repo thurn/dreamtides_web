@@ -16,7 +16,6 @@
 // view types, and holds only the local pick latch that plays the pick-out
 // animation.
 
-import { tx } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
@@ -37,14 +36,12 @@ import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import type { LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { parsePresentationId } from "../../types/identifiers";
 import type { DraftOfferKey } from "../../data/draft-site-bootstrap";
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
-  progressLabel: LocalizedString;
+  progressLabel: string;
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;
   /** The offered pack, resolved to cards (by UUID) and sorted for display. */
@@ -137,7 +134,6 @@ export function DraftScreen({
   onReroll = NOOP,
   onTutorialShown,
 }: DraftScreenProps) {
-  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
@@ -239,7 +235,7 @@ export function DraftScreen({
       >
         <IconButton
           glyph={GLYPHS.refresh}
-          label={tx("Reroll draft offer", "[ui] Draft reroll offer.")}
+          label={"Reroll draft offer"}
           onPress={onReroll}
           testId="reroll-draft-offer"
         />
@@ -333,7 +329,7 @@ export function DraftScreen({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {resolve(view.progressLabel)}
+          {view.progressLabel}
         </div>
       </div>
 

@@ -15,17 +15,16 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./dreamwell-card.css";
-import { txa, opaque, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** The complete resolved display data for one Dreamwell card. */
 export interface DreamwellCardDisplaySnapshot {
   /** Stable Dreamwell card UUID. */
   readonly id: DreamwellCardId;
   /** Display name resolved at the final render boundary. */
-  readonly name: LocalizedString;
+  readonly name: string;
   /** Rules copy with the shared Dreamtides symbol markup. */
-  readonly renderedText: LocalizedString;
+  readonly renderedText: string;
   /** Maximum energy this Dreamwell card adds. */
   readonly energyAdded: number;
   /** Hosted card-art key. */
@@ -78,7 +77,6 @@ function artStyle(art: ArtCrop): CSSProperties {
  * idle animation.
  */
 export function DreamwellCard({ model, testId }: DreamwellCardProps) {
-  const resolve = useLocalizer();
   const card = model.displaySnapshot;
   const [artErrored, setArtErrored] = useState(false);
 
@@ -99,14 +97,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
     spec: {
       primary: {
         kind: "source",
-        description: txa(
-          "{card_name}. {rules_text}",
-          {
-            card_name: opaque(card.name),
-            rules_text: opaque(card.renderedText),
-          },
-          "[accessibility] [battle] Reveal description for a Dreamwell card. card_name is the canonical card display name with unknown grammatical gender; rules_text is its complete authored rules text.",
-        ),
+        description: `${card.name}. ${card.renderedText}`,
       },
       secondaries: definitions,
     },
@@ -123,11 +114,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
       pressFeedback="stationary"
       role="group"
       tabIndex={hasDefinitions ? 0 : undefined}
-      ariaLabelMessage={txa(
-        "{card_name}: adds {energy_amount} Energy",
-        { card_name: opaque(card.name), energy_amount: card.energyAdded },
-        "[accessibility] [battle] Name for a Dreamwell card. card_name is its canonical display name with unknown grammatical gender; energy_amount is the non-negative Energy the card adds when drawn.",
-      )}
+      ariaLabelMessage={`${card.name}: adds ${formatNumber(card.energyAdded)} Energy`}
       data-cumulus-dreamwell-card=""
       data-dreamwell-card={model.cardId}
       data-testid={testId}
@@ -177,11 +164,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
           sizeVar="14cqw"
           numberSizeVar="8cqw"
           numberCapPx={72}
-          ariaLabel={txa(
-            "{energy_amount} Energy added",
-            { energy_amount: card.energyAdded },
-            "[accessibility] [battle] Description of the Energy amount added by a Dreamwell card. energy_amount is a non-negative integer.",
-          )}
+          ariaLabel={`${formatNumber(card.energyAdded)} Energy added`}
         />
       </div>
       <div
@@ -209,7 +192,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
             textShadow: token("--text-outline-media"),
           }}
         >
-          {resolve(card.name)}
+          {card.name}
         </strong>
         <div
           data-dreamwell-card-rules=""

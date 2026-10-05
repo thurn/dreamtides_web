@@ -1,4 +1,3 @@
-import type { LocalizedString } from "@trox/runtime";
 import { useEffect, type ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
@@ -6,21 +5,20 @@ import type { CardChoiceGridCardView as CardGalleryCardView } from "../component
 import { token } from "../primitives/tokens";
 import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface DeckGalleryOverlayProps {
   /** Whether the gallery is mounted. */
   isOpen: boolean;
   /** Gallery heading. */
-  title: LocalizedString;
+  title: string;
   /** Short supporting line beneath the heading. */
-  subtitle: LocalizedString;
+  subtitle: string;
   /** Resolved, UUID-backed deck entries in display order. */
   cards: readonly CardGalleryCardView[];
   /** Copy shown if no deck entries can be resolved. */
-  emptyLabel: LocalizedString;
+  emptyLabel: string;
   /** Visible label for the primary header action. */
-  actionLabel: LocalizedString;
+  actionLabel: string;
   /** Reserve the mobile top-left band for persistent journey menu chrome. */
   clearMobileJourneyMenu?: boolean;
   /** Dismisses the gallery. */
@@ -42,7 +40,7 @@ export function DeckGalleryOverlay({
   clearMobileJourneyMenu = false,
   onClose,
 }: DeckGalleryOverlayProps): ReactElement {
-  const resolve = useLocalizer();
+  
   const isDesktop = useIsDesktop();
   const clearsMobileMenu = !isDesktop && clearMobileJourneyMenu;
   const mobileMenuClearance =
@@ -67,7 +65,7 @@ export function DeckGalleryOverlay({
           key="deck-gallery-overlay"
           role="dialog"
           aria-modal="true"
-          aria-label={resolve(title)}
+          aria-label={title}
           className="cumulus"
           data-deck-gallery-overlay=""
           initial={{ opacity: 0 }}

@@ -29,11 +29,6 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { controlChrome } from "../../internal/control-treatment";
 import { applySymbolReplacements } from "../../primitives/symbol-replacements";
 import { tideResonanceLabel, tideVisual, type Tide } from "../hud/tide-spec";
-import { assertLocalized, txa, type LocalizedString } from "@trox/runtime";
-import {
-  useLocalizer,
-  useOptionalLocalizer,
-} from "../../../runtime/localization/use-localizer";
 
 /* ---- authored component geometry ---- */
 const CARD_W = 248; // every info card is this wide
@@ -239,7 +234,7 @@ interface InfoCardCommonProps {
    * The card's headline. Resolve names before display; canonical rules symbols
    * render as their inline icons.
    */
-  title?: LocalizedString;
+  title?: string;
   /**
    * The reveal copy, as a structured {@link RichText} value. Canonical rules
    * symbols and explicit glyph parts render as cap-height-aligned inline icons.
@@ -284,7 +279,7 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
    * Avatar-select name/epithet pairing. Resolve before display; rules
    * symbols render as icons.
    */
-  subtitle?: LocalizedString;
+  subtitle?: string;
 }
 
 /**
@@ -302,7 +297,7 @@ export interface InfoCardAtlasRevealProps extends InfoCardCommonProps {
   /** Optional transparent full-body figure standing on the card's right side. */
   figure?: ArtRef;
   /** The resident guide / boss title; rules symbols render as icons. */
-  subtitle?: LocalizedString;
+  subtitle?: string;
 }
 
 /**
@@ -340,7 +335,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
    * the Avatar-select name/epithet pairing. Resolve before display;
    * rules symbols render as icons.
    */
-  subtitle?: LocalizedString;
+  subtitle?: string;
 }
 
 /**
@@ -395,21 +390,18 @@ function InfoCardBody(
   contentOverride?: InfoCardContentOverride,
 ): React.ReactElement {
   const { title, body } = props;
-  const resolve = useOptionalLocalizer() ?? missingInfoCardLocalizer;
   // `variant` is optional only on the text member; resolve the default once for
   // the shared body/title styling. The per-variant branches below narrow on the
   // discriminant directly so each reads only the media its interface carries.
   const variant: InfoCardVariant = props.variant ?? "text";
   const titleContent =
     contentOverride?.title ??
-    (title === undefined
-      ? undefined
-      : renderRulesSymbolsInline(resolve(title)));
+    (title === undefined ? undefined : renderRulesSymbolsInline(title));
   const bodyContent =
     body == null
       ? null
       : (contentOverride?.body ??
-        renderRichText(body, resolve, 0, { substituteRulesSymbols: true }));
+        renderRichText(body, 0, { substituteRulesSymbols: true }));
   const Body =
     body == null ? null : (
       <div
@@ -570,7 +562,7 @@ function InfoCardBody(
                 marginBottom: body ? token("--space-s") : 0,
               }}
             >
-              {renderRulesSymbolsInline(resolve(subtitle))}
+              {renderRulesSymbolsInline(subtitle)}
             </div>
           )}
           {body != null && <div style={{ ...tBody }}>{bodyContent}</div>}
@@ -681,7 +673,7 @@ function InfoCardBody(
               <div style={tAtlasHeadline}>{titleContent}</div>
               {subtitle !== undefined && (
                 <div style={tAtlasSubtitle}>
-                  {renderRulesSymbolsInline(resolve(subtitle))}
+                  {renderRulesSymbolsInline(subtitle)}
                 </div>
               )}
             </div>
@@ -828,17 +820,11 @@ function InfoCardBody(
         <div
           style={{ ...tEpithet, marginBottom: body ? token("--space-s") : 0 }}
         >
-          {renderRulesSymbolsInline(resolve(subtitle))}
+          {renderRulesSymbolsInline(subtitle)}
         </div>
       )}
       {Body}
     </div>
-  );
-}
-
-function missingInfoCardLocalizer(): never {
-  throw new Error(
-    "Localized InfoCard copy requires a mounted TroxLocalizationProvider.",
   );
 }
 
@@ -897,7 +883,7 @@ export interface EditableInfoCardField {
   /** Whether the card is currently showing this field's editor. */
   readonly isEditing: boolean;
   /** Validation message shown beneath the native editor. */
-  readonly error?: LocalizedString;
+  readonly error?: string;
   readonly onBeginEdit: () => void;
   readonly onDraftChange: (value: string) => void;
   readonly onCancel: () => void;
@@ -927,7 +913,6 @@ function EditableInfoCardCopy({
   readonly children: React.ReactNode;
   readonly value: EditableInfoCardField;
 }): React.ReactElement {
-  const resolve = useLocalizer();
   const editorRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(
     null,
   );
@@ -1003,13 +988,7 @@ function EditableInfoCardCopy({
         ref={(element) => {
           editorRef.current = element;
         }}
-        aria-label={resolve(
-          txa(
-            "{field} editor",
-            { field },
-            "[accessibility] [developer] Name for a developer Info Card editor field; field is the raw editor field kind.",
-          ),
-        )}
+        aria-label={`${field} editor`}
         aria-invalid={value.error === undefined ? undefined : true}
         data-editor-input-field={field}
         rows={4}
@@ -1024,13 +1003,7 @@ function EditableInfoCardCopy({
         ref={(element) => {
           editorRef.current = element;
         }}
-        aria-label={resolve(
-          txa(
-            "{field} editor",
-            { field },
-            "[accessibility] [developer] Name for a developer Info Card editor field; field is the raw editor field kind.",
-          ),
-        )}
+        aria-label={`${field} editor`}
         aria-invalid={value.error === undefined ? undefined : true}
         data-editor-input-field={field}
         type="text"
@@ -1060,7 +1033,7 @@ function EditableInfoCardCopy({
             font: token("--t-caption"),
           }}
         >
-          {resolve(value.error)}
+          {value.error}
         </span>
       ) : null}
     </span>
@@ -1077,14 +1050,13 @@ export function EditableInfoCard({
   body,
   bodyFormat,
 }: EditableInfoCardProps): React.ReactElement {
-  const resolve = useOptionalLocalizer() ?? missingInfoCardLocalizer;
   const bodyModel: RichText =
     bodyFormat === "rules"
-      ? { kind: "rules", text: assertLocalized(body.value) }
-      : { kind: "plain", text: assertLocalized(body.value) };
+      ? { kind: "rules", text: body.value }
+      : { kind: "plain", text: body.value };
   const props: InfoCardTextProps = {
     variant: "text",
-    title: title === undefined ? undefined : assertLocalized(title.value),
+    title: title === undefined ? undefined : title.value,
     body: bodyModel,
   };
   const titleContent =
@@ -1095,7 +1067,7 @@ export function EditableInfoCard({
     );
   const bodyContent = (
     <EditableInfoCardCopy field="description" mode="multiline" value={body}>
-      {renderRichText(bodyModel, resolve, 0, { substituteRulesSymbols: true })}
+      {renderRichText(bodyModel, 0, { substituteRulesSymbols: true })}
     </EditableInfoCardCopy>
   );
   const style = useInfoCardFrameStyle(CARD_W);

@@ -3,9 +3,9 @@ import {
   testCardName,
   testDreamwellCardName,
 } from "../../types/test-identities";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import type {
   BattleFoldState,
   TutorialGuidanceMessage,

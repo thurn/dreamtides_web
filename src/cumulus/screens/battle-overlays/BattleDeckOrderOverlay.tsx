@@ -1,4 +1,3 @@
-import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import {
   CardOrderEditor,
@@ -11,8 +10,8 @@ import type { BattleSide } from "../../../types/battle";
 import type { BattleCardId } from "../../../types/identifiers";
 
 export interface BattleDeckOrderOverlayProps {
-  readonly title: LocalizedString;
-  readonly label: LocalizedString;
+  readonly title: string;
+  readonly label: string;
   readonly scope: "top-N" | "full";
   readonly side: BattleSide;
   readonly initialOrder: readonly BattleCardId[];
@@ -66,14 +65,8 @@ export function BattleDeckOrderOverlay({
   return (
     <GlassDialog
       title={title}
-      subtitle={tx(
-        "Top to bottom. Confirm commits one battle command.",
-        "[battle] Instruction beneath the battle deck-order title. The player arranges cards from the top of the deck to the bottom before committing one battle command.",
-      )}
-      closeLabel={tx(
-        "Cancel deck ordering",
-        "[accessibility] [battle] Name for the command that closes battle deck ordering without committing it.",
-      )}
+      subtitle={"Top to bottom. Confirm commits one battle command."}
+      closeLabel={"Cancel deck ordering"}
       onClose={onCancel}
     >
       <div
@@ -96,19 +89,13 @@ export function BattleDeckOrderOverlay({
           }}
         >
           <GlassButton
-            label={tx(
-              meaning("deck-order-cancel", "Cancel"),
-              "[battle] Deck order cancel action.",
-            )}
+            label={"Cancel"}
             placement="onGlass"
             testId="battle-deck-order-cancel"
             onPress={onCancel}
           />
           <GlassButton
-            label={tx(
-              "Confirm Order",
-              "[battle] Deck order confirm action.",
-            )}
+            label={"Confirm Order"}
             placement="onGlass"
             variant="accent"
             testId="battle-deck-order-confirm"

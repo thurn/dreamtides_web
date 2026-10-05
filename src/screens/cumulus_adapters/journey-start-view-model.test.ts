@@ -1,9 +1,8 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { LocalizedString } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import type { AvatarContent } from "../../types/content";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type { TutorialJourneyPool } from "../../data/tutorial-journey-pool";
@@ -155,9 +154,9 @@ describe("buildJourneyStartGuideDialogue", () => {
       verticalOffset: -10,
       bubbleWidth: 550,
     });
-    expect(dialogue?.model.portraitAlt).toBeInstanceOf(LocalizedString);
-    expect(dialogue?.model.speakerName).toBeInstanceOf(LocalizedString);
-    expect(dialogue?.model.text).toBeInstanceOf(LocalizedString);
+    expect(dialogue?.model.portraitAlt).toEqual(expect.any(String));
+    expect(dialogue?.model.speakerName).toEqual(expect.any(String));
+    expect(dialogue?.model.text).toEqual(expect.any(String));
   });
 
   it("omits guidance from ordinary offers and missing authored data", () => {
@@ -203,7 +202,7 @@ describe("toAvatarOfferView", () => {
       testCardId("uuid-a2"),
     ]);
     expect(
-      view.signatureCards.every(({ name }) => name instanceof LocalizedString),
+      view.signatureCards.every(({ name }) => typeof name === "string"),
     ).toBe(true);
   });
 
@@ -217,7 +216,7 @@ describe("toAvatarOfferView", () => {
     );
     expect(view.signatureCards).toHaveLength(1);
     expect(view.signatureCards[0]?.id).toBeNull();
-    expect(view.signatureCards[0]?.name).toBeInstanceOf(LocalizedString);
+    expect(view.signatureCards[0]?.name).toEqual(expect.any(String));
   });
 
   it("copies the Avatar's display fields through unchanged", () => {
@@ -229,9 +228,9 @@ describe("toAvatarOfferView", () => {
       portraitFocus: { x: 0.42, y: 0.18 },
       startingEssence: 3,
     });
-    expect(view.name).toBeInstanceOf(LocalizedString);
-    expect(view.title).toBeInstanceOf(LocalizedString);
-    expect(view.renderedText).toBeInstanceOf(LocalizedString);
+    expect(view.name).toEqual(expect.any(String));
+    expect(view.title).toEqual(expect.any(String));
+    expect(view.renderedText).toEqual(expect.any(String));
   });
 });
 

@@ -28,17 +28,15 @@ import {
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { meaning, opaque, txa, tx, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { CardId } from "../../types/card-identity";
 import type { BattleId, OpponentId } from "../../types/identifiers";
 
 export interface BattleStartAvatarView {
   id: OpponentId;
-  name: LocalizedString;
-  title: LocalizedString;
+  name: string;
+  title: string;
   imageNumber: string;
-  ability: LocalizedString;
+  ability: string;
   abilityActive: boolean;
 }
 
@@ -241,7 +239,6 @@ function BattleStartPanel({
   onBegin,
   density,
 }: BattleStartScreenProps & { readonly density: PanelDensity }) {
-  const resolve = useLocalizer();
   const compact = density === "compact";
   const cardWidth = compact
     ? COMPACT_SIGNATURE_CARD_WIDTH
@@ -317,15 +314,9 @@ function BattleStartPanel({
                 font: compact ? token("--t-title-sm") : token("--t-hero"),
               }}
             >
-              {resolve(
-                txa(
-                  "Battle vs. {avatar_name}",
-                  { avatar_name: opaque(view.avatar.name) },
-                  "[battle] Start title.",
-                ),
-              )}
+              {`Battle vs. ${view.avatar.name}`}
             </h1>
-            {resolve(view.avatar.title) !== "" && (
+            {view.avatar.title !== "" && (
               <p
                 style={{
                   margin: 0,
@@ -334,20 +325,13 @@ function BattleStartPanel({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {resolve(view.avatar.title)}
+                {view.avatar.title}
               </p>
             )}
           </header>
 
-          {resolve(view.avatar.ability) !== "" && (
-            <PanelSection
-              section="ability"
-              label={tx(
-                meaning("battle-avatar-ability-label", "Ability"),
-                "[battle] Start ability label.",
-              )}
-              density={density}
-            >
+          {view.avatar.ability !== "" && (
+            <PanelSection section="ability" label={"Ability"} density={density}>
               <div style={{ font: token("--t-rules") }}>
                 {view.avatar.abilityActive ? (
                   <RulesText
@@ -359,12 +343,7 @@ function BattleStartPanel({
                   />
                 ) : (
                   <span style={{ color: token("--text-on-glass-muted") }}>
-                    {resolve(
-                      tx(
-                        "Opponent avatar ability is not active.",
-                        "[battle] [tutorial] [avatar] Unavailable-state description for an opponent Avatar whose ability is disabled during a tutorial battle.",
-                      ),
-                    )}
+                    {"Opponent avatar ability is not active."}
                   </span>
                 )}
               </div>
@@ -377,14 +356,8 @@ function BattleStartPanel({
                 section="signature-objects"
                 label={
                   view.dreamsigns.length > 0
-                    ? tx(
-                        "Signature Cards & Dreamsigns",
-                        "[battle] [dreamsign] Start signature cards and dreamsigns label.",
-                      )
-                    : tx(
-                        "Signature Cards",
-                        "[avatar] Collection label for the active Avatar's authored signature cards.",
-                      )
+                    ? "Signature Cards & Dreamsigns"
+                    : "Signature Cards"
                 }
                 density={density}
               >
@@ -405,10 +378,7 @@ function BattleStartPanel({
           {!compact && view.signatureCards.length > 0 && (
             <PanelSection
               section="signature-cards"
-              label={tx(
-                "Signature Cards",
-                "[avatar] Collection label for the active Avatar's authored signature cards.",
-              )}
+              label={"Signature Cards"}
               density={density}
             >
               <div
@@ -427,10 +397,7 @@ function BattleStartPanel({
           {!compact && view.dreamsigns.length > 0 && (
             <PanelSection
               section="dreamsigns"
-              label={tx(
-                "Dreamsigns",
-                "[dreamsign] Section label for the player's collected Dreamsigns.",
-              )}
+              label={"Dreamsigns"}
               density={density}
             >
               <div
@@ -462,24 +429,16 @@ function BattleStartPanel({
                 gap: compact ? token("--space-m") : token("--space-2xl"),
               }}
             >
-              <Stake
-                stake="points"
-                label={tx("To Win", "[battle] Start to win label.")}
-                density={density}
-              >
+              <Stake stake="points" label={"To Win"} density={density}>
                 <span>{view.pointsToWin}</span>
                 <InlineGlyph glyph={GLYPHS.points} color="white" />
               </Stake>
-              <Stake
-                stake="reward"
-                label={tx("Reward", "[battle] Start reward label.")}
-                density={density}
-              >
+              <Stake stake="reward" label={"Reward"} density={density}>
                 <EssenceValue amount={view.essenceReward} tone="inherit" />
               </Stake>
             </div>
             <GlassButton
-              label={tx("Begin Battle", "[battle] Start action.")}
+              label={"Begin Battle"}
               variant="accent"
               placement="onGlass"
               onPress={onBegin}
@@ -500,12 +459,12 @@ function PanelSection({
 }: {
   readonly section:
     "ability" | "signature-objects" | "signature-cards" | "dreamsigns";
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly density: PanelDensity;
   readonly children: ReactNode;
 }) {
   const compact = density === "compact";
-  const resolve = useLocalizer();
+
   return (
     <section
       data-battle-start-panel-section={section}
@@ -525,7 +484,7 @@ function PanelSection({
           color: token("--text-on-glass-muted"),
         }}
       >
-        {resolve(label)}
+        {label}
       </h2>
       {children}
     </section>
@@ -539,12 +498,12 @@ function Stake({
   children,
 }: {
   readonly stake: "points" | "reward";
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly density: PanelDensity;
   readonly children: ReactNode;
 }) {
   const compact = density === "compact";
-  const resolve = useLocalizer();
+
   return (
     <div
       data-battle-start-stake={stake}
@@ -569,7 +528,7 @@ function Stake({
           color: token("--text-on-glass-muted"),
         }}
       >
-        {resolve(label)}
+        {label}
       </span>
     </div>
   );

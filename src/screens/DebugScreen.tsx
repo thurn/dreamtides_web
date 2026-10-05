@@ -16,7 +16,6 @@ import {
 } from "../state/journey-save-files";
 import { PackageDebugDialog } from "../cumulus/screens/PackageDebugDialog";
 import { buildPackageDebugView } from "./cumulus_adapters/package-debug-view-model";
-import { assertLocalized } from "@trox/runtime";
 
 /** Outer diagnostic controller: owns save I/O, mutation dispatch, and logging. */
 export function DebugScreen({
@@ -151,8 +150,8 @@ export function DebugScreen({
       isOpen={isOpen}
       view={view}
       saveName={saveName}
-      saveStatus={status === null ? null : assertLocalized(status)}
-      saveError={error === null ? null : assertLocalized(error)}
+      saveStatus={status === null ? null : status}
+      saveError={error === null ? null : error}
       busy={busy}
       canSave={journeyState !== null}
       canLoad={onLoadJourneyState !== undefined}

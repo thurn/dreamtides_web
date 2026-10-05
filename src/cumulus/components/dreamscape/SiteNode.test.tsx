@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -18,9 +17,9 @@ const MODEL: DreamscapeSiteModel = {
   isBattle: true,
   isLocked: true,
   isInteractive: false,
-  label: assertLocalized("Guardian Battle"),
-  lockedGuidance: assertLocalized("Visit the other sites first."),
-  blurb: assertLocalized("Defeat the guardian."),
+  label: "Guardian Battle",
+  lockedGuidance: "Visit the other sites first.",
+  blurb: "Defeat the guardian.",
   icon: glyph("bxf bx-shield"),
 };
 

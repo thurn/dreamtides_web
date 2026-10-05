@@ -42,9 +42,8 @@ import {
 import { logRevealClosed, logRevealOpened } from "./logging";
 import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
 import { feedbackForRect, type RevealFeedback } from "./feedback";
-import { txa, tx } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
-import { localizedSourceText } from "../../../runtime/localization/runtime";
+import { annotatedTextValue } from "../../../runtime/text";
+import { formatNumber } from "../../../runtime/format-number";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -66,7 +65,7 @@ function canonicalDescription(
 ): RevealDescriptionUnit[] {
   return text === undefined || text.trim() === ""
     ? []
-    : [{ kind: "message", message: localizedSourceText(text) }];
+    : [{ kind: "message", message: text }];
 }
 
 function richTextDescriptionUnits(
@@ -83,7 +82,7 @@ function richTextDescriptionUnits(
     return value.parts.flatMap(richTextDescriptionUnits);
   }
   if (value.kind === "annotated") {
-    return [{ kind: "message", message: value.text.localized }];
+    return [{ kind: "message", message: annotatedTextValue(value.text) }];
   }
   return [{ kind: "message", message: value.text }];
 }
@@ -117,56 +116,33 @@ function gameCardDescriptionUnits(
     card.energyCosts !== undefined && card.energyCosts.length > 0
       ? card.energyCosts.map((energyCost) => ({
           kind: "message",
-          message: txa(
-            "Energy cost: {energy_cost}.",
-            { energy_cost: energyCost },
-            "[accessibility] Complete Energy-cost sentence for a card. energy_cost is one non-negative printed or alternative resource amount.",
-          ),
+          message: `Energy cost: ${energyCost}.`,
         }))
       : [
           {
             kind: "message",
             message:
               card.energyCost === null
-                ? tx(
-                    "Energy cost: X.",
-                    "[accessibility] Complete Energy-cost sentence for a card whose cost is variable.",
-                  )
-                : txa(
-                    "Energy cost: {energy_cost}.",
-                    { energy_cost: card.energyCost },
-                    "[accessibility] Complete Energy-cost sentence for a card. energy_cost is one non-negative printed or alternative resource amount.",
-                  ),
+                ? "Energy cost: X."
+                : `Energy cost: ${formatNumber(card.energyCost)}.`,
           },
         ];
   return [
     {
       kind: "message",
-      message: txa(
-        "Card name: {card_name}.",
-        { card_name: card.name },
-        "[accessibility] Complete identity sentence for a revealed game card. card_name is the canonical UUID-resolved authored name and has no grammatical-gender metadata.",
-      ),
+      message: `Card name: ${card.name}.`,
     },
     ...(card.rarity === undefined
       ? []
       : [
           {
             kind: "message" as const,
-            message: txa(
-              "Rarity: {rarity}.",
-              { rarity: card.rarity },
-              "[accessibility] Complete rarity sentence for a revealed game card. rarity is the card catalog's authored rarity label.",
-            ),
+            message: `Rarity: ${card.rarity}.`,
           },
         ]),
     {
       kind: "message",
-      message: txa(
-        "Card type: {card_type}.",
-        { card_type: card.cardType },
-        "[accessibility] Complete card-type sentence for a revealed game card. card_type is the authored Character or Event display label.",
-      ),
+      message: `Card type: ${card.cardType}.`,
     },
     ...(card.subtype === undefined ||
     card.subtype.trim() === "" ||
@@ -175,11 +151,7 @@ function gameCardDescriptionUnits(
       : [
           {
             kind: "message" as const,
-            message: txa(
-              "Subtype: {card_subtype}.",
-              { card_subtype: card.subtype },
-              "[accessibility] Complete subtype sentence for a revealed game card. card_subtype is the authored catalog subtype and remains grammatically opaque.",
-            ),
+            message: `Subtype: ${card.subtype}.`,
           },
         ]),
     ...energyUnits,
@@ -187,10 +159,7 @@ function gameCardDescriptionUnits(
       ? [
           {
             kind: "message" as const,
-            message: tx(
-              "Spark: X.",
-              "[accessibility] Complete Spark sentence for a card whose Spark is variable.",
-            ),
+            message: "Spark: X.",
           },
         ]
       : card.spark === null
@@ -198,21 +167,14 @@ function gameCardDescriptionUnits(
         : [
             {
               kind: "message" as const,
-              message: txa(
-                "Spark: {spark_amount}.",
-                { spark_amount: card.spark },
-                "[accessibility] Complete Spark sentence for a revealed card. spark_amount is the non-negative printed challenge strength.",
-              ),
+              message: `Spark: ${formatNumber(card.spark)}.`,
             },
           ]),
     ...(card.isFast
       ? [
           {
             kind: "message" as const,
-            message: tx(
-              "This card is Fast.",
-              "[accessibility] Complete trait sentence for a Fast game card.",
-            ),
+            message: "This card is Fast.",
           },
         ]
       : []),
@@ -220,10 +182,7 @@ function gameCardDescriptionUnits(
       ? [
           {
             kind: "message" as const,
-            message: tx(
-              "This card has Interrupt.",
-              "[accessibility] Complete trait sentence for a game card with Interrupt.",
-            ),
+            message: "This card has Interrupt.",
           },
         ]
       : []),
@@ -232,11 +191,7 @@ function gameCardDescriptionUnits(
       : [
           {
             kind: "message" as const,
-            message: txa(
-              "Reclaim cost: {reclaim_cost}.",
-              { reclaim_cost: card.reclaimCost },
-              "[accessibility] Complete Reclaim-cost sentence for a revealed game card. reclaim_cost is a non-negative resource amount.",
-            ),
+            message: `Reclaim cost: ${formatNumber(card.reclaimCost)}.`,
           },
         ]),
     ...canonicalDescription(card.renderedText),
@@ -286,7 +241,6 @@ interface SourceRegistration {
   readonly element: HTMLElement | null;
 }
 interface RevealCoordinatorValue {
-  readonly resolve: ReturnType<typeof useLocalizer>;
   readonly state: ReturnType<typeof reduceRevealState>;
   readonly dispatch: Dispatch<Parameters<typeof reduceRevealState>[1]>;
   readonly registerSource: (
@@ -357,7 +311,6 @@ export function RevealCoordinatorProvider({
 }: {
   readonly children: ReactNode;
 }) {
-  const resolve = useLocalizer();
   const parent = useContext(RevealCoordinatorContext);
   if (parent !== null)
     throw new Error(
@@ -575,7 +528,6 @@ export function RevealCoordinatorProvider({
   );
   const value = useMemo(
     () => ({
-      resolve,
       state,
       dispatch,
       registerSource,
@@ -585,7 +537,6 @@ export function RevealCoordinatorProvider({
       isKeyboardFocusEligible,
     }),
     [
-      resolve,
       state,
       registerSource,
       updateSourceElement,
@@ -729,7 +680,7 @@ export function RevealCoordinatorProvider({
         {[...sourcesRef.current.entries()].map(([key, source]) => (
           <span id={source.descriptionId} key={key}>
             {source.descriptionUnits.map((unit, index) => (
-              <span key={String(index)}>{resolve(unit.message)}</span>
+              <span key={String(index)}>{unit.message}</span>
             ))}
           </span>
         ))}
@@ -785,7 +736,6 @@ export function useRevealSource(
     throw new Error(
       "Semantic Cumulus reveal sources require one mounted CumulusRoot.",
     );
-  const resolve = coordinator.resolve;
   const reactId = useId();
   const descriptionId = revealDescriptionId(reactId);
   const valid = isValidRegistration(registration.identity, registration.spec);
@@ -798,7 +748,7 @@ export function useRevealSource(
   const spec = registration.spec;
   const descriptionUnits = valid ? revealDescriptionUnits(spec) : [];
   const descriptionFingerprint = descriptionUnits
-    .map((unit) => `message:${unit.message.toCanonicalJSON()}`)
+    .map((unit) => `message:${unit.message}`)
     .join("\u001e");
   const specFingerprint = [
     spec.primary.kind,
@@ -885,7 +835,7 @@ export function useRevealSource(
               : (spec.primary.card.variant ?? "text"),
       "data-reveal-placement-exception": placementException,
       "data-reveal-secondary-titles": spec.secondaries
-        .map((card) => (card.title === undefined ? "" : resolve(card.title)))
+        .map((card) => card.title ?? "")
         .join("\u001f"),
       style: {
         "--reveal-press-scale": String(feedback.pressScale),

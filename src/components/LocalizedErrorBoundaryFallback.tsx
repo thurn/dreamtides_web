@@ -1,6 +1,4 @@
 import type { ReactNode } from "react";
-import { meaning, tx } from "@trox/runtime";
-import { useLocalizer } from "../runtime/localization/use-localizer";
 
 export function LocalizedErrorBoundaryFallback({
   scope,
@@ -13,7 +11,6 @@ export function LocalizedErrorBoundaryFallback({
   readonly onClose?: () => void;
   readonly onRecover?: () => void;
 }): ReactNode {
-  const resolve = useLocalizer();
   return (
     <div
       data-testid="error-boundary-fallback"
@@ -40,20 +37,12 @@ export function LocalizedErrorBoundaryFallback({
           color: "#fecaca",
         }}
       >
-        {resolve(
-          tx(
-            "Something went wrong",
-            "[ui] Heading for an unexpected render failure caught by an application error boundary.",
-          ),
-        )}
+        {"Something went wrong"}
       </h2>
       <p style={{ margin: 0, marginBottom: "1rem", opacity: 0.85 }}>
-        {resolve(
-          tx(
-            "This part of the screen hit an unexpected error. The rest of the app is still working. Try again, or close this and return to where you were.",
-            "[ui] Explanation for an unexpected render failure; technical details appear separately when available.",
-          ),
-        )}
+        {
+          "This part of the screen hit an unexpected error. The rest of the app is still working. Try again, or close this and return to where you were."
+        }
       </p>
       <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
         <button
@@ -70,12 +59,7 @@ export function LocalizedErrorBoundaryFallback({
             cursor: "pointer",
           }}
         >
-          {resolve(
-            tx(
-              "Retry",
-              "[ui] Command that retries the failed application operation represented by the current error surface.",
-            ),
-          )}
+          {"Retry"}
         </button>
         {onRecover !== undefined && (
           <button
@@ -92,12 +76,7 @@ export function LocalizedErrorBoundaryFallback({
               cursor: "pointer",
             }}
           >
-            {resolve(
-              tx(
-                meaning("error-boundary-recover", "Recover Game"),
-                "[coop] Emergency action that restores the entire shared game to its latest verified checkpoint.",
-              ),
-            )}
+            {"Recover Game"}
           </button>
         )}
         {onClose !== undefined && (
@@ -115,12 +94,7 @@ export function LocalizedErrorBoundaryFallback({
               cursor: "pointer",
             }}
           >
-            {resolve(
-              tx(
-                meaning("error-boundary-close", "Close"),
-                "[ui] Action that closes an application error boundary and returns to the previous surface.",
-              ),
-            )}
+            {"Close"}
           </button>
         )}
       </div>

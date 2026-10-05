@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { tx } from "@trox/runtime";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 import { getFirebaseDatabase } from "../firebase/app-config";
 import { logEvent } from "../logging";
@@ -79,18 +78,9 @@ export default function RecoveryApp(): ReactNode {
       <ApplicationStateScreen
         view={{
           kind: "fatalConfiguration",
-          title: tx(
-            "Game Recovery Link Required",
-            "[coop] Title when the cold shared-room recovery entrypoint has no valid room id.",
-          ),
-          message: tx(
-            "Open recovery from a shared game link.",
-            "[coop] Explanation that cold recovery requires a valid shared-room URL.",
-          ),
-          detail: tx(
-            "The recovery URL must include the game id.",
-            "[coop] Guidance when the cold recovery URL has no valid shared-room identity.",
-          ),
+          title: "Game Recovery Link Required",
+          message: "Open recovery from a shared game link.",
+          detail: "The recovery URL must include the game id.",
         }}
       />
     );
@@ -101,25 +91,13 @@ export default function RecoveryApp(): ReactNode {
       <ApplicationStateScreen
         view={{
           kind: "recoverableError",
-          title: tx(
-            "Game Recovery Failed",
-            "[coop] Title when the cold shared-room recovery entrypoint cannot restore its checkpoint.",
-          ),
-          message: tx(
-            "The shared game could not be restored.",
-            "[coop] Explanation that cold shared-room recovery did not complete.",
-          ),
-          detail: tx(
-            "Retry recovery. If it still fails, preserve the game URL and diagnostic log for repair.",
-            "[coop] Guidance after cold shared-room recovery fails.",
-          ),
+          title: "Game Recovery Failed",
+          message: "The shared game could not be restored.",
+          detail: "Retry recovery. If it still fails, preserve the game URL and diagnostic log for repair.",
           actions: [
             {
               id: "primary",
-              label: tx(
-                "Retry Recovery",
-                "[coop] Action that retries cold shared-room recovery.",
-              ),
+              label: "Retry Recovery",
               onPress: retry,
             },
           ],
@@ -134,22 +112,10 @@ export default function RecoveryApp(): ReactNode {
         kind: "loading",
         title:
           status.kind === "redirecting"
-            ? tx(
-                "Game Recovered",
-                "[coop] Title after the shared room has been restored and before navigation resumes it.",
-              )
-            : tx(
-                "Recovering Shared Game",
-                "[coop] Status while the cold recovery entrypoint restores the room checkpoint for every player.",
-              ),
-        message: tx(
-          "Restoring the latest verified checkpoint for every player.",
-          "[coop] Status explaining that cold recovery applies to the whole shared room.",
-        ),
-        busyLabel: tx(
-          "Recovering Shared Game",
-          "[coop] Status while the cold recovery entrypoint restores the room checkpoint for every player.",
-        ),
+            ? "Game Recovered"
+            : "Recovering Shared Game",
+        message: "Restoring the latest verified checkpoint for every player.",
+        busyLabel: "Recovering Shared Game",
       }}
     />
   );

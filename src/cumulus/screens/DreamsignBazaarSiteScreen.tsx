@@ -20,7 +20,6 @@ import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
-import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
@@ -65,12 +64,12 @@ export interface DreamsignBazaarPurgeView {
 export interface DreamsignBazaarSiteView {
   presentation: {
     readonly kind: "dreamsign-bazaar";
-    readonly title: LocalizedString;
-    readonly restocked: LocalizedString;
-    readonly restockOffersAction: LocalizedString;
-    readonly restockAction: LocalizedString;
-    readonly freePrice: LocalizedString;
-    readonly replacementTitle: LocalizedString;
+    readonly title: string;
+    readonly restocked: string;
+    readonly restockOffersAction: string;
+    readonly restockAction: string;
+    readonly freePrice: string;
+    readonly replacementTitle: string;
   };
   /** Stable site id. */
   siteId: SiteId;
@@ -141,14 +140,8 @@ export function DreamsignBazaarSiteScreen({
             incoming: view.purge.pendingDreamsign,
             held: view.purge.currentDreamsigns,
             capacity: view.purge.maxDreamsigns,
-            dismissLabel: tx(
-              meaning("dreamsign-replacement-cancel", "Cancel"),
-              "[dreamsign] Bazaar replacement cancel.",
-            ),
-            closeLabel: tx(
-              "Cancel replacement",
-              "[dreamsign] Accessible label for closing a Dreamsign replacement dialog.",
-            ),
+            dismissLabel: "Cancel",
+            closeLabel: "Cancel replacement",
           }}
           onDreamsignPress={onPurge}
           onDismiss={onCancelPurge}
@@ -296,10 +289,7 @@ function DreamsignBazaarGallery({
           disabled: restock.state !== "available",
         }}
         size={desktop ? "standard" : "compact"}
-        closeLabel={tx(
-          "Leave Dreamsign Bazaar",
-          "[dreamsign] Bazaar leave action.",
-        )}
+        closeLabel={"Leave Dreamsign Bazaar"}
         testId="cumulus-dreamsign-bazaar-gallery"
         onClose={onClose}
         onEntryPress={buyOffer}

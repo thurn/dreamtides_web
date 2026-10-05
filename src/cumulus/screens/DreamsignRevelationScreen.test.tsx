@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -32,8 +31,8 @@ function view(): DreamsignRevelationView {
     scene: null,
     guide: {
       id: testGuideId("sigrun"),
-      name: assertLocalized("Sigrun"),
-      line: assertLocalized("Choose one sign."),
+      name: "Sigrun",
+      line: "Choose one sign.",
       art: artRef.dreamGuide(testGuideId("sigrun")),
     },
     offer: [
@@ -88,11 +87,9 @@ describe("DreamsignRevelationScreen", () => {
         ),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: assertLocalized("Mira"),
-          speakerName: assertLocalized("Mira"),
-          text: assertLocalized(
-            "A [purple]Dreamsign[/purple] gives ongoing benefits.",
-          ),
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "A [purple]Dreamsign[/purple] gives ongoing benefits.",
         },
         delaySeconds: 1,
         horizontalOffset: 0,

@@ -1,7 +1,6 @@
 // Pure view-model builder for Durgan Forgehammer's standard Cumulus
 // Transfiguration site.
 
-import type { LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
@@ -38,7 +37,7 @@ export function resolveTransfigurationGuide(
 /** Build the guide art and one stable greeting for the site layout. */
 export function buildTransfigurationGuideView(
   guide: DreamGuideContent,
-  guideLine: LocalizedString,
+  guideLine: string,
 ): TransfigurationGuideView {
   return projectGuideView(guide, guideLine);
 }
@@ -150,7 +149,7 @@ export function buildTransfigurationSiteView(params: {
   runtime: CardChoiceSiteRuntime | null;
   cardDatabase: ReadonlyMap<number, CardData>;
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   transfigurationData: TransfigurationData;
 }): TransfigurationSiteView {
   const scene: ArtRef | null =

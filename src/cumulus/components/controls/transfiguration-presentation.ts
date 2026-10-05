@@ -1,13 +1,11 @@
-import type { LocalizedString } from "@trox/runtime";
-import { localizedSourceText } from "../../../runtime/localization/runtime";
 import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
 
 export type LocalizedTransfigurationPresentation = Pick<
   TransfigurationFormDefinition,
   "glossaryUuid" | "glyph" | "accentColor"
 > & {
-  readonly name: LocalizedString;
-  readonly description: LocalizedString;
+  readonly name: string;
+  readonly description: string;
 };
 
 export function localizedTransfigurationPresentation(
@@ -17,7 +15,7 @@ export function localizedTransfigurationPresentation(
     glossaryUuid: presentation.glossaryUuid,
     glyph: presentation.glyph,
     accentColor: presentation.accentColor,
-    name: localizedSourceText(presentation.name),
-    description: localizedSourceText(presentation.description),
+    name: presentation.name,
+    description: presentation.description,
   };
 }

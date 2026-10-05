@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -40,8 +39,8 @@ function view(): CardShopSiteView {
     scene: null,
     guide: {
       id: testGuideId("tobias_tanglefur"),
-      name: assertLocalized("Tobias Tanglefur"),
-      line: assertLocalized("I've set aside something just for you."),
+      name: "Tobias Tanglefur",
+      line: "I've set aside something just for you.",
       art: artRef.dreamGuide(testGuideId("tobias_tanglefur")),
     },
     offers: Array.from({ length: 5 }, (_, index) => ({

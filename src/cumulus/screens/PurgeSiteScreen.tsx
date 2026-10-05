@@ -1,6 +1,5 @@
 // PurgeSiteScreen — the Cumulus rendering of Master Takeshi's purge site.
 
-import { tx, type LocalizedString } from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
@@ -40,9 +39,9 @@ export interface PurgeCardView extends DeckCardView {
 export interface PurgeSiteView {
   presentation: {
     readonly kind: "purge";
-    readonly title: LocalizedString;
-    readonly instruction: LocalizedString;
-    readonly purgeAction: (count: number) => LocalizedString;
+    readonly title: string;
+    readonly instruction: string;
+    readonly purgeAction: (count: number) => string;
   };
   /** Stable site id used by the shared character-gallery layout. */
   siteId: SiteId;
@@ -105,10 +104,7 @@ export function PurgeSiteScreen({
       ).map((reservation) => ({
         ...(reservation.label.kind === "decline"
           ? {
-              label: tx(
-                "Decline",
-                "[ui] Compact action declining the current interaction without applying it.",
-              ),
+              label: "Decline",
             }
           : {
               label: view.presentation.purgeAction(reservation.label.count),
@@ -248,10 +244,7 @@ function PurgeGallery({
           button: {
             ...(selectedCount === 0
               ? {
-                  label: tx(
-                    "Decline",
-                    "[ui] Compact action declining the current interaction without applying it.",
-                  ),
+                  label: "Decline",
                 }
               : {
                   label: presentation.purgeAction(selectedCount),

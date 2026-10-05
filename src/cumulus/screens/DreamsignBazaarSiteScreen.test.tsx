@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -36,8 +35,8 @@ function view(): DreamsignBazaarSiteView {
     scene: null,
     guide: {
       id: testGuideId("amunet_the_tomb_keeper"),
-      name: assertLocalized("Amunet, the Tomb-Keeper"),
-      line: assertLocalized("The sands remember all dreams."),
+      name: "Amunet, the Tomb-Keeper",
+      line: "The sands remember all dreams.",
       art: artRef.dreamGuide(testGuideId("amunet_the_tomb_keeper")),
     },
     offers: Array.from({ length: 3 }, (_, index) => ({
@@ -142,18 +141,18 @@ describe("DreamsignBazaarSiteScreen", () => {
   it("keeps an action caption empty when it has neither price nor text", () => {
     const { container } = renderInCumulus(
       <DreamsignGalleryPanel
-        title={assertLocalized("Fixture gallery")}
+        title={"Fixture gallery"}
         entries={[]}
         endAction={{
           entryId: parseDeckEntryId("fixture-action"),
           glyph: GLYPHS.refresh,
-          label: assertLocalized("Fixture action"),
+          label: "Fixture action",
           glossaryId: GLOSSARY_IDS.dreamsignRestock,
           price: null,
           text: null,
           disabled: true,
         }}
-        closeLabel={assertLocalized("Close fixture gallery")}
+        closeLabel={"Close fixture gallery"}
         onClose={vi.fn()}
         onEntryPress={vi.fn()}
         onEndActionPress={vi.fn()}

@@ -9,7 +9,6 @@ import type {
   JourneyDebugDeckEntryView,
   JourneyDebugDreamsignView,
 } from "../../cumulus/screens/JourneyDebugEditorScreen";
-import { assertLocalized } from "@trox/runtime";
 
 /**
  * Builds the diagnostic editor's complete presentation model from live journey
@@ -24,10 +23,10 @@ export function buildJourneyDebugEditorView(
 ): JourneyDebugEditorView {
   return {
     transfigurationOptions: [
-      { value: "none", label: assertLocalized("None") },
+      { value: "none", label: "None" },
       ...transfigurationData.forms.map((form) => ({
         value: form.id,
-        label: assertLocalized(form.name),
+        label: form.name,
       })),
     ],
     essence: state.essence,
@@ -37,16 +36,16 @@ export function buildJourneyDebugEditorView(
       (dreamsign, index): JourneyDebugDreamsignView => ({
         actionId: `dreamsign:${index}`,
         templateId: dreamsign.id ?? null,
-        name: assertLocalized(dreamsign.name),
+        name: dreamsign.name,
       }),
     ),
     dreamsignOptions: dreamsignOptions.map((template) => ({
       id: template.id,
-      name: assertLocalized(template.name),
+      name: template.name,
     })),
     cards: [...cardDatabase.values()].map((card) => ({
       cardId: card.id,
-      title: assertLocalized(card.name),
+      title: card.name,
       model: { cardId: card.id, displaySnapshot: card },
     })),
     deck: state.deck.map((entry): JourneyDebugDeckEntryView => {
@@ -57,14 +56,11 @@ export function buildJourneyDebugEditorView(
           : resolveDeckEntryCard(transfigurationData, base, entry);
       return {
         entryId: entry.entryId,
-        name: assertLocalized(
-          displaySnapshot?.name ?? `Unknown ${String(entry.cardNumber)}`,
-        ),
-        detail: assertLocalized(
+        name: displaySnapshot?.name ?? `Unknown ${String(entry.cardNumber)}`,
+        detail:
           displaySnapshot === null
             ? "Card data is unavailable."
             : `${displaySnapshot.cardType}${displaySnapshot.subtype === "" ? "" : ` · ${displaySnapshot.subtype}`} · E ${displaySnapshot.energyCost === null ? "—" : String(displaySnapshot.energyCost)} · S ${displaySnapshot.spark === null ? "—" : String(displaySnapshot.spark)}`,
-        ),
         isBane: entry.isBane,
         transfiguration: entry.transfiguration,
         typeChange: entry.typeChange ?? null,

@@ -3,7 +3,6 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   BattleResultSurface,
@@ -67,7 +66,7 @@ describe("BattleResultSurface", () => {
   it("counts the victory essence payoff before enabling Continue", () => {
     const { container, root, onAction } = mount({
       outcome: "victory",
-      opponentName: assertLocalized("Fixture Caller"),
+      opponentName: "Fixture Caller",
       playerScore: 10,
       opponentScore: 5,
       turnCount: 6,

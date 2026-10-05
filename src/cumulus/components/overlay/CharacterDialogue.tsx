@@ -9,8 +9,6 @@ import { resolveArtRef, type ArtRef } from "../../primitives/art";
 import type { DomTestId } from "../../types/dom";
 import { token } from "../../primitives/tokens";
 import { SpeechBubble } from "./SpeechBubble";
-import { opaque, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 const DIALOGUE_FRAME_URL = assetUrl("/atlas/Round_frame.png");
 const DIALOGUE_FADE_SECONDS = motionTimeSeconds("--dur-slow");
@@ -53,11 +51,11 @@ export interface CharacterDialogueModel {
   /** Typed portrait art shown inside the circular frame. */
   readonly portrait: CharacterDialoguePortraitArt;
   /** Accessible description of the portrait art. */
-  readonly portraitAlt: LocalizedString;
+  readonly portraitAlt: string;
   /** Character name shown by the speech bubble. */
-  readonly speakerName: LocalizedString;
+  readonly speakerName: string;
   /** Spoken line shown with tutorial highlights and canonical inline rules glyphs. */
-  readonly text: LocalizedString;
+  readonly text: string;
 }
 
 export interface CharacterDialogueProps {
@@ -84,7 +82,7 @@ export function CharacterDialogue({
   testId,
   playbackSpeed = 1,
 }: CharacterDialogueProps): ReactElement {
-  const resolve = useLocalizer();
+  
   const reduceMotion = useReducedMotion() === true;
   const targetOpacity = visible ? 1 : 0;
   const portraitSize = DIALOGUE_PORTRAIT_SIZE[size];
@@ -93,13 +91,7 @@ export function CharacterDialogue({
   return (
     <motion.section
       aria-hidden={!visible}
-      aria-label={resolve(
-        txa(
-          "{speaker_name} speaks",
-          { speaker_name: opaque(dialogue.speakerName) },
-          "[accessibility] Name for character dialogue. speaker_name is the displayed name of the character currently speaking and has unknown grammatical gender.",
-        ),
-      )}
+      aria-label={`${dialogue.speakerName} speaks`}
       data-character-dialogue=""
       data-character-dialogue-size={size}
       data-character-dialogue-visible={String(visible)}
@@ -139,7 +131,7 @@ export function CharacterDialogue({
           }}
         >
           <img
-            alt={resolve(dialogue.portraitAlt)}
+            alt={dialogue.portraitAlt}
             data-character-dialogue-portrait=""
             draggable={false}
             src={resolveArtRef(dialogue.portrait)}

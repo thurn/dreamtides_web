@@ -15,7 +15,6 @@ import {
   type SiteLayoutGuideView,
 } from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 
@@ -85,7 +84,7 @@ export function TransfigurationSiteScreen({
   onClose,
   onTransfigure,
 }: TransfigurationSiteScreenProps) {
-  const resolve = useLocalizer();
+  
   const reduceMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -290,7 +289,7 @@ export function TransfigurationSiteScreen({
                   onTransfigure(
                     picked.entryId,
                     type,
-                    resolve(form.presentation.description),
+                    form.presentation.description,
                     form.effectDetails,
                     essenceCost,
                   );

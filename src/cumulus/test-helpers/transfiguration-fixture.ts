@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import type { TransfigurationType } from "../../types/journey";
 import type { TransfigurationFormDefinition } from "../../types/transfiguration-data";
 import type { LocalizedTransfigurationPresentation } from "../components/controls/transfiguration-presentation";
@@ -29,7 +28,7 @@ export function localizedTransfigurationFormFixture(
     glossaryUuid: form.glossaryUuid,
     glyph: form.glyph,
     accentColor: form.accentColor,
-    name: assertLocalized(form.name),
-    description: assertLocalized(form.description),
+    name: form.name,
+    description: form.description,
   };
 }

@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -18,7 +17,7 @@ function mountOrb(
       ? undefined
       : {
           kind: changeBadgeKind,
-          accessibleName: assertLocalized("Synthetic form"),
+          accessibleName: "Synthetic form",
         };
   const container = document.createElement("div");
   document.body.append(container);
@@ -33,9 +32,7 @@ function mountOrb(
           numberSizeVar="45px"
           numberCapPx={45}
           changeBadge={changeBadge}
-          ariaLabel={
-            ariaLabel === undefined ? undefined : assertLocalized(ariaLabel)
-          }
+          ariaLabel={ariaLabel === undefined ? undefined : ariaLabel}
         />
       </CumulusRoot>,
     );

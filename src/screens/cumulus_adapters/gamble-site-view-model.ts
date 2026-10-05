@@ -11,7 +11,6 @@ import type {
 } from "../../cumulus/screens/GambleSiteScreen";
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
-import { txa, type LocalizedString } from "@trox/runtime";
 import {
   gravokGateEssenceReward,
   gravokGateChanceLabel,
@@ -70,6 +69,7 @@ import type {
   GuideId,
   SiteId,
 } from "../../types/identifiers";
+import { formatNumber } from "../../runtime/format-number";
 
 function gambleResultId(
   siteId: SiteId,
@@ -106,15 +106,9 @@ export function buildGambleGateViews(
   return game.rules.gates.map((gate) => ({
     id: gate.gate,
     minimumWinningRank: gate.threshold,
-    chanceLabel: txa(
-      "{chance_percent}%",
-      {
-        chance_percent: Number.parseFloat(
+    chanceLabel: `${formatNumber(Number.parseFloat(
           gravokGateChanceLabel(game, gate).replace("%", ""),
-        ),
-      },
-      "[gamble] Exact winning probability for one wager gate. chance_percent is the percentage from zero through one hundred, rounded to two decimal places before display.",
-    ),
+        ))}%`,
     oddsNumerator: gate.winningCardCount,
     oddsDenominator: game.rules.standardDeckSize,
     essenceReward: gravokGateEssenceReward(game.economy, gate.gate),
@@ -133,7 +127,7 @@ export function buildGambleGateViews(
 function commonGambleView(params: {
   sceneNode: DreamscapeNode | null;
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
 }): { scene: ArtRef | null; guide: GravokWagerSiteView["guide"] } {
   return {
     scene:
@@ -147,7 +141,7 @@ function buildGravokWagerSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   game: ThreeGateGame;
   runtime: GravokWagerSiteRuntime;
 }): GravokWagerSiteView {
@@ -230,7 +224,7 @@ function buildLadderClimbSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   game: LadderClimbGame;
   runtime: TidemarkLadderClimbSiteRuntime;
 }): LadderClimbSiteView {
@@ -321,7 +315,7 @@ function buildStarwayStairsSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   game: StarwayStairsGame;
   runtime: StarwayStairsSiteRuntime;
 }): StarwayStairsSiteView {
@@ -407,7 +401,7 @@ function buildBlackjackSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   runtime: BlackjackSiteRuntime;
   game: BlackjackGame;
 }): BlackjackSiteView {
@@ -534,7 +528,7 @@ function buildFourSuitRepriseSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   game: FourSuitRepriseGame;
   runtime: FourSuitRepriseSiteRuntime;
   transfigurationData: TransfigurationData;
@@ -639,7 +633,7 @@ export function buildGambleSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   gambleData: GambleData;
   transfigurationData: TransfigurationData;
 }): GambleSiteView | null {

@@ -3,7 +3,6 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 import type { Database } from "firebase/database";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
-import { meaning, tx } from "@trox/runtime";
 import { recoveryUrlFromLocation } from "./room-recovery-url";
 import { logEvent } from "../logging";
 
@@ -43,35 +42,18 @@ export function UnreadableRoomScreen({
     <ApplicationStateScreen
       view={{
         kind: "unreadableRoom",
-        title: tx(
-          "This Game Could Not Be Read",
-          "[coop] Title for a shared room whose persisted data cannot be decoded safely.",
-        ),
-        message: tx(
+        title: "This Game Could Not Be Read",
+        message:
           "This game’s data cannot be loaded safely. Start a fresh game to keep playing.",
-          "[coop] Explanation that an unreadable shared room must be replaced to continue playing.",
-        ),
         actions: [
           {
             id: "primary",
-            label: tx(
-              meaning("unreadable-room-recover", "Recover Game"),
-              "[coop] Action that restores an unreadable shared room from its latest verified checkpoint.",
-            ),
+            label: "Recover Game",
             onPress: handleRecoverGame,
           },
           {
             id: "secondary",
-            label:
-              status === "creating"
-                ? tx(
-                    "Starting…",
-                    "[coop] Disabled action label while a replacement shared room is being created.",
-                  )
-                : tx(
-                    "Create New Game",
-                    "[coop] Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
-                  ),
+            label: status === "creating" ? "Starting…" : "Create New Game",
             disabled: status === "creating",
             onPress: handleStartNewGame,
           },

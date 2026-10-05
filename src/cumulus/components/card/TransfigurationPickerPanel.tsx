@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { tx, txa } from "@trox/runtime";
 import type { TransfigurationType } from "../../../types/journey";
 import type { GameCardModel } from "./CardView";
 import { CardPickerPanel } from "./CardPickerPanel";
@@ -53,16 +52,7 @@ export function TransfigurationPickerPanel({
   const openDeck = ready && state.presentation === "open-deck";
   const cards = ready ? state.cards : [];
   const dismiss = {
-    label:
-      openDeck || narrow
-        ? tx(
-            "Decline",
-            "[ui] Compact action declining the current interaction without applying it.",
-          )
-        : tx(
-            "Decline Offer",
-            "[ui] Action declining the current site offer and leaving without its reward.",
-          ),
+    label: openDeck || narrow ? "Decline" : "Decline Offer",
     onPress: onDismiss,
     testId: "cumulus-transfiguration-decline",
   } as const;
@@ -76,25 +66,13 @@ export function TransfigurationPickerPanel({
       style={{ display: "contents" }}
     >
       <CardPickerPanel
-        title={tx(
-          "Transfiguration",
-          "[transfiguration] Title of the card picker at a Transfiguration site.",
-        )}
+        title={"Transfiguration"}
         subtitle={
           !ready
-            ? tx(
-                "Heating the forge…",
-                "[transfiguration] [loading] Loading status while Transfiguration choices are prepared.",
-              )
+            ? "Heating the forge…"
             : openDeck
-              ? tx(
-                  "Pick any card to reforge",
-                  "[transfiguration] Instruction when any eligible card may be reforged.",
-                )
-              : tx(
-                  "Choose a card to reforge",
-                  "[transfiguration] Instruction for choosing the offered card to reforge.",
-                )
+              ? "Pick any card to reforge"
+              : "Choose a card to reforge"
         }
         rightAccessory={
           openDeck || narrow
@@ -112,24 +90,12 @@ export function TransfigurationPickerPanel({
             candidate.reforgedType != null
               ? {
                   kind: "text" as const,
-                  message: txa(
-                    "{form} · Reforged",
-                    { form: candidate.reforgedType },
-                    "[transfiguration] Caption beneath a card that has already been reforged. form is its canonical Transfiguration form name.",
-                  ),
+                  message: `${candidate.reforgedType} · Reforged`,
                 }
               : undefined,
         }))}
         emptyLabel={
-          ready
-            ? tx(
-                "No eligible cards to reforge.",
-                "[transfiguration] Empty state when no card can be reforged.",
-              )
-            : tx(
-                "Heating the forge…",
-                "[transfiguration] [loading] Loading status while Transfiguration choices are prepared.",
-              )
+          ready ? "No eligible cards to reforge." : "Heating the forge…"
         }
         testId="cumulus-transfiguration-picker"
         onCardPress={onCardPress}

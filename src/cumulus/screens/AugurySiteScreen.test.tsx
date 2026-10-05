@@ -3,7 +3,6 @@
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { parseStableDigest } from "../../types/stable-digest";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -97,8 +96,8 @@ function view(): AugurySiteView {
     ),
     guide: {
       id: testGuideId("aldric_the_seer"),
-      name: assertLocalized("Aldric, the Seer"),
-      line: assertLocalized("Choose one path for your dream."),
+      name: "Aldric, the Seer",
+      line: "Choose one path for your dream.",
       art: artRef.dreamGuide(testGuideId("aldric_the_seer")),
     },
     offers: [
@@ -453,10 +452,8 @@ describe("AugurySiteScreen", () => {
               isBattle: false,
               isLocked: false,
               isInteractive: false,
-              label: assertLocalized("Card Shop"),
-              blurb: assertLocalized(
-                "Spend essence to add cards to your deck.",
-              ),
+              label: "Card Shop",
+              blurb: "Spend essence to add cards to your deck.",
               icon: GLYPHS.gift,
             },
           },
@@ -588,7 +585,7 @@ describe("AugurySiteScreen", () => {
         view={view()}
         onChoose={() => ({
           ok: false,
-          message: assertLocalized("The visions shifted. Choose again."),
+          message: "The visions shifted. Choose again.",
         })}
         onClose={() => undefined}
       />,
@@ -609,9 +606,7 @@ describe("AugurySiteScreen", () => {
       ...view(),
       encounterSignature: null,
       offers: [],
-      unavailableMessage: assertLocalized(
-        "The visions are clouded. Walk on for now.",
-      ),
+      unavailableMessage: "The visions are clouded. Walk on for now.",
     };
     const container = mount(
       <AugurySiteScreen

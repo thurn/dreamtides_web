@@ -1,9 +1,7 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { resolveSource } from "../../runtime/localization/runtime";
 import type {
   AtlasNodeModel,
   AtlasNodePrimary,
@@ -171,8 +169,8 @@ function emptyPrimary(): AtlasNodePrimary {
   return {
     sceneArt: null,
     figureArt: null,
-    title: assertLocalized("An Unseen Dream"),
-    body: assertLocalized("An unseen dream."),
+    title: "An Unseen Dream",
+    body: "An unseen dream.",
     placeName: null,
     guideName: null,
   };
@@ -186,20 +184,20 @@ function residentModel(): Pick<
     primary: {
       sceneArt: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
       figureArt: artRef.dreamGuide(testGuideId("aldric")),
-      title: assertLocalized("Aldric, the Seer"),
-      body: assertLocalized("Aldric offers curated visions of the future."),
-      placeName: assertLocalized("The Glass Orchard"),
-      guideName: assertLocalized("Aldric, the Seer"),
+      title: "Aldric, the Seer",
+      body: "Aldric offers curated visions of the future.",
+      placeName: "The Glass Orchard",
+      guideName: "Aldric, the Seer",
     },
     dreamsign: null,
     site: {
-      name: assertLocalized("Augury"),
-      blurb: assertLocalized("Study a curated vision of what waits ahead."),
+      name: "Augury",
+      blurb: "Study a curated vision of what waits ahead.",
       icon: GLYPHS.water,
     },
     affiliation: {
-      title: assertLocalized("Fixture affiliation"),
-      body: assertLocalized("Fixture cards are more likely here."),
+      title: "Fixture affiliation",
+      body: "Fixture cards are more likely here.",
     },
   };
 }
@@ -216,7 +214,7 @@ function nodeItem(
 ): AtlasNodePlacementView {
   const model: AtlasNodeModel = {
     id: parseAtlasNodeId(idSeed),
-    name: assertLocalized(idSeed),
+    name: idSeed,
     state,
     role: extra.role ?? "regular",
     isReachable: true,
@@ -264,11 +262,9 @@ describe("Cumulus AtlasScreen", () => {
         id: testPresentationId("tutorial-run:atlas-guidance"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: assertLocalized("Mira"),
-          speakerName: assertLocalized("Mira"),
-          text: assertLocalized(
-            "On the [purple]Atlas[/purple] screen, choose a dream.",
-          ),
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "On the [purple]Atlas[/purple] screen, choose a dream.",
         },
         delaySeconds: 1,
         horizontalOffset: 0,
@@ -316,9 +312,9 @@ describe("Cumulus AtlasScreen", () => {
         id: testPresentationId("tutorial-run:atlas-guidance"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: assertLocalized("Mira"),
-          speakerName: assertLocalized("Mira"),
-          text: assertLocalized("Choose a dream."),
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Choose a dream.",
         },
         delaySeconds: 1,
         horizontalOffset: 12,
@@ -537,22 +533,22 @@ describe("Cumulus AtlasScreen", () => {
     });
 
     expect(document.body.textContent).toContain(
-      resolveSource(resident.primary.guideName!),
+      resident.primary.guideName!,
     );
     expect(document.body.textContent).toContain(
-      resolveSource(resident.site!.name),
+      resident.site!.name,
     );
     expect(document.body.textContent).toContain(
-      resolveSource(resident.site!.blurb),
+      resident.site!.blurb,
     );
     expect(document.body.textContent).toContain(
-      resolveSource(resident.affiliation!.title),
+      resident.affiliation!.title,
     );
     expect(document.body.textContent).toContain(
-      resolveSource(resident.affiliation!.body),
+      resident.affiliation!.body,
     );
     expect(document.body.textContent).toContain(
-      resolveSource(resident.primary.placeName!),
+      resident.primary.placeName!,
     );
   });
 });

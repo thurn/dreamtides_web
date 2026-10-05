@@ -4,7 +4,6 @@
 // console hairline, while both compose the canonical RulesText source.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startJourney.
 
-import type { LocalizedString } from "@trox/runtime";
 import type { CardId } from "../../types/card-identity";
 import type {
   TideId,
@@ -27,7 +26,6 @@ import { DEBUG_REROLL_TOP } from "../primitives/chrome-geometry";
 import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { AvatarId } from "../../types/identifiers";
 
 /** Canonical rules copy in the Journey Start console's inherited type voice. */
@@ -60,9 +58,9 @@ export interface AvatarTideView {
   /** Stable id (a tide deck id) for the React key / QA hook. */
   id: TideId | TutorialJourneyTideId;
   /** Display name shown on the tide's reveal card. */
-  label: LocalizedString;
+  label: string;
   /** Description revealed through the disc's InfoCard reveal. */
-  description: LocalizedString;
+  description: string;
   /** Which of the five tides fixes the disc's icon + color. */
   tide: Tide;
 }
@@ -174,17 +172,17 @@ export function TidesEssenceBlock({
 /** One signature card (kept for the shared view type; unused by the carousel). */
 export interface AvatarSignatureCardView {
   id: CardId | null;
-  name: LocalizedString;
+  name: string;
 }
 
 /** A single Avatar offered on the select screen, as display data. */
 export interface AvatarOfferView {
   id: AvatarId;
-  name: LocalizedString;
-  title: LocalizedString;
+  name: string;
+  title: string;
   imageNumber: string;
   portraitFocus?: AvatarPortraitFocus;
-  renderedText: LocalizedString;
+  renderedText: string;
   startingEssence: number;
   signatureCards: AvatarSignatureCardView[];
   tides: AvatarTideView[];
@@ -266,7 +264,7 @@ export function JourneyStartRerollControl({
   label,
 }: {
   readonly onReroll: () => void;
-  readonly label: LocalizedString;
+  readonly label: string;
 }) {
   return (
     <div
@@ -292,8 +290,8 @@ export function JourneyStartRerollControl({
 }
 
 /** The small purple uppercase context label painted directly over scene art. */
-export function OnMediaEyebrow({ label }: { readonly label: LocalizedString }) {
-  const resolve = useLocalizer();
+export function OnMediaEyebrow({ label }: { readonly label: string }) {
+  
   return (
     <span
       style={{
@@ -305,7 +303,7 @@ export function OnMediaEyebrow({ label }: { readonly label: LocalizedString }) {
         textShadow: token("--text-outline-media"),
       }}
     >
-      {resolve(label)}
+      {label}
     </span>
   );
 }

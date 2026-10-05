@@ -3,13 +3,12 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import {
   ApplicationStateScreen,
   type ApplicationStateView,
 } from "./ApplicationStateScreen";
 import { CumulusRoot } from "../CumulusRoot";
-const COPY = assertLocalized("Synthetic application-state copy");
+const COPY = "Synthetic application-state copy";
 
 let container: HTMLDivElement;
 let root: Root;

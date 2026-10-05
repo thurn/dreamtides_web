@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { testCardName } from "../../types/test-identities";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { LocalizedString } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { createTestBattleInit } from "../../testing/create-battle-init";
 import {
   makeBattleTestCardDatabase,
@@ -82,7 +81,7 @@ describe("buildBattleStartView", () => {
       id: init.enemyDescriptor.dreamsigns[0]?.id,
       imageName: "test.webp",
     });
-    expect(view.dreamsigns[0]?.imageAlt).toBeInstanceOf(LocalizedString);
+    expect(view.dreamsigns[0]?.imageAlt).toEqual(expect.any(String));
     expect(view.pointsToWin).toBe(15);
     expect(view.essenceReward).toBe(90);
   });

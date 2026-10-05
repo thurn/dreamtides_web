@@ -1,6 +1,5 @@
 // Pure view-model builder for Tobias Tanglefur's Cumulus Card Shop.
 
-import type { LocalizedString } from "@trox/runtime";
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import {
@@ -40,7 +39,6 @@ import type { GuideId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import type { ExplorationActionId } from "../../types/identifiers";
-import { bindSourceTransport } from "../../runtime/localization/runtime";
 import { SHOP_FLOW_PRESENTATION } from "./shop-flow-presentation-view-model";
 
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
@@ -54,7 +52,7 @@ export function resolveCardShopGuide(
 /** Build Tobias's guide slice for the shared character-gallery layout. */
 export function buildCardShopGuideView(
   guide: DreamGuideContent,
-  guideLine: LocalizedString,
+  guideLine: string,
 ) {
   return projectGuideView(guide, guideLine);
 }
@@ -168,7 +166,7 @@ export function buildCardShopSiteView(params: {
   runtime: ShopSiteRuntime;
   cardDatabase: ReadonlyMap<number, CardData>;
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   economyData: EconomyData;
   transfigurationData: TransfigurationData;
   sitesData: SitesData;
@@ -187,7 +185,7 @@ export function buildCardShopSiteView(params: {
       >;
       return {
         kind: identity.kind,
-        title: bindSourceTransport(identity.title),
+        title: identity.title,
         ...SHOP_FLOW_PRESENTATION,
       };
     })(),

@@ -21,8 +21,6 @@ import type {
   CommandMenuStatusCopy,
 } from "../cumulus/components/overlay/CommandMenu";
 import { GLYPHS } from "../cumulus/primitives/glyph";
-import { tx, txa } from "@trox/runtime";
-import { useLocalizer } from "../runtime/localization/use-localizer";
 
 /** A route-supplied command that the journey utility menu may render. */
 export type JourneyUtilityMenuAction = CommandMenuAction | CommandMenuGroup;
@@ -72,10 +70,7 @@ export function buildJourneyUtilityMenuViewModel({
             {
               kind: "action",
               id: "saveJourney",
-              label: tx(
-                "Save Journey",
-                "[journey] Command in the Journey utility menu that downloads the current journey as a save file.",
-              ),
+              label: "Save Journey",
               glyph: GLYPHS.save,
               onCommand: onSaveJourney,
             },
@@ -86,10 +81,7 @@ export function buildJourneyUtilityMenuViewModel({
                 {
                   kind: "action",
                   id: "loadJourney",
-                  label: tx(
-                    "Load Journey",
-                    "[journey] Command in the Journey utility menu that imports a Journey save file.",
-                  ),
+                  label: "Load Journey",
                   glyph: GLYPHS.folderOpen,
                   onCommand: onLoadJourney,
                 },
@@ -100,10 +92,7 @@ export function buildJourneyUtilityMenuViewModel({
             {
               kind: "action",
               id: "downloadLog",
-              label: tx(
-                "Download Log",
-                "[journey] [developer] Command in the Journey utility menu that downloads the diagnostic Journey log.",
-              ),
+              label: "Download Log",
               glyph: GLYPHS.download,
               onCommand: onDownloadLog,
             },
@@ -113,10 +102,7 @@ export function buildJourneyUtilityMenuViewModel({
             {
               kind: "action",
               id: "buildSha",
-              label: tx(
-                "Build SHA",
-                "[journey] Command in the Journey utility menu that displays the current build identifier.",
-              ),
+              label: "Build SHA",
               glyph: GLYPHS.code,
               onCommand: onViewBuildSha,
             },
@@ -153,7 +139,7 @@ export function useJourneyUtilityMenuController({
   loadSource,
 }: JourneyUtilityMenuControllerOptions): JourneyUtilityMenuViewModel {
   const { state } = useJourney();
-  const resolve = useLocalizer();
+  
   const [status, setStatus] = useState<CommandMenuStatusCopy | null>(null);
   const statusTimerRef = useRef<number | null>(null);
 
@@ -175,21 +161,13 @@ export function useJourneyUtilityMenuController({
 
   function handleSaveJourney(): void {
     const entered = window.prompt(
-      resolve(
-        tx(
-          "Save current journey as:",
-          "[journey] Native browser prompt text for naming a downloaded Journey save. The prompt is visible before the file is created and asks for the player's authored name.",
-        ),
-      ),
+      "Save current journey as:",
     );
     if (entered === null) return;
     const trimmed = entered.trim();
     if (trimmed === "") {
       flashStatus(
-        tx(
-          "Save cancelled: a name is required.",
-          "[journey] Transient status after the player submits an empty Journey save name.",
-        ),
+        "Save cancelled: a name is required.",
       );
       return;
     }
@@ -203,11 +181,7 @@ export function useJourneyUtilityMenuController({
         formatVersion: save.version,
       });
       flashStatus(
-        txa(
-          'Downloaded "{file_name}".',
-          { file_name: fileName },
-          "[journey] Transient status after a Journey save download. file_name is a generated filename and remains an opaque technical value.",
-        ),
+        `Downloaded "${fileName}".`,
       );
     } catch (error) {
       logEvent("debug_journey_save_failed", {
@@ -216,10 +190,7 @@ export function useJourneyUtilityMenuController({
         message: error instanceof Error ? error.message : null,
       });
       flashStatus(
-        tx(
-          "Failed to save journey.",
-          "[journey] Transient status when a Journey save fails.",
-        ),
+        "Failed to save journey.",
       );
     }
   }
@@ -227,10 +198,7 @@ export function useJourneyUtilityMenuController({
   async function handleLoadJourney(): Promise<void> {
     if (onLoadJourneyState === undefined) {
       flashStatus(
-        tx(
-          "Loading is unavailable in this context.",
-          "[journey] [loading] Transient status when Journey loading is unavailable in the current route context.",
-        ),
+        "Loading is unavailable in this context.",
       );
       return;
     }
@@ -246,11 +214,7 @@ export function useJourneyUtilityMenuController({
       });
       onLoadJourneyState(loaded.journeyState, loadSource);
       flashStatus(
-        txa(
-          'Loaded "{save_name}".',
-          { save_name: loaded.name },
-          "[journey] Transient status after a Journey save is imported. save_name is the player's authored save name and remains grammatically opaque.",
-        ),
+        `Loaded "${loaded.name}".`,
       );
     } catch (error) {
       logEvent("debug_journey_load_failed", {
@@ -259,10 +223,7 @@ export function useJourneyUtilityMenuController({
         message: error instanceof Error ? error.message : null,
       });
       flashStatus(
-        tx(
-          "Failed to load journey.",
-          "[journey] Transient status when a Journey load fails.",
-        ),
+        "Failed to load journey.",
       );
     }
   }
@@ -283,14 +244,10 @@ export function useJourneyUtilityMenuController({
             gitSha: BUILD_GIT_SHA,
           });
           flashStatus(
-            txa(
-              "Build Git SHA: {git_sha}",
-              { git_sha: BUILD_GIT_SHA },
-              "[ui] Transient status after the player requests the current build identifier. git_sha is an opaque technical build identifier.",
-            ),
+            `Build Git SHA: ${BUILD_GIT_SHA}`,
           );
         },
       }),
-    [actions, builtIns, onLoadJourneyState, status, resolve],
+    [actions, builtIns, onLoadJourneyState, status],
   );
 }

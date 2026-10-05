@@ -1,14 +1,12 @@
-import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export type ApplicationStateComparisonValue =
   | { readonly kind: "raw"; readonly value: string }
-  | { readonly kind: "message"; readonly message: LocalizedString };
+  | { readonly kind: "message"; readonly message: string };
 
 export type ApplicationStateComparisonId =
   | "atlas"
@@ -23,7 +21,7 @@ export type ApplicationStateComparisonId =
 /** One labelled value in an application-state comparison. */
 export interface ApplicationStateComparisonRow {
   readonly id: ApplicationStateComparisonId;
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly expected: ApplicationStateComparisonValue;
   readonly actual: ApplicationStateComparisonValue;
   readonly differs: boolean;
@@ -32,15 +30,15 @@ export interface ApplicationStateComparisonRow {
 /** One explicit action offered by an application-state screen. */
 export interface ApplicationStateAction {
   readonly id: "primary" | "secondary";
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly onPress: () => void;
   readonly disabled?: boolean;
 }
 
 interface ApplicationStateBase {
-  readonly title: LocalizedString;
-  readonly message: LocalizedString;
-  readonly detail?: LocalizedString;
+  readonly title: string;
+  readonly message: string;
+  readonly detail?: string;
   readonly actions?: readonly ApplicationStateAction[];
 }
 
@@ -52,11 +50,11 @@ interface ApplicationStateBase {
 export type ApplicationStateView =
   | (ApplicationStateBase & {
       readonly kind: "loading";
-      readonly busyLabel: LocalizedString;
+      readonly busyLabel: string;
     })
   | (ApplicationStateBase & {
       readonly kind: "roomCreation";
-      readonly busyLabel: LocalizedString;
+      readonly busyLabel: string;
     })
   | (ApplicationStateBase & { readonly kind: "recoverableError" })
   | (ApplicationStateBase & { readonly kind: "fatalConfiguration" })
@@ -73,44 +71,23 @@ export interface ApplicationStateScreenProps {
   readonly view: ApplicationStateView;
 }
 
-function eyebrowForKind(kind: ApplicationStateView["kind"]): LocalizedString {
+function eyebrowForKind(kind: ApplicationStateView["kind"]): string {
   switch (kind) {
     case "loading":
     case "roomCreation":
-      return tx(
-        meaning("product-eyebrow", "Dreamtides"),
-        "[loading] Product eyebrow above application loading and shared-room creation states.",
-      );
+      return "Dreamtides";
     case "recoverableError":
-      return tx(
-        "Journey Status",
-        "[journey] Eyebrow above a recoverable Journey state failure.",
-      );
+      return "Journey Status";
     case "fatalConfiguration":
-      return tx(
-        "Configuration",
-        "[ui] Eyebrow above a fatal application configuration problem.",
-      );
+      return "Configuration";
     case "versionGate":
-      return tx(
-        "Game Version",
-        "[coop] Eyebrow above a shared room reducer-version compatibility gate.",
-      );
+      return "Game Version";
     case "contentConfigGate":
-      return tx(
-        "Game Settings",
-        "[coop] Eyebrow above a shared room content-settings comparison gate.",
-      );
+      return "Game Settings";
     case "unreadableRoom":
-      return tx(
-        "Game Data",
-        "[coop] Eyebrow above a shared room whose persisted data cannot be decoded.",
-      );
+      return "Game Data";
     case "unreachableRoom":
-      return tx(
-        "Game Connection",
-        "[coop] Eyebrow above a shared room connection failure.",
-      );
+      return "Game Connection";
   }
 }
 
@@ -118,7 +95,6 @@ function eyebrowForKind(kind: ApplicationStateView["kind"]): LocalizedString {
 export function ApplicationStateScreen({
   view,
 }: ApplicationStateScreenProps): ReactElement {
-  const resolve = useLocalizer();
   const busy = view.kind === "loading" || view.kind === "roomCreation";
   return (
     <main
@@ -179,7 +155,7 @@ export function ApplicationStateScreen({
                   overflowWrap: "anywhere",
                 }}
               >
-                {resolve(view.detail)}
+                {view.detail}
               </p>
             )}
             {view.actions !== undefined && view.actions.length > 0 && (
@@ -211,12 +187,7 @@ export function ApplicationStateScreen({
   );
 }
 
-function BusyIndicator({
-  label,
-}: {
-  readonly label: LocalizedString;
-}): ReactElement {
-  const resolve = useLocalizer();
+function BusyIndicator({ label }: { readonly label: string }): ReactElement {
   return (
     <p
       role="status"
@@ -228,7 +199,7 @@ function BusyIndicator({
         textAlign: "center",
       }}
     >
-      {resolve(label)}
+      {label}
     </p>
   );
 }
@@ -238,7 +209,6 @@ function ComparisonTable({
 }: {
   readonly rows: readonly ApplicationStateComparisonRow[];
 }): ReactElement {
-  const resolve = useLocalizer();
   return (
     <dl
       data-application-state-comparison
@@ -251,22 +221,8 @@ function ComparisonTable({
       }}
     >
       <span aria-hidden="true" />
-      <dt style={{ color: token("--text-on-glass-muted") }}>
-        {resolve(
-          tx(
-            "This Game",
-            "[coop] Comparison-table heading for the shared room's expected content configuration.",
-          ),
-        )}
-      </dt>
-      <dt style={{ color: token("--text-on-glass-muted") }}>
-        {resolve(
-          tx(
-            "Yours",
-            "[ui] Comparison-table heading for the local client's content configuration.",
-          ),
-        )}
-      </dt>
+      <dt style={{ color: token("--text-on-glass-muted") }}>{"This Game"}</dt>
+      <dt style={{ color: token("--text-on-glass-muted") }}>{"Yours"}</dt>
       {rows.map((row) => (
         <ComparisonRow key={row.id} row={row} />
       ))}
@@ -279,22 +235,17 @@ function ComparisonRow({
 }: {
   readonly row: ApplicationStateComparisonRow;
 }): ReactElement {
-  const resolve = useLocalizer();
   const valueColor = row.differs ? token("--danger") : token("--text-on-glass");
   return (
     <>
-      <dt style={{ color: token("--text-on-glass-muted") }}>
-        {resolve(row.label)}
-      </dt>
+      <dt style={{ color: token("--text-on-glass-muted") }}>{row.label}</dt>
       <dd style={{ margin: 0, color: valueColor }}>
         {row.expected.kind === "raw"
           ? row.expected.value
-          : resolve(row.expected.message)}
+          : row.expected.message}
       </dd>
       <dd style={{ margin: 0, color: valueColor }}>
-        {row.actual.kind === "raw"
-          ? row.actual.value
-          : resolve(row.actual.message)}
+        {row.actual.kind === "raw" ? row.actual.value : row.actual.message}
       </dd>
     </>
   );

@@ -1,6 +1,5 @@
 // Pure view-model builder for the Cumulus Dreamsign Revelation screen.
 
-import { tx, type LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -35,7 +34,7 @@ export function resolveDreamsignRevelationGuide(
 /** Build the guide slice shown beside the offer. */
 export function buildDreamsignRevelationGuideView(
   guide: DreamGuideContent,
-  guideLine: LocalizedString,
+  guideLine: string,
 ): DreamsignRevelationGuideView {
   return projectGuideView(guide, guideLine);
 }
@@ -45,7 +44,7 @@ export function buildDreamsignRevelationView(params: {
   state: JourneyState;
   sceneNode: DreamscapeNode | null;
   guide: DreamGuideContent;
-  guideLine: LocalizedString;
+  guideLine: string;
   offeredDreamsigns: readonly Dreamsign[] | null;
   pendingPurgeDreamsign: Dreamsign | null;
   tutorialConfiguration?: TutorialSiteConfiguration;
@@ -55,14 +54,8 @@ export function buildDreamsignRevelationView(params: {
   return {
     presentation: {
       kind: "dreamsign-revelation",
-      loading: tx(
-        "Revealing Dreamsigns...",
-        "[dreamsign revelation] Status shown while the offered Dreamsigns are being prepared.",
-      ),
-      exhausted: tx(
-        "The Dreamsign pool is exhausted.",
-        "[dreamsign revelation] Message shown when no Dreamsign remains available to offer.",
-      ),
+      loading: "Revealing Dreamsigns...",
+      exhausted: "The Dreamsign pool is exhausted.",
     },
     scene,
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),

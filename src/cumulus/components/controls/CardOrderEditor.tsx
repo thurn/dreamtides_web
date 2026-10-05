@@ -10,23 +10,21 @@ import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "./StandaloneGlyph";
-import { opaque, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface CardOrderEditorItem<Id extends string> {
   /** Card UUID or battle-instance id returned unchanged by callbacks. */
   id: Id;
   /** Presentation-only card label. */
-  label: LocalizedString;
+  label: string;
   /** Optional secondary identifying detail. */
-  summary?: LocalizedString;
+  summary?: string;
 }
 
 export interface CardOrderEditorProps<Id extends string> {
   /** Ordered cards, from top to bottom. */
   items: readonly CardOrderEditorItem<Id>[];
   /** Accessible name for the ordered collection. */
-  label: LocalizedString;
+  label: string;
   /** Returns the complete top-to-bottom sequence of card ids after a move. */
   onOrderChange: (orderedIds: readonly Id[]) => void;
   /**
@@ -44,7 +42,6 @@ export function CardOrderEditor<Id extends string>({
   onOrderChange,
   placement = "onMedia",
 }: CardOrderEditorProps<Id>): ReactElement {
-  const resolve = useLocalizer();
   const move = (from: number, to: number): void => {
     const ids = items.map((item) => item.id);
     const [moved] = ids.splice(from, 1);
@@ -59,7 +56,7 @@ export function CardOrderEditor<Id extends string>({
       values={items.map((item) => item.id)}
       onReorder={onOrderChange}
       role="list"
-      aria-label={resolve(label)}
+      aria-label={label}
       data-glass-placement={placement}
       style={{
         ...glassContentControlSurface(placement),
@@ -92,7 +89,6 @@ function CardOrderEditorRow<Id extends string>({
   readonly itemCount: number;
   readonly onMove: (from: number, to: number) => void;
 }): ReactElement {
-  const resolve = useLocalizer();
   const controls = useDragControls();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>): void => {
@@ -143,7 +139,7 @@ function CardOrderEditorRow<Id extends string>({
             whiteSpace: "nowrap",
           }}
         >
-          {resolve(item.label)}
+          {item.label}
         </span>
         {item.summary === undefined ? null : (
           <span
@@ -152,17 +148,13 @@ function CardOrderEditorRow<Id extends string>({
               font: token("--t-caption"),
             }}
           >
-            {resolve(item.summary)}
+            {item.summary}
           </span>
         )}
       </span>
       <Pressable
         as="button"
-        ariaLabelMessage={txa(
-          "Reorder {card_name}",
-          { card_name: opaque(item.label) },
-          "[accessibility] [battle] Command on a drag handle that reorders one battle card. card_name is the independently localized UUID-resolved card name and is grammatically invariant here; arrow-key commands move that physical entry.",
-        )}
+        ariaLabelMessage={`Reorder ${item.label}`}
         aria-keyshortcuts="ArrowUp ArrowDown"
         data-card-order-drag-handle={item.id}
         onPointerDown={(event: PointerEvent<HTMLButtonElement>) =>

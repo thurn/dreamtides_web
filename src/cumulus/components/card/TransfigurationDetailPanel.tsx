@@ -1,7 +1,5 @@
 import type { ReactElement } from "react";
-import { meaning, tx } from "@trox/runtime";
 import type { TransfigurationType } from "../../../types/journey";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { token } from "../../primitives/tokens";
 import { GlassButton } from "../controls/GlassButton";
 import {
@@ -64,7 +62,6 @@ export function TransfigurationDetailPanel({
   onChange,
   onConfirm,
 }: TransfigurationDetailPanelProps): ReactElement {
-  const resolve = useLocalizer();
   const narrow = !useIsDesktop();
   const activeForm =
     candidate.forms.find((form) => form.type === value) ?? null;
@@ -95,10 +92,7 @@ export function TransfigurationDetailPanel({
       }}
     >
       <GlassPanel
-        title={tx(
-          "Choose Its New Form",
-          "[transfiguration] Title above the form choices for the currently selected card.",
-        )}
+        title={"Choose Its New Form"}
         headerSpacing={narrow ? "compact" : "medium"}
         footer={
           <div
@@ -114,10 +108,7 @@ export function TransfigurationDetailPanel({
             {navigation.kind === "reselectable" && (
               <GlassButton
                 placement="onGlass"
-                label={tx(
-                  meaning("transfiguration-reselect-action", "Choose Again"),
-                  "[transfiguration] Returns to the card picker.",
-                )}
+                label={"Choose Again"}
                 disabled={status === "submitting"}
                 onPress={navigation.onBack}
                 testId="cumulus-transfiguration-choose-again"
@@ -126,34 +117,18 @@ export function TransfigurationDetailPanel({
             <GlassButton
               placement="onGlass"
               variant="accent"
-              label={
-                status === "submitting"
-                  ? tx(
-                      "Reforging…",
-                      "[transfiguration] Pending status while a Transfiguration is being saved.",
-                    )
-                  : tx(
-                      meaning("transfiguration-commit-action", "Transfigure"),
-                      "[transfiguration] Commits the selected form.",
-                    )
-              }
+              label={status === "submitting" ? "Reforging…" : "Transfigure"}
               essenceCost={activePrice?.amount ?? null}
               widthReservations={candidate.forms.flatMap((form) => [
                 {
-                  label: tx(
-                    meaning("transfiguration-commit-action", "Transfigure"),
-                    "[transfiguration] Commits the selected form.",
-                  ),
+                  label: "Transfigure",
                   essenceCost:
                     form.pricing.kind === "essence"
                       ? form.pricing.amount
                       : null,
                 },
                 {
-                  label: tx(
-                    "Reforging…",
-                    "[transfiguration] Pending status while a Transfiguration is being saved.",
-                  ),
+                  label: "Reforging…",
                   essenceCost:
                     form.pricing.kind === "essence"
                       ? form.pricing.amount
@@ -199,12 +174,7 @@ export function TransfigurationDetailPanel({
           </div>
           <div
             role="radiogroup"
-            aria-label={resolve(
-              tx(
-                "Transfiguration options",
-                "[accessibility] [transfiguration] Options name.",
-              ),
-            )}
+            aria-label={"Transfiguration options"}
             data-transfiguration-options=""
             data-transfiguration-option-layout={narrow ? "compact" : "wide"}
             style={{

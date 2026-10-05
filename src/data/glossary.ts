@@ -1,11 +1,10 @@
 import { validateGlossaryEntries } from "../../scripts/glossary-source.mjs";
 import { GLOSSARY as GLOSSARY_ENTRIES } from "../content/glossary";
-import type { SourceTransport } from "../runtime/localization/runtime";
-import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import {
   parseGlossaryEntryId,
   type GlossaryEntryId,
 } from "../types/identifiers";
+import { requireText } from "../runtime/text";
 
 /** A RON-authored explanatory Info Card entry. */
 export interface GlossaryEntry {
@@ -26,9 +25,9 @@ export interface GlossaryProjection {
   /** Case-insensitive regular expression which the source sentence must match. */
   readonly pattern?: string;
   /** Display-term template; `{term}` and numbered captures such as `{1}` expand. */
-  readonly term?: SourceTransport;
+  readonly term?: string;
   /** Definition template; `{term}` and numbered captures such as `{1}` expand. */
-  readonly definition?: SourceTransport;
+  readonly definition?: string;
 }
 
 /** Fully identified glossary catalog record. */
@@ -98,18 +97,12 @@ export const INFO_CARD_GLOSSARY: readonly GlossaryCatalogEntry[] =
       ...(projection.term === undefined
         ? {}
         : {
-            term: hydrateSourceTransport(
-              projection.term,
-              `Glossary ${entry.id} projection term`,
-            ),
+            term: requireText(projection.term, `Glossary ${entry.id} projection term`),
           }),
       ...(projection.definition === undefined
         ? {}
         : {
-            definition: hydrateSourceTransport(
-              projection.definition,
-              `Glossary ${entry.id} projection definition`,
-            ),
+            definition: requireText(projection.definition, `Glossary ${entry.id} projection definition`),
           }),
     })),
   }));

@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
@@ -46,7 +45,7 @@ describe("StandaloneGlyph", () => {
       <StandaloneGlyph
         glyph={GLYPHS.bolt}
         color="text-primary"
-        label={assertLocalized("Fast")}
+        label={"Fast"}
       />,
     );
     const decorative = renderLocalizedToStaticMarkup(

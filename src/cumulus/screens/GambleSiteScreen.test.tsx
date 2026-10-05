@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -52,7 +51,7 @@ const VIEW: GravokWagerSiteView = {
     {
       id: "six",
       minimumWinningRank: "6",
-      chanceLabel: assertLocalized("69.23%"),
+      chanceLabel: "69.23%",
       oddsNumerator: 36,
       oddsDenominator: 52,
       essenceReward: 100,
@@ -62,7 +61,7 @@ const VIEW: GravokWagerSiteView = {
     {
       id: "nine",
       minimumWinningRank: "9",
-      chanceLabel: assertLocalized("46.15%"),
+      chanceLabel: "46.15%",
       oddsNumerator: 24,
       oddsDenominator: 52,
       essenceReward: 150,
@@ -72,7 +71,7 @@ const VIEW: GravokWagerSiteView = {
     {
       id: "jack",
       minimumWinningRank: "J",
-      chanceLabel: assertLocalized("30.77%"),
+      chanceLabel: "30.77%",
       oddsNumerator: 16,
       oddsDenominator: 52,
       essenceReward: 200,
@@ -82,8 +81,8 @@ const VIEW: GravokWagerSiteView = {
   ],
   guide: {
     id: testGuideId("fixture-guide"),
-    name: assertLocalized("Fixture Guide"),
-    line: assertLocalized("A fixture gamble."),
+    name: "Fixture Guide",
+    line: "A fixture gamble.",
     art: artRef.dreamGuide(testGuideId("fixture-guide")),
   },
   result: null,
@@ -125,10 +124,8 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   currentTierNumber: 1,
   guide: {
     id: testGuideId("gravok"),
-    name: assertLocalized("Gravok"),
-    line: assertLocalized(
-      "Starway Stairs is the game. Keep betting to see how high you can go!",
-    ),
+    name: "Gravok",
+    line: "Starway Stairs is the game. Keep betting to see how high you can go!",
     art: artRef.dreamGuide(testGuideId("gravok")),
   },
   result: null,
@@ -186,8 +183,8 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   cards: [fourSuitCardView(1), fourSuitCardView(2)],
   guide: {
     id: testGuideId("gravok"),
-    name: assertLocalized("Gravok"),
-    line: assertLocalized("A fixture gamble."),
+    name: "Gravok",
+    line: "A fixture gamble.",
     art: artRef.dreamGuide(testGuideId("gravok")),
   },
   result: null,
@@ -219,8 +216,8 @@ const BLACKJACK_VIEW: BlackjackSiteView = {
   canPlayAgain: false,
   guide: {
     id: testGuideId("gravok"),
-    name: assertLocalized("Gravok"),
-    line: assertLocalized("A fixture gamble."),
+    name: "Gravok",
+    line: "A fixture gamble.",
     art: artRef.dreamGuide(testGuideId("gravok")),
   },
 };

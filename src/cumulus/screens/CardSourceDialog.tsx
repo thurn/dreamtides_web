@@ -5,8 +5,6 @@ import { GameCard } from "../components/card/CardView";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
 import { token } from "../primitives/tokens";
-import type { LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export type CardSourceNarrativeLineId =
   | `card:${number}:${number}`
@@ -16,17 +14,17 @@ export type CardSourceNarrativeSectionId = "construction" | "cards";
 
 export interface CardSourceNarrativeLine {
   id: CardSourceNarrativeLineId;
-  text: LocalizedString;
+  text: string;
   card: GameCardModel | null;
 }
 export interface CardSourceNarrativeSection {
   id: CardSourceNarrativeSectionId;
-  title: LocalizedString;
+  title: string;
   lines: readonly CardSourceNarrativeLine[];
 }
 export interface CardSourceView {
-  title: LocalizedString;
-  subtitle: LocalizedString;
+  title: string;
+  subtitle: string;
   construction: CardSourceNarrativeSection | null;
   cards: CardSourceNarrativeSection;
 }
@@ -85,7 +83,7 @@ function Narrative({
   section: CardSourceNarrativeSection;
   initiallyExpanded: boolean;
 }): ReactElement {
-  const resolve = useLocalizer();
+  
   const [expanded, setExpanded] = useState(initiallyExpanded);
   return (
     <DisclosureSection
@@ -105,7 +103,7 @@ function Narrative({
         {section.lines.map((line) =>
           line.card === null ? (
             <p key={line.id} style={text}>
-              {resolve(line.text)}
+              {line.text}
             </p>
           ) : (
             <div
@@ -123,7 +121,7 @@ function Narrative({
                 hideRulesText
                 testId={`card-source-game-card-${line.card.cardId}`}
               />
-              <p style={text}>{resolve(line.text)}</p>
+              <p style={text}>{line.text}</p>
             </div>
           ),
         )}

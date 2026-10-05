@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -22,8 +21,8 @@ describe("TideDisc", () => {
           <TideDisc
             tide="valor"
             id={testTideId("tide-valor")}
-            label={assertLocalized("Rising Valor")}
-            description={assertLocalized("Stand firm.")}
+            label={"Rising Valor"}
+            description={"Stand firm."}
           />
         </CumulusRoot>,
       ),

@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 
-import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -21,7 +20,7 @@ describe("TextField commit behavior", () => {
       root.render(
         <CumulusRoot>
           <TextField
-            label={assertLocalized("Field")}
+            label={"Field"}
             value="draft"
             onChange={vi.fn()}
             onCommit={onCommit}
@@ -50,7 +49,7 @@ describe("TextField commit behavior", () => {
       root.render(
         <CumulusRoot>
           <TextField
-            label={assertLocalized("Field")}
+            label={"Field"}
             value="draft"
             onChange={vi.fn()}
             onCommit={onCommit}

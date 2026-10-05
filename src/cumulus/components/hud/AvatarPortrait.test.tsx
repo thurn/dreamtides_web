@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { afterEach, describe, expect, it } from "vitest";
@@ -11,8 +10,8 @@ import { renderInCumulus } from "../../testing/render";
 
 const DC: AvatarVisual = {
   imageNumber: "0042",
-  name: assertLocalized("Astra"),
-  title: assertLocalized("The Dawnbound"),
+  name: "Astra",
+  title: "The Dawnbound",
 };
 
 afterEach(() => {
@@ -40,7 +39,7 @@ describe("AvatarPortrait variants", () => {
         variant="panel"
         profile={{
           id: testAvatarId("00000000-0000-4000-8000-000000000061"),
-          ability: assertLocalized("Gain 1 essence."),
+          ability: "Gain 1 essence.",
         }}
       />,
     );

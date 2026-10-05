@@ -30,15 +30,6 @@
 // from "the whole deck + that state" to "the visible grid" lives in the pure,
 // tested `desktop-deck-filter` module.
 
-import {
-  meaning,
-  tx,
-  plural,
-  one,
-  other,
-  txa,
-  type LocalizedString,
-} from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { requireDreamsignId } from "../../data/dreamsigns";
@@ -55,7 +46,6 @@ import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { DeckCardView } from "./MobileDeckViewer";
 import {
   TideDiscReveal,
@@ -75,13 +65,14 @@ import {
   buildSubtypeFilterOptions,
   filterAndSortDesktopDeckCards,
 } from "./desktop-deck-filter";
+import { formatNumber } from "../../runtime/format-number";
 
 /** The Avatar shown in the sidebar: the portrait's visual plus rules text. */
 export interface DeckAvatarView extends AvatarVisual {
   /** Stable Avatar UUID. */
   id: AvatarId;
   /** The Avatar's ability text, revealed through the shared InfoCard. */
-  renderedText: LocalizedString;
+  renderedText: string;
 }
 
 /** The full view-model the desktop viewer renders. */
@@ -135,7 +126,7 @@ const AVATAR_PORTRAIT_PX = DREAMSIGN_TILE_PX;
  * (the dark margin) or Escape closes it.
  */
 export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
-  const resolve = useLocalizer();
+  
   const [filterSort, setFilterSort] = useState<DesktopDeckFilterSort>(
     DEFAULT_DESKTOP_DECK_FILTER_SORT,
   );
@@ -184,12 +175,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={resolve(
-          tx(
-            "Your Deck",
-            "[card-browser] [coop] Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
-          ),
-        )}
+        aria-label={"Your Deck"}
         // Presses inside the content never reach the surface, so only an outside
         // press closes.
         onPointerDown={(e) => {
@@ -270,9 +256,9 @@ function Eyebrow({
 }
 
 /** The sidebar's consistent section header: an uppercase eyebrow label. */
-function SidebarSectionHeader({ label }: { label: LocalizedString }) {
-  const resolve = useLocalizer();
-  return <Eyebrow>{resolve(label)}</Eyebrow>;
+function SidebarSectionHeader({ label }: { label: string }) {
+  
+  return <Eyebrow>{label}</Eyebrow>;
 }
 
 /**
@@ -280,7 +266,7 @@ function SidebarSectionHeader({ label }: { label: LocalizedString }) {
  * corner close disc wearing the shared glass surface.
  */
 function Header({ count, onClose }: { count: number; onClose: () => void }) {
-  const resolve = useLocalizer();
+  
   return (
     <header
       style={{
@@ -306,34 +292,17 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
             color: token("--text-primary"),
           }}
         >
-          {resolve(
-            tx(
-              "Your Deck",
-              "[card-browser] [coop] Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
-            ),
-          )}
+          {"Your Deck"}
         </h2>
         <Eyebrow>
-          {resolve(
-            txa(
-              meaning(
-                "journey-deck-count-subtitle",
-                plural(count, [one("{count} Card"), other("{count} Cards")]),
-              ),
-              { count },
-              "[card-browser] Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
-            ),
-          )}
+          {(count === 1 ? `${formatNumber(count)} Card` : `${formatNumber(count)} Cards`)}
         </Eyebrow>
       </div>
       <IconButton
         placement="onGlass"
         glyph={GLYPHS.close}
         size="sm"
-        label={tx(
-          "Close deck browser",
-          "[accessibility] [card-browser] [journey] Name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
-        )}
+        label={"Close deck browser"}
         onPress={onClose}
       />
     </header>
@@ -394,10 +363,7 @@ function AvatarBlock({
       }}
     >
       <SidebarSectionHeader
-        label={tx(
-          meaning("deck-avatar-label", "Avatar"),
-          "[card-browser] Deck viewer avatar label.",
-        )}
+        label={"Avatar"}
       />
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {/* The portrait itself is the reveal trigger: Pressable owns the one
@@ -435,7 +401,7 @@ function AvatarBlock({
 
 /** The collected dreamsigns as hoverable art tiles. */
 function DreamsignsBlock({ dreamsigns }: { dreamsigns: LocalizedDreamsign[] }) {
-  const resolve = useLocalizer();
+  
   return (
     <section
       style={{
@@ -445,21 +411,13 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: LocalizedDreamsign[] }) {
       }}
     >
       <SidebarSectionHeader
-        label={tx(
-          "Dreamsigns",
-          "[dreamsign] Section label for the player's collected Dreamsigns.",
-        )}
+        label={"Dreamsigns"}
       />
       {dreamsigns.length === 0 ? (
         <div
           style={{ font: token("--t-body-sm"), color: token("--text-muted") }}
         >
-          {resolve(
-            tx(
-              "None collected yet.",
-              "[dreamsign] [card-browser] Deck viewer no dreamsigns.",
-            ),
-          )}
+          {"None collected yet."}
         </div>
       ) : (
         <div
@@ -498,10 +456,7 @@ function TidesBlock({ tides }: { tides: AvatarTideView[] }) {
       }}
     >
       <SidebarSectionHeader
-        label={tx(
-          "Tides",
-          "[card-browser] Deck viewer tides label.",
-        )}
+        label={"Tides"}
       />
       <div
         data-deck-tides-grid=""
@@ -539,71 +494,38 @@ function ControlBar({
   onChange: (patch: Partial<DesktopDeckFilterSort>) => void;
 }) {
   const showSubtypeFilter = filterSort.type !== "Event";
-  const typeLabel = (value: DesktopDeckFilterSort["type"]): LocalizedString => {
+  const typeLabel = (value: DesktopDeckFilterSort["type"]): string => {
     switch (value) {
       case "all":
-        return tx(
-          "All",
-          "[card-browser] Type filter option that keeps every card type.",
-        );
+        return "All";
       case "Character":
-        return tx(
-          "Characters",
-          "[card-browser] Type filter option that keeps Character cards.",
-        );
+        return "Characters";
       case "Event":
-        return tx(
-          "Events",
-          "[card-browser] Type filter option that keeps Event cards.",
-        );
+        return "Events";
     }
   };
-  const sortLabel = (value: DesktopDeckFilterSort["sort"]): LocalizedString => {
+  const sortLabel = (value: DesktopDeckFilterSort["sort"]): string => {
     switch (value) {
       case "name":
-        return tx(
-          "Name",
-          "[card-browser] Sort-field option for canonical authored card names.",
-        );
+        return "Name";
       case "drafted":
-        return tx(
-          "Acquired",
-          "[card-browser] Deck sort acquired.",
-        );
+        return "Acquired";
       case "cost":
-        return tx(
-          "Cost",
-          "[card-browser] Sort-field option for printed Energy cost.",
-        );
+        return "Cost";
       case "spark":
-        return tx(
-          "Spark",
-          "[card-browser] Sort-field option for printed Spark.",
-        );
+        return "Spark";
       case "subtype":
-        return tx(
-          "Subtype",
-          "[card-browser] Sort-field option for canonical authored subtypes.",
-        );
+        return "Subtype";
     }
   };
-  const sizeLabel = (value: DeckCardSize): LocalizedString => {
+  const sizeLabel = (value: DeckCardSize): string => {
     switch (value) {
       case "small":
-        return tx(
-          "S",
-          "[card-browser] Deck size small.",
-        );
+        return "S";
       case "medium":
-        return tx(
-          "M",
-          "[card-browser] Deck size medium.",
-        );
+        return "M";
       case "large":
-        return tx(
-          "L",
-          "[card-browser] Deck size large.",
-        );
+        return "L";
     }
   };
 
@@ -640,18 +562,12 @@ function ControlBar({
           size="sm"
           leadingGlyph={GLYPHS.filter}
           align="start"
-          ariaLabel={tx(
-            "Filter by subtype",
-            "[accessibility] [card-browser] Deck filter subtype name.",
-          )}
+          ariaLabel={"Filter by subtype"}
           options={subtypeOptions.map((option) =>
             option.label === undefined
               ? {
                   value: option.value,
-                  label: tx(
-                    "All Subtypes",
-                    "[card-browser] Deck filter option that includes every character subtype.",
-                  ),
+                  label: "All Subtypes",
                 }
               : { value: option.value, label: option.label },
           )}
@@ -663,10 +579,7 @@ function ControlBar({
         size="sm"
         leadingGlyph={GLYPHS.sort}
         align="start"
-        ariaLabel={tx(
-          "Sort order",
-          "[accessibility] [card-browser] Deck sort name.",
-        )}
+        ariaLabel={"Sort order"}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
           label: sortLabel(option.value),
@@ -682,18 +595,12 @@ function ControlBar({
           {
             value: "asc",
             symbol: "↑",
-            ariaLabel: tx(
-              "Sort ascending",
-              "[accessibility] [card-browser] Action sorting the visible card collection in ascending order.",
-            ),
+            ariaLabel: "Sort ascending",
           },
           {
             value: "desc",
             symbol: "↓",
-            ariaLabel: tx(
-              "Sort descending",
-              "[accessibility] [card-browser] Action sorting the visible card collection in descending order.",
-            ),
+            ariaLabel: "Sort descending",
           },
         ]}
         value={filterSort.direction}
@@ -742,17 +649,11 @@ function DeckGrid({
     >
       {cards.length === 0 ? (
         <GridPlaceholder
-          message={tx(
-            "Your deck is empty.",
-            "[card-browser] Empty state in the deck browser when the player's deck contains zero cards.",
-          )}
+          message={"Your deck is empty."}
         />
       ) : visible.length === 0 ? (
         <GridPlaceholder
-          message={tx(
-            "No cards match this filter.",
-            "[card-browser] Empty state when the player's non-empty deck has no cards matching the active filter. The player can change or clear that filter to see cards again.",
-          )}
+          message={"No cards match this filter."}
         />
       ) : (
         <div

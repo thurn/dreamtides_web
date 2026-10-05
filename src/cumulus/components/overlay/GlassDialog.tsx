@@ -30,8 +30,6 @@
 // exactly one close owner — the disc simply moves — so this is a non-breaking,
 // additive extension.
 
-import { meaning, tx } from "@trox/runtime";
-import type { LocalizedString } from "@trox/runtime";
 import { useEffect, useLayoutEffect, useState } from "react";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
@@ -40,7 +38,6 @@ import { IconButton } from "../controls/IconButton";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Diameter (px) of the `md` IconButton close disc, for cutout-relative placement. */
 const CLOSE_DISC_PX = 48;
@@ -84,16 +81,16 @@ export function GlassBackdrop(): ReactElement {
 /** Props for {@link GlassDialog}. */
 export interface GlassDialogProps {
   /** The dialog's heading, rendered as an `<h2>`. */
-  title: LocalizedString;
+  title: string;
   /** Optional intro line under the title. */
-  subtitle?: LocalizedString;
+  subtitle?: string;
   /**
    * Dismisses the dialog from its close disc. Omit for a commit-gated dialog
    * that intentionally exposes no dismissal control.
    */
   onClose?: () => void;
   /** Accessible name for the close disc. Defaults to `"Close"`. */
-  closeLabel?: LocalizedString;
+  closeLabel?: string;
   /**
    * When true, on a full-bleed mobile overlay whose screen-cutout box is known
    * (a device-screenshot mock-up) the close disc floats up beside the device
@@ -166,7 +163,6 @@ export function GlassDialog({
   companion,
   children,
 }: GlassDialogProps): ReactElement {
-  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
   const popup = presentation === "popup" && !fullScreen;
@@ -276,13 +272,7 @@ export function GlassDialog({
         placement="onGlass"
         glyph={GLYPHS.close}
         size="md"
-        label={
-          closeLabel ??
-          tx(
-            meaning("dialog-close", "Close"),
-            "[accessibility] Action name for the control that dismisses a dialog.",
-          )
-        }
+        label={closeLabel ?? "Close"}
         onPress={onClose}
       />
     );
@@ -324,7 +314,7 @@ export function GlassDialog({
                 color: token("--text-primary"),
               }}
             >
-              {resolve(title)}
+              {title}
             </h2>
             {subtitle !== undefined && (
               <p
@@ -334,7 +324,7 @@ export function GlassDialog({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {resolve(subtitle)}
+                {subtitle}
               </p>
             )}
           </div>
@@ -374,7 +364,7 @@ export function GlassDialog({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={resolve(title)}
+      aria-label={title}
       className="cumulus"
       data-glass-dialog-desktop-center-target={desktopCenterTarget}
       data-glass-dialog-presentation={presentation}

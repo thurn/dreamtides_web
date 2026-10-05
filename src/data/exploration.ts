@@ -12,15 +12,6 @@ import type {
   RewardSelectionPolicyId,
 } from "../reward-selection/types";
 import { EXPLORATION_EFFECT_KINDS } from "../../scripts/exploration-effect-kinds.mjs";
-import {
-  LocalizedString,
-  SourceMessage,
-  type SourceMessageRef,
-} from "@trox/runtime";
-import {
-  localizedSourceMessage,
-  sourceMessage,
-} from "../runtime/localization/runtime";
 import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
 import { parseExplorationActionId } from "../types/identifiers";
 import {
@@ -30,7 +21,6 @@ import {
   type FoldHash,
 } from "../types/content-hash";
 import { explorationDocument } from "../content/documents";
-
 
 export type ExplorationPredicate =
   | "character"
@@ -90,11 +80,11 @@ export function isTransfigurationExplorationEffect(
 export interface ExplorationActionContent {
   id: ExplorationActionId;
   /** Strings are accepted only by synthetic fixtures; loaded content is typed. */
-  label: string | LocalizedString;
+  label: string;
   /** Optional encounter-specific override; typed mechanics own the default copy. */
-  effectText?: string | LocalizedString | SourceMessage;
-  followupTitle?: string | LocalizedString | SourceMessage;
-  followupSubtitle?: string | LocalizedString | SourceMessage;
+  effectText?: string;
+  followupTitle?: string;
+  followupSubtitle?: string;
   effectKind: ExplorationEffectKind;
   /** Compiled site-neutral mechanic and its non-player-facing selection policy. */
   canonicalMechanicId?: RewardMechanicId;
@@ -134,7 +124,7 @@ export function explorationActionUsesOfferedDeckTarget(
 export interface ExplorationEncounterContent {
   cardId: CardId;
   /** Strings are accepted only by synthetic fixtures; loaded content is typed. */
-  prose: string | LocalizedString;
+  prose: string;
   actions: readonly ExplorationActionContent[];
 }
 
@@ -173,37 +163,23 @@ function requiredString(value: unknown, label: string): string {
 function hydrateStaticMessage(
   value: unknown,
   label: string,
-): string | LocalizedString {
-  if (typeof value === "string") return requiredString(value, label);
-  const message = sourceMessage(value as SourceMessageRef);
-  if (Object.keys(message.argumentSchemas).length !== 0) {
-    throw new Error(`Invalid Exploration data: ${label} must be static`);
-  }
-  return message.bind({});
+): string {
+  return requiredString(value, label);
 }
 
 function hydrateEffectMessage(
   value: unknown,
-): string | LocalizedString | SourceMessage {
-  if (typeof value === "string")
-    return requiredString(value, "action effect text");
-  const message = sourceMessage(value as SourceMessageRef);
-  return Object.keys(message.argumentSchemas).length === 0
-    ? localizedSourceMessage(value as SourceMessageRef)
-    : message;
+): string {
+  return requiredString(value, "action effect text");
 }
 
 function messageArgumentNames(
   value: ExplorationActionContent["effectText"],
 ): readonly string[] {
   if (value === undefined) return [];
-  if (value instanceof SourceMessage) return Object.keys(value.argumentSchemas);
-  if (typeof value === "string") {
-    return [...value.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
-      (match) => match[1] ?? "",
-    );
-  }
-  return [];
+  return [...value.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
+    (match) => match[1] ?? "",
+  );
 }
 
 const DREAMSIGN_ID_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> = new Set([

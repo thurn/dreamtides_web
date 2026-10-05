@@ -5,3 +5,5 @@ The Tollgate release baseline fails `npm run trox:gate` in `trox:check-generated
 The Hastened transfiguration has no glossary entry, so card-text tooltips and the glossary popup cannot explain it. Every other transfiguration resolves through `lookupGlossaryTerm`; `src/data/glossary.test.ts` marks Hastened as the known gap.
 
 Dreamscapes and Dream guides are identified at runtime by art-key slugs (`firstlight_meadow`, `tobias_tanglefur`) rather than the UUIDs authored in their catalogs. The compiled runtime data, and therefore `src/content/dreamscapes.ts`, `src/content/guides.ts`, and the guide references in `src/content/sites.ts`, key these entities by slug, contrary to the UUID identity invariant.
+
+QA scenes are not reproducible across loads: with `?goto=<scene>&seed=7`, 22 of 37 scenes (Atlas layouts, site offers, avatar choices, battle hands) render different content on each load, so before/after comparisons of their copy are impossible. Passing an explicit `?game=<id>` for a fresh room leaves the page on "Joining Game" indefinitely instead of creating it. Guide dialogue also picks its line with `Math.random()` on each mount.

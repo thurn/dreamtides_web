@@ -1,7 +1,5 @@
-import { assertLocalized, LocalizedString } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { resolveSource } from "../../runtime/localization/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import { createDefaultState } from "../../state/journey-context";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { gambleFixture } from "../../testing/gamble-fixture";
@@ -34,7 +32,7 @@ import { parseShuffleCommitment } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testDreamscapeId, testDreamsignId, testGuideId, testCardId } from "../../types/test-identities";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 
 const buildGambleSiteView = (
   params: Omit<
@@ -49,7 +47,7 @@ const buildGambleSiteView = (
   });
 
 const GUIDE_LINE_SOURCE = "Fixture game line.";
-const GUIDE_LINE = assertLocalized(GUIDE_LINE_SOURCE);
+const GUIDE_LINE = GUIDE_LINE_SOURCE;
 const GUIDE = {
   id: testGuideId("fixture-gamble-guide"),
   name: "Fixture Gamble Guide",
@@ -135,7 +133,7 @@ describe("gamble-site-view-model", () => {
         available: true,
       },
     ]);
-    expect(gates.every(({ chanceLabel }) => chanceLabel instanceof LocalizedString)).toBe(
+    expect(gates.every(({ chanceLabel }) => typeof chanceLabel === "string")).toBe(
       true,
     );
   });
@@ -159,7 +157,7 @@ describe("gamble-site-view-model", () => {
     expect(view.canAfford).toBe(true);
     expect(view.canPlayAgain).toBe(false);
     expect(view.card).toEqual({ rank: "A", suit: "spades" });
-    expect(resolveSource(view.guide.line)).toBe(GUIDE_LINE_SOURCE);
+    expect(view.guide.line).toBe(GUIDE_LINE_SOURCE);
     expect(view.result).toBeNull();
   });
 
@@ -562,7 +560,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     if (view?.gameId !== "starway-stairs") {
       throw new Error("expected Starway Stairs view");
     }
-    expect(resolveSource(view.guide.line)).toBe(GUIDE_LINE_SOURCE);
+    expect(view.guide.line).toBe(GUIDE_LINE_SOURCE);
     expect(view.currentTierNumber).toBe(1);
     expect(view.tiers).toMatchObject([
       {

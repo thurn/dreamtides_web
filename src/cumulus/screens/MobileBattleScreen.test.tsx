@@ -3,7 +3,6 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
@@ -122,10 +121,8 @@ function makeSide(
     status: {
       avatar: {
         imageNumber: owner === "enemy" ? "0042" : "0007",
-        name: assertLocalized(
-          owner === "enemy" ? "Enemy Avatar" : "Player Avatar",
-        ),
-        title: assertLocalized("Fixture"),
+        name: owner === "enemy" ? "Enemy Avatar" : "Player Avatar",
+        title: "Fixture",
       },
       currentEnergy: owner === "enemy" ? 2 : 3,
       maxEnergy: owner === "enemy" ? 4 : 3,
@@ -972,8 +969,8 @@ describe("MobileBattleScreen", () => {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: assertLocalized("Fixture Beacon"),
-            renderedText: assertLocalized("Draw a card."),
+            name: "Fixture Beacon",
+            renderedText: "Draw a card.",
             energyAdded: 2,
             imageNumber: 42,
           },
@@ -1041,8 +1038,8 @@ describe("MobileBattleScreen", () => {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: assertLocalized("Fixture Beacon"),
-            renderedText: assertLocalized("Draw a card."),
+            name: "Fixture Beacon",
+            renderedText: "Draw a card.",
             energyAdded: 2,
             imageNumber: 42,
           },
@@ -2462,7 +2459,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: 42,
-        label: assertLocalized("Choose an option"),
+        label: "Choose an option",
         side: "player",
         candidates: view.playerHand
           .slice(0, 2)
@@ -2559,7 +2556,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: 42,
-          label: assertLocalized("Choose an option"),
+          label: "Choose an option",
           side: "player",
           candidates: [
             makePickerCandidate(view.playerHand[0], "player", "hand"),
@@ -2604,10 +2601,10 @@ describe("MobileBattleScreen", () => {
         ...makeView(),
         choicePrompt: {
           key: 42,
-          label: assertLocalized("Choose an option"),
+          label: "Choose an option",
           options: [
-            { label: assertLocalized("Yes") },
-            { label: assertLocalized("Skip") },
+            { label: "Yes" },
+            { label: "Skip" },
           ],
           canResolve: true,
         },
@@ -2667,7 +2664,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: 42,
-          label: assertLocalized("Choose an option"),
+          label: "Choose an option",
           side: "enemy",
           candidates: view.enemyHand.map((card) =>
             makePickerCandidate(card, "enemy", "hand"),
@@ -2758,7 +2755,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: 42,
-          label: assertLocalized("Choose an option"),
+          label: "Choose an option",
           side: "player",
           candidates: [
             makePickerCandidate(enemyCard, "enemy", "frontRank"),
@@ -2839,8 +2836,8 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: 42,
-          label: assertLocalized("Choose an option"),
-          subtitle: assertLocalized("Choose an available option to continue."),
+          label: "Choose an option",
+          subtitle: "Choose an available option to continue.",
           side: "player",
           candidates,
           candidateIds: candidates.map((candidate) => candidate.instanceId),
@@ -2924,7 +2921,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: 42,
-        label: assertLocalized("Choose an option"),
+        label: "Choose an option",
         side: "player",
         candidates: [candidate],
         candidateIds: [candidate.instanceId],
@@ -2960,7 +2957,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: 42,
-        label: assertLocalized("Choose an option"),
+        label: "Choose an option",
         side: "player",
         candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
         candidateIds: [highlighted.id],
@@ -3004,7 +3001,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: 42,
-          label: assertLocalized("Choose an option"),
+          label: "Choose an option",
           side: "player",
           candidates: [],
           candidateIds: [],
@@ -3492,8 +3489,8 @@ describe("MobileBattleScreen", () => {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: assertLocalized("Fixture Beacon"),
-            renderedText: assertLocalized("Draw a card."),
+            name: "Fixture Beacon",
+            renderedText: "Draw a card.",
             energyAdded: 2,
             imageNumber: 42,
           },
@@ -3529,7 +3526,7 @@ describe("MobileBattleScreen", () => {
     const view: MobileBattleView = {
       ...makeView(),
       aiApproval: {
-        description: assertLocalized("Play a fixture card to B2."),
+        description: "Play a fixture card to B2.",
         canReject: true,
       },
     };
@@ -3581,7 +3578,7 @@ describe("MobileBattleScreen", () => {
     const view: MobileBattleView = {
       ...makeView(),
       aiApproval: {
-        description: assertLocalized("Pass from Day to Dusk."),
+        description: "Pass from Day to Dusk.",
         canReject: false,
       },
     };
@@ -3910,7 +3907,7 @@ describe("MobileBattleScreen", () => {
             rank: "back",
             slotId: parseBattleSlotViewId("player-back-filled"),
           },
-          figmentLabel: assertLocalized("Shadow"),
+          figmentLabel: "Shadow",
           status: "eligible",
           addedSpark: 2,
           requiresConfirmation: false,
@@ -3989,7 +3986,7 @@ describe("MobileBattleScreen", () => {
             rank: "back",
             slotId: parseBattleSlotViewId("player-back-filled"),
           },
-          figmentLabel: assertLocalized("Shadow"),
+          figmentLabel: "Shadow",
           status: "blocked-exhaustion",
           addedSpark: 0,
           requiresConfirmation: false,
@@ -4053,7 +4050,7 @@ describe("MobileBattleScreen", () => {
             rank: "back",
             slotId: parseBattleSlotViewId("player-back-filled"),
           },
-          figmentLabel: assertLocalized("Legionnaire"),
+          figmentLabel: "Legionnaire",
           status: "eligible",
           addedSpark: 1,
           requiresConfirmation: true,
@@ -4607,7 +4604,7 @@ describe("MobileBattleScreen", () => {
         owner: "player",
         rank: "front",
         slotId: parseBattleSlotViewId("player-front-empty"),
-        label: assertLocalized("Move this character here."),
+        label: "Move this character here.",
       },
     });
     const playArea = container.querySelector<HTMLElement>(

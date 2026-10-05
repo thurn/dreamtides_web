@@ -5,8 +5,6 @@ import {
   type ReactElement,
 } from "react";
 import { motion } from "framer-motion";
-import { one, other, plural, tx, txa } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import {
   GameCard,
   cardSelectionShadowLayers,
@@ -31,6 +29,7 @@ import { battleCardLayoutId } from "./battle-card-layout";
 import { useTutorialObstacle } from "../overlay/tutorial-placement";
 import type { BattleCardId } from "../../../types/identifiers";
 import type { PresentationId } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
@@ -190,21 +189,12 @@ function ChallengeMarker({
   owner,
   side,
 }: NonNullable<BattlefieldCardModel["challengeMarker"]>): ReactElement {
-  const resolve = useLocalizer();
   return (
     <div
       role="img"
-      aria-label={resolve(
-        owner === "enemy"
-          ? tx(
-              "Opponent challenger",
-              "[accessibility] [battle] Opposing challenger.",
-            )
-          : tx(
-              "Player challenger",
-              "[accessibility] [battle] Local challenger.",
-            ),
-      )}
+      aria-label={
+        owner === "enemy" ? "Opponent challenger" : "Player challenger"
+      }
       data-battle-challenger-chevron={owner}
       data-battle-challenger-chevron-direction={side === "far" ? "down" : "up"}
       data-battle-challenger-chevron-style="circle-badge"
@@ -267,7 +257,6 @@ function StatusIndicators({
 }: {
   readonly model: BattlefieldCardModel;
 }): ReactElement {
-  const resolve = useLocalizer();
   return (
     <div
       data-battle-card-status-indicators=""
@@ -275,9 +264,7 @@ function StatusIndicators({
     >
       {model.exhausted && (
         <div
-          aria-label={resolve(
-            tx("Exhausted", "[accessibility] [battle] Exhausted card status."),
-          )}
+          aria-label={"Exhausted"}
           data-battle-card-status="exhausted"
           style={{
             ...BADGE_STYLE,
@@ -297,16 +284,11 @@ function StatusIndicators({
       )}
       {model.storedMemory > 0 && (
         <div
-          aria-label={resolve(
-            txa(
-              plural(model.storedMemory, [
-                one("{count} memory counter"),
-                other("{count} memory counters"),
-              ]),
-              { count: model.storedMemory },
-              "[accessibility] [battle] Memory counters on a card.",
-            ),
-          )}
+          aria-label={
+            model.storedMemory === 1
+              ? `${formatNumber(model.storedMemory)} memory counter`
+              : `${formatNumber(model.storedMemory)} memory counters`
+          }
           data-battle-card-status="stored-time"
           data-battle-card-status-kind="stored-memory"
           style={{

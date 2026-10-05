@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import { useMemo } from "react";
 import type { AuguryArchetypeId } from "../journey_v2";
 import {
@@ -60,14 +59,14 @@ export function useAuguryJourneyMenuActions(
         id: "forceJourneyCategory",
         kind: "group",
         glyph: GLYPHS.bug,
-        label: assertLocalized("Force Category"),
+        label: "Force Category",
         active: forcedArchetypeId !== null,
         actions: [
           {
             id: "forceJourneyCategory:clear",
             kind: "action" as const,
             glyph: GLYPHS.refresh,
-            label: assertLocalized("Random (clear force)"),
+            label: "Random (clear force)",
             active: forcedArchetypeId === null,
             onCommand: () => forceCategory(site.id, null),
           },
@@ -75,7 +74,7 @@ export function useAuguryJourneyMenuActions(
             id: `forceJourneyCategory:${archetypeId}`,
             kind: "action" as const,
             glyph: GLYPHS.check,
-            label: assertLocalized(archetypeName(archetypeId)),
+            label: archetypeName(archetypeId),
             active: forcedArchetypeId === archetypeId,
             onCommand: () => forceCategory(site.id, archetypeId),
           })),
@@ -88,7 +87,7 @@ export function useAuguryJourneyMenuActions(
         id: "rerollJourney",
         kind: "action",
         glyph: GLYPHS.refresh,
-        label: assertLocalized("Reroll Journey"),
+        label: "Reroll Journey",
         onCommand: () => rerollJourney(site.id),
       });
     }

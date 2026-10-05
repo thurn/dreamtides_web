@@ -1,18 +1,10 @@
-import {
-  one,
-  other,
-  plural,
-  tx,
-  txa,
-  type LocalizedString,
-} from "@trox/runtime";
 import { requireDreamsignId } from "../../../data/dreamsigns";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { GlassButton } from "../controls/GlassButton";
 import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { token } from "../../primitives/tokens";
 import { GlassDialog } from "./GlassDialog";
 import type { DreamsignId } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** Prepared display data for choosing which held Dreamsign to replace. */
 export interface DreamsignReplacementModel {
@@ -23,9 +15,9 @@ export interface DreamsignReplacementModel {
   /** Prepared maximum held-Dreamsign count. */
   readonly capacity: number;
   /** Label for the non-destructive dismissal action. */
-  readonly dismissLabel: LocalizedString;
+  readonly dismissLabel: string;
   /** Accessible label for the dialog close control. */
-  readonly closeLabel: LocalizedString;
+  readonly closeLabel: string;
 }
 
 export interface DreamsignReplacementDialogProps {
@@ -43,25 +35,18 @@ export function DreamsignReplacementDialog({
   onDreamsignPress,
   onDismiss,
 }: DreamsignReplacementDialogProps) {
-  const resolve = useLocalizer();
   const incomingId = requireDreamsignId(
     model.incoming,
     "Cumulus Dreamsign replacement incoming reward",
   );
   return (
     <GlassDialog
-      title={tx(
-        "Choose a Dreamsign to Replace",
-        "[dreamsign] Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
-      )}
-      subtitle={txa(
-        plural(model.capacity, [
-          one("You can hold {count} Dreamsign."),
-          other("You can hold {count} Dreamsigns."),
-        ]),
-        { count: model.capacity },
-        "[dreamsign] Subtitle in the Dreamsign replacement dialog. count is the positive maximum number of Dreamsigns the current player may hold at once.",
-      )}
+      title={"Choose a Dreamsign to Replace"}
+      subtitle={
+        model.capacity === 1
+          ? `You can hold ${formatNumber(model.capacity)} Dreamsign.`
+          : `You can hold ${formatNumber(model.capacity)} Dreamsigns.`
+      }
       onClose={onDismiss}
       closeLabel={model.closeLabel}
     >
@@ -87,12 +72,7 @@ export function DreamsignReplacementDialog({
               color: token("--text-on-glass-muted"),
             }}
           >
-            {resolve(
-              tx(
-                "New Dreamsign",
-                "[dreamsign] Eyebrow above the newly gained Dreamsign in the replacement dialog.",
-              ),
-            )}
+            {"New Dreamsign"}
           </p>
           <div style={{ width: 88, height: 88 }}>
             <Dreamsign dreamsign={model.incoming} variant="hud" />
@@ -127,10 +107,7 @@ export function DreamsignReplacementDialog({
                   <Dreamsign dreamsign={dreamsign} variant="hud" />
                 </div>
                 <GlassButton
-                  label={tx(
-                    "Replace",
-                    "[dreamsign] Replacement replace action.",
-                  )}
+                  label={"Replace"}
                   variant="accent"
                   placement="onGlass"
                   onPress={() => onDreamsignPress(dreamsignId)}

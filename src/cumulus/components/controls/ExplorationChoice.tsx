@@ -4,11 +4,6 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import type { LocalizedString } from "@trox/runtime";
-import {
-  useLocalizedPartsResolver,
-  useLocalizer,
-} from "../../../runtime/localization/use-localizer";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { token } from "../../primitives/tokens";
@@ -58,11 +53,11 @@ export interface ExplorationChoiceModel {
   /** Stable authored action UUID emitted by activation. */
   readonly actionId: ExplorationActionId;
   /** Localized primary action label. */
-  readonly label: LocalizedString;
+  readonly label: string;
   /** Lazy localized description with reveal entities attached to placeholders. */
   readonly description: RichText<ExplorationChoiceEntity>;
   /** Optional complete localized disclosure appended to the description. */
-  readonly disclosure?: LocalizedString;
+  readonly disclosure?: string;
   /** Prepared activation availability; unavailable choices remain readable. */
   readonly availability: "available" | "unavailable";
   /** Optional entity revealed by holding or focusing the complete choice. */
@@ -161,21 +156,18 @@ function ChoiceContents({
 }: {
   readonly model: ExplorationChoiceModel;
 }): ReactElement {
-  const resolve = useLocalizer();
-  const resolveParts = useLocalizedPartsResolver();
   return (
     <>
       <span style={{ minWidth: 0, display: "grid", gap: token("--space-xxs") }}>
         <strong style={{ font: token("--t-button") }}>
-          {renderRulesSymbolsInline(resolve(model.label))}
+          {renderRulesSymbolsInline(model.label)}
         </strong>
         <span
           data-exploration-choice-description=""
           style={{ font: token("--t-caption"), color: token("--text-muted") }}
         >
-          {renderRichText(model.description, resolve, 0, {
+          {renderRichText(model.description, 0, {
             substituteRulesSymbols: true,
-            resolveParts,
             renderAnnotation: (entity, value, key) => (
               <EntityLabel key={key} entity={entity}>
                 {value}
@@ -183,7 +175,7 @@ function ChoiceContents({
             ),
           })}
           {model.disclosure === undefined ? null : (
-            <span> {resolve(model.disclosure)}</span>
+            <span> {model.disclosure}</span>
           )}
         </span>
       </span>

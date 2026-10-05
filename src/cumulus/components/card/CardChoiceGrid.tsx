@@ -21,62 +21,41 @@ import {
 } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
 import { CARD_CORNER_RADIUS } from "./card-aspect";
-import {
-  one,
-  other,
-  plural,
-  tx,
-  txa,
-  type LocalizedString,
-} from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DeckEntryId } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** A small line rendered directly below a card-choice tile. */
 export type CardChoiceGridCaption =
-  | { kind: "essence"; amount: number }
-  | { kind: "text"; message: LocalizedString };
+  { kind: "essence"; amount: number } | { kind: "text"; message: string };
 
 /** The pending operation identified on a selected card-choice tile. */
 export type CardChoiceOperation = "purge" | "copy" | "transfigure" | "change";
 
 const OPERATION_PRESENTATION = {
   purge: {
-    message: tx(
-      "This card will be purged",
-      "[accessibility] Status on a selected card marked for a pending purge operation.",
-    ),
+    message: "This card will be purged",
     glyph: GLYPHS.trash,
     tone: "danger",
   },
   copy: {
-    message: tx(
-      "This card will be copied",
-      "[accessibility] Status on a selected card marked for a pending copy operation.",
-    ),
+    message: "This card will be copied",
     glyph: GLYPHS.copy,
     tone: "selected",
   },
   transfigure: {
-    message: tx(
-      "This card will be transfigured",
-      "[accessibility] [transfiguration] Status on a selected card marked for a pending Transfiguration operation.",
-    ),
+    message: "This card will be transfigured",
     glyph: GLYPHS.transfigurationSite,
     tone: "selected",
   },
   change: {
-    message: tx(
-      "This card will be changed",
-      "[accessibility] Status on a selected card marked for another pending card-change operation.",
-    ),
+    message: "This card will be changed",
     glyph: GLYPHS.refreshCcw,
     tone: "selected",
   },
 } as const satisfies Record<
   CardChoiceOperation,
   {
-    readonly message: LocalizedString;
+    readonly message: string;
     readonly glyph: Glyph;
     readonly tone: "danger" | "selected";
   }
@@ -131,7 +110,7 @@ export interface CardChoiceGridActionView<
   /** Large glyph that carries the action's visual identity. */
   glyph: Glyph;
   /** Accessible action label. */
-  label: LocalizedString;
+  label: string;
   /** Small uncontained line rendered below the glyph. */
   caption: CardChoiceGridCaption;
   /** Detach interaction and visually recede the action. */
@@ -225,7 +204,6 @@ function CaptionNode({
 }: {
   readonly caption: CardChoiceGridCaption;
 }): ReactElement {
-  const resolve = useLocalizer();
   return (
     <p
       data-gallery-caption={caption.kind}
@@ -242,7 +220,7 @@ function CaptionNode({
       {caption.kind === "essence" ? (
         <EssenceValue amount={caption.amount} tone="inherit" />
       ) : (
-        resolve(caption.message)
+        caption.message
       )}
     </p>
   );
@@ -343,7 +321,6 @@ function CardChoiceGridItem<EntryId extends string>({
   onCardDragEnd,
   onCardContextMenu,
 }: CardChoiceGridItemProps<EntryId>): ReactElement {
-  const resolve = useLocalizer();
   const reserved = card.reserved === true;
   const disabled = card.disabled === true || reserved;
   const draggable = !disabled && card.draggable === true;
@@ -437,7 +414,7 @@ function CardChoiceGridItem<EntryId extends string>({
           )}
           {operationPresentation !== null && (
             <span
-              aria-label={resolve(operationPresentation.message)}
+              aria-label={operationPresentation.message}
               data-card-choice-operation={card.operation}
               style={{
                 position: "absolute",
@@ -482,16 +459,13 @@ function CardChoiceQuantityBadge({
   readonly count: number;
   readonly operationPresent: boolean;
 }): ReactElement {
-  const resolve = useLocalizer();
   return (
     <span
-      aria-label={resolve(
-        txa(
-          plural(count, [one("{count} copy"), other("{count} copies")]),
-          { count },
-          "[accessibility] [augury] Label on a selected Augury card showing how many copies the offer grants. count is a positive integer; the numeral is visible in the badge and is repeated here because this message is exposed only to assistive technology.",
-        ),
-      )}
+      aria-label={
+        count === 1
+          ? `${formatNumber(count)} copy`
+          : `${formatNumber(count)} copies`
+      }
       data-card-choice-quantity-badge=""
       style={{
         position: "absolute",

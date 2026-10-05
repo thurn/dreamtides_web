@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { artRef } from "../../primitives/art";
 import { mountCumulus } from "../../test-helpers/component-test-fixtures";
 import {
@@ -78,8 +77,8 @@ describe("SiteLayout", () => {
             moteTint="warm"
             guide={{
               id: testGuideId("guide"),
-              name: assertLocalized("Guide"),
-              line: assertLocalized("Line"),
+              name: "Guide",
+              line: "Line",
               art: artRef.dreamGuide(testGuideId("guide")),
               presence: "speaking",
             }}
@@ -128,8 +127,8 @@ describe("SiteLayout", () => {
         moteTint="violet"
         guide={{
           id: testGuideId("guide"),
-          name: assertLocalized("Guide"),
-          line: assertLocalized("Line"),
+          name: "Guide",
+          line: "Line",
           art: artRef.dreamGuide(testGuideId("guide")),
           presence: "portrait-only",
         }}

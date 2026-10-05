@@ -7,7 +7,6 @@ import type {
 } from "../../components/overlay/InfoCard";
 import type { GameCardSelection } from "../../components/card/CardView";
 import type { Glyph } from "../../primitives/glyph";
-import type { LocalizedString } from "@trox/runtime";
 import type { SemanticEntityId } from "../../../types/identifiers";
 import type { SemanticEntityNamespace } from "../../../types/semantic-identity";
 
@@ -29,12 +28,12 @@ export type RevealInfoCardModel = Readonly<InfoCardProps>;
 
 export interface RevealGalleryActionModel {
   readonly glyph: Glyph;
-  readonly label: LocalizedString;
+  readonly label: string;
 }
 
 export type RevealDescriptionUnit = {
   readonly kind: "message";
-  readonly message: LocalizedString;
+  readonly message: string;
 };
 
 export interface RevealGameCard {
@@ -58,7 +57,7 @@ export type RevealCard =
   | {
       /** The mounted source already contains the complete primary content. */
       readonly kind: "source";
-      readonly description: LocalizedString;
+      readonly description: string;
     }
   | RevealGameCard
   | {

@@ -1,4 +1,3 @@
-import { LocalizedString, tx } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
 import type { ExplorationActionContent } from "./exploration";
 import {
@@ -20,9 +19,7 @@ function action(
 
 describe("code-owned Exploration presentation", () => {
   it("derives static mechanical copy without an authored override", () => {
-    expect(derivedExplorationEffectText(action({}), {})).toBeInstanceOf(
-      LocalizedString,
-    );
+    expect(derivedExplorationEffectText(action({}), {})).toEqual(expect.any(String));
   });
 
   it("declares and binds entity arguments for dynamic mechanical copy", () => {
@@ -36,12 +33,9 @@ describe("code-owned Exploration presentation", () => {
     ]);
     expect(
       derivedExplorationEffectText(dynamic, {
-        fixed_card: tx(
-          "Synthetic card",
-          "[test] Synthetic entity used to verify derived Exploration presentation binding.",
-        ),
+        fixed_card: "Synthetic card",
       }),
-    ).toBeInstanceOf(LocalizedString);
+    ).toEqual(expect.any(String));
   });
 
   it("canonicalizes compatibility defaults before selecting presentation", () => {
@@ -54,7 +48,7 @@ describe("code-owned Exploration presentation", () => {
     ).not.toBe(serializeExplorationPresentationMechanic(implicit));
     expect(
       derivedExplorationEffectText({ ...implicit, count: 1 }, {}),
-    ).toBeInstanceOf(LocalizedString);
+    ).toEqual(expect.any(String));
   });
 
   it("binds authored random essence ranges into derived presentation", () => {
@@ -66,9 +60,7 @@ describe("code-owned Exploration presentation", () => {
       }),
       {},
     );
-    expect(presentation.arguments).toMatchObject({
-      minimum_essence: { kind: "number", value: 25 },
-      maximum_essence: { kind: "number", value: 75 },
-    });
+    expect(presentation).toContain("25");
+    expect(presentation).toContain("75");
   });
 });

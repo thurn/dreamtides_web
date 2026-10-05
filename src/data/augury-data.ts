@@ -2,11 +2,10 @@ import type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
 import type { AuguryArchetypeId } from "../journey_v2/archetypes/types";
 import type { AuguryOfferFamily } from "../journey_v2/archetypes/types";
 import type { RewardSelectionPolicyId } from "../reward-selection/types";
-import { hydrateSourceTransport } from "../runtime/localization/runtime";
-import { LocalizedString, SourceMessage } from "@trox/runtime";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 import { auguryArchetypeIdFromUnknown } from "../types/identifiers";
 import { auguryDocument } from "../content/documents";
+import { requireText } from "../runtime/text";
 
 export type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
 
@@ -67,17 +66,8 @@ function isNonemptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim() !== "";
 }
 
-function isSourceMessageRef(value: unknown): boolean {
-  return isRecord(value) &&
-    value.format === "trox-source-message-ref" &&
-    typeof value.entry_id === "string" &&
-    typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string";
-}
-
 function isLocalizedTransport(value: unknown): boolean {
-  return isNonemptyString(value) || isSourceMessageRef(value) ||
-    value instanceof LocalizedString || value instanceof SourceMessage;
+  return isNonemptyString(value);
 }
 
 function presentationTextFromUnknown(
@@ -89,7 +79,7 @@ function presentationTextFromUnknown(
       if (!isLocalizedTransport(value.text)) return null;
       return {
         kind: "text",
-        text: hydrateSourceTransport(value.text, "Augury presentation text"),
+        text: requireText(value.text, "Augury presentation text"),
       };
     case "count":
       if (!isLocalizedTransport(value.one) || !isLocalizedTransport(value.other)) {
@@ -97,8 +87,8 @@ function presentationTextFromUnknown(
       }
       return {
         kind: "count",
-        one: hydrateSourceTransport(value.one, "Augury presentation one"),
-        other: hydrateSourceTransport(value.other, "Augury presentation other"),
+        one: requireText(value.one, "Augury presentation one"),
+        other: requireText(value.other, "Augury presentation other"),
       };
     case "category": {
       const fields = [
@@ -114,14 +104,14 @@ function presentationTextFromUnknown(
       if (!fields.every(isLocalizedTransport)) return null;
       return {
         kind: "category",
-        character: hydrateSourceTransport(value.character, "Augury presentation character"),
-        event: hydrateSourceTransport(value.event, "Augury presentation event"),
-        cheap: hydrateSourceTransport(value.cheap, "Augury presentation cheap"),
-        midCost: hydrateSourceTransport(value.midCost, "Augury presentation midCost"),
-        expensive: hydrateSourceTransport(value.expensive, "Augury presentation expensive"),
-        fast: hydrateSourceTransport(value.fast, "Augury presentation fast"),
-        subtype: hydrateSourceTransport(value.subtype, "Augury presentation subtype"),
-        package: hydrateSourceTransport(value.package, "Augury presentation package"),
+        character: requireText(value.character, "Augury presentation character"),
+        event: requireText(value.event, "Augury presentation event"),
+        cheap: requireText(value.cheap, "Augury presentation cheap"),
+        midCost: requireText(value.midCost, "Augury presentation midCost"),
+        expensive: requireText(value.expensive, "Augury presentation expensive"),
+        fast: requireText(value.fast, "Augury presentation fast"),
+        subtype: requireText(value.subtype, "Augury presentation subtype"),
+        package: requireText(value.package, "Augury presentation package"),
       };
     }
     default:

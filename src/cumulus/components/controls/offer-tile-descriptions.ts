@@ -2,21 +2,16 @@ import type {
   AuguryArchetypeData,
   AuguryPresentationText,
 } from "../../../types/augury-data";
-import type { LocalizedString } from "@trox/runtime";
-import {
-  bindSourceTransport,
-  canonicalPlaceholderName,
-  localizedSourceText,
-} from "../../../runtime/localization/runtime";
-import type { SourceTransport } from "../../../runtime/localization/runtime";
+import { canonicalPlaceholderName } from "../../../runtime/localization/runtime";
 import { richText, type RichText } from "../card/rich-text";
 import type { OfferTileModel } from "./OfferTile";
+import { fillTemplate } from "../../../runtime/text";
 
 type Presentation = AuguryArchetypeData["presentation"];
 type HeadlinePresentation = Pick<Presentation, "headline">;
 type SubtitlePresentation = Pick<Presentation, "subtitle">;
-function cardName(model: { readonly name: string }): LocalizedString {
-  return localizedSourceText(model.name);
+function cardName(model: { readonly name: string }): string {
+  return model.name;
 }
 
 function countFor(model: OfferTileModel): number | null {
@@ -34,7 +29,7 @@ function countFor(model: OfferTileModel): number | null {
 
 function variablesFor(
   model: OfferTileModel,
-): Readonly<Record<string, LocalizedString | number>> {
+): Readonly<Record<string, string | number>> {
   switch (model.kind) {
     case "card-gift":
     case "transfigure-card":
@@ -76,7 +71,7 @@ function variablesFor(
 function categoryTemplate(
   text: Extract<AuguryPresentationText, { kind: "category" }>,
   model: OfferTileModel,
-): SourceTransport {
+): string {
   if (model.kind !== "category-draft") {
     throw new Error(
       "Augury category presentation requires a category-draft offer",
@@ -105,7 +100,7 @@ function categoryTemplate(
 function selectedTemplate(
   text: AuguryPresentationText,
   model: OfferTileModel,
-): SourceTransport {
+): string {
   if (text.kind === "text") return text.text;
   if (text.kind === "category") return categoryTemplate(text, model);
   const count = countFor(model);
@@ -118,11 +113,11 @@ function selectedTemplate(
 function localizedPresentationText(
   text: AuguryPresentationText,
   model: OfferTileModel,
-  variables: Readonly<Record<string, LocalizedString | number>>,
-): LocalizedString {
+  variables: Readonly<Record<string, string | number>>,
+): string {
   const selected = selectedTemplate(text, model);
   if (typeof selected !== "string") {
-    return bindSourceTransport(selected, variables);
+    return fillTemplate(selected, variables);
   }
   const names = [...selected.matchAll(/\{([a-z][a-zA-Z0-9_]*)\}/gu)].map(
     (match) => match[1] ?? "",
@@ -135,14 +130,14 @@ function localizedPresentationText(
       return [name, value];
     }),
   );
-  return bindSourceTransport(selected, compatibleVariables);
+  return fillTemplate(selected, compatibleVariables);
 }
 
 /** Complete authored detail title for an Augury offer's semantic model. */
 export function auguryOfferHeadline(
   model: OfferTileModel,
   presentation: HeadlinePresentation,
-): LocalizedString {
+): string {
   const count = countFor(model);
   return localizedPresentationText(
     presentation.headline,
@@ -155,7 +150,7 @@ export function auguryOfferHeadline(
 export function offerTileDescription(
   model: OfferTileModel,
   presentation: SubtitlePresentation,
-): LocalizedString {
+): string {
   return localizedPresentationText(
     presentation.subtitle,
     model,

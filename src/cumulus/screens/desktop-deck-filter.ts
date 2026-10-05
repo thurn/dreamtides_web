@@ -14,7 +14,6 @@
 
 import type { CardType } from "../../types/cards";
 import type { DeckCardView } from "./MobileDeckViewer";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import {
   type DeckControlOption,
   type DeckSortId,
@@ -100,7 +99,7 @@ export function buildSubtypeFilterOptions(
     .sort((a, b) => a.localeCompare(b))
     .map((subtype): DeckControlOption<SubtypeFilter> => ({
       value: subtype,
-      label: localizedSourceText(subtype),
+      label: subtype,
     }));
   return [{ value: "all" }, ...options];
 }

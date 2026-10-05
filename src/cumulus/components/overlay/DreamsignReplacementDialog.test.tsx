@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { mountCumulus } from "../../test-helpers/component-test-fixtures";
 import { DreamsignReplacementDialog } from "./DreamsignReplacementDialog";
@@ -30,8 +29,8 @@ describe("DreamsignReplacementDialog", () => {
           incoming,
           held,
           capacity: 2,
-          dismissLabel: assertLocalized("Dismiss"),
-          closeLabel: assertLocalized("Close"),
+          dismissLabel: "Dismiss",
+          closeLabel: "Close",
         }}
         onDreamsignPress={onDreamsignPress}
         onDismiss={onDismiss}
@@ -76,8 +75,8 @@ describe("DreamsignReplacementDialog", () => {
             incoming,
             held,
             capacity,
-            dismissLabel: assertLocalized("Dismiss"),
-            closeLabel: assertLocalized("Close"),
+            dismissLabel: "Dismiss",
+            closeLabel: "Close",
           }}
           onDreamsignPress={() => {}}
           onDismiss={() => {}}

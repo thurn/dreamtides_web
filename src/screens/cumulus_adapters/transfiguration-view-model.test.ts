@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -243,7 +243,7 @@ describe("buildTransfigurationSiteView", () => {
       runtime: null,
       cardDatabase: new Map(),
       guide: GUIDE,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
     });
 
     expect(view.siteId).toBe(site.id);
@@ -256,7 +256,6 @@ describe("buildTransfigurationSiteView", () => {
     expect(view.candidates).toEqual([]);
   });
 });
-import { assertLocalized } from "@trox/runtime";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";

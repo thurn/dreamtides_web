@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { assertLocalized } from "@trox/runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainMenuButton } from "./MainMenuButton";
 import { renderInCumulus } from "../../testing/render";
@@ -26,10 +25,7 @@ afterEach(() => {
 describe("MainMenuButton", () => {
   it("renders the shared neutral glass treatment on the press surface", () => {
     const { container } = renderInCumulus(
-      <MainMenuButton
-        label={assertLocalized("New Journey")}
-        onPress={() => {}}
-      />,
+      <MainMenuButton label={"New Journey"} onPress={() => {}} />,
     );
 
     const glassSurface = container.querySelector<HTMLElement>(
@@ -45,10 +41,7 @@ describe("MainMenuButton", () => {
   it("reports activation with its player-facing label intact", () => {
     const onPress = vi.fn();
     const { container } = renderInCumulus(
-      <MainMenuButton
-        label={assertLocalized("New Journey")}
-        onPress={onPress}
-      />,
+      <MainMenuButton label={"New Journey"} onPress={onPress} />,
     );
     const button = container.querySelector("button");
 

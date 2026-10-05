@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -151,7 +151,7 @@ describe("buildDuplicationSiteView", () => {
       runtime: runtime([parseDeckEntryId("entry-1")]),
       cardDatabase: new Map(),
       guide: GUIDE,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
     });
 
     expect(view).toMatchObject({
@@ -171,13 +171,12 @@ describe("buildDuplicationSiteView", () => {
       runtime: null,
       cardDatabase: new Map(),
       guide: GUIDE,
-      guideLine: assertLocalized("Fixture line."),
+      guideLine: "Fixture line.",
     });
     expect(view.ready).toBe(false);
     expect(view.cards).toEqual([]);
   });
 });
-import { assertLocalized } from "@trox/runtime";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";

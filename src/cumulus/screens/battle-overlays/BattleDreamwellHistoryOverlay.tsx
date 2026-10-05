@@ -1,4 +1,3 @@
-import { tx } from "@trox/runtime";
 import type { ReactElement } from "react";
 import {
   DreamwellCard,
@@ -6,7 +5,6 @@ import {
 } from "../../components/battle/DreamwellCard";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DeckEntryId, DreamwellCardId } from "../../../types/identifiers";
 
 export interface BattleDreamwellHistoryEntryView {
@@ -25,18 +23,11 @@ export function BattleDreamwellHistoryOverlay({
   entries,
   onClose,
 }: BattleDreamwellHistoryOverlayProps): ReactElement {
-  const resolve = useLocalizer();
   return (
     <GlassDialog
-      title={tx("Dreamwell History", "[battle] Dreamwell history title.")}
-      subtitle={tx(
-        "Shared draws, most recent first.",
-        "[battle] Dreamwell history subtitle.",
-      )}
-      closeLabel={tx(
-        "Close Dreamwell history",
-        "[battle] Dreamwell history close action.",
-      )}
+      title={"Dreamwell History"}
+      subtitle={"Shared draws, most recent first."}
+      closeLabel={"Close Dreamwell history"}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
@@ -58,12 +49,7 @@ export function BattleDreamwellHistoryOverlay({
               font: token("--t-body"),
             }}
           >
-            {resolve(
-              tx(
-                "No Dreamwell cards drawn yet.",
-                "[battle] Dreamwell history empty.",
-              ),
-            )}
+            {"No Dreamwell cards drawn yet."}
           </p>
         ) : (
           entries.map((entry) => (

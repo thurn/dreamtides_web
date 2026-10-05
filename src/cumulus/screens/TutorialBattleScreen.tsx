@@ -1,4 +1,3 @@
-import { meaning, tx } from "@trox/runtime";
 import type { ClientId } from "../../types/identifiers";
 import {
   useCallback,
@@ -36,7 +35,6 @@ import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type {
   BattleCardId,
   DreamwellCardId,
@@ -384,24 +382,15 @@ export function TutorialBattleScreen({
           }}
         >
           <GlassPanel
-            title={tx(
-              "Choose a Target",
-              "[battle] [tutorial] Title above the tutorial battle prompt shown after the current player plays a card that requires a battlefield target.",
-            )}
-            subtitle={tx(
-              "Select a highlighted legal target.",
-              "[ui] Instruction beneath that title; the current player must activate one of the visually highlighted legal targets.",
-            )}
+            title={"Choose a Target"}
+            subtitle={"Select a highlighted legal target."}
             headerSpacing="compact"
             headerDivider={false}
             radius="control"
             rightAccessory={{
               kind: "glassButton",
               button: {
-                label: tx(
-                  meaning("tutorial-target-cancel", "Cancel"),
-                  "[tutorial] Visible command that cancels the tutorial card's pending target selection.",
-                ),
+                label: "Cancel",
                 testId: "tutorial-target-cancel",
                 onPress: () => interactions.onTargetSelectionCancel?.(),
               },
@@ -416,19 +405,10 @@ export function TutorialBattleScreen({
           copy={{
             message:
               movementStatusMessage === "send-failed"
-                ? tx(
-                    "Movement failed to send. Try again.",
-                    "[tutorial] Error when a tutorial movement intent could not be submitted.",
-                  )
+                ? "Movement failed to send. Try again."
                 : movementStatusMessage === "exhausted-front-rank"
-                  ? tx(
-                      "This character is exhausted and cannot move to the front rank.",
-                      "[ui] Error when an exhausted Character cannot enter the front rank during the opponent's Dusk.",
-                    )
-                  : tx(
-                      "No legal battlefield cell is available for this movement.",
-                      "[tutorial] Error when a tutorial movement has no legal destination.",
-                    ),
+                  ? "This character is exhausted and cannot move to the front rank."
+                  : "No legal battlefield cell is available for this movement.",
           }}
           onDismiss={onMovementStatusDismiss}
         />
@@ -500,15 +480,12 @@ function TutorialVictorySurface({
 }: {
   readonly onNewJourney: () => void;
 }): ReactElement {
-  const resolve = useLocalizer();
   const [actionSettled, setActionSettled] = useState(false);
   return (
     <section
       role="dialog"
       aria-modal="true"
-      aria-label={resolve(
-        tx("Tutorial complete", "[battle] [tutorial] Battle complete."),
-      )}
+      aria-label={"Tutorial complete"}
       data-tutorial-victory-screen=""
       style={{
         position: "fixed",
@@ -536,7 +513,7 @@ function TutorialVictorySurface({
       <Motes on tint="warm" count={12} seed={243} zIndex={1} />
       <RadialAnnouncement
         variant="victory"
-        headline={tx("Victory", "[battle] Victory headline.")}
+        headline={"Victory"}
         announcementId="tutorial-victory"
       />
       <div
@@ -561,10 +538,7 @@ function TutorialVictorySurface({
         }}
       >
         <GlassButton
-          label={tx(
-            "New Journey",
-            "[journey] Command that starts a fresh Journey from a menu or terminal Journey result.",
-          )}
+          label={"New Journey"}
           variant="accent"
           testId="tutorial-battle-new-journey"
           onPress={onNewJourney}

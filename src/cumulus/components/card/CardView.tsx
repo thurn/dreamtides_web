@@ -16,7 +16,6 @@ import {
   figmentCardIdentityName,
 } from "../../../data/figment-card-display";
 import { identiconsForced } from "../../../runtime/identicon-mode";
-import { localizedSourceText } from "../../../runtime/localization/runtime";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
@@ -44,24 +43,16 @@ import { semanticEntityId as revealEntityId } from "../../../types/semantic-iden
 import { DEFAULT_ART_CROP, resolveCardArtImageStyle } from "./card-art-crop";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { glossaryInfoCard } from "./glossary-info-card";
-import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { GlossaryEntryId } from "../../../types/identifiers";
 
 function localizedCardDisplayName(
   card: Pick<CardData, "name" | "subtype">,
   figment: boolean,
-): LocalizedString {
-  if (!figment) return localizedSourceText(card.name);
+): string {
+  if (!figment) return card.name;
   const identity = figmentCardIdentityName(card.name, card.subtype);
-  if (identity === "") return localizedSourceText("Figment");
-  return txa(
-    "{figment_identity} Figment",
-    {
-      figment_identity: opaque(localizedSourceText(identity)),
-    },
-    "[battle] Canonical card title for a generated Figment. figment_identity is the independently localized authored Figment identity and has no grammatical metadata.",
-  );
+  if (identity === "") return "Figment";
+  return `${identity} Figment`;
 }
 
 export {
@@ -132,7 +123,7 @@ function cardRulesTextDefinitionCards(
 ) {
   if (card.renderedText.trim() === "") return [];
   return rulesTextDefinitionCards(
-    localizedSourceText(card.renderedText),
+    card.renderedText,
     "card",
     [
       ...(card.isFast || card.isInterrupt === true
@@ -268,7 +259,7 @@ function ArtLayers({
   onError,
 }: {
   imageUrl: string;
-  alt: LocalizedString;
+  alt: string;
   artCrop: { x: number; y: number; scale: number };
   imageAspect: number | null;
   safeAreaTarget: number;
@@ -289,7 +280,7 @@ function ArtLayers({
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
-  const resolve = useLocalizer();
+  
   const extendedStyle = resolveCardArtImageStyle(
     artCrop,
     imageAspect,
@@ -353,7 +344,7 @@ function ArtLayers({
           masks it from the band down. */}
       <img
         src={imageUrl}
-        alt={resolve(alt)}
+        alt={alt}
         style={extendedStyle}
         draggable={false}
         onLoad={onLoad}
@@ -586,7 +577,7 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
 interface AttributeChip {
   key: string;
   boltCount: number;
-  ariaLabel: LocalizedString;
+  ariaLabel: string;
 }
 
 /**
@@ -602,10 +593,7 @@ function buildAttributeChips(
       {
         key: "interrupt",
         boltCount: 2,
-        ariaLabel: tx(
-          meaning("card-interrupt-attribute-name", "Interrupt"),
-          "[accessibility] Name for the double-bolt Interrupt attribute shown before a card name.",
-        ),
+        ariaLabel: "Interrupt",
       },
     ];
   }
@@ -614,10 +602,7 @@ function buildAttributeChips(
       {
         key: "fast",
         boltCount: 1,
-        ariaLabel: tx(
-          meaning("card-fast-attribute-name", "Fast"),
-          "[accessibility] Name for the single-bolt Fast attribute shown before a card name.",
-        ),
+        ariaLabel: "Fast",
       },
     ];
   }
@@ -688,7 +673,7 @@ export interface CardViewSlotContext {
   card: Readonly<CardData>;
   large: boolean;
   textScale: number;
-  typeLine: LocalizedString | null;
+  typeLine: string | null;
 }
 
 export interface CardViewSlots {
@@ -798,7 +783,7 @@ interface GameCardSurfaceProps extends CardViewProps {
 }
 
 function GameCardSurface(props: GameCardSurfaceProps) {
-  const resolve = useLocalizer();
+  
   const {
     card: sourceCard,
     onPress,
@@ -887,26 +872,14 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     ? null
     : cardIdenticonUri(card.id !== "" ? card.id : card.name);
 
-  const typeLine: LocalizedString | null =
+  const typeLine: string | null =
     card.cardType === "Character"
       ? card.subtype === ""
         ? null
-        : txa(
-            meaning("card-subtype-line", "{subtype}"),
-            { subtype: card.subtype },
-            "[ui] Type line for a Character card. subtype is the card's canonical authored subtype.",
-          )
+        : `${card.subtype}`
       : card.subtype === ""
-        ? txa(
-            "{card_type}",
-            { card_type: card.cardType },
-            "[ui] Type line for a non-Character card without a subtype. card_type is its canonical authored card type.",
-          )
-        : txa(
-            "{card_type} — {subtype}",
-            { card_type: card.cardType, subtype: card.subtype },
-            "[ui] Type line for a non-Character card with a subtype. card_type and subtype are canonical authored taxonomy labels.",
-          );
+        ? `${card.cardType}`
+        : `${card.cardType} — ${card.subtype}`;
   const rarityStyle = rarityStyleFor(card);
   const attributeChips = buildAttributeChips(card);
 
@@ -977,9 +950,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         transfiguration.energyChangeName !== null
           ? {
               kind: "empowered",
-              accessibleName: localizedSourceText(
-                transfiguration.energyChangeName,
-              ),
+              accessibleName: transfiguration.energyChangeName,
             }
           : undefined
       }
@@ -1023,7 +994,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     <span
       key={chip.key}
       data-attribute-chip={chip.key}
-      aria-label={resolve(chip.ariaLabel)}
+      aria-label={chip.ariaLabel}
       style={{
         color:
           transfiguration?.fastChanged === true
@@ -1088,25 +1059,13 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           textOverflow: "ellipsis",
         }}
       >
-        {resolve(localizedCardName)}
+        {localizedCardName}
       </span>
       {transfiguration !== undefined ? (
         <i
           className={GLYPHS[transfiguration.form.glyph]}
-          aria-label={resolve(
-            txa(
-              "{form_name} Transfiguration",
-              { form_name: transfiguration.form.name },
-              "[accessibility] [transfiguration] Description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
-            ),
-          )}
-          title={resolve(
-            txa(
-              "{form_name} Transfiguration",
-              { form_name: transfiguration.form.name },
-              "[accessibility] [transfiguration] Description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
-            ),
-          )}
+          aria-label={`${transfiguration.form.name} Transfiguration`}
+          title={`${transfiguration.form.name} Transfiguration`}
           style={{
             flex: "0 0 auto",
             marginLeft: "0.35em",
@@ -1124,7 +1083,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   );
 
   const typeLineContentNode =
-    typeLine === null ? null : <span>{resolve(typeLine)}</span>;
+    typeLine === null ? null : <span>{typeLine}</span>;
   const renderedTypeLineContent =
     slots.typeLineContent?.(slotContext, typeLineContentNode) ??
     typeLineContentNode;
@@ -1221,9 +1180,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           transfiguration.sparkChangeName !== null
             ? {
                 kind: "kindled",
-                accessibleName: localizedSourceText(
-                  transfiguration.sparkChangeName,
-                ),
+                accessibleName: transfiguration.sparkChangeName,
               }
             : undefined
         }
@@ -1383,13 +1340,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       {identiconUri !== null ? (
         <img
           src={identiconUri}
-          alt={resolve(
-            txa(
-              "{card_name} identicon",
-              { card_name: opaque(localizedCardName) },
-              "[accessibility] Alternative text for a generated card identicon. card_name is the card's canonical authored name.",
-            ),
-          )}
+          alt={`${localizedCardName} identicon`}
           className="absolute inset-0 h-full w-full object-contain"
           draggable={false}
           loading="lazy"
@@ -1435,7 +1386,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
               lineHeight: 1.15,
             }}
           >
-            {resolve(localizedCardName)}
+            {localizedCardName}
           </span>
         </div>
       )}
@@ -1519,13 +1470,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           {rulesTextChanged && transfiguration !== undefined ? (
             <span
               data-card-rules-text-change={transfiguration?.type}
-              title={resolve(
-                txa(
-                  "Rules text changed by {form_name} Transfiguration",
-                  { form_name: transfiguration.form.name },
-                  "[transfiguration] Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
-                ),
-              )}
+              title={`Rules text changed by ${transfiguration.form.name} Transfiguration`}
               style={{
                 position: "absolute",
                 right:
@@ -1539,11 +1484,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             >
               <CardChangeBadge
                 sizeVar="var(--cv-transfiguration-change-badge-size)"
-                ariaLabel={txa(
-                  "Rules text changed by {form_name} Transfiguration",
-                  { form_name: transfiguration.form.name },
-                  "[transfiguration] Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
-                )}
+                ariaLabel={`Rules text changed by ${transfiguration.form.name} Transfiguration`}
               />
             </span>
           ) : null}
@@ -1813,7 +1754,7 @@ export function GameCard({
   figment = false,
   testId,
 }: GameCardProps) {
-  const resolve = useLocalizer();
+  
   const lastPointerType = useRef<string | null>(null);
   const displaySnapshot = figment
     ? {
@@ -1848,7 +1789,7 @@ export function GameCard({
       role={interactive ? "button" : undefined}
       tabIndex={0}
       aria-disabled={unavailable || undefined}
-      aria-label={resolve(localizedCardDisplayName(displaySnapshot, figment))}
+      aria-label={localizedCardDisplayName(displaySnapshot, figment)}
       data-testid={testId}
       data-game-card-source=""
       data-game-card-presentation={presentation}

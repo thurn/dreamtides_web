@@ -3,7 +3,6 @@ import type {
   AuguryOfferFamily,
 } from "../journey_v2/archetypes/types";
 import type { RewardSelectionPolicyId } from "../reward-selection/types";
-import type { SourceTransport } from "../runtime/localization/runtime";
 
 export interface AuguryArchetypeData {
   id: AuguryArchetypeId;
@@ -24,18 +23,18 @@ export interface AuguryArchetypeData {
 }
 
 export type AuguryPresentationText =
-  | Readonly<{ kind: "text"; text: SourceTransport }>
-  | Readonly<{ kind: "count"; one: SourceTransport; other: SourceTransport }>
+  | Readonly<{ kind: "text"; text: string }>
+  | Readonly<{ kind: "count"; one: string; other: string }>
   | Readonly<{
       kind: "category";
-      character: SourceTransport;
-      event: SourceTransport;
-      cheap: SourceTransport;
-      midCost: SourceTransport;
-      expensive: SourceTransport;
-      fast: SourceTransport;
-      subtype: SourceTransport;
-      package: SourceTransport;
+      character: string;
+      event: string;
+      cheap: string;
+      midCost: string;
+      expensive: string;
+      fast: string;
+      subtype: DisplayText;
+      package: string;
     }>;
 
 /** Validated Augury data from `src/content/augury.ts`. */
@@ -59,3 +58,4 @@ export interface AuguryData {
   archetypes: readonly AuguryArchetypeData[];
 }
 import type { ContentHash, FoldHash } from "./content-hash";
+import type { DisplayText } from "../runtime/text";

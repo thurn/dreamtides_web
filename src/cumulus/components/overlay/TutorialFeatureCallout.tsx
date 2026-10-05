@@ -4,8 +4,6 @@ import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import type { CumulusColor } from "../../primitives/color";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
-import { meaning, tx, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DomTestId } from "../../types/dom";
 
 /** The four authored card regions taught by the loading-screen anatomy scene. */
@@ -13,44 +11,32 @@ export type TutorialFeatureCalloutKind =
   "cost" | "spark" | "ability" | "cardType";
 
 interface CardFeatureSpec {
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly glyph?: Glyph;
   readonly color?: CumulusColor;
-  readonly glyphLabel?: LocalizedString;
+  readonly glyphLabel?: string;
 }
 
 const CARD_FEATURES: Readonly<
   Record<TutorialFeatureCalloutKind, CardFeatureSpec>
 > = {
   cost: {
-    label: tx(
-      meaning("tutorial-cost-feature-label", "Cost"),
-      "[loading] Loading-screen card feature labels.",
-    ),
+    label: "Cost",
     glyph: GLYPHS.energy,
     color: "energy",
-    glyphLabel: tx(
-      "energy",
-      "[accessibility] [loading] Loading-screen resource glyph names.",
-    ),
+    glyphLabel: "energy",
   },
   spark: {
-    label: tx(
-      meaning("tutorial-spark-feature-label", "Spark"),
-      "[tutorial] Feature spark.",
-    ),
+    label: "Spark",
     glyph: GLYPHS.sparkInline,
     color: "spark",
-    glyphLabel: tx("spark", "[tutorial] Feature spark glyph."),
+    glyphLabel: "spark",
   },
   ability: {
-    label: tx(
-      meaning("tutorial-ability-feature-label", "Ability"),
-      "[tutorial] Feature ability.",
-    ),
+    label: "Ability",
   },
   cardType: {
-    label: tx("Card Type", "[tutorial] Feature card type."),
+    label: "Card Type",
   },
 };
 
@@ -71,7 +57,6 @@ export function TutorialFeatureCallout({
   testId,
 }: TutorialFeatureCalloutProps): ReactElement {
   const spec = CARD_FEATURES[feature];
-  const resolve = useLocalizer();
 
   return (
     <aside
@@ -99,7 +84,7 @@ export function TutorialFeatureCallout({
           label={spec.glyphLabel}
         />
       )}
-      <span>{resolve(spec.label)}</span>
+      <span>{spec.label}</span>
     </aside>
   );
 }

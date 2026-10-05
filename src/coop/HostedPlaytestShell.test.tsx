@@ -1,12 +1,10 @@
 // @vitest-environment jsdom
 
 import { act, type ComponentProps, type ReactNode } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FoldState } from "../rules/fold-state";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
-import { useLocalizer } from "../runtime/localization/use-localizer";
 import { parseClientId } from "../types/identifiers";
 import type { ClientId } from "../types/identifiers";
 
@@ -30,14 +28,13 @@ vi.mock("../cumulus/components/overlay/GlassPanel", () => ({
     children,
     footer,
   }: {
-    title?: LocalizedString;
+    title?: string;
     children: ReactNode;
     footer?: ReactNode;
   }) => {
-    const resolve = useLocalizer();
     return (
       <aside>
-        <h2>{title === undefined ? null : resolve(title)}</h2>
+        <h2>{title === undefined ? null : title}</h2>
         {children}
         {footer}
       </aside>
@@ -46,15 +43,8 @@ vi.mock("../cumulus/components/overlay/GlassPanel", () => ({
 }));
 
 vi.mock("../cumulus/components/controls/GlassButton", () => ({
-  GlassButton: ({
-    label,
-    onPress,
-  }: {
-    label: LocalizedString;
-    onPress: () => void;
-  }) => {
-    const resolve = useLocalizer();
-    return <button onClick={onPress}>{resolve(label)}</button>;
+  GlassButton: ({ label, onPress }: { label: string; onPress: () => void }) => {
+    return <button onClick={onPress}>{label}</button>;
   },
 }));
 

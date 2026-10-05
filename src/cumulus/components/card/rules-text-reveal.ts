@@ -4,12 +4,7 @@ import {
   type RulesTextGlossaryOwner,
 } from "../../../data/glossary-terms";
 import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
-import type { LocalizedString } from "@trox/runtime";
 import type { GlossaryEntryId } from "../../../types/identifiers";
-import {
-  localizedSourceText,
-  resolveSource,
-} from "../../../runtime/localization/runtime";
 
 /**
  * Build the compact glossary card shared by semantic rules-text sources. Each
@@ -35,14 +30,11 @@ export function glossaryDefinitionsCardModel(
     body: {
       kind: "definitions",
       entries: visibleEntries.map((entry) => ({
-        term:
-          "localizedTerm" in entry
-            ? entry.localizedTerm
-            : localizedSourceText(entry.term),
+        term: "localizedTerm" in entry ? entry.localizedTerm : entry.term,
         definition:
           "localizedDefinition" in entry
             ? entry.localizedDefinition
-            : localizedSourceText(entry.definition),
+            : entry.definition,
         symbol: entry.definitionSymbol,
         termPresentation: entry.termPresentation,
       })),
@@ -56,12 +48,12 @@ export function glossaryDefinitionsCardModel(
  * rules-text owner presents its definitions in one shared glossary card.
  */
 export function rulesTextDefinitionCards(
-  text: LocalizedString,
+  text: string,
   owner: RulesTextGlossaryOwner = "card",
   excludedIds: readonly GlossaryEntryId[] = [],
 ): Readonly<InfoCardProps>[] {
   const card = glossaryDefinitionsCardModel(
-    extractProjectedGlossaryTerms(resolveSource(text), owner),
+    extractProjectedGlossaryTerms(text, owner),
     excludedIds,
   );
   return card === null ? [] : [card];

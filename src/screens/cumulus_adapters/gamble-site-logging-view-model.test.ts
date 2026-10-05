@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { artRef } from "../../cumulus/primitives/art";
 import type {
@@ -80,8 +79,8 @@ const VIEW: LadderClimbSiteView = {
   nextDraw: null,
   guide: {
     id: testGuideId("fixture-guide"),
-    name: assertLocalized("Fixture Guide"),
-    line: assertLocalized("Fixture line."),
+    name: "Fixture Guide",
+    line: "Fixture line.",
     art: artRef.dreamGuide(testGuideId("fixture-guide")),
   },
   result: null,

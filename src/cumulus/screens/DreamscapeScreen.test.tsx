@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -67,8 +66,8 @@ function siteModel(
     isBattle: site.type === "Battle",
     isLocked: false,
     isInteractive: !site.isVisited,
-    label: assertLocalized(site.type),
-    blurb: assertLocalized("Remove cards from your deck."),
+    label: site.type,
+    blurb: "Remove cards from your deck.",
     icon: glyph("bxf bx-hot"),
     ...overrides,
   };
@@ -89,13 +88,13 @@ function siteState(
 
 const VIEW: DreamscapeView = {
   scene: artRef.dreamscapeScene(testDreamscapeId("ember_wood")),
-  title: assertLocalized("Ember Wood"),
+  title: "Ember Wood",
   inlineRewards: {},
   replacement: null,
   sites: [
     siteModel(siteState("s-purge")),
     siteModel(siteState("s-draft", { type: "Draft" }), {
-      label: assertLocalized("Draft 5x"),
+      label: "Draft 5x",
     }),
     siteModel(siteState("s-visited", { type: "Shop", isVisited: true })),
   ],
@@ -144,9 +143,9 @@ describe("DreamscapeScreen", () => {
         id: testPresentationId("dreamscape-guide-dialogue"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: assertLocalized("Mira"),
-          speakerName: assertLocalized("Mira"),
-          text: assertLocalized("Visit [purple]Dream Sites[/purple]."),
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Visit [purple]Dream Sites[/purple].",
         },
         delaySeconds: 2,
         horizontalOffset: 0,

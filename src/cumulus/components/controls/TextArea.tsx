@@ -1,13 +1,11 @@
 import type { ChangeEvent, KeyboardEvent, ReactElement, Ref } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { controlChrome } from "../../internal/control-treatment";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DomTestId } from "../../types/dom";
 
 export interface TextAreaProps {
   /** Visible field label. */
-  readonly label: LocalizedString;
+  readonly label: string;
   /** Controlled multiline text. */
   readonly value: string;
   /** Reports each local text edit. */
@@ -15,11 +13,11 @@ export interface TextAreaProps {
   /** Commits the draft on blur or Command/Ctrl+Enter. */
   readonly onCommit?: (value: string) => void;
   /** Optional placeholder shown while empty. */
-  readonly placeholder?: LocalizedString;
+  readonly placeholder?: string;
   /** Supporting copy beneath the control. */
-  readonly supportingText?: LocalizedString;
+  readonly supportingText?: string;
   /** Validation copy; also marks the textarea invalid. */
-  readonly error?: LocalizedString;
+  readonly error?: string;
   /** Stable test id for product QA. */
   readonly testId?: DomTestId;
   /** Optional ref to the native textarea. */
@@ -38,7 +36,6 @@ export function TextArea({
   testId,
   inputRef,
 }: TextAreaProps): ReactElement {
-  const resolve = useLocalizer();
   const chrome = controlChrome("onGlass");
   const message = error ?? supportingText;
   const invalid = error !== undefined;
@@ -52,15 +49,13 @@ export function TextArea({
           textTransform: "uppercase",
         }}
       >
-        {resolve(label)}
+        {label}
       </span>
       <textarea
         ref={inputRef}
         rows={3}
         value={value}
-        placeholder={
-          placeholder === undefined ? undefined : resolve(placeholder)
-        }
+        placeholder={placeholder === undefined ? undefined : placeholder}
         aria-invalid={invalid ? true : undefined}
         data-testid={testId}
         onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
@@ -95,7 +90,7 @@ export function TextArea({
             font: token("--t-caption"),
           }}
         >
-          {resolve(message)}
+          {message}
         </span>
       )}
     </label>

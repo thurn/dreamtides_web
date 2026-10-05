@@ -1,12 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { stableDigest } from "../../reward-selection/stable";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import {
-  localizedSourceText,
-  resolveSource,
-} from "../../runtime/localization/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { parseCardName } from "../../types/card-identity";
 import {
   MINIMAL_ATLAS_DATA,
@@ -435,7 +431,7 @@ describe("augury view model", () => {
       isVisited: false,
       isInteractive: false,
     });
-    expect(resolveSource(visual.model.label)).toBe(
+    expect(visual.model.label).toBe(
       siteTypeName(MINIMAL_SITES_DATA, "Shop"),
     );
   });
@@ -587,7 +583,7 @@ describe("augury view model", () => {
       auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, "purge").presentation,
     );
 
-    const source = resolveSource(formatted);
+    const source = formatted;
     expect(source).not.toBe("");
     expect(source).toContain(deckObject.displayName);
   });
@@ -691,7 +687,7 @@ describe("augury view model", () => {
       site,
       journeyContent: mappingContentWithTide(),
       guide: GUIDE,
-      guideLine: localizedSourceText("Fixture line."),
+      guideLine: "Fixture line.",
     });
 
     expect(result.errorMessage).toBeNull();

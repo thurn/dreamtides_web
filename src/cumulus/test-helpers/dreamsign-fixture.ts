@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { testDreamsignId } from "../../types/test-identities";
 import type { DreamsignId } from "../../types/identifiers";
@@ -19,12 +18,12 @@ export function localizedDreamsignFixture(
 ): LocalizedDreamsign {
   return {
     id: input.id ?? testDreamsignId(input.idSeed),
-    name: assertLocalized(input.name),
+    name: input.name,
     effectDescription:
       input.effectDescription === null
         ? null
-        : assertLocalized(input.effectDescription ?? `${input.name} effect.`),
+        : (input.effectDescription ?? `${input.name} effect.`),
     ...(input.imageName === undefined ? {} : { imageName: input.imageName }),
-    imageAlt: assertLocalized(input.imageAlt ?? input.name),
+    imageAlt: input.imageAlt ?? input.name,
   };
 }

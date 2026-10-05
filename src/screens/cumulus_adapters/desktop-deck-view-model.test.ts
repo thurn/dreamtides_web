@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { testJourneySeed } from "../../types/test-identities";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { LocalizedString } from "@trox/runtime";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import type { CardData } from "../../types/cards";
 import type { AvatarContent } from "../../types/content";
 import type { DeckEntry, Avatar, Dreamsign } from "../../types/journey";
@@ -157,9 +156,9 @@ describe("buildDesktopDeckView", () => {
       id: avatar.id,
       imageNumber: "12",
     });
-    expect(view.avatar?.name).toBeInstanceOf(LocalizedString);
-    expect(view.avatar?.title).toBeInstanceOf(LocalizedString);
-    expect(view.avatar?.renderedText).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.name).toEqual(expect.any(String));
+    expect(view.avatar?.title).toEqual(expect.any(String));
+    expect(view.avatar?.renderedText).toEqual(expect.any(String));
   });
 
   it("carries a null Avatar through as null", () => {
@@ -201,7 +200,7 @@ describe("buildDesktopDeckView", () => {
     );
 
     expect(view.tides).toMatchObject([{ id: TIDE_ID, tide: "ember" }]);
-    expect(view.tides[0]?.label).toBeInstanceOf(LocalizedString);
-    expect(view.tides[0]?.description).toBeInstanceOf(LocalizedString);
+    expect(view.tides[0]?.label).toEqual(expect.any(String));
+    expect(view.tides[0]?.description).toEqual(expect.any(String));
   });
 });

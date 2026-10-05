@@ -22,8 +22,6 @@ import {
   type LoadingCalloutLeaderLine,
 } from "./loading-callout-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
-import { tx } from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface LoadingView {
   readonly loadingCharacter: GameCardModel;
@@ -192,7 +190,6 @@ function AnnotatedLoadingCard({
   readonly annotations: readonly AnnotationSpec[];
   readonly isDesktop: boolean;
 }): ReactElement {
-  const resolve = useLocalizer();
   const groupRef = useRef<HTMLDivElement | null>(null);
   const calloutRefs = useRef<
     Partial<Record<TutorialFeatureCalloutKind, HTMLDivElement | null>>
@@ -308,17 +305,7 @@ function AnnotatedLoadingCard({
           pointerEvents: "none",
         }}
       >
-        {resolve(
-          cardType === "character"
-            ? tx(
-                "Character",
-                "[loading] Card-type label above the Character example on the loading screen.",
-              )
-            : tx(
-                "Event",
-                "[loading] Card-type label above the Event example on the loading screen.",
-              ),
-        )}
+        {cardType === "character" ? "Character" : "Event"}
       </p>
 
       <svg
@@ -374,7 +361,6 @@ export function LoadingScreen({
   playbackSpeed = 1,
   onBegin,
 }: LoadingScreenProps): ReactElement {
-  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const [ready, setReady] = useState(false);
@@ -498,13 +484,11 @@ export function LoadingScreen({
             playbackSpeed={playbackSpeed}
             reduceMotion={reduceMotion}
           />
-          <span>{resolve(tx("Loading", "[loading] Progress label."))}</span>
+          <span>{"Loading"}</span>
         </div>
       )}
       <section
-        aria-label={resolve(
-          tx("Card anatomy", "[loading] Card anatomy label."),
-        )}
+        aria-label={"Card anatomy"}
         data-loading-card-stage
         style={{
           width: "100%",
@@ -568,7 +552,7 @@ export function LoadingScreen({
             }}
           >
             <GlassButton
-              label={tx("Begin", "[loading] Begin action.")}
+              label={"Begin"}
               onPress={onBegin}
               size="prominent"
               variant="accent"

@@ -1,15 +1,13 @@
-import { tx, type LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { Pressable } from "../../primitives/Pressable";
 import { SAFE_AREA_INSET_PROPERTIES } from "../../primitives/safe-area";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Structured text for a transient status; presentation owns its layout. */
 export interface TransientStatusCopy {
-  readonly title?: LocalizedString;
-  readonly message: LocalizedString;
+  readonly title?: string;
+  readonly message: string;
 }
 
 export interface TransientStatusToastProps {
@@ -28,23 +26,13 @@ export function TransientStatusToast({
   copy,
   onDismiss,
 }: TransientStatusToastProps): ReactElement {
-  const resolve = useLocalizer();
   return (
     <Pressable
       as="button"
       data-transient-status-toast="warning"
       data-coop-bounce-toast=""
       aria-live="assertive"
-      aria-label={
-        onDismiss === undefined
-          ? undefined
-          : resolve(
-              tx(
-                "Dismiss status",
-                "[accessibility] Action name for dismissing a transient player status message.",
-              ),
-            )
-      }
+      aria-label={onDismiss === undefined ? undefined : "Dismiss status"}
       disabled={onDismiss === undefined}
       onClick={onDismiss}
       style={{
@@ -63,13 +51,9 @@ export function TransientStatusToast({
     >
       <span role="alert" style={{ display: "grid", gap: token("--space-xs") }}>
         {copy.title !== undefined && (
-          <strong style={{ font: token("--t-button") }}>
-            {resolve(copy.title)}
-          </strong>
+          <strong style={{ font: token("--t-button") }}>{copy.title}</strong>
         )}
-        <span style={{ font: token("--t-body-sm") }}>
-          {resolve(copy.message)}
-        </span>
+        <span style={{ font: token("--t-body-sm") }}>{copy.message}</span>
       </span>
     </Pressable>
   );

@@ -14,15 +14,6 @@ import {
   JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX,
   JOURNEY_RESULT_TOP_CHROME_CLEARANCE,
 } from "./journey-result-layout";
-import {
-  tx,
-  txa,
-  plural,
-  one,
-  other,
-  type LocalizedString,
-} from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { AvatarId } from "../../types/identifiers";
 
 export interface JourneyCompleteStatView {
@@ -33,7 +24,7 @@ export interface JourneyCompleteStatView {
 
 export interface JourneyCompleteAvatarView extends AvatarVisual {
   id: AvatarId;
-  ability: LocalizedString;
+  ability: string;
 }
 
 export interface JourneyCompleteView {
@@ -51,37 +42,19 @@ export function JourneyCompleteScreen({
   view,
   onNewJourney,
 }: JourneyCompleteScreenProps): ReactElement {
-  const resolve = useLocalizer();
-  const statLabel = (stat: JourneyCompleteStatView): LocalizedString => {
+  
+  const statLabel = (stat: JourneyCompleteStatView): string => {
     switch (stat.id) {
       case "battles":
-        return txa(
-          plural(stat.value, [one("Battle Won"), other("Battles Won")]),
-          {},
-          "[journey] Label beneath the completed Journey's number of battles won. The number is rendered separately above.",
-        );
+        return (stat.value === 1 ? "Battle Won" : "Battles Won");
       case "dreamscapes":
-        return txa(
-          plural(stat.value, [one("Dreamscape"), other("Dreamscapes")]),
-          {},
-          "[journey] Label beneath the number of Dreamscapes in a completed Journey. The number is rendered separately above.",
-        );
+        return (stat.value === 1 ? "Dreamscape" : "Dreamscapes");
       case "cards":
-        return tx(
-          "Final Deck",
-          "[journey] Label beneath the number of cards in the completed Journey's final deck.",
-        );
+        return "Final Deck";
       case "dreamsigns":
-        return txa(
-          plural(stat.value, [one("Dreamsign"), other("Dreamsigns")]),
-          {},
-          "[dreamsign] [journey] Label beneath the number of Dreamsigns in a completed Journey. The number is rendered separately above.",
-        );
+        return (stat.value === 1 ? "Dreamsign" : "Dreamsigns");
       case "essence":
-        return tx(
-          "Essence Remaining",
-          "[journey] Label beneath the remaining Essence at the end of a Journey.",
-        );
+        return "Essence Remaining";
     }
   };
 
@@ -153,12 +126,7 @@ export function JourneyCompleteScreen({
                   color: token("--text-primary"),
                 }}
               >
-                {resolve(
-                  tx(
-                    "Journey Complete",
-                    "[journey] Complete title.",
-                  ),
-                )}
+                {"Journey Complete"}
               </h1>
             </header>
 
@@ -229,10 +197,7 @@ export function JourneyCompleteScreen({
             }}
           >
             <GlassButton
-              label={tx(
-                "New Journey",
-                "[journey] Command that starts a fresh Journey from a menu or terminal Journey result.",
-              )}
+              label={"New Journey"}
               variant="accent"
               onPress={onNewJourney}
               testId="journey-complete-new-journey"
@@ -249,9 +214,9 @@ function SummaryStat({
   label,
 }: {
   readonly stat: JourneyCompleteStatView;
-  readonly label: LocalizedString;
+  readonly label: string;
 }) {
-  const resolve = useLocalizer();
+  
   return (
     <div
       data-journey-complete-stat={stat.id}
@@ -288,7 +253,7 @@ function SummaryStat({
           color: token("--text-on-glass-muted"),
         }}
       >
-        {resolve(label)}
+        {label}
       </dt>
     </div>
   );

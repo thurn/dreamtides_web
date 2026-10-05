@@ -3,8 +3,7 @@ import {
   testCardName,
   testDreamwellCardName,
 } from "../../types/test-identities";
-import { LocalizedString } from "@trox/runtime";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import { createInitialBattleState } from "../../battle/state/create-initial-state";
 import { makeBattleTestState } from "../../battle/test-support";
 import type {
@@ -34,8 +33,6 @@ import {
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
 import type { MobileBattlePromptCopy } from "../../cumulus/screens/MobileBattleScreen";
-import { assertLocalized } from "@trox/runtime";
-import { resolveChecked } from "../../runtime/localization/runtime";
 import { parseBattleId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseBattleEntryKey } from "../../types/identifiers";
@@ -46,16 +43,16 @@ import { parseBattleEffectScriptId } from "../../types/identifiers";
 import { identityKeys } from "../../types/identifiers";
 import { testAvatarId, testCardId, testDreamwellCardId } from "../../types/test-identities";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 
 function resolveFixturePromptText(
   text: BattlePromptText,
 ): MobileBattlePromptCopy {
   if (isDreamwellPromptRef(text)) {
-    return assertLocalized(text.promptKey);
+    return text.promptKey;
   }
-  if (isLegacyPromptText(text)) return assertLocalized(text.text);
-  return assertLocalized(text.prompt);
+  if (isLegacyPromptText(text)) return text.text;
+  return text.prompt;
 }
 
 const ENEMY_AVATAR: BattleAvatarSummary = {
@@ -446,8 +443,8 @@ describe("buildMobileBattleView", () => {
         confirmedPromptId: null,
       },
     );
-    expect(optimistic.cardPicker?.label).toBeInstanceOf(LocalizedString);
-    expect(optimistic.cardPicker?.subtitle).toBeInstanceOf(LocalizedString);
+    expect(optimistic.cardPicker?.label).toEqual(expect.any(String));
+    expect(optimistic.cardPicker?.subtitle).toEqual(expect.any(String));
     expect(optimistic.cardPicker).toMatchObject({
       key: prompt.promptId,
       candidateIds: prompt.options.candidateIds,
@@ -546,13 +543,9 @@ describe("buildMobileBattleView", () => {
         confirmedPromptId: null,
       },
     );
-    expect(optimistic.choicePrompt?.label).toBeInstanceOf(LocalizedString);
-    expect(optimistic.choicePrompt?.options[0]?.label).toBeInstanceOf(
-      LocalizedString,
-    );
-    expect(optimistic.choicePrompt?.options[1]?.label).toBeInstanceOf(
-      LocalizedString,
-    );
+    expect(optimistic.choicePrompt?.label).toEqual(expect.any(String));
+    expect(optimistic.choicePrompt?.options[0]?.label).toEqual(expect.any(String));
+    expect(optimistic.choicePrompt?.options[1]?.label).toEqual(expect.any(String));
     expect(optimistic.choicePrompt).toMatchObject({
       key: prompt.promptId,
       canResolve: false,
@@ -954,16 +947,12 @@ describe("buildMobileBattleView", () => {
       enemyAvatar === null ||
       enemyProfile === undefined
     ) return;
-    expect(playerAvatar.name).toBeInstanceOf(LocalizedString);
-    expect(playerAvatar.title).toBeInstanceOf(LocalizedString);
-    expect(playerProfile.ability).toBeInstanceOf(
-      LocalizedString,
-    );
-    expect(enemyAvatar.name).toBeInstanceOf(LocalizedString);
-    expect(enemyAvatar.title).toBeInstanceOf(LocalizedString);
-    expect(enemyProfile.ability).toBeInstanceOf(
-      LocalizedString,
-    );
+    expect(playerAvatar.name).toEqual(expect.any(String));
+    expect(playerAvatar.title).toEqual(expect.any(String));
+    expect(playerProfile.ability).toEqual(expect.any(String));
+    expect(enemyAvatar.name).toEqual(expect.any(String));
+    expect(enemyAvatar.title).toEqual(expect.any(String));
+    expect(enemyProfile.ability).toEqual(expect.any(String));
 
     const fallback = buildMobileBattleView(
       { ...init, avatarSummary: null },
@@ -977,7 +966,7 @@ describe("buildMobileBattleView", () => {
     const fallbackAvatar = fallback.player.status.avatar;
     expect(fallbackAvatar).not.toBeNull();
     if (fallbackAvatar === null) return;
-    expect(fallbackAvatar.name).toBeInstanceOf(LocalizedString);
+    expect(fallbackAvatar.name).toEqual(expect.any(String));
   });
 
   it("replaces the opening opponent ability with dormant hover copy", () => {
@@ -998,15 +987,11 @@ describe("buildMobileBattleView", () => {
     expect(enemyProfile).toBeDefined();
     expect(playerProfile).toBeDefined();
     if (enemyProfile === undefined || playerProfile === undefined) return;
-    expect(enemyProfile.ability).toBeInstanceOf(
-      LocalizedString,
-    );
+    expect(enemyProfile.ability).toEqual(expect.any(String));
     expect(view.player.status.avatarProfile).toMatchObject({
       id: init.avatarSummary?.id,
     });
-    expect(playerProfile.ability).toBeInstanceOf(
-      LocalizedString,
-    );
+    expect(playerProfile.ability).toEqual(expect.any(String));
   });
 });
 
@@ -1075,7 +1060,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
         );
         expect(
           confirmationView.choicePrompt?.options.map((option) =>
-            resolveChecked(option.label),
+            option.label,
           ),
         ).toEqual(["confirm-yes", "confirm-skip"]);
         parked = resolvePendingPrompt(

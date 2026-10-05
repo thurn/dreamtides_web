@@ -11,7 +11,6 @@ import {
   useJourneyUtilityMenuController,
   type JourneyUtilityMenuAction,
 } from "./JourneyUtilityMenuController";
-import { meaning, tx } from "@trox/runtime";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeJourneyMenuProps {
@@ -81,20 +80,14 @@ export function DreamscapeJourneyMenu({
       id: "deck",
       kind: "action",
       glyph: GLYPHS.affiliationRow,
-      label: tx(
-        "View Deck",
-        "[journey] [developer] Normal Journey utility-menu actions. These labels are visible in the shared app chrome; debug-labelled actions remain in the same menu only when their route supplies the corresponding developer capability.",
-      ),
+      label: "View Deck",
       onCommand: onOpenDeckViewer,
     },
     {
       id: "pool",
       kind: "action",
       glyph: GLYPHS.grid,
-      label: tx(
-        meaning("pool-viewer-action", "Pool Viewer"),
-        "[pool-viewer] [journey] Menu pool viewer action.",
-      ),
+      label: "Pool Viewer",
       onCommand: onOpenPoolViewer,
     },
     ...(hasDraftData
@@ -103,10 +96,7 @@ export function DreamscapeJourneyMenu({
             id: "package",
             kind: "action" as const,
             glyph: GLYPHS.package,
-            label: tx(
-              "Package Debug",
-              "[journey] Menu package debug action.",
-            ),
+            label: "Package Debug",
             onCommand: onOpenDebugScreen,
           },
         ]
@@ -117,10 +107,7 @@ export function DreamscapeJourneyMenu({
             id: "cardSource",
             kind: "action" as const,
             glyph: GLYPHS.list,
-            label: tx(
-              "Card Sources",
-              "[journey] Menu card sources action.",
-            ),
+            label: "Card Sources",
             active: isCardSourceOverlayOpen,
             onCommand: onToggleCardSourceOverlay,
           },
@@ -131,10 +118,7 @@ export function DreamscapeJourneyMenu({
       id: "editor",
       kind: "action",
       glyph: GLYPHS.edit,
-      label: tx(
-        "Edit Journey State",
-        "[journey] Menu edit state action.",
-      ),
+      label: "Edit Journey State",
       onCommand: onOpenJourneyEditor,
     },
     ...(onRegenerateAtlas !== undefined
@@ -143,10 +127,7 @@ export function DreamscapeJourneyMenu({
             id: "regenerateAtlas",
             kind: "action" as const,
             glyph: GLYPHS.refresh,
-            label: tx(
-              "Regenerate Atlas",
-              "[journey] Menu regenerate atlas action.",
-            ),
+            label: "Regenerate Atlas",
             onCommand: onRegenerateAtlas,
           },
         ]
@@ -167,10 +148,7 @@ export function DreamscapeJourneyMenu({
         kind: "appChrome",
         trigger: {
           glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
-          label: tx(
-            "Open menu",
-            "[journey] Menu open action.",
-          ),
+          label: "Open menu",
           corner: isDesktop ? "topEnd" : "topStart",
         },
         actions: model.actions,

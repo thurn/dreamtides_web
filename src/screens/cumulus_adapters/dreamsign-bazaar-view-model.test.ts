@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import { economyFixture } from "../../testing/economy-fixture";
 import type {
@@ -187,7 +187,7 @@ describe("buildDreamsignBazaarSiteView", () => {
         dialogue: { site: ["Choose carefully."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: assertLocalized("A chosen greeting."),
+      guideLine: "A chosen greeting.",
       pendingDreamsign,
       economyData: economyFixture(),
       sitesData: MINIMAL_SITES_DATA,
@@ -197,8 +197,8 @@ describe("buildDreamsignBazaarSiteView", () => {
     expect(view.guide).toMatchObject({
       id: guideId,
     });
-    expect(view.guide.name).toBeInstanceOf(LocalizedString);
-    expect(view.guide.line).toBeInstanceOf(LocalizedString);
+    expect(view.guide.name).toEqual(expect.any(String));
+    expect(view.guide.line).toEqual(expect.any(String));
     expect(view.offers).toHaveLength(3);
     expect(view.purge?.pendingDreamsign.id).toBe(pendingDreamsign.id);
   });
@@ -234,7 +234,7 @@ describe("buildDreamsignBazaarSiteView", () => {
         dialogue: { site: ["Choose carefully."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: assertLocalized("A chosen greeting."),
+      guideLine: "A chosen greeting.",
       pendingDreamsign: null,
       economyData: economyFixture(),
       sitesData: MINIMAL_SITES_DATA,
@@ -248,7 +248,6 @@ describe("buildDreamsignBazaarSiteView", () => {
     expect(view.restock.price).toBeGreaterThan(0);
   });
 });
-import { assertLocalized, LocalizedString } from "@trox/runtime";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testDreamscapeId, testExplorationActionId, testGuideId, testDreamsignId } from "../../types/test-identities";

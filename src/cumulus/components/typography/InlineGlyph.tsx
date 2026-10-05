@@ -1,8 +1,6 @@
 import type { ReactElement } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import type { Glyph } from "../../primitives/glyph";
-import { useOptionalLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface InlineGlyphProps {
   /** Named Boxicons glyph from the shared Cumulus glyph vocabulary. */
@@ -10,7 +8,7 @@ export interface InlineGlyphProps {
   /** Optional semantic fill color. Omit to inherit the surrounding text color. */
   color?: CumulusColor;
   /** Accessible meaning. Omit only when surrounding copy already names the glyph. */
-  label?: LocalizedString;
+  label?: string;
 }
 
 /**
@@ -30,19 +28,12 @@ export function InlineGlyph({
   color,
   label,
 }: InlineGlyphProps): ReactElement {
-  const resolve = useOptionalLocalizer();
   const isAccessible = label !== undefined;
   return (
     <span
       data-inline-glyph=""
       role={isAccessible ? "img" : undefined}
-      aria-label={
-        label === undefined
-          ? undefined
-          : resolve === null
-            ? missingLocalizationProvider()
-            : resolve(label)
-      }
+      aria-label={label}
       aria-hidden={isAccessible ? undefined : true}
       style={{
         color: color === undefined ? undefined : resolveColor(color),
@@ -76,11 +67,5 @@ export function InlineGlyph({
         />
       </span>
     </span>
-  );
-}
-
-function missingLocalizationProvider(): never {
-  throw new Error(
-    "Localized InlineGlyph copy requires a mounted TroxLocalizationProvider.",
   );
 }

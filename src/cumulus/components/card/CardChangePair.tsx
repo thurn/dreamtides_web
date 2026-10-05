@@ -1,6 +1,4 @@
 import { useEffect, useState, type ReactElement } from "react";
-import { txa } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
@@ -60,7 +58,6 @@ export function CardChangePair<ChangeId extends string>({
   model,
   reveal,
 }: CardChangePairProps<ChangeId>): ReactElement {
-  const resolve = useLocalizer();
   const reducedMotion = useReducedMotion();
   const complete = reveal === "complete" || reducedMotion;
   const afterSelection =
@@ -81,22 +78,11 @@ export function CardChangePair<ChangeId extends string>({
       data-after-entry-id={model.after.entryId}
       data-after-card-id={model.after.card.cardId}
       role="group"
-      aria-label={resolve(
+      aria-label={
         complete
-          ? txa(
-              "{before_card} changed into {after_card}",
-              {
-                before_card: model.before.card.displaySnapshot.name,
-                after_card: model.after.card.displaySnapshot.name,
-              },
-              "[accessibility] Name for a resolved before-and-after card presentation. Both names are UUID-resolved and may match.",
-            )
-          : txa(
-              "The result of changing {before_card} is concealed",
-              { before_card: model.before.card.displaySnapshot.name },
-              "[accessibility] Name for a before-and-after card presentation while its result remains concealed. before_card is UUID-resolved.",
-            ),
-      )}
+          ? `${model.before.card.displaySnapshot.name} changed into ${model.after.card.displaySnapshot.name}`
+          : `The result of changing ${model.before.card.displaySnapshot.name} is concealed`
+      }
       style={{ width: 520, maxWidth: "100%" }}
     >
       <div
@@ -171,11 +157,7 @@ export function CardChangePair<ChangeId extends string>({
               }}
             >
               <CardBack
-                label={txa(
-                  "Changed card {card}",
-                  { card: model.after.card.displaySnapshot.name },
-                  "[accessibility] Concealed result card label.",
-                )}
+                label={`Changed card ${model.after.card.displaySnapshot.name}`}
               />
             </div>
             <div

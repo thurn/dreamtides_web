@@ -4,7 +4,6 @@ import {
   type BattleFigmentDeckPosition,
   type BattleFigmentZone,
 } from "../../cumulus/screens/battle-overlays/BattleFigmentCreatorOverlay";
-import { assertLocalized } from "@trox/runtime";
 import { parseCardName } from "../../types/card-identity";
 import type {
   BattleDebugEdit,
@@ -197,20 +196,18 @@ export function BattleFigmentCreator({
       typeId={figmentTypeId}
       typeOptions={figmentCatalogEntries().map((entry) => ({
         value: entry.id,
-        label: assertLocalized(formatCatalogOptionLabel(entry)),
+        label: formatCatalogOptionLabel(entry),
       }))}
-      keywordText={assertLocalized(
+      keywordText={
         selectedKeyword === undefined
           ? "No keyword."
-          : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`,
-      )}
+          : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`
+      }
       count={count}
       maxCount={maxCount}
       sparkText={sparkText}
       sparkError={
-        sparkIsValid
-          ? undefined
-          : assertLocalized("Spark must be a non-negative whole number.")
+        sparkIsValid ? undefined : "Spark must be a non-negative whole number."
       }
       baseSpark={selectedEntry.baseSpark}
       side={side}
@@ -219,9 +216,7 @@ export function BattleFigmentCreator({
       slot={slot}
       slotOptions={slotOptions}
       canSubmit={canSubmit}
-      disabledReason={
-        disabledReason === null ? null : assertLocalized(disabledReason)
-      }
+      disabledReason={disabledReason === null ? null : disabledReason}
       onNameChange={setName}
       onCountChange={setCount}
       onTypeChange={handleSelectType}

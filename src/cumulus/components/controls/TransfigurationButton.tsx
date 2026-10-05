@@ -7,13 +7,12 @@ import type { DomTestId } from "../../types/dom";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
-import { opaque, txa } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { LocalizedTransfigurationPresentation } from "./transfiguration-presentation";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { richText } from "../card/rich-text";
 import { useRef } from "react";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** Identity and authored presentation shared by every Transfiguration choice. */
 export interface TransfigurationButtonBaseModel {
@@ -73,7 +72,7 @@ export function TransfigurationButton({
   onPress,
   testId,
 }: TransfigurationButtonProps) {
-  const resolve = useLocalizer();
+  
   const canAfford =
     form.pricing.kind === "unpriced" || form.pricing.affordable;
   const canSelect = canAfford && !disabled;
@@ -114,24 +113,11 @@ export function TransfigurationButton({
       data-transfiguration-button-layout={layout}
       role="radio"
       aria-checked={selected}
-      aria-description={resolve(
-        txa(
-          "{description}",
-          { description: opaque(form.presentation.description) },
-          "[transfiguration] Description of a Transfiguration form sourced from the authored catalog.",
-        ),
-      )}
+      aria-description={`${form.presentation.description}`}
       ariaLabelMessage={
         form.pricing.kind === "unpriced"
           ? form.presentation.name
-          : txa(
-              "{form_name}, {essence_cost} Essence",
-              {
-                form_name: opaque(form.presentation.name),
-                essence_cost: form.pricing.amount,
-              },
-              "[accessibility] [transfiguration] Name and quoted price for a selectable Essence-priced Transfiguration form. form_name is the authored catalog name; essence_cost is the displayed non-negative Essence amount.",
-            )
+          : `${form.presentation.name}, ${formatNumber(form.pricing.amount)} Essence`
       }
       aria-disabled={canSelect ? undefined : true}
       data-testid={testId}
@@ -201,7 +187,7 @@ export function TransfigurationButton({
           whiteSpace: "nowrap",
         }}
       >
-        {resolve(form.presentation.name)}
+        {form.presentation.name}
       </strong>
       {showPrice && form.pricing.kind === "essence" && (
         <span

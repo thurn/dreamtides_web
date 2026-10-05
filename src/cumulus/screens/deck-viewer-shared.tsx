@@ -5,9 +5,7 @@
 // source of truth backs both rather than each viewer re-declaring it.
 
 import type { ReactElement } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** The standard alpha scrim shared by both deck-viewer layouts. */
 export function DeckViewerBackdrop(): ReactElement {
@@ -26,8 +24,8 @@ export function DeckViewerBackdrop(): ReactElement {
 }
 
 /** The centered muted message shared by the empty / no-match grid states. */
-export function GridPlaceholder({ message }: { message: LocalizedString }): ReactElement {
-  const resolve = useLocalizer();
+export function GridPlaceholder({ message }: { message: string }): ReactElement {
+  
   return (
     <div
       style={{
@@ -39,7 +37,7 @@ export function GridPlaceholder({ message }: { message: LocalizedString }): Reac
         textAlign: "center",
       }}
     >
-      {resolve(message)}
+      {message}
     </div>
   );
 }

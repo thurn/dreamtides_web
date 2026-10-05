@@ -1,4 +1,3 @@
-import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -17,7 +16,6 @@ import type {
 } from "../../types/journey";
 import type { CardType } from "../../types/cards";
 import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   parseCardSubtype,
   type CardId,
@@ -34,17 +32,17 @@ export type JourneyDebugDreamsignActionId = `dreamsign:${number}`;
 export interface JourneyDebugDreamsignView {
   actionId: JourneyDebugDreamsignActionId;
   templateId: DreamsignId | null;
-  name: LocalizedString;
+  name: string;
 }
 export interface JourneyDebugCardSearchView {
   cardId: CardId;
-  title: LocalizedString;
+  title: string;
   model: GameCardModel;
 }
 export interface JourneyDebugDeckEntryView {
   entryId: DeckEntryId;
-  name: LocalizedString;
-  detail: LocalizedString;
+  name: string;
+  detail: string;
   isBane: boolean;
   transfiguration: TransfigurationType | null;
   typeChange: CardTypeChange | null;
@@ -57,12 +55,12 @@ export interface JourneyDebugEditorView {
   maxDreamsigns: number;
   completionLevel: number;
   dreamsigns: readonly JourneyDebugDreamsignView[];
-  dreamsignOptions: readonly { id: DreamsignId; name: LocalizedString }[];
+  dreamsignOptions: readonly { id: DreamsignId; name: string }[];
   cards: readonly JourneyDebugCardSearchView[];
   deck: readonly JourneyDebugDeckEntryView[];
   transfigurationOptions: readonly {
     value: TransfigurationType | "none";
-    label: LocalizedString;
+    label: string;
   }[];
 }
 export interface JourneyDebugEditorScreenProps {
@@ -119,7 +117,7 @@ export function JourneyDebugEditorScreen(
   const [query, setQuery] = useState("");
   const [dreamsignQuery, setDreamsignQuery] = useState("");
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const resolve = useLocalizer();
+  
   useEffect(() => {
     if (!props.isOpen) return undefined;
     const close = (event: KeyboardEvent): void => {
@@ -135,11 +133,11 @@ export function JourneyDebugEditorScreen(
       : props.view.cards
           .filter(
             (card) =>
-              resolve(card.title).toLowerCase().includes(needle) ||
+              card.title.toLowerCase().includes(needle) ||
               card.cardId.toLowerCase().includes(needle),
           )
           .slice(0, 50);
-  }, [props.view.cards, query, resolve]);
+  }, [props.view.cards, query]);
   const dreamsignMatches = useMemo(() => {
     const needle = dreamsignQuery.trim().toLowerCase();
     return needle === ""
@@ -147,11 +145,11 @@ export function JourneyDebugEditorScreen(
       : props.view.dreamsignOptions
           .filter(
             (option) =>
-              resolve(option.name).toLowerCase().includes(needle) ||
+              option.name.toLowerCase().includes(needle) ||
               option.id.toLowerCase().includes(needle),
           )
           .slice(0, 50);
-  }, [dreamsignQuery, props.view.dreamsignOptions, resolve]);
+  }, [dreamsignQuery, props.view.dreamsignOptions]);
   if (!props.isOpen) return null;
   const canAddDreamsign =
     props.view.dreamsigns.length < props.view.maxDreamsigns;
@@ -162,10 +160,8 @@ export function JourneyDebugEditorScreen(
       style={{ minHeight: "100vh" }}
     >
       <GlassDialog
-        title={assertLocalized("Edit Journey State")}
-        subtitle={assertLocalized(
-          "Make explicit diagnostic changes to the active run.",
-        )}
+        title={"Edit Journey State"}
+        subtitle={"Make explicit diagnostic changes to the active run."}
         onClose={props.onClose}
         fullScreen
       >
@@ -178,10 +174,8 @@ export function JourneyDebugEditorScreen(
             />
           </section>
           <DisclosureSection
-            title={assertLocalized("Dreamsigns")}
-            summary={assertLocalized(
-              `${String(props.view.dreamsigns.length)} / ${String(props.view.maxDreamsigns)}`,
-            )}
+            title={"Dreamsigns"}
+            summary={`${String(props.view.dreamsigns.length)} / ${String(props.view.maxDreamsigns)}`}
             expanded={expanded.dreamsigns ?? true}
             onExpandedChange={(value) =>
               setExpanded((current) => ({ ...current, dreamsigns: value }))
@@ -199,7 +193,7 @@ export function JourneyDebugEditorScreen(
                     data-journey-debug-dreamsign={dreamsign.actionId}
                     style={sectionStyle}
                   >
-                    <p style={textStyle}>{resolve(dreamsign.name)}</p>
+                    <p style={textStyle}>{dreamsign.name}</p>
                     <div
                       style={{
                         display: "flex",
@@ -208,7 +202,7 @@ export function JourneyDebugEditorScreen(
                       }}
                     >
                       <GlassButton
-                        label={assertLocalized("Remove")}
+                        label={"Remove"}
                         onPress={() =>
                           props.onRemoveDreamsign(dreamsign.actionId)
                         }
@@ -221,21 +215,17 @@ export function JourneyDebugEditorScreen(
                 ))
               )}
               <TextField
-                label={assertLocalized("Add dreamsign")}
+                label={"Add dreamsign"}
                 value={dreamsignQuery}
                 onChange={setDreamsignQuery}
                 kind="search"
                 disabled={!canAddDreamsign}
-                placeholder={assertLocalized(
-                  canAddDreamsign
+                placeholder={canAddDreamsign
                     ? "Search by name or ID"
-                    : "Dreamsign cap reached",
-                )}
-                supportingText={assertLocalized(
-                  canAddDreamsign
+                    : "Dreamsign cap reached"}
+                supportingText={canAddDreamsign
                     ? "Choose a matching Dreamsign below."
-                    : "Remove one before adding another.",
-                )}
+                    : "Remove one before adding another."}
                 testId="journey-debug-dreamsign-search"
               />
               <div
@@ -248,7 +238,7 @@ export function JourneyDebugEditorScreen(
                 {dreamsignMatches.map((option) => (
                   <GlassButton
                     key={option.id}
-                    label={assertLocalized(`Add ${resolve(option.name)}`)}
+                    label={`Add ${option.name}`}
                     onPress={() => props.onAddDreamsign(option.id)}
                     disabled={!canAddDreamsign}
                     placement="onGlass"
@@ -259,10 +249,8 @@ export function JourneyDebugEditorScreen(
             </div>
           </DisclosureSection>
           <DisclosureSection
-            title={assertLocalized("Deck")}
-            summary={assertLocalized(
-              `${String(props.view.deck.length)} entries`,
-            )}
+            title={"Deck"}
+            summary={`${String(props.view.deck.length)} entries`}
             expanded={expanded.deck ?? true}
             onExpandedChange={(value) =>
               setExpanded((current) => ({ ...current, deck: value }))
@@ -272,11 +260,11 @@ export function JourneyDebugEditorScreen(
           >
             <div style={stackStyle}>
               <TextField
-                label={assertLocalized("Add card")}
+                label={"Add card"}
                 value={query}
                 onChange={setQuery}
                 kind="search"
-                placeholder={assertLocalized("Search by name or UUID")}
+                placeholder={"Search by name or UUID"}
                 testId="journey-debug-card-search"
               />
               {matches.map((card) => (
@@ -299,7 +287,7 @@ export function JourneyDebugEditorScreen(
                   </div>
                   <div style={sectionStyle}>
                     <p style={textStyle}>
-                      {resolve(card.title)}
+                      {card.title}
                       <br />
                       {card.cardId}
                     </p>
@@ -311,7 +299,7 @@ export function JourneyDebugEditorScreen(
                       }}
                     >
                       <GlassButton
-                        label={assertLocalized("Add")}
+                        label={"Add"}
                         onPress={() => props.onAddCard(card.cardId)}
                         placement="onGlass"
                         testId={`journey-debug-add-card-${card.cardId}`}
@@ -361,10 +349,10 @@ function ResourceSteppers({
       {resources.map(([id, label, value]) => (
         <NumberStepper
           key={id}
-          label={assertLocalized(label)}
+          label={label}
           value={value}
-          decrementLabel={assertLocalized(`Decrease ${label}`)}
-          incrementLabel={assertLocalized(`Increase ${label}`)}
+          decrementLabel={`Decrease ${label}`}
+          incrementLabel={`Increase ${label}`}
           onDecrement={() => onChange(id, -1)}
           onIncrement={() => onChange(id, 1)}
           testId={`journey-debug-${id}`}
@@ -392,13 +380,11 @@ function DeckEntryEditor({
   onSetKeywords: JourneyDebugEditorScreenProps["onSetKeywords"];
 }): ReactElement {
   const [expanded, setExpanded] = useState(false);
-  const resolve = useLocalizer();
+  
   return (
     <DisclosureSection
       title={entry.name}
-      summary={assertLocalized(
-        `${resolve(entry.detail)}${entry.isBane ? " · Nightmare" : ""}`,
-      )}
+      summary={`${entry.detail}${entry.isBane ? " · Nightmare" : ""}`}
       expanded={expanded}
       onExpandedChange={setExpanded}
       placement="onGlass"
@@ -427,7 +413,7 @@ function DeckEntryEditor({
           onSetKeywords={onSetKeywords}
         />
         <GlassButton
-          label={assertLocalized("Remove")}
+          label={"Remove"}
           onPress={() => onRemove(entry.entryId)}
           placement="onGlass"
           variant="danger"
@@ -528,30 +514,30 @@ function DeckEditControls({
   return (
     <div style={stackStyle}>
       <TextField
-        label={assertLocalized("Energy override")}
+        label={"Energy override"}
         value={energy}
         onChange={setEnergy}
-        placeholder={assertLocalized("Use printed energy")}
+        placeholder={"Use printed energy"}
         testId={`journey-debug-energy-${entry.entryId}`}
       />
       <TextField
-        label={assertLocalized("Spark override")}
+        label={"Spark override"}
         value={spark}
         onChange={setSpark}
-        placeholder={assertLocalized("Use printed spark")}
+        placeholder={"Use printed spark"}
         testId={`journey-debug-spark-${entry.entryId}`}
       />
       <div
         style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}
       >
         <GlassButton
-          label={assertLocalized("Commit stats")}
+          label={"Commit stats"}
           onPress={commitStats}
           placement="onGlass"
           testId={`journey-debug-commit-stats-${entry.entryId}`}
         />
         <GlassButton
-          label={assertLocalized("Reset stats")}
+          label={"Reset stats"}
           onPress={() => onSetStatOverride(entry.entryId, null)}
           placement="onGlass"
           testId={`journey-debug-reset-stats-${entry.entryId}`}
@@ -561,10 +547,10 @@ function DeckEditControls({
         options={[...transfigurationOptions]}
         value={transfiguration}
         onChange={setTransfiguration}
-        ariaLabel={assertLocalized("Transfiguration")}
+        ariaLabel={"Transfiguration"}
       />
       <GlassButton
-        label={assertLocalized("Commit transfiguration")}
+        label={"Commit transfiguration"}
         onPress={() =>
           onSetTransfiguration(
             entry.entryId,
@@ -579,24 +565,24 @@ function DeckEditControls({
       <Select
         options={CARD_TYPES.map((option) => ({
           ...option,
-          label: assertLocalized(option.label),
+          label: option.label,
           ...("triggerLabel" in option &&
           typeof option.triggerLabel === "string"
-            ? { triggerLabel: assertLocalized(option.triggerLabel) }
+            ? { triggerLabel: option.triggerLabel }
             : {}),
         }))}
         value={cardType}
         onChange={setCardType}
-        ariaLabel={assertLocalized("Card type")}
+        ariaLabel={"Card type"}
       />
       <TextField
-        label={assertLocalized("Subtype")}
+        label={"Subtype"}
         value={subtype}
         onChange={setSubtype}
         testId={`journey-debug-subtype-${entry.entryId}`}
       />
       <GlassButton
-        label={assertLocalized("Commit type")}
+        label={"Commit type"}
         onPress={() => {
           onSetTypeChange(entry.entryId, {
             predicateId: parseCardTypeChangePredicateId("debug"),
@@ -610,37 +596,37 @@ function DeckEditControls({
       />
       <SegmentedControl
         options={[
-          { value: "normal", label: assertLocalized("Normal") },
-          { value: "fast", label: assertLocalized("Fast") },
+          { value: "normal", label: "Normal" },
+          { value: "fast", label: "Fast" },
         ]}
         value={fast}
         onChange={setFast}
         full
       />
       <TextField
-        label={assertLocalized("Reclaim")}
+        label={"Reclaim"}
         value={reclaim}
         onChange={setReclaim}
-        placeholder={assertLocalized("None")}
+        placeholder={"None"}
         testId={`journey-debug-reclaim-${entry.entryId}`}
       />
       <div
         style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}
       >
         <GlassButton
-          label={assertLocalized("Commit keywords")}
+          label={"Commit keywords"}
           onPress={commitKeywords}
           placement="onGlass"
           testId={`journey-debug-commit-keywords-${entry.entryId}`}
         />
         <GlassButton
-          label={assertLocalized("Clear keywords")}
+          label={"Clear keywords"}
           onPress={() => onSetKeywords(entry.entryId, null)}
           placement="onGlass"
           testId={`journey-debug-clear-keywords-${entry.entryId}`}
         />
         <GlassButton
-          label={assertLocalized("Reset type")}
+          label={"Reset type"}
           onPress={() => onSetTypeChange(entry.entryId, null)}
           placement="onGlass"
           testId={`journey-debug-reset-type-${entry.entryId}`}

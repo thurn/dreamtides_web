@@ -15,19 +15,18 @@ import {
 } from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
-import type { LocalizedString } from "@trox/runtime";
 import type { SiteId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 
 export interface RandomSiteChoiceView {
   siteType: RandomSiteDestinationType;
-  label: LocalizedString;
-  blurb: LocalizedString;
+  label: string;
+  blurb: string;
   icon: Glyph;
 }
 
 export interface RandomSiteView {
-  title: LocalizedString;
+  title: string;
   siteId: SiteId;
   scene: ArtRef | null;
   guide: SiteLayoutGuideView;

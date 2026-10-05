@@ -11,9 +11,8 @@ import {
 import { CardBack } from "./CardBack";
 import { battleCardLayoutId } from "./battle-card-layout";
 import { Pressable } from "../../primitives/Pressable";
-import { txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { BattleCardId } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** A face-down physical card instance. */
 export interface FaceDownPileCard {
@@ -45,11 +44,11 @@ export interface CardPileProps {
   /** Cards ordered topmost-first. At most three physical layers are rendered. */
   readonly cards: readonly BattlePileCard[];
   /** Accessible name for the card zone represented by this pile. */
-  readonly label: LocalizedString;
+  readonly label: string;
   /** Treatment shown when the pile has no cards. Defaults to `hidden`. */
   readonly emptyState?: CardPileEmptyState;
   /** Visible copy centered inside an empty outlined pile. */
-  readonly emptyLabel?: LocalizedString;
+  readonly emptyLabel?: string;
   /** Primary press action for the pile as one zone control. */
   readonly onPress?: () => void;
   /** Optional stable test id for the pile as a whole. */
@@ -81,8 +80,7 @@ function cardStageStyle(): CSSProperties {
   };
 }
 
-function EmptyPileOutline({ label }: { readonly label?: LocalizedString }) {
-  const resolve = useLocalizer();
+function EmptyPileOutline({ label }: { readonly label?: string }) {
   return (
     <div
       aria-hidden="true"
@@ -109,7 +107,7 @@ function EmptyPileOutline({ label }: { readonly label?: LocalizedString }) {
             textShadow: token("--text-outline-media"),
           }}
         >
-          {resolve(label)}
+          {label}
         </span>
       )}
     </div>
@@ -130,7 +128,6 @@ export function CardPile({
   onPress,
   testId,
 }: CardPileProps) {
-  const resolve = useLocalizer();
   const visibleCards = cards.slice(0, CARD_PILE_VISIBLE_LAYER_CAP);
   const stageStyle = cardStageStyle();
 
@@ -175,13 +172,7 @@ export function CardPile({
         >
           <div style={stageStyle}>
             {card.face === "down" ? (
-              <CardBack
-                label={txa(
-                  "Face-down card {position}",
-                  { position: depth + 1 },
-                  "[accessibility] [battle] Name for one unidentified card back within a separately labeled battle pile. position is its positive one-based depth from the top of that pile.",
-                )}
-              />
+              <CardBack label={`Face-down card ${formatNumber(depth + 1)}`} />
             ) : (
               <CardView
                 card={card.model.displaySnapshot}
@@ -234,12 +225,7 @@ export function CardPile({
   }
 
   return (
-    <div
-      role="group"
-      aria-label={resolve(label)}
-      {...sharedProps}
-      style={rootStyle}
-    >
+    <div role="group" aria-label={label} {...sharedProps} style={rootStyle}>
       {layers}
       {visibleCards.length === 0 && emptyState === "outlined" ? (
         <EmptyPileOutline label={emptyLabel} />

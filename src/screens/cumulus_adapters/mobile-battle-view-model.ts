@@ -1,4 +1,3 @@
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import {
   selectBattleCardLocation,
   selectSidePlayAreaSize,
@@ -45,8 +44,7 @@ import {
   resolveDreamwellPromptRef,
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
-import { builtInBattlePromptMessage } from "../../runtime/localization/battle-prompt-messages";
-import { tx } from "@trox/runtime";
+import { builtInBattlePromptMessage } from "../../runtime/battle-prompt-messages";
 import type { BattleCardId } from "../../types/identifiers";
 import { parseBattleCardId } from "../../types/identifiers";
 import { parseBattleSlotViewId } from "../../types/identifiers";
@@ -57,10 +55,7 @@ const FALLBACK_PLAYER_AVATAR = {
   title: "",
 } as const;
 
-const INACTIVE_OPPONENT_AVATAR_ABILITY = tx(
-  "Opponent avatar ability is not active.",
-  "[battle] [tutorial] [avatar] Unavailable-state description for an opponent Avatar whose ability is disabled during a tutorial battle.",
-);
+const INACTIVE_OPPONENT_AVATAR_ABILITY = "Opponent avatar ability is not active.";
 
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
@@ -169,7 +164,7 @@ export function buildMobileBattleView(
       aiProposal === null
         ? null
         : {
-            description: localizedSourceText(aiProposal.description),
+            description: aiProposal.description,
             canReject: aiProposal.kind === "action",
           },
     cardPicker: buildCardPickerView(
@@ -238,7 +233,7 @@ export function buildMobileBattleResultView(
   return {
     outcome: "victory",
     essenceReward: init.essenceReward,
-    opponentName: localizedSourceText(init.enemyDescriptor.name),
+    opponentName: init.enemyDescriptor.name,
     playerScore: board.sides.player.score,
     opponentScore: board.sides.enemy.score,
     turnCount: board.turnNumber,
@@ -333,7 +328,7 @@ function resolvePromptText(
   if (isDreamwellPromptRef(text)) {
     return resolveDreamwellPromptRef(text, init.dreamwellDeck);
   }
-  if (isLegacyPromptText(text)) return localizedSourceText(text.text);
+  if (isLegacyPromptText(text)) return text.text;
   return builtInBattlePromptMessage(text);
 }
 
@@ -570,15 +565,12 @@ function buildStatusView(
       imageNumber: avatar.imageNumber,
       name:
         "id" in avatar
-          ? localizedSourceText(avatar.name)
-          : tx(
-              "Avatar",
-              "[battle] [avatar] Fallback Avatar name while battle identity data is unavailable.",
-            ),
+          ? avatar.name
+          : "Avatar",
       title:
         avatar.title === ""
           ? undefined
-          : localizedSourceText(avatar.title),
+          : avatar.title,
       ...("portraitFocus" in avatar &&
       avatar.portraitFocus !== undefined
         ? { portraitFocus: avatar.portraitFocus }
@@ -590,7 +582,7 @@ function buildStatusView(
             id: avatar.id,
             ability: abilityUnavailable
               ? INACTIVE_OPPONENT_AVATAR_ABILITY
-              : localizedSourceText(avatar.renderedText),
+              : avatar.renderedText,
             ...(abilityUnavailable ? { unavailable: true } : {}),
           },
         }

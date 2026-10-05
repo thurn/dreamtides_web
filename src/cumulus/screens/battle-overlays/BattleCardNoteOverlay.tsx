@@ -1,4 +1,3 @@
-import { meaning, opaque, txa, tx, type LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { NumberStepper } from "../../components/controls/NumberStepper";
@@ -7,15 +6,15 @@ import { TextField } from "../../components/controls/TextField";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { BattleCardId } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 export type BattleCardNoteExpiryOption =
   "end-of-this-turn" | "end-of-next-turn" | "after-n-turns" | "manual";
 
 export interface BattleCardNoteOverlayProps {
   readonly cardId: BattleCardId;
-  readonly cardName: LocalizedString;
+  readonly cardName: string;
   readonly text: string;
   readonly expiryOption: BattleCardNoteExpiryOption;
   readonly afterNTurns: number;
@@ -43,21 +42,13 @@ export function BattleCardNoteOverlay({
   onCancel,
   onSubmit,
 }: BattleCardNoteOverlayProps): ReactElement {
-  const resolve = useLocalizer();
   const hasText = text.trim().length > 0;
 
   return (
     <GlassDialog
-      title={txa(
-        "Annotate {card_name}",
-        { card_name: opaque(cardName) },
-        "[battle] Title of the optional player note editor for a battle card. card_name is the canonical display name and has unknown grammatical gender.",
-      )}
-      subtitle={tx(
-        "Notes appear on the card and in the inspector.",
-        "[battle] Card note subtitle.",
-      )}
-      closeLabel={tx("Cancel note", "[battle] Card note cancel.")}
+      title={`Annotate ${cardName}`}
+      subtitle={"Notes appear on the card and in the inspector."}
+      closeLabel={"Cancel note"}
       onClose={onCancel}
       desktopCenterTarget="battlefield"
     >
@@ -69,23 +60,12 @@ export function BattleCardNoteOverlay({
       >
         <div data-battle-note-field="text">
           <TextField
-            label={tx("Note Text", "[battle] Card note text label.")}
+            label={"Note Text"}
             value={text}
             onChange={(value) => onTextChange(value.slice(0, 200))}
-            placeholder={tx(
-              "Short reminder",
-              "[battle] Card note placeholder.",
-            )}
-            supportingText={txa(
-              "{count}/200 characters",
-              { count: text.length },
-              "[battle] Card note character count.",
-            )}
-            error={
-              hasText
-                ? undefined
-                : tx("A note needs text.", "[battle] Card note error.")
-            }
+            placeholder={"Short reminder"}
+            supportingText={`${formatNumber(text.length)}/200 characters`}
+            error={hasText ? undefined : "A note needs text."}
           />
         </div>
         <div
@@ -98,43 +78,28 @@ export function BattleCardNoteOverlay({
               font: token("--t-caption"),
             }}
           >
-            {resolve(tx("Expiry", "[battle] Card note expiry label."))}
+            {"Expiry"}
           </span>
           <Select
-            ariaLabel={tx(
-              "Note expiry",
-              "[accessibility] [battle] Card note expiry name.",
-            )}
+            ariaLabel={"Note expiry"}
             leadingGlyph={GLYPHS.duration}
             full
             options={[
               {
                 value: "end-of-next-turn",
-                label: tx(
-                  "End of Next Turn",
-                  "[battle] Card note expiry next turn.",
-                ),
+                label: "End of Next Turn",
               },
               {
                 value: "end-of-this-turn",
-                label: tx(
-                  "End of This Turn",
-                  "[battle] Card note expiry this turn.",
-                ),
+                label: "End of This Turn",
               },
               {
                 value: "after-n-turns",
-                label: tx(
-                  "After a Number of Turns",
-                  "[battle] Card note expiry numbered.",
-                ),
+                label: "After a Number of Turns",
               },
               {
                 value: "manual",
-                label: tx(
-                  "Manual Dismissal",
-                  "[battle] Card note expiry manual.",
-                ),
+                label: "Manual Dismissal",
               },
             ]}
             value={expiryOption}
@@ -144,19 +109,10 @@ export function BattleCardNoteOverlay({
         {expiryOption === "after-n-turns" ? (
           <div data-battle-note-field="after-n-turns">
             <NumberStepper
-              label={tx(
-                "Turns Before Expiry",
-                "[battle] Card note turns label.",
-              )}
+              label={"Turns Before Expiry"}
               value={afterNTurns}
-              decrementLabel={tx(
-                "Use one fewer turn",
-                "[battle] Card note fewer turn.",
-              )}
-              incrementLabel={tx(
-                "Use one more turn",
-                "[battle] Card note more turn.",
-              )}
+              decrementLabel={"Use one fewer turn"}
+              incrementLabel={"Use one more turn"}
               decrementDisabled={afterNTurns <= minimumTurns}
               incrementDisabled={afterNTurns >= maximumTurns}
               onDecrement={() =>
@@ -176,16 +132,13 @@ export function BattleCardNoteOverlay({
           }}
         >
           <GlassButton
-            label={tx(
-              meaning("card-note-cancel", "Cancel"),
-              "[battle] Card note cancel action.",
-            )}
+            label={"Cancel"}
             placement="onGlass"
             testId="battle-note-cancel"
             onPress={onCancel}
           />
           <GlassButton
-            label={tx("Add Note", "[battle] Card note add action.")}
+            label={"Add Note"}
             placement="onGlass"
             variant="accent"
             disabled={!hasText}

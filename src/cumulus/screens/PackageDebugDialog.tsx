@@ -1,10 +1,8 @@
-import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import type { CSSProperties, ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { TextField } from "../components/controls/TextField";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { CardId } from "../../types/card-identity";
 import type { DreamsignId } from "../../types/identifiers";
 
@@ -26,21 +24,21 @@ export type PackageDebugCardEntryId = CardId | `card-number:${number}`;
 /** Stable, display-ready diagnostic value. */
 export interface PackageDebugValueView {
   id: PackageDebugValueId;
-  label: LocalizedString;
-  value: LocalizedString;
+  label: string;
+  value: string;
 }
 
 /** One UUID- or source-id-backed diagnostic entry. */
 export interface PackageDebugEntryView<Id extends string> {
   id: Id;
-  label: LocalizedString;
-  detail?: LocalizedString;
+  label: string;
+  detail?: string;
 }
 
 /** Plain presentation model for the package-state diagnostic. */
 export interface PackageDebugView {
   values: readonly PackageDebugValueView[];
-  avatar: LocalizedString | null;
+  avatar: string | null;
   validation: readonly PackageDebugValueView[];
   remainingDreamsigns: readonly PackageDebugEntryView<DreamsignId>[];
   spentDreamsigns: readonly PackageDebugEntryView<DreamsignId>[];
@@ -52,8 +50,8 @@ export interface PackageDebugDialogProps {
   isOpen: boolean;
   view: PackageDebugView;
   saveName: string;
-  saveStatus: LocalizedString | null;
-  saveError: LocalizedString | null;
+  saveStatus: string | null;
+  saveError: string | null;
   busy: boolean;
   canSave: boolean;
   canLoad: boolean;
@@ -77,7 +75,7 @@ const mutedStyle: CSSProperties = {
 export function PackageDebugDialog(
   props: PackageDebugDialogProps,
 ): ReactElement | null {
-  const resolve = useLocalizer();
+  
   if (!props.isOpen) return null;
   return (
     <div
@@ -86,10 +84,8 @@ export function PackageDebugDialog(
       style={{ minHeight: "100vh" }}
     >
       <GlassDialog
-        title={assertLocalized("Debug: Package State")}
-        subtitle={assertLocalized(
-          "Inspect the active run and manage a portable journey save.",
-        )}
+        title={"Debug: Package State"}
+        subtitle={"Inspect the active run and manage a portable journey save."}
         onClose={props.onClose}
         fullScreen
       >
@@ -112,7 +108,7 @@ export function PackageDebugDialog(
                 }}
               >
                 <span style={{ font: token("--t-eyebrow") }}>
-                  {resolve(value.label)}
+                  {value.label}
                 </span>
                 <strong
                   style={{
@@ -120,7 +116,7 @@ export function PackageDebugDialog(
                     color: token("--text-on-glass"),
                   }}
                 >
-                  {resolve(value.value)}
+                  {value.value}
                 </strong>
               </p>
             ))}
@@ -136,10 +132,10 @@ export function PackageDebugDialog(
               Journey Save File
             </h3>
             <TextField
-              label={assertLocalized("Save name")}
+              label={"Save name"}
               value={props.saveName}
               onChange={props.onSaveNameChange}
-              placeholder={assertLocalized("e.g. warriors draft")}
+              placeholder={"e.g. warriors draft"}
               disabled={props.busy || !props.canSave}
               testId="debug-save-journey-name"
               error={
@@ -147,11 +143,9 @@ export function PackageDebugDialog(
                   ? undefined
                   : props.saveError
               }
-              supportingText={assertLocalized(
-                props.saveStatus === null
+              supportingText={props.saveStatus === null
                   ? "Download the active run as JSON, or load a journey file."
-                  : resolve(props.saveStatus),
-              )}
+                  : props.saveStatus}
             />
             <div
               style={{
@@ -161,7 +155,7 @@ export function PackageDebugDialog(
               }}
             >
               <GlassButton
-                label={assertLocalized("Save Journey")}
+                label={"Save Journey"}
                 onPress={props.onSave}
                 disabled={props.busy || !props.canSave}
                 placement="onGlass"
@@ -169,7 +163,7 @@ export function PackageDebugDialog(
                 testId="debug-save-journey"
               />
               <GlassButton
-                label={assertLocalized("Load Journey")}
+                label={"Load Journey"}
                 onPress={props.onLoad}
                 disabled={props.busy || !props.canLoad}
                 placement="onGlass"
@@ -178,43 +172,41 @@ export function PackageDebugDialog(
             </div>
           </section>
           <DiagnosticSection
-            title={assertLocalized("Avatar")}
+            title={"Avatar"}
             entries={
               props.view.avatar === null
                 ? []
                 : [{ id: "avatar", label: props.view.avatar }]
             }
-            emptyLabel={assertLocalized("No package data available yet.")}
+            emptyLabel={"No package data available yet."}
           />
           <DiagnosticSection
-            title={assertLocalized("Package Validation")}
+            title={"Package Validation"}
             entries={props.view.validation.map((value) => ({
               id: value.id,
-              label: assertLocalized(
-                `${resolve(value.label)}: ${resolve(value.value)}`,
-              ),
+              label: `${value.label}: ${value.value}`,
             }))}
-            emptyLabel={assertLocalized("No package data available yet.")}
+            emptyLabel={"No package data available yet."}
           />
           <DiagnosticSection
-            title={assertLocalized("Dreamsign Pool")}
+            title={"Dreamsign Pool"}
             entries={props.view.remainingDreamsigns}
-            emptyLabel={assertLocalized("Dreamsign pool exhausted.")}
+            emptyLabel={"Dreamsign pool exhausted."}
           />
           <DiagnosticSection
-            title={assertLocalized("Spent Dreamsigns")}
+            title={"Spent Dreamsigns"}
             entries={props.view.spentDreamsigns}
-            emptyLabel={assertLocalized("No Dreamsigns have been spent yet.")}
+            emptyLabel={"No Dreamsigns have been spent yet."}
           />
           <DiagnosticSection
-            title={assertLocalized("Current Offer")}
+            title={"Current Offer"}
             entries={props.view.currentOffer}
-            emptyLabel={assertLocalized("No offer is currently active.")}
+            emptyLabel={"No offer is currently active."}
           />
           {props.canForceLegendaryOffer ? (
             <div>
               <GlassButton
-                label={assertLocalized("Force Legendary Offer (QA)")}
+                label={"Force Legendary Offer (QA)"}
                 onPress={props.onForceLegendaryOffer}
                 placement="onGlass"
                 variant="accent"
@@ -223,9 +215,9 @@ export function PackageDebugDialog(
             </div>
           ) : null}
           <DiagnosticSection
-            title={assertLocalized("Top Remaining Draft Cards")}
+            title={"Top Remaining Draft Cards"}
             entries={props.view.topRemainingCards}
-            emptyLabel={assertLocalized("No cards remain in the draft pool.")}
+            emptyLabel={"No cards remain in the draft pool."}
           />
         </div>
       </GlassDialog>
@@ -238,11 +230,11 @@ function DiagnosticSection<Id extends string>({
   entries,
   emptyLabel,
 }: {
-  title: LocalizedString;
+  title: string;
   entries: readonly PackageDebugEntryView<Id>[];
-  emptyLabel: LocalizedString;
+  emptyLabel: string;
 }): ReactElement {
-  const resolve = useLocalizer();
+  
   return (
     <section style={stackStyle}>
       <h3
@@ -252,10 +244,10 @@ function DiagnosticSection<Id extends string>({
           color: token("--text-on-glass"),
         }}
       >
-        {resolve(title)}
+        {title}
       </h3>
       {entries.length === 0 ? (
-        <p style={mutedStyle}>{resolve(emptyLabel)}</p>
+        <p style={mutedStyle}>{emptyLabel}</p>
       ) : (
         <div style={entryStyle}>
           {entries.map((entry) => (
@@ -264,11 +256,11 @@ function DiagnosticSection<Id extends string>({
               data-package-debug-entry={entry.id}
               style={mutedStyle}
             >
-              {resolve(entry.label)}
+              {entry.label}
               {entry.detail === undefined ? null : (
                 <>
                   <br />
-                  {resolve(entry.detail)}
+                  {entry.detail}
                 </>
               )}
             </p>

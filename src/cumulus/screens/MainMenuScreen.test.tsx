@@ -3,7 +3,6 @@
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -13,19 +12,19 @@ import {
 } from "./MainMenuScreen";
 
 const VIEW: MainMenuView = {
-  title: assertLocalized("Dreamtides"),
+  title: "Dreamtides",
   background: artRef.mainMenuBackground(),
   actions: [
-    { id: "new-journey", label: assertLocalized("New Journey") },
-    { id: "dream-codex", label: assertLocalized("Dream Codex") },
-    { id: "settings", label: assertLocalized("Settings") },
-    { id: "about", label: assertLocalized("About") },
-    { id: "quit", label: assertLocalized("Quit") },
+    { id: "new-journey", label: "New Journey" },
+    { id: "dream-codex", label: "Dream Codex" },
+    { id: "settings", label: "Settings" },
+    { id: "about", label: "About" },
+    { id: "quit", label: "Quit" },
   ],
   socials: [
-    { id: "github", label: assertLocalized("GitHub"), glyph: GLYPHS.github },
-    { id: "discord", label: assertLocalized("Discord"), glyph: GLYPHS.discord },
-    { id: "reddit", label: assertLocalized("Reddit"), glyph: GLYPHS.reddit },
+    { id: "github", label: "GitHub", glyph: GLYPHS.github },
+    { id: "discord", label: "Discord", glyph: GLYPHS.discord },
+    { id: "reddit", label: "Reddit", glyph: GLYPHS.reddit },
   ],
 };
 

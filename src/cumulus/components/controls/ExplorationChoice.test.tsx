@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized, opaque, txa } from "@trox/runtime";
 import {
   mountCumulus,
   syntheticGameCard,
@@ -15,6 +14,7 @@ import { parseDeckEntryId } from "../../../types/identifiers";
 import { testExplorationActionId } from "../../../types/test-identities";
 import { parseGlossaryEntryId } from "../../../types/identifiers";
 import { richText } from "../card/rich-text";
+import { annotatedFixture } from "../../testing/annotated-text";
 
 const entityCard = syntheticGameCard(1);
 const entity: ExplorationChoiceEntity = {
@@ -55,13 +55,13 @@ describe("ExplorationChoice", () => {
       <ExplorationChoice
         model={{
           actionId,
-          label: assertLocalized("Choice"),
+          label: "Choice",
           description: richText.annotated(
-            txa(
+            annotatedFixture(
               "Before {entity} after",
-              { entity: opaque(assertLocalized("Entity")) },
-              "[exploration] Synthetic choice effect surrounding one revealable entity. entity is a fixture card name.",
-            ).annotate({ entity }),
+              { entity: "Entity" },
+              { entity },
+            ),
           ),
           availability: "available",
           preview: entity,
@@ -90,10 +90,8 @@ describe("ExplorationChoice", () => {
       <ExplorationChoice
         model={{
           actionId: testExplorationActionId("kindled-definition"),
-          label: assertLocalized("Temper Two in Flame"),
-          description: richText.rules(
-            assertLocalized("Apply Kindled to two eligible cards."),
-          ),
+          label: "Temper Two in Flame",
+          description: richText.rules("Apply Kindled to two eligible cards."),
           availability: "available",
           transfigurationGlossaryId: glossaryId,
         }}
@@ -117,8 +115,8 @@ describe("ExplorationChoice", () => {
       <ExplorationChoice
         model={{
           actionId,
-          label: assertLocalized("Choice"),
-          description: richText.rules(assertLocalized("Plain")),
+          label: "Choice",
+          description: richText.rules("Plain"),
           availability: "available",
         }}
         onPress={onPress}
@@ -164,13 +162,9 @@ describe("ExplorationChoice", () => {
       <ExplorationChoice
         model={{
           actionId,
-          label: assertLocalized("Choice"),
+          label: "Choice",
           description: richText.annotated(
-            txa(
-              "{entity}",
-              { entity: opaque(assertLocalized("Entity")) },
-              "[exploration] Synthetic choice effect containing one revealable entity. entity is a fixture card name.",
-            ).annotate({ entity }),
+            annotatedFixture("{entity}", { entity: "Entity" }, { entity }),
           ),
           availability: "available",
           preview: entity,
@@ -218,23 +212,21 @@ describe("ExplorationChoice", () => {
       <ExplorationChoice
         model={{
           actionId: testExplorationActionId("ordered"),
-          label: assertLocalized(
-            "A long localized choice label that must remain readable",
-          ),
+          label: "A long localized choice label that must remain readable",
           description: richText.annotated(
-            txa(
+            annotatedFixture(
               "{first_entity} then {second_entity} then reveal {dreamsign}",
               {
-                first_entity: opaque(assertLocalized("Entity")),
-                second_entity: opaque(assertLocalized("Entity")),
-                dreamsign: opaque(dreamsign.name),
+                first_entity: "Entity",
+                second_entity: "Entity",
+                dreamsign: dreamsign.name,
               },
-              "[exploration] Synthetic choice effect containing two fixture cards and one Dreamsign. Each placeholder is the proper name of its revealable entity.",
-            ).annotate({
-              first_entity: entity,
-              second_entity: repeatedCard,
-              dreamsign: dreamsignEntity,
-            }),
+              {
+                first_entity: entity,
+                second_entity: repeatedCard,
+                dreamsign: dreamsignEntity,
+              },
+            ),
           ),
           availability: "available",
           preview: dreamsignEntity,
@@ -263,13 +255,9 @@ describe("ExplorationChoice", () => {
       <ExplorationChoice
         model={{
           actionId: testExplorationActionId("blocked"),
-          label: assertLocalized("Choice"),
+          label: "Choice",
           description: richText.annotated(
-            txa(
-              "{entity}",
-              { entity: opaque(assertLocalized("Entity")) },
-              "[exploration] Synthetic unavailable choice effect containing one revealable entity. entity is a fixture card name.",
-            ).annotate({ entity }),
+            annotatedFixture("{entity}", { entity: "Entity" }, { entity }),
           ),
           availability: "unavailable",
           preview: entity,

@@ -1,8 +1,6 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SiteState } from "../../types/journey";
-import { tx } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
 import type { CardData } from "../../types/cards";
 import type { CardId } from "../../types/card-identity";
 import {
@@ -498,13 +496,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           figmentLabel:
             board.cardInstances[pendingDrag.battleCardId]?.definition.name ===
             undefined
-              ? tx(
-                  "Figment",
-                  "[battle] Fallback name for a generated battle Figment whose card definition is unavailable.",
-                )
-              : localizedSourceText(
-                  board.cardInstances[pendingDrag.battleCardId].definition.name,
-                ),
+              ? "Figment"
+              : board.cardInstances[pendingDrag.battleCardId].definition.name,
           status:
             candidate.assessment.kind === "eligible"
               ? "eligible"

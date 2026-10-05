@@ -20,8 +20,6 @@ import {
 } from "../components/overlay/DreamsignReplacementDialog";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { meaning, tx, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { DreamsignId, GuideId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 
@@ -30,9 +28,9 @@ export interface DreamsignRevelationGuideView {
   /** Stable guide id, used for QA data attributes. */
   id: GuideId;
   /** Display name shown in the speech bubble. */
-  name: LocalizedString;
+  name: string;
   /** The dialog line shown in the speech bubble. */
-  line: LocalizedString;
+  line: string;
   /** Transparent character render. */
   art: ArtRef;
 }
@@ -41,8 +39,8 @@ export interface DreamsignRevelationGuideView {
 export interface DreamsignRevelationView {
   presentation: {
     readonly kind: "dreamsign-revelation";
-    readonly loading: LocalizedString;
-    readonly exhausted: LocalizedString;
+    readonly loading: string;
+    readonly exhausted: string;
   };
   /** The current dreamscape scene art. */
   scene: ArtRef | null;
@@ -176,14 +174,8 @@ export function DreamsignRevelationScreen({
         <DreamsignReplacementDialog
           model={{
             ...view.purge,
-            dismissLabel: tx(
-              meaning("dreamsign-revelation-cancel", "Cancel"),
-              "[dreamsign] Revelation cancel action.",
-            ),
-            closeLabel: tx(
-              "Cancel replacement",
-              "[dreamsign] Accessible label for closing a Dreamsign replacement dialog.",
-            ),
+            dismissLabel: "Cancel",
+            closeLabel: "Cancel replacement",
           }}
           onDreamsignPress={onPurge}
           onDismiss={onCancelPurge}
@@ -283,10 +275,7 @@ function OfferStack({
         }
       >
         <GlassButton
-          label={tx(
-            "Decline Offer",
-            "[ui] Action declining the current site offer and leaving without its reward.",
-          )}
+          label={"Decline Offer"}
           onPress={onSkip}
           disabled={disabled}
         />
@@ -295,8 +284,7 @@ function OfferStack({
   );
 }
 
-function StatusLine({ text }: { readonly text: LocalizedString }) {
-  const resolve = useLocalizer();
+function StatusLine({ text }: { readonly text: string }) {
   return (
     <p
       style={{
@@ -306,7 +294,7 @@ function StatusLine({ text }: { readonly text: LocalizedString }) {
         textShadow: token("--text-outline-media"),
       }}
     >
-      {resolve(text)}
+      {text}
     </p>
   );
 }

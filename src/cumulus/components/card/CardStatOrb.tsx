@@ -10,8 +10,6 @@ import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardChangeBadge } from "./card-change-badge";
-import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 const VISUALLY_HIDDEN_STYLE: CSSProperties = {
   position: "absolute",
@@ -29,7 +27,7 @@ export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export interface CardStatChangeBadge {
   kind: "empowered" | "kindled";
   /** Localized form name supplied by the Transfiguration catalog. */
-  accessibleName: LocalizedString;
+  accessibleName: string;
 }
 
 /** Purple fill for the Dreamwell energy mark; the number stays white. */
@@ -111,7 +109,7 @@ interface CardStatOrbProps {
    * needs to sit at or above the rendered digit size.
    */
   numberCapPx: number;
-  ariaLabel?: LocalizedString;
+  ariaLabel?: string;
   /**
    * Monochrome hammer marker for a transfiguration-changed stat, shared with
    * the Transfiguration site's atlas icon.
@@ -143,24 +141,14 @@ export function CardStatOrb({
   ariaLabel,
   changeBadge,
 }: CardStatOrbProps) {
-  const resolve = useLocalizer();
   const accessibleId = useId();
   const baseMessage =
     ariaLabel ??
     (variant === "energy"
-      ? tx(
-          "Energy cost",
-          "[accessibility] Name for the numeric Energy-cost orb on a card. The visible numeral is inside the same labeled element.",
-        )
+      ? "Energy cost"
       : variant === "spark"
-        ? tx(
-            meaning("card-spark-stat-name", "Spark"),
-            "[accessibility] Name for the numeric Spark orb on a card. The visible numeral is inside the same labeled element.",
-          )
-        : tx(
-            "Energy added",
-            "[accessibility] Name for the numeric Energy-added orb on a Dreamwell card. The visible numeral is inside the same labeled element.",
-          ));
+        ? "Spark"
+        : "Energy added");
   const icon = ICON_BY_VARIANT[variant];
   // The digit box edge equals the CSS digit size; the digit sits over the
   // glyph's body so it reads over the fullest region rather than the edges.
@@ -207,17 +195,11 @@ export function CardStatOrb({
       }}
     >
       <span id={`${accessibleId}-base`} style={VISUALLY_HIDDEN_STYLE}>
-        {resolve(baseMessage)}
+        {baseMessage}
       </span>
       {changeBadge === undefined ? null : (
         <span id={`${accessibleId}-change`} style={VISUALLY_HIDDEN_STYLE}>
-          {resolve(
-            txa(
-              "Changed by {form_name}",
-              { form_name: opaque(changeBadge.accessibleName) },
-              "[accessibility] [transfiguration] Sentence naming the Transfiguration form that changed this card stat. form_name is the independently localized proper name of the form and is grammatically invariant here.",
-            ),
-          )}
+          {`Changed by ${changeBadge.accessibleName}`}
         </span>
       )}
       {/* The glowing mark sits below the digit. Each Boxicons glyph leaves

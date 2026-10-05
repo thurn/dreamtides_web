@@ -1,8 +1,7 @@
 import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { tx, plural, one, other, txa } from "@trox/runtime";
 import type { SiteId } from "../../types/identifiers";
 import type { ExplorationActionId } from "../../types/identifiers";
+import { formatNumber } from "../../runtime/format-number";
 
 /** Provenance and remaining capacity for Exploration-granted free purchases. */
 export interface ShopFreePurchaseStatusView {
@@ -21,7 +20,6 @@ export function ShopFreePurchaseStatus({
 }: {
   readonly status: ShopFreePurchaseStatusView;
 }) {
-  const resolve = useLocalizer();
   const hasFreeNextShop = status.freeNextShopSource !== null;
   const hasFreePurchases = status.freePurchasesRemaining > 0;
   if (!hasFreeNextShop && !hasFreePurchases) return null;
@@ -33,33 +31,14 @@ export function ShopFreePurchaseStatus({
     : "free-purchases";
   const message =
     kind === "next-shop"
-      ? tx(
-          "Exploration boon: every item in this shop is free.",
-          "[exploration] Persistent live status above a Card Shop shelf when its T56 visit-wide Exploration benefit is bound to this exact visit.",
-        )
+      ? "Exploration boon: every item in this shop is free."
       : kind === "free-purchases"
-        ? txa(
-            plural(status.freePurchasesRemaining, [
-              one("Exploration boon: {remaining_count} free purchase remains."),
-              other(
-                "Exploration boon: {remaining_count} free purchases remain.",
-              ),
-            ]),
-            { remaining_count: status.freePurchasesRemaining },
-            "[dreamsign] Persistent live status above a Shop or Dreamsign Bazaar shelf when T82 free purchases are queued. remaining_count is the positive total across all FIFO counters.",
-          )
-        : txa(
-            plural(status.freePurchasesRemaining, [
-              one(
-                "Exploration boons: every item in this shop is free, with {remaining_count} free purchase remaining.",
-              ),
-              other(
-                "Exploration boons: every item in this shop is free, with {remaining_count} free purchases remaining.",
-              ),
-            ]),
-            { remaining_count: status.freePurchasesRemaining },
-            "[ui] Persistent live status above a Card Shop shelf when T56 and T82 overlap. remaining_count is the positive total of successful T82 purchases remaining; those counters are consumed even while T56 also makes the visit free.",
-          );
+        ? status.freePurchasesRemaining === 1
+          ? `Exploration boon: ${formatNumber(status.freePurchasesRemaining)} free purchase remains.`
+          : `Exploration boon: ${formatNumber(status.freePurchasesRemaining)} free purchases remain.`
+        : status.freePurchasesRemaining === 1
+          ? `Exploration boons: every item in this shop is free, with ${formatNumber(status.freePurchasesRemaining)} free purchase remaining.`
+          : `Exploration boons: every item in this shop is free, with ${formatNumber(status.freePurchasesRemaining)} free purchases remaining.`;
 
   return (
     <div
@@ -83,7 +62,7 @@ export function ShopFreePurchaseStatus({
         textShadow: token("--text-outline-media"),
       }}
     >
-      {resolve(message)}
+      {message}
     </div>
   );
 }

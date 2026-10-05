@@ -11,15 +11,6 @@ import {
   type CardSubtype,
 } from "../../types/card-identity";
 import { useEffect, useState } from "react";
-import {
-  meaning,
-  one,
-  other,
-  plural,
-  tx,
-  txa,
-  type LocalizedString,
-} from "@trox/runtime";
 import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
@@ -27,8 +18,8 @@ import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { DeckEntryId } from "../../types/identifiers";
+import { formatNumber } from "../../runtime/format-number";
 
 export type PoolViewerSourceId = "run" | "tides" | "catalog" | "signature";
 export type PoolViewerTitleKind = "pool" | "battle";
@@ -72,7 +63,7 @@ export interface PoolViewerView {
   totalCount: number;
   visibleCount: number;
   sortOptions: readonly PoolViewerSortId[];
-  subtypeOptions: readonly { value: string; label: LocalizedString }[];
+  subtypeOptions: readonly { value: string; label: string }[];
   disclosures: readonly PoolViewerDisclosureView[];
 }
 
@@ -118,7 +109,7 @@ export function PoolViewerScreen({
   onCardDragStart,
   onCardDragEnd,
 }: PoolViewerScreenProps): ReactElement {
-  const resolve = useLocalizer();
+  
   const [expandedDisclosures, setExpandedDisclosures] = useState<
     ReadonlyMap<PoolViewerDisclosureId, boolean>
   >(() => new Map());
@@ -199,17 +190,11 @@ export function PoolViewerScreen({
         <Select
           size="sm"
           leadingGlyph={GLYPHS.filter}
-          ariaLabel={tx(
-            "Filter card subtype",
-            "[accessibility] [pool-viewer] Name for the Pool Viewer selector that filters Character cards by their authored subtype.",
-          )}
+          ariaLabel={"Filter card subtype"}
           options={[
             {
               value: "",
-              label: tx(
-                "All subtypes",
-                "[pool-viewer] Visible Pool Viewer subtype option that clears the authored Character-subtype filter.",
-              ),
+              label: "All subtypes",
             },
             ...view.subtypeOptions.map((option) => ({
               value: option.value,
@@ -226,10 +211,7 @@ export function PoolViewerScreen({
         <Select
           size="sm"
           leadingGlyph={GLYPHS.energy}
-          ariaLabel={tx(
-            "Filter card cost",
-            "[accessibility] [pool-viewer] Name for the Pool Viewer selector that filters cards by their Energy-cost category.",
-          )}
+          ariaLabel={"Filter card cost"}
           options={(
             ["all", "0", "1", "2", "3", "4", "5plus", "x"] as const
           ).map((cost) => {
@@ -249,30 +231,13 @@ export function PoolViewerScreen({
           key={disclosure.id}
           title={
             disclosure.id === "tides"
-              ? tx(
-                  "Tide provenance",
-                  "[pool-viewer] Visible title of the Pool Viewer disclosure explaining which Tides constructed the run pool.",
-                )
-              : tx(
-                  "Pool construction",
-                  "[pool-viewer] Visible title of the Pool Viewer disclosure identifying the active pool-construction algorithm.",
-                )
+              ? "Tide provenance"
+              : "Pool construction"
           }
           summary={
             disclosure.id === "tides"
-              ? txa(
-                  plural(disclosure.tideCount, [
-                    one("{tide_count} Tide"),
-                    other("{tide_count} Tides"),
-                  ]),
-                  { tide_count: disclosure.tideCount },
-                  "[pool-viewer] Visible Pool Viewer disclosure summary showing the number of Tides used to construct the pool. tide_count is a visible nonnegative safe integer, can be zero in synthetic or incomplete data, and governs Tide number grammar.",
-                )
-              : txa(
-                  "Algorithm: {algorithm_id}",
-                  { algorithm_id: disclosure.variant },
-                  "[pool-viewer] [developer] Visible Pool Viewer diagnostic summary naming the pool-construction algorithm. algorithm_id is a stable raw internal identifier such as tides4; translators may reorder it but the identifier itself remains unchanged.",
-                )
+              ? (disclosure.tideCount === 1 ? `${formatNumber(disclosure.tideCount)} Tide` : `${formatNumber(disclosure.tideCount)} Tides`)
+              : `Algorithm: ${disclosure.variant}`
           }
           expanded={expandedDisclosures.get(disclosure.id) ?? true}
           onExpandedChange={(expanded) =>
@@ -290,74 +255,32 @@ export function PoolViewerScreen({
             }}
           >
             {disclosure.id === "tides"
-              ? resolve(
-                  txa(
-                    plural(disclosure.dealSize, [
-                      one(
-                        "Built to {deal_size} Card with a per-card copy cap of {copy_cap}; {facet_drawn_count} of {facet_available_count} theme Tides were drawn.",
-                      ),
-                      other(
-                        "Built to {deal_size} Cards with a per-card copy cap of {copy_cap}; {facet_drawn_count} of {facet_available_count} theme Tides were drawn.",
-                      ),
-                    ]),
-                    {
-                      deal_size: disclosure.dealSize,
-                      copy_cap: disclosure.copyCap,
-                      facet_drawn_count: disclosure.facetDrawnCount,
-                      facet_available_count: disclosure.facetAvailableCount,
-                    },
-                    "[pool-viewer] [developer] Visible Pool Viewer diagnostic sentence describing a Tides-built pool. deal_size is the visible nonnegative safe-integer target pool size and governs Card number grammar. copy_cap is the visible nonnegative per-card maximum. facet_drawn_count and facet_available_count are separate visible nonnegative counts showing selected and available theme Tides; drawn can be zero and cannot exceed available.",
-                  ),
-                )
-              : resolve(
-                  tx(
-                    "The active run pool is shown with its remaining copies.",
-                    "[pool-viewer] Visible Pool Viewer disclosure sentence explaining that card quantities are the current remaining copies in the active run pool.",
-                  ),
-                )}
+              ? (disclosure.dealSize === 1 ? `Built to ${formatNumber(disclosure.dealSize)} Card with a per-card copy cap of ${formatNumber(disclosure.copyCap)}; ${formatNumber(disclosure.facetDrawnCount)} of ${formatNumber(disclosure.facetAvailableCount)} theme Tides were drawn.` : `Built to ${formatNumber(disclosure.dealSize)} Cards with a per-card copy cap of ${formatNumber(disclosure.copyCap)}; ${formatNumber(disclosure.facetDrawnCount)} of ${formatNumber(disclosure.facetAvailableCount)} theme Tides were drawn.`)
+              : "The active run pool is shown with its remaining copies."}
           </p>
         </DisclosureSection>
       ))}
       <CardBrowserPanel
         title={viewerTitle(view.title)}
-        subtitle={txa(
-          meaning(
-            "pool-filtered-count-subtitle",
-            plural(view.totalCount, [
-              one("{visible_count} of {total_count} Card"),
-              other("{visible_count} of {total_count} Cards"),
-            ]),
-          ),
-          { visible_count: view.visibleCount, total_count: view.totalCount },
-          "[pool-viewer] Filtered card-browser subtitle. visible_count is the non-negative number matching the active filters; total_count is the non-negative collection size before filtering and governs Card grammar.",
-        )}
+        subtitle={(view.totalCount === 1 ? `${formatNumber(view.visibleCount)} of ${formatNumber(view.totalCount)} Card` : `${formatNumber(view.visibleCount)} of ${formatNumber(view.totalCount)} Cards`)}
         rightAccessory={{
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
-            label: tx(
-              "Close pool viewer",
-              "[accessibility] [pool-viewer] Command name for the button that closes the Pool Viewer overlay or floating panel.",
-            ),
+            label: "Close pool viewer",
             onPress: onClose,
             testId: "pool-viewer-close",
           },
         }}
         toolbar={{
           search: {
-            label: tx(
-              "Search cards",
-              "[pool-viewer] Visible label for the Pool Viewer field that searches authored card names and rules text.",
-            ),
+            label: "Search cards",
             value: view.filters.query,
             onChange: (query) => onFiltersChange({ query }),
             testId: "pool-viewer-search",
           },
           sort: {
-            ariaLabel: tx(
-              "Sort cards",
-              "[accessibility] [pool-viewer] Name for the Pool Viewer selector that chooses the card property used for sorting.",
-            ),
+            ariaLabel: "Sort cards",
             value: view.filters.sort,
             options: view.sortOptions.map((sort) => {
               return { value: sort, label: sortFieldLabel(sort) };
@@ -382,94 +305,55 @@ export function PoolViewerScreen({
   );
 }
 
-function sourceOptionLabel(source: PoolViewerSourceId): LocalizedString {
+function sourceOptionLabel(source: PoolViewerSourceId): string {
   switch (source) {
     case "run":
-      return tx(
-        "Run Pool",
-        "[pool-viewer] Visible Pool Viewer source-tab label for the current remaining draft pool.",
-      );
+      return "Run Pool";
     case "tides":
-      return tx(
-        "Tide Decks",
-        "[pool-viewer] Visible Pool Viewer source-tab label for the Tide construction input.",
-      );
+      return "Tide Decks";
     case "catalog":
-      return tx(
-        "All Cards",
-        "[pool-viewer] Visible Pool Viewer source-tab label for the full card catalog.",
-      );
+      return "All Cards";
     case "signature":
-      return tx(
-        "Signature Cards",
-        "[avatar] Collection label for the active Avatar's authored signature cards.",
-      );
+      return "Signature Cards";
   }
 }
 
-function emptySourceLabel(source: PoolViewerSourceId): LocalizedString {
+function emptySourceLabel(source: PoolViewerSourceId): string {
   switch (source) {
     case "run":
-      return tx(
-        "No run pool cards are available.",
-        "[pool-viewer] Visible Pool Viewer empty-state sentence for an empty current run pool.",
-      );
+      return "No run pool cards are available.";
     case "tides":
-      return tx(
-        "This run has no Tide decks.",
-        "[pool-viewer] Visible Pool Viewer empty-state sentence when the run has no Tide construction inputs.",
-      );
+      return "This run has no Tide decks.";
     case "catalog":
-      return tx(
-        "No cards match the current filters.",
-        "[pool-viewer] Visible Pool Viewer empty-state sentence when filters hide every card in the full catalog.",
-      );
+      return "No cards match the current filters.";
     case "signature":
-      return tx(
-        "This avatar has no signature cards.",
-        "[avatar] [pool-viewer] Visible Pool Viewer empty-state sentence when the Avatar has no authored signature cards.",
-      );
+      return "This avatar has no signature cards.";
   }
 }
 
-function typeFilterLabel(cardType: PoolViewerTypeFilter): LocalizedString {
+function typeFilterLabel(cardType: PoolViewerTypeFilter): string {
   switch (cardType) {
     case "all":
-      return tx(
-        "All",
-        "[card-browser] Type filter option that keeps every card type.",
-      );
+      return "All";
     case "character":
-      return tx(
-        "Characters",
-        "[card-browser] Type filter option that keeps Character cards.",
-      );
+      return "Characters";
     case "event":
-      return tx(
-        "Events",
-        "[card-browser] Type filter option that keeps Event cards.",
-      );
+      return "Events";
   }
 }
 
 function sortDirectionLabel(
   direction: PoolViewerSortDirection,
-): LocalizedString {
+): string {
   switch (direction) {
     case "asc":
-      return tx(
-        "Sort ascending",
-        "[accessibility] [card-browser] Action sorting the visible card collection in ascending order.",
-      );
+      return "Sort ascending";
     case "desc":
-      return tx(
-        "Sort descending",
-        "[accessibility] [card-browser] Action sorting the visible card collection in descending order.",
-      );
+      return "Sort descending";
   }
 }
 
-function costFilterLabel(cost: PoolViewerCostFilter): LocalizedString {
+function costFilterLabel(cost: PoolViewerCostFilter): string {
   switch (cost) {
     case "all":
     case "0":
@@ -477,66 +361,36 @@ function costFilterLabel(cost: PoolViewerCostFilter): LocalizedString {
     case "2":
     case "3":
     case "4":
-      return tx(
-        "All costs",
-        "[pool-viewer] Compact visible Pool Viewer Energy-cost filter option. The same source label is used for the no-filter option and the exact-cost zero-through-four options.",
-      );
+      return "All costs";
     case "5plus":
-      return tx(
-        "Cost 5+",
-        "[pool-viewer] Compact visible Pool Viewer Energy-cost filter option that selects cards with a printed cost of five or more.",
-      );
+      return "Cost 5+";
     case "x":
-      return tx(
-        "Cost X",
-        "[pool-viewer] Compact visible Pool Viewer Energy-cost filter option that selects cards with a variable printed cost.",
-      );
+      return "Cost X";
   }
 }
 
-function viewerTitle(title: PoolViewerTitleKind): LocalizedString {
+function viewerTitle(title: PoolViewerTitleKind): string {
   switch (title) {
     case "pool":
-      return tx(
-        meaning("pool-viewer-heading", "Pool Viewer"),
-        "[pool-viewer] [journey] Visible Pool Viewer heading for the Journey utility overlay.",
-      );
+      return "Pool Viewer";
     case "battle":
-      return tx(
-        "Battle Pool Viewer",
-        "[battle] [pool-viewer] Visible Pool Viewer heading for the floating Battle inspector.",
-      );
+      return "Battle Pool Viewer";
   }
 }
 
-function sortFieldLabel(sort: PoolViewerSortId): LocalizedString {
+function sortFieldLabel(sort: PoolViewerSortId): string {
   switch (sort) {
     case "name":
-      return tx(
-        "Name",
-        "[card-browser] Sort-field option for canonical authored card names.",
-      );
+      return "Name";
     case "cardNumber":
-      return tx(
-        "Number",
-        "[pool-viewer] Compact visible Pool Viewer sort-field option for authored card numbers.",
-      );
+      return "Number";
     case "cost":
-      return tx(
-        "Cost",
-        "[card-browser] Sort-field option for printed Energy cost.",
-      );
+      return "Cost";
     case "type":
-      return tx(
-        "Type",
-        "[pool-viewer] Compact visible Pool Viewer sort-field option for card type.",
-      );
+      return "Type";
     case "subtype":
-      return tx(
-        "Subtype",
-        "[card-browser] Sort-field option for canonical authored subtypes.",
-      );
+      return "Subtype";
     case "spark":
-      return tx("Spark", "[card-browser] Sort-field option for printed Spark.");
+      return "Spark";
   }
 }

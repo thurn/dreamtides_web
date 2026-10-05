@@ -9,8 +9,6 @@ import {
   avatarPortraitFocus,
   type AvatarVisual,
 } from "./AvatarPortrait";
-import { opaque, select, when, otherwise, txa } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The visual treatment applied to the full-body stage art. */
 export type AvatarStageVariant = "standing" | "cutout" | "fullBleed";
@@ -38,19 +36,9 @@ export function AvatarStage({
   avatar,
   variant,
 }: AvatarStageProps) {
-  const resolve = useLocalizer();
+  
   const [broken, setBroken] = useState(false);
-  const alt = txa(
-    select(avatar.title === undefined ? "no" : "yes", [
-      when("yes", "{avatar_name}, {avatar_title}"),
-      otherwise("{avatar_name}"),
-    ]),
-    {
-      avatar_name: opaque(avatar.name),
-      avatar_title: opaque(avatar.title ?? avatar.name),
-    },
-    '[accessibility] [avatar] Name for Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is "yes" when the epithet is present and "no" when the artwork should be identified by the name alone.',
-  );
+  const alt = ((avatar.title === undefined ? "no" : "yes") === "yes" ? `${avatar.name}, ${avatar.title ?? avatar.name}` : `${avatar.name}`);
   const focus = avatarPortraitFocus(avatar);
   const focusPercentX = Math.round(focus.x * 1000) / 10;
   const focusPercentY = Math.round(focus.y * 1000) / 10;
@@ -95,7 +83,7 @@ export function AvatarStage({
                 letterSpacing: "0.08em",
               }}
             >
-              {resolve(avatar.name).charAt(0)}
+              {avatar.name.charAt(0)}
             </div>
           </div>
         </>
@@ -107,7 +95,7 @@ export function AvatarStage({
         <img
           data-avatar-stage-art="standing"
           src={avatarCutoutSrc(avatar.imageNumber)}
-          alt={resolve(alt)}
+          alt={alt}
           draggable={false}
           fetchPriority="high"
           loading="eager"
@@ -147,7 +135,7 @@ export function AvatarStage({
             font: token("--t-display"),
           }}
         >
-          {resolve(avatar.name).charAt(0)}
+          {avatar.name.charAt(0)}
         </div>
       );
     }
@@ -155,7 +143,7 @@ export function AvatarStage({
       <img
         data-avatar-stage-art="cutout"
         src={avatarCutoutSrc(avatar.imageNumber)}
-        alt={resolve(alt)}
+        alt={alt}
         draggable={false}
         fetchPriority="high"
         loading="eager"
@@ -204,7 +192,7 @@ export function AvatarStage({
             letterSpacing: "0.08em",
           }}
         >
-          {resolve(avatar.name).charAt(0)}
+          {avatar.name.charAt(0)}
         </div>
       </>
     );
@@ -215,7 +203,7 @@ export function AvatarStage({
       <img
         data-avatar-stage-art="fullBleed"
         src={avatarCutoutSrc(avatar.imageNumber)}
-        alt={resolve(alt)}
+        alt={alt}
         draggable={false}
         fetchPriority="high"
         loading="eager"

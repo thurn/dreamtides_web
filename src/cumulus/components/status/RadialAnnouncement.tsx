@@ -11,17 +11,8 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { motionTimeSeconds } from "../../primitives/motion-time";
 import { token } from "../../primitives/tokens";
-import {
-  meaning,
-  txa,
-  plural,
-  one,
-  other,
-  tx,
-  type LocalizedString,
-} from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DomElementId } from "../../types/dom";
+import { formatNumber } from "../../../runtime/format-number";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
 export const RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS = 3_360;
@@ -206,11 +197,11 @@ export interface RadialAnnouncementSceneProps extends RadialAnnouncementCommonPr
   /** Named radial presentation. Omit for the ordinary scene announcement. */
   variant?: "announcement";
   /** Primary announcement copy. */
-  headline: LocalizedString;
+  headline: string;
   /** Optional canonical glyph rendered in place of the headline copy. */
   headlineGlyph?: Glyph;
   /** Optional supporting copy beneath the headline. */
-  detail?: LocalizedString;
+  detail?: string;
   /** Optional gained Essence amount, rendered with the canonical currency glyph. */
   essenceGained?: number;
   /** Semantic orbit and ripple color. Defaults to accent. */
@@ -254,7 +245,7 @@ export interface RadialAnnouncementVictoryProps extends RadialAnnouncementCommon
   /** Selects the persistent victory presentation. */
   variant: "victory";
   /** Victory heading moved above the radial core after its opening hold. */
-  headline: LocalizedString;
+  headline: string;
 }
 
 /** A persistent playing-hand total with a continuously orbiting rim. */
@@ -383,25 +374,17 @@ function HandTotalAnnouncement({
   announcementId,
 }: RadialAnnouncementHandTotalProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
-  const resolve = useLocalizer();
+
   const diameter = size === "mini" ? 52 : 60;
   return (
     <motion.div
       role="status"
       aria-live="polite"
-      aria-label={resolve(
+      aria-label={
         owner === "dealer"
-          ? txa(
-              "Dealer total {total}",
-              { total },
-              "[accessibility] [gamble] Name for a Gamble dealer's final hand total. total is the non-negative numeric hand value.",
-            )
-          : txa(
-              "Player total {total}",
-              { total },
-              "[accessibility] [gamble] Name for the local player's final Gamble hand total. total is the non-negative numeric hand value.",
-            ),
-      )}
+          ? `Dealer total ${formatNumber(total)}`
+          : `Player total ${formatNumber(total)}`
+      }
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-variant="hand-total"
       data-radial-announcement-owner={owner}
@@ -481,20 +464,17 @@ function CardScoreAnnouncement({
   points,
   announcementId,
 }: RadialAnnouncementCardScoreProps): ReactElement {
-  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion();
   const animationDuration = reduceMotion ? 0 : CARD_SCORE_ANIMATION_SECONDS;
   return (
     <div
       role="status"
       aria-live="polite"
-      aria-label={resolve(
-        txa(
-          plural(points, [one("{count} Point"), other("{count} Points")]),
-          { count: points },
-          "[accessibility] [battle] Label for a battle score announcement. count is the non-negative number of points shown by the announcement and can be zero.",
-        ),
-      )}
+      aria-label={
+        points === 1
+          ? `${formatNumber(points)} Point`
+          : `${formatNumber(points)} Points`
+      }
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-variant="card-score"
       data-radial-announcement-tone="accent"
@@ -600,15 +580,14 @@ function TransientAnnouncement({
   duration,
 }: {
   readonly announcementId?: DomElementId;
-  readonly headline: LocalizedString;
+  readonly headline: string;
   readonly headlineGlyph?: Glyph;
-  readonly detail?: LocalizedString;
+  readonly detail?: string;
   readonly essenceGained?: number;
   readonly tone: RadialAnnouncementTone;
   readonly size: RadialAnnouncementSize;
   readonly duration: RadialAnnouncementDuration;
 }): ReactElement {
-  const resolve = useLocalizer();
   const accent = toneColor(tone);
   const animationDuration = `calc(${token("--dur-slow")} * ${duration === "extended" ? "8" : "5"})`;
   const rippleAnimation =
@@ -713,7 +692,7 @@ function TransientAnnouncement({
             }}
           >
             {headlineGlyph === undefined ? (
-              renderRulesSymbolsInline(resolve(headline))
+              renderRulesSymbolsInline(headline)
             ) : (
               <InlineGlyph glyph={headlineGlyph} label={headline} />
             )}
@@ -737,7 +716,7 @@ function TransientAnnouncement({
                 color: token("--text-secondary"),
               }}
             >
-              {renderRulesSymbolsInline(resolve(detail))}
+              {renderRulesSymbolsInline(detail)}
             </span>
           ) : null}
         </div>
@@ -751,7 +730,6 @@ function MergeTargetAnnouncement(
     | RadialAnnouncementAvailableTargetProps
     | RadialAnnouncementBlockedTargetProps,
 ): ReactElement {
-  const resolve = useLocalizer();
   const blocked = props.status === "blocked";
   const tone: RadialAnnouncementTone = blocked ? "danger" : "accent";
   const orbitColor = blocked ? token("--danger") : token("--border-accent");
@@ -818,29 +796,11 @@ function MergeTargetAnnouncement(
           }}
         >
           <span data-radial-announcement-headline="">
-            {resolve(
-              blocked
-                ? tx(
-                    "Cannot Merge",
-                    "[battle] Headline inside a blocked Figment merge target when exhaustion prevents the merge.",
-                  )
-                : tx(
-                    meaning("figment-merge-headline", "Merge"),
-                    "[battle] Headline inside an available Figment merge target.",
-                  ),
-            )}
+            {blocked ? "Cannot Merge" : "Merge"}
           </span>
           {!blocked ? (
             <span data-radial-announcement-detail="">
-              {renderRulesSymbolsInline(
-                resolve(
-                  txa(
-                    "+{spark_count} ✦",
-                    { spark_count: props.addedSpark },
-                    "[accessibility] [battle] Compact Spark detail inside an available Figment merge target. spark_count is the non-negative Spark that the destination Figment will gain; the star is the canonical Spark symbol and is converted to the shared labeled glyph.",
-                  ),
-                ),
-              )}
+              {renderRulesSymbolsInline(`+${formatNumber(props.addedSpark)} ✦`)}
             </span>
           ) : null}
         </span>
@@ -854,7 +814,7 @@ function VictoryAnnouncement({
   announcementId,
 }: RadialAnnouncementVictoryProps): ReactElement {
   const [titleSettled, setTitleSettled] = useState(false);
-  const resolve = useLocalizer();
+
   return (
     <div
       data-radial-announcement={announcementId ?? ""}
@@ -902,7 +862,7 @@ function VictoryAnnouncement({
             animation: `radial-announcement-victory-title-fade ${VICTORY_TITLE_FADE_DURATION} ${token("--ease-out")} both`,
           }}
         >
-          {resolve(headline)}
+          {headline}
         </span>
       </h1>
       {[0, 1].map((index) => (

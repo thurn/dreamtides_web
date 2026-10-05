@@ -39,7 +39,6 @@ import {
   useRef,
   useState,
 } from "react";
-import type { LocalizedString } from "@trox/runtime";
 import { createPortal } from "react-dom";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { StandaloneGlyph } from "./StandaloneGlyph";
@@ -50,7 +49,6 @@ import {
   controlChrome,
   glassTrack,
 } from "../../internal/control-treatment";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Height/scale variants, matching SegmentedControl's. */
 type SelectSize = "sm" | "md";
@@ -64,8 +62,8 @@ type SelectSize = "sm" | "md";
 /** One option whose copy remains localized until its DOM text node. */
 export interface SelectOption<Value extends string = string> {
   value: Value;
-  label: LocalizedString;
-  triggerLabel?: LocalizedString;
+  label: string;
+  triggerLabel?: string;
   disabled?: boolean;
 }
 
@@ -93,9 +91,9 @@ export interface SelectProps<Value extends string = string> {
    */
   align?: "start" | "end";
   /** Accessible label for the trigger. */
-  ariaLabel?: LocalizedString;
+  ariaLabel?: string;
   /** Text shown when `value` does not match an option, for action-picker controls. */
-  placeholder?: LocalizedString;
+  placeholder?: string;
 }
 
 interface SizeSpec {
@@ -152,7 +150,6 @@ export function Select<Value extends string>({
   const spec = SIZES[size];
   const chrome = controlChrome();
   const { pressed, hovered, bind } = usePress();
-  const resolve = useLocalizer();
 
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<MenuAnchor | null>(null);
@@ -274,7 +271,7 @@ export function Select<Value extends string>({
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={ariaLabel === undefined ? undefined : resolve(ariaLabel)}
+        aria-label={ariaLabel === undefined ? undefined : ariaLabel}
         onClick={() => (open ? close() : openMenu())}
         onKeyDown={(event) => {
           if (!open && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
@@ -341,7 +338,7 @@ export function Select<Value extends string>({
                 color: token("--text-primary"),
               }}
             >
-              {resolve(placeholder)}
+              {placeholder}
             </span>
           )}
           {options.map((option) => (
@@ -356,7 +353,7 @@ export function Select<Value extends string>({
                 color: token("--text-primary"),
               }}
             >
-              {resolve(option.triggerLabel ?? option.label)}
+              {option.triggerLabel ?? option.label}
             </span>
           ))}
         </span>
@@ -494,7 +491,7 @@ function MenuItem<Value extends string>({
   onPick,
 }: MenuItemProps<Value>): ReactElement {
   const { pressed, hovered, bind } = usePress();
-  const resolve = useLocalizer();
+
   const lit = active || hovered || pressed;
   return (
     <button
@@ -548,7 +545,7 @@ function MenuItem<Value extends string>({
           <StandaloneGlyph glyph={GLYPHS.check} color="text-primary" />
         </span>
       </span>
-      {resolve(option.label)}
+      {option.label}
     </button>
   );
 }

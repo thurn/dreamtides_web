@@ -1,4 +1,3 @@
-import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -488,40 +487,40 @@ describe("Cumulus reveal coordinator root", () => {
       {
         variant: "object",
         image: artRef.dreamsign("a.png"),
-        title: assertLocalized("Object Title"),
-        body: { kind: "plain", text: assertLocalized("Object Body") },
+        title: "Object Title",
+        body: { kind: "plain", text: "Object Body" },
       },
       {
         variant: "fullBleed",
         image: artRef.dreamscapeScene(testDreamscapeId("scene")),
-        title: assertLocalized("Full Title"),
-        subtitle: assertLocalized("Full Subtitle"),
-        body: { kind: "plain", text: assertLocalized("Full Body") },
+        title: "Full Title",
+        subtitle: "Full Subtitle",
+        body: { kind: "plain", text: "Full Body" },
       },
       {
         variant: "atlasReveal",
         image: artRef.dreamscapeScene(testDreamscapeId("atlas")),
-        title: assertLocalized("Atlas Title"),
-        subtitle: assertLocalized("Atlas Guide"),
-        body: { kind: "plain", text: assertLocalized("Atlas Body") },
+        title: "Atlas Title",
+        subtitle: "Atlas Guide",
+        body: { kind: "plain", text: "Atlas Body" },
       },
       {
         variant: "icon",
         glyph: GLYPHS.info,
-        title: assertLocalized("Icon Title"),
-        body: { kind: "plain", text: assertLocalized("Icon Body") },
+        title: "Icon Title",
+        body: { kind: "plain", text: "Icon Body" },
       },
       {
         variant: "tide",
         tide: "valor",
-        title: assertLocalized("Tide Title"),
-        body: { kind: "plain", text: assertLocalized("Tide Body") },
+        title: "Tide Title",
+        body: { kind: "plain", text: "Tide Body" },
       },
       {
         variant: "text",
-        title: assertLocalized("Text Title"),
-        subtitle: assertLocalized("Text Subtitle"),
-        body: { kind: "plain", text: assertLocalized("Text Body") },
+        title: "Text Title",
+        subtitle: "Text Subtitle",
+        body: { kind: "plain", text: "Text Body" },
       },
     ];
     const spec: RevealSpec = {
@@ -570,13 +569,13 @@ describe("Cumulus reveal coordinator root", () => {
       secondaries: [
         {
           variant: "text",
-          title: assertLocalized("First Definition"),
-          body: { kind: "rules", text: assertLocalized("First rules.") },
+          title: "First Definition",
+          body: { kind: "rules", text: "First rules." },
         },
         {
           variant: "text",
-          title: assertLocalized("Second Definition"),
-          body: { kind: "rules", text: assertLocalized("Second rules.") },
+          title: "Second Definition",
+          body: { kind: "rules", text: "Second rules." },
         },
       ],
     };

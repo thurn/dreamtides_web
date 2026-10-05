@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 
-import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { IconButton } from "./IconButton";
@@ -16,7 +15,7 @@ describe("IconButton", () => {
     const { container } = renderInCumulus(
       <IconButton
         glyph={GLYPHS.close}
-        label={assertLocalized("Close deck")}
+        label={"Close deck"}
         onPress={() => {}}
       />,
     );
@@ -33,7 +32,7 @@ describe("IconButton", () => {
       <IconButton
         glyph={GLYPHS.refresh}
         overlayGlyph={GLYPHS.bug}
-        label={assertLocalized("Reroll offers")}
+        label={"Reroll offers"}
         onPress={() => {}}
       />,
     );
@@ -47,7 +46,7 @@ describe("IconButton", () => {
     const { container } = renderInCumulus(
       <IconButton
         glyph={GLYPHS.close}
-        label={assertLocalized("Close")}
+        label={"Close"}
         placement="onGlass"
         onPress={() => {}}
       />,
@@ -60,11 +59,7 @@ describe("IconButton", () => {
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container } = renderInCumulus(
-      <IconButton
-        glyph={GLYPHS.close}
-        label={assertLocalized("Close")}
-        onPress={onPress}
-      />,
+      <IconButton glyph={GLYPHS.close} label={"Close"} onPress={onPress} />,
     );
 
     act(() => {
@@ -78,7 +73,7 @@ describe("IconButton", () => {
     const { container } = renderInCumulus(
       <IconButton
         glyph={GLYPHS.close}
-        label={assertLocalized("Close")}
+        label={"Close"}
         onPress={onPress}
         disabled
       />,

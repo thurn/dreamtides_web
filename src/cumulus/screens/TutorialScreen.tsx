@@ -1,4 +1,3 @@
-import { tx, txa, type LocalizedString } from "@trox/runtime";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -13,7 +12,6 @@ import {
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { BattleStatusAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import {
@@ -108,8 +106,8 @@ export type TutorialDialogueView =
       readonly horizontalOffset?: number;
       readonly verticalOffset?: number;
       readonly bubbleWidth?: number;
-      readonly speakerName: LocalizedString;
-      readonly text: LocalizedString;
+      readonly speakerName: string;
+      readonly text: string;
     };
 
 export interface TutorialChallengeParticipantView {
@@ -143,7 +141,7 @@ export interface TutorialView {
   readonly currentAction: TutorialAction | null;
   readonly howToPlay: {
     readonly actionId: TutorialActionId;
-    readonly text: LocalizedString;
+    readonly text: string;
     readonly wait: number;
     readonly trigger: TutorialHowToPlayTrigger;
     readonly companion?: DreamwellCardModel | null;
@@ -370,13 +368,13 @@ function TutorialHowToPlayDialog({
   staged,
   onClose,
 }: {
-  readonly text: LocalizedString;
+  readonly text: string;
   readonly companion: DreamwellCardModel | null;
   readonly cardWidth: number;
   readonly staged: boolean;
   readonly onClose: () => void;
 }): ReactElement {
-  const resolve = useLocalizer();
+  
   const desktop = useIsDesktop();
   const paragraphStyle = {
     margin: 0,
@@ -384,7 +382,7 @@ function TutorialHowToPlayDialog({
     font: desktop ? token("--t-tutorial-instruction") : token("--t-lead"),
     whiteSpace: "pre-line",
   } as const;
-  const paragraphs = parseTutorialInstructionMarkup(resolve(text));
+  const paragraphs = parseTutorialInstructionMarkup(text);
 
   return (
     <div
@@ -393,8 +391,8 @@ function TutorialHowToPlayDialog({
       style={{ visibility: staged ? "hidden" : "visible" }}
     >
       <GlassDialog
-        title={tx("How to Play", "[tutorial] How to play title.")}
-        closeLabel={tx("Close how to play", "[tutorial] How to play close.")}
+        title={"How to Play"}
+        closeLabel={"Close how to play"}
         presentation="popup"
         chrome="flowing-close"
         companion={
@@ -1135,10 +1133,7 @@ function TutorialOpponentCardPlay({
                 }}
               >
                 <CardBack
-                  label={tx(
-                    "Opponent card flipping face up",
-                    "[tutorial] Opponent card flipping.",
-                  )}
+                  label={"Opponent card flipping face up"}
                 />
               </div>
               <div
@@ -1291,7 +1286,7 @@ function TutorialChallengeAnimation({
   readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
-  const resolve = useLocalizer();
+  
   const [started, setStarted] = useState(false);
   const [geometry, setGeometry] = useState<TutorialChallengeGeometry | null>(
     null,
@@ -1433,25 +1428,9 @@ function TutorialChallengeAnimation({
   return (
     <div
       role="status"
-      aria-label={resolve(
-        loser.owner === "enemy"
-          ? txa(
-              "{winner_name} wins the challenge. {loser_name} dissolves into the opponent void.",
-              {
-                winner_name: winner.card.model.displaySnapshot.name,
-                loser_name: loser.card.model.displaySnapshot.name,
-              },
-              "[accessibility] [tutorial] Narration after a tutorial challenge whose losing card enters the opponent's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
-            )
-          : txa(
-              "{winner_name} wins the challenge. {loser_name} dissolves into the player void.",
-              {
-                winner_name: winner.card.model.displaySnapshot.name,
-                loser_name: loser.card.model.displaySnapshot.name,
-              },
-              "[accessibility] [tutorial] Narration after a tutorial challenge whose losing card enters the local player's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
-            ),
-      )}
+      aria-label={(loser.owner === "enemy"
+          ? `${winner.card.model.displaySnapshot.name} wins the challenge. ${loser.card.model.displaySnapshot.name} dissolves into the opponent void.`
+          : `${winner.card.model.displaySnapshot.name} wins the challenge. ${loser.card.model.displaySnapshot.name} dissolves into the player void.`)}
       data-tutorial-challenge-animation=""
       data-tutorial-challenge-winner-card-id={winner.card.model.cardId}
       data-tutorial-challenge-loser-card-id={loser.card.model.cardId}
@@ -1679,7 +1658,7 @@ export function TutorialScreen({
   onEndTurn,
   onPlayerCharacterReposition,
 }: TutorialScreenProps): ReactElement {
-  const resolve = useLocalizer();
+  
   const desktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const screenRef = useRef<HTMLElement | null>(null);
@@ -1959,7 +1938,7 @@ export function TutorialScreen({
             },
             inspector: {
               ...sourceBattle.inspector,
-              opponentName: resolve(view.avatars.enemy.visual.name),
+              opponentName: view.avatars.enemy.visual.name,
             },
           }
         : {}),
@@ -1990,7 +1969,7 @@ export function TutorialScreen({
               ...sourceBattle.inspector,
               ...(enemySettled
                 ? {
-                    opponentName: resolve(view.avatars.enemy.visual.name),
+                    opponentName: view.avatars.enemy.visual.name,
                   }
                 : {}),
               sides: {
@@ -2957,16 +2936,7 @@ export function TutorialScreen({
                       owner: "player",
                       rank: "front",
                       slotId: repositionTargetSlotId,
-                      label: txa(
-                        "Drag {source_card_name} to block {opposing_card_name}.",
-                        {
-                          source_card_name:
-                            repositionSourceCard.model.displaySnapshot.name,
-                          opposing_card_name:
-                            repositionOpposingCard.model.displaySnapshot.name,
-                        },
-                        "[tutorial] Drag to block.",
-                      ),
+                      label: `Drag ${repositionSourceCard.model.displaySnapshot.name} to block ${repositionOpposingCard.model.displaySnapshot.name}.`,
                     }
               }
               viewport="contained"

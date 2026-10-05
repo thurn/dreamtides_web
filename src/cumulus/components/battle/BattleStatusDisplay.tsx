@@ -7,19 +7,8 @@ import {
   type AvatarVisual,
 } from "../hud/AvatarPortrait";
 import { InlineGlyph } from "../typography/InlineGlyph";
-import {
-  tx,
-  select,
-  when,
-  otherwise,
-  plural,
-  one,
-  other,
-  txa,
-} from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
-import type { LocalizedString } from "@trox/runtime";
 import type { AvatarId, OpponentId } from "../../../types/identifiers";
+import { formatNumber } from "../../../runtime/format-number";
 
 /** Which combatant this status card describes. */
 export type BattleStatusOwner = "player" | "enemy";
@@ -28,7 +17,7 @@ export type BattleStatusRelationship = "near" | "far";
 /** Semantic profile revealed from a populated battle Avatar portrait. */
 export interface BattleStatusAvatarProfile {
   readonly id: AvatarId | OpponentId;
-  readonly ability: LocalizedString;
+  readonly ability: string;
   readonly unavailable?: boolean;
 }
 
@@ -69,45 +58,11 @@ export function BattleStatusDisplay({
   pointsToWin,
   testId,
 }: BattleStatusDisplayProps) {
-  const resolve = useLocalizer();
 
   return (
     <div
       role="group"
-      aria-label={resolve(
-        txa(
-          select(relationship === "near" ? "viewer" : "opponent", [
-            when(
-              "viewer",
-              plural(pointsToWin, [
-                one(
-                  "Your side: {current_energy} of {max_energy} Energy, {points} of {points_to_win} Point",
-                ),
-                other(
-                  "Your side: {current_energy} of {max_energy} Energy, {points} of {points_to_win} Points",
-                ),
-              ]),
-            ),
-            otherwise(
-              plural(pointsToWin, [
-                one(
-                  "Opponent: {current_energy} of {max_energy} Energy, {points} of {points_to_win} Point",
-                ),
-                other(
-                  "Opponent: {current_energy} of {max_energy} Energy, {points} of {points_to_win} Points",
-                ),
-              ]),
-            ),
-          ]),
-          {
-            current_energy: currentEnergy,
-            max_energy: maxEnergy,
-            points,
-            points_to_win: pointsToWin,
-          },
-          '[accessibility] [battle] Summary for one participant\'s battle status card. owner is "viewer" for the side nearest the current local perspective or "opponent" for the opposing side. Energy and point values are non-negative integers; maximums and the points-to-win target are positive integers.',
-        ),
-      )}
+      aria-label={((relationship === "near" ? "viewer" : "opponent") === "viewer" ? (pointsToWin === 1 ? `Your side: ${formatNumber(currentEnergy)} of ${formatNumber(maxEnergy)} Energy, ${formatNumber(points)} of ${formatNumber(pointsToWin)} Point` : `Your side: ${formatNumber(currentEnergy)} of ${formatNumber(maxEnergy)} Energy, ${formatNumber(points)} of ${formatNumber(pointsToWin)} Points`) : (pointsToWin === 1 ? `Opponent: ${formatNumber(currentEnergy)} of ${formatNumber(maxEnergy)} Energy, ${formatNumber(points)} of ${formatNumber(pointsToWin)} Point` : `Opponent: ${formatNumber(currentEnergy)} of ${formatNumber(maxEnergy)} Energy, ${formatNumber(points)} of ${formatNumber(pointsToWin)} Points`))}
       data-battle-status=""
       data-owner={owner}
       data-relationship={relationship}
@@ -145,12 +100,7 @@ export function BattleStatusDisplay({
         {avatar === null ? (
           <div
             role="img"
-            aria-label={resolve(
-              tx(
-                "Avatar portrait loading",
-                "[battle] [loading] Status avatar loading.",
-              ),
-            )}
+            aria-label={"Avatar portrait loading"}
             data-battle-status-avatar-placeholder=""
             style={{
               width: "100%",

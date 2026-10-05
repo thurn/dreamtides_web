@@ -18,8 +18,6 @@ import {
   speechBubblePointerDepth,
   type SpeechBubblePointerPlacement,
 } from "./speech-bubble-geometry";
-import type { LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 const SPEECH_GLASS_FILL = token("--glass-fill-popover");
 const SPEECH_CONTENT_PADDING = token("--space-m");
@@ -34,12 +32,12 @@ const SPEECH_BUBBLE_ZOOM: Record<SpeechBubbleSize, number> = {
 
 export interface SpeechBubbleProps {
   /** The speaking character's display name. */
-  speakerName: LocalizedString;
+  speakerName: string;
   /**
    * The spoken line. Uses tutorial instruction formatting for yellow and
    * bold high-contrast purple highlights plus canonical inline rules glyphs.
    */
-  text: LocalizedString;
+  text: string;
   /** Authored display scale for compact or prominent character dialogue. */
   size?: SpeechBubbleSize;
   /** Edge and alignment of the pointer toward the speaking character. */
@@ -60,7 +58,6 @@ export function SpeechBubble({
   pointerPlacement = "left-lower",
   testId,
 }: SpeechBubbleProps): ReactElement {
-  const resolve = useLocalizer();
   const bubbleRef = useRef<HTMLElement | null>(null);
   const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
   const tail = `${String(speechBubblePointerDepth())}px`;
@@ -185,7 +182,7 @@ export function SpeechBubble({
           color: token("--text-on-glass"),
         }}
       >
-        {resolve(speakerName)}
+        {speakerName}
       </div>
       <p
         style={{
@@ -197,7 +194,7 @@ export function SpeechBubble({
           whiteSpace: "pre-line",
         }}
       >
-        {renderTutorialInstructionText(text, resolve)}
+        {renderTutorialInstructionText(text)}
       </p>
     </aside>
   );

@@ -1,6 +1,4 @@
-import { tx } from "@trox/runtime";
 import { useReducedMotion } from "framer-motion";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
@@ -36,25 +34,21 @@ export function BattlePhaseIndicator({
   phase,
   side,
 }: BattlePhaseIndicatorProps) {
-  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const phaseName =
     phase === "dawn"
-      ? tx("Dawn phase", "[accessibility] [battle] Dawn phase name.")
+      ? "Dawn phase"
       : phase === "day"
-        ? tx("Day phase", "[accessibility] [battle] Day phase name.")
+        ? "Day phase"
         : phase === "dusk"
-          ? tx("Dusk phase", "[accessibility] [battle] Dusk phase name.")
+          ? "Dusk phase"
           : phase === "night"
-            ? tx("Night phase", "[accessibility] [battle] Night phase name.")
-            : tx(
-                "Challenge phase",
-                "[accessibility] [battle] Challenge phase name.",
-              );
+            ? "Night phase"
+            : "Challenge phase";
   return (
     <div
       role="img"
-      aria-label={resolve(phaseName)}
+      aria-label={phaseName}
       data-battle-phase={phase}
       data-battle-side={side}
       style={{

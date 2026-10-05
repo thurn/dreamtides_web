@@ -1,4 +1,3 @@
-import { tx, type LocalizedString } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactElement } from "react";
 import { IconButton } from "../components/controls/IconButton";
@@ -10,7 +9,6 @@ import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import "../primitives/cumulus-base.css";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export type MainMenuActionId =
   "new-journey" | "dream-codex" | "settings" | "about" | "quit";
@@ -19,17 +17,17 @@ export type MainMenuSocialId = "github" | "discord" | "reddit";
 
 export interface MainMenuActionView {
   readonly id: MainMenuActionId;
-  readonly label: LocalizedString;
+  readonly label: string;
 }
 
 export interface MainMenuSocialView {
   readonly id: MainMenuSocialId;
-  readonly label: LocalizedString;
+  readonly label: string;
   readonly glyph: Glyph;
 }
 
 export interface MainMenuView {
-  readonly title: LocalizedString;
+  readonly title: string;
   readonly background: ArtRef;
   readonly actions: readonly MainMenuActionView[];
   readonly socials: readonly MainMenuSocialView[];
@@ -63,7 +61,6 @@ export function MainMenuScreen({
   onExitComplete,
   playbackSpeed = 1,
 }: MainMenuScreenProps): ReactElement {
-  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const mobileEdgeInline = `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-l")})`;
@@ -117,16 +114,11 @@ export function MainMenuScreen({
           whiteSpace: "nowrap",
         }}
       >
-        {resolve(view.title)}
+        {view.title}
       </h1>
 
       <nav
-        aria-label={resolve(
-          tx(
-            "Main menu",
-            "[accessibility] Name for the primary front-door navigation landmark.",
-          ),
-        )}
+        aria-label={"Main menu"}
         data-main-menu-actions
         style={{
           position: "absolute",
@@ -169,12 +161,7 @@ export function MainMenuScreen({
 
       <div
         role="group"
-        aria-label={resolve(
-          tx(
-            "Dreamtides community",
-            "[accessibility] Group name for external Dreamtides community links.",
-          ),
-        )}
+        aria-label={"Dreamtides community"}
         data-main-menu-socials
         style={{
           position: "absolute",

@@ -2,8 +2,6 @@
 // Dreamsigns. It keeps the Dream Market's header and captions while rendering
 // both the collectible art and the restock glyph without object backgrounds.
 
-import type { LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { useRef, type ReactElement } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { DomTestId } from "../../types/dom";
@@ -41,20 +39,20 @@ export interface DreamsignGalleryActionView {
   /** Glyph that identifies the action. */
   glyph: Glyph;
   /** Visible and accessible action label. */
-  label: LocalizedString;
+  label: string;
   /** Stable Glossary UUID for the action's explanatory Info Card. */
   glossaryId: GlossaryEntryId;
   /** Essence price, or null for a free/spent text caption. */
   price: number | null;
   /** Caption used when the action is free or already spent. */
-  text: LocalizedString | null;
+  text: string | null;
   /** Whether the action can currently be triggered. */
   disabled: boolean;
 }
 
 export interface DreamsignGalleryPanelProps {
   /** Header title. */
-  title: LocalizedString;
+  title: string;
   /** Dreamsign offers in persistent slot order. */
   entries: readonly DreamsignGalleryEntryView[];
   /** Bare-glyph action shown after the offers. */
@@ -62,7 +60,7 @@ export interface DreamsignGalleryPanelProps {
   /** Compact uses the two-column phone shelf; standard uses the four-column desktop shelf. */
   size?: "compact" | "standard";
   /** Accessible label for the close control. */
-  closeLabel: LocalizedString;
+  closeLabel: string;
   /** Fires when the close disc is activated. */
   onClose: () => void;
   /** Fires with the UUID-derived entry id when an available Dreamsign is activated. */
@@ -82,9 +80,9 @@ function DreamsignGalleryCaption({
   text,
 }: {
   readonly price: number | null;
-  readonly text: LocalizedString | null;
+  readonly text: string | null;
 }): ReactElement {
-  const resolve = useLocalizer();
+  
   return (
     <p
       data-dreamsign-gallery-caption={price === null ? "text" : "essence"}
@@ -100,7 +98,7 @@ function DreamsignGalleryCaption({
     >
       {price === null ? (
         text === null ? null : (
-          resolve(text)
+          text
         )
       ) : (
         <EssenceValue amount={price} tone="inherit" />
@@ -204,7 +202,7 @@ export function DreamsignGalleryPanel({
   onEndActionPress,
   testId,
 }: DreamsignGalleryPanelProps): ReactElement {
-  const resolve = useLocalizer();
+  
   const compact = size === "compact";
   const itemWidth = compact ? COMPACT_ITEM_WIDTH : STANDARD_ITEM_WIDTH;
   const itemHeight = itemWidth / CARD_ASPECT_RATIO_VALUE;
@@ -245,7 +243,7 @@ export function DreamsignGalleryPanel({
             letterSpacing: 0,
           }}
         >
-          {resolve(title)}
+          {title}
         </h2>
         <IconButton
           glyph={GLYPHS.close}

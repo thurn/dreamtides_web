@@ -21,8 +21,6 @@ import type {
   JourneyStartGuideDialogueView,
 } from "../../cumulus/screens/JourneyStartScreen";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
-import { localizedSourceText } from "../../runtime/localization/runtime";
-import { tx } from "@trox/runtime";
 import type { AvatarId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
 
@@ -67,9 +65,9 @@ export function buildJourneyStartGuideDialogue(
     ),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
-      speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
-      text: localizedSourceText(speechBubble.text),
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: speechBubble.text,
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,
@@ -101,10 +99,8 @@ export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
 function toTideView(tide: Tides4DeckJson): AvatarTideView {
   return {
     id: tide.id,
-    label: localizedSourceText(
-      tide.displayName !== "" ? tide.displayName : tide.id,
-    ),
-    description: localizedSourceText(tide.displayDescription),
+    label: (tide.displayName !== "" ? tide.displayName : tide.id),
+    description: tide.displayDescription,
     tide: tide.resonance,
   };
 }
@@ -112,8 +108,8 @@ function toTideView(tide: Tides4DeckJson): AvatarTideView {
 function toTutorialTideView(tide: TutorialJourneyTide): AvatarTideView {
   return {
     id: tide.id,
-    label: localizedSourceText(tide.name),
-    description: localizedSourceText(tide.description),
+    label: tide.name,
+    description: tide.description,
     tide: tide.type,
   };
 }
@@ -152,15 +148,15 @@ export function toAvatarOfferView(
       ? []
       : (avatar.signatureCards ?? []).map((name, index) => ({
           id: signatureCardIds[index] ?? null,
-          name: localizedSourceText(name),
+          name: name,
         }));
   return {
     id: avatar.id,
-    name: localizedSourceText(avatar.name),
-    title: localizedSourceText(avatar.title),
+    name: avatar.name,
+    title: avatar.title,
     imageNumber: avatar.imageNumber,
     portraitFocus: avatar.portraitFocus,
-    renderedText: localizedSourceText(avatar.renderedText),
+    renderedText: avatar.renderedText,
     startingEssence: avatar.startingEssence,
     signatureCards,
     tides: largestTides(tides).map(toTideView),

@@ -5,7 +5,6 @@ import {
   type SiteType,
 } from "../types/site-type";
 import { requireGlossaryEntry } from "./glossary";
-import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import {
   dreamscapeIdFromUnknown,
   guideIdFromUnknown,
@@ -14,6 +13,7 @@ import {
 } from "../types/identifiers";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 import { sitesDocument } from "../content/documents";
+import { requireText } from "../runtime/text";
 
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
 
@@ -41,16 +41,6 @@ function hasExactKeys(
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
-}
-
-function isSourceMessageRef(value: unknown): boolean {
-  return (
-    isRecord(value) &&
-    value.format === "trox-source-message-ref" &&
-    typeof value.entry_id === "string" &&
-    typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string"
-  );
 }
 
 function isInteger(
@@ -136,7 +126,7 @@ function isSitePresentation(value: unknown, siteType: SiteType): boolean {
     return false;
   return Object.entries(value).every(
     ([key, field]) =>
-      key === "kind" || isNonEmptyString(field) || isSourceMessageRef(field),
+      key === "kind" || isNonEmptyString(field),
   );
 }
 
@@ -306,10 +296,7 @@ export function parseSitesData(value: unknown): SitesData {
                       key,
                       key === "kind"
                         ? field
-                        : hydrateSourceTransport(
-                            field,
-                            `${siteType} presentation ${key}`,
-                          ),
+                        : requireText(field, `${siteType} presentation ${key}`),
                     ]),
                   ),
           },

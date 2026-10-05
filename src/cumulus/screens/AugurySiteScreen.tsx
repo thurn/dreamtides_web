@@ -1,4 +1,3 @@
-import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -31,7 +30,6 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import type { AuguryArchetypeData } from "../../types/augury-data";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   SiteLayout,
   type SiteLayoutGuideView,
@@ -98,13 +96,12 @@ export interface AugurySiteView {
   encounterSignature: StableDigest | null;
   guide: AuguryGuideView;
   offers: readonly AuguryOfferView[];
-  unavailableMessage: LocalizedString | null;
+  unavailableMessage: string | null;
   /** catalog-authored encounter rule; absent synthetic fixtures default to allowed. */
   allowDecline?: boolean;
 }
 
-export type AuguryChoiceResult =
-  { ok: true } | { ok: false; message: LocalizedString };
+export type AuguryChoiceResult = { ok: true } | { ok: false; message: string };
 
 export interface AugurySiteScreenProps {
   view: AugurySiteView;
@@ -154,9 +151,7 @@ export function AugurySiteScreen({
   const [committingOfferId, setCommittingOfferId] = useState<OfferId | null>(
     null,
   );
-  const [errorMessage, setErrorMessage] = useState<LocalizedString | null>(
-    null,
-  );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const inspectedOffer =
     view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
   const wideDesktopDetail =
@@ -168,10 +163,7 @@ export function AugurySiteScreen({
         ...view.guide,
         line:
           view.unavailableMessage ??
-          tx(
-            "The visions are clouded. Walk on for now.",
-            "[augury] Unavailable guide line.",
-          ),
+          "The visions are clouded. Walk on for now.",
       };
 
   const selectChoice = useCallback((offerId: OfferId, choiceId: ChoiceId) => {
@@ -353,10 +345,7 @@ export function AugurySiteScreen({
               </div>
               {view.allowDecline !== false ? (
                 <GlassButton
-                  label={tx(
-                    "Decline Offer",
-                    "[ui] Action declining the current site offer and leaving without its reward.",
-                  )}
+                  label={"Decline Offer"}
                   disabled={committingOfferId !== null}
                   onPress={onClose}
                   testId="cumulus-augury-decline"
@@ -373,7 +362,7 @@ export function AugurySiteScreen({
               style={{ pointerEvents: "auto" }}
             >
               <GlassButton
-                label={tx("Walk On", "[augury] Site walk on.")}
+                label={"Walk On"}
                 onPress={onClose}
                 testId="cumulus-augury-unavailable-exit"
               />
@@ -396,7 +385,7 @@ export function AugurySiteScreen({
           <IconButton
             glyph={GLYPHS.refresh}
             overlayGlyph={GLYPHS.bug}
-            label={tx("Reroll Augury offers", "[augury] Reroll offers.")}
+            label={"Reroll Augury offers"}
             onPress={onReroll}
             testId="reroll-augury-offers"
           />
@@ -420,12 +409,11 @@ function OfferDetailPanel({
   layout: "mobile" | "desktop";
   selectedChoiceId?: ChoiceId;
   disabled: boolean;
-  errorMessage: LocalizedString | null;
+  errorMessage: string | null;
   onSelect: (offerId: OfferId, choiceId: ChoiceId) => void;
   onChooseAgain: () => void;
   onConfirm: (offer: AuguryOfferView) => void;
 }) {
-  const resolve = useLocalizer();
   const confirmDisabled =
     disabled || (offer.requiresSelection && selectedChoiceId === undefined);
   return (
@@ -459,20 +447,14 @@ function OfferDetailPanel({
             }}
           >
             <GlassButton
-              label={tx(
-                meaning("augury-reselect-action", "Choose Again"),
-                "[augury] Site choose again.",
-              )}
+              label={"Choose Again"}
               placement="onGlass"
               disabled={disabled}
               onPress={onChooseAgain}
               testId="cumulus-augury-choose-again"
             />
             <GlassButton
-              label={tx(
-                "Confirm",
-                "[ui] Action confirming the current selection.",
-              )}
+              label={"Confirm"}
               variant="accent"
               placement="onGlass"
               disabled={confirmDisabled}
@@ -519,7 +501,7 @@ function OfferDetailPanel({
                 textAlign: "center",
               }}
             >
-              {resolve(errorMessage)}
+              {errorMessage}
             </p>
           )}
         </div>

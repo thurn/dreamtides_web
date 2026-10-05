@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { act, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import {
   mountCumulus,
   fixtureDialogue,
@@ -116,9 +115,7 @@ function MovingObstacleHost() {
         presentationId={parsePresentationId("moving-tutorial")}
         dialogue={{
           ...fixtureDialogue,
-          text: assertLocalized(
-            "A long tutorial explanation stays measured and moves when its registered obstacle changes position.",
-          ),
+          text: "A long tutorial explanation stays measured and moves when its registered obstacle changes position.",
         }}
         context="card"
         placement={{ kind: "floating" }}

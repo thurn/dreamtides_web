@@ -18,8 +18,6 @@ import { token } from "../primitives/tokens";
 import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { opaque, tx, txa } from "@trox/runtime";
 import type { BattleCardId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import {
@@ -190,7 +188,6 @@ export function BattleTutorialGuidance({
   onDismiss,
   onDurationComplete,
 }: BattleTutorialGuidanceProps): ReactElement {
-  const resolve = useLocalizer();
   const desktop = useIsDesktop();
   const reduceMotion = useReducedMotion() ?? false;
   const [retainedView, setRetainedView] =
@@ -431,12 +428,7 @@ export function BattleTutorialGuidance({
   return (
     <section
       ref={journeyRef}
-      aria-label={resolve(
-        tx(
-          "Battle tutorial",
-          "[accessibility] [tutorial] Tutorial region names.",
-        ),
-      )}
+      aria-label={"Battle tutorial"}
       aria-live={active ? "polite" : "off"}
       aria-hidden={active ? undefined : "true"}
       data-battle-tutorial-guidance=""
@@ -515,11 +507,7 @@ export function BattleTutorialGuidance({
           role="button"
           tabIndex={active ? 0 : -1}
           disabled={!active}
-          ariaLabelMessage={txa(
-            "Dismiss {speaker_name} tutorial",
-            { speaker_name: opaque(renderedView.dialogue.speakerName) },
-            "[accessibility] [tutorial] Command that dismisses one tutorial dialogue. speaker_name is the displayed name of the character speaking and has unknown grammatical gender.",
-          )}
+          ariaLabelMessage={`Dismiss ${renderedView.dialogue.speakerName} tutorial`}
           data-testid="battle-tutorial-dismiss"
           hoverFeedback="stationary"
           pressFeedback="stationary"

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
-expect.addEqualityTesters([localizedStringSourceEquality]);
+expect.addEqualityTesters([annotatedTextEquality]);
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { buildCardTutorialGuidanceView } from "./card-tutorial-guidance-view-model";
