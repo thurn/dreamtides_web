@@ -26,7 +26,7 @@ import { registerGameProviders } from "./session/providers/register-game-provide
 import {
   parseDeckEntryId,
   parseJourneyId,
-  parseRoomId,
+  parseGameId,
 } from "./types/identifiers";
 import { testAvatarId, testJourneySeed } from "./types/test-identities";
 
@@ -325,7 +325,7 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          gameId: parseRoomId("ab12cd"),
+          gameId: parseGameId("ab12cd"),
         }}
       />,
     );
@@ -346,7 +346,7 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          gameId: parseRoomId("ab12cd"),
+          gameId: parseGameId("ab12cd"),
         }}
       />,
     );

@@ -111,13 +111,11 @@ export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
 export type PromptId = DomainIdentity<"PromptId">;
 export type DreamwellChoiceKey = DomainIdentity<"DreamwellChoiceKey">;
 export type DreamwellPromptKey = DomainIdentity<"DreamwellPromptKey">;
-export type EditorFieldTargetId = DomainIdentity<"EditorFieldTargetId">;
 export type ExplorationActionId = DomainIdentity<"ExplorationActionId">;
 export type FrontRankSlotId = `F${number}`;
 export type FrontDoorActionId = DomainIdentity<"FrontDoorActionId">;
 export type FigmentCatalogKey = DomainIdentity<"FigmentCatalogKey">;
 export type GlossaryEntryId = DomainIdentity<"GlossaryEntryId">;
-export type GameId = DomainIdentity<"GameId">;
 export type GambleResultId = DomainIdentity<"GambleResultId">;
 export type GuideId = DomainIdentity<"GuideId">;
 export type JourneyId = DomainIdentity<"JourneyId">;
@@ -131,7 +129,7 @@ export type OpponentId = DomainIdentity<"OpponentId">;
 export type PresentationId = DomainIdentity<"PresentationId">;
 export type PublicationId = DomainIdentity<"PublicationId">;
 export type QaSceneId = DomainIdentity<"QaSceneId">;
-export type RoomId = DomainIdentity<"RoomId">;
+export type GameId = DomainIdentity<"GameId">;
 export type RewardCandidateKey = DomainIdentity<"RewardCandidateKey">;
 export type SelectionKey = DomainIdentity<"SelectionKey">;
 export type ScreenTransitionKey = DomainIdentity<"ScreenTransitionKey">;
@@ -183,12 +181,10 @@ const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
 const brandPromptId = identityConstructor<PromptId>();
 const brandDreamwellChoiceKey = identityConstructor<DreamwellChoiceKey>();
 const brandDreamwellPromptKey = identityConstructor<DreamwellPromptKey>();
-const brandEditorFieldTargetId = identityConstructor<EditorFieldTargetId>();
 const brandExplorationActionId = identityConstructor<ExplorationActionId>();
 const brandFrontDoorActionId = identityConstructor<FrontDoorActionId>();
 const brandFigmentCatalogKey = identityConstructor<FigmentCatalogKey>();
 const brandGlossaryEntryId = identityConstructor<GlossaryEntryId>();
-const brandGameId = identityConstructor<GameId>();
 const brandGambleResultId = identityConstructor<GambleResultId>();
 const brandGuideId = identityConstructor<GuideId>();
 const brandJourneyId = identityConstructor<JourneyId>();
@@ -202,7 +198,7 @@ const brandOpponentId = identityConstructor<OpponentId>();
 const brandPresentationId = identityConstructor<PresentationId>();
 const brandPublicationId = identityConstructor<PublicationId>();
 const brandQaSceneId = identityConstructor<QaSceneId>();
-const brandRoomId = identityConstructor<RoomId>();
+const brandGameId = identityConstructor<GameId>();
 const brandRewardCandidateKey = identityConstructor<RewardCandidateKey>();
 const brandSelectionKey = identityConstructor<SelectionKey>();
 const brandScreenTransitionKey = identityConstructor<ScreenTransitionKey>();
@@ -350,10 +346,6 @@ export const parseDreamwellPromptKey = identityParser(
   "Dreamwell prompt key",
   brandDreamwellPromptKey,
 );
-export const parseEditorFieldTargetId = identityParser(
-  "Editor field target id",
-  brandEditorFieldTargetId,
-);
 export const parseExplorationActionId = identityParser(
   "Exploration action id",
   brandExplorationActionId,
@@ -374,7 +366,6 @@ export const parseGlossaryEntryId = identityParser(
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
 );
-export const parseGameId = identityParser("Game id", brandGameId);
 export const parseGambleResultId = identityParser(
   "Gamble result id",
   brandGambleResultId,
@@ -410,7 +401,7 @@ export const parsePublicationId = identityParser(
   brandPublicationId,
 );
 export const parseQaSceneId = identityParser("QA scene id", brandQaSceneId);
-export const parseRoomId = identityParser("Room id", brandRoomId);
+export const parseGameId = identityParser("Game id", brandGameId);
 export const parseRewardCandidateKey = identityParser(
   "Reward candidate key",
   brandRewardCandidateKey,
@@ -469,42 +460,15 @@ export const parseTideId = identityParser(
 );
 
 export const atlasNodeIdFromUnknown = identityDecoder(parseAtlasNodeId);
-export const atlasFillProfileIdFromUnknown =
-  identityDecoder(parseAtlasFillProfileId);
-export const artAssetKeyFromUnknown = identityDecoder(parseArtAssetKey);
 export const auguryArchetypeIdFromUnknown = identityDecoder(
   parseAuguryArchetypeId,
 );
-export const auguryCardViewIdFromUnknown = identityDecoder(parseAuguryCardViewId);
-export const apollyonIncarnationIdFromUnknown = identityDecoder(
-  parseApollyonIncarnationId,
-);
-export const affiliationIdFromUnknown = identityDecoder(parseAffiliationId);
-export const aiDifficultyPresetIdFromUnknown = identityDecoder(
-  parseAiDifficultyPresetId,
-);
-export const aiActionKeyFromUnknown = identityDecoder(parseAiActionKey);
 export const battleCardIdFromUnknown = identityDecoder(parseBattleCardId);
-export const battleAttemptIdFromUnknown = identityDecoder(parseBattleAttemptId);
-export const battleEffectScriptIdFromUnknown = identityDecoder(
-  parseBattleEffectScriptId,
-);
-export const battleEntryKeyFromUnknown = identityDecoder(parseBattleEntryKey);
-export const battleHistoryCommandIdFromUnknown = identityDecoder(
-  parseBattleHistoryCommandId,
-);
-export const battleIdFromUnknown = identityDecoder(parseBattleId);
-export const battleSlotViewIdFromUnknown = identityDecoder(parseBattleSlotViewId);
-export const choiceIdFromUnknown = identityDecoder(parseChoiceId);
 export const clientIdFromUnknown = identityDecoder(parseClientId);
-export const cardTutorialScreenKeyFromUnknown = identityDecoder(
-  parseCardTutorialScreenKey,
-);
 export const cardTypeChangePredicateIdFromUnknown = identityDecoder(
   parseCardTypeChangePredicateId,
 );
 export const deckEntryIdFromUnknown = identityDecoder(parseDeckEntryId);
-export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
 export const dreamscapeIdFromUnknown = identityDecoder(parseDreamscapeId);
 export const dreamsignIdFromUnknown = identityDecoder(parseDreamsignId);
 export const dreamwellCardIdFromUnknown = identityDecoder(parseDreamwellCardId);
@@ -512,53 +476,20 @@ export const dreamwellChoiceKeyFromUnknown =
   identityDecoder(parseDreamwellChoiceKey);
 export const dreamwellPromptKeyFromUnknown =
   identityDecoder(parseDreamwellPromptKey);
-export const editorFieldTargetIdFromUnknown = identityDecoder(
-  parseEditorFieldTargetId,
-);
 export const explorationActionIdFromUnknown = identityDecoder(
   parseExplorationActionId,
 );
 export const frontDoorActionIdFromUnknown =
   identityDecoder(parseFrontDoorActionId);
-export const figmentCatalogKeyFromUnknown = identityDecoder(
-  parseFigmentCatalogKey,
-);
 export const glossaryEntryIdFromUnknown = identityDecoder(parseGlossaryEntryId);
-export const gameIdFromUnknown = identityDecoder(parseGameId);
-export const gambleResultIdFromUnknown = identityDecoder(parseGambleResultId);
 export const guideIdFromUnknown = identityDecoder(parseGuideId);
-export const journeyIdFromUnknown = identityDecoder(parseJourneyId);
 export const intentKeyFromUnknown = identityDecoder(parseIntentKey);
-export const auguryCategoryIdFromUnknown =
-  identityDecoder(parseAuguryCategoryId);
-export const auguryTargetKeyFromUnknown =
-  identityDecoder(parseAuguryTargetKey);
 export const noteIdFromUnknown = identityDecoder(parseNoteId);
 export const offerIdFromUnknown = identityDecoder(parseOfferId);
-export const offerTileIdFromUnknown = identityDecoder(parseOfferTileId);
-export const opponentIdFromUnknown = identityDecoder(parseOpponentId);
-export const presentationIdFromUnknown = identityDecoder(parsePresentationId);
-export const publicationIdFromUnknown = identityDecoder(parsePublicationId);
-export const qaSceneIdFromUnknown = identityDecoder(parseQaSceneId);
-export const roomIdFromUnknown = identityDecoder(parseRoomId);
-export const rewardCandidateKeyFromUnknown =
-  identityDecoder(parseRewardCandidateKey);
-export const selectionKeyFromUnknown = identityDecoder(parseSelectionKey);
-export const screenTransitionKeyFromUnknown = identityDecoder(
-  parseScreenTransitionKey,
-);
-export const semanticEntityIdFromUnknown = identityDecoder(parseSemanticEntityId);
+export const gameIdFromUnknown = identityDecoder(parseGameId);
 export const shuffleCommitmentFromUnknown =
   identityDecoder(parseShuffleCommitment);
 export const siteIdFromUnknown = identityDecoder(parseSiteId);
-export const tutorialActionIdFromUnknown = identityDecoder(parseTutorialActionId);
 export const tutorialAiActionOverrideIdFromUnknown = identityDecoder(
   parseTutorialAiActionOverrideId,
 );
-export const tutorialRunIdFromUnknown = identityDecoder(parseTutorialRunId);
-export const tutorialJourneyTideIdFromUnknown = identityDecoder(
-  parseTutorialJourneyTideId,
-);
-export const tutorialTriggerIdFromUnknown =
-  identityDecoder(parseTutorialTriggerId);
-export const tideIdFromUnknown = identityDecoder(parseTideId);

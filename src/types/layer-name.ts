@@ -97,19 +97,3 @@ export function isLayerName(value: unknown): value is LayerName {
   );
 }
 
-/**
- * Coerces a persisted layer value to a {@link LayerName}. Accepts a current
- * `LayerName` string unchanged, and revives a legacy save that stored the layer
- * as a 0-based number (`0` -> `One` ... `6` -> `Seven`). Falls back to
- * {@link LayerName.One} for any value it cannot interpret, so reviving a
- * malformed snapshot renders a safe layer instead of crashing.
- */
-export function toLayerName(value: unknown): LayerName {
-  if (isLayerName(value)) {
-    return value;
-  }
-  if (typeof value === "number" && Number.isInteger(value)) {
-    return layerAtOrdinal(value) ?? LayerName.One;
-  }
-  return LayerName.One;
-}

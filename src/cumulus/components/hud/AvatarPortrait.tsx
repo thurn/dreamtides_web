@@ -33,7 +33,7 @@ export interface AvatarVisual {
   portraitFocus?: AvatarPortraitFocus;
 }
 
-/** Neutral fallback for older room snapshots that predate authored focus data. */
+/** Neutral fallback for journey snapshots that predate authored focus data. */
 export const DEFAULT_AVATAR_PORTRAIT_FOCUS: AvatarPortraitFocus = {
   x: 0.5,
   y: 0.2,
@@ -180,11 +180,6 @@ function fallbackStyle(): CSSProperties {
     letterSpacing: "0.08em",
     textTransform: "uppercase",
   };
-}
-
-/** Resolve the hosted URL of an avatar's full scene render. */
-export function avatarImageSrc(imageNumber: string): string {
-  return assetUrl(`/avatars/${imageNumber}.png`);
 }
 
 /** Resolve the hosted URL of an avatar's transparent full-body cutout. */

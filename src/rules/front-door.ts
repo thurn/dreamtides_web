@@ -23,7 +23,7 @@ export interface TutorialFrontDoorContentProvider {
 
 let tutorialContentProvider: TutorialFrontDoorContentProvider | null = null;
 
-/** Register tutorial identities before any room event is folded. */
+/** Register tutorial identities before any game event is folded. */
 export function registerTutorialFrontDoorContentProvider(
   provider: TutorialFrontDoorContentProvider | null,
 ): void {

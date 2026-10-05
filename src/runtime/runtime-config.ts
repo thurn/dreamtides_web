@@ -10,7 +10,7 @@ import type { GambleData } from "../types/gamble-data";
 import type { TransfigurationData } from "../types/transfiguration-data";
 import { parseCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
-import { parseQaSceneId, type QaSceneId, type RoomId } from "../types/identifiers";
+import { parseQaSceneId, type QaSceneId, type GameId } from "../types/identifiers";
 import type { FoldHash } from "../types/content-hash";
 
 export interface RuntimeConfig {
@@ -23,17 +23,7 @@ export interface RuntimeConfig {
    * genesis.
    */
   tutorialPlaybackSpeed?: number;
-  gameId: RoomId | null;
-  /**
-   * Name of a saved journey to load on boot, from `?loadJourney=`. When set, the
-   * app fetches the matching snapshot from the dev server's `/api/saved-journeys`
-   * endpoint and replaces the game's journey state with it before showing the
-   * game (see `scripts/saved-journeys-api.mjs`). Null when absent.
-   * `parseRuntimeConfig` always sets it; it is optional only so test config
-   * literals can omit it. Only works while the Vite dev server is running,
-   * since that serves the endpoint.
-   */
-  loadJourneyName?: string | null;
+  gameId: GameId | null;
   /**
    * Id of a developer QA scene to jump straight to on boot, from `?goto=`. When
    * set, the app replaces the freshly created game's empty journey state with one
@@ -125,14 +115,6 @@ export function contentConfigsEqual(
   );
 }
 
-/** Returns a canonical gameplay query string with the obsolete UI key removed. */
-export function removeUiParamFromSearch(search: string): string {
-  const params = new URLSearchParams(search);
-  params.delete("ui");
-  const query = params.toString();
-  return query === "" ? "" : `?${query}`;
-}
-
 export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
   return {
@@ -142,7 +124,36 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
       params.get("tutorialSpeed"),
     ),
     gameId: normalizeGameId(params.get("game")),
-    loadJourneyName: parseLoadJourneyName(params.get("loadJourney")),
+    ...parseQaParams(params),
+  };
+}
+
+type QaParams = Pick<
+  RuntimeConfig,
+  | "gotoScene"
+  | "explorationCardId"
+  | "explorationDreamsignCount"
+  | "explorationDreamsignCap"
+  | "explorationStarterCount"
+  | "gambleGameId"
+>;
+
+/**
+ * The QA scene parameters. They apply only in development builds (P7); a
+ * production build ignores them.
+ */
+function parseQaParams(params: URLSearchParams): QaParams {
+  if (!import.meta.env.DEV) {
+    return {
+      gotoScene: null,
+      explorationCardId: null,
+      explorationDreamsignCount: null,
+      explorationDreamsignCap: null,
+      explorationStarterCount: null,
+      gambleGameId: null,
+    };
+  }
+  return {
     gotoScene: parseGotoScene(params.get("goto")),
     explorationCardId: parseExplorationCardId(params.get("card")),
     explorationDreamsignCount: parseQaDreamsignInteger(
@@ -204,14 +215,6 @@ function parseGotoScene(rawScene: string | null): QaSceneId | null {
   }
   const trimmed = rawScene.trim();
   return trimmed === "" ? null : parseQaSceneId(trimmed);
-}
-
-function parseLoadJourneyName(rawName: string | null): string | null {
-  if (rawName === null) {
-    return null;
-  }
-  const trimmed = rawName.trim();
-  return trimmed === "" ? null : trimmed;
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

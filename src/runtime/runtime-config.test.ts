@@ -11,7 +11,6 @@ import {
   contentConfigFromRuntime,
   contentConfigsEqual,
   parseRuntimeConfig,
-  removeUiParamFromSearch,
 } from "./runtime-config";
 import { createDefaultState } from "../state/journey-context";
 import type {
@@ -34,7 +33,6 @@ describe("runtime-config", () => {
         aiMode: false,
         tutorialPlaybackSpeed: 1,
         gameId: null,
-        loadJourneyName: null,
         gotoScene: null,
         explorationCardId: null,
         explorationDreamsignCount: null,
@@ -129,25 +127,6 @@ describe("runtime-config", () => {
       });
     });
 
-    describe("loadJourneyName", () => {
-      it("returns null when loadJourney is absent or blank", () => {
-        expect(parseRuntimeConfig("").loadJourneyName).toBeNull();
-        expect(parseRuntimeConfig("?loadJourney=").loadJourneyName).toBeNull();
-        expect(
-          parseRuntimeConfig("?loadJourney=%20%20").loadJourneyName,
-        ).toBeNull();
-      });
-
-      it("returns the trimmed, decoded name when loadJourney is present", () => {
-        expect(
-          parseRuntimeConfig("?loadJourney=warriors%20draft").loadJourneyName,
-        ).toBe("warriors draft");
-        expect(
-          parseRuntimeConfig("?loadJourney=%20foo%20").loadJourneyName,
-        ).toBe("foo");
-      });
-    });
-
     describe("aiMode", () => {
       it("enables the journey battle AI only when ai=1", () => {
         expect(parseRuntimeConfig("").aiMode).toBe(false);
@@ -194,16 +173,6 @@ describe("runtime-config", () => {
           "journeygame123",
         );
       });
-    });
-  });
-
-  describe("removeUiParamFromSearch", () => {
-    it("removes every ui key while preserving unrelated parameters", () => {
-      expect(
-        removeUiParamFromSearch(
-          "?game=game7&ui=legacy&seed=42&ui=cumulus&deviceFrame=iphone16",
-        ),
-      ).toBe("?game=game7&seed=42&deviceFrame=iphone16");
     });
   });
 

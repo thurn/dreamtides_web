@@ -1,18 +1,17 @@
 // Device-frame safe-area injection.
 //
-// The device-screenshot tool (scripts/device-screenshots.mjs) renders the app
-// inside an <iframe> and paints the Dynamic Island / camera punch-hole as an
-// overlay. Because the app runs in that iframe over a headless viewport with no
-// physical display cutout, the browser reports `env(safe-area-inset-*)` as 0 —
-// so any layout that clears the notch via `env()` collapses and slides under
-// the painted island.
+// Browser QA can render the app in a headless viewport or an <iframe> that
+// mimics a phone, with the Dynamic Island or camera punch-hole painted as an
+// overlay. With no physical display cutout, the browser reports
+// `env(safe-area-inset-*)` as 0, so any layout that clears the notch via
+// `env()` collapses and slides under the painted island.
 //
-// To make a mock-up match real hardware, the tool encodes the target device's
-// safe-area insets and screen-cutout bounding box into a `deviceFrame` query
-// param on the iframe URL (see `deviceFrameDescriptor` there). This module
-// reads that param on boot and republishes the values as CSS custom properties
-// on the document root, so the same layout that reads `env()` on device reads
-// the simulated values in a screenshot.
+// To make a capture match real hardware, the QA URL encodes the target
+// device's safe-area insets and screen-cutout bounding box into a
+// `deviceFrame` query param. This module reads that param on boot and
+// republishes the values as CSS custom properties on the document root, so the
+// same layout that reads `env()` on device reads the simulated values in a
+// capture.
 //
 // The published properties (all lengths in CSS px):
 //   --safe-area-inset-top / -right / -bottom / -left

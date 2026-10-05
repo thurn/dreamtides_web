@@ -185,7 +185,7 @@ export interface MobileBattleView {
   readonly playerHand: readonly MobileBattleCardView[];
   readonly inspector: MobileBattleInspectorView;
   readonly result: MobileBattleResultView | null;
-  /** One room-shared hand card presented over the battlefield at reading size. */
+  /** One shared hand card presented over the battlefield at reading size. */
   readonly revealedHandCard?: MobileBattleCardView | null;
 }
 
@@ -606,7 +606,7 @@ const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-m");
 const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
 // Canonical full-card reading size, constrained on narrow screens so the
-// room-shared reveal stays fully visible beside the battlefield.
+// shared reveal stays fully visible beside the battlefield.
 const SHARED_HAND_CARD_REVEAL_WIDTH = "min(240px, 45vw)";
 const PLAYER_HAND_Z_INDEX = 15;
 // A pending event remains a tangible card while leaving both the hand fan and

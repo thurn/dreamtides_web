@@ -101,7 +101,7 @@ export interface ExplorationSiteView {
   scene: ArtRef | null;
   /** Resident Dream Guide art and greeting. */
   guide: SiteLayoutGuideView;
-  /** UUID-backed card selected from the Exploration prototype pool. */
+  /** UUID-backed card selected from the Exploration encounter pool. */
   card: GameCardModel;
   /** Licensed full-resolution source for the selected card's frame break. */
   fullArt: ArtRef;

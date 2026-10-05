@@ -4,7 +4,7 @@
 // lock manager with the Web Locks `ifAvailable` semantics.
 
 import { describe, expect, it } from "vitest";
-import { parseRoomId } from "../types/identifiers";
+import { parseGameId } from "../types/identifiers";
 import { acquireGameLock, type GameLockManager } from "./game-lock";
 
 /** Exclusive `ifAvailable` locks: held until the callback's promise settles. */
@@ -20,8 +20,8 @@ function createFakeLockManager(): GameLockManager & { held: Set<string> } {
   };
 }
 
-const GAME = parseRoomId("lockd1");
-const OTHER_GAME = parseRoomId("lockd2");
+const GAME = parseGameId("lockd1");
+const OTHER_GAME = parseGameId("lockd2");
 
 describe("acquireGameLock", () => {
   it("lets one holder write a game until it releases", async () => {

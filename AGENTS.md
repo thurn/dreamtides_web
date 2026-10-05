@@ -56,8 +56,7 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
   strings.
 - **Pre-existing issues** you encounter go in your bead's own file,
   `docs/plan/evidence/pre-existing/<bead-id>.md`, included in the same
-  commit. The legacy `./pre-existing-issues.txt` is read-only until Phase 2.8
-  resolves its entries.
+  commit.
 - **Documentation describes the current system.** Never describe what the
   system *no longer* does: phrasings like "X no longer exists", "there is no
   longer a Y", "we removed Z", or "unlike before" are not acceptable.

@@ -3,21 +3,20 @@
 //
 //   npm run regenerate-replay-fixtures
 //
-// The rules modules use TS enums and extensionless imports node's
+// The rules modules use TS enums and extensionless imports that node's
 // --experimental-strip-types resolver cannot follow, so this script runs under
-// `tsx` (the supported fallback per docs/journey_prototype/qa_tooling.md).
+// `tsx`.
 //
 // Each fixture is a checked-in `{ providerSet, genesis, events, finalHash }`.
 // These are SYNTHETIC seeds: they use the DETERMINISTIC fixture providers
 // (src/rules/replay/fixture-providers.ts, shared with replay.test.ts), NOT the
-// real content generators (which live in src/session/providers/). The fixtures stay
-// synthetic on purpose: real-content hashes would couple this regression net to
-// the TOML data, which AGENTS.md forbids. When an intentional reducer /
-// rules-table change moves the hashes, re-run this script to re-stamp
-// `finalHash`. Per AGENTS.md the fixtures assert on HASHES only, never on TOML
-// card content: Dreamwell scripts are selected from the live effects table by
-// structure, and card
-// definitions in the fixtures are synthetic, so a TOML edit does not move them.
+// real content generators (which live in src/session/providers/). The fixtures
+// stay synthetic on purpose: real-content hashes would couple this regression
+// net to the content catalogs. When an intentional reducer or rules-table
+// change moves the hashes, re-run this script to re-stamp `finalHash`. The
+// fixtures assert on HASHES only, never on card content: Dreamwell scripts are
+// selected from the live effects table by structure, and card definitions in
+// the fixtures are synthetic, so a content edit does not move them.
 //
 // Determinism check: run twice; the two runs must produce byte-identical files.
 
@@ -84,7 +83,7 @@ function drawDreamwell() {
 }
 
 function genesis(seed) {
-  // `contentConfig` is pinned into every genesis at room creation; the fold
+  // `contentConfig` is pinned into every genesis at game creation; the fold
   // never reads it, so a fixed placeholder keeps fixtures a valid Genesis shape
   // without affecting the replayed hash.
   return {

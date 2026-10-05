@@ -20,7 +20,7 @@ describe("resumesRecentGame", () => {
     ["/loading", ""],
     ["/main", "?goto=tutorial-battle"],
     ["", "?seed=7"],
-    ["/main", "?loadJourney=qa"],
+    ["/main", "?starterCount=3"],
     ["", "?tutorialSpeed=2&gambleGame=three-gate"],
   ])("asks for a new game at %j%s", (pathname, search) => {
     expect(resumesRecentGame(pathname, search)).toBe(false);

@@ -3,11 +3,7 @@ import { CARD_RARITIES, type Rarity } from "../types/cards";
 import { draftDocument } from "../content/documents";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
-export type {
-  DraftData,
-  DraftRarityCap,
-  Tides4Tuning,
-} from "../types/draft-data";
+export type { DraftData } from "../types/draft-data";
 
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
 const RARITIES: ReadonlySet<Rarity> = new Set(CARD_RARITIES);

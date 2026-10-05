@@ -18,7 +18,7 @@ import {
   type CommittedEvent,
 } from "../eventlog/local-log";
 import type { EngineConfig, Genesis } from "../eventlog/types";
-import type { ClientId, RoomId } from "../types/identifiers";
+import type { ClientId, GameId } from "../types/identifiers";
 import {
   UnreadableLocalGameError,
   type GameRepository,
@@ -41,7 +41,7 @@ export interface LocalGameOpenReport {
 }
 
 export interface LocalGame<S> {
-  readonly gameId: RoomId;
+  readonly gameId: GameId;
   readonly localPlayerId: ClientId;
   readonly genesis: Genesis;
   readonly log: LocalLog<S>;
@@ -67,7 +67,7 @@ export interface LocalGameOptions {
 }
 
 export interface NewLocalGame {
-  gameId: RoomId;
+  gameId: GameId;
   genesis: Genesis;
   localPlayerId: ClientId;
 }
@@ -104,7 +104,7 @@ export async function createLocalGame<S>(
 export async function openLocalGame<S>(
   repository: GameRepository,
   config: EngineConfig<S>,
-  gameId: RoomId,
+  gameId: GameId,
   options: LocalGameOptions = {},
 ): Promise<LocalGame<S> | null> {
   const stored = await repository.readGame(gameId);

@@ -18,10 +18,10 @@ import { decodeEvent, decodeGenesis, encodeEvent } from "../eventlog/wire";
 import {
   clientIdFromUnknown,
   intentKeyFromUnknown,
-  roomIdFromUnknown,
+  gameIdFromUnknown,
   type ClientId,
   type IntentKey,
-  type RoomId,
+  type GameId,
 } from "../types/identifiers";
 import type { KeyValueEntry, KeyValueStore } from "./key-value-store";
 
@@ -35,7 +35,7 @@ const EXACT_KEY_END = "\u0000";
 
 /** The listing view of one local game. */
 export interface LocalGameSummary {
-  gameId: RoomId;
+  gameId: GameId;
   /** The game's single local player, the default actor of its intents. */
   localPlayerId: ClientId;
   /** Epoch milliseconds. */
@@ -63,7 +63,7 @@ export interface StoredLocalGame {
 
 /** The listing view of one game's stored journey log. */
 export interface GameLogSummary {
-  gameId: RoomId;
+  gameId: GameId;
   /** Stored JSONL size in characters, one newline per line included. */
   characters: number;
   /** Epoch milliseconds of the newest log write. */
@@ -79,7 +79,7 @@ export interface LocalGameWrite {
 
 /** A stored game whose records do not decode. */
 export class UnreadableLocalGameError extends Error {
-  constructor(gameId: RoomId, detail: string) {
+  constructor(gameId: GameId, detail: string) {
     super(`Local game ${gameId} is unreadable: ${detail}`);
     this.name = "UnreadableLocalGameError";
   }
@@ -88,10 +88,10 @@ export class UnreadableLocalGameError extends Error {
 export interface GameRepository {
   createGame(summary: LocalGameSummary, genesis: Genesis): Promise<void>;
   /** The stored game, or null when no game has this id. */
-  readGame(gameId: RoomId): Promise<StoredLocalGame | null>;
+  readGame(gameId: GameId): Promise<StoredLocalGame | null>;
   /** Stored events with seq > `afterSeq`, ascending. */
-  readEvents(gameId: RoomId, afterSeq: number): Promise<CommittedEvent[]>;
-  write(gameId: RoomId, write: LocalGameWrite): Promise<void>;
+  readEvents(gameId: GameId, afterSeq: number): Promise<CommittedEvent[]>;
+  write(gameId: GameId, write: LocalGameWrite): Promise<void>;
   /** Every stored game, most recently updated first. */
   listGames(): Promise<LocalGameSummary[]>;
   /**
@@ -99,26 +99,26 @@ export interface GameRepository {
    * log and return its updated summary. One writer per game.
    */
   appendLogLines(
-    gameId: RoomId,
+    gameId: GameId,
     lines: readonly string[],
     updatedAt: number,
   ): Promise<GameLogSummary>;
   /** Every stored journey-log line of the game, oldest first. */
-  readLogLines(gameId: RoomId): Promise<string[]>;
+  readLogLines(gameId: GameId): Promise<string[]>;
   /** Every stored journey log, least recently written first. */
   listLogs(): Promise<GameLogSummary[]>;
   /** Delete these games' stored journey logs; their games stay playable. */
-  deleteLogs(gameIds: readonly RoomId[]): Promise<void>;
+  deleteLogs(gameIds: readonly GameId[]): Promise<void>;
 }
 
-const gameRecordKey = (gameId: RoomId): string => `games/${gameId}`;
-const checkpointKey = (gameId: RoomId): string => `game/${gameId}/checkpoint`;
-const eventsPrefix = (gameId: RoomId): string => `game/${gameId}/events/`;
-const eventKey = (gameId: RoomId, seq: number): string =>
+const gameRecordKey = (gameId: GameId): string => `games/${gameId}`;
+const checkpointKey = (gameId: GameId): string => `game/${gameId}/checkpoint`;
+const eventsPrefix = (gameId: GameId): string => `game/${gameId}/events/`;
+const eventKey = (gameId: GameId, seq: number): string =>
   `${eventsPrefix(gameId)}${String(seq).padStart(SEQ_KEY_DIGITS, "0")}`;
-const logRecordKey = (gameId: RoomId): string => `logs/${gameId}`;
-const logChunksPrefix = (gameId: RoomId): string => `game/${gameId}/log/`;
-const logChunkKey = (gameId: RoomId, chunk: number): string =>
+const logRecordKey = (gameId: GameId): string => `logs/${gameId}`;
+const logChunksPrefix = (gameId: GameId): string => `game/${gameId}/log/`;
+const logChunkKey = (gameId: GameId, chunk: number): string =>
   `${logChunksPrefix(gameId)}${String(chunk).padStart(SEQ_KEY_DIGITS, "0")}`;
 
 interface StoredLogRecord extends GameLogSummary {
@@ -146,7 +146,7 @@ function decodeGameRecord(
   if (!isRecord(value) || value.schemaVersion !== LOCAL_GAME_SCHEMA_VERSION) {
     return null;
   }
-  const gameId = roomIdFromUnknown(value.gameId);
+  const gameId = gameIdFromUnknown(value.gameId);
   const localPlayerId = clientIdFromUnknown(value.localPlayerId);
   const genesis = decodeGenesis(value.genesis);
   const { createdAt, updatedAt, head } = value;
@@ -197,7 +197,7 @@ function decodeLogRecord(value: unknown): StoredLogRecord | null {
   if (!isRecord(value) || value.schemaVersion !== LOCAL_GAME_SCHEMA_VERSION) {
     return null;
   }
-  const gameId = roomIdFromUnknown(value.gameId);
+  const gameId = gameIdFromUnknown(value.gameId);
   const { characters, updatedAt, nextChunk } = value;
   if (
     gameId === null ||
@@ -233,9 +233,9 @@ function encodeGameRecord(
 export function createGameRepository(store: KeyValueStore): GameRepository {
   // The genesis never changes, so each game's encoded genesis is kept for
   // rewriting the game record alongside every batch.
-  const encodedGenesisByGame = new Map<RoomId, string>();
+  const encodedGenesisByGame = new Map<GameId, string>();
 
-  async function encodedGenesis(gameId: RoomId): Promise<string> {
+  async function encodedGenesis(gameId: GameId): Promise<string> {
     const cached = encodedGenesisByGame.get(gameId);
     if (cached !== undefined) return cached;
     const record = await store.get(gameRecordKey(gameId));

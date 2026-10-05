@@ -75,8 +75,8 @@ function canonicalize(value: unknown, path: string): string {
  * fold hash: an `undefined`, a function, a symbol, or a non-finite number
  * (`NaN` / `±Infinity`, which `JSON.stringify` silently coerces to `null`).
  *
- * The canonical hash mirrors `JSON.stringify`, so an `undefined` object entry no
- * longer changes the hash on its own -- this walker is where a smuggled
+ * The canonical hash mirrors `JSON.stringify`, so an `undefined` object entry
+ * does not change the hash on its own -- this walker is where a smuggled
  * `undefined`/function/`NaN` is caught at its source instead of surfacing later
  * as a divergence or a structurally different snapshot. Game-agnostic; the
  * client runs it on the folded state after each applied event in dev mode, and

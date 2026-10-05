@@ -91,11 +91,6 @@ export function registerDraftContentProvider(
   contentProvider = provider;
 }
 
-/** The currently registered provider, or `null` when none is wired. */
-export function getDraftContentProvider(): DraftContentProvider | null {
-  return contentProvider;
-}
-
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------

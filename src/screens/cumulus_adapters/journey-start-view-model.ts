@@ -29,7 +29,7 @@ const MAX_TIDES_SHOWN = 4;
 
 /**
  * Resolve the shared journey-start offer. Tutorial selection persists one exact
- * UUID in journey state; ordinary runs derive their three choices from the room
+ * UUID in journey state; ordinary runs derive their three choices from the game
  * seed and shared reroll count.
  */
 export function resolveAvatarOffer(

@@ -720,7 +720,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
 
   // LOAD_STATE — adversarial snapshots the validator must bounce, preserving
   // the nullability invariant IN-REDUCER rather than via a generator carve-out:
-  //   - a structurally valid snapshot with the correct room seed but null run
+  //   - a structurally valid snapshot with the correct game seed but null run
   //     fields (the genesis journey) — bounced for nulling a non-null run field;
   //   - a snapshot with a foreign seed — bounced by the seed check;
   //   - a malformed snapshot — bounced by the shape check.

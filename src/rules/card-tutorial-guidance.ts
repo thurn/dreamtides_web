@@ -54,7 +54,7 @@ export interface CardTutorialGuidanceContentProvider {
 
 let contentProvider: CardTutorialGuidanceContentProvider | null = null;
 
-/** Register deterministic card and tutorial content before the room log folds. */
+/** Register deterministic card and tutorial content before the game log folds. */
 export function registerCardTutorialGuidanceContentProvider(
   provider: CardTutorialGuidanceContentProvider | null,
 ): void {

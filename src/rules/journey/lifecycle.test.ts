@@ -438,7 +438,7 @@ describe("SELECT_AVATAR", () => {
 
 describe("START_JOURNEY", () => {
 
-  it("assembles a run and preserves the room seed", () => {
+  it("assembles a run and preserves the game seed", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     const start = genesis();
     const started = apply(
@@ -554,7 +554,7 @@ describe("LOAD_STATE", () => {
     expect(out.outcome).toBe("bounced");
   });
 
-  it("bounces a snapshot whose seed differs from the room seed", () => {
+  it("bounces a snapshot whose seed differs from the game seed", () => {
     const start = genesis();
     const snapshot: JourneyState = {
       ...start.journey,

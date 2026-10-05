@@ -1,6 +1,6 @@
 declare const journeySeedBrand: unique symbol;
 
-/** Stable entropy chosen once for a room/run and reused by every deterministic generator. */
+/** Stable entropy chosen once for a game and reused by every deterministic generator. */
 export type JourneySeed = string & {
   readonly [journeySeedBrand]: "JourneySeed";
 };

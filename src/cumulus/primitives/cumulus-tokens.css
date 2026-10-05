@@ -277,7 +277,7 @@
   --hud-h: 64px;           /* persistent bottom resource bar */
 
   /* ---- Safe-area design floors ---- */
-  --safe-top: 59px;        /* design floor: minimum chrome reservation for the status bar + Dynamic Island region. Equals the derived iPhone-16 top inset (11+37+11 in scripts/screenshot-devices.mjs) but is independent of it — this is a static reservation, not the hardware-inset channel (--safe-area-inset-top). */
+  --safe-top: 59px;        /* design floor: minimum chrome reservation for the status bar + Dynamic Island region. Equals the iPhone 16 top inset (11 + 37 + 11) but is independent of it — this is a static reservation, not the hardware-inset channel (--safe-area-inset-top). */
   --safe-bottom: 34px;     /* home indicator inset */
 }
 

@@ -126,4 +126,3 @@ export function DeckGalleryOverlay({
   );
 }
 
-export type { CardGalleryCardView as DeckGalleryCardView };

@@ -14,7 +14,7 @@
 //
 // One strict role-or-hex shape lets every color prop share the same contract.
 
-import { token, type TokenName } from "./tokens";
+import { token } from "./tokens";
 
 /**
  * A `#rrggbb` (or `#rgb` / `#rrggbbaa`) color literal. A template-literal type,
@@ -92,4 +92,3 @@ export function withAlpha(color: CumulusColor, alpha: number): string {
 }
 
 /** A palette token name, re-exported for the rare case a raw token is needed. */
-export type { TokenName };

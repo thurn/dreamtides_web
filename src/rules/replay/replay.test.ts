@@ -18,7 +18,6 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
 import { decodeEvent, decodeGenesis } from "../../eventlog/wire";
-import { NIGHTMARE_CARD_NUMBER } from "../../data/nightmare";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { FoldState } from "../fold-state";
 import { GAME_ENGINE_CONFIG, replayLog, type SeqEvent } from "./replay";
@@ -30,10 +29,7 @@ import {
 import adversarial from "./fixtures/adversarial.json";
 import battle from "./fixtures/battle.json";
 import journeyOnly from "./fixtures/journey-only.json";
-import { parseSiteId } from "../../types/identifiers";
-import { parseDeckEntryId } from "../../types/identifiers";
 import { parseBattleCardId } from "../../types/identifiers";
-import { testDreamsignId } from "../../types/test-identities";
 
 interface ReplayFixture {
   providerSet: string;
@@ -181,107 +177,6 @@ describe("replay fixtures", () => {
       expect(decoded.battle?.pendingPrompt?.options).toEqual(prompt.options);
     },
   );
-
-  it("normalizes every compacted Bane reference to Nightmare", () => {
-    const state = GAME_ENGINE_CONFIG.genesisState(JOURNEY_ONLY_FIXTURE.genesis);
-    const decoded = GAME_ENGINE_CONFIG.decode(
-      JSON.stringify({
-        ...state,
-        journey: {
-          ...state.journey,
-          deck: [
-            {
-              entryId: parseDeckEntryId("nightmare"),
-              cardNumber: NIGHTMARE_CARD_NUMBER,
-              isBane: false,
-            },
-            { entryId: parseDeckEntryId("retired"), cardNumber: 44, isBane: true },
-          ],
-          dreamsigns: [
-            {
-              id: testDreamsignId("negative"),
-              name: "Sign",
-              effectDescription: "",
-              isBane: true,
-            },
-          ],
-          battleModifiers: [
-            {
-              kind: "temporary_bane_grant",
-              count: 1,
-              battlesRemaining: 1,
-              addedEntryIds: [parseDeckEntryId("nightmare")],
-              source: "historical-log",
-            },
-            {
-              kind: "temporary_bane_grant",
-              count: 1,
-              battlesRemaining: 1,
-              addedEntryIds: [parseDeckEntryId("retired")],
-              source: "historical-log",
-            },
-          ],
-        },
-      }),
-    );
-
-    expect(decoded.journey.deck).toEqual([
-      expect.objectContaining({
-        entryId: parseDeckEntryId("nightmare"),
-        isBane: true,
-      }),
-      expect.objectContaining({
-        entryId: parseDeckEntryId("retired"),
-        cardNumber: NIGHTMARE_CARD_NUMBER,
-        isBane: true,
-      }),
-    ]);
-    expect(decoded.journey.dreamsigns).toEqual([
-      expect.objectContaining({ id: testDreamsignId("negative") }),
-    ]);
-    expect(decoded.journey.dreamsigns[0]).not.toHaveProperty("isBane");
-    expect(decoded.journey.dreamsigns[0]).not.toHaveProperty("isNegative");
-    expect(decoded.journey.battleModifiers).toEqual([
-      expect.objectContaining({ kind: "temporary_nightmare_grant" }),
-      expect.objectContaining({ kind: "temporary_nightmare_grant" }),
-    ]);
-  });
-
-  it("normalizes pre-Wave-6 shop state during compaction replay", () => {
-    const state = GAME_ENGINE_CONFIG.genesisState(JOURNEY_ONLY_FIXTURE.genesis);
-    const {
-      freeNextShopModifiers: _freeNextShopModifiers,
-      freePurchaseModifiers: _freePurchaseModifiers,
-      ...legacyShopModifiers
-    } = state.journey.shopModifiers;
-    const decoded = GAME_ENGINE_CONFIG.decode(
-      JSON.stringify({
-        ...state,
-        journey: {
-          ...state.journey,
-          shopModifiers: legacyShopModifiers,
-          siteRuntime: {
-            "legacy-shop": {
-              kind: "shop",
-              slots: [],
-              rerollCount: 0,
-              remainingDreamsignPoolIds: [],
-            },
-          },
-        },
-      }),
-    );
-
-    expect(decoded.journey.shopModifiers).toEqual({
-      ...legacyShopModifiers,
-      freeNextShopModifiers: [],
-      freePurchaseModifiers: [],
-    });
-    expect(decoded.journey.siteRuntime[parseSiteId("legacy-shop")]).toMatchObject({
-      kind: "shop",
-      purchaseHistory: [],
-    });
-  });
 
   it.each(FIXTURES)("$name replays to its stamped finalHash", ({ fixture }) => {
     expect(fixture.providerSet).toBe(FIXTURE_PROVIDER_SET);

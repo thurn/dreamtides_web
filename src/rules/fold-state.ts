@@ -17,7 +17,7 @@ import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance"
 // which owns the cursor model that keeps the state closure-free. `FoldState`
 // re-exports it so the root reducer / CAS policy keep depending on
 // `state.battle.pendingPrompt.promptId` (a number = the opening event's seq).
-export type { BattleFoldState, PendingPrompt } from "./battle/fold";
+export type { BattleFoldState } from "./battle/fold";
 import type { BattleFoldState } from "./battle/fold";
 import { parseJourneyId } from "../types/identifiers";
 import type {
@@ -44,7 +44,7 @@ export interface PlaytestControlState {
 }
 
 /**
- * The complete state folded from a room's event log: the journey slice plus an
+ * The complete state folded from a game's event log: the journey slice plus an
  * optional in-battle slice. `battle` is null whenever no battle is active.
  */
 export interface FoldState {
@@ -52,7 +52,7 @@ export interface FoldState {
   readonly playtestControl?: PlaytestControlState;
   readonly journey: JourneyState;
   readonly battle: BattleFoldState | null;
-  /** First-occurrence tutorials already presented in this shared room. */
+  /** First-occurrence tutorials already presented in this game. */
   readonly tutorialTriggerIdsSeen?: readonly TutorialTriggerId[];
   /** Site-surface or draft-offer identities that presented one card tutorial. */
   readonly cardTutorialScreenKeysSeen?: readonly CardTutorialScreenKey[];
@@ -61,11 +61,11 @@ export interface FoldState {
 }
 
 /**
- * Builds the pre-journey fold state a fresh room shows before `START_JOURNEY`.
+ * Builds the pre-journey fold state a fresh game shows before `START_JOURNEY`.
  *
  * Mirrors legacy `createDefaultState()` (src/state/journey-context.tsx) — the
- * initial `journeyState` a newly created room seeded — with two adjustments:
- * `seed` is taken from `genesis.seed` so replays are deterministic per room,
+ * initial `journeyState` a newly created game seeded — with two adjustments:
+ * `seed` is taken from `genesis.seed` so replays are deterministic per game,
  * and `battle` starts null. The values are inlined here (rather than imported
  * from journey-context.tsx) because that module pulls in React, which the
  * src/rules/ lint rails forbid.
@@ -92,7 +92,7 @@ export function genesisFoldState(genesis: Genesis): FoldState {
 }
 
 function genesisJourneyState(genesis: Genesis): JourneyState {
-  // These literals are compatibility defaults for historical rooms whose
+  // These literals are compatibility defaults for games whose
   // genesis predates economy pinning.
   const defaultStartingEssence =
     genesis.contentConfig?.defaultStartingEssence ?? 200;

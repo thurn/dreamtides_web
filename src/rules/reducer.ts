@@ -1,7 +1,7 @@
 // The root fold and CAS (compare-and-swap) policy for the coop event-sourcing
 // rules layer.
 //
-// `reduceGameEvent` is the single reducer the engine folds a room's log with
+// `reduceGameEvent` is the single reducer the engine folds a game's log with
 // (it matches `EngineConfig.reducer`). It applies the design spec's §Root fold
 // and CAS policy rules 1–6 verbatim, then routes surviving events to a domain
 // case. It BOUNCES on any invalid event content — malformed, stale, or unknown
@@ -9,7 +9,7 @@
 // programmer error and PROPAGATES to the engine's fold containment
 // (`fold.ts`: dev rethrow, prod `FoldError` → `fold_error`). The single
 // exception is a matching `RESOLVE_PROMPT`, whose domain throw is contained here
-// (see `reduceGameEvent`) because rule 4 would otherwise wedge the room.
+// (see `reduceGameEvent`) because rule 4 would otherwise wedge the game.
 //
 // Domain cases land per-task by extending the `routeDomain` switch. Until a
 // type has a case it falls through to a bounce. The journey lifecycle, essence,
@@ -43,7 +43,6 @@ import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
-import { NIGHTMARE_CARD_ID } from "../data/nightmare";
 import { parseSiteId } from "../types/identifiers";
 import { parseClientId } from "../types/identifiers";
 
@@ -57,7 +56,7 @@ export type ReduceResult =
     };
 
 /**
- * Folds a single event over the room's state per the CAS policy.
+ * Folds a single event over the game's state per the CAS policy.
  *
  * Rules 1–6 (design spec §Root fold and CAS policy):
  *   1. CAS-exempt types (`SET_CARD_NOTE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
@@ -78,7 +77,6 @@ export function reduceGameEvent(
   event: GameEvent,
   ctx: EventContext,
 ): ReduceResult {
-  event = normalizeLegacyNightmareEvent(event);
   const controlDecision = authorizePlaytestIntent(state, event);
   if (controlDecision === "reject") {
     return bounce(state, "observer_read_only");
@@ -116,7 +114,7 @@ export function reduceGameEvent(
     // (rule 2 passed, so `state.battle.pendingPrompt` is non-null) must never
     // leave the prompt open on a throw: rule 4 makes a stuck-open prompt
     // PERMANENT — every retry re-throws and every other event bounces, wedging
-    // the room forever. So a throwing resolve deterministically clears the
+    // the game forever. So a throwing resolve deterministically clears the
     // prompt and drops queued automation, keeping the board at its last good
     // value. The result is identical on both clients, so the fold stays
     // convergent. Every OTHER domain throw propagates to `fold.ts` containment.
@@ -150,33 +148,6 @@ export function reduceGameEvent(
       ? { ...result, state }
       : result;
   return enforceInvariants(event, controlled);
-}
-
-/**
- * Translate persisted event names from the historical schema. Each Bane alias
- * applies specifically to Nightmare, regardless of the card identity carried
- * by the historical payload.
- */
-function normalizeLegacyNightmareEvent(event: GameEvent): GameEvent {
-  switch (event.type) {
-    case "PURGE_ALL_BANE_CARDS":
-      return { ...event, type: "PURGE_ALL_NIGHTMARE_CARDS" };
-    case "PURGE_RANDOM_BANE_CARDS":
-      return { ...event, type: "PURGE_RANDOM_NIGHTMARE_CARDS" };
-    case "PUSH_TEMPORARY_BANE_GRANT":
-      return {
-        ...event,
-        type: "PUSH_TEMPORARY_NIGHTMARE_GRANT",
-        payload: {
-          cardId: NIGHTMARE_CARD_ID,
-          count: event.payload.count,
-          battlesRemaining: event.payload.battlesRemaining,
-          source: event.payload.source,
-        },
-      };
-    default:
-      return event;
-  }
 }
 
 function enforceInvariants(

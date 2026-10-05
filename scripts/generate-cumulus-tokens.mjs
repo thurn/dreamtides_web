@@ -98,20 +98,6 @@ export function token(name: TokenName): string {
 `;
 }
 
-/**
- * The exact file content `npm run cumulus-tokens` writes to
- * {@link TOKENS_TS_OUT_PATH}, computed from the live stylesheet without
- * touching disk. The contract test compares this against the materialized
- * file so `token()`'s typed names stay aligned with the stylesheet.
- */
-export function computeTokensSource() {
-  const css = readFileSync(CSS_PATH, "utf8");
-  return buildTokensSource(parseCssTokens(css));
-}
-
-/** Where the generated typed-token module lives, for the drift test. */
-export const TOKENS_TS_OUT_PATH = OUT_PATH;
-
 function main() {
   const css = readFileSync(CSS_PATH, "utf8");
   const tokens = parseCssTokens(css);

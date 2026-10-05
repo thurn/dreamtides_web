@@ -4,7 +4,7 @@ import {
   isRewardMechanicId,
   mechanicSupportsPolicy,
   REWARD_MECHANIC_IDS,
-} from "./reward-selection-contracts.mjs";
+} from "./contracts";
 
 describe("reward selection contracts", () => {
   it("registers deterministic shop purchase modifiers without a selection policy", () => {

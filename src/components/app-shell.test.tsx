@@ -232,7 +232,7 @@ describe("FrontDoorRouter", () => {
     }
   });
 
-  it("renders and reflects the room's shared scene while preserving its room URL", () => {
+  it("renders and reflects the game's shared scene while preserving its game URL", () => {
     const router = (journey?: ReactElement) => (
       <FrontDoorRouter avatars={AVATARS} tutorialPlaybackSpeed={4} journey={journey} />
     );

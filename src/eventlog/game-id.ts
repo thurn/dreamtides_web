@@ -4,9 +4,9 @@
 
 import {
   parseClientId,
-  parseRoomId,
+  parseGameId,
   type ClientId,
-  type RoomId,
+  type GameId,
 } from "../types/identifiers";
 
 // Excludes visually-ambiguous characters (0/O, 1/l) — matches the legacy
@@ -29,7 +29,7 @@ function defaultRandomBytes(length: number): Uint8Array {
 export function generateGameId(
   randomBytes: RandomBytes = defaultRandomBytes,
   length = DEFAULT_GAME_ID_LENGTH,
-): RoomId {
+): GameId {
   if (
     !Number.isInteger(length) ||
     length < MIN_GAME_ID_LENGTH ||
@@ -41,7 +41,7 @@ export function generateGameId(
   }
 
   const bytes = randomBytes(length);
-  return parseRoomId(
+  return parseGameId(
     Array.from(
       bytes,
       (byte) => GAME_ID_ALPHABET[byte % GAME_ID_ALPHABET.length],
@@ -50,7 +50,7 @@ export function generateGameId(
 }
 
 /** Whether `value` is 4-24 lowercase alphanumeric characters. */
-export function isValidGameId(value: unknown): value is RoomId {
+export function isValidGameId(value: unknown): value is GameId {
   return typeof value === "string" && GAME_ID_PATTERN.test(value);
 }
 
@@ -58,13 +58,13 @@ export function isValidGameId(value: unknown): value is RoomId {
  * Trims and lowercases `value`, returning the normalized id when it is
  * valid or `null` otherwise (including when `value` is `null`).
  */
-export function normalizeGameId(value: string | null): RoomId | null {
+export function normalizeGameId(value: string | null): GameId | null {
   if (value === null) {
     return null;
   }
 
   const normalized = value.trim().toLowerCase();
-  return isValidGameId(normalized) ? parseRoomId(normalized) : null;
+  return isValidGameId(normalized) ? parseGameId(normalized) : null;
 }
 
 // ---------------------------------------------------------------------------

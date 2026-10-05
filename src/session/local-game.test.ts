@@ -25,8 +25,8 @@ import {
 import {
   parseClientId,
   parseIntentKey,
-  parseRoomId,
-  type RoomId,
+  parseGameId,
+  type GameId,
 } from "../types/identifiers";
 import { testEventActor, testJourneySeed } from "../types/test-identities";
 import { createGameRepository, type GameRepository } from "./game-repository";
@@ -66,7 +66,7 @@ const hash = (game: LocalGame<FoldState>): string =>
 
 function newGame(
   repository: GameRepository,
-  gameId: RoomId,
+  gameId: GameId,
   options: LocalGameOptions = OPTIONS,
   genesis: Genesis = GENESIS,
 ): Promise<LocalGame<FoldState>> {
@@ -104,7 +104,7 @@ function play(game: LocalGame<FoldState>, drafts: readonly EventDraft[]): void {
 
 async function replayStored(
   repository: GameRepository,
-  gameId: RoomId,
+  gameId: GameId,
 ): Promise<string> {
   const events = await repository.readEvents(gameId, 0);
   return replayLog({ genesis: GENESIS, events }).finalHash;
@@ -116,12 +116,12 @@ afterAll(clearReplayFixtureProviders);
 describe("local game persistence", () => {
   it("reopens a new journey and a mid-journey reload to the identical fold", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
-    const fresh = await newGame(repository, parseRoomId("fresh1"));
+    const fresh = await newGame(repository, parseGameId("fresh1"));
     const reopenedFresh = await reopen(repository, fresh);
     expect(reopenedFresh.log.head()).toBe(0);
     expect(hash(reopenedFresh)).toBe(hash(fresh));
 
-    const live = await newGame(repository, parseRoomId("journey1"));
+    const live = await newGame(repository, parseGameId("journey1"));
     play(live, SCRIPT.slice(0, BEGIN_BATTLE_INDEX));
     const reloaded = await reopen(repository, live);
     expect(reloaded.log.head()).toBe(BEGIN_BATTLE_INDEX);
@@ -137,7 +137,7 @@ describe("local game persistence", () => {
   it("reloads mid-battle from a checkpoint plus the events after it", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     const options = { ...OPTIONS, checkpointInterval: BEGIN_BATTLE_INDEX + 1 };
-    const live = await newGame(repository, parseRoomId("battle1"), options);
+    const live = await newGame(repository, parseGameId("battle1"), options);
     play(live, SCRIPT.slice(0, BEGIN_BATTLE_INDEX + 1));
     await live.flush();
     play(live, SCRIPT.slice(BEGIN_BATTLE_INDEX + 1, BEGIN_BATTLE_INDEX + 3));
@@ -165,7 +165,7 @@ describe("local game persistence", () => {
     const store = createMemoryKeyValueStore();
     const repository = createGameRepository(store);
     const options = { ...OPTIONS, checkpointInterval: 2 };
-    const live = await newGame(repository, parseRoomId("tamper1"), options);
+    const live = await newGame(repository, parseGameId("tamper1"), options);
     play(live, SCRIPT.slice(0, BEGIN_BATTLE_INDEX + 2));
     await live.close();
     await corruptCheckpoint(store, live.gameId);
@@ -181,7 +181,7 @@ describe("local game persistence", () => {
 
   it("loads a journey save file into an equal journey that survives reload", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
-    const source = await newGame(repository, parseRoomId("saved1"));
+    const source = await newGame(repository, parseGameId("saved1"));
     play(source, SCRIPT);
     const saved = parseJourneySaveFile(
       serializeJourneySaveFile(
@@ -191,7 +191,7 @@ describe("local game persistence", () => {
       ),
     ).journeyState;
 
-    const target = await newGame(repository, parseRoomId("loaded1"), OPTIONS, {
+    const target = await newGame(repository, parseGameId("loaded1"), OPTIONS, {
       ...GENESIS,
       seed: testJourneySeed("local-game-load-target"),
     });
@@ -215,7 +215,7 @@ describe("local game persistence", () => {
   ])("keeps applied intent keys and deterministic bounces across reloads %s", async (_, checkpointInterval) => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     const options = { ...OPTIONS, checkpointInterval };
-    const live = await newGame(repository, parseRoomId("keys1"), options);
+    const live = await newGame(repository, parseGameId("keys1"), options);
     const intentKey = parseIntentKey("start-journey");
     const startSeq = live.log.append({ ...SCRIPT[0], intentKey });
     expect(live.log.append({ ...SCRIPT[0], intentKey })).toBe(startSeq);
@@ -245,7 +245,7 @@ describe("local game persistence", () => {
     };
     const repository = createGameRepository(flaky);
     const errors: unknown[] = [];
-    const live = await newGame(repository, parseRoomId("flaky1"), {
+    const live = await newGame(repository, parseGameId("flaky1"), {
       ...OPTIONS,
       onPersistError: (error) => errors.push(error),
     });
@@ -278,7 +278,7 @@ describe("local game persistence", () => {
       const errors: unknown[] = [];
       const live = await newGame(
         createGameRepository(flaky),
-        parseRoomId("final1"),
+        parseGameId("final1"),
         {
           ...OPTIONS,
           onPersistError: (error) => errors.push(error),
@@ -327,7 +327,7 @@ describe("local game persistence", () => {
       };
       const live = await newGame(
         createGameRepository(failing),
-        parseRoomId("closed1"),
+        parseGameId("closed1"),
       );
       play(live, SCRIPT.slice(0, 1));
       await live.flush();
@@ -344,8 +344,8 @@ describe("local game persistence", () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     let clock = 0;
     const options = { ...OPTIONS, now: () => (clock += 1) };
-    const older = await newGame(repository, parseRoomId("older1"), options);
-    const newer = await newGame(repository, parseRoomId("newer1"), options);
+    const older = await newGame(repository, parseGameId("older1"), options);
+    const newer = await newGame(repository, parseGameId("newer1"), options);
     older.log.append(SCRIPT[0]);
     await older.flush();
     expect((await repository.listGames()).map((game) => game.gameId)).toEqual([
@@ -453,7 +453,7 @@ describe("local log", () => {
 
 async function corruptCheckpoint(
   store: KeyValueStore,
-  gameId: RoomId,
+  gameId: GameId,
 ): Promise<void> {
   const key = `game/${gameId}/checkpoint`;
   const checkpoint = (await store.get(key)) as Record<string, unknown>;

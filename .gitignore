@@ -23,22 +23,13 @@ logs/
 .claude/worktrees
 .worktrees/
 .playwright-mcp/
-augury-metric-report.json
 .superpowers/
-# Default output directory for scripts/mobile-screenshot.mjs
-screenshots/
-artifacts/journey-desktop-screenshots/
 artifacts/qa/
-
-cumulus/Assets/ThirdParty/
 
 .vscode
 
-# Developer filesystem journey saves written by the saved-journeys dev API.
-saved-journeys/
-
 # Local outputs left in older checkouts by earlier data tooling.
 public/*-data.json
-src/generated/
-data/
-tools/
+/src/generated/
+/data/
+/tools/

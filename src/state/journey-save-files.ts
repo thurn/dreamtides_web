@@ -100,15 +100,13 @@ export function parseJourneySaveFile(
     throw new Error("This file is not a Dreamtides journey save.");
   }
 
-  if ("format" in parsed || "version" in parsed) {
-    if (parsed.format !== JOURNEY_SAVE_FILE_FORMAT) {
-      throw new Error("This file is not a Dreamtides journey save.");
-    }
-    if (parsed.version !== JOURNEY_SAVE_FILE_VERSION) {
-      throw new Error(
-        `Journey save version ${String(parsed.version)} is not supported.`,
-      );
-    }
+  if (parsed.format !== JOURNEY_SAVE_FILE_FORMAT) {
+    throw new Error("This file is not a Dreamtides journey save.");
+  }
+  if (parsed.version !== JOURNEY_SAVE_FILE_VERSION) {
+    throw new Error(
+      `Journey save version ${String(parsed.version)} is not supported.`,
+    );
   }
 
   const name = typeof parsed.name === "string" ? parsed.name.trim() : "";

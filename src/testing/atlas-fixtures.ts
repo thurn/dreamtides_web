@@ -3,12 +3,7 @@ import type {
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
-import type {
-  AtlasData,
-  DreamAtlas,
-  DreamscapeNode,
-  SiteState,
-} from "../types/journey";
+import type { AtlasData, DreamscapeNode, SiteState } from "../types/journey";
 import { LayerName } from "../types/layer-name";
 import { SITE_TYPES } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
@@ -365,20 +360,5 @@ export function makeTestAtlasNode(
     backwardIds: [],
     knownDreamsignId: null,
     ...overrides,
-  };
-}
-
-/**
- * Builds a minimal single-node atlas around `node` for tests that only need the
- * journey state to reference a current dreamscape and its sites.
- */
-export function makeTestAtlas(node: DreamscapeNode): DreamAtlas<true> {
-  return {
-    layers: [[node.id]],
-    nodes: { [node.id]: node },
-    startingNodeId: node.id,
-    bossNodeId: node.id,
-    currentNodeId: node.id,
-    knownDreamsignCarrierIds: [],
   };
 }

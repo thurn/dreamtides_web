@@ -12,7 +12,7 @@ import {
   setJourneyLogCapture,
   setLogContext,
 } from "../logging";
-import { parseRoomId, type RoomId } from "../types/identifiers";
+import { parseGameId, type GameId } from "../types/identifiers";
 import {
   createGameLogCapture,
   gameLogsToEvict,
@@ -25,9 +25,9 @@ import {
   type KeyValueStore,
 } from "./key-value-store";
 
-const GAME_A = parseRoomId("gamea1");
-const GAME_B = parseRoomId("gameb2");
-const GAME_C = parseRoomId("gamec3");
+const GAME_A = parseGameId("gamea1");
+const GAME_B = parseGameId("gameb2");
+const GAME_C = parseGameId("gamec3");
 const UNCAPPED = 1_000_000;
 
 function record(index: number): Record<string, unknown> {
@@ -36,7 +36,7 @@ function record(index: number): Record<string, unknown> {
 
 function captureAt(
   repository: GameRepository,
-  gameId: RoomId,
+  gameId: GameId,
   maxStoredCharacters: number,
   clock: { now: number },
 ): GameLogCapture {
@@ -202,7 +202,7 @@ describe("game log capture", () => {
 });
 
 describe("gameLogsToEvict", () => {
-  const log = (gameId: RoomId, characters: number, updatedAt: number) => ({
+  const log = (gameId: GameId, characters: number, updatedAt: number) => ({
     gameId,
     characters,
     updatedAt,

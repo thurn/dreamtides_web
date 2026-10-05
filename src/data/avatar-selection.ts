@@ -29,7 +29,7 @@ export function selectAvatarOffer<T = AvatarContent>(
   return pool.slice(0, offerSize);
 }
 
-/** FNV-1a hash of a room seed into the numeric seed used by mulberry32. */
+/** FNV-1a hash of a game seed into the numeric seed used by mulberry32. */
 function hashSeed(seedMaterial: string): number {
   let hash = 2166136261;
   for (let index = 0; index < seedMaterial.length; index += 1) {
@@ -67,7 +67,7 @@ function offerRng(
 }
 
 /**
- * Derive the room's shared Avatar offer from its immutable genesis seed.
+ * Derive the game's shared Avatar offer from its immutable genesis seed.
  * Every client and every remount therefore presents the same choices.
  */
 export function selectAvatarOfferForSeed<T = AvatarContent>(
@@ -93,7 +93,7 @@ function selectAvatarOfferForScope<T>(
 
 /**
  * Derive the Avatar offer for a shared debug-reroll count. Count zero is
- * the room's original offer. Later counts use distinct deterministic salts and,
+ * the game's original offer. Later counts use distinct deterministic salts and,
  * when another Avatar exists, guarantee that at least one shown id changes
  * from the preceding offer.
  */

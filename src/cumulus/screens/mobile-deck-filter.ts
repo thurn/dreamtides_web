@@ -115,11 +115,6 @@ export const DECK_SORT_OPTIONS: readonly DeckControlOption<DeckSortId>[] = [
   { value: "subtype" },
 ] as const;
 
-/** The semantic selected sort value for an accessible name. */
-export function deckSortLabel(sort: DeckSortId): DeckSortId {
-  return sort;
-}
-
 /** The semantic selected type-filter value or authored subtype name. */
 export function deckTypeFilterLabel(
   filter: DeckTypeFilter,

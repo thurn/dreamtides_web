@@ -24,7 +24,7 @@ export interface QaSceneBuildOptions {
   explorationMaxDreamsigns?: number;
   /** Number of authentic foundation starter-card entries retained in the deck. */
   explorationStarterCount?: number;
-  /** Live room seed used by deterministic runtime offers in a QA snapshot. */
+  /** Live game seed used by deterministic runtime offers in a QA snapshot. */
   journeySeed?: JourneySeed;
 }
 
@@ -34,7 +34,7 @@ export interface QaSceneBuildOptions {
  * complete, valid {@link JourneyState} from live journey content (the same
  * generators the real journey uses, never hand-faked fixtures) and parks the run
  * directly on the target screen, so a screen like the Dream Atlas can be opened
- * for browser QA from an empty room.
+ * for browser QA from an empty game.
  *
  * Reached with `?goto=<id>` on the journey app (see `src/App.tsx`). To add a
  * scene, register a {@link QaScene} here; the URL handling and mutation are
@@ -49,7 +49,7 @@ export interface QaScene {
   description: string;
   /**
    * When true, this scene's destination is the Avatar-selection
-   * (`journeyStart`) screen the fresh room already opens on — i.e. its built
+   * (`journeyStart`) screen the fresh game already opens on — i.e. its built
    * state keeps `avatar: null`. App must not hold the "Opening QA scene…"
    * loading gate for such a scene: that gate waits for an Avatar to be
    * selected and would otherwise spin forever.
@@ -68,9 +68,9 @@ export interface QaScene {
 }
 
 /**
- * The Avatar selection screen a run opens on. This is the fresh-room
+ * The Avatar selection screen a run opens on. This is the fresh-game
  * `journeyStart` state ({@link createDefaultState}, `avatar: null`), which
- * the "Create Game" lobby button also lands on — parking a room directly on it
+ * the "Create Game" lobby button also lands on — parking a game directly on it
  * lets the choose-your-avatar UI be QA'd from a `?goto=` URL without
  * clicking through the lobby first.
  */

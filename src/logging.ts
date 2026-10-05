@@ -3,7 +3,6 @@ import type {
   BattleCardNoteExpiry,
   BattleCommandSourceSurface,
   BattleDeferredLogEvent,
-  BattleHistoryEntryMetadata,
   BattleMutableState,
   BattleSide,
 } from "./battle/types";
@@ -486,56 +485,6 @@ export function createBattleProtoMarkerSetLogEvent(
       markers: payload.markers,
     },
   };
-}
-
-export function logBattleCommandApplied(
-  metadata: BattleHistoryEntryMetadata,
-  state: BattleMutableState,
-): Readonly<LogEntry> {
-  return logEvent("battle_proto_command_applied", {
-    ...createBattleLogBaseFields(state, {
-      sourceSurface: metadata.sourceSurface,
-      selectedCardId: selectSelectedCardIdFromMetadata(metadata),
-    }),
-    commandId: metadata.commandId,
-    forcedResult: state.forcedResult,
-    isComposite: metadata.isComposite,
-    kind: metadata.kind,
-    label: metadata.label,
-    result: state.result,
-  });
-}
-
-function selectSelectedCardIdFromMetadata(
-  metadata: BattleHistoryEntryMetadata,
-): BattleCardId | null {
-  const cardTarget = metadata.targets.find((target) => target.kind === "card");
-  return cardTarget?.ref ?? null;
-}
-
-export function logBattleHistoryEvent(
-  event: "battle_proto_history_undo" | "battle_proto_history_redo",
-  metadata: BattleHistoryEntryMetadata,
-  state: BattleMutableState,
-  historyCounts: {
-    futureCount: number;
-    historyCount: number;
-  },
-): Readonly<LogEntry> {
-  return logEvent(event, {
-    ...createBattleLogBaseFields(state, {
-      sourceSurface: metadata.sourceSurface,
-      selectedCardId: selectSelectedCardIdFromMetadata(metadata),
-    }),
-    commandId: metadata.commandId,
-    forcedResult: state.forcedResult,
-    futureCount: historyCounts.futureCount,
-    historyCount: historyCounts.historyCount,
-    isComposite: metadata.isComposite,
-    kind: metadata.kind,
-    label: metadata.label,
-    result: state.result,
-  });
 }
 
 /** Returns a deep-copied snapshot of all accumulated log entries. */

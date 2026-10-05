@@ -38,7 +38,6 @@ import { DebugScreen } from "./screens/DebugScreen";
 import JourneyDebugEditor from "./screens/JourneyDebugEditor";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { getSavedJourney } from "./state/saved-journeys";
 import { logEvent } from "./logging";
 import {
   contentConfigFromRuntime,
@@ -88,15 +87,6 @@ export function JourneyApp({
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
   const openPoolViewerFiredRef = useRef(false);
-  const loadJourneyFiredRef = useRef(false);
-  const loadJourneyName = runtimeConfig.loadJourneyName ?? null;
-  // `?loadJourney=<name>` boot flow: 'pending' holds a loading screen until the
-  // saved snapshot has been fetched and dispatched; 'error' surfaces a failure;
-  // 'done' (or no load requested) lets the game render normally.
-  const [loadJourneyStatus, setLoadJourneyStatus] = useState<
-    "idle" | "pending" | "done" | "error"
-  >(loadJourneyName === null ? "idle" : "pending");
-  const [, setLoadJourneyError] = useState<string | null>(null);
 
   // `?goto=<scene>`: replace the freshly created game's empty journey state with
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
@@ -164,52 +154,6 @@ export function JourneyApp({
     setPoolViewerOpen(true);
   }, [runtimeConfig.gotoScene, state.avatar]);
 
-  // `?loadJourney=<name>`: fetch the named snapshot from the dev server and
-  // replace the game's journey state with it, then render the loaded run. Once
-  // the snapshot is applied, the `loadJourney` param is stripped from the URL so
-  // a later reload — including a Vite HMR full reload triggered by editing a
-  // file — keeps the in-session run instead of re-applying the snapshot and
-  // discarding progress.
-  useEffect(() => {
-    const journeyName = loadJourneyName;
-    if (journeyName === null || loadJourneyFiredRef.current) {
-      return;
-    }
-    if (mutations.loadJourneyState === undefined) {
-      setLoadJourneyError(
-        "Loading a saved journey is unavailable in this context.",
-      );
-      setLoadJourneyStatus("error");
-      return;
-    }
-
-    loadJourneyFiredRef.current = true;
-    const loadJourneyState = mutations.loadJourneyState;
-    void getSavedJourney(journeyName)
-      .then((loaded) => {
-        if (loaded === null) {
-          setLoadJourneyError(`No saved journey named "${journeyName}".`);
-          setLoadJourneyStatus("error");
-          return;
-        }
-        logEvent("debug_journey_loaded", {
-          source: "load_journey_url",
-          name: journeyName,
-          screen: loaded.screen?.type ?? "unknown",
-        });
-        loadJourneyState(loaded, "load_journey_url");
-        stripLoadJourneyParam();
-        setLoadJourneyStatus("done");
-      })
-      .catch((error: unknown) => {
-        setLoadJourneyError(
-          error instanceof Error
-            ? error.message
-            : "Failed to load the saved journey.",
-        );
-        setLoadJourneyStatus("error");
-      });
-  }, [loadJourneyName, mutations]);
 
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
@@ -329,35 +273,6 @@ export function JourneyApp({
     );
   }
 
-  // Hold a loading screen while the `?loadJourney=` snapshot is being fetched and
-  // applied, so the player lands directly on the loaded run rather than the
-  // Avatar selection screen.
-  if (loadJourneyStatus === "pending") {
-    return (
-      <ApplicationStateScreen
-        view={{
-          kind: "loading",
-          title: "Loading Saved Journey",
-          message: `Loading ${loadJourneyName ?? "saved journey"}.`,
-          busyLabel: "Loading Saved Journey",
-        }}
-      />
-    );
-  }
-
-  if (loadJourneyStatus === "error") {
-    return (
-      <ApplicationStateScreen
-        view={{
-          kind: "recoverableError",
-          title: "Could Not Load Saved Journey",
-          message: "The saved journey could not be opened.",
-          detail: "Try again, or choose another saved journey.",
-        }}
-      />
-    );
-  }
-
   return (
     <div>
       {/*
@@ -468,24 +383,6 @@ export function JourneyApp({
       </ErrorBoundary>
     </div>
   );
-}
-
-/**
- * Remove the `loadJourney` query param from the current URL without reloading the
- * page. Called once the named snapshot has been applied so a later reload — for
- * example a Vite HMR full reload after editing a file — keeps the in-session run
- * rather than re-fetching the snapshot and discarding progress.
- */
-function stripLoadJourneyParam(): void {
-  if (typeof window === "undefined") {
-    return;
-  }
-  const url = new URL(window.location.href);
-  if (!url.searchParams.has("loadJourney")) {
-    return;
-  }
-  url.searchParams.delete("loadJourney");
-  window.history.replaceState(window.history.state, "", url.toString());
 }
 
 export default function App({

@@ -35,8 +35,8 @@ import type { EventType } from "../eventlog/types";
 //
 // At the engine boundary a `GameEvent.payload` is `Record<string, unknown>`
 // (see src/eventlog/types.ts): the log stores untyped JSON. This module is the
-// rules layer's *typed* view — one payload interface per event type, unified
-// into the `TypedGameEvent` discriminated union — plus the classification sets
+// rules layer's *typed* view — one payload interface per event type, collected in
+// `EventPayloads` — plus the classification sets
 // (CAS-exempt, decision-neutral) the root CAS policy consults.
 //
 // Payloads use UUIDs, selections, and indices — never card names (AGENTS.md).
@@ -284,14 +284,6 @@ export interface EventPayloads {
 
 /** Every event `type` string the rules layer recognizes. */
 export type GameEventType = keyof EventPayloads;
-
-/**
- * The typed, discriminated view of an event: `type` narrows `payload`. This is
- * the reducer-internal counterpart to the engine's untyped `GameEvent`.
- */
-export type TypedGameEvent<T extends GameEventType = GameEventType> = {
-  [K in T]: { readonly type: K; readonly payload: EventPayloads[K] };
-}[T];
 
 // ---------------------------------------------------------------------------
 // Classification sets consulted by the root CAS policy.

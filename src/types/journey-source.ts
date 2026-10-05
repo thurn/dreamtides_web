@@ -14,7 +14,6 @@ export const KNOWN_JOURNEY_MUTATION_SOURCES = [
   "reward_site",
   "transfiguration_skipped",
   "gamble",
-  "load_journey_url",
   "debug_load_journey",
   "debug_force_legendary_offer",
   "debug_save_journey",

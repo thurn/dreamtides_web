@@ -380,8 +380,6 @@ export type TutorialAction =
   | DrawDreamwellCardTutorialAction
   | EndTurnTutorialAction;
 
-/** Local filesystem persistence state shown by the Tutorial Editor. */
-
 /** Optional cursor and transport metadata for a shared tutorial playback. */
 export interface BeginTutorialOptions {
   /** Stable authored action id that should animate first. */

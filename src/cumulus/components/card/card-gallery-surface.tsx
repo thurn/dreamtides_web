@@ -40,7 +40,6 @@ import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import {
   CardChoiceGrid,
   type CardChoiceGridActionView,
-  type CardChoiceGridCaption,
   type CardChoiceGridCardView,
   type CardChoiceGridColumns,
 } from "./CardChoiceGrid";
@@ -49,9 +48,6 @@ import type { DeckEntryId } from "../../../types/identifiers";
 /** One resolved card in a {@link CardBrowserPanel} or {@link CardPickerPanel}. */
 export type CardGalleryCardView<EntryId extends string = DeckEntryId> =
   CardChoiceGridCardView<EntryId>;
-
-/** The small white line shown beneath a gallery item. */
-export type CardGalleryCaption = CardChoiceGridCaption;
 
 /** A card-sized action appended to the gallery grid. */
 export type CardGalleryActionView<EntryId extends string = DeckEntryId> =

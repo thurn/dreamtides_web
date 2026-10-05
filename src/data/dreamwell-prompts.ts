@@ -33,17 +33,6 @@ export interface LegacyPromptText {
   readonly text: string;
 }
 
-/** Stable semantic identity for application-owned battle prompt copy. */
-export const BUILT_IN_BATTLE_PROMPT_KINDS = [
-  "discover-character",
-  "confirm-yes",
-  "confirm-skip",
-  "generic",
-  "generic-subtitle",
-  "generic-option",
-  "switch-side",
-] as const;
-
 export type BuiltInBattlePromptRef =
   | {
       readonly kind: "built-in-battle-prompt";
@@ -141,43 +130,6 @@ export function isBuiltInBattlePromptRef(
       candidate.prompt === "generic-subtitle" ||
       candidate.prompt === "generic-option")
   );
-}
-
-/** Normalize the exact built-in descriptor shapes persisted by v24 imports. */
-export function builtInBattlePromptRefFromV24Descriptor(
-  value: unknown,
-): BuiltInBattlePromptRef | null {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    return null;
-  }
-  const descriptor = value as Record<string, unknown>;
-  const withoutVariables: Readonly<
-    Record<string, Exclude<BuiltInBattlePromptRef["prompt"], "switch-side">>
-  > = {
-    "battle-prompt-discover-character": "discover-character",
-    "battle-prompt-confirm-yes": "confirm-yes",
-    "battle-prompt-confirm-skip": "confirm-skip",
-    "battle-prompt-generic": "generic",
-    "battle-prompt-generic-subtitle": "generic-subtitle",
-    "battle-prompt-generic-option": "generic-option",
-  };
-  if (
-    typeof descriptor.id === "string" &&
-    Object.prototype.hasOwnProperty.call(withoutVariables, descriptor.id) &&
-    isExactRecord(value, ["id"])
-  ) {
-    return builtInBattlePromptRef(withoutVariables[descriptor.id]);
-  }
-  if (
-    descriptor.id === "battle-prompt-switch-side" &&
-    isExactRecord(value, ["id", "variables"]) &&
-    isExactRecord(descriptor.variables, ["side"]) &&
-    (descriptor.variables.side === "player" ||
-      descriptor.variables.side === "enemy")
-  ) {
-    return builtInBattlePromptRef("switch-side", descriptor.variables.side);
-  }
-  return null;
 }
 
 export function dreamwellPromptRef(

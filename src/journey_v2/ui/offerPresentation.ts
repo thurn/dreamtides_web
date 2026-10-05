@@ -195,26 +195,3 @@ export function resolveOfferPresentation(offer: AuguryOffer): OfferPresentation 
     }
   }
 }
-
-/** Whether the player must select a candidate before the accept button works. */
-export function presentationRequiresSelection(
-  presentation: OfferPresentation,
-): boolean {
-  return (
-    presentation.kind === "cardGrid" ||
-    presentation.kind === "duplicateChoose"
-  );
-}
-
-/** The candidate set a chooser presentation offers, or empty for pre-targeted. */
-export function presentationCandidates(
-  presentation: OfferPresentation,
-): readonly AuguryChoiceCandidate[] {
-  switch (presentation.kind) {
-    case "cardGrid":
-    case "duplicateChoose":
-      return presentation.candidates;
-    default:
-      return [];
-  }
-}

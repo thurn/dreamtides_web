@@ -58,16 +58,3 @@ export const CARD_CORNER_RADIUS = `${CARD_CORNER_RADIUS_PCT}% / ${(
 
 /** Uniform corner radius for the square in-play battlefield face. */
 export const BATTLEFIELD_CARD_CORNER_RADIUS = `${CARD_CORNER_RADIUS_PCT}%`;
-
-/**
- * Width of a single card in the journey draft offer: the smaller of half the
- * container width (two cards across) and the width that keeps two rows tall
- * within the available viewport height. Each row is `width * H / W` tall, so
- * two rows fit when `width = available-height * W / (2 * H)`. The card
- * editor's "large" preset tiles cards at this same width so editor previews
- * match the size players see while drafting. Both surfaces resolve `100cqw`
- * against an `inline-size` container, so the value tracks the surface width.
- */
-export const DRAFT_OFFER_CARD_WIDTH = `min(calc((100cqw - 16px) / 2), calc((100vh - 48px - 80px) * ${CARD_ASPECT_W} / ${
-  2 * CARD_ASPECT_H
-}))`;

@@ -8,7 +8,6 @@ import type { JourneyMutationSource } from "../state/journey-context";
 import {GLYPHS } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
-import { MENU_BUTTON_PX } from "../cumulus/primitives/chrome-geometry";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { CommandMenu } from "../cumulus/components/overlay/CommandMenu";
 import { GlassDialog } from "../cumulus/components/overlay/GlassDialog";
@@ -56,16 +55,6 @@ interface DreamscapeJourneyMenuProps {
 }
 
 /**
- * The trigger disc's diameter. Both platforms wear the same compact circular
- * glass IconButton (`md`, a 48px disc that clears the 44px touch floor); only
- * the corner and glyph differ. Exported so the corner layout can reserve the
- * disc's footprint. The value flows from the shared chrome geometry
- * (`chrome-geometry.ts`), the source of truth both this menu and screens that
- * must clear it read; re-exported here for footprint-reserving consumers.
- */
-export const menuBtnSize = MENU_BUTTON_PX;
-
-/**
  * The dreamscape's top-left utility menu. Renders the screen-appropriate trigger
  * and, while open, the dropdown of journey actions (with a Load-Journey submenu).
  */
@@ -84,21 +73,7 @@ export function DreamscapeJourneyMenu({
   elevated = false,
 }: DreamscapeJourneyMenuProps) {
   const isDesktop = useIsDesktop();
-  const actions: JourneyUtilityMenuAction[] = [
-    {
-      id: "deck",
-      kind: "action",
-      glyph: GLYPHS.affiliationRow,
-      label: "View Deck",
-      onCommand: onOpenDeckViewer,
-    },
-    {
-      id: "pool",
-      kind: "action",
-      glyph: GLYPHS.grid,
-      label: "Pool Viewer",
-      onCommand: onOpenPoolViewer,
-    },
+  const developerActions: JourneyUtilityMenuAction[] = [
     ...(hasDraftData
       ? [
           {
@@ -141,6 +116,24 @@ export function DreamscapeJourneyMenu({
           },
         ]
       : []),
+  ];
+  const actions: JourneyUtilityMenuAction[] = [
+    {
+      id: "deck",
+      kind: "action",
+      glyph: GLYPHS.affiliationRow,
+      label: "View Deck",
+      onCommand: onOpenDeckViewer,
+    },
+    {
+      id: "pool",
+      kind: "action",
+      glyph: GLYPHS.grid,
+      label: "Pool Viewer",
+      onCommand: onOpenPoolViewer,
+    },
+    // Developer surfaces exist only in development builds (P7).
+    ...(import.meta.env.DEV ? developerActions : []),
   ];
 
   const model = useJourneyUtilityMenuController({

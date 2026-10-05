@@ -28,8 +28,6 @@ import type { SiteType } from "../../../types/journey";
 /** Named OfferTile edge lengths, in pixels. */
 export const OFFER_TILE_STANDARD_SIZE = 300;
 export const OFFER_TILE_COMPACT_SIZE = 240;
-/** Backward-compatible standard OfferTile edge length. */
-export const OFFER_TILE_SIZE = OFFER_TILE_STANDARD_SIZE;
 export type OfferTileSize = "standard" | "compact";
 export const OFFER_TILE_DIMENSIONS: Readonly<Record<OfferTileSize, number>> = {
   standard: OFFER_TILE_STANDARD_SIZE,

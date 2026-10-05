@@ -247,7 +247,7 @@ describe("card tutorial guidance selection", () => {
     expect(match?.trigger.id).toBe(testTutorialTriggerId("foresee"));
   });
 
-  it("skips room-seen triggers before considering the next visible card", () => {
+  it("skips already-seen triggers before considering the next visible card", () => {
     const match = selectCardTutorialGuidance(
       provider(),
       [testCardId("card-a"), testCardId("card-b")],

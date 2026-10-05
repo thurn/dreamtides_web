@@ -1,6 +1,6 @@
 // Adapter bridging live journey state to the pure Cumulus Avatar-select screen
 // (`src/cumulus/screens/JourneyStartScreen`). Adapters are wiring only: this one
-// owns `useJourney()`, derives the shared offer from the room seed, and wires the
+// owns `useJourney()`, derives the shared offer from the game seed, and wires the
 // pick→`startJourney` callback. All mapping
 // from domain data to the screen's view types lives in the pure builder
 // (`journey-start-view-model.ts`); the Cumulus screen itself stays pure and
@@ -18,7 +18,7 @@ import { JourneyStartScreen } from "../../cumulus/screens/JourneyStartScreen";
 import type { AvatarId } from "../../types/identifiers";
 
 /**
- * Live Avatar-select screen: derives the offer and preview from the room's
+ * Live Avatar-select screen: derives the offer and preview from the game's
  * immutable seed, then hands the chosen Avatar to `startJourney`.
  */
 export function JourneyStartScreenAdapter() {

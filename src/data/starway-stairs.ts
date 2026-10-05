@@ -32,13 +32,6 @@ export function starwayStairsEssenceReward(
   return reward.essence;
 }
 
-/** Format the inclusive low-rank bust range shown on a Starway tier. */
-export function starwayStairsBustRangeLabel(
-  tier: StarwayStairsTierRule,
-): string {
-  return tier.highestBustRank === "2" ? "2" : `2-${tier.highestBustRank}`;
-}
-
 /** Lowest rank in the inclusive safe-draw range through Ace. */
 export function starwayStairsMinimumSafeRank(
   tier: StarwayStairsTierRule,

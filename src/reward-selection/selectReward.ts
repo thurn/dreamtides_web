@@ -23,7 +23,7 @@ import {
   isRewardMechanicId,
   isRewardSelectionPolicyId,
   mechanicSupportsPolicy,
-} from "../../scripts/reward-selection-contracts.mjs";
+} from "./contracts";
 import {
   SELECTION_RULES_VERSION,
   type RewardCandidateKeyKind,

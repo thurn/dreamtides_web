@@ -1,11 +1,27 @@
-const TUTORIAL_CARD_CONSTANT_ROLES = new Set([
+// Cross-field invariants of the tutorial battle configuration that its types
+// cannot express: handoff placements, Dreamwell prefix bounds, and starter-deck
+// copy counts across the authored draws.
+
+import type { CardId } from "../types/card-identity";
+import type {
+  TutorialAction,
+  TutorialBattleConfiguration,
+  TutorialCardConstantRole,
+  TutorialCardConstants,
+} from "../types/tutorial";
+
+type TutorialValidationErrorFactory = (message: string) => Error;
+type TutorialSide = "player" | "enemy";
+type BattlePhase = TutorialBattleConfiguration["handoff"]["phase"];
+
+const TUTORIAL_CARD_CONSTANT_ROLES: ReadonlySet<unknown> = new Set<TutorialCardConstantRole>([
   "tutorialPlayerCharacter",
   "tutorialOpponentCharacter",
   "handoffEnemyCharacter",
   "loadingScreenEvent",
 ]);
 
-const BATTLE_PHASES = new Set([
+const BATTLE_PHASES: ReadonlySet<unknown> = new Set<BattlePhase>([
   "dreamwell",
   "draw",
   "dawn",
@@ -16,28 +32,38 @@ const BATTLE_PHASES = new Set([
   "ending",
 ]);
 
-function defaultError(message) {
+const TUTORIAL_SIDES: readonly TutorialSide[] = ["player", "enemy"];
+
+function defaultError(message: string): Error {
   return new Error(message);
 }
 
-export function isTutorialCardConstantRole(value) {
+export function isTutorialCardConstantRole(
+  value: unknown,
+): value is TutorialCardConstantRole {
   return TUTORIAL_CARD_CONSTANT_ROLES.has(value);
 }
 
-export function isTutorialBattlePhase(value) {
+export function isTutorialBattlePhase(value: unknown): value is BattlePhase {
   return BATTLE_PHASES.has(value);
 }
 
-export function isTutorialHandoffSlotLegal(side, zone, slotId) {
+export function isTutorialHandoffSlotLegal(
+  side: TutorialSide,
+  zone: "frontRank" | "backRank",
+  slotId: unknown,
+): boolean {
   if (typeof slotId !== "string") return false;
   if (zone === "frontRank") return /^F[0-8]$/u.test(slotId);
-  if (zone !== "backRank") return false;
   return side === "player"
     ? /^B[0-4]$/u.test(slotId)
     : /^B[0-9]$/u.test(slotId);
 }
 
-export function tutorialCardConstantId(tutorialCardConstants, role) {
+export function tutorialCardConstantId(
+  tutorialCardConstants: TutorialCardConstants,
+  role: TutorialCardConstantRole,
+): CardId {
   switch (role) {
     case "tutorialPlayerCharacter":
       return tutorialCardConstants.tutorialPlayerCharacterCardId;
@@ -47,15 +73,13 @@ export function tutorialCardConstantId(tutorialCardConstants, role) {
       return tutorialCardConstants.handoffEnemyCharacterCardId;
     case "loadingScreenEvent":
       return tutorialCardConstants.loadingScreenEventCardId;
-    default:
-      throw new Error(`Unknown tutorial card-constant role: ${String(role)}`);
   }
 }
 
 export function assertTutorialBattleConfigurationContracts(
-  battle,
-  makeError = defaultError,
-) {
+  battle: TutorialBattleConfiguration,
+  makeError: TutorialValidationErrorFactory = defaultError,
+): void {
   if (
     battle.tutorialCardConstants.loadingScreenCharacterCardId ===
     battle.tutorialCardConstants.handoffEnemyCharacterCardId
@@ -91,7 +115,7 @@ export function assertTutorialBattleConfigurationContracts(
       "Tutorial battle handoff dreamwellDeckIndex must fit the configured Dreamwell prefix.",
     );
   }
-  for (const side of ["player", "enemy"]) {
+  for (const side of TUTORIAL_SIDES) {
     const state = battle.handoff[side];
     if (state.dreamwellCardIndex >= battle.handoff.dreamwellDeckIndex) {
       throw makeError(
@@ -111,7 +135,12 @@ export function assertTutorialBattleConfigurationContracts(
   }
 }
 
-function consumeDeckCard(counts, cardId, context, makeError) {
+function consumeDeckCard(
+  counts: Map<CardId, number>,
+  cardId: CardId,
+  context: string,
+  makeError: TutorialValidationErrorFactory,
+): void {
   const remaining = counts.get(cardId) ?? 0;
   if (remaining <= 0) {
     throw makeError(
@@ -122,11 +151,11 @@ function consumeDeckCard(counts, cardId, context, makeError) {
 }
 
 export function assertTutorialDeckSufficiency(
-  battle,
-  actions,
-  makeError = defaultError,
-) {
-  const decks = {
+  battle: TutorialBattleConfiguration,
+  actions: readonly TutorialAction[],
+  makeError: TutorialValidationErrorFactory = defaultError,
+): void {
+  const decks: Record<TutorialSide, Map<CardId, number>> = {
     player: new Map(
       battle.starterDeck.map((entry) => [entry.cardId, entry.copies]),
     ),
@@ -144,7 +173,7 @@ export function assertTutorialDeckSufficiency(
     );
   }
 
-  const hands = { player: [], enemy: [] };
+  const hands: Record<TutorialSide, CardId[]> = { player: [], enemy: [] };
   for (const action of actions) {
     if (action.action === "draw-opponent-card") {
       hands.enemy.push(action.cardId);
@@ -160,7 +189,7 @@ export function assertTutorialDeckSufficiency(
       hands.enemy.splice(index, 1);
     }
   }
-  for (const side of ["player", "enemy"]) {
+  for (const side of TUTORIAL_SIDES) {
     for (const cardId of hands[side]) {
       if ((decks[side].get(cardId) ?? 0) > 0) {
         consumeDeckCard(

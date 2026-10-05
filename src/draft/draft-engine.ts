@@ -563,19 +563,3 @@ export function processPlayerPickWithoutLogging(
     postPickDeckCardNumbers,
   );
 }
-
-/** Finalize a draft site visit. Log the cards drafted during this visit. */
-export function completeDraftSite(
-  state: DraftState,
-  draftedCardNumbers: number[],
-): void {
-  logEvent("draft_site_completed", {
-    siteId: state.activeSiteId,
-    cardsDrafted: [...draftedCardNumbers],
-    picksCompleted: state.sitePicksCompleted,
-    poolRemaining: countRemainingCards(state.remainingCopiesByCard),
-    uniqueCardsRemaining: countRemainingUniqueCards(
-      state.remainingCopiesByCard,
-    ),
-  });
-}

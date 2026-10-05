@@ -17,7 +17,6 @@ import { useIsDesktop, type JourneyStartScreenProps } from "./journey-start-shar
 
 export type {
   AvatarOfferView,
-  AvatarSignatureCardView,
   AvatarTideView,
   JourneyStartGuideDialogueView,
   JourneyStartScreenProps,

@@ -26,7 +26,7 @@ import {
   isTutorialCardConstantRole,
   isTutorialHandoffSlotLegal,
   tutorialCardConstantId as resolveTutorialCardConstantId,
-} from "../../scripts/tutorial-battle-contracts.mjs";
+} from "./tutorial-battle-contracts";
 import {
   parseAvatarId,
   parseTutorialActionId,

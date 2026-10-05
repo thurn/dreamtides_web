@@ -1,4 +1,5 @@
-export const EXPLORATION_EFFECT_KINDS: readonly [
+/** The closed set of Exploration effect mechanics that content may author. */
+export const EXPLORATION_EFFECT_KINDS = [
   "purge-and-copy",
   "purge-one-transfigure-and-copy-others",
   "gain-dreamsign",
@@ -64,4 +65,4 @@ export const EXPLORATION_EFFECT_KINDS: readonly [
   "add-site",
   "free-next-shop",
   "lose-half-essence-and-free-purchases",
-];
+] as const;

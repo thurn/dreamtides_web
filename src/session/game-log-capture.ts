@@ -7,7 +7,7 @@
 // capturing game's own.
 
 import { journeyLogLine, logEvent, type JourneyLogRecord } from "../logging";
-import type { RoomId } from "../types/identifiers";
+import type { GameId } from "../types/identifiers";
 import type { GameLogSummary, GameRepository } from "./game-repository";
 
 export interface GameLogCaptureOptions {
@@ -18,7 +18,7 @@ export interface GameLogCaptureOptions {
 }
 
 export interface GameLogCapture {
-  readonly gameId: RoomId;
+  readonly gameId: GameId;
   /** Queue one journey-log record for storage. Synchronous. */
   capture: (record: JourneyLogRecord) => void;
   /** Resolves once every record captured so far has been written (or failed). */
@@ -28,11 +28,11 @@ export interface GameLogCapture {
 /** The games whose logs to delete so the rest fit `maxStoredCharacters`. */
 export function gameLogsToEvict(
   logs: readonly GameLogSummary[],
-  keep: RoomId,
+  keep: GameId,
   maxStoredCharacters: number,
-): RoomId[] {
+): GameId[] {
   let total = logs.reduce((sum, log) => sum + log.characters, 0);
-  const evicted: RoomId[] = [];
+  const evicted: GameId[] = [];
   const oldestFirst = [...logs].sort(
     (left, right) => left.updatedAt - right.updatedAt,
   );
@@ -48,7 +48,7 @@ export function gameLogsToEvict(
 /** Captures `gameId`'s journey log into `repository`. */
 export function createGameLogCapture(
   repository: GameRepository,
-  gameId: RoomId,
+  gameId: GameId,
   options: GameLogCaptureOptions,
 ): GameLogCapture {
   const now = options.now ?? Date.now;

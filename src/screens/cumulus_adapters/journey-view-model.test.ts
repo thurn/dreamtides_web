@@ -104,7 +104,7 @@ describe("journey-start-view-model", () => {
       const tutorialAvatarId = testAvatarId("avatar-c");
       const offer = resolveAvatarOffer(
         avatars,
-        testJourneySeed("room-seed"),
+        testJourneySeed("game-seed"),
         12,
         tutorialAvatarId,
       );
@@ -121,7 +121,7 @@ describe("journey-start-view-model", () => {
 
       const offer = resolveAvatarOffer(
         avatars,
-        testJourneySeed("room-seed"),
+        testJourneySeed("game-seed"),
         0,
       );
 
@@ -221,7 +221,7 @@ describe("journey-start-view-model", () => {
           }),
         ],
         undefined,
-        testJourneySeed("room-seed"),
+        testJourneySeed("game-seed"),
         pool,
         testAvatarId("dc-1"),
       );
@@ -564,7 +564,7 @@ describe("main-menu-view-model", () => {
   };
 
   describe("buildMainMenuView", () => {
-    it("keeps every rendered control unique and New Journey reachable through the room fold", () => {
+    it("keeps every rendered control unique and New Journey reachable through the game fold", () => {
       const view = buildMainMenuView();
       const controls = [
         ...view.actions.map(({ id }) => ({ id, surface: "action" })),

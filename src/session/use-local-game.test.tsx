@@ -12,7 +12,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { parseFoldHash } from "../types/content-hash";
-import { parseClientId, parseRoomId, type RoomId } from "../types/identifiers";
+import { parseClientId, parseGameId, type GameId } from "../types/identifiers";
 import { createGameRepository, type GameRepository } from "./game-repository";
 import { createFreshGenesis } from "./genesis";
 import type { GameLockManager } from "./game-lock";
@@ -61,7 +61,7 @@ const settle = () =>
 /** Mounts one "tab" selecting `gameId`; unmounting it closes the tab. */
 async function openTab(
   repository: GameRepository,
-  gameId: RoomId | null,
+  gameId: GameId | null,
   contentConfig: PinnedContentConfig = CONTENT,
   locks?: GameLockManager,
   resumeRecent = false,
@@ -99,7 +99,7 @@ async function openTab(
 
 async function selectGame(
   repository: GameRepository,
-  gameId: RoomId | null,
+  gameId: GameId | null,
   contentConfig: PinnedContentConfig = CONTENT,
   resumeRecent = false,
 ): Promise<LocalGameStatus> {
@@ -126,10 +126,10 @@ afterEach(() => {
 /** Store a game last written at `updatedAt`, pinned to `contentConfig`. */
 async function storeGame(
   repository: GameRepository,
-  gameId: RoomId,
+  gameId: GameId,
   updatedAt: number,
   contentConfig: PinnedContentConfig = CONTENT,
-): Promise<RoomId> {
+): Promise<GameId> {
   await repository.createGame(
     {
       gameId,
@@ -148,7 +148,7 @@ const urlGameId = (): string | null =>
 
 const selections = async (
   repository: GameRepository,
-  gameId: RoomId,
+  gameId: GameId,
 ): Promise<unknown[]> =>
   (await repository.readLogLines(gameId))
     .map((line) => JSON.parse(line) as { event: string; selection?: string })
@@ -174,8 +174,8 @@ describe("useLocalGame", () => {
 
   it("resumes the most recent game at the front door instead of creating one", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
-    const older = await storeGame(repository, parseRoomId("older1"), 1_000);
-    const recent = await storeGame(repository, parseRoomId("recent1"), 2_000);
+    const older = await storeGame(repository, parseGameId("older1"), 1_000);
+    const recent = await storeGame(repository, parseGameId("recent1"), 2_000);
     const entries = window.history.length;
 
     const resumed = await selectGame(repository, null, CONTENT, true);
@@ -206,7 +206,7 @@ describe("useLocalGame", () => {
     };
     const pinned = await storeGame(
       repository,
-      parseRoomId("pinned1"),
+      parseGameId("pinned1"),
       2_000,
       otherContent,
     );
@@ -243,7 +243,7 @@ describe("useLocalGame", () => {
       games[0].localPlayerId,
     );
     const logged = (await repository.readLogLines(gameId)).map(
-      (line) => JSON.parse(line) as { event: string; gameId?: RoomId },
+      (line) => JSON.parse(line) as { event: string; gameId?: GameId },
     );
     expect(
       logged.filter((entry) => entry.event === "local_game_opened"),
@@ -273,7 +273,7 @@ describe("useLocalGame", () => {
   it("starts a new game from the open game's controls and keeps the old one resumable", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     const locks = createFakeLockManager();
-    const previous = await storeGame(repository, parseRoomId("previous1"), 1_000);
+    const previous = await storeGame(repository, parseGameId("previous1"), 1_000);
     window.history.replaceState(null, "", `/?game=${previous}`);
     const entries = window.history.length;
 
@@ -316,7 +316,7 @@ describe("useLocalGame", () => {
 
   it("gates unknown games and games pinned to other content", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
-    expect(await selectGame(repository, parseRoomId("nosuch"))).toEqual({
+    expect(await selectGame(repository, parseGameId("nosuch"))).toEqual({
       kind: "notFound",
       gameId: "nosuch",
     });

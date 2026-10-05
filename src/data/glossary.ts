@@ -1,4 +1,4 @@
-import { validateGlossaryEntries } from "../../scripts/glossary-source.mjs";
+import { validateGlossaryEntries } from "./glossary-source";
 import { GLOSSARY as GLOSSARY_ENTRIES } from "../content/glossary";
 import {
   parseGlossaryEntryId,
@@ -230,11 +230,6 @@ export function lookupGlossaryTerm(
     return GLOSSARY_INDEX[key.slice(TRIGGER_ARROW.length)];
   }
   return undefined;
-}
-
-/** Returns whether a lowercase word is recognized by the rules glossary. */
-export function hasGlossaryTerm(word: string): boolean {
-  return GLOSSARY_INDEX[word.toLocaleLowerCase()] !== undefined;
 }
 
 /**

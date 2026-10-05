@@ -6,7 +6,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
-import { createSavedJourneysApiMiddleware } from "./scripts/saved-journeys-api.mjs";
 import {
   parseBuildGitSha,
   type BuildGitRevision,
@@ -59,19 +58,6 @@ function journeyLogPlugin(): Plugin {
   };
 }
 
-/** Vite plugin that serves the saved-journey read/write endpoints. */
-function savedJourneysApiPlugin(): Plugin {
-  return {
-    name: "saved-journeys-api",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use(
-        createSavedJourneysApiMiddleware({ rootDir: __dirname }),
-      );
-    },
-  };
-}
-
 export default defineConfig({
   define: {
     "import.meta.env.VITE_BUILD_GIT_SHA": JSON.stringify(buildGitSha),
@@ -80,7 +66,6 @@ export default defineConfig({
     react(),
     tailwindcss(),
     journeyLogPlugin(),
-    savedJourneysApiPlugin(),
   ],
   server: {
     watch: {
@@ -90,9 +75,6 @@ export default defineConfig({
       // full reload on any tsconfig change. Ignoring these directories keeps
       // creating a worktree from reloading the dev server.
       ignored: [
-        // Saving a journey writes a JSON file here; ignore it so the save does
-        // not trigger a full page reload that would close the debug overlay.
-        path.resolve(path.join(__dirname, "saved-journeys")) + "/**",
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
       ],

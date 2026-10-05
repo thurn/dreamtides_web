@@ -13,7 +13,7 @@ import type {
   REWARD_CARD_PREDICATES,
   REWARD_MECHANIC_IDS,
   REWARD_SELECTION_POLICY_IDS,
-} from "../../scripts/reward-selection-contracts.mjs";
+} from "./contracts";
 import type { DeckEntryId } from "../types/identifiers";
 import type { DreamsignId } from "../types/identifiers";
 import type { AvatarId } from "../types/identifiers";

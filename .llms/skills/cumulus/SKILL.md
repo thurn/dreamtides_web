@@ -33,8 +33,7 @@ component seems to need customizing, stop at the first rung that fits:
 Never widen a prop into an open value: no numeric `size`/`gap`/`padding`,
 per-instance `color`, `className`, `style`, or `CSSProperties` props, and no
 one-screen decorative toggles. Components decide state-dependent looks from
-their semantic model. ESLint (`no-escape-hatch-props`) and API contract tests
-enforce this; never disable them. A local copy of a component's material,
+their semantic model. A local copy of a component's material,
 type scale, or geometry is a fork and does not ship.
 
 ## Values and models
@@ -78,7 +77,7 @@ type scale, or geometry is a fork and does not ship.
   their `onGlass` placement.
 - Text on glass uses `--text-on-glass` or `--text-on-glass-muted`; authored
   `[purple]` tutorial emphasis uses `--text-tutorial-highlight`. Accent and
-  resource tokens are not glass text colors (`no-purple-text-on-glass`).
+  resource tokens are not glass text colors.
 - Surfaces that do not float over art use a solid material, not glass.
 
 ## Rendering rules
@@ -101,9 +100,8 @@ type scale, or geometry is a fork and does not ship.
 
 Code under `src/cumulus/` imports only `src/cumulus/`, `node_modules`, and
 the non-UI allowlist (`src/data/`, `src/types/`, `src/runtime/`,
-`src/logging.ts`). The rest of the app imports its UI from Cumulus. The lint
-boundary is fail-closed; move code rather than widening it. Outer UI files
-have checked roles in `eslint-rules/ui-boundary-roles.js`.
+`src/logging.ts`). The rest of the app imports its UI from Cumulus. Move code
+rather than widening the boundary.
 
 ## Building a screen: screen, builder, adapter
 
@@ -120,8 +118,8 @@ have checked roles in `eslint-rules/ui-boundary-roles.js`.
    `src/state` imports; `.ts` only. Domain rules other systems need belong in
    `src/data/`.
 3. **Builder tests** beside it, with synthetic fixtures.
-4. **Adapter** `FooScreenAdapter.tsx`: wiring only, at most 120 lines
-   (`thin-adapters`): acquire state, call the builder in `useMemo`, wire
+4. **Adapter** `FooScreenAdapter.tsx`: wiring only, at most 120 lines:
+   acquire state, call the builder in `useMemo`, wire
    callbacks to mutations, render the screen. Mint per-mount randomness with a
    lazily initialized `useRef`, not `useMemo`. Guard mount effects and logs
    against StrictMode double-firing with a ref. Resolve ids defensively.

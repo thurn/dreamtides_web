@@ -1,8 +1,7 @@
 // Which game a URL without `?game=` asks for. The front door (`/` and `/main`)
 // resumes this browser's most recently played game. Every other entry, and any
-// URL that shapes a new game (a seed, a QA scene, a saved journey to load, a
-// forced Gamble game), asks for a new game, so those parameters never act on a
-// resumed one.
+// URL that shapes a new game (a seed, a QA scene, a forced Gamble game), asks
+// for a new game, so those parameters never act on a resumed one.
 
 /** Query parameters that change only presentation, never which game plays. */
 const PRESENTATION_PARAMS: ReadonlySet<string> = new Set([

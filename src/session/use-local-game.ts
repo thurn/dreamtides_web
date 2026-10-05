@@ -16,7 +16,7 @@ import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import { logEvent } from "../logging";
 import type { FoldState } from "../rules/fold-state";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
-import type { RoomId } from "../types/identifiers";
+import type { GameId } from "../types/identifiers";
 import { browserGameRepository } from "./browser-repository";
 import {
   createLocalGameControls,
@@ -54,16 +54,16 @@ export type LocalGameStatus =
       game: LocalGame<FoldState>;
       controls: LocalGameControls;
     }
-  | { kind: "notFound"; gameId: RoomId }
-  | { kind: "openElsewhere"; gameId: RoomId }
-  | { kind: "unreadable"; gameId: RoomId }
+  | { kind: "notFound"; gameId: GameId }
+  | { kind: "openElsewhere"; gameId: GameId }
+  | { kind: "unreadable"; gameId: GameId }
   | { kind: "versionGate" }
   | { kind: "configGate"; gameContentConfig: ContentConfig | undefined }
   | { kind: "error"; message: string };
 
 export interface UseLocalGameInput {
   /** The `?game=` id, or null to resume or create a game. */
-  gameId: RoomId | null;
+  gameId: GameId | null;
   /**
    * Without a `gameId`, resume the most recently played stored game this build
    * can play, creating a new game only when there is none.
@@ -95,7 +95,7 @@ type OpenResult = Exclude<LocalGameStatus, { kind: "ready" }> | OpenedGame;
 /** Attempts at drawing an unused game id before giving up. */
 const CREATE_GAME_MAX_ATTEMPTS = 3;
 
-function persistOptions(gameId: RoomId): LocalGameOptions {
+function persistOptions(gameId: GameId): LocalGameOptions {
   return {
     onPersistError: (error) => {
       logEvent("local_game_persist_failed", {
@@ -138,7 +138,7 @@ function opened(
 async function openGame(
   repository: GameRepository,
   locks: GameLockManager | undefined,
-  gameId: RoomId,
+  gameId: GameId,
   contentConfig: PinnedContentConfig,
   requestNewGame: () => void,
   selection: Exclude<LocalGameSelection, "created"> = "opened",
@@ -258,7 +258,7 @@ async function resumeOrCreateGame(
 }
 
 /** Point the current history entry's `?game=` at `gameId`. */
-function replaceGameInUrl(gameId: RoomId): void {
+function replaceGameInUrl(gameId: GameId): void {
   const nextUrl = new URL(window.location.href);
   nextUrl.searchParams.set("game", gameId);
   window.history.replaceState(

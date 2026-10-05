@@ -11,7 +11,7 @@ import type {
   RewardMechanicId,
   RewardSelectionPolicyId,
 } from "../reward-selection/types";
-import { EXPLORATION_EFFECT_KINDS } from "../../scripts/exploration-effect-kinds.mjs";
+import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds";
 import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
 import { parseExplorationActionId } from "../types/identifiers";
 import {

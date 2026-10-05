@@ -19,7 +19,7 @@ function renderStrict(root: Root, children: ReactNode): void {
 async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
   const [
     { default: App },
-    { parseRuntimeConfig, removeUiParamFromSearch },
+    { parseRuntimeConfig },
     { resumesRecentGame },
   ] = await Promise.all([
     import("./App.tsx"),
@@ -27,15 +27,8 @@ async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
     import("./session/game-selection"),
   ]);
 
-  const canonicalSearch = removeUiParamFromSearch(window.location.search);
-  if (canonicalSearch !== window.location.search) {
-    window.history.replaceState(
-      null,
-      "",
-      window.location.pathname + canonicalSearch + window.location.hash,
-    );
-  }
-  const runtimeConfig = parseRuntimeConfig(canonicalSearch);
+  const search = window.location.search;
+  const runtimeConfig = parseRuntimeConfig(search);
   const directTutorialBattle = runtimeConfig.gotoScene === "tutorial-battle";
   const previewTutorialVictory = runtimeConfig.gotoScene === "tutorial-victory";
   const frontDoorEntry =
@@ -51,7 +44,7 @@ async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
     <App
       runtimeConfig={runtimeConfig}
       frontDoorEntry={frontDoorEntry}
-      resumeRecentGame={resumesRecentGame(pathname, canonicalSearch)}
+      resumeRecentGame={resumesRecentGame(pathname, search)}
       directTutorialBattle={directTutorialBattle}
       previewTutorialVictory={previewTutorialVictory}
     />,

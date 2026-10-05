@@ -1,6 +1,3 @@
-import { assetUrl } from "../../../runtime/asset-url";
-import type { DreamscapeId } from "../../../types/identifiers";
-import type { GuideId } from "../../../types/identifiers";
 
 /**
  * Visual presentation data for the redesigned Dream Atlas screen. The Atlas
@@ -16,26 +13,6 @@ import type { GuideId } from "../../../types/identifiers";
  *   - `/dream-guides/<guideId>.png` Dream Guide character render
  *   - `/atlas/<asset-key>`           Atlas-specific authored assets
  */
-
-/** Rectangular scene art for a dreamscape, shown in the hover-preview header. */
-export function dreamscapeSceneUrl(dreamscapeId: DreamscapeId): string {
-  return assetUrl(`/dreamscapes/${dreamscapeId}.png`);
-}
-
-/** Circular node icon for a dreamscape, shown inside the atlas node frame. */
-export function dreamscapeIconUrl(dreamscapeId: DreamscapeId): string {
-  return assetUrl(`/dreamscape-icons/${dreamscapeId}.png`);
-}
-
-/** Character render of a Dream Guide, shown standing over the preview seam. */
-export function guidePortraitUrl(guideId: GuideId): string {
-  return assetUrl(`/dream-guides/${guideId}.png`);
-}
-
-/** A dreamsign's icon art (its `imageName`), shown on the badge and sign card. */
-export function dreamsignIconUrl(imageName: string): string {
-  return assetUrl(`/dreamsigns/${imageName}`);
-}
 
 /**
  * Node diameters (stage pixels) for the atlas layout, in one in-Cumulus home so

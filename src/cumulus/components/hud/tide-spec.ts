@@ -45,7 +45,3 @@ export function tideAccessibilityName(
 ): string {
   return resonance(tide, data).accessibilityName;
 }
-
-export function resonances(): readonly ResonanceDefinition[] {
-  return RESONANCE_DATA.resonances;
-}

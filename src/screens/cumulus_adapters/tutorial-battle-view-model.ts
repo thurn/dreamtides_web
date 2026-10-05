@@ -202,7 +202,7 @@ export function buildTutorialBattleView(
  * Reconstruct the last painted Challenge lane from persisted UUIDs. The
  * authoritative board already contains the void moves; this local projection
  * supplies a source frame even when the screen mounts after those moves were
- * folded from the room log.
+ * folded from the game log.
  */
 function boardBeforeChallengeResolutionPresentation(
   battle: BattleFoldState,
@@ -250,7 +250,7 @@ function boardBeforeChallengeResolutionPresentation(
 }
 
 /**
- * The play is already committed in the room fold, but the tutorial presents
+ * The play is already committed in the game fold, but the tutorial presents
  * the physical card before revealing its destination. This projection removes
  * only that card from visible enemy zones until the persisted checkpoint
  * clears; card identity and rule state remain authoritative in the fold.

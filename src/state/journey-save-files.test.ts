@@ -48,30 +48,22 @@ describe("journey save files", () => {
     });
   });
 
-  it("accepts existing developer filesystem save records", () => {
-    expect(
-      parseJourneySaveFile(
-        JSON.stringify({
-          name: "legacy save",
-          savedAt: "2026-06-01T00:00:00.000Z",
-          journeyState: JOURNEY_STATE,
-        }),
-      ),
-    ).toEqual({
-      name: "legacy save",
-      savedAt: "2026-06-01T00:00:00.000Z",
-      buildGitSha: null,
-      journeyState: JOURNEY_STATE,
-    });
-  });
-
   it("reports malformed, unrelated, incomplete, and future-version files", () => {
     expect(() => parseJourneySaveFile("<!doctype html>")).toThrow(
       "This journey save is not valid JSON.",
     );
     expect(() => parseJourneySaveFile(JSON.stringify({ hello: "world" }))).toThrow(
-      "This file is not a complete Dreamtides journey save.",
+      "This file is not a Dreamtides journey save.",
     );
+    expect(() =>
+      parseJourneySaveFile(
+        JSON.stringify({
+          format: JOURNEY_SAVE_FILE_FORMAT,
+          version: 1,
+          name: "save",
+        }),
+      ),
+    ).toThrow("This file is not a complete Dreamtides journey save.");
     expect(() =>
       parseJourneySaveFile(
         JSON.stringify({

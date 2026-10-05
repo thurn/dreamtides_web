@@ -7,8 +7,6 @@ import type { DeckEntryId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 
 export type { FourSuitRepriseOutcome } from "../types/gamble-data";
-export type FourSuitRepriseOutcomeRule =
-  FourSuitRepriseGame["rules"]["outcomes"][number];
 
 interface FourSuitRepriseTargetIdentity {
   entryId: DeckEntryId;

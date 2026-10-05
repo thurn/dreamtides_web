@@ -1041,9 +1041,6 @@ export type GambleSiteRuntime =
   | FourSuitRepriseSiteRuntime
   | BlackjackSiteRuntime;
 
-/** Stable Gamble game id, re-exported beside its persisted runtime union. */
-export type GambleSiteGameId = GambleGameId;
-
 /** Shared, replayable configured destination offer at Random Site's home. */
 export interface RandomSiteRuntime {
   kind: "randomSite";
@@ -1220,7 +1217,7 @@ export interface JourneyState {
   /**
    * Whether the player has dismissed the one-time starter-deck reveal popup
    * shown immediately after picking an Avatar. Persisted on the journey
-   * state so reloads of the same room (or other clients) do not see the
+   * state so reloads of the same game do not see the
    * popup again. Defaults to `false`; flipped to `true` when the player
    * clicks the popup's "Continue" action.
    */

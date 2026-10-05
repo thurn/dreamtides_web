@@ -1,0 +1,34 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  // Run with `npx knip`. Vite, Vitest, ESLint, and the package.json scripts
+  // supply the default entry points; the entries below are the ones knip
+  // cannot infer.
+  "entry": [
+    // review.mjs spawns this by path rather than importing it.
+    "scripts/run-eslint.mjs",
+    // The Playwright MCP client the Phase 4 card screenshot sweep imports.
+    "scripts/screenshot-runtime.mjs",
+    // Compile-time prop contract checks that `tsc` runs; nothing imports them.
+    "src/**/__type_tests__/*.typecheck.tsx"
+  ],
+  "ignoreDependencies": [
+    // Referenced only by the package.json `overrides` pin.
+    "brace-expansion"
+  ],
+  "ignore": [
+    // The vendored brace-expansion package that the override above installs.
+    "vendor/brace-expansion/**"
+  ],
+  // A type or constant exported for callers and also used in its own module
+  // (component prop types, view-model shapes) is part of a deliberate API.
+  "ignoreExportsUsedInFile": true,
+  "ignoreIssues": {
+    // The engine's public surface; its lane owns these exports.
+    "src/engine/**": ["exports", "types", "duplicates"],
+    // The sandbox battle and its rules, which Phase 4 replaces wholesale.
+    "src/battle/**": ["exports", "types", "duplicates"],
+    "src/rules/battle/**": ["exports", "types", "duplicates"],
+    // RuleTester-facing helpers in the custom ESLint rules.
+    "eslint-rules/**": ["exports"]
+  }
+}

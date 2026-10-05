@@ -62,7 +62,7 @@ function context(
 }
 
 describe("front-door reducer", () => {
-  it("derives direct loading and tutorial entries from room genesis", () => {
+  it("derives direct loading and tutorial entries from game genesis", () => {
     expect(
       genesisFoldState({ ...GENESIS, frontDoorEntry: "loading" }).frontDoor,
     ).toEqual({

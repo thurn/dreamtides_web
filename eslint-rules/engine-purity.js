@@ -100,7 +100,7 @@ const rule = {
   create(context) {
     const sourceCode = context.sourceCode;
     let functionDepth = 0;
-    /** @type {Set<import("estree").Node>} */
+    /** @type {Set<import("eslint").Rule.Node>} */
     const reported = new Set();
     /** @type {Set<unknown>} */
     const followed = new Set();

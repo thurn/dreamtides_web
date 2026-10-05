@@ -1,0 +1,8 @@
+{"file":"scripts/saved-journeys-api.test.mjs","verdict":"delete","reason":"deleted-system","notes":"The dev-server saved-journeys API and ?loadJourney= went with it; readable at 19836c5."}
+{"file":"scripts/reward-selection-contracts.test.mjs","verdict":"keep","reason":"contract","notes":"Moved with its module to src/reward-selection/contracts.test.ts."}
+{"file":"src/rules/replay/replay.test.ts","verdict":"rewrite","reason":"deleted-system","notes":"Dropped the two compaction-migration cases (Bane-to-Nightmare and pre-Wave-6 shop) with the save migrations; readable at 19836c5."}
+{"file":"src/rules/journey/shop.test.ts","verdict":"rewrite","reason":"deleted-system","notes":"Dropped the historical PUSH_TEMPORARY_BANE_GRANT alias case with the legacy event-name translation."}
+{"file":"src/state/journey-save-files.test.ts","verdict":"rewrite","reason":"deleted-system","notes":"Dropped the unversioned developer save-record case; an unversioned file is now rejected, and the incomplete-file case uses a versioned envelope."}
+{"file":"src/types/layer-name.test.ts","verdict":"rewrite","reason":"deleted-system","notes":"Dropped the toLayerName numeric-layer revival cases with the function."}
+{"file":"src/runtime/runtime-config.test.ts","verdict":"rewrite","reason":"deleted-system","notes":"Dropped the ?loadJourney= and ?ui= cases with those parameters."}
+{"file":"src/session/game-selection.test.ts","verdict":"keep","reason":"contract","notes":"The new-game parameter example uses ?starterCount= in place of the deleted ?loadJourney=."}

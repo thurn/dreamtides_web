@@ -693,7 +693,7 @@ describe("reducer containment at the foldEvents layer", () => {
 
 // ---------------------------------------------------------------------------
 // RESOLVE_PROMPT single sanctioned catch (P1-2) — a throw while resolving the
-// open prompt clears it (applied) instead of wedging the room forever.
+// open prompt clears it (applied) instead of wedging the game forever.
 // ---------------------------------------------------------------------------
 
 /**
@@ -744,7 +744,7 @@ describe("RESOLVE_PROMPT throw containment", () => {
       ctx(),
     );
     // The resolve applied its containment fallback: the prompt is cleared and
-    // the queued automation dropped, so the room is never wedged open.
+    // the queued automation dropped, so the game is never wedged open.
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.pendingPrompt).toBeNull();
     expect(result.state.battle?.effectQueue).toEqual([]);

@@ -1,7 +1,6 @@
 import { parseJourneySeed } from "../types/journey-seed";
 import { createContext, useContext, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
-import { toJourneyAvatar } from "../data/avatar-selection";
 import type { CardData } from "../types/cards";
 import type {
   AvatarContent,
@@ -20,7 +19,6 @@ import type {
 } from "../types/journey";
 import type { DraftState } from "../types/draft";
 import type { GambleGameId, GravokGateId } from "../types/gamble";
-import { deriveEntryIdCounter } from "./deck-entry-ids";
 import type {
   AuguryAcceptRequest,
   AuguryArchetypeId,
@@ -37,13 +35,9 @@ import type { QaSceneId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { JourneyMutationSource } from "../types/journey-source";
 export {
-  KNOWN_JOURNEY_MUTATION_SOURCES,
   parseJourneyMutationSource,
   type JourneyMutationSource,
-  type KnownJourneyMutationSource,
 } from "../types/journey-source";
-
-export { deriveEntryIdCounter };
 
 /** Mutation functions exposed by the journey context. */
 export interface JourneyMutations {
@@ -289,7 +283,7 @@ export interface JourneyMutations {
   ) => void;
   /**
    * Marks the one-time starter-deck reveal popup as dismissed. Called from
-   * the popup's "Continue" button so subsequent reloads of the same room
+   * the popup's "Continue" button so subsequent reloads of the same game
    * land directly on the first dreamscape.
    */
   dismissStartingDeckPopup: () => void;
@@ -524,54 +518,6 @@ export function createDefaultState(
     },
     siteOfferModifiers: [],
     dreamscapeModifiers: [],
-  };
-}
-
-export function applyAvatarSelection(
-  prev: JourneyState,
-  resolvedPackage: ResolvedAvatarPackage,
-): JourneyState {
-  return {
-    ...prev,
-    avatar: toJourneyAvatar(resolvedPackage.avatar),
-    resolvedPackage,
-    remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
-  };
-}
-
-export function applyRemainingDreamsignPool(
-  prev: JourneyState,
-  remainingDreamsignPool: DreamsignId[],
-): JourneyState {
-  return {
-    ...prev,
-    remainingDreamsignPool: [...remainingDreamsignPool],
-  };
-}
-
-export function applyCardSourceDebug(
-  prev: JourneyState,
-  cardSourceDebug: CardSourceDebugState | null,
-): JourneyState {
-  return {
-    ...prev,
-    cardSourceDebug:
-      cardSourceDebug === null
-        ? null
-        : {
-            ...cardSourceDebug,
-            entries: cardSourceDebug.entries.map((entry) => ({ ...entry })),
-          },
-  };
-}
-
-export function applyDraftState(
-  prev: JourneyState,
-  draftState: DraftState,
-): JourneyState {
-  return {
-    ...prev,
-    draftState,
   };
 }
 

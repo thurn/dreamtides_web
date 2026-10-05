@@ -6,7 +6,7 @@
 import { createContext, useContext } from "react";
 import { downloadJsonl, logEvent } from "../logging";
 import type { FoldState } from "../rules/fold-state";
-import type { RoomId } from "../types/identifiers";
+import type { GameId } from "../types/identifiers";
 import { readGameLog, type GameLogCapture } from "./game-log-capture";
 import type { GameRepository } from "./game-repository";
 import type { LocalGame } from "./local-game";
@@ -43,7 +43,7 @@ export function useLocalGameControls(): LocalGameControls | null {
 }
 
 /** The export file name for `gameId`'s log written at `at`. */
-export function gameLogFileName(gameId: RoomId, at: Date): string {
+export function gameLogFileName(gameId: GameId, at: Date): string {
   return `journey-log-${gameId}-${at.toISOString().replace(/[:.]/g, "-")}.jsonl`;
 }
 

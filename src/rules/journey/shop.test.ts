@@ -546,25 +546,6 @@ describe("battle modifiers", () => {
     }
   });
 
-  it("maps every historical temporary Bane grant to Nightmare", () => {
-    registerDeckContentProvider({
-      resolveCardNumber: (cardId) =>
-        cardId === NIGHTMARE_CARD_ID ? 10002 : null,
-      resolveDreamsign: () => null,
-    });
-    const state = shopState([cardSlot()]);
-    const result = reduce(state, "PUSH_TEMPORARY_BANE_GRANT", {
-      cardNumber: 3,
-      baneName: "Historical value",
-      count: 1,
-      battlesRemaining: 2,
-      source: "historical-log",
-    });
-    expect(result.outcome).toBe("applied");
-    expect(result.state.journey.deck).toEqual([
-      expect.objectContaining({ cardNumber: 10002, isBane: true }),
-    ]);
-  });
 });
 
 // ---------------------------------------------------------------------------

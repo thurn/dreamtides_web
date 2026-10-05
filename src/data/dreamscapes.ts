@@ -4,7 +4,7 @@ import type {
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
-import type { SiteState, SiteType } from "../types/journey";
+import type { SiteType } from "../types/journey";
 import type { GuideId } from "../types/identifiers";
 import { SITE_TYPES } from "../types/site-type";
 import {
@@ -228,25 +228,6 @@ export function otherGuideSignatureSites(
   return guideSignatureSites(dreamscapes).filter((site) => site !== homeSite);
 }
 
-/**
- * The Dream Guide resident at a given site type, or `null` when no guide tends
- * that site type. Each guide tends exactly one site type (its home dreamscape's
- * signature site), so a guide appears wherever that site type appears — in its
- * home dreamscape (where the site is enhanced) and as fill in other dreamscapes
- * (where the same site type is unenhanced). The frame presentation uses this to
- * resolve which guide greets the player at a guide-bearing site screen.
- */
-export function guideForSiteType(
-  guides: readonly DreamGuideContent[],
-  siteType: SiteType,
-  presentingGuideId?: GuideId,
-): DreamGuideContent | null {
-  if (presentingGuideId !== undefined) {
-    return guides.find((guide) => guide.id === presentingGuideId) ?? null;
-  }
-  return guides.find((guide) => guide.siteType === siteType) ?? null;
-}
-
 /** Resolve exactly one authored guide, failing when content is incomplete. */
 export function requireGuideForSiteType(
   guides: readonly DreamGuideContent[],
@@ -276,16 +257,4 @@ export function guideDialogueLines(
     throw new Error(`Dream Guide ${guide.id} has no ${context} dialogue.`);
   }
   return lines.map((line) => fillTemplate(line, values));
-}
-
-/** Resolve the guide for a concrete site, honoring Random Site hosting. */
-export function guideForSite(
-  guides: readonly DreamGuideContent[],
-  site: Pick<SiteState, "type" | "randomSite">,
-): DreamGuideContent | null {
-  const presentingGuideId = site.randomSite?.presentingGuideId;
-  if (presentingGuideId !== undefined) {
-    return guides.find((guide) => guide.id === presentingGuideId) ?? null;
-  }
-  return guideForSiteType(guides, site.type);
 }

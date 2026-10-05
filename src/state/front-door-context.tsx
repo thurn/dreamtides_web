@@ -42,7 +42,7 @@ export interface FrontDoorContextValue {
 
 const FrontDoorContext = createContext<FrontDoorContextValue | null>(null);
 
-/** Exposes the room fold through the state boundary used by UI adapters. */
+/** Exposes the game fold through the state boundary used by UI adapters. */
 export function FrontDoorProvider({ children }: { children: ReactNode }) {
   const gameState = useGameState();
   const { frontDoor } = gameState;

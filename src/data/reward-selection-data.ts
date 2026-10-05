@@ -5,7 +5,7 @@ import { stableDigest } from "../reward-selection/stable";
 import type { RewardSelectionData } from "../types/reward-selection-data";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
-export type { RewardSelectionData, RewardSelectionTuning } from "../types/reward-selection-data";
+export type { RewardSelectionData } from "../types/reward-selection-data";
 
 /** Assemble the selector's compatibility view from its three owning RON catalogs. */
 export function buildRewardSelectionData(input: {

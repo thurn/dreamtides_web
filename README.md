@@ -94,7 +94,9 @@ the developer. Never launch browsers directly.
 
 ### URL parameters
 
-Read once at page load (`src/runtime/runtime-config.ts`):
+Read once at page load (`src/runtime/runtime-config.ts`). Only development
+builds honor `goto`, `card`, and `gambleGame`, and only they show the journey
+menu's developer commands.
 
 | Parameter | Effect |
 | --- | --- |

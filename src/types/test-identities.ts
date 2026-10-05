@@ -23,24 +23,18 @@ import {
   parseAtlasFillProfileId,
   parseAtlasNodeId,
   parseArtAssetKey,
-  parseBattleCardId,
-  parseClientId,
   parseAvatarId,
   parseDreamscapeId,
   parseDreamsignId,
   parseDreamwellCardId,
-  parseDreamwellChoiceKey,
-  parseDreamwellPromptKey,
   parseExplorationActionId,
   parseGlossaryEntryId,
   parseGambleResultId,
   parseGuideId,
-  parseIntentKey,
   parseJourneyId,
   parseOfferTileId,
   parseOpponentId,
   parsePresentationId,
-  parseRoomId,
   parseSemanticEntityId,
   parseShuffleCommitment,
   parseTideId,
@@ -54,24 +48,18 @@ import {
   type AtlasFillProfileId,
   type AtlasNodeId,
   type ArtAssetKey,
-  type BattleCardId,
-  type ClientId,
   type AvatarId,
   type DreamscapeId,
   type DreamsignId,
   type DreamwellCardId,
-  type DreamwellChoiceKey,
-  type DreamwellPromptKey,
   type ExplorationActionId,
   type GambleResultId,
   type GlossaryEntryId,
   type GuideId,
-  type IntentKey,
   type JourneyId,
   type OfferTileId,
   type OpponentId,
   type PresentationId,
-  type RoomId,
   type SemanticEntityId,
   type ShuffleCommitment,
   type TideId,
@@ -123,8 +111,6 @@ export const testJourneyMutationSource = (
 export const testDreamwellCardName = (
   name = "Fixture Dreamwell Card",
 ): DreamwellCardName => parseDreamwellCardName(name);
-export const testBattleCardId = (seed: string): BattleCardId =>
-  parseBattleCardId(seed);
 export const testAtlasFillProfileId = (seed: string): AtlasFillProfileId =>
   parseAtlasFillProfileId(testUuid(seed));
 export const testAtlasNodeId = (seed: string): AtlasNodeId =>
@@ -144,10 +130,6 @@ export const testDreamsignId = (seed: string): DreamsignId =>
   parseDreamsignId(testUuid(seed));
 export const testDreamwellCardId = (seed: string): DreamwellCardId =>
   parseDreamwellCardId(testUuid(seed));
-export const testDreamwellChoiceKey = (seed: string): DreamwellChoiceKey =>
-  parseDreamwellChoiceKey(seed);
-export const testDreamwellPromptKey = (seed: string): DreamwellPromptKey =>
-  parseDreamwellPromptKey(seed);
 export const testExplorationActionId = (
   seed: string,
 ): ExplorationActionId => parseExplorationActionId(testUuid(seed));
@@ -157,13 +139,10 @@ export const testGambleResultId = (seed: string): GambleResultId =>
   parseGambleResultId(seed);
 export const testGuideId = (seed: string): GuideId =>
   parseGuideId(testUnderscoreSlug(seed));
-export const testClientId = (seed: string): ClientId => parseClientId(seed);
-export const testRoomId = (seed: string): RoomId => parseRoomId(seed);
 export const testSemanticEntityId = (seed: string): SemanticEntityId =>
   parseSemanticEntityId(testUuid(seed));
 export const testShuffleCommitment = (seed: string): ShuffleCommitment =>
   parseShuffleCommitment(seed);
-export const testIntentKey = (seed: string): IntentKey => parseIntentKey(seed);
 export const testJourneyId = (seed: string): JourneyId => parseJourneyId(seed);
 export const testOpponentId = (seed: string): OpponentId => parseOpponentId(seed);
 export const testOfferTileId = (seed: string): OfferTileId =>

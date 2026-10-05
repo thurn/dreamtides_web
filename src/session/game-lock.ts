@@ -4,7 +4,7 @@
 // A tab that finds the lock held does not open the game. Where the Web Locks
 // API is unavailable the guard is skipped and every open succeeds.
 
-import type { RoomId } from "../types/identifiers";
+import type { GameId } from "../types/identifiers";
 
 /** The slice of the Web Locks `LockManager` the guard uses. */
 export interface GameLockManager {
@@ -21,7 +21,7 @@ export interface GameLock {
 }
 
 /** The lock name that guards `gameId`. */
-export function gameLockName(gameId: RoomId): string {
+export function gameLockName(gameId: GameId): string {
   return `dreamtides-game:${gameId}`;
 }
 
@@ -43,7 +43,7 @@ const UNGUARDED: GameLock = { release: () => undefined };
  * another tab holds it. Without a lock manager every call succeeds.
  */
 export function acquireGameLock(
-  gameId: RoomId,
+  gameId: GameId,
   locks: GameLockManager | undefined,
 ): Promise<GameLock | null> {
   if (locks === undefined) return Promise.resolve(UNGUARDED);

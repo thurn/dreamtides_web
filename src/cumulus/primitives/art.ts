@@ -71,7 +71,7 @@ export type ArtRef =
       readonly assetKey: ArtAssetKey;
     }
   | {
-      /** Licensed full-resolution art used by the Exploration prototype. */
+      /** Licensed full-resolution art used by Exploration encounters. */
       readonly kind: "exploration-card";
       readonly imageNumber: number;
     }

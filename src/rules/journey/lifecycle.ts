@@ -23,8 +23,6 @@ import type { EffectStep } from "../battle/effect-step";
 import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { ChallengeCursor } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
-import { normalizePersistedNightmareJourney } from "../nightmare-migration";
-import { normalizePersistedShopPurchaseJourney } from "../shop-purchase-migration";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
@@ -35,7 +33,6 @@ import {
 } from "../../random-site/random-site";
 import { SITE_TYPES } from "../../types/site-type";
 import {
-  builtInBattlePromptRefFromV24Descriptor,
   isBuiltInBattlePromptRef,
   isDreamwellPromptRef,
   isLegacyPromptText,
@@ -62,7 +59,7 @@ import type { JourneySeed } from "../../types/journey-seed";
  * The impure side (app/coop bootstrap, which has already loaded the content)
  * registers a provider whose functions are PURE and DETERMINISTIC in
  * `(avatarId, seed)`: the run `seed` is always `journey.seed` (fixed per
- * room at genesis), never a freshly-minted one, so two clients folding the same
+ * game at genesis), never a freshly-minted one, so two clients folding the same
  * log resolve byte-identical packages. Legacy `startJourneyFromAvatar` minted
  * a fresh `generateJourneySeed()` (a `crypto`/`Math.random` source); pinning the
  * generation seed to `journey.seed` is the determinism fix.
@@ -108,11 +105,6 @@ export function registerJourneyLifecycleContentProvider(
   provider: JourneyLifecycleContentProvider | null,
 ): void {
   contentProvider = provider;
-}
-
-/** The currently registered provider, or `null` when none is wired. */
-export function getJourneyLifecycleContentProvider(): JourneyLifecycleContentProvider | null {
-  return contentProvider;
 }
 
 // ---------------------------------------------------------------------------
@@ -313,7 +305,7 @@ export function dismissStartingDeckPopup(
 
 /**
  * `REROLL_AVATAR_OFFER { }` — increment the shared journey-start reroll
- * count. The screen adapter combines this count with the immutable room seed,
+ * count. The screen adapter combines this count with the immutable game seed,
  * so the event log reproduces the same offer on every client and reload.
  */
 export function rerollAvatarOffer(
@@ -378,7 +370,7 @@ export function selectAvatar(
  * avatar is already selected (legacy checked `journeyState.avatar !==
  * null`), and it bounces when no provider is wired or the avatar is unknown.
  *
- * The provider MUST preserve `journey.seed` (the room seed pinned at genesis) so
+ * The provider MUST preserve `journey.seed` (the game seed pinned at genesis) so
  * RESET_JOURNEY can always reconstruct the genesis fold.
  */
 export function startJourney(
@@ -407,13 +399,13 @@ export function startJourney(
 
 /**
  * `RESET_JOURNEY { }` — legacy `resetJourney`. Resets the journey slice to the
- * genesis fold (preserving the room seed, which is `journey.seed`) and clears the
- * battle slice. The output equals `genesisFoldState(genesis)` for the room's
+ * genesis fold (preserving the game seed, which is `journey.seed`) and clears the
+ * battle slice. The output equals `genesisFoldState(genesis)` for the game's
  * genesis, so a forgotten field on reset is caught by the reset-completeness
  * hash test.
  */
 export function resetJourney(state: FoldState, ctx: EventContext): FoldState {
-  // Reset rebuilds the initial journey from the room seed and the immutable
+  // Reset rebuilds the initial journey from the game seed and the immutable
   // content configuration carried by the fold context. Reducer version and
   // creation time do not participate in journey initialization.
   const reset = genesisFoldState({
@@ -441,7 +433,7 @@ export function resetJourney(state: FoldState, ctx: EventContext): FoldState {
  * `payload.battle` when present, else clears it.
  *
  * Because a `LOAD_STATE` folds identically on every client, an unvalidated one
- * would converge the whole room to a possibly-insane state (a foreign `seed`, a
+ * would fold the game into a possibly-insane state (a foreign `seed`, a
  * nulled run field mid-run, a planted `pendingPrompt` whose parked cursor points
  * past its script). {@link validateLoadedState} enforces the structural and
  * fold-consistency invariants and this case bounces on any violation.
@@ -474,7 +466,7 @@ export function loadState(
  * next {@link FoldState} to apply or `null` to bounce. Checks:
  *   - `snapshot` is an object carrying the required `JourneyState` fields with the
  *     correct primitive/container types;
- *   - `snapshot.seed === state.journey.seed` (the room seed, pinned equal to
+ *   - `snapshot.seed === state.journey.seed` (the game seed, pinned equal to
  *     `genesis.seed` at creation) — a foreign seed would desync every derived
  *     generator;
  *   - no run field (`avatar` / `resolvedPackage` / `draftState`) that is
@@ -491,9 +483,7 @@ export function validateLoadedState(
   state: FoldState,
   payload: Record<string, unknown>,
 ): FoldState | null {
-  const snapshot = normalizePersistedShopPurchaseJourney(
-    normalizePersistedNightmareJourney(payload.snapshot),
-  );
+  const snapshot = payload.snapshot;
   if (!isJourneyStateShape(snapshot)) return null;
   if (snapshot.seed !== state.journey.seed) return null;
 
@@ -684,12 +674,11 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   for (const run of value.effectQueue) {
     if (!isResolvableRun(run)) return null;
   }
-  const normalizedValue = normalizeLegacyPendingPrompt(value);
-  const pendingPrompt = normalizedValue.pendingPrompt;
+  const pendingPrompt = value.pendingPrompt;
   if (pendingPrompt !== null) {
     if (!isValidPendingPrompt(pendingPrompt)) return null;
   }
-  const loaded = normalizedValue as unknown as BattleFoldState;
+  const loaded = value as unknown as BattleFoldState;
   const board = loaded.board as unknown as Record<string, unknown>;
   const canNormalizeCards =
     isRecord(board.cardInstances) && isRecord(board.sides);
@@ -700,45 +689,6 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
     board: canNormalizeCards
       ? cloneBattleMutableState(loaded.board)
       : loaded.board,
-  };
-}
-
-function legacyPromptText(value: string): BattlePromptText {
-  return { kind: "legacy-prompt-text", text: value };
-}
-
-function normalizeImportedPromptText(value: unknown): unknown {
-  if (isPromptText(value)) return value;
-  const builtIn = builtInBattlePromptRefFromV24Descriptor(value);
-  if (builtIn !== null) return builtIn;
-  return typeof value === "string" ? legacyPromptText(value) : value;
-}
-
-export function normalizeLegacyPendingPrompt(
-  value: Record<string, unknown>,
-): Record<string, unknown> {
-  if (value.pendingPrompt === null || !isRecord(value.pendingPrompt)) {
-    return value;
-  }
-  if (!isRecord(value.pendingPrompt.options)) return value;
-  const options = { ...value.pendingPrompt.options };
-  options.label = normalizeImportedPromptText(options.label);
-  if (options.subtitle !== undefined) {
-    options.subtitle = normalizeImportedPromptText(options.subtitle);
-  }
-  if (Array.isArray(options.options)) {
-    const legacyOptions: unknown[] = options.options;
-    options.options = legacyOptions.map((option: unknown) => {
-      if (!isRecord(option)) return option;
-      return {
-        ...option,
-        label: normalizeImportedPromptText(option.label),
-      };
-    });
-  }
-  return {
-    ...value,
-    pendingPrompt: { ...value.pendingPrompt, options },
   };
 }
 

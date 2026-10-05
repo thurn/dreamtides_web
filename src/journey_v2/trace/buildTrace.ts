@@ -1,4 +1,3 @@
-import type { AuguryCatalogCard, AuguryDeckCard } from "../types";
 import type {
   AuguryDreamsignTier,
   AuguryOfferTrace,
@@ -11,7 +10,6 @@ import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { AuguryTargetKey } from "../../types/identifiers";
-import { parseAuguryTargetKey } from "../../types/identifiers";
 
 /**
  * Cap on the candidates carried per offer line. Small candidate sets (choosers
@@ -149,54 +147,4 @@ export function assembleOfferTrace(params: {
     ...(params.blend === undefined ? {} : { blend: params.blend }),
     ...(params.notes === undefined ? {} : { notes: params.notes }),
   };
-}
-
-/**
- * Maps grant-pool catalog cards to {@link TraceCandidateInput}s for the
- * `scored_cards` decision, the shared shape across the grant family. `score`
- * comes from the builder's UUID-keyed score map; `components` (e.g. quality/fit)
- * are optional per-card breakdowns when the builder surfaces them.
- */
-export function catalogTraceCandidates(
-  pool: readonly AuguryCatalogCard[],
-  scoreByUuid: ReadonlyMap<CardId, number>,
-  componentsByUuid?: ReadonlyMap<CardId, Readonly<Record<string, number>>>,
-  draftPoolCardUuids?: ReadonlySet<CardId>,
-): TraceCandidateInput[] {
-  return pool.map((card) => ({
-    key: parseAuguryTargetKey(card.cardUuid),
-    displayName: card.displayName,
-    cardUuid: card.cardUuid,
-    cardNumber: card.cardNumber,
-    score: scoreByUuid.get(card.cardUuid) ?? 0,
-    ...(componentsByUuid?.get(card.cardUuid) === undefined
-      ? {}
-      : { components: componentsByUuid.get(card.cardUuid) }),
-    ...(draftPoolCardUuids === undefined
-      ? {}
-      : { inDraftPool: draftPoolCardUuids.has(card.cardUuid) }),
-  }));
-}
-
-/**
- * Maps deck-card entries to {@link TraceCandidateInput}s keyed by `entryId`,
- * for the `deck_entry_rank` decision (`duplicate`, `purge`).
- */
-export function deckEntryTraceCandidates(
-  entries: readonly {
-    deckCard: AuguryDeckCard;
-    entryId: DeckEntryId;
-    score: number;
-    components?: Readonly<Record<string, number>>;
-  }[],
-): TraceCandidateInput[] {
-  return entries.map((entry) => ({
-    key: parseAuguryTargetKey(entry.entryId),
-    displayName: entry.deckCard.displayName,
-    cardUuid: entry.deckCard.cardUuid,
-    cardNumber: entry.deckCard.cardNumber,
-    entryId: entry.entryId,
-    score: entry.score,
-    ...(entry.components === undefined ? {} : { components: entry.components }),
-  }));
 }

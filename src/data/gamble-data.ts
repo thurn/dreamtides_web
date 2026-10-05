@@ -107,13 +107,3 @@ export function gambleGameByRulesKind<Kind extends GambleRulesKind>(
     throw new Error(`Missing Gamble rules variant ${kind}`);
   return game as Extract<GambleGameDefinition, { rules: { kind: Kind } }>;
 }
-
-export function gamblePresentationText(
-  values: readonly { key: string; text: string }[],
-  key: string,
-): string {
-  const value = values.find((candidate) => candidate.key === key)?.text;
-  if (value === undefined)
-    throw new Error(`Missing Gamble presentation key ${key}`);
-  return value;
-}

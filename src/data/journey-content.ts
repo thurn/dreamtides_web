@@ -111,15 +111,15 @@ export interface JourneyContent {
   atlasData: AtlasData;
   /** Canonical cross-site metadata and fold-relevant site rules. */
   sitesData: SitesData;
-  /** Validated draft rules loaded before room folding begins. */
+  /** Validated draft rules loaded before game folding begins. */
   draftData: DraftData;
-  /** Validated direct economy tuning loaded before room folding begins. */
+  /** Validated direct economy tuning loaded before game folding begins. */
   economyData: EconomyData;
   /** Fold-relevant Gamble rules, economy, and authored presentation. */
   gambleData: GambleData;
   /** Fold-relevant Transfiguration rules, tuning, and authored presentation. */
   transfigurationData: TransfigurationData;
-  /** Fold-relevant opponent and battle tuning loaded before room entry. */
+  /** Fold-relevant opponent and battle tuning loaded before game entry. */
   opponentsData: OpponentsData;
   /**
    * Apollyon's ten incarnations. Atlas generation picks one per run to present the boss node; the Atlas UI resolves the chosen incarnation's

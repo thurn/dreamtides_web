@@ -16,7 +16,3 @@ export function hasAssignedImage(imageNumber: CardData["imageNumber"]): boolean 
   const value = Number(imageNumber);
   return Number.isFinite(value) && value > 0;
 }
-
-export function isStarterCard(card: Pick<CardData, "isStarter">): boolean {
-  return card.isStarter;
-}

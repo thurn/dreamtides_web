@@ -1,10 +1,5 @@
 import type { SiteType } from "./journey";
 
-export interface RewardSelectionBand {
-  fraction: number;
-  minimum: number;
-}
-
 export interface RewardSelectionTuning {
   bandFraction: number;
   bandMinimum: number;

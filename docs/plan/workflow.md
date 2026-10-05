@@ -664,9 +664,6 @@ written **one file per bead or per entry**:
   writes one Markdown file listing each issue, with its location and a
   one-line description. A bead that finds none writes no file. The first
   bead that records an issue creates `docs/plan/evidence/pre-existing/`.
-- **The legacy `./pre-existing-issues.txt` is read-only.** Phase
-  [2.8](phase-2-cleanup.md#28-dead-code-and-legacy-sweep), the dead-code
-  sweep, resolves its entries and clears it. No other bead edits it.
 - **Measurements.** When a page tells a non-gate bead to record numbers or a
   policy text "in `metrics.md`", the bead writes its measurement file
   instead. Each gate bead folds the measurement files since the previous gate

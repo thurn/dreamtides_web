@@ -854,7 +854,7 @@ export const TUTORIAL = {
       // A one-shot authored AI decision. Matching proceeds in source order before heuristic
       // planning.
       {
-        // Stable identity used to consume this override exactly once in the shared room log.
+        // Stable identity used to consume this override exactly once in the game log.
         id: "2fd657e4-02d2-412e-acad-4b063504a188",
         // Battle-state edge which makes this override eligible.
         trigger: {

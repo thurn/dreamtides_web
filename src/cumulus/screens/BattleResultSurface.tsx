@@ -9,8 +9,6 @@ import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 import { JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX } from "./journey-result-layout";
 import { formatNumber } from "../../runtime/format-number";
 
-export type MobileBattleResultOutcome = "victory" | "defeat" | "draw";
-
 export type MobileBattleResultView =
   | {
       readonly outcome: "victory";

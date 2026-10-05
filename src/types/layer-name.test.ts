@@ -9,7 +9,6 @@ import {
   layerOrdinal,
   layerRoman,
   nextLayer,
-  toLayerName,
 } from "./layer-name";
 
 describe("LayerName ordinals and display", () => {
@@ -50,25 +49,7 @@ describe("LayerName ordinals and display", () => {
   });
 });
 
-describe("toLayerName migration", () => {
-  it("passes a current LayerName string through unchanged", () => {
-    for (const layer of LAYER_ORDER) {
-      expect(toLayerName(layer)).toBe(layer);
-    }
-  });
-
-  it("revives a legacy 0-based numeric layer", () => {
-    expect(toLayerName(0)).toBe(LayerName.One);
-    expect(toLayerName(6)).toBe(LayerName.Seven);
-  });
-
-  it("falls back to Layer One for values it cannot interpret", () => {
-    expect(toLayerName(undefined)).toBe(LayerName.One);
-    expect(toLayerName(null)).toBe(LayerName.One);
-    expect(toLayerName(99)).toBe(LayerName.One);
-    expect(toLayerName("nonsense")).toBe(LayerName.One);
-  });
-
+describe("isLayerName", () => {
   it("recognizes only the enum string values as LayerName", () => {
     expect(isLayerName("three")).toBe(true);
     expect(isLayerName("Three")).toBe(false);

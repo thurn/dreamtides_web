@@ -1,7 +1,7 @@
 /**
  * Default starting essence used when an Avatar record omits a tuned
  * value. Persistence helpers (see `normalizeJourneyState`) also fall back to
- * this constant so RTDB-stripped rooms render with a sensible value.
+ * this constant so journeys missing the field render with a sensible value.
  */
 import type { SiteType } from "./journey.ts";
 import type { Rarity } from "./cards.ts";
@@ -20,7 +20,6 @@ import type {
   DreamsignId,
   TideId,
 } from "./identifiers";
-import type { ContentHash } from "./content-hash";
 import type { DisplayText } from "../runtime/text";
 
 /** Normalized point locating an Avatar's head in its portrait artwork. */
@@ -106,13 +105,6 @@ export interface DreamGuideContent {
   portraitSource: string;
   dialogue: Readonly<Record<string, readonly string[]>>;
   homeSpecialty: string;
-}
-
-/** Versioned canonical Dream Guide catalog emitted by the asset compiler. */
-export interface DreamGuidesData {
-  schemaVersion: 1;
-  contentHash: ContentHash;
-  guides: readonly DreamGuideContent[];
 }
 
 /**

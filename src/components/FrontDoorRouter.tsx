@@ -9,7 +9,7 @@ import { useFrontDoor } from "../state/front-door-context";
 import type { AvatarContent } from "../types/content";
 import { ErrorBoundary } from "./ErrorBoundary";
 
-/** Reflects the room's shared front-door fold and renders its current scene. */
+/** Reflects the game's shared front-door fold and renders its current scene. */
 export function FrontDoorRouter({
   avatars,
   tutorialPlaybackSpeed = 1,

@@ -21,15 +21,13 @@ import type {
   StateHash,
 } from "../../eventlog/types";
 import { genesisFoldState, type FoldState } from "../fold-state";
-import { normalizePersistedNightmareState } from "../nightmare-migration";
-import { normalizePersistedShopPurchaseState } from "../shop-purchase-migration";
 import { reduceGameEvent } from "../reducer";
 
 /**
  * The canonical `EngineConfig<FoldState>` for the real Dreamtides coop game.
  *
  * - `reducer`   — the root fold + CAS policy (`reduceGameEvent`).
- * - `genesisState` — the pre-journey fold state a fresh room shows.
+ * - `genesisState` — the pre-journey fold state a fresh game shows.
  * - `encode` / `decode` — JSON round-trip of the pure-data `FoldState`, used for
  *   the compaction base snapshot. `FoldState` holds only JSON-safe data (no
  *   functions / `undefined` / class instances), so `JSON.stringify` /
@@ -43,20 +41,17 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   reducer: reduceGameEvent,
   genesisState: genesisFoldState,
   encode: (state) => JSON.stringify(state),
-  decode: (raw) =>
-    normalizePersistedShopPurchaseState(
-      normalizePersistedNightmareState(JSON.parse(raw)),
-    ) as FoldState,
+  decode: (raw) => JSON.parse(raw) as FoldState,
   hash: hashState,
 };
 
-/** A committed event with its assigned seq — the shape a room log stores. */
+/** A committed event with its assigned seq — the shape a game log stores. */
 export interface SeqEvent {
   seq: number;
   event: GameEvent;
 }
 
-/** The input to {@link replayLog}: a room's genesis plus its full event log. */
+/** The input to {@link replayLog}: a game's genesis plus its full event log. */
 export interface ReplayInput {
   genesis: Genesis;
   events: SeqEvent[];
