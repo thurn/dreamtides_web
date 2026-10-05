@@ -308,7 +308,10 @@ describe("StartingDeckOverlay", () => {
       />,
     );
 
-    expect(container.querySelector('[role="dialog"]')).not.toBeNull();
+    expect(
+      container.querySelector('[role="dialog"] [data-card-gallery-empty]')
+        ?.textContent,
+    ).not.toBe("");
     expect(
       container.querySelector("[data-testid^='starting-deck-modal-card-']"),
     ).toBeNull();

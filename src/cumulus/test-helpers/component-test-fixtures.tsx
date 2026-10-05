@@ -1,24 +1,17 @@
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import type { ReactElement } from "react";
 import { assertLocalized } from "@trox/runtime";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { GameCardModel } from "../components/card/CardView";
-import { CumulusRoot } from "../CumulusRoot";
+import { renderInCumulus, type CumulusRender } from "../testing/render";
 import {
   testCardId,
   testCardSubtype,
 } from "../../types/test-identities";
 
-export function mountCumulus(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
+/** Renders inside CumulusRoot with automatic teardown; see renderInCumulus. */
+export function mountCumulus(element: ReactElement): CumulusRender {
+  return renderInCumulus(element);
 }
 
 export function syntheticGameCard(

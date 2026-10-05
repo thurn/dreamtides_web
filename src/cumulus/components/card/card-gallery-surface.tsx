@@ -810,6 +810,7 @@ function CardGallerySurface<EntryId extends string>({
               }}
             >
               <p
+                data-card-gallery-empty=""
                 style={{
                   margin: 0,
                   font: token("--t-body"),

@@ -99,6 +99,23 @@ describe("Pressable press feedback", () => {
     expect(el.style.transform).toBe("none");
   });
 
+  it("shows the pointer cursor when actionable and the default cursor when disabled", () => {
+    const { container } = mountInto(
+      <>
+        <Pressable as="button" data-testid="actionable">Go</Pressable>
+        <Pressable as="button" data-testid="disabled" disabled>Stop</Pressable>
+      </>,
+    );
+    expect(
+      container.querySelector<HTMLElement>('[data-testid="actionable"]')?.style
+        .cursor,
+    ).toBe("pointer");
+    expect(
+      container.querySelector<HTMLElement>('[data-testid="disabled"]')?.style
+        .cursor,
+    ).toBe("default");
+  });
+
   it("keeps the compile-time guards referenced", () => {
     // Anchors _pressFeedbackTypeGuards so it is not dead code; its value is the
     // type-level assertions above, verified by `tsc`, not this runtime check.

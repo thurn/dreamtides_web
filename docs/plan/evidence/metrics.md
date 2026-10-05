@@ -354,12 +354,13 @@ for the fix.
 ## Phase 1.4 test triage (2026-10-05, beads hv-b8ef.4, .7, .8, .9)
 
 `docs/plan/evidence/test-triage.jsonl` holds one verdict per surviving-area
-test file (278 files). Final tally: 216 keep, 41 rewrite (20 product copy,
-20 implementation detail, 1 statistical threshold), 21 delete. Seventeen of
-the deletes cover systems Phase 2 removes (Firebase and RTDB transport,
-co-op, Trox, identicons, editors, devtools, `/offers`) and execute with
-those deletions; the four implementation-detail deletes and the dead
-`src/draft/deck-cooccurrence` module landed in Phase 1.
+test file: 278 under `src/` plus the six tests of essential scripts that
+survive Phase 2 (284 rows). Final tally: 223 keep, 41 rewrite (19 product
+copy, 21 implementation detail, 1 statistical threshold), 20 delete.
+Seventeen of the deletes cover systems Phase 2 removes (Firebase and RTDB
+transport, co-op, Trox, identicons, editors, devtools, `/offers`) and
+execute with those deletions; the three implementation-detail deletes and
+the dead `src/draft/deck-cooccurrence` module landed in Phase 1.
 
 Rules applied while executing:
 
@@ -415,3 +416,34 @@ Phase 1 gates took 253 s at low load and 427–656 s at load averages of
 23 s for identical work. Friction lines now carry the host's
 one-minute load average at commit time as `hostLoad` so overruns can be
 attributed (starting with hv-b8ef.12). The budgets themselves are unchanged.
+
+## Phase 1 gate re-measurement (2026-10-05, bead hv-b8ef.5)
+
+Same commands as the 1.1 baseline, run in a fresh worktree at `release`
+`64b81751`. The host load average was 49–55 at the start and 65–97 at the
+end (the 1.1 baseline ran at low load), so wall times on unchanged work
+roughly doubled: compare the "Unchanged work" rows to read the load factor
+before reading the rows Phase 1 changed.
+
+| Measurement | 1.1 baseline | Phase 1 gate | Changed by Phase 1? |
+| --- | --- | --- | --- |
+| prepare-workspace, cold / warm | 17.1 / 4.0–4.1 s | 26.1 / 6.2–6.3 s | Unchanged work |
+| `trox:gate` | 24.5 s | 38.4 s | Unchanged work |
+| `review:full` clean-game-data | 26.7 s | 44.5 s | Unchanged work |
+| `review:full` lint (whole `src/`) | 18.4 s | 33.6 s | Unchanged work |
+| `tsc --noEmit` | 10.2 s | 18.5 s | Unchanged work |
+| `TIMING` lint of `src/` | 29.0 s | 52.7 s | Unchanged work; same rule ranking |
+| `review:full` typecheck (cold) | 10.8 s | 18.6 s | Declaration emit, same cold cost |
+| `review:full` test | 142.2 s | 234.1 s | 518 → 513 files, 5,187 → 5,153 tests |
+| `review:full` total | 220.2 s | 366.2 s | |
+| Vitest JSON per-file exec sum | 61.5 s | 123.8 s | Slowest: MobileBattleScreen 37.4 s, ExplorationSiteScreen 11.9 s |
+| `npm run review`, one-line logic change | 65.2 s (typecheck 9.6 s, related tests 45.0 s at 1 worker) | 66.1 s (typecheck 2.1 s, related tests 46.3 s at 2 workers) | Typecheck −78% despite load; related tests held flat against the load factor |
+| `npm run review`, docs only | 0.2 s | 0.5 s | |
+| `npm run review`, one RON value | 9.9 s | 14.4 s | Unchanged work |
+| `npm test -- src/rules/journey/shop.test.ts` | 15.7 s | 20.7 s | |
+| Tollgate gate total | 256.2 s median | 482.4 s (hv-b8ef.12) | Load |
+
+Phase 1's lasting gains are per-edit: the typecheck step drops from a full
+recheck to about 2 s once build info exists, and a fresh worktree seeds it,
+and related tests run on two workers. The gate itself shrinks in Phase 2,
+which removes the Trox, RON, and Rust steps (about 80 s at this load).

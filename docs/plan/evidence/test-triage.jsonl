@@ -1,7 +1,7 @@
 {"file": "src/App.test.tsx", "verdict": "keep", "reason": "contract", "notes": "The four room-gate and Firebase setup cases go with co-op and Firebase in Phase 2."}
 {"file": "src/atlas/atlas-generator.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/atlas/atlas-reachability.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/button-cursor.test.ts", "verdict": "delete", "reason": "impl-detail", "notes": "Regex over index.css and SiteNode.tsx source text; cursor affordance is a visual concern covered by browser QA."}
+{"file": "src/button-cursor.test.ts", "verdict": "rewrite", "reason": "impl-detail", "notes": "Refined at the Phase 1 gate review: the cursor affordance is a player-facing contract. The regex over index.css and SiteNode.tsx is replaced by computed-style checks against index.css; Pressable, which owns inline cursors, is covered in Pressable.test.tsx."}
 {"file": "src/card-type-change.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/components/BattleSiteRoute.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/components/CumulusJourneyChrome.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
@@ -14,7 +14,7 @@
 {"file": "src/cumulus/components/atlas/AtlasNode.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Refined in hv-b8ef.8: its style checks pin gesture handling (touch-action), caller-owned layout, and press/hover behavior, not restated tokens."}
 {"file": "src/cumulus/components/battle/BattleForeseeEditor.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Trigger-source label copy. Assert roles, ids, and structure instead."}
 {"file": "src/cumulus/components/battle/BattlePhaseIndicator.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/cumulus/components/battle/BattleStatusDisplay.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Dormant-ability description copy. Assert roles, ids, and structure instead. Also review 14 inline style-value assertions."}
+{"file": "src/cumulus/components/battle/BattleStatusDisplay.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Refined at the Phase 1 gate review: the asserted ability text is supplied by the synthetic avatar profile (pass-through, allowed), so the assertion is kept."}
 {"file": "src/cumulus/components/battle/BattlefieldCard.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/battle/CardBack.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/battle/CardPile.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Pile label copy. Assert roles, ids, and structure instead."}
@@ -276,3 +276,9 @@
 {"file": "src/transfiguration/transfiguration-pricing.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/types/identifiers.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/types/layer-name.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "scripts/review-plan.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Added at the Phase 1 gate review: review file selection survives Phase 2. Trox, RON, and Rust selection cases go with those steps in Phase 2.3, 2.4, and 2.7."}
+{"file": "scripts/review-lock.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Added at the Phase 1 gate review: the exhaustive-review lock survives Phase 2."}
+{"file": "scripts/prepare-workspace.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Added at the Phase 1 gate review: generator ordering contract; Phase 2.3 reshapes or removes workspace generation with the RON pipeline."}
+{"file": "scripts/setup-assets.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Added at the Phase 1 gate review: setup-assets is an essential script, but almost all 2,393 lines test RON/TOML compilation and localization sources that Phase 2.3 and 2.4 delete; only the local-art linking cases survive. Phase 2.7 trims it with the script."}
+{"file": "scripts/dev-processes.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Added at the Phase 1 gate review: dev-server process inspection survives as part of the dev script."}
+{"file": "scripts/dev-with-emulator.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Added at the Phase 1 gate review: port forwarding and exit formatting survive; the Firebase emulator wrapper itself goes in Phase 2 (D3), which renames or rewrites this test with the dev script."}

@@ -194,7 +194,7 @@ concrete failure mode, and why it belongs to this change. If none, say so.
 Request: <bead title + acceptance criteria + relevant docs/plan page section>
 Repository instructions: AGENTS.md, docs/plan/README.md, docs/plan/engine-design.md
 EOF
-)"
+)" < /dev/null
 ```
 
 Then follow the `independent-review` skill's steps 3–6:

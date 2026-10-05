@@ -37,8 +37,9 @@ work is filed, delivered, reviewed and QA'd. Hive project id:
 - **Never commit image files.** QA screenshots go to the gitignored
   `artifacts/qa/<bead-id>/` and are referenced by filename only.
 - **Log new features** well enough to reconstruct what an algorithm did in a
-  given production game. Journey logs live in `logs/journey-log.jsonl`; read
-  them for all production game design debugging. Logs carry UUIDs, never
+  given production game. Logs go to `logs/journey-log.jsonl` in development
+  and to per-game IndexedDB storage with JSONL export in every build (D40);
+  read them for all production game design debugging. Logs carry UUIDs, never
   names.
 - **Tunables live in the data catalogs**, never as literals in logic.
 - **Player-facing copy lives in UI modules.** Rules code never builds display
@@ -55,7 +56,9 @@ work is filed, delivered, reviewed and QA'd. Hive project id:
   synthetic fixtures.
 - Never gate CI on mutable production data, copy, default algorithm choices,
   private implementation details, statistical or timing thresholds,
-  load-sensitive behavior, or commands that reference deleted tests.
+  load-sensitive behavior, or commands that reference deleted tests. The
+  content coverage gate (`docs/plan/engine-design.md`) is the one sanctioned
+  data-to-engine exception.
 - Do not write tests which assert on specific UI strings.
 
 # Architecture pointers
