@@ -49,16 +49,14 @@ describe("card source view", () => {
     expect(
       view?.construction?.lines.map((line) => resolveSource(line.text)),
     ).toContain("Signature A");
-    expect(resolveSource(view.cards.lines[0].text)).toContain(
-      "signature tide Signature A",
-    );
+    expect(resolveSource(view.cards.lines[0].text)).toContain("Signature A");
   });
 
   it("falls back to pool-copy provenance while tides are loading", () => {
     const view = buildCardSourceView(DEBUG, null, new Map());
     if (view === null) throw new Error("Expected card source view.");
-    expect(resolveSource(view.cards.lines[0].text)).toContain(
-      "2 copies in the pool",
-    );
+    const line = resolveSource(view.cards.lines[0].text);
+    expect(line).toContain(String(DEBUG.entries[0].draftPoolCopies));
+    expect(line).not.toContain("Signature A");
   });
 });

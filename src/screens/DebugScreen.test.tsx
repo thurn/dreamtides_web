@@ -169,7 +169,7 @@ describe("DebugScreen", () => {
       />,
     );
 
-    expect(container.textContent).toContain("Debug: Package State");
+    expect(container.querySelector('[role="dialog"]')).not.toBeNull();
     expect(container.textContent).toContain("Caller of Lanterns");
     expect(container.textContent).toContain("First Sign");
     expect(container.textContent).toContain("Second Sign");

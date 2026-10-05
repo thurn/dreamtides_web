@@ -218,7 +218,7 @@
 {"file": "src/runtime/qa-scenes.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/runtime/runtime-config.test.ts", "verdict": "keep", "reason": "contract", "notes": "gameId, databaseMode, and viewLogs cases go with rooms and Firebase in Phase 2."}
 {"file": "src/runtime/screen-url.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/screens/CardSourceOverlay.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/CardSourceOverlay.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Refined in hv-b8ef.7: provenance lines asserted debug-overlay copy; they now assert the fixture tide name and copy count pass through."}
 {"file": "src/screens/DebugScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Debug overlay heading copy. Assert roles, ids, and structure instead."}
 {"file": "src/screens/cumulus_adapters/DesktopDeckViewerAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
@@ -227,8 +227,8 @@
 {"file": "src/screens/cumulus_adapters/MainMenuScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/screens/cumulus_adapters/StartingDeckOverlayAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/screens/cumulus_adapters/atlas-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/screens/cumulus_adapters/augury-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/atlas-view-model.test.ts", "verdict": "rewrite", "reason": "ui-copy", "notes": "Refined in hv-b8ef.7: the signature-site name asserted the production glossary title; it now compares against siteTypeName. Other resolveSource assertions compare synthetic fixture text passed through (allowed)."}
+{"file": "src/screens/cumulus_adapters/augury-view-model.test.ts", "verdict": "rewrite", "reason": "ui-copy", "notes": "Refined in hv-b8ef.7: the added-site label asserted the production glossary title; it now compares against siteTypeName for the fixture sites data. Other resolveSource assertions compare synthetic fixture text passed through (allowed)."}
 {"file": "src/screens/cumulus_adapters/battle-start-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/screens/cumulus_adapters/battle-tutorial-guidance-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/screens/cumulus_adapters/card-shop-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}

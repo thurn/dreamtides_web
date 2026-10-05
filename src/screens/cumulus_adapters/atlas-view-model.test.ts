@@ -39,6 +39,7 @@ import {
   resolveAtlasNodeGeometry,
 } from "./atlas-view-model";
 import { parseAtlasNodeId } from "../../types/identifiers";
+import { siteTypeName } from "../../data/sites-data";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
@@ -569,7 +570,9 @@ describe("buildAtlasMapNodes", () => {
     const items = buildAtlasMapNodes(atlas, content);
     const middle = items.find((item) => item.model.id === "middle");
 
-    expect(resolveSource(middle!.model.site!.name)).toBe("Augury");
+    expect(resolveSource(middle!.model.site!.name)).toBe(
+      siteTypeName(content.sitesData, "Augury"),
+    );
     expect(resolveSource(middle!.model.site!.blurb).length).toBeGreaterThan(0);
     expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
     expect(middle?.model.affiliation).not.toBeNull();

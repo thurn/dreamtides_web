@@ -41,6 +41,7 @@ import {
   offerTileDescription,
 } from "../../cumulus/components/controls/offer-tile-descriptions";
 import { auguryArchetype } from "../../data/augury-data";
+import { siteTypeName } from "../../data/sites-data";
 import type { ChoiceId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import { parseOfferId } from "../../types/identifiers";
@@ -434,7 +435,9 @@ describe("augury view model", () => {
       isVisited: false,
       isInteractive: false,
     });
-    expect(resolveSource(visual.model.label)).toBe("Card Shop");
+    expect(resolveSource(visual.model.label)).toBe(
+      siteTypeName(MINIMAL_SITES_DATA, "Shop"),
+    );
   });
 
   it("builds the persisted accept request from stable offer and choice ids", () => {
