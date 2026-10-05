@@ -15,7 +15,7 @@ describe("prepareWorkspace", () => {
     expect(run.mock.calls.map(([, args]) => args[0])).toEqual(
       WORKSPACE_GENERATORS.map(({ script }) => `/fixture/${script}`),
     );
-    expect(run).toHaveBeenCalledTimes(4);
+    expect(run).toHaveBeenCalledTimes(WORKSPACE_GENERATORS.length);
   });
 
   it("stops immediately when a generator fails", () => {

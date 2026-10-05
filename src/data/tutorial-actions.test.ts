@@ -134,20 +134,12 @@ function successfulFetcher() {
 }
 
 describe("loadTutorialActions", () => {
-  it("loads directly from tutorial.toml through the editor API in development", async () => {
+  it("loads the generated runtime data", async () => {
     const fetcher = successfulFetcher();
 
     await expect(
       loadTutorialActions(fetcher as unknown as typeof fetch),
     ).resolves.toEqual(ACTIONS_RESPONSE.actions);
-    expect(fetcher).toHaveBeenCalledWith("/api/editor/tutorial");
-  });
-
-  it("loads generated data for a production runtime", async () => {
-    const fetcher = successfulFetcher();
-
-    await loadTutorialActions(fetcher, "runtime");
-
     expect(fetcher).toHaveBeenCalledWith("/tutorial-data.json");
   });
 });

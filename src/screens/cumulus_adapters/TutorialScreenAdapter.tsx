@@ -1,10 +1,9 @@
 /* eslint-disable max-lines -- tutorial orchestration is intentionally centralized here. */
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { assertLocalized } from "@trox/runtime";
 import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
-import * as tutorialEditor from "../../state/use-tutorial-editor";
+import { useTutorialActions } from "../../state/use-tutorial-actions";
 import { useTutorialActionComplete } from "../../state/use-tutorial-action-complete";
 import { useTutorialCardPlay } from "../../state/use-tutorial-card-play";
 import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
@@ -36,19 +35,10 @@ export function TutorialScreenAdapter({
   if (battleConfiguration === undefined) {
     throw new Error("Tutorial battle configuration is missing.");
   }
-  const {
-    actions: authoredActions,
-    loaded: actionsLoaded,
-    saveStatus,
-    saveError,
-    onActionsChange: handleEditorActionsChange,
-  } = tutorialEditor.useTutorialEditor();
+  const { actions: authoredActions, loaded: actionsLoaded } =
+    useTutorialActions();
   const beginRequestedKey = useRef<IntentKey | null>(null);
   const tutorialCards = useTutorialCards();
-  const handleReplay = tutorialEditor.useTutorialReplay(
-    authoredActions,
-    mutations.beginTutorial,
-  );
   useEffect(() => {
     if (
       !actionsLoaded ||
@@ -130,25 +120,12 @@ export function TutorialScreenAdapter({
     <TutorialScreen
       view={view}
       playbackSpeed={playbackSpeed}
-      editor={
-        import.meta.env.DEV
-          ? {
-              actions: authoredActions,
-              tutorialCardConstants: battleConfiguration.tutorialCardConstants,
-              saveStatus,
-              saveError: saveError === null ? null : assertLocalized(saveError),
-            }
-          : undefined
-      }
       onActionComplete={handleActionComplete}
       onAvatarArrivalComplete={handleAvatarArrivalComplete}
       {...howToPlayLogging}
       onPlayerCardPlay={handlePlayerCardPlay}
       onEndTurn={handleEndTurn}
       onPlayerCharacterReposition={handlePlayerCharacterReposition}
-      onEditorActionsChange={handleEditorActionsChange}
-      onReplay={handleReplay}
-      onPlayFromAction={handleReplay}
     />
   );
 }

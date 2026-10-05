@@ -68,7 +68,6 @@ describe("applyDeviceFrame", () => {
     expect(root.style.getPropertyValue("--safe-area-inset-top")).toBe("59px");
     expect(root.style.getPropertyValue("--safe-area-inset-bottom")).toBe("34px");
     expect(root.style.getPropertyValue("--display-cutout")).toBe("1");
-    expect(root.style.getPropertyValue("--display-cutout-width")).toBe("126px");
     expect(root.style.getPropertyValue("--display-cutout-height")).toBe("37px");
   });
 
@@ -77,7 +76,7 @@ describe("applyDeviceFrame", () => {
     applyDeviceFrame({ safeArea: { top: 0, right: 0, bottom: 0, left: 0 } });
     const root = document.documentElement;
     expect(root.style.getPropertyValue("--display-cutout")).toBe("");
-    expect(root.style.getPropertyValue("--display-cutout-width")).toBe("");
+    expect(root.style.getPropertyValue("--display-cutout-height")).toBe("");
     expect(root.style.getPropertyValue("--safe-area-inset-top")).toBe("0px");
   });
 });

@@ -16,10 +16,6 @@ export const WORKSPACE_GENERATORS = [
     script: "scripts/generate-cumulus-tokens.mjs",
   },
   {
-    label: "Cumulus documentation metadata",
-    script: "scripts/generate-cumulus-metadata.mjs",
-  },
-  {
     label: "localized runtime adapters",
     script: "scripts/generate-localized-runtime-templates.mjs",
   },
@@ -48,7 +44,6 @@ export const DISPOSABLE_WORKSPACE_FILES = [
   "public/tides4-data.json",
   "public/transfiguration-data.json",
   "public/tutorial-data.json",
-  "src/cumulus/metadata/cumulus-metadata.json",
   "src/cumulus/primitives/tokens.ts",
   "src/generated/config/augury-data.json",
   "src/generated/config/card-role-data.json",

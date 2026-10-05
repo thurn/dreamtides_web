@@ -20,10 +20,10 @@
 //       index.css. App code reads `var(--safe-area-inset-top)` (never `env()`
 //       directly) so both the device and the screenshot resolve correctly.
 //   --display-cutout          `1` when a screen cutout is present (else unset).
-//   --display-cutout-top / -left / -width / -height
-//       The cutout's bounding box, for deliberately placing UI in the unsafe
-//       region beside it (e.g. a control to the right of the Dynamic Island).
-//       Published only when the target has a visible cutout.
+//   --display-cutout-top / -height
+//       The cutout's vertical extent, for placing controls level with it
+//       (e.g. a close disc beside the Dynamic Island). Published only when the
+//       target has a visible cutout.
 //
 // On real hardware no `deviceFrame` param is present, nothing is published, and
 // the index.css `env()` defaults apply unchanged.
@@ -64,14 +64,11 @@ const SAFE_AREA_VARS = {
   left: "--safe-area-inset-left",
 } satisfies Record<keyof SafeAreaInsets, keyof typeof TOKENS>;
 
-// `right` is intentionally not published: no layout places UI relative to the
-// cutout's right edge, so no CSS var backs it. The `DisplayCutout` descriptor
-// still carries `right` (it round-trips through the screenshot metrics) — only
-// the CSS channel drops it.
+// Only the edges a layout reads are published: the cutout's top and height,
+// which place controls clear of the island. The `DisplayCutout` descriptor
+// still carries every edge (it round-trips through the screenshot metrics).
 const CUTOUT_VARS = {
   top: "--display-cutout-top",
-  left: "--display-cutout-left",
-  width: "--display-cutout-width",
   height: "--display-cutout-height",
 } satisfies Partial<Record<keyof DisplayCutout, keyof typeof TOKENS>>;
 

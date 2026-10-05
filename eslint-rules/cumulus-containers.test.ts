@@ -20,21 +20,6 @@ describe("Cumulus container allowlist (single source of truth)", () => {
     );
   });
 
-  it("the contract test consumes the same shared list", () => {
-    // The resolved-surface contract test builds its allowlist from the shared
-    // module. Assert it still imports both halves (components + the Pressable
-    // primitive) so the two enforcement layers can't diverge.
-    const contract = readFileSync(
-      resolve(HERE, "../scripts/cumulus-strict-api.contract.test.mjs"),
-      "utf8",
-    );
-    expect(contract).toContain(
-      'from "../eslint-rules/cumulus-containers.js"',
-    );
-    expect(contract).toContain("CONTAINER_COMPONENTS");
-    expect(contract).toContain("CONTAINER_PRIMITIVES");
-  });
-
   it("keeps Pressable as a primitive, out of the components-scoped rule", () => {
     // Pressable forwards DOM props and lives in primitives/, so it must NOT be
     // in the components allowlist (the AST rule never scans it) but MUST be a

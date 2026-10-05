@@ -1,4 +1,4 @@
-import { assertLocalized, tx, txa, type LocalizedString } from "@trox/runtime";
+import { tx, txa, type LocalizedString } from "@trox/runtime";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -13,8 +13,6 @@ import {
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
-import { GLYPHS } from "../primitives/glyph";
-import { IconButton } from "../components/controls/IconButton";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { BattleStatusAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
@@ -51,20 +49,13 @@ import {
 } from "./MobileBattleScreen";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
-  TutorialEditorRail,
-  TutorialEditorTakeover,
-} from "./TutorialEditorRail";
-import {
   DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
-  MOBILE_BATTLE_INSPECTOR_RAIL_TRACK,
   MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
   MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
 import type {
   TutorialAction,
   TutorialAvatarOwner,
-  TutorialEditorSaveStatus,
-  TutorialCardConstants,
   TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
 import { renderTutorialInstructionParagraph } from "../internal/tutorial-instruction-text";
@@ -81,7 +72,6 @@ import type { TutorialActionId } from "../../types/identifiers";
 import type { TutorialRunId } from "../../types/identifiers";
 
 type TutorialActionPresentationKey = `${TutorialRunId}:${TutorialActionId}`;
-type TutorialDialogueLayoutKey = `${boolean}:${boolean}`;
 
 function tutorialActionPresentationKey(
   runId: TutorialRunId,
@@ -173,16 +163,8 @@ export interface TutorialView {
   readonly challenge?: TutorialChallengeView | null;
 }
 
-export interface TutorialEditorView {
-  readonly actions: readonly TutorialAction[];
-  readonly tutorialCardConstants: TutorialCardConstants;
-  readonly saveStatus: TutorialEditorSaveStatus;
-  readonly saveError: LocalizedString | null;
-}
-
 export interface TutorialScreenProps {
   readonly view: TutorialView;
-  readonly editor?: TutorialEditorView;
   /** Multiplier applied to every timed part of the tutorial sequence. */
   readonly playbackSpeed?: number;
   readonly onActionComplete?: (
@@ -220,12 +202,6 @@ export interface TutorialScreenProps {
     opposingCardId: CardId,
     targetSlotId: BattleSlotViewId,
   ) => void;
-  readonly onEditorActionsChange?: (
-    actions: readonly TutorialAction[],
-    persist: boolean,
-  ) => void;
-  readonly onReplay?: () => void;
-  readonly onPlayFromAction?: (actionId: TutorialActionId) => void;
 }
 
 interface TutorialDialogueAnchor {
@@ -270,7 +246,6 @@ const TUTORIAL_DREAMWELL_EMERGE_START_SCALE = 0.72;
 // Lift the Dreamwell's transformed side-zone stacking context above battlefield
 // ranks during emergence while keeping it beneath battle controls and dialogs.
 const TUTORIAL_DREAMWELL_EMERGENCE_LAYER = 5;
-const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
 const TUTORIAL_CHALLENGE_TOTAL_SECONDS = TUTORIAL_CARD_TRAVEL_SECONDS * 6;
@@ -681,7 +656,6 @@ interface TutorialAvatarDialogueAnchor {
 function TutorialAvatarDialogue({
   dialogue,
   visible,
-  layoutKey,
   desktop,
 }: {
   readonly dialogue: Extract<
@@ -689,7 +663,6 @@ function TutorialAvatarDialogue({
     { readonly kind: "avatar" }
   >;
   readonly visible: boolean;
-  readonly layoutKey: TutorialDialogueLayoutKey;
   readonly desktop: boolean;
 }): ReactElement {
   const bubbleFrameRef = useRef<HTMLDivElement | null>(null);
@@ -769,7 +742,6 @@ function TutorialAvatarDialogue({
     dialogue.horizontalOffset,
     dialogue.owner,
     dialogue.verticalOffset,
-    layoutKey,
   ]);
 
   const pointerPlacement =
@@ -1698,7 +1670,6 @@ function TutorialChallengeAnimation({
 /** Standalone tutorial battle presentation entered from the loading scene. */
 export function TutorialScreen({
   view,
-  editor,
   playbackSpeed = 1,
   onActionComplete,
   onAvatarArrivalComplete,
@@ -1707,17 +1678,12 @@ export function TutorialScreen({
   onPlayerCardPlay,
   onEndTurn,
   onPlayerCharacterReposition,
-  onEditorActionsChange,
-  onReplay,
-  onPlayFromAction,
 }: TutorialScreenProps): ReactElement {
   const resolve = useLocalizer();
   const desktop = useIsDesktop();
-  const dockEditor = useIsDesktop(TUTORIAL_EDITOR_DOCK_MIN_WIDTH);
   const reduceMotion = useReducedMotion() === true;
   const screenRef = useRef<HTMLElement | null>(null);
   const [sceneEntered, setSceneEntered] = useState(reduceMotion);
-  const [editorOpen, setEditorOpen] = useState(false);
   const [battleInspectorOpen, setBattleInspectorOpen] = useState(false);
   const [arrivedActionKey, setArrivedActionKey] =
     useState<TutorialActionPresentationKey | null>(null);
@@ -2720,12 +2686,6 @@ export function TutorialScreen({
     view.playbackRunId,
   ]);
 
-  useEffect(() => {
-    if (!dockEditor && editorOpen && battleInspectorOpen) {
-      setEditorOpen(false);
-    }
-  }, [battleInspectorOpen, dockEditor, editorOpen]);
-
   useLayoutEffect(() => {
     const screen = screenRef.current;
     const dialogue = screen?.querySelector<HTMLElement>(
@@ -2851,26 +2811,11 @@ export function TutorialScreen({
     };
   }, [desktop, renderedDialogue]);
 
-  const editorSurface =
-    editor === undefined ||
-    onEditorActionsChange === undefined ||
-    onReplay === undefined ||
-    onPlayFromAction === undefined
-      ? null
-      : {
-          ...editor,
-          onActionsChange: onEditorActionsChange,
-          onReplay,
-          onPlayFromAction,
-          onClose: () => setEditorOpen(false),
-        };
-
   const handleBattleInspectorOpenChange = useCallback(
     (open: boolean): void => {
       setBattleInspectorOpen(open);
-      if (open && !dockEditor) setEditorOpen(false);
     },
-    [dockEditor],
+    [],
   );
   const howToPlayActionKey =
     view.howToPlay === null || view.playbackRunId === null
@@ -2993,17 +2938,11 @@ export function TutorialScreen({
             position: "absolute",
             inset: 0,
             display: "grid",
-            gridTemplateColumns:
-              dockEditor && editorOpen
-                ? `${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK} minmax(0, 1fr)`
-                : "minmax(0, 1fr)",
+            gridTemplateColumns: "minmax(0, 1fr)",
             minWidth: 0,
             minHeight: 0,
           }}
         >
-          {dockEditor && editorOpen && editorSurface !== null ? (
-            <TutorialEditorRail {...editorSurface} />
-          ) : null}
           <div style={{ position: "relative", minWidth: 0, minHeight: 0 }}>
             <MobileBattleScreen
               view={displayedBattleView}
@@ -3121,30 +3060,6 @@ export function TutorialScreen({
             }
           />
         ) : null}
-        {editorSurface !== null && !editorOpen ? (
-          <div
-            style={{
-              position: "absolute",
-              top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-s")})`,
-              left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-s")})`,
-              zIndex: 20,
-            }}
-          >
-            {/* localization-ignore: developer-only tutorial editor entry point. */}
-            <IconButton
-              glyph={GLYPHS.sidebarLeft}
-              size="sm"
-              label={assertLocalized("Open tutorial editor")}
-              ariaExpanded={false}
-              ariaControls="cumulus-tutorial-editor"
-              testId="tutorial-editor-trigger"
-              onPress={() => {
-                if (!dockEditor) setBattleInspectorOpen(false);
-                setEditorOpen(true);
-              }}
-            />
-          </div>
-        ) : null}
         <div
           data-tutorial-dialogue-anchor=""
           style={{
@@ -3215,12 +3130,8 @@ export function TutorialScreen({
               visibleDialogueActionKey ===
                 tutorialActionPresentationKey(view.playbackRunId, dialogueActionId)
             }
-            layoutKey={`${dockEditor}:${editorOpen}`}
             desktop={desktop}
           />
-        ) : null}
-        {!dockEditor && editorOpen && editorSurface !== null ? (
-          <TutorialEditorTakeover {...editorSurface} />
         ) : null}
         {(howToPlayVisible || stageHowToPlayDreamwell) &&
         view.howToPlay !== null ? (

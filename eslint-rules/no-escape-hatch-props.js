@@ -232,7 +232,7 @@ const rule = {
       return {};
     }
     // Skip `__*__` fixtures / internal helpers (e.g. __docgen_fixture__.tsx),
-    // matching generate-cumulus-metadata.mjs — they are not the public surface and
+    // they are not the public surface and
     // deliberately exercise shapes the real components must never expose.
     const basename = fileRelative.slice(fileRelative.lastIndexOf("/") + 1);
     if (/^__.*__/.test(basename)) {

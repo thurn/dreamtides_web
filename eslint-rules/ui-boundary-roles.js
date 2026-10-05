@@ -27,10 +27,6 @@ const fileRoles = {
   // globally inherited legacy color bridge; product presentation belongs to
   // Cumulus closures.
   "src/index.css": OUTER_UI_ROLES.APP_SHELL,
-  "src/editor/card-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/editor/editable-figment.css": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/editor/exploration-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/editor/glossary-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/vendor/boxicons/boxicons.css": OUTER_UI_ROLES.VENDOR_ASSET,
   "src/vendor/boxicons/boxicons-filled.css": OUTER_UI_ROLES.VENDOR_ASSET,
   "src/vendor/boxicons/boxicons-logos.css": OUTER_UI_ROLES.VENDOR_ASSET,
@@ -75,12 +71,6 @@ const fileRoles = {
   "src/coop/UnreadableRoomScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/VersionGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
 
-  "src/debug/OffersDebugApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-
-  "src/image_viewer/ImageGrid.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/image_viewer/ImageViewerApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/image_viewer/ImageViewerToolbar.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-
   "src/screens/CardSourceOverlay.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/screens/DebugScreen.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/screens/JourneyDebugEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
@@ -123,57 +113,6 @@ for (const name of [
     OUTER_UI_ROLES.STATE_ADAPTER;
 }
 
-for (const name of [
-  "CardEditorApp",
-  "CardEditorGrid",
-  "CardEditorToolbar",
-  "CardTagEditor",
-  "CatalogTagToolbar",
-  "AvatarDetailView",
-  "AvatarEditorApp",
-  "AvatarEditorGrid",
-  "AvatarEditorToolbar",
-  "DreamscapeEditorApp",
-  "DreamscapeEditorToolbar",
-  "DreamscapeResidents",
-  "DreamsignEditorApp",
-  "DreamsignEditorGrid",
-  "DreamsignEditorToolbar",
-  "DreamwellEditorApp",
-  "DreamwellEditorPreview",
-  "DreamwellEditorToolbar",
-  "EditableCard",
-  "EditableAvatar",
-  "EditableDreamscape",
-  "EditableDreamsign",
-  "EditableDreamwell",
-  "EditableField",
-  "EditableFigment",
-  "FigmentEditorApp",
-  "FocusedCardEditor",
-  "ManageTagsModal",
-  "TagChip",
-  "TagFilterControl",
-  "ExplorationEditorApp",
-  "GlossaryEditorApp",
-  "TidePoolModal",
-  "TideSourcePreview",
-  "TidesDetailView",
-  "TidesEditorApp",
-  "TidesListView",
-]) {
-  fileRoles[`src/editor/${name}.tsx`] = OUTER_UI_ROLES.OPERATOR_TOOL;
-}
-
-for (const name of [
-  "CardBrowserGrid",
-  "CardBrowserToolbar",
-  "MtgNameTooltip",
-]) {
-  fileRoles[`src/editor/card-browser/${name}.tsx`] =
-    OUTER_UI_ROLES.OPERATOR_TOOL;
-}
-
 export const OUTER_UI_FILE_ROLES = Object.freeze(fileRoles);
 
 export const OUTER_UI_ROLE_VALUES = Object.freeze(
@@ -204,16 +143,11 @@ export const LOCALIZATION_NON_REACT_PRODUCER_FILES = Object.freeze([
 ]);
 
 const LOCALIZATION_EXCLUDED_PREFIXES = Object.freeze([
-  "src/cumulus/docs/",
-  "src/cumulus/screens/devtools/",
   "src/debug/",
-  "src/editor/",
-  "src/image_viewer/",
 ]);
 
 const LOCALIZATION_EXCLUDED_FILES = new Set([
   "src/cumulus/screens/JourneyDebugEditorScreen.tsx",
-  "src/cumulus/screens/TutorialEditorRail.tsx",
   "src/battle/components/BattleContextMenu.tsx",
   "src/battle/components/BattleFigmentCreator.tsx",
   "src/cumulus/components/overlay/DeveloperRail.tsx",

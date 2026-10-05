@@ -158,10 +158,6 @@ describe("Cumulus UI boundary", () => {
 
   it("keeps bootstrap and coop controllers outside strict presentation scope", () => {
     expect(isStrictCompositionFile("src/coop/BounceToast.tsx", [])).toBe(false);
-    expect(isStrictCompositionFile("src/editor/CardEditorApp.tsx", [])).toBe(
-      false,
-    );
-    expect(isUniversalUiFile("src/editor/CardEditorApp.tsx")).toBe(true);
     expect(isUniversalUiFile("src/vendor/boxicons/boxicons.css")).toBe(false);
   });
 

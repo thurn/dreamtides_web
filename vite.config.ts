@@ -6,16 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
-import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
-import { createExplorationEditorApiMiddleware } from "./scripts/exploration-editor-api.mjs";
-import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
-import { createAvatarEditorApiMiddleware } from "./scripts/avatar-editor-api.mjs";
-import { createTidesEditorApiMiddleware } from "./scripts/tides-editor-api.mjs";
-import { createDreamscapeEditorApiMiddleware } from "./scripts/dreamscape-editor-api.mjs";
-import { createDreamGuideEditorApiMiddleware } from "./scripts/dream-guide-editor-api.mjs";
-import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.mjs";
 import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
-import { createDreamwellEditorApiMiddleware } from "./scripts/dreamwell-editor-api.mjs";
 import { refreshDreamwellDataJson } from "./scripts/dreamwell-editor-data.mjs";
 import {
   generatedConfigDataWatchPaths,
@@ -23,17 +14,13 @@ import {
   regenerateSitesData,
   SIMPLE_CONFIG_TOML_BASENAMES,
 } from "./scripts/config-data.mjs";
-import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { createSavedJourneysApiMiddleware } from "./scripts/saved-journeys-api.mjs";
-import { createTutorialEditorApiMiddleware } from "./scripts/tutorial-editor-api.mjs";
-import { createGlossaryEditorApiMiddleware } from "./scripts/glossary-editor-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 import { regenerateCardData } from "./scripts/setup-assets.mjs";
 import { resolveBuildHash } from "./scripts/build-hash.mjs";
 import { troxDevelopmentBundlesPlugin } from "./scripts/trox-vite-plugin.ts";
 import { ensureGameData, listGameData } from "./scripts/game-data-pipeline.mjs";
-import { createRonEditorBridge } from "./scripts/ron-editor-bridge.mjs";
 import {
   parseGameDataDatasetId,
   type GameDataDatasetId,
@@ -46,12 +33,6 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildGitSha = resolveBuildGitSha();
 const buildHash = resolveBuildHash(__dirname);
-const imageViewerStatePath = path.join(
-  __dirname,
-  "data",
-  "internal",
-  "image-viewer-state.json",
-);
 export const generatedDataTomlWatchPattern =
   path.resolve(path.join(__dirname, "data")) + "/*.toml*";
 export const generatedCardRuntimeDataPaths = [
@@ -234,75 +215,6 @@ function journeyLogPlugin(): Plugin {
   };
 }
 
-/** Vite plugin that serves local card editor read/write endpoints. */
-function cardEditorApiPlugin(): Plugin {
-  return {
-    name: "card-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use(
-        createCardEditorApiMiddleware({ rootDir: __dirname }),
-      );
-    },
-  };
-}
-
-/** Vite plugin that serves the TOML-backed Exploration production editor. */
-function explorationEditorApiPlugin(): Plugin {
-  return {
-    name: "exploration-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use(
-        createExplorationEditorApiMiddleware({
-          rootDir: __dirname,
-          onChanged(change) {
-            server.ws.send({
-              type: "custom",
-              event: "exploration-data:changed",
-              data: change,
-            });
-          },
-        }),
-      );
-    },
-  };
-}
-
-/** Vite plugin that serves local dreamsign editor read/write endpoints. */
-function dreamsignEditorApiPlugin(): Plugin {
-  return {
-    name: "dreamsign-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
-      server.middlewares.use(
-        createDreamsignEditorApiMiddleware({
-          rootDir:
-            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
-        }),
-      );
-    },
-  };
-}
-
-/** Vite plugin that serves the canonical RON-backed Info Card glossary editor. */
-function glossaryEditorApiPlugin(): Plugin {
-  return {
-    name: "glossary-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
-      server.middlewares.use(
-        createGlossaryEditorApiMiddleware({
-          rootDir:
-            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
-        }),
-      );
-    },
-  };
-}
-
 /**
  * Notify every non-glossary page when generated glossary.toml changes. The data
  * directory is outside Vite's watcher, so this small direct watcher lets open
@@ -366,69 +278,6 @@ export function glossaryDataHotReloadPlugin(
       };
       server.httpServer?.once("close", close);
       server.watcher.once("close", close);
-    },
-  };
-}
-
-/** Vite plugin that serves local avatar editor read/write endpoints. */
-function avatarEditorApiPlugin(): Plugin {
-  return {
-    name: "avatar-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
-      server.middlewares.use(
-        createAvatarEditorApiMiddleware({
-          rootDir:
-            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
-        }),
-      );
-    },
-  };
-}
-
-/** Vite plugin that serves the tides editor read/write endpoints (`/tides`). */
-function tidesEditorApiPlugin(): Plugin {
-  return {
-    name: "tides-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
-      server.middlewares.use(
-        createTidesEditorApiMiddleware({
-          rootDir:
-            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
-        }),
-      );
-    },
-  };
-}
-
-/** Vite plugin that serves local dreamscape editor read/write endpoints. */
-function dreamscapeEditorApiPlugin(): Plugin {
-  return {
-    name: "dreamscape-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
-      const rootDir =
-        editorRoot === undefined ? __dirname : path.resolve(editorRoot);
-      server.middlewares.use(createDreamGuideEditorApiMiddleware({ rootDir }));
-      server.middlewares.use(createDreamscapeEditorApiMiddleware({ rootDir }));
-    },
-  };
-}
-
-/** Vite plugin that serves local figment editor read/write endpoints. */
-function figmentEditorApiPlugin(): Plugin {
-  return {
-    name: "figment-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
-      const rootDir =
-        editorRoot === undefined ? __dirname : path.resolve(editorRoot);
-      server.middlewares.use(createFigmentEditorApiMiddleware({ rootDir }));
     },
   };
 }
@@ -521,32 +370,6 @@ function figmentDataHotReloadPlugin(): Plugin {
 
       server.httpServer?.once("close", closeWatcher);
       server.watcher.once("close", closeWatcher);
-    },
-  };
-}
-
-/** Vite plugin that serves local Dreamwell editor read/write endpoints. */
-function dreamwellEditorApiPlugin(): Plugin {
-  return {
-    name: "dreamwell-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use(
-        createDreamwellEditorApiMiddleware({ rootDir: __dirname }),
-      );
-    },
-  };
-}
-
-/** Dev-only filesystem persistence for the Tutorial Editor rail. */
-function tutorialEditorApiPlugin(): Plugin {
-  return {
-    name: "tutorial-editor-api",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use(
-        createTutorialEditorApiMiddleware({ rootDir: __dirname }),
-      );
     },
   };
 }
@@ -730,23 +553,6 @@ function configDataHotReloadPlugin(): Plugin {
 
       server.httpServer?.once("close", closeWatcher);
       server.watcher.once("close", closeWatcher);
-    },
-  };
-}
-
-/** Vite plugin that serves the candidate-image viewer endpoints. */
-function imageViewerApiPlugin(): Plugin {
-  return {
-    name: "image-viewer-api",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use(
-        createImageViewerApiMiddleware({
-          cardsTomlPath: path.join(__dirname, "data", "cards.toml"),
-          nameHistoryTomlPaths: [path.join(__dirname, "data", "cards.toml")],
-          statePath: imageViewerStatePath,
-        }),
-      );
     },
   };
 }
@@ -1064,20 +870,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
     journeyLogPlugin(),
-    cardEditorApiPlugin(),
-    explorationEditorApiPlugin(),
-    dreamsignEditorApiPlugin(),
-    glossaryEditorApiPlugin(),
     glossaryDataHotReloadPlugin(),
-    avatarEditorApiPlugin(),
-    tidesEditorApiPlugin(),
-    dreamscapeEditorApiPlugin(),
-    figmentEditorApiPlugin(),
     figmentDataHotReloadPlugin(),
-    dreamwellEditorApiPlugin(),
-    tutorialEditorApiPlugin(),
     dreamwellDataHotReloadPlugin(),
-    imageViewerApiPlugin(),
     cardImageApiPlugin(),
     savedJourneysApiPlugin(),
     cardDataHotReloadPlugin(),
@@ -1100,7 +895,6 @@ export default defineConfig({
       // creating a worktree from reloading the dev server.
       ignored: [
         generatedDataTomlWatchPattern,
-        imageViewerStatePath,
         // Exploration editor saves update canonical templates and regenerate
         // the public runtime catalog. Its targeted websocket event refreshes
         // journey pages while the editor keeps its in-progress UI state.

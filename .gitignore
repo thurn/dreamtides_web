@@ -14,7 +14,6 @@ public/dream-guides/
 public/atlas/
 public/*-data.json
 src/generated/config/
-src/cumulus/metadata/cumulus-metadata.json
 src/cumulus/primitives/tokens.ts
 src/runtime/localization/runtime-templates.generated.ts
 logs/

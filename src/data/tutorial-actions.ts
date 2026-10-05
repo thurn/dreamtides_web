@@ -15,7 +15,6 @@ import type {
   TutorialCardConstantRole,
   TutorialCardConstants,
 } from "../types/tutorial";
-import { confirmSourceRevision } from "../editor/source-revision";
 import { parseTutorialBattleAiActionOverrides } from "../types/tutorial-ai-action-overrides";
 import semanticPlayCardIds from "../battle/semantic-play-card-ids.json";
 import { glossaryEntry } from "./glossary";
@@ -1025,28 +1024,18 @@ export function parseTutorialTriggers(
   });
 }
 
-export type TutorialActionLoadSource = "editor" | "runtime";
-
-function defaultTutorialActionLoadSource(): TutorialActionLoadSource {
-  return import.meta.env.DEV ? "editor" : "runtime";
-}
-
-/** Load the authored tutorial sequence from the live editor or built runtime data. */
+/** Load the authored tutorial sequence from the built runtime data. */
 export async function loadTutorialActions(
   fetcher: typeof fetch = fetch,
-  source: TutorialActionLoadSource = defaultTutorialActionLoadSource(),
 ): Promise<readonly TutorialAction[]> {
-  return (await loadTutorialConfiguration(fetcher, source)).actions;
+  return (await loadTutorialConfiguration(fetcher)).actions;
 }
 
 /** Load both the scripted sequence and supplemental battle triggers. */
 export async function loadTutorialConfiguration(
   fetcher: typeof fetch = fetch,
-  source: TutorialActionLoadSource = defaultTutorialActionLoadSource(),
 ): Promise<TutorialConfiguration> {
-  const path =
-    source === "editor" ? "/api/editor/tutorial" : "/tutorial-data.json";
-  const response = await fetcher(path);
+  const response = await fetcher("/tutorial-data.json");
   if (!response.ok) {
     throw new Error(
       `Failed to load tutorial actions (${String(response.status)}).`,
@@ -1057,7 +1046,6 @@ export async function loadTutorialConfiguration(
     throw new Error("Tutorial data response must be an object.");
   }
   const record = body as Record<string, unknown>;
-  if (source === "editor") confirmSourceRevision("tutorial", record);
   if (
     typeof record.contentHash !== "string" ||
     !SHA256_PATTERN.test(record.contentHash) ||

@@ -381,7 +381,6 @@ export type TutorialAction =
   | EndTurnTutorialAction;
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */
-export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";
 
 /** Optional cursor and transport metadata for a shared tutorial playback. */
 export interface BeginTutorialOptions {

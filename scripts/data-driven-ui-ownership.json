@@ -109,11 +109,8 @@
           "fields": ["display_name", "accent_color", "accessibility_name"]
         }
       ],
-      "consumers": [
-        "src/cumulus/components/hud/TideDisc.tsx",
-        "src/editor/TidePoolModal.tsx"
-      ],
-      "persisted": ["src/editor/tides-types.ts"],
+      "consumers": ["src/cumulus/components/hud/TideDisc.tsx"],
+      "persisted": [],
       "logging": []
     },
     "rulesSymbols": {
