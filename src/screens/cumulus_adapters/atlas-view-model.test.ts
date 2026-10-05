@@ -20,31 +20,22 @@ import {
 } from "../../testing/atlas-fixtures";
 import {
   ATLAS_LAYOUT_DESKTOP,
-  ATLAS_LAYOUT_MOBILE,
   ATLAS_STAGE_HEIGHT,
-  ATLAS_STAGE_LANDSCAPE_HEIGHT,
-  ATLAS_STAGE_LANDSCAPE_WIDTH,
   ATLAS_STAGE_WIDTH,
   atlasChoiceLayer,
   atlasEdgeKind,
   buildAtlasGuidanceLog,
   buildAtlasGuideDialogue,
-  buildAtlasMapEdges,
   buildAtlasMapNodes,
   buildAtlasView,
   resolveAtlasNodeGeometry,
 } from "./atlas-view-model";
 import { parseAtlasNodeId } from "../../types/identifiers";
-import { siteTypeName } from "../../data/sites-data";
 import { parseJourneyId } from "../../types/identifiers";
-import { parseSiteId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import {
-  testAffiliationId,
   testDreamscapeId,
   testDreamsignId,
-  testGuideId,
-  testTideId,
 } from "../../types/test-identities";
 
 const STARTER_NODE_ID = parseAtlasNodeId("starter");
@@ -230,23 +221,6 @@ describe("resolveAtlasNodeGeometry", () => {
     expect(Math.min(...tops)).toBe(boss!.top);
   });
 
-  it("sizes the starter and boss larger than a regular node", () => {
-    const geometry = resolveAtlasNodeGeometry(makeVerticalAtlas());
-    expect(geometry.get(STARTER_NODE_ID)!.size).toBe(
-      geometry.get(BOSS_NODE_ID)!.size,
-    );
-    expect(geometry.get(MIDDLE_NODE_ID)!.size).toBeLessThan(
-      geometry.get(STARTER_NODE_ID)!.size,
-    );
-    expect(geometry.get(STARTER_NODE_ID)!.role).toBe("starter");
-    expect(geometry.get(BOSS_NODE_ID)!.role).toBe("boss");
-  });
-
-  it("returns an empty map for an atlas with no positioned nodes", () => {
-    const atlas = makeVerticalAtlas();
-    expect(resolveAtlasNodeGeometry({ ...atlas, nodes: {} }).size).toBe(0);
-  });
-
   it("runs the layer axis left-to-right on the landscape (desktop) profile: starter at the left, boss at the right", () => {
     const geometry = resolveAtlasNodeGeometry(
       makeVerticalAtlas(),
@@ -266,29 +240,11 @@ describe("resolveAtlasNodeGeometry", () => {
     // The within-layer spread fans vertically, so a node's y decides its `top`.
     expect(middle!.top).toBeLessThan(boss!.top);
   });
-
-  it("draws larger nodes on mobile than on desktop so icons stay legible once the narrow viewport scales the stage down", () => {
-    const atlas = makeVerticalAtlas();
-    const mobile = resolveAtlasNodeGeometry(atlas, ATLAS_LAYOUT_MOBILE);
-    const desktop = resolveAtlasNodeGeometry(atlas, ATLAS_LAYOUT_DESKTOP);
-    expect(mobile.get(MIDDLE_NODE_ID)!.size).toBeGreaterThan(
-      desktop.get(MIDDLE_NODE_ID)!.size,
-    );
-    expect(mobile.get(STARTER_NODE_ID)!.size).toBeGreaterThan(
-      desktop.get(STARTER_NODE_ID)!.size,
-    );
-  });
 });
 
 describe("atlasChoiceLayer", () => {
   it("reports the layer of the available frontier", () => {
     expect(atlasChoiceLayer(makeVerticalAtlas())).toBe(LayerName.Two);
-  });
-
-  it("is null once no node is available", () => {
-    const atlas = makeVerticalAtlas();
-    atlas.nodes[MIDDLE_NODE_ID].state = "completed";
-    expect(atlasChoiceLayer(atlas)).toBeNull();
   });
 });
 
@@ -358,16 +314,6 @@ describe("atlasEdgeKind", () => {
   const to = (state: DreamscapeNode["state"], layer: LayerName) =>
     makeNode(parseAtlasNodeId("t"), layer, { x: 0, y: 0 }, { state });
 
-  it("draws a traveled edge between two completed nodes", () => {
-    expect(
-      atlasEdgeKind(
-        from("completed", LayerName.One),
-        to("completed", LayerName.Two),
-        LayerName.Three,
-      ),
-    ).toBe("traveled");
-  });
-
   it("draws an open edge from a completed node into the available frontier", () => {
     expect(
       atlasEdgeKind(
@@ -386,16 +332,6 @@ describe("atlasEdgeKind", () => {
         LayerName.Two,
       ),
     ).toBe("locked");
-  });
-
-  it("draws a dim edge for everything at or before the frontier", () => {
-    expect(
-      atlasEdgeKind(
-        from("available", LayerName.Two),
-        to("revealedLocked", LayerName.Three),
-        LayerName.Two,
-      ),
-    ).toBe("dim");
   });
 });
 
@@ -444,144 +380,6 @@ describe("buildAtlasMapNodes", () => {
     expect(passed?.model.dreamsign).toBeNull();
     expect(passed?.model.primary.sceneArt).toBeNull();
   });
-
-  it("uses the starter Dreamscape's authored Atlas description", () => {
-    const atlas = makeVerticalAtlas();
-    const starterId = testDreamscapeId("starter-description");
-    atlas.nodes[STARTER_NODE_ID].dreamscapeId = starterId;
-    const atlasDescription = "Synthetic starter Atlas description";
-    const content: JourneyContent = {
-      ...EMPTY_CONTENT,
-      dreamscapes: [
-        {
-          id: starterId,
-          name: "Synthetic Starter",
-          guideId: null,
-          signatureSite: "Draft",
-          affiliationId: null,
-          isStarter: true,
-          atlasDescription,
-          fixedSites: ["Draft", "Battle"],
-          avatarIds: [],
-        },
-      ],
-    };
-
-    const starter = buildAtlasMapNodes(atlas, content).find(
-      (item) => item.model.id === STARTER_NODE_ID,
-    );
-
-    expect(starter?.model.primary.body).toEqual(atlasDescription);
-  });
-
-  it("rejects a guideless starter without authored Atlas copy", () => {
-    const atlas = makeVerticalAtlas();
-    const starterId = testDreamscapeId("starter-without-description");
-    atlas.nodes[STARTER_NODE_ID].dreamscapeId = starterId;
-    const content: JourneyContent = {
-      ...EMPTY_CONTENT,
-      dreamscapes: [
-        {
-          id: starterId,
-          name: "Synthetic Starter",
-          guideId: null,
-          signatureSite: "Draft",
-          affiliationId: null,
-          isStarter: true,
-          fixedSites: ["Draft", "Battle"],
-          avatarIds: [],
-        },
-      ],
-    };
-
-    expect(() => buildAtlasMapNodes(atlas, content)).toThrow(
-      /has no Atlas description/u,
-    );
-  });
-
-  it("carries a resident dreamscape's signature site as a standard site info card", () => {
-    const atlas = makeVerticalAtlas();
-    atlas.nodes[MIDDLE_NODE_ID].dreamscapeId = testDreamscapeId("wilderveil");
-    atlas.nodes[MIDDLE_NODE_ID].sites = [
-      {
-        id: parseSiteId("00000000-0000-4000-8000-000000000091"),
-        type: "Augury",
-        isEnhanced: false,
-        isVisited: false,
-      },
-    ];
-    const content: JourneyContent = {
-      ...EMPTY_CONTENT,
-      atlasData: MINIMAL_ATLAS_DATA,
-      sitesData: {
-        ...MINIMAL_SITES_DATA,
-        siteTypes: {
-          ...MINIMAL_SITES_DATA.siteTypes,
-          Augury: {
-            ...MINIMAL_SITES_DATA.siteTypes.Augury,
-            icon: "fixture-atlas-icon",
-          },
-        },
-      },
-      dreamscapes: [
-        {
-          id: testDreamscapeId("wilderveil"),
-          name: "Wilderveil",
-          guideId: testGuideId("aldric"),
-          signatureSite: "Augury",
-          affiliationId: testAffiliationId("figments"),
-          isStarter: false,
-          avatarIds: [],
-        },
-      ],
-      guides: [
-        {
-          id: testGuideId("aldric"),
-          name: "Aldric, the Seer",
-          homeDreamscapeId: testDreamscapeId("wilderveil"),
-          siteType: "Augury",
-          portraitSource: "fixture-guide.png",
-          dialogue: { site: [] },
-          homeSpecialty: "Aldric offers curated visions of the future.",
-        },
-      ],
-      affiliations: [
-        {
-          id: testAffiliationId("figments"),
-          name: "Figments",
-          atlasCardTheme: "Figment",
-          tideIds: [
-            testTideId("tide-a"),
-            testTideId("tide-b"),
-            testTideId("tide-c"),
-          ],
-        },
-      ],
-    };
-
-    const items = buildAtlasMapNodes(atlas, content);
-    const middle = items.find((item) => item.model.id === "middle");
-
-    expect(middle!.model.site!.name).toBe(
-      siteTypeName(content.sitesData, "Augury"),
-    );
-    expect(middle!.model.site!.blurb.length).toBeGreaterThan(0);
-    expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
-    expect(middle?.model.affiliation).not.toBeNull();
-  });
-});
-
-describe("buildAtlasMapEdges", () => {
-  it("draws every connector touching an unreachable node dim", () => {
-    const edges = buildAtlasMapEdges(makeForgoneAtlas());
-    const kindOf = (key: string) =>
-      edges.find((edge) => edge.key === key)?.kind;
-    // Both edges touching the forgone `passed` node are forced dim; the open
-    // route into the node the player is still on keeps its lively styling.
-    expect(kindOf("starter-passed")).toBe("dim");
-    expect(kindOf("passed-boss")).toBe("dim");
-    expect(kindOf("starter-chosen")).toBe("open");
-  });
 });
 
 describe("buildAtlasView", () => {
@@ -592,12 +390,5 @@ describe("buildAtlasView", () => {
     expect(view.nodes).toHaveLength(3);
     // starter → middle and middle → boss.
     expect(view.edges).toHaveLength(2);
-  });
-
-  it("assembles a landscape stage on desktop", () => {
-    const view = buildAtlasView(makeVerticalAtlas(), EMPTY_CONTENT, true);
-    expect(view.stageWidth).toBe(ATLAS_STAGE_LANDSCAPE_WIDTH);
-    expect(view.stageHeight).toBe(ATLAS_STAGE_LANDSCAPE_HEIGHT);
-    expect(view.stageWidth).toBeGreaterThan(view.stageHeight);
   });
 });

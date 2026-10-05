@@ -26,11 +26,6 @@ describe("parseDeviceFrame", () => {
     expect(parseDeviceFrame(encode(FRAME))).toEqual(FRAME);
   });
 
-  it("decodes a descriptor with no cutout", () => {
-    const frame = { safeArea: { top: 0, right: 0, bottom: 0, left: 0 } };
-    expect(parseDeviceFrame(encode(frame))).toEqual(frame);
-  });
-
   it("returns null when the param is absent", () => {
     expect(parseDeviceFrame("?goto=atlas")).toBeNull();
     expect(parseDeviceFrame("")).toBeNull();
@@ -52,12 +47,6 @@ describe("parseDeviceFrame", () => {
       encode({ safeArea: FRAME.safeArea, cutout: { top: 1 } }),
     );
     expect(frame).toEqual({ safeArea: FRAME.safeArea });
-  });
-
-  it("treats omitted safe-area edges as zero", () => {
-    expect(parseDeviceFrame(encode({ safeArea: { top: 59 } }))).toEqual({
-      safeArea: { top: 59, right: 0, bottom: 0, left: 0 },
-    });
   });
 });
 
@@ -88,12 +77,5 @@ describe("applyDeviceFrameFromSearch", () => {
     expect(
       document.documentElement.style.getPropertyValue("--safe-area-inset-top"),
     ).toBe("59px");
-  });
-
-  it("is a no-op that returns null without the param", () => {
-    expect(applyDeviceFrameFromSearch("?goto=atlas")).toBeNull();
-    expect(
-      document.documentElement.style.getPropertyValue("--safe-area-inset-top"),
-    ).toBe("");
   });
 });

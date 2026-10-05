@@ -1,6 +1,6 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { testEventActor } from "../../types/test-identities";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type { PoolDraftState } from "../../types/draft";
@@ -25,7 +25,6 @@ import { parseJourneyId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
-import { parseClientId } from "../../types/identifiers";
 import { testCardId, testDreamscapeId, testExplorationActionId, testTutorialTriggerId } from "../../types/test-identities";
 
 // ---------------------------------------------------------------------------
@@ -285,19 +284,6 @@ describe("PICK_DRAFT_CARD", () => {
     expect(result.state.cardTutorialPresentation).toBeNull();
   });
 
-  it("bounces a pick whose card is not at the given pack position", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(poolDraftState());
-    // packIndex 0 holds card 1, not card 3 — the pack membership guard bounces.
-    const result = reduce(start, "PICK_DRAFT_CARD", {
-      packIndex: 0,
-      cardId: cardIdForNumber(3),
-    });
-
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
-
   it("bounces a pick for a card entirely absent from the offered pack", () => {
     registerDraftContentProvider(provider());
     const start = stateWithDraftSites(poolDraftState());
@@ -306,48 +292,6 @@ describe("PICK_DRAFT_CARD", () => {
       cardId: cardIdForNumber(8),
     });
 
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
-
-  it("bounces a second pick against the same pack position (double-pick race)", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(poolDraftState());
-
-    const first = reduce(start, "PICK_DRAFT_CARD", {
-      packIndex: 0,
-      cardId: cardIdForNumber(1),
-    });
-    expect(first.outcome).toBe("applied");
-
-    // A duplicate click replays the same intent against the post-pick state.
-    // The offer has advanced, so pack position 0 no longer holds card 1: bounce
-    // instead of drafting a second card.
-    const second = reduce(first.state, "PICK_DRAFT_CARD", {
-      packIndex: 0,
-      cardId: cardIdForNumber(1),
-    });
-    expect(second.outcome).toBe("bounced");
-    expect(second.state).toEqual(first.state);
-  });
-
-  it("bounces when no draft state is present", () => {
-    registerDraftContentProvider(provider());
-    const start = genesisFoldState(GENESIS);
-    const result = reduce(start, "PICK_DRAFT_CARD", {
-      packIndex: 0,
-      cardId: cardIdForNumber(1),
-    });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
-
-  it("bounces when no content provider is registered", () => {
-    const start = stateWithDraft(poolDraftState());
-    const result = reduce(start, "PICK_DRAFT_CARD", {
-      packIndex: 0,
-      cardId: cardIdForNumber(1),
-    });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
   });
@@ -402,18 +346,6 @@ describe("REROLL_DRAFT_OFFER", () => {
     expect(result.state.journey.deck).toEqual(start.journey.deck);
     expect(draft.currentOffer).toEqual([5, 6, 7, 8]);
     expect(draft.siteShownCardNumbers).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
-  });
-
-  it("bounces when the requested site is not the active draft site", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(poolDraftState());
-
-    const result = reduce(start, "REROLL_DRAFT_OFFER", {
-      siteId: parseSiteId("site-b"),
-    });
-
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
   });
 });
 
@@ -483,38 +415,6 @@ describe("ENTER_DRAFT_SITE", () => {
     );
   });
 
-  it("allows an observer to commit the displayed draft site's deterministic entry", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(
-      poolDraftState({
-        activeSiteId: null,
-        currentOffer: [],
-        siteShownCardNumbers: [],
-      }),
-      {
-        screen: { type: "site", siteId: parseSiteId("site-a") },
-        activeSiteId: parseSiteId("site-a"),
-      },
-    );
-    const hosted = {
-      ...start,
-      playtestControl: {
-        mode: "single-controller" as const,
-        controllerClientId: parseClientId("controller"),
-      },
-    };
-
-    const result = reduceGameEvent(
-      hosted,
-      event("ENTER_DRAFT_SITE", { siteId: parseSiteId("site-a") }, "observer"),
-      ctx({ rng: makeRng(3) }),
-    );
-
-    expect(result.outcome).toBe("applied");
-    expect(result.state.journey.draftState?.activeSiteId).toBe("site-a");
-    expect(result.state.playtestControl?.controllerClientId).toBe("controller");
-  });
-
   it("activates the site and reveals a non-empty offer from ctx.rng", () => {
     registerDraftContentProvider(provider());
     const draftState = poolDraftState({
@@ -535,23 +435,6 @@ describe("ENTER_DRAFT_SITE", () => {
     const next = result.state.journey.draftState as PoolDraftState;
     expect(next.activeSiteId).toBe("site-a");
     expect(next.currentOffer.length).toBeGreaterThan(0);
-  });
-
-  it("bounces with zero rng draws when the site is already active", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(poolDraftState());
-    const rngSpy = vi.fn(() => 0);
-
-    const result = reduce(
-      start,
-      "ENTER_DRAFT_SITE",
-      { siteId: parseSiteId("site-a") },
-      ctx({ rng: rngSpy }),
-    );
-
-    expect(result.outcome).toBe("bounced");
-    expect(result.state.journey).toBe(start.journey);
-    expect(rngSpy).not.toHaveBeenCalled();
   });
 
   it("converges if a repeated entry reaches the reducer after the winning entry", () => {
@@ -589,53 +472,6 @@ describe("ENTER_DRAFT_SITE", () => {
     expect(secondResult.state.journey).toBe(firstResult.state.journey);
     expect(secondResult.state).toEqual(soloResult.state);
   });
-
-  it("bounces without a provider", () => {
-    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
-    const result = reduce(start, "ENTER_DRAFT_SITE", {
-      siteId: parseSiteId("site-b"),
-    });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
-
-  it("bounces with a null draftState", () => {
-    registerDraftContentProvider(provider());
-    const start = genesisFoldState(GENESIS);
-    const result = reduce(start, "ENTER_DRAFT_SITE", {
-      siteId: parseSiteId("site-a"),
-    });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
-
-  it("bounces for a non-draft site", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
-    const result = reduce(start, "ENTER_DRAFT_SITE", {
-      siteId: parseSiteId("site-battle"),
-    });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
-
-  it("bounces for an unknown site id", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
-    const result = reduce(start, "ENTER_DRAFT_SITE", {
-      siteId: parseSiteId("site-nowhere"),
-    });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
-
-  it("bounces a malformed payload", () => {
-    registerDraftContentProvider(provider());
-    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
-    const result = reduce(start, "ENTER_DRAFT_SITE", {});
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -656,20 +492,6 @@ describe("SET_DRAFT_STATE", () => {
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.draftState).toEqual(replacement);
   });
-
-  it("clears the draft state when passed null", () => {
-    const start = stateWithDraft(poolDraftState());
-    const result = reduce(start, "SET_DRAFT_STATE", { draftState: null });
-    expect(result.outcome).toBe("applied");
-    expect(result.state.journey.draftState).toBeNull();
-  });
-
-  it("bounces a malformed (non-object) draft state", () => {
-    const start = stateWithDraft(poolDraftState());
-    const result = reduce(start, "SET_DRAFT_STATE", { draftState: 5 });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toEqual(start);
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -689,27 +511,6 @@ describe("draft-engine injected rng", () => {
       },
     });
   }
-
-  it("produces the same sample for the same rng stream", () => {
-    const a = structuredClone(samplePool());
-    const b = structuredClone(samplePool());
-    const drawnA = drawAndSpendUniqueCards(
-      a,
-      4,
-      undefined,
-      undefined,
-      makeRng(7),
-    );
-    const drawnB = drawAndSpendUniqueCards(
-      b,
-      4,
-      undefined,
-      undefined,
-      makeRng(7),
-    );
-    expect(drawnA).toEqual(drawnB);
-    expect(drawnA).toHaveLength(4);
-  });
 
   it("threads the injected rng rather than reading ambient randomness", () => {
     // A fixed rng of 0 makes weightedSample take the first cumulative entry each

@@ -1,451 +1,472 @@
 import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
-import type { JourneyContent } from "../../data/journey-content";
-
-expect.addEqualityTesters([annotatedTextEquality]);
 import type {
-  Avatar,
-  Dreamsign,
   DreamscapeNode,
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { resolveArtRef } from "../../cumulus/primitives/art";
 import { createDefaultState } from "../../state/journey-context";
 import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import {
-  battleLabel,
   buildDreamscapeHudView,
   buildDreamscapeGuideDialogue,
   buildDreamscapeView as buildDreamscapeViewImpl,
   buildSiteModels as buildSiteModelsImpl,
-  dreamscapeSceneRef,
-  dreamscapeTitle,
-  toQsbAvatar,
-  toQsbDreamsigns,
 } from "./dreamscape-view-model";
-import { parseAtlasNodeId } from "../../types/identifiers";
-import { parseDeckEntryId } from "../../types/identifiers";
-import { parseSiteId } from "../../types/identifiers";
+import {
+  parseAtlasNodeId,
+  parseDeckEntryId,
+  parseSiteId,
+  parseBattleEntryKey,
+  parseOpponentId,
+} from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
-import { testCardId, testAvatarId, testDreamsignId, testExplorationActionId } from "../../types/test-identities";
+import {
+  testCardId,
+  testDreamsignId,
+  testExplorationActionId,
+  testDreamscapeId,
+} from "../../types/test-identities";
+import { createTestBattleInit } from "../../testing/create-battle-init";
+import {
+  makeBattleTestCardDatabase,
+  makeBattleTestAvatars,
+  makeBattleTestSite,
+  makeBattleTestState,
+} from "../../battle/test-support";
+import { buildBattleStartView } from "./battle-start-view-model";
 
-const buildSiteModels = (
-  dreamscapeNode: DreamscapeNode,
-  completionLevel: number,
-  sitesData = MINIMAL_SITES_DATA,
-) => buildSiteModelsImpl(dreamscapeNode, completionLevel, sitesData, 5);
+describe("dreamscape-view-model", () => {
+  expect.addEqualityTesters([annotatedTextEquality]);
 
-const buildDreamscapeView = (
-  dreamscapeNode: DreamscapeNode,
-  state: JourneyState,
-  sitesData = MINIMAL_SITES_DATA,
-  replacementSiteId: SiteId | null = null,
-) =>
-  buildDreamscapeViewImpl(
-    dreamscapeNode,
-    "Fixture Dreamscape",
-    state,
-    sitesData,
-    5,
-    replacementSiteId,
-    undefined,
-  );
+  const buildSiteModels = (
+    dreamscapeNode: DreamscapeNode,
+    completionLevel: number,
+    sitesData = MINIMAL_SITES_DATA,
+  ) => buildSiteModelsImpl(dreamscapeNode, completionLevel, sitesData, 5);
 
-function site(
-  overrides: Partial<SiteState> & Pick<SiteState, "id" | "type">,
-): SiteState {
-  return { isEnhanced: false, isVisited: false, ...overrides };
-}
-
-function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
-  return {
-    id: parseAtlasNodeId("node-1"),
-    layer: 0,
-    indexInLayer: 0,
-    dreamscapeId: "ember_wood",
-    sites: [
-      site({ id: parseSiteId("s-purge"), type: "Purge" }),
-      site({ id: parseSiteId("s-draft"), type: "Draft" }),
-      site({ id: parseSiteId("s-battle"), type: "Battle" }),
-    ],
-    position: { x: 0, y: 0 },
-    state: "revealed",
-    enhancedSiteType: null,
-    forwardIds: [],
-    backwardIds: [],
-    knownDreamsignId: null,
-    ...overrides,
-  } as DreamscapeNode;
-}
-
-describe("battleLabel", () => {
-  it("identifies the final boss at the last completion level", () => {
-    expect(battleLabel(6, MINIMAL_SITES_DATA)).toBe(
-      "Final Boss",
-    );
-    expect(battleLabel(0, MINIMAL_SITES_DATA)).toBe("Battle");
-    expect(battleLabel(3, MINIMAL_SITES_DATA)).toBe("Battle");
-  });
-});
-
-describe("buildSiteModels", () => {
-  it("places one model per site with a seeded scatter position", () => {
-    const models = buildSiteModels(node(), 0);
-    expect(models).toHaveLength(3);
-    for (const model of models) {
-      expect(model.pos.x).toBeGreaterThanOrEqual(0);
-      expect(model.pos.x).toBeLessThanOrEqual(100);
-      expect(model.pos.y).toBeGreaterThanOrEqual(0);
-      expect(model.pos.y).toBeLessThanOrEqual(100);
-    }
-  });
-
-  it("locks the guardian battle until every non-battle site is visited", () => {
-    const locked = buildSiteModels(node(), 0).find((m) => m.isBattle);
-    expect(locked?.isLocked).toBe(true);
-    expect(locked?.isInteractive).toBe(false);
-
-    const visitedNonBattle = node({
-      sites: [
-        site({ id: parseSiteId("s-purge"), type: "Purge", isVisited: true }),
-        site({ id: parseSiteId("s-draft"), type: "Draft", isVisited: true }),
-        site({ id: parseSiteId("s-battle"), type: "Battle" }),
-      ],
-    });
-    const unlocked = buildSiteModels(visitedNonBattle, 0).find(
-      (m) => m.isBattle,
-    );
-    expect(unlocked?.isLocked).toBe(false);
-    expect(unlocked?.isInteractive).toBe(true);
-  });
-
-  it("carries guardian tier and draft pick count as semantic values", () => {
-    const models = buildSiteModels(node(), 6);
-    const battle = models.find((m) => m.isBattle);
-    const draft = models.find((m) => m.type === "Draft");
-    expect(battle!.label).toBe("Final Boss");
-    expect(draft!.label).toBe("Draft 5x");
-  });
-});
-
-describe("toQsbAvatar", () => {
-  it("returns undefined before an Avatar is chosen", () => {
-    expect(toQsbAvatar(null)).toBeUndefined();
-  });
-
-  it("maps the Avatar's title to the epithet and its imageNumber to a portrait ref", () => {
-    const avatar: Avatar = {
-      id: testAvatarId("dc-1"),
-      name: "Drusus Calvus",
-      title: "Triumphator",
-      renderedText: "Gain 1 essence.",
-      imageNumber: "0007",
-      portraitFocus: { x: 0.42, y: 0.18 },
-      startingEssence: 200,
-    };
-    const qsb = toQsbAvatar(avatar);
-    expect(qsb!.name).toBe("Drusus Calvus");
-    expect(qsb!.epithet!).toBe("Triumphator");
-    expect(qsb!.ability!).toBe("Gain 1 essence.");
-    expect(qsb?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
-    expect(resolveArtRef(qsb!.portrait)).toContain("0007");
-  });
-});
-
-describe("toQsbDreamsigns", () => {
-  it("maps owned dreamsigns by imageName and drops those without art", () => {
-    const orbId = testDreamsignId("orb");
-    const signs: Dreamsign[] = [
-      {
-        id: orbId,
-        name: "Dreaming Orb",
-        effectDescription: "At Dawn, foresee 1.",
-        imageName: "magic-ball.png",
-      },
-      { name: "Nameless", effectDescription: "No art." },
-    ];
-    const docked = toQsbDreamsigns(signs);
-    expect(docked).toHaveLength(1);
-    expect(docked[0]?.id).toBe(orbId);
-    expect(docked[0].name).toBe("Dreaming Orb");
-    expect(docked[0].effectDescription!).toBe(
-      "At Dawn, foresee 1.",
-    );
-    expect(docked[0]?.imageName).toBe("magic-ball.png");
-  });
-});
-
-describe("dreamscapeSceneRef / dreamscapeTitle", () => {
-  it("resolves the scene art from the dreamscape id and falls back to null when unrevealed", () => {
-    expect(dreamscapeSceneRef(node())).not.toBeNull();
-    expect(dreamscapeSceneRef(node({ dreamscapeId: null }))).toBeNull();
-  });
-
-  it("resolves canonical dreamscape names and an unrevealed fallback", () => {
-    const content = {
-      dreamscapes: [{ id: "ember_wood", name: "Fixture Dreamscape" }],
-      atlasData: { boss: { dreamscapeId: "fixture-boss", place: "Limbo" } },
-    } as unknown as JourneyContent;
-    expect(dreamscapeTitle(node(), content)).toBe(
+  const buildDreamscapeView = (
+    dreamscapeNode: DreamscapeNode,
+    state: JourneyState,
+    sitesData = MINIMAL_SITES_DATA,
+    replacementSiteId: SiteId | null = null,
+  ) =>
+    buildDreamscapeViewImpl(
+      dreamscapeNode,
       "Fixture Dreamscape",
+      state,
+      sitesData,
+      5,
+      replacementSiteId,
+      undefined,
     );
-    expect(dreamscapeTitle(node({ dreamscapeId: null }), content)).toBe(
-      "An Unknown Dream",
-    );
-  });
-});
 
-describe("buildDreamscapeView", () => {
-  it("builds first-dream guidance only after the tutorial deck modal closes", () => {
-    const configuration = {
-      speechBubble: {
-        speaker: "mira" as const,
-        delay: 2,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Visit [purple]Dream Sites[/purple].",
-      },
-    };
-    const tutorialState = {
-      isTutorialJourney: true,
-      completionLevel: 0,
-      hasSeenStartingDeckPopup: false,
-    } as JourneyState;
-    expect(
-      buildDreamscapeGuideDialogue(node(), tutorialState, configuration),
-    ).toBeUndefined();
-    expect(
-      buildDreamscapeGuideDialogue(
-        node(),
-        { ...tutorialState, hasSeenStartingDeckPopup: true },
-        configuration,
-      ),
-    ).toMatchObject({
-      delaySeconds: 2,
-      bubbleWidth: 700,
-      model: {
-        speakerName: "Mira",
-        text: "Visit [purple]Dream Sites[/purple].",
-      },
-    });
-    expect(
-      buildDreamscapeGuideDialogue(
-        node(),
-        {
-          ...tutorialState,
-          completionLevel: 1,
-          hasSeenStartingDeckPopup: true,
-        },
-        configuration,
-      ),
-    ).toBeUndefined();
-  });
+  function site(
+    overrides: Partial<SiteState> & Pick<SiteState, "id" | "type">,
+  ): SiteState {
+    return { isEnhanced: false, isVisited: false, ...overrides };
+  }
 
-  it("omits first-dream guidance when returning after a Draft visit", () => {
-    const configuration = {
-      speechBubble: {
-        speaker: "mira" as const,
-        delay: 2,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Visit [purple]Dream Sites[/purple].",
-      },
-    };
-    const tutorialState = {
-      isTutorialJourney: true,
-      completionLevel: 0,
-      hasSeenStartingDeckPopup: true,
-    } as JourneyState;
-    const returnedNode = node({
+  function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
+    return {
+      id: parseAtlasNodeId("node-1"),
+      layer: 0,
+      indexInLayer: 0,
+      dreamscapeId: "ember_wood",
       sites: [
         site({ id: parseSiteId("s-purge"), type: "Purge" }),
-        site({ id: parseSiteId("s-draft"), type: "Draft", isVisited: true }),
+        site({ id: parseSiteId("s-draft"), type: "Draft" }),
         site({ id: parseSiteId("s-battle"), type: "Battle" }),
       ],
-    });
+      position: { x: 0, y: 0 },
+      state: "revealed",
+      enhancedSiteType: null,
+      forwardIds: [],
+      backwardIds: [],
+      knownDreamsignId: null,
+      ...overrides,
+    } as DreamscapeNode;
+  }
 
-    expect(
-      buildDreamscapeGuideDialogue(returnedNode, tutorialState, configuration),
-    ).toBeUndefined();
-  });
+  describe("buildSiteModels", () => {
+    it("locks the guardian battle until every non-battle site is visited", () => {
+      const locked = buildSiteModels(node(), 0).find((m) => m.isBattle);
+      expect(locked?.isLocked).toBe(true);
+      expect(locked?.isInteractive).toBe(false);
 
-  it("assembles the scene, placed sites, and bottom-HUD data", () => {
-    const state = {
-      essence: 240,
-      deck: [{}, {}, {}],
-      avatar: null,
-      dreamsigns: [],
-      completionLevel: 2,
-    } as unknown as JourneyState;
-    const view = buildDreamscapeView(node(), state, MINIMAL_SITES_DATA);
-    expect(view.title).toBe("Fixture Dreamscape");
-    expect(view.sites).toHaveLength(3);
-    expect(view.inlineRewards).toEqual({});
-  });
-
-  it("maps generated Essence rewards by site id for the in-place animation", () => {
-    const essenceNode = node({
-      sites: [site({ id: parseSiteId("s-essence"), type: "Essence" })],
-    });
-    const state = {
-      essence: 240,
-      deck: [],
-      avatar: null,
-      dreamsigns: [],
-      completionLevel: 2,
-      siteRuntime: {
-        "s-essence": { kind: "essence", amount: 275, accepted: false },
-      },
-    } as unknown as JourneyState;
-
-    expect(
-      buildDreamscapeView(essenceNode, state, MINIMAL_SITES_DATA).inlineRewards,
-    ).toMatchObject({
-      "s-essence": { kind: "essence", amount: 275 },
+      const visitedNonBattle = node({
+        sites: [
+          site({ id: parseSiteId("s-purge"), type: "Purge", isVisited: true }),
+          site({ id: parseSiteId("s-draft"), type: "Draft", isVisited: true }),
+          site({ id: parseSiteId("s-battle"), type: "Battle" }),
+        ],
+      });
+      const unlocked = buildSiteModels(visitedNonBattle, 0).find(
+        (m) => m.isBattle,
+      );
+      expect(unlocked?.isLocked).toBe(false);
+      expect(unlocked?.isInteractive).toBe(true);
     });
   });
 
-  it("maps generated Reward site results by site id for in-place collection", () => {
-    const rewardNode = node({
-      sites: [site({ id: parseSiteId("s-reward"), type: "Reward" })],
-    });
-    const dreamsign = {
-      id: testDreamsignId("dreamsign-uuid"),
-      name: "Lantern in the Rain",
-      effectDescription: "Your first dream each dawn costs 1 less.",
-      imageName: "lantern-in-the-rain.webp",
-    };
-    const state = {
-      essence: 240,
-      deck: [],
-      avatar: null,
-      dreamsigns: [],
-      completionLevel: 2,
-      siteRuntime: {
-        "s-reward": {
-          kind: "reward",
-          reward: { rewardType: "dreamsign", dreamsign },
-          remainingDreamsignPoolIds: [],
-          accepted: false,
+  describe("buildDreamscapeView", () => {
+    it("builds first-dream guidance only after the tutorial deck modal closes", () => {
+      const configuration = {
+        speechBubble: {
+          speaker: "mira" as const,
+          delay: 2,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Visit [purple]Dream Sites[/purple].",
         },
-      },
-    } as unknown as JourneyState;
+      };
+      const tutorialState = {
+        isTutorialJourney: true,
+        completionLevel: 0,
+        hasSeenStartingDeckPopup: false,
+      } as JourneyState;
+      expect(
+        buildDreamscapeGuideDialogue(node(), tutorialState, configuration),
+      ).toBeUndefined();
+      expect(
+        buildDreamscapeGuideDialogue(
+          node(),
+          { ...tutorialState, hasSeenStartingDeckPopup: true },
+          configuration,
+        ),
+      ).toMatchObject({
+        delaySeconds: 2,
+        bubbleWidth: 700,
+        model: {
+          speakerName: "Mira",
+          text: "Visit [purple]Dream Sites[/purple].",
+        },
+      });
+      expect(
+        buildDreamscapeGuideDialogue(
+          node(),
+          {
+            ...tutorialState,
+            completionLevel: 1,
+            hasSeenStartingDeckPopup: true,
+          },
+          configuration,
+        ),
+      ).toBeUndefined();
+    });
 
-    expect(
-      buildDreamscapeView(rewardNode, state, MINIMAL_SITES_DATA).inlineRewards,
-    ).toMatchObject({
-      "s-reward": {
+    it("assembles the scene, placed sites, and bottom-HUD data", () => {
+      const state = {
+        essence: 240,
+        deck: [{}, {}, {}],
+        avatar: null,
+        dreamsigns: [],
+        completionLevel: 2,
+      } as unknown as JourneyState;
+      const view = buildDreamscapeView(node(), state, MINIMAL_SITES_DATA);
+      expect(view.title).toBe("Fixture Dreamscape");
+      expect(view.sites).toHaveLength(3);
+      expect(view.inlineRewards).toEqual({});
+    });
+
+    it("maps generated Reward site results by site id for in-place collection", () => {
+      const rewardNode = node({
+        sites: [site({ id: parseSiteId("s-reward"), type: "Reward" })],
+      });
+      const dreamsign = {
+        id: testDreamsignId("dreamsign-uuid"),
+        name: "Lantern in the Rain",
+        effectDescription: "Your first dream each dawn costs 1 less.",
+        imageName: "lantern-in-the-rain.webp",
+      };
+      const state = {
+        essence: 240,
+        deck: [],
+        avatar: null,
+        dreamsigns: [],
+        completionLevel: 2,
+        siteRuntime: {
+          "s-reward": {
+            kind: "reward",
+            reward: { rewardType: "dreamsign", dreamsign },
+            remainingDreamsignPoolIds: [],
+            accepted: false,
+          },
+        },
+      } as unknown as JourneyState;
+
+      expect(
+        buildDreamscapeView(rewardNode, state, MINIMAL_SITES_DATA)
+          .inlineRewards,
+      ).toMatchObject({
+        "s-reward": {
+          kind: "dreamsign",
+          dreamsign,
+          requiresReplacement: false,
+        },
+      });
+    });
+
+    it("builds an at-cap Dreamsign replacement view from a Reward runtime", () => {
+      const rewardNode = node({
+        sites: [site({ id: parseSiteId("s-reward"), type: "Reward" })],
+      });
+      const pendingDreamsign = {
+        id: testDreamsignId("pending-dreamsign"),
+        name: "Pending",
+        effectDescription: "Pending effect.",
+      };
+      const heldDreamsign = {
+        id: testDreamsignId("held-dreamsign"),
+        name: "Held",
+        effectDescription: "Held effect.",
+      };
+      const state = {
+        dreamsigns: [heldDreamsign],
+        maxDreamsigns: 1,
+        completionLevel: 2,
+        siteRuntime: {
+          "s-reward": {
+            kind: "reward",
+            reward: { rewardType: "dreamsign", dreamsign: pendingDreamsign },
+            accepted: false,
+          },
+        },
+      } as unknown as JourneyState;
+
+      const view = buildDreamscapeView(
+        rewardNode,
+        state,
+        MINIMAL_SITES_DATA,
+        parseSiteId("s-reward"),
+      );
+      expect(view.inlineRewards["s-reward"]).toMatchObject({
         kind: "dreamsign",
-        dreamsign,
-        requiresReplacement: false,
-      },
+        requiresReplacement: true,
+      });
+      expect(view.replacement).toMatchObject({
+        incoming: { id: pendingDreamsign.id },
+        held: [{ id: heldDreamsign.id }],
+        capacity: 1,
+      });
     });
   });
 
-  it("builds an at-cap Dreamsign replacement view from a Reward runtime", () => {
-    const rewardNode = node({
-      sites: [site({ id: parseSiteId("s-reward"), type: "Reward" })],
+  describe("buildDreamscapeHudView", () => {
+    it("reads essence, deck size, avatar, and dreamsigns from live state", () => {
+      const state = {
+        ...createDefaultState(),
+        essence: 10,
+        deck: [
+          {
+            entryId: parseDeckEntryId("entry-a"),
+            cardNumber: 1,
+            transfiguration: null,
+            isBane: false,
+          },
+          {
+            entryId: parseDeckEntryId("entry-b"),
+            cardNumber: 2,
+            transfiguration: null,
+            isBane: false,
+          },
+        ],
+        avatar: null,
+        dreamsigns: [],
+      } satisfies JourneyState;
+      const hud = buildDreamscapeHudView(state);
+      expect(hud.essence).toBe(10);
+      expect(hud.deck).toBe(2);
+      expect(hud.dreamsigns).toEqual([]);
     });
-    const pendingDreamsign = {
-      id: testDreamsignId("pending-dreamsign"),
-      name: "Pending",
-      effectDescription: "Pending effect.",
-    };
-    const heldDreamsign = {
-      id: testDreamsignId("held-dreamsign"),
-      name: "Held",
-      effectDescription: "Held effect.",
-    };
-    const state = {
-      dreamsigns: [heldDreamsign],
-      maxDreamsigns: 1,
-      completionLevel: 2,
-      siteRuntime: {
-        "s-reward": {
-          kind: "reward",
-          reward: { rewardType: "dreamsign", dreamsign: pendingDreamsign },
-          accepted: false,
-        },
-      },
-    } as unknown as JourneyState;
 
-    const view = buildDreamscapeView(
-      rewardNode,
-      state,
-      MINIMAL_SITES_DATA,
-      parseSiteId("s-reward"),
-    );
-    expect(view.inlineRewards["s-reward"]).toMatchObject({
-      kind: "dreamsign",
-      requiresReplacement: true,
-    });
-    expect(view.replacement).toMatchObject({
-      incoming: { id: pendingDreamsign.id },
-      held: [{ id: heldDreamsign.id }],
-      capacity: 1,
+    it("holds an Exploration Essence reward out of the HUD until the site presentation completes", () => {
+      const state = {
+        ...createDefaultState(),
+        essence: 290,
+        screen: {
+          type: "site" as const,
+          siteId: parseSiteId("exploration-site"),
+        },
+        siteRuntime: {
+          "exploration-site": {
+            kind: "exploration" as const,
+            encounterCardId: testCardId("encounter-card-id"),
+            actionOffers: [],
+            resolution: {
+              actionId: testExplorationActionId("gain-essence"),
+              gainedCardIds: [],
+              gainedDreamsignIds: [],
+              purgedCardIds: [],
+              affectedEntryIds: [parseDeckEntryId("spirit-animal-entry")],
+              essenceGained: 90,
+            },
+          },
+        },
+      };
+
+      expect(buildDreamscapeHudView(state).essence).toBe(200);
+      expect(
+        buildDreamscapeHudView({
+          ...state,
+          screen: { type: "dreamscape" as const },
+        }).essence,
+      ).toBe(290);
     });
   });
 });
 
-describe("buildDreamscapeHudView", () => {
-  it("reads essence, deck size, avatar, and dreamsigns from live state", () => {
-    const state = {
-      ...createDefaultState(),
-      essence: 10,
-      deck: [
-        {
-          entryId: parseDeckEntryId("entry-a"),
-          cardNumber: 1,
-          transfiguration: null,
-          isBane: false,
-        },
-        {
-          entryId: parseDeckEntryId("entry-b"),
-          cardNumber: 2,
-          transfiguration: null,
-          isBane: false,
-        },
-      ],
-      avatar: null,
-      dreamsigns: [],
-    } satisfies JourneyState;
-    const hud = buildDreamscapeHudView(state);
-    expect(hud.essence).toBe(10);
-    expect(hud.deck).toBe(2);
-    expect(hud.dreamsigns).toEqual([]);
-  });
+describe("battle-start-view-model", () => {
+  expect.addEqualityTesters([annotatedTextEquality]);
 
-  it("holds an Exploration Essence reward out of the HUD until the site presentation completes", () => {
-    const state = {
-      ...createDefaultState(),
-      essence: 290,
-      screen: { type: "site" as const, siteId: parseSiteId("exploration-site") },
-      siteRuntime: {
-        "exploration-site": {
-          kind: "exploration" as const,
-          encounterCardId: testCardId("encounter-card-id"),
-          actionOffers: [],
-          resolution: {
-            actionId: testExplorationActionId("gain-essence"),
-            gainedCardIds: [],
-            gainedDreamsignIds: [],
-            purgedCardIds: [],
-            affectedEntryIds: [parseDeckEntryId("spirit-animal-entry")],
-            essenceGained: 90,
-          },
+  function makeInit() {
+    const cardDatabase = makeBattleTestCardDatabase();
+    const base = createTestBattleInit({
+      battleEntryKey: parseBattleEntryKey("battle-entry"),
+      site: makeBattleTestSite(),
+      state: makeBattleTestState(),
+      cardDatabase,
+      avatars: makeBattleTestAvatars(),
+      dreamwellCards: [],
+      seedOverride: 1234,
+    });
+    const signature = [...cardDatabase.values()].slice(0, 2);
+    return {
+      cardDatabase,
+      init: {
+        ...base,
+        scoreToWin: 15,
+        essenceReward: 90,
+        enemyDescriptor: {
+          ...base.enemyDescriptor,
+          id: parseOpponentId("opponent-uuid"),
+          name: "The Long-Named Opponent",
+          subtitle: "Keeper of the Last Horizon",
+          abilityText: "Whenever you score, foresee 1.",
+          dreamsigns: [
+            {
+              id: testDreamsignId("dreamsign-catalog-uuid"),
+              name: "A Test Sign",
+              effectDescription: "A stable test effect.",
+              imageName: "test.webp",
+              imageAlt: "A test Dreamsign",
+            },
+          ],
+          signatureCards: signature.map((card) => ({
+            cardId: card.id,
+            cardNumber: card.cardNumber,
+            name: card.name,
+          })),
         },
       },
     };
+  }
 
-    expect(buildDreamscapeHudView(state).essence).toBe(200);
-    expect(
-      buildDreamscapeHudView({
-        ...state,
-        screen: { type: "dreamscape" as const },
-      }).essence,
-    ).toBe(290);
+  describe("buildBattleStartView", () => {
+    it("maps opponent identity, scene, signature UUIDs, dreamsign ids, and stakes", () => {
+      const { init, cardDatabase } = makeInit();
+      const view = buildBattleStartView(init, cardDatabase);
+
+      expect(view.scene).toEqual({
+        kind: "dreamscape-scene",
+        dreamscapeId: testDreamscapeId("test_dreamscape"),
+      });
+      expect(view.avatar).toMatchObject({
+        id: "opponent-uuid",
+        name: "The Long-Named Opponent",
+        title: "Keeper of the Last Horizon",
+        ability: "Whenever you score, foresee 1.",
+        abilityActive: true,
+      });
+      expect(view.signatureCards.map((card) => card.cardId)).toEqual(
+        init.enemyDescriptor.signatureCards.map((card) => card.cardId),
+      );
+      expect(view.dreamsigns[0]).toMatchObject({
+        id: init.enemyDescriptor.dreamsigns[0]?.id,
+        imageName: "test.webp",
+      });
+      expect(view.dreamsigns[0]?.imageAlt).toEqual(expect.any(String));
+      expect(view.pointsToWin).toBe(15);
+      expect(view.essenceReward).toBe(90);
+    });
+
+    it("maps authored Mira guidance for the first two tutorial-journey battles", () => {
+      const { init, cardDatabase } = makeInit();
+      const configuration = {
+        firstBattle: {
+          speechBubble: {
+            speaker: "mira" as const,
+            delay: 1,
+            horizontalOffset: -4,
+            verticalOffset: 6,
+            bubbleWidth: 650,
+            text: "Review the first opponent.",
+          },
+        },
+        secondBattle: {
+          speechBubble: {
+            speaker: "mira" as const,
+            delay: 1,
+            horizontalOffset: 12,
+            verticalOffset: -8,
+            bubbleWidth: 700,
+            text: "Prepare for the second battle.",
+          },
+        },
+      };
+      const firstBattle = { ...init, completionLevelAtStart: 0 };
+      const secondBattle = { ...init, completionLevelAtStart: 1 };
+
+      expect(
+        buildBattleStartView(firstBattle, cardDatabase, {
+          isTutorialJourney: true,
+          configuration,
+        }).guideDialogue,
+      ).toEqual({
+        id: `${init.battleId}:first-battle-start-guidance`,
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Review the first opponent.",
+        },
+        delaySeconds: 1,
+        horizontalOffset: -4,
+        verticalOffset: 6,
+        bubbleWidth: 650,
+      });
+      expect(
+        buildBattleStartView(secondBattle, cardDatabase, {
+          isTutorialJourney: true,
+          configuration,
+        }).guideDialogue,
+      ).toEqual({
+        id: `${init.battleId}:second-battle-start-guidance`,
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Prepare for the second battle.",
+        },
+        delaySeconds: 1,
+        horizontalOffset: 12,
+        verticalOffset: -8,
+        bubbleWidth: 700,
+      });
+      expect(
+        buildBattleStartView(secondBattle, cardDatabase, {
+          isTutorialJourney: false,
+          configuration,
+        }).guideDialogue,
+      ).toBeUndefined();
+      expect(
+        buildBattleStartView(
+          { ...init, completionLevelAtStart: 2 },
+          cardDatabase,
+          { isTutorialJourney: true, configuration },
+        ).guideDialogue,
+      ).toBeUndefined();
+    });
   });
 });

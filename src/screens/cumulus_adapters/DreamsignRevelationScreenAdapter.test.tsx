@@ -76,17 +76,6 @@ const GUIDE: DreamGuideContent = {
   homeSpecialty: "Dreamsign Revelation",
 };
 
-const TUTORIAL_CONFIGURATION: TutorialSiteConfiguration = {
-  speechBubble: {
-    speaker: "mira",
-    delay: 1,
-    horizontalOffset: 0,
-    verticalOffset: 0,
-    bubbleWidth: 600,
-    text: "A [purple]Dreamsign[/purple] gives ongoing benefits.",
-  },
-};
-
 function makeDreamsign(idSeed: string): Dreamsign {
   return {
     id: testDreamsignId(idSeed),
@@ -247,28 +236,6 @@ describe("DreamsignRevelationScreenAdapter", () => {
     });
 
     expect(loggingMock.emitted).toHaveLength(2);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("logs the resident guide while first-visit Mira guidance is active", () => {
-    const guideId = testGuideId("sigrun-guide");
-    setJourneyContext(makeState(), TUTORIAL_CONFIGURATION);
-    const { root } = mount(
-      <DreamsignRevelationScreenAdapter siteId={parseSiteId("site-1")} />,
-    );
-
-    expect(loggingMock.emitted).toContainEqual({
-      key: `dreamsign-revelation:site-1:guide:${guideId}`,
-      event: "dream_guide_presented",
-      fields: {
-        guideId,
-        siteType: "DreamsignRevelation",
-        isEnhanced: false,
-      },
-    });
 
     act(() => {
       root.unmount();

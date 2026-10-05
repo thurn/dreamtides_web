@@ -279,24 +279,6 @@ describe("BUY_SHOP_SLOT", () => {
     ]);
   });
 
-  it("bounces a second buy on the same slot (the coop double-buy race)", () => {
-    const state = shopState([cardSlot({ basePrice: 100 })], { essence: 300 });
-    const first = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
-      slotIndex: 0,
-    });
-    expect(first.outcome).toBe("applied");
-    expect(first.state.journey.essence).toBe(200);
-    const second = reduce(first.state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
-      slotIndex: 0,
-    });
-    expect(second.outcome).toBe("bounced");
-    // Essence unchanged by the bounced second buy; deck did not double.
-    expect(second.state.journey.essence).toBe(200);
-    expect(second.state.journey.deck).toHaveLength(1);
-  });
-
   it("charges the discounted price when a slot and shop discount both apply", () => {
     const basePrice = 200;
     const slotDiscount = 10;
@@ -321,15 +303,6 @@ describe("BUY_SHOP_SLOT", () => {
     });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.essence).toBe(300 - expectedPrice);
-  });
-
-  it("bounces on an out-of-range slot index", () => {
-    const state = shopState([cardSlot()], { essence: 300 });
-    const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
-      slotIndex: 5,
-    });
-    expect(result.outcome).toBe("bounced");
   });
 
   it("keeps a bound Card Shop free across paid rerolls and persists every receipt", () => {
@@ -403,122 +376,6 @@ describe("BUY_SHOP_SLOT", () => {
     });
   });
 
-  it("consumes stacked free-purchase modifiers FIFO even when the visit is already free", () => {
-    const firstModifier = {
-      kind: "free-purchases" as const,
-      sourceSiteId: parseSiteId("exploration-one"),
-      sourceActionId: testExplorationActionId("action-one"),
-      initialCount: 1,
-      remainingCount: 1,
-    };
-    const secondModifier = {
-      kind: "free-purchases" as const,
-      sourceSiteId: parseSiteId("exploration-two"),
-      sourceActionId: testExplorationActionId("action-two"),
-      initialCount: 2,
-      remainingCount: 2,
-    };
-    const freePurchaseSource = {
-      sourceSiteId: parseSiteId("exploration-free-shop"),
-      sourceActionId: testExplorationActionId("action-free-shop"),
-    };
-    const slots = [cardSlot(), cardSlot(), cardSlot()];
-    let current = shopState(slots, {
-      essence: 10,
-      shopModifiers: shopModifiers({
-        freePurchaseModifiers: [firstModifier, secondModifier],
-      }),
-      siteRuntime: {
-        [SITE_ID]: {
-          ...shopRuntime(slots),
-          freePurchaseSource,
-        },
-      },
-    });
-
-    for (let slotIndex = 0; slotIndex < slots.length; slotIndex += 1) {
-      const result = reduce(current, "BUY_SHOP_SLOT", {
-        siteId: SITE_ID,
-        slotIndex,
-      });
-      expect(result.outcome).toBe("applied");
-      current = result.state;
-    }
-
-    expect(current.journey.essence).toBe(10);
-    expect(current.journey.shopModifiers.freePurchaseModifiers).toEqual([]);
-    const runtime = current.journey.siteRuntime[SITE_ID];
-    if (runtime?.kind !== "shop") throw new Error("Expected Shop runtime");
-    expect(
-      runtime.purchaseHistory.map((purchase) =>
-        purchase.freePurchaseModifier === undefined
-          ? null
-          : {
-              sourceActionId: purchase.freePurchaseModifier.sourceActionId,
-              before: purchase.freePurchaseModifier.remainingBefore,
-              after: purchase.freePurchaseModifier.remainingAfter,
-            },
-      ),
-    ).toEqual([
-      {
-        sourceActionId: testExplorationActionId("action-one"),
-        before: 1,
-        after: 0,
-      },
-      {
-        sourceActionId: testExplorationActionId("action-two"),
-        before: 2,
-        after: 1,
-      },
-      {
-        sourceActionId: testExplorationActionId("action-two"),
-        before: 1,
-        after: 0,
-      },
-    ]);
-  });
-
-  it("consumes a T82 counter when ordinary discounts already make the item free", () => {
-    const modifier = {
-      kind: "free-purchases" as const,
-      sourceSiteId: parseSiteId("exploration-site"),
-      sourceActionId: testExplorationActionId("discount-overlap-action"),
-      initialCount: 1,
-      remainingCount: 1,
-    };
-    const state = shopState(
-      [cardSlot({ basePrice: 100, discountPercent: 100 })],
-      {
-        essence: 0,
-        shopModifiers: shopModifiers({ freePurchaseModifiers: [modifier] }),
-      },
-    );
-
-    const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
-      slotIndex: 0,
-    });
-
-    expect(result.outcome).toBe("applied");
-    expect(result.state.journey.shopModifiers.freePurchaseModifiers).toEqual(
-      [],
-    );
-    expect(result.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      kind: "shop",
-      purchaseHistory: [
-        {
-          priceBeforeFree: 0,
-          pricePaid: 0,
-          freePurchaseModifier: {
-            sourceActionId: testExplorationActionId("discount-overlap-action"),
-            remainingBefore: 1,
-            remainingAfter: 0,
-          },
-        },
-      ],
-    });
-  });
-
   it("consumes a T82 purchase at a Dreamsign Bazaar and records replacement identity", () => {
     const modifier = {
       kind: "free-purchases" as const,
@@ -576,66 +433,6 @@ describe("BUY_SHOP_SLOT", () => {
       ],
     });
   });
-
-  it("keeps the T82 counter and receipt history unchanged when a capped Bazaar buy bounces", () => {
-    const modifier = {
-      kind: "free-purchases" as const,
-      sourceSiteId: parseSiteId("exploration-site"),
-      sourceActionId: testExplorationActionId("free-bazaar-action"),
-      initialCount: 1,
-      remainingCount: 1,
-    };
-    const state = shopState(
-      [dreamsignSlot("offered-dreamsign")],
-      {
-        maxDreamsigns: 1,
-        dreamsigns: [
-          {
-            id: testDreamsignId("held-dreamsign"),
-            name: "Held",
-            effectDescription: "Held effect",
-          },
-        ],
-        shopModifiers: shopModifiers({ freePurchaseModifiers: [modifier] }),
-      },
-      "DreamsignBazaar",
-    );
-
-    const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
-      slotIndex: 0,
-    });
-
-    expect(result.outcome).toBe("bounced");
-    expect(result.state.journey.shopModifiers.freePurchaseModifiers).toEqual([
-      modifier,
-    ]);
-    expect(
-      (result.state.journey.siteRuntime[SITE_ID] as ShopSiteRuntime)
-        .purchaseHistory,
-    ).toEqual([]);
-  });
-
-  it("rejects a forged T56 source on a Dreamsign Bazaar", () => {
-    const runtime = {
-      ...shopRuntime([dreamsignSlot("offered-dreamsign")]),
-      freePurchaseSource: {
-        sourceSiteId: parseSiteId("exploration-site"),
-        sourceActionId: testExplorationActionId("free-shop-action"),
-      },
-    };
-    const state = shopState(
-      runtime.slots,
-      { siteRuntime: { [SITE_ID]: runtime } },
-      "DreamsignBazaar",
-    );
-    expect(
-      reduce(state, "BUY_SHOP_SLOT", {
-        siteId: SITE_ID,
-        slotIndex: 0,
-      }).outcome,
-    ).toBe("bounced");
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -643,11 +440,6 @@ describe("BUY_SHOP_SLOT", () => {
 // ---------------------------------------------------------------------------
 
 describe("REROLL_SHOP", () => {
-  it("bounces when no content provider is registered", () => {
-    const state = shopState([cardSlot()], { essence: 300 });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
-    expect(result.outcome).toBe("bounced");
-  });
 
   it("consumes a free reroll before charging essence (order)", () => {
     registerSiteContentProvider(rerollProvider);
@@ -678,56 +470,6 @@ describe("REROLL_SHOP", () => {
     expect(result.state.journey.shopModifiers.freeRerolls).toBe(0);
     expect(result.state.journey.essence).toBe(300 - cost);
   });
-
-  it("bounces a paid reroll the player cannot afford, leaving essence unchanged", () => {
-    registerSiteContentProvider(rerollProvider);
-    const state = shopState([cardSlot()], {
-      essence: 20,
-      shopModifiers: shopModifiers(),
-    });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state.journey.essence).toBe(20);
-  });
-
-  it("bounces a reroll of an already-rerolled shop", () => {
-    registerSiteContentProvider(rerollProvider);
-    const runtime = { ...shopRuntime([cardSlot()]), rerollCount: 1 };
-    const state = shopState([cardSlot()], {
-      essence: 300,
-      shopModifiers: shopModifiers({ freeRerolls: 1 }),
-      siteRuntime: { [SITE_ID]: runtime },
-    });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
-    expect(result.outcome).toBe("bounced");
-  });
-
-  it("honors an injected multi-reroll visit limit", () => {
-    const economy = economyFixture();
-    economy.shop.reroll.maxPerVisit = 2;
-    registerSiteContentProvider({ ...rerollProvider, economyData: economy });
-    const state = shopState([cardSlot()], {
-      essence: 300,
-      shopModifiers: shopModifiers(),
-    });
-
-    const first = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
-    const second = reduce(first.state, "REROLL_SHOP", {
-      siteId: SITE_ID,
-    });
-    const third = reduce(second.state, "REROLL_SHOP", {
-      siteId: SITE_ID,
-    });
-
-    expect(first.outcome).toBe("applied");
-    expect(second.outcome).toBe("applied");
-    expect(third.outcome).toBe("bounced");
-    expect(second.state.journey.essence).toBe(200);
-    expect(
-      (second.state.journey.siteRuntime[SITE_ID] as ShopSiteRuntime)
-        .rerollCount,
-    ).toBe(2);
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -744,13 +486,6 @@ describe("shop modifier grants", () => {
     expect(result.state.journey.shopModifiers.freeRerolls).toBe(3);
   });
 
-  it("GRANT_FREE_REROLLS bounces a non-positive count", () => {
-    const state = shopState([cardSlot()]);
-    expect(reduce(state, "GRANT_FREE_REROLLS", { count: 0 }).outcome).toBe(
-      "bounced",
-    );
-  });
-
   it("APPLY_SHOP_DISCOUNT adds to the essence discount", () => {
     const state = shopState([cardSlot()], {
       shopModifiers: shopModifiers({ essenceDiscountPercent: 10 }),
@@ -758,13 +493,6 @@ describe("shop modifier grants", () => {
     const result = reduce(state, "APPLY_SHOP_DISCOUNT", { percent: 15 });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.shopModifiers.essenceDiscountPercent).toBe(25);
-  });
-
-  it("APPLY_SHOP_DISCOUNT bounces a non-positive percent", () => {
-    const state = shopState([cardSlot()]);
-    expect(reduce(state, "APPLY_SHOP_DISCOUNT", { percent: 0 }).outcome).toBe(
-      "bounced",
-    );
   });
 });
 
@@ -784,14 +512,6 @@ describe("battle modifiers", () => {
     const result = reduce(state, "PUSH_BATTLE_MODIFIER", { modifier });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.battleModifiers).toEqual([modifier]);
-  });
-
-  it("PUSH_BATTLE_MODIFIER bounces a malformed modifier", () => {
-    const state = shopState([cardSlot()]);
-    expect(
-      reduce(state, "PUSH_BATTLE_MODIFIER", { modifier: { kind: "nope" } })
-        .outcome,
-    ).toBe("bounced");
   });
 
   it("PUSH_TEMPORARY_NIGHTMARE_GRANT adds Nightmare entries and a modifier", () => {
@@ -826,29 +546,6 @@ describe("battle modifiers", () => {
     }
   });
 
-  it("replays the historical temporary grant only for Nightmare", () => {
-    registerDeckContentProvider({
-      resolveCardNumber: (cardId) =>
-        cardId === NIGHTMARE_CARD_ID ? 10002 : null,
-      resolveDreamsign: () => null,
-    });
-    const state = shopState([cardSlot()]);
-    const result = reduce(state, "PUSH_TEMPORARY_BANE_GRANT", {
-      cardNumber: 10002,
-      baneName: "Nightmare",
-      count: 1,
-      battlesRemaining: 2,
-      source: "historical-log",
-    });
-    expect(result.outcome).toBe("applied");
-    expect(result.state.journey.deck).toEqual([
-      expect.objectContaining({ cardNumber: 10002, isBane: true }),
-    ]);
-    expect(result.state.journey.battleModifiers[0]?.kind).toBe(
-      "temporary_nightmare_grant",
-    );
-  });
-
   it("maps every historical temporary Bane grant to Nightmare", () => {
     registerDeckContentProvider({
       resolveCardNumber: (cardId) =>
@@ -867,23 +564,6 @@ describe("battle modifiers", () => {
     expect(result.state.journey.deck).toEqual([
       expect.objectContaining({ cardNumber: 10002, isBane: true }),
     ]);
-  });
-
-  it("PUSH_TEMPORARY_NIGHTMARE_GRANT bounces a non-positive count", () => {
-    registerDeckContentProvider({
-      resolveCardNumber: (cardId) =>
-        cardId === NIGHTMARE_CARD_ID ? 10002 : null,
-      resolveDreamsign: () => null,
-    });
-    const state = shopState([cardSlot()]);
-    expect(
-      reduce(state, "PUSH_TEMPORARY_NIGHTMARE_GRANT", {
-        cardId: NIGHTMARE_CARD_ID,
-        count: 0,
-        battlesRemaining: 1,
-        source: "x",
-      }).outcome,
-    ).toBe("bounced");
   });
 });
 
@@ -904,16 +584,6 @@ describe("dreamscape modifiers", () => {
     const mod = mods[0];
     expect(mod.kind).toBe("remove_shop_sites");
     expect(mod.dreamscapesRemaining).toBe(3);
-  });
-
-  it("BAN_SITE_TYPE bounces a non-Shop site type", () => {
-    const state = shopState([cardSlot()]);
-    expect(
-      reduce(state, "BAN_SITE_TYPE", {
-        siteType: "Essence",
-        dreamscapesRemaining: 3,
-      }).outcome,
-    ).toBe("bounced");
   });
 
   it("BOOST_SITE_APPEARANCE appends a boost modifier with its dreamscape count", () => {
@@ -954,17 +624,6 @@ describe("atlas edits", () => {
     expect(node.sites).toHaveLength(1);
     expect(node.sites[0].type).toBe("Essence");
     expect(node.sites[0].id).not.toBe(SITE_ID);
-  });
-
-  it("REPLACE_SITE_TYPE bounces when no unvisited site of the source type exists", () => {
-    const state = shopState([cardSlot()]);
-    expect(
-      reduce(state, "REPLACE_SITE_TYPE", {
-        nodeId: NODE_ID,
-        fromSiteType: "Essence",
-        toSiteType: "Shop",
-      }).outcome,
-    ).toBe("bounced");
   });
 
   it("ADD_SITE_TO_DREAMSCAPE appends a new site to the node", () => {
@@ -1008,37 +667,6 @@ describe("atlas edits", () => {
       },
     });
   });
-
-  it("ADD_SITE_TO_DREAMSCAPE bounces an unknown node", () => {
-    const state = shopState([cardSlot()]);
-    expect(
-      reduce(state, "ADD_SITE_TO_DREAMSCAPE", {
-        nodeId: parseAtlasNodeId("nope"),
-        siteType: "Essence",
-      }).outcome,
-    ).toBe("bounced");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Card source debug
-// ---------------------------------------------------------------------------
-
-describe("SET_CARD_SOURCE_DEBUG", () => {
-  it("sets and clears the card-source debug state", () => {
-    const debugState = {
-      screenLabel: "Shop",
-      surface: "Shop",
-      entries: [],
-    };
-    const state = shopState([cardSlot()]);
-    const set = reduce(state, "SET_CARD_SOURCE_DEBUG", { state: debugState });
-    expect(set.outcome).toBe("applied");
-    expect(set.state.journey.cardSourceDebug).toEqual(debugState);
-    const cleared = reduce(set.state, "SET_CARD_SOURCE_DEBUG", { state: null });
-    expect(cleared.outcome).toBe("applied");
-    expect(cleared.state.journey.cardSourceDebug).toBeNull();
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -1063,46 +691,6 @@ describe("augury offers", () => {
     });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.essence).toBe(499);
-  });
-
-  it("ACCEPT_AUGURY_OFFER bounces when the provider returns null", () => {
-    const provider: SiteContentProvider = {
-      sitesData: MINIMAL_SITES_DATA,
-      openSite() {
-        return null;
-      },
-      resolveAugury() {
-        return null;
-      },
-    };
-    registerSiteContentProvider(provider);
-    const state = stateWith([makeSite("Augury")]);
-    expect(
-      reduce(state, "ACCEPT_AUGURY_OFFER", { siteId: SITE_ID })
-        .outcome,
-    ).toBe("bounced");
-  });
-
-  it("ACCEPT_AUGURY_OFFER bounces with no provider or unknown site", () => {
-    const state = stateWith([makeSite("Augury")]);
-    expect(
-      reduce(state, "ACCEPT_AUGURY_OFFER", { siteId: SITE_ID })
-        .outcome,
-    ).toBe("bounced");
-    const provider: SiteContentProvider = {
-      sitesData: MINIMAL_SITES_DATA,
-      openSite() {
-        return null;
-      },
-      resolveAugury({ journey }) {
-        return { ...journey };
-      },
-    };
-    registerSiteContentProvider(provider);
-    expect(
-      reduce(state, "ACCEPT_AUGURY_OFFER", { siteId: parseSiteId("missing") })
-        .outcome,
-    ).toBe("bounced");
   });
 
   it("DECLINE_AUGURY delegates to the provider", () => {

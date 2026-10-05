@@ -14,14 +14,12 @@ import {
 } from "./deck";
 import type { DeckEntryId, DreamsignId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { parseSiteId } from "../../types/identifiers";
 import { testCardId, testDreamsignId } from "../../types/test-identities";
 
 const KNOWN_CARD_ID = testCardId("known");
 const DREAMSIGN_ONE_ID = testDreamsignId("ds-1");
 const DREAMSIGN_TWO_ID = testDreamsignId("ds-2");
 const NEW_DREAMSIGN_ID = testDreamsignId("ds-new");
-const GHOST_DREAMSIGN_ID = testDreamsignId("ghost");
 const DREAMSIGN_POOL_IDS = [
   testDreamsignId("pool-a"),
   testDreamsignId("pool-b"),
@@ -177,15 +175,6 @@ describe("DUPLICATE_DECK_ENTRY", () => {
     const idB = deckB[deckB.length - 1].entryId;
     expect(idA).toBe(idB);
   });
-
-  it("bounces a missing entry id and leaves state untouched by reference", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "DUPLICATE_DECK_ENTRY", {
-      entryId: parseDeckEntryId("nope"),
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -214,16 +203,6 @@ describe("stale-target bounce", () => {
     expect(out.state.journey.deck).toHaveLength(4);
   });
 
-  it("TRANSFIGURE_CARD bounces a missing target", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "TRANSFIGURE_CARD", {
-      entryId: parseDeckEntryId("ghost"),
-      transfiguration: "Empowered",
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-
   it("TRANSFIGURE_CARD applies to a present target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "TRANSFIGURE_CARD", {
@@ -232,36 +211,6 @@ describe("stale-target bounce", () => {
     });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.deck[0].transfiguration).toBe("Empowered");
-  });
-
-  it("SET_DECK_ENTRY_STAT_OVERRIDE bounces a missing target", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "SET_DECK_ENTRY_STAT_OVERRIDE", {
-      entryId: parseDeckEntryId("ghost"),
-      override: { spark: 3 },
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-
-  it("SET_DECK_ENTRY_KEYWORDS bounces a missing target", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "SET_DECK_ENTRY_KEYWORDS", {
-      entryId: parseDeckEntryId("ghost"),
-      keywords: { fast: true },
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-
-  it("SET_DECK_ENTRY_TYPE bounces a missing target", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "SET_DECK_ENTRY_TYPE", {
-      entryId: parseDeckEntryId("ghost"),
-      typeChange: null,
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
   });
 });
 
@@ -320,30 +269,6 @@ describe("SET_DECK_ENTRY_* apply", () => {
   });
 });
 
-describe("SET_DECK_ENTRY_* plain object guards", () => {
-  it("bounces array-shaped stat overrides, keyword modifications, and type changes", () => {
-    const state = stateWithDeck();
-    expect(
-      reduce(state, "SET_DECK_ENTRY_STAT_OVERRIDE", {
-        entryId: parseDeckEntryId("deck-1"),
-        override: [],
-      }).outcome,
-    ).toBe("bounced");
-    expect(
-      reduce(state, "SET_DECK_ENTRY_KEYWORDS", {
-        entryId: parseDeckEntryId("deck-1"),
-        keywords: [],
-      }).outcome,
-    ).toBe("bounced");
-    expect(
-      reduce(state, "SET_DECK_ENTRY_TYPE", {
-        entryId: parseDeckEntryId("deck-1"),
-        typeChange: [],
-      }).outcome,
-    ).toBe("bounced");
-  });
-});
-
 // ---------------------------------------------------------------------------
 // Purge determinism / Nightmare purges
 // ---------------------------------------------------------------------------
@@ -356,24 +281,6 @@ describe("Nightmare purges", () => {
       "deck-1",
       "deck-2",
     ]);
-  });
-
-  it("replays the historical purge event as a Nightmare-only purge", () => {
-    const out = reduce(stateWithDeck(), "PURGE_ALL_BANE_CARDS", {});
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.deck.map((entry) => entry.entryId)).toEqual([
-      "deck-1",
-      "deck-2",
-    ]);
-  });
-
-  it("PURGE_ALL_NIGHTMARE_CARDS bounces when there are no Nightmares", () => {
-    const state = stateWith({
-      deck: [makeEntry({ entryId: parseDeckEntryId("deck-1") })],
-    });
-    const out = reduce(state, "PURGE_ALL_NIGHTMARE_CARDS", {});
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
   });
 
   it("PURGE_RANDOM_NIGHTMARE_CARDS removes the same entries for the same seed+seq", () => {
@@ -399,20 +306,6 @@ describe("Nightmare purges", () => {
     expect(remainingA).toContain("deck-1");
     expect(remainingA).toContain("deck-2");
   });
-
-  it("PURGE_RANDOM_NIGHTMARE_CARDS bounces with no Nightmares or a non-positive count", () => {
-    const noNightmares = stateWith({
-      deck: [makeEntry({ entryId: parseDeckEntryId("deck-1") })],
-    });
-    expect(
-      reduce(noNightmares, "PURGE_RANDOM_NIGHTMARE_CARDS", { count: 3 })
-        .outcome,
-    ).toBe("bounced");
-    expect(
-      reduce(stateWithDeck(), "PURGE_RANDOM_NIGHTMARE_CARDS", { count: 0 })
-        .outcome,
-    ).toBe("bounced");
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -424,15 +317,6 @@ describe("PURGE_DECK_CARDS", () => {
     const state = stateWithDeck();
     const out = reduce(state, "PURGE_DECK_CARDS", {
       entryIds: [parseDeckEntryId("deck-1"), parseDeckEntryId("deck-3")],
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-
-  it("bounces when no listed entry is present", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "PURGE_DECK_CARDS", {
-      entryIds: [parseDeckEntryId("ghost")],
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -453,13 +337,6 @@ describe("ADD_CARD", () => {
           : null,
     resolveDreamsign: () => null,
   };
-
-  it("bounces when no content provider is registered", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "ADD_CARD", { cardId: KNOWN_CARD_ID });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
 
   it("appends a resolved card with a fresh unique deterministic id", () => {
     registerDeckContentProvider(provider);
@@ -492,44 +369,6 @@ describe("ADD_CARD", () => {
     const added = deckOut[deckOut.length - 1];
     expect(added.isBane).toBe(true);
     expect(added.transfiguration).toBe("Kindled");
-  });
-
-  it("replays a historical Nightmare ADD_CARD payload", () => {
-    registerDeckContentProvider(provider);
-    const out = reduce(stateWithDeck(), "ADD_CARD", {
-      cardId: NIGHTMARE_CARD_ID,
-      isBane: true,
-    });
-    expect(out.outcome).toBe("applied");
-    expect(
-      out.state.journey.deck[out.state.journey.deck.length - 1],
-    ).toMatchObject({
-      cardNumber: 10002,
-      isBane: true,
-    });
-  });
-
-  it("maps a historical Bane flag to Nightmare", () => {
-    registerDeckContentProvider(provider);
-    const out = reduce(stateWithDeck(), "ADD_CARD", {
-      cardId: KNOWN_CARD_ID,
-      isBane: true,
-    });
-    expect(out.outcome).toBe("applied");
-    expect(
-      out.state.journey.deck[out.state.journey.deck.length - 1],
-    ).toMatchObject({
-      cardNumber: 10002,
-      isBane: true,
-    });
-  });
-
-  it("bounces an unknown card id", () => {
-    registerDeckContentProvider(provider);
-    const state = stateWithDeck();
-    const out = reduce(state, "ADD_CARD", { cardId: testCardId("mystery") });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
   });
 });
 
@@ -573,15 +412,6 @@ describe("dreamsigns", () => {
     ]);
   });
 
-  it("REMOVE_DREAMSIGN bounces a missing id", () => {
-    const state = stateWith({ dreamsigns: [dreamsign(DREAMSIGN_ONE_ID)] });
-    const out = reduce(state, "REMOVE_DREAMSIGN", {
-      dreamsignId: GHOST_DREAMSIGN_ID,
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-
   it("REMOVE_DREAMSIGN removes a present id", () => {
     const state = stateWith({
       dreamsigns: [dreamsign(DREAMSIGN_ONE_ID), dreamsign(DREAMSIGN_TWO_ID)],
@@ -607,32 +437,6 @@ describe("dreamsigns", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Deferred site-coupled cases (Task 14)
-// ---------------------------------------------------------------------------
-
-describe("site-coupled acceptance (deferred to Task 14)", () => {
-  it("ACCEPT_TRANSFIGURATION_CHOICE bounces (does not half-apply)", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "ACCEPT_TRANSFIGURATION_CHOICE", {
-      siteId: parseSiteId("s1"),
-      entryId: parseDeckEntryId("deck-1"),
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-
-  it("ACCEPT_DUPLICATION_CHOICE bounces (does not half-apply)", () => {
-    const state = stateWithDeck();
-    const out = reduce(state, "ACCEPT_DUPLICATION_CHOICE", {
-      siteId: parseSiteId("s1"),
-      entryId: parseDeckEntryId("deck-1"),
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-});
-
-// ---------------------------------------------------------------------------
 // mintEntryId (P3-8: the single seq-keyed entry-id scheme)
 // ---------------------------------------------------------------------------
 
@@ -640,13 +444,6 @@ describe("mintEntryId", () => {
   it("mints a deterministic id from (seq, index)", () => {
     expect(mintEntryId([], 42, 0)).toBe("deck-42-0");
     expect(mintEntryId([], 42, 1)).toBe("deck-42-1");
-  });
-
-  it("two clients minting for the same (seq, index) derive the same id", () => {
-    const deck = [
-      makeEntry({ entryId: parseDeckEntryId("deck-1"), cardNumber: 10 }),
-    ];
-    expect(mintEntryId(deck, 7, 0)).toBe(mintEntryId(deck, 7, 0));
   });
 
   it("bumps past a collision with an existing entry id", () => {

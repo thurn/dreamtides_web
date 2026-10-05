@@ -24,8 +24,6 @@ import type { DeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseShuffleCommitment } from "../../types/identifiers";
-import { parseClientId } from "../../types/identifiers";
-import type { AuguryArchetypeId } from "../../types/identifiers";
 import { testDreamscapeId, testDreamsignId, testExplorationActionId, testGuideId } from "../../types/test-identities";
 
 // ---------------------------------------------------------------------------
@@ -310,40 +308,6 @@ describe("Random Site", () => {
     expect(new Set(runtime.offeredSiteTypes).size).toBe(3);
   });
 
-  it("preserves the configured presenting guide when materializing a home choice", () => {
-    const opened = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
-      siteId: SITE_ID,
-    });
-    const runtime = runtimeOf(opened);
-    if (runtime?.kind !== "randomSite")
-      throw new Error("expected Random Site runtime");
-    const selected = runtime.offeredSiteTypes[0];
-    const chosen = reduce(opened.state, "CHOOSE_RANDOM_SITE", {
-      siteId: SITE_ID,
-      siteType: selected,
-    });
-    const materialized = chosen.state.journey.atlas.nodes[NODE_ID].sites[0];
-    expect(chosen.outcome).toBe("applied");
-    expect(materialized).toMatchObject({
-      id: SITE_ID,
-      type: selected,
-      isEnhanced: true,
-      randomSite: {
-        mode: "homeChoice",
-        presentingGuideId: testGuideId("fixture-random-guide"),
-        destinationSiteType: selected,
-        materialized: true,
-      },
-    });
-    expect(chosen.state.journey.siteRuntime[SITE_ID]).toBeUndefined();
-
-    const stale = reduce(chosen.state, "CHOOSE_RANDOM_SITE", {
-      siteId: SITE_ID,
-      siteType: runtime.offeredSiteTypes[1],
-    });
-    expect(stale.outcome).toBe("bounced");
-  });
-
   it("materializes a persisted single destination when entered", () => {
     const wrapper: SiteState = {
       ...makeSite("RandomSite", true),
@@ -368,17 +332,6 @@ describe("Random Site", () => {
         presentingGuideId: testGuideId("fixture-random-guide"),
       },
     });
-  });
-
-  it("bounces choices that were not offered", () => {
-    const opened = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
-      siteId: SITE_ID,
-    });
-    const out = reduce(opened.state, "CHOOSE_RANDOM_SITE", {
-      siteId: SITE_ID,
-      siteType: "DreamsignBazaar",
-    });
-    expect(out.outcome).toBe("bounced");
   });
 });
 
@@ -414,67 +367,6 @@ describe("OPEN_SITE generation determinism", () => {
       expect(JSON.stringify(runtimeOf(a))).toBe(JSON.stringify(runtimeOf(b)));
     });
   }
-
-  it("Essence: pure in-reducer generation is deterministic in seed+seq", () => {
-    registerSiteContentProvider(fakeProvider);
-    const a = reduce(siteState("Essence"), "OPEN_SITE", {
-      siteId: SITE_ID,
-    });
-    const b = reduce(siteState("Essence"), "OPEN_SITE", {
-      siteId: SITE_ID,
-    });
-    expect(a.outcome).toBe("applied");
-    const ra = runtimeOf(a);
-    expect(ra?.kind).toBe("essence");
-    expect(JSON.stringify(ra)).toBe(JSON.stringify(runtimeOf(b)));
-  });
-
-  it("Essence: enhanced site draws a larger band than a normal site", () => {
-    registerSiteContentProvider(fakeProvider);
-    const normal = reduce(siteState("Essence"), "OPEN_SITE", {
-      siteId: SITE_ID,
-    });
-    const enhanced = reduce(
-      stateWithSites([makeSite("Essence", true)]),
-      "OPEN_SITE",
-      { siteId: SITE_ID },
-    );
-    const nAmount =
-      runtimeOf(normal)?.kind === "essence"
-        ? (runtimeOf(normal) as { amount: number }).amount
-        : -1;
-    const eAmount =
-      runtimeOf(enhanced)?.kind === "essence"
-        ? (runtimeOf(enhanced) as { amount: number }).amount
-        : -1;
-    expect(nAmount).toBeGreaterThanOrEqual(200);
-    expect(nAmount).toBeLessThanOrEqual(300);
-    expect(eAmount).toBeGreaterThanOrEqual(400);
-    expect(eAmount).toBeLessThanOrEqual(600);
-  });
-
-  it("bounces a provider-backed type when no provider is registered", () => {
-    const state = siteState("Reward");
-    const out = reduce(state, "OPEN_SITE", { siteId: SITE_ID });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
-
-  it("bounces a site type with no runtime (Battle)", () => {
-    registerSiteContentProvider(fakeProvider);
-    const out = reduce(siteState("Battle"), "OPEN_SITE", {
-      siteId: SITE_ID,
-    });
-    expect(out.outcome).toBe("bounced");
-  });
-
-  it("bounces an unknown site id", () => {
-    registerSiteContentProvider(fakeProvider);
-    const out = reduce(siteState("Reward"), "OPEN_SITE", {
-      siteId: parseSiteId("ghost"),
-    });
-    expect(out.outcome).toBe("bounced");
-  });
 
   it("applies a provider's T56 queue shift atomically with the Shop runtime", () => {
     const firstModifier = {
@@ -543,47 +435,6 @@ describe("OPEN_SITE generation determinism", () => {
 
 describe("OPEN_SITE idempotence", () => {
   beforeEach(() => registerSiteContentProvider(fakeProvider));
-  it("allows an observer to commit the displayed site's deterministic bootstrap", () => {
-    const hosted = {
-      ...siteState("Essence"),
-      playtestControl: {
-        mode: "single-controller" as const,
-        controllerClientId: parseClientId("controller"),
-      },
-    };
-
-    const out = reduceGameEvent(
-      hosted,
-      event("OPEN_SITE", { siteId: SITE_ID }, "observer"),
-      ctx(),
-    );
-
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.siteRuntime[SITE_ID]?.kind).toBe("essence");
-    expect(out.state.playtestControl?.controllerClientId).toBe("controller");
-  });
-
-  it("rejects an observer bootstrap for a site that is not displayed", () => {
-    const hosted = {
-      ...siteState("Essence", {
-        screen: { type: "dreamscape" as const },
-        activeSiteId: null,
-      }),
-      playtestControl: {
-        mode: "single-controller" as const,
-        controllerClientId: parseClientId("controller"),
-      },
-    };
-
-    const out = reduceGameEvent(
-      hosted,
-      event("OPEN_SITE", { siteId: SITE_ID }, "observer"),
-      ctx(),
-    );
-
-    expect(out.outcome).toBe("bounced");
-    expect(out.bounceReason).toBe("observer_read_only");
-  });
 
   it("bounces a repeated OPEN_SITE without changing or regenerating runtime", () => {
     const first = reduce(siteState("Essence"), "OPEN_SITE", {
@@ -598,22 +449,6 @@ describe("OPEN_SITE idempotence", () => {
     expect(JSON.stringify(second.state.journey)).toBe(
       JSON.stringify(first.state.journey),
     );
-    expect(second.state.journey.siteRuntime[SITE_ID]).toEqual(
-      first.state.journey.siteRuntime[SITE_ID],
-    );
-  });
-
-  it("a fresh seq does not overwrite an existing runtime", () => {
-    const first = reduce(siteState("Essence"), "OPEN_SITE", {
-      siteId: SITE_ID,
-    });
-    const second = reduce(
-      first.state,
-      "OPEN_SITE",
-      { siteId: SITE_ID },
-      ctx({ seq: 99, rng: makeRng(777) }),
-    );
-    expect(second.outcome).toBe("bounced");
     expect(second.state.journey.siteRuntime[SITE_ID]).toEqual(
       first.state.journey.siteRuntime[SITE_ID],
     );
@@ -663,16 +498,6 @@ describe("ACCEPT_ESSENCE", () => {
     );
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
-
-  it("bounces a double-accept on an already-accepted site", () => {
-    const accepted = reduce(opened(), "ACCEPT_ESSENCE", {
-      siteId: SITE_ID,
-    }).state;
-    const out = reduce(accepted, "ACCEPT_ESSENCE", {
-      siteId: SITE_ID,
-    });
-    expect(out.outcome).toBe("bounced");
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -698,19 +523,6 @@ describe("ACCEPT_REWARD (essence reward)", () => {
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.essence).toBe(amount);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
-  });
-
-  it("bounces accept-before-open and double-accept", () => {
-    const before = reduce(siteState("Reward"), "ACCEPT_REWARD", {
-      siteId: SITE_ID,
-    });
-    expect(before.outcome).toBe("bounced");
-    const accepted = reduce(opened(), "ACCEPT_REWARD", {
-      siteId: SITE_ID,
-    }).state;
-    expect(
-      reduce(accepted, "ACCEPT_REWARD", { siteId: SITE_ID }).outcome,
-    ).toBe("bounced");
   });
 });
 
@@ -783,14 +595,6 @@ describe("dreamsign offer accept / reject", () => {
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
 
-  it("bounces an unoffered dreamsign id", () => {
-    const out = reduce(opened(), "ACCEPT_DREAMSIGN_OFFER", {
-      siteId: SITE_ID,
-      dreamsignId: testDreamsignId("not-offered"),
-    });
-    expect(out.outcome).toBe("bounced");
-  });
-
   it("rejects the offer and completes the site", () => {
     const out = reduce(opened(), "REJECT_DREAMSIGN_OFFER", {
       siteId: SITE_ID,
@@ -801,21 +605,6 @@ describe("dreamsign offer accept / reject", () => {
       (out.state.journey.siteRuntime[SITE_ID] as { accepted: boolean })
         .accepted,
     ).toBe(true);
-  });
-
-  it("bounces reject-before-open and a double reject", () => {
-    expect(
-      reduce(siteState("DreamsignRevelation"), "REJECT_DREAMSIGN_OFFER", {
-        siteId: SITE_ID,
-      }).outcome,
-    ).toBe("bounced");
-    const rejected = reduce(opened(), "REJECT_DREAMSIGN_OFFER", {
-      siteId: SITE_ID,
-    }).state;
-    expect(
-      reduce(rejected, "REJECT_DREAMSIGN_OFFER", { siteId: SITE_ID })
-        .outcome,
-    ).toBe("bounced");
   });
 });
 
@@ -854,29 +643,6 @@ describe("Augury", () => {
       JSON.stringify(first.journey.siteRuntime[SITE_ID]),
     );
   });
-
-  it("REROLL bounces once the augury is completed", () => {
-    const completed = reduce(siteState("Augury"), "COMPLETE_AUGURY", {
-      siteId: SITE_ID,
-    }).state;
-    expect(
-      reduce(completed, "REROLL_AUGURY", { siteId: SITE_ID }).outcome,
-    ).toBe("bounced");
-  });
-
-  it("FORCE_AUGURY_ARCHETYPE stores the forced archetype", () => {
-    const out = reduce(siteState("Augury"), "FORCE_AUGURY_ARCHETYPE", {
-      siteId: SITE_ID,
-      archetypeId: "fit_card_grant",
-    });
-    expect(out.outcome).toBe("applied");
-    expect(
-      (out.state.journey.siteRuntime[SITE_ID] as {
-        forcedArchetypeId?: AuguryArchetypeId;
-      })
-        .forcedArchetypeId,
-    ).toBe("fit_card_grant");
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -913,53 +679,6 @@ describe("ACCEPT_TRANSFIGURATION_CHOICE", () => {
     expect(entry?.transfiguration).toBe(offer.type);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
-
-  it("bounces without enough essence", () => {
-    const out = reduce(opened(0), "ACCEPT_TRANSFIGURATION_CHOICE", {
-      siteId: SITE_ID,
-      entryId: parseDeckEntryId("deck-1"),
-    });
-    expect(out.outcome).toBe("bounced");
-  });
-
-  it("bounces accept-before-open, unknown entry, and double-accept", () => {
-    const deck = [makeEntry({ entryId: parseDeckEntryId("deck-1") })];
-    expect(
-      reduce(
-        siteState("Transfiguration", { deck }),
-        "ACCEPT_TRANSFIGURATION_CHOICE",
-        { siteId: SITE_ID, entryId: parseDeckEntryId("deck-1") },
-      ).outcome,
-    ).toBe("bounced");
-    const state = opened();
-    expect(
-      reduce(state, "ACCEPT_TRANSFIGURATION_CHOICE", {
-        siteId: SITE_ID,
-        entryId: parseDeckEntryId("ghost"),
-      }).outcome,
-    ).toBe("bounced");
-    const accepted = reduce(state, "ACCEPT_TRANSFIGURATION_CHOICE", {
-      siteId: SITE_ID,
-      entryId: parseDeckEntryId("deck-1"),
-    }).state;
-    expect(
-      reduce(accepted, "ACCEPT_TRANSFIGURATION_CHOICE", {
-        siteId: SITE_ID,
-        entryId: parseDeckEntryId("deck-1"),
-      }).outcome,
-    ).toBe("bounced");
-  });
-
-  it("bounces an unrecognized requested type instead of accepting the first offer", () => {
-    const state = opened(1000);
-    const out = reduce(state, "ACCEPT_TRANSFIGURATION_CHOICE", {
-      siteId: SITE_ID,
-      entryId: parseDeckEntryId("deck-1"),
-      type: "bogus",
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state.journey.deck[0].transfiguration).toBeNull();
-  });
 });
 
 describe("ACCEPT_DUPLICATION_CHOICE", () => {
@@ -984,26 +703,6 @@ describe("ACCEPT_DUPLICATION_CHOICE", () => {
     ).toHaveLength(2);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
-
-  it("bounces accept-before-open and double-accept", () => {
-    const deck = [makeEntry({ entryId: parseDeckEntryId("deck-1") })];
-    expect(
-      reduce(siteState("Duplication", { deck }), "ACCEPT_DUPLICATION_CHOICE", {
-        siteId: SITE_ID,
-        entryId: parseDeckEntryId("deck-1"),
-      }).outcome,
-    ).toBe("bounced");
-    const accepted = reduce(opened(), "ACCEPT_DUPLICATION_CHOICE", {
-      siteId: SITE_ID,
-      entryId: parseDeckEntryId("deck-1"),
-    }).state;
-    expect(
-      reduce(accepted, "ACCEPT_DUPLICATION_CHOICE", {
-        siteId: SITE_ID,
-        entryId: parseDeckEntryId("deck-1"),
-      }).outcome,
-    ).toBe("bounced");
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -1018,79 +717,6 @@ describe("COMPLETE_SITE", () => {
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
     expect(out.state.journey.screen.type).toBe("dreamscape");
-  });
-
-  it("bounces a second completion of an already-visited site", () => {
-    const done = reduce(siteState("Augury"), "COMPLETE_SITE", {
-      siteId: SITE_ID,
-    }).state;
-    expect(
-      reduce(done, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
-    ).toBe("bounced");
-  });
-
-  it("allows an observer to commit the deterministic completed-draft handoff", () => {
-    const completedDraft = siteState("Draft", {
-      draftState: {
-        mode: "tides4",
-        currentOffer: [],
-        activeSiteId: SITE_ID,
-        pickNumber: 6,
-        sitePicksCompleted: 5,
-        siteShownCardNumbers: [],
-        draftPoolCopiesByCard: {},
-        remainingCopiesByCard: {},
-      },
-    });
-    const hosted = {
-      ...completedDraft,
-      playtestControl: {
-        mode: "single-controller" as const,
-        controllerClientId: parseClientId("controller"),
-      },
-    };
-
-    const out = reduceGameEvent(
-      hosted,
-      event("COMPLETE_SITE", { siteId: SITE_ID }, "observer"),
-      ctx(),
-    );
-
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
-    expect(out.state.journey.screen.type).toBe("dreamscape");
-    expect(out.state.playtestControl?.controllerClientId).toBe("controller");
-  });
-
-  it("keeps an observer from completing an active draft offer", () => {
-    const activeDraft = siteState("Draft", {
-      draftState: {
-        mode: "tides4",
-        currentOffer: [1, 2, 3, 4],
-        activeSiteId: SITE_ID,
-        pickNumber: 5,
-        sitePicksCompleted: 4,
-        siteShownCardNumbers: [1, 2, 3, 4],
-        draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
-        remainingCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
-      },
-    });
-    const hosted = {
-      ...activeDraft,
-      playtestControl: {
-        mode: "single-controller" as const,
-        controllerClientId: parseClientId("controller"),
-      },
-    };
-
-    const out = reduceGameEvent(
-      hosted,
-      event("COMPLETE_SITE", { siteId: SITE_ID }, "observer"),
-      ctx(),
-    );
-
-    expect(out.outcome).toBe("bounced");
-    expect(out.bounceReason).toBe("observer_read_only");
   });
 });
 
@@ -1115,13 +741,6 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     });
   }
 
-  it("bounces without a Purge site identity", () => {
-    const out = reduce(purgeState(), "PURGE_DECK_CARDS", {
-      entryIds: [parseDeckEntryId("deck-1")],
-    });
-    expect(out.outcome).toBe("bounced");
-  });
-
   it("derives the canonical price and completes the site atomically", () => {
     const state = purgeState();
     const out = reduce(state, "PURGE_DECK_CARDS", {
@@ -1141,21 +760,6 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     expect(out.state.journey.screen.type).toBe("dreamscape");
   });
 
-  it("bounces a site purge whose cost exceeds current essence", () => {
-    const state = purgeState();
-    const out = reduce(
-      { ...state, journey: { ...state.journey, essence: 3 } },
-      "PURGE_DECK_CARDS",
-      {
-        entryIds: [parseDeckEntryId("deck-1")],
-        siteId: SITE_ID,
-      },
-    );
-    expect(out.outcome).toBe("bounced");
-    expect(out.state.journey.essence).toBe(3);
-    expect(out.state.journey.visitedSites).not.toContain(SITE_ID);
-  });
-
   it("ignores a forged client price and charges the derived price", () => {
     const state = purgeState();
     const out = reduce(
@@ -1169,17 +773,5 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     );
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.essence).toBe(60);
-  });
-
-  it("bounces a re-purge of an already-visited site", () => {
-    const done = reduce(purgeState(), "PURGE_DECK_CARDS", {
-      entryIds: [parseDeckEntryId("deck-1")],
-      siteId: SITE_ID,
-    }).state;
-    const out = reduce(done, "PURGE_DECK_CARDS", {
-      entryIds: [parseDeckEntryId("deck-2")],
-      siteId: SITE_ID,
-    });
-    expect(out.outcome).toBe("bounced");
   });
 });

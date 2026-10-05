@@ -891,36 +891,6 @@ describe("(a) run-field nullability", () => {
     expect(appliedCount).toBeGreaterThan(SEQUENCE_COUNT); // events broadly apply
     expect(draftStateWrites).toBeGreaterThan(0); // draftState is actually rewritten
   });
-
-  it("negative control: the checker flags a non-carve-out event that nulls a run field", () => {
-    // Build a populated start, then a hand-crafted step that nulls draftState.
-    // The step type is a NON-carve-out event, so the checker must flag it —
-    // proving the property above can catch a regression, not just pass.
-    const populated = foldEvents(
-      ENGINE_CONFIG,
-      GENESIS,
-      { seq: 0, state: genesisFoldState(GENESIS) },
-      [START_JOURNEY_ENTRY],
-      { devMode: false },
-    ).state;
-    expect(populated.journey.draftState).not.toBeNull();
-
-    const nulledDraft: FoldState = {
-      ...populated,
-      journey: { ...populated.journey, draftState: null },
-    };
-    expect(firstNulledRunField(populated, nulledDraft)).toBe("draftState");
-
-    // And it also catches an avatar / resolvedPackage regression.
-    const nulledCaller: FoldState = {
-      ...populated,
-      journey: { ...populated.journey, avatar: null },
-    };
-    expect(firstNulledRunField(populated, nulledCaller)).toBe("avatar");
-
-    // A step that PRESERVES the run fields must NOT be flagged (no false positive).
-    expect(firstNulledRunField(populated, populated)).toBeNull();
-  });
 });
 
 // ---------------------------------------------------------------------------

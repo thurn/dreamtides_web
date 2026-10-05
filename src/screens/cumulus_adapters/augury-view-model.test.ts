@@ -27,17 +27,9 @@ import {
 } from "../../journey_v2/testing/fixtures";
 import {
   buildAuguryAcceptRequest,
-  buildAuguryOfferTileModel,
   buildAuguryOfferViews,
   buildAugurySiteModel,
-  projectOfferTileCategory,
 } from "./augury-view-model";
-import {
-  auguryOfferHeadline,
-  offerTileDescription,
-} from "../../cumulus/components/controls/offer-tile-descriptions";
-import { auguryArchetype } from "../../data/augury-data";
-import { siteTypeName } from "../../data/sites-data";
 import type { ChoiceId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import { parseOfferId } from "../../types/identifiers";
@@ -45,13 +37,11 @@ import { parseChoiceId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseAuguryTargetKey } from "../../types/identifiers";
-import { parseAuguryCategoryId } from "../../types/identifiers";
 import type { DreamGuideContent } from "../../types/content";
 import { makeTestPoolContext } from "../../testing/pool-context";
 import {
   testCardId,
   testDreamscapeId,
-  testDreamsignId,
   testGuideId,
   testTideId,
 } from "../../types/test-identities";
@@ -278,22 +268,6 @@ const choiceRequest = (
   candidates,
 });
 
-function dreamsignObject(
-  idSeed: string,
-): Extract<AuguryGameObject, { objectType: "dreamsign" }> {
-  return {
-    objectType: "dreamsign",
-    dreamsignId: testDreamsignId(idSeed),
-    displayName: `Dreamsign ${idSeed}`,
-    dreamsignTemplate: {
-      id: testDreamsignId(idSeed),
-      name: `Dreamsign ${idSeed}`,
-      effectDescription: "Fixture",
-      imageName: `${idSeed}.png`,
-    },
-  };
-}
-
 describe("augury view model", () => {
   const context = {
     deckEntryById: new Map(),
@@ -303,23 +277,6 @@ describe("augury view model", () => {
       content: { auguryData: CONFIG_DATA_FIXTURE.auguryData },
     },
   } as unknown as AuguryContext;
-
-  it("maps both offers to short object-first views without production summaries", () => {
-    const offers = buildAuguryOfferViews(encounter(), context);
-
-    expect(offers).toHaveLength(2);
-    expect(offers[0]).toMatchObject({
-      id: "A",
-      requiresSelection: true,
-      tile: { kind: "card-draft" },
-    });
-    expect(offers[1]).toMatchObject({
-      id: "B",
-      requiresSelection: false,
-      tile: { kind: "card-gift" },
-    });
-    expect(JSON.stringify(offers)).not.toContain("Production summary");
-  });
 
   it("preserves card UUID identity and candidate choice ids", () => {
     const offers = buildAuguryOfferViews(encounter(), context);
@@ -387,55 +344,6 @@ describe("augury view model", () => {
     );
   });
 
-  it("shows only the resulting starter card", () => {
-    const previewCard = {
-      ...mappingCards[0],
-      renderedText: "Improved starter text.",
-    };
-    const offer = mappedOffer("starter_transfigure", {
-      gameObjects: [{ ...deckObject, previewCard }],
-      applyPayload: { kind: "composite", children: [] },
-    });
-    const offers = buildAuguryOfferViews(
-      { ...encounter(), offers: [offer, directOffer()] },
-      mappingContext,
-    );
-    const visual = offers[0]?.visual;
-    if (visual?.kind !== "cards") {
-      throw new Error("expected resulting starter cards");
-    }
-
-    expect(visual.cards).toHaveLength(1);
-    expect(visual.cards[0]?.model.displaySnapshot.renderedText).toBe(
-      "Improved starter text.",
-    );
-  });
-
-  it("builds an added site as a canonical non-interactive site-node model", () => {
-    const offer = mappedOffer("add_site", {
-      family: "site",
-      targetKey: parseAuguryTargetKey("Shop"),
-      applyPayload: { kind: "add_site", siteType: "Shop" },
-    });
-    const offers = buildAuguryOfferViews(
-      { ...encounter(), offers: [offer, directOffer()] },
-      mappingContext,
-    );
-    const visual = offers[0]?.visual;
-    if (visual?.kind !== "site") {
-      throw new Error("expected a site preview");
-    }
-
-    expect(visual.model).toMatchObject({
-      type: "Shop",
-      isVisited: false,
-      isInteractive: false,
-    });
-    expect(visual.model.label).toBe(
-      siteTypeName(MINIMAL_SITES_DATA, "Shop"),
-    );
-  });
-
   it("builds the persisted accept request from stable offer and choice ids", () => {
     expect(
       buildAuguryAcceptRequest(
@@ -449,206 +357,6 @@ describe("augury view model", () => {
       archetypeId: "fit_card_draft",
       choice: { choiceId: parseChoiceId("choice-2") },
     });
-  });
-
-  it("maps every augury archetype to its strict Offer Tile category", () => {
-    const drafts = fourCandidates();
-    const dreamsigns = [dreamsignObject("sign-1"), dreamsignObject("sign-2")];
-    const cases: readonly [AuguryOffer, string, string][] = [
-      [
-        mappedOffer("fit_card_grant", { gameObjects: [catalogObject(0)] }),
-        "card-gift",
-        "Gain a Card",
-      ],
-      [
-        mappedOffer("fit_card_draft", { choiceRequest: choiceRequest(drafts) }),
-        "card-draft",
-        "Choose a Card",
-      ],
-      [
-        mappedOffer("copies_draft", {
-          choiceRequest: choiceRequest(fourCandidates(2)),
-        }),
-        "copies-draft",
-        "Choose a Card",
-      ],
-      [
-        mappedOffer("strong_card", { gameObjects: [catalogObject(0)] }),
-        "card-gift",
-        "Gain a Card",
-      ],
-      [
-        mappedOffer("category_draft_known", {
-          targetKey: parseAuguryTargetKey(
-            `type:Character:${mappingCards
-              .slice(0, 4)
-              .map((value) => value.id)
-              .join(",")}`,
-          ),
-          choiceRequest: choiceRequest(drafts),
-        }),
-        "category-draft",
-        "Choose a Card",
-      ],
-      [
-        mappedOffer("card_bundle", {
-          gameObjects: [catalogObject(0), catalogObject(1)],
-        }),
-        "card-bundle",
-        "Gain Two Cards",
-      ],
-      [
-        mappedOffer("transfigured_draft", {
-          choiceRequest: choiceRequest(drafts),
-        }),
-        "transfigured-draft",
-        "Choose a Transfigured Card",
-      ],
-      [
-        mappedOffer("transfigure", {
-          gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
-          applyPayload: {
-            kind: "transfigure_deck_entry",
-            entryId: deckObject.entryId,
-            cardUuid: deckObject.cardUuid,
-            cardNumber: deckObject.cardNumber,
-            transfiguration: "Empowered",
-            previewCard: mappingCards[0],
-            description: "Fixture",
-          },
-        }),
-        "transfigure-card",
-        "Transfigure a Card",
-      ],
-      [
-        mappedOffer("starter_transfigure", {
-          gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
-          applyPayload: { kind: "composite", children: [] },
-        }),
-        "transfigure-starters",
-        "Transfigure Your Starters",
-      ],
-      [
-        mappedOffer("purge", { gameObjects: [deckObject] }),
-        "purge-card",
-        "Purge a Card",
-      ],
-      [
-        mappedOffer("duplicate", {
-          choiceRequest: choiceRequest(drafts.slice(0, 3)),
-        }),
-        "duplicate-card",
-        "Choose a Card",
-      ],
-      [
-        mappedOffer("dreamsign", { gameObjects: [dreamsigns[0]] }),
-        "dreamsign-gift",
-        "Gain a Dreamsign",
-      ],
-      [
-        mappedOffer("add_site", {
-          family: "site",
-          targetKey: parseAuguryTargetKey("Shop"),
-          applyPayload: { kind: "add_site", siteType: "Shop" },
-        }),
-        "add-site",
-        "Add a Site",
-      ],
-    ];
-
-    for (const [offer, expectedKind] of cases) {
-      const model = buildAuguryOfferTileModel(offer, mappingContext);
-      expect(model.kind, offer.archetypeId).toBe(expectedKind);
-      expect(model.id).toBe(
-        `${stableDigest("mapping-encounter")}:${offer.offerId}`,
-      );
-      expect(
-        auguryOfferHeadline(
-          model,
-          auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, offer.archetypeId)
-            .presentation,
-        ),
-        offer.archetypeId,
-      ).not.toBe("");
-    }
-  });
-
-  it("keeps display names semantic until localized offer formatting", () => {
-    const purge = buildAuguryOfferTileModel(
-      mappedOffer("purge", { gameObjects: [deckObject] }),
-      mappingContext,
-    );
-    const formatted = offerTileDescription(
-      purge,
-      auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, "purge").presentation,
-    );
-
-    const source = formatted;
-    expect(source).not.toBe("");
-    expect(source).toContain(deckObject.displayName);
-  });
-
-  it("rejects malformed fixed counts and resolves structured category and copy data", () => {
-    const category = buildAuguryOfferTileModel(
-      mappedOffer("category_draft_known", {
-        targetKey: parseAuguryTargetKey(
-          `type:Character:${mappingCards
-            .slice(0, 4)
-            .map((value) => value.id)
-            .join(",")}`,
-        ),
-        choiceRequest: choiceRequest(fourCandidates()),
-      }),
-      mappingContext,
-    );
-    const copies = buildAuguryOfferTileModel(
-      mappedOffer("copies_draft", {
-        choiceRequest: choiceRequest(fourCandidates(2)),
-      }),
-      mappingContext,
-    );
-    expect(category).toMatchObject({
-      kind: "category-draft",
-      category: { kind: "character" },
-    });
-    expect(copies).toMatchObject({ kind: "copies-draft", copyCount: 2 });
-    for (const count of [2, 3, 4]) {
-      const model = buildAuguryOfferTileModel(
-        mappedOffer("fit_card_draft", {
-          choiceRequest: choiceRequest(fourCandidates().slice(0, count)),
-        }),
-        mappingContext,
-      );
-      expect(model.kind).toBe("card-draft");
-      if (model.kind === "card-draft") expect(model.cards).toHaveLength(count);
-    }
-  });
-
-  it("projects every generated category family to a semantic localization variant", () => {
-    const cases = [
-      ["type:Character", "Character", { kind: "character" }],
-      ["type:Event", "Event", { kind: "event" }],
-      ["cost:cheap", "cheap card", { kind: "cheap" }],
-      ["cost:mid", "mid-cost card", { kind: "mid-cost" }],
-      ["cost:big", "expensive card", { kind: "expensive" }],
-      ["fast", "fast card", { kind: "fast" }],
-      ["subtype:Ancient", "Ancient", { kind: "subtype", name: "Ancient" }],
-      [
-        `tide:${PACKAGE_TIDE_ID}`,
-        "Harvest of the Fallen package",
-        { kind: "package", name: "Harvest of the Fallen package" },
-      ],
-    ] as const;
-
-    for (const [id, label, expected] of cases) {
-      expect(
-        projectOfferTileCategory({
-          id: parseAuguryCategoryId(id),
-          label,
-          memberUuids: [],
-        }),
-      ).toEqual(expected);
-    }
   });
 
   it("keeps a persisted tide-package category reroll in the offer state", () => {

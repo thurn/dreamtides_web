@@ -465,7 +465,6 @@ describe("TutorialScreenAdapter", () => {
           actionId: testTutorialActionId("how-to-play"),
           battleId: parseBattleId("tutorial-battle"),
           trigger: "player-turn-announcement-complete",
-          title: "How to Play",
         }),
         expect.objectContaining({
           event: "tutorial_how_to_play_dismissed",

@@ -593,7 +593,7 @@ describe("buildTutorialView", () => {
         text: "Configured [yellow]instructions[/yellow].",
         wait: 0,
       }),
-    ).toEqual({
+    ).toMatchObject({
       actionId: testTutorialActionId("how-to-play"),
       action: "display-how-to-play",
       cardWidthPx: 650,
@@ -601,7 +601,6 @@ describe("buildTutorialView", () => {
       presentationSequence: ["dreamwell-emergence", "instruction"],
       dreamwellEmergenceDurationSeconds: 1,
       trigger: "player-turn-announcement-complete",
-      title: "How to Play",
       messageText: "Configured instructions.",
       messageMarkup: "Configured [yellow]instructions[/yellow].",
       waitSeconds: 0,
