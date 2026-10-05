@@ -14,6 +14,9 @@ sections:
   record any change.
 - [Established facts](#established-facts) are behaviors the code already
   settles.
+- [Card text clarifications](#card-text-clarifications) are the operator's
+  readings of card, dreamsign, avatar, and Dreamwell text that the rules and
+  the code do not settle.
 
 **Rules document path.** The rules doc is `docs/rules.md`. Phase 2.1 moves it
 there from `docs/battle_rules/battle_rules.md`. Phase 1 uses the old path.
@@ -316,7 +319,8 @@ toolchain.
 
 When `docs/rules.md` is silent or ambiguous, decide in this order:
 
-1. An explicit decision in this file (D-entries, then P-entries).
+1. An explicit decision in this file (D-entries, then C-entries, then
+   P-entries).
 2. Existing prototype behavior, where the prototype implements an actual rule.
    Sandbox shortcuts don't count; see P10.
 3. `~/dreamtides` Rust engine behavior, where the relevant rules text is
@@ -705,3 +709,180 @@ ladder and are logged.
   Enduring, Hastened, Resonant, Attuned, and Perfected. Hastened applies to an
   event that is not Fast and makes it Fast. Perfected applies every other one
   the card is eligible for.
+
+## Card text clarifications
+
+The operator settled these in a card-text audit on 2026-10-04. Each one is
+binding like a D-entry. Phase 3.1 writes the general rules among them (C5,
+C7–C10, C13–C15, C17) into `docs/rules.md` with RD entries. The content batch that implements each affected
+entity cites its C-entry in its notes. Typos stay in the data (D11); each is
+logged in `docs/plan/evidence/card-issues.md` with its suggested fix.
+
+### C1. Contemplation
+
+Card `09e17f29-8ee1-477f-8175-ff37eb1f254a` ("create 'Contemplation' in your
+hand") names a card that does not exist. **Contemplation** is a **2● Standard
+event: "Draw a card."**
+
+- Phase 5 adds it as new catalog data with rarity `Special`, like Nightmare
+  (`b0a2c3d4-e5f6-4789-8abc-0def12345678`). It gets a new UUID, belongs to no
+  tide, and never appears in drafts, shops, rewards, or opponent decks. Adding
+  it is not an edit to existing card data.
+- It is only ever created, so it ceases to exist when it leaves play (rules §
+  Created Cards).
+
+### C2. Radiant figments are Ethereal
+
+Dreamsign `4a91c56c-d828-482a-a46c-1299d69fa011` ("materialize a 2✦ radiant
+figment") names a figment type that does not exist. Read it as **a 2✦ Ethereal
+figment.** Log it as a card issue: suggested fix "ethereal figment".
+
+### C3. "Ethereal copy" means ephemeral
+
+Dreamsign `7ec00da2-2b2d-4613-9a2a-8611d38199ca` ("Add an ethereal copy of the
+first event you played last turn to your hand") means **an ephemeral created
+copy**: it is banished at end of turn if still in hand, and it ceases to exist
+when it leaves play. Log it as a card issue: suggested fix "ephemeral copy".
+
+### C4. "Your deck" on a dreamsign means the journey deck
+
+Dreamsigns `00cc7e7f-4245-4447-b9dc-f647dc6241a2` ("Characters in your deck with
+cost ≤2● have +1✦") and `47081bde-f35d-4b5c-ba17-53e5dbf5b419` ("Characters in
+your deck with cost ≥4● have awakened") apply to **every card that came from the
+player's journey deck** and matches, wherever it is during the battle. The cost
+check uses the card's cost after its variant (transfigurations and D39 deck
+mods). Created cards and figments never qualify. The same reading applies to any
+other dreamsign whose battle text says "your deck" in a static condition.
+
+### C5. Figment copies copy copiable values
+
+"Figment copy" appears on card `ccff822e-e2ae-4d38-9720-6df289dbe4cd`, dreamsign
+`2ebf0bbb-440c-4dba-8e48-228daadc0a1e`, and avatar
+`bf72adff-7d74-4be8-9b93-1db7ba13a1db`. A figment copy:
+
+- copies the source's **copiable values** after variant transforms: subtype,
+  abilities, cost, and base spark;
+- never copies gained spark, counters, or statuses;
+- is a figment: it counts for figment synergies, and it ceases to exist when it
+  leaves play;
+- has its base spark set to 0 when the text says "0✦ figment copy";
+- merges only with figment copies of the same card UUID;
+- with "until end of turn", ceases to exist during that turn's Ending.
+
+### C6. Copies may always re-target (D15 stands)
+
+[D15](#d15-copies-of-cards-on-the-stack) holds: every copy's controller may
+choose new targets and modes. Card `fb967cc1-4199-4a08-8070-724e07cebea5`'s
+amplified clause "You may choose new targets for the copies" is therefore
+redundant. Implement it as a no-op and log it as a card issue.
+
+### C7. Paying to end an effect is a Fast special action
+
+"…until the opponent pays N●" (card `9e9efbc0-d438-48a9-9551-85c93fb33f3e`)
+gives the affected character's controller an **end-effect special action**: pay
+N● to end that effect immediately.
+
+- It is available wherever that player could play a Fast card (❖), and never as
+  an Interrupt response.
+- It does not use the stack and cannot be responded to.
+- The engine offers it as a top-level action (`payToEnd`), so it goes through
+  legality and the policy interface like any other action.
+
+### C8. Extra turns are full turns outside the round count
+
+Card `a911ef71-799c-4240-ad13-8fabd3caeafa` ("Take an extra turn after this
+one"):
+
+- An extra turn runs all eight phases, including the Dreamwell draw and the
+  Draw.
+- It is one of that player's turns for "next turn", "last turn", "this turn",
+  "once per turn", and "until your next turn".
+- It does **not** advance the round counter, so it does not count toward the
+  turn limit (P11).
+- Several pending extra turns are taken last-in, first-out (MTG 500.7).
+
+### C9. "Supporting it" counts any character behind it
+
+Card `5ab11bef-5dcd-49f5-be49-ae2ccde76e70` ("+2✦ for each character supporting
+it") counts every character in a back-rank position that supports this
+character's front-rank position, with or without the Support keyword. That is
+0–2 characters, and zero while this character is in the back rank.
+
+### C10. "When you challenge with N" fires at challenger designation
+
+Card `f07dfe42-566c-4e91-a250-9e2781e9d06f` ("When you challenge with two or
+more warriors") and dreamsign `5a22f358-bc84-44b1-a201-5f9f57940c51` ("When you
+challenge with 2 or more characters") fire **once, at the end of Day, when
+challengers are designated.** They count the designated challengers that match.
+Later Night changes never re-fire them.
+
+### C11. "The card pool" is the run's draft pool
+
+Dreamsign `1a524712-ef7e-43d9-bd79-5dea5250bf08` ("Add a random ≤2● cost event
+from the card pool to your hand"):
+
+- The pool is the run's tides4 draft pool, passed to the battle in `BattleInit`.
+  For an opponent's dreamsign, it is that opponent's pool as produced by the
+  opponent generator.
+- The pick is uniform, on RNG stream `random:dreamsign`.
+- The added card is a **created** card.
+
+### C12. The type-remap dreamsign rewrites selectors and figments
+
+Dreamsign `3d86f8ce-42ac-43dc-96d5-121e6d1a6167` ("pick a character type. All
+cards in your deck that mention character types in their text now refer to that
+character type"):
+
+- It is a journey-level remap stored with the run (P8), applied to every card in
+  the journey deck, **including cards added later**.
+- Every character-type reference in a selector or condition becomes the chosen
+  type: "warriors you control", "draw a warrior", "a survivor in your void".
+- Figments the card creates also change type **when the chosen type is a figment
+  type**. They keep the printed spark ("1✦ warrior figment" becomes "1✦ survivor
+  figment"). Otherwise the figment type is unchanged.
+- The card's own subtype is unchanged.
+- Displayed text uses a word-substitution text transform. The type is chosen
+  with the existing pick UI.
+
+### C13. Figments cost 0●
+
+A figment's cost is 0● for cost selectors ("≤2● cost character") and for "its
+cost" or "that character's cost". A figment copy (C5) has the copied cost.
+
+### C14. Victory points never go below 0
+
+An effect that makes a player lose ⍟ stops at 0. Example: card
+`7697da0e-d759-4c75-8c9c-477e9058b035`, "the opponent loses an equivalent
+quantity of ⍟".
+
+### C15. "You win the game" is a state-based win
+
+Card `6e2188f8-580e-4a66-a3e3-267d509de903` ("If you have no cards in your deck,
+you win the game") is checked by the state-based victory check (P5) after every
+step while the card is in play. Its controller wins the battle. If the opponent
+reaches the score target in the same check, the battle is a draw.
+
+### C16. Avatar and Dreamwell readings
+
+- Avatar `1cc5a88a-134f-42f7-a0ae-95ace44b3745` ("If you have 5●"): 5 or more
+  current ●.
+- Dreamwell `a3033051-8eb7-4fbf-93d6-f947ed68974d` ("Return a random character
+  from each player's void to play"): each character returns under its owner's
+  control.
+- Dreamwell `558a1f1b-7dc1-4d83-9f00-c6af2187a954` ("Draw an additional
+  Dreamwell card"): the additional card grants its `energy_added` and resolves
+  its ability.
+
+### C17. Targeting and additional spark
+
+- **"Cannot be targeted by effects"** (cards
+  `516dbd2d-dae4-4873-937e-adfeeee4444d`,
+  `2708c635-9332-4cfb-b43d-889ba2e329b6`,
+  `bd43b120-2503-406c-8b72-ea3dc55198a0`) covers every effect, including its
+  controller's own.
+- **"When a character you control gains ✦, it gains 1 additional ✦"** (card
+  `26a05558-4692-43d2-ae6c-a6eb385a6d22`, dreamsign
+  `1a21186c-cafd-4e0f-9304-1ac0ef55340a`) applies to each "gains +N✦" event,
+  permanent or with a duration; the additional ✦ has the same duration. It never
+  applies to spark a character *has* (statics, Support, anthems). The additional
+  gain does not retrigger it. Several sources stack, each adding 1.

@@ -38,7 +38,10 @@ Every content batch bead follows these steps exactly.
 3. **Add primitives** the batch needs, each with primitive tests that use
    synthetic cards. Update the engine-design catalog table if the primitive is
    general.
-4. **Resolve ambiguities** with the ladder. Write `docs/rules.md` text and
+4. **Resolve ambiguities** with the ladder. Check the
+   [card text clarifications](decisions.md#card-text-clarifications) first:
+   an entity named there is implemented exactly as its C-entry says, and the
+   notes cite it. Write `docs/rules.md` text and
    entries in `docs/plan/evidence/rules-decisions.md`. Log card problems in
    `docs/plan/evidence/card-issues.md`.
 5. **Write scenario specs** only for cards whose behavior exceeds the
@@ -82,7 +85,8 @@ Write `scripts/content-inventory.mjs`. It emits
 Cluster the entities into batches by mechanic family. Order the batches by
 primitive dependency and frequency:
 
-1. the Starter cards (10), the Tutorial card, and Nightmare;
+1. the Starter cards (10), the Tutorial card, Nightmare, and Contemplation
+   ([C1](decisions.md#c1-contemplation)), added here as new `Special` data;
 2. vanilla and keyword-only bodies (Awakened, Vengeful, Veil, Offering,
    Ephemeral, Reclaim);
 3. card flow: draw, discard, foresee, discover, erode, look-at-top
@@ -136,7 +140,9 @@ start of your first turn…"), and once-per-turn. Respect opponent progression:
 ### 5.5 Dreamsigns: battle effects
 
 Every dreamsign ability that acts in battle, run as an emblem ability, in
-batches by family. The card-lab gains `?goto=card-lab&dreamsign=<uuid>`.
+batches by family. Dreamsigns named in
+[C2–C4, C10, C11, and C17](decisions.md#card-text-clarifications) follow those
+entries. The card-lab gains `?goto=card-lab&dreamsign=<uuid>`.
 Dreamsigns with both battle and journey text are split across 5.5 and 5.6.
 
 ### 5.6 Dreamsigns: journey effects (P8)
@@ -155,7 +161,11 @@ consumed by the journey rules:
 - essence-site alternatives (forgo essence → purge 2, or offer a dreamsign
   instead);
 - pre- and post-battle purge or transfigure windows;
-- "when you gain this dreamsign" one-shots.
+- "when you gain this dreamsign" one-shots;
+- the type remap of dreamsign `3d86f8ce-42ac-43dc-96d5-121e6d1a6167`
+  ([C12](decisions.md#c12-the-type-remap-dreamsign-rewrites-selectors-and-figments)),
+  stored with the run and applied to battle selectors and figment types
+  through the deck-entry variant.
 
 New player choices use existing Cumulus patterns and plain English copy in
 the UI copy module:

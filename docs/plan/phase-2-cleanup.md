@@ -140,7 +140,10 @@ This is one or two beads.
    it into plain English strings, so no data module depends on Trox. This
    task runs before 2.4 deletes Trox for that reason.
    Cards get `pending: true`, or `vanilla: true` when they have no rules
-   text; Phase 3 introduces the ability fields.
+   text; Phase 3 introduces the ability fields. `amplifiedText` holds the
+   **expanded** amplified rules text from the generated runtime JSON, not the
+   RON's compact replacement fragment
+   ([engine-design](engine-design.md#ability-dsl-and-content-modules)).
 2. **Prove parity.** Before deleting the pipeline, run a one-off check that
    every converted catalog deep-equals the current generated runtime JSON,
    value for value (D11). Where the runtime JSON holds a

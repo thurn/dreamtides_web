@@ -40,7 +40,12 @@ This is a docs-only bead.
    - P5 victory and draw checks;
    - P6 the hand-limit choice;
    - F3 the temporary-banish return;
-   - "mandatory prompts with no legal answer" (engine-design rule 4).
+   - "mandatory prompts with no legal answer" (engine-design rule 4);
+   - the general card-text clarifications
+     ([C5, C7–C10, C13–C15, C17](decisions.md#card-text-clarifications)):
+     figment copies, paying to end an effect, extra turns, "supporting",
+     "when you challenge with N", figment cost, the ⍟ floor, "you win the
+     game", untargetability, and additional spark.
 2. **Create `docs/plan/evidence/rules-decisions.md`** with entries RD-001
    onward.
 3. **Fix contradictions** you find, through the ladder.
@@ -61,7 +66,8 @@ Build:
 
 Rules:
 
-- the phase machine as `advancePhase` steps;
+- the phase machine as `advancePhase` steps, including extra turns
+  ([C8](decisions.md#c8-extra-turns-are-full-turns-outside-the-round-count));
 - Dreamwell energy (F1);
 - draw and Fatigue;
 - challenger and blocker designation;
@@ -155,6 +161,8 @@ Build:
 - the Dusk and Night windows;
 - `prevent`, including the "unless the opponent pays" prompt and "put it on
   top of the opponent's deck" or "into your hand";
+- the `payToEnd` special action for "until the opponent pays N●" effects
+  ([C7](decisions.md#c7-paying-to-end-an-effect-is-a-fast-special-action));
 - "cannot be prevented".
 
 **Acceptance:**
@@ -174,7 +182,9 @@ Build:
 - intervening conditions (as an RD entry);
 - once-per-turn;
 - floating and delayed triggers, `triggerAbility`, and disabled triggers;
-- all named triggers and the `when…` patterns, including nth-in-turn counters;
+- all named triggers and the `when…` patterns, including nth-in-turn counters
+  and "when you challenge with N"
+  ([C10](decisions.md#c10-when-you-challenge-with-n-fires-at-challenger-designation));
 - every duration kind.
 
 **Acceptance:**
@@ -214,7 +224,12 @@ Build:
 - banish-until and its returns;
 - Offering, Ephemeral, and Reclaim from the void;
 - Phasing;
-- stack copies (D15), figment copies, and create-in-hand copies.
+- stack copies (D15), figment copies
+  ([C5](decisions.md#c5-figment-copies-copy-copiable-values)), and
+  create-in-hand copies;
+- figment cost 0●
+  ([C13](decisions.md#c13-figments-cost-0)) and the ⍟ floor of 0
+  ([C14](decisions.md#c14-victory-points-never-go-below-0)).
 
 **Acceptance:**
 

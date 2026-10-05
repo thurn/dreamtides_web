@@ -70,7 +70,8 @@ interface BattleState {
   seed: string;                        // from the game seed + battle index
   rng: RngStreams;                     // named streams: shuffle:<side>, dreamwell, random:<purpose>
   config: BattleConfig;                // from src/content/data/battle.ts + BattleInit journey inputs (D39)
-  turn: { round: number; active: Side; phase: Phase; challengeLane: number | null };
+  turn: { round: number; active: Side; phase: Phase; challengeLane: number | null;
+          extraTurns: Side[] };      // pending extra turns, last-in first-out (C8)
   sides: Record<Side, SideState>;
   instances: Record<InstanceId, CardInstance>;
   stack: StackItem[];                  // last element is the top
@@ -155,6 +156,7 @@ type Action =
   | { kind: "reposition"; card: InstanceId; to: Slot }      // includes figment merges
   | { kind: "pass" }                                        // pass priority, or end Day/Dusk/Night
   | { kind: "repeatLoop"; loop: LoopId; count: number | "untilVictory" }
+  | { kind: "payToEnd"; effect: EffectId }                 // "until the opponent pays N●" (C7)
   | { kind: "debug"; op: DebugOp };                         // dev builds only (D4)
 ```
 
@@ -558,7 +560,7 @@ export default card({
   id: "7be2e6d7-abff-4c44-a0c3-35460da1693c",
   name: "Windcutter",
   text: ["▸Challenge: Banish an enemy until end of turn."],
-  amplifiedText: "until your next turn.",
+  amplifiedText: "▸Challenge: Banish an enemy until your next turn.",
   cost: fixed(3),
   kind: character({ subtype: "Warrior", spark: 1 }),
   rarity: "Uncommon",
@@ -569,6 +571,12 @@ export default card({
   verifiedText: "<hash>",   // hash of text + amplifiedText that these abilities were verified against
 });
 ```
+
+**Amplified text is stored expanded.** The RON catalogs author
+`amplified_text` as a compact fuzzy replacement ("until your next turn."),
+which the Rust compiler expands into the full rules text. The content modules
+store the **expanded** text from the generated runtime JSON (Phase 2.3
+parity), so no module depends on the replacement algorithm.
 
 **File layout.** Use one file per entity, named `<slug>-<uuid8>.ts`. Names
 aren't unique; the UUID prefix disambiguates. Each directory has an explicit
@@ -598,13 +606,13 @@ tests for each.
 | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `doubleEnergy`, `gainPoints`, `playerGainsPoints`, `store`, `spendCounters` |
 | Cards | `draw` (modifiers: ephemeral, cost 0), `discard` (chosen or random), `foresee`, `discover`, `erode`, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom`, `createInHand(copyOf, modifiers)` |
-| Characters | `dissolve`, `banish(duration?)`, `abandon(chooser, predicate)`, `materialize(from, selection)`, `materializeFigment(type, spark, n)`, `materializeFigmentCopy`, `rematerialize`, `returnToHand`, `gainSpark(duration?)`, `setBaseSpark`, `awaken`, `exhaust`, `move(slotRule)`, `gainControl`, `grant(keyword, duration)`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)` |
+| Characters | `dissolve`, `banish(duration?)`, `abandon(chooser, predicate)`, `materialize(from, selection)`, `materializeFigment(type, spark, n)`, `materializeFigmentCopy` (C5), `rematerialize`, `returnToHand`, `gainSpark(duration?)`, `setBaseSpark`, `awaken`, `exhaust`, `move(slotRule)`, `gainControl`, `grant(keyword, duration)`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)` |
 | Stack | `prevent(unless?)`, `copyStackItem(times, overrides)`, `putPreventedInto(zone)` |
-| Flow | `sequence`, `choose`, `chooseOne(modes)`, `ifThen(Else)`, `forEach`, `repeat`, `optional`, `eachPlayer`, `forDuration`, `delayed(next…)`, `floating(when…)` |
+| Flow | `sequence`, `choose`, `chooseOne(modes)`, `ifThen(Else)`, `forEach`, `repeat`, `optional`, `eachPlayer`, `forDuration`, `delayed(next…)`, `floating(when…)`, `takeExtraTurn` (C8) |
 | Selectors | characters (by controller, subtype, ✦/● bounds, figment or not, exhausted, rank, "another"); cards in a zone; stack items; players |
 | Values | constant, X, `count(selector)`, stored counters, turn counters, `lockedAtResolution` |
-| Durations | `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `permanent` |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(pred, nth?)`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `atStartOfTurn`, `atStartOfFirstTurn` |
+| Durations | `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7), `permanent` |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(pred, nth?)`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, pred)` (C10), `atStartOfTurn`, `atStartOfFirstTurn` |
 
 Dreamsigns and avatars use the same DSL as emblem abilities (P4). Dreamwell
 cards use event-like abilities. Figments are catalog entries.

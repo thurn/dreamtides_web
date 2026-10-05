@@ -29,7 +29,8 @@ When the run ends:
   one prompt protocol
   ([D31](decisions.md#d31-prompt-architecture-replay-suspended-steps)).
 - **All content works as printed.** That means:
-  - all 521 cards and their 244 amplified variants;
+  - all 521 cards and their 244 amplified variants, plus Contemplation
+    ([C1](decisions.md#c1-contemplation));
   - 153 dreamsigns, with battle and journey effects;
   - 32 avatars;
   - 33 Dreamwell cards;
@@ -39,7 +40,8 @@ When the run ends:
   - exploration deck-entry modifications and next-battle effects
     ([D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects)).
 
-  "As printed" means as defined by `docs/rules.md`.
+  "As printed" means as defined by `docs/rules.md` and the operator's
+  [card text clarifications](decisions.md#card-text-clarifications).
 - **The tutorial runs on the engine,** keeping all of its guidance.
 - **Apollyon has mechanics.** All ten incarnations get provisional, documented
   mechanics.
