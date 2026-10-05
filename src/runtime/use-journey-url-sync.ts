@@ -9,9 +9,9 @@ import { screenToJourneyPath } from "./screen-url";
  *
  * Uses `history.replaceState` — not `pushState` — so screen changes do not pile
  * up back-button history entries: the path is a passive reflection of
- * authoritative, Firebase-synced journey state, not a navigable route. The query
- * string (`?game=<roomId>`, `?realtime=1`, `?goto=`, …) and any hash are
- * preserved untouched, keeping the room id as the real resume key. See
+ * the journey state folded from the game's event log, not a navigable route.
+ * The query string (`?game=<gameId>`, `?goto=`, …) and any hash are preserved
+ * untouched, keeping the game id as the real resume key. See
  * `screenToJourneyPath` for the path grammar and the reflection rationale.
  *
  * A `journey_url_synced` log event is emitted on each path change, recording the

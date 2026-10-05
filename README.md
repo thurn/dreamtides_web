@@ -11,8 +11,6 @@ deck at sites, and fights seven card battles, the last against Apollyon.
 ## Prerequisites
 
 - Node 24 and npm.
-- JDK 21 for the local Firebase Realtime Database emulator. On macOS:
-  `brew install openjdk@21`.
 - Optional card art: the TV image cache at
   `~/Library/Caches/io.github.dreamtides.tv/image_cache/`, and Avatar and
   Dreamsign portraits under `~/Documents/synty/avatars/` and
@@ -23,12 +21,20 @@ deck at sites, and fights seven card battles, the last against Apollyon.
 
 ```bash
 npm install
-npm run dev                  # emulator + workspace prep + Vite on :5173
+npm run dev                  # workspace prep + Vite on :5173
 npm run dev -- --port 5174   # any other port
 ```
 
-Open the `Local` URL Vite prints. The app creates a game room in the local
-emulator, adds `?game=<room-id>` to the URL, and opens Avatar selection.
+Open the `Local` URL Vite prints. Games are local: each one is an event log
+stored in the browser's IndexedDB, and `?game=<id>` in the URL selects it. The
+front door (`/` or `/main` with no `?game=`) resumes this browser's most
+recently played game, or creates a new one and opens Avatar selection when
+there is none. Any other entry URL, or one carrying a game-shaping parameter
+such as `?seed=` or `?goto=`, starts a new game.
+
+`npm run build` writes a static site to `dist/` and needs no env file. Card
+art is served from `public/` unless the build sets `VITE_ASSET_BASE_URL` to
+the origin that hosts it (see `.env.example`).
 
 | Command | Purpose |
 | --- | --- |
@@ -53,7 +59,7 @@ against your own Vite server on port **5174 or higher**. Port 5173 belongs to
 the developer. Never launch browsers directly.
 
 1. **Start and track your server:** `npm run dev -- --port 5174`. It starts a
-   process tree (npm, the dev wrapper, Vite, and the emulator). Stop exactly
+   process tree (npm, the dev wrapper, and Vite). Stop exactly
    that tree when done, never `pkill -f vite`, and confirm the port is free:
    `lsof -iTCP:5174 -sTCP:LISTEN -n -P`.
 2. **Assert before acting.** Before every measurement or screenshot, evaluate
@@ -95,7 +101,7 @@ Read once at page load (`src/runtime/runtime-config.ts`):
 | `goto=<scene>` | Boot a fresh game straight onto a screen (below) |
 | `seed=<n>` | Fixed RNG seed (non-negative integer) |
 | `ai=1` | Local AI proposes enemy battle actions for approval |
-| `game=<id>` | Join or resume a game room |
+| `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
 | `card=<uuid>` | With an Exploration scene, use that source card's encounter |
 | `tutorialSpeed=<x>` | Tutorial playback speed multiplier |
@@ -129,12 +135,13 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
 
 ## Architecture
 
-- **Event log and fold.** Game state is a fold of an event log. Clients write
-  intent events only (`src/coop/actions.ts`); a pure reducer
+- **Event log and fold.** Game state is a fold of an event log. The client
+  writes intent events only (`src/session/actions.ts`); a pure reducer
   (`src/rules/`) applies them, with time and randomness supplied by the event
-  context, so a reload replays to the same state. The log lives in Firebase
-  Realtime Database rooms (`src/eventlog/`, `src/coop/`); local development
-  uses the emulator.
+  context, so a reload replays to the same state. Each game's log is a
+  `LocalLog` (`src/eventlog/local-log.ts`) persisted in IndexedDB; the game
+  session (`src/session/`) opens, resumes, and creates games and holds a
+  per-game lock so one tab writes a game at a time.
 - **Journey rules.** `src/rules/journey/` holds the site, deck, shop, gamble,
   and lifecycle reducers. Generators live beside their domains: `src/atlas/`,
   `src/draft/` (tides4), `src/exploration/`, `src/journey_v2/` (Augury),
@@ -161,8 +168,10 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
   a view-model builder and adapter in `src/screens/cumulus_adapters/` turn
   journey state into a screen's props, and `src/components/` routes screens
   and hosts journey chrome.
-- **Logging.** `src/logging.ts` writes structured events; development builds
-  mirror them to `logs/journey-log.jsonl`.
+- **Logging.** `src/logging.ts` writes structured events. Every build stores
+  each game's journey log in IndexedDB beside its event log, and the game menu
+  and the error fallback export it as JSONL; development builds also mirror
+  events to `logs/journey-log.jsonl`.
 
 ## Data layout
 

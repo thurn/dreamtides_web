@@ -10,6 +10,6 @@ In `src/components/ScreenRouter.test.tsx`, every journey route renders `JourneyC
 
 The `overlay:cumulus-journey-menu` error boundary's fallback renders beneath the dreamscape layer: when the corner menu crashes, its fallback panel paints under the dreamscape image, so its title is hidden and its buttons (Retry, Recover Game, Export Log) cannot be clicked. The app-shell and screen boundaries are unaffected.
 
-README.md's Architecture "Logging" bullet mentions only the development `logs/journey-log.jsonl` mirror; it does not describe the per-game journey log every build stores in IndexedDB and exports from the game menu and error fallback (D40).
+Co-op "room" vocabulary survives in local-only code: the `RoomId` type names local game ids (`src/session/use-local-game.ts`), and comments in `src/components/FrontDoorRouter.tsx`, `src/battle/types.ts`, `src/cumulus/screens/MobileBattleScreen.tsx`, `src/content/tutorial.ts`, `src/data/avatar-selection.ts`, and `scripts/regenerate-replay-fixtures.mjs` describe a shared room or room fold.
 
-README.md's "Run" section says the app creates a game room in the local emulator and adds `?game=<room-id>`; games are local IndexedDB games, and `/` or `/main` without `?game=` resumes the browser's most recently played game (creating one only when there is none), which the README does not describe.
+`src/eventlog/hash.ts`'s `assertJsonSafe` doc comment says an `undefined` entry "no longer changes the hash", describing a past behavior rather than the current one.

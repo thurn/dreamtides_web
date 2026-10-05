@@ -29,8 +29,8 @@ export function createBaseBattleDeckCardDefinition(
     energyCost: card.energyCost ?? 0,
     printedEnergyCost: card.energyCost,
     // Carry multi-cost orb labels through only when present: this definition is
-    // serialized into the shared battle state, and Firebase rejects an explicit
-    // `undefined` field. Single-cost cards omit it and fall back to the orb
+    // part of the folded battle state, which must stay JSON-safe (no explicit
+    // `undefined` field). Single-cost cards omit it and fall back to the orb
     // derived from `printedEnergyCost`.
     ...(card.energyCosts ? { energyCosts: card.energyCosts } : {}),
     printedSpark: card.spark ?? 0,
@@ -39,9 +39,9 @@ export function createBaseBattleDeckCardDefinition(
     reclaimCost: card.reclaimCost ?? null,
     renderedText: card.renderedText,
     imageNumber: card.imageNumber,
-    // Only set `art` when the card has a curated crop: this definition is
-    // serialized into the shared battle state, and Firebase rejects an explicit
-    // `undefined` field. Cards with no crop fall back to the default at render.
+    // Only set `art` when the card has a curated crop: this definition is part
+    // of the folded battle state, which must stay JSON-safe (no explicit
+    // `undefined` field). Cards with no crop fall back to the default at render.
     ...(card.art ? { art: card.art } : {}),
     transfiguration: null,
     isBane: false,

@@ -1,0 +1,1 @@
+{"file": "scripts/build-hash.test.mjs", "verdict": "delete", "reason": "deleted-system", "notes": "scripts/build-hash.mjs only fed the unused __BUILD_HASH__ Vite define, which is deleted with the Firebase config guard (D2)."}

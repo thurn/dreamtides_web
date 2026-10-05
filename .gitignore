@@ -17,7 +17,6 @@ logs/
 .env
 .env.local
 .env.*.local
-.firebase
 *-debug.log
 .claude/scheduled_tasks.lock
 .DS_Store
@@ -29,7 +28,6 @@ augury-metric-report.json
 # Default output directory for scripts/mobile-screenshot.mjs
 screenshots/
 artifacts/journey-desktop-screenshots/
-artifacts/coop-fuzz/
 artifacts/qa/
 
 cumulus/Assets/ThirdParty/

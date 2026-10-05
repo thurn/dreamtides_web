@@ -5,7 +5,7 @@
 // `(journey, payload[, ctx])`. The legacy transaction / normalization / actionLog
 // wrappers are engine concerns and live elsewhere now (the root reducer folds,
 // the eventlog engine persists), so they are dropped here. These functions read
-// nothing but their arguments — no Firebase, no React, no live clock/rng (the
+// nothing but their arguments — no React, no live clock/rng (the
 // src/rules/ lint rails): randomness arrives via `ctx.rng` and any minted id via
 // `ctx.seq`.
 //

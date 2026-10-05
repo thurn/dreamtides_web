@@ -27,7 +27,7 @@ import { testEventActor } from "../../types/test-identities";
 //       defined until Task 22, so a plain JSON round-trip stands in here.
 //
 // The random generator is a small seeded xorshift PRNG (no `Math.random`, no
-// `Date.now`, no firebase/react — the src/rules/ lint rails).
+// `Date.now`, no React — the src/rules/ lint rails).
 //
 // Populated-start approach: FAKE content providers (approach (a) in the task
 // brief). Four provider seams gate the events this suite folds, so we register

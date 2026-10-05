@@ -8,8 +8,8 @@
 // eventlog engine, the coop React layer, the replay fixtures — imports this one
 // object so there is exactly one wiring of reducer + genesis + codec + hash.
 //
-// This module lives under src/rules/ and obeys its lint rails: no Firebase, no
-// React, no live clock/rng. It is pure — replaying the same `{ genesis, events }`
+// This module lives under src/rules/ and obeys its lint rails: no React,
+// no live clock/rng. It is pure — replaying the same `{ genesis, events }`
 // always yields the same final state, hash, and per-event outcomes.
 
 import { foldEvents, type FoldOutcome } from "../../eventlog/fold";

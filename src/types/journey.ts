@@ -146,7 +146,7 @@ export interface Avatar {
   /**
    * Starting essence the player begins the journey with. Captured on the
    * Avatar record so the HUD inspector and persisted state always know
-   * the chosen value, even after Firebase round-trips.
+   * the chosen value, even after a JSON round-trip.
    */
   startingEssence: number;
 }

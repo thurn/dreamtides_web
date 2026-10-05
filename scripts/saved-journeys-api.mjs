@@ -13,10 +13,9 @@ import { join } from "node:path";
 
 // Dev-server middleware backing the journey debug overlay's "Save Journey" /
 // "Load Saved Journey" controls. Each save is a JSON file on disk under
-// `saved-journeys/`, so a run survives a Realtime Database emulator restart (the
-// emulator holds room data only in memory) and can be loaded back into the
-// current room later. Saves are keyed by a human-chosen name, e.g.
-// "warriors draft".
+// `saved-journeys/`, so a run outlives the browser's IndexedDB game store and
+// can be loaded back into the current game later. Saves are keyed by a
+// human-chosen name, e.g. "warriors draft".
 
 const BASE_PATH = "/api/saved-journeys";
 const SAVES_DIR_NAME = "saved-journeys";

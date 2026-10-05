@@ -9,7 +9,7 @@
 // wrappers are engine concerns and live elsewhere now (the root reducer folds,
 // the eventlog engine persists), so they are dropped here.
 //
-// The src/rules/ lint rails forbid Firebase, React, and any live clock/rng:
+// The src/rules/ lint rails forbid React and any live clock/rng:
 // randomness arrives via `ctx.rng` and any minted id via `ctx.seq`. Sites are
 // keyed by id and cards by UUID/entry-id only — never by name.
 //

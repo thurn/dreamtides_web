@@ -25,11 +25,9 @@
     "prepare-workspace": "node scripts/prepare-workspace.mjs",
     "cumulus-tokens": "node scripts/generate-cumulus-tokens.mjs",
     "audit:domain-strings": "node scripts/domain-string-audit.mjs",
-    "upload-assets": "node scripts/upload-assets-to-storage.mjs",
     "send-screenshots": "node scripts/send-screenshots-to-discord.mjs",
     "device-screenshots": "node scripts/device-screenshots.mjs",
     "screenshots:desktop": "node scripts/desktop-screenshots.mjs",
-    "deploy": "bash scripts/deploy.sh",
     "fuzz:engine": "tsx scripts/fuzz-engine.ts",
     "dev:status": "node scripts/dev-processes.mjs",
     "dev:stop": "node scripts/dev-processes.mjs --stop",
@@ -38,7 +36,6 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
-    "firebase": "^12.13.0",
     "framer-motion": "^12.6.3",
     "js-sha256": "^0.11.0",
     "react": "^19.1.0",
@@ -50,6 +47,7 @@
     "@noble/hashes": "^2.3.0",
     "@playwright/test": "^1.62.0",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^25.6.2",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
@@ -58,7 +56,6 @@
     "brace-expansion": "file:vendor/brace-expansion",
     "eslint": "^9.39.2",
     "fast-check": "^4.9.0",
-    "firebase-tools": "15.24.0",
     "jsdom": "^29.0.2",
     "markdownlint-cli2": "0.23.2",
     "prettier": "3.9.6",
@@ -71,17 +68,6 @@
   },
   "overrides": {
     "brace-expansion": "$brace-expansion",
-    "@hono/node-server": "2.0.12",
-    "@google-cloud/pubsub": "5.0.0",
-    "morgan": "1.11.0",
-    "firebase-tools": {
-      "uuid": "11.1.1",
-      "universal-analytics": {
-        "uuid": "14.0.0"
-      }
-    },
-    "gaxios": {
-      "uuid": "11.1.1"
-    }
+    "@hono/node-server": "2.0.12"
   }
 }

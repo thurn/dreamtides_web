@@ -6,11 +6,10 @@
  *     returns `/cards/1.webp` unchanged. The Vite dev server serves it from the
  *     `public/` directory, where `scripts/setup-assets.ts` has symlinked the
  *     art out of the developer's `~/Documents` source folders.
- *   - Production: the build sets `VITE_ASSET_BASE_URL` to the Firebase Storage
- *     bucket origin (see `.env.production`), so the same call returns
- *     `https://storage.googleapis.com/<bucket>/cards/1.webp`. The large binaries
- *     are served from the bucket instead of being bundled into the Hosting
- *     deploy.
+ *   - Production: a build may set `VITE_ASSET_BASE_URL` to the origin that
+ *     hosts the art (see `.env.example`), so the same call returns
+ *     `<origin>/cards/1.webp`. The large binaries are then served from that
+ *     origin instead of being bundled into the static `dist/`.
  *
  * Only binary art is routed through here; the content catalogs
  * stay on Hosting alongside the code that fetches them, since they are small and

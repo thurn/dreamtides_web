@@ -8,13 +8,12 @@ import type { SiteId } from "../types/identifiers";
  * the Purge site of the layer-2 Ember Wood dreamscape, `/atlas` for the Dream
  * Atlas).
  *
- * The path is a passive *reflection* of authoritative, Firebase-synced journey
- * state — it is derived from state, never the source of it. The room id in the
- * query string (`?game=<roomId>`) remains the resume key: a reload restores the
- * run from the room and the path is re-derived from the restored screen. Because
- * the path is one-way, it does not fight co-op state sync (two clients sharing a
- * room each reflect the same screen) and a stale bookmarked path is harmlessly
- * rewritten to match the actual screen once the room loads.
+ * The path is a passive *reflection* of the journey state folded from the game's
+ * event log — it is derived from state, never the source of it. The game id in
+ * the query string (`?game=<gameId>`) is the resume key: a reload replays the
+ * local game from IndexedDB and the path is re-derived from the restored screen.
+ * Because the path is one-way, a stale bookmarked path is harmlessly rewritten
+ * to match the actual screen once the game loads.
  *
  * Path grammar:
  * ```

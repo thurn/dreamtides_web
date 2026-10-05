@@ -3,13 +3,12 @@ import type { JourneyState, Screen } from "../types/journey";
 /**
  * Named journey saves persisted to the developer's file system.
  *
- * A journey run normally lives only in its Firebase room. Under the local
- * Realtime Database emulator that room is held in memory and is lost when the
- * emulator process stops, so a run cannot be resumed across restarts. These
- * helpers talk to the dev server's `/api/saved-journeys` endpoints (see
+ * A journey run normally lives only in the browser's IndexedDB game store, so it
+ * is tied to one browser profile and origin. These helpers talk to the dev
+ * server's `/api/saved-journeys` endpoints (see
  * `scripts/saved-journeys-api.mjs`), which read and write JSON files under the
  * repository's `saved-journeys/` directory. A saved snapshot can be loaded back
- * into the current room to resume the run later.
+ * into the current game to resume the run later, in any browser or checkout.
  *
  * Saves are keyed by a human-chosen name (for example "warriors draft") so a
  * player can keep several runs side by side and reload any of them by name.

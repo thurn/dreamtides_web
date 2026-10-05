@@ -1,11 +1,11 @@
 // The root fold state for the coop event-sourcing rules layer.
 //
 // `FoldState` is the single value every `GameEvent` folds over. It is pure
-// data — no undo stack, no React, no Firebase — so the same event log always
+// data — no undo stack, no React — so the same event log always
 // replays to the same state on every client (see design spec §Data model).
 //
 // This module must stay import-clean per the src/rules/ lint rails: no
-// `firebase/*`, no `react`, no live clock/rng. All time arrives via
+// `react`, no live clock/rng. All time arrives via
 // `ctx.timestamp` and all randomness via `ctx.rng` in the reducer.
 
 import type { Genesis } from "../eventlog/types";

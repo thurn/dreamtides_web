@@ -628,8 +628,9 @@ function toDreamwellCardDefinition(
     cardNumber: card.cardNumber,
     imageNumber: card.imageNumber ?? 0,
   };
-  // Firebase rejects `undefined` property values, so only attach `art` when the
-  // card has actually been framed. Unframed cards omit the key entirely.
+  // The folded battle state must stay JSON-safe (no `undefined` property
+  // values), so only attach `art` when the card has actually been framed.
+  // Unframed cards omit the key entirely.
   if (card.art !== undefined) {
     definition.art = card.art;
   }
@@ -894,8 +895,8 @@ function normalizePlayerDeckCard(
     subtype: effectiveCard.subtype,
     energyCost: effectiveCard.energyCost ?? 0,
     printedEnergyCost: effectiveCard.energyCost,
-    // Carry multi-cost orb labels through only when present (Firebase rejects an
-    // explicit `undefined` in the serialized battle state). A transfiguration
+    // Carry multi-cost orb labels through only when present (the folded battle
+    // state must stay JSON-safe, with no explicit `undefined`). A transfiguration
     // that changes the energy cost clears this on the source `CardData`, so the
     // recomputed single orb is shown instead of stale multi-cost orbs.
     ...(effectiveCard.energyCosts
@@ -909,8 +910,8 @@ function normalizePlayerDeckCard(
     imageNumber: card.imageNumber,
     // Curated art crop pairs with the printed `imageNumber`, so it is sourced
     // from the base catalog card (a transfiguration can change cost/text but not
-    // the rendered image). Omitted when absent: this definition is serialized
-    // into the shared battle state, and Firebase rejects an explicit `undefined`.
+    // the rendered image). Omitted when absent: this definition is part of the
+    // folded battle state, which must stay JSON-safe (no explicit `undefined`).
     ...(card.art ? { art: card.art } : {}),
     transfiguration: entry.transfiguration,
     ...(transfigurationDisplay === undefined ? {} : { transfigurationDisplay }),
