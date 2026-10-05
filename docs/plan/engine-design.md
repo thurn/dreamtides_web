@@ -74,14 +74,15 @@ interface BattleState {
   rng: RngStreams;                     // named streams: shuffle:<side>, dreamwell, random:<purpose>
   config: BattleConfig;                // from src/content/data/battle.ts + BattleInit journey inputs (D39)
   turn: { round: number; active: Side; phase: Phase; challengeLane: number | null;
-          extraTurns: Side[] };      // pending extra turns, last-in first-out (C8)
+          extraTurns: Side[];        // pending extra turns, last-in first-out (C8)
+          sideTurns: Record<Side, number> };  // turns each side has begun, for "your first turn"
   sides: Record<Side, SideState>;
   instances: Record<InstanceId, CardInstance>;
   stack: StackItem[];                  // last element is the top
   priority: Side | null;
   triggerQueue: QueuedTrigger[];
-  floating: FloatingEffect[];          // "until end of turn", "while X in play"
-  delayed: DelayedTrigger[];           // "the next time you play an event this turn…"
+  floating: FloatingEffect[];          // spark changes with a duration, floating and delayed
+                                       // ("the next time…", `once: true`) triggers, disabled triggers
   turnLog: TurnCounters;               // cards/events/characters played this turn per side, etc.
   oncePerTurn: string[];
   challenge: { challengers: InstanceId[]; blockers: Record<InstanceId, InstanceId> } | null;
@@ -465,8 +466,17 @@ Further rules:
 
 This follows [D14](decisions.md#d14-trigger-timing-and-order).
 
-- **Matching.** Primitives emit engine events. After each step's effect
-  completes, the matcher enqueues matching abilities as `QueuedTrigger`s.
+- **Matching.** Primitives emit engine events, and `Context.emit` runs the
+  matcher on each event as it happens. Matches only join
+  `state.triggerQueue` as `QueuedTrigger`s; they never resolve inline.
+  Matching at the moment of the event lets ▸Dissolved see its own dissolve and
+  lets "leaves play" and "leaves your void" triggers see the card as it last
+  was, through the `leftPlay` and `leftVoid` events emitted just before a card
+  moves.
+- **Shape.** A `TriggeredAbility` is `{ trigger, effect, zone, condition?,
+  oncePerTurn? }`. A queued trigger records its origin (card variant or
+  emblem), ability index, floating-trigger node, and the card the event
+  concerns, so it resolves even after its source moves or ceases to exist.
 - **Ordering.** Matches enqueue in event order. Simultaneous matches use the
   fixed order: the active side first; within a side, avatar → dreamsigns →
   characters, B0→B9 then F0→F8. Cards in other zones follow, ordered by zone
@@ -484,7 +494,9 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 - **Once per turn** is keyed by instance and ability index, and cleared at the
   start of each turn.
 - **Floating triggers** are "until end of turn, when…". **Delayed triggers**
-  are one-shot "the next time…".
+  are one-shot "the next time…" floating triggers with `once: true`. Both
+  store a reference to their effect node in the catalog definition, so state
+  stays plain data.
 - **`triggerAbility`** enqueues a named trigger outside its phase.
 - **Disabled triggers** suppress matching.
 
@@ -614,8 +626,11 @@ can't use `import.meta.glob`.
 
 **Primitive registry.** Each primitive lives in its own module under
 `src/engine/effects/primitives/`, exporting its node type, its
-`PrimitiveDefinition` (op, optional children, modes, and play-time targets,
-and `resolve`), and its builder. `primitives/index.ts` lists one `export *` line
+`PrimitiveDefinition` (op, optional children, modes, play-time targets, an
+optional `deferred` hook naming effects that run later and so are excluded
+from play-time target collection, and `resolve`), and its builder, exported as
+`<op>Primitive`. The registry finds each definition by that name at call
+time. `primitives/index.ts` lists one `export *` line
 per primitive and is the authoritative catalog; `effects/registry.ts` derives
 the `Effect` union and the op lookup from it, so adding a primitive touches
 only its module, its group's test file, and one index line. Flow primitives

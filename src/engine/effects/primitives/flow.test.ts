@@ -9,6 +9,7 @@ import { DSL, DSL_CARDS } from "../../testing/dsl-cards";
 import { playFromHand, runScenario } from "../../testing/scenario";
 import { SYNTHETIC, syntheticId, testCatalog } from "../../testing/synthetic-cards";
 import { chosenModes, collectTargets, everyNode, everyTarget } from "../interpreter";
+import { primitiveDefinition, primitiveOps } from "../registry";
 import { banish } from "./banish";
 import { chooseOne } from "./choose-one";
 import { dissolve } from "./dissolve";
@@ -190,5 +191,14 @@ describe("flow primitives", () => {
     };
     expect(playable(DSL.pointsTimesX.id)).toBe(false);
     expect(playable(pointsFromZeroX.id)).toBe(true);
+  });
+});
+
+describe("primitive registry", () => {
+  it("finds every primitive export by its op", () => {
+    const ops = primitiveOps();
+    expect(new Set(ops).size).toBe(ops.length);
+    for (const op of ops) expect(primitiveDefinition(op).op).toBe(op);
+    expect(() => primitiveDefinition("noSuchPrimitive")).toThrow();
   });
 });

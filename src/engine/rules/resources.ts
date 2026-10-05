@@ -1,6 +1,7 @@
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { StepContext } from "../steps/types";
+import { recordDrawn } from "./turn-log";
 import { moveInstance } from "./zones";
 
 export function setEnergy(ctx: StepContext, side: Side, current: number, max: number): void {
@@ -74,6 +75,7 @@ export function drawCard(ctx: StepContext, side: Side): void {
     return;
   }
   moveInstance(ctx, top, "hand", "bottom");
+  recordDrawn(ctx.state, side);
   ctx.emit({ kind: "cardDrawn", side, instance: top });
   const cardId = ctx.state.instances[top]?.cardId;
   if (cardId !== undefined && ctx.catalog.card(cardId).status === "pending") {

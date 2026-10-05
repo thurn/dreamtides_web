@@ -58,6 +58,19 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
   if (state.result === null && (state.stack.length === 0) !== (state.priority === null)) {
     problems.push("priority must be held exactly while the stack is non-empty");
   }
+  // A floating effect never outlives the cards it changes or the boundary it lasts until.
+  for (const effect of state.floating) {
+    const { change, expiry } = effect;
+    if (change.kind !== "trigger" && state.instances[change.instance] === undefined) {
+      problems.push(`floating effect ${effect.id} changes ${change.instance}, which no longer exists`);
+    }
+    if (expiry.at === "paid" && !state.payable.some((payable) => payable.id === expiry.effect)) {
+      problems.push(`floating effect ${effect.id} outlived its payable effect`);
+    }
+    if (expiry.at === "sourceLeavesPlay" && state.instances[expiry.source]?.zone !== "play") {
+      problems.push(`floating effect ${effect.id} outlived its source leaving play`);
+    }
+  }
   if (stateHash(deserializeState(serializeState(state))) !== stateHash(state)) {
     problems.push("serialization round-trip changed the state hash");
   }

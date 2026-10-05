@@ -11,6 +11,7 @@ import { payToEnd, type PayToEndStep } from "./pay-to-end";
 import { play, type PlayStep } from "./play";
 import { reposition, type RepositionStep } from "./reposition";
 import { resolveTop, type ResolveTopStep } from "./resolve-top";
+import { resolveTrigger, type ResolveTriggerStep } from "./resolve-trigger";
 import type { StepDefinition } from "../types";
 
 export type Step =
@@ -21,7 +22,8 @@ export type Step =
   | PayToEndStep
   | PlayStep
   | RepositionStep
-  | ResolveTopStep;
+  | ResolveTopStep
+  | ResolveTriggerStep;
 
 export type StepKind = Step["kind"];
 
@@ -36,6 +38,7 @@ export const STEP_DEFINITIONS = {
   play,
   reposition,
   resolveTop,
+  resolveTrigger,
 } as const satisfies { readonly [K in StepKind]: StepDefinition<StepOf<K>> };
 
 export function stepDefinition<K extends StepKind>(kind: K): StepDefinition<StepOf<K>> {

@@ -43,11 +43,23 @@ export type {
   CardStackItem,
   DeckEntry,
   DreamsignEmblem,
+  Expiry,
+  FloatingChange,
+  FloatingEffect,
   PayableEffect,
+  QueuedTrigger,
   StackItem,
+  TurnLog,
 } from "./state/types";
 export { deserializeState, serializeState, stateHash } from "./state/hash";
 export type { StepObserver } from "./steps/driver";
 export { InlineSource, NO_PROMPTS, ScriptedSource } from "./steps/sources";
 export type { AnswerSource } from "./steps/types";
-export type { BattleView, HiddenZoneView, InstanceView, SideView } from "./view/view";
+export type {
+  BattleView,
+  FloatingEffectView,
+  HiddenZoneView,
+  InstanceView,
+  QueuedTriggerView,
+  SideView,
+} from "./view/view";

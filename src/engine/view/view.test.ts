@@ -27,7 +27,7 @@ function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("v
     controller: holder,
     zone,
     variant: { amplified: false },
-    status: { exhausted: false, gainedSpark: 1, turnSpark: 0, counters: 2, created: false, reclaimed: false, x: null },
+    status: { exhausted: false, gainedSpark: 1, counters: 2, created: false, reclaimed: false, x: null },
     enteredZoneAt: 3,
   };
   if (zone === "stack") {
@@ -216,5 +216,23 @@ describe("view", () => {
     expect(seen.sides.player.avatar?.exhausted).toBe(true);
     expect(seen.sides.player.dreamsigns).toHaveLength(1);
     expect(seen.payable).toHaveLength(1);
+  });
+  it("shows floating effects and queued triggers, hiding cards the viewer cannot see", () => {
+    const { state } = fixture();
+    const enemyFront = state.sides.enemy.frontRank[0]!;
+    const enemyHand = state.sides.enemy.hand[0];
+    state.floating = [
+      { id: "e2", controller: "player", source: { kind: "avatar", side: "player" }, timestamp: 1, expiry: { at: "endOfTurn" }, change: { kind: "spark", instance: enemyFront, amount: -1 } },
+      { id: "e3", controller: "player", source: { kind: "avatar", side: "player" }, timestamp: 2, expiry: { at: "turnStart", side: "player" }, change: { kind: "spark", instance: enemyHand, amount: 2 } },
+    ];
+    const origin = { kind: "card" as const, cardId: v.event0.id, variant: { amplified: false } };
+    state.triggerQueue = [{ source: enemyHand, controller: "enemy", origin, ability: 0, node: null, subject: enemyFront }];
+    const player = view(state, "player");
+    expect(player.floating.map((effect) => effect.id)).toEqual(["e2"]);
+    expect(player.triggerQueue).toEqual([{ controller: "enemy", source: null, ability: 0, node: null, subject: enemyFront }]);
+    const enemy = view(state, "enemy");
+    expect(enemy.floating.map((effect) => effect.id)).toEqual(["e2", "e3"]);
+    expect(enemy.triggerQueue[0]?.source).toBe(enemyHand);
+    expect(JSON.stringify(player)).not.toContain(v.event0.id);
   });
 });

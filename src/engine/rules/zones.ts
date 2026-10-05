@@ -2,6 +2,7 @@ import type { InstanceId, Side, Slot, Zone } from "../state/ids";
 import { BACK_RANK_SIZE } from "../state/ids";
 import type { BattleState, CardInstance } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { endChangesTo, expireAt } from "./floating";
 import { hasKeyword } from "./keywords";
 
 export function instanceOf(state: BattleState, id: InstanceId): CardInstance {
@@ -60,6 +61,20 @@ export function charactersInPlay(state: BattleState, side: Side): InstanceId[] {
   return [...backRank, ...frontRank].filter((id): id is InstanceId => id !== null);
 }
 
+/**
+ * Announces that an instance is about to leave play or the void for `to`
+ * (`null` when it ceases to exist), while it is still there, so "leaves" triggers
+ * see it as it last was. Leaving play ends effects lasting while it is in play.
+ */
+function depart(ctx: StepContext, instance: CardInstance, to: Zone | null): void {
+  if (instance.zone === "play" && to !== "play") {
+    ctx.emit({ kind: "leftPlay", instance: instance.id, side: instance.controller, to });
+    expireAt(ctx, { at: "sourceLeavesPlay", source: instance.id });
+  } else if (instance.zone === "void") {
+    ctx.emit({ kind: "leftVoid", instance: instance.id, side: instance.controller, to });
+  }
+}
+
 /** Removes an instance from whatever zone list holds it. */
 function detach(state: BattleState, instance: CardInstance): void {
   switch (instance.zone) {
@@ -102,6 +117,7 @@ function relocate(
   const { state } = ctx;
   const instance = instanceOf(state, id);
   const leavingPlay = instance.zone === "play";
+  depart(ctx, instance, to);
   detach(state, instance);
   instance.controller = holder;
   instance.zone = to;
@@ -158,6 +174,7 @@ export function moveToStack(
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
+  depart(ctx, instance, "stack");
   detach(state, instance);
   instance.controller = controller;
   instance.zone = "stack";
@@ -188,6 +205,7 @@ export function enterPlay(
   if (occupant(state, side, slot) !== null) {
     throw new Error(`Slot ${slot.rank}${String(slot.index)} is occupied`);
   }
+  depart(ctx, instance, "play");
   detach(state, instance);
   instance.controller = side;
   instance.zone = "play";
@@ -203,7 +221,10 @@ export function enterPlay(
  */
 export function ceaseToExist(ctx: StepContext, id: InstanceId): void {
   const { state } = ctx;
-  detach(state, instanceOf(state, id));
+  const instance = instanceOf(state, id);
+  depart(ctx, instance, null);
+  detach(state, instance);
+  endChangesTo(ctx, id);
   state.instances = Object.fromEntries(
     Object.entries(state.instances).filter(([key]) => key !== id),
   );

@@ -1,6 +1,6 @@
 import { eventAbilities } from "../../effects/abilities";
 import { resolveEffect, splitChoices } from "../../effects/interpreter";
-import { originAbilities, originCardId } from "../../rules/activation";
+import { originAbilities } from "../../rules/activation";
 import { enterPlay, instanceOf, leftmostOpenBackSlot, moveInstance } from "../../rules/zones";
 import type { AbilityStackItem, CardStackItem } from "../../state/types";
 import type { StepContext, StepDefinition } from "../types";
@@ -28,10 +28,9 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
   abilities.forEach((ability, index) => {
     resolveEffect(ctx, ability.effect, {
       source: item.instance,
+      origin: { kind: "card", cardId: instance.cardId, variant: instance.variant },
       ability: ability.ability,
-      cardId: instance.cardId,
       controller: item.controller,
-      variant: instance.variant,
       x: item.x,
       optionalPaid: item.optionalPaid,
       choices: choices[index] ?? { modes: [], targets: [] },
@@ -62,10 +61,9 @@ function resolveAbility(ctx: StepContext, item: AbilityStackItem): void {
   }
   resolveEffect(ctx, ability.effect, {
     source: item.source,
+    origin: item.origin,
     ability: item.ability,
-    cardId: originCardId(item.origin),
     controller: item.controller,
-    variant: item.origin.kind === "card" ? item.origin.variant : { amplified: false },
     x: item.x,
     optionalPaid: item.optionalPaid,
     choices: item,

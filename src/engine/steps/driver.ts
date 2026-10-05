@@ -29,15 +29,22 @@ export function stepForAction(state: BattleState, action: Action): Step {
 
 /**
  * The next automatic step, or `null` when a top-level decision is pending or
- * the battle has ended. Automatic steps are: auto-pass for a side with no
- * legal response (P1), phases that advance on their own, and challenge lanes.
+ * the battle has ended. Automatic steps are: draining the trigger queue, one
+ * trigger per step, before anything else (D14); auto-pass for a side with no
+ * legal response (P1); phases that advance on their own; and challenge lanes.
  */
 export function nextAutomaticStep(
   state: BattleState,
   catalog: EngineCatalog,
   memo: LegalityMemo,
 ): Step | null {
-  if (state.result !== null || decision(state, catalog, memo) !== null) {
+  if (state.result !== null) {
+    return null;
+  }
+  if (state.triggerQueue.length > 0) {
+    return { kind: "resolveTrigger" };
+  }
+  if (decision(state, catalog, memo) !== null) {
     return null;
   }
   if (state.stack.length > 0) {

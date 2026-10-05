@@ -57,7 +57,9 @@ describe("content gates", () => {
         const built: readonly Ability[] = abilities({ amplified });
         for (const ability of built) {
           // Every node, every mode of a modal node included, is a registered primitive.
-          if (ability.kind === "event" || ability.kind === "activated") expect(() => everyNode(ability.effect)).not.toThrow();
+          if (ability.kind === "event" || ability.kind === "activated" || ability.kind === "triggered") {
+            expect(() => everyNode(ability.effect)).not.toThrow();
+          }
         }
       }
     }

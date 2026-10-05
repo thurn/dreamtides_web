@@ -19,6 +19,7 @@ import { SYNTHETIC_CARDS, testCatalog } from "./synthetic-cards";
 import { PROMPTING_CARDS } from "./synthetic-effects";
 import { DSL_CARDS } from "./dsl-cards";
 import { AVATAR, DREAMSIGN, STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stack-cards";
+import { TRIGGER_AVATAR, TRIGGER_CARDS, TRIGGER_DREAMSIGN, TRIGGER_EMBLEMS } from "./trigger-cards";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
 export interface RecordedAction {
@@ -46,8 +47,12 @@ export const DECK_SIZE = 30;
 /** Top-level actions after which a game counts as non-terminating. */
 export const ACTION_CAP = 20000;
 
-/** Synthetic cards the fuzzer mixes in: vanilla, prompting, DSL, and stack fixtures (Interrupts, prevent, activated abilities). */
-const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS];
+/**
+ * Synthetic cards the fuzzer mixes in: vanilla, prompting, DSL, stack
+ * (Interrupts, prevent, activated abilities), and trigger and duration
+ * fixtures.
+ */
+const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS];
 
 /** Every card the fuzzer draws from: the synthetic fixtures plus the full pool. */
 export function fuzzCatalogCards() {
@@ -56,7 +61,10 @@ export function fuzzCatalogCards() {
 
 /** The fuzzer's catalog: the synthetic fixtures and emblems, any `extra` cards, and the full catalog. */
 export function fuzzEngineCatalog(extra: readonly EngineCardDefinition[] = []) {
-  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...extra], SYNTHETIC_EMBLEMS);
+  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...extra], {
+    avatars: [...(SYNTHETIC_EMBLEMS.avatars ?? []), ...(TRIGGER_EMBLEMS.avatars ?? [])],
+    dreamsigns: [...(SYNTHETIC_EMBLEMS.dreamsigns ?? []), ...(TRIGGER_EMBLEMS.dreamsigns ?? [])],
+  });
 }
 
 /**
@@ -75,7 +83,9 @@ export function randomDeck(random: PolicyRandom): DeckEntry[] {
 
 export function fuzzInit(seed: BattleSeed): BattleInit {
   const random = new PolicyRandom(battleSeed(`decks|${seed}`));
-  const avatars = Object.values(AVATAR).map((avatar) => avatar.id);
+  const avatars = [...Object.values(AVATAR), ...Object.values(TRIGGER_AVATAR)].map((avatar) => avatar.id);
+  const dreamsigns = [DREAMSIGN.points, ...Object.values(TRIGGER_DREAMSIGN)].map((dreamsign) => dreamsign.id);
+  const someDreamsigns = () => dreamsigns.filter(() => random.next() < 0.3);
   return {
     seed,
     scoreToWin: 25,
@@ -83,7 +93,7 @@ export function fuzzInit(seed: BattleSeed): BattleInit {
     decks: { player: randomDeck(random), enemy: randomDeck(random) },
     dreamwell: contentDreamwellDefinitions().map((card) => card.id),
     avatars: { player: random.pick(avatars), enemy: random.pick(avatars) },
-    dreamsigns: { player: random.next() < 0.5 ? [DREAMSIGN.points.id] : [] },
+    dreamsigns: { player: someDreamsigns(), enemy: someDreamsigns() },
   };
 }
 

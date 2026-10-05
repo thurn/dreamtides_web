@@ -7,10 +7,11 @@ import {
   matchingStackItems,
   resolvePlayer,
 } from "../dsl/selectors";
-import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, Variant } from "../dsl/types";
+import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr } from "../dsl/types";
 import type { AbilitySource, CardId, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
-import type { BattleState } from "../state/types";
+import type { AbilityOrigin, BattleState } from "../state/types";
+import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
 import { primitiveDefinition } from "./registry";
 import type { EffectEnv, EffectNode } from "./types";
@@ -46,13 +47,19 @@ function walkPlayTime(
   walk(effect);
 }
 
-/** Every node of an effect tree, every mode of a modal node included. Throws on an unregistered primitive. */
+/**
+ * Every node of an effect tree, every mode of a modal node and every deferred
+ * effect included, in a fixed order that floating triggers index into. Throws
+ * on an unregistered primitive.
+ */
 export function everyNode(effect: EffectNode): EffectNode[] {
   const nodes: EffectNode[] = [];
   const walk = (node: EffectNode): void => {
     if (nodes.includes(node)) return;
     nodes.push(node);
-    for (const child of primitiveDefinition(node.op).children?.(node) ?? []) walk(child);
+    const definition = primitiveDefinition(node.op);
+    for (const child of definition.children?.(node) ?? []) walk(child);
+    for (const child of definition.deferred?.(node) ?? []) walk(child);
   };
   walk(effect);
   return nodes;
@@ -221,6 +228,64 @@ export function chooseTargets(
   });
 }
 
+/**
+ * Choices for an effect made as it resolves, for a triggered ability, which
+ * does not use the stack: modes, then targets, in walk order. A required
+ * choice with no legal option makes that part of the effect do nothing (rules
+ * § Targeting): a target spec with too few candidates takes those it has,
+ * none without a prompt, and a modal node with no legal mode makes the whole
+ * effect do nothing (`null`). Each emits noLegalTarget.
+ */
+export function chooseOnResolution(
+  ctx: StepContext,
+  effect: EffectNode,
+  controller: Side,
+  source: AbilitySource,
+  purpose: (role: string) => PromptPurpose,
+): EffectChoices | null {
+  const modes: number[] = [];
+  let blocked = false;
+  walkPlayTime(
+    effect,
+    (_, options) => {
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source));
+      if (blocked || !legal.includes(true)) {
+        blocked = true;
+        return 0;
+      }
+      const mode = ctx.choose<ChooseModePrompt>({
+        kind: "chooseMode",
+        side: controller,
+        purpose: purpose("chooseOne"),
+        options: legal.map((isLegal, index) => ({ mode: index, legal: isLegal })),
+      });
+      modes.push(mode);
+      return mode;
+    },
+    () => undefined,
+  );
+  if (blocked) {
+    ctx.emit({ kind: "noLegalTarget", source });
+    return null;
+  }
+  const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source);
+    const bounds = targetBounds(spec);
+    if (candidates.length < bounds.min) ctx.emit({ kind: "noLegalTarget", source });
+    if (candidates.length === 0) return [];
+    const chosen = ctx.choose<ChooseTargetsPrompt>({
+      kind: "chooseTargets",
+      side: controller,
+      purpose: purpose("target"),
+      candidates,
+      min: Math.min(bounds.min, candidates.length),
+      max: Math.min(bounds.max, candidates.length),
+    });
+    return [...chosen];
+  });
+  return { modes, targets };
+}
+
 /** Play-time choices for one effect: its chosen modes and its targets, both in walk order. */
 export interface EffectChoices {
   readonly modes: readonly number[];
@@ -259,18 +324,39 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
   }
 }
 
-export function checkCondition(ctx: StepContext, condition: Condition, env: EffectEnv): boolean {
+/** What a condition is checked against: the effect's controller and source, and the item's paid optional costs. */
+export interface ConditionScope {
+  readonly controller: Side;
+  readonly source: AbilitySource;
+  readonly optionalPaid: readonly boolean[];
+}
+
+/** Whether a condition holds now, outside a resolving effect as well (intervening "if" conditions). */
+export function conditionHolds(
+  state: BattleState,
+  catalog: EngineCatalog,
+  condition: Condition,
+  scope: ConditionScope,
+): boolean {
   switch (condition.cond) {
     case "controls":
       return (
-        matchingCharacters(ctx.state, ctx.catalog, condition.selector, env.controller, env.source)
-          .length >= condition.atLeast
+        matchingCharacters(state, catalog, condition.selector, scope.controller, scope.source).length >=
+        condition.atLeast
       );
     case "energyAtLeast":
-      return ctx.state.sides[env.controller].currentEnergy >= condition.amount;
+      return state.sides[scope.controller].currentEnergy >= condition.amount;
     case "costPaid":
-      return env.optionalPaid[condition.optional] === true;
+      return scope.optionalPaid[condition.optional] === true;
+    case "sourceIn": {
+      const instance = sourceInstance(scope.source);
+      return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;
+    }
   }
+}
+
+export function checkCondition(ctx: StepContext, condition: Condition, env: EffectEnv): boolean {
+  return conditionHolds(ctx.state, ctx.catalog, condition, env);
 }
 
 /**
@@ -287,6 +373,10 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
     }
     case "all":
       return matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source);
+    case "subject": {
+      const subject = env.subject;
+      return subject !== null && ctx.state.instances[subject]?.zone === "play" ? [subject] : [];
+    }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
       const legal = chosen.filter((id) =>
@@ -318,12 +408,15 @@ export function resolveStackTargets(ctx: StepContext, spec: StackTargetSpec, env
 
 export interface ResolveOptions {
   readonly source: AbilitySource;
+  /** Where the ability's definition comes from; prompt purposes carry its card. */
+  readonly origin: AbilityOrigin;
   /** The ability's index in its source's ability list. */
   readonly ability: number;
-  /** The source's card, or `null` for an emblem; prompt purposes carry it. */
-  readonly cardId: CardId | null;
+  /** The ability's whole effect, when `effect` is a part of it (a floating trigger's effect). */
+  readonly root?: EffectNode;
+  /** The card the triggering event concerns, for a trigger. */
+  readonly subject?: InstanceId | null;
   readonly controller: Side;
-  readonly variant: Variant;
   readonly x: number | null;
   /** Whether each optional cost of the item was paid, in printed order. */
   readonly optionalPaid: readonly boolean[];
@@ -335,11 +428,15 @@ export interface ResolveOptions {
 export function resolveEffect(ctx: StepContext, effect: EffectNode, options: ResolveOptions): void {
   const chosen = chosenModes(effect, options.choices.modes);
   const specs = collectTargets(effect, chosen);
+  const cardId = options.origin.kind === "card" ? options.origin.cardId : null;
   const env: EffectEnv = {
     source: options.source,
+    origin: options.origin,
     ability: options.ability,
+    root: options.root ?? effect,
+    subject: options.subject ?? null,
     controller: options.controller,
-    variant: options.variant,
+    variant: options.origin.kind === "card" ? options.origin.variant : BASE_VARIANT,
     x: options.x,
     optionalPaid: options.optionalPaid,
     modeOf(node) {
@@ -353,7 +450,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
       primitiveDefinition(node.op).resolve(ctx, node, env);
     },
     purpose(role) {
-      return purposeOf(options.source, options.cardId, options.ability, role);
+      return purposeOf(options.source, cardId, options.ability, role);
     },
   };
   env.run(effect);

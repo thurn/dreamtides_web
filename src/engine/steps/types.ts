@@ -29,6 +29,7 @@ export interface StepContext {
   choose<P extends Prompt>(prompt: PromptSpec<P>): AnswerFor<P>;
   /** Marks the point after which this step can no longer be cancelled. */
   commitPoint(): void;
+  /** Records an event; triggered abilities it matches join the trigger queue. */
   emit(event: EngineEvent): void;
   /** A uniform draw in `[0, 1)` from the named stream. */
   random(stream: string): number;

@@ -11,6 +11,7 @@ export interface SideSetup {
   /** Hand cards; `{ cardId, amplified: true }` places an amplified variant. */
   readonly hand?: readonly (CardId | { readonly cardId: CardId; readonly amplified: boolean })[];
   readonly deck?: readonly CardId[];
+  readonly void?: readonly CardId[];
   readonly energy?: number;
   readonly score?: number;
   readonly avatar?: AvatarId;
@@ -34,7 +35,7 @@ export interface BoardSetup {
 export function boardState(
   catalog: EngineCatalog,
   setup: BoardSetup,
-): { state: BattleState; ids: Record<Side, { front: (InstanceId | null)[]; back: (InstanceId | null)[]; hand: InstanceId[]; deck: InstanceId[] }> } {
+): { state: BattleState; ids: Record<Side, { front: (InstanceId | null)[]; back: (InstanceId | null)[]; hand: InstanceId[]; deck: InstanceId[]; void: InstanceId[] }> } {
   const state = initialState(
     {
       seed: battleSeed("board"),
@@ -51,11 +52,12 @@ export function boardState(
     phase: setup.phase,
     round: setup.round ?? 2,
     turnNumber: (setup.round ?? 2) * 2,
+    sideTurns: { player: setup.round ?? 2, enemy: setup.round ?? 2 },
     lastNormal: setup.active,
   };
   const ids = {
-    player: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[] },
-    enemy: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[] },
+    player: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[], void: [] as InstanceId[] },
+    enemy: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[], void: [] as InstanceId[] },
   };
   const mint = (side: Side, cardId: CardId, zone: CardInstance["zone"], amplified = false): InstanceId => {
     catalog.card(cardId);
@@ -68,7 +70,7 @@ export function boardState(
       controller: side,
       zone,
       variant: { amplified },
-      status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
+      status: { exhausted: false, gainedSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
       enteredZoneAt: 0,
     };
     return id;
@@ -109,6 +111,11 @@ export function boardState(
       const id = mint(side, cardId, "deck");
       sideState.deck.push(id);
       ids[side].deck.push(id);
+    }
+    for (const cardId of sideSetup.void ?? []) {
+      const id = mint(side, cardId, "void");
+      sideState.void.push(id);
+      ids[side].void.push(id);
     }
   }
   return { state, ids };

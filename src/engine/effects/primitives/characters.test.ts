@@ -73,9 +73,10 @@ describe("character primitives", () => {
       steps: (ids) => [playFromHand(ids, "player")],
     });
     const pumped = temporary.ids.player.back[0]!;
-    expect(temporary.state.instances[pumped]?.status.turnSpark).toBe(3);
+    expect(effectiveSpark(temporary.state, engine.catalog, pumped)).toBe(5);
     const ended = engine.apply(engine.apply(engine.apply(temporary.state, "player", { kind: "pass" }, NO).state, "enemy", { kind: "pass" }, NO).state, "player", { kind: "pass" }, NO).state;
-    expect(ended.instances[pumped]?.status.turnSpark).toBe(0);
+    expect(effectiveSpark(ended, engine.catalog, pumped)).toBe(2);
+    expect(ended.floating).toEqual([]);
     const permanent = runScenario(engine, {
       board: { active: "player", phase: "day", player: { hand: [DSL.pumpPermanently.id], energy: 1, back: [v.vanilla2.id, v.vanilla3.id], deck }, enemy: { deck } },
       steps: (ids) => [playFromHand(ids, "player")],

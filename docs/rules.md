@@ -30,6 +30,7 @@ reference for reading any card definition.
 - [Targeting](#targeting)
 - [Keywords and Effects](#keywords-and-effects)
 - [Ability Types](#ability-types)
+- [Durations](#durations)
 - [Counters](#counters)
 - [Zone Changes](#zone-changes)
 - [Created Cards](#created-cards)
@@ -355,7 +356,9 @@ Changes during Night never fire them again.
 A character "scores ⍟" when a challenge converts its spark into victory points —
 that is, when an unpaired challenger scores or when a challenger wins a blocked
 lane. This is the event that
-abilities reading "When an X you control scores ⍟" respond to. By contrast, a
+abilities reading "When an X you control scores ⍟" respond to, and abilities
+reading "When the opponent scores ⍟" respond to it once for each character the
+opponent controls that scores. A character that scores 0⍟ does not score. By contrast, a
 flat "gain N⍟" effect (such as an Abandon-for-points ability, or Fatigue) awards
 victory points to a player without any character scoring, and does not count as
 a character scoring.
@@ -665,7 +668,48 @@ Triggered abilities can also use descriptive conditions such as "When you play a
 card" or "When you materialize a character". A character played from hand can
 satisfy both "when you play" and ▸Materialized triggers, while a character put
 directly into play satisfies only ▸Materialized. Combined triggers such as
-"▸Materialized, ▸Dawn" fire on both occasions.
+"▸Materialized, ▸Dawn" fire on both occasions. "When you play your second event
+in a turn" counts only the matching cards that player played this turn,
+including the one just played; copies are not played and are not counted.
+"At the start of your turn" abilities trigger as each of your turns begins,
+before its Dreamwell phase; "At the start of your first turn" triggers only as
+your first turn of the battle begins.
+
+**Where triggered abilities work:** A triggered ability works while its card is
+in play. An ability that names another zone, such as "▸Dawn: If this card is in
+your void, …", works while the card is in that zone instead. Avatar and
+dreamsign abilities always work. A ▸Dissolved ability triggers from wherever
+the dissolved card went, and abilities that trigger when a card leaves play or
+leaves your void see that card as it was just before it left. Nothing triggers
+while the opening hands are dealt.
+
+**Intervening conditions:** A triggered ability written "When X, if Y, …", or
+"▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it
+resolves it does nothing unless Y is still true.
+
+**Once per turn:** A triggered ability marked "Once per turn" triggers at most
+once in each turn, extra turns included.
+
+**Choices:** Triggered abilities do not use the stack, so their targets and
+modes are chosen as they resolve. A required target with no legal option makes
+that part of the ability do nothing (see [Targeting](#targeting)); a modal
+triggered ability with no mode that can be chosen does nothing.
+
+**Floating and delayed triggers:** An effect such as "Until end of turn, when you
+play a character, draw a card" creates a floating trigger, which triggers each
+time its condition is met until its duration ends. An effect such as "The next
+time you play an event this turn, copy it" creates a delayed trigger, which
+triggers once and then ends; without a stated duration it lasts until it
+triggers. The player who controlled the effect that created a floating or
+delayed trigger controls it.
+
+**Triggering an ability outside its occasion:** An effect such as "Trigger this
+character's ▸Materialized ability" makes that ability trigger as if its
+occasion had happened. It waits and resolves like any other triggered ability.
+
+**Disabled triggers:** While an effect says a character's triggered abilities
+do not trigger, its abilities do not trigger; an ability that triggered before
+that effect began still resolves.
 
 **Trigger timing and order:** Triggered abilities do not use the stack and
 cannot be responded to.
@@ -679,8 +723,11 @@ cannot be responded to.
 - Abilities triggered by the same event resolve in a fixed order: the active
   player's first, then the opposing player's. For each player, the order is
   their avatar, then their dreamsigns, then their characters in play — back
-  rank `B0` through `B9`, then front rank `F0` through `F8` — and then their
-  cards in other zones: void, then hand, then deck.
+  rank `B0` through `B9`, then front rank `F0` through `F8` — then their
+  cards in other zones: void, then hand, then deck, each zone in the order the
+  cards were created for the battle — and then their floating and delayed
+  triggers, in the order they were created. A card that has just left play is
+  ordered by the zone it went to.
 - Players never choose the order of triggered abilities.
 
 **Activated abilities** — Abilities with a cost the controller chooses to pay,
@@ -698,6 +745,25 @@ other rule changes.
 
 **Modal abilities** — Abilities that present multiple options, written as "Choose
 one:" followed by the available effects (each with its own cost where relevant).
+
+## Durations
+
+An effect with a duration lasts until its boundary, wherever the cards it
+changes are at that time. Extra turns count as their player's turns.
+
+- **"This turn"** and **"until end of turn"** end in step 3 of the Ending phase.
+  An effect of this kind that begins later in the Ending phase ends as the turn
+  ends.
+- **"Until your next turn"** ends as the next turn of the player who controlled
+  the effect begins, before its Dreamwell phase.
+- **"Until the next Day phase"** ends as the next Day phase begins, whichever
+  player's turn it is in.
+- **"While this is in play"** ends as its source leaves play. If its source is
+  not in play when the effect would begin, the effect does not happen. An
+  avatar or dreamsign is always in play.
+- **"Until the opponent pays N●"** ends when that player pays to end it (see
+  [Paying to end an effect](#playing-cards-and-the-stack)).
+- An effect with no stated duration is permanent.
 
 ## Counters
 

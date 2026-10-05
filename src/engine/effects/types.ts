@@ -1,5 +1,6 @@
 import type { PromptPurpose } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
+import type { AbilityOrigin } from "../state/types";
 import type { StepContext } from "../steps/types";
 import type { PlayTimeTarget, Variant } from "../dsl/types";
 
@@ -12,8 +13,14 @@ export interface EffectNode {
 export interface EffectEnv {
   /** The card or emblem whose ability this is. */
   readonly source: AbilitySource;
+  /** Where the ability's definition comes from. */
+  readonly origin: AbilityOrigin;
   /** The ability's index in its source's ability list. */
   readonly ability: number;
+  /** The ability's whole effect tree, which floating and delayed triggers index into. */
+  readonly root: EffectNode;
+  /** The card the triggering event concerns, for a trigger; otherwise `null`. */
+  readonly subject: InstanceId | null;
   readonly controller: Side;
   readonly variant: Variant;
   /** The value chosen for X, or `null`. */
@@ -37,8 +44,14 @@ export interface EffectEnv {
  */
 export interface PrimitiveDefinition<N extends EffectNode> {
   readonly op: N["op"];
-  /** Every nested effect, in order; validation walks them all. */
+  /** Every nested effect resolved with this node, in order; validation walks them all. */
   children?(node: N): readonly EffectNode[];
+  /**
+   * Nested effects that resolve later, as a floating or delayed trigger:
+   * validation and node indexing walk them, but play-time choices never
+   * reach into them; their choices are made as they resolve.
+   */
+  deferred?(node: N): readonly EffectNode[];
   /**
    * For a modal node, its modes: one is chosen at play time, before targets,
    * and only the chosen mode's targets are collected and resolved.

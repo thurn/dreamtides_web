@@ -4,7 +4,9 @@ import type { StepContext } from "../steps/types";
 import { designateBlockers, designateChallengers } from "./challenge";
 import { drawDreamwell } from "./dreamwell";
 import type { ChooseCardsPrompt } from "../prompts/types";
+import { expireAt } from "./floating";
 import { discardCard, drawCard, setEnergy } from "./resources";
+import { emptyTurnLog } from "./turn-log";
 import { endBattle } from "./victory";
 import { charactersInPlay, instanceOf } from "./zones";
 
@@ -34,12 +36,15 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
       }
       return;
     }
+    case "day":
+      expireAt(ctx, { at: "nextDay" });
+      return;
     case "challenge":
       state.turn.challengeLane = 0;
       return;
     case "ending":
       discardToHandLimit(ctx);
-      expireUntilEndOfTurn(ctx);
+      expireAt(ctx, { at: "endOfTurn" });
       clearExhaustion(ctx);
       return;
     default:
@@ -69,13 +74,6 @@ function discardToHandLimit(ctx: StepContext): void {
   }
 }
 
-/** Ending: effects that last until end of turn end, in every zone. */
-function expireUntilEndOfTurn(ctx: StepContext): void {
-  for (const instance of Object.values(ctx.state.instances)) {
-    instance.status.turnSpark = 0;
-  }
-}
-
 /** Ending: every exhausted character in play, and each exhausted avatar, loses the exhausted status. */
 function clearExhaustion(ctx: StepContext): void {
   for (const side of ["player", "enemy"] as const) {
@@ -101,9 +99,25 @@ function leavePhase(ctx: StepContext, phase: Phase): void {
     case "challenge":
       ctx.state.turn.challengeLane = null;
       return;
+    case "ending":
+      // An "until end of turn" effect that began during Ending, after its
+      // expiry step, ends as the turn ends.
+      expireAt(ctx, { at: "endOfTurn" });
+      return;
     default:
       return;
   }
+}
+
+/**
+ * The bookkeeping as `side` begins a turn: its turn count, a fresh turn
+ * log, and once-per-turn uses cleared.
+ */
+function resetForTurn(ctx: StepContext, side: Side): void {
+  const { state } = ctx;
+  state.turn.sideTurns[side] += 1;
+  state.turnLog = emptyTurnLog();
+  state.oncePerTurn = [];
 }
 
 /**
@@ -137,7 +151,7 @@ export function beginNextTurn(ctx: StepContext): void {
   turn.active = next;
   turn.extra = extra;
   turn.turnNumber += 1;
-  state.oncePerTurn = [];
+  resetForTurn(ctx, next);
   ctx.emit({
     kind: "turnStarted",
     side: next,
@@ -145,6 +159,8 @@ export function beginNextTurn(ctx: StepContext): void {
     turnNumber: turn.turnNumber,
     extra,
   });
+  // "Until your next turn" ends as that side's turn begins, extra turns included (C8).
+  expireAt(ctx, { at: "turnStart", side: next });
   enterPhase(ctx, "dreamwell");
 }
 
@@ -168,6 +184,7 @@ export function advancePhase(ctx: StepContext): void {
 export function beginFirstTurn(ctx: StepContext): void {
   const { state } = ctx;
   state.turn.turnNumber = 1;
+  resetForTurn(ctx, state.turn.active);
   ctx.emit({
     kind: "turnStarted",
     side: state.turn.active,

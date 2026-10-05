@@ -1,0 +1,5 @@
+# RD-hv-7x4l.6-3: "When the opponent scores ⍟" responds to each character the opponent controls scoring
+- Ladder: 5 (the simplest reading consistent with rules § Challengers, Blockers, and Scoring, which defines "scores ⍟" as a challenge converting a character's spark into points)
+- rules.md: § Challengers, Blockers, and Scoring
+- Affects: avatar 9e4862fd-e18c-463e-9d5f-e5d73c29a66f ("when the opponent scores ⍟"); 071bcab4-ed02-48a0-93dc-8fd0f36611c8, 7697da0e-d759-4c75-8c9c-477e9058b035, 4f29a241-9265-4669-a189-5a2a91923e12 ("When this character scores ⍟")
+- Why: rules.md defined a character scoring but not a player scoring. Reading "the opponent scores ⍟" as "a character the opponent controls scores ⍟" keeps one meaning of "scores" and excludes flat "gain N⍟" effects and Fatigue, as rules.md already does for characters; the ability triggers once for each scoring character. A challenger whose challenge awards 0⍟ (an unpaired 0✦ challenger) does not score, since no spark becomes points.

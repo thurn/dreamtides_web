@@ -7,6 +7,9 @@ import type {
   CardInstance,
   CardStatus,
   ChallengeState,
+  Expiry,
+  FloatingChange,
+  FloatingEffect,
   StackItem,
   TurnState,
 } from "../state/types";
@@ -59,6 +62,25 @@ export interface PayableEffectView {
   readonly affects: readonly InstanceId[];
 }
 
+/** A change with a duration (rules § Durations). */
+export interface FloatingEffectView {
+  readonly id: EffectId;
+  readonly controller: Side;
+  readonly source: AbilitySource;
+  readonly timestamp: number;
+  readonly expiry: Expiry;
+  readonly change: FloatingChange;
+}
+
+/** A triggered ability waiting to resolve; a source the viewer cannot see is `null`. */
+export interface QueuedTriggerView {
+  readonly controller: Side;
+  readonly source: AbilitySource | null;
+  readonly ability: number;
+  readonly node: number | null;
+  readonly subject: InstanceId | null;
+}
+
 export interface SideView {
   readonly score: number;
   readonly currentEnergy: number;
@@ -99,6 +121,13 @@ export interface BattleView {
   readonly priority: Side | null;
   /** Effects a side may pay to end, in registration order. */
   readonly payable: readonly PayableEffectView[];
+  /**
+   * Floating effects, in creation order, except those whose source or
+   * changed card the viewer cannot see.
+   */
+  readonly floating: readonly FloatingEffectView[];
+  /** Triggered abilities waiting to resolve, first in, first out. */
+  readonly triggerQueue: readonly QueuedTriggerView[];
   readonly dreamwell: { readonly remaining: number };
   readonly challenge: Readonly<ChallengeState> | null;
   readonly result: Readonly<BattleResult> | null;
@@ -156,6 +185,9 @@ export function view(state: BattleState, viewer: Side): BattleView {
     }
   }
   const visible = (id: InstanceId): boolean => id in instances;
+  const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);
+  const floatingVisible = (effect: FloatingEffect): boolean =>
+    visibleSource(effect.source) && (effect.change.kind === "trigger" || visible(effect.change.instance));
   const side = (which: Side): SideView => {
     const source = state.sides[which];
     return {
@@ -194,6 +226,14 @@ export function view(state: BattleState, viewer: Side): BattleView {
       cost: effect.cost,
       source: copy(effect.source),
       affects: effect.affects.filter(visible),
+    })),
+    floating: state.floating.filter(floatingVisible).map((effect) => copy(effect)),
+    triggerQueue: state.triggerQueue.map((trigger) => ({
+      controller: trigger.controller,
+      source: visibleSource(trigger.source) ? copy(trigger.source) : null,
+      ability: trigger.ability,
+      node: trigger.node,
+      subject: trigger.subject !== null && visible(trigger.subject) ? trigger.subject : null,
     })),
     dreamwell: { remaining: state.dreamwell.deck.length - state.dreamwell.next },
     challenge: copy(state.challenge),

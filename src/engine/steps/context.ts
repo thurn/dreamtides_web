@@ -7,6 +7,7 @@ import type { AnswerFor, Prompt, PromptSpec } from "../prompts/types";
 import type { Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
 import type { BattleState } from "../state/types";
+import { matchEvent } from "../triggers/matcher";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence } from "./errors";
 import type { AnswerSource, RecordedAnswer, StepContext } from "./types";
 
@@ -77,9 +78,11 @@ export class Context implements StepContext {
     this.committed = true;
   }
 
+  /** Records an event and matches it against triggered abilities, which queue (D14). */
   emit(event: EngineEvent): void {
     eventDefinition(event.kind);
     this.events.push(event);
+    matchEvent(this, event);
   }
 
   random(stream: string): number {

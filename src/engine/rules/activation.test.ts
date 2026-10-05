@@ -185,8 +185,8 @@ describe("avatars and dreamsigns", () => {
       enemy: { avatar: AVATAR.drawer.id, deck },
     });
     const { state } = activate(start, "player", { kind: "avatar", side: "player" });
-    const gained = Object.values(state.instances).filter((instance) => instance.status.turnSpark > 0);
-    expect(gained.map((instance) => instance.id)).toEqual([start.sides.player.backRank[0]]);
+    const gained = state.floating.map((effect) => (effect.change.kind === "spark" ? effect.change.instance : null));
+    expect(gained).toEqual([start.sides.player.backRank[0]]);
   });
 
   it("answers the opponent's event with an Interrupt-speed avatar ability", () => {

@@ -87,7 +87,7 @@ export function legalActions(
   side: Side,
   memo: LegalityMemo,
 ): Action[] {
-  if (state.result !== null) {
+  if (state.result !== null || state.triggerQueue.length > 0) {
     return [];
   }
   if (state.stack.length > 0) {
@@ -109,14 +109,15 @@ export function legalActions(
 
 /**
  * The pending top-level decision, derived from the state. A side holding
- * priority with no legal response has no decision: it passes automatically (P1).
+ * priority with no legal response has no decision: it passes automatically
+ * (P1). Nobody decides while triggers wait to resolve (D14).
  */
 export function decision(
   state: BattleState,
   catalog: EngineCatalog,
   memo: LegalityMemo,
 ): Decision | null {
-  if (state.result !== null) {
+  if (state.result !== null || state.triggerQueue.length > 0) {
     return null;
   }
   if (state.stack.length > 0) {

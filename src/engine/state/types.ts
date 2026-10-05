@@ -1,4 +1,5 @@
-import type { Variant } from "../dsl/types";
+import type { CardSubtype } from "../../types/card-identity";
+import type { Condition, Variant } from "../dsl/types";
 import type {
   AbilitySource,
   AvatarId,
@@ -52,10 +53,11 @@ export interface BattleInit {
 
 export interface CardStatus {
   exhausted: boolean;
-  /** Permanent gained spark; travels with the card across zones. */
+  /**
+   * Permanent gained spark; travels with the card across zones. Spark gained
+   * with a duration is a floating effect instead.
+   */
   gainedSpark: number;
-  /** Spark gained until end of turn; removed during Ending wherever the card is. */
-  turnSpark: number;
   counters: number;
   /** Created by an effect rather than drawn from a deck; it ceases to exist instead of leaving play or the stack. */
   created: boolean;
@@ -148,6 +150,89 @@ export interface PayableEffect {
   readonly affects: readonly InstanceId[];
 }
 
+/**
+ * When a floating effect ends (rules § Durations). Every boundary counts
+ * extra turns as their player's turns (C8).
+ */
+export type Expiry =
+  /** "Until end of turn": Ending, step 3, or as the turn ends if it began later. */
+  | { readonly at: "endOfTurn" }
+  /** "Until your next turn": as `side` next begins a turn. */
+  | { readonly at: "turnStart"; readonly side: Side }
+  /** "Until the next Day phase": as any Day phase begins. */
+  | { readonly at: "nextDay" }
+  /** "While this is in play": as the source instance leaves play. */
+  | { readonly at: "sourceLeavesPlay"; readonly source: InstanceId }
+  /** "Until the opponent pays N●": as the linked payable effect ends (C7). */
+  | { readonly at: "paid"; readonly effect: EffectId }
+  | { readonly at: "never" };
+
+/**
+ * Names a floating or delayed trigger's node: the node at index `node` of
+ * `everyNode` over the effect of ability `ability` of `origin`. Effects are
+ * read from the catalog, never stored in the state.
+ */
+export interface EffectRef {
+  readonly origin: AbilityOrigin;
+  readonly ability: number;
+  readonly node: number;
+}
+
+/** What a floating effect changes while it lasts. */
+export type FloatingChange =
+  /** Spark gained with a duration; it ends wherever the card is. */
+  | { readonly kind: "spark"; readonly instance: InstanceId; readonly amount: number }
+  /**
+   * "Until end of turn, when …" (floating) or "the next time …" (delayed,
+   * `once`: it ends as it triggers).
+   */
+  | { readonly kind: "trigger"; readonly ref: EffectRef; readonly once: boolean }
+  /** The instance's triggered abilities do not trigger, while `while` holds if given. */
+  | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition };
+
+/** A change with a duration, created by a resolving effect. */
+export interface FloatingEffect {
+  readonly id: EffectId;
+  readonly controller: Side;
+  readonly source: AbilitySource;
+  /** The zone-entry clock when the effect began, for layer ordering. */
+  readonly timestamp: number;
+  readonly expiry: Expiry;
+  readonly change: FloatingChange;
+}
+
+/**
+ * A triggered ability waiting to resolve (D14). The ability is read from
+ * `origin` as it was when it triggered, so it resolves even if its source has
+ * since changed zones or ceased to exist.
+ */
+export interface QueuedTrigger {
+  readonly source: AbilitySource;
+  readonly controller: Side;
+  readonly origin: AbilityOrigin;
+  /** The ability's index in its origin's ability list. */
+  readonly ability: number;
+  /** A floating or delayed trigger's node in that ability's effect tree; `null` for a triggered ability. */
+  readonly node: number | null;
+  /** The card the triggering event concerns ("it", "that character"), if any. */
+  readonly subject: InstanceId | null;
+}
+
+/** A card one side played this turn, with the characteristics it was played with. */
+export interface PlayedCard {
+  readonly instance: InstanceId;
+  readonly cardType: "character" | "event";
+  readonly subtype: CardSubtype;
+}
+
+/** Counters for the current turn, reset as each turn begins. */
+export interface TurnLog {
+  /** Cards each side played this turn, in order. Copies are not played (D15). */
+  played: Record<Side, PlayedCard[]>;
+  /** Cards each side drew this turn. */
+  drawn: Record<Side, number>;
+}
+
 export interface SideState {
   score: number;
   currentEnergy: number;
@@ -175,6 +260,8 @@ export interface TurnState {
   turnNumber: number;
   active: Side;
   phase: Phase;
+  /** Turns each side has begun, extra turns included (C8). */
+  sideTurns: Record<Side, number>;
   /** Whether the current turn is an extra turn. */
   extra: boolean;
   /** The side whose most recent non-extra turn this is or was. */
@@ -232,9 +319,14 @@ export interface BattleState {
   priority: Side | null;
   /** Effects their payer may end with `payToEnd`, in registration order. */
   payable: PayableEffect[];
+  /** Triggered abilities waiting to resolve, first in, first out (D14). */
+  triggerQueue: QueuedTrigger[];
+  /** Changes with a duration, in creation order. */
+  floating: FloatingEffect[];
+  turnLog: TurnLog;
   /** Next effect number to mint. */
   nextEffect: number;
-  /** Once-per-turn abilities used this turn, by source key and ability index. */
+  /** Once-per-turn abilities used (activated) or triggered this turn, by source key and ability index. */
   oncePerTurn: OncePerTurnKey[];
   dreamwell: DreamwellState;
   challenge: ChallengeState | null;

@@ -2,10 +2,11 @@
  * The ability DSL: typed, declarative ability data (D5). Each entity's
  * abilities sit beside its printed text in its content module, and one
  * interpreter executes them. Effect nodes come from the primitive registry
- * (effects/primitives/); later phases add trigger, cost, and static kinds.
+ * (effects/primitives/); later phases add static kinds.
  */
 import type { CardSubtype } from "../../types/card-identity";
 import type { Effect } from "../effects/registry";
+import type { Zone } from "../state/ids";
 
 /** The variant a card instance is played as. Phase 4 adds transfigurations and deck modifications. */
 export interface Variant {
@@ -70,8 +71,13 @@ export interface SelfSpec {
   readonly kind: "self";
 }
 
+/** The card the triggering event concerns ("it", "that character"), while it is in play. */
+export interface SubjectSpec {
+  readonly kind: "subject";
+}
+
 /** The characters a character effect applies to. */
-export type CharacterRef = TargetSpec | AllSpec | SelfSpec;
+export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec;
 
 /** Any target chosen at play time: characters in play or cards on the stack. */
 export type PlayTimeTarget = TargetSpec | StackTargetSpec;
@@ -83,8 +89,17 @@ export type ValueExpr =
   | { readonly value: "count"; readonly of: CharacterSelector }
   | { readonly value: "handSize"; readonly player: PlayerRef };
 
-/** How long a change lasts. Phase 3.6 adds the remaining duration kinds. */
-export type Duration = "permanent" | "untilEndOfTurn";
+/**
+ * How long a change lasts (rules § Durations). "Until the opponent pays N●"
+ * lets the opponent end it with the `payToEnd` action (C7).
+ */
+export type Duration =
+  | "permanent"
+  | "untilEndOfTurn"
+  | "untilYourNextTurn"
+  | "untilNextDay"
+  | "whileSourceInPlay"
+  | { readonly duration: "untilOpponentPays"; readonly cost: number };
 
 /** A condition an effect checks when it resolves. */
 export type Condition =
@@ -96,7 +111,9 @@ export type Condition =
    * counts the original's optional costs as paid (rules § Playing Cards and
    * the Stack → Copies on the stack).
    */
-  | { readonly cond: "costPaid"; readonly optional: number };
+  | { readonly cond: "costPaid"; readonly optional: number }
+  /** "If this card is in your void": the source instance is in `zone`. An emblem is always in play. */
+  | { readonly cond: "sourceIn"; readonly zone: Zone };
 
 /** Keywords printed on a card. */
 export type Keyword = "vengeful" | "awakened" | "cannotBePrevented";
@@ -189,11 +206,59 @@ export interface AdditionalCostAbility {
   readonly costs: readonly AdditionalCost[];
 }
 
+/** The named (▸) triggers: each concerns the ability's own card or its controller's phase. */
+export type NamedTrigger = "materialized" | "dawn" | "dusk" | "night" | "challenge" | "dissolved";
+
+/** The cards a "when" trigger concerns: the ability's own card, or characters matching a selector. */
+export type TriggerSubject = "self" | CharacterSelector;
+
+/** What makes a triggered ability trigger (rules § Ability Types → Triggered abilities). */
+export type Trigger =
+  | { readonly on: NamedTrigger }
+  /** "When you play your `nth` … this turn" counts only the plays that match. */
+  | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly nth?: number }
+  | { readonly on: "materialize"; readonly subject: TriggerSubject }
+  | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
+  | { readonly on: "discard"; readonly player: PlayerRef; readonly filter: CardFilter }
+  | { readonly on: "abandon"; readonly player: PlayerRef; readonly filter: CardFilter }
+  | { readonly on: "leavesPlay"; readonly subject: TriggerSubject }
+  /** "When … scores ⍟": a challenge converts the character's spark into points. */
+  | { readonly on: "scores"; readonly subject: TriggerSubject }
+  /** "When the opponent scores ⍟": a character the opponent controls scores. */
+  | { readonly on: "opponentScores" }
+  | { readonly on: "leavesVoid"; readonly player: PlayerRef; readonly filter: CardFilter }
+  /** "When you challenge with N or more …": once, as challengers are designated (C10). */
+  | { readonly on: "challengeWith"; readonly count: number; readonly selector: CharacterSelector }
+  | { readonly on: "startOfTurn" }
+  | { readonly on: "startOfFirstTurn" }
+  /** Combined triggers such as "▸Materialized, ▸Dawn" fire on each occasion. */
+  | { readonly on: "either"; readonly triggers: readonly Trigger[] };
+
+/**
+ * Where a triggered ability works: in play, or the functional zones "void",
+ * "hand", and "any" (play, void, hand, and deck). An emblem's abilities
+ * always work.
+ */
+export type FunctionalZone = "play" | "void" | "hand" | "any";
+
+/** "When …, …": an ability that triggers on an event and resolves without the stack (D14). */
+export interface TriggeredAbility {
+  readonly kind: "triggered";
+  readonly trigger: Trigger;
+  readonly effect: Effect;
+  readonly zone: FunctionalZone;
+  /** An intervening "if": checked when the ability triggers and again as it resolves. */
+  readonly condition?: Condition;
+  /** Triggers at most once each turn. */
+  readonly oncePerTurn?: boolean;
+}
+
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
   | AdditionalCostAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }
-  | ActivatedAbility;
+  | ActivatedAbility
+  | TriggeredAbility;
 
 /** A card's abilities for a variant; the amplified flag selects amplified text's behavior. */
 export type AbilityList = (variant: Variant) => readonly Ability[];

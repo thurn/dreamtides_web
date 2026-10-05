@@ -18,16 +18,20 @@ import { countersChanged, type CountersChangedEvent } from "./kinds/counters-cha
 import { discarded, type DiscardedEvent } from "./kinds/discarded";
 import { dissolved, type DissolvedEvent } from "./kinds/dissolved";
 import { dreamwellDrawn, type DreamwellDrawnEvent } from "./kinds/dreamwell-drawn";
+import { effectEnded, type EffectEndedEvent } from "./kinds/effect-ended";
+import { effectStarted, type EffectStartedEvent } from "./kinds/effect-started";
 import { energyChanged, type EnergyChangedEvent } from "./kinds/energy-changed";
 import { eroded, type ErodedEvent } from "./kinds/eroded";
 import { exhaustionChanged, type ExhaustionChangedEvent } from "./kinds/exhaustion-changed";
 import { fatigue, type FatigueEvent } from "./kinds/fatigue";
 import { laneResolved, type LaneResolvedEvent } from "./kinds/lane-resolved";
+import { leftPlay, type LeftPlayEvent } from "./kinds/left-play";
+import { leftVoid, type LeftVoidEvent } from "./kinds/left-void";
 import { materialized, type MaterializedEvent } from "./kinds/materialized";
 import { noLegalTarget, type NoLegalTargetEvent } from "./kinds/no-legal-target";
-import { pendingAbility, type PendingAbilityEvent } from "./kinds/pending-ability";
 import { payableEffectEnded, type PayableEffectEndedEvent } from "./kinds/payable-effect-ended";
 import { payableEffectRegistered, type PayableEffectRegisteredEvent } from "./kinds/payable-effect-registered";
+import { pendingAbility, type PendingAbilityEvent } from "./kinds/pending-ability";
 import { phaseChanged, type PhaseChangedEvent } from "./kinds/phase-changed";
 import { pointsScored, type PointsScoredEvent } from "./kinds/points-scored";
 import { prevented, type PreventedEvent } from "./kinds/prevented";
@@ -36,6 +40,8 @@ import { resolved, type ResolvedEvent } from "./kinds/resolved";
 import { returnedToHand, type ReturnedToHandEvent } from "./kinds/returned-to-hand";
 import { revealed, type RevealedEvent } from "./kinds/revealed";
 import { sparkGained, type SparkGainedEvent } from "./kinds/spark-gained";
+import { triggerQueued, type TriggerQueuedEvent } from "./kinds/trigger-queued";
+import { triggerResolved, type TriggerResolvedEvent } from "./kinds/trigger-resolved";
 import { turnStarted, type TurnStartedEvent } from "./kinds/turn-started";
 import type { EventDefinition } from "./types";
 
@@ -55,16 +61,20 @@ export type EngineEvent =
   | DiscardedEvent
   | DissolvedEvent
   | DreamwellDrawnEvent
+  | EffectEndedEvent
+  | EffectStartedEvent
   | EnergyChangedEvent
   | ErodedEvent
   | ExhaustionChangedEvent
   | FatigueEvent
   | LaneResolvedEvent
+  | LeftPlayEvent
+  | LeftVoidEvent
   | MaterializedEvent
   | NoLegalTargetEvent
-  | PendingAbilityEvent
   | PayableEffectEndedEvent
   | PayableEffectRegisteredEvent
+  | PendingAbilityEvent
   | PhaseChangedEvent
   | PointsScoredEvent
   | PreventedEvent
@@ -73,6 +83,8 @@ export type EngineEvent =
   | ReturnedToHandEvent
   | RevealedEvent
   | SparkGainedEvent
+  | TriggerQueuedEvent
+  | TriggerResolvedEvent
   | TurnStartedEvent;
 
 export type EngineEventKind = EngineEvent["kind"];
@@ -95,16 +107,20 @@ export const EVENT_DEFINITIONS = {
   discarded,
   dissolved,
   dreamwellDrawn,
+  effectEnded,
+  effectStarted,
   energyChanged,
   eroded,
   exhaustionChanged,
   fatigue,
   laneResolved,
+  leftPlay,
+  leftVoid,
   materialized,
   noLegalTarget,
-  pendingAbility,
   payableEffectEnded,
   payableEffectRegistered,
+  pendingAbility,
   phaseChanged,
   pointsScored,
   prevented,
@@ -113,6 +129,8 @@ export const EVENT_DEFINITIONS = {
   returnedToHand,
   revealed,
   sparkGained,
+  triggerQueued,
+  triggerResolved,
   turnStarted,
 } as const satisfies { readonly [K in EngineEventKind]: EventDefinition<EventOf<K>> };
 

@@ -2,6 +2,7 @@ import { eventAbilities } from "../../effects/abilities";
 import { chooseModes, chooseTargets, chosenModes, collectTargets, purposeOf } from "../../effects/interpreter";
 import { chooseX, payCosts, planCosts, playCosts } from "../../rules/costs";
 import { canPlayFromHand } from "../../rules/timing";
+import { recordPlayed } from "../../rules/turn-log";
 import { instanceOf, moveToStack } from "../../rules/zones";
 import type { InstanceId } from "../../state/ids";
 import { opponent } from "../../state/ids";
@@ -64,6 +65,7 @@ export const play: StepDefinition<PlayStep> = {
     ctx.commitPoint();
     payCosts(ctx, side, step.card, plan);
     moveToStack(ctx, step.card, side, { modes, targets, x, optionalPaid: plan.optionalPaid });
+    recordPlayed(state, catalog, side, step.card);
     ctx.emit({ kind: "cardPlayed", side, instance: step.card });
     if (definition.status === "pending") {
       ctx.emit({ kind: "pendingAbility", side, cardId: instance.cardId, instance: step.card, reason: "played" });

@@ -1,4 +1,5 @@
 import { BATTLE } from "../../content/battle";
+import { emptyTurnLog } from "../rules/turn-log";
 import type { EngineCatalog } from "../catalog";
 import type { InstanceId, Side } from "./ids";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES } from "./ids";
@@ -55,6 +56,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
       turnNumber: 0,
       active: config.startingSide,
       phase: "dreamwell",
+      sideTurns: { player: 0, enemy: 0 },
       extra: false,
       lastNormal: config.startingSide,
       extraTurns: [],
@@ -65,6 +67,9 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
     stack: [],
     priority: null,
     payable: [],
+    triggerQueue: [],
+    floating: [],
+    turnLog: emptyTurnLog(),
     nextEffect: 1,
     oncePerTurn: [],
     dreamwell: { deck: [], next: 0, catalog: [] },
@@ -93,7 +98,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
         controller: side,
         zone: "deck",
         variant: { amplified: entry.amplified === true },
-        status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
+        status: { exhausted: false, gainedSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
         enteredZoneAt: 0,
       };
       state.instances[id] = instance;
