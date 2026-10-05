@@ -54,8 +54,10 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
 - **Tunables live in the data catalogs**, never as literals in logic.
 - **Player-facing copy lives in UI modules.** Rules code never builds display
   strings.
-- **Pre-existing issues** you encounter go in `./pre-existing-issues.txt`,
-  included in the same commit.
+- **Pre-existing issues** you encounter go in your bead's own file,
+  `docs/plan/evidence/pre-existing/<bead-id>.md`, included in the same
+  commit. The legacy `./pre-existing-issues.txt` is read-only until Phase 2.8
+  resolves its entries.
 - **Documentation describes the current system.** Never describe what the
   system *no longer* does: phrasings like "X no longer exists", "there is no
   longer a Y", "we removed Z", or "unlike before" are not acceptable.

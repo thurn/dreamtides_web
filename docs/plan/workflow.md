@@ -210,6 +210,7 @@ A gate bead closes only when all of these hold:
 Every brief contains, verbatim or by exact path:
 
 - the bead ID, title, description, acceptance criteria, and `Areas:` line;
+- whether the bead is core-review ([Reviews](#reviews));
 - the phase-page section to read, and the read-first list;
 - the worktree path, the lane's QA port, and `artifacts/qa/<bead-id>/`;
 - whether it holds the `heavy` slot and the `browser` slot (D17). Without
@@ -230,8 +231,20 @@ Every brief contains, verbatim or by exact path:
     stop the dev server when done.
   - Write the bead's [friction file](#friction-ledger) and any other
     per-bead evidence files.
-  - Make exactly **one** detailed Conventional Commit, with
-    `pre-existing-issues.txt` updates if any, ending with a
+  - Record pre-existing issues in the bead's own
+    `docs/plan/evidence/pre-existing/<bead-id>.md`
+    ([Evidence files](#evidence-files)).
+  - **Core-review beads only:** for each new state transition, enumerate its
+    failure, interrupt, and recovery paths:
+    - an error mid-step;
+    - a reload or restart mid-operation;
+    - a partial write;
+    - invalid or stale input;
+    - concurrent actors.
+
+    Cover each path with a test that fails when the broken behavior is
+    restored, or state why no test applies.
+  - Make exactly **one** detailed Conventional Commit, ending with a
     `Bead: <bead-id>` trailer. Leave the worktree clean.
   - If the work exceeds ~1,500 changed non-test lines (mechanical deletions
     may be larger) or needs paths outside the areas, stop and report
@@ -244,6 +257,8 @@ Every brief contains, verbatim or by exact path:
   - the runtime ledger: every process it started, with PID and port, and
     whether it was stopped;
   - rules decisions and card issues created;
+  - **core-review beads only:** the failure-path list, with each path's
+    test name or the reason no test applies;
   - anything left undone.
 
 ### Collect a result
@@ -252,6 +267,10 @@ When a subagent returns:
 
 1. **Verify.** The worktree is clean, `HEAD` is the reported OID, the diff
    stays within the areas, and the friction file is present.
+   - **For a core-review bead,** check the failure-path list before
+     submitting. Every path names a test that exists in the commit, or gives
+     a reason no test applies. A missing or thin list goes back to the
+     subagent, in the same worktree, before submission.
 2. **Submit and approve:**
 
    ```sh
@@ -638,8 +657,16 @@ written **one file per bead or per entry**:
 | QA ledger | `docs/plan/evidence/qa-ledger/<bead-id>.jsonl` |
 | Rules decisions | `docs/plan/evidence/rules-decisions/RD-<bead-id>-<n>.md` |
 | Card issues | `docs/plan/evidence/card-issues/<uuid>--<bead-id>.md` |
+| Pre-existing issues | `docs/plan/evidence/pre-existing/<bead-id>.md` |
 
 - **Readers aggregate** with `cat`/`jq -s` over the directory.
+- **Pre-existing issues.** A bead that finds an issue outside its scope
+  writes one Markdown file listing each issue, with its location and a
+  one-line description. A bead that finds none writes no file. The first
+  bead that records an issue creates `docs/plan/evidence/pre-existing/`.
+- **The legacy `./pre-existing-issues.txt` is read-only.** Phase
+  [2.8](phase-2-cleanup.md#28-dead-code-and-legacy-sweep), the dead-code
+  sweep, resolves its entries and clears it. No other bead edits it.
 - **Measurements.** When a page tells a non-gate bead to record numbers or a
   policy text "in `metrics.md`", the bead writes its measurement file
   instead. Each gate bead folds the measurement files since the previous gate

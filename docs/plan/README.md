@@ -230,8 +230,9 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
   strings.
 - **Docs describe the current state,** with no "no longer" or "removed"
   phrasing. After Phase 2 the docs are only those of D33.
-- **Log pre-existing issues.** Record them in `./pre-existing-issues.txt`
-  within the same commit.
+- **Log pre-existing issues.** Record them in
+  `docs/plan/evidence/pre-existing/<bead-id>.md` within the same commit
+  ([Evidence files](workflow.md#evidence-files)).
 - **Leave the primary checkout alone.** Never edit `~/dreamtides_web`
   directly; all work happens in Tollgate worktrees. The exception is the local
   Tollgate policy, under the Phase 1.2 rule. Tollgate fast-forwards its
