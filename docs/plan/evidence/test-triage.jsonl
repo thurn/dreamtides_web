@@ -1,0 +1,278 @@
+{"file": "src/App.test.tsx", "verdict": "keep", "reason": "contract", "notes": "The four room-gate and Firebase setup cases go with co-op and Firebase in Phase 2."}
+{"file": "src/atlas/atlas-generator.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/atlas/atlas-reachability.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/button-cursor.test.ts", "verdict": "delete", "reason": "impl-detail", "notes": "Regex over index.css and SiteNode.tsx source text; cursor affordance is a visual concern covered by browser QA."}
+{"file": "src/card-type-change.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/components/BattleSiteRoute.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/components/CumulusJourneyChrome.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/components/DreamscapeJourneyMenu.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/components/ErrorBoundary.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Drop the source-text check for the emergency-fallback exemption; locate the fallback structurally instead of by its copy."}
+{"file": "src/components/FrontDoorRouter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/components/JourneyCardTutorialController.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/components/JourneyUtilityMenuController.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/components/ScreenRouter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/atlas/AtlasNode.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "19 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/battle/BattleForeseeEditor.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Trigger-source label copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/components/battle/BattlePhaseIndicator.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/battle/BattleStatusDisplay.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Dormant-ability description copy. Assert roles, ids, and structure instead. Also review 14 inline style-value assertions."}
+{"file": "src/cumulus/components/battle/BattlefieldCard.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/battle/CardBack.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/battle/CardPile.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Pile label copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/components/battle/DreamwellCard.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/CardChangePair.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/CardChoiceGrid.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/CardPanels.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/CardStatOrb.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/CardView.artpan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/CardView.event-frame.test.ts", "verdict": "delete", "reason": "impl-detail", "notes": "Regex over CardView.css source pinning token fallback literals."}
+{"file": "src/cumulus/components/card/CardView.hover-zoom.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Editor-variant cases go with the editors in Phase 2 (D8)."}
+{"file": "src/cumulus/components/card/CardView.transfiguration.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/GameCardReveal.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Glossary entry titles and definitions from production glossary data (Exhausted, Bane, Figment). Assert roles, ids, and structure instead. Also review 19 inline style-value assertions."}
+{"file": "src/cumulus/components/card/GlossaryTerm.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/PlayingCard.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/RulesText.nesting.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/RulesText.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/TransfigurationDetailPanel.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/TransfigurationPickerPanel.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/card-text.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/glossary-info-card.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/rich-text.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/rules-text-highlight.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/card/rules-text-reveal.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/ExplorationChoice.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/GlassButton.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "35 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/controls/IconButton.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "12 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/controls/MainMenuButton.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/NumberStepper.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/OfferTile.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "35 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/controls/Select.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/StandaloneGlyph.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/TextField.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/TransfigurationButton.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/inspector-controls.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/controls/offer-tile-descriptions.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/dreamscape/SiteNode.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Locked guardian battle description copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/components/hud/AvatarPortrait.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/hud/AvatarStage.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/hud/Dreamsign.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/hud/EssenceValue.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/hud/TideDisc.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/hud/TidesInfoLabel.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/hud/tide-spec.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/layout/SiteLayout.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "28 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/overlay/CharacterDialogue.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "21 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/overlay/CommandMenu.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/overlay/DreamsignReplacementDialog.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/overlay/GlassDialog.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "29 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/overlay/GlassPanel.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/overlay/InfoCard.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/overlay/TutorialFeatureCallout.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/overlay/ViewportTutorialDialogue.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/overlay/speech-bubble-geometry.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/overlay/tutorial-placement.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/status/RadialAnnouncement.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Outcome headline copy (Won!, Victory). Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/components/status/TransientStatusToast.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/typography/InlineGlyph.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/RevealOverlay.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "17 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/internal/reveal/context.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/entity-competition.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/feedback.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/geometry.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/identity.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/logging.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/state-machine.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/internal/reveal/viewport.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/primitives/Pressable.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "18 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/primitives/motion-time.test.ts", "verdict": "delete", "reason": "impl-detail", "notes": "Asserts one design-token value (mutable design data), not the conversion contract."}
+{"file": "src/cumulus/primitives/safe-area.test.ts", "verdict": "delete", "reason": "impl-detail", "notes": "Asserts the CSS string a private helper builds."}
+{"file": "src/cumulus/primitives/use-scale-to-fit.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/ApplicationStateScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/AtlasScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/AugurySiteScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Guide instruction copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/screens/BattleResultSurface.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/BattleStartScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Stakes and action labels (To Win, Reward, Begin Battle) and authored Mira copy. Assert roles, ids, and structure instead. Also review 19 inline style-value assertions."}
+{"file": "src/cumulus/screens/BattleTutorialGuidance.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Authored guidance copy. Assert roles, ids, and structure instead. Also review 15 inline style-value assertions."}
+{"file": "src/cumulus/screens/CardShopSiteScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Screen heading copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/screens/DesktopDeckViewer.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/DraftScreen.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "15 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/screens/DreamscapeScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/DreamsignBazaarSiteScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Screen heading and replacement prompt copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/screens/DreamsignRevelationScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/DuplicationSiteScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Heading, pending-action, and instruction copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/screens/ExplorationSiteScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Follow-up confirm labels and outcome copy (Confirm Choice, New Avatar). Assert roles, ids, and structure instead. Also review 26 inline style-value assertions."}
+{"file": "src/cumulus/screens/GambleSiteScreen.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "11 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/screens/JourneyCompleteScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/JourneyFailedScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/JourneyStartScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Screen heading copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/screens/LoadingScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/MainMenuScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/MobileBattleScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Inspector and control labels (Return to Your Side, Battle Snapshot, Continue, debug fill labels). Phase 4 rewires this screen onto the engine; its sandbox debug-menu and card-debug cases go with D4. Assert roles, ids, and structure instead. Also review 259 inline style-value assertions."}
+{"file": "src/cumulus/screens/MobileDeckViewer.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/PackageDebugDialog.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Save and load action labels. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/screens/PoolViewerScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/PurgeSiteScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Screen heading copy. Assert roles, ids, and structure instead. Also review 27 inline style-value assertions."}
+{"file": "src/cumulus/screens/StartingDeckOverlay.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Title, action, and empty-state copy. Assert roles, ids, and structure instead. Also review 17 inline style-value assertions."}
+{"file": "src/cumulus/screens/TransfigurationSiteScreen.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "20 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/screens/TutorialBattleScreen.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/TutorialEditorRail.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of the in-app tutorial editor (D8)."}
+{"file": "src/cumulus/screens/TutorialScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Authored tutorial dialogue and score copy (production tutorial data). Phase 6 rewrites the tutorial on the engine. Assert roles, ids, and structure instead. Also review 38 inline style-value assertions."}
+{"file": "src/cumulus/screens/atlas-preflight.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/desktop-deck-filter.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/devtools/EntityRevealConformanceDemo.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of the dev-only Cumulus devtools screens (D8)."}
+{"file": "src/cumulus/screens/loading-callout-geometry.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/screens/mobile-deck-filter.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/authored-template.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/avatar-selection.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/blackjack.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/build-avatar-package.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/card-database.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/card-references.test.ts", "verdict": "keep", "reason": "contract", "notes": "Referential integrity of the catalogs; reads generated data/*.toml, so Phase 2.3 points it at the TS modules."}
+{"file": "src/data/card-roles.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/config-data.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/draft-data.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/dreamscapes.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/dreamwell-prompts.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/economy-data.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/exploration-presentation.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/exploration.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/four-suit-reprise.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/gamble-data.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/glossary-terms-symbols.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/glossary-terms.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/glossary.test.ts", "verdict": "rewrite", "reason": "impl-detail", "notes": "Drop the case that greps docs/journeys/journeys.md prose (docs are not a contract and Phase 2.1 deletes them); the transfiguration catalog case already pins the data contract."}
+{"file": "src/data/guide-sites-loaders.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/journey-content.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/materialized-figments.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/opponents-data.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/resolve-pool-legendary.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/resonance-data.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/site-tutorial-guidance.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/starway-stairs.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/tidemark-ladder-climb.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/tides4-preview.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/transfiguration-data.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/tutorial-actions.test.ts", "verdict": "keep", "reason": "contract", "notes": "The tutorial.toml editor-API loading case goes with the editors and RON pipeline in Phase 2."}
+{"file": "src/data/tutorial-cards.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/data/tutorial-instruction-markup.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/tutorial-journey-pool.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/data/tutorial-speech-bubble.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/debug/OffersDebugApp.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of the /offers route (D8)."}
+{"file": "src/debug/card-source-debug.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/draft/deck-cooccurrence.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Tests a module with no production importer; delete the module with it (Phase 1.4 domain batch)."}
+{"file": "src/draft/draft-engine.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/draft/draft-site-config.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/draft/pool/tides4-io.test.ts", "verdict": "keep", "reason": "contract", "notes": "Runtime artifact boundary; Phase 2.3 replaces the fetch/parse path with TS module imports and retires these cases with it."}
+{"file": "src/draft/pool/variant-tides4.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/dreamsign/dreamsign-pool.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/eventlog/append.firebase.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of Firebase transport (D2, D3)."}
+{"file": "src/eventlog/append.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of compaction and cross-client nonce dedup (D3)."}
+{"file": "src/eventlog/client.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of LogClient optimistic echo, reconciliation, and recovery generations (D3)."}
+{"file": "src/eventlog/fold.test.ts", "verdict": "keep", "reason": "contract", "notes": "Fold determinism, poison containment, and incremental equivalence survive; intervening-window (CAS) cases go with co-op conflict handling in Phase 2 (D3)."}
+{"file": "src/eventlog/hash.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/eventlog/rng.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/eventlog/room.firebase.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of Firebase presence and rooms (D3)."}
+{"file": "src/eventlog/room.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of room ids, stale-room eviction, and presence (D3)."}
+{"file": "src/eventlog/subscribe.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of the RTDB log subscription (D3)."}
+{"file": "src/eventlog/wire.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of the RTDB wire format (D3)."}
+{"file": "src/exploration/compound-action-plan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/exploration/disclosed-deck-target-plan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/exploration/multi-card-replacement-plan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/exploration/multi-card-transfiguration-plan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/exploration/random-deck-target-plan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/exploration/site-insertion-plan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/exploration/starter-card-transfiguration-plan.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/archetypes/improve.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/archetypes/registry.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/archetypes/site.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/context/buildAuguryContext.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/encounter/generateAuguryEncounter.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/encounter/resolveAuguryOffer.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/signals/rng.test.ts", "verdict": "rewrite", "reason": "statistical", "notes": "Replace the 60-95% heavy-pick and >=4 distinct first-pick threshold cases with exact assertions under a scripted rng; keep the deterministic cases."}
+{"file": "src/journey_v2/trace/buildTrace.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/journey_v2/trace/deckSnapshot.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/logging.test.ts", "verdict": "keep", "reason": "contract", "notes": "The battle_proto_* helper suite goes with the battle sandbox in Phase 4."}
+{"file": "src/purge/purge-pricing.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/random-site/random-site.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/reward-selection/selectReward.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/reward-selection/stable.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rewards/reward-generator.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/root-router.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of the editor routes (D8); its only case renders the Figment editor."}
+{"file": "src/rules/card-tutorial-guidance.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/events.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/front-door.test.ts", "verdict": "keep", "reason": "contract", "notes": "Partner-intent cases go with co-op in Phase 2 (D3)."}
+{"file": "src/rules/invariants.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/journey/deck.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/journey/draft.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/journey/gamble.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/journey/journey-properties.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/journey/lifecycle.test.ts", "verdict": "keep", "reason": "contract", "notes": "Hosted-control cases go with hosted playtests in Phase 2 (D3)."}
+{"file": "src/rules/journey/reward-effects.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/journey/shop.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/journey/sites.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/rules/reducer.test.ts", "verdict": "keep", "reason": "contract", "notes": "Rule 3 CAS-window, isCasExempt, and isInterveningWindowClear cases go with co-op conflict handling in Phase 2 (D3)."}
+{"file": "src/rules/replay/replay.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/runtime/device-frame.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/runtime/identicon-mode.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of presence identicons (D3)."}
+{"file": "src/runtime/localization/context.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of Trox localization (D35, Phase 2.4)."}
+{"file": "src/runtime/localization/runtime.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of Trox localization (D35, Phase 2.4)."}
+{"file": "src/runtime/qa-scenes.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/runtime/runtime-config.test.ts", "verdict": "keep", "reason": "contract", "notes": "gameId, databaseMode, and viewLogs cases go with rooms and Firebase in Phase 2."}
+{"file": "src/runtime/screen-url.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/CardSourceOverlay.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/DebugScreen.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Debug overlay heading copy. Assert roles, ids, and structure instead."}
+{"file": "src/screens/cumulus_adapters/DesktopDeckViewerAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/DreamsignRevelationScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/LoadingScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/MainMenuScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/StartingDeckOverlayAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/atlas-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/augury-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/battle-start-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/battle-tutorial-guidance-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/card-shop-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/card-tutorial-guidance-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/desktop-deck-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/draft-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/dreamscape-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/dreamsign-bazaar-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/duplication-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/exploration-logging-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/exploration-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/gamble-site-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/inline-reward-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/journey-complete-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/journey-debug-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/journey-failed-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/journey-start-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/loading-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/main-menu-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/mobile-battle-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/pool-viewer-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/purge-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/random-site-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/registry.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/shop-purchase-logging-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/site-tutorial-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/starting-deck-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/transfiguration-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/tutorial-battle-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/cumulus_adapters/tutorial-view-model.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/screens/debug-helpers.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/selection/tide-affinity.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/shop/shop-generator.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/state/card-source-publication.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/state/journey-flow.integration.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/state/journey-save-files.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/state/journey-selectors.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/state/journey-state-actions.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/state/use-card-source-debug-publication.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/state/use-tutorial-editor.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of the in-app tutorial editor (D8)."}
+{"file": "src/testing/coop-fuzz-harness.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Execute with the Phase 2 deletion of co-op (D3)."}
+{"file": "src/transfiguration/transfiguration-logic.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/transfiguration/transfiguration-pricing.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/types/identifiers.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/types/layer-name.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}

@@ -1,11 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { bandSample, auguryRng, weightedSample } from "./rng";
+import { bandSample, auguryRng, weightedSample, type AuguryRng } from "./rng";
 
 type ScoredItemId = `item-${number}`;
 
 interface ScoredItem {
   id: ScoredItemId;
   score: number;
+}
+
+/** Returns the given draws in order, then repeats the last one. */
+function scriptedRng(draws: readonly number[]): AuguryRng {
+  let index = 0;
+  return () => {
+    const draw = draws[Math.min(index, draws.length - 1)];
+    index += 1;
+    return draw;
+  };
 }
 
 function makeItems(count: number): ScoredItem[] {
@@ -85,17 +95,19 @@ describe("bandSample", () => {
     }
   });
 
-  it("spreads first picks across the band over 200 seeds (no residual argmax)", () => {
+  it("maps the first draw uniformly onto every in-band rank", () => {
     const items = makeItems(20);
-    const firstPicks = new Set<ScoredItemId>();
-    for (let seed = 0; seed < 200; seed += 1) {
-      const picks = bandSample(items, (t) => t.score, 3, auguryRng("dist", String(seed)), {
-        bandFraction: 0.25,
-        bandMinimum: 5,
-      });
-      firstPicks.add(picks[0].id);
+    // A band of 5 splits [0, 1) into fifths: draw k/5 selects rank k.
+    for (let rank = 0; rank < 5; rank += 1) {
+      const picks = bandSample(
+        items,
+        (t) => t.score,
+        1,
+        scriptedRng([(rank + 0.5) / 5]),
+        { bandFraction: 0.25, bandMinimum: 5 },
+      );
+      expect(picks.map((p) => p.id)).toEqual([`item-${rank}`]);
     }
-    expect(firstPicks.size).toBeGreaterThanOrEqual(4);
   });
 
   it("returns fewer items when the band is smaller than count", () => {
@@ -119,21 +131,17 @@ describe("weightedSample", () => {
     expect(weightedSample([] as ScoredItem[], () => 1, auguryRng("w"))).toBeNull();
   });
 
-  it("picks the heavy item 60-95% of the time over 500 seeds with 9:1 weights", () => {
+  it("picks in proportion to weight: draws below the heavy share pick it", () => {
     const items = [
       { id: "heavy", score: 9 },
       { id: "light", score: 1 },
     ];
-    let heavyCount = 0;
-    for (let seed = 0; seed < 500; seed += 1) {
-      const pick = weightedSample(items, (t) => t.score, auguryRng("weighted", String(seed)));
-      if (pick?.id === "heavy") {
-        heavyCount += 1;
-      }
-    }
-    const fraction = heavyCount / 500;
-    expect(fraction).toBeGreaterThanOrEqual(0.6);
-    expect(fraction).toBeLessThanOrEqual(0.95);
+    const pick = (draw: number) =>
+      weightedSample(items, (t) => t.score, scriptedRng([draw]))?.id;
+    expect(pick(0)).toBe("heavy");
+    expect(pick(0.899)).toBe("heavy");
+    expect(pick(0.9)).toBe("light");
+    expect(pick(0.999)).toBe("light");
   });
 
   it("never picks zero-weight items", () => {
