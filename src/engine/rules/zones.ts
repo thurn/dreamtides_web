@@ -71,7 +71,7 @@ function detach(state: BattleState, instance: CardInstance): void {
       return;
     }
     case "stack": {
-      state.stack = state.stack.filter((item) => item.instance !== instance.id);
+      state.stack = state.stack.filter((item) => item.kind !== "card" || item.instance !== instance.id);
       return;
     }
     default: {
@@ -130,6 +130,7 @@ export function moveToStack(
   instance.zone = "stack";
   instance.enteredZoneAt = ++state.clock;
   state.stack.push({
+    kind: "card",
     instance: id,
     controller,
     targets: choices.targets.map((list) => [...list]),
@@ -159,6 +160,19 @@ export function enterPlay(
   instance.status.exhausted = !hasKeyword(state, ctx.catalog, id, "awakened");
   setOccupant(state, side, slot, id);
   ctx.emit({ kind: "materialized", instance: id, side, slot });
+}
+
+/**
+ * A created card ceases to exist (rules § Created Cards): it leaves its zone
+ * and the battle, and is in no zone afterwards.
+ */
+export function ceaseToExist(ctx: StepContext, id: InstanceId): void {
+  const { state } = ctx;
+  detach(state, instanceOf(state, id));
+  state.instances = Object.fromEntries(
+    Object.entries(state.instances).filter(([key]) => key !== id),
+  );
+  ctx.emit({ kind: "ceasedToExist", instance: id });
 }
 
 /** Dissolves a character in play into its owner's void. */

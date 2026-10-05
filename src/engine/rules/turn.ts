@@ -76,11 +76,16 @@ function expireUntilEndOfTurn(ctx: StepContext): void {
   }
 }
 
-/** Ending: every exhausted character in play loses the exhausted status. */
+/** Ending: every exhausted character in play, and each exhausted avatar, loses the exhausted status. */
 function clearExhaustion(ctx: StepContext): void {
   for (const side of ["player", "enemy"] as const) {
     for (const id of charactersInPlay(ctx.state, side)) {
       instanceOf(ctx.state, id).status.exhausted = false;
+    }
+    const avatar = ctx.state.sides[side].avatar;
+    if (avatar?.exhausted === true) {
+      avatar.exhausted = false;
+      ctx.emit({ kind: "avatarExhaustionChanged", side, exhausted: false });
     }
   }
 }
@@ -132,6 +137,7 @@ export function beginNextTurn(ctx: StepContext): void {
   turn.active = next;
   turn.extra = extra;
   turn.turnNumber += 1;
+  state.oncePerTurn = [];
   ctx.emit({
     kind: "turnStarted",
     side: next,

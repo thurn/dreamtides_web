@@ -1,10 +1,18 @@
+import { AVATARS } from "../content/avatars";
 import { CARDS } from "../content/cards";
 import type { CardDefinition, DreamwellCardDefinition } from "../content/define";
+import { DREAMSIGNS } from "../content/dreamsigns";
 import { DREAMWELL_CARDS } from "../content/dreamwell";
 import { parseCardId } from "../types/card-identity";
-import { parseDreamwellCardId } from "../types/identifiers";
+import { parseAvatarId, parseDreamsignId, parseDreamwellCardId } from "../types/identifiers";
 import type { ContentStatus } from "../content/define";
-import type { ContentState, EngineCardDefinition, EngineDreamwellDefinition } from "./catalog";
+import type {
+  ContentState,
+  EngineAvatarDefinition,
+  EngineCardDefinition,
+  EngineDreamsignDefinition,
+  EngineDreamwellDefinition,
+} from "./catalog";
 import type { AbilityList } from "./dsl/types";
 
 const NO_ABILITIES: AbilityList = () => [];
@@ -49,4 +57,22 @@ export function contentCardDefinitions(): EngineCardDefinition[] {
 
 export function contentDreamwellDefinitions(): EngineDreamwellDefinition[] {
   return DREAMWELL_CARDS.map(engineDreamwellFromContent);
+}
+
+/** Avatar emblems from the catalog; a pending avatar has no abilities (D36). */
+export function contentAvatarDefinitions(): EngineAvatarDefinition[] {
+  return AVATARS.map((avatar) => ({
+    id: parseAvatarId(avatar.id),
+    status: contentState(avatar),
+    abilities: avatar.abilities ?? NO_ABILITIES,
+  }));
+}
+
+/** Dreamsign emblems from the catalog; a pending dreamsign has no abilities (D36). */
+export function contentDreamsignDefinitions(): EngineDreamsignDefinition[] {
+  return DREAMSIGNS.map((dreamsign) => ({
+    id: parseDreamsignId(dreamsign.id),
+    status: contentState(dreamsign),
+    abilities: dreamsign.abilities ?? NO_ABILITIES,
+  }));
 }

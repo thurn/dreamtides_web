@@ -1,4 +1,5 @@
-import type { EngineCatalog, EngineCardDefinition } from "../catalog";
+import type { EngineCatalog } from "../catalog";
+import type { Speed } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -10,27 +11,36 @@ export function hasFastWindow(state: BattleState, side: Side): boolean {
   return side === active ? phase === "day" || phase === "night" : phase === "dusk";
 }
 
-/** Whether the timing rules let `side` play a card of this definition now. */
-export function timingAllows(
-  state: BattleState,
-  side: Side,
-  definition: EngineCardDefinition,
-): boolean {
+/**
+ * Whether the timing rules let `side` play a card or activate an ability of
+ * this speed now (rules § Playing Cards and the Stack). Cards and activated
+ * abilities share these rules.
+ */
+export function timingAllows(state: BattleState, side: Side, speed: Speed): boolean {
   if (state.stack.length === 0) {
-    if (definition.speed === "standard") {
+    if (speed === "standard") {
       return side === state.turn.active && state.turn.phase === "day";
     }
+    // Fast, and Interrupt as a kind of Fast.
     return hasFastWindow(state, side);
   }
   // Only an Interrupt can be played onto a non-empty stack, as a response to
   // the opponent's item by the side holding priority.
   const top = state.stack[state.stack.length - 1];
   return (
-    definition.speed === "interrupt" &&
+    speed === "interrupt" &&
     state.priority === side &&
     top !== undefined &&
     top.controller === opponent(side)
   );
+}
+
+/**
+ * Whether `side` may take a special action that is available wherever it
+ * could play a Fast card but never as a response, such as `payToEnd` (C7).
+ */
+export function specialActionAllowed(state: BattleState, side: Side): boolean {
+  return state.stack.length === 0 && hasFastWindow(state, side);
 }
 
 /**
@@ -41,6 +51,7 @@ export function timingAllows(
 export function freeBackSlotsAfterStack(state: BattleState, catalog: EngineCatalog, side: Side): number {
   const pending = state.stack.filter(
     (item) =>
+      item.kind === "card" &&
       item.controller === side &&
       catalog.card(instanceOf(state, item.instance).cardId).cardType === "character",
   ).length;
@@ -59,7 +70,7 @@ export function canPlayFromHand(
     return false;
   }
   const definition = catalog.card(instance.cardId);
-  if (!timingAllows(state, side, definition)) {
+  if (!timingAllows(state, side, definition.speed)) {
     return false;
   }
   // An X cost needs at least 1● for X; the X prompt checks the rest.

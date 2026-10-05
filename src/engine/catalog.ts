@@ -1,7 +1,7 @@
 import type { CardSubtype } from "../types/card-identity";
-import type { AbilityList } from "./dsl/types";
-import type { CardId, DreamwellCardId, InstanceId } from "./state/ids";
-import type { StackItem } from "./state/types";
+import type { AbilityList, Speed } from "./dsl/types";
+import type { AvatarId, CardId, DreamsignId, DreamwellCardId, InstanceId } from "./state/ids";
+import type { CardStackItem } from "./state/types";
 import type { StepContext } from "./steps/types";
 
 /** Choices made while playing a card, carried on its stack item. */
@@ -18,11 +18,11 @@ export interface SyntheticHooks {
   /** Play-time choices, made before the commit point. */
   play?(ctx: StepContext, self: InstanceId): PlayChoices;
   /** Runs when the card resolves, before it moves to play or the void. */
-  resolve?(ctx: StepContext, item: StackItem): void;
+  resolve?(ctx: StepContext, item: CardStackItem): void;
 }
 
 /** How a card's timing category lets it be played (rules § Playing Cards and the Stack). */
-export type Speed = "standard" | "fast" | "interrupt";
+export type { Speed } from "./dsl/types";
 
 /** Combat keywords the challenge rules read. */
 export type CombatKeyword = "vengeful" | "awakened";
@@ -59,22 +59,57 @@ export interface EngineDreamwellDefinition {
   readonly status: ContentState;
 }
 
-/** Card and Dreamwell definitions by UUID. */
+/**
+ * The engine's view of an avatar or dreamsign: an emblem whose abilities use
+ * the same DSL as cards (P4). A pending emblem has no abilities (D36).
+ */
+export interface EngineEmblemDefinition<Id extends AvatarId | DreamsignId> {
+  readonly id: Id;
+  readonly status: ContentState;
+  readonly abilities: AbilityList;
+}
+
+export type EngineAvatarDefinition = EngineEmblemDefinition<AvatarId>;
+export type EngineDreamsignDefinition = EngineEmblemDefinition<DreamsignId>;
+
+/** Card, Dreamwell, avatar, and dreamsign definitions by UUID. */
 export interface EngineCatalog {
   card(id: CardId): EngineCardDefinition;
   dreamwellCard(id: DreamwellCardId): EngineDreamwellDefinition;
+  avatar(id: AvatarId): EngineAvatarDefinition;
+  dreamsign(id: DreamsignId): EngineDreamsignDefinition;
+}
+
+export interface EmblemDefinitions {
+  readonly avatars?: readonly EngineAvatarDefinition[];
+  readonly dreamsigns?: readonly EngineDreamsignDefinition[];
+}
+
+function lookup<K, V>(map: ReadonlyMap<K, V>, id: K, what: string): V {
+  const definition = map.get(id);
+  if (definition === undefined) {
+    throw new Error(`Unknown ${what} ${String(id)}`);
+  }
+  return definition;
 }
 
 /** Builds a catalog over the given definitions; unknown UUIDs throw. */
 export function createCatalog(
   cards: readonly EngineCardDefinition[],
   dreamwellCards: readonly EngineDreamwellDefinition[],
+  emblems: EmblemDefinitions = {},
 ): EngineCatalog {
   const cardsById = new Map(cards.map((definition) => [definition.id, definition]));
   const dreamwellById = new Map(
     dreamwellCards.map((definition) => [definition.id, definition]),
   );
+  const avatarsById = new Map((emblems.avatars ?? []).map((definition) => [definition.id, definition]));
+  const dreamsignsById = new Map(
+    (emblems.dreamsigns ?? []).map((definition) => [definition.id, definition]),
+  );
   return {
+    avatar: (id) => lookup(avatarsById, id, "avatar"),
+    dreamsign: (id) => lookup(dreamsignsById, id, "dreamsign"),
     card(id) {
       const definition = cardsById.get(id);
       if (definition === undefined) {

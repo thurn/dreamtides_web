@@ -2,8 +2,13 @@
  * Synthetic card definitions: test fixtures that exercise engine rules, not
  * catalog content. Their UUIDs use the reserved `5e5e5e5e-` prefix.
  */
-import { createCatalog, type EngineCardDefinition, type EngineCatalog } from "../catalog";
-import { contentCardDefinitions, contentDreamwellDefinitions } from "../content-catalog";
+import { createCatalog, type EmblemDefinitions, type EngineCardDefinition, type EngineCatalog } from "../catalog";
+import {
+  contentAvatarDefinitions,
+  contentCardDefinitions,
+  contentDreamsignDefinitions,
+  contentDreamwellDefinitions,
+} from "../content-catalog";
 import { parseCardId } from "../../types/card-identity";
 import type { CardId } from "../state/ids";
 
@@ -64,10 +69,20 @@ export const SYNTHETIC = {
 
 export const SYNTHETIC_CARDS: readonly EngineCardDefinition[] = Object.values(SYNTHETIC);
 
-/** A catalog of the given synthetic cards plus every catalog card and Dreamwell card. */
-export function testCatalog(extra: readonly EngineCardDefinition[] = []): EngineCatalog {
+/**
+ * A catalog of the given synthetic cards and emblems plus every catalog
+ * card, Dreamwell card, avatar, and dreamsign.
+ */
+export function testCatalog(
+  extra: readonly EngineCardDefinition[] = [],
+  emblems: EmblemDefinitions = {},
+): EngineCatalog {
   return createCatalog(
     [...SYNTHETIC_CARDS, ...extra, ...contentCardDefinitions()],
     contentDreamwellDefinitions(),
+    {
+      avatars: [...(emblems.avatars ?? []), ...contentAvatarDefinitions()],
+      dreamsigns: [...(emblems.dreamsigns ?? []), ...contentDreamsignDefinitions()],
+    },
   );
 }

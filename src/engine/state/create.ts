@@ -16,6 +16,8 @@ function emptySide(): SideState {
     banished: [],
     backRank: Array.from({ length: BACK_RANK_SIZE }, () => null),
     frontRank: Array.from({ length: FRONT_RANK_SIZE }, () => null),
+    avatar: null,
+    dreamsigns: [],
   };
 }
 
@@ -62,12 +64,24 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
     instances: {},
     stack: [],
     priority: null,
+    payable: [],
+    nextEffect: 1,
+    oncePerTurn: [],
     dreamwell: { deck: [], next: 0, catalog: [] },
     challenge: null,
     automaticSteps: 0,
     result: null,
   };
   for (const side of SIDES) {
+    const avatar = init.avatars?.[side];
+    if (avatar !== undefined) {
+      catalog.avatar(avatar);
+      state.sides[side].avatar = { id: avatar, exhausted: false };
+    }
+    for (const dreamsign of init.dreamsigns?.[side] ?? []) {
+      catalog.dreamsign(dreamsign);
+      state.sides[side].dreamsigns.push({ id: dreamsign });
+    }
     for (const entry of init.decks[side]) {
       catalog.card(entry.cardId);
       const id: InstanceId = `i${state.nextInstance}`;
@@ -79,7 +93,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
         controller: side,
         zone: "deck",
         variant: { amplified: entry.amplified === true },
-        status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false },
+        status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false },
         enteredZoneAt: 0,
       };
       state.instances[id] = instance;

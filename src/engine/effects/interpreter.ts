@@ -1,9 +1,15 @@
 import type { EngineCatalog } from "../catalog";
-import type { ChooseNumberPrompt, ChooseTargetsPrompt } from "../prompts/types";
-import { matchesCharacter, matchingCharacters, resolvePlayer } from "../dsl/selectors";
-import type { CharacterRef, Condition, TargetSpec, ValueExpr, Variant } from "../dsl/types";
-import { instanceOf } from "../rules/zones";
-import type { InstanceId, Side } from "../state/ids";
+import type { ChooseNumberPrompt, ChooseTargetsPrompt, PromptPurpose } from "../prompts/types";
+import {
+  matchesCharacter,
+  matchesStackItem,
+  matchingCharacters,
+  matchingStackItems,
+  resolvePlayer,
+} from "../dsl/selectors";
+import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, Variant } from "../dsl/types";
+import type { AbilitySource, CardId, InstanceId, Side } from "../state/ids";
+import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { primitiveDefinition } from "./registry";
@@ -13,8 +19,8 @@ import type { EffectEnv, EffectNode } from "./types";
  * Every play-time target spec in an effect, in walk order. A spec object
  * used in several places is one target ("that character"), listed once.
  */
-export function collectTargets(effect: EffectNode): TargetSpec[] {
-  const specs: TargetSpec[] = [];
+export function collectTargets(effect: EffectNode): PlayTimeTarget[] {
+  const specs: PlayTimeTarget[] = [];
   const walk = (node: EffectNode): void => {
     const definition = primitiveDefinition(node.op);
     for (const spec of definition.targets?.(node) ?? []) {
@@ -26,15 +32,27 @@ export function collectTargets(effect: EffectNode): TargetSpec[] {
   return specs;
 }
 
-/** The characters a target spec may choose now. */
+/** A prompt purpose for an ability of `source`; an emblem's prompts carry no instance or card. */
+export function purposeOf(
+  source: AbilitySource,
+  cardId: CardId | null,
+  ability: number,
+  role: string,
+): PromptPurpose {
+  return { source: sourceInstance(source), cardId, ability, role };
+}
+
+/** The characters or stack cards a target spec may choose now. */
 export function targetCandidates(
   state: BattleState,
   catalog: EngineCatalog,
-  spec: TargetSpec,
+  spec: PlayTimeTarget,
   controller: Side,
-  source: InstanceId,
+  source: AbilitySource,
 ): InstanceId[] {
-  return matchingCharacters(state, catalog, spec.selector, controller, source);
+  return spec.kind === "stackTarget"
+    ? matchingStackItems(state, catalog, spec.selector, controller, source)
+    : matchingCharacters(state, catalog, spec.selector, controller, source);
 }
 
 /**
@@ -44,24 +62,20 @@ export function targetCandidates(
  */
 export function chooseTargets(
   ctx: StepContext,
-  specs: readonly TargetSpec[],
+  specs: readonly PlayTimeTarget[],
   controller: Side,
-  source: InstanceId,
+  source: AbilitySource,
+  purpose: PromptPurpose,
 ): InstanceId[][] {
   return specs.map((spec) => {
     const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source);
-    const count = spec.count ?? 1;
+    const count = spec.kind === "stackTarget" ? 1 : (spec.count ?? 1);
     const chosen = ctx.choose<ChooseTargetsPrompt>({
       kind: "chooseTargets",
       side: controller,
-      purpose: {
-        source,
-        cardId: instanceOf(ctx.state, source).cardId,
-        ability: 0,
-        role: "target",
-      },
+      purpose,
       candidates,
-      min: spec.upTo === true ? 0 : count,
+      min: spec.kind === "target" && spec.upTo === true ? 0 : count,
       max: count,
     });
     return [...chosen];
@@ -69,11 +83,11 @@ export function chooseTargets(
 }
 
 /** Chooses X as a play-time prompt: at least 1, at most the energy left after the fixed cost. */
-export function chooseX(ctx: StepContext, controller: Side, source: InstanceId, available: number): number {
+export function chooseX(ctx: StepContext, controller: Side, purpose: PromptPurpose, available: number): number {
   return ctx.choose<ChooseNumberPrompt>({
     kind: "chooseNumber",
     side: controller,
-    purpose: { source, cardId: instanceOf(ctx.state, source).cardId, ability: 0, role: "chooseX" },
+    purpose,
     min: 1,
     max: available,
   });
@@ -110,8 +124,11 @@ export function checkCondition(ctx: StepContext, condition: Condition, env: Effe
  */
 export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
-    case "self":
-      return instanceOf(ctx.state, env.source).zone === "play" ? [env.source] : [];
+    case "self": {
+      // An emblem is never a character (P4).
+      const self = sourceInstance(env.source);
+      return self !== null && ctx.state.instances[self]?.zone === "play" ? [self] : [];
+    }
     case "all":
       return matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source);
     case "target": {
@@ -127,8 +144,28 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
   }
 }
 
+/**
+ * The stack cards a stack target applies to now: chosen targets still on the
+ * stack and still matching. If none remain, that part of the effect does
+ * nothing and reports noLegalTarget.
+ */
+export function resolveStackTargets(ctx: StepContext, spec: StackTargetSpec, env: EffectEnv): InstanceId[] {
+  const chosen = env.targetsOf(spec) ?? [];
+  const legal = chosen.filter((id) =>
+    matchesStackItem(ctx.state, ctx.catalog, spec.selector, id, env.controller, env.source),
+  );
+  if (legal.length === 0 && chosen.length > 0) {
+    ctx.emit({ kind: "noLegalTarget", source: env.source });
+  }
+  return legal;
+}
+
 export interface ResolveOptions {
-  readonly source: InstanceId;
+  readonly source: AbilitySource;
+  /** The ability's index in its source's ability list. */
+  readonly ability: number;
+  /** The source's card, or `null` for an emblem; prompt purposes carry it. */
+  readonly cardId: CardId | null;
   readonly controller: Side;
   readonly variant: Variant;
   readonly x: number | null;
@@ -141,6 +178,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
   const specs = collectTargets(effect);
   const env: EffectEnv = {
     source: options.source,
+    ability: options.ability,
     controller: options.controller,
     variant: options.variant,
     x: options.x,
@@ -150,6 +188,9 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     },
     run(node) {
       primitiveDefinition(node.op).resolve(ctx, node, env);
+    },
+    purpose(role) {
+      return purposeOf(options.source, options.cardId, options.ability, role);
     },
   };
   env.run(effect);

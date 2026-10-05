@@ -1,5 +1,4 @@
 import type { ChooseModePrompt } from "../../prompts/types";
-import { instanceOf } from "../../rules/zones";
 import { definePrimitive, type EffectNode } from "../types";
 
 /**
@@ -18,7 +17,7 @@ export const chooseOnePrimitive = definePrimitive<ChooseOneNode>({
     const mode = ctx.choose<ChooseModePrompt>({
       kind: "chooseMode",
       side: env.controller,
-      purpose: { source: env.source, cardId: instanceOf(ctx.state, env.source).cardId, ability: 0, role: "chooseOne" },
+      purpose: env.purpose("chooseOne"),
       options: node.modes.map((_, index) => ({ mode: index, legal: true })),
     });
     const chosen = node.modes[mode];

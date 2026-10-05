@@ -1,9 +1,14 @@
 import type { Variant } from "../dsl/types";
 import type {
+  AbilitySource,
+  AvatarId,
   BattleSeed,
   CardId,
+  DreamsignId,
   DreamwellCardId,
+  EffectId,
   InstanceId,
+  OncePerTurnKey,
   Phase,
   Side,
   Zone,
@@ -39,6 +44,10 @@ export interface BattleInit {
   readonly decks: Readonly<Record<Side, readonly DeckEntry[]>>;
   /** The Dreamwell catalog cards the shared Dreamwell deck is built from. */
   readonly dreamwell: readonly DreamwellCardId[];
+  /** Each side's avatar, in play from the start of the battle (P4). */
+  readonly avatars?: Readonly<Partial<Record<Side, AvatarId>>>;
+  /** Each side's dreamsigns, in order. */
+  readonly dreamsigns?: Readonly<Partial<Record<Side, readonly DreamsignId[]>>>;
 }
 
 export interface CardStatus {
@@ -48,8 +57,10 @@ export interface CardStatus {
   /** Spark gained until end of turn; removed during Ending wherever the card is. */
   turnSpark: number;
   counters: number;
-  /** Created by an effect rather than drawn from a deck. */
+  /** Created by an effect rather than drawn from a deck; it ceases to exist instead of leaving play or the stack. */
   created: boolean;
+  /** Played by Reclaim; it is banished instead of any other zone change. */
+  reclaimed: boolean;
 }
 
 export interface CardInstance {
@@ -64,13 +75,61 @@ export interface CardInstance {
   enteredZoneAt: number;
 }
 
-export interface StackItem {
-  readonly instance: InstanceId;
+interface StackItemBase {
   readonly controller: Side;
   /** Targets chosen when the item was played, one list per target spec in walk order. */
   readonly targets: readonly (readonly InstanceId[])[];
   /** The value chosen for X, if the item has an X. */
   readonly x: number | null;
+}
+
+/** A played card on the stack. */
+export interface CardStackItem extends StackItemBase {
+  readonly kind: "card";
+  readonly instance: InstanceId;
+}
+
+/**
+ * Where an activated ability's definition comes from, captured at
+ * activation so the ability resolves even if its source has left play.
+ */
+export type AbilityOrigin =
+  | { readonly kind: "card"; readonly cardId: CardId; readonly variant: Variant }
+  | { readonly kind: "avatar"; readonly id: AvatarId }
+  | { readonly kind: "dreamsign"; readonly id: DreamsignId };
+
+/** An activated ability on the stack. */
+export interface AbilityStackItem extends StackItemBase {
+  readonly kind: "ability";
+  readonly source: AbilitySource;
+  /** The ability's index in its source's ability list. */
+  readonly ability: number;
+  readonly origin: AbilityOrigin;
+}
+
+export type StackItem = CardStackItem | AbilityStackItem;
+
+/** A side's avatar: not a character; its exhausted status serves only its ☾ costs (P4). */
+export interface AvatarEmblem {
+  readonly id: AvatarId;
+  exhausted: boolean;
+}
+
+export interface DreamsignEmblem {
+  readonly id: DreamsignId;
+}
+
+/**
+ * An effect lasting "until the opponent pays N●": `payer` may end it with the
+ * `payToEnd` action (C7). Duration-bearing effects key their changes by `id`
+ * and end when the record is removed.
+ */
+export interface PayableEffect {
+  readonly id: EffectId;
+  readonly payer: Side;
+  /** Energy the payer pays to end the effect. */
+  readonly cost: number;
+  readonly source: AbilitySource;
 }
 
 export interface SideState {
@@ -88,6 +147,8 @@ export interface SideState {
   backRank: (InstanceId | null)[];
   /** `F0`–`F8`. */
   frontRank: (InstanceId | null)[];
+  avatar: AvatarEmblem | null;
+  dreamsigns: DreamsignEmblem[];
 }
 
 export interface TurnState {
@@ -152,6 +213,12 @@ export interface BattleState {
   /** The last element is the top. */
   stack: StackItem[];
   priority: Side | null;
+  /** Effects their payer may end with `payToEnd`, in registration order. */
+  payable: PayableEffect[];
+  /** Next effect number to mint. */
+  nextEffect: number;
+  /** Once-per-turn abilities used this turn, by source key and ability index. */
+  oncePerTurn: OncePerTurnKey[];
   dreamwell: DreamwellState;
   challenge: ChallengeState | null;
   /** Automatic steps run since the last top-level decision. */

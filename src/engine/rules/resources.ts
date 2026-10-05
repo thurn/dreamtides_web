@@ -10,6 +10,19 @@ export function setEnergy(ctx: StepContext, side: Side, current: number, max: nu
   ctx.emit({ kind: "energyChanged", side, current: state.currentEnergy, max: state.maxEnergy });
 }
 
+/** Spends energy `side` has; callers check that it can pay. */
+export function spendEnergy(ctx: StepContext, side: Side, amount: number): void {
+  if (amount === 0) {
+    return;
+  }
+  const state = ctx.state.sides[side];
+  if (amount > state.currentEnergy) {
+    throw new Error(`${side} cannot pay ${String(amount)}●`);
+  }
+  state.currentEnergy -= amount;
+  ctx.emit({ kind: "energyChanged", side, current: state.currentEnergy, max: state.maxEnergy });
+}
+
 /** Adds victory points; a total never goes below 0 (C14). */
 export function gainPoints(
   ctx: StepContext,

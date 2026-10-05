@@ -1,3 +1,4 @@
+import type { EngineCardDefinition } from "../catalog";
 import { contentCardDefinitions, contentDreamwellDefinitions } from "../content-catalog";
 import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
@@ -17,6 +18,7 @@ import { PolicyRandom, randomAction } from "./random-policy";
 import { SYNTHETIC_CARDS, testCatalog } from "./synthetic-cards";
 import { PROMPTING_CARDS } from "./synthetic-effects";
 import { DSL_CARDS } from "./dsl-cards";
+import { AVATAR, DREAMSIGN, STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stack-cards";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
 export interface RecordedAction {
@@ -44,14 +46,17 @@ export const DECK_SIZE = 30;
 /** Top-level actions after which a game counts as non-terminating. */
 export const ACTION_CAP = 20000;
 
-/** Every card the fuzzer draws from: synthetic vanilla, prompting, and DSL cards plus the full pool. */
+/** Synthetic cards the fuzzer mixes in: vanilla, prompting, DSL, and stack fixtures (Interrupts, prevent, activated abilities). */
+const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS];
+
+/** Every card the fuzzer draws from: the synthetic fixtures plus the full pool. */
 export function fuzzCatalogCards() {
-  return [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...contentCardDefinitions()];
+  return [...FUZZ_SYNTHETIC, ...contentCardDefinitions()];
 }
 
-/** The fuzzer's catalog: synthetic vanilla, prompting, and DSL cards plus the full card pool. */
-export function fuzzEngineCatalog() {
-  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS]);
+/** The fuzzer's catalog: the synthetic fixtures and emblems, any `extra` cards, and the full catalog. */
+export function fuzzEngineCatalog(extra: readonly EngineCardDefinition[] = []) {
+  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...extra], SYNTHETIC_EMBLEMS);
 }
 
 /**
@@ -60,7 +65,7 @@ export function fuzzEngineCatalog() {
  * entries are amplified.
  */
 export function randomDeck(random: PolicyRandom): DeckEntry[] {
-  const synthetic = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS];
+  const synthetic = FUZZ_SYNTHETIC;
   const pool = contentCardDefinitions();
   return Array.from({ length: DECK_SIZE }, () => ({
     cardId: (random.next() < 0.5 ? random.pick(synthetic) : random.pick(pool)).id,
@@ -70,12 +75,15 @@ export function randomDeck(random: PolicyRandom): DeckEntry[] {
 
 export function fuzzInit(seed: BattleSeed): BattleInit {
   const random = new PolicyRandom(battleSeed(`decks|${seed}`));
+  const avatars = Object.values(AVATAR).map((avatar) => avatar.id);
   return {
     seed,
     scoreToWin: 25,
     startingSide: random.next() < 0.5 ? "player" : "enemy",
     decks: { player: randomDeck(random), enemy: randomDeck(random) },
     dreamwell: contentDreamwellDefinitions().map((card) => card.id),
+    avatars: { player: random.pick(avatars), enemy: random.pick(avatars) },
+    dreamsigns: { player: random.next() < 0.5 ? [DREAMSIGN.points.id] : [] },
   };
 }
 

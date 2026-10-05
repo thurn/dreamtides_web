@@ -1,4 +1,5 @@
-import type { InstanceId, Side, Slot } from "../state/ids";
+import type { AbilitySource, EffectId, InstanceId, Side, Slot } from "../state/ids";
+import { sourceKey } from "../state/ids";
 
 /**
  * A top-level action. Actions carry no choices: every choice an action needs
@@ -6,8 +7,12 @@ import type { InstanceId, Side, Slot } from "../state/ids";
  */
 export type Action =
   | { readonly kind: "play"; readonly card: InstanceId; readonly from: "hand" }
+  | { readonly kind: "activate"; readonly source: AbilitySource; readonly ability: number }
   | { readonly kind: "reposition"; readonly card: InstanceId; readonly to: Slot }
-  | { readonly kind: "pass" };
+  /** Pass priority, or end the current Day, Dusk, or Night. */
+  | { readonly kind: "pass" }
+  /** Pay to end an effect lasting "until the opponent pays N●" (C7). */
+  | { readonly kind: "payToEnd"; readonly effect: EffectId };
 
 /**
  * The pending top-level decision: `main` while a side may act in its Day,
@@ -24,6 +29,8 @@ export function actionsEqual(a: Action, b: Action): boolean {
   switch (a.kind) {
     case "play":
       return b.kind === "play" && a.card === b.card && a.from === b.from;
+    case "activate":
+      return b.kind === "activate" && sourceKey(a.source) === sourceKey(b.source) && a.ability === b.ability;
     case "reposition":
       return (
         b.kind === "reposition" &&
@@ -33,5 +40,7 @@ export function actionsEqual(a: Action, b: Action): boolean {
       );
     case "pass":
       return b.kind === "pass";
+    case "payToEnd":
+      return b.kind === "payToEnd" && a.effect === b.effect;
   }
 }

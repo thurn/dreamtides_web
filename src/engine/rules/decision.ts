@@ -3,7 +3,8 @@ import type { Side, Slot } from "../state/ids";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { Action, Decision } from "./actions";
-import { legalPlays, type LegalityMemo } from "./legality";
+import { legalMoves, type LegalityMemo } from "./legality";
+import { payableNow } from "./payable";
 import { charactersInPlay, instanceOf, occupant, slotOf } from "./zones";
 
 /** The side that acts in the current main window, or `null` outside Day, Dusk, and Night. */
@@ -62,15 +63,18 @@ function legalRepositions(state: BattleState, side: Side): Action[] {
   return actions;
 }
 
-function playActions(
+/** The plays and activations `side` may make now: its responses while the stack is non-empty. */
+function stackActions(
   state: BattleState,
   catalog: EngineCatalog,
   side: Side,
   memo: LegalityMemo,
 ): Action[] {
-  return legalPlays(state, catalog, side, memo).map(
-    (card): Action => ({ kind: "play", card, from: "hand" }),
-  );
+  const { plays, activations } = legalMoves(state, catalog, side, memo);
+  return [
+    ...plays.map((card): Action => ({ kind: "play", card, from: "hand" })),
+    ...activations.map((activation): Action => ({ kind: "activate", ...activation })),
+  ];
 }
 
 /**
@@ -90,15 +94,16 @@ export function legalActions(
     if (state.priority !== side) {
       return [];
     }
-    return [{ kind: "pass" }, ...playActions(state, catalog, side, memo)];
+    return [{ kind: "pass" }, ...stackActions(state, catalog, side, memo)];
   }
   if (mainWindowSide(state) !== side) {
     return [];
   }
   return [
     { kind: "pass" },
-    ...playActions(state, catalog, side, memo),
+    ...stackActions(state, catalog, side, memo),
     ...legalRepositions(state, side),
+    ...payableNow(state, side).map((effect): Action => ({ kind: "payToEnd", effect: effect.id })),
   ];
 }
 
@@ -116,7 +121,7 @@ export function decision(
   }
   if (state.stack.length > 0) {
     const side = state.priority;
-    if (side === null || legalPlays(state, catalog, side, memo).length === 0) {
+    if (side === null || stackActions(state, catalog, side, memo).length === 0) {
       return null;
     }
     return { kind: "respond", side };

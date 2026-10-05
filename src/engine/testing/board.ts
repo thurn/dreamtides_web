@@ -1,6 +1,6 @@
 import type { EngineCatalog } from "../catalog";
 import { initialState } from "../state/create";
-import type { CardId, InstanceId, Phase, Side } from "../state/ids";
+import type { AvatarId, CardId, DreamsignId, InstanceId, Phase, Side } from "../state/ids";
 import { battleSeed, SIDES } from "../state/ids";
 import type { BattleState, CardInstance } from "../state/types";
 
@@ -13,6 +13,8 @@ export interface SideSetup {
   readonly deck?: readonly CardId[];
   readonly energy?: number;
   readonly score?: number;
+  readonly avatar?: AvatarId;
+  readonly dreamsigns?: readonly DreamsignId[];
 }
 
 export interface BoardSetup {
@@ -66,7 +68,7 @@ export function boardState(
       controller: side,
       zone,
       variant: { amplified },
-      status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false },
+      status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false },
       enteredZoneAt: 0,
     };
     return id;
@@ -77,6 +79,14 @@ export function boardState(
     sideState.currentEnergy = sideSetup.energy ?? 0;
     sideState.maxEnergy = sideSetup.energy ?? 0;
     sideState.score = sideSetup.score ?? 0;
+    if (sideSetup.avatar !== undefined) {
+      catalog.avatar(sideSetup.avatar);
+      sideState.avatar = { id: sideSetup.avatar, exhausted: false };
+    }
+    for (const dreamsign of sideSetup.dreamsigns ?? []) {
+      catalog.dreamsign(dreamsign);
+      sideState.dreamsigns.push({ id: dreamsign });
+    }
     (sideSetup.front ?? []).forEach((cardId, lane) => {
       const id = cardId === null ? null : mint(side, cardId, "play");
       sideState.frontRank[lane] = id;

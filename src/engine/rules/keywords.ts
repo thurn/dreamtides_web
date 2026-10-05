@@ -14,7 +14,7 @@ export function hasKeyword(
   const instance = instanceOf(state, id);
   const definition = catalog.card(instance.cardId);
   return (
-    definition.keywords.includes(keyword) ||
+    definition.keywords.some((printed) => printed === keyword) ||
     definition
       .abilities(instance.variant)
       .some((ability) => ability.kind === "keyword" && ability.keyword === keyword)

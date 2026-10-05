@@ -43,6 +43,7 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
     }
   }
   for (const item of state.stack) {
+    if (item.kind !== "card") continue;
     record(item.instance, "stack");
     if (state.instances[item.instance]?.zone !== "stack") {
       problems.push(`${item.instance} on the stack but recorded elsewhere`);

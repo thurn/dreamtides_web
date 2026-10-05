@@ -24,11 +24,14 @@ export class PolicyRandom {
 }
 
 /**
- * The Random policy: passes a quarter of the time, otherwise plays a card when
- * it can, otherwise repositions, so random games make progress and end.
+ * The Random policy: passes a quarter of the time, otherwise plays a card,
+ * activates an ability, or pays to end an effect when it can, otherwise
+ * repositions, so random games make progress and end.
  */
 export function randomAction(legal: readonly Action[], random: PolicyRandom): Action {
-  const plays = legal.filter((action) => action.kind === "play");
+  const plays = legal.filter(
+    (action) => action.kind === "play" || action.kind === "activate" || action.kind === "payToEnd",
+  );
   const moves = legal.filter((action) => action.kind === "reposition");
   const roll = random.next();
   if (roll < 0.25 || (plays.length === 0 && moves.length === 0)) {

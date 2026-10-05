@@ -15,10 +15,9 @@ import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { ScriptedSource } from "../steps/sources";
 import { boardState, type BoardSetup } from "../testing/board";
-import { playFuzzGame, replayInteractively } from "../testing/fuzz";
-import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
-import { DSL_CARDS } from "../testing/dsl-cards";
-import { PROMPTING, PROMPTING_CARDS } from "../testing/synthetic-effects";
+import { fuzzEngineCatalog, playFuzzGame, replayInteractively } from "../testing/fuzz";
+import { SYNTHETIC, syntheticId } from "../testing/synthetic-cards";
+import { PROMPTING } from "../testing/synthetic-effects";
 import { parsePromptId } from "../../types/identifiers";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "./slice";
 
@@ -123,7 +122,7 @@ const MALFORMED = [
   ),
 ];
 
-const engine = createEngine(testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, divergent, emptyPrompt, emitThenChoose, ...MALFORMED]));
+const engine = createEngine(fuzzEngineCatalog([divergent, emptyPrompt, emitThenChoose, ...MALFORMED]));
 const fold = createFoldAdapter(engine, { checkEventPrefix: true });
 
 function slice(setup: BoardSetup): { slice: BattleSlice; ids: ReturnType<typeof boardState>["ids"] } {

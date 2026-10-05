@@ -18,7 +18,37 @@ export function opponent(side: Side): Side {
 export type InstanceId = `i${number}`;
 
 export type { CardId } from "../../types/card-identity";
-export type { DreamwellCardId } from "../../types/identifiers";
+export type { AvatarId, DreamsignId, DreamwellCardId } from "../../types/identifiers";
+
+/**
+ * A side's avatar or one of its dreamsigns. Emblems are not characters and
+ * not card instances (P4): they have no position, spark, or zone.
+ */
+export type EmblemRef =
+  | { readonly kind: "avatar"; readonly side: Side }
+  | { readonly kind: "dreamsign"; readonly side: Side; readonly index: number };
+
+/** What an ability belongs to: a card instance or an emblem. */
+export type AbilitySource = InstanceId | EmblemRef;
+
+/** A stable key for an ability source: `i12`, `avatar:player`, `dreamsign:enemy:0`. */
+export type SourceKey = InstanceId | `avatar:${Side}` | `dreamsign:${Side}:${number}`;
+
+export function sourceKey(source: AbilitySource): SourceKey {
+  if (typeof source === "string") return source;
+  return source.kind === "avatar" ? `avatar:${source.side}` : `dreamsign:${source.side}:${source.index}`;
+}
+
+/** Names one ability of one source for once-per-turn tracking: `<source key>#<ability index>`. */
+export type OncePerTurnKey = `${SourceKey}#${number}`;
+
+/** The instance an ability source names, or `null` for an emblem. */
+export function sourceInstance(source: AbilitySource): InstanceId | null {
+  return typeof source === "string" ? source : null;
+}
+
+/** An effect registered on the battle state, such as one a player may pay to end (C7). */
+export type EffectId = `e${number}`;
 
 /** A battle's seed, derived by the host from the game seed and battle index. */
 export type BattleSeed = string & { readonly __brand: "BattleSeed" };

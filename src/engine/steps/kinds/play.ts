@@ -1,5 +1,6 @@
-import { eventTargetSpecs } from "../../effects/abilities";
-import { chooseTargets, chooseX } from "../../effects/interpreter";
+import { eventAbilities } from "../../effects/abilities";
+import { chooseTargets, chooseX, purposeOf } from "../../effects/interpreter";
+import { spendEnergy } from "../../rules/resources";
 import { canPlayFromHand } from "../../rules/timing";
 import { instanceOf, moveToStack } from "../../rules/zones";
 import type { InstanceId } from "../../state/ids";
@@ -9,7 +10,7 @@ import type { StepDefinition } from "../types";
 /**
  * Plays a card from hand: play-time choices (X, then targets), then the
  * commit point, then the cost, then the card moves to the stack and the
- * opponent receives priority.
+ * opponent receives priority (D13).
  */
 export interface PlayStep {
   readonly kind: "play";
@@ -28,28 +29,22 @@ export const play: StepDefinition<PlayStep> = {
     }
     const definition = catalog.card(instance.cardId);
     let x: number | null = null;
-    let targets: (readonly (readonly InstanceId[])[]) = [];
+    let targets: readonly (readonly InstanceId[])[] = [];
     if (definition.synthetic?.play !== undefined) {
       const choices = definition.synthetic.play(ctx, step.card);
       x = choices.x ?? null;
       targets = choices.targets ?? [];
     } else {
       if (definition.cost === null) {
-        x = chooseX(ctx, side, step.card, state.sides[side].currentEnergy);
+        const purpose = purposeOf(step.card, instance.cardId, 0, "chooseX");
+        x = chooseX(ctx, side, purpose, state.sides[side].currentEnergy);
       }
-      targets = eventTargetSpecs(definition, instance.variant).flatMap((specs) =>
-        chooseTargets(ctx, specs, side, step.card),
+      targets = eventAbilities(definition, instance.variant).flatMap((ability) =>
+        chooseTargets(ctx, ability.targets, side, step.card, purposeOf(step.card, instance.cardId, ability.ability, "target")),
       );
     }
     ctx.commitPoint();
-    const cost = (definition.cost ?? 0) + (x ?? 0);
-    state.sides[side].currentEnergy -= cost;
-    ctx.emit({
-      kind: "energyChanged",
-      side,
-      current: state.sides[side].currentEnergy,
-      max: state.sides[side].maxEnergy,
-    });
+    spendEnergy(ctx, side, (definition.cost ?? 0) + (x ?? 0));
     moveToStack(ctx, step.card, side, { targets, x });
     ctx.emit({ kind: "cardPlayed", side, instance: step.card });
     if (definition.status === "pending") {

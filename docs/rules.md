@@ -667,7 +667,9 @@ written as "Cost: Effect" (for example "2●: Draw a card" or "1⧗, ☾: Draw a
 card"). They can be used any number of times per turn unless "Once per turn"
 appears. Activated abilities use the same timing categories as cards: standard
 abilities are Day-only while the stack is empty, Fast abilities follow Fast
-timing, and Interrupt abilities follow Interrupt timing.
+timing, and Interrupt abilities follow Interrupt timing. An activated ability
+on the stack is independent of its source: it resolves even if its source has
+left play, using the ability as it was when activated.
 
 **Static abilities** — Always-on rule modifications that apply while their source
 is in play, such as cost reductions, spark bonuses for matching characters, or

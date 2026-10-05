@@ -15,6 +15,7 @@ export * from "./gain-points";
 export * from "./gain-spark";
 export * from "./if-then";
 export * from "./optional";
+export * from "./prevent";
 export * from "./repeat";
 export * from "./return-to-hand";
 export * from "./sequence";

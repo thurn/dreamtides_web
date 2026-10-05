@@ -3,7 +3,7 @@ import { createEngine } from "../engine";
 import { serializeState, stateHash } from "../state/hash";
 import type { CardId, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
-import type { BattleState } from "../state/types";
+import type { BattleState, StackItem } from "../state/types";
 import { NO_PROMPTS } from "../steps/sources";
 import { boardState } from "../testing/board";
 import { fuzzEngineCatalog, fuzzInit } from "../testing/fuzz";
@@ -26,11 +26,11 @@ function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("v
     controller: owner,
     zone,
     variant: { amplified: false },
-    status: { exhausted: false, gainedSpark: 1, turnSpark: 0, counters: 2, created: false },
+    status: { exhausted: false, gainedSpark: 1, turnSpark: 0, counters: 2, created: false, reclaimed: false },
     enteredZoneAt: 3,
   };
   if (zone === "stack") {
-    state.stack.push({ instance: id, controller: owner, targets: [], x: null });
+    state.stack.push({ kind: "card", instance: id, controller: owner, targets: [], x: null });
   } else {
     state.sides[owner][zone].push(id);
   }
@@ -55,7 +55,7 @@ function fixture() {
   const enemyFront = ids.enemy.front[0];
   const playerFront = ids.player.front[0];
   if (enemyFront === null || playerFront === null) throw new Error("fixture has empty fronts");
-  state.stack[0] = { instance: stacked, controller: "player", targets: [[enemyFront, ids.enemy.hand[0]]], x: 2 };
+  state.stack[0] = { kind: "card", instance: stacked, controller: "player", targets: [[enemyFront, ids.enemy.hand[0]]], x: 2 };
   state.challenge = { challengers: [playerFront], blockers: { [playerFront]: enemyFront } };
   state.result = { kind: "victory", winner: "player", reason: "score" };
   state.rng["shuffle:player"] = 4;
@@ -168,7 +168,8 @@ describe("view", () => {
       expect(seen.config).toEqual(state.config);
       expect(seen.challenge).toEqual(state.challenge);
       expect(seen.result).toEqual(state.result);
-      expect(seen.stack.map((item) => item.instance)).toEqual(state.stack.map((item) => item.instance));
+      const stacked = (items: readonly StackItem[]) => items.map((item) => (item.kind === "card" ? item.instance : null));
+      expect(stacked(seen.stack)).toEqual(stacked(state.stack));
     }
   });
 });

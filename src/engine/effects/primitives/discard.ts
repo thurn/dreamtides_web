@@ -2,7 +2,6 @@ import { resolvePlayer } from "../../dsl/selectors";
 import type { PlayerRef, ValueExpr } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
 import { discardCard } from "../../rules/resources";
-import { instanceOf } from "../../rules/zones";
 import { evaluate } from "../interpreter";
 import { definePrimitive } from "../types";
 
@@ -37,7 +36,7 @@ export const discardPrimitive = definePrimitive<DiscardNode>({
       chosen = ctx.choose<ChooseCardsPrompt>({
         kind: "chooseCards",
         side,
-        purpose: { source: env.source, cardId: instanceOf(ctx.state, env.source).cardId, ability: 0, role: "discard" },
+        purpose: env.purpose("discard"),
         candidates: hand,
         min: count,
         max: count,

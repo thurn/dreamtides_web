@@ -55,6 +55,8 @@ export function labBoard(
   const back: Record<Side, CardId[]> = { player: [], enemy: [] };
   for (const specs of eventTargetSpecs(definition, { amplified: false })) {
     for (const spec of specs) {
+      // A stack target needs an item on the stack, which a Day board never has; lab overrides supply one.
+      if (spec.kind !== "target") continue;
       const side: Side = spec.selector.controller === "you" ? "player" : "enemy";
       for (let index = 0; index < (spec.count ?? 1); index++) {
         back[side].push(characterFor(engine, spec.selector, pool));

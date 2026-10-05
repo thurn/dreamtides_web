@@ -30,6 +30,25 @@ export interface CharacterSelector {
   readonly rank?: "front" | "back";
 }
 
+/**
+ * Which cards on the stack a selector matches. Activated abilities on the
+ * stack are not cards, so no stack selector matches them.
+ */
+export interface StackItemSelector {
+  readonly kind: "stackItem";
+  /** Whose item, relative to the effect's controller. */
+  readonly controller: "you" | "opponent" | "any";
+  readonly cardType?: "character" | "event";
+  /** Only items that can be prevented: excludes cards that cannot be prevented. */
+  readonly preventable?: boolean;
+}
+
+/** A card on the stack chosen when the card or ability is played. */
+export interface StackTargetSpec {
+  readonly kind: "stackTarget";
+  readonly selector: StackItemSelector;
+}
+
 /** A target chosen when the card is played (rules § Targeting). */
 export interface TargetSpec {
   readonly kind: "target";
@@ -54,6 +73,9 @@ export interface SelfSpec {
 /** The characters a character effect applies to. */
 export type CharacterRef = TargetSpec | AllSpec | SelfSpec;
 
+/** Any target chosen at play time: characters in play or cards on the stack. */
+export type PlayTimeTarget = TargetSpec | StackTargetSpec;
+
 /** A number an effect reads when it resolves. */
 export type ValueExpr =
   | number
@@ -70,11 +92,39 @@ export type Condition =
   | { readonly cond: "energyAtLeast"; readonly amount: number };
 
 /** Keywords printed on a card. */
-export type Keyword = "vengeful" | "awakened";
+export type Keyword = "vengeful" | "awakened" | "cannotBePrevented";
+
+/** A timing category: when a card or activated ability may be played (rules § Playing Cards and the Stack). */
+export type Speed = "standard" | "fast" | "interrupt";
+
+/**
+ * One cost of an activated ability (engine-design § Costs). Choices among
+ * costs are play-time prompts; payment happens after the commit point.
+ */
+export type Cost =
+  | { readonly cost: "energy"; readonly amount: number }
+  /** X●, chosen as the ability is activated; X is at least 1. */
+  | { readonly cost: "energyX" }
+  /** ☾: exhausts the source, a ready back-rank character or the avatar. */
+  | { readonly cost: "exhaustSelf" }
+  /** Abandon characters you control that match the selector. */
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: number }
+  /** Discard cards from your hand. */
+  | { readonly cost: "discard"; readonly count: number };
+
+/** "Cost: Effect" — an ability its controller activates; it goes on the stack. */
+export interface ActivatedAbility {
+  readonly kind: "activated";
+  readonly costs: readonly Cost[];
+  readonly effect: Effect;
+  readonly speed: Speed;
+  readonly oncePerTurn?: boolean;
+}
 
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
-  | { readonly kind: "keyword"; readonly keyword: Keyword };
+  | { readonly kind: "keyword"; readonly keyword: Keyword }
+  | ActivatedAbility;
 
 /** A card's abilities for a variant; the amplified flag selects amplified text's behavior. */
 export type AbilityList = (variant: Variant) => readonly Ability[];

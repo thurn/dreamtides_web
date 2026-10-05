@@ -16,6 +16,10 @@ export function stepForAction(state: BattleState, action: Action): Step {
   switch (action.kind) {
     case "play":
       return { kind: "play", card: action.card };
+    case "activate":
+      return { kind: "activate", source: action.source, ability: action.ability };
+    case "payToEnd":
+      return { kind: "payToEnd", effect: action.effect };
     case "reposition":
       return { kind: "reposition", card: action.card, to: action.to };
     case "pass":

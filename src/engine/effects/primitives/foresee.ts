@@ -1,6 +1,6 @@
 import type { ValueExpr } from "../../dsl/types";
 import type { ArrangePrompt } from "../../prompts/types";
-import { instanceOf, moveInstance } from "../../rules/zones";
+import { moveInstance } from "../../rules/zones";
 import { evaluate } from "../interpreter";
 import { definePrimitive } from "../types";
 
@@ -20,7 +20,7 @@ export const foreseePrimitive = definePrimitive<ForeseeNode>({
       kind: "arrange",
       side,
       privateTo: side,
-      purpose: { source: env.source, cardId: instanceOf(ctx.state, env.source).cardId, ability: 0, role: "foresee" },
+      purpose: env.purpose("foresee"),
       cards,
       destinations: [
         { to: "top", min: 0, max: cards.length },
