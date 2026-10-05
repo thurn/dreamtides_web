@@ -1,12 +1,16 @@
 // A local game: one `LocalLog` written through to a `GameRepository`.
 //
 // Every committed event is persisted in seq order. Appends made in the same
-// task are batched into one atomic write, and a failed write is retried, in
-// order, with the next batch. Every `checkpointInterval` events the batch also
-// carries a fold checkpoint, so opening a long game replays at most that many
-// events. Opening verifies the checkpoint against its stored hash and falls
-// back to replaying from genesis when it does not match.
+// task are batched into one atomic write. A failed write is requeued ahead of
+// later events and retried on its own after a backoff delay
+// (`GAME_EVENT_PERSISTENCE`), or sooner with the next batch, until it lands or
+// the game closes. Every `checkpointInterval` events the batch also carries a
+// fold checkpoint, so opening a long game replays at most that many events.
+// Opening verifies the checkpoint against its stored hash and falls back to
+// replaying from genesis when it does not match; the events the checkpoint
+// covers still load into the log's event list, unfolded.
 
+import { GAME_EVENT_PERSISTENCE } from "../content/game-logs";
 import {
   createLocalLog,
   type LocalLog,
@@ -55,7 +59,10 @@ export interface LocalGameOptions {
   now?: () => number;
   /** Clock for event `clientTimestamp`s. */
   eventClock?: () => string;
-  /** A batch failed to persist; it is retried with the next batch. */
+  /**
+   * A batch failed to persist; it is retried after a backoff delay or with the
+   * next batch, whichever comes first.
+   */
   onPersistError?: (error: unknown) => void;
 }
 
@@ -87,7 +94,7 @@ export async function createLocalGame<S>(
     config,
     { summary, genesis: game.genesis, checkpoint: null },
     undefined,
-    [],
+    { history: [], events: [] },
     { checkpointSeq: 0, checkpointRejected: false },
     options,
   );
@@ -104,13 +111,17 @@ export async function openLocalGame<S>(
   if (stored === null) return null;
   const base = verifiedCheckpoint(config, stored);
   const checkpointRejected = stored.checkpoint !== null && base === undefined;
-  const events = await repository.readEvents(gameId, base?.seq ?? 0);
+  const storedEvents = await repository.readEvents(gameId, 0);
+  const baseSeq = base?.seq ?? 0;
   return attach(
     repository,
     config,
     stored,
     base,
-    events,
+    {
+      history: storedEvents.slice(0, baseSeq),
+      events: storedEvents.slice(baseSeq),
+    },
     { checkpointSeq: base?.seq ?? 0, checkpointRejected },
     options,
   );
@@ -145,12 +156,30 @@ function encodeCheckpoint<S>(
   };
 }
 
+/** The stored events of a game, split at its fold base. */
+interface StoredEvents {
+  /** Events the base covers: kept in the event list, not folded. */
+  history: readonly CommittedEvent[];
+  /** Events after the base, folded on open. */
+  events: readonly CommittedEvent[];
+}
+
+/** Backoff before the retry that follows `failures` consecutive failures. */
+function retryDelayMs(failures: number): number {
+  const { retryInitialDelayMs, retryBackoffFactor, retryMaxDelayMs } =
+    GAME_EVENT_PERSISTENCE;
+  return Math.min(
+    retryInitialDelayMs * retryBackoffFactor ** Math.max(0, failures - 1),
+    retryMaxDelayMs,
+  );
+}
+
 function attach<S>(
   repository: GameRepository,
   config: EngineConfig<S>,
   stored: StoredLocalGame,
   base: LocalLogBase<S> | undefined,
-  events: readonly CommittedEvent[],
+  { history, events }: StoredEvents,
   checkpoint: Pick<LocalGameOpenReport, "checkpointSeq" | "checkpointRejected">,
   options: LocalGameOptions,
 ): LocalGame<S> {
@@ -167,6 +196,7 @@ function attach<S>(
       localActor: localPlayerId,
       base,
       events,
+      history,
       now: options.eventClock,
     });
   } catch (error) {
@@ -180,6 +210,9 @@ function attach<S>(
   let pendingEvents: CommittedEvent[] = [];
   let scheduled = false;
   let writing: Promise<void> | null = null;
+  let consecutiveFailures = 0;
+  let retryTimer: ReturnType<typeof setTimeout> | null = null;
+  let closed = false;
 
   const checkpointDue = (): boolean => log.head() - lastCheckpointSeq >= interval;
 
@@ -205,12 +238,25 @@ function attach<S>(
           ...(due === undefined ? {} : { checkpoint: due }),
         });
         if (due !== undefined) lastCheckpointSeq = due.seq;
+        consecutiveFailures = 0;
       } catch (error) {
         pendingEvents = [...batch, ...pendingEvents];
+        consecutiveFailures += 1;
         onPersistError(error);
+        scheduleRetry();
         return;
       }
     }
+  }
+
+  // A failed batch is retried without waiting for another append, so the last
+  // events before a reload still reach storage.
+  function scheduleRetry(): void {
+    if (closed || retryTimer !== null) return;
+    retryTimer = setTimeout(() => {
+      retryTimer = null;
+      void drain();
+    }, retryDelayMs(consecutiveFailures));
   }
 
   function drain(): Promise<void> {
@@ -248,6 +294,9 @@ function attach<S>(
     },
     flush: () => (writing ?? Promise.resolve()).then(drain),
     async close() {
+      closed = true;
+      if (retryTimer !== null) clearTimeout(retryTimer);
+      retryTimer = null;
       unsubscribe();
       await (writing ?? Promise.resolve()).then(drain);
     },

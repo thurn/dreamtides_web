@@ -1,8 +1,13 @@
-// Selects the local game the app plays. `?game=<id>` resumes that game from
-// storage; without it, or on request, a new game is created and the URL gains
-// its `?game=` id so a reload resumes it. A game opens only in the tab that
-// holds its lock (see `game-lock.ts`); another tab on it reports
-// `openElsewhere`. The open game's journey log is captured into storage.
+// Selects the local game the app plays. `?game=<id>` opens that game from
+// storage. Without it, the front door resumes this browser's most recently
+// played game when asked to (`resumeRecent`), and otherwise creates a new game;
+// "create game" requests always create one. A created or resumed game's id
+// replaces the URL's `?game=` in place, without a new history entry, so a
+// reload reopens it and Back and Forward never disagree with the game shown.
+// A game opens only in the tab that holds its lock (see `game-lock.ts`);
+// another tab on it reports `openElsewhere`, and a front-door resume of it
+// creates a new game instead. The open game's journey log is captured into
+// storage.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GAME_LOGS } from "../content/game-logs";
@@ -17,7 +22,7 @@ import {
   createLocalGameControls,
   type LocalGameControls,
 } from "./game-controls";
-import { attachGameLog } from "./game-log";
+import { attachGameLog, type LocalGameSelection } from "./game-log";
 import { createGameLogCapture, type GameLogCapture } from "./game-log-capture";
 import {
   acquireGameLock,
@@ -57,8 +62,13 @@ export type LocalGameStatus =
   | { kind: "error"; message: string };
 
 export interface UseLocalGameInput {
-  /** The `?game=` id, or null to create a new game. */
+  /** The `?game=` id, or null to resume or create a game. */
   gameId: RoomId | null;
+  /**
+   * Without a `gameId`, resume the most recently played stored game this build
+   * can play, creating a new game only when there is none.
+   */
+  resumeRecent?: boolean;
   /** This build's fold-relevant content configuration. */
   contentConfig: PinnedContentConfig;
   /** Front-door scene for a newly created game. */
@@ -77,6 +87,7 @@ interface OpenedGame {
   status: Extract<LocalGameStatus, { kind: "ready" }>;
   lock: GameLock;
   logCapture: GameLogCapture;
+  selection: LocalGameSelection;
 }
 
 type OpenResult = Exclude<LocalGameStatus, { kind: "ready" }> | OpenedGame;
@@ -99,6 +110,7 @@ function opened(
   repository: GameRepository,
   game: LocalGame<FoldState>,
   lock: GameLock,
+  selection: LocalGameSelection,
 ): OpenedGame {
   const logCapture = createGameLogCapture(repository, game.gameId, {
     maxStoredCharacters: GAME_LOGS.maxStoredCharacters,
@@ -113,6 +125,7 @@ function opened(
     },
     lock,
     logCapture,
+    selection,
   };
 }
 
@@ -121,6 +134,7 @@ async function openGame(
   locks: GameLockManager | undefined,
   gameId: RoomId,
   contentConfig: PinnedContentConfig,
+  selection: Exclude<LocalGameSelection, "created"> = "opened",
 ): Promise<OpenResult> {
   try {
     const stored = await repository.readGame(gameId);
@@ -145,7 +159,7 @@ async function openGame(
         gameId,
         persistOptions(gameId),
       );
-      if (game !== null) return opened(repository, game, lock);
+      if (game !== null) return opened(repository, game, lock, selection);
       lock.release();
       return { kind: "notFound", gameId };
     } catch (error) {
@@ -183,8 +197,8 @@ async function createGame(
         { gameId, genesis, localPlayerId: mintClientId() },
         persistOptions(gameId),
       );
-      navigateToGame(gameId);
-      return opened(repository, game, lock);
+      replaceGameInUrl(gameId);
+      return opened(repository, game, lock, "created");
     } catch (error) {
       lock.release();
       throw error;
@@ -193,11 +207,44 @@ async function createGame(
   throw new Error("Could not draw an unused game id.");
 }
 
-function navigateToGame(gameId: RoomId): void {
+/**
+ * Opens the most recently played stored game, or creates a new game when there
+ * is none or it cannot be played here (unreadable, pinned to other content, or
+ * open in another tab).
+ */
+async function resumeOrCreateGame(
+  repository: GameRepository,
+  locks: GameLockManager | undefined,
+  contentConfig: PinnedContentConfig,
+  frontDoorEntry: FrontDoorEntry | undefined,
+): Promise<OpenResult> {
+  const [recent] = await repository.listGames();
+  if (recent !== undefined) {
+    const result = await openGame(
+      repository,
+      locks,
+      recent.gameId,
+      contentConfig,
+      "resumed",
+    );
+    if (result.kind === "ready") {
+      replaceGameInUrl(recent.gameId);
+      return result;
+    }
+    logEvent("local_game_resume_skipped", {
+      gameId: recent.gameId,
+      reason: result.kind,
+    });
+  }
+  return createGame(repository, locks, contentConfig, frontDoorEntry);
+}
+
+/** Point the current history entry's `?game=` at `gameId`. */
+function replaceGameInUrl(gameId: RoomId): void {
   const nextUrl = new URL(window.location.href);
   nextUrl.searchParams.set("game", gameId);
-  window.history.pushState(
-    null,
+  window.history.replaceState(
+    window.history.state,
     "",
     `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`,
   );
@@ -209,13 +256,14 @@ function closeOpened(opened: OpenedGame): void {
 }
 
 /**
- * Opens or creates the local game and reports its status. The ready game is
+ * Opens, resumes, or creates the local game and reports its status. The ready game is
  * logged (see `attachGameLog`) and its journey log captured from before it
  * first renders until another game replaces it or the hook unmounts; until
  * then this tab holds its lock.
  */
 export function useLocalGame({
   gameId,
+  resumeRecent = false,
   contentConfig,
   frontDoorEntry,
   repository = browserGameRepository,
@@ -225,8 +273,12 @@ export function useLocalGame({
   createNewGame: () => void;
 } {
   const [createRequests, setCreateRequests] = useState(0);
-  const create = gameId === null || createRequests > 0;
-  const requestKey = create ? `create:${createRequests}` : `open:${gameId}`;
+  const create = createRequests > 0 || (gameId === null && !resumeRecent);
+  const requestKey = create
+    ? `create:${createRequests}`
+    : gameId === null
+      ? "resume"
+      : `open:${gameId}`;
   const [status, setStatus] = useState<LocalGameStatus>({
     kind: create ? "creating" : "opening",
   });
@@ -248,9 +300,16 @@ export function useLocalGame({
       requestRef.current = {
         key: requestKey,
         result: repository().then((loaded) =>
-          create || gameId === null
+          create
             ? createGame(loaded, locks(), contentConfig, frontDoorEntry)
-            : openGame(loaded, locks(), gameId, contentConfig),
+            : gameId === null
+              ? resumeOrCreateGame(
+                  loaded,
+                  locks(),
+                  contentConfig,
+                  frontDoorEntry,
+                )
+              : openGame(loaded, locks(), gameId, contentConfig),
         ),
       };
     }
@@ -284,6 +343,7 @@ export function useLocalGame({
             opened: next,
             detachLog: attachGameLog(next.game, {
               capture: next.logCapture.capture,
+              selection: next.selection,
             }),
           };
         }
@@ -308,6 +368,7 @@ export function useLocalGame({
     locks,
     repository,
     requestKey,
+    resumeRecent,
   ]);
 
   // Unmounting closes the game and frees its lock for another tab.

@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // The game selection contract: without `?game=` exactly one game is created
-// (StrictMode included) and the URL gains its id; with `?game=` that stored
+// (StrictMode included) and the URL gains its id in place; the front door
+// resumes the most recent playable game instead; with `?game=` that stored
 // game resumes and its journey log is captured; unknown ids and games pinned
 // to other content are gated; a game another tab holds is not opened.
 
@@ -9,8 +10,9 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { parseFoldHash } from "../types/content-hash";
-import { parseRoomId, type RoomId } from "../types/identifiers";
+import { parseClientId, parseRoomId, type RoomId } from "../types/identifiers";
 import { createGameRepository, type GameRepository } from "./game-repository";
+import { createFreshGenesis } from "./genesis";
 import type { GameLockManager } from "./game-lock";
 import { createMemoryKeyValueStore } from "./key-value-store";
 import {
@@ -60,6 +62,7 @@ async function openTab(
   gameId: RoomId | null,
   contentConfig: PinnedContentConfig = CONTENT,
   locks?: GameLockManager,
+  resumeRecent = false,
 ): Promise<{ status: () => LocalGameStatus; close: () => Promise<void> }> {
   let latest: LocalGameStatus = { kind: "opening" };
   const loadRepository = () => Promise.resolve(repository);
@@ -67,6 +70,7 @@ async function openTab(
   function Probe(): ReactNode {
     latest = useLocalGame({
       gameId,
+      resumeRecent,
       contentConfig,
       repository: loadRepository,
       locks: lockManager,
@@ -95,8 +99,15 @@ async function selectGame(
   repository: GameRepository,
   gameId: RoomId | null,
   contentConfig: PinnedContentConfig = CONTENT,
+  resumeRecent = false,
 ): Promise<LocalGameStatus> {
-  const tab = await openTab(repository, gameId, contentConfig);
+  const tab = await openTab(
+    repository,
+    gameId,
+    contentConfig,
+    undefined,
+    resumeRecent,
+  );
   await tab.close();
   return tab.status();
 }
@@ -110,7 +121,111 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+/** Store a game last written at `updatedAt`, pinned to `contentConfig`. */
+async function storeGame(
+  repository: GameRepository,
+  gameId: RoomId,
+  updatedAt: number,
+  contentConfig: PinnedContentConfig = CONTENT,
+): Promise<RoomId> {
+  await repository.createGame(
+    {
+      gameId,
+      localPlayerId: parseClientId("p1"),
+      createdAt: updatedAt,
+      updatedAt,
+      head: 0,
+    },
+    createFreshGenesis(contentConfig, "main"),
+  );
+  return gameId;
+}
+
+const urlGameId = (): string | null =>
+  new URL(window.location.href).searchParams.get("game");
+
+const selections = async (
+  repository: GameRepository,
+  gameId: RoomId,
+): Promise<unknown[]> =>
+  (await repository.readLogLines(gameId))
+    .map((line) => JSON.parse(line) as { event: string; selection?: string })
+    .filter((entry) => entry.event === "local_game_opened")
+    .map((entry) => entry.selection);
+
 describe("useLocalGame", () => {
+  it("records a created game's id in the URL without a history entry", async () => {
+    window.history.replaceState({ marker: 1 }, "", "/main?tutorialSpeed=2");
+    const entries = window.history.length;
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const created = await selectGame(repository, null);
+    expect(created.kind).toBe("ready");
+    expect(window.history.length).toBe(entries);
+    expect(window.history.state).toEqual({ marker: 1 });
+    const url = new URL(window.location.href);
+    expect(url.pathname).toBe("/main");
+    expect(url.searchParams.get("tutorialSpeed")).toBe("2");
+    expect(url.searchParams.get("game")).toBe(
+      created.kind === "ready" ? created.game.gameId : null,
+    );
+  });
+
+  it("resumes the most recent game at the front door instead of creating one", async () => {
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const older = await storeGame(repository, parseRoomId("older1"), 1_000);
+    const recent = await storeGame(repository, parseRoomId("recent1"), 2_000);
+    const entries = window.history.length;
+
+    const resumed = await selectGame(repository, null, CONTENT, true);
+    expect(resumed.kind === "ready" && resumed.game.gameId).toBe(recent);
+    expect(urlGameId()).toBe(recent);
+    expect(window.history.length).toBe(entries);
+    expect((await repository.listGames()).map((g) => g.gameId).sort()).toEqual(
+      [older, recent].sort(),
+    );
+    expect(await selections(repository, recent)).toEqual(["resumed"]);
+  });
+
+  it("creates a game at the front door when there is none to resume", async () => {
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const created = await selectGame(repository, null, CONTENT, true);
+    expect(created.kind).toBe("ready");
+    const games = await repository.listGames();
+    expect(games).toHaveLength(1);
+    expect(urlGameId()).toBe(games[0].gameId);
+    expect(await selections(repository, games[0].gameId)).toEqual(["created"]);
+  });
+
+  it("creates a game at the front door when the recent game cannot be played here", async () => {
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const otherContent = {
+      ...CONTENT,
+      draftFoldHash: parseFoldHash("b".repeat(64)),
+    };
+    const pinned = await storeGame(
+      repository,
+      parseRoomId("pinned1"),
+      2_000,
+      otherContent,
+    );
+    const created = await selectGame(repository, null, CONTENT, true);
+    expect(created.kind).toBe("ready");
+    expect(created.kind === "ready" && created.game.gameId).not.toBe(pinned);
+    expect(await repository.listGames()).toHaveLength(2);
+
+    const locks = createFakeLockManager();
+    const holder = await openTab(repository, null, CONTENT, locks, true);
+    const held = holder.status();
+    const second = await openTab(repository, null, CONTENT, locks, true);
+    const fresh = second.status();
+    expect(fresh.kind).toBe("ready");
+    expect(
+      fresh.kind === "ready" && held.kind === "ready" && fresh.game.gameId,
+    ).not.toBe(held.kind === "ready" ? held.game.gameId : null);
+    await second.close();
+    await holder.close();
+  });
+
   it("creates one game, puts its id in the URL, and resumes it by id", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     const created = await selectGame(repository, null);

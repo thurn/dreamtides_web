@@ -25,7 +25,15 @@ export interface AttachGameLogOptions {
   mirror?: JourneyLogMirror;
   /** Receives every journey-log record while attached, for the game's stored log. */
   capture?: JourneyLogMirror;
+  /** How the game was selected, for the `local_game_opened` entry. */
+  selection?: LocalGameSelection;
 }
+
+/**
+ * How a tab came to open a game: `created` new, `opened` by its `?game=` id,
+ * or `resumed` as the most recent stored game.
+ */
+export type LocalGameSelection = "created" | "opened" | "resumed";
 
 /**
  * Logs `game` while attached: stamps its id onto every `logEvent` entry,
@@ -37,6 +45,7 @@ export function attachGameLog(
   {
     mirror = createJourneyLogMirror(),
     capture,
+    selection,
   }: AttachGameLogOptions = {},
 ): () => void {
   const { gameId } = game;
@@ -46,6 +55,7 @@ export function attachGameLog(
     localPlayerId: game.localPlayerId,
     reducerVersion: game.genesis.reducerVersion,
     head: game.log.head(),
+    ...(selection === undefined ? {} : { selection }),
     ...game.opened,
   });
 

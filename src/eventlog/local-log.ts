@@ -3,13 +3,16 @@
 //
 // `append` is synchronous. It stamps the envelope (`actor`, `clientTimestamp`,
 // `basedOnSeq`), assigns the next seq, folds the event through the pure
-// reducer, and commits it — applied or deterministically bounced — before it
-// returns. Listeners then receive one record per committed event, in seq order;
-// persistence and logging are listeners, so this module does no IO.
+// reducer, and commits it — applied or deterministically bounced — to the
+// ordered in-memory event list before it returns. Listeners then receive one
+// record per committed event, in seq order; persistence and logging are
+// listeners, so this module does no IO.
 //
 // A log opens from a base (genesis, or a checkpoint of the fold) plus the
 // committed events after that base. Replaying those events uses contained-throw
-// mode, exactly like `replayLog`, so a stored log always opens.
+// mode, exactly like `replayLog`, so a stored log always opens. The events the
+// base already covers can be supplied as history: they join the event list
+// without being folded, so the list holds every event from seq 1.
 //
 // Game-agnostic: parameterized over `EngineConfig<S>`, never imports from
 // src/rules/ or src/coop/.
@@ -90,6 +93,12 @@ export interface LocalLogOptions<S> {
   base?: LocalLogBase<S>;
   /** Committed events after `base`, dense and ascending from `base.seq + 1`. */
   events?: readonly CommittedEvent[];
+  /**
+   * The committed events `base` covers, dense and ascending from seq 1 to
+   * `base.seq`. They are kept in the event list, not folded. Omitted, the list
+   * starts after the base.
+   */
+  history?: readonly CommittedEvent[];
   /** Clock for `clientTimestamp`. Defaults to the wall clock. */
   now?: () => string;
   /** Rethrow reducer throws from `append`. Defaults to the build's dev flag. */
@@ -105,6 +114,13 @@ export interface LocalLog<S> {
   head(): number;
   /** The fold of every committed event. Stable identity between appends. */
   state(): S;
+  /**
+   * The committed events in seq order, dense and ending at `head()`: the
+   * history, the replayed events, and every append since opening. Starts at
+   * seq 1 unless the log opened from a base without history. A read-only view
+   * that grows with each append.
+   */
+  events(): readonly CommittedEvent[];
   /**
    * Stamp, fold, and commit one intent; returns its seq. An already-applied
    * `intentKey` returns the seq that applied it and commits nothing. In dev
@@ -143,6 +159,22 @@ export function createLocalLog<S>(options: LocalLogOptions<S>): LocalLog<S> {
       );
     }
   });
+  const history = options.history;
+  if (history !== undefined) {
+    if (history.length !== base.seq) {
+      throw new Error(
+        `Local log history must hold seqs 1 to ${base.seq}; found ${history.length} events.`,
+      );
+    }
+    history.forEach(({ seq }, index) => {
+      if (seq !== index + 1) {
+        throw new Error(
+          `Local log history must be dense from seq 1; found seq ${seq} at position ${index}.`,
+        );
+      }
+    });
+  }
+  const committed: CommittedEvent[] = [...(history ?? []), ...replayEvents];
   const replayed = foldEvents(
     config,
     genesis,
@@ -225,6 +257,7 @@ export function createLocalLog<S>(options: LocalLogOptions<S>): LocalLog<S> {
     }
     state = folded.state;
     head = seq;
+    committed.push({ seq, event });
     recordIntentKey(event, seq, outcome.outcome);
     pendingRecords.push({
       seq,
@@ -247,6 +280,7 @@ export function createLocalLog<S>(options: LocalLogOptions<S>): LocalLog<S> {
     replay,
     head: () => head,
     state: () => state,
+    events: () => committed,
     append,
     subscribe(listener) {
       listeners.add(listener);

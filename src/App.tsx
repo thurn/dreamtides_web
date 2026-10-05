@@ -494,11 +494,14 @@ function stripLoadJourneyParam(): void {
 export default function App({
   runtimeConfig,
   frontDoorEntry,
+  resumeRecentGame = false,
   directTutorialBattle = false,
   previewTutorialVictory = false,
 }: {
   runtimeConfig: RuntimeConfig;
   frontDoorEntry?: FrontDoorEntry;
+  /** Without `?game=`, resume the most recent game (the front door). */
+  resumeRecentGame?: boolean;
   directTutorialBattle?: boolean;
   previewTutorialVictory?: boolean;
 }) {
@@ -610,18 +613,20 @@ export default function App({
       tutorialFoldHash={journeyContent.tutorial.foldHash}
       runtimeConfig={runtimeConfig}
       frontDoorEntry={frontDoorEntry}
+      resumeRecentGame={resumeRecentGame}
       directTutorialBattle={directTutorialBattle}
       previewTutorialVictory={previewTutorialVictory}
     />
   );
 }
 
-/** Opens the `?game=` local game (or creates one) and renders it. */
+/** Opens the `?game=` local game (or resumes or creates one) and renders it. */
 function LocalGameApp({
   journeyContent,
   tutorialFoldHash,
   runtimeConfig,
   frontDoorEntry,
+  resumeRecentGame,
   directTutorialBattle,
   previewTutorialVictory,
 }: {
@@ -629,6 +634,7 @@ function LocalGameApp({
   tutorialFoldHash: FoldHash;
   runtimeConfig: RuntimeConfig;
   frontDoorEntry?: FrontDoorEntry;
+  resumeRecentGame: boolean;
   directTutorialBattle: boolean;
   previewTutorialVictory: boolean;
 }) {
@@ -651,6 +657,7 @@ function LocalGameApp({
   );
   const { status, createNewGame } = useLocalGame({
     gameId: runtimeConfig.gameId,
+    resumeRecent: resumeRecentGame,
     contentConfig,
     frontDoorEntry,
   });

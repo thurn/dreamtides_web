@@ -17,11 +17,15 @@ function renderStrict(root: Root, children: ReactNode): void {
 }
 
 async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
-  const [{ default: App }, { parseRuntimeConfig, removeUiParamFromSearch }] =
-    await Promise.all([
-      import("./App.tsx"),
-      import("./runtime/runtime-config"),
-    ]);
+  const [
+    { default: App },
+    { parseRuntimeConfig, removeUiParamFromSearch },
+    { resumesRecentGame },
+  ] = await Promise.all([
+    import("./App.tsx"),
+    import("./runtime/runtime-config"),
+    import("./session/game-selection"),
+  ]);
 
   const canonicalSearch = removeUiParamFromSearch(window.location.search);
   if (canonicalSearch !== window.location.search) {
@@ -47,6 +51,7 @@ async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
     <App
       runtimeConfig={runtimeConfig}
       frontDoorEntry={frontDoorEntry}
+      resumeRecentGame={resumesRecentGame(pathname, canonicalSearch)}
       directTutorialBattle={directTutorialBattle}
       previewTutorialVictory={previewTutorialVictory}
     />,

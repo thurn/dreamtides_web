@@ -1,9 +1,11 @@
 // Local-first log contracts: a game written through to storage reopens to the
 // identical fold — fresh, mid-journey, mid-battle, from a checkpoint or from
-// genesis — and a journey save file loads into an equal journey. Runs the real
-// reducer over the synthetic fixture providers on the in-memory store.
+// genesis — and a journey save file loads into an equal journey; a failed
+// write reaches storage without another append; the log holds every committed
+// event in order. Runs the real reducer over the synthetic fixture providers on
+// the in-memory store.
 
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { hashState } from "../eventlog/hash";
 import { createLocalLog, type EventDraft } from "../eventlog/local-log";
 import type { EngineConfig, GameEvent, Genesis } from "../eventlog/types";
@@ -149,6 +151,10 @@ describe("local game persistence", () => {
     });
     expect(hash(reloaded)).toBe(hash(live));
     expect(await replayStored(repository, live.gameId)).toBe(hash(live));
+    expect(reloaded.log.events()).toEqual(live.log.events());
+    expect(reloaded.log.events().map((e) => e.seq)).toEqual(
+      Array.from({ length: BEGIN_BATTLE_INDEX + 3 }, (_, index) => index + 1),
+    );
 
     play(live, SCRIPT.slice(BEGIN_BATTLE_INDEX + 3));
     play(reloaded, SCRIPT.slice(BEGIN_BATTLE_INDEX + 3));
@@ -254,6 +260,86 @@ describe("local game persistence", () => {
     expect(hash(reloaded)).toBe(hash(live));
   });
 
+  it("retries a failed final write on its own, so a reload recovers every event", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      const store = createMemoryKeyValueStore();
+      let failuresLeft = 0;
+      const flaky: KeyValueStore = {
+        ...store,
+        putAll: (entries) => {
+          if (failuresLeft > 0 && entries.length > 1) {
+            failuresLeft -= 1;
+            return Promise.reject(new Error("transaction aborted"));
+          }
+          return store.putAll(entries);
+        },
+      };
+      const errors: unknown[] = [];
+      const live = await newGame(
+        createGameRepository(flaky),
+        parseRoomId("final1"),
+        {
+          ...OPTIONS,
+          onPersistError: (error) => errors.push(error),
+        },
+      );
+      play(live, SCRIPT.slice(0, BEGIN_BATTLE_INDEX));
+      await live.flush();
+      failuresLeft = 3;
+      play(live, SCRIPT.slice(BEGIN_BATTLE_INDEX, BEGIN_BATTLE_INDEX + 2));
+      await live.flush();
+      expect(errors).toHaveLength(1);
+
+      // No further append, flush, or close: only the retry can land the batch.
+      await vi.runAllTimersAsync();
+      expect(errors).toHaveLength(3);
+
+      // Reload: a fresh repository over the same storage, the old tab gone.
+      const reloaded = await openLocalGame<FoldState>(
+        createGameRepository(store),
+        GAME_ENGINE_CONFIG,
+        live.gameId,
+        OPTIONS,
+      );
+      expect(reloaded?.log.head()).toBe(BEGIN_BATTLE_INDEX + 2);
+      expect(reloaded === null ? null : hash(reloaded)).toBe(hash(live));
+      expect(reloaded?.log.events()).toEqual(live.log.events());
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("stops retrying a failed write once the game closes", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      const store = createMemoryKeyValueStore();
+      let writes = 0;
+      const failing: KeyValueStore = {
+        ...store,
+        putAll: (entries) => {
+          if (entries.length > 1) {
+            writes += 1;
+            return Promise.reject(new Error("transaction aborted"));
+          }
+          return store.putAll(entries);
+        },
+      };
+      const live = await newGame(
+        createGameRepository(failing),
+        parseRoomId("closed1"),
+      );
+      play(live, SCRIPT.slice(0, 1));
+      await live.flush();
+      await live.close();
+      const attempts = writes;
+      await vi.runAllTimersAsync();
+      expect(writes).toBe(attempts);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("lists stored games, most recently updated first", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     let clock = 0;
@@ -300,6 +386,51 @@ describe("local log", () => {
     expect(log.state()).toEqual({ total: 11 });
   });
 
+  it("keeps every committed event in seq order, synchronously", () => {
+    const log = createLocalLog({
+      config: counter,
+      genesis: GENESIS,
+      localActor: testEventActor("p1"),
+      now: () => "2026-01-01T00:00:00.000Z",
+    });
+    log.subscribe((record) => {
+      if (record.seq === 1) log.append({ type: "ADD", payload: { add: 10 } });
+    });
+    log.append({ type: "ADD", payload: { add: 1 } });
+    const bounced = log.append({ type: "ADD", payload: {} });
+    expect(log.events().map(({ seq, event }) => [seq, event.payload])).toEqual([
+      [1, { add: 1 }],
+      [2, { add: 10 }],
+      [bounced, {}],
+    ]);
+
+    // Reopened from a checkpoint at seq 2 with its history, the list is whole.
+    const reopened = createLocalLog({
+      config: counter,
+      genesis: GENESIS,
+      localActor: testEventActor("p1"),
+      base: { ...log.checkpoint(), seq: 2, state: { total: 11 } },
+      history: log.events().slice(0, 2),
+      events: log.events().slice(2),
+    });
+    reopened.append({ type: "ADD", payload: { add: 5 } });
+    expect(reopened.events().map(({ seq }) => seq)).toEqual([1, 2, 3, 4]);
+    expect(reopened.events().slice(0, 3)).toEqual(log.events());
+    expect(reopened.state()).toEqual({ total: 16 });
+  });
+
+  it("refuses history that does not cover its base", () => {
+    expect(() =>
+      createLocalLog({
+        config: counter,
+        genesis: GENESIS,
+        localActor: testEventActor("p1"),
+        base: { seq: 2, state: { total: 0 }, intentKeys: [] },
+        history: [],
+      }),
+    ).toThrow();
+  });
+
   it("commits nothing when a dev-mode reducer throws", () => {
     const log = createLocalLog({
       config: {
@@ -316,6 +447,7 @@ describe("local log", () => {
       "reducer bug",
     );
     expect(log.head()).toBe(0);
+    expect(log.events()).toEqual([]);
   });
 });
 
