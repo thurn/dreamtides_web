@@ -26,7 +26,7 @@
  */
 import type { EngineEvent, EventOf } from "./events";
 import type { LoopId } from "./loops/types";
-import type { Answer, Prompt, PromptFingerprint, PromptId } from "./prompts/types";
+import type { Answer, Prompt, PromptFingerprint, PromptId, PromptRole } from "./prompts/types";
 import type { Action } from "./rules/actions";
 import type { CardId, InstanceId, Side } from "./state/ids";
 import type { BattleInit, BattleResult, BattleState } from "./state/types";
@@ -58,7 +58,7 @@ export type EngineLogRecord =
       readonly promptId: PromptId | null;
       readonly side: Side;
       readonly kind: Prompt["kind"];
-      readonly role: string;
+      readonly role: PromptRole;
       readonly source: InstanceId | null;
       readonly cardId: CardId | null;
       readonly privateTo: Side | null;
@@ -135,11 +135,16 @@ export function stepLogRecords(before: BattleState, after: BattleState): EngineL
   return records;
 }
 
-export function promptOpenedRecord(prompt: Prompt, fingerprint: PromptFingerprint, version: number): EngineLogRecord {
+export function promptOpenedRecord(
+  prompt: Prompt,
+  promptId: PromptId,
+  fingerprint: PromptFingerprint,
+  version: number,
+): EngineLogRecord {
   return {
     event: "engine.promptOpened",
     version,
-    promptId: prompt.id ?? null,
+    promptId,
     side: prompt.side,
     kind: prompt.kind,
     role: prompt.purpose.role,

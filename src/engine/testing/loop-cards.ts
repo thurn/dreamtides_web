@@ -64,7 +64,7 @@ export const LOOP = {
           ctx.choose<ChooseTargetsPrompt>({
             kind: "chooseTargets",
             side,
-            purpose: { source: card, cardId: syntheticId(0xd04), ability: 0, role: "lateResponse" },
+            purpose: { source: card, cardId: syntheticId(0xd04), ability: 0, role: "target" },
             candidates: [],
             min: 1,
             max: 1,

@@ -15,6 +15,7 @@ import type {
   ConfirmPrompt,
   PayOrDeclinePrompt,
   PromptPurpose,
+  PromptRole,
 } from "../prompts/types";
 import { discardCard, drawCard } from "../rules/resources";
 import { charactersInPlay, dissolve, instanceOf, moveInstance } from "../rules/zones";
@@ -23,7 +24,7 @@ import { opponent } from "../state/ids";
 import type { StepContext } from "../steps/types";
 import { syntheticId } from "./synthetic-cards";
 
-function purpose(ctx: StepContext, source: InstanceId, role: string): PromptPurpose {
+function purpose(ctx: StepContext, source: InstanceId, role: PromptRole): PromptPurpose {
   return { source, cardId: printedCardId(instanceOf(ctx.state, source).printing), ability: 0, role };
 }
 
@@ -90,7 +91,7 @@ export const PROMPTING = {
         targets: [ctx.choose<ChooseTargetsPrompt>({
           kind: "chooseTargets",
           side,
-          purpose: purpose(ctx, self, "dissolveEnemy"),
+          purpose: purpose(ctx, self, "target"),
           candidates: charactersInPlay(ctx.state, opponent(side)),
           min: 1,
           max: 1,
@@ -179,7 +180,7 @@ export const PROMPTING = {
       const arrangement = ctx.choose<ArrangePrompt>({
         kind: "arrange",
         side: item.controller,
-        purpose: purpose(ctx, item.instance, "topAndBottom"),
+        purpose: purpose(ctx, item.instance, "foresee"),
         privateTo: item.controller,
         cards,
         destinations: [
@@ -200,7 +201,7 @@ export const PROMPTING = {
       const accept = ctx.choose<ConfirmPrompt>({
         kind: "confirm",
         side: item.controller,
-        purpose: purpose(ctx, item.instance, "mayDraw"),
+        purpose: purpose(ctx, item.instance, "youMay"),
       });
       if (accept) drawCard(ctx, item.controller);
     },
@@ -213,7 +214,7 @@ export const PROMPTING = {
       const pays = ctx.choose<PayOrDeclinePrompt>({
         kind: "payOrDecline",
         side: payer,
-        purpose: purpose(ctx, item.instance, "drawUnlessPays"),
+        purpose: purpose(ctx, item.instance, "preventUnlessPays"),
         energy: 1,
         payable: energy >= 1,
       });

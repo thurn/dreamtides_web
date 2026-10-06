@@ -1,5 +1,5 @@
 import type { EngineCatalog } from "../catalog";
-import type { PromptPurpose } from "../prompts/types";
+import type { PromptPurpose, PromptRole } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { AbilityOrigin, BattleState, ContinuousChange, Expiry } from "../state/types";
 import type { StepContext } from "../steps/types";
@@ -56,7 +56,7 @@ export interface EffectEnv {
   /** Resolves a nested effect, for flow primitives. */
   run(effect: EffectNode): void;
   /** The purpose of a prompt this ability raises, with the given role. */
-  purpose(role: string): PromptPurpose;
+  purpose(role: PromptRole): PromptPurpose;
 }
 
 /**

@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import { promptFingerprint } from "../prompts/fingerprint";
-import type { ArrangePrompt, ChooseCardsPrompt, ChooseNumberPrompt, PromptId } from "../prompts/types";
+import type { ArrangePrompt, ChooseCardsPrompt, ChooseNumberPrompt, PromptId, PromptPurpose } from "../prompts/types";
 import { stateHash } from "../state/hash";
 import { battleSeed } from "../state/ids";
 import type { InstanceId } from "../state/ids";
@@ -48,7 +48,7 @@ const divergent: EngineCardDefinition = {
       ctx.choose<ChooseCardsPrompt>({
         kind: "chooseCards",
         side: item.controller,
-        purpose: { source: item.instance, cardId: null, ability: 0, role: "divergent" },
+        purpose: { source: item.instance, cardId: null, ability: 0, role: "discard" },
         candidates: run % 2 === 1 ? hand : hand.slice(1),
         min: 1,
         max: 1,
@@ -66,7 +66,7 @@ const emptyPrompt: EngineCardDefinition = {
       ctx.choose<ChooseCardsPrompt>({
         kind: "chooseCards",
         side: item.controller,
-        purpose: { source: item.instance, cardId: null, ability: 0, role: "empty" },
+        purpose: { source: item.instance, cardId: null, ability: 0, role: "discard" },
         candidates: [],
         min: 1,
         max: 1,
@@ -87,7 +87,7 @@ const emitThenChoose: EngineCardDefinition = {
         x: ctx.choose<ChooseNumberPrompt>({
           kind: "chooseNumber",
           side: ctx.state.instances[self]?.owner ?? "player",
-          purpose: { source: self, cardId: null, ability: 0, role: "emitThenChoose" },
+          purpose: { source: self, cardId: null, ability: 0, role: "chooseX" },
           min: 0,
           max: 1,
         }),
@@ -100,7 +100,7 @@ const emitThenChoose: EngineCardDefinition = {
 function malformed(index: number, raise: (ctx: StepContext, source: InstanceId) => void): EngineCardDefinition {
   return { ...divergent, id: syntheticId(index), synthetic: { resolve: (ctx, item) => raise(ctx, item.instance) } };
 }
-const malformedPurpose = (source: InstanceId) => ({ source, cardId: null, ability: 0, role: "malformed" });
+const malformedPurpose = (source: InstanceId): PromptPurpose => ({ source, cardId: null, ability: 0, role: "discard" });
 const MALFORMED = [
   malformed(904, (ctx, source) =>
     ctx.choose<ChooseCardsPrompt>({ kind: "chooseCards", side: "player", purpose: malformedPurpose(source), candidates: [source, source], min: 2, max: 2 }),

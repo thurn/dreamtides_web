@@ -283,7 +283,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       const version = slice.committed.version;
       log(eventLogRecords(fresh, version));
       if (result.kind === "suspended") {
-        log([promptOpenedRecord({ ...result.prompt, id: promptIdOf(slice, result.answers.length) }, promptFingerprint(result.prompt), version)]);
+        log([promptOpenedRecord(result.prompt, promptIdOf(slice, result.answers.length), promptFingerprint(result.prompt), version)]);
         return {
           kind: "applied",
           slice: {
@@ -347,8 +347,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
           if (prompt.id !== intent.promptId) return { kind: "bounced", reason: "stalePrompt" };
           if (prompt.side !== intent.side) return { kind: "bounced", reason: "notYourPrompt" };
           if (!isLegalAnswer(prompt, intent.value)) return { kind: "bounced", reason: "illegalAnswer" };
-          const { id: _id, ...raised } = prompt;
-          const fingerprint = promptFingerprint(raised);
+          const fingerprint = promptFingerprint(prompt);
           log([{ event: "engine.promptAnswered", version: slice.committed.version, promptId: prompt.id, side: intent.side, fingerprint, value: intent.value }]);
           return advance({
             ...slice,

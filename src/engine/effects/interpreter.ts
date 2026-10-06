@@ -1,5 +1,5 @@
 import type { EngineCatalog } from "../catalog";
-import type { ChooseModePrompt, ChooseTargetsPrompt, PromptPurpose } from "../prompts/types";
+import type { ChooseModePrompt, ChooseTargetsPrompt, PromptPurpose, PromptRole } from "../prompts/types";
 import {
   matchesCharacter,
   matchesStackItem,
@@ -124,7 +124,7 @@ export function purposeOf(
   source: AbilitySource,
   cardId: CardId | null,
   ability: number,
-  role: string,
+  role: PromptRole,
 ): PromptPurpose {
   return { source: sourceInstance(source), cardId, ability, role };
 }
@@ -245,7 +245,7 @@ export function choosePlayTime(
   abilities: readonly PlayTimeAbility[],
   controller: Side,
   source: AbilitySource,
-  purpose: (ability: number, role: string) => PromptPurpose,
+  purpose: (ability: number, role: PromptRole) => PromptPurpose,
 ): EffectChoices[] {
   const modes = abilities.map((ability) => chooseModes(ctx, ability.effect, controller, source, purpose(ability.ability, "chooseOne")));
   return abilities.map((ability, index) => {
@@ -268,7 +268,7 @@ export function chooseOnResolution(
   effect: EffectNode,
   controller: Side,
   source: AbilitySource,
-  purpose: (role: string) => PromptPurpose,
+  purpose: (role: PromptRole) => PromptPurpose,
 ): EffectChoices | null {
   const modes: number[] = [];
   let blocked = false;

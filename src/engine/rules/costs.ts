@@ -17,6 +17,7 @@ import type {
   ChooseNumberPrompt,
   ConfirmPrompt,
   PromptPurpose,
+  PromptRole,
 } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -163,7 +164,7 @@ function cardCandidates(
 }
 
 /** The role of the prompt choosing the cards for a cost. */
-const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], string>> = {
+const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
   abandon: "abandonCost",
   discard: "discardCost",
   reveal: "revealCost",
@@ -190,7 +191,7 @@ export function planCosts(
   source: AbilitySource,
   costs: readonly Cost[],
   x: number | null,
-  purpose: (role: string) => PromptPurpose,
+  purpose: (role: PromptRole) => PromptPurpose,
   excluded: readonly InstanceId[],
   modifier: CostModifier = NO_COST_MODIFIER,
 ): CostPlan {

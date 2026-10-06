@@ -1,23 +1,58 @@
 import type { CardId, InstanceId, Side } from "../state/ids";
 
+/**
+ * The stable key of a prompt's choice, which the UI copy module renders. The
+ * string is part of the prompt's fingerprint, so a role's spelling never
+ * changes.
+ */
+export type PromptRole =
+  /** The active side discards down to the hand limit at end of turn. */
+  | "discardToHandLimit"
+  /** The route a card is played by: from hand, as an offering, or by reclaim. */
+  | "playRoute"
+  /** The value of X in a cost. */
+  | "chooseX"
+  /** The mode of a modal ("choose one") effect. */
+  | "chooseOne"
+  /** The targets of an ability. */
+  | "target"
+  /** Which alternative of an "A or B" cost to pay. */
+  | "chooseCost"
+  /** Whether to pay an optional cost. */
+  | "optionalCost"
+  /** The characters abandoned to pay a cost. */
+  | "abandonCost"
+  /** The cards discarded to pay a cost. */
+  | "discardCost"
+  /** The cards revealed to pay a cost. */
+  | "revealCost"
+  /** The void cards banished to pay a cost. */
+  | "banishCost"
+  /** The hand cards banished to pay a cost. */
+  | "offeringCost"
+  /** The cards an effect discards. */
+  | "discard"
+  /** Where each looked-at card goes. */
+  | "foresee"
+  /** Whether to do a "you may". */
+  | "youMay"
+  /** Whether the prevented card's controller pays to stop the prevention. */
+  | "preventUnlessPays";
+
 /** Why a prompt was raised: its source and the role of the choice. Never prose. */
 export interface PromptPurpose {
   readonly source: InstanceId | null;
   readonly cardId: CardId | null;
   readonly ability: number | null;
-  /** A stable key the UI copy module renders, such as `discardToHandLimit`. */
-  readonly role: string;
+  readonly role: PromptRole;
 }
 
 export type { PromptId } from "../../types/identifiers";
-import type { PromptId } from "../../types/identifiers";
 
 /** A prompt's fingerprint: a hash of its identifying fields. */
 export type PromptFingerprint = string & { readonly __brand: "PromptFingerprint" };
 
 interface PromptBase {
-  /** Assigned by the fold while the prompt is pending; absent in inline runs. */
-  readonly id?: PromptId;
   /** The side that answers. */
   readonly side: Side;
   readonly purpose: PromptPurpose;
@@ -122,7 +157,7 @@ export type AnswerFor<P extends Prompt> = P extends ChooseTargetsPrompt | Choose
         ? ArrangeAnswer
         : never;
 
-/** What rules code passes to `choose`: the context fills in `cancellable` and the id. */
+/** What rules code passes to `choose`: the context fills in `cancellable`. */
 export type PromptSpec<P extends Prompt = Prompt> = P extends Prompt
-  ? Omit<P, "cancellable" | "id">
+  ? Omit<P, "cancellable">
   : never;

@@ -1,5 +1,6 @@
 import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { abilityOrigin, activatedAbilityAt, canActivate, oncePerTurnKey, originCardId, sourceController } from "../../rules/activation";
+import type { PromptRole } from "../../prompts/types";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import type { AbilitySource } from "../../state/ids";
 import { opponent } from "../../state/ids";
@@ -31,7 +32,7 @@ export const activate: StepDefinition<ActivateStep> = {
       throw new Error(`Ability ${String(step.ability)} cannot be activated now`);
     }
     const cardId = originCardId(origin);
-    const purpose = (role: string) => purposeOf(step.source, cardId, step.ability, role);
+    const purpose = (role: PromptRole) => purposeOf(step.source, cardId, step.ability, role);
     const x = chooseX(ctx, side, ability.costs, purpose("chooseX"));
     const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role));
     if (choices === undefined) throw new Error("choosePlayTime returns one entry per ability");

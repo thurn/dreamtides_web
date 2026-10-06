@@ -8,7 +8,7 @@ import { endFloating } from "../../rules/floating";
 import { canPlay, playRoutes, routeCosts, routePayable, type PlayRoute, type PlayZone } from "../../rules/timing";
 import { recordPlayed } from "../../rules/turn-log";
 import { instanceOf, moveToStack } from "../../rules/zones";
-import type { ChooseModePrompt } from "../../prompts/types";
+import type { ChooseModePrompt, PromptRole } from "../../prompts/types";
 import type { InstanceId, Slot } from "../../state/ids";
 import type { EffectChoices } from "../../state/types";
 import { opponent } from "../../state/ids";
@@ -47,7 +47,7 @@ export const play: StepDefinition<PlayStep> = {
     const definition = printedCard(catalog, instance.printing);
     const cardId = printedCardId(instance.printing);
     const modifier = costModifier(state, catalog, step.card, side);
-    const purpose = (ability: number, role: string) => purposeOf(step.card, cardId, ability, role);
+    const purpose = (ability: number, role: PromptRole) => purposeOf(step.card, cardId, ability, role);
     const routes = playRoutes(state, catalog, step.card, step.from);
     let route: PlayRoute = routes[0] ?? "hand";
     if (routes.length > 1) {

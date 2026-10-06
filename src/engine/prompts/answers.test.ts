@@ -11,7 +11,7 @@ import type { ArrangePrompt, ArrangeSlot, Prompt, PromptPurpose } from "./types"
 
 const autoAnswer = { autoAnswerForcedPrompts: true };
 const noAutoAnswer = { autoAnswerForcedPrompts: false };
-const purpose: PromptPurpose = { source: null, cardId: null, ability: null, role: "test" };
+const purpose: PromptPurpose = { source: null, cardId: null, ability: null, role: "discard" };
 const [a, b, c, d, e] = ["i1", "i2", "i3", "i4", "i5"] as InstanceId[];
 
 function arrange(cards: readonly (InstanceId | undefined)[], destinations: readonly ArrangeSlot[]): ArrangePrompt {
