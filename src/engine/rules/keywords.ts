@@ -1,22 +1,15 @@
 import type { EngineCatalog } from "../catalog";
+import { characteristicsOf } from "../continuous/characteristics";
 import type { Keyword } from "../dsl/types";
 import type { InstanceId } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { instanceOf } from "./zones";
 
-/** Whether an instance has a keyword, printed or from its authored keyword abilities. */
+/** Whether an instance has a keyword now: printed or authored, gained, and not lost (layer 3). */
 export function hasKeyword(
   state: BattleState,
   catalog: EngineCatalog,
   id: InstanceId,
   keyword: Keyword,
 ): boolean {
-  const instance = instanceOf(state, id);
-  const definition = catalog.card(instance.cardId);
-  return (
-    definition.keywords.some((printed) => printed === keyword) ||
-    definition
-      .abilities(instance.variant)
-      .some((ability) => ability.kind === "keyword" && ability.keyword === keyword)
-  );
+  return characteristicsOf(state, catalog, id).keywords.includes(keyword);
 }

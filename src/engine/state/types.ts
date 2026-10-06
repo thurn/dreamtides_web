@@ -1,5 +1,5 @@
 import type { CardSubtype } from "../../types/card-identity";
-import type { Condition, Variant } from "../dsl/types";
+import type { CardFilter, Condition, Keyword, Variant } from "../dsl/types";
 import type {
   AbilitySource,
   AvatarId,
@@ -178,10 +178,31 @@ export interface EffectRef {
   readonly node: number;
 }
 
+/**
+ * A change to characteristics, applied by the layer evaluation
+ * (continuous/layers.ts) while its floating effect lasts or its static
+ * ability applies. Values and affected cards are fixed when the change is
+ * made (RD-hv-7x4l.7-1).
+ */
+export type ContinuousChange =
+  /** Layer 2: the character has all character types. */
+  | { readonly kind: "allTypes"; readonly instance: InstanceId }
+  /** Layer 3: the card gains (`gains`) or loses a keyword. */
+  | { readonly kind: "keyword"; readonly instance: InstanceId; readonly keyword: Keyword; readonly gains: boolean }
+  /** Layer 4: the character's base spark becomes `value`. */
+  | { readonly kind: "baseSpark"; readonly instance: InstanceId; readonly value: number }
+  /** Layer 5: spark gained with a duration, or spark a character has; it ends wherever the card is. */
+  | { readonly kind: "spark"; readonly instance: InstanceId; readonly amount: number }
+  /**
+   * Layer 6: cards `player` plays that match `filter` cost `amount` more
+   * (less when negative). A `next` modifier applies to one card: it ends as
+   * that card is played.
+   */
+  | { readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean };
+
 /** What a floating effect changes while it lasts. */
 export type FloatingChange =
-  /** Spark gained with a duration; it ends wherever the card is. */
-  | { readonly kind: "spark"; readonly instance: InstanceId; readonly amount: number }
+  | ContinuousChange
   /**
    * "Until end of turn, when …" (floating) or "the next time …" (delayed,
    * `once`: it ends as it triggers).

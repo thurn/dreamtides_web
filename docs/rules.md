@@ -92,7 +92,8 @@ round count. If 50 rounds end without a winner, the battle ends in a draw.
 **Character** — Permanent cards that enter play when they resolve. Each
 character has a spark value (✦) used during the Challenge phase, and a subtype
 (Warrior, Spirit Animal, Survivor, Outsider, and so on) that other cards can
-reference. Subtypes are an open-ended set of tribal tags. Characters can have
+reference. Subtypes are an open-ended set of tribal tags. A character that
+**has all character types** counts as every subtype a card refers to. Characters can have
 triggered, activated, and static abilities. A character entering play is
 **exhausted** unless it is **awakened**, so it cannot challenge, block, or pay
 ☾ costs on the turn it is played. Characters remain in play until removed by an
@@ -400,6 +401,24 @@ Spark can change in three distinct ways:
   control have +1✦", persists only while that static ability applies. It does not carry
   across zones the way gained spark does.
 
+**Base spark:** An effect such as "its base ✦ becomes 7" replaces the
+character's printed spark. Gained spark and spark it has from other effects
+still apply on top of the new base. If several such effects apply, the most
+recent one wins (see [Order of continuous effects](#ability-types)).
+
+**Spark below 0:** Spark changes add up, but a character's spark is never less
+than 0 for any rule that reads it. A 1✦ character with −3✦ of changes has 0✦,
+and it needs +3✦ more to reach 1✦.
+
+**Values fixed as an effect resolves:** When a resolving effect gives
+characters spark, a keyword, a new base spark, or another change for a while,
+as in "Until end of turn, characters you control have +X✦, where X is the
+number of characters you control", the characters it changes and any value it
+uses are settled as it resolves. A character that arrives later is not
+changed, and the value does not change when the count does. A static ability
+that says characters _have_ something works the other way: it changes
+whichever characters match at each moment, and its value stays current.
+
 **Additional spark:** An ability such as "When a character you control gains
 ✦, it gains 1 additional ✦" applies to each "gains +N✦" event, permanent or
 with a duration, and the additional ✦ has the same duration as the gain that
@@ -496,6 +515,16 @@ same way.
 Other costs include spending counters stored on the card itself ("1⧗, ☾: …"),
 banishing cards from your void, and revealing cards from your hand. A revealed
 card stays in your hand.
+
+**Cost changes:** Effects such as "Events cost you 1● more" and "The next
+character you play this turn costs 2● less" change the energy a player pays to
+play a card. Every increase applies first, then every reduction, and the cost
+never goes below 0●. They change the card's whole energy cost, X included:
+with a 2● reduction, a card costing 1● plus X can be played with X = 3 for 2●.
+A "next card" change applies to the next matching card its player plays and is
+used up when that card's costs are paid, even if the cost was already 0●. A
+card that is not played does not use it up. A card's cost for conditions such
+as "≤2● cost character" is its printed cost, unaffected by cost changes.
 
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
@@ -744,7 +773,22 @@ left play, using the ability as it was when activated.
 
 **Static abilities** — Always-on rule modifications that apply while their source
 is in play, such as cost reductions, spark bonuses for matching characters, or
-other rule changes.
+other rule changes. Avatar and dreamsign static abilities always apply.
+
+**Order of continuous effects:** When several static abilities and effects
+with a duration change the same card, they apply in this order: changes to its
+types ("has all character types"), then keywords it gains or loses, then base
+spark it is given, then changes to its spark, then changes to its cost. Within
+each step, effects apply in the order they began: a static ability when its
+source entered play (an avatar's or dreamsign's at the start of the battle),
+and any other effect when it resolved. Among effects that began at the same
+moment, static abilities apply first — avatars and dreamsigns, then cards in
+the order they were created for the battle — then the other effects, in the
+order they were created. Where effects conflict, such as one that gives a
+keyword and one that removes it, the one applied last wins. A static ability
+decides which characters it changes, and by how much, from what the earlier
+steps produced: an ability that changes spark reads types, keywords, and base
+spark, but not other spark changes.
 
 **Modal abilities** — Abilities that present multiple options, written as "Choose
 one:" followed by the available effects (each with its own cost where relevant).

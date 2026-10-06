@@ -123,7 +123,7 @@ describe("view", () => {
       const { state } = fixture();
       const before = serializeState(state);
       const hash = stateHash(state);
-      vandalize(view(state, viewer));
+      vandalize(view(state, viewer, catalog));
       expect(serializeState(state)).toBe(before);
       expect(stateHash(state)).toBe(hash);
     }
@@ -132,14 +132,14 @@ describe("view", () => {
   it("reveals neither the instance IDs nor the card IDs of cards in decks and the opponent's hand", () => {
     for (const viewer of SIDES) {
       const { state } = fixture();
-      const seen = strings(view(state, viewer));
+      const seen = strings(view(state, viewer, catalog));
       for (const id of hiddenFrom(state, viewer)) {
         expect(seen.has(id)).toBe(false);
         expect(seen.has(state.instances[id].cardId)).toBe(false);
       }
       expect(seen.has(state.seed)).toBe(false);
-      expect(Object.keys(view(state, viewer))).not.toContain("seed");
-      expect(Object.keys(view(state, viewer))).not.toContain("rng");
+      expect(Object.keys(view(state, viewer, catalog))).not.toContain("seed");
+      expect(Object.keys(view(state, viewer, catalog))).not.toContain("rng");
     }
   });
 
@@ -156,11 +156,11 @@ describe("view", () => {
 
   it("counts hidden zones and lists the viewer's own hand, including a card the opponent owns", () => {
     const { state, ids, held } = fixture();
-    const seen = view(state, "player");
+    const seen = view(state, "player", catalog);
     expect(seen.sides.player.hand).toEqual({ count: 3, known: [...ids.player.hand, held] });
     expect(seen.instances[held]).toMatchObject({ owner: "enemy", controller: "player", zone: "hand" });
-    expect(view(state, "enemy").instances[held]).toBeUndefined();
-    expect(view(state, "enemy").sides.player.hand).toEqual({ count: 3, known: [] });
+    expect(view(state, "enemy", catalog).instances[held]).toBeUndefined();
+    expect(view(state, "enemy", catalog).sides.player.hand).toEqual({ count: 3, known: [] });
     expect(seen.sides.enemy.hand).toEqual({ count: 2, known: [] });
     expect(seen.sides.player.deck).toEqual({ count: 2, known: [] });
     expect(seen.sides.enemy.deck).toEqual({ count: 2, known: [] });
@@ -169,13 +169,14 @@ describe("view", () => {
   it("matches the state in public zones and the viewer's own hand", () => {
     for (const viewer of SIDES) {
       const { state } = fixture();
-      const seen = view(state, viewer);
+      const seen = view(state, viewer, catalog);
       const visible = Object.values(state.instances)
         .filter((instance) => instance.zone !== "deck" && (instance.zone !== "hand" || instance.controller === viewer))
         .map((instance) => instance.id);
       expect(Object.keys(seen.instances).sort()).toEqual([...visible].sort());
       for (const id of visible) {
-        expect(seen.instances[id]).toEqual(state.instances[id]);
+        const { characteristics: _effective, ...instance } = seen.instances[id] ?? { characteristics: null };
+        expect(instance).toEqual(state.instances[id]);
       }
       for (const side of SIDES) {
         const source = state.sides[side];
@@ -201,7 +202,7 @@ describe("view", () => {
     const { state } = fixture();
     const enemyFront = state.sides.enemy.frontRank[0];
     for (const viewer of SIDES) {
-      const seen = view(state, viewer);
+      const seen = view(state, viewer, catalog);
       expect(seen.sides.player.avatar).toEqual({ id: AVATAR.drawer.id, exhausted: true });
       expect(seen.sides.enemy.avatar).toEqual({ id: AVATAR.rally.id, exhausted: false });
       expect(seen.sides.player.dreamsigns).toEqual([{ id: DREAMSIGN.points.id }]);
@@ -210,7 +211,7 @@ describe("view", () => {
         { id: "e1", controller: "player", payer: "enemy", cost: 2, source: { kind: "avatar", side: "player" }, affects: [enemyFront] },
       ]);
     }
-    const seen = view(state, "player");
+    const seen = view(state, "player", catalog);
     state.sides.player.avatar = { id: AVATAR.drawer.id, exhausted: false };
     state.sides.player.dreamsigns.push({ id: DREAMSIGN.points.id });
     state.payable = [];
@@ -223,10 +224,10 @@ describe("view", () => {
     const enemyFront = state.sides.enemy.frontRank[0]!;
     const playerHand = state.sides.player.hand[0];
     state.payable = [{ id: "e1", payer: "enemy", cost: 2, source: playerHand, affects: [enemyFront] }];
-    const enemy = view(state, "enemy");
+    const enemy = view(state, "enemy", catalog);
     expect(enemy.payable).toEqual([{ id: "e1", controller: "player", payer: "enemy", cost: 2, source: null, affects: [enemyFront] }]);
     expect(strings(enemy).has(playerHand)).toBe(false);
-    expect(view(state, "player").payable[0]?.source).toBe(playerHand);
+    expect(view(state, "player", catalog).payable[0]?.source).toBe(playerHand);
   });
 
   it("keeps effect events from a card in a hidden zone private to the side holding it", () => {
@@ -260,10 +261,10 @@ describe("view", () => {
     ];
     const origin = { kind: "card" as const, cardId: v.event0.id, variant: { amplified: false } };
     state.triggerQueue = [{ source: enemyHand, controller: "enemy", origin, ability: 0, node: null, subject: enemyFront }];
-    const player = view(state, "player");
+    const player = view(state, "player", catalog);
     expect(player.floating.map((effect) => effect.id)).toEqual(["e2"]);
     expect(player.triggerQueue).toEqual([{ controller: "enemy", source: null, ability: 0, node: null, subject: enemyFront }]);
-    const enemy = view(state, "enemy");
+    const enemy = view(state, "enemy", catalog);
     expect(enemy.floating.map((effect) => effect.id)).toEqual(["e2", "e3"]);
     expect(enemy.triggerQueue[0]?.source).toBe(enemyHand);
     expect(JSON.stringify(player)).not.toContain(v.event0.id);

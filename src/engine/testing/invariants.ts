@@ -1,4 +1,10 @@
 import type { EngineCatalog } from "../catalog";
+import { changedInstance } from "../rules/floating";
+import { characteristics } from "../continuous/characteristics";
+import { adjustedEnergy, costModifier } from "../continuous/costs";
+import { Layers } from "../continuous/layers";
+import { fixedEnergy } from "../dsl/energy";
+import { playCosts } from "../rules/costs";
 import { serializeState, stateHash, deserializeState } from "../state/hash";
 import type { InstanceId, Zone } from "../state/ids";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES } from "../state/ids";
@@ -61,14 +67,31 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
   // A floating effect never outlives the cards it changes or the boundary it lasts until.
   for (const effect of state.floating) {
     const { change, expiry } = effect;
-    if (change.kind !== "trigger" && state.instances[change.instance] === undefined) {
-      problems.push(`floating effect ${effect.id} changes ${change.instance}, which no longer exists`);
+    const changed = changedInstance(change);
+    if (changed !== null && state.instances[changed] === undefined) {
+      problems.push(`floating effect ${effect.id} changes ${changed}, which no longer exists`);
     }
     if (expiry.at === "paid" && !state.payable.some((payable) => payable.id === expiry.effect)) {
       problems.push(`floating effect ${effect.id} outlived its payable effect`);
     }
     if (expiry.at === "sourceLeavesPlay" && state.instances[expiry.source]?.zone !== "play") {
       problems.push(`floating effect ${effect.id} outlived its source leaving play`);
+    }
+  }
+  // Effective characteristics: spark and costs never go below 0, and the
+  // memoized evaluation of a committed state matches a fresh one.
+  const fresh = new Layers(state, catalog);
+  const memoized = characteristics(state, catalog);
+  for (const instance of Object.values(state.instances)) {
+    const card = fresh.of(instance.id);
+    if (card.spark !== null && card.spark < 0) problems.push(`${instance.id} has negative spark ${String(card.spark)}`);
+    if (memoized !== fresh && JSON.stringify(memoized.of(instance.id)) !== JSON.stringify(card)) {
+      problems.push(`${instance.id} has memoized characteristics that differ from a fresh evaluation`);
+    }
+    if (instance.zone === "hand") {
+      const definition = catalog.card(instance.cardId);
+      const cost = adjustedEnergy(fixedEnergy(playCosts(definition, instance.variant)), costModifier(state, catalog, instance.id, instance.controller, fresh));
+      if (cost < 0) problems.push(`${instance.id} has a negative effective cost`);
     }
   }
   if (stateHash(deserializeState(serializeState(state))) !== stateHash(state)) {

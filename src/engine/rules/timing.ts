@@ -1,4 +1,6 @@
 import type { EngineCatalog } from "../catalog";
+import { characteristicsOf } from "../continuous/characteristics";
+import { costModifier } from "../continuous/costs";
 import type { Speed } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
@@ -54,7 +56,7 @@ export function freeBackSlotsAfterStack(state: BattleState, catalog: EngineCatal
     (item) =>
       item.kind === "card" &&
       item.controller === side &&
-      catalog.card(instanceOf(state, item.instance).cardId).cardType === "character",
+      characteristicsOf(state, catalog, item.instance).cardType === "character",
   ).length;
   return openBackSlots(state, side) - pending;
 }
@@ -74,11 +76,11 @@ export function canPlayFromHand(
   if (!timingAllows(state, side, definition.speed)) {
     return false;
   }
-  // An X cost needs its minimum X; the play's prompts check the cost choices.
-  if (!costsPayable(state, side, id, playCosts(definition, instance.variant))) {
+  // An X cost needs its minimum X, after cost modifications; the play's prompts check the cost choices.
+  if (!costsPayable(state, side, id, playCosts(definition, instance.variant), costModifier(state, catalog, id, side))) {
     return false;
   }
   return (
-    definition.cardType !== "character" || freeBackSlotsAfterStack(state, catalog, side) > 0
+    characteristicsOf(state, catalog, id).cardType !== "character" || freeBackSlotsAfterStack(state, catalog, side) > 0
   );
 }

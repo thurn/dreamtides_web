@@ -1,4 +1,5 @@
 import type { CardSubtype } from "../types/card-identity";
+import type { CharacteristicsMemo } from "./continuous/characteristics";
 import type { AbilityList, CardCost, Speed } from "./dsl/types";
 import type { AvatarId, CardId, DreamsignId, DreamwellCardId, InstanceId } from "./state/ids";
 import type { CardStackItem } from "./state/types";
@@ -85,6 +86,11 @@ export interface EngineCatalog {
   dreamwellCard(id: DreamwellCardId): EngineDreamwellDefinition;
   avatar(id: AvatarId): EngineAvatarDefinition;
   dreamsign(id: DreamsignId): EngineDreamsignDefinition;
+  /**
+   * Effective characteristics of committed states evaluated over this
+   * catalog (continuous/characteristics.ts). Derived data, never persisted.
+   */
+  readonly memo: CharacteristicsMemo;
 }
 
 export interface EmblemDefinitions {
@@ -115,6 +121,7 @@ export function createCatalog(
     (emblems.dreamsigns ?? []).map((definition) => [definition.id, definition]),
   );
   return {
+    memo: new WeakMap(),
     avatar: (id) => lookup(avatarsById, id, "avatar"),
     dreamsign: (id) => lookup(dreamsignsById, id, "dreamsign"),
     card(id) {

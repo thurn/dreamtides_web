@@ -1,11 +1,12 @@
 /**
  * Floating effects: changes with a duration (rules § Durations). Spark gained
  * with a duration, floating and delayed triggers, and disabled triggers are
- * records here; each ends when its expiry is reached, wherever its cards are.
- * Continuous effects read the same records, in timestamp order.
+ * records here, as are the continuous changes of continuous/layers.ts; each
+ * ends when its expiry is reached, wherever its cards are. The layer
+ * evaluation reads the continuous records in timestamp order.
  */
 import type { EffectId, InstanceId, Side } from "../state/ids";
-import type { BattleState, Expiry, FloatingEffect } from "../state/types";
+import type { BattleState, Expiry, FloatingChange, FloatingEffect } from "../state/types";
 import type { StepContext } from "../steps/types";
 
 /** Mints an effect id; payable and floating effects share the counter. */
@@ -61,18 +62,14 @@ function sameBoundary(expiry: Expiry, boundary: Expiry): boolean {
   }
 }
 
-/** Ends the floating effects that change `id`, when it ceases to exist. */
-export function endChangesTo(ctx: StepContext, id: InstanceId): void {
-  endFloating(ctx, (effect) => effect.change.kind !== "trigger" && effect.change.instance === id);
+/** The card a floating change changes, or `null` for a trigger or a cost modifier. */
+export function changedInstance(change: FloatingChange): InstanceId | null {
+  return change.kind === "trigger" || change.kind === "cost" ? null : change.instance;
 }
 
-/** Spark the instance has gained with a duration, from its floating effects. */
-export function floatingSpark(state: BattleState, id: InstanceId): number {
-  let total = 0;
-  for (const effect of state.floating) {
-    if (effect.change.kind === "spark" && effect.change.instance === id) total += effect.change.amount;
-  }
-  return total;
+/** Ends the floating effects that change `id`, when it ceases to exist. */
+export function endChangesTo(ctx: StepContext, id: InstanceId): void {
+  endFloating(ctx, (effect) => changedInstance(effect.change) === id);
 }
 
 /** The floating and delayed triggers `side` controls, in creation order. */

@@ -81,7 +81,8 @@ interface BattleState {
   stack: StackItem[];                  // last element is the top
   priority: Side | null;
   triggerQueue: QueuedTrigger[];
-  floating: FloatingEffect[];          // spark changes with a duration, floating and delayed
+  floating: FloatingEffect[];          // continuous changes with a duration (spark, base spark,
+                                       // keywords, types, costs), floating and delayed
                                        // ("the next time…", `once: true`) triggers, disabled triggers
   turnLog: TurnCounters;               // cards/events/characters played this turn per side, etc.
   oncePerTurn: string[];
@@ -502,26 +503,71 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 
 ## Continuous effects
 
-Effective characteristics are computed, never stored, and memoized per
-`state.version`. They follow the MTG layer analog, in timestamp order within a
-layer:
+Effective characteristics are computed, never stored
+(`src/engine/continuous/`). `layers.ts` holds the evaluation; rules code
+reads it through `effectiveSpark`, `hasKeyword`, the selectors, the cost
+code, and the view. Changes come from two sources:
 
-1. **Copiable values:** printed values, figment catalog values, copy
-   overrides, and variant transforms: transfigurations first, then
-   deck-entry modifications ([below](#deck-entry-modifications)).
-2. **Type changes:** "has all character types".
-3. **Ability adds and removes:** granted keywords, and disabled triggers.
-4. **Base-spark setting:** "base ✦ becomes 7", "✦ … becomes X".
-5. **Spark modifications:** gained spark, temporary gains, anthems, Support,
-   and per-figment shares. The result is clamped at 0 for comparisons.
-6. **Cost modifications:** increases, then reductions, with a minimum of 0.
-   "Next card" modifiers are consumed on use.
+- **Static abilities** (`staticAbility(effect)`), on cards in play and on
+  emblems, read live.
+- **Floating records** in `state.floating`, made by resolving effects. Their
+  characters and values are fixed as they resolve, and each carries its
+  `timestamp`.
+
+Both feed the same `ContinuousChange` kinds. The layers follow the MTG
+analog:
+
+1. **Copiable values:** printed values for the variant. Figment catalog
+   values, copy overrides, and variant transforms (transfigurations, then
+   deck-entry modifications, [below](#deck-entry-modifications)) join this
+   layer when Phases 3.8 and 4 add them.
+2. **Type changes:** "has all character types" (`allTypes`).
+3. **Ability adds and removes:** keywords gained and lost (`keyword`).
+   Disabled triggers are floating records that the trigger matcher reads.
+4. **Base-spark setting:** "base ✦ becomes 7" (`baseSpark`).
+5. **Spark modifications:** permanent gained spark (`status.gainedSpark`),
+   spark with a duration, anthems, Support, and per-figment shares (`spark`).
+   The result is clamped at 0; the modifications themselves are not.
+6. **Cost modifications** (`continuous/costs.ts`): increases, then
+   reductions, with a minimum of 0, applied to the total of the fixed energy
+   and X when a player plays a card. A "next card" modifier (`next: true`)
+   ends as the card it applied to is paid for, after the commit point.
+
+Ordering within a layer:
+
+- Changes apply in timestamp order. A static ability's timestamp is its
+  source's `enteredZoneAt` (0 for an emblem).
+- Ties go to static abilities first, in source order (emblems, player first,
+  then cards by instance number), then floating records in creation order
+  (RD-hv-7x4l.7-2).
+- A static ability's selectors and values read the characteristics of the
+  layers before its own, so no layer depends on itself.
+- Cost selectors (`costAtMost`) read the copiable cost (C4, C13).
 
 Dynamic values such as "+X✦ where X is…" are **locked at resolution** unless
-the ability is a static "have". This is the MTG 608.2h analog; record it as an
-RD entry.
+the ability is a static "have" (MTG 608.2h; RD-hv-7x4l.7-1). A resolving
+continuous primitive evaluates its characters and value once and stores one
+floating record per character. `lockedAtResolution(value)` marks the intent.
 
-**Support adjacency:** `B(i)` supports `F(i-1)` and `F(i)`.
+**Continuous primitives** (`setBaseSpark`, `grant`/`loseKeyword`,
+`giveAllTypes`, `sparkModifier`, `costModifier`) each declare a
+`continuous` hook: their layer and the changes they make while a static
+ability holds them. Their `resolve` makes floating records for their own
+duration, else the enclosing `forDuration`'s, else permanently.
+
+**Memoization:** the layer evaluation of a state is cached lazily, per card
+and layer, inside a `Layers` object. A step mutates its work copy in place
+without changing `version`, so only committed states are memoized. The
+engine facade (`decision`, `legalActions`, `apply`, `view`) remembers each
+state it is handed in the catalog's `memo`, a `WeakMap` keyed by the state
+object and checked against `state.version`. Reads of any other state build
+a fresh evaluation. Caches never enter `BattleState`, and the fuzz
+invariants compare the memoized evaluation with a fresh one.
+
+**Support adjacency** (`continuous/support.ts`): `B(i)` supports `F(i-1)` and
+`F(i)`. `supported(filter)` is the `CharacterRef` for "supported
+characters". `supporting()` counts the characters behind a front-rank
+character (C9).
 
 ## Zones and zone changes
 
@@ -618,10 +664,10 @@ can't use `import.meta.glob`.
 () => [event(prevent(stackItem({ cardType: "event", controller: "opponent" }), { unlessPays: 2 }))]
 
 // Echo Architect 21965e95-0c8c-470c-a1e1-06d7b87a8d00: "Events cost you 1● more." / "When you play an event, copy it."
-() => [staticAbility(costModifier(cardsYouPlay({ type: "event" }), +1)), triggered(whenYouPlay({ type: "event" }), copyStackItem(triggeringItem()))]
+() => [staticAbility(costModifier("you", { cardType: "event" }, 1)), triggered(whenYouPlay({ cardType: "event" }), copyStackItem(triggeringItem()))]
 
 // Spirit Bond 3cda9dd7-cb81-43c1-9db5-1444d7363e13: "Until end of turn, characters you control have +X✦ where X is the number of characters you control."
-() => [event(forDuration(untilEndOfTurn(), sparkModifier(charactersYouControl(), lockedAtResolution(count(charactersYouControl())))))]
+() => [event(forDuration("untilEndOfTurn", sparkModifier(all(characterYouControl()), lockedAtResolution(count(characterYouControl())))))]
 ```
 
 **Primitive registry.** Each primitive lives in its own module under
@@ -649,11 +695,12 @@ them, with tests for each.
 | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `doubleEnergy`, `gainPoints`, `playerGainsPoints`, `store`, `spendCounters` |
 | Cards | `draw` (modifiers: ephemeral, cost 0), `discard` (chosen or random), `foresee`, `discover`, `erode`, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom`, `createInHand(copyOf, modifiers)` |
-| Characters | `dissolve`, `banish(duration?)`, `abandon(chooser, predicate)`, `materialize(from, selection)`, `materializeFigment(type, spark, n)`, `materializeFigmentCopy` (C5), `rematerialize`, `returnToHand`, `gainSpark(duration?)`, `setBaseSpark`, `awaken`, `exhaust`, `move(slotRule)`, `gainControl`, `grant(keyword, duration)`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)` |
+| Characters | `dissolve`, `banish(duration?)`, `abandon(chooser, predicate)`, `materialize(from, selection)`, `materializeFigment(type, spark, n)`, `materializeFigmentCopy` (C5), `rematerialize`, `returnToHand`, `gainSpark(duration?)`, `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `move(slotRule)`, `gainControl`, `grant(keyword, duration)`, `loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)` |
+| Costs | `costModifier(player, filter, amount, { next, duration })` |
 | Stack | `prevent(unless?)`, `copyStackItem(times, overrides)`, `putPreventedInto(zone)` |
 | Flow | `sequence`, `choose`, `chooseOne(modes)`, `ifThen(Else)`, `forEach`, `repeat`, `optional`, `eachPlayer`, `forDuration`, `delayed(next…)`, `floating(when…)`, `takeExtraTurn` (C8) |
 | Selectors | characters (by controller, subtype, ✦/● bounds, figment or not, exhausted, rank, "another"); cards in a zone; stack items; players |
-| Values | constant, X, `count(selector)`, stored counters, turn counters, `lockedAtResolution` |
+| Values | constant, X, `count(selector)`, `supporting` (C9), `times`, stored counters, turn counters, `lockedAtResolution` |
 | Durations | `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7), `permanent` |
 | Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(pred, nth?)`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, pred)` (C10), `atStartOfTurn`, `atStartOfFirstTurn` |
 

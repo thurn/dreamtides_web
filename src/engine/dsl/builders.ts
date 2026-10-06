@@ -20,12 +20,19 @@ import type {
   SelfSpec,
   Speed,
   StackItemSelector,
+  StaticAbility,
+  SupportedSpec,
   TargetSpec,
   ValueExpr,
 } from "./types";
 
 export function event(effect: Effect): Ability {
   return { kind: "event", effect };
+}
+
+/** An always-on ability holding a continuous primitive: "Warriors you control have +1✦." */
+export function staticAbility(effect: Effect): StaticAbility {
+  return { kind: "static", effect };
 }
 
 /** "Cost: Effect". Standard speed unless stated. */
@@ -152,4 +159,24 @@ export function x(): ValueExpr {
 
 export function count(of: CharacterSelector): ValueExpr {
   return { value: "count", of };
+}
+
+/** "Supported characters" (matching `extra`): the front-rank characters the source supports from the back rank. */
+export function supported(extra: Omit<CharacterSelector, "controller"> = {}): SupportedSpec {
+  return { kind: "supported", selector: extra };
+}
+
+/** "The number of characters supporting it" (C9). */
+export function supporting(): ValueExpr {
+  return { value: "supporting" };
+}
+
+/** `of` multiplied by `factor`: "+2✦ for each …". */
+export function times(of: ValueExpr, factor: number): ValueExpr {
+  return { value: "times", of, factor };
+}
+
+/** "X, where X is …", fixed as the effect resolves (RD-hv-7x4l.7-1). */
+export function lockedAtResolution(of: ValueExpr): ValueExpr {
+  return { value: "locked", of };
 }

@@ -1,8 +1,9 @@
+import type { EngineCatalog } from "../catalog";
 import type { PromptPurpose } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import type { AbilityOrigin } from "../state/types";
+import type { AbilityOrigin, BattleState, ContinuousChange } from "../state/types";
 import type { StepContext } from "../steps/types";
-import type { PlayTimeTarget, Variant } from "../dsl/types";
+import type { CharacterRef, Duration, PlayTimeTarget, ValueExpr, Variant } from "../dsl/types";
 
 /** The shape every effect node has; the registry narrows it to the primitive union. */
 export interface EffectNode {
@@ -27,6 +28,8 @@ export interface EffectEnv {
   readonly x: number | null;
   /** Whether each optional cost of the item was paid, in printed order (the `costPaid` condition). */
   readonly optionalPaid: readonly boolean[];
+  /** The duration a `forDuration` node gives the continuous primitives inside it; `null` outside one. */
+  readonly duration: Duration | null;
   /** The mode chosen at play time for a modal node of this effect, or `null` for a node off the chosen path. */
   modeOf(node: EffectNode): number | null;
   /** The targets chosen at play time for a target spec in this effect, or `null` if none were chosen. */
@@ -60,6 +63,35 @@ export interface PrimitiveDefinition<N extends EffectNode> {
   /** Target specs held directly by this node, in order. */
   targets?(node: N): readonly PlayTimeTarget[];
   resolve(ctx: StepContext, node: N, env: EffectEnv): void;
+  /** For a continuous primitive, the layer it applies in and its changes while a static ability holds it. */
+  readonly continuous?: ContinuousDefinition<N>;
+}
+
+/**
+ * The layers of the continuous-effects evaluation, in order (engine-design §
+ * Continuous effects). Layer 1, copiable values, has no primitives.
+ */
+export type Layer = 2 | 3 | 4 | 5 | 6;
+
+/**
+ * What a static ability's continuous primitive sees: its source and
+ * controller, with selectors and values read live, against the
+ * characteristics the layers before its own produced.
+ */
+export interface StaticEnv {
+  readonly state: BattleState;
+  readonly catalog: EngineCatalog;
+  readonly source: AbilitySource;
+  readonly controller: Side;
+  /** The characters a reference covers now; a target or the triggering card covers none. */
+  characters(ref: CharacterRef): InstanceId[];
+  value(expr: ValueExpr): number;
+}
+
+export interface ContinuousDefinition<N extends EffectNode> {
+  readonly layer: Layer;
+  /** The changes the node makes while a static ability applies it. */
+  changes(node: N, env: StaticEnv): ContinuousChange[];
 }
 
 /** Declares a primitive; the identity keeps the node type checked. */

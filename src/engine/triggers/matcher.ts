@@ -6,6 +6,7 @@
  * step per trigger, before any player receives priority.
  */
 import type { EngineCatalog } from "../catalog";
+import { cardMatchesFilter } from "../continuous/characteristics";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, FunctionalZone, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
 import { conditionHolds } from "../effects/interpreter";
@@ -112,13 +113,7 @@ function worksIn(zone: FunctionalZone, current: Zone): boolean {
 }
 
 function filterMatches(catalog: EngineCatalog, state: BattleState, filter: CardFilter, id: InstanceId): boolean {
-  const instance = state.instances[id];
-  if (instance === undefined) return false;
-  const definition = catalog.card(instance.cardId);
-  return (
-    (filter.cardType === undefined || definition.cardType === filter.cardType) &&
-    (filter.subtype === undefined || definition.subtype === filter.subtype)
-  );
+  return cardMatchesFilter(state, catalog, id, filter);
 }
 
 function subjectMatches(

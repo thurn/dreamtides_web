@@ -13,7 +13,32 @@ import type {
   StackItem,
   TurnState,
 } from "../state/types";
-import type { Variant } from "../dsl/types";
+import type { EngineCatalog } from "../catalog";
+import { characteristics } from "../continuous/characteristics";
+import { adjustedEnergy, costModifier } from "../continuous/costs";
+import { fixedEnergy } from "../dsl/energy";
+import type { Keyword, Variant } from "../dsl/types";
+import type { CardSubtype } from "../../types/card-identity";
+import { changedInstance } from "../rules/floating";
+import { playCosts } from "../rules/costs";
+
+/**
+ * A card's effective characteristics, after every continuous effect (the
+ * layer evaluation): what the UI and the AI show and compare.
+ */
+export interface CharacteristicsView {
+  readonly cardType: "character" | "event";
+  readonly subtype: CardSubtype;
+  readonly allTypes: boolean;
+  readonly keywords: readonly Keyword[];
+  /** A character's effective spark; `null` for an event. */
+  readonly spark: number | null;
+  /**
+   * The energy its controller would pay to play it now, X counted as 0,
+   * after cost modifications.
+   */
+  readonly cost: number;
+}
 
 /** One instance the viewer can see, with its card identity. */
 export interface InstanceView {
@@ -25,6 +50,7 @@ export interface InstanceView {
   readonly variant: Readonly<Variant>;
   readonly status: Readonly<CardStatus>;
   readonly enteredZoneAt: number;
+  readonly characteristics: CharacteristicsView;
 }
 
 /**
@@ -169,10 +195,13 @@ function hiddenZone(ids: readonly InstanceId[], visible: (id: InstanceId) => boo
   return { count: ids.length, known: ids.filter(visible) };
 }
 
-export function view(state: BattleState, viewer: Side): BattleView {
+export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): BattleView {
+  const layers = characteristics(state, catalog);
   const instances: Record<InstanceId, InstanceView> = {};
   for (const instance of Object.values(state.instances)) {
     if (visibleTo(instance, viewer)) {
+      const card = layers.of(instance.id);
+      const printed = fixedEnergy(playCosts(catalog.card(instance.cardId), instance.variant));
       instances[instance.id] = {
         id: instance.id,
         cardId: instance.cardId,
@@ -182,13 +211,23 @@ export function view(state: BattleState, viewer: Side): BattleView {
         variant: { ...instance.variant },
         status: { ...instance.status },
         enteredZoneAt: instance.enteredZoneAt,
+        characteristics: {
+          cardType: card.cardType,
+          subtype: card.subtype,
+          allTypes: card.allTypes,
+          keywords: [...card.keywords],
+          spark: card.spark,
+          cost: adjustedEnergy(printed, costModifier(state, catalog, instance.id, instance.controller, layers)),
+        },
       };
     }
   }
   const visible = (id: InstanceId): boolean => id in instances;
   const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);
-  const floatingVisible = (effect: FloatingEffect): boolean =>
-    visibleSource(effect.source) && (effect.change.kind === "trigger" || visible(effect.change.instance));
+  const floatingVisible = (effect: FloatingEffect): boolean => {
+    const changed = changedInstance(effect.change);
+    return visibleSource(effect.source) && (changed === null || visible(changed));
+  };
   const side = (which: Side): SideView => {
     const source = state.sides[which];
     return {

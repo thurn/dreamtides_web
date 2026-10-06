@@ -20,6 +20,7 @@ import { PROMPTING_CARDS } from "./synthetic-effects";
 import { DSL_CARDS } from "./dsl-cards";
 import { AVATAR, DREAMSIGN, STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stack-cards";
 import { TRIGGER_AVATAR, TRIGGER_CARDS, TRIGGER_DREAMSIGN, TRIGGER_EMBLEMS } from "./trigger-cards";
+import { CONTINUOUS_AVATAR, CONTINUOUS_CARDS, CONTINUOUS_DREAMSIGN, CONTINUOUS_EMBLEMS } from "./continuous-cards";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
 export interface RecordedAction {
@@ -49,10 +50,10 @@ export const ACTION_CAP = 20000;
 
 /**
  * Synthetic cards the fuzzer mixes in: vanilla, prompting, DSL, stack
- * (Interrupts, prevent, activated abilities), and trigger and duration
- * fixtures.
+ * (Interrupts, prevent, activated abilities), trigger and duration, and
+ * continuous-effect fixtures.
  */
-const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS];
+const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS];
 
 /** Every card the fuzzer draws from: the synthetic fixtures plus the full pool. */
 export function fuzzCatalogCards() {
@@ -61,9 +62,9 @@ export function fuzzCatalogCards() {
 
 /** The fuzzer's catalog: the synthetic fixtures and emblems, any `extra` cards, and the full catalog. */
 export function fuzzEngineCatalog(extra: readonly EngineCardDefinition[] = []) {
-  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...extra], {
-    avatars: [...(SYNTHETIC_EMBLEMS.avatars ?? []), ...(TRIGGER_EMBLEMS.avatars ?? [])],
-    dreamsigns: [...(SYNTHETIC_EMBLEMS.dreamsigns ?? []), ...(TRIGGER_EMBLEMS.dreamsigns ?? [])],
+  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...extra], {
+    avatars: [...(SYNTHETIC_EMBLEMS.avatars ?? []), ...(TRIGGER_EMBLEMS.avatars ?? []), ...(CONTINUOUS_EMBLEMS.avatars ?? [])],
+    dreamsigns: [...(SYNTHETIC_EMBLEMS.dreamsigns ?? []), ...(TRIGGER_EMBLEMS.dreamsigns ?? []), ...(CONTINUOUS_EMBLEMS.dreamsigns ?? [])],
   });
 }
 
@@ -83,8 +84,8 @@ export function randomDeck(random: PolicyRandom): DeckEntry[] {
 
 export function fuzzInit(seed: BattleSeed): BattleInit {
   const random = new PolicyRandom(battleSeed(`decks|${seed}`));
-  const avatars = [...Object.values(AVATAR), ...Object.values(TRIGGER_AVATAR)].map((avatar) => avatar.id);
-  const dreamsigns = [DREAMSIGN.points, ...Object.values(TRIGGER_DREAMSIGN)].map((dreamsign) => dreamsign.id);
+  const avatars = [...Object.values(AVATAR), ...Object.values(TRIGGER_AVATAR), ...Object.values(CONTINUOUS_AVATAR)].map((avatar) => avatar.id);
+  const dreamsigns = [DREAMSIGN.points, ...Object.values(TRIGGER_DREAMSIGN), ...Object.values(CONTINUOUS_DREAMSIGN)].map((dreamsign) => dreamsign.id);
   const someDreamsigns = () => dreamsigns.filter(() => random.next() < 0.3);
   return {
     seed,

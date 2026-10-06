@@ -5,8 +5,9 @@ import {
   matchesStackItem,
   matchingCharacters,
   matchingStackItems,
-  resolvePlayer,
 } from "../dsl/selectors";
+import { evaluateValue } from "../dsl/values";
+import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr } from "../dsl/types";
 import type { AbilitySource, CardId, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
@@ -315,16 +316,17 @@ export function splitChoices(effects: readonly EffectNode[], choices: EffectChoi
   });
 }
 
+/**
+ * A value as the effect resolves. A resolving effect locks every value it
+ * reads at this moment (RD-hv-7x4l.7-1).
+ */
 export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): number {
-  if (typeof value === "number") return value;
-  switch (value.value) {
-    case "x":
-      return env.x ?? 0;
-    case "count":
-      return matchingCharacters(ctx.state, ctx.catalog, value.of, env.controller, env.source).length;
-    case "handSize":
-      return ctx.state.sides[resolvePlayer(env.controller, value.player)].hand.length;
-  }
+  return evaluateValue(ctx.state, value, {
+    controller: env.controller,
+    source: env.source,
+    x: env.x,
+    count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source).length,
+  });
 }
 
 /** What a condition is checked against: the effect's controller and source, and the item's paid optional costs. */
@@ -379,6 +381,13 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
     case "subject": {
       const subject = env.subject;
       return subject !== null && ctx.state.instances[subject]?.zone === "play" ? [subject] : [];
+    }
+    case "supported": {
+      const self = sourceInstance(env.source);
+      const selector = { controller: "you" as const, ...ref.selector };
+      return self === null
+        ? []
+        : supportedBy(ctx.state, self).filter((id) => matchesCharacter(ctx.state, ctx.catalog, selector, id, env.controller, env.source));
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
@@ -442,6 +451,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     variant: options.origin.kind === "card" ? options.origin.variant : BASE_VARIANT,
     x: options.x,
     optionalPaid: options.optionalPaid,
+    duration: null,
     modeOf(node) {
       return chosen.get(node) ?? null;
     },

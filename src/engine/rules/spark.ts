@@ -1,21 +1,18 @@
 import type { EngineCatalog } from "../catalog";
+import { characteristicsOf } from "../continuous/characteristics";
 import type { InstanceId } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { floatingSpark } from "./floating";
-import { instanceOf } from "./zones";
 
 /**
- * A character's effective spark: base plus gained spark, permanent and with
- * a duration, never below 0. A variable-spark character's base is the X paid
- * for it while in play, and 0 elsewhere.
+ * A character's effective spark from the layer evaluation: its base spark
+ * (the X paid for a variable-spark character while in play, 0 elsewhere)
+ * after base-spark setting, plus gained spark, spark with a duration,
+ * anthems, and Support, never below 0. An event has none.
  */
 export function effectiveSpark(
   state: BattleState,
   catalog: EngineCatalog,
   id: InstanceId,
 ): number {
-  const instance = instanceOf(state, id);
-  const printed = catalog.card(instance.cardId).spark;
-  const base = printed === "x" ? (instance.status.x ?? 0) : (printed ?? 0);
-  return Math.max(0, base + instance.status.gainedSpark + floatingSpark(state, id));
+  return characteristicsOf(state, catalog, id).spark ?? 0;
 }

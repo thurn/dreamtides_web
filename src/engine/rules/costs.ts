@@ -6,9 +6,11 @@
  * stack.
  */
 import type { EngineCardDefinition, EngineCatalog } from "../catalog";
+import { cardMatchesFilter } from "../continuous/characteristics";
+import { adjustedEnergy, NO_COST_MODIFIER, type CostModifier } from "../continuous/costs";
 import { matchingCharacters } from "../dsl/selectors";
 import { fixedEnergy, minimumEnergy, xCost } from "../dsl/energy";
-import type { CardFilter, Cost, EnergyXCost, PaymentCost, Variant } from "../dsl/types";
+import type { Cost, PaymentCost, Variant } from "../dsl/types";
 import type {
   ChooseCardsPrompt,
   ChooseModePrompt,
@@ -24,14 +26,22 @@ import { banish, instanceOf, moveInstance, slotOf } from "./zones";
 
 /** One cost to pay after the commit point, with the cards chosen for it. */
 export interface PlannedCost {
-  readonly cost: PaymentCost | EnergyXCost;
+  readonly cost: PaymentCost;
   readonly cards: readonly InstanceId[];
 }
 
 /** How a list of costs will be paid, settled by play-time prompts before the commit point. */
 export interface CostPlan {
   readonly x: number | null;
-  /** The costs to pay, in printed order, with each chosen alternative's costs in place of its choice. */
+  /**
+   * The energy paid for the top-level energy costs and for X, after cost
+   * modifications (applied to their total); paid first, the fixed part then X.
+   */
+  readonly energy: { readonly fixed: number; readonly x: number };
+  /**
+   * The other costs to pay, in printed order, with each chosen alternative's
+   * costs in place of its choice.
+   */
   readonly payments: readonly PlannedCost[];
   /** Whether each optional cost will be paid, in printed order. */
   readonly optionalPaid: readonly boolean[];
@@ -50,14 +60,16 @@ export function playCosts(definition: EngineCardDefinition, variant: Variant): C
 
 /**
  * Chooses X as a play-time prompt when the costs have an X part: from its
- * minimum up to the energy left after the fixed part. An unaffordable X is an
- * empty prompt, which makes the play illegal. `null` without an X part.
+ * minimum up to the most the side can pay once the fixed part and the cost
+ * modifications apply. An unaffordable X is an empty prompt, which makes the
+ * play illegal. `null` without an X part.
  */
 export function chooseX(
   ctx: StepContext,
   side: Side,
   costs: readonly Cost[],
   purpose: PromptPurpose,
+  modifier: CostModifier = NO_COST_MODIFIER,
 ): number | null {
   const variable = xCost(costs);
   if (variable === null) return null;
@@ -66,7 +78,7 @@ export function chooseX(
     side,
     purpose,
     min: variable.min,
-    max: ctx.state.sides[side].currentEnergy - fixedEnergy(costs),
+    max: ctx.state.sides[side].currentEnergy - fixedEnergy(costs) - modifier.increase + modifier.reduction,
   });
 }
 
@@ -105,19 +117,12 @@ export function costsPayable(
   side: Side,
   source: AbilitySource,
   costs: readonly Cost[],
+  modifier: CostModifier = NO_COST_MODIFIER,
 ): boolean {
-  if (minimumEnergy(costs) > state.sides[side].currentEnergy) return false;
+  if (adjustedEnergy(minimumEnergy(costs), modifier) > state.sides[side].currentEnergy) return false;
   const counters = sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
   if (counters > storedCounters(state, source)) return false;
   return costs.every((cost) => cost.cost !== "exhaustSelf" || canPayExhaust(state, source));
-}
-
-function matchesFilter(state: BattleState, catalog: EngineCatalog, id: InstanceId, filter: CardFilter): boolean {
-  const definition = catalog.card(instanceOf(state, id).cardId);
-  return (
-    (filter.cardType === undefined || definition.cardType === filter.cardType) &&
-    (filter.subtype === undefined || definition.subtype === filter.subtype)
-  );
 }
 
 /** A cost paid with chosen cards. */
@@ -141,9 +146,9 @@ function cardCandidates(
     case "discard":
       return [...state.sides[side].hand];
     case "reveal":
-      return state.sides[side].hand.filter((id) => matchesFilter(state, catalog, id, cost.filter));
+      return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "banishFromVoid":
-      return state.sides[side].void.filter((id) => matchesFilter(state, catalog, id, cost.filter));
+      return state.sides[side].void.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
   }
 }
 
@@ -163,7 +168,8 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], string>> = {
  * — the card being played and the ability's targets — and cards chosen for
  * earlier costs are not candidates: a card used to pay a cost is never also
  * a target of the same ability (rules § Targeting). A mandatory cost that
- * cannot be paid raises an empty prompt, which makes the play illegal.
+ * cannot be paid raises an empty prompt, which makes the play illegal. The
+ * top-level energy and X are paid together, after `modifier`.
  */
 export function planCosts(
   ctx: StepContext,
@@ -173,10 +179,14 @@ export function planCosts(
   x: number | null,
   purpose: (role: string) => PromptPurpose,
   excluded: readonly InstanceId[],
+  modifier: CostModifier = NO_COST_MODIFIER,
 ): CostPlan {
   const { state, catalog } = ctx;
   const used = [...excluded];
-  let energyLeft = state.sides[side].currentEnergy - fixedEnergy(costs) - (x ?? 0);
+  const total = adjustedEnergy(fixedEnergy(costs) + (x ?? 0), modifier);
+  const fixedPart = Math.min(total, adjustedEnergy(fixedEnergy(costs), modifier));
+  const energy = { fixed: fixedPart, x: total - fixedPart };
+  let energyLeft = state.sides[side].currentEnergy - total;
   let countersLeft = storedCounters(state, source) - sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
   let exhaustFree = canPayExhaust(state, source) && !costs.some((cost) => cost.cost === "exhaustSelf");
   const payments: PlannedCost[] = [];
@@ -206,7 +216,8 @@ export function planCosts(
       if (cost.cost === "exhaustSelf") exhaustFree = false;
     }
     if (!choosesCards(cost)) {
-      payments.push({ cost, cards: [] });
+      // Top-level energy is part of `energy`.
+      if (nested || cost.cost !== "energy") payments.push({ cost, cards: [] });
       return;
     }
     const candidates = cardCandidates(state, catalog, side, source, cost);
@@ -225,7 +236,6 @@ export function planCosts(
   for (const cost of costs) {
     switch (cost.cost) {
       case "energyX":
-        payments.push({ cost, cards: [] });
         break;
       case "choice": {
         const choice = ctx.choose<ChooseModePrompt>({
@@ -249,7 +259,7 @@ export function planCosts(
         plan(cost, false);
     }
   }
-  return { x, payments, optionalPaid };
+  return { x, energy, payments, optionalPaid };
 }
 
 /** Exhausts a source to pay a ☾ cost. */
@@ -280,16 +290,14 @@ export function abandonCharacter(ctx: StepContext, side: Side, id: InstanceId): 
   ctx.emit({ kind: "abandoned", instance: id, side });
 }
 
-/** Pays every planned cost, in order, after the commit point. */
+/** Pays every planned cost after the commit point: the energy first (the fixed part, then X), then the rest in order. */
 export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, plan: CostPlan): void {
+  spendEnergy(ctx, side, plan.energy.fixed);
+  spendEnergy(ctx, side, plan.energy.x);
   for (const { cost, cards } of plan.payments) {
     switch (cost.cost) {
       case "energy":
         spendEnergy(ctx, side, cost.amount);
-        break;
-      case "energyX":
-        if (plan.x === null) throw new Error("An X cost is paid only after X is chosen");
-        spendEnergy(ctx, side, plan.x);
         break;
       case "exhaustSelf":
         exhaustForCost(ctx, source);

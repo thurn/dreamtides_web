@@ -1,4 +1,5 @@
 import type { EngineCatalog } from "./catalog";
+import { rememberCharacteristics } from "./continuous/characteristics";
 import type { EngineEvent } from "./events";
 import { actionsEqual, type Action, type Decision } from "./rules/actions";
 import { decision, legalActions } from "./rules/decision";
@@ -17,7 +18,11 @@ export interface ApplyResult {
   readonly answers: readonly RecordedAnswer[];
 }
 
-/** The engine API over one card catalog. Every function is pure. */
+/**
+ * The engine API over one card catalog. Every function is pure. States
+ * handed to it are committed and never mutated afterwards, so it memoizes
+ * their effective characteristics (continuous/characteristics.ts).
+ */
 export interface Engine {
   readonly catalog: EngineCatalog;
   /** Builds the battle and runs it to the first top-level decision. */
@@ -60,19 +65,23 @@ export function createEngine(catalog: EngineCatalog): Engine {
       );
     },
     decision(state) {
+      rememberCharacteristics(state, catalog);
       return decision(state, catalog, memo);
     },
     legalActions(state, side) {
+      rememberCharacteristics(state, catalog);
       return legalActions(state, catalog, side, memo);
     },
     apply(state, side, action, source, observe) {
+      rememberCharacteristics(state, catalog);
       if (!legalActions(state, catalog, side, memo).some((legal) => actionsEqual(legal, action))) {
         throw new IllegalAction(`Illegal action for ${side}: ${JSON.stringify(action)}`);
       }
       return runToDecision(state, stepForAction(state, action), source, catalog, memo, observe);
     },
     view(state, side) {
-      return view(state, side);
+      rememberCharacteristics(state, catalog);
+      return view(state, side, catalog);
     },
   };
 }

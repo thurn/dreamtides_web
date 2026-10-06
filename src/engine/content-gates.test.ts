@@ -15,6 +15,7 @@ import type { Ability } from "./dsl/types";
 import { expectedVerifiedText } from "./dsl/verified-text";
 import { engineCardFromContent } from "./content-catalog";
 import { everyNode } from "./effects/interpreter";
+import { primitiveDefinition } from "./effects/registry";
 
 interface Entity {
   readonly kind: string;
@@ -57,8 +58,12 @@ describe("content gates", () => {
         const built: readonly Ability[] = abilities({ amplified });
         for (const ability of built) {
           // Every node, every mode of a modal node included, is a registered primitive.
-          if (ability.kind === "event" || ability.kind === "activated" || ability.kind === "triggered") {
+          if (ability.kind === "event" || ability.kind === "activated" || ability.kind === "triggered" || ability.kind === "static") {
             expect(() => everyNode(ability.effect)).not.toThrow();
+          }
+          // A static ability holds a continuous primitive, which the layer evaluation applies.
+          if (ability.kind === "static") {
+            expect(primitiveDefinition(ability.effect.op).continuous, `${entity.kind} ${entity.id}`).toBeDefined();
           }
         }
       }

@@ -2,7 +2,8 @@
  * The ability DSL: typed, declarative ability data (D5). Each entity's
  * abilities sit beside its printed text in its content module, and one
  * interpreter executes them. Effect nodes come from the primitive registry
- * (effects/primitives/); later phases add static kinds.
+ * (effects/primitives/); static abilities hold continuous primitives, which
+ * the layer evaluation in continuous/ applies while their source is in play.
  */
 import type { CardSubtype } from "../../types/card-identity";
 import type { Effect } from "../effects/registry";
@@ -76,8 +77,18 @@ export interface SubjectSpec {
   readonly kind: "subject";
 }
 
+/**
+ * The front-rank characters the source supports (rules § The Play Area):
+ * while the source is in its controller's back rank at `Bi`, the characters
+ * at `F(i-1)` and `Fi` that match the selector's other fields.
+ */
+export interface SupportedSpec {
+  readonly kind: "supported";
+  readonly selector: Omit<CharacterSelector, "controller">;
+}
+
 /** The characters a character effect applies to. */
-export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec;
+export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec;
 
 /** Any target chosen at play time: characters in play or cards on the stack. */
 export type PlayTimeTarget = TargetSpec | StackTargetSpec;
@@ -87,7 +98,16 @@ export type ValueExpr =
   | number
   | { readonly value: "x" }
   | { readonly value: "count"; readonly of: CharacterSelector }
-  | { readonly value: "handSize"; readonly player: PlayerRef };
+  | { readonly value: "handSize"; readonly player: PlayerRef }
+  /** The characters supporting the source (C9): 0–2 while it is in the front rank, 0 elsewhere. */
+  | { readonly value: "supporting" }
+  /** `of` multiplied by `factor`: "+2✦ for each …". */
+  | { readonly value: "times"; readonly of: ValueExpr; readonly factor: number }
+  /**
+   * "+X✦ where X is …" in a resolving effect: `of`, evaluated once as the
+   * effect resolves (RD-hv-7x4l.7-1). A static ability's values are live.
+   */
+  | { readonly value: "locked"; readonly of: ValueExpr };
 
 /**
  * How long a change lasts (rules § Durations). "Until the opponent pays N●"
@@ -253,8 +273,19 @@ export interface TriggeredAbility {
   readonly oncePerTurn?: boolean;
 }
 
+/**
+ * An always-on ability (rules § Ability Types → Static abilities): its
+ * effect is a continuous primitive that applies while its source is in play
+ * (an emblem always is), with values read live.
+ */
+export interface StaticAbility {
+  readonly kind: "static";
+  readonly effect: Effect;
+}
+
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
+  | StaticAbility
   | AdditionalCostAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }
   | ActivatedAbility
