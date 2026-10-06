@@ -6,7 +6,7 @@ import type { CardId, InstanceId, Phase, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { NO_PROMPTS } from "../steps/sources";
-import { boardState } from "../testing/board";
+import { boardState, cardIdOf } from "../testing/board";
 import { STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "../testing/stack-cards";
 import { SYNTHETIC, testCatalog } from "../testing/synthetic-cards";
 
@@ -176,10 +176,10 @@ describe("timing windows", () => {
     const legal = engine.legalActions(state, side);
     const speedOf = (cardId: CardId) => speedList.find((speed) => SPEED_CARDS[speed].card.id === cardId || SPEED_CARDS[speed].ability.id === cardId);
     const played = legal.flatMap((action) =>
-      action.kind === "play" ? [speedOf(state.instances[action.card].cardId)] : [],
+      action.kind === "play" ? [speedOf(cardIdOf(state, action.card))] : [],
     );
     const activated = legal.flatMap((action) =>
-      action.kind === "activate" && typeof action.source === "string" ? [speedOf(state.instances[action.source].cardId)] : [],
+      action.kind === "activate" && typeof action.source === "string" ? [speedOf(cardIdOf(state, action.source))] : [],
     );
     expect(played).toEqual(speeds);
     expect(activated).toEqual(speeds);

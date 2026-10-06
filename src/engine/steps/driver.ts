@@ -15,7 +15,7 @@ export type StepObserver = (state: BattleState, step: Step, events: readonly Eng
 export function stepForAction(state: BattleState, action: Action): Step {
   switch (action.kind) {
     case "play":
-      return { kind: "play", card: action.card };
+      return { kind: "play", card: action.card, from: action.from, ...(action.slot === undefined ? {} : { slot: action.slot }) };
     case "activate":
       return { kind: "activate", source: action.source, ability: action.ability };
     case "payToEnd":

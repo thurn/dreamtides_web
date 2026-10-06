@@ -3,6 +3,8 @@ import { CARDS } from "../content/cards";
 import type { CardDefinition, DreamwellCardDefinition } from "../content/define";
 import { DREAMSIGNS } from "../content/dreamsigns";
 import { DREAMWELL_CARDS } from "../content/dreamwell";
+import { FIGMENTS } from "../content/figments";
+import { parseFigmentId } from "./state/ids";
 import { parseCardId } from "../types/card-identity";
 import { parseAvatarId, parseDreamsignId, parseDreamwellCardId } from "../types/identifiers";
 import type { ContentStatus } from "../content/define";
@@ -12,6 +14,7 @@ import type {
   EngineCardDefinition,
   EngineDreamsignDefinition,
   EngineDreamwellDefinition,
+  EngineFigmentDefinition,
 } from "./catalog";
 import { energy, energyX } from "./dsl/builders";
 import { fixedEnergy, xCost } from "./dsl/energy";
@@ -89,6 +92,17 @@ export function contentAvatarDefinitions(): EngineAvatarDefinition[] {
     id: parseAvatarId(avatar.id),
     status: contentState(avatar),
     abilities: avatar.abilities ?? NO_ABILITIES,
+  }));
+}
+
+/** Figment types from the figment catalog; a pending figment has no abilities (D36). */
+export function contentFigmentDefinitions(): EngineFigmentDefinition[] {
+  return FIGMENTS.map((figment) => ({
+    id: parseFigmentId(figment.id),
+    subtype: figment.subtype,
+    spark: figment.spark,
+    status: contentState(figment),
+    abilities: figment.abilities ?? NO_ABILITIES,
   }));
 }
 

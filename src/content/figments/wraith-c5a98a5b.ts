@@ -1,3 +1,4 @@
+import { keyword } from "../../engine/dsl/builders";
 import { figment } from "../define";
 
 export default figment({
@@ -11,5 +12,6 @@ export default figment({
   imageNumber: 2025883232,
   artOwned: false,
   art: { x: -0.096, y: 0.529, scale: 1.37 },
-  pending: true,
+  abilities: () => [keyword("vengeful")],
+  verifiedText: "3bffipbzn3",
 });

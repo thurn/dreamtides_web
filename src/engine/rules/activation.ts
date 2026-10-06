@@ -8,9 +8,10 @@ import type { Ability, ActivatedAbility } from "../dsl/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { AbilitySource, CardId, OncePerTurnKey, Side } from "../state/ids";
 import { sourceKey } from "../state/ids";
-import type { AbilityOrigin, BattleState } from "../state/types";
+import type { AbilityOrigin, BattleState, CardInstance } from "../state/types";
 import { costsPayable } from "./costs";
-import { timingAllows } from "./timing";
+import { effectEntersPlay } from "../effects/interpreter";
+import { freeBackSlotsAfterStack, timingAllows } from "./timing";
 import { charactersInPlay } from "./zones";
 
 /** The side controlling a source now, or `null` when the source is gone. */
@@ -23,11 +24,19 @@ export function sourceController(state: BattleState, source: AbilitySource): Sid
   return present ? source.side : null;
 }
 
+/** Where an instance's abilities come from: its card for its variant, the card a figment copy copies, or its figment type. */
+export function instanceOrigin(instance: CardInstance): AbilityOrigin {
+  const { printing } = instance;
+  return printing.kind === "figment"
+    ? { kind: "figment", id: printing.figment }
+    : { kind: "card", cardId: printing.cardId, variant: instance.variant };
+}
+
 /** Where a source's abilities come from now, or `null` when the source is gone. */
 export function abilityOrigin(state: BattleState, source: AbilitySource): AbilityOrigin | null {
   if (typeof source === "string") {
     const instance = state.instances[source];
-    return instance === undefined ? null : { kind: "card", cardId: instance.cardId, variant: instance.variant };
+    return instance === undefined ? null : instanceOrigin(instance);
   }
   const side = state.sides[source.side];
   if (source.kind === "avatar") {
@@ -42,6 +51,8 @@ export function originAbilities(catalog: EngineCatalog, origin: AbilityOrigin): 
   switch (origin.kind) {
     case "card":
       return catalog.card(origin.cardId).abilities(origin.variant);
+    case "figment":
+      return catalog.figment(origin.id).abilities(BASE_VARIANT);
     case "avatar":
       return catalog.avatar(origin.id).abilities(BASE_VARIANT);
     case "dreamsign":
@@ -87,9 +98,10 @@ export function abilitySources(state: BattleState, side: Side): AbilitySource[] 
 
 /**
  * Whether `side` may begin activating the ability now: it controls the
- * source, the ability's timing allows it, a once-per-turn ability is unused
- * this turn, and the costs that need no choice are payable. The dry run of
- * the `activate` step checks the choices.
+ * source, the ability's timing allows it, an ability that would put
+ * characters into play has an open back-rank position, a once-per-turn
+ * ability is unused this turn, and the costs that need no choice are
+ * payable. The dry run of the `activate` step checks the choices.
  */
 export function canActivate(
   state: BattleState,
@@ -103,6 +115,7 @@ export function canActivate(
   const ability = activatedAbilityAt(state, catalog, source, index);
   if (ability === null) return false;
   if (!timingAllows(state, side, ability.speed)) return false;
+  if (effectEntersPlay(ability.effect) && freeBackSlotsAfterStack(state, catalog, side) <= 0) return false;
   if (ability.oncePerTurn === true && state.oncePerTurn.includes(oncePerTurnKey(source, index))) {
     return false;
   }

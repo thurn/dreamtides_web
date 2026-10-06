@@ -485,10 +485,14 @@ Types](#ability-types)).
 copy as a created card directly above the original, so the copy resolves first.
 The copy is **not played**: it fires no "when you play" triggers, is not counted
 by effects that count cards played, and does not give either player priority.
-Its controller may choose new targets and modes for it. It uses the original's
-value of X and counts any additional costs paid for the original as paid. A copy
-can be Prevented like any other item, and it ceases to exist when it resolves or
-is Prevented.
+Its controller may choose new targets and modes for it: each choice is made
+again as the copy is created, a choice with only one legal option is made
+automatically, and a choice with no legal option keeps the original's. It uses
+the original's value of X and counts any additional costs paid for the original
+as paid. A copy can be Prevented like any other item, and it ceases to exist
+when it resolves or is Prevented. A copy of a character is not created while
+its controller's back rank would be full (see [Battlefield
+Capacity](#battlefield-capacity)).
 
 **Paying to end an effect:** An effect that lasts "until the opponent pays N●"
 lets that opponent — the controller of the affected character — pay N● to end
@@ -584,7 +588,11 @@ Ending phase, in the leftmost open back-rank position of the player who
 controlled it when it was banished. Its return is a materialize: it enters
 exhausted unless awakened and fires its ▸Materialized trigger. If that player's
 back rank is full, it stays banished. A figment or other created card banished
-this way ceases to exist and does not return.
+this way ceases to exist and does not return. The other variants return the
+same way at their own boundary: as the banishing card leaves play, as the next
+Day phase begins, or as the banishing player's next turn begins. "Until this
+leaves play" does nothing if the banishing card is no longer in play when it
+would begin.
 
 **Materialize** — Put a character into play. This covers a character entering
 play from hand (played normally), from the void, from the deck, as a created
@@ -601,7 +609,9 @@ its ▸Materialized trigger and any "When you materialize" triggers.
 
 **Phasing** — ▸Materialized: Return another character you control to hand, then
 move this character to that character's position. Phasing is resolved through the normal
-return-to-hand and repositioning tools.
+return-to-hand and repositioning tools. The move is part of the effect, so it
+can put an exhausted character in the front rank; it happens only if this
+character is still in play and the position is open.
 
 **Awakened** — A character with this keyword enters play without the exhausted
 status. See [Exhaust and Awaken](#exhaust-and-awaken).
@@ -612,7 +622,9 @@ effect on its own; the keyword text states the benefit, such as "Support –
 Supported characters have +1✦."
 
 **Veil** — If a character with Veil would be dissolved by an effect the
-opponent controls, instead it loses Veil.
+opponent controls, instead it loses Veil. A challenge and an abandon are not
+effects the opponent controls. A character that loses Veil keeps that change
+when it changes zones.
 
 **Reclaim** / **Reclaim N●** — A card with Reclaim may be played from the void
 instead of from hand. With plain Reclaim it is played for its normal ● cost; with
@@ -641,10 +653,13 @@ event, it is banished from the void at the end of the turn. The Offering status
 persists across zones, so banishing the card and materializing it, or returning
 it to hand and replaying it, does not prevent the end-of-turn banishment. Other
 costs (such as "To play this card, …") must still be paid; if the card's cost
-includes X, X is 0.
+includes X, X is 0. The player chooses between Offering and the card's own costs
+as they play it, from the ways they can pay; cost changes apply to the 0● cost
+as to any play.
 
 **Ephemeral** — A card drawn with Ephemeral is banished at the end of the turn if
-it is still in hand, so it must be played the turn it is drawn.
+it is still in hand, so it must be played the turn it is drawn. It is no longer
+Ephemeral once it leaves the hand.
 
 **Vengeful** — When this character loses a challenge, it dissolves the opposing
 enemy character. In effect both characters in the challenge are dissolved.
@@ -832,6 +847,20 @@ when it changes zones.
 Targeting is based on card identity, which persists across zones. Banishing a
 card and returning it to play does **not** protect a character: an effect
 targeting that character still works once it is found in play again.
+
+Three rules replace a zone change, applied in this order, each to the change as
+the earlier ones left it:
+
+1. A created card ceases to exist instead of moving to a deck, a hand, the
+   void, or the Banished zone (see [Created Cards](#created-cards)). A
+   dissolved one is still dissolved and fires its ▸Dissolved triggers first.
+2. A reclaimed card is banished instead of any other zone change, which is no
+   longer a dissolve (see Reclaim).
+3. A dissolve by an effect the opponent controls removes Veil instead (see
+   Veil).
+
+So a figment with Veil that the opponent dissolves only loses Veil, while a
+reclaimed character with Veil that the opponent dissolves is banished.
 
 Gained spark and persistent statuses (such as reclaimed and Offering) travel
 with the card across zones, while spark a character merely _has_ from a static

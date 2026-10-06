@@ -7,6 +7,7 @@ export type {
   EngineCatalog,
   EngineDreamsignDefinition,
   EngineDreamwellDefinition,
+  EngineFigmentDefinition,
   Speed,
 } from "./catalog";
 export { createCatalog } from "./catalog";
@@ -15,6 +16,7 @@ export {
   contentCardDefinitions,
   contentDreamsignDefinitions,
   contentDreamwellDefinitions,
+  contentFigmentDefinitions,
 } from "./content-catalog";
 export type { ApplyResult, Engine } from "./engine";
 export { createEngine, IllegalAction } from "./engine";
@@ -25,6 +27,7 @@ export type {
   CardId,
   EffectId,
   EmblemRef,
+  FigmentId,
   InstanceId,
   Phase,
   Side,
@@ -47,6 +50,7 @@ export type {
   FloatingChange,
   FloatingEffect,
   PayableEffect,
+  Printing,
   QueuedTrigger,
   StackItem,
   TurnLog,

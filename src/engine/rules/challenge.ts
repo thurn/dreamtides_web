@@ -115,9 +115,9 @@ export function resolveLane(ctx: StepContext, lane: number): void {
     scored,
   });
   if (challengerDissolves) {
-    dissolve(ctx, challenger);
+    dissolve(ctx, challenger, null);
   }
   if (blockerDissolves) {
-    dissolve(ctx, blocker);
+    dissolve(ctx, blocker, null);
   }
 }

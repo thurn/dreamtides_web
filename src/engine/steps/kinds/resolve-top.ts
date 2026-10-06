@@ -1,14 +1,17 @@
+import { printedCard } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { resolveEffect, splitChoices } from "../../effects/interpreter";
-import { originAbilities } from "../../rules/activation";
-import { enterPlay, instanceOf, leftmostOpenBackSlot, moveInstance } from "../../rules/zones";
+import { instanceOrigin, originAbilities } from "../../rules/activation";
+import { enterPlay, instanceOf, moveInstance, placement } from "../../rules/zones";
 import type { AbilityStackItem, CardStackItem } from "../../state/types";
 import type { StepContext, StepDefinition } from "../types";
 
 /**
- * Resolves the top item of the stack. A character enters play in its
- * controller's leftmost open back-rank position; an event goes to its owner's
- * void; an activated ability applies its effect and leaves the stack.
+ * Resolves the top item of the stack. A character enters play in the
+ * back-rank position it was dropped on if still open, else its controller's
+ * leftmost open one; an event goes to its owner's void (a copy or other
+ * created card ceases to exist instead); an activated ability applies its
+ * effect and leaves the stack.
  * Afterwards the resolved item's controller receives priority if the stack is
  * still non-empty (D13).
  */
@@ -19,7 +22,7 @@ export interface ResolveTopStep {
 function resolveCard(ctx: StepContext, item: CardStackItem): void {
   const { state, catalog } = ctx;
   const instance = instanceOf(state, item.instance);
-  const definition = catalog.card(instance.cardId);
+  const definition = printedCard(catalog, instance.printing);
   ctx.emit({ kind: "resolved", instance: item.instance });
   definition.synthetic?.resolve?.(ctx, item);
   // Each event ability resolves with its own share of the play-time modes and targets.
@@ -28,7 +31,7 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
   abilities.forEach((ability, index) => {
     resolveEffect(ctx, ability.effect, {
       source: item.instance,
-      origin: { kind: "card", cardId: instance.cardId, variant: instance.variant },
+      origin: instanceOrigin(instance),
       ability: ability.ability,
       controller: item.controller,
       x: item.x,
@@ -37,7 +40,7 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
     });
   });
   if (definition.cardType === "character") {
-    const slot = leftmostOpenBackSlot(state, item.controller);
+    const slot = placement(state, item.controller, item.slot);
     if (slot === null) {
       // Capacity is reserved at play time, so this is unreachable through legal play.
       moveInstance(ctx, item.instance, "void");

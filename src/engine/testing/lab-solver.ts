@@ -2,13 +2,18 @@
  * The card-lab setup solver: a minimal legal board on which a card can be
  * played. Specs, the card-lab scene, and the sweep share it.
  */
-import type { EngineCardDefinition } from "../catalog";
+import { printedCardId, type EngineCardDefinition } from "../catalog";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import type { CharacterSelector } from "../dsl/types";
-import type { CardId, Side } from "../state/ids";
+import type { CardId, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
+
+function printedCardIdOf(state: BattleState, id: InstanceId): CardId | null {
+  const instance = state.instances[id];
+  return instance === undefined ? null : printedCardId(instance.printing);
+}
 import { boardState, type BoardSetup, type SideSetup } from "./board";
 import { LAB_OVERRIDES } from "./lab-overrides";
 import { SYNTHETIC } from "./synthetic-cards";
@@ -71,7 +76,7 @@ export function labBoard(
   const { state } = boardState(engine.catalog, setup);
   const playable = engine
     .legalActions(state, "player")
-    .some((action) => action.kind === "play" && state.instances[action.card]?.cardId === cardId);
+    .some((action) => action.kind === "play" && printedCardIdOf(state, action.card) === cardId);
   if (!playable) {
     throw new Error(`The lab board for ${cardId} does not make it playable; add a lab override`);
   }

@@ -144,7 +144,7 @@ describe("trigger order (D14)", () => {
       const theirs = ids[other];
       // Within a zone, cards go in the order they were created, not zone order.
       state.sides[active].void.reverse();
-      const result = runStep(state, { kind: "play", card: mine.hand[0] }, NO_PROMPTS, engine.catalog);
+      const result = runStep(state, { kind: "play", from: "hand", card: mine.hand[0] }, NO_PROMPTS, engine.catalog);
       if (result.kind !== "done") throw new Error("suspended");
       const queue = result.state.triggerQueue.map((entry) => [entry.source, entry.ability]);
       expect(queue).toEqual([

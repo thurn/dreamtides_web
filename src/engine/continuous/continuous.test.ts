@@ -6,7 +6,7 @@
  * (RD-hv-7x4l.7-1), memoization, and the view.
  */
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../catalog";
+import { printedCard, type EngineCardDefinition } from "../catalog";
 import { all, enemyCharacter, energy, energyX, staticAbility } from "../dsl/builders";
 import { matchingCharacters } from "../dsl/selectors";
 import * as p from "../effects/primitives";
@@ -75,7 +75,7 @@ function play(state: BattleState, side: Side, card: InstanceId | undefined, answ
 /** The energy `side` would pay to play `card` now, X counted as 0. */
 function costOf(state: BattleState, card: InstanceId | undefined, side: Side = "player"): number {
   if (card === undefined) throw new Error("no card");
-  const definition = catalog.card(state.instances[card].cardId);
+  const definition = printedCard(catalog, state.instances[card].printing);
   const fixed = definition.costs.reduce((total, cost) => total + (cost.cost === "energy" ? cost.amount : 0), 0);
   return adjustedEnergy(fixed, costModifier(state, catalog, card, side));
 }
@@ -271,7 +271,7 @@ describe("cost modifications", () => {
     float(state, { kind: "cost", player: "player", filter: {}, amount: -1, next: true }, 1);
     const before = serializeState(state);
     // The X prompt has no answer: the step throws and its private copy is dropped.
-    expect(() => runStep(state, { kind: "play", card: ids.player.hand[0] }, NO_PROMPTS, catalog)).toThrow();
+    expect(() => runStep(state, { kind: "play", from: "hand", card: ids.player.hand[0] }, NO_PROMPTS, catalog)).toThrow();
     expect(serializeState(state)).toBe(before);
   });
 

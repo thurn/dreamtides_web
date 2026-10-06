@@ -8,7 +8,7 @@ import type { EngineEvent } from "../events";
 import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
 import type { Answer, Prompt, PromptId } from "../prompts/types";
-import { actionsEqual, type Action } from "../rules/actions";
+import { allowedBy, type Action } from "../rules/actions";
 import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
 import type { Side } from "../state/ids";
@@ -307,7 +307,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
           const decision = engine.decision(slice.committed);
           if (decision?.side !== intent.side) return { kind: "bounced", reason: "notYourDecision" };
           const legal = engine.legalActions(slice.committed, intent.side);
-          if (!legal.some((action) => actionsEqual(action, intent.action))) {
+          if (!legal.some((action) => allowedBy(action, intent.action, slice.committed))) {
             return { kind: "bounced", reason: "illegalAction" };
           }
           return advance(opened(slice, stepForAction(slice.committed, intent.action), false), false);

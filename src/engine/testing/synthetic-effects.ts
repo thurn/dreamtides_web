@@ -2,7 +2,7 @@
  * Synthetic effects that raise every prompt kind, for prompt-protocol tests
  * and the fuzzer. Test fixtures only: catalog cards never carry hooks.
  */
-import type { EngineCardDefinition, SyntheticHooks } from "../catalog";
+import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import { energy, energyX } from "../dsl/builders";
 import type { CardCost } from "../dsl/types";
 import type {
@@ -24,7 +24,7 @@ import type { StepContext } from "../steps/types";
 import { syntheticId } from "./synthetic-cards";
 
 function purpose(ctx: StepContext, source: InstanceId, role: string): PromptPurpose {
-  return { source, cardId: instanceOf(ctx.state, source).cardId, ability: 0, role };
+  return { source, cardId: printedCardId(instanceOf(ctx.state, source).printing), ability: 0, role };
 }
 
 /** Has `side` choose a card from its hand to discard, or emits noLegalTarget for an empty hand. */
@@ -100,7 +100,7 @@ export const PROMPTING = {
     resolve: (ctx, item) => {
       const target = item.targets[0]?.[0];
       if (target !== undefined && instanceOf(ctx.state, target).zone === "play") {
-        dissolve(ctx, target);
+        dissolve(ctx, target, item.controller);
       } else {
         ctx.emit({ kind: "noLegalTarget", source: item.instance });
       }

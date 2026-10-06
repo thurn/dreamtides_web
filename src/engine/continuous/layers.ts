@@ -6,7 +6,8 @@
  * cards fixed as they resolved) and static abilities of cards in play and
  * emblems (read live). They apply layer by layer:
  *
- * 1. copiable values: the printed card for its variant;
+ * 1. copiable values: the printed card for its variant, a figment's type
+ *    and spark, or what a figment copy copied (catalog.ts `printedCard`);
  * 2. type changes: "has all character types";
  * 3. ability adds and removes: keywords gained and lost;
  * 4. base-spark setting;
@@ -21,18 +22,18 @@
  * ability's selectors and values read the characteristics the layers before
  * its own produced, so no layer depends on itself.
  */
-import type { EngineCatalog } from "../catalog";
+import { printedCard, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { matchesCharacterWith, matchingCharactersWith, type CharacteristicsReader } from "../dsl/selectors";
 import type { CharacterRef, Keyword } from "../dsl/types";
 import { evaluateValue } from "../dsl/values";
 import { primitiveDefinition } from "../effects/registry";
 import type { EffectNode, Layer, StaticEnv } from "../effects/types";
-import { originAbilities } from "../rules/activation";
+import { instanceOrigin, originAbilities } from "../rules/activation";
 import { charactersInPlay } from "../rules/zones";
 import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { SIDES, sourceInstance } from "../state/ids";
-import type { AbilityOrigin, BattleState, ContinuousChange } from "../state/types";
+import type { AbilityOrigin, BattleState, ContinuousChange, FloatingChange } from "../state/types";
 import { supportedBy } from "./support";
 
 /** A card's effective characteristics. */
@@ -57,6 +58,11 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   spark: 5,
   cost: 6,
 };
+
+/** Whether a floating change is a continuous change the layers apply. */
+function isContinuousChange(change: FloatingChange): change is ContinuousChange {
+  return change.kind in LAYER;
+}
 
 /** A change with its ordering keys. */
 export interface OrderedChange {
@@ -107,7 +113,7 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
   for (const id of cards) {
     const instance = state.instances[id];
     if (instance === undefined) continue;
-    add(id, instance.controller, { kind: "card", cardId: instance.cardId, variant: instance.variant }, instance.enteredZoneAt);
+    add(id, instance.controller, instanceOrigin(instance), instance.enteredZoneAt);
   }
   return entries;
 }
@@ -154,7 +160,7 @@ export class Layers {
     const ordered: OrderedChange[] = [];
     this.state.floating.forEach((effect, index) => {
       const change = effect.change;
-      if (change.kind === "trigger" || change.kind === "disableTriggers" || LAYER[change.kind] !== layer) return;
+      if (!isContinuousChange(change) || LAYER[change.kind] !== layer) return;
       ordered.push({ change, timestamp: effect.timestamp, effect: effect.id, order: index });
     });
     for (const entry of this.statics) {
@@ -245,11 +251,11 @@ export class Layers {
     return result;
   }
 
-  /** Layer 1: the printed card for its variant. */
+  /** Layer 1: the printed card for its variant, or the figment or figment copy's copiable values. */
   private copiable(id: InstanceId): Characteristics {
     const instance = this.state.instances[id];
     if (instance === undefined) throw new Error(`Unknown instance ${id}`);
-    const definition = this.catalog.card(instance.cardId);
+    const definition = printedCard(this.catalog, instance.printing);
     const keywords = new Set<Keyword>(definition.keywords);
     for (const ability of definition.abilities(instance.variant)) {
       if (ability.kind === "keyword") keywords.add(ability.keyword);

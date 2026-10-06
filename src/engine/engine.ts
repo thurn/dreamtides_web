@@ -1,7 +1,7 @@
 import type { EngineCatalog } from "./catalog";
 import { rememberCharacteristics } from "./continuous/characteristics";
 import type { EngineEvent } from "./events";
-import { actionsEqual, type Action, type Decision } from "./rules/actions";
+import { allowedBy, type Action, type Decision } from "./rules/actions";
 import { decision, legalActions } from "./rules/decision";
 import type { LegalityMemo } from "./rules/legality";
 import type { Side } from "./state/ids";
@@ -74,7 +74,7 @@ export function createEngine(catalog: EngineCatalog): Engine {
     },
     apply(state, side, action, source, observe) {
       rememberCharacteristics(state, catalog);
-      if (!legalActions(state, catalog, side, memo).some((legal) => actionsEqual(legal, action))) {
+      if (!legalActions(state, catalog, side, memo).some((legal) => allowedBy(legal, action, state))) {
         throw new IllegalAction(`Illegal action for ${side}: ${JSON.stringify(action)}`);
       }
       return runToDecision(state, stepForAction(state, action), source, catalog, memo, observe);

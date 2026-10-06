@@ -1,0 +1,5 @@
+# RD-hv-7x4l.8-4: A copy's new modes and targets are prompts answered automatically without an alternative, and keep the original's with no legal option
+- Ladder: 1 (D15, C6), then 5
+- rules.md: § Playing Cards and the Stack → Copies on the stack
+- Affects: d24ea640-638d-4ce2-b15d-b3f4588bda6b, 21965e95-0c8c-470c-a1e1-06d7b87a8d00, fc4b06d6-3b30-4769-af98-88fcea5b54dd, fb967cc1-4199-4a08-8070-724e07cebea5, and every card that copies a card on the stack
+- Why: D15 lets a copy's controller choose new targets and modes but does not say how. As the copy is created, its controller makes each of the card's mode and target choices again as a prompt, which the engine answers automatically when it has only one legal answer, so a player is asked only when a legal alternative exists. A choice with no legal option keeps the original's, and that part of the copy then does nothing at resolution as any illegal target does (rules § Targeting). A copy of a character on the stack counts toward its controller's back rank like any character on the stack, so it is not created while that back rank would be full (rules § Battlefield Capacity).

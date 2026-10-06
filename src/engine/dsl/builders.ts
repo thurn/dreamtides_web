@@ -17,6 +17,7 @@ import type {
   Keyword,
   OptionalCost,
   PaymentCost,
+  ReclaimAbility,
   SelfSpec,
   Speed,
   StackItemSelector,
@@ -115,6 +116,11 @@ export function stackItem(
   extra: Partial<Pick<StackItemSelector, "controller" | "cardType">> = {},
 ): StackItemSelector {
   return { kind: "stackItem", controller: extra.controller ?? "any", ...(extra.cardType === undefined ? {} : { cardType: extra.cardType }) };
+}
+
+/** "Reclaim N●" or "Reclaim – costs": played from your void for `costs` in place of its printed energy cost. Plain Reclaim is `keyword("reclaim")`. */
+export function reclaim(...costs: readonly Cost[]): ReclaimAbility {
+  return { kind: "reclaim", costs };
 }
 
 export function keyword(name: Keyword): Ability {

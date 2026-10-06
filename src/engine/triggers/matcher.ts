@@ -11,7 +11,7 @@ import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, FunctionalZone, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
 import { conditionHolds } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
-import { oncePerTurnKey, originAbilities } from "../rules/activation";
+import { instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
 import { charactersInPlay } from "../rules/zones";
 import type { AbilitySource, InstanceId, Side, Zone } from "../state/ids";
@@ -56,7 +56,7 @@ function cardListener(state: BattleState, id: InstanceId): Listener {
   return {
     source: id,
     controller: instance.controller,
-    origin: { kind: "card", cardId: instance.cardId, variant: instance.variant },
+    origin: instanceOrigin(instance),
     zone: instance.zone,
     emblem: false,
   };
@@ -312,6 +312,17 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent): void {
 }
 
 /**
+ * The card an event announces as leaving play while it is still there: one
+ * announced by `leftPlay`, or a dissolved figment or other created card,
+ * which fires ▸Dissolved before it ceases to exist.
+ */
+function departure(state: BattleState, event: EngineEvent): Departure | null {
+  if (event.kind === "leftPlay") return { instance: event.instance, to: event.to };
+  if (event.kind === "dissolved" && state.instances[event.instance]?.zone === "play") return { instance: event.instance, to: null };
+  return null;
+}
+
+/**
  * Matches one event against every triggered ability, in the fixed order:
  * the active side first, then the other; within a side, its listeners, then
  * its floating and delayed triggers in creation order. Nothing triggers
@@ -320,7 +331,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent): void {
 export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   const { state } = ctx;
   if (state.turn.turnNumber === 0 || state.result !== null || !TRIGGERING.includes(event.kind)) return;
-  const departing = event.kind === "leftPlay" ? { instance: event.instance, to: event.to } : null;
+  const departing = departure(state, event);
   for (const side of [state.turn.active, opponent(state.turn.active)]) {
     for (const listener of listeners(state, side, departing)) matchListener(ctx, listener, event);
     matchFloating(ctx, side, event);

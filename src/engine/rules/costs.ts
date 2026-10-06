@@ -5,12 +5,12 @@
  * commit point; payment happens after it, all before the item goes on the
  * stack.
  */
-import type { EngineCardDefinition, EngineCatalog } from "../catalog";
+import type { EngineCatalog, PrintedCard } from "../catalog";
 import { cardMatchesFilter } from "../continuous/characteristics";
 import { adjustedEnergy, NO_COST_MODIFIER, type CostModifier } from "../continuous/costs";
 import { matchingCharacters } from "../dsl/selectors";
 import { fixedEnergy, minimumEnergy, xCost } from "../dsl/energy";
-import type { Cost, PaymentCost, Variant } from "../dsl/types";
+import type { AdditionalCost, Cost, PaymentCost, Variant } from "../dsl/types";
 import type {
   ChooseCardsPrompt,
   ChooseModePrompt,
@@ -22,7 +22,7 @@ import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { discardCard, spendEnergy } from "./resources";
-import { banish, instanceOf, moveInstance, slotOf } from "./zones";
+import { banish, dissolve, instanceOf, slotOf } from "./zones";
 
 /** One cost to pay after the commit point, with the cards chosen for it. */
 export interface PlannedCost {
@@ -51,11 +51,13 @@ export interface CostPlan {
  * Every cost of playing a card as `variant`: its printed energy, then each
  * additional cost ("To play this card, …") in printed order.
  */
-export function playCosts(definition: EngineCardDefinition, variant: Variant): Cost[] {
-  return [
-    ...definition.costs,
-    ...definition.abilities(variant).flatMap((ability) => (ability.kind === "additionalCost" ? ability.costs : [])),
-  ];
+export function playCosts(definition: PrintedCard, variant: Variant): Cost[] {
+  return [...definition.costs, ...additionalCosts(definition, variant)];
+}
+
+/** A card's additional costs ("To play this card, …") for `variant`, in printed order. */
+export function additionalCosts(definition: PrintedCard, variant: Variant): AdditionalCost[] {
+  return definition.abilities(variant).flatMap((ability) => (ability.kind === "additionalCost" ? ability.costs : []));
 }
 
 /**
@@ -149,6 +151,8 @@ function cardCandidates(
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "banishFromVoid":
       return state.sides[side].void.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
+    case "banishFromHand":
+      return [...state.sides[side].hand];
   }
 }
 
@@ -158,6 +162,7 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], string>> = {
   discard: "discardCost",
   reveal: "revealCost",
   banishFromVoid: "banishCost",
+  banishFromHand: "offeringCost",
 };
 
 /**
@@ -284,10 +289,14 @@ function spendCounters(ctx: StepContext, source: AbilitySource, amount: number):
   ctx.emit({ kind: "countersChanged", instance: source, counters: status.counters });
 }
 
-/** Abandons a character `side` controls: it moves from play to its owner's void (rules § Abandon). */
+/**
+ * Abandons a character `side` controls (rules § Abandon): it is dissolved by
+ * no effect, so it fires ▸Dissolved, and a figment ceases to exist after
+ * firing it.
+ */
 export function abandonCharacter(ctx: StepContext, side: Side, id: InstanceId): void {
-  moveInstance(ctx, id, "void");
-  ctx.emit({ kind: "abandoned", instance: id, side });
+  if (instanceOf(ctx.state, id).controller !== side) throw new Error(`${side} cannot abandon ${id}`);
+  dissolve(ctx, id, null, true);
 }
 
 /** Pays every planned cost after the commit point: the energy first (the fixed part, then X), then the rest in order. */
@@ -312,6 +321,7 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
         for (const id of cards) discardCard(ctx, side, id);
         break;
       case "banishFromVoid":
+      case "banishFromHand":
         for (const id of cards) banish(ctx, id);
         break;
       case "reveal":

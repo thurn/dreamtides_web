@@ -5,8 +5,9 @@ import { serializeState, stateHash } from "../state/hash";
 import type { CardId, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, StackItem } from "../state/types";
-import { NO_PROMPTS } from "../steps/sources";
-import { boardState } from "../testing/board";
+import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
+import { boardState, cardIdOf, placeFigment } from "../testing/board";
+import { ZONE, ZONE_FIGMENT } from "../testing/zone-cards";
 import { fuzzEngineCatalog, fuzzInit } from "../testing/fuzz";
 import { SYNTHETIC } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
@@ -23,12 +24,12 @@ function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("v
   state.nextInstance += 1;
   state.instances[id] = {
     id,
-    cardId,
+    printing: { kind: "card", cardId },
     owner,
     controller: holder,
     zone,
     variant: { amplified: false },
-    status: { exhausted: false, gainedSpark: 1, counters: 2, created: false, reclaimed: false, x: null },
+    status: { exhausted: false, gainedSpark: 1, counters: 2, created: false, reclaimed: false, offering: false, ephemeral: false, x: null },
     enteredZoneAt: 3,
   };
   if (zone === "stack") {
@@ -135,7 +136,7 @@ describe("view", () => {
       const seen = strings(view(state, viewer, catalog));
       for (const id of hiddenFrom(state, viewer)) {
         expect(seen.has(id)).toBe(false);
-        expect(seen.has(state.instances[id].cardId)).toBe(false);
+        expect(seen.has(cardIdOf(state, id))).toBe(false);
       }
       expect(seen.has(state.seed)).toBe(false);
       expect(Object.keys(view(state, viewer, catalog))).not.toContain("seed");
@@ -234,7 +235,7 @@ describe("view", () => {
     const { state } = fixture();
     const enemyFront = state.sides.enemy.frontRank[0]!;
     const playerHand = state.sides.player.hand[0];
-    const origin = { kind: "card" as const, cardId: state.instances[playerHand].cardId, variant: { amplified: false } };
+    const origin = { kind: "card" as const, cardId: cardIdOf(state, playerHand), variant: { amplified: false } };
     const hiddenSource: EngineEvent[] = [
       { kind: "effectStarted", effect: "e5", controller: "player", source: playerHand, expiry: { at: "never" }, change: { kind: "trigger", ref: { origin, ability: 0, node: 0 }, once: true } },
       { kind: "payableEffectRegistered", effect: "e6", payer: "enemy", cost: 1, source: playerHand, affects: [enemyFront] },
@@ -268,5 +269,22 @@ describe("view", () => {
     expect(enemy.floating.map((effect) => effect.id)).toEqual(["e2", "e3"]);
     expect(enemy.triggerQueue[0]?.source).toBe(enemyHand);
     expect(JSON.stringify(player)).not.toContain(v.event0.id);
+  });
+
+  it("shows figments and figment copies by their printing with their effective characteristics, and keeps a card created in a hand private", () => {
+    const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: { back: [v.vanilla1.id], hand: [ZONE.handEcho.id], energy: 1 } });
+    const figment = placeFigment(state, "player", { rank: "back", index: 1 }, { kind: "figment", figment: ZONE_FIGMENT.legion.id, spark: 1 });
+    const copy = placeFigment(state, "player", { rank: "back", index: 2 }, { kind: "figmentCopy", cardId: v.vanilla3.id, spark: 0 });
+    for (const viewer of SIDES) {
+      const seen = view(state, viewer, catalog);
+      expect(seen.instances[figment]).toMatchObject({ printing: { kind: "figment", figment: ZONE_FIGMENT.legion.id, spark: 1 }, characteristics: { subtype: "Warrior", spark: 3, cost: 0 } });
+      expect(seen.instances[copy]).toMatchObject({ printing: { kind: "figmentCopy", cardId: v.vanilla3.id, spark: 0 }, characteristics: { spark: 0, cost: 3 } });
+    }
+    const engine = createEngine(catalog);
+    const { state: after, events } = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, new ScriptedSource([[ids.player.back[0]!]]));
+    const created = events.find((event) => event.kind === "cardCreated");
+    expect(created).toMatchObject({ zone: "hand", side: "player" });
+    expect(created !== undefined && eventVisibleTo(created, "enemy", after)).toBe(false);
+    expect(created !== undefined && eventVisibleTo(created, "player", after)).toBe(true);
   });
 });

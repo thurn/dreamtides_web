@@ -1,4 +1,4 @@
-import type { EngineCatalog } from "../catalog";
+import { printedCard, type EngineCatalog } from "../catalog";
 import { characteristics, type Characteristics } from "../continuous/characteristics";
 import { fixedEnergy } from "./energy";
 import { hasKeyword } from "../rules/keywords";
@@ -25,11 +25,12 @@ export function resolvePlayer(controller: Side, ref: PlayerRef): Side {
 
 /**
  * A character's cost for cost selectors: its fixed energy, with X counting
- * as 0. Cost selectors read the copiable cost (C4, C13); cost modifications
- * apply only to playing a card.
+ * as 0. Cost selectors read the copiable cost (C4): 0● for a figment, the
+ * copied cost for a figment copy (C13). Cost modifications apply only to
+ * playing a card.
  */
 function costOf(state: BattleState, catalog: EngineCatalog, id: InstanceId): number {
-  return fixedEnergy(catalog.card(instanceOf(state, id).cardId).costs);
+  return fixedEnergy(printedCard(catalog, instanceOf(state, id).printing).costs);
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */

@@ -27,7 +27,7 @@ export function triggerBody(
   node: number | null,
 ): TriggerBody {
   const definition = originAbilities(catalog, origin)[ability];
-  if (definition === undefined || definition.kind === "keyword" || definition.kind === "additionalCost") {
+  if (definition === undefined || definition.kind === "keyword" || definition.kind === "additionalCost" || definition.kind === "reclaim") {
     throw new Error(`Ability ${String(ability)} of its origin has no effect`);
   }
   if (node === null) {

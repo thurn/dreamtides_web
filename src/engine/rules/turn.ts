@@ -8,7 +8,7 @@ import { expireAt } from "./floating";
 import { discardCard, drawCard, setEnergy } from "./resources";
 import { emptyTurnLog } from "./turn-log";
 import { endBattle } from "./victory";
-import { charactersInPlay, instanceOf } from "./zones";
+import { banish, charactersInPlay, instanceOf } from "./zones";
 
 function enterPhase(ctx: StepContext, phase: Phase): void {
   const { state } = ctx;
@@ -44,6 +44,8 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
       return;
     case "ending":
       discardToHandLimit(ctx);
+      banishEndOfTurnStatuses(ctx);
+      // "Until end of turn" ends; cards banished until then return (F3).
       expireAt(ctx, { at: "endOfTurn" });
       clearExhaustion(ctx);
       return;
@@ -71,6 +73,21 @@ function discardToHandLimit(ctx: StepContext): void {
   });
   for (const card of chosen) {
     discardCard(ctx, side, card);
+  }
+}
+
+/**
+ * Ending, step 2: every Ephemeral card still in a hand, and every card played
+ * by Offering wherever it is, is banished, in the order the cards were
+ * created for the battle. A created card ceases to exist instead.
+ */
+function banishEndOfTurnStatuses(ctx: StepContext): void {
+  const due = Object.values(ctx.state.instances)
+    .filter(({ zone, status }) => (status.ephemeral && zone === "hand") || (status.offering && zone !== "banished" && zone !== "stack"))
+    .map(({ id }) => id)
+    .sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)));
+  for (const id of due) {
+    if (ctx.state.instances[id] !== undefined) banish(ctx, id);
   }
 }
 

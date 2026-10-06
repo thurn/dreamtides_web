@@ -15,7 +15,7 @@ import type { AbilityOrigin, BattleState } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
 import { primitiveDefinition } from "./registry";
-import type { EffectEnv, EffectNode } from "./types";
+import type { CardRef, EffectEnv, EffectNode } from "./types";
 
 /** The mode chosen at play time for each modal node of an effect. */
 export type ChosenModes = ReadonlyMap<EffectNode, number>;
@@ -416,6 +416,31 @@ export function resolveStackTargets(ctx: StepContext, spec: StackTargetSpec, env
     ctx.emit({ kind: "noLegalTarget", source: env.source });
   }
   return legal;
+}
+
+/**
+ * The cards a card reference names now: chosen characters still legal,
+ * chosen stack cards still on the stack, or the triggering card or the
+ * source wherever it is, while it exists.
+ */
+export function resolveCards(ctx: StepContext, ref: CardRef, env: EffectEnv): InstanceId[] {
+  switch (ref.kind) {
+    case "target":
+      return resolveCharacters(ctx, ref, env);
+    case "stackTarget":
+      return resolveStackTargets(ctx, ref, env);
+    case "subject":
+      return env.subject !== null && ctx.state.instances[env.subject] !== undefined ? [env.subject] : [];
+    case "self": {
+      const self = sourceInstance(env.source);
+      return self !== null && ctx.state.instances[self] !== undefined ? [self] : [];
+    }
+  }
+}
+
+/** Whether resolving an effect could put characters into play (rules § Battlefield Capacity). */
+export function effectEntersPlay(effect: EffectNode): boolean {
+  return everyNode(effect).some((node) => primitiveDefinition(node.op).entersPlay === true);
 }
 
 export interface ResolveOptions {

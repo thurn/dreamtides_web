@@ -102,17 +102,24 @@ interface SideState {
 
 interface CardInstance {
   id: InstanceId;                      // stable across zone changes
-  source: { kind: "card"; cardId: CardId } | { kind: "figment"; figment: FigmentId }
-        | { kind: "copy"; of: InstanceId | CardId; overrides?: CopyOverrides };
+  printing: { kind: "card"; cardId: CardId }                         // deck card, created card, or copy
+          | { kind: "figment"; figment: FigmentId; spark: number }   // "a 2✦ Ethereal figment"
+          | { kind: "figmentCopy"; cardId: CardId; spark: number | null };  // C5; 0 for "0✦ figment copy"
   owner: Side; controller: Side;
   variant: Variant;                    // amplified flag + transfigurations + deck-entry mods (D39)
   status: { exhausted: boolean; reclaimed: boolean; offering: boolean; ephemeral: boolean;
-            veil: boolean; gainedSpark: number; counters: number; created: boolean; grants: Grant[];
+            gainedSpark: number; counters: number; created: boolean;
             x: number | null };                // X paid to play it, kept while in play (variable spark)
   knownTo: Side[];                     // hidden-information tracking
   enteredZoneAt: number;               // timestamp for layer ordering
 }
 ```
+
+`printing` is where layer 1 reads an instance's copiable values
+(`printedCard` in `catalog.ts`): the catalog card for its variant, a figment
+type from the figment catalog as a 0● character with the spark its text gave
+it (C13), or the card a figment copy copied. Every figment is `created`. Veil
+is a keyword; losing it is a permanent floating keyword change.
 
 **`BattleState` never contains a pending prompt.** Prompts exist only while a
 step runs. In interactive play they are reconstructed from the in-flight
@@ -461,7 +468,12 @@ Further rules:
 - **Activated abilities** are stack items too.
 - **Copies** follow [D15](decisions.md#d15-copies-of-cards-on-the-stack). A
   copy pushed above its original offers its controller a `chooseTargets` or
-  `chooseMode` prompt when legal alternatives exist.
+  `chooseMode` prompt when legal alternatives exist (`rules/copies.ts`,
+  `copyCard`): each choice is a resolution-time prompt, answered
+  automatically with one legal answer, and a choice with no legal option keeps
+  the original's (RD-hv-7x4l.8-4). The copy keeps the item's `x` and
+  `optionalPaid`, emits `cardCopied` instead of `cardPlayed`, and changes no
+  priority.
 
 ## Triggers
 
@@ -517,10 +529,10 @@ code, and the view. Changes come from two sources:
 Both feed the same `ContinuousChange` kinds. The layers follow the MTG
 analog:
 
-1. **Copiable values:** printed values for the variant. Figment catalog
-   values, copy overrides, and variant transforms (transfigurations, then
-   deck-entry modifications, [below](#deck-entry-modifications)) join this
-   layer when Phases 3.8 and 4 add them.
+1. **Copiable values:** printed values for the variant, figment catalog
+   values, and figment copies' copied values (`printedCard`). Variant
+   transforms (transfigurations, then deck-entry modifications,
+   [below](#deck-entry-modifications)) join this layer when Phase 4 adds them.
 2. **Type changes:** "has all character types" (`allTypes`).
 3. **Ability adds and removes:** keywords gained and lost (`keyword`).
    Disabled triggers are floating records that the trigger matcher reads.
@@ -571,29 +583,52 @@ character (C9).
 
 ## Zones and zone changes
 
-There is one primitive, `moveInstance(id, to, cause)`, and every effect and
-rule calls it. It applies these replacements in order:
+`rules/zones.ts` owns every zone change. `moveInstance(ctx, id, to)` (and
+`moveToHand`) move a card to a non-play zone and return where it went, or
+`null` when it ceased to exist; `dissolve(ctx, id, by)` names the side whose
+effect dissolves it (`null` for a challenge or an abandon). The replacements
+apply in order, each to the change as the earlier ones left it
+(RD-hv-7x4l.8-1):
 
 1. **Created cards and figments cease to exist** instead of entering the deck,
-   hand, void, or banished zone. Dissolved figments fire `▸Dissolved` first.
+   hand, void, or banished zone. Dissolved figments fire `▸Dissolved` first:
+   `leftPlay` (to `null`), `dissolved`, then `ceasedToExist`, while queued
+   triggers keep their origin.
 2. **Reclaimed cards are banished** instead of any other zone change, without
-   `▸Dissolved`.
+   `▸Dissolved`; a reclaimed card never leaves the Banished zone.
 3. **Veil.** A dissolve by an opposing effect removes Veil instead.
 
 Other zone rules:
 
-- **Materialize** places the card in the leftmost open back-rank slot, or the
-  chosen slot for a UI drop. The card enters exhausted unless awakened.
+- **Materialize** (`materialize`, `placement`) places the card in the
+  leftmost open back-rank slot, or the open slot a UI drop names (the `play`
+  action's optional `slot`, kept on the stack item). The card enters
+  exhausted unless awakened.
 - **Capacity:**
-  - A full back rank makes materializing plays illegal (the dry run catches
-    this).
-  - Triggers leave the card in place.
-  - Figments merge per rules § Creating Figments at Capacity.
+  - A full back rank makes materializing plays illegal: characters, and cards
+    and activated abilities whose effects hold a primitive with
+    `entersPlay` (`materializeFigments`, `materializeFigmentCopy`).
+  - Triggers leave the card in place and emit `capacityReached`.
+  - Figments merge per rules § Creating Figments at Capacity
+    (`rules/figments.ts`, `createFigments`).
+- **Merging** is a `reposition` onto a figment of the same identity (figment
+  UUID, or copied card UUID for figment copies): the source ceases to exist
+  silently and its base spark plus gained spark joins the destination's
+  gained spark (`figmentsMerged`).
 - **Gain control** moves the card to the receiver's leftmost open back slot,
-  exhausted through Ending. It fails if the rank is full.
-- **Banish-until** effects record their return (F3, plus RD entries for the
-  other variants).
-- **Offering, ephemeral, and reclaimed statuses** travel with the instance.
+  exhausted through Ending (`controlChanged`). It fails if the rank is full.
+- **Banish-until** (`banishUntil`) records its return as a floating
+  `banishedUntil` record with the duration's expiry; as it ends,
+  `floatingEnded` materializes the card under its prior controller (F3,
+  RD-hv-7x4l.8-2). A temporary figment copy's `temporary` record makes it
+  cease to exist the same way.
+- **Offering, Reclaim, Ephemeral.** A `play` from `"void"` uses Reclaim's
+  costs and marks the card reclaimed; a hand play of an Offering card first
+  chooses its route (RD-hv-7x4l.8-3). Ending step 2 banishes Offering cards
+  anywhere and Ephemeral cards in hands. The statuses travel with the
+  instance; Ephemeral ends as the card leaves a hand.
+- **Copies** (`rules/copies.ts`): stack copies (D15), figment copies (C5),
+  and created copies in a hand, each announced by `cardCreated`.
 
 ## Costs
 

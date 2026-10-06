@@ -6,7 +6,7 @@ import type { Answer } from "../prompts/types";
 import type { CardId, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { ScriptedSource } from "../steps/sources";
-import { boardState, type SideSetup } from "../testing/board";
+import { boardState, cardIdOf, type SideSetup } from "../testing/board";
 import { invariantViolations } from "../testing/invariants";
 import { STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "../testing/stack-cards";
 import { SYNTHETIC, testCatalog } from "../testing/synthetic-cards";
@@ -59,7 +59,7 @@ function toVoid(state: BattleState, id: InstanceId): void {
 }
 
 function cardsOf(state: BattleState, ids: readonly InstanceId[]): CardId[] {
-  return ids.map((id) => state.instances[id].cardId);
+  return ids.map((id) => cardIdOf(state, id));
 }
 
 describe("additional costs to play a card", () => {

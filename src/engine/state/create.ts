@@ -3,7 +3,12 @@ import { emptyTurnLog } from "../rules/turn-log";
 import type { EngineCatalog } from "../catalog";
 import type { InstanceId, Side } from "./ids";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES } from "./ids";
-import type { BattleConfig, BattleInit, BattleState, CardInstance, SideState } from "./types";
+import type { BattleConfig, BattleInit, BattleState, CardInstance, CardStatus, SideState } from "./types";
+
+/** The status of a card new to the battle: ready, unchanged, and not created unless `created`. */
+export function freshStatus(created = false): CardStatus {
+  return { exhausted: false, gainedSpark: 0, counters: 0, created, reclaimed: false, offering: false, ephemeral: false, x: null };
+}
 
 function emptySide(): SideState {
   return {
@@ -94,12 +99,12 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
       state.nextInstance += 1;
       const instance: CardInstance = {
         id,
-        cardId: entry.cardId,
+        printing: { kind: "card", cardId: entry.cardId },
         owner: side,
         controller: side,
         zone: "deck",
         variant: { amplified: entry.amplified === true },
-        status: { exhausted: false, gainedSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
+        status: freshStatus(),
         enteredZoneAt: 0,
       };
       state.instances[id] = instance;

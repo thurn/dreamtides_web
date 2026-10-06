@@ -4,6 +4,7 @@ import { BACK_RANK_SIZE, FRONT_RANK_SIZE, opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { Action, Decision } from "./actions";
 import { legalMoves, type LegalityMemo } from "./legality";
+import { mergeable } from "./figments";
 import { payableNow } from "./payable";
 import { charactersInPlay, instanceOf, occupant, slotOf } from "./zones";
 
@@ -48,12 +49,17 @@ function legalRepositions(state: BattleState, side: Side): Action[] {
       if (to.rank === from.rank && to.index === from.index) {
         continue;
       }
+      const other = occupant(state, side, to);
+      if (other !== null && mergeable(state, card, other)) {
+        // A merge, legal only between two exhausted figments or two ready ones.
+        if (exhausted === instanceOf(state, other).status.exhausted) actions.push({ kind: "reposition", card, to });
+        continue;
+      }
       // An exhausted character cannot be moved to the front rank, by either
       // half of a swap.
       if (exhausted && to.rank === "front") {
         continue;
       }
-      const other = occupant(state, side, to);
       if (other !== null && from.rank === "front" && instanceOf(state, other).status.exhausted) {
         continue;
       }
@@ -72,7 +78,7 @@ function stackActions(
 ): Action[] {
   const { plays, activations } = legalMoves(state, catalog, side, memo);
   return [
-    ...plays.map((card): Action => ({ kind: "play", card, from: "hand" })),
+    ...plays.map(({ card, from }): Action => ({ kind: "play", card, from })),
     ...activations.map((activation): Action => ({ kind: "activate", ...activation })),
   ];
 }

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { cardIdOf } from "./testing/board";
 import { xCost } from "./dsl/energy";
 import { createEngine } from "./engine";
 import { deserializeState, serializeState, stateHash } from "./state/hash";
@@ -39,7 +40,7 @@ describe("random streams", () => {
       const init: BattleInit = { ...fuzzInit(battleSeed("x")), seed: battleSeed(seed), decks: { player: deck, enemy: deck } };
       const { state } = engine.createBattle(init, NO_PROMPTS);
       const player = state.sides.player;
-      return [...player.hand, ...player.deck].map((id) => state.instances[id].cardId);
+      return [...player.hand, ...player.deck].map((id) => cardIdOf(state, id));
     };
     expect(deal("one")).toHaveLength(DECK_SIZE);
     expect(deal("one")).toEqual(deal("one"));

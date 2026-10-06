@@ -8,10 +8,12 @@ import type {
   DreamsignId,
   DreamwellCardId,
   EffectId,
+  FigmentId,
   InstanceId,
   OncePerTurnKey,
   Phase,
   Side,
+  Slot,
   Zone,
 } from "./ids";
 
@@ -59,17 +61,38 @@ export interface CardStatus {
    */
   gainedSpark: number;
   counters: number;
-  /** Created by an effect rather than drawn from a deck; it ceases to exist instead of leaving play or the stack. */
+  /**
+   * Created by an effect rather than drawn from a deck, as every figment is:
+   * it ceases to exist instead of entering a deck, a hand, a void, or the
+   * Banished zone.
+   */
   created: boolean;
   /** Played by Reclaim; it is banished instead of any other zone change. */
   reclaimed: boolean;
+  /** Played by Offering; it is banished during each Ending, wherever it is. */
+  offering: boolean;
+  /** Drawn or created with Ephemeral; it is banished during Ending while it is in a hand. */
+  ephemeral: boolean;
   /** The X paid to play the card, kept while it is in play (variable spark reads it); `null` elsewhere. */
   x: number | null;
 }
 
+/** Where an instance's copiable values (layer 1) come from. */
+export type Printing =
+  /** A catalog card for the instance's variant: a deck card, a created card, or a copy of a card. */
+  | { readonly kind: "card"; readonly cardId: CardId }
+  /** A figment of the figment catalog, with the base spark its creating text gives it ("a 2✦ Ethereal figment"). */
+  | { readonly kind: "figment"; readonly figment: FigmentId; readonly spark: number }
+  /**
+   * A figment copy of a card (C5): the card's subtype, abilities, cost, and
+   * base spark for the instance's variant; `spark` 0 for a "0✦ figment
+   * copy", else `null`.
+   */
+  | { readonly kind: "figmentCopy"; readonly cardId: CardId; readonly spark: number | null };
+
 export interface CardInstance {
   readonly id: InstanceId;
-  readonly cardId: CardId;
+  readonly printing: Printing;
   readonly owner: Side;
   /**
    * The side controlling the card: in play or on the stack, its controller;
@@ -103,6 +126,8 @@ interface StackItemBase {
 export interface CardStackItem extends StackItemBase {
   readonly kind: "card";
   readonly instance: InstanceId;
+  /** The back-rank position a character was dropped on, used when it resolves if still open. */
+  readonly slot?: Slot;
 }
 
 /**
@@ -111,6 +136,7 @@ export interface CardStackItem extends StackItemBase {
  */
 export type AbilityOrigin =
   | { readonly kind: "card"; readonly cardId: CardId; readonly variant: Variant }
+  | { readonly kind: "figment"; readonly id: FigmentId }
   | { readonly kind: "avatar"; readonly id: AvatarId }
   | { readonly kind: "dreamsign"; readonly id: DreamsignId };
 
@@ -209,7 +235,11 @@ export type FloatingChange =
    */
   | { readonly kind: "trigger"; readonly ref: EffectRef; readonly once: boolean }
   /** The instance's triggered abilities do not trigger, while `while` holds if given. */
-  | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition };
+  | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition }
+  /** "Banish … until …": as the effect ends, the banished card returns to play under `side` (F3). */
+  | { readonly kind: "banishedUntil"; readonly instance: InstanceId; readonly side: Side }
+  /** "… until end of turn" on a created character: as the effect ends, it ceases to exist (C5). */
+  | { readonly kind: "temporary"; readonly instance: InstanceId };
 
 /** A change with a duration, created by a resolving effect. */
 export interface FloatingEffect {

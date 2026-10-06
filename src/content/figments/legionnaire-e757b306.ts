@@ -1,3 +1,5 @@
+import { characterYouControl, count, self, staticAbility } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives/spark-modifier";
 import { figment } from "../define";
 
 export default figment({
@@ -11,5 +13,6 @@ export default figment({
   imageNumber: 653554603,
   artOwned: false,
   art: { x: 0, y: 0.399, scale: 1 },
-  pending: true,
+  abilities: () => [staticAbility(sparkModifier(self(), count(characterYouControl({ subtype: "Warrior", another: true }))))],
+  verifiedText: "n7c5gxe3j6",
 });

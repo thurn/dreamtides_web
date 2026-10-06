@@ -6,7 +6,7 @@ import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { FIRST_LEGAL } from "../steps/sources";
 import { abilitySources, canActivate, abilityOrigin, originAbilities } from "./activation";
-import { canPlayFromHand } from "./timing";
+import { canPlay, type PlayZone } from "./timing";
 
 /** An activated ability a side may activate now. */
 export interface LegalActivation {
@@ -14,9 +14,15 @@ export interface LegalActivation {
   readonly ability: number;
 }
 
+/** A card a side may play now, and where it plays it from. */
+export interface LegalPlay {
+  readonly card: InstanceId;
+  readonly from: PlayZone;
+}
+
 /** The plays and activations open to one side in one state. */
 export interface LegalMoves {
-  readonly plays: InstanceId[];
+  readonly plays: LegalPlay[];
   readonly activations: LegalActivation[];
 }
 
@@ -45,8 +51,11 @@ function isFeasible(state: BattleState, catalog: EngineCatalog, step: Step): boo
 }
 
 function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side): LegalMoves {
-  const plays = state.sides[side].hand.filter(
-    (card) => canPlayFromHand(state, catalog, side, card) && isFeasible(state, catalog, { kind: "play", card }),
+  const zones: readonly PlayZone[] = ["hand", "void"];
+  const plays = zones.flatMap((from) =>
+    state.sides[side][from]
+      .filter((card) => canPlay(state, catalog, side, card, from) && isFeasible(state, catalog, { kind: "play", card, from }))
+      .map((card) => ({ card, from })),
   );
   const activations: LegalActivation[] = [];
   for (const source of abilitySources(state, side)) {
@@ -84,12 +93,12 @@ export function legalMoves(
   return moves;
 }
 
-/** The cards `side` may legally play from hand now. */
+/** The cards `side` may legally play now, from its hand or by Reclaim from its void. */
 export function legalPlays(
   state: BattleState,
   catalog: EngineCatalog,
   side: Side,
   memo: LegalityMemo,
-): InstanceId[] {
+): LegalPlay[] {
   return legalMoves(state, catalog, side, memo).plays;
 }

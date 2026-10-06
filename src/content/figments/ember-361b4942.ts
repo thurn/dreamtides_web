@@ -1,3 +1,4 @@
+import { keyword } from "../../engine/dsl/builders";
 import { figment } from "../define";
 
 export default figment({
@@ -11,5 +12,6 @@ export default figment({
   imageNumber: 515170261,
   artOwned: false,
   art: { x: 0.353, y: 0.555, scale: 1.17 },
-  pending: true,
+  abilities: () => [keyword("awakened")],
+  verifiedText: "azz39211yk",
 });

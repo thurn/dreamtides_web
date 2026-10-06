@@ -1,4 +1,4 @@
-import type { AbilitySource, AvatarId, CardId, DreamsignId, EffectId, InstanceId, Side, Zone } from "../state/ids";
+import type { AbilitySource, AvatarId, DreamsignId, EffectId, InstanceId, Side, Zone } from "../state/ids";
 import { opponent } from "../state/ids";
 import type {
   BattleConfig,
@@ -10,10 +10,11 @@ import type {
   Expiry,
   FloatingChange,
   FloatingEffect,
+  Printing,
   StackItem,
   TurnState,
 } from "../state/types";
-import type { EngineCatalog } from "../catalog";
+import { printedCard, type EngineCatalog } from "../catalog";
 import { characteristics } from "../continuous/characteristics";
 import { adjustedEnergy, costModifier } from "../continuous/costs";
 import { fixedEnergy } from "../dsl/energy";
@@ -40,10 +41,10 @@ export interface CharacteristicsView {
   readonly cost: number;
 }
 
-/** One instance the viewer can see, with its card identity. */
+/** One instance the viewer can see, with its identity: a card, a figment, or a figment copy of a card. */
 export interface InstanceView {
   readonly id: InstanceId;
-  readonly cardId: CardId;
+  readonly printing: Printing;
   readonly owner: Side;
   readonly controller: Side;
   readonly zone: Zone;
@@ -201,10 +202,10 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   for (const instance of Object.values(state.instances)) {
     if (visibleTo(instance, viewer)) {
       const card = layers.of(instance.id);
-      const printed = fixedEnergy(playCosts(catalog.card(instance.cardId), instance.variant));
+      const printed = fixedEnergy(playCosts(printedCard(catalog, instance.printing), instance.variant));
       instances[instance.id] = {
         id: instance.id,
-        cardId: instance.cardId,
+        printing: { ...instance.printing },
         owner: instance.owner,
         controller: instance.controller,
         zone: instance.zone,

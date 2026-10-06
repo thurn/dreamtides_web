@@ -3,7 +3,14 @@ import type { PromptPurpose } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { AbilityOrigin, BattleState, ContinuousChange } from "../state/types";
 import type { StepContext } from "../steps/types";
-import type { CharacterRef, Duration, PlayTimeTarget, ValueExpr, Variant } from "../dsl/types";
+import type { CharacterRef, Duration, PlayTimeTarget, SelfSpec, StackTargetSpec, SubjectSpec, TargetSpec, ValueExpr, Variant } from "../dsl/types";
+
+/**
+ * The card a copy copies: a chosen character in play or card on the stack,
+ * the card the triggering event concerns ("copy it"), or the source, in
+ * whatever zone it is.
+ */
+export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec;
 
 /** The shape every effect node has; the registry narrows it to the primitive union. */
 export interface EffectNode {
@@ -63,6 +70,12 @@ export interface PrimitiveDefinition<N extends EffectNode> {
   /** Target specs held directly by this node, in order. */
   targets?(node: N): readonly PlayTimeTarget[];
   resolve(ctx: StepContext, node: N, env: EffectEnv): void;
+  /**
+   * Whether resolving the node puts characters into play: a card or ability
+   * holding one cannot be played or activated while its controller's back
+   * rank would be full (rules § Battlefield Capacity).
+   */
+  readonly entersPlay?: boolean;
   /** For a continuous primitive, the layer it applies in and its changes while a static ability holds it. */
   readonly continuous?: ContinuousDefinition<N>;
 }

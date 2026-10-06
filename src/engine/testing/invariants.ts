@@ -1,4 +1,4 @@
-import type { EngineCatalog } from "../catalog";
+import { printedCard, type EngineCatalog } from "../catalog";
 import { changedInstance } from "../rules/floating";
 import { characteristics } from "../continuous/characteristics";
 import { adjustedEnergy, costModifier } from "../continuous/costs";
@@ -28,6 +28,10 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
         const instance = state.instances[id];
         if (instance?.zone !== zone || instance.controller !== side) {
           problems.push(`${id} listed in ${side} ${zone} but recorded as ${instance?.zone ?? "missing"} of ${instance?.controller ?? "nobody"}`);
+        } else if (instance.printing.kind !== "card") {
+          problems.push(`figment ${id} is in ${side} ${zone}; figments exist only in play`);
+        } else if (zone !== "hand" && instance.status.created) {
+          problems.push(`created card ${id} is in ${side} ${zone} instead of ceasing to exist`);
         } else if (zone !== "hand" && instance.owner !== side) {
           // Only a hand may hold a card the other side owns.
           problems.push(`${id} listed in ${side} ${zone} but owned by ${instance.owner}`);
@@ -43,7 +47,7 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
       const instance = state.instances[id];
       if (instance?.zone !== "play" || instance.controller !== side) {
         problems.push(`${id} in ${side} play but recorded as ${instance?.zone ?? "missing"}`);
-      } else if (catalog.card(instance.cardId).cardType !== "character") {
+      } else if (printedCard(catalog, instance.printing).cardType !== "character") {
         problems.push(`${id} is in play but is not a character`);
       }
     }
@@ -56,6 +60,8 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
     record(item.instance, "stack");
     if (state.instances[item.instance]?.zone !== "stack") {
       problems.push(`${item.instance} on the stack but recorded elsewhere`);
+    } else if (state.instances[item.instance]?.printing.kind !== "card") {
+      problems.push(`figment ${item.instance} is on the stack; figments exist only in play`);
     }
   }
   if (seen.size !== Object.keys(state.instances).length) {
@@ -89,7 +95,7 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
       problems.push(`${instance.id} has memoized characteristics that differ from a fresh evaluation`);
     }
     if (instance.zone === "hand") {
-      const definition = catalog.card(instance.cardId);
+      const definition = printedCard(catalog, instance.printing);
       const cost = adjustedEnergy(fixedEnergy(playCosts(definition, instance.variant)), costModifier(state, catalog, instance.id, instance.controller, fresh));
       if (cost < 0) problems.push(`${instance.id} has a negative effective cost`);
     }

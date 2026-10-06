@@ -1,8 +1,26 @@
 import type { EngineCatalog } from "../catalog";
-import { initialState } from "../state/create";
-import type { AvatarId, CardId, DreamsignId, InstanceId, Phase, Side } from "../state/ids";
+import { freshStatus, initialState } from "../state/create";
+import type { AvatarId, CardId, DreamsignId, InstanceId, Phase, Side, Slot } from "../state/ids";
 import { battleSeed, SIDES } from "../state/ids";
-import type { BattleState, CardInstance } from "../state/types";
+import type { BattleState, CardInstance, Printing } from "../state/types";
+
+/** Places a ready figment or figment copy directly into play at the open `slot`, for rules tests. */
+export function placeFigment(state: BattleState, side: Side, slot: Slot, printing: Printing, amplified = false): InstanceId {
+  const id: InstanceId = `i${state.nextInstance}`;
+  state.nextInstance += 1;
+  state.instances[id] = { id, printing, owner: side, controller: side, zone: "play", variant: { amplified }, status: freshStatus(true), enteredZoneAt: 0 };
+  const rank = slot.rank === "front" ? state.sides[side].frontRank : state.sides[side].backRank;
+  if (rank[slot.index] !== null) throw new Error(`slot ${slot.rank}${String(slot.index)} is occupied`);
+  rank[slot.index] = id;
+  return id;
+}
+
+/** The catalog card an instance prints, for tests; throws for a figment. */
+export function cardIdOf(state: BattleState, id: InstanceId): CardId {
+  const printing = state.instances[id]?.printing;
+  if (printing === undefined || printing.kind === "figment") throw new Error(`${id} prints no catalog card`);
+  return printing.cardId;
+}
 
 export interface SideSetup {
   /** Front-rank cards by lane index (`F0`…); `null` leaves a lane empty. */
@@ -65,12 +83,12 @@ export function boardState(
     state.nextInstance += 1;
     state.instances[id] = {
       id,
-      cardId,
+      printing: { kind: "card", cardId },
       owner: side,
       controller: side,
       zone,
       variant: { amplified },
-      status: { exhausted: false, gainedSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
+      status: freshStatus(),
       enteredZoneAt: 0,
     };
     return id;

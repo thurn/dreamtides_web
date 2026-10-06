@@ -1,5 +1,5 @@
 /** The current turn's counters (state `turnLog`): cards played and drawn per side. */
-import type { EngineCatalog } from "../catalog";
+import { printedCard, type EngineCatalog } from "../catalog";
 import type { InstanceId, Side } from "../state/ids";
 import type { BattleState, TurnLog } from "../state/types";
 import { instanceOf } from "./zones";
@@ -10,7 +10,7 @@ export function emptyTurnLog(): TurnLog {
 
 /** Records that `side` played `card`, before its "when you play" triggers match. */
 export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
-  const definition = catalog.card(instanceOf(state, card).cardId);
+  const definition = printedCard(catalog, instanceOf(state, card).printing);
   state.turnLog.played[side].push({ instance: card, cardType: definition.cardType, subtype: definition.subtype });
 }
 

@@ -10,10 +10,14 @@ import { avatarExhaustionChanged, type AvatarExhaustionChangedEvent } from "./ki
 import { banished, type BanishedEvent } from "./kinds/banished";
 import { battleEnded, type BattleEndedEvent } from "./kinds/battle-ended";
 import { blockersDesignated, type BlockersDesignatedEvent } from "./kinds/blockers-designated";
+import { capacityReached, type CapacityReachedEvent } from "./kinds/capacity-reached";
+import { cardCopied, type CardCopiedEvent } from "./kinds/card-copied";
+import { cardCreated, type CardCreatedEvent } from "./kinds/card-created";
 import { cardDrawn, type CardDrawnEvent } from "./kinds/card-drawn";
 import { cardPlayed, type CardPlayedEvent } from "./kinds/card-played";
 import { ceasedToExist, type CeasedToExistEvent } from "./kinds/ceased-to-exist";
 import { challengersDesignated, type ChallengersDesignatedEvent } from "./kinds/challengers-designated";
+import { controlChanged, type ControlChangedEvent } from "./kinds/control-changed";
 import { countersChanged, type CountersChangedEvent } from "./kinds/counters-changed";
 import { discarded, type DiscardedEvent } from "./kinds/discarded";
 import { dissolved, type DissolvedEvent } from "./kinds/dissolved";
@@ -24,6 +28,7 @@ import { energyChanged, type EnergyChangedEvent } from "./kinds/energy-changed";
 import { eroded, type ErodedEvent } from "./kinds/eroded";
 import { exhaustionChanged, type ExhaustionChangedEvent } from "./kinds/exhaustion-changed";
 import { fatigue, type FatigueEvent } from "./kinds/fatigue";
+import { figmentsMerged, type FigmentsMergedEvent } from "./kinds/figments-merged";
 import { laneResolved, type LaneResolvedEvent } from "./kinds/lane-resolved";
 import { leftPlay, type LeftPlayEvent } from "./kinds/left-play";
 import { leftVoid, type LeftVoidEvent } from "./kinds/left-void";
@@ -55,10 +60,14 @@ export type EngineEvent =
   | BanishedEvent
   | BattleEndedEvent
   | BlockersDesignatedEvent
+  | CapacityReachedEvent
+  | CardCopiedEvent
+  | CardCreatedEvent
   | CardDrawnEvent
   | CardPlayedEvent
   | CeasedToExistEvent
   | ChallengersDesignatedEvent
+  | ControlChangedEvent
   | CountersChangedEvent
   | DiscardedEvent
   | DissolvedEvent
@@ -69,6 +78,7 @@ export type EngineEvent =
   | ErodedEvent
   | ExhaustionChangedEvent
   | FatigueEvent
+  | FigmentsMergedEvent
   | LaneResolvedEvent
   | LeftPlayEvent
   | LeftVoidEvent
@@ -101,10 +111,14 @@ export const EVENT_DEFINITIONS = {
   banished,
   battleEnded,
   blockersDesignated,
+  capacityReached,
+  cardCopied,
+  cardCreated,
   cardDrawn,
   cardPlayed,
   ceasedToExist,
   challengersDesignated,
+  controlChanged,
   countersChanged,
   discarded,
   dissolved,
@@ -115,6 +129,7 @@ export const EVENT_DEFINITIONS = {
   eroded,
   exhaustionChanged,
   fatigue,
+  figmentsMerged,
   laneResolved,
   leftPlay,
   leftVoid,

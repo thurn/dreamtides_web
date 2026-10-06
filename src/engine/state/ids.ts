@@ -50,6 +50,18 @@ export function sourceInstance(source: AbilitySource): InstanceId | null {
 /** An effect registered on the battle state, such as one a player may pay to end (C7). */
 export type EffectId = `e${number}`;
 
+/** A figment type in the figment catalog (rules § Figments), by its UUID. */
+export type FigmentId = string & { readonly __brand: "FigmentId" };
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+/** Validates a figment catalog UUID. */
+export function parseFigmentId(text: string): FigmentId {
+  if (!UUID.test(text)) throw new Error(`Invalid figment id ${text}`);
+  // eslint-disable-next-line dreamtides/no-raw-string-identity -- private minting boundary; the UUID shape is validated above
+  return text as FigmentId;
+}
+
 /** A battle's seed, derived by the host from the game seed and battle index. */
 export type BattleSeed = string & { readonly __brand: "BattleSeed" };
 

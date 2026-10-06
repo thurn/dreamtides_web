@@ -8,6 +8,7 @@
 import type { EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState, Expiry, FloatingChange, FloatingEffect } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { floatingEnded } from "./zones";
 
 /** Mints an effect id; payable and floating effects share the counter. */
 export function mintEffectId(state: BattleState): EffectId {
@@ -34,7 +35,11 @@ export function addFloating(
   return id;
 }
 
-/** Ends every floating effect matching `ends`, in creation order. */
+/**
+ * Ends every floating effect matching `ends`, in creation order, then does
+ * what each one's end does: a card banished until then returns, and a
+ * temporary created character ceases to exist (zones.ts `floatingEnded`).
+ */
 export function endFloating(ctx: StepContext, ends: (effect: FloatingEffect) => boolean): void {
   const ending = ctx.state.floating.filter(ends);
   if (ending.length === 0) return;
@@ -42,6 +47,7 @@ export function endFloating(ctx: StepContext, ends: (effect: FloatingEffect) => 
   for (const effect of ending) {
     ctx.emit({ kind: "effectEnded", effect: effect.id });
   }
+  for (const effect of ending) floatingEnded(ctx, effect);
 }
 
 /** Ends the floating effects whose expiry is `at` this boundary. */

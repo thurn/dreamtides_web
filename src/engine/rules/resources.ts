@@ -2,7 +2,7 @@ import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { StepContext } from "../steps/types";
 import { recordDrawn } from "./turn-log";
-import { moveInstance } from "./zones";
+import { instanceOf, moveInstance } from "./zones";
 
 export function setEnergy(ctx: StepContext, side: Side, current: number, max: number): void {
   const state = ctx.state.sides[side];
@@ -64,27 +64,37 @@ export function erodeCard(ctx: StepContext, side: Side): void {
 }
 
 /**
- * Draws one card for `side`. From an empty deck the side suffers Fatigue
- * instead: the opponent gains 1⍟, then 2⍟, 4⍟, … (rules § Fatigue).
+ * Draws one card for `side`, Ephemeral if `ephemeral` (banished during
+ * Ending while still in hand), and returns it. From an empty deck the side
+ * suffers Fatigue instead: the opponent gains 1⍟, then 2⍟, 4⍟, … (rules §
+ * Fatigue), and no card is drawn.
  */
-export function drawCard(ctx: StepContext, side: Side): void {
+export function drawCard(ctx: StepContext, side: Side, ephemeral = false): InstanceId | null {
   const sideState = ctx.state.sides[side];
   const top = sideState.deck[0];
   if (top === undefined) {
     suffersFatigue(ctx, side);
-    return;
+    return null;
   }
   moveInstance(ctx, top, "hand", "bottom");
+  const instance = instanceOf(ctx.state, top);
+  if (ephemeral) instance.status.ephemeral = true;
   recordDrawn(ctx.state, side);
   ctx.emit({ kind: "cardDrawn", side, instance: top });
-  const cardId = ctx.state.instances[top]?.cardId;
-  if (cardId !== undefined && ctx.catalog.card(cardId).status === "pending") {
-    ctx.emit({ kind: "pendingAbility", side, cardId, instance: top, reason: "drawn" });
+  if (instance.printing.kind === "card" && ctx.catalog.card(instance.printing.cardId).status === "pending") {
+    ctx.emit({ kind: "pendingAbility", side, cardId: instance.printing.cardId, instance: top, reason: "drawn" });
   }
+  return top;
 }
 
-/** Discards a card from `side`'s hand into its void. */
+/**
+ * Discards a card from `side`'s hand into its void. A created card, which
+ * ceases to exist instead, is announced while it is still in hand, so
+ * "when you discard" abilities still see it.
+ */
 export function discardCard(ctx: StepContext, side: Side, card: InstanceId): void {
+  const created = instanceOf(ctx.state, card).status.created;
+  if (created) ctx.emit({ kind: "discarded", side, instance: card });
   moveInstance(ctx, card, "void");
-  ctx.emit({ kind: "discarded", side, instance: card });
+  if (!created) ctx.emit({ kind: "discarded", side, instance: card });
 }

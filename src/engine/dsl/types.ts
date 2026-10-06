@@ -135,8 +135,11 @@ export type Condition =
   /** "If this card is in your void": the source instance is in `zone`. An emblem is always in play. */
   | { readonly cond: "sourceIn"; readonly zone: Zone };
 
-/** Keywords printed on a card. */
-export type Keyword = "vengeful" | "awakened" | "cannotBePrevented";
+/**
+ * Keywords a card has (layer 3). `reclaim` is plain Reclaim, played from the
+ * void for its normal cost; "Reclaim N●" is a `reclaim` ability instead.
+ */
+export type Keyword = "vengeful" | "awakened" | "cannotBePrevented" | "veil" | "reclaim" | "offering";
 
 /** A timing category: when a card or activated ability may be played (rules § Playing Cards and the Stack). */
 export type Speed = "standard" | "fast" | "interrupt";
@@ -179,6 +182,8 @@ export type PaymentCost =
   | { readonly cost: "counters"; readonly amount: number }
   /** Banish cards from your void that match the filter. */
   | { readonly cost: "banishFromVoid"; readonly count: number; readonly filter: CardFilter }
+  /** Banish other cards from your hand, as Offering pays. */
+  | { readonly cost: "banishFromHand"; readonly count: number }
   /** Reveal cards from your hand that match the filter; they stay in hand. */
   | { readonly cost: "reveal"; readonly count: number; readonly filter: CardFilter };
 
@@ -283,10 +288,20 @@ export interface StaticAbility {
   readonly effect: Effect;
 }
 
+/**
+ * "Reclaim N●" or "Reclaim – costs": the card may be played from its owner's
+ * void for `costs` in place of its printed energy cost, and is then reclaimed.
+ */
+export interface ReclaimAbility {
+  readonly kind: "reclaim";
+  readonly costs: readonly Cost[];
+}
+
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
   | StaticAbility
   | AdditionalCostAbility
+  | ReclaimAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }
   | ActivatedAbility
   | TriggeredAbility;
