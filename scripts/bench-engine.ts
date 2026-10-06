@@ -25,18 +25,15 @@ import {
   contentFigmentDefinitions,
 } from "../src/engine/content-catalog";
 import { cycleHash, loopSignature } from "../src/engine/loops/signature";
-import { randomLegalAnswer } from "../src/engine/prompts/answers";
-import type { Answer, Prompt } from "../src/engine/prompts/types";
+import type { Answer } from "../src/engine/prompts/types";
 import { cloneState } from "../src/engine/state/clone";
 import { stateHash } from "../src/engine/state/hash";
 import { battleSeed, SIDES } from "../src/engine/state/ids";
 import type { BattleState } from "../src/engine/state/types";
-import type { StepObserver } from "../src/engine/steps/driver";
 import type { Step } from "../src/engine/steps/kinds";
 import { runStep } from "../src/engine/steps/runner";
-import { InlineSource } from "../src/engine/steps/sources";
-import { fuzzEngineCatalog, fuzzInit, playFuzzGame, replayInteractively, type FuzzPool } from "../src/engine/testing/fuzz";
-import { PolicyRandom, randomAction } from "../src/engine/testing/random-policy";
+import { fuzzEngineCatalog, fuzzInit, playFuzzGame, playRandomGame, replayInteractively, type FuzzPool } from "../src/engine/testing/fuzz";
+import { PolicyRandom } from "../src/engine/testing/random-policy";
 import { determinize } from "../src/engine/view/determinize";
 import { view } from "../src/engine/view/view";
 
@@ -67,41 +64,29 @@ interface RecordedStep {
 
 /** Plays one Random-policy game; `record` receives every step with its start state and answers. */
 function playGame(seed: string, record?: (step: RecordedStep) => void): number {
-  const policy = new PolicyRandom(battleSeed(`policy|${seed}`));
   let given: Answer[] = [];
-  const answer = (prompt: Prompt): Answer => {
-    const value = randomLegalAnswer(prompt, () => policy.next());
-    given.push(value);
-    return value;
-  };
-  const source = new InlineSource({ player: answer, enemy: answer });
   let previous: BattleState | null = null;
   let automatic = true;
   let steps = 0;
-  const observe: StepObserver | undefined =
-    record === undefined
-      ? undefined
-      : (state, step) => {
-          if (previous !== null) record({ start: previous, step, answers: given, automatic });
-          given = [];
-          previous = state;
-          automatic = true;
-        };
-  const counting: StepObserver = (state, step, events) => {
-    steps += 1;
-    observe?.(state, step, events);
-  };
-  let state = engine.createBattle(fuzzInit(battleSeed(seed), pool), source, counting).state;
-  previous = state;
-  while (state.result === null) {
-    const pending = engine.decision(state);
-    if (pending === null) throw new Error(`${seed}: no decision and no result`);
-    const action = randomAction(engine.legalActions(state, pending.side), policy);
-    previous = state;
-    automatic = false;
-    given = [];
-    state = engine.apply(state, pending.side, action, source, counting).state;
-  }
+  const game = playRandomGame(engine, fuzzInit(battleSeed(seed), pool), {
+    answered: (_prompt, _work, answer) => {
+      given.push(answer);
+    },
+    observe: (state, step) => {
+      steps += 1;
+      if (record === undefined) return;
+      if (previous !== null) record({ start: previous, step, answers: given, automatic });
+      given = [];
+      previous = state;
+      automatic = true;
+    },
+    choosing: (_chosen, state) => {
+      previous = state;
+      automatic = false;
+      given = [];
+    },
+  });
+  if (game.end !== "result") throw new Error(`${seed}: the game ended without a result (${game.end})`);
   return steps;
 }
 

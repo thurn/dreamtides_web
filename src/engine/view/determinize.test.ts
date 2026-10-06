@@ -1,49 +1,30 @@
 /** Determinization (D22): sampled states are legal, match the view, are seeded, and never read hidden information. */
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
-import { randomLegalAnswer } from "../prompts/answers";
 import { stateHash } from "../state/hash";
 import type { InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, DeckEntry } from "../state/types";
-import { InlineSource } from "../steps/sources";
-import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
+import { fuzzEngineCatalog, fuzzInit, playRandomActions, playRandomGame, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { invariantViolations } from "../testing/invariants";
-import { PolicyRandom, randomAction } from "../testing/random-policy";
+import { PolicyRandom } from "../testing/random-policy";
 import { hiddenFrom } from "../testing/redaction";
 import { determinize, type Decklists } from "./determinize";
 import type { BattleView } from "./view";
 
 const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
 
-function randomSource(random: PolicyRandom): InlineSource {
-  const answer = (prompt: Parameters<typeof randomLegalAnswer>[0]) => randomLegalAnswer(prompt, () => random.next());
-  return new InlineSource({ player: answer, enemy: answer });
-}
-
-/** Plays up to `actions` Random-policy actions from `state`, checking invariants at the end. */
-function playOn(state: BattleState, random: PolicyRandom, actions: number): BattleState {
-  let current = state;
-  for (let count = 0; count < actions && current.result === null; count++) {
-    const pending = engine.decision(current);
-    if (pending === null) throw new Error("no decision and no result");
-    const action = randomAction(engine.legalActions(current, pending.side), random);
-    current = engine.apply(current, pending.side, action, randomSource(random)).state;
-  }
-  return current;
-}
-
-/** Mid-game states of seeded Random games, with their decklists. */
+/** Mid-game states of seeded Random games, every 40 actions up to 160, with their decklists. */
 function samples(): { state: BattleState; decklists: Decklists }[] {
   const result: { state: BattleState; decklists: Decklists }[] = [];
   for (let game = 0; game < 3; game++) {
     const init = fuzzInit(battleSeed(`determinize-${String(game)}`), SYNTHETIC_FUZZ_POOL);
-    const random = new PolicyRandom(battleSeed(`determinize-policy-${String(game)}`));
-    let state = engine.createBattle(init, randomSource(random)).state;
-    for (let round = 0; round < 4 && state.result === null; round++) {
-      state = playOn(state, random, 40);
-      if (state.result === null) result.push({ state, decklists: init.decks });
-    }
+    playRandomGame(engine, init, {
+      stop: (state, actions) => {
+        if (actions > 0 && actions % 40 === 0) result.push({ state, decklists: init.decks });
+        return actions >= 160;
+      },
+    });
   }
   return result;
 }
@@ -90,8 +71,11 @@ describe("determinize", () => {
         const sampled = determinize(engine.view(state, viewer), decklists, seeded(`legal-${String(index)}-${viewer}`), engine.catalog);
         expect(invariantViolations(sampled, engine.catalog)).toEqual([]);
         expect(engine.decision(sampled) !== null || sampled.result !== null).toBe(true);
-        const later = playOn(sampled, new PolicyRandom(battleSeed(`legal-play-${String(index)}`)), 30);
-        expect(invariantViolations(later, engine.catalog)).toEqual([]);
+        const later = playRandomActions(engine, sampled, new PolicyRandom(battleSeed(`legal-play-${String(index)}`)), {
+          stop: (_state, actions) => actions >= 30,
+        });
+        expect(later.end).not.toBe("noDecision");
+        expect(invariantViolations(later.state, engine.catalog)).toEqual([]);
       }
     });
   });

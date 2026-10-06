@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { cardIdOf } from "./testing/board";
 import { xCost } from "./dsl/energy";
 import { createEngine } from "./engine";
-import { deserializeState, serializeState, stateHash } from "./state/hash";
 import { battleSeed, type CardId } from "./state/ids";
 import type { BattleInit } from "./state/types";
 import { drawRandom } from "./state/rng";
@@ -50,45 +49,7 @@ describe("random streams", () => {
   });
 });
 
-/** A deep copy whose objects list their keys in reverse insertion order. */
-function reversedKeys<T>(value: T): T {
-  if (Array.isArray(value)) return value.map(reversedKeys) as T;
-  if (value === null || typeof value !== "object") return value;
-  return Object.fromEntries(
-    Object.entries(value)
-      .reverse()
-      .map(([key, entry]) => [key, reversedKeys(entry)]),
-  ) as T;
-}
-
-describe("state hash", () => {
-  it("hashes states that are equal as data equally, whatever their key order", () => {
-    const state = engine.createBattle(fuzzInit(battleSeed("hash-order"), pool), NO_PROMPTS).state;
-    state.rng["random:a"] = 1;
-    state.rng["random:b"] = 2;
-    const reordered = reversedKeys(state);
-    expect(Object.keys(reordered.rng)).not.toEqual(Object.keys(state.rng));
-    expect(Object.keys(reordered.instances)).not.toEqual(Object.keys(state.instances));
-    expect(reordered).toEqual(state);
-    expect(stateHash(reordered)).toBe(stateHash(state));
-  });
-
-  it("hashes states that differ as data differently", () => {
-    const state = engine.createBattle(fuzzInit(battleSeed("hash-differ"), pool), NO_PROMPTS).state;
-    const changed = deserializeState(serializeState(state));
-    changed.rng["random:a"] = 1;
-    expect(stateHash(changed)).not.toBe(stateHash(state));
-  });
-});
-
-describe("serialization and replay", () => {
-  it("round-trips a state through serialization with an identical hash", () => {
-    const state = engine.createBattle(fuzzInit(battleSeed("serialize"), pool), NO_PROMPTS).state;
-    const copy = deserializeState(serializeState(state));
-    expect(copy).toEqual(state);
-    expect(stateHash(copy)).toBe(stateHash(state));
-  });
-
+describe("replay", () => {
   it("plays seeded random games with no invariant violation, and replays each to its final hash", () => {
     for (let index = 0; index < 8; index++) {
       const game = playFuzzGame(engine, battleSeed(`core-test-${String(index)}`), pool);

@@ -7,7 +7,7 @@ import {
   type EngineFigmentDefinition,
 } from "../catalog";
 import { energy, energyX } from "../dsl/builders";
-import type { Engine } from "../engine";
+import type { ApplyResult, Engine } from "../engine";
 import type { EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { randomLegalAnswer } from "../prompts/answers";
@@ -182,59 +182,127 @@ function eventsDigest(events: readonly EngineEvent[]): number {
   return hashString(JSON.stringify(events));
 }
 
+/** A top-level action the Random policy chose, and the side it chose it for. */
+export interface ChosenAction {
+  readonly side: Side;
+  readonly action: Action;
+}
+
+/** Observers of a Random-policy game; every hook is optional. */
+export interface RandomGameHooks {
+  /** Receives every step, as the engine's step observer. */
+  readonly observe?: StepObserver;
+  /** Sees each prompt the policy answers, the working state it was asked in, and the answer. */
+  readonly answered?: (prompt: Prompt, work: BattleState, answer: Answer) => void;
+  /** Sees each action the policy chooses and the committed state it chose it in, before the engine applies it. */
+  readonly choosing?: (chosen: ChosenAction, state: BattleState) => void;
+  /** Receives the engine's result for the battle's creation (`chosen` null), then for each applied action. */
+  readonly committed?: (result: ApplyResult, chosen: ChosenAction | null) => void;
+  /** Ends play before the next decision when it returns true; `actions` counts the actions taken so far. */
+  readonly stop?: (state: BattleState, actions: number) => boolean;
+}
+
+/**
+ * Why a Random-policy game ended: the battle's result, the `stop` hook, a
+ * state with neither a result nor a pending decision, or `ACTION_CAP`.
+ */
+export type RandomGameEnd = "result" | "stopped" | "noDecision" | "actionCap";
+
+export interface RandomGame {
+  readonly state: BattleState;
+  /** The top-level actions taken. */
+  readonly actions: number;
+  readonly end: RandomGameEnd;
+}
+
+/** Answers every prompt for both sides with `policy`, reporting each answer to `answered`. */
+function randomAnswers(policy: PolicyRandom, answered: RandomGameHooks["answered"]): InlineSource {
+  const answer = (prompt: Prompt, work: BattleState): Answer => {
+    const value = randomLegalAnswer(prompt, () => policy.next());
+    answered?.(prompt, work, value);
+    return value;
+  };
+  return new InlineSource({ player: answer, enemy: answer });
+}
+
+/**
+ * Creates the battle `init` describes and plays it with the Random policy on
+ * both sides, seeded by `policy|<seed>`, until it ends (`RandomGameEnd`).
+ * The policy answers every prompt and chooses every top-level action.
+ */
+export function playRandomGame(engine: Engine, init: BattleInit, hooks: RandomGameHooks = {}): RandomGame {
+  const policy = new PolicyRandom(battleSeed(`policy|${init.seed}`));
+  const created = engine.createBattle(init, randomAnswers(policy, hooks.answered), hooks.observe);
+  hooks.committed?.(created, null);
+  return playRandomActions(engine, created.state, policy, hooks);
+}
+
+/** Plays on from a committed `state` with the Random policy `policy` on both sides, as `playRandomGame` does. */
+export function playRandomActions(engine: Engine, state: BattleState, policy: PolicyRandom, hooks: RandomGameHooks = {}): RandomGame {
+  const source = randomAnswers(policy, hooks.answered);
+  let current = state;
+  let actions = 0;
+  while (current.result === null) {
+    if (hooks.stop?.(current, actions) === true) return { state: current, actions, end: "stopped" };
+    const pending = engine.decision(current);
+    if (pending === null) return { state: current, actions, end: "noDecision" };
+    if (actions >= ACTION_CAP) return { state: current, actions, end: "actionCap" };
+    const chosen: ChosenAction = { side: pending.side, action: randomAction(engine.legalActions(current, pending.side), policy) };
+    hooks.choosing?.(chosen, current);
+    const applied = engine.apply(current, chosen.side, chosen.action, source, hooks.observe);
+    actions += 1;
+    hooks.committed?.(applied, chosen);
+    current = applied.state;
+  }
+  return { state: current, actions, end: "result" };
+}
+
 /** Plays one seeded game with the Random policy on both sides, checking invariants after every step. */
 export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): FuzzGame {
   const init = fuzzInit(seed, pool);
-  const policy = new PolicyRandom(battleSeed(`policy|${seed}`));
   let prompts = 0;
   let steps = 0;
   let failure: string | null = null;
-  const answer = (prompt: Prompt, work: BattleState): Answer => {
-    prompts += 1;
-    if (failure === null) {
-      const problems = promptRedactionViolations(prompt, work, engine.catalog);
-      if (problems.length > 0) failure = `at a ${prompt.kind} prompt after step #${String(steps)}: ${problems.join("; ")}`;
-    }
-    return randomLegalAnswer(prompt, () => policy.next());
-  };
-  const answerer = (): InlineSource => new InlineSource({ player: answer, enemy: answer });
   const events: EngineEvent[] = [];
-  const observe: StepObserver = (state, step) => {
-    steps += 1;
-    if (failure === null) {
-      const problems = invariantViolations(state, engine.catalog);
-      if (problems.length > 0) {
-        failure = `after step ${step.kind} (#${String(steps)}): ${problems.join("; ")}`;
-      }
-    }
-  };
   let state: BattleState = initialState(init, engine.catalog);
   let startAnswers: readonly RecordedAnswer[] = [];
   const actions: RecordedAction[] = [];
   let failedAction: FuzzGame["failedAction"] = null;
   try {
-    const start = engine.createBattle(init, answerer(), observe);
-    events.push(...start.events);
-    startAnswers = start.answers;
-    state = start.state;
-    while (state.result === null && failure === null) {
-      const pending = engine.decision(state);
-      if (pending === null) {
-        failure = "no decision and no result";
-        break;
-      }
-      if (actions.length >= ACTION_CAP) {
-        failure = `no result after ${String(ACTION_CAP)} actions`;
-        break;
-      }
-      const action = randomAction(engine.legalActions(state, pending.side), policy);
-      failedAction = { side: pending.side, action };
-      const applied = engine.apply(state, pending.side, action, answerer(), observe);
-      failedAction = null;
-      actions.push({ side: pending.side, action, answers: applied.answers });
-      events.push(...applied.events);
-      state = applied.state;
-    }
+    const game = playRandomGame(engine, init, {
+      answered: (prompt, work) => {
+        prompts += 1;
+        if (failure === null) {
+          const problems = promptRedactionViolations(prompt, work, engine.catalog);
+          if (problems.length > 0) failure = `at a ${prompt.kind} prompt after step #${String(steps)}: ${problems.join("; ")}`;
+        }
+      },
+      observe: (observed, step) => {
+        steps += 1;
+        if (failure === null) {
+          const problems = invariantViolations(observed, engine.catalog);
+          if (problems.length > 0) {
+            failure = `after step ${step.kind} (#${String(steps)}): ${problems.join("; ")}`;
+          }
+        }
+      },
+      choosing: (chosen) => {
+        failedAction = chosen;
+      },
+      committed: (applied, chosen) => {
+        if (chosen === null) {
+          startAnswers = applied.answers;
+        } else {
+          failedAction = null;
+          actions.push({ ...chosen, answers: applied.answers });
+        }
+        events.push(...applied.events);
+        state = applied.state;
+      },
+      stop: () => failure !== null,
+    });
+    if (game.end === "noDecision") failure = "no decision and no result";
+    if (game.end === "actionCap") failure = `no result after ${String(ACTION_CAP)} actions`;
   } catch (error) {
     failure ??= errorText(error);
   }

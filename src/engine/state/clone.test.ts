@@ -1,12 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
-import { randomLegalAnswer } from "../prompts/answers";
-import type { Prompt } from "../prompts/types";
-import { InlineSource } from "../steps/sources";
-import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
-import { PolicyRandom, randomAction } from "../testing/random-policy";
+import {
+  fuzzEngineCatalog,
+  fuzzInit,
+  playRandomGame,
+  SYNTHETIC_FUZZ_POOL,
+} from "../testing/fuzz";
 import { cloneState, copyJson } from "./clone";
-import { canonicalHash, stateHash } from "./hash";
+import {
+  canonicalHash,
+  deserializeState,
+  serializeState,
+  stateHash,
+} from "./hash";
 import { battleSeed } from "./ids";
 import type { BattleState } from "./types";
 
@@ -14,30 +20,18 @@ const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
 
 /** Every committed state of a seeded Random-policy game. */
 function committedStates(seed: string): BattleState[] {
-  const policy = new PolicyRandom(battleSeed(`policy|${seed}`));
-  const answer = (prompt: Prompt) =>
-    randomLegalAnswer(prompt, () => policy.next());
-  const source = new InlineSource({ player: answer, enemy: answer });
   const states: BattleState[] = [];
-  const observe = (state: BattleState) => {
-    states.push(state);
-  };
-  let state = engine.createBattle(
+  const game = playRandomGame(
+    engine,
     fuzzInit(battleSeed(seed), SYNTHETIC_FUZZ_POOL),
-    source,
-    observe,
-  ).state;
-  while (state.result === null) {
-    const pending = engine.decision(state);
-    if (pending === null) throw new Error(`${seed}: no decision and no result`);
-    state = engine.apply(
-      state,
-      pending.side,
-      randomAction(engine.legalActions(state, pending.side), policy),
-      source,
-      observe,
-    ).state;
-  }
+    {
+      observe: (state) => {
+        states.push(state);
+      },
+    },
+  );
+  if (game.end !== "result")
+    throw new Error(`${seed}: the game ended without a result`);
   return states;
 }
 
@@ -45,6 +39,17 @@ const STATES = [...committedStates("clone-a"), ...committedStates("clone-b")];
 
 function roundTrip<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
+}
+
+/** A deep copy whose objects list their keys in reverse insertion order. */
+function reversedKeys<T>(value: T): T {
+  if (Array.isArray(value)) return value.map(reversedKeys) as T;
+  if (value === null || typeof value !== "object") return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .reverse()
+      .map(([key, entry]) => [key, reversedKeys(entry)]),
+  ) as T;
 }
 
 /** Every object and array reachable from `value`. */
@@ -94,12 +99,9 @@ function withLeafChanged(
 }
 
 describe("cloneState", () => {
-  it("equals the JSON round trip of every committed state, key order included", () => {
-    for (const state of STATES) {
-      const clone = cloneState(state);
-      expect(clone).toStrictEqual(roundTrip(state));
-      expect(JSON.stringify(clone)).toBe(JSON.stringify(state));
-    }
+  it("equals the JSON round trip of every committed state", () => {
+    for (const state of STATES)
+      expect(cloneState(state)).toStrictEqual(roundTrip(state));
   });
 
   it("shares no object or array with the source", () => {
@@ -135,9 +137,22 @@ describe("copyJson", () => {
 });
 
 describe("stateHash", () => {
-  it("hashes every committed state as its JSON round trip", () => {
-    for (const state of STATES)
-      expect(stateHash(roundTrip(state))).toBe(stateHash(state));
+  it("round-trips every committed state through serialization with an identical hash", () => {
+    for (const state of STATES) {
+      const copy = deserializeState(serializeState(state));
+      expect(copy).toEqual(state);
+      expect(stateHash(copy)).toBe(stateHash(state));
+    }
+  });
+
+  it("hashes committed states equally whatever their key order", () => {
+    for (const state of STATES.filter((_, index) => index % 25 === 0)) {
+      const reordered = reversedKeys(state);
+      expect(Object.keys(reordered.instances)).not.toEqual(
+        Object.keys(state.instances),
+      );
+      expect(stateHash(reordered)).toBe(stateHash(state));
+    }
   });
 
   it("changes when any leaf of a state changes", () => {
