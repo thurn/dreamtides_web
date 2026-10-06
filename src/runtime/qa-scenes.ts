@@ -149,9 +149,7 @@ function atlasLayerSceneState(layer: number): QaScene["build"] {
 
     // No dreamscape modifiers are active on a QA jump-in, so the site-generation
     // context is empty — matching a fresh run's atlas generation.
-    const context: SiteGenerationContext = {
-      draftPickCount: journeyContent.draftData.offers.picksPerSite,
-    };
+    const context: SiteGenerationContext = {};
     const atlas = regenerateAtlasForProgress(
       layer,
       context,
@@ -306,7 +304,7 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
         ? foundation.atlas
         : regenerateAtlasForProgress(
             completionLevel,
-            { draftPickCount: journeyContent.draftData.offers.picksPerSite },
+            {},
             {
               dreamscapes: journeyContent.dreamscapes,
               atlasData: journeyContent.atlasData,
@@ -1004,7 +1002,7 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
     }
     const atlas = regenerateAtlasForProgress(
       6,
-      { draftPickCount: journeyContent.draftData.offers.picksPerSite },
+      {},
       {
         dreamscapes: journeyContent.dreamscapes,
         atlasData: journeyContent.atlasData,

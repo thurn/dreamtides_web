@@ -38,10 +38,7 @@ import { testJourneyMutationSource } from "../types/test-identities";
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
 ): SiteGenerationContext {
-  return {
-    draftPickCount: 5,
-    ...overrides,
-  };
+  return { ...overrides };
 }
 
 const TEST_DREAMSCAPES = SYNTHETIC_ATLAS_DREAMSCAPES;
@@ -140,27 +137,6 @@ function counts(sites: SiteState[]): Partial<Record<SiteType, number>> {
 }
 
 describe("generateSiteComposition", () => {
-  it("persists the configured pick target on generated Draft sites", () => {
-    const home = {
-      ...NON_STARTER_DREAMSCAPES[0],
-      signatureSite: "Draft" as const,
-    };
-    const result = generateSiteComposition({
-      layer: LayerName.Two,
-      dreamscape: home,
-      dreamscapes: TEST_DREAMSCAPES,
-      atlasData: TEST_ATLAS_DATA,
-      sitesData: MINIMAL_SITES_DATA,
-      context: { draftPickCount: 7 },
-      rng: nextFixtureRandom,
-    });
-    const draftSites = result.sites.filter((site) => site.type === "Draft");
-    expect(draftSites.length).toBeGreaterThan(0);
-    for (const site of draftSites) {
-      expect(site.data?.draftPickCount).toBe(7);
-    }
-  });
-
   it("builds the presenting guide's home Random Site with a distinct eligible candidate pool", () => {
     const home = NON_STARTER_DREAMSCAPES.find(
       (dreamscape) => dreamscape.signatureSite === "RandomSite",
@@ -196,7 +172,6 @@ describe("generateSiteComposition", () => {
       atlasData: TEST_ATLAS_DATA,
       sitesData: MINIMAL_SITES_DATA,
       context: {
-        draftPickCount: 5,
         dreamscapeModifiers: [
           {
             kind: "remove_shop_sites",
@@ -400,18 +375,6 @@ describe("generateSiteComposition", () => {
 
     expect(bossFill(EARLY_ATLAS_FILL_PROFILE_ID)).toBe("Duplication");
     expect(bossFill(LATE_ATLAS_FILL_PROFILE_ID)).toBe("Transfiguration");
-  });
-
-  it("leaves Draft site data attached and other sites unresolved", () => {
-    const dreamscape = NON_STARTER_DREAMSCAPES[0];
-    const sites = composeFor(dreamscape, 1, { hasKnownDreamsign: true });
-    for (const site of sites) {
-      if (site.type === "Draft") {
-        expect(site.data).toBeDefined();
-      } else {
-        expect(site.data).toBeUndefined();
-      }
-    }
   });
 
   it("assigns unique IDs to all sites", () => {

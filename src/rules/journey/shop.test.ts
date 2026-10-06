@@ -100,7 +100,6 @@ function makeSite(
     type,
     isEnhanced: false,
     isVisited: false,
-    data: {},
     ...overrides,
   };
 }

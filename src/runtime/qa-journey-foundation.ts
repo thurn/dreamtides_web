@@ -75,7 +75,7 @@ export function createQaJourneyFoundation(
 
   const atlas = generateInitialAtlas(
     0,
-    { draftPickCount: journeyContent.draftData.offers.picksPerSite },
+    {},
     {
       dreamscapes: journeyContent.dreamscapes,
       atlasData: journeyContent.atlasData,

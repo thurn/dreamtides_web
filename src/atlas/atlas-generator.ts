@@ -17,7 +17,6 @@ import {
   layerOrdinal,
 } from "../types/layer-name";
 import { otherGuideSignatureSites } from "../data/dreamscapes";
-import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
 import type { RandomSiteDestinationType } from "../types/journey";
 import { atlasLayerData } from "../types/atlas-data";
@@ -40,8 +39,6 @@ export interface SiteGenerationContext {
    * for the same site type stack additively before the weight is recalculated.
    */
   dreamscapeModifiers?: readonly DreamscapeModifier[];
-  /** Number of picks persisted on each newly generated Draft site. */
-  draftPickCount: number;
 }
 
 /**
@@ -352,17 +349,12 @@ export interface SiteCompositionResult {
 }
 
 /** Builds a fresh, unvisited site of the given type. */
-function makeSite(
-  type: SiteType,
-  isEnhanced: boolean,
-  draftPickCount: number,
-): SiteState {
+function makeSite(type: SiteType, isEnhanced: boolean): SiteState {
   return {
     id: nextSiteId(),
     type,
     isEnhanced,
     isVisited: false,
-    ...(type === "Draft" ? { data: draftSiteData(draftPickCount) } : {}),
   };
 }
 
@@ -382,7 +374,6 @@ function makeRandomSite(
   candidates: RandomSiteDestinationType[],
   homeChoiceCount: number,
   guideId: GuideId | null,
-  draftPickCount: number,
 ): SiteState {
   if (mode === "homeChoice" && candidates.length < homeChoiceCount) {
     throw new Error(
@@ -394,8 +385,7 @@ function makeRandomSite(
       ? candidates[randomInt(0, candidates.length - 1)]
       : undefined;
   return {
-    ...makeSite("RandomSite", true, draftPickCount),
-    data: draftSiteData(draftPickCount),
+    ...makeSite("RandomSite", true),
     randomSite: {
       mode,
       candidateSiteTypes: candidates,
@@ -452,9 +442,7 @@ function generateSiteCompositionInternal(
 
   // Starter dreamscape: fixed list, no enhancement, no fill.
   if (dreamscape?.isStarter === true && dreamscape.fixedSites !== undefined) {
-    const sites = dreamscape.fixedSites.map((type) =>
-      makeSite(type, false, context.draftPickCount),
-    );
+    const sites = dreamscape.fixedSites.map((type) => makeSite(type, false));
     if (logEvents) {
       logEvent("dreamscape_site_composition", {
         dreamscapeId: dreamscape.id,
@@ -478,7 +466,7 @@ function generateSiteCompositionInternal(
   // --- Mandatory: home guide's signature site, enhanced. ---
   let enhancedSiteType: SiteType | null = null;
   if (homeSite !== null) {
-    preBattle.push(makeSite(homeSite, true, context.draftPickCount));
+    preBattle.push(makeSite(homeSite, true));
     usedTypes.add(homeSite);
     enhancedSiteType = homeSite;
   }
@@ -490,7 +478,7 @@ function generateSiteCompositionInternal(
     const siteType = mandatoryType as SiteType;
     for (let index = 0; index < count; index += 1) {
       if (siteType !== "Draft" && usedTypes.has(siteType)) break;
-      preBattle.push(makeSite(siteType, false, context.draftPickCount));
+      preBattle.push(makeSite(siteType, false));
       if (siteType !== "Draft") usedTypes.add(siteType);
     }
   }
@@ -498,7 +486,7 @@ function generateSiteCompositionInternal(
   // --- Known-dreamsign carrier: one fill slot becomes a Dreamsign Reward. ---
   const knownDreamsignSite = atlasData.siteComposition.knownDreamsignSite;
   if (hasKnownDreamsign === true && !usedTypes.has(knownDreamsignSite)) {
-    preBattle.push(makeSite(knownDreamsignSite, false, context.draftPickCount));
+    preBattle.push(makeSite(knownDreamsignSite, false));
     usedTypes.add(knownDreamsignSite);
   }
 
@@ -562,7 +550,6 @@ function generateSiteCompositionInternal(
         candidates,
         sitesData.randomSite.homeChoiceCount,
         randomSiteGuideId,
-        context.draftPickCount,
       );
       preBattle.push(randomSite);
       if (randomSite.randomSite?.destinationSiteType !== undefined) {
@@ -577,7 +564,7 @@ function generateSiteCompositionInternal(
         }
       }
     } else {
-      preBattle.push(makeSite(siteType, false, context.draftPickCount));
+      preBattle.push(makeSite(siteType, false));
     }
     usedTypes.add(siteType);
     chosenFill.push(siteType);
@@ -606,7 +593,6 @@ function generateSiteCompositionInternal(
         candidates,
         sitesData.randomSite.homeChoiceCount,
         randomSiteGuideId,
-        context.draftPickCount,
       );
     }
   }
@@ -614,7 +600,7 @@ function generateSiteCompositionInternal(
   // --- Battle, always last. ---
   const sites = [
     ...preBattle,
-    makeSite("Battle", false, context.draftPickCount),
+    makeSite("Battle", false),
   ];
 
   if (logEvents) {

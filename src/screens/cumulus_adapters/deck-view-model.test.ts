@@ -10,7 +10,7 @@ import {
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import type { CardData } from "../../types/cards";
 import type { AvatarContent } from "../../types/content";
-import type { DeckEntry, Avatar } from "../../types/journey";
+import type { DeckEntry, Avatar, SiteState } from "../../types/journey";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { PoolData } from "../../draft/pool/types";
 import { parseCardName } from "../../types/card-identity";
@@ -559,6 +559,13 @@ describe("draft-view-model", () => {
   });
 
   describe("buildDraftView", () => {
+    const DRAFT_SITE: SiteState = {
+      id: parseSiteId("draft-site"),
+      type: "Draft",
+      isEnhanced: false,
+      isVisited: false,
+    };
+
     it("assembles the offer and a card-number key; null scene without a node", () => {
       const db = cardDatabase([
         card({ cardNumber: 5, energyCost: 2 }),
@@ -568,9 +575,9 @@ describe("draft-view-model", () => {
         offerCardNumbers: [5, 6],
         cardDatabase: db,
         sceneNode: null,
-        site: { data: { draftPickCount: 5 } },
+        site: DRAFT_SITE,
         sitePicksCompleted: 0,
-        defaultPickCount: 5,
+        pickCount: 5,
       });
       expect(view.offer.map((c) => c.displaySnapshot.cardNumber)).toEqual([
         6, 5,
@@ -585,9 +592,9 @@ describe("draft-view-model", () => {
         offerCardNumbers: [1],
         cardDatabase: cardDatabase([card({ cardNumber: 1 })]),
         sceneNode: null,
-        site: { data: { draftPickCount: 5 } },
+        site: DRAFT_SITE,
         sitePicksCompleted: 2,
-        defaultPickCount: 5,
+        pickCount: 5,
       });
       expect(view.pickNumber).toBe(3);
       expect(view.pickTotal).toBe(5);
@@ -602,9 +609,9 @@ describe("draft-view-model", () => {
           card({ cardNumber: 6, spark: 2 }),
         ]),
         sceneNode: null,
-        site: { data: { draftPickCount: 5 } },
+        site: DRAFT_SITE,
         sitePicksCompleted: 0,
-        defaultPickCount: 5,
+        pickCount: 5,
       });
       expect(view.offer.map((model) => model.transfiguration?.type)).toEqual([
         "Kindled",

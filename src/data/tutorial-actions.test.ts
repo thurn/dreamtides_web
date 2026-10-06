@@ -361,7 +361,6 @@ describe("site-tutorial-guidance", () => {
     return {
       id: parseSiteId(idSeed),
       type,
-      data: {},
       isVisited: false,
       isEnhanced: false,
     };

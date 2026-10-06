@@ -194,7 +194,6 @@ export function createBattleCompletionProvider(
           ...(journey.dreamscapeModifiers.length === 0
             ? {}
             : { dreamscapeModifiers: journey.dreamscapeModifiers }),
-          draftPickCount: content.draftData.offers.picksPerSite,
         },
         {
           dreamscapes: content.dreamscapes,

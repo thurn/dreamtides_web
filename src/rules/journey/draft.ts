@@ -22,7 +22,6 @@ import { serializeCardNumber } from "../../types/draft";
 import type {
   DeckEntry,
   JourneyState,
-  SiteState,
   TransfigurationType,
 } from "../../types/journey";
 import {
@@ -68,10 +67,7 @@ export interface DraftContentProvider {
    * The explicit draft config for the active dreamscape, including any
    * affiliation reweighting. `undefined` rejects the reducer action.
    */
-  draftConfigFor(
-    draftState: DraftState,
-    site: Pick<SiteState, "data">,
-  ): DraftConfig | undefined;
+  draftConfigFor(draftState: DraftState): DraftConfig | undefined;
   /** Deterministically choose a legal form for one offered card, when any. */
   transfigurationForCard(
     cardNumber: number,
@@ -191,7 +187,7 @@ export function pickDraftCard(
   // Advance the draft on a clone so a bounce (from a thrown engine error, which
   // the root reducer catches) never leaves a half-mutated live state.
   const nextDraftState = structuredClone(draftState);
-  const config = provider.draftConfigFor(nextDraftState, site);
+  const config = provider.draftConfigFor(nextDraftState);
   if (config === undefined) return null;
   const stream = rngStream(ctx);
   processPlayerPickWithoutLogging(
@@ -250,7 +246,7 @@ export function enterDraftSite(
   if (draftState.activeSiteId === siteId) return null;
 
   const nextDraftState = structuredClone(draftState);
-  const config = provider.draftConfigFor(nextDraftState, site);
+  const config = provider.draftConfigFor(nextDraftState);
   if (config === undefined) return null;
   const stream = rngStream(ctx);
   engineEnterDraftSite(
@@ -318,7 +314,7 @@ export function rerollDraftOffer(
   if (site === null || site.type !== "Draft") return null;
 
   const nextDraftState = structuredClone(draftState);
-  const config = provider.draftConfigFor(nextDraftState, site);
+  const config = provider.draftConfigFor(nextDraftState);
   if (config === undefined) return null;
   const stream = rngStream(ctx);
   const hasOffer = engineRerollDraftOffer(nextDraftState, config, stream);

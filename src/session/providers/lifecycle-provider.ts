@@ -85,7 +85,7 @@ export function startJourneyFromAvatar({
   );
   const atlas = generateInitialAtlas(
     prev.completionLevel,
-    { draftPickCount: journeyContent.draftData.offers.picksPerSite },
+    {},
     {
       dreamscapes: journeyContent.dreamscapes,
       atlasData: journeyContent.atlasData,
@@ -183,7 +183,6 @@ export function createJourneyLifecycleContentProvider(
           ...(journey.dreamscapeModifiers.length === 0
             ? {}
             : { dreamscapeModifiers: journey.dreamscapeModifiers }),
-          draftPickCount: content.draftData.offers.picksPerSite,
         },
         {
           dreamscapes: content.dreamscapes,

@@ -401,7 +401,6 @@ describe("site-tutorial-view-model", () => {
               {
                 id: parseSiteId("prior"),
                 type: current.type,
-                data: {},
                 isVisited: visitedSites.includes("prior"),
                 isEnhanced: false,
               },
@@ -416,7 +415,6 @@ describe("site-tutorial-view-model", () => {
   const revelation: SiteState = {
     id: parseSiteId("revelation-a"),
     type: "DreamsignRevelation",
-    data: {},
     isVisited: false,
     isEnhanced: false,
   };
@@ -447,7 +445,6 @@ describe("site-tutorial-view-model", () => {
       const purge: SiteState = {
         id: parseSiteId("purge-a"),
         type: "Purge",
-        data: {},
         isVisited: false,
         isEnhanced: false,
       };

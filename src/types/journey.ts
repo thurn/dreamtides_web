@@ -188,7 +188,6 @@ export interface SiteState {
   isVisited: boolean;
   /** Random Site wrapper/origin metadata persisted for deterministic replay. */
   randomSite?: RandomSiteMetadata;
-  data?: Record<string, unknown>;
 }
 
 export interface RandomSiteMetadata {

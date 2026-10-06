@@ -4,7 +4,6 @@
 // `DraftSiteScreenAdapter` acquires live state (and mints the draft offer) and
 // calls `buildDraftView`; this module never acquires anything itself.
 
-import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { CardData } from "../../types/cards";
 import type {
   DreamscapeNode,
@@ -63,17 +62,15 @@ export function buildDraftView(params: {
   offerTransfigurations?: Readonly<Record<string, TransfigurationType>>;
   cardDatabase: ReadonlyMap<number, CardData>;
   sceneNode: DreamscapeNode | null;
-  site: Pick<SiteState, "data"> | null;
+  site: SiteState | null;
   sitePicksCompleted: number;
   journeyState?: JourneyState;
   tutorialConfiguration?: TutorialSiteConfiguration;
-  defaultPickCount: number;
+  /** Catalog-authored number of picks at every Draft site. */
+  pickCount: number;
   transfigurationData: TransfigurationData;
 }): DraftView {
-  const pickTotal =
-    params.site !== null
-      ? draftSitePickCount(params.site, params.defaultPickCount)
-      : 0;
+  const pickTotal = params.site !== null ? params.pickCount : 0;
   const pickNumber = Math.min(
     params.sitePicksCompleted + 1,
     Math.max(pickTotal, 1),

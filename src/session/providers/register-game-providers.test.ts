@@ -449,7 +449,6 @@ describe("registerGameProviders (real content providers)", () => {
       type: "Shop",
       isEnhanced: true,
       isVisited: false,
-      data: {},
     };
     const provider = createSiteContentProvider(content);
 
@@ -515,7 +514,6 @@ describe("registerGameProviders (real content providers)", () => {
       type: "Shop",
       isEnhanced: false,
       isVisited: false,
-      data: {},
     };
     const modifier = {
       kind: "transfigure-next-draft-or-shop" as const,

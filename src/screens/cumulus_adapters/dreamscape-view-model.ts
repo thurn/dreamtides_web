@@ -9,7 +9,6 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../../data/sites-data";
-import { draftSitePickCount } from "../../draft/draft-site-config";
 import {
   scatterSites,
   seedFromString,
@@ -133,7 +132,7 @@ export function buildSiteModels(
   node: DreamscapeNode,
   completionLevel: number,
   sitesData: SitesData,
-  defaultDraftPickCount: number,
+  draftPickCount: number,
 ): DreamscapeSiteModel[] {
   const allNonBattleVisited = node.sites
     .filter((site) => site.type !== "Battle")
@@ -151,7 +150,7 @@ export function buildSiteModels(
       ? battleLabel(completionLevel, sitesData)
       : site.type === "Draft"
         ? fillTemplate(draftPresentation.label, {
-            pick_count: draftSitePickCount(site, defaultDraftPickCount),
+            pick_count: draftPickCount,
           })
         : siteTypeName(sitesData, site.type);
     return {
@@ -258,7 +257,7 @@ export function buildDreamscapeView(
   title: string,
   state: JourneyState,
   sitesData: SitesData,
-  defaultDraftPickCount: number,
+  draftPickCount: number,
   replacementSiteId: SiteId | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
 ): DreamscapeView {
@@ -295,7 +294,7 @@ export function buildDreamscapeView(
       node,
       state.completionLevel,
       sitesData,
-      defaultDraftPickCount,
+      draftPickCount,
     ),
     inlineRewards,
     replacement: buildDreamsignReplacementView(state, replacementSiteId),

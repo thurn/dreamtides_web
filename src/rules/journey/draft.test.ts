@@ -134,7 +134,6 @@ function makeSite(idSeed: string, type: SiteState["type"]): SiteState {
     type,
     isEnhanced: false,
     isVisited: false,
-    data: {},
   };
 }
 

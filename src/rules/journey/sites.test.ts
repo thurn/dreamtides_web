@@ -113,7 +113,6 @@ function makeSite(type: SiteType, isEnhanced = false): SiteState {
     type,
     isEnhanced,
     isVisited: false,
-    data: {},
   };
 }
 

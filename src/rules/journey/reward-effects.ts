@@ -218,8 +218,7 @@ function siteRecordsEqual(left: SiteState, right: SiteState): boolean {
     left.type === right.type &&
     left.isEnhanced === right.isEnhanced &&
     left.isVisited === right.isVisited &&
-    left.randomSite === right.randomSite &&
-    left.data === right.data
+    left.randomSite === right.randomSite
   );
 }
 
@@ -244,8 +243,7 @@ function insertPreparedSiteInJourneyState(
     input.insertionIndex < 0 ||
     input.site.isEnhanced ||
     input.site.isVisited ||
-    input.site.randomSite !== undefined ||
-    input.site.data !== undefined
+    input.site.randomSite !== undefined
   ) {
     return null;
   }
