@@ -92,6 +92,7 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
   for (const instance of Object.values(state.instances)) {
     const card = fresh.of(instance.id);
     if (card.spark !== null && card.spark < 0) problems.push(`${instance.id} has negative spark ${String(card.spark)}`);
+    if (instance.zone !== "play" && instance.status.exhausted) problems.push(`${instance.id} is exhausted outside play`);
     if (memoized !== fresh && JSON.stringify(memoized.of(instance.id)) !== JSON.stringify(card)) {
       problems.push(`${instance.id} has memoized characteristics that differ from a fresh evaluation`);
     }

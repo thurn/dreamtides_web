@@ -2,8 +2,8 @@
  * Zone changes and special mechanics (engine-design § Zones and zone
  * changes): the moveInstance replacements in order (created cards cease to
  * exist, reclaimed cards are banished, Veil), materialize placement and
- * capacity, gain control, banish-until, Offering, Reclaim, Ephemeral, and
- * Phasing.
+ * capacity, leaving play, gain control, banish-until, Offering, Reclaim,
+ * Ephemeral, and Phasing.
  */
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
@@ -20,6 +20,7 @@ import { SYNTHETIC } from "../testing/synthetic-cards";
 import { TRIGGER } from "../testing/trigger-cards";
 import { at, passUntil } from "../testing/trigger-harness";
 import { ZONE, ZONE_FIGMENT, zoneCatalog } from "../testing/zone-cards";
+import { freshStatus } from "../state/create";
 import { hasKeyword } from "./keywords";
 
 const engine = createEngine(zoneCatalog());
@@ -133,6 +134,22 @@ describe("zone-change replacements", () => {
 });
 
 const fullBack = Array.from({ length: 10 }, () => v.vanilla1.id);
+
+describe("leaving play", () => {
+  it("returns an exhausted character to hand ready, as if drawn, and it enters per the normal rules when replayed", () => {
+    for (const card of [v.vanilla2.id, v.awakened2.id]) {
+      const { state, ids } = board({ player: { back: [card], hand: [DSL.returnAnyToHand.id], energy: 5 } });
+      const bounced = ids.player.back[0]!;
+      const ready = structuredClone(state);
+      ready.instances[bounced].status = { ...ready.instances[bounced].status, exhausted: true, counters: 2 };
+      const returned = play(ready, "player", ids.player.hand[0]).state;
+      expect(returned.instances[bounced]).toMatchObject({ zone: "hand", status: freshStatus() });
+      const replayed = play(returned, "player", bounced).state;
+      expect(where(replayed, bounced)).toBe("play");
+      expect(replayed.instances[bounced].status.exhausted).toBe(card !== v.awakened2.id);
+    }
+  });
+});
 
 describe("materialize placement and capacity", () => {
   it("enters the leftmost open back-rank position, or the open position a UI drop names", () => {

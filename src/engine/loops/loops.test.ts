@@ -230,14 +230,12 @@ describe("optional loops", () => {
     const card = ids.player.hand[0];
     if (card === undefined) throw new Error("no card");
     const playCard = (from: BattleState) => engine.apply(from, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS);
-    // The first play returns the card to hand exhausted, a different position
-    // from the start (pre-existing issue); the second play repeats it.
+    // The play returns the card to hand as it was drawn, so one play is a loop.
     const once = playCard(state);
-    const twice = playCard(once.state);
-    expect(twice.state.sides.player.hand).toEqual([card]);
-    const result = repeat(twice.state, 3);
+    expect(once.state.sides.player.hand).toEqual([card]);
+    const result = repeat(once.state, 3);
     expect(ended(result.events)).toEqual({ iterations: 3, reason: "completed" });
-    expect(result.state.sides.player.score).toBe(5);
+    expect(result.state.sides.player.score).toBe(4);
     expect(result.events.filter((event) => event.kind === "triggerResolved")).toHaveLength(3);
   });
 

@@ -128,8 +128,11 @@ function detach(state: BattleState, instance: CardInstance): void {
  * Moves an instance to a non-play zone of `holder`, its owner unless a card
  * goes into another side's hand, after the replacements: a created card
  * ceases to exist instead, and a reclaimed card goes to its owner's Banished
- * zone instead. Leaving play clears its counters (rules § Counters). Returns
- * the zone it went to, or `null` when it ceased to exist.
+ * zone instead. It is never exhausted outside play: exhaustion marks a
+ * character in play (rules § Exhaust and Awaken), and a card that returns to
+ * play enters exhausted unless awakened. Leaving play clears its counters
+ * (rules § Counters). Returns the zone it went to, or `null` when it ceased
+ * to exist.
  */
 function relocate(
   ctx: StepContext,
@@ -158,9 +161,7 @@ function relocate(
   } else {
     list.push(id);
   }
-  if (destination !== "deck" && destination !== "hand") {
-    instance.status.exhausted = false;
-  }
+  instance.status.exhausted = false;
   if (leavingPlay) {
     instance.status.counters = 0;
   }
