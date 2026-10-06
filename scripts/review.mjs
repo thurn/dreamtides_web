@@ -3,12 +3,16 @@ import { execFileSync } from "node:child_process";
 import {
   existsSync,
   mkdirSync,
+  readFileSync,
 } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import {
   buildReviewPlan,
   gateExecutionPlan,
+  IMPORTER_EXTENSIONS,
+  importersOf,
+  importSearchNeedles,
   reviewNeedsPreparedWorkspace,
 } from "./review-plan.mjs";
 import {
@@ -118,10 +122,23 @@ function splitNullDelimited(value) {
   return value.split("\0").filter((entry) => entry !== "");
 }
 
+/**
+ * Paths changed since `base`, deletions included. Rename detection is off, so
+ * a renamed file reports its old path as a deletion and its new path as an
+ * addition.
+ */
 function changedFilesSince(base) {
   const tracked = execFileSync(
     "git",
-    ["diff", "--name-only", "--diff-filter=ACMRTUXB", "-z", base, "--"],
+    [
+      "diff",
+      "--name-only",
+      "--no-renames",
+      "--diff-filter=ACDMTUXB",
+      "-z",
+      base,
+      "--",
+    ],
     { cwd: root, encoding: "utf8" },
   );
   const untracked = execFileSync(
@@ -132,10 +149,47 @@ function changedFilesSince(base) {
   return [...splitNullDelimited(tracked), ...splitNullDelimited(untracked)];
 }
 
+/**
+ * Tracked and untracked working-tree files that import one of the deleted
+ * `targets`. `git grep` narrows the candidates to files that mention a
+ * target's stem before their imports are resolved.
+ */
+function findImporters(targets) {
+  let listed;
+  try {
+    listed = execFileSync(
+      "git",
+      [
+        "grep",
+        "--untracked",
+        "-l",
+        "-z",
+        "-F",
+        ...importSearchNeedles(targets).flatMap((needle) => ["-e", needle]),
+        "--",
+        ...IMPORTER_EXTENSIONS.map((extension) => `*${extension}`),
+      ],
+      { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+    );
+  } catch (error) {
+    // `git grep` exits 1 when nothing matches.
+    if (error?.status === 1) return [];
+    throw error;
+  }
+  return importersOf(
+    targets,
+    splitNullDelimited(listed).map((path) => ({
+      path,
+      source: readFileSync(join(root, path), "utf8"),
+    })),
+  );
+}
+
 const base = task === "gate" ? gateBase() : reviewBase();
 const reviewPlan = buildReviewPlan(
   changedFilesSince(base),
   (file) => existsSync(join(root, file)),
+  findImporters,
 );
 
 function pidIsAlive(pid) {
@@ -431,6 +485,12 @@ try {
     console.log(
       `[review] ${reviewPlan.changedFiles.length} changed file(s) since ${base.slice(0, 12)}`,
     );
+    if (reviewPlan.importerFiles.length > 0) {
+      console.log(
+        `[review] ${reviewPlan.importerFiles.length} file(s) import a deleted ` +
+        `module: ${reviewPlan.importerFiles.join(", ")}`,
+      );
+    }
   }
   if (steps.length === 0) {
     console.log("[review] no applicable checks");

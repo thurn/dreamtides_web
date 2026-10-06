@@ -5,6 +5,8 @@ import {
   buildReviewPlan,
   GATE_RELATED_TEST_FILE_CAP,
   gateExecutionPlan,
+  importersOf,
+  importSearchNeedles,
   relatedTestRunDecision,
   reviewNeedsPreparedWorkspace,
 } from "./review-plan.mjs";
@@ -22,6 +24,7 @@ describe("fast review plan", () => {
   it("skips executable checks for documentation-only changes", () => {
     expect(buildReviewPlan(["docs/notes.md"])).toEqual({
       changedFiles: ["docs/notes.md"],
+      importerFiles: [],
       lintFiles: [],
       shouldTypecheck: false,
       testInputs: [],
@@ -39,6 +42,7 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
+      importerFiles: [],
       lintFiles: [
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
@@ -83,6 +87,162 @@ describe("fast review plan", () => {
       shouldTypecheck: true,
       testInputs: [],
     });
+  });
+});
+
+describe("deleted modules", () => {
+  it("checks the surviving importers of a deleted module in its place", () => {
+    const requested = [];
+    const plan = buildReviewPlan(
+      ["docs/notes.md", "scripts/lib/removed.mjs"],
+      (file) => file !== "scripts/lib/removed.mjs",
+      (targets) => {
+        requested.push(targets);
+        return ["scripts/tool.mjs", "src/state/uses-removed.ts"];
+      },
+    );
+
+    expect(requested).toEqual([["scripts/lib/removed.mjs"]]);
+    expect(plan).toEqual({
+      changedFiles: ["docs/notes.md", "scripts/lib/removed.mjs"],
+      importerFiles: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
+      lintFiles: ["src/state/uses-removed.ts"],
+      shouldTypecheck: false,
+      testInputs: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
+    });
+  });
+
+  it("selects an importer once when it also changed", () => {
+    expect(
+      buildReviewPlan(
+        ["src/removed.ts", "src/caller.ts"],
+        (file) => file === "src/caller.ts",
+        () => ["src/caller.ts"],
+      ),
+    ).toMatchObject({
+      importerFiles: ["src/caller.ts"],
+      lintFiles: ["src/caller.ts"],
+      testInputs: ["src/caller.ts"],
+    });
+  });
+
+  it("ignores importers that are themselves deleted", () => {
+    expect(
+      buildReviewPlan(
+        ["src/a.ts", "src/b.ts"],
+        () => false,
+        () => ["src/a.ts", "src/b.ts"],
+      ),
+    ).toMatchObject({ importerFiles: [], lintFiles: [], testInputs: [] });
+  });
+
+  it("looks up importers only for deleted modules", () => {
+    const requested = [];
+    const findImporters = (targets) => {
+      requested.push(targets);
+      return [];
+    };
+    buildReviewPlan(["src/live.ts"], () => true, findImporters);
+    buildReviewPlan(["docs/removed.md"], () => false, findImporters);
+    expect(requested).toEqual([]);
+  });
+
+  it("runs the capped related tests of the importers at the gate", () => {
+    expect(
+      gateExecutionPlan(
+        buildReviewPlan(
+          ["scripts/dev.mjs"],
+          (file) => file !== "scripts/dev.mjs",
+          () => ["scripts/dev.test.mjs"],
+        ),
+      ),
+    ).toEqual([
+      { step: "prepare", args: [] },
+      { concurrent: [{ step: "typecheck", args: [] }] },
+      {
+        step: "test-related-capped",
+        args: [
+          "--max-files",
+          String(GATE_RELATED_TEST_FILE_CAP),
+          "scripts/dev.test.mjs",
+        ],
+      },
+    ]);
+  });
+});
+
+describe("importer resolution", () => {
+  const importer = (path, source) => ({ path, source });
+
+  it("finds static, dynamic, require and mock imports of a deleted module", () => {
+    expect(
+      importersOf(
+        ["scripts/lib/removed.mjs"],
+        [
+          importer("scripts/static.mjs", 'import { a } from "./lib/removed.mjs";'),
+          importer("scripts/side.mjs", "import './lib/removed.mjs';"),
+          importer("scripts/dynamic.mjs", 'await import("./lib/removed.mjs");'),
+          importer("scripts/required.cjs", 'require("./lib/removed.mjs");'),
+          importer("scripts/lib/mocked.test.mjs", 'vi.mock("./removed.mjs");'),
+          importer("scripts/reexport.mjs", 'export * from "../scripts/lib/removed.mjs";'),
+        ],
+      ),
+    ).toEqual([
+      "scripts/dynamic.mjs",
+      "scripts/lib/mocked.test.mjs",
+      "scripts/reexport.mjs",
+      "scripts/required.cjs",
+      "scripts/side.mjs",
+      "scripts/static.mjs",
+    ]);
+  });
+
+  it("resolves extensionless, typed-ESM and directory-index specifiers", () => {
+    expect(
+      importersOf(
+        ["src/rules/removed.ts", "src/ui/panel/index.tsx"],
+        [
+          importer("src/rules/bare.ts", 'import { x } from "./removed";'),
+          importer("src/rules/esm.ts", 'import { x } from "./removed.js";'),
+          importer("src/ui/screen.tsx", 'import { Panel } from "./panel";'),
+        ],
+      ),
+    ).toEqual(["src/rules/bare.ts", "src/rules/esm.ts", "src/ui/screen.tsx"]);
+  });
+
+  it("finds a stylesheet imported by a module or another stylesheet", () => {
+    expect(
+      importersOf(
+        ["src/styles/removed.css"],
+        [
+          importer("src/main.tsx", 'import "./styles/removed.css";'),
+          importer("src/styles/app.css", '@import "./removed.css";'),
+        ],
+      ),
+    ).toEqual(["src/main.tsx", "src/styles/app.css"]);
+  });
+
+  it("ignores packages and same-named modules elsewhere", () => {
+    expect(
+      importersOf(
+        ["scripts/lib/removed.mjs"],
+        [
+          importer("scripts/package.mjs", 'import removed from "removed";'),
+          importer("scripts/sibling.mjs", 'import { a } from "./removed.mjs";'),
+          importer("src/removed-user.ts", 'const name = "removed";'),
+        ],
+      ),
+    ).toEqual([]);
+  });
+
+  it("searches for the stem, or the directory of an index module", () => {
+    expect(
+      importSearchNeedles([
+        "scripts/lib/removed.mjs",
+        "src/ui/panel/index.tsx",
+        "src/rules/removed.ts",
+      ]),
+    ).toEqual(["panel", "removed"]);
   });
 });
 
