@@ -13,8 +13,7 @@ export interface DraftAvatar {
   imageNumber: string;
   portraitFocus?: AvatarPortraitFocus;
   startingEssence?: number;
-  signatureCards?: readonly string[];
-  /** Stable card UUIDs, index-aligned with `signatureCards`. */
+  /** Stable UUIDs of the Avatar's signature cards. */
   signatureCardIds?: readonly CardId[];
 }
 
@@ -27,7 +26,6 @@ export function loadAvatarsV2(): DraftAvatar[] {
   return avatars.map((avatar) => ({
     ...avatar,
     id: parseAvatarId(avatar.id),
-    signatureCards: avatar.signatureCards ?? [],
     signatureCardIds: avatar.signatureCardIds ?? [],
   }));
 }

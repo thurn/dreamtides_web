@@ -5,7 +5,7 @@
  */
 import type { SiteType } from "./journey.ts";
 import type { Rarity } from "./cards.ts";
-import type { CardId, CardName } from "./card-identity";
+import type { CardId } from "./card-identity";
 import type {
   DraftPoolCopiesByCard,
   OpeningDraftOffers,
@@ -45,12 +45,8 @@ export interface AvatarContent {
    */
   startingEssence: number;
   /**
-   * Display names corresponding to the avatar's authored signature card UUIDs.
-   */
-  signatureCards?: CardName[];
-  /**
-   * Stable card UUIDs for {@link signatureCards}, index-aligned. Lets a
-   * consumer distinguish two cards that share a display name.
+   * Stable UUIDs of the Avatar's authored signature cards. Display names
+   * resolve from the card catalog at the render boundary.
    */
   signatureCardIds?: CardId[];
 }

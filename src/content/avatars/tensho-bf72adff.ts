@@ -7,13 +7,6 @@ export default avatar({
   imageNumber: "0029",
   renderedText:
     "2●, ☾: Materialize a 0✦ figment copy of the last warrior you played this turn.",
-  signatureCards: [
-    "Burning Revenant",
-    "Underworld Witch",
-    "Worldbreacher",
-    "Cinderblade Legionnaire",
-    "Vengeance Taker",
-  ],
   portraitFocus: { x: 0.5, y: 0.22 },
   tidePool: {
     starter: "254054e3-1a7c-4bf4-8c30-491fdeeab40c",

@@ -7,14 +7,6 @@ export default avatar({
   imageNumber: "0044",
   renderedText:
     "Once per turn, when you discard a card, it gains reclaim until end of turn.",
-  signatureCards: [
-    "Chaos Crasher",
-    "Thought Augury",
-    "Embrace the Infinite",
-    "Part the Veil",
-    "Catastrophe Broker",
-    "Fractured Vessel",
-  ],
   portraitFocus: { x: 0.5, y: 0.179 },
   tidePool: {
     starter: "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",

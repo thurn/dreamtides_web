@@ -6,14 +6,6 @@ export default avatar({
   id: "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
   imageNumber: "0095",
   renderedText: "4●, ☾: Gain 1● for each spirit animal you control.",
-  signatureCards: [
-    "Vigilant Howler",
-    "Ghostlight Wolves",
-    "Eternal Stag",
-    "Cloudmantle Ray",
-    "Ethereal Courser",
-    "Empyreal Light",
-  ],
   portraitFocus: { x: 0.51, y: 0.169 },
   tidePool: {
     starter: "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",

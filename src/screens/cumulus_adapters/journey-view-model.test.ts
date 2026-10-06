@@ -162,32 +162,56 @@ describe("journey-start-view-model", () => {
     it("suppresses signature cards whenever tides exist (tides4 runs show tides instead)", () => {
       const view = toAvatarOfferView(
         avatar({
-          signatureCards: [parseCardName("Alpha"), parseCardName("Beta")],
           signatureCardIds: [testCardId("uuid-a"), testCardId("uuid-b")],
         }),
         [tide("t1", 3)],
+        new Map([
+          [testCardId("uuid-a"), "Alpha"],
+          [testCardId("uuid-b"), "Beta"],
+        ]),
       );
       expect(view.signatureCards).toEqual([]);
       expect(view.tides.map((t) => t.id)).toEqual([testTideId("t1")]);
     });
 
     it("shows signature cards keyed by their stable UUIDs when there are no tides", () => {
+      const cardNameById = new Map([
+        [testCardId("uuid-a1"), "Alpha"],
+        [testCardId("uuid-a2"), "Alpha"],
+      ]);
       const view = toAvatarOfferView(
         avatar({
-          signatureCards: [parseCardName("Alpha"), parseCardName("Alpha")],
           signatureCardIds: [testCardId("uuid-a1"), testCardId("uuid-a2")],
         }),
         [],
+        cardNameById,
       );
       // Two cards sharing a display name stay distinct because keys come from
-      // the index-aligned UUID list, never from the name.
+      // the UUID list, never from the name.
       expect(view.signatureCards.map(({ id }) => id)).toEqual([
         testCardId("uuid-a1"),
         testCardId("uuid-a2"),
       ]);
-      expect(
-        view.signatureCards.every(({ name }) => typeof name === "string"),
-      ).toBe(true);
+      expect(view.signatureCards.map(({ name }) => name)).toEqual([
+        cardNameById.get(testCardId("uuid-a1")),
+        cardNameById.get(testCardId("uuid-a2")),
+      ]);
+    });
+
+    it("resolves signature names from the catalog by UUID and skips UUIDs absent from it", () => {
+      const cardNameById = new Map([
+        [testCardId("uuid-b"), "Beta catalog name"],
+      ]);
+      const view = toAvatarOfferView(
+        avatar({
+          signatureCardIds: [testCardId("uuid-missing"), testCardId("uuid-b")],
+        }),
+        [],
+        cardNameById,
+      );
+      expect(view.signatureCards).toEqual([
+        { id: testCardId("uuid-b"), name: cardNameById.get(testCardId("uuid-b")) },
+      ]);
     });
   });
 
@@ -214,14 +238,19 @@ describe("journey-start-view-model", () => {
         })),
       };
 
+      // The signature UUID resolves in the catalog, so only the tutorial
+      // offer's tide view suppresses it.
+      const poolContext = makeTestPoolContext();
+      poolContext.poolData.cardNameById = new Map([
+        [testCardId("signature-id"), "Hidden signature"],
+      ]);
       const [view] = buildAvatarOfferViews(
         [
           avatar({
-            signatureCards: [parseCardName("Hidden signature")],
             signatureCardIds: [testCardId("signature-id")],
           }),
         ],
-        makeTestPoolContext(),
+        poolContext,
         testJourneySeed("game-seed"),
         pool,
         testAvatarId("dc-1"),

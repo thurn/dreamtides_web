@@ -461,7 +461,6 @@ describe("pool-viewer-view-model", () => {
           renderedText: "",
           imageNumber: "1",
           startingEssence: 0,
-          signatureCards: [parseCardName("display-only")],
           signatureCardIds: [beta.id],
         },
         draftPoolCopiesByCard: {},

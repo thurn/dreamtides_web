@@ -6,14 +6,6 @@ export default avatar({
   id: "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
   imageNumber: "0007",
   renderedText: "2●, ☾, Discard a card: Materialize a 1✦ survivor figment.",
-  signatureCards: [
-    "Frost Hewer",
-    "Vessel of Echoes",
-    "Salvage Engine",
-    "Specter of Silent Snow",
-    "Resilient Wanderer",
-    "Abomination of Memory",
-  ],
   portraitFocus: { x: 0.5, y: 0.164 },
   tidePool: {
     starter: "c78a2ce1-80fe-48b9-9400-98f4965e17a4",

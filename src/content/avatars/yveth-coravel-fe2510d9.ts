@@ -7,13 +7,6 @@ export default avatar({
   imageNumber: "0084",
   renderedText:
     "2●, ☾: Return a character you control to hand. Its cost is reduced by 1●.",
-  signatureCards: [
-    "Celestial Reverie",
-    "Obliterator of Worlds",
-    "Nightmare Shepherd",
-    "Cloudmantle Ray",
-    "Blood Moon Triad",
-  ],
   portraitFocus: { x: 0.503, y: 0.201 },
   tidePool: {
     starter: "fc729d2b-bf04-4b69-8050-00b30b296330",

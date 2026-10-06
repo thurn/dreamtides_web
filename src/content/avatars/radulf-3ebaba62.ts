@@ -7,13 +7,6 @@ export default avatar({
   imageNumber: "0045",
   renderedText:
     "If you control 3 or more characters, the first character you play each turn costs 1● less.",
-  signatureCards: [
-    "Dawnprowler",
-    "Nightprowler",
-    "Celestial Reverie",
-    "Rower of Changing Seas",
-    "Lumin-Gate Seer",
-  ],
   portraitFocus: { x: 0.5, y: 0.173 },
   tidePool: {
     starter: "eb397537-8a0b-4969-924b-baee5137094c",

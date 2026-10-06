@@ -7,14 +7,6 @@ export default avatar({
   imageNumber: "0064",
   renderedText:
     "Once per turn, when you abandon a character, the next character you play this turn costs 2● less.",
-  signatureCards: [
-    "Grim Recruiter",
-    "Clockwork Conductor",
-    "Sunset Chronicler",
-    "Embersummoner",
-    "Shardwoven Tyrant",
-    "Grief Shaman",
-  ],
   portraitFocus: { x: 0.51, y: 0.2 },
   tidePool: {
     starter: "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",

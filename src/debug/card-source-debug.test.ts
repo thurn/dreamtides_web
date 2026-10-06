@@ -31,7 +31,6 @@ function makeResolvedPackage(): ResolvedAvatarPackage {
       renderedText: "Test rules text.",
       imageNumber: "0009",
       startingEssence: 250,
-      signatureCards: [parseCardName("Lantern Witness")],
     },
     draftPoolCopiesByCard: { "2": 2, "7": 1 },
     dreamsignPoolIds: [testDreamsignId("sign-1")],

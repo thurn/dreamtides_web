@@ -8,6 +8,7 @@ import { selectedTides4Decks } from "../../data/tides4-preview";
 import { selectAvatarOfferForReroll } from "../../data/avatar-selection";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { AvatarContent } from "../../types/content";
+import type { CardId } from "../../types/card-identity";
 import type { JourneySeed } from "../../types/journey-seed";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type {
@@ -134,22 +135,23 @@ export function buildAvatarTideViews(
  * from) to the screen's view type, capped by {@link largestTides}.
  *
  * A `tides4` run shows its dealt tides in place of the signature cards, so the
- * signature list is suppressed whenever tides exist. Each signature name is
- * paired with its index-aligned stable UUID so keys stay unique when two
- * signature cards share a display name.
+ * signature list is suppressed whenever tides exist. Each signature card keeps
+ * its stable UUID, so keys stay unique when two signature cards share a display
+ * name; the display name resolves from `cardNameById` here, at the render
+ * boundary, and a UUID absent from the catalog is skipped.
  */
 export function toAvatarOfferView(
   avatar: AvatarContent,
   tides: Tides4DeckJson[],
+  cardNameById: ReadonlyMap<CardId, string> | undefined,
 ): AvatarOfferView {
-  const signatureCardIds = avatar.signatureCardIds ?? [];
   const signatureCards =
     tides.length > 0
       ? []
-      : (avatar.signatureCards ?? []).map((name, index) => ({
-          id: signatureCardIds[index] ?? null,
-          name: name,
-        }));
+      : (avatar.signatureCardIds ?? []).flatMap((id) => {
+          const name = cardNameById?.get(id);
+          return name === undefined ? [] : [{ id, name }];
+        });
   return {
     id: avatar.id,
     name: avatar.name,
@@ -176,6 +178,7 @@ export function buildAvatarOfferViews(
   tutorialJourneyPool: TutorialJourneyPool,
   tutorialAvatarId?: AvatarId,
 ): AvatarOfferView[] {
+  const cardNameById = poolContext.poolData.cardNameById;
   return offered.map((avatar) => {
     const tutorialTides =
       tutorialAvatarId === avatar.id &&
@@ -184,7 +187,7 @@ export function buildAvatarOfferViews(
         : undefined;
     if (tutorialTides !== undefined) {
       return {
-        ...toAvatarOfferView(avatar, []),
+        ...toAvatarOfferView(avatar, [], cardNameById),
         signatureCards: [],
         tides: tutorialTides.map(toTutorialTideView),
       };
@@ -192,6 +195,7 @@ export function buildAvatarOfferViews(
     return toAvatarOfferView(
       avatar,
       selectedTides4Decks(poolContext, avatar, journeySeed),
+      cardNameById,
     );
   });
 }

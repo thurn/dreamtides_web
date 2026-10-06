@@ -6,11 +6,6 @@ export default avatar({
   id: "5e28154d-770a-4b84-8aac-9de44f5d7d02",
   imageNumber: "0080",
   renderedText: "❖ – 4●, ☾: Materialize a 1✦ outsider figment.",
-  signatureCards: [
-    "Paradox Corps Enforcer",
-    "Vanishing Inquisitor",
-    "Abyssal Deputy",
-  ],
   portraitFocus: { x: 0.55, y: 0.276 },
   tidePool: {
     starter: "4fcd40ac-b03f-405f-9236-a00139cbdcc8",

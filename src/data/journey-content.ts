@@ -8,11 +8,7 @@ import {
   type Tides4ProvenanceSummary,
   type Tides4TideSummary,
 } from "../types/content";
-import {
-  parseCardId,
-  parseCardName,
-  type CardId,
-} from "../types/card-identity";
+import { parseCardId, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { JourneySeed } from "../types/journey-seed";
 import type {
@@ -497,7 +493,6 @@ export function buildJourneyContent(
     portraitFocus: dc.portraitFocus,
     startingEssence:
       dc.startingEssence ?? economyData.journey.defaultStartingEssence,
-    signatureCards: (dc.signatureCards ?? []).map(parseCardName),
     signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
 

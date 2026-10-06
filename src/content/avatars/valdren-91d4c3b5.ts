@@ -7,15 +7,6 @@ export default avatar({
   imageNumber: "0056",
   renderedText:
     "2●, ☾: A warrior in your void gains reclaim until end of turn.",
-  signatureCards: [
-    "Blood Altar Monarch",
-    "Battle Herald",
-    "Dragonward",
-    "Harbor Warden",
-    "Bloom Guard",
-    "Infernal Cavalier",
-    "Aspiring Guardian",
-  ],
   portraitFocus: { x: 0.5, y: 0.228 },
   tidePool: {
     starter: "833ba3dd-498a-42ce-9a03-32f6636acea1",

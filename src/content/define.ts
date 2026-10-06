@@ -105,7 +105,6 @@ interface AvatarFields {
   /** Normalized head position within the portrait art. */
   readonly portraitFocus: { readonly x: number; readonly y: number };
   readonly tidePool: AvatarTidePoolDefinition;
-  readonly signatureCards?: readonly string[];
   readonly signatureCardIds?: readonly Uuid[];
 }
 

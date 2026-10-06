@@ -7,14 +7,6 @@ export default avatar({
   imageNumber: "0013",
   renderedText:
     "Once per turn, if there are 7 or more cards in your void, you may play a character from your void.",
-  signatureCards: [
-    "Duskreaper",
-    "Hungering Mass",
-    "Wreckborn",
-    "Collapse Protocol",
-    "The Thinning",
-    "Skull Weaver",
-  ],
   portraitFocus: { x: 0.5, y: 0.209 },
   tidePool: {
     starter: "f7072be7-f12b-482a-b9e1-4d3925622eb2",

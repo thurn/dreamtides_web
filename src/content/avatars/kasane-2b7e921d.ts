@@ -6,13 +6,6 @@ export default avatar({
   id: "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
   imageNumber: "0060",
   renderedText: "4●, ☾: Copy the next event you play this turn.",
-  signatureCards: [
-    "Nebula's Wake",
-    "From the Barrow",
-    "Call the Lost",
-    "Inverted Reflection",
-    "Flash of Power",
-  ],
   portraitFocus: { x: 0.513, y: 0.223 },
   tidePool: {
     starter: "1ad97f42-6157-45b3-8290-e27219c7888a",

@@ -274,7 +274,6 @@ describe("shared reward selection", () => {
             renderedText: "A synthetic ability.",
             imageNumber: "1",
             startingEssence: 250,
-            signatureCards: [],
           },
         ],
       },

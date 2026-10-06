@@ -216,7 +216,6 @@ function content(): JourneyContent {
         renderedText: "inactive",
         imageNumber: "0029",
         startingEssence: 0,
-        signatureCards: [],
       },
       {
         id: testAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
@@ -225,7 +224,6 @@ function content(): JourneyContent {
         renderedText: "inactive",
         imageNumber: "0025",
         startingEssence: 0,
-        signatureCards: [],
       },
     ],
     dreamwellCards: [

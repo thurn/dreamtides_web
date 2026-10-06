@@ -7,14 +7,6 @@ export default avatar({
   imageNumber: "0017",
   renderedText:
     "When you play your second character in a turn, a character in your void gains reclaim 2● until end of turn.",
-  signatureCards: [
-    "Ridge Vortex Explorer",
-    "Silent Gatherer",
-    "Flagbearer of Decay",
-    "The Rising God",
-    "Shadowsinger",
-    "Sunset Chronicler",
-  ],
   portraitFocus: { x: 0.479, y: 0.239 },
   tidePool: {
     starter: "a182f025-8a15-44e1-be26-74766a3b0b85",

@@ -78,7 +78,6 @@ function contentFixture(): JourneyContent {
         renderedText: "Synthetic.",
         imageNumber: "1",
         startingEssence: 100,
-        signatureCards: [],
       },
     ],
     dreamwellCards: [],

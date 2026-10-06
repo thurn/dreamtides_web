@@ -6,13 +6,6 @@ export default avatar({
   id: "84e7020c-7384-4cc3-a20f-ab05f03cc375",
   imageNumber: "0106",
   renderedText: "When you play your second event in a turn, foresee 2.",
-  signatureCards: [
-    "Underroot Diviner",
-    "Aerie Defender",
-    "Pattern Seeker",
-    "Gateweaver",
-    "Scorched Reckoning",
-  ],
   portraitFocus: { x: 0.515, y: 0.201 },
   tidePool: {
     starter: "ab89d262-45d4-438d-8670-79d91f6e944f",

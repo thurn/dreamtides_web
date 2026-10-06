@@ -7,16 +7,6 @@ export default avatar({
   imageNumber: "0087",
   renderedText:
     "Once per turn, when you discard a card, draw a card with ephemeral.",
-  signatureCards: [
-    "Fiery Apparition",
-    "Pyre Wight",
-    "Keeper of the Lightpath",
-    "Fallen One",
-    "Oblivion Guide",
-    "Oracle of Shifting Skies",
-    "Inheritor of Sorrows",
-    "Underroot Diviner",
-  ],
   portraitFocus: { x: 0.49, y: 0.18 },
   tidePool: {
     starter: "1a075e25-0344-4103-997c-dd8f8a57c84e",

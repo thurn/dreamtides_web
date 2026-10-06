@@ -7,13 +7,6 @@ export default avatar({
   imageNumber: "0112",
   renderedText:
     "2●, ☾, Abandon a character: Materialize a random character with cost 1● higher from your deck.",
-  signatureCards: [
-    "Duskreaper",
-    "Kindred Sparks",
-    "Immolate",
-    "Entropy Spike",
-    "Watcher in the Ruins",
-  ],
   portraitFocus: { x: 0.55, y: 0.2 },
   tidePool: {
     starter: "0ac06270-f783-4c4f-bfd9-4109d22316e0",

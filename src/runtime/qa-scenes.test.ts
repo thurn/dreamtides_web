@@ -60,7 +60,6 @@ function makeAvatar(id = "avatar-1"): AvatarContent {
     renderedText: "Test ability.",
     imageNumber: "0001",
     startingEssence: 250,
-    signatureCards: [parseCardName("Alpha Card 1")],
   };
 }
 

@@ -7,14 +7,6 @@ export default avatar({
   imageNumber: "0005",
   renderedText:
     "❖❖ – 2●, ☾, Discard a card: An event in your void gains reclaim until end of turn.",
-  signatureCards: [
-    "Paradox Corps Enforcer",
-    "Cloud Drifter",
-    "Breach Artist",
-    "Impending Fury",
-    "Dustway Ringleader",
-    "Dune Interceptor",
-  ],
   portraitFocus: { x: 0.487, y: 0.193 },
   tidePool: {
     starter: "09b9b56c-6356-40aa-bcd8-77b0c80d3835",

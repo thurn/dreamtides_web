@@ -7,13 +7,6 @@ export default avatar({
   imageNumber: "0100",
   renderedText:
     "When you play your second character in a turn, draw a card with ephemeral.",
-  signatureCards: [
-    "Ethereal Courser",
-    "Moonbound Wolf",
-    "Vigilant Howler",
-    "Nexus Wayfinder",
-    "Nightprowler",
-  ],
   portraitFocus: { x: 0.539, y: 0.211 },
   tidePool: {
     starter: "80e3d33f-6b21-4739-9050-be8d28de28a6",

@@ -60,7 +60,6 @@ function makeAvatar(): AvatarContent {
     imageNumber: "0006",
     portraitFocus: { x: 0.42, y: 0.18 },
     startingEssence: 275,
-    signatureCards: [parseCardName("Alpha Card 1")],
   };
 }
 

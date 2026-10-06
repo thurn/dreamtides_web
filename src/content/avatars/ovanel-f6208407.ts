@@ -6,12 +6,6 @@ export default avatar({
   id: "f6208407-c4e9-42ac-b533-346704f5e39e",
   imageNumber: "0078",
   renderedText: "2●, ☾: If you played an event this turn, draw an event.",
-  signatureCards: [
-    "Cloudtop Chronicler",
-    "Pastward Wanderer",
-    "Unleashed Destruction",
-    "Fell Swoop",
-  ],
   portraitFocus: { x: 0.5, y: 0.162 },
   tidePool: {
     starter: "e6863f55-50e7-4c7b-b118-609b5fc5c005",

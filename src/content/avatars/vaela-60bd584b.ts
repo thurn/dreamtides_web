@@ -7,14 +7,6 @@ export default avatar({
   imageNumber: "0028",
   renderedText:
     "When a card leaves your void, a random card in your void gains reclaim.",
-  signatureCards: [
-    "Eternal Soul",
-    "Returned Vanguard",
-    "Vigil Keeper",
-    "Skull Weaver",
-    "Wasteland Arbitrator",
-    "Fallen Angel",
-  ],
   portraitFocus: { x: 0.508, y: 0.193 },
   tidePool: {
     starter: "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",

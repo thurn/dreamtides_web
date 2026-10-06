@@ -6,14 +6,6 @@ export default avatar({
   id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
   imageNumber: "0108",
   renderedText: "The first warrior you play each turn costs 1● less.",
-  signatureCards: [
-    "Extractor of Souls",
-    "Riftwalker",
-    "Blood Altar Monarch",
-    "Battle Herald",
-    "Worldbreacher",
-    "Inspiring Templar",
-  ],
   portraitFocus: { x: 0.58, y: 0.233 },
   tidePool: {
     starter: "4b01b6c1-ccca-4e19-848a-d799d46088b2",

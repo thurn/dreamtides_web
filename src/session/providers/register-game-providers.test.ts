@@ -129,7 +129,6 @@ function makeAvatar(idSeed: string): AvatarContent {
     renderedText: "Test ability.",
     imageNumber: "0006",
     startingEssence: 200,
-    signatureCards: [],
   };
 }
 
