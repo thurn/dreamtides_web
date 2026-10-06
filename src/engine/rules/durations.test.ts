@@ -33,7 +33,6 @@ const discardPump: EngineCardDefinition = {
   spark: 1,
   subtype: "Warrior",
   speed: "standard",
-  keywords: [],
   status: "authored",
   abilities: () => [triggered(whenDiscard(), p.gainSpark(self(), 1, "untilEndOfTurn"))],
 };

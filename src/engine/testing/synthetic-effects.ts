@@ -59,7 +59,6 @@ function event(
     spark: null,
     subtype: "",
     speed,
-    keywords: [],
     status: "authored",
     abilities: () => [],
     synthetic,

@@ -26,7 +26,6 @@ const mage: EngineCardDefinition = {
   spark: 1,
   subtype: "Mage",
   speed: "standard",
-  keywords: [],
   status: "vanilla",
   abilities: () => [],
 };

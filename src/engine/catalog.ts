@@ -29,9 +29,6 @@ export interface SyntheticHooks {
 /** How a card's timing category lets it be played (rules § Playing Cards and the Stack). */
 export type { Speed } from "./dsl/types";
 
-/** Combat keywords the challenge rules read. */
-export type CombatKeyword = "vengeful" | "awakened";
-
 /**
  * Whether an entity's abilities are implemented: `pending` entities play
  * text-less (D36), `vanilla` ones have no rules text, `authored` ones carry
@@ -55,8 +52,6 @@ export interface EngineCardDefinition {
   readonly spark: BaseSpark | null;
   readonly subtype: CardSubtype;
   readonly speed: Speed;
-  /** Printed keywords; authored keyword abilities add to these. */
-  readonly keywords: readonly CombatKeyword[];
   readonly status: ContentState;
   readonly abilities: AbilityList;
   readonly synthetic?: SyntheticHooks;
@@ -145,7 +140,6 @@ export function printedCard(catalog: EngineCatalog, printing: Printing): Printed
         spark: printing.spark,
         subtype: figment.subtype,
         speed: "standard",
-        keywords: [],
         status: figment.status,
         abilities: figment.abilities,
       };

@@ -49,7 +49,6 @@ function card(index: number, cardType: "character" | "event", cost: number, abil
     spark: cardType === "character" ? spark : null,
     subtype: cardType === "character" ? "Warrior" : "",
     speed: "standard",
-    keywords: [],
     status: "authored",
     abilities,
   };

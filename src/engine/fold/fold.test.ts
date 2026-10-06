@@ -36,7 +36,6 @@ const divergent: EngineCardDefinition = {
   spark: null,
   subtype: "",
   speed: "standard",
-  keywords: [],
   status: "authored",
   abilities: () => [],
   synthetic: {

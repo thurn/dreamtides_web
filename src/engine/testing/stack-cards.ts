@@ -55,7 +55,6 @@ function card(
     spark: cardType === "character" ? 1 : null,
     subtype: cardType === "character" ? "Warrior" : "",
     speed,
-    keywords: [],
     status: "authored",
     abilities,
   };

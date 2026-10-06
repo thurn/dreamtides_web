@@ -34,7 +34,6 @@ const reluctant: EngineCardDefinition = {
   spark: 1,
   subtype: "Warrior",
   speed: "standard",
-  keywords: [],
   status: "authored",
   abilities: () => [triggered(whenOpponentPlays(), p.optional(p.gainEnergy(-1)))],
 };

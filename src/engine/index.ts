@@ -1,7 +1,6 @@
 export type { Action, Decision } from "./rules/actions";
 export { actionsEqual } from "./rules/actions";
 export type {
-  CombatKeyword,
   EngineAvatarDefinition,
   EngineCardDefinition,
   EngineCatalog,

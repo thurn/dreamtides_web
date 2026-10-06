@@ -61,7 +61,6 @@ export function engineCardFromContent(card: CardDefinition): EngineCardDefinitio
     spark: card.cardType !== "Character" ? null : card.sparkVariable === true ? "x" : card.spark,
     subtype: card.subtype,
     speed: card.isInterrupt ? "interrupt" : card.isFast ? "fast" : "standard",
-    keywords: [],
     status: contentState(card),
     abilities: card.abilities ?? NO_ABILITIES,
   };

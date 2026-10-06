@@ -40,7 +40,6 @@ const enemyBaseThree: EngineCardDefinition = {
   spark: 1,
   subtype: "Mage",
   speed: "standard",
-  keywords: [],
   status: "authored",
   abilities: () => [staticAbility(p.setBaseSpark(all(enemyCharacter()), 3))],
 };
@@ -56,7 +55,6 @@ function fixture(index: number, cardType: "character" | "event", cost: number, a
     spark: cardType === "character" ? 1 : null,
     subtype: cardType === "character" ? "Warrior" : "",
     speed: "standard",
-    keywords: [],
     status: "authored",
     abilities,
   };

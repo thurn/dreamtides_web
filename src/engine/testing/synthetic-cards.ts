@@ -13,7 +13,7 @@ import {
 } from "../catalog";
 import { parseCardId } from "../../types/card-identity";
 import { parseDreamwellCardId } from "../../types/identifiers";
-import { energy } from "../dsl/builders";
+import { energy, keyword } from "../dsl/builders";
 import type { CardId } from "../state/ids";
 
 export function syntheticId(index: number): CardId {
@@ -24,7 +24,7 @@ function character(
   index: number,
   cost: number,
   spark: number,
-  options: Partial<Pick<EngineCardDefinition, "speed" | "keywords" | "subtype">> = {},
+  options: Partial<Pick<EngineCardDefinition, "speed" | "subtype" | "abilities">> = {},
 ): EngineCardDefinition {
   return {
     id: syntheticId(index),
@@ -33,9 +33,8 @@ function character(
     spark,
     subtype: options.subtype ?? "Warrior",
     speed: options.speed ?? "standard",
-    keywords: options.keywords ?? [],
     status: "vanilla",
-    abilities: () => [],
+    abilities: options.abilities ?? (() => []),
   };
 }
 
@@ -47,7 +46,6 @@ function event(index: number, cost: number, speed: EngineCardDefinition["speed"]
     spark: null,
     subtype: "",
     speed,
-    keywords: [],
     status: "vanilla",
     abilities: () => [],
   };
@@ -63,8 +61,8 @@ export const SYNTHETIC = {
   vanilla8: character(6, 6, 8),
   fastCharacter: character(7, 2, 2, { speed: "fast" }),
   interruptCharacter: character(8, 2, 1, { speed: "interrupt" }),
-  vengeful1: character(9, 1, 1, { keywords: ["vengeful"] }),
-  awakened2: character(10, 2, 2, { keywords: ["awakened"] }),
+  vengeful1: character(9, 1, 1, { abilities: () => [keyword("vengeful")] }),
+  awakened2: character(10, 2, 2, { abilities: () => [keyword("awakened")] }),
   event0: event(11, 0, "standard"),
   event1: event(12, 1, "standard"),
   fastEvent: event(13, 1, "fast"),

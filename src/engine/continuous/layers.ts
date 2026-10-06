@@ -42,7 +42,7 @@ export interface Characteristics {
   readonly subtype: CardSubtype;
   /** "Has all character types": it matches every subtype a selector names. */
   readonly allTypes: boolean;
-  /** Printed and authored keywords, plus those gained, minus those lost. */
+  /** Keyword abilities, plus those gained, minus those lost. */
   readonly keywords: readonly Keyword[];
   /** A character's base spark after base-spark setting; `null` for an event. */
   readonly baseSpark: number | null;
@@ -256,7 +256,7 @@ export class Layers {
     const instance = this.state.instances[id];
     if (instance === undefined) throw new Error(`Unknown instance ${id}`);
     const definition = printedCard(this.catalog, instance.printing);
-    const keywords = new Set<Keyword>(definition.keywords);
+    const keywords = new Set<Keyword>();
     for (const ability of definition.abilities(instance.variant)) {
       if (ability.kind === "keyword") keywords.add(ability.keyword);
     }

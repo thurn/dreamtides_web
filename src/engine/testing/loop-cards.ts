@@ -21,7 +21,6 @@ function character(index: number, abilities: AbilityList): EngineCardDefinition 
     spark: 1,
     subtype: "Warrior",
     speed: "standard",
-    keywords: [],
     status: "authored",
     abilities,
   };
@@ -53,7 +52,6 @@ export const LOOP = {
     spark: null,
     subtype: "",
     speed: "interrupt",
-    keywords: [],
     status: "authored",
     abilities: () => [],
     synthetic: {

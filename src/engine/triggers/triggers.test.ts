@@ -42,7 +42,6 @@ function local(index: number, cardType: "character" | "event", abilities: Engine
     spark: cardType === "character" ? spark : null,
     subtype: cardType === "character" ? "Warrior" : "",
     speed: "standard",
-    keywords: [],
     status: "authored",
     abilities,
   };
