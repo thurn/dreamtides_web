@@ -52,7 +52,6 @@ import { testEventActor } from "../../types/test-identities";
 // proves the nullability checker fires on a deliberate non-carve-out nulling.
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 
 import { eventRng } from "../../eventlog/rng";
 import { foldEvents } from "../../eventlog/fold";
@@ -83,6 +82,11 @@ import {
   type JourneyLifecycleContentProvider,
 } from "./lifecycle";
 import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
+import {
+  testDraftContentProvider,
+  testJourneyLifecycleContentProvider,
+  testSiteContentProvider,
+} from "./test-content-providers";
 import { registerBattleInitProvider } from "../battle/battle-events";
 import { fixtureBattleInitProvider } from "../replay/fixture-providers";
 import { parseAtlasNodeId } from "../../types/identifiers";
@@ -181,7 +185,7 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
     };
   }
 
-  return {
+  return testJourneyLifecycleContentProvider({
     resolveAvatarPackage: (avatarId, seed) =>
       packageFor(avatarId, seed),
     startJourney: ({ journey, avatarId, seed }) => {
@@ -218,7 +222,7 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
         screen: { type: "dreamscape" },
       };
     },
-  };
+  });
 }
 
 const SHOP_SITE_ID = "shop-site";
@@ -282,33 +286,29 @@ function rerolledDraftState(): DraftState {
 
 /** Draft fake: `PICK_DRAFT_CARD` resolves `card-<n>` and advances the draft. */
 function draftProvider(): DraftContentProvider {
-  return {
+  return testDraftContentProvider({
     resolveCardNumber: (cardId) => {
       const match = /^card-(\d+)$/.exec(cardId);
       return match ? Number(match[1]) : null;
     },
-    cardDatabase: () => new Map(),
-    draftConfigFor: () => undefined,
-  };
+  });
 }
 
 /**
  * Site fake: `rerollShop` restocks with a NON-NULL `draftState`, so
  * `REROLL_SHOP` applies and rewrites the run's draft state. `openSite` bounces
- * (returns null) so `OPEN_SITE` never mutates the seeded runtime; the augury
- * seam is left unimplemented so augury events bounce.
+ * (returns null) so content-coupled `OPEN_SITE` never mutates the seeded
+ * runtime, and the augury and exploration resolvers bounce.
  */
 function siteProvider(): SiteContentProvider {
-  return {
-    sitesData: MINIMAL_SITES_DATA,
-    openSite: () => null,
+  return testSiteContentProvider({
     rerollShop: () => ({
       slots: [],
       remainingDreamsignPoolIds: [],
       remainingDreamsignPool: [],
       draftState: rerolledDraftState(),
     }),
-  };
+  });
 }
 
 /**

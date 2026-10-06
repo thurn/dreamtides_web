@@ -29,8 +29,6 @@ import {
   parseCardName,
   parseCardSubtype,
 } from "../../types/card-identity";
-import { economyFixture } from "../../testing/economy-fixture";
-import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import type {
   DraftPoolCopiesByCard,
   PoolDraftState,
@@ -77,6 +75,11 @@ import {
   registerSiteContentProvider,
   type SiteContentProvider,
 } from "../journey/sites";
+import {
+  testDraftContentProvider,
+  testJourneyLifecycleContentProvider,
+  testSiteContentProvider,
+} from "../journey/test-content-providers";
 import type { AvatarId } from "../../types/identifiers";
 import type { JourneySeed } from "../../types/journey-seed";
 import type { BattleCardId } from "../../types/identifiers";
@@ -275,7 +278,7 @@ function fixtureDraftState(): PoolDraftState {
 }
 
 function lifecycleProvider(): JourneyLifecycleContentProvider {
-  return {
+  return testJourneyLifecycleContentProvider({
     resolveAvatarPackage: (avatarId, seed) =>
       fixturePackage(avatarId, seed),
     startJourney: ({ journey, avatarId, seed }) => {
@@ -317,7 +320,7 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
         screen: { type: "dreamscape" },
       };
     },
-  };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -343,14 +346,12 @@ function deckProvider(): DeckContentProvider {
 }
 
 function draftProvider(): DraftContentProvider {
-  return {
+  return testDraftContentProvider({
     resolveCardNumber: (cardId) => {
       const match = /^card-(\d+)$/.exec(cardId);
       return match ? Number(match[1]) : null;
     },
-    cardDatabase: () => new Map(),
-    draftConfigFor: () => undefined,
-  };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -358,9 +359,7 @@ function draftProvider(): DraftContentProvider {
 // ---------------------------------------------------------------------------
 
 function siteProvider(): SiteContentProvider {
-  return {
-    sitesData: MINIMAL_SITES_DATA,
-    economyData: economyFixture(),
+  return testSiteContentProvider({
     openSite: ({ site }) => {
       if (site.type !== "Shop") return null;
       const slot: RuntimeShopSlot = {
@@ -380,7 +379,7 @@ function siteProvider(): SiteContentProvider {
         },
       };
     },
-  };
+  });
 }
 
 // ---------------------------------------------------------------------------

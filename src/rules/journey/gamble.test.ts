@@ -1,9 +1,6 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { testEventActor } from "../../types/test-identities";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { economyFixture } from "../../testing/economy-fixture";
-import { gambleFixture } from "../../testing/gamble-fixture";
-import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type {
   GravokGateId,
@@ -26,7 +23,8 @@ import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
-import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
+import { registerSiteContentProvider } from "./sites";
+import { testSiteContentProvider } from "./test-content-providers";
 import { parseShuffleCommitment } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
@@ -50,8 +48,6 @@ const REWARD_DREAMSIGN: Dreamsign = {
   effectDescription: "Fixture effect.",
 };
 const OTHER_DREAMSIGN_ID = testDreamsignId("other-sign");
-const ECONOMY = economyFixture();
-const GAMBLE = gambleFixture();
 
 function runtime(
   rank: StandardPlayingCardRank,
@@ -171,12 +167,7 @@ afterEach(() => {
   registerSiteContentProvider(null);
 });
 beforeEach(() => {
-  registerSiteContentProvider({
-    sitesData: MINIMAL_SITES_DATA,
-    economyData: ECONOMY,
-    gambleData: GAMBLE,
-    openSite: () => null,
-  });
+  registerSiteContentProvider(testSiteContentProvider());
 });
 
 function wager(state: FoldState, gateId: GravokGateId) {
@@ -337,17 +328,14 @@ describe("Gravok's Three-Gate Wager", () => {
   });
 
   it("allows two retries and bounces a third", () => {
-    const provider: SiteContentProvider = {
-      sitesData: MINIMAL_SITES_DATA,
-      economyData: ECONOMY,
-      gambleData: GAMBLE,
+    const provider = testSiteContentProvider({
       openSite: () => ({
         runtime: runtime("K", {
           shuffleCommitment: parseShuffleCommitment("final-commitment"),
           committedCard: { rank: "K", suit: "diamonds" },
         }),
       }),
-    };
+    });
     registerSiteContentProvider(provider);
 
     const secondRound = settleWager(
@@ -1051,22 +1039,21 @@ describe("Blackjack", () => {
       resultSettled: true,
     });
 
-    registerSiteContentProvider({
-      sitesData: MINIMAL_SITES_DATA,
-      economyData: ECONOMY,
-      gambleData: GAMBLE,
-      openSite: () => ({
-        runtime: blackjackRuntime(
-          [
-            { rank: "10", suit: "hearts" },
-            { rank: "9", suit: "clubs" },
-            { rank: "5", suit: "spades" },
-            { rank: "7", suit: "diamonds" },
-          ],
-          { shuffleCommitment: parseShuffleCommitment("bust-retry-hand") },
-        ),
+    registerSiteContentProvider(
+      testSiteContentProvider({
+        openSite: () => ({
+          runtime: blackjackRuntime(
+            [
+              { rank: "10", suit: "hearts" },
+              { rank: "9", suit: "clubs" },
+              { rank: "5", suit: "spades" },
+              { rank: "7", suit: "diamonds" },
+            ],
+            { shuffleCommitment: parseShuffleCommitment("bust-retry-hand") },
+          ),
+        }),
       }),
-    });
+    );
     const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
       siteId: SITE_ID,
       previousShuffleCommitment: parseShuffleCommitment("blackjack-hand"),
@@ -1107,26 +1094,25 @@ describe("Blackjack", () => {
       essenceAwarded: 40,
     });
 
-    registerSiteContentProvider({
-      sitesData: MINIMAL_SITES_DATA,
-      economyData: ECONOMY,
-      gambleData: GAMBLE,
-      openSite: () => ({
-        runtime: blackjackRuntime(
-          [
-            { rank: "10", suit: "hearts" },
-            { rank: "9", suit: "clubs" },
-            { rank: "5", suit: "spades" },
-            { rank: "7", suit: "diamonds" },
-          ],
-          {
-            isFarpoint: true,
-            wagerCost: 40,
-            shuffleCommitment: parseShuffleCommitment("next-blackjack-hand"),
-          },
-        ),
+    registerSiteContentProvider(
+      testSiteContentProvider({
+        openSite: () => ({
+          runtime: blackjackRuntime(
+            [
+              { rank: "10", suit: "hearts" },
+              { rank: "9", suit: "clubs" },
+              { rank: "5", suit: "spades" },
+              { rank: "7", suit: "diamonds" },
+            ],
+            {
+              isFarpoint: true,
+              wagerCost: 40,
+              shuffleCommitment: parseShuffleCommitment("next-blackjack-hand"),
+            },
+          ),
+        }),
       }),
-    });
+    );
     const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
       siteId: SITE_ID,
       previousShuffleCommitment: parseShuffleCommitment("blackjack-hand"),

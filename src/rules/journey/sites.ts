@@ -90,21 +90,18 @@ export interface SiteOpenResult {
  * rng derived from `ctx.rng` so two clients folding the same event produce
  * byte-identical offers.
  *
- * SEAM (Task 26): real content registration is deferred to the integration
- * task that wires the reducer into src/session/ and relocates the legacy
- * `generateRewardSiteData` / `drawDreamsignOptions` / shop / `buildCardChoiceRuntime`
- * generators behind this seam, reading from the injected rng instead of
- * `Math.random`. Until a provider is registered, `OPEN_SITE` on a
- * content-coupled type bounces (a recorded no-op, never a throw); Essence and
- * Augury are generated purely in-reducer and never need it.
+ * `createSiteContentProvider` (src/session/providers/site-provider.ts)
+ * supplies every member from the loaded journey content. Until a provider is
+ * registered, every provider-backed site event bounces (a recorded no-op,
+ * never a throw).
  */
 export interface SiteContentProvider {
   /** Immutable validated site rules captured with the provider registration. */
   sitesData: SitesData;
   /** Immutable validated economy data captured with the provider registration. */
-  economyData?: EconomyData;
+  economyData: EconomyData;
   /** Immutable validated Gamble catalog captured with provider registration. */
-  gambleData?: GambleData;
+  gambleData: GambleData;
   /**
    * Generate the runtime for `site` (of a content-coupled type) deterministically
    * from `(journey, site, rng)`, or `null` to bounce. Must not mutate `journey`.
@@ -126,12 +123,8 @@ export interface SiteContentProvider {
    * is delegated here, handed a deterministic `rng` derived from `ctx.rng`.
    * Returns the regenerated slots + Dreamsign pool + draft state, or `null` to
    * bounce.
-   *
-   * SEAM (Task 26): real registration relocates the legacy `generateShopInventory`
-   * redraw (currently `Math.random`-seeded) behind this method, reading from the
-   * injected `rng`. Absent (or `null`-returning) → `REROLL_SHOP` bounces.
    */
-  rerollShop?(input: {
+  rerollShop(input: {
     journey: JourneyState;
     site: SiteState;
     rng: (drawIndex: number) => number;
@@ -144,17 +137,11 @@ export interface SiteContentProvider {
    * augury encounter generated from async-loaded journey content — so it lives
    * entirely behind this seam. Returns the fully-updated `JourneyState` (site
    * already completed) or `null` to bounce (stale encounter, unknown offer,
-   * unaffordable, already-visited). Must not mutate `journey`.
-   *
-   * SEAM (Task 26): real registration relocates the legacy
-   * `resolveAuguryOffer` / `resolveAuguryDecline` (src/journey_v2) behind
-   * this method, sourcing randomness from the injected `rng` and minting any
-   * new deck entry through `seq` (via `mintEntryId(deck, seq, index)` in
-   * ./deck — the SAME scheme every other minting case uses, not a second
-   * independently-evolving one; audit finding P3-8). Absent (or
-   * `null`-returning) → the augury events bounce.
+   * unaffordable, already-visited). Must not mutate `journey`. Any new deck
+   * entry is minted through `seq` via `mintEntryId(deck, seq, index)` in
+   * ./deck, the same scheme every other minting case uses.
    */
-  resolveAugury?(input: {
+  resolveAugury(input: {
     journey: JourneyState;
     site: SiteState;
     action: "accept" | "decline";
@@ -165,7 +152,7 @@ export interface SiteContentProvider {
   }): JourneyState | null;
 
   /** Resolve one Exploration action against its persisted deterministic offer. */
-  resolveExploration?(input: {
+  resolveExploration(input: {
     journey: JourneyState;
     site: SiteState;
     payload: Record<string, unknown>;
@@ -403,7 +390,7 @@ export function openSite(
       });
     }
     case "Essence": {
-      const economy = contentProvider?.economyData?.siteRewards.essence;
+      const economy = contentProvider?.economyData.siteRewards.essence;
       if (economy === undefined) return null;
       const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
       const amount = randomIntInRange(
@@ -538,9 +525,13 @@ export function resolveExplorationChoice(
   if (siteId === null) return null;
   const site = findSite(journey, siteId);
   if (site?.type !== "Exploration") return null;
-  const provider = contentProvider;
-  if (provider?.resolveExploration === undefined) return null;
-  return provider.resolveExploration({ journey, site, payload, seq: ctx.seq });
+  if (contentProvider === null) return null;
+  return contentProvider.resolveExploration({
+    journey,
+    site,
+    payload,
+    seq: ctx.seq,
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -629,7 +620,7 @@ export function acceptEssence(
   if (existing?.accepted) return null;
   const site = findSite(journey, siteId);
   if (site?.type !== "Essence") return null;
-  const economy = contentProvider?.economyData?.siteRewards.essence;
+  const economy = contentProvider?.economyData.siteRewards.essence;
   if (economy === undefined) return null;
   const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
   const runtime =
@@ -1050,7 +1041,7 @@ export function purgeDeckCards(
     return null;
   }
   const paidCount = removed.filter((entry) => !entry.isBane).length;
-  const purgeConfig = contentProvider?.economyData?.purge;
+  const purgeConfig = contentProvider?.economyData.purge;
   if (purgeConfig === undefined || paidCount > purgeConfig.marginalCosts.length)
     return null;
   const cost = purgeVisitCost(purgeConfig, paidCount, {

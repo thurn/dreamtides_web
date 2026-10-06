@@ -471,7 +471,7 @@ describe("registerGameProviders (real content providers)", () => {
       ),
     ).toBe(true);
 
-    const rerolled = provider.rerollShop?.({
+    const rerolled = provider.rerollShop({
       journey: {
         ...journey,
         siteRuntime: {

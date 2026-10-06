@@ -18,6 +18,7 @@ import {
 import { genesisFoldState, type FoldState } from "./fold-state";
 import { GAME_ENGINE_CONFIG } from "./replay/replay";
 import { registerJourneyLifecycleContentProvider } from "./journey/lifecycle";
+import { testJourneyLifecycleContentProvider } from "./journey/test-content-providers";
 import {
   isCasExempt,
   isInterveningWindowClear,
@@ -652,14 +653,16 @@ describe("reducer containment at the foldEvents layer", () => {
   it("a throwing domain case propagates in dev fold mode and becomes fold_error in prod fold mode", () => {
     // A lifecycle provider whose START_JOURNEY assembly THROWS — a stand-in for a
     // programmer error deep inside a domain case (the reducer never swallows it).
-    registerJourneyLifecycleContentProvider({
-      resolveAvatarPackage: () => {
-        throw new Error("resolveAvatarPackage exploded");
-      },
-      startJourney: () => {
-        throw new Error("startJourney exploded");
-      },
-    });
+    registerJourneyLifecycleContentProvider(
+      testJourneyLifecycleContentProvider({
+        resolveAvatarPackage: () => {
+          throw new Error("resolveAvatarPackage exploded");
+        },
+        startJourney: () => {
+          throw new Error("startJourney exploded");
+        },
+      }),
+    );
     try {
       const state = genesisFoldState(GENESIS);
       const batch = [

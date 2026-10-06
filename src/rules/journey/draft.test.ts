@@ -21,6 +21,7 @@ import {
   registerDraftContentProvider,
   type DraftContentProvider,
 } from "./draft";
+import { testDraftContentProvider } from "./test-content-providers";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
@@ -205,7 +206,7 @@ function cardIdForNumber(cardNumber: number): CardId {
 
 /** Resolves the branded UUID already carried by each synthetic catalog card. */
 function provider(): DraftContentProvider {
-  return {
+  return testDraftContentProvider({
     resolveCardNumber: (cardId) => CARD_NUMBER_BY_ID.get(cardId) ?? null,
     cardDatabase: () => CARD_DB,
     draftConfigFor: () => ({
@@ -214,7 +215,7 @@ function provider(): DraftContentProvider {
       rarityCaps: [],
     }),
     transfigurationForCard: () => "Empowered",
-  };
+  });
 }
 
 afterEach(() => {

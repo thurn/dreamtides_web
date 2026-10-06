@@ -55,9 +55,9 @@ import { siteIdFromUnknown } from "../../types/identifiers";
  * Resolution never depends on the event's seq: the same UUID always resolves to
  * the same card, and the same `(draftState, deck)` always yields the same deps.
  *
- * SEAM: real content registration is deferred to the integration task that
- * wires the reducer into src/session/. Until a provider is registered,
- * `PICK_DRAFT_CARD` bounces (a recorded no-op, never a throw).
+ * `createDraftContentProvider` (src/session/providers/draft-provider.ts)
+ * supplies every member from the loaded journey content. Until a provider is
+ * registered, `PICK_DRAFT_CARD` bounces (a recorded no-op, never a throw).
  */
 export interface DraftContentProvider {
   /** Resolve a card UUID to its `cardNumber`, or `null` when unknown. */
@@ -73,7 +73,7 @@ export interface DraftContentProvider {
     site: Pick<SiteState, "data">,
   ): DraftConfig | undefined;
   /** Deterministically choose a legal form for one offered card, when any. */
-  transfigurationForCard?(
+  transfigurationForCard(
     cardNumber: number,
     rng: () => number,
   ): TransfigurationType | null;
@@ -119,7 +119,7 @@ function rollOfferTransfigurations(
   return Object.fromEntries(
     draftState.currentOffer.flatMap((cardNumber) => {
       const transfiguration =
-        provider.transfigurationForCard?.(cardNumber, rng) ?? null;
+        provider.transfigurationForCard(cardNumber, rng);
       return transfiguration === null
         ? []
         : [[serializeCardNumber(cardNumber), transfiguration] as const];

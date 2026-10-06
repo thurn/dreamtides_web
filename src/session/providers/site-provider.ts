@@ -387,8 +387,6 @@ function buildGambleRuntime(
   requestedGameId: GambleGameId | undefined,
 ): GambleSiteRuntime {
   const gambleData = content.gambleData;
-  if (gambleData === undefined)
-    throw new Error("Journey content is missing Gamble data");
   const configuredGames = gambleData.games;
   const totalWeight = configuredGames.reduce(
     (sum, game) => sum + game.selection.weight,
@@ -494,8 +492,6 @@ function buildGambleFallbackRuntime(
   rng: () => number,
 ): GambleSiteRuntime {
   const gambleData = content.gambleData;
-  if (gambleData === undefined)
-    throw new Error("Journey content is missing Gamble data");
   const fallback = gambleGame(gambleData, GAMBLE_FALLBACK_GAME_ID);
   return buildGambleRuntimeFromDefinition(
     journey,
@@ -811,8 +807,8 @@ export function createSiteContentProvider(
                   },
                 }),
           };
-          // SEAM (Task 27): the `SiteOpenResult` seam cannot carry the spent
-          // draft state (only `remainingDreamsignPool`), so a tides4 shop's
+          // `SiteOpenResult` carries no draft state (only
+          // `remainingDreamsignPool`), so a tides4 shop's
           // draft-multiset consumption is not persisted on OPEN. Slots are still
           // drawn deterministically from the run pool. The Dreamsign pool the
           // shop drew is persisted below.

@@ -1,8 +1,6 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { testEventActor } from "../../types/test-identities";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { economyFixture } from "../../testing/economy-fixture";
-import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import { LayerName } from "../../types/layer-name";
@@ -18,7 +16,8 @@ import type {
 } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
-import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
+import { registerSiteContentProvider } from "./sites";
+import { testSiteContentProvider } from "./test-content-providers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
@@ -169,9 +168,7 @@ function siteState(
  * runtime and a fresh seq yields a different one. Content-free types (essence,
  * augury) are generated purely in-reducer and never reach this provider.
  */
-const fakeProvider: SiteContentProvider = {
-  sitesData: MINIMAL_SITES_DATA,
-  economyData: economyFixture(),
+const fakeProvider = testSiteContentProvider({
   openSite({ site, rng }) {
     const draw = Math.floor(rng(0) * 1_000_000);
     switch (site.type) {
@@ -261,7 +258,7 @@ const fakeProvider: SiteContentProvider = {
         return null;
     }
   },
-};
+});
 
 afterEach(() => {
   registerSiteContentProvider(null);

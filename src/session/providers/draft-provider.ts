@@ -21,10 +21,9 @@ export function createDraftContentProvider(
     resolveCardNumber: (cardId) =>
       idIndex.get(parseCardId(cardId.toLowerCase())) ?? null,
     cardDatabase: (): Map<number, CardData> => content.cardDatabase,
-    // SEAM (Task 27): the affiliation reweighting the legacy pick path applied is
-    // keyed on the CURRENT dreamscape node, while this seam receives only the
-    // persisted site data. The catalog-authored rules are deterministic here;
-    // affiliation-steered draft offers remain a separate follow-up.
+    // Affiliation reweighting is keyed on the current dreamscape node, while
+    // this method receives only the persisted site data, so the config carries
+    // the catalog-authored rules without `affiliationWeights`.
     draftConfigFor: (
       _draftState: DraftState,
       site: Pick<SiteState, "data">,

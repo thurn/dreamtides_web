@@ -1,7 +1,6 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { testEventActor } from "../../types/test-identities";
 import { afterEach, describe, expect, it } from "vitest";
-import { economyFixture } from "../../testing/economy-fixture";
 import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
@@ -22,8 +21,8 @@ import { reduceGameEvent, type ReduceResult } from "../reducer";
 import {
   registerSiteContentProvider,
   type ShopRerollResult,
-  type SiteContentProvider,
 } from "./sites";
+import { testSiteContentProvider } from "./test-content-providers";
 import { registerDeckContentProvider } from "./deck";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
@@ -208,12 +207,7 @@ function shopState(
 }
 
 /** A provider that regenerates a shop with a single deterministic card slot. */
-const rerollProvider: SiteContentProvider = {
-  sitesData: MINIMAL_SITES_DATA,
-  economyData: economyFixture(),
-  openSite() {
-    return null;
-  },
+const rerollProvider = testSiteContentProvider({
   rerollShop({ rng }): ShopRerollResult {
     const draw = Math.floor(rng(0) * 1_000_000);
     return {
@@ -223,7 +217,7 @@ const rerollProvider: SiteContentProvider = {
       draftState: null,
     };
   },
-};
+});
 
 afterEach(() => {
   registerSiteContentProvider(null);
@@ -621,17 +615,18 @@ describe("atlas edits", () => {
   });
 
   it("uses configured Random Site destinations and presenting guide for Atlas edits", () => {
-    registerSiteContentProvider({
-      sitesData: {
-        ...MINIMAL_SITES_DATA,
-        randomSite: {
-          ...MINIMAL_SITES_DATA.randomSite,
-          destinations: ["Exploration"],
-          guideId: testGuideId("fixture-random-guide"),
+    registerSiteContentProvider(
+      testSiteContentProvider({
+        sitesData: {
+          ...MINIMAL_SITES_DATA,
+          randomSite: {
+            ...MINIMAL_SITES_DATA.randomSite,
+            destinations: ["Exploration"],
+            guideId: testGuideId("fixture-random-guide"),
+          },
         },
-      },
-      openSite: () => null,
-    });
+      }),
+    );
     const state = shopState([cardSlot()]);
     const result = reduce(state, "ADD_SITE_TO_DREAMSCAPE", {
       nodeId: NODE_ID,
@@ -656,15 +651,11 @@ describe("atlas edits", () => {
 
 describe("augury offers", () => {
   it("ACCEPT_AUGURY_OFFER delegates to the provider and applies its state", () => {
-    const provider: SiteContentProvider = {
-      sitesData: MINIMAL_SITES_DATA,
-      openSite() {
-        return null;
-      },
+    const provider = testSiteContentProvider({
       resolveAugury({ journey, action }) {
         return action === "accept" ? { ...journey, essence: 499 } : null;
       },
-    };
+    });
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
     const result = reduce(state, "ACCEPT_AUGURY_OFFER", {
@@ -675,11 +666,7 @@ describe("augury offers", () => {
   });
 
   it("DECLINE_AUGURY delegates to the provider", () => {
-    const provider: SiteContentProvider = {
-      sitesData: MINIMAL_SITES_DATA,
-      openSite() {
-        return null;
-      },
+    const provider = testSiteContentProvider({
       resolveAugury({ journey, action }) {
         return action === "decline"
           ? {
@@ -688,7 +675,7 @@ describe("augury offers", () => {
             }
           : null;
       },
-    };
+    });
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
     const result = reduce(state, "DECLINE_AUGURY", {

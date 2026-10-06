@@ -356,7 +356,7 @@ export function buyShopSlot(
  * Bounces on a malformed payload, an unknown / already-visited site, a non-shop
  * runtime, a shop at its configured reroll limit, a paid reroll the
  * player cannot afford (essence unchanged), or when no provider is registered
- * (or its `rerollShop` returns null / is absent).
+ * (or its `rerollShop` returns null).
  */
 export function rerollShop(
   journey: JourneyState,
@@ -374,8 +374,8 @@ export function rerollShop(
   if (site === null) return null;
 
   const provider = getSiteContentProvider();
-  const rerollConfig = provider?.economyData?.shop.reroll;
-  if (rerollConfig === undefined) return null;
+  if (provider === null) return null;
+  const rerollConfig = provider.economyData.shop.reroll;
   if (runtime.rerollCount >= rerollConfig.maxPerVisit) return null;
   const useFreeReroll = journey.shopModifiers.freeRerolls > 0;
   const cost = useFreeReroll
@@ -383,8 +383,8 @@ export function rerollShop(
     : rerollCost(rerollConfig, runtime.rerollCount, site.isEnhanced);
   if (!useFreeReroll && cost > journey.essence) return null;
 
-  const generated = provider?.rerollShop?.({ journey, site, rng: ctx.rng });
-  if (generated === undefined || generated === null) return null;
+  const generated = provider.rerollShop({ journey, site, rng: ctx.rng });
+  if (generated === null) return null;
 
   const shopModifiers = useFreeReroll
     ? {
@@ -468,7 +468,7 @@ export function applyShopDiscount(
  * deck / dreamsign payload application, site completion) is content-coupled and
  * lives behind the {@link SiteContentProvider}'s `resolveAugury`, so this
  * case only resolves the site and delegates. Bounces on a missing site, no
- * provider (or absent `resolveAugury`), or a provider that rejects the
+ * registered provider, or a provider that rejects the
  * request (stale encounter, unknown offer, unaffordable, already visited).
  */
 export function acceptAuguryOffer(
@@ -504,7 +504,8 @@ function resolveAugury(
   const site = findSite(journey, siteId);
   if (site === null) return null;
   const provider = getSiteContentProvider();
-  const result = provider?.resolveAugury?.({
+  if (provider === null) return null;
+  return provider.resolveAugury({
     journey,
     site,
     action,
@@ -512,7 +513,6 @@ function resolveAugury(
     rng: ctx.rng,
     seq: ctx.seq,
   });
-  return result ?? null;
 }
 
 // ---------------------------------------------------------------------------

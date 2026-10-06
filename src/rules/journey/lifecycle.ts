@@ -64,9 +64,10 @@ import type { JourneySeed } from "../../types/journey-seed";
  * a fresh `generateJourneySeed()` (a `crypto`/`Math.random` source); pinning the
  * generation seed to `journey.seed` is the determinism fix.
  *
- * SEAM: real content registration is deferred to the integration task that
- * wires the reducer into src/session/. Until a provider is registered,
- * SELECT_AVATAR and START_JOURNEY bounce (a recorded no-op, never a throw).
+ * `createJourneyLifecycleContentProvider`
+ * (src/session/providers/lifecycle-provider.ts) supplies every member from the
+ * loaded journey content. Until a provider is registered, SELECT_AVATAR,
+ * START_JOURNEY, and REGENERATE_ATLAS bounce (a recorded no-op, never a throw).
  */
 export interface JourneyLifecycleContentProvider {
   /**
@@ -88,7 +89,7 @@ export interface JourneyLifecycleContentProvider {
     seed: JourneySeed;
   }): JourneyState | null;
   /** Rebuild the Atlas at the journey's authoritative progress depth. */
-  regenerateAtlas?(input: {
+  regenerateAtlas(input: {
     journey: JourneyState;
     completionLevel: number;
     rng: (drawIndex: number) => number;
@@ -286,13 +287,12 @@ export function regenerateAtlas(
   ) {
     return null;
   }
-  return (
-    contentProvider?.regenerateAtlas?.({
-      journey,
-      completionLevel,
-      rng: ctx.rng,
-    }) ?? null
-  );
+  if (contentProvider === null) return null;
+  return contentProvider.regenerateAtlas({
+    journey,
+    completionLevel,
+    rng: ctx.rng,
+  });
 }
 
 /** `DISMISS_STARTING_DECK_POPUP { }` — legacy `dismissStartingDeckPopup`. */

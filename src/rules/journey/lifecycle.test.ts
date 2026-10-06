@@ -17,6 +17,7 @@ import {
   registerJourneyLifecycleContentProvider,
   type JourneyLifecycleContentProvider,
 } from "./lifecycle";
+import { testJourneyLifecycleContentProvider } from "./test-content-providers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import type { AvatarId } from "../../types/identifiers";
@@ -127,7 +128,7 @@ function deterministicProvider(
       preferredSubsetCount: 1,
     };
   }
-  return {
+  return testJourneyLifecycleContentProvider({
     resolveAvatarPackage: (avatarId, seed) =>
       packageFor(avatarId, seed),
     startJourney: ({ journey, avatarId, seed }) => {
@@ -174,7 +175,7 @@ function deterministicProvider(
         screen: { type: "dreamscape" },
       };
     },
-  };
+  });
 }
 
 function hashNumber(text: string): number {

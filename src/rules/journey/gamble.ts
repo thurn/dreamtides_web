@@ -51,8 +51,10 @@ import { deckEntryIdFromUnknown } from "../../types/identifiers";
 
 
 function configuredGame<Kind extends GambleRulesKind>(kind: Kind) {
-  const data = getSiteContentProvider()?.gambleData;
-  return data === undefined ? null : gambleGameByRulesKind(data, kind);
+  const provider = getSiteContentProvider();
+  return provider === null
+    ? null
+    : gambleGameByRulesKind(provider.gambleData, kind);
 }
 
 function asString(value: unknown): string | null {

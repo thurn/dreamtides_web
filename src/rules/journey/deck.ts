@@ -51,9 +51,10 @@ import { parseCardTypeChangePredicateId } from "../../types/identifiers";
  * folding the same log resolve byte-identical results. Resolution never depends
  * on the event's seq: the same UUID always resolves to the same card / dreamsign.
  *
- * SEAM: real content registration is deferred to the integration task that
- * wires the reducer into src/session/. Until a provider is registered, `ADD_CARD`
- * and `ADD_DREAMSIGN` bounce (a recorded no-op, never a throw).
+ * `createDeckContentProvider` (src/session/providers/deck-provider.ts)
+ * supplies every member from the loaded journey content. Until a provider is
+ * registered, `ADD_CARD` and `ADD_DREAMSIGN` bounce (a recorded no-op, never a
+ * throw).
  */
 export interface DeckContentProvider {
   /** Resolve a card UUID to its `cardNumber`, or `null` when unknown. */
