@@ -11,7 +11,7 @@ import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr } from "../dsl/types";
 import type { AbilitySource, CardId, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
-import type { AbilityOrigin, BattleState } from "../state/types";
+import type { AbilityOrigin, BattleState, EffectChoices } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
 import { primitiveDefinition } from "./registry";
@@ -229,6 +229,32 @@ export function chooseTargets(
   });
 }
 
+/** One ability whose play-time choices are made: its index in its source's ability list and its effect. */
+export interface PlayTimeAbility {
+  readonly ability: number;
+  readonly effect: EffectNode;
+}
+
+/**
+ * The play-time choices of `abilities` as `source` is played or activated:
+ * every ability's modes, in order, then every ability's targets, in order.
+ * Returns one entry per ability.
+ */
+export function choosePlayTime(
+  ctx: StepContext,
+  abilities: readonly PlayTimeAbility[],
+  controller: Side,
+  source: AbilitySource,
+  purpose: (ability: number, role: string) => PromptPurpose,
+): EffectChoices[] {
+  const modes = abilities.map((ability) => chooseModes(ctx, ability.effect, controller, source, purpose(ability.ability, "chooseOne")));
+  return abilities.map((ability, index) => {
+    const chosen = modes[index] ?? [];
+    const specs = collectTargets(ability.effect, chosenModes(ability.effect, chosen));
+    return { modes: chosen, targets: chooseTargets(ctx, specs, controller, source, purpose(ability.ability, "target")) };
+  });
+}
+
 /**
  * Choices for an effect made as it resolves, for a triggered ability, which
  * does not use the stack: modes, then targets, in walk order. A required
@@ -288,32 +314,6 @@ export function chooseOnResolution(
     return [...chosen];
   });
   return { modes, targets };
-}
-
-/** Play-time choices for one effect: its chosen modes and its targets, both in walk order. */
-export interface EffectChoices {
-  readonly modes: readonly number[];
-  readonly targets: readonly (readonly InstanceId[])[];
-}
-
-/**
- * Splits the flat play-time choices of a card's event abilities, made in
- * printed order, into each ability's own modes and targets.
- */
-export function splitChoices(effects: readonly EffectNode[], choices: EffectChoices): EffectChoices[] {
-  let modeOffset = 0;
-  let targetOffset = 0;
-  return effects.map((effect) => {
-    const chosen = chosenModes(effect, choices.modes.slice(modeOffset));
-    const targetCount = collectTargets(effect, chosen).length;
-    const split = {
-      modes: choices.modes.slice(modeOffset, modeOffset + chosen.size),
-      targets: choices.targets.slice(targetOffset, targetOffset + targetCount),
-    };
-    modeOffset += chosen.size;
-    targetOffset += targetCount;
-    return split;
-  });
 }
 
 /**

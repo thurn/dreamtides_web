@@ -37,7 +37,7 @@ function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("v
     enteredZoneAt: 3,
   };
   if (zone === "stack") {
-    state.stack.push({ kind: "card", instance: id, controller: owner, modes: [], targets: [], x: null, optionalPaid: [] });
+    state.stack.push({ kind: "card", instance: id, controller: owner, choices: [], x: null, optionalPaid: [] });
   } else {
     state.sides[holder][zone].push(id);
   }
@@ -62,15 +62,14 @@ function fixture() {
   const enemyFront = ids.enemy.front[0];
   const playerFront = ids.player.front[0];
   if (enemyFront === null || playerFront === null) throw new Error("fixture has empty fronts");
-  state.stack[0] = { kind: "card", instance: stacked, controller: "player", modes: [], targets: [[enemyFront, ids.enemy.hand[0]]], x: 2, optionalPaid: [] };
+  state.stack[0] = { kind: "card", instance: stacked, controller: "player", choices: [{ modes: [], targets: [[enemyFront, ids.enemy.hand[0]]] }], x: 2, optionalPaid: [] };
   state.stack.push({
     kind: "ability",
     source: { kind: "dreamsign", side: "player", index: 0 },
     ability: 0,
     origin: { kind: "dreamsign", id: DREAMSIGN.points.id },
     controller: "player",
-    modes: [],
-    targets: [],
+    choices: { modes: [], targets: [] },
     x: null,
     optionalPaid: [true],
   });

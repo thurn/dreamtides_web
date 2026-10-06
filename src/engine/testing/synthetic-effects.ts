@@ -98,7 +98,7 @@ export const PROMPTING = {
       };
     },
     resolve: (ctx, item) => {
-      const target = item.targets[0]?.[0];
+      const target = item.choices[0]?.targets[0]?.[0];
       if (target !== undefined && instanceOf(ctx.state, target).zone === "play") {
         dissolve(ctx, target, item.controller);
       } else {

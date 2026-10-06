@@ -133,12 +133,17 @@ export interface CardInstance {
   enteredZoneAt: number;
 }
 
+/**
+ * The play-time choices for one effect: its modes, one per modal node on the
+ * chosen path, and its targets, one list per target spec, both in walk order.
+ */
+export interface EffectChoices {
+  readonly modes: readonly number[];
+  readonly targets: readonly (readonly InstanceId[])[];
+}
+
 interface StackItemBase {
   readonly controller: Side;
-  /** Modes chosen when the item was played, one per modal node on the chosen path in walk order. */
-  readonly modes: readonly number[];
-  /** Targets chosen when the item was played, one list per target spec in walk order. */
-  readonly targets: readonly (readonly InstanceId[])[];
   /** The value chosen for X, if the item has an X. */
   readonly x: number | null;
   /**
@@ -152,6 +157,12 @@ interface StackItemBase {
 export interface CardStackItem extends StackItemBase {
   readonly kind: "card";
   readonly instance: InstanceId;
+  /**
+   * The choices made when the card was played, one entry per event ability
+   * in printed order. A synthetic test card's play hook stores its choices
+   * as the first entry.
+   */
+  readonly choices: readonly EffectChoices[];
   /** The back-rank position a character was dropped on, used when it resolves if still open. */
   readonly slot?: Slot;
 }
@@ -173,6 +184,8 @@ export interface AbilityStackItem extends StackItemBase {
   /** The ability's index in its source's ability list. */
   readonly ability: number;
   readonly origin: AbilityOrigin;
+  /** The choices made when the ability was activated. */
+  readonly choices: EffectChoices;
 }
 
 export type StackItem = CardStackItem | AbilityStackItem;

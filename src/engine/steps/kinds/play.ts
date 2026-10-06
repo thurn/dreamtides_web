@@ -1,6 +1,6 @@
 import { printedCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
-import { chooseModes, chooseTargets, chosenModes, collectTargets, purposeOf } from "../../effects/interpreter";
+import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { costModifier } from "../../continuous/costs";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
@@ -10,6 +10,7 @@ import { recordPlayed } from "../../rules/turn-log";
 import { instanceOf, moveToStack } from "../../rules/zones";
 import type { ChooseModePrompt } from "../../prompts/types";
 import type { InstanceId, Slot } from "../../state/ids";
+import type { EffectChoices } from "../../state/types";
 import { opponent } from "../../state/ids";
 import type { StepDefinition } from "../types";
 
@@ -63,37 +64,23 @@ export const play: StepDefinition<PlayStep> = {
     }
     const costs = routeCosts(definition, instance.variant, route);
     let x: number | null;
-    let modes: readonly number[];
-    let targets: readonly (readonly InstanceId[])[];
+    let choices: readonly EffectChoices[];
     if (definition.synthetic?.play !== undefined) {
-      const choices = definition.synthetic.play(ctx, step.card);
-      x = choices.x ?? null;
-      modes = choices.modes ?? [];
-      targets = choices.targets ?? [];
+      const chosen = definition.synthetic.play(ctx, step.card);
+      x = chosen.x ?? null;
+      choices = [{ modes: chosen.modes ?? [], targets: chosen.targets ?? [] }];
     } else {
       // Offering plays the card for 0●: if its cost includes X, X is 0.
       x = route === "offering" ? (xCost(definition.costs) === null ? null : 0) : chooseX(ctx, side, costs, purpose(0, "chooseX"), modifier);
-      const abilities = eventAbilities(definition, instance.variant);
-      const abilityModes = abilities.map((ability) =>
-        chooseModes(ctx, ability.effect, side, step.card, purpose(ability.ability, "chooseOne")),
-      );
-      targets = abilities.flatMap((ability, index) =>
-        chooseTargets(
-          ctx,
-          collectTargets(ability.effect, chosenModes(ability.effect, abilityModes[index] ?? [])),
-          side,
-          step.card,
-          purpose(ability.ability, "target"),
-        ),
-      );
-      modes = abilityModes.flat();
+      choices = choosePlayTime(ctx, eventAbilities(definition, instance.variant), side, step.card, purpose);
     }
+    const targets = choices.flatMap((choice) => choice.targets.flat());
     const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
-    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets.flat()], modifier);
+    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier);
     ctx.commitPoint();
     payCosts(ctx, side, step.card, plan);
     endFloating(ctx, (effect) => modifier.consumes.includes(effect.id));
-    moveToStack(ctx, step.card, side, { modes, targets, x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
+    moveToStack(ctx, step.card, side, { choices, x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
     if (route === "reclaim") instance.status.reclaimed = true;
     if (route === "offering") instance.status.offering = true;
     recordPlayed(state, catalog, side, step.card);

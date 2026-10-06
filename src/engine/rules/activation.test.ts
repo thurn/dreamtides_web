@@ -43,7 +43,7 @@ describe("activated abilities on the stack", () => {
     const { state, events } = activate(start, "player", source);
     expect(events.map((event) => event.kind)).toEqual(["energyChanged", "exhaustionChanged", "abilityActivated"]);
     expect(state.stack).toEqual([
-      { kind: "ability", source, ability: 0, origin: { kind: "card", cardId: STACK.drawForEnergyAndExhaust.id, variant: { amplified: false } }, controller: "player", modes: [], targets: [], x: null, optionalPaid: [] },
+      { kind: "ability", source, ability: 0, origin: { kind: "card", cardId: STACK.drawForEnergyAndExhaust.id, variant: { amplified: false } }, controller: "player", choices: { modes: [], targets: [] }, x: null, optionalPaid: [] },
     ]);
     expect(state.priority).toBe("enemy");
     expect(engine.decision(state)).toEqual({ kind: "respond", side: "enemy" });
@@ -139,7 +139,7 @@ describe("activated abilities on the stack", () => {
     });
     const victim = ids.enemy.back[1]!;
     const { state } = activate(start, "player", ids.player.back[0]!, [0, [victim]]);
-    expect(state.stack).toEqual([expect.objectContaining({ kind: "ability", modes: [0], targets: [[victim]] })]);
+    expect(state.stack).toEqual([expect.objectContaining({ kind: "ability", choices: { modes: [0], targets: [[victim]] } })]);
     const resolved = engine.apply(state, "enemy", { kind: "pass" }, NO_PROMPTS).state;
     expect(resolved.instances[victim]?.zone).toBe("void");
     expect(resolved.sides.player.score).toBe(0);

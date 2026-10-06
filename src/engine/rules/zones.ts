@@ -13,7 +13,7 @@
  */
 import type { AbilitySource, InstanceId, Side, Slot, Zone } from "../state/ids";
 import { BACK_RANK_SIZE } from "../state/ids";
-import type { BattleState, CardInstance, FloatingEffect, Printing } from "../state/types";
+import type { BattleState, CardInstance, EffectChoices, FloatingEffect, Printing } from "../state/types";
 import type { Variant } from "../dsl/types";
 import { freshStatus } from "../state/create";
 import type { StepContext } from "../steps/types";
@@ -206,18 +206,23 @@ export function moveToHand(ctx: StepContext, id: InstanceId, side: Side): Zone |
   return relocate(ctx, id, "hand", "bottom", side);
 }
 
+/** A copy of one effect's play-time choices that shares no arrays with `choices`. */
+export function copyChoices(choices: EffectChoices): EffectChoices {
+  return { modes: [...choices.modes], targets: choices.targets.map((list) => [...list]) };
+}
+
 /** Moves an instance onto the top of the stack under `controller`, with its play-time choices. */
 export function moveToStack(
   ctx: StepContext,
   id: InstanceId,
   controller: Side,
-  choices: {
-    readonly modes: readonly number[];
-    readonly targets: readonly (readonly InstanceId[])[];
+  played: {
+    /** One entry per event ability, in printed order. */
+    readonly choices: readonly EffectChoices[];
     readonly x: number | null;
     readonly optionalPaid: readonly boolean[];
     readonly slot?: Slot;
-  } = { modes: [], targets: [], x: null, optionalPaid: [] },
+  } = { choices: [], x: null, optionalPaid: [] },
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
@@ -230,11 +235,10 @@ export function moveToStack(
     kind: "card",
     instance: id,
     controller,
-    modes: [...choices.modes],
-    targets: choices.targets.map((list) => [...list]),
-    x: choices.x,
-    optionalPaid: [...choices.optionalPaid],
-    ...(choices.slot === undefined ? {} : { slot: choices.slot }),
+    choices: played.choices.map(copyChoices),
+    x: played.x,
+    optionalPaid: [...played.optionalPaid],
+    ...(played.slot === undefined ? {} : { slot: played.slot }),
   });
 }
 

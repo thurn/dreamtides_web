@@ -1,6 +1,6 @@
 import { printedCard } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
-import { resolveEffect, splitChoices } from "../../effects/interpreter";
+import { resolveEffect } from "../../effects/interpreter";
 import { instanceOrigin, originAbilities } from "../../rules/activation";
 import { enterPlay, instanceOf, moveInstance, placement } from "../../rules/zones";
 import type { AbilityStackItem, CardStackItem } from "../../state/types";
@@ -25,10 +25,8 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
   const definition = printedCard(catalog, instance.printing);
   ctx.emit({ kind: "resolved", instance: item.instance });
   definition.synthetic?.resolve?.(ctx, item);
-  // Each event ability resolves with its own share of the play-time modes and targets.
-  const abilities = eventAbilities(definition, instance.variant);
-  const choices = splitChoices(abilities.map((ability) => ability.effect), item);
-  abilities.forEach((ability, index) => {
+  // Each event ability resolves with its own play-time modes and targets.
+  eventAbilities(definition, instance.variant).forEach((ability, index) => {
     resolveEffect(ctx, ability.effect, {
       source: item.instance,
       origin: instanceOrigin(instance),
@@ -36,7 +34,7 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
       controller: item.controller,
       x: item.x,
       optionalPaid: item.optionalPaid,
-      choices: choices[index] ?? { modes: [], targets: [] },
+      choices: item.choices[index] ?? { modes: [], targets: [] },
     });
   });
   if (definition.cardType === "character") {
@@ -69,7 +67,7 @@ function resolveAbility(ctx: StepContext, item: AbilityStackItem): void {
     controller: item.controller,
     x: item.x,
     optionalPaid: item.optionalPaid,
-    choices: item,
+    choices: item.choices,
   });
 }
 

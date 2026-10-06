@@ -1,4 +1,4 @@
-import { chooseModes, chooseTargets, chosenModes, collectTargets, purposeOf } from "../../effects/interpreter";
+import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { abilityOrigin, activatedAbilityAt, canActivate, oncePerTurnKey, originCardId, sourceController } from "../../rules/activation";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import type { AbilitySource } from "../../state/ids";
@@ -33,16 +33,15 @@ export const activate: StepDefinition<ActivateStep> = {
     const cardId = originCardId(origin);
     const purpose = (role: string) => purposeOf(step.source, cardId, step.ability, role);
     const x = chooseX(ctx, side, ability.costs, purpose("chooseX"));
-    const modes = chooseModes(ctx, ability.effect, side, step.source, purpose("chooseOne"));
-    const specs = collectTargets(ability.effect, chosenModes(ability.effect, modes));
-    const targets = chooseTargets(ctx, specs, side, step.source, purpose("target"));
-    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, targets.flat());
+    const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role));
+    if (choices === undefined) throw new Error("choosePlayTime returns one entry per ability");
+    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat());
     ctx.commitPoint();
     payCosts(ctx, side, step.source, plan);
     if (ability.oncePerTurn === true) {
       state.oncePerTurn.push(oncePerTurnKey(step.source, step.ability));
     }
-    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, modes, targets, x, optionalPaid: plan.optionalPaid });
+    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices, x, optionalPaid: plan.optionalPaid });
     ctx.emit({ kind: "abilityActivated", side, source: step.source, ability: step.ability });
     state.priority = opponent(side);
   },

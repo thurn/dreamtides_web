@@ -6,14 +6,14 @@
  */
 import { printedCard, printedCardId } from "../catalog";
 import { eventAbilities } from "../effects/abilities";
-import { chooseOnResolution, purposeOf, splitChoices } from "../effects/interpreter";
+import { chooseOnResolution, purposeOf } from "../effects/interpreter";
 import type { InstanceId, Side } from "../state/ids";
 import type { Printing } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { createFigments } from "./figments";
 import { addFloating } from "./floating";
 import { freeBackSlotsAfterStack } from "./timing";
-import { createInstance, instanceOf } from "./zones";
+import { copyChoices, createInstance, instanceOf } from "./zones";
 
 /**
  * Copies the card `original` on the stack for `controller` (D15): the copy is
@@ -38,22 +38,16 @@ export function copyOnStack(ctx: StepContext, original: InstanceId, controller: 
   }
   const copy = createInstance(ctx, source.printing, controller, source.variant, "stack");
   const abilities = eventAbilities(definition, source.variant);
-  const kept = splitChoices(abilities.map((ability) => ability.effect), item);
-  const modes: number[] = [];
-  const targets: (readonly InstanceId[])[] = [];
-  abilities.forEach((ability, position) => {
-    const chosen =
+  const choices = abilities.map(
+    (ability, position) =>
       chooseOnResolution(ctx, ability.effect, controller, copy.id, (role) => purposeOf(copy.id, printedCardId(copy.printing), ability.ability, role)) ??
-      kept[position] ?? { modes: [], targets: [] };
-    modes.push(...chosen.modes);
-    targets.push(...chosen.targets);
-  });
+      item.choices[position] ?? { modes: [], targets: [] },
+  );
   state.stack.splice(index + 1, 0, {
     kind: "card",
     instance: copy.id,
     controller,
-    modes,
-    targets: targets.map((list) => [...list]),
+    choices: choices.map(copyChoices),
     x: item.x,
     optionalPaid: [...item.optionalPaid],
   });

@@ -9,6 +9,7 @@ import type {
   BattleState,
   CardStatus,
   ChallengeState,
+  EffectChoices,
   Expiry,
   FloatingChange,
   FloatingEffect,
@@ -252,6 +253,10 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   }
   const visible = (id: InstanceId): boolean => id in instances;
   const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);
+  const visibleChoices = (choices: EffectChoices): EffectChoices => ({
+    modes: [...choices.modes],
+    targets: choices.targets.map((list) => list.filter(visible)),
+  });
   const floatingVisible = (effect: FloatingEffect): boolean => {
     const changed = changedInstance(effect.change);
     return visibleSource(effect.source) && (changed === null || visible(changed));
@@ -280,11 +285,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     turn: copy(state.turn),
     sides: { player: side("player"), enemy: side("enemy") },
     instances,
-    stack: state.stack.map((item) => ({
-      ...copy(item),
-      modes: [...item.modes],
-      targets: item.targets.map((list) => list.filter(visible)),
-    })),
+    stack: state.stack.map((item) =>
+      item.kind === "card"
+        ? { ...copy(item), choices: item.choices.map(visibleChoices) }
+        : { ...copy(item), choices: visibleChoices(item.choices) },
+    ),
     priority: state.priority,
     payable: state.payable.map((effect) => ({
       id: effect.id,

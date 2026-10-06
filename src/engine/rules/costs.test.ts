@@ -94,7 +94,7 @@ describe("additional costs to play a card", () => {
     const { state: start, ids } = board({ hand: [STACK.optionalKicker.id, v.vanilla2.id], energy: 2 });
     const [card, fodder] = ids.player.hand;
     const paid = playFirst(start, card, [true]);
-    expect(paid.state.stack).toEqual([{ kind: "card", instance: card, controller: "player", modes: [], targets: [], x: null, optionalPaid: [true] }]);
+    expect(paid.state.stack).toEqual([{ kind: "card", instance: card, controller: "player", choices: [{ modes: [], targets: [] }], x: null, optionalPaid: [true] }]);
     expect(paid.state.sides.player.currentEnergy).toBe(0);
     expect(paid.state.sides.player.void).toEqual([fodder]);
     expect(resolve(paid.state).state.sides.player.score).toBe(4);
@@ -118,7 +118,7 @@ describe("additional costs to play a card", () => {
     const card = ids.player.hand[0];
     start.sides.player.hand = [];
     start.instances[card].zone = "stack";
-    start.stack.push({ kind: "card", instance: card, controller: "player", modes: [], targets: [], x: null, optionalPaid: [true] });
+    start.stack.push({ kind: "card", instance: card, controller: "player", choices: [], x: null, optionalPaid: [true] });
     start.priority = "enemy";
     const { state } = resolve(start);
     expect(state.sides.player.score).toBe(4);

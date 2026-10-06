@@ -5,7 +5,10 @@ import type { AvatarId, CardId, DreamsignId, DreamwellCardId, FigmentId, Instanc
 import type { CardStackItem, Printing } from "./state/types";
 import type { StepContext } from "./steps/types";
 
-/** Choices made while playing a card, carried on its stack item. */
+/**
+ * Choices a synthetic play hook makes while playing a card. Its modes and
+ * targets are the first entry of the stack item's choices.
+ */
 export interface PlayChoices {
   readonly modes?: readonly number[];
   readonly targets?: readonly (readonly InstanceId[])[];
