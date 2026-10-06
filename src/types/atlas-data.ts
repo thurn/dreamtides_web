@@ -5,7 +5,7 @@ import type {
   AtlasFillProfileId,
   DreamscapeArtKey,
   DreamscapeId,
-  GuideId,
+  GuideArtKey,
   IdentityRecord,
 } from "./identifiers";
 
@@ -74,7 +74,7 @@ export interface AtlasData {
     fallbackIntroduction: string;
     sceneArtKey: DreamscapeArtKey;
     iconArtKey: DreamscapeArtKey;
-    figureArtId: GuideId;
+    figureArtKey: GuideArtKey;
   };
   assets: {
     unrevealedFrameSource: string;

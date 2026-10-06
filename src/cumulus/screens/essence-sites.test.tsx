@@ -26,11 +26,12 @@ import {
   SHOP_PRESENTATION,
 } from "../test-helpers/presentation-fixtures";
 import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
-import { parseDeckEntryId, parseSiteId, type GuideId } from "../../types/identifiers";
+import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
 import {
   testCardId,
   testDreamsignId,
   testExplorationActionId,
+  testGuideArtKey,
   testGuideId,
   testPresentationId,
 } from "../../types/test-identities";
@@ -68,12 +69,13 @@ function makeCard(index: number): CardData {
   };
 }
 
-function guide(id: GuideId) {
+function guide(seed: string) {
   return {
-    id,
+    id: testGuideId(seed),
     name: "Fixture Guide",
     line: "Fixture line.",
-    art: artRef.dreamGuide(id),
+    art: artRef.dreamGuide(testGuideArtKey(seed)),
+    headTargetX: 0.6,
   };
 }
 
@@ -104,7 +106,7 @@ describe("PurgeSiteScreen", () => {
       presentation: PURGE_PRESENTATION,
       siteId: parseSiteId("purge-site"),
       scene: null,
-      guide: guide(testGuideId("takeshi")),
+      guide: guide("fixture-purge-guide"),
       cards: Array.from({ length: cardCount }, (_, index) => {
         const card = makeCard(index + 1);
         return {
@@ -247,7 +249,7 @@ describe("CardShopSiteScreen", () => {
       presentation: SHOP_PRESENTATION,
       siteId: parseSiteId("shop-site"),
       scene: null,
-      guide: guide(testGuideId("tobias_tanglefur")),
+      guide: guide("fixture-shop-guide"),
       offers: Array.from({ length: 5 }, (_, index) => {
         const displaySnapshot = makeCard(index + 1);
         return {
@@ -393,7 +395,7 @@ describe("DreamsignBazaarSiteScreen", () => {
       presentation: DREAMSIGN_MARKET_PRESENTATION,
       siteId: parseSiteId("dreamsign-bazaar-site"),
       scene: null,
-      guide: guide(testGuideId("amunet_the_tomb_keeper")),
+      guide: guide("fixture-bazaar-guide"),
       offers: Array.from({ length: 3 }, (_, index) => ({
         entryId: parseDeckEntryId(`dreamsign-offer-${String(index)}`),
         slotIndex: index,

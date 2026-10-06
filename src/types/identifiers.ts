@@ -120,6 +120,8 @@ export type FigmentCatalogKey = DomainIdentity<"FigmentCatalogKey">;
 export type GlossaryEntryId = DomainIdentity<"GlossaryEntryId">;
 export type GambleResultId = DomainIdentity<"GambleResultId">;
 export type GuideId = DomainIdentity<"GuideId">;
+/** Hosted art filename stem of a Dream Guide or Atlas boss character render. */
+export type GuideArtKey = DomainIdentity<"GuideArtKey">;
 export type JourneyId = DomainIdentity<"JourneyId">;
 export type IntentKey = DomainIdentity<"IntentKey">;
 export type AuguryCategoryId = DomainIdentity<"AuguryCategoryId">;
@@ -190,6 +192,7 @@ const brandFigmentCatalogKey = identityConstructor<FigmentCatalogKey>();
 const brandGlossaryEntryId = identityConstructor<GlossaryEntryId>();
 const brandGambleResultId = identityConstructor<GambleResultId>();
 const brandGuideId = identityConstructor<GuideId>();
+const brandGuideArtKey = identityConstructor<GuideArtKey>();
 const brandJourneyId = identityConstructor<JourneyId>();
 const brandIntentKey = identityConstructor<IntentKey>();
 const brandAuguryCategoryId = identityConstructor<AuguryCategoryId>();
@@ -383,7 +386,13 @@ export const parseGambleResultId = identityParser(
 export const parseGuideId = identityParser(
   "Dream Guide id",
   brandGuideId,
-  (value) => /^[a-z0-9]+(?:_[a-z0-9]+)*$/u.test(value),
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseGuideArtKey = identityParser(
+  "Dream Guide art key",
+  brandGuideArtKey,
+  (value) => /^[a-z0-9_]+$/u.test(value),
 );
 export const parseJourneyId = identityParser("Journey id", brandJourneyId);
 export const parseIntentKey = identityParser("Intent key", brandIntentKey);
@@ -493,6 +502,7 @@ export const frontDoorActionIdFromUnknown =
   identityDecoder(parseFrontDoorActionId);
 export const glossaryEntryIdFromUnknown = identityDecoder(parseGlossaryEntryId);
 export const guideIdFromUnknown = identityDecoder(parseGuideId);
+export const guideArtKeyFromUnknown = identityDecoder(parseGuideArtKey);
 export const intentKeyFromUnknown = identityDecoder(parseIntentKey);
 export const noteIdFromUnknown = identityDecoder(parseNoteId);
 export const offerIdFromUnknown = identityDecoder(parseOfferId);

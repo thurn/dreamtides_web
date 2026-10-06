@@ -18,6 +18,7 @@ import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
 import {
   testDreamsignId,
   testGambleResultId,
+  testGuideArtKey,
   testGuideId,
   testShuffleCommitment,
 } from "../../types/test-identities";
@@ -39,7 +40,8 @@ const SITE = {
     id: testGuideId("fixture-guide"),
     name: "Fixture Guide",
     line: "A fixture gamble.",
-    art: artRef.dreamGuide(testGuideId("fixture-guide")),
+    art: artRef.dreamGuide(testGuideArtKey("fixture-guide")),
+    headTargetX: 0.6,
   },
 } as const;
 

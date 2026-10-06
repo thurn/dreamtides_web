@@ -21,6 +21,7 @@ import {
 } from "../../types/identifiers";
 import {
   testCardId,
+  testGuideArtKey,
   testGuideId,
   testOfferTileId,
 } from "../../types/test-identities";
@@ -131,7 +132,8 @@ describe("AugurySiteScreen", () => {
         id: testGuideId("aldric_the_seer"),
         name: "Aldric, the Seer",
         line: "Choose one path for your dream.",
-        art: artRef.dreamGuide(testGuideId("aldric_the_seer")),
+        art: artRef.dreamGuide(testGuideArtKey("aldric_the_seer")),
+        headTargetX: 0.6,
       },
       offers: [
         {
@@ -220,7 +222,7 @@ describe("AugurySiteScreen", () => {
       container
         .querySelector("[data-site-layout-guide]")
         ?.getAttribute("data-guide-id"),
-    ).toBe("aldric_the_seer");
+    ).toBe(testGuideId("aldric_the_seer"));
     expect(container.querySelectorAll("[data-glass-panel-frame]")).toHaveLength(
       0,
     );

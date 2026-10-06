@@ -11,7 +11,7 @@ import type {
   OpeningDraftOffers,
   SerializedCardNumber,
 } from "./draft";
-import type { GuideId } from "./identifiers";
+import type { GuideArtKey, GuideId } from "./identifiers";
 import type { AvatarId } from "./identifiers";
 import type { DreamscapeArtKey, DreamscapeId } from "./identifiers";
 import type {
@@ -97,10 +97,17 @@ export interface DreamscapeContent {
  */
 export interface DreamGuideContent {
   id: GuideId;
+  /** Filename stem of the hosted character render. */
+  artKey: GuideArtKey;
   name: string;
   homeDreamscapeId: DreamscapeId;
   siteType: SiteType;
   portraitSource: string;
+  /**
+   * Horizontal fraction of the render where the silhouette's right-hand edge
+   * crosses the shared head band; site dialogue points its speech tail here.
+   */
+  headTargetX: number;
   dialogue: Readonly<Record<string, readonly string[]>>;
   homeSpecialty: string;
 }

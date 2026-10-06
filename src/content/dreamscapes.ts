@@ -31,7 +31,7 @@ export const DREAMSCAPES = [
       "3ebaba62-9000-429d-b203-2a5a9724389a",
       "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
     ],
-    guideId: "tobias_tanglefur",
+    guideId: "e915cbd5-d7b1-4c97-979a-553ec7f1c923", // Tobias Tanglefur
     signatureSite: "Shop",
     isStarter: false,
   },
@@ -46,7 +46,7 @@ export const DREAMSCAPES = [
       "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
       "f0f5449e-01c2-4635-bce1-76b179fc2108",
     ],
-    guideId: "amunet_the_tomb_keeper",
+    guideId: "dcf43929-2412-4817-b743-3254f3d102b9", // Amunet, the Tomb-Keeper
     signatureSite: "DreamsignBazaar",
     isStarter: false,
   },
@@ -60,7 +60,7 @@ export const DREAMSCAPES = [
       "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
       "5e28154d-770a-4b84-8aac-9de44f5d7d02",
     ],
-    guideId: "sigrun",
+    guideId: "7c4f7807-a1fe-419e-a011-b5de0828e7f0", // Sigrún
     signatureSite: "DreamsignRevelation",
     isStarter: false,
   },
@@ -74,7 +74,7 @@ export const DREAMSCAPES = [
       "84e7020c-7384-4cc3-a20f-ab05f03cc375",
       "f6208407-c4e9-42ac-b533-346704f5e39e",
     ],
-    guideId: "durgan_forgehammer",
+    guideId: "9bdd56c6-ce73-4105-a954-3d873578ce03", // Durgan Forgehammer
     signatureSite: "Transfiguration",
     isStarter: false,
   },
@@ -88,7 +88,7 @@ export const DREAMSCAPES = [
       "3c4773e4-f8e1-4686-86cb-b407a42489d4",
       "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
     ],
-    guideId: "deacon_holt",
+    guideId: "d16b65b6-b788-421c-9f94-df7c017c2e3e", // Deacon Holt
     signatureSite: "Duplication",
     isStarter: false,
   },
@@ -102,7 +102,7 @@ export const DREAMSCAPES = [
       "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
       "91d4c3b5-fd63-480b-9ed5-979109a227bb",
     ],
-    guideId: "master_takeshi",
+    guideId: "b5dfa69f-93c3-4618-a2d9-1bec1a27eaae", // Master Takeshi
     signatureSite: "Purge",
     isStarter: false,
   },
@@ -116,7 +116,7 @@ export const DREAMSCAPES = [
       "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
       "16b579fe-c15b-4df6-8262-d45ce44732ae",
     ],
-    guideId: "aldric_the_seer",
+    guideId: "7d81eeb7-69c1-4bb5-9755-06d60280d3a5", // Aldric, the Seer
     signatureSite: "Augury",
     isStarter: false,
   },
@@ -130,7 +130,7 @@ export const DREAMSCAPES = [
       "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
       "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
     ],
-    guideId: "maddox",
+    guideId: "e67ac921-40cd-48bc-8b7f-051f8dd692ef", // Maddox
     signatureSite: "RandomSite",
     isStarter: false,
   },
@@ -144,7 +144,7 @@ export const DREAMSCAPES = [
       "8a2fcd65-bba7-459c-a6b0-f0391b9293fd",
       "b99936ca-97f9-4930-af5a-fa9ef92557ef",
     ],
-    guideId: "gravok",
+    guideId: "05161908-e15c-4acb-b35e-ccbe58e99c08", // Gravok
     signatureSite: "Gamble",
     isStarter: false,
   },
@@ -159,7 +159,7 @@ export const DREAMSCAPES = [
       "ba973428-6d90-4847-b779-cb7e25a5ac84",
       "4d5e3933-7dd6-406b-922d-dd78acfa044a",
     ],
-    guideId: "layaway",
+    guideId: "1cb84e30-c2bf-43fa-8cf9-0cdaf83d3e31", // "Layaway"
     signatureSite: "Exploration",
     isStarter: false,
   },

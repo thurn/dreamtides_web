@@ -27,7 +27,7 @@ import {
 import { parseSiteId } from "../../types/identifiers";
 import { parseShuffleCommitment } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testDreamscapeId, testDreamsignId, testGuideId, testCardId } from "../../types/test-identities";
+import { testDreamscapeId, testDreamsignId, testGuideArtKey, testGuideId, testCardId } from "../../types/test-identities";
 
 expect.addEqualityTesters([annotatedTextEquality]);
 
@@ -51,6 +51,8 @@ const GUIDE = {
   homeDreamscapeId: testDreamscapeId("fixture-home"),
   siteType: "Gamble",
   portraitSource: "fixture-guide.png",
+  artKey: testGuideArtKey("fixture-guide"),
+  headTargetX: 0.6,
   dialogue: { site: [GUIDE_LINE_SOURCE] },
   homeSpecialty: "Fixture specialty.",
 } satisfies DreamGuideContent;

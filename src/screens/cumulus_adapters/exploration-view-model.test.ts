@@ -43,6 +43,7 @@ import {
   testDreamscapeId,
   testDreamsignId,
   testExplorationActionId,
+  testGuideArtKey,
   testGuideId,
   testCardId,
 } from "../../types/test-identities";
@@ -94,6 +95,8 @@ const guide: DreamGuideContent = {
   homeDreamscapeId: testDreamscapeId("fixture-dreamscape"),
   siteType: "Exploration",
   portraitSource: "fixture-guide.png",
+  artKey: testGuideArtKey("fixture-guide"),
+  headTargetX: 0.6,
   dialogue: { site: ["Every card dreams. Draw one, and we'll step inside."] },
   homeSpecialty: "Fixture specialty.",
 };

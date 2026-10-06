@@ -17,6 +17,7 @@ import type { DeckEntryId } from "../../types/identifiers";
 import {
   testCardId,
   testDreamscapeId,
+  testGuideArtKey,
   testGuideId,
   testDreamsignId,
 } from "../../types/test-identities";
@@ -248,6 +249,8 @@ describe("purge-view-model", () => {
     homeDreamscapeId: testDreamscapeId("fixture-home"),
     siteType: "Purge",
     portraitSource: "fixture-guide.png",
+    artKey: testGuideArtKey("fixture-guide"),
+    headTargetX: 0.6,
     dialogue: { site: ["Fixture line."] },
     homeSpecialty: "Fixture specialty.",
   } satisfies DreamGuideContent;
@@ -493,6 +496,8 @@ describe("random-site-view-model", () => {
           homeDreamscapeId: testDreamscapeId("fixture-dreamscape"),
           siteType: "RandomSite",
           portraitSource: "fixture-guide.png",
+          artKey: testGuideArtKey("fixture-guide"),
+          headTargetX: 0.6,
           dialogue: { site: [] },
           homeSpecialty: "Fixture specialty",
         },

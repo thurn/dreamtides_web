@@ -11,6 +11,7 @@ export function projectGuideView(
     id: guide.id,
     name: guide.name,
     line,
-    art: artRef.dreamGuide(guide.id),
+    art: artRef.dreamGuide(guide.artKey),
+    headTargetX: guide.headTargetX,
   };
 }

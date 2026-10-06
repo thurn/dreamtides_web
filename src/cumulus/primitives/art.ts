@@ -5,13 +5,13 @@
 // resolving it at the call site scatters the id → URL mapping across screens.
 // Instead a component takes an `ArtRef` — a small discriminated union naming
 // WHAT art to show (a dreamsign by its image name, an avatar by its number,
-// a dreamscape by its id) — and resolves the URL itself via `resolveArtRef`.
-// The id → URL mapping lives here, once.
+// a dreamscape by its art key) — and resolves the URL itself via
+// `resolveArtRef`. The identity → URL mapping lives here, once.
 
 import { assetUrl } from "../../runtime/asset-url";
 import miraHeadCircleUrl from "../assets/dream-avatars/0020-head-circle.png";
 import type { ArtAssetKey, DreamscapeArtKey } from "../../types/identifiers";
-import type { GuideId } from "../../types/identifiers";
+import type { GuideArtKey } from "../../types/identifiers";
 
 /** Character portraits authored as local Cumulus assets. */
 export type CharacterPortraitId = "mira";
@@ -61,9 +61,9 @@ export type ArtRef =
     }
   | {
       /** A Dream Guide's transparent full-body character render, keyed by its
-       * guide id. */
+       * art key. */
       readonly kind: "dream-guide";
-      readonly guideId: GuideId;
+      readonly artKey: GuideArtKey;
     }
   | {
       /** An Atlas-specific asset emitted under the hosted `/atlas/` prefix. */
@@ -93,7 +93,7 @@ export function resolveArtRef(ref: ArtRef): string {
     case "dreamscape-scene":
       return assetUrl(`/dreamscapes/${ref.artKey}.png`);
     case "dream-guide":
-      return assetUrl(`/dream-guides/${ref.guideId}.png`);
+      return assetUrl(`/dream-guides/${ref.artKey}.png`);
     case "atlas-asset":
       return assetUrl(`/atlas/${ref.assetKey}`);
     case "exploration-card":
@@ -126,9 +126,9 @@ export const artRef = {
     kind: "dreamscape-scene",
     artKey,
   }),
-  dreamGuide: (guideId: GuideId): ArtRef => ({
+  dreamGuide: (artKey: GuideArtKey): ArtRef => ({
     kind: "dream-guide",
-    guideId,
+    artKey,
   }),
   atlasAsset: (assetKey: ArtAssetKey): ArtRef => ({
     kind: "atlas-asset",

@@ -5,6 +5,8 @@ import {
   parseSiteId,
   auguryArchetypeIdFromUnknown,
   dreamscapeIdFromUnknown,
+  guideArtKeyFromUnknown,
+  guideIdFromUnknown,
   siteIdFromUnknown,
   type DeckEntryId,
   type SiteId,
@@ -46,5 +48,16 @@ describe("domain identifiers", () => {
     ).toBe("f413a98f-10d2-4578-8031-cc6ce57b61b4");
     expect(dreamscapeIdFromUnknown("wilderveil")).toBeNull();
     expect(dreamscapeIdFromUnknown("")).toBeNull();
+  });
+
+  it("accepts only UUID guide identities and slug guide art keys", () => {
+    expect(guideIdFromUnknown("E915CBD5-D7B1-4C97-979A-553EC7F1C923")).toBe(
+      "e915cbd5-d7b1-4c97-979a-553ec7f1c923",
+    );
+    expect(guideIdFromUnknown("fixture_guide")).toBeNull();
+    expect(guideArtKeyFromUnknown("fixture_guide")).toBe("fixture_guide");
+    expect(
+      guideArtKeyFromUnknown("e915cbd5-d7b1-4c97-979a-553ec7f1c923"),
+    ).toBeNull();
   });
 });

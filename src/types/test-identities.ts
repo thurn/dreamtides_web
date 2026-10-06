@@ -31,6 +31,7 @@ import {
   parseExplorationActionId,
   parseGlossaryEntryId,
   parseGambleResultId,
+  parseGuideArtKey,
   parseGuideId,
   parseJourneyId,
   parseOfferTileId,
@@ -57,6 +58,7 @@ import {
   type ExplorationActionId,
   type GambleResultId,
   type GlossaryEntryId,
+  type GuideArtKey,
   type GuideId,
   type JourneyId,
   type OfferTileId,
@@ -142,7 +144,9 @@ export const testGlossaryEntryId = (seed: string): GlossaryEntryId =>
 export const testGambleResultId = (seed: string): GambleResultId =>
   parseGambleResultId(seed);
 export const testGuideId = (seed: string): GuideId =>
-  parseGuideId(testUnderscoreSlug(seed));
+  parseGuideId(testUuid(seed));
+export const testGuideArtKey = (seed: string): GuideArtKey =>
+  parseGuideArtKey(testUnderscoreSlug(seed));
 export const testSemanticEntityId = (seed: string): SemanticEntityId =>
   parseSemanticEntityId(testUuid(seed));
 export const testShuffleCommitment = (seed: string): ShuffleCommitment =>

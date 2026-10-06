@@ -42,6 +42,7 @@ import { makeTestPoolContext } from "../../testing/pool-context";
 import {
   testCardId,
   testDreamscapeId,
+  testGuideArtKey,
   testGuideId,
   testTideId,
 } from "../../types/test-identities";
@@ -187,6 +188,8 @@ const GUIDE = {
   homeDreamscapeId: testDreamscapeId("fixture-home"),
   siteType: "Augury",
   portraitSource: "fixture-guide.png",
+  artKey: testGuideArtKey("fixture-guide"),
+  headTargetX: 0.6,
   dialogue: { site: ["Fixture line."] },
   homeSpecialty: "Fixture specialty.",
 } satisfies DreamGuideContent;

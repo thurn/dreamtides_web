@@ -37,6 +37,7 @@ import {
   testDreamscapeId,
   testDreamsignId,
   testExplorationActionId,
+  testGuideArtKey,
   testJourneySeed,
 } from "../types/test-identities";
 
@@ -148,6 +149,8 @@ function auguryContent(
       homeDreamscapeId: assignment.homeDreamscapeId,
       siteType: siteType as DreamGuideContent["siteType"],
       portraitSource: "fixture-guide.png",
+      artKey: testGuideArtKey("fixture-guide"),
+      headTargetX: 0.6,
       dialogue: { site: ["Fixture."], "random-site": ["Fixture."], "gamble-three-gate": ["Fixture."] },
       homeSpecialty: "Fixture specialty",
     }),

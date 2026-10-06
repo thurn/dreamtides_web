@@ -225,8 +225,9 @@ export const ATLAS = {
     // Filename stem of the circular image drawn on the Layer Seven Atlas node
     // (`dreamscape-icons/<key>.png`).
     iconArtKey: "limbo",
-    // Apollyon character figure composited over the Limbo scene.
-    figureArtId: "apollyon",
+    // Filename stem of the Apollyon character figure composited over the Limbo
+    // scene (`dream-guides/<key>.png`).
+    figureArtKey: "apollyon",
   },
   // Shared Atlas chrome that the asset build publishes for the renderer.
   assets: {

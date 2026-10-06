@@ -91,6 +91,11 @@ export interface SiteLayoutGuideView {
   readonly line: string;
   /** Transparent resident-guide artwork. */
   readonly art: ArtRef;
+  /**
+   * Horizontal fraction of the artwork where the silhouette's right-hand edge
+   * crosses the head band; the speech pointer targets this point.
+   */
+  readonly headTargetX: number;
 }
 
 /** The resolved resident guide displayed by one SiteLayout composition. */
@@ -135,23 +140,9 @@ const DESKTOP_DIALOG_LEFT = `clamp(calc(${token("--space-6xl")} + ${token("--spa
 // band above the panel rather than sharing its horizontal region.
 const COMPACT_DESKTOP_DIALOG_WIDTH = "190px";
 
+// Shared head band of the transparent guide sources. Each guide's catalog
+// entry supplies the horizontal target sampled at this band.
 const GUIDE_HEAD_TARGET_Y = 0.22;
-const DEFAULT_GUIDE_HEAD_TARGET_X = 0.62;
-// Right-hand silhouette edges sampled from the transparent guide sources at
-// the shared head band. Stable guide identities keep the runtime geometry
-// independent of guide names and dialogue length.
-const GUIDE_HEAD_TARGET_X_BY_ID: Readonly<Record<string, number>> = {
-  tobias_tanglefur: 0.793,
-  amunet_the_tomb_keeper: 0.635,
-  sigrun: 0.634,
-  durgan_forgehammer: 0.62,
-  deacon_holt: 0.593,
-  master_takeshi: 0.595,
-  aldric_the_seer: 0.608,
-  maddox: 0.586,
-  gravok: 0.808,
-  layaway: 0.557,
-};
 
 interface GuideSpeechTargetGeometry {
   readonly containerLeft: number;
@@ -276,9 +267,7 @@ export function SiteLayout({
         naturalWidth: image.naturalWidth,
         naturalHeight: image.naturalHeight,
         objectPositionY: desktop || !isRevelation ? "bottom" : "top",
-        focusX:
-          GUIDE_HEAD_TARGET_X_BY_ID[String(guide.id)] ??
-          DEFAULT_GUIDE_HEAD_TARGET_X,
+        focusX: guide.headTargetX,
         focusY: GUIDE_HEAD_TARGET_Y,
       });
       setGuideSpeechTarget((current) => {
@@ -303,7 +292,7 @@ export function SiteLayout({
       image.removeEventListener("load", update);
       observer.disconnect();
     };
-  }, [desktop, guide.id, guideUrl, isRevelation]);
+  }, [desktop, guide.headTargetX, guideUrl, isRevelation]);
 
   const measuredSpeechTarget =
     compactContentLed || hasSupplementalDialogue ? null : guideSpeechTarget;

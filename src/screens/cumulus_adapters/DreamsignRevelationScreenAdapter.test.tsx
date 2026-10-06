@@ -27,7 +27,7 @@ import {
 } from "../../testing/atlas-fixtures";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
-import { testDreamscapeId, testGuideId, testDreamsignId } from "../../types/test-identities";
+import { testDreamscapeId, testGuideArtKey, testGuideId, testDreamsignId } from "../../types/test-identities";
 
 const screenMock = vi.hoisted(() => vi.fn());
 const loggingMock = vi.hoisted(() => {
@@ -76,6 +76,8 @@ const GUIDE: DreamGuideContent = {
   homeDreamscapeId: testDreamscapeId("winterwake"),
   siteType: "DreamsignRevelation",
   portraitSource: "fixture-guide.png",
+  artKey: testGuideArtKey("fixture-guide"),
+  headTargetX: 0.6,
   dialogue: { site: ["Choose what the frost reveals."] },
   homeSpecialty: "Dreamsign Revelation",
 };

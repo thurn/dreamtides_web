@@ -18,8 +18,8 @@ import {
   transfigurationPresentationFixture,
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
-import { parseDeckEntryId, parseSiteId, type GuideId } from "../../types/identifiers";
-import { testCardId, testGuideId } from "../../types/test-identities";
+import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
+import { testCardId, testGuideArtKey, testGuideId } from "../../types/test-identities";
 import { renderInCumulus } from "../testing/render";
 
 function stubMatchMedia(matches: (query: string) => boolean): void {
@@ -54,12 +54,13 @@ function makeCard(index: number): CardData {
   };
 }
 
-function guide(id: GuideId) {
+function guide(seed: string) {
   return {
-    id,
+    id: testGuideId(seed),
     name: "Fixture Guide",
     line: "Fixture line.",
-    art: artRef.dreamGuide(id),
+    art: artRef.dreamGuide(testGuideArtKey(seed)),
+    headTargetX: 0.6,
   };
 }
 
@@ -124,7 +125,7 @@ describe("TransfigurationSiteScreen", () => {
     return {
       siteId: parseSiteId("transfiguration-site"),
       scene: null,
-      guide: guide(testGuideId("durgan_forgehammer")),
+      guide: guide("fixture-transfiguration-guide"),
       ready: true,
       isEnhanced: false,
       candidates: [candidate(1), candidate(2), candidate(3)],
@@ -374,7 +375,7 @@ describe("DuplicationSiteScreen", () => {
     return {
       siteId: parseSiteId("duplication-site"),
       scene: null,
-      guide: guide(testGuideId("deacon_holt")),
+      guide: guide("fixture-duplication-guide"),
       ready: true,
       alreadyAccepted: false,
       isEnhanced,

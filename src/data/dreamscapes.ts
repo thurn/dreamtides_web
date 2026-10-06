@@ -7,8 +7,12 @@ import type {
 import type { SiteType } from "../types/journey";
 import {
   dreamscapeIdFromUnknown,
+  guideArtKeyFromUnknown,
+  guideIdFromUnknown,
   parseDreamscapeArtKey,
   parseDreamscapeId,
+  parseGuideArtKey,
+  parseGuideId,
   type DreamscapeArtKey,
   type DreamscapeId,
   type GuideId,
@@ -101,6 +105,8 @@ export function parseDreamGuides(catalog: unknown): DreamGuideContent[] {
   }
   return catalog.guides.map((guide) => ({
     ...guide,
+    id: parseGuideId(guide.id),
+    artKey: parseGuideArtKey(guide.artKey),
     dialogue: Object.fromEntries(
       Object.entries(guide.dialogue).map(([context, lines]) => [
         context,
@@ -116,14 +122,18 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
   if (typeof value !== "object" || value === null) return false;
   if (
     !("id" in value) ||
+    !("artKey" in value) ||
     !("name" in value) ||
     !("portraitSource" in value) ||
     !("homeDreamscapeId" in value) ||
     !("siteType" in value) ||
     !("homeSpecialty" in value) ||
+    !("headTargetX" in value) ||
     !("dialogue" in value) ||
-    typeof value.id !== "string" ||
-    value.id.trim() === "" ||
+    guideIdFromUnknown(value.id) === null ||
+    guideArtKeyFromUnknown(value.artKey) === null ||
+    typeof value.headTargetX !== "number" ||
+    !(value.headTargetX >= 0 && value.headTargetX <= 1) ||
     typeof value.name !== "string" ||
     value.name.trim() === "" ||
     typeof value.portraitSource !== "string" ||

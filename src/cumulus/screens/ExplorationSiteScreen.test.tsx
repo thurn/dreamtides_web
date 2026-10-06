@@ -6,6 +6,7 @@ import { parseDeckEntryId, parseSiteId, type DeckEntryId } from "../../types/ide
 import {
   testCardId,
   testExplorationActionId,
+  testGuideArtKey,
   testGuideId,
 } from "../../types/test-identities";
 import { plainAnnotatedText } from "../../runtime/text";
@@ -66,7 +67,13 @@ function view(resolved = false): ExplorationSiteView {
   return {
     siteId: parseSiteId("exploration-site"),
     scene: null,
-    guide: { id: guideId, name: "Guide", line: "Greeting.", art: artRef.dreamGuide(guideId) },
+    guide: {
+      id: guideId,
+      name: "Guide",
+      line: "Greeting.",
+      art: artRef.dreamGuide(testGuideArtKey("layaway")),
+      headTargetX: 0.6,
+    },
     card: model(),
     fullArt: artRef.explorationCard(17),
     narrative: "A synthetic encounter waits in the dark.",

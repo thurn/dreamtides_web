@@ -426,7 +426,7 @@ function buildNodeCard(
       primary: {
         sceneArt: artRef.dreamscapeScene(boss.sceneArtKey),
         // The boss stands over the Limbo scene as its prominent figure.
-        figureArt: artRef.dreamGuide(boss.figureArtId),
+        figureArt: artRef.dreamGuide(boss.figureArtKey),
         title: bossIncarnation?.title ?? boss.fallbackTitle,
         // Title with the run's chosen Apollyon incarnation (its full name, e.g.
         // "Apollyon, the World's End"), falling back to the default epithet when
@@ -498,7 +498,7 @@ function buildNodeCard(
   return {
     primary: {
       sceneArt: artRef.dreamscapeScene(dreamscape.artKey),
-      figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
+      figureArt: guide != null ? artRef.dreamGuide(guide.artKey) : null,
       title: guide?.name ?? dreamscape.name,
       body: (() => {
         if (guide?.homeSpecialty !== undefined) {

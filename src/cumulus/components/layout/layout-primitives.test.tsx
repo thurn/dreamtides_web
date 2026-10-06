@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseSiteId } from "../../../types/identifiers";
 import {
   testDreamscapeArtKey,
+  testGuideArtKey,
   testGuideId,
 } from "../../../types/test-identities";
 import { artRef } from "../../primitives/art";
@@ -183,7 +184,8 @@ describe("SiteLayout", () => {
     id: testGuideId("guide"),
     name: "Guide",
     line: "Line",
-    art: artRef.dreamGuide(testGuideId("guide")),
+    art: artRef.dreamGuide(testGuideArtKey("guide")),
+    headTargetX: 0.6,
   };
 
   function installMatchMedia(width: number): void {
@@ -291,6 +293,46 @@ describe("SiteLayout", () => {
     expect(
       container.querySelector("[data-site-layout-speech-anchor]"),
     ).toBeNull();
+  });
+
+  it("points the measured speech anchor at the guide's head target", () => {
+    installMatchMedia(1440);
+    const rect = vi
+      .spyOn(Element.prototype, "getBoundingClientRect")
+      .mockReturnValue(new DOMRect(0, 0, 400, 800));
+    const naturalWidth = vi
+      .spyOn(HTMLImageElement.prototype, "naturalWidth", "get")
+      .mockReturnValue(400);
+    const naturalHeight = vi
+      .spyOn(HTMLImageElement.prototype, "naturalHeight", "get")
+      .mockReturnValue(800);
+    const anchorLeft = (headTargetX: number): number => {
+      const { container, unmount } = renderInCumulus(
+        <SiteLayout
+          siteId={parseSiteId("fixture")}
+          scene={null}
+          moteTint="warm"
+          guide={{ ...guide, headTargetX, presence: "speaking" }}
+          composition="balanced-gallery"
+        >
+          <div />
+        </SiteLayout>,
+      );
+      const left = Number.parseFloat(
+        container.querySelector<HTMLElement>(
+          "[data-site-layout-speech-anchor]",
+        )?.style.left ?? "",
+      );
+      unmount();
+      return left;
+    };
+    try {
+      expect(anchorLeft(0.75) - anchorLeft(0.25)).toBeCloseTo(200);
+    } finally {
+      rect.mockRestore();
+      naturalWidth.mockRestore();
+      naturalHeight.mockRestore();
+    }
   });
 });
 

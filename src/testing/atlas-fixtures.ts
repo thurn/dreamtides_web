@@ -16,6 +16,7 @@ import {
   testDreamscapeArtKey,
   testDreamscapeId,
   testFoldHash,
+  testGuideArtKey,
   testGuideId,
 } from "../types/test-identities";
 import {
@@ -296,7 +297,7 @@ export function makeSyntheticAtlasData(): AtlasData {
       fallbackIntroduction: "A synthetic boss introduction.",
       sceneArtKey: testDreamscapeArtKey("fixture-boss-scene"),
       iconArtKey: testDreamscapeArtKey("fixture-boss-icon"),
-      figureArtId: testGuideId("fixture-boss-figure"),
+      figureArtKey: testGuideArtKey("fixture-boss-figure"),
     },
     assets: {
       unrevealedFrameSource: "fixture-frame.png",

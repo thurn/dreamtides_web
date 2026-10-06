@@ -12,7 +12,7 @@ import {
   testCardId,
   testCardSubtype,
   testDreamscapeArtKey,
-  testGuideId,
+  testGuideArtKey,
 } from "../../types/test-identities";
 import type { AtlasNodeModel } from "../components/atlas/AtlasNode";
 import { artRef, resolveArtRef } from "../primitives/art";
@@ -306,7 +306,7 @@ describe("atlasPreflightImageUrls", () => {
   it("collects screen and reveal images once in first-seen order", () => {
     const icon = artRef.dreamscapeIcon(testDreamscapeArtKey("wilderveil"));
     const scene = artRef.dreamscapeScene(testDreamscapeArtKey("wilderveil"));
-    const guide = artRef.dreamGuide(testGuideId("aldric"));
+    const guide = artRef.dreamGuide(testGuideArtKey("aldric"));
     const dreamsign = artRef.dreamsign("magic-ball.png");
     const primary = {
       ...item("base", {}).primary,

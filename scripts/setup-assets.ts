@@ -350,8 +350,8 @@ function linkExplorationArt(catalog: ArtCatalog, paths: ArtPaths): void {
 
 /**
  * Dream Atlas art: each dreamscape's scene (`<id>.png`) and node icon
- * (`<id>_icon.png`), the final dream under the Atlas boss art ids, guide
- * portraits keyed by guide id, and the round frame for unrevealed nodes.
+ * (`<id>_icon.png`), the final dream under the Atlas boss art keys, guide
+ * portraits keyed by guide art key, and the round frame for unrevealed nodes.
  */
 function linkAtlasArt(catalog: ArtCatalog, paths: ArtPaths): void {
   const scenesDir = join(paths.publicDir, "dreamscapes");
@@ -464,7 +464,7 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
     }),
     dreamscapeArtNames: DREAMSCAPES.map((dreamscape) => dreamscape.artKey),
     guidePortraits: DREAM_GUIDES.map((guide) => ({
-      artName: guide.id,
+      artName: guide.artKey,
       portraitSource: guide.portraitSource,
     })),
     atlas: {
@@ -475,7 +475,7 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
       unrevealedFrameFile: ATLAS.assets.unrevealedFrameKey,
       bossSceneArtName: ATLAS.boss.sceneArtKey,
       bossIconArtName: ATLAS.boss.iconArtKey,
-      bossFigureArtName: ATLAS.boss.figureArtId,
+      bossFigureArtName: ATLAS.boss.figureArtKey,
     },
   };
 }

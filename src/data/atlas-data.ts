@@ -1,7 +1,11 @@
 import type { AtlasData } from "../types/atlas-data";
 import { atlasDocument } from "../content/documents";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
-import { parseDreamscapeArtKey, parseDreamscapeId } from "../types/identifiers";
+import {
+  parseDreamscapeArtKey,
+  parseDreamscapeId,
+  parseGuideArtKey,
+} from "../types/identifiers";
 
 export type { AtlasData } from "../types/atlas-data";
 
@@ -28,6 +32,7 @@ export function loadAtlasData(): AtlasData {
       dreamscapeId: parseDreamscapeId(raw.boss.dreamscapeId),
       sceneArtKey: parseDreamscapeArtKey(raw.boss.sceneArtKey),
       iconArtKey: parseDreamscapeArtKey(raw.boss.iconArtKey),
+      figureArtKey: parseGuideArtKey(raw.boss.figureArtKey),
     },
     contentHash: parseContentHash(raw.contentHash),
     foldHash: parseFoldHash(raw.foldHash),

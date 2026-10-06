@@ -20,6 +20,7 @@ import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import { parseDeckEntryId, type PresentationId } from "../../types/identifiers";
 import {
   testCardId,
+  testGuideArtKey,
   testGuideId,
   testPresentationId,
 } from "../../types/test-identities";
@@ -232,7 +233,8 @@ describe("DreamsignRevelationScreen", () => {
         id: testGuideId("sigrun"),
         name: "Sigrun",
         line: "Fixture line.",
-        art: artRef.dreamGuide(testGuideId("sigrun")),
+        art: artRef.dreamGuide(testGuideArtKey("sigrun")),
+        headTargetX: 0.6,
       },
       offer: [
         dreamsign("left", "eye_3.png"),

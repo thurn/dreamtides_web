@@ -9,7 +9,10 @@ import type { DreamsignView } from "../components/hud/Dreamsign";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
-import { SiteLayout } from "../components/layout/SiteLayout";
+import {
+  SiteLayout,
+  type SiteLayoutGuideView,
+} from "../components/layout/SiteLayout";
 import { type ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "../primitives/use-is-desktop";
@@ -19,20 +22,11 @@ import {
 } from "../components/overlay/DreamsignReplacementDialog";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import type { DreamsignId, GuideId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 
 /** The guide who speaks over the Revelation offer. */
-export interface DreamsignRevelationGuideView {
-  /** Stable guide id, used for QA data attributes. */
-  id: GuideId;
-  /** Display name shown in the speech bubble. */
-  name: string;
-  /** The dialog line shown in the speech bubble. */
-  line: string;
-  /** Transparent character render. */
-  art: ArtRef;
-}
+export type DreamsignRevelationGuideView = SiteLayoutGuideView;
 
 /** Everything rendered by the pure Revelation screen. */
 export interface DreamsignRevelationView {

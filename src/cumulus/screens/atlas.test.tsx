@@ -15,7 +15,7 @@ import { parseAtlasNodeId, parseDreamsignId } from "../../types/identifiers";
 import {
   testArtAssetKey,
   testDreamscapeArtKey,
-  testGuideId,
+  testGuideArtKey,
   testPresentationId,
 } from "../../types/test-identities";
 import {
@@ -110,7 +110,7 @@ function domRect(x: number, y: number, width: number, height: number): DOMRect {
 
 const KNOWN_PRIMARY: AtlasNodePrimary = {
   sceneArt: artRef.dreamscapeScene(testDreamscapeArtKey("wilderveil")),
-  figureArt: artRef.dreamGuide(testGuideId("aldric")),
+  figureArt: artRef.dreamGuide(testGuideArtKey("aldric")),
   placeName: "Wilderveil",
   guideName: "Aldric, the Seer",
   title: "Aldric, the Seer",

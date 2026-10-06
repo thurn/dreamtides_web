@@ -21,6 +21,7 @@ import {
   testDreamsignId,
   testCardId,
   testExplorationActionId,
+  testGuideArtKey,
   testGuideId,
 } from "../../types/test-identities";
 import { artRef } from "../../cumulus/primitives/art";
@@ -284,7 +285,8 @@ describe("gamble-site-logging-view-model", () => {
       id: testGuideId("fixture-guide"),
       name: "Fixture Guide",
       line: "Fixture line.",
-      art: artRef.dreamGuide(testGuideId("fixture-guide")),
+      art: artRef.dreamGuide(testGuideArtKey("fixture-guide")),
+      headTargetX: 0.6,
     },
     result: null,
     replacement: null,
