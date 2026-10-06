@@ -270,6 +270,11 @@ export interface TurnState {
   extraTurns: Side[];
   /** The next front-rank lane to resolve during the Challenge phase. */
   challengeLane: number | null;
+  /**
+   * The turn has begun and its Dreamwell phase has not: the abilities that
+   * triggered as it began resolve first. `phase` is `"dreamwell"` meanwhile.
+   */
+  beginning: boolean;
 }
 
 export interface ChallengeState {

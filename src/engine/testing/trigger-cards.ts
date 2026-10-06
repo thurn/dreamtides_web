@@ -6,7 +6,7 @@
  * emblems 700+.
  */
 import type { EmblemDefinitions, EngineAvatarDefinition, EngineCardDefinition, EngineDreamsignDefinition } from "../catalog";
-import { characterYouControl, enemyCharacter, energy, event, self, target } from "../dsl/builders";
+import { characterYouControl, enemyCharacter, energy, event, self, stackItem, target } from "../dsl/builders";
 import {
   atStartOfFirstTurn,
   atStartOfTurn,
@@ -29,6 +29,7 @@ import {
   whenLeavesPlay,
   whenLeavesVoid,
   whenMaterialize,
+  whenOpponentPlays,
   whenOpponentScores,
   whenScores,
   whenYouChallengeWith,
@@ -119,6 +120,14 @@ export const TRIGGER = {
   delayedByTrigger: character(27, 1, () => [triggered(onMaterialized(), p.delayed(whenLeavesPlay(characterYouControl()), p.gainEnergy(2)))]),
   /** "When you draw your second card in a turn, gain 1●." */
   secondDrawEnergy: character(28, 2, () => [triggered(whenDraw("you", 2), p.gainEnergy(1))]),
+  /** "Until your next turn, at the start of your turn, gain 1⍟." — a floating trigger at its own boundary. */
+  turnStartUntilNextTurn: spell(29, 0, () => [event(p.floating(atStartOfTurn(), p.gainPoints(1), untilYourNextTurn()))]),
+  /** "When the opponent plays a card, if this card is in your hand, the next time you play a card, gain 1●." — a hidden source's delayed trigger. */
+  handDelayed: character(30, 1, () => [triggered(whenOpponentPlays(), p.delayed(whenYouPlay(), p.gainEnergy(1)), { zone: "hand" })]),
+  /** "When the opponent plays a card, prevent a card the opponent controls." — a trigger that empties the stack. */
+  preventOnPlay: character(31, 2, () => [triggered(whenOpponentPlays(), p.prevent(stackItem({ controller: "opponent" })))]),
+  /** "▸Dissolved: Dissolve two enemies." — a required two-target trigger. */
+  dissolvedTwo: character(32, 2, () => [triggered(onDissolved(), p.dissolve(target(enemyCharacter(), 2)))]),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 export const TRIGGER_CARDS: readonly EngineCardDefinition[] = Object.values(TRIGGER);

@@ -95,6 +95,16 @@ describe("duration boundaries", () => {
     expect(steps[begins]?.state.floating).toEqual([]);
   });
 
+  it("ends a floating 'until your next turn' start-of-turn trigger before it can trigger at that boundary", () => {
+    const { state, ids } = board({ player: { hand: [t.turnStartUntilNextTurn.id], deck }, enemy: { deck } });
+    const start = play(state, "player", ids.player.hand[0]);
+    expect(start.floating).toHaveLength(1);
+    const next = passUntil(engine, start, (current) => at(engine, "player", "day")(current) && current.turn.turnNumber > start.turn.turnNumber);
+    expect(next.events.some((entry) => entry.kind === "triggerQueued")).toBe(false);
+    expect(next.state.floating).toEqual([]);
+    expect(next.state.sides.player.score).toBe(0);
+  });
+
   it("counts extra turns as their player's turns for 'until your next turn' (C8)", () => {
     const { state, ids } = board({ player: { back: [v.vanilla1.id], hand: [t.pumpUntilNextTurn.id], energy: 1, deck }, enemy: { deck } });
     const pumped = play(state, "player", ids.player.hand[0], [[ids.player.back[0]!]]);

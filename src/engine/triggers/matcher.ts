@@ -61,12 +61,24 @@ function cardListener(state: BattleState, id: InstanceId): Listener {
   };
 }
 
+/** The zones outside play whose cards may trigger, in trigger order. */
+const OTHER_ZONES = ["void", "hand", "deck"] as const;
+
+/** A card announced as leaving play, still in play, and the zone it is going to (`null`: it ceases to exist). */
+interface Departure {
+  readonly instance: InstanceId;
+  readonly to: Zone | null;
+}
+
 /**
  * `side`'s listeners in the fixed order: avatar, dreamsigns, characters in
  * play (B0→B9 then F0→F8), then cards in its void, hand, and deck, each zone
- * by instance number.
+ * by instance number. A `departing` card is still in play, and its listener
+ * sees it there, but it is ordered by the zone it is going to; a card going
+ * to no ordered zone (the stack, the Banished zone, or nowhere) comes after
+ * the deck (RD-hv-7x4l.17-2).
  */
-function listeners(state: BattleState, side: Side): Listener[] {
+function listeners(state: BattleState, side: Side, departing: Departure | null): Listener[] {
   const sideState = state.sides[side];
   const result: Listener[] = [];
   if (sideState.avatar !== null) {
@@ -75,11 +87,16 @@ function listeners(state: BattleState, side: Side): Listener[] {
   sideState.dreamsigns.forEach((dreamsign, index) => {
     result.push({ source: { kind: "dreamsign", side, index }, controller: side, origin: { kind: "dreamsign", id: dreamsign.id }, zone: "play", emblem: true });
   });
-  for (const id of charactersInPlay(state, side)) result.push(cardListener(state, id));
-  for (const zone of ["void", "hand", "deck"] as const) {
-    const ids = [...sideState[zone]].sort((a, b) => instanceNumber(a) - instanceNumber(b));
+  const moving = departing !== null && charactersInPlay(state, side).includes(departing.instance) ? departing : null;
+  for (const id of charactersInPlay(state, side)) {
+    if (id !== moving?.instance) result.push(cardListener(state, id));
+  }
+  for (const zone of OTHER_ZONES) {
+    const arriving = moving !== null && moving.to === zone ? [moving.instance] : [];
+    const ids = [...sideState[zone], ...arriving].sort((a, b) => instanceNumber(a) - instanceNumber(b));
     for (const id of ids) result.push(cardListener(state, id));
   }
+  if (moving !== null && !OTHER_ZONES.some((zone) => zone === moving.to)) result.push(cardListener(state, moving.instance));
   return result;
 }
 
@@ -308,8 +325,9 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent): void {
 export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   const { state } = ctx;
   if (state.turn.turnNumber === 0 || state.result !== null || !TRIGGERING.includes(event.kind)) return;
+  const departing = event.kind === "leftPlay" ? { instance: event.instance, to: event.to } : null;
   for (const side of [state.turn.active, opponent(state.turn.active)]) {
-    for (const listener of listeners(state, side)) matchListener(ctx, listener, event);
+    for (const listener of listeners(state, side, departing)) matchListener(ctx, listener, event);
     matchFloating(ctx, side, event);
   }
 }

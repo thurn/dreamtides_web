@@ -1,0 +1,5 @@
+# RD-hv-7x4l.17-2: A card leaving play for no ordered zone is ordered after its controller's deck
+- Ladder: 5 (the simplest reading consistent with D14 and RD-hv-7x4l.6-1, which order cards outside play by void, hand, then deck, and a card that has just left play by the zone it went to)
+- rules.md: § Ability Types → Trigger timing and order
+- Affects: general; every "leaves play" ability (ffec9fdd-d948-4756-b7df-39b9e982613e) when its card, or another card leaving at the same time, is banished, put on the stack, or ceases to exist
+- Why: RD-hv-7x4l.6-1 orders a card that has just left play by the zone it went to, but the order names only the void, hand, and deck. A card banished, moved to the stack, or ceasing to exist (a figment or other created card) goes to none of them. It comes after the deck in its controller's block, before that player's floating and delayed triggers, so it still triggers after every card left in play. Its ability sees the card as it was in play, as RD-hv-7x4l.6-1 requires.

@@ -152,21 +152,46 @@ export function beginNextTurn(ctx: StepContext): void {
   turn.extra = extra;
   turn.turnNumber += 1;
   resetForTurn(ctx, next);
+  // "Until your next turn" ends as that side's turn begins, extra turns
+  // included (C8), before anything triggers at the start of that turn.
+  expireAt(ctx, { at: "turnStart", side: next });
+  startTurn(ctx, extra);
+}
+
+/**
+ * Announces the turn, which triggers "at the start of your turn" abilities,
+ * and enters its Dreamwell phase. While triggers wait, the turn is
+ * `beginning` instead: they resolve first, and the Dreamwell phase begins in
+ * the next automatic step (rules § Ability Types → Triggered abilities).
+ */
+function startTurn(ctx: StepContext, extra: boolean): void {
+  const { turn } = ctx.state;
+  turn.phase = "dreamwell";
   ctx.emit({
     kind: "turnStarted",
-    side: next,
+    side: turn.active,
     round: turn.round,
     turnNumber: turn.turnNumber,
     extra,
   });
-  // "Until your next turn" ends as that side's turn begins, extra turns included (C8).
-  expireAt(ctx, { at: "turnStart", side: next });
+  if (ctx.state.triggerQueue.length > 0) {
+    turn.beginning = true;
+    return;
+  }
   enterPhase(ctx, "dreamwell");
 }
 
-/** Leaves the current phase and enters the next, or starts the next turn after Ending. */
+/**
+ * Leaves the current phase and enters the next, or starts the next turn
+ * after Ending. A turn that is still beginning enters its Dreamwell phase.
+ */
 export function advancePhase(ctx: StepContext): void {
   const { state } = ctx;
+  if (state.turn.beginning) {
+    state.turn.beginning = false;
+    enterPhase(ctx, "dreamwell");
+    return;
+  }
   const current = state.turn.phase;
   leavePhase(ctx, current);
   if (current === "ending") {
@@ -185,12 +210,5 @@ export function beginFirstTurn(ctx: StepContext): void {
   const { state } = ctx;
   state.turn.turnNumber = 1;
   resetForTurn(ctx, state.turn.active);
-  ctx.emit({
-    kind: "turnStarted",
-    side: state.turn.active,
-    round: 1,
-    turnNumber: 1,
-    extra: false,
-  });
-  enterPhase(ctx, "dreamwell");
+  startTurn(ctx, false);
 }

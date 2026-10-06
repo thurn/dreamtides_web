@@ -61,6 +61,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
       lastNormal: config.startingSide,
       extraTurns: [],
       challengeLane: null,
+      beginning: false,
     },
     sides: { player: emptySide(), enemy: emptySide() },
     instances: {},

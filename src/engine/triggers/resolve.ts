@@ -8,9 +8,16 @@ import { triggerBody } from "./body";
 /**
  * Resolves `trigger`. Its intervening "if" is checked again first; if it no
  * longer holds, the trigger does nothing. Triggers do not use the stack, so
- * their modes and targets are chosen now, as prompts inside this step.
+ * their modes and targets are chosen now, as prompts inside this step. A
+ * trigger that empties the stack, by preventing its last card, ends the
+ * priority window with it.
  */
 export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): void {
+  resolveBody(ctx, trigger);
+  if (ctx.state.stack.length === 0) ctx.state.priority = null;
+}
+
+function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   const { source, controller, origin, ability, node, subject } = trigger;
   const body = triggerBody(ctx.catalog, origin, ability, node);
   const applied =

@@ -232,8 +232,8 @@ export function chooseTargets(
  * Choices for an effect made as it resolves, for a triggered ability, which
  * does not use the stack: modes, then targets, in walk order. A required
  * choice with no legal option makes that part of the effect do nothing (rules
- * § Targeting): a target spec with too few candidates takes those it has,
- * none without a prompt, and a modal node with no legal mode makes the whole
+ * § Targeting): a target spec with fewer candidates than it requires gets no
+ * targets and no prompt, and a modal node with no legal mode makes the whole
  * effect do nothing (`null`). Each emits noLegalTarget.
  */
 export function chooseOnResolution(
@@ -271,14 +271,17 @@ export function chooseOnResolution(
   const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
     const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source);
     const bounds = targetBounds(spec);
-    if (candidates.length < bounds.min) ctx.emit({ kind: "noLegalTarget", source });
+    if (candidates.length < bounds.min) {
+      ctx.emit({ kind: "noLegalTarget", source });
+      return [];
+    }
     if (candidates.length === 0) return [];
     const chosen = ctx.choose<ChooseTargetsPrompt>({
       kind: "chooseTargets",
       side: controller,
       purpose: purpose("target"),
       candidates,
-      min: Math.min(bounds.min, candidates.length),
+      min: bounds.min,
       max: Math.min(bounds.max, candidates.length),
     });
     return [...chosen];

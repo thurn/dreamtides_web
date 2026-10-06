@@ -43,6 +43,8 @@ import { sparkGained, type SparkGainedEvent } from "./kinds/spark-gained";
 import { triggerQueued, type TriggerQueuedEvent } from "./kinds/trigger-queued";
 import { triggerResolved, type TriggerResolvedEvent } from "./kinds/trigger-resolved";
 import { turnStarted, type TurnStartedEvent } from "./kinds/turn-started";
+import type { Side } from "../state/ids";
+import type { BattleState } from "../state/types";
 import type { EventDefinition } from "./types";
 
 export type EngineEvent =
@@ -138,4 +140,10 @@ export function eventDefinition<K extends EngineEventKind>(
   kind: K,
 ): EventDefinition<EventOf<K>> {
   return EVENT_DEFINITIONS[kind] as EventDefinition<EventOf<K>>;
+}
+
+/** Whether `viewer` may see `event`'s details: it is public, or private to `viewer`. */
+export function eventVisibleTo(event: EngineEvent, viewer: Side, state: BattleState): boolean {
+  const privateTo = (EVENT_DEFINITIONS[event.kind] as EventDefinition<EngineEvent>).privateTo(event, state);
+  return privateTo === null || privateTo === viewer;
 }

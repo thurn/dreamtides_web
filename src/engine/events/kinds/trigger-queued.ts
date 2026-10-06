@@ -13,14 +13,17 @@ export interface TriggerQueuedEvent {
   readonly subject: InstanceId | null;
 }
 
-/** A card's ability that triggers from a hand or deck is private to the side holding that zone. */
-export function triggerPrivacy(source: AbilitySource, controller: Side, state: BattleState): Side | null {
+/**
+ * An event naming a card in a hand or deck as its source is private to the
+ * side holding that zone; other sources are public.
+ */
+export function sourcePrivacy(source: AbilitySource, state: BattleState): Side | null {
   if (typeof source !== "string") return null;
-  const zone = state.instances[source]?.zone;
-  return zone === "hand" || zone === "deck" ? controller : null;
+  const instance = state.instances[source];
+  return instance?.zone === "hand" || instance?.zone === "deck" ? instance.controller : null;
 }
 
 export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
   kind: "triggerQueued",
-  privateTo: (event, state) => triggerPrivacy(event.source, event.controller, state),
+  privateTo: (event, state) => sourcePrivacy(event.source, state),
 };

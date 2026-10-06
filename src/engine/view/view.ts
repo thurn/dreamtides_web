@@ -57,7 +57,8 @@ export interface PayableEffectView {
   readonly payer: Side;
   /** Energy the payer pays to end it. */
   readonly cost: number;
-  readonly source: AbilitySource;
+  /** A source the viewer cannot see is `null`. */
+  readonly source: AbilitySource | null;
   /** The characters whose changes from the effect end when it ends. */
   readonly affects: readonly InstanceId[];
 }
@@ -224,7 +225,7 @@ export function view(state: BattleState, viewer: Side): BattleView {
       controller: opponent(effect.payer),
       payer: effect.payer,
       cost: effect.cost,
-      source: copy(effect.source),
+      source: visibleSource(effect.source) ? copy(effect.source) : null,
       affects: effect.affects.filter(visible),
     })),
     floating: state.floating.filter(floatingVisible).map((effect) => copy(effect)),

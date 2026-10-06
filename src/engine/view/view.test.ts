@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
+import { eventVisibleTo, type EngineEvent } from "../events";
 import { serializeState, stateHash } from "../state/hash";
 import type { CardId, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
@@ -217,6 +218,38 @@ describe("view", () => {
     expect(seen.sides.player.dreamsigns).toHaveLength(1);
     expect(seen.payable).toHaveLength(1);
   });
+  it("hides the source of an effect a side may pay to end when the viewer cannot see it", () => {
+    const { state } = fixture();
+    const enemyFront = state.sides.enemy.frontRank[0]!;
+    const playerHand = state.sides.player.hand[0];
+    state.payable = [{ id: "e1", payer: "enemy", cost: 2, source: playerHand, affects: [enemyFront] }];
+    const enemy = view(state, "enemy");
+    expect(enemy.payable).toEqual([{ id: "e1", controller: "player", payer: "enemy", cost: 2, source: null, affects: [enemyFront] }]);
+    expect(strings(enemy).has(playerHand)).toBe(false);
+    expect(view(state, "player").payable[0]?.source).toBe(playerHand);
+  });
+
+  it("keeps effect events from a card in a hidden zone private to the side holding it", () => {
+    const { state } = fixture();
+    const enemyFront = state.sides.enemy.frontRank[0]!;
+    const playerHand = state.sides.player.hand[0];
+    const origin = { kind: "card" as const, cardId: state.instances[playerHand].cardId, variant: { amplified: false } };
+    const hiddenSource: EngineEvent[] = [
+      { kind: "effectStarted", effect: "e5", controller: "player", source: playerHand, expiry: { at: "never" }, change: { kind: "trigger", ref: { origin, ability: 0, node: 0 }, once: true } },
+      { kind: "payableEffectRegistered", effect: "e6", payer: "enemy", cost: 1, source: playerHand, affects: [enemyFront] },
+    ];
+    for (const event of hiddenSource) {
+      expect(eventVisibleTo(event, "player", state)).toBe(true);
+      expect(eventVisibleTo(event, "enemy", state)).toBe(false);
+    }
+    const avatar = { kind: "avatar" as const, side: "player" as const };
+    const publicSource: EngineEvent[] = [
+      { kind: "effectStarted", effect: "e7", controller: "player", source: avatar, expiry: { at: "endOfTurn" }, change: { kind: "spark", instance: enemyFront, amount: 1 } },
+      { kind: "payableEffectRegistered", effect: "e8", payer: "enemy", cost: 1, source: avatar, affects: [enemyFront] },
+    ];
+    for (const event of publicSource) expect(eventVisibleTo(event, "enemy", state)).toBe(true);
+  });
+
   it("shows floating effects and queued triggers, hiding cards the viewer cannot see", () => {
     const { state } = fixture();
     const enemyFront = state.sides.enemy.frontRank[0]!;

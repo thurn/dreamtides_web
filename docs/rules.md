@@ -539,7 +539,9 @@ target, such as "Dissolve all characters", still affect it.
 ability cannot be activated, if a choice it requires when it is played — such
 as a target — has no legal option. If a required choice has no legal option when
 the card or ability resolves, that part of its effect does nothing; the rest of
-the effect still happens.
+the effect still happens. A choice of a set number of targets, such as "two
+enemies", has no legal option while fewer than that many are available; a
+choice of "up to" a number always has one.
 
 ## Keywords and Effects
 
@@ -671,9 +673,9 @@ directly into play satisfies only ▸Materialized. Combined triggers such as
 "▸Materialized, ▸Dawn" fire on both occasions. "When you play your second event
 in a turn" counts only the matching cards that player played this turn,
 including the one just played; copies are not played and are not counted.
-"At the start of your turn" abilities trigger as each of your turns begins,
-before its Dreamwell phase; "At the start of your first turn" triggers only as
-your first turn of the battle begins.
+"At the start of your turn" abilities trigger as each of your turns begins and
+resolve before its Dreamwell phase; "At the start of your first turn" triggers
+only as your first turn of the battle begins.
 
 **Where triggered abilities work:** A triggered ability works while its card is
 in play. An ability that names another zone, such as "▸Dawn: If this card is in
@@ -727,7 +729,8 @@ cannot be responded to.
   cards in other zones: void, then hand, then deck, each zone in the order the
   cards were created for the battle — and then their floating and delayed
   triggers, in the order they were created. A card that has just left play is
-  ordered by the zone it went to.
+  ordered by the zone it went to; one that went to the stack or the Banished
+  zone, or ceased to exist, comes after that player's deck.
 - Players never choose the order of triggered abilities.
 
 **Activated abilities** — Abilities with a cost the controller chooses to pay,
@@ -755,7 +758,8 @@ changes are at that time. Extra turns count as their player's turns.
   An effect of this kind that begins later in the Ending phase ends as the turn
   ends.
 - **"Until your next turn"** ends as the next turn of the player who controlled
-  the effect begins, before its Dreamwell phase.
+  the effect begins, before anything triggers at the start of that turn and
+  before its Dreamwell phase.
 - **"Until the next Day phase"** ends as the next Day phase begins, whichever
   player's turn it is in.
 - **"While this is in play"** ends as its source leaves play. If its source is

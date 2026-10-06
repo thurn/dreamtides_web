@@ -1,6 +1,6 @@
 import type { AbilitySource, Side } from "../../state/ids";
 import type { EventDefinition } from "../types";
-import { triggerPrivacy } from "./trigger-queued";
+import { sourcePrivacy } from "./trigger-queued";
 
 /**
  * A queued trigger began resolving. `applied` is false when its intervening
@@ -17,5 +17,5 @@ export interface TriggerResolvedEvent {
 
 export const triggerResolved: EventDefinition<TriggerResolvedEvent> = {
   kind: "triggerResolved",
-  privateTo: (event, state) => triggerPrivacy(event.source, event.controller, state),
+  privateTo: (event, state) => sourcePrivacy(event.source, state),
 };
