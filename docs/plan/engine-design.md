@@ -90,7 +90,7 @@ interface BattleState {
   oncePerTurn: string[];
   challenge: { challengers: InstanceId[]; blockers: Record<InstanceId, InstanceId> } | null;
   loops: LoopTracker;
-  result: { kind: "victory" | "draw"; winner?: Side; reason: EndReason } | null;
+  result: { kind: "victory"; winner: Side; reason: "score" } | { kind: "draw"; reason: EndReason } | null;
 }
 
 interface SideState {

@@ -197,7 +197,7 @@ export interface BattleView {
   readonly dreamwell: { readonly remaining: number; readonly catalog: readonly DreamwellCardId[] };
   readonly challenge: Readonly<ChallengeState> | null;
   readonly loop: LoopView | null;
-  readonly result: Readonly<BattleResult> | null;
+  readonly result: BattleResult | null;
 }
 
 /** A deep copy of plain JSON data. */

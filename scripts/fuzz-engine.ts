@@ -83,7 +83,7 @@ for (let index = first; index < first + games; index++) {
     steps += game.steps;
     prompts += game.prompts;
     const result = game.result;
-    if (result?.kind === "victory" && result.winner !== undefined) results[result.winner] += 1;
+    if (result?.kind === "victory") results[result.winner] += 1;
     else if (result?.kind === "draw") results.draw += 1;
   }
   if (failure !== null) {

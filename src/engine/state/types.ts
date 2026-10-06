@@ -371,11 +371,13 @@ export interface DreamwellState {
 
 export type EndReason = "score" | "turnLimit" | "resolutionCap" | "mandatoryLoop";
 
-export interface BattleResult {
-  readonly kind: "victory" | "draw";
-  readonly winner?: Side;
-  readonly reason: EndReason;
-}
+/**
+ * How a battle ended: a side wins only by reaching the score threshold (P5);
+ * every other ending, and both sides reaching it at once, is a draw.
+ */
+export type BattleResult =
+  | { readonly kind: "victory"; readonly winner: Side; readonly reason: "score" }
+  | { readonly kind: "draw"; readonly reason: EndReason };
 
 /**
  * The complete state of one battle. Plain JSON data: cloning, hashing, and
