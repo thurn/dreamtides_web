@@ -10,8 +10,83 @@
 import { canonicalHash, type StateHash } from "../state/hash";
 import type { Side } from "../state/ids";
 import { opponent, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, FloatingEffect } from "../state/types";
+import type { BattleState, CardInstance, FloatingEffect, SideState } from "../state/types";
 import type { LoopResources, LoopSignature, SideResources } from "./types";
+
+/**
+ * How the loop signature treats a state field:
+ * - `position`: part of the position, hashed into the signature;
+ * - `resource`: a monotone quantity an optional loop may gain or spend, or a
+ *   counter that only advances, abstracted away;
+ * - `bookkeeping`: never affects play, or is fixed for the whole battle, and
+ *   is ignored.
+ */
+type SignatureRole = "position" | "resource" | "bookkeeping";
+
+/*
+ * The role of every field of `SideState` and `BattleState`: the compiler
+ * flags a field added to either interface until it is classified here.
+ */
+const SIDE_FIELDS = {
+  score: "resource",
+  currentEnergy: "resource",
+  maxEnergy: "resource",
+  fatigueCount: "position",
+  deck: "resource",
+  hand: "position",
+  void: "resource",
+  banished: "position",
+  backRank: "position",
+  frontRank: "position",
+  avatar: "position",
+  dreamsigns: "position",
+} as const satisfies Record<keyof SideState, SignatureRole>;
+
+const STATE_FIELDS = {
+  version: "bookkeeping",
+  seed: "bookkeeping",
+  rng: "resource",
+  nextInstance: "resource",
+  clock: "bookkeeping",
+  config: "bookkeeping",
+  turn: "position",
+  sides: "position",
+  /** Projected: deck and void instances are dropped, and counters and gained spark zeroed. */
+  instances: "position",
+  /** Which hidden cards each side has seen informs no rule. */
+  knownTo: "bookkeeping",
+  stack: "position",
+  priority: "position",
+  payable: "position",
+  triggerQueue: "position",
+  floating: "position",
+  /** Cards played and drawn only accumulate within a turn. */
+  turnLog: "resource",
+  nextEffect: "resource",
+  oncePerTurn: "position",
+  dreamwell: "position",
+  challenge: "position",
+  automaticSteps: "bookkeeping",
+  loops: "bookkeeping",
+  result: "position",
+} as const satisfies Record<keyof BattleState, SignatureRole>;
+
+/** The fields of a table with the `position` role. */
+type PositionField<Fields extends Readonly<Record<string, SignatureRole>>> = {
+  [K in keyof Fields]: Fields[K] extends "position" ? K : never;
+}[keyof Fields];
+
+function positionFields<Fields extends Readonly<Record<string, SignatureRole>>>(fields: Fields): readonly PositionField<Fields>[] {
+  return Object.keys(fields).filter((key) => fields[key] === "position") as PositionField<Fields>[];
+}
+
+const SIDE_POSITION = positionFields(SIDE_FIELDS);
+const STATE_POSITION = positionFields(STATE_FIELDS);
+
+/** The values of `fields` in `value`, keyed by field. */
+function pick<T, K extends keyof T & string>(value: T, fields: readonly K[]): Record<K, T[K]> {
+  return Object.fromEntries(fields.map((field) => [field, value[field]])) as Record<K, T[K]>;
+}
 
 /** Each timestamp's rank among `values`, so equal orders give equal ranks. */
 function ranks(values: readonly number[]): Map<number, number> {
@@ -40,36 +115,23 @@ function timestampRanks(instances: readonly CardInstance[], floating: readonly F
 }
 
 /**
- * The loop signature of a checkpoint: every part of the state except the
- * monotone resources (scores, current and maximum energy, counters, gained
- * spark), the deck and void contents, the turn counters, the minted-id and
- * random-stream counters, and bookkeeping.
+ * The loop signature of a checkpoint: the `position` fields of the state and
+ * of each side (`STATE_FIELDS`, `SIDE_FIELDS`), with the instances outside
+ * decks and voids, their counters and gained spark zeroed, and zone-entry
+ * timestamps replaced by their ranks.
  */
 export function loopSignature(state: BattleState): LoopSignature {
   const instances = Object.values(state.instances).filter((instance) => instance.zone !== "deck" && instance.zone !== "void");
   const rank = timestampRanks(instances, state.floating);
-  const side = (which: Side) => {
-    const { fatigueCount, hand, banished, backRank, frontRank, avatar, dreamsigns } = state.sides[which];
-    return { fatigueCount, hand, banished, backRank, frontRank, avatar, dreamsigns };
-  };
-  const projection = {
-    turn: state.turn,
-    sides: { player: side("player"), enemy: side("enemy") },
+  const projected = {
+    sides: { player: pick(state.sides.player, SIDE_POSITION), enemy: pick(state.sides.enemy, SIDE_POSITION) },
     instances: rankedInstances(instances, rank, (instance) => ({
       ...instance,
       status: { ...instance.status, counters: 0, gainedSpark: 0 },
     })),
-    stack: state.stack,
-    priority: state.priority,
-    payable: state.payable,
-    triggerQueue: state.triggerQueue,
     floating: rankedFloating(state.floating, rank),
-    oncePerTurn: state.oncePerTurn,
-    dreamwell: state.dreamwell,
-    challenge: state.challenge,
-    result: state.result,
-  };
-  return canonicalHash<LoopSignature>(projection);
+  } satisfies Partial<Record<PositionField<typeof STATE_FIELDS>, unknown>>;
+  return canonicalHash<LoopSignature>({ ...pick(state, STATE_POSITION), ...projected });
 }
 
 /** Each side's monotone resources. */
