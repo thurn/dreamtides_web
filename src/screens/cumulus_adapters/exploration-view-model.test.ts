@@ -450,7 +450,10 @@ describe("exploration-view-model", () => {
             {
               actionId: action.id,
               canonicalMechanicId: "purge-deck-entry",
-              starterCardPreparation,
+              preparation: {
+                kind: "starter-card",
+                plan: starterCardPreparation,
+              },
               offeredCardIds: [],
               offeredDeckEntryIds:
                 action.effectKind === "purge-starter-card"

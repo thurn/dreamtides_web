@@ -103,7 +103,7 @@ describe("exploration logging view model", () => {
           selectionKey: preparation.selectionKey,
           selectionSignature: preparation.planSignature,
           selectionTraces: preparation.selectorTraces,
-          compoundActionPreparation: preparation,
+          preparation: { kind: "compound-action", plan: preparation },
           offeredCardIds: [],
           offeredDeckEntryIds: preparation.targets.map(
             (target) => target.entryId,

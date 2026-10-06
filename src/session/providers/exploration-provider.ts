@@ -52,6 +52,7 @@ import {
   prepareExplorationSiteInsertion,
   prepareExplorationSiteTypeChoice,
 } from "../../exploration/site-insertion-plan";
+import { explorationOfferPlan } from "../../exploration/offer-usability";
 import {
   prepareExplorationDreamsignPlan,
   resolveExplorationDreamsignPlan,
@@ -70,7 +71,6 @@ import type {
   DeckEntry,
   Dreamsign,
   ExplorationActionOfferRuntime,
-  ExplorationEssencePreparation,
   ExplorationCardKeywordChange,
   ExplorationResolution,
   ExplorationSiteRuntime,
@@ -509,7 +509,7 @@ function buildCompoundActionOffer(input: {
   offer.selectionKey = preparation.selectionKey;
   offer.selectionSignature = preparation.planSignature;
   offer.selectionTraces = [...preparation.selectorTraces];
-  offer.compoundActionPreparation = preparation;
+  offer.preparation = { kind: "compound-action", plan: preparation };
   switch (preparation.kind) {
     case "all-card-transfiguration":
       offer.transfigurationByEntryId = Object.fromEntries(
@@ -587,7 +587,7 @@ function buildDisclosedDeckTargetOffer(input: {
     ...(preparation.selectorTrace === undefined
       ? {}
       : { selectionTrace: preparation.selectorTrace }),
-    disclosedDeckTargetPreparation: preparation,
+    preparation: { kind: "disclosed-deck-target", plan: preparation },
     offeredDeckEntryIds:
       preparation.target === null ? [] : [preparation.target.entryId],
   };
@@ -795,8 +795,9 @@ function essenceSelectionSignature(
     actionId: action.id,
     effectKind: action.effectKind,
     essence: action.essence ?? null,
-    preparedEssenceAmount: offer.preparedEssenceAmount ?? null,
-    essencePreparation: offer.essencePreparation ?? null,
+    preparedEssenceAmount:
+      offer.preparation?.kind === "essence" ? offer.preparation.amount : null,
+    essencePreparation: explorationOfferPlan(offer, "essence") ?? null,
   });
 }
 
@@ -840,17 +841,20 @@ function buildEssenceMutationOffer(input: {
       actionId: action.id,
     });
     const stream = createRewardSelectionStream(request, ESSENCE_AMOUNT_PURPOSE);
-    offer.preparedEssenceAmount = mapDeterministicDrawToInclusiveInteger(
-      stream.draw(),
-      minimumEssence as number,
-      maximumEssence as number,
-    );
-    offer.essencePreparation = {
-      minimumEssence: minimumEssence as number,
-      maximumEssence: maximumEssence as number,
-      purpose: ESSENCE_AMOUNT_PURPOSE,
-      saltParts: [...stream.saltParts],
-      drawsConsumed: stream.drawsConsumed(),
+    offer.preparation = {
+      kind: "essence",
+      amount: mapDeterministicDrawToInclusiveInteger(
+        stream.draw(),
+        minimumEssence as number,
+        maximumEssence as number,
+      ),
+      plan: {
+        minimumEssence: minimumEssence as number,
+        maximumEssence: maximumEssence as number,
+        purpose: ESSENCE_AMOUNT_PURPOSE,
+        saltParts: [...stream.saltParts],
+        drawsConsumed: stream.drawsConsumed(),
+      },
     };
   }
   offer.selectionSignature = essenceSelectionSignature(
@@ -924,7 +928,7 @@ function buildActionOffer(
       selectionContentRevision: context.selectionContentRevision,
       selectionKey: parseSelectionKey(action.id),
       selectionSignature: preparation.planSignature,
-      siteInsertionPreparation: preparation,
+      preparation: { kind: "site-insertion", plan: preparation },
     };
   }
 
@@ -956,7 +960,7 @@ function buildActionOffer(
     return {
       ...withSelection(offer, selected),
       selectionSignature: preparation.planSignature,
-      siteTypeChoicePreparation: preparation,
+      preparation: { kind: "site-type-choice", plan: preparation },
     };
   }
 
@@ -971,9 +975,9 @@ function buildActionOffer(
       site,
       content,
     });
-    const preparedOffer = {
+    const preparedOffer: ExplorationActionOfferRuntime = {
       ...offer,
-      canonicalMechanicId: "gain-dreamsign" as const,
+      canonicalMechanicId: "gain-dreamsign",
       selectionPolicyId:
         planned.preparation.kind === "fixed-gain"
           ? ("fixed" as const)
@@ -984,7 +988,7 @@ function buildActionOffer(
       selectionRulesVersion: SELECTION_RULES_VERSION,
       selectionContentRevision: context.selectionContentRevision,
       selectionKey: parseSelectionKey(action.id),
-      dreamsignPreparation: planned.preparation,
+      preparation: { kind: "dreamsign", plan: planned.preparation },
       offeredDreamsignIds:
         planned.preparation.kind === "offered-gain" ||
         planned.preparation.kind === "offered-replacement"
@@ -1021,7 +1025,7 @@ function buildActionOffer(
       selectionKey: preparation.selectionKey,
       selectionSignature: preparation.planSignature,
       selectionTraces: [...preparation.selectorTraces],
-      multiCardTransfigurationPreparation: preparation,
+      preparation: { kind: "multi-card-transfiguration", plan: preparation },
       offeredDeckEntryIds: [],
       transfigurationByEntryId: Object.fromEntries(
         preparation.targets.map((target) => [
@@ -1051,7 +1055,7 @@ function buildActionOffer(
       selectionKey: preparation.selectionKey,
       selectionSignature: preparation.planSignature,
       selectionTraces: [...preparation.selectorTraces],
-      multiCardReplacementPreparation: preparation,
+      preparation: { kind: "multi-card-replacement", plan: preparation },
       offeredDeckEntryIds: [],
       replacementCardIdByEntryId: {},
     };
@@ -1099,7 +1103,7 @@ function buildActionOffer(
       ...(preparation.selectorTrace === undefined
         ? {}
         : { selectionTrace: preparation.selectorTrace }),
-      randomDeckTargetPreparation: preparation,
+      preparation: { kind: "random-deck-target", plan: preparation },
       offeredDeckEntryIds: [],
     };
   }
@@ -1123,7 +1127,7 @@ function buildActionOffer(
       selectionKey: preparation.selectionKey,
       selectionSignature: preparation.planSignature,
       selectionTraces: [...preparation.selectorTraces],
-      starterCardTransfigurationPreparation: preparation,
+      preparation: { kind: "starter-card-transfiguration", plan: preparation },
       offeredDeckEntryIds: [],
       transfigurationByEntryId: Object.fromEntries(
         preparation.targets.map((target) => [
@@ -1151,7 +1155,7 @@ function buildActionOffer(
       selectionKey: preparation.selectionKey,
       selectionSignature: preparation.planSignature,
       selectionTraces: [...preparation.selectorTraces],
-      starterCardPreparation: preparation,
+      preparation: { kind: "starter-card", plan: preparation },
       offeredDeckEntryIds:
         action.effectKind === "purge-starter-card" &&
         preparation.unavailableReason === undefined
@@ -1421,18 +1425,9 @@ function explorationEncounterSignature(
     actionOffers: actionOffers.map((offer) => ({
       actionId: offer.actionId,
       signature:
-        offer.dreamsignPreparation?.planSignature ??
-        offer.starterCardPreparation?.planSignature ??
-        offer.multiCardTransfigurationPreparation?.planSignature ??
-        offer.multiCardReplacementPreparation?.planSignature ??
-        offer.disclosedDeckTargetPreparation?.planSignature ??
-        offer.randomDeckTargetPreparation?.planSignature ??
-        offer.compoundActionPreparation?.planSignature ??
-        offer.starterCardTransfigurationPreparation?.planSignature ??
-        offer.siteInsertionPreparation?.planSignature ??
-        offer.siteTypeChoicePreparation?.planSignature ??
-        offer.selectionSignature ??
-        null,
+        offer.preparation === undefined || offer.preparation.kind === "essence"
+          ? (offer.selectionSignature ?? null)
+          : offer.preparation.plan.planSignature,
     })),
   });
 }
@@ -1729,8 +1724,10 @@ function validEssenceMutationOffer(input: {
   if (action.effectKind === "gain-random-essence") {
     const minimumEssence = action.minimumEssence;
     const maximumEssence = action.maximumEssence;
-    const preparation = offer.essencePreparation;
-    const amount = offer.preparedEssenceAmount;
+    const essence =
+      offer.preparation?.kind === "essence" ? offer.preparation : undefined;
+    const preparation = essence?.plan;
+    const amount = essence?.amount;
     if (
       offer.selectionPolicyId !== "uniform" ||
       !Number.isInteger(minimumEssence) ||
@@ -1762,8 +1759,7 @@ function validEssenceMutationOffer(input: {
     }
   } else if (
     offer.selectionPolicyId !== undefined ||
-    offer.preparedEssenceAmount !== undefined ||
-    offer.essencePreparation !== undefined
+    offer.preparation?.kind === "essence"
   ) {
     return false;
   }
@@ -1938,7 +1934,7 @@ export function resolveExplorationChoice(input: {
 
   const compoundKind = explorationCompoundActionKind(action.effectKind);
   if (compoundKind !== null) {
-    const preparation = offer.compoundActionPreparation;
+    const preparation = explorationOfferPlan(offer, "compound-action");
     const expectedOffer = buildCompoundActionOffer({
       action,
       journey,
@@ -1946,7 +1942,10 @@ export function resolveExplorationChoice(input: {
       site,
       encounterCardId: runtime.encounterCardId,
     });
-    const expectedPreparation = expectedOffer?.compoundActionPreparation;
+    const expectedPreparation = explorationOfferPlan(
+      expectedOffer,
+      "compound-action",
+    );
     if (
       preparation === undefined ||
       expectedOffer === null ||
@@ -2394,7 +2393,7 @@ export function resolveExplorationChoice(input: {
   }
 
   if (isExplorationMultiCardReplacementEffect(action)) {
-    const preparation = offer.multiCardReplacementPreparation;
+    const preparation = explorationOfferPlan(offer, "multi-card-replacement");
     const expectedPreparation = prepareMultiCardReplacementPlan({
       actionId: action.id,
       encounterCardId: runtime.encounterCardId,
@@ -2509,7 +2508,7 @@ export function resolveExplorationChoice(input: {
   ) {
     const cardType = action.cardType;
     if (cardType !== "Character" && cardType !== "Event") return null;
-    const preparation = offer.disclosedDeckTargetPreparation;
+    const preparation = explorationOfferPlan(offer, "disclosed-deck-target");
     const expectedPreparation = prepareExplorationDisclosedDeckTargetPlan({
       effectKind: action.effectKind,
       cardType,
@@ -2544,15 +2543,6 @@ export function resolveExplorationChoice(input: {
         preparation,
         expectedPreparation,
       ) ||
-      offer.randomDeckTargetPreparation !== undefined ||
-      offer.multiCardReplacementPreparation !== undefined ||
-      offer.multiCardTransfigurationPreparation !== undefined ||
-      offer.starterCardPreparation !== undefined ||
-      offer.starterCardTransfigurationPreparation !== undefined ||
-      offer.dreamsignPreparation !== undefined ||
-      offer.siteInsertionPreparation !== undefined ||
-      offer.siteTypeChoicePreparation !== undefined ||
-      offer.compoundActionPreparation !== undefined ||
       offer.offeredCardIds.length !== 0 ||
       offer.packCardIds.length !== 0 ||
       Object.keys(offer.replacementCardIdByEntryId).length !== 0 ||
@@ -2610,7 +2600,7 @@ export function resolveExplorationChoice(input: {
   }
 
   if (isExplorationRandomDeckTargetEffect(action)) {
-    const preparation = offer.randomDeckTargetPreparation;
+    const preparation = explorationOfferPlan(offer, "random-deck-target");
     const expectedPreparation = prepareExplorationRandomDeckTargetPlan({
       effectKind: action.effectKind,
       predicate: action.predicate,
@@ -2639,15 +2629,6 @@ export function resolveExplorationChoice(input: {
       offer.selectionKey !== expectedPreparation.selectionKey ||
       offer.selectionSignature !== preparation.planSignature ||
       !equalStrings(offer.offeredDeckEntryIds ?? [], []) ||
-      offer.disclosedDeckTargetPreparation !== undefined ||
-      offer.multiCardReplacementPreparation !== undefined ||
-      offer.multiCardTransfigurationPreparation !== undefined ||
-      offer.starterCardPreparation !== undefined ||
-      offer.starterCardTransfigurationPreparation !== undefined ||
-      offer.dreamsignPreparation !== undefined ||
-      offer.siteInsertionPreparation !== undefined ||
-      offer.siteTypeChoicePreparation !== undefined ||
-      offer.compoundActionPreparation !== undefined ||
       offer.offeredCardIds.length !== 0 ||
       offer.packCardIds.length !== 0 ||
       Object.keys(offer.replacementCardIdByEntryId).length !== 0 ||
@@ -2818,7 +2799,10 @@ export function resolveExplorationChoice(input: {
   }
 
   if (isExplorationMultiCardTransfigurationEffect(action)) {
-    const preparation = offer.multiCardTransfigurationPreparation;
+    const preparation = explorationOfferPlan(
+      offer,
+      "multi-card-transfiguration",
+    );
     const expectedPreparation = prepareExplorationMultiCardTransfigurationPlan({
       effectKind: action.effectKind,
       predicate: action.predicate,
@@ -3002,7 +2986,10 @@ export function resolveExplorationChoice(input: {
   }
 
   if (isExplorationStarterCardTransfigurationEffectKind(action.effectKind)) {
-    const preparation = offer.starterCardTransfigurationPreparation;
+    const preparation = explorationOfferPlan(
+      offer,
+      "starter-card-transfiguration",
+    );
     const expectedPreparation =
       prepareExplorationStarterCardTransfigurationPlan({
         effectKind: action.effectKind,
@@ -3098,7 +3085,7 @@ export function resolveExplorationChoice(input: {
   }
 
   if (isExplorationStarterCardEffectKind(action.effectKind)) {
-    const preparation = offer.starterCardPreparation;
+    const preparation = explorationOfferPlan(offer, "starter-card");
     const expectedPreparation = prepareExplorationStarterCardPlan({
       effectKind: action.effectKind,
       predicate: action.predicate,
@@ -3249,7 +3236,7 @@ export function resolveExplorationChoice(input: {
   }
 
   if (isExplorationDreamsignEffectKind(action.effectKind)) {
-    const preparation = offer.dreamsignPreparation;
+    const preparation = explorationOfferPlan(offer, "dreamsign");
     const expectedPolicy =
       action.effectKind === "gain-nightmare-and-dreamsign"
         ? "fixed"
@@ -3403,7 +3390,8 @@ export function resolveExplorationChoice(input: {
       break;
     }
     case "gain-random-essence": {
-      const amount = offer.preparedEssenceAmount;
+      const essence =
+        offer.preparation?.kind === "essence" ? offer.preparation : undefined;
       if (
         !isEmptySelectionIntent(payload.selection) ||
         !validEssenceMutationOffer({
@@ -3414,24 +3402,22 @@ export function resolveExplorationChoice(input: {
           encounterCardId: runtime.encounterCardId,
           content,
         }) ||
-        !Number.isInteger(amount) ||
+        essence === undefined ||
+        !Number.isInteger(essence.amount) ||
         !Number.isFinite(next.essence)
       ) {
         return null;
       }
       const essenceBefore = next.essence;
-      if (!applyReward({ kind: "add_essence", amount: amount as number })) {
+      if (!applyReward({ kind: "add_essence", amount: essence.amount })) {
         return null;
       }
       result.essenceBefore = essenceBefore;
-      result.essenceGained = amount as number;
+      result.essenceGained = essence.amount;
       result.essenceAfter = next.essence;
       result.essencePreparation = {
-        ...(offer.essencePreparation as ExplorationEssencePreparation),
-        saltParts: [
-          ...(offer.essencePreparation as ExplorationEssencePreparation)
-            .saltParts,
-        ],
+        ...essence.plan,
+        saltParts: [...essence.plan.saltParts],
       };
       break;
     }
@@ -3992,7 +3978,7 @@ export function resolveExplorationChoice(input: {
       break;
     }
     case "add-fixed-site": {
-      const preparation = offer.siteInsertionPreparation;
+      const preparation = explorationOfferPlan(offer, "site-insertion");
       if (
         action.siteType === undefined ||
         !isEmptySelectionIntent(payload.selection) ||
@@ -4057,7 +4043,7 @@ export function resolveExplorationChoice(input: {
       break;
     }
     case "choose-site-type": {
-      const preparation = offer.siteTypeChoicePreparation;
+      const preparation = explorationOfferPlan(offer, "site-type-choice");
       const siteType = stringValue(selection.siteType);
       if (
         action.offerCount !== 3 ||
@@ -4070,8 +4056,7 @@ export function resolveExplorationChoice(input: {
         offer.selectionKey !== parseSelectionKey(action.id) ||
         offer.selectionTrace === undefined ||
         offer.selectionTraces !== undefined ||
-        offer.offeredSiteType !== undefined ||
-        offer.siteInsertionPreparation !== undefined
+        offer.offeredSiteType !== undefined
       ) {
         return null;
       }
@@ -4254,7 +4239,7 @@ export function resolveExplorationChoice(input: {
         entryIds === null ||
         entryIds.length !== 1 ||
         (cardType !== "Character" && cardType !== "Event") ||
-        offer.disclosedDeckTargetPreparation !== undefined
+        explorationOfferPlan(offer, "disclosed-deck-target") !== undefined
       ) {
         return null;
       }

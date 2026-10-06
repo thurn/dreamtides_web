@@ -31,6 +31,7 @@ import {
 import { createDreamsign } from "../../data/dreamsigns";
 import {
   cardById,
+  explorationOfferPlan,
   hasStarterCardRole,
   hasUsableCompoundActionPreparation,
   hasUsableDisclosedDeckTargetPreparation,
@@ -233,7 +234,7 @@ function preparedMultiCardTransfigurationCandidates(
   state: JourneyState,
   content: JourneyContent,
 ): readonly TransfigurationCandidateView[] {
-  const preparation = offer.multiCardTransfigurationPreparation;
+  const preparation = explorationOfferPlan(offer, "multi-card-transfiguration");
   if (preparation === undefined) return [];
   const candidatesByEntryId = new Map(
     freeTransfigurationCandidates(
@@ -277,7 +278,7 @@ function preparedMultiCardReplacementCards(
   state: JourneyState,
   content: JourneyContent,
 ): readonly ExplorationCardChoiceView<DeckEntryId>[] {
-  const preparation = offer.multiCardReplacementPreparation;
+  const preparation = explorationOfferPlan(offer, "multi-card-replacement");
   if (preparation === undefined) return [];
   return preparation.bindings.flatMap((binding) => {
     const entry = state.deck.find(
@@ -358,7 +359,7 @@ function dreamsignFlowFollowup(
   state: JourneyState,
   content: JourneyContent,
 ): ExplorationFollowupView {
-  const preparation = offer.dreamsignPreparation;
+  const preparation = explorationOfferPlan(offer, "dreamsign");
   const requiredOverflowReplacementCount =
     preparation?.requiredOverflowReplacementCount ?? 0;
   const common = {
@@ -502,7 +503,7 @@ function siteTypeChoiceFollowup(
   offer: ExplorationActionOfferRuntime,
   content: JourneyContent,
 ): ExplorationFollowupView {
-  const preparation = offer.siteTypeChoicePreparation;
+  const preparation = explorationOfferPlan(offer, "site-type-choice");
   const choices =
     preparation?.choices.flatMap((choice, index) => {
       if (
@@ -889,7 +890,7 @@ function followupForAction(
       };
     }
     case "take-transfigured-cards-and-gain-nightmares": {
-      const preparation = offer.compoundActionPreparation;
+      const preparation = explorationOfferPlan(offer, "compound-action");
       if (
         preparation === undefined ||
         preparation.kind !== "take-transfigured-nightmares"
@@ -930,7 +931,7 @@ function followupForAction(
       };
     }
     case "purge-one-transfigure-and-copy-others": {
-      const preparation = offer.compoundActionPreparation;
+      const preparation = explorationOfferPlan(offer, "compound-action");
       if (
         preparation === undefined ||
         preparation.kind !== "purge-transfigure-copy"
@@ -1029,7 +1030,8 @@ function followupForAction(
       return dreamsignFlowFollowup(action, offer, state, content);
     case "gain-nightmare-and-dreamsign":
       if (
-        (offer.dreamsignPreparation?.requiredOverflowReplacementCount ?? 0) > 0
+        (explorationOfferPlan(offer, "dreamsign")
+          ?.requiredOverflowReplacementCount ?? 0) > 0
       ) {
         return {
           kind: "dreamsigns",
@@ -1138,13 +1140,12 @@ function starterCardVariableTarget(
   content: JourneyContent,
 ): DeckCardVariableTarget | null {
   if (action.effectKind !== "purge-starter-card") return null;
-  const entryId = offer.starterCardPreparation?.purgedEntryIds[0];
-  if (
-    entryId === undefined ||
-    offer.starterCardPreparation?.purgedEntryIds.length !== 1
-  ) {
-    return null;
-  }
+  const purgedEntryIds = explorationOfferPlan(
+    offer,
+    "starter-card",
+  )?.purgedEntryIds;
+  const entryId = purgedEntryIds?.[0];
+  if (entryId === undefined || purgedEntryIds?.length !== 1) return null;
   const entry = state.deck.find((candidate) => candidate.entryId === entryId);
   if (entry === undefined) return null;
   const choice = deckCardChoice(entry, content);
@@ -1188,7 +1189,7 @@ function deckCardVariableTarget(
   state: JourneyState,
   content: JourneyContent,
 ): DeckCardVariableTarget | null {
-  const compoundPreparation = offer.compoundActionPreparation;
+  const compoundPreparation = explorationOfferPlan(offer, "compound-action");
   const isDisclosedCompoundTarget =
     action.effectKind === "purge-disclosed-and-transfigure-same-type" &&
     compoundPreparation?.kind === "purge-disclosed-transfigure-same-type";
@@ -1724,7 +1725,7 @@ function compoundActionRewardForResolution(
   const offer = runtime.actionOffers.find(
     (candidate) => candidate.actionId === action.id,
   );
-  const preparation = offer?.compoundActionPreparation;
+  const preparation = explorationOfferPlan(offer, "compound-action");
   if (
     resolution === null ||
     offer === undefined ||
@@ -2168,10 +2169,9 @@ function multiCardReplacementRewardForResolution(
     purgedSnapshots.map((entry) => [entry.entryId, entry]),
   );
   const preparedByEntryId = new Map(
-    offer.multiCardReplacementPreparation?.bindings.map((binding) => [
-      binding.sourceEntryId,
-      binding,
-    ]),
+    explorationOfferPlan(offer, "multi-card-replacement")?.bindings.map(
+      (binding) => [binding.sourceEntryId, binding],
+    ),
   );
   const replacements = persisted.flatMap((mapping) => {
     const prepared = preparedByEntryId.get(mapping.sourceEntryId);
@@ -2236,7 +2236,7 @@ function randomFixedCardReplacementRewardForResolution(
   ) {
     return null;
   }
-  const preparation = offer.randomDeckTargetPreparation;
+  const preparation = explorationOfferPlan(offer, "random-deck-target");
   const target = preparation?.targets[0];
   const mapping = resolution.cardReplacements?.[0];
   const sourceSnapshot = snapshots[0];
@@ -2305,7 +2305,7 @@ function randomCardCopiesRewardForResolution(
   ) {
     return null;
   }
-  const preparation = offer.randomDeckTargetPreparation;
+  const preparation = explorationOfferPlan(offer, "random-deck-target");
   const mappings = resolution.cardCopies ?? [];
   if (
     preparation === undefined ||
@@ -2395,7 +2395,10 @@ function cardTypeChangesRewardForResolution(
   const mappings = resolution.cardTypeChanges ?? [];
   let preparedTargets: Array<{ entryId: DeckEntryId; cardId: CardId }>;
   if (isDisclosed) {
-    const disclosedTarget = offer.disclosedDeckTargetPreparation?.target;
+    const disclosedTarget = explorationOfferPlan(
+      offer,
+      "disclosed-deck-target",
+    )?.target;
     if (disclosedTarget === undefined || disclosedTarget === null) return null;
     preparedTargets = [disclosedTarget];
   } else {
@@ -2496,7 +2499,7 @@ function multiCardTransfigurationRewardForResolution(
   ) {
     return null;
   }
-  const preparation = offer.multiCardTransfigurationPreparation;
+  const preparation = explorationOfferPlan(offer, "multi-card-transfiguration");
   const persisted = resolution.cardTransfigurations ?? [];
   const authoredCount = action.count ?? 0;
   const persistedEntryIds = persisted.map((mapping) => mapping.entryId);
@@ -2618,7 +2621,10 @@ function starterCardTransfigurationRewardForResolution(
   ) {
     return null;
   }
-  const preparation = offer?.starterCardTransfigurationPreparation;
+  const preparation = explorationOfferPlan(
+    offer,
+    "starter-card-transfiguration",
+  );
   const persisted = resolution.starterCardTransfigurations ?? [];
   if (
     preparation === undefined ||
@@ -2848,11 +2854,12 @@ function rewardForResolution(
         : resolution.selection?.siteType;
     const preparedChoice =
       resolvedAction.effectKind === "choose-site-type"
-        ? runtime.actionOffers
-            .find((offer) => offer.actionId === resolvedAction.id)
-            ?.siteTypeChoicePreparation?.choices.find(
-              (choice) => choice.siteType === selectedSiteType,
-            )
+        ? explorationOfferPlan(
+            runtime.actionOffers.find(
+              (offer) => offer.actionId === resolvedAction.id,
+            ),
+            "site-type-choice",
+          )?.choices.find((choice) => choice.siteType === selectedSiteType)
         : undefined;
     if (
       insertion === undefined ||

@@ -47,6 +47,7 @@ import {
   testFoldHash,
   testJourneySeed,
 } from "../../types/test-identities";
+import { explorationOfferPlan } from "../../exploration/offer-usability";
 import { buildExplorationRuntime } from "./exploration-provider";
 import { createSiteContentProvider } from "./site-provider";
 
@@ -269,7 +270,9 @@ const payload =
   () => ({ payload: value });
 
 const multiCardSelection = (offer: Offer) => {
-  const [a, b] = req(offer.multiCardTransfigurationPreparation).eligibleCards;
+  const [a, b] = req(
+    explorationOfferPlan(offer, "multi-card-transfiguration"),
+  ).eligibleCards;
   const form = req(
     a?.transfigurations.find((f) => b?.transfigurations.includes(f)),
   );
@@ -279,13 +282,16 @@ const multiCardSelection = (offer: Offer) => {
   };
 };
 const dreamsignSelection = (offer: Offer) => ({
-  offeredDreamsignId: offer.dreamsignPreparation?.preparedDreamsignIds[0],
+  offeredDreamsignId: explorationOfferPlan(offer, "dreamsign")
+    ?.preparedDreamsignIds[0],
 });
 const siteChoice = (offer: Offer) =>
-  req(offer.siteTypeChoicePreparation?.choices[1]);
+  req(explorationOfferPlan(offer, "site-type-choice")?.choices[1]);
 const formOf = (journey: JourneyState, entryId: DeckEntryId) =>
   journey.deck.find((entry) => entry.entryId === entryId)?.transfiguration;
 const forgedPlan = stableDigest("forged-plan");
+const essenceOf = (offer: Offer) =>
+  offer.preparation?.kind === "essence" ? offer.preparation : undefined;
 
 const CASES: Case[] = [
   {
@@ -296,12 +302,13 @@ const CASES: Case[] = [
       maximumEssence: 150,
     }),
     effect: (before, after, offer) => {
-      expect(after.essence - before.essence).toBe(offer.preparedEssenceAmount);
+      expect(after.essence - before.essence).toBe(req(essenceOf(offer)).amount);
     },
     forgeries: {
-      "a forged amount": offerPatch((offer) => ({
-        preparedEssenceAmount: req(offer.preparedEssenceAmount) + 1,
-      })),
+      "a forged amount": offerPatch((offer) => {
+        const essence = req(essenceOf(offer));
+        return { preparation: { ...essence, amount: essence.amount + 1 } };
+      }),
       "an unsupported protocol": payload({
         selectionRulesVersion: parseSelectionRulesVersion("unsupported"),
       }),
@@ -331,7 +338,17 @@ const CASES: Case[] = [
     },
     forgeries: {
       "a field injected into the unsigned offer": offerPatch(() => ({
-        preparedEssenceAmount: 1,
+        preparation: {
+          kind: "essence",
+          amount: 1,
+          plan: {
+            minimumEssence: 1,
+            maximumEssence: 1,
+            purpose: "essence-amount",
+            saltParts: [],
+            drawsConsumed: 1,
+          },
+        },
       })),
     },
   },
@@ -369,20 +386,26 @@ const CASES: Case[] = [
       predicate: "warrior",
     }),
     effect: (before, after, offer) => {
-      const purged = req(offer.starterCardPreparation).purgedEntryIds;
+      const purged = req(
+        explorationOfferPlan(offer, "starter-card"),
+      ).purgedEntryIds;
       expect(after.deck).toHaveLength(before.deck.length);
       expect(after.deck.map(({ entryId }) => entryId)).not.toContain(purged[0]);
     },
     forgeries: {
       "a forged plan": offerPatch((offer) => ({
-        starterCardPreparation: {
-          ...req(offer.starterCardPreparation),
-          planSignature: forgedPlan,
+        preparation: {
+          kind: "starter-card",
+          plan: {
+            ...req(explorationOfferPlan(offer, "starter-card")),
+            planSignature: forgedPlan,
+          },
         },
       })),
       "a stale target": journeyPatch((journey, offer) => ({
         deck: journey.deck.map((entry) =>
-          entry.entryId === offer.starterCardPreparation?.purgedEntryIds[0]
+          entry.entryId ===
+          explorationOfferPlan(offer, "starter-card")?.purgedEntryIds[0]
             ? { ...entry, cardNumber: 120 }
             : entry,
         ),
@@ -463,9 +486,12 @@ const CASES: Case[] = [
     },
     forgeries: {
       "a forged plan": offerPatch((offer) => ({
-        siteTypeChoicePreparation: {
-          ...req(offer.siteTypeChoicePreparation),
-          planSignature: forgedPlan,
+        preparation: {
+          kind: "site-type-choice",
+          plan: {
+            ...req(explorationOfferPlan(offer, "site-type-choice")),
+            planSignature: forgedPlan,
+          },
         },
       })),
       "stale atlas topology": journeyPatch((journey) => {

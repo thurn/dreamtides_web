@@ -3,6 +3,10 @@ import type { ExplorationSiteRuntime } from "../../types/journey";
 import type { ExplorationActionId } from "../../types/identifiers";
 import type { StableDigest } from "../../reward-selection/stable";
 import { isSiteType, type SiteType } from "../../types/site-type";
+import { explorationOfferPlan } from "../../exploration/offer-usability";
+
+type ExplorationOfferLogInput =
+  ExplorationSiteRuntime["actionOffers"][number] | undefined;
 
 function compoundAuthoredFields(
   action: ExplorationSiteView["actions"][number] | undefined,
@@ -37,33 +41,29 @@ function compoundAuthoredFields(
 }
 
 function preparedSelectorSignatures(
-  offer: ExplorationSiteRuntime["actionOffers"][number] | undefined,
+  offer: ExplorationOfferLogInput,
 ): readonly StableDigest[] {
-  if (offer === undefined) return [];
-  if (offer.multiCardReplacementPreparation !== undefined) {
-    return offer.multiCardReplacementPreparation.selectorSignatures;
+  const preparation = offer?.preparation;
+  switch (preparation?.kind) {
+    case "multi-card-replacement":
+    case "multi-card-transfiguration":
+    case "compound-action":
+      return preparation.plan.selectorSignatures;
+    case "site-type-choice":
+      return [preparation.plan.selectorSignature];
+    case "random-deck-target":
+    case "disclosed-deck-target": {
+      const signature = preparation.plan.selectorSignature;
+      return signature === undefined ? [] : [signature];
+    }
+    default:
+      return [];
   }
-  if (offer.multiCardTransfigurationPreparation !== undefined) {
-    return offer.multiCardTransfigurationPreparation.selectorSignatures;
-  }
-  if (offer.compoundActionPreparation !== undefined) {
-    return offer.compoundActionPreparation.selectorSignatures;
-  }
-  if (offer.siteTypeChoicePreparation !== undefined) {
-    return [offer.siteTypeChoicePreparation.selectorSignature];
-  }
-  const randomSignature = offer.randomDeckTargetPreparation?.selectorSignature;
-  if (randomSignature !== undefined) return [randomSignature];
-  const disclosedSignature =
-    offer.disclosedDeckTargetPreparation?.selectorSignature;
-  return disclosedSignature === undefined ? [] : [disclosedSignature];
 }
 
-function preparedSiteFields(
-  offer: ExplorationSiteRuntime["actionOffers"][number] | undefined,
-) {
-  const fixedPreparation = offer?.siteInsertionPreparation;
-  const choicePreparation = offer?.siteTypeChoicePreparation;
+function preparedSiteFields(offer: ExplorationOfferLogInput) {
+  const fixedPreparation = explorationOfferPlan(offer, "site-insertion");
+  const choicePreparation = explorationOfferPlan(offer, "site-type-choice");
   const preparation = choicePreparation ?? fixedPreparation;
   return {
     siteInsertionPreparation: fixedPreparation ?? null,
@@ -77,6 +77,31 @@ function preparedSiteFields(
     preparedTargetNodeId: preparation?.targetNodeId ?? null,
     preparedInsertionIndex: preparation?.insertionIndex ?? null,
     preparedSiblingSiteIdsBefore: preparation?.siblingSiteIdsBefore ?? [],
+  };
+}
+
+/** Every prepared deck, Dreamsign, and site plan under its stable log key. */
+function preparedPlanFields(offer: ExplorationOfferLogInput) {
+  const dreamsign = explorationOfferPlan(offer, "dreamsign");
+  return {
+    dreamsignPreparation: dreamsign ?? null,
+    starterCardPreparation: explorationOfferPlan(offer, "starter-card") ?? null,
+    starterCardTransfigurationPreparation:
+      explorationOfferPlan(offer, "starter-card-transfiguration") ?? null,
+    multiCardTransfigurationPreparation:
+      explorationOfferPlan(offer, "multi-card-transfiguration") ?? null,
+    multiCardReplacementPreparation:
+      explorationOfferPlan(offer, "multi-card-replacement") ?? null,
+    randomDeckTargetPreparation:
+      explorationOfferPlan(offer, "random-deck-target") ?? null,
+    disclosedDeckTargetPreparation:
+      explorationOfferPlan(offer, "disclosed-deck-target") ?? null,
+    compoundActionPreparation:
+      explorationOfferPlan(offer, "compound-action") ?? null,
+    ...preparedSiteFields(offer),
+    selectorPlan: dreamsign ?? null,
+    excludedDreamsignIds: dreamsign?.heldIdsAtPreparation ?? [],
+    dreamsignUnavailableReason: dreamsign?.unavailableReason ?? null,
   };
 }
 
@@ -121,14 +146,16 @@ function terminalOutcome(
     selectionTraces: offer?.selectionTraces ?? null,
     selectorSignatures: preparedSelectorSignatures(offer),
     multiCardReplacementPreparation:
-      offer?.multiCardReplacementPreparation ?? null,
-    randomDeckTargetPreparation: offer?.randomDeckTargetPreparation ?? null,
+      explorationOfferPlan(offer, "multi-card-replacement") ?? null,
+    randomDeckTargetPreparation:
+      explorationOfferPlan(offer, "random-deck-target") ?? null,
     disclosedDeckTargetPreparation:
-      offer?.disclosedDeckTargetPreparation ?? null,
-    compoundActionPreparation: offer?.compoundActionPreparation ?? null,
+      explorationOfferPlan(offer, "disclosed-deck-target") ?? null,
+    compoundActionPreparation:
+      explorationOfferPlan(offer, "compound-action") ?? null,
     ...preparedSiteFields(offer),
     multiCardTransfigurationPreparation:
-      offer?.multiCardTransfigurationPreparation ?? null,
+      explorationOfferPlan(offer, "multi-card-transfiguration") ?? null,
     rawSelection: resolution.selection ?? {},
     validatedSelection: resolution.selection ?? {},
     gainedCardIds: resolution.gainedCardIds,
@@ -194,26 +221,10 @@ export function buildExplorationEntryLog(
       selectionTrace: offer.selectionTrace ?? null,
       selectionTraces: offer.selectionTraces ?? null,
       selectorSignatures: preparedSelectorSignatures(offer),
-      preparedEssenceAmount: offer.preparedEssenceAmount ?? null,
-      essencePreparation: offer.essencePreparation ?? null,
-      dreamsignPreparation: offer.dreamsignPreparation ?? null,
-      starterCardPreparation: offer.starterCardPreparation ?? null,
-      starterCardTransfigurationPreparation:
-        offer.starterCardTransfigurationPreparation ?? null,
-      multiCardTransfigurationPreparation:
-        offer.multiCardTransfigurationPreparation ?? null,
-      multiCardReplacementPreparation:
-        offer.multiCardReplacementPreparation ?? null,
-      randomDeckTargetPreparation: offer.randomDeckTargetPreparation ?? null,
-      disclosedDeckTargetPreparation:
-        offer.disclosedDeckTargetPreparation ?? null,
-      compoundActionPreparation: offer.compoundActionPreparation ?? null,
-      ...preparedSiteFields(offer),
-      selectorPlan: offer.dreamsignPreparation ?? null,
-      excludedDreamsignIds:
-        offer.dreamsignPreparation?.heldIdsAtPreparation ?? [],
-      dreamsignUnavailableReason:
-        offer.dreamsignPreparation?.unavailableReason ?? null,
+      preparedEssenceAmount:
+        offer.preparation?.kind === "essence" ? offer.preparation.amount : null,
+      essencePreparation: explorationOfferPlan(offer, "essence") ?? null,
+      ...preparedPlanFields(offer),
       offeredCardIds: offer.offeredCardIds,
       offeredDreamsignIds: offer.offeredDreamsignIds ?? [],
       offeredDeckEntryIds: offer.offeredDeckEntryIds ?? [],
@@ -257,24 +268,7 @@ export function buildExplorationActionLog(
     selectionTrace: offer?.selectionTrace ?? null,
     selectionTraces: offer?.selectionTraces ?? null,
     selectorSignatures: preparedSelectorSignatures(offer),
-    dreamsignPreparation: offer?.dreamsignPreparation ?? null,
-    starterCardPreparation: offer?.starterCardPreparation ?? null,
-    starterCardTransfigurationPreparation:
-      offer?.starterCardTransfigurationPreparation ?? null,
-    multiCardTransfigurationPreparation:
-      offer?.multiCardTransfigurationPreparation ?? null,
-    multiCardReplacementPreparation:
-      offer?.multiCardReplacementPreparation ?? null,
-    randomDeckTargetPreparation: offer?.randomDeckTargetPreparation ?? null,
-    disclosedDeckTargetPreparation:
-      offer?.disclosedDeckTargetPreparation ?? null,
-    compoundActionPreparation: offer?.compoundActionPreparation ?? null,
-    ...preparedSiteFields(offer),
-    selectorPlan: offer?.dreamsignPreparation ?? null,
-    excludedDreamsignIds:
-      offer?.dreamsignPreparation?.heldIdsAtPreparation ?? [],
-    dreamsignUnavailableReason:
-      offer?.dreamsignPreparation?.unavailableReason ?? null,
+    ...preparedPlanFields(offer),
     requestedSelection: selection ?? null,
     rawSelection: selection ?? null,
     validatedSelection:
@@ -324,24 +318,7 @@ export function buildExplorationResolutionLog(
     selectionTrace: offer?.selectionTrace ?? null,
     selectionTraces: offer?.selectionTraces ?? null,
     selectorSignatures: preparedSelectorSignatures(offer),
-    dreamsignPreparation: offer?.dreamsignPreparation ?? null,
-    starterCardPreparation: offer?.starterCardPreparation ?? null,
-    starterCardTransfigurationPreparation:
-      offer?.starterCardTransfigurationPreparation ?? null,
-    multiCardTransfigurationPreparation:
-      offer?.multiCardTransfigurationPreparation ?? null,
-    multiCardReplacementPreparation:
-      offer?.multiCardReplacementPreparation ?? null,
-    randomDeckTargetPreparation: offer?.randomDeckTargetPreparation ?? null,
-    disclosedDeckTargetPreparation:
-      offer?.disclosedDeckTargetPreparation ?? null,
-    compoundActionPreparation: offer?.compoundActionPreparation ?? null,
-    ...preparedSiteFields(offer),
-    selectorPlan: offer?.dreamsignPreparation ?? null,
-    excludedDreamsignIds:
-      offer?.dreamsignPreparation?.heldIdsAtPreparation ?? [],
-    dreamsignUnavailableReason:
-      offer?.dreamsignPreparation?.unavailableReason ?? null,
+    ...preparedPlanFields(offer),
     authoredMechanics: action?.mechanics ?? null,
     outcomeKind: view.outcomeKind,
     rawSelection: resolution.selection ?? {},
@@ -399,24 +376,7 @@ export function buildExplorationCompletionLog(
     selectionTrace: offer?.selectionTrace ?? null,
     selectionTraces: offer?.selectionTraces ?? null,
     selectorSignatures: preparedSelectorSignatures(offer),
-    dreamsignPreparation: offer?.dreamsignPreparation ?? null,
-    starterCardPreparation: offer?.starterCardPreparation ?? null,
-    starterCardTransfigurationPreparation:
-      offer?.starterCardTransfigurationPreparation ?? null,
-    multiCardTransfigurationPreparation:
-      offer?.multiCardTransfigurationPreparation ?? null,
-    multiCardReplacementPreparation:
-      offer?.multiCardReplacementPreparation ?? null,
-    randomDeckTargetPreparation: offer?.randomDeckTargetPreparation ?? null,
-    disclosedDeckTargetPreparation:
-      offer?.disclosedDeckTargetPreparation ?? null,
-    compoundActionPreparation: offer?.compoundActionPreparation ?? null,
-    ...preparedSiteFields(offer),
-    selectorPlan: offer?.dreamsignPreparation ?? null,
-    excludedDreamsignIds:
-      offer?.dreamsignPreparation?.heldIdsAtPreparation ?? [],
-    dreamsignUnavailableReason:
-      offer?.dreamsignPreparation?.unavailableReason ?? null,
+    ...preparedPlanFields(offer),
     gainedCardIds: resolution.gainedCardIds,
     gainedDreamsignIds: resolution.gainedDreamsignIds,
     purgedDreamsignIds: resolution.purgedDreamsignIds ?? [],

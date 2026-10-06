@@ -1,7 +1,7 @@
 // Rules validation deciding whether a prepared Exploration action offer is
-// still usable: each effect kind's optional preparation must be present, match
-// the authored action, agree with the offer's selection evidence, and bind to
-// cards that are still in the deck.
+// still usable: each effect kind's prepared plan must be the offer's
+// preparation, match the authored action, agree with the offer's selection
+// evidence, and bind to cards that are still in the deck.
 
 import { resolveDeckEntryCard } from "../card-type-change";
 import {
@@ -23,8 +23,23 @@ import {
 import type {
   DeckEntry,
   ExplorationActionOfferRuntime,
+  ExplorationOfferPlan,
+  ExplorationOfferPreparationKind,
   JourneyState,
 } from "../types/journey";
+
+/**
+ * The offer's prepared plan when it belongs to the `kind` family, otherwise
+ * undefined.
+ */
+export function explorationOfferPlan<K extends ExplorationOfferPreparationKind>(
+  offer: Pick<ExplorationActionOfferRuntime, "preparation"> | null | undefined,
+  kind: K,
+): ExplorationOfferPlan<K> | undefined {
+  const preparation = offer?.preparation;
+  if (preparation === undefined || preparation.kind !== kind) return undefined;
+  return preparation.plan as ExplorationOfferPlan<K>;
+}
 
 /**
  * The parts of an action's follow-up step that offer usability reads. The
@@ -242,15 +257,17 @@ export function hasUsableExplorationOffer(params: {
   const requiresDeckCardTarget =
     explorationActionUsesOfferedDeckTarget(action) ||
     action.effectKind === "purge-disclosed-and-transfigure-same-type";
+  const essence =
+    offer.preparation?.kind === "essence" ? offer.preparation : undefined;
   const hasPreparedRandomEssence =
     action.effectKind !== "gain-random-essence" ||
-    (Number.isInteger(offer.preparedEssenceAmount) &&
-      offer.essencePreparation?.purpose === "essence-amount" &&
-      offer.essencePreparation.minimumEssence === action.minimumEssence &&
-      offer.essencePreparation.maximumEssence === action.maximumEssence &&
-      (offer.preparedEssenceAmount ?? -1) >= (action.minimumEssence ?? 0) &&
-      (offer.preparedEssenceAmount ?? -1) <=
-        (action.maximumEssence ?? Number.POSITIVE_INFINITY));
+    (essence !== undefined &&
+      Number.isInteger(essence.amount) &&
+      essence.plan.purpose === "essence-amount" &&
+      essence.plan.minimumEssence === action.minimumEssence &&
+      essence.plan.maximumEssence === action.maximumEssence &&
+      essence.amount >= (action.minimumEssence ?? 0) &&
+      essence.amount <= (action.maximumEssence ?? Number.POSITIVE_INFINITY));
   return !hasPreparedRandomEssence
     ? false
     : usesCompoundActionPreparation(action)
@@ -334,37 +351,36 @@ function hasUsableSiteInsertionPreparation(
   offer: ExplorationActionOfferRuntime,
   state: JourneyState,
 ): boolean {
-  const siteInsertionPreparation = offer.siteInsertionPreparation;
+  const preparation = explorationOfferPlan(offer, "site-insertion");
   const siteInsertionNode =
-    siteInsertionPreparation === undefined
+    preparation === undefined
       ? undefined
-      : state.atlas.nodes[siteInsertionPreparation.targetNodeId];
+      : state.atlas.nodes[preparation.targetNodeId];
   return (
     action.effectKind !== "add-fixed-site" ||
     (action.siteType !== undefined &&
-      siteInsertionPreparation !== undefined &&
+      preparation !== undefined &&
       offer.canonicalMechanicId === "add-site" &&
       offer.selectionPolicyId === "fixed" &&
       offer.selectionKey === parseSelectionKey(action.id) &&
-      offer.selectionSignature === siteInsertionPreparation.planSignature &&
+      offer.selectionSignature === preparation.planSignature &&
       offer.selectionTrace === undefined &&
       offer.selectionTraces === undefined &&
       offer.offeredSiteType === undefined &&
-      siteInsertionPreparation.sourceSiteId === activeSiteIdOf(state) &&
-      siteInsertionPreparation.sourceActionId === action.id &&
-      siteInsertionPreparation.targetNodeId === state.currentDreamscape &&
-      siteInsertionPreparation.targetNodeId === state.atlas.currentNodeId &&
+      preparation.sourceSiteId === activeSiteIdOf(state) &&
+      preparation.sourceActionId === action.id &&
+      preparation.targetNodeId === state.currentDreamscape &&
+      preparation.targetNodeId === state.atlas.currentNodeId &&
       siteInsertionNode !== undefined &&
-      siteInsertionPreparation.insertionIndex ===
-        siteInsertionPreparation.siblingSiteIdsBefore.length &&
+      preparation.insertionIndex === preparation.siblingSiteIdsBefore.length &&
       sameOrderedIds(
         siteInsertionNode.sites.map((site) => site.id),
-        siteInsertionPreparation.siblingSiteIdsBefore,
+        preparation.siblingSiteIdsBefore,
       ) &&
-      siteInsertionPreparation.insertedSite.id.length > 0 &&
-      siteInsertionPreparation.insertedSite.type === action.siteType &&
-      !siteInsertionPreparation.insertedSite.isEnhanced &&
-      !siteInsertionPreparation.insertedSite.isVisited)
+      preparation.insertedSite.id.length > 0 &&
+      preparation.insertedSite.type === action.siteType &&
+      !preparation.insertedSite.isEnhanced &&
+      !preparation.insertedSite.isVisited)
   );
 }
 
@@ -375,23 +391,23 @@ function hasUsableSiteTypeChoicePreparation(
   state: JourneyState,
   followup: OfferUsabilityFollowup,
 ): boolean {
-  const siteTypeChoicePreparation = offer.siteTypeChoicePreparation;
+  const preparation = explorationOfferPlan(offer, "site-type-choice");
   const siteTypeChoiceNode =
-    siteTypeChoicePreparation === undefined
+    preparation === undefined
       ? undefined
-      : state.atlas.nodes[siteTypeChoicePreparation.targetNodeId];
+      : state.atlas.nodes[preparation.targetNodeId];
   const preparedSiteTypes =
-    siteTypeChoicePreparation?.choices.map((choice) => choice.siteType) ?? [];
+    preparation?.choices.map((choice) => choice.siteType) ?? [];
   return (
     action.effectKind !== "choose-site-type" ||
-    (siteTypeChoicePreparation !== undefined &&
+    (preparation !== undefined &&
       followup.kind === "site-types" &&
       offer.canonicalMechanicId === "add-site" &&
       offer.selectionPolicyId === "site-uniform" &&
       offer.selectionKey === parseSelectionKey(action.id) &&
-      offer.selectionSignature === siteTypeChoicePreparation.planSignature &&
+      offer.selectionSignature === preparation.planSignature &&
       offer.selectionTrace !== undefined &&
-      siteTypeChoicePreparation.selectorSignature.length > 0 &&
+      preparation.selectorSignature.length > 0 &&
       offer.selectionTrace.mechanicId === "add-site" &&
       offer.selectionTrace.policyId === "site-uniform" &&
       offer.selectionTrace.selectionKey === parseSelectionKey(action.id) &&
@@ -401,21 +417,20 @@ function hasUsableSiteTypeChoicePreparation(
       ) &&
       offer.selectionTraces === undefined &&
       offer.offeredSiteType === undefined &&
-      siteTypeChoicePreparation.sourceSiteId === activeSiteIdOf(state) &&
-      siteTypeChoicePreparation.sourceActionId === action.id &&
-      siteTypeChoicePreparation.targetNodeId === state.currentDreamscape &&
-      siteTypeChoicePreparation.targetNodeId === state.atlas.currentNodeId &&
+      preparation.sourceSiteId === activeSiteIdOf(state) &&
+      preparation.sourceActionId === action.id &&
+      preparation.targetNodeId === state.currentDreamscape &&
+      preparation.targetNodeId === state.atlas.currentNodeId &&
       siteTypeChoiceNode !== undefined &&
-      siteTypeChoicePreparation.insertionIndex ===
-        siteTypeChoicePreparation.siblingSiteIdsBefore.length &&
+      preparation.insertionIndex === preparation.siblingSiteIdsBefore.length &&
       sameOrderedIds(
         siteTypeChoiceNode.sites.map((site) => site.id),
-        siteTypeChoicePreparation.siblingSiteIdsBefore,
+        preparation.siblingSiteIdsBefore,
       ) &&
-      siteTypeChoicePreparation.choices.length === action.offerCount &&
-      followup.choices.length === siteTypeChoicePreparation.choices.length &&
+      preparation.choices.length === action.offerCount &&
+      followup.choices.length === preparation.choices.length &&
       new Set(preparedSiteTypes).size === preparedSiteTypes.length &&
-      siteTypeChoicePreparation.choices.every(
+      preparation.choices.every(
         (choice) =>
           choice.insertedSite.type === choice.siteType &&
           choice.insertedSite.id.length > 0 &&
@@ -430,7 +445,7 @@ function hasUsableDreamsignPreparation(
   offer: ExplorationActionOfferRuntime,
   followup: OfferUsabilityFollowup,
 ): boolean {
-  const preparation = offer.dreamsignPreparation;
+  const preparation = explorationOfferPlan(offer, "dreamsign");
   if (
     preparation === undefined ||
     preparation.unavailableReason !== undefined ||
@@ -503,7 +518,7 @@ function hasUsableStarterCardPreparation(
   offer: ExplorationActionOfferRuntime,
   starterTargetCardId: CardId | undefined,
 ): boolean {
-  const preparation = offer.starterCardPreparation;
+  const preparation = explorationOfferPlan(offer, "starter-card");
   if (
     preparation === undefined ||
     preparation.kind !== action.effectKind ||
@@ -573,7 +588,10 @@ export function hasUsableStarterCardTransfigurationPreparation(
   state: JourneyState,
   content: JourneyContent,
 ): boolean {
-  const preparation = offer.starterCardTransfigurationPreparation;
+  const preparation = explorationOfferPlan(
+    offer,
+    "starter-card-transfiguration",
+  );
   const expectedKind =
     action.effectKind === "transfigure-random-starter-cards"
       ? "random-count"
@@ -700,7 +718,7 @@ export function hasUsableMultiCardTransfigurationPreparation(
   state: JourneyState,
   content: JourneyContent,
 ): boolean {
-  const preparation = offer.multiCardTransfigurationPreparation;
+  const preparation = explorationOfferPlan(offer, "multi-card-transfiguration");
   const expectedMode =
     action.effectKind === "transfigure-selected" && (action.count ?? 1) > 1
       ? "chosen-flexible"
@@ -835,7 +853,7 @@ export function hasUsableMultiCardReplacementPreparation(
   state: JourneyState,
   content: JourneyContent,
 ): boolean {
-  const preparation = offer.multiCardReplacementPreparation;
+  const preparation = explorationOfferPlan(offer, "multi-card-replacement");
   if (
     action.effectKind !== "replace-selected" ||
     (action.count ?? 1) <= 1 ||
@@ -892,7 +910,7 @@ export function hasUsableRandomDeckTargetPreparation(
   state: JourneyState,
   content: JourneyContent,
 ): boolean {
-  const preparation = offer.randomDeckTargetPreparation;
+  const preparation = explorationOfferPlan(offer, "random-deck-target");
   const expectedMechanic =
     action.effectKind === "copy-random-cards"
       ? "duplicate-deck-entry"
@@ -966,7 +984,7 @@ export function hasUsableDisclosedDeckTargetPreparation(
   content: JourneyContent,
   allowResolvedTypeChange = false,
 ): boolean {
-  const preparation = offer.disclosedDeckTargetPreparation;
+  const preparation = explorationOfferPlan(offer, "disclosed-deck-target");
   const target = preparation?.target;
   if (
     action.effectKind !== "change-card-type-selected" ||
@@ -989,8 +1007,7 @@ export function hasUsableDisclosedDeckTargetPreparation(
     offer.selectionSignature !== preparation.planSignature ||
     JSON.stringify(offer.selectionTrace) !==
       JSON.stringify(preparation.selectorTrace) ||
-    !sameOrderedIds(offer.offeredDeckEntryIds ?? [], [target.entryId]) ||
-    offer.randomDeckTargetPreparation !== undefined
+    !sameOrderedIds(offer.offeredDeckEntryIds ?? [], [target.entryId])
   ) {
     return false;
   }
@@ -1025,7 +1042,7 @@ export function hasUsableCompoundActionPreparation(
   state: JourneyState,
   content: JourneyContent,
 ): boolean {
-  const preparation = offer.compoundActionPreparation;
+  const preparation = explorationOfferPlan(offer, "compound-action");
   if (
     preparation === undefined ||
     preparation.unavailableReason !== undefined ||

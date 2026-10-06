@@ -715,6 +715,81 @@ export interface ExplorationNightmareGain {
   cardId: CardId;
 }
 
+/**
+ * The signed plan an Exploration action prepares when its site opens, keyed by
+ * the plan family. Each action prepares at most one plan.
+ */
+export type ExplorationOfferPreparation =
+  | {
+      kind: "essence";
+      /** Exact random Essence result prepared once when the site opens. */
+      amount: number;
+      /** Reconstructable deterministic stream and inclusive bounds for it. */
+      plan: ExplorationEssencePreparation;
+    }
+  | {
+      /** Exact Dreamsign offer/replacement plan. */
+      kind: "dreamsign";
+      plan: ExplorationDreamsignPreparation;
+    }
+  | {
+      /** Exact starter purge/replacement plan. */
+      kind: "starter-card";
+      plan: ExplorationStarterCardPreparation;
+    }
+  | {
+      /** Exact starter transfiguration plan. */
+      kind: "starter-card-transfiguration";
+      plan: ExplorationStarterCardTransfigurationPreparation;
+    }
+  | {
+      /** Exact multi-card transfiguration plan. */
+      kind: "multi-card-transfiguration";
+      plan: ExplorationMultiCardTransfigurationPreparation;
+    }
+  | {
+      /** Exact chosen multi-card replacement plan. */
+      kind: "multi-card-replacement";
+      plan: MultiCardReplacementPreparation;
+    }
+  | {
+      /** Exact automatic random deck-target plan. */
+      kind: "random-deck-target";
+      plan: ExplorationRandomDeckTargetPreparation;
+    }
+  | {
+      /** Exact concrete deck target disclosed before an automatic action. */
+      kind: "disclosed-deck-target";
+      plan: ExplorationDisclosedDeckTargetPreparation;
+    }
+  | {
+      /** Exact plan for a compound deck mutation. */
+      kind: "compound-action";
+      plan: ExplorationCompoundActionPreparation;
+    }
+  | {
+      /** Exact fixed-site append plan. */
+      kind: "site-insertion";
+      plan: ExplorationSiteInsertionPreparation;
+    }
+  | {
+      /** Exact player-facing site-type offer and append plan. */
+      kind: "site-type-choice";
+      plan: ExplorationSiteTypeChoicePreparation;
+    };
+
+export type ExplorationOfferPreparationKind =
+  ExplorationOfferPreparation["kind"];
+
+/** The signed plan carried by each preparation family. */
+type ExplorationOfferPlanByKind = {
+  [P in ExplorationOfferPreparation as P["kind"]]: P["plan"];
+};
+
+/** The signed plan carried by one preparation family. */
+export type ExplorationOfferPlan<K extends ExplorationOfferPreparationKind> =
+  ExplorationOfferPlanByKind[K];
+
 export interface ExplorationActionOfferRuntime {
   actionId: ExplorationActionId;
   /** Canonical internal mechanic and policy. */
@@ -727,30 +802,11 @@ export interface ExplorationActionOfferRuntime {
   selectionTrace?: RewardSelectionTrace;
   /** Every trace when one action prepares independent targets per deck entry. */
   selectionTraces?: RewardSelectionTrace[];
-  /** Exact random Essence result prepared once when the site opens. */
-  preparedEssenceAmount?: number;
-  /** Reconstructable deterministic stream and inclusive bounds for that result. */
-  essencePreparation?: ExplorationEssencePreparation;
-  /** Exact signed Dreamsign offer/replacement plan prepared at site opening. */
-  dreamsignPreparation?: ExplorationDreamsignPreparation;
-  /** Exact signed starter purge/replacement plan prepared at site opening. */
-  starterCardPreparation?: ExplorationStarterCardPreparation;
-  /** Exact signed starter transfiguration plan prepared at site opening. */
-  starterCardTransfigurationPreparation?: ExplorationStarterCardTransfigurationPreparation;
-  /** Exact signed multi-card transfiguration plan prepared at site opening. */
-  multiCardTransfigurationPreparation?: ExplorationMultiCardTransfigurationPreparation;
-  /** Exact signed chosen multi-card replacement plan prepared at site opening. */
-  multiCardReplacementPreparation?: MultiCardReplacementPreparation;
-  /** Exact signed automatic random deck-target plan prepared at site opening. */
-  randomDeckTargetPreparation?: ExplorationRandomDeckTargetPreparation;
-  /** Exact signed concrete deck target disclosed before an automatic action. */
-  disclosedDeckTargetPreparation?: ExplorationDisclosedDeckTargetPreparation;
-  /** Exact signed plan for a compound deck mutation prepared at site opening. */
-  compoundActionPreparation?: ExplorationCompoundActionPreparation;
-  /** Exact signed fixed-site append plan prepared at site opening. */
-  siteInsertionPreparation?: ExplorationSiteInsertionPreparation;
-  /** Exact signed player-facing site-type offer and append plan. */
-  siteTypeChoicePreparation?: ExplorationSiteTypeChoicePreparation;
+  /**
+   * The one signed plan prepared at site opening, when the action's effect
+   * kind needs one.
+   */
+  preparation?: ExplorationOfferPreparation;
   offeredCardIds: CardId[];
   offeredDreamsignIds?: DreamsignId[];
   /** Randomly minted concrete deck-entry UUIDs for deck-card effects. */
