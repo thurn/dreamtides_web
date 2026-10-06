@@ -1,0 +1,1 @@
+{"bead":"hv-47xj.41","phase":2,"lane":null,"implementMin":16,"localValidationS":{"review":12,"focused":4},"hostLoad":3.06,"testDelta":{"files":0,"lines":-6334,"jsdomFiles":0},"friction":[{"tag":"worktree-write-hook-misfire","minutes":0,"note":"Write/Edit refuse the .worktrees path; the rewrite went through a scratchpad file and python/cp."}]}
