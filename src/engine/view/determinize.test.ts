@@ -7,14 +7,14 @@ import type { InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, DeckEntry } from "../state/types";
 import { InlineSource } from "../steps/sources";
-import { fuzzEngineCatalog, fuzzInit } from "../testing/fuzz";
+import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { invariantViolations } from "../testing/invariants";
 import { PolicyRandom, randomAction } from "../testing/random-policy";
 import { hiddenFrom } from "../testing/redaction";
 import { determinize, type Decklists } from "./determinize";
 import type { BattleView } from "./view";
 
-const engine = createEngine(fuzzEngineCatalog());
+const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
 
 function randomSource(random: PolicyRandom): InlineSource {
   const answer = (prompt: Parameters<typeof randomLegalAnswer>[0]) => randomLegalAnswer(prompt, () => random.next());
@@ -37,7 +37,7 @@ function playOn(state: BattleState, random: PolicyRandom, actions: number): Batt
 function samples(): { state: BattleState; decklists: Decklists }[] {
   const result: { state: BattleState; decklists: Decklists }[] = [];
   for (let game = 0; game < 3; game++) {
-    const init = fuzzInit(battleSeed(`determinize-${String(game)}`));
+    const init = fuzzInit(battleSeed(`determinize-${String(game)}`), SYNTHETIC_FUZZ_POOL);
     const random = new PolicyRandom(battleSeed(`determinize-policy-${String(game)}`));
     let state = engine.createBattle(init, randomSource(random)).state;
     for (let round = 0; round < 4 && state.result === null; round++) {

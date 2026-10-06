@@ -8,7 +8,7 @@ import type { BattleState, StackItem } from "../state/types";
 import { InlineSource, NO_PROMPTS, ScriptedSource } from "../steps/sources";
 import { boardState, cardIdOf, placeFigment } from "../testing/board";
 import { ZONE, ZONE_FIGMENT } from "../testing/zone-cards";
-import { fuzzEngineCatalog, fuzzInit } from "../testing/fuzz";
+import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { SYNTHETIC } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
 import { AVATAR, DREAMSIGN, STACK } from "../testing/stack-cards";
@@ -18,7 +18,7 @@ import { PolicyRandom } from "../testing/random-policy";
 import { determinize } from "./determinize";
 import { promptView, view } from "./view";
 
-const catalog = fuzzEngineCatalog();
+const catalog = fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL);
 const v = SYNTHETIC;
 const p = PROMPTING;
 
@@ -136,7 +136,7 @@ describe("view", () => {
 
   it("reveals no hidden instance ID in a dealt battle", () => {
     const engine = createEngine(catalog);
-    const { state } = engine.createBattle(fuzzInit(battleSeed("view-dealt")), NO_PROMPTS);
+    const { state } = engine.createBattle(fuzzInit(battleSeed("view-dealt"), SYNTHETIC_FUZZ_POOL), NO_PROMPTS);
     for (const viewer of SIDES) {
       const seen = strings(engine.view(state, viewer));
       const hidden = hiddenFrom(state, viewer);

@@ -15,6 +15,13 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { createEngine } from "../src/engine";
+import {
+  contentAvatarDefinitions,
+  contentCardDefinitions,
+  contentDreamsignDefinitions,
+  contentDreamwellDefinitions,
+  contentFigmentDefinitions,
+} from "../src/engine/content-catalog";
 import { engineLogLine } from "../src/engine/log";
 import {
   fuzzEngineCatalog,
@@ -22,6 +29,7 @@ import {
   playFuzzGame,
   replayFinalHash,
   replayInteractively,
+  type FuzzPool,
 } from "../src/engine/testing/fuzz";
 import { battleSeed } from "../src/engine/state/ids";
 import { parseGameId } from "../src/types/identifiers";
@@ -36,7 +44,14 @@ const prefix = option("seed", "fuzz");
 const first = Number.parseInt(option("first", "0"), 10);
 const runId = `${prefix}-${String(first)}-${String(games)}`;
 const interactiveEvery = Number.parseInt(option("interactive-every", "10"), 10);
-const engine = createEngine(fuzzEngineCatalog());
+/** The production catalog, so the fuzzer plays real content beside the synthetic fixtures. */
+const pool: FuzzPool = {
+  cards: contentCardDefinitions(),
+  dreamwell: contentDreamwellDefinitions(),
+  emblems: { avatars: contentAvatarDefinitions(), dreamsigns: contentDreamsignDefinitions() },
+  figments: contentFigmentDefinitions(),
+};
+const engine = createEngine(fuzzEngineCatalog(pool));
 let prompts = 0;
 let reruns = 0;
 let rerunMs = 0;
@@ -50,7 +65,7 @@ for (let index = first; index < first + games; index++) {
   let failure: string | null;
   let game;
   try {
-    game = playFuzzGame(engine, seed);
+    game = playFuzzGame(engine, seed, pool);
     failure = game.failure;
     if (failure === null && replayFinalHash(engine, game) !== game.finalHash) {
       failure = "replay produced a different final hash";

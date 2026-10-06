@@ -4,14 +4,14 @@ import { createEngine } from "./engine";
 import type { EngineEvent } from "./events";
 import { eventLogRecords, stepLogRecords, type EngineLogRecord } from "./log";
 import { battleSeed } from "./state/ids";
-import { fuzzEngineCatalog, fuzzGameLog, playFuzzGame, replayInteractively, type FuzzGame } from "./testing/fuzz";
+import { fuzzEngineCatalog, fuzzGameLog, playFuzzGame, replayInteractively, SYNTHETIC_FUZZ_POOL, type FuzzGame } from "./testing/fuzz";
 
-const engine = createEngine(fuzzEngineCatalog());
+const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
 
 /** The first seeded fuzz game with prompts and triggers. */
 function promptingGame(): FuzzGame {
   for (let index = 0; index < 20; index++) {
-    const game = playFuzzGame(engine, battleSeed(`log-${String(index)}`));
+    const game = playFuzzGame(engine, battleSeed(`log-${String(index)}`), SYNTHETIC_FUZZ_POOL);
     const triggered = fuzzGameLog(engine, game).some((record) => record.event === "engine.trigger");
     if (game.prompts > 0 && triggered && game.result !== null) return game;
   }

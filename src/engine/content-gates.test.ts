@@ -2,7 +2,8 @@
  * The content gates (engine-design § Content gates): the sanctioned
  * data-to-engine contract test. Every catalog entity is pending, vanilla, or
  * authored; authored abilities build for both variants from registered
- * primitives; and each authored entity's verifiedText matches its text.
+ * primitives; each authored entity's verifiedText matches its text; and
+ * every figment has a unique UUID and a non-negative integer base spark.
  */
 import { describe, expect, it } from "vitest";
 import { AVATARS } from "../content/avatars";
@@ -67,6 +68,13 @@ describe("content gates", () => {
           }
         }
       }
+    }
+  });
+
+  it("gives every figment a unique UUID and a non-negative integer base spark", () => {
+    expect(new Set(FIGMENTS.map((figment) => figment.id)).size).toBe(FIGMENTS.length);
+    for (const figment of FIGMENTS) {
+      expect(Number.isInteger(figment.spark) && figment.spark >= 0, figment.id).toBe(true);
     }
   });
 

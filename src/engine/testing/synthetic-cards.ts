@@ -4,19 +4,15 @@
  */
 import {
   createCatalog,
+  type ContentState,
   type EmblemDefinitions,
   type EngineCardDefinition,
   type EngineCatalog,
+  type EngineDreamwellDefinition,
   type EngineFigmentDefinition,
 } from "../catalog";
-import {
-  contentAvatarDefinitions,
-  contentCardDefinitions,
-  contentDreamsignDefinitions,
-  contentDreamwellDefinitions,
-  contentFigmentDefinitions,
-} from "../content-catalog";
 import { parseCardId } from "../../types/card-identity";
+import { parseDreamwellCardId } from "../../types/identifiers";
 import { energy } from "../dsl/builders";
 import type { CardId } from "../state/ids";
 
@@ -77,22 +73,39 @@ export const SYNTHETIC = {
 
 export const SYNTHETIC_CARDS: readonly EngineCardDefinition[] = Object.values(SYNTHETIC);
 
+function dreamwell(index: number, order: number, energyAdded: number, status: ContentState): EngineDreamwellDefinition {
+  return {
+    id: parseDreamwellCardId(`5e5e5e5e-0000-4000-8000-${(0xe00 + index).toString(16).padStart(12, "0")}`),
+    order,
+    energyAdded,
+    status,
+  };
+}
+
 /**
- * A catalog of the given synthetic cards, emblems, and figments plus every
- * catalog card, Dreamwell card, avatar, dreamsign, and figment.
+ * Synthetic Dreamwell cards, ids 0xe00+: three in each recurring tier, adding
+ * 0, 1, or 2 energy, with a pending card (text-less, D36) in every tier.
  */
+export const SYNTHETIC_DREAMWELL: readonly EngineDreamwellDefinition[] = [
+  dreamwell(0, 1, 1, "vanilla"),
+  dreamwell(1, 1, 1, "pending"),
+  dreamwell(2, 1, 1, "vanilla"),
+  dreamwell(3, 2, 1, "vanilla"),
+  dreamwell(4, 2, 2, "pending"),
+  dreamwell(5, 2, 1, "vanilla"),
+  dreamwell(6, 3, 0, "pending"),
+  dreamwell(7, 3, 1, "vanilla"),
+  dreamwell(8, 3, 2, "vanilla"),
+  dreamwell(9, 4, 0, "vanilla"),
+  dreamwell(10, 4, 1, "pending"),
+  dreamwell(11, 4, 0, "vanilla"),
+];
+
+/** A catalog of the synthetic cards and Dreamwell plus the given cards, emblems, and figments. */
 export function testCatalog(
   extra: readonly EngineCardDefinition[] = [],
   emblems: EmblemDefinitions = {},
   figments: readonly EngineFigmentDefinition[] = [],
 ): EngineCatalog {
-  return createCatalog(
-    [...SYNTHETIC_CARDS, ...extra, ...contentCardDefinitions()],
-    contentDreamwellDefinitions(),
-    {
-      avatars: [...(emblems.avatars ?? []), ...contentAvatarDefinitions()],
-      dreamsigns: [...(emblems.dreamsigns ?? []), ...contentDreamsignDefinitions()],
-    },
-    [...figments, ...contentFigmentDefinitions()],
-  );
+  return createCatalog([...SYNTHETIC_CARDS, ...extra], SYNTHETIC_DREAMWELL, emblems, figments);
 }

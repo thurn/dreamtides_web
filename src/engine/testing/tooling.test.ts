@@ -1,7 +1,6 @@
 /** The card-lab setup solver and pending-entity semantics (D36). */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
-import { contentCardDefinitions } from "../content-catalog";
 import { createEngine } from "../engine";
 import { NO_PROMPTS } from "../steps/sources";
 import { DSL, DSL_CARDS } from "./dsl-cards";
@@ -12,18 +11,17 @@ import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 /** A pending 1● event and a pending 2● 2✦ character. */
 const pendingEvent: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(904), status: "pending" };
 const pendingCharacter: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(905), status: "pending" };
-const pool = contentCardDefinitions();
 const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter]));
 
 describe("card-lab setup solver", () => {
   it("solves a playable board for every synthetic DSL card", () => {
     for (const card of DSL_CARDS) {
-      expect(() => labBoard(engine, card.id, pool), card.id).not.toThrow();
+      expect(() => labBoard(engine, card.id, []), card.id).not.toThrow();
     }
   });
 
   it("places targets on the side each selector names", () => {
-    const { state } = labBoard(engine, DSL.dissolveEnemy.id, pool);
+    const { state } = labBoard(engine, DSL.dissolveEnemy.id, []);
     expect(state.sides.enemy.backRank.filter((id) => id !== null)).toHaveLength(1);
     expect(state.sides.player.backRank.filter((id) => id !== null)).toHaveLength(0);
   });

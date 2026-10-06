@@ -15,7 +15,7 @@ import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { ScriptedSource } from "../steps/sources";
 import { boardState, type BoardSetup } from "../testing/board";
-import { fuzzEngineCatalog, playFuzzGame, replayInteractively } from "../testing/fuzz";
+import { fuzzEngineCatalog, playFuzzGame, replayInteractively, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { SYNTHETIC, syntheticId } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
 import { parsePromptId } from "../../types/identifiers";
@@ -122,7 +122,7 @@ const MALFORMED = [
   ),
 ];
 
-const engine = createEngine(fuzzEngineCatalog([divergent, emptyPrompt, emitThenChoose, ...MALFORMED]));
+const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL, [divergent, emptyPrompt, emitThenChoose, ...MALFORMED]));
 const fold = createFoldAdapter(engine, { checkEventPrefix: true });
 
 function slice(setup: BoardSetup): { slice: BattleSlice; ids: ReturnType<typeof boardState>["ids"] } {
@@ -154,7 +154,7 @@ describe("inline and interactive equivalence", () => {
   it("reproduces final states, events, and fingerprints when suspending at every prompt", () => {
     let prompts = 0;
     for (let index = 0; index < 12; index++) {
-      const game = playFuzzGame(engine, battleSeed(`fold-equivalence-${String(index)}`));
+      const game = playFuzzGame(engine, battleSeed(`fold-equivalence-${String(index)}`), SYNTHETIC_FUZZ_POOL);
       expect(game.failure).toBeNull();
       prompts += game.prompts;
       expect(replayInteractively(engine, game, () => 0).failure).toBeNull();

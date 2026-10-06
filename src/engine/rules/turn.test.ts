@@ -1,17 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
 import type { EngineEvent } from "../events";
-import { contentDreamwellDefinitions } from "../content-catalog";
 import type { BattleInit, BattleState } from "../state/types";
 import type { Side } from "../state/ids";
 import { battleSeed } from "../state/ids";
 import { NO_PROMPTS } from "../steps/sources";
 import { boardState } from "../testing/board";
-import { SYNTHETIC, testCatalog } from "../testing/synthetic-cards";
+import { SYNTHETIC, SYNTHETIC_DREAMWELL, testCatalog } from "../testing/synthetic-cards";
 
 const engine = createEngine(testCatalog());
 const v = SYNTHETIC;
-const dreamwell = contentDreamwellDefinitions().map((card) => card.id);
+const dreamwell = SYNTHETIC_DREAMWELL.map((card) => card.id);
 
 function init(overrides: Partial<BattleInit> = {}): BattleInit {
   return {

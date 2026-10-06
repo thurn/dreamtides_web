@@ -17,6 +17,13 @@
  */
 import { cpus, loadavg } from "node:os";
 import { createEngine } from "../src/engine";
+import {
+  contentAvatarDefinitions,
+  contentCardDefinitions,
+  contentDreamsignDefinitions,
+  contentDreamwellDefinitions,
+  contentFigmentDefinitions,
+} from "../src/engine/content-catalog";
 import { cycleHash, loopSignature } from "../src/engine/loops/signature";
 import { randomLegalAnswer } from "../src/engine/prompts/answers";
 import type { Answer, Prompt } from "../src/engine/prompts/types";
@@ -28,7 +35,7 @@ import type { StepObserver } from "../src/engine/steps/driver";
 import type { Step } from "../src/engine/steps/kinds";
 import { runStep } from "../src/engine/steps/runner";
 import { InlineSource } from "../src/engine/steps/sources";
-import { fuzzEngineCatalog, fuzzInit, playFuzzGame, replayInteractively } from "../src/engine/testing/fuzz";
+import { fuzzEngineCatalog, fuzzInit, playFuzzGame, replayInteractively, type FuzzPool } from "../src/engine/testing/fuzz";
 import { PolicyRandom, randomAction } from "../src/engine/testing/random-policy";
 import { determinize } from "../src/engine/view/determinize";
 import { view } from "../src/engine/view/view";
@@ -42,7 +49,14 @@ const games = Number(option("games", "100"));
 const stepGames = Number(option("step-games", "20"));
 const interactiveGames = Number(option("interactive-games", "20"));
 const prefix = String(option("seed", "bench"));
-const engine = createEngine(fuzzEngineCatalog());
+/** The production catalog, so the fuzzer plays real content beside the synthetic fixtures. */
+const pool: FuzzPool = {
+  cards: contentCardDefinitions(),
+  dreamwell: contentDreamwellDefinitions(),
+  emblems: { avatars: contentAvatarDefinitions(), dreamsigns: contentDreamsignDefinitions() },
+  figments: contentFigmentDefinitions(),
+};
+const engine = createEngine(fuzzEngineCatalog(pool));
 
 interface RecordedStep {
   readonly start: BattleState;
@@ -77,7 +91,7 @@ function playGame(seed: string, record?: (step: RecordedStep) => void): number {
     steps += 1;
     observe?.(state, step, events);
   };
-  let state = engine.createBattle(fuzzInit(battleSeed(seed)), source, counting).state;
+  let state = engine.createBattle(fuzzInit(battleSeed(seed), pool), source, counting).state;
   previous = state;
   while (state.result === null) {
     const pending = engine.decision(state);
@@ -136,7 +150,7 @@ for (let index = 0; index < stepGames; index++) {
   const recorded: RecordedStep[] = [];
   const seed = `${prefix}-${String(index)}`;
   playGame(seed, (step) => recorded.push(step));
-  const decklists = fuzzInit(battleSeed(seed)).decks;
+  const decklists = fuzzInit(battleSeed(seed), pool).decks;
   const random = new PolicyRandom(battleSeed(`determinize|${seed}`));
   recorded.forEach(({ start }, position) => {
     if (position % 10 !== 0) return;
@@ -173,7 +187,7 @@ let reruns = 0;
 let rerunMs = 0;
 let rerunMaxMs = 0;
 for (let index = 0; index < interactiveGames; index++) {
-  const game = playFuzzGame(engine, battleSeed(`${prefix}-${String(index)}`));
+  const game = playFuzzGame(engine, battleSeed(`${prefix}-${String(index)}`), pool);
   const replay = replayInteractively(engine, game, () => performance.now());
   if (replay.failure !== null) throw new Error(`${prefix}-${String(index)}: ${replay.failure}`);
   reruns += replay.reruns;
