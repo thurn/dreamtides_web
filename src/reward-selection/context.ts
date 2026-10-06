@@ -44,20 +44,20 @@ function selectionContentRevision(content: JourneyContent): SelectionContentRevi
     dreamsigns: [...content.dreamsignTemplates].sort((left, right) =>
       left.id.localeCompare(right.id),
     ),
-    customCards: [...(content.exploration?.customCards ?? [])].sort(
+    customCards: [...content.exploration.customCards].sort(
       (left, right) => left.id.localeCompare(right.id),
     ),
-    customDreamsigns: [...(content.exploration?.customDreamsigns ?? [])].sort(
+    customDreamsigns: [...content.exploration.customDreamsigns].sort(
       (left, right) =>
         (left.id ?? "").localeCompare(right.id ?? ""),
     ),
     avatars: [...content.avatars].sort((left, right) =>
       left.id.localeCompare(right.id),
     ),
-    tides: content.poolContext?.poolData.tides4Decks,
+    tides: content.poolContext.poolData.tides4Decks,
     auguryFoldHash: content.auguryData.foldHash,
     sitesFoldHash: content.sitesData.foldHash,
-    explorationFoldHash: content.exploration?.foldHash ?? null,
+    explorationFoldHash: content.exploration.foldHash ?? null,
   }));
 }
 
@@ -88,7 +88,7 @@ export function buildRewardSelectionContext(input: {
         ];
   });
   const tideData =
-    journeyContent.poolContext?.poolData.tides4Decks ?? EMPTY_TIDES;
+    journeyContent.poolContext.poolData.tides4Decks ?? EMPTY_TIDES;
   const affinityIndex = buildTideAffinityIndex(tideData);
   const dreamsignById = new Map(
     journeyContent.dreamsignTemplates.map((dreamsign) => [

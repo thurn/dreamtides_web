@@ -68,6 +68,7 @@ function buildContext(
     sitesData: MINIMAL_SITES_DATA,
     gambleData: gambleFixture(),
     dreamsignPoolIds: TEST_DREAMSIGN_POOL,
+    apollyonIncarnations: [],
     ...overrides,
   };
 }

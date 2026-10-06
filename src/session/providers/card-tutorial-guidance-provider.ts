@@ -19,7 +19,7 @@ function explorationOffersTransfiguration(
   if (runtime?.kind !== "exploration" || runtime.resolution !== null) {
     return false;
   }
-  const encounter = content.exploration?.encounters.find(
+  const encounter = content.exploration.encounters.find(
     (candidate) => candidate.cardId === runtime.encounterCardId,
   );
   if (encounter === undefined) return false;
@@ -42,7 +42,7 @@ export function createCardTutorialGuidanceContentProvider(
     cardsById.set(card.id, card);
   }
   return {
-    triggers: content.tutorial?.triggers ?? [],
+    triggers: content.tutorial.triggers,
     cardById: (cardId) => cardsById.get(cardId),
     hasVisibleTransfigurationReward: (journey, site) => {
       if (site.type === "Exploration") {

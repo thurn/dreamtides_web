@@ -171,15 +171,15 @@ export function toAvatarOfferView(
  */
 export function buildAvatarOfferViews(
   offered: AvatarContent[],
-  poolContext: RunPoolContext | undefined,
+  poolContext: RunPoolContext,
   journeySeed: JourneySeed,
-  tutorialJourneyPool?: TutorialJourneyPool,
+  tutorialJourneyPool: TutorialJourneyPool,
   tutorialAvatarId?: AvatarId,
 ): AvatarOfferView[] {
   return offered.map((avatar) => {
     const tutorialTides =
       tutorialAvatarId === avatar.id &&
-      tutorialJourneyPool?.avatarId === avatar.id
+      tutorialJourneyPool.avatarId === avatar.id
         ? tutorialJourneyPool.tides
         : undefined;
     if (tutorialTides !== undefined) {

@@ -134,7 +134,7 @@ function dreamsignById(
   content: JourneyContent,
   dreamsignId: DreamsignId,
 ): ReturnType<typeof createDreamsign> | null {
-  const customDreamsign = content.exploration?.customDreamsigns.find(
+  const customDreamsign = content.exploration.customDreamsigns.find(
     (dreamsign) => dreamsign.id === dreamsignId,
   );
   if (customDreamsign !== undefined) return customDreamsign;
@@ -4500,7 +4500,6 @@ export function buildExplorationSiteView(params: {
   content: JourneyContent;
 }): ExplorationSiteView | null {
   const exploration = params.content.exploration;
-  if (exploration === undefined) return null;
   const encounter = explorationEncounterForCard(
     exploration,
     params.runtime.encounterCardId,

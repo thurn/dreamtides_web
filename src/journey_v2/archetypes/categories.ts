@@ -91,7 +91,7 @@ export function buildCategoryUniverse(
   );
 
   const tideData =
-    context.rewardSelection.content.poolContext?.poolData.tides4Decks;
+    context.rewardSelection.content.poolContext.poolData.tides4Decks;
   if (tideData !== undefined) {
     const poolUuids = new Set(pool.map((member) => member.cardUuid));
     for (const tide of tideData.tides) {

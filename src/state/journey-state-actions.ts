@@ -511,11 +511,6 @@ export function startJourneyFromAvatar({
 }): JourneyState {
   const seed = seedOverride ?? generateJourneySeed();
   const poolContext = journeyContent.poolContext;
-  if (poolContext === undefined) {
-    throw new Error(
-      "startJourneyFromAvatar: journeyContent.poolContext is required",
-    );
-  }
   const resolvedPackage =
     resolvedPackageOverride ??
     buildAvatarPackage(avatar, poolContext, seed);

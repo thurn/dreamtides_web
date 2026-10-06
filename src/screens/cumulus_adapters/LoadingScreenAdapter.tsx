@@ -15,10 +15,8 @@ export function LoadingScreenAdapter({
   const { state, mutations } = useFrontDoor();
   const { journeyContent } = useJourney();
   const { cardDatabase } = journeyContent;
-  const tutorialCardConstants = journeyContent.tutorial?.battle.tutorialCardConstants;
-  if (tutorialCardConstants === undefined) {
-    throw new Error("Tutorial loading configuration is missing.");
-  }
+  const tutorialCardConstants =
+    journeyContent.tutorial.battle.tutorialCardConstants;
   const source = state.journeyId?.startsWith("event:") ? "main_menu" : "direct";
   const view = useMemo(
     () => buildLoadingView(cardDatabase, tutorialCardConstants),

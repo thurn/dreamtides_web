@@ -36,7 +36,7 @@ export function AtlasScreenAdapter() {
         journeyContent,
         isDesktop,
         state,
-        journeyContent.tutorial?.atlas,
+        journeyContent.tutorial.atlas,
       ),
     [atlas, journeyContent, isDesktop, state],
   );

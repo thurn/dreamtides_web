@@ -6,14 +6,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // text selection. See src/cumulus/primitives/cumulus-base.css.
 import "./cumulus/primitives/cumulus-base.css";
 import type { CardData } from "./types/cards";
-import { parseFoldHash, type FoldHash } from "./types/content-hash";
+import { parseFoldHash } from "./types/content-hash";
 import type { JourneyContent } from "./data/journey-content";
 import {
   buildAvatarTides4Provenance,
   loadJourneyContent,
 } from "./data/journey-content";
-import { loadTutorialConfiguration } from "./data/tutorial-actions";
-import { tutorialStarterDeckSize } from "./data/tutorial-actions";
 import { ConfigGateScreen } from "./components/ConfigGateScreen";
 import { registerGameProviders } from "./session/providers/register-game-providers";
 import { LocalGameProvider, useConfirmedHead } from "./session/hooks";
@@ -38,7 +36,6 @@ import { DebugScreen } from "./screens/DebugScreen";
 import JourneyDebugEditor from "./screens/JourneyDebugEditor";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { logEvent } from "./logging";
 import {
   contentConfigFromRuntime,
   type RuntimeConfig,
@@ -60,7 +57,7 @@ export function JourneyApp({
 }) {
   const { state, mutations, journeyContent } = useJourney();
   const resolvedPoolVariant =
-    journeyContent.poolContext?.poolVariant ??
+    journeyContent.poolContext.poolVariant ??
     journeyContent.draftData.pool.defaultStrategy;
   // Reflect the current screen into the address-bar path (e.g.
   // `/dreamscape/ember-wood/purge`, `/atlas`) so the URL shows where the player
@@ -168,7 +165,7 @@ export function JourneyApp({
   const tides4ProvenanceNeeded = cardSourceOverlayOpen || poolViewerOpen;
   const tides4Provenance = useMemo(() => {
     const poolContext = journeyContent.poolContext;
-    if (!tides4ProvenanceNeeded || poolContext === undefined) return null;
+    if (!tides4ProvenanceNeeded) return null;
     if (resolvedAvatarId === null) return null;
     const avatar = journeyContent.avatars.find(
       (dc) => dc.id === resolvedAvatarId,
@@ -424,23 +421,7 @@ export default function App({
 
   useEffect(() => {
     try {
-      const loadedContent = loadJourneyContent();
-      const tutorial = loadTutorialConfiguration();
-      logEvent("tutorial_configuration_loaded", {
-        contentHash: tutorial.contentHash,
-        foldHash: tutorial.foldHash,
-        tutorialCardConstants: tutorial.battle.tutorialCardConstants,
-        playerAvatarId: tutorial.battle.playerAvatarId,
-        enemyAvatarId: tutorial.battle.enemyAvatarId,
-        derivedDeckSize: tutorialStarterDeckSize(tutorial.battle),
-        startingEnergy: tutorial.battle.startingEnergy,
-        scoreToWin: tutorial.battle.scoreToWin,
-        handoff: tutorial.battle.handoff,
-      });
-      const content = {
-        ...loadedContent,
-        tutorial,
-      };
+      const content = loadJourneyContent();
       // Register the reducer content providers from the loaded content BEFORE
       // any game folds an event. Until this runs, every provider-backed event
       // (START_JOURNEY, SELECT_AVATAR, ADD_CARD, ADD_DREAMSIGN, content-coupled
@@ -497,14 +478,9 @@ export default function App({
     );
   }
 
-  if (journeyContent.tutorial === undefined) {
-    throw new Error("Tutorial configuration is missing from journey content.");
-  }
-
   return (
     <LocalGameApp
       journeyContent={journeyContent}
-      tutorialFoldHash={journeyContent.tutorial.foldHash}
       runtimeConfig={runtimeConfig}
       frontDoorEntry={frontDoorEntry}
       resumeRecentGame={resumeRecentGame}
@@ -517,7 +493,6 @@ export default function App({
 /** Opens the `?game=` local game (or resumes or creates one) and renders it. */
 function LocalGameApp({
   journeyContent,
-  tutorialFoldHash,
   runtimeConfig,
   frontDoorEntry,
   resumeRecentGame,
@@ -525,7 +500,6 @@ function LocalGameApp({
   previewTutorialVictory,
 }: {
   journeyContent: JourneyContent;
-  tutorialFoldHash: FoldHash;
   runtimeConfig: RuntimeConfig;
   frontDoorEntry?: FrontDoorEntry;
   resumeRecentGame: boolean;
@@ -544,10 +518,10 @@ function LocalGameApp({
         journeyContent.opponentsData,
         journeyContent.rewardSelectionData,
         journeyContent.auguryData,
-        journeyContent.exploration?.foldHash ?? MISSING_EXPLORATION_FOLD_HASH,
-        tutorialFoldHash,
+        journeyContent.exploration.foldHash ?? MISSING_EXPLORATION_FOLD_HASH,
+        journeyContent.tutorial.foldHash,
       ),
-    [journeyContent, tutorialFoldHash],
+    [journeyContent],
   );
   const { status, createNewGame } = useLocalGame({
     gameId: runtimeConfig.gameId,

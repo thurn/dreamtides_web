@@ -98,7 +98,7 @@ const TUTORIAL_AVATAR_SELECT_SCENE: QaScene = {
   build: (journeyContent) => {
     const tutorialAvatar = journeyContent.avatars.find(
       (avatar) =>
-        avatar.id === journeyContent.tutorial?.battle.playerAvatarId,
+        avatar.id === journeyContent.tutorial.battle.playerAvatarId,
     );
     if (tutorialAvatar === undefined) return null;
     return {
@@ -775,7 +775,7 @@ function explorationScene(
       if (state === null) return null;
       const cards = [...journeyContent.cardDatabase.values()];
       const authenticStarterCardNumbers = new Set(
-        journeyContent.poolContext?.starterCardNumbers ?? [],
+        journeyContent.poolContext.starterCardNumbers,
       );
       const selected = new Map<number, (typeof cards)[number]>();
       const add = (

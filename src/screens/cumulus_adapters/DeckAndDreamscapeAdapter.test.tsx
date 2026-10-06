@@ -167,6 +167,7 @@ describe("DreamscapeScreenAdapter", () => {
         dreamscapes: MINIMAL_DREAMSCAPES,
         sitesData: MINIMAL_SITES_DATA,
         draftData: draftDataFixture(),
+        tutorial: makeTutorialConfiguration(),
         ...journeyContent,
       },
     } as JourneyContextValue);

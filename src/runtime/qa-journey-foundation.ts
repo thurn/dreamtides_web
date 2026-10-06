@@ -42,9 +42,6 @@ export function createQaJourneyFoundation(
   }
 
   const poolContext = journeyContent.poolContext;
-  if (poolContext === undefined) {
-    return null;
-  }
 
   const seed = generateJourneySeed();
   const resolvedPackage = buildAvatarPackage(

@@ -418,7 +418,7 @@ function buildNodeCard(
     const { boss } = journeyContent.atlasData;
     const bossIncarnation =
       atlas.bossIncarnationId != null
-        ? ((journeyContent.apollyonIncarnations ?? []).find(
+        ? (journeyContent.apollyonIncarnations.find(
             (i) => i.id === atlas.bossIncarnationId,
           ) ?? null)
         : null;

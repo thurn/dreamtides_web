@@ -404,7 +404,7 @@ describe("tutorial battle lifecycle", () => {
       renderedText: "Support – Supported characters have +2✦.",
     });
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       triggers: [
         {
           id: testTutorialTriggerId("support"),
@@ -499,7 +499,7 @@ describe("tutorial battle lifecycle", () => {
       renderedText: "Support – Supported characters have +2✦.",
     });
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       triggers: [
         {
           id: testTutorialTriggerId("support"),
@@ -591,7 +591,7 @@ describe("tutorial battle lifecycle", () => {
   it("opens phase guidance after entering the player's Dusk reposition window", () => {
     const tutorialContent = content();
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       triggers: [
         {
           id: testTutorialTriggerId("opponent-reposition-opportunity"),
@@ -666,7 +666,7 @@ describe("tutorial battle lifecycle", () => {
   it("opens six-second guidance when the player's post-script Night begins", () => {
     const tutorialContent = content();
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       triggers: [
         {
           id: testTutorialTriggerId("player-night-phase"),
@@ -831,9 +831,9 @@ describe("tutorial battle lifecycle", () => {
   it("stacks card and Dreamwell draws from the authored battle configuration", () => {
     const tutorialContent = content();
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       battle: {
-        ...tutorialContent.tutorial!.battle,
+        ...tutorialContent.tutorial.battle,
         forcedPlayerDraws: [
           PLAYER_DRAW_SEQUENCE[1],
           PLAYER_DRAW_SEQUENCE[0],
@@ -881,7 +881,7 @@ describe("tutorial battle lifecycle", () => {
   it("materializes a synthetic configured handoff board deterministically", () => {
     const tutorialContent = content();
     const configuredBattle = {
-      ...tutorialContent.tutorial!.battle,
+      ...tutorialContent.tutorial.battle,
       scoreToWin: 13,
       handoff: {
         activeSide: "enemy" as const,
@@ -927,7 +927,7 @@ describe("tutorial battle lifecycle", () => {
       },
     };
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       battle: configuredBattle,
     };
     registerTutorialBattleInitProvider(
@@ -1548,11 +1548,11 @@ describe("tutorial battle lifecycle", () => {
   it("restarts under transferred room control, then hands victory into the tutorial Avatar offer", () => {
     const tutorialContent = content();
     const configuredAvatarId =
-      tutorialContent.tutorial!.battle.enemyAvatarId;
+      tutorialContent.tutorial.battle.enemyAvatarId;
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       battle: {
-        ...tutorialContent.tutorial!.battle,
+        ...tutorialContent.tutorial.battle,
         playerAvatarId: configuredAvatarId,
       },
     };
@@ -2500,7 +2500,7 @@ describe("tutorial battle lifecycle", () => {
   it("opens figment guidance after an opponent Dreamwell reveal creates a figment", () => {
     const tutorialContent = content();
     tutorialContent.tutorial = {
-      ...tutorialContent.tutorial!,
+      ...tutorialContent.tutorial,
       triggers: [
         {
           id: testTutorialTriggerId("figment-created"),

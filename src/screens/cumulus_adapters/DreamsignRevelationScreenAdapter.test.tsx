@@ -17,7 +17,7 @@ import type {
   Dreamsign,
   JourneyState,
 } from "../../types/journey";
-import type { TutorialSiteConfiguration } from "../../types/tutorial";
+import { makeTutorialConfiguration } from "../../testing/tutorial-configuration-fixture";
 import { LayerName } from "../../types/layer-name";
 import { economyFixture } from "../../testing/economy-fixture";
 import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
@@ -135,10 +135,7 @@ function makeState(): JourneyState {
   } as unknown as JourneyState;
 }
 
-function setJourneyContext(
-  state = makeState(),
-  tutorialConfiguration?: TutorialSiteConfiguration,
-): void {
+function setJourneyContext(state = makeState()): void {
   vi.mocked(useJourney).mockReturnValue({
     state,
     mutations: {
@@ -150,7 +147,7 @@ function setJourneyContext(
       guides: [GUIDE],
       economyData: economyFixture(),
       sitesData: MINIMAL_SITES_DATA,
-      tutorialDreamsignRevelation: tutorialConfiguration,
+      tutorial: makeTutorialConfiguration(),
     } as unknown as JourneyContent,
   } as JourneyContextValue);
 }

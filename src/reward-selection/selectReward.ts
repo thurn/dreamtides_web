@@ -146,7 +146,7 @@ function ordinaryCatalogCandidates(
   constraints: RewardSelectionConstraints,
 ): CardData[] {
   const customIds = new Set(
-    (context.content.exploration?.customCards ?? []).map((card) => card.id),
+    context.content.exploration.customCards.map((card) => card.id),
   );
   const excluded = new Set(constraints.excludedCardUuids ?? []);
   const allowed =
@@ -490,9 +490,8 @@ function dreamsignCandidates(
   request: RewardSelectionRequest,
 ): Candidate[] | RewardSelectionFailure {
   const fixed = request.constraints?.fixedDreamsignId;
-  const customDreamsigns: DreamsignTemplate[] = (
-    context.content.exploration?.customDreamsigns ?? []
-  ).flatMap((dreamsign) =>
+  const customDreamsigns: DreamsignTemplate[] =
+    context.content.exploration.customDreamsigns.flatMap((dreamsign) =>
     dreamsign.id === undefined
       ? []
       : [
@@ -685,7 +684,7 @@ function tuningFor(
     return { fraction: 1, minimum: request.count, values: {} };
   }
   const selection =
-    context.content.poolContext?.poolData.tides4Decks?.selection;
+    context.content.poolContext.poolData.tides4Decks?.selection;
   const fraction = selection?.bandFraction ?? context.tuning.bandFraction;
   const minimum = selection?.bandMinimum ?? context.tuning.bandMinimum;
   return {

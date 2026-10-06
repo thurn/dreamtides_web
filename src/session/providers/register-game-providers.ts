@@ -49,14 +49,12 @@ import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guida
  * folding any event.
  */
 export function registerGameProviders(content: JourneyContent): void {
-  registerTutorialFrontDoorContentProvider(
-    content.tutorial === undefined
-      ? null
-      : {
-          playerCardId: content.tutorial.battle.tutorialCardConstants.tutorialPlayerCharacterCardId,
-          journeyAvatarId: content.tutorial.battle.playerAvatarId,
-        },
-  );
+  registerTutorialFrontDoorContentProvider({
+    playerCardId:
+      content.tutorial.battle.tutorialCardConstants
+        .tutorialPlayerCharacterCardId,
+    journeyAvatarId: content.tutorial.battle.playerAvatarId,
+  });
   registerJourneyLifecycleContentProvider(
     createJourneyLifecycleContentProvider(content),
   );

@@ -14,7 +14,7 @@ import type { DeckEntryId } from "../../types/identifiers";
 export function PurgeSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
   const { cardDatabase, guides } = journeyContent;
-  const tutorialPurge = journeyContent.tutorial?.purge;
+  const tutorialPurge = journeyContent.tutorial.purge;
   const node =
     state.currentDreamscape !== null
       ? (state.atlas.nodes[state.currentDreamscape] ?? null)

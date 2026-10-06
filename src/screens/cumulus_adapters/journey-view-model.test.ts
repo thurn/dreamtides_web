@@ -1,3 +1,4 @@
+import { makeTestPoolContext } from "../../testing/pool-context";
 import {
   testJourneySeed,
   testCardId,
@@ -220,7 +221,7 @@ describe("journey-start-view-model", () => {
             signatureCardIds: [testCardId("signature-id")],
           }),
         ],
-        undefined,
+        makeTestPoolContext(),
         testJourneySeed("game-seed"),
         pool,
         testAvatarId("dc-1"),

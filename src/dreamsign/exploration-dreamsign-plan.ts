@@ -121,7 +121,7 @@ function dreamsignIdIndex(
   for (const template of content.dreamsignTemplates) {
     index.add(template.id);
   }
-  for (const dreamsign of content.exploration?.customDreamsigns ?? []) {
+  for (const dreamsign of content.exploration.customDreamsigns) {
     if (dreamsign.id !== undefined) {
       index.add(dreamsign.id);
     }

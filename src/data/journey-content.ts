@@ -72,6 +72,10 @@ import type { AtlasData } from "../types/journey";
 import { resolveCatalogStarterCardNumbers } from "./card-roles";
 import type { TutorialConfiguration } from "../types/tutorial";
 import {
+  loadTutorialConfiguration,
+  tutorialStarterDeckSize,
+} from "./tutorial-actions";
+import {
   TUTORIAL_JOURNEY_POOL,
   type TutorialJourneyPool,
 } from "./tutorial-journey-pool";
@@ -81,7 +85,7 @@ import { parseAvatarId } from "../types/identifiers";
 export interface JourneyContent {
   cardDatabase: Map<number, CardData>;
   /** Authored Exploration encounters and their site-specific reward content. */
-  exploration?: ExplorationContent;
+  exploration: ExplorationContent;
   /** Selector tuning assembled from the Tides, Augury, and Sites catalogs. */
   rewardSelectionData: RewardSelectionData;
   /** Augury composition, archetype weights, policies, and quantities. */
@@ -91,9 +95,9 @@ export interface JourneyContent {
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
   /** Complete normalized tutorial scenario. */
-  tutorial?: TutorialConfiguration;
+  tutorial: TutorialConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
-  tutorialJourneyPool?: TutorialJourneyPool;
+  tutorialJourneyPool: TutorialJourneyPool;
   /** Dreamscape definitions the Atlas generator assigns to nodes. */
   dreamscapes: readonly DreamscapeContent[];
   /**
@@ -125,8 +129,8 @@ export interface JourneyContent {
    * Apollyon's ten incarnations. Atlas generation picks one per run to present the boss node; the Atlas UI resolves the chosen incarnation's
    * title and description by `DreamAtlas.bossIncarnationId`.
    */
-  apollyonIncarnations?: readonly ApollyonIncarnationContent[];
-  poolContext?: RunPoolContext;
+  apollyonIncarnations: readonly ApollyonIncarnationContent[];
+  poolContext: RunPoolContext;
 }
 
 /**
@@ -394,6 +398,7 @@ export interface JourneyContentSources {
   transfigurationData: TransfigurationData;
   opponentsData: OpponentsData;
   apollyonIncarnations: readonly ApollyonIncarnationContent[];
+  tutorial: TutorialConfiguration;
 }
 
 /**
@@ -424,7 +429,28 @@ export function loadJourneyContent(): JourneyContent {
     transfigurationData: loadTransfigurationData(),
     opponentsData: loadOpponentsData(),
     apollyonIncarnations: loadApollyonIncarnations(),
+    tutorial: loadTutorial(),
   });
+}
+
+/**
+ * Loads the normalized tutorial scenario and logs the hashes and battle
+ * parameters that identify which tutorial a production game played.
+ */
+function loadTutorial(): TutorialConfiguration {
+  const tutorial = loadTutorialConfiguration();
+  logEvent("tutorial_configuration_loaded", {
+    contentHash: tutorial.contentHash,
+    foldHash: tutorial.foldHash,
+    tutorialCardConstants: tutorial.battle.tutorialCardConstants,
+    playerAvatarId: tutorial.battle.playerAvatarId,
+    enemyAvatarId: tutorial.battle.enemyAvatarId,
+    derivedDeckSize: tutorialStarterDeckSize(tutorial.battle),
+    startingEnergy: tutorial.battle.startingEnergy,
+    scoreToWin: tutorial.battle.scoreToWin,
+    handoff: tutorial.battle.handoff,
+  });
+  return tutorial;
 }
 
 /** Assembles journey content and its run-pool context from validated catalogs. */
@@ -449,6 +475,7 @@ export function buildJourneyContent(
     transfigurationData,
     opponentsData,
     apollyonIncarnations,
+    tutorial,
   } = sources;
   const cardDatabase = new Map(sources.cardDatabase);
   const draftPoolCards = [...cardDatabase.values()];
@@ -513,6 +540,7 @@ export function buildJourneyContent(
     avatars,
     dreamwellCards,
     dreamsignTemplates,
+    tutorial,
     tutorialJourneyPool: TUTORIAL_JOURNEY_POOL,
     dreamscapes,
     affiliations,

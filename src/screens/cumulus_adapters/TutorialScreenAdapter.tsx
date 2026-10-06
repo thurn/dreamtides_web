@@ -30,10 +30,7 @@ export function TutorialScreenAdapter({
 }) {
   const { state, mutations } = useFrontDoor();
   const { journeyContent } = useJourney();
-  const battleConfiguration = journeyContent.tutorial?.battle;
-  if (battleConfiguration === undefined) {
-    throw new Error("Tutorial battle configuration is missing.");
-  }
+  const battleConfiguration = journeyContent.tutorial.battle;
   const authoredActions = useTutorialActions();
   const beginRequestedKey = useRef<IntentKey | null>(null);
   const tutorialCards = useTutorialCards();

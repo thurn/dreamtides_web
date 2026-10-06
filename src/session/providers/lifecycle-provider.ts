@@ -31,18 +31,16 @@ export function createJourneyLifecycleContentProvider(
     ): ResolvedAvatarPackage | null => {
       const avatar = avatarById.get(avatarId);
       if (avatar === undefined) return null;
-      if (content.poolContext === undefined) return null;
       return buildAvatarPackage(avatar, content.poolContext, seed);
     },
     startJourney: ({ journey, avatarId, seed }) => {
       const avatar = avatarById.get(avatarId);
       if (avatar === undefined) return null;
-      if (content.poolContext === undefined) return null;
       const tutorialJourneyPool = content.tutorialJourneyPool;
       const isTutorialJourney =
         journey.screen.type === "journeyStart" &&
         journey.screen.tutorialAvatarId === avatarId &&
-        tutorialJourneyPool?.avatarId === avatarId;
+        tutorialJourneyPool.avatarId === avatarId;
       const resolvedPackageOverride = isTutorialJourney
         ? buildTutorialJourneyPackage(
             avatar,

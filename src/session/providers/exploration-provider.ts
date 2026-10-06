@@ -611,7 +611,7 @@ function legacyCatalogCandidates(
   excludedCardId: CardId,
 ): CardData[] {
   const customCardIds = new Set(
-    (content.exploration?.customCards ?? []).map((card) => card.id),
+    content.exploration.customCards.map((card) => card.id),
   );
   return [...content.cardDatabase.values()]
     .filter(
@@ -1751,7 +1751,6 @@ export function buildLegacyExplorationRuntime(
   rng: () => number,
   encounterCardId?: CardId | null,
 ): ExplorationSiteRuntime | null {
-  if (content.exploration === undefined) return null;
   const availableEncounters = content.exploration.encounters.filter(
     (encounter) => idIndex(content).has(encounter.cardId),
   );
@@ -1793,7 +1792,6 @@ export function buildExplorationRuntime(
   _rng: () => number,
   encounterCardId?: CardId | null,
 ): ExplorationSiteRuntime | null {
-  if (content.exploration === undefined) return null;
   const availableEncounters = content.exploration.encounters.filter(
     (encounter) => idIndex(content).has(encounter.cardId),
   );
@@ -1947,7 +1945,7 @@ function dreamsignForId(
   content: JourneyContent,
   dreamsignId: DreamsignId,
 ): Dreamsign | null {
-  const custom = content.exploration?.customDreamsigns.find(
+  const custom = content.exploration.customDreamsigns.find(
     (dreamsign) => dreamsign.id === dreamsignId,
   );
   const template = content.dreamsignTemplates.find(
@@ -2173,7 +2171,6 @@ export function resolveExplorationChoice(input: {
     payload.selectionRulesVersion !== runtime.selectionRulesVersion
   )
     return null;
-  if (content.exploration === undefined) return null;
   const actionId = stringValue(payload.actionId);
   if (actionId === null) return null;
   const encounter = explorationEncounterForCard(

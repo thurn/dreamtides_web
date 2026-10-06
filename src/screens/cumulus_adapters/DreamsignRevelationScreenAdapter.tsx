@@ -76,7 +76,7 @@ export function DreamsignRevelationScreenAdapter({
         guideLine,
         offeredDreamsigns: options,
         pendingPurgeDreamsign,
-        tutorialConfiguration: journeyContent.tutorial?.dreamsignRevelation,
+        tutorialConfiguration: journeyContent.tutorial.dreamsignRevelation,
       }),
     [
       state,
@@ -85,7 +85,7 @@ export function DreamsignRevelationScreenAdapter({
       guideLine,
       options,
       pendingPurgeDreamsign,
-      journeyContent.tutorial?.dreamsignRevelation,
+      journeyContent.tutorial.dreamsignRevelation,
     ],
   );
 

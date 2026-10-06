@@ -59,11 +59,11 @@ export interface AtlasBuildContext {
   /** Dreamsign ids eligible to be granted as pre-revealed known dreamsigns. */
   dreamsignPoolIds: readonly DreamsignId[];
   /**
-   * Apollyon's incarnations; generation picks one to present the boss node. May
-   * be empty in legacy or test contexts, in which case no incarnation is
-   * assigned and the boss falls back to its default presentation.
+   * Apollyon's incarnations; generation picks one to present the boss node.
+   * When empty, no incarnation is assigned and the boss uses its default
+   * presentation.
    */
-  apollyonIncarnations?: readonly ApollyonIncarnationContent[];
+  apollyonIncarnations: readonly ApollyonIncarnationContent[];
 }
 
 export interface AtlasGenerationOptions {
@@ -1132,7 +1132,7 @@ function generateInitialAtlasInternal(
   const bossNodeId = layers[layers.length - 1][0];
 
   // Pick one of Apollyon's incarnations to present the boss node for this run.
-  const incarnations = build.apollyonIncarnations ?? [];
+  const incarnations = build.apollyonIncarnations;
   const bossIncarnationId =
     incarnations.length > 0
       ? incarnations[randomInt(0, incarnations.length - 1)].id

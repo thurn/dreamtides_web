@@ -119,11 +119,11 @@ function buildBattleInit(
     affiliations: content.affiliations,
     dreamwellCards: content.dreamwellCards,
     dreamsignTemplates: content.dreamsignTemplates,
-    tides4Decks: content.poolContext?.poolData.tides4Decks,
-    tides4Tuning: content.poolContext?.tides4Tuning,
+    tides4Decks: content.poolContext.poolData.tides4Decks,
+    tides4Tuning: content.poolContext.tides4Tuning,
     economyData: content.economyData,
     deferOpponentLog,
-    tutorialTriggers: content.tutorial?.triggers,
+    tutorialTriggers: content.tutorial.triggers,
   });
 }
 
@@ -230,7 +230,7 @@ export function createTutorialBattleInitProvider(
     }) => {
       const key = `tutorial:${journey.seed}:${tutorialRunId}:${String(restartNumber)}`;
       const battleId = `tutorial-battle:${tutorialRunId}:${String(restartNumber)}`;
-      const battleConfiguration = requireTutorialBattleConfiguration(content);
+      const battleConfiguration = content.tutorial.battle;
       const init = createTutorialBattleInit(
         content,
         journey,
@@ -310,7 +310,7 @@ function createTutorialBattleInit(
     ),
     startingSide: "player",
     playerDrawSkipsTurnOne: false,
-    tutorialTriggers: content.tutorial?.triggers ?? [],
+    tutorialTriggers: content.tutorial.triggers,
     journeyDeckEntries: [],
     playerDeckOrder: makeDeck("player"),
     dreamwellDeck: tutorialDreamwellDeck(
@@ -570,17 +570,6 @@ function tutorialDreamwellDeck(
     imageNumber: card.imageNumber ?? card.cardNumber,
     ...(card.art ? { art: card.art } : {}),
   }));
-}
-
-function requireTutorialBattleConfiguration(
-  content: JourneyContent,
-): TutorialBattleConfiguration {
-  if (content.tutorial === undefined) {
-    throw new Error(
-      "Tutorial battle configuration is missing from tutorial data.",
-    );
-  }
-  return content.tutorial.battle;
 }
 
 function cardById(content: JourneyContent, cardId: CardId) {

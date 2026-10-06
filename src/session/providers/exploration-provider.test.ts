@@ -2197,8 +2197,8 @@ describe("Exploration provider", () => {
     const tamperedContent: JourneyContent = {
       ...validContent,
       exploration: {
-        ...validContent.exploration!,
-        encounters: validContent.exploration!.encounters.map((encounter) => ({
+        ...validContent.exploration,
+        encounters: validContent.exploration.encounters.map((encounter) => ({
           ...encounter,
           actions: encounter.actions.map((candidate) =>
             candidate.id === validAction.id

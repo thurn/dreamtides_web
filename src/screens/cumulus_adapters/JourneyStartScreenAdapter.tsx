@@ -76,9 +76,9 @@ export function JourneyStartScreenAdapter() {
     () =>
       buildJourneyStartGuideDialogue(
         tutorialAvatarId,
-        journeyContent.tutorial?.journeyStart.speechBubble,
+        journeyContent.tutorial.journeyStart.speechBubble,
       ),
-    [journeyContent.tutorial?.journeyStart.speechBubble, tutorialAvatarId],
+    [journeyContent.tutorial.journeyStart.speechBubble, tutorialAvatarId],
   );
 
   const handleGuideDialogueShown = useCallback(() => {
