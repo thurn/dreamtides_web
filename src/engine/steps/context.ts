@@ -67,7 +67,7 @@ export class Context implements StepContext {
     if (this.options.replay === true) {
       throw new UnrecordedPrompt(prompt);
     }
-    const forced = forcedAnswer(prompt);
+    const forced = forcedAnswer(prompt, this.state.config);
     if (forced !== undefined) {
       if (!isLegalAnswer(prompt, forced)) {
         throw new IllegalAnswer(prompt);

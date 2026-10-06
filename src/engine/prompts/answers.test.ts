@@ -3,13 +3,14 @@
  * cardinality, well-formedness, and fingerprints over destination counts.
  */
 import { describe, expect, it } from "vitest";
-import { BATTLE } from "../../content/battle";
 import type { InstanceId } from "../state/ids";
 import { firstLegalAnswer, forcedAnswer, hasLegalAnswer, isLegalAnswer, randomLegalAnswer } from "./answers";
 import { promptFingerprint } from "./fingerprint";
 import { isWellFormedPrompt } from "./structure";
 import type { ArrangePrompt, ArrangeSlot, Prompt, PromptPurpose } from "./types";
 
+const autoAnswer = { autoAnswerForcedPrompts: true };
+const noAutoAnswer = { autoAnswerForcedPrompts: false };
 const purpose: PromptPurpose = { source: null, cardId: null, ability: null, role: "test" };
 const [a, b, c, d, e] = ["i1", "i2", "i3", "i4", "i5"] as InstanceId[];
 
@@ -78,15 +79,16 @@ describe("arrangement cardinality", () => {
   it("auto-answers only a single card with one destination that can take it", () => {
     const onlyBottom = arrange([a], [{ to: "top", min: 0, max: 0 }, { to: "bottom", min: 0, max: 1 }]);
     const either = arrange([a], [{ to: "top", min: 0, max: 1 }, { to: "bottom", min: 0, max: 1 }]);
-    const forced = forcedAnswer(onlyBottom);
-    if (BATTLE.autoAnswerForcedPrompts) {
-      expect(forced).toEqual([{ card: a, to: "bottom" }]);
-      expect(isLegalAnswer(onlyBottom, forced ?? [])).toBe(true);
-    } else {
-      expect(forced).toBeUndefined();
-    }
-    expect(forcedAnswer(either)).toBeUndefined();
-    expect(forcedAnswer(topAndBottom)).toBeUndefined();
+    const forced = forcedAnswer(onlyBottom, autoAnswer);
+    expect(forced).toEqual([{ card: a, to: "bottom" }]);
+    expect(isLegalAnswer(onlyBottom, forced ?? [])).toBe(true);
+    expect(forcedAnswer(either, autoAnswer)).toBeUndefined();
+    expect(forcedAnswer(topAndBottom, autoAnswer)).toBeUndefined();
+  });
+
+  it("never auto-answers when the config disables auto-answers", () => {
+    const onlyBottom = arrange([a], [{ to: "top", min: 0, max: 0 }, { to: "bottom", min: 0, max: 1 }]);
+    expect(forcedAnswer(onlyBottom, noAutoAnswer)).toBeUndefined();
   });
 
   it("fingerprints destination counts", () => {

@@ -1,5 +1,5 @@
-import { BATTLE } from "../../content/battle";
 import type { InstanceId } from "../state/ids";
+import type { BattleConfig } from "../state/types";
 import type { Answer, ArrangeAnswer, ArrangeDestination, ArrangePrompt, Prompt } from "./types";
 
 function isInstanceList(value: Answer): value is readonly InstanceId[] {
@@ -94,11 +94,14 @@ export function hasLegalAnswer(prompt: Prompt): boolean {
 }
 
 /**
- * The prompt's only legal answer, when it has exactly one and the battle
- * data module enables auto-answers; otherwise `undefined`.
+ * The prompt's only legal answer, when it has exactly one and the battle's
+ * config enables auto-answers; otherwise `undefined`.
  */
-export function forcedAnswer(prompt: Prompt): Answer | undefined {
-  if (!BATTLE.autoAnswerForcedPrompts) return undefined;
+export function forcedAnswer(
+  prompt: Prompt,
+  config: Pick<BattleConfig, "autoAnswerForcedPrompts">,
+): Answer | undefined {
+  if (!config.autoAnswerForcedPrompts) return undefined;
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards":

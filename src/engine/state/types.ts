@@ -18,7 +18,21 @@ import type {
   Zone,
 } from "./ids";
 
-/** Battle rules values for one battle, from the battle data module plus the battle's own inputs. */
+/** How the shared Dreamwell deck is constructed (rules § Dreamwell numbers and cycling). */
+export interface DreamwellConfig {
+  /** Deck tiers (`order`) sampled, in order, for every cycle. */
+  readonly recurringOrders: readonly number[];
+  /** Most cards taken from each recurring tier per cycle. */
+  readonly cardsPerRecurringOrder: number;
+  /** Cycles are appended until the prebuilt deck holds at least this many cards. */
+  readonly minimumConstructedLength: number;
+}
+
+/**
+ * Battle rules values for one battle, from the battle and Dreamwell data
+ * modules plus the battle's own inputs. The engine reads every tunable from
+ * here, so a serialized state determines its own replay.
+ */
 export interface BattleConfig {
   readonly scoreToWin: number;
   /** Rounds after which an unfinished battle is a draw (P11). */
@@ -38,6 +52,9 @@ export interface BattleConfig {
   readonly loopIterationCap: number;
   /** Top-level actions in one main window that loop detection remembers. */
   readonly loopHistoryActions: number;
+  /** Whether a prompt with exactly one legal answer is answered automatically. */
+  readonly autoAnswerForcedPrompts: boolean;
+  readonly dreamwell: DreamwellConfig;
 }
 
 /** One journey deck entry as the battle receives it. */

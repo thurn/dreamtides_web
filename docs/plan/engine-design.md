@@ -72,7 +72,8 @@ interface BattleState {
   readonly version: number;            // increments per committed step
   seed: string;                        // from the game seed + battle index
   rng: RngStreams;                     // named streams: shuffle:<side>, dreamwell, random:<purpose>
-  config: BattleConfig;                // from src/content/data/battle.ts + BattleInit journey inputs (D39)
+  config: BattleConfig;                // every engine tunable: src/content/battle.ts, src/content/
+                                       // dreamwell-rules.ts, + BattleInit journey inputs (D39)
   turn: { round: number; active: Side; phase: Phase; challengeLane: number | null;
           extraTurns: Side[];        // pending extra turns, last-in first-out (C8)
           sideTurns: Record<Side, number> };  // turns each side has begun, for "your first turn"
@@ -121,6 +122,12 @@ interface CardInstance {
 type from the figment catalog as a 0● character with the spark its text gave
 it (C13), or the card a figment copy copied. Every figment is `created`. Veil
 is a keyword; losing it is a permanent floating keyword change.
+
+**Engine code reads every tunable from `BattleState.config`**, never from a
+content module: the battle rules limits, `autoAnswerForcedPrompts`, and the
+Dreamwell construction rules (`config.dreamwell`). `initialState` fills the
+config from the data modules once, so a serialized state determines its own
+replay.
 
 **`BattleState` never contains a pending prompt.** Prompts exist only while a
 step runs. In interactive play they are reconstructed from the in-flight

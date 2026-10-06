@@ -1,5 +1,4 @@
 import type { EngineCatalog } from "../catalog";
-import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
 import type { DreamwellCardId, Side } from "../state/ids";
 import { shuffleInPlace } from "../state/rng";
 import type { BattleState } from "../state/types";
@@ -7,33 +6,34 @@ import type { StepContext } from "../steps/types";
 import { setEnergy } from "./resources";
 
 /**
- * Appends one Dreamwell cycle to the shared deck: up to
+ * Appends one Dreamwell cycle to the shared deck: up to the config's
  * `cardsPerRecurringOrder` cards from each recurring tier, shuffled within
  * the tier on the `dreamwell` stream (rules § Dreamwell numbers and cycling).
  * Returns the number of cards added.
  */
 function appendCycle(state: BattleState, catalog: EngineCatalog): number {
+  const rules = state.config.dreamwell;
   let added = 0;
-  for (const order of DREAMWELL_RULES.recurringOrders) {
+  for (const order of rules.recurringOrders) {
     const tier = state.dreamwell.catalog.filter(
       (id) => catalog.dreamwellCard(id).order === order,
     );
     shuffleInPlace(state, "dreamwell", tier);
-    const taken = tier.slice(0, DREAMWELL_RULES.cardsPerRecurringOrder);
+    const taken = tier.slice(0, rules.cardsPerRecurringOrder);
     state.dreamwell.deck.push(...taken);
     added += taken.length;
   }
   return added;
 }
 
-/** Builds the shared Dreamwell deck to at least the minimum constructed length. */
+/** Builds the shared Dreamwell deck to at least the config's minimum constructed length. */
 export function buildDreamwellDeck(
   state: BattleState,
   catalog: EngineCatalog,
   cards: readonly DreamwellCardId[],
 ): void {
   state.dreamwell = { deck: [], next: 0, catalog: [...cards] };
-  while (state.dreamwell.deck.length < DREAMWELL_RULES.minimumConstructedLength) {
+  while (state.dreamwell.deck.length < state.config.dreamwell.minimumConstructedLength) {
     if (appendCycle(state, catalog) === 0) {
       return;
     }

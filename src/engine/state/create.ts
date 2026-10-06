@@ -1,4 +1,5 @@
 import { BATTLE } from "../../content/battle";
+import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
 import { emptyLoopTracker } from "../loops/types";
 import { emptyTurnLog } from "../rules/turn-log";
 import type { EngineCatalog } from "../catalog";
@@ -45,6 +46,12 @@ export function battleConfig(init: BattleInit): BattleConfig {
     mandatoryLoopWindow: BATTLE.mandatoryLoopWindow,
     loopIterationCap: BATTLE.loopIterationCap,
     loopHistoryActions: BATTLE.loopHistoryActions,
+    autoAnswerForcedPrompts: BATTLE.autoAnswerForcedPrompts,
+    dreamwell: {
+      recurringOrders: [...DREAMWELL_RULES.recurringOrders],
+      cardsPerRecurringOrder: DREAMWELL_RULES.cardsPerRecurringOrder,
+      minimumConstructedLength: DREAMWELL_RULES.minimumConstructedLength,
+    },
   };
 }
 
