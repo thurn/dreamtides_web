@@ -20,8 +20,10 @@ Track T beads ([D45](decisions.md#d45-tollgate-track)).
 **Read first:**
 
 - `~/tollgate/AGENTS.md`, its `wt` flow, and its self-install rule;
-- `~/tollgate/docs/technical-design.md` §§ 4–6, 9.9–10.8, 12.6, 15;
-- `~/tollgate/docs/staged-release-design.md`, which is binding for T2–T7;
+- `~/tollgate/docs/technical-design.md` §§ 4–6, 9.8–10.9, 11.2, 11.5,
+  12.6–12.7, 15. It specifies staged release, which is binding for Track T:
+  terms (§4), invariants I1, I8, and R1–R5 (§5), the repository model and
+  workflow (§6.2–6.3), and release advance and push (§10.9);
 - this page's [incident record](#incident-2026-10-05).
 
 **In `~/tollgate`, every bead** is implemented by a subagent, while the
@@ -177,7 +179,7 @@ Change startup so the socket opens before any repository work:
 
 ### T2. Stage configuration
 
-Staged-release design §13 item 1:
+Technical design §11.2 (schema) and §11.5 (configuration changes):
 
 - `stage` on steps;
 - `release_concurrency` and `max_release_lag`;
@@ -192,7 +194,8 @@ and digest independence between stages.
 
 ### T3. `staging` and `release` refs (core-review)
 
-Design §13 item 2:
+Technical design §6.2 (repository model), §8.3 (logical data model), and
+§19.1 (startup reconciliation):
 
 - create `staging` and migrate existing repositories;
 - split `INTEGRATION_REF`;
@@ -209,7 +212,8 @@ Design §13 item 2:
 
 ### T4. Release runs (core-review)
 
-Design §13 item 3:
+Technical design §9.8 (queue item and buildset states), §12.7 (release
+runs), and §15.1–15.3 (resources, priority, and pause):
 
 - `QueueItemKind::Release`;
 - the runner's stage filter;
@@ -220,11 +224,13 @@ Design §13 item 3:
 - outcomes and notifications.
 
 **Acceptance:** the coalescing, lock-discipline, and range-filter tests in
-design §12.
+technical design §21.1–21.3.
 
 ### T5. Release advance and push (core-review)
 
-Design §13 item 4:
+Technical design §5 (invariants I1, I8, R1–R5), §10.1–10.7 (promotion,
+push, external movement, pull, push and reconciliation), and §10.9 (release
+advance and push, `max_release_lag`, `--release-fix`):
 
 - the release intent and CAS;
 - the relocated remote preflight and push barrier;
@@ -238,12 +244,13 @@ Design §13 item 4:
 
 - R1–R5 property tests.
 - Fault injection at every durable boundary.
-- The design §12 end-to-end fixture: three fast promotions, one coalesced
-  release run, and the remote receiving only the newest tested OID.
+- The technical design §21.2 end-to-end fixture: three fast promotions, one
+  coalesced release run, and the remote receiving only the newest tested OID.
 
 ### T6. Surfaces
 
-Design §13 item 5:
+Technical design §16.1–16.2 (CLI), §17.4–17.5 (Release panel and
+operations), and §17.7 (notifications):
 
 - `tg status` with both refs and lag;
 - `tg release status` and `tg release retry`;
@@ -259,10 +266,9 @@ Design §13 item 5:
 
 ### T7. Fold the design into the technical design
 
-Design §13 item 6. Update `technical-design.md` and the README to the
-current state, then delete `staged-release-design.md`. T10 updates the
-`dreamtides_web` plan's citations of the design to `technical-design.md`
-sections.
+`~/tollgate/docs/technical-design.md` and the Tollgate README describe staged
+release as implemented. The technical design is the single design document;
+this plan cites its sections.
 
 ### T8. Skills and Hive
 
@@ -326,7 +332,7 @@ Update every consumer of the ref model:
    Record the time to a healthy `doctor` and to all repositories active.
 3. In one `dreamtides_web` commit:
    - write the Track T beads' friction files from their notes;
-   - update the plan's citations of the staged-release design to
+   - point the plan's citations of Tollgate's design at
      `technical-design.md` sections.
 4. Close the Track T epic.
 

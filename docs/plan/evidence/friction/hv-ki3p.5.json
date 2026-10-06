@@ -1,0 +1,1 @@
+{"bead":"hv-ki3p.5","phase":"T","lane":null,"implementMin":47,"localValidationS":null,"hostLoad":12,"testDelta":null,"friction":[{"tag":"review-follow-up-bead","minutes":null,"note":"core-review findings accepted and filed as follow-up bead hv-ki3p.14"},{"tag":"flaky-restart-test","minutes":null,"note":"a pre-existing flaky Tollgate restart test had to be fixed in this bead"}]}

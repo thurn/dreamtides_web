@@ -1,0 +1,1 @@
+{"bead":"hv-ki3p.12","phase":"T","lane":null,"implementMin":9,"localValidationS":null,"hostLoad":4.8,"testDelta":null,"friction":[{"tag":"tollgate-app-sidecar-prep","minutes":null,"note":"tollgate-app tests need scripts/prepare-sidecar.sh debug run first"}]}

@@ -606,8 +606,9 @@ execution would take over 80 hours.
 
 ### D44. Staged validation
 
-Validation has two stages, as designed in
-`~/tollgate/docs/staged-release-design.md`:
+Validation has two stages, as specified in
+`~/tollgate/docs/technical-design.md` (§6.2–6.3 repository model and
+workflow, §10.9 release advance and push, §12.7 release runs):
 
 - **Gate stage.** It is fast, at most about 60 s. It blocks promotion to the
   Tollgate-owned `staging` ref. New worktrees branch from `staging`, and
@@ -625,8 +626,10 @@ Consequences:
   work. The dreamtides policy sets `max_release_lag = 5`.
 - **Phase gates, the Track T gate, and the end of the run** require `release`
   to equal `staging`.
-- **Until Track T adopts staged validation here** (task T9), the gate runs
-  `review:full` as before. The orchestrator still never waits on it (D43).
+- **This repository runs in staged mode** (task T9). Its gate stage runs
+  `dependencies` and `npm run review:gate`; its release stage runs
+  `npm run review:full` and `fuzz:engine -- --games 200`. The orchestrator
+  never waits on either stage (D43).
 
 **Why:** only 1 of 19 Phase 1–2 gates failed. Blocking every bead on the full
 suite bought almost nothing.
@@ -659,8 +662,10 @@ Rules:
   are project code, not shared Hive configuration.
 - **The startup fixes (T1a, T1b) promote first.** No other Tollgate bead
   promotes before them.
-- **The staged-release design is binding** for T2–T7, with its §15 defaults.
-  This repository's policy sets `max_release_lag = 5`.
+- **Tollgate's staged-release design is binding** for Track T. It lives in
+  `~/tollgate/docs/technical-design.md`: invariants R1–R5 (§5), release
+  advance and push (§10.9), the schema and its defaults (§11.2), and release
+  runs (§12.7). This repository's policy sets `max_release_lag = 5`.
 
 **Why:** on 2026-10-05 a docs-only Tollgate self-install restart left Tollgate
 unavailable to every repository for about 100 minutes. Startup pruned about
