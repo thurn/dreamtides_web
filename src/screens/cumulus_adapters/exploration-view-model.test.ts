@@ -23,6 +23,7 @@ import {
   resolveExplorationGuide,
 } from "./exploration-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 
 function serializedActionView(
   action: ExplorationActionView | undefined,
@@ -166,6 +167,7 @@ describe("exploration-view-model", () => {
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
       sitesData: MINIMAL_SITES_DATA,
+      rewardSelectionData: CONFIG_DATA_FIXTURE.rewardSelectionData,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -297,6 +299,7 @@ describe("exploration-view-model", () => {
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
       sitesData: MINIMAL_SITES_DATA,
+      rewardSelectionData: CONFIG_DATA_FIXTURE.rewardSelectionData,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -414,6 +417,7 @@ describe("exploration-view-model", () => {
         guides: [guide],
         atlasData: MINIMAL_ATLAS_DATA,
         sitesData: MINIMAL_SITES_DATA,
+        rewardSelectionData: CONFIG_DATA_FIXTURE.rewardSelectionData,
         exploration: {
           customCards: [],
           customDreamsigns: [],

@@ -7,12 +7,11 @@ import { resolveDeckEntryCard } from "../card-type-change";
 import {
   explorationActionUsesOfferedDeckTarget,
   type ExplorationActionContent,
-  type ExplorationPredicate,
 } from "../data/exploration";
 import type { JourneyContent } from "../data/journey-content";
 import { activeSiteIdOf } from "../rules/journey/sites";
 import { offeredTransfigurationForms } from "../transfiguration/transfiguration-logic";
-import { AUGURY_TUNING } from "../journey_v2/tuning";
+import { matchesPredicate } from "./predicates";
 import type { CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { DeckEntryId } from "../types/identifiers";
@@ -64,36 +63,6 @@ export type OfferUsabilityFollowup =
       readonly requiredOverflowReplacementCount: number;
     }
   | { readonly kind: "site-types"; readonly choices: readonly unknown[] };
-
-export function matchesPredicate(
-  card: CardData,
-  predicate: ExplorationPredicate,
-  content: JourneyContent,
-): boolean {
-  switch (predicate) {
-    case "character":
-      return card.cardType === "Character";
-    case "event":
-      return card.cardType === "Event";
-    case "cheap-character":
-      return (
-        card.cardType === "Character" &&
-        card.energyCost !== null &&
-        card.energyCost <=
-          (content.rewardSelectionData?.tuning.costBands
-            .cheapCharacterMaximum ??
-            AUGURY_TUNING.costBands.cheapCharacterMaximum)
-      );
-    case "legendary":
-      return card.rarity === "Legendary";
-    case "spirit-animal":
-      return card.cardType === "Character" && card.subtype === "Spirit Animal";
-    case "survivor":
-      return card.cardType === "Character" && card.subtype === "Survivor";
-    case "warrior":
-      return card.cardType === "Character" && card.subtype === "Warrior";
-  }
-}
 
 export function cardById(
   content: JourneyContent,
@@ -783,7 +752,11 @@ export function hasUsableMultiCardTransfigurationPreparation(
         !binding.transfigurations.includes(entry.transfiguration)) ||
       base.id !== binding.cardId ||
       (action.predicate !== undefined &&
-        !matchesPredicate(base, action.predicate, content))
+        !matchesPredicate(
+          base,
+          action.predicate,
+          content.rewardSelectionData.tuning.costBands,
+        ))
     ) {
       return false;
     }
@@ -896,10 +869,18 @@ export function hasUsableMultiCardReplacementPreparation(
     return (
       source !== null &&
       source.id === binding.sourceCardId &&
-      matchesPredicate(source, preparation.predicate, content) &&
+      matchesPredicate(
+        source,
+        preparation.predicate,
+        content.rewardSelectionData.tuning.costBands,
+      ) &&
       replacement !== null &&
       replacement.id !== binding.sourceCardId &&
-      matchesPredicate(replacement, preparation.predicate, content)
+      matchesPredicate(
+        replacement,
+        preparation.predicate,
+        content.rewardSelectionData.tuning.costBands,
+      )
     );
   });
 }
@@ -960,7 +941,11 @@ export function hasUsableRandomDeckTargetPreparation(
     }
     return (
       action.predicate !== undefined &&
-      matchesPredicate(card, action.predicate, content)
+      matchesPredicate(
+        card,
+        action.predicate,
+        content.rewardSelectionData.tuning.costBands,
+      )
     );
   });
   return (
@@ -1146,7 +1131,11 @@ export function hasUsableCompoundActionPreparation(
           const card = currentCard(target.entryId, target.cardId);
           return (
             card !== null &&
-            matchesPredicate(card, preparation.predicate, content)
+            matchesPredicate(
+              card,
+              preparation.predicate,
+              content.rewardSelectionData.tuning.costBands,
+            )
           );
         })
       );

@@ -2,6 +2,7 @@ import {
   mergeCardKeywordModification,
   resolveDeckEntryCard,
 } from "../../card-type-change";
+import { matchesPredicate } from "../../exploration/predicates";
 import { createDreamsign } from "../../data/dreamsigns";
 import { toJourneyAvatar } from "../../data/avatar-selection";
 import {
@@ -373,34 +374,6 @@ function idIndex(content: JourneyContent): ReadonlyMap<CardId, CardData> {
   );
 }
 
-function matchesPredicate(
-  card: CardData,
-  predicate: ExplorationPredicate,
-  content: JourneyContent,
-): boolean {
-  switch (predicate) {
-    case "character":
-      return card.cardType === "Character";
-    case "event":
-      return card.cardType === "Event";
-    case "cheap-character":
-      return (
-        card.cardType === "Character" &&
-        card.energyCost !== null &&
-        card.energyCost <=
-          content.rewardSelectionData.tuning.costBands.cheapCharacterMaximum
-      );
-    case "legendary":
-      return card.rarity === "Legendary";
-    case "spirit-animal":
-      return card.cardType === "Character" && card.subtype === "Spirit Animal";
-    case "survivor":
-      return card.cardType === "Character" && card.subtype === "Survivor";
-    case "warrior":
-      return card.cardType === "Character" && card.subtype === "Warrior";
-  }
-}
-
 function resolvedDeckCards(
   journey: JourneyState,
   content: JourneyContent,
@@ -434,7 +407,11 @@ function transfigureAllEligibleEntryIds(
     .filter(
       ({ entry, card }) =>
         entry.transfiguration === null &&
-        matchesPredicate(card, predicate, content) &&
+        matchesPredicate(
+          card,
+          predicate,
+          content.rewardSelectionData.tuning.costBands,
+        ) &&
         offeredTransfigurationForms(
           content.transfigurationData,
           card,
@@ -1375,7 +1352,11 @@ function buildActionOffer(
     return withSelection(offer, selected);
   } else if (action.effectKind === "replace-selected") {
     const deckCards = resolvedDeckCards(journey, content).filter(({ card }) =>
-      matchesPredicate(card, action.predicate ?? "character", content),
+      matchesPredicate(
+        card,
+        action.predicate ?? "character",
+        content.rewardSelectionData.tuning.costBands,
+      ),
     );
     const selections: RewardSelectionResult[] = [];
     for (const { entry, card } of deckCards) {
@@ -2134,7 +2115,11 @@ export function resolveExplorationChoice(input: {
           return resolved === null ||
             rewardTarget === null ||
             resolved.card.id !== target.cardId ||
-            !matchesPredicate(resolved.card, preparation.predicate, content)
+            !matchesPredicate(
+              resolved.card,
+              preparation.predicate,
+              content.rewardSelectionData.tuning.costBands,
+            )
             ? null
             : { ...resolved, rewardTarget, target };
         });
@@ -2721,7 +2706,11 @@ export function resolveExplorationChoice(input: {
         replacementCardId === undefined ||
         preparation.replacementCardId !== replacementCardId ||
         action.predicate === undefined ||
-        !matchesPredicate(target.effectiveCard, action.predicate, content) ||
+        !matchesPredicate(
+          target.effectiveCard,
+          action.predicate,
+          content.rewardSelectionData.tuning.costBands,
+        ) ||
         replacement === null
       ) {
         return null;
@@ -3509,7 +3498,11 @@ export function resolveExplorationChoice(input: {
       if (
         selected === null ||
         (action.predicate !== undefined &&
-          !matchesPredicate(selected.card, action.predicate, content)) ||
+          !matchesPredicate(
+            selected.card,
+            action.predicate,
+            content.rewardSelectionData.tuning.costBands,
+          )) ||
         !duplicateEntry(parseDeckEntryId(entryIds[0]), action.count ?? 1)
       ) {
         return null;
@@ -3841,7 +3834,11 @@ export function resolveExplorationChoice(input: {
       if (selected === null) return null;
       if (
         action.predicate !== undefined &&
-        !matchesPredicate(selected.card, action.predicate, content)
+        !matchesPredicate(
+          selected.card,
+          action.predicate,
+          content.rewardSelectionData.tuning.costBands,
+        )
       )
         return null;
       const transfiguration = offeredTransfigurationForms(
@@ -3884,7 +3881,11 @@ export function resolveExplorationChoice(input: {
           (entry) =>
             entry === null ||
             (predicate !== undefined &&
-              !matchesPredicate(entry.card, predicate, content)),
+              !matchesPredicate(
+                entry.card,
+                predicate,
+                content.rewardSelectionData.tuning.costBands,
+              )),
         )
       )
         return null;
@@ -4212,7 +4213,11 @@ export function resolveExplorationChoice(input: {
         selected.card.cardType !== "Character" ||
         selected.card.subtype === action.subtype ||
         (action.predicate !== undefined &&
-          !matchesPredicate(selected.card, action.predicate, content))
+          !matchesPredicate(
+            selected.card,
+            action.predicate,
+            content.rewardSelectionData.tuning.costBands,
+          ))
       )
         return null;
       const target = deckTarget(next, content, parseDeckEntryId(entryIds[0]));
@@ -4343,7 +4348,11 @@ export function resolveExplorationChoice(input: {
         target === null ||
         replacement === null ||
         (action.predicate !== undefined &&
-          !matchesPredicate(selected.card, action.predicate, content))
+          !matchesPredicate(
+            selected.card,
+            action.predicate,
+            content.rewardSelectionData.tuning.costBands,
+          ))
       ) {
         return null;
       }
@@ -4438,7 +4447,11 @@ export function resolveExplorationChoice(input: {
         selected === null ||
         selected.entry.transfiguration !== null ||
         (action.predicate !== undefined &&
-          !matchesPredicate(selected.card, action.predicate, content)) ||
+          !matchesPredicate(
+            selected.card,
+            action.predicate,
+            content.rewardSelectionData.tuning.costBands,
+          )) ||
         !offeredTransfigurationForms(
           content.transfigurationData,
           selected.card,
@@ -4549,7 +4562,7 @@ export function resolveExplorationChoice(input: {
           matchesPredicate(
             card,
             action.predicate as ExplorationPredicate,
-            content,
+            content.rewardSelectionData.tuning.costBands,
           ),
       );
       const essenceGained = matchingCards.length * action.essencePerCard;

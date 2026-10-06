@@ -1,3 +1,4 @@
+import { matchesPredicate } from "../exploration/predicates";
 import { applyTransfigurationToCard } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
@@ -27,7 +28,6 @@ import {
 import {
   SELECTION_RULES_VERSION,
   type RewardCandidateKeyKind,
-  type RewardCardPredicate,
   type RewardSelectionBindings,
   type RewardSelectionCandidateTrace,
   type RewardSelectionConstraints,
@@ -73,30 +73,6 @@ function failure(
     reason,
     ...(detail === undefined ? {} : { detail }),
   };
-}
-
-function matchesPredicate(
-  card: CardData,
-  predicate: RewardCardPredicate,
-): boolean {
-  switch (predicate) {
-    case "any":
-      return true;
-    case "character":
-      return card.cardType === "Character";
-    case "event":
-      return card.cardType === "Event";
-    case "cheap-character":
-      return card.cardType === "Character" && card.energyCost !== null;
-    case "spirit-animal":
-      return card.cardType === "Character" && card.subtype === "Spirit Animal";
-    case "survivor":
-      return card.cardType === "Character" && card.subtype === "Survivor";
-    case "warrior":
-      return card.cardType === "Character" && card.subtype === "Warrior";
-    case "legendary":
-      return card.rarity === "Legendary";
-  }
 }
 
 function canonicalRank(candidates: readonly Candidate[]): Candidate[] {
@@ -169,10 +145,7 @@ function ordinaryCatalogCandidates(
         (constraints.excludeOwned !== true ||
           !context.ownedCardUuids.has(card.id)) &&
         !excluded.has(card.id) &&
-        matchesPredicate(card, predicate) &&
-        (predicate !== "cheap-character" ||
-          (card.energyCost ?? Infinity) <=
-            context.tuning.costBands.cheapCharacterMaximum),
+        matchesPredicate(card, predicate, context.tuning.costBands),
     )
     .sort((left, right) => compareStableKeys(left.id, right.id));
 }
@@ -189,10 +162,11 @@ function cardCandidates(
         : context.cardByUuid.get(constraints.fixedCardUuid);
     if (
       card === undefined ||
-      !matchesPredicate(card, constraints.predicate ?? "any") ||
-      (constraints.predicate === "cheap-character" &&
-        (card.energyCost ?? Infinity) >
-          context.tuning.costBands.cheapCharacterMaximum)
+      !matchesPredicate(
+        card,
+        constraints.predicate ?? "any",
+        context.tuning.costBands,
+      )
     )
       return failure(
         request,
@@ -267,10 +241,7 @@ function deckEntryCandidates(
   const excludedEntryIds = new Set(constraints.excludedDeckEntryIds ?? []);
   let entries = context.effectiveDeckCards.filter(
     ({ entry, effectiveCard }) =>
-      matchesPredicate(effectiveCard, predicate) &&
-      (predicate !== "cheap-character" ||
-        (effectiveCard.energyCost ?? Infinity) <=
-          context.tuning.costBands.cheapCharacterMaximum) &&
+      matchesPredicate(effectiveCard, predicate, context.tuning.costBands) &&
       !excludedCardUuids.has(effectiveCard.id) &&
       !excludedEntryIds.has(entry.entryId) &&
       (constraints.allowNightmare === true || !entry.isBane) &&
@@ -361,10 +332,7 @@ function transfigurationCandidates(
   for (const { entry, baseCard, effectiveCard } of context.effectiveDeckCards) {
     if (
       entry.transfiguration !== null ||
-      !matchesPredicate(effectiveCard, predicate) ||
-      (predicate === "cheap-character" &&
-        (effectiveCard.energyCost ?? Infinity) >
-          context.tuning.costBands.cheapCharacterMaximum) ||
+      !matchesPredicate(effectiveCard, predicate, context.tuning.costBands) ||
       (constraints.starterOnly === true && !effectiveCard.isStarter) ||
       (constraints.starterOnly !== true &&
         constraints.allowStarters !== true &&
@@ -677,8 +645,7 @@ function tuningFor(
   if (request.policyId === "uniform" || request.policyId === "site-uniform") {
     return { fraction: 1, minimum: request.count, values: {} };
   }
-  const selection =
-    context.content.poolContext.poolData.tides4Decks?.selection;
+  const selection = context.content.poolContext.poolData.tides4Decks?.selection;
   const fraction = selection?.bandFraction ?? context.tuning.bandFraction;
   const minimum = selection?.bandMinimum ?? context.tuning.bandMinimum;
   return {

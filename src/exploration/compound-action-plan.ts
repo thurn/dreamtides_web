@@ -1,4 +1,5 @@
 import type { JourneyContent } from "../data/journey-content";
+import { matchesPredicate } from "./predicates";
 import type { ExplorationPredicate } from "../data/exploration";
 import {
   rewardTransfigurations,
@@ -164,34 +165,6 @@ const EXPLORATION_PREDICATES: ReadonlySet<ExplorationPredicate> = new Set([
   "survivor",
   "warrior",
 ]);
-
-function matchesPredicate(
-  card: CardData,
-  predicate: ExplorationPredicate,
-  content: JourneyContent,
-): boolean {
-  switch (predicate) {
-    case "character":
-      return card.cardType === "Character";
-    case "event":
-      return card.cardType === "Event";
-    case "cheap-character":
-      return (
-        card.cardType === "Character" &&
-        card.energyCost !== null &&
-        card.energyCost <=
-          content.rewardSelectionData.tuning.costBands.cheapCharacterMaximum
-      );
-    case "legendary":
-      return card.rarity === "Legendary";
-    case "spirit-animal":
-      return card.cardType === "Character" && card.subtype === "Spirit Animal";
-    case "survivor":
-      return card.cardType === "Character" && card.subtype === "Survivor";
-    case "warrior":
-      return card.cardType === "Character" && card.subtype === "Warrior";
-  }
-}
 
 function positiveForms(
   content: JourneyContent,
@@ -639,7 +612,11 @@ function prepareFastNightmares(
 ): ExplorationCompoundActionPreparation {
   const targets = context.effectiveDeckCards
     .filter(({ effectiveCard }) =>
-      matchesPredicate(effectiveCard, input.predicate, input.content),
+      matchesPredicate(
+        effectiveCard,
+        input.predicate,
+        input.content.rewardSelectionData.tuning.costBands,
+      ),
     )
     .map(({ entry, baseCard }) => ({
       entryId: entry.entryId,

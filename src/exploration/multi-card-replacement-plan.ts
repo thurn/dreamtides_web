@@ -1,4 +1,5 @@
 import { resolveDeckEntryCard } from "../card-type-change";
+import { matchesPredicate } from "./predicates";
 import type { ExplorationPredicate } from "../data/exploration";
 import type { JourneyContent } from "../data/journey-content";
 import { buildRewardSelectionContext } from "../reward-selection/context";
@@ -10,7 +11,6 @@ import {
   type RewardSelectionTrace,
   type SelectionRulesVersion,
 } from "../reward-selection/types";
-import type { CardData } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
 import type { DeckEntryId, SelectionKey } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
@@ -46,34 +46,6 @@ export interface MultiCardReplacementPlanInput {
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
-}
-
-function matchesPredicate(
-  card: CardData,
-  predicate: ExplorationPredicate,
-  content: JourneyContent,
-): boolean {
-  switch (predicate) {
-    case "character":
-      return card.cardType === "Character";
-    case "event":
-      return card.cardType === "Event";
-    case "cheap-character":
-      return (
-        card.cardType === "Character" &&
-        card.energyCost !== null &&
-        card.energyCost <=
-          content.rewardSelectionData.tuning.costBands.cheapCharacterMaximum
-      );
-    case "spirit-animal":
-      return card.cardType === "Character" && card.subtype === "Spirit Animal";
-    case "survivor":
-      return card.cardType === "Character" && card.subtype === "Survivor";
-    case "warrior":
-      return card.cardType === "Character" && card.subtype === "Warrior";
-    case "legendary":
-      return card.rarity === "Legendary";
-  }
 }
 
 function replacementRequest(input: {
@@ -150,7 +122,11 @@ export function prepareMultiCardReplacementPlan(
         baseCard,
         entry,
       );
-      return matchesPredicate(effectiveCard, input.predicate, input.content)
+      return matchesPredicate(
+        effectiveCard,
+        input.predicate,
+        input.content.rewardSelectionData.tuning.costBands,
+      )
         ? [{ entry, baseCard }]
         : [];
     })

@@ -1,4 +1,5 @@
 import type { JourneyContent } from "../data/journey-content";
+import { matchesPredicate } from "./predicates";
 import type { ExplorationPredicate } from "../data/exploration";
 import {
   rewardTransfigurations,
@@ -96,35 +97,6 @@ function modeFor(
   }
 }
 
-function matchesPredicate(
-  card: CardData,
-  predicate: ExplorationPredicate | undefined,
-  content: JourneyContent,
-): boolean {
-  if (predicate === undefined) return true;
-  switch (predicate) {
-    case "character":
-      return card.cardType === "Character";
-    case "event":
-      return card.cardType === "Event";
-    case "cheap-character":
-      return (
-        card.cardType === "Character" &&
-        card.energyCost !== null &&
-        card.energyCost <=
-          content.rewardSelectionData.tuning.costBands.cheapCharacterMaximum
-      );
-    case "spirit-animal":
-      return card.cardType === "Character" && card.subtype === "Spirit Animal";
-    case "survivor":
-      return card.cardType === "Character" && card.subtype === "Survivor";
-    case "warrior":
-      return card.cardType === "Character" && card.subtype === "Warrior";
-    case "legendary":
-      return card.rarity === "Legendary";
-  }
-}
-
 function offeredForms(
   input: ExplorationMultiCardTransfigurationPlanInput,
   card: CardData,
@@ -174,7 +146,11 @@ function candidates(
       const card = input.content.cardDatabase.get(entry.cardNumber);
       if (
         card === undefined ||
-        !matchesPredicate(card, input.predicate, input.content)
+        !matchesPredicate(
+          card,
+          input.predicate ?? "any",
+          input.content.rewardSelectionData.tuning.costBands,
+        )
       ) {
         return [];
       }
