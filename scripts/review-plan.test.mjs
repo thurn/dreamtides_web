@@ -9,6 +9,7 @@ import {
   importSearchNeedles,
   relatedTestRunDecision,
   reviewNeedsPreparedWorkspace,
+  TYPECHECK_STEPS,
 } from "./review-plan.mjs";
 
 describe("fast review plan", () => {
@@ -55,11 +56,23 @@ describe("fast review plan", () => {
     });
   });
 
-  it("routes repository scripts to related tests without typed source lint", () => {
+  it("lints and typechecks repository scripts beside their related tests", () => {
     expect(buildReviewPlan(["scripts/review.mjs"])).toMatchObject({
+      lintFiles: ["scripts/review.mjs"],
+      shouldTypecheck: true,
+      testInputs: ["scripts/review.mjs"],
+    });
+    expect(buildReviewPlan(["scripts/bench.ts"])).toMatchObject({
+      lintFiles: ["scripts/bench.ts"],
+      shouldTypecheck: true,
+    });
+  });
+
+  it("lints only the script modules the node TypeScript project checks", () => {
+    expect(buildReviewPlan(["scripts/legacy.cjs"])).toMatchObject({
       lintFiles: [],
       shouldTypecheck: false,
-      testInputs: ["scripts/review.mjs"],
+      testInputs: ["scripts/legacy.cjs"],
     });
   });
 
@@ -92,6 +105,7 @@ describe("fast review plan", () => {
 
 describe("deleted modules", () => {
   it("checks the surviving importers of a deleted module in its place", () => {
+    /** @type {string[][]} */
     const requested = [];
     const plan = buildReviewPlan(
       ["docs/notes.md", "scripts/lib/removed.mjs"],
@@ -106,8 +120,8 @@ describe("deleted modules", () => {
     expect(plan).toEqual({
       changedFiles: ["docs/notes.md", "scripts/lib/removed.mjs"],
       importerFiles: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
-      lintFiles: ["src/state/uses-removed.ts"],
-      shouldTypecheck: false,
+      lintFiles: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
+      shouldTypecheck: true,
       testInputs: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
     });
   });
@@ -137,8 +151,9 @@ describe("deleted modules", () => {
   });
 
   it("looks up importers only for deleted modules", () => {
+    /** @type {string[][]} */
     const requested = [];
-    const findImporters = (targets) => {
+    const findImporters = (/** @type {string[]} */ targets) => {
       requested.push(targets);
       return [];
     };
@@ -158,7 +173,12 @@ describe("deleted modules", () => {
       ),
     ).toEqual([
       { step: "prepare", args: [] },
-      { concurrent: [{ step: "typecheck", args: [] }] },
+      {
+        concurrent: [
+          ...TYPECHECK_STEPS,
+          { step: "lint", args: ["scripts/dev.test.mjs"] },
+        ],
+      },
       {
         step: "test-related-capped",
         args: [
@@ -172,7 +192,8 @@ describe("deleted modules", () => {
 });
 
 describe("importer resolution", () => {
-  const importer = (path, source) => ({ path, source });
+  const importer = (/** @type {string} */ path, /** @type {string} */ source) =>
+    ({ path, source });
 
   it("finds static, dynamic, require and mock imports of a deleted module", () => {
     expect(
@@ -250,7 +271,14 @@ describe("gate review plan", () => {
   it("always prepares and typechecks, even for documentation-only commits", () => {
     expect(gateExecutionPlan(buildReviewPlan(["docs/notes.md"]))).toEqual([
       { step: "prepare", args: [] },
-      { concurrent: [{ step: "typecheck", args: [] }] },
+      { concurrent: TYPECHECK_STEPS },
+    ]);
+  });
+
+  it("typechecks the application and the node tooling projects", () => {
+    expect(TYPECHECK_STEPS.map(({ step }) => step)).toEqual([
+      "typecheck",
+      "typecheck-node",
     ]);
   });
 
@@ -263,8 +291,8 @@ describe("gate review plan", () => {
       { step: "prepare", args: [] },
       {
         concurrent: [
-          { step: "typecheck", args: [] },
-          { step: "lint", args: ["src/state/example.ts"] },
+          ...TYPECHECK_STEPS,
+          { step: "lint", args: ["scripts/tool.mjs", "src/state/example.ts"] },
         ],
       },
       {

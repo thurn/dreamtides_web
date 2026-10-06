@@ -10,6 +10,8 @@
 // `--name: value;` declaration (optionally followed by a `/* @kind ... */`
 // marker) takes.
 
+/** @typedef {{ name: string, value: string, kind?: string }} CssToken */
+
 /**
  * Extract every `--name: value;` custom-property declaration from `cssText`.
  *
@@ -36,7 +38,7 @@
  *     suppressed.
  *
  * @param {string} cssText
- * @returns {Array<{ name: string, value: string, kind?: string }>}
+ * @returns {CssToken[]}
  */
 export function parseCssTokens(cssText) {
   // The null byte can't appear in real CSS source, so it's a safe sentinel
@@ -47,7 +49,11 @@ export function parseCssTokens(cssText) {
 
   const withoutComments = cssText.replace(
     /\/\*([\s\S]*?)\*\//g,
-    (_whole, body, offset) => {
+    (
+      /** @type {string} */ _whole,
+      /** @type {string} */ body,
+      /** @type {number} */ offset,
+    ) => {
       const kindMatch = body.trim().match(/^@kind\s+(\S+)$/);
       if (kindMatch && trailsSemicolon(cssText, offset)) {
         return `${SENTINEL}${kindMatch[1]}${SENTINEL}`;
@@ -66,9 +72,11 @@ export function parseCssTokens(cssText) {
     "g",
   );
 
+  /** @type {CssToken[]} */
   const tokens = [];
   for (const match of withoutComments.matchAll(declarationRe)) {
     const [, name, rawValue, kind] = match;
+    /** @type {CssToken} */
     const token = { name, value: rawValue.trim() };
     if (kind !== undefined) {
       token.kind = kind;
@@ -82,6 +90,10 @@ export function parseCssTokens(cssText) {
  * Whether the character immediately before `offset` in `text`, ignoring
  * whitespace, is a `;` — i.e. whether a comment starting at `offset` trails a
  * declaration's terminating semicolon rather than sitting inside its value.
+ *
+ * @param {string} text
+ * @param {number} offset
+ * @returns {boolean}
  */
 function trailsSemicolon(text, offset) {
   let i = offset - 1;

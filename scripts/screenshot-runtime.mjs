@@ -6,6 +6,17 @@ import { ListRootsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
 export const DEFAULT_SCREENSHOT_PORT = 5178;
 
+/**
+ * An MCP tool result. Only its `isError` flag and the text blocks of its
+ * `content` are read.
+ *
+ * @typedef {Record<string, unknown>} McpToolResult
+ */
+
+/**
+ * @param {{ name?: string, url?: string, roots?: string[] }} [options]
+ */
+
 export async function connectPlaywrightMcp({
   name = `quest-screenshots-${String(process.pid)}`,
   url = process.env.PLAYWRIGHT_MCP_URL ?? "http://localhost:8931/mcp",
@@ -15,16 +26,22 @@ export async function connectPlaywrightMcp({
     { name, version: "1.0.0" },
     { capabilities: { roots: { listChanged: false } } },
   );
-  client.setRequestHandler(ListRootsRequestSchema, async () => ({
-    roots: roots.map((root) => ({
-      uri: pathToFileURL(root).href,
-      name: root,
-    })),
-  }));
+  client.setRequestHandler(ListRootsRequestSchema, () =>
+    Promise.resolve({
+      roots: roots.map((root) => ({
+        uri: pathToFileURL(root).href,
+        name: root,
+      })),
+    }));
   const transport = new StreamableHTTPClientTransport(new URL(url));
   await client.connect(transport);
 
   return {
+    /**
+     * @param {string} name
+     * @param {Record<string, unknown>} [args]
+     * @returns {Promise<McpToolResult>}
+     */
     async call(name, args = {}) {
       const result = await client.callTool({ name, arguments: args });
       if (result.isError) {
@@ -42,13 +59,27 @@ export async function connectPlaywrightMcp({
   };
 }
 
+/**
+ * @param {McpToolResult} result
+ * @returns {string}
+ */
 export function mcpText(result) {
-  return (result.content ?? [])
-    .filter((entry) => entry.type === "text")
+  const content = Array.isArray(result.content) ? result.content : [];
+  return content
+    .filter(
+      /** @returns {entry is { type: "text", text: string }} */
+      (/** @type {unknown} */ entry) =>
+        typeof entry === "object" && entry !== null &&
+        "type" in entry && entry.type === "text",
+    )
     .map((entry) => entry.text)
     .join("\n");
 }
 
+/**
+ * @param {McpToolResult} result
+ * @returns {unknown}
+ */
 export function parseMcpResult(result) {
   const text = mcpText(result);
   const marker = "### Result\n";
@@ -61,7 +92,7 @@ export function parseMcpResult(result) {
   const end = text.indexOf("\n### ", valueStart);
   const raw = text.slice(valueStart, end === -1 ? undefined : end).trim();
   try {
-    return JSON.parse(raw);
+    return /** @type {unknown} */ (JSON.parse(raw));
   } catch (error) {
     throw new Error(`Could not parse MCP result: ${raw.slice(0, 300)}`, {
       cause: error,
@@ -69,10 +100,19 @@ export function parseMcpResult(result) {
   }
 }
 
+/**
+ * @param {number} ms
+ * @returns {Promise<void>}
+ */
 export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * @param {string} baseUrl
+ * @param {number} timeoutMs
+ * @returns {Promise<boolean>}
+ */
 export async function waitForServer(baseUrl, timeoutMs) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
@@ -87,6 +127,11 @@ export async function waitForServer(baseUrl, timeoutMs) {
   return false;
 }
 
+/**
+ * @param {number} port
+ * @param {{ cwd?: string, stderr?: NodeJS.WriteStream }} [options]
+ * @returns {Promise<import("node:child_process").ChildProcess>}
+ */
 export async function startScreenshotDevServer(
   port,
   { cwd = process.cwd(), stderr = process.stderr } = {},
@@ -106,14 +151,21 @@ export async function startScreenshotDevServer(
   return child;
 }
 
+/**
+ * @param {import("node:child_process").ChildProcess | null} child
+ * @param {number} [timeoutMs]
+ */
 export async function stopProcessTree(child, timeoutMs = 5_000) {
   if (child === null || child.exitCode !== null) return;
+  const pid = child.pid;
+  // A child that never spawned has no process group to signal.
+  if (process.platform !== "win32" && pid === undefined) return;
   const exited = new Promise((resolve) => {
     child.once("exit", resolve);
   });
   try {
     if (process.platform === "win32") child.kill("SIGTERM");
-    else process.kill(-child.pid, "SIGTERM");
+    else process.kill(-Number(pid), "SIGTERM");
   } catch {
     return;
   }
@@ -124,13 +176,21 @@ export async function stopProcessTree(child, timeoutMs = 5_000) {
   if (graceful) return;
   try {
     if (process.platform === "win32") child.kill("SIGKILL");
-    else process.kill(-child.pid, "SIGKILL");
+    else process.kill(-Number(pid), "SIGKILL");
   } catch {
     // The process tree exited between the timeout and the signal.
   }
   await Promise.race([exited, sleep(1_000)]);
 }
 
+/**
+ * @param {string} baseUrl
+ * @param {{
+ *   route?: string,
+ *   params?: Array<[string, string | number | boolean | null | undefined]>,
+ * }} [options]
+ * @returns {string}
+ */
 export function buildAppUrl(baseUrl, { route = "/", params = [] } = {}) {
   const normalizedRoute = route.startsWith("/") ? route : `/${route}`;
   const url = new URL(normalizedRoute, `${baseUrl.replace(/\/+$/, "")}/`);

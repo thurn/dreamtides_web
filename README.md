@@ -46,10 +46,13 @@ the origin that hosts it (see `.env.example`).
 | `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check, every 10th game replayed interactively through the fold |
 | `npm run prepare-workspace` | Refresh art links and generated adapters |
 
-`npm run review` plans its checks from the diff against `master`. Its
-typecheck emits declarations only, so an edit that keeps a module's API
-rechecks only that module, and a fresh worktree seeds its build information
-from `.git/journey-review/`. `review:full` never uses that shared copy.
+`npm run review` plans its checks from the diff against `master`. Lint covers
+`src/` and `scripts/`. The typecheck runs two projects side by side:
+`tsconfig.json` for `src/`, and `tsconfig.node.json` for the Vite and Vitest
+configs and `scripts/`, whose JavaScript modules it checks through their JSDoc
+types. The `src/` typecheck emits declarations only, so an edit that keeps a
+module's API rechecks only that module, and a fresh worktree seeds its build
+information from `.git/journey-review/`. `review:full` never uses that shared copy.
 
 ## Browser QA
 

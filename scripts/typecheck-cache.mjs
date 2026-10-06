@@ -14,24 +14,49 @@ import { dirname, join } from "node:path";
  * cold and hermetic.
  */
 
+/**
+ * @typedef {{
+ *   buildInfo: string,
+ *   declarations: string,
+ *   sharedBuildInfo: string,
+ *   nodeBuildInfo: string,
+ * }} TypecheckStatePaths
+ */
+
 const EXHAUSTIVE_TASKS = new Set(["full", "lint-full", "test-full"]);
 
-/** Whether a review task may read and publish the shared build info. */
+/**
+ * Whether a review task may read and publish the shared build info.
+ *
+ * @param {string} task
+ * @returns {boolean}
+ */
 export function sharesTypecheckState(task) {
   return !EXHAUSTIVE_TASKS.has(task);
 }
 
-/** Local and shared locations of the typecheck state. */
+/**
+ * Local and shared locations of the typecheck state.
+ *
+ * @param {{ root: string, commonGitDir: string }} locations
+ * @returns {TypecheckStatePaths}
+ */
 export function typecheckStatePaths({ root, commonGitDir }) {
   const cache = join(root, "node_modules", ".cache", "journey-review");
   return {
     buildInfo: join(cache, "tsconfig.tsbuildinfo"),
     declarations: join(cache, "declarations"),
     sharedBuildInfo: join(commonGitDir, "journey-review", "tsconfig.tsbuildinfo"),
+    nodeBuildInfo: join(cache, "tsconfig.node.tsbuildinfo"),
   };
 }
 
-/** Arguments for the declaration-only incremental tsc run. */
+/**
+ * Arguments for the declaration-only incremental tsc run.
+ *
+ * @param {{ tsc: string, paths: TypecheckStatePaths, extraArgs?: string[] }} options
+ * @returns {string[]}
+ */
 export function typecheckArgs({ tsc, paths, extraArgs = [] }) {
   return [
     tsc,
@@ -48,7 +73,31 @@ export function typecheckArgs({ tsc, paths, extraArgs = [] }) {
   ];
 }
 
-/** Copies the shared build info in when the worktree has none of its own. */
+/**
+ * Arguments for the incremental tsc run over `tsconfig.node.json`, the build
+ * configs and scripts/. That project emits nothing, and its build info stays
+ * in the worktree.
+ *
+ * @param {{ tsc: string, paths: TypecheckStatePaths }} options
+ * @returns {string[]}
+ */
+export function nodeTypecheckArgs({ tsc, paths }) {
+  return [
+    tsc,
+    "-p",
+    "tsconfig.node.json",
+    "--incremental",
+    "--tsBuildInfoFile",
+    paths.nodeBuildInfo,
+  ];
+}
+
+/**
+ * Copies the shared build info in when the worktree has none of its own.
+ *
+ * @param {TypecheckStatePaths} paths
+ * @returns {boolean}
+ */
 export function seedTypecheckState(paths) {
   if (existsSync(paths.buildInfo) || !existsSync(paths.sharedBuildInfo)) {
     return false;
@@ -58,7 +107,13 @@ export function seedTypecheckState(paths) {
   return true;
 }
 
-/** Atomically replaces the shared build info with this worktree's. */
+/**
+ * Atomically replaces the shared build info with this worktree's.
+ *
+ * @param {TypecheckStatePaths} paths
+ * @param {number} [pid]
+ * @returns {boolean}
+ */
 export function publishTypecheckState(paths, pid = process.pid) {
   if (!existsSync(paths.buildInfo)) return false;
   mkdirSync(dirname(paths.sharedBuildInfo), { recursive: true });

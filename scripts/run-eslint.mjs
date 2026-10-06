@@ -12,7 +12,7 @@ const concurrency = Number.isInteger(requestedConcurrency) && requestedConcurren
 const eslint = new ESLint({ cwd: process.cwd(), concurrency });
 const results = await eslint.lintFiles(requestedFiles.length > 0
   ? requestedFiles
-  : ["src/"]);
+  : ["src/", "scripts/"]);
 
 const formatter = await eslint.loadFormatter("stylish");
 const output = await formatter.format(results);

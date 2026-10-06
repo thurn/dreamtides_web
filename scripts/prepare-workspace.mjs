@@ -25,6 +25,15 @@ export const DISPOSABLE_WORKSPACE_FILES = ["src/cumulus/primitives/tokens.ts"];
  * Materialize every disposable file needed by development, tests, typechecking,
  * and production builds. Canonical sources remain the only versioned inputs;
  * each consumer invokes this entry point before reading generated files.
+ *
+ * @param {{
+ *   root?: string,
+ *   run?: (
+ *     command: string,
+ *     args: string[],
+ *     options: import("node:child_process").ExecFileSyncOptions,
+ *   ) => unknown,
+ * }} [options]
  */
 export function prepareWorkspace({ root = ROOT, run = execFileSync } = {}) {
   for (const { label, script, nodeArgs } of WORKSPACE_GENERATORS) {

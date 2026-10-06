@@ -70,6 +70,21 @@ export default tseslint.config(
     },
   },
   {
+    // scripts/ typechecks under tsconfig.node.json, outside the root
+    // tsconfig.json. TypeScript resolves its names, so no-undef (which knows
+    // no Node globals) stays off for the JavaScript modules too.
+    files: ["scripts/**/*.{ts,mjs}"],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+        project: "./tsconfig.node.json",
+      },
+    },
+    rules: {
+      "no-undef": "off",
+    },
+  },
+  {
     // Card names are not unique; identity is the card UUID everywhere.
     files: SOURCE,
     rules: {

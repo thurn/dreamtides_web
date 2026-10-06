@@ -14,6 +14,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("prepareWorkspace", () => {
   it("runs every workspace generator in dependency order", () => {
+    /** @type {import("vitest").Mock<(command: string, args: string[]) => void>} */
     const run = vi.fn();
 
     prepareWorkspace({ root: "/fixture", run });

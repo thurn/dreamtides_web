@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import {
+  nodeTypecheckArgs,
   publishTypecheckState,
   seedTypecheckState,
   sharesTypecheckState,
@@ -10,6 +11,7 @@ import {
   typecheckStatePaths,
 } from "./typecheck-cache.mjs";
 
+/** @type {string[]} */
 const temps = [];
 
 function workspace() {
@@ -21,6 +23,10 @@ function workspace() {
   });
 }
 
+/**
+ * @param {string} path
+ * @param {string} text
+ */
 function write(path, text) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, text);
@@ -48,6 +54,16 @@ describe("typecheck state sharing", () => {
     expect(args[args.indexOf("--tsBuildInfoFile") + 1]).toBe(paths.buildInfo);
     expect(args[args.indexOf("--outDir") + 1]).toBe(paths.declarations);
     expect(args.at(-1)).toBe("--pretty");
+  });
+
+  it("typechecks the node project incrementally with worktree-local build info", () => {
+    const paths = workspace();
+    const args = nodeTypecheckArgs({ tsc: "tsc", paths });
+    expect(args[args.indexOf("-p") + 1]).toBe("tsconfig.node.json");
+    expect(args).toContain("--incremental");
+    expect(args[args.indexOf("--tsBuildInfoFile") + 1]).toBe(paths.nodeBuildInfo);
+    expect(paths.nodeBuildInfo).not.toBe(paths.buildInfo);
+    expect(paths.nodeBuildInfo.startsWith(dirname(paths.buildInfo))).toBe(true);
   });
 
   it("seeds a worktree without build info from the shared copy", () => {

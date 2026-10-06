@@ -24,17 +24,18 @@ import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
+import { parseEventActor, parseEventType } from "../src/eventlog/types.ts";
 import { replayLog } from "../src/rules/replay/replay.ts";
 import { SELECTION_RULES_VERSION } from "../src/reward-selection/types.ts";
+import { parseJourneySeed } from "../src/types/journey-seed.ts";
+import { parseReducerVersion } from "../src/types/reducer-version.ts";
 import {
   BATTLE_CARD_DETERMINISTIC,
-  BATTLE_CARD_FORESEE,
   BATTLE_SITE_ID,
   DETERMINISTIC_SLOT,
   AVATAR_ID,
   ESSENCE_SITE_ID,
   FIXTURE_PROVIDER_SET,
-  FORESEE_SLOT,
   NODE_ID,
   SHOP_SITE_ID,
   clearReplayFixtureProviders,
@@ -45,32 +46,62 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const FIXTURE_DIR = resolve(HERE, "../src/rules/replay/fixtures");
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
 
-/** Build a committed event. */
+/**
+ * @typedef {import("../src/eventlog/types.ts").Genesis} Genesis
+ * @typedef {import("../src/rules/replay/replay.ts").SeqEvent} SeqEvent
+ * @typedef {Record<string, unknown>} Payload
+ */
+
+/**
+ * Build a committed event.
+ *
+ * @param {number} seq
+ * @param {string} type
+ * @param {Payload} payload
+ * @param {string} actor
+ * @param {number} basedOnSeq
+ * @returns {SeqEvent}
+ */
 function ev(seq, type, payload, actor, basedOnSeq) {
   return {
     seq,
     event: {
-      type,
+      type: parseEventType(type),
       payload,
-      actor,
+      actor: parseEventActor(actor),
       clientTimestamp: TIMESTAMP,
       basedOnSeq,
     },
   };
 }
 
-/** A single-actor chain: basedOnSeq = seq - 1, so every intervening window is empty. */
+/**
+ * A single-actor chain: basedOnSeq = seq - 1, so every intervening window is empty.
+ *
+ * @param {string} actor
+ * @param {Array<[string, Payload]>} steps
+ * @returns {SeqEvent[]}
+ */
 function chain(actor, steps) {
   return steps.map(([type, payload], index) =>
     ev(index + 1, type, payload, actor, index),
   );
 }
 
-/** A DEBUG_EDIT battle command payload. */
+/**
+ * A DEBUG_EDIT battle command payload.
+ *
+ * @param {Payload} edit
+ * @returns {Payload}
+ */
 function debugEdit(edit) {
   return { command: { id: "DEBUG_EDIT", edit } };
 }
 
+/**
+ * @param {string} battleCardId
+ * @param {string} slotId
+ */
 function moveToFront(battleCardId, slotId) {
   return debugEdit({
     kind: "MOVE_CARD_TO_ZONE",
@@ -90,16 +121,27 @@ function drawDreamwell() {
  */
 const FIXTURE_ECONOMY = { defaultStartingEssence: 200, dreamsignCap: 12 };
 
+/**
+ * @param {string} seed
+ * @returns {Genesis}
+ */
 function genesis(seed) {
   return {
-    seed,
-    reducerVersion: "fixture",
+    seed: parseJourneySeed(seed),
+    reducerVersion: parseReducerVersion("fixture"),
     createdAt: 0,
     contentConfig: { poolVariant: "tides4", ...FIXTURE_ECONOMY },
   };
 }
 
-/** Fold `events`, asserting the outcome at each 1-indexed position matches. */
+/**
+ * Fold `events`, asserting the outcome at each 1-indexed position matches.
+ *
+ * @param {string} label
+ * @param {SeqEvent[]} events
+ * @param {Genesis} gen
+ * @param {Record<number, string>} expected
+ */
 function expectOutcomes(label, events, gen, expected) {
   const { outcomes } = replayLog({ genesis: gen, events });
   for (const [seq, want] of Object.entries(expected)) {
@@ -249,6 +291,11 @@ function adversarialFixture() {
 // Finalize + write
 // ---------------------------------------------------------------------------
 
+/**
+ * @param {string} name
+ * @param {Genesis} gen
+ * @param {SeqEvent[]} events
+ */
 function finalize(name, gen, events) {
   const { finalHash } = replayLog({ genesis: gen, events });
   return {
@@ -269,7 +316,6 @@ function main() {
     for (const { name, fixture } of fixtures) {
       const path = resolve(FIXTURE_DIR, `${name}.json`);
       writeFileSync(path, `${JSON.stringify(fixture, null, 2)}\n`);
-      // eslint-disable-next-line no-console
       console.log(`wrote ${name}.json  finalHash=${fixture.finalHash}`);
     }
   } finally {

@@ -12,12 +12,24 @@ import {
   tryCreateReviewLock,
 } from "./review-lock.mjs";
 
+/** @type {string[]} */
 const temporaryDirectories = [];
 
 function lockFixture() {
   const directory = mkdtempSync(join(tmpdir(), "journey-review-lock-"));
   temporaryDirectories.push(directory);
   return join(directory, "review.lock");
+}
+
+/**
+ * The snapshot of a lock the test just created.
+ *
+ * @param {string} lockPath
+ */
+function presentSnapshot(lockPath) {
+  const snapshot = snapshotReviewLock(lockPath);
+  if (snapshot === null) throw new Error(`no lock at ${lockPath}`);
+  return snapshot;
 }
 
 afterEach(() => {
@@ -58,11 +70,11 @@ describe("review lock", () => {
   it("does not remove a replacement lock when its inode is reused", () => {
     const lockPath = lockFixture();
     tryCreateReviewLock(lockPath, { pid: 101, task: "lint" });
-    const staleSnapshot = snapshotReviewLock(lockPath);
+    const staleSnapshot = presentSnapshot(lockPath);
 
     unlinkSync(lockPath);
     tryCreateReviewLock(lockPath, { pid: 202, task: "test" });
-    const replacementSnapshot = snapshotReviewLock(lockPath);
+    const replacementSnapshot = presentSnapshot(lockPath);
     const reusedInodeSnapshot = {
       ...staleSnapshot,
       dev: replacementSnapshot.dev,

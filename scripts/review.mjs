@@ -14,8 +14,10 @@ import {
   importersOf,
   importSearchNeedles,
   reviewNeedsPreparedWorkspace,
+  TYPECHECK_STEPS,
 } from "./review-plan.mjs";
 import {
+  nodeTypecheckArgs,
   publishTypecheckState,
   seedTypecheckState,
   sharesTypecheckState,
@@ -29,6 +31,13 @@ import {
   snapshotReviewLock,
   tryCreateReviewLock,
 } from "./review-lock.mjs";
+import { thrownField } from "./lib/node-errors.mjs";
+
+/**
+ * @typedef {import("./review-plan.mjs").ReviewStep} ReviewStep
+ * @typedef {import("./review-plan.mjs").ReviewPlanEntry} ReviewPlanEntry
+ * @typedef {import("./review-lock.mjs").ReviewLockOwner} ReviewLockOwner
+ */
 
 const root = process.cwd();
 const localAssetHome = resolve(
@@ -70,6 +79,7 @@ if (!validTasks.has(task)) {
   process.exit(2);
 }
 
+/** @param {string[]} args */
 function gitOutput(args) {
   return execFileSync("git", args, {
     cwd: root,
@@ -77,6 +87,7 @@ function gitOutput(args) {
   }).trim();
 }
 
+/** @param {string} revision */
 function revisionExists(revision) {
   try {
     execFileSync("git", ["rev-parse", "--verify", "--quiet", revision], {
@@ -118,6 +129,7 @@ function gateBase() {
   }).trim();
 }
 
+/** @param {string} value */
 function splitNullDelimited(value) {
   return value.split("\0").filter((entry) => entry !== "");
 }
@@ -126,6 +138,8 @@ function splitNullDelimited(value) {
  * Paths changed since `base`, deletions included. Rename detection is off, so
  * a renamed file reports its old path as a deletion and its new path as an
  * addition.
+ *
+ * @param {string} base
  */
 function changedFilesSince(base) {
   const tracked = execFileSync(
@@ -153,8 +167,12 @@ function changedFilesSince(base) {
  * Tracked and untracked working-tree files that import one of the deleted
  * `targets`. `git grep` narrows the candidates to files that mention a
  * target's stem before their imports are resolved.
+ *
+ * @param {string[]} targets
+ * @returns {string[]}
  */
 function findImporters(targets) {
+  /** @type {string} */
   let listed;
   try {
     listed = execFileSync(
@@ -173,7 +191,7 @@ function findImporters(targets) {
     );
   } catch (error) {
     // `git grep` exits 1 when nothing matches.
-    if (error?.status === 1) return [];
+    if (thrownField(error, "status") === 1) return [];
     throw error;
   }
   return importersOf(
@@ -192,13 +210,16 @@ const reviewPlan = buildReviewPlan(
   findImporters,
 );
 
+/** @param {number | undefined} pid */
 function pidIsAlive(pid) {
-  if (!Number.isInteger(pid) || pid <= 0) return false;
+  if (typeof pid !== "number" || !Number.isInteger(pid) || pid <= 0) {
+    return false;
+  }
   try {
     process.kill(pid, 0);
     return true;
   } catch (error) {
-    return error?.code === "EPERM";
+    return thrownField(error, "code") === "EPERM";
   }
 }
 
@@ -206,11 +227,19 @@ function readOwner() {
   return readReviewLockOwner(lockPath);
 }
 
+/**
+ * @param {ReviewLockOwner | null} owner
+ * @returns {boolean}
+ */
 function ownerIsAlive(owner) {
   return owner !== null &&
     (pidIsAlive(owner.pid) || pidIsAlive(owner.childPid));
 }
 
+/**
+ * @param {Partial<ReviewLockOwner>} [extra]
+ * @returns {ReviewLockOwner}
+ */
 function ownerRecord(extra = {}) {
   return {
     pid: process.pid,
@@ -221,6 +250,7 @@ function ownerRecord(extra = {}) {
   };
 }
 
+/** @param {Partial<ReviewLockOwner>} [extra] */
 function writeOwner(extra = {}) {
   if (!lockHeld) return;
   replaceReviewLockOwner(lockPath, ownerRecord(extra));
@@ -235,7 +265,7 @@ async function acquireLock() {
 
     const snapshot = snapshotReviewLock(lockPath);
     const owner = readOwner();
-    if (!ownerIsAlive(owner)) {
+    if (owner === null || !ownerIsAlive(owner)) {
       removeReviewLockIfUnchanged(lockPath, snapshot);
       continue;
     }
@@ -251,6 +281,7 @@ async function acquireLock() {
   }
 }
 
+/** @type {Set<import("node:child_process").ChildProcess>} */
 const children = new Set();
 let lockHeld = false;
 
@@ -264,7 +295,7 @@ function releaseLock() {
   }
 }
 
-for (const signal of ["SIGINT", "SIGTERM"]) {
+for (const signal of /** @type {const} */ (["SIGINT", "SIGTERM"])) {
   process.on(signal, () => {
     for (const running of children) running.kill(signal);
     // Leave the owner record in place while a signalled child unwinds. The
@@ -273,6 +304,7 @@ for (const signal of ["SIGINT", "SIGTERM"]) {
   });
 }
 
+/** @param {string[]} parts */
 function nodeModulePath(...parts) {
   return join(root, "node_modules", ...parts);
 }
@@ -282,6 +314,11 @@ const typecheckPaths = typecheckStatePaths({ root, commonGitDir });
 // typechecks cold and never reads or publishes the shared build info.
 const shareTypecheckState = task !== "gate" && sharesTypecheckState(task);
 
+/**
+ * @param {string} step
+ * @param {string[]} [extraArgs]
+ * @returns {[string, string[]]}
+ */
 function commandFor(step, extraArgs = []) {
   if (step === "lint") {
     return [process.execPath, [join(root, "scripts", "run-eslint.mjs"), ...extraArgs]];
@@ -294,6 +331,16 @@ function commandFor(step, extraArgs = []) {
         tsc: nodeModulePath("typescript", "bin", "tsc"),
         paths: typecheckPaths,
         extraArgs,
+      }),
+    ];
+  }
+  if (step === "typecheck-node") {
+    mkdirSync(dirname(typecheckPaths.nodeBuildInfo), { recursive: true });
+    return [
+      process.execPath,
+      nodeTypecheckArgs({
+        tsc: nodeModulePath("typescript", "bin", "tsc"),
+        paths: typecheckPaths,
       }),
     ];
   }
@@ -333,6 +380,11 @@ function commandFor(step, extraArgs = []) {
 /**
  * Runs one review step. A buffered step collects its output and prints it as
  * one block when it exits, so concurrent steps never interleave lines.
+ *
+ * @param {string} step
+ * @param {string[]} [extraArgs]
+ * @param {{ isolateLocalAssets?: boolean, buffered?: boolean }} [options]
+ * @returns {Promise<number>}
  */
 async function runStep(
   step,
@@ -363,10 +415,12 @@ async function runStep(
     stdio: buffered ? ["ignore", "pipe", "pipe"] : "inherit",
   });
   children.add(child);
+  /** @type {Buffer[]} */
   const output = [];
-  child.stdout?.on("data", (chunk) => output.push(chunk));
-  child.stderr?.on("data", (chunk) => output.push(chunk));
+  child.stdout?.on("data", (/** @type {Buffer} */ chunk) => output.push(chunk));
+  child.stderr?.on("data", (/** @type {Buffer} */ chunk) => output.push(chunk));
   writeOwner({ childPid: child.pid, step });
+  /** @type {number} */
   const exitCode = await new Promise((resolveExit, reject) => {
     child.once("error", reject);
     child.once("close", (code, signal) => {
@@ -388,7 +442,11 @@ async function runStep(
   return exitCode;
 }
 
-/** Runs independent steps concurrently; returns the first failing exit code. */
+/**
+ * Runs independent steps concurrently; returns the first failing exit code.
+ *
+ * @param {ReviewStep[]} steps
+ */
 async function runConcurrentSteps(steps) {
   const exitCodes = await Promise.all(
     steps.map(({ step, args }) => runStep(step, args, { buffered: true })),
@@ -396,6 +454,7 @@ async function runConcurrentSteps(steps) {
   return exitCodes.find((exitCode) => exitCode !== 0) ?? 0;
 }
 
+/** @returns {ReviewPlanEntry[]} */
 function executionPlan() {
   const needsPreparedWorkspace = reviewNeedsPreparedWorkspace(reviewPlan);
 
@@ -403,12 +462,7 @@ function executionPlan() {
     // Lint and typecheck share no state, so they overlap.
     return [
       { step: "prepare", args: [] },
-      {
-        concurrent: [
-          { step: "lint", args: [] },
-          { step: "typecheck", args: [] },
-        ],
-      },
+      { concurrent: [{ step: "lint", args: [] }, ...TYPECHECK_STEPS] },
       { step: "test", args: [] },
     ];
   }
@@ -428,6 +482,7 @@ function executionPlan() {
     ];
   }
   if (task === "lint") {
+    /** @type {ReviewPlanEntry[]} */
     const steps = [];
     if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
     if (reviewPlan.lintFiles.length > 0 || passthrough.length > 0) {
@@ -453,12 +508,13 @@ function executionPlan() {
         ];
   }
   if (task === "quick") {
+    /** @type {ReviewPlanEntry[]} */
     const steps = [];
     if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
     if (reviewPlan.lintFiles.length > 0) {
       steps.push({ step: "lint", args: reviewPlan.lintFiles });
     }
-    if (reviewPlan.shouldTypecheck) steps.push({ step: "typecheck", args: [] });
+    if (reviewPlan.shouldTypecheck) steps.push({ concurrent: TYPECHECK_STEPS });
     if (reviewPlan.testInputs.length > 0) {
       steps.push({ step: "test-related", args: reviewPlan.testInputs });
     }
@@ -466,6 +522,16 @@ function executionPlan() {
   }
   if (task === "validate") {
     return [{ step: "prepare", args: [] }];
+  }
+  if (task === "typecheck") {
+    return [
+      { step: "prepare", args: [] },
+      {
+        concurrent: TYPECHECK_STEPS.map((entry) =>
+          entry.step === "typecheck" ? { ...entry, args: passthrough } : entry
+        ),
+      },
+    ];
   }
   return [
     { step: "prepare", args: [] },
@@ -496,10 +562,12 @@ try {
     console.log("[review] no applicable checks");
   }
   for (const entry of steps) {
-    const exitCode = entry.concurrent === undefined
-      ? await runStep(entry.step, entry.args)
-      : await runConcurrentSteps(entry.concurrent);
-    if (entry.step === "prepare" && exitCode === 0) restoreLocalAssets = true;
+    const exitCode = "concurrent" in entry
+      ? await runConcurrentSteps(entry.concurrent)
+      : await runStep(entry.step, entry.args);
+    if ("step" in entry && entry.step === "prepare" && exitCode === 0) {
+      restoreLocalAssets = true;
+    }
     if (exitCode !== 0) {
       process.exitCode = exitCode;
       break;

@@ -25,6 +25,7 @@ logs/
 .playwright-mcp/
 .superpowers/
 artifacts/qa/
+*.tsbuildinfo
 
 .vscode
 
