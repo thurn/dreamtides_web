@@ -147,6 +147,24 @@ export function mintEntryId(
   return parseDeckEntryId(candidate);
 }
 
+/**
+ * The high-water mark of the sequential `deck-N` entry ids in `deck` (0 when
+ * none exist), so ids continued from it never collide with an existing entry.
+ * Seq-keyed `deck-<seq>-<index>` ids from {@link mintEntryId} are ignored.
+ */
+export function deriveEntryIdCounter(deck: readonly DeckEntry[]): number {
+  let max = 0;
+  for (const entry of deck) {
+    const match = /^deck-(\d+)$/.exec(entry.entryId);
+    if (match === null) continue;
+    const value = Number(match[1]);
+    if (Number.isFinite(value) && value > max) {
+      max = value;
+    }
+  }
+  return max;
+}
+
 // ---------------------------------------------------------------------------
 // Add / remove / duplicate
 // ---------------------------------------------------------------------------

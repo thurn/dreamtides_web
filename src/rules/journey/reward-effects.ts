@@ -2,7 +2,6 @@ import { mergeCardKeywordModification } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
 import type { JourneyContent } from "../../data/journey-content";
 import { isNightmareCardId } from "../../data/nightmare";
-import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
 import type { DreamsignTemplate } from "../../types/content";
 import type {
   CardKeywordModification,
@@ -19,6 +18,7 @@ import type { DeckEntryId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
+import { deriveEntryIdCounter } from "./deck";
 import type { CardId } from "../../types/card-identity";
 import type { SiteId } from "../../types/identifiers";
 

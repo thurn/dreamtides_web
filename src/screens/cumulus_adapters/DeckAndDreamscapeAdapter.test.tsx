@@ -527,7 +527,6 @@ describe("DesktopDeckViewerAdapter", () => {
         knownDreamsignCarrierIds: [],
       },
       currentDreamscape: null,
-      visitedSites: [],
       siteRuntime: {},
       draftState: null,
       screen: { type: "dreamscape" },

@@ -16,7 +16,11 @@ import type {
 } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
-import { completeJourneySite, registerSiteContentProvider } from "./sites";
+import {
+  completeJourneySite,
+  isSiteVisited,
+  registerSiteContentProvider,
+} from "./sites";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { testSiteContentProvider } from "./test-content-providers";
 import { parseDeckEntryId } from "../../types/identifiers";
@@ -477,7 +481,7 @@ describe("ACCEPT_ESSENCE", () => {
       (out.state.journey.siteRuntime[SITE_ID] as { accepted: boolean })
         .accepted,
     ).toBe(true);
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
     expect(out.state.journey.screen.type).toBe("dreamscape");
   });
 
@@ -495,7 +499,7 @@ describe("ACCEPT_ESSENCE", () => {
     expect(out.state.journey.essence).toBe(
       state.journey.essence + runtime.amount,
     );
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
   });
 });
 
@@ -521,7 +525,7 @@ describe("ACCEPT_REWARD (essence reward)", () => {
     const out = reduce(state, "ACCEPT_REWARD", { siteId: SITE_ID });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.essence).toBe(amount);
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
   });
 });
 
@@ -551,9 +555,7 @@ describe("ACCEPT_REWARD (Dreamsign reward at the cap)", () => {
       siteId: SITE_ID,
     });
     expect(withoutReplacement.outcome).toBe("bounced");
-    expect(withoutReplacement.state.journey.visitedSites).not.toContain(
-      SITE_ID,
-    );
+    expect(isSiteVisited(withoutReplacement.state.journey, SITE_ID)).toBe(false);
 
     const withReplacement = reduce(state, "ACCEPT_REWARD", {
       siteId: SITE_ID,
@@ -566,7 +568,7 @@ describe("ACCEPT_REWARD (Dreamsign reward at the cap)", () => {
       state.journey.dreamsigns[0]?.id,
       testDreamsignId("reward-dreamsign"),
     ]);
-    expect(withReplacement.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(withReplacement.state.journey, SITE_ID)).toBe(true);
   });
 });
 
@@ -591,7 +593,7 @@ describe("dreamsign offer accept / reject", () => {
     });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.dreamsigns.map((d) => d.id)).toContain(offered.id);
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
   });
 
   it("rejects the offer and completes the site", () => {
@@ -599,7 +601,7 @@ describe("dreamsign offer accept / reject", () => {
       siteId: SITE_ID,
     });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
     expect(
       (out.state.journey.siteRuntime[SITE_ID] as { accepted: boolean })
         .accepted,
@@ -621,7 +623,7 @@ describe("Augury", () => {
       (out.state.journey.siteRuntime[SITE_ID] as { completed: boolean })
         .completed,
     ).toBe(true);
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
   });
 
   it("OPEN_SITE opens an Augury only under the current selection protocol", () => {
@@ -719,7 +721,7 @@ describe("ACCEPT_TRANSFIGURATION_CHOICE", () => {
     expect(out.state.journey.essence).toBe(1000 - offer.essenceCost);
     const entry = out.state.journey.deck.find((e) => e.entryId === "deck-1");
     expect(entry?.transfiguration).toBe(offer.type);
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
   });
 });
 
@@ -743,7 +745,7 @@ describe("ACCEPT_DUPLICATION_CHOICE", () => {
     expect(
       out.state.journey.deck.filter((e) => e.cardNumber === 7),
     ).toHaveLength(2);
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
   });
 });
 
@@ -757,7 +759,7 @@ describe("COMPLETE_SITE", () => {
       siteId: SITE_ID,
     });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
     expect(out.state.journey.screen.type).toBe("dreamscape");
   });
 
@@ -775,7 +777,6 @@ describe("COMPLETE_SITE", () => {
 
     const next = completeJourneySite(journey, SITE_ID);
 
-    expect(next.visitedSites).toEqual([SITE_ID]);
     expect(next.atlas.nodes[NODE_ID]?.sites.map((site) => site.isVisited)).toEqual(
       [true, false],
     );
@@ -820,7 +821,7 @@ describe("PURGE_DECK_CARDS full behavior", () => {
       testDreamsignId("first"),
       testDreamsignId("second"),
     ]);
-    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(out.state.journey, SITE_ID)).toBe(true);
     expect(out.state.journey.screen.type).toBe("dreamscape");
   });
 

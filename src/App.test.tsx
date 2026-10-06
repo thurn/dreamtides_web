@@ -181,7 +181,6 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
       knownDreamsignCarrierIds: [],
     },
     currentDreamscape: null,
-    visitedSites: [],
     siteRuntime: {},
     draftState: null,
     screen: { type: "journeyStart" },

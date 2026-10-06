@@ -1208,7 +1208,6 @@ export interface JourneyState {
   completionLevel: number;
   atlas: DreamAtlas;
   currentDreamscape: AtlasNodeId | null;
-  visitedSites: SiteId[];
   siteRuntime: IdentityRecord<SiteId, SiteRuntimeState>;
   draftState: DraftState | null;
   screen: Screen;

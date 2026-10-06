@@ -234,6 +234,14 @@ export function findSite(
 }
 
 /**
+ * Whether the atlas marks `siteId` visited. The site's `isVisited` flag is the
+ * single record of completion; a site id absent from the atlas is unvisited.
+ */
+export function isSiteVisited(journey: JourneyState, siteId: SiteId): boolean {
+  return findSite(journey, siteId)?.isVisited === true;
+}
+
+/**
  * Whether `siteId` is a legal visit target (relocated legacy
  * `canVisitSite`): the site must exist and, when the player stands in a
  * dreamscape, belong to it; it must be unvisited; a Battle site must be visited
@@ -243,7 +251,7 @@ export function canVisitSite(journey: JourneyState, siteId: SiteId): boolean {
   for (const node of Object.values(journey.atlas.nodes)) {
     const site = node.sites.find((candidate) => candidate.id === siteId);
     if (site === undefined) continue;
-    if (site.isVisited || journey.visitedSites.includes(siteId)) return false;
+    if (site.isVisited) return false;
     if (
       journey.currentDreamscape !== null &&
       node.id !== journey.currentDreamscape
@@ -252,10 +260,7 @@ export function canVisitSite(journey: JourneyState, siteId: SiteId): boolean {
     }
     if (site.type === "Battle") {
       return node.sites.every(
-        (candidate) =>
-          candidate.type === "Battle" ||
-          candidate.isVisited ||
-          journey.visitedSites.includes(candidate.id),
+        (candidate) => candidate.type === "Battle" || candidate.isVisited,
       );
     }
     return true;
@@ -263,7 +268,7 @@ export function canVisitSite(journey: JourneyState, siteId: SiteId): boolean {
   return false;
 }
 
-/** Mark `siteId` visited in `visitedSites` and the atlas (legacy `completeJourneySite`). */
+/** Mark `siteId` visited in the atlas (legacy `completeJourneySite`). */
 export function completeJourneySite(
   journey: JourneyState,
   siteId: SiteId,
@@ -283,7 +288,6 @@ export function completeJourneySite(
   }
   return {
     ...journey,
-    visitedSites: [...journey.visitedSites, siteId],
     atlas: { ...journey.atlas, nodes: updatedNodes },
   };
 }
@@ -553,7 +557,7 @@ export function acceptReward(
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
   if (runtime === undefined || runtime.kind !== "reward" || runtime.accepted) {
     return null;
@@ -613,7 +617,7 @@ export function acceptEssence(
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const existing = journey.siteRuntime[siteId];
   if (existing !== undefined && existing.kind !== "essence") {
     return null;
@@ -658,7 +662,7 @@ export function acceptDreamsignOffer(
   const siteId = siteIdFromUnknown(payload.siteId);
   const dreamsignId = dreamsignIdFromUnknown(payload.dreamsignId);
   if (siteId === null || dreamsignId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
   if (
     runtime === undefined ||
@@ -715,7 +719,7 @@ export function rejectDreamsignOffer(
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
   if (
     runtime === undefined ||
@@ -752,7 +756,7 @@ export function acceptTransfigurationChoice(
   const siteId = siteIdFromUnknown(payload.siteId);
   const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (siteId === null || entryId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
   if (
     runtime === undefined ||
@@ -814,7 +818,7 @@ export function acceptDuplicationChoice(
   const siteId = siteIdFromUnknown(payload.siteId);
   const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (siteId === null || entryId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
   if (
     runtime === undefined ||
@@ -857,7 +861,7 @@ export function completeAugury(
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const existing = journey.siteRuntime[siteId];
   if (
     existing !== undefined &&

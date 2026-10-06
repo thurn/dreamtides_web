@@ -370,9 +370,8 @@ describe("site-tutorial-guidance", () => {
   function state(
     current: SiteState,
     visitedSites: readonly string[] = [],
-    atlasVisitedSites: readonly string[] = visitedSites,
   ): JourneyState {
-    const atlasVisited = new Set(atlasVisitedSites);
+    const atlasVisited = new Set(visitedSites);
     const draft = {
       ...site("draft-a", "Draft"),
       isVisited: atlasVisited.has("draft-a"),
@@ -387,7 +386,6 @@ describe("site-tutorial-guidance", () => {
     };
     return {
       screen: { type: "site", siteId: current.id },
-      visitedSites: [...visitedSites],
       atlas: {
         nodes: {
           node: {
@@ -414,13 +412,6 @@ describe("site-tutorial-guidance", () => {
     it("suppresses later sites after a site of the same type was completed", () => {
       const later = site("draft-b", "Draft");
       expect(activeFirstVisitTutorialSite(state(later, ["draft-a"]))).toBeNull();
-    });
-
-    it("stays suppressed after dreamscape travel resets visitedSites", () => {
-      const later = site("draft-b", "Draft");
-      expect(
-        activeFirstVisitTutorialSite(state(later, [], ["draft-a"])),
-      ).toBeNull();
     });
 
     it("retires the first Draft tutorial after its first persisted pick", () => {

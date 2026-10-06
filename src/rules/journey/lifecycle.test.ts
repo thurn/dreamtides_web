@@ -325,7 +325,6 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
         },
         currentDreamscape: parseAtlasNodeId("node-a"),
         screen: { type: "atlas" },
-        visitedSites: [parseSiteId("stale-site")],
         dreamscapeModifiers: [modifier(1, "one"), modifier(2, "two")],
       },
     };
@@ -333,7 +332,6 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
       nodeId: parseAtlasNodeId("node-b"),
     });
     expect(next.journey.currentDreamscape).toBe("node-b");
-    expect(next.journey.visitedSites).toEqual([]);
     expect(next.journey.dreamscapeModifiers).toEqual([modifier(1, "two")]);
     expect(next.journey.screen).toEqual({ type: "dreamscape" });
     expect(next.journey.activeSiteId).toBeNull();

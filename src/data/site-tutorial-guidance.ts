@@ -49,12 +49,9 @@ export function activeFirstVisitTutorialSite(
   ) {
     return null;
   }
-  const visitedSiteIds = new Set(state.visitedSites);
   const alreadyVisitedType = sites.some(
     (site) =>
-      site.id !== current.id &&
-      site.type === current.type &&
-      (site.isVisited || visitedSiteIds.has(site.id)),
+      site.id !== current.id && site.type === current.type && site.isVisited,
   );
   return alreadyVisitedType
     ? null

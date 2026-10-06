@@ -208,7 +208,6 @@ function draftOfferState(
     ...base,
     journey: {
       ...base.journey,
-      visitedSites: firstVisit ? [] : [parseSiteId("prior-draft")],
       atlas: {
         ...base.journey.atlas,
         nodes: {

@@ -19,6 +19,8 @@ import type {
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import {
+  completeJourneySite,
+  isSiteVisited,
   registerSiteContentProvider,
   type ShopRerollResult,
 } from "./sites";
@@ -669,10 +671,7 @@ describe("augury offers", () => {
     const provider = testSiteContentProvider({
       resolveAugury({ journey, action }) {
         return action === "decline"
-          ? {
-              ...journey,
-              visitedSites: [...journey.visitedSites, SITE_ID],
-            }
+          ? completeJourneySite(journey, SITE_ID)
           : null;
       },
     });
@@ -682,6 +681,6 @@ describe("augury offers", () => {
       siteId: SITE_ID,
     });
     expect(result.outcome).toBe("applied");
-    expect(result.state.journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(result.state.journey, SITE_ID)).toBe(true);
   });
 });

@@ -23,7 +23,7 @@ import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
-import { registerSiteContentProvider } from "./sites";
+import { isSiteVisited, registerSiteContentProvider } from "./sites";
 import { testSiteContentProvider } from "./test-content-providers";
 import { parseShuffleCommitment } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
@@ -313,7 +313,7 @@ describe("Gravok's Three-Gate Wager", () => {
     expect(replaced.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       REWARD_DREAMSIGN.id,
     ]);
-    expect(replaced.state.journey.visitedSites).not.toContain(SITE_ID);
+    expect(isSiteVisited(replaced.state.journey, SITE_ID)).toBe(false);
     expect(replaced.state.journey.screen).toEqual({
       type: "site",
       siteId: SITE_ID,

@@ -1814,8 +1814,7 @@ export function resolveExplorationChoice(input: {
   content: JourneyContent;
 }): JourneyState | null {
   const { journey, site, payload, seq, content } = input;
-  if (site.type !== "Exploration" || journey.visitedSites.includes(site.id))
-    return null;
+  if (site.type !== "Exploration" || site.isVisited) return null;
   const runtime = journey.siteRuntime[site.id];
   if (runtime?.kind !== "exploration" || runtime.resolution !== null)
     return null;

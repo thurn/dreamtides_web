@@ -257,7 +257,16 @@ describe("PICK_DRAFT_CARD", () => {
       hasSeenStartingDeckPopup: true,
       screen: { type: "site", siteId: parseSiteId("site-a") },
       activeSiteId: parseSiteId("site-a"),
-      visitedSites: [parseSiteId("site-b")],
+      atlas: {
+        ...stateWithDraftSites(poolDraftState()).journey.atlas,
+        nodes: {
+          [NODE_ID]: makeNode([
+            makeSite("site-a", "Draft"),
+            { ...makeSite("site-b", "Draft"), isVisited: true },
+            makeSite("site-battle", "Battle"),
+          ]),
+        },
+      },
     });
     const screenKey = currentCardTutorialScreenKey(before);
     expect(screenKey).not.toBeNull();

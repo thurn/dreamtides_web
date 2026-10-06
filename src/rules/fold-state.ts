@@ -136,7 +136,6 @@ export function initialJourneyState(
       knownDreamsignCarrierIds: [],
     },
     currentDreamscape: null,
-    visitedSites: [],
     siteRuntime: {},
     draftState: null,
     screen: { type: "journeyStart" },

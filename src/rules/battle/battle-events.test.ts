@@ -23,6 +23,7 @@ import { LayerName } from "../../types/layer-name";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import { emptyDawnFired, type BattleFoldState } from "./fold";
+import { isSiteVisited } from "../journey/sites";
 import {
   registerBattleCompletionProvider,
   registerBattleInitProvider,
@@ -455,7 +456,7 @@ describe("END_BATTLE victory", () => {
 
     expect(journey.completionLevel).toBe(1);
     expect(journey.essence).toBe(550);
-    expect(journey.visitedSites).toContain(SITE_ID);
+    expect(isSiteVisited(journey, SITE_ID)).toBe(true);
     expect(
       journey.atlas.nodes[NODE_ID].sites.find((site) => site.id === SITE_ID)
         ?.isVisited,

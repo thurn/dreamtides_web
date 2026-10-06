@@ -6,6 +6,7 @@ import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
 import { genesisFoldState } from "../rules/fold-state";
 import { reduceGameEvent } from "../rules/reducer";
+import { isSiteVisited } from "../rules/journey/sites";
 import {
   BATTLE_SITE_ID,
   AVATAR_ID,
@@ -92,7 +93,7 @@ describe("authoritative journey flow", () => {
       activeSiteId: null,
       screen: { type: "atlas" },
     });
-    expect(state.journey.visitedSites).toContain(BATTLE_SITE_ID);
+    expect(isSiteVisited(state.journey, BATTLE_SITE_ID)).toBe(true);
     expect(state.journey.atlas.nodes[NODE_ID].state).toBe("completed");
     expect(state.journey.atlas.nodes[NEXT_NODE_ID]).toMatchObject({
       state: "available",

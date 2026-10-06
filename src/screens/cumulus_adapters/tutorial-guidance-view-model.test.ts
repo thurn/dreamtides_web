@@ -393,7 +393,6 @@ describe("site-tutorial-view-model", () => {
       runId: "run-a",
       seed: "seed-a",
       screen: { type: "site", siteId: current.id },
-      visitedSites: [...visitedSites],
       atlas: {
         nodes: {
           node: {

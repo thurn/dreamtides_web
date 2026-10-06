@@ -3,9 +3,11 @@ import type { JourneyState, SiteState, SiteType } from "../types/journey";
 import type { SiteGenerationContext } from "../atlas/atlas-generator";
 import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
 import { initialJourneyState } from "../rules/fold-state";
-import { generateJourneySeed } from "../state/journey-state-actions";
 import { createDreamsign } from "../data/dreamsigns";
-import { createQaJourneyFoundation } from "./qa-journey-foundation";
+import {
+  createQaJourneyFoundation,
+  generateJourneySeed,
+} from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../session/providers/exploration-provider";
 import { initializeDraftState } from "../draft/draft-engine";
 import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
@@ -327,9 +329,6 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
       return null;
     }
 
-    const visitedSites = node.sites
-      .filter((site) => site.type !== "Battle")
-      .map((site) => site.id);
     const battleReadyNode = {
       ...node,
       sites: node.sites.map((site) =>
@@ -345,7 +344,6 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
       },
       completionLevel,
       currentDreamscape: node.id,
-      visitedSites,
       screen: { type: "site", siteId: battleSite.id },
       activeSiteId: battleSite.id,
     };

@@ -38,7 +38,12 @@ import type {
   SiteType,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
-import { clampEssence, findSite, getSiteContentProvider } from "./sites";
+import {
+  clampEssence,
+  findSite,
+  getSiteContentProvider,
+  isSiteVisited,
+} from "./sites";
 import { SITE_TYPES as SITE_TYPE_VALUES } from "../../types/site-type";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
@@ -162,7 +167,7 @@ export function buyShopSlot(
   const siteId = siteIdFromUnknown(payload.siteId);
   const slotIndex = integer(payload.slotIndex);
   if (siteId === null || slotIndex === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
   const site = findSite(journey, siteId);
   if (
     site === null ||
@@ -361,7 +366,7 @@ export function rerollShop(
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (isSiteVisited(journey, siteId)) return null;
 
   const runtime = journey.siteRuntime[siteId];
   if (runtime === undefined || runtime.kind !== "shop") return null;

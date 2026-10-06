@@ -256,7 +256,6 @@ export function travelToDreamscape(
   return {
     ...journey,
     currentDreamscape: parsedNodeId,
-    visitedSites: [],
     dreamscapeModifiers,
     screen: { type: "dreamscape" },
     activeSiteId: null,
@@ -530,7 +529,6 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
     "deck",
     "remainingDreamsignPool",
     "dreamsigns",
-    "visitedSites",
     "siteOfferModifiers",
   ];
   for (const key of arrayKeys) {

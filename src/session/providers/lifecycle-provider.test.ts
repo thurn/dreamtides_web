@@ -167,7 +167,6 @@ describe("startJourneyFromAvatar", () => {
     expect(next.draftState?.sitePicksCompleted).toBe(0);
     expect(firstAvailableNode).toBeDefined();
     expect(next.currentDreamscape).toBe(firstAvailableNode?.id);
-    expect(next.visitedSites).toEqual([]);
     expect(next.screen).toEqual({ type: "dreamscape" });
     expect(next.activeSiteId).toBeNull();
     // The starter-deck reveal popup is gated entirely by the

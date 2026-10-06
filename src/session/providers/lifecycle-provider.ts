@@ -15,7 +15,7 @@ import { buildAvatarPackage } from "../../data/journey-content";
 import { buildTutorialJourneyPackage } from "../../data/tutorial-journey-package";
 import { toJourneyAvatar } from "../../data/avatar-selection";
 import { createInitialDraftState } from "../../draft/draft-engine";
-import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
+import { deriveEntryIdCounter } from "../../rules/journey/deck";
 import type { JourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
 import type { JourneyState } from "../../types/journey";
 import type { JourneySeed } from "../../types/journey-seed";
@@ -127,7 +127,6 @@ export function startJourneyFromAvatar({
     draftState,
     atlas,
     currentDreamscape: firstNode.id,
-    visitedSites: [],
     screen: { type: "dreamscape" },
     activeSiteId: null,
   };
@@ -212,7 +211,6 @@ export function createJourneyLifecycleContentProvider(
               ? { type: "journeyComplete" }
               : { type: "atlas" },
         activeSiteId: null,
-        visitedSites: [],
       };
     },
   };

@@ -35,7 +35,6 @@ import {
   parseSiteId,
   type AtlasNodeId,
   type BattleId,
-  type SiteId,
 } from "../types/identifiers";
 
 vi.mock("../state/journey-context", async (importOriginal) => ({
@@ -92,14 +91,12 @@ interface JourneyOverrides {
   completionLevel?: number;
   currentDreamscape?: AtlasNodeId | null;
   screen?: Screen;
-  visitedSites?: SiteId[];
 }
 
 function makeJourneyState({
   completionLevel = 3,
   currentDreamscape = parseAtlasNodeId("dreamscape-2"),
   screen = { type: "site", siteId: SITE_ID },
-  visitedSites = [],
 }: JourneyOverrides = {}) {
   const atlasStartingNodeId = parseAtlasNodeId("dreamscape-start");
   const battleState = makeBattleTestState();
@@ -117,7 +114,6 @@ function makeJourneyState({
       currentNodeId: atlasStartingNodeId,
     },
     currentDreamscape,
-    visitedSites,
     screen,
     activeSiteId: SITE_ID,
   };
@@ -310,7 +306,6 @@ describe("BattleSiteRoute", () => {
       completionLevel: 4,
       currentDreamscape: null,
       screen: { type: "atlas" },
-      visitedSites: [SITE_ID],
     });
     view.rerender(route());
     expect(view.start()).toBeNull();
