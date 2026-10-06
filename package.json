@@ -15,6 +15,7 @@
     "typecheck": "node scripts/review.mjs typecheck",
     "review": "node scripts/review.mjs quick",
     "review:full": "node scripts/review.mjs full",
+    "review:gate": "node scripts/review.mjs gate",
     "setup-assets": "tsx scripts/setup-assets.ts",
     "prepare-workspace": "node scripts/prepare-workspace.mjs",
     "fuzz:engine": "tsx scripts/fuzz-engine.ts",

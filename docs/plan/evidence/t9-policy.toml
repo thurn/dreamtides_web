@@ -1,0 +1,43 @@
+version = 1
+sync_user_master = "staging"
+
+[resources]
+max_buildsets = 2
+repository_concurrency = 1
+release_concurrency = 1
+max_release_lag = 5
+
+[remote]
+enabled = true
+name = "origin"
+branch = "master"
+
+[cache]
+epoch = 0
+
+[[step]]
+name = "dependencies"
+run = "npm ci --prefer-offline --no-audit --no-fund"
+timeout = "30m"
+
+[[step]]
+name = "review-gate"
+run = "npm run review:gate"
+needs = ["dependencies"]
+timeout = "15m"
+environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2" }
+
+[[step]]
+name = "review-full"
+run = "npm run review:full"
+stage = "release"
+needs = ["dependencies"]
+timeout = "120m"
+environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2" }
+
+[[step]]
+name = "fuzz"
+run = "npm run fuzz:engine -- --games 200"
+stage = "release"
+needs = ["dependencies"]
+timeout = "30m"

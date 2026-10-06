@@ -289,6 +289,117 @@ timeout = "120m"
 environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2", TROX_ROOT = "/Users/dthurn/.cache/quest-prototype/trox-604a79412034" }
 ```
 
+### Staged validation policy (T9)
+
+Bead hv-ki3p.10 drafts the staged-mode policy of
+[D44](../decisions.md#d44-staged-validation); the orchestrator applies
+exactly the text of [`t9-policy.toml`](t9-policy.toml) with
+`tg config validate` then `apply`. Tollgate step names allow only
+`[A-Za-z0-9._-]`, so the steps are `review-gate`, `review-full`, and
+`fuzz`.
+
+Old text (active digest `68c1e461196b…`, steps `dependencies` → `review`,
+no release stage):
+
+```toml
+version = 1
+sync_user_master = true
+
+[resources]
+max_buildsets = 2
+repository_concurrency = 1
+
+[remote]
+enabled = true
+name = "origin"
+branch = "master"
+
+[cache]
+epoch = 0
+
+[[step]]
+name = "dependencies"
+run = "npm ci --prefer-offline --no-audit --no-fund"
+timeout = "30m"
+
+[[step]]
+name = "review"
+run = "npm run review:full"
+needs = ["dependencies"]
+timeout = "120m"
+environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2" }
+```
+
+New text: gate stage `dependencies` → `review-gate`; release stage
+`review-full` and `fuzz`, each needing only `dependencies`. `tg config
+validate` takes no path, so the draft was parsed with Tollgate's own
+`tollgate_config::EffectiveConfig::parse` (crate at `~/tollgate`
+`c3303ef`, which reproduces the active digest above for the old text):
+valid, digest `407f184944ea…`, gate run `dependencies, review-gate`,
+release run `dependencies, review-full, fuzz`.
+
+```toml
+version = 1
+sync_user_master = "staging"
+
+[resources]
+max_buildsets = 2
+repository_concurrency = 1
+release_concurrency = 1
+max_release_lag = 5
+
+[remote]
+enabled = true
+name = "origin"
+branch = "master"
+
+[cache]
+epoch = 0
+
+[[step]]
+name = "dependencies"
+run = "npm ci --prefer-offline --no-audit --no-fund"
+timeout = "30m"
+
+[[step]]
+name = "review-gate"
+run = "npm run review:gate"
+needs = ["dependencies"]
+timeout = "15m"
+environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2" }
+
+[[step]]
+name = "review-full"
+run = "npm run review:full"
+stage = "release"
+needs = ["dependencies"]
+timeout = "120m"
+environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2" }
+
+[[step]]
+name = "fuzz"
+run = "npm run fuzz:engine -- --games 200"
+stage = "release"
+needs = ["dependencies"]
+timeout = "30m"
+```
+
+`npm run review:gate` on a typical one-file change (a scratch commit
+swapping `Math.max(0, value)` to `Math.max(value, 0)` in
+`src/rules/journey/shop.ts`, then reset), `JOURNEY_TEST_WORKERS=2
+DREAMTIDES_LOCAL_ASSET_HOME=.`, fresh worktree after `npm install` with no
+prepared workspace and no typecheck build info, timed with
+`/usr/bin/time -p`:
+
+| Case | Steps | Wall | Host load (1 min) |
+| --- | --- | --- | --- |
+| One-file change, cold | prepare 0.7 s; lint 1.7 s beside typecheck 6.7 s; related tests 5.2 s (21 files, 349 tests) | **12.8 s** | 6.41 |
+| One-line comment in `src/types/identifiers.ts` (warm build info) | prepare 0.3 s; typecheck 1.1 s beside lint 1.5 s; related tests skipped at 160 files (cap 40), 3.0 s to select | **5.0 s** | 5.39 |
+
+The `dependencies` step (`npm ci`) is separate and not included. A
+scratch commit that broke `clampEssence` failed `review:gate` with 2 failing
+related test files out of 21.
+
 ## Phase 1.3 feedback-loop speedups (2026-10-05, bead hv-b8ef.3)
 
 Each candidate was tried alone in a fresh worktree at `release` `c6972946`.

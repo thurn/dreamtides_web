@@ -8,6 +8,7 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import {
   buildReviewPlan,
+  gateExecutionPlan,
   reviewNeedsPreparedWorkspace,
 } from "./review-plan.mjs";
 import {
@@ -52,13 +53,15 @@ const validTasks = new Set([
   "test",
   "test-full",
   "quick",
+  "gate",
   "full",
 ]);
 
 if (!validTasks.has(task)) {
   console.error(
     "Usage: node scripts/review.mjs " +
-    "<lint|lint-full|typecheck|validate|test|test-full|quick|full> [args...]",
+    "<lint|lint-full|typecheck|validate|test|test-full|quick|gate|full> " +
+    "[args...]",
   );
   process.exit(2);
 }
@@ -98,6 +101,19 @@ function reviewBase() {
   return gitOutput(["rev-parse", "HEAD"]);
 }
 
+/**
+ * The gate stage checks the tested commit against its parent. A root commit
+ * diffs against the empty tree, so every file counts as changed.
+ */
+function gateBase() {
+  if (revisionExists("HEAD^")) return gitOutput(["rev-parse", "HEAD^"]);
+  return execFileSync("git", ["hash-object", "-t", "tree", "--stdin"], {
+    cwd: root,
+    encoding: "utf8",
+    input: "",
+  }).trim();
+}
+
 function splitNullDelimited(value) {
   return value.split("\0").filter((entry) => entry !== "");
 }
@@ -116,7 +132,7 @@ function changedFilesSince(base) {
   return [...splitNullDelimited(tracked), ...splitNullDelimited(untracked)];
 }
 
-const base = reviewBase();
+const base = task === "gate" ? gateBase() : reviewBase();
 const reviewPlan = buildReviewPlan(
   changedFilesSince(base),
   (file) => existsSync(join(root, file)),
@@ -208,7 +224,9 @@ function nodeModulePath(...parts) {
 }
 
 const typecheckPaths = typecheckStatePaths({ root, commonGitDir });
-const shareTypecheckState = sharesTypecheckState(task);
+// The gate stage certifies promotion, so like the exhaustive tasks it
+// typechecks cold and never reads or publishes the shared build info.
+const shareTypecheckState = task !== "gate" && sharesTypecheckState(task);
 
 function commandFor(step, extraArgs = []) {
   if (step === "lint") {
@@ -232,6 +250,12 @@ function commandFor(step, extraArgs = []) {
     return [
       process.execPath,
       ["--import", "tsx", join(root, "scripts", "setup-assets.ts")],
+    ];
+  }
+  if (step === "test-related-capped") {
+    return [
+      process.execPath,
+      [join(root, "scripts", "review-related-tests.mjs"), ...extraArgs],
     ];
   }
   if (step === "test-related") {
@@ -334,6 +358,9 @@ function executionPlan() {
       { step: "test", args: [] },
     ];
   }
+  if (task === "gate") {
+    return gateExecutionPlan(reviewPlan);
+  }
   if (task === "lint-full") {
     return [
       { step: "prepare", args: [] },
@@ -400,7 +427,7 @@ if (requiresFullReviewSlot) {
 }
 try {
   const steps = executionPlan();
-  if (["quick", "lint", "test"].includes(task)) {
+  if (["quick", "gate", "lint", "test"].includes(task)) {
     console.log(
       `[review] ${reviewPlan.changedFiles.length} changed file(s) since ${base.slice(0, 12)}`,
     );
