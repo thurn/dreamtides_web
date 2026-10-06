@@ -20,7 +20,7 @@ import { battleSeed, opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { runStep } from "../steps/runner";
 import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
-import type { Answer } from "../prompts/types";
+import type { Answer, PromptPurpose } from "../prompts/types";
 import { boardState, type BoardSetup } from "../testing/board";
 import { invariantViolations } from "../testing/invariants";
 import { STACK } from "../testing/stack-cards";
@@ -426,7 +426,10 @@ describe("when patterns", () => {
     expect(reloaded.inFlight?.step).toEqual({ kind: "resolveTrigger" });
     const pending = fold.pending(reloaded);
     if (pending === null) throw new Error("no prompt");
-    expect(pending.prompt).toMatchObject({ side: "player", purpose: { ability: 0 } });
+    expect(pending.prompt).toMatchObject({
+      side: "player",
+      purpose: { source: { kind: "dreamsign", side: "player", index: 0, id: START_SIGN.id }, cardId: null, ability: 0, role: "youMay" },
+    });
     const outcome = fold.reduce(reloaded, { kind: "answer", side: "player", promptId: pending.prompt.id, value: true });
     if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("answer failed");
     expect(outcome.slice.inFlight).toBeNull();
@@ -462,6 +465,19 @@ describe("functional zones and intervening conditions", () => {
     const day = passUntil(engine, state, at(engine, "player", "day"));
     expect(resolvedSources(day.events)).toEqual([ids.player.void[0]]);
     expect(day.state.sides.player.score).toBe(1);
+  });
+
+  it("names the avatar whose trigger asks for its target", () => {
+    const { state, ids } = board({ active: "enemy", player: { avatar: DAWN_AVATAR.id, back: [v.vanilla1.id, v.vanilla1.id], deck }, enemy: { deck } });
+    const purposes: PromptPurpose[] = [];
+    const scripted = new ScriptedSource([[ids.player.back[1]!]]);
+    passUntil(engine, state, at(engine, "player", "day"), {
+      answer(prompt) {
+        purposes.push(prompt.purpose);
+        return scripted.answer(prompt);
+      },
+    });
+    expect(purposes).toEqual([{ source: { kind: "avatar", side: "player", id: DAWN_AVATAR.id }, cardId: null, ability: 0, role: "target" }]);
   });
 
   it("checks an intervening 'if' when the ability triggers and again as it resolves", () => {
@@ -562,7 +578,7 @@ describe("prompts raised by triggers", () => {
     const opened = fold.reduce(start, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
     if (opened.kind !== "applied") throw new Error("bounced");
     let slice = opened.slice;
-    const sources: (InstanceId | null)[] = [];
+    const sources: PromptPurpose["source"][] = [];
     const firstId = fold.pending(slice)?.prompt.id;
     for (const answer of answers) {
       // Reloading mid-sequence reaches the identical prompt.

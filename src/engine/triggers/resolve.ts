@@ -1,6 +1,5 @@
 /** Resolving one queued trigger (D14): the body of the `resolveTrigger` step. */
 import { chooseOnResolution, conditionHolds, purposeOf, resolveEffect } from "../effects/interpreter";
-import { originCardId } from "../rules/activation";
 import type { QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { triggerBody } from "./body";
@@ -25,8 +24,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });
   ctx.emit({ kind: "triggerResolved", source, controller, ability, node, applied });
   if (!applied) return;
-  const cardId = originCardId(origin);
-  const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, cardId, ability, role));
+  const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role));
   if (choices === null) return;
   resolveEffect(ctx, body.effect, { source, origin, ability, root: body.root, subject, controller, x: null, optionalPaid: [], choices });
 }

@@ -4,9 +4,10 @@
  * copy is a created card, so it ceases to exist instead of entering a deck, a
  * hand, a void, or the Banished zone (rules/zones.ts).
  */
-import { printedCard, printedCardId } from "../catalog";
+import { printedCard } from "../catalog";
 import { eventAbilities } from "../effects/abilities";
 import { chooseOnResolution, purposeOf } from "../effects/interpreter";
+import { instanceOrigin } from "./activation";
 import type { InstanceId, Side } from "../state/ids";
 import type { Printing } from "../state/types";
 import type { StepContext } from "../steps/types";
@@ -40,7 +41,7 @@ export function copyOnStack(ctx: StepContext, original: InstanceId, controller: 
   const abilities = eventAbilities(definition, source.variant);
   const choices = abilities.map(
     (ability, position) =>
-      chooseOnResolution(ctx, ability.effect, controller, copy.id, (role) => purposeOf(copy.id, printedCardId(copy.printing), ability.ability, role)) ??
+      chooseOnResolution(ctx, ability.effect, controller, copy.id, (role) => purposeOf(copy.id, instanceOrigin(copy), ability.ability, role)) ??
       item.choices[position] ?? { modes: [], targets: [] },
   );
   state.stack.splice(index + 1, 0, {

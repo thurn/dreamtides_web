@@ -1,4 +1,4 @@
-import type { CardId, InstanceId, Side } from "../state/ids";
+import type { AvatarId, CardId, DreamsignId, InstanceId, Side } from "../state/ids";
 
 /**
  * The stable key of a prompt's choice, which the UI copy module renders. The
@@ -39,9 +39,30 @@ export type PromptRole =
   /** Whether the prevented card's controller pays to stop the prevention. */
   | "preventUnlessPays";
 
-/** Why a prompt was raised: its source and the role of the choice. Never prose. */
+/**
+ * The emblem whose ability raised a prompt: a side's avatar or one of its
+ * dreamsigns (by its position among that side's dreamsigns), with its
+ * catalog UUID. Emblems are public, so every view of a prompt keeps it.
+ */
+export type PromptEmblem =
+  | { readonly kind: "avatar"; readonly side: Side; readonly id: AvatarId }
+  | { readonly kind: "dreamsign"; readonly side: Side; readonly index: number; readonly id: DreamsignId };
+
+/** What raised a prompt: a card instance's ability or an emblem's. */
+export type PromptSource = InstanceId | PromptEmblem;
+
+/**
+ * Why a prompt was raised: its source and the role of the choice. Never
+ * prose. The purpose is part of the prompt's fingerprint.
+ */
 export interface PromptPurpose {
-  readonly source: InstanceId | null;
+  /**
+   * The card instance or emblem whose ability asks; `null` for a prompt of
+   * the rules themselves (the hand limit) or, in a view, for a card the
+   * viewer cannot identify.
+   */
+  readonly source: PromptSource | null;
+  /** The printed card of a card source; `null` for a figment, an emblem, or no source. */
   readonly cardId: CardId | null;
   readonly ability: number | null;
   readonly role: PromptRole;

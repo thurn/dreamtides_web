@@ -1,0 +1,1 @@
+{"bead":"hv-7x4l.35","phase":3,"lane":null,"implementMin":30,"localValidationS":{"review":35,"lintFull":15,"focused":3,"fuzz30":6.5},"hostLoad":4.3,"testDelta":{"files":0,"lines":80,"jsdomFiles":0},"friction":[{"tag":"worktree-write-hook-misfire","minutes":0,"note":"Write/Edit refuse .worktrees paths; every edit went through heredocs and python replacement scripts."}]}

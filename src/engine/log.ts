@@ -26,9 +26,9 @@
  */
 import type { EngineEvent, EventOf } from "./events";
 import type { LoopId } from "./loops/types";
-import type { Answer, Prompt, PromptFingerprint, PromptId, PromptRole } from "./prompts/types";
+import type { Answer, Prompt, PromptFingerprint, PromptId, PromptRole, PromptSource } from "./prompts/types";
 import type { Action } from "./rules/actions";
-import type { CardId, InstanceId, Side } from "./state/ids";
+import type { CardId, Side } from "./state/ids";
 import type { BattleInit, BattleResult, BattleState } from "./state/types";
 import type { Step } from "./steps/kinds";
 import type { RecordedAnswer } from "./steps/types";
@@ -59,7 +59,7 @@ export type EngineLogRecord =
       readonly side: Side;
       readonly kind: Prompt["kind"];
       readonly role: PromptRole;
-      readonly source: InstanceId | null;
+      readonly source: PromptSource | null;
       readonly cardId: CardId | null;
       readonly privateTo: Side | null;
       readonly fingerprint: PromptFingerprint;

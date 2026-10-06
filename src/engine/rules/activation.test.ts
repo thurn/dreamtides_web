@@ -1,15 +1,38 @@
 import { describe, expect, it } from "vitest";
+import type { EngineAvatarDefinition, EngineDreamsignDefinition } from "../catalog";
+import { activated, energy, enemyCharacter, exhaustSelf, target } from "../dsl/builders";
+import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
 import { createFoldAdapter } from "../fold/slice";
-import type { Answer } from "../prompts/types";
+import type { Answer, Prompt } from "../prompts/types";
 import type { AbilitySource, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
+import type { AnswerSource } from "../steps/types";
 import { boardState, type BoardSetup } from "../testing/board";
 import { AVATAR, DREAMSIGN, STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "../testing/stack-cards";
 import { SYNTHETIC, testCatalog } from "../testing/synthetic-cards";
+import { parseAvatarId, parseDreamsignId } from "../../types/identifiers";
 
-const engine = createEngine(testCatalog(STACK_CARDS, SYNTHETIC_EMBLEMS));
+/** "☾: Dissolve an enemy character." — a target prompt as the avatar's ability is activated. */
+const TARGETING_AVATAR: EngineAvatarDefinition = {
+  id: parseAvatarId("5e5e5e5e-0000-4000-8000-0000000004a1"),
+  status: "authored",
+  abilities: () => [activated([exhaustSelf()], p.dissolve(target(enemyCharacter())))],
+};
+/** "1●: You may gain 1⍟." — a prompt as the dreamsign's ability resolves. */
+const OPTIONAL_SIGN: EngineDreamsignDefinition = {
+  id: parseDreamsignId("5e5e5e5e-0000-4000-8000-0000000004a2"),
+  status: "authored",
+  abilities: () => [activated([energy(1)], p.optional(p.gainPoints(1)))],
+};
+
+const engine = createEngine(
+  testCatalog(STACK_CARDS, {
+    avatars: [...(SYNTHETIC_EMBLEMS.avatars ?? []), TARGETING_AVATAR],
+    dreamsigns: [...(SYNTHETIC_EMBLEMS.dreamsigns ?? []), OPTIONAL_SIGN],
+  }),
+);
 const v = SYNTHETIC;
 const deck = [v.vanilla1.id, v.vanilla1.id, v.vanilla1.id];
 
@@ -206,6 +229,32 @@ describe("avatars and dreamsigns", () => {
     const { state: start } = board({ player: { dreamsigns: [DREAMSIGN.points.id], energy: 2, deck } });
     const source = { kind: "dreamsign", side: "player", index: 0 } as const;
     const { state } = activate(start, "player", source);
+    expect(state.sides.player.score).toBe(1);
+  });
+
+  it("names the emblem whose ability asks in each prompt it raises", () => {
+    const { state: start, ids } = board({
+      player: { avatar: TARGETING_AVATAR.id, dreamsigns: [DREAMSIGN.points.id, OPTIONAL_SIGN.id], energy: 1, deck },
+      enemy: { back: [v.vanilla1.id, v.vanilla1.id], deck },
+    });
+    const prompts: Prompt[] = [];
+    const recording = (answers: readonly Answer[]): AnswerSource => {
+      const scripted = new ScriptedSource(answers);
+      return {
+        answer(prompt) {
+          prompts.push(prompt);
+          return scripted.answer(prompt);
+        },
+      };
+    };
+    // The enemy cannot respond, so each ability resolves within its activation.
+    const dissolved = engine.apply(start, "player", { kind: "activate", source: { kind: "avatar", side: "player" }, ability: 0 }, recording([[ids.enemy.back[0]!]])).state;
+    const state = engine.apply(dissolved, "player", { kind: "activate", source: { kind: "dreamsign", side: "player", index: 1 }, ability: 0 }, recording([true])).state;
+    expect(prompts.map((prompt) => prompt.purpose)).toEqual([
+      { source: { kind: "avatar", side: "player", id: TARGETING_AVATAR.id }, cardId: null, ability: 0, role: "target" },
+      { source: { kind: "dreamsign", side: "player", index: 1, id: OPTIONAL_SIGN.id }, cardId: null, ability: 0, role: "youMay" },
+    ]);
+    expect(dissolved.sides.enemy.backRank.filter((id) => id !== null)).toEqual([ids.enemy.back[1]]);
     expect(state.sides.player.score).toBe(1);
   });
 

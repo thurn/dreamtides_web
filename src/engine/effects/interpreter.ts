@@ -1,5 +1,5 @@
 import type { EngineCatalog } from "../catalog";
-import type { ChooseModePrompt, ChooseTargetsPrompt, PromptPurpose, PromptRole } from "../prompts/types";
+import type { ChooseModePrompt, ChooseTargetsPrompt, PromptPurpose, PromptRole, PromptSource } from "../prompts/types";
 import {
   matchesCharacter,
   matchesStackItem,
@@ -9,7 +9,7 @@ import {
 import { evaluateValue } from "../dsl/values";
 import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr } from "../dsl/types";
-import type { AbilitySource, CardId, InstanceId, Side } from "../state/ids";
+import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
@@ -119,14 +119,22 @@ export function chosenModes(effect: EffectNode, modes: readonly number[]): Map<E
   return chosen;
 }
 
-/** A prompt purpose for an ability of `source`; an emblem's prompts carry no instance or card. */
-export function purposeOf(
-  source: AbilitySource,
-  cardId: CardId | null,
-  ability: number,
-  role: PromptRole,
-): PromptPurpose {
-  return { source: sourceInstance(source), cardId, ability, role };
+/**
+ * A prompt purpose for an ability of `source`, whose definition comes from
+ * `origin`: a card source carries its instance and printed card, an emblem
+ * its side, kind, and catalog UUID.
+ */
+export function purposeOf(source: AbilitySource, origin: AbilityOrigin, ability: number, role: PromptRole): PromptPurpose {
+  return { source: promptSource(source, origin), cardId: origin.kind === "card" ? origin.cardId : null, ability, role };
+}
+
+function promptSource(source: AbilitySource, origin: AbilityOrigin): PromptSource {
+  if (typeof source === "string") return source;
+  if (source.kind === "avatar" && origin.kind === "avatar") return { kind: "avatar", side: source.side, id: origin.id };
+  if (source.kind === "dreamsign" && origin.kind === "dreamsign") {
+    return { kind: "dreamsign", side: source.side, index: source.index, id: origin.id };
+  }
+  throw new Error(`A ${source.kind} source has a ${origin.kind} origin`);
 }
 
 /** The characters or stack cards a target spec may choose now. */
@@ -445,7 +453,7 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 
 export interface ResolveOptions {
   readonly source: AbilitySource;
-  /** Where the ability's definition comes from; prompt purposes carry its card. */
+  /** Where the ability's definition comes from; prompt purposes carry its card or emblem. */
   readonly origin: AbilityOrigin;
   /** The ability's index in its source's ability list. */
   readonly ability: number;
@@ -465,7 +473,6 @@ export interface ResolveOptions {
 export function resolveEffect(ctx: StepContext, effect: EffectNode, options: ResolveOptions): void {
   const chosen = chosenModes(effect, options.choices.modes);
   const specs = collectTargets(effect, chosen);
-  const cardId = options.origin.kind === "card" ? options.origin.cardId : null;
   const env: EffectEnv = {
     source: options.source,
     origin: options.origin,
@@ -488,7 +495,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
       primitiveDefinition(node.op).resolve(ctx, node, env);
     },
     purpose(role) {
-      return purposeOf(options.source, cardId, options.ability, role);
+      return purposeOf(options.source, options.origin, options.ability, role);
     },
   };
   env.run(effect);

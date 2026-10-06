@@ -338,10 +338,10 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
 /**
  * A pending prompt as `viewer` may see it. The side answering sees all of
  * it. Anyone else sees its kind, purpose, and bounds, with only the cards
- * `viewer` can identify in the display state, a purpose source it cannot
- * identify as `null` (so never the cards of a
- * `privateTo` prompt shown to the other side); such a redacted prompt is for
- * display and cannot be answered.
+ * `viewer` can identify in the display state (so never the cards of a
+ * `privateTo` prompt shown to the other side) and a card source it cannot
+ * identify as `null`; an emblem source is public. Such a redacted prompt is
+ * for display and cannot be answered.
  */
 export function promptView(prompt: Prompt, viewer: Side, display: BattleState): Prompt {
   if (prompt.side === viewer) return copy(prompt);
@@ -350,7 +350,9 @@ export function promptView(prompt: Prompt, viewer: Side, display: BattleState): 
     return instance !== undefined && knows(display, instance, viewer);
   };
   const { source } = prompt.purpose;
-  const purpose = source === null || visible(source) ? copy(prompt.purpose) : { ...prompt.purpose, source: null, cardId: null };
+  // Emblems are public; a card source shows only when the viewer can identify it.
+  const identifiable = source === null || typeof source !== "string" || visible(source);
+  const purpose = identifiable ? copy(prompt.purpose) : { ...prompt.purpose, source: null, cardId: null };
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards":

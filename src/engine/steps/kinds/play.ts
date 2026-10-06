@@ -5,6 +5,7 @@ import { costModifier } from "../../continuous/costs";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
 import { endFloating } from "../../rules/floating";
+import { instanceOrigin } from "../../rules/activation";
 import { canPlay, playRoutes, routeCosts, routePayable, type PlayRoute, type PlayZone } from "../../rules/timing";
 import { recordPlayed } from "../../rules/turn-log";
 import { instanceOf, moveToStack } from "../../rules/zones";
@@ -46,8 +47,9 @@ export const play: StepDefinition<PlayStep> = {
     }
     const definition = printedCard(catalog, instance.printing);
     const cardId = printedCardId(instance.printing);
+    const origin = instanceOrigin(instance);
     const modifier = costModifier(state, catalog, step.card, side);
-    const purpose = (ability: number, role: PromptRole) => purposeOf(step.card, cardId, ability, role);
+    const purpose = (ability: number, role: PromptRole) => purposeOf(step.card, origin, ability, role);
     const routes = playRoutes(state, catalog, step.card, step.from);
     let route: PlayRoute = routes[0] ?? "hand";
     if (routes.length > 1) {

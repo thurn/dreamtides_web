@@ -366,4 +366,19 @@ describe("knowledge", () => {
     state.knownTo.player = [second];
     expect(promptView(prompt, "player", state)).toMatchObject({ candidates: [second] });
   });
+
+  it("shows every viewer the emblem whose ability raised another side's prompt", () => {
+    const { state } = fixture();
+    const [first, second] = state.sides.enemy.hand;
+    const prompt: Prompt = {
+      kind: "chooseCards",
+      side: "enemy",
+      purpose: { source: { kind: "dreamsign", side: "enemy", index: 0, id: DREAMSIGN.points.id }, cardId: null, ability: 0, role: "discard" },
+      cancellable: false,
+      candidates: [first, second],
+      min: 1,
+      max: 1,
+    };
+    expect(promptView(prompt, "player", state)).toEqual({ ...prompt, candidates: [] });
+  });
 });
