@@ -11,6 +11,7 @@ import { registerTutorialFrontDoorContentProvider } from "./front-door";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
 import { testTutorialActionId, testAvatarId } from "../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 const TUTORIAL_OPPONENT_CARD_ID =
   TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
@@ -29,9 +30,7 @@ const GENESIS: Genesis = {
   reducerVersion: "test",
   createdAt: 0,
   frontDoorEntry: "main",
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 function event(
@@ -54,6 +53,7 @@ function context(
   intervening: EventContext["intervening"] = [],
 ): EventContext {
   return {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq,
     rng: () => 0,
     timestamp: "1970-01-01T00:00:00.000Z",

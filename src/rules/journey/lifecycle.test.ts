@@ -1,6 +1,11 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { testEventActor } from "../../types/test-identities";
 import { testJourneyMutationSource } from "../../types/test-identities";
+import {
+  testPresentationId,
+  testTutorialTriggerId,
+} from "../../types/test-identities";
+import { parseCardTutorialScreenKey } from "../../types/identifiers";
 import { afterEach, describe, expect, it } from "vitest";
 
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
@@ -24,6 +29,7 @@ import type { AvatarId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import { testAvatarId, testDreamscapeId, testDreamsignId } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -33,13 +39,12 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("lifecycle-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
   return {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 10,
     rng: () => 0,
     intervening: [],
@@ -499,6 +504,87 @@ describe("RESET_JOURNEY", () => {
     expect(hashState(reset.journey)).toBe(
       hashState(genesisFoldState(GENESIS).journey),
     );
+  });
+});
+
+describe("initial fold state", () => {
+  it("starts with no tutorial history and nothing presented", () => {
+    const state = genesis();
+    expect(state.tutorialTriggerIdsSeen).toEqual([]);
+    expect(state.cardTutorialScreenKeysSeen).toEqual([]);
+    expect(state.cardTutorialPresentation).toBeNull();
+  });
+
+  it("reads the starting Essence and Dreamsign cap from the genesis economy", () => {
+    const state = genesisFoldState({
+      ...GENESIS,
+      contentConfig: {
+        ...TEST_CONTENT_CONFIG,
+        defaultStartingEssence: 137,
+        dreamsignCap: 9,
+      },
+    });
+    expect(state.journey.essence).toBe(137);
+    expect(state.journey.maxDreamsigns).toBe(9);
+  });
+});
+
+describe("RESET_JOURNEY initial state", () => {
+  const TRIGGER_ID = testTutorialTriggerId("first-battle");
+  const SCREEN_KEY = parseCardTutorialScreenKey("shop:slot-0");
+
+  function presented(state: FoldState): FoldState {
+    return {
+      ...state,
+      tutorialTriggerIdsSeen: [TRIGGER_ID],
+      cardTutorialScreenKeysSeen: [SCREEN_KEY],
+      cardTutorialPresentation: {
+        id: testPresentationId("presentation"),
+        screenKey: SCREEN_KEY,
+        cardId: null,
+        triggerId: TRIGGER_ID,
+        speaker: "mira",
+        text: "",
+        duration: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 1,
+      },
+    };
+  }
+
+  it("rebuilds the whole initial fold for the game seed, keeping the front door", () => {
+    registerJourneyLifecycleContentProvider(deterministicProvider());
+    const started = apply(genesis(), "START_JOURNEY", {
+      avatarId: testAvatarId("dc-7"),
+    });
+    const reset = apply(started, "RESET_JOURNEY", {});
+    expect(hashState(reset)).toBe(
+      hashState({ ...genesis(), frontDoor: started.frontDoor }),
+    );
+  });
+
+  it("reads the starting economy from the pinned content configuration", () => {
+    const economy = {
+      ...TEST_CONTENT_CONFIG,
+      defaultStartingEssence: 137,
+      dreamsignCap: 9,
+    };
+    const reset = apply(
+      genesis(),
+      "RESET_JOURNEY",
+      {},
+      ctx({ contentConfig: economy }),
+    );
+    expect(reset.journey.essence).toBe(137);
+    expect(reset.journey.maxDreamsigns).toBe(9);
+  });
+
+  it("keeps the tutorials already presented and closes the open presentation", () => {
+    const reset = apply(presented(genesis()), "RESET_JOURNEY", {});
+    expect(reset.tutorialTriggerIdsSeen).toEqual([TRIGGER_ID]);
+    expect(reset.cardTutorialScreenKeysSeen).toEqual([SCREEN_KEY]);
+    expect(reset.cardTutorialPresentation).toBeNull();
   });
 });
 

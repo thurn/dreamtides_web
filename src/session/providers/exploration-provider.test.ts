@@ -24,7 +24,7 @@ import { foldEvents } from "../../eventlog/fold";
 import type { GameEvent, Genesis } from "../../eventlog/types";
 import { GAME_ENGINE_CONFIG } from "../../rules/replay/replay";
 import { registerSiteContentProvider } from "../../rules/journey/sites";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState, TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { LayerName } from "../../types/layer-name";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -173,7 +173,7 @@ function journeyFixture(content: JourneyContent): JourneyState {
     throw new Error("Expected synthetic deck fixture cards");
   }
   return {
-    ...createDefaultState(),
+    ...testJourneyState(),
     seed: testJourneySeed("exploration-provider-test"),
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
@@ -830,7 +830,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("free-purchases-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const payload = {
       siteId: site.id,
@@ -959,7 +959,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("essence-mutation-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const payload = {
       siteId: site.id,
@@ -1231,7 +1231,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("bulk-transfiguration-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const event: GameEvent = {
       type: draft.type,
@@ -2442,7 +2442,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("nightmare-dreamsign-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const payload = {
       siteId: site.id,
@@ -4294,7 +4294,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("starter-transfiguration-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const event: GameEvent = {
       type: draft.type,
@@ -4777,7 +4777,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("multi-card-transfiguration-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const event: GameEvent = {
       type: draft.type,
@@ -6266,7 +6266,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("site-choice-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const resolvePayload = {
       siteId: site.id,
@@ -6369,7 +6369,7 @@ describe("Exploration provider", () => {
       seed: testJourneySeed("fixed-site-fold"),
       reducerVersion: "test",
       createdAt: 0,
-      contentConfig: { poolVariant: "tides4" },
+      contentConfig: TEST_CONTENT_CONFIG,
     };
     const payload = {
       siteId: site.id,

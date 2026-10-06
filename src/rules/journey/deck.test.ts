@@ -15,6 +15,7 @@ import {
 import type { DeckEntryId, DreamsignId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testCardId, testDreamsignId } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 const KNOWN_CARD_ID = testCardId("known");
 const DREAMSIGN_ONE_ID = testDreamsignId("ds-1");
@@ -34,11 +35,12 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("deck-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "tides4" },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
   return {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 42,
     rng: () => 0,
     intervening: [],

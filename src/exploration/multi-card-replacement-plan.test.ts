@@ -5,7 +5,7 @@ import {
   MINIMAL_SITES_DATA,
 } from "../testing/atlas-fixtures";
 import type { JourneyContent } from "../data/journey-content";
-import { createDefaultState } from "../state/journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
@@ -108,7 +108,7 @@ function journeyFixture(
   if (avatar === undefined)
     throw new Error("Expected Avatar fixture");
   return {
-    ...createDefaultState(),
+    ...testJourneyState(),
     seed: testJourneySeed("multi-card-replacement-plan-test"),
     deck: [
       {

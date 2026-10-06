@@ -82,15 +82,19 @@ function drawDreamwell() {
   return debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 });
 }
 
+/**
+ * Synthetic economy pinned into every fixture genesis. The initial fold state
+ * reads the starting Essence and Dreamsign cap from the genesis content
+ * configuration, so these values participate in the replayed hash.
+ */
+const FIXTURE_ECONOMY = { defaultStartingEssence: 200, dreamsignCap: 12 };
+
 function genesis(seed) {
-  // `contentConfig` is pinned into every genesis at game creation; the fold
-  // never reads it, so a fixed placeholder keeps fixtures a valid Genesis shape
-  // without affecting the replayed hash.
   return {
     seed,
     reducerVersion: "fixture",
     createdAt: 0,
-    contentConfig: { poolVariant: "tides4" },
+    contentConfig: { poolVariant: "tides4", ...FIXTURE_ECONOMY },
   };
 }
 

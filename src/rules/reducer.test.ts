@@ -30,6 +30,7 @@ import { parseBattleId } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
 import { parseNoteId } from "../types/identifiers";
 import { testCardId, testAvatarId, testFoldHash } from "../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -39,7 +40,7 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("test-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "tides4" },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 /** A base fold state with a known, mutable essence value. */
@@ -56,6 +57,7 @@ function foldStateWithEssence(essence: number): FoldState {
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
   return {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 10,
     rng: () => 0,
     intervening: [],

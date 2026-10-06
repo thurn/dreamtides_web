@@ -4,7 +4,8 @@ import { StrictMode, act, type ImgHTMLAttributes, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ScreenRouter } from "./ScreenRouter";
-import { JourneyContextProvider, createDefaultState } from "../state/journey-context";
+import { JourneyContextProvider } from "../state/journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import type { JourneyMutations } from "../state/journey-context";
 import { parseRuntimeConfig } from "../runtime/runtime-config";
 import type { JourneyContent } from "../data/journey-content";
@@ -191,7 +192,7 @@ function makeStateFor(site: SiteState): JourneyState {
     currentDreamscape: nodeId,
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
-    atlas: { ...createDefaultState().atlas, startingNodeId: nodeId, nodes: { [nodeId]: node } },
+    atlas: { ...testJourneyState().atlas, startingNodeId: nodeId, nodes: { [nodeId]: node } },
   };
 }
 
@@ -351,7 +352,7 @@ describe("ScreenRouter Augury routing", () => {
 
 describe("ScreenRouter terminal routing", () => {
   it("renders Journey Failed with the utility menu, no status bar, and the reset intent", () => {
-    const state = createDefaultState();
+    const state = testJourneyState();
     const battleId = parseBattleId("router-failure-battle");
     const siteId = parseSiteId("router-failure-site");
     state.screen = { type: "journeyFailed" };

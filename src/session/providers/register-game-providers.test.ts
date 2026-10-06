@@ -82,6 +82,7 @@ import { parseAtlasNodeId } from "../../types/identifiers";
 import type { AtlasNodeId, SiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testDreamscapeId, testExplorationActionId, testDreamsignId, testCardId, testAvatarId } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 const AVATAR_ID = "avatar-real-provider";
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
@@ -89,9 +90,7 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("real-provider-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 /** Eight dreamsign templates so the reward, revelation, and bazaar generators have a live pool. */
@@ -664,6 +663,7 @@ describe("registerGameProviders (real content providers)", () => {
         basedOnSeq: seq - 1,
       };
       const result = reduceGameEvent(state, event, {
+        contentConfig: TEST_CONTENT_CONFIG,
         seq,
         timestamp: TIMESTAMP,
         rng: eventRng(GENESIS.seed, seq),

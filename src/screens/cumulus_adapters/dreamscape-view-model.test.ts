@@ -5,7 +5,7 @@ import type {
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState } from "../../testing/journey-genesis";
 import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import {
   buildDreamscapeHudView,
@@ -256,7 +256,7 @@ describe("dreamscape-view-model", () => {
   describe("buildDreamscapeHudView", () => {
     it("reads essence, deck size, avatar, and dreamsigns from live state", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 10,
         deck: [
           {
@@ -283,7 +283,7 @@ describe("dreamscape-view-model", () => {
 
     it("holds an Exploration Essence reward out of the HUD until the site presentation completes", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 290,
         screen: {
           type: "site" as const,

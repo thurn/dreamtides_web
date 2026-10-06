@@ -41,6 +41,9 @@ function presentationState(): FoldState {
       controllerClientId: parseClientId("tutorial-driver"),
     },
     journey: {} as FoldState["journey"],
+    tutorialTriggerIdsSeen: [],
+    cardTutorialScreenKeysSeen: [],
+    cardTutorialPresentation: null,
     battle: {
       mode: {
         kind: "tutorial",

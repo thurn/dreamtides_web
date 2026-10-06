@@ -31,6 +31,7 @@ import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { testCardId, testDreamscapeId, testDreamsignId } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 const SITE_ID = parseSiteId("fixture-gamble");
 const NODE_ID = parseAtlasNodeId("fixture-node");
@@ -38,9 +39,7 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("fixture-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 const REWARD_DREAMSIGN: Dreamsign = {
   id: testDreamsignId("reward-sign"),
@@ -155,6 +154,7 @@ function apply(
     basedOnSeq: 0,
   };
   const context: EventContext = {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 1,
     timestamp: "1970-01-01T00:00:00.000Z",
     rng: () => 0.5,

@@ -10,6 +10,7 @@
 
 import type { Genesis } from "../eventlog/types";
 import type { JourneyState } from "../types/journey";
+import type { JourneySeed } from "../types/journey-seed";
 import type { TutorialPlaybackState } from "../types/tutorial";
 import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance";
 
@@ -53,55 +54,71 @@ export interface FoldState {
   readonly journey: JourneyState;
   readonly battle: BattleFoldState | null;
   /** First-occurrence tutorials already presented in this game. */
-  readonly tutorialTriggerIdsSeen?: readonly TutorialTriggerId[];
+  readonly tutorialTriggerIdsSeen: readonly TutorialTriggerId[];
   /** Site-surface or draft-offer identities that presented one card tutorial. */
-  readonly cardTutorialScreenKeysSeen?: readonly CardTutorialScreenKey[];
+  readonly cardTutorialScreenKeysSeen: readonly CardTutorialScreenKey[];
   /** Shared card-and-speech journey currently presented over a site screen. */
-  readonly cardTutorialPresentation?: CardTutorialGuidancePresentation | null;
+  readonly cardTutorialPresentation: CardTutorialGuidancePresentation | null;
+}
+
+/** The pinned economy tunables a journey's initial state reads. */
+export interface JourneyEconomy {
+  readonly defaultStartingEssence: number;
+  readonly dreamsignCap: number;
 }
 
 /**
- * Builds the pre-journey fold state a fresh game shows before `START_JOURNEY`.
- *
- * Mirrors legacy `createDefaultState()` (src/state/journey-context.tsx) — the
- * initial `journeyState` a newly created game seeded — with two adjustments:
- * `seed` is taken from `genesis.seed` so replays are deterministic per game,
- * and `battle` starts null. The values are inlined here (rather than imported
- * from journey-context.tsx) because that module pulls in React, which the
- * src/rules/ lint rails forbid.
+ * Builds the pre-journey fold state a fresh game shows before `START_JOURNEY`:
+ * the {@link initialJourneyState} for `seed`, no battle, no tutorial history,
+ * and the front door on `frontDoorEntry`. Journey games omit the entry; they
+ * start on the journey phase in collaborative control.
  */
-export function genesisFoldState(genesis: Genesis): FoldState {
-  const entry = genesis.frontDoorEntry ?? "journey";
+export function initialFoldState(
+  seed: JourneySeed,
+  economy: JourneyEconomy,
+  frontDoorEntry?: Genesis["frontDoorEntry"],
+): FoldState {
+  const entry = frontDoorEntry ?? "journey";
   return {
     frontDoor: {
       phase: entry,
-      journeyId:
-        entry === "main" ? null : parseJourneyId(`genesis:${genesis.seed}`),
+      journeyId: entry === "main" ? null : parseJourneyId(`genesis:${seed}`),
       tutorial: null,
     },
     playtestControl: {
-      mode:
-        genesis.frontDoorEntry === undefined
-          ? "collaborative"
-          : "single-controller",
+      mode: frontDoorEntry === undefined ? "collaborative" : "single-controller",
       controllerClientId: null,
     },
-    journey: genesisJourneyState(genesis),
+    journey: initialJourneyState(seed, economy),
     battle: null,
+    tutorialTriggerIdsSeen: [],
+    cardTutorialScreenKeysSeen: [],
+    cardTutorialPresentation: null,
   };
 }
 
-function genesisJourneyState(genesis: Genesis): JourneyState {
-  // These literals are compatibility defaults for games whose
-  // genesis predates economy pinning.
-  const defaultStartingEssence =
-    genesis.contentConfig?.defaultStartingEssence ?? 200;
-  const dreamsignCap = genesis.contentConfig?.dreamsignCap ?? 12;
+/** The initial fold state of a game, from its genesis. */
+export function genesisFoldState(genesis: Genesis): FoldState {
+  return initialFoldState(
+    genesis.seed,
+    genesis.contentConfig,
+    genesis.frontDoorEntry,
+  );
+}
+
+/**
+ * The journey slice a run starts from before an Avatar is chosen, on the
+ * `journeyStart` screen with the pinned starting Essence and Dreamsign cap.
+ */
+export function initialJourneyState(
+  seed: JourneySeed,
+  economy: JourneyEconomy,
+): JourneyState {
   return {
     runId: null,
-    seed: genesis.seed,
-    essence: defaultStartingEssence,
-    maxDreamsigns: dreamsignCap,
+    seed,
+    essence: economy.defaultStartingEssence,
+    maxDreamsigns: economy.dreamsignCap,
     deck: [],
     avatar: null,
     resolvedPackage: null,

@@ -5,11 +5,11 @@ import {
   type ApplicationStateComparisonId,
   type ApplicationStateComparisonValue,
 } from "../cumulus/screens/ApplicationStateScreen";
-import type { ContentConfig } from "../eventlog/types";
+import type { ContentConfig, StoredContentConfig } from "../eventlog/types";
 
 interface ConfigGateScreenProps {
   /** The content config pinned in the game's genesis, or undefined if the genesis predates config pinning. */
-  gameContentConfig: ContentConfig | undefined;
+  gameContentConfig: StoredContentConfig | undefined;
   /** This build's content config, shown alongside the game's for context. */
   localContentConfig: ContentConfig;
   onStartNewGame: () => void;
@@ -45,7 +45,7 @@ export function ConfigGateScreen({
 
 /** Pure structured values for the Cumulus comparison table. */
 export function configComparisonRows(
-  gameContentConfig: ContentConfig | undefined,
+  gameContentConfig: StoredContentConfig | undefined,
   localContentConfig: ContentConfig,
 ): readonly ApplicationStateComparisonRow[] {
   const game = describeConfig(gameContentConfig);
@@ -103,7 +103,7 @@ function rawConfigValue(
     : { kind: "raw", value };
 }
 
-function describeConfig(config: ContentConfig | undefined): readonly {
+function describeConfig(config: StoredContentConfig | undefined): readonly {
   readonly kind: ConfigKind;
   readonly label: string;
   readonly value: ApplicationStateComparisonValue;

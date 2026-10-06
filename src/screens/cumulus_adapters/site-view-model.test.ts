@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState } from "../../testing/journey-genesis";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import type {
@@ -120,7 +120,7 @@ describe("transfiguration-view-model", () => {
   describe("buildTransfigurationCandidates", () => {
     it("groups form rows by concrete entry id, keeps UUID card identity, and caps the standard offer at three cards", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 50,
         deck: [makeEntry(1), makeEntry(2), makeEntry(3), makeEntry(4)],
       };
@@ -159,7 +159,7 @@ describe("transfiguration-view-model", () => {
 
     it("skips missing, already-transfigured, and form-less entries", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 100,
         deck: [{ ...makeEntry(1), transfiguration: "Kindled" as const }],
       };
@@ -175,7 +175,7 @@ describe("transfiguration-view-model", () => {
 
     it("shows the whole enhanced deck in deck order and keeps reforged cards as disabled context", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 100,
         deck: [
           makeEntry(4),
@@ -320,7 +320,7 @@ describe("purge-view-model", () => {
 
   describe("buildPurgeSiteView", () => {
     it("caps paid selections by current essence and leaves free Nightmare selectable", () => {
-      const base = createDefaultState();
+      const base = testJourneyState();
       const state = {
         ...base,
         essence: 0,
@@ -421,7 +421,7 @@ describe("duplication-view-model", () => {
   describe("buildDuplicationCards", () => {
     it("preserves persisted concrete entry order and canonical UUID identity", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         deck: [makeEntry(1), makeEntry(2)],
       };
       const cardDatabase = new Map([
@@ -442,7 +442,7 @@ describe("duplication-view-model", () => {
   describe("buildDuplicationOfferLog", () => {
     it("records persisted entry ids with canonical card UUIDs", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         deck: [makeEntry(1), makeEntry(2)],
       };
       const cardDatabase = new Map([

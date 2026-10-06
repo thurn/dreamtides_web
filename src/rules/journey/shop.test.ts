@@ -28,6 +28,7 @@ import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { testDreamscapeId, testDreamsignId, testExplorationActionId, testGuideId } from "../../types/test-identities";
 import type { Genesis } from "../../eventlog/types";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -37,9 +38,7 @@ const GENESIS = {
   seed: testJourneySeed("shop-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 } satisfies Genesis;
 const SITE_ID = parseSiteId("site-1");
 const NODE_ID = parseAtlasNodeId("node-1");
@@ -58,6 +57,7 @@ function makeRng(seed: number): (drawIndex: number) => number {
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
   return {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 42,
     rng: makeRng(1),
     intervening: [],

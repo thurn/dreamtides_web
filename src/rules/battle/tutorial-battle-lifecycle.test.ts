@@ -33,6 +33,7 @@ import { parseTutorialRunId } from "../../types/identifiers";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseClientId } from "../../types/identifiers";
 import { testDreamwellCardId, testTutorialActionId, testTutorialTriggerId, testCardId, testAvatarId, testTutorialAiActionOverrideId, testGlossaryEntryId, testDreamwellCardName } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
@@ -40,9 +41,7 @@ const GENESIS = {
   seed: testJourneySeed("tutorial-room-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 } satisfies Genesis;
 const RUN_ID = "event:41";
 const FIGMENT_DREAMWELL_CARD_ID = testDreamwellCardId(
@@ -55,6 +54,7 @@ const TWILIGHT_OVERRIDE_ID = testTutorialAiActionOverrideId(
   "play-twilight-after-nomads-verge",
 );
 const CTX: EventContext = {
+  contentConfig: TEST_CONTENT_CONFIG,
   seq: 42,
   rng: () => 0.25,
   intervening: [],

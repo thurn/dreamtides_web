@@ -18,6 +18,7 @@ import {
   type CommittedEvent,
 } from "../eventlog/local-log";
 import type { EngineConfig, Genesis } from "../eventlog/types";
+import { isFoldableGenesis } from "../eventlog/wire";
 import type { ClientId, GameId } from "../types/identifiers";
 import {
   UnreadableLocalGameError,
@@ -26,6 +27,9 @@ import {
   type StoredCheckpoint,
   type StoredLocalGame,
 } from "./game-repository";
+
+/** A stored game whose genesis carries the content configuration the fold reads. */
+type FoldableLocalGame = Omit<StoredLocalGame, "genesis"> & { genesis: Genesis };
 
 /** Events between persisted fold checkpoints. */
 export const DEFAULT_CHECKPOINT_INTERVAL = 100;
@@ -107,8 +111,16 @@ export async function openLocalGame<S>(
   gameId: GameId,
   options: LocalGameOptions = {},
 ): Promise<LocalGame<S> | null> {
-  const stored = await repository.readGame(gameId);
-  if (stored === null) return null;
+  const read = await repository.readGame(gameId);
+  if (read === null) return null;
+  const { genesis } = read;
+  if (!isFoldableGenesis(genesis)) {
+    throw new UnreadableLocalGameError(
+      gameId,
+      "genesis lacks the content configuration the fold reads",
+    );
+  }
+  const stored = { ...read, genesis };
   const base = verifiedCheckpoint(config, stored);
   const checkpointRejected = stored.checkpoint !== null && base === undefined;
   const storedEvents = await repository.readEvents(gameId, 0);
@@ -129,7 +141,7 @@ export async function openLocalGame<S>(
 
 function verifiedCheckpoint<S>(
   config: EngineConfig<S>,
-  stored: StoredLocalGame,
+  stored: FoldableLocalGame,
 ): LocalLogBase<S> | undefined {
   const checkpoint = stored.checkpoint;
   if (checkpoint === null || checkpoint.seq > stored.summary.head) {
@@ -177,7 +189,7 @@ function retryDelayMs(failures: number): number {
 function attach<S>(
   repository: GameRepository,
   config: EngineConfig<S>,
-  stored: StoredLocalGame,
+  stored: FoldableLocalGame,
   base: LocalLogBase<S> | undefined,
   { history, events }: StoredEvents,
   checkpoint: Pick<LocalGameOpenReport, "checkpointSeq" | "checkpointRejected">,

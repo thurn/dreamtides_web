@@ -14,7 +14,7 @@ import {
   makeBattleTestState,
 } from "../../battle/test-support";
 import type { JourneyContent } from "../../data/journey-content";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState } from "../../testing/journey-genesis";
 import type { JourneyState } from "../../types/journey";
 import { getLogEntries, resetLog } from "../../logging";
 import {
@@ -59,7 +59,7 @@ function makeContent(): JourneyContent {
 
 function makeJourney(): JourneyState {
   return {
-    ...createDefaultState(),
+    ...testJourneyState(),
     ...makeBattleTestState(),
     runId: parseJourneyId("journey:test"),
   };

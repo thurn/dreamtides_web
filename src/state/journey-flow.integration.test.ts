@@ -19,14 +19,13 @@ import {
 } from "../rules/replay/fixture-providers";
 import { parseSiteId } from "../types/identifiers";
 import { testDreamscapeId, testAvatarId } from "../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 const GENESIS: Genesis = {
   seed: testJourneySeed("journey-flow-reducer"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 function apply(
@@ -43,6 +42,7 @@ function apply(
     basedOnSeq: seq - 1,
   };
   const context: EventContext = {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq,
     timestamp: event.clientTimestamp,
     rng: () => 0.25,
@@ -127,6 +127,7 @@ describe("authoritative journey flow", () => {
       basedOnSeq: reached.seq - 1,
     };
     const result = reduceGameEvent(reached.state, event, {
+      contentConfig: TEST_CONTENT_CONFIG,
       seq: reached.seq,
       timestamp: event.clientTimestamp,
       rng: () => 0.25,

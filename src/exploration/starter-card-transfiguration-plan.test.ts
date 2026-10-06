@@ -7,7 +7,7 @@ import {
 import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
-import { createDefaultState } from "../state/journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import type { JourneyContent } from "../data/journey-content";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
@@ -90,7 +90,7 @@ function journeyFixture(
   transfiguredEntryId?: DeckEntryId,
 ): JourneyState {
   return {
-    ...createDefaultState(),
+    ...testJourneyState(),
     seed: testJourneySeed("starter-transfiguration-plan-test"),
     deck: Array.from({ length: starterCount }, (_, index) => {
       const entryId = parseDeckEntryId(`starter-${String(index + 1)}`);

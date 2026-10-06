@@ -1,4 +1,3 @@
-import { parseJourneySeed } from "../types/journey-seed";
 import { createContext, useContext, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
 import type { CardData } from "../types/cards";
@@ -470,55 +469,6 @@ export function JourneyContextProvider({
   return (
     <JourneyContext.Provider value={value}>{children}</JourneyContext.Provider>
   );
-}
-
-export function createDefaultState(
-  economy: { defaultStartingEssence: number; dreamsignCap: number } = {
-    // Compatibility for historical fixtures which construct state without
-    // loading the economy catalog.
-    defaultStartingEssence: 200,
-    dreamsignCap: 12,
-  },
-): JourneyState {
-  return {
-    runId: null,
-    seed: parseJourneySeed("default"),
-    essence: economy.defaultStartingEssence,
-    maxDreamsigns: economy.dreamsignCap,
-    deck: [],
-    avatar: null,
-    resolvedPackage: null,
-    cardSourceDebug: null,
-    remainingDreamsignPool: [],
-    dreamsigns: [],
-    completionLevel: 0,
-    atlas: {
-      layers: [],
-      nodes: {},
-      startingNodeId: null,
-      bossNodeId: null,
-      bossIncarnationId: null,
-      currentNodeId: null,
-      knownDreamsignCarrierIds: [],
-    },
-    currentDreamscape: null,
-    visitedSites: [],
-    siteRuntime: {},
-    draftState: null,
-    screen: { type: "journeyStart" },
-    activeSiteId: null,
-    failureSummary: null,
-    hasSeenStartingDeckPopup: false,
-    battleModifiers: [],
-    shopModifiers: {
-      freeRerolls: 0,
-      essenceDiscountPercent: 0,
-      freeNextShopModifiers: [],
-      freePurchaseModifiers: [],
-    },
-    siteOfferModifiers: [],
-    dreamscapeModifiers: [],
-  };
 }
 
 /** Hook to access the journey state and mutation functions. */

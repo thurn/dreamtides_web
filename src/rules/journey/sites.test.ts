@@ -25,6 +25,7 @@ import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseShuffleCommitment } from "../../types/identifiers";
 import { testDreamscapeId, testDreamsignId, testExplorationActionId, testGuideId } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -34,9 +35,7 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("sites-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 /** A deterministic PRNG bound to a seed so a generation draw is reproducible. */
@@ -54,6 +53,7 @@ function makeRng(seed: number): (drawIndex: number) => number {
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
   return {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 42,
     rng: makeRng(1),
     intervening: [],

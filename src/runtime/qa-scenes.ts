@@ -2,7 +2,8 @@ import type { JourneyContent } from "../data/journey-content";
 import type { JourneyState, SiteState, SiteType } from "../types/journey";
 import type { SiteGenerationContext } from "../atlas/atlas-generator";
 import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
-import { createDefaultState } from "../state/journey-context";
+import { initialJourneyState } from "../rules/fold-state";
+import { generateJourneySeed } from "../state/journey-state-actions";
 import { createDreamsign } from "../data/dreamsigns";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../session/providers/exploration-provider";
@@ -69,7 +70,7 @@ export interface QaScene {
 
 /**
  * The Avatar selection screen a run opens on. This is the fresh-game
- * `journeyStart` state ({@link createDefaultState}, `avatar: null`), which
+ * `journeyStart` state ({@link initialJourneyState}, `avatar: null`), which
  * the "Create Game" lobby button also lands on — parking a game directly on it
  * lets the choose-your-avatar UI be QA'd from a `?goto=` URL without
  * clicking through the lobby first.
@@ -81,8 +82,11 @@ const AVATAR_SELECT_SCENE: QaScene = {
     "The choose-your-avatar screen a run opens on, parked directly on " +
     "journeyStart for UI QA without creating a game from the lobby.",
   landsOnJourneyStart: true,
-  build: (journeyContent) =>
-    createDefaultState(journeyContent.economyData.journey),
+  build: (journeyContent, options) =>
+    initialJourneyState(
+      options?.journeySeed ?? generateJourneySeed(),
+      journeyContent.economyData.journey,
+    ),
 };
 
 /**
@@ -95,14 +99,17 @@ const TUTORIAL_AVATAR_SELECT_SCENE: QaScene = {
   description:
     "The tutorial Avatar selection screen with its one fixed avatar.",
   landsOnJourneyStart: true,
-  build: (journeyContent) => {
+  build: (journeyContent, options) => {
     const tutorialAvatar = journeyContent.avatars.find(
       (avatar) =>
         avatar.id === journeyContent.tutorial.battle.playerAvatarId,
     );
     if (tutorialAvatar === undefined) return null;
     return {
-      ...createDefaultState(journeyContent.economyData.journey),
+      ...initialJourneyState(
+        options?.journeySeed ?? generateJourneySeed(),
+        journeyContent.economyData.journey,
+      ),
       screen: {
         type: "journeyStart",
         tutorialAvatarId: tutorialAvatar.id,

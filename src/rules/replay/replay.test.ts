@@ -17,7 +17,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
-import { decodeEvent, decodeGenesis } from "../../eventlog/wire";
+import { decodeEvent, decodeGenesis, isFoldableGenesis } from "../../eventlog/wire";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { FoldState } from "../fold-state";
 import { GAME_ENGINE_CONFIG, replayLog, type SeqEvent } from "./replay";
@@ -47,7 +47,9 @@ function parseReplayFixture(raw: {
   finalHash: string;
 }): ReplayFixture {
   const genesis = decodeGenesis(JSON.stringify(raw.genesis));
-  if (genesis === null) throw new Error("Replay fixture has invalid genesis.");
+  if (genesis === null || !isFoldableGenesis(genesis)) {
+    throw new Error("Replay fixture has invalid genesis.");
+  }
   const events = raw.events.map(({ seq, event }) => ({
     seq,
     event: decodeEvent(JSON.stringify(event)),

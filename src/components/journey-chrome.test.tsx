@@ -9,7 +9,8 @@ import {
   LocalGameControlsContext,
   type LocalGameControls,
 } from "../session/game-controls";
-import { createDefaultState, useJourney } from "../state/journey-context";
+import { useJourney } from "../state/journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import {
   chooseJourneySaveFile,
   downloadJourneySaveFile,
@@ -89,7 +90,7 @@ afterEach(() => {
 
 describe("CumulusJourneyChrome", () => {
   beforeEach(() => {
-    const state = createDefaultState();
+    const state = testJourneyState();
     state.essence = 275;
     state.deck = Array.from({ length: 17 }, (_, index) => ({
       entryId: parseDeckEntryId(`entry-${String(index)}`),

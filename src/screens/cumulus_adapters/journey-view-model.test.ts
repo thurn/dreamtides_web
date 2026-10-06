@@ -29,7 +29,7 @@ import {
 } from "../../types/identifiers";
 import { LayerName } from "../../types/layer-name";
 import type { CardData } from "../../types/cards";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState, TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import type { DreamscapeNode, JourneyState } from "../../types/journey";
 import {
   buildJourneyCompleteCardIds,
@@ -292,7 +292,7 @@ describe("journey-complete-view-model", () => {
   }
 
   function state(): JourneyState {
-    const base = createDefaultState();
+    const base = testJourneyState();
     return {
       ...base,
       essence: 140,
@@ -380,7 +380,7 @@ describe("journey-failed-view-model", () => {
   expect.addEqualityTesters([annotatedTextEquality]);
 
   function state(overrides: Partial<JourneyState> = {}): JourneyState {
-    const base = createDefaultState();
+    const base = testJourneyState();
     return {
       ...base,
       completionLevel: 2,
@@ -558,6 +558,7 @@ describe("main-menu-view-model", () => {
   };
 
   const EVENT_CONTEXT: EventContext = {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 1,
     rng: () => 0,
     timestamp: "1970-01-01T00:00:00.000Z",

@@ -15,7 +15,8 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { BattleSiteRoute } from "./BattleSiteRoute";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import type { GameActions } from "../session/actions";
-import { createDefaultState, useJourney } from "../state/journey-context";
+import { useJourney } from "../state/journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import type { FoldState } from "../rules/fold-state";
 import type { Screen, SiteState } from "../types/journey";
 import {
@@ -103,7 +104,7 @@ function makeJourneyState({
   const atlasStartingNodeId = parseAtlasNodeId("dreamscape-start");
   const battleState = makeBattleTestState();
   return {
-    ...createDefaultState(),
+    ...testJourneyState(),
     ...battleState,
     runId: parseJourneyId("journey:test"),
     essence: 250,
@@ -151,6 +152,9 @@ function setFold({
     frontDoor: { phase: "main", journeyId: null, tutorial: null },
     journey,
     battle,
+    tutorialTriggerIdsSeen: [],
+    cardTutorialScreenKeysSeen: [],
+    cardTutorialPresentation: null,
   };
   vi.mocked(useJourney).mockReturnValue({
     state: journey,

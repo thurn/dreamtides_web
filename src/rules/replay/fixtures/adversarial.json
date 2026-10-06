@@ -5,7 +5,9 @@
     "reducerVersion": "fixture",
     "createdAt": 0,
     "contentConfig": {
-      "poolVariant": "tides4"
+      "poolVariant": "tides4",
+      "defaultStartingEssence": 200,
+      "dreamsignCap": 12
     }
   },
   "events": [
@@ -167,5 +169,5 @@
       }
     }
   ],
-  "finalHash": "890d6194d16441209bf16d67812e394286121e3a279f1bf7e3fa2b13d3f22f84"
+  "finalHash": "3ba6df5888b15d3ad0fe2f376cea64117c43739676c98435d41f53134bed1ff2"
 }

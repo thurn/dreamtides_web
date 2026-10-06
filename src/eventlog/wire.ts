@@ -5,9 +5,10 @@
 import {
   parseEventActor,
   parseEventType,
-  type ContentConfig,
   type GameEvent,
   type Genesis,
+  type StoredContentConfig,
+  type StoredGenesis,
 } from "./types";
 import { parseIntentKey } from "../types/identifiers";
 import { parseFoldHash } from "../types/content-hash";
@@ -26,7 +27,9 @@ function isFoldHash(value: unknown): value is string {
   return typeof value === "string" && /^[0-9a-f]{64}$/u.test(value);
 }
 
-function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
+function decodeContentConfig(
+  value: unknown,
+): StoredContentConfig | undefined | null {
   if (value === undefined) return undefined;
   if (!isRecord(value)) return null;
   const {
@@ -105,7 +108,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
 }
 
 /** Parse and validate a stored JSON-encoded game genesis. */
-export function decodeGenesis(raw: unknown): Genesis | null {
+export function decodeGenesis(raw: unknown): StoredGenesis | null {
   if (typeof raw !== "string") return null;
   let parsed: unknown;
   try {
@@ -140,6 +143,16 @@ export function decodeGenesis(raw: unknown): Genesis | null {
     ...(frontDoorEntry === undefined ? {} : { frontDoorEntry }),
     ...(contentConfig === undefined ? {} : { contentConfig }),
   };
+}
+
+/** Whether a stored genesis carries every content field the fold reads. */
+export function isFoldableGenesis(genesis: StoredGenesis): genesis is Genesis {
+  const config = genesis.contentConfig;
+  return (
+    config !== undefined &&
+    config.defaultStartingEssence !== undefined &&
+    config.dreamsignCap !== undefined
+  );
 }
 
 /** Encodes a decoded event to the JSON string a log stores per seq. */

@@ -22,6 +22,7 @@ import { parseSiteId } from "../types/identifiers";
 import { parseAtlasNodeId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
 import { testCardId, testDreamscapeId, testTutorialTriggerId, testGlossaryEntryId } from "../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 function card(idSeed: string, cardNumber: number, renderedText: string): CardData {
   return {
@@ -118,9 +119,7 @@ function siteState(siteId = "site-a", siteType: SiteType = "Shop"): FoldState {
     seed: testJourneySeed("card-tutorial-test"),
     reducerVersion: "test",
     createdAt: 0,
-    contentConfig: {
-      poolVariant: "tides4",
-    },
+    contentConfig: TEST_CONTENT_CONFIG,
   });
   return {
     ...base,

@@ -5,11 +5,12 @@
 import { CURRENT_REDUCER_VERSION, isReducerVersionCompatible } from "./reducer-version";
 import type {
   ContentConfig,
-  Genesis,
   PinnedContentConfig,
   PinnedGenesis,
+  StoredGenesis,
 } from "../eventlog/types";
 import type { FrontDoorPhase } from "../rules/fold-state";
+import { isFoldableGenesis } from "../eventlog/wire";
 import { contentConfigsEqual } from "../runtime/runtime-config";
 import { parseJourneySeed, type JourneySeed } from "../types/journey-seed";
 
@@ -45,10 +46,12 @@ export function createFreshGenesis(
   };
 }
 
-export function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
+export function hasPinnedContentConfig(
+  genesis: StoredGenesis,
+): genesis is PinnedGenesis {
+  if (!isFoldableGenesis(genesis)) return false;
   const config = genesis.contentConfig;
   return (
-    config !== undefined &&
     typeof config.atlasFoldHash === "string" &&
     typeof config.sitesFoldHash === "string" &&
     typeof config.draftFoldHash === "string" &&
@@ -60,9 +63,7 @@ export function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenes
     typeof config.auguryFoldHash === "string" &&
     typeof config.explorationFoldHash === "string" &&
     typeof config.tutorialFoldHash === "string" &&
-    typeof config.opponentsFoldHash === "string" &&
-    typeof config.defaultStartingEssence === "number" &&
-    typeof config.dreamsignCap === "number"
+    typeof config.opponentsFoldHash === "string"
   );
 }
 
@@ -72,7 +73,7 @@ export function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenes
  * complete and equal to this build's.
  */
 export function genesisCompatibility(
-  genesis: Genesis,
+  genesis: StoredGenesis,
   localContentConfig: ContentConfig,
 ): "ready" | "versionGate" | "configGate" {
   if (!isReducerVersionCompatible(genesis.reducerVersion)) {

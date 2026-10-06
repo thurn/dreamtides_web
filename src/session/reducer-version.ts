@@ -10,7 +10,7 @@
 import type { ReducerVersion } from "../types/reducer-version";
 
 export const CURRENT_REDUCER_VERSION =
-  "dreamtides-coop-v25" satisfies ReducerVersion;
+  "dreamtides-coop-v26" satisfies ReducerVersion;
 
 /**
  * Build-scoped reducer ids from earlier builds whose fold behavior was

@@ -174,6 +174,9 @@ function state(): FoldState {
       controllerClientId: parseClientId("driver-client"),
     },
     journey: {} as FoldState["journey"],
+    tutorialTriggerIdsSeen: [],
+    cardTutorialScreenKeysSeen: [],
+    cardTutorialPresentation: null,
     battle: {
       mode: {
         kind: "tutorial",

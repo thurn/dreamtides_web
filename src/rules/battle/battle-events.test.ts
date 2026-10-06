@@ -42,6 +42,7 @@ import {
   testJourneyMutationSource,
   testJourneySeed,
 } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -51,7 +52,7 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("battle-events-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "tides4" },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 /** A deterministic PRNG bound to a seed so a generation draw is reproducible. */
@@ -69,6 +70,7 @@ function makeRng(seed: number): (drawIndex: number) => number {
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
   return {
+    contentConfig: TEST_CONTENT_CONFIG,
     seq: 42,
     rng: makeRng(overrides.seq ?? 42),
     intervening: [],

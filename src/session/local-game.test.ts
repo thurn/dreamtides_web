@@ -9,7 +9,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { hashState } from "../eventlog/hash";
 import { createLocalLog, type EventDraft } from "../eventlog/local-log";
 import type { EngineConfig, GameEvent, Genesis } from "../eventlog/types";
-import { decodeEvent, decodeGenesis } from "../eventlog/wire";
+import { decodeEvent, decodeGenesis, isFoldableGenesis } from "../eventlog/wire";
 import type { FoldState } from "../rules/fold-state";
 import {
   clearReplayFixtureProviders,
@@ -29,7 +29,11 @@ import {
   type GameId,
 } from "../types/identifiers";
 import { testEventActor, testJourneySeed } from "../types/test-identities";
-import { createGameRepository, type GameRepository } from "./game-repository";
+import {
+  createGameRepository,
+  UnreadableLocalGameError,
+  type GameRepository,
+} from "./game-repository";
 import {
   createMemoryKeyValueStore,
   type KeyValueStore,
@@ -43,7 +47,9 @@ import {
 
 const GENESIS: Genesis = (() => {
   const genesis = decodeGenesis(JSON.stringify(battleFixture.genesis));
-  if (genesis === null) throw new Error("Battle fixture genesis is invalid.");
+  if (genesis === null || !isFoldableGenesis(genesis)) {
+    throw new Error("Battle fixture genesis is invalid.");
+  }
   return genesis;
 })();
 
@@ -338,6 +344,29 @@ describe("local game persistence", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it("refuses to fold a stored game whose genesis lacks the pinned economy", async () => {
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const gameId = parseGameId("unpinned1");
+    // A genesis written before economy pinning, as storage holds it.
+    const unpinned = {
+      ...GENESIS,
+      contentConfig: { poolVariant: GENESIS.contentConfig.poolVariant },
+    } as unknown as Genesis;
+    await repository.createGame(
+      {
+        gameId,
+        localPlayerId: parseClientId("p1"),
+        createdAt: 0,
+        updatedAt: 0,
+        head: 0,
+      },
+      unpinned,
+    );
+    await expect(
+      openLocalGame(repository, GAME_ENGINE_CONFIG, gameId, OPTIONS),
+    ).rejects.toBeInstanceOf(UnreadableLocalGameError);
   });
 
   it("lists stored games, most recently updated first", async () => {

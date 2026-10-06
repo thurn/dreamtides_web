@@ -5,8 +5,7 @@ export type KnownReducerVersion =
   | "fixture"
   | "test"
   | "v1"
-  | "build-abc"
-  | "internal-reset";
+  | "build-abc";
 type LegacyReducerVersion = string & {
   readonly [legacyReducerVersionBrand]: "ReducerVersion";
 };

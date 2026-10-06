@@ -12,7 +12,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GAME_LOGS } from "../content/game-logs";
 import { generateGameId, mintClientId } from "../eventlog/game-id";
-import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
+import type {
+  PinnedContentConfig,
+  StoredContentConfig,
+} from "../eventlog/types";
 import { logEvent } from "../logging";
 import type { FoldState } from "../rules/fold-state";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
@@ -58,7 +61,10 @@ export type LocalGameStatus =
   | { kind: "openElsewhere"; gameId: GameId }
   | { kind: "unreadable"; gameId: GameId }
   | { kind: "versionGate" }
-  | { kind: "configGate"; gameContentConfig: ContentConfig | undefined }
+  | {
+      kind: "configGate";
+      gameContentConfig: StoredContentConfig | undefined;
+    }
   | { kind: "error"; message: string };
 
 export interface UseLocalGameInput {

@@ -13,7 +13,12 @@
 // round-trips byte-exactly.
 
 import type { CommittedEvent } from "../eventlog/local-log";
-import { parseStateHash, type Genesis, type StateHash } from "../eventlog/types";
+import {
+  parseStateHash,
+  type Genesis,
+  type StateHash,
+  type StoredGenesis,
+} from "../eventlog/types";
 import { decodeEvent, decodeGenesis, encodeEvent } from "../eventlog/wire";
 import {
   clientIdFromUnknown,
@@ -57,7 +62,7 @@ export interface StoredCheckpoint {
 /** Everything about a game except its events. */
 export interface StoredLocalGame {
   summary: LocalGameSummary;
-  genesis: Genesis;
+  genesis: StoredGenesis;
   checkpoint: StoredCheckpoint | null;
 }
 
@@ -142,7 +147,7 @@ function isSeq(value: unknown): value is number {
 
 function decodeGameRecord(
   value: unknown,
-): { summary: LocalGameSummary; genesis: Genesis } | null {
+): { summary: LocalGameSummary; genesis: StoredGenesis } | null {
   if (!isRecord(value) || value.schemaVersion !== LOCAL_GAME_SCHEMA_VERSION) {
     return null;
   }

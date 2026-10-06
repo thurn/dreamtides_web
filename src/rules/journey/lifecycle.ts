@@ -13,7 +13,7 @@
 // cases that also touch the battle slice (`RESET_JOURNEY`, `LOAD_STATE`) return a
 // whole `FoldState`.
 
-import { genesisFoldState } from "../fold-state";
+import { initialFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
 import { battleModeOf, resolveScript } from "../battle/fold";
 import { toJourneyAvatar } from "../../data/avatar-selection";
@@ -398,31 +398,18 @@ export function startJourney(
 // ---------------------------------------------------------------------------
 
 /**
- * `RESET_JOURNEY { }` — legacy `resetJourney`. Resets the journey slice to the
- * genesis fold (preserving the game seed, which is `journey.seed`) and clears the
- * battle slice. The output equals `genesisFoldState(genesis)` for the game's
- * genesis, so a forgotten field on reset is caught by the reset-completeness
- * hash test.
+ * `RESET_JOURNEY { }` — legacy `resetJourney`. Resets the fold to the
+ * {@link initialFoldState} for the game seed (`journey.seed`) and the economy
+ * pinned in the game's content configuration, keeping the front door and the
+ * tutorials already presented. A forgotten field on reset is caught by the
+ * reset-completeness hash test.
  */
 export function resetJourney(state: FoldState, ctx: EventContext): FoldState {
-  // Reset rebuilds the initial journey from the game seed and the immutable
-  // content configuration carried by the fold context. Reducer version and
-  // creation time do not participate in journey initialization.
-  const reset = genesisFoldState({
-    seed: state.journey.seed,
-    reducerVersion: "internal-reset",
-    createdAt: 0,
-    contentConfig: ctx.contentConfig,
-  });
   return {
-    ...reset,
+    ...initialFoldState(state.journey.seed, ctx.contentConfig),
     frontDoor: state.frontDoor,
-    ...(state.tutorialTriggerIdsSeen === undefined
-      ? {}
-      : { tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen }),
-    ...(state.cardTutorialScreenKeysSeen === undefined
-      ? {}
-      : { cardTutorialScreenKeysSeen: state.cardTutorialScreenKeysSeen }),
+    tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen,
+    cardTutorialScreenKeysSeen: state.cardTutorialScreenKeysSeen,
   };
 }
 
@@ -452,12 +439,6 @@ export function loadState(
           ...loaded.journey,
           runId: parseJourneyId(`journey:${String(ctx.seq)}`),
         },
-        ...(state.tutorialTriggerIdsSeen === undefined
-          ? {}
-          : { tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen }),
-        ...(state.cardTutorialScreenKeysSeen === undefined
-          ? {}
-          : { cardTutorialScreenKeysSeen: state.cardTutorialScreenKeysSeen }),
       };
 }
 

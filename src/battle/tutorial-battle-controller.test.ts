@@ -46,6 +46,9 @@ function stateFor(
       controllerClientId: extras.driverClientId ?? DRIVER,
     },
     journey: {} as FoldState["journey"],
+    tutorialTriggerIdsSeen: [],
+    cardTutorialScreenKeysSeen: [],
+    cardTutorialPresentation: null,
     battle: {
       mode: {
         kind: "tutorial",

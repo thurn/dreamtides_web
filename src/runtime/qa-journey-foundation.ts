@@ -8,6 +8,7 @@ import type {
   DreamscapeNode,
   JourneyState,
 } from "../types/journey";
+import { initialJourneyState } from "../rules/fold-state";
 import { generateJourneySeed } from "../state/journey-state-actions";
 import { parseDeckEntryId } from "../types/identifiers";
 
@@ -69,10 +70,8 @@ export function createQaJourneyFoundation(
   }
 
   const state: JourneyState = {
-    runId: null,
-    seed,
+    ...initialJourneyState(seed, journeyContent.economyData.journey),
     essence: avatar.startingEssence,
-    maxDreamsigns: journeyContent.economyData.journey.dreamsignCap,
     deck: poolContext.starterCardNumbers.map((cardNumber, index) => ({
       entryId: parseDeckEntryId(`deck-${String(index + 1)}`),
       cardNumber,
@@ -81,31 +80,14 @@ export function createQaJourneyFoundation(
     })),
     avatar: toJourneyAvatar(avatar),
     resolvedPackage,
-    cardSourceDebug: null,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
-    dreamsigns: [],
-    completionLevel: 0,
     atlas,
-    currentDreamscape: null,
-    visitedSites: [],
-    siteRuntime: {},
     draftState: initializeDraftState(
       journeyContent.cardDatabase,
       resolvedPackage,
     ),
     screen: { type: "atlas" },
-    activeSiteId: null,
-    failureSummary: null,
     hasSeenStartingDeckPopup: true,
-    battleModifiers: [],
-    shopModifiers: {
-      freeRerolls: 0,
-      essenceDiscountPercent: 0,
-      freeNextShopModifiers: [],
-      freePurchaseModifiers: [],
-    },
-    siteOfferModifiers: [],
-    dreamscapeModifiers: [],
   };
 
   return { state, atlas, starterNode };

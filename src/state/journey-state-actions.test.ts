@@ -27,7 +27,7 @@ import {
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import type { PoolDraftState } from "../types/draft";
 import { toJourneyAvatar } from "../data/avatar-selection";
-import { createDefaultState } from "./journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import {
   addCardToJourneyState,
   changeJourneyEssence,
@@ -151,7 +151,7 @@ beforeEach(() => {
 describe("journey state actions", () => {
   it("commits a prepared append only against the exact current sibling order", () => {
     const state: JourneyState = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       currentDreamscape: parseAtlasNodeId("dreamscape-1"),
       atlas: makeAtlas(),
     };
@@ -209,7 +209,7 @@ describe("journey state actions", () => {
   });
 
   it("changes journey essence without replacing the deck", () => {
-    const prev = createDefaultState();
+    const prev = testJourneyState();
     const startingEssence = prev.essence;
     const next = changeJourneyEssence(prev, 25);
 
@@ -220,7 +220,7 @@ describe("journey state actions", () => {
 
   it("adds a card with the next stable deck id", () => {
     const prev: JourneyState = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       deck: [
         {
           entryId: parseDeckEntryId("deck-7"),
@@ -252,7 +252,7 @@ describe("journey state actions", () => {
       ]),
     );
     const prev: JourneyState = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       draftState: {
         mode: "tides4",
         draftPoolCopiesByCard: {
@@ -306,7 +306,7 @@ describe("journey state actions", () => {
       ]),
     );
     const prev: JourneyState = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       draftState: {
         mode: "tides4",
         draftPoolCopiesByCard: {
@@ -354,7 +354,7 @@ describe("journey state actions", () => {
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
     const avatar = makeAvatar();
     const journeyContent = makeJourneyContent(avatar);
-    const prev = createDefaultState();
+    const prev = testJourneyState();
 
     const next = startJourneyFromAvatar({
       prev,
@@ -370,7 +370,7 @@ describe("journey state actions", () => {
     expect(next.avatar?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
     expect(next.avatar?.startingEssence).toBe(275);
     expect(next.essence).toBe(avatar.startingEssence);
-    expect(prev.essence).toBe(createDefaultState().essence);
+    expect(prev.essence).toBe(testJourneyState().essence);
     // The package is built from the run pool context at journey start; assert a
     // non-empty draft pool was produced rather than checking exact card numbers.
     expect(next.resolvedPackage).not.toBeNull();
@@ -465,7 +465,7 @@ describe("journey state actions", () => {
     };
 
     const next = startJourneyFromAvatar({
-      prev: createDefaultState(),
+      prev: testJourneyState(),
       avatar,
       journeyContent,
       seedOverride: testJourneySeed("tutorial-seed"),
@@ -491,7 +491,7 @@ describe("journey state actions", () => {
   });
 
   it("sets the journey screen and active site together", () => {
-    const prev = createDefaultState();
+    const prev = testJourneyState();
     const siteScreen = setJourneyScreen(prev, {
       type: "site",
       siteId: parseSiteId("site-1"),
@@ -508,7 +508,7 @@ describe("journey state actions", () => {
   });
 
   it("updates the journey atlas by reference", () => {
-    const prev = createDefaultState();
+    const prev = testJourneyState();
     const atlas = makeAtlas();
     const next = updateJourneyAtlas(prev, atlas);
 
@@ -531,7 +531,7 @@ describe("journey state actions", () => {
       accepted: false,
     };
     const prev: JourneyState = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       atlas: makeAtlas(),
       siteRuntime: {
         [parseSiteId("site-2")]: runtime,

@@ -12,7 +12,7 @@ import {
   contentConfigsEqual,
   parseRuntimeConfig,
 } from "./runtime-config";
-import { createDefaultState } from "../state/journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import type {
   DreamscapeNode,
   JourneyState,
@@ -383,7 +383,7 @@ describe("screen-url", () => {
     layer = 2,
   ): JourneyState {
     const node = makeNode(nodeId, dreamscapeIdSeed, sites, layer);
-    const base = createDefaultState();
+    const base = testJourneyState();
     return {
       ...base,
       currentDreamscape: parseAtlasNodeId(nodeId),
@@ -399,7 +399,7 @@ describe("screen-url", () => {
 
   describe("screenToJourneyPath", () => {
     it("maps the top-level screens", () => {
-      const base = createDefaultState();
+      const base = testJourneyState();
       expect(
         screenToJourneyPath({ ...base, screen: { type: "journeyStart" } }),
       ).toBe("/");

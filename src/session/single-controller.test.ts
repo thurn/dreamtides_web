@@ -13,7 +13,7 @@ import {
   type LocalLog,
 } from "../eventlog/local-log";
 import type { GameEvent, Genesis } from "../eventlog/types";
-import { decodeEvent, decodeGenesis } from "../eventlog/wire";
+import { decodeEvent, decodeGenesis, isFoldableGenesis } from "../eventlog/wire";
 import type { FoldState } from "../rules/fold-state";
 import {
   clearReplayFixtureProviders,
@@ -27,7 +27,9 @@ import { keepLocalPlayerInControl } from "./single-controller";
 
 const JOURNEY_GENESIS: Genesis = (() => {
   const genesis = decodeGenesis(JSON.stringify(battleFixture.genesis));
-  if (genesis === null) throw new Error("Battle fixture genesis is invalid.");
+  if (genesis === null || !isFoldableGenesis(genesis)) {
+    throw new Error("Battle fixture genesis is invalid.");
+  }
   return genesis;
 })();
 /** A standalone-tutorial game: its fold starts in single-controller mode. */

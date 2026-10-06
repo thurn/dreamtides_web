@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState } from "../../testing/journey-genesis";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../../cumulus/primitives/art";
@@ -241,10 +241,10 @@ describe("card-shop-view-model", () => {
   describe("buildCardShopSiteView", () => {
     it("projects overlapping Exploration benefits into zero-price offers and status", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 0,
         shopModifiers: {
-          ...createDefaultState().shopModifiers,
+          ...testJourneyState().shopModifiers,
           freePurchaseModifiers: [
             {
               kind: "free-purchases" as const,
@@ -409,10 +409,10 @@ describe("dreamsign-bazaar-view-model", () => {
   describe("buildDreamsignBazaarSiteView", () => {
     it("uses counted free purchases for Bazaar wares while preserving reroll pricing", () => {
       const state = {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 0,
         shopModifiers: {
-          ...createDefaultState().shopModifiers,
+          ...testJourneyState().shopModifiers,
           freePurchaseModifiers: [
             {
               kind: "free-purchases" as const,

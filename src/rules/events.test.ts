@@ -17,15 +17,17 @@ import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
 import { genesisFoldState } from "./fold-state";
 import { routeDomain } from "./reducer";
 import { INTENTIONALLY_UNROUTED_EVENT_TYPES, KNOWN_EVENT_TYPES } from "./events";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 const GENESIS = {
   seed: testJourneySeed("events-registry-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "tides4" },
+  contentConfig: TEST_CONTENT_CONFIG,
 } satisfies Genesis;
 
 const CTX: EventContext = {
+  contentConfig: TEST_CONTENT_CONFIG,
   seq: 1,
   rng: () => 0,
   intervening: [],

@@ -46,6 +46,7 @@ import { parseFrontDoorActionId } from "../types/identifiers";
 import { parseChoiceId, parseOfferId } from "../types/identifiers";
 import { parseStableDigest } from "../types/stable-digest";
 import { testCardId, testAvatarId, testDreamsignId, testExplorationActionId, testTutorialActionId } from "../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 const AUGURY_DECLINE = {
   encounterSignature: parseStableDigest("a".repeat(64)),
@@ -56,9 +57,7 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("actions-test-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 /** Promote a captured draft into the committed-event shape the fold expects. */

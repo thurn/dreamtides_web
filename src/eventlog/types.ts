@@ -88,7 +88,10 @@ export interface GameEvent {
   intentKey?: IntentKey;
 }
 
-/** Immutable metadata written once when a game is created. */
+/**
+ * Immutable metadata written once when a game is created, in the shape the
+ * fold consumes: every field the initial fold state reads is present.
+ */
 export interface Genesis {
   seed: JourneySeed;
   reducerVersion: ReducerVersion;
@@ -105,7 +108,17 @@ export interface Genesis {
    * always folds the content it was created with. A build whose content
    * differs is gated out of the game (see the config gate in src/App.tsx).
    */
-  contentConfig?: ContentConfig;
+  contentConfig: ContentConfig;
+}
+
+/**
+ * A genesis as decoded from storage. Games written before content pinning
+ * carry a partial content configuration or none at all; such a game reaches
+ * the config gate, and only a genesis narrowed to {@link PinnedGenesis} is
+ * folded.
+ */
+export interface StoredGenesis extends Omit<Genesis, "contentConfig"> {
+  contentConfig?: StoredContentConfig;
 }
 
 /**
@@ -139,6 +152,15 @@ export interface ContentConfig {
   /** Tutorial scenario fields which can change reducer outcomes. */
   tutorialFoldHash?: FoldHash;
   opponentsFoldHash?: FoldHash;
+  /** Essence a journey starts with before an Avatar is chosen. */
+  defaultStartingEssence: number;
+  /** Number of Dreamsigns a journey can hold. */
+  dreamsignCap: number;
+}
+
+/** A stored content configuration, whose economy fields may predate pinning. */
+export interface StoredContentConfig
+  extends Omit<ContentConfig, "defaultStartingEssence" | "dreamsignCap"> {
   defaultStartingEssence?: number;
   dreamsignCap?: number;
 }
@@ -156,8 +178,6 @@ export interface PinnedContentConfig extends ContentConfig {
   explorationFoldHash: FoldHash;
   tutorialFoldHash: FoldHash;
   opponentsFoldHash: FoldHash;
-  defaultStartingEssence: number;
-  dreamsignCap: number;
 }
 
 /** A current game genesis whose fold-relevant content settings are pinned. */
@@ -192,7 +212,7 @@ export interface ReducerResult<S> {
  */
 export interface EventContext {
   /** Immutable fold-relevant content configuration from game genesis. */
-  contentConfig?: ContentConfig;
+  contentConfig: ContentConfig;
   /** The seq being assigned to this event. */
   seq: number;
   /**

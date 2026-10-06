@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState } from "../../testing/journey-genesis";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { gambleFixture } from "../../testing/gamble-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
@@ -131,7 +131,7 @@ describe("gamble-site-view-model", () => {
 
   it("keeps the committed card concealed until the shared result exists", () => {
     const state = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       essence: 75,
       siteRuntime: { [GAMBLE_SITE.id]: RUNTIME },
     };
@@ -166,7 +166,7 @@ describe("gamble-site-view-model", () => {
       },
     };
     const state = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       essence: 350,
       maxDreamsigns: 1,
       dreamsigns: [
@@ -235,7 +235,7 @@ const LADDER_RUNTIME: TidemarkLadderClimbSiteRuntime = {
 describe("gamble-site-view-model — Ladder Climb", () => {
   it("shows only draw one with the locked Dreamsign prize", () => {
     const state = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       essence: 75,
       siteRuntime: { [GAMBLE_SITE.id]: LADDER_RUNTIME },
     };
@@ -289,7 +289,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
   it("maps all tier bust ranges and rewards with only tier one current", () => {
     const view = buildGambleSiteView({
       state: {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 30,
         siteRuntime: { [GAMBLE_SITE.id]: STARWAY_RUNTIME },
       },
@@ -414,7 +414,7 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
     };
     const view = buildGambleSiteView({
       state: {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 25,
         deck: runtime.targets.map((candidate) => ({
           entryId: candidate.entryId,
@@ -451,7 +451,7 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
 
     const replayView = buildGambleSiteView({
       state: {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 25,
         deck: runtime.targets.map((candidate) => ({
           entryId: candidate.entryId,
@@ -512,7 +512,7 @@ describe("gamble-site-view-model — Blackjack", () => {
   it("maps the wager, flat prize, player hand, and concealed dealer hand", () => {
     const view = buildGambleSiteView({
       state: {
-        ...createDefaultState(),
+        ...testJourneyState(),
         essence: 64,
         siteRuntime: { [GAMBLE_SITE.id]: runtime },
       },

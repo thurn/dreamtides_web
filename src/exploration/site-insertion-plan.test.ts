@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { stableDigest } from "../reward-selection/stable";
-import { createDefaultState } from "../state/journey-context";
+import { testJourneyState } from "../testing/journey-genesis";
 import { LayerName } from "../types/layer-name";
 import type { JourneyState, SiteState } from "../types/journey";
 import {
@@ -39,7 +39,7 @@ const battleSite: SiteState = {
 };
 
 function journey(): JourneyState {
-  const base = createDefaultState();
+  const base = testJourneyState();
   return {
     ...base,
     currentDreamscape: parseAtlasNodeId("current-node"),

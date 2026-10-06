@@ -10,6 +10,7 @@ import type {
   GameEvent,
   ReducerResult,
 } from "./types";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 // A minimal, game-agnostic toy fold state and reducer used to exercise the
 // pure fold driver. `n` is a running counter; `log` records applied events in
@@ -19,7 +20,7 @@ interface ToyState {
   log: string[];
 }
 
-const GENESIS: Genesis = { seed: testJourneySeed("toy-seed"), reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
+const GENESIS: Genesis = { seed: testJourneySeed("toy-seed"), reducerVersion: "v1", createdAt: 0, contentConfig: TEST_CONTENT_CONFIG };
 
 /**
  * Toy reducer:

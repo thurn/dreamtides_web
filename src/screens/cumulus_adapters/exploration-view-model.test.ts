@@ -13,7 +13,7 @@ import type {
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState } from "../../testing/journey-genesis";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
@@ -107,7 +107,7 @@ describe("exploration-view-model", () => {
       effectDescription: "A synthetic reward sign.",
     };
     const state = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       deck: [
         {
           entryId: parseDeckEntryId("entry-a"),
@@ -234,7 +234,7 @@ describe("exploration-view-model", () => {
       spark: null,
     };
     const state = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       deck: [
         {
           entryId: parseDeckEntryId("entry-already-transfigured"),
@@ -353,7 +353,7 @@ describe("exploration-view-model", () => {
     };
     const starterEntryId = parseDeckEntryId("starter-entry-32");
     const state: JourneyState = {
-      ...createDefaultState(),
+      ...testJourneyState(),
       deck: [
         {
           entryId: starterEntryId,

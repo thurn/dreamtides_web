@@ -21,7 +21,7 @@ import type {
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { createDefaultState } from "../../state/journey-context";
+import { testJourneyState } from "../../testing/journey-genesis";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { parseSiteId } from "../../types/identifiers";
 import {
@@ -112,7 +112,7 @@ export function makeAuguryTestJourneyState(
   overrides: Partial<JourneyState> = {},
 ): JourneyState {
   return {
-    ...createDefaultState(),
+    ...testJourneyState(),
     seed: parseJourneySeed("augury-fixture-seed"),
     essence: 120,
     ...overrides,

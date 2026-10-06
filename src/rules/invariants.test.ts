@@ -14,14 +14,13 @@ import { parseAtlasNodeId } from "../types/identifiers";
 import { parseJourneyId } from "../types/identifiers";
 import { testDreamscapeId } from "../types/test-identities";
 import type { Genesis } from "../eventlog/types";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 const GENESIS = {
   seed: testJourneySeed("invariant-test"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 } satisfies Genesis;
 
 function node(

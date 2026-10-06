@@ -94,6 +94,7 @@ import type { AvatarId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testAvatarId, testCardId, testDreamsignId } from "../../types/test-identities";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 
 // ---------------------------------------------------------------------------
 // Fixtures & engine config
@@ -103,9 +104,7 @@ const GENESIS: Genesis = {
   seed: testJourneySeed("journey-properties-seed"),
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: {
-    poolVariant: "tides4",
-  },
+  contentConfig: TEST_CONTENT_CONFIG,
 };
 
 const ACTOR = testEventActor("alice");
@@ -859,6 +858,7 @@ describe("(a) run-field nullability", () => {
       let state = genesisFoldState(GENESIS);
       for (const { seq, event } of events) {
         const ctx: EventContext = {
+          contentConfig: TEST_CONTENT_CONFIG,
           seq,
           rng: eventRng(GENESIS.seed, seq),
           intervening: [],
