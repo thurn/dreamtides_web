@@ -1,5 +1,6 @@
 import type { AbilitySource, EffectId, InstanceId, Side, Slot } from "../state/ids";
 import { BACK_RANK_SIZE, sourceKey } from "../state/ids";
+import type { LoopId } from "../loops/types";
 import type { BattleState } from "../state/types";
 
 /**
@@ -18,7 +19,13 @@ export type Action =
   /** Pass priority, or end the current Day, Dusk, or Night. */
   | { readonly kind: "pass" }
   /** Pay to end an effect lasting "until the opponent pays N●" (C7). */
-  | { readonly kind: "payToEnd"; readonly effect: EffectId };
+  | { readonly kind: "payToEnd"; readonly effect: EffectId }
+  /**
+   * Repeat the loop on offer `count` more times, or until the battle ends
+   * (rules § Optional Loops). Legal actions carry `"untilVictory"`; any
+   * whole `count` from 1 to the battle's iteration cap is allowed too.
+   */
+  | { readonly kind: "repeatLoop"; readonly loop: LoopId; readonly count: number | "untilVictory" };
 
 /**
  * The pending top-level decision: `main` while a side may act in its Day,
@@ -31,10 +38,18 @@ export interface Decision {
 }
 
 /**
- * Whether `action` is the legal action `legal`, or that play dropped on an
- * open back-rank position of the playing side.
+ * Whether `action` is the legal action `legal`, that play dropped on an
+ * open back-rank position of the playing side, or that loop repeated a
+ * whole number of times within the iteration cap.
  */
 export function allowedBy(legal: Action, action: Action, state: BattleState): boolean {
+  if (legal.kind === "repeatLoop" && action.kind === "repeatLoop" && legal.count === "untilVictory") {
+    return (
+      legal.loop === action.loop &&
+      (action.count === "untilVictory" ||
+        (Number.isInteger(action.count) && action.count >= 1 && action.count <= state.config.loopIterationCap))
+    );
+  }
   if (legal.kind !== "play" || action.kind !== "play" || action.slot === undefined || legal.slot !== undefined) {
     return actionsEqual(legal, action);
   }
@@ -73,5 +88,7 @@ export function actionsEqual(a: Action, b: Action): boolean {
       return b.kind === "pass";
     case "payToEnd":
       return b.kind === "payToEnd" && a.effect === b.effect;
+    case "repeatLoop":
+      return b.kind === "repeatLoop" && a.loop === b.loop && a.count === b.count;
   }
 }

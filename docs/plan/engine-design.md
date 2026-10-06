@@ -189,7 +189,8 @@ replay.
 | `advancePhase` | One phase transition and its rules actions (Dreamwell draw, Draw, Ending cleanup) |
 | `challengeLane` | Resolve one lane; `▸Dissolved` triggers are queued |
 | `reposition` | One reposition or merge (includes the Legionnaire confirmation prompt) |
-| `loopIteration` | One iteration of an accepted loop shortcut |
+| `repeatLoop` | Accept the loop on offer: start a repetition, nothing else |
+| `loopIteration` | One iteration of an accepted loop shortcut (automatic while a repetition runs) |
 
 **The driver composes steps.** After a top-level action's step commits, the
 driver keeps running **automatic steps** until it reaches a top-level decision
@@ -823,44 +824,85 @@ emits `pendingAbility` for each pending play or draw.
 ## Loops
 
 This follows [D12](decisions.md#d12-infinite-combos-are-intentional). Limits
-live in the battle data module.
+live in the battle data module (`loopIterationCap`, `loopHistoryActions`,
+`mandatoryLoopCheckFrom`, `resolutionCap`) and reach the engine through
+`BattleConfig`. The code is in `src/engine/loops/`; the runner calls it after
+every committed step, and `BattleState.loops` holds everything it remembers,
+so a reload between any two steps loses nothing.
 
-**Checkpoints.** At each top-level `main` decision with an empty stack and an
-empty trigger queue, the engine computes a loop signature. The signature is a
-hash of the state with monotone resources abstracted away:
+**Checkpoints.** A checkpoint is a `main` decision with an empty stack and an
+empty trigger queue. At each one the engine computes a loop signature: a hash
+of the state with monotone resources abstracted away:
 
 - scores;
 - current and maximum energy;
 - counters;
 - gained spark;
-- deck and void sizes;
-- turn counters.
+- deck and void contents;
+- turn counters;
+- bookkeeping: the version, minted-id and timestamp counters, random-stream
+  positions, and absolute zone-entry timestamps (their order stays).
 
-**Candidates.** Suppose signature *k* equals an earlier signature *j* in the
-same turn. Suppose also that the abstracted delta is non-negative for the
-actor, non-positive for the opponent, and positive somewhere. Then the engine
-records a `LoopCandidate`. It holds the top-level actions from *j* to *k* and
-**every prompt answer with its fingerprint**, and the engine offers
-`repeatLoop`.
+**History.** The tracker keeps one history per scope: one acting side's main
+window in one turn. It holds each checkpoint (signature, resources, and the
+number of actions before it) and each top-level action with every step it ran
+up to the next decision, each step with its recorded answers and their
+fingerprints. The runner identifies the action from its step
+(`actionForStep`, the inverse of `stepForAction`). The history restarts when
+the scope changes, when the opponent takes an action, or when a step contains
+an answer the opponent chose that was not forced. It keeps at most
+`loopHistoryActions` actions, dropping the oldest checkpoints first.
 
-**Execution.** Each `loopIteration` step replays the recorded actions and
-answers. It stops early in any of these cases:
+**Candidates.** Suppose checkpoint *k*'s signature equals an earlier
+checkpoint *j*'s in the same history, and the resource delta from *j* to *k*
+gains for the actor: none of the actor's resources fell, none of the
+opponent's rose, and one changed (resources and their orientation:
+RD-hv-7x4l.9-1). The latest such *j* wins. The engine then records a
+`LoopCandidate` holding the actions from *j* to *k*, and `legalActions` offers
+`{ kind: "repeatLoop", loop, count: "untilVictory" }`; any whole `count` from 1
+to the iteration cap is allowed too. Every other step withdraws the offer.
+The view shows the loop on offer and the repetition in progress, never the
+recorded answers.
 
-- an action is illegal;
-- a replayed prompt's fingerprint differs (a choice now has different options,
-  so the player decides);
-- the battle ends;
-- the opponent gains a decision with a legal non-pass response;
-- the iteration cap is reached (data module; default 10,000).
+**Execution.** The `repeatLoop` step starts a `LoopRun`. While it runs, nobody
+has a decision and `nextAutomaticStep` returns `loopIteration`. Each
+iteration runs the recorded steps again with `runStep`, each from the
+previous one's committed result, in replay mode: every prompt must be answered
+from the recording (`UnrecordedPrompt` otherwise) and loop detection is
+skipped. The step then adopts the final state and the nested steps' events
+(`StepContext.adopt`). It stops early, keeping the last step boundary
+reached, in any of these cases (`loopEnded.reason`):
+
+- `illegalAction`: an action is illegal;
+- `changedChoice`: a replayed prompt's fingerprint differs, or a prompt is
+  added or dropped. That step is discarded: a top-level action is left to its
+  player, and an automatic step runs on through the ordinary driver, so its
+  player answers the changed prompt;
+- `battleEnded`: the battle ends;
+- `opponentDecision`: the opponent gains a decision with a legal non-pass
+  response;
+- `diverged`: a different automatic step comes next, or the iteration ends
+  away from the loop's checkpoint.
+
+The repetition also ends after its count (`completed`) or at the iteration
+cap (`iterationCap`, default 10,000), and the loop stays on offer then. The
+`loopStarted` and `loopEnded` events log each repetition.
 
 **Mandatory cycles.** While automatic steps run with no decision offered, the
-engine hashes the full state after each step.
+engine checks for an exact repeat with Brent's cycle detection: from the
+`mandatoryLoopCheckFrom`th consecutive automatic step on (default 64), it
+hashes the full state after each step, ignoring bookkeeping, and compares the
+hash with the one saved at the last power-of-two step count. Memory is
+constant, and short runs cost nothing (RD-hv-7x4l.9-2).
 
-- An exact repeat ends the battle in a draw (`mandatory_loop`).
+- An exact repeat ends the battle in a draw (`mandatoryLoop`).
 - A non-repeating run beyond the resolution cap (default 100,000 steps) also
-  ends it in a draw (`resolution_cap`), and is logged loudly.
+  ends it in a draw (`resolutionCap`).
+- A loop iteration replays its player's decisions: it resets the count of
+  consecutive automatic steps, so repeating an optional loop never ends in
+  either draw.
 
-Write both rules into `docs/rules.md` § Infinite Loops.
+`docs/rules.md` § Infinite Loops states both rules.
 
 ## Randomness and replay
 

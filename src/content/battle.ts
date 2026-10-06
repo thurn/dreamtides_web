@@ -23,6 +23,18 @@ export const BATTLE = {
   // Consecutive automatic game actions after which a battle that no player can
   // stop ends in a draw (rules § Mandatory Loops).
   resolutionCap: 100000,
+  // Consecutive automatic game actions after which the engine starts checking
+  // whether the battle has returned to exactly a state it passed through,
+  // which ends it in a draw (rules § Mandatory Loops). Shorter runs are never
+  // checked, which keeps ordinary turns fast.
+  mandatoryLoopCheckFrom: 64,
+  // Iterations after which an accepted loop shortcut (Repeat ×N or Repeat
+  // until victory) stops and returns control to its player (rules § Optional
+  // Loops).
+  loopIterationCap: 10000,
+  // Top-level actions within one main window that loop detection remembers;
+  // a loop longer than this is not offered as a shortcut.
+  loopHistoryActions: 100,
   // Whether a prompt with exactly one legal answer (a forced choice) is
   // answered automatically instead of being asked; the answer is recorded.
   autoAnswerForcedPrompts: true,

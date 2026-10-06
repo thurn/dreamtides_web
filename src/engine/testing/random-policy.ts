@@ -24,11 +24,16 @@ export class PolicyRandom {
 }
 
 /**
- * The Random policy: passes a quarter of the time, otherwise plays a card,
- * activates an ability, or pays to end an effect when it can, otherwise
- * repositions, so random games make progress and end.
+ * The Random policy: accepts a loop on offer half the time, repeating it one
+ * to three times; otherwise passes a quarter of the time, otherwise plays a
+ * card, activates an ability, or pays to end an effect when it can,
+ * otherwise repositions, so random games make progress and end.
  */
 export function randomAction(legal: readonly Action[], random: PolicyRandom): Action {
+  const loop = legal.find((action) => action.kind === "repeatLoop");
+  if (loop !== undefined && random.next() < 0.5) {
+    return { ...loop, count: 1 + Math.floor(random.next() * 3) };
+  }
   const plays = legal.filter(
     (action) => action.kind === "play" || action.kind === "activate" || action.kind === "payToEnd",
   );

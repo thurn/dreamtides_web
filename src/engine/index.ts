@@ -21,6 +21,7 @@ export {
 export type { ApplyResult, Engine } from "./engine";
 export { createEngine, IllegalAction } from "./engine";
 export type { EngineEvent, EngineEventKind } from "./events";
+export type { LoopEndReason, LoopId } from "./loops/types";
 export type { Answer, Prompt } from "./prompts/types";
 export type {
   AbilitySource,
@@ -64,6 +65,7 @@ export type {
   FloatingEffectView,
   HiddenZoneView,
   InstanceView,
+  LoopView,
   QueuedTriggerView,
   SideView,
 } from "./view/view";

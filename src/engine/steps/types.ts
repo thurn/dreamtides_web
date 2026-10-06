@@ -33,6 +33,13 @@ export interface StepContext {
   emit(event: EngineEvent): void;
   /** A uniform draw in `[0, 1)` from the named stream. */
   random(stream: string): number;
+  /**
+   * Adopts the outcome of steps run inside this one, as a loop iteration
+   * runs its recorded steps: `state`, derived from the work state by those
+   * steps, replaces it, and their events, already matched against triggered
+   * abilities, are appended.
+   */
+  adopt(state: BattleState, events: readonly EngineEvent[]): void;
 }
 
 /** Registry entry for one step kind. */

@@ -973,15 +973,24 @@ they control, and a loop that nobody can stop ends the battle in a draw.
 ### Optional Loops
 
 A player builds an optional loop through their own choices. When, within a
-single turn, a sequence of a player's actions returns the battle to an
-equivalent position — the stack empty, no triggered abilities waiting, and
-everything the same except victory points, current and maximum ●, counters,
-gained spark, the number of cards in each deck and void, and turn counts — and
-those differences gained something for that player and nothing for the
-opponent, the player is offered a shortcut:
+single main window of a turn (one player's Day, Dusk, or Night), a sequence of
+that player's actions returns the battle to an equivalent position — the stack
+empty, no triggered abilities waiting, and everything the same except victory
+points, current and maximum ●, counters, gained spark, the cards in each deck
+and void, and turn counts — and those differences gained something for that
+player and nothing for the opponent, the player is offered a shortcut:
 
-- **Repeat ×N** performs the sequence N more times.
+- **Repeat ×N** performs the sequence N more times, for any N up to 10,000.
 - **Repeat until victory** performs it until the battle ends.
+
+A difference is a gain for a player when their victory points, current or
+maximum ●, counters on cards they control, gained spark on cards they control,
+or cards in their deck increase. A player's cards in their void and turn counts
+may change in either direction without counting as a gain or a loss. The
+sequence qualifies only if none of the player's own values fell, none of the
+opponent's rose, and at least one changed. A sequence in which the opponent
+had a decision — a legal response other than passing, or a choice with more
+than one option — is never offered.
 
 Each repetition takes the same actions and makes the same choices as the
 original sequence. Repeating stops early, returning control to the player,
@@ -994,6 +1003,13 @@ when:
 - the opponent has a legal response other than passing;
 - the sequence has repeated 10,000 times.
 
+Repeating stops at the last point the repetition reached. When a choice has
+changed, the action or triggered ability that raised it is not repeated: if it
+was one of the player's actions, the player decides what to do from the point
+before it; otherwise it resolves normally and the player makes the choice. The
+shortcut remains on offer after Repeat ×N completes or after 10,000
+repetitions. Taking any other action withdraws it.
+
 ### Mandatory Loops
 
 A mandatory loop is one that repeats while no player has the opportunity to
@@ -1001,6 +1017,11 @@ play a card, activate an ability, reposition, or pass — for example, triggered
 abilities that keep triggering each other. Nobody can stop it, so:
 
 - If the battle returns to exactly the same state during such a sequence, the
-  battle ends in a draw.
+  battle ends in a draw. The order in which cards entered their zones is part
+  of the state, but not when they did. The repeat may be noticed a few cycles
+  after it first happens; the result is the same.
 - If such a sequence runs for more than 100,000 consecutive automatic game
   actions without repeating, the battle also ends in a draw.
+
+Repetitions of an optional loop are the player's own actions, so they never
+make a mandatory loop.

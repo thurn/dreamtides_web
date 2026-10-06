@@ -9,7 +9,7 @@ import { payableNow } from "./payable";
 import { charactersInPlay, instanceOf, occupant, slotOf } from "./zones";
 
 /** The side that acts in the current main window, or `null` outside Day, Dusk, and Night. */
-function mainWindowSide(state: BattleState): Side | null {
+export function mainWindowSide(state: BattleState): Side | null {
   switch (state.turn.phase) {
     case "day":
     case "night":
@@ -93,7 +93,7 @@ export function legalActions(
   side: Side,
   memo: LegalityMemo,
 ): Action[] {
-  if (state.result !== null || state.triggerQueue.length > 0) {
+  if (state.result !== null || state.triggerQueue.length > 0 || state.loops.run !== null) {
     return [];
   }
   if (state.stack.length > 0) {
@@ -110,20 +110,28 @@ export function legalActions(
     ...stackActions(state, catalog, side, memo),
     ...legalRepositions(state, side),
     ...payableNow(state, side).map((effect): Action => ({ kind: "payToEnd", effect: effect.id })),
+    ...loopOffer(state, side),
   ];
+}
+
+/** The `repeatLoop` action for the loop on offer to `side`, if any. */
+function loopOffer(state: BattleState, side: Side): Action[] {
+  const candidate = state.loops.candidate;
+  return candidate?.side === side ? [{ kind: "repeatLoop", loop: candidate.id, count: "untilVictory" }] : [];
 }
 
 /**
  * The pending top-level decision, derived from the state. A side holding
  * priority with no legal response has no decision: it passes automatically
- * (P1). Nobody decides while triggers wait to resolve (D14).
+ * (P1). Nobody decides while triggers wait to resolve (D14) or while an
+ * accepted loop repeats.
  */
 export function decision(
   state: BattleState,
   catalog: EngineCatalog,
   memo: LegalityMemo,
 ): Decision | null {
-  if (state.result !== null || state.triggerQueue.length > 0) {
+  if (state.result !== null || state.triggerQueue.length > 0 || state.loops.run !== null) {
     return null;
   }
   if (state.stack.length > 0) {

@@ -1,4 +1,5 @@
 import { BATTLE } from "../../content/battle";
+import { emptyLoopTracker } from "../loops/types";
 import { emptyTurnLog } from "../rules/turn-log";
 import type { EngineCatalog } from "../catalog";
 import type { InstanceId, Side } from "./ids";
@@ -40,6 +41,9 @@ export function battleConfig(init: BattleInit): BattleConfig {
     startingSide,
     skipFirstDraw: BATTLE.skipPlayerOpeningDraw,
     resolutionCap: BATTLE.resolutionCap,
+    mandatoryLoopCheckFrom: BATTLE.mandatoryLoopCheckFrom,
+    loopIterationCap: BATTLE.loopIterationCap,
+    loopHistoryActions: BATTLE.loopHistoryActions,
   };
 }
 
@@ -81,6 +85,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
     dreamwell: { deck: [], next: 0, catalog: [] },
     challenge: null,
     automaticSteps: 0,
+    loops: emptyLoopTracker(),
     result: null,
   };
   for (const side of SIDES) {

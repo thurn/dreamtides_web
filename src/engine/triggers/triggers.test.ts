@@ -606,11 +606,10 @@ describe("trigger failure paths", () => {
     expect(engine.decision(result.state)).toEqual({ kind: "main", side: "player" });
   });
 
-  it("ends a trigger cycle nobody can stop in a draw at the resolution cap", () => {
+  it("ends a trigger cycle nobody can stop, which repeats a state exactly, in a draw", () => {
     const { state, ids } = board({ player: { hand: [L.echo.id], deck }, enemy: { deck } });
-    const capped: BattleState = { ...state, config: { ...state.config, resolutionCap: 6 } };
-    const result = play(capped, "player", ids.player.hand[0]);
-    expect(result.state.result).toEqual({ kind: "draw", reason: "resolutionCap" });
+    const result = play(state, "player", ids.player.hand[0]);
+    expect(result.state.result).toEqual({ kind: "draw", reason: "mandatoryLoop" });
   });
 
   it("throws, leaving the committed state alone, for an empty queue or a queued ability that is not a trigger", () => {

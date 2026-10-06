@@ -8,7 +8,7 @@ import type { Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
-import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence } from "./errors";
+import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
 import type { AnswerSource, RecordedAnswer, StepContext } from "./types";
 
 export interface ContextOptions {
@@ -18,11 +18,15 @@ export interface ContextOptions {
   readonly canceller?: Side | null;
   /** A legality dry run: the commit point throws `Feasible`. */
   readonly dryRun?: boolean;
+  /** A loop replay: every prompt must be answered by `prefix`, else `UnrecordedPrompt` is thrown. */
+  readonly replay?: boolean;
 }
 
 export class Context implements StepContext {
   readonly events: EngineEvent[] = [];
   readonly answers: RecordedAnswer[] = [];
+  /** The side that gave each answer in `answers`. */
+  readonly choosers: Side[] = [];
   committed = false;
 
   constructor(
@@ -52,23 +56,36 @@ export class Context implements StepContext {
       if (!isLegalAnswer(prompt, recorded.value)) {
         throw new IllegalAnswer(prompt);
       }
-      this.answers.push(recorded);
+      this.record(recorded, prompt.side);
       return recorded.value as AnswerFor<P>;
+    }
+    if (this.options.replay === true) {
+      throw new UnrecordedPrompt(prompt);
     }
     const forced = forcedAnswer(prompt);
     if (forced !== undefined) {
       if (!isLegalAnswer(prompt, forced)) {
         throw new IllegalAnswer(prompt);
       }
-      this.answers.push({ fingerprint, value: forced, auto: true });
+      this.record({ fingerprint, value: forced, auto: true }, prompt.side);
       return forced as AnswerFor<P>;
     }
     const value = this.source.answer(prompt, this.state);
     if (!isLegalAnswer(prompt, value)) {
       throw new IllegalAnswer(prompt);
     }
-    this.answers.push({ fingerprint, value });
+    this.record({ fingerprint, value }, prompt.side);
     return value as AnswerFor<P>;
+  }
+
+  private record(answer: RecordedAnswer, side: Side): void {
+    this.answers.push(answer);
+    this.choosers.push(side);
+  }
+
+  adopt(state: BattleState, events: readonly EngineEvent[]): void {
+    Object.assign(this.state, state);
+    this.events.push(...events);
   }
 
   commitPoint(): void {

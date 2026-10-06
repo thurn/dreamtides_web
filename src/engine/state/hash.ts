@@ -120,9 +120,18 @@ function feedCanonical(hasher: Hasher, value: unknown): void {
  * its canonical JSON, so states equal as data hash equally.
  */
 export function stateHash(state: BattleState): StateHash {
+  return canonicalHash<StateHash>(state);
+}
+
+/**
+ * The `hashString` of the canonical JSON of any plain data, as a hex string
+ * of the hash type `H` the caller names: values equal as data hash equally
+ * whatever their key insertion order.
+ */
+export function canonicalHash<H extends string>(value: unknown): H {
   const hasher = new Hasher();
-  feedCanonical(hasher, state);
-  return hasher.digest().toString(16).padStart(14, "0") as StateHash;
+  feedCanonical(hasher, value);
+  return hasher.digest().toString(16).padStart(14, "0") as H;
 }
 
 /** A deep copy that shares nothing with `state`. */

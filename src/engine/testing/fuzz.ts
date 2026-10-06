@@ -22,6 +22,7 @@ import { AVATAR, DREAMSIGN, STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stack-cards
 import { TRIGGER_AVATAR, TRIGGER_CARDS, TRIGGER_DREAMSIGN, TRIGGER_EMBLEMS } from "./trigger-cards";
 import { CONTINUOUS_AVATAR, CONTINUOUS_CARDS, CONTINUOUS_DREAMSIGN, CONTINUOUS_EMBLEMS } from "./continuous-cards";
 import { ZONE_CARDS, ZONE_FIGMENTS } from "./zone-cards";
+import { LOOP_CARDS } from "./loop-cards";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
 export interface RecordedAction {
@@ -52,9 +53,9 @@ export const ACTION_CAP = 20000;
 /**
  * Synthetic cards the fuzzer mixes in: vanilla, prompting, DSL, stack
  * (Interrupts, prevent, activated abilities), trigger and duration,
- * continuous-effect, and zone and special-mechanic fixtures.
+ * continuous-effect, zone and special-mechanic, and optional-loop fixtures.
  */
-const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS];
+const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS, ...LOOP_CARDS];
 
 /** Every card the fuzzer draws from: the synthetic fixtures plus the full pool. */
 export function fuzzCatalogCards() {
@@ -63,7 +64,7 @@ export function fuzzCatalogCards() {
 
 /** The fuzzer's catalog: the synthetic fixtures and emblems, any `extra` cards, and the full catalog. */
 export function fuzzEngineCatalog(extra: readonly EngineCardDefinition[] = []) {
-  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS, ...extra], {
+  return testCatalog([...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS, ...LOOP_CARDS, ...extra], {
     avatars: [...(SYNTHETIC_EMBLEMS.avatars ?? []), ...(TRIGGER_EMBLEMS.avatars ?? []), ...(CONTINUOUS_EMBLEMS.avatars ?? [])],
     dreamsigns: [...(SYNTHETIC_EMBLEMS.dreamsigns ?? []), ...(TRIGGER_EMBLEMS.dreamsigns ?? []), ...(CONTINUOUS_EMBLEMS.dreamsigns ?? [])],
   }, ZONE_FIGMENTS);

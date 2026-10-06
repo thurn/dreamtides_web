@@ -38,3 +38,10 @@ export class IllegalAnswer extends Error {
     super(`Illegal answer to a ${prompt.kind} prompt (${prompt.purpose.role})`);
   }
 }
+
+/** A loop replay raised a prompt its recording does not answer: the player must decide it. */
+export class UnrecordedPrompt extends Error {
+  constructor(readonly prompt: Prompt) {
+    super(`A loop replay raised an unrecorded ${prompt.kind} prompt (${prompt.purpose.role})`);
+  }
+}

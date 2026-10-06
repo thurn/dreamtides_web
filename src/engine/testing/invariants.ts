@@ -1,4 +1,5 @@
 import { printedCard, type EngineCatalog } from "../catalog";
+import { checkpointSide } from "../loops/tracker";
 import { changedInstance } from "../rules/floating";
 import { characteristics } from "../continuous/characteristics";
 import { adjustedEnergy, costModifier } from "../continuous/costs";
@@ -99,6 +100,15 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
       const cost = adjustedEnergy(fixedEnergy(playCosts(definition, instance.variant)), costModifier(state, catalog, instance.id, instance.controller, fresh));
       if (cost < 0) problems.push(`${instance.id} has a negative effective cost`);
     }
+  }
+  // The loop shortcut: a repetition runs only for the loop on offer, and a
+  // loop is offered only at its player's checkpoint.
+  const { candidate, run } = state.loops;
+  if (run !== null && (candidate?.id !== run.loop || state.result !== null)) {
+    problems.push(`loop run ${run.loop} has no matching loop on offer or outlived the battle`);
+  }
+  if (candidate !== null && run === null && checkpointSide(state) !== candidate.side) {
+    problems.push(`loop ${candidate.id} is on offer away from its player's checkpoint`);
   }
   if (stateHash(deserializeState(serializeState(state))) !== stateHash(state)) {
     problems.push("serialization round-trip changed the state hash");

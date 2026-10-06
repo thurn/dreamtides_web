@@ -7,8 +7,10 @@ import { activate, type ActivateStep } from "./activate";
 import { advancePhase, type AdvancePhaseStep } from "./advance-phase";
 import { beginBattle, type BeginBattleStep } from "./begin-battle";
 import { challengeLane, type ChallengeLaneStep } from "./challenge-lane";
+import { loopIteration, type LoopIterationStep } from "./loop-iteration";
 import { payToEnd, type PayToEndStep } from "./pay-to-end";
 import { play, type PlayStep } from "./play";
+import { repeatLoop, type RepeatLoopStep } from "./repeat-loop";
 import { reposition, type RepositionStep } from "./reposition";
 import { resolveTop, type ResolveTopStep } from "./resolve-top";
 import { resolveTrigger, type ResolveTriggerStep } from "./resolve-trigger";
@@ -19,8 +21,10 @@ export type Step =
   | AdvancePhaseStep
   | BeginBattleStep
   | ChallengeLaneStep
+  | LoopIterationStep
   | PayToEndStep
   | PlayStep
+  | RepeatLoopStep
   | RepositionStep
   | ResolveTopStep
   | ResolveTriggerStep;
@@ -34,8 +38,10 @@ export const STEP_DEFINITIONS = {
   advancePhase,
   beginBattle,
   challengeLane,
+  loopIteration,
   payToEnd,
   play,
+  repeatLoop,
   reposition,
   resolveTop,
   resolveTrigger,

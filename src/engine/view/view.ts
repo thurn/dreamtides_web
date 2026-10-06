@@ -1,3 +1,4 @@
+import type { LoopId } from "../loops/types";
 import type { AbilitySource, AvatarId, DreamsignId, EffectId, InstanceId, Side, Zone } from "../state/ids";
 import { opponent } from "../state/ids";
 import type {
@@ -109,6 +110,19 @@ export interface QueuedTriggerView {
   readonly subject: InstanceId | null;
 }
 
+/**
+ * The loop on offer, or being repeated (rules § Optional Loops). Its
+ * recorded actions and answers stay hidden: some answers are private to
+ * their chooser.
+ */
+export interface LoopView {
+  readonly id: LoopId;
+  /** The side that may repeat it. */
+  readonly side: Side;
+  /** The repetition in progress, or `null` while the loop is only on offer. */
+  readonly run: { readonly remaining: number | "untilVictory"; readonly iterations: number } | null;
+}
+
 export interface SideView {
   readonly score: number;
   readonly currentEnergy: number;
@@ -158,6 +172,7 @@ export interface BattleView {
   readonly triggerQueue: readonly QueuedTriggerView[];
   readonly dreamwell: { readonly remaining: number };
   readonly challenge: Readonly<ChallengeState> | null;
+  readonly loop: LoopView | null;
   readonly result: Readonly<BattleResult> | null;
 }
 
@@ -278,6 +293,14 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     })),
     dreamwell: { remaining: state.dreamwell.deck.length - state.dreamwell.next },
     challenge: copy(state.challenge),
+    loop:
+      state.loops.candidate === null
+        ? null
+        : {
+            id: state.loops.candidate.id,
+            side: state.loops.candidate.side,
+            run: state.loops.run === null ? null : { remaining: state.loops.run.remaining, iterations: state.loops.run.iterations },
+          },
     result: copy(state.result),
   };
 }

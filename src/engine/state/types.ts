@@ -1,5 +1,6 @@
 import type { CardSubtype } from "../../types/card-identity";
 import type { CardFilter, Condition, Keyword, Variant } from "../dsl/types";
+import type { LoopTracker } from "../loops/types";
 import type {
   AbilitySource,
   AvatarId,
@@ -29,6 +30,12 @@ export interface BattleConfig {
   readonly skipFirstDraw: boolean;
   /** Consecutive automatic steps after which the battle is a draw (rules § Mandatory Loops). */
   readonly resolutionCap: number;
+  /** Consecutive automatic steps after which exact repeats are checked for (rules § Mandatory Loops). */
+  readonly mandatoryLoopCheckFrom: number;
+  /** Iterations after which an accepted loop shortcut stops (rules § Optional Loops). */
+  readonly loopIterationCap: number;
+  /** Top-level actions in one main window that loop detection remembers. */
+  readonly loopHistoryActions: number;
 }
 
 /** One journey deck entry as the battle receives it. */
@@ -388,5 +395,7 @@ export interface BattleState {
   challenge: ChallengeState | null;
   /** Automatic steps run since the last top-level decision. */
   automaticSteps: number;
+  /** Loop detection and the loop shortcut (rules § Infinite Loops). */
+  loops: LoopTracker;
   result: BattleResult | null;
 }
