@@ -24,6 +24,7 @@ import { boardState, type BoardSetup } from "../testing/board";
 import { invariantViolations } from "../testing/invariants";
 import { CYCLE, CYCLE_CARDS, LOOP, LOOP_CARDS } from "../testing/loop-cards";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { TRIGGER } from "../testing/trigger-cards";
 import type { LoopEndReason } from "./types";
 
 /** "When the opponent plays a card, you may lose 1●." — gives the opponent of a loop of plays a real choice. */
@@ -38,7 +39,7 @@ const reluctant: EngineCardDefinition = {
   abilities: () => [triggered(whenOpponentPlays(), p.optional(p.gainEnergy(-1)))],
 };
 
-const engine = createEngine(testCatalog([...LOOP_CARDS, ...CYCLE_CARDS, reluctant]));
+const engine = createEngine(testCatalog([...LOOP_CARDS, ...CYCLE_CARDS, reluctant, TRIGGER.secondCardPoints]));
 const v = SYNTHETIC;
 const deck = Array.from({ length: 6 }, () => v.vanilla1.id);
 
@@ -237,6 +238,30 @@ describe("optional loops", () => {
     expect(ended(result.events)).toEqual({ iterations: 3, reason: "completed" });
     expect(result.state.sides.player.score).toBe(4);
     expect(result.events.filter((event) => event.kind === "triggerResolved")).toHaveLength(3);
+  });
+
+  it("offers a loop of plays as the turn log grows, and stops a repetition a play-count trigger diverges", () => {
+    // "When you play your second card in a turn, gain 1⍟" counts the turn log, which the loop signature leaves out (RD-hv-7x4l.36-1).
+    const { state, ids } = board({ player: { back: [TRIGGER.secondCardPoints.id], hand: [LOOP.bouncer.id], deck }, enemy: { deck } });
+    const card = ids.player.hand[0];
+    if (card === undefined) throw new Error("no card");
+    const playCard = (from: BattleState) => engine.apply(from, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS);
+    const second = playCard(playCard(state).state);
+    // The offered pass includes the second-card trigger, which no repetition triggers again.
+    expect(second.state.sides.player.score).toBe(3);
+    const diverged = repeat(second.state, 5);
+    expect(ended(diverged.events)).toEqual({ iterations: 0, reason: "diverged" });
+    // The replayed play is kept and its own trigger resolves.
+    expect(diverged.state.sides.player.score).toBe(4);
+    expect(engine.decision(diverged.state)).toEqual({ kind: "main", side: "player" });
+    expect(offer(diverged.state)).toBeUndefined();
+    // One more pass by hand puts the loop as it now repeats on offer.
+    const again = playCard(diverged.state);
+    expect(again.state.sides.player.score).toBe(5);
+    const result = repeat(again.state, 5);
+    expect(ended(result.events)).toEqual({ iterations: 5, reason: "completed" });
+    expect(result.state.sides.player.score).toBe(10);
+    expect(offer(result.state)).toBeDefined();
   });
 
   it("does not offer a sequence in which the opponent made a choice", () => {

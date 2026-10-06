@@ -981,20 +981,21 @@ single main window of a turn (one player's Day, Dusk, or Night), a sequence of
 that player's actions returns the battle to an equivalent position — the stack
 empty, no triggered abilities waiting, and everything the same except victory
 points, current and maximum ●, counters, gained spark, the cards in each deck
-and void, and turn counts — and those differences gained something for that
-player and nothing for the opponent, the player is offered a shortcut:
+and void, and how many cards each player has played and drawn this turn — and
+those differences gained something for that player and nothing for the
+opponent, the player is offered a shortcut:
 
 - **Repeat ×N** performs the sequence N more times, for any N up to 10,000.
 - **Repeat until victory** performs it until the battle ends.
 
 A difference is a gain for a player when their victory points, current or
 maximum ●, counters on cards they control, gained spark on cards they control,
-or cards in their deck increase. A player's cards in their void and turn counts
-may change in either direction without counting as a gain or a loss. The
-sequence qualifies only if none of the player's own values fell, none of the
-opponent's rose, and at least one changed. A sequence in which the opponent
-had a decision — a legal response other than passing, or a choice with more
-than one option — is never offered.
+or cards in their deck increase. A player's cards in their void may change in
+either direction, and the cards played and drawn this turn may grow, without
+counting as a gain or a loss. The sequence qualifies only if none of the
+player's own values fell, none of the opponent's rose, and at least one
+changed. A sequence in which the opponent had a decision — a legal response
+other than passing, or a choice with more than one option — is never offered.
 
 Each repetition takes the same actions and makes the same choices as the
 original sequence. Repeating stops early, returning control to the player,
@@ -1005,6 +1006,9 @@ when:
   makes it;
 - the battle ends;
 - the opponent has a legal response other than passing;
+- the repetition no longer follows the original sequence — for example, a
+  triggered ability triggers that did not trigger originally — or it ends at a
+  position not equivalent to the original one;
 - the sequence has repeated 10,000 times.
 
 Repeating stops at the last point the repetition reached. When a choice has
@@ -1013,6 +1017,14 @@ was one of the player's actions, the player decides what to do from the point
 before it; otherwise it resolves normally and the player makes the choice. The
 shortcut remains on offer after Repeat ×N completes or after 10,000
 repetitions. Taking any other action withdraws it.
+
+The cards played and drawn this turn are left out of the comparison so that a
+sequence that plays or draws a card can repeat. A card that counts them — for
+example "When you play your second card in a turn, gain 1⍟" — can therefore
+trigger during the sequence on offer and not during a repetition, or the other
+way around. That repetition stops at the first point it differs, and after the
+player performs the sequence once more themselves, it is offered as it now
+repeats.
 
 ### Mandatory Loops
 
