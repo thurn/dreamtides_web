@@ -190,7 +190,6 @@ function stateWith(
         currentNodeId: NODE_ID,
       },
       screen: { type: "site", siteId: SITE_ID },
-      activeSiteId: SITE_ID,
       ...overrides,
     },
   };
@@ -589,7 +588,6 @@ describe("atlas edits", () => {
   it("REPLACE_SITE_TYPE swaps a matching unvisited site for a new one", () => {
     const state = shopState([cardSlot()], {
       screen: { type: "dreamscape" },
-      activeSiteId: null,
     }); // node has one Shop site
     const result = reduce(state, "REPLACE_SITE_TYPE", {
       nodeId: NODE_ID,

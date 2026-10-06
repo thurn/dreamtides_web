@@ -115,7 +115,6 @@ function makeJourneyState({
     },
     currentDreamscape,
     screen,
-    activeSiteId: SITE_ID,
   };
 }
 

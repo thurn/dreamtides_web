@@ -191,7 +191,6 @@ function makeStateFor(site: SiteState): JourneyState {
     ...base,
     currentDreamscape: nodeId,
     screen: { type: "site", siteId: site.id },
-    activeSiteId: site.id,
     atlas: { ...testJourneyState().atlas, startingNodeId: nodeId, nodes: { [nodeId]: node } },
   };
 }

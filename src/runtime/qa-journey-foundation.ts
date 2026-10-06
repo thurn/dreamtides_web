@@ -39,7 +39,7 @@ export function generateJourneySeed(): JourneySeed {
  * and its starter node, shared by every developer-only "jump straight to a
  * screen" entry point. The base {@link JourneyState} is the between-dreamscapes
  * resting state (atlas screen, no dreamscape entered); callers that need a
- * different screen override `screen`/`currentDreamscape`/`activeSiteId` on top
+ * different screen override `screen`/`currentDreamscape` on top
  * of it (see `qa-scenes.ts`).
  */
 export interface QaJourneyFoundation {

@@ -144,7 +144,12 @@ import {
 } from "../../battle/starter-card-targets";
 import { configuredTutorialJourneyAvatarId } from "../front-door";
 import { resetJourney } from "../journey/lifecycle";
-import { canVisitSite, completeJourneySite, findSite } from "../journey/sites";
+import {
+  activeSiteIdOf,
+  canVisitSite,
+  completeJourneySite,
+  findSite,
+} from "../journey/sites";
 import type {
   BattleCardId,
   BattleEffectScriptId,
@@ -294,7 +299,6 @@ export function beginBattle(
   if (
     state.journey.screen.type !== "site" ||
     state.journey.screen.siteId !== siteId ||
-    state.journey.activeSiteId !== siteId ||
     findSite(state.journey, parseSiteId(siteId))?.type !== "Battle" ||
     !canVisitSite(state.journey, parseSiteId(siteId))
   ) {
@@ -533,7 +537,7 @@ function applyVictory(
     dreamscapeId === null ||
     journey.currentDreamscape !== dreamscapeId ||
     journey.completionLevel !== init.completionLevelAtStart ||
-    journey.activeSiteId !== init.siteId ||
+    activeSiteIdOf(journey) !== init.siteId ||
     journey.atlas.nodes[dreamscapeId] === undefined ||
     findSite(journey, init.siteId)?.type !== "Battle" ||
     !canVisitSite(journey, init.siteId)
@@ -583,7 +587,6 @@ function applyVictory(
       ...completedJourney,
       completionLevel: newLevel,
       screen,
-      activeSiteId: null,
       atlas,
       essence: completedJourney.essence + init.essenceReward,
       battleModifiers,
@@ -607,7 +610,6 @@ function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
       ...journey,
       failureSummary: deriveFailureSummary(battle.init, battle.board, journey),
       screen: { type: "journeyFailed" },
-      activeSiteId: null,
     },
     battle: null,
   };
@@ -648,7 +650,7 @@ function deriveFailureSummary(
   } else {
     reason = "score_target_reached";
   }
-  const siteId = journey.activeSiteId ?? init.siteId;
+  const siteId = activeSiteIdOf(journey) ?? init.siteId;
   return {
     battleId: board.battleId,
     result,

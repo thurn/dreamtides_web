@@ -539,8 +539,7 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
       if (
         site?.type !== "Battle" ||
         journey.screen.type !== "site" ||
-        journey.screen.siteId !== siteId ||
-        journey.activeSiteId !== siteId
+        journey.screen.siteId !== siteId
       ) {
         return null;
       }

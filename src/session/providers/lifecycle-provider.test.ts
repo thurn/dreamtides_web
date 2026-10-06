@@ -168,7 +168,6 @@ describe("startJourneyFromAvatar", () => {
     expect(firstAvailableNode).toBeDefined();
     expect(next.currentDreamscape).toBe(firstAvailableNode?.id);
     expect(next.screen).toEqual({ type: "dreamscape" });
-    expect(next.activeSiteId).toBeNull();
     // The starter-deck reveal popup is gated entirely by the
     // `hasSeenStartingDeckPopup` flag. A fresh journey start leaves the flag
     // at the default `false` so the popup opens once when the avatar

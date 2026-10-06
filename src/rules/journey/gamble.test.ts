@@ -90,7 +90,6 @@ function stateWith(
         OTHER_DREAMSIGN_ID,
       ],
       currentDreamscape: NODE_ID,
-      activeSiteId: SITE_ID,
       screen: { type: "site", siteId: SITE_ID },
       atlas: {
         ...base.journey.atlas,

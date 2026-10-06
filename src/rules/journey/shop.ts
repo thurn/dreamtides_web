@@ -39,6 +39,7 @@ import type {
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
 import {
+  activeSiteIdOf,
   clampEssence,
   findSite,
   getSiteContentProvider,
@@ -716,7 +717,7 @@ export function replaceSiteType(
     (site) => site.type === fromSiteType && !site.isVisited,
   );
   if (targetIndex === -1) return null;
-  if (node.sites[targetIndex].id === journey.activeSiteId) return null;
+  if (node.sites[targetIndex].id === activeSiteIdOf(journey)) return null;
 
   const replacement = debugSite(
     nextSiteId(journey.atlas),

@@ -530,7 +530,6 @@ describe("DesktopDeckViewerAdapter", () => {
       siteRuntime: {},
       draftState: null,
       screen: { type: "dreamscape" },
-      activeSiteId: null,
       failureSummary: null,
       hasSeenStartingDeckPopup: true,
       battleModifiers: [],

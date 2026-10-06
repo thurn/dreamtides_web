@@ -1,7 +1,6 @@
 import { layerOrdinal } from "../types/layer-name";
 import type { FoldState } from "./fold-state";
 import { battleModeOf } from "./battle/fold";
-import { parseSiteId } from "../types/identifiers";
 
 export interface FoldInvariantViolation {
   code: string;
@@ -42,12 +41,6 @@ export function foldInvariantViolations(
 
   if (journey.screen.type === "site") {
     const siteId = journey.screen.siteId;
-    if (journey.activeSiteId !== siteId) {
-      violations.push({
-        code: "site_screen_active_mismatch",
-        detail: `${siteId}/${journey.activeSiteId ?? parseSiteId("none")}`,
-      });
-    }
     const current =
       journey.currentDreamscape === null
         ? undefined
@@ -58,11 +51,6 @@ export function foldInvariantViolations(
         detail: siteId,
       });
     }
-  } else if (journey.activeSiteId !== null) {
-    violations.push({
-      code: "active_site_without_site_screen",
-      detail: journey.activeSiteId,
-    });
   }
 
   if (journey.runId === null) return violations;
@@ -172,7 +160,6 @@ export function foldInvariantViolations(
       });
     }
     if (
-      journey.activeSiteId !== init.siteId ||
       journey.screen.type !== "site" ||
       journey.screen.siteId !== init.siteId
     ) {

@@ -256,7 +256,6 @@ describe("PICK_DRAFT_CARD", () => {
       runId: parseJourneyId("run-a"),
       hasSeenStartingDeckPopup: true,
       screen: { type: "site", siteId: parseSiteId("site-a") },
-      activeSiteId: parseSiteId("site-a"),
       atlas: {
         ...stateWithDraftSites(poolDraftState()).journey.atlas,
         nodes: {

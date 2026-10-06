@@ -242,6 +242,14 @@ export function isSiteVisited(journey: JourneyState, siteId: SiteId): boolean {
 }
 
 /**
+ * The site the player currently stands in: the screen's site while a site
+ * screen is showing, otherwise `null`.
+ */
+export function activeSiteIdOf(journey: JourneyState): SiteId | null {
+  return journey.screen.type === "site" ? journey.screen.siteId : null;
+}
+
+/**
  * Whether `siteId` is a legal visit target (relocated legacy
  * `canVisitSite`): the site must exist and, when the player stands in a
  * dreamscape, belong to it; it must be unvisited; a Battle site must be visited
@@ -300,7 +308,6 @@ export function completeAndReturn(
   return {
     ...completeJourneySite(journey, siteId),
     screen: { type: "dreamscape" },
-    activeSiteId: null,
   };
 }
 
@@ -958,7 +965,6 @@ export function completeSite(
     siteId === null ||
     journey.screen.type !== "site" ||
     journey.screen.siteId !== siteId ||
-    journey.activeSiteId !== siteId ||
     !canVisitSite(journey, siteId)
   ) {
     return null;
@@ -1040,8 +1046,7 @@ export function purgeDeckCards(
   if (
     site?.type !== "Purge" ||
     !canVisitSite(journey, siteId) ||
-    journey.screen.type !== "site" ||
-    journey.activeSiteId !== siteId
+    activeSiteIdOf(journey) !== siteId
   ) {
     return null;
   }

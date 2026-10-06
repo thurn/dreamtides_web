@@ -176,7 +176,6 @@ function journeyFixture(content: JourneyContent): JourneyState {
     ...testJourneyState(),
     seed: testJourneySeed("exploration-provider-test"),
     screen: { type: "site", siteId: site.id },
-    activeSiteId: site.id,
     essence: 100,
     maxDreamsigns: 12,
     deck: Array.from({ length: 8 }, (_, index) =>

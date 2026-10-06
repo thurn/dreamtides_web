@@ -3,6 +3,7 @@ import type { JourneyState, SiteState, SiteType } from "../types/journey";
 import type { SiteGenerationContext } from "../atlas/atlas-generator";
 import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
 import { initialJourneyState } from "../rules/fold-state";
+import { activeSiteIdOf } from "../rules/journey/sites";
 import { createDreamsign } from "../data/dreamsigns";
 import {
   createQaJourneyFoundation,
@@ -171,7 +172,6 @@ function atlasLayerSceneState(layer: number): QaScene["build"] {
       completionLevel: layer,
       currentDreamscape: null,
       screen: { type: "atlas" },
-      activeSiteId: null,
     };
   };
 }
@@ -345,7 +345,6 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
       completionLevel,
       currentDreamscape: node.id,
       screen: { type: "site", siteId: battleSite.id },
-      activeSiteId: battleSite.id,
     };
   };
 }
@@ -486,7 +485,6 @@ const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
       atlas,
       currentDreamscape: node.id,
       screen: { type: "dreamscape" },
-      activeSiteId: null,
     };
   },
 };
@@ -530,7 +528,6 @@ const REWARD_SCENE: QaScene = {
       atlas,
       currentDreamscape: node.id,
       screen: { type: "dreamscape" },
-      activeSiteId: null,
     };
   },
 };
@@ -669,7 +666,6 @@ function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
       atlas,
       currentDreamscape: node.id,
       screen: { type: "site", siteId: site.id },
-      activeSiteId: site.id,
     };
   };
 }
@@ -682,17 +678,18 @@ function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
  * supports the authentic Exploration -> Dreamscape -> Shop/Bazaar workflow.
  */
 function addExplorationPurchasePath(state: JourneyState): JourneyState | null {
-  if (state.currentDreamscape === null || state.activeSiteId === null) {
+  const activeSiteId = activeSiteIdOf(state);
+  if (state.currentDreamscape === null || activeSiteId === null) {
     return null;
   }
   const node = state.atlas.nodes[state.currentDreamscape];
   if (node === undefined) return null;
   const shopSlot = node.sites.find(
-    (site) => site.id !== state.activeSiteId && site.type !== "Battle",
+    (site) => site.id !== activeSiteId && site.type !== "Battle",
   );
   if (shopSlot === undefined) return null;
 
-  const bazaarId = `${state.activeSiteId}-qa-dreamsign-bazaar`;
+  const bazaarId = `${activeSiteId}-qa-dreamsign-bazaar`;
   if (
     Object.values(state.atlas.nodes).some((candidate) =>
       candidate.sites.some((site) => site.id === bazaarId),
@@ -954,9 +951,9 @@ function explorationScene(
         return null;
       }
       const node = qaState.atlas.nodes[currentNodeId];
+      const activeSiteId = activeSiteIdOf(qaState);
       const siteOwners = Object.values(qaState.atlas.nodes).filter(
-        (candidate) =>
-          candidate.sites.some((site) => site.id === qaState.activeSiteId),
+        (candidate) => candidate.sites.some((site) => site.id === activeSiteId),
       );
       if (
         node === undefined ||
@@ -966,7 +963,7 @@ function explorationScene(
         return null;
       }
       const site = node.sites.find(
-        (candidate) => candidate.id === qaState.activeSiteId,
+        (candidate) => candidate.id === activeSiteId,
       );
       if (site === undefined) return null;
       const runtime = buildExplorationRuntime(
@@ -1115,15 +1112,12 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
         mode === "single" ? destination : "RandomSite",
         true,
       )(journeyContent);
-      if (
-        state === null ||
-        state.currentDreamscape === null ||
-        state.activeSiteId === null
-      )
-        return null;
+      if (state === null || state.currentDreamscape === null) return null;
+      const activeSiteId = activeSiteIdOf(state);
+      if (activeSiteId === null) return null;
       const node = state.atlas.nodes[state.currentDreamscape];
       const sites = node.sites.map((site) =>
-        site.id !== state.activeSiteId
+        site.id !== activeSiteId
           ? site
           : mode === "single"
             ? {

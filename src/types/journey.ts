@@ -1211,7 +1211,6 @@ export interface JourneyState {
   siteRuntime: IdentityRecord<SiteId, SiteRuntimeState>;
   draftState: DraftState | null;
   screen: Screen;
-  activeSiteId: SiteId | null;
   failureSummary: JourneyFailureSummary | null;
   /**
    * Whether the player has dismissed the one-time starter-deck reveal popup

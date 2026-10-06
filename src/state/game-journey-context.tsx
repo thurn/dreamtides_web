@@ -32,6 +32,7 @@ function importedSnapshotWithSeed(snapshot: unknown, seed: JourneySeed): unknown
 }
 import { mergeCardKeywordModification } from "../card-type-change";
 import { buildQaScene, qaSceneLoadsBattle } from "../runtime/qa-scenes";
+import { activeSiteIdOf } from "../rules/journey/sites";
 import {
   createBattleInitProvider,
   settleDeferredOpponentLog,
@@ -161,7 +162,7 @@ export function GameJourneyProvider({
         });
         if (snapshot === null) return;
         const seededSnapshot = { ...snapshot, seed: stateRef.current.seed };
-        const activeSiteId = seededSnapshot.activeSiteId;
+        const activeSiteId = activeSiteIdOf(seededSnapshot);
         const battle =
           activeSiteId === null || !qaSceneLoadsBattle(sceneId)
             ? null

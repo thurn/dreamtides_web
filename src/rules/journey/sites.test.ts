@@ -154,7 +154,6 @@ function stateWithSites(
         currentNodeId: NODE_ID,
       },
       screen: { type: "site", siteId: SITE_ID },
-      activeSiteId: SITE_ID,
       ...overrides,
     },
   };
@@ -323,7 +322,6 @@ describe("Random Site", () => {
     };
     const base = stateWithSites([wrapper], {
       screen: { type: "dreamscape" },
-      activeSiteId: null,
     });
     const entered = reduce(base, "ENTER_SITE", { siteId: SITE_ID });
     expect(entered.outcome).toBe("applied");

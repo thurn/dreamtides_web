@@ -33,7 +33,9 @@ import {
   makeTutorialConfiguration,
   TEST_TUTORIAL_PLAYER_AVATAR_ID,
 } from "../testing/tutorial-configuration-fixture";
-import { parseSiteId } from "../types/identifiers";
+import { parseSiteId, type SiteId } from "../types/identifiers";
+import type { JourneyState } from "../types/journey";
+import { activeSiteIdOf } from "../rules/journey/sites";
 import {
   testApollyonIncarnationId,
   testCardId,
@@ -45,6 +47,10 @@ import {
 } from "../types/test-identities";
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
+
+function activeSiteOf(state: JourneyState | null): SiteId | null {
+  return state === null ? null : activeSiteIdOf(state);
+}
 
 function makeAvatar(id = "avatar-1"): AvatarContent {
   return {
@@ -173,7 +179,6 @@ describe('the "atlas" QA scene', () => {
     expect(state?.screen.type).toBe("atlas");
     // Between dreamscapes: no dreamscape entered and no active site.
     expect(state?.currentDreamscape).toBeNull();
-    expect(state?.activeSiteId).toBeNull();
     expect(state?.avatar?.id).toBe(testAvatarId("avatar-1"));
 
     const bossNodeId = state?.atlas.bossNodeId;
@@ -258,8 +263,7 @@ describe("the atlas layer QA scenes", () => {
       expect(state).not.toBeNull();
       expect(state?.screen.type).toBe("atlas");
       expect(state?.currentDreamscape).toBeNull();
-      expect(state?.activeSiteId).toBeNull();
-      // Reaching the column-N frontier means N-1 dreamscapes were completed.
+        // Reaching the column-N frontier means N-1 dreamscapes were completed.
       expect(state?.completionLevel).toBe(frontierLayer);
 
       const nodes = Object.values(state?.atlas.nodes ?? {});
@@ -309,9 +313,6 @@ describe("the battle layer QA scenes", () => {
       expect(state?.completionLevel).toBe(displayLayer - 1);
       expect(state?.screen.type).toBe("site");
       expect(state?.currentDreamscape).not.toBeNull();
-      expect(state?.activeSiteId).toBe(
-        state?.screen.type === "site" ? state.screen.siteId : null,
-      );
 
       const node =
         state?.currentDreamscape == null
@@ -322,7 +323,7 @@ describe("the battle layer QA scenes", () => {
         displayLayer - 1,
       );
       const battleSite = node?.sites.find(
-        (site) => site.id === state?.activeSiteId,
+        (site) => site.id === activeSiteOf(state),
       );
       expect(battleSite?.type).toBe("Battle");
       expect(
@@ -345,7 +346,7 @@ describe("the battle layer QA scenes", () => {
         : state.atlas.nodes[state.currentDreamscape];
     expect(node === undefined ? undefined : layerOrdinal(node.layer)).toBe(0);
     expect(
-      node?.sites.find((site) => site.id === state?.activeSiteId)?.type,
+      node?.sites.find((site) => site.id === activeSiteOf(state))?.type,
     ).toBe("Battle");
   });
 });
@@ -359,16 +360,13 @@ describe("site QA scenes", () => {
       expect(state).not.toBeNull();
       expect(state?.screen.type).toBe("site");
       expect(state?.currentDreamscape).not.toBeNull();
-      expect(state?.activeSiteId).toBe(
-        state?.screen.type === "site" ? state.screen.siteId : null,
-      );
       const node =
         state?.currentDreamscape === null ||
         state?.currentDreamscape === undefined
           ? undefined
           : state?.atlas.nodes[state.currentDreamscape];
       const activeSite = node?.sites.find(
-        (site) => site.id === state?.activeSiteId,
+        (site) => site.id === activeSiteOf(state),
       );
       expect(activeSite?.type).toBe(siteType);
     }
@@ -508,7 +506,7 @@ describe('the "exploration" QA scene', () => {
         ? undefined
         : state.atlas.nodes[state.currentDreamscape];
     const activeSite = currentNode?.sites.find(
-      (site) => site.id === state?.activeSiteId,
+      (site) => site.id === activeSiteOf(state),
     );
     const shop = currentNode?.sites.find((site) => site.type === "Shop");
     const bazaar = currentNode?.sites.find(
@@ -525,7 +523,7 @@ describe('the "exploration" QA scene', () => {
     expect(state?.essence).toBe(101);
     expect(state?.screen).toEqual({
       type: "site",
-      siteId: state?.activeSiteId,
+      siteId: activeSiteOf(state),
     });
     expect(activeSite?.type).toBe("Exploration");
     expect(activeSite?.isVisited).toBe(false);
@@ -535,7 +533,7 @@ describe('the "exploration" QA scene', () => {
       isVisited: false,
     });
     expect(bazaar).toMatchObject({
-      id: parseSiteId(`${state?.activeSiteId ?? "none"}-qa-dreamsign-bazaar`),
+      id: parseSiteId(`${activeSiteOf(state) ?? "none"}-qa-dreamsign-bazaar`),
       type: "DreamsignBazaar",
       isEnhanced: false,
       isVisited: false,
@@ -600,7 +598,6 @@ describe('the "dreamscape-with-essence" QA scene', () => {
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
     expect(state?.essence).toBe(450);
-    expect(state?.activeSiteId).toBeNull();
     expect(state?.currentDreamscape).not.toBeNull();
 
     const node = state?.currentDreamscape
@@ -618,7 +615,6 @@ describe('the "reward" QA scene', () => {
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
-    expect(state?.activeSiteId).toBeNull();
     expect(state?.currentDreamscape).not.toBeNull();
 
     const node = state?.currentDreamscape

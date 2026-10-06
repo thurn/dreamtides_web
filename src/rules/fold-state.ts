@@ -139,7 +139,6 @@ export function initialJourneyState(
     siteRuntime: {},
     draftState: null,
     screen: { type: "journeyStart" },
-    activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: false,
     battleModifiers: [],

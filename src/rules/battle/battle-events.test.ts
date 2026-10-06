@@ -285,7 +285,6 @@ function baseState(overrides: Partial<JourneyState> = {}): FoldState {
     ...base,
     journey: {
       ...base.journey,
-      activeSiteId: SITE_ID,
       atlas: journeyAtlas(),
       currentDreamscape: NODE_ID,
       screen: { type: "site", siteId: SITE_ID },

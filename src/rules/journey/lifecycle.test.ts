@@ -264,7 +264,6 @@ describe("navigation", () => {
       type: "site",
       siteId: parseSiteId("site-1"),
     });
-    expect(siteScreen.journey.activeSiteId).toBe("site-1");
 
     expect(
       reduceGameEvent(
@@ -334,7 +333,6 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
     expect(next.journey.currentDreamscape).toBe("node-b");
     expect(next.journey.dreamscapeModifiers).toEqual([modifier(1, "two")]);
     expect(next.journey.screen).toEqual({ type: "dreamscape" });
-    expect(next.journey.activeSiteId).toBeNull();
   });
 });
 

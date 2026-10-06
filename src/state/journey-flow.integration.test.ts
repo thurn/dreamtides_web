@@ -90,7 +90,6 @@ describe("authoritative journey flow", () => {
       completionLevel: 1,
       essence: before.journey.essence + 75,
       currentDreamscape: null,
-      activeSiteId: null,
       screen: { type: "atlas" },
     });
     expect(isSiteVisited(state.journey, BATTLE_SITE_ID)).toBe(true);

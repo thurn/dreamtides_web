@@ -209,8 +209,7 @@ function isPassiveHostedHandoff(state: FoldState, event: GameEvent): boolean {
     return (
       typeof siteId === "string" &&
       state.journey.screen.type === "site" &&
-      state.journey.screen.siteId === siteId &&
-      state.journey.activeSiteId === siteId
+      state.journey.screen.siteId === siteId
     );
   }
   if (event.type !== "COMPLETE_SITE") return false;

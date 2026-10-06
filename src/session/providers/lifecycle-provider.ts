@@ -128,7 +128,6 @@ export function startJourneyFromAvatar({
     atlas,
     currentDreamscape: firstNode.id,
     screen: { type: "dreamscape" },
-    activeSiteId: null,
   };
 }
 
@@ -210,7 +209,6 @@ export function createJourneyLifecycleContentProvider(
             : completionLevel >= 7
               ? { type: "journeyComplete" }
               : { type: "atlas" },
-        activeSiteId: null,
       };
     },
   };

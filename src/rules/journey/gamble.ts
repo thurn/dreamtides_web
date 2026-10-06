@@ -70,7 +70,6 @@ function runtimeFor(
   if (
     site?.type !== "Gamble" ||
     site.isVisited ||
-    journey.activeSiteId !== siteId ||
     journey.screen.type !== "site" ||
     journey.screen.siteId !== siteId ||
     runtime?.kind !== "gamble"

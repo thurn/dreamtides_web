@@ -204,13 +204,11 @@ export function enterSite(
         },
       },
       screen: { type: "site", siteId: parseSiteId(siteId) },
-      activeSiteId: parseSiteId(siteId),
     };
   }
   return {
     ...journey,
     screen: { type: "site", siteId: parseSiteId(siteId) },
-    activeSiteId: parseSiteId(siteId),
   };
 }
 
@@ -258,7 +256,6 @@ export function travelToDreamscape(
     currentDreamscape: parsedNodeId,
     dreamscapeModifiers,
     screen: { type: "dreamscape" },
-    activeSiteId: null,
   };
 }
 
@@ -575,9 +572,6 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
     value.currentDreamscape !== null &&
     typeof value.currentDreamscape !== "string"
   ) {
-    return false;
-  }
-  if (value.activeSiteId !== null && typeof value.activeSiteId !== "string") {
     return false;
   }
   return true;

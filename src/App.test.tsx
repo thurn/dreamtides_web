@@ -184,7 +184,6 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
     siteRuntime: {},
     draftState: null,
     screen: { type: "journeyStart" },
-    activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: false,
     battleModifiers: [],

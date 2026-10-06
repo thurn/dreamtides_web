@@ -52,6 +52,7 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import { activeSiteIdOf } from "../../rules/journey/sites";
 import {
   buildTransfigurationDisplay,
   offeredTransfigurationForms,
@@ -2370,7 +2371,7 @@ function actionView(
       offer.selectionTrace === undefined &&
       offer.selectionTraces === undefined &&
       offer.offeredSiteType === undefined &&
-      siteInsertionPreparation.sourceSiteId === state.activeSiteId &&
+      siteInsertionPreparation.sourceSiteId === activeSiteIdOf(state) &&
       siteInsertionPreparation.sourceActionId === action.id &&
       siteInsertionPreparation.targetNodeId === state.currentDreamscape &&
       siteInsertionPreparation.targetNodeId === state.atlas.currentNodeId &&
@@ -2411,7 +2412,7 @@ function actionView(
       ) &&
       offer.selectionTraces === undefined &&
       offer.offeredSiteType === undefined &&
-      siteTypeChoicePreparation.sourceSiteId === state.activeSiteId &&
+      siteTypeChoicePreparation.sourceSiteId === activeSiteIdOf(state) &&
       siteTypeChoicePreparation.sourceActionId === action.id &&
       siteTypeChoicePreparation.targetNodeId === state.currentDreamscape &&
       siteTypeChoicePreparation.targetNodeId === state.atlas.currentNodeId &&
