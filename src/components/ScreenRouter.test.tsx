@@ -37,9 +37,12 @@ import {
   testDreamscapeId,
   testDreamsignId,
   testExplorationActionId,
+  testFoldHash,
   testGuideArtKey,
   testJourneySeed,
 } from "../types/test-identities";
+import { SELECTION_RULES_VERSION } from "../reward-selection";
+import { testGambleSelectionTrace } from "../testing/gamble-fixture";
 
 const motionPreference = vi.hoisted(() => ({ reduced: false, isPresent: true }));
 
@@ -419,7 +422,9 @@ describe("ScreenRouter site dispatch", () => {
     const state = makeStateFor(site);
     state.siteRuntime = {
       [site.id]: {
-        kind: "gamble", gameId: "gravok-three-gate-wager", roundNumber: 1, isFarpoint: false,
+        kind: "gamble", gameId: "gravok-three-gate-wager",
+        selectionTrace: testGambleSelectionTrace("gravok-three-gate-wager"),
+        roundNumber: 1, isFarpoint: false,
         wagerCost: 50, shuffleCommitment: parseShuffleCommitment("fixture-commitment"),
         committedCard: { rank: "A", suit: "spades" },
         dreamsignCandidateIds: [], rewardDreamsign: null, result: null,
@@ -457,6 +462,7 @@ describe("ScreenRouter site dispatch", () => {
       effectKind: "gain-card" as const, cardId: selected.id,
     }));
     journeyContent.exploration = {
+      foldHash: testFoldHash("e"),
       customCards: [],
       customDreamsigns: [],
       encounters: [{ cardId: selected.id, prose: "Fixture prose.", actions }],
@@ -464,9 +470,10 @@ describe("ScreenRouter site dispatch", () => {
     const state = makeStateFor(site);
     state.siteRuntime[site.id] = {
       kind: "exploration",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       encounterCardId: selected.id,
       actionOffers: actionIds.map((actionId) => ({
-        actionId, offeredCardIds: [], packCardIds: [],
+        actionId, canonicalMechanicId: "gain-card", offeredCardIds: [], packCardIds: [],
         replacementCardIdByEntryId: {}, transfigurationByEntryId: {},
       })),
       resolution: null,

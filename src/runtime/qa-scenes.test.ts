@@ -452,6 +452,7 @@ describe('the "exploration" QA scene', () => {
       throw new Error("Exploration QA fixture requires a catalog card.");
     }
     content.exploration = {
+      ...content.exploration,
       customCards: [],
       customDreamsigns: [],
       encounters: [

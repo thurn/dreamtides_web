@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { stableDigest } from "../../reward-selection/stable";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 
@@ -386,6 +387,7 @@ describe("augury view model", () => {
         [site.id]: {
           kind: "augury",
           completed: false,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
           rerollNonce: 5,
           encounter: persistedEncounter,
         },

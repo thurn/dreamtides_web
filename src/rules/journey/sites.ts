@@ -110,7 +110,8 @@ export interface SiteContentProvider {
     journey: JourneyState;
     site: SiteState;
     rng: (drawIndex: number) => number;
-    selectionRulesVersion?: SelectionRulesVersion;
+    /** Selection protocol named by the OPEN_SITE intent. */
+    selectionRulesVersion: SelectionRulesVersion;
     /** Optional URL-selected Gamble game written into the OPEN_SITE intent. */
     gambleGameId?: GambleGameId;
   }): SiteOpenResult | null;
@@ -337,9 +338,10 @@ function randomIntInRange(
 // ---------------------------------------------------------------------------
 
 /**
- * `OPEN_SITE { siteId }` — collapses the five legacy `ensure*SiteRuntime`
- * writers into one type-dispatched generator. Dispatches on the
- * site's TYPE:
+ * `OPEN_SITE { siteId, selectionRulesVersion }` — collapses the five legacy
+ * `ensure*SiteRuntime` writers into one type-dispatched generator. Every open
+ * names the selection protocol it was written under. Dispatches on the site's
+ * TYPE:
  *   - RandomSite / Essence: generated purely in-reducer from `ctx.rng`.
  *   - Augury / Exploration: delegated to the registered
  *     {@link SiteContentProvider} under the payload's `selectionRulesVersion`,
@@ -350,9 +352,10 @@ function randomIntInRange(
  * An existing runtime is authoritative, so a repeated event bounces without
  * regenerating it. The event-log intent key prevents repeated screen mounts and
  * connected clients from appending that repeated event. Bounces also cover a
- * malformed payload, an unknown site, a site type that has no runtime, a
- * content-coupled type with no provider wired, or an Augury / Exploration open
- * whose `selectionRulesVersion` is missing or names another protocol.
+ * malformed payload (including a missing `selectionRulesVersion`), an unknown
+ * site, a site type that has no runtime, a content-coupled type with no
+ * provider wired, or an Augury / Exploration open whose
+ * `selectionRulesVersion` names another protocol.
  */
 export function openSite(
   journey: JourneyState,
@@ -367,10 +370,13 @@ export function openSite(
   const site = findSite(journey, siteId);
   if (site === null) return null;
   const rawGambleGameId = payload.gambleGameId;
-  const rawSelectionRulesVersionValue = asString(payload.selectionRulesVersion);
-  const rawSelectionRulesVersion = rawSelectionRulesVersionValue === null
-    ? null
-    : parseSelectionRulesVersion(rawSelectionRulesVersionValue);
+  const rawSelectionRulesVersion = asString(payload.selectionRulesVersion);
+  if (rawSelectionRulesVersion === null || rawSelectionRulesVersion === "") {
+    return null;
+  }
+  const selectionRulesVersion = parseSelectionRulesVersion(
+    rawSelectionRulesVersion,
+  );
   if (
     rawGambleGameId !== undefined &&
     rawGambleGameId !== "gravok-three-gate-wager" &&
@@ -422,7 +428,7 @@ export function openSite(
     }
     case "Augury": {
       if (
-        rawSelectionRulesVersion !== SELECTION_RULES_VERSION ||
+        selectionRulesVersion !== SELECTION_RULES_VERSION ||
         contentProvider === null
       ) {
         return null;
@@ -431,7 +437,7 @@ export function openSite(
         journey,
         site,
         rng: ctx.rng,
-        selectionRulesVersion: rawSelectionRulesVersion,
+        selectionRulesVersion,
       });
       if (result === null) return null;
       return withRuntime(journey, siteId, result.runtime);
@@ -450,9 +456,7 @@ export function openSite(
         journey,
         site,
         rng: ctx.rng,
-        ...(rawSelectionRulesVersion === null
-          ? {}
-          : { selectionRulesVersion: rawSelectionRulesVersion }),
+        selectionRulesVersion,
         ...(rawGambleGameId === undefined
           ? {}
           : { gambleGameId: rawGambleGameId }),
@@ -879,7 +883,11 @@ export function completeAugury(
   const runtime: AugurySiteRuntime =
     existing?.kind === "augury"
       ? existing
-      : { kind: "augury", completed: false };
+      : {
+          kind: "augury",
+          completed: false,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        };
   return completeAndReturn(
     withRuntime(journey, siteId, { ...runtime, completed: true }),
     siteId,
@@ -908,6 +916,7 @@ export function rerollAugury(
   const runtime: AugurySiteRuntime = {
     kind: "augury",
     completed: false,
+    selectionRulesVersion: SELECTION_RULES_VERSION,
     rerollNonce: previousNonce + 1,
     ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
   };
@@ -941,6 +950,7 @@ export function forceAuguryArchetype(
   const runtime: AugurySiteRuntime = {
     kind: "augury",
     completed: false,
+    selectionRulesVersion: SELECTION_RULES_VERSION,
     rerollNonce: previousNonce + 1,
     ...(archetypeId === null ? {} : { forcedArchetypeId: archetypeId }),
   };

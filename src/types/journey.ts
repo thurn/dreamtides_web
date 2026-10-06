@@ -425,8 +425,6 @@ export interface CardChoiceTransfigurationOffer {
   type: TransfigurationType;
   /** Structured change used by player presentation. */
   change?: TransfigurationChange;
-  /** Legacy analytics/debug payload retained for imported runtime compatibility. */
-  effectDescription?: string;
   effectDetails: Record<string, unknown>;
   previewCard: CardData;
   /**
@@ -456,9 +454,14 @@ export type CardChoiceSiteRuntime = {
 export interface AugurySiteRuntime {
   kind: "augury";
   completed: boolean;
-  /** Shared-version runtimes persist their complete prepared encounter. */
-  selectionRulesVersion?: SelectionRulesVersion;
+  /** Selection protocol the runtime was created under. */
+  selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
+  /**
+   * The complete encounter prepared when the site opened. Absent on a debug
+   * rerolled runtime and on a runtime completed without opening; both
+   * regenerate the encounter from the journey parameters.
+   */
   encounter?: AuguryEncounter;
   /**
    * Debug reroll counter. Incremented by `rerollAugury` to regenerate the
@@ -511,8 +514,8 @@ export interface GambleSelectionTrace {
 export interface GravokWagerSiteRuntime {
   kind: "gamble";
   gameId: "gravok-three-gate-wager";
-  /** Absent only on persisted runtimes created before catalog tracing. */
-  selectionTrace?: GambleSelectionTrace;
+  /** Catalog selection inputs that chose this game. */
+  selectionTrace: GambleSelectionTrace;
   /** One-based wager number within this site visit. */
   roundNumber?: number;
   isFarpoint: boolean;
@@ -714,8 +717,8 @@ export interface ExplorationNightmareGain {
 
 export interface ExplorationActionOfferRuntime {
   actionId: ExplorationActionId;
-  /** Canonical internal mechanic and policy; omitted on legacy runtimes. */
-  canonicalMechanicId?: RewardMechanicId;
+  /** Canonical internal mechanic and policy. */
+  canonicalMechanicId: RewardMechanicId;
   selectionPolicyId?: RewardSelectionPolicyId;
   selectionRulesVersion?: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
@@ -883,7 +886,7 @@ export interface ExplorationResolution {
 /** Shared, replayable runtime for one Exploration encounter. */
 export interface ExplorationSiteRuntime {
   kind: "exploration";
-  selectionRulesVersion?: SelectionRulesVersion;
+  selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
   encounterSignature?: StableDigest;
   encounterCardId: CardId;
@@ -915,8 +918,8 @@ export interface TidemarkLadderClimbResult {
 export interface TidemarkLadderClimbSiteRuntime {
   kind: "gamble";
   gameId: "tidemark-ladder-climb";
-  /** Absent only on persisted runtimes created before catalog tracing. */
-  selectionTrace?: GambleSelectionTrace;
+  /** Catalog selection inputs that chose this game. */
+  selectionTrace: GambleSelectionTrace;
   isFarpoint: boolean;
   /** One independent full-deck commitment for each possible attempt. */
   shuffleCommitments: ShuffleCommitment[];
@@ -949,8 +952,8 @@ export type StarwayStairsTerminalReason = "bust" | "cashed-out" | "top";
 export interface StarwayStairsSiteRuntime {
   kind: "gamble";
   gameId: "starway-stairs";
-  /** Absent only on persisted runtimes created before catalog tracing. */
-  selectionTrace?: GambleSelectionTrace;
+  /** Catalog selection inputs that chose this game. */
+  selectionTrace: GambleSelectionTrace;
   /** One-based game number within this site visit. */
   roundNumber: number;
   isFarpoint: boolean;
@@ -995,8 +998,8 @@ export interface FourSuitRepriseRound {
 export interface FourSuitRepriseSiteRuntime {
   kind: "gamble";
   gameId: "four-suit-reprise";
-  /** Absent only on persisted runtimes created before catalog tracing. */
-  selectionTrace?: GambleSelectionTrace;
+  /** Catalog selection inputs that chose this game. */
+  selectionTrace: GambleSelectionTrace;
   isFarpoint: boolean;
   drawCost: number;
   /** One independent full-deck commitment for each possible round. */
@@ -1011,8 +1014,8 @@ export interface FourSuitRepriseSiteRuntime {
 export interface BlackjackSiteRuntime {
   kind: "gamble";
   gameId: "blackjack";
-  /** Absent only on persisted runtimes created before catalog tracing. */
-  selectionTrace?: GambleSelectionTrace;
+  /** Catalog selection inputs that chose this game. */
+  selectionTrace: GambleSelectionTrace;
   isFarpoint: boolean;
   wagerCost: number;
   prizeEssence: number;

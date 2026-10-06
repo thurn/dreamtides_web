@@ -95,6 +95,7 @@ import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testAvatarId, testCardId, testDreamsignId } from "../../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 
 // ---------------------------------------------------------------------------
 // Fixtures & engine config
@@ -563,7 +564,10 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   // sites (bounce without a SiteContentProvider / matching runtime)
   (rng) => ({
     type: "OPEN_SITE",
-    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
+    payload: {
+      siteId: parseSiteId(pick(rng, SITE_IDS)),
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    },
   }),
   (rng) => ({
     type: "COMPLETE_AUGURY",

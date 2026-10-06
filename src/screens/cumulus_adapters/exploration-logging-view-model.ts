@@ -171,7 +171,7 @@ export function buildExplorationEntryLog(
   return {
     presentedCardId: runtime.encounterCardId,
     encounterSignature: runtime.encounterSignature ?? null,
-    selectionRulesVersion: runtime.selectionRulesVersion ?? null,
+    selectionRulesVersion: runtime.selectionRulesVersion,
     selectionContentRevision: runtime.selectionContentRevision ?? null,
     actionIds: runtime.actionOffers.map((offer) => offer.actionId),
     actions: view.actions.map((action) => ({
@@ -185,7 +185,7 @@ export function buildExplorationEntryLog(
       ...compoundAuthoredFields(
         view.actions.find((action) => action.id === offer.actionId),
       ),
-      canonicalMechanicId: offer.canonicalMechanicId ?? null,
+      canonicalMechanicId: offer.canonicalMechanicId,
       selectionPolicyId: offer.selectionPolicyId ?? null,
       selectionRulesVersion: offer.selectionRulesVersion ?? null,
       selectionContentRevision: offer.selectionContentRevision ?? null,

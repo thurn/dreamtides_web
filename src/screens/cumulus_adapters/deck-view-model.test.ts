@@ -148,6 +148,9 @@ describe("desktop-deck-view-model", () => {
         database(a, b),
         null,
         [],
+        [],
+        tidesContext("tides4"),
+        testJourneySeed("run-seed"),
       );
 
       expect(view.cards.map((c) => c.entryId)).toEqual([

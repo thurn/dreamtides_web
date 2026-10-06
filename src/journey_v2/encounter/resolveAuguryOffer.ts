@@ -8,10 +8,12 @@ import type {
   AuguryApplyPayload,
   AuguryChoice,
   AuguryDeclineRequest,
+  AuguryEncounter,
   AuguryOffer,
   AuguryOfferFailureReason,
 } from "../types";
 import { generateAuguryEncounter } from "./generateAuguryEncounter";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 
@@ -76,7 +78,11 @@ function markSiteComplete(
     ...completed,
     siteRuntime: {
       ...completed.siteRuntime,
-      [siteId]: { kind: "augury", completed: true },
+      [siteId]: {
+        kind: "augury",
+        completed: true,
+        selectionRulesVersion: SELECTION_RULES_VERSION,
+      },
     },
   };
 }
@@ -108,15 +114,12 @@ function findCurrentOffer(input: {
 }): AuguryOffer | AuguryResolveFailureReason {
   const { state, journeyContent, site, request } = input;
   const runtime = state.siteRuntime[site.id];
-  let encounter = runtime?.kind === "augury" ? runtime.encounter : undefined;
-  if (
-    runtime?.kind === "augury" &&
-    runtime.selectionRulesVersion !== undefined
-  ) {
+  let encounter: AuguryEncounter;
+  if (runtime?.kind === "augury" && runtime.encounter !== undefined) {
     if (request.selectionRulesVersion !== runtime.selectionRulesVersion) {
       return "stale_encounter";
     }
-    if (encounter === undefined) return "encounter_unavailable";
+    encounter = runtime.encounter;
   } else {
     try {
       encounter = generateAuguryEncounter(
@@ -202,7 +205,7 @@ export function resolveAuguryDecline({
     const runtime = state.siteRuntime[site.id];
     if (
       runtime?.kind === "augury" &&
-      runtime.selectionRulesVersion !== undefined &&
+      runtime.encounter !== undefined &&
       request.selectionRulesVersion !== runtime.selectionRulesVersion
     ) {
       return { ok: false, reason: "stale_encounter", state };

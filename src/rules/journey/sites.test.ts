@@ -30,6 +30,7 @@ import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseShuffleCommitment } from "../../types/identifiers";
 import { testDreamscapeId, testDreamsignId, testExplorationActionId, testGuideId } from "../../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
+import { testGambleSelectionTrace } from "../../testing/gamble-fixture";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -226,7 +227,6 @@ const fakeProvider = testSiteContentProvider({
               {
                 entryId: parseDeckEntryId("deck-1"),
                 type: "Empowered",
-                effectDescription: "boost",
                 effectDetails: { draw },
                 previewCard: {} as never,
                 essenceCost: 50,
@@ -248,6 +248,7 @@ const fakeProvider = testSiteContentProvider({
           runtime: {
             kind: "gamble",
             gameId: "gravok-three-gate-wager",
+            selectionTrace: testGambleSelectionTrace("gravok-three-gate-wager"),
             roundNumber: 1,
             isFarpoint: site.isEnhanced,
             wagerCost: site.isEnhanced ? 0 : 50,
@@ -295,9 +296,11 @@ describe("Random Site", () => {
   it("persists three distinct deterministic home choices", () => {
     const first = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     const replay = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     expect(first.outcome).toBe("applied");
     expect(runtimeOf(first)).toEqual(runtimeOf(replay));
@@ -357,9 +360,11 @@ describe("OPEN_SITE generation determinism", () => {
       ];
       const a = reduce(siteState(type, { deck }), "OPEN_SITE", {
         siteId: SITE_ID,
+        selectionRulesVersion: SELECTION_RULES_VERSION,
       });
       const b = reduce(siteState(type, { deck }), "OPEN_SITE", {
         siteId: SITE_ID,
+        selectionRulesVersion: SELECTION_RULES_VERSION,
       });
       expect(a.outcome).toBe("applied");
       expect(b.outcome).toBe("applied");
@@ -407,9 +412,13 @@ describe("OPEN_SITE generation determinism", () => {
       },
     });
 
-    const opened = reduce(initial, "OPEN_SITE", { siteId: SITE_ID });
+    const opened = reduce(initial, "OPEN_SITE", {
+      siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    });
     const duplicate = reduce(opened.state, "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
 
     expect(opened.outcome).toBe("applied");
@@ -436,13 +445,21 @@ describe("OPEN_SITE generation determinism", () => {
 describe("OPEN_SITE idempotence", () => {
   beforeEach(() => registerSiteContentProvider(fakeProvider));
 
+  it("bounces an OPEN_SITE that names no selection protocol", () => {
+    const out = reduce(siteState("Essence"), "OPEN_SITE", { siteId: SITE_ID });
+    expect(out.outcome).toBe("bounced");
+    expect(runtimeOf(out)).toBeUndefined();
+  });
+
   it("bounces a repeated OPEN_SITE without changing or regenerating runtime", () => {
     const first = reduce(siteState("Essence"), "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     expect(first.outcome).toBe("applied");
     const second = reduce(first.state, "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     expect(second.outcome).toBe("bounced");
     // Runtime is not regenerated/overwritten: state hash unchanged.
@@ -464,6 +481,7 @@ describe("ACCEPT_ESSENCE", () => {
   function opened(): FoldState {
     return reduce(siteState("Essence", { essence: 0 }), "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     }).state;
   }
 
@@ -509,6 +527,7 @@ describe("ACCEPT_REWARD (essence reward)", () => {
     registerSiteContentProvider(fakeProvider);
     return reduce(siteState("Reward", { essence }), "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     }).state;
   }
 
@@ -574,6 +593,7 @@ describe("dreamsign offer accept / reject", () => {
     registerSiteContentProvider(fakeProvider);
     return reduce(siteState("DreamsignRevelation", overrides), "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     }).state;
   }
 
@@ -630,7 +650,13 @@ describe("Augury", () => {
         openSite({ site, selectionRulesVersion }) {
           requestedVersions.push(selectionRulesVersion);
           return site.type === "Augury"
-            ? { runtime: { kind: "augury", completed: false } }
+            ? {
+                runtime: {
+                  kind: "augury",
+                  completed: false,
+                  selectionRulesVersion,
+                },
+              }
             : null;
         },
       }),
@@ -668,7 +694,13 @@ describe("Augury", () => {
 
   it("REROLL_AUGURY advances the runtime (nonce bumped, hash differs)", () => {
     const opened = siteState("Augury", {
-      siteRuntime: { [SITE_ID]: { kind: "augury", completed: false } },
+      siteRuntime: {
+        [SITE_ID]: {
+          kind: "augury",
+          completed: false,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+      },
     });
     const before = JSON.stringify(opened.journey.siteRuntime[SITE_ID]);
     const out = reduce(opened, "REROLL_AUGURY", { siteId: SITE_ID });
@@ -699,7 +731,7 @@ describe("ACCEPT_TRANSFIGURATION_CHOICE", () => {
     return reduce(
       siteState("Transfiguration", { deck, essence }),
       "OPEN_SITE",
-      { siteId: SITE_ID },
+      { siteId: SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION },
     ).state;
   }
 
@@ -730,6 +762,7 @@ describe("ACCEPT_DUPLICATION_CHOICE", () => {
     ];
     return reduce(siteState("Duplication", { deck }), "OPEN_SITE", {
       siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     }).state;
   }
 

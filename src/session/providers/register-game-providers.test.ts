@@ -12,6 +12,7 @@ import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { loadTestSitesData } from "../../testing/atlas-fixtures";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 //
 //   START_JOURNEY -> SELECT_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
@@ -274,7 +275,12 @@ describe("registerGameProviders (real content providers)", () => {
       ) {
         openedTypes.add(site.type);
         seq += 1;
-        tail.push(ev(seq, "OPEN_SITE", { siteId: site.id }));
+        tail.push(
+          ev(seq, "OPEN_SITE", {
+            siteId: site.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          }),
+        );
         if (site.type === "Shop" || site.type === "DreamsignBazaar") {
           seq += 1;
           tail.push(ev(seq, "REROLL_SHOP", { siteId: site.id }));
@@ -421,6 +427,7 @@ describe("registerGameProviders (real content providers)", () => {
       journey: tutorialJourney,
       site: revelation,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
 
     expect(result?.runtime.kind).toBe("dreamsignOffer");
@@ -451,7 +458,12 @@ describe("registerGameProviders (real content providers)", () => {
     };
     const provider = createSiteContentProvider(content);
 
-    const opened = provider.openSite({ journey, site: shop, rng: () => 0 });
+    const opened = provider.openSite({
+      journey,
+      site: shop,
+      rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    });
 
     expect(opened?.runtime.kind).toBe("shop");
     if (opened?.runtime.kind !== "shop") return;
@@ -524,6 +536,7 @@ describe("registerGameProviders (real content providers)", () => {
       journey: { ...started, siteOfferModifiers: [modifier] },
       site: shop,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
 
     expect(result?.siteOfferModifiers).toEqual([]);
@@ -584,6 +597,7 @@ describe("registerGameProviders (real content providers)", () => {
         isVisited: false,
       },
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     expect(bazaar?.runtime).toMatchObject({
       kind: "shop",
@@ -601,6 +615,7 @@ describe("registerGameProviders (real content providers)", () => {
         isVisited: false,
       },
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     expect(shopResult?.runtime).toMatchObject({
       kind: "shop",
@@ -839,80 +854,94 @@ describe("createSiteContentProvider — Gamble", () => {
       journey,
       site,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     const randomLadderRolls = [0.3, 0];
     const randomLadder = provider.openSite({
       journey,
       site,
       rng: () => randomLadderRolls.shift() ?? 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     const randomStarway = provider.openSite({
       journey,
       site,
       rng: () => 0.5,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     const randomFourSuit = provider.openSite({
       journey,
       site,
       rng: () => 0.7,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     const randomBlackjack = provider.openSite({
       journey,
       site,
       rng: () => 0.999,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     });
     const forcedThreeGate = provider.openSite({
       journey,
       site,
       rng: () => 0.999,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "gravok-three-gate-wager",
     });
     const forcedLadder = provider.openSite({
       journey,
       site,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "tidemark-ladder-climb",
     });
     const forcedStarway = provider.openSite({
       journey,
       site,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "starway-stairs",
     });
     const forcedFourSuit = provider.openSite({
       journey,
       site,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "four-suit-reprise",
     });
     const forcedBlackjack = provider.openSite({
       journey,
       site,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "blackjack",
     });
     const farpointThreeGate = provider.openSite({
       journey,
       site: farpointSite,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "gravok-three-gate-wager",
     });
     const farpointStarway = provider.openSite({
       journey,
       site: farpointSite,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "starway-stairs",
     });
     const farpointFourSuit = provider.openSite({
       journey,
       site: farpointSite,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "four-suit-reprise",
     });
     const farpointBlackjack = provider.openSite({
       journey,
       site: farpointSite,
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "blackjack",
     });
 
@@ -1062,6 +1091,7 @@ describe("createSiteContentProvider — Gamble", () => {
         type: "Gamble",
       }),
       rng: () => 0.999,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "tidemark-ladder-climb",
     });
 
@@ -1091,6 +1121,7 @@ describe("createSiteContentProvider — Gamble", () => {
         type: "Gamble",
       }),
       rng: () => 0,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       gambleGameId: "tidemark-ladder-climb",
     });
 

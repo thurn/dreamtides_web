@@ -129,10 +129,11 @@ export interface ExplorationEncounterContent {
 }
 
 export interface ExplorationContent {
+  /** Catalog identity pinned in the game's content config. */
+  foldHash: FoldHash;
   /** Present on compiler output; optional only for focused synthetic fixtures. */
   schemaVersion?: 2;
   contentHash?: ContentHash;
-  foldHash?: FoldHash;
   customCards: readonly CardData[];
   customDreamsigns: readonly Dreamsign[];
   encounters: readonly ExplorationEncounterContent[];

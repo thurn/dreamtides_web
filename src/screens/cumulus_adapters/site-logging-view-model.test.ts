@@ -31,7 +31,10 @@ import type {
   BlackjackSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import { getLogEntries, resetLog } from "../../logging";
-import { gambleFixture } from "../../testing/gamble-fixture";
+import {
+  gambleFixture,
+  testGambleSelectionTrace,
+} from "../../testing/gamble-fixture";
 import {
   logGamblePrepared,
   logGambleResolved,
@@ -241,6 +244,7 @@ describe("gamble-site-logging-view-model", () => {
   const RUNTIME: TidemarkLadderClimbSiteRuntime = {
     kind: "gamble",
     gameId: "tidemark-ladder-climb",
+    selectionTrace: testGambleSelectionTrace("tidemark-ladder-climb"),
     isFarpoint: false,
     shuffleCommitments: [
       parseShuffleCommitment("attempt-1"),
@@ -315,6 +319,7 @@ describe("gamble-site-logging-view-model", () => {
       expect(getLogEntries()[0]).toMatchObject({
         event: "gamble_wager_settled",
         gameId: "tidemark-ladder-climb",
+        selectionTrace: testGambleSelectionTrace("tidemark-ladder-climb"),
         gambleFoldHash: gambleFixture().foldHash,
         attemptNumber: 1,
         cumulativeCost: 0,
@@ -344,6 +349,7 @@ describe("gamble-site-logging-view-model", () => {
       const runtime: FourSuitRepriseSiteRuntime = {
         kind: "gamble",
         gameId: "four-suit-reprise",
+        selectionTrace: testGambleSelectionTrace("four-suit-reprise"),
         isFarpoint: false,
         drawCost: 25,
         shuffleCommitments: [
@@ -366,7 +372,6 @@ describe("gamble-site-logging-view-model", () => {
               {
                 entryId: parseDeckEntryId("entry-101"),
                 type: "Empowered",
-                effectDescription: "Fixture form.",
                 effectDetails: { fixture: true },
                 previewCard: { ...card, energyCost: 1 },
                 essenceCost: 0,
@@ -419,6 +424,7 @@ describe("gamble-site-logging-view-model", () => {
       expect(getLogEntries()[0]).toMatchObject({
         event: "gamble_game_prepared",
         gameId: "four-suit-reprise",
+        selectionTrace: testGambleSelectionTrace("four-suit-reprise"),
         drawCost: 25,
         outcomes: [
           { suit: "spades", outcome: "transfiguration" },
@@ -447,6 +453,7 @@ describe("gamble-site-logging-view-model", () => {
       const runtime: BlackjackSiteRuntime = {
         kind: "gamble",
         gameId: "blackjack",
+        selectionTrace: testGambleSelectionTrace("blackjack"),
         isFarpoint: false,
         wagerCost: 50,
         prizeEssence: 300,
@@ -499,6 +506,7 @@ describe("gamble-site-logging-view-model", () => {
       expect(getLogEntries()[0]).toMatchObject({
         event: "gamble_game_prepared",
         gameId: "blackjack",
+        selectionTrace: testGambleSelectionTrace("blackjack"),
         wagerCost: 50,
         prizeEssence: 300,
         dealerRule: "stand-soft-17",

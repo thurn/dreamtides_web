@@ -164,7 +164,7 @@ export interface EventPayloads {
   // --- sites ---
   OPEN_SITE: {
     siteId: SiteId;
-    selectionRulesVersion?: SelectionRulesVersion;
+    selectionRulesVersion: SelectionRulesVersion;
     gambleGameId?:
       | "gravok-three-gate-wager"
       | "tidemark-ladder-climb"
@@ -176,7 +176,7 @@ export interface EventPayloads {
   RESOLVE_EXPLORATION_CHOICE: {
     siteId: SiteId;
     actionId: ExplorationActionId;
-    selectionRulesVersion?: SelectionRulesVersion;
+    selectionRulesVersion: SelectionRulesVersion;
     selection?: unknown;
   };
   COMPLETE_AUGURY: { siteId: SiteId };

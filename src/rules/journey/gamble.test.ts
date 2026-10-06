@@ -32,6 +32,7 @@ import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { testCardId, testDreamscapeId, testDreamsignId } from "../../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
+import { testGambleSelectionTrace } from "../../testing/gamble-fixture";
 
 const SITE_ID = parseSiteId("fixture-gamble");
 const NODE_ID = parseAtlasNodeId("fixture-node");
@@ -55,6 +56,7 @@ function runtime(
   return {
     kind: "gamble",
     gameId: "gravok-three-gate-wager",
+    selectionTrace: testGambleSelectionTrace("gravok-three-gate-wager"),
     roundNumber: 1,
     isFarpoint: false,
     wagerCost: 50,
@@ -367,6 +369,7 @@ function ladderRuntime(
   return {
     kind: "gamble",
     gameId: "tidemark-ladder-climb",
+    selectionTrace: testGambleSelectionTrace("tidemark-ladder-climb"),
     isFarpoint: false,
     shuffleCommitments: [
       parseShuffleCommitment("attempt-1"),
@@ -509,6 +512,7 @@ function starwayRuntime(
   return {
     kind: "gamble",
     gameId: "starway-stairs",
+    selectionTrace: testGambleSelectionTrace("starway-stairs"),
     roundNumber: 1,
     isFarpoint: false,
     wagerAmount: 30,
@@ -677,7 +681,6 @@ function fourSuitTarget(
       {
         entryId: parseDeckEntryId(entryId),
         type: "Empowered",
-        effectDescription: "Fixture form.",
         effectDetails: {},
         previewCard: { ...card, energyCost: 2 },
         essenceCost: 0,
@@ -693,6 +696,7 @@ function fourSuitRuntime(
   return {
     kind: "gamble",
     gameId: "four-suit-reprise",
+    selectionTrace: testGambleSelectionTrace("four-suit-reprise"),
     isFarpoint: false,
     drawCost: 25,
     shuffleCommitments: [
@@ -889,6 +893,7 @@ function blackjackRuntime(
   return {
     kind: "gamble",
     gameId: "blackjack",
+    selectionTrace: testGambleSelectionTrace("blackjack"),
     isFarpoint: false,
     wagerCost: 50,
     prizeEssence: 300,

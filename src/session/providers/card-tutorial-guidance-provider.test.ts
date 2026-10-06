@@ -15,7 +15,12 @@ import { buildExplorationRuntime } from "./exploration-provider";
 import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guidance-provider";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testExplorationActionId, testCardId } from "../../types/test-identities";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
+import {
+  testCardId,
+  testExplorationActionId,
+  testFoldHash,
+} from "../../types/test-identities";
 
 function uuid(index: number) {
   return testCardId(
@@ -50,6 +55,7 @@ describe("card tutorial guidance content provider", () => {
         [site.id]: {
           kind: "augury",
           completed: false,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
           forcedArchetypeId: "transfigured_draft",
         },
       },
@@ -88,6 +94,7 @@ describe("card tutorial guidance content provider", () => {
       essencePerCard: 1,
     };
     const exploration: ExplorationContent = {
+      foldHash: testFoldHash("e"),
       customCards: [],
       customDreamsigns: [],
       encounters: [

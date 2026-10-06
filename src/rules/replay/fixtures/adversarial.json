@@ -64,7 +64,8 @@
       "event": {
         "type": "OPEN_SITE",
         "payload": {
-          "siteId": "site-essence"
+          "siteId": "site-essence",
+          "selectionRulesVersion": "2"
         },
         "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -76,7 +77,8 @@
       "event": {
         "type": "OPEN_SITE",
         "payload": {
-          "siteId": "site-essence"
+          "siteId": "site-essence",
+          "selectionRulesVersion": "2"
         },
         "actor": "bob",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",

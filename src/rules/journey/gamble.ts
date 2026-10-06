@@ -43,6 +43,7 @@ import type {
 import type { EventContext } from "../../eventlog/types";
 import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import type { SiteId } from "../../types/identifiers";
 import { siteIdFromUnknown } from "../../types/identifiers";
 import { shuffleCommitmentFromUnknown } from "../../types/identifiers";
@@ -352,6 +353,7 @@ export function playAgainBlackjack(
     journey,
     site,
     rng: ctx.rng,
+    selectionRulesVersion: SELECTION_RULES_VERSION,
     gambleGameId: "blackjack",
   });
   if (
@@ -519,6 +521,7 @@ export function playAgainGravokWager(
     journey,
     site,
     rng: ctx.rng,
+    selectionRulesVersion: SELECTION_RULES_VERSION,
     gambleGameId: "gravok-three-gate-wager",
   });
   if (
@@ -888,6 +891,7 @@ export function playAgainStarwayStairs(
     journey,
     site,
     rng: ctx.rng,
+    selectionRulesVersion: SELECTION_RULES_VERSION,
     gambleGameId: "starway-stairs",
   });
   if (

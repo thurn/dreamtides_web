@@ -20,7 +20,7 @@ function gambleCatalogLogFields(
   return {
     gameId: runtime.gameId,
     gambleFoldHash: gambleData.foldHash,
-    selectionTrace: runtime.selectionTrace ?? null,
+    selectionTrace: runtime.selectionTrace,
   };
 }
 

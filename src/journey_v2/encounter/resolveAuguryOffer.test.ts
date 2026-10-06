@@ -1,6 +1,10 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { stableDigest } from "../../reward-selection/stable";
+import {
+  parseSelectionRulesVersion,
+  SELECTION_RULES_VERSION,
+} from "../../reward-selection/types";
 import { parseCardName } from "../../types/card-identity";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
@@ -122,6 +126,28 @@ function encounterFor(fixture: {
   );
 }
 
+/** The fixture with an Augury runtime that carries no persisted encounter. */
+function withUnpreparedRuntime(fixture: {
+  state: JourneyState;
+  journeyContent: JourneyContent;
+  site: SiteState;
+}) {
+  return {
+    ...fixture,
+    state: {
+      ...fixture.state,
+      siteRuntime: {
+        ...fixture.state.siteRuntime,
+        [fixture.site.id]: {
+          kind: "augury" as const,
+          completed: false,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+      },
+    },
+  };
+}
+
 function requestFor(offer: AuguryOffer): AuguryAcceptRequest {
   return {
     encounterSignature: offer.encounterSignature,
@@ -218,6 +244,67 @@ describe("resolveAuguryOffer", () => {
         ),
       ),
     );
+  });
+
+  it("accepts against the regenerated encounter when the runtime persisted none", () => {
+    const fixture = withUnpreparedRuntime(makeFixture());
+    const directOffer = encounterFor(fixture).offers.find(
+      (offer) => offer.applyPayload !== undefined,
+    );
+    expect(directOffer).toBeDefined();
+    if (directOffer === undefined) return;
+    const result = resolveAuguryOffer({
+      state: fixture.state,
+      journeyContent: fixture.journeyContent,
+      site: fixture.site,
+      request: requestFor(directOffer),
+    });
+    expect(result.ok).toBe(true);
+  });
+
+  it("declines against the regenerated encounter when the runtime persisted none", () => {
+    const fixture = withUnpreparedRuntime(makeFixture());
+    const encounter = encounterFor(fixture);
+    const result = resolveAuguryDecline({
+      state: fixture.state,
+      journeyContent: fixture.journeyContent,
+      site: fixture.site,
+      request: {
+        encounterSignature: encounter.encounterSignature,
+        offerId: encounter.offers[0].offerId,
+      },
+    });
+    expect(result.ok).toBe(true);
+  });
+
+  it("rejects a request naming another protocol than the persisted encounter", () => {
+    const base = makeFixture();
+    const encounter = encounterFor(base);
+    const state: JourneyState = {
+      ...base.state,
+      siteRuntime: {
+        ...base.state.siteRuntime,
+        [base.site.id]: {
+          kind: "augury",
+          completed: false,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          encounter,
+        },
+      },
+    };
+    const result = resolveAuguryOffer({
+      state,
+      journeyContent: base.journeyContent,
+      site: base.site,
+      request: {
+        ...requestFor(encounter.offers[0]),
+        selectionRulesVersion: parseSelectionRulesVersion("other-protocol"),
+      },
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.reason).toBe("stale_encounter");
+    expect(result.state).toBe(state);
   });
 
   it("declines without mutating deck or dreamsigns and completes the site", () => {

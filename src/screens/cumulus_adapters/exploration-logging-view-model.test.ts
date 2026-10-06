@@ -15,7 +15,10 @@ import {
   testExplorationActionId,
 } from "../../types/test-identities";
 import { parseSelectionContentRevision } from "../../types/selection-content-revision";
-import { parseSelectionRulesVersion } from "../../reward-selection/types";
+import {
+  parseSelectionRulesVersion,
+  SELECTION_RULES_VERSION,
+} from "../../reward-selection/types";
 
 describe("exploration logging view model", () => {
   it("records the complete signed plan and ordered result for a compound deck mutation", () => {
@@ -213,10 +216,12 @@ describe("exploration logging view model", () => {
     } as unknown as ExplorationSiteView;
     const runtime: ExplorationSiteRuntime = {
       kind: "exploration",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       encounterCardId: testCardId("encounter-card-uuid"),
       actionOffers: [
         {
           actionId: actionId,
+          canonicalMechanicId: "duplicate-deck-entry",
           offeredCardIds: [],
           offeredDeckEntryIds: [parseDeckEntryId(offeredEntryId)],
           packCardIds: [],
@@ -294,10 +299,12 @@ describe("exploration logging view model", () => {
     } as unknown as ExplorationSiteView;
     const runtime: ExplorationSiteRuntime = {
       kind: "exploration",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       encounterCardId: testCardId("encounter-card-uuid"),
       actionOffers: [
         {
           actionId: actionId,
+          canonicalMechanicId: "next-site-transfiguration",
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},

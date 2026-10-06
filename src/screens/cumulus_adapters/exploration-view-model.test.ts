@@ -38,7 +38,10 @@ import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSelectionKey } from "../../types/identifiers";
 import { parseSelectionContentRevision } from "../../types/selection-content-revision";
-import { parseSelectionRulesVersion } from "../../reward-selection/types";
+import {
+  parseSelectionRulesVersion,
+  SELECTION_RULES_VERSION,
+} from "../../reward-selection/types";
 import {
   testDreamscapeId,
   testDreamsignId,
@@ -123,10 +126,12 @@ describe("exploration-view-model", () => {
     };
     const runtime: ExplorationSiteRuntime = {
       kind: "exploration",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       encounterCardId: source.id,
       actionOffers: [
         {
           actionId: testExplorationActionId("action-a"),
+          canonicalMechanicId: "purge-and-duplicate",
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -134,6 +139,7 @@ describe("exploration-view-model", () => {
         },
         {
           actionId: testExplorationActionId("action-b"),
+          canonicalMechanicId: "gain-card",
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -255,10 +261,12 @@ describe("exploration-view-model", () => {
     };
     const runtime: ExplorationSiteRuntime = {
       kind: "exploration",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
       encounterCardId: source.id,
       actionOffers: [
         {
           actionId: testExplorationActionId("inspire-event"),
+          canonicalMechanicId: "transfigure-deck-entry",
           offeredCardIds: [],
           offeredDeckEntryIds: [parseDeckEntryId("entry-target")],
           packCardIds: [],
@@ -267,6 +275,7 @@ describe("exploration-view-model", () => {
         },
         {
           actionId: testExplorationActionId("gain-card"),
+          canonicalMechanicId: "gain-card",
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -435,10 +444,12 @@ describe("exploration-view-model", () => {
         content,
         runtime: {
           kind: "exploration",
+          selectionRulesVersion: SELECTION_RULES_VERSION,
           encounterCardId: source.id,
           actionOffers: [
             {
               actionId: action.id,
+              canonicalMechanicId: "purge-deck-entry",
               starterCardPreparation,
               offeredCardIds: [],
               offeredDeckEntryIds:
@@ -451,6 +462,7 @@ describe("exploration-view-model", () => {
             },
             {
               actionId: testExplorationActionId("starter-fallback"),
+              canonicalMechanicId: "gain-card",
               offeredCardIds: [],
               packCardIds: [],
               replacementCardIdByEntryId: {},

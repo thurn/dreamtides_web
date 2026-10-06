@@ -220,6 +220,7 @@ describe("shared reward selection", () => {
     const content = {
       ...base.content,
       exploration: {
+        ...base.content.exploration,
         customCards: [],
         customDreamsigns: [
           {

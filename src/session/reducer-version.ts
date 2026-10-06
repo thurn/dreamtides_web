@@ -12,35 +12,9 @@ import type { ReducerVersion } from "../types/reducer-version";
 export const CURRENT_REDUCER_VERSION =
   "dreamtides-coop-v26" satisfies ReducerVersion;
 
-/**
- * Build-scoped reducer ids from earlier builds whose fold behavior was
- * reviewed against {@link CURRENT_REDUCER_VERSION}.
- *
- * These exact ids bridge games created before semantic reducer versioning.
- * Keep the full id: its digest includes generated runtime catalogs, so a
- * different catalog build is not accepted accidentally.
- */
-export const COMPATIBLE_LEGACY_REDUCER_VERSIONS: ReadonlySet<ReducerVersion> =
-  new Set();
-
-export type ReducerCompatibility = "current" | "legacy" | "incompatible";
-
-/** Classify whether this build may safely fold a stored game. */
-export function classifyReducerVersion(
-  gameReducerVersion: ReducerVersion,
-): ReducerCompatibility {
-  if (gameReducerVersion === CURRENT_REDUCER_VERSION) {
-    return "current";
-  }
-  if (COMPATIBLE_LEGACY_REDUCER_VERSIONS.has(gameReducerVersion)) {
-    return "legacy";
-  }
-  return "incompatible";
-}
-
 /** Whether this build may safely fold and append to a stored game. */
 export function isReducerVersionCompatible(
   gameReducerVersion: ReducerVersion,
 ): boolean {
-  return classifyReducerVersion(gameReducerVersion) !== "incompatible";
+  return gameReducerVersion === CURRENT_REDUCER_VERSION;
 }

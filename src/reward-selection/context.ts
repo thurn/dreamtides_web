@@ -57,7 +57,7 @@ function selectionContentRevision(content: JourneyContent): SelectionContentRevi
     tides: content.poolContext.poolData.tides4Decks,
     auguryFoldHash: content.auguryData.foldHash,
     sitesFoldHash: content.sitesData.foldHash,
-    explorationFoldHash: content.exploration.foldHash ?? null,
+    explorationFoldHash: content.exploration.foldHash,
   }));
 }
 

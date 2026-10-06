@@ -1,15 +1,13 @@
-declare const legacyReducerVersionBrand: unique symbol;
+declare const reducerVersionBrand: unique symbol;
 
 export type KnownReducerVersion =
   | `dreamtides-coop-v${number}`
   | "fixture"
-  | "test"
-  | "v1"
-  | "build-abc";
-type LegacyReducerVersion = string & {
-  readonly [legacyReducerVersionBrand]: "ReducerVersion";
+  | "test";
+type ParsedReducerVersion = string & {
+  readonly [reducerVersionBrand]: "ReducerVersion";
 };
-export type ReducerVersion = KnownReducerVersion | LegacyReducerVersion;
+export type ReducerVersion = KnownReducerVersion | ParsedReducerVersion;
 
 export function parseReducerVersion(value: unknown): ReducerVersion {
   if (typeof value !== "string" || value.trim() === "") {

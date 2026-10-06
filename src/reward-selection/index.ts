@@ -8,5 +8,4 @@ export {
   type RewardSelectionPolicyId,
   type RewardSelectionRequest,
   type RewardSelectionResult,
-  type SelectionRulesVersion,
 } from "./types";

@@ -41,7 +41,6 @@ export type OutcomeListener = (
 
 interface LocalGameContextValue {
   game: LocalGame<FoldState>;
-  append: AppendFn;
   actions: GameActions;
 }
 
@@ -112,7 +111,6 @@ export function LocalGameProvider({
   const value = useMemo<LocalGameContextValue>(
     () => ({
       game,
-      append,
       actions: makeActions(append),
     }),
     [append, game],
@@ -163,11 +161,6 @@ export function useConfirmedHead(): number | null {
 /** The local player's id: the default actor of every intent and the controller. */
 export function useClientId(): ClientId {
   return useLocalGameContext().game.localPlayerId;
-}
-
-/** Appends one intent to the game log, resolving to its seq. */
-export function useAppend(): AppendFn {
-  return useLocalGameContext().append;
 }
 
 /** The named action facade, bound to the game log. */

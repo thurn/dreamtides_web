@@ -170,13 +170,19 @@ function eligibleGambleDreamsigns(
   return { dreamsignCandidateIds, templatesById, templates };
 }
 
+/** A Gamble runtime before the catalog trace that selected its game is attached. */
+type Untraced<T extends GambleSiteRuntime> = T extends GambleSiteRuntime
+  ? Omit<T, "selectionTrace">
+  : never;
+type UntracedGambleSiteRuntime = Untraced<GambleSiteRuntime>;
+
 function buildGravokWagerRuntime(
   journey: JourneyState,
   site: SiteState,
   content: JourneyContent,
   game: ThreeGateGame,
   rng: () => number,
-): GambleSiteRuntime {
+): UntracedGambleSiteRuntime {
   const shuffleCommitment = gambleShuffleCommitment(rng);
   const committedCard = gambleCommittedCard(rng);
   const { dreamsignCandidateIds, templatesById } = eligibleGambleDreamsigns(
@@ -213,7 +219,7 @@ function buildTidemarkLadderClimbRuntime(
   content: JourneyContent,
   game: LadderClimbGame,
   rng: () => number,
-): TidemarkLadderClimbSiteRuntime | null {
+): Untraced<TidemarkLadderClimbSiteRuntime> | null {
   const { templates } = eligibleGambleDreamsigns(journey, content);
   if (templates.length === 0) return null;
   const commitments = Array.from({ length: 4 }, () => ({
@@ -268,7 +274,7 @@ function buildStarwayStairsRuntime(
   site: SiteState,
   game: StarwayStairsGame,
   rng: () => number,
-): StarwayStairsSiteRuntime {
+): Untraced<StarwayStairsSiteRuntime> {
   const commitments = game.rules.tiers.map(() => ({
     shuffleCommitment: parseShuffleCommitment(gambleShuffleCommitment(rng)),
     card: gambleCommittedCard(rng),
@@ -295,7 +301,7 @@ function buildFourSuitRepriseRuntime(
   content: JourneyContent,
   game: FourSuitRepriseGame,
   rng: () => number,
-): FourSuitRepriseSiteRuntime | null {
+): Untraced<FourSuitRepriseSiteRuntime> | null {
   const targets = journey.deck.flatMap((entry) => {
     if (entry.isBane || entry.transfiguration !== null) return [];
     const baseCard = content.cardDatabase.get(entry.cardNumber);
@@ -353,7 +359,7 @@ function buildBlackjackRuntime(
   site: SiteState,
   game: BlackjackGame,
   rng: () => number,
-): BlackjackSiteRuntime {
+): Untraced<BlackjackSiteRuntime> {
   const economy = game.economy;
   return {
     kind: "gamble",
@@ -430,7 +436,7 @@ function buildGambleRuntimeFromDefinition(
   content: JourneyContent,
   rng: () => number,
   game: GambleGameDefinition,
-): GambleSiteRuntime {
+): UntracedGambleSiteRuntime {
   if (
     game.rules.kind === "ladderClimb" &&
     game.economy.kind === "ladderClimb"
@@ -487,7 +493,7 @@ function buildGambleFallbackRuntime(
   site: SiteState,
   content: JourneyContent,
   rng: () => number,
-): GambleSiteRuntime {
+): UntracedGambleSiteRuntime {
   const gambleData = content.gambleData;
   const fallback = gambleGame(gambleData, GAMBLE_FALLBACK_GAME_ID);
   return buildGambleRuntimeFromDefinition(

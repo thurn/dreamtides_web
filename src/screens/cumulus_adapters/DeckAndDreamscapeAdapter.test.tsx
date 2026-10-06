@@ -552,7 +552,8 @@ describe("DesktopDeckViewerAdapter", () => {
       cardDatabase,
       journeyContent: {
         cardDatabase,
-      } as JourneyContent,
+        avatars: [],
+      } as unknown as JourneyContent,
     });
   }
 

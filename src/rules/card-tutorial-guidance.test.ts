@@ -173,7 +173,6 @@ function transfigurationSiteState(): FoldState {
             {
               entryId: parseDeckEntryId("entry-a"),
               type: "Empowered",
-              effectDescription: "Costs 1 less.",
               effectDetails: {},
               previewCard: card("card-a", 1, "Support."),
               essenceCost: 20,

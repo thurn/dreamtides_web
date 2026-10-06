@@ -124,6 +124,7 @@ function contentFixture(
 ): JourneyContent {
   const cards = catalogCards();
   const exploration: ExplorationContent = {
+    foldHash: testFoldHash("a"),
     customCards: [],
     customDreamsigns: [],
     encounters: [
@@ -405,7 +406,6 @@ describe("Exploration provider", () => {
       selectionRulesVersion: SELECTION_RULES_VERSION,
     });
 
-    expect(provider.openSite(input)).toBeNull();
     expect(current?.runtime).toMatchObject({
       kind: "exploration",
       selectionRulesVersion: SELECTION_RULES_VERSION,
@@ -5760,6 +5760,7 @@ describe("Exploration provider", () => {
         journey: resolved,
         site: preparation.insertedSite,
         rng: () => 0.25,
+        selectionRulesVersion: SELECTION_RULES_VERSION,
       });
       if (siteType === "Purge") {
         expect(route).toBeNull();

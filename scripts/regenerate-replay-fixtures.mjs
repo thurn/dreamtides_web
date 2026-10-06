@@ -25,6 +25,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
 import { replayLog } from "../src/rules/replay/replay.ts";
+import { SELECTION_RULES_VERSION } from "../src/reward-selection/types.ts";
 import {
   BATTLE_CARD_DETERMINISTIC,
   BATTLE_CARD_FORESEE,
@@ -124,9 +125,9 @@ function journeyOnlyFixture() {
   const events = chain("p1", [
     ["START_JOURNEY", { avatarId: AVATAR_ID }],
     ["SELECT_AVATAR", { avatarId: AVATAR_ID }],
-    ["OPEN_SITE", { siteId: ESSENCE_SITE_ID }],
+    ["OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }],
     ["ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }],
-    ["OPEN_SITE", { siteId: SHOP_SITE_ID }],
+    ["OPEN_SITE", { siteId: SHOP_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }],
     ["BUY_SHOP_SLOT", { siteId: SHOP_SITE_ID, slotIndex: 0 }],
   ]);
   expectOutcomes("journey-only", events, gen, {
@@ -208,8 +209,8 @@ function adversarialFixture() {
     ev(4, "ENTER_SITE", { siteId: ESSENCE_SITE_ID }, "alice", 3),
     // OPEN_SITE race — both are accepted at the log boundary; bob's reducer
     // attempt observes the already-open runtime and bounces.
-    ev(5, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "alice", 4),
-    ev(6, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "bob", 4),
+    ev(5, "OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }, "alice", 4),
+    ev(6, "OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }, "bob", 4),
     ev(7, "ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }, "alice", 6),
     ev(8, "ENTER_SITE", { siteId: BATTLE_SITE_ID }, "alice", 7),
     // Begin a battle and park a Dreamwell Foresee prompt.

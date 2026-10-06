@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import { testJourneyState } from "../../testing/journey-genesis";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
-import { gambleFixture } from "../../testing/gamble-fixture";
+import {
+  gambleFixture,
+  testGambleSelectionTrace,
+} from "../../testing/gamble-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -69,6 +72,7 @@ const FIXTURE_SIGN_ID = testDreamsignId("fixture-sign");
 const RUNTIME: GravokWagerSiteRuntime = {
   kind: "gamble",
   gameId: "gravok-three-gate-wager",
+  selectionTrace: testGambleSelectionTrace("gravok-three-gate-wager"),
   roundNumber: 1,
   isFarpoint: false,
   wagerCost: 50,
@@ -210,6 +214,7 @@ describe("gamble-site-view-model", () => {
 const LADDER_RUNTIME: TidemarkLadderClimbSiteRuntime = {
   kind: "gamble",
   gameId: "tidemark-ladder-climb",
+  selectionTrace: testGambleSelectionTrace("tidemark-ladder-climb"),
   isFarpoint: false,
   shuffleCommitments: [
     parseShuffleCommitment("attempt-1"),
@@ -269,6 +274,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
 const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
   kind: "gamble",
   gameId: "starway-stairs",
+  selectionTrace: testGambleSelectionTrace("starway-stairs"),
   roundNumber: 1,
   isFarpoint: false,
   wagerAmount: 30,
@@ -364,7 +370,6 @@ function fourSuitTarget(
       {
         entryId: parseDeckEntryId(entryId),
         type: "Empowered",
-        effectDescription: "Fixture form.",
         effectDetails: { fixture: true },
         previewCard: { ...card, energyCost: 1 },
         essenceCost: 0,
@@ -385,6 +390,7 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
     const runtime: FourSuitRepriseSiteRuntime = {
       kind: "gamble",
       gameId: "four-suit-reprise",
+      selectionTrace: testGambleSelectionTrace("four-suit-reprise"),
       isFarpoint: false,
       drawCost: 25,
       shuffleCommitments: [
@@ -483,6 +489,7 @@ describe("gamble-site-view-model — Blackjack", () => {
   const runtime: BlackjackSiteRuntime = {
     kind: "gamble",
     gameId: "blackjack",
+    selectionTrace: testGambleSelectionTrace("blackjack"),
     isFarpoint: false,
     wagerCost: 50,
     prizeEssence: 300,

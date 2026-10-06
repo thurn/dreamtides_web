@@ -451,12 +451,12 @@ function usesOfferedDeckTarget(action: ExplorationActionContent): boolean {
 
 function emptyOffer(
   actionId: ExplorationActionId,
-  mechanicId?: RewardMechanicId,
+  mechanicId: RewardMechanicId,
   policyId?: RewardSelectionPolicyId,
 ): ExplorationActionOfferRuntime {
   return {
     actionId: actionId,
-    ...(mechanicId === undefined ? {} : { canonicalMechanicId: mechanicId }),
+    canonicalMechanicId: mechanicId,
     ...(policyId === undefined ? {} : { selectionPolicyId: policyId }),
     offeredCardIds: [],
     offeredDreamsignIds: [],

@@ -121,7 +121,7 @@ function toTutorialTideView(tide: TutorialJourneyTide): AvatarTideView {
  * screen, so later references show the same tide set the player chose.
  */
 export function buildAvatarTideViews(
-  poolContext: RunPoolContext | undefined,
+  poolContext: RunPoolContext,
   avatar: AvatarContent,
   journeySeed: JourneySeed,
 ): AvatarTideView[] {

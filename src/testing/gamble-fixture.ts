@@ -1,4 +1,6 @@
+import type { GambleGameId } from "../types/gamble";
 import type { GambleData } from "../types/gamble-data";
+import type { GambleSelectionTrace } from "../types/journey";
 import { testContentHash, testFoldHash } from "../types/test-identities";
 
 const FIXTURE: GambleData = {
@@ -138,4 +140,18 @@ const FIXTURE: GambleData = {
 
 export function gambleFixture(): GambleData {
   return FIXTURE;
+}
+
+/** A synthetic catalog trace recording a requested selection of `gameId`. */
+export function testGambleSelectionTrace(
+  gameId: GambleGameId,
+): GambleSelectionTrace {
+  return {
+    source: "requested",
+    requestedGameId: gameId,
+    selectionRoll: 0,
+    totalWeight: 1,
+    candidates: [{ gameId, weight: 1, fallback: false }],
+    selectedGameId: gameId,
+  };
 }

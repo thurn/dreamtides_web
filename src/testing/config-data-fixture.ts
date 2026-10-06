@@ -12,7 +12,7 @@ import type { ExplorationContent } from "../data/exploration";
 import type { RunPoolContext } from "../data/journey-content";
 import type { TutorialJourneyPool } from "../data/tutorial-journey-pool";
 import type { ApollyonIncarnationContent } from "../types/content";
-import { testAvatarId } from "../types/test-identities";
+import { testAvatarId, testFoldHash } from "../types/test-identities";
 import { gambleFixture } from "./gamble-fixture";
 import { transfigurationFixture } from "./transfiguration-fixture";
 import { makeTutorialConfiguration } from "./tutorial-configuration-fixture";
@@ -22,6 +22,7 @@ const sitesJson = sitesDocument();
 const tidesJson = tides4Document();
 
 const EMPTY_EXPLORATION: ExplorationContent = {
+  foldHash: testFoldHash("e"),
   customCards: [],
   customDreamsigns: [],
   encounters: [],

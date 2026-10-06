@@ -23,11 +23,10 @@ import { hashStringToSeed, type RunPoolContext } from "./journey-content.ts";
  * callers can simply omit the preview in that case.
  */
 export function selectedTides4Decks(
-  poolContext: RunPoolContext | undefined,
+  poolContext: RunPoolContext,
   avatar: AvatarContent,
   journeySeed: JourneySeed,
 ): Tides4DeckJson[] {
-  if (poolContext === undefined) return [];
   if (poolContext.poolVariant !== "tides4") return [];
   const decks = poolContext.poolData.tides4Decks;
   if (decks === undefined) return [];

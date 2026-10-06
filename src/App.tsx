@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // text selection. See src/cumulus/primitives/cumulus-base.css.
 import "./cumulus/primitives/cumulus-base.css";
 import type { CardData } from "./types/cards";
-import { parseFoldHash } from "./types/content-hash";
 import type { JourneyContent } from "./data/journey-content";
 import {
   buildAvatarTides4Provenance,
@@ -22,9 +21,6 @@ import { GameJourneyProvider } from "./state/game-journey-context";
 import { FrontDoorProvider } from "./state/front-door-context";
 import { FrontDoorRouter } from "./components/FrontDoorRouter";
 
-const MISSING_EXPLORATION_FOLD_HASH = parseFoldHash(
-  "665bc1d7b9821fc8c95a0266d9773fda5414e05c9c19774b79c0b7a3f0365183",
-);
 import { ScreenRouter } from "./components/ScreenRouter";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
@@ -518,7 +514,7 @@ function LocalGameApp({
         journeyContent.opponentsData,
         journeyContent.rewardSelectionData,
         journeyContent.auguryData,
-        journeyContent.exploration.foldHash ?? MISSING_EXPLORATION_FOLD_HASH,
+        journeyContent.exploration.foldHash,
         journeyContent.tutorial.foldHash,
       ),
     [journeyContent],

@@ -46,9 +46,9 @@ export function buildDesktopDeckView(
   cardDatabase: Map<number, CardData>,
   avatar: Avatar | null,
   dreamsigns: readonly Dreamsign[],
-  avatars: readonly AvatarContent[] = [],
-  poolContext?: RunPoolContext,
-  journeySeed?: JourneySeed,
+  avatars: readonly AvatarContent[],
+  poolContext: RunPoolContext,
+  journeySeed: JourneySeed,
 ): DesktopDeckView {
   const avatarContent =
     avatar === null
@@ -61,7 +61,7 @@ export function buildDesktopDeckView(
       toDreamsignView(dreamsign),
     ),
     tides:
-      avatarContent === undefined || journeySeed === undefined
+      avatarContent === undefined
         ? []
         : buildAvatarTideViews(
             poolContext,

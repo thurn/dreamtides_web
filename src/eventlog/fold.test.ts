@@ -20,7 +20,7 @@ interface ToyState {
   log: string[];
 }
 
-const GENESIS: Genesis = { seed: testJourneySeed("toy-seed"), reducerVersion: "v1", createdAt: 0, contentConfig: TEST_CONTENT_CONFIG };
+const GENESIS: Genesis = { seed: testJourneySeed("toy-seed"), reducerVersion: "test", createdAt: 0, contentConfig: TEST_CONTENT_CONFIG };
 
 /**
  * Toy reducer:
