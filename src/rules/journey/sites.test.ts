@@ -17,6 +17,7 @@ import type {
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import { registerSiteContentProvider } from "./sites";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { testSiteContentProvider } from "./test-content-providers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
@@ -165,8 +166,9 @@ function siteState(
 /**
  * A deterministic fake {@link SiteContentProvider} whose runtime embeds an
  * rng-derived value so re-folding the same event yields a byte-identical
- * runtime and a fresh seq yields a different one. Content-free types (essence,
- * augury) are generated purely in-reducer and never reach this provider.
+ * runtime and a fresh seq yields a different one. Content-free types
+ * (RandomSite, Essence) are generated purely in-reducer and never reach this
+ * provider.
  */
 const fakeProvider = testSiteContentProvider({
   openSite({ site, rng }) {
@@ -622,10 +624,53 @@ describe("Augury", () => {
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
 
-  it("REROLL_AUGURY advances the runtime (nonce bumped, hash differs)", () => {
-    const opened = reduce(siteState("Augury"), "OPEN_SITE", {
+  it("OPEN_SITE opens an Augury only under the current selection protocol", () => {
+    const requestedVersions: unknown[] = [];
+    registerSiteContentProvider(
+      testSiteContentProvider({
+        openSite({ site, selectionRulesVersion }) {
+          requestedVersions.push(selectionRulesVersion);
+          return site.type === "Augury"
+            ? { runtime: { kind: "augury", completed: false } }
+            : null;
+        },
+      }),
+    );
+
+    const unversioned = reduce(siteState("Augury"), "OPEN_SITE", {
       siteId: SITE_ID,
-    }).state;
+    });
+    const unsupported = reduce(siteState("Augury"), "OPEN_SITE", {
+      siteId: SITE_ID,
+      selectionRulesVersion: "unsupported-selection-version",
+    });
+    const current = reduce(siteState("Augury"), "OPEN_SITE", {
+      siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    });
+
+    expect(unversioned.outcome).toBe("bounced");
+    expect(runtimeOf(unversioned)).toBeUndefined();
+    expect(unsupported.outcome).toBe("bounced");
+    expect(runtimeOf(unsupported)).toBeUndefined();
+    expect(current.outcome).toBe("applied");
+    expect(runtimeOf(current)?.kind).toBe("augury");
+    expect(requestedVersions).toEqual([SELECTION_RULES_VERSION]);
+  });
+
+  it("OPEN_SITE bounces a current Augury open with no content provider", () => {
+    const out = reduce(siteState("Augury"), "OPEN_SITE", {
+      siteId: SITE_ID,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    });
+    expect(out.outcome).toBe("bounced");
+    expect(runtimeOf(out)).toBeUndefined();
+  });
+
+  it("REROLL_AUGURY advances the runtime (nonce bumped, hash differs)", () => {
+    const opened = siteState("Augury", {
+      siteRuntime: { [SITE_ID]: { kind: "augury", completed: false } },
+    });
     const before = JSON.stringify(opened.journey.siteRuntime[SITE_ID]);
     const out = reduce(opened, "REROLL_AUGURY", { siteId: SITE_ID });
     expect(out.outcome).toBe("applied");

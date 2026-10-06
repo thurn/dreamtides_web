@@ -42,7 +42,6 @@ import {
 import { makeActions } from "../actions";
 import {
   buildExplorationRuntime,
-  buildLegacyExplorationRuntime,
   mapDeterministicDrawToInclusiveInteger,
   resolveExplorationChoice,
 } from "./exploration-provider";
@@ -249,17 +248,13 @@ function resolve(
   actionId: ExplorationActionId,
   selection: Record<string, unknown> = {},
 ): JourneyState {
-  const runtime = journey.siteRuntime[site.id];
   const result = resolveExplorationChoice({
     journey,
     site,
     payload: {
       actionId,
       selection,
-      ...(runtime?.kind === "exploration" &&
-      runtime.selectionRulesVersion !== undefined
-        ? { selectionRulesVersion: runtime.selectionRulesVersion }
-        : {}),
+      selectionRulesVersion: SELECTION_RULES_VERSION,
     },
     seq: 91,
     content,
@@ -384,45 +379,7 @@ function starterJourney(
 }
 
 describe("Exploration provider", () => {
-  it("keeps the frozen unversioned offer algorithm available for legacy game replay", () => {
-    const offeredAction: ExplorationActionContent = {
-      id: testExplorationActionId("gain-offered"),
-      label: "Invite someone through",
-      effectText: "Gain $OFFERED_CARD",
-      effectKind: "gain-offered-card",
-      predicate: "cheap-character",
-    };
-    const fallbackAction: ExplorationActionContent = {
-      id: testExplorationActionId("gain-card"),
-      label: "Gain a card",
-      effectText: "Gain a card",
-      effectKind: "gain-card",
-      cardId: SOURCE_CARD_ID,
-    };
-    const content = contentFixture([offeredAction, fallbackAction]);
-    const journey = journeyFixture(content);
-    const legacy = buildLegacyExplorationRuntime(
-      journey,
-      site,
-      content,
-      () => 0.37,
-    );
-    const current = buildExplorationRuntime(journey, site, content, () => 0.37);
-
-    expect(legacy).toMatchObject({
-      kind: "exploration",
-      encounterCardId: SOURCE_CARD_ID,
-    });
-    expect(legacy?.actionOffers[0]).toMatchObject({
-      actionId: offeredAction.id,
-      offeredCardIds: ["f0000000-0000-4000-8000-000000000033"],
-    });
-    expect(legacy).not.toHaveProperty("selectionRulesVersion");
-    expect(legacy?.actionOffers[0]).not.toHaveProperty("canonicalMechanicId");
-    expect(current?.selectionRulesVersion).toBe(SELECTION_RULES_VERSION);
-  });
-
-  it("routes unversioned opens to legacy replay and current opens to shared selection", () => {
+  it("opens Exploration only under the current selection protocol", () => {
     const offeredAction: ExplorationActionContent = {
       id: testExplorationActionId("gain-offered"),
       label: "Invite someone through",
@@ -444,13 +401,12 @@ describe("Exploration provider", () => {
       site,
       rng: () => 0.37,
     };
-    const legacy = provider.openSite(input);
     const current = provider.openSite({
       ...input,
       selectionRulesVersion: SELECTION_RULES_VERSION,
     });
 
-    expect(legacy?.runtime).not.toHaveProperty("selectionRulesVersion");
+    expect(provider.openSite(input)).toBeNull();
     expect(current?.runtime).toMatchObject({
       kind: "exploration",
       selectionRulesVersion: SELECTION_RULES_VERSION,
@@ -463,6 +419,54 @@ describe("Exploration provider", () => {
         ),
       }),
     ).toBeNull();
+  });
+
+  it("resolves Exploration choices only under the current selection protocol", () => {
+    const action: ExplorationActionContent = {
+      id: testExplorationActionId("gain-card"),
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([
+      action,
+      { ...action, id: testExplorationActionId("gain-card-second") },
+    ]);
+    const { journey, runtime } = buildState(content);
+    const resolveWith = (
+      candidate: JourneyState,
+      payload: Record<string, unknown>,
+    ): JourneyState | null =>
+      resolveExplorationChoice({
+        journey: candidate,
+        site,
+        payload: { actionId: action.id, ...payload },
+        seq: 91,
+        content,
+      });
+    const { selectionRulesVersion: _version, ...unversionedRuntime } = runtime;
+    const unversionedJourney: JourneyState = {
+      ...journey,
+      siteRuntime: { ...journey.siteRuntime, [site.id]: unversionedRuntime },
+    };
+
+    expect(resolveWith(journey, {})).toBeNull();
+    expect(
+      resolveWith(journey, {
+        selectionRulesVersion: parseSelectionRulesVersion(
+          "unsupported-selection-version",
+        ),
+      }),
+    ).toBeNull();
+    expect(
+      resolveWith(unversionedJourney, {
+        selectionRulesVersion: SELECTION_RULES_VERSION,
+      }),
+    ).toBeNull();
+    expect(
+      resolveWith(journey, { selectionRulesVersion: SELECTION_RULES_VERSION }),
+    ).not.toBeNull();
   });
 
   it("maps deterministic draws to both endpoints of an inclusive integer range", () => {
@@ -5708,43 +5712,12 @@ describe("Exploration provider", () => {
         () => 0.99,
         SOURCE_CARD_ID,
       );
-      const legacyRuntime = buildLegacyExplorationRuntime(
-        startingJourney,
-        site,
-        content,
-        () => 0.01,
-        SOURCE_CARD_ID,
-      );
       const offer = first.runtime.actionOffers[0];
       const preparation = offer?.siteInsertionPreparation;
       if (offer === undefined || preparation === undefined) {
         throw new Error("Expected a fixed-site preparation");
       }
       expect(replayRuntime?.actionOffers[0]).toEqual(offer);
-      expect(legacyRuntime?.actionOffers[0]?.siteInsertionPreparation).toEqual(
-        preparation,
-      );
-      if (siteType === "Duplication" && legacyRuntime !== null) {
-        const legacyResolved = resolveExplorationChoice({
-          journey: {
-            ...startingJourney,
-            siteRuntime: { [site.id]: legacyRuntime },
-          },
-          site,
-          payload: { actionId: action.id },
-          seq: 90,
-          content,
-        });
-        expect(
-          legacyResolved?.atlas.nodes[parseAtlasNodeId("exploration-node")]
-            ?.sites[1],
-        ).toEqual(preparation.insertedSite);
-        expect(
-          legacyResolved === null
-            ? undefined
-            : explorationResolutionFor(legacyResolved).selectionSignature,
-        ).toBe(preparation.planSignature);
-      }
       expect(offer).toMatchObject({
         canonicalMechanicId: "add-site",
         selectionPolicyId: "fixed",
@@ -5952,20 +5925,12 @@ describe("Exploration provider", () => {
       () => 0.99,
       SOURCE_CARD_ID,
     );
-    const legacy = buildLegacyExplorationRuntime(
-      startingJourney,
-      site,
-      content,
-      () => 0.01,
-      SOURCE_CARD_ID,
-    );
     const offer = first.runtime.actionOffers[0];
     const preparation = offer?.siteTypeChoicePreparation;
     if (offer === undefined || preparation === undefined) {
       throw new Error("Expected a site-type choice preparation");
     }
     expect(replay?.actionOffers[0]).toEqual(offer);
-    expect(legacy?.actionOffers[0]).toEqual(offer);
     expect(offer).toMatchObject({
       canonicalMechanicId: "add-site",
       selectionPolicyId: "site-uniform",

@@ -328,16 +328,19 @@ function randomIntInRange(
  * `OPEN_SITE { siteId }` — collapses the five legacy `ensure*SiteRuntime`
  * writers into one type-dispatched generator. Dispatches on the
  * site's TYPE:
- *   - Essence / Augury: generated purely in-reducer (Essence draws its
- *     amount from `ctx.rng`; Augury seeds a fresh, un-completed runtime).
+ *   - RandomSite / Essence: generated purely in-reducer from `ctx.rng`.
+ *   - Augury / Exploration: delegated to the registered
+ *     {@link SiteContentProvider} under the payload's `selectionRulesVersion`,
+ *     which must name the current selection protocol.
  *   - Reward / DreamsignRevelation / Shop / DreamsignBazaar / Transfiguration /
  *     Duplication / Gamble: delegated to the registered {@link SiteContentProvider}.
  *
  * An existing runtime is authoritative, so a repeated event bounces without
  * regenerating it. The event-log intent key prevents repeated screen mounts and
  * connected clients from appending that repeated event. Bounces also cover a
- * malformed payload, an unknown site, a site type that has no runtime, or a
- * content-coupled type with no provider wired.
+ * malformed payload, an unknown site, a site type that has no runtime, a
+ * content-coupled type with no provider wired, or an Augury / Exploration open
+ * whose `selectionRulesVersion` is missing or names another protocol.
  */
 export function openSite(
   journey: JourneyState,
@@ -407,22 +410,19 @@ export function openSite(
     }
     case "Augury": {
       if (
-        rawSelectionRulesVersion === SELECTION_RULES_VERSION &&
-        contentProvider !== null
+        rawSelectionRulesVersion !== SELECTION_RULES_VERSION ||
+        contentProvider === null
       ) {
-        const result = contentProvider.openSite({
-          journey,
-          site,
-          rng: ctx.rng,
-          selectionRulesVersion: rawSelectionRulesVersion,
-        });
-        if (result === null) return null;
-        return withRuntime(journey, siteId, result.runtime);
+        return null;
       }
-      return withRuntime(journey, siteId, {
-        kind: "augury",
-        completed: false,
+      const result = contentProvider.openSite({
+        journey,
+        site,
+        rng: ctx.rng,
+        selectionRulesVersion: rawSelectionRulesVersion,
       });
+      if (result === null) return null;
+      return withRuntime(journey, siteId, result.runtime);
     }
     case "Reward":
     case "DreamsignRevelation":

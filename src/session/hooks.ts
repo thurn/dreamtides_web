@@ -21,7 +21,6 @@ import {
 } from "react";
 import { BounceToast, bounceMessageForReason } from "../components/BounceToast";
 import { makeActions, type AppendFn, type GameActions } from "./actions";
-import { CURRENT_REDUCER_VERSION } from "./reducer-version";
 import type { EventDraft } from "../eventlog/local-log";
 import type { EventOutcome, GameEvent } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
@@ -114,12 +113,7 @@ export function LocalGameProvider({
     () => ({
       game,
       append,
-      actions: makeActions(append, {
-        selectionRulesVersion:
-          game.genesis.reducerVersion === CURRENT_REDUCER_VERSION
-            ? undefined
-            : null,
-      }),
+      actions: makeActions(append),
     }),
     [append, game],
   );

@@ -26,10 +26,7 @@ import type {
   SiteType,
   TransfigurationType,
 } from "../types/journey";
-import {
-  SELECTION_RULES_VERSION,
-  type SelectionRulesVersion,
-} from "../reward-selection";
+import { SELECTION_RULES_VERSION } from "../reward-selection";
 import type { BattleId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
 import type { AvatarId } from "../types/identifiers";
@@ -406,14 +403,7 @@ export interface GameActions {
  * fake in tests), and every creator is a thin payload-builder that appends one
  * event.
  */
-export function makeActions(
-  append: AppendFn,
-  options: { selectionRulesVersion?: SelectionRulesVersion | null } = {},
-): GameActions {
-  const selectionRulesVersion =
-    options.selectionRulesVersion === undefined
-      ? SELECTION_RULES_VERSION
-      : options.selectionRulesVersion;
+export function makeActions(append: AppendFn): GameActions {
   const emit = <T extends GameEventType>(
     type: T,
     payload: EventPayloads[T],
@@ -603,7 +593,7 @@ export function makeActions(
         {
           siteId,
           ...(gambleGameId === undefined ? {} : { gambleGameId }),
-          ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
+          selectionRulesVersion: SELECTION_RULES_VERSION,
         },
         parseIntentKey(
           gambleGameId === undefined
@@ -617,7 +607,7 @@ export function makeActions(
       emit("RESOLVE_EXPLORATION_CHOICE", {
         siteId,
         actionId,
-        ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
+        selectionRulesVersion: SELECTION_RULES_VERSION,
         ...(selection === undefined ? {} : { selection }),
       }),
     completeAugury: (siteId) => emit("COMPLETE_AUGURY", { siteId }),

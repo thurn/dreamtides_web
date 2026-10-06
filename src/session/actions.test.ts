@@ -29,6 +29,7 @@ import { NIGHTMARE_CARD_ID } from "../data/nightmare";
 import { isKnownEventType, KNOWN_EVENT_TYPES } from "../rules/events";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import { makeActions } from "./actions";
+import { SELECTION_RULES_VERSION } from "../reward-selection";
 import { parseBattleId } from "../types/identifiers";
 import { parsePresentationId } from "../types/identifiers";
 import { parseSiteId } from "../types/identifiers";
@@ -402,15 +403,12 @@ describe("game actions facade", () => {
     ]);
   });
 
-  it("omits the selection protocol from intents written to legacy games", () => {
+  it("writes the current selection protocol into site opens and Exploration choices", () => {
     const captured: EventDraft[] = [];
-    const actions = makeActions(
-      (draft) => {
-        captured.push(draft);
-        return Promise.resolve(captured.length);
-      },
-      { selectionRulesVersion: null },
-    );
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
 
     void actions.openSite(
       parseSiteId("site-7"),
@@ -426,10 +424,14 @@ describe("game actions facade", () => {
     );
 
     expect(captured.map((draft) => draft.payload)).toEqual([
-      { siteId: parseSiteId("site-7") },
+      {
+        siteId: parseSiteId("site-7"),
+        selectionRulesVersion: SELECTION_RULES_VERSION,
+      },
       {
         siteId: parseSiteId("site-7"),
         actionId: testExplorationActionId("action-1"),
+        selectionRulesVersion: SELECTION_RULES_VERSION,
         selection: { entryIds: [parseDeckEntryId("entry-1")] },
       },
     ]);

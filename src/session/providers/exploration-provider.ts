@@ -57,10 +57,7 @@ import {
   resolveExplorationDreamsignPlan,
   type ExplorationDreamsignEffectKind,
 } from "../../dreamsign/exploration-dreamsign-plan";
-import {
-  hashStringToSeed,
-  type JourneyContent,
-} from "../../data/journey-content";
+import type { JourneyContent } from "../../data/journey-content";
 import {
   eligibleTransfigurations,
   offeredTransfigurationForms,
@@ -594,309 +591,6 @@ function buildDisclosedDeckTargetOffer(input: {
     offeredDeckEntryIds:
       preparation.target === null ? [] : [preparation.target.entryId],
   };
-}
-
-function legacyShuffled<T>(items: readonly T[], rng: () => number): T[] {
-  const result = [...items];
-  for (let index = result.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(rng() * (index + 1));
-    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
-  }
-  return result;
-}
-
-function legacyCatalogCandidates(
-  content: JourneyContent,
-  predicate: ExplorationPredicate,
-  excludedCardId: CardId,
-): CardData[] {
-  const customCardIds = new Set(
-    content.exploration.customCards.map((card) => card.id),
-  );
-  return [...content.cardDatabase.values()]
-    .filter(
-      (card) =>
-        !customCardIds.has(card.id) &&
-        card.id !== excludedCardId &&
-        matchesPredicate(card, predicate, content),
-    )
-    .sort((left, right) => left.id.localeCompare(right.id));
-}
-
-function isLegacyDeckCardVariableTarget(
-  action: ExplorationActionContent,
-  entry: DeckEntry,
-  card: CardData,
-  content: JourneyContent,
-): boolean {
-  if (
-    action.predicate !== undefined &&
-    !matchesPredicate(card, action.predicate, content)
-  ) {
-    return false;
-  }
-  switch (action.effectKind) {
-    case "change-subtype-selected":
-      return (
-        action.subtype !== undefined &&
-        card.cardType === "Character" &&
-        card.subtype !== action.subtype
-      );
-    case "transfigure-fixed-selected":
-      return (
-        entry.transfiguration === null &&
-        action.transfiguration !== undefined &&
-        offeredTransfigurationForms(
-          content.transfigurationData,
-          card,
-          null,
-        ).some((form) => form.type === action.transfiguration)
-      );
-    case "transfigure-selected":
-      return (
-        entry.transfiguration === null &&
-        offeredTransfigurationForms(content.transfigurationData, card, null)
-          .length > 0
-      );
-    default:
-      return true;
-  }
-}
-
-function buildLegacyActionOffer(
-  action: ExplorationActionContent,
-  journey: JourneyState,
-  content: JourneyContent,
-  rng: () => number,
-  encounterCardId: CardId,
-  site: SiteState,
-): ExplorationActionOfferRuntime | null {
-  const offer = emptyOffer(action.id);
-  if (explorationCompoundActionKind(action.effectKind) !== null) {
-    return buildCompoundActionOffer({
-      action,
-      journey,
-      content,
-      site,
-      encounterCardId,
-    });
-  }
-  if (
-    action.effectKind === "free-next-shop" ||
-    action.effectKind === "lose-half-essence-and-free-purchases"
-  ) {
-    return { ...offer, canonicalMechanicId: "shop-purchase-modifier" };
-  }
-  if (action.effectKind === "add-fixed-site") {
-    if (action.siteType === undefined) return null;
-    const selectionContentRevision = buildRewardSelectionContext({
-      journeyState: journey,
-      journeyContent: content,
-      site,
-    }).selectionContentRevision;
-    const preparation = prepareExplorationSiteInsertion({
-      journey,
-      sourceSite: site,
-      sourceActionId: action.id,
-      encounterCardId,
-      siteType: action.siteType,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      selectionContentRevision,
-    });
-    return preparation === null
-      ? null
-      : {
-          ...offer,
-          canonicalMechanicId: "add-site",
-          selectionPolicyId: "fixed",
-          selectionRulesVersion: SELECTION_RULES_VERSION,
-          selectionContentRevision,
-          selectionKey: parseSelectionKey(action.id),
-          selectionSignature: preparation.planSignature,
-          siteInsertionPreparation: preparation,
-        };
-  }
-  if (action.effectKind === "choose-site-type") {
-    if (action.offerCount !== 3) return null;
-    const context = buildRewardSelectionContext({
-      journeyState: journey,
-      journeyContent: content,
-      site,
-    });
-    const selected = selectReward(context, {
-      mechanicId: "add-site",
-      policyId: "site-uniform",
-      scope: {
-        journeySeed: journey.seed,
-        siteUuid: site.id,
-        selectionKey: parseSelectionKey(action.id),
-      },
-      count: action.offerCount,
-      constraints: {
-        allowedSiteTypes: context.tuning.placeableSites,
-      },
-    });
-    if (
-      !selected.ok ||
-      selected.bindings.siteTypes.length !== action.offerCount
-    )
-      return null;
-    const siteTypes = explorationChoosableSiteTypes(
-      selected.bindings.siteTypes,
-    );
-    if (siteTypes === null) return null;
-    const preparation = prepareExplorationSiteTypeChoice({
-      journey,
-      sourceSite: site,
-      sourceActionId: action.id,
-      encounterCardId,
-      siteTypes,
-      selectorSignature: selected.signature,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      selectionContentRevision: context.selectionContentRevision,
-    });
-    return preparation === null
-      ? null
-      : {
-          ...withSelection(offer, selected),
-          selectionSignature: preparation.planSignature,
-          siteTypeChoicePreparation: preparation,
-        };
-  }
-  if (
-    action.effectKind === "change-card-type-selected" &&
-    action.deckTarget === "offered" &&
-    action.cardType !== undefined
-  ) {
-    return buildDisclosedDeckTargetOffer({
-      action,
-      cardType: action.cardType,
-      journey,
-      content,
-      site,
-      encounterCardId,
-    });
-  }
-  if (isExplorationRandomDeckTargetEffect(action)) {
-    const preparation = prepareExplorationRandomDeckTargetPlan({
-      effectKind: action.effectKind,
-      predicate: action.predicate,
-      count: action.count,
-      replacementCardId: action.cardId,
-      actionId: action.id,
-      encounterCardId,
-      journey,
-      site,
-      content,
-    });
-    const mechanicId =
-      action.effectKind === "copy-random-cards"
-        ? "duplicate-deck-entry"
-        : "replace-deck-entry";
-    return {
-      ...offer,
-      canonicalMechanicId: mechanicId,
-      selectionPolicyId: "uniform",
-      selectionRulesVersion: preparation.selectionRulesVersion,
-      selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
-      selectionSignature: preparation.planSignature,
-      ...(preparation.selectorTrace === undefined
-        ? {}
-        : { selectionTrace: preparation.selectorTrace }),
-      randomDeckTargetPreparation: preparation,
-      offeredDeckEntryIds: [],
-    };
-  }
-  if (action.effectKind === "gain-random-dreamsign") {
-    const availableIds = new Set(
-      content.dreamsignTemplates.map((dreamsign) => dreamsign.id),
-    );
-    const candidates = journey.remainingDreamsignPool.filter((id) =>
-      availableIds.has(id),
-    );
-    const selected = legacyShuffled(candidates, rng)[0];
-    if (selected !== undefined) offer.offeredDreamsignIds = [selected];
-    return offer;
-  }
-  if (action.effectKind === "copy-offered-deck-card") {
-    offer.offeredDeckEntryIds = legacyShuffled(journey.deck, rng)
-      .slice(0, action.offerCount ?? 4)
-      .map((entry) => entry.entryId);
-    return offer;
-  }
-  if (action.effectKind === "choose-avatar") {
-    const currentId = journey.avatar?.id;
-    const candidates = content.avatars
-      .filter((avatar) => avatar.id !== currentId)
-      .sort((left, right) => left.id.localeCompare(right.id));
-    offer.offeredAvatarIds = legacyShuffled(candidates, rng)
-      .slice(0, action.offerCount ?? 3)
-      .map((avatar) => avatar.id);
-    return offer;
-  }
-  if (
-    usesOfferedDeckTarget(action) &&
-    action.effectKind !== "replace-selected"
-  ) {
-    const target = legacyShuffled(
-      resolvedDeckCards(journey, content).filter(
-        ({ entry, card }) =>
-          card.id !== encounterCardId &&
-          isLegacyDeckCardVariableTarget(action, entry, card, content),
-      ),
-      rng,
-    )[0];
-    if (target !== undefined)
-      offer.offeredDeckEntryIds = [target.entry.entryId];
-    return offer;
-  }
-  if (action.predicate === undefined) return offer;
-
-  const candidates = legacyCatalogCandidates(
-    content,
-    action.predicate,
-    encounterCardId,
-  );
-  if (
-    action.effectKind === "gain-offered-card" ||
-    action.effectKind === "draft-card" ||
-    action.effectKind === "take-cards" ||
-    action.effectKind === "gain-random-cards"
-  ) {
-    const offerCount =
-      action.effectKind === "gain-offered-card"
-        ? 1
-        : action.effectKind === "gain-random-cards"
-          ? (action.count ?? 1)
-          : (action.offerCount ?? 4);
-    offer.offeredCardIds = legacyShuffled(candidates, rng)
-      .slice(0, offerCount)
-      .map((card) => card.id);
-  } else if (action.effectKind === "choose-pack") {
-    const ordered = legacyShuffled(candidates, rng);
-    const packCount = action.packCount ?? 2;
-    const packSize = action.packSize ?? 3;
-    offer.packCardIds = Array.from({ length: packCount }, (_, packIndex) =>
-      ordered
-        .slice(packIndex * packSize, (packIndex + 1) * packSize)
-        .map((card) => card.id),
-    ).filter((pack) => pack.length > 0);
-  } else if (action.effectKind === "replace-selected") {
-    const deckCards = resolvedDeckCards(journey, content).filter(({ card }) =>
-      matchesPredicate(card, action.predicate as ExplorationPredicate, content),
-    );
-    for (const { entry, card } of deckCards) {
-      const replacement = legacyShuffled(
-        candidates.filter((candidate) => candidate.id !== card.id),
-        rng,
-      )[0];
-      if (replacement !== undefined) {
-        offer.replacementCardIdByEntryId[entry.entryId] = replacement.id;
-      }
-    }
-  }
-  return offer;
 }
 
 function canonicalSelectionForAction(action: ExplorationActionContent): {
@@ -1743,47 +1437,6 @@ function explorationEncounterSignature(
   });
 }
 
-/** Reproduce the prepared offers written by unversioned Exploration opens. */
-export function buildLegacyExplorationRuntime(
-  journey: JourneyState,
-  site: SiteState,
-  content: JourneyContent,
-  rng: () => number,
-  encounterCardId?: CardId | null,
-): ExplorationSiteRuntime | null {
-  const availableEncounters = content.exploration.encounters.filter(
-    (encounter) => idIndex(content).has(encounter.cardId),
-  );
-  if (availableEncounters.length === 0) return null;
-  const encounter =
-    encounterCardId === undefined || encounterCardId === null
-      ? availableEncounters[
-          hashStringToSeed(`${journey.seed}:${site.id}:exploration-card`) %
-            availableEncounters.length
-        ]
-      : availableEncounters.find(
-          (candidate) => candidate.cardId === encounterCardId,
-        );
-  if (encounter === undefined) return null;
-  const offers = encounter.actions.map((action) =>
-    buildLegacyActionOffer(
-      action,
-      journey,
-      content,
-      rng,
-      encounter.cardId,
-      site,
-    ),
-  );
-  if (offers.some((offer) => offer === null)) return null;
-  return {
-    kind: "exploration",
-    encounterCardId: encounter.cardId,
-    actionOffers: offers as ExplorationActionOfferRuntime[],
-    resolution: null,
-  };
-}
-
 /** Build the shared source-card encounter and every randomized follow-up offer. */
 export function buildExplorationRuntime(
   journey: JourneyState,
@@ -2167,8 +1820,8 @@ export function resolveExplorationChoice(input: {
   if (runtime?.kind !== "exploration" || runtime.resolution !== null)
     return null;
   if (
-    runtime.selectionRulesVersion !== undefined &&
-    payload.selectionRulesVersion !== runtime.selectionRulesVersion
+    runtime.selectionRulesVersion !== SELECTION_RULES_VERSION ||
+    payload.selectionRulesVersion !== SELECTION_RULES_VERSION
   )
     return null;
   const actionId = stringValue(payload.actionId);
@@ -2210,17 +1863,15 @@ export function resolveExplorationChoice(input: {
     }
   }
   const result = baseResolution(action.id);
-  if (runtime.selectionRulesVersion !== undefined) {
-    result.selectionRulesVersion = runtime.selectionRulesVersion;
-    const selectionContentRevision =
-      offer.selectionContentRevision ?? runtime.selectionContentRevision;
-    if (selectionContentRevision !== undefined) {
-      result.selectionContentRevision = selectionContentRevision;
-    }
-    result.encounterSignature = runtime.encounterSignature;
-    if (offer.selectionSignature !== undefined) {
-      result.selectionSignature = offer.selectionSignature;
-    }
+  result.selectionRulesVersion = runtime.selectionRulesVersion;
+  const selectionContentRevision =
+    offer.selectionContentRevision ?? runtime.selectionContentRevision;
+  if (selectionContentRevision !== undefined) {
+    result.selectionContentRevision = selectionContentRevision;
+  }
+  result.encounterSignature = runtime.encounterSignature;
+  if (offer.selectionSignature !== undefined) {
+    result.selectionSignature = offer.selectionSignature;
   }
   let next = journey;
   let mintIndex = 0;
