@@ -639,3 +639,58 @@ Findings:
 `npm run fuzz:engine -- --games 200`: 101,946 steps, 80.8 s (2.5 games/s),
 1,507 prompts, 136 interactive re-runs (0.318 ms each), 0 failures. Wall
 81.3 s. Host load 18.45 at the start, 8.01 at the end.
+
+## Engine state copy and hashing (2026-10-05, bead hv-7x4l.21)
+
+`cloneState` (`src/engine/state/clone.ts`) copies a state with typed object
+literals for the instances, sides, turn, and Dreamwell and a JSON-semantics
+structural copy (`copyJson`) for every other part. `stateHash` and
+`canonicalHash` (`src/engine/state/hash.ts`) are a structural hash: an
+object is the sum of mixed per-entry hashes, so no keys are sorted and no
+JSON text is built, and each card instance is hashed as the ordered sequence
+of its field values. `clone.test.ts` checks that the copy equals the JSON
+round trip of every committed state of two seeded games, key order included,
+shares no object, and keeps the hash; that the hash survives a JSON round
+trip; and that changing any leaf of a state changes it. The committed states,
+steps, and events of 60 seeded games were identical before and after, loop
+signature and cycle hash strings aside.
+
+- Command: `npx tsx scripts/bench-engine.ts --games 100 --step-games 20 --interactive-games 20`,
+  run at the parent commit and then at this change, back to back on the
+  same host (Apple M5 Max, Node 24.16.0).
+- Host load (1-minute): 4.39 at the start of the parent run, 4.73 between
+  the runs, 5.25 at the end. A separate run of this change at load 4.63
+  measured clone plus hash at a median of 19.3 µs.
+
+| Target | Budget | Before | After | Status |
+| --- | --- | --- | --- | --- |
+| Random-policy full battles per core | ≥ 20/s | 10.7/s (186.4 µs per step) | 40.3/s (49.5 µs per step) | within |
+| Median step (`runStep`) | < 50 µs | 97.2 µs; p90 132.0, p99 158.8 | 16.7 µs; p90 36.0, p99 64.3 | within |
+| Clone plus hash | < 20 µs | 155.7 µs; p90 167.9 | 19.9 µs; p90 23.1, p99 33.7 | at budget |
+| Interactive re-run per answer, largest step | < 2 ms | max 1.673 ms; mean 0.360 | max 0.340 ms; mean 0.096 | within |
+
+| Measurement (median) | Before | After |
+| --- | --- | --- |
+| Full-state hash (`stateHash`) | 77.7 µs | 16.4 µs |
+| Cycle hash (`cycleHash`) | 79.5 µs | 34.9 µs |
+| Loop signature (`loopSignature`) | 31.9 µs | 15.2 µs |
+| View (`view`) | 11.4 µs | 11.7 µs |
+| Determinization (`determinize`) | 109.6 µs | 112.0 µs |
+
+Findings:
+
+- **Clone plus hash sits at the budget**: 19.3 µs and 19.9 µs in two runs at
+  load 4.6–4.7, so it moves over under heavier load. The copy is about 4 µs
+  and the hash the rest; the card instances take about half of the hash and
+  UUID strings about a quarter.
+  The engine-purity lint rule bans module-level state, so the hash keeps no
+  memo of recurring strings (one measured about 3 µs faster).
+- **The cycle hash and loop signature** still build projected copies of the
+  instances before hashing, which is most of their remaining cost. Neither
+  runs on every step.
+
+### 200-game fuzz
+
+`npm run fuzz:engine -- --games 200`: 101,946 steps, 40.2 s (5.0 games/s),
+1,507 prompts, 136 interactive re-runs (0.116 ms each), 0 failures. Wall
+40.7 s. Host load 9.28 at the start, 7.62 at the end.

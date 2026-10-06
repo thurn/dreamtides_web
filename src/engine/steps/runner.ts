@@ -1,7 +1,7 @@
 import type { EngineCatalog } from "../catalog";
 import { checkMandatoryCycle, trackLoops } from "../loops/tracker";
 import { checkVictory, endBattle } from "../rules/victory";
-import { cloneState } from "../state/hash";
+import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { Context } from "./context";
 import { Suspend } from "./errors";
