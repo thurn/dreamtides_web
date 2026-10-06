@@ -68,7 +68,6 @@ import {
 import { richText, type RichText } from "../components/card/rich-text";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import type { CardData, CardType } from "../../types/cards";
 import type {
@@ -726,7 +725,7 @@ function explorationEntityDetails(
         copies: normalizedEntityCopies(entity.copies),
       }
     : {
-        id: requireDreamsignId(entity.dreamsign, "Exploration entity preview"),
+        id: entity.dreamsign.id,
         name: entity.dreamsign.name,
         copies: 1,
       };
@@ -773,7 +772,7 @@ function preparedExplorationChoiceEntity(
       }
     : {
         kind: "dreamsign",
-        id: requireDreamsignId(entity.dreamsign, "Exploration choice"),
+        id: entity.dreamsign.id,
         copies: details.copies,
         dreamsign: entity.dreamsign,
       };
@@ -1251,7 +1250,7 @@ function explorationRewardIdentity(
       ),
       ...reward.objects.cards.map((card) => `gained:${card.cardId}`),
       ...reward.objects.dreamsigns.map(
-        (dreamsign) => `dreamsign:${dreamsign.id ?? "missing"}`,
+        (dreamsign) => `dreamsign:${dreamsign.id}`,
       ),
     ].join("|");
   }
@@ -1285,7 +1284,7 @@ function explorationRewardIdentity(
       return [
         actionId,
         reward.kind,
-        reward.dreamsign.id ?? "missing",
+        reward.dreamsign.id,
         reward.totalEssence,
       ].join("|");
     case "purged-card-essence":
@@ -2645,7 +2644,6 @@ export function ExplorationSiteScreen({
     const hiddenTargets = new Map<HTMLElement, string>();
     const hideDockedDreamsigns = (): void => {
       for (const dreamsign of objectReward.dreamsigns) {
-        if (dreamsign.id === undefined) continue;
         const target = visibleHudDreamsign(dreamsign.id);
         if (target === null || hiddenTargets.has(target)) continue;
         hiddenTargets.set(target, target.style.visibility);

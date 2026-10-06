@@ -1,4 +1,3 @@
-import { requireDreamsignId } from "../../../data/dreamsigns";
 import { GlassButton } from "../controls/GlassButton";
 import { Dreamsign, type DreamsignView } from "../hud/Dreamsign";
 import { token } from "../../primitives/tokens";
@@ -35,10 +34,7 @@ export function DreamsignReplacementDialog({
   onDreamsignPress,
   onDismiss,
 }: DreamsignReplacementDialogProps) {
-  const incomingId = requireDreamsignId(
-    model.incoming,
-    "Cumulus Dreamsign replacement incoming reward",
-  );
+  const incomingId = model.incoming.id;
   return (
     <GlassDialog
       title={"Choose a Dreamsign to Replace"}
@@ -88,10 +84,7 @@ export function DreamsignReplacementDialog({
           }}
         >
           {model.held.map((dreamsign) => {
-            const dreamsignId = requireDreamsignId(
-              dreamsign,
-              "Cumulus Dreamsign replacement collection",
-            );
+            const dreamsignId = dreamsign.id;
             return (
               <div
                 key={dreamsignId}

@@ -1,7 +1,6 @@
 // Pure view-model builder for Amunet's Cumulus Dreamsign Bazaar.
 
 import { requireGuideForSiteType } from "../../data/dreamscapes";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import {
   effectivePrice,
   type ShopPriceModifiers,
@@ -60,17 +59,14 @@ export function buildDreamsignBazaarOffers(
   const offers: DreamsignBazaarOfferView[] = [];
   runtime.slots.forEach((slot, slotIndex) => {
     if (slot.itemType !== "dreamsign") return;
-    const dreamsignId = requireDreamsignId(
-      slot.dreamsign,
-      "Dreamsign Bazaar offer",
-    );
+    const dreamsignId = slot.dreamsign.id;
     const price = effectivePrice(slot, priceModifiers);
     offers.push({
       entryId: parseDeckEntryId(
         `shop-slot-${String(slotIndex)}-${dreamsignId}`,
       ),
       slotIndex,
-      dreamsign: toDreamsignView(slot.dreamsign, "Dreamsign Bazaar offer"),
+      dreamsign: toDreamsignView(slot.dreamsign),
       price,
       state: slot.purchased
         ? "purchased"
@@ -112,12 +108,9 @@ export function buildDreamsignBazaarPurgeView(
   return pendingDreamsign === null
     ? null
     : {
-        pendingDreamsign: toDreamsignView(
-          pendingDreamsign,
-          "Dreamsign Bazaar pending purchase",
-        ),
+        pendingDreamsign: toDreamsignView(pendingDreamsign),
         currentDreamsigns: state.dreamsigns.map((dreamsign) =>
-          toDreamsignView(dreamsign, "Dreamsign Bazaar held collection"),
+          toDreamsignView(dreamsign),
         ),
         maxDreamsigns: state.maxDreamsigns,
       };

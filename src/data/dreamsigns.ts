@@ -1,10 +1,6 @@
 import type { DreamsignTemplate } from "../types/content";
 import type { Dreamsign } from "../types/journey";
-import {
-  parseDreamsignId,
-  parseTideId,
-  type DreamsignId,
-} from "../types/identifiers";
+import { parseDreamsignId, parseTideId } from "../types/identifiers";
 import { dreamsignsDocument } from "../content/documents";
 
 interface RawDreamsign {
@@ -47,15 +43,4 @@ export function createDreamsign(template: DreamsignTemplate): Dreamsign {
     imageName: template.imageName,
     imageAlt: template.imageAlt,
   };
-}
-
-/** Return the stable UUID-backed identifier required for rendering a dreamsign. */
-export function requireDreamsignId(
-  dreamsign: Pick<Dreamsign, "id">,
-  context: string,
-): DreamsignId {
-  if (dreamsign.id === undefined || dreamsign.id.length === 0) {
-    throw new Error(`${context} dreamsign is missing a stable id.`);
-  }
-  return dreamsign.id;
 }

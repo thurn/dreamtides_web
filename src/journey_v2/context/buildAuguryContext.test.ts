@@ -219,39 +219,37 @@ describe("buildAuguryContext", () => {
     });
 
     expect(context.heldDreamsignIds).toEqual(new Set([heldDreamsignId]));
-    expect(context.heldDreamsignFallbackNames).toEqual(new Set());
     expect(context.candidateDreamsigns).toEqual([openTemplate]);
   });
 
-  it("keeps name fallback separate for held Dreamsigns missing ids", () => {
-    const heldNameTemplate = makeAuguryTestDreamsignTemplate({
-      id: testDreamsignId("sign-held-name"),
+  it("excludes held Dreamsigns by id, never by shared name", () => {
+    const heldDreamsignId = testDreamsignId("sign-held");
+    const heldTemplate = makeAuguryTestDreamsignTemplate({
+      id: heldDreamsignId,
       name: "Shared Name",
     });
-    const openTemplate = makeAuguryTestDreamsignTemplate({
-      id: testDreamsignId("sign-open"),
+    const sameNameTemplate = makeAuguryTestDreamsignTemplate({
+      id: testDreamsignId("sign-same-name"),
+      name: "Shared Name",
     });
 
     const context = buildAuguryContext({
       journeyState: makeAuguryTestJourneyState({
         dreamsigns: [
           makeAuguryTestDreamsign({
-            id: undefined,
+            id: heldDreamsignId,
             name: "Shared Name",
           }),
         ],
       }),
       journeyContent: makeAuguryTestContent({
         cards: [],
-        dreamsignTemplates: [heldNameTemplate, openTemplate],
+        dreamsignTemplates: [heldTemplate, sameNameTemplate],
       }),
       site: makeAuguryTestSite(),
     });
 
-    expect(context.heldDreamsignIds).toEqual(new Set());
-    expect(context.heldDreamsignFallbackNames).toEqual(
-      new Set(["Shared Name"]),
-    );
-    expect(context.candidateDreamsigns).toEqual([openTemplate]);
+    expect(context.heldDreamsignIds).toEqual(new Set([heldDreamsignId]));
+    expect(context.candidateDreamsigns).toEqual([sameNameTemplate]);
   });
 });

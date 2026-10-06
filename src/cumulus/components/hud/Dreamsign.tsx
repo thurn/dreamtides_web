@@ -12,7 +12,6 @@ import type { CSSProperties } from "react";
 import { richText } from "../card/rich-text";
 import { assetUrl } from "../../../runtime/asset-url";
 import { artRef } from "../../primitives/art";
-import { requireDreamsignId } from "../../../data/dreamsigns";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
@@ -116,7 +115,7 @@ export function Dreamsign({
 }: DreamsignProps): React.ReactElement {
   const [imageBroken, setImageBroken] = React.useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-  const dreamsignId = requireDreamsignId(dreamsign, "Dreamsign tile");
+  const dreamsignId = dreamsign.id;
   const binding = useRevealSource({
     identity: {
       entityType: "dreamsign",

@@ -240,7 +240,6 @@ export function GameJourneyProvider({
 
       // ---- dreamsigns ----
       addDreamsign: (dreamsign, _sourceSiteType, purgeIndex) => {
-        if (dreamsign.id === undefined) return;
         dispatch(actions.addDreamsign(dreamsign.id, purgeIndex));
       },
       removeDreamsign: (index) => {
@@ -452,7 +451,6 @@ export function GameJourneyProvider({
       acceptRewardSite: (siteId, purgeIndex) =>
         dispatch(actions.acceptReward(siteId, purgeIndex)),
       acceptDreamsignOffer: (siteId, dreamsign, purgeIndex) => {
-        if (dreamsign.id === undefined) return;
         dispatch(
           actions.acceptDreamsignOffer(siteId, dreamsign.id, purgeIndex),
         );

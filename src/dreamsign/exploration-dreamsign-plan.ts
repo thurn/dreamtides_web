@@ -122,9 +122,7 @@ function dreamsignIdIndex(
     index.add(template.id);
   }
   for (const dreamsign of content.exploration.customDreamsigns) {
-    if (dreamsign.id !== undefined) {
-      index.add(dreamsign.id);
-    }
+    index.add(dreamsign.id);
   }
   return index;
 }
@@ -156,10 +154,7 @@ function heldIds(
   const result: DreamsignId[] = [];
   const seen = new Set<DreamsignId>();
   for (const dreamsign of journey.dreamsigns) {
-    const canonical =
-      dreamsign.id !== undefined && index.has(dreamsign.id)
-        ? dreamsign.id
-        : undefined;
+    const canonical = index.has(dreamsign.id) ? dreamsign.id : undefined;
     if (canonical === undefined || seen.has(canonical))
       return null;
     seen.add(canonical);

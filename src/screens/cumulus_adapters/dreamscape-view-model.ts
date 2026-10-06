@@ -200,7 +200,7 @@ export function toQsbDreamsigns(
     if (sign.imageName === undefined) {
       return;
     }
-    docked.push(toDreamsignView(sign, "JourneyStatusBar docked"));
+    docked.push(toDreamsignView(sign));
   });
   return docked;
 }
@@ -274,10 +274,7 @@ export function buildDreamscapeView(
     if (runtime.reward.rewardType === "dreamsign") {
       inlineRewards[site.id] = {
         kind: "dreamsign",
-        dreamsign: toDreamsignView(
-          runtime.reward.dreamsign,
-          "Dreamscape inline reward",
-        ),
+        dreamsign: toDreamsignView(runtime.reward.dreamsign),
         requiresReplacement: state.dreamsigns.length >= state.maxDreamsigns,
       };
       return;
@@ -380,12 +377,9 @@ export function buildDreamsignReplacementView(
     return null;
   }
   return {
-    incoming: toDreamsignView(
-      runtime.reward.dreamsign,
-      "Dreamscape pending reward",
-    ),
+    incoming: toDreamsignView(runtime.reward.dreamsign),
     held: state.dreamsigns.map((dreamsign) =>
-      toDreamsignView(dreamsign, "Dreamscape held reward"),
+      toDreamsignView(dreamsign),
     ),
     capacity: state.maxDreamsigns,
   };

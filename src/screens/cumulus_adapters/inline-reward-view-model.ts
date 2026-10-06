@@ -4,7 +4,6 @@ import type {
   SiteRuntimeState,
   SiteState,
 } from "../../types/journey";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
 
@@ -46,8 +45,7 @@ export function resolveRewardReplacement(
   const site = node.sites.find((candidate) => candidate.id === siteId);
   const runtime = state.siteRuntime[siteId];
   const purgeIndex = state.dreamsigns.findIndex(
-    (dreamsign) =>
-      requireDreamsignId(dreamsign, "Reward site replacement") === dreamsignId,
+    (dreamsign) => dreamsign.id === dreamsignId,
   );
   if (
     purgeIndex < 0 ||

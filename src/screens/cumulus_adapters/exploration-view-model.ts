@@ -368,11 +368,7 @@ function offeredDeckCards(
 }
 
 function heldDreamsignChoices(state: JourneyState) {
-  return state.dreamsigns.flatMap((dreamsign) =>
-    dreamsign.id === undefined
-      ? []
-      : [toDreamsignView(dreamsign, "Exploration held Dreamsign")],
-  );
+  return state.dreamsigns.map((dreamsign) => toDreamsignView(dreamsign));
 }
 
 function dreamsignChoices(
@@ -381,8 +377,8 @@ function dreamsignChoices(
 ): readonly ReturnType<typeof toDreamsignView>[] {
   return ids.flatMap((id) => {
     const dreamsign = dreamsignById(content, parseDreamsignId(id));
-    if (dreamsign?.id === undefined) return [];
-    return [toDreamsignView(dreamsign, "Exploration Dreamsign choice")];
+    if (dreamsign === null) return [];
+    return [toDreamsignView(dreamsign)];
   });
 }
 
@@ -1351,10 +1347,7 @@ function effectReferencesForAction(
         placeholder: dreamsignPlaceholder,
         entity: {
           kind: "dreamsign",
-          dreamsign: toDreamsignView(
-            dreamsign,
-            "Exploration effect reference",
-          ),
+          dreamsign: toDreamsignView(dreamsign),
         },
       });
     }
@@ -4010,8 +4003,8 @@ function rewardForResolution(
       }
       return [
         {
-          removed: toDreamsignView(removed, "Exploration removed Dreamsign"),
-          gained: toDreamsignView(gained, "Exploration gained Dreamsign"),
+          removed: toDreamsignView(removed),
+          gained: toDreamsignView(gained),
         },
       ];
     });
@@ -4319,10 +4312,7 @@ function rewardForResolution(
     if (purgedDreamsign !== null) {
       return {
         kind: "purged-dreamsign-essence",
-        dreamsign: toDreamsignView(
-          purgedDreamsign,
-          "Exploration purged Dreamsign",
-        ),
+        dreamsign: toDreamsignView(purgedDreamsign),
         totalEssence: resolution.essenceGained,
       };
     }
@@ -4463,7 +4453,7 @@ function rewardForResolution(
     );
     return dreamsign === undefined
       ? []
-      : [toDreamsignView(dreamsign, "Exploration gained Dreamsign")];
+      : [toDreamsignView(dreamsign)];
   });
   const semanticKind =
     resolvedAction?.effectKind === "purge-selected"

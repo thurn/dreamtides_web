@@ -1,6 +1,5 @@
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
-import type { DreamsignTemplate } from "../../types/content";
 import type {
   DeckEntry,
   Dreamsign,
@@ -94,36 +93,7 @@ function buildDraftPoolCardUuids(
 function buildHeldDreamsignIds(
   dreamsigns: readonly Dreamsign[],
 ): ReadonlySet<DreamsignId> {
-  const heldDreamsignIds = new Set<DreamsignId>();
-  for (const dreamsign of dreamsigns) {
-    if (dreamsign.id !== undefined) {
-      heldDreamsignIds.add(dreamsign.id);
-    }
-  }
-  return heldDreamsignIds;
-}
-
-function buildHeldDreamsignFallbackNames(
-  dreamsigns: readonly Dreamsign[],
-): ReadonlySet<string> {
-  const heldDreamsignNames = new Set<string>();
-  for (const dreamsign of dreamsigns) {
-    if (dreamsign.id === undefined) {
-      heldDreamsignNames.add(dreamsign.name);
-    }
-  }
-  return heldDreamsignNames;
-}
-
-function isAvailableDreamsignTemplate(
-  template: DreamsignTemplate,
-  heldDreamsignIds: ReadonlySet<DreamsignId>,
-  heldDreamsignFallbackNames: ReadonlySet<string>,
-): boolean {
-  return (
-    !heldDreamsignIds.has(template.id) &&
-    !heldDreamsignFallbackNames.has(template.name)
-  );
+  return new Set(dreamsigns.map((dreamsign) => dreamsign.id));
 }
 
 export function buildAuguryContext({
@@ -157,16 +127,9 @@ export function buildAuguryContext({
   );
 
   const heldDreamsignIds = buildHeldDreamsignIds(journeyState.dreamsigns);
-  const heldDreamsignFallbackNames = buildHeldDreamsignFallbackNames(
-    journeyState.dreamsigns,
-  );
   const candidateDreamsigns = Object.freeze(
-    journeyContent.dreamsignTemplates.filter((template) =>
-      isAvailableDreamsignTemplate(
-        template,
-        heldDreamsignIds,
-        heldDreamsignFallbackNames,
-      ),
+    journeyContent.dreamsignTemplates.filter(
+      (template) => !heldDreamsignIds.has(template.id),
     ),
   );
 
@@ -190,7 +153,6 @@ export function buildAuguryContext({
     ownedCardUuids,
     draftPoolCardUuids,
     heldDreamsignIds,
-    heldDreamsignFallbackNames,
     candidateGrantCards,
     candidateDreamsigns,
     cardDatabase: journeyContent.cardDatabase,

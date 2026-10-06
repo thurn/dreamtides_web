@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { GravokGateId, StarwayStairsTierNumber } from "../../types/gamble";
@@ -793,10 +792,7 @@ function LadderDreamsignReward({
   const [trajectory, setTrajectory] =
     useState<LadderDreamsignTrajectory | null>(null);
   const [complete, setComplete] = useState(false);
-  const dreamsignId = requireDreamsignId(
-    dreamsign,
-    "Ladder Climb reward animation",
-  );
+  const dreamsignId = dreamsign.id;
   const size =
     layout === "desktop"
       ? LADDER_DREAMSIGN_DESKTOP_SIZE

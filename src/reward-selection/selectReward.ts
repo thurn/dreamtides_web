@@ -491,17 +491,11 @@ function dreamsignCandidates(
 ): Candidate[] | RewardSelectionFailure {
   const fixed = request.constraints?.fixedDreamsignId;
   const customDreamsigns: DreamsignTemplate[] =
-    context.content.exploration.customDreamsigns.flatMap((dreamsign) =>
-    dreamsign.id === undefined
-      ? []
-      : [
-          {
-            id: dreamsign.id,
-            name: dreamsign.name,
-            effectDescription: dreamsign.effectDescription,
-          },
-        ],
-  );
+    context.content.exploration.customDreamsigns.map((dreamsign) => ({
+      id: dreamsign.id,
+      name: dreamsign.name,
+      effectDescription: dreamsign.effectDescription,
+    }));
   const allDreamsigns = [
     ...context.content.dreamsignTemplates,
     ...customDreamsigns,

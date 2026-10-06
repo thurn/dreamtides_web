@@ -32,7 +32,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import type { DreamsignView } from "../components/hud/Dreamsign";
 import { GameCard } from "../components/card/CardView";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
@@ -431,7 +430,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignView[] }) {
         >
           {dreamsigns.map((sign) => (
             <div
-              key={requireDreamsignId(sign, "Desktop deck viewer dreamsign")}
+              key={sign.id}
               style={{ width: DREAMSIGN_TILE_PX, height: DREAMSIGN_TILE_PX }}
             >
               <Dreamsign dreamsign={sign} />

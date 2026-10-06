@@ -58,7 +58,7 @@ export function buildDesktopDeckView(
     cards: buildMobileDeckView(transfigurationData, deck, cardDatabase).cards,
     avatar: toAvatarView(avatar),
     dreamsigns: dreamsigns.map((dreamsign) =>
-      toDreamsignView(dreamsign, "Desktop deck viewer"),
+      toDreamsignView(dreamsign),
     ),
     tides:
       avatarContent === undefined || journeySeed === undefined

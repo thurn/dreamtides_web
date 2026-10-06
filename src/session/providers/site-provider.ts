@@ -154,9 +154,7 @@ function eligibleGambleDreamsigns(
   content: JourneyContent,
 ) {
   const heldIds = new Set(
-    journey.dreamsigns.flatMap((dreamsign) =>
-      dreamsign.id === undefined ? [] : [dreamsign.id],
-    ),
+    journey.dreamsigns.map((dreamsign) => dreamsign.id),
   );
   const { availableIds, templatesById } = readDreamsignPool(
     journey.remainingDreamsignPool,

@@ -29,9 +29,7 @@ export function JourneyCompleteScreenAdapter() {
       deckEntryIds: state.deck.map((entry) => entry.entryId),
       cardIds,
       essenceRemaining: state.essence,
-      dreamsignIds: state.dreamsigns.flatMap((dreamsign) =>
-        dreamsign.id === undefined ? [] : [dreamsign.id],
-      ),
+      dreamsignIds: state.dreamsigns.map((dreamsign) => dreamsign.id),
     });
   }, [cardIds, state]);
 

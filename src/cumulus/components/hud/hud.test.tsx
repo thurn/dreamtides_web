@@ -114,13 +114,6 @@ describe("Dreamsign", () => {
     expect(tile().querySelector("img")).toBeNull();
     expect(tile().textContent).not.toBe("");
   });
-
-  it("requires a stable dreamsign id for render data attributes", () => {
-    const { id: _id, ...sign } = makeDreamsign({});
-    expect(() => {
-      renderInCumulus(<Dreamsign dreamsign={sign as DreamsignView} />);
-    }).toThrow(/missing a stable id/);
-  });
 });
 
 describe("AvatarPortrait", () => {

@@ -35,7 +35,7 @@ export function buildJourneyDebugEditorView(
     dreamsigns: state.dreamsigns.map(
       (dreamsign, index): JourneyDebugDreamsignView => ({
         actionId: `dreamsign:${index}`,
-        templateId: dreamsign.id ?? null,
+        templateId: dreamsign.id,
         name: dreamsign.name,
       }),
     ),

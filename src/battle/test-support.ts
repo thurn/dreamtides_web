@@ -219,10 +219,12 @@ function makeBattleTestAvatar(): Avatar {
 function makeBattleTestDreamsigns(): Dreamsign[] {
   return [
     {
+      id: testDreamsignId("bolt-script"),
       name: "Bolt Script",
       effectDescription: "The first event each turn costs 1 less.",
     },
     {
+      id: testDreamsignId("wilted-crown"),
       name: "Wilted Crown",
       effectDescription: "A lingering drawback for regression testing.",
     },

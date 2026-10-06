@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEventOnce } from "../../logging";
 import type { Dreamsign } from "../../types/journey";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignRevelationScreen } from "../../cumulus/screens/DreamsignRevelationScreen";
 import { useJourney } from "../../state/journey-context";
 import {
@@ -145,9 +144,7 @@ export function DreamsignRevelationScreenAdapter({
     (dreamsignId: DreamsignId) => {
       if (pendingPurgeDreamsign === null) return;
       const index = state.dreamsigns.findIndex(
-        (dreamsign) =>
-          requireDreamsignId(dreamsign, "Dreamsign Revelation replacement") ===
-          dreamsignId,
+        (dreamsign) => dreamsign.id === dreamsignId,
       );
       if (index < 0) return;
       mutations.acceptDreamsignOffer(siteId, pendingPurgeDreamsign, index);

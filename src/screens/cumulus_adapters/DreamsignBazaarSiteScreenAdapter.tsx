@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignBazaarSiteScreen } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
 import {
   buildDreamsignBazaarSiteView,
@@ -80,9 +79,7 @@ export function DreamsignBazaarSiteScreenAdapter({
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       essence: state.essence,
-      offerIds: view.offers.map((offer) =>
-        requireDreamsignId(offer.dreamsign, "Dreamsign Bazaar log"),
-      ),
+      offerIds: view.offers.map((offer) => offer.dreamsign.id),
       offerPrices: view.offers.map((offer) => offer.price),
       restockPrice: view.restock.price,
       ...buildShopSiteEntryLog(

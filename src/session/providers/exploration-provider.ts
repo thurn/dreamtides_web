@@ -3307,9 +3307,7 @@ export function resolveExplorationChoice(input: {
     });
     if (dreamsignMutation === null) return null;
     const existingById = new Map(
-      journey.dreamsigns.flatMap((dreamsign) =>
-        dreamsign.id === undefined ? [] : [[dreamsign.id, dreamsign] as const],
-      ),
+      journey.dreamsigns.map((dreamsign) => [dreamsign.id, dreamsign] as const),
     );
     const afterDreamsigns = dreamsignMutation.afterIds.map((dreamsignId) => {
       const existing = existingById.get(dreamsignId);

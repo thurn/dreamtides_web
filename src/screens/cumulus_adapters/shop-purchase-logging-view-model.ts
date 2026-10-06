@@ -1,4 +1,3 @@
-import { requireDreamsignId } from "../../data/dreamsigns";
 import { effectivePrice } from "../../shop/shop-generator";
 import type { CardData } from "../../types/cards";
 import type {
@@ -37,10 +36,7 @@ export function buildShopSiteEntryLog(
             }
           : {
               kind: "dreamsign" as const,
-              dreamsignId: requireDreamsignId(
-                  slot.dreamsign,
-                  "Dreamsign Bazaar entry log",
-                ),
+              dreamsignId: slot.dreamsign.id,
             },
       purchased: slot.purchased,
       basePrice: slot.basePrice,

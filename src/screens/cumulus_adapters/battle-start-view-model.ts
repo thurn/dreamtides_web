@@ -52,10 +52,8 @@ export function buildBattleStartView(
       ability: enemy.abilityText.trim(),
       abilityActive: init.opponentAbilityActive,
     },
-    dreamsigns: (enemy.dreamsigns ?? []).flatMap((dreamsign) =>
-      dreamsign.id === undefined
-        ? []
-        : [toDreamsignView(dreamsign, "Battle start")],
+    dreamsigns: (enemy.dreamsigns ?? []).map((dreamsign) =>
+      toDreamsignView(dreamsign),
     ),
     signatureCards: (enemy.signatureCards ?? []).flatMap((summary) => {
       const card = cardDatabase.get(summary.cardNumber);

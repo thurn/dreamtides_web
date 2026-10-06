@@ -52,7 +52,6 @@ import {
   DS_SHADOW,
   type DreamsignView,
 } from "./Dreamsign";
-import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { AvatarPortraitFocus } from "../../../types/content";
 import {
   DEFAULT_AVATAR_PORTRAIT_FOCUS,
@@ -184,7 +183,7 @@ function QsbOverflowStack({
     >
       {signs.map((s, i) => (
         <img
-          key={requireDreamsignId(s, "JourneyStatusBar overflow dreamsign")}
+          key={s.id}
           src={dreamsignArtUrl(String(s.imageName))}
           alt=""
           draggable={false}
@@ -285,7 +284,7 @@ function QsbDreamsignStrip({
       <div style={{ ...wrap, gap: token("--space-xxs") }}>
         {signs.map((s) => (
           <div
-            key={requireDreamsignId(s, "JourneyStatusBar dreamsign strip")}
+            key={s.id}
             style={{ width: SIGN, height: SIGN, flex: "none" }}
           >
             <Dreamsign variant="hud" dreamsign={s} />
@@ -376,7 +375,7 @@ function QsbDreamsignWindow({
         >
           {signs.map((s) => (
             <div
-              key={requireDreamsignId(s, "JourneyStatusBar dreamsign window")}
+              key={s.id}
               style={{ width: 60, height: 60 }}
             >
               <Dreamsign variant="hud" dreamsign={s} />
@@ -713,7 +712,7 @@ function QsbBattleHudBar({
       >
         {signs.map((sign, index) => (
           <div
-            key={requireDreamsignId(sign, "JourneyStatusBar battle dreamsign")}
+            key={sign.id}
             data-journey-status-dreamsign=""
             data-journey-status-dreamsign-column={
               dreamsignColumnCount - Math.floor(index / 2)

@@ -97,9 +97,7 @@ export function buildRewardSelectionContext(input: {
     ]),
   );
   const heldDreamsignIds = new Set(
-    journeyState.dreamsigns.flatMap((dreamsign) =>
-      dreamsign.id === undefined ? [] : [dreamsign.id],
-    ),
+    journeyState.dreamsigns.map((dreamsign) => dreamsign.id),
   );
   const joinedTideIds = journeyState.resolvedPackage?.joinedTideIds ?? [];
   const affinityContext = buildAffinityContext({

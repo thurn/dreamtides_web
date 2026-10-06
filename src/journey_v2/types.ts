@@ -104,7 +104,6 @@ export interface AuguryContext {
    */
   draftPoolCardUuids: ReadonlySet<CardId>;
   heldDreamsignIds: ReadonlySet<DreamsignId>;
-  heldDreamsignFallbackNames: ReadonlySet<string>;
   /** Non-starter pool cards eligible as grant targets. */
   candidateGrantCards: readonly AuguryCatalogCard[];
   /** Unheld dreamsign templates. */

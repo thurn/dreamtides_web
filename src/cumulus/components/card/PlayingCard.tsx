@@ -7,7 +7,6 @@ import type {
   StandardPlayingCardSuit,
 } from "../../../types/gamble";
 import type { DomTestId } from "../../types/dom";
-import { requireDreamsignId } from "../../../data/dreamsigns";
 import { glassAccentChrome } from "../../internal/control-treatment";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { useRevealSource } from "../../internal/reveal/context";
@@ -539,10 +538,7 @@ function DreamsignPlayingCardPrize<ObjectId extends string>(
     relatedDreamsign: DreamsignView;
   },
 ): ReactElement {
-  const dreamsignId = requireDreamsignId(
-    props.relatedDreamsign,
-    "Playing card prize",
-  );
+  const dreamsignId = props.relatedDreamsign.id;
   const revealBinding = useRevealSource({
     identity: {
       entityType: "dreamsign",

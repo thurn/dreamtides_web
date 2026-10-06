@@ -60,7 +60,7 @@ export function buildDreamsignRevelationView(params: {
     scene,
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),
     offer: (params.offeredDreamsigns ?? []).map((dreamsign) =>
-      toDreamsignView(dreamsign, "Dreamsign Revelation offer"),
+      toDreamsignView(dreamsign),
     ),
     offerReady: params.offeredDreamsigns !== null,
     tutorial: buildFirstVisitSiteTutorialView(
@@ -72,15 +72,9 @@ export function buildDreamsignRevelationView(params: {
       params.pendingPurgeDreamsign === null
         ? null
         : {
-            incoming: toDreamsignView(
-              params.pendingPurgeDreamsign,
-              "Dreamsign Revelation pending reward",
-            ),
+            incoming: toDreamsignView(params.pendingPurgeDreamsign),
             held: params.state.dreamsigns.map((dreamsign) =>
-              toDreamsignView(
-                dreamsign,
-                "Dreamsign Revelation held collection",
-              ),
+              toDreamsignView(dreamsign),
             ),
             capacity: params.state.maxDreamsigns,
           },

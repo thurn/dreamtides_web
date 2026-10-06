@@ -1,15 +1,11 @@
 import type { Dreamsign } from "../../../types/journey";
-import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { DreamsignView } from "./Dreamsign";
 
 /** Convert canonical Dreamsign content into the Cumulus presentation contract. */
-export function toDreamsignView(
-  dreamsign: Dreamsign,
-  context: string,
-): DreamsignView {
+export function toDreamsignView(dreamsign: Dreamsign): DreamsignView {
   const name = dreamsign.name;
   return {
-    id: requireDreamsignId(dreamsign, context),
+    id: dreamsign.id,
     name,
     effectDescription:
       dreamsign.effectDescription === "" ? null : dreamsign.effectDescription,

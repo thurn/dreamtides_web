@@ -153,7 +153,7 @@ export interface Avatar {
 
 /** A passive effect collected during the journey. */
 export interface Dreamsign {
-  id?: DreamsignId;
+  id: DreamsignId;
   name: string;
   effectDescription: string;
   imageName?: string;

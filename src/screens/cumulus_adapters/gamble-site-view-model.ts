@@ -114,7 +114,7 @@ export function buildGambleGateViews(
     essenceReward: gravokGateEssenceReward(game.economy, gate.gate),
     rewardDreamsign:
       gate.awardsDreamsign && runtime?.rewardDreamsign != null
-        ? toDreamsignView(runtime.rewardDreamsign, "Gamble gate reward")
+        ? toDreamsignView(runtime.rewardDreamsign)
         : null,
     available:
       !gate.awardsDreamsign ||
@@ -199,19 +199,16 @@ function buildGravokWagerSiteView(params: {
             rewardDreamsign:
               rewardDreamsign === null
                 ? null
-                : toDreamsignView(rewardDreamsign, "Gamble result reward"),
+                : toDreamsignView(rewardDreamsign),
             pendingDreamsignReplacement: result.pendingDreamsignReplacement,
           },
     replacement:
       result?.pendingDreamsignReplacement === true &&
       runtime.rewardDreamsign !== null
         ? {
-            incoming: toDreamsignView(
-              runtime.rewardDreamsign,
-              "Gamble pending reward",
-            ),
+            incoming: toDreamsignView(runtime.rewardDreamsign),
             held: params.state.dreamsigns.map((dreamsign) =>
-              toDreamsignView(dreamsign, "Gamble held collection"),
+              toDreamsignView(dreamsign),
             ),
             capacity: params.state.maxDreamsigns,
           }
@@ -254,10 +251,7 @@ function buildLadderClimbSiteView(params: {
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
     essenceReward: params.game.economy.winEssence,
-    rewardDreamsign: toDreamsignView(
-      runtime.rewardDreamsign,
-      "Ladder Climb reward",
-    ),
+    rewardDreamsign: toDreamsignView(runtime.rewardDreamsign),
     nextDraw:
       nextAttempt === null || nextCost === null
         ? null
@@ -297,12 +291,9 @@ function buildLadderClimbSiteView(params: {
     replacement:
       result?.pendingDreamsignReplacement === true
         ? {
-            incoming: toDreamsignView(
-              runtime.rewardDreamsign,
-              "Ladder Climb pending reward",
-            ),
+            incoming: toDreamsignView(runtime.rewardDreamsign),
             held: params.state.dreamsigns.map((dreamsign) =>
-              toDreamsignView(dreamsign, "Gamble held collection"),
+              toDreamsignView(dreamsign),
             ),
             capacity: params.state.maxDreamsigns,
           }

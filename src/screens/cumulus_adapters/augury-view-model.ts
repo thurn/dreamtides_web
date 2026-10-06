@@ -161,16 +161,13 @@ function allCards(objects: readonly AuguryGameObject[]): CardObject[] {
 function toDreamsign(
   object: Extract<AuguryGameObject, { objectType: "dreamsign" }>,
 ): ReturnType<typeof toDreamsignView> {
-  return toDreamsignView(
-    {
-      id: object.dreamsignId,
-      name: object.dreamsignTemplate.name,
-      effectDescription: object.dreamsignTemplate.effectDescription,
-      imageName: object.dreamsignTemplate.imageName,
-      imageAlt: object.dreamsignTemplate.imageAlt,
-    },
-    "Augury offer",
-  );
+  return toDreamsignView({
+    id: object.dreamsignId,
+    name: object.dreamsignTemplate.name,
+    effectDescription: object.dreamsignTemplate.effectDescription,
+    imageName: object.dreamsignTemplate.imageName,
+    imageAlt: object.dreamsignTemplate.imageAlt,
+  });
 }
 
 function unavailable(message: string): never {

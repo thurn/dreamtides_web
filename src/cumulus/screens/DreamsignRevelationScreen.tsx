@@ -5,7 +5,6 @@
 
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import type { DreamsignView } from "../components/hud/Dreamsign";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
@@ -247,10 +246,7 @@ function OfferStack({
       >
         {view.offer.map((dreamsign, index) => (
           <RevelationOption
-            key={requireDreamsignId(
-              dreamsign,
-              "Cumulus Dreamsign Revelation offer",
-            )}
+            key={dreamsign.id}
             dreamsign={dreamsign}
             index={index}
             disabled={disabled}
