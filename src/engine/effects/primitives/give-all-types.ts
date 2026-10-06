@@ -1,7 +1,7 @@
 import type { CharacterRef, Duration } from "../../dsl/types";
 import { startContinuous } from "../../continuous/resolve";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "… has all character types" (layer 2): selectors and filters naming any
@@ -16,7 +16,7 @@ export interface GiveAllTypesNode {
 
 export const giveAllTypesPrimitive = definePrimitive<GiveAllTypesNode>({
   op: "giveAllTypes",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     const ids = resolveCharacters(ctx, node.subject, env);
     startContinuous(ctx, env, node.duration, ids, ids.map((instance) => ({ kind: "allTypes", instance })));

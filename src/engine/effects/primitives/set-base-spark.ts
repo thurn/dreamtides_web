@@ -1,7 +1,7 @@
 import type { CharacterRef, Duration, ValueExpr } from "../../dsl/types";
 import { startContinuous } from "../../continuous/resolve";
 import { evaluate, resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "Its base ✦ becomes N" (layer 4): spark modifications still apply on top.
@@ -17,7 +17,7 @@ export interface SetBaseSparkNode {
 
 export const setBaseSparkPrimitive = definePrimitive<SetBaseSparkNode>({
   op: "setBaseSpark",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     const value = evaluate(ctx, node.value, env);
     const ids = resolveCharacters(ctx, node.subject, env);

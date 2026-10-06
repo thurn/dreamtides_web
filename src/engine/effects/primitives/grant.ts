@@ -1,7 +1,7 @@
 import type { CharacterRef, Duration, Keyword } from "../../dsl/types";
 import { startContinuous } from "../../continuous/resolve";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "… gains Vengeful" or, with `gains: false`, "… loses Vengeful" (layer 3).
@@ -19,7 +19,7 @@ export interface GrantNode {
 
 export const grantPrimitive = definePrimitive<GrantNode>({
   op: "grant",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     const ids = resolveCharacters(ctx, node.subject, env);
     const { keyword, gains } = node;

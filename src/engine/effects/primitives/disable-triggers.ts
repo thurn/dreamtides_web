@@ -2,7 +2,7 @@ import type { CharacterRef, Condition, Duration } from "../../dsl/types";
 import { startDuration } from "../../rules/durations";
 import { addFloating } from "../../rules/floating";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "This character's triggered abilities don't trigger" for `duration`, and
@@ -17,7 +17,7 @@ export interface DisableTriggersNode {
 
 export const disableTriggersPrimitive = definePrimitive<DisableTriggersNode>({
   op: "disableTriggers",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     const ids = resolveCharacters(ctx, node.subject, env);
     if (ids.length === 0) return;

@@ -1,7 +1,7 @@
 import type { CharacterRef } from "../../dsl/types";
 import { instanceOf } from "../../rules/zones";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /** "Awaken a character": it loses the exhausted status. */
 export interface AwakenNode {
@@ -11,7 +11,7 @@ export interface AwakenNode {
 
 export const awakenPrimitive = definePrimitive<AwakenNode>({
   op: "awaken",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     for (const id of resolveCharacters(ctx, node.subject, env)) {
       instanceOf(ctx.state, id).status.exhausted = false;

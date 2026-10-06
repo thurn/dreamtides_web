@@ -4,7 +4,7 @@ import { spendEnergy } from "../../rules/resources";
 import { preventCard, type PreventDestination } from "../../rules/stack";
 import { opponent } from "../../state/ids";
 import { resolveStackTargets } from "../interpreter";
-import { definePrimitive } from "../types";
+import { cardTarget, definePrimitive } from "../types";
 
 /**
  * "Prevent a card": the chosen card leaves the stack without resolving and
@@ -23,7 +23,7 @@ export interface PreventNode {
 
 export const preventPrimitive = definePrimitive<PreventNode>({
   op: "prevent",
-  targets: (node) => [node.subject],
+  targets: (node) => cardTarget(node.subject),
   resolve(ctx, node, env) {
     for (const id of resolveStackTargets(ctx, node.subject, env)) {
       if (node.unlessPays !== null) {

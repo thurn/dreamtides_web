@@ -3,7 +3,7 @@ import { startDuration } from "../../rules/durations";
 import { addFloating } from "../../rules/floating";
 import { banish, instanceOf } from "../../rules/zones";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "Banish … until end of turn", "until your next turn", "until the next Day
@@ -21,7 +21,7 @@ export interface BanishUntilNode {
 
 export const banishUntilPrimitive = definePrimitive<BanishUntilNode>({
   op: "banishUntil",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     for (const id of resolveCharacters(ctx, node.subject, env)) {
       const expiry = startDuration(ctx, node.duration, env.controller, env.source, [id]);

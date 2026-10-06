@@ -119,6 +119,23 @@ export interface ContinuousDefinition<N extends EffectNode> {
   changes(node: N, env: StaticEnv): ContinuousChange[];
 }
 
+/**
+ * The `targets` hook of a primitive holding a character reference: the
+ * reference when it is chosen at play time, otherwise nothing.
+ */
+export function characterTarget(ref: CharacterRef): readonly PlayTimeTarget[] {
+  return ref.kind === "target" ? [ref] : [];
+}
+
+/**
+ * The `targets` hook of a primitive holding a card reference: the reference
+ * when it is a character or stack card chosen at play time, otherwise
+ * nothing.
+ */
+export function cardTarget(ref: CardRef): readonly PlayTimeTarget[] {
+  return ref.kind === "target" || ref.kind === "stackTarget" ? [ref] : [];
+}
+
 /** Declares a primitive; the identity keeps the node type checked. */
 export function definePrimitive<N extends EffectNode>(
   definition: PrimitiveDefinition<N>,

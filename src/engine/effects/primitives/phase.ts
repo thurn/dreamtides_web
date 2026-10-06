@@ -4,7 +4,7 @@ import type { TargetSpec, TriggeredAbility } from "../../dsl/types";
 import { occupant, returnToHand, setOccupant, slotOf } from "../../rules/zones";
 import { sourceInstance } from "../../state/ids";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * Phasing's effect (rules § Keywords and Effects → Phasing): return another
@@ -20,7 +20,7 @@ export interface PhaseNode {
 
 export const phasePrimitive = definePrimitive<PhaseNode>({
   op: "phase",
-  targets: (node) => [node.subject],
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     const { state } = ctx;
     const self = sourceInstance(env.source);

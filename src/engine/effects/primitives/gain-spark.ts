@@ -3,7 +3,7 @@ import { startDuration } from "../../rules/durations";
 import { addFloating } from "../../rules/floating";
 import { instanceOf } from "../../rules/zones";
 import { evaluate, resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "This character gains +N✦", permanently (gained spark travels with the
@@ -20,7 +20,7 @@ export interface GainSparkNode {
 
 export const gainSparkPrimitive = definePrimitive<GainSparkNode>({
   op: "gainSpark",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     const amount = evaluate(ctx, node.amount, env);
     const ids = resolveCharacters(ctx, node.subject, env);

@@ -17,6 +17,7 @@ import { expectedVerifiedText } from "./dsl/verified-text";
 import { engineCardFromContent } from "./content-catalog";
 import { everyNode } from "./effects/interpreter";
 import { primitiveDefinition } from "./effects/registry";
+import { undeclaredAbilityTargets } from "./testing/target-audit";
 
 interface Entity {
   readonly kind: string;
@@ -67,6 +68,16 @@ describe("content gates", () => {
             expect(primitiveDefinition(ability.effect.op).continuous, `${entity.kind} ${entity.id}`).toBeDefined();
           }
         }
+      }
+    }
+  });
+
+  it("declares every play-time target each authored entity's primitives hold", () => {
+    for (const entity of ENTITIES) {
+      const abilities = entity.status.abilities;
+      if (abilities === undefined) continue;
+      for (const amplified of [false, true]) {
+        expect(undeclaredAbilityTargets(abilities({ amplified })), `${entity.kind} ${entity.id}`).toEqual([]);
       }
     }
   });

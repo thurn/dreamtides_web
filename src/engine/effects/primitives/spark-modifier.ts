@@ -1,7 +1,7 @@
 import type { CharacterRef, ValueExpr } from "../../dsl/types";
 import { startContinuous } from "../../continuous/resolve";
 import { evaluate, resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "… have +N✦" (layer 5): spark the characters have, not spark they gain
@@ -18,7 +18,7 @@ export interface SparkModifierNode {
 
 export const sparkModifierPrimitive = definePrimitive<SparkModifierNode>({
   op: "sparkModifier",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     const amount = evaluate(ctx, node.amount, env);
     const ids = resolveCharacters(ctx, node.subject, env);

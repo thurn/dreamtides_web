@@ -1,7 +1,7 @@
 import type { CharacterRef } from "../../dsl/types";
 import { dissolve as dissolveCharacter } from "../../rules/zones";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "Dissolve a character": moves it from play to its owner's void, after the
@@ -15,7 +15,7 @@ export interface DissolveNode {
 
 export const dissolvePrimitive = definePrimitive<DissolveNode>({
   op: "dissolve",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     for (const id of resolveCharacters(ctx, node.subject, env)) dissolveCharacter(ctx, id, env.controller);
   },

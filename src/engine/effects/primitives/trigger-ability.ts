@@ -1,7 +1,7 @@
 import type { CharacterRef, NamedTrigger } from "../../dsl/types";
 import { triggerNamed } from "../../triggers/matcher";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "Trigger this character's ▸Materialized ability": queues the character's
@@ -16,7 +16,7 @@ export interface TriggerAbilityNode {
 
 export const triggerAbilityPrimitive = definePrimitive<TriggerAbilityNode>({
   op: "triggerAbility",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     for (const id of resolveCharacters(ctx, node.subject, env)) triggerNamed(ctx, id, node.trigger);
   },

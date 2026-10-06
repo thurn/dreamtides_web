@@ -1,7 +1,7 @@
 import type { CharacterRef } from "../../dsl/types";
 import { gainControl as takeControl } from "../../rules/zones";
 import { resolveCharacters } from "../interpreter";
-import { definePrimitive } from "../types";
+import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "Gain control of an enemy": it moves to the controller's leftmost open
@@ -15,7 +15,7 @@ export interface GainControlNode {
 
 export const gainControlPrimitive = definePrimitive<GainControlNode>({
   op: "gainControl",
-  targets: (node) => (node.subject.kind === "target" ? [node.subject] : []),
+  targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
     for (const id of resolveCharacters(ctx, node.subject, env)) takeControl(ctx, id, env.controller);
   },

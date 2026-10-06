@@ -1,19 +1,28 @@
 /** Flow primitives: sequence, chooseOne, optional, ifThen, repeat; X. */
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../../catalog";
-import { enemyCharacter, energyX, event, target } from "../../dsl/builders";
+import type { EngineAvatarDefinition, EngineCardDefinition, EngineDreamsignDefinition, EngineFigmentDefinition } from "../../catalog";
+import { enemyCharacter, energyX, event, stackItem, target } from "../../dsl/builders";
 import { createEngine } from "../../engine";
 import { createFoldAdapter } from "../../fold/slice";
 import { boardState } from "../../testing/board";
+import { CONTINUOUS_CARDS, CONTINUOUS_EMBLEMS } from "../../testing/continuous-cards";
 import { DSL, DSL_CARDS } from "../../testing/dsl-cards";
+import { CYCLE_CARDS, LOOP_CARDS } from "../../testing/loop-cards";
 import { playFromHand, runScenario } from "../../testing/scenario";
-import { SYNTHETIC, syntheticId, testCatalog } from "../../testing/synthetic-cards";
+import { STACK_CARDS, SYNTHETIC_EMBLEMS } from "../../testing/stack-cards";
+import { SYNTHETIC, SYNTHETIC_CARDS, syntheticId, testCatalog } from "../../testing/synthetic-cards";
+import { PROMPTING_CARDS } from "../../testing/synthetic-effects";
+import { undeclaredAbilityTargets, undeclaredTargets } from "../../testing/target-audit";
+import { TRIGGER_CARDS, TRIGGER_EMBLEMS } from "../../testing/trigger-cards";
+import { ZONE_CARDS, ZONE_FIGMENTS } from "../../testing/zone-cards";
 import { chosenModes, collectTargets, everyNode, everyTarget } from "../interpreter";
 import { primitiveDefinition, primitiveOps } from "../registry";
 import { banish } from "./banish";
 import { chooseOne } from "./choose-one";
 import { dissolve } from "./dissolve";
 import { gainPoints } from "./gain-points";
+import { prevent } from "./prevent";
+import { sequence } from "./sequence";
 
 /** "X●, X from 0: Gain X⍟." */
 const pointsFromZeroX: EngineCardDefinition = { ...DSL.pointsTimesX, id: syntheticId(291), costs: [energyX(0)] };
@@ -200,5 +209,47 @@ describe("primitive registry", () => {
     expect(new Set(ops).size).toBe(ops.length);
     for (const op of ops) expect(primitiveDefinition(op).op).toBe(op);
     expect(() => primitiveDefinition("noSuchPrimitive")).toThrow();
+  });
+});
+
+describe("primitive play-time targets", () => {
+  const fixtures: readonly (EngineCardDefinition | EngineFigmentDefinition | EngineAvatarDefinition | EngineDreamsignDefinition)[] = [
+    ...SYNTHETIC_CARDS,
+    ...PROMPTING_CARDS,
+    ...DSL_CARDS,
+    ...STACK_CARDS,
+    ...TRIGGER_CARDS,
+    ...CONTINUOUS_CARDS,
+    ...ZONE_CARDS,
+    ...LOOP_CARDS,
+    ...CYCLE_CARDS,
+    ...ZONE_FIGMENTS,
+    ...[SYNTHETIC_EMBLEMS, TRIGGER_EMBLEMS, CONTINUOUS_EMBLEMS].flatMap((emblems) => [...(emblems.avatars ?? []), ...(emblems.dreamsigns ?? [])]),
+  ];
+
+  it("declares every target spec each synthetic fixture's primitives hold", () => {
+    for (const fixture of fixtures) {
+      for (const amplified of [false, true]) {
+        expect(undeclaredAbilityTargets(fixture.abilities({ amplified })), fixture.id).toEqual([]);
+      }
+    }
+  });
+
+  it("reports a target spec a node holds outside its primitive's targets hook", () => {
+    const stray = target(enemyCharacter());
+    const node = { ...gainPoints(1), stray };
+    expect(undeclaredTargets(node)).toEqual([stray]);
+    const stackStray = { kind: "stackTarget" as const, selector: stackItem({}) };
+    const listed = { ...dissolve(target(enemyCharacter())), extra: [stackStray] };
+    expect(undeclaredTargets(listed)).toEqual([stackStray]);
+  });
+
+  it("checks declared specs and nested effect nodes as nodes of their own", () => {
+    expect(undeclaredTargets(dissolve(target(enemyCharacter())))).toEqual([]);
+    expect(undeclaredTargets(prevent(stackItem({})))).toEqual([]);
+    expect(undeclaredTargets(sequence(dissolve(target(enemyCharacter())), banish(target(enemyCharacter()))))).toEqual([]);
+    const stray = target(enemyCharacter());
+    const node = { ...gainPoints(2), stray };
+    expect(undeclaredAbilityTargets([event(sequence(gainPoints(1), node))])).toEqual([{ op: "gainPoints", spec: stray }]);
   });
 });
