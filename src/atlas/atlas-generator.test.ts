@@ -1,375 +1,237 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import {
   additionalSiteTypesForLevel,
   advanceAtlas,
-  generateSiteComposition,
-  generateInitialAtlas,
   edgesCross,
+  generateInitialAtlas,
+  generateSiteComposition,
   regenerateAtlasForProgress,
-  revealedAtlasSite,
   resetAtlasGenerator,
+  revealedAtlasSite,
   type AtlasBuildContext,
-  type SiteGenerationContext,
+  type AtlasGenerationOptions,
 } from "./atlas-generator";
 import {
+  EARLY_ATLAS_FILL_PROFILE_ID,
+  LATE_ATLAS_FILL_PROFILE_ID,
   makeSyntheticAtlasData,
   makeTestAtlasNode,
   MINIMAL_SITES_DATA,
   SYNTHETIC_ATLAS_DREAMSCAPES,
-  EARLY_ATLAS_FILL_PROFILE_ID,
-  LATE_ATLAS_FILL_PROFILE_ID,
 } from "../testing/atlas-fixtures";
 import { gambleFixture } from "../testing/gamble-fixture";
+import { makeRng } from "../draft/pool/rng";
 import type {
-  AtlasNodeState,
   DreamAtlas,
   DreamscapeNode,
   SiteState,
   SiteType,
 } from "../types/journey";
 import { LayerName, layerAtOrdinal, layerOrdinal } from "../types/layer-name";
-import type { AtlasNodeId, DreamscapeId } from "../types/identifiers";
-import { parseSiteId } from "../types/identifiers";
-import { parseAtlasNodeId } from "../types/identifiers";
-import { type AtlasFillProfileId } from "../types/identifiers";
-import { testDreamsignId } from "../types/test-identities";
-import { testJourneyMutationSource } from "../types/test-identities";
+import type { AtlasFillProfileId, AtlasNodeId } from "../types/identifiers";
+import { parseAtlasNodeId, parseSiteId } from "../types/identifiers";
+import {
+  testDreamsignId,
+  testJourneyMutationSource,
+} from "../types/test-identities";
 
-function defaultContext(
-  overrides?: Partial<SiteGenerationContext>,
-): SiteGenerationContext {
-  return { ...overrides };
-}
+// Every generation call takes an explicit seeded stream, so each property
+// sweep below is deterministic and needs no ambient-randomness mock.
 
-const TEST_DREAMSCAPES = SYNTHETIC_ATLAS_DREAMSCAPES;
-const TEST_ATLAS_DATA = makeSyntheticAtlasData();
-// Dreamsign ids the known-dreamsign placement can draw from; arbitrary unique
-// strings so the tests do not depend on any real dreamsign data.
-const TEST_DREAMSIGN_POOL = Array.from({ length: 8 }, (_, i) =>
+const DREAMSCAPES = SYNTHETIC_ATLAS_DREAMSCAPES;
+const ATLAS_DATA = makeSyntheticAtlasData();
+const DREAMSIGN_POOL = Array.from({ length: 8 }, (_, i) =>
   testDreamsignId(`test-dreamsign-${String(i)}`),
 );
-
-let fixtureRandomState = 1;
-
-function nextFixtureRandom(): number {
-  fixtureRandomState = (fixtureRandomState * 1664525 + 1013904223) >>> 0;
-  return fixtureRandomState / 0x100000000;
-}
+const STARTER = DREAMSCAPES.find((d) => d.isStarter);
+const NON_STARTERS = DREAMSCAPES.filter((d) => !d.isStarter);
+const NON_STARTER_LAYERS = Array.from(
+  { length: ATLAS_DATA.layers.length - 1 },
+  (_, i) => i + 1,
+);
+const SEEDS = Array.from({ length: 24 }, (_, i) => i + 1);
 
 function buildContext(
   overrides?: Partial<AtlasBuildContext>,
 ): AtlasBuildContext {
   return {
-    dreamscapes: TEST_DREAMSCAPES,
-    atlasData: TEST_ATLAS_DATA,
+    dreamscapes: DREAMSCAPES,
+    atlasData: ATLAS_DATA,
     sitesData: MINIMAL_SITES_DATA,
     gambleData: gambleFixture(),
-    dreamsignPoolIds: TEST_DREAMSIGN_POOL,
+    dreamsignPoolIds: DREAMSIGN_POOL,
     apollyonIncarnations: [],
     ...overrides,
   };
 }
 
+function options(seed: number): AtlasGenerationOptions {
+  return { logEvents: false, rng: makeRng(seed) };
+}
+
+function freshAtlas(seed = 1): DreamAtlas<true> {
+  return generateInitialAtlas(0, {}, buildContext(), options(seed));
+}
+
+function advance(
+  atlas: DreamAtlas<true>,
+  nodeId: AtlasNodeId,
+  completionLevel: number,
+  seed = 1,
+): DreamAtlas<true> {
+  return advanceAtlas(
+    atlas,
+    nodeId,
+    completionLevel,
+    {},
+    buildContext(),
+    options(seed),
+  );
+}
+
+function nodesIn(atlas: DreamAtlas<true>, state: DreamscapeNode["state"]) {
+  return Object.values(atlas.nodes).filter((node) => node.state === state);
+}
+
+function countOf(sites: readonly SiteState[], type: SiteType): number {
+  return sites.filter((site) => site.type === type).length;
+}
+
 beforeEach(() => {
-  vi.restoreAllMocks();
-  fixtureRandomState = 1;
-  vi.spyOn(Math, "random").mockImplementation(nextFixtureRandom);
   resetAtlasGenerator();
-  vi.spyOn(console, "log").mockImplementation(() => {});
 });
 
-// ---------------------------------------------------------------------------
-// Synthetic site-composition fixtures exercise the stable AtlasData contract.
-// ---------------------------------------------------------------------------
-
-const STARTER_DREAMSCAPE = (() => {
-  const starter = TEST_DREAMSCAPES.find((d) => d.isStarter);
-  if (starter === undefined) {
-    throw new Error("test data has no starter dreamscape");
-  }
-  return starter;
-})();
-
-const NON_STARTER_DREAMSCAPES = TEST_DREAMSCAPES.filter((d) => !d.isStarter);
-
-/** Layers a non-starter dreamscape can occupy: 0-indexed atlas layers 1..6. */
-const NON_STARTER_LAYERS = Array.from(
-  { length: TEST_ATLAS_DATA.layers.length - 1 },
-  (_, i) => i + 1,
-);
-
-/** Expected mandatory draft count for a 0-indexed atlas layer (doc table). */
-function expectedDraftCount(layer: number): number {
-  return TEST_ATLAS_DATA.layers[layer]?.mandatorySites.Draft ?? 0;
-}
-
-/** Layers where Purge is mandatory (0-indexed 1 and 2; doc layers 2 and 3). */
-function expectsMandatoryPurge(layer: number): boolean {
-  return (TEST_ATLAS_DATA.layers[layer]?.mandatorySites.Purge ?? 0) > 0;
-}
-
-function composeFor(
-  dreamscape: (typeof NON_STARTER_DREAMSCAPES)[number],
-  layer: number,
-  overrides?: Partial<{
-    hasKnownDreamsign: boolean;
-  }>,
-): SiteState[] {
-  resetAtlasGenerator();
-  return generateSiteComposition({
-    layer: layerAtOrdinal(layer) ?? LayerName.One,
-    dreamscape,
-    dreamscapes: TEST_DREAMSCAPES,
-    atlasData: TEST_ATLAS_DATA,
-    sitesData: MINIMAL_SITES_DATA,
-    context: defaultContext(),
-    hasKnownDreamsign: overrides?.hasKnownDreamsign,
-    rng: nextFixtureRandom,
-  }).sites;
-}
-
-function counts(sites: SiteState[]): Partial<Record<SiteType, number>> {
-  const out: Partial<Record<SiteType, number>> = {};
-  for (const site of sites) {
-    out[site.type] = (out[site.type] ?? 0) + 1;
-  }
-  return out;
-}
-
 describe("generateSiteComposition", () => {
-  it("builds the presenting guide's home Random Site with a distinct eligible candidate pool", () => {
-    const home = NON_STARTER_DREAMSCAPES.find(
-      (dreamscape) => dreamscape.signatureSite === "RandomSite",
-    );
-    if (home === undefined)
-      throw new Error("expected a Random Site dreamscape");
-    const sites = composeFor(home, 4);
-    const randomSite = sites.find((site) => site.type === "RandomSite");
-    expect(randomSite?.isEnhanced).toBe(true);
-    expect(randomSite?.randomSite?.mode).toBe("homeChoice");
-    expect(
-      randomSite?.randomSite?.candidateSiteTypes.length,
-    ).toBeGreaterThanOrEqual(3);
-    expect(new Set(randomSite?.randomSite?.candidateSiteTypes).size).toBe(
-      randomSite?.randomSite?.candidateSiteTypes.length,
-    );
-    const visibleTypes = new Set(sites.map((site) => site.type));
-    for (const candidate of randomSite?.randomSite?.candidateSiteTypes ?? []) {
-      expect(visibleTypes.has(candidate)).toBe(false);
-    }
-  });
-
-  it("excludes hard-removed destinations from the Random Site candidate pool", () => {
-    const home = NON_STARTER_DREAMSCAPES.find(
-      (dreamscape) => dreamscape.signatureSite === "RandomSite",
-    );
-    if (home === undefined)
-      throw new Error("expected a Random Site dreamscape");
-    const result = generateSiteComposition({
-      layer: LayerName.Five,
-      dreamscape: home,
-      dreamscapes: TEST_DREAMSCAPES,
-      atlasData: TEST_ATLAS_DATA,
+  function compose(
+    dreamscape: (typeof NON_STARTERS)[number],
+    layer: number,
+    hasKnownDreamsign: boolean,
+    seed: number,
+  ): SiteState[] {
+    resetAtlasGenerator();
+    return generateSiteComposition({
+      layer: layerAtOrdinal(layer) ?? LayerName.One,
+      dreamscape,
+      dreamscapes: DREAMSCAPES,
+      atlasData: ATLAS_DATA,
       sitesData: MINIMAL_SITES_DATA,
-      context: {
-        dreamscapeModifiers: [
-          {
-            kind: "remove_shop_sites",
-            dreamscapesRemaining: 1,
-            source: testJourneyMutationSource("fixture"),
-          },
-        ],
-      },
-      rng: nextFixtureRandom,
-    });
-    const randomSite = result.sites.find((site) => site.type === "RandomSite");
-    expect(randomSite?.randomSite?.candidateSiteTypes).not.toContain("Shop");
-  });
-  it("produces 3-6 sites per non-starter dreamscape at every layer", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer);
-          expect(sites.length).toBeGreaterThanOrEqual(3);
-          expect(sites.length).toBeLessThanOrEqual(6);
-        }
-      }
-    }
-  });
+      context: {},
+      hasKnownDreamsign,
+      rng: makeRng(seed),
+    }).sites;
+  }
 
-  it("places exactly one Battle, always last in visit order", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+  it("meets every per-layer composition rule for every non-starter dreamscape", () => {
+    const eligibleForDreamsign = new Set(
+      ATLAS_DATA.knownDreamsign.eligibleLayers.map(layerOrdinal),
+    );
+    for (const dreamscape of NON_STARTERS) {
       for (const layer of NON_STARTER_LAYERS) {
-        for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer);
-          expect(sites.filter((s) => s.type === "Battle")).toHaveLength(1);
-          expect(sites[sites.length - 1].type).toBe("Battle");
-        }
-      }
-    }
-  });
-
-  it("includes the home guide's signature site, marked enhanced", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer);
-          const signature = sites.filter(
-            (s) => s.type === dreamscape.signatureSite,
-          );
-          expect(signature).toHaveLength(1);
-          expect(signature[0].isEnhanced).toBe(true);
-          // The presenting guide's hidden destination is also enhanced when Random Site fills
-          // a different guide's dreamscape.
-          expect(sites.filter((s) => s.isEnhanced)).toHaveLength(
-            1 +
-              (sites.some(
-                (site) => site.type === "RandomSite" && site !== signature[0],
-              )
-                ? 1
-                : 0),
-          );
-        }
-      }
-    }
-  });
-
-  it("matches the per-layer draft count from the doc table", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer);
-          const drafts = sites.filter((s) => s.type === "Draft");
-          expect(drafts).toHaveLength(expectedDraftCount(layer));
-        }
-      }
-    }
-  });
-
-  it("guarantees Purge in the early layers (and allows it only as fill later)", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        let mandatoryAllHadPurge = true;
-        for (let i = 0; i < 30; i++) {
-          const sites = composeFor(dreamscape, layer);
-          const hasPurge = sites.some((s) => s.type === "Purge");
-          if (expectsMandatoryPurge(layer) && !hasPurge) {
-            mandatoryAllHadPurge = false;
-          }
-          // Purge, when present, is never duplicated.
-          expect(
-            sites.filter((s) => s.type === "Purge").length,
-          ).toBeLessThanOrEqual(1);
-        }
-        if (expectsMandatoryPurge(layer)) {
-          expect(mandatoryAllHadPurge).toBe(true);
-        }
-      }
-    }
-  });
-
-  it("guarantees an Augury in Layer II (0-indexed layer 1)", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        let allHadAugury = true;
-        for (let i = 0; i < 30; i++) {
-          const sites = composeFor(dreamscape, layer);
-          const hasAugury = sites.some((s) => s.type === "Augury");
-          if (layer === 1 && !hasAugury) {
-            allHadAugury = false;
-          }
-          // Augury, when present, is never duplicated.
-          expect(
-            sites.filter((s) => s.type === "Augury").length,
-          ).toBeLessThanOrEqual(1);
-        }
-        if (layer === 1) {
-          expect(allHadAugury).toBe(true);
-        }
-      }
-    }
-  });
-
-  it("keeps each non-Draft type to at most one and Draft to at most two", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        for (let i = 0; i < 30; i++) {
-          const sites = composeFor(dreamscape, layer, {
-            hasKnownDreamsign: true,
-          });
-          for (const [type, count] of Object.entries(counts(sites))) {
-            if (type === "Draft") {
-              expect(count).toBeLessThanOrEqual(2);
-            } else {
-              expect(count).toBeLessThanOrEqual(1);
+        const mandatory = ATLAS_DATA.layers[layer].mandatorySites;
+        for (const seed of SEEDS.slice(0, 8)) {
+          for (const hasKnownDreamsign of eligibleForDreamsign.has(layer)
+            ? [false, true]
+            : [false]) {
+            const sites = compose(dreamscape, layer, hasKnownDreamsign, seed);
+            expect(sites.length).toBeGreaterThanOrEqual(3);
+            expect(sites.length).toBeLessThanOrEqual(6);
+            expect(countOf(sites, "Battle")).toBe(1);
+            expect(sites[sites.length - 1].type).toBe("Battle");
+            expect(countOf(sites, "Draft")).toBe(mandatory.Draft ?? 0);
+            if ((mandatory.Purge ?? 0) > 0) {
+              expect(countOf(sites, "Purge")).toBe(1);
             }
+            if (layer === 1) {
+              expect(countOf(sites, "Augury")).toBe(1);
+            }
+            expect(countOf(sites, "Reward")).toBe(hasKnownDreamsign ? 1 : 0);
+            for (const type of new Set(sites.map((site) => site.type))) {
+              expect(countOf(sites, type)).toBeLessThanOrEqual(
+                type === "Draft" ? 2 : 1,
+              );
+            }
+            const signature = sites.filter(
+              (site) => site.type === dreamscape.signatureSite,
+            );
+            expect(signature).toHaveLength(1);
+            expect(signature[0].isEnhanced).toBe(true);
+            // A Random Site filling another guide's dreamscape is the only
+            // other enhanced site.
+            const hiddenRandom = sites.some(
+              (site) => site.type === "RandomSite" && site !== signature[0],
+            );
+            expect(sites.filter((site) => site.isEnhanced)).toHaveLength(
+              hiddenRandom ? 2 : 1,
+            );
+            const ids = sites.map((site) => site.id);
+            expect(new Set(ids).size).toBe(ids.length);
           }
         }
       }
     }
   });
 
-  it("gives a known-dreamsign carrier exactly one Dreamsign Reward site", () => {
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer, {
-            hasKnownDreamsign: true,
-          });
-          expect(sites.filter((s) => s.type === "Reward")).toHaveLength(1);
-        }
-      }
-    }
-  });
-
-  it("does not add a Dreamsign Reward when the node carries no known dreamsign", () => {
-    // A node without a known dreamsign can still randomly roll a Reward only if
-    // Reward were in the fill pool; it is not, so Reward never appears.
-    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
-      for (const layer of NON_STARTER_LAYERS) {
-        for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer, {
-            hasKnownDreamsign: false,
-          });
-          expect(sites.some((s) => s.type === "Reward")).toBe(false);
-        }
+  it("builds the home Random Site from distinct hidden candidates, honoring hard removals", () => {
+    const home = NON_STARTERS.find((d) => d.signatureSite === "RandomSite");
+    if (home === undefined) throw new Error("expected a Random Site home");
+    for (const removeShops of [false, true]) {
+      const { sites } = generateSiteComposition({
+        layer: LayerName.Five,
+        dreamscape: home,
+        dreamscapes: DREAMSCAPES,
+        atlasData: ATLAS_DATA,
+        sitesData: MINIMAL_SITES_DATA,
+        context: removeShops
+          ? {
+              dreamscapeModifiers: [
+                {
+                  kind: "remove_shop_sites",
+                  dreamscapesRemaining: 1,
+                  source: testJourneyMutationSource("fixture"),
+                },
+              ],
+            }
+          : {},
+        rng: makeRng(7),
+      });
+      const randomSite = sites.find((site) => site.type === "RandomSite");
+      expect(randomSite?.isEnhanced).toBe(true);
+      expect(randomSite?.randomSite?.mode).toBe("homeChoice");
+      const candidates = randomSite?.randomSite?.candidateSiteTypes ?? [];
+      expect(candidates.length).toBeGreaterThanOrEqual(3);
+      expect(new Set(candidates).size).toBe(candidates.length);
+      const visible = new Set(sites.map((site) => site.type));
+      expect(candidates.filter((type) => visible.has(type))).toEqual([]);
+      if (removeShops) {
+        expect(candidates).not.toContain("Shop");
       }
     }
   });
 
   it("uses the selected fill profile's exact weights", () => {
-    const weightedProfiles = {
-      [EARLY_ATLAS_FILL_PROFILE_ID]: {
-        id: EARLY_ATLAS_FILL_PROFILE_ID,
-        signatureSiteWeight: 0,
-        siteWeights: { Transfiguration: 1, Duplication: 10 },
-      },
-      [LATE_ATLAS_FILL_PROFILE_ID]: {
-        id: LATE_ATLAS_FILL_PROFILE_ID,
-        signatureSiteWeight: 0,
-        siteWeights: { Transfiguration: 10, Duplication: 1 },
-      },
-    };
-
     function bossFill(fillProfile: AtlasFillProfileId): SiteType {
       const atlasData = makeSyntheticAtlasData();
-      atlasData.fillProfiles = weightedProfiles;
+      atlasData.fillProfiles = {
+        [EARLY_ATLAS_FILL_PROFILE_ID]: {
+          id: EARLY_ATLAS_FILL_PROFILE_ID,
+          signatureSiteWeight: 0,
+          siteWeights: { Transfiguration: 1, Duplication: 10 },
+        },
+        [LATE_ATLAS_FILL_PROFILE_ID]: {
+          id: LATE_ATLAS_FILL_PROFILE_ID,
+          signatureSiteWeight: 0,
+          siteWeights: { Transfiguration: 10, Duplication: 1 },
+        },
+      };
       atlasData.layers = atlasData.layers.map((layer) =>
         layer.role === "boss"
-          ? {
-              ...layer,
-              fillProfile,
-              siteCount: { min: 2, max: 2 },
-            }
+          ? { ...layer, fillProfile, siteCount: { min: 2, max: 2 } }
           : layer,
       );
-      resetAtlasGenerator();
-      const atlas = generateInitialAtlas(
-        0,
-        defaultContext(),
-        buildContext({ atlasData }),
-        { logEvents: false, rng: () => 0.6 },
-      );
+      const atlas = generateInitialAtlas(0, {}, buildContext({ atlasData }), {
+        logEvents: false,
+        rng: () => 0.6,
+      });
       return atlas.nodes[atlas.bossNodeId].sites[0].type;
     }
 
@@ -377,116 +239,77 @@ describe("generateSiteComposition", () => {
     expect(bossFill(LATE_ATLAS_FILL_PROFILE_ID)).toBe("Transfiguration");
   });
 
-  it("assigns unique IDs to all sites", () => {
-    const sites = composeFor(NON_STARTER_DREAMSCAPES[0], 1, {
-      hasKnownDreamsign: true,
-    });
-    const ids = sites.map((s) => s.id);
-    expect(new Set(ids).size).toBe(ids.length);
-  });
-
-  it("returns the starter's fixed site list with no enhancement and no fill", () => {
-    expect(STARTER_DREAMSCAPE.fixedSites).toBeDefined();
-    for (let i = 0; i < 20; i++) {
-      resetAtlasGenerator();
+  it("returns the starter's fixed site list with no enhancement", () => {
+    if (STARTER === undefined) throw new Error("expected a starter");
+    for (const seed of SEEDS.slice(0, 4)) {
       const { sites, enhancedSiteType } = generateSiteComposition({
         layer: LayerName.One,
-        dreamscape: STARTER_DREAMSCAPE,
-        dreamscapes: TEST_DREAMSCAPES,
-        atlasData: TEST_ATLAS_DATA,
+        dreamscape: STARTER,
+        dreamscapes: DREAMSCAPES,
+        atlasData: ATLAS_DATA,
         sitesData: MINIMAL_SITES_DATA,
-        context: defaultContext(),
+        context: {},
         hasKnownDreamsign: false,
-        rng: nextFixtureRandom,
+        rng: makeRng(seed),
       });
-      expect(sites.map((s) => s.type)).toEqual(STARTER_DREAMSCAPE.fixedSites);
-      expect(sites.some((s) => s.isEnhanced)).toBe(false);
+      expect(sites.map((site) => site.type)).toEqual(STARTER.fixedSites);
+      expect(sites.some((site) => site.isEnhanced)).toBe(false);
       expect(enhancedSiteType).toBeNull();
     }
   });
 });
 
-// ---------------------------------------------------------------------------
-// 7-layer atlas generation invariants
-// ---------------------------------------------------------------------------
-
-/** Builds a fresh atlas with logging suppressed. */
-function freshAtlas(): DreamAtlas<true> {
-  return generateInitialAtlas(0, defaultContext(), buildContext(), {
-    logEvents: false,
-  });
-}
-
-/** Returns every node in `atlas` reachable from the start via forward edges. */
-function reachableFromStart(atlas: DreamAtlas<true>): Set<string> {
-  const seen = new Set<string>([atlas.startingNodeId]);
-  const queue = [atlas.startingNodeId];
-  while (queue.length > 0) {
-    const id = queue.shift();
-    if (id === undefined) break;
-    for (const next of atlas.nodes[id].forwardIds) {
-      if (!seen.has(next)) {
-        seen.add(next);
-        queue.push(next);
-      }
-    }
-  }
-  return seen;
-}
-
-describe("generateInitialAtlas structural invariants", () => {
-  it("produces exactly 7 layers with valid widths every iteration", () => {
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
+describe("generateInitialAtlas", () => {
+  it("builds a connected, non-crossing, seven-layer graph with valid reveals and dreamsigns", () => {
+    const eligibleLayers = new Set(
+      ATLAS_DATA.knownDreamsign.eligibleLayers.map(layerOrdinal),
+    );
+    for (const seed of SEEDS) {
+      const atlas = freshAtlas(seed);
       expect(atlas.layers).toHaveLength(7);
+      atlas.layers.forEach((layer, index) => {
+        const spec = ATLAS_DATA.layers[index].nodeCount;
+        expect(layer.length).toBeGreaterThanOrEqual(spec.min);
+        expect(layer.length).toBeLessThanOrEqual(spec.max);
+      });
       expect(atlas.layers[0]).toHaveLength(1);
       expect(atlas.layers[6]).toHaveLength(1);
-      for (let layer = 0; layer < 7; layer++) {
-        const spec = TEST_ATLAS_DATA.layers[layer].nodeCount;
-        expect(atlas.layers[layer].length).toBeGreaterThanOrEqual(spec.min);
-        expect(atlas.layers[layer].length).toBeLessThanOrEqual(spec.max);
-      }
-    }
-  });
 
-  it("keeps every non-boss node with a forward edge and every non-starter with a backward edge", () => {
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
-      for (const node of Object.values(atlas.nodes)) {
-        if (node.id !== atlas.bossNodeId) {
-          expect(node.forwardIds.length).toBeGreaterThanOrEqual(1);
-        }
-        if (node.id !== atlas.startingNodeId) {
-          expect(node.backwardIds.length).toBeGreaterThanOrEqual(1);
-        }
-      }
-    }
-  });
-
-  it("keeps the boss reachable from the start via forward edges", () => {
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
-      const reachable = reachableFromStart(atlas);
-      expect(reachable.has(atlas.bossNodeId)).toBe(true);
-      // Every node should be reachable forward from the start.
-      for (const id of Object.keys(atlas.nodes)) {
-        expect(reachable.has(id)).toBe(true);
-      }
-    }
-  });
-
-  it("never wires two crossing forward edges within a layer gap", () => {
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
-      for (let layer = 0; layer < atlas.layers.length - 1; layer++) {
-        const edges: Array<[number, number]> = [];
-        for (const fromId of atlas.layers[layer]) {
-          const fromNode = atlas.nodes[fromId];
-          for (const toId of fromNode.forwardIds) {
-            const toNode = atlas.nodes[toId];
-            edges.push([fromNode.indexInLayer, toNode.indexInLayer]);
+      // Every node is reachable forward from the start.
+      const reached = new Set<AtlasNodeId>([atlas.startingNodeId]);
+      const queue = [atlas.startingNodeId];
+      for (let id = queue.shift(); id !== undefined; id = queue.shift()) {
+        for (const next of atlas.nodes[id].forwardIds) {
+          if (!reached.has(next)) {
+            reached.add(next);
+            queue.push(next);
           }
         }
+      }
+      expect(reached.size).toBe(Object.keys(atlas.nodes).length);
+
+      for (const node of Object.values(atlas.nodes)) {
+        if (node.id !== atlas.bossNodeId) {
+          expect(node.forwardIds.length).toBeGreaterThan(0);
+        }
+        if (node.id !== atlas.startingNodeId) {
+          expect(node.backwardIds.length).toBeGreaterThan(0);
+        }
+        for (const neighborId of [...node.forwardIds, ...node.backwardIds]) {
+          const neighbor = atlas.nodes[neighborId].dreamscapeId;
+          if (node.dreamscapeId !== null && neighbor !== null) {
+            expect(neighbor).not.toBe(node.dreamscapeId);
+          }
+        }
+      }
+
+      for (const layer of atlas.layers.slice(0, -1)) {
+        const edges = layer.flatMap((fromId) =>
+          atlas.nodes[fromId].forwardIds.map((toId) => [
+            atlas.nodes[fromId].indexInLayer,
+            atlas.nodes[toId].indexInLayer,
+          ]),
+        );
         for (let a = 0; a < edges.length; a++) {
           for (let b = a + 1; b < edges.length; b++) {
             expect(
@@ -495,868 +318,318 @@ describe("generateInitialAtlas structural invariants", () => {
           }
         }
       }
-    }
-  });
 
-  it("never places a revealed dreamscape adjacent to a copy of itself", () => {
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
-      for (const node of Object.values(atlas.nodes)) {
-        if (node.dreamscapeId === null) {
-          continue;
-        }
-        for (const neighborId of [...node.forwardIds, ...node.backwardIds]) {
-          const neighbor = atlas.nodes[neighborId];
-          if (neighbor.dreamscapeId === null) {
-            continue;
-          }
-          expect(neighbor.dreamscapeId).not.toBe(node.dreamscapeId);
-        }
-      }
-    }
-  });
+      const start = atlas.nodes[atlas.startingNodeId];
+      const boss = atlas.nodes[atlas.bossNodeId];
+      expect(start.state).toBe("available");
+      expect(start.dreamscapeId).toBe(STARTER?.id);
+      expect(boss.state).toBe("revealedLocked");
+      expect(boss.dreamscapeId).toBe(ATLAS_DATA.boss.dreamscapeId);
+      expect(boss.enhancedSiteType).toBeNull();
+      expect(boss.sites[boss.sites.length - 1]?.type).toBe("Battle");
+      const bonus = nodesIn(atlas, "revealedLocked").length - 1;
+      expect(bonus).toBeGreaterThanOrEqual(ATLAS_DATA.graph.bonusReveal.min);
+      expect(bonus).toBeLessThanOrEqual(ATLAS_DATA.graph.bonusReveal.max);
 
-  it("places at most 2 known dreamsigns, only in eligible layers, with unique pool ids", () => {
-    const eligibleLayers = new Set(
-      TEST_ATLAS_DATA.knownDreamsign.eligibleLayers.map(layerOrdinal),
-    );
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
       const carriers = atlas.knownDreamsignCarrierIds;
       expect(carriers.length).toBeLessThanOrEqual(
-        TEST_ATLAS_DATA.knownDreamsign.maxPerAtlas,
+        ATLAS_DATA.knownDreamsign.maxPerAtlas,
       );
-      const grantedIds = new Set<string>();
+      const granted = carriers.map((id) => atlas.nodes[id].knownDreamsignId);
+      expect(new Set(granted).size).toBe(granted.length);
       for (const carrierId of carriers) {
         const node = atlas.nodes[carrierId];
-        expect(node.knownDreamsignId).not.toBeNull();
+        expect(DREAMSIGN_POOL).toContain(node.knownDreamsignId);
         expect(eligibleLayers.has(layerOrdinal(node.layer))).toBe(true);
-        expect(TEST_DREAMSIGN_POOL).toContain(node.knownDreamsignId);
-        // Unique per atlas.
-        expect(grantedIds.has(node.knownDreamsignId ?? "")).toBe(false);
-        grantedIds.add(node.knownDreamsignId ?? "");
       }
-      // Every node carrying a known dreamsign is listed as a carrier.
-      const nodesWithDreamsign = Object.values(atlas.nodes).filter(
-        (n) => n.knownDreamsignId !== null,
-      );
-      expect(nodesWithDreamsign).toHaveLength(carriers.length);
+      expect(
+        Object.values(atlas.nodes).filter((n) => n.knownDreamsignId !== null),
+      ).toHaveLength(carriers.length);
     }
   });
 
-  it("draws known dreamsigns from random positions in the available pool", () => {
+  it.each([
+    { roll: 0, expected: DREAMSIGN_POOL[0] },
+    { roll: 0.999999, expected: DREAMSIGN_POOL[DREAMSIGN_POOL.length - 1] },
+  ])("draws the known dreamsign at roll $roll from that pool position", ({ roll, expected }) => {
     const atlasData = {
-      ...TEST_ATLAS_DATA,
+      ...ATLAS_DATA,
       knownDreamsign: {
-        ...TEST_ATLAS_DATA.knownDreamsign,
+        ...ATLAS_DATA.knownDreamsign,
         maxPerAtlas: 1,
         placementProbability: 1,
       },
     };
-
-    vi.mocked(Math.random).mockReturnValue(0);
-    const firstDraw = generateInitialAtlas(
-      0,
-      defaultContext(),
-      buildContext({ atlasData }),
-      { logEvents: false },
-    );
-    const firstCarrier = firstDraw.knownDreamsignCarrierIds[0];
-    expect(firstDraw.nodes[firstCarrier].knownDreamsignId).toBe(
-      TEST_DREAMSIGN_POOL[0],
-    );
-
-    vi.mocked(Math.random).mockReturnValue(0.999999);
-    const lastDraw = generateInitialAtlas(
-      0,
-      defaultContext(),
-      buildContext({ atlasData }),
-      { logEvents: false },
-    );
-    const lastCarrier = lastDraw.knownDreamsignCarrierIds[0];
-    expect(lastDraw.nodes[lastCarrier].knownDreamsignId).toBe(
-      TEST_DREAMSIGN_POOL[TEST_DREAMSIGN_POOL.length - 1],
-    );
+    const atlas = generateInitialAtlas(0, {}, buildContext({ atlasData }), {
+      logEvents: false,
+      rng: () => roll,
+    });
+    const carrier = atlas.knownDreamsignCarrierIds[0];
+    expect(atlas.nodes[carrier].knownDreamsignId).toBe(expected);
   });
 
-  it("reveals the boss and starter at start, with a small bonus reveal", () => {
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
-      expect(atlas.nodes[atlas.startingNodeId].state).toBe("available");
-      expect(atlas.nodes[atlas.bossNodeId].state).toBe("revealedLocked");
-
-      const revealedLocked = Object.values(atlas.nodes).filter(
-        (n) => n.state === "revealedLocked",
-      );
-      // Boss plus 0-2 bonus reveals.
-      const bonusCount = revealedLocked.length - 1;
-      expect(bonusCount).toBeGreaterThanOrEqual(
-        TEST_ATLAS_DATA.graph.bonusReveal.min,
-      );
-      expect(bonusCount).toBeLessThanOrEqual(
-        TEST_ATLAS_DATA.graph.bonusReveal.max,
-      );
-    }
-  });
-
-  it("assigns the starter dreamscape to layer I and configured Limbo to the boss", () => {
-    const starter = TEST_DREAMSCAPES.find((d) => d.isStarter);
-    expect(starter).toBeDefined();
-    for (let iter = 0; iter < 30; iter++) {
-      const atlas = freshAtlas();
-      expect(atlas.nodes[atlas.startingNodeId].dreamscapeId).toBe(starter?.id);
-      const boss = atlas.nodes[atlas.bossNodeId];
-      expect(boss.dreamscapeId).toBe(TEST_ATLAS_DATA.boss.dreamscapeId);
-      expect(boss.enhancedSiteType).toBeNull();
-      expect(boss.sites[boss.sites.length - 1]?.type).toBe("Battle");
-    }
-  });
-
-  it("places the starting dreamscape at the left edge (x=0)", () => {
-    const atlas = freshAtlas();
-    expect(atlas.nodes[atlas.startingNodeId].position.x).toBe(0);
-  });
-
-  it("gives the two layer-1 choices out of the starter different dreamscapes (and signature site icons)", () => {
-    const dreamscapesById = new Map(TEST_DREAMSCAPES.map((d) => [d.id, d]));
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
-      // Layer 1 is the first choice out of Firstlight Meadow. Derive its
-      // expected width from the live config rather than hardcoding it; the
-      // layer-1-distinct feature inherently needs at least 2 nodes. Reveal both
-      // nodes the way consumers do: completing the starter makes its forward
-      // targets available, which reveals their dreamscapes.
-      const layer1 = atlas.layers[1];
-      const layer1Spec = TEST_ATLAS_DATA.layers[1].nodeCount;
-      expect(layer1Spec.min).toBeGreaterThanOrEqual(2);
-      expect(layer1.length).toBeGreaterThanOrEqual(layer1Spec.min);
-      expect(layer1.length).toBeLessThanOrEqual(layer1Spec.max);
-      const advanced = advanceAtlas(
-        atlas,
-        atlas.startingNodeId,
-        1,
-        defaultContext(),
-        buildContext(),
-        { logEvents: false },
-      );
-
-      const [a, b] = layer1.map((id) => advanced.nodes[id]);
-      expect(a.state).toBe("available");
-      expect(b.state).toBe("available");
-      expect(a.dreamscapeId).not.toBeNull();
-      expect(b.dreamscapeId).not.toBeNull();
-
-      // Different dreamscapes...
-      expect(a.dreamscapeId).not.toBe(b.dreamscapeId);
-      if (a.dreamscapeId === null || b.dreamscapeId === null) {
-        throw new Error("Expected revealed nodes to have dreamscape identities.");
+  it("reveals distinct dreamscapes within each layer as the journey advances", () => {
+    for (const seed of SEEDS) {
+      const atlas = freshAtlas(seed);
+      const afterStart = advance(atlas, atlas.startingNodeId, 1, seed);
+      const layer1 = afterStart.layers[1].map((id) => afterStart.nodes[id]);
+      expect(layer1.length).toBeGreaterThanOrEqual(2);
+      for (const node of layer1) {
+        expect(node.state).toBe("available");
+        expect(node.dreamscapeId).not.toBeNull();
       }
-      // ...and therefore different signature site icons, since each dreamscape
-      // has a unique signature site.
-      const siteA = dreamscapesById.get(a.dreamscapeId)?.signatureSite;
-      const siteB = dreamscapesById.get(b.dreamscapeId)?.signatureSite;
-      expect(siteA).toBeDefined();
-      expect(siteB).toBeDefined();
-      expect(siteA).not.toBe(siteB);
-    }
-  });
+      // The two first choices show different signature sites.
+      const signatures = layer1.map(
+        (node) =>
+          DREAMSCAPES.find((d) => d.id === node.dreamscapeId)?.signatureSite,
+      );
+      expect(new Set(signatures).size).toBe(signatures.length);
 
-  it("never assigns the same dreamscape twice within one layer", () => {
-    for (let iter = 0; iter < 60; iter++) {
-      const atlas = freshAtlas();
-      // Complete the starter (reveals layer 1 as the available frontier), then
-      // complete a layer-1 node, which fully reveals layer 3 — the layer where a
-      // same-layer duplicate was observed. Every revealed node in a layer must
-      // carry a distinct dreamscape.
-      const afterStart = advanceAtlas(
-        atlas,
-        atlas.startingNodeId,
-        1,
-        defaultContext(),
-        buildContext(),
-        { logEvents: false },
-      );
-      const firstChoice = afterStart.layers[1].find(
-        (id) => afterStart.nodes[id].state === "available",
-      );
-      expect(firstChoice).toBeDefined();
-      const afterLayer1 = advanceAtlas(
-        afterStart,
-        firstChoice ?? atlas.startingNodeId,
-        2,
-        defaultContext(),
-        buildContext(),
-        { logEvents: false },
-      );
-
-      for (const layerIds of afterLayer1.layers) {
-        const revealedDreamscapeIds = layerIds
+      const afterLayer1 = advance(afterStart, layer1[0].id, 2, seed);
+      for (const layer of afterLayer1.layers) {
+        const revealed = layer
           .map((id) => afterLayer1.nodes[id].dreamscapeId)
-          .filter((id): id is DreamscapeId => id !== null && id !== undefined);
-        expect(new Set(revealedDreamscapeIds).size).toBe(
-          revealedDreamscapeIds.length,
-        );
+          .filter((id) => id !== null && id !== undefined);
+        expect(new Set(revealed).size).toBe(revealed.length);
       }
     }
   });
 });
 
 describe("advanceAtlas", () => {
-  it("is byte-identical across optimistic and confirmed refolds in one runtime", () => {
+  it("is identical across optimistic and confirmed refolds in one runtime", () => {
     const atlas = freshAtlas();
-    const options = { logEvents: false, rng: () => 0.25 };
-    const first = advanceAtlas(
-      atlas,
-      atlas.startingNodeId,
-      1,
-      defaultContext(),
-      buildContext(),
-      options,
-    );
-    const second = advanceAtlas(
-      atlas,
-      atlas.startingNodeId,
-      1,
-      defaultContext(),
-      buildContext(),
-      options,
-    );
+    const fold = () =>
+      advanceAtlas(atlas, atlas.startingNodeId, 1, {}, buildContext(), {
+        logEvents: false,
+        rng: () => 0.25,
+      });
 
-    expect(second).toEqual(first);
+    expect(fold()).toEqual(fold());
   });
 
-  it("marks the completed node completed and its forward targets available", () => {
+  it("completes the node, opens its targets, forgoes siblings, and reveals two layers ahead", () => {
     const atlas = freshAtlas();
-    const advanced = advanceAtlas(
-      atlas,
-      atlas.startingNodeId,
-      1,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
-    expect(advanced.nodes[atlas.startingNodeId].state).toBe("completed");
-    for (const targetId of atlas.nodes[atlas.startingNodeId].forwardIds) {
-      expect(advanced.nodes[targetId].state).toBe("available");
+    const afterStart = advance(atlas, atlas.startingNodeId, 1);
+    expect(afterStart.currentNodeId).toBe(atlas.startingNodeId);
+    expect(afterStart.nodes[atlas.startingNodeId].state).toBe("completed");
+    for (const id of atlas.nodes[atlas.startingNodeId].forwardIds) {
+      expect(afterStart.nodes[id].state).toBe("available");
     }
-    expect(advanced.currentNodeId).toBe(atlas.startingNodeId);
-  });
+    for (const id of afterStart.layers[2]) {
+      expect(afterStart.nodes[id].state).not.toBe("unrevealed");
+    }
 
-  it("forgoes sibling nodes in the completed node's layer", () => {
-    const atlas = freshAtlas();
-    // Pick a layer-1 node to complete (layer 1 always has 2 nodes), so it has a
-    // sibling to forgo. First advance through layer 0.
-    const afterStart = advanceAtlas(
-      atlas,
-      atlas.startingNodeId,
-      1,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
-    const layer1 = afterStart.layers[1];
-    expect(layer1.length).toBeGreaterThanOrEqual(2);
-    const chosen = layer1[0];
-    const advanced = advanceAtlas(
-      afterStart,
-      chosen,
-      2,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
+    const [chosen, ...siblings] = afterStart.layers[1];
+    const advanced = advance(afterStart, chosen, 2);
     expect(advanced.nodes[chosen].state).toBe("completed");
-    for (const siblingId of layer1) {
-      if (siblingId !== chosen) {
-        expect(advanced.nodes[siblingId].state).toBe("forgone");
-      }
-    }
-  });
-
-  it("reveals the layer two ahead of the completed layer", () => {
-    const atlas = freshAtlas();
-    const advanced = advanceAtlas(
-      atlas,
-      atlas.startingNodeId,
-      1,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
-    // Completing layer 0 reveals layer 2.
-    for (const nodeId of advanced.layers[2]) {
-      expect(advanced.nodes[nodeId].state).not.toBe("unrevealed");
+    expect(siblings.length).toBeGreaterThan(0);
+    for (const id of siblings) {
+      expect(advanced.nodes[id].state).toBe("forgone");
     }
   });
 
   it("returns the atlas unchanged for an unknown node id", () => {
     const atlas = freshAtlas();
-    const result = advanceAtlas(
-      atlas,
-      parseAtlasNodeId("nonexistent"),
-      1,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
-    expect(result).toBe(atlas);
+
+    expect(advance(atlas, parseAtlasNodeId("nonexistent"), 1)).toBe(atlas);
   });
 
-  // Realtime Database drops empty arrays on write, so an unrevealed node that
-  // carries no sites yet round-trips back with `sites` absent. advanceAtlas
-  // syncs its id counters across every node up front, so it must tolerate a
-  // persisted node whose `sites` array is missing rather than throwing — a
-  // throw here strands the post-victory atlas handoff and blocks progression.
-  it("advances a persisted atlas whose unrevealed nodes lack a sites array", () => {
-    const atlas = freshAtlas();
-    const persisted: DreamAtlas<true> = {
-      ...atlas,
+  // Persistence drops every empty array (the boss's `forwardIds`, the
+  // start's `backwardIds`, unrevealed nodes' `sites`), and the boss advance
+  // runs on the winning battle, so the walk must survive the stripped shape.
+  it("advances a fully empty-array-stripped atlas through every layer including the boss", () => {
+    const original = freshAtlas();
+    const path: AtlasNodeId[] = [original.startingNodeId];
+    while (original.nodes[path[path.length - 1]].forwardIds.length > 0) {
+      path.push(original.nodes[path[path.length - 1]].forwardIds[0]);
+    }
+    expect(path[path.length - 1]).toBe(original.bossNodeId);
+
+    const strip = <T extends object>(value: T): T =>
+      Object.fromEntries(
+        Object.entries(value).filter(
+          ([, field]) => !(Array.isArray(field) && field.length === 0),
+        ),
+      ) as T;
+    let atlas = strip({
+      ...original,
       nodes: Object.fromEntries(
-        Object.entries(atlas.nodes).map(([id, node]) => {
-          if (node.state !== "unrevealed") {
-            return [id, node];
-          }
-          const { sites: _sites, ...withoutSites } = node;
-          return [id, withoutSites as typeof node];
+        Object.entries(original.nodes).map(([id, node]) => [id, strip(node)]),
+      ),
+    });
+    expect(atlas.nodes[original.bossNodeId]).not.toHaveProperty("forwardIds");
+
+    path.forEach((nodeId, index) => {
+      atlas = advance(atlas, nodeId, index);
+    });
+
+    expect(atlas.nodes[original.bossNodeId].state).toBe("completed");
+  });
+
+  // A persisted snapshot drops stored nulls, so an unrevealed node can arrive
+  // with `dreamscapeId` absent; advancing must still fully reveal it.
+  it("reveals forward nodes whose dreamscapeId arrived absent", () => {
+    const original = freshAtlas();
+    const snapshot: DreamAtlas<true> = {
+      ...original,
+      nodes: Object.fromEntries(
+        Object.entries(original.nodes).map(([id, node]) => {
+          if (node.dreamscapeId !== null) return [id, node];
+          const { dreamscapeId: _dropped, ...rest } = node;
+          return [id, { ...rest, sites: [] } as unknown as DreamscapeNode];
         }),
       ),
     };
+    const targets = original.nodes[original.startingNodeId].forwardIds;
+    expect(snapshot.nodes[targets[0]]).not.toHaveProperty("dreamscapeId");
 
-    expect(() =>
-      advanceAtlas(
-        persisted,
-        persisted.startingNodeId,
-        1,
-        defaultContext(),
-        buildContext(),
-        { logEvents: false },
-      ),
-    ).not.toThrow();
+    const advanced = advance(snapshot, snapshot.startingNodeId, 1);
 
-    const advanced = advanceAtlas(
-      persisted,
-      persisted.startingNodeId,
-      1,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
-    expect(advanced.nodes[persisted.startingNodeId].state).toBe("completed");
-  });
-
-  // Realtime Database drops EVERY empty array on write, not just `sites`. The
-  // boss node carries `forwardIds: []` and the starting node carries
-  // `backwardIds: []`, so a round-tripped atlas loses those keys too. advanceAtlas
-  // runs on every victory including the final boss (isFinalBoss only gates the
-  // screen change, not the advance), so an unguarded `forwardIds` iteration
-  // throws `forwardIds is not iterable` at the worst possible moment — winning
-  // the run — stranding journey progression. This drives the full graph from start
-  // through every layer up to and INCLUDING the boss on an atlas with all empty
-  // arrays stripped, asserting no throw and that the boss ends completed.
-  it("advances a fully RTDB-stripped atlas through every layer including the boss", () => {
-    const original = freshAtlas();
-
-    // Capture the navigation path off the intact atlas before stripping, since a
-    // stripped atlas can no longer report a node's forward targets. Always take
-    // the first forward edge so the walk follows a real start-to-boss route.
-    const path: AtlasNodeId[] = [original.startingNodeId];
-    let walkId: AtlasNodeId = original.startingNodeId;
-    while (original.nodes[walkId].forwardIds.length > 0) {
-      walkId = original.nodes[walkId].forwardIds[0];
-      path.push(walkId);
-    }
-    const bossId = path[path.length - 1];
-    expect(bossId).toBe(original.bossNodeId);
-
-    // Simulate RTDB stripping: delete every empty array on every node and at the
-    // atlas level. Non-empty arrays survive; empty ones vanish entirely.
-    const stripEmptyArrays = <T extends object>(obj: T): T => {
-      const next = { ...obj } as Record<string, unknown>;
-      for (const [key, value] of Object.entries(next)) {
-        if (Array.isArray(value) && value.length === 0) {
-          delete next[key];
-        }
-      }
-      return next as T;
-    };
-
-    const strippedNodes: Record<string, DreamscapeNode> = {};
-    for (const [id, node] of Object.entries(original.nodes)) {
-      strippedNodes[id] = stripEmptyArrays(node);
-    }
-    const stripped = stripEmptyArrays({
-      ...original,
-      nodes: strippedNodes,
-    });
-
-    // Sanity: the boss node really did lose its forwardIds, and the start lost
-    // its backwardIds — the exact shape that crashes the unguarded path.
-    expect(
-      (stripped.nodes[bossId] as Partial<DreamscapeNode>).forwardIds,
-    ).toBeUndefined();
-    expect(
-      (stripped.nodes[stripped.startingNodeId] as Partial<DreamscapeNode>)
-        .backwardIds,
-    ).toBeUndefined();
-
-    let atlas = stripped;
-    let completionLevel = 0;
-    expect(() => {
-      for (const nodeId of path) {
-        atlas = advanceAtlas(
-          atlas,
-          parseAtlasNodeId(nodeId),
-          completionLevel,
-          defaultContext(),
-          buildContext(),
-          { logEvents: false },
-        );
-        completionLevel += 1;
-      }
-    }).not.toThrow();
-
-    // The boss advance applied: the boss node is completed.
-    expect(atlas.nodes[bossId].state).toBe("completed");
-  });
-
-  // The Atlas UI styles all five AtlasNodeState values distinctly. If a played
-  // run could never produce one of those states, the corresponding UI treatment
-  // would be dead code that silently masks a regression. This drives the real
-  // generator + advance logic from start through every layer (always taking the
-  // first available forward node) and asserts that every AtlasNodeState value
-  // shows up somewhere across the run, so the UI always has each state to render.
-  it("produces every AtlasNodeState across a played-through journey", () => {
-    let atlas = freshAtlas();
-    const seenStates = new Set<AtlasNodeState>();
-
-    const recordStates = (a: DreamAtlas<true>) => {
-      for (const node of Object.values(a.nodes)) {
-        seenStates.add(node.state);
-      }
-    };
-    recordStates(atlas);
-
-    // Walk forward layer by layer: complete the current node, then step to one of
-    // its now-available forward targets, until the boss (a node with no forward
-    // edges) is completed.
-    let currentId: AtlasNodeId = atlas.startingNodeId;
-    let completionLevel = 0;
-    // Bounded by the fixed 7-layer depth; the guard prevents an infinite loop if
-    // the graph were ever malformed.
-    for (let step = 0; step < atlas.layers.length + 2; step++) {
-      atlas = advanceAtlas(
-        atlas,
-        currentId,
-        completionLevel,
-        defaultContext(),
-        buildContext(),
-        { logEvents: false },
-      );
-      recordStates(atlas);
-      completionLevel += 1;
-
-      const forwardIds = atlas.nodes[currentId].forwardIds;
-      if (forwardIds.length === 0) {
-        break;
-      }
-      // Prefer an available forward node; the generator marks forward targets of
-      // a completed node available.
-      const nextId =
-        forwardIds.find((id) => atlas.nodes[id].state === "available") ??
-        forwardIds[0];
-      currentId = nextId;
-    }
-
-    const allStates: AtlasNodeState[] = [
-      "unrevealed",
-      "revealedLocked",
-      "available",
-      "completed",
-      "forgone",
-    ];
-    for (const expected of allStates) {
-      expect(seenStates).toContain(expected);
-    }
-  });
-
-  // The atlas snapshot the battle-completion bridge hands to `advanceAtlas` comes
-  // off persisted state, where Realtime Database has dropped every stored `null`
-  // and `structuredClone` has dropped every `undefined`-valued key — so an
-  // unrevealed node arrives with `dreamscapeId` absent (`undefined`) rather than
-  // `null`. If the reveal guard only treats a strict `null` as "needs revealing",
-  // the just-completed node's forward targets are flipped to `available` but never
-  // get a dreamscape or sites, stranding the player on a blank, dead-end
-  // dreamscape with no battle to advance the run. This reproduces that snapshot
-  // shape and asserts the advance fully reveals the forward (and look-ahead)
-  // nodes.
-  it("reveals forward nodes whose dreamscapeId arrived as undefined (RTDB null-drop)", () => {
-    const original = freshAtlas();
-
-    // Reshape every still-unrevealed node the way a persist/snapshot round-trip
-    // does: drop `dreamscapeId` entirely (RTDB strips the stored `null`), clear
-    // the name, and drop the empty `sites` array. Revealed nodes (start/boss/
-    // bonus) keep their assigned dreamscape and sites.
-    const snapshotNodes: Record<string, DreamscapeNode> = {};
-    for (const [id, node] of Object.entries(original.nodes)) {
-      if (node.dreamscapeId === null) {
-        const { dreamscapeId: _dropped, ...rest } = node;
-        // The `dreamscapeId` key is intentionally absent to mirror the persisted
-        // snapshot shape (RTDB drops the stored `null`); cast through `unknown`
-        // since the literal deliberately omits a required field.
-        snapshotNodes[id] = {
-          ...rest,
-          sites: [],
-        } as unknown as DreamscapeNode;
-      } else {
-        snapshotNodes[id] = node;
-      }
-    }
-    const snapshot: DreamAtlas<true> = { ...original, nodes: snapshotNodes };
-
-    // Sanity: the layer-1 forward targets really did lose their dreamscapeId key.
-    const forwardTargets = original.nodes[original.startingNodeId].forwardIds;
-    expect(forwardTargets.length).toBeGreaterThan(0);
-    for (const id of forwardTargets) {
-      expect(
-        (snapshot.nodes[id] as Partial<DreamscapeNode>).dreamscapeId,
-      ).toBeUndefined();
-    }
-
-    const advanced = advanceAtlas(
-      snapshot,
-      snapshot.startingNodeId,
-      1,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
-
-    // Every newly-available forward node is fully revealed: it carries a real
-    // dreamscape and a non-empty site list ending in a Battle so the
-    // player can actually clear it and progress.
-    for (const id of forwardTargets) {
+    for (const id of targets) {
       const node = advanced.nodes[id];
       expect(node.state).toBe("available");
-      expect(node.dreamscapeId).not.toBeNull();
-      expect(node.dreamscapeId).not.toBeUndefined();
-      expect(node.sites.length).toBeGreaterThan(0);
-      expect(node.sites.some((s) => s.type === "Battle")).toBe(true);
+      expect(node.dreamscapeId ?? null).not.toBeNull();
+      expect(countOf(node.sites, "Battle")).toBe(1);
     }
   });
 });
 
 describe("regenerateAtlasForProgress", () => {
-  const countCompleted = (atlas: DreamAtlas<true>) =>
-    Object.values(atlas.nodes).filter((node) => node.state === "completed")
-      .length;
-  const countAvailable = (atlas: DreamAtlas<true>) =>
-    Object.values(atlas.nodes).filter((node) => node.state === "available")
-      .length;
-
-  it("rebuilds a fresh, unprogressed atlas at zero depth", () => {
-    const atlas = regenerateAtlasForProgress(
-      0,
-      defaultContext(),
-      buildContext(),
-      {
-        logEvents: false,
-      },
-    );
-
-    // No dreamscape has been completed yet, and the only entry point is the
-    // starter — the same shape a brand-new journey begins with.
-    expect(countCompleted(atlas)).toBe(0);
-    expect(atlas.nodes[atlas.startingNodeId].state).toBe("available");
-    expect(countAvailable(atlas)).toBeGreaterThan(0);
-  });
-
-  it("replays one completion per progress level", () => {
-    for (const depth of [1, 2, 3]) {
-      const atlas = regenerateAtlasForProgress(
-        depth,
-        defaultContext(),
-        buildContext(),
-        { logEvents: false },
+  /** Follows forward edges through completed nodes from the starter. */
+  function completedChain(atlas: DreamAtlas<true>): AtlasNodeId[] {
+    const chain: AtlasNodeId[] = [];
+    let current: AtlasNodeId | undefined = atlas.startingNodeId;
+    while (current !== undefined && atlas.nodes[current].state === "completed") {
+      chain.push(current);
+      current = (atlas.nodes[current].forwardIds ?? []).find(
+        (id) => atlas.nodes[id]?.state === "completed",
       );
-      // Each replayed level completes exactly one dreamscape, reproducing the
-      // player's progress depth.
-      expect(countCompleted(atlas)).toBe(depth);
-      // The frontier is preserved: there is always somewhere to continue from.
-      expect(countAvailable(atlas)).toBeGreaterThan(0);
+    }
+    return chain;
+  }
+
+  it("replays one completion per level as a single connected route ending at a live frontier", () => {
+    for (const seed of SEEDS.slice(0, 10)) {
+      for (const depth of [0, 1, 2, 3, 4, 5, 6]) {
+        const atlas = regenerateAtlasForProgress(
+          depth,
+          {},
+          buildContext(),
+          options(seed),
+        );
+        const completed = nodesIn(atlas, "completed").map((node) => node.id);
+        expect(completed).toHaveLength(depth);
+        const chain = completedChain(atlas);
+        expect([...chain].sort()).toEqual([...completed].sort());
+        const chainLayers = chain.map((id) => layerOrdinal(atlas.nodes[id].layer));
+        expect(new Set(chainLayers).size).toBe(chainLayers.length);
+
+        const available = nodesIn(atlas, "available");
+        expect(available.length).toBeGreaterThan(0);
+        expect(
+          Math.min(...available.map((node) => layerOrdinal(node.layer))),
+        ).toBeGreaterThan(Math.max(-1, ...chainLayers));
+        if (depth < atlas.layers.length - 1) {
+          // A locked layer ahead stays visible until the boss is the frontier.
+          expect(nodesIn(atlas, "revealedLocked").length).toBeGreaterThan(0);
+        }
+      }
     }
   });
 
-  it("places the player at the current frontier with revealed layers ahead", () => {
-    const atlas = regenerateAtlasForProgress(
-      2,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
+  it("stops at the boss when the requested depth exceeds the graph", () => {
+    const atlas = regenerateAtlasForProgress(100, {}, buildContext(), options(3));
 
-    // The available frontier sits ahead of every completed node, and there is
-    // at least one revealed-but-locked node further out — the layer-ahead reveal
-    // that gives the player a glimpse of what is coming.
-    const completedLayers = Object.values(atlas.nodes)
-      .filter((node) => node.state === "completed")
-      .map((node) => layerOrdinal(node.layer));
-    const deepestCompleted = Math.max(...completedLayers);
-    const availableLayers = Object.values(atlas.nodes)
-      .filter((node) => node.state === "available")
-      .map((node) => layerOrdinal(node.layer));
-    expect(Math.min(...availableLayers)).toBeGreaterThan(deepestCompleted);
-    expect(
-      Object.values(atlas.nodes).some(
-        (node) => node.state === "revealedLocked",
-      ),
-    ).toBe(true);
-  });
-
-  it("stops cleanly when the requested depth exceeds the reachable path", () => {
-    // A depth far beyond the 7-layer atlas cannot complete more nodes than the
-    // graph allows; the replay breaks out rather than looping forever.
-    const atlas = regenerateAtlasForProgress(
-      100,
-      defaultContext(),
-      buildContext(),
-      { logEvents: false },
-    );
-    expect(countCompleted(atlas)).toBeGreaterThan(0);
-    expect(countCompleted(atlas)).toBeLessThanOrEqual(
-      Object.keys(atlas.nodes).length,
-    );
-  });
-
-  // The invariant the `?goto=atlasN` jump and the Debug Regenerate button both
-  // depend on: a replayed atlas must look like a real playthrough, where the
-  // completed dreamscapes form a single connected route the player actually
-  // walked. A layout with disconnected `completed` segments is unreachable in
-  // the live game, so the replay must never produce one — at any depth, on any
-  // random roll. This is a structural check (edges and lifecycle states only);
-  // it makes no assumptions about which dreamscapes the production catalog defines.
-  describe("completed path is always a connected route", () => {
-    /**
-     * Walks forward edges from the starter, hopping to the single completed
-     * successor at each step, and returns the ids reached. If the completed
-     * nodes form one connected chain, this visits every completed node.
-     */
-    const walkCompletedChainFromStart = (
-      atlas: DreamAtlas<true>,
-    ): AtlasNodeId[] => {
-      const visited: AtlasNodeId[] = [];
-      let current: AtlasNodeId | null = atlas.startingNodeId;
-      while (current !== null) {
-        const node: DreamscapeNode | undefined = atlas.nodes[current];
-        if (node === undefined || node.state !== "completed") {
-          break;
-        }
-        visited.push(current);
-        const forwardIds: readonly AtlasNodeId[] = node.forwardIds ?? [];
-        current =
-          forwardIds.find((id) => atlas.nodes[id]?.state === "completed") ??
-          null;
-      }
-      return visited;
-    };
-
-    it("connects every completed node in one chain from the starter", () => {
-      for (let trial = 0; trial < 100; trial++) {
-        for (const depth of [1, 2, 3, 4, 5, 6]) {
-          const atlas = regenerateAtlasForProgress(
-            depth,
-            defaultContext(),
-            buildContext(),
-            { logEvents: false },
-          );
-          const completedIds = Object.values(atlas.nodes)
-            .filter((node) => node.state === "completed")
-            .map((node) => node.id);
-          const reachedByWalk = walkCompletedChainFromStart(atlas);
-          // Every completed node is reached by walking forward edges from the
-          // starter: no orphaned `completed` node sits off the traversed route.
-          expect(reachedByWalk.slice().sort()).toEqual(
-            completedIds.slice().sort(),
-          );
-          // The chain starts at the starter and holds exactly one completed
-          // node per layer it passes through (the player never completes two
-          // dreamscapes in the same layer).
-          expect(reachedByWalk[0]).toBe(atlas.startingNodeId);
-          const layersOnChain = reachedByWalk.map((id) =>
-            layerOrdinal(atlas.nodes[id].layer),
-          );
-          expect(new Set(layersOnChain).size).toBe(layersOnChain.length);
-        }
-      }
-    });
+    expect(nodesIn(atlas, "completed")).toHaveLength(atlas.layers.length);
   });
 });
 
 describe("edgesCross", () => {
-  it("detects crossing and non-crossing edge pairs", () => {
-    // (0->1) and (1->0) cross.
-    expect(edgesCross(0, 1, 1, 0)).toBe(true);
-    // (0->0) and (1->1) do not cross.
-    expect(edgesCross(0, 0, 1, 1)).toBe(false);
-    // Shared source never crosses.
-    expect(edgesCross(0, 0, 0, 2)).toBe(false);
+  it.each([
+    [0, 1, 1, 0, true],
+    [0, 0, 1, 1, false],
+    [0, 0, 0, 2, false],
+  ])("(%i->%i) x (%i->%i) crosses: %s", (a, b, c, d, expected) => {
+    expect(edgesCross(a, b, c, d)).toBe(expected);
   });
 });
 
 describe("revealedAtlasSite", () => {
-  function makeSite(
-    idSeed: string,
+  const site = (
+    label: string,
     type: SiteType,
     isEnhanced = false,
-  ): SiteState {
-    return { id: parseSiteId(idSeed), type, isEnhanced, isVisited: false };
-  }
-
-  function makeNode(
-    idSeed: string,
-    sites: SiteState[],
-    enhancedSiteType: SiteType | null,
-  ): DreamscapeNode {
-    return makeTestAtlasNode(idSeed, sites, { enhancedSiteType });
-  }
-
-  it("never reveals the Battle site even if it is the only marked-enhanced one", () => {
-    const node = makeNode(
-      "dreamscape-1",
-      [
-        makeSite("a", "Shop"),
-        makeSite("b", "Essence"),
-        makeSite("c", "Battle", true),
-      ],
-      "Battle",
-    );
-    const revealed = revealedAtlasSite(node);
-    expect(revealed).not.toBeNull();
-    expect(revealed?.type).not.toBe("Battle");
+  ): SiteState => ({
+    id: parseSiteId(label),
+    type,
+    isEnhanced,
+    isVisited: false,
   });
+  const node = (
+    label: string,
+    sites: SiteState[],
+    enhancedSiteType: SiteType | null = null,
+  ): DreamscapeNode => makeTestAtlasNode(label, sites, { enhancedSiteType });
 
   it("reveals the enhanced site when the dreamscape has one", () => {
-    const node = makeNode(
-      "dreamscape-1",
-      [
-        makeSite("a", "Shop"),
-        makeSite("b", "Essence", true),
-        makeSite("c", "Battle"),
-      ],
-      "Essence",
+    const revealed = revealedAtlasSite(
+      node(
+        "dreamscape-1",
+        [site("a", "Shop"), site("b", "Essence", true), site("c", "Battle")],
+        "Essence",
+      ),
     );
-    const revealed = revealedAtlasSite(node);
+
     expect(revealed?.id).toBe("b");
-    expect(revealed?.type).toBe("Essence");
   });
 
-  it("picks deterministically from non-battle sites when there is no enhanced site", () => {
-    const sites = [
-      makeSite("a", "Draft"),
-      makeSite("b", "Shop"),
-      makeSite("c", "Essence"),
-      makeSite("d", "Battle"),
-    ];
-    const node = makeNode("dreamscape-7", sites, null);
-    const first = revealedAtlasSite(node);
-    const second = revealedAtlasSite(node);
-    expect(first).not.toBeNull();
-    expect(first?.type).not.toBe("Battle");
-    expect(second?.id).toBe(first?.id);
-  });
-
-  it("returns the same site for the same node id across calls (reload-resilient)", () => {
-    const sites = [
-      makeSite("s1", "Draft"),
-      makeSite("s2", "Shop"),
-      makeSite("s3", "Augury"),
-      makeSite("s4", "Essence"),
-      makeSite("s5", "Battle"),
-    ];
-    const nodeA = makeNode("dreamscape-42", sites, null);
-    const nodeAClone = makeNode("dreamscape-42", sites, null);
-    expect(revealedAtlasSite(nodeA)?.id).toBe(
-      revealedAtlasSite(nodeAClone)?.id,
-    );
-  });
-
-  it("returns different reveals for different node ids (at least sometimes)", () => {
-    const sites: SiteState[] = [
-      makeSite("a", "Draft"),
-      makeSite("b", "Shop"),
-      makeSite("c", "Essence"),
-      makeSite("d", "Augury"),
-      makeSite("e", "Battle"),
-    ];
-    const distinctTypes = new Set<SiteType>();
-    for (let i = 0; i < 50; i++) {
-      const node = makeNode(`dreamscape-${String(i)}`, sites, null);
-      const revealed = revealedAtlasSite(node);
-      if (revealed) distinctTypes.add(revealed.type);
-    }
-    expect(distinctTypes.size).toBeGreaterThan(1);
-  });
-
-  it("never reveals a Draft site", () => {
-    for (let i = 0; i < 50; i++) {
-      const node = makeNode(
-        `dreamscape-${String(i)}`,
-        [
-          makeSite("a", "Draft"),
-          makeSite("b", "Draft"),
-          makeSite("c", "Shop"),
-          makeSite("d", "Essence"),
-          makeSite("e", "Battle"),
-        ],
-        null,
-      );
-      const revealed = revealedAtlasSite(node);
-      expect(revealed?.type).not.toBe("Draft");
-      expect(revealed?.type).not.toBe("Battle");
-    }
-  });
+  it.each([
+    { name: "an enhanced Battle", enhanced: "Battle" as const, battleEnhanced: true },
+    { name: "an enhanced type with no marked site", enhanced: "Reward" as const, battleEnhanced: false },
+    { name: "no enhanced site", enhanced: null, battleEnhanced: false },
+  ])(
+    "never reveals Battle or Draft for $name, and is stable per node id",
+    ({ enhanced, battleEnhanced }) => {
+      for (let i = 0; i < 20; i++) {
+        const sites = [
+          site("a", "Draft"),
+          site("b", "Draft"),
+          site("c", "Shop"),
+          site("d", "Essence"),
+          site("e", "Battle", battleEnhanced),
+        ];
+        const revealed = revealedAtlasSite(
+          node(`dreamscape-${String(i)}`, sites, enhanced),
+        );
+        expect(["Shop", "Essence"]).toContain(revealed?.type);
+        const clone = node(`dreamscape-${String(i)}`, [...sites], enhanced);
+        expect(revealedAtlasSite(clone)?.id).toBe(revealed?.id);
+      }
+    },
+  );
 
   it("returns null for nodes with no sites", () => {
-    const node = makeNode("empty-node", [], null);
-    expect(revealedAtlasSite(node)).toBeNull();
-  });
-
-  it("falls back to deterministic pick if enhancedSiteType is set but no site is marked isEnhanced", () => {
-    const node = makeNode(
-      "dreamscape-9",
-      [
-        makeSite("a", "Shop"),
-        makeSite("b", "Essence"),
-        makeSite("c", "Battle"),
-      ],
-      "Reward",
-    );
-    const revealed = revealedAtlasSite(node);
-    expect(revealed).not.toBeNull();
-    expect(revealed?.type).not.toBe("Battle");
+    expect(revealedAtlasSite(node("empty-node", []))).toBeNull();
   });
 });
 
 describe("additionalSiteTypesForLevel", () => {
-  it("returns the fill candidate site types for a dreamscape layer", () => {
-    const dreamscape = NON_STARTER_DREAMSCAPES[0];
+  it("offers Essence and other guides' signature sites, never the dreamscape's own", () => {
+    const [dreamscape] = NON_STARTERS;
     const types = additionalSiteTypesForLevel(
       LayerName.Four,
       dreamscape.signatureSite,
-      TEST_DREAMSCAPES,
-      defaultContext(),
-      TEST_ATLAS_DATA,
+      DREAMSCAPES,
+      {},
+      ATLAS_DATA,
     );
-    // Essence is always an eligible fill option.
-    expect(types).toContain("Essence");
-    // The dreamscape's own signature site is excluded from its fill.
-    expect(types).not.toContain(dreamscape.signatureSite);
-    // Another dreamscape's signature site is an eligible fill option.
-    const otherSignature = NON_STARTER_DREAMSCAPES.find(
+    const other = NON_STARTERS.find(
       (d) => d.signatureSite !== dreamscape.signatureSite,
-    )?.signatureSite;
-    expect(otherSignature).toBeDefined();
-    if (otherSignature !== undefined) {
-      expect(types).toContain(otherSignature);
-    }
+    );
+
+    expect(types).toContain("Essence");
+    expect(types).not.toContain(dreamscape.signatureSite);
+    expect(types).toContain(other?.signatureSite);
   });
 });

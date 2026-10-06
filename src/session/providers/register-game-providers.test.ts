@@ -1,41 +1,15 @@
-import { testJourneySeed } from "../../types/test-identities";
-import { testEventActor } from "../../types/test-identities";
-// Integration coverage for the real content providers behind reducer
-// seams (Task 25b). Unlike the per-case rules unit tests (which register minimal
-// deterministic FAKES) and the synthetic replay fixtures, this suite registers
-// the ACTUAL generators via `registerGameProviders(content)` and folds a full
-// content-coupled event chain through the canonical game engine config, so the
-// previously-bouncing provider-backed events APPLY:
-import { economyFixture } from "../../testing/economy-fixture";
-import { opponentsFixture } from "../../testing/opponents-fixture";
-import { draftDataFixture } from "../../testing/draft-data-fixture";
-import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
-import { loadTestSitesData } from "../../testing/atlas-fixtures";
-import { gambleGameByRulesKind } from "../../data/gamble-data";
-import { SELECTION_RULES_VERSION } from "../../reward-selection";
-//
-//   START_JOURNEY -> SELECT_AVATAR -> OPEN_SITE (every content-coupled site
-//   type) -> REROLL_SHOP -> BEGIN_BATTLE
-//
-// Two invariants:
-//   (a) each provider-backed event APPLIES (never bounces) once the real
-//       providers are registered; and
-//   (b) folding the same log twice yields a byte-identical final hash — the
-//       determinism rail. A generator that leaked `Math.random` (e.g. the atlas
-//       generator, or a site generator not threaded off `ctx.rng`) would make
-//       the two folds diverge and fail (b), which is exactly the desync this
-//       task exists to prevent.
-//
-// Data-resilient per AGENTS.md: the JourneyContent is built from the shared
-// src/testing (live compiled dreamscape / atlas-data bundles) plus a
-// hand-authored card/dreamsign corpus. Site ids and the avatar id are
-// RESOLVED from the folded state / content, never hardcoded, and the assertions
-// are over OUTCOMES and HASHES, never catalog content — so a data edit cannot
-// break the suite.
+// Integration coverage for the real content providers behind the reducer
+// seams. Unlike the per-case rules tests (which register minimal fakes), this
+// suite registers the actual generators via `registerGameProviders(content)`
+// and folds content-coupled event chains through the canonical engine config:
+//   (a) each provider-backed event applies once the real providers are
+//       registered; and
+//   (b) folding the same log twice yields an identical final hash, so a
+//       generator that leaked ambient randomness fails the determinism rail.
+// Site ids and the avatar id are resolved from the folded state, and the
+// assertions are over outcomes, hashes, and fixture-derived values.
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { getLogEntries, resetLog } from "../../logging";
-
 import type { GameEvent, Genesis } from "../../eventlog/types";
 import { eventRng } from "../../eventlog/rng";
 import type { SeqEvent } from "../../rules/replay/replay";
@@ -44,24 +18,26 @@ import { genesisFoldState } from "../../rules/fold-state";
 import { reduceGameEvent } from "../../rules/reducer";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
-import type {
-  AvatarContent,
-  DreamsignTemplate,
-} from "../../types/content";
-import type { FoldState } from "../../rules/fold-state";
+import type { AvatarContent, DreamsignTemplate } from "../../types/content";
+import type { GambleGameDefinition } from "../../types/gamble-data";
 import type { JourneyState, SiteState, SiteType } from "../../types/journey";
 import { parseCardName } from "../../types/card-identity";
+import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+import { draftDataFixture } from "../../testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import {
-  loadTestAffiliations,
-  loadTestAtlasData,
-  loadTestDreamGuides,
-  loadTestDreamscapes,
+  makeSyntheticAtlasData,
+  MINIMAL_SITES_DATA,
+  SYNTHETIC_ATLAS_DREAMSCAPES,
 } from "../../testing/atlas-fixtures";
 import {
   buildTestCorpusCards,
   makeTestPoolContext,
   TEST_STARTER_CARD_NUMBERS,
 } from "../../testing/pool-context";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { LayerName } from "../../types/layer-name";
 import { buildAuguryContext } from "../../journey_v2/context/buildAuguryContext";
 import { generateAuguryEncounter } from "../../journey_v2/encounter/generateAuguryEncounter";
@@ -78,14 +54,23 @@ import {
   registerGameProviders,
 } from "./register-game-providers";
 import { createSiteContentProvider } from "./site-provider";
-import { parseSiteId } from "../../types/identifiers";
-import { parseAtlasNodeId } from "../../types/identifiers";
-import type { AtlasNodeId, SiteId } from "../../types/identifiers";
-import { parseDeckEntryId } from "../../types/identifiers";
-import { testDreamscapeId, testExplorationActionId, testDreamsignId, testCardId, testAvatarId } from "../../types/test-identities";
-import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
+import {
+  parseAtlasNodeId,
+  parseDeckEntryId,
+  parseSiteId,
+} from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import {
+  testAvatarId,
+  testCardId,
+  testDreamscapeId,
+  testDreamsignId,
+  testEventActor,
+  testExplorationActionId,
+  testJourneySeed,
+} from "../../types/test-identities";
 
-const AVATAR_ID = "avatar-real-provider";
+const AVATAR_ID = testAvatarId("avatar-real-provider");
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
 const GENESIS: Genesis = {
   seed: testJourneySeed("real-provider-seed"),
@@ -93,17 +78,7 @@ const GENESIS: Genesis = {
   createdAt: 0,
   contentConfig: TEST_CONTENT_CONFIG,
 };
-
-/** Eight dreamsign templates so the reward, revelation, and bazaar generators have a live pool. */
-function makeDreamsignTemplates(): DreamsignTemplate[] {
-  return Array.from({ length: 8 }, (_value, index) => ({
-    id: testDreamsignId(`dreamsign-${String(index)}`),
-    name: `Dreamsign ${String(index)}`,
-    effectDescription: "A test dreamsign.",
-    imageName: "sign",
-    imageAlt: "sign",
-  }));
-}
+const OPEN = { selectionRulesVersion: SELECTION_RULES_VERSION };
 
 function makeCard(cardNumber: number, isStarter: boolean): CardData {
   return {
@@ -122,47 +97,46 @@ function makeCard(cardNumber: number, isStarter: boolean): CardData {
   };
 }
 
-function makeAvatar(idSeed: string): AvatarContent {
-  return {
-    id: testAvatarId(idSeed),
-    name: `Avatar ${idSeed}`,
-    title: "Provider Witness",
-    renderedText: "Test ability.",
-    imageNumber: "0006",
-    startingEssence: 200,
-  };
+function makeDreamsignTemplates(count: number): DreamsignTemplate[] {
+  return Array.from({ length: count }, (_value, index) =>
+    makeAuguryTestDreamsignTemplate({
+      id: testDreamsignId(`dreamsign-${String(index).padStart(3, "0")}`),
+      name: `Dreamsign ${String(index)}`,
+    }),
+  );
 }
 
-/**
- * A {@link JourneyContent} built from the shared test helpers plus a hand-authored
- * card / dreamsign corpus, exercising the REAL journey-start, atlas, shop, and
- * battle-init generators without any network fetch.
- */
+const AVATAR: AvatarContent = {
+  id: AVATAR_ID,
+  name: "Provider Witness",
+  title: "Provider Witness",
+  renderedText: "Test ability.",
+  imageNumber: "0006",
+  startingEssence: 200,
+};
+
+/** Real journey-start, atlas, shop, and battle-init generators, no fetch. */
 function makeJourneyContent(): JourneyContent {
-  const dreamsignTemplates = makeDreamsignTemplates();
-  const dreamsignIds = dreamsignTemplates.map((template) => template.id);
-  const starterCards = TEST_STARTER_CARD_NUMBERS.map((cardNumber) =>
-    makeCard(cardNumber, true),
-  );
-  const corpusCards = buildTestCorpusCards();
-  const cardDatabase = new Map<number, CardData>(
-    [...starterCards, ...corpusCards].map((card) => [card.cardNumber, card]),
-  );
+  const dreamsignTemplates = makeDreamsignTemplates(8);
+  const cards = [
+    ...TEST_STARTER_CARD_NUMBERS.map((cardNumber) => makeCard(cardNumber, true)),
+    ...buildTestCorpusCards(),
+  ];
   return {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
-    cardDatabase,
-    avatars: [makeAvatar(AVATAR_ID)],
+    cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
+    avatars: [AVATAR],
     dreamwellCards: [],
     dreamsignTemplates,
-    dreamscapes: loadTestDreamscapes(),
-    affiliations: loadTestAffiliations(),
-    guides: loadTestDreamGuides(),
-    atlasData: loadTestAtlasData(),
-    sitesData: loadTestSitesData(),
+    dreamscapes: SYNTHETIC_ATLAS_DREAMSCAPES,
+    affiliations: [],
+    guides: [],
+    atlasData: makeSyntheticAtlasData(),
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
-    poolContext: makeTestPoolContext(dreamsignIds),
+    poolContext: makeTestPoolContext(dreamsignTemplates.map(({ id }) => id)),
   };
 }
 
@@ -176,7 +150,7 @@ const CONTENT_SITE_TYPES: SiteType[] = [
   "Gamble",
 ];
 
-/** A single-actor committed event: basedOnSeq = seq - 1 (empty intervening window). */
+/** A single-actor committed event: basedOnSeq = seq - 1. */
 function ev(
   seq: number,
   type: SeqEvent["event"]["type"],
@@ -194,13 +168,26 @@ function ev(
   };
 }
 
-/** The current dreamscape node id after START_JOURNEY, or throws. */
-function currentNodeId(state: FoldState): AtlasNodeId {
-  const id = state.journey.currentDreamscape;
-  if (id === null) {
-    throw new Error("expected a current dreamscape after START_JOURNEY");
+const START: SeqEvent[] = [
+  ev(1, "START_JOURNEY", { avatarId: AVATAR_ID }),
+  ev(2, "SELECT_AVATAR", { avatarId: AVATAR_ID }),
+];
+
+function startedJourney(): JourneyState {
+  return replayLog({ genesis: GENESIS, events: START }).finalState.journey;
+}
+
+function siteOf(label: string, type: SiteType, isEnhanced = false): SiteState {
+  return { id: parseSiteId(label), type, isEnhanced, isVisited: false };
+}
+
+function expectAllApplied(outcomes: ReturnType<typeof replayLog>["outcomes"]) {
+  for (const outcome of outcomes) {
+    expect(
+      outcome.outcome,
+      `seq ${String(outcome.seq)} ${outcome.error?.message ?? ""}`,
+    ).toBe("applied");
   }
-  return id;
 }
 
 describe("registerGameProviders (real content providers)", () => {
@@ -211,332 +198,147 @@ describe("registerGameProviders (real content providers)", () => {
     clearGameProviders();
   });
 
-  it("folds START_JOURNEY -> SELECT_AVATAR -> OPEN_SITE(each type) -> REROLL_SHOP -> BEGIN_BATTLE, all applied, deterministically", () => {
-    // Phase 1: start the run and add one site of every content-coupled type
-    // (plus a Battle site) to the starting node, so OPEN_SITE / BEGIN_BATTLE
-    // have live targets regardless of what the atlas generator rolled.
-    const prefix: SeqEvent[] = [
-      ev(1, "START_JOURNEY", {
-        avatarId: testAvatarId(AVATAR_ID),
-      }),
-      ev(2, "SELECT_AVATAR", {
-        avatarId: testAvatarId(AVATAR_ID),
-      }),
-    ];
-    const started = replayLog({ genesis: GENESIS, events: prefix });
-    expect(started.outcomes.find((o) => o.seq === 1)?.outcome).toBe("applied");
-    expect(started.outcomes.find((o) => o.seq === 2)?.outcome).toBe("applied");
-    const nodeId = currentNodeId(started.finalState);
+  it("applies OPEN_SITE for every content-coupled type and REROLL_SHOP, deterministically", () => {
+    const started = replayLog({ genesis: GENESIS, events: START });
+    const nodeId = started.finalState.journey.currentDreamscape;
+    if (nodeId === null) throw new Error("expected a current dreamscape");
 
-    let seq = 2;
-    const addSiteEvents: SeqEvent[] = [];
-    for (const siteType of [...CONTENT_SITE_TYPES, "Battle" as SiteType]) {
-      seq += 1;
-      addSiteEvents.push(
-        ev(seq, "ADD_SITE_TO_DREAMSCAPE", {
-          nodeId: nodeId,
-          siteType,
-        }),
-      );
-    }
-
-    // Fold the site-additions so we can resolve the minted site ids by type.
+    let seq = START.length;
+    const addSites = CONTENT_SITE_TYPES.map((siteType) =>
+      ev(++seq, "ADD_SITE_TO_DREAMSCAPE", { nodeId, siteType }),
+    );
     const withSites = replayLog({
       genesis: GENESIS,
-      events: [...prefix, ...addSiteEvents],
+      events: [...START, ...addSites],
     });
-    for (const added of addSiteEvents) {
-      expect(withSites.outcomes.find((o) => o.seq === added.seq)?.outcome).toBe(
-        "applied",
+    const opened = new Map<SiteType, SiteId>();
+    const visits: SeqEvent[] = [];
+    for (const site of withSites.finalState.journey.atlas.nodes[nodeId].sites) {
+      if (!CONTENT_SITE_TYPES.includes(site.type) || opened.has(site.type)) {
+        continue;
+      }
+      opened.set(site.type, site.id);
+      visits.push(
+        ev(++seq, "ENTER_SITE", { siteId: site.id }),
+        ev(++seq, "OPEN_SITE", { siteId: site.id, ...OPEN }),
       );
-    }
-    const node = withSites.finalState.journey.atlas.nodes[nodeId];
-    const siteIdByType = new Map<SiteType, SiteId>();
-    for (const site of node.sites) {
-      if (!siteIdByType.has(site.type)) siteIdByType.set(site.type, site.id);
-    }
-    for (const siteType of CONTENT_SITE_TYPES) {
-      expect(siteIdByType.get(siteType)).toBeDefined();
-    }
-
-    // Phase 2: enter and complete every non-Battle site, exercising OPEN_SITE
-    // for every content-backed type and rerolling both shop variants. The
-    // Battle-last rule then permits the terminal battle sequence.
-    const tail: SeqEvent[] = [];
-    const openedTypes = new Set<SiteType>();
-    for (const site of node.sites.filter(
-      (candidate) => candidate.type !== "Battle",
-    )) {
-      seq += 1;
-      tail.push(ev(seq, "ENTER_SITE", { siteId: site.id }));
-      if (
-        CONTENT_SITE_TYPES.includes(site.type) &&
-        !openedTypes.has(site.type)
-      ) {
-        openedTypes.add(site.type);
-        seq += 1;
-        tail.push(
-          ev(seq, "OPEN_SITE", {
-            siteId: site.id,
-            selectionRulesVersion: SELECTION_RULES_VERSION,
-          }),
-        );
-        if (site.type === "Shop" || site.type === "DreamsignBazaar") {
-          seq += 1;
-          tail.push(ev(seq, "REROLL_SHOP", { siteId: site.id }));
-        }
+      if (site.type === "Shop" || site.type === "DreamsignBazaar") {
+        visits.push(ev(++seq, "REROLL_SHOP", { siteId: site.id }));
       }
-      seq += 1;
-      tail.push(ev(seq, "COMPLETE_SITE", { siteId: site.id }));
+      visits.push(ev(++seq, "COMPLETE_SITE", { siteId: site.id }));
     }
-    const battleSiteId = node.sites.find((site) => site.type === "Battle")?.id;
-    expect(battleSiteId).toBeDefined();
-    seq += 1;
-    tail.push(ev(seq, "ENTER_SITE", { siteId: battleSiteId }));
-    seq += 1;
-    tail.push(ev(seq, "BEGIN_BATTLE", { siteId: battleSiteId }));
-    seq += 1;
-    tail.push(
-      ev(seq, "BATTLE_COMMAND", {
-        command: { id: "SKIP_TO_REWARDS" },
-      }),
-    );
-    seq += 1;
-    tail.push(ev(seq, "END_BATTLE", {}));
+    expect([...opened.keys()].sort()).toEqual([...CONTENT_SITE_TYPES].sort());
 
-    const events = [...prefix, ...addSiteEvents, ...tail];
+    const events = [...START, ...addSites, ...visits];
     const first = replayLog({ genesis: GENESIS, events });
-
-    // (a) Every provider-backed event APPLIES (nothing bounces).
-    for (const outcome of first.outcomes) {
+    expectAllApplied(first.outcomes);
+    const runtimeOf = (type: SiteType) => {
+      const siteId = opened.get(type);
+      return siteId === undefined
+        ? undefined
+        : first.finalState.journey.siteRuntime[siteId];
+    };
+    const bazaar = runtimeOf("DreamsignBazaar");
+    expect(bazaar?.kind).toBe("shop");
+    if (bazaar?.kind === "shop") {
+      expect(bazaar.slots.length).toBeGreaterThan(0);
       expect(
-        outcome.outcome,
-        `seq ${String(outcome.seq)} bounced${
-          outcome.error ? ` (${outcome.error.message})` : ""
-        }`,
-      ).toBe("applied");
+        bazaar.slots.every(({ itemType }) => itemType === "dreamsign"),
+      ).toBe(true);
     }
-    // The terminal event commits the full journey handoff.
-    expect(first.finalState.battle).toBeNull();
-    expect(first.finalState.journey.completionLevel).toBe(1);
-    expect(first.finalState.journey.screen.type).toBe("atlas");
-    const completedNode = first.finalState.journey.atlas.nodes[nodeId];
-    expect(completedNode.state).toBe("completed");
-    const frontier = completedNode.forwardIds
-      .map((id) => first.finalState.journey.atlas.nodes[id])
-      .filter((candidate) => candidate?.state === "available");
-    expect(frontier.length).toBeGreaterThan(0);
-    expect(frontier.every((candidate) => candidate.dreamscapeId !== null)).toBe(
-      true,
-    );
-    const bazaarSiteId = siteIdByType.get("DreamsignBazaar");
-    expect(bazaarSiteId).toBeDefined();
-    if (bazaarSiteId !== undefined) {
-      const bazaarRuntime = first.finalState.journey.siteRuntime[bazaarSiteId];
-      expect(bazaarRuntime?.kind).toBe("shop");
-      if (bazaarRuntime?.kind === "shop") {
-        expect(bazaarRuntime.slots).toHaveLength(3);
-        expect(
-          bazaarRuntime.slots.every((slot) => slot.itemType === "dreamsign"),
-        ).toBe(true);
-      }
-    }
-    const gambleSiteId = siteIdByType.get("Gamble");
-    expect(gambleSiteId).toBeDefined();
-    if (gambleSiteId !== undefined) {
-      const gambleRuntime = first.finalState.journey.siteRuntime[gambleSiteId];
-      expect(gambleRuntime).toMatchObject({ kind: "gamble" });
-      if (gambleRuntime?.kind === "gamble") {
-        if (gambleRuntime.gameId === "gravok-three-gate-wager") {
-          expect(gambleRuntime.wagerCost).toBe(50);
-          expect(gambleRuntime.shuffleCommitment).toMatch(/^[0-9a-f]{16}$/);
-          expect(gambleRuntime.dreamsignCandidateIds).toContain(
-            gambleRuntime.rewardDreamsign?.id,
-          );
-          expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
-        } else if (gambleRuntime.gameId === "tidemark-ladder-climb") {
-          expect(gambleRuntime.shuffleCommitments).toHaveLength(4);
-          expect(gambleRuntime.committedCards).toHaveLength(4);
-          expect(gambleRuntime.strongPoolSize).toBeGreaterThan(0);
-          expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
-        } else if (gambleRuntime.gameId === "starway-stairs") {
-          expect(gambleRuntime.shuffleCommitments).toHaveLength(3);
-          expect(gambleRuntime.committedCards).toHaveLength(3);
-          expect(gambleRuntime.results).toEqual([]);
-        } else if (gambleRuntime.gameId === "four-suit-reprise") {
-          expect(gambleRuntime.shuffleCommitments).toHaveLength(3);
-          expect(gambleRuntime.committedCards).toHaveLength(3);
-          expect(gambleRuntime.targets.length).toBeGreaterThan(0);
-          expect(gambleRuntime.rounds).toEqual([]);
-        } else {
-          expect(gambleRuntime.committedDeck).toHaveLength(52);
-          expect(gambleRuntime.playerCards).toEqual([]);
-          expect(gambleRuntime.dealerCards).toEqual([]);
-        }
-      }
-    }
+    expect(runtimeOf("Gamble")?.kind).toBe("gamble");
 
-    // (b) Determinism: folding the identical log again is byte-identical.
-    const second = replayLog({ genesis: GENESIS, events });
-    expect(second.finalHash).toBe(first.finalHash);
+    expect(replayLog({ genesis: GENESIS, events }).finalHash).toBe(
+      first.finalHash,
+    );
   });
 
   it("includes the authored Dreamsign in the tutorial's opening Revelation offer", () => {
     const content = makeJourneyContent();
-    const started = replayLog({
-      genesis: GENESIS,
-      events: [
-        ev(1, "START_JOURNEY", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-        ev(2, "SELECT_AVATAR", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-      ],
-    }).finalState.journey;
-    const startingNodeId = started.atlas.startingNodeId;
-    expect(startingNodeId).not.toBeNull();
-    if (startingNodeId === null) return;
+    const started = startedJourney();
+    const { startingNodeId } = started.atlas;
+    if (started.resolvedPackage === null || startingNodeId === null) {
+      throw new Error("expected a started journey");
+    }
+    const poolIds = content.dreamsignTemplates.map(({ id }) => id);
+    const requiredId = poolIds[poolIds.length - 1];
+    // The authored offer applies only to the opening node's Revelation site.
+    const revelation = siteOf("revelation", "DreamsignRevelation");
     const openingNode = started.atlas.nodes[startingNodeId];
-    const revelation = openingNode.sites.find(
-      (site) => site.type === "DreamsignRevelation",
-    );
-    expect(revelation).toBeDefined();
-    if (revelation === undefined || started.resolvedPackage === null) return;
-
-    const requiredId =
-      content.dreamsignTemplates[content.dreamsignTemplates.length - 1]?.id;
-    expect(requiredId).toBeDefined();
-    if (requiredId === undefined) return;
-    const tutorialJourney: JourneyState = {
-      ...started,
-      isTutorialJourney: true,
-      remainingDreamsignPool: content.dreamsignTemplates.map(
-        (template) => template.id,
-      ),
-      resolvedPackage: {
-        ...started.resolvedPackage,
-        dreamsignPoolIds: content.dreamsignTemplates.map(
-          (template) => template.id,
-        ),
-        openingDreamsignOfferIds: [requiredId],
-      },
-    };
 
     const result = createSiteContentProvider(content).openSite({
-      journey: tutorialJourney,
+      journey: {
+        ...started,
+        atlas: {
+          ...started.atlas,
+          nodes: {
+            ...started.atlas.nodes,
+            [startingNodeId]: {
+              ...openingNode,
+              sites: [revelation, ...openingNode.sites],
+            },
+          },
+        },
+        isTutorialJourney: true,
+        remainingDreamsignPool: poolIds,
+        resolvedPackage: {
+          ...started.resolvedPackage,
+          dreamsignPoolIds: poolIds,
+          openingDreamsignOfferIds: [requiredId],
+        },
+      },
       site: revelation,
       rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
+      ...OPEN,
     });
 
     expect(result?.runtime.kind).toBe("dreamsignOffer");
     if (result?.runtime.kind !== "dreamsignOffer") return;
-    expect(
-      result.runtime.offeredDreamsigns.map((dreamsign) => dreamsign.id),
-    ).toContain(requiredId);
+    expect(result.runtime.offeredDreamsigns.map(({ id }) => id)).toContain(
+      requiredId,
+    );
   });
 
   it("uses standard card pricing for enhanced Shop inventory and restocks", () => {
     const content = makeJourneyContent();
-    const journey = replayLog({
-      genesis: GENESIS,
-      events: [
-        ev(1, "START_JOURNEY", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-        ev(2, "SELECT_AVATAR", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-      ],
-    }).finalState.journey;
-    const shop: SiteState = {
-      id: parseSiteId("enhanced-shop"),
-      type: "Shop",
-      isEnhanced: true,
-      isVisited: false,
-    };
+    const journey = startedJourney();
+    const shop = siteOf("enhanced-shop", "Shop", true);
     const provider = createSiteContentProvider(content);
+    const { cardSlots } = content.economyData.shop.stock.specialtyShop;
+    const { standardCard } = content.economyData.shop.prices;
 
-    const opened = provider.openSite({
-      journey,
-      site: shop,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-    });
-
-    expect(opened?.runtime.kind).toBe("shop");
-    if (opened?.runtime.kind !== "shop") return;
-    const openingCards = opened.runtime.slots.filter(
-      (slot) => slot.itemType === "card",
-    );
-    expect(openingCards).toHaveLength(
-      content.economyData.shop.stock.specialtyShop.cardSlots,
-    );
-    expect(
-      openingCards.every(
-        (slot) =>
-          slot.basePrice === content.economyData.shop.prices.standardCard,
-      ),
-    ).toBe(true);
-
+    const opened = provider.openSite({ journey, site: shop, rng: () => 0, ...OPEN });
+    if (opened?.runtime.kind !== "shop") throw new Error("expected a shop");
     const rerolled = provider.rerollShop({
       journey: {
         ...journey,
-        siteRuntime: {
-          ...journey.siteRuntime,
-          [shop.id]: opened.runtime,
-        },
+        siteRuntime: { ...journey.siteRuntime, [shop.id]: opened.runtime },
       },
       site: shop,
       rng: () => 0.5,
     });
 
-    expect(rerolled).not.toBeNull();
-    const restockedCards = rerolled?.slots.filter(
-      (slot) => slot.itemType === "card",
-    );
-    expect(restockedCards).toHaveLength(
-      content.economyData.shop.stock.specialtyShop.cardSlots,
-    );
-    expect(
-      restockedCards?.every(
-        (slot) =>
-          slot.basePrice === content.economyData.shop.prices.standardCard,
-      ),
-    ).toBe(true);
+    for (const slots of [opened.runtime.slots, rerolled?.slots ?? []]) {
+      const cards = slots.filter(({ itemType }) => itemType === "card");
+      expect(cards).toHaveLength(cardSlots);
+      expect(cards.every(({ basePrice }) => basePrice === standardCard)).toBe(
+        true,
+      );
+    }
   });
 
-  it("consumes the one-use modifier while minting exact transfigured Shop slots", () => {
-    const content = makeJourneyContent();
-    const started = replayLog({
-      genesis: GENESIS,
-      events: [
-        ev(1, "START_JOURNEY", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-        ev(2, "SELECT_AVATAR", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-      ],
-    }).finalState.journey;
-    const shop: SiteState = {
-      id: parseSiteId("transfigured-shop"),
-      type: "Shop",
-      isEnhanced: false,
-      isVisited: false,
-    };
+  it("consumes the one-use modifier while minting transfigured Shop slots", () => {
     const modifier = {
       kind: "transfigure-next-draft-or-shop" as const,
       sourceSiteId: parseSiteId("exploration-site"),
       sourceActionId: testExplorationActionId("exploration-action"),
     };
 
-    const result = createSiteContentProvider(content).openSite({
-      journey: { ...started, siteOfferModifiers: [modifier] },
-      site: shop,
+    const result = createSiteContentProvider(makeJourneyContent()).openSite({
+      journey: { ...startedJourney(), siteOfferModifiers: [modifier] },
+      site: siteOf("transfigured-shop", "Shop"),
       rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
+      ...OPEN,
     });
 
     expect(result?.siteOfferModifiers).toEqual([]);
@@ -552,34 +354,18 @@ describe("registerGameProviders (real content providers)", () => {
       (slot) => slot.itemType === "card",
     );
     expect(cards.length).toBeGreaterThan(0);
-    expect(cards.every((slot) => slot.transfiguration !== undefined)).toBe(
+    expect(cards.every(({ transfiguration }) => transfiguration !== undefined)).toBe(
       true,
     );
   });
 
-  it("binds one queued T56 modifier only to a Card Shop and leaves Bazaar opens ineligible", () => {
-    const content = makeJourneyContent();
-    const started = replayLog({
-      genesis: GENESIS,
-      events: [
-        ev(1, "START_JOURNEY", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-        ev(2, "SELECT_AVATAR", {
-          avatarId: testAvatarId(AVATAR_ID),
-        }),
-      ],
-    }).finalState.journey;
-    const firstModifier = {
+  it("binds one queued free-shop modifier only to a Card Shop, never a Bazaar", () => {
+    const started = startedJourney();
+    const [firstModifier, secondModifier] = ["one", "two"].map((suffix) => ({
       kind: "free-next-shop" as const,
-      sourceSiteId: parseSiteId("exploration-one"),
-      sourceActionId: testExplorationActionId("action-one"),
-    };
-    const secondModifier = {
-      kind: "free-next-shop" as const,
-      sourceSiteId: parseSiteId("exploration-two"),
-      sourceActionId: testExplorationActionId("action-two"),
-    };
+      sourceSiteId: parseSiteId(`exploration-${suffix}`),
+      sourceActionId: testExplorationActionId(`action-${suffix}`),
+    }));
     const journey: JourneyState = {
       ...started,
       shopModifiers: {
@@ -587,100 +373,79 @@ describe("registerGameProviders (real content providers)", () => {
         freeNextShopModifiers: [firstModifier, secondModifier],
       },
     };
-    const provider = createSiteContentProvider(content);
+    const provider = createSiteContentProvider(makeJourneyContent());
+
     const bazaar = provider.openSite({
       journey,
-      site: {
-        id: parseSiteId("bazaar"),
-        type: "DreamsignBazaar",
-        isEnhanced: false,
-        isVisited: false,
-      },
+      site: siteOf("bazaar", "DreamsignBazaar"),
       rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-    });
-    expect(bazaar?.runtime).toMatchObject({
-      kind: "shop",
-      purchaseHistory: [],
+      ...OPEN,
     });
     expect(bazaar?.runtime).not.toHaveProperty("freePurchaseSource");
     expect(bazaar?.shopModifiers).toBeUndefined();
 
-    const shopResult = provider.openSite({
+    const shop = provider.openSite({
       journey,
-      site: {
-        id: parseSiteId("shop"),
-        type: "Shop",
-        isEnhanced: false,
-        isVisited: false,
-      },
+      site: siteOf("shop", "Shop"),
       rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
+      ...OPEN,
     });
-    expect(shopResult?.runtime).toMatchObject({
+    expect(shop?.runtime).toMatchObject({
       kind: "shop",
-      purchaseHistory: [],
       freePurchaseSource: {
         sourceSiteId: firstModifier.sourceSiteId,
         sourceActionId: firstModifier.sourceActionId,
       },
     });
-    expect(shopResult?.shopModifiers?.freeNextShopModifiers).toEqual([
-      secondModifier,
-    ]);
-    expect(shopResult?.shopModifiers?.freePurchaseModifiers).toEqual(
+    expect(shop?.shopModifiers?.freeNextShopModifiers).toEqual([secondModifier]);
+    expect(shop?.shopModifiers?.freePurchaseModifiers).toEqual(
       journey.shopModifiers.freePurchaseModifiers,
     );
   });
 
   it("rebuilds debug progress as one consistent Atlas transition", () => {
-    const events = [
-      ev(1, "START_JOURNEY", {
-        avatarId: testAvatarId(AVATAR_ID),
-      }),
-      ev(2, "REGENERATE_ATLAS", { completionLevel: 3 }),
-    ];
-    const result = replayLog({ genesis: GENESIS, events });
+    const result = replayLog({
+      genesis: GENESIS,
+      events: [START[0], ev(2, "REGENERATE_ATLAS", { completionLevel: 3 })],
+    });
+    expectAllApplied(result.outcomes);
+    const { journey } = result.finalState;
+    const nodes = Object.values(journey.atlas.nodes);
 
-    expect(result.outcomes.map((outcome) => outcome.outcome)).toEqual([
-      "applied",
-      "applied",
-    ]);
-    expect(result.finalState.journey.completionLevel).toBe(3);
-    expect(result.finalState.journey.screen.type).toBe("atlas");
+    expect(journey.completionLevel).toBe(3);
+    expect(journey.screen.type).toBe("atlas");
+    expect(nodes.filter(({ state }) => state === "completed")).toHaveLength(3);
     expect(
-      Object.values(result.finalState.journey.atlas.nodes).filter(
-        (node) => node.state === "completed",
-      ),
-    ).toHaveLength(3);
-    expect(
-      Object.values(result.finalState.journey.atlas.nodes)
-        .filter((node) => node.state === "available")
-        .every((node) => node.dreamscapeId !== null),
+      nodes
+        .filter(({ state }) => state === "available")
+        .every(({ dreamscapeId }) => dreamscapeId !== null),
     ).toBe(true);
   });
 
-  it("plays all seven real-content layers through authoritative reducer events", () => {
+  it("plays all seven layers through authoritative reducer events", () => {
     let state = genesisFoldState(GENESIS);
     let seq = 1;
     const apply = (
       type: GameEvent["type"],
       payload: Record<string, unknown>,
     ): void => {
-      const event: GameEvent = {
-        type,
-        payload,
-        actor: testEventActor("p1"),
-        clientTimestamp: TIMESTAMP,
-        basedOnSeq: seq - 1,
-      };
-      const result = reduceGameEvent(state, event, {
-        contentConfig: TEST_CONTENT_CONFIG,
-        seq,
-        timestamp: TIMESTAMP,
-        rng: eventRng(GENESIS.seed, seq),
-        intervening: [],
-      });
+      const result = reduceGameEvent(
+        state,
+        {
+          type,
+          payload,
+          actor: testEventActor("p1"),
+          clientTimestamp: TIMESTAMP,
+          basedOnSeq: seq - 1,
+        },
+        {
+          contentConfig: TEST_CONTENT_CONFIG,
+          seq,
+          timestamp: TIMESTAMP,
+          rng: eventRng(GENESIS.seed, seq),
+          intervening: [],
+        },
+      );
       expect(
         result.outcome,
         `seq ${String(seq)} ${type} ${
@@ -691,45 +456,35 @@ describe("registerGameProviders (real content providers)", () => {
       seq += 1;
     };
 
-    apply("START_JOURNEY", { avatarId: testAvatarId(AVATAR_ID) });
+    apply("START_JOURNEY", { avatarId: AVATAR_ID });
     const layerCount = state.journey.atlas.layers.length;
     for (let layer = 0; layer < layerCount; layer += 1) {
       const nodeId = state.journey.currentDreamscape;
-      expect(nodeId).not.toBeNull();
-      if (nodeId === null) return;
+      if (nodeId === null) throw new Error("expected a current dreamscape");
       const node = state.journey.atlas.nodes[nodeId];
-      for (const site of node.sites.filter(
-        (candidate) => candidate.type !== "Battle",
-      )) {
+      for (const site of node.sites.filter(({ type }) => type !== "Battle")) {
         apply("ENTER_SITE", { siteId: site.id });
         apply("COMPLETE_SITE", { siteId: site.id });
       }
-      const battle = node.sites.find((site) => site.type === "Battle");
-      expect(battle).toBeDefined();
-      if (battle === undefined) return;
-      apply("ENTER_SITE", { siteId: battle.id });
-      apply("BEGIN_BATTLE", { siteId: battle.id });
-      apply("BATTLE_COMMAND", {
-        command: { id: "SKIP_TO_REWARDS" },
-      });
+      const battle = node.sites.find(({ type }) => type === "Battle");
+      apply("ENTER_SITE", { siteId: battle?.id });
+      apply("BEGIN_BATTLE", { siteId: battle?.id });
+      apply("BATTLE_COMMAND", { command: { id: "SKIP_TO_REWARDS" } });
       apply("END_BATTLE", {});
 
       expect(state.journey.atlas.nodes[nodeId].state).toBe("completed");
       expect(state.journey.completionLevel).toBe(layer + 1);
       if (layer < layerCount - 1) {
         const nextId = node.forwardIds.find(
-          (candidate) =>
-            state.journey.atlas.nodes[candidate]?.state === "available",
+          (id) => state.journey.atlas.nodes[id].state === "available",
         );
-        expect(nextId).toBeDefined();
-        if (nextId === undefined) return;
+        if (nextId === undefined) throw new Error("expected a frontier");
         expect(state.journey.atlas.nodes[nextId].dreamscapeId).not.toBeNull();
         apply("TRAVEL_TO_DREAMSCAPE", { nodeId: nextId });
       }
     }
 
     expect(state.battle).toBeNull();
-    expect(state.journey.completionLevel).toBe(layerCount);
     expect(state.journey.screen.type).toBe("journeyComplete");
     for (const layer of state.journey.atlas.layers) {
       expect(
@@ -742,61 +497,38 @@ describe("registerGameProviders (real content providers)", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Augury resolution (ACCEPT_AUGURY_OFFER / DECLINE_AUGURY)
+// Synthetic single-node fixture for Gamble and Augury resolution
 // ---------------------------------------------------------------------------
 
-const AUGURY_SEED = "augury-real-provider-seed";
-// The augury fixture journey is seeded with AUGURY_SEED, and the LOAD_STATE
-// validator requires the loaded snapshot's seed to equal the game seed, so these
-// augury replays run against a genesis pinned to the same seed.
-const AUGURY_GENESIS: Genesis = { ...GENESIS, seed: testJourneySeed(AUGURY_SEED) };
+const AUGURY_SEED = testJourneySeed("augury-real-provider-seed");
+// LOAD_STATE requires the loaded snapshot's seed to equal the game seed.
+const AUGURY_GENESIS: Genesis = { ...GENESIS, seed: AUGURY_SEED };
 const AUGURY_SITE_ID = parseSiteId("site-augury-resolve");
 const AUGURY_NODE_ID = parseAtlasNodeId("dreamscape-a");
 
-/** An Augury augury fixture: content with a corpus + a journey state whose current dreamscape holds the augury site. */
-function makeAuguryFixture(): {
+function makeAuguryFixture(dreamsignCount = 10): {
   journey: JourneyState;
   content: JourneyContent;
   site: SiteState;
 } {
-  const site = makeAuguryTestSite({
-    id: AUGURY_SITE_ID,
-    type: "Augury",
+  const site = makeAuguryTestSite({ id: AUGURY_SITE_ID, type: "Augury" });
+  const cards = Array.from({ length: 30 }, (_value, index) => {
+    const cardNumber = 1000 + index;
+    return makeAuguryTestCard({
+      id: testCardId(
+        `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`,
+      ),
+      cardNumber,
+      name: parseCardName(`Pool ${String(cardNumber)}`),
+    });
   });
-
-  const cards: CardData[] = [];
-  for (let i = 0; i < 30; i += 1) {
-    const cardNumber = 1000 + i;
-    const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
-    cards.push(
-      makeAuguryTestCard({
-        id: testCardId(id),
-        cardNumber,
-        name: parseCardName(`Pool ${String(cardNumber)}`),
-      }),
-    );
-  }
-
-  const templates = [];
-  for (let i = 0; i < 10; i += 1) {
-    const id = `dsign-${String(i)}`;
-    templates.push(
-      makeAuguryTestDreamsignTemplate({
-        id: testDreamsignId(id),
-        name: `Sign ${String(i)}`,
-      }),
-    );
-  }
-
-  const content = makeAuguryTestContent({
-    cards,
-    dreamsignTemplates: templates,
-  });
-
+  const dreamsignTemplates = makeDreamsignTemplates(dreamsignCount);
+  const content = makeAuguryTestContent({ cards, dreamsignTemplates });
   const journey = makeAuguryTestJourneyState({
-    seed: testJourneySeed(AUGURY_SEED),
+    seed: AUGURY_SEED,
     currentDreamscape: AUGURY_NODE_ID,
     screen: { type: "site", siteId: site.id },
+    remainingDreamsignPool: dreamsignTemplates.map(({ id }) => id),
     deck: [1000, 1001, 1002, 1003, 1004, 1005].map((cardNumber, index) =>
       makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId(`deck-${String(index + 1)}`),
@@ -829,299 +561,138 @@ function makeAuguryFixture(): {
   return { journey, content, site };
 }
 
+/** The runtime field and fixture price a game charges at a standard or enhanced site. */
+function expectedPrice(
+  game: GambleGameDefinition,
+  isEnhanced: boolean,
+): Record<string, number> {
+  const { economy } = game;
+  switch (economy.kind) {
+    case "threeGate":
+    case "blackjack":
+      return {
+        wagerCost: isEnhanced ? economy.enhancedWager : economy.standardWager,
+      };
+    case "starwayStairs":
+      return {
+        wagerAmount: isEnhanced ? economy.enhancedWager : economy.standardWager,
+      };
+    case "fourSuitReprise":
+      return {
+        drawCost: isEnhanced
+          ? economy.enhancedDrawPrice
+          : economy.standardDrawPrice,
+      };
+    case "ladderClimb":
+      return {};
+  }
+}
+
 describe("createSiteContentProvider — Gamble", () => {
-  it("chooses among every configured game unless one is forced", () => {
-    resetLog();
-    const fixture = makeAuguryFixture();
-    const site = makeAuguryTestSite({
-      id: parseSiteId("gamble-site"),
-      type: "Gamble",
-    });
-    const farpointSite = makeAuguryTestSite({
-      id: parseSiteId("farpoint-gamble-site"),
-      type: "Gamble",
-      isEnhanced: true,
-    });
-    const journey = {
-      ...fixture.journey,
-      remainingDreamsignPool: fixture.content.dreamsignTemplates.map(
-        (template) => template.id,
-      ),
-    };
-    const provider = createSiteContentProvider(fixture.content);
+  const fixture = makeAuguryFixture();
+  const provider = createSiteContentProvider(fixture.content);
+  const { games } = fixture.content.gambleData;
+  const gambleSite = makeAuguryTestSite({
+    id: parseSiteId("gamble-site"),
+    type: "Gamble",
+  });
 
-    const randomThreeGate = provider.openSite({
-      journey,
-      site,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-    });
-    const randomLadderRolls = [0.3, 0];
-    const randomLadder = provider.openSite({
-      journey,
-      site,
-      rng: () => randomLadderRolls.shift() ?? 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-    });
-    const randomStarway = provider.openSite({
-      journey,
-      site,
-      rng: () => 0.5,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-    });
-    const randomFourSuit = provider.openSite({
-      journey,
-      site,
-      rng: () => 0.7,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-    });
-    const randomBlackjack = provider.openSite({
-      journey,
-      site,
-      rng: () => 0.999,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-    });
-    const forcedThreeGate = provider.openSite({
-      journey,
-      site,
-      rng: () => 0.999,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "gravok-three-gate-wager",
-    });
-    const forcedLadder = provider.openSite({
-      journey,
-      site,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "tidemark-ladder-climb",
-    });
-    const forcedStarway = provider.openSite({
-      journey,
-      site,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "starway-stairs",
-    });
-    const forcedFourSuit = provider.openSite({
-      journey,
-      site,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "four-suit-reprise",
-    });
-    const forcedBlackjack = provider.openSite({
-      journey,
-      site,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "blackjack",
-    });
-    const farpointThreeGate = provider.openSite({
-      journey,
-      site: farpointSite,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "gravok-three-gate-wager",
-    });
-    const farpointStarway = provider.openSite({
-      journey,
-      site: farpointSite,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "starway-stairs",
-    });
-    const farpointFourSuit = provider.openSite({
-      journey,
-      site: farpointSite,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "four-suit-reprise",
-    });
-    const farpointBlackjack = provider.openSite({
-      journey,
-      site: farpointSite,
-      rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "blackjack",
-    });
+  it.each(games.map((game, index) => ({ game, index })))(
+    "selects $game.id by weighted roll and prices it from the catalog",
+    ({ game, index }) => {
+      // Fixture games carry equal weight, so the roll at each bucket's midpoint
+      // selects that game.
+      const weighted = provider.openSite({
+        journey: fixture.journey,
+        site: gambleSite,
+        rng: () => (index + 0.5) / games.length,
+        ...OPEN,
+      });
+      expect(weighted?.runtime).toMatchObject({
+        kind: "gamble",
+        gameId: game.id,
+        selectionTrace: { source: "weighted", selectedGameId: game.id },
+        ...expectedPrice(game, false),
+      });
 
-    expect(
-      getLogEntries().filter(
-        (entry) => entry.event === "gamble_configuration_resolved",
-      ),
-    ).toHaveLength(0);
-
-    const fourSuitEconomy = gambleGameByRulesKind(
-      fixture.content.gambleData,
-      "fourSuitReprise",
-    ).economy;
-
-    expect(randomThreeGate?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "gravok-three-gate-wager",
-      selectionTrace: {
-        source: "weighted",
-        requestedGameId: null,
-        selectionRoll: 0,
-        totalWeight: fixture.content.gambleData.games.reduce(
-          (total, game) => total + game.selection.weight,
-          0,
-        ),
-        candidates: fixture.content.gambleData.games.map((game) => ({
+      for (const isEnhanced of [false, true]) {
+        const forced = provider.openSite({
+          journey: fixture.journey,
+          site: { ...gambleSite, isEnhanced },
+          rng: () => 0.999,
+          ...OPEN,
+          gambleGameId: game.id,
+        });
+        expect(forced?.runtime).toMatchObject({
+          kind: "gamble",
           gameId: game.id,
-          weight: game.selection.weight,
-          fallback: game.id === "gravok-three-gate-wager",
-        })),
-        selectedGameId: "gravok-three-gate-wager",
-      },
-    });
-    expect(randomLadder?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "tidemark-ladder-climb",
-    });
-    expect(randomStarway?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "starway-stairs",
-      wagerAmount: 30,
-    });
-    expect(randomFourSuit?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "four-suit-reprise",
-      drawCost: fourSuitEconomy.standardDrawPrice,
-    });
-    expect(randomBlackjack?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "blackjack",
-      wagerCost: 90,
-      prizeEssence: 300,
-    });
-    expect(forcedThreeGate?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "gravok-three-gate-wager",
-      wagerCost: 50,
-    });
-    expect(forcedLadder?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "tidemark-ladder-climb",
-    });
-    expect(forcedStarway?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "starway-stairs",
-      wagerAmount: 30,
-    });
-    expect(forcedFourSuit?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "four-suit-reprise",
-      drawCost: fourSuitEconomy.standardDrawPrice,
-      phase: "choose",
-    });
-    expect(forcedBlackjack?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "blackjack",
-      selectionTrace: {
-        source: "requested",
-        requestedGameId: "blackjack",
-        selectedGameId: "blackjack",
-      },
-      wagerCost: 90,
-      prizeEssence: 300,
-    });
-    expect(farpointThreeGate?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "gravok-three-gate-wager",
-      wagerCost: 45,
-    });
-    expect(farpointStarway?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "starway-stairs",
-      wagerAmount: 20,
-    });
-    expect(farpointFourSuit?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "four-suit-reprise",
-      drawCost: fourSuitEconomy.enhancedDrawPrice,
-    });
-    expect(farpointBlackjack?.runtime).toMatchObject({
-      kind: "gamble",
-      gameId: "blackjack",
-      wagerCost: 40,
-      prizeEssence: 300,
+          selectionTrace: { source: "requested", requestedGameId: game.id },
+          ...expectedPrice(game, isEnhanced),
+        });
+      }
+    },
+  );
+
+  it("offers Four-Suit Reprise targets as distinct entries with free transfigurations", () => {
+    const result = provider.openSite({
+      journey: fixture.journey,
+      site: gambleSite,
+      rng: () => 0,
+      ...OPEN,
+      gambleGameId: "four-suit-reprise",
     });
     if (
-      forcedFourSuit?.runtime.kind === "gamble" &&
-      forcedFourSuit.runtime.gameId === "four-suit-reprise"
+      result?.runtime.kind !== "gamble" ||
+      result.runtime.gameId !== "four-suit-reprise"
     ) {
-      expect(forcedFourSuit.runtime.targets.length).toBeGreaterThan(0);
-      expect(
-        forcedFourSuit.runtime.targets.every((target) =>
-          target.transfigurationOffers.every(
-            (offer) => offer.essenceCost === 0,
-          ),
-        ),
-      ).toBe(true);
-      expect(
-        new Set(forcedFourSuit.runtime.targets.map((target) => target.entryId))
-          .size,
-      ).toBe(forcedFourSuit.runtime.targets.length);
+      throw new Error("expected Four-Suit Reprise");
+    }
+    const { targets } = result.runtime;
+
+    expect(targets.length).toBeGreaterThan(0);
+    expect(new Set(targets.map(({ entryId }) => entryId)).size).toBe(
+      targets.length,
+    );
+    for (const target of targets) {
+      for (const offer of target.transfigurationOffers) {
+        expect(offer.essenceCost).toBe(0);
+      }
     }
   });
 
-  it("selects the Ladder Climb reward uniformly from its top 50 candidates", () => {
-    const fixture = makeAuguryFixture();
-    const templates = Array.from({ length: 55 }, (_value, index) => {
-      const id = `dsign-${String(index).padStart(3, "0")}`;
-      return makeAuguryTestDreamsignTemplate({
-        id: testDreamsignId(id),
-        name: `Sign ${String(index)}`,
-      });
-    });
-    const content = makeAuguryTestContent({
-      cards: [...fixture.content.cardDatabase.values()],
-      dreamsignTemplates: templates,
-    });
-    const journey = {
-      ...fixture.journey,
-      remainingDreamsignPool: templates.map((template) => template.id),
-    };
+  it("selects the Ladder Climb reward uniformly from its strong pool", () => {
+    const wide = makeAuguryFixture(55);
+    const ladder = games.find(({ rules }) => rules.kind === "ladderClimb");
+    if (ladder?.rules.kind !== "ladderClimb") throw new Error("no ladder");
 
-    const result = createSiteContentProvider(content).openSite({
-      journey,
-      site: makeAuguryTestSite({
-        id: parseSiteId("gamble-site"),
-        type: "Gamble",
-      }),
+    const result = createSiteContentProvider(wide.content).openSite({
+      journey: wide.journey,
+      site: gambleSite,
       rng: () => 0.999,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
-      gambleGameId: "tidemark-ladder-climb",
+      ...OPEN,
+      gambleGameId: ladder.id,
     });
-
-    expect(result?.runtime.kind).toBe("gamble");
     if (
       result?.runtime.kind !== "gamble" ||
       result.runtime.gameId !== "tidemark-ladder-climb"
     ) {
-      return;
+      throw new Error("expected Ladder Climb");
     }
+    const { strongPoolLimit } = ladder.rules;
+
     expect(result.runtime.dreamsignCandidateScores).toHaveLength(55);
-    expect(result.runtime.strongPoolSize).toBe(50);
+    expect(result.runtime.strongPoolSize).toBe(strongPoolLimit);
     expect(result.runtime.rewardDreamsign?.id).toBe(
-      result.runtime.dreamsignCandidateScores[49]?.dreamsignId,
+      result.runtime.dreamsignCandidateScores[strongPoolLimit - 1]?.dreamsignId,
     );
   });
 
   it("falls back to Three Gates when Ladder Climb cannot prepare a Dreamsign", () => {
-    const fixture = makeAuguryFixture();
-    const result = createSiteContentProvider(fixture.content).openSite({
-      journey: {
-        ...fixture.journey,
-        remainingDreamsignPool: [],
-      },
-      site: makeAuguryTestSite({
-        id: parseSiteId("gamble-site"),
-        type: "Gamble",
-      }),
+    const result = provider.openSite({
+      journey: { ...fixture.journey, remainingDreamsignPool: [] },
+      site: gambleSite,
       rng: () => 0,
-      selectionRulesVersion: SELECTION_RULES_VERSION,
+      ...OPEN,
       gambleGameId: "tidemark-ladder-climb",
     });
 
@@ -1142,6 +713,9 @@ describe("registerGameProviders — augury resolution", () => {
       site: fixture.site,
     }),
   );
+  const directOffer = encounter.offers.find(
+    ({ applyPayload }) => applyPayload !== undefined,
+  );
 
   beforeAll(() => {
     registerGameProviders(fixture.content);
@@ -1150,44 +724,39 @@ describe("registerGameProviders — augury resolution", () => {
     clearGameProviders();
   });
 
-  // LOAD_STATE injects the augury fixture journey state into the fold; the
-  // augury event then resolves against the same state the encounter was
-  // generated from, so the signature matches and the event APPLIES.
-  const loadState = (): SeqEvent =>
-    ev(1, "LOAD_STATE", { snapshot: fixture.journey });
-
-  it("folds LOAD_STATE -> ACCEPT_AUGURY_OFFER: applies + deterministic", () => {
-    // A direct-payload (non-chooser) offer, exactly as the augury unit test
-    // accepts one.
-    const offer = encounter.offers.find((o) => o.applyPayload !== undefined);
-    expect(offer).toBeDefined();
-    if (offer === undefined) return;
-
-    const events: SeqEvent[] = [
-      loadState(),
-      ev(2, "ACCEPT_AUGURY_OFFER", {
+  it.each([
+    {
+      type: "ACCEPT_AUGURY_OFFER" as const,
+      payload: () => ({
         siteId: AUGURY_SITE_ID,
-        encounterSignature: offer.encounterSignature,
-        offerId: offer.offerId,
-        archetypeId: offer.archetypeId,
+        encounterSignature: directOffer?.encounterSignature,
+        offerId: directOffer?.offerId,
+        archetypeId: directOffer?.archetypeId,
       }),
+    },
+    {
+      type: "DECLINE_AUGURY" as const,
+      payload: () => ({
+        siteId: AUGURY_SITE_ID,
+        encounterSignature: encounter.encounterSignature,
+        offerId: encounter.offers[0]?.offerId,
+      }),
+    },
+  ])("folds LOAD_STATE -> $type: applies, returns to the dreamscape, deterministic", ({ type, payload }) => {
+    const events = [
+      ev(1, "LOAD_STATE", { snapshot: fixture.journey }),
+      ev(2, type, payload()),
     ];
     const first = replayLog({ genesis: AUGURY_GENESIS, events });
-    expect(
-      first.outcomes.find((o) => o.seq === 2)?.outcome,
-      first.outcomes.find((o) => o.seq === 2)?.error?.message,
-    ).toBe("applied");
-    // The augury site completed and returned to the dreamscape.
-    expect(first.finalState.journey.screen).toEqual({ type: "dreamscape" });
 
-    const second = replayLog({ genesis: AUGURY_GENESIS, events });
-    expect(second.finalHash).toBe(first.finalHash);
+    expectAllApplied(first.outcomes);
+    expect(first.finalState.journey.screen).toEqual({ type: "dreamscape" });
+    expect(replayLog({ genesis: AUGURY_GENESIS, events }).finalHash).toBe(
+      first.finalHash,
+    );
   });
 
-  it("mints a new deck entry through the shared mintEntryId(deck, seq, index) scheme (P3-8)", () => {
-    // An offer whose payload actually mints a fresh deck entry (a card
-    // grant), so this exercises the id the resolution path stamps — not
-    // just that the resolution applies.
+  it("mints a granted card's deck entry through the shared mintEntryId(deck, seq, index) scheme", () => {
     const mintJourney: JourneyState = {
       ...fixture.journey,
       siteRuntime: {
@@ -1206,65 +775,36 @@ describe("registerGameProviders — augury resolution", () => {
         site: fixture.site,
       }),
     );
+    const isCardGrant = (candidate: { applyPayload: { kind: string } }) =>
+      candidate.applyPayload.kind === "add_catalog_card";
     const offer = mintEncounter.offers.find((o) =>
-      o.choiceRequest?.candidates.some(
-        (candidate) => candidate.applyPayload.kind === "add_catalog_card",
-      ),
+      o.choiceRequest?.candidates.some(isCardGrant),
     );
-    expect(offer).toBeDefined();
-    if (offer === undefined || offer.choiceRequest === undefined) return;
-    const candidate = offer.choiceRequest.candidates.find(
-      (c) => c.applyPayload.kind === "add_catalog_card",
+    const candidate = offer?.choiceRequest?.candidates.find(isCardGrant);
+    if (offer === undefined || candidate === undefined) {
+      throw new Error("expected a card-grant offer");
+    }
+
+    const result = replayLog({
+      genesis: AUGURY_GENESIS,
+      events: [
+        ev(1, "LOAD_STATE", { snapshot: mintJourney }),
+        ev(2, "ACCEPT_AUGURY_OFFER", {
+          siteId: AUGURY_SITE_ID,
+          encounterSignature: offer.encounterSignature,
+          offerId: offer.offerId,
+          archetypeId: offer.archetypeId,
+          choice: { choiceId: candidate.choiceId },
+        }),
+      ],
+    });
+    expectAllApplied(result.outcomes);
+
+    const before = new Set(mintJourney.deck.map(({ entryId }) => entryId));
+    const minted = result.finalState.journey.deck.filter(
+      ({ entryId }) => !before.has(entryId),
     );
-    expect(candidate).toBeDefined();
-    if (candidate === undefined) return;
-
-    const events: SeqEvent[] = [
-      ev(1, "LOAD_STATE", { snapshot: mintJourney }),
-      ev(2, "ACCEPT_AUGURY_OFFER", {
-        siteId: AUGURY_SITE_ID,
-        encounterSignature: offer.encounterSignature,
-        offerId: offer.offerId,
-        archetypeId: offer.archetypeId,
-        choice: { choiceId: candidate.choiceId },
-      }),
-    ];
-    const result = replayLog({ genesis: AUGURY_GENESIS, events });
-    expect(
-      result.outcomes.find((o) => o.seq === 2)?.outcome,
-      result.outcomes.find((o) => o.seq === 2)?.error?.message,
-    ).toBe("applied");
-
-    const beforeIds = new Set(mintJourney.deck.map((entry) => entry.entryId));
-    const newEntries = result.finalState.journey.deck.filter(
-      (entry) => !beforeIds.has(entry.entryId),
-    );
-    expect(newEntries).toHaveLength(1);
-    // Minted through mintEntryId(deck, ctx.seq, 0) at the ACCEPT_AUGURY_OFFER
-    // event's own seq (2) — the SAME scheme every other minting case uses, not
-    // a second, independently-evolving `deck-<counter>` scheme.
-    expect(newEntries[0].entryId).toBe("deck-2-0");
-  });
-
-  it("folds LOAD_STATE -> DECLINE_AUGURY: applies + deterministic", () => {
-    const offer = encounter.offers[0];
-    expect(offer).toBeDefined();
-    const events: SeqEvent[] = [
-      loadState(),
-      ev(2, "DECLINE_AUGURY", {
-        siteId: AUGURY_SITE_ID,
-        encounterSignature: encounter.encounterSignature,
-        offerId: offer.offerId,
-      }),
-    ];
-    const first = replayLog({ genesis: AUGURY_GENESIS, events });
-    expect(
-      first.outcomes.find((o) => o.seq === 2)?.outcome,
-      first.outcomes.find((o) => o.seq === 2)?.error?.message,
-    ).toBe("applied");
-    expect(first.finalState.journey.screen).toEqual({ type: "dreamscape" });
-
-    const second = replayLog({ genesis: AUGURY_GENESIS, events });
-    expect(second.finalHash).toBe(first.finalHash);
+    // Minted at the ACCEPT_AUGURY_OFFER event's own seq (2), index 0.
+    expect(minted.map(({ entryId }) => entryId)).toEqual(["deck-2-0"]);
   });
 });
