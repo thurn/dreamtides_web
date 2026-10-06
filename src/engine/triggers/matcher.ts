@@ -20,21 +20,39 @@ import type { AbilityOrigin, BattleState, QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { triggerBody } from "./body";
 
+/** Every trigger kind except the `either` combinator, which matches through its branches. */
+type TriggerKind = Exclude<Trigger["on"], "either">;
+
+/**
+ * The event kinds each trigger kind can match. Every trigger kind needs an
+ * entry, so a new `Trigger` member fails to type-check until its events are
+ * listed here, and `matchTrigger` refuses a match on an unlisted event.
+ */
+const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] } = {
+  materialized: ["materialized"],
+  dissolved: ["dissolved"],
+  dawn: ["phaseChanged"],
+  dusk: ["phaseChanged"],
+  night: ["phaseChanged"],
+  challenge: ["phaseChanged"],
+  play: ["cardPlayed"],
+  materialize: ["materialized"],
+  draw: ["cardDrawn"],
+  discard: ["discarded"],
+  abandon: ["abandoned"],
+  leavesPlay: ["leftPlay"],
+  scores: ["laneResolved"],
+  opponentScores: ["laneResolved"],
+  leavesVoid: ["leftVoid"],
+  challengeWith: ["challengersDesignated"],
+  startOfTurn: ["turnStarted"],
+  startOfFirstTurn: ["turnStarted"],
+};
+
 /** Event kinds some trigger can match; other events skip the matcher. */
-const TRIGGERING: readonly EngineEventKind[] = [
-  "materialized",
-  "dissolved",
-  "phaseChanged",
-  "cardPlayed",
-  "cardDrawn",
-  "discarded",
-  "abandoned",
-  "leftPlay",
-  "leftVoid",
-  "laneResolved",
-  "challengersDesignated",
-  "turnStarted",
-];
+const TRIGGERING: readonly EngineEventKind[] = Object.values(TRIGGER_EVENTS)
+  .flat()
+  .filter((kind, index, all) => all.indexOf(kind) === index);
 
 /** A source whose abilities may trigger: an emblem, or a card in play or another zone. */
 interface Listener {
@@ -147,8 +165,6 @@ function matchTrigger(
   listener: Listener,
   inZone: boolean,
 ): Match | null {
-  const self = sourceInstance(listener.source);
-  const you = listener.controller;
   if (trigger.on === "either") {
     for (const branch of trigger.triggers) {
       const match = matchTrigger(state, catalog, branch, event, listener, inZone);
@@ -156,6 +172,24 @@ function matchTrigger(
     }
     return null;
   }
+  const match = matchKind(state, catalog, trigger, event, listener, inZone);
+  if (match !== null && !TRIGGER_EVENTS[trigger.on].includes(event.kind)) {
+    throw new Error(`Trigger ${trigger.on} matched ${event.kind}, which TRIGGER_EVENTS does not list`);
+  }
+  return match;
+}
+
+/** `matchTrigger` for one trigger kind; `TRIGGER_EVENTS` lists the events each case can match. */
+function matchKind(
+  state: BattleState,
+  catalog: EngineCatalog,
+  trigger: Exclude<Trigger, { readonly on: "either" }>,
+  event: EngineEvent,
+  listener: Listener,
+  inZone: boolean,
+): Match | null {
+  const self = sourceInstance(listener.source);
+  const you = listener.controller;
   if (trigger.on === "dissolved") {
     return event.kind === "dissolved" && self !== null && event.instance === self ? { subject: self } : null;
   }
