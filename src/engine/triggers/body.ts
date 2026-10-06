@@ -1,5 +1,6 @@
 /** Reading a queued or floating trigger's definition from the catalog. */
 import type { EngineCatalog } from "../catalog";
+import { abilityEffect } from "../dsl/abilities";
 import type { Condition, Trigger } from "../dsl/types";
 import { everyNode } from "../effects/interpreter";
 import type { FloatingTriggerNode } from "../effects/primitives/floating-trigger";
@@ -27,15 +28,14 @@ export function triggerBody(
   node: number | null,
 ): TriggerBody {
   const definition = originAbilities(catalog, origin)[ability];
-  if (definition === undefined || definition.kind === "keyword" || definition.kind === "additionalCost" || definition.kind === "reclaim") {
-    throw new Error(`Ability ${String(ability)} of its origin has no effect`);
-  }
+  const root = definition === undefined ? null : abilityEffect(definition);
+  if (definition === undefined || root === null) throw new Error(`Ability ${String(ability)} of its origin has no effect`);
   if (node === null) {
     if (definition.kind !== "triggered") throw new Error(`Ability ${String(ability)} is not a triggered ability`);
-    return { trigger: definition.trigger, effect: definition.effect, root: definition.effect, condition: definition.condition ?? null };
+    return { trigger: definition.trigger, effect: root, root, condition: definition.condition ?? null };
   }
-  const found = everyNode(definition.effect)[node];
+  const found = everyNode(root)[node];
   if (found?.op !== "floatingTrigger") throw new Error(`Node ${String(node)} of ability ${String(ability)} is not a floating trigger`);
   const floating = found as FloatingTriggerNode;
-  return { trigger: floating.trigger, effect: floating.effect, root: definition.effect, condition: null };
+  return { trigger: floating.trigger, effect: floating.effect, root, condition: null };
 }

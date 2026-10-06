@@ -4,6 +4,7 @@
  * so that part of the effect resolves against nothing. Tests run it over
  * every synthetic fixture and every authored entity.
  */
+import { abilityEffect } from "../dsl/abilities";
 import type { Ability, PlayTimeTarget } from "../dsl/types";
 import { everyNode } from "../effects/interpreter";
 import { primitiveDefinition } from "../effects/registry";
@@ -16,7 +17,9 @@ export interface UndeclaredTarget {
 }
 
 function isPlayTimeTarget(value: object): value is PlayTimeTarget {
-  return "kind" in value && (value.kind === "target" || value.kind === "stackTarget");
+  return (
+    "kind" in value && (value.kind === "target" || value.kind === "stackTarget")
+  );
 }
 
 /**
@@ -35,9 +38,11 @@ export function undeclaredTargets(node: EffectNode): PlayTimeTarget[] {
   ]);
   const found: PlayTimeTarget[] = [];
   const visit = (value: unknown): void => {
-    if (typeof value !== "object" || value === null || nested.has(value)) return;
+    if (typeof value !== "object" || value === null || nested.has(value))
+      return;
     if (isPlayTimeTarget(value)) {
-      if (!declared.includes(value) && !found.includes(value)) found.push(value);
+      if (!declared.includes(value) && !found.includes(value))
+        found.push(value);
       return;
     }
     for (const field of Object.values(value)) visit(field);
@@ -47,10 +52,15 @@ export function undeclaredTargets(node: EffectNode): PlayTimeTarget[] {
 }
 
 /** Every undeclared target in the effects of a list of abilities, every mode and deferred effect included. */
-export function undeclaredAbilityTargets(abilities: readonly Ability[]): UndeclaredTarget[] {
-  return abilities.flatMap((ability) =>
-    "effect" in ability
-      ? everyNode(ability.effect).flatMap((node) => undeclaredTargets(node).map((spec) => ({ op: node.op, spec })))
-      : [],
-  );
+export function undeclaredAbilityTargets(
+  abilities: readonly Ability[],
+): UndeclaredTarget[] {
+  return abilities.flatMap((ability) => {
+    const effect = abilityEffect(ability);
+    return effect === null
+      ? []
+      : everyNode(effect).flatMap((node) =>
+          undeclaredTargets(node).map((spec) => ({ op: node.op, spec })),
+        );
+  });
 }
