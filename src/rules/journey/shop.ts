@@ -38,7 +38,7 @@ import type {
   SiteType,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
-import { findSite, getSiteContentProvider } from "./sites";
+import { clampEssence, findSite, getSiteContentProvider } from "./sites";
 import { SITE_TYPES as SITE_TYPE_VALUES } from "../../types/site-type";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
@@ -73,10 +73,6 @@ function asSiteType(value: unknown): SiteType | null {
   return typeof value === "string" && SITE_TYPES.has(value as SiteType)
     ? (value as SiteType)
     : null;
-}
-
-function clampEssence(value: number): number {
-  return Math.max(0, value);
 }
 
 /** Store `runtime` for `siteId`, replacing any existing entry for that key. */

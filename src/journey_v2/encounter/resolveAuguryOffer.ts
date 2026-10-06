@@ -1,8 +1,5 @@
 import type { JourneyContent } from "../../data/journey-content";
-import {
-  completeJourneySite,
-  setJourneyScreen,
-} from "../../state/journey-state-actions";
+import { canVisitSite, completeAndReturn } from "../../rules/journey/sites";
 import type { DeckEntry, JourneyState, SiteState } from "../../types/journey";
 import { applyJourneyRewardEffect } from "../../rules/journey/reward-effects";
 import { buildAuguryContext } from "../context/buildAuguryContext";
@@ -73,18 +70,15 @@ function markSiteComplete(
   state: JourneyState,
   siteId: SiteId,
 ): JourneyState | null {
-  const completed = completeJourneySite(state, siteId);
-  if (completed === state) return null;
-  return setJourneyScreen(
-    {
-      ...completed,
-      siteRuntime: {
-        ...completed.siteRuntime,
-        [siteId]: { kind: "augury", completed: true },
-      },
+  if (!canVisitSite(state, siteId)) return null;
+  const completed = completeAndReturn(state, siteId);
+  return {
+    ...completed,
+    siteRuntime: {
+      ...completed.siteRuntime,
+      [siteId]: { kind: "augury", completed: true },
     },
-    { type: "dreamscape" },
-  );
+  };
 }
 
 export function applyAuguryPayloadToState({

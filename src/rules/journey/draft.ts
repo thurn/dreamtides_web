@@ -1,8 +1,8 @@
 // Pure draft reducer cases.
 //
 // Each exported case relocates the DOMAIN MATH of a legacy journey draft mutation
-// (`src/state/multiplayer-journey-context.tsx` / `journey-state-actions.ts`) into a
-// pure function of `(journey, payload, ctx)`. The legacy transaction /
+// (`src/state/multiplayer-journey-context.tsx`) into a pure function of
+// `(journey, payload, ctx)`. The legacy transaction /
 // normalization / actionLog wrappers are engine concerns and live elsewhere now
 // (the root reducer folds, the eventlog engine persists), so they are dropped
 // here. These functions read nothing but their arguments and the registered
@@ -132,8 +132,8 @@ function rollOfferTransfigurations(
 // ---------------------------------------------------------------------------
 
 /**
- * `PICK_DRAFT_CARD { packIndex, cardId }` — relocates legacy `pickDraftCard` /
- * `pickDraftCardInJourneyState`. The card UUID resolves to its `cardNumber`
+ * `PICK_DRAFT_CARD { packIndex, cardId }` — relocates legacy `pickDraftCard`.
+ * The card UUID resolves to its `cardNumber`
  * through the registered {@link DraftContentProvider}; the pick is validated
  * against the offered pack, the card is appended to the deck (with a
  * seq-deterministic entry id), and the draft is advanced — revealing the next

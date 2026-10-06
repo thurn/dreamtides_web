@@ -3,15 +3,12 @@ import { createDreamsign } from "../../data/dreamsigns";
 import type { JourneyContent } from "../../data/journey-content";
 import { isNightmareCardId } from "../../data/nightmare";
 import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
-import {
-  addSiteToCurrentDreamscape,
-  insertPreparedSiteInJourneyState,
-} from "../../state/journey-state-actions";
 import type { DreamsignTemplate } from "../../types/content";
 import type {
   CardKeywordModification,
   CardTypeChange,
   DeckEntry,
+  DreamAtlas,
   JourneyState,
   SiteState,
   SiteType,
@@ -21,6 +18,7 @@ import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { SiteId } from "../../types/identifiers";
 
@@ -153,6 +151,144 @@ function validateDeckTarget(
   return validateCatalogCard(journeyContent, effect.cardUuid, effect.cardNumber)
     ? entry
     : null;
+}
+
+/**
+ * Count all sites across the atlas for deterministic id derivation.
+ * Using total site count (not max site-N) ensures that applying the same
+ * payload twice to states with different site counts yields distinct ids.
+ */
+function totalSiteCount(atlas: DreamAtlas): number {
+  let count = 0;
+  for (const node of Object.values(atlas.nodes)) {
+    count += node.sites.length;
+  }
+  return count;
+}
+
+/**
+ * Add a fresh, unvisited site of `siteType` to the current dreamscape.
+ * No-ops when there is no current dreamscape or the node cannot be found.
+ *
+ * Site ids derive deterministically from `(sourceId, existing total site count)`
+ * so that the regenerate-validate-apply pattern produces the same id on each
+ * apply invocation of the same payload at the same state, and distinct ids when
+ * the state already has a different number of sites (preventing id collision on
+ * repeated rewards).
+ *
+ * Augury site rewards delegate here for `"current"` placement so every
+ * offer shape shares one implementation.
+ */
+function addSiteToCurrentDreamscape(
+  prev: JourneyState,
+  siteType: SiteType,
+  sourceId: SiteType,
+): JourneyState {
+  const targetId = prev.currentDreamscape;
+  if (targetId === null || prev.atlas.nodes[targetId] === undefined) {
+    return prev;
+  }
+  const count = totalSiteCount(prev.atlas);
+  const newSite: SiteState = {
+    id: parseSiteId(`site-augury-${sourceId}-${String(count)}`),
+    type: siteType,
+    isEnhanced: false,
+    isVisited: false,
+  };
+  const node = prev.atlas.nodes[targetId];
+  if (node === undefined) return prev;
+  return {
+    ...prev,
+    atlas: {
+      ...prev.atlas,
+      nodes: {
+        ...prev.atlas.nodes,
+        [targetId]: { ...node, sites: [...node.sites, newSite] },
+      },
+    },
+  };
+}
+
+function siteRecordsEqual(left: SiteState, right: SiteState): boolean {
+  const exactKeys = ["id", "isEnhanced", "isVisited", "type"];
+  return (
+    Object.keys(left).sort().join("|") === exactKeys.join("|") &&
+    Object.keys(right).sort().join("|") === exactKeys.join("|") &&
+    left.id === right.id &&
+    left.type === right.type &&
+    left.isEnhanced === right.isEnhanced &&
+    left.isVisited === right.isVisited &&
+    left.randomSite === right.randomSite &&
+    left.data === right.data
+  );
+}
+
+/**
+ * Commit an already-prepared site at one exact atlas position. Every
+ * precondition is rechecked so a stale or forged reward cannot move, replace,
+ * enhance, revisit, or duplicate a site.
+ */
+function insertPreparedSiteInJourneyState(
+  prev: JourneyState,
+  input: {
+    targetNodeId: AtlasNodeId;
+    insertionIndex: number;
+    siblingSiteIdsBefore: readonly string[];
+    site: SiteState;
+  },
+): JourneyState | null {
+  if (
+    prev.currentDreamscape !== input.targetNodeId ||
+    prev.atlas.currentNodeId !== input.targetNodeId ||
+    !Number.isInteger(input.insertionIndex) ||
+    input.insertionIndex < 0 ||
+    input.site.isEnhanced ||
+    input.site.isVisited ||
+    input.site.randomSite !== undefined ||
+    input.site.data !== undefined
+  ) {
+    return null;
+  }
+  const node = prev.atlas.nodes[input.targetNodeId];
+  if (node === undefined || input.insertionIndex !== node.sites.length) {
+    return null;
+  }
+  const actualSiblingIds = node.sites.map(({ id }) => id);
+  if (
+    actualSiblingIds.length !== input.siblingSiteIdsBefore.length ||
+    actualSiblingIds.some(
+      (siteId, index) => siteId !== input.siblingSiteIdsBefore[index],
+    ) ||
+    Object.values(prev.atlas.nodes).some((candidateNode) =>
+      candidateNode.sites.some((site) => site.id === input.site.id),
+    )
+  ) {
+    return null;
+  }
+  const insertedSite: SiteState = {
+    id: input.site.id,
+    type: input.site.type,
+    isEnhanced: false,
+    isVisited: false,
+  };
+  if (!siteRecordsEqual(input.site, insertedSite)) return null;
+  return {
+    ...prev,
+    atlas: {
+      ...prev.atlas,
+      nodes: {
+        ...prev.atlas.nodes,
+        [input.targetNodeId]: {
+          ...node,
+          sites: [
+            ...node.sites.slice(0, input.insertionIndex),
+            insertedSite,
+            ...node.sites.slice(input.insertionIndex),
+          ],
+        },
+      },
+    },
+  };
 }
 
 function applyEffect(

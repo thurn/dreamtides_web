@@ -16,7 +16,7 @@ import type {
 } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
-import { registerSiteContentProvider } from "./sites";
+import { completeJourneySite, registerSiteContentProvider } from "./sites";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { testSiteContentProvider } from "./test-content-providers";
 import { parseDeckEntryId } from "../../types/identifiers";
@@ -759,6 +759,28 @@ describe("COMPLETE_SITE", () => {
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
     expect(out.state.journey.screen.type).toBe("dreamscape");
+  });
+
+  it("marks only the target site visited and preserves other site runtime", () => {
+    const otherSiteId = parseSiteId("site-2");
+    const runtime: SiteRuntimeState = {
+      kind: "essence",
+      amount: 25,
+      accepted: false,
+    };
+    const journey = stateWithSites(
+      [makeSite("Draft"), { ...makeSite("Battle"), id: otherSiteId }],
+      { siteRuntime: { [otherSiteId]: runtime } },
+    ).journey;
+
+    const next = completeJourneySite(journey, SITE_ID);
+
+    expect(next.visitedSites).toEqual([SITE_ID]);
+    expect(next.atlas.nodes[NODE_ID]?.sites.map((site) => site.isVisited)).toEqual(
+      [true, false],
+    );
+    expect(next.siteRuntime[otherSiteId]).toBe(runtime);
+    expect(completeJourneySite(next, SITE_ID)).toBe(next);
   });
 });
 

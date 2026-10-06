@@ -26,7 +26,7 @@ import type { EventContext } from "../../eventlog/types";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
-import { canVisitSite, getSiteContentProvider } from "./sites";
+import { canVisitSite, clampEssence, getSiteContentProvider } from "./sites";
 import {
   isRandomSiteMetadata,
   materializeRandomSite,
@@ -60,9 +60,7 @@ import type { JourneySeed } from "../../types/journey-seed";
  * registers a provider whose functions are PURE and DETERMINISTIC in
  * `(avatarId, seed)`: the run `seed` is always `journey.seed` (fixed per
  * game at genesis), never a freshly-minted one, so two clients folding the same
- * log resolve byte-identical packages. Legacy `startJourneyFromAvatar` minted
- * a fresh `generateJourneySeed()` (a `crypto`/`Math.random` source); pinning the
- * generation seed to `journey.seed` is the determinism fix.
+ * log resolve byte-identical packages.
  *
  * `createJourneyLifecycleContentProvider`
  * (src/session/providers/lifecycle-provider.ts) supplies every member from the
@@ -111,11 +109,6 @@ export function registerJourneyLifecycleContentProvider(
 // ---------------------------------------------------------------------------
 // Essence
 // ---------------------------------------------------------------------------
-
-/** Clamp essence to zero or greater. */
-function clampEssence(value: number): number {
-  return Math.max(0, value);
-}
 
 function finiteNumber(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;

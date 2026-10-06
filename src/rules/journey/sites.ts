@@ -216,7 +216,8 @@ function integer(value: unknown): number | null {
   return typeof value === "number" && Number.isInteger(value) ? value : null;
 }
 
-function clampEssence(value: number): number {
+/** Clamp an essence amount to zero or greater. */
+export function clampEssence(value: number): number {
   return Math.max(0, value);
 }
 
@@ -288,7 +289,7 @@ export function completeJourneySite(
 }
 
 /** Complete the site and return to the dreamscape (legacy `completeSiteAndReturnToDreamscape`). */
-function completeAndReturn(
+export function completeAndReturn(
   journey: JourneyState,
   siteId: SiteId,
 ): JourneyState {
