@@ -36,8 +36,11 @@ export function characteristicsOf(state: BattleState, catalog: EngineCatalog, id
   return characteristics(state, catalog).of(id);
 }
 
-/** Whether characteristics match a card filter: type, and subtype unless the card has all types. */
-export function matchesFilter(card: Characteristics, filter: CardFilter): boolean {
+/**
+ * Whether characteristics match a card filter: type, and subtype unless the
+ * card has all types. A played card's turn-log record matches the same way.
+ */
+export function matchesFilter(card: Pick<Characteristics, "cardType" | "subtype" | "allTypes">, filter: CardFilter): boolean {
   return (
     (filter.cardType === undefined || card.cardType === filter.cardType) &&
     (filter.subtype === undefined || card.allTypes || card.subtype === filter.subtype)

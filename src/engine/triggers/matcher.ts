@@ -6,7 +6,7 @@
  * step per trigger, before any player receives priority.
  */
 import type { EngineCatalog } from "../catalog";
-import { cardMatchesFilter } from "../continuous/characteristics";
+import { cardMatchesFilter, matchesFilter } from "../continuous/characteristics";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, FunctionalZone, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
 import { conditionHolds } from "../effects/interpreter";
@@ -212,11 +212,8 @@ function matchKind(
         : null;
     case "play": {
       if (event.kind !== "cardPlayed" || event.side !== resolvePlayer(you, trigger.player)) return null;
-      const played = state.turnLog.played[event.side].filter(
-        (card) =>
-          (trigger.filter.cardType === undefined || card.cardType === trigger.filter.cardType) &&
-          (trigger.filter.subtype === undefined || card.subtype === trigger.filter.subtype),
-      );
+      // Each play matches by the characteristics it was recorded with (RD-hv-7x4l.34-1).
+      const played = state.turnLog.played[event.side].filter((card) => matchesFilter(card, trigger.filter));
       if (played[played.length - 1]?.instance !== event.instance) return null;
       return trigger.nth === undefined || played.length === trigger.nth ? { subject: event.instance } : null;
     }

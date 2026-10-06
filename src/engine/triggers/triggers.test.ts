@@ -67,6 +67,13 @@ const L = {
   ifTwoWarriors: local(6, "character", () => [
     triggered(onDawn(), p.gainPoints(1), { condition: { cond: "controls", selector: characterYouControl({ subtype: "Warrior" }), atLeast: 2 } }),
   ]),
+  /** "When you play a Mage, gain 1●. When you play your second Mage in a turn, gain 1⍟." */
+  mageWatcher: local(9, "character", () => [
+    triggered(whenYouPlay({ subtype: "Mage" }), p.gainEnergy(1)),
+    triggered(whenYouPlay({ subtype: "Mage" }, 2), p.gainPoints(1)),
+  ]),
+  /** A vanilla Warrior. */
+  warrior: local(10, "character", () => []),
 } as const;
 const WATCHER_AVATAR: EngineAvatarDefinition = { id: parseAvatarId("5e5e5e5e-0000-4000-8000-000000000391"), status: "authored", abilities: watching };
 const WATCHER_SIGN: EngineDreamsignDefinition = { id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000000392"), status: "authored", abilities: watching };
@@ -287,6 +294,32 @@ describe("when patterns", () => {
     expect(current.turnLog.played.player.map((entry) => entry.instance)).toEqual(ids.player.hand);
     const next = passUntil(engine, current, at(engine, "enemy", "day")).state;
     expect(next.turnLog.played.player).toEqual([]);
+  });
+
+  it("matches a played card by the types it had as it was played, including all character types", () => {
+    const { state, ids } = board({ player: { back: [L.mageWatcher.id], hand: [L.warrior.id, L.warrior.id, L.warrior.id], deck }, enemy: { deck } });
+    const [first, plain, last] = ids.player.hand;
+    if (first === undefined || plain === undefined || last === undefined) throw new Error("no card");
+    // As a resolved "gains all character types" effect leaves it: a floating type change that follows the card into hand.
+    const withAllTypes = (current: BattleState, instance: InstanceId): BattleState => ({
+      ...current,
+      nextEffect: current.nextEffect + 1,
+      floating: [
+        ...current.floating,
+        { id: `e${current.nextEffect}`, controller: "player", source: { kind: "avatar", side: "player" }, timestamp: 0, expiry: { at: "endOfTurn" }, change: { kind: "allTypes", instance } },
+      ],
+    });
+    let current = play(withAllTypes(state, first), "player", first).state;
+    expect(current.sides.player.currentEnergy).toBe(1);
+    expect(current.sides.player.score).toBe(0);
+    // The first card's type change ends; it still counts as a Mage played this turn.
+    current = { ...current, floating: current.floating.filter((effect) => effect.change.kind !== "allTypes") };
+    current = play(current, "player", plain).state;
+    expect(current.sides.player.currentEnergy).toBe(1);
+    expect(current.sides.player.score).toBe(0);
+    current = play(withAllTypes(current, last), "player", last).state;
+    expect(current.sides.player.currentEnergy).toBe(2);
+    expect(current.sides.player.score).toBe(1);
   });
 
   it("triggers a once-per-turn ability once each turn", () => {

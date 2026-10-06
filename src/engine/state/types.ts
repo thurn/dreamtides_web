@@ -308,11 +308,16 @@ export interface QueuedTrigger {
   readonly subject: InstanceId | null;
 }
 
-/** A card one side played this turn, with the characteristics it was played with. */
+/**
+ * A card one side played this turn, with the effective characteristics it
+ * had as it was played (RD-hv-7x4l.34-1).
+ */
 export interface PlayedCard {
   readonly instance: InstanceId;
   readonly cardType: "character" | "event";
   readonly subtype: CardSubtype;
+  /** "Has all character types" as it was played: it matches every subtype a filter names. */
+  readonly allTypes: boolean;
 }
 
 /** Counters for the current turn, reset as each turn begins. */

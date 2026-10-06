@@ -718,6 +718,10 @@ directly into play satisfies only ▸Materialized. Combined triggers such as
 "▸Materialized, ▸Dawn" fire on both occasions. "When you play your second event
 in a turn" counts only the matching cards that player played this turn,
 including the one just played; copies are not played and are not counted.
+A played card matches "when you play" abilities by its type and subtype as it
+was played, including any changes to its types: a card that has all character
+types as it is played is a play of every subtype. A later change to its types
+does not change which of these abilities its play matched or counted toward.
 "At the start of your turn" abilities trigger as each of your turns begins and
 resolve before its Dreamwell phase; "At the start of your first turn" triggers
 only as your first turn of the battle begins.
