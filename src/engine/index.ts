@@ -65,7 +65,13 @@ export type {
   FloatingEffectView,
   HiddenZoneView,
   InstanceView,
+  KnownCardView,
   LoopView,
   QueuedTriggerView,
   SideView,
+  TurnLogView,
 } from "./view/view";
+export { promptView } from "./view/view";
+export type { Decklists } from "./view/determinize";
+export type { EngineLogLine, EngineLogRecord } from "./log";
+export { engineLogLine } from "./log";

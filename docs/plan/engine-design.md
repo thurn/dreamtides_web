@@ -78,6 +78,7 @@ interface BattleState {
           sideTurns: Record<Side, number> };  // turns each side has begun, for "your first turn"
   sides: Record<Side, SideState>;
   instances: Record<InstanceId, CardInstance>;
+  knownTo: Record<Side, InstanceId[]>; // hidden cards each side can identify (view/knowledge.ts)
   stack: StackItem[];                  // last element is the top
   priority: Side | null;
   triggerQueue: QueuedTrigger[];
@@ -929,22 +930,36 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 
 ## Views and hidden information
 
-- **`view(state, side)`** hides the opponent's hand contents (count only, plus
-  cards known to this side) and every deck order (counts, plus known cards).
-- **Knowledge** is tracked through `knownTo`, which updates on:
-  - reveal;
-  - look at a hand;
-  - the card being played;
-  - public moves;
-  - `privateTo` prompts. A "look at the top 4" prompt reveals those cards only
+- **`view(state, side)`** hides the opponent's hand contents and every deck
+  order: each is a count plus the cards known to this side at their
+  positions (`HiddenZoneView.known`). Every other part of the view omits or
+  nulls what names a card the side cannot identify.
+- **Knowledge** is `state.knownTo[side]`: the cards in decks and hands that
+  `side` can identify beyond what their zone shows it (public zones, and its
+  own hand). `view/knowledge.ts` updates it:
+  - a card keeps every side that could see it as it moves, so a public move
+    into a hand or deck, or a move from a hand into a deck, stays known to
+    whoever watched it;
+  - a revealed card becomes known to both sides;
+  - a `privateTo` prompt shows its cards to its chooser only as it opens,
+    and the other side loses track of those still in a deck, whose order the
+    chooser may change. A "look at the top 4" prompt reveals those cards only
     to its chooser.
+- **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
+  it: whole for the side answering, and otherwise with only the cards and
+  purpose source `side` can identify.
 - **The UI renders only views.** Debug reveal switches that side's view to
   omniscient.
-- **Determinization** (D22) is `sample(view, decklist, rng) → BattleState`.
-  The decklist includes each entry's variant (D39). It
-  deals unknown cards consistent with the decklist, the cards seen in public
-  zones, the cards known to be in hand, and the known deck positions. Only the
-  AI uses it.
+- **Determinization** (D22) is `engine.determinize(view, decklists, random)
+  → BattleState`. The decklists include each entry's variant (D39). It
+  deals the cards the view hides from what each decklist has left after the
+  cards the view shows, keeps every known card at its known position, and
+  reads nothing but the view, so states that look alike to the viewer give
+  the same sample for the same draws. It draws a fresh seed (so later
+  shuffles and Dreamwell cycles are sampled too) and starts empty what a view
+  does not carry: queued triggers and floating effects from sources the
+  viewer cannot see, the opponent's knowledge, loop history, and the
+  automatic-step count. Only the AI uses it.
 
 ## Presentation
 

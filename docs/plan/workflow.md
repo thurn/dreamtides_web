@@ -725,7 +725,9 @@ enough to reconstruct what happened.
 
 **The engine stays pure.** It emits engine events and never calls the logger.
 The host (the fold adapter, the worker host, the fuzzer, or the tournament
-runner) turns events into log lines and adds the game ID and timestamp.
+runner) turns events into log lines and adds the game ID and timestamp. The
+record schema and the event-to-record mapping are `src/engine/log.ts`; the
+fold adapter reports records through its `log` option.
 
 What to log:
 

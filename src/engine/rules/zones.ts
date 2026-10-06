@@ -20,6 +20,7 @@ import type { StepContext } from "../steps/types";
 import { addFloating, endChangesTo, expireAt } from "./floating";
 import { hasKeyword } from "./keywords";
 import { forgetCeased } from "./payable";
+import { departKnowledge, settleKnowledge } from "../view/knowledge";
 
 export function instanceOf(state: BattleState, id: InstanceId): CardInstance {
   const instance = state.instances[id];
@@ -96,8 +97,18 @@ function depart(ctx: StepContext, instance: CardInstance, to: Zone | null): void
   }
 }
 
-/** Removes an instance from whatever zone list holds it. Leaving a hand ends Ephemeral. */
-function detach(state: BattleState, instance: CardInstance): void {
+/**
+ * Removes an instance from whatever zone list holds it. Leaving a hand ends
+ * Ephemeral. Returns the sides that could identify it there, who keep
+ * knowing it if it goes to a hidden zone (view/knowledge.ts).
+ */
+function detach(state: BattleState, instance: CardInstance): Side[] {
+  const seers = departKnowledge(state, instance);
+  removeFromZone(state, instance);
+  return seers;
+}
+
+function removeFromZone(state: BattleState, instance: CardInstance): void {
   switch (instance.zone) {
     case "play": {
       const slot = slotOf(state, instance.id);
@@ -151,7 +162,7 @@ function relocate(
   const receiver = destination === "hand" ? holder : instance.owner;
   const leavingPlay = instance.zone === "play";
   depart(ctx, instance, destination);
-  detach(state, instance);
+  const seers = detach(state, instance);
   instance.controller = receiver;
   instance.zone = destination;
   instance.enteredZoneAt = ++state.clock;
@@ -161,6 +172,7 @@ function relocate(
   } else {
     list.push(id);
   }
+  settleKnowledge(state, instance, seers);
   instance.status.exhausted = false;
   if (leavingPlay) {
     instance.status.counters = 0;

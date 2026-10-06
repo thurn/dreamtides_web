@@ -5,15 +5,20 @@ import type { EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { randomLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
+import type { Answer, Prompt } from "../prompts/types";
 import type { Action } from "../rules/actions";
 import { hashString, stateHash, type StateHash } from "../state/hash";
 import type { BattleSeed, Side } from "../state/ids";
 import { battleSeed } from "../state/ids";
 import type { BattleInit, BattleResult, BattleState, DeckEntry } from "../state/types";
-import type { StepObserver } from "../steps/driver";
+import { stepForAction, type StepObserver } from "../steps/driver";
+import type { Step } from "../steps/kinds";
+import { initialState } from "../state/create";
+import { eventLogRecords, stepLogRecords, type EngineLogRecord } from "../log";
 import { InlineSource } from "../steps/sources";
 import type { RecordedAnswer } from "../steps/types";
 import { invariantViolations } from "./invariants";
+import { promptRedactionViolations } from "./redaction";
 import { PolicyRandom, randomAction } from "./random-policy";
 import { SYNTHETIC_CARDS, testCatalog } from "./synthetic-cards";
 import { PROMPTING_CARDS } from "./synthetic-effects";
@@ -42,8 +47,17 @@ export interface FuzzGame {
   readonly eventsHash: number;
   readonly steps: number;
   readonly prompts: number;
-  /** The first invariant violation, with the step that caused it. */
+  /** The first invariant violation or engine error, with the step that caused it. */
   readonly failure: string | null;
+  /** The action whose run threw, which `actions` therefore lacks. */
+  readonly failedAction: { readonly side: Side; readonly action: Action } | null;
+}
+
+/** The policy playing each side of a fuzz game, as its log records it. */
+export const FUZZ_POLICIES: Readonly<Record<Side, string>> = { player: "random", enemy: "random" };
+
+function errorText(error: unknown): string {
+  return error instanceof Error ? (error.stack ?? error.message) : String(error);
 }
 
 export const DECK_SIZE = 30;
@@ -109,19 +123,17 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed): FuzzGame {
   const init = fuzzInit(seed);
   const policy = new PolicyRandom(battleSeed(`policy|${seed}`));
   let prompts = 0;
-  const answerer = (): InlineSource =>
-    new InlineSource({
-      player: (prompt) => {
-        prompts += 1;
-        return randomLegalAnswer(prompt, () => policy.next());
-      },
-      enemy: (prompt) => {
-        prompts += 1;
-        return randomLegalAnswer(prompt, () => policy.next());
-      },
-    });
   let steps = 0;
   let failure: string | null = null;
+  const answer = (prompt: Prompt, work: BattleState): Answer => {
+    prompts += 1;
+    if (failure === null) {
+      const problems = promptRedactionViolations(prompt, work, engine.catalog);
+      if (problems.length > 0) failure = `at a ${prompt.kind} prompt after step #${String(steps)}: ${problems.join("; ")}`;
+    }
+    return randomLegalAnswer(prompt, () => policy.next());
+  };
+  const answerer = (): InlineSource => new InlineSource({ player: answer, enemy: answer });
   const events: EngineEvent[] = [];
   const observe: StepObserver = (state, step) => {
     steps += 1;
@@ -132,29 +144,39 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed): FuzzGame {
       }
     }
   };
-  const start = engine.createBattle(init, answerer(), observe);
-  events.push(...start.events);
-  let state: BattleState = start.state;
+  let state: BattleState = initialState(init, engine.catalog);
+  let startAnswers: readonly RecordedAnswer[] = [];
   const actions: RecordedAction[] = [];
-  while (state.result === null && failure === null) {
-    const pending = engine.decision(state);
-    if (pending === null) {
-      failure = "no decision and no result";
-      break;
+  let failedAction: FuzzGame["failedAction"] = null;
+  try {
+    const start = engine.createBattle(init, answerer(), observe);
+    events.push(...start.events);
+    startAnswers = start.answers;
+    state = start.state;
+    while (state.result === null && failure === null) {
+      const pending = engine.decision(state);
+      if (pending === null) {
+        failure = "no decision and no result";
+        break;
+      }
+      if (actions.length >= ACTION_CAP) {
+        failure = `no result after ${String(ACTION_CAP)} actions`;
+        break;
+      }
+      const action = randomAction(engine.legalActions(state, pending.side), policy);
+      failedAction = { side: pending.side, action };
+      const applied = engine.apply(state, pending.side, action, answerer(), observe);
+      failedAction = null;
+      actions.push({ side: pending.side, action, answers: applied.answers });
+      events.push(...applied.events);
+      state = applied.state;
     }
-    if (actions.length >= ACTION_CAP) {
-      failure = `no result after ${String(ACTION_CAP)} actions`;
-      break;
-    }
-    const action = randomAction(engine.legalActions(state, pending.side), policy);
-    const applied = engine.apply(state, pending.side, action, answerer(), observe);
-    actions.push({ side: pending.side, action, answers: applied.answers });
-    events.push(...applied.events);
-    state = applied.state;
+  } catch (error) {
+    failure ??= errorText(error);
   }
   return {
     init,
-    startAnswers: start.answers,
+    startAnswers,
     actions,
     result: state.result,
     finalHash: stateHash(state),
@@ -162,22 +184,52 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed): FuzzGame {
     steps,
     prompts,
     failure,
+    failedAction,
   };
+}
+
+/**
+ * The engine log of a recorded fuzz game (log.ts), for a failing game's log
+ * file: its init and policies, then each action with its answers, replayed
+ * inline to add the triggers, loops, random draws, and battle end it
+ * produced. A step that throws ends the log with an `engine.error` record.
+ */
+export function fuzzGameLog(engine: Engine, game: FuzzGame): EngineLogRecord[] {
+  const records: EngineLogRecord[] = [{ event: "engine.battleStarted", version: 0, init: game.init, policies: FUZZ_POLICIES }];
+  let previous = initialState(game.init, engine.catalog);
+  const observe: StepObserver = (state, _step, events) => {
+    records.push(...eventLogRecords(events, previous.version), ...stepLogRecords(previous, state));
+    previous = state;
+  };
+  let step: Step = { kind: "beginBattle", dreamwell: game.init.dreamwell };
+  try {
+    let state = engine.createBattle(game.init, replaySource(game.startAnswers), observe).state;
+    for (const { side, action, answers } of game.actions) {
+      records.push({ event: "engine.action", version: state.version, side, action, answers });
+      step = stepForAction(state, action);
+      state = engine.apply(state, side, action, replaySource(answers), observe).state;
+    }
+  } catch (error) {
+    records.push({ event: "engine.error", version: previous.version, step, message: errorText(error) });
+  }
+  return records;
+}
+
+/** Answers prompts with the recorded non-automatic answers, in order. */
+function replaySource(answers: readonly RecordedAnswer[]): InlineSource {
+  const values = answers.filter((answer) => answer.auto !== true).map((answer) => answer.value);
+  let index = 0;
+  return new InlineSource({
+    player: () => values[index++] ?? [],
+    enemy: () => values[index++] ?? [],
+  });
 }
 
 /** Replays a recorded game inline and returns its final state hash. */
 export function replayFinalHash(engine: Engine, game: FuzzGame): StateHash {
-  const replayed = (answers: readonly RecordedAnswer[]) => {
-    const values = answers.filter((answer) => answer.auto !== true).map((answer) => answer.value);
-    let index = 0;
-    return new InlineSource({
-      player: () => values[index++] ?? [],
-      enemy: () => values[index++] ?? [],
-    });
-  };
-  let state = engine.createBattle(game.init, replayed(game.startAnswers)).state;
+  let state = engine.createBattle(game.init, replaySource(game.startAnswers)).state;
   for (const { side, action, answers } of game.actions) {
-    state = engine.apply(state, side, action, replayed(answers)).state;
+    state = engine.apply(state, side, action, replaySource(answers)).state;
   }
   return stateHash(state);
 }
@@ -187,22 +239,35 @@ export interface InteractiveReplay {
   /** Fold re-runs of a suspended step, and their total time in milliseconds. */
   readonly reruns: number;
   readonly rerunMs: number;
+  /** The slowest single re-run, in milliseconds. */
+  readonly rerunMaxMs: number;
 }
 
 /**
  * Replays a recorded game through the fold, suspending at every prompt and
  * answering it from the recording, then checks that the final state, the
- * event sequence, and every prompt fingerprint match the inline game.
+ * event sequence, and every prompt fingerprint match the inline game, that
+ * each suspended display redacts the state and prompt for both sides, and
+ * that the fold logged every action once, in order.
  */
 export function replayInteractively(
   engine: Engine,
   game: FuzzGame,
   now: () => number,
+  log?: (record: EngineLogRecord) => void,
 ): InteractiveReplay {
-  const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+  const logged: EngineLogRecord[] = [];
+  const fold = createFoldAdapter(engine, {
+    checkEventPrefix: true,
+    log: (record) => {
+      logged.push(record);
+      log?.(record);
+    },
+  });
   const events: EngineEvent[] = [];
   let reruns = 0;
   let rerunMs = 0;
+  let rerunMaxMs = 0;
   let failure: string | null = null;
 
   const answerAll = (slice: BattleSlice, answers: readonly RecordedAnswer[]): BattleSlice => {
@@ -219,9 +284,16 @@ export function replayInteractively(
         failure ??= "a prompt fingerprint differs from the inline game";
         return current;
       }
+      const leaks = promptRedactionViolations(pending.prompt, pending.display, engine.catalog);
+      if (leaks.length > 0) {
+        failure ??= `a suspended display leaks: ${leaks.join("; ")}`;
+        return current;
+      }
       const started = now();
       const outcome = fold.reduce(current, { kind: "answer", side: pending.prompt.side, promptId: id, value: recorded.value });
-      rerunMs += now() - started;
+      const elapsed = now() - started;
+      rerunMs += elapsed;
+      rerunMaxMs = Math.max(rerunMaxMs, elapsed);
       reruns += 1;
       if (outcome.kind !== "applied" || outcome.error !== null) {
         failure ??= `answer failed: ${outcome.kind === "bounced" ? outcome.reason : (outcome.error?.message ?? "")}`;
@@ -237,7 +309,7 @@ export function replayInteractively(
   };
 
   const started = fold.start(game.init);
-  if (started.kind !== "applied") return { failure: "start bounced", reruns, rerunMs };
+  if (started.kind !== "applied") return { failure: "start bounced", reruns, rerunMs, rerunMaxMs };
   events.push(...started.published);
   let slice = answerAll(started.slice, game.startAnswers);
   for (const { side, action, answers } of game.actions) {
@@ -256,5 +328,9 @@ export function replayInteractively(
   if (failure === null && eventsDigest(events) !== game.eventsHash) {
     failure = "the fold published a different event sequence";
   }
-  return { failure, reruns, rerunMs };
+  const loggedActions = logged.flatMap((record) => (record.event === "engine.action" ? [{ side: record.side, action: record.action }] : []));
+  if (failure === null && JSON.stringify(loggedActions) !== JSON.stringify(game.actions.map(({ side, action }) => ({ side, action })))) {
+    failure = "the fold's log differs from the actions taken";
+  }
+  return { failure, reruns, rerunMs, rerunMaxMs };
 }

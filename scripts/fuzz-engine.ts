@@ -7,18 +7,24 @@
  * Every Nth game is also replayed through the fold, suspending at every
  * prompt, and must match the inline game exactly.
  *
- * A failing game writes its seed, decks, and action log to
- * logs/fuzz/<run-id>/<game>.jsonl and prints the repro command.
+ * Passing games write no logs. A failing game writes its engine log
+ * (src/engine/log.ts: the seed, decks, policies, and every action with its
+ * answers, then the triggers, loops, and random draws they produced) to
+ * logs/fuzz/<run-id>/<game>.jsonl, after a `fuzz.failure` line, and prints
+ * the repro command.
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { createEngine } from "../src/engine";
+import { engineLogLine } from "../src/engine/log";
 import {
   fuzzEngineCatalog,
+  fuzzGameLog,
   playFuzzGame,
   replayFinalHash,
   replayInteractively,
 } from "../src/engine/testing/fuzz";
 import { battleSeed } from "../src/engine/state/ids";
+import { parseGameId } from "../src/types/identifiers";
 
 function option(name: string, fallback: string): string {
   const index = process.argv.indexOf(`--${name}`);
@@ -69,14 +75,11 @@ for (let index = first; index < first + games; index++) {
     failures += 1;
     const directory = `logs/fuzz/${runId}`;
     mkdirSync(directory, { recursive: true });
+    const gameId = parseGameId(seed);
+    const timestamp = new Date().toISOString();
     const lines = [
-      JSON.stringify({ kind: "fuzzFailure", seed, failure }),
-      ...(game === undefined
-        ? []
-        : [
-            JSON.stringify({ kind: "init", init: game.init }),
-            ...game.actions.map((entry) => JSON.stringify({ kind: "action", ...entry })),
-          ]),
+      JSON.stringify({ event: "fuzz.failure", gameId, timestamp, seed, failure, failedAction: game?.failedAction ?? null }),
+      ...(game === undefined ? [] : fuzzGameLog(engine, game).map((record) => JSON.stringify(engineLogLine(record, gameId, timestamp)))),
     ];
     writeFileSync(`${directory}/${seed}.jsonl`, `${lines.join("\n")}\n`);
     console.error(`FAIL ${seed}: ${failure}`);

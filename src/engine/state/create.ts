@@ -75,6 +75,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
     },
     sides: { player: emptySide(), enemy: emptySide() },
     instances: {},
+    knownTo: { player: [], enemy: [] },
     stack: [],
     priority: null,
     payable: [],

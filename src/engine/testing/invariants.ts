@@ -10,6 +10,7 @@ import { serializeState, stateHash, deserializeState } from "../state/hash";
 import type { InstanceId, Zone } from "../state/ids";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
+import { redactionViolations } from "./redaction";
 
 /** Every rules invariant that must hold after every committed step. Returns the violations. */
 export function invariantViolations(state: BattleState, catalog: EngineCatalog): string[] {
@@ -111,6 +112,14 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
   if (candidate !== null && run === null && checkpointSide(state) !== candidate.side) {
     problems.push(`loop ${candidate.id} is on offer away from its player's checkpoint`);
   }
+  // Knowledge lists only cards in decks and hands, and each side's view hides the rest.
+  for (const side of SIDES) {
+    for (const id of state.knownTo[side]) {
+      const zone = state.instances[id]?.zone;
+      if (zone !== "deck" && zone !== "hand") problems.push(`${side} knows ${id}, which is in ${zone ?? "no zone"}`);
+    }
+  }
+  problems.push(...redactionViolations(state, catalog));
   if (stateHash(deserializeState(serializeState(state))) !== stateHash(state)) {
     problems.push("serialization round-trip changed the state hash");
   }

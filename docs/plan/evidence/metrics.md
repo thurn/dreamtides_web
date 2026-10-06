@@ -586,3 +586,56 @@ value). Overruns are judged only at comparable load.
 
 The Phase 2.11 test cut must reach the first three. The rest are monitored
 from the bead that introduces them.
+
+## Engine performance targets (2026-10-05, bead hv-7x4l.10)
+
+Measured against the
+[engine performance targets](../engine-design.md#performance-targets), which
+are monitored and never gated.
+
+- Command: `npx tsx scripts/bench-engine.ts --games 100 --step-games 20 --interactive-games 20`
+  (single process, seeded Random-policy fuzz games, the fuzz catalog). Wall
+  34.7 s.
+- Host load (1-minute): 11.25 at the start, 14.07 at the end. An earlier run
+  of the same command without the view and determinization rows, at load
+  5.96, measured within 4% of every row below.
+- Each step and hash is timed as the median of 3 runs on the committed state
+  the step started from.
+
+| Target | Budget | Measured | Status |
+| --- | --- | --- | --- |
+| Random-policy full battles per core | ≥ 20/s | 10.5/s (100 battles, 50,132 steps; 189 µs per step including policy and decisions) | over budget |
+| Median step (`runStep`) | < 50 µs | median 95.5 µs; p90 129.6, p99 150.9, max 1,053 µs (n = 10,150) | over budget |
+| Clone plus hash | < 20 µs | median 155.5 µs; p90 165.2, p99 183.6 µs | over budget |
+| Interactive re-run per answer, largest step | < 2 ms | max 1.567 ms; mean 0.342 ms (n = 133) | within |
+| Planner iteration budget | fits 1.5 s at 3× M5 Max time | not measurable: the Planner arrives in Phase 7 | — |
+
+Supporting measurements from the same run, all on committed states:
+
+| Measurement | Median | p90 | p99 | Max |
+| --- | --- | --- | --- | --- |
+| Full-state hash (`stateHash`) | 78.5 µs | 83.2 µs | 90.9 µs | 156.0 µs |
+| Cycle hash (`cycleHash`, mandatory-cycle checks) | 80.2 µs | 84.2 µs | 92.5 µs | 130.6 µs |
+| Loop signature (`loopSignature`, per checkpoint) | 32.1 µs | 40.7 µs | 47.2 µs | 79.3 µs |
+| View (`view`, every 10th state, both sides) | 11.2 µs | 22.6 µs | 32.6 µs | 42.6 µs |
+| Determinization (`determinize` of a view) | 109.2 µs | 160.5 µs | 189.5 µs | 220.2 µs |
+
+Findings:
+
+- **Cloning dominates a step.** `cloneState` is a JSON round trip: clone plus
+  hash (155 µs) minus the hash (78 µs) leaves about 77 µs, most of the
+  95 µs median step. A structural clone or copy-on-write work state is the
+  lever for the step and battle targets.
+- **Hashing** costs about 80 µs per full or cycle hash (Phase 3.9 noted
+  about 84 µs per step) and 32 µs per loop signature (3.9: about 40 µs per
+  decision). A step computes a cycle hash only at power-of-two counts of
+  consecutive automatic steps and a signature only at loop checkpoints, so
+  neither is on every step.
+- **The redaction invariant** adds about 11% to fuzz time: 30 games took
+  11.8 s with it and 10.6 s at the parent commit, at load 6.7–7.2.
+
+### 200-game fuzz
+
+`npm run fuzz:engine -- --games 200`: 101,946 steps, 80.8 s (2.5 games/s),
+1,507 prompts, 136 interactive re-runs (0.318 ms each), 0 failures. Wall
+81.3 s. Host load 18.45 at the start, 8.01 at the end.

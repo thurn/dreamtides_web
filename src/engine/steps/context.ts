@@ -2,12 +2,13 @@ import type { EngineCatalog } from "../catalog";
 import { eventDefinition, type EngineEvent } from "../events";
 import { forcedAnswer, hasLegalAnswer, isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
-import { isWellFormedPrompt, MalformedPrompt } from "../prompts/structure";
+import { isWellFormedPrompt, MalformedPrompt, promptCards } from "../prompts/structure";
 import type { AnswerFor, Prompt, PromptSpec } from "../prompts/types";
 import type { Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
+import { showPrivately } from "../view/knowledge";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
 import type { AnswerSource, RecordedAnswer, StepContext } from "./types";
 
@@ -45,6 +46,10 @@ export class Context implements StepContext {
     }
     if (!hasLegalAnswer(prompt)) {
       throw new EmptyPrompt(prompt);
+    }
+    if (prompt.privateTo !== undefined) {
+      // The chooser sees the cards as the prompt opens, whoever answers it.
+      showPrivately(this.state, prompt.privateTo, promptCards(prompt));
     }
     const fingerprint = promptFingerprint(prompt);
     const index = this.answers.length;

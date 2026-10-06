@@ -23,6 +23,7 @@ import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { discardCard, spendEnergy } from "./resources";
 import { banish, dissolve, instanceOf, slotOf } from "./zones";
+import { revealToBoth } from "../view/knowledge";
 
 /** A payment cost other than energy, which a plan pays as one total. */
 export type NonEnergyCost = Exclude<PaymentCost, { readonly cost: "energy" }>;
@@ -332,6 +333,7 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
         for (const id of cards) banish(ctx, id);
         break;
       case "reveal":
+        revealToBoth(ctx.state, cards);
         ctx.emit({ kind: "revealed", side, instances: [...cards] });
         break;
     }

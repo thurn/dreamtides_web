@@ -1,16 +1,18 @@
 import type { LoopId } from "../loops/types";
-import type { AbilitySource, AvatarId, DreamsignId, EffectId, InstanceId, Side, Zone } from "../state/ids";
+import type { Prompt } from "../prompts/types";
+import type { AbilitySource, AvatarId, DreamsignId, DreamwellCardId, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent } from "../state/ids";
 import type {
+  AbilityOrigin,
   BattleConfig,
   BattleResult,
   BattleState,
-  CardInstance,
   CardStatus,
   ChallengeState,
   Expiry,
   FloatingChange,
   FloatingEffect,
+  PlayedCard,
   Printing,
   StackItem,
   TurnState,
@@ -23,6 +25,7 @@ import type { Keyword, Variant } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
 import { changedInstance } from "../rules/floating";
 import { playCosts } from "../rules/costs";
+import { knows } from "./knowledge";
 
 /**
  * A card's effective characteristics, after every continuous effect (the
@@ -55,14 +58,21 @@ export interface InstanceView {
   readonly characteristics: CharacteristicsView;
 }
 
+/** A card in a hidden zone that the viewer knows, at its position in the zone. */
+export interface KnownCardView {
+  readonly id: InstanceId;
+  /** Its index in the zone: for a deck, 0 is the top. */
+  readonly index: number;
+}
+
 /**
  * A zone whose contents are hidden from at least one side: its size plus the
- * cards in it the viewer knows, in zone order. A hidden card appears only in
- * `count`; its instance ID is never exposed.
+ * cards in it the viewer knows (view/knowledge.ts), in zone order. A hidden
+ * card appears only in `count`; its instance ID is never exposed.
  */
 export interface HiddenZoneView {
   readonly count: number;
-  readonly known: readonly InstanceId[];
+  readonly known: readonly KnownCardView[];
 }
 
 /** A side's avatar: its identity and whether it is exhausted (P4). */
@@ -101,10 +111,14 @@ export interface FloatingEffectView {
   readonly change: FloatingChange;
 }
 
-/** A triggered ability waiting to resolve; a source the viewer cannot see is `null`. */
+/**
+ * A triggered ability waiting to resolve. A source the viewer cannot see is
+ * `null`, and so is the origin it would identify.
+ */
 export interface QueuedTriggerView {
   readonly controller: Side;
   readonly source: AbilitySource | null;
+  readonly origin: AbilityOrigin | null;
   readonly ability: number;
   readonly node: number | null;
   readonly subject: InstanceId | null;
@@ -141,13 +155,19 @@ export interface SideView {
   readonly dreamsigns: readonly DreamsignView[];
 }
 
+/** This turn's counters, as far as the viewer can see the cards played. */
+export interface TurnLogView {
+  readonly played: Readonly<Record<Side, readonly PlayedCard[]>>;
+  readonly drawn: Readonly<Record<Side, number>>;
+}
+
 /**
  * What one side may know about a battle. It is the only thing the UI and the
  * AI read. It shares no objects with the state it was built from, carries no
  * seed or random-stream counters, and lists only instances the viewer can
- * see: those in public zones and those known to the viewer (for now, the
- * cards in the viewer's own hand, including any the opponent owns). Every
- * deck and the opponent's hand appear as counts.
+ * see: those in public zones, those in the viewer's own hand (including any
+ * the opponent owns), and hidden cards the viewer knows (view/knowledge.ts).
+ * Every deck and the opponent's hand appear as counts plus the known cards.
  */
 export interface BattleView {
   readonly viewer: Side;
@@ -170,26 +190,14 @@ export interface BattleView {
   readonly floating: readonly FloatingEffectView[];
   /** Triggered abilities waiting to resolve, first in, first out. */
   readonly triggerQueue: readonly QueuedTriggerView[];
-  readonly dreamwell: { readonly remaining: number };
+  readonly turnLog: TurnLogView;
+  /** Once-per-turn abilities used this turn, except those of sources the viewer cannot see. */
+  readonly oncePerTurn: readonly OncePerTurnKey[];
+  /** The shared Dreamwell: cards left before the next cycle, and the catalog cycles are built from. */
+  readonly dreamwell: { readonly remaining: number; readonly catalog: readonly DreamwellCardId[] };
   readonly challenge: Readonly<ChallengeState> | null;
   readonly loop: LoopView | null;
   readonly result: Readonly<BattleResult> | null;
-}
-
-/** Whether `viewer` may see this instance's identity. */
-function visibleTo(instance: CardInstance, viewer: Side): boolean {
-  switch (instance.zone) {
-    case "deck":
-      return false;
-    case "hand":
-      // The side holding a card sees it, whoever owns it.
-      return instance.controller === viewer;
-    case "stack":
-    case "play":
-    case "void":
-    case "banished":
-      return true;
-  }
 }
 
 /** A deep copy of plain JSON data. */
@@ -208,14 +216,18 @@ function copy<T>(value: T): T {
 }
 
 function hiddenZone(ids: readonly InstanceId[], visible: (id: InstanceId) => boolean): HiddenZoneView {
-  return { count: ids.length, known: ids.filter(visible) };
+  const known: KnownCardView[] = [];
+  ids.forEach((id, index) => {
+    if (visible(id)) known.push({ id, index });
+  });
+  return { count: ids.length, known };
 }
 
 export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): BattleView {
   const layers = characteristics(state, catalog);
   const instances: Record<InstanceId, InstanceView> = {};
   for (const instance of Object.values(state.instances)) {
-    if (visibleTo(instance, viewer)) {
+    if (knows(state, instance, viewer)) {
       const card = layers.of(instance.id);
       const printed = fixedEnergy(playCosts(printedCard(catalog, instance.printing), instance.variant));
       instances[instance.id] = {
@@ -287,11 +299,24 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     triggerQueue: state.triggerQueue.map((trigger) => ({
       controller: trigger.controller,
       source: visibleSource(trigger.source) ? copy(trigger.source) : null,
+      origin: visibleSource(trigger.source) ? copy(trigger.origin) : null,
       ability: trigger.ability,
       node: trigger.node,
       subject: trigger.subject !== null && visible(trigger.subject) ? trigger.subject : null,
     })),
-    dreamwell: { remaining: state.dreamwell.deck.length - state.dreamwell.next },
+    turnLog: {
+      played: {
+        player: state.turnLog.played.player.filter((card) => visible(card.instance)).map((card) => ({ ...card })),
+        enemy: state.turnLog.played.enemy.filter((card) => visible(card.instance)).map((card) => ({ ...card })),
+      },
+      drawn: { ...state.turnLog.drawn },
+    },
+    // A key names its source by instance ID or emblem: `i12#0`, `avatar:player#1`.
+    oncePerTurn: state.oncePerTurn.filter((key) => {
+      const source = key.slice(0, key.indexOf("#"));
+      return source.startsWith("avatar:") || source.startsWith("dreamsign:") || source in instances;
+    }),
+    dreamwell: { remaining: state.dreamwell.deck.length - state.dreamwell.next, catalog: [...state.dreamwell.catalog] },
     challenge: copy(state.challenge),
     loop:
       state.loops.candidate === null
@@ -303,4 +328,34 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
           },
     result: copy(state.result),
   };
+}
+
+/**
+ * A pending prompt as `viewer` may see it. The side answering sees all of
+ * it. Anyone else sees its kind, purpose, and bounds, with only the cards
+ * `viewer` can identify in the display state, a purpose source it cannot
+ * identify as `null` (so never the cards of a
+ * `privateTo` prompt shown to the other side); such a redacted prompt is for
+ * display and cannot be answered.
+ */
+export function promptView(prompt: Prompt, viewer: Side, display: BattleState): Prompt {
+  if (prompt.side === viewer) return copy(prompt);
+  const visible = (id: InstanceId): boolean => {
+    const instance = display.instances[id];
+    return instance !== undefined && knows(display, instance, viewer);
+  };
+  const { source } = prompt.purpose;
+  const purpose = source === null || visible(source) ? copy(prompt.purpose) : { ...prompt.purpose, source: null, cardId: null };
+  switch (prompt.kind) {
+    case "chooseTargets":
+    case "chooseCards":
+      return { ...copy(prompt), purpose, candidates: prompt.candidates.filter(visible) };
+    case "arrange":
+      return { ...copy(prompt), purpose, cards: prompt.cards.filter(visible) };
+    case "chooseMode":
+    case "chooseNumber":
+    case "confirm":
+    case "payOrDecline":
+      return { ...copy(prompt), purpose };
+  }
 }

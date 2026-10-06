@@ -379,6 +379,11 @@ export interface BattleState {
   turn: TurnState;
   sides: Record<Side, SideState>;
   instances: Record<InstanceId, CardInstance>;
+  /**
+   * The cards in decks and hands each side can identify beyond what their
+   * zone shows it, in the order it learned them (view/knowledge.ts).
+   */
+  knownTo: Record<Side, InstanceId[]>;
   /** The last element is the top. */
   stack: StackItem[];
   priority: Side | null;

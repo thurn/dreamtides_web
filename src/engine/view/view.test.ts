@@ -5,14 +5,18 @@ import { serializeState, stateHash } from "../state/hash";
 import type { CardId, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, StackItem } from "../state/types";
-import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
+import { InlineSource, NO_PROMPTS, ScriptedSource } from "../steps/sources";
 import { boardState, cardIdOf, placeFigment } from "../testing/board";
 import { ZONE, ZONE_FIGMENT } from "../testing/zone-cards";
 import { fuzzEngineCatalog, fuzzInit } from "../testing/fuzz";
 import { SYNTHETIC } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
-import { AVATAR, DREAMSIGN } from "../testing/stack-cards";
-import { view } from "./view";
+import { AVATAR, DREAMSIGN, STACK } from "../testing/stack-cards";
+import { hiddenFrom, strings } from "../testing/redaction";
+import type { ArrangeAnswer, Prompt } from "../prompts/types";
+import { PolicyRandom } from "../testing/random-policy";
+import { determinize } from "./determinize";
+import { promptView, view } from "./view";
 
 const catalog = fuzzEngineCatalog();
 const v = SYNTHETIC;
@@ -83,21 +87,6 @@ function fixture() {
   return { state, ids, held };
 }
 
-/** Every string in a value, keys included. */
-function strings(value: unknown, into: Set<string> = new Set()): Set<string> {
-  if (typeof value === "string") {
-    into.add(value);
-  } else if (Array.isArray(value)) {
-    for (const entry of value) strings(entry, into);
-  } else if (value !== null && typeof value === "object") {
-    for (const [key, entry] of Object.entries(value)) {
-      into.add(key);
-      strings(entry, into);
-    }
-  }
-  return into;
-}
-
 /** Overwrites every array and object field reachable from `value`, innermost first. */
 function vandalize(value: unknown): void {
   if (Array.isArray(value)) {
@@ -113,8 +102,8 @@ function vandalize(value: unknown): void {
   }
 }
 
-/** Instances whose identity `viewer` must not learn: every deck and the opponent's hand. */
-function hiddenFrom(state: BattleState, viewer: Side): InstanceId[] {
+/** Instances whose identity `viewer` has not learned in the fixture: every deck and the opponent's hand. */
+function unseen(state: BattleState, viewer: Side): InstanceId[] {
   return [...state.sides.player.deck, ...state.sides.enemy.deck, ...state.sides[opponent(viewer)].hand];
 }
 
@@ -134,7 +123,8 @@ describe("view", () => {
     for (const viewer of SIDES) {
       const { state } = fixture();
       const seen = strings(view(state, viewer, catalog));
-      for (const id of hiddenFrom(state, viewer)) {
+      expect(hiddenFrom(state, viewer).sort()).toEqual(unseen(state, viewer).sort());
+      for (const id of unseen(state, viewer)) {
         expect(seen.has(id)).toBe(false);
         expect(seen.has(cardIdOf(state, id))).toBe(false);
       }
@@ -158,7 +148,7 @@ describe("view", () => {
   it("counts hidden zones and lists the viewer's own hand, including a card the opponent owns", () => {
     const { state, ids, held } = fixture();
     const seen = view(state, "player", catalog);
-    expect(seen.sides.player.hand).toEqual({ count: 3, known: [...ids.player.hand, held] });
+    expect(seen.sides.player.hand).toEqual({ count: 3, known: [...ids.player.hand, held].map((id, index) => ({ id, index })) });
     expect(seen.instances[held]).toMatchObject({ owner: "enemy", controller: "player", zone: "hand" });
     expect(view(state, "enemy", catalog).instances[held]).toBeUndefined();
     expect(view(state, "enemy", catalog).sides.player.hand).toEqual({ count: 3, known: [] });
@@ -264,7 +254,7 @@ describe("view", () => {
     state.triggerQueue = [{ source: enemyHand, controller: "enemy", origin, ability: 0, node: null, subject: enemyFront }];
     const player = view(state, "player", catalog);
     expect(player.floating.map((effect) => effect.id)).toEqual(["e2"]);
-    expect(player.triggerQueue).toEqual([{ controller: "enemy", source: null, ability: 0, node: null, subject: enemyFront }]);
+    expect(player.triggerQueue).toEqual([{ controller: "enemy", source: null, origin: null, ability: 0, node: null, subject: enemyFront }]);
     const enemy = view(state, "enemy", catalog);
     expect(enemy.floating.map((effect) => effect.id)).toEqual(["e2", "e3"]);
     expect(enemy.triggerQueue[0]?.source).toBe(enemyHand);
@@ -286,5 +276,95 @@ describe("view", () => {
     expect(created).toMatchObject({ zone: "hand", side: "player" });
     expect(created !== undefined && eventVisibleTo(created, "enemy", after)).toBe(false);
     expect(created !== undefined && eventVisibleTo(created, "player", after)).toBe(true);
+  });
+});
+
+describe("knowledge", () => {
+  /** The player holds Foresee 2 over a three-card deck; the enemy cannot respond. */
+  function foreseeBoard() {
+    return boardState(catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [p.foresee.id], deck: [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id] },
+      enemy: { deck: [v.vanilla5.id] },
+    });
+  }
+
+  it("shows the cards of a privateTo prompt to its chooser only, who keeps knowing where they went", () => {
+    const { state, ids } = foreseeBoard();
+    const [top, second] = ids.player.deck;
+    const engine = createEngine(catalog);
+    let checked = false;
+    const source = new InlineSource({
+      player: (prompt: Prompt, work: BattleState): ArrangeAnswer => {
+        expect(view(work, "player", catalog).sides.player.deck.known).toEqual([{ id: top, index: 0 }, { id: second, index: 1 }]);
+        expect(view(work, "enemy", catalog).sides.player.deck.known).toEqual([]);
+        expect(promptView(prompt, "player", work)).toEqual(prompt);
+        const redacted = strings(promptView(prompt, "enemy", work));
+        expect(redacted.has(top) || redacted.has(second)).toBe(false);
+        expect(strings(view(work, "enemy", catalog)).has(top)).toBe(false);
+        checked = true;
+        return [{ card: top, to: "top" }, { card: second, to: "void" }];
+      },
+      enemy: () => {
+        throw new Error("the enemy has no prompt");
+      },
+    });
+    const { state: after } = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, source);
+    expect(checked).toBe(true);
+    expect(after.sides.player.void).toContain(second);
+    expect(view(after, "player", catalog).sides.player.deck.known).toEqual([{ id: top, index: 0 }]);
+    expect(view(after, "enemy", catalog).sides.player.deck.known).toEqual([]);
+    // A determinization keeps the known card where the chooser put it.
+    const random = new PolicyRandom(battleSeed("knowledge-determinize"));
+    const decklists = { player: [p.foresee.id, v.vanilla1.id, v.vanilla2.id, v.vanilla3.id].map((cardId) => ({ cardId })), enemy: [{ cardId: v.vanilla5.id }] };
+    const sampled = determinize(view(after, "player", catalog), decklists, () => random.next(), catalog);
+    expect(sampled.sides.player.deck[0]).toBe(top);
+    expect(sampled.instances[top]?.printing).toEqual(after.instances[top]?.printing);
+  });
+
+  it("makes the other side lose track of deck cards a privateTo prompt shows the chooser", () => {
+    const { state, ids } = foreseeBoard();
+    const [top, second] = ids.player.deck;
+    state.knownTo.enemy = [top];
+    expect(view(state, "enemy", catalog).sides.player.deck.known).toEqual([{ id: top, index: 0 }]);
+    const engine = createEngine(catalog);
+    const { state: after } = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, new ScriptedSource([[{ card: second, to: "top" }, { card: top, to: "top" }]]));
+    expect(after.sides.player.deck.slice(0, 2)).toEqual([second, top]);
+    expect(view(after, "enemy", catalog).sides.player.deck.known).toEqual([]);
+    expect(view(after, "player", catalog).sides.player.deck.known).toEqual([{ id: second, index: 0 }, { id: top, index: 1 }]);
+  });
+
+  it("makes a card revealed from a hand known to both sides while it stays there", () => {
+    const { state, ids } = boardState(catalog, {
+      active: "player",
+      phase: "day",
+      player: { back: [STACK.revealWarrior.id], hand: [v.event1.id, v.vanilla1.id], deck: [v.vanilla2.id] },
+      enemy: { hand: [v.interruptEvent.id], energy: 5, deck: [v.vanilla2.id] },
+    });
+    const warrior = ids.player.hand[1];
+    expect(view(state, "enemy", catalog).sides.player.hand.known).toEqual([]);
+    const { state: after } = createEngine(catalog).apply(state, "player", { kind: "activate", source: ids.player.back[0]!, ability: 0 }, NO_PROMPTS);
+    expect(view(after, "enemy", catalog).sides.player.hand.known).toEqual([{ id: warrior, index: 1 }]);
+    expect(view(after, "enemy", catalog).instances[warrior]).toMatchObject({ zone: "hand", controller: "player" });
+    expect(strings(view(after, "enemy", catalog)).has(ids.player.hand[0])).toBe(false);
+  });
+
+  it("hides the cards and source of another side's prompt that the viewer cannot identify", () => {
+    const { state } = fixture();
+    const [first, second] = state.sides.enemy.hand;
+    const prompt: Prompt = {
+      kind: "chooseCards",
+      side: "enemy",
+      purpose: { source: first, cardId: cardIdOf(state, first), ability: 0, role: "discard" },
+      cancellable: false,
+      candidates: [first, second],
+      min: 1,
+      max: 1,
+    };
+    expect(promptView(prompt, "enemy", state)).toEqual(prompt);
+    expect(promptView(prompt, "player", state)).toEqual({ ...prompt, purpose: { ...prompt.purpose, source: null, cardId: null }, candidates: [] });
+    state.knownTo.player = [second];
+    expect(promptView(prompt, "player", state)).toMatchObject({ candidates: [second] });
   });
 });

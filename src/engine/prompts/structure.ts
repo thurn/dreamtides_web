@@ -1,3 +1,4 @@
+import type { InstanceId } from "../state/ids";
 import type { Prompt } from "./types";
 
 function isBound(value: number): boolean {
@@ -46,5 +47,21 @@ export function isWellFormedPrompt(prompt: Prompt): boolean {
 export class MalformedPrompt extends Error {
   constructor(readonly prompt: Prompt) {
     super(`A ${prompt.kind} prompt (${prompt.purpose.role}) is malformed`);
+  }
+}
+
+/** The instances a prompt shows: its candidates or the cards it arranges. */
+export function promptCards(prompt: Prompt): readonly InstanceId[] {
+  switch (prompt.kind) {
+    case "chooseTargets":
+    case "chooseCards":
+      return prompt.candidates;
+    case "arrange":
+      return prompt.cards;
+    case "chooseMode":
+    case "chooseNumber":
+    case "confirm":
+    case "payOrDecline":
+      return [];
   }
 }

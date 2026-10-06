@@ -61,10 +61,10 @@ describe("prevent", () => {
     expect(state.sides.player.hand).toEqual([]);
     expect(state.sides.enemy.hand).toEqual([played]);
     expect(state.instances[played]).toMatchObject({ zone: "hand", owner: "player", controller: "enemy" });
-    // The holder sees it in its hand; its owner does not.
-    expect(view(state, "enemy", engine.catalog).sides.enemy.hand).toEqual({ count: 1, known: [played] });
-    expect(view(state, "player", engine.catalog).sides.enemy.hand).toEqual({ count: 1, known: [] });
-    expect(view(state, "player", engine.catalog).instances[played]).toBeUndefined();
+    // It moved there publicly from the stack, so its owner still knows it.
+    expect(view(state, "enemy", engine.catalog).sides.enemy.hand).toEqual({ count: 1, known: [{ id: played, index: 0 }] });
+    expect(view(state, "player", engine.catalog).sides.enemy.hand).toEqual({ count: 1, known: [{ id: played, index: 0 }] });
+    expect(view(state, "player", engine.catalog).instances[played]).toMatchObject({ zone: "hand", controller: "enemy" });
 
     const later = structuredClone(state);
     later.turn = { ...later.turn, active: "enemy", phase: "day" };

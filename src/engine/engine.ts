@@ -9,6 +9,7 @@ import { initialState } from "./state/create";
 import type { BattleInit, BattleState } from "./state/types";
 import { runToDecision, stepForAction, type StepObserver } from "./steps/driver";
 import type { AnswerSource, RecordedAnswer } from "./steps/types";
+import { determinize, type Decklists } from "./view/determinize";
 import { view, type BattleView } from "./view/view";
 
 export interface ApplyResult {
@@ -41,6 +42,8 @@ export interface Engine {
     observe?: StepObserver,
   ): ApplyResult;
   view(state: BattleState, side: Side): BattleView;
+  /** A complete state consistent with `view` and both decklists, sampled with `random` (D22). */
+  determinize(view: BattleView, decklists: Decklists, random: () => number): BattleState;
   /** The per-engine legality memo shared with the fold. Never persisted. */
   readonly memo: LegalityMemo;
 }
@@ -82,6 +85,9 @@ export function createEngine(catalog: EngineCatalog): Engine {
     view(state, side) {
       rememberCharacteristics(state, catalog);
       return view(state, side, catalog);
+    },
+    determinize(seen, decklists, random) {
+      return determinize(seen, decklists, random, catalog);
     },
   };
 }

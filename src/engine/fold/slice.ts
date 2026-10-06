@@ -5,6 +5,7 @@
  */
 import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
+import { eventLogRecords, promptOpenedRecord, stepLogRecords, type EngineLogRecord } from "../log";
 import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
 import type { Answer, Prompt, PromptId } from "../prompts/types";
@@ -13,7 +14,7 @@ import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
 import type { Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
-import { nextAutomaticStep, stepForAction } from "../steps/driver";
+import { actionForStep, nextAutomaticStep, stepForAction } from "../steps/driver";
 import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { INTERACTIVE } from "../steps/sources";
@@ -107,6 +108,11 @@ export interface FoldOptions {
    * A mismatch is an `engine_error`.
    */
   readonly checkEventPrefix?: boolean;
+  /**
+   * Receives the engine log records (log.ts) of everything the fold does, in
+   * order: each event is logged once, as it is published.
+   */
+  readonly log?: (record: EngineLogRecord) => void;
 }
 
 function promptIdOf(slice: BattleSlice, answerCount: number): PromptId {
@@ -143,6 +149,10 @@ type Replay =
   | { readonly kind: "error"; readonly error: EngineErrorRecord };
 
 export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): FoldAdapter {
+  const log = (records: readonly EngineLogRecord[]): void => {
+    if (options.log !== undefined) for (const record of records) options.log(record);
+  };
+
   // Non-persisted re-run memo: the run of an in-flight step for a committed
   // state, keyed by the in-flight record. Committed states never change, and
   // a run does not depend on the attempt.
@@ -233,7 +243,12 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     };
   }
 
+  function logError(slice: BattleSlice, error: EngineErrorRecord): void {
+    log([{ event: "engine.error", version: slice.committed.version, step: error.step, message: error.message }]);
+  }
+
   function failed(slice: BattleSlice, error: EngineErrorRecord): IntentOutcome {
+    logError(slice, error);
     return { kind: "applied", slice: recovered(slice), published: [], error };
   }
 
@@ -259,11 +274,16 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       const evaluation = evaluate(slice.committed, inFlight, checked ? slice.publishedEvents : null);
       checked = false;
       if (evaluation.kind === "error") {
+        logError(slice, evaluation.error);
         return { kind: "applied", slice: recovered(slice), published, error: evaluation.error };
       }
       const { result } = evaluation;
-      published.push(...result.events.slice(slice.publishedEvents));
+      const fresh = result.events.slice(slice.publishedEvents);
+      published.push(...fresh);
+      const version = slice.committed.version;
+      log(eventLogRecords(fresh, version));
       if (result.kind === "suspended") {
+        log([promptOpenedRecord({ ...result.prompt, id: promptIdOf(slice, result.answers.length) }, promptFingerprint(result.prompt), version)]);
         return {
           kind: "applied",
           slice: {
@@ -275,6 +295,12 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
           error: null,
         };
       }
+      const action = inFlight.automatic ? null : actionForStep(inFlight.step);
+      const actor = action === null ? null : engine.decision(slice.committed)?.side;
+      if (action !== null && actor !== undefined && actor !== null) {
+        log([{ event: "engine.action", version, side: actor, action, answers: result.answers }]);
+      }
+      log(stepLogRecords(slice.committed, result.state));
       slice = { committed: result.state, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
     }
   }
@@ -288,6 +314,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
   return {
     start(init) {
       const committed = initialState(init, engine.catalog);
+      log([{ event: "engine.battleStarted", version: committed.version, init }]);
       return advance({
         committed,
         inFlight: { step: { kind: "beginBattle", dreamwell: init.dreamwell }, automatic: true, answers: [] },
@@ -321,13 +348,15 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
           if (prompt.side !== intent.side) return { kind: "bounced", reason: "notYourPrompt" };
           if (!isLegalAnswer(prompt, intent.value)) return { kind: "bounced", reason: "illegalAnswer" };
           const { id: _id, ...raised } = prompt;
+          const fingerprint = promptFingerprint(raised);
+          log([{ event: "engine.promptAnswered", version: slice.committed.version, promptId: prompt.id, side: intent.side, fingerprint, value: intent.value }]);
           return advance({
             ...slice,
             inFlight: {
               ...slice.inFlight,
               answers: [
                 ...slice.inFlight.answers,
-                { fingerprint: promptFingerprint(raised), value: intent.value },
+                { fingerprint, value: intent.value },
               ],
             },
           }, true);
@@ -340,6 +369,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
           if (prompt.id !== intent.promptId) return { kind: "bounced", reason: "stalePrompt" };
           if (prompt.side !== intent.side) return { kind: "bounced", reason: "notYourPrompt" };
           if (!prompt.cancellable) return { kind: "bounced", reason: "notCancellable" };
+          log([{ event: "engine.promptCancelled", version: slice.committed.version, promptId: prompt.id, side: intent.side }]);
           return {
             kind: "applied",
             slice: { ...recovered(slice), attempt: slice.attempt + 1 },
