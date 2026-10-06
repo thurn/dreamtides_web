@@ -825,7 +825,8 @@ emits `pendingAbility` for each pending play or draw.
 
 This follows [D12](decisions.md#d12-infinite-combos-are-intentional). Limits
 live in the battle data module (`loopIterationCap`, `loopHistoryActions`,
-`mandatoryLoopCheckFrom`, `resolutionCap`) and reach the engine through
+`mandatoryLoopCheckFrom`, `mandatoryLoopWindow`, `resolutionCap`) and reach
+the engine through
 `BattleConfig`. The code is in `src/engine/loops/`; the runner calls it after
 every committed step, and `BattleState.loops` holds everything it remembers,
 so a reload between any two steps loses nothing.
@@ -892,12 +893,21 @@ cap (`iterationCap`, default 10,000), and the loop stays on offer then. The
 engine checks for an exact repeat with Brent's cycle detection: from the
 `mandatoryLoopCheckFrom`th consecutive automatic step on (default 64), it
 hashes the full state after each step, ignoring bookkeeping, and compares the
-hash with the one saved at the last power-of-two step count. Memory is
-constant, and short runs cost nothing (RD-hv-7x4l.9-2).
+hash with one saved mark (`LoopTracker.cycle`). The first checked state is
+the first mark. The mark moves to the current state 1, 2, 4, … steps after the
+previous move, the gap doubling up to `mandatoryLoopWindow` (default 4,096)
+and staying there. A cycle of at most that many steps is therefore found
+within about twice the window of the run entering it, however late in the
+run; a longer one ends at the resolution cap. Memory is constant, and short
+runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 
 - An exact repeat ends the battle in a draw (`mandatoryLoop`).
 - A non-repeating run beyond the resolution cap (default 100,000 steps) also
   ends it in a draw (`resolutionCap`).
+- A step in which a player gave an answer that was not forced resets the
+  count of consecutive automatic steps and the mark, so a sequence a player
+  keeps choosing to continue never ends in either draw; forced answers leave
+  the run going (RD-hv-7x4l.20-1).
 - A loop iteration replays its player's decisions: it resets the count of
   consecutive automatic steps, so repeating an optional loop never ends in
   either draw.

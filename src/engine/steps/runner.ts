@@ -11,13 +11,21 @@ import type { AnswerSource, RecordedAnswer, StepResult } from "./types";
 export interface RunOptions {
   readonly prefix?: readonly RecordedAnswer[];
   readonly dryRun?: boolean;
-  /** An automatic step counts toward the resolution cap; a top-level action resets the count. */
+  /**
+   * An automatic step counts toward the resolution cap unless a player made a
+   * choice in it; a top-level action resets the count.
+   */
   readonly automatic?: boolean;
   /**
    * A step a loop iteration replays: every prompt must be answered by
    * `prefix`, and loop detection leaves the step alone.
    */
   readonly replay?: boolean;
+}
+
+/** Whether a player made a real choice: an answer that was not forced. */
+function madeChoice(answers: readonly RecordedAnswer[]): boolean {
+  return answers.some((answer) => answer.auto !== true);
 }
 
 /**
@@ -58,9 +66,10 @@ export function runStep(
   }
   checkVictory(ctx);
   // A run of automatic steps nobody can stop ends in a draw when it repeats a
-  // state exactly or passes the cap (rules § Mandatory Loops). A loop
-  // iteration replays its player's decisions, so it starts a new run.
-  const decisionFree = options.automatic === true && step.kind !== "loopIteration";
+  // state exactly or passes the cap (rules § Mandatory Loops). A step whose
+  // prompt a player answered by choice, and a loop iteration, which replays
+  // its player's decisions, start a new run; a forced answer does not.
+  const decisionFree = options.automatic === true && step.kind !== "loopIteration" && !madeChoice(ctx.answers);
   work.automaticSteps = decisionFree ? start.automaticSteps + 1 : 0;
   if (options.replay !== true) {
     checkMandatoryCycle(ctx, decisionFree);

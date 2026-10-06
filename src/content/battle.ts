@@ -28,6 +28,12 @@ export const BATTLE = {
   // which ends it in a draw (rules § Mandatory Loops). Shorter runs are never
   // checked, which keeps ordinary turns fast.
   mandatoryLoopCheckFrom: 64,
+  // Longest repeating sequence of automatic game actions the engine checks
+  // for: a battle that returns to a state it passed through no more than this
+  // many actions earlier ends in a draw within about twice this many actions
+  // of entering the loop. A longer loop ends at the resolution cap, also a
+  // draw (rules § Mandatory Loops).
+  mandatoryLoopWindow: 4096,
   // Iterations after which an accepted loop shortcut (Repeat ×N or Repeat
   // until victory) stops and returns control to its player (rules § Optional
   // Loops).

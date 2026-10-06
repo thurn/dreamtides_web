@@ -12,9 +12,11 @@
  *   actions between them become the loop on offer.
  * - **Mandatory cycles.** Once a run of automatic steps with no decision
  *   offered reaches the battle's check threshold, the full state is hashed
- *   after each step and compared with the hash saved at the last power-of-two
- *   step count (Brent's cycle detection): an exact repeat is found within a
- *   few cycle lengths of the threshold, with constant memory.
+ *   after each step and compared with one saved mark (Brent's cycle
+ *   detection). The mark moves to the current state after 1, 2, 4, … steps,
+ *   counted from the threshold, and then every `mandatoryLoopWindow` steps.
+ *   A cycle of at most that many steps is found within about twice the
+ *   window of entering it, however late in the run, with constant memory.
  */
 import { mainWindowSide } from "../rules/decision";
 import { endBattle } from "../rules/victory";
@@ -163,27 +165,32 @@ export function trackLoops(
   loops.candidate = findCandidate(loops, side);
 }
 
-function isPowerOfTwo(value: number): boolean {
-  return value > 0 && (value & (value - 1)) === 0;
-}
-
 /**
  * Ends the battle in a draw when automatic steps return it to exactly a
  * state they passed through (rules § Mandatory Loops), checked from the
  * battle's `mandatoryLoopCheckFrom` step of a run on. `automatic` is false
- * for a step that follows or replays a decision, which starts a new run.
+ * for a step that follows or replays a decision, or in which a player made
+ * a choice, which starts a new run.
  */
 export function checkMandatoryCycle(ctx: StepContext, automatic: boolean): void {
   const { state } = ctx;
+  const { loops, config } = state;
   if (!automatic) {
-    state.loops.cycleMark = null;
+    loops.cycle = null;
     return;
   }
-  if (state.result !== null || state.automaticSteps < state.config.mandatoryLoopCheckFrom) return;
+  if (state.result !== null || state.automaticSteps < config.mandatoryLoopCheckFrom) return;
   const hash = cycleHash(state);
-  if (hash === state.loops.cycleMark) {
+  const mark = loops.cycle;
+  if (mark === null) {
+    loops.cycle = { hash, at: state.automaticSteps, window: 1 };
+    return;
+  }
+  if (hash === mark.hash) {
     endBattle(ctx, { kind: "draw", reason: "mandatoryLoop" });
     return;
   }
-  if (isPowerOfTwo(state.automaticSteps)) state.loops.cycleMark = hash;
+  if (state.automaticSteps - mark.at >= mark.window) {
+    loops.cycle = { hash, at: state.automaticSteps, window: Math.min(mark.window * 2, config.mandatoryLoopWindow) };
+  }
 }

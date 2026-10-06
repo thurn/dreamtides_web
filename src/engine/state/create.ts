@@ -42,6 +42,7 @@ export function battleConfig(init: BattleInit): BattleConfig {
     skipFirstDraw: BATTLE.skipPlayerOpeningDraw,
     resolutionCap: BATTLE.resolutionCap,
     mandatoryLoopCheckFrom: BATTLE.mandatoryLoopCheckFrom,
+    mandatoryLoopWindow: BATTLE.mandatoryLoopWindow,
     loopIterationCap: BATTLE.loopIterationCap,
     loopHistoryActions: BATTLE.loopHistoryActions,
   };

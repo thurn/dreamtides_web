@@ -4,7 +4,7 @@
  * catalog content. Cards use synthetic ids 0xd00+.
  */
 import type { EngineCardDefinition } from "../catalog";
-import { activated, choiceCost, energy, self } from "../dsl/builders";
+import { activated, characterYouControl, choiceCost, energy, self, target } from "../dsl/builders";
 import { onMaterialized, triggered } from "../dsl/triggers";
 import type { AbilityList } from "../dsl/types";
 import * as p from "../effects/primitives";
@@ -84,6 +84,32 @@ export const CYCLE = {
   echo: character(11, () => [triggered(onMaterialized(), p.triggerAbility(self(), "materialized"))]),
   /** "▸Materialized: Gain 1●, then trigger this character's ▸Materialized abilities." — never repeats a state. */
   growingEcho: character(12, () => [triggered(onMaterialized(), p.sequence(p.gainEnergy(1), p.triggerAbility(self(), "materialized")))]),
+  /** "▸Materialized: You may trigger this character's ▸Materialized abilities." — repeats while its controller chooses to. */
+  optionalEcho: character(13, () => [triggered(onMaterialized(), p.optional(p.triggerAbility(self(), "materialized")))]),
+  /**
+   * "▸Materialized: You may gain 1●, then trigger this character's
+   * ▸Materialized abilities." — never repeats a state, and continues while
+   * its controller chooses to.
+   */
+  optionalGrowingEcho: character(14, () => [
+    triggered(onMaterialized(), p.optional(p.sequence(p.gainEnergy(1), p.triggerAbility(self(), "materialized")))),
+  ]),
+  /**
+   * "▸Materialized: Trigger target character you control's ▸Materialized
+   * abilities." — alone in play, its target choice is forced, so it repeats
+   * the same state exactly.
+   */
+  targetedEcho: character(15, () => [triggered(onMaterialized(), p.triggerAbility(target(characterYouControl()), "materialized"))]),
+  /**
+   * "▸Materialized: If you have 8● or more, trigger this character's
+   * ▸Materialized abilities; otherwise gain 1●, then trigger them." — repeats
+   * the same state exactly once its controller reaches 8●: a cycle entered as
+   * late in the run as its starting ● puts it.
+   */
+  lateEcho: character(16, () => {
+    const echo = p.triggerAbility(self(), "materialized");
+    return [triggered(onMaterialized(), p.ifThen({ cond: "energyAtLeast", amount: 8 }, echo, p.sequence(p.gainEnergy(1), echo)))];
+  }),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 export const CYCLE_CARDS: readonly EngineCardDefinition[] = Object.values(CYCLE);

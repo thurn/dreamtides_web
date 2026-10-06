@@ -1013,15 +1013,21 @@ repetitions. Taking any other action withdraws it.
 ### Mandatory Loops
 
 A mandatory loop is one that repeats while no player has the opportunity to
-play a card, activate an ability, reposition, or pass — for example, triggered
-abilities that keep triggering each other. Nobody can stop it, so:
+play a card, activate an ability, reposition, or pass, and no player makes a
+choice with more than one option — for example, triggered abilities that keep
+triggering each other. Nobody can stop it, so:
 
 - If the battle returns to exactly the same state during such a sequence, the
   battle ends in a draw. The order in which cards entered their zones is part
   of the state, but not when they did. The repeat may be noticed a few cycles
-  after it first happens; the result is the same.
+  after it first happens, and a loop more than 4,096 game actions long is
+  ended by the limit below instead; the result is the same.
 - If such a sequence runs for more than 100,000 consecutive automatic game
   actions without repeating, the battle also ends in a draw.
 
-Repetitions of an optional loop are the player's own actions, so they never
-make a mandatory loop.
+A choice with more than one option, such as accepting or declining a "you
+may" effect, could stop the sequence, so the game actions before it never
+make a mandatory loop with the ones after it, and the count of consecutive
+automatic game actions starts again after it. A choice with only one option
+does not. Repetitions of an optional loop are the player's own actions, so
+they never make a mandatory loop either.

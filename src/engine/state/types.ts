@@ -32,6 +32,8 @@ export interface BattleConfig {
   readonly resolutionCap: number;
   /** Consecutive automatic steps after which exact repeats are checked for (rules § Mandatory Loops). */
   readonly mandatoryLoopCheckFrom: number;
+  /** Longest cycle of automatic steps that exact-repeat detection finds (rules § Mandatory Loops). */
+  readonly mandatoryLoopWindow: number;
   /** Iterations after which an accepted loop shortcut stops (rules § Optional Loops). */
   readonly loopIterationCap: number;
   /** Top-level actions in one main window that loop detection remembers. */

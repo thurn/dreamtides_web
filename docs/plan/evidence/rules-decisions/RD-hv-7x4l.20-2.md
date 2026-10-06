@@ -1,0 +1,5 @@
+# RD-hv-7x4l.20-2: Exact repeats are checked for loops of up to 4,096 automatic actions, however late in a sequence they begin
+- Ladder: 5 (engine detection limit; the rules outcome, a draw, is unchanged)
+- rules.md: § Infinite Loops → Mandatory Loops
+- Affects: no catalog card yet; any mandatory sequence that settles into a repeat after a long non-repeating start
+- Why: RD-hv-7x4l.9-2 lets the engine notice an exact repeat a few cycles late. Brent's method with an ever-doubling interval notices a repeat only after the saved state falls inside the loop, and that interval reaches tens of thousands of actions late in a sequence, so a loop entered after action 50,000 or so could run to the 100,000-action limit instead. The interval stops doubling at the battle data module's window (4,096 actions): a loop of at most that many actions is noticed within about 8,192 actions of beginning, at any point in the sequence. A loop longer than the window ends at the 100,000-action limit. Both outcomes are the same draw, so the window affects only how long the engine resolves before ending the battle, and with what logged reason.

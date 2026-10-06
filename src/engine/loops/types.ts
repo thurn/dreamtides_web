@@ -100,6 +100,19 @@ export type LoopEndReason =
   /** The steps or the position reached differed from the recorded sequence. */
   | "diverged";
 
+/**
+ * The state mandatory-cycle detection compares each later state with
+ * (Brent's method): its full-state hash, the run's step count when it was
+ * saved, and the steps until it is replaced.
+ */
+export interface CycleMark {
+  readonly hash: StateHash;
+  /** `BattleState.automaticSteps` when the hash was saved. */
+  readonly at: number;
+  /** Steps after `at` at which the mark moves on: doubles each time, up to the battle's window. */
+  readonly window: number;
+}
+
 export interface LoopTracker {
   /** The scope of the history, or `null` while no history is kept. */
   scope: LoopScope | null;
@@ -113,13 +126,12 @@ export interface LoopTracker {
   /** Next loop number to mint. */
   nextLoop: number;
   /**
-   * Mandatory-cycle detection: the full-state hash saved at the last
-   * power-of-two count of consecutive automatic steps; `null` after a
-   * top-level action.
+   * Mandatory-cycle detection in the current run of automatic steps; `null`
+   * before the run reaches the battle's check threshold.
    */
-  cycleMark: StateHash | null;
+  cycle: CycleMark | null;
 }
 
 export function emptyLoopTracker(): LoopTracker {
-  return { scope: null, checkpoints: [], actions: [], candidate: null, run: null, nextLoop: 1, cycleMark: null };
+  return { scope: null, checkpoints: [], actions: [], candidate: null, run: null, nextLoop: 1, cycle: null };
 }
