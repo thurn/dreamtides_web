@@ -24,9 +24,12 @@ import type { StepContext } from "../steps/types";
 import { discardCard, spendEnergy } from "./resources";
 import { banish, dissolve, instanceOf, slotOf } from "./zones";
 
+/** A payment cost other than energy, which a plan pays as one total. */
+export type NonEnergyCost = Exclude<PaymentCost, { readonly cost: "energy" }>;
+
 /** One cost to pay after the commit point, with the cards chosen for it. */
 export interface PlannedCost {
-  readonly cost: PaymentCost;
+  readonly cost: NonEnergyCost;
   readonly cards: readonly InstanceId[];
 }
 
@@ -34,13 +37,15 @@ export interface PlannedCost {
 export interface CostPlan {
   readonly x: number | null;
   /**
-   * The energy paid for the top-level energy costs and for X, after cost
-   * modifications (applied to their total); paid first, the fixed part then X.
+   * The whole energy cost — the fixed energy (top-level, and each chosen
+   * alternative's and paid optional cost's) plus X — after cost
+   * modifications applied to the total (RD-hv-7x4l.7-3). Paid first: the
+   * fixed part, then X.
    */
   readonly energy: { readonly fixed: number; readonly x: number };
   /**
-   * The other costs to pay, in printed order, with each chosen alternative's
-   * costs in place of its choice.
+   * The costs other than energy to pay, in printed order, with each chosen
+   * alternative's costs in place of its choice.
    */
   readonly payments: readonly PlannedCost[];
   /** Whether each optional cost will be paid, in printed order. */
@@ -173,8 +178,10 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], string>> = {
  * — the card being played and the ability's targets — and cards chosen for
  * earlier costs are not candidates: a card used to pay a cost is never also
  * a target of the same ability (rules § Targeting). A mandatory cost that
- * cannot be paid raises an empty prompt, which makes the play illegal. The
- * top-level energy and X are paid together, after `modifier`.
+ * cannot be paid raises an empty prompt, which makes the play illegal. Every
+ * energy part — top-level, X, and the chosen alternatives' and optional
+ * costs' — is one total that `modifier` changes, so an alternative or an
+ * optional cost is affordable when the modified total is.
  */
 export function planCosts(
   ctx: StepContext,
@@ -188,10 +195,9 @@ export function planCosts(
 ): CostPlan {
   const { state, catalog } = ctx;
   const used = [...excluded];
-  const total = adjustedEnergy(fixedEnergy(costs) + (x ?? 0), modifier);
-  const fixedPart = Math.min(total, adjustedEnergy(fixedEnergy(costs), modifier));
-  const energy = { fixed: fixedPart, x: total - fixedPart };
-  let energyLeft = state.sides[side].currentEnergy - total;
+  const available = state.sides[side].currentEnergy;
+  /** The energy committed so far before cost modifications: the top-level parts and X, then each chosen nested part. */
+  let baseEnergy = fixedEnergy(costs) + (x ?? 0);
   let countersLeft = storedCounters(state, source) - sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
   let exhaustFree = canPayExhaust(state, source) && !costs.some((cost) => cost.cost === "exhaustSelf");
   const payments: PlannedCost[] = [];
@@ -199,7 +205,7 @@ export function planCosts(
 
   /** Whether every cost in a nested list could be paid on top of what is already committed. */
   const affordable = (list: readonly PaymentCost[]): boolean => {
-    if (sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))) > energyLeft) return false;
+    if (adjustedEnergy(baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))), modifier) > available) return false;
     if (sum(list.map((cost) => (cost.cost === "counters" ? cost.amount : 0))) > countersLeft) return false;
     const exhausts = list.filter((cost) => cost.cost === "exhaustSelf").length;
     if (exhausts > (exhaustFree ? 1 : 0)) return false;
@@ -213,16 +219,18 @@ export function planCosts(
     return true;
   };
 
-  /** Plans one payment cost; `nested` costs are budgeted here, top-level fixed parts were budgeted up front. */
+  /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
   const plan = (cost: PaymentCost, nested: boolean): void => {
+    if (cost.cost === "energy") {
+      if (nested) baseEnergy += cost.amount;
+      return;
+    }
     if (nested) {
-      if (cost.cost === "energy") energyLeft -= cost.amount;
       if (cost.cost === "counters") countersLeft -= cost.amount;
       if (cost.cost === "exhaustSelf") exhaustFree = false;
     }
     if (!choosesCards(cost)) {
-      // Top-level energy is part of `energy`.
-      if (nested || cost.cost !== "energy") payments.push({ cost, cards: [] });
+      payments.push({ cost, cards: [] });
       return;
     }
     const candidates = cardCandidates(state, catalog, side, source, cost);
@@ -264,7 +272,9 @@ export function planCosts(
         plan(cost, false);
     }
   }
-  return { x, energy, payments, optionalPaid };
+  const total = adjustedEnergy(baseEnergy, modifier);
+  const fixed = Math.min(total, adjustedEnergy(baseEnergy - (x ?? 0), modifier));
+  return { x, energy: { fixed, x: total - fixed }, payments, optionalPaid };
 }
 
 /** Exhausts a source to pay a ☾ cost. */
@@ -299,15 +309,12 @@ export function abandonCharacter(ctx: StepContext, side: Side, id: InstanceId): 
   dissolve(ctx, id, null, true);
 }
 
-/** Pays every planned cost after the commit point: the energy first (the fixed part, then X), then the rest in order. */
+/** Pays every planned cost after the commit point: the whole energy cost first (the fixed part, then X), then the rest in order. */
 export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, plan: CostPlan): void {
   spendEnergy(ctx, side, plan.energy.fixed);
   spendEnergy(ctx, side, plan.energy.x);
   for (const { cost, cards } of plan.payments) {
     switch (cost.cost) {
-      case "energy":
-        spendEnergy(ctx, side, cost.amount);
-        break;
       case "exhaustSelf":
         exhaustForCost(ctx, source);
         break;

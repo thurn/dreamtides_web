@@ -3,11 +3,14 @@
  * timestamp order and its ties, anthems and other static abilities,
  * base-spark setting, type changes, keyword grants and losses, cost
  * modifications with "next card" modifiers, values locked at resolution
- * (RD-hv-7x4l.7-1), memoization, and the view.
+ * (RD-hv-7x4l.7-1), "until the opponent pays" changes sharing one payable
+ * effect, memoization, and the view.
  */
 import { describe, expect, it } from "vitest";
 import { printedCard, type EngineCardDefinition } from "../catalog";
-import { all, enemyCharacter, energy, energyX, staticAbility } from "../dsl/builders";
+import { additionalCost, all, characterYouControl, costPaid, enemyCharacter, energy, energyX, event, optionalCost, self, staticAbility } from "../dsl/builders";
+import { untilOpponentPays } from "../dsl/triggers";
+import type { AbilityList } from "../dsl/types";
 import { matchingCharacters } from "../dsl/selectors";
 import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
@@ -20,10 +23,11 @@ import type { EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState, ContinuousChange } from "../state/types";
 import { runStep } from "../steps/runner";
 import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
-import { boardState, type BoardSetup } from "../testing/board";
+import { boardState, placeFigment, type BoardSetup } from "../testing/board";
 import { CONTINUOUS, CONTINUOUS_CARDS, CONTINUOUS_EMBLEMS, CONTINUOUS_DREAMSIGN } from "../testing/continuous-cards";
 import { DSL, DSL_CARDS } from "../testing/dsl-cards";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { at, passUntil } from "../testing/trigger-harness";
 import { characteristics, characteristicsOf, rememberCharacteristics } from "./characteristics";
 import { adjustedEnergy, costModifier } from "./costs";
 import { Layers } from "./layers";
@@ -44,7 +48,38 @@ const enemyBaseThree: EngineCardDefinition = {
 /** "2 X: …" — a 2● event with an X part, to show cost modifications apply to the total. */
 const twoPlusX: EngineCardDefinition = { ...DSL.fixedPlusXPoints, id: syntheticId(0xa82), costs: [energy(2), energyX()] };
 
-const engine = createEngine(testCatalog([...CONTINUOUS_CARDS, ...DSL_CARDS, enemyBaseThree, twoPlusX], CONTINUOUS_EMBLEMS));
+function fixture(index: number, cardType: "character" | "event", cost: number, abilities: AbilityList): EngineCardDefinition {
+  return {
+    id: syntheticId(index),
+    cardType,
+    costs: [energy(cost)],
+    spark: cardType === "character" ? 1 : null,
+    subtype: cardType === "character" ? "Warrior" : "",
+    speed: "standard",
+    keywords: [],
+    status: "authored",
+    abilities,
+  };
+}
+
+/** "Characters you control have Awakened." */
+const awakenedBanner = fixture(0xa83, "character", 1, () => [staticAbility(p.grant(all(characterYouControl()), "awakened"))]);
+/** "This character has Awakened.", from its own static ability. */
+const selfAwakened = fixture(0xa84, "character", 1, () => [staticAbility(p.grant(self(), "awakened"))]);
+/** "You may pay 2● to play this event. If you did, gain 2⍟." — a 0● event with an optional 2● additional cost. */
+const kicker = fixture(0xa85, "event", 0, () => [additionalCost(optionalCost(energy(2))), event(p.ifThen(costPaid(), p.gainPoints(2)))]);
+/** "Until the opponent pays 1●, enemies have −1✦ and have all character types." — two changes under one duration. */
+const weakenUntilPays = fixture(0xa86, "event", 0, () => [
+  event(p.forDuration(untilOpponentPays(1), p.sequence(p.sparkModifier(all(enemyCharacter()), -1), p.giveAllTypes(all(enemyCharacter()))))),
+]);
+/** "Until the opponent pays 1●, enemies have −1✦. Dissolve every enemy." — its changes are gone before it finishes resolving. */
+const weakenThenDissolve = fixture(0xa87, "event", 0, () => [
+  event(p.forDuration(untilOpponentPays(1), p.sequence(p.sparkModifier(all(enemyCharacter()), -1), p.dissolve(all(enemyCharacter()))))),
+]);
+
+const engine = createEngine(
+  testCatalog([...CONTINUOUS_CARDS, ...DSL_CARDS, enemyBaseThree, twoPlusX, awakenedBanner, selfAwakened, kicker, weakenUntilPays, weakenThenDissolve], CONTINUOUS_EMBLEMS),
+);
 const catalog = engine.catalog;
 const c = CONTINUOUS;
 const v = SYNTHETIC;
@@ -183,6 +218,20 @@ describe("static abilities", () => {
     expect(spark(state, ids.player.back[0])).toBe(1);
   });
 
+  it("apply Awakened to a character as it enters play, from another source or its own", () => {
+    const covered = board({ player: { back: [awakenedBanner.id], hand: [v.vanilla1.id], energy: 1, deck }, enemy: { deck } });
+    const entering = covered.ids.player.hand[0];
+    const entered = play(covered.state, "player", entering).state;
+    expect(entered.instances[entering]).toMatchObject({ zone: "play", status: { exhausted: false } });
+
+    const own = board({ player: { hand: [selfAwakened.id, v.vanilla1.id], energy: 2, deck }, enemy: { deck } });
+    const [awakened, plain] = own.ids.player.hand;
+    let next = play(own.state, "player", awakened).state;
+    next = play(next, "player", plain).state;
+    expect(next.instances[awakened]).toMatchObject({ zone: "play", status: { exhausted: false } });
+    expect(next.instances[plain]).toMatchObject({ zone: "play", status: { exhausted: true } });
+  });
+
   it("grant keywords that the rules read", () => {
     const { state, ids } = board({ player: { back: [c.vengefulBanner.id, v.vanilla1.id] } });
     expect(hasKeyword(state, catalog, ids.player.back[1]!, "vengeful")).toBe(true);
@@ -191,6 +240,52 @@ describe("static abilities", () => {
 });
 
 describe("resolving continuous effects", () => {
+  it("share one payable effect across every change of an 'until the opponent pays' node, ended by one payment", () => {
+    const { state, ids } = board({ player: { hand: [weakenUntilPays.id], deck }, enemy: { front: [v.vanilla3.id, v.vanilla1.id], energy: 1, deck } });
+    const enemies = ids.enemy.front.filter((id): id is InstanceId => id !== null);
+    const result = play(state, "player", ids.player.hand[0]);
+    let current = result.state;
+    expect(current.payable).toHaveLength(1);
+    const [payable] = current.payable;
+    expect(payable).toMatchObject({ payer: "enemy", cost: 1, affects: enemies });
+    expect(result.events.filter((entry) => entry.kind === "payableEffectRegistered")).toHaveLength(1);
+    expect(current.floating).toHaveLength(4);
+    expect(current.floating.every((effect) => effect.expiry.at === "paid" && effect.expiry.effect === payable.id)).toBe(true);
+    expect(enemies.map((id) => spark(current, id))).toEqual([2, 0]);
+    current = passUntil(engine, current, at(engine, "enemy", "day")).state;
+    current = engine.apply(current, "enemy", { kind: "payToEnd", effect: payable.id }, NO_PROMPTS).state;
+    expect(current.payable).toEqual([]);
+    expect(current.floating).toEqual([]);
+    expect(enemies.map((id) => spark(current, id))).toEqual([3, 1]);
+    expect(characteristicsOf(current, catalog, enemies[0]).allTypes).toBe(false);
+  });
+
+  it("drop a created character that ceases to exist from a payable effect, ending the effect once it changes nothing", () => {
+    const { state, ids } = board({ player: { hand: [weakenUntilPays.id, DSL.dissolveEnemy.id, DSL.dissolveEnemy.id], energy: 4, deck }, enemy: { deck } });
+    const copies = [0, 1].map((index) => placeFigment(state, "enemy", { rank: "front", index }, { kind: "card", cardId: v.vanilla3.id }));
+    const [, first, second] = ids.player.hand;
+    let current = play(state, "player", ids.player.hand[0]).state;
+    const [payable] = current.payable;
+    expect(payable.affects).toEqual(copies);
+    current = play(current, "player", first, [[copies[0]]]).state;
+    expect(current.instances[copies[0]]).toBeUndefined();
+    expect(current.payable).toEqual([{ ...payable, affects: [copies[1]] }]);
+    const last = play(current, "player", second, [[copies[1]]]);
+    expect(last.state.payable).toEqual([]);
+    expect(last.state.floating).toEqual([]);
+    expect(last.events).toContainEqual({ kind: "payableEffectEnded", effect: payable.id, payer: "enemy", paid: false });
+  });
+
+  it("register no payable effect when every change of the node ended before it finished resolving", () => {
+    const { state, ids } = board({ player: { hand: [weakenThenDissolve.id], deck }, enemy: { deck } });
+    const created = placeFigment(state, "enemy", { rank: "front", index: 0 }, { kind: "card", cardId: v.vanilla3.id });
+    const result = play(state, "player", ids.player.hand[0]);
+    expect(result.state.instances[created]).toBeUndefined();
+    expect(result.state.payable).toEqual([]);
+    expect(result.state.floating).toEqual([]);
+    expect(result.events.some((entry) => entry.kind === "payableEffectRegistered")).toBe(false);
+  });
+
   it("set base spark for a duration, and lose keywords and gain types until end of turn", () => {
     const { state, ids } = board({ player: { hand: [c.baseSevenThisTurn.id, c.disarm.id, c.shapeshift.id], back: [v.vanilla1.id], energy: 1, deck }, enemy: { front: [v.vengeful1.id], deck } });
     const mine = ids.player.back[0]!;
@@ -247,6 +342,18 @@ describe("cost modifications", () => {
     // 2● + X − 3●: X may go up to 4 with 3● available.
     const result = play(state, "player", ids.player.hand[0], [4]);
     expect(result.state.sides.player).toMatchObject({ currentEnergy: 0, score: 4 });
+  });
+
+  it("apply to the energy of a paid optional cost, which a reduction can make free", () => {
+    for (const [energyAvailable, left] of [[0, 0], [1, 1]] as const) {
+      const { state, ids } = board({ player: { hand: [kicker.id], energy: energyAvailable, deck }, enemy: { deck } });
+      float(state, { kind: "cost", player: "player", filter: {}, amount: -2, next: false }, 1);
+      // 0● plus the optional 2●, less 2●: the option is offered and costs nothing.
+      const source = new ScriptedSource([true]);
+      const result = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, source);
+      source.assertExhausted();
+      expect(result.state.sides.player).toMatchObject({ currentEnergy: left, score: 2 });
+    }
   });
 
   it("use up a 'next card' modifier on the next matching play only", () => {

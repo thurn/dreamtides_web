@@ -1,10 +1,12 @@
 /** Turning a DSL duration into a floating effect's expiry as the effect resolves (rules § Durations). */
 import type { Duration } from "../dsl/types";
-import type { AbilitySource, InstanceId, Side } from "../state/ids";
+import type { SharedDuration } from "../effects/types";
+import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { opponent, sourceInstance } from "../state/ids";
 import type { Expiry } from "../state/types";
 import type { StepContext } from "../steps/types";
-import { registerPayable } from "./payable";
+import { mintEffectId } from "./floating";
+import { linkedFloating, registerPayable } from "./payable";
 
 /**
  * The expiry of a change with `duration`, made by an effect `controller`
@@ -39,4 +41,32 @@ export function startDuration(
       return ctx.state.instances[instance]?.zone === "play" ? { at: "sourceLeavesPlay", source: instance } : null;
     }
   }
+}
+
+/**
+ * The duration of one `forDuration` node, for an effect `controller`
+ * controls from `source`. Each change inside the node starts its own expiry
+ * as `startDuration` would, except "until the opponent pays": the first
+ * change mints the payable effect's id, every change links to it, and as the
+ * node finishes it registers once, affecting every character the changes
+ * affect that still exists. It does not register when no change is linked
+ * to it any more.
+ */
+export function sharedDuration(duration: Duration, controller: Side, source: AbilitySource): SharedDuration {
+  let payable: { readonly id: EffectId; readonly affects: InstanceId[] } | null = null;
+  return {
+    join(ctx, affects) {
+      if (typeof duration === "string") return startDuration(ctx, duration, controller, source, affects);
+      payable ??= { id: mintEffectId(ctx.state), affects: [] };
+      for (const id of affects) {
+        if (!payable.affects.includes(id)) payable.affects.push(id);
+      }
+      return { at: "paid", effect: payable.id };
+    },
+    finish(ctx) {
+      if (typeof duration === "string" || payable === null || !linkedFloating(ctx.state, payable.id)) return;
+      const existing = payable.affects.filter((id) => ctx.state.instances[id] !== undefined);
+      registerPayable(ctx, opponent(controller), duration.cost, source, existing, payable.id);
+    },
+  };
 }

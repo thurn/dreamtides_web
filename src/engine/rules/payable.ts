@@ -12,7 +12,8 @@ import { specialActionAllowed } from "./timing";
 
 /**
  * Registers an effect `payer` may end by paying `cost`, changing the
- * characters in `affects`, and returns its id.
+ * characters in `affects`, and returns its id: `id` when its floating
+ * effects were started with an id minted for it, else a new one.
  */
 export function registerPayable(
   ctx: StepContext,
@@ -20,8 +21,8 @@ export function registerPayable(
   cost: number,
   source: AbilitySource,
   affects: readonly InstanceId[],
+  id: EffectId = mintEffectId(ctx.state),
 ): EffectId {
-  const id = mintEffectId(ctx.state);
   ctx.state.payable.push({ id, payer, cost, source, affects: [...affects] });
   ctx.emit({ kind: "payableEffectRegistered", effect: id, payer, cost, source, affects: [...affects] });
   return id;
@@ -29,6 +30,26 @@ export function registerPayable(
 
 export function payableEffect(state: BattleState, id: EffectId): PayableEffect | null {
   return state.payable.find((effect) => effect.id === id) ?? null;
+}
+
+/** Whether any floating effect ends with the payable effect `id`. */
+export function linkedFloating(state: BattleState, id: EffectId): boolean {
+  return state.floating.some((effect) => effect.expiry.at === "paid" && effect.expiry.effect === id);
+}
+
+/**
+ * A card ceased to exist (zones.ts `ceaseToExist`), after the floating
+ * effects changing it ended: it leaves every payable effect's `affects`, and
+ * one that then affects no character and has no floating effect left ends,
+ * unpaid, so nothing offers to pay for an effect that changes nothing.
+ */
+export function forgetCeased(ctx: StepContext, ceased: InstanceId): void {
+  for (const effect of ctx.state.payable) {
+    if (!effect.affects.includes(ceased)) continue;
+    const affects = effect.affects.filter((id) => id !== ceased);
+    ctx.state.payable = ctx.state.payable.map((entry) => (entry.id === effect.id ? { ...entry, affects } : entry));
+    if (affects.length === 0 && !linkedFloating(ctx.state, effect.id)) endPayable(ctx, effect.id, false);
+  }
 }
 
 /** Ends a payable effect and the floating effects linked to it; `paid` when its payer paid to end it. */

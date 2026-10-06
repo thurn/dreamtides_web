@@ -19,6 +19,7 @@ import { freshStatus } from "../state/create";
 import type { StepContext } from "../steps/types";
 import { addFloating, endChangesTo, expireAt } from "./floating";
 import { hasKeyword } from "./keywords";
+import { forgetCeased } from "./payable";
 
 export function instanceOf(state: BattleState, id: InstanceId): CardInstance {
   const instance = state.instances[id];
@@ -226,7 +227,9 @@ export function moveToStack(
 
 /**
  * Puts a character into play under `side` at `slot` (rules § Materialize). It
- * enters exhausted unless awakened.
+ * enters exhausted unless awakened, as it is once in play: the keywords are
+ * read after it takes its position, so static abilities that cover
+ * characters in play, its own included, apply.
  */
 export function enterPlay(
   ctx: StepContext,
@@ -244,8 +247,8 @@ export function enterPlay(
   instance.controller = side;
   instance.zone = "play";
   instance.enteredZoneAt = ++state.clock;
-  instance.status.exhausted = !hasKeyword(state, ctx.catalog, id, "awakened");
   setOccupant(state, side, slot, id);
+  instance.status.exhausted = !hasKeyword(state, ctx.catalog, id, "awakened");
   ctx.emit({ kind: "materialized", instance: id, side, slot });
 }
 
@@ -316,7 +319,9 @@ export function createInPlay(ctx: StepContext, printing: Printing, side: Side, v
 
 /**
  * A created card ceases to exist (rules § Created Cards): it leaves its zone
- * and the battle, and is in no zone afterwards. A dissolved one emits
+ * and the battle, and is in no zone afterwards. The floating effects
+ * changing it end, and it leaves the payable effects that affect it
+ * (payable.ts `forgetCeased`). A dissolved one emits
  * `dissolved` as it leaves, so its ▸Dissolved abilities fire first. With
  * `silent`, as when a figment merges, it announces nothing that could
  * trigger.
@@ -341,6 +346,7 @@ export function ceaseToExist(
     Object.entries(state.instances).filter(([key]) => key !== id),
   );
   endChangesTo(ctx, id);
+  forgetCeased(ctx, id);
   ctx.emit({ kind: "ceasedToExist", instance: id });
 }
 

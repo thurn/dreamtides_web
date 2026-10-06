@@ -1,9 +1,9 @@
 import type { EngineCatalog } from "../catalog";
 import type { PromptPurpose } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import type { AbilityOrigin, BattleState, ContinuousChange } from "../state/types";
+import type { AbilityOrigin, BattleState, ContinuousChange, Expiry } from "../state/types";
 import type { StepContext } from "../steps/types";
-import type { CharacterRef, Duration, PlayTimeTarget, SelfSpec, StackTargetSpec, SubjectSpec, TargetSpec, ValueExpr, Variant } from "../dsl/types";
+import type { CharacterRef, PlayTimeTarget, SelfSpec, StackTargetSpec, SubjectSpec, TargetSpec, ValueExpr, Variant } from "../dsl/types";
 
 /**
  * The card a copy copies: a chosen character in play or card on the stack,
@@ -15,6 +15,18 @@ export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec;
 /** The shape every effect node has; the registry narrows it to the primitive union. */
 export interface EffectNode {
   readonly op: string;
+}
+
+/**
+ * The duration of one `forDuration` node, shared by every change made inside
+ * it so they end together: an "until the opponent pays" node is one payable
+ * effect covering all its changes and every character they affect.
+ */
+export interface SharedDuration {
+  /** The expiry of changes to `affects` made inside the node; `null` when the duration is already over. */
+  join(ctx: StepContext, affects: readonly InstanceId[]): Expiry | null;
+  /** Registers the node's payable effect, if it has one, once every change inside it has started. */
+  finish(ctx: StepContext): void;
 }
 
 /** What a primitive sees while it resolves. */
@@ -36,7 +48,7 @@ export interface EffectEnv {
   /** Whether each optional cost of the item was paid, in printed order (the `costPaid` condition). */
   readonly optionalPaid: readonly boolean[];
   /** The duration a `forDuration` node gives the continuous primitives inside it; `null` outside one. */
-  readonly duration: Duration | null;
+  readonly duration: SharedDuration | null;
   /** The mode chosen at play time for a modal node of this effect, or `null` for a node off the chosen path. */
   modeOf(node: EffectNode): number | null;
   /** The targets chosen at play time for a target spec in this effect, or `null` if none were chosen. */

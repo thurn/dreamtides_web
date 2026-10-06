@@ -541,8 +541,9 @@ analog:
    spark with a duration, anthems, Support, and per-figment shares (`spark`).
    The result is clamped at 0; the modifications themselves are not.
 6. **Cost modifications** (`continuous/costs.ts`): increases, then
-   reductions, with a minimum of 0, applied to the total of the fixed energy
-   and X when a player plays a card. A "next card" modifier (`next: true`)
+   reductions, with a minimum of 0, applied to the total chosen energy cost
+   when a player plays a card: the fixed energy, X, and the energy of a chosen
+   alternative or paid optional cost. A "next card" modifier (`next: true`)
    ends as the card it applied to is paid for, after the commit point.
 
 Ordering within a layer:

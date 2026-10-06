@@ -523,7 +523,8 @@ card stays in your hand.
 **Cost changes:** Effects such as "Events cost you 1● more" and "The next
 character you play this turn costs 2● less" change the energy a player pays to
 play a card. Every increase applies first, then every reduction, and the cost
-never goes below 0●. They change the card's whole energy cost, X included:
+never goes below 0●. They change the card's whole energy cost, including X
+and the energy of any alternative or optional cost the player chooses to pay:
 with a 2● reduction, a card costing 1● plus X can be played with X = 3 for 2●.
 A "next card" change applies to the next matching card its player plays and is
 used up when that card's costs are paid, even if the cost was already 0●. A
