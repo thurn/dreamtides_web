@@ -10,19 +10,15 @@
 //     event. Screens keep their call sites unchanged — only the implementation
 //     under the interface changes.
 //
-// Fields the reducer reads that the typed facade does not surface (e.g.
-// `purgeIndex` on ACCEPT_REWARD / ACCEPT_DREAMSIGN_OFFER / BUY_SHOP_SLOT, the
-// optional transfiguration `type`, `essenceCost` on REROLL_SHOP, and the
-// augury request fields) are appended directly via `useAppend()`; the reducer
-// re-validates every raw payload, so a raw append is equivalent to a facade call
-// with the extra fields present.
+// Every mutation writes through a typed facade creator, so each payload matches
+// its `EventPayloads` entry (src/rules/events.ts); the reducer still
+// re-validates every payload at fold time.
 
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
 import type { JourneySeed } from "../types/journey-seed";
-import type { GameEventType } from "../rules/events";
 import { NIGHTMARE_CARD_ID } from "../data/nightmare";
-import { useActions, useAppend, useGameState } from "../session/hooks";
+import { useActions, useGameState } from "../session/hooks";
 import {
   JourneyContextProvider,
   type JourneyContextValue,
@@ -96,7 +92,6 @@ export function GameJourneyProvider({
     [fold.journey, cardSourcePublication],
   );
   const actions = useActions();
-  const append = useAppend();
   const cardDatabase = journeyContent.cardDatabase;
 
   // The current fold state, reachable from the (stable) memoized mutations so
@@ -112,9 +107,6 @@ export function GameJourneyProvider({
       void promise.catch((error: unknown) => {
         console.error("Journey action failed", error);
       });
-    };
-    const emit = (type: GameEventType, payload: Record<string, unknown>): void => {
-      dispatch(append({ type, payload }));
     };
     const cardIdFor = (cardNumber: number): string | null =>
       cardDatabase.get(cardNumber)?.id ?? null;
@@ -183,14 +175,11 @@ export function GameJourneyProvider({
               });
         settleDeferredOpponentLog(0, false);
         dispatch(
-          append({
-            type: "LOAD_STATE",
-            payload: {
-              snapshot: seededSnapshot,
-              ...(battle === null ? {} : { battle }),
-            },
-            intentKey: parseIntentKey(`qa-bootstrap:${sceneId}`),
-          }),
+          actions.loadState(
+            seededSnapshot,
+            battle ?? undefined,
+            parseIntentKey(`qa-bootstrap:${sceneId}`),
+          ),
         );
       },
       dismissStartingDeckPopup: () =>
@@ -251,11 +240,7 @@ export function GameJourneyProvider({
       // ---- dreamsigns ----
       addDreamsign: (dreamsign, _sourceSiteType, purgeIndex) => {
         if (dreamsign.id === undefined) return;
-        if (purgeIndex === undefined) {
-          dispatch(actions.addDreamsign(dreamsign.id));
-          return;
-        }
-        emit("ADD_DREAMSIGN", { dreamsignId: dreamsign.id, purgeIndex });
+        dispatch(actions.addDreamsign(dreamsign.id, purgeIndex));
       },
       removeDreamsign: (index) => {
         const dreamsignId = stateRef.current.dreamsigns[index]?.id;
@@ -463,21 +448,13 @@ export function GameJourneyProvider({
             stateRef.current.runId ?? undefined,
           ),
         ),
-      acceptRewardSite: (siteId, purgeIndex) => {
-        // ACCEPT_REWARD's reducer reads `purgeIndex` (the at-cap Dreamsign
-        // replace slot), which the typed facade does not carry.
-        emit(
-          "ACCEPT_REWARD",
-          purgeIndex === undefined ? { siteId } : { siteId, purgeIndex },
-        );
-      },
+      acceptRewardSite: (siteId, purgeIndex) =>
+        dispatch(actions.acceptReward(siteId, purgeIndex)),
       acceptDreamsignOffer: (siteId, dreamsign, purgeIndex) => {
         if (dreamsign.id === undefined) return;
-        emit("ACCEPT_DREAMSIGN_OFFER", {
-          siteId,
-          dreamsignId: dreamsign.id,
-          ...(purgeIndex === undefined ? {} : { purgeIndex }),
-        });
+        dispatch(
+          actions.acceptDreamsignOffer(siteId, dreamsign.id, purgeIndex),
+        );
       },
       rejectDreamsignOffer: (siteId) =>
         dispatch(actions.rejectDreamsignOffer(siteId)),
@@ -486,28 +463,23 @@ export function GameJourneyProvider({
           actions.acceptEssence(siteId, stateRef.current.runId ?? undefined),
         ),
       acceptTransfigurationChoice: (siteId, entryId, type) =>
-        emit("ACCEPT_TRANSFIGURATION_CHOICE", { siteId, entryId, type }),
+        dispatch(actions.acceptTransfigurationChoice(siteId, entryId, type)),
       acceptDuplicationChoice: (siteId, entryId) =>
         dispatch(actions.acceptDuplicationChoice(siteId, entryId)),
       completeAugurySite: (siteId) => dispatch(actions.completeAugury(siteId)),
       rerollAugury: (siteId) => dispatch(actions.rerollAugury(siteId)),
       forceAuguryArchetype: (siteId, archetypeId) =>
-        // archetypeId may be null (clear the force); the reducer accepts it.
-        emit("FORCE_AUGURY_ARCHETYPE", { siteId, archetypeId }),
+        dispatch(actions.forceAuguryArchetype(siteId, archetypeId)),
       acceptAuguryOffer: (siteId, request) => {
-        emit("ACCEPT_AUGURY_OFFER", { siteId, ...request });
+        dispatch(actions.acceptAuguryOffer(siteId, request));
       },
       declineAugury: (siteId, request) => {
-        emit("DECLINE_AUGURY", { siteId, ...request });
+        dispatch(actions.declineAugury(siteId, request));
       },
 
       // ---- shop ----
       buyShopSlot: (siteId, slotIndex, purgeIndex) =>
-        emit("BUY_SHOP_SLOT", {
-          siteId,
-          slotIndex,
-          ...(purgeIndex === undefined ? {} : { purgeIndex }),
-        }),
+        dispatch(actions.buyShopSlot(siteId, slotIndex, purgeIndex)),
       rerollShop: (site) => dispatch(actions.rerollShop(site.id)),
       grantFreeShopRerolls: (count) =>
         dispatch(actions.grantFreeRerolls(count)),
@@ -562,7 +534,7 @@ export function GameJourneyProvider({
         dispatch(actions.boostSiteAppearance(siteType, percent, dreamscapes)),
       setCardSourceDebug: publishCardSourceDebug,
     };
-  }, [actions, append, journeyContent, cardDatabase, publishCardSourceDebug]);
+  }, [actions, journeyContent, cardDatabase, publishCardSourceDebug]);
 
   const value = useMemo<JourneyContextValue>(
     () => ({ state, mutations, cardDatabase, journeyContent }),

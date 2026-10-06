@@ -42,7 +42,14 @@ import { parseTutorialRunId } from "../types/identifiers";
 import { parseCardTutorialScreenKey } from "../types/identifiers";
 import { parseIntentKey } from "../types/identifiers";
 import { parseFrontDoorActionId } from "../types/identifiers";
+import { parseChoiceId, parseOfferId } from "../types/identifiers";
+import { parseStableDigest } from "../types/stable-digest";
 import { testCardId, testAvatarId, testDreamsignId, testExplorationActionId, testTutorialActionId } from "../types/test-identities";
+
+const AUGURY_DECLINE = {
+  encounterSignature: parseStableDigest("a".repeat(64)),
+  offerId: parseOfferId("offer-1"),
+};
 
 const GENESIS: Genesis = {
   seed: testJourneySeed("actions-test-seed"),
@@ -226,8 +233,11 @@ function captureAllDrafts(): EventDraft[] {
     parseSiteId("site-1"),
     parseShuffleCommitment("commitment-1"),
   );
-  void actions.acceptAuguryOffer(parseSiteId("site-1"));
-  void actions.declineAugury(parseSiteId("site-1"));
+  void actions.acceptAuguryOffer(parseSiteId("site-1"), {
+    ...AUGURY_DECLINE,
+    archetypeId: "fit_card_grant",
+  });
+  void actions.declineAugury(parseSiteId("site-1"), AUGURY_DECLINE);
   void actions.buyShopSlot(parseSiteId("site-1"), 0);
   void actions.rerollShop(parseSiteId("site-1"));
   void actions.grantFreeRerolls(1);
@@ -517,6 +527,69 @@ describe("game actions facade", () => {
         intentKey: "tutorial:test:terminal",
       },
     ]);
+  });
+
+  it("writes optional journey fields in the order the replay log stores them", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
+    const siteId = parseSiteId("site-7");
+    const dreamsignId = testDreamsignId("ds-7");
+    const entryId = parseDeckEntryId("entry-7");
+    const acceptRequest = {
+      ...AUGURY_DECLINE,
+      archetypeId: "fit_card_grant" as const,
+      choice: { choiceId: parseChoiceId("choice-1") },
+    };
+
+    void actions.addDreamsign(dreamsignId);
+    void actions.addDreamsign(dreamsignId, 2);
+    void actions.acceptReward(siteId);
+    void actions.acceptReward(siteId, 0);
+    void actions.acceptDreamsignOffer(siteId, dreamsignId, 3);
+    void actions.buyShopSlot(siteId, 1);
+    void actions.buyShopSlot(siteId, 1, 4);
+    void actions.acceptTransfigurationChoice(siteId, entryId);
+    void actions.acceptTransfigurationChoice(siteId, entryId, "Empowered");
+    void actions.forceAuguryArchetype(siteId, null);
+    void actions.acceptAuguryOffer(siteId, acceptRequest);
+    void actions.declineAugury(siteId, AUGURY_DECLINE);
+    void actions.loadState(
+      { snapshot: true },
+      undefined,
+      parseIntentKey("qa-bootstrap:scene-1"),
+    );
+
+    // JSON text pins key order: replay fixtures hash the stored wire bytes.
+    expect(
+      captured.map((draft) => [draft.type, JSON.stringify(draft.payload)]),
+    ).toEqual([
+      ["ADD_DREAMSIGN", JSON.stringify({ dreamsignId })],
+      ["ADD_DREAMSIGN", JSON.stringify({ dreamsignId, purgeIndex: 2 })],
+      ["ACCEPT_REWARD", JSON.stringify({ siteId })],
+      ["ACCEPT_REWARD", JSON.stringify({ siteId, purgeIndex: 0 })],
+      [
+        "ACCEPT_DREAMSIGN_OFFER",
+        JSON.stringify({ siteId, dreamsignId, purgeIndex: 3 }),
+      ],
+      ["BUY_SHOP_SLOT", JSON.stringify({ siteId, slotIndex: 1 })],
+      ["BUY_SHOP_SLOT", JSON.stringify({ siteId, slotIndex: 1, purgeIndex: 4 })],
+      ["ACCEPT_TRANSFIGURATION_CHOICE", JSON.stringify({ siteId, entryId })],
+      [
+        "ACCEPT_TRANSFIGURATION_CHOICE",
+        JSON.stringify({ siteId, entryId, type: "Empowered" }),
+      ],
+      [
+        "FORCE_AUGURY_ARCHETYPE",
+        JSON.stringify({ siteId, archetypeId: null }),
+      ],
+      ["ACCEPT_AUGURY_OFFER", JSON.stringify({ siteId, ...acceptRequest })],
+      ["DECLINE_AUGURY", JSON.stringify({ siteId, ...AUGURY_DECLINE })],
+      ["LOAD_STATE", JSON.stringify({ snapshot: { snapshot: true } })],
+    ]);
+    expect(captured[captured.length - 1]?.intentKey).toBe("qa-bootstrap:scene-1");
   });
 
   it("carries an explicit battle seed in the authoritative intent", () => {

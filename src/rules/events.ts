@@ -4,6 +4,7 @@ import type {
   BattleCardId,
   BattleId,
   CardTutorialScreenKey,
+  ChoiceId,
   ClientId,
   DeckEntryId,
   AvatarId,
@@ -12,6 +13,7 @@ import type {
   FrontDoorActionId,
   JourneyId,
   NoteId,
+  OfferId,
   PresentationId,
   ShuffleCommitment,
   SiteId,
@@ -21,6 +23,8 @@ import type {
 } from "../types/identifiers";
 import { identityKeys } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
+import type { StableDigest } from "../types/stable-digest";
+import type { TutorialAction } from "../types/tutorial";
 import type { JourneyMutationSource } from "../types/journey-source";
 import type {
   RandomSiteDestinationType,
@@ -49,6 +53,25 @@ import type { EventType } from "../eventlog/types";
 // ---------------------------------------------------------------------------
 
 /**
+ * The fields an Augury decline names: the encounter the player saw and the
+ * offer the decline resolves against. The site content provider regenerates
+ * the encounter and rejects a stale signature or unknown offer. Payload shapes
+ * are type aliases (not interfaces) so they stay assignable to the log's
+ * `Record<string, unknown>` payload.
+ */
+export type AuguryDeclinePayload = {
+  encounterSignature: StableDigest;
+  offerId: OfferId;
+  selectionRulesVersion?: SelectionRulesVersion;
+  choice?: { choiceId: ChoiceId };
+};
+
+/** An Augury acceptance additionally names the archetype of the taken offer. */
+export type AuguryAcceptPayload = AuguryDeclinePayload & {
+  archetypeId: AuguryArchetypeId;
+};
+
+/**
  * Maps each event `type` literal to its payload interface. Keys are the
  * authoritative set of event types the rules layer understands.
  */
@@ -63,7 +86,11 @@ export interface EventPayloads {
     from: "mainExiting" | "loading";
     journeyId: JourneyId;
   };
-  BEGIN_TUTORIAL: { actions: unknown };
+  BEGIN_TUTORIAL: {
+    actions: TutorialAction[];
+    startActionId?: TutorialActionId;
+    startAtEnd?: true;
+  };
   COMPLETE_TUTORIAL_ACTION: {
     runId: TutorialRunId;
     actionId: TutorialActionId;
@@ -113,13 +140,18 @@ export interface EventPayloads {
   SET_DECK_ENTRY_KEYWORDS: { entryId: DeckEntryId; keywords: unknown };
   SET_DECK_ENTRY_TYPE: { entryId: DeckEntryId; typeChange: unknown };
   TRANSFIGURE_CARD: { entryId: DeckEntryId; transfiguration: unknown };
-  ACCEPT_TRANSFIGURATION_CHOICE: { siteId: SiteId; entryId: DeckEntryId };
+  ACCEPT_TRANSFIGURATION_CHOICE: {
+    siteId: SiteId;
+    entryId: DeckEntryId;
+    type?: TransfigurationType;
+  };
   ACCEPT_DUPLICATION_CHOICE: { siteId: SiteId; entryId: DeckEntryId };
   PURGE_ALL_NIGHTMARE_CARDS: Record<string, never>;
   PURGE_RANDOM_NIGHTMARE_CARDS: { count: number };
 
   // --- dreamsigns ---
-  ADD_DREAMSIGN: { dreamsignId: DreamsignId };
+  // `purgeIndex` names the held Dreamsign the new one replaces at the cap.
+  ADD_DREAMSIGN: { dreamsignId: DreamsignId; purgeIndex?: number };
   REMOVE_DREAMSIGN: { dreamsignId: DreamsignId };
   SET_DREAMSIGN_POOL: { ids: DreamsignId[] };
 
@@ -148,12 +180,20 @@ export interface EventPayloads {
     selection?: unknown;
   };
   COMPLETE_AUGURY: { siteId: SiteId };
-  ACCEPT_REWARD: { siteId: SiteId; choiceIndex?: number };
-  ACCEPT_DREAMSIGN_OFFER: { siteId: SiteId; dreamsignId: DreamsignId };
+  ACCEPT_REWARD: { siteId: SiteId; purgeIndex?: number };
+  ACCEPT_DREAMSIGN_OFFER: {
+    siteId: SiteId;
+    dreamsignId: DreamsignId;
+    purgeIndex?: number;
+  };
   REJECT_DREAMSIGN_OFFER: { siteId: SiteId };
   ACCEPT_ESSENCE: { siteId: SiteId };
   REROLL_AUGURY: { siteId: SiteId };
-  FORCE_AUGURY_ARCHETYPE: { siteId: SiteId; archetypeId: AuguryArchetypeId };
+  // A null `archetypeId` clears the forced archetype.
+  FORCE_AUGURY_ARCHETYPE: {
+    siteId: SiteId;
+    archetypeId: AuguryArchetypeId | null;
+  };
   COMPLETE_SITE: { siteId: SiteId };
   PLACE_GRAVOK_WAGER: {
     siteId: SiteId;
@@ -214,9 +254,9 @@ export interface EventPayloads {
   };
 
   // --- augury & shop ---
-  ACCEPT_AUGURY_OFFER: { siteId: SiteId; offer?: unknown };
-  DECLINE_AUGURY: { siteId: SiteId };
-  BUY_SHOP_SLOT: { siteId: SiteId; slotIndex: number };
+  ACCEPT_AUGURY_OFFER: { siteId: SiteId } & AuguryAcceptPayload;
+  DECLINE_AUGURY: { siteId: SiteId } & AuguryDeclinePayload;
+  BUY_SHOP_SLOT: { siteId: SiteId; slotIndex: number; purgeIndex?: number };
   REROLL_SHOP: { siteId: SiteId };
   GRANT_FREE_REROLLS: { count: number };
   APPLY_SHOP_DISCOUNT: { percent: number };

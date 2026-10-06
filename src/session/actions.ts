@@ -2,7 +2,9 @@
 //
 // Every creator builds a single event's `{ type, payload }` draft (UUIDs and
 // indices only — never card names) and appends it through the injected
-// `append` function. `actions.test.ts` pins that every creator's type exists
+// `append` function. Drafts go through one `emit` helper whose payload
+// parameter is `EventPayloads[type]`, so a creator cannot write a field the
+// rules layer's payload contract (src/rules/events.ts) does not declare. `actions.test.ts` pins that every creator's type exists
 // in the rules-layer union and that the union is fully covered (no drift in
 // either direction).
 //
@@ -54,7 +56,12 @@ import type {
 } from "../types/identifiers";
 import type { BattleSide, BattlefieldSlotId } from "../battle/types";
 import { parseIntentKey } from "../types/identifiers";
-import type { GameEventType } from "../rules/events";
+import type {
+  AuguryAcceptPayload,
+  AuguryDeclinePayload,
+  EventPayloads,
+  GameEventType,
+} from "../rules/events";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -107,7 +114,11 @@ export interface GameActions {
   // --- lifecycle ---
   startJourney: (payload?: Record<string, unknown>) => Promise<number>;
   resetJourney: () => Promise<number>;
-  loadState: (snapshot: unknown, battle?: unknown) => Promise<number>;
+  loadState: (
+    snapshot: unknown,
+    battle?: unknown,
+    intentKey?: IntentKey,
+  ) => Promise<number>;
 
   // --- avatar ---
   selectAvatar: (avatarId: AvatarId) => Promise<number>;
@@ -150,6 +161,7 @@ export interface GameActions {
   acceptTransfigurationChoice: (
     siteId: SiteId,
     entryId: DeckEntryId,
+    type?: TransfigurationType,
   ) => Promise<number>;
   acceptDuplicationChoice: (
     siteId: SiteId,
@@ -159,7 +171,11 @@ export interface GameActions {
   purgeRandomNightmareCards: (count: number) => Promise<number>;
 
   // --- dreamsigns ---
-  addDreamsign: (dreamsignId: DreamsignId) => Promise<number>;
+  /** `purgeIndex` names the held Dreamsign to replace at the cap. */
+  addDreamsign: (
+    dreamsignId: DreamsignId,
+    purgeIndex?: number,
+  ) => Promise<number>;
   removeDreamsign: (dreamsignId: DreamsignId) => Promise<number>;
   setDreamsignPool: (ids: readonly DreamsignId[]) => Promise<number>;
 
@@ -186,17 +202,19 @@ export interface GameActions {
     selection?: unknown,
   ) => Promise<number>;
   completeAugury: (siteId: SiteId) => Promise<number>;
-  acceptReward: (siteId: SiteId, choiceIndex?: number) => Promise<number>;
+  acceptReward: (siteId: SiteId, purgeIndex?: number) => Promise<number>;
   acceptDreamsignOffer: (
     siteId: SiteId,
     dreamsignId: DreamsignId,
+    purgeIndex?: number,
   ) => Promise<number>;
   rejectDreamsignOffer: (siteId: SiteId) => Promise<number>;
   acceptEssence: (siteId: SiteId, runId?: JourneyId) => Promise<number>;
   rerollAugury: (siteId: SiteId) => Promise<number>;
+  /** A null `archetypeId` clears the forced archetype. */
   forceAuguryArchetype: (
     siteId: SiteId,
-    archetypeId: AuguryArchetypeId,
+    archetypeId: AuguryArchetypeId | null,
   ) => Promise<number>;
   completeSite: (siteId: SiteId, runId?: JourneyId) => Promise<number>;
   placeGravokWager: (siteId: SiteId, gateId: GravokGateId) => Promise<number>;
@@ -273,9 +291,19 @@ export interface GameActions {
   ) => Promise<number>;
 
   // --- augury & shop ---
-  acceptAuguryOffer: (siteId: SiteId, offer?: unknown) => Promise<number>;
-  declineAugury: (siteId: SiteId) => Promise<number>;
-  buyShopSlot: (siteId: SiteId, slotIndex: number) => Promise<number>;
+  acceptAuguryOffer: (
+    siteId: SiteId,
+    request: AuguryAcceptPayload,
+  ) => Promise<number>;
+  declineAugury: (
+    siteId: SiteId,
+    request: AuguryDeclinePayload,
+  ) => Promise<number>;
+  buyShopSlot: (
+    siteId: SiteId,
+    slotIndex: number,
+    purgeIndex?: number,
+  ) => Promise<number>;
   rerollShop: (siteId: SiteId) => Promise<number>;
   grantFreeRerolls: (count: number) => Promise<number>;
   applyShopDiscount: (percent: number) => Promise<number>;
@@ -386,15 +414,17 @@ export function makeActions(
     options.selectionRulesVersion === undefined
       ? SELECTION_RULES_VERSION
       : options.selectionRulesVersion;
-  const emit = (
-    type: GameEventType,
-    payload: Record<string, unknown>,
+  const emit = <T extends GameEventType>(
+    type: T,
+    payload: EventPayloads[T],
     intentKey?: IntentKey,
+    actor?: EventActor,
   ): Promise<number> =>
     append({
       type,
       payload,
       ...(intentKey === undefined ? {} : { intentKey }),
+      ...(actor === undefined ? {} : { actor }),
     });
   type SiteIntentKind =
     | "enter-draft-site"
@@ -426,11 +456,11 @@ export function makeActions(
           : { surface, actionId, detail },
       ),
     advanceFrontDoor: (from, journeyId) =>
-      append({
-        type: "ADVANCE_FRONT_DOOR",
-        payload: { from, journeyId },
-        intentKey: parseIntentKey(`front-door:${journeyId}:${from}`),
-      }),
+      emit(
+        "ADVANCE_FRONT_DOOR",
+        { from, journeyId },
+        parseIntentKey(`front-door:${journeyId}:${from}`),
+      ),
     beginTutorial: (actions, options) =>
       emit(
         "BEGIN_TUTORIAL",
@@ -493,10 +523,11 @@ export function makeActions(
     // --- lifecycle ---
     startJourney: (payload = {}) => emit("START_JOURNEY", { ...payload }),
     resetJourney: () => emit("RESET_JOURNEY", {}),
-    loadState: (snapshot, battle) =>
+    loadState: (snapshot, battle, intentKey) =>
       emit(
         "LOAD_STATE",
         battle === undefined ? { snapshot } : { snapshot, battle },
+        intentKey,
       ),
 
     // --- avatar ---
@@ -531,8 +562,11 @@ export function makeActions(
       emit("SET_DECK_ENTRY_TYPE", { entryId, typeChange }),
     transfigureCard: (entryId, transfiguration) =>
       emit("TRANSFIGURE_CARD", { entryId, transfiguration }),
-    acceptTransfigurationChoice: (siteId, entryId) =>
-      emit("ACCEPT_TRANSFIGURATION_CHOICE", { siteId, entryId }),
+    acceptTransfigurationChoice: (siteId, entryId, type) =>
+      emit(
+        "ACCEPT_TRANSFIGURATION_CHOICE",
+        type === undefined ? { siteId, entryId } : { siteId, entryId, type },
+      ),
     acceptDuplicationChoice: (siteId, entryId) =>
       emit("ACCEPT_DUPLICATION_CHOICE", { siteId, entryId }),
     purgeAllNightmareCards: () => emit("PURGE_ALL_NIGHTMARE_CARDS", {}),
@@ -540,7 +574,13 @@ export function makeActions(
       emit("PURGE_RANDOM_NIGHTMARE_CARDS", { count }),
 
     // --- dreamsigns ---
-    addDreamsign: (dreamsignId) => emit("ADD_DREAMSIGN", { dreamsignId }),
+    addDreamsign: (dreamsignId, purgeIndex) =>
+      emit(
+        "ADD_DREAMSIGN",
+        purgeIndex === undefined
+          ? { dreamsignId }
+          : { dreamsignId, purgeIndex },
+      ),
     removeDreamsign: (dreamsignId) => emit("REMOVE_DREAMSIGN", { dreamsignId }),
     setDreamsignPool: (ids) => emit("SET_DREAMSIGN_POOL", { ids: [...ids] }),
 
@@ -581,13 +621,17 @@ export function makeActions(
         ...(selection === undefined ? {} : { selection }),
       }),
     completeAugury: (siteId) => emit("COMPLETE_AUGURY", { siteId }),
-    acceptReward: (siteId, choiceIndex) =>
+    acceptReward: (siteId, purgeIndex) =>
       emit(
         "ACCEPT_REWARD",
-        choiceIndex === undefined ? { siteId } : { siteId, choiceIndex },
+        purgeIndex === undefined ? { siteId } : { siteId, purgeIndex },
       ),
-    acceptDreamsignOffer: (siteId, dreamsignId) =>
-      emit("ACCEPT_DREAMSIGN_OFFER", { siteId, dreamsignId }),
+    acceptDreamsignOffer: (siteId, dreamsignId, purgeIndex) =>
+      emit("ACCEPT_DREAMSIGN_OFFER", {
+        siteId,
+        dreamsignId,
+        ...(purgeIndex === undefined ? {} : { purgeIndex }),
+      }),
     rejectDreamsignOffer: (siteId) =>
       emit("REJECT_DREAMSIGN_OFFER", { siteId }),
     acceptEssence: (siteId, runId) =>
@@ -707,14 +751,16 @@ export function makeActions(
       ),
 
     // --- augury & shop ---
-    acceptAuguryOffer: (siteId, offer) =>
-      emit(
-        "ACCEPT_AUGURY_OFFER",
-        offer === undefined ? { siteId } : { siteId, offer },
-      ),
-    declineAugury: (siteId) => emit("DECLINE_AUGURY", { siteId }),
-    buyShopSlot: (siteId, slotIndex) =>
-      emit("BUY_SHOP_SLOT", { siteId, slotIndex }),
+    acceptAuguryOffer: (siteId, request) =>
+      emit("ACCEPT_AUGURY_OFFER", { siteId, ...request }),
+    declineAugury: (siteId, request) =>
+      emit("DECLINE_AUGURY", { siteId, ...request }),
+    buyShopSlot: (siteId, slotIndex, purgeIndex) =>
+      emit("BUY_SHOP_SLOT", {
+        siteId,
+        slotIndex,
+        ...(purgeIndex === undefined ? {} : { purgeIndex }),
+      }),
     rerollShop: (siteId) => emit("REROLL_SHOP", { siteId }),
     grantFreeRerolls: (count) => emit("GRANT_FREE_REROLLS", { count }),
     applyShopDiscount: (percent) => emit("APPLY_SHOP_DISCOUNT", { percent }),
@@ -752,12 +798,7 @@ export function makeActions(
     setBattleAutomation: (enabled) =>
       emit("SET_BATTLE_AUTOMATION", { enabled }),
     battleCommand: (command, intentKey, actor) =>
-      append({
-        type: "BATTLE_COMMAND",
-        payload: { command },
-        ...(intentKey === undefined ? {} : { intentKey }),
-        ...(actor === undefined ? {} : { actor }),
-      }),
+      emit("BATTLE_COMMAND", { command }, intentKey, actor),
     battleRepositionCharacter: (battleCardId, destination) =>
       emit("BATTLE_REPOSITION_CHARACTER", {
         battleCardId,
@@ -772,9 +813,9 @@ export function makeActions(
       characterDestination,
       tutorialAiActionOverrideId,
     ) =>
-      append({
-        type: "BATTLE_PLAY_CARD",
-        payload: {
+      emit(
+        "BATTLE_PLAY_CARD",
+        {
           battleCardId,
           targetBattleCardIds: [...targetBattleCardIds],
           ...(aiChoices === undefined ? {} : { aiChoices }),
@@ -785,45 +826,30 @@ export function makeActions(
             ? {}
             : { tutorialAiActionOverrideId }),
         },
-        ...(intentKey === undefined ? {} : { intentKey }),
-        ...(actor === undefined ? {} : { actor }),
-      }),
-    battleGesture: (commands, intentKey, actor) =>
-      append({
-        type: "BATTLE_GESTURE",
-        payload: { commands: [...commands] },
-        ...(intentKey === undefined ? {} : { intentKey }),
-        ...(actor === undefined ? {} : { actor }),
-      }),
-    battleAiBlock: (aiSide, actor, intentKey) =>
-      append({
-        type: "BATTLE_AI_BLOCK",
-        payload: { aiSide },
+        intentKey,
         actor,
-        ...(intentKey === undefined ? {} : { intentKey }),
-      }),
+      ),
+    battleGesture: (commands, intentKey, actor) =>
+      emit("BATTLE_GESTURE", { commands: [...commands] }, intentKey, actor),
+    battleAiBlock: (aiSide, actor, intentKey) =>
+      emit("BATTLE_AI_BLOCK", { aiSide }, intentKey, actor),
     completeTutorialBattlePresentation: (
       presentationId,
       intentKey,
       actor,
       messageIndex,
     ) =>
-      append({
-        type: "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
-        payload: {
+      emit(
+        "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+        {
           presentationId,
           ...(messageIndex === undefined ? {} : { messageIndex }),
         },
         intentKey,
         actor,
-      }),
+      ),
     resolvePrompt: (promptId, resolution, intentKey, actor) =>
-      append({
-        type: "RESOLVE_PROMPT",
-        payload: { promptId, resolution },
-        ...(intentKey === undefined ? {} : { intentKey }),
-        ...(actor === undefined ? {} : { actor }),
-      }),
+      emit("RESOLVE_PROMPT", { promptId, resolution }, intentKey, actor),
     setCardNote: (instanceId, note) =>
       emit("SET_CARD_NOTE", { instanceId, note }),
   };
