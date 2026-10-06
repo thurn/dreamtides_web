@@ -1,6 +1,10 @@
 import type { JourneyState, SiteType } from "../types/journey";
 import { layerOrdinal } from "../types/layer-name";
 import type { SiteId } from "../types/identifiers";
+import {
+  dreamscapeSceneArtKey,
+  type DreamscapeArtCatalog,
+} from "../data/dreamscapes";
 
 /**
  * Maps the journey's current screen to a human-readable address-bar path, so the
@@ -25,7 +29,10 @@ import type { SiteId } from "../types/identifiers";
  * /failed                            journey defeat
  * ```
  */
-export function screenToJourneyPath(state: JourneyState): string {
+export function screenToJourneyPath(
+  state: JourneyState,
+  artCatalog: DreamscapeArtCatalog,
+): string {
   const { screen } = state;
   switch (screen.type) {
     case "journeyStart":
@@ -37,9 +44,9 @@ export function screenToJourneyPath(state: JourneyState): string {
     case "journeyFailed":
       return "/failed";
     case "dreamscape":
-      return dreamscapeBasePath(state);
+      return dreamscapeBasePath(state, artCatalog);
     case "site": {
-      const base = dreamscapeBasePath(state);
+      const base = dreamscapeBasePath(state, artCatalog);
       const site = activeSite(state, screen.siteId);
       return site === undefined ? base : `${base}/${siteTypeSlug(site.type)}`;
     }
@@ -47,22 +54,33 @@ export function screenToJourneyPath(state: JourneyState): string {
 }
 
 /** Base path for the current dreamscape, keyed by its biome slug when known. */
-function dreamscapeBasePath(state: JourneyState): string {
-  const slug = dreamscapeSlug(state);
+function dreamscapeBasePath(
+  state: JourneyState,
+  artCatalog: DreamscapeArtCatalog,
+): string {
+  const slug = dreamscapeSlug(state, artCatalog);
   return slug === null ? "/dreamscape" : `/dreamscape/${slug}`;
 }
 
 /**
- * URL slug for the player's current dreamscape node, `<layer>-<dreamscape-id>`.
- * The node id is used while its dreamscape identity is concealed. `null` when
- * the player is not inside a dreamscape (e.g. on the Atlas).
+ * URL slug for the player's current dreamscape node, `<layer>-<art-key>`. The
+ * node id is used while its dreamscape identity is concealed or resolves no
+ * catalog art. `null` when the player is not inside a dreamscape (e.g. on the
+ * Atlas).
  */
-function dreamscapeSlug(state: JourneyState): string | null {
+function dreamscapeSlug(
+  state: JourneyState,
+  artCatalog: DreamscapeArtCatalog,
+): string | null {
   const nodeId = state.currentDreamscape;
   if (nodeId === null) return null;
   const node = state.atlas.nodes[nodeId];
   if (node === undefined) return null;
-  const name = slugify(node.dreamscapeId ?? node.id);
+  const artKey =
+    node.dreamscapeId === null
+      ? null
+      : dreamscapeSceneArtKey(artCatalog, node.dreamscapeId);
+  const name = slugify(artKey ?? node.id);
   return `${String(layerOrdinal(node.layer))}-${name}`;
 }
 

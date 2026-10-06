@@ -8,12 +8,7 @@ import {
 } from "../../purge/purge-pricing";
 import type { CardData } from "../../types/cards";
 import type { EconomyData } from "../../types/economy-data";
-import type {
-  DeckEntry,
-  DreamscapeNode,
-  JourneyState,
-  SiteState,
-} from "../../types/journey";
+import type { DeckEntry, JourneyState, SiteState } from "../../types/journey";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   PurgeCardView,
@@ -23,7 +18,6 @@ import type {
 import type { DreamGuideContent } from "../../types/content";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { toDeckCardView } from "./mobile-deck-view-model";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
@@ -80,7 +74,7 @@ export function buildPurgeVisitCosts(
 /** Build the complete Cumulus purge-site view-model. */
 export function buildPurgeSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState;
   cardDatabase: Map<number, CardData>;
   transfigurationData: TransfigurationData;
@@ -106,8 +100,7 @@ export function buildPurgeSiteView(params: {
     ),
     paidCardCount,
   );
-  const scene: ArtRef | null =
-    params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
+  const { scene } = params;
 
   return {
     presentation: (() => {

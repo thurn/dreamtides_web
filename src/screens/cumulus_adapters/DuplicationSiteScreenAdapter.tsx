@@ -13,6 +13,7 @@ import { useGuideDialogue } from "./guide-dialogue-view-model";
 import { useGuidePresentedLog } from "../../state/guide-logging";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export function DuplicationSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -45,7 +46,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
       ? null
       : buildDuplicationSiteView({
           state,
-          sceneNode: node,
+          scene: dreamscapeSceneRef(node, journeyContent),
           site,
           runtime,
           cardDatabase: journeyContent.cardDatabase,

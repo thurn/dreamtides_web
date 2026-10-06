@@ -207,15 +207,9 @@ export const ATLAS = {
     earlyRevealBias: 1,
   },
   boss: {
-    // Compatibility identity emitted for runtime consumers of atlas.toml.
-    // Each asset pairs an authoring filename (`source`) with the stable runtime
-    // lookup identity (`key`) under which the asset build publishes it.
-    // Full-bleed Limbo background on the boss reveal card.
-    // Circular image drawn on the Layer Seven Atlas node.
-    // Apollyon character figure composited over the Limbo scene.
     // Stable UUID persisted on the special Layer Seven node. It identifies
     // Limbo without resolving a normal dreamscape definition.
-    dreamscapeId: "limbo",
+    dreamscapeId: "ccda6e48-23fa-4222-9d3c-23b93ce06077",
     // Place label stored on and displayed for the boss node.
     place: "Limbo",
     // Base character name used when no per-run Apollyon incarnation supplies a
@@ -225,8 +219,13 @@ export const ATLAS = {
     fallbackTitle: "Apollyon, the Doom of Humanity",
     fallbackIntroduction:
       "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
-    sceneArtId: "limbo",
-    iconArtId: "limbo",
+    // Filename stem of the full-bleed Limbo background on the boss reveal card
+    // (`dreamscapes/<key>.png`).
+    sceneArtKey: "limbo",
+    // Filename stem of the circular image drawn on the Layer Seven Atlas node
+    // (`dreamscape-icons/<key>.png`).
+    iconArtKey: "limbo",
+    // Apollyon character figure composited over the Limbo scene.
     figureArtId: "apollyon",
   },
   // Shared Atlas chrome that the asset build publishes for the renderer.

@@ -13,6 +13,7 @@ import {
   testAffiliationId,
   testAtlasFillProfileId,
   testContentHash,
+  testDreamscapeArtKey,
   testDreamscapeId,
   testFoldHash,
   testGuideId,
@@ -37,6 +38,7 @@ export const LATE_ATLAS_FILL_PROFILE_ID = testAtlasFillProfileId("late");
 export const MINIMAL_DREAMSCAPES: DreamscapeContent[] = [
   {
     id: testDreamscapeId("fixture-starter-dreamscape"),
+    artKey: testDreamscapeArtKey("fixture-starter-dreamscape"),
     name: "Fixture Starter Dreamscape",
     guideId: null,
     signatureSite: "Draft",
@@ -66,6 +68,7 @@ export const SYNTHETIC_ATLAS_DREAMSCAPES: DreamscapeContent[] = [
     ] as const
   ).map((signatureSite, index) => ({
     id: testDreamscapeId(`fixture-dreamscape-${String(index)}`),
+    artKey: testDreamscapeArtKey(`fixture-dreamscape-${String(index)}`),
     name: `Fixture Dreamscape ${String(index)}`,
     guideId: testGuideId(
       signatureSite === "RandomSite"
@@ -291,8 +294,8 @@ export function makeSyntheticAtlasData(): AtlasData {
       name: "Fixture Boss",
       fallbackTitle: "Fixture Boss Title",
       fallbackIntroduction: "A synthetic boss introduction.",
-      sceneArtId: testDreamscapeId("fixture-boss-scene"),
-      iconArtId: testDreamscapeId("fixture-boss-icon"),
+      sceneArtKey: testDreamscapeArtKey("fixture-boss-scene"),
+      iconArtKey: testDreamscapeArtKey("fixture-boss-icon"),
       figureArtId: testGuideId("fixture-boss-figure"),
     },
     assets: {

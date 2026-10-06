@@ -9,6 +9,7 @@ import {
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 import { useTransfigurationSiteActions } from "../../state/transfiguration-site-actions";
 import type { SiteId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export function TransfigurationSiteScreenAdapter({
   siteId,
@@ -38,7 +39,7 @@ export function TransfigurationSiteScreenAdapter({
       ? null
       : buildTransfigurationSiteView({
           state,
-          sceneNode: node,
+          scene: dreamscapeSceneRef(node, journeyContent),
           site,
           runtime,
           cardDatabase: journeyContent.cardDatabase,

@@ -462,7 +462,7 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
       );
       return imageNumber === undefined ? [] : [imageNumber];
     }),
-    dreamscapeArtNames: DREAMSCAPES.map((dreamscape) => dreamscape.id),
+    dreamscapeArtNames: DREAMSCAPES.map((dreamscape) => dreamscape.artKey),
     guidePortraits: DREAM_GUIDES.map((guide) => ({
       artName: guide.id,
       portraitSource: guide.portraitSource,
@@ -473,8 +473,8 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
       bossFigureSource: ATLAS.assets.bossFigureSource,
       unrevealedFrameSource: ATLAS.assets.unrevealedFrameSource,
       unrevealedFrameFile: ATLAS.assets.unrevealedFrameKey,
-      bossSceneArtName: ATLAS.boss.sceneArtId,
-      bossIconArtName: ATLAS.boss.iconArtId,
+      bossSceneArtName: ATLAS.boss.sceneArtKey,
+      bossIconArtName: ATLAS.boss.iconArtKey,
       bossFigureArtName: ATLAS.boss.figureArtId,
     },
   };

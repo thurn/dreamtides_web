@@ -137,7 +137,7 @@ describe("gamble-site-view-model", () => {
     };
     const view = buildGambleSiteView({
       state,
-      sceneNode: null,
+      scene: null,
       site: GAMBLE_SITE,
       guide: GUIDE,
       guideLine: GUIDE_LINE,
@@ -180,7 +180,7 @@ describe("gamble-site-view-model", () => {
     };
     const view = buildGambleSiteView({
       state,
-      sceneNode: null,
+      scene: null,
       site: GAMBLE_SITE,
       guide: GUIDE,
       guideLine: GUIDE_LINE,
@@ -241,7 +241,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     };
     const view = buildGambleSiteView({
       state,
-      sceneNode: null,
+      scene: null,
       site: GAMBLE_SITE,
       guide: GUIDE,
       guideLine: GUIDE_LINE,
@@ -293,7 +293,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
         essence: 30,
         siteRuntime: { [GAMBLE_SITE.id]: STARWAY_RUNTIME },
       },
-      sceneNode: null,
+      scene: null,
       site: GAMBLE_SITE,
       guide: GUIDE,
       guideLine: GUIDE_LINE,
@@ -424,7 +424,7 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
         })),
         siteRuntime: { [GAMBLE_SITE.id]: runtime },
       },
-      sceneNode: null,
+      scene: null,
       site: GAMBLE_SITE,
       guide: GUIDE,
       guideLine: GUIDE_LINE,
@@ -463,7 +463,7 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
           [GAMBLE_SITE.id]: { ...runtime, phase: "choose" },
         },
       },
-      sceneNode: null,
+      scene: null,
       site: GAMBLE_SITE,
       guide: GUIDE,
       guideLine: GUIDE_LINE,
@@ -516,7 +516,7 @@ describe("gamble-site-view-model — Blackjack", () => {
         essence: 64,
         siteRuntime: { [GAMBLE_SITE.id]: runtime },
       },
-      sceneNode: null,
+      scene: null,
       site: GAMBLE_SITE,
       guide: GUIDE,
       guideLine: GUIDE_LINE,

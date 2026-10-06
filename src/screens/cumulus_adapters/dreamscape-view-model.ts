@@ -35,6 +35,10 @@ import type {
 } from "../../types/journey";
 import type { SitesData } from "../../types/sites-data";
 import type { JourneyContent } from "../../data/journey-content";
+import {
+  dreamscapeSceneArtKey,
+  type DreamscapeArtCatalog,
+} from "../../data/dreamscapes";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import type { SiteId } from "../../types/identifiers";
@@ -225,11 +229,17 @@ export function buildDreamscapeHudView(
   };
 }
 
-/** The scene art reference for a dreamscape node, or null while unrevealed. */
-export function dreamscapeSceneRef(node: DreamscapeNode): ArtRef | null {
-  return node.dreamscapeId !== null
-    ? artRef.dreamscapeScene(node.dreamscapeId)
-    : null;
+/**
+ * The scene art reference for a dreamscape node, or null without a node, while
+ * unrevealed, or when its dreamscape resolves no catalog art.
+ */
+export function dreamscapeSceneRef(
+  node: Pick<DreamscapeNode, "dreamscapeId"> | null,
+  catalog: DreamscapeArtCatalog,
+): ArtRef | null {
+  if (node === null || node.dreamscapeId === null) return null;
+  const artKey = dreamscapeSceneArtKey(catalog, node.dreamscapeId);
+  return artKey === null ? null : artRef.dreamscapeScene(artKey);
 }
 
 /** Resolve the dreamscape's display title from canonical content. */
@@ -255,6 +265,7 @@ export function dreamscapeTitle(
 export function buildDreamscapeView(
   node: DreamscapeNode,
   title: string,
+  scene: ArtRef | null,
   state: JourneyState,
   sitesData: SitesData,
   draftPickCount: number,
@@ -285,7 +296,7 @@ export function buildDreamscapeView(
     };
   });
   return {
-    scene: dreamscapeSceneRef(node),
+    scene,
     title,
     sites: buildSiteModels(
       node,

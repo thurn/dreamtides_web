@@ -17,7 +17,6 @@ import type {
 } from "../../types/content";
 import type {
   CardSourceDebugState,
-  DreamscapeNode,
   JourneyState,
   ShopSiteRuntime,
   SiteState,
@@ -28,7 +27,6 @@ import type {
   CardShopRestockView,
   CardShopSiteView,
 } from "../../cumulus/screens/CardShopSiteScreen";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { projectGuideView } from "./guide-view-model";
 import {
@@ -161,7 +159,7 @@ export function buildCardShopTransfiguredOfferLog(
 /** Build the complete Cumulus Card Shop view-model. */
 export function buildCardShopSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState;
   runtime: ShopSiteRuntime;
   cardDatabase: ReadonlyMap<number, CardData>;
@@ -175,8 +173,7 @@ export function buildCardShopSiteView(params: {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
     freePurchase: hasFreePurchase(params.runtime, params.state.shopModifiers),
   };
-  const scene: ArtRef | null =
-    params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
+  const { scene } = params;
   return {
     presentation: (() => {
       const identity = params.sitesData.siteTypes.Shop.presentation as Extract<

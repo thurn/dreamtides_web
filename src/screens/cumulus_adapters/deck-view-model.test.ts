@@ -573,7 +573,7 @@ describe("draft-view-model", () => {
       const view = buildDraftView({
         offerCardNumbers: [5, 6],
         cardDatabase: db,
-        sceneNode: null,
+        scene: null,
         site: DRAFT_SITE,
         sitePicksCompleted: 0,
         pickCount: 5,
@@ -590,7 +590,7 @@ describe("draft-view-model", () => {
       const view = buildDraftView({
         offerCardNumbers: [1],
         cardDatabase: cardDatabase([card({ cardNumber: 1 })]),
-        sceneNode: null,
+        scene: null,
         site: DRAFT_SITE,
         sitePicksCompleted: 2,
         pickCount: 5,
@@ -607,7 +607,7 @@ describe("draft-view-model", () => {
           card({ cardNumber: 5, energyCost: 4 }),
           card({ cardNumber: 6, spark: 2 }),
         ]),
-        sceneNode: null,
+        scene: null,
         site: DRAFT_SITE,
         sitePicksCompleted: 0,
         pickCount: 5,

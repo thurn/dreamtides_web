@@ -48,7 +48,6 @@ import type {
 } from "../../types/gamble-data";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type {
-  DreamscapeNode,
   FourSuitRepriseSiteRuntime,
   FourSuitRepriseTarget,
   GambleSiteRuntime,
@@ -60,7 +59,6 @@ import type {
   BlackjackSiteRuntime,
 } from "../../types/journey";
 import type { GravokGateId } from "../../types/gamble";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import { parseGambleResultId } from "../../types/identifiers";
@@ -125,20 +123,19 @@ export function buildGambleGateViews(
 }
 
 function commonGambleView(params: {
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   guide: DreamGuideContent;
   guideLine: string;
 }): { scene: ArtRef | null; guide: GravokWagerSiteView["guide"] } {
   return {
-    scene:
-      params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode),
+    scene: params.scene,
     guide: projectGuideView(params.guide, params.guideLine),
   };
 }
 
 function buildGravokWagerSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
@@ -160,7 +157,7 @@ function buildGravokWagerSiteView(params: {
     gameId: "gravok-three-gate-wager",
     siteId: params.site.id,
     ...commonGambleView({
-      sceneNode: params.sceneNode,
+      scene: params.scene,
       guide: params.guide,
       guideLine: params.guideLine,
     }),
@@ -218,7 +215,7 @@ function buildGravokWagerSiteView(params: {
 
 function buildLadderClimbSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
@@ -244,7 +241,7 @@ function buildLadderClimbSiteView(params: {
     gameId: "tidemark-ladder-climb",
     siteId: params.site.id,
     ...commonGambleView({
-      sceneNode: params.sceneNode,
+      scene: params.scene,
       guide: params.guide,
       guideLine: params.guideLine,
     }),
@@ -303,7 +300,7 @@ function buildLadderClimbSiteView(params: {
 
 function buildStarwayStairsSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
@@ -329,7 +326,7 @@ function buildStarwayStairsSiteView(params: {
     gameId: "starway-stairs",
     siteId: params.site.id,
     ...commonGambleView({
-      sceneNode: params.sceneNode,
+      scene: params.scene,
       guide: params.guide,
       guideLine: params.guideLine,
     }),
@@ -389,7 +386,7 @@ function buildStarwayStairsSiteView(params: {
 
 function buildBlackjackSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
@@ -421,7 +418,7 @@ function buildBlackjackSiteView(params: {
     siteId: params.site.id,
     handId: runtime.shuffleCommitment,
     ...commonGambleView({
-      sceneNode: params.sceneNode,
+      scene: params.scene,
       guide: params.guide,
       guideLine: params.guideLine,
     }),
@@ -516,7 +513,7 @@ function fourSuitCardView(
 
 function buildFourSuitRepriseSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
@@ -570,7 +567,7 @@ function buildFourSuitRepriseSiteView(params: {
     gameId: "four-suit-reprise",
     siteId: params.site.id,
     ...commonGambleView({
-      sceneNode: params.sceneNode,
+      scene: params.scene,
       guide: params.guide,
       guideLine: params.guideLine,
     }),
@@ -621,7 +618,7 @@ function buildFourSuitRepriseSiteView(params: {
 /** Build the selected Gamble game's view without exposing future outcomes. */
 export function buildGambleSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;

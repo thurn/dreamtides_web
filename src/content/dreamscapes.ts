@@ -3,8 +3,11 @@
 export const DREAMSCAPES = [
   // Boss composition and presentation are defined by the Atlas catalog.
   {
-    // Each asset pairs its stable runtime lookup key with its authoring filename.
-    id: "firstlight_meadow",
+    // Stable UUID persisted on Atlas nodes and in game logs.
+    id: "84310493-f7cb-4749-9ceb-ef3b0717e46b",
+    // Filename stem of the hosted scene (`dreamscapes/<artKey>.png`) and icon
+    // (`dreamscape-icons/<artKey>.png`) art.
+    artKey: "firstlight_meadow",
     name: "Firstlight Meadow",
     // The starter has no resident guide, so its signature site is defined here.
     signatureSite: "Draft",
@@ -17,7 +20,8 @@ export const DREAMSCAPES = [
     avatarIds: [],
   },
   {
-    id: "tumbleleaf_village",
+    id: "31042197-2621-42bd-8b23-500dfe1f56c0",
+    artKey: "tumbleleaf_village",
     name: "Tumbleleaf Village",
     // Shapes card selection and opponent construction in this region.
     affiliationId: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
@@ -32,7 +36,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "pharaohs_gate",
+    id: "63f0e601-12b6-499f-9d04-06cd46323e4d",
+    artKey: "pharaohs_gate",
     name: "Pharaoh's Gate",
     affiliationId: "c3815562-e80d-4afc-8ba6-91bd60ad323e",
     avatarIds: [
@@ -46,7 +51,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "winterwake_fjords",
+    id: "3d520651-46b8-4e27-9e57-333da77bbdd3",
+    artKey: "winterwake_fjords",
     name: "Winterwake Fjords",
     affiliationId: "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
     avatarIds: [
@@ -59,7 +65,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "frostforge",
+    id: "db2a796d-31b0-4bed-8b0a-22113e1754f2",
+    artKey: "frostforge",
     name: "Frostforge",
     affiliationId: "04103386-ca4e-42a0-9a90-150297a20e91",
     avatarIds: [
@@ -72,7 +79,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "hopes_end",
+    id: "829da88a-9f61-4d1c-8a26-180a01d1b5f2",
+    artKey: "hopes_end",
     name: "Hope's End",
     affiliationId: "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
     avatarIds: [
@@ -85,7 +93,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "tsukiren",
+    id: "a9bd9f2c-a859-415b-8fa5-60df9710c1a1",
+    artKey: "tsukiren",
     name: "Tsukiren",
     affiliationId: "33dee3b4-19d2-4788-9cef-b69057385844",
     avatarIds: [
@@ -98,7 +107,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "wilderveil",
+    id: "f413a98f-10d2-4578-8031-cc6ce57b61b4",
+    artKey: "wilderveil",
     name: "Wilderveil",
     affiliationId: "c674a92f-3860-4851-8357-dd4f3e469674",
     avatarIds: [
@@ -111,7 +121,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "rust_expanse",
+    id: "ce7f54bc-63ad-4105-a0e1-3a910b54c78d",
+    artKey: "rust_expanse",
     name: "The Rust Expanse",
     affiliationId: "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
     avatarIds: [
@@ -124,7 +135,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "farpoint_station",
+    id: "cefa9a2b-b0ce-4ba3-be09-d97627a48d70",
+    artKey: "farpoint_station",
     name: "Farpoint Station",
     affiliationId: "96258dfd-33c9-44a7-96a5-6747eb42cc60",
     avatarIds: [
@@ -137,7 +149,8 @@ export const DREAMSCAPES = [
     isStarter: false,
   },
   {
-    id: "grid_city",
+    id: "40ec06a6-bd39-4ca8-97c4-628b6d686672",
+    artKey: "grid_city",
     name: "Grid City",
     affiliationId: "0f09352d-3a1d-44db-a58e-229ab834cdc3",
     avatarIds: [

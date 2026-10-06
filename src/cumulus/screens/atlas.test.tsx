@@ -14,7 +14,7 @@ import { renderInCumulus } from "../testing/render";
 import { parseAtlasNodeId, parseDreamsignId } from "../../types/identifiers";
 import {
   testArtAssetKey,
-  testDreamscapeId,
+  testDreamscapeArtKey,
   testGuideId,
   testPresentationId,
 } from "../../types/test-identities";
@@ -109,7 +109,7 @@ function domRect(x: number, y: number, width: number, height: number): DOMRect {
 }
 
 const KNOWN_PRIMARY: AtlasNodePrimary = {
-  sceneArt: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
+  sceneArt: artRef.dreamscapeScene(testDreamscapeArtKey("wilderveil")),
   figureArt: artRef.dreamGuide(testGuideId("aldric")),
   placeName: "Wilderveil",
   guideName: "Aldric, the Seer",
@@ -325,7 +325,7 @@ describe("AtlasNode", () => {
     overrides: Partial<AtlasNodeModel> = {},
   ): AtlasNodeModel {
     return nodeModel(NODE_ID, state, {
-      iconRef: artRef.dreamscapeIcon(testDreamscapeId("wilderveil")),
+      iconRef: artRef.dreamscapeIcon(testDreamscapeArtKey("wilderveil")),
       siteBadgeGlyph: GLYPHS.water,
       knownDreamsignRef: artRef.dreamsign("known.png"),
       primary: KNOWN_PRIMARY,

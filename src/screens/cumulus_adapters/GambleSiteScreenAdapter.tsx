@@ -16,6 +16,7 @@ import { useGuideDialogue } from "./guide-dialogue-view-model";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { gambleSiteActions } from "./gamble-site-actions-view-model";
 import type { SiteId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 export function GambleSiteScreenAdapter({
   siteId,
   gambleGameId,
@@ -64,7 +65,7 @@ export function GambleSiteScreenAdapter({
         ? null
         : buildGambleSiteView({
             state,
-            sceneNode: node,
+            scene: dreamscapeSceneRef(node, journeyContent),
             site,
             guide,
             guideLine,

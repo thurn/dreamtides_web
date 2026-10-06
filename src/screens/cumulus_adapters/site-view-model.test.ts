@@ -8,16 +8,11 @@ import type {
   DeckEntry,
   TransfigurationType,
   SiteState,
-  DreamscapeNode,
   RewardSiteRuntime,
 } from "../../types/journey";
 import { buildTransfigurationCandidates as buildTransfigurationCandidatesImpl } from "./transfiguration-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
-import {
-  parseDeckEntryId,
-  parseSiteId,
-  parseAtlasNodeId,
-} from "../../types/identifiers";
+import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import {
   testCardId,
@@ -36,7 +31,6 @@ import {
   buildDuplicationCards as buildDuplicationCardsImpl,
   buildDuplicationOfferLog,
 } from "./duplication-view-model";
-import { LayerName } from "../../types/layer-name";
 import { buildRandomSiteView } from "./random-site-view-model";
 import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
 
@@ -337,7 +331,7 @@ describe("purge-view-model", () => {
 
       const view = buildPurgeSiteView({
         state,
-        sceneNode: null,
+        scene: null,
         site,
         cardDatabase: database(
           makeCard({ cardNumber: 1 }),
@@ -485,22 +479,8 @@ describe("random-site-view-model", () => {
         isEnhanced: true,
         isVisited: false,
       };
-      const node: DreamscapeNode = {
-        id: parseAtlasNodeId("fixture-node"),
-        layer: LayerName.Four,
-        indexInLayer: 0,
-        dreamscapeId: testDreamscapeId("fixture-dreamscape"),
-        sites: [site],
-        position: { x: 0, y: 0 },
-        state: "available",
-        enhancedSiteType: "RandomSite",
-        forwardIds: [],
-        backwardIds: [],
-        knownDreamsignId: null,
-      };
-
       const view = buildRandomSiteView({
-        sceneNode: node,
+        scene: null,
         site,
         runtime: {
           kind: "randomSite",

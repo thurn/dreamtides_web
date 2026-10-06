@@ -10,6 +10,7 @@ import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tuto
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export function PurgeSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -32,7 +33,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
         ? null
         : buildPurgeSiteView({
             state,
-            sceneNode: node,
+            scene: dreamscapeSceneRef(node, journeyContent),
             site,
             cardDatabase,
             guide,

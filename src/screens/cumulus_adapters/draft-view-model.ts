@@ -4,16 +4,12 @@
 // `DraftSiteScreenAdapter` acquires live state (and mints the draft offer) and
 // calls `buildDraftView`; this module never acquires anything itself.
 
+import type { ArtRef } from "../../cumulus/primitives/art";
 import type { CardData } from "../../types/cards";
-import type {
-  DreamscapeNode,
-  SiteState,
-  TransfigurationType,
-} from "../../types/journey";
+import type { SiteState, TransfigurationType } from "../../types/journey";
 import type { DraftView } from "../../cumulus/screens/DraftScreen";
 import type { JourneyState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationData } from "../../types/transfiguration-data";
@@ -61,7 +57,7 @@ export function buildDraftView(params: {
   offerCardNumbers: readonly number[];
   offerTransfigurations?: Readonly<Record<string, TransfigurationType>>;
   cardDatabase: ReadonlyMap<number, CardData>;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState | null;
   sitePicksCompleted: number;
   journeyState?: JourneyState;
@@ -76,8 +72,7 @@ export function buildDraftView(params: {
     Math.max(pickTotal, 1),
   );
   return {
-    scene:
-      params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null,
+    scene: params.scene,
     offer: resolveOfferCards(params.offerCardNumbers, params.cardDatabase).map(
       (card) => {
         const type = params.offerTransfigurations?.[String(card.cardNumber)];

@@ -8,7 +8,7 @@ import { parseBattleId } from "../../types/identifiers";
 import {
   testAvatarId,
   testCardId,
-  testDreamscapeId,
+  testDreamscapeArtKey,
   testDreamsignId,
   testOpponentId,
 } from "../../types/test-identities";
@@ -83,7 +83,7 @@ describe("BattleStartScreen", () => {
     }));
     return {
       battleId: parseBattleId("battle-test"),
-      scene: artRef.dreamscapeScene(testDreamscapeId("test_dreamscape")),
+      scene: artRef.dreamscapeScene(testDreamscapeArtKey("test_dreamscape")),
       avatar: {
         id: testOpponentId("opponent-uuid"),
         name: "Aeris, the Prism Guide",

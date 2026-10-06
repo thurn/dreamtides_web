@@ -20,7 +20,11 @@ import type {
 import { makeTutorialConfiguration } from "../../testing/tutorial-configuration-fixture";
 import { LayerName } from "../../types/layer-name";
 import { economyFixture } from "../../testing/economy-fixture";
-import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_DREAMSCAPES,
+  MINIMAL_SITES_DATA,
+} from "../../testing/atlas-fixtures";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { testDreamscapeId, testGuideId, testDreamsignId } from "../../types/test-identities";
@@ -144,6 +148,8 @@ function setJourneyContext(state = makeState()): void {
     } as unknown as JourneyMutations,
     journeyContent: {
       guides: [GUIDE],
+      dreamscapes: MINIMAL_DREAMSCAPES,
+      atlasData: MINIMAL_ATLAS_DATA,
       economyData: economyFixture(),
       sitesData: MINIMAL_SITES_DATA,
       tutorial: makeTutorialConfiguration(),

@@ -6,7 +6,12 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { CARD_ROLE_DATA } from "../data/card-roles";
-import { testFoldHash, testDreamscapeId } from "../types/test-identities";
+import {
+  testDreamscapeArtKey,
+  testDreamscapeId,
+  testFoldHash,
+} from "../types/test-identities";
+import type { DreamscapeArtCatalog } from "../data/dreamscapes";
 import {
   contentConfigFromRuntime,
   contentConfigsEqual,
@@ -344,6 +349,25 @@ describe("runtime-config", () => {
 });
 
 describe("screen-url", () => {
+  const ART_CATALOG: DreamscapeArtCatalog = {
+    dreamscapes: [
+      {
+        id: testDreamscapeId("ember-wood"),
+        artKey: testDreamscapeArtKey("ember_wood"),
+      },
+      {
+        id: testDreamscapeId("Ember Wood"),
+        artKey: testDreamscapeArtKey("ember_wood"),
+      },
+    ],
+    atlasData: {
+      boss: {
+        dreamscapeId: testDreamscapeId("fixture-boss"),
+        sceneArtKey: testDreamscapeArtKey("fixture_limbo"),
+      },
+    },
+  };
+
   function makeSite(idSeed: string, type: SiteType): SiteState {
     return {
       id: parseSiteId(idSeed),
@@ -401,23 +425,38 @@ describe("screen-url", () => {
     it("maps the top-level screens", () => {
       const base = testJourneyState();
       expect(
-        screenToJourneyPath({ ...base, screen: { type: "journeyStart" } }),
+        screenToJourneyPath(
+          { ...base, screen: { type: "journeyStart" } },
+          ART_CATALOG,
+        ),
       ).toBe("/");
-      expect(screenToJourneyPath({ ...base, screen: { type: "atlas" } })).toBe(
-        "/atlas",
-      );
       expect(
-        screenToJourneyPath({ ...base, screen: { type: "journeyComplete" } }),
+        screenToJourneyPath(
+          { ...base, screen: { type: "atlas" } },
+          ART_CATALOG,
+        ),
+      ).toBe("/atlas");
+      expect(
+        screenToJourneyPath(
+          { ...base, screen: { type: "journeyComplete" } },
+          ART_CATALOG,
+        ),
       ).toBe("/complete");
       expect(
-        screenToJourneyPath({ ...base, screen: { type: "journeyFailed" } }),
+        screenToJourneyPath(
+          { ...base, screen: { type: "journeyFailed" } },
+          ART_CATALOG,
+        ),
       ).toBe("/failed");
     });
 
     it("keys the dreamscape screen by the layer and dreamscape id", () => {
       const state = stateInDreamscape("ember-wood", [], "dreamscape-3", 2);
       expect(
-        screenToJourneyPath({ ...state, screen: { type: "dreamscape" } }),
+        screenToJourneyPath(
+          { ...state, screen: { type: "dreamscape" } },
+          ART_CATALOG,
+        ),
       ).toBe("/dreamscape/2-ember-wood");
     });
 
@@ -431,23 +470,42 @@ describe("screen-url", () => {
         2,
       );
       expect(
-        screenToJourneyPath({
-          ...state,
-          screen: { type: "site", siteId: parseSiteId("site-7") },
-        }),
+        screenToJourneyPath(
+          {
+            ...state,
+            screen: { type: "site", siteId: parseSiteId("site-7") },
+          },
+          ART_CATALOG,
+        ),
       ).toBe("/dreamscape/2-ember-wood/purge");
       expect(
-        screenToJourneyPath({
-          ...state,
-          screen: { type: "site", siteId: parseSiteId("site-8") },
-        }),
+        screenToJourneyPath(
+          {
+            ...state,
+            screen: { type: "site", siteId: parseSiteId("site-8") },
+          },
+          ART_CATALOG,
+        ),
       ).toBe("/dreamscape/2-ember-wood/augury");
+    });
+
+    it("keys the boss node by its scene art key", () => {
+      const state = stateInDreamscape("fixture-boss", [], "boss", 2);
+      expect(
+        screenToJourneyPath(
+          { ...state, screen: { type: "dreamscape" } },
+          ART_CATALOG,
+        ),
+      ).toBe("/dreamscape/2-fixture-limbo");
     });
 
     it("falls back to the node id slug while identity is concealed", () => {
       const state = stateInDreamscape(null, [], "dreamscape-4", 3);
       expect(
-        screenToJourneyPath({ ...state, screen: { type: "dreamscape" } }),
+        screenToJourneyPath(
+          { ...state, screen: { type: "dreamscape" } },
+          ART_CATALOG,
+        ),
       ).toBe("/dreamscape/3-dreamscape-4");
     });
   });

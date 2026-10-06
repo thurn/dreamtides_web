@@ -39,6 +39,7 @@ import { activeSiteIdOf } from "../rules/journey/sites";
 import {
   testApollyonIncarnationId,
   testCardId,
+  testDreamscapeArtKey,
   testDreamscapeId,
   testExplorationActionId,
   testGuideId,
@@ -195,6 +196,7 @@ describe('the "random-site-atlas" QA scene', () => {
       ...content.dreamscapes,
       {
         id: testDreamscapeId("rust-expanse-test"),
+        artKey: testDreamscapeArtKey("rust-expanse-test"),
         name: "The Rust Expanse",
         guideId: testGuideId("maddox"),
         signatureSite: "RandomSite",
@@ -220,7 +222,8 @@ describe('the "random-site-atlas" QA scene', () => {
     expect(state?.screen.type).toBe("atlas");
     const maddoxNode = Object.values(state?.atlas.nodes ?? {}).find(
       (node) =>
-        node.dreamscapeId === "rust-expanse-test" && node.state === "available",
+        node.dreamscapeId === testDreamscapeId("rust-expanse-test") &&
+        node.state === "available",
     );
     expect(maddoxNode?.state).toBe("available");
     expect(maddoxNode?.enhancedSiteType).toBe("RandomSite");

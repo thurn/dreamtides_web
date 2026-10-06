@@ -15,6 +15,7 @@ import {
   buildShopSiteEntryLog,
 } from "./shop-purchase-logging-view-model";
 import type { SiteId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export function CardShopSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -37,7 +38,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
         ? null
         : buildCardShopSiteView({
             state,
-            sceneNode: node,
+            scene: dreamscapeSceneRef(node, journeyContent),
             site,
             runtime: shopRuntime,
             cardDatabase: journeyContent.cardDatabase,

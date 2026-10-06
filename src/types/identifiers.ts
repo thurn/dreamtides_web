@@ -105,6 +105,8 @@ export type CardTypeChangePredicateId =
 export type DeckEntryId = DomainIdentity<"DeckEntryId">;
 export type AvatarId = DomainIdentity<"AvatarId">;
 export type DreamscapeId = DomainIdentity<"DreamscapeId">;
+/** Hosted art filename stem shared by a dreamscape's scene and icon images. */
+export type DreamscapeArtKey = DomainIdentity<"DreamscapeArtKey">;
 export type DreamsignId = DomainIdentity<"DreamsignId">;
 export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
 /** A pending battle prompt: `<committed version>:<answers recorded>`. */
@@ -176,6 +178,7 @@ const brandCardTypeChangePredicateId =
 const brandDeckEntryId = identityConstructor<DeckEntryId>();
 const brandAvatarId = identityConstructor<AvatarId>();
 const brandDreamscapeId = identityConstructor<DreamscapeId>();
+const brandDreamscapeArtKey = identityConstructor<DreamscapeArtKey>();
 const brandDreamsignId = identityConstructor<DreamsignId>();
 const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
 const brandPromptId = identityConstructor<PromptId>();
@@ -319,6 +322,13 @@ export const parseAvatarId = identityParser(
 export const parseDreamscapeId = identityParser(
   "Dreamscape id",
   brandDreamscapeId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseDreamscapeArtKey = identityParser(
+  "Dreamscape art key",
+  brandDreamscapeArtKey,
+  (value) => /^[a-z0-9_]+$/u.test(value),
 );
 export const parseDreamsignId = identityParser(
   "Dreamsign id",

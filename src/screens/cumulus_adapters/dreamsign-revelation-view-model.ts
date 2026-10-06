@@ -2,18 +2,13 @@
 
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
-import type {
-  DreamscapeNode,
-  Dreamsign,
-  JourneyState,
-} from "../../types/journey";
+import type { Dreamsign, JourneyState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignRevelationGuideView,
   DreamsignRevelationView,
 } from "../../cumulus/screens/DreamsignRevelationScreen";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
@@ -42,15 +37,14 @@ export function buildDreamsignRevelationGuideView(
 /** Build the complete Cumulus Dreamsign Revelation view-model. */
 export function buildDreamsignRevelationView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   guide: DreamGuideContent;
   guideLine: string;
   offeredDreamsigns: readonly Dreamsign[] | null;
   pendingPurgeDreamsign: Dreamsign | null;
   tutorialConfiguration?: TutorialSiteConfiguration;
 }): DreamsignRevelationView {
-  const scene: ArtRef | null =
-    params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
+  const { scene } = params;
   return {
     presentation: {
       kind: "dreamsign-revelation",

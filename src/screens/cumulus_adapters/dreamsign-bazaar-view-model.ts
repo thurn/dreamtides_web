@@ -10,7 +10,6 @@ import type { DreamGuideContent } from "../../types/content";
 import type { EconomyData } from "../../types/economy-data";
 import type { SitesData } from "../../types/sites-data";
 import type {
-  DreamscapeNode,
   Dreamsign,
   JourneyState,
   ShopSiteRuntime,
@@ -24,7 +23,6 @@ import type {
   DreamsignBazaarSiteView,
 } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import {
   buildShopFreePurchaseStatus,
@@ -119,7 +117,7 @@ export function buildDreamsignBazaarPurgeView(
 /** Build the complete Cumulus Dreamsign Bazaar view-model. */
 export function buildDreamsignBazaarSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState;
   runtime: ShopSiteRuntime;
   guide: DreamGuideContent;
@@ -132,8 +130,7 @@ export function buildDreamsignBazaarSiteView(params: {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
     freePurchase: hasFreePurchase(params.runtime, params.state.shopModifiers),
   };
-  const scene: ArtRef | null =
-    params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
+  const { scene } = params;
   return {
     presentation: (() => {
       const identity = params.sitesData.siteTypes.DreamsignBazaar

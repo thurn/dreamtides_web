@@ -15,6 +15,7 @@ import {
 } from "./shop-purchase-logging-view-model";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export function DreamsignBazaarSiteScreenAdapter({
   siteId,
@@ -47,7 +48,7 @@ export function DreamsignBazaarSiteScreenAdapter({
         ? null
         : buildDreamsignBazaarSiteView({
             state,
-            sceneNode: node,
+            scene: dreamscapeSceneRef(node, journeyContent),
             site,
             runtime: shopRuntime,
             guide,

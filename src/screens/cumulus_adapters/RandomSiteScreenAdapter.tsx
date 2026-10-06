@@ -7,6 +7,7 @@ import type { RandomSiteDestinationType } from "../../types/journey";
 import { buildRandomSiteView } from "./random-site-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 import type { SiteId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export function RandomSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -33,7 +34,7 @@ export function RandomSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
       site === null || runtime === null
         ? null
         : buildRandomSiteView({
-            sceneNode: node,
+            scene: dreamscapeSceneRef(node, journeyContent),
             site,
             runtime,
             guide,

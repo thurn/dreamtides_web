@@ -24,6 +24,7 @@ import {
   parseAtlasNodeId,
   parseArtAssetKey,
   parseAvatarId,
+  parseDreamscapeArtKey,
   parseDreamscapeId,
   parseDreamsignId,
   parseDreamwellCardId,
@@ -49,6 +50,7 @@ import {
   type AtlasNodeId,
   type ArtAssetKey,
   type AvatarId,
+  type DreamscapeArtKey,
   type DreamscapeId,
   type DreamsignId,
   type DreamwellCardId,
@@ -125,7 +127,9 @@ export const testAffiliationId = (seed: string): AffiliationId =>
 export const testAvatarId = (seed: string): AvatarId =>
   parseAvatarId(testUuid(seed));
 export const testDreamscapeId = (seed: string): DreamscapeId =>
-  parseDreamscapeId(seed);
+  parseDreamscapeId(testUuid(seed));
+export const testDreamscapeArtKey = (seed: string): DreamscapeArtKey =>
+  parseDreamscapeArtKey(testUnderscoreSlug(seed));
 export const testDreamsignId = (seed: string): DreamsignId =>
   parseDreamsignId(testUuid(seed));
 export const testDreamwellCardId = (seed: string): DreamwellCardId =>

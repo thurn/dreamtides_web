@@ -1,6 +1,7 @@
 import type { AtlasData } from "../types/atlas-data";
 import { atlasDocument } from "../content/documents";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
+import { parseDreamscapeArtKey, parseDreamscapeId } from "../types/identifiers";
 
 export type { AtlasData } from "../types/atlas-data";
 
@@ -22,6 +23,12 @@ export function loadAtlasData(): AtlasData {
   const raw = value as AtlasData;
   return {
     ...raw,
+    boss: {
+      ...raw.boss,
+      dreamscapeId: parseDreamscapeId(raw.boss.dreamscapeId),
+      sceneArtKey: parseDreamscapeArtKey(raw.boss.sceneArtKey),
+      iconArtKey: parseDreamscapeArtKey(raw.boss.iconArtKey),
+    },
     contentHash: parseContentHash(raw.contentHash),
     foldHash: parseFoldHash(raw.foldHash),
   };

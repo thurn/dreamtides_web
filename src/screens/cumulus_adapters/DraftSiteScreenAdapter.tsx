@@ -19,6 +19,7 @@ import {
 import { DraftScreen } from "../../cumulus/screens/DraftScreen";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 import type { SiteId } from "../../types/identifiers";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 /** Live draft site screen: enters the site, builds the view-model, picks a
  * card, and completes back to the dreamscape once the pack runs out. */
@@ -46,7 +47,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
         offerCardNumbers: progress.offerCardNumbers,
         offerTransfigurations: state.draftState?.currentOfferTransfigurations,
         cardDatabase,
-        sceneNode: node,
+        scene: dreamscapeSceneRef(node, journeyContent),
         site,
         sitePicksCompleted: progress.sitePicksCompleted,
         journeyState: state,

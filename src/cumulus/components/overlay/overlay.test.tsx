@@ -8,7 +8,7 @@ import { GLYPHS } from "../../primitives/glyph";
 import { renderInCumulus } from "../../testing/render";
 import { dreamsignViewFixture } from "../../test-helpers/dreamsign-fixture";
 import { richText } from "../card/rich-text";
-import { testDreamscapeId } from "../../../types/test-identities";
+import { testDreamscapeArtKey } from "../../../types/test-identities";
 import { CommandMenu, type CommandMenuItem } from "./CommandMenu";
 import { DreamsignReplacementDialog } from "./DreamsignReplacementDialog";
 import { GlassBackdrop, GlassDialog } from "./GlassDialog";
@@ -467,7 +467,7 @@ describe("InfoCard", () => {
   });
 
   it("replaces rules symbols with labeled icons in every textual field", () => {
-    const image = artRef.dreamscapeScene(testDreamscapeId("wilderveil"));
+    const image = artRef.dreamscapeScene(testDreamscapeArtKey("wilderveil"));
     const html = (node: ReactElement) =>
       renderInCumulus(node).container.innerHTML;
     const text = html(

@@ -3,6 +3,7 @@ import type { SiteType } from "./site-type";
 import type {
   ArtAssetKey,
   AtlasFillProfileId,
+  DreamscapeArtKey,
   DreamscapeId,
   GuideId,
   IdentityRecord,
@@ -71,8 +72,8 @@ export interface AtlasData {
     name: string;
     fallbackTitle: string;
     fallbackIntroduction: string;
-    sceneArtId: DreamscapeId;
-    iconArtId: DreamscapeId;
+    sceneArtKey: DreamscapeArtKey;
+    iconArtKey: DreamscapeArtKey;
     figureArtId: GuideId;
   };
   assets: {

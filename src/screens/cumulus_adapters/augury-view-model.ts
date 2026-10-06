@@ -601,8 +601,10 @@ export function buildAugurySiteModel(params: {
   guide: DreamGuideContent;
   guideLine: string;
 }): AuguryBuildResult {
-  const scene: ArtRef | null =
-    params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
+  const scene: ArtRef | null = dreamscapeSceneRef(
+    params.sceneNode,
+    params.journeyContent,
+  );
   const baseView = {
     siteId: params.site.id,
     scene,

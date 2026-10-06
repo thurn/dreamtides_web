@@ -258,7 +258,7 @@ describe("card-shop-view-model", () => {
       };
       const view = buildCardShopSiteView({
         state,
-        sceneNode: null,
+        scene: null,
         site,
         runtime: {
           ...runtime(),
@@ -426,7 +426,7 @@ describe("dreamsign-bazaar-view-model", () => {
       };
       const view = buildDreamsignBazaarSiteView({
         state,
-        sceneNode: null,
+        scene: null,
         site,
         runtime: runtime(),
         guide: {

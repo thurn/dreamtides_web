@@ -5,7 +5,15 @@ import type {
   DreamscapeContent,
 } from "../types/content";
 import type { SiteType } from "../types/journey";
-import type { GuideId } from "../types/identifiers";
+import {
+  dreamscapeIdFromUnknown,
+  parseDreamscapeArtKey,
+  parseDreamscapeId,
+  type DreamscapeArtKey,
+  type DreamscapeId,
+  type GuideId,
+} from "../types/identifiers";
+import type { AtlasData } from "../types/atlas-data";
 import { SITE_TYPES } from "../types/site-type";
 import {
   affiliationsDocument,
@@ -52,6 +60,8 @@ export function loadDreamscapes(): DreamscapeContent[] {
   const dreamscapes = asContent<DreamscapeContent[]>(dreamscapesDocument());
   return dreamscapes.map((dreamscape) => ({
     ...dreamscape,
+    id: parseDreamscapeId(dreamscape.id),
+    artKey: parseDreamscapeArtKey(dreamscape.artKey),
     ...(dreamscape.atlasDescription === undefined
       ? {}
       : {
@@ -118,8 +128,7 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
     value.name.trim() === "" ||
     typeof value.portraitSource !== "string" ||
     value.portraitSource.trim() === "" ||
-    typeof value.homeDreamscapeId !== "string" ||
-    value.homeDreamscapeId.trim() === "" ||
+    dreamscapeIdFromUnknown(value.homeDreamscapeId) === null ||
     typeof value.siteType !== "string" ||
     !SITE_TYPES.includes(value.siteType as SiteType) ||
     typeof value.homeSpecialty !== "string" ||
@@ -172,6 +181,32 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
     }
   }
   return value.siteType !== "Gamble" || hasWinEssenceSlot;
+}
+
+/** Content that resolves a dreamscape's hosted art. */
+export interface DreamscapeArtCatalog {
+  readonly dreamscapes: readonly Pick<DreamscapeContent, "id" | "artKey">[];
+  readonly atlasData: {
+    readonly boss: Pick<AtlasData["boss"], "dreamscapeId" | "sceneArtKey">;
+  };
+}
+
+/**
+ * The scene art key for a dreamscape: the Atlas boss's scene for the boss
+ * identity, otherwise the catalog dreamscape's art key. `null` when the id
+ * resolves no catalog entry.
+ */
+export function dreamscapeSceneArtKey(
+  catalog: DreamscapeArtCatalog,
+  dreamscapeId: DreamscapeId,
+): DreamscapeArtKey | null {
+  if (dreamscapeId === catalog.atlasData.boss.dreamscapeId) {
+    return catalog.atlasData.boss.sceneArtKey;
+  }
+  return (
+    catalog.dreamscapes.find((dreamscape) => dreamscape.id === dreamscapeId)
+      ?.artKey ?? null
+  );
 }
 
 /** Returns the affiliation definitions from the content modules. */

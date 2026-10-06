@@ -11,11 +11,9 @@ import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   CardChoiceSiteRuntime,
-  DreamscapeNode,
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { toDeckCardView } from "./mobile-deck-view-model";
 import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
@@ -82,7 +80,7 @@ export function buildDuplicationOfferLog(
 /** Build the complete Cumulus Duplication site view. */
 export function buildDuplicationSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState;
   runtime: CardChoiceSiteRuntime | null;
   cardDatabase: Map<number, CardData>;
@@ -90,8 +88,7 @@ export function buildDuplicationSiteView(params: {
   guideLine: string;
   transfigurationData: TransfigurationData;
 }): DuplicationSiteView {
-  const scene: ArtRef | null =
-    params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
+  const { scene } = params;
   return {
     siteId: params.site.id,
     scene,

@@ -7,7 +7,6 @@ import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   CardChoiceSiteRuntime,
-  DreamscapeNode,
   JourneyState,
   SiteState,
 } from "../../types/journey";
@@ -20,7 +19,6 @@ import type {
   TransfigurationGuideView,
   TransfigurationSiteView,
 } from "../../cumulus/screens/TransfigurationSiteScreen";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { transfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 import type { GuideId } from "../../types/identifiers";
@@ -144,7 +142,7 @@ export function buildTransfigurationCandidates(
 /** Build the complete standard desktop Transfiguration site view. */
 export function buildTransfigurationSiteView(params: {
   state: JourneyState;
-  sceneNode: DreamscapeNode | null;
+  scene: ArtRef | null;
   site: SiteState;
   runtime: CardChoiceSiteRuntime | null;
   cardDatabase: ReadonlyMap<number, CardData>;
@@ -152,8 +150,7 @@ export function buildTransfigurationSiteView(params: {
   guideLine: string;
   transfigurationData: TransfigurationData;
 }): TransfigurationSiteView {
-  const scene: ArtRef | null =
-    params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
+  const { scene } = params;
   return {
     siteId: params.site.id,
     scene,

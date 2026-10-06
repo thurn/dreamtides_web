@@ -4,7 +4,7 @@ export const DREAM_GUIDES = [
   {
     id: "tobias_tanglefur",
     name: "Tobias Tanglefur",
-    homeDreamscapeId: "tumbleleaf_village",
+    homeDreamscapeId: "31042197-2621-42bd-8b23-500dfe1f56c0", // Tumbleleaf Village
     siteType: "Shop",
     portraitSource: "tobias.png",
     homeSpecialty: "Tobias offers strong cards at a steep discount.",
@@ -18,7 +18,7 @@ export const DREAM_GUIDES = [
   {
     id: "amunet_the_tomb_keeper",
     name: "Amunet, the Tomb-Keeper",
-    homeDreamscapeId: "pharaohs_gate",
+    homeDreamscapeId: "63f0e601-12b6-499f-9d04-06cd46323e4d", // Pharaoh's Gate
     siteType: "DreamsignBazaar",
     portraitSource: "amunet.png",
     homeSpecialty: "Amunet will restock the dreamsign choices once at no cost.",
@@ -32,7 +32,7 @@ export const DREAM_GUIDES = [
   {
     id: "sigrun",
     name: "Sigrún",
-    homeDreamscapeId: "winterwake_fjords",
+    homeDreamscapeId: "3d520651-46b8-4e27-9e57-333da77bbdd3", // Winterwake Fjords
     siteType: "DreamsignRevelation",
     portraitSource: "sigrun.png",
     homeSpecialty:
@@ -47,7 +47,7 @@ export const DREAM_GUIDES = [
   {
     id: "durgan_forgehammer",
     name: "Durgan Forgehammer",
-    homeDreamscapeId: "frostforge",
+    homeDreamscapeId: "db2a796d-31b0-4bed-8b0a-22113e1754f2", // Frostforge
     siteType: "Transfiguration",
     portraitSource: "durgan.png",
     homeSpecialty: "Durgan can transfigure any card in your deck.",
@@ -61,7 +61,7 @@ export const DREAM_GUIDES = [
   {
     id: "deacon_holt",
     name: "Deacon Holt",
-    homeDreamscapeId: "hopes_end",
+    homeDreamscapeId: "829da88a-9f61-4d1c-8a26-180a01d1b5f2", // Hope's End
     siteType: "Duplication",
     portraitSource: "holt.png",
     homeSpecialty: "Deacon Holt can pick any card to duplicate.",
@@ -75,7 +75,7 @@ export const DREAM_GUIDES = [
   {
     id: "master_takeshi",
     name: "Master Takeshi",
-    homeDreamscapeId: "tsukiren",
+    homeDreamscapeId: "a9bd9f2c-a859-415b-8fa5-60df9710c1a1", // Tsukiren
     siteType: "Purge",
     portraitSource: "takeshi.png",
     homeSpecialty: "Master Takeshi will purge cards from your deck at no cost.",
@@ -86,7 +86,7 @@ export const DREAM_GUIDES = [
   {
     id: "aldric_the_seer",
     name: "Aldric, the Seer",
-    homeDreamscapeId: "wilderveil",
+    homeDreamscapeId: "f413a98f-10d2-4578-8031-cc6ce57b61b4", // Wilderveil
     siteType: "Augury",
     portraitSource: "aldric.png",
     homeSpecialty: "Aldric offers curated visions of the future.",
@@ -103,7 +103,7 @@ export const DREAM_GUIDES = [
   {
     id: "maddox",
     name: "Maddox",
-    homeDreamscapeId: "rust_expanse",
+    homeDreamscapeId: "ce7f54bc-63ad-4105-a0e1-3a910b54c78d", // The Rust Expanse
     siteType: "RandomSite",
     portraitSource: "maddox.png",
     homeSpecialty:
@@ -116,7 +116,7 @@ export const DREAM_GUIDES = [
   {
     id: "gravok",
     name: "Gravok",
-    homeDreamscapeId: "farpoint_station",
+    homeDreamscapeId: "cefa9a2b-b0ce-4ba3-be09-d97627a48d70", // Farpoint Station
     siteType: "Gamble",
     portraitSource: "gravok.png",
     homeSpecialty: "Gravok offers you his highest rewards and best odds.",
@@ -145,7 +145,7 @@ export const DREAM_GUIDES = [
   {
     id: "layaway",
     name: '"Layaway"',
-    homeDreamscapeId: "grid_city",
+    homeDreamscapeId: "40ec06a6-bd39-4ca8-97c4-628b6d686672", // Grid City
     siteType: "Exploration",
     portraitSource: "layaway.png",
     homeSpecialty:

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { BattleStartScreen } from "../../cumulus/screens/BattleStartScreen";
 import type { CardData } from "../../types/cards";
+import type { DreamscapeArtCatalog } from "../../data/dreamscapes";
 import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
 import {
   buildBattleStartView,
@@ -11,23 +12,25 @@ import {
 export function BattleStartScreenAdapter({
   init,
   cardDatabase,
+  artCatalog,
   isTutorialJourney,
   tutorialConfiguration,
   onBegin,
 }: {
   init: BattleStartInit;
   cardDatabase: ReadonlyMap<number, CardData>;
+  artCatalog: DreamscapeArtCatalog;
   isTutorialJourney: boolean;
   tutorialConfiguration?: TutorialBattleStartConfiguration;
   onBegin: () => void;
 }) {
   const view = useMemo(
     () =>
-      buildBattleStartView(init, cardDatabase, {
+      buildBattleStartView(init, cardDatabase, artCatalog, {
         isTutorialJourney,
         configuration: tutorialConfiguration,
       }),
-    [init, cardDatabase, isTutorialJourney, tutorialConfiguration],
+    [init, cardDatabase, artCatalog, isTutorialJourney, tutorialConfiguration],
   );
 
   useEffect(() => {

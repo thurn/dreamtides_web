@@ -3,7 +3,10 @@
 import { act, type CSSProperties } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseSiteId } from "../../../types/identifiers";
-import { testDreamscapeId, testGuideId } from "../../../types/test-identities";
+import {
+  testDreamscapeArtKey,
+  testGuideId,
+} from "../../../types/test-identities";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
 import {
@@ -276,7 +279,7 @@ describe("SiteLayout", () => {
     const { container } = renderInCumulus(
       <SiteLayout
         siteId={parseSiteId("fixture")}
-        scene={artRef.dreamscapeScene(testDreamscapeId("fixture"))}
+        scene={artRef.dreamscapeScene(testDreamscapeArtKey("fixture"))}
         moteTint="violet"
         guide={{ ...guide, presence: "portrait-only" }}
         composition="balanced-gallery"

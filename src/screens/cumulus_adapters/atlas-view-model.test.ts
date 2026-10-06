@@ -34,6 +34,7 @@ import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseJourneyId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import {
+  testDreamscapeArtKey,
   testDreamscapeId,
   testDreamsignId,
 } from "../../types/test-identities";
@@ -344,7 +345,7 @@ describe("buildAtlasMapNodes", () => {
         boss: {
           ...MINIMAL_ATLAS_DATA.boss,
           place: "Synthetic boss place",
-          sceneArtId: testDreamscapeId("synthetic-boss-scene"),
+          sceneArtKey: testDreamscapeArtKey("synthetic-boss-scene"),
         },
       },
     };
@@ -355,7 +356,7 @@ describe("buildAtlasMapNodes", () => {
     expect(boss!.model.primary.placeName!).toBe("Synthetic boss place");
     expect(boss?.model.primary.sceneArt).toEqual({
       kind: "dreamscape-scene",
-      dreamscapeId: testDreamscapeId("synthetic-boss-scene"),
+      artKey: testDreamscapeArtKey("synthetic-boss-scene"),
     });
     // An available (revealed) node's card is not the unrevealed variant, even
     // with no dreamscape content resolved.

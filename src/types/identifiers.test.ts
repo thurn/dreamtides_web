@@ -4,6 +4,7 @@ import {
   parseDeckEntryId,
   parseSiteId,
   auguryArchetypeIdFromUnknown,
+  dreamscapeIdFromUnknown,
   siteIdFromUnknown,
   type DeckEntryId,
   type SiteId,
@@ -37,5 +38,13 @@ describe("domain identifiers", () => {
     expectTypeOf<"unknown_archetype">().not.toMatchTypeOf<
       ReturnType<typeof parseAuguryArchetypeId>
     >();
+  });
+
+  it("accepts only UUID dreamscape identities, normalized to lowercase", () => {
+    expect(
+      dreamscapeIdFromUnknown("F413A98F-10D2-4578-8031-CC6CE57B61B4"),
+    ).toBe("f413a98f-10d2-4578-8031-cc6ce57b61b4");
+    expect(dreamscapeIdFromUnknown("wilderveil")).toBeNull();
+    expect(dreamscapeIdFromUnknown("")).toBeNull();
   });
 });

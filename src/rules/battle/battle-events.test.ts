@@ -166,7 +166,7 @@ function makeInit(overrides: Partial<BattleInit> = {}): BattleInit {
   return {
     battleId: parseBattleId("battle-xyz"),
     siteId: SITE_ID,
-    dreamscapeId: testDreamscapeId(NODE_ID),
+    dreamscapeId: NODE_ID,
     completionLevelAtStart: 0,
     essenceReward: 100,
     scoreToWin: 30,

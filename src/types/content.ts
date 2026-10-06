@@ -13,7 +13,7 @@ import type {
 } from "./draft";
 import type { GuideId } from "./identifiers";
 import type { AvatarId } from "./identifiers";
-import type { DreamscapeId } from "./identifiers";
+import type { DreamscapeArtKey, DreamscapeId } from "./identifiers";
 import type {
   AffiliationId,
   ApollyonIncarnationId,
@@ -77,6 +77,8 @@ export interface DreamsignTemplate {
  */
 export interface DreamscapeContent {
   id: DreamscapeId;
+  /** Filename stem of the hosted scene and icon art. */
+  artKey: DreamscapeArtKey;
   name: string;
   guideId: GuideId | null;
   signatureSite: SiteType;

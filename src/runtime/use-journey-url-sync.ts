@@ -20,8 +20,8 @@ import { screenToJourneyPath } from "./screen-url";
  * reconstructable from `logs/journey-log.jsonl`.
  */
 export function useJourneyUrlSync(): void {
-  const { state } = useJourney();
-  const path = screenToJourneyPath(state);
+  const { state, journeyContent } = useJourney();
+  const path = screenToJourneyPath(state, journeyContent);
   const screenType = state.screen.type;
   const siteId = state.screen.type === "site" ? state.screen.siteId : null;
 

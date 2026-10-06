@@ -88,6 +88,7 @@ export function BattleSiteRoute({
         <BattleStartScreenAdapter
           init={preview}
           cardDatabase={cardDatabase}
+          artCatalog={journeyContent}
           isTutorialJourney={state.isTutorialJourney === true}
           tutorialConfiguration={journeyContent.tutorial.battleStart}
           onBegin={beginBattle}

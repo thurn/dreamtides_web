@@ -6,6 +6,7 @@ import {
   buildDreamscapeOverviewLog,
   buildDreamscapeGuidanceLog,
   buildDreamscapeView,
+  dreamscapeSceneRef,
   dreamscapeTitle,
   resolveDreamscapeSiteSelection,
 } from "./dreamscape-view-model";
@@ -34,6 +35,7 @@ export function DreamscapeScreenAdapter() {
         : buildDreamscapeView(
             node,
             dreamscapeTitle(node, journeyContent),
+            dreamscapeSceneRef(node, journeyContent),
             state,
             journeyContent.sitesData,
             journeyContent.draftData.offers.picksPerSite,

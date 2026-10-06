@@ -4514,7 +4514,7 @@ export function buildExplorationSiteView(params: {
   });
   if (actions.length < 1 || actions.length > 4) return null;
   const scene: ArtRef | null =
-    params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
+    dreamscapeSceneRef(params.sceneNode, params.content);
   const reward = rewardForResolution(
     params.runtime,
     params.site.id,

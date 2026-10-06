@@ -16,7 +16,10 @@ import {
   type DreamsignId,
   type SiteId,
 } from "../../types/identifiers";
-import { testDreamscapeId, testDreamsignId } from "../../types/test-identities";
+import {
+  testDreamscapeArtKey,
+  testDreamsignId,
+} from "../../types/test-identities";
 import { DreamscapeScreen, type DreamscapeView } from "./DreamscapeScreen";
 
 beforeEach(() => {
@@ -69,7 +72,7 @@ describe("DreamscapeScreen", () => {
   }
 
   const VIEW: DreamscapeView = {
-    scene: artRef.dreamscapeScene(testDreamscapeId("ember_wood")),
+    scene: artRef.dreamscapeScene(testDreamscapeArtKey("ember_wood")),
     title: "Ember Wood",
     inlineRewards: {},
     replacement: null,

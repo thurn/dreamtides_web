@@ -10,7 +10,7 @@
 
 import { assetUrl } from "../../runtime/asset-url";
 import miraHeadCircleUrl from "../assets/dream-avatars/0020-head-circle.png";
-import type { ArtAssetKey, DreamscapeId } from "../../types/identifiers";
+import type { ArtAssetKey, DreamscapeArtKey } from "../../types/identifiers";
 import type { GuideId } from "../../types/identifiers";
 
 /** Character portraits authored as local Cumulus assets. */
@@ -50,14 +50,14 @@ export type ArtRef =
       readonly imageNumber: string;
     }
   | {
-      /** A dreamscape's circular node icon, keyed by its dreamscape id. */
+      /** A dreamscape's circular node icon, keyed by its art key. */
       readonly kind: "dreamscape-icon";
-      readonly dreamscapeId: DreamscapeId;
+      readonly artKey: DreamscapeArtKey;
     }
   | {
-      /** A dreamscape's rectangular scene art, keyed by its dreamscape id. */
+      /** A dreamscape's rectangular scene art, keyed by its art key. */
       readonly kind: "dreamscape-scene";
-      readonly dreamscapeId: DreamscapeId;
+      readonly artKey: DreamscapeArtKey;
     }
   | {
       /** A Dream Guide's transparent full-body character render, keyed by its
@@ -89,9 +89,9 @@ export function resolveArtRef(ref: ArtRef): string {
     case "avatar-cutout":
       return assetUrl(`/avatars/cutout/${ref.imageNumber}.png`);
     case "dreamscape-icon":
-      return assetUrl(`/dreamscape-icons/${ref.dreamscapeId}.png`);
+      return assetUrl(`/dreamscape-icons/${ref.artKey}.png`);
     case "dreamscape-scene":
-      return assetUrl(`/dreamscapes/${ref.dreamscapeId}.png`);
+      return assetUrl(`/dreamscapes/${ref.artKey}.png`);
     case "dream-guide":
       return assetUrl(`/dream-guides/${ref.guideId}.png`);
     case "atlas-asset":
@@ -118,13 +118,13 @@ export const artRef = {
     kind: "avatar-cutout",
     imageNumber,
   }),
-  dreamscapeIcon: (dreamscapeId: DreamscapeId): ArtRef => ({
+  dreamscapeIcon: (artKey: DreamscapeArtKey): ArtRef => ({
     kind: "dreamscape-icon",
-    dreamscapeId,
+    artKey,
   }),
-  dreamscapeScene: (dreamscapeId: DreamscapeId): ArtRef => ({
+  dreamscapeScene: (artKey: DreamscapeArtKey): ArtRef => ({
     kind: "dreamscape-scene",
-    dreamscapeId,
+    artKey,
   }),
   dreamGuide: (guideId: GuideId): ArtRef => ({
     kind: "dream-guide",

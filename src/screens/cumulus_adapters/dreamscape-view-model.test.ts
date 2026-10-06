@@ -12,7 +12,10 @@ import {
   buildDreamscapeGuideDialogue,
   buildDreamscapeView as buildDreamscapeViewImpl,
   buildSiteModels as buildSiteModelsImpl,
+  dreamscapeSceneRef,
 } from "./dreamscape-view-model";
+import { artRef } from "../../cumulus/primitives/art";
+import type { DreamscapeArtCatalog } from "../../data/dreamscapes";
 import {
   parseAtlasNodeId,
   parseDeckEntryId,
@@ -25,6 +28,7 @@ import {
   testCardId,
   testDreamsignId,
   testExplorationActionId,
+  testDreamscapeArtKey,
   testDreamscapeId,
 } from "../../types/test-identities";
 import { createTestBattleInit } from "../../testing/create-battle-init";
@@ -35,6 +39,21 @@ import {
   makeBattleTestState,
 } from "../../battle/test-support";
 import { buildBattleStartView } from "./battle-start-view-model";
+
+const ART_CATALOG: DreamscapeArtCatalog = {
+  dreamscapes: [
+    {
+      id: testDreamscapeId("test_dreamscape"),
+      artKey: testDreamscapeArtKey("test_dreamscape"),
+    },
+  ],
+  atlasData: {
+    boss: {
+      dreamscapeId: testDreamscapeId("fixture-boss"),
+      sceneArtKey: testDreamscapeArtKey("fixture_boss_scene"),
+    },
+  },
+};
 
 describe("dreamscape-view-model", () => {
   expect.addEqualityTesters([annotatedTextEquality]);
@@ -54,6 +73,7 @@ describe("dreamscape-view-model", () => {
     buildDreamscapeViewImpl(
       dreamscapeNode,
       "Fixture Dreamscape",
+      null,
       state,
       sitesData,
       5,
@@ -72,7 +92,7 @@ describe("dreamscape-view-model", () => {
       id: parseAtlasNodeId("node-1"),
       layer: 0,
       indexInLayer: 0,
-      dreamscapeId: "ember_wood",
+      dreamscapeId: testDreamscapeId("ember_wood"),
       sites: [
         site({ id: parseSiteId("s-purge"), type: "Purge" }),
         site({ id: parseSiteId("s-draft"), type: "Draft" }),
@@ -317,6 +337,36 @@ describe("dreamscape-view-model", () => {
   });
 });
 
+describe("dreamscapeSceneRef", () => {
+  it("resolves catalog dreamscapes and the Atlas boss to their scene art keys", () => {
+    expect(
+      dreamscapeSceneRef(
+        { dreamscapeId: testDreamscapeId("test_dreamscape") },
+        ART_CATALOG,
+      ),
+    ).toEqual(artRef.dreamscapeScene(testDreamscapeArtKey("test_dreamscape")));
+    expect(
+      dreamscapeSceneRef(
+        { dreamscapeId: testDreamscapeId("fixture-boss") },
+        ART_CATALOG,
+      ),
+    ).toEqual(
+      artRef.dreamscapeScene(testDreamscapeArtKey("fixture_boss_scene")),
+    );
+  });
+
+  it("returns null without a node, while unrevealed, or for an unknown id", () => {
+    expect(dreamscapeSceneRef(null, ART_CATALOG)).toBeNull();
+    expect(dreamscapeSceneRef({ dreamscapeId: null }, ART_CATALOG)).toBeNull();
+    expect(
+      dreamscapeSceneRef(
+        { dreamscapeId: testDreamscapeId("unknown_dreamscape") },
+        ART_CATALOG,
+      ),
+    ).toBeNull();
+  });
+});
+
 describe("battle-start-view-model", () => {
   expect.addEqualityTesters([annotatedTextEquality]);
 
@@ -366,11 +416,11 @@ describe("battle-start-view-model", () => {
   describe("buildBattleStartView", () => {
     it("maps opponent identity, scene, signature UUIDs, dreamsign ids, and stakes", () => {
       const { init, cardDatabase } = makeInit();
-      const view = buildBattleStartView(init, cardDatabase);
+      const view = buildBattleStartView(init, cardDatabase, ART_CATALOG);
 
       expect(view.scene).toEqual({
         kind: "dreamscape-scene",
-        dreamscapeId: testDreamscapeId("test_dreamscape"),
+        artKey: testDreamscapeArtKey("test_dreamscape"),
       });
       expect(view.avatar).toMatchObject({
         id: "opponent-uuid",
@@ -419,7 +469,7 @@ describe("battle-start-view-model", () => {
       const secondBattle = { ...init, completionLevelAtStart: 1 };
 
       expect(
-        buildBattleStartView(firstBattle, cardDatabase, {
+        buildBattleStartView(firstBattle, cardDatabase, ART_CATALOG, {
           isTutorialJourney: true,
           configuration,
         }).guideDialogue,
@@ -437,7 +487,7 @@ describe("battle-start-view-model", () => {
         bubbleWidth: 650,
       });
       expect(
-        buildBattleStartView(secondBattle, cardDatabase, {
+        buildBattleStartView(secondBattle, cardDatabase, ART_CATALOG, {
           isTutorialJourney: true,
           configuration,
         }).guideDialogue,
@@ -455,7 +505,7 @@ describe("battle-start-view-model", () => {
         bubbleWidth: 700,
       });
       expect(
-        buildBattleStartView(secondBattle, cardDatabase, {
+        buildBattleStartView(secondBattle, cardDatabase, ART_CATALOG, {
           isTutorialJourney: false,
           configuration,
         }).guideDialogue,
@@ -464,6 +514,7 @@ describe("battle-start-view-model", () => {
         buildBattleStartView(
           { ...init, completionLevelAtStart: 2 },
           cardDatabase,
+          ART_CATALOG,
           { isTutorialJourney: true, configuration },
         ).guideDialogue,
       ).toBeUndefined();

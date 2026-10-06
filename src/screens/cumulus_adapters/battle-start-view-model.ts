@@ -1,7 +1,8 @@
 import type { BattleInit } from "../../battle/types";
 import type { CardData } from "../../types/cards";
 import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
-import { artRef } from "../../cumulus/primitives/art";
+import type { DreamscapeArtCatalog } from "../../data/dreamscapes";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import type { BattleStartView } from "../../cumulus/screens/BattleStartScreen";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
@@ -17,6 +18,7 @@ export interface BattleStartTutorialContext {
 export function buildBattleStartView(
   init: BattleInit,
   cardDatabase: ReadonlyMap<number, CardData>,
+  artCatalog: DreamscapeArtCatalog,
   tutorial?: BattleStartTutorialContext,
 ): BattleStartView {
   const enemy = init.enemyDescriptor;
@@ -40,10 +42,7 @@ export function buildBattleStartView(
         : undefined;
   return {
     battleId: init.battleId,
-    scene:
-      node?.dreamscapeId !== null && node?.dreamscapeId !== undefined
-        ? artRef.dreamscapeScene(node.dreamscapeId)
-        : null,
+    scene: dreamscapeSceneRef(node ?? null, artCatalog),
     avatar: {
       id: enemy.id,
       name: enemy.name,

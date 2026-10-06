@@ -424,7 +424,7 @@ function buildNodeCard(
         : null;
     return {
       primary: {
-        sceneArt: artRef.dreamscapeScene(boss.sceneArtId),
+        sceneArt: artRef.dreamscapeScene(boss.sceneArtKey),
         // The boss stands over the Limbo scene as its prominent figure.
         figureArt: artRef.dreamGuide(boss.figureArtId),
         title: bossIncarnation?.title ?? boss.fallbackTitle,
@@ -497,7 +497,7 @@ function buildNodeCard(
   // with the dreamscape's own name, so it never reveals as an untitled scene.
   return {
     primary: {
-      sceneArt: artRef.dreamscapeScene(dreamscape.id),
+      sceneArt: artRef.dreamscapeScene(dreamscape.artKey),
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
       title: guide?.name ?? dreamscape.name,
       body: (() => {
@@ -555,10 +555,10 @@ export function buildAtlasMapNodes(
     // its circular icon; an unrevealed node shows the empty round frame.
     const iconRef =
       geo.role === "boss"
-        ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtId)
+        ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtKey)
         : dreamscape === null
           ? null
-          : artRef.dreamscapeIcon(dreamscape.id);
+          : artRef.dreamscapeIcon(dreamscape.artKey);
 
     // The signature-site badge is shown only for non-starter, non-boss revealed
     // dreamscapes.
