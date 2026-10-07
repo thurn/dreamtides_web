@@ -238,7 +238,6 @@ function insertPreparedSiteInJourneyState(
 ): JourneyState | null {
   if (
     prev.currentDreamscape !== input.targetNodeId ||
-    prev.atlas.currentNodeId !== input.targetNodeId ||
     !Number.isInteger(input.insertionIndex) ||
     input.insertionIndex < 0 ||
     input.site.isEnhanced ||

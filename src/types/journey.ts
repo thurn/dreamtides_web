@@ -265,7 +265,11 @@ export interface DreamAtlas<Generated extends boolean = boolean> {
    * default boss presentation.
    */
   bossIncarnationId?: ApollyonIncarnationId | null;
-  /** The node the player currently occupies, or `null` between dreamscapes. */
+  /**
+   * The Atlas route anchor: the starting node, then the most recently completed
+   * node. Travel offers this node's forward targets. The dreamscape the player
+   * is visiting is `JourneyState.currentDreamscape`.
+   */
   currentNodeId: AtlasNodeId | null;
   /** Node ids that carry a pre-revealed known dreamsign. */
   knownDreamsignCarrierIds: AtlasNodeId[];

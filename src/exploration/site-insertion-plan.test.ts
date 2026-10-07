@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { stableDigest } from "../reward-selection/stable";
 import { testJourneyState } from "../testing/journey-genesis";
 import { LayerName } from "../types/layer-name";
-import type { JourneyState, SiteState } from "../types/journey";
+import type { DreamscapeNode, JourneyState, SiteState } from "../types/journey";
+import { travelToDreamscape } from "../rules/journey/lifecycle";
 import {
   explorationSiteInsertionPreparationsEqual,
   explorationSiteTypeChoicePreparationsEqual,
@@ -10,9 +11,14 @@ import {
   prepareExplorationSiteTypeChoice,
 } from "./site-insertion-plan";
 import { parseSiteId } from "../types/identifiers";
-import { parseAtlasNodeId } from "../types/identifiers";
+import { parseAtlasNodeId, type AtlasNodeId } from "../types/identifiers";
 import type { ExplorationActionId } from "../types/identifiers";
-import { testCardId, testDreamscapeId, testExplorationActionId, testGuideId } from "../types/test-identities";
+import {
+  testCardId,
+  testDreamscapeId,
+  testExplorationActionId,
+  testGuideId,
+} from "../types/test-identities";
 import { parseSelectionContentRevision } from "../types/selection-content-revision";
 import { parseSelectionRulesVersion } from "../reward-selection/types";
 
@@ -38,31 +44,67 @@ const battleSite: SiteState = {
   isVisited: false,
 };
 
+const STARTER_NODE_ID = parseAtlasNodeId("starter-node");
+const CURRENT_NODE_ID = parseAtlasNodeId("current-node");
+
+/**
+ * The journey after clearing the starter dreamscape and traveling onward: the
+ * Atlas route anchor (`atlas.currentNodeId`) stays on the cleared starter while
+ * `currentDreamscape` names the visited node, as in real play.
+ */
 function journey(): JourneyState {
   const base = testJourneyState();
-  return {
+  const node = (
+    id: AtlasNodeId,
+    layer: LayerName,
+    sites: SiteState[],
+    links: Pick<DreamscapeNode, "state" | "forwardIds" | "backwardIds">,
+  ): DreamscapeNode => ({
+    id,
+    layer,
+    indexInLayer: 0,
+    dreamscapeId: testDreamscapeId("fixture-dreamscape"),
+    sites,
+    position: { x: 0, y: 0 },
+    enhancedSiteType: null,
+    knownDreamsignId: null,
+    ...links,
+  });
+  const onAtlas: JourneyState = {
     ...base,
-    currentDreamscape: parseAtlasNodeId("current-node"),
+    currentDreamscape: STARTER_NODE_ID,
+    screen: { type: "atlas" },
     atlas: {
       ...base.atlas,
-      currentNodeId: parseAtlasNodeId("current-node"),
+      startingNodeId: STARTER_NODE_ID,
+      currentNodeId: STARTER_NODE_ID,
       nodes: {
-        [parseAtlasNodeId("current-node")]: {
-          id: parseAtlasNodeId("current-node"),
-          layer: LayerName.Two,
-          indexInLayer: 0,
-          dreamscapeId: testDreamscapeId("fixture-dreamscape"),
-          sites: [sourceSite, battleSite],
-          position: { x: 0, y: 0 },
-          state: "available",
-          enhancedSiteType: null,
-          forwardIds: [],
+        [STARTER_NODE_ID]: node(STARTER_NODE_ID, LayerName.One, [], {
+          state: "completed",
+          forwardIds: [CURRENT_NODE_ID],
           backwardIds: [],
-          knownDreamsignId: null,
-        },
+        }),
+        [CURRENT_NODE_ID]: node(
+          CURRENT_NODE_ID,
+          LayerName.Two,
+          [sourceSite, battleSite],
+          {
+            state: "available",
+            forwardIds: [],
+            backwardIds: [STARTER_NODE_ID],
+          },
+        ),
       },
     },
   };
+  const visiting = travelToDreamscape(onAtlas, { nodeId: CURRENT_NODE_ID });
+  if (
+    visiting?.currentDreamscape !== CURRENT_NODE_ID ||
+    visiting.atlas.currentNodeId !== STARTER_NODE_ID
+  ) {
+    throw new Error("Expected travel to enter the node past the starter");
+  }
+  return visiting;
 }
 
 function prepare(
@@ -89,7 +131,7 @@ describe("Exploration fixed-site insertion planning", () => {
     expect(first).toMatchObject({
       sourceSiteId: sourceSite.id,
       sourceActionId: FIXED_ACTION_ID,
-      targetNodeId: parseAtlasNodeId("current-node"),
+      targetNodeId: CURRENT_NODE_ID,
       insertionIndex: 2,
       siblingSiteIdsBefore: [sourceSite.id, battleSite.id],
       insertedSite: {
@@ -111,11 +153,11 @@ describe("Exploration fixed-site insertion planning", () => {
 
   it("rejects a non-current owner and globally duplicated minted identity", () => {
     const offNode = journey();
-    offNode.atlas.currentNodeId = parseAtlasNodeId("elsewhere");
+    offNode.currentDreamscape = STARTER_NODE_ID;
     expect(prepare(offNode)).toBeNull();
 
     const duplicated = journey();
-    const node = duplicated.atlas.nodes[parseAtlasNodeId("current-node")];
+    const node = duplicated.atlas.nodes[CURRENT_NODE_ID];
     if (node === undefined) throw new Error("Expected fixture node");
     node.sites.push({
       id: insertedSiteId(FIXED_ACTION_ID),
@@ -188,7 +230,7 @@ describe("Exploration site-type choice planning", () => {
     expect(plan).toMatchObject({
       sourceSiteId: sourceSite.id,
       sourceActionId: CHOICE_ACTION_ID,
-      targetNodeId: parseAtlasNodeId("current-node"),
+      targetNodeId: CURRENT_NODE_ID,
       insertionIndex: 2,
       siblingSiteIdsBefore: [sourceSite.id, battleSite.id],
       selectorSignature: stableDigest("selector-signature"),
@@ -267,7 +309,7 @@ describe("Exploration site-type choice planning", () => {
     ).toBeNull();
 
     const stale = journey();
-    stale.atlas.nodes[parseAtlasNodeId("current-node")]?.sites.push({
+    stale.atlas.nodes[CURRENT_NODE_ID]?.sites.push({
       id: insertedSiteId(CHOICE_ACTION_ID),
       type: "Purge",
       isEnhanced: false,

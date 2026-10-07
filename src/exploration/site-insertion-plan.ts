@@ -73,8 +73,7 @@ export function prepareExplorationSiteInsertion(input: {
   if (
     input.sourceSite.type !== "Exploration" ||
     targetNodeId === null ||
-    targetNodeId !== input.journey.currentDreamscape ||
-    targetNodeId !== input.journey.atlas.currentNodeId
+    targetNodeId !== input.journey.currentDreamscape
   ) {
     return null;
   }
@@ -166,8 +165,7 @@ export function prepareExplorationSiteTypeChoice(input: {
     ) ||
     input.selectorSignature.length === 0 ||
     targetNodeId === null ||
-    targetNodeId !== input.journey.currentDreamscape ||
-    targetNodeId !== input.journey.atlas.currentNodeId
+    targetNodeId !== input.journey.currentDreamscape
   ) {
     return null;
   }

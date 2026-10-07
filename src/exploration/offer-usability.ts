@@ -339,7 +339,6 @@ function hasUsableSiteInsertionPreparation(
       preparation.sourceSiteId === activeSiteIdOf(state) &&
       preparation.sourceActionId === action.id &&
       preparation.targetNodeId === state.currentDreamscape &&
-      preparation.targetNodeId === state.atlas.currentNodeId &&
       siteInsertionNode !== undefined &&
       preparation.insertionIndex === preparation.siblingSiteIdsBefore.length &&
       sameOrderedIds(
@@ -389,7 +388,6 @@ function hasUsableSiteTypeChoicePreparation(
       preparation.sourceSiteId === activeSiteIdOf(state) &&
       preparation.sourceActionId === action.id &&
       preparation.targetNodeId === state.currentDreamscape &&
-      preparation.targetNodeId === state.atlas.currentNodeId &&
       siteTypeChoiceNode !== undefined &&
       preparation.insertionIndex === preparation.siblingSiteIdsBefore.length &&
       sameOrderedIds(

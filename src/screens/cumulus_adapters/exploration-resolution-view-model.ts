@@ -1294,7 +1294,6 @@ export function rewardForResolution(
       sceneNode === null ||
       sceneNode.id !== insertion.targetNodeId ||
       state.currentDreamscape !== insertion.targetNodeId ||
-      state.atlas.currentNodeId !== insertion.targetNodeId ||
       targetNode !== sceneNode ||
       insertedSite === undefined ||
       targetNode.sites.length !== insertion.siblingSiteIdsBefore.length + 1 ||
