@@ -1,8 +1,10 @@
 # Engine Design
 
 This page specifies the rules engine that Phases 3–7 build. It defines the
-contracts and their non-obvious decisions. The agent fills in details through
-the [rules ladder](decisions.md#d10-rules-ambiguity-ladder) and keeps this page
+contracts and their non-obvious decisions, and describes the code in
+`src/engine/` as it stands; parts a later phase builds are marked with that
+phase. The agent fills in details through the
+[rules ladder](decisions.md#d10-rules-ambiguity-ladder) and keeps this page
 consistent when an implementation improves on it.
 
 `docs/rules.md` is authoritative for game behavior.
@@ -18,12 +20,12 @@ Every other section is written to fit it.
   thread-based engine: `const target = ctx.choose(prompt)` returns the answer.
   Nothing else in the engine knows about suspension.
 - **Pure and deterministic.** There is no React, DOM, `Date`, `Math.random`,
-  or module-level mutable state in `src/engine/`; enforce this with
-  `no-restricted-globals` and `no-restricted-syntax` lint rules. The same start
-  state plus the same answers always produces the same state, events, and
-  prompts.
+  or module-level mutable state in `src/engine/`; the
+  `dreamtides/engine-purity` lint rule (`eslint-rules/engine-purity.js`)
+  enforces the clock, randomness, and module-state bans. The same start state
+  plus the same answers always produces the same state, events, and prompts.
 - **Headless.** It runs in Vite, Vitest, Node (`tsx`, `worker_threads`), and a
-  Web Worker.
+  Web Worker (the policy host, Phase 4.5).
 - **Cheap to clone.** State is plain JSON-serializable data. AI search clones
   it thousands of times per decision.
 - **Complete.** Every rule is enforced, and legality is computed rather than
@@ -35,84 +37,115 @@ Every other section is written to fit it.
 
 ## Module layout
 
-This layout is a starting point. Update this page if a clearer structure
+This is the current layout; update this page when a clearer structure
 emerges.
 
 Step kinds, engine event kinds, and DSL primitives are each **registered from
-their own module** through typed registries (Phase 3.2 and 3.4). Parallel
-lanes and content batches then add files instead of editing central switches.
+their own module** through typed registries (`steps/kinds/index.ts`,
+`events/index.ts`, `effects/primitives/index.ts`). Parallel lanes and content
+batches then add files instead of editing central switches.
 
 ```text
 src/engine/
-  state/       BattleState, CardInstance, zones, ids, serialization, hashing
-  steps/       step kinds, the step runner, drivers (interactive, inline, scripted), Suspend
-  prompts/     Prompt/Answer types, fingerprints, validation, auto-answer rules
-  rules/       turn/phase machine, priority, stack, challenge, victory, fatigue
-  effects/     DSL interpreter and primitives
-  continuous/  computed characteristics (spark, cost, keywords, types), Support
-  triggers/    event bus, trigger matching, queue, delayed/floating triggers
-  dsl/         ability types, builders, transfiguration transforms
-  loops/       loop signatures, shortcut detection, mandatory-cycle detection
-  view/        per-side redaction, knowledge tracking, determinization sampling
-  policy/      Policy interface, Random/Greedy (Phase 4), bots (Phase 7), worker host
-  testing/     scenario-spec builder, card-lab setup solver, fuzz harness, invariants
+  engine.ts          the Engine facade: createEngine(catalog)
+  index.ts           the public API other modules import
+  catalog.ts         EngineCatalog, engine card/emblem/figment definitions, printedCard
+  content-catalog.ts engine definitions built from the src/content modules
+  log.ts             the engine logging schema (EngineLogRecord); hosts write the lines
+  state/       BattleState and its types, ids, initial state, clone, hashing and serialization, RNG streams
+  steps/       step kinds (kinds/), the step runner, the step context, drivers, answer sources, Suspend and other errors
+  prompts/     Prompt/Answer types, fingerprints, structure checks, legal and forced answers
+  events/      engine event kinds (kinds/), one module each, with their privacy
+  rules/       turn/phase machine, decisions and legal actions, legality, timing, stack, challenge,
+               zones, costs, copies, figments, durations, floating effects, payable effects, victory
+  effects/     the DSL interpreter, the primitive registry, and the primitives (primitives/)
+  continuous/  layer evaluation of characteristics (spark, cost, keywords, types), cost modifiers, Support
+  triggers/    the event matcher, queued and floating trigger bodies, trigger resolution
+  dsl/         ability and selector types, builders, trigger builders, verified-text hash
+  loops/       loop signatures, the loop tracker, loop replay, mandatory-cycle detection
+  view/        per-side views, knowledge tracking, determinization
+  fold/        the battle slice adapter (BattleSlice, intents, in-flight replay)
+  testing/     synthetic cards, board builder, scenario specs, card-lab setup solver,
+               fuzz harness, Random policy, invariants, redaction checks
 src/content/   typed catalogs (D32) with co-located abilities (D5)
-  cards/ dreamsigns/ avatars/ dreamwell/ figments/ apollyon/
-  data/        battle, opponents, ai, atlas, dreamscapes, guides, sites, economy, tutorial, …
+  cards/ dreamsigns/ avatars/ dreamwell/ figments/
+  battle.ts, dreamwell-rules.ts, opponents.ts, ai.ts, atlas.ts, apollyon.ts, …   data modules
 ```
 
-The battle adapter in the fold (today `src/rules/battle/`) turns intents into
-engine calls. It also keeps the in-flight step record
-([below](#fold-integration)).
+`src/engine/policy/` (the Policy interface, Greedy, the worker host, and the
+Phase 7 bots) arrives with Phase 4.5.
+
+**The engine API** (`engine.ts`) is `createEngine(catalog)`, an `Engine`
+with `createBattle(init, source)`, `decision(state)`,
+`legalActions(state, side)`, `apply(state, side, action, source)`,
+`view(state, side)`, `determinize(view, decklists, random)`, and the
+per-engine legality `memo`. `createBattle` and `apply` run to the next
+top-level decision or the battle's end (`runToDecision`) with the answer
+source they are given, which must never suspend ([Drivers](#drivers)), and
+return the state, every event, and every answer.
+
+The battle slice adapter (`fold/slice.ts`, `createFoldAdapter`) turns
+intents into engine calls and keeps the in-flight step record
+([below](#fold-integration)). Phase 4.1 wires it into the journey fold.
 
 ## State model
 
+`state/types.ts` holds the authoritative definitions; this is their shape:
+
 ```ts
 interface BattleState {
-  readonly version: number;            // increments per committed step
-  seed: string;                        // from the game seed + battle index
-  rng: RngStreams;                     // named streams: shuffle:<side>, dreamwell, random:<purpose>
-  config: BattleConfig;                // every engine tunable: src/content/battle.ts, src/content/
-                                       // dreamwell-rules.ts, + BattleInit journey inputs (D39)
-  turn: { round: number; active: Side; phase: Phase; challengeLane: number | null;
-          extraTurns: Side[];        // pending extra turns, last-in first-out (C8)
-          sideTurns: Record<Side, number> };  // turns each side has begun, for "your first turn"
+  version: number;                     // increments per committed step
+  readonly seed: BattleSeed;           // from the game seed + battle index
+  rng: Record<string, number>;         // draws consumed per named stream: shuffle:<side>, dreamwell, random:<purpose>
+  nextInstance: number;                // next instance number to mint (i1, i2, …)
+  clock: number;                       // zone-entry clock for enteredZoneAt
+  readonly config: BattleConfig;       // every engine tunable (below)
+  turn: TurnState;                     // round, turnNumber, active, phase, sideTurns, extra, lastNormal,
+                                       // extraTurns (last element first, C8), challengeLane, beginning
   sides: Record<Side, SideState>;
   instances: Record<InstanceId, CardInstance>;
   knownTo: Record<Side, InstanceId[]>; // hidden cards each side can identify (view/knowledge.ts)
-  stack: StackItem[];                  // last element is the top
-  priority: Side | null;
-  triggerQueue: QueuedTrigger[];
-  floating: FloatingEffect[];          // continuous changes with a duration (spark, base spark,
-                                       // keywords, types, costs), floating and delayed
-                                       // ("the next time…", `once: true`) triggers, disabled triggers
-  turnLog: TurnCounters;               // cards/events/characters played this turn per side, etc.
-  oncePerTurn: string[];
+  stack: StackItem[];                  // last element is the top; card items and activated abilities
+  priority: Side | null;               // held exactly while the stack is non-empty
+  payable: PayableEffect[];            // "until the opponent pays N●" effects, ended by payToEnd (C7)
+  triggerQueue: QueuedTrigger[];       // first in, first out (D14)
+  floating: FloatingEffect[];          // changes with a duration: continuous changes (spark, base spark,
+                                       // keywords, types, costs), floating and delayed ("the next time…",
+                                       // `once: true`) triggers, disabled triggers, banish-until returns,
+                                       // temporary figment copies
+  turnLog: TurnLog;                    // cards each side played (with their characteristics) and drew this turn
+  nextEffect: number;                  // next effect number to mint (e1, e2, …)
+  oncePerTurn: OncePerTurnKey[];       // `<source key>#<ability index>`, cleared as each turn begins
+  dreamwell: DreamwellState;           // the prebuilt shared deck, the next index, and its catalog
   challenge: { challengers: InstanceId[]; blockers: Record<InstanceId, InstanceId> } | null;
+  automaticSteps: number;              // automatic steps since the last top-level decision
   loops: LoopTracker;
   result: { kind: "victory"; winner: Side; reason: "score" } | { kind: "draw"; reason: EndReason } | null;
 }
 
 interface SideState {
   score: number; currentEnergy: number; maxEnergy: number; fatigueCount: number;
-  deck: InstanceId[]; hand: InstanceId[]; void: InstanceId[]; banished: InstanceId[];
+  deck: InstanceId[];                  // top is index 0
+  hand: InstanceId[];                  // cards this side holds, including any the opponent owns
+  void: InstanceId[]; banished: InstanceId[];
   backRank: (InstanceId | null)[];     // length 10, B0..B9
   frontRank: (InstanceId | null)[];    // length 9,  F0..F8
-  avatar: EmblemState;                 // not a character (P4); has `exhausted`
-  dreamsigns: EmblemState[];
+  avatar: AvatarEmblem | null;         // { id, exhausted }: not a character (P4)
+  dreamsigns: DreamsignEmblem[];       // { id }
 }
 
 interface CardInstance {
-  id: InstanceId;                      // stable across zone changes
-  printing: { kind: "card"; cardId: CardId }                         // deck card, created card, or copy
-          | { kind: "figment"; figment: FigmentId; spark: number }   // "a 2✦ Ethereal figment"
-          | { kind: "figmentCopy"; cardId: CardId; spark: number | null };  // C5; 0 for "0✦ figment copy"
-  owner: Side; controller: Side;
-  variant: Variant;                    // amplified flag + transfigurations + deck-entry mods (D39)
-  status: { exhausted: boolean; reclaimed: boolean; offering: boolean; ephemeral: boolean;
-            gainedSpark: number; counters: number; created: boolean;
-            x: number | null };                // X paid to play it, kept while in play (variable spark)
-  knownTo: Side[];                     // hidden-information tracking
+  readonly id: InstanceId;             // stable across zone changes
+  readonly printing: { kind: "card"; cardId: CardId }                         // deck card, created card, or copy
+          | { kind: "figment"; figment: FigmentId; spark: number }            // "a 2✦ Ethereal figment"
+          | { kind: "figmentCopy"; cardId: CardId; spark: number | null };    // C5; 0 for "0✦ figment copy"
+  readonly owner: Side;
+  controller: Side;                    // in a hand, the side holding it; in a deck, void, or Banished, its owner
+  zone: Zone;                          // "deck" | "hand" | "stack" | "play" | "void" | "banished"
+  readonly variant: Variant;           // { amplified }; Phases 4.1 and 5 add the rest (D39, below)
+  status: { exhausted: boolean; gainedSpark: number; counters: number; created: boolean;
+            reclaimed: boolean; offering: boolean; ephemeral: boolean;
+            x: number | null };        // X paid to play it, kept while in play (variable spark)
   enteredZoneAt: number;               // timestamp for layer ordering
 }
 ```
@@ -123,11 +156,19 @@ type from the figment catalog as a 0● character with the spark its text gave
 it (C13), or the card a figment copy copied. Every figment is `created`. Veil
 is a keyword; losing it is a permanent floating keyword change.
 
+Emblems (an avatar or a dreamsign) are not instances: an `EmblemRef` names
+one by side (and dreamsign index), and an `AbilitySource` is an `InstanceId`
+or an `EmblemRef`.
+
 **Engine code reads every tunable from `BattleState.config`**, never from a
-content module: the battle rules limits, `autoAnswerForcedPrompts`, and the
-Dreamwell construction rules (`config.dreamwell`). `initialState` fills the
-config from the data modules once, so a serialized state determines its own
-replay.
+content module. `BattleConfig` holds the battle rules limits (score to win,
+turn limit, hand limit, opening hand sizes, starting side, first-draw skip),
+the loop limits ([Loops](#loops)), `autoAnswerForcedPrompts`, and the
+Dreamwell construction rules (`config.dreamwell`). `initialState`
+(`state/create.ts`) fills the config once from `src/content/battle.ts`,
+`src/content/dreamwell-rules.ts`, and the `BattleInit`'s score target and
+starting side, so a serialized state determines its own replay. The
+next-battle effects (D39) join `BattleInit` in Phase 4.1.
 
 **`BattleState` never contains a pending prompt.** Prompts exist only while a
 step runs. In interactive play they are reconstructed from the in-flight
@@ -148,8 +189,11 @@ cheap to clone and the same everywhere.
   - **`main`:** play, activate, reposition, or pass in Day, Dusk, or Night.
   - **`respond`:** priority with a non-empty stack.
 
-  `decision(state)` derives it from the state. The answer is a top-level
-  `Action`.
+  `decision(state)` derives it from the state as `{ kind: "main" |
+  "respond"; side }`. It is `null` while triggers wait, while a loop
+  repetition runs, when the priority holder has no legal response
+  (auto-pass, P1), outside Day, Dusk, and Night, and once the battle is
+  over. The answer is a top-level `Action`.
 
 **Prompt**
 : A choice raised *inside* a step by `ctx.choose()`:
@@ -161,7 +205,8 @@ cheap to clone and the same everywhere.
   - confirming a "you may";
   - paying an "unless" cost;
   - discarding to the hand limit;
-  - an additional-cost choice.
+  - an additional-cost choice;
+  - the route of a hand play of an Offering card.
 
 **Step**
 : The unit of execution and commitment. A step runs rules code synchronously
@@ -170,59 +215,94 @@ cheap to clone and the same everywhere.
 
 ### Top-level actions
 
+`rules/actions.ts`:
+
 ```ts
 type Action =
-  | { kind: "play"; card: InstanceId; from: "hand" | "void" | "deckTop" }
-  | { kind: "activate"; source: InstanceId | EmblemRef; ability: number }
-  | { kind: "reposition"; card: InstanceId; to: Slot }      // includes figment merges
+  | { kind: "play"; card: InstanceId; from: "hand" | "void"; slot?: Slot }  // void: by Reclaim
+  | { kind: "activate"; source: AbilitySource; ability: number }           // InstanceId | EmblemRef
+  | { kind: "reposition"; card: InstanceId; to: Slot }      // a swap, or a figment merge
   | { kind: "pass" }                                        // pass priority, or end Day/Dusk/Night
-  | { kind: "repeatLoop"; loop: LoopId; count: number | "untilVictory" }
   | { kind: "payToEnd"; effect: EffectId }                 // "until the opponent pays N●" (C7)
-  | { kind: "debug"; op: DebugOp };                         // dev builds only (D4)
+  | { kind: "repeatLoop"; loop: LoopId; count: number | "untilVictory" };
 ```
 
 **Actions carry no choices.** Every choice an action needs is a prompt inside
-its step: targets, modes, X, costs, merge confirmation.
+its step: targets, modes, X, costs, the Offering route. The one exception is
+presentation: a UI drop may name the open back-rank `slot` a played character
+enters. Legal actions never carry a slot, and `allowedBy(legal, action,
+state)` accepts that play on any open back-rank position of the player, and
+any whole `repeatLoop` count from 1 to the iteration cap.
+
+Phase 4.6 adds engine debug actions behind `?debug=1` in development builds
+([D4](decisions.md#d4-debug-tooling)).
 
 ### Step kinds
 
 Steps are kept small, so that a suspended step never has many prompts to
-replay.
+replay. Each kind is a module in `steps/kinds/` with a `StepDefinition`: its
+`run` and its `canceller`, the side that may cancel it before its commit
+point (`null` for every kind but `play` and `activate`).
 
 | Step | Runs |
 | --- | --- |
-| `play` / `activate` | Play-time prompts (X, modes, targets, additional and optional costs) → `ctx.commitPoint()` → pay costs → push to stack → queue "when you play" triggers |
-| `resolveTop` | Resolve the top stack item's effect, then queue its triggers |
-| `resolveTrigger` | Pop and resolve exactly one queued trigger; one step per trigger |
-| `advancePhase` | One phase transition and its rules actions (Dreamwell draw, Draw, Ending cleanup) |
+| `beginBattle` | Shuffle both decks, build the Dreamwell, deal opening hands, start turn 1 |
+| `play` / `activate` | Play-time prompts (the Offering route, X, modes, targets, cost alternatives, optional costs, cost cards) → `ctx.commitPoint()` → pay costs → push to stack ("when you play" triggers queue) → priority to the opponent |
+| `resolveTop` | Resolve the top stack item, then priority to its controller if the stack is still non-empty |
+| `resolveTrigger` | Resolve exactly the first queued trigger; one step per trigger |
+| `advancePhase` | One phase transition and its rules actions (Dreamwell draw, Draw, designations, Ending cleanup), or the next turn after Ending |
 | `challengeLane` | Resolve one lane; `▸Dissolved` triggers are queued |
-| `reposition` | One reposition or merge (includes the Legionnaire confirmation prompt) |
+| `reposition` | One reposition, swap, or figment merge |
+| `payToEnd` | Pay to end a payable effect (C7); no stack, no response, priority and phase unchanged |
 | `repeatLoop` | Accept the loop on offer: start a repetition, nothing else |
 | `loopIteration` | One iteration of an accepted loop shortcut (automatic while a repetition runs) |
 
+`stepForAction` maps a top-level action to its step (a `pass` is
+`resolveTop` over a non-empty stack, else `advancePhase`); `actionForStep`
+is its inverse.
+
 **The driver composes steps.** After a top-level action's step commits, the
 driver keeps running **automatic steps** until it reaches a top-level decision
-or a battle result. Automatic steps are: drain the trigger queue one step at a
-time, auto-pass (P1), and advance phases.
+or a battle result. `nextAutomaticStep` (`steps/driver.ts`) chooses them, in
+this order: the iterations of an accepted loop; draining the trigger queue,
+one step per trigger; auto-pass (P1), resolving the top of the stack when
+its priority holder has no legal response; phases that advance on their own
+(Dreamwell, Draw, Dawn, Ending); and challenge lanes.
 
 ### The rules-code contract
 
 ```ts
-interface StepContext {
-  choose<P extends Prompt>(prompt: P): AnswerFor<P>;   // synchronous
-  commitPoint(): void;           // point of no return: prompts after it are not cancellable
-  emit(event: EngineEvent): void;
-  // primitives: draw, dissolve, banish, materialize, … (never call choose internally)
+interface StepContext {                // steps/types.ts
+  readonly state: BattleState;         // the step's private work copy, mutated in place
+  readonly catalog: EngineCatalog;
+  choose<P extends Prompt>(prompt: PromptSpec<P>): AnswerFor<P>;   // synchronous; fills in `cancellable`
+  commitPoint(): void;                 // point of no return: prompts after it are not cancellable
+  emit(event: EngineEvent): void;      // records the event and matches triggers against it
+  random(stream: string): number;      // a draw from a named stream
+  adopt(state: BattleState, events: readonly EngineEvent[]): void;  // a loop iteration's nested steps
 }
 
-// Interpreter excerpt: plain synchronous code
-function resolveBanish(ctx: StepContext, spec: BanishSpec, source: InstanceId): void {
-  const candidates = legalTargets(ctx.state, spec.target, source);
-  if (candidates.length === 0) { ctx.emit({ kind: "noLegalTarget", source }); return; }
-  const [target] = ctx.choose(chooseTargets({ candidates, min: 1, max: 1, purpose: purposeOf(source, spec) }));
-  ctx.banish(target, spec.duration);
+// Interpreter excerpt (effects/interpreter.ts): plain synchronous code
+function chooseTargets(ctx, specs, controller, source, purpose): InstanceId[][] {
+  return specs.map((spec) => [...ctx.choose<ChooseTargetsPrompt>({
+    kind: "chooseTargets", side: controller, purpose,
+    candidates: targetCandidates(ctx.state, ctx.catalog, spec, controller, source),
+    ...targetBounds(spec),
+  })]);
+}
+
+// A primitive (effects/primitives/banish.ts) reads the targets chosen at play time
+resolve(ctx, node, env) {
+  for (const id of resolveCharacters(ctx, node.subject, env)) banishCharacter(ctx, id);
 }
 ```
+
+The atomic primitives of rules code are plain functions over the context in
+`rules/` (`zones.ts`: `moveInstance`, `dissolve`, `banish`, `materialize`, …;
+`resources.ts`: `drawCard`, `discardCard`, `setEnergy`, …). They never call
+`choose`. A card or ability on the stack makes its choices at play time and
+stores them on the stack item; a triggered ability, which does not use the
+stack, makes them as it resolves (`chooseOnResolution`).
 
 These rules make it work:
 
@@ -236,100 +316,135 @@ These rules make it work:
 3. **Make the prompt's legal answer set complete and enumerable.** Bounds and
    candidates are computed by the engine. Answers are validated against the
    prompt the engine itself raised, never against a client's copy.
-4. **Handle empty prompts explicitly.** A mandatory prompt with zero legal
-   answers can't be raised:
-   - At play time, the action is illegal. A [dry run](#legality-by-dry-run)
-     detects this.
+4. **Handle empty prompts explicitly.** A prompt with zero legal answers
+   can't be raised: `choose` throws `EmptyPrompt` (and `MalformedPrompt` for
+   a structurally invalid prompt). Rules code avoids raising one (rules §
+   Targeting):
+   - At play time, the empty prompt makes the action illegal. A
+     [dry run](#legality-by-dry-run) detects this.
    - At resolution time, that effect part does nothing and emits
-     `noLegalTarget`.
-   - Record this as an RD entry.
+     `noLegalTarget`, without a prompt.
 5. **Cancelling** is possible only for the acting player's own `play` and
    `activate` steps, before `commitPoint()`. Cancelling discards the in-flight
    step, and the state is exactly the committed state.
 
 ### Drivers
 
-One step runner; three answer sources:
+One step runner (`steps/runner.ts`); several answer sources:
 
 ```ts
 interface AnswerSource { answer(prompt: Prompt, work: BattleState): Answer }   // may throw Suspend
 
-function runStep(start: BattleState, step: Step, source: AnswerSource): StepResult {
-  const work = clone(start);
-  const ctx = new Context(work, source);
+function runStep(start, step, source, catalog, options?: { prefix?, dryRun?, automatic?, replay? }): StepResult {
+  const work = cloneState(start);
+  const ctx = new Context(work, catalog, source, { prefix, dryRun, replay, canceller });
   try {
-    executeStep(ctx, step);
-    return { kind: "done", state: work, events: ctx.events };
+    stepDefinition(step.kind).run(ctx, step);
   } catch (e) {
-    if (e instanceof Suspend) return { kind: "suspended", prompt: e.prompt, display: work, events: ctx.events };
+    if (e instanceof Suspend) return { kind: "suspended", prompt: e.prompt, display: work, events, answers };
     throw e;                     // engine bug: caller aborts the step; committed state is untouched
   }
+  // victory check, the automatic-step count and mandatory-cycle checks, loop detection, version + 1
+  return { kind: "done", state: work, events, answers };
 }
 ```
 
-**`InteractiveSource`** is used by the fold. It replays the in-flight record's
-answers in order. For each one, it checks that the replayed prompt's
-**fingerprint** matches the recorded one, and throws `ReplayDivergence` if
-not. When the answers run out, it throws `Suspend(prompt)`.
+**The context answers each prompt in this order:**
 
-Prompts that the auto-answer rules allow are answered by the source itself and
-recorded with `auto: true`. The rules come from data (P9), for example a
-single legal target for a mandatory effect.
+1. **Recorded answers.** `options.prefix` holds the answers recorded by
+   earlier runs of this step, replayed in order. For each one, the context
+   checks that the replayed prompt's **fingerprint** matches the recorded
+   one, and throws `ReplayDivergence` if not; a recorded answer the prompt
+   does not allow throws `IllegalAnswer`. In a loop replay
+   (`options.replay`), a prompt beyond the recording throws
+   `UnrecordedPrompt`.
+2. **Forced answers.** When `config.autoAnswerForcedPrompts` is on (P9) and
+   the prompt has exactly one legal answer (`forcedAnswer`), the context
+   answers it and records it with `auto: true`.
+3. **The source.** Every other prompt goes to the answer source, and an
+   answer the prompt does not allow throws `IllegalAnswer`.
 
-**`InlineSource`** is used by AI search, fuzzing, and tournaments. It calls
-the owning side's policy synchronously, so execution never suspends and replay
-costs nothing.
+Every answer is recorded with its prompt's fingerprint (`RecordedAnswer`).
+The sources (`steps/sources.ts`):
 
-**`ScriptedSource`** is used by tests and scenario specs. It answers from a
-list. It fails if a prompt arrives with no scripted answer, or if any answers
-are left over.
+- **`INTERACTIVE`** is used by the fold. It throws `Suspend(prompt)`, so the
+  step suspends at the first prompt without a recorded answer.
+- **`InlineSource`** is used by AI search, fuzzing, and tournaments. It calls
+  the answering side's policy function synchronously, so execution never
+  suspends and replay costs nothing.
+- **`ScriptedSource`** is used by tests and scenario specs. It answers from a
+  list and fails on a prompt with no scripted answer; `assertExhausted()`
+  fails on answers left over.
+- **`FIRST_LEGAL`** answers every prompt with its first legal answer, for
+  legality dry runs.
+- **`NO_PROMPTS`** fails on any prompt, for runs that must never prompt.
 
-**The fingerprint** is a hash of the prompt's identifying fields: kind, side,
-purpose, sorted candidates, bounds, and source instance. It is the safety net
-for the whole approach: nondeterministic rules code fails loudly on the first
-replay instead of silently corrupting a game.
+**The fingerprint** (`prompts/fingerprint.ts`) is a hash of the prompt's
+identifying fields: kind, side, purpose (which names the source), `privateTo`,
+sorted candidates or cards, bounds, mode options, arrangement destinations
+with their counts, and an "unless" cost with whether it is payable. It is the
+safety net for the whole approach: nondeterministic rules code fails loudly on
+the first replay instead of silently corrupting a game.
 
 ### Fold integration
 
-The fold's battle slice holds only plain data:
+The battle slice (`fold/slice.ts`) holds only plain data:
 
 ```ts
 interface BattleSlice {
   committed: BattleState;                  // last step boundary
   inFlight: null | {
-    step: Step;                            // e.g. { kind: "play", card: "i17" }
-    answers: { fingerprint: string; value: Answer; auto?: true }[];
+    step: Step;                            // e.g. { kind: "play", card: "i17", from: "hand" }
+    automatic: boolean;                    // an automatic step rather than a top-level action
+    answers: RecordedAnswer[];             // { fingerprint, value, auto? }
   };
   publishedEvents: number;                 // events of the in-flight step already handed to presentation
+  attempt: number;                         // in-flight attempt counter, part of prompt ids
 }
 ```
 
-The intents are:
+`createFoldAdapter(engine, { checkEventPrefix?, log? })` returns
+`start(init)`, `reduce(slice, intent)`, and `pending(slice)`. `start` builds
+the battle and runs its `beginBattle` step. `pending` replays the in-flight
+step to the prompt it is suspended on, with its `display` state; it never
+throws, and is `null` when nothing is in flight or the record fails to
+replay to a prompt.
+
+The intents each name their `side`:
 
 - **`battleAction(action)`**
-  - Allowed only when `inFlight === null` and the action is in
+  - Allowed only when `inFlight === null`, the side owns the pending
+    decision, and `allowedBy` accepts the action against
     `legalActions(committed, side)`.
   - Opens `inFlight` for its step.
 - **`answer(promptId, value)`**
-  - Allowed only when `promptId` equals the currently suspended prompt's ID
-    and `validate(prompt, value)` passes.
+  - Allowed only when `promptId` equals the currently suspended prompt's ID,
+    the side answers that prompt, and `isLegalAnswer(prompt, value)` passes.
   - Appends the answer.
 - **`cancel(promptId)`**
-  - Allowed only for a cancellable prompt.
-  - Clears `inFlight`.
+  - Allowed only for the answering side of a cancellable prompt.
+  - Clears `inFlight` and advances `attempt`.
 
-After each intent, the reducer **advances**:
+An intent that is not allowed bounces with a reason (`battleOver`,
+`stepInFlight`, `notYourDecision`, `illegalAction`, `noPendingPrompt`,
+`stalePrompt`, `notYourPrompt`, `illegalAnswer`, `notCancellable`) and
+changes nothing.
 
-1. Run the in-flight step with `InteractiveSource`.
+After each applied intent, the reducer **advances**:
+
+1. Run the in-flight step with `INTERACTIVE` and the recorded answers.
 2. If it is **suspended:**
-   - Expose `pending = prompt` and `display = work`, the intermediate state.
+   - Record its answers, so forced answers persist, and expose the prompt
+     with its id and `display`, the intermediate state.
    - Publish the step's events past `publishedEvents`.
 3. If it is **done:**
    - Commit the state and clear `inFlight`.
    - Publish the remaining events.
    - Start the next automatic step, if any, and repeat.
-4. If it **threw:**
-   - Log `engine_error` with the step and answers, for reproduction.
+4. If it **threw**, or the record fails to replay (a divergent or illegal
+   recorded answer, answers left unused, a failed event-prefix check):
+   - Return an `engine_error` record with the step, answers, and message, and
+     log `engine.error`, for reproduction.
    - Leave `committed` untouched, clear `inFlight`, and surface a recoverable
      error.
 
@@ -345,48 +460,81 @@ Properties that follow:
   is microseconds. A non-persisted memo keyed by the committed state and the
   in-flight record avoids redundant re-runs.
 - **Events are deterministic,** so re-runs regenerate an identical prefix. The
-  fold publishes only new events, and in development compares each re-run with
-  the same step's previous answer prefix; a mismatch, like any replay failure,
-  becomes an `engine_error` that keeps `committed`.
+  fold publishes only new events. With `checkEventPrefix` (development), it
+  compares each re-run with the same step's previous answer prefix; a
+  mismatch, like any replay failure, becomes an `engine_error` that keeps
+  `committed`.
+- **Logging.** The adapter hands its `log` callback the engine log records
+  ([Randomness and replay](#randomness-and-replay)) of everything it does:
+  the battle's init, each published event's record, every prompt opened,
+  answered, and cancelled, each completed action, and each error.
 - **Either side can be prompted at any time.** A human card can prompt the AI
   ("each player discards"), and an AI card can prompt the human. The UI and
   the AI host both just watch `pending.side`.
 
 ### Legality by dry run
 
-`legalActions(state, side)` enumerates the timing-legal candidates, then
-filters them with a **dry run** of each candidate's step on a clone:
+`legalActions(state, side)` (`rules/decision.ts`) lists `pass`, the legal
+plays and activations, and, in a main window, the legal repositions,
+`payToEnd` actions, and the loop on offer. `legalMoves` (`rules/legality.ts`)
+finds the plays and activations: the quick timing and cost checks
+(`canPlay`, `canActivate`) pick the candidates, then a **dry run** of each
+candidate's step (`runStep` with `dryRun`) filters them:
 
-- The `InlineSource` answers every prompt with its first legal answer.
+- `FIRST_LEGAL` answers every prompt with its first legal answer.
 - `commitPoint()` throws a `Feasible` sentinel.
+- An `EmptyPrompt` makes the candidate illegal.
 
 Reaching the commit point means every required play-time prompt had a legal
 answer and the costs are payable. This replaces a separately maintained "can
 play?" predicate, so legality can never drift from execution. Results are
-memoized per `state.version`.
+memoized in the engine's `LegalityMemo`, a `WeakMap` keyed by the state
+object (committed states are never mutated, so an entry never goes stale),
+per side. The fold shares the engine's memo; it is never persisted.
 
 ### Prompt data
 
+`prompts/types.ts` defines `Prompt` as a union discriminated by `kind`, over
+a shared base:
+
 ```ts
-interface Prompt {
-  id: string;                          // assigned by the fold; absent in inline runs
+interface PromptBase {
   side: Side;                          // who answers
-  kind: "chooseTargets" | "chooseCards" | "chooseMode" | "chooseNumber" | "arrange"
-      | "confirm" | "payOrDecline";
-  purpose: PromptPurpose;              // { source: InstanceId; cardId: CardId; ability: number; role: PurposeRole }
-  candidates?: InstanceId[];           // complete legal set
-  min?: number; max?: number;          // bounds
-  options?: ModeOption[];              // modes, each with its own legality
-  cards?: InstanceId[]; destinations?: { to: "top" | "bottom" | "void" | "hand"; min: number; max: number }[];  // arrange
+  purpose: PromptPurpose;
   cancellable: boolean;                // only before commitPoint of the acting side's own play/activate
   privateTo?: Side;                    // revealed cards visible only to the chooser (e.g. "look at the top 4")
 }
+
+interface PromptPurpose {
+  source: InstanceId | PromptEmblem | null;  // the card or emblem whose ability asks; null for a rules
+                                             // prompt (the hand limit) or, in a view, an unidentified card
+  cardId: CardId | null;                     // printed card of a card source; null for a figment, an emblem,
+                                             // or no source
+  ability: number | null;
+  role: PromptRole;                          // "target", "chooseX", "discardToHandLimit", "youMay", …
+}
+// PromptEmblem: { kind: "avatar"; side; id: AvatarId } | { kind: "dreamsign"; side; index; id: DreamsignId }
+
+type Prompt =
+  | { kind: "chooseTargets" | "chooseCards"; candidates: InstanceId[]; min: number; max: number }  // complete legal set
+  | { kind: "chooseMode"; options: { mode: number; legal: boolean }[] }
+  | { kind: "chooseNumber"; min: number; max: number }
+  | { kind: "arrange"; cards: InstanceId[];
+      destinations: { to: "top" | "bottom" | "void" | "hand"; min: number; max: number }[] }
+  | { kind: "confirm" }
+  | { kind: "payOrDecline"; energy: number; payable: boolean };   // each with PromptBase
 ```
 
-The purpose is structured, not prose. The UI renders prompt text from English
+Rules code passes a `PromptSpec` (a prompt without `cancellable`) to
+`choose`. A prompt has no id inside the engine; the fold adds one
+(`PendingPrompt.prompt.id`). Answers are `InstanceId[]`, a number, a boolean,
+or an arrangement (`{ card, to }[]`).
+
+The purpose is structured, not prose, and is part of the fingerprint, so a
+role's spelling never changes. The UI renders prompt text from English
 templates in one UI copy module, keyed by `kind` and `role` ("Choose an enemy
-to banish", "Discard a card"), with the source card shown alongside. Engine
-code never builds player-facing strings (D35).
+to banish", "Discard a card"), with the source card or emblem shown
+alongside. Engine code never builds player-facing strings (D35).
 
 ### UI contract (implemented in Phase 4)
 
@@ -431,8 +579,10 @@ See [D31](decisions.md#d31-prompt-architecture-replay-suspended-steps).
 
 The phase machine follows rules § Turn Structure, encoded once:
 
-1. **Dreamwell.** Applies from round 2.
-2. **Draw.** The player skips it on their first turn.
+1. **Dreamwell.** Current energy resets to maximum; the Dreamwell draw
+   applies from round 2 and in every extra turn.
+2. **Draw.** The starting side skips it on the battle's first turn
+   (`config.skipFirstDraw`).
 3. **Dawn.** Auto-advances.
 4. **Day.** Standard, Fast, and Interrupt windows for the active side;
    repositioning.
@@ -443,6 +593,11 @@ The phase machine follows rules § Turn Structure, encoded once:
 8. **Ending.** The hand-limit prompt (P6). Then ephemeral and offering
    banishes. Then "until end of turn" expiry and F3 returns. Then exhaust
    clears for everything, avatars included.
+
+A new turn (`beginNextTurn`, `rules/turn.ts`) takes pending extra turns
+first, most recent first (C8), and is a draw once more than `turnLimit`
+rounds would begin (P11). Its "at the start of your turn" triggers resolve
+before its Dreamwell phase (`turn.beginning`).
 
 Designations:
 
@@ -472,8 +627,12 @@ This follows [D13](decisions.md#d13-stack-and-priority).
 
 Further rules:
 
-- **Prevent** removes an item from the stack, and the card goes to its owner's
-  void. Created cards cease to exist; reclaimed cards are banished.
+- **Prevent** (`preventCard`, `rules/stack.ts`) removes a card from the
+  stack, and the card goes to its owner's void, or to the destination the
+  effect names: the top of its owner's deck, its owner's hand, or the
+  preventer's hand. Created cards cease to exist; reclaimed cards are
+  banished. "Unless the opponent pays N●" asks the prevent effect's
+  opponent with a `payOrDecline` prompt.
 - **Activated abilities** are stack items too.
 - **Copies** follow [D15](decisions.md#d15-copies-of-cards-on-the-stack). A
   copy pushed above its original offers its controller a `chooseTargets` or
@@ -489,38 +648,52 @@ Further rules:
 This follows [D14](decisions.md#d14-trigger-timing-and-order).
 
 - **Matching.** Primitives emit engine events, and `Context.emit` runs the
-  matcher on each event as it happens. Matches only join
-  `state.triggerQueue` as `QueuedTrigger`s; they never resolve inline.
+  matcher (`triggers/matcher.ts`) on each event as it happens. Matches only
+  join `state.triggerQueue` as `QueuedTrigger`s; they never resolve inline.
   Matching at the moment of the event lets ▸Dissolved see its own dissolve and
   lets "leaves play" and "leaves your void" triggers see the card as it last
   was, through the `leftPlay` and `leftVoid` events emitted just before a card
-  moves.
+  moves. Nothing triggers before the first turn begins or after the battle
+  ends.
+- **Trigger events.** `TRIGGER_EVENTS` lists the engine event kinds each
+  trigger kind can match. A new `Trigger` member fails to type-check until
+  it has an entry, the matcher refuses a match on an unlisted event, and
+  events no trigger lists skip the matcher.
 - **Shape.** A `TriggeredAbility` is `{ trigger, effect, zone, condition?,
-  oncePerTurn? }`. A queued trigger records its origin (card variant or
-  emblem), ability index, floating-trigger node, and the card the event
-  concerns, so it resolves even after its source moves or ceases to exist.
+  oncePerTurn? }`. A queued trigger records its source, controller, origin
+  (card variant, figment, or emblem), ability index, floating-trigger node,
+  and `subject`, the card the event concerns, so it resolves even after its
+  source moves or ceases to exist.
 - **Ordering.** Matches enqueue in event order. Simultaneous matches use the
   fixed order: the active side first; within a side, avatar → dreamsigns →
   characters, B0→B9 then F0→F8. Cards in other zones follow, ordered by zone
-  (void, hand, deck) and then by instance ID.
+  (void, hand, deck) and then by instance number; a card leaving play is
+  ordered by the zone it is going to, and one going to no ordered zone comes
+  last (RD-hv-7x4l.17-2). Each side's floating and delayed triggers follow
+  its cards, in creation order.
 - **Draining.** Each queued trigger resolves in its own `resolveTrigger` step,
-  so its prompts are cheap to replay.
-- **Functional zones.** Abilities that work outside play declare
-  `zone: "void" | "hand" | "any"`. Examples:
+  so its prompts are cheap to replay. Its modes and targets are chosen as it
+  resolves (`chooseOnResolution`).
+- **Functional zones.** A triggered ability works in play unless it declares
+  `zone: "void" | "hand" | "any"` (`any` is play, void, hand, and deck); an
+  emblem's abilities always work. Examples:
   - Soulkindler `4edf2d8d-61e4-4c3a-a388-4b52b2ebd005`: "▸Dawn: If this card
     is in your void, erode 3";
   - Graywatch `3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1`;
   - From the Barrow `4752fc43-6696-4bc3-88d0-4d5b97622fa8`.
 - **Intervening "if" conditions** are checked when the trigger matches and
-  again on resolution. Record this as an RD entry.
-- **Once per turn** is keyed by instance and ability index, and cleared at the
-  start of each turn.
-- **Floating triggers** are "until end of turn, when…". **Delayed triggers**
-  are one-shot "the next time…" floating triggers with `once: true`. Both
-  store a reference to their effect node in the catalog definition, so state
-  stays plain data.
-- **`triggerAbility`** enqueues a named trigger outside its phase.
-- **Disabled triggers** suppress matching.
+  again on resolution (rules § Ability Types).
+- **Once per turn** is keyed by source key and ability index
+  (`OncePerTurnKey`, which covers emblems), and cleared as each turn begins.
+- **Floating triggers** (`floating`) are "until end of turn, when…".
+  **Delayed triggers** (`delayed`) are one-shot "the next time…" floating
+  triggers with `once: true`. Both are `floatingTrigger` nodes, and their
+  floating record stores an `EffectRef` (origin, ability, and node index in
+  `everyNode`) into the catalog definition, so state stays plain data.
+- **`triggerAbility`** enqueues a named trigger outside its occasion
+  (`triggerNamed`).
+- **Disabled triggers** (`disableTriggers`, optionally while a condition
+  holds) suppress matching.
 
 ## Continuous effects
 
@@ -541,7 +714,8 @@ analog:
 1. **Copiable values:** printed values for the variant, figment catalog
    values, and figment copies' copied values (`printedCard`). Variant
    transforms (transfigurations, then deck-entry modifications,
-   [below](#deck-entry-modifications)) join this layer when Phase 4 adds them.
+   [below](#deck-entry-modifications)) join this layer in Phase 5 (5.7a,
+   5.7b).
 2. **Type changes:** "has all character types" (`allTypes`).
 3. **Ability adds and removes:** keywords gained and lost (`keyword`).
    Disabled triggers are floating records that the trigger matcher reads.
@@ -642,20 +816,24 @@ Other zone rules:
 
 ## Costs
 
-Cost kinds:
+Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
+`rules/costs.ts`):
 
-- energy: Fixed, X, or Fixed+X;
-- ☾ (back-rank characters and avatars only);
+- energy: Fixed, X, or Fixed+X (`energy`, `energyX`);
+- ☾ (`exhaustSelf`; back-rank characters and avatars only);
 - discard;
 - abandon;
 - banish from void;
 - reveal from hand;
 - counters;
-- optional additional costs.
+- a choice between costs ("A or B", `choiceCost`);
+- optional additional costs (`optionalCost`);
+- Offering's banish from hand, by the Offering route.
 
-**Cost choices are play-time prompts** before `commitPoint()`: which cards to
-discard, whether to pay the optional cost. Payment happens after the commit
-point, all of it before the item goes on the stack. Copies don't pay.
+**Cost choices are play-time prompts** before `commitPoint()`: which
+alternative to pay, whether to pay the optional cost, which cards to discard,
+abandon, reveal, or banish. Payment happens after the commit point, all of it
+before the item goes on the stack. Copies don't pay.
 
 **X legality** comes from the definition's range, which defaults to `min: 1`.
 Widen it to 0 only when X=0 does something meaningful.
@@ -663,7 +841,8 @@ Widen it to 0 only when X=0 does something meaningful.
 ## Ability DSL and content modules
 
 Each entity lives in a typed content module that holds its catalog data, its
-printed text, and its abilities together:
+printed text, and its abilities together. Windcutter is `pending: true`
+today; authored as Phase 5 will author it, it reads:
 
 ```ts
 // src/content/cards/windcutter-7be2e6d7.ts (catalog fields abbreviated)
@@ -678,21 +857,26 @@ export default card({
   spark: 1,
   // …rarity, art, and the other catalog fields…
   abilities: (v) => [
-    triggered(onChallenge(), p.banish(target(enemyCharacter()), v.amplified ? untilYourNextTurn() : untilEndOfTurn())),
+    triggered(onChallenge(), p.banishUntil(target(enemyCharacter()), v.amplified ? "untilYourNextTurn" : "untilEndOfTurn")),
   ],
   verifiedText: "…",   // expectedVerifiedText(renderedText, amplifiedText) when these abilities were verified
 });
 ```
 
-An entity is exactly one of `pending: true`, `vanilla: true`, or authored
-`abilities` with `verifiedText` (`src/content/define.ts`). The engine reads
-catalog entries through `content-catalog.ts`; a pending card plays text-less.
+`p` is the primitive catalog (`import * as p from
+"…/engine/effects/primitives"`); the other builders come from
+`engine/dsl/builders.ts` and `engine/dsl/triggers.ts`. The authored modules
+today are the Ember, Legionnaire, and Wraith figments
+(`src/content/figments/`).
 
-**Amplified text is stored expanded.** The RON catalogs author
-`amplified_text` as a compact fuzzy replacement ("until your next turn."),
-which the Rust compiler expands into the full rules text. The content modules
-store the **expanded** text from the generated runtime JSON (Phase 2.3
-parity), so no module depends on the replacement algorithm.
+An entity is exactly one of `pending: true`, `vanilla: true`, or authored
+`abilities` with `verifiedText` (`ContentStatus` in `src/content/define.ts`).
+The engine reads catalog entries through `content-catalog.ts`; a pending
+entity plays text-less.
+
+**Amplified text is stored expanded.** `amplifiedText` holds the amplified
+card's full rules text ("▸Challenge: Banish an enemy until your next
+turn."), so no module depends on a replacement algorithm.
 
 **File layout.** Use one file per entity, named `<slug>-<uuid8>.ts`. Names
 aren't unique; the UUID prefix disambiguates. Each directory has an explicit
@@ -703,25 +887,28 @@ can't use `import.meta.glob`.
 
 ```ts
 // Kindlehorn 9b9c2743-75b3-499d-b5fb-c3429c92d420: "▸Dawn: Gain 1●." / "4●, ☾: This character gains +1✦." / amplified "2●."
-(v) => [triggered(onDawn(), gainEnergy(1)), activated([energy(v.amplified ? 2 : 4), exhaustSelf()], gainSpark(self(), 1))]
+(v) => [triggered(onDawn(), p.gainEnergy(1)), activated([energy(v.amplified ? 2 : 4), exhaustSelf()], p.gainSpark(self(), 1))]
 
 // Dream Sever 6e019832-2e0c-4166-81c3-54f7995425df (Interrupt): "Prevent a played event unless the opponent pays 2●."
-() => [event(prevent(stackItem({ cardType: "event", controller: "opponent" }), { unlessPays: 2 }))]
+() => [event(p.prevent(stackItem({ cardType: "event", controller: "opponent" }), { unlessPays: 2 }))]
 
 // Echo Architect 21965e95-0c8c-470c-a1e1-06d7b87a8d00: "Events cost you 1● more." / "When you play an event, copy it."
-() => [staticAbility(costModifier("you", { cardType: "event" }, 1)), triggered(whenYouPlay({ cardType: "event" }), copyStackItem(triggeringItem()))]
+() => [staticAbility(p.costModifier("you", { cardType: "event" }, 1)), triggered(whenYouPlay({ cardType: "event" }), p.copyCard(triggeringCard()))]
 
 // Spirit Bond 3cda9dd7-cb81-43c1-9db5-1444d7363e13: "Until end of turn, characters you control have +X✦ where X is the number of characters you control."
-() => [event(forDuration("untilEndOfTurn", sparkModifier(all(characterYouControl()), lockedAtResolution(count(characterYouControl())))))]
+() => [event(p.forDuration("untilEndOfTurn", p.sparkModifier(all(characterYouControl()), lockedAtResolution(count(characterYouControl())))))]
 ```
 
 **Primitive registry.** Each primitive lives in its own module under
 `src/engine/effects/primitives/`, exporting its node type, its
-`PrimitiveDefinition` (op, optional children, modes, play-time targets, an
-optional `deferred` hook naming effects that run later and so are excluded
-from play-time target collection, and `resolve`), and its builder, exported as
-`<op>Primitive`. The registry finds each definition by that name at call
-time. `primitives/index.ts` lists one `export *` line
+`PrimitiveDefinition`, and its builder. The definition, exported as
+`<op>Primitive`, holds the op, optional `children`, `modes`, play-time
+`targets`, an optional `deferred` hook naming effects that run later and so
+are excluded from play-time target collection, `entersPlay` for a primitive
+that puts characters into play, a `continuous` hook for a continuous
+primitive, and `resolve`. A primitive holding a character or card reference
+declares it with the `characterTarget` or `cardTarget` helper. The registry
+finds each definition by that name at call time. `primitives/index.ts` lists one `export *` line
 per primitive and is the authoritative catalog; `effects/registry.ts` derives
 the `Effect` union and the op lookup from it, so adding a primitive touches
 only its module, its group's test file, and one index line. Flow primitives
@@ -733,29 +920,32 @@ are chosen. The stack item stores the chosen modes and targets, and the node
 resolves its stored mode. One target spec object used in several places is
 one target. Validation walks `children`, which list every mode.
 
-**Primitive catalog.** Phase 3 starts with a subset of these. Phase 5 extends
-them, with tests for each.
+**Primitive catalog.** The registered primitives and DSL builders, by group,
+with the ones Phase 5 adds as content batches need them, each with tests.
 
-| Group | Primitives |
-| --- | --- |
-| Resources | `gainEnergy`, `gainMaxEnergy`, `doubleEnergy`, `gainPoints`, `playerGainsPoints`, `store`, `spendCounters` |
-| Cards | `draw` (modifiers: ephemeral, cost 0), `discard` (chosen or random), `foresee`, `discover`, `erode`, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom`, `createInHand(copyOf, modifiers)` |
-| Characters | `dissolve`, `banish(duration?)`, `abandon(chooser, predicate)`, `materialize(from, selection)`, `materializeFigment(type, spark, n)`, `materializeFigmentCopy` (C5), `rematerialize`, `returnToHand`, `gainSpark(duration?)`, `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `move(slotRule)`, `gainControl`, `grant(keyword, duration)`, `loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)` |
-| Costs | `costModifier(player, filter, amount, { next, duration })` |
-| Stack | `prevent(unless?)`, `copyStackItem(times, overrides)`, `putPreventedInto(zone)` |
-| Flow | `sequence`, `choose`, `chooseOne(modes)`, `ifThen(Else)`, `forEach`, `repeat`, `optional`, `eachPlayer`, `forDuration`, `delayed(next…)`, `floating(when…)`, `takeExtraTurn` (C8) |
-| Selectors | characters (by controller, subtype, ✦/● bounds, figment or not, exhausted, rank, "another"); cards in a zone; stack items; players |
-| Values | constant, X, `count(selector)`, `supporting` (C9), `times`, stored counters, turn counters, `lockedAtResolution` |
-| Durations | `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7), `permanent` |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(pred, nth?)`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, pred)` (C10), `atStartOfTurn`, `atStartOfFirstTurn` |
+| Group | Registered | Phase 5 |
+| --- | --- | --- |
+| Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral) | `draw` at cost 0, `discover`, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
+| Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
+| Costs | `costModifier(player, filter, amount, { next, duration })` | |
+| Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
+| Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)` | `forEach`, `eachPlayer`, `takeExtraTurn` (C8) |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, `costAtMost`, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype); players (`you`, `opponent`) | figment or not |
+| Values | constant, `x`, `count(selector)`, hand size, `supporting` (C9), `times`, `lockedAtResolution` | stored counters, turn counters |
+| Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
+| Conditions | `controls`, `energyAtLeast`, `costPaid`, `sourceIn` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
 
 Dreamsigns and avatars use the same DSL as emblem abilities (P4). Dreamwell
-cards use event-like abilities. Figments are catalog entries.
+cards use event-like abilities; a drawn Dreamwell card applies only its
+`energyAdded` until Phase 5 authors its bonus. Figments are catalog entries.
 
 ## Transfigurations
 
-Each transfiguration is a pure transform of an entity's abilities, with an
-eligibility predicate:
+Phase 5.7a builds these transforms; the engine `Variant` carries only the
+amplified flag until then. Each transfiguration is a pure transform of an
+entity's abilities, with an eligibility predicate.
 
 There are nine ([F6](decisions.md#established-facts)):
 
@@ -781,6 +971,9 @@ of the two in agreement.
 ## Deck-entry modifications
 
 This follows [D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects).
+Phase 4.1 plumbs each deck entry's full variant and the next-battle effects
+into `BattleInit`, and Phase 5.7b applies them; today `Variant` and
+`DeckEntry` carry only the amplified flag. The full variant:
 
 ```ts
 interface Variant {
@@ -811,14 +1004,32 @@ interface Variant {
 
 ## Content gates
 
-**The coverage gate** is a CI test of the data↔engine contract:
+**The coverage gate** (`src/engine/content-gates.test.ts`) is the CI test of
+the data↔engine contract, over every card, dreamsign, avatar, Dreamwell card,
+and figment. Each check names every offending entity:
 
-- Every catalog entry has `abilities`, `vanilla: true`, or (only during
-  Phases 3–5) `pending: true`.
-- The pending set is empty at the Phase 5 gate.
-- Every entry with abilities has `verifiedText === hash(text, amplifiedText)`.
-  A text edit fails CI until the abilities are re-verified against the new
-  text and the hash is updated.
+- **Status.** Every entity has exactly one of `abilities`, `vanilla: true`,
+  or (only during Phases 3–5) `pending: true`. The pending set is empty at
+  the Phase 5 gate.
+- **`verifiedText`.** Every entity with abilities has `verifiedText ===
+  expectedVerifiedText(text, amplifiedText)` (`dsl/verified-text.ts`). A text
+  edit fails CI until the abilities are re-verified against the new text and
+  the hash is updated.
+- **Primitive registration.** Every authored entity's abilities build for
+  both variants, every node of each effect (every mode included) is a
+  registered primitive, and every static ability holds a continuous
+  primitive.
+- **Undeclared targets.** Every play-time target spec a primitive holds is
+  declared by its `targets` hook (`undeclaredAbilityTargets`,
+  `testing/target-audit.ts`), so play-time choices never miss one.
+- **Static references.** No static ability holds a play-time target,
+  stack target, or triggering-card (`subject`) reference anywhere in its
+  tree: the layer evaluation has no chosen target or triggering event to
+  read.
+- **Printed energy cost.** Every card's printed energy cost orbs read into
+  its engine costs (`engineCardFromContent`).
+- **Figment data.** Every figment has a unique UUID and a non-negative
+  integer base spark.
 
 The printed text is canonical and the abilities implement it (D5). There is
 no ability-to-English renderer. Correctness of an encoding is shown by
@@ -826,8 +1037,9 @@ primitive tests, scenario specs, the fuzzer, and the card-lab sweep and judged
 QA.
 
 **Pending entities** are text-less in battle until authored
-([D36](decisions.md#d36-pending-entities-play-text-less)). The interpreter
-emits `pendingAbility` for each pending play or draw.
+([D36](decisions.md#d36-pending-entities-play-text-less)). The `play` step
+and the draw rules emit `pendingAbility` for each pending card played or
+drawn and each pending Dreamwell card drawn.
 
 ## Loops
 
@@ -848,9 +1060,14 @@ of the state with monotone resources abstracted away:
 - counters;
 - gained spark;
 - deck and void contents;
-- turn counters;
+- turn counters (`turnLog`, RD-hv-7x4l.36-1);
 - bookkeeping: the version, minted-id and timestamp counters, random-stream
-  positions, and absolute zone-entry timestamps (their order stays).
+  positions, each side's knowledge (`knownTo`), the automatic-step count,
+  the loop tracker, and absolute zone-entry timestamps (their order stays).
+
+`loops/signature.ts` classifies every field of `BattleState` and `SideState`
+as position, resource, or bookkeeping in typed field tables, so a field added
+to either interface fails to compile until it is classified.
 
 **History.** The tracker keeps one history per scope: one acting side's main
 window in one turn. It holds each checkpoint (signature, resources, and the
@@ -924,16 +1141,26 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 
 ## Randomness and replay
 
-- **RNG** uses named streams:
+- **RNG** (`state/rng.ts`) uses named streams:
   - `shuffle:<side>`;
   - `dreamwell`;
-  - `random:<purpose>`.
+  - `random:<purpose>` (`random:discard`).
 
-  New random effects never perturb other streams. Every draw logs its stream
-  and purpose.
+  Each stream is a counter in `state.rng`: draw `n` of stream `s` is a hash
+  of the seed, `s`, and `n`, so new random effects never perturb other
+  streams. The engine log records the counters each step advanced
+  (`engine.rng`, one record per stream).
 - **Seeds.** The battle seed derives from the game seed and the battle index.
 - **The fold log is the replay:** top-level actions, answers, and cancels.
-  Fixtures and the fuzzer re-run logs and compare the hashes of final states.
+  Fixtures and the fuzzer re-run logs and compare the hashes of final states
+  (`stateHash`, `state/hash.ts`).
+- **The engine log** (`log.ts`) is the schema hosts write. The engine stays
+  pure and never calls a logger: the fold adapter, the fuzzer, and later the
+  worker host and tournament runner build `EngineLogRecord`s from what the
+  engine returns. `engine.battleStarted` and the `engine.action` records,
+  each with every answer it took, replay the battle from its init; the
+  prompt, trigger, loop, rng, battle-end, and error records explain what the
+  replay does. Records carry instance IDs and catalog UUIDs, never names.
 
 ## Views and hidden information
 
@@ -955,10 +1182,11 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: whole for the side answering, and otherwise with only the cards and
   purpose source `side` can identify.
-- **The UI renders only views.** Debug reveal switches that side's view to
-  omniscient.
+- **The UI renders only views.** The Phase 4.6 debug reveal switches that
+  side's view to omniscient.
 - **Determinization** (D22) is `engine.determinize(view, decklists, random)
-  → BattleState`. The decklists include each entry's variant (D39). It
+  → BattleState`. The decklists are `DeckEntry` lists with each entry's
+  variant (D39; today the amplified flag). It
   deals the cards the view hides from what each decklist has left after the
   cards the view shows, keeps every known card at its known position, and
   reads nothing but the view, so states that look alike to the viewer give
@@ -970,7 +1198,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 
 ## Presentation
 
-Every engine event kind maps to an existing animation, particle, or log line:
+Phase 4.4 builds this. Every engine event kind (`events/kinds/`; each
+declares whether it is private to one side) maps to an existing animation,
+particle, or log line:
 
 - dissolve, banish, materialize;
 - spark change;
@@ -997,6 +1227,11 @@ doesn't gate the fold.
 
 ## Policy interface
 
+Phase 4.5 builds `src/engine/policy/` with this interface, the worker host,
+and Greedy; Phase 7 adds the bots. Today the fuzzer's Random policy
+(`testing/random-policy.ts`, with the policy-private `PolicyRandom` stream)
+plays both sides through `InlineSource` and `engine.apply`.
+
 ```ts
 type PolicyDecision =
   | { kind: "topLevel"; decision: TopLevelDecision; legal: Action[] }
@@ -1009,7 +1244,7 @@ interface Policy {
 interface PolicyContext {
   rng: Rng;                                    // policy-private stream; never the battle RNG
   budget: { iterations: number; wallClockMs?: number };
-  decklist: { mine: CardId[]; opponent: CardId[] };   // D22
+  decklists: Decklists;                        // D22: each side's DeckEntry list, as determinize reads it
   log: (entry: PolicyTrace) => void;
 }
 ```
@@ -1029,9 +1264,14 @@ an intent.
 ## Testing layers
 
 - **Primitive and rules tests:** `src/engine/**/*.test.ts`, using synthetic
-  definitions from `src/engine/testing/synthetic-cards.ts`. These are test
-  fixtures, not catalog content.
-- **Prompt properties:** the core of Phase 3.3.
+  definitions from `src/engine/testing/` (`synthetic-cards.ts`, with the
+  reserved `5e5e5e5e-` UUID prefix, and the per-area fixture modules:
+  `dsl-cards.ts`, `stack-cards.ts`, `trigger-cards.ts`,
+  `continuous-cards.ts`, `zone-cards.ts`, `loop-cards.ts`,
+  `synthetic-effects.ts`). These are test fixtures, not catalog content.
+  `boardState` (`testing/board.ts`) builds a committed state with cards
+  placed directly.
+- **Prompt properties** (`fold/fold.test.ts`): the core of Phase 3.3.
   - **Equivalence.** For seeded synthetic games, run the game with
     `InlineSource` while recording its answers. Then replay the same answers
     through the fold, suspending and resuming at **every** prompt. Final
@@ -1044,39 +1284,50 @@ an intent.
     exactly. A cancel after it is rejected.
   - **Edge cases:** empty candidate sets, prompts alternating sides within one
     step, and auto-answers recorded and replayed.
-- **Scenario specs:** one file per content batch,
-  `src/content/specs/<batch-slug>.spec.ts`, written per D20, with scripted
-  answers. Like every engine and content test, they run in the `node`
-  environment ([D19](decisions.md#d19-test-pruning)):
+- **Scenario specs** (`testing/scenario.ts`, `runScenario`): a board, the
+  top-level actions in order, and scripted answers to every non-automatic
+  prompt, run through `engine.apply` with a `ScriptedSource`. It fails if a
+  prompt has no scripted answer or answers are left over. Primitive tests use
+  it today; Phase 5 writes one file per content batch,
+  `src/content/specs/<batch-slug>.spec.ts`, per D20. Like every engine and
+  content test, they run in the `node` environment
+  ([D19](decisions.md#d19-test-pruning)):
 
   ```ts
-  spec("7be2e6d7-abff-4c44-a0c3-35460da1693c", "challenge trigger banishes the opposing blocker until Ending", {
-    board: { me: { F2: card("7be2e6d7-abff-4c44-a0c3-35460da1693c") }, enemy: { F2: vanilla(3) } },
-    at: "endOfDay",
-    play: [pass() /* Dusk */],
-    answers: [targets(enemy("F2"))],
-    expect: (s) => [zoneOf(s, enemy("F2")) === "banished", scoreOf(s, "me") === 1],
+  const { state, ids } = runScenario(engine, {
+    board: { active: "player", phase: "day", player: { hand: [DSL.dissolveEnemy.id], energy: 2, deck },
+             enemy: { back: [vanilla2.id, vanilla3.id], deck } },
+    steps: (ids) => [{ side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } }],
+    answers: (ids) => [[ids.enemy.back[1]]],    // the dissolve target
   });
   ```
 
-- **Fuzz invariants** (`npm run fuzz:engine`): seeded games, random decks,
-  random transfigurations, random deck-entry modifications, Random and Greedy
-  policies. Every Nth game runs in
-  interactive replay mode to exercise suspension. After every step, it
-  asserts:
-  - zone conservation;
+- **Fuzz invariants** (`npm run fuzz:engine -- --games N [--seed]
+  [--first] [--interactive-every 10]`, `testing/fuzz.ts`): seeded games with
+  random decks mixing the synthetic fixtures with the production catalog (a
+  tenth of the entries amplified), the Random policy on both sides. Every Nth
+  game is replayed through the fold, suspending at every prompt, and must
+  match the inline game's final state, events, and fingerprints; every game
+  is replayed inline to the same final hash. After every step
+  (`invariantViolations`, `testing/invariants.ts`), it asserts:
+  - zone conservation and agreement between zone lists and instance zones;
   - rank capacities;
-  - non-negative energy and score;
-  - every prompt has ≥1 legal answer and every legal answer validates;
-  - view redaction;
-  - serialization round-trip;
-  - replay determinism.
+  - non-negative energy, score, spark, and effective cost;
+  - priority held exactly while the stack is non-empty;
+  - no floating effect outliving its cards, payable effect, or source;
+  - memoized characteristics equal to a fresh evaluation;
+  - a loop run or offer only where it belongs;
+  - knowledge only of cards in decks and hands, and view redaction;
+  - serialization round-trip.
 
-  Games must terminate.
-- **The card-lab setup solver** is shared by specs, the card-lab scene, and the
-  sweep. It synthesizes a minimal legal board for an entity from its selectors
-  and costs. Per-entity overrides live in
-  `src/engine/testing/lab-overrides.ts`.
+  At every prompt it checks the prompt's redaction (`testing/redaction.ts`).
+  Games must terminate. A failing game writes its engine log to
+  `logs/fuzz/<run-id>/<game>.jsonl`. Phase 4.5 adds Greedy, and Phase 5 adds
+  random transfigurations and deck-entry modifications.
+- **The card-lab setup solver** (`testing/lab-solver.ts`) is shared by
+  specs, the card-lab scene (Phase 4.6), and the sweep. It synthesizes a
+  minimal legal board for an entity from its selectors and costs. Per-entity
+  overrides live in `src/engine/testing/lab-overrides.ts`.
 
 ## Performance targets
 
