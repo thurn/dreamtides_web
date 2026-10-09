@@ -2,8 +2,9 @@
  * Copies (D15, C3): a copy of a card on the stack is a created card directly
  * above the original that is not played, keeps X and paid optional costs,
  * lets its controller choose new targets through a prompt that never offers
- * a card that cannot be targeted, and can be prevented; created copies in a
- * hand cease to exist instead of being banished.
+ * a card that cannot be targeted, keeps each of the original's choices that
+ * has no legal option, and can be prevented; created copies in a hand cease
+ * to exist instead of being banished.
  */
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
@@ -18,7 +19,7 @@ import { DSL } from "../testing/dsl-cards";
 import { invariantViolations } from "../testing/invariants";
 import { STACK } from "../testing/stack-cards";
 import { SYNTHETIC } from "../testing/synthetic-cards";
-import { at, passUntil } from "../testing/trigger-harness";
+import { at, type Observed, passUntil } from "../testing/trigger-harness";
 import { ZONE, zoneCatalog } from "../testing/zone-cards";
 
 const engine = createEngine(zoneCatalog());
@@ -31,10 +32,11 @@ function board(setup: Partial<BoardSetup>) {
 
 function act(state: BattleState, side: Side, action: Action, answers: readonly Answer[] = []) {
   const source = new ScriptedSource(answers);
-  const result = engine.apply(state, side, action, source);
+  const steps: Observed[] = [];
+  const result = engine.apply(state, side, action, source, (next, step, events) => steps.push({ state: next, step, events }));
   source.assertExhausted();
   expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
-  return result;
+  return { ...result, steps };
 }
 
 function play(state: BattleState, side: Side, card: InstanceId | null | undefined, answers: readonly Answer[] = []) {
@@ -46,6 +48,23 @@ function copyOf(events: readonly EngineEvent[]): InstanceId {
   const copied = events.find((event) => event.kind === "cardCopied");
   if (copied?.kind !== "cardCopied") throw new Error("nothing was copied");
   return copied.copy;
+}
+
+/** The state right after the step that made a copy, the copy, and the events up to and after that step. */
+function atCopy(steps: readonly Observed[]) {
+  const index = steps.findIndex((observed) => observed.events.some((event) => event.kind === "cardCopied"));
+  const observed = steps[index];
+  if (observed === undefined) throw new Error("nothing was copied");
+  const copy = copyOf(observed.events);
+  const item = observed.state.stack.find((entry) => entry.kind === "card" && entry.instance === copy);
+  return {
+    state: observed.state,
+    copy,
+    item,
+    viewItem: engine.view(observed.state, "player").stack.find((entry) => entry.kind === "card" && entry.instance === copy),
+    before: steps.slice(0, index + 1).flatMap((step) => step.events),
+    after: steps.slice(index + 1).flatMap((step) => step.events),
+  };
 }
 
 describe("copies on the stack", () => {
@@ -88,21 +107,69 @@ describe("copies on the stack", () => {
     expect(result.state.instances[shielded!]?.zone).toBe("play");
   });
 
-  it("finds no legal option for a copy's target choice when its only candidate cannot be targeted", () => {
+  it("keeps the original's target for a copy's target choice with no legal option, and skips it at resolution while it is illegal", () => {
     const { state, ids } = board({ player: { back: [DSL.untargetableCharacter.id], hand: [DSL.dissolveEnemy.id], energy: 2 }, enemy: { back: [v.vanilla2.id], hand: [ZONE.mirror.id], energy: 1 } });
     const shielded = ids.player.back[0]!;
-    const dissolve = ids.player.hand[0];
-    const played = act(state, "player", { kind: "play", card: dissolve, from: "hand" }).state;
+    const original = ids.enemy.back[0]!;
+    const played = play(state, "player", ids.player.hand[0]).state;
     // The enemy copies the dissolve: for the copy, "an enemy" is a player's character, and the only one cannot be targeted.
     const mirrored = play(played, "enemy", ids.enemy.hand[0]);
-    const done = passUntil(engine, mirrored.state, (next) => next.stack.length === 0);
-    const events = [...mirrored.events, ...done.events];
-    expect(events).toContainEqual({ kind: "noLegalTarget", source: copyOf(events) });
-    // The copy's choice raised no prompt and recorded no answer naming the character.
-    expect(mirrored.answers.map((answer) => answer.value)).not.toContainEqual([shielded]);
-    expect(done.state.instances[shielded]?.zone).toBe("play");
-    // The original still dissolves its own target.
-    expect(done.state.instances[ids.enemy.back[0]!]?.zone).toBe("void");
+    const copied = atCopy(mirrored.steps);
+    expect(copied.item).toMatchObject({ choices: [{ modes: [], targets: [[original]] }] });
+    expect(copied.viewItem).toMatchObject({ choices: [{ targets: [[original]] }] });
+    // Keeping the original's target raises no prompt and reports nothing as the copy is made.
+    expect(mirrored.answers).toEqual([expect.objectContaining({ auto: true })]);
+    expect(copied.before.filter((event) => event.kind === "noLegalTarget")).toEqual([]);
+    // The kept target is the copier's own character, not an enemy, so the copy does nothing; the original still dissolves it.
+    expect(copied.after).toContainEqual({ kind: "noLegalTarget", source: copied.copy });
+    expect(mirrored.state.stack).toEqual([]);
+    expect(mirrored.state.instances[shielded]?.zone).toBe("play");
+    expect(mirrored.state.instances[original]?.zone).toBe("void");
+  });
+
+  it("resolves a kept original target that becomes legal for the copy's controller before the copy resolves", () => {
+    const { state, ids } = board({
+      player: { hand: [DSL.dissolveEnemy.id, ZONE.quickSeize.id], energy: 3 },
+      enemy: { back: [v.vanilla2.id], hand: [v.interruptEvent.id, ZONE.mirror.id], energy: 2 },
+    });
+    const [dissolve, seize] = ids.player.hand;
+    const [response, mirror] = ids.enemy.hand;
+    const original = ids.enemy.back[0]!;
+    // The stack becomes dissolve, response, seize, mirror: the mirror's copy goes directly above the dissolve, below the seize.
+    const played = play(state, "player", dissolve).state;
+    const responded = play(played, "enemy", response).state;
+    const seizing = play(responded, "player", seize).state;
+    const mirrored = play(seizing, "enemy", mirror, [[dissolve]]);
+    // The player controls no characters as the copy is made, so it keeps the original's target, the enemy's own character.
+    const copied = atCopy(mirrored.steps);
+    expect(copied.item).toMatchObject({ choices: [{ targets: [[original]] }] });
+    expect(copied.state.stack.map((item) => (item.kind === "card" ? item.instance : null))).toEqual([dissolve, copied.copy, response, seize]);
+    // The seize resolves first and makes it an enemy of the copy's controller, so the copy dissolves it.
+    expect(copied.after).toContainEqual(expect.objectContaining({ kind: "controlChanged", instance: original, to: "player" }));
+    expect(mirrored.state.stack).toEqual([]);
+    expect(mirrored.state.instances[original]?.zone).toBe("void");
+    expect(copied.after).not.toContainEqual({ kind: "noLegalTarget", source: copied.copy });
+    // The original, resolving last, finds its target gone.
+    expect(copied.after).toContainEqual({ kind: "noLegalTarget", source: dissolve });
+  });
+
+  it("keeps the original's choices one at a time, choosing anew wherever a legal option exists", () => {
+    const { state, ids } = board({ player: { hand: [ZONE.modalThenPump.id] }, enemy: { back: [v.vanilla1.id, v.vanilla2.id], hand: [ZONE.mirror.id], energy: 1 } });
+    const [first, second] = ids.enemy.back;
+    if (first === null || first === undefined || second === null || second === undefined) throw new Error("fixture has empty backs");
+    // The original exhausts the first enemy and pumps the second.
+    const played = play(state, "player", ids.player.hand[0], [1, [first], [second]]).state;
+    const spark = (from: BattleState, id: InstanceId) => engine.view(from, "player").instances[id]?.characteristics?.spark ?? 0;
+    const before = [spark(played, first), spark(played, second)];
+    // The player controls no characters: the copy keeps the original's mode and that mode's target, and pumps the first enemy instead.
+    const mirrored = play(played, "enemy", ids.enemy.hand[0], [[first]]);
+    const copied = atCopy(mirrored.steps);
+    expect(copied.item).toMatchObject({ choices: [{ modes: [1], targets: [[first], [first]] }] });
+    expect(mirrored.answers.filter((answer) => answer.auto !== true).map((answer) => answer.value)).toEqual([[first]]);
+    expect(copied.before.filter((event) => event.kind === "noLegalTarget")).toEqual([]);
+    expect(copied.after).toContainEqual({ kind: "noLegalTarget", source: copied.copy });
+    expect([spark(mirrored.state, first), spark(mirrored.state, second)]).toEqual(before.map((value) => value + 1));
+    expect(mirrored.state.instances[first]).toMatchObject({ zone: "play", status: { exhausted: true } });
   });
 
   it("keeps the original's X without paying again", () => {

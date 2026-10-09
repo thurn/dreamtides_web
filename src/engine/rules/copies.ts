@@ -6,7 +6,7 @@
  */
 import { printedCard } from "../catalog";
 import { eventAbilities } from "../effects/abilities";
-import { chooseOnResolution, purposeOf } from "../effects/interpreter";
+import { chooseForCopy, purposeOf } from "../effects/interpreter";
 import { instanceOrigin } from "./activation";
 import type { InstanceId, Side } from "../state/ids";
 import type { Printing } from "../state/types";
@@ -14,7 +14,7 @@ import type { StepContext } from "../steps/types";
 import { createFigments } from "./figments";
 import { addFloating } from "./floating";
 import { freeBackSlotsAfterStack } from "./timing";
-import { copyChoices, createInstance, instanceOf } from "./zones";
+import { createInstance, instanceOf } from "./zones";
 
 /**
  * Copies the card `original` on the stack for `controller` (D15): the copy is
@@ -22,8 +22,9 @@ import { copyChoices, createInstance, instanceOf } from "./zones";
  * (no play triggers, play counts, or priority), keeps the original's X and
  * paid optional costs, and its controller may choose new modes and targets:
  * each choice is a prompt, answered automatically when it has one legal
- * answer, and a choice with no legal option keeps the original's. A copy of a
- * character is not created while its controller's back rank would be full.
+ * answer, and each choice with no legal option keeps the original's for that
+ * choice alone (`chooseForCopy`). A copy of a character is not created while
+ * its controller's back rank would be full.
  * Returns the copy, or `null` when the original is no longer on the stack.
  */
 export function copyOnStack(ctx: StepContext, original: InstanceId, controller: Side): InstanceId | null {
@@ -39,16 +40,21 @@ export function copyOnStack(ctx: StepContext, original: InstanceId, controller: 
   }
   const copy = createInstance(ctx, source.printing, controller, source.variant, "stack");
   const abilities = eventAbilities(definition, source.variant);
-  const choices = abilities.map(
-    (ability, position) =>
-      chooseOnResolution(ctx, ability.effect, controller, copy.id, (role) => purposeOf(copy.id, instanceOrigin(copy), ability.ability, role)) ??
+  const choices = abilities.map((ability, position) =>
+    chooseForCopy(
+      ctx,
+      ability.effect,
+      controller,
+      copy.id,
+      (role) => purposeOf(copy.id, instanceOrigin(copy), ability.ability, role),
       item.choices[position] ?? { modes: [], targets: [] },
+    ),
   );
   state.stack.splice(index + 1, 0, {
     kind: "card",
     instance: copy.id,
     controller,
-    choices: choices.map(copyChoices),
+    choices,
     x: item.x,
     optionalPaid: [...item.optionalPaid],
   });

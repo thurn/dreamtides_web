@@ -705,7 +705,13 @@ Further rules:
   `chooseMode` prompt when legal alternatives exist (`rules/copies.ts`,
   `copyCard`): each choice is a resolution-time prompt, answered
   automatically with one legal answer, and a choice with no legal option keeps
-  the original's (RD-hv-7x4l.8-4). The copy keeps the item's `x` and
+  the original's (RD-hv-7x4l.8-4). `chooseForCopy` keeps choices one at a
+  time: a modal node with no legal mode keeps the mode the original chose for
+  it, and a target spec with too few candidates keeps the original's targets
+  for that spec, while every other choice is made anew. Keeping a choice
+  reports nothing; resolution re-checks kept targets like any chosen target
+  and reports `noLegalTarget` for a part whose targets are all illegal then.
+  The copy keeps the item's `x` and
   `optionalPaid`, emits `cardCopied` instead of `cardPlayed`, and changes no
   priority.
 

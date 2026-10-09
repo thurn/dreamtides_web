@@ -8,6 +8,7 @@ import type { EngineCardDefinition, EngineFigmentDefinition } from "../catalog";
 import {
   abandonCost,
   activated,
+  anyCharacter,
   characterYouControl,
   count,
   energy,
@@ -127,6 +128,12 @@ export const ZONE = {
   sacrifice: card(20, "character", 1, () => [activated([abandonCost()], p.draw(1))], { subtype: "Mage" }),
   /** "Materialize a 1✦ Ember figment." */
   emberCall: card(21, "event", 1, () => [event(p.materializeFigments(FIGMENT.ember))]),
+  /** ❖❖ "Gain control of an enemy." */
+  quickSeize: card(22, "event", 1, () => [event(p.gainControl(target(enemyCharacter())))], { speed: "interrupt" }),
+  /** "Choose one: Dissolve an enemy; or exhaust an enemy. Then a character gains +1✦." */
+  modalThenPump: card(23, "event", 0, () => [
+    event(p.sequence(p.chooseOne(p.dissolve(target(enemyCharacter())), p.exhaust(target(enemyCharacter()))), p.gainSpark(target(anyCharacter()), 1))),
+  ]),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 export const ZONE_CARDS: readonly EngineCardDefinition[] = Object.values(ZONE);

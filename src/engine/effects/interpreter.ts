@@ -282,6 +282,39 @@ export function choosePlayTime(
   });
 }
 
+/** A mode prompt offering `legal` modes, answered automatically when only one is legal. */
+function promptMode(ctx: StepContext, legal: readonly boolean[], controller: Side, purpose: PromptPurpose): number {
+  return ctx.choose<ChooseModePrompt>({
+    kind: "chooseMode",
+    side: controller,
+    purpose,
+    options: legal.map((isLegal, index) => ({ mode: index, legal: isLegal })),
+  });
+}
+
+/**
+ * A target prompt over `candidates`, which number at least `bounds.min`;
+ * none and no prompt when there are no candidates.
+ */
+function promptTargets(
+  ctx: StepContext,
+  candidates: InstanceId[],
+  bounds: { readonly min: number; readonly max: number },
+  controller: Side,
+  purpose: PromptPurpose,
+): InstanceId[] {
+  if (candidates.length === 0) return [];
+  const chosen = ctx.choose<ChooseTargetsPrompt>({
+    kind: "chooseTargets",
+    side: controller,
+    purpose,
+    candidates,
+    min: bounds.min,
+    max: Math.min(bounds.max, candidates.length),
+  });
+  return [...chosen];
+}
+
 /**
  * Choices for an effect made as it resolves, for a triggered ability, which
  * does not use the stack: modes, then targets, in walk order. A required
@@ -307,12 +340,7 @@ export function chooseOnResolution(
         blocked = true;
         return 0;
       }
-      const mode = ctx.choose<ChooseModePrompt>({
-        kind: "chooseMode",
-        side: controller,
-        purpose: purpose("chooseOne"),
-        options: legal.map((isLegal, index) => ({ mode: index, legal: isLegal })),
-      });
+      const mode = promptMode(ctx, legal, controller, purpose("chooseOne"));
       modes.push(mode);
       return mode;
     },
@@ -329,16 +357,58 @@ export function chooseOnResolution(
       ctx.emit({ kind: "noLegalTarget", source });
       return [];
     }
-    if (candidates.length === 0) return [];
-    const chosen = ctx.choose<ChooseTargetsPrompt>({
-      kind: "chooseTargets",
-      side: controller,
-      purpose: purpose("target"),
-      candidates,
-      min: bounds.min,
-      max: Math.min(bounds.max, candidates.length),
-    });
-    return [...chosen];
+    return promptTargets(ctx, candidates, bounds, controller, purpose("target"));
+  });
+  return { modes, targets };
+}
+
+/**
+ * A copy's choices for an effect (D15, RD-hv-7x4l.8-4): its controller makes
+ * each of the original's choices again, modes then targets in walk order, as
+ * prompts answered automatically when only one answer is legal. Each choice
+ * with no legal option keeps the original's, one choice at a time: a modal
+ * node with no legal mode keeps the mode the original chose for that node,
+ * and a target spec with fewer candidates than it requires keeps the
+ * original's targets for that spec. Keeping a choice reports nothing; the
+ * copy's resolution re-checks a kept target like any chosen target, and a
+ * part whose targets are all illegal then does nothing and reports
+ * noLegalTarget. The result shares no arrays with `original`. Throws when
+ * `original` lacks a choice the copy keeps, which legal play-time choices
+ * never do: a choice reached only through a mode the copy chose anew always
+ * has a legal option.
+ */
+export function chooseForCopy(
+  ctx: StepContext,
+  effect: EffectNode,
+  controller: Side,
+  source: AbilitySource,
+  purpose: (role: PromptRole) => PromptPurpose,
+  original: EffectChoices,
+): EffectChoices {
+  let originalModes: ChosenModes | null = null;
+  const originalModesNow = (): ChosenModes => (originalModes ??= chosenModes(effect, original.modes));
+  const modes: number[] = [];
+  walkPlayTime(
+    effect,
+    (node, options) => {
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source));
+      const kept = legal.includes(true) ? null : originalModesNow().get(node);
+      if (kept === undefined) throw new Error(`The original made no choice for a ${node.op} node its copy keeps`);
+      const mode = kept ?? promptMode(ctx, legal, controller, purpose("chooseOne"));
+      modes.push(mode);
+      return mode;
+    },
+    () => undefined,
+  );
+  let originalSpecs: PlayTimeTarget[] | null = null;
+  const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source);
+    const bounds = targetBounds(spec);
+    if (candidates.length >= bounds.min) return promptTargets(ctx, candidates, bounds, controller, purpose("target"));
+    originalSpecs ??= collectTargets(effect, originalModesNow());
+    const kept = original.targets[originalSpecs.indexOf(spec)];
+    if (kept === undefined) throw new Error("The original chose no targets for a target its copy keeps");
+    return [...kept];
   });
   return { modes, targets };
 }
