@@ -149,7 +149,8 @@ primitive dependency and frequency:
 
 When 5.1 lands, the orchestrator files one bead per batch from the inventory.
 Each gets an `Areas:` line naming its entity modules, its new primitive
-modules, and its spec file. Add batch-to-batch
+modules, its spec file, `engine hubs`, and the fallout areas its
+[fallout listing](workflow.md#listing-fallout-before-dispatch) calls for. Add batch-to-batch
 edges only where the inventory shows a primitive dependency. File the
 remaining Phase 5 task beads (5.3–5.10, including 5.7a and 5.7b) with the
 edges in the [task graph](#earliest-start-and-task-graph).

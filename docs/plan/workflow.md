@@ -63,7 +63,9 @@ Phases 2 and 3 and Track T are already filed.
 2. **Create one child per task on the phase page.** Give each:
    - `--parent <epic>`;
    - a description that names its phase-page section and its scope, and ends
-     with an `Areas:` line (see [Areas](#areas));
+     with an `Areas:` line (see [Areas](#areas)) that carries its hub areas
+     and the fallout areas its
+     [fallout listing](#listing-fallout-before-dispatch) calls for;
    - acceptance criteria copied from the phase page;
    - `hive_origin_thread` metadata;
    - the label `core-review` where the page marks it.
@@ -109,10 +111,11 @@ review follow-ups are filed the same way. They preempt other ready work
 Every bead description ends with one line:
 
 ```text
-Areas: src/rules/journey/, src/content/economy.ts, package.json
+Areas: src/rules/journey/, src/content/economy.ts, fold hubs, fallout: SiteState
 ```
 
-- An area is a directory prefix or a file.
+- An area is a directory prefix, a file, a [hub area](#hub-areas), or a
+  [fallout area](#fallout-areas).
 - These are each a single area: `package.json` with `package-lock.json`,
   `eslint.config.js`, `vitest.config.ts`, `tsconfig*.json`, `scripts/review*.mjs`,
   the local Tollgate policy, `docs/rules.md`, the plan pages with
@@ -129,6 +132,81 @@ change as a new bead.
 
 A gate bead's long checks (soaks, playthroughs, reviews) hold no areas. It
 takes the plan-pages area only to commit its evidence.
+
+#### Fallout areas
+
+`fallout: <exported symbol or file>` covers the edits `tsc` forces wherever
+that symbol, or any export of that file, is imported or constructed:
+
+- import lines and re-exports;
+- call-site arguments and type annotations;
+- renamed or deleted identifiers;
+- a neutral value for a new required field in test fixtures and synthetic
+  builders;
+- re-stamped replay fixture hashes.
+
+A fallout edit keeps behavior. Any other change outside the bead's areas
+still stops the subagent: a changed branch, value, rendered output, log line,
+or test assertion.
+
+Name a fallout area for every exported type, field, or signature the bead
+changes or deletes. Name the file instead when the bead reshapes most of its
+exports.
+
+#### Hub areas
+
+A hub area names the shared files most features in a layer touch. It grants
+the same rights as any area. Write its name in the `Areas:` line.
+
+- **`engine hubs`**, taken by every bead that changes `src/engine/`:
+  - `src/engine/state/`: state types, initial state, clone, hash and
+    serialization, ids;
+  - `src/engine/steps/*.ts`: the runner, context, driver, sources, errors,
+    and types (not `steps/kinds/`);
+  - `src/engine/prompts/`, `src/engine/events/index.ts`, and new modules in
+    `src/engine/events/kinds/`;
+  - `src/engine/effects/types.ts`, `src/engine/view/view.ts`,
+    `src/engine/fold/slice.ts`;
+  - `src/engine/engine.ts`, `index.ts`, `catalog.ts`, `content-catalog.ts`,
+    and `log.ts`;
+  - `src/engine/testing/`: synthetic cards, fixtures, the fuzz pool,
+    policies, invariants;
+  - `src/content/battle.ts` (battle tunables) and
+    `docs/plan/engine-design.md`.
+- **`fold hubs`**, taken by every bead that adds, changes, or removes an
+  intent, a fold-state field, or a genesis input:
+  - `src/rules/events.ts`, `src/rules/reducer.ts`, `src/rules/fold-state.ts`;
+  - `src/session/actions.ts`, `src/session/genesis.ts`,
+    `src/session/reducer-version.ts`;
+  - `src/rules/replay/` and `scripts/regenerate-replay-fixtures.mjs`.
+
+#### Listing fallout before dispatch
+
+Before writing or dispatching a bead's `Areas:` line, the orchestrator lists
+the importers of every exported symbol the bead will change. From the
+worktree root:
+
+```sh
+# The symbols the bead changes or deletes:
+git grep -lwE 'SiteState|SiteGenerationContext' -- src scripts
+
+# Every export of a file the bead reshapes:
+f=src/engine/state/types.ts
+syms=$(grep -oE '^export (declare )?(abstract )?(async )?(interface|type|function|const|let|class|enum) [A-Za-z0-9_]+' "$f" | awk '{print $NF}' | paste -sd'|' -)
+git grep -lwE "$syms" -- src scripts
+```
+
+- Append `| grep -E '\.test\.tsx?$'` to see the test files alone.
+- The lookup follows barrels (`src/engine/index.ts`) and type-only imports. It
+  over-lists short common names; read the hits.
+- It misses a value built through a parent type with no named import. The
+  subagent's compile check in the [brief](#implementation-brief) finds those.
+- `review:gate`'s related-test lookup (`scripts/review-related-tests.mjs`)
+  selects transitive test files, not direct importers. It does not list
+  fallout.
+
+Every listed file outside the bead's areas gets a fallout area, a hub area, or
+a wider area.
 
 ### Selection order
 
@@ -194,11 +272,15 @@ A gate bead closes only when all of these hold:
 1. **Create the worktree** (orchestrator):
    `tg --no-launch worktree create wt/<slug>`. In staged mode it is based on
    `staging`, which holds every earlier bead. Record its path.
-2. **Use port 5174** for the bead's QA dev server, and 5175 or higher for a
+2. **List the fallout** in the worktree
+   ([Listing fallout before dispatch](#listing-fallout-before-dispatch)).
+   Add the fallout, hub, or wider areas the listing calls for to the bead's
+   `Areas:` line, and record each widening in the bead notes.
+3. **Use port 5174** for the bead's QA dev server, and 5175 or higher for a
    QA helper. Never use 5173.
-3. **Launch the implementation subagent** with the Agent tool, with the
+4. **Launch the implementation subagent** with the Agent tool, with the
    [brief](#implementation-brief). Record its agent ID in the bead notes.
-4. **Wait for it to return.** Launch no other subagent meanwhile. Background
+5. **Wait for it to return.** Launch no other subagent meanwhile. Background
    processes that use no Claude usage (Codex reviews, soaks, tournaments)
    may keep running.
 
@@ -217,6 +299,15 @@ Every brief contains, verbatim or by exact path:
 - these rules:
   - Work only inside the worktree and only within the areas. Run
     `npm install` first.
+  - A `fallout:` area covers only the mechanical edits `tsc` forces
+    ([Fallout areas](#fallout-areas)). List them after the change, once
+    `npm run prepare-workspace` has run:
+
+    ```sh
+    for p in tsconfig.json tsconfig.node.json; do npx tsc --noEmit --pretty false -p "$p"; done | grep -oE '^[^ (][^(]*\.[cm]?[jt]sx?' | sort -u
+    ```
+
+    A behavioral change outside the other areas stops the subagent.
   - Follow AGENTS.md: UUIDs not names, no images committed, tunables in data
     modules, copy in UI modules, logging, current-state docs, and test rules
     ([D19](decisions.md#d19-test-pruning)).
@@ -249,10 +340,13 @@ Every brief contains, verbatim or by exact path:
     `Bead: <bead-id>` trailer. Leave the worktree clean.
   - If the work exceeds ~1,500 changed non-test lines (mechanical deletions
     may be larger) or needs paths outside the areas, stop and report
-    instead.
+    instead. Report the paths and the change each needs.
 - **The return format:**
   - commit OID;
   - files changed and the test delta;
+  - the fallout files, listed separately from the files in the other areas,
+    each with the `fallout:` area that covers it and a one-line description of
+    the edit;
   - validation commands with their wall times;
   - QA evidence filenames;
   - the runtime ledger: every process it started, with PID and port, and
@@ -268,6 +362,8 @@ When a subagent returns:
 
 1. **Verify.** The worktree is clean, `HEAD` is the reported OID, the diff
    stays within the areas, and the friction file is present.
+   - Every changed file outside the path and hub areas is on the returned
+     fallout list, and its diff is mechanical.
    - **For a core-review bead,** check the failure-path list before
      submitting. Every path names a test that exists in the commit, or gives
      a reason no test applies. A missing or thin list goes back to the
