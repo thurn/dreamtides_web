@@ -30,15 +30,30 @@ function freshSeed(): JourneySeed {
 }
 
 /**
- * The genesis of a new game: a fresh seed, the current reducer protocol, now,
- * and the fold-relevant content configuration of this build.
+ * The game seed of a game created from a `?seed=<n>` URL: a fixed function of
+ * `n`, so every game created from the same seeded URL derives the same Avatar
+ * offer, QA scene, and event-keyed random draws.
+ */
+export function journeySeedFromSeedOverride(seedOverride: number): JourneySeed {
+  return parseJourneySeed(`url-seed:${String(seedOverride)}`);
+}
+
+/**
+ * The genesis of a new game: its seed, the current reducer protocol, now, and
+ * the fold-relevant content configuration of this build. The seed is fresh
+ * entropy unless `seedOverride` (the URL's `?seed=<n>`) is set, in which case it
+ * is {@link journeySeedFromSeedOverride}.
  */
 export function createFreshGenesis(
   contentConfig: PinnedContentConfig,
   frontDoorEntry?: FrontDoorEntry,
+  seedOverride: number | null = null,
 ): PinnedGenesis {
   return {
-    seed: freshSeed(),
+    seed:
+      seedOverride === null
+        ? freshSeed()
+        : journeySeedFromSeedOverride(seedOverride),
     reducerVersion: CURRENT_REDUCER_VERSION,
     createdAt: Date.now(),
     contentConfig,

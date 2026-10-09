@@ -524,6 +524,7 @@ function LocalGameApp({
     resumeRecent: resumeRecentGame,
     contentConfig,
     frontDoorEntry,
+    seedOverride: runtimeConfig.seedOverride,
   });
   const createNewGameAction = {
     id: "primary",

@@ -79,6 +79,12 @@ export interface UseLocalGameInput {
   contentConfig: PinnedContentConfig;
   /** Front-door scene for a newly created game. */
   frontDoorEntry?: FrontDoorEntry;
+  /**
+   * The URL's `?seed=<n>`: the game this hook creates on load takes a seed
+   * derived from it (see `createFreshGenesis`). A game created through
+   * `createNewGame` always draws a fresh seed.
+   */
+  seedOverride?: number | null;
   /** Defaults to this browser's repository. */
   repository?: () => Promise<GameRepository>;
   /** Defaults to this browser's Web Locks, where available. */
@@ -196,6 +202,7 @@ async function createGame(
   contentConfig: PinnedContentConfig,
   frontDoorEntry: FrontDoorEntry | undefined,
   requestNewGame: () => void,
+  seedOverride: number | null,
 ): Promise<OpenResult> {
   for (let attempt = 0; attempt < CREATE_GAME_MAX_ATTEMPTS; attempt += 1) {
     const gameId = generateGameId();
@@ -206,7 +213,11 @@ async function createGame(
         lock.release();
         continue;
       }
-      const genesis = createFreshGenesis(contentConfig, frontDoorEntry);
+      const genesis = createFreshGenesis(
+        contentConfig,
+        frontDoorEntry,
+        seedOverride,
+      );
       const game = await createLocalGame<FoldState>(
         repository,
         GAME_ENGINE_CONFIG,
@@ -234,6 +245,7 @@ async function resumeOrCreateGame(
   contentConfig: PinnedContentConfig,
   frontDoorEntry: FrontDoorEntry | undefined,
   requestNewGame: () => void,
+  seedOverride: number | null,
 ): Promise<OpenResult> {
   const [recent] = await repository.listGames();
   if (recent !== undefined) {
@@ -260,6 +272,7 @@ async function resumeOrCreateGame(
     contentConfig,
     frontDoorEntry,
     requestNewGame,
+    seedOverride,
   );
 }
 
@@ -290,6 +303,7 @@ export function useLocalGame({
   resumeRecent = false,
   contentConfig,
   frontDoorEntry,
+  seedOverride = null,
   repository = browserGameRepository,
   locks = browserGameLockManager,
 }: UseLocalGameInput): {
@@ -325,6 +339,8 @@ export function useLocalGame({
   useEffect(() => {
     if (requestRef.current?.key !== requestKey) {
       setStatus({ kind: create ? "creating" : "opening" });
+      // Only the game the URL itself creates takes the URL's seed.
+      const genesisSeedOverride = createRequests === 0 ? seedOverride : null;
       requestRef.current = {
         key: requestKey,
         result: repository().then((loaded) =>
@@ -335,6 +351,7 @@ export function useLocalGame({
                 contentConfig,
                 frontDoorEntry,
                 createNewGame,
+                genesisSeedOverride,
               )
             : gameId === null
               ? resumeOrCreateGame(
@@ -343,6 +360,7 @@ export function useLocalGame({
                   contentConfig,
                   frontDoorEntry,
                   createNewGame,
+                  genesisSeedOverride,
                 )
               : openGame(
                   loaded,
@@ -405,12 +423,14 @@ export function useLocalGame({
     contentConfig,
     create,
     createNewGame,
+    createRequests,
     frontDoorEntry,
     gameId,
     locks,
     repository,
     requestKey,
     resumeRecent,
+    seedOverride,
   ]);
 
   // Unmounting closes the game and frees its lock for another tab.

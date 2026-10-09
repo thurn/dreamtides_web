@@ -5,7 +5,8 @@
 // game resumes and its journey log is captured; unknown ids and games pinned
 // to other content are gated; a game another tab holds is not opened; the open
 // game's New Journey control switches to a created game and leaves the previous
-// one resumable by its id.
+// one resumable by its id. A game created from a `?seed=<n>` URL takes the seed
+// derived from `n` under a fresh game id; a New Journey game draws a fresh seed.
 
 import { act, StrictMode, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
@@ -14,7 +15,7 @@ import type { PinnedContentConfig } from "../eventlog/types";
 import { parseFoldHash } from "../types/content-hash";
 import { parseClientId, parseGameId, type GameId } from "../types/identifiers";
 import { createGameRepository, type GameRepository } from "./game-repository";
-import { createFreshGenesis } from "./genesis";
+import { createFreshGenesis, journeySeedFromSeedOverride } from "./genesis";
 import type { GameLockManager } from "./game-lock";
 import { createMemoryKeyValueStore } from "./key-value-store";
 import {
@@ -65,6 +66,7 @@ async function openTab(
   contentConfig: PinnedContentConfig = CONTENT,
   locks?: GameLockManager,
   resumeRecent = false,
+  seedOverride: number | null = null,
 ): Promise<{ status: () => LocalGameStatus; close: () => Promise<void> }> {
   let latest: LocalGameStatus = { kind: "opening" };
   const loadRepository = () => Promise.resolve(repository);
@@ -74,6 +76,7 @@ async function openTab(
       gameId,
       resumeRecent,
       contentConfig,
+      seedOverride,
       repository: loadRepository,
       locks: lockManager,
     }).status;
@@ -312,6 +315,32 @@ describe("useLocalGame", () => {
         gameId: previous,
       }),
     );
+  });
+
+  it("derives a URL-created game's seed from the URL seed under a fresh game id", async () => {
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const locks = createFakeLockManager();
+    const first = await openTab(repository, null, CONTENT, locks, false, 7);
+    const firstStatus = first.status();
+    await first.close();
+    const second = await openTab(repository, null, CONTENT, locks, false, 7);
+    const secondStatus = second.status();
+    if (firstStatus.kind !== "ready" || secondStatus.kind !== "ready") {
+      throw new Error("expected ready games");
+    }
+    expect(firstStatus.game.genesis.seed).toBe(journeySeedFromSeedOverride(7));
+    expect(secondStatus.game.genesis.seed).toBe(
+      journeySeedFromSeedOverride(7),
+    );
+    expect(secondStatus.game.gameId).not.toBe(firstStatus.game.gameId);
+
+    act(() => secondStatus.controls.startNewGame({ source: "game_menu" }));
+    await settle();
+    const fresh = second.status();
+    if (fresh.kind !== "ready") throw new Error("expected a ready game");
+    expect(fresh.game.gameId).not.toBe(secondStatus.game.gameId);
+    expect(fresh.game.genesis.seed).not.toBe(journeySeedFromSeedOverride(7));
+    await second.close();
   });
 
   it("gates unknown games and games pinned to other content", async () => {

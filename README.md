@@ -104,7 +104,7 @@ menu's developer commands.
 | Parameter | Effect |
 | --- | --- |
 | `goto=<scene>` | Boot a fresh game straight onto a screen (below) |
-| `seed=<n>` | Fixed RNG seed (non-negative integer) |
+| `seed=<n>` | Fixed seed (non-negative integer) for the game the URL creates and its battles |
 | `ai=1` | Local AI proposes enemy battle actions for approval |
 | `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
@@ -116,7 +116,9 @@ menu's developer commands.
 
 Scenes build a valid journey state from live content with the real
 generators and park the run on a screen (`src/runtime/qa-scenes.ts`). They
-only bootstrap a brand-new game; reloading a `?game=` URL resumes it.
+only bootstrap a brand-new game; reloading a `?game=` URL resumes it. A scene
+is built from the game seed, so `?goto=<scene>&seed=<n>` builds the same
+scene on every load.
 
 - **Journey start:** `avatar-select`, `tutorial-avatar-select`.
 - **Atlas:** `atlas` (same as `atlas2`), `atlas2` … `atlas7` (the frontier on

@@ -1,12 +1,17 @@
 // Stored-genesis contracts: a genesis decodes from storage whether or not its
 // content configuration was pinned, only a complete pinned configuration equal
-// to this build's opens, and anything else reaches the config gate.
+// to this build's opens, and anything else reaches the config gate. A new
+// genesis draws a fresh seed unless a URL seed override fixes it.
 
 import { describe, expect, it } from "vitest";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { decodeGenesis, isFoldableGenesis } from "../eventlog/wire";
 import { testFoldHash } from "../types/test-identities";
-import { genesisCompatibility } from "./genesis";
+import {
+  createFreshGenesis,
+  genesisCompatibility,
+  journeySeedFromSeedOverride,
+} from "./genesis";
 import { CURRENT_REDUCER_VERSION } from "./reducer-version";
 
 const HASH = testFoldHash("genesis");
@@ -64,5 +69,25 @@ describe("stored genesis", () => {
     if (genesis === null) return;
     expect(isFoldableGenesis(genesis)).toBe(false);
     expect(genesisCompatibility(genesis, CONTENT)).toBe("configGate");
+  });
+});
+
+describe("new genesis seed", () => {
+  it("draws a fresh seed for each game without a seed override", () => {
+    expect(createFreshGenesis(CONTENT).seed).not.toBe(
+      createFreshGenesis(CONTENT).seed,
+    );
+  });
+
+  it("derives the seed from a seed override", () => {
+    expect(createFreshGenesis(CONTENT, "main", 7).seed).toBe(
+      createFreshGenesis(CONTENT, undefined, 7).seed,
+    );
+    expect(createFreshGenesis(CONTENT, "main", 7).seed).toBe(
+      journeySeedFromSeedOverride(7),
+    );
+    expect(journeySeedFromSeedOverride(7)).not.toBe(
+      journeySeedFromSeedOverride(8),
+    );
   });
 });

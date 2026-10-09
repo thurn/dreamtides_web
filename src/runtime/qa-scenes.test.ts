@@ -50,6 +50,8 @@ import {
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
+const SCENE_OPTIONS = { journeySeed: testJourneySeed("qa-scenes") };
+
 function activeSiteOf(state: JourneyState | null): SiteId | null {
   return state === null ? null : activeSiteIdOf(state);
 }
@@ -129,7 +131,11 @@ describe("QA scenes", () => {
   it("returns null for an unknown scene id", () => {
     expect(findQaScene(parseQaSceneId("not-a-real-scene"))).toBeNull();
     expect(
-      buildQaScene(parseQaSceneId("not-a-real-scene"), makeJourneyContent()),
+      buildQaScene(
+        parseQaSceneId("not-a-real-scene"),
+        makeJourneyContent(),
+        SCENE_OPTIONS,
+      ),
     ).toBeNull();
   });
 });
@@ -139,6 +145,7 @@ describe('the "avatar-select" QA scene', () => {
     const state = buildQaScene(
       parseQaSceneId("avatar-select"),
       makeJourneyContent(),
+      SCENE_OPTIONS,
     );
 
     expect(state).not.toBeNull();
@@ -159,6 +166,7 @@ describe('the "tutorial-avatar-select" QA scene', () => {
     const state = buildQaScene(
       parseQaSceneId("tutorial-avatar-select"),
       content,
+      SCENE_OPTIONS,
     );
 
     expect(state).not.toBeNull();
@@ -174,7 +182,11 @@ describe('the "tutorial-avatar-select" QA scene', () => {
 
 describe('the "atlas" QA scene', () => {
   it("parks the run on the atlas screen with a generated boss node", () => {
-    const state = buildQaScene(parseQaSceneId("atlas"), makeJourneyContent());
+    const state = buildQaScene(
+      parseQaSceneId("atlas"),
+      makeJourneyContent(),
+      SCENE_OPTIONS,
+    );
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("atlas");
@@ -220,7 +232,11 @@ describe('the "random-site-atlas" QA scene', () => {
       },
     ];
 
-    const state = buildQaScene(parseQaSceneId("random-site-atlas"), content);
+    const state = buildQaScene(
+      parseQaSceneId("random-site-atlas"),
+      content,
+      SCENE_OPTIONS,
+    );
 
     expect(state?.screen.type).toBe("atlas");
     const maddoxNode = Object.values(state?.atlas.nodes ?? {}).find(
@@ -243,6 +259,7 @@ describe('the "tutorial-atlas" QA scene', () => {
     const state = buildQaScene(
       parseQaSceneId("tutorial-atlas"),
       makeJourneyContent(),
+      SCENE_OPTIONS,
     );
 
     expect(state?.screen.type).toBe("atlas");
@@ -263,6 +280,7 @@ describe("the atlas layer QA scenes", () => {
       const state = buildQaScene(
         parseQaSceneId(`atlas${String(displayLayer)}`),
         makeJourneyContent(),
+        SCENE_OPTIONS,
       );
 
       expect(state).not.toBeNull();
@@ -299,6 +317,7 @@ describe("the battle layer QA scenes", () => {
       const state = buildQaScene(
         parseQaSceneId(`tutorial-battle${String(displayLayer)}`),
         makeJourneyContent(),
+        SCENE_OPTIONS,
       );
 
       expect(state?.screen.type).toBe("site");
@@ -312,6 +331,7 @@ describe("the battle layer QA scenes", () => {
       const state = buildQaScene(
         parseQaSceneId(`battle${String(displayLayer)}`),
         makeJourneyContent(),
+        SCENE_OPTIONS,
       );
 
       expect(state).not.toBeNull();
@@ -340,7 +360,11 @@ describe("the battle layer QA scenes", () => {
   }
 
   it('aliases plain "battle" to the Layer 1 battle scene', () => {
-    const state = buildQaScene(parseQaSceneId("battle"), makeJourneyContent());
+    const state = buildQaScene(
+      parseQaSceneId("battle"),
+      makeJourneyContent(),
+      SCENE_OPTIONS,
+    );
 
     expect(state).not.toBeNull();
     expect(state?.completionLevel).toBe(0);
@@ -361,7 +385,11 @@ describe("site QA scenes", () => {
     const expectedSites = [[parseQaSceneId("draft"), "Draft"]] as const;
 
     for (const [sceneId, siteType] of expectedSites) {
-      const state = buildQaScene(sceneId, makeJourneyContent());
+      const state = buildQaScene(
+        sceneId,
+        makeJourneyContent(),
+        SCENE_OPTIONS,
+      );
       expect(state).not.toBeNull();
       expect(state?.screen.type).toBe("site");
       expect(state?.currentDreamscape).not.toBeNull();
@@ -483,6 +511,7 @@ describe('the "exploration" QA scene', () => {
     const { content, encounterCardId } = explorationContent();
 
     const state = buildQaScene(parseQaSceneId("exploration"), content, {
+      ...SCENE_OPTIONS,
       explorationCardId: encounterCardId,
     });
 
@@ -561,6 +590,7 @@ describe('the "exploration" QA scene', () => {
       parseQaSceneId("exploration-duplicates"),
       content,
       {
+        ...SCENE_OPTIONS,
         explorationCardId: encounterCardId,
       },
     );
@@ -599,6 +629,7 @@ describe('the "dreamscape-with-essence" QA scene', () => {
     const state = buildQaScene(
       parseQaSceneId("dreamscape-with-essence"),
       makeJourneyContent(),
+      SCENE_OPTIONS,
     );
 
     expect(state).not.toBeNull();
@@ -617,7 +648,11 @@ describe('the "dreamscape-with-essence" QA scene', () => {
 
 describe('the "reward" QA scene', () => {
   it("parks on the dreamscape overview with an unvisited Reward site", () => {
-    const state = buildQaScene(parseQaSceneId("reward"), makeJourneyContent());
+    const state = buildQaScene(
+      parseQaSceneId("reward"),
+      makeJourneyContent(),
+      SCENE_OPTIONS,
+    );
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
@@ -638,7 +673,11 @@ describe('the "reward" QA scene', () => {
       name: `Dreamsign ${String(index + 1)}`,
       effectDescription: "A QA effect.",
     }));
-    const state = buildQaScene(parseQaSceneId("reward-at-cap"), content);
+    const state = buildQaScene(
+      parseQaSceneId("reward-at-cap"),
+      content,
+      SCENE_OPTIONS,
+    );
 
     expect(state).not.toBeNull();
     expect(state?.dreamsigns).toHaveLength(state?.maxDreamsigns ?? 0);
@@ -650,4 +689,37 @@ describe('the "reward" QA scene', () => {
       expect(runtime.reward.rewardType).toBe("dreamsign");
     }
   });
+});
+
+describe("QA scene seeding", () => {
+  // One scene per kind of seeded content: the Avatar offer's seed, Atlas
+  // layouts at several depths, a parked site, a keeper battle, and an end
+  // screen built on a fully replayed Atlas.
+  const sceneIds = [
+    "avatar-select",
+    "atlas",
+    "atlas4",
+    "shop",
+    "draft",
+    "battle3",
+    "dreamscape",
+    "journeycomplete",
+  ].map((id) => parseQaSceneId(id));
+
+  for (const sceneId of sceneIds) {
+    it(`${sceneId} is a pure function of the game seed`, () => {
+      const content = makeJourneyContent();
+      const seed = testJourneySeed("qa-seed-7");
+      const first = buildQaScene(sceneId, content, { journeySeed: seed });
+      // An intervening build with another seed leaves no trace on the next.
+      buildQaScene(sceneId, content, {
+        journeySeed: testJourneySeed("qa-seed-8"),
+      });
+      const second = buildQaScene(sceneId, content, { journeySeed: seed });
+
+      expect(first).not.toBeNull();
+      expect(first?.seed).toBe(seed);
+      expect(second).toEqual(first);
+    });
+  }
 });
