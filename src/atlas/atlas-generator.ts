@@ -67,11 +67,11 @@ export interface AtlasGenerationOptions {
   logEvents?: boolean;
   /**
    * Deterministic `[0, 1)` random source for the whole generation. When omitted
-   * the generator draws from `Math.random` (the legacy/UI path). The coop
-   * event-sourcing lifecycle provider passes a rng seeded from the run seed so
-   * every client folding `START_JOURNEY` builds a byte-identical atlas (the
-   * determinism rail). Set for the duration of a `generateInitialAtlas` call and
-   * restored afterward, so other atlas mutators keep their own default.
+   * the generator draws from `Math.random` (the UI path). The event-sourcing
+   * lifecycle provider passes a rng seeded from the run seed so every fold of
+   * `START_JOURNEY` builds a byte-identical atlas (the determinism rail). Set
+   * for the duration of a `generateInitialAtlas` call and restored afterward,
+   * so other atlas mutators keep their own default.
    */
   rng?: () => number;
 }

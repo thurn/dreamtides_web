@@ -3,11 +3,8 @@
 // This module owns the journey events that spend at a shop, resolve a Dream
 // Augury offer, and stack the battle / dreamscape / shop modifiers and atlas
 // edits that Augury rewards and debug tools push. Each exported case
-// relocates the DOMAIN MATH of a legacy journey mutation
-// (`src/state/multiplayer-journey-context.tsx`) into a pure function of
-// `(journey, payload[, ctx])`. The legacy transaction / normalization / actionLog
-// wrappers are engine concerns and live elsewhere now (the root reducer folds,
-// the eventlog engine persists), so they are dropped here.
+// is a pure function of `(journey, payload[, ctx])`; the root reducer folds the
+// event and the eventlog engine persists it.
 //
 // The src/rules/ lint rails forbid React and any live clock/rng:
 // randomness arrives via `ctx.rng`, minted ids via `ctx.seq`, and time via
@@ -93,7 +90,7 @@ function withShopRuntime(
   };
 }
 
-/** The lowest unused `site-N` id anywhere in the atlas (legacy `nextSiteIdFromAtlas`). */
+/** The lowest unused `site-N` id anywhere in the atlas. */
 function nextSiteId(atlas: DreamAtlas): SiteId {
   let max = 0;
   for (const node of Object.values(atlas.nodes)) {
@@ -146,17 +143,17 @@ function debugSite(
 // ---------------------------------------------------------------------------
 
 /**
- * `BUY_SHOP_SLOT { siteId, slotIndex, purgeIndex? }` — legacy `buyShopSlot`.
- * Computes the canonical discounted price, applies any visit-wide or queued
- * free-purchase modifier, grants the item (a card appended to the deck via a
- * seq-deterministic entry id, or a Dreamsign appended / replacing the
- * `purgeIndex` slot), marks the slot purchased, and appends a replay-safe
- * purchase receipt. A successful purchase consumes one queued free-purchase
- * count even when another modifier already reduced the price to zero.
+ * `BUY_SHOP_SLOT { siteId, slotIndex, purgeIndex? }` computes the canonical
+ * discounted price, applies any visit-wide or queued free-purchase modifier,
+ * grants the item (a card appended to the deck via a seq-deterministic entry
+ * id, or a Dreamsign appended / replacing the `purgeIndex` slot), marks the
+ * slot purchased, and appends a replay-safe purchase receipt. A successful
+ * purchase consumes one queued free-purchase count even when another modifier
+ * already reduced the price to zero.
  *
  * Bounces on a malformed payload, an unknown / already-visited site, a non-shop
- * runtime, an out-of-range slot, an already-purchased slot (the coop
- * double-buy race), an effective price above current essence (the
+ * runtime, an out-of-range slot, an already-purchased slot (a repeated buy
+ * intent), an effective price above current essence (the
  * insufficient-essence guard, essence unchanged), or a Dreamsign purchase at the
  * `maxDreamsigns` limit with no valid purge slot.
  */
@@ -420,7 +417,7 @@ export function rerollShop(
 // ---------------------------------------------------------------------------
 
 /**
- * `GRANT_FREE_REROLLS { count }` — legacy `grantFreeShopRerolls`. Adds `count`
+ * `GRANT_FREE_REROLLS { count }` adds `count`
  * free rerolls to the additive pool consumed by `REROLL_SHOP`. Bounces on a
  * malformed or non-positive count.
  */
@@ -440,7 +437,7 @@ export function grantFreeRerolls(
 }
 
 /**
- * `APPLY_SHOP_DISCOUNT { percent }` — legacy `applyShopEssenceDiscount`. Adds
+ * `APPLY_SHOP_DISCOUNT { percent }` adds
  * `percent` to the permanent additive essence discount every shop slot applies.
  * Bounces on a malformed or non-positive percent.
  */
@@ -465,12 +462,11 @@ export function applyShopDiscount(
 // ---------------------------------------------------------------------------
 
 /**
- * `ACCEPT_AUGURY_OFFER { siteId, ...request }` — legacy
- * `acceptAuguryOffer`. The whole resolution (offer lookup, essence /
- * deck / dreamsign payload application, site completion) is content-coupled and
- * lives behind the {@link SiteContentProvider}'s `resolveAugury`, so this
- * case only resolves the site and delegates. Bounces on a missing site, no
- * registered provider, or a provider that rejects the
+ * `ACCEPT_AUGURY_OFFER { siteId, ...request }`. The whole resolution (offer
+ * lookup, essence / deck / dreamsign payload application, site completion) is
+ * content-coupled and lives behind the {@link SiteContentProvider}'s
+ * `resolveAugury`, so this case only resolves the site and delegates. Bounces
+ * on a missing site, no registered provider, or a provider that rejects the
  * request (stale encounter, unknown offer, unaffordable, already visited).
  */
 export function acceptAuguryOffer(
@@ -482,10 +478,10 @@ export function acceptAuguryOffer(
 }
 
 /**
- * `DECLINE_AUGURY { siteId, ...request }` — legacy `declineAugury`.
- * Delegates to the {@link SiteContentProvider}'s `resolveAugury` with a
- * `decline` action; the provider validates the encounter and completes the
- * site. Bounces on the same conditions as `ACCEPT_AUGURY_OFFER`.
+ * `DECLINE_AUGURY { siteId, ...request }` delegates to the
+ * {@link SiteContentProvider}'s `resolveAugury` with a `decline` action; the
+ * provider validates the encounter and completes the site. Bounces on the same
+ * conditions as `ACCEPT_AUGURY_OFFER`.
  */
 export function declineAugury(
   journey: JourneyState,
@@ -522,10 +518,10 @@ function resolveAugury(
 // ---------------------------------------------------------------------------
 
 /**
- * `PUSH_BATTLE_MODIFIER { modifier }` — legacy `pushBattleRewardModifier`.
- * Appends a fully-formed reward-reduction modifier to `battleModifiers`.
- * Bounces on a malformed modifier. (The temporary-Nightmare modifier has its
- * own event because it also mints deck entries.)
+ * `PUSH_BATTLE_MODIFIER { modifier }` appends a fully-formed reward-reduction
+ * modifier to `battleModifiers`. Bounces on a malformed modifier. (The
+ * temporary-Nightmare modifier has its own event because it also mints deck
+ * entries.)
  */
 export function pushBattleModifier(
   journey: JourneyState,
@@ -622,11 +618,11 @@ export function pushTemporaryNightmareGrant(
 // ---------------------------------------------------------------------------
 
 /**
- * `BAN_SITE_TYPE { siteType, dreamscapesRemaining, source? }` — legacy
- * `removeSiteTypeFromNextDreamscapes`. Pushes a `remove_shop_sites` dreamscape
- * modifier so upcoming dreamscapes drop shop sites for `dreamscapesRemaining`
- * dreamscapes. Only `Shop` is representable as a ban today, so any other site
- * type bounces. Also bounces on a malformed or non-positive `dreamscapesRemaining`.
+ * `BAN_SITE_TYPE { siteType, dreamscapesRemaining, source? }` pushes a
+ * `remove_shop_sites` dreamscape modifier so upcoming dreamscapes drop shop
+ * sites for `dreamscapesRemaining` dreamscapes. Only `Shop` is representable as
+ * a ban today, so any other site type bounces. Also bounces on a malformed or
+ * non-positive `dreamscapesRemaining`.
  */
 export function banSiteType(
   journey: JourneyState,
@@ -654,11 +650,10 @@ export function banSiteType(
 }
 
 /**
- * `BOOST_SITE_APPEARANCE { siteType, percent, dreamscapesRemaining, source? }` —
- * legacy `boostSiteAppearance`. Pushes a `boost_site_appearance` dreamscape
- * modifier that biases `siteType` to appear more often for
- * `dreamscapesRemaining` dreamscapes. Bounces on a malformed site type,
- * percent, or a non-positive `dreamscapesRemaining`.
+ * `BOOST_SITE_APPEARANCE { siteType, percent, dreamscapesRemaining, source? }`
+ * pushes a `boost_site_appearance` dreamscape modifier that biases `siteType`
+ * to appear more often for `dreamscapesRemaining` dreamscapes. Bounces on a
+ * malformed site type, percent, or a non-positive `dreamscapesRemaining`.
  */
 export function boostSiteAppearance(
   journey: JourneyState,
@@ -695,11 +690,10 @@ export function boostSiteAppearance(
 // ---------------------------------------------------------------------------
 
 /**
- * `REPLACE_SITE_TYPE { nodeId, fromSiteType, toSiteType }` — legacy
- * `replaceSiteType`. Replaces the first UNVISITED site of `fromSiteType` in
- * `nodeId` with a fresh, unvisited site of `toSiteType` (a new `site-N` id).
- * Bounces on a malformed payload, an unknown node, or when the node holds no
- * unvisited site of the source type.
+ * `REPLACE_SITE_TYPE { nodeId, fromSiteType, toSiteType }` replaces the first
+ * UNVISITED site of `fromSiteType` in `nodeId` with a fresh, unvisited site of
+ * `toSiteType` (a new `site-N` id). Bounces on a malformed payload, an unknown
+ * node, or when the node holds no unvisited site of the source type.
  */
 export function replaceSiteType(
   journey: JourneyState,
@@ -737,9 +731,9 @@ export function replaceSiteType(
 }
 
 /**
- * `ADD_SITE_TO_DREAMSCAPE { nodeId, siteType }` — legacy `addSiteToDreamscape`.
- * Appends a fresh, unvisited site of `siteType` (a new `site-N` id) to `nodeId`.
- * Bounces on a malformed payload or an unknown node.
+ * `ADD_SITE_TO_DREAMSCAPE { nodeId, siteType }` appends a fresh, unvisited
+ * site of `siteType` (a new `site-N` id) to `nodeId`. Bounces on a malformed
+ * payload or an unknown node.
  */
 export function addSiteToDreamscape(
   journey: JourneyState,
@@ -765,7 +759,7 @@ export function addSiteToDreamscape(
 }
 
 /**
- * `SET_CARD_SOURCE_DEBUG { state }` (debug) — legacy `setCardSourceDebug`. Sets
+ * `SET_CARD_SOURCE_DEBUG { state }` (debug) sets
  * (or clears, with `null`) the card-source provenance overlay state. Bounces on
  * a value that is neither `null` nor an object.
  */

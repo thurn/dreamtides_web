@@ -608,8 +608,8 @@ function buildAttributeChips(
 }
 
 /**
- * Tracks the rendered card width. The width drives both the legacy text-scale
- * metadata (`data-card-text-scale`, still asserted by tests and used as the
+ * Tracks the rendered card width. The width drives both the text-scale
+ * metadata (`data-card-text-scale`, asserted by tests and used as the
  * baseline font ceiling) and the pixel sizes of the orbs and frame text.
  */
 function useCardMetrics(large: boolean): {

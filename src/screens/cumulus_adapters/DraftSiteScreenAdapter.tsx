@@ -112,8 +112,8 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   }, [mutations, siteId]);
 
   // The pack is exhausted: log the completed draft and return to the dreamscape.
-  // The COMPLETE_SITE run-scoped intent key is the durable once-only owner;
-  // every client observing completion may submit this effect.
+  // The COMPLETE_SITE run-scoped intent key is the durable once-only owner, so
+  // a repeated effect run after a remount or reload is harmless.
   useEffect(() => {
     if (!progress.isComplete) return;
     logEvent("draft_site_completed_ui", {

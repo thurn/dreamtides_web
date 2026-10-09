@@ -55,8 +55,8 @@ function tutorialContextIsVisible(
 
 /**
  * App-shell bridge between visible site cards and the shared tutorial fold.
- * Screens remain props-only; the first connected client to observe the cards
- * submits the same run/site-scoped intent as every other client.
+ * Screens remain props-only; the controller submits a run/site-scoped intent
+ * when it observes the cards, so a repeated observation is harmless.
  */
 export function JourneyCardTutorialController({
   stageRef,
@@ -79,7 +79,7 @@ export function JourneyCardTutorialController({
   const [visibilityGateReady, setVisibilityGateReady] = useState(false);
   const presentationLocallyVisible =
     visibilityGate === undefined || visibilityGateReady;
-  const presentation = state.cardTutorialPresentation ?? null;
+  const presentation = state.cardTutorialPresentation;
   const siteTutorialActive =
     activeFirstVisitTutorialSite(state.journey) !== null;
   const view = useMemo(
@@ -122,7 +122,7 @@ export function JourneyCardTutorialController({
       screenKey === null ||
       !presentationLocallyVisible ||
       presentation !== null ||
-      (state.cardTutorialScreenKeysSeen ?? []).includes(screenKey)
+      state.cardTutorialScreenKeysSeen.includes(screenKey)
     ) {
       return undefined;
     }
@@ -139,7 +139,7 @@ export function JourneyCardTutorialController({
       const match = selectCardTutorialGuidance(
         provider,
         cardIds,
-        new Set(state.tutorialTriggerIdsSeen ?? []),
+        new Set(state.tutorialTriggerIdsSeen),
         triggerEvent,
       );
       if (match === null) return;
@@ -181,7 +181,7 @@ export function JourneyCardTutorialController({
 
   const complete = useCallback(
     (reason: "timer" | "manual") => {
-      const confirmed = confirmedState.cardTutorialPresentation ?? null;
+      const confirmed = confirmedState.cardTutorialPresentation;
       if (confirmed === null) return;
       logEvent("card_tutorial_guidance_advance_requested", {
         presentationId: confirmed.id,
@@ -201,7 +201,7 @@ export function JourneyCardTutorialController({
   );
 
   useEffect(() => {
-    const confirmed = confirmedState.cardTutorialPresentation ?? null;
+    const confirmed = confirmedState.cardTutorialPresentation;
     if (confirmed === null) return;
     logEvent("card_tutorial_guidance_presented", {
       presentationId: confirmed.id,

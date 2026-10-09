@@ -85,7 +85,7 @@ describe("rewardTransfigurations", () => {
   });
 });
 
-// --- Task 11: transfigure -----------------------------------------------------
+// --- transfigure -------------------------------------------------------------
 
 describe("improve family — transfigure pair enumeration", () => {
   it("contributes exactly one candidate per (entry, eligible transfiguration) pair", () => {
@@ -215,7 +215,7 @@ describe("improve family — transfigure pair enumeration", () => {
     expect(pairs.every((p) => p.benefit > 0)).toBe(true);
   });
 
-  // THE DIREWOLF TEST — the anti-argmax property the whole v3 rewrite exists to
+  // THE DIREWOLF TEST — the anti-argmax property the improve family exists to
   // deliver. A deck with one high-spark Kindled character (benefit ~1.0) plus
   // many other positive-benefit pairs must NOT collapse to always offering the
   // Kindled pair.
@@ -312,7 +312,7 @@ describe("improve family — transfigure pair enumeration", () => {
   });
 });
 
-// --- Task 11: starter_transfigure --------------------------------------------
+// --- starter_transfigure -----------------------------------------------------
 
 describe("improve family — starter_transfigure", () => {
   it("is eligible only when an untransfigured starter has an eligible transfiguration", () => {

@@ -226,7 +226,7 @@ export interface EventContext {
    * the SAME `(seed, seq, 0)`, `(seed, seq, 1)`, ... values and so correlate
    * — e.g. two "random" choices within one event landing suspiciously
    * identical — silently breaking the independence a reducer's randomness is
-   * assumed to have (audit finding P3-4).
+   * assumed to have.
    */
   rng: (drawIndex: number) => number;
   /**

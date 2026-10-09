@@ -171,7 +171,7 @@ export function TidesEssenceBlock({
 
 /** One signature card (kept for the shared view type; unused by the carousel). */
 export interface AvatarSignatureCardView {
-  id: CardId | null;
+  id: CardId;
   name: string;
 }
 

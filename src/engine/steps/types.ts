@@ -47,7 +47,8 @@ export interface StepDefinition<S extends Step> {
   readonly kind: S["kind"];
   /**
    * The side that may cancel this step before its commit point, or `null`
-   * when the step cannot be cancelled. Only a side's own play can be.
+   * when the step cannot be cancelled. Only a side's own play or activation
+   * can be.
    */
   canceller(state: BattleState, step: S): Side | null;
   run(ctx: StepContext, step: S): void;

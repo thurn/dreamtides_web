@@ -101,10 +101,11 @@
   /* Five pixels at the card's canonical 500px design width. */
   --cv-rules-change-badge-corner-shift: 1cqw;
 
-  /* Typography is 13 / 11.8 times the prior scale, making the common rules
-   * voice 13px wherever it previously rendered at 11.8px. The rendered area
-   * permits the extra line that the larger voice can produce, while CardView's
-   * fitter retains the prior three-line fit as its proportional baseline. */
+  /* Typography is 13 / 11.8 times the unscaled measurement baseline
+   * (`CARD_TYPOGRAPHY_SCALE` in CardView), making the common rules voice 13px
+   * where the baseline measures 11.8px. The rendered area permits the extra
+   * line that the larger voice can produce, while CardView's fitter keeps the
+   * baseline three-line fit as its proportional baseline. */
   --cv-name-font-size: 5.73cqw;
   --cv-type-font-size: 5.46cqw;
   --cv-rules-font-size-base: 4.96cqw;

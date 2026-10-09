@@ -3,11 +3,8 @@
 // This module owns the journey's per-site runtime: it generates each site's
 // offer when the player opens it (`OPEN_SITE`), and resolves the player's
 // choice at the site (`ACCEPT_*` / `REJECT_*` / `COMPLETE_*`). Each exported
-// case relocates the DOMAIN MATH of a legacy journey mutation
-// (`src/state/multiplayer-journey-context.tsx`) into a pure function of
-// `(journey, payload[, ctx])`. The legacy transaction / normalization / actionLog
-// wrappers are engine concerns and live elsewhere now (the root reducer folds,
-// the eventlog engine persists), so they are dropped here.
+// case is a pure function of `(journey, payload[, ctx])`; the root reducer
+// folds the event and the eventlog engine persists it.
 //
 // The src/rules/ lint rails forbid React and any live clock/rng:
 // randomness arrives via `ctx.rng` and any minted id via `ctx.seq`. Sites are
@@ -15,15 +12,13 @@
 //
 // OPEN_SITE generation splits by what the site's offer needs:
 //   - Essence and Augury need no async content, so they are generated
-//     purely in-reducer, drawing from `ctx.rng` (replacing the legacy
-//     `Math.random`).
+//     purely in-reducer, drawing from `ctx.rng`.
 //   - Reward / Dreamsign offer / Shop / Card choice generation reads the
 //     catalog-sourced card, dreamsign, and affiliation catalogues that only load
 //     asynchronously, so it is delegated to the injectable
 //     {@link SiteContentProvider}, which is handed a deterministic
-//     `(drawIndex) => number` rng derived from `ctx.rng`. Two clients folding
-//     the same event roll byte-identical offers (the determinism fix for the
-//     legacy `Math.random` the ensure* family used).
+//     `(drawIndex) => number` rng derived from `ctx.rng`, so folding the same
+//     event always rolls byte-identical offers.
 
 import type { EventContext } from "../../eventlog/types";
 import type { EconomyData } from "../../types/economy-data";
@@ -87,7 +82,7 @@ export interface SiteOpenResult {
  * is generated from async-loaded data (Reward, Dreamsign offer, Shop, Card
  * choice). The reducer resolves the site and enforces idempotence itself, then
  * delegates the offer generation to this provider, handing it a deterministic
- * rng derived from `ctx.rng` so two clients folding the same event produce
+ * rng derived from `ctx.rng` so every fold of the same event produces
  * byte-identical offers.
  *
  * `createSiteContentProvider` (src/session/providers/site-provider.ts)
@@ -222,7 +217,7 @@ export function clampEssence(value: number): number {
   return Math.max(0, value);
 }
 
-/** Locate a site by id anywhere in the atlas (relocated legacy `findSite`). */
+/** Locate a site by id anywhere in the atlas. */
 export function findSite(
   journey: JourneyState,
   siteId: SiteId,
@@ -251,10 +246,9 @@ export function activeSiteIdOf(journey: JourneyState): SiteId | null {
 }
 
 /**
- * Whether `siteId` is a legal visit target (relocated legacy
- * `canVisitSite`): the site must exist and, when the player stands in a
- * dreamscape, belong to it; it must be unvisited; a Battle site must be visited
- * last (every non-Battle sibling already visited).
+ * Whether `siteId` is a legal visit target: the site must exist and, when the
+ * player stands in a dreamscape, belong to it; it must be unvisited; a Battle
+ * site must be visited last (every non-Battle sibling already visited).
  */
 export function canVisitSite(journey: JourneyState, siteId: SiteId): boolean {
   for (const node of Object.values(journey.atlas.nodes)) {
@@ -277,7 +271,7 @@ export function canVisitSite(journey: JourneyState, siteId: SiteId): boolean {
   return false;
 }
 
-/** Mark `siteId` visited in the atlas (legacy `completeJourneySite`). */
+/** Mark `siteId` visited in the atlas. */
 export function completeJourneySite(
   journey: JourneyState,
   siteId: SiteId,
@@ -301,7 +295,7 @@ export function completeJourneySite(
   };
 }
 
-/** Complete the site and return to the dreamscape (legacy `completeSiteAndReturnToDreamscape`). */
+/** Complete the site and return to the dreamscape. */
 export function completeAndReturn(
   journey: JourneyState,
   siteId: SiteId,
@@ -338,10 +332,9 @@ function randomIntInRange(
 // ---------------------------------------------------------------------------
 
 /**
- * `OPEN_SITE { siteId, selectionRulesVersion }` — collapses the five legacy
- * `ensure*SiteRuntime` writers into one type-dispatched generator. Every open
- * names the selection protocol it was written under. Dispatches on the site's
- * TYPE:
+ * `OPEN_SITE { siteId, selectionRulesVersion }` — one type-dispatched
+ * generator for every site runtime. Every open names the selection protocol it
+ * was written under. Dispatches on the site's TYPE:
  *   - RandomSite / Essence: generated purely in-reducer from `ctx.rng`.
  *   - Augury / Exploration: delegated to the registered
  *     {@link SiteContentProvider} under the payload's `selectionRulesVersion`,
@@ -350,8 +343,8 @@ function randomIntInRange(
  *     Duplication / Gamble: delegated to the registered {@link SiteContentProvider}.
  *
  * An existing runtime is authoritative, so a repeated event bounces without
- * regenerating it. The event-log intent key prevents repeated screen mounts and
- * connected clients from appending that repeated event. Bounces also cover a
+ * regenerating it. The event-log intent key prevents repeated screen mounts
+ * from appending that repeated event. Bounces also cover a
  * malformed payload (including a missing `selectionRulesVersion`), an unknown
  * site, a site type that has no runtime, a content-coupled type with no
  * provider wired, or an Augury / Exploration open whose
@@ -555,7 +548,7 @@ export function resolveExplorationChoice(
 // ---------------------------------------------------------------------------
 
 /**
- * `ACCEPT_REWARD { siteId, purgeIndex? }` — legacy `acceptRewardSite`. Grants
+ * `ACCEPT_REWARD { siteId, purgeIndex? }` grants
  * the stored reward (a Dreamsign appended, or replacing the `purgeIndex` slot;
  * or an essence gain), marks the runtime accepted, and completes the site.
  * Bounces on a missing runtime, a wrong kind, an already-accepted site, a
@@ -616,7 +609,7 @@ export function acceptReward(
 }
 
 /**
- * `ACCEPT_ESSENCE { siteId }` — legacy `acceptEssenceSite`. Generates the
+ * `ACCEPT_ESSENCE { siteId }` generates the
  * site's deterministic reward when it has not been opened, adds the amount,
  * marks accepted, and completes the site.
  * Bounces on a wrong site/runtime kind or an already-accepted site.
@@ -658,13 +651,12 @@ export function acceptEssence(
 }
 
 /**
- * `ACCEPT_DREAMSIGN_OFFER { siteId, dreamsignId, purgeIndex? }` — legacy
- * `acceptDreamsignOffer`, keyed by UUID: the accepted Dreamsign is resolved from
- * the runtime's offered list by id (never by name). Appends it (or replaces the
- * `purgeIndex` slot), marks accepted, and completes the site. Bounces on a
- * missing runtime, a wrong kind, an already-accepted site, an unoffered id, the
- * `maxDreamsigns` limit with no purge slot, or a `purgeIndex` pointing at no
- * held Dreamsign.
+ * `ACCEPT_DREAMSIGN_OFFER { siteId, dreamsignId, purgeIndex? }`, keyed by UUID:
+ * the accepted Dreamsign is resolved from the runtime's offered list by id
+ * (never by name). Appends it (or replaces the `purgeIndex` slot), marks
+ * accepted, and completes the site. Bounces on a missing runtime, a wrong kind,
+ * an already-accepted site, an unoffered id, the `maxDreamsigns` limit with no
+ * purge slot, or a `purgeIndex` pointing at no held Dreamsign.
  */
 export function acceptDreamsignOffer(
   journey: JourneyState,
@@ -720,7 +712,7 @@ export function acceptDreamsignOffer(
 }
 
 /**
- * `REJECT_DREAMSIGN_OFFER { siteId }` — legacy `rejectDreamsignOffer`. Marks the
+ * `REJECT_DREAMSIGN_OFFER { siteId }` marks the
  * offer accepted (declined) and completes the site without granting anything.
  * Bounces on a missing runtime, a wrong kind, or an already-accepted site.
  */
@@ -746,19 +738,18 @@ export function rejectDreamsignOffer(
 }
 
 // ---------------------------------------------------------------------------
-// Card choice: transfiguration / duplication (Task-12 deferrals)
+// Card choice: transfiguration / duplication
 // ---------------------------------------------------------------------------
 
 /**
- * `ACCEPT_TRANSFIGURATION_CHOICE { siteId, entryId, type? }` — legacy
- * `acceptTransfigurationChoice`. Stamps the chosen transfiguration onto the deck
- * entry, charges the offer's quoted essence cost (authoritative from the stored
- * runtime, never the client), records the accepted entry, and completes the
- * site. When more than one form is offered for an entry, an optional `type`
- * selects which; otherwise the first offered form for the entry is used.
- * Bounces on a missing runtime, a wrong kind/choiceKind, an already-accepted
- * site, an entry not offered, an entry already transfigured, no matching offer,
- * or insufficient essence.
+ * `ACCEPT_TRANSFIGURATION_CHOICE { siteId, entryId, type? }` stamps the chosen
+ * transfiguration onto the deck entry, charges the offer's quoted essence cost
+ * (authoritative from the stored runtime, never the client), records the
+ * accepted entry, and completes the site. When more than one form is offered
+ * for an entry, an optional `type` selects which; otherwise the first offered
+ * form for the entry is used. Bounces on a missing runtime, a wrong
+ * kind/choiceKind, an already-accepted site, an entry not offered, an entry
+ * already transfigured, no matching offer, or insufficient essence.
  */
 export function acceptTransfigurationChoice(
   journey: JourneyState,
@@ -815,11 +806,11 @@ export function acceptTransfigurationChoice(
 }
 
 /**
- * `ACCEPT_DUPLICATION_CHOICE { siteId, entryId }` — legacy
- * `acceptDuplicationChoice`. Appends one plain copy of the chosen deck entry's
- * card (a fresh seq-deterministic entry id), records the accepted entry, and
- * completes the site. Bounces on a missing runtime, a wrong kind/choiceKind, an
- * already-accepted site, an entry not offered, or a stale entry id.
+ * `ACCEPT_DUPLICATION_CHOICE { siteId, entryId }` appends one plain copy of the
+ * chosen deck entry's card (a fresh seq-deterministic entry id), records the
+ * accepted entry, and completes the site. Bounces on a missing runtime, a wrong
+ * kind/choiceKind, an already-accepted site, an entry not offered, or a stale
+ * entry id.
  */
 export function acceptDuplicationChoice(
   journey: JourneyState,
@@ -861,7 +852,7 @@ export function acceptDuplicationChoice(
 // ---------------------------------------------------------------------------
 
 /**
- * `COMPLETE_AUGURY { siteId }` — legacy `completeAugurySite`. Marks
+ * `COMPLETE_AUGURY { siteId }` marks
  * the augury runtime completed (seeding one if the site was never opened) and
  * completes the site. Bounces on a wrong (non-augury) runtime or an
  * already-completed augury.
@@ -895,7 +886,7 @@ export function completeAugury(
 }
 
 /**
- * `REROLL_AUGURY { siteId }` — legacy `rerollAugury` (debug). Rebuilds
+ * `REROLL_AUGURY { siteId }` (debug) rebuilds
  * the augury runtime from scratch with a bumped `rerollNonce` (a clean-slate
  * encounter), preserving any debug-forced archetype. Bounces on a wrong
  * (non-augury) runtime or an already-completed augury.
@@ -924,11 +915,10 @@ export function rerollAugury(
 }
 
 /**
- * `FORCE_AUGURY_ARCHETYPE { siteId, archetypeId }` — legacy
- * `forceAuguryArchetype` (debug). Rebuilds the augury runtime with a bumped
- * nonce and the forced archetype (a `null` archetype clears it). Bounces on a
- * wrong (non-augury) runtime, an already-completed augury, or a malformed
- * archetype value.
+ * `FORCE_AUGURY_ARCHETYPE { siteId, archetypeId }` (debug) rebuilds the augury
+ * runtime with a bumped nonce and the forced archetype (a `null` archetype
+ * clears it). Bounces on a wrong (non-augury) runtime, an already-completed
+ * augury, or a malformed archetype value.
  */
 export function forceAuguryArchetype(
   journey: JourneyState,
@@ -962,7 +952,7 @@ export function forceAuguryArchetype(
 // ---------------------------------------------------------------------------
 
 /**
- * `COMPLETE_SITE { siteId }` — legacy `completeSite`. Marks the site visited and
+ * `COMPLETE_SITE { siteId }` marks the site visited and
  * returns to the dreamscape. Bounces (via the visited guard) when the site is
  * already visited so a double completion cannot re-fire.
  */

@@ -1,11 +1,10 @@
 /* SiteNode — the dreamscape site disc and its ambient motes.
  *
- * Moved into Cumulus from the screen stylesheet so the component carries its own
- * styling wherever it renders (the dreamscape screen and the /cumulus demo). The
- * selectors are intentionally un-scoped (a bare `.ds-node`, not
- * `.dreamscape-detail .ds-node`): the class names are unique to this component,
- * and the disc positions itself absolutely inside whatever
- * `position: relative` stage the consumer provides. */
+ * The component carries its own styling wherever it renders (the dreamscape
+ * screen and the /cumulus demo). The selectors are intentionally un-scoped (a
+ * bare `.ds-node`, not `.dreamscape-detail .ds-node`): the class names are
+ * unique to this component, and the disc positions itself absolutely inside
+ * whatever `position: relative` stage the consumer provides. */
 
 /* ---- Site nodes ---- */
 .ds-node {

@@ -20,7 +20,7 @@ export function resolveNodeAffiliation(
   );
 }
 
-/** Log any explicitly supplied legacy draw weights for replay diagnostics. */
+/** Log explicitly supplied affiliation draw weights for replay diagnostics. */
 export function logAffiliationDraw(args: {
   drawSite: string;
   affiliationId: AffiliationId | undefined;

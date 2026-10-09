@@ -65,9 +65,9 @@ export interface ShopGenerationOptions {
   affiliationId?: AffiliationId;
   /**
    * Deterministic `[0, 1)` random source for the stock draw, discounts, and the
-   * Dreamsign pull. Defaults to `Math.random` (the legacy/UI path); the coop
-   * site provider passes a stream derived from `ctx.rng` so two clients folding
-   * the same `OPEN_SITE` / `REROLL_SHOP` roll a byte-identical inventory.
+   * Dreamsign pull. Defaults to `Math.random` (the UI path); the site provider
+   * passes a stream derived from `ctx.rng` so every fold of the same
+   * `OPEN_SITE` / `REROLL_SHOP` rolls a byte-identical inventory.
    */
   rng?: () => number;
 }
@@ -306,7 +306,7 @@ export function generateShopInventory(
       undefined,
       affiliationNumberWeights,
       // Explicit randomness source threaded from the caller: the UI path passes
-      // `Math.random`, while the coop site provider passes a `ctx.rng`-derived
+      // `Math.random`, while the site provider passes a `ctx.rng`-derived
       // stream so the stock draw is deterministic per event.
       rng,
     );

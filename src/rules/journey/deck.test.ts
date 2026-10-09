@@ -439,7 +439,7 @@ describe("dreamsigns", () => {
 });
 
 // ---------------------------------------------------------------------------
-// mintEntryId (P3-8: the single seq-keyed entry-id scheme)
+// mintEntryId (the single seq-keyed entry-id scheme)
 // ---------------------------------------------------------------------------
 
 describe("mintEntryId", () => {

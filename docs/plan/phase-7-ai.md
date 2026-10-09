@@ -84,7 +84,7 @@ Hand-written features computed from the engine view:
   estimated from the decklist;
 - tempo.
 
-The weights live in the AI data module (`src/content/data/ai.ts`). Greedy is
+The weights live in the AI data module (`src/content/ai.ts`). Greedy is
 upgraded to use the evaluation.
 
 **Acceptance:**

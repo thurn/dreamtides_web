@@ -1,8 +1,8 @@
-// The root fold state for the coop event-sourcing rules layer.
+// The root fold state for the event-sourcing rules layer.
 //
 // `FoldState` is the single value every `GameEvent` folds over. It is pure
 // data — no undo stack, no React — so the same event log always
-// replays to the same state on every client (see design spec §Data model).
+// replays to the same state.
 //
 // This module must stay import-clean per the src/rules/ lint rails: no
 // `react`, no live clock/rng. All time arrives via
@@ -14,7 +14,7 @@ import type { JourneySeed } from "../types/journey-seed";
 import type { TutorialPlaybackState } from "../types/tutorial";
 import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance";
 
-// The authoritative battle fold shape lives in `battle/fold.ts` (Task 18),
+// The authoritative battle fold shape lives in `battle/fold.ts`,
 // which owns the cursor model that keeps the state closure-free. `FoldState`
 // re-exports it so the root reducer / CAS policy keep depending on
 // `state.battle.pendingPrompt.promptId` (a number = the opening event's seq).

@@ -130,7 +130,7 @@ export interface TutorialTriggerDefinition extends Omit<
 export interface TutorialConfiguration {
   /** Hash of the complete normalized tutorial artifact. */
   readonly contentHash: ContentHash;
-  /** Hash of configuration which can change the cooperative fold. */
+  /** Hash of configuration which can change the game fold. */
   readonly foldHash: FoldHash;
   readonly journeyStart: TutorialJourneyStartConfiguration;
   readonly dreamscape: TutorialDreamscapeConfiguration;

@@ -440,7 +440,7 @@ function RulesTextBolt({ count }: { readonly count: number }) {
  * a blank line (`\n\n`). Each chunk between blank lines is one ability and
  * renders as its own paragraph block so the player can tell adjacent
  * abilities apart. A single-ability card produces exactly one paragraph and
- * no inter-ability gap. See backlog task 029.
+ * no inter-ability gap.
  *
  * Surrounding whitespace and stray empty strings are trimmed so a leading
  * newline does not produce an empty
@@ -467,7 +467,6 @@ function splitRulesTextIntoParagraphs(text: string): string[] {
  * variables. It is expressed in `em` there so it scales with the surrounding
  * (possibly auto-shrunk) font size. The literal fallback keeps the gap sane on
  * any surface that renders rules text without the card-view token in scope.
- * See backlog task 029.
  */
 const PARAGRAPH_GAP = "var(--cv-paragraph-gap, 0.22em)";
 

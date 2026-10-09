@@ -3,12 +3,10 @@
 // This mounts inside `LocalGameProvider` (src/session/hooks.ts) and backs the
 // `JourneyContextValue` interface that every journey screen consumes:
 //   - `state` comes from `useGameState().journey`, the fold of the game log.
-//   - `mutations` are thin adapters over the Task-25 action facade
-//     (`useActions()`): each legacy `JourneyMutations` method resolves its display
-//     identifiers (cardNumber, dreamsign/dreamscape index, placement) to the
-//     event payload's UUID / index / nodeId at THIS boundary and appends one
-//     event. Screens keep their call sites unchanged — only the implementation
-//     under the interface changes.
+//   - `mutations` are thin adapters over the action facade (`useActions()`):
+//     each `JourneyMutations` method resolves its display identifiers
+//     (cardNumber, dreamsign/dreamscape index, placement) to the event
+//     payload's UUID / index / nodeId at THIS boundary and appends one event.
 //
 // Every mutation writes through a typed facade creator, so each payload matches
 // its `EventPayloads` entry (src/rules/events.ts); the reducer still
@@ -52,8 +50,8 @@ export interface GameJourneyProviderProps {
 
 /**
  * The "next" dreamscape reachable from `currentId`: the first forward target the
- * player has not already cleared. Mirrors the legacy provider's resolution so
- * `addSiteToDreamscape("next", …)` targets the same node.
+ * player has not already cleared. `addSiteToDreamscape("next", …)` targets
+ * this node.
  */
 function findNextDreamscapeId(
   atlas: DreamAtlas,
@@ -103,7 +101,7 @@ export function GameJourneyProvider({
 
   const mutations = useMemo<JourneyMutations>(() => {
     // Fire-and-forget an action; surface (but do not throw on) an append error,
-    // matching the legacy providers' non-blocking write semantics.
+    // so a journey write never blocks the screen.
     const dispatch = (promise: Promise<number>): void => {
       void promise.catch((error: unknown) => {
         console.error("Journey action failed", error);
@@ -218,7 +216,7 @@ export function GameJourneyProvider({
       setDeckEntryKeywords: (entryId, keywordModification) =>
         dispatch(actions.setDeckEntryKeywords(entryId, keywordModification)),
       changeDeckEntryKeywords: (entryId, keywordModification) => {
-        // Legacy `changeDeckEntryKeywords` MERGED onto the entry's existing
+        // `changeDeckEntryKeywords` MERGES onto the entry's existing
         // modification; SET_DECK_ENTRY_KEYWORDS replaces, so merge here.
         const entry = stateRef.current.deck.find((e) => e.entryId === entryId);
         if (entry === undefined) return;

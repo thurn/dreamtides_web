@@ -160,7 +160,7 @@ describe("foldEvents intervening window", () => {
   });
 });
 
-describe("foldEvents interveningSeqs on a bounced outcome (P3-9)", () => {
+describe("foldEvents interveningSeqs on a bounced outcome", () => {
   it("attaches the intervening window's seqs to a rule-3-style bounce", () => {
     const events = [
       ev(1, "A", 0),

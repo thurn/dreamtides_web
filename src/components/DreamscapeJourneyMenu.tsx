@@ -33,7 +33,8 @@ interface DreamscapeJourneyMenuProps {
   isCardSourceOverlayOpen: boolean;
   /**
    * Replaces the running journey with a saved snapshot loaded by name. Optional
-   * because only the live multiplayer provider supplies it (matching the HUD).
+   * because only the event-log-backed `GameJourneyProvider` supplies it
+   * (matching the HUD).
    */
   onLoadJourneyState?: (
     state: unknown,

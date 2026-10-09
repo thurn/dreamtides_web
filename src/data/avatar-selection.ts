@@ -68,7 +68,7 @@ function offerRng(
 
 /**
  * Derive the game's shared Avatar offer from its immutable genesis seed.
- * Every client and every remount therefore presents the same choices.
+ * Every reload and every remount therefore presents the same choices.
  */
 export function selectAvatarOfferForSeed<T = AvatarContent>(
   avatars: readonly T[],

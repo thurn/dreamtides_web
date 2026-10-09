@@ -9,8 +9,8 @@ import type {
 } from "./model";
 
 // The reading renderer is loaded across an asynchronous module boundary. This
-// keeps CardView free to register with the coordinator in Task 3 without
-// creating context -> overlay -> CardView -> context initialization cycles.
+// lets CardView register with the reveal coordinator without creating
+// context -> overlay -> CardView -> context initialization cycles.
 const RevealGameCard = lazy(async () => {
   const module = await import("../../components/card/CardView");
   return { default: module.CardView };

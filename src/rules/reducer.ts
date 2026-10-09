@@ -1,9 +1,9 @@
-// The root fold and CAS (compare-and-swap) policy for the coop event-sourcing
-// rules layer.
+// The root fold and CAS (compare-and-swap) policy for the event-sourcing rules
+// layer.
 //
 // `reduceGameEvent` is the single reducer the engine folds a game's log with
-// (it matches `EngineConfig.reducer`). It applies the design spec's §Root fold
-// and CAS policy rules 1–6 verbatim, then routes surviving events to a domain
+// (it matches `EngineConfig.reducer`). It applies the CAS policy rules 1–6
+// documented on `reduceGameEvent`, then routes surviving events to a domain
 // case. It BOUNCES on any invalid event content — malformed, stale, or unknown
 // intents leave state untouched — but a *throw* from a domain case is a
 // programmer error and PROPAGATES to the engine's fold containment
@@ -11,10 +11,9 @@
 // exception is a matching `RESOLVE_PROMPT`, whose domain throw is contained here
 // (see `reduceGameEvent`) because rule 4 would otherwise wedge the game.
 //
-// Domain cases land per-task by extending the `routeDomain` switch. Until a
-// type has a case it falls through to a bounce. The journey lifecycle, essence,
-// and navigation cases live in `./journey/lifecycle` as pure `(journey, payload)`
-// functions; `routeDomain` wraps their result over the fold state.
+// `routeDomain` holds one case per event type. The journey cases live in
+// `./journey/` as pure `(journey, payload[, ctx])` functions; `routeDomain`
+// wraps their result over the fold state.
 
 import type {
   BounceReason,
@@ -58,7 +57,7 @@ export type ReduceResult =
 /**
  * Folds a single event over the game's state per the CAS policy.
  *
- * Rules 1–6 (design spec §Root fold and CAS policy):
+ * Rules 1–6:
  *   1. CAS-exempt types (`SET_CARD_NOTE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
  *      skip rules 2–4.
  *   2. A RESOLVE_PROMPT matching the open prompt skips rules 3–4.
@@ -116,8 +115,9 @@ export function reduceGameEvent(
     // PERMANENT — every retry re-throws and every other event bounces, wedging
     // the game forever. So a throwing resolve deterministically clears the
     // prompt and drops queued automation, keeping the board at its last good
-    // value. The result is identical on both clients, so the fold stays
-    // convergent. Every OTHER domain throw propagates to `fold.ts` containment.
+    // value. The result is identical on every replay, so the fold stays
+    // deterministic. Every OTHER domain throw propagates to `fold.ts`
+    // containment.
     let result: ReduceResult;
     try {
       result = routeDomain(routedState, event, ctx);
@@ -338,9 +338,9 @@ export function isInterveningWindowClear(
  * switch below is a COMPILE-TIME-EXHAUSTIVE match over every key of
  * `EventPayloads` (see events.ts) — its `default` arm assigns `type` to
  * `never`, so adding a payload-map key without adding a case here fails to
- * typecheck, tying the registry directly to the routing (audit finding P3-5;
- * `events.test.ts` also asserts this at the type level with a runtime probe
- * over every `KNOWN_EVENT_TYPES` member).
+ * typecheck, tying the registry directly to the routing (`events.test.ts`
+ * also asserts this at the type level with a runtime probe over every
+ * `KNOWN_EVENT_TYPES` member).
  */
 export function routeDomain(
   state: FoldState,

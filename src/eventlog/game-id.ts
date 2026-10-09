@@ -9,8 +9,8 @@ import {
   type GameId,
 } from "../types/identifiers";
 
-// Excludes visually-ambiguous characters (0/O, 1/l) — matches the legacy
-// alphabet so ids read cleanly aloud/typed by hand.
+// Excludes visually-ambiguous characters (0/O, 1/l) so ids read cleanly
+// aloud/typed by hand.
 const GAME_ID_ALPHABET = "abcdefghijkmnopqrstuvwxyz23456789";
 const DEFAULT_GAME_ID_LENGTH = 6;
 const MIN_GAME_ID_LENGTH = 4;

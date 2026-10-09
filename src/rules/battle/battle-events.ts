@@ -699,7 +699,7 @@ function openTutorialGuidance(
   cardKind: "character" | "event" | undefined,
   continuation: TutorialGuidanceContinuation,
 ): FoldState | null {
-  const seen = new Set(state.tutorialTriggerIdsSeen ?? []);
+  const seen = new Set(state.tutorialTriggerIdsSeen);
   const sourceCardId =
     source.kind === "card" ||
     source.kind === "dreamwell" ||

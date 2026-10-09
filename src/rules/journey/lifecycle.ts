@@ -1,11 +1,8 @@
 // Pure journey-lifecycle, essence, and navigation reducer cases.
 //
-// Each exported case relocates the DOMAIN MATH of a legacy journey mutation
-// (`src/state/multiplayer-journey-context.tsx`) into a pure function of
-// `(journey, payload[, ctx])`. The legacy transaction/normalization/actionLog
-// wrappers are engine concerns and live elsewhere now (the root reducer folds,
-// the eventlog engine persists), so they are dropped here. These functions read
-// nothing but their arguments — no React, no live clock/rng (the
+// Each exported case is a pure function of `(journey, payload[, ctx])`; the
+// root reducer folds the event and the eventlog engine persists it. These
+// functions read nothing but their arguments — no React, no live clock/rng (the
 // src/rules/ lint rails); randomness arrives via `ctx.rng` and time via
 // `ctx.timestamp`.
 //
@@ -53,14 +50,14 @@ import type { JourneySeed } from "../../types/journey-seed";
  * The deterministic content the two run-assembly cases need but cannot compute
  * inside a pure reducer: the real Avatar pool, atlas, and draft state are
  * generated from catalog-sourced card/avatar data that only loads
- * asynchronously (`loadJourneyContent` in src/data/), while the reducer must fold
- * synchronously from `(state, event, ctx)` alone.
+ * asynchronously (`loadJourneyContent` in src/data/), while the reducer must
+ * fold synchronously from `(state, event, ctx)` alone.
  *
- * The impure side (app/coop bootstrap, which has already loaded the content)
- * registers a provider whose functions are PURE and DETERMINISTIC in
+ * The impure side (the session bootstrap, which has already loaded the
+ * content) registers a provider whose functions are PURE and DETERMINISTIC in
  * `(avatarId, seed)`: the run `seed` is always `journey.seed` (fixed per
- * game at genesis), never a freshly-minted one, so two clients folding the same
- * log resolve byte-identical packages.
+ * game at genesis), never a freshly-minted one, so every fold of the same log
+ * resolves byte-identical packages.
  *
  * `createJourneyLifecycleContentProvider`
  * (src/session/providers/lifecycle-provider.ts) supplies every member from the
@@ -114,7 +111,7 @@ function finiteNumber(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
-/** `ADJUST_ESSENCE { delta }` — legacy `changeEssence`. */
+/** `ADJUST_ESSENCE { delta }` adds `delta` to the clamped essence total. */
 export function adjustEssence(
   journey: JourneyState,
   payload: Record<string, unknown>,
@@ -127,7 +124,7 @@ export function adjustEssence(
   };
 }
 
-/** `SET_ESSENCE { value }` — legacy `setEssence`. */
+/** `SET_ESSENCE { value }` sets the clamped essence total. */
 export function setEssence(
   journey: JourneyState,
   payload: Record<string, unknown>,
@@ -143,7 +140,7 @@ function clampToNonNegativeInteger(value: number): number {
 }
 
 /**
- * `SET_MAX_DREAMSIGNS { value }` — legacy `setMaxDreamsigns` (debug edit).
+ * `SET_MAX_DREAMSIGNS { value }` (debug edit).
  * Clamped to a non-negative integer; a non-finite payload still bounces (a
  * debug tool typo should never poison the fold with `NaN`/`Infinity`).
  */
@@ -284,7 +281,7 @@ export function regenerateAtlas(
   });
 }
 
-/** `DISMISS_STARTING_DECK_POPUP { }` — legacy `dismissStartingDeckPopup`. */
+/** `DISMISS_STARTING_DECK_POPUP { }` marks the starting-deck popup seen. */
 export function dismissStartingDeckPopup(
   journey: JourneyState,
 ): JourneyState | null {
@@ -295,7 +292,7 @@ export function dismissStartingDeckPopup(
 /**
  * `REROLL_AVATAR_OFFER { }` — increment the shared journey-start reroll
  * count. The screen adapter combines this count with the immutable game seed,
- * so the event log reproduces the same offer on every client and reload.
+ * so the event log reproduces the same offer on every reload and replay.
  */
 export function rerollAvatarOffer(
   journey: JourneyState,
@@ -321,12 +318,10 @@ export function rerollAvatarOffer(
 // ---------------------------------------------------------------------------
 
 /**
- * `SELECT_AVATAR { avatarId }` — legacy `setAvatarSelection`,
- * with the package resolution the legacy mutation trusted from the client
- * moved in-reducer: the package is derived deterministically from
- * `(avatarId, journey.seed)` via the registered content provider (see
- * {@link JourneyLifecycleContentProvider}). Bounces with no provider or an
- * unknown avatar. The state merge mirrors legacy `applyAvatarSelection`.
+ * `SELECT_AVATAR { avatarId }` selects the Avatar. The package is derived
+ * in-reducer, deterministically from `(avatarId, journey.seed)`, via the
+ * registered content provider (see {@link JourneyLifecycleContentProvider}).
+ * Bounces with no provider or an unknown avatar.
  */
 export function selectAvatar(
   journey: JourneyState,
@@ -350,17 +345,17 @@ export function selectAvatar(
 }
 
 /**
- * `START_JOURNEY { avatarId }` — legacy `startJourney` / `startJourneyFromAvatar`.
+ * `START_JOURNEY { avatarId }` assembles the run.
  *
  * The full run assembly (pool package, starter deck, atlas generation, draft
  * state) is content- and generator-heavy, so it is delegated to the registered
  * content provider, which is deterministic in `(avatarId, journey.seed)`.
- * The reducer owns the guards the legacy transaction owned: it is a no-op once a
- * avatar is already selected (legacy checked `journeyState.avatar !==
- * null`), and it bounces when no provider is wired or the avatar is unknown.
+ * The reducer owns the guards: it bounces once an Avatar is already selected
+ * (`journey.avatar !== null`), when no provider is wired, or when the avatar is
+ * unknown.
  *
- * The provider MUST preserve `journey.seed` (the game seed pinned at genesis) so
- * RESET_JOURNEY can always reconstruct the genesis fold.
+ * The provider MUST preserve `journey.seed` (the game seed pinned at genesis)
+ * so RESET_JOURNEY can always reconstruct the genesis fold.
  */
 export function startJourney(
   journey: JourneyState,
@@ -387,7 +382,7 @@ export function startJourney(
 // ---------------------------------------------------------------------------
 
 /**
- * `RESET_JOURNEY { }` — legacy `resetJourney`. Resets the fold to the
+ * `RESET_JOURNEY { }` resets the fold to the
  * {@link initialFoldState} for the game seed (`journey.seed`) and the economy
  * pinned in the game's content configuration, keeping the front door and the
  * tutorials already presented. A forgotten field on reset is caught by the
@@ -403,16 +398,16 @@ export function resetJourney(state: FoldState, ctx: EventContext): FoldState {
 }
 
 /**
- * `LOAD_STATE { snapshot, battle? }` — legacy `loadJourneyState` /
- * `bootstrapQaScene`. Replaces the journey slice with the provided snapshot
- * (debug / QA bootstrap; a large payload is fine) and sets the battle slice from
- * `payload.battle` when present, else clears it.
+ * `LOAD_STATE { snapshot, battle? }`, submitted by the `loadJourneyState` and
+ * `bootstrapQaScene` mutations, replaces the journey slice with the provided
+ * snapshot (debug / QA bootstrap; a large payload is fine) and sets the battle
+ * slice from `payload.battle` when present, else clears it.
  *
- * Because a `LOAD_STATE` folds identically on every client, an unvalidated one
+ * Because a `LOAD_STATE` folds identically on every replay, an unvalidated one
  * would fold the game into a possibly-insane state (a foreign `seed`, a
- * nulled run field mid-run, a planted `pendingPrompt` whose parked cursor points
- * past its script). {@link validateLoadedState} enforces the structural and
- * fold-consistency invariants and this case bounces on any violation.
+ * nulled run field mid-run, a planted `pendingPrompt` whose parked cursor
+ * points past its script). {@link validateLoadedState} enforces the structural
+ * and fold-consistency invariants and this case bounces on any violation.
  */
 export function loadState(
   state: FoldState,

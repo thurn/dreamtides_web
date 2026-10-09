@@ -24,7 +24,7 @@ export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
   rarityCaps: DEFAULT_DRAFT_DATA.rarityCaps,
 };
 
-/** Legacy default used by tests and imported saves without persisted site data. */
+/** Pick count for tests and imported saves without persisted site data. */
 export const SITE_PICKS = DEFAULT_DRAFT_DATA.offers.picksPerSite;
 
 /**
@@ -33,7 +33,7 @@ export const SITE_PICKS = DEFAULT_DRAFT_DATA.offers.picksPerSite;
  *
  * Randomness is injected: `rng` is a required `() => number` returning a
  * uniform value in `[0, 1)`. Callers reached from the pure journey reducer pass a
- * `ctx.rng`-derived stream so two clients folding the same event draw the same
+ * `ctx.rng`-derived stream so every fold of the same event draws the same
  * sample; other callers pass an explicit source (e.g. `Math.random`). This
  * function reads no ambient randomness of its own.
  */

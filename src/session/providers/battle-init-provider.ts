@@ -3,9 +3,9 @@
 // derives all of its randomness from a `BattleRng` stream keyed by
 // `deriveBattleSeed(journey.seed:battleEntryKey)`, and `createInitialBattleState`
 // is pure — so it needs no `ctx.rng`: given the same journey seed and site, every
-// client builds a byte-identical battle. The `battleEntryKey` is derived
+// fold builds a byte-identical battle. The `battleEntryKey` is derived
 // deterministically from `(siteId, completionLevel, dreamscapeId)` so it is
-// identical across clients too.
+// identical across replays too.
 
 import type { JourneyContent } from "../../data/journey-content";
 import { createBattleInit } from "../../battle/integration/create-battle-init";
@@ -63,7 +63,7 @@ const deferredOpponentLogs = new Map<number, () => void>();
 
 /**
  * A battle at `(siteId, completionLevel, dreamscapeId)` always has the same
- * stable identity, so the derived battle seed is identical on every client.
+ * stable identity, so the derived battle seed is identical on every replay.
  */
 function battleEntryKeyFor(
   dreamscapeId: AtlasNodeId | null,

@@ -230,9 +230,9 @@ export interface JourneyMutations {
   /** Requests a shared debug reroll of the displayed offer at an active draft site. */
   rerollDraftOffer?: (siteId: SiteId) => void;
   /**
-   * Enters a draft site, revealing its first offer. The coop event log scopes
-   * this intent to the current run and site, so every observing client may
-   * request it while the displayed fold catches up.
+   * Enters a draft site, revealing its first offer. The event log scopes this
+   * intent to the current run and site, so a repeated request while the
+   * displayed fold catches up is harmless.
    */
   enterDraftSite: (siteId: SiteId) => void;
   addCard: (cardNumber: number, source: JourneyMutationSource) => void;
@@ -292,8 +292,9 @@ export interface JourneyMutations {
    * selection so screens reachable only by playing battles forward — such as
    * the Dream Atlas boss preview — can be opened directly for browser QA.
    * Drives the `?goto=<scene>` runtime flag. No-op once an Avatar is
-   * selected. Optional because only the live multiplayer provider implements
-   * it; lightweight test/demo mutation stubs omit it.
+   * selected. Optional because only the event-log-backed
+   * `GameJourneyProvider` implements it; lightweight test/demo mutation stubs
+   * omit it.
    */
   bootstrapQaScene?: (
     sceneId: QaSceneId,
@@ -306,8 +307,8 @@ export interface JourneyMutations {
    * Debug-only: replaces the entire journey state with a previously saved
    * snapshot (a named save loaded from the developer's file system via the
    * debug overlay). Clears the battle slot, mirroring `resetJourney`. Optional
-   * because only the live multiplayer provider implements it; lightweight
-   * test/demo mutation stubs omit it.
+   * because only the event-log-backed `GameJourneyProvider` implements it;
+   * lightweight test/demo mutation stubs omit it.
    */
   loadJourneyState?: (
     state: unknown,

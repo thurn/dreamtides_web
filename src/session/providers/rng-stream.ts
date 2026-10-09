@@ -2,17 +2,17 @@
 //
 // The reducer hands each content seam a keyed `(drawIndex) => number` stream
 // derived from `(genesis.seed, seq, drawIndex)` (see `src/eventlog/rng.ts`), so
-// the same event on any client draws identical values. The legacy generators,
+// every fold of the same event draws identical values. The content generators,
 // though, consume a `() => number` stream (`Math.random`-shaped). These helpers
 // bridge the two WITHOUT introducing any ambient state, so a provider stays a
-// pure function of its inputs and every client folding the same log computes
+// pure function of its inputs and every fold of the same log computes
 // byte-identical content.
 
 import type { JourneySeed } from "../../types/journey-seed";
 
 /**
  * Adapt a keyed `(drawIndex) => number` rng into the `() => number` stream the
- * legacy generators expect. A local counter advances the draw index on each
+ * content generators expect. A local counter advances the draw index on each
  * call, so successive draws within one event are independent yet deterministic
  * for a fixed `(seed, seq)`.
  */
@@ -33,9 +33,9 @@ function hashStringToSeed(input: string): number {
 
 /**
  * A deterministic `[0, 1)` stream seeded by a string (mulberry32). Used by the
- * lifecycle provider to seed atlas generation from the run seed: two clients
- * folding the same `START_JOURNEY` derive the same stream and build a
- * byte-identical atlas.
+ * lifecycle provider to seed atlas generation from the run seed: every fold of
+ * the same `START_JOURNEY` derives the same stream and builds a byte-identical
+ * atlas.
  */
 export function seededJourneyRng(
   seed: JourneySeed,

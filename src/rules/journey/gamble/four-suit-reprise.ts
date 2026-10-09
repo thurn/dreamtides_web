@@ -269,7 +269,7 @@ export function chooseFourSuitRepriseTransfiguration(
   );
 }
 
-/** Advance every client to a new card choice after a settled round. */
+/** Advance the site to a new card choice after a settled round. */
 export function playAgainFourSuitReprise(
   journey: JourneyState,
   payload: Record<string, unknown>,

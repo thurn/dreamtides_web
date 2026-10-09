@@ -16,8 +16,8 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 /**
  * Drives the event-sourced battle fold. A null folded battle renders the
  * deterministic opposing-Avatar preview; its Begin action appends
- * `BEGIN_BATTLE`. A non-null folded battle renders the playable surface on
- * every client, including after reload.
+ * `BEGIN_BATTLE`. A non-null folded battle renders the playable surface,
+ * including after reload.
  */
 export function BattleSiteRoute({
   site,

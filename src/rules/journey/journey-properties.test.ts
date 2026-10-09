@@ -1,9 +1,8 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { testEventActor } from "../../types/test-identities";
-// Cross-cutting property tests for the Stage B journey reducer.
+// Cross-cutting property tests for the journey reducer.
 //
-// These suites only make sense once every journey domain case exists (Tasks
-// 10–15). They fold ~100 SEEDED random event sequences over a populated
+// These suites fold ~100 SEEDED random event sequences over a populated
 // post-`START_JOURNEY` fold state and assert four invariants that no single
 // per-case unit test can express:
 //
@@ -23,17 +22,16 @@ import { testEventActor } from "../../types/test-identities";
 //       `hashState`.
 //   (d) JSON purity — the final state survives a plain JSON encode/decode
 //       round-trip with hash equality (catches functions / `undefined`
-//       smuggled into state). `GAME_ENGINE_CONFIG`'s encode/decode is not
-//       defined until Task 22, so a plain JSON round-trip stands in here.
+//       smuggled into state), the same round-trip `GAME_ENGINE_CONFIG`'s
+//       encode/decode performs.
 //
 // The random generator is a small seeded xorshift PRNG (no `Math.random`, no
 // `Date.now`, no React — the src/rules/ lint rails).
 //
-// Populated-start approach: FAKE content providers (approach (a) in the task
-// brief). Four provider seams gate the events this suite folds, so we register
-// minimal deterministic fakes for ALL FOUR in `beforeAll` and clear them
-// (`register*(null)`) in `afterAll`, so no registration leaks into other
-// suites:
+// Populated-start approach: FAKE content providers. Four provider seams gate
+// the events this suite folds, so we register minimal deterministic fakes for
+// ALL FOUR in `beforeAll` and clear them (`register*(null)`) in `afterAll`, so
+// no registration leaks into other suites:
 //   - Lifecycle fake — `START_JOURNEY` populates all three run fields
 //     (`avatar`, `resolvedPackage`, a non-null `draftState`) AND seeds a
 //     Shop atlas site with a shop `siteRuntime`, so the nullability invariant
@@ -46,7 +44,7 @@ import { testEventActor } from "../../types/test-identities";
 //   - Site fake — its `rerollShop` returns a result with a NON-NULL
 //     `draftState`, so `REROLL_SHOP` applies and REWRITES `draftState`. This is
 //     the one genuinely at-risk write (`ShopRerollResult.draftState` is
-//     `DraftState | null` — a known Task-26 trap), so suite (a) is its guard.
+//     `DraftState | null`), so suite (a) is its guard.
 // A mutation-count guard in (a) asserts at least one applied event actually
 // wrote `draftState` (vacuity is a hard failure), and a negative-control test
 // proves the nullability checker fires on a deliberate non-carve-out nulling.
@@ -113,8 +111,8 @@ const TIMESTAMP = "1970-01-01T00:00:00.000Z";
 
 /**
  * A minimal `EngineConfig<FoldState>` for `foldEvents`. Only `reducer` is read
- * by `foldEvents`; the rest are supplied for completeness (and mirror what the
- * real engine config will expose in Task 22).
+ * by `foldEvents`; the rest are supplied for completeness and mirror
+ * `GAME_ENGINE_CONFIG`.
  */
 const ENGINE_CONFIG: EngineConfig<FoldState> = {
   reducer: reduceGameEvent,

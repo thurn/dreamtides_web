@@ -1,9 +1,9 @@
 // Real SiteContentProvider: generates the content-coupled site runtimes
 // (`OPEN_SITE`) and the shop restock (`REROLL_SHOP`) from the loaded journey
 // content, drawing ALL randomness from the reducer-supplied `ctx.rng` (adapted
-// to a `() => number` stream) so two clients folding the same event roll
-// byte-identical offers. Every generator's `Math.random` was threaded off this
-// stream (see the reward / dreamsign / shop generators).
+// to a `() => number` stream) so every fold of the same event rolls
+// byte-identical offers. The reward / dreamsign / shop generators each take
+// this stream as their `rng`.
 
 import type { JourneyContent } from "../../data/journey-content";
 import type { DraftState } from "../../types/draft";
@@ -924,7 +924,7 @@ export function createSiteContentProvider(
     // site completion) is a PURE function of `(journey, journeyContent, site,
     // request)` — no rng, no clock — so the provider `rng` is unused. Both
     // resolvers regenerate the encounter deterministically from the same journey
-    // state the reducer folds against, so two clients resolve identically.
+    // state the reducer folds against, so every fold resolves identically.
     resolveAugury: ({
       journey,
       site,
@@ -974,8 +974,7 @@ export function createSiteContentProvider(
           ...(choice ? { choice } : {}),
         },
         // Mint any new deck entry through the SAME seq-keyed scheme every
-        // other minting reducer case uses (audit finding P3-8), instead of
-        // this module's legacy standalone counter.
+        // other minting reducer case uses.
         mintEntryId: (deck, index) => mintEntryId(deck, seq, index),
       });
       return result.ok ? result.state : null;

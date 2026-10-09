@@ -719,7 +719,7 @@ describe("Augury", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Card choice: transfiguration / duplication (Task-12 deferrals)
+// Card choice: transfiguration / duplication
 // ---------------------------------------------------------------------------
 
 describe("ACCEPT_TRANSFIGURATION_CHOICE", () => {

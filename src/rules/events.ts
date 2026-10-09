@@ -286,7 +286,7 @@ export interface EventPayloads {
   // --- battle lifecycle bridges ---
   END_BATTLE: Record<string, never>;
 
-  // --- battle events (no legacy 1:1) ---
+  // --- battle events ---
   BEGIN_BATTLE: { siteId: SiteId; seedOverride?: number };
   SET_BATTLE_AUTOMATION: { enabled: boolean };
   BATTLE_COMMAND: { command: unknown };
@@ -378,7 +378,7 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<GameEventType> =
  * second, explicit assignment-based check of the same tie (belt-and-braces:
  * it fails to compile independently of how this literal's own type
  * annotation is written), so the registry and the payload map can never drift
- * apart silently (audit finding P3-5).
+ * apart silently.
  */
 const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   FRONT_DOOR_ACTION: true,

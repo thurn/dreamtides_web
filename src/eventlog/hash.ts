@@ -5,7 +5,7 @@ import { parseStateHash, type StateHash } from "./types";
  * Computes a canonical SHA-256 hex digest of `value`.
  *
  * Object keys are sorted recursively at every nesting depth, so key order
- * never affects the result -- two clients that fold the same event log into
+ * never affects the result -- two folds of the same event log into
  * differently-ordered (but semantically identical) state must produce
  * byte-identical hashes.
  *

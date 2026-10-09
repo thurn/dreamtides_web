@@ -1,13 +1,11 @@
 // Pure draft reducer cases.
 //
-// Each exported case relocates the DOMAIN MATH of a legacy journey draft mutation
-// (`src/state/multiplayer-journey-context.tsx`) into a pure function of
-// `(journey, payload, ctx)`. The legacy transaction /
-// normalization / actionLog wrappers are engine concerns and live elsewhere now
-// (the root reducer folds, the eventlog engine persists), so they are dropped
-// here. These functions read nothing but their arguments and the registered
+// Each exported case is a pure function of `(journey, payload, ctx)`; the root
+// reducer folds the event and the eventlog engine persists it. These functions
+// read nothing but their arguments and the registered
 // content provider — no React, no live clock/rng (the src/rules/
-// lint rails): randomness arrives via `ctx.rng` and any minted id via `ctx.seq`.
+// lint rails): randomness arrives via `ctx.rng` and any minted id via
+// `ctx.seq`.
 //
 // Cards are keyed by UUID/cardNumber only — never by name.
 
@@ -48,9 +46,9 @@ import { siteIdFromUnknown } from "../../types/identifiers";
  * asynchronously, while the reducer must fold synchronously from
  * `(state, event, ctx)` alone.
  *
- * The impure side (app/coop bootstrap, which has already loaded the content)
- * registers a provider whose functions are PURE and DETERMINISTIC in their
- * inputs, so two clients folding the same log resolve byte-identical results.
+ * The impure side (the session bootstrap, which has already loaded the
+ * content) registers a provider whose functions are PURE and DETERMINISTIC in
+ * their inputs, so every fold of the same log resolves byte-identical results.
  * Resolution never depends on the event's seq: the same UUID always resolves to
  * the same card, and the same `(draftState, deck)` always yields the same deps.
  *
@@ -99,8 +97,8 @@ function integer(value: unknown): number | null {
  * Adapt the event context's keyed rng `(drawIndex) => number` to the
  * `() => number` stream the draft engine expects. A local counter advances the
  * draw index on each call, so successive draws within one event are independent
- * yet deterministic for `(seed, seq)` — two clients folding the same
- * `PICK_DRAFT_CARD` roll the same next offer.
+ * yet deterministic for `(seed, seq)` — every fold of the same
+ * `PICK_DRAFT_CARD` rolls the same next offer.
  */
 function rngStream(ctx: EventContext): () => number {
   let drawIndex = 0;
@@ -128,10 +126,9 @@ function rollOfferTransfigurations(
 // ---------------------------------------------------------------------------
 
 /**
- * `PICK_DRAFT_CARD { packIndex, cardId }` — relocates legacy `pickDraftCard`.
- * The card UUID resolves to its `cardNumber`
- * through the registered {@link DraftContentProvider}; the pick is validated
- * against the offered pack, the card is appended to the deck (with a
+ * `PICK_DRAFT_CARD { packIndex, cardId }`. The card UUID resolves to its
+ * `cardNumber` through the registered {@link DraftContentProvider}; the pick is
+ * validated against the offered pack, the card is appended to the deck (with a
  * seq-deterministic entry id), and the draft is advanced — revealing the next
  * offer via the engine, which draws from `ctx.rng` so the roll is deterministic
  * per `(seed, seq)`.
@@ -219,8 +216,8 @@ export function pickDraftCard(
  * null`); or `siteId` does not name a `"Draft"` site in this run's atlas.
  *
  * If the draft is already active at `siteId`, the event bounces with zero rng
- * draws. The event-log intent key prevents repeated screen mounts and connected
- * clients from appending that repeated event. Otherwise the
+ * draws. The event-log intent key prevents repeated screen mounts from
+ * appending that repeated event. Otherwise the
  * draft state is cloned and advanced via the engine's `enterDraftSite`,
  * drawing the first offer from `ctx.rng` (through the same `rngStream`
  * adapter `PICK_DRAFT_CARD` uses), so the roll is deterministic per
@@ -288,7 +285,7 @@ export function enterDraftSite(
  * active offer. It keeps the draft's pick counter and deck unchanged, while
  * the engine records the abandoned pack as shown so offers remain
  * unique within this site visit. The event context supplies the deterministic
- * replacement roll, making the debug action converge for connected clients.
+ * replacement roll, so the debug action replays identically.
  */
 export function rerollDraftOffer(
   journey: JourneyState,
@@ -333,7 +330,7 @@ export function rerollDraftOffer(
 }
 
 /**
- * `SET_DRAFT_STATE { draftState }` — legacy `setDraftState` (debug edit).
+ * `SET_DRAFT_STATE { draftState }` (debug edit).
  * Replaces the whole draft state with the payload's, or clears it with `null`.
  * Bounces on a malformed (non-object, non-null) value. The payload shape is
  * trusted here exactly like `LOAD_STATE`'s snapshot: this is a debug escape

@@ -232,8 +232,8 @@ export function openCardTutorialGuidance(
     payload.cardIds.length > 100 ||
     !payload.cardIds.every((cardId) => typeof cardId === "string") ||
     new Set(payload.cardIds).size !== payload.cardIds.length ||
-    (state.cardTutorialPresentation ?? null) !== null ||
-    (state.cardTutorialScreenKeysSeen ?? []).includes(screenKey) ||
+    state.cardTutorialPresentation !== null ||
+    state.cardTutorialScreenKeysSeen.includes(screenKey) ||
     contentProvider === null ||
     !cardIdsMatchCurrentDraftOffer(
       state,
@@ -248,18 +248,18 @@ export function openCardTutorialGuidance(
   const match = selectCardTutorialGuidance(
     contentProvider,
     cardIds,
-    new Set(state.tutorialTriggerIdsSeen ?? []),
+    new Set(state.tutorialTriggerIdsSeen),
     context.event,
   );
   if (match === null) return null;
 
-  const triggerIdsSeen = new Set(state.tutorialTriggerIdsSeen ?? []);
+  const triggerIdsSeen = new Set(state.tutorialTriggerIdsSeen);
   triggerIdsSeen.add(match.trigger.id);
   return {
     ...state,
     tutorialTriggerIdsSeen: [...triggerIdsSeen],
     cardTutorialScreenKeysSeen: [
-      ...(state.cardTutorialScreenKeysSeen ?? []),
+      ...state.cardTutorialScreenKeysSeen,
       screenKey,
     ],
     cardTutorialPresentation: {
@@ -285,7 +285,7 @@ export function completeCardTutorialGuidance(
   state: FoldState,
   payload: Record<string, unknown>,
 ): FoldState | null {
-  const presentation = state.cardTutorialPresentation ?? null;
+  const presentation = state.cardTutorialPresentation;
   if (presentation === null || payload.presentationId !== presentation.id) {
     return null;
   }
@@ -298,7 +298,7 @@ export function completeCardTutorialGuidance(
  * to another surface retires the guidance with that same folded transition.
  */
 export function reconcileCardTutorialGuidance(state: FoldState): FoldState {
-  const presentation = state.cardTutorialPresentation ?? null;
+  const presentation = state.cardTutorialPresentation;
   if (
     presentation === null ||
     currentCardTutorialScreenKey(state) === presentation.screenKey

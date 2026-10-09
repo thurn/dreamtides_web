@@ -397,8 +397,8 @@ function buildAffiliationCard(
  * figure. A guideless revealed place (the starter) shows the scene titled with
  * the dreamscape's own name and no figure. An unreachable / unrevealed node
  * shows the compact "unseen dream" text card. A pre-revealed known dreamsign is
- * carried as its own companion card. The labelled site / bonus / affiliation
- * rows of the legacy desktop card are cut.
+ * carried as its own companion card. The card carries no labelled site /
+ * bonus / affiliation rows.
  */
 function buildNodeCard(
   node: DreamscapeNode,

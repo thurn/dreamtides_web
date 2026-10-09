@@ -8,7 +8,8 @@
 // rules change crept in (a bug). This is the whole-reducer safety net.
 //
 // The fixtures are SYNTHETIC seeds built with the DETERMINISTIC providers in
-// `./fixture-providers` (the real content generators are deferred to Stage D).
+// `./fixture-providers`, never the real content generators, so the fixtures
+// never couple to catalog data.
 // The test MUST register the SAME providers the generator used, or the replay
 // would fold differently than when the hash was stamped — hence the shared
 // module and the beforeAll/afterAll registration (cleared so no other suite is

@@ -109,7 +109,7 @@ review follow-ups are filed the same way. They preempt other ready work
 Every bead description ends with one line:
 
 ```text
-Areas: src/rules/journey/, src/content/data/economy.ts, package.json
+Areas: src/rules/journey/, src/content/economy.ts, package.json
 ```
 
 - An area is a directory prefix or a file.

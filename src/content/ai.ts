@@ -73,7 +73,7 @@ export const AI = {
         searchDepth: 16,
         // Journey planning stops when this wall-clock budget is exhausted.
         journeyPlanningBudgetMs: 100,
-        // Tutorial planning uses a deterministic expansion count for synchronized clients.
+        // Tutorial planning uses a fixed expansion count so replays agree.
         tutorialExpansionBudget: 256,
       },
     },

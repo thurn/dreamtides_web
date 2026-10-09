@@ -9,12 +9,12 @@
 // adapter closures here, so the providers are synchronous and deterministic at
 // fold time.
 //
-// DETERMINISM / REGISTRATION INVARIANT (design spec §Randomness and time):
-// `registerGameProviders` MUST run BEFORE any event is folded, and every client
-// on the same build MUST register the SAME content, or one client APPLIES a
-// provider-backed event while another BOUNCES (or they compute different
-// content from the same rng) and their folds diverge. Registration is a global
-// fact of the deployed build, not per-client state.
+// DETERMINISM / REGISTRATION INVARIANT: `registerGameProviders` MUST run
+// BEFORE any event is folded, and every fold of a log on the same build MUST
+// register the SAME content, or a replay APPLIES a provider-backed event the
+// original fold BOUNCED (or computes different content from the same rng) and
+// the folds diverge. Registration is a global fact of the build, not
+// per-session state.
 //
 // The call site is the app bootstrap (src/App.tsx): it loads the journey
 // content and calls `registerGameProviders(content)` before opening the local

@@ -3,8 +3,8 @@
 //
 // Run assembly is seed-string based (pool generation, draft state, and pricing
 // all derive from the run seed), so it is a content-lookup + seed pass-through.
-// Atlas generation draws from a stream SEEDED from the run seed, so two clients
-// folding the same `START_JOURNEY` build a byte-identical atlas.
+// Atlas generation draws from a stream SEEDED from the run seed, so every fold
+// of the same `START_JOURNEY` builds a byte-identical atlas.
 
 import type { JourneyContent } from "../../data/journey-content";
 import type {
@@ -164,7 +164,7 @@ export function createJourneyLifecycleContentProvider(
           )
         : undefined;
       // Seed atlas generation from the run seed so the assembled atlas is
-      // identical on every client.
+      // identical on every replay.
       return startJourneyFromAvatar({
         prev: journey,
         avatar,

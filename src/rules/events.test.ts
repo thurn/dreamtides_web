@@ -1,6 +1,6 @@
 import { testJourneySeed } from "../types/test-identities";
 import { testEventActor } from "../types/test-identities";
-// Registry-tie coverage (audit finding P3-5): `EventPayloads`, `GameEventType`,
+// Registry-tie coverage: `EventPayloads`, `GameEventType`,
 // and `KNOWN_EVENT_TYPES` are tied at COMPILE time in events.ts (the
 // `KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true>` literal plus its
 // `_exhaustive` assignment fail to typecheck on drift), and `routeDomain`'s

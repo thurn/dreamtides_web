@@ -484,7 +484,7 @@ describe("RESET_JOURNEY", () => {
       },
     };
     // A battle in progress with no open prompt (an open prompt would be gated
-    // by CAS rule 4 before routing — see the seam note in the task report).
+    // by CAS rule 4 before routing).
     state = {
       ...state,
       battle: {

@@ -7,7 +7,7 @@ Then delete the tutorial-only sandbox path.
 
 **Read first:**
 
-- the tutorial content module, `src/content/data/tutorial.ts`, created in
+- the tutorial content module, `src/content/tutorial.ts`, created in
   Phase 2.3;
 - `src/battle/tutorial-battle-controller.ts`;
 - `src/battle/use-tutorial-battle-controller.ts`;

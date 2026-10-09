@@ -1,13 +1,10 @@
 // Pure deck, transfiguration, and dreamsign reducer cases.
 //
-// Each exported case relocates the DOMAIN MATH of a legacy journey mutation
-// (`src/state/multiplayer-journey-context.tsx`) into a pure function of
-// `(journey, payload[, ctx])`. The legacy transaction / normalization / actionLog
-// wrappers are engine concerns and live elsewhere now (the root reducer folds,
-// the eventlog engine persists), so they are dropped here. These functions read
-// nothing but their arguments — no React, no live clock/rng (the
-// src/rules/ lint rails): randomness arrives via `ctx.rng` and any minted id via
-// `ctx.seq`.
+// Each exported case is a pure function of `(journey, payload[, ctx])`; the
+// root reducer folds the event and the eventlog engine persists it. These
+// functions read nothing but their arguments — no React, no live clock/rng (the
+// src/rules/ lint rails): randomness arrives via `ctx.rng` and any minted id
+// via `ctx.seq`.
 //
 // Cards and dreamsigns are keyed by UUID/entry-id only — never by name.
 
@@ -42,14 +39,15 @@ import { parseCardTypeChangePredicateId } from "../../types/identifiers";
  * The deterministic content the two "add by id" cases need but cannot compute
  * inside a pure reducer: `ADD_CARD` carries a card UUID (not the `cardNumber`
  * the deck stores), and `ADD_DREAMSIGN` carries a dreamsign UUID (not the full
- * `Dreamsign` record). Both resolutions read the catalog-sourced card / dreamsign
- * catalogues that only load asynchronously, while the reducer must fold
- * synchronously from `(state, event, ctx)` alone.
+ * `Dreamsign` record). Both resolutions read the catalog-sourced card /
+ * dreamsign catalogues that only load asynchronously, while the reducer must
+ * fold synchronously from `(state, event, ctx)` alone.
  *
- * The impure side (app/coop bootstrap, which has already loaded the content)
- * registers a provider whose functions are PURE lookups by UUID, so two clients
- * folding the same log resolve byte-identical results. Resolution never depends
- * on the event's seq: the same UUID always resolves to the same card / dreamsign.
+ * The impure side (the session bootstrap, which has already loaded the
+ * content) registers a provider whose functions are PURE lookups by UUID, so
+ * every fold of the same log resolves byte-identical results. Resolution never
+ * depends on the event's seq: the same UUID always resolves to the same card /
+ * dreamsign.
  *
  * `createDeckContentProvider` (src/session/providers/deck-provider.ts)
  * supplies every member from the loaded journey content. Until a provider is
@@ -117,9 +115,9 @@ function findEntry(
 
 /**
  * Mint a fresh deck-entry id that is deterministic in `(seq, index)` and
- * guaranteed unique within `deck`. Two clients folding the same event at the
- * same seq derive the same id (replaying `Math.random`/`crypto.randomUUID` would
- * diverge — that is the legacy determinism bug this fixes). `index`
+ * guaranteed unique within `deck`. Every fold of the same event at the same
+ * seq derives the same id (a `Math.random`/`crypto.randomUUID` id would
+ * diverge on replay). `index`
  * distinguishes multiple entries minted by one event so they never collide.
  *
  * THE single entry-id minting scheme: every case that mints a deck entry —
@@ -127,7 +125,7 @@ function findEntry(
  * resolution in shop.ts, `PURGE_...`-adjacent grants in sites.ts, and
  * `PICK_DRAFT_CARD` in draft.ts — mints through this function with its own
  * event's `seq`, so no second, independently-evolving id scheme exists in
- * the reducer (audit finding P3-8). Takes the seq directly (not a whole
+ * the reducer. Takes the seq directly (not a whole
  * `EventContext`) so a caller that only has a seq in hand (e.g. a
  * content-provider seam threading it through from `ctx.seq`) needs no
  * `EventContext` of its own to call it.
@@ -171,14 +169,12 @@ export function deriveEntryIdCounter(deck: readonly DeckEntry[]): number {
 
 /**
  * `ADD_CARD { cardId, transfiguration?, source? }` adds one catalog card. The
- * card UUID resolves
- * to its `cardNumber` through the registered {@link DeckContentProvider}
- * (mirroring legacy `resolveCardById`). Nightmare is the sole Bane, so its
- * UUID sets the persisted Bane flag automatically; callers cannot mark another
- * card as a Bane. `transfiguration` stamps a badge. Bounces with no
+ * card UUID resolves to its `cardNumber` through the registered
+ * {@link DeckContentProvider}. Nightmare is the sole Bane, so its UUID sets
+ * the persisted Bane flag automatically; callers cannot mark another card as a
+ * Bane. `transfiguration` stamps a badge. Bounces with no
  * provider, an unknown card id, or a malformed `transfiguration`. The minted
- * entry id is deterministic in `ctx.seq` (legacy `addCardById` used
- * `crypto.randomUUID`).
+ * entry id is deterministic in `ctx.seq`.
  */
 export function addCard(
   journey: JourneyState,
@@ -219,7 +215,7 @@ export function addCard(
   return { ...journey, deck: [...journey.deck, entry] };
 }
 
-/** `REMOVE_DECK_ENTRY { entryId }` — legacy `removeDeckEntry`. Stale target bounces. */
+/** `REMOVE_DECK_ENTRY { entryId }`. Stale target bounces. */
 export function removeDeckEntry(
   journey: JourneyState,
   payload: Record<string, unknown>,
@@ -234,11 +230,11 @@ export function removeDeckEntry(
 }
 
 /**
- * `DUPLICATE_DECK_ENTRY { entryId }` — legacy `duplicateDeckEntry`. Appends a
+ * `DUPLICATE_DECK_ENTRY { entryId }`. Appends a
  * copy carrying the source entry's card, transfiguration, and persistent
  * modifications, with a fresh id minted deterministically from `ctx.seq`
- * (legacy used the deck-counter scheme; the collision bug is fixed here by
- * `mintEntryId`'s within-deck uniqueness guard). Stale target bounces.
+ * (`mintEntryId`'s within-deck uniqueness guard keeps it collision-free).
+ * Stale target bounces.
  */
 export function duplicateDeckEntry(
   journey: JourneyState,
@@ -361,9 +357,8 @@ function isPlainRecord(value: unknown): value is Record<string, unknown> {
 }
 
 /**
- * `SET_DECK_ENTRY_STAT_OVERRIDE { entryId, override }` — legacy
- * `setDeckEntryStatOverride` (debug edit). A `null` override drops the key.
- * Stale target or malformed override bounces.
+ * `SET_DECK_ENTRY_STAT_OVERRIDE { entryId, override }` (debug edit). A `null`
+ * override drops the key. Stale target or malformed override bounces.
  */
 export function setDeckEntryStatOverride(
   journey: JourneyState,
@@ -384,9 +379,8 @@ export function setDeckEntryStatOverride(
 }
 
 /**
- * `SET_DECK_ENTRY_KEYWORDS { entryId, keywords }` — legacy
- * `setDeckEntryKeywords` (absolute set; a `null` value drops the key). Stale
- * target or malformed keywords bounces.
+ * `SET_DECK_ENTRY_KEYWORDS { entryId, keywords }` (absolute set; a `null` value
+ * drops the key). Stale target or malformed keywords bounces.
  */
 export function setDeckEntryKeywords(
   journey: JourneyState,
@@ -430,10 +424,9 @@ export function setDeckEntryType(
 }
 
 /**
- * `TRANSFIGURE_CARD { entryId, transfiguration }` — legacy `transfigureCard`
- * (the badge-stamp half; the action-log summary is dropped). `transfiguration`
- * may be a valid {@link TransfigurationType} or `null` to clear. Stale target or
- * malformed transfiguration bounces.
+ * `TRANSFIGURE_CARD { entryId, transfiguration }` stamps the transfiguration
+ * badge. `transfiguration` may be a valid {@link TransfigurationType} or `null`
+ * to clear. Stale target or malformed transfiguration bounces.
  */
 export function transfigureCard(
   journey: JourneyState,
@@ -507,11 +500,11 @@ export function purgeRandomNightmareCards(
 // ---------------------------------------------------------------------------
 
 /**
- * `ADD_DREAMSIGN { dreamsignId, purgeIndex? }` — legacy `addDreamsign`. The
+ * `ADD_DREAMSIGN { dreamsignId, purgeIndex? }`. The
  * dreamsign UUID resolves to its record through the registered
  * {@link DeckContentProvider}.
  *
- * Two paths mirror the legacy mutation:
+ * Two paths:
  *   - Append (no `purgeIndex`): adds the dreamsign; bounces at the
  *     `maxDreamsigns` limit.
  *   - Replace-at-slot (`purgeIndex`): overwrites the held dreamsign at that
@@ -549,9 +542,8 @@ export function addDreamsign(
 }
 
 /**
- * `REMOVE_DREAMSIGN { dreamsignId }` — legacy `removeDreamsign`, keyed by UUID
- * instead of index. Removes the first dreamsign whose id matches. Bounces when
- * no held dreamsign carries that id.
+ * `REMOVE_DREAMSIGN { dreamsignId }`, keyed by UUID. Removes the first
+ * dreamsign whose id matches. Bounces when no held dreamsign carries that id.
  */
 export function removeDreamsign(
   journey: JourneyState,
@@ -567,7 +559,7 @@ export function removeDreamsign(
   };
 }
 
-/** `SET_DREAMSIGN_POOL { ids }` — legacy `setRemainingDreamsignPool`. */
+/** `SET_DREAMSIGN_POOL { ids }` replaces the remaining Dreamsign pool. */
 export function setDreamsignPool(
   journey: JourneyState,
   payload: Record<string, unknown>,

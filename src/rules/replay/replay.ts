@@ -1,11 +1,11 @@
 // The replay harness: the canonical game EngineConfig plus a one-call log
-// replayer used by the fixture regression net and by src/session/ (Stage D).
+// replayer used by the fixture regression net and by src/session/.
 //
 // `GAME_ENGINE_CONFIG` is THE single definition of the real game's
 // `EngineConfig<FoldState>`: the root reducer, the genesis-state builder, a
 // byte-stable JSON encode/decode for the compaction snapshot, and the canonical
 // state hash. Every consumer that needs to fold the game's event log — the
-// eventlog engine, the coop React layer, the replay fixtures — imports this one
+// eventlog engine, the session layer, the replay fixtures — imports this one
 // object so there is exactly one wiring of reducer + genesis + codec + hash.
 //
 // This module lives under src/rules/ and obeys its lint rails: no React,
@@ -24,7 +24,7 @@ import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 
 /**
- * The canonical `EngineConfig<FoldState>` for the real Dreamtides coop game.
+ * The canonical `EngineConfig<FoldState>` for the real Dreamtides game.
  *
  * - `reducer`   — the root fold + CAS policy (`reduceGameEvent`).
  * - `genesisState` — the pre-journey fold state a fresh game shows.
@@ -34,8 +34,9 @@ import { reduceGameEvent } from "../reducer";
  *   `JSON.parse` round-trips it byte-exactly.
  * - `hash` — the canonical, key-order-independent SHA-256 digest.
  *
- * This is the ONE wiring every folder of the game log consumes (Stage D's
- * `src/session/` included). Do not construct a second ad-hoc config; import this.
+ * This is the ONE wiring every folder of the game log consumes
+ * (`src/session/` included). Do not construct a second ad-hoc config; import
+ * this.
  */
 export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   reducer: reduceGameEvent,

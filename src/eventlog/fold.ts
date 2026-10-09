@@ -42,7 +42,7 @@ export interface FoldOutcome {
    * partner/non-neutral filtering CAS rule 3 applies is NOT re-applied here,
    * so this can include decision-neutral or self-chain entries too). Answers
    * "which event caused this bounce" for `event_bounced` log lines
-   * (audit finding P3-9). Absent when the window predates the checkpoint
+   * Absent when the window predates the checkpoint
    * horizon (`ctx.intervening === "unknown"`) or the event never reached
    * `computeIntervening` at all (e.g. a malformed `basedOnSeq`) — an empty
    * array is a precise "nothing intervened, the reducer bounced it for its

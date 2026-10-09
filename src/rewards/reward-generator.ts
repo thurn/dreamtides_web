@@ -32,9 +32,9 @@ export interface RewardGenerationOptions {
    */
   regenerationPoolIds?: readonly DreamsignId[];
   /**
-   * Deterministic `[0, 1)` random source. Defaults to `Math.random` (the
-   * legacy/UI path); the coop site provider passes a stream derived from
-   * `ctx.rng` so two clients folding the same `OPEN_SITE` roll the same reward.
+   * Deterministic `[0, 1)` random source. Defaults to `Math.random` (the UI
+   * path); the site provider passes a stream derived from `ctx.rng` so every
+   * fold of the same `OPEN_SITE` rolls the same reward.
    */
   rng?: () => number;
 }
