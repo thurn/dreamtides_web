@@ -5,15 +5,40 @@
 import { useRef, type ReactNode } from "react";
 import { DreamscapeJourneyMenu } from "./DreamscapeJourneyMenu";
 import type { JourneyUtilityMenuAction } from "./JourneyUtilityMenuController";
-import { ErrorBoundary } from "./ErrorBoundary";
+import {
+  ErrorBoundary,
+  type ErrorBoundaryFallbackProps,
+} from "./ErrorBoundary";
+import { DefaultErrorBoundaryFallback } from "./ErrorBoundaryFallback";
 import { useJourney } from "../state/journey-context";
 import { JourneyStatusBar } from "../cumulus/components/hud/JourneyStatusBar";
+import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
 import type { JourneyMutationSource } from "../state/journey-context";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
 import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
 
 const NOOP = (): void => undefined;
+
+/**
+ * The journey menu's error fallback. The default panel keeps its in-flow
+ * placement at the top of the chrome; the wrapper raises it onto the menu's
+ * app-chrome layer so the routed screen's positioned scene art cannot cover
+ * it or swallow its clicks.
+ */
+function renderJourneyMenuFallback({
+  scope,
+  reset,
+}: ErrorBoundaryFallbackProps): ReactNode {
+  return (
+    <div
+      data-journey-menu-error-layer=""
+      style={{ position: "relative", zIndex: token("--layer-app-chrome") }}
+    >
+      <DefaultErrorBoundaryFallback scope={scope} onRetry={reset} />
+    </div>
+  );
+}
 
 export interface CumulusJourneyChromeHandlers {
   onViewDeck?: () => void;
@@ -79,7 +104,10 @@ export function CumulusJourneyChrome({
         </ErrorBoundary>
       )}
       {variant === "journey" && state.avatar !== null && (
-        <ErrorBoundary scope="overlay:cumulus-journey-menu">
+        <ErrorBoundary
+          scope="overlay:cumulus-journey-menu"
+          fallback={renderJourneyMenuFallback}
+        >
           <DreamscapeJourneyMenu
             onOpenDeckViewer={handlers.onViewDeck ?? NOOP}
             onOpenPoolViewer={handlers.onOpenPoolViewer ?? NOOP}
