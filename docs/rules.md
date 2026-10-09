@@ -426,12 +426,20 @@ changed, and the value does not change when the count does. A static ability
 that says characters _have_ something works the other way: it changes
 whichever characters match at each moment, and its value stays current.
 
+**Gaining ✦:** A character _gains ✦_ when an effect gives it +N✦, permanent
+or with a duration, and N is at least 1. A gain of +0✦, such as "gains +X✦"
+where X is 0, is not a gain, and neither is an effect that lowers a
+character's spark, just as a character that scores 0⍟ does not score. Spark a
+character _has_ (from static abilities, Support, or similar effects) and a new
+base spark are never gains. Abilities that trigger "when … gains ✦" trigger
+only on gains.
+
 **Additional spark:** An ability such as "When a character you control gains
-✦, it gains 1 additional ✦" applies to each "gains +N✦" event, permanent or
-with a duration, and the additional ✦ has the same duration as the gain that
-caused it. It never applies to spark a character _has_ (from static abilities,
-Support, or similar effects). The additional gain does not cause the ability to
-apply again. Several such abilities stack, each adding 1✦.
+✦, it gains 1 additional ✦" applies to each gain, and the additional ✦ has
+the same duration as the gain that caused it. The additional ✦ triggers no
+"when … gains ✦" ability: neither the ability that caused it nor any other.
+Several such abilities therefore stack, each adding exactly 1✦: with two of
+them, a character that gains +2✦ gains 2 additional ✦, 4✦ in all.
 
 ## Playing Cards and the Stack
 
