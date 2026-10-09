@@ -26,7 +26,8 @@ Each task depends on the tasks listed after its arrow:
 - 6.2 ← 6.1; 6.3 ← 6.2
 - 6.4 ← 6.3 and the Phase 5 gate
 
-Phase 6 overlaps the Phase 5 content batches, as one lane among them.
+Phase 6 tasks interleave with the Phase 5 content batches, one bead at a
+time, in [selection order](workflow.md#selection-order).
 
 ## Tasks
 

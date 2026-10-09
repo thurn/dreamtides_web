@@ -41,7 +41,7 @@ Each task depends on the tasks listed after its arrow:
     recipe.
   - Between later batches, add an edge only where a batch needs a primitive
     that an earlier batch introduces. The inventory derives these edges.
-    Otherwise batches run in parallel lanes.
+    Otherwise batches run in inventory order.
 - 5.3 ← Phase 4.7, the energy-and-points batch
 - 5.4 and 5.5 ← the batches that introduce the primitives they need, per the
   inventory
@@ -51,17 +51,18 @@ Each task depends on the tasks listed after its arrow:
   and logs why.
 - 5.9 ← every task above; 5.10 ← 5.9 and the Phase 4 gate
 
-Two lanes run content batches in parallel. Batches touch disjoint entity
-modules. New primitives are new files under `effects/primitives/` (Phase 3.4),
-so two batches rarely share an area. When they do, the orchestrator runs them
-in sequence.
+Content batches run one at a time, in inventory order
+([D43](decisions.md#d43-orchestrated-sequential-execution)). Batches touch
+disjoint entity modules, and new primitives are new files under
+`effects/primitives/` (Phase 3.4), so each batch builds on the landed
+primitives of the batches before it.
 
 ## Batch recipe
 
 Every content batch bead follows these steps exactly.
 
 1. **Dispatch.** The orchestrator claims the bead, creates its worktree, and
-   briefs a subagent ([workflow](workflow.md#lanes-and-dispatch)).
+   briefs a subagent ([workflow](workflow.md#dispatch)).
 2. **Author the abilities** in each entity's content module, plus the
    amplified variant wherever `amplifiedText` is present. The printed text is
    canonical (D5): read it clause by clause and check that every clause is
@@ -84,7 +85,7 @@ Every content batch bead follows these steps exactly.
    environment (D19).
 6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <batch>`.
    Decks are biased to include the batch. It is heavy (D17).
-7. **Sweep** the batch in the card-lab, on the lane's port:
+7. **Sweep** the batch in the card-lab, on the bead's port:
    `node scripts/qa/card-sweep.mjs --bead <id> --port <port>`. Cover the base
    and amplified variants, `as=player` and `as=enemy`. Every `fail` is fixed
    and re-swept.

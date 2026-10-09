@@ -1,7 +1,7 @@
 # Dreamtides Web: End-to-End Delivery Plan
 
-One orchestrating Claude Code session, running unattended with implementation
-subagents in parallel lanes, turns this fork of the journey prototype into the
+One orchestrating Claude Code session, running unattended and implementing
+one bead at a time through subagents, turns this fork of the journey prototype into the
 complete Dreamtides web game:
 
 - A full rules engine that automates every card, dreamsign, avatar, and
@@ -140,8 +140,8 @@ Shared design references:
 
 ## Operating model
 
-**One orchestrating session; implementation subagents in parallel lanes**
-([D43](decisions.md#d43-orchestrated-parallel-execution)).
+**One orchestrating session; one bead at a time**
+([D43](decisions.md#d43-orchestrated-sequential-execution)).
 
 - **Beads.** Each unit of work is one native Beads bead in the Hive store,
   with `hive_project=dreamtides_web`. Beads form a dependency graph, not a
@@ -150,16 +150,20 @@ Shared design references:
   authorized continuous mode, restricted to project `dreamtides_web`. It owns
   every Beads call, every Tollgate queue action, worktree creation, reviews,
   retrospectives, and ledgers.
-- **Lanes.** Up to two `dreamtides_web` implementation subagents and one
-  Track T subagent run at once, on beads with disjoint areas.
+- **Sequential.** One bead runs at a time, implemented by one subagent. It
+  lands on `staging` before the next bead is dispatched. At most one Claude
+  subagent of any kind runs at a time, which keeps the run within the
+  account's usage limits.
 - **Delivery.** Each bead is one Conventional Commit in a Tollgate worktree.
-  The orchestrator submits it with `tg candidate <oid>` and authorizes it with
-  `tg approve <id>`, never waiting on the gate. This plan grants promotion
-  authority for in-scope work.
+  The orchestrator submits it with `tg candidate <oid>`, authorizes it with
+  `tg approve <id> --wait`, and waits for the gate stage (about 60 s). This
+  plan grants promotion authority for in-scope work.
 - **Other helpers:**
-  - the independent reviewer (the Codex CLI), run asynchronously;
+  - the independent reviewer (the Codex CLI), run asynchronously, since it
+    uses no Claude usage;
   - read-only subagents for mason audits, retrospectives, QA, and the
-    fallback cold review;
+    fallback cold review, run one at a time between implementation
+    subagents;
   - background processes the session owns, such as dev servers, fuzz soaks,
     and tournaments.
 
@@ -206,8 +210,9 @@ claimed bead blocks the new actor. Before relaunching:
    worktrees; see
    [workflow](workflow.md#re-entry-after-compaction-or-restart).
 
-A session that started under the sequential model adopts this model at its
-next re-entry. Its claimed bead finishes as a single lane.
+A session that resumes holding several claimed beads finishes them one at a
+time, in selection order, before dispatching new work; see
+[workflow](workflow.md#re-entry-after-compaction-or-restart).
 
 ## Global invariants
 
@@ -247,8 +252,8 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
 
 All of these are run-scoped and live under `docs/plan/`.
 
-Parallel lanes write evidence one file per bead or per entry, so lanes never
-conflict ([workflow § Evidence files](workflow.md#evidence-files)).
+Evidence is written one file per bead or per entry
+([workflow § Evidence files](workflow.md#evidence-files)).
 
 | Record | Path | Written by |
 | --- | --- | --- |

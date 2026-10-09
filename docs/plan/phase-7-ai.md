@@ -31,8 +31,9 @@ Each task depends on the tasks listed after its arrow:
 - 7.10 ← 7.9, the Phase 6 gate, and the Track T gate
 - 7.11 ← 7.10
 
-Tournament runs are heavy. Run them only under the D17 soak conditions. While
-one runs, the other lane may implement, but not run heavy validation.
+Tournament runs are heavy. Run them as background processes, only under the
+D17 soak conditions. While one runs, the current bead may implement, but not
+run heavy validation.
 
 **No time box.** The phase is best effort
 ([D25](decisions.md#d25-ai-phase-stop-rule)). Every build task, 7.1–7.6,

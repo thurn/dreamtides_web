@@ -45,15 +45,12 @@ Each task depends on the tasks listed after its arrow:
 - 3.12 ← 3.11 and the Phase 2 gate (2.10)
 
 **The orchestrator implements 3.2–3.4 itself,** in sequence. They fix the
-architecture every later bead builds on. After 3.4 there are two lanes:
-
-- **Lane X:** 3.5 stack → 3.6 triggers → 3.9 loops.
-- **Lane Y:** 3.7 continuous effects → 3.8 zones → 3.10 views.
-
-They can run in parallel only because 3.2–3.4 make the engine
-**registry-based** (below), so lanes add files rather than edit shared
-switches. A lane that must edit a shared core file (`state/`, `steps/runner`,
-`effects/interpreter`) lists it in its areas. The other lane waits for it.
+architecture every later bead builds on. After 3.4 the tasks run one at a
+time: 3.5 stack → 3.6 triggers → 3.7 continuous effects → 3.8 zones →
+3.9 loops → 3.10 views. 3.2–3.4 make the engine **registry-based** (below),
+so each task adds files rather than editing shared switches. A task that
+must edit a shared core file (`state/`, `steps/runner`,
+`effects/interpreter`) lists it in its areas.
 
 | Section | Bead |
 | --- | --- |
@@ -368,9 +365,9 @@ definitions harder to write. Every filed bead keeps the fuzz smoke green.
 
 1. **Fuzz soak:** 10,000 games with synthetic and vanilla decks, ≥10% of them
    in interactive replay mode, in ≤30-minute batches with ≤4 processes. There
-   must be zero invariant violations or divergences. Run batches while at most
-   one implementation lane is active (D17). Phase 4 work may continue in the
-   other lane.
+   must be zero invariant violations or divergences. The soak runs as a
+   background process under the D17 soak conditions, and Phase 4 beads may
+   run meanwhile.
 2. **Adversarial check:** run the `adversarial-test-validation` skill on the
    engine core, the step runner and prompt protocol first. Fix the survivors.
 3. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)

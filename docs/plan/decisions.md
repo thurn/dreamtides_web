@@ -2,8 +2,9 @@
 
 These decisions were made with the operator in the planning interview on
 2026-10-03, revised the same day, refined in two readiness reviews on
-2026-10-04, and amended in a replanning session on 2026-10-05 (D16–D19 and
-D26 amended; D43–D45 added). They are binding for the run. In the
+2026-10-04, amended in a replanning session on 2026-10-05 (D16–D19 and
+D26 amended; D43–D45 added), and amended on 2026-10-09 for sequential
+execution (D17, D18, D26, D37, D43, and D44). They are binding for the run. In the
 [rules ambiguity ladder](#d10-rules-ambiguity-ladder) they outrank every other
 precedent.
 
@@ -503,34 +504,31 @@ Two runtime exceptions:
 The machine is shared with other agents. Keep sustained load at about 6 cores:
 
 - **Vitest:** `JOURNEY_TEST_WORKERS=2`, locally and in Tollgate.
-- **Implementation lanes:** at most two `dreamtides_web` implementation
-  subagents and one Track T implementation subagent at a time
-  ([D43](#d43-orchestrated-parallel-execution)).
+- **Implementation:** one implementation subagent at a time
+  ([D43](#d43-orchestrated-sequential-execution)).
 - **Heavy commands.** Heavy means a local `npm run review:full`, a fuzz run
   of 200 or more games, `cargo test --workspace`, and a Tollgate release
-  build. Beads that need one carry the label `heavy`. At most one `heavy`
-  `dreamtides_web` bead runs at a time, and Tollgate's own validation is the
-  other heavy slot. The Track T lane runs its cargo checks alongside, with
-  `CARGO_BUILD_JOBS=4`.
+  build. Beads that need one carry the label `heavy`. The running bead runs
+  at most one heavy command at a time, and Tollgate's own validation is the
+  other heavy slot. Track T beads run cargo with `CARGO_BUILD_JOBS=4`.
 - **Tollgate:** `max_buildsets = 2` for this repository, so one gate run and
   one release run can overlap.
-- **Interactive browser QA** through the Playwright MCP tools runs in one
-  subagent at a time (label `browser`), because subagents may share the
+- **Interactive browser QA** through the Playwright MCP tools runs in the
+  one active subagent (label `browser`), because subagents may share the
   orchestrator's MCP connection. Script-driven sweeps open their own MCP
-  client and may run in parallel on separate ports.
+  client on a separate port.
 - **Fuzz soaks and tournaments:**
   - batches of at most 30 minutes;
   - 4 worker processes while no `heavy` bead is running, otherwise 2;
-  - they may overlap Tollgate validation and implementation lanes.
+  - they may overlap Tollgate validation and the running bead.
 - **Memory pressure:** when `memory_pressure` reports warn or critical, finish
-  the current work and drop to one implementation lane until it clears.
+  the running bead and pause soaks and tournaments until it clears.
 
 ### D37. Mason pass every phase
 
 Every phase ends with a `mason` audit immediately before its gate, scoped to
 the code that phase created or touched. **Every** bead it files is implemented
 in the same phase; nothing is deferred to a later phase or past the run.
-Mason beads touch disjoint files, so they fill both implementation lanes.
 Procedure: [workflow § Mason passes](workflow.md#mason-passes).
 
 ### D42. Continuous introspection
@@ -555,10 +553,10 @@ player-visible UI, or these decisions. Procedure:
 across ~200 beads, and the mason pass at the end of a phase arrives too late
 for a phase as long as Phase 5.
 
-### D43. Orchestrated parallel execution
+### D43. Orchestrated sequential execution
 
 The run uses one **orchestrating** Claude Code session. Implementation is
-delegated to Agent-tool subagents running in parallel lanes.
+delegated to Agent-tool subagents, **one bead at a time**.
 
 - **The orchestrator owns all shared state:**
   - every Beads call (claim, notes, close, filing);
@@ -573,36 +571,37 @@ delegated to Agent-tool subagents running in parallel lanes.
   - It never calls `bd`, never submits or approves candidates, never creates,
     removes, or pushes branches or worktrees, and never edits outside its
     worktree.
-- **Lanes:** at most two `dreamtides_web` implementation subagents plus one
-  Track T subagent at a time (D17).
-- **No overlapping areas.** Every bead's description has an `Areas:` line
-  listing the directories and files it may change.
-  - A bead **holds its areas from dispatch until it lands** or is cancelled,
-    including while its candidate validates or is repaired. Two beads hold
-    areas at the same time only if those areas are disjoint.
-  - These are each a single area: `package.json` with `package-lock.json`,
-    `eslint.config.js`, `vitest.config.ts`, the local Tollgate policy, and the
-    plan pages with `metrics.md`.
-  - Per-bead evidence files never conflict
-    ([workflow § Evidence files](workflow.md#evidence-files)).
-- **Claims.** The orchestrator claims each bead it dispatches. It may hold one
-  claimed bead per lane that is still being implemented, plus any number
-  whose candidates are awaiting landing. This overrides the Hive executor's
-  one-unfinished-assignment convention for this run.
-- **The orchestrator may implement a bead itself** when coherence matters more
-  than parallelism, for example Phase 3.2–3.4. That bead occupies a lane.
-- **Read-only and QA helpers** are also subagents: mason audits, sage
-  retrospectives, browser QA and screenshots, judged card QA, and the
-  fallback cold review. They count against the D17 heavy-command and port
-  limits, not against the implementation lanes.
-- **Never wait idle on the gate.** The orchestrator approves a candidate and
-  dispatches the next ready bead at once. A lane is free once its subagent
-  has returned. The orchestrator checks candidate outcomes at each dispatch
-  boundary.
+- **One bead at a time.** The orchestrator dispatches one bead, waits for its
+  subagent to return, submits and approves the candidate, and waits for it to
+  land on `staging`. Only then does it dispatch the next bead. Every bead
+  starts from a `staging` that contains all earlier beads.
+- **One Claude subagent at a time.** Read-only and QA helpers are subagents
+  too: mason audits, sage retrospectives, browser QA and screenshots, judged
+  card QA, and the fallback cold review. They run between implementation
+  beads, or inside a bead after its implementation subagent has returned,
+  never alongside another subagent.
+- **Areas.** Every bead's description has an `Areas:` line listing the
+  directories and files it may change. Areas bound the subagent's scope: a
+  change outside them stops the subagent for the orchestrator's decision.
+- **Claims.** The orchestrator holds one claimed bead, the one being worked,
+  plus any bead checkpointed behind a newly discovered prerequisite
+  ([workflow § Beads](workflow.md#beads)).
+- **The orchestrator may implement a bead itself** when coherence matters,
+  for example Phase 3.2–3.4. No subagent runs meanwhile.
+- **Work that costs no Claude usage overlaps the current bead:** Tollgate's
+  release stage (D44), Codex core-reviews (D18), and the fuzz soaks and
+  tournaments the orchestrator runs as background processes (D17).
+- **Waiting on the gate.** The orchestrator runs
+  `tg --no-launch approve <candidate-id> --wait` as a background command and
+  resumes when it exits. The gate stage takes about 60 s (D44). It never
+  waits on the release stage.
 
-**Why:** measured on Phases 1–2, a bead took about 25 minutes, and a third of
-that was the session waiting on the gate. With about 200 beads left, serial
-execution would take over 80 hours.
+**Why:** concurrent subagents multiply Claude usage, and the run kept hitting
+the account's usage limits, which stalls an unattended run. One subagent at a
+time keeps usage within the limits. Staged validation keeps the wait for each
+landing short, and landing every bead before the next starts means beads
+never conflict on areas, never rebase onto each other, and re-entry has one
+bead to recover.
 
 ### D44. Staged validation
 
@@ -629,7 +628,7 @@ Consequences:
 - **This repository runs in staged mode** (task T9). Its gate stage runs
   `dependencies` and `npm run review:gate`; its release stage runs
   `npm run review:full` and `fuzz:engine -- --games 200`. The orchestrator
-  never waits on either stage (D43).
+  waits on the gate stage and never on the release stage (D43).
 
 **Why:** only 1 of 19 Phase 1–2 gates failed. Blocking every bead on the full
 suite bought almost nothing.
@@ -684,9 +683,9 @@ model honored, about 20 s for a trivial review. It runs:
 This explicitly authorizes more than the skill's default of one review per
 session. There is no per-bead warden review.
 
-**Core-review is asynchronous.** The review runs in the background against
-the bead's exact commit, while the candidate validates and the next bead
-starts. Confirmed findings become a follow-up bead, which runs next in that
+**Core-review is asynchronous.** The Codex review runs in the background
+against the bead's exact commit, while the next bead starts. It uses no
+Claude usage, so it is the one review that overlaps implementation (D43). Confirmed findings become a follow-up bead, which runs next in that
 bead's area. A gate review blocks its gate bead until its findings are
 resolved.
 
@@ -772,8 +771,8 @@ flow; the champion games prove the AI.
 
 ### D26. Dependency-ordered execution
 
-Beads run in dependency order, not in one chain. Lanes run beads in parallel
-whenever their prerequisites have landed and their areas are disjoint (D43).
+Beads run in dependency order, one at a time (D43). The next bead is the
+highest-priority ready bead whose prerequisites have all landed.
 
 **Phases overlap.** A later phase's task may start as soon as its
 prerequisites have landed. Each phase page states its earliest start and its

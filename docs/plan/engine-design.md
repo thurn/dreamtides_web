@@ -42,7 +42,7 @@ emerges.
 
 Step kinds, engine event kinds, and DSL primitives are each **registered from
 their own module** through typed registries (`steps/kinds/index.ts`,
-`events/index.ts`, `effects/primitives/index.ts`). Parallel lanes and content
+`events/index.ts`, `effects/primitives/index.ts`). Engine tasks and content
 batches then add files instead of editing central switches.
 
 ```text

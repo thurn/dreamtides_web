@@ -22,9 +22,10 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
   the plan run, a subagent stops there and the orchestrator submits it with
   `tg candidate <oid>`. The plan grants promotion authority for
   in-scope plan work and in-scope CI repairs: authorize the exact candidate
-  with `tg approve <candidate-id>` without asking, and do not wait on the gate
-  (docs/plan/workflow.md). Tollgate owns regeneration, certified promotion,
-  and the leased remote push.
+  with `tg approve <candidate-id> --wait` without asking, and wait for it to
+  land before dispatching the next bead. The plan runs one bead and one
+  subagent at a time (docs/plan/workflow.md). Tollgate owns regeneration,
+  certified promotion, and the leased remote push.
 - Tollgate's local gate is the only CI. Never add GitHub Actions workflows.
 - Request independent review (the `independent-review` skill, run through the
   Codex CLI) at every plan phase gate and for every bead the phase pages mark

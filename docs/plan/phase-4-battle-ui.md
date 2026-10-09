@@ -45,8 +45,8 @@ Each task depends on the tasks listed after its arrow:
 - 4.8 ← 4.6, 4.7
 - 4.9 ← 4.8 and the Phase 3 gate (3.12)
 
-Typical lanes: 4.1 → 4.2 → 4.3 → 4.4 in one, and 4.5 then 4.7 in the other.
-Phase 4 overlaps the end of Phase 3. The engine API that 3.2–3.4 fix
+Tasks run one at a time, in this order: 4.0 → 4.1 → 4.5 → 4.2 → 4.3 →
+4.4 → 4.6 → 4.7 → 4.8 → 4.9. Phase 4 overlaps the end of Phase 3. The engine API that 3.2–3.4 fix
 is stable. A Phase 3 bead that must change it files a follow-up for the
 affected Phase 4 code.
 

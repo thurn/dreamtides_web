@@ -34,9 +34,8 @@ it. If nothing does, delete it. Git history keeps everything.
 
 ## Task graph
 
-Phase 2 was filed as a chain and re-filed as this graph on 2026-10-05. Tasks
-on different branches run in parallel lanes when their areas are disjoint
-([D43](decisions.md#d43-orchestrated-parallel-execution)).
+Tasks run one at a time, in dependency order
+([D43](decisions.md#d43-orchestrated-sequential-execution)).
 
 Each task depends on the tasks listed after its arrow:
 
@@ -47,9 +46,6 @@ Each task depends on the tasks listed after its arrow:
 - 2.11d ← 2.11a, 2.11b, 2.11c, 2.4b, 2.5c
 - 2.8 ← 2.7a, 2.7b, 2.11d
 - 2.9 ← 2.8; 2.10 ← 2.9
-
-Typical lanes: 2.4b → 2.7b in one lane and 2.5a → 2.5b → 2.5c → 2.6 in the
-other, with the 2.11 cuts filling whichever lane is free.
 
 | Section | Bead | Areas (summary) |
 | --- | --- | --- |

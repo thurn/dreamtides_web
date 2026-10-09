@@ -12,8 +12,9 @@
 - Skills and Hive use `staging` and `release` correctly.
 - `dreamtides_web` runs a gate stage of about 60 s or less.
 
-Track T runs **alongside the phases**, in its own implementation lane
-([D43](decisions.md#d43-orchestrated-parallel-execution)). Its work happens in
+Track T beads run **between the phases' beads**, one at a time like every
+other bead ([D43](decisions.md#d43-orchestrated-sequential-execution)). Its
+work happens in
 `~/tollgate`, except T8. The operator granted standing promotion authority for
 Track T beads ([D45](decisions.md#d45-tollgate-track)).
 
@@ -101,9 +102,8 @@ Each task depends on the tasks listed after its arrow:
 | T9 | `hv-ki3p.10` |
 | T10 | `hv-ki3p.11` |
 
-Track T is one lane: its beads all touch the same Tollgate service and store
-modules. T8 and T9 work in other repositories. They may run in a
-`dreamtides_web` lane when one is free and their areas allow.
+Track T beads run in task order: they all touch the same Tollgate service
+and store modules. T8 and T9 work in other repositories.
 
 ## Tasks
 

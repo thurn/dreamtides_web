@@ -15,18 +15,19 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
 ## Identity and scope
 
 - **There is one orchestrating Claude Code session**
-  ([D43](decisions.md#d43-orchestrated-parallel-execution)). Its actor is
+  ([D43](decisions.md#d43-orchestrated-sequential-execution)). Its actor is
   `"${CLAUDE_CODE_SESSION_ID:?}"`, expanded inside the same command as each
   Beads call.
-- **Implementation is delegated to subagents,** one bead each, in at most two
-  `dreamtides_web` lanes and one Track T lane. Subagents share the parent's
+- **Work is sequential.** One bead runs at a time, implemented by one
+  subagent, and lands on `staging` before the next bead starts. At most one
+  Claude subagent of any kind runs at a time. Subagents share the parent's
   session ID, so **only the orchestrator** calls Beads, the Tollgate queue,
-  or `tg worktree`. See [Lanes and dispatch](#lanes-and-dispatch).
+  or `tg worktree`. See [Dispatch](#dispatch).
 - **The Hive project is `dreamtides_web`.** Track T beads are filed in it,
   even though they change `~/tollgate` ([D45](decisions.md#d45-tollgate-track)).
   Never claim, edit, or close beads of another project.
-- **Continuous mode is explicitly authorized.** Keep every lane busy with
-  ready beads until the Phase 7 epic closes.
+- **Continuous mode is explicitly authorized.** Dispatch the next ready bead
+  as soon as the previous one lands, until the Phase 7 epic closes.
 - **The run ends when the Phase 7 epic closes,** with the Track T epic also
   closed. Nothing is filed to run after it. The session then stops.
 - **The run is silent.** Send no push notifications or other outbound
@@ -71,7 +72,7 @@ Phases 2 and 3 and Track T are already filed.
 
 3. **Add the edges in the phase page's task graph,** and only those:
    `hbd dep add <child> <prerequisite>`. Never chain beads that the graph
-   leaves parallel.
+   leaves unordered; selection order sequences them.
    - The mason task depends on every implementation task.
    - The gate task depends on the mason task and on the previous phase's
      gate task.
@@ -94,8 +95,8 @@ edge. Then:
 
 1. The running bead's subagent makes an unvalidated checkpoint commit in its
    worktree and returns.
-2. The bead releases its lane and areas, keeps its worktree, and stays
-   claimed. Its notes record the checkpoint.
+2. The bead keeps its worktree and stays claimed. Its notes record the
+   checkpoint.
 3. The orchestrator dispatches the prerequisite.
 4. After the prerequisite lands, a new subagent rebases the checkpoint with
    `tg update`, finishes, and amends it into the bead's single commit.
@@ -116,17 +117,15 @@ Areas: src/rules/journey/, src/content/data/economy.ts, package.json
   `eslint.config.js`, `vitest.config.ts`, `tsconfig*.json`, `scripts/review*.mjs`,
   the local Tollgate policy, `docs/rules.md`, the plan pages with
   `metrics.md`, and `AGENTS.md`.
-- **Per-bead ledger files are never an area conflict** (see
+- Per-bead ledger files are always in scope (see
   [Evidence files](#evidence-files)).
 - Track T beads list paths in `~/tollgate` or the other repositories they
   touch.
 
-A bead **holds its areas from dispatch until it lands** or is cancelled,
-including while its candidate validates or is repaired. Two beads may hold
-areas at the same time only if those areas are disjoint. If a subagent
-discovers it must change something outside its areas, it stops and reports.
-The orchestrator then widens the bead's areas if no other bead holds them.
-Otherwise it checkpoints the bead until they are free.
+Areas bound what the subagent may change. If a subagent discovers it must
+change something outside its areas, it stops and reports. The orchestrator
+widens the bead's areas when the change belongs to the bead, or files the
+change as a new bead.
 
 A gate bead's long checks (soaks, playthroughs, reviews) hold no areas. It
 takes the plan-pages area only to commit its evidence.
@@ -143,20 +142,18 @@ priority order:
 3. the lowest phase number first, then Track T, then later phases;
 4. within a phase, page order.
 
-Then skip any bead whose areas overlap a running bead.
 
 ### Claiming and working
 
 - **Claim on dispatch,** never before: `hbd update <id> --claim --json`, by
   the orchestrator. Proceed only on acknowledgement. Per D43, the orchestrator
-  holds one claimed bead per lane that is still being implemented, plus any
-  number awaiting landing.
+  holds one claimed bead, plus any bead checkpointed behind a prerequisite.
 - **Retitle the session** with the native title tool: `set_session_title` on
   session `self`, in the Claude desktop app. Use
-  `⚒️ [<ids>] <phase or lane summary>`. A failed rename is reported and
+  `⚒️ [<id>] <phase summary>`. A failed rename is reported and
   retried; it never blocks.
 - **Record transitions** with `hbd update <id> --append-notes '...'`:
-  - lane, worktree path, branch, and the subagent's agent ID;
+  - worktree path, branch, and the subagent's agent ID;
   - candidate ID and source OID;
   - key measurements;
   - decisions made;
@@ -190,20 +187,20 @@ A gate bead closes only when all of these hold:
 - its phase evidence is written;
 - in staged mode, `release` equals `staging`.
 
-## Lanes and dispatch
+## Dispatch
 
 ### Dispatch a bead
 
 1. **Create the worktree** (orchestrator):
    `tg --no-launch worktree create wt/<slug>`. In staged mode it is based on
-   `staging`. Record its path.
-2. **Pick the lane's port:** lane 1 uses 5174, lane 2 uses 5175, and a QA
-   helper uses 5176 or higher. Never use 5173.
-3. **Launch the implementation subagent** with the Agent tool, in the
-   background, with the [brief](#implementation-brief). Record its agent ID
-   in the bead notes.
-4. **Dispatch the next ready bead** into any free lane. Never wait on a
-   subagent or a gate while a lane is free and ready work exists.
+   `staging`, which holds every earlier bead. Record its path.
+2. **Use port 5174** for the bead's QA dev server, and 5175 or higher for a
+   QA helper. Never use 5173.
+3. **Launch the implementation subagent** with the Agent tool, with the
+   [brief](#implementation-brief). Record its agent ID in the bead notes.
+4. **Wait for it to return.** Launch no other subagent meanwhile. Background
+   processes that use no Claude usage (Codex reviews, soaks, tournaments)
+   may keep running.
 
 ### Implementation brief
 
@@ -212,11 +209,9 @@ Every brief contains, verbatim or by exact path:
 - the bead ID, title, description, acceptance criteria, and `Areas:` line;
 - whether the bead is core-review ([Reviews](#reviews));
 - the phase-page section to read, and the read-first list;
-- the worktree path, the lane's QA port, and `artifacts/qa/<bead-id>/`;
-- whether it holds the `heavy` slot and the `browser` slot (D17). Without
-  them, it must not run heavy commands or interactive MCP browser QA. If it
-  needs one, it returns and says so, and the orchestrator re-dispatches it
-  when the slot is free;
+- the worktree path, QA port 5174, and `artifacts/qa/<bead-id>/`;
+- whether the bead is `heavy` or `browser` (D17). The orchestrator sizes
+  any soak or tournament it runs meanwhile to match;
 - these rules:
   - Work only inside the worktree and only within the areas. Run
     `npm install` first.
@@ -278,20 +273,22 @@ When a subagent returns:
    tg --no-launch approve <candidate-id>
    ```
 
-   Never pass `--wait` in this run (D43). This plan grants promotion
-   authority for in-scope work and in-scope CI repairs.
+   This plan grants promotion authority for in-scope work and in-scope CI
+   repairs.
 3. **Start the review** in the background if the bead is core-review
    ([Reviews](#reviews)).
-4. **Record** the candidate in the bead notes, then dispatch the next ready
-   bead into the freed lane.
+4. **Record** the candidate in the bead notes.
+5. **Wait for the gate** (D43): run
+   `tg --no-launch approve <candidate-id> --wait` as a background command and
+   resume when it exits. Then read `tg --no-launch --json status
+   <candidate-id>` and handle the outcome below.
 
-### Watch candidates
+### Candidate outcomes
 
-At each dispatch boundary, check every open candidate:
-`tg --no-launch --json status <candidate-id>`.
-
-- **Landed:** close the bead (see [Closing](#closing)).
-- **Failed:** the bead still holds its areas.
+- **Landed:** close the bead (see [Closing](#closing)), then dispatch the
+  next ready bead.
+- **Failed:** the bead stays the current bead. Dispatch nothing else until
+  it lands.
   1. Run `tg diagnose` on it.
   2. Hand the same worktree back to a subagent with the failure, or repair it
      yourself if the fix is small.
@@ -302,14 +299,14 @@ At each dispatch boundary, check every open candidate:
 - **Conflicted with the queue prefix:** the subagent rebases the worktree with
   `tg update` and amends, then the orchestrator resubmits.
 
-**Dependent beads start only from landed code.** A bead whose prerequisite is
-still in Tollgate waits. Never base a worktree on an unpromoted commit.
+**Every bead starts from landed code.** Never base a worktree on an
+unpromoted commit.
 
 ### The orchestrator as implementer
 
 When a phase page says the orchestrator implements a bead (for example Phase
-3.2–3.4), it does so in its own worktree, using the same brief rules. That
-bead occupies a lane.
+3.2–3.4), it does so in its own worktree, using the same brief rules. No
+subagent runs meanwhile.
 
 ## Staged validation
 
@@ -323,7 +320,8 @@ Candidates submitted after the switch follow staged mode.
 - **The gate** runs `dependencies → trox → review:full` until Phase 2.4b
   removes trox, then `dependencies → review:full`.
 - **A bead lands** when it is promoted to `release` and pushed.
-- **The orchestrator never waits:** it approves and moves on.
+- **The orchestrator waits** for each candidate to land before the next
+  bead.
 
 ### Staged mode
 
@@ -339,7 +337,7 @@ Candidates submitted after the switch follow staged mode.
   2. File a `ci-fix` bead. Its areas are the failing tests plus the files the
      fix will touch, not the whole range.
 
-  It preempts all other ready work, and the other lanes keep running.
+  It is the next bead dispatched, ahead of all other ready work.
   Tollgate's `max_release_lag = 5` pauses ordinary promotion if the streak
   grows anyway. The `ci-fix` candidate is approved with
   `tg approve --release-fix <id>`, which bypasses that pause (T5).
@@ -460,7 +458,7 @@ Every phase ends with a mason pass, immediately before its gate.
 2. **File.** The audit subagent returns its findings. The orchestrator files
    each one as a bounded bead (label `mason`) with an `Areas:` line. Its edges: after the mason task, before the gate. Never
    chain mason beads to each other unless their areas overlap.
-3. **Implement all of them in the phase,** in both lanes. Nothing is deferred
+3. **Implement all of them in the phase,** one at a time. Nothing is deferred
    to a later phase or past the run. Each bead preserves behavior and
    rendering. Its evidence is the same as any bead's, plus screenshots for
    touched screens. Engine beads also keep the fuzz smoke green.
@@ -484,7 +482,7 @@ Every bead writes one file, `docs/plan/evidence/friction/<bead-id>.json`, in
 its own commit:
 
 ```json
-{"bead":"hv-xxx","phase":3,"lane":1,"implementMin":95,"localValidationS":{"review":38,"focused":12,"fuzz":40},"hostLoad":12.4,"testDelta":{"files":-3,"lines":-820,"jsdomFiles":-2},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
+{"bead":"hv-xxx","phase":3,"implementMin":95,"localValidationS":{"review":38,"focused":12,"fuzz":40},"hostLoad":12.4,"testDelta":{"files":-3,"lines":-820,"jsdomFiles":-2},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
 ```
 
 - **`implementMin`** is the subagent's wall time from dispatch to commit.
@@ -532,8 +530,8 @@ prerequisite bead at once, without waiting for a trigger.
 ### Retrospectives
 
 Run a retrospective **after every 10th closed bead within a phase** and as part
-of every **phase gate**. Run it as a read-only subagent, while the lanes keep
-working:
+of every **phase gate**. Run it as a read-only subagent at a dispatch
+boundary, before the next bead is dispatched:
 
 1. Run the Hive `sage` skill read-only, scoped to this project's workflow
    since the last retrospective. Its inputs:
@@ -544,8 +542,8 @@ working:
      release-run failures;
    - review dispositions;
    - fuzz and sweep failures;
-   - **lane utilization:** idle lane time, area conflicts, and beads that
-     waited on a prerequisite.
+   - **waiting time:** time spent waiting on the gate, on usage limits, and
+     on prerequisites.
 2. Compare the current gate-stage time, release-stage time, `npm run review`
    latency, focused test time, and the D19 suite budgets with their targets.
 3. File an improvement bead (label `introspection`) for every recurring cost
@@ -565,15 +563,15 @@ launch browsers directly.** The project details (scenes, URL parameters,
 assert-before-acting) are in the README's Browser QA section.
 
 Subagents may share the orchestrator's MCP connection, and with it one
-browser context. So interactive MCP QA runs in one subagent at a time, the
-one holding the `browser` slot (D17). Script-driven tools such as the card
-sweep and `scripts/screenshot-runtime.mjs` open their own MCP client. They
-may run in parallel on separate ports.
+browser context. Only one subagent runs at a time (D17), so interactive MCP QA
+never shares a context. Script-driven tools such as the card sweep and
+`scripts/screenshot-runtime.mjs` open their own MCP client, on their own
+port.
 
 ### Servers and contexts
 
-- Run the QA dev server from the bead's worktree on the lane's port:
-  `npm run dev -- --port <port>`. Never use 5173.
+- Run the QA dev server from the bead's worktree on port 5174:
+  `npm run dev -- --port 5174`. Never use 5173.
 - Report the server's PID or process group in the return's runtime ledger.
   The orchestrator records it in the bead notes.
 - Kill only that PID. Never use `pkill -f vite` or other broad patterns.
@@ -646,8 +644,8 @@ and dispatched next. Then append a new `pass` line in that bead's file.
 
 ## Evidence files
 
-Parallel lanes would conflict on shared append-only ledgers, so evidence is
-written **one file per bead or per entry**:
+Evidence is written **one file per bead or per entry**, so each bead's
+evidence lands in its own commit and is found by bead ID:
 
 | Record | Path |
 | --- | --- |
@@ -754,24 +752,27 @@ What to log:
 These are the [D17](decisions.md#d17-machine-resources) limits:
 
 - `JOURNEY_TEST_WORKERS=2` locally. The local Tollgate policy sets 2.
-- At most two `dreamtides_web` implementation lanes and one Track T lane.
-- **Heavy slot.** At most one `heavy` `dreamtides_web` bead runs at a time.
-  Tollgate's own validation is the other heavy slot. The Track T lane runs
-  cargo alongside, with `CARGO_BUILD_JOBS=4`. The orchestrator grants the
-  slot in the brief.
+- One implementation subagent at a time, and one Claude subagent of any
+  kind at a time.
+- **Heavy commands.** The running bead runs at most one heavy command at a
+  time. Tollgate's own validation is the other heavy slot. Track T beads run
+  cargo with `CARGO_BUILD_JOBS=4`.
 - **Labels.** The orchestrator adds `heavy` or `browser` when a bead's
   acceptance needs heavy validation or interactive browser QA. It decides
   from the bead's text at dispatch if the label is missing.
-- **Browser slot.** Interactive MCP browser QA runs in one subagent at a time.
 - **Soaks and tournaments.** Run them in batches of at most 30 minutes, with
-  4 worker processes while no `heavy` bead runs and 2 otherwise. They may
-  overlap Tollgate validation and implementation lanes.
+  4 worker processes while the running bead is not `heavy` and 2 otherwise.
+  They may overlap Tollgate validation and the running bead.
 - Watch memory pressure: `memory_pressure`, or `vm_stat` compressed pages.
-  Under pressure, finish the running work and drop to one lane.
+  Under pressure, finish the running bead and pause soaks and tournaments.
+- **Claude usage limits.** When a subagent or the session hits a usage
+  limit, wait for the limit to reset, then continue the same bead from its
+  worktree ([recovery](#failure-and-recovery)). Never start extra subagents
+  to catch up.
 
 ## Failure and recovery
 
-- **CI failure.** Use the [watch loop](#watch-candidates).
+- **CI failure.** Follow [candidate outcomes](#candidate-outcomes).
 - **Red release run** (staged mode): file a `ci-fix` bead, as described in
   [Staged mode](#staged-mode).
 - **Flaky test.** If Tollgate attributes it `flaky-or-non-hermetic`, fix the
@@ -805,8 +806,8 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - **Tollgate unavailable.** First check whether it is still starting, or is
   activating repositories: `pgrep -fl tollgate-app`, and after T1a,
   `tg --no-launch doctor`. While it is unavailable:
-  1. Let the subagents keep implementing and committing in their worktrees.
-  2. Queue their commits for submission.
+  1. Let the running subagent finish and commit in its worktree.
+  2. Queue its commit for submission, and dispatch nothing else.
   3. Retry with backoff: 1 minute, then 5, then 15.
 
   Never bypass Tollgate with raw `git push`. Never kill a Tollgate that is
@@ -819,7 +820,8 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 
   A genuine external blocker is one that stays unresolved after recovery, such
   as GitHub being unreachable for hours. For one, checkpoint the affected
-  beads in their notes and keep the other lanes working.
+  bead in its notes and continue with the next ready bead the blocker does
+  not affect.
 
 ## Re-entry after compaction or restart
 
@@ -829,17 +831,18 @@ Run this sequence on every resume. It is idempotent.
    Phase 7 epic is closed, the run is over: stop.
 2. **Find your work.** List your unfinished assignments:
    `hbd list --assignee "${CLAUDE_CODE_SESSION_ID:?}" --status in_progress --json`.
-   There may be several: one per lane being implemented, plus beads awaiting
-   landing.
-3. **For each assignment,** read its notes. The latest note names its lane,
+   Normally there is one, plus any bead checkpointed behind a prerequisite.
+   If there are several, finish them one at a time, in
+   [selection order](#selection-order), before dispatching new work.
+3. **For each assignment,** read its notes. The latest note names its
    worktree, subagent agent ID, candidate, and next action.
 4. **Check its candidate.** If the notes name one, run
    `tg --no-launch --json status <candidate-id>` and continue from its state.
 5. **Check its subagent.**
-   - **After a compaction in the same session,** background subagents keep
-     running. Their completion notifications still arrive. Never dispatch a
-     second subagent into a worktree whose subagent may be alive. To get its
-     status, send it a message by agent ID.
+   - **After a compaction in the same session,** the subagent may still be
+     running. Its completion notification still arrives. Never dispatch a
+     second subagent while it may be alive. To get its status, send it a
+     message by agent ID.
    - **After a session restart,** all subagents are gone.
 6. **Check its worktree** when its subagent is gone. If the notes name a
    worktree that this session created, run `git -C <worktree> status --short`
@@ -857,5 +860,5 @@ Run this sequence on every resume. It is idempotent.
    - commits that were queued for submission while Tollgate was unavailable.
 8. **Check owned processes.** For each runtime-ledger process in the notes,
    check whether it is alive. Stop it if no running work needs it.
-9. **Refill the lanes** from the ready queue, reading only the phase pages of
-   the beads you dispatch.
+9. **Dispatch the next bead** from the ready queue, reading only the phase
+   page of the bead you dispatch.
