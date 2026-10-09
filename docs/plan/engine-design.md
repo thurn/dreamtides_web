@@ -1515,7 +1515,13 @@ an intent.
 
 ## Performance targets
 
-These are monitored in `docs/plan/evidence/metrics.md` and never gated:
+These are monitored in `docs/plan/evidence/metrics.md` and never gated.
+`scripts/bench-engine.ts` measures them, and the fuzzer reports games per
+second of wall and of CPU time. A change's effect on them is measured
+against its base commit with `npm run perf:ab` (`scripts/perf-ab.ts`;
+[workflow § Validation ladder](workflow.md#validation-ladder)): interleaved
+base and head rounds of either workload, with wall time, CPU time, and load
+per round:
 
 - Random-policy full battles: ≥ 20 per second per core in Node.
 - A median step: < 50 µs. Clone plus hash: < 20 µs.

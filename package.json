@@ -19,6 +19,7 @@
     "setup-assets": "tsx scripts/setup-assets.ts",
     "prepare-workspace": "node scripts/prepare-workspace.mjs",
     "fuzz:engine": "tsx scripts/fuzz-engine.ts",
+    "perf:ab": "tsx scripts/perf-ab.ts",
     "friction:triggers": "node scripts/friction-triggers.mjs",
     "regenerate-replay-fixtures": "tsx scripts/regenerate-replay-fixtures.mjs"
   },

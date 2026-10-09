@@ -9,7 +9,7 @@ import { eventSeenBy, type EngineEvent } from "../events";
 import { promptCards } from "../prompts/structure";
 import type { Prompt } from "../prompts/types";
 import type { CardId, InstanceId, Side } from "../state/ids";
-import { cardIdFromUnknown } from "../../types/card-identity";
+import { isCardId, parseCardId } from "../../types/card-identity";
 import { opponent, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { identifies } from "../view/knowledge";
@@ -117,6 +117,18 @@ function namedStrings(value: unknown, path: string, into: NamedString[]): NamedS
   return into;
 }
 
+/** Whether `test` holds for any string in `value`, keys included: `namedStrings` without building paths. */
+function anyString(value: unknown, test: (text: string) => boolean): boolean {
+  if (typeof value === "string") return test(value);
+  if (Array.isArray(value)) return value.some((entry) => anyString(entry, test));
+  if (value !== null && typeof value === "object") {
+    for (const key in value) {
+      if (test(key) || anyString((value as Record<string, unknown>)[key], test)) return true;
+    }
+  }
+  return false;
+}
+
 /** The shape of an `InstanceId`: `i` and a counter. */
 const INSTANCE_ID = /^i\d+$/;
 
@@ -190,7 +202,6 @@ export class EventRedaction {
       for (const viewer of SIDES) {
         const seen = eventSeenBy(event, viewer, after);
         if (seen === null) continue;
-        const found = namedStrings(seen, "", []).filter(({ path }) => path !== "kind");
         const identified = (id: InstanceId): boolean => {
           if (id in before.instances || id in after.instances) return identifies(before, id, viewer) || identifies(after, id, viewer);
           const held = this.lastHeld.get(id);
@@ -201,13 +212,16 @@ export class EventRedaction {
             return seenCreated?.kind === "cardCreated" && seenCreated.instance === id;
           });
         };
-        const leaked = found.filter(({ text }) => {
+        const hidden = (text: string): boolean => {
           if (isInstanceId(text)) return !identified(text);
-          const cardId = cardIdFromUnknown(text);
-          if (cardId === null) return false;
+          if (!isCardId(text)) return false;
+          const cardId = parseCardId(text);
           const printed = [...this.instancesPrintedFrom(before, cardId), ...this.instancesPrintedFrom(after, cardId)];
           return printed.length > 0 && !printed.some(identified);
-        });
+        };
+        // Field paths are built only to report a leak.
+        if (!anyString(seen, hidden)) continue;
+        const leaked = namedStrings(seen, "", []).filter(({ path, text }) => path !== "kind" && hidden(text));
         if (leaked.length > 0) {
           problems.push(`${viewer} sees a ${event.kind} event naming cards hidden from it: ${leaked.map(({ path, text }) => `${path}=${text}`).join(", ")}`);
         }

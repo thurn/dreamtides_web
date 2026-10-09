@@ -467,6 +467,16 @@ Run the cheapest relevant check first:
    - **Whichever of Phase 3.2 and T9 lands second** adds the fuzz smoke to
      the release stage of the local Tollgate policy. Both are authorized to
      change the policy for this.
+5. **Engine performance claims** (a speedup, a regression's cost, a change
+   within budget) compare against a base commit with
+   `npm run perf:ab -- <base-oid> [--workload fuzz|bench] [--rounds 5]
+   [--args "..."]`. It checks the base out as a detached snapshot outside
+   the worktree, runs interleaved A/B rounds of the seeded fuzz or
+   `scripts/bench-engine.ts`, records wall time, CPU time, and load per
+   round, prints medians and spread, and removes the snapshot. Quote its
+   summary, CPU time first on a loaded host, in the bead's measurement file.
+   Never rebuild a base by hand: no `git stash` (one `refs/stash` serves
+   every worktree), branches, or restored files.
 
 Tests follow AGENTS.md and [D19](decisions.md#d19-test-pruning):
 

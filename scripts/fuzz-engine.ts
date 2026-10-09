@@ -59,6 +59,7 @@ let prompts = 0;
 let reruns = 0;
 let rerunMs = 0;
 const started = performance.now();
+const startedCpu = process.cpuUsage();
 let steps = 0;
 let failures = 0;
 /** Feasibility bounds met: plays and activations left out unproven, and prompts that withheld answers. */
@@ -110,9 +111,11 @@ for (let index = first; index < first + games; index++) {
 }
 
 const seconds = (performance.now() - started) / 1000;
+const cpu = process.cpuUsage(startedCpu);
+const cpuSeconds = (cpu.user + cpu.system) / 1e6;
 console.log(
-  `fuzz:engine ${String(games)} games, ${String(steps)} steps, ${seconds.toFixed(1)} s ` +
-    `(${(games / seconds).toFixed(1)} games/s); prompts ${String(prompts)}; ` +
+  `fuzz:engine ${String(games)} games, ${String(steps)} steps, ${seconds.toFixed(1)} s wall, ${cpuSeconds.toFixed(1)} s CPU ` +
+    `(${(games / seconds).toFixed(1)} games/s wall, ${(games / cpuSeconds).toFixed(1)} games/s CPU); prompts ${String(prompts)}; ` +
     `interactive re-runs ${String(reruns)} (${reruns > 0 ? (rerunMs / reruns).toFixed(3) : "0"} ms each); ` +
     `feasibility bounded ${JSON.stringify(bounded)}; results ${JSON.stringify(results)}; failures ${String(failures)}`,
 );
