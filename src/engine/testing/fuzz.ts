@@ -25,7 +25,7 @@ import { eventLogRecords, legalityLogRecords, stepLogRecords, type EngineLogReco
 import { InlineSource } from "../steps/sources";
 import type { RecordedAnswer } from "../steps/types";
 import { invariantViolations } from "./invariants";
-import { promptRedactionViolations } from "./redaction";
+import { EventRedaction, promptRedactionViolations } from "./redaction";
 import { PolicyRandom, randomAction } from "./random-policy";
 import { SYNTHETIC, SYNTHETIC_CARDS, SYNTHETIC_DREAMWELL, syntheticId } from "./synthetic-cards";
 import { PROMPTING_CARDS } from "./synthetic-effects";
@@ -271,6 +271,9 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
   let failure: string | null = null;
   const events: EngineEvent[] = [];
   let state: BattleState = initialState(init, engine.catalog);
+  /** The state before the step the observer sees next, for the event-redaction invariant. */
+  let beforeStep = state;
+  const eventRedaction = new EventRedaction();
   let startAnswers: readonly RecordedAnswer[] = [];
   const actions: RecordedAction[] = [];
   let failedAction: FuzzGame["failedAction"] = null;
@@ -283,14 +286,15 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
           if (problems.length > 0) failure = `at a ${prompt.kind} prompt after step #${String(steps)}: ${problems.join("; ")}`;
         }
       },
-      observe: (observed, step) => {
+      observe: (observed, step, stepEvents) => {
         steps += 1;
         if (failure === null) {
-          const problems = invariantViolations(observed, engine.catalog);
+          const problems = [...invariantViolations(observed, engine.catalog), ...eventRedaction.check(stepEvents, beforeStep, observed)];
           if (problems.length > 0) {
             failure = `after step ${step.kind} (#${String(steps)}): ${problems.join("; ")}`;
           }
         }
+        beforeStep = observed;
       },
       choosing: (chosen) => {
         failedAction = chosen;
@@ -394,8 +398,10 @@ export interface InteractiveReplay {
  * Replays a recorded game through the fold, suspending at every prompt and
  * answering it from the recording, then checks that the final state, the
  * event sequence, and every prompt fingerprint match the inline game, that
- * each suspended display redacts the state and prompt for both sides, and
- * that the fold logged every action once, in order.
+ * each suspended display redacts the state and prompt for both sides, that
+ * the events a suspended step has published name only cards each side that
+ * may see them can identify at the step's start or in the display
+ * (`EventRedaction`), and that the fold logged every action once, in order.
  */
 export function replayInteractively(
   engine: Engine,
@@ -416,6 +422,19 @@ export function replayInteractively(
   let rerunMs = 0;
   let rerunMaxMs = 0;
   let failure: string | null = null;
+  // Each suspended step's events published so far must name only cards each
+  // side that may see them can identify at the step's start or in the
+  // display (completed steps publish the inline game's events, checked there).
+  const eventRedaction = new EventRedaction();
+  const publish = (published: readonly EngineEvent[], from: BattleSlice | null, slice: BattleSlice): void => {
+    events.push(...published);
+    const display = fold.pending(slice)?.display;
+    if (display === undefined) return;
+    const earlier = from !== null && from.committed === slice.committed ? from.publishedEvents : 0;
+    const fresh = published.slice(published.length - (slice.publishedEvents - earlier));
+    const leaks = eventRedaction.check(fresh, slice.committed, display);
+    if (leaks.length > 0) failure ??= `a suspended step's events leak: ${leaks.join("; ")}`;
+  };
 
   const answerAll = (slice: BattleSlice, answers: readonly RecordedAnswer[]): BattleSlice => {
     const given = answers.filter((answer) => answer.auto !== true);
@@ -446,7 +465,7 @@ export function replayInteractively(
         failure ??= `answer failed: ${outcome.kind === "bounced" ? outcome.reason : (outcome.error?.message ?? "")}`;
         return current;
       }
-      events.push(...outcome.published);
+      publish(outcome.published, current, outcome.slice);
       current = outcome.slice;
     }
     if (fold.pending(current) !== null) {
@@ -457,7 +476,7 @@ export function replayInteractively(
 
   const started = fold.start(game.init);
   if (started.kind !== "applied") return { failure: "start bounced", reruns, rerunMs, rerunMaxMs };
-  events.push(...started.published);
+  publish(started.published, null, started.slice);
   let slice = answerAll(started.slice, game.startAnswers);
   for (const { side, action, answers } of game.actions) {
     if (failure !== null) break;
@@ -466,7 +485,7 @@ export function replayInteractively(
       failure = `action failed: ${outcome.kind === "bounced" ? outcome.reason : (outcome.error?.message ?? "")}`;
       break;
     }
-    events.push(...outcome.published);
+    publish(outcome.published, null, outcome.slice);
     slice = answerAll(outcome.slice, answers);
   }
   if (failure === null && stateHash(slice.committed) !== game.finalHash) {

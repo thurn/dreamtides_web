@@ -1498,7 +1498,14 @@ an intent.
   - serialization round-trip.
 
   At every prompt it checks the prompt's redaction (`testing/redaction.ts`).
-  Games must terminate. A failing game writes its engine log to
+  After every step it also checks event redaction (`EventRedaction`,
+  `testing/redaction.ts`): each event a side may see, as that side sees it
+  (`eventSeenBy`, with per-viewer field redaction applied), names no
+  instance ID or printed card ID that side cannot identify (`identifies`,
+  `view/knowledge.ts`) before or after the step. An instance that has left
+  the battle is judged in the last checked state that held it. The
+  interactive replay applies the same check to the events a suspended step
+  has published, against its display. Games must terminate. A failing game writes its engine log to
   `logs/fuzz/<run-id>/<game>.jsonl`. Phase 4.5 adds Greedy, and Phase 5 adds
   random transfigurations and deck-entry modifications.
 - **The card-lab setup solver** (`testing/lab-solver.ts`) is shared by

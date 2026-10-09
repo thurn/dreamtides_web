@@ -5,7 +5,7 @@
  * triggerAbility, disabled triggers, and prompts raised by triggers through
  * the fold.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { EngineAvatarDefinition, EngineCardDefinition, EngineDreamsignDefinition } from "../catalog";
 import { all, characterYouControl, enemyCharacter, energy, event, self, target } from "../dsl/builders";
 import {
@@ -26,6 +26,7 @@ import {
 import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
 import { eventSeenBy, eventVisibleTo, type EngineEvent } from "../events";
+import { winConditionMet } from "../events/kinds/win-condition-met";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { effectiveSpark } from "../rules/spark";
 import { departKnowledge, settleKnowledge } from "../view/knowledge";
@@ -39,6 +40,7 @@ import type { Answer, PromptPurpose } from "../prompts/types";
 import { boardState, type BoardSetup } from "../testing/board";
 import { CONTINUOUS } from "../testing/continuous-cards";
 import { invariantViolations } from "../testing/invariants";
+import { eventRedactionViolations } from "../testing/redaction";
 import { STACK } from "../testing/stack-cards";
 import { DSL } from "../testing/dsl-cards";
 import { SYNTHETIC, syntheticId } from "../testing/synthetic-cards";
@@ -661,6 +663,25 @@ describe("floating, delayed, and disabled triggers", () => {
       // Its holder identifies a card in its hand, but not one in its deck it has not learned.
       expect(namedTo("enemy").has(hidden)).toBe(zone === "hand");
       expect(seenBy(result.events, "enemy", result.state)).toContainEqual({ kind: "winConditionMet", side: "enemy", sources: [zone === "hand" ? hidden : null] });
+      expect(eventRedactionViolations(result.events, state, result.state)).toEqual([]);
+    });
+
+    it(`fails the event-redaction invariant when a win claimed from a hidden ${zone} is public and unredacted`, () => {
+      const winner = zone === "hand" ? L.handWin.id : L.anywhereWin.id;
+      const { state, ids } = board({ player: { hand: [v.event0.id], deck }, enemy: { [zone]: zone === "hand" ? [winner] : [winner, ...deck] } });
+      const hidden = zone === "hand" ? ids.enemy.hand[0] : ids.enemy.deck[0];
+      const publicWin = vi.spyOn(winConditionMet, "privateTo").mockReturnValue(null);
+      const unredacted = vi.spyOn(winConditionMet, "redact").mockImplementation((event) => event);
+      try {
+        const result = play(state, "player", ids.player.hand[0]);
+        const violations = eventRedactionViolations(result.events, state, result.state);
+        // The opponent never identifies the card; its holder cannot identify an unlearned deck card.
+        expect(violations).toHaveLength(zone === "hand" ? 1 : 2);
+        for (const violation of violations) expect(violation).toContain(hidden);
+      } finally {
+        unredacted.mockRestore();
+        publicWin.mockRestore();
+      }
     });
   }
 

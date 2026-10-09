@@ -12,7 +12,7 @@ import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../testing/fuz
 import { SYNTHETIC } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
 import { AVATAR, DREAMSIGN, STACK } from "../testing/stack-cards";
-import { hiddenFrom, strings } from "../testing/redaction";
+import { eventRedactionViolations, hiddenFrom, strings } from "../testing/redaction";
 import type { ArrangeAnswer, Prompt } from "../prompts/types";
 import { PolicyRandom } from "../testing/random-policy";
 import { determinize } from "./determinize";
@@ -401,5 +401,25 @@ describe("knowledge", () => {
       max: 1,
     };
     expect(promptView(prompt, "player", state)).toEqual({ ...prompt, candidates: [] });
+  });
+});
+
+describe("event redaction invariant", () => {
+  it("fails on an event a side may see that names a card hidden from it, and passes private or redacted ones", () => {
+    const { state, ids } = fixture();
+    const hidden = ids.enemy.hand[0];
+    const shown = ids.player.front[0];
+    if (hidden === undefined || shown === null) throw new Error("fixture lacks an enemy hand card or a player front card");
+    const leakedInstance: EngineEvent = { kind: "revealed", side: "enemy", instances: [hidden] };
+    const leakedCard: EngineEvent = { kind: "pendingAbility", side: "enemy", cardId: cardIdOf(state, hidden), instance: null, reason: "played" };
+    for (const leak of [leakedInstance, leakedCard]) {
+      const violations = eventRedactionViolations([leak], state, state);
+      expect(violations).toHaveLength(1);
+      expect(violations[0]).toContain(leak.kind === "revealed" ? hidden : cardIdOf(state, hidden));
+    }
+    const drawn: EngineEvent = { kind: "cardDrawn", side: "enemy", instance: hidden };
+    const queued: EngineEvent = { kind: "triggerQueued", source: shown, controller: "player", ability: 0, node: null, subject: hidden, subjectHiddenFrom: ["player"] };
+    expect(strings(queued).has(hidden)).toBe(true);
+    expect(eventRedactionViolations([drawn, queued], state, state)).toEqual([]);
   });
 });
