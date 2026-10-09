@@ -29,7 +29,7 @@ import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { effectiveSpark } from "../rules/spark";
 import { deserializeState, stateHash } from "../state/hash";
 import type { AbilitySource, CardId, InstanceId, Side } from "../state/ids";
-import { battleSeed, opponent } from "../state/ids";
+import { SIDES, battleSeed, opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { runStep } from "../steps/runner";
 import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
@@ -102,6 +102,10 @@ const L = {
   additionalOnce: local(16, "character", () => [triggered(whenGainsSpark(), p.gainAdditionalSpark(triggeringCard(), 1), { oncePerTurn: true })]),
   /** "When a character you control gains ✦, gain 1●." */
   gainWatcher: local(17, "character", () => [triggered(whenGainsSpark(), p.gainEnergy(1))]),
+  /** "When the opponent plays a card, if this card is in your hand, you win the game." */
+  handWin: local(18, "character", () => [triggered(whenOpponentPlays(), p.winTheGame(), { zone: "hand" })]),
+  /** "When the opponent plays a card, you win the game." — in every zone. */
+  anywhereWin: local(19, "character", () => [triggered(whenOpponentPlays(), p.winTheGame(), { zone: "any" })]),
 } as const;
 const WATCHER_AVATAR: EngineAvatarDefinition = { id: parseAvatarId("5e5e5e5e-0000-4000-8000-000000000391"), status: "authored", abilities: watching };
 const WATCHER_SIGN: EngineDreamsignDefinition = { id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000000392"), status: "authored", abilities: watching };
@@ -622,6 +626,34 @@ describe("floating, delayed, and disabled triggers", () => {
     const enemy = seenBy("enemy");
     expect(enemy.has(hidden)).toBe(true);
     expect(enemy.has(t.handDelayed.id)).toBe(true);
+  });
+
+  for (const zone of ["hand", "deck"] as const) {
+    it(`keeps a win claimed by a trigger from a card in a hidden ${zone} private to its holder, while the win stays public`, () => {
+      const winner = zone === "hand" ? L.handWin.id : L.anywhereWin.id;
+      const { state, ids } = board({ player: { hand: [v.event0.id], deck }, enemy: { [zone]: zone === "hand" ? [winner] : [winner, ...deck] } });
+      const hidden = zone === "hand" ? ids.enemy.hand[0] : ids.enemy.deck[0];
+      const result = play(state, "player", ids.player.hand[0]);
+      const met = result.events.find((entry) => entry.kind === "winConditionMet");
+      expect(met).toEqual({ kind: "winConditionMet", side: "enemy", sources: [hidden] });
+      expect(result.state.result).toEqual({ kind: "victory", winner: "enemy", reason: "winCondition" });
+      const ended = result.events.find((entry) => entry.kind === "battleEnded");
+      for (const viewer of SIDES) expect(ended !== undefined && eventVisibleTo(ended, viewer, result.state)).toBe(true);
+      const seenBy = (viewer: Side) =>
+        strings([result.events.filter((entry) => eventVisibleTo(entry, viewer, result.state)), engine.view(result.state, viewer)]);
+      const player = seenBy("player");
+      expect(player.has(hidden)).toBe(false);
+      expect(player.has(winner)).toBe(false);
+      expect(seenBy("enemy").has(hidden)).toBe(true);
+    });
+  }
+
+  it("shows a win condition met by a public source to both sides", () => {
+    const { state, ids } = board({ player: { hand: [v.event0.id], deck }, enemy: { back: [L.anywhereWin.id], deck } });
+    const result = play(state, "player", ids.player.hand[0]);
+    const met = result.events.find((entry) => entry.kind === "winConditionMet");
+    expect(met).toEqual({ kind: "winConditionMet", side: "enemy", sources: [ids.enemy.back[0]] });
+    for (const viewer of SIDES) expect(met !== undefined && eventVisibleTo(met, viewer, result.state)).toBe(true);
   });
 
   it("suppresses a disabled character's triggers until the duration ends", () => {

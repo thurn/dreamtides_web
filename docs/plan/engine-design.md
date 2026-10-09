@@ -686,8 +686,11 @@ One winning side gets the victory. Both winning in the same check is a draw,
 with reason `score` when both won by score and `winCondition` otherwise.
 The check emits a `winConditionMet` event for each side with a holding win
 condition, naming its sources, before `battleEnded`; a resolving
-`winTheGame` emits one naming its card as it resolves. Each is logged as
-`engine.winCondition`. A suspended step has no check until it completes.
+`winTheGame` emits one naming its card as it resolves. A `winConditionMet`
+naming a card in a hand or deck (a hidden trigger's `winTheGame`) is private
+to that card's holder, like the trigger's own events; `battleEnded` is
+always public. Each is logged as `engine.winCondition`. A suspended step has
+no check until it completes.
 
 Designations:
 

@@ -1,5 +1,6 @@
 import type { AbilitySource, Side } from "../../state/ids";
-import { publicEvent } from "../types";
+import type { EventDefinition } from "../types";
+import { sourcePrivacy } from "./trigger-queued";
 
 /**
  * A "you win the game" condition held for `side` (C15): either the victory
@@ -14,4 +15,20 @@ export interface WinConditionMetEvent {
   readonly sources: readonly AbilitySource[];
 }
 
-export const winConditionMet = publicEvent<WinConditionMetEvent>("winConditionMet");
+/**
+ * Private to the side holding a source that is a card in a hand or deck (a
+ * hidden trigger resolving `winTheGame`), like that trigger's own
+ * `triggerQueued` and `triggerResolved` events; public otherwise. The
+ * sources are all `side`'s, so at most one side holds hidden ones. The win
+ * itself stays public through `battleEnded`.
+ */
+export const winConditionMet: EventDefinition<WinConditionMetEvent> = {
+  kind: "winConditionMet",
+  privateTo(event, state) {
+    for (const source of event.sources) {
+      const holder = sourcePrivacy(source, state);
+      if (holder !== null) return holder;
+    }
+    return null;
+  },
+};
