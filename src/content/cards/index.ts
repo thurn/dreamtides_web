@@ -522,6 +522,7 @@ import signOfArrival910b4cf9 from "./sign-of-arrival-910b4cf9";
 import worldsAwait944e15d2 from "./worlds-await-944e15d2";
 import twilightTroubadour229ab3a1 from "./twilight-troubadour-229ab3a1";
 import nightmareB0a2c3d4 from "./nightmare-b0a2c3d4";
+import contemplation69964b8e from "./contemplation-69964b8e";
 
 export const CARDS: readonly CardDefinition[] = [
   windcutter7be2e6d7,
@@ -1045,4 +1046,5 @@ export const CARDS: readonly CardDefinition[] = [
   worldsAwait944e15d2,
   twilightTroubadour229ab3a1,
   nightmareB0a2c3d4,
+  contemplation69964b8e,
 ];
