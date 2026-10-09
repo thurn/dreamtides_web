@@ -77,10 +77,17 @@ lane, and each phase change — so a player who reaches the threshold wins at
 once, even partway through a phase. In each check:
 
 - A player at or above the threshold wins.
-- A card in play that says "you win the game" when a condition holds wins the
-  battle for its controller while that condition is true — for example, "If
-  you have no cards in your deck, you win the game."
-- If both players would win in the same check, the battle is a draw.
+- A character in play, an avatar, or a dreamsign whose ability says "you win
+  the game" when a condition holds wins the battle for its controller in any
+  check where that condition is true. A condition that is true only partway
+  through an action and false by the check does not win.
+- An event or ability whose effect says "you win the game" checks its
+  condition as that effect resolves. If the condition holds then, the effect's
+  controller wins in the check that follows the resolution — for example, an
+  event that says "If you have no cards in your deck, you win the game." wins
+  the battle if your deck is empty as it resolves.
+- If both players would win in the same check — by the threshold, by "you win
+  the game", or one of each — the battle is a draw.
 
 **Rounds and the turn limit:** A **round** is one turn for each player, the
 first player's turn followed by the second player's. Extra turns (see [Turn
