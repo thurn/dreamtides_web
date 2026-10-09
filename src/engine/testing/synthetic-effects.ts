@@ -17,6 +17,7 @@ import type {
   PromptPurpose,
   PromptRole,
 } from "../prompts/types";
+import { hasKeyword } from "../rules/keywords";
 import { discardCard, drawCard } from "../rules/resources";
 import { charactersInPlay, dissolve, instanceOf, moveInstance } from "../rules/zones";
 import type { InstanceId, Side } from "../state/ids";
@@ -91,7 +92,7 @@ export const PROMPTING = {
           kind: "chooseTargets",
           side,
           purpose: purpose(ctx, self, "target"),
-          candidates: charactersInPlay(ctx.state, opponent(side)),
+          candidates: charactersInPlay(ctx.state, opponent(side)).filter((id) => !hasKeyword(ctx.state, ctx.catalog, id, "cannotBeTargeted")),
           min: 1,
           max: 1,
         })],
@@ -99,7 +100,7 @@ export const PROMPTING = {
     },
     resolve: (ctx, item) => {
       const target = item.choices[0]?.targets[0]?.[0];
-      if (target !== undefined && instanceOf(ctx.state, target).zone === "play") {
+      if (target !== undefined && instanceOf(ctx.state, target).zone === "play" && !hasKeyword(ctx.state, ctx.catalog, target, "cannotBeTargeted")) {
         dissolve(ctx, target, item.controller);
       } else {
         ctx.emit({ kind: "noLegalTarget", source: item.instance });

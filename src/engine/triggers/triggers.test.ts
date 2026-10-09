@@ -646,6 +646,14 @@ describe("required trigger targets with too few candidates", () => {
     expect(result.answers.filter((answer) => answer.auto === true)).toEqual([]);
   });
 
+  it("does nothing, without a prompt, when a trigger's only candidate cannot be targeted", () => {
+    const { state, ids } = board({ player: { back: [t.dissolvedRevenge.id], hand: [L.sweep.id], deck }, enemy: { back: [DSL.untargetableCharacter.id], deck } });
+    const result = play(state, "player", ids.player.hand[0]);
+    expect(result.events).toContainEqual({ kind: "noLegalTarget", source: ids.player.back[0] });
+    expect(result.state.sides.enemy.backRank[0]).toBe(ids.enemy.back[0]);
+    expect(result.answers).toEqual([]);
+  });
+
   it("chooses both targets when a required two-target trigger has enough candidates", () => {
     const { state, ids } = board({ player: { back: [t.dissolvedTwo.id], hand: [L.sweep.id], deck }, enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } });
     const result = play(state, "player", ids.player.hand[0]);

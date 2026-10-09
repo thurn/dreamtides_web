@@ -991,6 +991,18 @@ are chosen. The stack item stores the chosen modes and targets, and the node
 resolves its stored mode. One target spec object used in several places is
 one target. Validation walks `children`, which list every mode.
 
+**Untargetable cards** (C17) have the `cannotBeTargeted` keyword, printed
+or granted through layer 3 (`grant(…, "cannotBeTargeted", duration)`).
+Targeted references alone read it, in `effects/interpreter.ts`:
+`targetCandidates` leaves such cards out of every play-time, trigger, and
+copy target prompt, whoever controls the effect, so a play whose only
+targets cannot be targeted is illegal; and a chosen target that cannot be
+targeted as the effect resolves is skipped like any target that is no
+longer legal, reporting `noLegalTarget` when none remain. Selectors that do
+not target (`all`, `supported`, counts, conditions, trigger subjects) and
+the cards a cost chooses ("abandon a character") still match it: a cost is
+not an effect, and its cards are not targets (rules § Targeting).
+
 **Primitive catalog.** The registered primitives and DSL builders, by group,
 with the ones Phase 5 adds as content batches need them, each with tests.
 

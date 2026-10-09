@@ -143,8 +143,11 @@ export type CountedZone = "deck" | "hand" | "void";
 /**
  * Keywords a card has (layer 3). `reclaim` is plain Reclaim, played from the
  * void for its normal cost; "Reclaim N●" is a `reclaim` ability instead.
+ * `cannotBeTargeted` is "cannot be targeted by effects" (C17): no effect,
+ * its controller's included, chooses or keeps the card as a target, while
+ * effects that do not target still apply to it.
  */
-export type Keyword = "vengeful" | "awakened" | "cannotBePrevented" | "veil" | "reclaim" | "offering";
+export type Keyword = "vengeful" | "awakened" | "cannotBePrevented" | "cannotBeTargeted" | "veil" | "reclaim" | "offering";
 
 /** A timing category: when a card or activated ability may be played (rules § Playing Cards and the Stack). */
 export type Speed = "standard" | "fast" | "interrupt";

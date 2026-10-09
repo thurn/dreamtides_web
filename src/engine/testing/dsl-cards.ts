@@ -76,6 +76,10 @@ export const DSL = {
   winWithEmptyDeck: authored(29, "character", 2, () => [winCondition(noCardsIn("deck"))], { spark: 1 }),
   /** An event, as Terminus reads: "If you have no cards in your deck, you win the game." */
   winIfDeckEmpty: authored(30, "event", 1, events(event(p.ifThen(noCardsIn("deck"), p.winTheGame())))),
+  /** A character that cannot be targeted by effects (C17). */
+  untargetableCharacter: authored(31, "character", 1, () => [keyword("cannotBeTargeted")], { spark: 1 }),
+  /** ❖❖ "A character you control cannot be targeted by effects this turn." */
+  shieldAlly: authored(32, "event", 1, events(event(p.grant(target(characterYouControl()), "cannotBeTargeted", "untilEndOfTurn"))), { speed: "interrupt" }),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

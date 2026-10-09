@@ -8,6 +8,7 @@ import {
   resolvePlayer,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
+import { characteristics } from "../continuous/characteristics";
 import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
@@ -138,7 +139,20 @@ function promptSource(source: AbilitySource, origin: AbilityOrigin): PromptSourc
   throw new Error(`A ${source.kind} source has a ${origin.kind} origin`);
 }
 
-/** The characters or stack cards a target spec may choose now. */
+/**
+ * The cards of `ids` an effect may target now, in order (rules § Targeting):
+ * a card that cannot be targeted by effects is never chosen or kept as a
+ * target, whoever controls the effect. Only targeted references read this;
+ * a selector alone ("all", counts, conditions, Support, triggers, and costs)
+ * still matches the card.
+ */
+function targetable(state: BattleState, catalog: EngineCatalog, ids: InstanceId[]): InstanceId[] {
+  if (ids.length === 0) return ids;
+  const layers = characteristics(state, catalog);
+  return ids.filter((id) => !layers.of(id).keywords.includes("cannotBeTargeted"));
+}
+
+/** The characters or stack cards a target spec may choose now: matching ones that can be targeted. */
 export function targetCandidates(
   state: BattleState,
   catalog: EngineCatalog,
@@ -146,9 +160,13 @@ export function targetCandidates(
   controller: Side,
   source: AbilitySource,
 ): InstanceId[] {
-  return spec.kind === "stackTarget"
-    ? matchingStackItems(state, catalog, spec.selector, controller, source)
-    : matchingCharacters(state, catalog, spec.selector, controller, source);
+  return targetable(
+    state,
+    catalog,
+    spec.kind === "stackTarget"
+      ? matchingStackItems(state, catalog, spec.selector, controller, source)
+      : matchingCharacters(state, catalog, spec.selector, controller, source),
+  );
 }
 
 /** How many targets a spec takes: "up to N" allows none. */
@@ -377,8 +395,9 @@ export function checkCondition(ctx: StepContext, condition: Condition, env: Effe
 
 /**
  * The characters a character effect applies to now. A chosen target that is
- * no longer legal is skipped; if none remain, that part of the effect does
- * nothing and reports noLegalTarget.
+ * no longer legal (it no longer matches, or cannot be targeted now) is
+ * skipped; if none remain, that part of the effect does nothing and reports
+ * noLegalTarget.
  */
 export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
@@ -402,8 +421,10 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
-      const legal = chosen.filter((id) =>
-        matchesCharacter(ctx.state, ctx.catalog, ref.selector, id, env.controller, env.source),
+      const legal = targetable(
+        ctx.state,
+        ctx.catalog,
+        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, ref.selector, id, env.controller, env.source)),
       );
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
@@ -415,13 +436,15 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
 
 /**
  * The stack cards a stack target applies to now: chosen targets still on the
- * stack and still matching. If none remain, that part of the effect does
- * nothing and reports noLegalTarget.
+ * stack, still matching, and still targetable. If none remain, that part of
+ * the effect does nothing and reports noLegalTarget.
  */
 export function resolveStackTargets(ctx: StepContext, spec: StackTargetSpec, env: EffectEnv): InstanceId[] {
   const chosen = env.targetsOf(spec) ?? [];
-  const legal = chosen.filter((id) =>
-    matchesStackItem(ctx.state, ctx.catalog, spec.selector, id, env.controller, env.source),
+  const legal = targetable(
+    ctx.state,
+    ctx.catalog,
+    chosen.filter((id) => matchesStackItem(ctx.state, ctx.catalog, spec.selector, id, env.controller, env.source)),
   );
   if (legal.length === 0 && chosen.length > 0) {
     ctx.emit({ kind: "noLegalTarget", source: env.source });

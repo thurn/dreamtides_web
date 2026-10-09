@@ -1,14 +1,14 @@
 /**
  * Copies (D15, C3): a copy of a card on the stack is a created card directly
  * above the original that is not played, keeps X and paid optional costs,
- * lets its controller choose new targets through a prompt, and can be
- * prevented; created copies in a hand cease to exist instead of being
- * banished.
+ * lets its controller choose new targets through a prompt that never offers
+ * a card that cannot be targeted, and can be prevented; created copies in a
+ * hand cease to exist instead of being banished.
  */
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
 import type { EngineEvent } from "../events";
-import type { Answer } from "../prompts/types";
+import type { Answer, ChooseTargetsPrompt } from "../prompts/types";
 import type { Action } from "./actions";
 import type { InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -70,6 +70,39 @@ describe("copies on the stack", () => {
     expect(events.some((event) => event.kind === "cardCopied")).toBe(true);
     // The original's only target was dissolved by the copy first.
     expect(events).toContainEqual(expect.objectContaining({ kind: "noLegalTarget", source: ids.player.hand[0] }));
+  });
+
+  it("never offers a character that cannot be targeted to the copy's new-target choice", () => {
+    const { state, ids } = board({ player: { back: [ZONE.echo.id], hand: [DSL.dissolveEnemy.id], energy: 2 }, enemy: { back: [DSL.untargetableCharacter.id, v.vanilla1.id, v.vanilla2.id] } });
+    const [shielded, first, second] = ids.enemy.back;
+    const asked: ChooseTargetsPrompt[] = [];
+    const result = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, {
+      answer(prompt) {
+        if (prompt.kind !== "chooseTargets") throw new Error(`Unexpected ${prompt.kind} prompt`);
+        asked.push(prompt);
+        return prompt.candidates.slice(0, 1);
+      },
+    });
+    // The original's prompt, then the copy's, each offering only the targetable enemies.
+    expect(asked.map((prompt) => prompt.candidates)).toEqual([[first, second], [first, second]]);
+    expect(result.state.instances[shielded!]?.zone).toBe("play");
+  });
+
+  it("finds no legal option for a copy's target choice when its only candidate cannot be targeted", () => {
+    const { state, ids } = board({ player: { back: [DSL.untargetableCharacter.id], hand: [DSL.dissolveEnemy.id], energy: 2 }, enemy: { back: [v.vanilla2.id], hand: [ZONE.mirror.id], energy: 1 } });
+    const shielded = ids.player.back[0]!;
+    const dissolve = ids.player.hand[0];
+    const played = act(state, "player", { kind: "play", card: dissolve, from: "hand" }).state;
+    // The enemy copies the dissolve: for the copy, "an enemy" is a player's character, and the only one cannot be targeted.
+    const mirrored = play(played, "enemy", ids.enemy.hand[0]);
+    const done = passUntil(engine, mirrored.state, (next) => next.stack.length === 0);
+    const events = [...mirrored.events, ...done.events];
+    expect(events).toContainEqual({ kind: "noLegalTarget", source: copyOf(events) });
+    // The copy's choice raised no prompt and recorded no answer naming the character.
+    expect(mirrored.answers.map((answer) => answer.value)).not.toContainEqual([shielded]);
+    expect(done.state.instances[shielded]?.zone).toBe("play");
+    // The original still dissolves its own target.
+    expect(done.state.instances[ids.enemy.back[0]!]?.zone).toBe("void");
   });
 
   it("keeps the original's X without paying again", () => {
