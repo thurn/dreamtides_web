@@ -12,3 +12,4 @@
 {"tag":"host-load-noise","phase":2,"reason":"shared host: every timing records hostLoad and budgets are judged at comparable load (metrics.md, Phase 1 retrospective)"}
 {"retrospective":"2026-10-09","phase":"T","bead":"hv-47xj.18","covers":["hv-ki3p.1","hv-ki3p.2","hv-ki3p.3","hv-ki3p.4","hv-ki3p.5","hv-ki3p.6","hv-ki3p.7","hv-ki3p.8","hv-ki3p.9","hv-ki3p.10","hv-ki3p.12","hv-ki3p.13","hv-ki3p.14","hv-ki3p.15","hv-ki3p.16","hv-ki3p.17","hv-ki3p.18","hv-ki3p.19","hv-ki3p.20","hv-ki3p.21","hv-ki3p.24"]}
 {"tag":"host-load-noise","phase":3,"bead":"hv-7x4l.49"}
+{"retrospective":"2026-10-09","phase":3,"bead":"hv-7x4l.12","covers":["hv-7x4l.12","hv-7x4l.37","hv-7x4l.38","hv-7x4l.39","hv-7x4l.40","hv-7x4l.41","hv-7x4l.42","hv-7x4l.43","hv-7x4l.44","hv-7x4l.45","hv-7x4l.46","hv-7x4l.47","hv-7x4l.48","hv-7x4l.49","hv-7x4l.50","hv-7x4l.51"]}

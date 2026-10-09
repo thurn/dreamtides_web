@@ -857,3 +857,130 @@ the primary checkout's `artifacts/qa/hv-47xj.18/`.
 | Retrospective beads landed | hv-47xj.54 `7eda7b8aa`, hv-47xj.55 `e328a6405`, hv-47xj.56 `dfd89933d` | pass |
 | Metrics re-measured | this section | pass |
 | Review resolved | findings resolved; follow-up hv-47xj.57 landed as `66bfe8661` | pass |
+
+## Phase 3 gate (2026-10-09, bead hv-7x4l.12)
+
+### Re-measurement after Phase 3
+
+Run in a fresh worktree at `staging` `1530cd16f` after `npm install`, with
+`JOURNEY_TEST_WORKERS=2` and `DREAMTIDES_LOCAL_ASSET_HOME=.` (the staged
+Tollgate policy's `review-gate` and `review-full` environment). One heavy
+command ran at a time; other sessions shared the host. Host load is the
+1-minute `sysctl -n vm.loadavg` value at the start of each run, with the end
+value after the arrow.
+
+| Measurement | Phase 2 gate | After Phase 3 | Host load |
+| --- | --- | --- | --- |
+| `review:full` lint (whole `src/`) | 15.8 s | 15.3 s, concurrent with typecheck | 8.17 → 6.69 |
+| `review:full` typecheck (cold) | 7.6 s, plus `typecheck-node` 2.6 s | 7.3 s, plus `typecheck-node` 2.6 s | 8.17 → 6.69 |
+| `review:full` test | 24.8 s: 211 files, 2,238 tests | **23.9 s**: 211 files, 2,309 tests | 8.17 → 6.69 |
+| `review:full` total | 41.1 s | **40.0 s** wall (`/usr/bin/time -p`) | 8.17 → 6.69 |
+| Vitest JSON per-file exec sum (`npx vitest run --reporter=json`) | 12.2 s | 12.7 s (wall 21.0 s, 0 failures); slowest `src/engine/fold/fold.test.ts` 2.8 s, `src/engine/core.test.ts` 1.9 s, `src/engine/state/clone.test.ts` 1.0 s, `ExplorationSiteScreen` 0.5 s, `MobileBattleScreen` 0.4 s | 5.64 → 5.16 |
+| `npx vitest run src/engine` | — | 5.1 s wall (vitest 4.4 s): 27 files, 417 tests | 4.84 → 4.77 |
+
+### Engine tests' share of the suite
+
+From the same JSON reporter run; engine tests are the test files under
+`src/engine/`.
+
+| Measure | Engine | Whole suite | Share |
+| --- | --- | --- | --- |
+| Test files | 27 | 211 | 12.8% |
+| Tests | 417 | 2,309 | 18.1% |
+| Per-file exec time (sum) | 6.2 s | 12.7 s | 48.7% |
+
+The engine's 27 files carry about half of the suite's test time: the three
+seeded-game files (`fold.test.ts`, `core.test.ts`, `clone.test.ts`) alone
+take 5.6 s. The engine has 190 non-test files (15,571 lines) and 7,833 lines
+of tests.
+
+### Tollgate stage totals
+
+Per-buildset sums of step `elapsed_ms` from the primary checkout's
+`.git/tollgate/state.sqlite3`, opened read-only, with the
+[Gate total](#gate-total) query; passed buildsets only, for commits carrying
+a `Bead: hv-7x4l.*` trailer. Staged mode covers 33 of the phase's 45
+commits, `8c401bc94` (hv-7x4l.8) … `1530cd16f` (hv-7x4l.47); the earlier
+ones ran in interim mode.
+
+| Stage | Sample | Median | Range | Steps (median) |
+| --- | --- | --- | --- | --- |
+| Gate stage (staged mode) | last 20, `97ab705a6` … `1530cd16f` | **17.3 s** | 11.7–24.1 s | `dependencies` 4.7 s, `review-gate` 12.5 s (7.9–19.0) |
+| Release stage (staged mode) | same 20 | **86.2 s** | 83.2–104.5 s | `review-full` 43.4 s (42.0–51.3), `fuzz` 38.0 s (36.9–46.6) |
+| Gate stage, all Phase 3 staged runs | 33 | 17.4 s | 11.7–25.4 s | |
+| Release stage, all Phase 3 staged runs | 33 | 86.9 s | 83.2–131.6 s | `fuzz` 38.1 s (36.8–81.1) |
+
+Both stages match the Phase 2 gate (17.2 s and 86.2 s) while the suite grew
+by 71 engine tests. `release` and `staging` both point at `1530cd16f`.
+
+### D19 suite budgets
+
+| Budget | Limit | Phase 3 ceiling (hv-47xj.22) | Measured | Command | Host load | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Full suite wall, 2 workers | ≤ 60 s | ≤ 60 s | 23.9 s | `[review] test finished in` from `review:full` | 8.17 | met |
+| Test files | ≤ 220 | 212 | 211 | `npx vitest list --filesOnly \| wc -l` (also `git ls-files` of test files: 211) | 6.39 | met |
+| `jsdom` test files | ≤ 80 | 50 | 49 | `git grep -l "@vitest-environment jsdom"` over test files | — | met |
+
+No test file was added after the Phase 2 gate: the later Phase 3 beads
+added 71 tests to existing engine test files (2,238 → 2,309). The Phase 4
+ceilings are 212 files and 55 `jsdom` files.
+
+### Other budgets at this gate
+
+| Budget | Value | Measured | Host load | Status |
+| --- | --- | --- | --- | --- |
+| Typecheck step | ≤ 10 s | 7.3 s cold | 8.17 | within |
+| Lint, whole `src/` | ≤ 20 s | 15.3 s | 8.17 | within |
+| Gate stage (staged mode) | ≤ 60 s | 17.3 s median | — | within |
+| Release stage (staged mode) | ≤ 5 min | 86.2 s median | — | within |
+| Fuzz smoke | ≤ 60 s | 38.0 s median `fuzz` step; 36–38 s local across beads (5.4–5.8 games/s) | 3.9–4.9 (bead friction files) | within |
+
+The engine performance targets were last measured by
+[hv-7x4l.21](#engine-state-copy-and-hashing-2026-10-05-bead-hv-7x4l21); the
+Planner target waits for Phase 7.
+
+### Fuzz soak
+
+Each soak ran 10,000 games of `npm run fuzz:engine` as 2 processes × 5,000
+(seed `soak`, `--interactive-every 10`) in the background under the D17 soak
+conditions.
+
+| Run | Commit | Host load | Games | Interactive re-runs | Failures | Result |
+| --- | --- | --- | --- | --- | --- | --- |
+| Soak 1 | `b20630f26` | 6.3–7.0 | 10,000 | 7,350 | 1 | `soak-792`: a play the legality check offered reached payment unable to pay 1●. hv-7x4l.38 (`20ee87515`) made legality an existential bounded search that matches payment. |
+| Soak 2 | `df95db214` | 5.0–10.0 | 10,000 | 7,298 (≥ 10% of games) | **0** | 0 feasibility bounds reached; 5.3–5.4 games/s per process; interactive re-run 0.26–0.28 ms each |
+
+### Phase 3 measurement files
+
+Folded from `measurements/<bead-id>.md`; each file keeps the full tables.
+
+- **hv-7x4l.3 (3.3 Prompt protocol).** `npm run fuzz:engine -- --games 1000`
+  with every 10th game replayed through the fold, suspending at every prompt,
+  at load 15.4: 541,035 steps, 5,286 inline prompts, 488 interactive
+  re-runs at a mean of 0.065 ms each (target < 2 ms for the largest step),
+  7.5 games/s including invariants and both replays, 0 failures.
+- **hv-7x4l.37 (3.12 Adversarial check).** 99 realistic rules regressions,
+  each injected alone into `src/engine/` on base `b20630f26` and run against
+  the 27 engine test files: 6 rejected as equivalent at the engine's public
+  boundary, 93 valid, 76 killed initially. Each of the 17 survivors gained a
+  regression test that fails with its mutation and passes without it, so the
+  engine suite kills all 93, including all 44 in the step runner and prompt
+  protocol (12 of whose survivors were answer validation, fingerprint
+  fields, `cancellable` marking, attempt counters, and loop-replay prompts).
+  No production bug was found; the final production diff is empty. Final
+  `vitest run src/engine` 4.6 s (355 tests) and 200-game fuzz 35.8 s, both
+  at load 4.5.
+
+### Exit gate
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| The engine enforces all of `docs/rules.md` | hv-7x4l.1 (`9c613f114`) wrote the priority, trigger, copy, loop, and card-text rules, adding § Durations, § Figments → Figment Copies, and § Infinite Loops (Optional Loops, Mandatory Loops); 52 rules decisions in `rules-decisions/` (RD-hv-7x4l.1-1 … RD-hv-7x4l.46-1). Clarified during the phase: § Objective → Victory check ("you win the game", hv-7x4l.43, C15), § Targeting (untargetable before resolution, hv-7x4l.45, C17), § Spark (which gains trigger "when … gains ✦", hv-7x4l.46, C17), § Infinite Loops (turn log outside the optional-loop signature, hv-7x4l.36; choices as decisions and the Brent window, hv-7x4l.20), § Ability Types ('when you play' on effective types, hv-7x4l.34). Review findings landed as hv-7x4l.38–.42, .44 and .47. The engine's tests check these rules with synthetic fixtures from `src/engine/testing/`. Known gap: printed card text takes effect only as Phase 5 authors it (516 of 521 cards, every Avatar, and every Dreamwell card are pending). | pass |
+| The prompt protocol is proven by property tests and the soak | `src/engine/fold/fold.test.ts`: inline and interactive equivalence (12 seeded games, suspending at every prompt), suspension (divergence, reload mid-prompt, sides alternating within a step, forced auto-answers), cancellation before and after the commit point, empty candidate sets, prompt ids across attempts, corrupt in-flight records, answers from an answer source. `src/engine/core.test.ts` replay (seeded games, invariants, final-hash replay); `src/engine/prompts/answers.test.ts` (answer validation, fingerprints, enumeration); `src/engine/loops/loops.test.ts` (loop replay). Soak 2: 10,000 games, 7,298 interactive re-runs, 0 failures. Adversarial check: all 44 step-runner and prompt-protocol mutations killed. | pass |
+| Every entity is `pending` or `vanilla` | `src/engine/content-gates.test.ts` passes. Cards 521 (516 pending, 5 vanilla), dreamsigns 153 (152 pending, 1 vanilla), avatars 32 pending, Dreamwell cards 33 pending. Figments 10: 7 vanilla and 3 authored (`src/content/figments/wraith-c5a98a5b.ts`, `ember-361b4942.ts`, `legionnaire-e757b306.ts`). The 3 authored figments are the 3.8 figment catalog, which § 3.8 scopes into this phase; they pass the gate's authored-entity checks. | pass, with the 3.8 figment catalog authored |
+| Every mason bead filed this phase has landed | hv-7x4l.22 `05d135c5d`, .23 `03bd571b5`, .24 `0fa03a6da`, .25 `7a1ba6815`, .26 `97ab705a6`, .27 `e02c523c3`, .28 `105574218`, .29 `a6727bd08`, .30 `3f2975a96`, .31 `402593c7b`, .32 `54423eea8`, .33 `1e36eeb36`; the orchestrator confirms each closed | pass |
+| The retrospective's improvement beads have landed | Phase 2 gate retrospective (hv-47xj.18, 34 Phase 3 beads): `bead-areas-incomplete` → hv-47xj.55 `e328a6405`; `domain-string-audit-engine-ids` → hv-47xj.25. Phase 3 gate retrospective: hv-7x4l.48 `ec53af159` (its invariant found real leaks, fixed first by prerequisites hv-7x4l.50 `219ec3d3c` and hv-7x4l.51 `17fd0bece`) and hv-7x4l.49 `b772c3630` (which also cut the invariant's fuzz cost from +23% to +0.2% wall; release-stage `fuzz` step 48.8 s → 39.2 s). | pass |
+| The retrospective covers the phase | A second retrospective (2026-10-09, hv-7x4l.12) covered hv-7x4l.37–.47 and this bead (`introspection.jsonl`). It filed hv-7x4l.48 (fuzz invariant: no visible event names a hidden card; leaks found by review in .17, .44, .47) and hv-7x4l.49 (`npm run perf:ab`, base-vs-head engine performance with CPU time; `host-load-noise` in .10, .21, .44). Dispositioned without beads: review follow-up churn (D18), vitest synchronous hangs (2 beads), Areas engine plumbing (1 of 8 beads after hv-47xj.55). `npm run friction:triggers` exits 0 with no retrospective due. | pass |
+| The reviews are resolved | Codex gpt-5.6-sol. Phase diff: 6 findings, 5 accepted (greedy legality hv-7x4l.38, conditional victory .39, untargetability .40, additional spark .41, copy choices .42) and 1 rejected (authored figments are 3.8 scope). hv-7x4l.38 review: 5 accepted → hv-7x4l.44. Follow-up range review: 1 accepted → hv-7x4l.47, 1 rejected (fingerprint ordering: the memo is keyed by immutable state). Rules-text beads hv-7x4l.43, .45, .46 landed with their RD files; hv-7x4l.50 added RD-hv-7x4l.50-1 and -2 (discards are seen as they enter the void; a trigger's hidden subject stays hidden). | pass |
+| D19 budgets | [above](#d19-suite-budgets-1): 23.9 s, 211 files, 49 `jsdom` | pass |
+| Metrics re-measured | this section, measured at `1530cd16f`; the closing bead confirms `release == staging` in its notes | pass |
