@@ -185,6 +185,8 @@ describe("timing windows", () => {
     expect(activated).toEqual(speeds);
     // Paying to end an effect is open exactly where a Fast card is, never as a response (C7).
     expect(legal.some((action) => action.kind === "payToEnd")).toBe(stack === "empty" && speeds.includes("fast"));
+    // Only the side holding priority may act on a non-empty stack.
+    if (stack !== "empty") expect(engine.legalActions(state, other)).toEqual([]);
     // A response window opens only while the side holds a legal response (P1).
     const decision = engine.decision(state);
     if (stack === "empty") {

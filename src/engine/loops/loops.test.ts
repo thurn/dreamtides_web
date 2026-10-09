@@ -1,13 +1,14 @@
 /**
  * Loops (rules § Infinite Loops), on synthetic fixtures: the optional-loop
  * shortcut (offer, execution, embedded prompts, early stops, reload) and
- * mandatory cycles (an exact repeat, a late-entered repeat, the resolution
- * cap, and the choices that make a sequence not mandatory).
+ * mandatory cycles (an exact repeat, a late-entered repeat, a two-step
+ * repeat, the resolution cap, and the choices that make a sequence not
+ * mandatory).
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
-import { energy } from "../dsl/builders";
-import { triggered, whenOpponentPlays } from "../dsl/triggers";
+import { energy, self } from "../dsl/builders";
+import { onMaterialized, triggered, whenOpponentPlays } from "../dsl/triggers";
 import * as p from "../effects/primitives";
 import { createEngine, IllegalAction } from "../engine";
 import type { EngineEvent } from "../events";
@@ -39,7 +40,21 @@ const reluctant: EngineCardDefinition = {
   abilities: () => [triggered(whenOpponentPlays(), p.optional(p.gainEnergy(-1)))],
 };
 
-const engine = createEngine(testCatalog([...LOOP_CARDS, ...CYCLE_CARDS, reluctant, TRIGGER.secondCardPoints]));
+/**
+ * "▸Materialized: If you have 1● or more, lose 1●; otherwise gain 1●. Then
+ * trigger this character's ▸Materialized abilities." — a mandatory cycle
+ * that repeats a state every second step.
+ */
+const toggleEcho: EngineCardDefinition = {
+  ...reluctant,
+  id: syntheticId(0xd21),
+  abilities: () => {
+    const echo = p.triggerAbility(self(), "materialized");
+    return [triggered(onMaterialized(), p.ifThen({ cond: "energyAtLeast", amount: 1 }, p.sequence(p.gainEnergy(-1), echo), p.sequence(p.gainEnergy(1), echo)))];
+  },
+};
+
+const engine = createEngine(testCatalog([...LOOP_CARDS, ...CYCLE_CARDS, reluctant, toggleEcho, TRIGGER.secondCardPoints]));
 const v = SYNTHETIC;
 const deck = Array.from({ length: 6 }, () => v.vanilla1.id);
 
@@ -117,6 +132,10 @@ describe("optional loops", () => {
     expect(result.state.sides.player.score).toBe(4);
     expect(ended(result.events)).toEqual({ iterations: 3, reason: "iterationCap" });
     expect(offer(result.state)).toBeDefined();
+    // A count of exactly the cap is accepted and runs to completion.
+    const counted = repeat(capped, 3);
+    expect(counted.state.sides.player.score).toBe(4);
+    expect(ended(counted.events)).toEqual({ iterations: 3, reason: "completed" });
   });
 
   it("rejects a count outside 1 to the iteration cap, and a loop not on offer", () => {
@@ -188,6 +207,26 @@ describe("optional loops", () => {
     expect(ended(result.events)).toEqual({ iterations: 0, reason: "illegalAction" });
     expect(result.state.sides.player.score).toBe(1);
     expect(result.state.loops.run).toBeNull();
+    expect(engine.decision(result.state)).toEqual({ kind: "main", side: "player" });
+  });
+
+  it("stops when a replayed action raises a prompt its recording does not answer, leaving the choice to its player", () => {
+    const { state, ids } = board({ player: { back: [LOOP.freeChoice.id], deck }, enemy: { deck } });
+    const once = activate(state, sourceOf(ids.player), new ScriptedSource([1]));
+    const candidate = once.state.loops.candidate;
+    if (candidate === null) throw new Error("no candidate");
+    const [action] = candidate.actions;
+    const [activation, ...rest] = action?.steps ?? [];
+    if (activation?.answers.length !== 1) throw new Error("unexpected recording");
+    // The recorded activation answered no prompt; replaying it raises its mode choice.
+    const tampered: BattleState = {
+      ...once.state,
+      loops: { ...once.state.loops, candidate: { ...candidate, actions: [{ steps: [{ ...activation, answers: [] }, ...rest] }] } },
+    };
+    const result = repeat(tampered, 3);
+    expect(ended(result.events)).toEqual({ iterations: 0, reason: "changedChoice" });
+    expect(result.state.sides.player.currentEnergy).toBe(1);
+    expect(result.state.stack).toEqual([]);
     expect(engine.decision(result.state)).toEqual({ kind: "main", side: "player" });
   });
 
@@ -376,6 +415,14 @@ describe("mandatory loops", () => {
     expect(result.state.result).toEqual({ kind: "draw", reason: "mandatoryLoop" });
     expect(result.state.automaticSteps).toBeLessThan(result.state.config.resolutionCap);
     expect(engine.decision(result.state)).toBeNull();
+  });
+
+  it("detects a cycle that repeats a state only every second step", () => {
+    const { state, ids } = board({ player: { hand: [toggleEcho.id], energy: 1, deck }, enemy: { deck } });
+    const config = { ...state.config, resolutionCap: 200, mandatoryLoopCheckFrom: 1 };
+    const result = playOnly({ ...state, config }, ids.player.hand);
+    expect(result.state.result).toEqual({ kind: "draw", reason: "mandatoryLoop" });
+    expect(result.state.automaticSteps).toBeLessThan(config.resolutionCap);
   });
 
   it("ends a cycle that never repeats a state in a draw at the resolution cap", () => {

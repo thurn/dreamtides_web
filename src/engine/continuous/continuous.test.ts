@@ -184,6 +184,8 @@ describe("layer order", () => {
     const { state, ids } = board({ player: { front: [v.vanilla1.id] } });
     const id = ids.player.front[0]!;
     float(state, { kind: "spark", instance: id, amount: -3 }, 1);
+    // 1✦ - 3 is below 0.
+    expect(spark(state, id)).toBe(0);
     float(state, { kind: "spark", instance: id, amount: 2 }, 2);
     expect(spark(state, id)).toBe(0);
     expect(matchingCharacters(state, catalog, { controller: "you", sparkAtMost: 0 }, "player", { kind: "avatar", side: "player" })).toEqual([id]);

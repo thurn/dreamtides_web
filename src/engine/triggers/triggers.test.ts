@@ -83,6 +83,12 @@ const START_SIGN: EngineDreamsignDefinition = {
   status: "authored",
   abilities: () => [triggered(atStartOfTurn(), p.optional(p.gainPoints(1)))],
 };
+/** "When you draw a card, gain 1●." */
+const DRAW_SIGN: EngineDreamsignDefinition = {
+  id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000000395"),
+  status: "authored",
+  abilities: () => [triggered(whenDraw(), p.gainEnergy(1))],
+};
 /** "▸Dawn: Dissolve a character you control." */
 const DAWN_AVATAR: EngineAvatarDefinition = {
   id: parseAvatarId("5e5e5e5e-0000-4000-8000-000000000393"),
@@ -90,7 +96,7 @@ const DAWN_AVATAR: EngineAvatarDefinition = {
   abilities: () => [triggered(onDawn(), p.dissolve(target(characterYouControl())))],
 };
 
-const engine = createEngine(triggerCatalog(Object.values(L), { avatars: [WATCHER_AVATAR, DAWN_AVATAR], dreamsigns: [WATCHER_SIGN, START_SIGN] }));
+const engine = createEngine(triggerCatalog(Object.values(L), { avatars: [WATCHER_AVATAR, DAWN_AVATAR], dreamsigns: [WATCHER_SIGN, START_SIGN, DRAW_SIGN] }));
 
 function board(setup: Omit<BoardSetup, "phase" | "active"> & Partial<Pick<BoardSetup, "phase" | "active">>) {
   return boardState(engine.catalog, { active: "player", phase: "day", ...setup });
@@ -391,6 +397,23 @@ describe("when patterns", () => {
     expect(resolvedSources(enemyTurn.events)).toEqual([sign("enemy", 0)]);
     const secondTurn = passUntil(engine, enemyTurn.state, at(engine, "player", "day"));
     expect(resolvedSources(secondTurn.events)).toEqual([sign("player", 1)]);
+  });
+
+  it("does not fire on the opening-hand draws, before the first turn begins", () => {
+    const init = {
+      seed: battleSeed("opening-draws"),
+      scoreToWin: 25,
+      startingSide: "enemy" as const,
+      decks: { player: deck.map((cardId) => ({ cardId })), enemy: deck.map((cardId) => ({ cardId })) },
+      dreamwell: [],
+      dreamsigns: { player: [DRAW_SIGN.id], enemy: [] },
+    };
+    const start = engine.createBattle(init, NO_PROMPTS);
+    expect(start.events.filter((entry) => entry.kind === "cardDrawn" && entry.side === "player").length).toBeGreaterThan(0);
+    expect(queuedCount(start.events, { kind: "dreamsign", side: "player", index: 0 })).toBe(0);
+    // The player's first draw, in its own first turn, is the first to trigger.
+    const playerTurn = passUntil(engine, start.state, at(engine, "player", "day"));
+    expect(queuedCount(playerTurn.events, { kind: "dreamsign", side: "player", index: 0 })).toBe(1);
   });
 
   it("resolves a start-of-turn trigger as the turn begins, before its Dreamwell phase", () => {

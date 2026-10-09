@@ -1,6 +1,7 @@
 /**
  * Prompt structure and answer helpers on synthetic prompts: arrangement
- * cardinality, well-formedness, and fingerprints over destination counts.
+ * cardinality, answer validation, well-formedness, and the fields each
+ * fingerprint identifies.
  */
 import { describe, expect, it } from "vitest";
 import type { InstanceId } from "../state/ids";
@@ -94,6 +95,66 @@ describe("arrangement cardinality", () => {
   it("fingerprints destination counts", () => {
     const loose = arrange([a, b], [{ to: "top", min: 0, max: 2 }, { to: "bottom", min: 0, max: 2 }]);
     expect(promptFingerprint(loose)).not.toBe(promptFingerprint(topAndBottom));
+  });
+});
+
+describe("answer validation", () => {
+  const base = { side: "player", purpose, cancellable: false } as const;
+
+  it("rejects a repeated selection, an illegal mode, a number out of bounds, and paying an unpayable cost", () => {
+    const upToTwo: Prompt = { ...base, kind: "chooseTargets", candidates: [a, b, c], min: 1, max: 2 };
+    expect(isLegalAnswer(upToTwo, [a, b])).toBe(true);
+    expect(isLegalAnswer(upToTwo, [a, a])).toBe(false);
+    const modes: Prompt = { ...base, kind: "chooseMode", options: [{ mode: 0, legal: true }, { mode: 1, legal: false }] };
+    expect(isLegalAnswer(modes, 0)).toBe(true);
+    expect(isLegalAnswer(modes, 1)).toBe(false);
+    const number: Prompt = { ...base, kind: "chooseNumber", min: 1, max: 3 };
+    expect(isLegalAnswer(number, 3)).toBe(true);
+    expect(isLegalAnswer(number, 4)).toBe(false);
+    expect(isLegalAnswer(number, 0)).toBe(false);
+    const unpayable: Prompt = { ...base, kind: "payOrDecline", energy: 2, payable: false };
+    expect(isLegalAnswer(unpayable, false)).toBe(true);
+    expect(isLegalAnswer(unpayable, true)).toBe(false);
+  });
+
+  it("fingerprints each identifying field: side, privacy, bounds, options, and payability", () => {
+    const pairs: [Prompt, Prompt][] = [
+      [
+        { ...base, kind: "chooseCards", candidates: [a, b], min: 1, max: 1 },
+        { ...base, side: "enemy", kind: "chooseCards", candidates: [a, b], min: 1, max: 1 },
+      ],
+      [
+        { ...base, kind: "chooseCards", candidates: [a, b], min: 1, max: 1 },
+        { ...base, kind: "chooseCards", candidates: [a, b], min: 1, max: 1, privateTo: "player" },
+      ],
+      [
+        { ...base, kind: "chooseTargets", candidates: [a, b], min: 1, max: 1 },
+        { ...base, kind: "chooseTargets", candidates: [a, b], min: 0, max: 1 },
+      ],
+      [
+        { ...base, kind: "chooseTargets", candidates: [a, b], min: 1, max: 1 },
+        { ...base, kind: "chooseTargets", candidates: [a, b], min: 1, max: 2 },
+      ],
+      [
+        { ...base, kind: "chooseMode", options: [{ mode: 0, legal: true }, { mode: 1, legal: false }] },
+        { ...base, kind: "chooseMode", options: [{ mode: 0, legal: true }, { mode: 1, legal: true }] },
+      ],
+      [
+        { ...base, kind: "chooseNumber", min: 0, max: 2 },
+        { ...base, kind: "chooseNumber", min: 0, max: 3 },
+      ],
+      [
+        { ...base, kind: "payOrDecline", energy: 2, payable: false },
+        { ...base, kind: "payOrDecline", energy: 2, payable: true },
+      ],
+    ];
+    for (const [left, right] of pairs) {
+      expect(promptFingerprint(left)).not.toBe(promptFingerprint(right));
+    }
+    // Candidate order is not identifying.
+    expect(promptFingerprint({ ...base, kind: "chooseCards", candidates: [b, a], min: 1, max: 1 })).toBe(
+      promptFingerprint({ ...base, kind: "chooseCards", candidates: [a, b], min: 1, max: 1 }),
+    );
   });
 });
 

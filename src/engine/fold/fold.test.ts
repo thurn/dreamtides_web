@@ -1,17 +1,21 @@
 /**
  * Prompt-protocol properties (engine-design § Testing layers), on synthetic
  * effects: inline/interactive equivalence, divergence, reload, cancel, empty
- * candidate sets, alternating sides, auto-answers, and bounces.
+ * candidate sets, alternating sides, auto-answers, bounces, and the step
+ * context's validation of answers and cancellability.
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import { promptFingerprint } from "../prompts/fingerprint";
-import type { ArrangePrompt, ChooseCardsPrompt, ChooseNumberPrompt, PromptId, PromptPurpose } from "../prompts/types";
+import { firstLegalAnswer } from "../prompts/answers";
+import type { ArrangePrompt, ChooseCardsPrompt, ChooseNumberPrompt, Prompt, PromptId, PromptPurpose } from "../prompts/types";
 import { stateHash } from "../state/hash";
-import { battleSeed } from "../state/ids";
-import type { InstanceId } from "../state/ids";
+import { battleSeed, opponent } from "../state/ids";
+import type { InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
+import { Context } from "../steps/context";
+import { IllegalAnswer } from "../steps/errors";
 import type { StepContext } from "../steps/types";
 import { ScriptedSource } from "../steps/sources";
 import { boardState, type BoardSetup } from "../testing/board";
@@ -95,6 +99,47 @@ const emitThenChoose: EngineCardDefinition = {
   },
 };
 
+// The same nondeterminism in a play-time prompt, so a top-level step fails on replay.
+const divergentPlay: EngineCardDefinition = {
+  ...divergent,
+  id: syntheticId(908),
+  synthetic: {
+    play: (ctx, self) => {
+      // eslint-disable-next-line dreamtides/engine-purity -- the fixture must be nondeterministic
+      divergentRuns += 1;
+      const run = divergentRuns;
+      const hand = ctx.state.sides.player.hand.filter((card) => card !== self);
+      ctx.choose<ChooseCardsPrompt>({
+        kind: "chooseCards",
+        side: "player",
+        purpose: { source: self, cardId: null, ability: 0, role: "discard" },
+        candidates: run % 2 === 1 ? hand : hand.slice(1),
+        min: 1,
+        max: 1,
+      });
+      return {};
+    },
+  },
+};
+
+// The opponent chooses a number while the card is played, before its commit point.
+const opponentChoosesAtPlay: EngineCardDefinition = {
+  ...divergent,
+  id: syntheticId(909),
+  synthetic: {
+    play: (ctx, self) => {
+      ctx.choose<ChooseNumberPrompt>({
+        kind: "chooseNumber",
+        side: opponent(ctx.state.instances[self]?.controller ?? "player"),
+        purpose: { source: self, cardId: null, ability: 0, role: "chooseX" },
+        min: 0,
+        max: 1,
+      });
+      return {};
+    },
+  },
+};
+
 // Malformed prompts, which rules code must never raise.
 function malformed(index: number, raise: (ctx: StepContext, source: InstanceId) => void): EngineCardDefinition {
   return { ...divergent, id: syntheticId(index), synthetic: { resolve: (ctx, item) => raise(ctx, item.instance) } };
@@ -121,7 +166,7 @@ const MALFORMED = [
   ),
 ];
 
-const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL, [divergent, emptyPrompt, emitThenChoose, ...MALFORMED]));
+const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL, [divergent, emptyPrompt, emitThenChoose, divergentPlay, opponentChoosesAtPlay, ...MALFORMED]));
 const fold = createFoldAdapter(engine, { checkEventPrefix: true });
 
 function slice(setup: BoardSetup): { slice: BattleSlice; ids: ReturnType<typeof boardState>["ids"] } {
@@ -260,6 +305,22 @@ describe("cancellation", () => {
     expect(engine.decision(cancelled.committed)).toEqual({ kind: "main", side: "player" });
   });
 
+  it("lets only the acting side cancel, never the opponent answering a prompt in its play", () => {
+    const { slice: start, ids } = slice({
+      active: "player",
+      phase: "day",
+      player: { hand: [opponentChoosesAtPlay.id], deck },
+      enemy: { deck },
+    });
+    const suspended = applied(play(start, ids.player.hand[0]));
+    const pending = pendingOf(suspended);
+    expect(pending.prompt).toMatchObject({ kind: "chooseNumber", side: "enemy", cancellable: false });
+    expect(fold.reduce(suspended, { kind: "cancel", side: "enemy", promptId: pending.prompt.id })).toEqual({ kind: "bounced", reason: "notCancellable" });
+    const done = applied(fold.reduce(suspended, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: 1 }));
+    expect(fold.pending(done)).toBeNull();
+    expect(done.committed.sides.player.void).toEqual([ids.player.hand[0]]);
+  });
+
   it("rejects a cancel after the commit point", () => {
     const { slice: start, ids } = slice({
       active: "player",
@@ -384,6 +445,28 @@ describe("prompt ids across attempts", () => {
   });
 });
 
+describe("prompt ids after a failed attempt", () => {
+  it("bounces an answer to a failed attempt's prompt after a new attempt from the same state", () => {
+    // eslint-disable-next-line dreamtides/engine-purity -- reset the nondeterministic fixture
+    divergentRuns = 0;
+    const { slice: start, ids } = slice({
+      active: "player",
+      phase: "day",
+      player: { hand: [divergentPlay.id, v.vanilla1.id, v.vanilla2.id, v.vanilla3.id], deck },
+      enemy: { deck },
+    });
+    const first = applied(play(start, ids.player.hand[0]));
+    const stale = pendingOf(first).prompt.id;
+    const failed = fold.reduce(first, { kind: "answer", side: "player", promptId: stale, value: [ids.player.hand[2]] });
+    if (failed.kind !== "applied" || failed.error === null) throw new Error("expected an engine error");
+    expect(stateHash(failed.slice.committed)).toBe(stateHash(start.committed));
+    const second = applied(play(failed.slice, ids.player.hand[0]));
+    const current = pendingOf(second).prompt.id;
+    expect(current).not.toBe(stale);
+    expect(fold.reduce(second, { kind: "answer", side: "player", promptId: stale, value: [ids.player.hand[2]] })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+  });
+});
+
 describe("the event-prefix check", () => {
   it("compares a re-run only with the same step's previous run, never a cancelled attempt", () => {
     const { slice: start, ids } = slice({
@@ -466,6 +549,40 @@ describe("prompt validation in the step context", () => {
       expect(outcome.error?.message).toMatch(/malformed/);
       expect(outcome.slice.inFlight).toBeNull();
     }
+  });
+});
+
+describe("answers from an answer source", () => {
+  it("rejects an illegal answer from the source and leaves the committed state untouched", () => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [p.drawX.id], energy: 2, deck },
+      enemy: { deck },
+    });
+    const before = stateHash(state);
+    const action = { kind: "play", card: ids.player.hand[0], from: "hand" } as const;
+    expect(() => engine.apply(state, "player", action, new ScriptedSource([3]))).toThrow(IllegalAnswer);
+    expect(stateHash(state)).toBe(before);
+    expect(engine.apply(state, "player", action, new ScriptedSource([2])).state.sides.player.hand).toHaveLength(2);
+  });
+
+  it("marks only the cancelling side's prompts before the commit point cancellable", () => {
+    const { state } = boardState(engine.catalog, { active: "player", phase: "day", player: { deck }, enemy: { deck } });
+    const seen: Prompt[] = [];
+    const ctx = new Context(state, engine.catalog, {
+      answer(prompt) {
+        seen.push(prompt);
+        return firstLegalAnswer(prompt);
+      },
+    }, { canceller: "player" });
+    const ask = (side: Side) =>
+      ctx.choose<ChooseNumberPrompt>({ kind: "chooseNumber", side, purpose: { source: null, cardId: null, ability: null, role: "chooseX" }, min: 0, max: 1 });
+    ask("player");
+    ask("enemy");
+    ctx.commitPoint();
+    ask("player");
+    expect(seen.map((prompt) => [prompt.side, prompt.cancellable])).toEqual([["player", true], ["enemy", false], ["player", false]]);
   });
 });
 
