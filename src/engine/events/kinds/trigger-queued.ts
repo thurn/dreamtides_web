@@ -1,12 +1,14 @@
 import type { AbilitySource, InstanceId, Side } from "../../state/ids";
-import type { BattleState, SparkGain } from "../../state/types";
+import type { SparkGain } from "../../state/types";
 import { seesSubject } from "../../view/knowledge";
+import { redactSource, sourcePrivacy } from "../sources";
 import type { EventDefinition } from "../types";
 
 /** A triggered ability matched an event and joined the end of the trigger queue (D14). */
 export interface TriggerQueuedEvent {
   readonly kind: "triggerQueued";
-  readonly source: AbilitySource;
+  /** The engine names it; it is `null` as a side that cannot identify it sees the event (`eventSeenBy`). */
+  readonly source: AbilitySource | null;
   readonly controller: Side;
   readonly ability: number;
   /** A floating or delayed trigger's node; `null` for a triggered ability. */
@@ -19,24 +21,18 @@ export interface TriggerQueuedEvent {
 }
 
 /**
- * An event naming a card in a hand or deck as its source is private to the
- * side holding that zone; other sources are public.
- */
-export function sourcePrivacy(source: AbilitySource, state: BattleState): Side | null {
-  if (typeof source !== "string") return null;
-  const instance = state.instances[source];
-  return instance?.zone === "hand" || instance?.zone === "deck" ? instance.controller : null;
-}
-
-/**
- * Private to the holder of a source in a hand or deck. A side that may see
- * it sees its subject only as the view's queued trigger shows it
- * (`seesSubject`): one that could not identify the subject as the ability
- * triggered, such as the opponent of a side drawing a card, or cannot
- * identify it now, sees `null`.
+ * Private to the holder of a source in a hand or deck (`sourcePrivacy`). A
+ * side that may see it sees it as the view's queued trigger shows it: the
+ * source only when it can identify it (`redactSource`), so the holder of a
+ * deck card it has not learned sees the trigger without its card; the
+ * subject only when it could identify it as the ability triggered and can
+ * now (`seesSubject`), so the opponent of a side drawing a card sees `null`.
  */
 export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
   kind: "triggerQueued",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
-  redact: (event, viewer, state) => (event.subject === null || seesSubject(state, event, viewer) ? event : { ...event, subject: null }),
+  redact(event, viewer, state) {
+    const seen = redactSource(event, viewer, state);
+    return seen.subject === null || seesSubject(state, seen, viewer) ? seen : { ...seen, subject: null };
+  },
 };

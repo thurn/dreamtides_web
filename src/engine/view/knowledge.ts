@@ -15,7 +15,7 @@
  * Decks start unknown to both sides; the opening shuffle happens before any
  * card is known.
  */
-import type { InstanceId, Side } from "../state/ids";
+import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { SIDES } from "../state/ids";
 import type { BattleState, CardInstance } from "../state/types";
 
@@ -58,6 +58,17 @@ export function seesSubject(
   viewer: Side,
 ): boolean {
   return trigger.subject !== null && trigger.subjectHiddenFrom?.includes(viewer) !== true && identifies(state, trigger.subject, viewer);
+}
+
+/**
+ * Whether `viewer` sees an ability's `source` in `state`, as the view shows
+ * a queued trigger's, a floating effect's, or a payable effect's source: an
+ * avatar or dreamsign always, a card when `viewer` can identify it there
+ * (`identifies`). A card in a deck its holder has not learned, or one that
+ * has left the battle, is hidden from that holder too.
+ */
+export function seesSource(state: BattleState, source: AbilitySource, viewer: Side): boolean {
+  return typeof source !== "string" || identifies(state, source, viewer);
 }
 
 /** Whether `side` sees `instance` without a `knownTo` entry: it is in a public zone or in `side`'s hand. */

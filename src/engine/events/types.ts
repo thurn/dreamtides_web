@@ -13,9 +13,11 @@ export interface EventDefinition<E extends EngineEvent> {
   /**
    * The event as `viewer`, who may see it, sees it in `state`: a field
    * naming a card the viewer cannot identify there is `null`, as in the
-   * view. Absent for a kind every viewer who may see it sees whole.
+   * view, and the whole event is `null` when the view omits what it
+   * describes from the viewer. Absent for a kind every viewer who may see it
+   * sees whole.
    */
-  readonly redact?: (event: E, viewer: Side, state: BattleState) => E;
+  readonly redact?: (event: E, viewer: Side, state: BattleState) => E | null;
 }
 
 export function publicEvent<E extends EngineEvent>(

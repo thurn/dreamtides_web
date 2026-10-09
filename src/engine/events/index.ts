@@ -169,20 +169,20 @@ export function eventDefinition<K extends EngineEventKind>(
   return EVENT_DEFINITIONS[kind] as EventDefinition<EventOf<K>>;
 }
 
-/** Whether `viewer` may see `event`'s details: it is public, or private to `viewer`. */
-export function eventVisibleTo(event: EngineEvent, viewer: Side, state: BattleState): boolean {
-  const privateTo = (EVENT_DEFINITIONS[event.kind] as EventDefinition<EngineEvent>).privateTo(event, state);
-  return privateTo === null || privateTo === viewer;
-}
-
 /**
  * `event` as `viewer` sees it, judged in the state that arrives with it:
- * `null` when it is private to the other side, else the event with any
- * field naming a card the viewer cannot identify nulled
- * (`EventDefinition.redact`).
+ * `null` when it is private to the other side or its kind's `redact` hides
+ * it from the viewer, else the event with any field naming a card the viewer
+ * cannot identify nulled (`EventDefinition.redact`).
  */
 export function eventSeenBy(event: EngineEvent, viewer: Side, state: BattleState): EngineEvent | null {
-  if (!eventVisibleTo(event, viewer, state)) return null;
-  const redact = (EVENT_DEFINITIONS[event.kind] as EventDefinition<EngineEvent>).redact;
-  return redact === undefined ? event : redact(event, viewer, state);
+  const definition = EVENT_DEFINITIONS[event.kind] as EventDefinition<EngineEvent>;
+  const privateTo = definition.privateTo(event, state);
+  if (privateTo !== null && privateTo !== viewer) return null;
+  return definition.redact === undefined ? event : definition.redact(event, viewer, state);
+}
+
+/** Whether `viewer` sees `event` at all, perhaps with fields nulled (`eventSeenBy`). */
+export function eventVisibleTo(event: EngineEvent, viewer: Side, state: BattleState): boolean {
+  return eventSeenBy(event, viewer, state) !== null;
 }

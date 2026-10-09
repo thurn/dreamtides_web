@@ -1324,20 +1324,34 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   (`purposeView`), even for the side answering, which otherwise sees it
   whole; any other side sees only the cards it can identify.
 - **Events** are judged in the state that arrives with them. Each kind's
-  `privateTo` shows the whole event to one side or both
-  (`eventVisibleTo`). `eventSeenBy(event, side, state)` is the event as
-  that side sees it: `null` when it is private to the other side, else the
-  event after its kind's `redact`, which nulls a field naming a card the
-  side cannot identify, as the view does. The kinds that can name a hidden
+  `privateTo` shows the whole event to one side or both.
+  `eventSeenBy(event, side, state)` is the event as that side sees it:
+  `null` when it is private to the other side, else the event after its
+  kind's `redact`, which nulls a field naming a card the side cannot
+  identify, as the view does, or hides the whole event when the view omits
+  what it describes from that side. `eventVisibleTo` is whether
+  `eventSeenBy` shows the side anything. The kinds that can name a hidden
   card:
   - `cardDrawn`, a `pendingAbility` for a drawn card, and a `cardCreated`
     in a hand are private to the side holding the hand;
     `feasibilityBounded` is private to the answering side;
   - `triggerQueued`, `triggerResolved`, `winConditionMet`, `effectStarted`,
-    and `payableEffectRegistered` are private to the holder of a source in
-    a hand or deck. A `triggerQueued` that a side may see shows its
-    subject as the view's queued trigger does (`seesSubject`), so the
-    opponent sees a public trigger queue without the card it concerns;
+    `payableEffectRegistered`, and `noLegalTarget` name an ability's
+    source (`events/sources.ts`). One whose source is a card in a hand or
+    deck is private to the side holding that zone (`sourcePrivacy`). A side
+    that may see it sees the source only when it can identify it there, as
+    the view shows a queued trigger's or payable effect's source
+    (`seesSource`): an avatar or dreamsign always, a card in a public zone
+    or its own hand, or a card it has learned. So the holder of a card in
+    its deck that it has not learned sees that card's triggers queue and
+    resolve, and its win condition met, with the source `null`, and a
+    source that has left the battle is `null` to both sides. An
+    `effectStarted` whose source a side cannot identify is hidden from it
+    whole, as the view omits that floating effect: its change can name the
+    source's card (a delayed trigger's `ref.origin`);
+  - a `triggerQueued` that a side may see shows its subject as the view's
+    queued trigger does (`seesSubject`), so the opponent sees a public
+    trigger queue without the card it concerns;
   - `ceasedToExist` names the zone the card left (`from`). It is private to
     the side holding that zone when the zone is a hand or deck (rules §
     Zones → Hand);

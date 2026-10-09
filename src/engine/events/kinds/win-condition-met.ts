@@ -1,6 +1,6 @@
 import type { AbilitySource, Side } from "../../state/ids";
+import { seenSource, sourcePrivacy } from "../sources";
 import type { EventDefinition } from "../types";
-import { sourcePrivacy } from "./trigger-queued";
 
 /**
  * A "you win the game" condition held for `side` (C15): either the victory
@@ -12,15 +12,17 @@ import { sourcePrivacy } from "./trigger-queued";
 export interface WinConditionMetEvent {
   readonly kind: "winConditionMet";
   readonly side: Side;
-  readonly sources: readonly AbilitySource[];
+  /** The engine names each; one is `null` as a side that cannot identify it sees the event (`eventSeenBy`). */
+  readonly sources: readonly (AbilitySource | null)[];
 }
 
 /**
  * Private to the side holding a source that is a card in a hand or deck (a
  * hidden trigger resolving `winTheGame`), like that trigger's own
- * `triggerQueued` and `triggerResolved` events; public otherwise. The
- * sources are all `side`'s, so at most one side holds hidden ones. The win
- * itself stays public through `battleEnded`.
+ * `triggerQueued` and `triggerResolved` events, and showing a source only to
+ * a side that can identify it; public otherwise. The sources are all
+ * `side`'s, so at most one side holds hidden ones. The win itself stays
+ * public through `battleEnded`.
  */
 export const winConditionMet: EventDefinition<WinConditionMetEvent> = {
   kind: "winConditionMet",
@@ -30,5 +32,9 @@ export const winConditionMet: EventDefinition<WinConditionMetEvent> = {
       if (holder !== null) return holder;
     }
     return null;
+  },
+  redact(event, viewer, state) {
+    const sources = event.sources.map((source) => seenSource(source, viewer, state));
+    return sources.every((source, index) => source === event.sources[index]) ? event : { ...event, sources };
   },
 };
