@@ -233,8 +233,8 @@ Monitored, never gated. "Overrun" means more than 50% over the budget.
 | Workspace prepare, warm | ≤ 5 s | 4.0–4.1 s | `node scripts/prepare-workspace.mjs` |
 
 The review and focused-test budgets start below the baseline on purpose:
-Phase 1.3 targets them. Phase 3 adds a fuzz-smoke budget
-(`npm run fuzz:engine -- --games 200`) when the command exists.
+Phase 1.3 targets them. The fuzz-smoke budget is in the
+[Phase 2 gate budget revision](#budget-revision-phase-2-retrospective).
 
 ## Tollgate policy
 
@@ -580,7 +580,7 @@ value). Overruns are judged only at comparable load.
 | `jsdom` test files | ≤ 80 | files with a `@vitest-environment jsdom` pragma |
 | Gate stage (staged mode), one-file change | ≤ 60 s | sum of gate-stage step `elapsed_ms` per buildset |
 | Release stage (staged mode) | ≤ 5 min | sum of release-stage step `elapsed_ms` per release run |
-| Full Tollgate gate (interim mode) | ≤ 5 min | unchanged |
+| Full Tollgate gate (interim mode) | ≤ 5 min | inactive while staged mode runs; kept for fallback ([Phase 2 gate](#budget-revision-phase-2-retrospective)) |
 | Tollgate restart to healthy `doctor` | ≤ 30 s | Track T restart drill |
 | Idle lane time | ≤ 15% of lane time | retrospective, from bead dispatch and close times |
 
@@ -694,3 +694,166 @@ Findings:
 `npm run fuzz:engine -- --games 200`: 101,946 steps, 40.2 s (5.0 games/s),
 1,507 prompts, 136 interactive re-runs (0.116 ms each), 0 failures. Wall
 40.7 s. Host load 9.28 at the start, 7.62 at the end.
+
+## Phase 2 gate (2026-10-09, bead hv-47xj.18)
+
+### Re-measurement after Phase 2
+
+Same commands as the 1.1 baseline where the step still exists, run in a
+fresh worktree at `staging` `66bfe8661` after `npm install`. Environment:
+`JOURNEY_TEST_WORKERS=2` and `DREAMTIDES_LOCAL_ASSET_HOME=.`, the values the
+staged Tollgate policy sets for `review-gate` and `review-full` (the policy
+sets no `TROX_ROOT`). One heavy command ran at a time. Host load is the
+1-minute `sysctl -n vm.loadavg` value at the start of each run (end value
+after the arrow where read); other sessions shared the host, and the load
+stayed between 4.4 and 6.6 throughout.
+
+| Measurement | 1.1 baseline | Phase 1 gate | After Phase 2 | Host load |
+| --- | --- | --- | --- | --- |
+| `npm ci --prefer-offline --no-audit --no-fund`, fresh `node_modules` | 5.8 s | — | 2.1 s (372 packages) | 6.01 |
+| prepare-workspace, cold / warm | 17.1 / 4.0–4.1 s | 26.1 / 6.2–6.3 s | 0.71 / 0.28, 0.29 s (local art and Cumulus tokens only) | 5.69 |
+| `trox:gate` | 24.5 s | 38.4 s | deleted in Phase 2 (2.4b) | — |
+| `review:full` clean-game-data | 26.7 s | 44.5 s | deleted in Phase 2 (2.3) | — |
+| `review:full` lint (whole `src/`) | 18.4 s | 33.6 s | 15.8 s, concurrent with typecheck | 6.14 → 5.58 |
+| `tsc --noEmit` | 10.2 s | 18.5 s | 6.3 s | 6.60 → 6.39 |
+| `TIMING` lint of `src/` (`TIMING=20 npx eslint src/`) | 29.0 s | 52.7 s | 22.1 s; same top two rules (`no-unsafe-assignment` 46%, `no-misused-promises` 31%); `dreamtides/no-raw-string-identity` 27 ms | 6.39 → 5.80 |
+| `review:full` typecheck (cold) | 10.8 s | 18.6 s | 7.6 s, plus `typecheck-node` 2.6 s, both concurrent with lint | 6.14 → 5.58 |
+| `review:full` test | 142.2 s | 234.1 s | **24.8 s**: 211 files, 2,238 tests | 6.14 → 5.58 |
+| `review:full` total | 220.2 s | 366.2 s | **41.1 s** wall (`/usr/bin/time -p`) | 6.14 → 5.58 |
+| Vitest JSON per-file exec sum | 61.5 s | 123.8 s | 12.2 s (wall 19.8 s, 211 files, 2,238 tests, 0 failures); slowest `src/engine/fold/fold.test.ts` 2.3 s, `src/engine/core.test.ts` 1.6 s, `src/engine/state/clone.test.ts` 0.9 s, `ExplorationSiteScreen` 0.5 s, `MobileBattleScreen` 0.4 s | 4.39 → 4.68 |
+| `npm run review`, one-line logic change (`src/rules/journey/shop.ts`, `pricePaid > journey.essence` → `journey.essence < pricePaid`) | 65.2 s | 66.1 s | 10.4 s, 9.0 s: lint 1.8 / 1.7, typecheck 1.2 / 1.0 (+ node 0.9 / 0.7), related tests 6.6 / 5.6 s (25 files, 293 tests) | 4.54, 4.45 |
+| `npm run review`, docs only (newline appended to `docs/design.md`) | 0.2 s | 0.5 s | 0.19 s, no applicable checks | 4.84 |
+| `npm run review`, one RON value | 9.9 s | 14.4 s | deleted in Phase 2 (2.3) | — |
+| `npm run review`, one TS data value (`src/content/shop.ts` dreamsign price 50 → 55), the RON row's successor | — | — | 22.2 s: related tests 18.0 s (127 files, 1,321 tests) | 4.78 → 5.23 |
+| `npm test -- src/rules/journey/shop.test.ts` | 15.7 s | 20.7 s | 1.9 s, 1.9 s (prepare 0.3, test 1.4) | 4.84 |
+| `npx vitest run src/rules/journey/shop.test.ts` | 9.0 s | — | 1.7 s | 4.77 |
+| `npm run fuzz:engine -- --games 200` (local) | — | — | 36.4 s wall; 101,946 steps, 0 failures | 4.55 → 4.50 |
+
+Vitest summary for the `review:full` test step: duration 24.2 s (transform
+6.8 s, setup 0.5 s, import 20.8 s, tests 13.6 s, environment 10.0 s;
+cumulative across 2 workers). Import still leads, at about a seventh of its
+1.1 cost.
+
+### Tollgate stage totals
+
+Per-buildset sums of step `elapsed_ms` from the primary checkout's
+`.git/tollgate/state.sqlite3`, opened read-only (`sqlite3 -readonly`), with
+the [Gate total](#gate-total) query; passed buildsets only. Tollgate history
+does not record host load; each bead's friction file carries `hostLoad`.
+
+| Stage | Sample | Median | Range | Steps (median) |
+| --- | --- | --- | --- | --- |
+| Gate stage (staged mode) | last 20 candidates, `402593c7b` … `66bfe8661` | **17.2 s** | 12.6–24.0 s | `dependencies` ≈ 4 s, `review-gate` 8.5–19.0 s |
+| Release stage (staged mode) | same 20 | **86.2 s** | 82.8–91.4 s | `review-full` 43.9 s (41.5–47.7), `fuzz` 37.7 s (36.7–40.5) |
+| Gate stage, all staged-mode history | 52 | 17.5 s | 12.6–40.6 s | |
+| Release stage, all staged-mode history | 52 | 92.6 s | 82.8–150.6 s | |
+| Interim mode after the Trox step left (`dependencies` → `review`) | 29 | 61.0 s | 45.3–82.6 s | |
+
+Against the Phase 1 gate (482.4 s for hv-b8ef.12, 256.2 s median at low
+load), a candidate now waits about 17 s for the gate stage, and the whole
+release run sums to under 1.5 minutes.
+
+### D19 suite budgets
+
+| Budget | Limit | Measured | Command | Host load | Status |
+| --- | --- | --- | --- | --- | --- |
+| Full suite wall, 2 workers | ≤ 60 s | 24.8 s | `[review] test finished in` from `review:full` | 6.14 | met |
+| Test files | ≤ 220 | 211 | `npx vitest list --filesOnly \| wc -l` (also `git ls-files` of `src/`, `scripts/`, `eslint-rules/` test files: 211) | 5.46 | met |
+| `jsdom` test files | ≤ 80 | 49 | `git grep -l "@vitest-environment jsdom"` over test files | — | met |
+
+### Other budgets at this gate
+
+| Budget | Value | Measured | Host load | Status |
+| --- | --- | --- | --- | --- |
+| `npm run review`, one-file logic change | ≤ 45 s | 9.0–10.4 s | 4.45–4.54 | within |
+| `npm run review`, docs only | ≤ 5 s | 0.19 s | 4.84 | within |
+| `npm run review`, one-value data change | ≤ 20 s | 22.2 s (TS data module) | 4.78 | over by 11%: a `src/content/` module selects 127 related test files |
+| Focused test file | ≤ 10 s | 1.9 s | 4.84 | within |
+| Typecheck step | ≤ 10 s | 7.6 s cold | 6.14 | within |
+| Lint, whole `src/` | ≤ 20 s | 15.8 s | 6.14 | within |
+| Workspace prepare, warm | ≤ 5 s | 0.28–0.29 s | 5.69 | within |
+| Gate stage (staged mode) | ≤ 60 s | 17.2 s median | — | within |
+| Release stage (staged mode) | ≤ 5 min | 86.2 s median | — | within |
+| Fuzz smoke | ≤ 60 s | 37.7 s median `fuzz` step; 36.4 s local | 4.55 (local) | within |
+
+### Budget revision (Phase 2 retrospective)
+
+| Budget | Value | Measured as | Reason |
+| --- | --- | --- | --- |
+| Fuzz smoke, `npm run fuzz:engine -- --games 200` | ≤ 60 s | the release-stage `fuzz` step's `elapsed_ms` | The command exists and runs on every release (35.7–41 s since hv-7x4l.21); the budget catches a regression in engine step cost before it slows releases. |
+| Full Tollgate gate (interim mode) | ≤ 5 min | inactive | Staged mode has run since T9 (hv-ki3p.10), so no interim-mode gate runs. The budget applies again if the policy falls back to interim mode. |
+
+**Test-file headroom.** 211 test files against the D19 cap of 220 (9 left)
+and the Phase 3 ceiling of 212 from hv-47xj.22; 49 `jsdom` files against 80
+and the Phase 3 ceiling of 50. Phase 3 engine beads have already added files
+since hv-47xj.22 measured 206. The Phase 4 gate re-checks the headroom.
+
+### Phase 2 measurement files
+
+Folded from `measurements/<bead-id>.md`; each file keeps the full tables.
+
+- **hv-47xj.9 (2.4b Delete Trox).** 54 files deleted (Trox config,
+  `localization/`, `vendor/trox-runtime/`, runtime localization, 15 scripts
+  and tests); 8 test files (−699 lines); 13 npm scripts and `@trox/runtime`
+  with 11 lockfile packages; the `trox-source-check` review step and the
+  localized-runtime workspace generator. Diff +281/−19,694. A clean clone
+  without `cargo`/`rustc` passed `npm ci` (5 s) and `review:full` (61 s,
+  load 6.63 → 7.90; 224 files, 2,374 tests). The Tollgate policy dropped the
+  `trox` step and the `tools/game-data/target` cache (digest
+  `68c1e461196b…`).
+- **hv-47xj.14 (2.7a Cull scripts and dependencies).** `scripts/` 66 → 32
+  files, npm scripts 28 → 15, devDependencies 23 → 17, 88 fewer lockfile
+  packages. Lint wall unchanged (`lint:full` 13.4 → 13.8 s at load
+  7.74 / 4.17): ESLint covers `src/` only. `review:full` 56 s at load 4.19
+  (192 files, 2,089 tests). 17 test files deleted, net −1,863 lines.
+- **hv-47xj.15 (2.7b Cull custom ESLint rules).** Rule modules 18 → 8,
+  restriction blocks 6 → 2, `eslint-rules/` 6,738 → 2,008 lines. Custom
+  rules cost about 0.2 s of about 19 s of rule CPU, so whole-`src/` lint
+  stays at 13–16 s (alternating runs at load 10.8–12.6). 14 test files
+  deleted, net −2,662 lines; `review:full` 45.9 s at load 9.09.
+- **hv-47xj.22 (2.11d Suite speed and D19 budgets).** `isolate: false` for
+  the shared project, with `vi.mock` files in an isolated project and a setup
+  file that restores jsdom globals and resets modules per file; green across
+  eight shuffled seeds. Suite wall 29.7 → 20.8 s median (load 4.4–5.5).
+  `review:full` overlaps lint and typecheck: 50 → 35 s back to back (load
+  5.03 / 4.83). Budgets met at 206 files and 50 `jsdom` files; it set
+  per-phase test-file ceilings for Phases 3–7.
+- **hv-47xj.25 (identity audit as an ESLint rule).** The domain-string
+  audit test became `dreamtides/no-raw-string-identity`. `npm run review` for
+  a one-line `src/` change: 16.2 / 17.2 s before (load 8.04 / 9.12), 14.2 /
+  13.5 s after (load 5.56 / 5.23); the selection drops the 1.6 s audit test.
+  `lint:full` 14.6 s at load 5.70, zero findings.
+
+### Browser smoke
+
+Dev server `npm run dev -- --port 5174 --strictPort` from the gate
+worktree; Playwright MCP; `window.__caps` installed after each full
+navigation and read after each action: empty at every read. Captures are in
+the primary checkout's `artifacts/qa/hv-47xj.18/`.
+
+| Viewport | Flow | Result | Captures |
+| --- | --- | --- | --- |
+| Desktop 1440×900 | `/` (no saved game) → avatar select → Choose → starting deck → Begin Journey → Draft 5x twice, Dreamsign Revelation (declined), Purge (declined) → Battle unlocks → Battle Start → Begin Battle | battle screen mounted: player and enemy status, 5 hand cards, Battle Start control gone | `front-door-desktop.png`, `battle-start-desktop.png` |
+| Mobile 390×844 | `/` resumed the desktop game on its battle (front-door resume); `/?seed=7` started a new game → same flow | battle screen mounted, 5 hand cards; `scrollWidth` 390 (no horizontal scroll); Begin Battle at 237,693, 128×42 | `front-door-mobile.png`, `battle-start-mobile.png` |
+
+### Exit gate
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| Three docs and one skill | Tracked Markdown outside `docs/plan/`: `README.md`, `AGENTS.md`, `CLAUDE.md` (`@AGENTS.md`), `docs/design.md`, `docs/rules.md`, `.llms/skills/cumulus/SKILL.md`. `.claude/skills` and `.codex/skills` are symlinks to `.llms/skills`. | pass |
+| No RON | `git ls-files '*.ron'`: 0 | pass |
+| No Rust | `git ls-files '*.rs' Cargo.toml '**/Cargo.toml' Cargo.lock`: 0; no `tools/` | pass |
+| No Firebase | `grep -i firebase package.json package-lock.json` and `git grep -i firebase` over `src`, `scripts`, `vite.config.ts`, `vitest.config.ts`, `eslint.config.js`, `index.html`: no matches | pass |
+| No Trox or localization | `git grep -i trox` over `src`, `scripts`, `eslint-rules`, `package.json`, configs: no matches; no tracked path contains `trox`; no `localization/`, `src/runtime/localization/`, `tx(`, `txa(`, or `LocalizedString` | pass |
+| No co-op | no `src/coop/`; no room or transport code. Remaining identifiers: the log compatibility tag `dreamtides-coop-v26` (`src/session/reducer-version.ts`, `src/types/reducer-version.ts`) and comments in `src/rules/battle/fold.ts` and `src/rules/battle/apply-debug-edit.ts` (legacy battle that Phases 3–4 replace) | pass |
+| No editors | `src/root-router.tsx` renders one route (`RootRouteId = "journey"`); no `src/editor/`, `src/cumulus/docs/`, `src/devtools/`; no `tabula/`, root `cumulus/`, `saved-journeys/`, `.superpowers/` | pass |
+| No analysis tooling | no tracked first-pick, analysis, experiment, or metrics scripts; `src/draft/` holds `draft-engine.ts` (tides4) and `pool/` | pass |
+| Data in typed TS modules | catalogs are TS under `src/content/` (781 tracked files). Non-TS files under `src/` are assets, Boxicons, replay test fixtures, and `src/battle/semantic-play-card-ids.json`, a UUID list in the legacy battle sandbox imported by `src/battle/semantic-play.ts` and `src/data/tutorial-actions.ts` | pass |
+| Local-first log | `LocalLog` (`src/eventlog/local-log.ts`) over IndexedDB (`src/session/indexeddb-store.ts`); no `fetch(`, `WebSocket`, or `EventSource` in `src/eventlog/` or `src/session/` | pass |
+| Scripts culled | `scripts/`: 26 tracked files, 17 non-test modules, 4,562 lines (baseline 201 scripts, ~51k lines); 18 npm scripts | pass |
+| Lint rules culled | 10 custom rule modules (the 8 kept by 2.7b, `engine-purity` from Phase 3, `no-raw-string-identity` from hv-47xj.25) plus the `cumulus-token-index.js` helper, and 2 restriction blocks (determinism in `src/rules/`, `localeCompare` in `generateAuguryEncounter.ts`); baseline 45 | pass |
+| D19 budgets | [above](#d19-suite-budgets): 24.8 s, 211 files, 49 `jsdom` | pass |
+| Mason beads landed | the orchestrator confirms every hv-47xj mason bead closed; friction files exist for hv-47xj.9 … .57 | pass |
+| Retrospective beads landed | hv-47xj.54 `7eda7b8aa`, hv-47xj.55 `e328a6405`, hv-47xj.56 `dfd89933d` | pass |
+| Metrics re-measured | this section | pass |
+| Review resolved | findings resolved; follow-up hv-47xj.57 landed as `66bfe8661` | pass |
