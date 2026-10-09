@@ -351,6 +351,7 @@ export function ceaseToExist(
   const { state } = ctx;
   const instance = instanceOf(state, id);
   const side = instance.controller;
+  const from = instance.zone;
   if (options.silent === true) {
     if (instance.zone === "play") expireAt(ctx, { at: "sourceLeavesPlay", source: id });
   } else {
@@ -364,7 +365,7 @@ export function ceaseToExist(
   );
   endChangesTo(ctx, id);
   forgetCeased(ctx, id);
-  ctx.emit({ kind: "ceasedToExist", instance: id });
+  ctx.emit({ kind: "ceasedToExist", instance: id, side, from });
 }
 
 /**

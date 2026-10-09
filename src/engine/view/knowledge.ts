@@ -34,6 +34,32 @@ export function knows(state: BattleState, instance: CardInstance, side: Side): b
   }
 }
 
+/** Whether `side` can identify the card `id` in `state`: it is still in the battle and `side` knows it where it is. */
+export function identifies(state: BattleState, id: InstanceId, side: Side): boolean {
+  const instance = state.instances[id];
+  return instance !== undefined && knows(state, instance, side);
+}
+
+/** The sides that cannot identify the card `id` in `state`. */
+export function sidesBlindTo(state: BattleState, id: InstanceId): Side[] {
+  return SIDES.filter((side) => !identifies(state, id, side));
+}
+
+/**
+ * Whether `viewer` sees the subject of a queued trigger in `state`: it could
+ * identify the subject as the ability triggered (`subjectHiddenFrom`) and
+ * can identify it now. A card that was hidden then stays hidden as that
+ * trigger's subject even once it is public, so a trigger never tells which
+ * card a hidden draw or discard concerned.
+ */
+export function seesSubject(
+  state: BattleState,
+  trigger: { readonly subject: InstanceId | null; readonly subjectHiddenFrom?: readonly Side[] },
+  viewer: Side,
+): boolean {
+  return trigger.subject !== null && trigger.subjectHiddenFrom?.includes(viewer) !== true && identifies(state, trigger.subject, viewer);
+}
+
 /** Whether `side` sees `instance` without a `knownTo` entry: it is in a public zone or in `side`'s hand. */
 function seenByZone(instance: CardInstance, side: Side): boolean {
   return instance.zone === "hand" ? instance.controller === side : instance.zone !== "deck";

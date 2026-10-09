@@ -1,0 +1,5 @@
+# RD-hv-7x4l.50-1: A discarded card is shown as it enters the void; a created card that ceases from a hand is not shown
+- Ladder: 4 (MTG analog: discarding moves a card from hand to the graveyard, a public zone, and the card is seen there), then 5 for a created card that never reaches the void
+- rules.md: § Zones → Hand
+- Affects: 9a18d375-1b6d-4df4-95ec-c7c5c3f36379 (Pattern Seeker), c86c1364-6ac4-4c90-8053-4e49441a2c83 (Key Sifter), 4cec92f2-9bac-4949-a602-cd0a44618aaf (The Ringleader); any created card in a hand
+- Why: rules.md said a hand is hidden and the void public, but not whether discarding itself reveals a card. As in MTG, the card is seen because it lands face up in a public zone. A created card discarded, or banished at Ending with Ephemeral, ceases to exist instead (§ Created Cards) and enters no zone, so the opponent never sees it. The engine encodes this once: `discarded` is public while the card is still in the battle (it is in the void) and private to the discarding side once it has ceased to exist, and `ceasedToExist` is private to the holder when the card left a hand or deck.

@@ -10,6 +10,12 @@ export interface EventDefinition<E extends EngineEvent> {
    * public. Redacted views and logs read this.
    */
   privateTo(event: E, state: BattleState): Side | null;
+  /**
+   * The event as `viewer`, who may see it, sees it in `state`: a field
+   * naming a card the viewer cannot identify there is `null`, as in the
+   * view. Absent for a kind every viewer who may see it sees whole.
+   */
+  readonly redact?: (event: E, viewer: Side, state: BattleState) => E;
 }
 
 export function publicEvent<E extends EngineEvent>(

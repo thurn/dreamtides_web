@@ -1302,7 +1302,12 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 - **`view(state, side)`** hides the opponent's hand contents and every deck
   order: each is a count plus the cards known to this side at their
   positions (`HiddenZoneView.known`). Every other part of the view omits or
-  nulls what names a card the side cannot identify.
+  nulls what names a card the side cannot identify. A queued trigger's
+  subject is shown only to a side that could identify it as the ability
+  triggered and still can (`seesSubject`): the queue records the sides that
+  could not (`QueuedTrigger.subjectHiddenFrom`), so a card drawn into a
+  hidden hand and then discarded is never named as the draw trigger's
+  subject (rules § Ability Types → Triggered abilities).
 - **Knowledge** is `state.knownTo[side]`: the cards in decks and hands that
   `side` can identify beyond what their zone shows it (public zones, and its
   own hand). `view/knowledge.ts` updates it:
@@ -1318,6 +1323,27 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   it: its purpose names a source card only when `side` can identify it
   (`purposeView`), even for the side answering, which otherwise sees it
   whole; any other side sees only the cards it can identify.
+- **Events** are judged in the state that arrives with them. Each kind's
+  `privateTo` shows the whole event to one side or both
+  (`eventVisibleTo`). `eventSeenBy(event, side, state)` is the event as
+  that side sees it: `null` when it is private to the other side, else the
+  event after its kind's `redact`, which nulls a field naming a card the
+  side cannot identify, as the view does. The kinds that can name a hidden
+  card:
+  - `cardDrawn`, a `pendingAbility` for a drawn card, and a `cardCreated`
+    in a hand are private to the side holding the hand;
+    `feasibilityBounded` is private to the answering side;
+  - `triggerQueued`, `triggerResolved`, `winConditionMet`, `effectStarted`,
+    and `payableEffectRegistered` are private to the holder of a source in
+    a hand or deck. A `triggerQueued` that a side may see shows its
+    subject as the view's queued trigger does (`seesSubject`), so the
+    opponent sees a public trigger queue without the card it concerns;
+  - `ceasedToExist` names the zone the card left (`from`). It is private to
+    the side holding that zone when the zone is a hand or deck (rules §
+    Zones → Hand);
+  - `discarded` is public while the card is in the battle, in the void. It
+    is private to the discarding side once a created card ceases to exist
+    instead.
 - **The UI renders only views.** The Phase 4.6 debug reveal switches that
   side's view to omniscient.
 - **Determinization** (D22) is `engine.determinize(view, decklists, random)
@@ -1335,7 +1361,8 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 ## Presentation
 
 Phase 4.4 builds this. Every engine event kind (`events/kinds/`; each
-declares whether it is private to one side) maps to an existing animation,
+declares whether it is private to one side and what it redacts, and the
+presentation reads `eventSeenBy`) maps to an existing animation,
 particle, or log line:
 
 - dissolve, banish, materialize;

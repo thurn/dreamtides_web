@@ -102,7 +102,7 @@ describe("prevent", () => {
     });
     expect(created.state.instances[created.played]).toBeUndefined();
     expect(created.events).toContainEqual({ kind: "prevented", instance: created.played, side: "player", to: null, zoneOf: null });
-    expect(created.events).toContainEqual({ kind: "ceasedToExist", instance: created.played });
+    expect(created.events).toContainEqual({ kind: "ceasedToExist", instance: created.played, side: "player", from: "stack" });
     expect(created.state.sides.player.hand).toEqual([]);
     expect(created.state.sides.player.void).toEqual([]);
 

@@ -8,10 +8,10 @@
  */
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
-import type { EngineEvent } from "../events";
+import { eventSeenBy, type EngineEvent } from "../events";
 import type { Answer, ChooseTargetsPrompt } from "../prompts/types";
 import type { Action } from "./actions";
-import type { InstanceId, Side } from "../state/ids";
+import { SIDES, type InstanceId, type Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { ScriptedSource } from "../steps/sources";
 import { boardState, type BoardSetup } from "../testing/board";
@@ -208,8 +208,20 @@ describe("copies in hand", () => {
     const { state: after } = play(state, "player", ids.player.hand[0]);
     const [copy] = after.sides.player.hand;
     expect(after.instances[copy]).toMatchObject({ printing: { kind: "card", cardId: v.vanilla2.id }, owner: "player", status: { created: true, ephemeral: true } });
-    const ended = passUntil(engine, after, at(engine, "enemy", "day")).state;
+    const { state: ended, steps } = passUntil(engine, after, at(engine, "enemy", "day"));
     expect(ended.instances[copy]).toBeUndefined();
     expect(ended.sides.player.banished).toEqual([]);
+    // It ceases from a hidden hand: only its holder sees the event naming it.
+    const ceasing = steps.find((step) => step.events.some((event) => event.kind === "ceasedToExist"));
+    if (ceasing === undefined) throw new Error("no step ceased the copy");
+    const ceased = ceasing.events.find((event) => event.kind === "ceasedToExist");
+    expect(ceased).toEqual({ kind: "ceasedToExist", instance: copy, side: "player", from: "hand" });
+    for (const viewer of SIDES) {
+      const seen = ceasing.events.flatMap((event) => {
+        const visible = eventSeenBy(event, viewer, ceasing.state);
+        return visible === null ? [] : [visible];
+      });
+      expect(JSON.stringify(seen).includes(copy)).toBe(viewer === "player");
+    }
   });
 });

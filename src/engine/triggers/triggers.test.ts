@@ -16,6 +16,7 @@ import {
   triggered,
   triggeringCard,
   untilOpponentPays,
+  whenDiscard,
   whenDraw,
   whenGainsSpark,
   whenLeavesPlay,
@@ -24,7 +25,7 @@ import {
 } from "../dsl/triggers";
 import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
-import { eventVisibleTo, type EngineEvent } from "../events";
+import { eventSeenBy, eventVisibleTo, type EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { effectiveSpark } from "../rules/spark";
 import { deserializeState, stateHash } from "../state/hash";
@@ -106,6 +107,10 @@ const L = {
   handWin: local(18, "character", () => [triggered(whenOpponentPlays(), p.winTheGame(), { zone: "hand" })]),
   /** "When the opponent plays a card, you win the game." — in every zone. */
   anywhereWin: local(19, "character", () => [triggered(whenOpponentPlays(), p.winTheGame(), { zone: "any" })]),
+  /** "When you discard a card, gain 1●." */
+  discardWatcher: local(20, "character", () => [triggered(whenDiscard(), p.gainEnergy(1))]),
+  /** "Draw a card, then discard a card." */
+  drawThenDiscard: local(21, "event", () => [event(p.sequence(p.draw(1), p.discard(1)))]),
 } as const;
 const WATCHER_AVATAR: EngineAvatarDefinition = { id: parseAvatarId("5e5e5e5e-0000-4000-8000-000000000391"), status: "authored", abilities: watching };
 const WATCHER_SIGN: EngineDreamsignDefinition = { id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000000392"), status: "authored", abilities: watching };
@@ -667,6 +672,85 @@ describe("floating, delayed, and disabled triggers", () => {
     expect(queuedCount(dissolved.events, ids.enemy.back[0]!)).toBe(0);
     current = passUntil(engine, dissolved.state, at(engine, "enemy", "day")).state;
     expect(current.floating).toEqual([]);
+  });
+});
+
+/** `events` as `viewer` sees them in `state` (`eventSeenBy`). */
+function seenBy(events: readonly EngineEvent[], viewer: Side, state: BattleState): EngineEvent[] {
+  return events.flatMap((entry) => {
+    const seen = eventSeenBy(entry, viewer, state);
+    return seen === null ? [] : [seen];
+  });
+}
+
+describe("trigger subjects hidden from a side", () => {
+  it("shows the opponent a public trigger on a draw without the card drawn into a hidden hand", () => {
+    const { state, ids } = board({ player: { back: [L.drawPoints.id], hand: [DSL.drawTwo.id], energy: 1, deck }, enemy: { deck } });
+    const result = play(state, "player", ids.player.hand[0]);
+    const drawn = result.state.sides.player.hand;
+    expect(drawn).toEqual(ids.player.deck.slice(0, 2));
+    const queued = result.events.filter((entry) => entry.kind === "triggerQueued");
+    expect(queued.map((entry) => entry.subject)).toEqual(drawn);
+    for (const entry of queued) {
+      expect(entry.subjectHiddenFrom).toEqual(["enemy"]);
+      expect(eventSeenBy(entry, "enemy", result.state)).toEqual({ ...entry, subject: null });
+      expect(eventSeenBy(entry, "player", result.state)).toEqual(entry);
+    }
+    const enemy = strings([seenBy(result.events, "enemy", result.state), engine.view(result.state, "enemy")]);
+    for (const id of drawn) expect(enemy.has(id)).toBe(false);
+    expect(result.state.sides.player.score).toBe(2);
+  });
+
+  it("never names a drawn card as a draw trigger's subject to the opponent, even once it is discarded into the void, across a reload", () => {
+    const { state, ids } = board({ player: { back: [L.drawPoints.id], hand: [L.drawThenDiscard.id, v.vanilla2.id], deck }, enemy: { deck } });
+    const drawn = ids.player.deck[0];
+    const answers: Answer[] = [[drawn]];
+    const action = { kind: "play", card: ids.player.hand[0], from: "hand" } as const;
+    const inline = play(state, "player", ids.player.hand[0], answers);
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const opened = fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 }, { kind: "battleAction", side: "player", action });
+    if (opened.kind !== "applied") throw new Error("bounced");
+    const pending = fold.pending(opened.slice);
+    if (pending === null) throw new Error("no prompt");
+    // Suspended at the discard, the drawn card is in hand and the draw trigger is queued.
+    const reloaded = deserializeState(JSON.stringify(pending.display));
+    for (const display of [pending.display, reloaded]) {
+      expect(engine.view(display, "enemy").triggerQueue.map((entry) => entry.subject)).toEqual([null]);
+      expect(engine.view(display, "player").triggerQueue.map((entry) => entry.subject)).toEqual([drawn]);
+    }
+    const answered = fold.reduce(opened.slice, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [drawn] });
+    if (answered.kind !== "applied" || answered.error !== null) throw new Error("answer failed");
+    const published = [...opened.published, ...answered.published];
+    expect(published).toEqual(inline.events);
+    expect(stateHash(answered.slice.committed)).toBe(stateHash(inline.state));
+    const after = answered.slice.committed;
+    expect(after.instances[drawn]?.zone).toBe("void");
+    const queued = published.find((entry) => entry.kind === "triggerQueued");
+    expect(queued !== undefined && eventSeenBy(queued, "enemy", after)).toMatchObject({ kind: "triggerQueued", subject: null });
+    expect(queued !== undefined && eventSeenBy(queued, "player", after)).toMatchObject({ kind: "triggerQueued", subject: drawn });
+    // The discard itself is public: the card is in the void.
+    expect(seenBy(published, "enemy", after)).toContainEqual({ kind: "discarded", side: "player", instance: drawn });
+  });
+
+  it("keeps a created card discarded from a hidden hand, and the triggers it causes, from naming it to the opponent", () => {
+    const { state, ids } = board({
+      player: { back: [L.discardWatcher.id], hand: [DSL.discardTwo.id, v.vanilla1.id, v.vanilla2.id, v.vanilla3.id], deck },
+      enemy: { deck },
+    });
+    const [, created, kept] = ids.player.hand;
+    state.instances[created].status.created = true;
+    const result = play(state, "player", ids.player.hand[0], [[created, kept]]);
+    expect(result.state.instances[created]).toBeUndefined();
+    expect(result.state.sides.player.void).toContain(kept);
+    expect(result.state.sides.player.currentEnergy).toBe(2);
+    const enemy = seenBy(result.events, "enemy", result.state);
+    expect(strings([enemy, engine.view(result.state, "enemy")]).has(created)).toBe(false);
+    expect(enemy).toContainEqual({ kind: "discarded", side: "player", instance: kept });
+    // The opponent still sees both discard triggers queue.
+    expect(enemy.filter((entry) => entry.kind === "triggerQueued").map((entry) => entry.subject)).toEqual([null, kept]);
+    const player = seenBy(result.events, "player", result.state);
+    expect(player).toContainEqual({ kind: "discarded", side: "player", instance: created });
+    expect(player).toContainEqual({ kind: "ceasedToExist", instance: created, side: "player", from: "hand" });
   });
 });
 

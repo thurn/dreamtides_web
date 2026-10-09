@@ -18,6 +18,7 @@ import type { AbilitySource, InstanceId, Side, Zone } from "../state/ids";
 import { opponent, sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, QueuedTrigger, SparkGain } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { sidesBlindTo } from "../view/knowledge";
 import { triggerBody } from "./body";
 
 /** Every trigger kind except the `either` combinator, which matches through its branches. */
@@ -316,7 +317,14 @@ function enqueueAbility(
   enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match });
 }
 
-function enqueue(ctx: StepContext, trigger: QueuedTrigger): void {
+/**
+ * Queues `matched`, recording the sides that cannot identify its subject as
+ * it triggers (a card drawn into or discarded from a hidden hand), which
+ * never see it as this trigger's subject.
+ */
+function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
+  const hidden = matched.subject === null ? [] : sidesBlindTo(ctx.state, matched.subject);
+  const trigger: QueuedTrigger = hidden.length === 0 ? matched : { ...matched, subjectHiddenFrom: hidden };
   ctx.state.triggerQueue.push(trigger);
   ctx.emit({
     kind: "triggerQueued",
@@ -325,6 +333,7 @@ function enqueue(ctx: StepContext, trigger: QueuedTrigger): void {
     ability: trigger.ability,
     node: trigger.node,
     subject: trigger.subject,
+    ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
   });
 }

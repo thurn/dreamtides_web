@@ -27,7 +27,7 @@ import type { Keyword, Variant } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
 import { changedInstance } from "../rules/floating";
 import { playCosts } from "../rules/costs";
-import { knows } from "./knowledge";
+import { knows, seesSubject } from "./knowledge";
 
 /**
  * A card's effective characteristics, after every continuous effect (the
@@ -115,7 +115,9 @@ export interface FloatingEffectView {
 
 /**
  * A triggered ability waiting to resolve. A source the viewer cannot see is
- * `null`, and so is the origin it would identify.
+ * `null`, and so is the origin it would identify. So is a subject the viewer
+ * could not identify as the ability triggered or cannot identify now
+ * (`seesSubject`).
  */
 export interface QueuedTriggerView {
   readonly controller: Side;
@@ -310,7 +312,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       origin: visibleSource(trigger.source) ? copy(trigger.origin) : null,
       ability: trigger.ability,
       node: trigger.node,
-      subject: trigger.subject !== null && visible(trigger.subject) ? trigger.subject : null,
+      subject: seesSubject(state, trigger, viewer) ? trigger.subject : null,
       ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
     })),
     turnLog: {

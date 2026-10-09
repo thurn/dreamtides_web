@@ -313,6 +313,13 @@ export interface QueuedTrigger {
   readonly node: number | null;
   /** The card the triggering event concerns ("it", "that character"), if any. */
   readonly subject: InstanceId | null;
+  /**
+   * The sides that could not identify `subject` as the ability triggered,
+   * such as the opponent of the side drawing it; absent when both could.
+   * Neither the view nor the `triggerQueued` event shows them the subject
+   * (view/knowledge.ts `seesSubject`).
+   */
+  readonly subjectHiddenFrom?: readonly Side[];
   /** The gain a "when … gains ✦" trigger matched; absent for any other trigger. */
   readonly gain?: SparkGain;
 }

@@ -7,10 +7,10 @@
  */
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
-import type { EngineEvent } from "../events";
+import { eventVisibleTo, type EngineEvent } from "../events";
 import type { Answer } from "../prompts/types";
 import type { Action } from "./actions";
-import type { InstanceId, Side } from "../state/ids";
+import { SIDES, type InstanceId, type Side } from "../state/ids";
 import type { BattleState, CardInstance } from "../state/types";
 import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
 import { boardState, placeFigment, type BoardSetup } from "../testing/board";
@@ -72,6 +72,10 @@ describe("zone-change replacements", () => {
     const { state: after, events } = play(state, "player", ids.player.hand[0], [[figment]]);
     expect(after.instances[figment]).toBeUndefined();
     expect(kinds(events, figment)).toEqual(["leftPlay", "ceasedToExist"]);
+    // It ceased from play, where both sides saw it.
+    const ceased = events.find((event) => event.kind === "ceasedToExist");
+    expect(ceased).toEqual({ kind: "ceasedToExist", instance: figment, side: "player", from: "play" });
+    for (const viewer of SIDES) expect(ceased !== undefined && eventVisibleTo(ceased, viewer, after)).toBe(true);
     expect(after.sides.player.hand).toEqual([]);
     // "When a character you control leaves play" still sees it leave.
     expect(after.sides.player.currentEnergy).toBe(1);

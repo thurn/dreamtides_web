@@ -138,6 +138,12 @@ the Draw phase and by card effects.
 number of cards during the turn, but the active player discards down to 10
 during the Ending phase, choosing which cards to discard.
 
+A card leaving a hand is shown to the opponent as it enters a zone they can
+see, so a discarded card is shown to both players as it enters its owner's void.
+A created card that ceases to exist instead (see [Created
+Cards](#created-cards)), such as a discarded or Ephemeral one, enters no zone and
+is not shown.
+
 An effect can put a card the opponent owns into your hand, as in "Prevent a
 played card, then put that card into your hand." That card is in your hand
 like any other: you may play it, discard it, or use it to pay a cost, and you
@@ -744,6 +750,12 @@ does not change which of these abilities its play matched or counted toward.
 "At the start of your turn" abilities trigger as each of your turns begins and
 resolve before its Dreamwell phase; "At the start of your first turn" triggers
 only as your first turn of the battle begins.
+
+Each player sees a triggered ability trigger and resolve when they can see its
+card, avatar, or dreamsign, but not a hidden card the triggering event
+concerns: when "When you draw a card" triggers, the opponent learns that it
+triggered, not which card was drawn, even once that card enters a zone they can
+see.
 
 **Where triggered abilities work:** A triggered ability works while its card is
 in play. An ability that names another zone, such as "▸Dawn: If this card is in

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../engine";
 import { eventVisibleTo, type EngineEvent } from "../events";
-import { serializeState, stateHash } from "../state/hash";
+import { deserializeState, serializeState, stateHash } from "../state/hash";
 import type { CardId, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, StackItem } from "../state/types";
@@ -258,6 +258,27 @@ describe("view", () => {
     expect(enemy.floating.map((effect) => effect.id)).toEqual(["e2", "e3"]);
     expect(enemy.triggerQueue[0]?.source).toBe(enemyHand);
     expect(JSON.stringify(player)).not.toContain(v.event0.id);
+  });
+
+  it("hides a queued trigger's subject from a side that could not identify it as it triggered, even once it is public, across a reload", () => {
+    const { state } = fixture();
+    const enemyFront = state.sides.enemy.frontRank[0]!;
+    const [discarded] = state.sides.enemy.hand;
+    // The enemy drew `discarded` with a public trigger watching, then discarded it into its void.
+    state.sides.enemy.hand = state.sides.enemy.hand.filter((id) => id !== discarded);
+    state.sides.enemy.void.push(discarded);
+    state.instances[discarded].zone = "void";
+    const origin = { kind: "card" as const, cardId: cardIdOf(state, enemyFront), variant: { amplified: false } };
+    state.triggerQueue = [
+      { source: enemyFront, controller: "enemy", origin, ability: 0, node: null, subject: discarded, subjectHiddenFrom: ["player"] },
+      { source: enemyFront, controller: "enemy", origin, ability: 0, node: null, subject: "i999" },
+    ];
+    const reloaded = deserializeState(serializeState(state));
+    for (const shown of [state, reloaded]) {
+      expect(view(shown, "player", catalog).triggerQueue.map((trigger) => trigger.subject)).toEqual([null, null]);
+      expect(view(shown, "enemy", catalog).triggerQueue.map((trigger) => trigger.subject)).toEqual([discarded, null]);
+      expect(view(shown, "player", catalog).triggerQueue[0]?.source).toBe(enemyFront);
+    }
   });
 
   it("shows figments and figment copies by their printing with their effective characteristics, and keeps a card created in a hand private", () => {
