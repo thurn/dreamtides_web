@@ -156,7 +156,11 @@ dreamscape has 3–6 sites:
 4. Fill sites drawn from the other guides' signature sites (each with its
    guide, not enhanced) plus Essence sites, using the layer's fill profile.
    Later profiles favor sites such as Transfiguration and Duplication. A
-   known Dreamsign takes one fill slot as a Dreamsign Reward site.
+   known Dreamsign takes one fill slot as a Dreamsign Reward site. A known
+   Dreamsign is placed only in a layer whose Battle, signature, and required
+   sites leave a fill slot free. If a dreamscape has no free slot anyway,
+   its Reward replaces a second Draft, or else the last required site, so
+   it never exceeds the layer's site count.
 
 A site type appears at most once per dreamscape, except Draft (at most 2).
 Sites can be visited in any order except Battle, and each is visited once.

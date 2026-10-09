@@ -19,7 +19,7 @@ import {
 import { otherGuideSignatureSites } from "../data/dreamscapes";
 import { logEvent } from "../logging";
 import type { RandomSiteDestinationType } from "../types/journey";
-import { atlasLayerData } from "../types/atlas-data";
+import { atlasLayerData, type AtlasLayerData } from "../types/atlas-data";
 import type { SitesData } from "../types/sites-data";
 import type { GambleData } from "../types/gamble-data";
 import { GAMBLE_FALLBACK_GAME_ID } from "../types/gamble";
@@ -397,8 +397,8 @@ function makeRandomSite(
 
 /**
  * Generates the ordered site composition for one dreamscape node, following the
- * doc's named-dreamscape rules. Total sites stay within 3-6 and the Battle is
- * always last in visit order.
+ * doc's named-dreamscape rules. Total sites stay within the layer's catalog
+ * site-count range and the Battle is always last in visit order.
  *
  * The starter dreamscape ({@link LayerName.One}, `isStarter`) returns its fixed
  * site list with no enhancement and no fill. Every other dreamscape is built
@@ -409,7 +409,8 @@ function makeRandomSite(
  * - **Fill** sites drawn from the layer's configured profile (including other
  *   dreamscapes' signature sites), sampled without replacement so every
  *   non-Draft type appears at most once. A known-dreamsign carrier consumes one
- *   fill slot with a Dreamsign Reward site.
+ *   fill slot with a Dreamsign Reward site, displacing a required site when
+ *   the mandatory sites leave no fill slot.
  *
  * The composition is logged (layer, weights, chosen sites) for reconstruction.
  */
@@ -471,29 +472,87 @@ function generateSiteCompositionInternal(
     enhancedSiteType = homeSite;
   }
 
+  const siteCount = layerData.siteCount;
+  if (siteCount === null) {
+    throw new Error(
+      `Atlas layer ${layer} has no non-starter site-count rules.`,
+    );
+  }
+  const minPreBattle = Math.max(0, siteCount.min - 1);
+  const maxPreBattle = Math.max(0, siteCount.max - 1);
+
   // --- Mandatory sites authored per layer. Draft may repeat; other types do not. ---
+  const requiredTypes: SiteType[] = [];
   for (const [mandatoryType, count] of Object.entries(
     layerData.mandatorySites,
   )) {
     const siteType = mandatoryType as SiteType;
     for (let index = 0; index < count; index += 1) {
       if (siteType !== "Draft" && usedTypes.has(siteType)) break;
-      preBattle.push(makeSite(siteType, false));
+      requiredTypes.push(siteType);
       if (siteType !== "Draft") usedTypes.add(siteType);
     }
   }
 
   // --- Known-dreamsign carrier: one fill slot becomes a Dreamsign Reward. ---
+  // The node has shown its known Dreamsign since Atlas generation, so the
+  // Reward is a promise the composition keeps. When the home signature site
+  // and the required sites already fill the layer's maximum, there is no fill
+  // slot for it: the Reward then displaces one required site instead of
+  // pushing the dreamscape past its site range. It displaces the last repeated
+  // required site (a second Draft) when there is one, so every required site
+  // type stays on offer, and otherwise the last required site in authored
+  // order. With no required site to displace (the home signature site and
+  // Battle alone fill the layer), the Reward is left out. Atlas generation only
+  // places known Dreamsigns in layers with a fill slot (see
+  // `layerHasKnownDreamsignSlot`), so these rules apply only to a carrier
+  // placed under different catalog tuning or to a direct composition call.
   const knownDreamsignSite = atlasData.siteComposition.knownDreamsignSite;
-  if (hasKnownDreamsign === true && !usedTypes.has(knownDreamsignSite)) {
+  let placeKnownDreamsign =
+    hasKnownDreamsign === true && !usedTypes.has(knownDreamsignSite);
+  let displacedSiteType: SiteType | null = null;
+  if (
+    placeKnownDreamsign &&
+    preBattle.length + requiredTypes.length >= maxPreBattle
+  ) {
+    if (requiredTypes.length === 0) {
+      placeKnownDreamsign = false;
+    } else {
+      let displacedIndex = requiredTypes.length - 1;
+      for (let index = requiredTypes.length - 1; index >= 0; index -= 1) {
+        if (requiredTypes.indexOf(requiredTypes[index]) !== index) {
+          displacedIndex = index;
+          break;
+        }
+      }
+      [displacedSiteType] = requiredTypes.splice(displacedIndex, 1);
+      if (!requiredTypes.includes(displacedSiteType)) {
+        usedTypes.delete(displacedSiteType);
+      }
+    }
+    if (logEvents) {
+      logEvent("dreamscape_known_dreamsign_without_fill_slot", {
+        dreamscapeId: dreamscape?.id ?? null,
+        layer,
+        maxSiteCount: siteCount.max,
+        outcome: placeKnownDreamsign ? "displaced_required_site" : "omitted",
+        displacedSiteType,
+      });
+    }
+  }
+  for (const siteType of requiredTypes) {
+    preBattle.push(makeSite(siteType, false));
+  }
+  if (placeKnownDreamsign) {
     preBattle.push(makeSite(knownDreamsignSite, false));
     usedTypes.add(knownDreamsignSite);
   }
 
-  // --- Fill from the weighted pool until total sites reach 3-6. ---
-  // The total includes the trailing Battle, so the pre-battle target is 2-5.
-  // `Battle` is never a guide signature site, so passing it as the excluded home
-  // site keeps every guide site in the pool when the node has no dreamscape.
+  // --- Fill from the weighted pool up to the layer's site-count range. ---
+  // The range includes the trailing Battle, so the pre-battle target is one
+  // less. `Battle` is never a guide signature site, so passing it as the
+  // excluded home site keeps every guide site in the pool when the node has
+  // no dreamscape.
   const fillPool = applySiteAppearanceBoosts(
     applySiteRemovalModifiers(
       buildFillPool(layer, homeSite ?? "Battle", dreamscapes, atlasData),
@@ -509,14 +568,6 @@ function generateSiteCompositionInternal(
     type,
     weight,
   }));
-  const siteCount = layerData.siteCount;
-  if (siteCount === null) {
-    throw new Error(
-      `Atlas layer ${layer} has no non-starter site-count rules.`,
-    );
-  }
-  const minPreBattle = Math.max(0, siteCount.min - 1);
-  const maxPreBattle = Math.max(0, siteCount.max - 1);
   const minFill = Math.max(0, minPreBattle - preBattle.length);
   const maxFill = Math.max(minFill, maxPreBattle - preBattle.length);
   const fillCount = Math.min(randomInt(minFill, maxFill), remainingPool.length);
@@ -953,10 +1004,35 @@ function setNodeState(
 }
 
 /**
+ * Whether every dreamscape on this layer keeps a fill slot for a known
+ * Dreamsign's Reward site. Dreamscapes are assigned only when a node is
+ * revealed, after placement, so this reserves a home signature site for every
+ * node alongside the layer's required sites and the Battle.
+ */
+function layerHasKnownDreamsignSlot(layerData: AtlasLayerData): boolean {
+  if (layerData.siteCount === null) {
+    return false;
+  }
+  return reservedSiteCount(layerData) < layerData.siteCount.max;
+}
+
+/** Home signature site, the layer's required sites, and the Battle. */
+function reservedSiteCount(layerData: AtlasLayerData): number {
+  let required = 0;
+  for (const count of Object.values(layerData.mandatorySites)) {
+    required += count ?? 0;
+  }
+  return required + 2;
+}
+
+/**
  * Places up to `maxPerAtlas` known dreamsigns on eligible nodes. Carriers are
  * drawn from the configured eligible layers, biased toward earlier layers so one
  * can land among the start-revealed set; each carrier is granted a distinct
- * dreamsign drawn (and removed) from the run pool.
+ * dreamsign drawn (and removed) from the run pool. A carrier's node shows its
+ * Dreamsign from generation on, so placement refuses an eligible layer whose
+ * mandatory sites leave no fill slot for the Reward site and draws carriers
+ * from the remaining eligible layers instead.
  */
 function placeKnownDreamsigns(
   state: AtlasState,
@@ -968,9 +1044,25 @@ function placeKnownDreamsigns(
   }
 
   // Convert authored layer names to the ordinals used by the persisted arrays.
-  const eligibleOrdinals = cfg.eligibleLayers
-    .map((layer) => layerOrdinal(layer))
-    .filter((ordinal) => ordinal >= 0 && ordinal < state.atlas.layers.length);
+  const eligibleOrdinals: number[] = [];
+  for (const layer of cfg.eligibleLayers) {
+    const ordinal = layerOrdinal(layer);
+    if (ordinal < 0 || ordinal >= state.atlas.layers.length) {
+      continue;
+    }
+    const layerData = atlasLayerData(state.context.atlasData, layer);
+    if (!layerHasKnownDreamsignSlot(layerData)) {
+      if (state.logEvents) {
+        logEvent("atlas_known_dreamsign_layer_refused", {
+          layer,
+          reservedSiteCount: reservedSiteCount(layerData),
+          maxSiteCount: layerData.siteCount?.max ?? null,
+        });
+      }
+      continue;
+    }
+    eligibleOrdinals.push(ordinal);
+  }
 
   // Candidate nodes, biased toward earlier layers and toward the start-reveal
   // set so a known dreamsign tends to be visible from the start.
