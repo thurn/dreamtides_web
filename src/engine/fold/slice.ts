@@ -5,11 +5,13 @@
  */
 import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
-import { eventLogRecords, promptOpenedRecord, stepLogRecords, type EngineLogRecord } from "../log";
+import { eventLogRecords, legalityLogRecords, promptOpenedRecord, stepLogRecords, type EngineLogRecord } from "../log";
 import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
 import type { Answer, Prompt, PromptId } from "../prompts/types";
 import { allowedBy, type Action } from "../rules/actions";
+import { mainWindowSide } from "../rules/decision";
+import { legalMoves } from "../rules/legality";
 import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
 import type { Side } from "../state/ids";
@@ -243,6 +245,19 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     };
   }
 
+  /**
+   * Logs the plays and activations a committed state's decision leaves out
+   * because their legality search ran out of runs: the priority holder's
+   * responses on a non-empty stack, which decide whether it passes
+   * automatically, and, where the fold stops, the main window's options.
+   */
+  function logBoundedLegality(state: BattleState, stopped: boolean): void {
+    if (state.result !== null || state.triggerQueue.length > 0 || state.loops.run !== null) return;
+    const side = state.stack.length > 0 ? state.priority : stopped ? mainWindowSide(state) : null;
+    if (side === null) return;
+    log(legalityLogRecords(side, legalMoves(state, engine.catalog, side, engine.memo).bounded, state.version));
+  }
+
   function logError(slice: BattleSlice, error: EngineErrorRecord): void {
     log([{ event: "engine.error", version: slice.committed.version, step: error.step, message: error.message }]);
   }
@@ -265,6 +280,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       let inFlight = slice.inFlight;
       if (inFlight === null) {
         const next = nextAutomaticStep(slice.committed, engine.catalog, engine.memo);
+        logBoundedLegality(slice.committed, next === null);
         if (next === null) {
           return { kind: "applied", slice, published, error: null };
         }

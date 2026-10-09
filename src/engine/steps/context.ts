@@ -3,7 +3,7 @@ import { eventDefinition, type EngineEvent } from "../events";
 import { forcedAnswer, hasLegalAnswer, isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
 import { isWellFormedPrompt, MalformedPrompt, promptCards } from "../prompts/structure";
-import type { AnswerFor, Prompt, PromptSpec } from "../prompts/types";
+import type { AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
 import type { Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
 import type { BattleState } from "../state/types";
@@ -21,6 +21,23 @@ export interface ContextOptions {
   readonly dryRun?: boolean;
   /** A loop replay: every prompt must be answered by `prefix`, else `UnrecordedPrompt` is thrown. */
   readonly replay?: boolean;
+  /** Narrows each prompt raised before the commit point to the answers with a feasible continuation. */
+  readonly guard?: PromptGuard;
+}
+
+/**
+ * Narrows the play-time prompts of a step with a commit point
+ * (steps/feasibility.ts). `prefix` holds the answers given so far, each with
+ * the fingerprint of the prompt as rules code raised it, before narrowing.
+ */
+export interface PromptGuard {
+  narrow(prompt: Prompt, prefix: readonly RecordedAnswer[]): Narrowed;
+}
+
+/** A narrowed prompt, and how many answers it withholds only because their search ran out of budget. */
+export interface Narrowed {
+  readonly prompt: Prompt;
+  readonly unproven: number;
 }
 
 export class Context implements StepContext {
@@ -28,6 +45,8 @@ export class Context implements StepContext {
   readonly answers: RecordedAnswer[] = [];
   /** The side that gave each answer in `answers`. */
   readonly choosers: Side[] = [];
+  /** `answers` with the fingerprint of each prompt as rules code raised it, before any narrowing. */
+  readonly rawAnswers: RecordedAnswer[] = [];
   committed = false;
 
   constructor(
@@ -40,18 +59,20 @@ export class Context implements StepContext {
   choose<P extends Prompt>(spec: PromptSpec<P>): AnswerFor<P> {
     const cancellable =
       !this.committed && this.options.canceller != null && spec.side === this.options.canceller;
-    const prompt = { ...spec, cancellable } as Prompt;
-    if (!isWellFormedPrompt(prompt)) {
-      throw new MalformedPrompt(prompt);
+    const raw = { ...spec, cancellable } as Prompt;
+    if (!isWellFormedPrompt(raw)) {
+      throw new MalformedPrompt(raw);
     }
-    if (!hasLegalAnswer(prompt)) {
-      throw new EmptyPrompt(prompt);
+    if (!hasLegalAnswer(raw)) {
+      throw new EmptyPrompt(raw);
     }
-    if (prompt.privateTo !== undefined) {
+    if (raw.privateTo !== undefined) {
       // The chooser sees the cards as the prompt opens, whoever answers it.
-      showPrivately(this.state, prompt.privateTo, promptCards(prompt));
+      showPrivately(this.state, raw.privateTo, promptCards(raw));
     }
-    const fingerprint = promptFingerprint(prompt);
+    const prompt = this.narrow(raw);
+    const rawFingerprint = promptFingerprint(raw);
+    const fingerprint = prompt === raw ? rawFingerprint : promptFingerprint(prompt);
     const index = this.answers.length;
     const recorded = this.options.prefix?.[index];
     if (recorded !== undefined) {
@@ -61,7 +82,7 @@ export class Context implements StepContext {
       if (!isLegalAnswer(prompt, recorded.value)) {
         throw new IllegalAnswer(prompt);
       }
-      this.record(recorded, prompt.side);
+      this.record(recorded, rawFingerprint, prompt.side);
       return recorded.value as AnswerFor<P>;
     }
     if (this.options.replay === true) {
@@ -72,19 +93,39 @@ export class Context implements StepContext {
       if (!isLegalAnswer(prompt, forced)) {
         throw new IllegalAnswer(prompt);
       }
-      this.record({ fingerprint, value: forced, auto: true }, prompt.side);
+      this.record({ fingerprint, value: forced, auto: true }, rawFingerprint, prompt.side);
       return forced as AnswerFor<P>;
     }
     const value = this.source.answer(prompt, this.state);
     if (!isLegalAnswer(prompt, value)) {
       throw new IllegalAnswer(prompt);
     }
-    this.record({ fingerprint, value }, prompt.side);
+    this.record({ fingerprint, value }, rawFingerprint, prompt.side);
     return value as AnswerFor<P>;
   }
 
-  private record(answer: RecordedAnswer, side: Side): void {
+  /**
+   * Before the commit point of a guarded step, the prompt narrowed to the
+   * answers with a feasible continuation; a prompt left with none is empty.
+   * Answers withheld only because their search ran out of budget are
+   * reported with a `feasibilityBounded` event.
+   */
+  private narrow(raw: Prompt): Prompt {
+    const guard = this.options.guard;
+    if (guard === undefined || this.committed) return raw;
+    const { prompt, unproven } = guard.narrow(raw, this.rawAnswers);
+    if (unproven > 0) {
+      this.emit({ kind: "feasibilityBounded", side: raw.side, purpose: raw.purpose, unproven });
+    }
+    if (!hasLegalAnswer(prompt)) {
+      throw new EmptyPrompt(prompt);
+    }
+    return prompt;
+  }
+
+  private record(answer: RecordedAnswer, rawFingerprint: PromptFingerprint, side: Side): void {
     this.answers.push(answer);
+    this.rawAnswers.push({ ...answer, fingerprint: rawFingerprint });
     this.choosers.push(side);
   }
 

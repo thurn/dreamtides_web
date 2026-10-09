@@ -37,6 +37,7 @@ export interface PlayStep {
 export const play: StepDefinition<PlayStep> = {
   kind: "play",
   canceller: (state, step) => state.instances[step.card]?.controller ?? null,
+  hasCommitPoint: true,
   run(ctx, step) {
     const { state, catalog } = ctx;
     const instance = instanceOf(state, step.card);

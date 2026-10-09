@@ -1,10 +1,8 @@
 import type { EngineCatalog } from "../catalog";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { EmptyPrompt, Feasible } from "../steps/errors";
+import { searchCommitPoint } from "../steps/feasibility";
 import type { Step } from "../steps/kinds";
-import { runStep } from "../steps/runner";
-import { FIRST_LEGAL } from "../steps/sources";
 import { abilitySources, canActivate, abilityOrigin, originAbilities } from "./activation";
 import { canPlay, type PlayZone } from "./timing";
 
@@ -24,6 +22,13 @@ export interface LegalPlay {
 export interface LegalMoves {
   readonly plays: LegalPlay[];
   readonly activations: LegalActivation[];
+  /**
+   * The `play` and `activate` steps left out because their feasibility
+   * search ran out of runs (`BattleConfig.feasibilitySearchRuns`) before
+   * finding a path, in candidate order; hosts log them as
+   * `engine.feasibility` records.
+   */
+  readonly bounded: Step[];
 }
 
 /**
@@ -33,28 +38,22 @@ export interface LegalMoves {
  */
 export type LegalityMemo = WeakMap<BattleState, Map<Side, LegalMoves>>;
 
-/**
- * Whether a `play` or `activate` step can reach its commit point: every
- * required play-time choice has a legal answer and the costs are payable. A
- * dry run answers each prompt with its first legal answer and stops at the
- * commit point, so legality never drifts from execution.
- */
-function isFeasible(state: BattleState, catalog: EngineCatalog, step: Step): boolean {
-  try {
-    runStep(state, step, FIRST_LEGAL, catalog, { dryRun: true });
-    return true;
-  } catch (error) {
-    if (error instanceof Feasible) return true;
-    if (error instanceof EmptyPrompt) return false;
-    throw error;
-  }
-}
-
 function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side): LegalMoves {
+  const bounded: Step[] = [];
+  /**
+   * Whether some path of answers to the step's play-time prompts reaches its
+   * commit point with payable costs (steps/feasibility.ts), so legality
+   * never drifts from execution.
+   */
+  const feasible = (step: Step): boolean => {
+    const outcome = searchCommitPoint(state, step, catalog, []);
+    if (outcome.exhausted) bounded.push(step);
+    return outcome.feasible;
+  };
   const zones: readonly PlayZone[] = ["hand", "void"];
   const plays = zones.flatMap((from) =>
     state.sides[side][from]
-      .filter((card) => canPlay(state, catalog, side, card, from) && isFeasible(state, catalog, { kind: "play", card, from }))
+      .filter((card) => canPlay(state, catalog, side, card, from) && feasible({ kind: "play", card, from }))
       .map((card) => ({ card, from })),
   );
   const activations: LegalActivation[] = [];
@@ -65,13 +64,13 @@ function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side): L
       if (
         ability.kind === "activated" &&
         canActivate(state, catalog, side, source, index) &&
-        isFeasible(state, catalog, { kind: "activate", source, ability: index })
+        feasible({ kind: "activate", source, ability: index })
       ) {
         activations.push({ source, ability: index });
       }
     });
   }
-  return { plays, activations };
+  return { plays, activations, bounded };
 }
 
 /** The cards `side` may play and the abilities it may activate now. */

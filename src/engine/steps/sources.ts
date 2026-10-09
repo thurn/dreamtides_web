@@ -1,4 +1,3 @@
-import { firstLegalAnswer } from "../prompts/answers";
 import type { Answer, Prompt } from "../prompts/types";
 import type { BattleState } from "../state/types";
 import type { Side } from "../state/ids";
@@ -52,13 +51,6 @@ export class ScriptedSource implements AnswerSource {
 export const INTERACTIVE: AnswerSource = {
   answer(prompt) {
     throw new Suspend(prompt);
-  },
-};
-
-/** Answers every prompt with its first legal answer. Used by legality dry runs. */
-export const FIRST_LEGAL: AnswerSource = {
-  answer(prompt) {
-    return firstLegalAnswer(prompt);
   },
 };
 

@@ -89,6 +89,13 @@ export interface ChooseTargetsPrompt extends PromptBase {
   readonly candidates: readonly InstanceId[];
   readonly min: number;
   readonly max: number;
+  /**
+   * The complete list of legal answers, present only when the engine withheld
+   * answers the other fields allow: a play-time prompt offers only answers
+   * from which some continuation reaches the commit point with payable costs
+   * (engine-design § Legality by search).
+   */
+  readonly allowed?: readonly (readonly InstanceId[])[];
 }
 
 /** Choose between `min` and `max` distinct cards from a zone. */
@@ -97,6 +104,13 @@ export interface ChooseCardsPrompt extends PromptBase {
   readonly candidates: readonly InstanceId[];
   readonly min: number;
   readonly max: number;
+  /**
+   * The complete list of legal answers, present only when the engine withheld
+   * answers the other fields allow: a play-time prompt offers only answers
+   * from which some continuation reaches the commit point with payable costs
+   * (engine-design § Legality by search).
+   */
+  readonly allowed?: readonly (readonly InstanceId[])[];
 }
 
 export interface ModeOption {
@@ -104,7 +118,7 @@ export interface ModeOption {
   readonly legal: boolean;
 }
 
-/** Choose one legal mode. */
+/** Choose one legal mode; a play-time prompt marks a mode with no feasible continuation not legal. */
 export interface ChooseModePrompt extends PromptBase {
   readonly kind: "chooseMode";
   readonly options: readonly ModeOption[];
@@ -115,6 +129,13 @@ export interface ChooseNumberPrompt extends PromptBase {
   readonly kind: "chooseNumber";
   readonly min: number;
   readonly max: number;
+  /**
+   * The complete list of legal answers, present only when the engine withheld
+   * answers the other fields allow: a play-time prompt offers only answers
+   * from which some continuation reaches the commit point with payable costs
+   * (engine-design § Legality by search).
+   */
+  readonly allowed?: readonly number[];
 }
 
 export type ArrangeDestination = "top" | "bottom" | "void" | "hand";
@@ -138,11 +159,25 @@ export interface ArrangePrompt extends PromptBase {
   readonly cards: readonly InstanceId[];
   /** Distinct destinations, each listed once. */
   readonly destinations: readonly ArrangeSlot[];
+  /**
+   * The complete list of legal answers, present only when the engine withheld
+   * answers the other fields allow: a play-time prompt offers only answers
+   * from which some continuation reaches the commit point with payable costs
+   * (engine-design § Legality by search).
+   */
+  readonly allowed?: readonly ArrangeAnswer[];
 }
 
 /** Accept or decline a "you may". */
 export interface ConfirmPrompt extends PromptBase {
   readonly kind: "confirm";
+  /**
+   * The complete list of legal answers, present only when the engine withheld
+   * answers the other fields allow: a play-time prompt offers only answers
+   * from which some continuation reaches the commit point with payable costs
+   * (engine-design § Legality by search).
+   */
+  readonly allowed?: readonly boolean[];
 }
 
 /** Pay an "unless" cost, or decline. `payable` is false when the cost cannot be paid. */
@@ -150,6 +185,13 @@ export interface PayOrDeclinePrompt extends PromptBase {
   readonly kind: "payOrDecline";
   readonly energy: number;
   readonly payable: boolean;
+  /**
+   * The complete list of legal answers, present only when the engine withheld
+   * answers the other fields allow: a play-time prompt offers only answers
+   * from which some continuation reaches the commit point with payable costs
+   * (engine-design § Legality by search).
+   */
+  readonly allowed?: readonly boolean[];
 }
 
 export type Prompt =

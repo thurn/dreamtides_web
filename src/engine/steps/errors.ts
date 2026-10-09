@@ -25,6 +25,19 @@ export class Feasible extends Error {
   }
 }
 
+/**
+ * A play-time answer path reached the end of its cost choices with costs it
+ * cannot pay, such as an X or an alternative that leaves too little energy
+ * once cost modifications apply. A feasibility search treats it as a dead
+ * end; a real run never reaches one, because its prompts offer only answers
+ * with a feasible continuation.
+ */
+export class Infeasible extends Error {
+  constructor(readonly reason: string) {
+    super(`Infeasible play-time choices: ${reason}`);
+  }
+}
+
 /** Rules code raised a prompt with no legal answer, which must never happen. */
 export class EmptyPrompt extends Error {
   constructor(readonly prompt: Prompt) {

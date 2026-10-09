@@ -99,21 +99,22 @@ const emitThenChoose: EngineCardDefinition = {
   },
 };
 
-// The same nondeterminism in a play-time prompt, so a top-level step fails on replay.
+// The same nondeterminism in a play-time prompt, so a top-level step fails on
+// replay. Its candidates follow a switch the test flips between runs: the
+// legality search and prompt narrowing run the step several times each.
+// eslint-disable-next-line dreamtides/engine-purity -- the fixture must be nondeterministic
+let divergentPlayShifted = false;
 const divergentPlay: EngineCardDefinition = {
   ...divergent,
   id: syntheticId(908),
   synthetic: {
     play: (ctx, self) => {
-      // eslint-disable-next-line dreamtides/engine-purity -- the fixture must be nondeterministic
-      divergentRuns += 1;
-      const run = divergentRuns;
       const hand = ctx.state.sides.player.hand.filter((card) => card !== self);
       ctx.choose<ChooseCardsPrompt>({
         kind: "chooseCards",
         side: "player",
         purpose: { source: self, cardId: null, ability: 0, role: "discard" },
-        candidates: run % 2 === 1 ? hand : hand.slice(1),
+        candidates: divergentPlayShifted ? hand.slice(1) : hand,
         min: 1,
         max: 1,
       });
@@ -448,7 +449,7 @@ describe("prompt ids across attempts", () => {
 describe("prompt ids after a failed attempt", () => {
   it("bounces an answer to a failed attempt's prompt after a new attempt from the same state", () => {
     // eslint-disable-next-line dreamtides/engine-purity -- reset the nondeterministic fixture
-    divergentRuns = 0;
+    divergentPlayShifted = false;
     const { slice: start, ids } = slice({
       active: "player",
       phase: "day",
@@ -457,7 +458,11 @@ describe("prompt ids after a failed attempt", () => {
     });
     const first = applied(play(start, ids.player.hand[0]));
     const stale = pendingOf(first).prompt.id;
+    // eslint-disable-next-line dreamtides/engine-purity -- the re-run after the answer diverges
+    divergentPlayShifted = true;
     const failed = fold.reduce(first, { kind: "answer", side: "player", promptId: stale, value: [ids.player.hand[2]] });
+    // eslint-disable-next-line dreamtides/engine-purity -- the next attempt runs deterministically
+    divergentPlayShifted = false;
     if (failed.kind !== "applied" || failed.error === null) throw new Error("expected an engine error");
     expect(stateHash(failed.slice.committed)).toBe(stateHash(start.committed));
     const second = applied(play(failed.slice, ids.player.hand[0]));
@@ -472,7 +477,8 @@ describe("the event-prefix check", () => {
     const { slice: start, ids } = slice({
       active: "player",
       phase: "day",
-      player: { hand: [emitThenChoose.id, emitThenChoose.id], deck },
+      // X=1 costs 1●, so both answers to the X prompt are payable.
+      player: { hand: [emitThenChoose.id, emitThenChoose.id], energy: 1, deck },
       enemy: { deck },
     });
     const first = applied(play(start, ids.player.hand[0]));

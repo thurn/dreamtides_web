@@ -28,6 +28,7 @@ import { energyChanged, type EnergyChangedEvent } from "./kinds/energy-changed";
 import { eroded, type ErodedEvent } from "./kinds/eroded";
 import { exhaustionChanged, type ExhaustionChangedEvent } from "./kinds/exhaustion-changed";
 import { fatigue, type FatigueEvent } from "./kinds/fatigue";
+import { feasibilityBounded, type FeasibilityBoundedEvent } from "./kinds/feasibility-bounded";
 import { figmentsMerged, type FigmentsMergedEvent } from "./kinds/figments-merged";
 import { laneResolved, type LaneResolvedEvent } from "./kinds/lane-resolved";
 import { leftPlay, type LeftPlayEvent } from "./kinds/left-play";
@@ -80,6 +81,7 @@ export type EngineEvent =
   | ErodedEvent
   | ExhaustionChangedEvent
   | FatigueEvent
+  | FeasibilityBoundedEvent
   | FigmentsMergedEvent
   | LaneResolvedEvent
   | LeftPlayEvent
@@ -133,6 +135,7 @@ export const EVENT_DEFINITIONS = {
   eroded,
   exhaustionChanged,
   fatigue,
+  feasibilityBounded,
   figmentsMerged,
   laneResolved,
   leftPlay,

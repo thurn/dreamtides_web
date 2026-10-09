@@ -1,9 +1,11 @@
 import { hashString } from "../state/hash";
+import { allowedAnswers, canonicalAnswer } from "./answers";
 import type { Prompt, PromptFingerprint } from "./types";
 
 /**
  * A hash of the prompt's identifying fields: kind, side, purpose, sorted
- * candidates, bounds, options, destinations with their counts, and cost. Replaying a step compares it, so
+ * candidates, bounds, options, destinations with their counts, cost, and the
+ * allowed answers of a narrowed prompt. Replaying a step compares it, so
  * nondeterministic rules code fails loudly on the first replay.
  */
 export function promptFingerprint(prompt: Prompt): PromptFingerprint {
@@ -31,5 +33,7 @@ export function promptFingerprint(prompt: Prompt): PromptFingerprint {
       fields.push(prompt.energy, prompt.payable);
       break;
   }
+  const allowed = allowedAnswers(prompt);
+  if (allowed !== undefined) fields.push(allowed.map((answer) => canonicalAnswer(prompt, answer)).sort());
   return hashString(JSON.stringify(fields)).toString(36) as PromptFingerprint;
 }

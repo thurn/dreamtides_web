@@ -19,6 +19,7 @@
  * | a new loop on offer; `loopStarted`, `loopEnded` events | `engine.loop` |
  * | random-stream counters advanced by a step | `engine.rng`, one per stream |
  * | a `battleEnded` event | `engine.battleEnded` |
+ * | a `feasibilityBounded` event; a play or activation a decision leaves out because its legality search ran out of runs | `engine.feasibility` |
  * | a step that threw | `engine.error` |
  *
  * The action and answer records replay the battle from its init; the rest
@@ -84,6 +85,11 @@ export type EngineLogRecord =
       readonly draws: number;
     })
   | (RecordBase & { readonly event: "engine.battleEnded"; readonly result: BattleResult })
+  | (RecordBase & {
+      readonly event: "engine.feasibility";
+      /** A prompt that withheld answers its search could not prove, or a candidate step legality left out unproven. */
+      readonly detail: EventOf<"feasibilityBounded"> | { readonly kind: "legalityBounded"; readonly side: Side; readonly step: Step };
+    })
   | (RecordBase & { readonly event: "engine.error"; readonly step: Step; readonly message: string });
 
 /** One written log line: a record plus what the host adds. */
@@ -104,6 +110,8 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
       return { event: "engine.loop", version, detail: event };
     case "battleEnded":
       return { event: "engine.battleEnded", version, result: event.result };
+    case "feasibilityBounded":
+      return { event: "engine.feasibility", version, detail: event };
     default:
       return null;
   }
@@ -133,6 +141,15 @@ export function stepLogRecords(before: BattleState, after: BattleState): EngineL
     records.push({ event: "engine.loop", version, detail: { kind: "loopOffered", side: offered.side, loop: offered.id } });
   }
   return records;
+}
+
+/**
+ * The `engine.feasibility` records for a committed state's decision: the
+ * plays and activations of the side choosing (`legalMoves(...).bounded`)
+ * whose legality search ran out of runs, so the decision leaves them out.
+ */
+export function legalityLogRecords(side: Side, bounded: readonly Step[], version: number): EngineLogRecord[] {
+  return bounded.map((step) => ({ event: "engine.feasibility", version, detail: { kind: "legalityBounded", side, step } }));
 }
 
 export function promptOpenedRecord(

@@ -51,6 +51,12 @@ export interface StepDefinition<S extends Step> {
    * can be.
    */
   canceller(state: BattleState, step: S): Side | null;
+  /**
+   * The step makes its play-time choices before `ctx.commitPoint()`: legality
+   * searches their answer paths, and a real run offers only answers with a
+   * feasible continuation (steps/feasibility.ts).
+   */
+  readonly hasCommitPoint?: true;
   run(ctx: StepContext, step: S): void;
 }
 

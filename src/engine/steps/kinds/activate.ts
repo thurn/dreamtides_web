@@ -23,6 +23,7 @@ export interface ActivateStep {
 export const activate: StepDefinition<ActivateStep> = {
   kind: "activate",
   canceller: (state, step) => sourceController(state, step.source),
+  hasCommitPoint: true,
   run(ctx, step) {
     const { state, catalog } = ctx;
     const side = sourceController(state, step.source);

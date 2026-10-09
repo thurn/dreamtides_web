@@ -25,6 +25,7 @@ import type { StepContext } from "../steps/types";
 import { discardCard, spendEnergy } from "./resources";
 import { banish, dissolve, instanceOf, slotOf } from "./zones";
 import { revealToBoth } from "../view/knowledge";
+import { Infeasible } from "../steps/errors";
 
 /** A payment cost other than energy, which a plan pays as one total. */
 export type NonEnergyCost = Exclude<PaymentCost, { readonly cost: "energy" }>;
@@ -118,8 +119,9 @@ function sum(values: readonly number[]): number {
 
 /**
  * Whether `side` could pay the mandatory costs that need no card choice:
- * the energy (with X at its minimum), any ☾, and any ⧗. The dry run checks
- * the card choices, alternatives, and optional costs.
+ * the energy (with X at its minimum), any ☾, and any ⧗. Legality's
+ * feasibility search checks the card choices, alternatives, and optional
+ * costs.
  */
 export function costsPayable(
   state: BattleState,
@@ -175,15 +177,18 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
 /**
  * Settles how the costs will be paid, as play-time prompts in printed order:
  * which alternative of each "A or B" cost (an alternative is legal when it
- * can be paid), whether to pay each optional cost (asked only when it can be
- * paid), and the cards that pay each card-choosing cost. Cards in `excluded`
+ * can be paid on its own), whether to pay each optional cost (asked only when
+ * it can be paid), and the cards that pay each card-choosing cost. Cards in `excluded`
  * — the card being played and the ability's targets — and cards chosen for
  * earlier costs are not candidates: a card used to pay a cost is never also
  * a target of the same ability (rules § Targeting). A mandatory cost that
- * cannot be paid raises an empty prompt, which makes the play illegal. Every
- * energy part — top-level, X, and the chosen alternatives' and optional
- * costs' — is one total that `modifier` changes, so an alternative or an
- * optional cost is affordable when the modified total is.
+ * cannot be paid raises an empty prompt, and a plan whose energy total the
+ * side cannot pay throws `Infeasible`: both are dead ends of that path of
+ * answers, so legality's search tries the others and a real run never offers
+ * an answer that leads to one (steps/feasibility.ts). Every energy part —
+ * top-level, X, and the chosen alternatives' and optional costs' — is one
+ * total that `modifier` changes, so an alternative or an optional cost is
+ * affordable when the modified total is.
  */
 export function planCosts(
   ctx: StepContext,
@@ -205,20 +210,22 @@ export function planCosts(
   const payments: PlannedCost[] = [];
   const optionalPaid: boolean[] = [];
 
-  /** Whether every cost in a nested list could be paid on top of what is already committed. */
+  /**
+   * Whether every cost in a nested list could be paid on top of what is
+   * already committed. Its card costs need distinct cards among the cards
+   * not yet used, which Hall's condition decides exactly: every group of
+   * them together has at least as many candidates as it needs cards.
+   */
   const affordable = (list: readonly PaymentCost[]): boolean => {
     if (adjustedEnergy(baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))), modifier) > available) return false;
     if (sum(list.map((cost) => (cost.cost === "counters" ? cost.amount : 0))) > countersLeft) return false;
     const exhausts = list.filter((cost) => cost.cost === "exhaustSelf").length;
     if (exhausts > (exhaustFree ? 1 : 0)) return false;
-    const taken = new Set(used);
-    for (const cost of list) {
-      if (!choosesCards(cost)) continue;
-      const pool = cardCandidates(state, catalog, side, source, cost).filter((id) => !taken.has(id));
-      if (pool.length < cost.count) return false;
-      for (const id of pool.slice(0, cost.count)) taken.add(id);
-    }
-    return true;
+    const demands = list.filter(choosesCards).map((cost) => ({
+      count: cost.count,
+      pool: cardCandidates(state, catalog, side, source, cost).filter((id) => !used.includes(id)),
+    }));
+    return cardsAssignable(demands);
   };
 
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
@@ -275,8 +282,37 @@ export function planCosts(
     }
   }
   const total = adjustedEnergy(baseEnergy, modifier);
+  // A path of choices can reach this point with more energy than the side
+  // has, such as an X a play hook allowed past the cost modifications: a
+  // dead end before the commit point, never a failed payment after it.
+  if (total > available) throw new Infeasible(`${side} cannot pay ${String(total)}●`);
   const fixed = Math.min(total, adjustedEnergy(baseEnergy - (x ?? 0), modifier));
   return { x, energy: { fixed, x: total - fixed }, payments, optionalPaid };
+}
+
+/** One card-choosing cost's need: how many distinct cards, from which candidates. */
+interface CardDemand {
+  readonly count: number;
+  readonly pool: readonly InstanceId[];
+}
+
+/**
+ * Whether the demands can be met with distinct cards: by Hall's condition,
+ * exactly when every group of them has, among all its candidates, at least
+ * as many cards as it needs. A cost list holds few card costs.
+ */
+function cardsAssignable(demands: readonly CardDemand[]): boolean {
+  for (let group = 1; group < 1 << demands.length; group++) {
+    const candidates = new Set<InstanceId>();
+    let needed = 0;
+    demands.forEach((demand, index) => {
+      if ((group & (1 << index)) === 0) return;
+      needed += demand.count;
+      for (const id of demand.pool) candidates.add(id);
+    });
+    if (candidates.size < needed) return false;
+  }
+  return true;
 }
 
 /** Exhausts a source to pay a ☾ cost. */

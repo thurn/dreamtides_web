@@ -314,14 +314,19 @@ These rules make it work:
    includes RNG streams. Iteration order must be deterministic: arrays and
    sorted keys.
 3. **Make the prompt's legal answer set complete and enumerable.** Bounds and
-   candidates are computed by the engine. Answers are validated against the
-   prompt the engine itself raised, never against a client's copy.
+   candidates are computed by the engine, and `legalAnswers` enumerates every
+   legal answer. Answers are validated against the prompt the engine itself
+   raised, never against a client's copy. A play-time prompt offers no
+   dead-end answer: before the commit point the engine narrows it to the
+   answers with a feasible continuation
+   ([Legality by search](#legality-by-search)).
 4. **Handle empty prompts explicitly.** A prompt with zero legal answers
    can't be raised: `choose` throws `EmptyPrompt` (and `MalformedPrompt` for
    a structurally invalid prompt). Rules code avoids raising one (rules §
    Targeting):
-   - At play time, the empty prompt makes the action illegal. A
-     [dry run](#legality-by-dry-run) detects this.
+   - At play time, the empty prompt is a dead end of that path of answers.
+     The [legality search](#legality-by-search) tries the others, and the
+     action is illegal when every path dead-ends.
    - At resolution time, that effect part does nothing and emits
      `noLegalTarget`, without a prompt.
 5. **Cancelling** is possible only for the acting player's own `play` and
@@ -349,7 +354,9 @@ function runStep(start, step, source, catalog, options?: { prefix?, dryRun?, aut
 }
 ```
 
-**The context answers each prompt in this order:**
+**The context answers each prompt in this order,** after a play or
+activation's guard narrows a prompt raised before its commit point to the
+answers with a feasible continuation ([Legality by search](#legality-by-search)):
 
 1. **Recorded answers.** `options.prefix` holds the answers recorded by
    earlier runs of this step, replayed in order. For each one, the context
@@ -375,8 +382,6 @@ The sources (`steps/sources.ts`):
 - **`ScriptedSource`** is used by tests and scenario specs. It answers from a
   list and fails on a prompt with no scripted answer; `assertExhausted()`
   fails on answers left over.
-- **`FIRST_LEGAL`** answers every prompt with its first legal answer, for
-  legality dry runs.
 - **`NO_PROMPTS`** fails on any prompt, for runs that must never prompt.
 
 **The fingerprint** (`prompts/fingerprint.ts`) is a hash of the prompt's
@@ -472,25 +477,63 @@ Properties that follow:
   ("each player discards"), and an AI card can prompt the human. The UI and
   the AI host both just watch `pending.side`.
 
-### Legality by dry run
+### Legality by search
 
 `legalActions(state, side)` (`rules/decision.ts`) lists `pass`, the legal
 plays and activations, and, in a main window, the legal repositions,
 `payToEnd` actions, and the loop on offer. `legalMoves` (`rules/legality.ts`)
 finds the plays and activations: the quick timing and cost checks
-(`canPlay`, `canActivate`) pick the candidates, then a **dry run** of each
-candidate's step (`runStep` with `dryRun`) filters them:
+(`canPlay`, `canActivate`) pick the candidates, then a **feasibility search**
+(`steps/feasibility.ts`) of each candidate's step filters them.
 
-- `FIRST_LEGAL` answers every prompt with its first legal answer.
-- `commitPoint()` throws a `Feasible` sentinel.
-- An `EmptyPrompt` makes the candidate illegal.
+**A play or activation is legal when some path of answers to its play-time
+prompts reaches the commit point with payable costs.** The search runs the
+step's own code in dry runs (`runStep`'s context with `dryRun`), so legality
+never drifts from execution:
 
-Reaching the commit point means every required play-time prompt had a legal
-answer and the costs are payable. This replaces a separately maintained "can
-play?" predicate, so legality can never drift from execution. Results are
-memoized in the engine's `LegalityMemo`, a `WeakMap` keyed by the state
-object (committed states are never mutated, so an entry never goes stale),
-per side. The fold shares the engine's memo; it is never persisted.
+- Each run replays a prefix of answers, answers every later prompt with its
+  first legal answer (`legalAnswers` order), and remembers each such prompt
+  as a choice point.
+- `commitPoint()` throws a `Feasible` sentinel, which proves the path.
+- An `EmptyPrompt`, or a cost plan whose energy total the side cannot pay
+  (`planCosts` throws `Infeasible`), is a dead end. The search backtracks to
+  the deepest choice point with an untried answer and runs again.
+- The search is depth first and stops after
+  `BattleConfig.feasibilitySearchRuns` runs (`BATTLE.feasibilitySearchRuns`).
+  A search that runs out proves nothing: the candidate is left out and
+  listed in `LegalMoves.bounded`, which the fold logs as an
+  `engine.feasibility` record.
+
+The common case costs one run, as the first path pays. Results are memoized
+in the engine's `LegalityMemo`, a `WeakMap` keyed by the state object
+(committed states are never mutated, so an entry never goes stale), per side.
+The fold shares the engine's memo; it is never persisted.
+
+**A legal play can always be paid along whatever path its player answers.**
+A step with a commit point (`hasCommitPoint`: `play`, `activate`) runs with a
+guard that narrows each prompt raised before the commit point to the answers
+a search proves:
+
+- The guard examines the prompt's answers in `legalAnswers` order, at most
+  `feasibilitySearchRuns` of them, searching from each.
+- The narrowed prompt states its legal set in its own fields where they can:
+  fewer candidates, tighter bounds, a mode marked not legal. Otherwise it
+  lists the legal answers in `allowed`. A prompt whose every answer is
+  feasible is unchanged, fingerprint included.
+- An answer withheld only because its search ran out, or because the guard
+  stopped examining, emits a `feasibilityBounded` event (private to the
+  answering side, logged as `engine.feasibility`).
+- `isLegalAnswer`, `forcedAnswer`, `randomLegalAnswer`, and the fingerprint
+  read the narrowed prompt, so a stale or dead-end answer bounces as
+  `illegalAnswer`, a recorded one fails replay, and one feasible answer is
+  answered automatically.
+
+The guard's searches replay the answers given so far against the prompts as
+rules code raised them (`Context.rawAnswers`). The witness path that made the
+play legal stays within budget at every prompt, so a narrowed prompt is never
+empty for a play legality offered. Narrowing is a deterministic function of
+the committed state and the answers, so an inline run, a fold re-run, a
+reload, and a loop replay see the same prompts.
 
 ### Prompt data
 
@@ -523,7 +566,12 @@ type Prompt =
       destinations: { to: "top" | "bottom" | "void" | "hand"; min: number; max: number }[] }
   | { kind: "confirm" }
   | { kind: "payOrDecline"; energy: number; payable: boolean };   // each with PromptBase
+// Every kind but chooseMode may carry `allowed`: the complete list of legal
+// answers of a narrowed play-time prompt whose other fields cannot state it.
 ```
+
+A view of a prompt for the side that does not answer it leaves out
+`allowed`, which names cards.
 
 Rules code passes a `PromptSpec` (a prompt without `cancellable`) to
 `choose`. A prompt has no id inside the engine; the fold adds one
@@ -1159,8 +1207,10 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   worker host and tournament runner build `EngineLogRecord`s from what the
   engine returns. `engine.battleStarted` and the `engine.action` records,
   each with every answer it took, replay the battle from its init; the
-  prompt, trigger, loop, rng, battle-end, and error records explain what the
-  replay does. Records carry instance IDs and catalog UUIDs, never names.
+  prompt, trigger, loop, rng, battle-end, feasibility, and error records
+  explain what the replay does. An `engine.feasibility` record marks where
+  the feasibility search's bound, not the rules, left out a play or withheld
+  an answer. Records carry instance IDs and catalog UUIDs, never names.
 
 ## Views and hidden information
 

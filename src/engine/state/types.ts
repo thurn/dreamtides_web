@@ -54,6 +54,12 @@ export interface BattleConfig {
   readonly loopHistoryActions: number;
   /** Whether a prompt with exactly one legal answer is answered automatically. */
   readonly autoAnswerForcedPrompts: boolean;
+  /**
+   * Most step runs one feasibility search makes, and most answers a narrowed
+   * play-time prompt examines (steps/feasibility.ts). Running out is
+   * conservative: nothing unproven is offered.
+   */
+  readonly feasibilitySearchRuns: number;
   readonly dreamwell: DreamwellConfig;
 }
 

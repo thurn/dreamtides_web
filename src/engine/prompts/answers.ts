@@ -1,6 +1,6 @@
 import type { InstanceId } from "../state/ids";
 import type { BattleConfig } from "../state/types";
-import type { Answer, ArrangeAnswer, ArrangeDestination, ArrangePrompt, Prompt } from "./types";
+import type { Answer, ArrangeAnswer, ArrangeDestination, ArrangePrompt, ArrangeSlot, Prompt } from "./types";
 
 function isInstanceList(value: Answer): value is readonly InstanceId[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
@@ -32,8 +32,8 @@ function isLegalArrangement(prompt: ArrangePrompt, value: ArrangeAnswer): boolea
   });
 }
 
-/** Whether `value` is a legal answer to `prompt`. Answers are validated against the engine's own prompt. */
-export function isLegalAnswer(prompt: Prompt, value: Answer): boolean {
+/** Whether the prompt's fields (candidates, bounds, legal modes, destinations, payability) allow `value`, ignoring `allowed`. */
+export function fieldsAllow(prompt: Prompt, value: Answer): boolean {
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards": {
@@ -67,11 +67,42 @@ export function isLegalAnswer(prompt: Prompt, value: Answer): boolean {
   }
 }
 
+/** The prompt's list of legal answers when it withholds some (`allowed`), else `undefined`. */
+export function allowedAnswers(prompt: Prompt): readonly Answer[] | undefined {
+  return prompt.kind === "chooseMode" ? undefined : prompt.allowed;
+}
+
+/**
+ * A key equal for two answers to `prompt` exactly when they mean the same
+ * choice: a selection is a set, and an arrangement is each destination's
+ * cards in order.
+ */
+export function canonicalAnswer(prompt: Prompt, value: Answer): string {
+  if (prompt.kind === "chooseTargets" || prompt.kind === "chooseCards") {
+    return isInstanceList(value) ? JSON.stringify([...value].sort()) : JSON.stringify(value);
+  }
+  if (prompt.kind === "arrange" && isArrangement(value)) {
+    return JSON.stringify(prompt.destinations.map((slot) => value.filter((entry) => entry.to === slot.to).map((entry) => entry.card)));
+  }
+  return JSON.stringify(value);
+}
+
+/** Whether `value` is a legal answer to `prompt`. Answers are validated against the engine's own prompt. */
+export function isLegalAnswer(prompt: Prompt, value: Answer): boolean {
+  if (!fieldsAllow(prompt, value)) return false;
+  const allowed = allowedAnswers(prompt);
+  if (allowed === undefined) return true;
+  const key = canonicalAnswer(prompt, value);
+  return allowed.some((answer) => canonicalAnswer(prompt, answer) === key);
+}
+
 /**
  * Whether the prompt has at least one legal answer. A prompt without one
  * must never be raised. Assumes the prompt is well formed (`isWellFormedPrompt`).
  */
 export function hasLegalAnswer(prompt: Prompt): boolean {
+  const allowed = allowedAnswers(prompt);
+  if (allowed !== undefined) return allowed.length > 0;
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards":
@@ -93,6 +124,90 @@ export function hasLegalAnswer(prompt: Prompt): boolean {
   }
 }
 
+/** Every `size`-card selection from `pool`, in lexicographic order of positions. */
+function* selections(pool: readonly InstanceId[], size: number, from = 0): Generator<InstanceId[]> {
+  if (size === 0) {
+    yield [];
+    return;
+  }
+  for (let index = from; index <= pool.length - size; index++) {
+    const card = pool[index];
+    if (card === undefined) continue;
+    for (const rest of selections(pool, size - 1, index + 1)) yield [card, ...rest];
+  }
+}
+
+/** Every ordering of `cards`, in lexicographic order of positions. */
+function* orderings(cards: readonly InstanceId[]): Generator<InstanceId[]> {
+  if (cards.length === 0) {
+    yield [];
+    return;
+  }
+  for (const [index, card] of cards.entries()) {
+    for (const rest of orderings([...cards.slice(0, index), ...cards.slice(index + 1)])) yield [card, ...rest];
+  }
+}
+
+/** Every per-destination card count that holds `total` cards, the earlier destinations fullest first. */
+function* destinationCounts(slots: readonly ArrangeSlot[], total: number): Generator<number[]> {
+  const [slot, ...rest] = slots;
+  if (slot === undefined) {
+    if (total === 0) yield [];
+    return;
+  }
+  for (let count = Math.min(slot.max, total); count >= slot.min; count--) {
+    for (const counts of destinationCounts(rest, total - count)) yield [count, ...counts];
+  }
+}
+
+/**
+ * Every legal answer to `prompt`, lazily, each meaning a different choice;
+ * the first is `firstLegalAnswer`. A prompt that lists `allowed` answers
+ * yields those. Selections go from the fewest cards up, numbers and modes
+ * from the lowest, a confirmation accepts before it declines, and an
+ * arrangement lists each ordering of its cards with each split among the
+ * destinations.
+ */
+export function* legalAnswers(prompt: Prompt): Generator<Answer> {
+  const allowed = allowedAnswers(prompt);
+  if (allowed !== undefined) {
+    yield* allowed;
+    return;
+  }
+  switch (prompt.kind) {
+    case "chooseTargets":
+    case "chooseCards":
+      for (let size = prompt.min; size <= Math.min(prompt.max, prompt.candidates.length); size++) {
+        yield* selections(prompt.candidates, size);
+      }
+      return;
+    case "chooseMode":
+      for (const option of prompt.options) if (option.legal) yield option.mode;
+      return;
+    case "chooseNumber":
+      for (let value = prompt.min; value <= prompt.max; value++) yield value;
+      return;
+    case "arrange":
+      for (const order of orderings(prompt.cards)) {
+        for (const counts of destinationCounts(prompt.destinations, order.length)) {
+          let next = 0;
+          yield prompt.destinations.flatMap((slot, index) =>
+            order.slice(next, (next += counts[index] ?? 0)).map((card) => ({ card, to: slot.to })),
+          );
+        }
+      }
+      return;
+    case "confirm":
+      yield true;
+      yield false;
+      return;
+    case "payOrDecline":
+      if (prompt.payable) yield true;
+      yield false;
+      return;
+  }
+}
+
 /**
  * The prompt's only legal answer, when it has exactly one and the battle's
  * config enables auto-answers; otherwise `undefined`.
@@ -102,6 +217,8 @@ export function forcedAnswer(
   config: Pick<BattleConfig, "autoAnswerForcedPrompts">,
 ): Answer | undefined {
   if (!config.autoAnswerForcedPrompts) return undefined;
+  const allowed = allowedAnswers(prompt);
+  if (allowed !== undefined) return allowed.length === 1 ? allowed[0] : undefined;
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards":
@@ -133,6 +250,12 @@ export function forcedAnswer(
 /** A legal answer drawn with `random` (a uniform `[0, 1)` source). */
 export function randomLegalAnswer(prompt: Prompt, random: () => number): Answer {
   const pickIndex = (count: number): number => Math.floor(random() * count);
+  const allowed = allowedAnswers(prompt);
+  if (allowed !== undefined) {
+    const answer = allowed[pickIndex(allowed.length)];
+    if (answer === undefined) throw new Error(`A ${prompt.kind} prompt allows no answer`);
+    return answer;
+  }
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards": {
@@ -186,7 +309,11 @@ export function randomLegalAnswer(prompt: Prompt, random: () => number): Answer 
   }
 }
 
-/** The first legal answer: the minimum selection, the lowest legal mode or number, or "decline". */
+/**
+ * The first legal answer, which `legalAnswers` also yields first: the first
+ * allowed answer, the minimum selection, the lowest legal mode or number,
+ * acceptance, or paying when payable.
+ */
 export function firstLegalAnswer(prompt: Prompt): Answer {
   return randomLegalAnswer(prompt, () => 0);
 }

@@ -47,6 +47,7 @@ export function battleConfig(init: BattleInit): BattleConfig {
     loopIterationCap: BATTLE.loopIterationCap,
     loopHistoryActions: BATTLE.loopHistoryActions,
     autoAnswerForcedPrompts: BATTLE.autoAnswerForcedPrompts,
+    feasibilitySearchRuns: BATTLE.feasibilitySearchRuns,
     dreamwell: {
       recurringOrders: [...DREAMWELL_RULES.recurringOrders],
       cardsPerRecurringOrder: DREAMWELL_RULES.cardsPerRecurringOrder,

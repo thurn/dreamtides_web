@@ -1,12 +1,14 @@
 /**
  * Prompt structure and answer helpers on synthetic prompts: arrangement
- * cardinality, answer validation, well-formedness, and the fields each
- * fingerprint identifies.
+ * cardinality, answer validation, well-formedness, the fields each
+ * fingerprint identifies, answer enumeration, and narrowing to feasible
+ * answers.
  */
 import { describe, expect, it } from "vitest";
 import type { InstanceId } from "../state/ids";
-import { firstLegalAnswer, forcedAnswer, hasLegalAnswer, isLegalAnswer, randomLegalAnswer } from "./answers";
+import { canonicalAnswer, firstLegalAnswer, forcedAnswer, hasLegalAnswer, isLegalAnswer, legalAnswers, randomLegalAnswer } from "./answers";
 import { promptFingerprint } from "./fingerprint";
+import { narrowPrompt } from "./narrow";
 import { isWellFormedPrompt } from "./structure";
 import type { ArrangePrompt, ArrangeSlot, Prompt, PromptPurpose } from "./types";
 
@@ -191,5 +193,74 @@ describe("prompt structure", () => {
     for (const prompt of wellFormed) {
       expect(isWellFormedPrompt(prompt)).toBe(true);
     }
+  });
+});
+
+describe("answer enumeration and narrowing", () => {
+  const base = { side: "player", purpose, cancellable: false } as const;
+  const prompts: Prompt[] = [
+    { ...base, kind: "chooseCards", candidates: [a, b, c, d], min: 1, max: 2 },
+    { ...base, kind: "chooseTargets", candidates: [a, b], min: 0, max: 2 },
+    { ...base, kind: "chooseMode", options: [{ mode: 0, legal: false }, { mode: 1, legal: true }, { mode: 2, legal: true }] },
+    { ...base, kind: "chooseNumber", min: 1, max: 4 },
+    { ...base, kind: "confirm" },
+    { ...base, kind: "payOrDecline", energy: 1, payable: true },
+    { ...base, kind: "payOrDecline", energy: 1, payable: false },
+    arrange([a, b, c], [{ to: "top", min: 1, max: 2 }, { to: "void", min: 0, max: 3 }]),
+  ];
+  const counts = [4 + 6, 1 + 2 + 1, 2, 4, 2, 2, 1, 6 * 2];
+
+  it("lists every legal answer once, the first legal answer first", () => {
+    prompts.forEach((prompt, index) => {
+      const answers = [...legalAnswers(prompt)];
+      expect(answers).toHaveLength(counts[index]);
+      expect(new Set(answers.map((answer) => canonicalAnswer(prompt, answer))).size).toBe(answers.length);
+      expect(answers.every((answer) => isLegalAnswer(prompt, answer))).toBe(true);
+      expect(answers[0]).toEqual(firstLegalAnswer(prompt));
+    });
+  });
+
+  it("leaves a prompt unchanged when every answer is feasible", () => {
+    for (const prompt of prompts) expect(narrowPrompt(prompt, [...legalAnswers(prompt)])).toBe(prompt);
+  });
+
+  it("narrows candidates, bounds, and modes where they state the feasible answers exactly", () => {
+    const cards: Prompt = { ...base, kind: "chooseCards", candidates: [a, b, c], min: 1, max: 1 };
+    expect(narrowPrompt(cards, [[a], [c]])).toEqual({ ...cards, candidates: [a, c] });
+    const number: Prompt = { ...base, kind: "chooseNumber", min: 0, max: 3 };
+    expect(narrowPrompt(number, [0, 1])).toEqual({ ...number, max: 1 });
+    const modes: Prompt = { ...base, kind: "chooseMode", options: [{ mode: 0, legal: true }, { mode: 1, legal: true }] };
+    expect(narrowPrompt(modes, [1])).toEqual({ ...modes, options: [{ mode: 0, legal: false }, { mode: 1, legal: true }] });
+    expect(hasLegalAnswer(narrowPrompt(number, []))).toBe(false);
+  });
+
+  it("lists the allowed answers otherwise, and every answer helper keeps to them", () => {
+    const pairs: Prompt = { ...base, kind: "chooseCards", candidates: [a, b, c], min: 2, max: 2 };
+    const narrowed = narrowPrompt(pairs, [[a, c], [b, c]]);
+    expect(narrowed).toEqual({ ...pairs, allowed: [[a, c], [b, c]] });
+    expect(isWellFormedPrompt(narrowed)).toBe(true);
+    expect(isLegalAnswer(narrowed, [c, b])).toBe(true);
+    expect(isLegalAnswer(narrowed, [a, b])).toBe(false);
+    expect([...legalAnswers(narrowed)]).toEqual([[a, c], [b, c]]);
+    expect(forcedAnswer(narrowed, autoAnswer)).toBeUndefined();
+    const random = sequence(3);
+    for (let draw = 0; draw < 20; draw++) expect(isLegalAnswer(narrowed, randomLegalAnswer(narrowed, random))).toBe(true);
+    expect(promptFingerprint(narrowed)).not.toBe(promptFingerprint(pairs));
+
+    const confirm = narrowPrompt({ ...base, kind: "confirm" }, [false]);
+    expect(confirm).toEqual({ ...base, kind: "confirm", allowed: [false] });
+    expect(forcedAnswer(confirm, autoAnswer)).toBe(false);
+    expect(forcedAnswer(confirm, noAutoAnswer)).toBeUndefined();
+    expect(isLegalAnswer(confirm, true)).toBe(false);
+
+    const gap = narrowPrompt({ ...base, kind: "chooseNumber", min: 0, max: 3 }, [0, 2]);
+    expect(gap).toEqual({ ...base, kind: "chooseNumber", min: 0, max: 2, allowed: [0, 2] });
+    expect(isLegalAnswer(gap, 1)).toBe(false);
+  });
+
+  it("rejects allowed answers that repeat or that the prompt's fields do not allow", () => {
+    expect(isWellFormedPrompt({ ...base, kind: "chooseCards", candidates: [a, b], min: 1, max: 1, allowed: [[a], [a]] })).toBe(false);
+    expect(isWellFormedPrompt({ ...base, kind: "chooseCards", candidates: [a, b], min: 1, max: 1, allowed: [[c]] })).toBe(false);
+    expect(isWellFormedPrompt({ ...base, kind: "chooseNumber", min: 0, max: 1, allowed: [2] })).toBe(false);
   });
 });

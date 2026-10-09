@@ -5,6 +5,7 @@ import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { Context } from "./context";
 import { Suspend } from "./errors";
+import { feasibilityGuard } from "./feasibility";
 import { stepDefinition, type Step } from "./kinds";
 import type { AnswerSource, RecordedAnswer, StepResult } from "./types";
 
@@ -30,7 +31,8 @@ function madeChoice(answers: readonly RecordedAnswer[]): boolean {
 
 /**
  * Runs one step from a committed state. The step works on a private copy,
- * so a step that suspends or throws leaves `start` untouched. A completed
+ * so a step that suspends or throws leaves `start` untouched. A step with a
+ * commit point offers only play-time answers with a feasible continuation. A completed
  * step gets the state-based victory check (P5), the mandatory-loop checks
  * (an exact repeat and the resolution cap), loop detection, and a new
  * version.
@@ -49,6 +51,7 @@ export function runStep(
     dryRun: options.dryRun,
     replay: options.replay,
     canceller: definition.canceller(start, step),
+    ...(definition.hasCommitPoint === true && options.dryRun !== true ? { guard: feasibilityGuard(start, step, catalog) } : {}),
   });
   try {
     definition.run(ctx, step);
