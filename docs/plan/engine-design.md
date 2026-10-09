@@ -729,7 +729,9 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   oncePerTurn? }`. A queued trigger records its source, controller, origin
   (card variant, figment, or emblem), ability index, floating-trigger node,
   and `subject`, the card the event concerns, so it resolves even after its
-  source moves or ceases to exist.
+  source moves or ceases to exist. A "when … gains ✦" trigger also records
+  `gain`, the matched gain's amount and expiry, which the trigger's effect
+  reads as `env.gain`, the view shows, and `triggerQueued` logs.
 - **Ordering.** Matches enqueue in event order. Simultaneous matches use the
   fixed order: the active side first; within a side, avatar → dreamsigns →
   characters, B0→B9 then F0→F8. Cards in other zones follow, ordered by zone
@@ -760,6 +762,19 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   (`triggerNamed`).
 - **Disabled triggers** (`disableTriggers`, optionally while a condition
   holds) suppress matching.
+- **Additional spark** (C17, rules § Spark → Additional spark): `gainSpark`
+  emits `sparkGained` with the gain's amount, its expiry (`never` for a
+  permanent gain), and `additional: false`. The `gainsSpark` trigger
+  (`whenGainsSpark(subject)`) matches each such event with an amount of at
+  least 1 whose character matches the subject as the gain happens. Its
+  effect `gainAdditionalSpark(it, N)` gives the subject, while it is in
+  play, N✦ with the matched gain's own expiry, so both end together: the
+  same end of turn, the same "while this is in play" source, or the same
+  payable effect. It does nothing when that duration is already over, and
+  resolving it in any other ability throws. Its gain emits `sparkGained`
+  with `additional: true`, which matches no trigger, so it never retriggers
+  and each source adds exactly N. Spark a character has (statics, Support,
+  anthems, `forDuration` changes) emits no `sparkGained` and never matches.
 
 ## Continuous effects
 
@@ -1010,7 +1025,7 @@ with the ones Phase 5 adds as content batches need them, each with tests.
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
 | Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral) | `draw` at cost 0, `discover`, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
-| Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
+| Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)` | `forEach`, `eachPlayer`, `takeExtraTurn` (C8) |

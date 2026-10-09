@@ -1,7 +1,8 @@
 /**
  * Synthetic fixtures for triggers and durations: named triggers, "when"
  * patterns, functional zones, intervening conditions, once-per-turn,
- * floating and delayed triggers, disabled triggers, and every duration kind.
+ * floating and delayed triggers, disabled triggers, additional spark, and
+ * every duration kind.
  * Test fixtures only, never catalog content. Cards use synthetic ids 600+,
  * emblems 700+.
  */
@@ -26,6 +27,7 @@ import {
   whenAbandon,
   whenDiscard,
   whenDraw,
+  whenGainsSpark,
   whenLeavesPlay,
   whenLeavesVoid,
   whenMaterialize,
@@ -127,6 +129,8 @@ export const TRIGGER = {
   preventOnPlay: character(31, 2, () => [triggered(whenOpponentPlays(), p.prevent(stackItem({ controller: "opponent" })))]),
   /** "▸Dissolved: Dissolve two enemies." — a required two-target trigger. */
   dissolvedTwo: character(32, 2, () => [triggered(onDissolved(), p.dissolve(target(enemyCharacter(), 2)))]),
+  /** "When a character you control gains ✦, it gains 1 additional ✦." (C17) */
+  additionalSpark: character(33, 1, () => [triggered(whenGainsSpark(characterYouControl()), p.gainAdditionalSpark(triggeringCard(), 1))], 2),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 export const TRIGGER_CARDS: readonly EngineCardDefinition[] = Object.values(TRIGGER);
@@ -148,6 +152,12 @@ export const TRIGGER_DREAMSIGN = {
   voidLeaves: { id: parseDreamsignId(emblemText(13)), status: "authored", abilities: () => [triggered(whenLeavesVoid(), p.gainEnergy(1))] },
   /** "When you play an event, draw a card." */
   eventDraw: { id: parseDreamsignId(emblemText(14)), status: "authored", abilities: () => [triggered(whenYouPlay({ cardType: "event" }), p.draw(1))] },
+  /** "When a character you control gains ✦, it gains 1 additional ✦." (C17) */
+  additionalSpark: {
+    id: parseDreamsignId(emblemText(15)),
+    status: "authored",
+    abilities: () => [triggered(whenGainsSpark(characterYouControl()), p.gainAdditionalSpark(triggeringCard(), 1))],
+  },
 } as const satisfies Record<string, EngineDreamsignDefinition>;
 
 export const TRIGGER_EMBLEMS: EmblemDefinitions = {

@@ -1,7 +1,7 @@
 import type { EngineCatalog } from "../catalog";
 import type { PromptPurpose, PromptRole } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import type { AbilityOrigin, BattleState, ContinuousChange, Expiry } from "../state/types";
+import type { AbilityOrigin, BattleState, ContinuousChange, Expiry, SparkGain } from "../state/types";
 import type { StepContext } from "../steps/types";
 import type { CharacterRef, PlayTimeTarget, SelfSpec, StackTargetSpec, SubjectSpec, TargetSpec, ValueExpr, Variant } from "../dsl/types";
 
@@ -41,6 +41,8 @@ export interface EffectEnv {
   readonly root: EffectNode;
   /** The card the triggering event concerns, for a trigger; otherwise `null`. */
   readonly subject: InstanceId | null;
+  /** The gain a "when … gains ✦" trigger matched; otherwise `null`. */
+  readonly gain: SparkGain | null;
   readonly controller: Side;
   readonly variant: Variant;
   /** The value chosen for X, or `null`. */

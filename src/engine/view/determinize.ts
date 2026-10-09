@@ -171,7 +171,15 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
   const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap((trigger) =>
     trigger.source === null || trigger.origin === null
       ? []
-      : [{ source: copy(trigger.source), controller: trigger.controller, origin: copy(trigger.origin), ability: trigger.ability, node: trigger.node, subject: trigger.subject }],
+      : [{
+          source: copy(trigger.source),
+          controller: trigger.controller,
+          origin: copy(trigger.origin),
+          ability: trigger.ability,
+          node: trigger.node,
+          subject: trigger.subject,
+          ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
+        }],
   );
   const payable: PayableEffect[] = view.payable.map((effect) => ({
     id: effect.id,

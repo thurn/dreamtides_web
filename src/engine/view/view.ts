@@ -15,6 +15,7 @@ import type {
   FloatingEffect,
   PlayedCard,
   Printing,
+  SparkGain,
   StackItem,
   TurnState,
 } from "../state/types";
@@ -123,6 +124,8 @@ export interface QueuedTriggerView {
   readonly ability: number;
   readonly node: number | null;
   readonly subject: InstanceId | null;
+  /** The gain a "when … gains ✦" trigger matched, which is public; absent for any other trigger. */
+  readonly gain?: SparkGain;
 }
 
 /**
@@ -308,6 +311,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       ability: trigger.ability,
       node: trigger.node,
       subject: trigger.subject !== null && visible(trigger.subject) ? trigger.subject : null,
+      ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
     })),
     turnLog: {
       played: {

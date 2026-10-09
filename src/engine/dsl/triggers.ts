@@ -80,6 +80,11 @@ export function whenLeavesPlay(subject: TriggerSubject = "self"): Trigger {
   return { on: "leavesPlay", subject };
 }
 
+/** "When a character matching `subject` gains ✦" (rules § Spark → Additional spark). */
+export function whenGainsSpark(subject: TriggerSubject = { controller: "you" }): Trigger {
+  return { on: "gainsSpark", subject };
+}
+
 export function whenScores(subject: TriggerSubject = "self"): Trigger {
   return { on: "scores", subject };
 }

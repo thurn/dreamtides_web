@@ -17,7 +17,7 @@ export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): 
 }
 
 function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
-  const { source, controller, origin, ability, node, subject } = trigger;
+  const { source, controller, origin, ability, node, subject, gain } = trigger;
   const body = triggerBody(ctx.catalog, origin, ability, node);
   const applied =
     body.condition === null ||
@@ -26,5 +26,5 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   if (!applied) return;
   const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role));
   if (choices === null) return;
-  resolveEffect(ctx, body.effect, { source, origin, ability, root: body.root, subject, controller, x: null, optionalPaid: [], choices });
+  resolveEffect(ctx, body.effect, { source, origin, ability, root: body.root, subject, gain: gain ?? null, controller, x: null, optionalPaid: [], choices });
 }

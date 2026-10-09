@@ -1,5 +1,5 @@
 import type { AbilitySource, InstanceId, Side } from "../../state/ids";
-import type { BattleState } from "../../state/types";
+import type { BattleState, SparkGain } from "../../state/types";
 import type { EventDefinition } from "../types";
 
 /** A triggered ability matched an event and joined the end of the trigger queue (D14). */
@@ -11,6 +11,8 @@ export interface TriggerQueuedEvent {
   /** A floating or delayed trigger's node; `null` for a triggered ability. */
   readonly node: number | null;
   readonly subject: InstanceId | null;
+  /** The gain a "when … gains ✦" trigger matched; absent for any other trigger. */
+  readonly gain?: SparkGain;
 }
 
 /**

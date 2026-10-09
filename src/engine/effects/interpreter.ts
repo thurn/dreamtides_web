@@ -13,7 +13,7 @@ import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
-import type { AbilityOrigin, BattleState, EffectChoices } from "../state/types";
+import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
 import { primitiveDefinition } from "./registry";
@@ -487,6 +487,8 @@ export interface ResolveOptions {
   readonly root?: EffectNode;
   /** The card the triggering event concerns, for a trigger. */
   readonly subject?: InstanceId | null;
+  /** The gain a "when … gains ✦" trigger matched. */
+  readonly gain?: SparkGain | null;
   readonly controller: Side;
   readonly x: number | null;
   /** Whether each optional cost of the item was paid, in printed order. */
@@ -505,6 +507,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     ability: options.ability,
     root: options.root ?? effect,
     subject: options.subject ?? null,
+    gain: options.gain ?? null,
     controller: options.controller,
     variant: options.origin.kind === "card" ? options.origin.variant : BASE_VARIANT,
     x: options.x,

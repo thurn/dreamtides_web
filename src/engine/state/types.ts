@@ -312,6 +312,18 @@ export interface QueuedTrigger {
   readonly node: number | null;
   /** The card the triggering event concerns ("it", "that character"), if any. */
   readonly subject: InstanceId | null;
+  /** The gain a "when … gains ✦" trigger matched; absent for any other trigger. */
+  readonly gain?: SparkGain;
+}
+
+/**
+ * One "gains +N✦" event as a trigger sees it: the amount and the expiry the
+ * gained spark has, so "it gains 1 additional ✦" ends with it (rules § Spark →
+ * Additional spark).
+ */
+export interface SparkGain {
+  readonly amount: number;
+  readonly expiry: Expiry;
 }
 
 /**

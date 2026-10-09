@@ -16,7 +16,7 @@ import { endFloating, floatingTriggers } from "../rules/floating";
 import { charactersInPlay } from "../rules/zones";
 import type { AbilitySource, InstanceId, Side, Zone } from "../state/ids";
 import { opponent, sourceInstance } from "../state/ids";
-import type { AbilityOrigin, BattleState, QueuedTrigger } from "../state/types";
+import type { AbilityOrigin, BattleState, QueuedTrigger, SparkGain } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { triggerBody } from "./body";
 
@@ -41,6 +41,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   discard: ["discarded"],
   abandon: ["abandoned"],
   leavesPlay: ["leftPlay"],
+  gainsSpark: ["sparkGained"],
   scores: ["laneResolved"],
   opponentScores: ["laneResolved"],
   leavesVoid: ["leftVoid"],
@@ -145,9 +146,10 @@ function subjectMatches(
   return matchesCharacter(state, catalog, subject, id, listener.controller, listener.source);
 }
 
-/** A match and the card its event concerns. */
+/** A match, the card its event concerns, and the gain a "when … gains ✦" trigger matched. */
 interface Match {
   readonly subject: InstanceId | null;
+  readonly gain?: SparkGain;
 }
 
 const NO_SUBJECT: Match = { subject: null };
@@ -243,6 +245,13 @@ function matchKind(
       return event.kind === "leftPlay" && subjectMatches(state, catalog, trigger.subject, event.instance, listener)
         ? { subject: event.instance }
         : null;
+    case "gainsSpark":
+      return event.kind === "sparkGained" &&
+        event.amount > 0 &&
+        !event.additional &&
+        subjectMatches(state, catalog, trigger.subject, event.instance, listener)
+        ? { subject: event.instance, gain: { amount: event.amount, expiry: event.expiry } }
+        : null;
     case "scores":
       return event.kind === "laneResolved" &&
         event.scored > 0 &&
@@ -294,7 +303,7 @@ function enqueueAbility(
   listener: Listener,
   ability: TriggeredAbility,
   index: number,
-  subject: InstanceId | null,
+  match: Match,
 ): void {
   const { state, catalog } = ctx;
   const self = sourceInstance(listener.source);
@@ -304,7 +313,7 @@ function enqueueAbility(
   const scope = { controller: listener.controller, source: listener.source, optionalPaid: [] };
   if (ability.condition !== undefined && !conditionHolds(state, catalog, ability.condition, scope)) return;
   if (ability.oncePerTurn === true) state.oncePerTurn.push(key);
-  enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, subject });
+  enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match });
 }
 
 function enqueue(ctx: StepContext, trigger: QueuedTrigger): void {
@@ -316,6 +325,7 @@ function enqueue(ctx: StepContext, trigger: QueuedTrigger): void {
     ability: trigger.ability,
     node: trigger.node,
     subject: trigger.subject,
+    ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
   });
 }
 
@@ -324,7 +334,7 @@ function matchListener(ctx: StepContext, listener: Listener, event: EngineEvent)
     if (ability.kind !== "triggered") return;
     const inZone = listener.emblem || worksIn(ability.zone, listener.zone);
     const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, listener, inZone);
-    if (match !== null) enqueueAbility(ctx, listener, ability, index, match.subject);
+    if (match !== null) enqueueAbility(ctx, listener, ability, index, match);
   });
 }
 
@@ -338,7 +348,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent): void {
     const match = matchTrigger(ctx.state, ctx.catalog, trigger, event, listener, true);
     if (match === null) continue;
     if (once) endFloating(ctx, (entry) => entry.id === effect.id);
-    enqueue(ctx, { source: effect.source, controller: side, origin: ref.origin, ability: ref.ability, node: ref.node, subject: match.subject });
+    enqueue(ctx, { source: effect.source, controller: side, origin: ref.origin, ability: ref.ability, node: ref.node, ...match });
   }
 }
 
@@ -383,6 +393,6 @@ export function triggerNamed(ctx: StepContext, id: InstanceId, named: NamedTrigg
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered" || !hasNamed(ability.trigger, named)) return;
     if (named !== "dissolved" && !worksIn(ability.zone, listener.zone)) return;
-    enqueueAbility(ctx, listener, ability, index, id);
+    enqueueAbility(ctx, listener, ability, index, { subject: id });
   });
 }

@@ -255,6 +255,12 @@ export type Trigger =
   | { readonly on: "discard"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "abandon"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "leavesPlay"; readonly subject: TriggerSubject }
+  /**
+   * "When … gains ✦": each "gains +N✦" event with N ≥ 1, permanent or with a
+   * duration, except an additional gain (rules § Spark → Additional spark).
+   * Spark a character has never triggers it.
+   */
+  | { readonly on: "gainsSpark"; readonly subject: TriggerSubject }
   /** "When … scores ⍟": a challenge converts the character's spark into points. */
   | { readonly on: "scores"; readonly subject: TriggerSubject }
   /** "When the opponent scores ⍟": a character the opponent controls scores. */
