@@ -1,0 +1,13 @@
+{"retrospective":"2026-10-05","phase":1,"bead":"hv-b8ef.5","covers":["hv-b8ef.1","hv-b8ef.2","hv-b8ef.3","hv-b8ef.4","hv-b8ef.5","hv-b8ef.6","hv-b8ef.7","hv-b8ef.8","hv-b8ef.9","hv-b8ef.10","hv-b8ef.11","hv-b8ef.12"]}
+{"retrospective":"2026-10-09","phase":2,"bead":"hv-47xj.18","covers":["hv-47xj.1","hv-47xj.2","hv-47xj.3","hv-47xj.4","hv-47xj.5","hv-47xj.6","hv-47xj.7","hv-47xj.8","hv-47xj.9","hv-47xj.10","hv-47xj.11","hv-47xj.12","hv-47xj.13","hv-47xj.14","hv-47xj.15","hv-47xj.16","hv-47xj.19","hv-47xj.20","hv-47xj.21","hv-47xj.22","hv-47xj.23","hv-47xj.24","hv-47xj.25","hv-47xj.26","hv-47xj.27","hv-47xj.28","hv-47xj.29","hv-47xj.30","hv-47xj.31","hv-47xj.32","hv-47xj.33","hv-47xj.34","hv-47xj.35","hv-47xj.36","hv-47xj.37","hv-47xj.38","hv-47xj.39","hv-47xj.40","hv-47xj.41","hv-47xj.42","hv-47xj.43","hv-47xj.44","hv-47xj.45","hv-47xj.46","hv-47xj.47","hv-47xj.49","hv-47xj.50","hv-47xj.51","hv-47xj.52","hv-47xj.53","hv-47xj.54","hv-47xj.55"]}
+{"retrospective":"2026-10-09","phase":3,"bead":"hv-47xj.18","covers":["hv-7x4l.1","hv-7x4l.2","hv-7x4l.3","hv-7x4l.4","hv-7x4l.5","hv-7x4l.6","hv-7x4l.7","hv-7x4l.8","hv-7x4l.9","hv-7x4l.10","hv-7x4l.13","hv-7x4l.14","hv-7x4l.15","hv-7x4l.16","hv-7x4l.17","hv-7x4l.18","hv-7x4l.19","hv-7x4l.20","hv-7x4l.21","hv-7x4l.22","hv-7x4l.23","hv-7x4l.24","hv-7x4l.25","hv-7x4l.26","hv-7x4l.27","hv-7x4l.28","hv-7x4l.29","hv-7x4l.30","hv-7x4l.31","hv-7x4l.32","hv-7x4l.33","hv-7x4l.34","hv-7x4l.35","hv-7x4l.36"]}
+{"tag":"worktree-write-hook-misfire","phase":2,"reason":"harness issue: the Write/Edit hook refuses .worktrees paths; no repository fix"}
+{"tag":"worktree-write-hook-misfire","phase":3,"reason":"harness issue: the Write/Edit hook refuses .worktrees paths; no repository fix"}
+{"tag":"review-follow-up-bead","phase":"T","reason":"by design: D18 files accepted core-review findings as follow-up beads"}
+{"tag":"domain-string-audit-engine-ids","phase":3,"bead":"hv-47xj.25"}
+{"tag":"qa-scenes-nondeterministic","phase":2,"bead":"hv-47xj.50"}
+{"tag":"playwright-screenshot-root","phase":2,"bead":"hv-47xj.54"}
+{"tag":"bead-areas-incomplete","phase":2,"bead":"hv-47xj.55"}
+{"tag":"bead-areas-incomplete","phase":3,"bead":"hv-47xj.55"}
+{"tag":"host-load-noise","phase":2,"reason":"shared host: every timing records hostLoad and budgets are judged at comparable load (metrics.md, Phase 1 retrospective)"}
+{"retrospective":"2026-10-09","phase":"T","bead":"hv-47xj.18","covers":["hv-ki3p.1","hv-ki3p.2","hv-ki3p.3","hv-ki3p.4","hv-ki3p.5","hv-ki3p.6","hv-ki3p.7","hv-ki3p.8","hv-ki3p.9","hv-ki3p.10","hv-ki3p.12","hv-ki3p.13","hv-ki3p.14","hv-ki3p.15","hv-ki3p.16","hv-ki3p.17","hv-ki3p.18","hv-ki3p.19","hv-ki3p.20","hv-ki3p.21","hv-ki3p.24"]}

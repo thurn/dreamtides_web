@@ -596,7 +596,9 @@ its own commit:
   slow checks, flaky tests, confusing code, a missing primitive or helper,
   an awkward abstraction, a misleading doc. An empty list is fine.
 - **`tag`** is a short stable kebab-case slug. Reuse an existing tag for the
-  same cause, so that recurrence can be counted with `jq`.
+  same cause, so that recurrence can be counted. Tags that name one cause in
+  different words map to one canonical tag through the `aliases` in
+  `docs/plan/evidence/friction-tags.json`.
 
 Gate outcomes (wall time, candidates, CI repairs) come from Tollgate's history
 at retrospective time, not from the friction file.
@@ -607,7 +609,8 @@ the per-bead files existed. Retrospectives read both.
 
 File an **improvement bead** when either of these holds:
 
-- the same friction tag appears in **3 beads** within a phase;
+- the same friction tag appears in **3 beads** within a phase
+  (`triggerBeads` in `docs/plan/evidence/friction-tags.json`);
 - a [budget](#validation-ladder) in `metrics.md` is exceeded by **more than
   50% on 3 consecutive beads** at comparable host load.
 
@@ -629,11 +632,30 @@ An improvement bead:
 A friction cause that is a prerequisite of a running bead is handled as a
 prerequisite bead at once, without waiting for a trigger.
 
+The orchestrator runs **`npm run friction:triggers`** at every dispatch
+boundary. It reads the friction files and `friction.jsonl`, normalizes tags
+through the alias map, and lists every fired tag trigger with its disposition
+from the ledger `docs/plan/evidence/introspection.jsonl`. It exits non-zero
+when a fired trigger has no disposition. Each fired trigger gets one ledger
+line per phase. The improvement bead appends its own line in its commit; the
+orchestrator has the next dispatched bead append a `reason` line:
+
+```json
+{"tag":"playwright-screenshot-root","phase":2,"bead":"hv-47xj.54"}
+{"tag":"worktree-write-hook-misfire","phase":3,"reason":"harness issue: the Write/Edit hook refuses .worktrees paths; no repository fix"}
+```
+
+- **`bead`** is the improvement bead filed for the trigger.
+- **`reason`** records why no bead is filed, such as a harness issue
+  outside the repository or friction that a decision makes by design.
+
 ### Retrospectives
 
 Run a retrospective **after every 10th closed bead within a phase** and as part
 of every **phase gate**. Run it as a read-only subagent at a dispatch
-boundary, before the next bead is dispatched:
+boundary, before the next bead is dispatched. `npm run friction:triggers`
+reports, per phase, the friction files that no recorded retrospective covers
+and marks a phase whose count reaches `retrospectiveCadence` (10) as due.
 
 1. Run the Hive `sage` skill read-only, scoped to this project's workflow
    since the last retrospective. Its inputs:
@@ -653,6 +675,14 @@ boundary, before the next bead is dispatched:
    `hive_project`. Budgets may be revised here, with the reason recorded in
    `metrics.md`.
 4. Record the summary and the filed bead IDs in the phase epic's notes.
+5. Return a retrospective line for `docs/plan/evidence/introspection.jsonl`
+   listing the friction beads it covered, and a disposition line for each
+   fired trigger it resolved. The orchestrator has the next dispatched bead
+   append them:
+
+   ```json
+   {"retrospective":"2026-10-09","phase":2,"bead":"hv-47xj.18","covers":["hv-47xj.1","hv-47xj.2"]}
+   ```
 
 At a phase gate, the retrospective runs before the independent review. The gate
 closes only after every bead it filed has closed.
@@ -796,6 +826,9 @@ evidence lands in its own commit and is found by bead ID:
 - **Files that exactly one bead writes** are never an area conflict either:
   `content-inventory.json` (5.1), `legacy-behavior.md` (4.7), and each
   tournament report `ai/<run-id>.md`.
+- **The introspection ledger**, `introspection.jsonl`, is the one shared
+  append-only evidence file: trigger dispositions and retrospective
+  coverage ([Triggers](#triggers), [Retrospectives](#retrospectives)).
 - **Track T beads** record their friction JSON in their bead notes. T10
   writes those as friction files in one `dreamtides_web` commit.
 
