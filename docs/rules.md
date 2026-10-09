@@ -574,7 +574,11 @@ individually.
 
 A card that "cannot be targeted by effects" cannot be chosen as a target by any
 effect, including effects its own controller controls. Effects that do not
-target, such as "Dissolve all characters", still affect it.
+target, such as "Dissolve all characters", still affect it. A chosen target that
+cannot be targeted by effects when the card or ability resolves, such as a
+character that gained this after it was chosen, is no longer a legal target: the
+effect does not affect it, and a part of the effect left with no legal target
+does nothing.
 
 **Required choices with no legal option:** A card cannot be played, and an
 ability cannot be activated, if a choice it requires when it is played — such
