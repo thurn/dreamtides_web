@@ -35,3 +35,4 @@ export * from "./sequence";
 export * from "./set-base-spark";
 export * from "./spark-modifier";
 export * from "./trigger-ability";
+export * from "./win-the-game";

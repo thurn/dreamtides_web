@@ -5,7 +5,7 @@ import type { Ability } from "./types";
 /**
  * The effect an ability resolves or applies: an event's, an activated or
  * triggered ability's, or a static ability's continuous primitive. Keywords,
- * additional costs, and reclaim carry no effect.
+ * additional costs, reclaim, and win conditions carry no effect.
  */
 export function abilityEffect(ability: Ability): Effect | null {
   switch (ability.kind) {
@@ -17,6 +17,7 @@ export function abilityEffect(ability: Ability): Effect | null {
     case "keyword":
     case "additionalCost":
     case "reclaim":
+    case "winCondition":
       return null;
   }
 }

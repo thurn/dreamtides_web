@@ -133,7 +133,12 @@ export type Condition =
    */
   | { readonly cond: "costPaid"; readonly optional: number }
   /** "If this card is in your void": the source instance is in `zone`. An emblem is always in play. */
-  | { readonly cond: "sourceIn"; readonly zone: Zone };
+  | { readonly cond: "sourceIn"; readonly zone: Zone }
+  /** "If you have no cards in your deck": the player has at most `atMost` cards in `zone`. */
+  | { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: CountedZone; readonly atMost: number };
+
+/** A player's zone whose cards a condition counts. */
+export type CountedZone = "deck" | "hand" | "void";
 
 /**
  * Keywords a card has (layer 3). `reclaim` is plain Reclaim, played from the
@@ -297,9 +302,22 @@ export interface ReclaimAbility {
   readonly costs: readonly Cost[];
 }
 
+/**
+ * "If …, you win the game" on a card in play or an emblem (an emblem always
+ * is in play): the state-based victory check (P5) wins the battle for the
+ * source's controller whenever the condition holds (C15). It never resolves
+ * and holds no effect. A resolving effect wins with the `winTheGame`
+ * primitive instead.
+ */
+export interface WinConditionAbility {
+  readonly kind: "winCondition";
+  readonly condition: Condition;
+}
+
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
   | StaticAbility
+  | WinConditionAbility
   | AdditionalCostAbility
   | ReclaimAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }

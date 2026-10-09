@@ -18,6 +18,7 @@
  * | `triggerQueued`, `triggerResolved` events | `engine.trigger` |
  * | a new loop on offer; `loopStarted`, `loopEnded` events | `engine.loop` |
  * | random-stream counters advanced by a step | `engine.rng`, one per stream |
+ * | a `winConditionMet` event | `engine.winCondition` |
  * | a `battleEnded` event | `engine.battleEnded` |
  * | a `feasibilityBounded` event; a play or activation a decision leaves out because its legality search ran out of runs | `engine.feasibility` |
  * | a step that threw | `engine.error` |
@@ -84,6 +85,7 @@ export type EngineLogRecord =
       readonly stream: string;
       readonly draws: number;
     })
+  | (RecordBase & { readonly event: "engine.winCondition"; readonly detail: EventOf<"winConditionMet"> })
   | (RecordBase & { readonly event: "engine.battleEnded"; readonly result: BattleResult })
   | (RecordBase & {
       readonly event: "engine.feasibility";
@@ -108,6 +110,8 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
     case "loopStarted":
     case "loopEnded":
       return { event: "engine.loop", version, detail: event };
+    case "winConditionMet":
+      return { event: "engine.winCondition", version, detail: event };
     case "battleEnded":
       return { event: "engine.battleEnded", version, result: event.result };
     case "feasibilityBounded":

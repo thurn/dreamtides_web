@@ -12,11 +12,13 @@ import type {
   ChoiceCost,
   Condition,
   Cost,
+  CountedZone,
   EnergyCost,
   EnergyXCost,
   Keyword,
   OptionalCost,
   PaymentCost,
+  PlayerRef,
   ReclaimAbility,
   SelfSpec,
   Speed,
@@ -25,6 +27,7 @@ import type {
   SupportedSpec,
   TargetSpec,
   ValueExpr,
+  WinConditionAbility,
 } from "./types";
 
 export function event(effect: Effect): Ability {
@@ -109,6 +112,19 @@ export function additionalCost(...costs: readonly AdditionalCost[]): AdditionalC
 /** "If the additional cost was paid": the item's optional cost at `optional` (printed order) was paid. */
 export function costPaid(optional = 0): Condition {
   return { cond: "costPaid", optional };
+}
+
+/** "If you have no cards in your deck": the player (you by default) has no cards in `zone`. */
+export function noCardsIn(zone: CountedZone, player: PlayerRef = "you"): Condition {
+  return { cond: "cardsIn", player, zone, atMost: 0 };
+}
+
+/**
+ * "If …, you win the game" on a card in play or an emblem: its controller
+ * wins in the victory check whenever the condition holds (C15).
+ */
+export function winCondition(condition: Condition): WinConditionAbility {
+  return { kind: "winCondition", condition };
 }
 
 /** Cards on the stack: by controller relative to the effect's controller, and card type. */

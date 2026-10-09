@@ -393,14 +393,24 @@ export interface DreamwellState {
   catalog: DreamwellCardId[];
 }
 
-export type EndReason = "score" | "turnLimit" | "resolutionCap" | "mandatoryLoop";
+/**
+ * Why the state-based victory check (P5) found a side winning: its score
+ * reached the threshold, or else a "you win the game" ability it controls
+ * in play had its condition hold (C15).
+ */
+export type WinReason = "score" | "winCondition";
+
+export type EndReason = WinReason | "turnLimit" | "resolutionCap" | "mandatoryLoop";
 
 /**
- * How a battle ended: a side wins only by reaching the score threshold (P5);
- * every other ending, and both sides reaching it at once, is a draw.
+ * How a battle ended: a side wins only in the victory check (P5), by score
+ * or by a "you win the game" condition (C15); every other ending, and both
+ * sides winning in the same check, is a draw. A simultaneous-win draw's
+ * reason is `score` when both sides won by score and `winCondition`
+ * otherwise.
  */
 export type BattleResult =
-  | { readonly kind: "victory"; readonly winner: Side; readonly reason: "score" }
+  | { readonly kind: "victory"; readonly winner: Side; readonly reason: WinReason }
   | { readonly kind: "draw"; readonly reason: EndReason };
 
 /**

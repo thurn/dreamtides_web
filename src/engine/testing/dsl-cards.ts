@@ -4,7 +4,7 @@
  * `5e5e5e5e-…-0000000002xx`.
  */
 import type { EngineCardDefinition } from "../catalog";
-import { anyCharacter, characterYouControl, enemyCharacter, energy, energyX, event, keyword, target, upTo, x } from "../dsl/builders";
+import { anyCharacter, characterYouControl, enemyCharacter, energy, energyX, event, keyword, noCardsIn, target, upTo, winCondition, x } from "../dsl/builders";
 import type { Ability, CardCost } from "../dsl/types";
 import * as p from "../effects/primitives";
 import { syntheticId } from "./synthetic-cards";
@@ -72,6 +72,10 @@ export const DSL = {
     event(p.chooseOne(p.gainPoints(1), p.dissolve(target(enemyCharacter())))),
     event(p.returnToHand(target(anyCharacter()))),
   )),
+  /** A character: "If you have no cards in your deck, you win the game." (C15) */
+  winWithEmptyDeck: authored(29, "character", 2, () => [winCondition(noCardsIn("deck"))], { spark: 1 }),
+  /** An event, as Terminus reads: "If you have no cards in your deck, you win the game." */
+  winIfDeckEmpty: authored(30, "event", 1, events(event(p.ifThen(noCardsIn("deck"), p.winTheGame())))),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

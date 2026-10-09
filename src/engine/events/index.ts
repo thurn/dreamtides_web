@@ -51,6 +51,7 @@ import { sparkGained, type SparkGainedEvent } from "./kinds/spark-gained";
 import { triggerQueued, type TriggerQueuedEvent } from "./kinds/trigger-queued";
 import { triggerResolved, type TriggerResolvedEvent } from "./kinds/trigger-resolved";
 import { turnStarted, type TurnStartedEvent } from "./kinds/turn-started";
+import { winConditionMet, type WinConditionMetEvent } from "./kinds/win-condition-met";
 import type { Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { EventDefinition } from "./types";
@@ -103,7 +104,8 @@ export type EngineEvent =
   | SparkGainedEvent
   | TriggerQueuedEvent
   | TriggerResolvedEvent
-  | TurnStartedEvent;
+  | TurnStartedEvent
+  | WinConditionMetEvent;
 
 export type EngineEventKind = EngineEvent["kind"];
 
@@ -158,6 +160,7 @@ export const EVENT_DEFINITIONS = {
   triggerQueued,
   triggerResolved,
   turnStarted,
+  winConditionMet,
 } as const satisfies { readonly [K in EngineEventKind]: EventDefinition<EventOf<K>> };
 
 export function eventDefinition<K extends EngineEventKind>(

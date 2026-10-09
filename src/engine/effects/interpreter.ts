@@ -5,6 +5,7 @@ import {
   matchesStackItem,
   matchingCharacters,
   matchingStackItems,
+  resolvePlayer,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
 import { supportedBy } from "../continuous/support";
@@ -365,6 +366,8 @@ export function conditionHolds(
       const instance = sourceInstance(scope.source);
       return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;
     }
+    case "cardsIn":
+      return state.sides[resolvePlayer(scope.controller, condition.player)][condition.zone].length <= condition.atMost;
   }
 }
 

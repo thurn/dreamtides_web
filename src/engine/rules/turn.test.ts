@@ -1,12 +1,20 @@
 import { describe, expect, it } from "vitest";
+import type { EngineCardDefinition, EngineDreamsignDefinition } from "../catalog";
+import { all, characterYouControl, energy, enemyCharacter, event, noCardsIn, target, winCondition } from "../dsl/builders";
+import type { Ability } from "../dsl/types";
+import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
 import type { EngineEvent } from "../events";
+import { eventLogRecords } from "../log";
+import { stateHash } from "../state/hash";
 import type { BattleInit, BattleState } from "../state/types";
 import type { Side } from "../state/ids";
 import { battleSeed } from "../state/ids";
-import { NO_PROMPTS } from "../steps/sources";
+import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
 import { boardState } from "../testing/board";
-import { SYNTHETIC, SYNTHETIC_DREAMWELL, testCatalog } from "../testing/synthetic-cards";
+import { DSL, DSL_CARDS } from "../testing/dsl-cards";
+import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { parseDreamsignId } from "../../types/identifiers";
 
 const engine = createEngine(testCatalog());
 const v = SYNTHETIC;
@@ -194,6 +202,176 @@ describe("victory", () => {
     });
     const { state } = engine.apply(start, "player", { kind: "pass" }, NO_PROMPTS);
     expect(state.result).toEqual({ kind: "draw", reason: "score" });
+  });
+});
+
+function winFixture(index: number, cardType: "character" | "event", abilities: readonly Ability[]): EngineCardDefinition {
+  return {
+    id: syntheticId(0x980 + index),
+    cardType,
+    costs: [energy(0)],
+    spark: cardType === "character" ? 1 : null,
+    subtype: cardType === "character" ? "Warrior" : "",
+    speed: "standard",
+    status: "authored",
+    abilities: () => abilities,
+  };
+}
+
+/** Conditional-victory fixtures (C15); test-local ids 0x980+. */
+const WIN = {
+  /** "If you have no cards in your hand, you win the game." */
+  emptyHand: winFixture(0, "character", [winCondition(noCardsIn("hand"))]),
+  /** "Draw a card. Dissolve each character you control." */
+  drawThenDissolveOwn: winFixture(1, "event", [event(p.sequence(p.draw(1), p.dissolve(all(characterYouControl()))))]),
+  /** "Discard a card. Draw a card." */
+  discardThenDraw: winFixture(2, "event", [event(p.sequence(p.discard(1), p.draw(1)))]),
+  /** "Gain control of an enemy character." */
+  takeControl: winFixture(3, "event", [event(p.gainControl(target(enemyCharacter())))]),
+} as const;
+
+/** "If the opponent has no cards in their hand, you win the game." */
+const emptyHandDreamsign: EngineDreamsignDefinition = {
+  id: parseDreamsignId(`5e5e5e5e-0000-4000-8000-${(0x984).toString(16).padStart(12, "0")}`),
+  status: "authored",
+  abilities: () => [winCondition(noCardsIn("hand", "opponent"))],
+};
+
+const winEngine = createEngine(testCatalog([...DSL_CARDS, ...Object.values(WIN)], { dreamsigns: [emptyHandDreamsign] }));
+const terminus = DSL.winWithEmptyDeck.id;
+
+function endings(events: readonly EngineEvent[]): EngineEvent[] {
+  return events.filter((event) => event.kind === "winConditionMet" || event.kind === "battleEnded");
+}
+
+describe("conditional victory (C15)", () => {
+  it("wins for the controller of a card in play once its condition holds after a step, and logs the sources", () => {
+    const { state: start, ids } = boardState(winEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { back: [terminus], hand: [DSL.drawThenEnergy.id], energy: 1, deck: [v.vanilla1.id] },
+      enemy: { hand: [v.vanilla1.id], deck: [v.vanilla1.id] },
+    });
+    const source = ids.player.back[0]!;
+    // The deck still holds a card, so the condition is false and nobody wins.
+    const passed = winEngine.apply(start, "player", { kind: "reposition", card: source, to: { rank: "back", index: 1 } }, NO_PROMPTS);
+    expect(passed.state.result).toBeNull();
+    const { state, events } = winEngine.apply(passed.state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS);
+    expect(state.sides.player.deck).toEqual([]);
+    expect(state.result).toEqual({ kind: "victory", winner: "player", reason: "winCondition" });
+    expect(endings(events)).toEqual([
+      { kind: "winConditionMet", side: "player", sources: [source] },
+      { kind: "battleEnded", result: state.result },
+    ]);
+    expect(eventLogRecords(events, passed.state.version).map((record) => record.event)).toEqual(["engine.winCondition", "engine.battleEnded"]);
+    expect(winEngine.decision(state)).toBeNull();
+  });
+
+  it("recomputes the same win when the step replays from a reloaded state", () => {
+    const { state: start, ids } = boardState(winEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { back: [terminus], hand: [DSL.drawThenEnergy.id], energy: 1, deck: [v.vanilla1.id] },
+      enemy: { hand: [v.vanilla1.id], deck: [v.vanilla1.id] },
+    });
+    const action = { kind: "play", card: ids.player.hand[0], from: "hand" } as const;
+    const first = winEngine.apply(start, "player", action, NO_PROMPTS);
+    const reloaded = JSON.parse(JSON.stringify(start)) as BattleState;
+    const replayed = winEngine.apply(reloaded, "player", action, new ScriptedSource(first.answers.map((answer) => answer.value)));
+    expect(replayed.state.result).toEqual(first.state.result);
+    expect(replayed.events).toEqual(first.events);
+    expect(stateHash(replayed.state)).toBe(stateHash(first.state));
+  });
+
+  it("counts only cards in play: a source in hand or void, or one that leaves play in the step, never wins", () => {
+    const idle = boardState(winEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [terminus], void: [terminus], deck: [] },
+      enemy: { deck: [v.vanilla1.id] },
+    });
+    expect(winEngine.apply(idle.state, "player", { kind: "pass" }, NO_PROMPTS).state.result).toBeNull();
+
+    const { state: start, ids } = boardState(winEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { back: [terminus], hand: [WIN.drawThenDissolveOwn.id], deck: [v.vanilla1.id] },
+      enemy: { deck: [v.vanilla1.id] },
+    });
+    const { state, events } = winEngine.apply(start, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS);
+    expect(state.sides.player.deck).toEqual([]);
+    expect(state.sides.player.void).toContain(ids.player.back[0]);
+    expect(state.result).toBeNull();
+    expect(endings(events)).toEqual([]);
+  });
+
+  it("checks only at step boundaries: a condition true mid-step and false at the check does not win", () => {
+    const { state: start, ids } = boardState(winEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { back: [WIN.emptyHand.id], hand: [WIN.discardThenDraw.id, v.vanilla1.id], deck: [v.vanilla1.id, v.vanilla1.id] },
+      enemy: { deck: [v.vanilla1.id] },
+    });
+    const { state } = winEngine.apply(start, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS);
+    expect(state.sides.player.void).toContain(ids.player.hand[1]);
+    expect(state.sides.player.hand).toHaveLength(1);
+    expect(state.result).toBeNull();
+  });
+
+  it("wins for a character's new controller after a control change", () => {
+    const { state: start, ids } = boardState(winEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [WIN.takeControl.id], deck: [] },
+      enemy: { back: [terminus], deck: [v.vanilla1.id] },
+    });
+    const stolen = ids.enemy.back[0]!;
+    const { state, events } = winEngine.apply(start, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, new ScriptedSource([[stolen]]));
+    expect(state.instances[stolen]?.controller).toBe("player");
+    expect(state.result).toEqual({ kind: "victory", winner: "player", reason: "winCondition" });
+    expect(endings(events)[0]).toEqual({ kind: "winConditionMet", side: "player", sources: [stolen] });
+  });
+
+  it("counts an emblem's win condition, read relative to its controller", () => {
+    const { state: start } = boardState(winEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { dreamsigns: [emptyHandDreamsign.id], hand: [v.vanilla1.id], deck: [v.vanilla1.id] },
+      enemy: { deck: [v.vanilla1.id] },
+    });
+    const { state, events } = winEngine.apply(start, "player", { kind: "pass" }, NO_PROMPTS);
+    expect(state.result).toEqual({ kind: "victory", winner: "player", reason: "winCondition" });
+    expect(endings(events)[0]).toEqual({ kind: "winConditionMet", side: "player", sources: [{ kind: "dreamsign", side: "player", index: 0 }] });
+  });
+
+  it.each([
+    {
+      name: "a win condition and the opponent's score draw",
+      player: { back: [terminus], deck: [] },
+      enemy: { score: 10, deck: [v.vanilla1.id] },
+      result: { kind: "draw", reason: "winCondition" },
+      met: ["player"],
+    },
+    {
+      name: "both sides' win conditions draw",
+      player: { back: [terminus], deck: [] },
+      enemy: { back: [terminus], deck: [] },
+      result: { kind: "draw", reason: "winCondition" },
+      met: ["player", "enemy"],
+    },
+    {
+      name: "a side meeting both its score and a win condition wins by score",
+      player: { back: [terminus], score: 10, deck: [] },
+      enemy: { deck: [v.vanilla1.id] },
+      result: { kind: "victory", winner: "player", reason: "score" },
+      met: ["player"],
+    },
+  ] as const)("$name", ({ player, enemy, result, met }) => {
+    const { state: start } = boardState(winEngine.catalog, { active: "player", phase: "day", scoreToWin: 10, player, enemy });
+    const { state, events } = winEngine.apply(start, "player", { kind: "pass" }, NO_PROMPTS);
+    expect(state.result).toEqual(result);
+    const sides = endings(events).flatMap((event) => (event.kind === "winConditionMet" ? [event.side] : []));
+    expect(sides).toEqual(met);
   });
 });
 

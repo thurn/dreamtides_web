@@ -67,7 +67,7 @@ export function runStep(
     }
     throw error;
   }
-  checkVictory(ctx);
+  checkVictory(ctx, ctx.events);
   // A run of automatic steps nobody can stop ends in a draw when it repeats a
   // state exactly or passes the cap (rules § Mandatory Loops). A step whose
   // prompt a player answered by choice, and a loop iteration, which replays

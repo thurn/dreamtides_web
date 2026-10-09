@@ -120,7 +120,8 @@ interface BattleState {
   challenge: { challengers: InstanceId[]; blockers: Record<InstanceId, InstanceId> } | null;
   automaticSteps: number;              // automatic steps since the last top-level decision
   loops: LoopTracker;
-  result: { kind: "victory"; winner: Side; reason: "score" } | { kind: "draw"; reason: EndReason } | null;
+  result: { kind: "victory"; winner: Side; reason: WinReason } | { kind: "draw"; reason: EndReason } | null;
+                                       // WinReason: "score" | "winCondition"
 }
 
 interface SideState {
@@ -647,6 +648,23 @@ first, most recent first (C8), and is a draw once more than `turnLimit`
 rounds would begin (P11). Its "at the start of your turn" triggers resolve
 before its Dreamwell phase (`turn.beginning`).
 
+**Victory check** (`rules/victory.ts`, P5, C15). After every completed step
+the runner checks each side for a win:
+
+- its score is at or above `scoreToWin` (reason `score`);
+- otherwise, a card in play or emblem it controls has a `winCondition`
+  ability whose condition holds now, or a `winTheGame` effect it controlled
+  resolved during the step (reason `winCondition`). Cards in any other zone
+  never count, and a condition true only partway through a step does not
+  win.
+
+One winning side gets the victory. Both winning in the same check is a draw,
+with reason `score` when both won by score and `winCondition` otherwise.
+The check emits a `winConditionMet` event for each side with a holding win
+condition, naming its sources, before `battleEnded`; a resolving
+`winTheGame` emits one naming its card as it resolves. Each is logged as
+`engine.winCondition`. A suspended step has no check until it completes.
+
 Designations:
 
 - At the end of Day, the active side's front-rank characters are recorded as
@@ -943,6 +961,11 @@ can't use `import.meta.glob`.
 // Echo Architect 21965e95-0c8c-470c-a1e1-06d7b87a8d00: "Events cost you 1● more." / "When you play an event, copy it."
 () => [staticAbility(p.costModifier("you", { cardType: "event" }, 1)), triggered(whenYouPlay({ cardType: "event" }), p.copyCard(triggeringCard()))]
 
+// Terminus 6e2188f8-580e-4a66-a3e3-267d509de903 (Event): "If you have no cards in your deck, you win the game."
+() => [event(p.ifThen(noCardsIn("deck"), p.winTheGame()))]
+// The same text on a character, checked while it is in play:
+() => [winCondition(noCardsIn("deck"))]
+
 // Spirit Bond 3cda9dd7-cb81-43c1-9db5-1444d7363e13: "Until end of turn, characters you control have +X✦ where X is the number of characters you control."
 () => [event(p.forDuration("untilEndOfTurn", p.sparkModifier(all(characterYouControl()), lockedAtResolution(count(characterYouControl())))))]
 ```
@@ -982,7 +1005,8 @@ with the ones Phase 5 adds as content batches need them, each with tests.
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, `costAtMost`, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype); players (`you`, `opponent`) | figment or not |
 | Values | constant, `x`, `count(selector)`, hand size, `supporting` (C9), `times`, `lockedAtResolution` | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
-| Conditions | `controls`, `energyAtLeast`, `costPaid`, `sourceIn` | |
+| Conditions | `controls`, `energyAtLeast`, `costPaid`, `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`) | |
+| Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
 | Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
 
 Dreamsigns and avatars use the same DSL as emblem abilities (P4). Dreamwell
@@ -1207,7 +1231,8 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   worker host and tournament runner build `EngineLogRecord`s from what the
   engine returns. `engine.battleStarted` and the `engine.action` records,
   each with every answer it took, replay the battle from its init; the
-  prompt, trigger, loop, rng, battle-end, feasibility, and error records
+  prompt, trigger, loop, rng, win-condition, battle-end, feasibility, and
+  error records
   explain what the replay does. An `engine.feasibility` record marks where
   the feasibility search's bound, not the rules, left out a play or withheld
   an answer. Records carry instance IDs and catalog UUIDs, never names.

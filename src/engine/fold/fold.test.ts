@@ -18,7 +18,10 @@ import { Context } from "../steps/context";
 import { IllegalAnswer } from "../steps/errors";
 import type { StepContext } from "../steps/types";
 import { ScriptedSource } from "../steps/sources";
+import { energy, event } from "../dsl/builders";
+import * as primitives from "../effects/primitives";
 import { boardState, type BoardSetup } from "../testing/board";
+import { DSL } from "../testing/dsl-cards";
 import { fuzzEngineCatalog, playFuzzGame, replayInteractively, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { SYNTHETIC, syntheticId } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
@@ -167,7 +170,19 @@ const MALFORMED = [
   ),
 ];
 
-const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL, [divergent, emptyPrompt, emitThenChoose, divergentPlay, opponentChoosesAtPlay, ...MALFORMED]));
+/** "Draw a card, then discard a card": the deck empties before the discard prompt. */
+const drawThenDiscard: EngineCardDefinition = {
+  id: syntheticId(0x985),
+  cardType: "event",
+  costs: [energy(0)],
+  spark: null,
+  subtype: "",
+  speed: "standard",
+  status: "authored",
+  abilities: () => [event(primitives.sequence(primitives.draw(1), primitives.discard(1)))],
+};
+
+const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL, [divergent, emptyPrompt, emitThenChoose, divergentPlay, opponentChoosesAtPlay, drawThenDiscard, ...MALFORMED]));
 const fold = createFoldAdapter(engine, { checkEventPrefix: true });
 
 function slice(setup: BoardSetup): { slice: BattleSlice; ids: ReturnType<typeof boardState>["ids"] } {
@@ -249,6 +264,26 @@ describe("suspension", () => {
     const { id: _a, ...left } = pending.prompt;
     const { id: _b, ...right } = fresh!.prompt;
     expect(promptFingerprint(right)).toBe(promptFingerprint(left));
+  });
+
+  it("runs the victory check only when a suspended step completes, after a reload mid-prompt too", () => {
+    const { slice: start, ids } = slice({
+      active: "player",
+      phase: "day",
+      player: { back: [DSL.winWithEmptyDeck.id], hand: [drawThenDiscard.id, v.vanilla1.id], deck: [v.vanilla1.id] },
+      enemy: { deck },
+    });
+    const suspended = applied(play(start, ids.player.hand[0]));
+    const pending = pendingOf(suspended);
+    // The deck is empty mid-step, but the battle has no result until the step completes.
+    expect(pending.display.sides.player.deck).toEqual([]);
+    expect(pending.display.result).toBeNull();
+    expect(suspended.committed.result).toBeNull();
+    const reloaded = JSON.parse(JSON.stringify(suspended)) as BattleSlice;
+    const answer = { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1]] } as const;
+    const done = applied(createFoldAdapter(engine).reduce(reloaded, answer));
+    expect(done.committed.result).toEqual({ kind: "victory", winner: "player", reason: "winCondition" });
+    expect(stateHash(done.committed)).toBe(stateHash(applied(fold.reduce(suspended, answer)).committed));
   });
 
   it("alternates prompts between sides within one step", () => {
