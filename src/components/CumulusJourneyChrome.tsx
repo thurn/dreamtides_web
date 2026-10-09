@@ -21,18 +21,19 @@ import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
 const NOOP = (): void => undefined;
 
 /**
- * The journey menu's error fallback. The default panel keeps its in-flow
- * placement at the top of the chrome; the wrapper raises it onto the menu's
- * app-chrome layer so the routed screen's positioned scene art cannot cover
- * it or swallow its clicks.
+ * The error fallback shared by every chrome boundary (card-tutorial guidance,
+ * status bar, journey menu). The default panel keeps its in-flow placement at
+ * the top of the chrome; the wrapper raises it onto the app-chrome layer so
+ * the routed screen's positioned scene art cannot cover it or swallow its
+ * clicks.
  */
-function renderJourneyMenuFallback({
+function renderChromeErrorFallback({
   scope,
   reset,
 }: ErrorBoundaryFallbackProps): ReactNode {
   return (
     <div
-      data-journey-menu-error-layer=""
+      data-journey-chrome-error-layer={scope}
       style={{ position: "relative", zIndex: token("--layer-app-chrome") }}
     >
       <DefaultErrorBoundaryFallback scope={scope} onRetry={reset} />
@@ -85,12 +86,18 @@ export function CumulusJourneyChrome({
     >
       {children}
       {variant === "journey" && (
-        <ErrorBoundary scope="overlay:card-tutorial-guidance">
+        <ErrorBoundary
+          scope="overlay:card-tutorial-guidance"
+          fallback={renderChromeErrorFallback}
+        >
           <JourneyCardTutorialController stageRef={stageRef} />
         </ErrorBoundary>
       )}
       {showStatusBar && (variant === "journey" || isDesktop) && (
-        <ErrorBoundary scope="overlay:cumulus-status-bar">
+        <ErrorBoundary
+          scope="overlay:cumulus-status-bar"
+          fallback={renderChromeErrorFallback}
+        >
           <JourneyStatusBar
             stageRef={stageRef}
             essence={hud.essence}
@@ -106,7 +113,7 @@ export function CumulusJourneyChrome({
       {variant === "journey" && state.avatar !== null && (
         <ErrorBoundary
           scope="overlay:cumulus-journey-menu"
-          fallback={renderJourneyMenuFallback}
+          fallback={renderChromeErrorFallback}
         >
           <DreamscapeJourneyMenu
             onOpenDeckViewer={handlers.onViewDeck ?? NOOP}

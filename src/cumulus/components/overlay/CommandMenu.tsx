@@ -202,7 +202,9 @@ function AppChromeCommandMenu<Id extends string>({
         ...(trigger.corner === "topEnd"
           ? { right: `max(var(--safe-area-inset-right), ${edgeInset}px)` }
           : { left: `max(var(--safe-area-inset-left), ${edgeInset}px)` }),
-        zIndex: elevated ? 65 : 60,
+        zIndex: elevated
+          ? token("--layer-app-chrome-elevated")
+          : token("--layer-app-chrome"),
       }}
     >
       <IconButton
@@ -323,7 +325,7 @@ function ContextCommandMenu<Id extends string>({
         position: "fixed",
         left: position?.left ?? origin.x,
         top: position?.top ?? origin.y,
-        zIndex: 61,
+        zIndex: token("--layer-app-chrome-context"),
         visibility: position === null ? "hidden" : "visible",
       }}
     >

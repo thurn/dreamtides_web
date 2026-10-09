@@ -296,6 +296,11 @@
      screen; a chrome error fallback takes this layer so it stays visible and
      interactive over scene art. */
   --layer-app-chrome: 60; /* @kind other */
+  /* App-chrome command menu trigger lifted above an app-shell full-screen
+     overlay. */
+  --layer-app-chrome-elevated: calc(var(--layer-app-chrome) + 5); /* @kind other */
+  /* Card or pointer command menu, one step above the app chrome. */
+  --layer-app-chrome-context: calc(var(--layer-app-chrome) + 1); /* @kind other */
 
   /* ---- Press-down bound ----
      CSS-only and direct usePress controls use this factor. <Pressable> and
