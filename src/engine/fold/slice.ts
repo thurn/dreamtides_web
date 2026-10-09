@@ -10,13 +10,11 @@ import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
 import type { Answer, Prompt, PromptId } from "../prompts/types";
 import { allowedBy, type Action } from "../rules/actions";
-import { mainWindowSide } from "../rules/decision";
-import { legalMoves } from "../rules/legality";
 import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
 import type { Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
-import { actionForStep, nextAutomaticStep, stepForAction } from "../steps/driver";
+import { actionForStep, boundedLegality, nextAutomaticStep, stepForAction } from "../steps/driver";
 import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { INTERACTIVE } from "../steps/sources";
@@ -168,6 +166,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     const result = runStep(committed, inFlight.step, INTERACTIVE, engine.catalog, {
       prefix: inFlight.answers,
       automatic: inFlight.automatic,
+      searches: engine.memo.searches,
     });
     if (byState === undefined) {
       byState = new Map();
@@ -252,10 +251,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
    * automatically, and, where the fold stops, the main window's options.
    */
   function logBoundedLegality(state: BattleState, stopped: boolean): void {
-    if (state.result !== null || state.triggerQueue.length > 0 || state.loops.run !== null) return;
-    const side = state.stack.length > 0 ? state.priority : stopped ? mainWindowSide(state) : null;
-    if (side === null) return;
-    log(legalityLogRecords(side, legalMoves(state, engine.catalog, side, engine.memo).bounded, state.version));
+    log(legalityLogRecords(boundedLegality(state, engine.catalog, engine.memo, stopped)));
   }
 
   function logError(slice: BattleSlice, error: EngineErrorRecord): void {

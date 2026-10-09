@@ -1,7 +1,7 @@
 import type { EngineCatalog } from "../catalog";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { searchCommitPoint } from "../steps/feasibility";
+import { stepSearch, type SearchMemo } from "../steps/feasibility";
 import type { Step } from "../steps/kinds";
 import { abilitySources, canActivate, abilityOrigin, originAbilities } from "./activation";
 import { canPlay, type PlayZone } from "./timing";
@@ -24,21 +24,42 @@ export interface LegalMoves {
   readonly activations: LegalActivation[];
   /**
    * The `play` and `activate` steps left out because their feasibility
-   * search ran out of runs (`BattleConfig.feasibilitySearchRuns`) before
-   * finding a path, in candidate order; hosts log them as
-   * `engine.feasibility` records.
+   * search spent the step's budget (`BattleConfig.feasibilitySearchRuns`)
+   * before finding a path, in candidate order. The driver reports them in
+   * `ApplyResult.bounded`, and hosts log them as `engine.feasibility`
+   * records.
    */
   readonly bounded: Step[];
 }
 
 /**
- * Per-engine memo of legal plays and activations, keyed by the state
- * object. States are immutable once committed, so an entry never goes
- * stale. Never persisted.
+ * A play or activation a committed state's decision left out because its
+ * legality search spent the step's feasibility budget before finding a path.
  */
-export type LegalityMemo = WeakMap<BattleState, Map<Side, LegalMoves>>;
+export interface BoundedLegality {
+  /** The version of the committed state whose decision left it out. */
+  readonly version: number;
+  /** The side deciding. */
+  readonly side: Side;
+  readonly step: Step;
+}
 
-function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side): LegalMoves {
+/**
+ * Per-engine memo of legal plays and activations, and of the feasibility
+ * searches behind them, keyed by the state object. States are immutable
+ * once committed, so an entry never goes stale. A step's guard reads its
+ * search back when the step runs. Never persisted.
+ */
+export interface LegalityMemo {
+  readonly moves: WeakMap<BattleState, Map<Side, LegalMoves>>;
+  readonly searches: SearchMemo;
+}
+
+export function createLegalityMemo(): LegalityMemo {
+  return { moves: new WeakMap(), searches: new WeakMap() };
+}
+
+function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side, searches: SearchMemo): LegalMoves {
   const bounded: Step[] = [];
   /**
    * Whether some path of answers to the step's play-time prompts reaches its
@@ -46,7 +67,7 @@ function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side): L
    * never drifts from execution.
    */
   const feasible = (step: Step): boolean => {
-    const outcome = searchCommitPoint(state, step, catalog, []);
+    const outcome = stepSearch(state, step, catalog, searches).legality;
     if (outcome.exhausted) bounded.push(step);
     return outcome.feasible;
   };
@@ -80,13 +101,13 @@ export function legalMoves(
   side: Side,
   memo: LegalityMemo,
 ): LegalMoves {
-  let bySide = memo.get(state);
+  let bySide = memo.moves.get(state);
   const cached = bySide?.get(side);
   if (cached !== undefined) return cached;
-  const moves = computeMoves(state, catalog, side);
+  const moves = computeMoves(state, catalog, side, memo.searches);
   if (bySide === undefined) {
     bySide = new Map();
-    memo.set(state, bySide);
+    memo.moves.set(state, bySide);
   }
   bySide.set(side, moves);
   return moves;

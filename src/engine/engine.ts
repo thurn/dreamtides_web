@@ -3,7 +3,7 @@ import { rememberCharacteristics } from "./continuous/characteristics";
 import type { EngineEvent } from "./events";
 import { allowedBy, type Action, type Decision } from "./rules/actions";
 import { decision, legalActions } from "./rules/decision";
-import type { LegalityMemo } from "./rules/legality";
+import { createLegalityMemo, type BoundedLegality, type LegalityMemo } from "./rules/legality";
 import type { Side } from "./state/ids";
 import { initialState } from "./state/create";
 import type { BattleInit, BattleState } from "./state/types";
@@ -17,6 +17,15 @@ export interface ApplyResult {
   readonly events: readonly EngineEvent[];
   /** Every prompt answer given, including automatic ones, in order. */
   readonly answers: readonly RecordedAnswer[];
+  /**
+   * Every play or activation a decision on the way left out because its
+   * legality search spent the step's feasibility budget, in order: the
+   * responses that decided an automatic pass, and the options of the
+   * decision the run stopped at. Prompts that withheld answers for the same
+   * reason are `feasibilityBounded` events. Hosts log both as
+   * `engine.feasibility` records (`legalityLogRecords`, `eventLogRecords`).
+   */
+  readonly bounded: readonly BoundedLegality[];
 }
 
 /**
@@ -51,7 +60,7 @@ export interface Engine {
 export class IllegalAction extends Error {}
 
 export function createEngine(catalog: EngineCatalog): Engine {
-  const memo: LegalityMemo = new WeakMap();
+  const memo = createLegalityMemo();
   return {
     catalog,
     memo,

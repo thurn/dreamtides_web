@@ -41,13 +41,14 @@ export const BATTLE = {
   // Top-level actions within one main window that loop detection remembers;
   // a loop longer than this is not offered as a shortcut.
   loopHistoryActions: 100,
-  // Most runs of a play or activation's choices that one feasibility search
-  // makes before it stops. Legality searches the answer paths of every
-  // possible play for one that reaches the commit point with payable costs,
-  // and each play-time prompt offers only answers from which such a path
-  // exists, examining at most this many of its answers. A search that runs
-  // out finds nothing: the play is not offered, or the answer is withheld
-  // and a feasibilityBounded event records it.
+  // Most dry runs of a play or activation's choices that its feasibility
+  // search makes, legality and every play-time prompt together, along the
+  // path of answers its player gives. Legality searches the answer paths of
+  // every possible play for one that reaches the commit point with payable
+  // costs, and each play-time prompt offers only answers from which such a
+  // path exists, searching with what earlier prompts left. A search that
+  // runs out finds nothing: the play is not offered, or the answer is
+  // withheld and a feasibilityBounded event records it.
   feasibilitySearchRuns: 256,
   // Whether a prompt with exactly one legal answer (a forced choice) is
   // answered automatically instead of being asked; the answer is recorded.

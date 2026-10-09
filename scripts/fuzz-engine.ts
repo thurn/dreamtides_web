@@ -5,7 +5,10 @@
  *   npm run fuzz:engine -- --games 200 [--seed fuzz] [--first 0] [--interactive-every 10]
  *
  * Every Nth game is also replayed through the fold, suspending at every
- * prompt, and must match the inline game exactly.
+ * prompt, and must match the inline game exactly. The summary counts the
+ * feasibility bounds met (`ApplyResult.bounded` and `feasibilityBounded`
+ * events): plays left out and prompts narrowed only because a step's
+ * feasibility budget ran out.
  *
  * Passing games write no logs. A failing game writes its engine log
  * (src/engine/log.ts: the seed, decks, policies, and every action with its
@@ -58,6 +61,8 @@ let rerunMs = 0;
 const started = performance.now();
 let steps = 0;
 let failures = 0;
+/** Feasibility bounds met: plays and activations left out unproven, and prompts that withheld answers. */
+const bounded = { legality: 0, prompts: 0 };
 const results = { player: 0, enemy: 0, draw: 0 };
 
 for (let index = first; index < first + games; index++) {
@@ -82,6 +87,8 @@ for (let index = first; index < first + games; index++) {
   if (game !== undefined) {
     steps += game.steps;
     prompts += game.prompts;
+    bounded.legality += game.boundedLegality;
+    bounded.prompts += game.boundedPrompts;
     const result = game.result;
     if (result?.kind === "victory") results[result.winner] += 1;
     else if (result?.kind === "draw") results.draw += 1;
@@ -107,6 +114,6 @@ console.log(
   `fuzz:engine ${String(games)} games, ${String(steps)} steps, ${seconds.toFixed(1)} s ` +
     `(${(games / seconds).toFixed(1)} games/s); prompts ${String(prompts)}; ` +
     `interactive re-runs ${String(reruns)} (${reruns > 0 ? (rerunMs / reruns).toFixed(3) : "0"} ms each); ` +
-    `results ${JSON.stringify(results)}; failures ${String(failures)}`,
+    `feasibility bounded ${JSON.stringify(bounded)}; results ${JSON.stringify(results)}; failures ${String(failures)}`,
 );
 process.exitCode = failures > 0 ? 1 : 0;

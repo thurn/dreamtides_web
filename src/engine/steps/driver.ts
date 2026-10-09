@@ -1,8 +1,8 @@
 import type { EngineCatalog } from "../catalog";
 import type { EngineEvent } from "../events";
 import type { Action } from "../rules/actions";
-import { decision } from "../rules/decision";
-import type { LegalityMemo } from "../rules/legality";
+import { decision, mainWindowSide } from "../rules/decision";
+import { legalMoves, type BoundedLegality, type LegalityMemo } from "../rules/legality";
 import type { BattleState } from "../state/types";
 import type { Step } from "./kinds";
 import { runStep } from "./runner";
@@ -100,9 +100,28 @@ export function nextAutomaticStep(
 }
 
 /**
+ * The plays and activations a committed state's decision leaves out because
+ * their legality search spent its budget: the priority holder's responses on
+ * a non-empty stack, which decide whether it passes automatically, and,
+ * where play `stopped` for a decision, the main window's options.
+ */
+export function boundedLegality(
+  state: BattleState,
+  catalog: EngineCatalog,
+  memo: LegalityMemo,
+  stopped: boolean,
+): BoundedLegality[] {
+  if (state.result !== null || state.triggerQueue.length > 0 || state.loops.run !== null) return [];
+  const side = state.stack.length > 0 ? state.priority : stopped ? mainWindowSide(state) : null;
+  if (side === null) return [];
+  return legalMoves(state, catalog, side, memo).bounded.map((step) => ({ version: state.version, side, step }));
+}
+
+/**
  * Runs `step`, then automatic steps until a top-level decision or a result,
- * answering prompts inline. Returns the final state, every event, and every
- * answer given, in order.
+ * answering prompts inline. Returns the final state, every event, every
+ * answer given, and every play or activation a decision on the way left out
+ * unproven (`boundedLegality`), in order.
  */
 export function runToDecision(
   start: BattleState,
@@ -112,14 +131,15 @@ export function runToDecision(
   memo: LegalityMemo,
   observe?: StepObserver,
   automatic = false,
-): { state: BattleState; events: EngineEvent[]; answers: RecordedAnswer[] } {
+): { state: BattleState; events: EngineEvent[]; answers: RecordedAnswer[]; bounded: BoundedLegality[] } {
   const events: EngineEvent[] = [];
   const answers: RecordedAnswer[] = [];
+  const bounded: BoundedLegality[] = [];
   let current: Step | null = step;
   let isAutomatic = automatic;
   let state = start;
   while (current !== null) {
-    const result = runStep(state, current, source, catalog, { automatic: isAutomatic });
+    const result = runStep(state, current, source, catalog, { automatic: isAutomatic, searches: memo.searches });
     if (result.kind === "suspended") {
       throw new Error("An inline run cannot suspend; use the fold for interactive play");
     }
@@ -128,7 +148,8 @@ export function runToDecision(
     answers.push(...result.answers);
     observe?.(state, current, result.events);
     current = nextAutomaticStep(state, catalog, memo);
+    bounded.push(...boundedLegality(state, catalog, memo, current === null));
     isAutomatic = true;
   }
-  return { state, events, answers };
+  return { state, events, answers, bounded };
 }

@@ -213,8 +213,8 @@ export function planCosts(
   /**
    * Whether every cost in a nested list could be paid on top of what is
    * already committed. Its card costs need distinct cards among the cards
-   * not yet used, which Hall's condition decides exactly: every group of
-   * them together has at least as many candidates as it needs cards.
+   * not yet used, which a matching of cards to needs decides exactly
+   * (`cardsAssignable`).
    */
   const affordable = (list: readonly PaymentCost[]): boolean => {
     if (adjustedEnergy(baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))), modifier) > available) return false;
@@ -291,28 +291,36 @@ export function planCosts(
 }
 
 /** One card-choosing cost's need: how many distinct cards, from which candidates. */
-interface CardDemand {
+export interface CardDemand {
   readonly count: number;
   readonly pool: readonly InstanceId[];
 }
 
 /**
- * Whether the demands can be met with distinct cards: by Hall's condition,
- * exactly when every group of them has, among all its candidates, at least
- * as many cards as it needs. A cost list holds few card costs.
+ * Whether the demands can be met with distinct cards: whether a matching of
+ * each card needed to one of its demand's candidates, no card used twice,
+ * covers every card needed. Augmenting paths (Kuhn's algorithm) find one in
+ * time polynomial in the cards needed and the candidates, for any number of
+ * demands.
  */
-function cardsAssignable(demands: readonly CardDemand[]): boolean {
-  for (let group = 1; group < 1 << demands.length; group++) {
-    const candidates = new Set<InstanceId>();
-    let needed = 0;
-    demands.forEach((demand, index) => {
-      if ((group & (1 << index)) === 0) return;
-      needed += demand.count;
-      for (const id of demand.pool) candidates.add(id);
-    });
-    if (candidates.size < needed) return false;
-  }
-  return true;
+export function cardsAssignable(demands: readonly CardDemand[]): boolean {
+  const needs = demands.flatMap((demand) => Array.from({ length: demand.count }, () => demand.pool));
+  if (needs.length > new Set(demands.flatMap((demand) => demand.pool)).size) return false;
+  /** The need each card is matched to. */
+  const matched = new Map<InstanceId, number>();
+  const augment = (need: number, visited: Set<InstanceId>): boolean => {
+    for (const card of needs[need] ?? []) {
+      if (visited.has(card)) continue;
+      visited.add(card);
+      const other = matched.get(card);
+      if (other === undefined || augment(other, visited)) {
+        matched.set(card, need);
+        return true;
+      }
+    }
+    return false;
+  };
+  return needs.every((_, need) => augment(need, new Set()));
 }
 
 /** Exhausts a source to pay a ☾ cost. */

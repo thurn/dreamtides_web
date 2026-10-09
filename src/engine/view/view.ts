@@ -1,5 +1,5 @@
 import type { LoopId } from "../loops/types";
-import type { Prompt } from "../prompts/types";
+import type { Prompt, PromptPurpose } from "../prompts/types";
 import type { AbilitySource, AvatarId, DreamsignId, DreamwellCardId, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent } from "../state/ids";
 import type {
@@ -340,24 +340,22 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
 }
 
 /**
- * A pending prompt as `viewer` may see it. The side answering sees all of
- * it. Anyone else sees its kind, purpose, and bounds, with only the cards
- * `viewer` can identify in the display state (so never the cards of a
- * `privateTo` prompt shown to the other side) and a card source it cannot
- * identify as `null`; an emblem source is public. Its allowed answers,
- * which name cards, are left out. Such a redacted prompt is for display and
- * cannot be answered.
+ * A pending prompt as `viewer` may see it. Its purpose names a card source
+ * only when `viewer` can identify it in the display state (`purposeView`),
+ * so the opponent answering a prompt of a play still hidden in hand never
+ * learns the card. Beyond that the side answering sees all of it. Anyone
+ * else sees its kind, purpose, and bounds, with only the cards `viewer` can
+ * identify (so never the cards of a `privateTo` prompt shown to the other
+ * side). Its allowed answers, which name cards, are left out. Such a
+ * redacted prompt is for display and cannot be answered.
  */
 export function promptView(prompt: Prompt, viewer: Side, display: BattleState): Prompt {
-  if (prompt.side === viewer) return copy(prompt);
+  if (prompt.side === viewer) return { ...copy(prompt), purpose: purposeView(prompt.purpose, viewer, display) };
   const visible = (id: InstanceId): boolean => {
     const instance = display.instances[id];
     return instance !== undefined && knows(display, instance, viewer);
   };
-  const { source } = prompt.purpose;
-  // Emblems are public; a card source shows only when the viewer can identify it.
-  const identifiable = source === null || typeof source !== "string" || visible(source);
-  const purpose = identifiable ? copy(prompt.purpose) : { ...prompt.purpose, source: null, cardId: null };
+  const purpose = purposeView(prompt.purpose, viewer, display);
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards": {
@@ -374,4 +372,16 @@ export function promptView(prompt: Prompt, viewer: Side, display: BattleState): 
     case "payOrDecline":
       return { ...copy(prompt), purpose };
   }
+}
+
+/**
+ * A prompt purpose as `viewer` may see it in `display`. Emblems are public; a
+ * card source shows only when the viewer can identify it, and otherwise the
+ * source and its printed card are `null`.
+ */
+export function purposeView(purpose: PromptPurpose, viewer: Side, display: BattleState): PromptPurpose {
+  const { source } = purpose;
+  if (source === null || typeof source !== "string") return copy(purpose);
+  const instance = display.instances[source];
+  return instance !== undefined && knows(display, instance, viewer) ? copy(purpose) : { ...purpose, source: null, cardId: null };
 }

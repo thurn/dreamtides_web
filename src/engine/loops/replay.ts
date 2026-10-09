@@ -20,7 +20,7 @@ import type { EngineCatalog } from "../catalog";
 import type { EngineEvent } from "../events";
 import { allowedBy } from "../rules/actions";
 import { decision, legalActions } from "../rules/decision";
-import type { LegalityMemo } from "../rules/legality";
+import { createLegalityMemo } from "../rules/legality";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { actionForStep, nextAutomaticStep, stepForAction } from "../steps/driver";
@@ -57,7 +57,7 @@ function replayStep(start: BattleState, recorded: LoopStep, automatic: boolean, 
 
 /** Runs one iteration of `candidate` from `start`, a checkpoint equivalent to the loop's. */
 export function replayIteration(start: BattleState, candidate: LoopCandidate, catalog: EngineCatalog): IterationOutcome {
-  const memo: LegalityMemo = new WeakMap();
+  const memo = createLegalityMemo();
   const actor = candidate.side;
   const events: EngineEvent[] = [];
   // The replayed steps see the battle as their player saw it, with no repetition running.

@@ -9,6 +9,7 @@ import { drawRandom } from "../state/rng";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
 import { showPrivately } from "../view/knowledge";
+import { purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
 import type { AnswerSource, RecordedAnswer, StepContext } from "./types";
 
@@ -34,10 +35,13 @@ export interface PromptGuard {
   narrow(prompt: Prompt, prefix: readonly RecordedAnswer[]): Narrowed;
 }
 
-/** A narrowed prompt, and how many answers it withholds only because their search ran out of budget. */
+/** A narrowed prompt, and the answers it withholds only because the step's feasibility budget ran out. */
 export interface Narrowed {
   readonly prompt: Prompt;
+  /** Answers examined whose search ran out before settling them. */
   readonly unproven: number;
+  /** Answers were left unexamined. */
+  readonly truncated: boolean;
 }
 
 export class Context implements StepContext {
@@ -107,15 +111,17 @@ export class Context implements StepContext {
   /**
    * Before the commit point of a guarded step, the prompt narrowed to the
    * answers with a feasible continuation; a prompt left with none is empty.
-   * Answers withheld only because their search ran out of budget are
+   * Answers withheld only because the step's feasibility budget ran out are
    * reported with a `feasibilityBounded` event.
    */
   private narrow(raw: Prompt): Prompt {
     const guard = this.options.guard;
     if (guard === undefined || this.committed) return raw;
-    const { prompt, unproven } = guard.narrow(raw, this.rawAnswers);
-    if (unproven > 0) {
-      this.emit({ kind: "feasibilityBounded", side: raw.side, purpose: raw.purpose, unproven });
+    const { prompt, unproven, truncated } = guard.narrow(raw, this.rawAnswers);
+    if (unproven > 0 || truncated) {
+      // Only the answering side sees the event, so it names the source as that side may see it.
+      const purpose = purposeView(raw.purpose, raw.side, this.state);
+      this.emit({ kind: "feasibilityBounded", side: raw.side, purpose, unproven, truncated });
     }
     if (!hasLegalAnswer(prompt)) {
       throw new EmptyPrompt(prompt);

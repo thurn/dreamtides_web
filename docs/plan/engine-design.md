@@ -341,7 +341,7 @@ One step runner (`steps/runner.ts`); several answer sources:
 ```ts
 interface AnswerSource { answer(prompt: Prompt, work: BattleState): Answer }   // may throw Suspend
 
-function runStep(start, step, source, catalog, options?: { prefix?, dryRun?, automatic?, replay? }): StepResult {
+function runStep(start, step, source, catalog, options?: { prefix?, dryRun?, automatic?, replay?, searches? }): StepResult {
   const work = cloneState(start);
   const ctx = new Context(work, catalog, source, { prefix, dryRun, replay, canceller });
   try {
@@ -499,42 +499,66 @@ never drifts from execution:
 - An `EmptyPrompt`, or a cost plan whose energy total the side cannot pay
   (`planCosts` throws `Infeasible`), is a dead end. The search backtracks to
   the deepest choice point with an untried answer and runs again.
-- The search is depth first and stops after
-  `BattleConfig.feasibilitySearchRuns` runs (`BATTLE.feasibilitySearchRuns`).
-  A search that runs out proves nothing: the candidate is left out and
-  listed in `LegalMoves.bounded`, which the fold logs as an
-  `engine.feasibility` record.
+- The search is depth first. A search that spends its budget proves
+  nothing: the candidate is left out and listed in `LegalMoves.bounded`.
 
 The common case costs one run, as the first path pays. Results are memoized
-in the engine's `LegalityMemo`, a `WeakMap` keyed by the state object
-(committed states are never mutated, so an entry never goes stale), per side.
-The fold shares the engine's memo; it is never persisted.
+in the engine's `LegalityMemo` (`createLegalityMemo`), keyed by the state
+object (committed states are never mutated, so an entry never goes stale):
+the legal moves per side, and each candidate step's search
+(`LegalityMemo.searches`), which the step's guard reads back when the step
+runs. The fold shares the engine's memo; it is never persisted.
 
 **A legal play can always be paid along whatever path its player answers.**
 A step with a commit point (`hasCommitPoint`: `play`, `activate`) runs with a
 guard that narrows each prompt raised before the commit point to the answers
 a search proves:
 
-- The guard examines the prompt's answers in `legalAnswers` order, at most
-  `feasibilitySearchRuns` of them, searching from each.
+- The search that proved the path the guard stands on, its **witness**,
+  settles the prompt's answers up to the witness's own for free: the
+  depth-first search moved past each earlier answer only once every path
+  through it had dead-ended, and the witness's answer is proven.
+- Each later answer, in `legalAnswers` order, gets a search of its own. The
+  searches share the budget left: one run each in order, then one run each
+  in turn until each is settled.
 - The narrowed prompt states its legal set in its own fields where they can:
   fewer candidates, tighter bounds, a mode marked not legal. Otherwise it
   lists the legal answers in `allowed`. A prompt whose every answer is
   feasible is unchanged, fingerprint included.
-- An answer withheld only because its search ran out, or because the guard
-  stopped examining, emits a `feasibilityBounded` event (private to the
-  answering side, logged as `engine.feasibility`).
+- An answer withheld only because the budget ran out emits a
+  `feasibilityBounded` event, private to the answering side and logged as
+  `engine.feasibility`. It counts the examined answers left unproven
+  (`unproven`) and says whether answers were left unexamined (`truncated`).
+  Its purpose is as the answering side may see it (`purposeView`), so a play
+  still hidden in hand is never named to the opponent.
 - `isLegalAnswer`, `forcedAnswer`, `randomLegalAnswer`, and the fingerprint
   read the narrowed prompt, so a stale or dead-end answer bounces as
   `illegalAnswer`, a recorded one fails replay, and one feasible answer is
   answered automatically.
 
-The guard's searches replay the answers given so far against the prompts as
-rules code raised them (`Context.rawAnswers`). The witness path that made the
-play legal stays within budget at every prompt, so a narrowed prompt is never
-empty for a play legality offered. Narrowing is a deterministic function of
-the committed state and the answers, so an inline run, a fold re-run, a
-reload, and a loop replay see the same prompts.
+**One budget per step.** `BattleConfig.feasibilitySearchRuns`
+(`BATTLE.feasibilitySearchRuns`) bounds every dry run of one step along one
+path of answers: legality spends from it first, and each prompt spends only
+what the prompts before it left. Every answer offered carries a witness, and
+the witness's answer at the next prompt is free, so a narrowed prompt is
+never empty for a play legality offered, even with nothing left to spend.
+
+**Replay is free and identical.** The guard's searches replay the answers
+given so far against the prompts as rules code raised them
+(`Context.rawAnswers`). Its decision at a prompt, with the budget it leaves
+and the witnesses it found, is a function of the committed state, the step,
+and the answers before the prompt. The step's search memoizes it by those
+answers and checks the replayed prompt's fingerprint against it
+(`ReplayDivergence`), so a fold re-run makes no dry runs, and an inline run,
+a reload, another engine, and a loop replay compute the same prompts.
+
+**Hosts see every bound.** `ApplyResult.bounded` lists the plays and
+activations each decision of an `apply` or `createBattle` left out unproven
+(`boundedLegality`, `steps/driver.ts`): the responses that decided an
+automatic pass, and the options of the decision the run stopped at. Together
+with the `feasibilityBounded` events, AI, fuzz, tournament, and worker hosts
+log them as `engine.feasibility` records (`legalityLogRecords`,
+`eventLogRecords`) as the fold does, and the fuzzer counts both.
 
 ### Prompt data
 
@@ -1288,8 +1312,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     chooser may change. A "look at the top 4" prompt reveals those cards only
     to its chooser.
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
-  it: whole for the side answering, and otherwise with only the cards and
-  purpose source `side` can identify.
+  it: its purpose names a source card only when `side` can identify it
+  (`purposeView`), even for the side answering, which otherwise sees it
+  whole; any other side sees only the cards it can identify.
 - **The UI renders only views.** The Phase 4.6 debug reveal switches that
   side's view to omniscient.
 - **Determinization** (D22) is `engine.determinize(view, decklists, random)

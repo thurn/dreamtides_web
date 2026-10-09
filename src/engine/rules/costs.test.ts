@@ -5,33 +5,37 @@
  * with payable costs, and only answers that keep such a path open.
  */
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../catalog";
+import { printedCardId, type EngineCardDefinition } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { abandonCost, activated, additionalCost, characterYouControl, choiceCost, discardCost, energy, event, revealCost, target } from "../dsl/builders";
 import * as p from "../effects/primitives";
 import { createEngine, IllegalAction } from "../engine";
-import type { EngineEvent } from "../events";
+import { eventVisibleTo, type EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { legalityLogRecords, type EngineLogRecord } from "../log";
 import { legalAnswers } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
-import type { Answer, Prompt } from "../prompts/types";
+import type { Answer, ChooseNumberPrompt, Prompt } from "../prompts/types";
 import { stateHash } from "../state/hash";
-import type { CardId, EffectId, InstanceId, Side } from "../state/ids";
+import { opponent, type CardId, type EffectId, type InstanceId, type Side } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { searchCommitPoint } from "../steps/feasibility";
+import { Infeasible } from "../steps/errors";
+import { searchCommitPoint, stepSearch, type StepSearch } from "../steps/feasibility";
 import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { promptView } from "../view/view";
 import { INTERACTIVE, ScriptedSource } from "../steps/sources";
-import type { RecordedAnswer } from "../steps/types";
+import type { AnswerSource, RecordedAnswer, StepContext } from "../steps/types";
 import { boardState, cardIdOf, type SideSetup } from "../testing/board";
 import { invariantViolations } from "../testing/invariants";
+import { promptRedactionViolations } from "../testing/redaction";
 import { STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "../testing/stack-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import type { Action } from "./actions";
-import { legalMoves } from "./legality";
+import { cardsAssignable } from "./costs";
+import { createLegalityMemo, legalMoves, type BoundedLegality } from "./legality";
+import { BATTLE } from "../../content/battle";
 
 function fixture(index: number, cardType: "character" | "event", abilities: EngineCardDefinition["abilities"], subtype: CardSubtype = "Warrior"): EngineCardDefinition {
   return {
@@ -45,6 +49,28 @@ function fixture(index: number, cardType: "character" | "event", abilities: Engi
     abilities,
   };
 }
+
+/** The value of X: `a`, then `b`, each from 0 to `PAIR_MAX`. */
+const PAIR_MAX = 7;
+// eslint-disable-next-line dreamtides/engine-purity -- counts every run of a play step, dry or real
+let pairRuns = 0;
+
+/** A play hook choosing two numbers for `side`; a pair with `b < a` dead-ends, and `a = 3` is a rules bug when `broken`. */
+function pairHook(side: (ctx: StepContext, self: InstanceId) => Side, broken = false): NonNullable<EngineCardDefinition["synthetic"]>["play"] {
+  return (ctx, self) => {
+    // eslint-disable-next-line dreamtides/engine-purity -- counts every run of a play step, dry or real
+    pairRuns += 1;
+    const asked = side(ctx, self);
+    const purpose = { source: self, cardId: printedCardId(ctx.state.instances[self].printing), ability: 0, role: "chooseX" } as const;
+    const a = ctx.choose<ChooseNumberPrompt>({ kind: "chooseNumber", side: asked, purpose, min: 0, max: PAIR_MAX });
+    if (broken && a === 3) throw new Error("a rules bug on one answer path");
+    const b = ctx.choose<ChooseNumberPrompt>({ kind: "chooseNumber", side: asked, purpose, min: 0, max: PAIR_MAX });
+    if (b < a) throw new Infeasible("b < a");
+    return {};
+  };
+}
+
+const controller = (ctx: StepContext, self: InstanceId): Side => ctx.state.instances[self].controller;
 
 /** Fixtures whose first-legal answer path dead-ends while another path pays. */
 const SEARCH = {
@@ -62,6 +88,14 @@ const SEARCH = {
   discardEachThenRevealEvent: fixture(5, "event", () => [additionalCost(discardCost(1), discardCost(1), revealCost(1, { cardType: "event" })), event(p.gainPoints(1))]),
   /** A Mage with "Abandon a Warrior: A character you control gains +1✦." */
   pumpingMage: fixture(6, "character", () => [activated([abandonCost({ subtype: "Warrior" })], p.gainSpark(target(characterYouControl()), 1))], "Mage"),
+  /** Its player chooses `a`, then `b ≥ a`, at play time: the number of paths through an answer grows with it. */
+  ascendingPair: { ...fixture(7, "event", () => []), synthetic: { play: pairHook(controller) } },
+  /** As `ascendingPair`, but the opponent of its player chooses, while the card is still hidden in hand. */
+  opponentPair: { ...fixture(8, "event", () => []), synthetic: { play: pairHook((ctx, self) => opponent(controller(ctx, self))) } },
+  /** As `ascendingPair`, but rules code throws once `a = 3` is chosen. */
+  brokenPair: { ...fixture(9, "event", () => []), synthetic: { play: pairHook(controller, true) } },
+  /** An Interrupt: "To play this card, discard a card and reveal an event. Gain 1⍟." */
+  revealingInterrupt: { ...fixture(10, "event", () => [additionalCost(discardCost(1), revealCost(1, { cardType: "event" })), event(p.gainPoints(1))]), speed: "interrupt" },
 } as const satisfies Record<string, EngineCardDefinition>;
 
 const engine = createEngine(testCatalog([...STACK_CARDS, ...Object.values(SEARCH), PROMPTING.drawX], SYNTHETIC_EMBLEMS));
@@ -253,6 +287,195 @@ describe("activated ability costs", () => {
   });
 });
 
+describe("one feasibility budget per step", () => {
+  it("bounds every dry run of a play, legality and narrowing together, by the budget", () => {
+    for (const budget of [1, 4, 9, 16, 36, 64]) {
+      const { state, ids } = withBudget(board({ hand: [SEARCH.ascendingPair.id] }), budget);
+      const card = ids.player.hand[0];
+      // eslint-disable-next-line dreamtides/engine-purity -- counts every run of a play step, dry or real
+      pairRuns = 0;
+      expect(plays(state)).toEqual([card]);
+      const result = engine.apply(state, "player", { kind: "play", card, from: "hand" }, HIGHEST);
+      // One real run; every other run is a dry run of legality or of a narrowed prompt.
+      expect(pairRuns - 1).toBeLessThanOrEqual(budget);
+      expect(searchOf(state, card).dryRuns).toBe(pairRuns - 1);
+      expect(result.state.stack[0]).toMatchObject({ instance: card });
+    }
+  });
+
+  it("narrows by proof within the budget, and reports exactly the answers it could not settle", () => {
+    const pairPrompts = (budget: number) => {
+      const { state, ids } = withBudget(board({ hand: [SEARCH.ascendingPair.id] }), budget);
+      const result = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, HIGHEST);
+      return { answers: result.answers.map((answer) => answer.value), bounded: result.events.filter((event) => event.kind === "feasibilityBounded") };
+    };
+    // Every a has a path (b = a), so the default budget proves each answer; a = 7 leaves b = 7.
+    expect(pairPrompts(BATTLE_BUDGET)).toEqual({ answers: [PAIR_MAX, PAIR_MAX], bounded: [] });
+    // Legality's witness (0, 0) is free. Twenty runs settle a = 1 and a = 2
+    // in turn; a = 3 to 7 are examined and left unproven, and b = 2 is
+    // free along a = 2's witness, the rest unexamined.
+    const twenty = pairPrompts(20);
+    expect(twenty.answers).toEqual([2, 2]);
+    expect(twenty.bounded.map(({ unproven, truncated }) => ({ unproven, truncated }))).toEqual([
+      { unproven: 5, truncated: false },
+      { unproven: 0, truncated: true },
+    ]);
+    // Five runs examine a = 1 to 4 once each and stop: only the witness is offered, and answered as forced.
+    const five = pairPrompts(5);
+    expect(five.answers).toEqual([0, 0]);
+    expect(five.bounded.map(({ unproven, truncated }) => ({ unproven, truncated }))).toEqual([
+      { unproven: 4, truncated: true },
+      { unproven: 0, truncated: true },
+    ]);
+  });
+
+  it("makes no dry runs when the fold re-runs a step, and decides alike after a cold reload", () => {
+    for (const budget of [1, 9, 20, 64]) {
+      const { state, ids } = withBudget(board({ hand: [SEARCH.ascendingPair.id] }), budget);
+      const card = ids.player.hand[0];
+      const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+      let slice = sliceOf(state);
+      let pending = null;
+      slice = appliedSlice(fold.reduce(slice, { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } }));
+      const search = () => searchOf(state, card).dryRuns;
+      while ((pending = fold.pending(slice)) !== null) {
+        const spent = search();
+        expect(fold.pending(slice)).toEqual(pending);
+        expect(search()).toBe(spent);
+        const cold = createFoldAdapter(createEngine(engine.catalog));
+        expect(cold.pending(JSON.parse(JSON.stringify(slice)) as BattleSlice)).toEqual(pending);
+        const value = [...legalAnswers(pending.prompt)].pop()!;
+        slice = appliedSlice(fold.reduce(slice, { kind: "answer", side: "player", promptId: pending.prompt.id, value }));
+      }
+      expect(search()).toBeLessThanOrEqual(budget);
+      expect(slice.committed.stack[0]).toMatchObject({ instance: card });
+    }
+  });
+
+  it("never offers a play whose narrowed prompts could come up empty, whatever the budget", () => {
+    for (let budget = 1; budget <= 12; budget++) {
+      for (const hand of permutations([v.event1.id, v.vanilla1.id, v.vanilla2.id])) {
+        const { state, ids } = withBudget(board({ hand: [SEARCH.discardEachThenRevealEvent.id, ...hand] }), budget);
+        const card = ids.player.hand[0];
+        // The play can always be paid, so legality leaves it out only when its search runs out.
+        const legal = plays(state).includes(card);
+        expect(legal).toBe(!legalMoves(state, engine.catalog, "player", createLegalityMemo()).bounded.some((step) => step.kind === "play" && step.card === card));
+        if (legal) expect(offeredPaths(state, playStep(card)).finished).toBeGreaterThan(0);
+      }
+      const pair = withBudget(board({ hand: [SEARCH.ascendingPair.id] }), budget);
+      expect(offeredPaths(pair.state, playStep(pair.ids.player.hand[0])).finished).toBeGreaterThan(0);
+    }
+  });
+
+  it("names a play-time prompt's source to the opponent answering it only as it may see the card", () => {
+    const { state, ids } = board({ hand: [SEARCH.opponentPair.id] });
+    const fold = createFoldAdapter(engine);
+    const opened = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } }));
+    const { prompt, display } = fold.pending(opened)!;
+    expect(prompt).toMatchObject({ side: "enemy", purpose: { source: ids.player.hand[0] } });
+    expect(promptView(prompt, "enemy", display).purpose).toMatchObject({ source: null, cardId: null, role: "chooseX" });
+    expect(promptRedactionViolations(prompt, display, engine.catalog)).toEqual([]);
+  });
+
+  it("names a prompt's source in its bounded event only as the answering side may see it", () => {
+    const { state, ids } = withBudget(board({ hand: [SEARCH.opponentPair.id] }), 1);
+    const card = ids.player.hand[0];
+    const records: EngineLogRecord[] = [];
+    const fold = createFoldAdapter(engine, { log: (record) => records.push(record) });
+    const done = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } }));
+    expect(done.committed.stack[0]).toMatchObject({ instance: card });
+    const bounded = records.flatMap((record) => (record.event === "engine.feasibility" && record.detail.kind === "feasibilityBounded" ? [record.detail] : []));
+    expect(bounded).toHaveLength(2);
+    for (const event of bounded) {
+      expect(event).toMatchObject({ side: "enemy", purpose: { source: null, cardId: null, role: "chooseX" } });
+      expect(JSON.stringify(event)).not.toContain(card);
+      expect(JSON.stringify(event)).not.toContain(SEARCH.opponentPair.id);
+      expect(eventVisibleTo(event, "enemy", state)).toBe(true);
+      expect(eventVisibleTo(event, "player", state)).toBe(false);
+    }
+    // The player answering its own play's prompts may see the card.
+    const own = withBudget(board({ hand: [SEARCH.ascendingPair.id] }), 1);
+    const result = engine.apply(own.state, "player", { kind: "play", card: own.ids.player.hand[0], from: "hand" }, HIGHEST);
+    expect(result.events).toContainEqual(expect.objectContaining({
+      kind: "feasibilityBounded",
+      side: "player",
+      purpose: expect.objectContaining({ source: own.ids.player.hand[0], cardId: SEARCH.ascendingPair.id }) as unknown,
+    }));
+  });
+
+  it("reports the responses a decision left out unproven in the apply result when they pass automatically", () => {
+    const setup = boardState(engine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { deck, hand: [v.event0.id], energy: 5 },
+      enemy: { deck, hand: [SEARCH.revealingInterrupt.id, v.event1.id, v.vanilla1.id], energy: 5 },
+    });
+    const interrupt = setup.ids.enemy.hand[0];
+    const action: Action = { kind: "play", card: setup.ids.player.hand[0], from: "hand" };
+    // Discarding the event first dead-ends, so the Interrupt needs two runs.
+    const tight = withBudget(setup, 1).state;
+    const passed = run(tight, "player", action);
+    const left: BoundedLegality = { version: tight.version + 1, side: "enemy", step: playStep(interrupt) };
+    expect(passed.bounded).toEqual([left]);
+    expect(passed.state.stack).toEqual([]);
+    expect(legalityLogRecords(passed.bounded)).toEqual([{ event: "engine.feasibility", version: left.version, detail: { kind: "legalityBounded", side: "enemy", step: left.step } }]);
+    const roomy = run(withBudget(setup, 2).state, "player", action);
+    expect(roomy.bounded).toEqual([]);
+    expect(engine.decision(roomy.state)).toEqual({ kind: "respond", side: "enemy" });
+  });
+
+  it("aborts a step whose rules code throws in a dry run, keeping the committed state, alike on retry", () => {
+    const { state, ids } = board({ hand: [SEARCH.brokenPair.id] });
+    const card = ids.player.hand[0];
+    // Legality's first path, a = 0, pays; narrowing the first prompt searches a = 3.
+    expect(plays(state)).toEqual([card]);
+    const fold = createFoldAdapter(engine);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const outcome = fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } });
+      if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
+      expect(outcome.slice.committed).toBe(state);
+      expect(outcome.slice.inFlight).toBeNull();
+      expect(searchOf(state, card).nodes.size).toBe(0);
+    }
+    expect(() => engine.apply(state, "player", { kind: "play", card, from: "hand" }, HIGHEST)).toThrow();
+  });
+});
+
+describe("assigning distinct cards to card costs", () => {
+  const ids = (count: number, from = 0): InstanceId[] => Array.from({ length: count }, (_, index): InstanceId => `i${from + index}`);
+  it("decides by matching for any number of demands", () => {
+    expect(cardsAssignable(ids(40).map((id) => ({ count: 1, pool: [id] })))).toBe(true);
+    // Forty demands for one card each from the same thirty-nine cards.
+    expect(cardsAssignable(ids(40).map(() => ({ count: 1, pool: ids(39) })))).toBe(false);
+    // Thirty-two demands, one of which competes for a card another needs alone.
+    expect(cardsAssignable([...ids(31).map((id) => ({ count: 1, pool: [id] })), { count: 1, pool: ["i0"] }])).toBe(false);
+    expect(cardsAssignable([...ids(31).map((id) => ({ count: 1, pool: [id] })), { count: 1, pool: ["i0", "i99"] }])).toBe(true);
+  });
+
+  it("needs as many distinct cards as each demand counts, reassigning cards where it must", () => {
+    expect(cardsAssignable([{ count: 2, pool: ids(3) }, { count: 1, pool: ["i0"] }])).toBe(true);
+    expect(cardsAssignable([{ count: 2, pool: ids(2) }, { count: 1, pool: ["i0"] }])).toBe(false);
+    expect(cardsAssignable([{ count: 0, pool: [] }])).toBe(true);
+    expect(cardsAssignable([])).toBe(true);
+  });
+});
+
+/** Answers each prompt with its last legal answer: the highest number. */
+const HIGHEST: AnswerSource = { answer: (prompt) => [...legalAnswers(prompt)].pop()! };
+
+/** The default budget (`BATTLE.feasibilitySearchRuns`). */
+const BATTLE_BUDGET = BATTLE.feasibilitySearchRuns;
+
+/** The engine's memoized feasibility search of playing `card` from `state`. */
+function searchOf(state: BattleState, card: InstanceId): StepSearch {
+  return stepSearch(state, playStep(card), engine.catalog, engine.memo.searches);
+}
+
+/** `setup` with a feasibility budget of `budget` runs per step. */
+function withBudget<T extends { state: BattleState }>(setup: T, budget: number): T {
+  return { ...setup, state: { ...setup.state, config: { ...setup.state.config, feasibilitySearchRuns: budget } } };
+}
+
 /** Every ordering of `items`. */
 function permutations<T>(items: readonly T[]): T[][] {
   if (items.length <= 1) return [[...items]];
@@ -422,15 +645,15 @@ describe("legality by search", () => {
     const late = tight([v.event1.id, v.vanilla1.id, v.vanilla2.id]);
     const lateCard = late.ids.player.hand[0];
     expect(plays(late.state)).not.toContain(lateCard);
-    const moves = legalMoves(late.state, engine.catalog, "player", new WeakMap());
+    const moves = legalMoves(late.state, engine.catalog, "player", createLegalityMemo());
     expect(moves.bounded).toEqual([playStep(lateCard)]);
-    expect(legalityLogRecords("player", moves.bounded, late.state.version)).toEqual([
+    expect(legalityLogRecords([{ version: late.state.version, side: "player", step: playStep(lateCard) }])).toEqual([
       { event: "engine.feasibility", version: late.state.version, detail: { kind: "legalityBounded", side: "player", step: playStep(lateCard) } },
     ]);
 
-    // The first path pays in one run, and the first two answers are proven;
-    // the prompt examines no more answers than a search makes runs, so the
-    // event is withheld, unproven.
+    // Legality's first path pays in one run, which proves its answer, the
+    // first, for free; the second answer's search spends the last run, so
+    // the event is left unexamined and withheld.
     const early = tight([v.vanilla1.id, v.vanilla2.id, v.event1.id]);
     const card = early.ids.player.hand[0];
     const [, one, two, theEvent] = early.ids.player.hand;
@@ -440,7 +663,7 @@ describe("legality by search", () => {
     const opened = appliedSlice(fold.reduce(sliceOf(early.state), { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } }));
     const { prompt } = fold.pending(opened)!;
     expect(prompt).toMatchObject({ kind: "chooseCards", candidates: [one, two], purpose: { role: "discardCost" } });
-    const bounded: EngineEvent = { kind: "feasibilityBounded", side: "player", purpose: prompt.purpose, unproven: 1 };
+    const bounded: EngineEvent = { kind: "feasibilityBounded", side: "player", purpose: prompt.purpose, unproven: 0, truncated: true };
     expect(records).toContainEqual({ event: "engine.feasibility", version: early.state.version, detail: bounded });
     expect(fold.reduce(opened, { kind: "answer", side: "player", promptId: prompt.id, value: [theEvent] })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
   });

@@ -21,7 +21,7 @@ import type { BattleInit, BattleResult, BattleState, DeckEntry } from "../state/
 import { stepForAction, type StepObserver } from "../steps/driver";
 import type { Step } from "../steps/kinds";
 import { initialState } from "../state/create";
-import { eventLogRecords, stepLogRecords, type EngineLogRecord } from "../log";
+import { eventLogRecords, legalityLogRecords, stepLogRecords, type EngineLogRecord } from "../log";
 import { InlineSource } from "../steps/sources";
 import type { RecordedAnswer } from "../steps/types";
 import { invariantViolations } from "./invariants";
@@ -54,6 +54,10 @@ export interface FuzzGame {
   readonly eventsHash: number;
   readonly steps: number;
   readonly prompts: number;
+  /** Plays and activations decisions left out because their legality search spent its budget (`ApplyResult.bounded`). */
+  readonly boundedLegality: number;
+  /** Play-time prompts that withheld answers because the budget ran out (`feasibilityBounded` events). */
+  readonly boundedPrompts: number;
   /** The first invariant violation or engine error, with the step that caused it. */
   readonly failure: string | null;
   /** The action whose run threw, which `actions` therefore lacks. */
@@ -262,6 +266,8 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
   const init = fuzzInit(seed, pool);
   let prompts = 0;
   let steps = 0;
+  let boundedLegality = 0;
+  let boundedPrompts = 0;
   let failure: string | null = null;
   const events: EngineEvent[] = [];
   let state: BattleState = initialState(init, engine.catalog);
@@ -297,6 +303,8 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
           actions.push({ ...chosen, answers: applied.answers });
         }
         events.push(...applied.events);
+        boundedLegality += applied.bounded.length;
+        boundedPrompts += applied.events.filter((event) => event.kind === "feasibilityBounded").length;
         state = applied.state;
       },
       stop: () => failure !== null,
@@ -315,6 +323,8 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
     eventsHash: eventsDigest(events),
     steps,
     prompts,
+    boundedLegality,
+    boundedPrompts,
     failure,
     failedAction,
   };
@@ -323,8 +333,9 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
 /**
  * The engine log of a recorded fuzz game (log.ts), for a failing game's log
  * file: its init and policies, then each action with its answers, replayed
- * inline to add the triggers, loops, random draws, and battle end it
- * produced. A step that throws ends the log with an `engine.error` record.
+ * inline to add the triggers, loops, random draws, battle end, and
+ * feasibility bounds it produced. A step that throws ends the log with an
+ * `engine.error` record.
  */
 export function fuzzGameLog(engine: Engine, game: FuzzGame): EngineLogRecord[] {
   const records: EngineLogRecord[] = [{ event: "engine.battleStarted", version: 0, init: game.init, policies: FUZZ_POLICIES }];
@@ -335,11 +346,15 @@ export function fuzzGameLog(engine: Engine, game: FuzzGame): EngineLogRecord[] {
   };
   let step: Step = { kind: "beginBattle", dreamwell: game.init.dreamwell };
   try {
-    let state = engine.createBattle(game.init, replaySource(game.startAnswers), observe).state;
+    const created = engine.createBattle(game.init, replaySource(game.startAnswers), observe);
+    records.push(...legalityLogRecords(created.bounded));
+    let state = created.state;
     for (const { side, action, answers } of game.actions) {
       records.push({ event: "engine.action", version: state.version, side, action, answers });
       step = stepForAction(state, action);
-      state = engine.apply(state, side, action, replaySource(answers), observe).state;
+      const applied = engine.apply(state, side, action, replaySource(answers), observe);
+      records.push(...legalityLogRecords(applied.bounded));
+      state = applied.state;
     }
   } catch (error) {
     records.push({ event: "engine.error", version: previous.version, step, message: errorText(error) });

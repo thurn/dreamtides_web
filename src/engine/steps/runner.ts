@@ -5,7 +5,7 @@ import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { Context } from "./context";
 import { Suspend } from "./errors";
-import { feasibilityGuard } from "./feasibility";
+import { feasibilityGuard, type SearchMemo } from "./feasibility";
 import { stepDefinition, type Step } from "./kinds";
 import type { AnswerSource, RecordedAnswer, StepResult } from "./types";
 
@@ -22,6 +22,12 @@ export interface RunOptions {
    * `prefix`, and loop detection leaves the step alone.
    */
   readonly replay?: boolean;
+  /**
+   * The engine's memo of feasibility searches: the guard of a step with a
+   * commit point reads its legality search and earlier decisions from it,
+   * so a re-run makes no dry runs.
+   */
+  readonly searches?: SearchMemo;
 }
 
 /** Whether a player made a real choice: an answer that was not forced. */
@@ -32,7 +38,8 @@ function madeChoice(answers: readonly RecordedAnswer[]): boolean {
 /**
  * Runs one step from a committed state. The step works on a private copy,
  * so a step that suspends or throws leaves `start` untouched. A step with a
- * commit point offers only play-time answers with a feasible continuation. A completed
+ * commit point offers only play-time answers with a feasible continuation,
+ * within its one feasibility budget (steps/feasibility.ts). A completed
  * step gets the state-based victory check (P5), the mandatory-loop checks
  * (an exact repeat and the resolution cap), loop detection, and a new
  * version.
@@ -51,7 +58,7 @@ export function runStep(
     dryRun: options.dryRun,
     replay: options.replay,
     canceller: definition.canceller(start, step),
-    ...(definition.hasCommitPoint === true && options.dryRun !== true ? { guard: feasibilityGuard(start, step, catalog) } : {}),
+    ...(definition.hasCommitPoint === true && options.dryRun !== true ? { guard: feasibilityGuard(start, step, catalog, options.searches) } : {}),
   });
   try {
     definition.run(ctx, step);
