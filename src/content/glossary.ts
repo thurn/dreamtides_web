@@ -574,6 +574,17 @@ export const GLOSSARY = [
     projections: [],
   },
   {
+    id: "19f6c2c9-dd6b-4d65-9f95-f6a3486772cc",
+    category: "Transfigurations",
+    term: "Hastened",
+    definition:
+      "Transfiguration: makes this event card fast (❖), so it may be played at the end of either player's turn.",
+    priority: 85,
+    matchesTermInRulesText: true,
+    variants: [],
+    projections: [],
+  },
+  {
     id: "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
     category: "Transfigurations",
     term: "Attuned",

@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { GLOSSARY, GLOSSARY_IDS, GLOSSARY_INDEX, RULES_SYMBOL_GLOSSARY, glossaryDefinitionUsesRulesText, glossaryRulesTextForms, lookupGlossaryTerm, requireGlossaryEntry, rulesSymbolGlossaryEntry } from "./glossary";
 import { testGlossaryEntryId } from "../types/test-identities";
 import { projectGlossaryEntry, extractGlossaryTerms } from "./glossary-terms";
+import { loadTransfigurationData } from "./transfiguration-data";
 import type { GlossaryCatalogEntry } from "./glossary";
 
 describe("glossary", () => {
@@ -53,6 +54,16 @@ describe("glossary", () => {
         ...Object.values(GLOSSARY_IDS.sites),
       ];
       for (const id of ids) expect(requireGlossaryEntry(id).id).toBe(id);
+    });
+
+    it("resolves every transfiguration form to a transfiguration rules term", () => {
+      // Each form's Info Card and rules-text tooltip resolve through its
+      // glossary id, so a dangling id leaves the transfiguration unexplained.
+      for (const form of loadTransfigurationData().forms) {
+        const entry = requireGlossaryEntry(form.glossaryUuid);
+        expect(entry.category).toBe("Transfigurations");
+        expect(lookupGlossaryTerm(entry.term)).toBe(entry);
+      }
     });
 
     it("indexes each term and variant exactly once", () => {
