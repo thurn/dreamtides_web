@@ -1,9 +1,9 @@
-// Schema and validation for the browser projection of `data/tides.ron` and the
-// embedded tide pools of the Avatar catalog (`src/content/tides.ts` and
-// `src/content/avatars/`). The tides4
-// pool algorithm recombines these manually curated decks into a seeded draft pool.
+// Schema and validation for the tides4 decks document, assembled from the tide
+// catalog (`src/content/tides.ts`) and the tide pools embedded in the Avatar
+// modules (`src/content/avatars/`). The tides4 pool algorithm recombines these
+// manually curated decks into a seeded draft pool.
 //
-// The artifact carries both halves of the algorithm so it is self-contained:
+// The document carries both halves of the algorithm so it is self-contained:
 //   * `tides` — the preconstructed decklists. Each tide has a `role`:
 //       - a `signature` tide is one signatured Avatar's signature cards
 //         themselves (the always-included identity floor for its pool);

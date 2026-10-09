@@ -18,6 +18,11 @@ export interface KeyValueStore {
   putAll(entries: readonly KeyValueEntry[]): Promise<void>;
   /** Delete every key in every range, all or nothing. */
   deleteRanges(ranges: readonly KeyRange[]): Promise<void>;
+  /** Delete every key in every range, then write every entry, all or nothing. */
+  replaceRanges(
+    ranges: readonly KeyRange[],
+    entries: readonly KeyValueEntry[],
+  ): Promise<void>;
 }
 
 /**
@@ -28,6 +33,13 @@ export function createMemoryKeyValueStore(): KeyValueStore {
   const entries = new Map<string, unknown>();
   const keysInRange = (lower: string, upper: string): string[] =>
     [...entries.keys()].filter((key) => key >= lower && key < upper).sort();
+  const deleteAll = (ranges: readonly KeyRange[]): void => {
+    for (const [lower, upper] of ranges) {
+      for (const key of keysInRange(lower, upper)) entries.delete(key);
+    }
+  };
+  const cloneAll = (batch: readonly KeyValueEntry[]): KeyValueEntry[] =>
+    batch.map(([key, value]) => [key, structuredClone(value)] as const);
   return {
     get: (key) =>
       Promise.resolve(
@@ -40,16 +52,18 @@ export function createMemoryKeyValueStore(): KeyValueStore {
         ),
       ),
     putAll: (batch) => {
-      const cloned = batch.map(
-        ([key, value]) => [key, structuredClone(value)] as const,
-      );
-      for (const [key, value] of cloned) entries.set(key, value);
+      for (const [key, value] of cloneAll(batch)) entries.set(key, value);
       return Promise.resolve();
     },
     deleteRanges: (ranges) => {
-      for (const [lower, upper] of ranges) {
-        for (const key of keysInRange(lower, upper)) entries.delete(key);
-      }
+      deleteAll(ranges);
+      return Promise.resolve();
+    },
+    replaceRanges: (ranges, batch) => {
+      // Cloned first, so a value that cannot be cloned changes nothing.
+      const cloned = cloneAll(batch);
+      deleteAll(ranges);
+      for (const [key, value] of cloned) entries.set(key, value);
       return Promise.resolve();
     },
   };

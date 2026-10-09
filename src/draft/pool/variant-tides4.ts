@@ -7,7 +7,9 @@
 //    tides, shuffle them together, and deal your draft pool, never more than 2
 //    copies of a card."
 //
-// `data/tides.ron` curates the axes of an avatar's identity as separate decks:
+// The tide catalog (`src/content/tides.ts`) curates the axes of an avatar's
+// identity as separate decks, and each Avatar module names the tides its pool
+// combines:
 //   * a SIGNATURE tide is one signatured Avatar's signature cards themselves
 //     — the always-joined identity floor;
 //   * a FACET tide is a single-anchor affinity pool — the coherent lean one

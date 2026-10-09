@@ -7,17 +7,22 @@
 // game's New Journey control switches to a created game and leaves the previous
 // one resumable by its id. A game created from a `?seed=<n>` URL takes the seed
 // derived from `n` under a fresh game id; a New Journey game draws a fresh seed.
+// Closing a game writes its last journey-log lines before its lock is released.
 
 import { act, StrictMode, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PinnedContentConfig } from "../eventlog/types";
+import { logEvent } from "../logging";
 import { parseFoldHash } from "../types/content-hash";
 import { parseClientId, parseGameId, type GameId } from "../types/identifiers";
 import { createGameRepository, type GameRepository } from "./game-repository";
 import { createFreshGenesis, journeySeedFromSeedOverride } from "./genesis";
 import type { GameLockManager } from "./game-lock";
-import { createMemoryKeyValueStore } from "./key-value-store";
+import {
+  createMemoryKeyValueStore,
+  type KeyValueStore,
+} from "./key-value-store";
 import {
   useLocalGame,
   type LocalGameStatus,
@@ -43,13 +48,18 @@ const CONTENT: PinnedContentConfig = {
 };
 
 /** Exclusive `ifAvailable` locks shared by every "tab" in a test. */
-function createFakeLockManager(): GameLockManager {
+function createFakeLockManager(
+  onRelease: () => void = () => undefined,
+): GameLockManager {
   const held = new Set<string>();
   return {
     request(name, _options, callback) {
       if (held.has(name)) return callback(null);
       held.add(name);
-      return callback({ name }).finally(() => held.delete(name));
+      return callback({ name }).finally(() => {
+        held.delete(name);
+        onRelease();
+      });
     },
   };
 }
@@ -273,10 +283,59 @@ describe("useLocalGame", () => {
     await reopened.close();
   });
 
+  it("writes the journey log's last lines on close, before releasing the lock", async () => {
+    const inner = createMemoryKeyValueStore();
+    let failLogWrites = false;
+    // Slow log writes land a task later, after anything not waiting for them.
+    let slowLogWrites = false;
+    const steps: string[] = [];
+    const store: KeyValueStore = {
+      ...inner,
+      putAll: async (entries) => {
+        if (!entries.some(([key]) => key.includes("/log/"))) {
+          return inner.putAll(entries);
+        }
+        if (failLogWrites) throw new Error("aborted");
+        if (slowLogWrites) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+        await inner.putAll(entries);
+        steps.push("log written");
+      },
+    };
+    const repository = createGameRepository(store);
+    const locks = createFakeLockManager(() => steps.push("lock released"));
+    const tab = await openTab(repository, null, CONTENT, locks);
+    const opened = tab.status();
+    if (opened.kind !== "ready") throw new Error("expected a ready game");
+
+    // The final batch fails; its retry is still pending when the tab closes.
+    failLogWrites = true;
+    logEvent("fixture_tail");
+    await settle();
+    failLogWrites = false;
+    slowLogWrites = true;
+    await tab.close();
+    await settle();
+
+    const events = (await repository.readLogLines(opened.game.gameId)).map(
+      (line) => (JSON.parse(line) as { event: string }).event,
+    );
+    expect(events.slice(-2)).toEqual([
+      "fixture_tail",
+      "game_log_persist_failed",
+    ]);
+    expect(steps.slice(-2)).toEqual(["log written", "lock released"]);
+  });
+
   it("starts a new game from the open game's controls and keeps the old one resumable", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     const locks = createFakeLockManager();
-    const previous = await storeGame(repository, parseGameId("previous1"), 1_000);
+    const previous = await storeGame(
+      repository,
+      parseGameId("previous1"),
+      1_000,
+    );
     window.history.replaceState(null, "", `/?game=${previous}`);
     const entries = window.history.length;
 
@@ -329,9 +388,7 @@ describe("useLocalGame", () => {
       throw new Error("expected ready games");
     }
     expect(firstStatus.game.genesis.seed).toBe(journeySeedFromSeedOverride(7));
-    expect(secondStatus.game.genesis.seed).toBe(
-      journeySeedFromSeedOverride(7),
-    );
+    expect(secondStatus.game.genesis.seed).toBe(journeySeedFromSeedOverride(7));
     expect(secondStatus.game.gameId).not.toBe(firstStatus.game.gameId);
 
     act(() => secondStatus.controls.startNewGame({ source: "game_menu" }));
@@ -352,7 +409,10 @@ describe("useLocalGame", () => {
 
     await selectGame(repository, null);
     const [{ gameId }] = await repository.listGames();
-    const otherContent = { ...CONTENT, draftFoldHash: parseFoldHash("b".repeat(64)) };
+    const otherContent = {
+      ...CONTENT,
+      draftFoldHash: parseFoldHash("b".repeat(64)),
+    };
     const gated = await selectGame(repository, gameId, otherContent);
     expect(gated.kind).toBe("configGate");
   });

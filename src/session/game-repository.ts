@@ -8,9 +8,10 @@
 //
 // Each game owns the `game/<gameId>/` keyspace. The `games/` records make the
 // recent-games listing one range read, and the `logs/` records make the stored
-// journey logs one range read, for capping their total size. Events and the genesis are stored as
-// the same JSON strings the event codec reads and writes, so a stored log
-// round-trips byte-exactly.
+// journey logs one range read, for capping their total size. Trimming a log
+// deletes its oldest chunks and rewrites the chunk that keeps its newest lines.
+// Events and the genesis are stored as the same JSON strings the event codec
+// reads and writes, so a stored log round-trips byte-exactly.
 
 import type { CommittedEvent } from "../eventlog/local-log";
 import {
@@ -28,7 +29,7 @@ import {
   type IntentKey,
   type GameId,
 } from "../types/identifiers";
-import type { KeyValueEntry, KeyValueStore } from "./key-value-store";
+import type { KeyRange, KeyValueEntry, KeyValueStore } from "./key-value-store";
 
 /** Version of the record shapes below. */
 export const LOCAL_GAME_SCHEMA_VERSION = 1;
@@ -75,6 +76,16 @@ export interface GameLogSummary {
   updatedAt: number;
 }
 
+/** What trimming a game's stored journey log removed. */
+export interface GameLogTrim {
+  /** The log after the trim. */
+  log: GameLogSummary;
+  /** Oldest lines deleted. */
+  droppedLines: number;
+  /** Their size in characters, one newline per line included. */
+  droppedCharacters: number;
+}
+
 /** One atomic write: new events, the updated summary, maybe a checkpoint. */
 export interface LocalGameWrite {
   summary: LocalGameSummary;
@@ -114,6 +125,15 @@ export interface GameRepository {
   listLogs(): Promise<GameLogSummary[]>;
   /** Delete these games' stored journey logs; their games stay playable. */
   deleteLogs(gameIds: readonly GameId[]): Promise<void>;
+  /**
+   * Delete the game's oldest journey-log lines, keeping the newest lines that
+   * fit within `maxCharacters`, in one atomic write. Null when the game has no
+   * stored log. One writer per game.
+   */
+  trimLogLines(
+    gameId: GameId,
+    maxCharacters: number,
+  ): Promise<GameLogTrim | null>;
 }
 
 const gameRecordKey = (gameId: GameId): string => `games/${gameId}`;
@@ -221,6 +241,11 @@ function decodeLogRecord(value: unknown): StoredLogRecord | null {
   };
 }
 
+/** A stored line's share of its log's size: the line and its newline. */
+function lineCharacters(line: string): number {
+  return line.length + 1;
+}
+
 function isLogChunk(value: unknown): value is string[] {
   return (
     Array.isArray(value) && value.every((line) => typeof line === "string")
@@ -249,6 +274,21 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
     }
     encodedGenesisByGame.set(gameId, record.genesis);
     return record.genesis;
+  }
+
+  async function readLogChunks(
+    gameId: GameId,
+  ): Promise<Array<[key: string, lines: string[]]>> {
+    const chunks = await store.getRange(
+      logChunksPrefix(gameId),
+      `${logChunksPrefix(gameId)}${RANGE_END}`,
+    );
+    return chunks.map(([key, value]) => {
+      if (!isLogChunk(value)) {
+        throw new UnreadableLocalGameError(gameId, `invalid log chunk ${key}`);
+      }
+      return [key, value];
+    });
   }
 
   return {
@@ -332,7 +372,7 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
         gameId,
         characters:
           (previous?.characters ?? 0) +
-          lines.reduce((total, line) => total + line.length + 1, 0),
+          lines.reduce((total, line) => total + lineCharacters(line), 0),
         updatedAt,
         nextChunk: nextChunk + 1,
       };
@@ -345,16 +385,7 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
     },
 
     async readLogLines(gameId) {
-      const chunks = await store.getRange(
-        logChunksPrefix(gameId),
-        `${logChunksPrefix(gameId)}${RANGE_END}`,
-      );
-      return chunks.flatMap(([key, value]) => {
-        if (!isLogChunk(value)) {
-          throw new UnreadableLocalGameError(gameId, `invalid log chunk ${key}`);
-        }
-        return value;
-      });
+      return (await readLogChunks(gameId)).flatMap(([, lines]) => lines);
     },
 
     async listLogs() {
@@ -376,6 +407,57 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
           [logChunksPrefix(gameId), `${logChunksPrefix(gameId)}${RANGE_END}`],
         ]),
       );
+    },
+
+    async trimLogLines(gameId, maxCharacters) {
+      const previous = decodeLogRecord(await store.get(logRecordKey(gameId)));
+      if (previous === null) return null;
+      const chunks = await readLogChunks(gameId);
+      const lines = chunks.flatMap(([, chunkLines]) => chunkLines);
+      let keptCharacters = 0;
+      let firstKept = lines.length;
+      while (
+        firstKept > 0 &&
+        keptCharacters + lineCharacters(lines[firstKept - 1]) <= maxCharacters
+      ) {
+        firstKept -= 1;
+        keptCharacters += lineCharacters(lines[firstKept]);
+      }
+      const trim: GameLogTrim = {
+        log: {
+          gameId,
+          characters: keptCharacters,
+          updatedAt: previous.updatedAt,
+        },
+        droppedLines: firstKept,
+        droppedCharacters: lines
+          .slice(0, firstKept)
+          .reduce((sum, line) => sum + lineCharacters(line), 0),
+      };
+      if (firstKept === 0 && previous.characters === keptCharacters) {
+        return trim;
+      }
+
+      // Whole chunks of dropped lines are deleted and the chunk holding the
+      // oldest kept line is rewritten in place. The record keeps its chunk
+      // counter, so later appends follow the kept lines in order.
+      const ranges: KeyRange[] = [];
+      const entries: KeyValueEntry[] = [
+        [logRecordKey(gameId), { ...previous, characters: keptCharacters }],
+      ];
+      let toDrop = firstKept;
+      for (const [key, chunkLines] of chunks) {
+        if (toDrop === 0) break;
+        if (chunkLines.length <= toDrop) {
+          ranges.push([key, `${key}${EXACT_KEY_END}`]);
+          toDrop -= chunkLines.length;
+        } else {
+          entries.push([key, chunkLines.slice(toDrop)]);
+          toDrop = 0;
+        }
+      }
+      await store.replaceRanges(ranges, entries);
+      return trim;
     },
   };
 }

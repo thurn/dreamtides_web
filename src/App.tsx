@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // Cumulus base interaction reset — disables native mobile long-press behaviour
 // (selection magnifier, iOS callout, Android context menu) across the `.cumulus`
-// subtree so it never fights Cumulus's own long-press-to-reveal gesture. Loaded
-// with the game entry only, so the /cumulus docs and editor tools keep normal
-// text selection. See src/cumulus/primitives/cumulus-base.css.
+// subtree so it never fights Cumulus's own long-press-to-reveal gesture. See
+// src/cumulus/primitives/cumulus-base.css.
 import "./cumulus/primitives/cumulus-base.css";
 import type { CardData } from "./types/cards";
 import type { JourneyContent } from "./data/journey-content";

@@ -1,7 +1,9 @@
 // Generates the typed mirror of the Cumulus design tokens.
 //
 //   node scripts/generate-cumulus-tokens.mjs   # writes src/cumulus/primitives/tokens.ts
-//                                             # also: npm run cumulus-tokens
+//
+// `npm run prepare-workspace` (scripts/prepare-workspace.mjs) runs it with the
+// other workspace generators before development, tests, and builds.
 //
 // src/cumulus/primitives/cumulus-tokens.css is the source of truth: every design
 // token is a CSS custom property declared there. This script parses that

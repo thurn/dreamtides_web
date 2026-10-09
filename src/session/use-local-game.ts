@@ -7,7 +7,8 @@
 // A game opens only in the tab that holds its lock (see `game-lock.ts`);
 // another tab on it reports `openElsewhere`, and a front-door resume of it
 // creates a new game instead. The open game's journey log is captured into
-// storage.
+// storage; closing the game writes its last events and log lines before the
+// lock is released.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GAME_LOGS } from "../content/game-logs";
@@ -125,9 +126,7 @@ function opened(
   selection: LocalGameSelection,
   requestNewGame: () => void,
 ): OpenedGame {
-  const logCapture = createGameLogCapture(repository, game.gameId, {
-    maxStoredCharacters: GAME_LOGS.maxStoredCharacters,
-  });
+  const logCapture = createGameLogCapture(repository, game.gameId, GAME_LOGS);
   return {
     kind: "ready",
     game,
@@ -287,9 +286,16 @@ function replaceGameInUrl(gameId: GameId): void {
   );
 }
 
-/** Stop writing `opened` and give up its lock. */
+/**
+ * Stop writing `opened`, flushing its events and then its journey log, and
+ * give up its lock once both are done, so the next tab to open the game is
+ * its only writer.
+ */
 function closeOpened(opened: OpenedGame): void {
-  void opened.game.close().finally(() => opened.lock.release());
+  void opened.game
+    .close()
+    .finally(() => opened.logCapture.close())
+    .finally(() => opened.lock.release());
 }
 
 /**

@@ -74,5 +74,13 @@ export async function openIndexedDbKeyValueStore(
       for (const [lower, upper] of ranges) store.delete(range(lower, upper));
       await transactionDone(transaction);
     },
+    async replaceRanges(ranges, entries) {
+      // Requests in one transaction run in order, and commit or abort together.
+      const transaction = database.transaction(RECORDS_STORE, "readwrite");
+      const store = transaction.objectStore(RECORDS_STORE);
+      for (const [lower, upper] of ranges) store.delete(range(lower, upper));
+      for (const [key, value] of entries) store.put(value, key);
+      await transactionDone(transaction);
+    },
   };
 }
