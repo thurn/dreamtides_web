@@ -72,7 +72,8 @@ List, in the bead notes, every surviving test that exercises the prototype
 battle path: the Phase 2.11a smoke files, and the battle screen and view-model
 contracts. Name the Phase 4 bead that replaces or deletes each one.
 
-**Acceptance:** the screenshots are in `artifacts/qa/<bead-id>/`, and the
+**Acceptance:** the screenshots are in the primary checkout's
+`artifacts/qa/<bead-id>/` ([Screenshots](workflow.md#screenshots)), and the
 inventory is in the notes.
 
 ### 4.1 Fold wiring and battle init

@@ -221,7 +221,9 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
 - **Identify content by UUID, never by name.** Names are not unique. Resolve
   names only at display time.
 - **Never commit image files.** Screenshots go to the gitignored
-  `artifacts/qa/` directory and are referenced by filename only.
+  `artifacts/qa/<bead-id>/` of the primary checkout
+  ([Screenshots](workflow.md#screenshots)) and are referenced by filename
+  only.
 - **Log new features.** Every new feature logs enough to reconstruct what the
   algorithm did in a given game. Logs go to `logs/journey-log.jsonl` in
   development and to per-game IndexedDB storage with JSONL export in every
@@ -239,8 +241,9 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
   `docs/plan/evidence/pre-existing/<bead-id>.md` within the same commit
   ([Evidence files](workflow.md#evidence-files)).
 - **Leave the primary checkout alone.** Never edit `~/dreamtides_web`
-  directly; all work happens in Tollgate worktrees. The exception is the local
-  Tollgate policy, under the Phase 1.2 rule. Tollgate fast-forwards its
+  directly; all work happens in Tollgate worktrees. The exceptions are the
+  local Tollgate policy, under the Phase 1.2 rule, and browser captures in its
+  gitignored `artifacts/qa/<bead-id>/`. Tollgate fast-forwards its
   `master` after each promotion (`sync_user_master`). Never push worktree
   branches.
 - **Never deploy.** Touch other repositories only as

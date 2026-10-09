@@ -209,7 +209,9 @@ Every brief contains, verbatim or by exact path:
 - the bead ID, title, description, acceptance criteria, and `Areas:` line;
 - whether the bead is core-review ([Reviews](#reviews));
 - the phase-page section to read, and the read-first list;
-- the worktree path, QA port 5174, and `artifacts/qa/<bead-id>/`;
+- the worktree path, QA port 5174, and the capture directory
+  `/Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/`
+  ([Screenshots](#screenshots));
 - whether the bead is `heavy` or `browser` (D17). The orchestrator sizes
   any soak or tournament it runs meanwhile to match;
 - these rules:
@@ -220,7 +222,11 @@ Every brief contains, verbatim or by exact path:
     ([D19](decisions.md#d19-test-pruning)).
   - Never run `bd` or `hbd`, `tg candidate`, `tg approve`, `tg cancel`, or
     `tg worktree`. Never push, never create branches, never touch the primary
-    checkout.
+    checkout except to write browser captures. Run `mkdir -p` on the capture
+    directory once, then pass each capture's absolute path as the
+    `browser_take_screenshot` `filename`, in the form
+    `/Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/<name>.png`
+    ([Screenshots](#screenshots)).
   - Run the [validation ladder](#validation-ladder), plus browser QA when
     runtime behavior or presentation changes. Close the browser context and
     stop the dev server when done.
@@ -581,8 +587,32 @@ port.
 
 ### Screenshots
 
-Write screenshots to `artifacts/qa/<bead-id>/`, inside the worktree, which is
-gitignored. Reference each by filename only. Never commit images.
+Every capture goes to the gitignored `artifacts/qa/<bead-id>/` of the primary
+checkout, outside every Tollgate worktree, so captures survive when Tollgate
+removes the bead's worktree. Later beads compare against them. Subagents may
+write there even though they otherwise leave the primary checkout alone.
+Captures are never committed; reference each by filename only.
+
+The shared Playwright MCP accepts a `filename` only inside its client's first
+MCP root, which is the primary checkout for the orchestrator's connection, and
+it does not create directories. Create the bead's directory once, then pass
+the absolute path straight to `browser_take_screenshot`:
+
+```sh
+mkdir -p /Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>
+```
+
+```text
+browser_take_screenshot filename: /Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/<name>.png
+```
+
+Use that literal absolute form: the MCP does not expand `~`, resolves a
+relative `filename` against the primary checkout rather than the worktree, and
+refuses paths outside its roots (for example `~/.local/state`). A
+script-driven client opened with `connectPlaywrightMcp` from
+`scripts/screenshot-runtime.mjs` defaults its root to the process's working
+directory, so a script that captures passes `roots` with the primary checkout
+first to use the same form.
 
 The default budget per changed surface is one desktop capture (1440×900), one
 mobile capture (390×844), and one changed interaction state. Verify each with
@@ -633,11 +663,12 @@ mobile:
 
 ```json
 {"uuid":"7be2e6d7-abff-4c44-a0c3-35460da1693c","variant":"base","mode":"sweep","verdict":"pass","notes":"","bead":"hv-xxx","commit":"<oid>","screens":[]}
-{"uuid":"7be2e6d7-abff-4c44-a0c3-35460da1693c","variant":"amplified","mode":"judged","verdict":"fail","notes":"return marker missing on banished card","bead":"hv-xxx","commit":"<oid>","screens":["artifacts/qa/hv-xxx/windcutter-amp.png"]}
+{"uuid":"7be2e6d7-abff-4c44-a0c3-35460da1693c","variant":"amplified","mode":"judged","verdict":"fail","notes":"return marker missing on banished card","bead":"hv-xxx","commit":"<oid>","screens":["windcutter-amp.png"]}
 ```
 
 `commit` is the base OID the bead was built on. The orchestrator adds the
-landed OID in the bead notes.
+landed OID in the bead notes. `screens` lists capture filenames in the bead's
+[capture directory](#screenshots).
 
 A `fail` must be fixed in the same bead, or in a new bead filed immediately
 and dispatched next. Then append a new `pass` line in that bead's file.

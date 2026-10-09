@@ -91,8 +91,14 @@ the developer. Never launch browsers directly.
    IDs, and `browser_evaluate` geometry for objective checks; use screenshots
    for appearance. Default budget per changed surface: one desktop capture
    (1440×900), one mobile capture (390×844), one changed interaction state.
-   Screenshots go to the gitignored `artifacts/qa/<bead-id>/`; check each with
-   `file <path>`.
+   Captures go to the gitignored `artifacts/qa/<bead-id>/` of the primary
+   checkout, outside every worktree, so they outlive the worktree. The MCP
+   accepts a `filename` only inside its client's first root (the primary
+   checkout) and does not create directories, so run
+   `mkdir -p /Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>` once and
+   pass the absolute path to `browser_take_screenshot`:
+   `filename: /Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/<name>.png`.
+   Check each with `file <path>`. Captures are never committed.
 5. **Close** your browser context with `browser_close` when done.
 
 ### URL parameters

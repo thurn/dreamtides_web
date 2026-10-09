@@ -14,7 +14,8 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
 
 - Use the `wt` skill (`~/.llms/skills/wt/SKILL.md`, not project-local) for
   all work unless explicitly asked to work "on master". Never edit the primary
-  checkout directly; all work happens in Tollgate worktrees. Repairs to an
+  checkout directly; all work happens in Tollgate worktrees. Gitignored QA
+  captures under its `artifacts/qa/` are written there directly. Repairs to an
   unlanded candidate stay in the same worktree; new work gets a new bead.
 - Do not create new branches unless explicitly requested. Worktree branches
   are local-only and are never pushed.
@@ -45,8 +46,9 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
 - **Identities use branded types** from the `parse*`/brand helpers in
   `src/types/identifiers.ts` and `src/types/card-identity.ts`, never raw
   `string`; `dreamtides/no-raw-string-identity` enforces this.
-- **Never commit image files.** QA screenshots go to the gitignored
-  `artifacts/qa/<bead-id>/` and are referenced by filename only.
+- **Never commit image files.** QA screenshots go to the primary checkout's
+  gitignored `/Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/` (see
+  `docs/plan/workflow.md` § Screenshots) and are referenced by filename only.
 - **Log new features** well enough to reconstruct what an algorithm did in a
   given production game. Logs go to `logs/journey-log.jsonl` in development
   and to per-game IndexedDB storage with JSONL export in every build (D40);
