@@ -4,7 +4,12 @@ import { moveInstance } from "../../rules/zones";
 import { evaluate } from "../interpreter";
 import { definePrimitive } from "../types";
 
-/** "Foresee N": look at the top N cards, put any into the void, and the rest back on top in any order. */
+/**
+ * "Foresee N": look at the top N cards, put any into the void, and the rest
+ * back on top in any order, then emit `foresaw`, which names a card only to a
+ * side that can identify it: the opponent sees how many cards went each way
+ * and which went into the public void.
+ */
 export interface ForeseeNode {
   readonly op: "foresee";
   readonly count: ValueExpr;
@@ -28,11 +33,11 @@ export const foreseePrimitive = definePrimitive<ForeseeNode>({
       ],
     });
     const top = arrangement.filter((entry) => entry.to === "top").map((entry) => entry.card);
-    for (const entry of arrangement) {
-      if (entry.to === "void") moveInstance(ctx, entry.card, "void");
-    }
+    const voided = arrangement.filter((entry) => entry.to === "void").map((entry) => entry.card);
+    for (const card of voided) moveInstance(ctx, card, "void");
     const deck = ctx.state.sides[side].deck;
     ctx.state.sides[side].deck = [...top, ...deck.filter((card) => !top.includes(card))];
+    ctx.emit({ kind: "foresaw", side, kept: top, voided });
   },
 });
 

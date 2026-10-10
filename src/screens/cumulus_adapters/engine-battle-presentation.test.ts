@@ -7,7 +7,7 @@ import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { PresentationQueue } from "../../battle/components/battle-presentation";
 import { enqueuePresentation, presentationItems, type PresentationItem } from "../../battle/components/presentation-items";
 import { BATTLE } from "../../content/battle";
-import { createEngine, type BattleState, type Engine, type InstanceView } from "../../engine";
+import { createEngine, type BattleState, type Engine, type EngineEvent, type InstanceView } from "../../engine";
 import { createCatalog } from "../../engine/catalog";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../../engine/fold/slice";
 import { boardState, type BoardSetup } from "../../engine/testing/board";
@@ -126,6 +126,16 @@ function discovery(human: "player" | "enemy") {
     if (event?.kind === "cardDiscovered" && event.instance !== null) return { step, index, instance: event.instance };
   }
   throw new Error("no discovery");
+}
+
+/** The step of the foresee lab fixture that publishes its `foresaw`, the event's index in it, and the cards it kept and voided. */
+function foresight(human: "player" | "enemy") {
+  for (const step of steps("foresee", human)) {
+    const index = step.published.findIndex((event) => event.kind === "foresaw");
+    const event = step.published[index];
+    if (event?.kind === "foresaw") return { step, index, kept: event.kept, voided: event.voided };
+  }
+  throw new Error("no foresee");
 }
 
 describe("presentation items", () => {
@@ -321,6 +331,14 @@ describe("presentation items", () => {
       expect(item?.presentation).toBe("travel");
     }
   });
+
+  it("travels a foresee's voided card for both sides", () => {
+    for (const human of ["player", "enemy"] as const) {
+      const { step, index } = foresight(human);
+      const item = step.items.find((entry) => entry.key === `${step.batch.key}:${String(index)}`);
+      expect(item?.presentation).toBe("travel");
+    }
+  });
 });
 
 describe("presentation queue", () => {
@@ -453,6 +471,33 @@ describe("battle log", () => {
     expect(mine?.cards[instance]?.id).toBe(instance);
     expect(theirs?.event).toEqual({ kind: "cardDiscovered", side: "player", instance: null });
     expect(theirs?.cards).toEqual({});
+  });
+
+  it("logs a foresee for both sides, naming the kept card only in the foreseer's entry", () => {
+    const { step, kept, voided } = foresight("player");
+    const [keptCard] = kept;
+    const [voidedCard] = voided;
+    if (keptCard == null || voidedCard == null) throw new Error("expected one kept and one voided card");
+    const foreseen = (human: "player" | "enemy") =>
+      battleLogEntries(
+        step.published,
+        human,
+        step.after,
+        labEngine.view(step.after, human),
+        labEngine.view(step.before, human),
+        `foresee:${human}`,
+      ).filter((entry) => entry.event.kind === "foresaw");
+    const [mine] = foreseen("player");
+    const [theirs] = foreseen("enemy");
+    const line = (human: "player" | "enemy", event: EngineEvent | undefined) =>
+      event === undefined ? null : engineBattleLogText(event, { human, card: (id) => id, dreamwell: () => null });
+
+    expect(mine?.event).toEqual({ kind: "foresaw", side: "player", kept: [keptCard], voided: [voidedCard] });
+    expect(Object.keys(mine?.cards ?? {}).sort()).toEqual([keptCard, voidedCard].sort());
+    expect(theirs?.event).toEqual({ kind: "foresaw", side: "player", kept: [null], voided: [voidedCard] });
+    expect(Object.keys(theirs?.cards ?? {})).toEqual([voidedCard]);
+    expect(line("player", mine?.event)).not.toBeNull();
+    expect(line("enemy", theirs?.event)).not.toBeNull();
   });
 
   describe("from the event log", () => {

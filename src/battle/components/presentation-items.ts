@@ -79,6 +79,7 @@ const EVENT_PRESENTATION = {
   fatigue: "status",
   feasibilityBounded: "none",
   figmentsMerged: "travel",
+  foresaw: "travel",
   laneResolved: "score",
   leftPlay: "none",
   leftVoid: "none",

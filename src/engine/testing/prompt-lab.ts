@@ -295,7 +295,7 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
   },
   {
     name: "foresee",
-    description: "Foresee 2: an arrangement private to the human",
+    description: "Foresee 2: an arrangement private to the human, presented as one card into the void and one kept on top",
     setup: {
       active: "player",
       phase: "day",
@@ -303,6 +303,16 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       enemy: { deck: deck(6) },
     },
     script: [],
+    presents: [
+      playHand(0),
+      {
+        side: "player",
+        answer: (ids) => [
+          { card: at(ids.player.deck, 1), to: "top" },
+          { card: at(ids.player.deck, 0), to: "void" },
+        ],
+      },
+    ],
   },
   {
     name: "discover",

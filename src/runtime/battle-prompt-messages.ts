@@ -470,6 +470,18 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${who(event.side)} had no card to draw, so ${who(event.side === "player" ? "enemy" : "player").toLowerCase()} gained ${plural(event.points, "point", "points")}.`;
     case "figmentsMerged":
       return `${card(event.source)} merged into ${named(event.destination)}, which has ${String(event.spark)} spark.`;
+    case "foresaw": {
+      // Names the cards only when the player can identify every one of them; otherwise counts them.
+      const list = (instances: readonly (InstanceId | null)[]) =>
+        instances.every((instance) => words.card(instance) !== null)
+          ? instances.map(named).join(", ")
+          : plural(instances.length, "card", "cards");
+      const moves = [
+        ...(event.voided.length > 0 ? [`put ${list(event.voided)} into ${whose(event.side)} void`] : []),
+        ...(event.kept.length > 0 ? [`kept ${list(event.kept)} on top`] : []),
+      ];
+      return `${who(event.side)} foresaw ${plural(event.kept.length + event.voided.length, "card", "cards")}: ${moves.join(" and ")}.`;
+    }
     case "laneResolved": {
       if (event.blocker === null) {
         return event.scored > 0

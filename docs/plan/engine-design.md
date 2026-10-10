@@ -1358,6 +1358,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - `cardDiscovered` is public, and names the card only to a side that can
     identify it, so the opponent sees that a card was discovered but not
     which;
+  - `foresaw` is public, and names each kept or voided card only to a side
+    that can identify it, so the opponent sees how many cards were kept and
+    which were voided;
   - `triggerQueued`, `triggerResolved`, `winConditionMet`, `effectStarted`,
     `payableEffectRegistered`, and `noLegalTarget` name an ability's
     source (`events/sources.ts`). One whose source is a card in a hand or

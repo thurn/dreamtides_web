@@ -702,7 +702,9 @@ character's ▸Dissolved trigger. It is frequently used as a cost. A figment tha
 is abandoned ceases to exist after firing its dissolved triggers.
 
 **Foresee N** — Look at the top N cards of your deck, reorder them in any order,
-and optionally send any of them to the void.
+and optionally send any of them to the void. Only you see the cards you look
+at; your opponent sees how many you looked at, how many you put back on top,
+and which cards you sent to the void.
 
 **Discover** — Look at 3 cards chosen at random from the cards in your deck
 that match a stated criterion, put one of them into your hand, then shuffle your

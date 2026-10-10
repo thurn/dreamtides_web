@@ -31,6 +31,7 @@ import { exhaustionChanged, type ExhaustionChangedEvent } from "./kinds/exhausti
 import { fatigue, type FatigueEvent } from "./kinds/fatigue";
 import { feasibilityBounded, type FeasibilityBoundedEvent } from "./kinds/feasibility-bounded";
 import { figmentsMerged, type FigmentsMergedEvent } from "./kinds/figments-merged";
+import { foresaw, type ForesawEvent } from "./kinds/foresaw";
 import { laneResolved, type LaneResolvedEvent } from "./kinds/lane-resolved";
 import { leftPlay, type LeftPlayEvent } from "./kinds/left-play";
 import { leftVoid, type LeftVoidEvent } from "./kinds/left-void";
@@ -87,6 +88,7 @@ export type EngineEvent =
   | FatigueEvent
   | FeasibilityBoundedEvent
   | FigmentsMergedEvent
+  | ForesawEvent
   | LaneResolvedEvent
   | LeftPlayEvent
   | LeftVoidEvent
@@ -144,6 +146,7 @@ export const EVENT_DEFINITIONS = {
   fatigue,
   feasibilityBounded,
   figmentsMerged,
+  foresaw,
   laneResolved,
   leftPlay,
   leftVoid,
