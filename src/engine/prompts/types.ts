@@ -34,6 +34,8 @@ export type PromptRole =
   | "discard"
   /** Where each looked-at card goes. */
   | "foresee"
+  /** The card a discover puts into its controller's hand. */
+  | "discover"
   /** Whether to do a "you may". */
   | "youMay"
   /** Whether the prevented card's controller pays to stop the prevention. */

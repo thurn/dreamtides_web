@@ -704,8 +704,12 @@ is abandoned ceases to exist after firing its dissolved triggers.
 **Foresee N** — Look at the top N cards of your deck, reorder them in any order,
 and optionally send any of them to the void.
 
-**Discover** — Look at 3 cards from your deck matching a stated criterion, then
-add one of them to your hand.
+**Discover** — Look at 3 cards chosen at random from the cards in your deck
+that match a stated criterion, put one of them into your hand, then shuffle your
+deck. Only you see the cards you look at; your opponent sees that you put a
+card into your hand, but not which. If fewer than 3 cards match, look at
+all of them; if none match, nothing happens and your deck is not shuffled.
+Putting the card into your hand is not a draw.
 
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played. Copies of cards on the stack

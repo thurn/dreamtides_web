@@ -7,7 +7,7 @@ import { createEngine, type Engine } from "../engine";
 import { createFoldAdapter, decisionKeyOf, sidePending, type BattleSlice, type FoldAdapter } from "../fold/slice";
 import { isLegalAnswer } from "../prompts/answers";
 import type { ConfirmPrompt, Prompt } from "../prompts/types";
-import { battleSeed, type Side } from "../state/ids";
+import { battleSeed, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, BattleState, DeckEntry } from "../state/types";
 import { boardState, type BoardSetup } from "../testing/board";
 import { CYCLE, CYCLE_CARDS } from "../testing/loop-cards";
@@ -17,7 +17,7 @@ import { AI } from "../../content/ai";
 import { catalogManifest, manifestCatalog, type CatalogManifest } from "./catalog-manifest";
 import { aiDecision, runPolicy, type PolicyRequest } from "./decide";
 import { createInlinePolicyHost, createWorkerPolicyHost, PolicyHostError, type PolicyWorker, type Timers, type WorkerBoot } from "./host";
-import { declineAnswer } from "./prompts";
+import { declineAnswer, greedyAnswer, type CardInfo } from "./prompts";
 import { RANDOM_POLICY, PolicyRandom } from "./random";
 import type { PolicyBudget, PolicyId } from "./types";
 import { createPolicyWorkerHandler, type PolicyWorkerMessage, type PolicyWorkerReply } from "./worker-protocol";
@@ -145,6 +145,22 @@ describe("the optional-chain bound", () => {
 });
 
 describe("Greedy", () => {
+  it("discovers its most valuable offered card while still giving up its least valuable for a discard", () => {
+    const values: Readonly<Record<InstanceId, number>> = { i1: 2, i2: 5, i3: 1 };
+    const info = (id: InstanceId): CardInfo => ({ mine: true, value: values[id] ?? 0 });
+    const offer = (role: "discover" | "discard"): Prompt => ({
+      kind: "chooseCards",
+      side: "enemy",
+      purpose: { source: null, cardId: null, ability: 0, role },
+      cancellable: false,
+      candidates: ["i1", "i2", "i3"],
+      min: 1,
+      max: 1,
+    });
+    expect(greedyAnswer(offer("discover"), info, 0)).toEqual(["i2"]);
+    expect(greedyAnswer(offer("discard"), info, 0)).toEqual(["i3"]);
+  });
+
   it("plays the character that adds the most board spark", () => {
     const { state, ids } = board({ enemy: { hand: [weak.id, strong.id], energy: 1, deck }, player: { hand: [SYNTHETIC.vanilla1.id], deck } });
     const decklists = { player: entries([SYNTHETIC.vanilla1.id, ...deck]), enemy: entries([weak.id, strong.id, ...deck]) };

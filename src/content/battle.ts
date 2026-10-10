@@ -20,6 +20,10 @@ export const BATTLE = {
   // Maximum cards a side keeps when end-of-turn automation discards excess
   // cards from its hand.
   handLimit: 10,
+  // Most cards a Discover shows: the cards it offers are drawn at random from
+  // those in the deck that match its criterion (rules § Keywords and Effects
+  // → Discover).
+  discoverOptions: 3,
   // Consecutive automatic game actions after which a battle that no player can
   // stop ends in a draw (rules § Mandatory Loops).
   resolutionCap: 100000,

@@ -97,6 +97,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return cards("choose", "offering", "offerings");
       case "foresee":
         return "Arrange the top of your deck";
+      case "discover":
+        return cards("discover");
       case "youMay":
         return "Do you want to do this?";
       case "preventUnlessPays":
@@ -435,6 +437,8 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     case "cardCreated":
       // A copy on the stack is logged as copied (`cardCopied`).
       return event.zone === "stack" ? null : `${who(event.side)} created ${named(event.instance)}${event.zone === "hand" ? " in hand" : ""}.`;
+    case "cardDiscovered":
+      return `${who(event.side)} discovered ${named(event.instance)}.`;
     case "cardDrawn":
       return `${who(event.side)} drew ${named(event.instance)}.`;
     case "cardPlayed":

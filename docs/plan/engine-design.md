@@ -1035,7 +1035,8 @@ declares it with the `characterTarget` or `cardTarget` helper. The registry
 finds each definition by that name at call time. `primitives/index.ts` lists one `export *` line
 per primitive and is the authoritative catalog; `effects/registry.ts` derives
 the `Effect` union and the op lookup from it, so adding a primitive touches
-only its module, its group's test file, and one index line. Flow primitives
+only its module, its group's test file, one index line, and one getter in the
+registry's op table, which its `satisfies` clause requires. Flow primitives
 resolve children through the `run` callback in their environment. Play-time
 choices are collected by walking the effect tree: a modal node (`chooseOne`)
 prompts for its mode, a mode whose required targets have no candidates is not
@@ -1062,7 +1063,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral) | `draw` at cost 0, `discover`, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)` | `draw` at cost 0, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
 | Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
@@ -1294,7 +1295,7 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 - **RNG** (`state/rng.ts`) uses named streams:
   - `shuffle:<side>`;
   - `dreamwell`;
-  - `random:<purpose>` (`random:discard`).
+  - `random:<purpose>` (`random:discard`, `random:discover`).
 
   Each stream is a counter in `state.rng`: draw `n` of stream `s` is a hash
   of the seed, `s`, and `n`, so new random effects never perturb other
@@ -1353,6 +1354,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - `cardDrawn`, a `pendingAbility` for a drawn card, and a `cardCreated`
     in a hand are private to the side holding the hand;
     `feasibilityBounded` is private to the answering side;
+  - `cardDiscovered` is public, and names the card only to a side that can
+    identify it, so the opponent sees that a card was discovered but not
+    which;
   - `triggerQueued`, `triggerResolved`, `winConditionMet`, `effectStarted`,
     `payableEffectRegistered`, and `noLegalTarget` name an ability's
     source (`events/sources.ts`). One whose source is a card in a hand or

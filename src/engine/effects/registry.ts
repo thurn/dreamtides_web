@@ -23,6 +23,7 @@ import {
   createCopyInHandPrimitive,
   disableTriggersPrimitive,
   discardPrimitive,
+  discoverPrimitive,
   dissolvePrimitive,
   drawPrimitive,
   erodePrimitive,
@@ -88,6 +89,9 @@ const DEFINITIONS = {
   },
   get discard() {
     return discardPrimitive;
+  },
+  get discover() {
+    return discoverPrimitive;
   },
   get dissolve() {
     return dissolvePrimitive;

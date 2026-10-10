@@ -106,10 +106,14 @@ const LOSS_ROLES: readonly PromptRole[] = [
   "discardToHandLimit",
 ];
 
+/** Roles whose chosen card the chooser gains: it picks its most valuable offered card. */
+const GAIN_ROLES: readonly PromptRole[] = ["discover"];
+
 /** How much Greedy wants `id` chosen for a prompt of `role`. */
 function cardWant(role: PromptRole, info: CardInfo | null): number {
   if (info === null) return 0;
   if (LOSS_ROLES.includes(role)) return -info.value - 1;
+  if (GAIN_ROLES.includes(role)) return info.value + 1;
   // A target is assumed hostile: the opponent's most valuable card first.
   return info.mine ? -info.value - 1 : info.value + 1;
 }

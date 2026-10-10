@@ -13,6 +13,7 @@ import { blockersDesignated, type BlockersDesignatedEvent } from "./kinds/blocke
 import { capacityReached, type CapacityReachedEvent } from "./kinds/capacity-reached";
 import { cardCopied, type CardCopiedEvent } from "./kinds/card-copied";
 import { cardCreated, type CardCreatedEvent } from "./kinds/card-created";
+import { cardDiscovered, type CardDiscoveredEvent } from "./kinds/card-discovered";
 import { cardDrawn, type CardDrawnEvent } from "./kinds/card-drawn";
 import { cardPlayed, type CardPlayedEvent } from "./kinds/card-played";
 import { ceasedToExist, type CeasedToExistEvent } from "./kinds/ceased-to-exist";
@@ -68,6 +69,7 @@ export type EngineEvent =
   | CapacityReachedEvent
   | CardCopiedEvent
   | CardCreatedEvent
+  | CardDiscoveredEvent
   | CardDrawnEvent
   | CardPlayedEvent
   | CeasedToExistEvent
@@ -124,6 +126,7 @@ export const EVENT_DEFINITIONS = {
   capacityReached,
   cardCopied,
   cardCreated,
+  cardDiscovered,
   cardDrawn,
   cardPlayed,
   ceasedToExist,

@@ -80,6 +80,10 @@ export const DSL = {
   untargetableCharacter: authored(31, "character", 1, () => [keyword("cannotBeTargeted")], { spark: 1 }),
   /** ❖❖ "A character you control cannot be targeted by effects this turn." */
   shieldAlly: authored(32, "event", 1, events(event(p.grant(target(characterYouControl()), "cannotBeTargeted", "untilEndOfTurn"))), { speed: "interrupt" }),
+  /** "Discover a character." */
+  discoverCharacter: authored(33, "event", 0, events(event(p.discover({ cardType: "character" })))),
+  /** "Discover an event." */
+  discoverEvent: authored(34, "event", 0, events(event(p.discover({ cardType: "event" })))),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

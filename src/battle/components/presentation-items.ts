@@ -61,6 +61,7 @@ const EVENT_PRESENTATION = {
   capacityReached: "notice",
   cardCopied: "travel",
   cardCreated: "travel",
+  cardDiscovered: "travel",
   cardDrawn: "travel",
   cardPlayed: "reveal",
   ceasedToExist: "travel",

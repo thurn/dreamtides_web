@@ -148,6 +148,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [DSL.mayDrawTwo.id]: { name: "Lab Temptation", text: "You may draw 2 cards." },
   [DSL.pointsTimesX.id]: { name: "Lab Surge", text: "Gain X⍟." },
   [DSL.foreseeTwo.id]: { name: "Lab Scrying", text: "Foresee 2." },
+  [DSL.discoverCharacter.id]: { name: "Lab Arrival", text: "Discover a character." },
   [STACK.preventUnlessPays.id]: { name: "Lab Denial", text: "Prevent a card the opponent played unless they pay 2●." },
   [STACK.banishVoidToDraw.id]: { name: "Lab Exhumation", text: "To play this card, banish 2 cards from your void. Draw a card." },
   [LOOP.freePoints.id]: { name: "Lab Engine", text: "Gain 1⍟." },
@@ -302,6 +303,22 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       enemy: { deck: deck(6) },
     },
     script: [],
+  },
+  {
+    name: "discover",
+    description: "Discover a character: a private pick of one of the three characters in the deck",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: {
+        hand: [DSL.discoverCharacter.id],
+        energy: 2,
+        deck: [vanillas[0], SYNTHETIC.interruptEvent.id, vanillas[1], SYNTHETIC.interruptEvent.id, vanillas[2]],
+      },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.deck, 2)] }],
   },
   {
     name: "draw-discard",
