@@ -89,6 +89,11 @@ export function ScreenRouter({
  * receiving input. `pointer-events: none` on an ancestor is insufficient when
  * a fixed descendant explicitly restores `pointer-events: auto`; the native
  * `inert` attribute disables the whole subtree while its fade finishes.
+ *
+ * Input blocking follows presence and stays out of the exit animation target.
+ * A route that returns before its fade ends reuses this retained frame, and
+ * Framer Motion keeps every value an exit animation wrote that the enter
+ * target does not restore.
  */
 function JourneyScreenFrame({
   screenType,
@@ -107,7 +112,7 @@ function JourneyScreenFrame({
       aria-hidden={isPresent ? undefined : true}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, pointerEvents: "none" }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.35 }}
       style={isPresent ? undefined : { pointerEvents: "none" }}
     >

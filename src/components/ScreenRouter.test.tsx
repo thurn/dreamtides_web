@@ -55,8 +55,8 @@ vi.mock("framer-motion", () => {
     useReducedMotion: () => motionPreference.reduced,
     useIsPresent: () => motionPreference.isPresent,
     motion: {
-      div: ({ children, exit, ...props }: Props & { exit?: { pointerEvents?: string } }) => (
-        <div {...props} data-exit-pointer-events={exit?.pointerEvents}>
+      div: ({ children, exit, ...props }: Props & { exit?: Record<string, unknown> }) => (
+        <div {...props} data-exit-keys={exit === undefined ? undefined : Object.keys(exit).join(" ")}>
           {children}
         </div>
       ),
@@ -256,8 +256,9 @@ describe("ScreenRouter route transitions", () => {
     const { container } = mountRouter({ state: makeStateFor(makeSite("Augury")) });
     const presence = container.querySelector("[data-animate-presence-mode]");
     expect(presence?.getAttribute("data-animate-presence-mode")).toBe("sync");
-    const screen = container.querySelector("[data-journey-screen]");
-    expect(screen?.getAttribute("data-exit-pointer-events")).toBe("none");
+    const screen = container.querySelector<HTMLElement>("[data-journey-screen]");
+    expect(screen?.dataset.journeyScreenPresence).toBe("present");
+    expect(screen?.style.pointerEvents).toBe("");
 
     motionPreference.isPresent = false;
     const exiting = mountRouter({ state: makeStateFor(makeSite("Augury")) }).container;
@@ -265,6 +266,17 @@ describe("ScreenRouter route transitions", () => {
     expect(frame?.dataset.journeyScreenPresence).toBe("exiting");
     expect(frame?.hasAttribute("inert")).toBe(true);
     expect(frame?.getAttribute("aria-hidden")).toBe("true");
+    expect(frame?.style.pointerEvents).toBe("none");
+  });
+
+  it("keeps pointer blocking out of the exit animation so a returning route accepts input", () => {
+    // A route that comes back before its exit fade ends is the same retained
+    // frame. Framer Motion keeps values its exit animation wrote, and the
+    // enter target restores only opacity, so the exit target must not write
+    // pointer-events; presence alone owns the exiting route's input block.
+    const { container } = mountRouter({ state: makeStateFor(makeSite("Augury")) });
+    const screen = container.querySelector<HTMLElement>("[data-journey-screen]");
+    expect(screen?.getAttribute("data-exit-keys")?.split(" ")).not.toContain("pointerEvents");
   });
 });
 
