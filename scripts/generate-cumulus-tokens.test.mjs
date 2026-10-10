@@ -9,8 +9,22 @@
 // scripts/**/*.test.mjs for `npm test`, so a node:test-only file here would
 // make vitest fail with "No test suite found in file").
 
-import { describe, expect, it } from "vitest";
-import { buildTokensSource, dedupeLastWins } from "./generate-cumulus-tokens.mjs";
+import {
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  utimesSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
+import {
+  buildTokensSource,
+  dedupeLastWins,
+  writeIfChanged,
+} from "./generate-cumulus-tokens.mjs";
 
 describe("dedupeLastWins", () => {
   it("keeps the last value for a name declared more than once (last-wins dedupe)", () => {
@@ -117,5 +131,46 @@ describe("buildTokensSource", () => {
     expect(source).toContain("export type TokenName = keyof typeof TOKENS;");
     expect(source).toContain("export function token(name: TokenName): string {");
     expect(source).toContain("return TOKENS[name].var;");
+  });
+});
+
+describe("writeIfChanged", () => {
+  /** @type {string[]} */
+  const directories = [];
+  afterEach(() => {
+    for (const directory of directories.splice(0)) {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+
+  function scratchFile() {
+    const directory = mkdtempSync(join(tmpdir(), "cumulus-tokens-"));
+    directories.push(directory);
+    return join(directory, "tokens.ts");
+  }
+
+  it("creates a missing file", () => {
+    const path = scratchFile();
+
+    expect(writeIfChanged(path, "export const A = 1;\n")).toBe(true);
+    expect(readFileSync(path, "utf8")).toBe("export const A = 1;\n");
+  });
+
+  it("leaves a file holding identical source untouched, modification time included", () => {
+    const path = scratchFile();
+    writeFileSync(path, "export const A = 1;\n");
+    const past = new Date("2020-01-01T00:00:00Z");
+    utimesSync(path, past, past);
+
+    expect(writeIfChanged(path, "export const A = 1;\n")).toBe(false);
+    expect(statSync(path).mtimeMs).toBe(past.getTime());
+  });
+
+  it("rewrites a file whose source differs", () => {
+    const path = scratchFile();
+    writeFileSync(path, "export const A = 1;\n");
+
+    expect(writeIfChanged(path, "export const A = 2;\n")).toBe(true);
+    expect(readFileSync(path, "utf8")).toBe("export const A = 2;\n");
   });
 });

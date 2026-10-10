@@ -9,10 +9,12 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import {
   buildReviewPlan,
+  fullExecutionPlan,
   gateExecutionPlan,
   IMPORTER_EXTENSIONS,
   importersOf,
   importSearchNeedles,
+  KNIP_STEP,
   reviewNeedsPreparedWorkspace,
   STATIC_CHECK_STEPS,
   TYPECHECK_STEPS,
@@ -62,6 +64,7 @@ const passthrough = process.argv.slice(3);
 const validTasks = new Set([
   "lint",
   "lint-full",
+  "knip",
   "typecheck",
   "validate",
   "test",
@@ -74,7 +77,7 @@ const validTasks = new Set([
 if (!validTasks.has(task)) {
   console.error(
     "Usage: node scripts/review.mjs " +
-    "<lint|lint-full|typecheck|validate|test|test-full|quick|gate|full> " +
+    "<lint|lint-full|knip|typecheck|validate|test|test-full|quick|gate|full> " +
     "[args...]",
   );
   process.exit(2);
@@ -357,6 +360,9 @@ function commandFor(step, extraArgs = []) {
   if (step === "bundle") {
     return [process.execPath, [join(root, "scripts", "qa", "check-production-bundle.mjs")]];
   }
+  if (step === "knip") {
+    return [process.execPath, [nodeModulePath("knip", "bin", "knip.js"), ...extraArgs]];
+  }
   if (step === "import-cycles") {
     return [process.execPath, [join(root, "scripts", "import-cycles.mjs")]];
   }
@@ -466,15 +472,10 @@ function executionPlan() {
   const needsPreparedWorkspace = reviewNeedsPreparedWorkspace(reviewPlan);
 
   if (task === "full") {
-    // Lint, typecheck and the import-cycle check share no state, so they
-    // overlap.
-    return [
-      { step: "prepare", args: [] },
-      { concurrent: [{ step: "lint", args: [] }, ...STATIC_CHECK_STEPS] },
-      { step: "test", args: [] },
-      // The production bundle assertion (P7): no development-only module ships.
-      { step: "bundle", args: [] },
-    ];
+    return fullExecutionPlan();
+  }
+  if (task === "knip") {
+    return [{ step: "prepare", args: [] }, { ...KNIP_STEP, args: passthrough }];
   }
   if (task === "gate") {
     return gateExecutionPlan(reviewPlan);

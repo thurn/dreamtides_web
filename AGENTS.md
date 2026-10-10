@@ -7,8 +7,10 @@ work is filed, dispatched to implementation subagents, delivered, reviewed
 and QA'd. Hive project id: `dreamtides_web`.
 
 An implementation subagent works only in the worktree and areas it is given,
-makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
-`tg worktree`; the orchestrating session does.
+makes one commit, and never runs `bd`, `tg candidate`, `tg approve`,
+`tg update`, or `tg worktree`; the orchestrating session does, and it alone
+rebases a worktree with `tg --no-launch update` (docs/plan/workflow.md
+§ Updating a worktree).
 
 # Delivery
 
@@ -103,7 +105,8 @@ Run commands from the repository root; run `npm install` first in a fresh
 worktree.
 
 - While iterating: `npm test -- src/path/to/affected.test.ts`.
-- Before committing: `npm run review`.
+- Before committing: `npm run review` and `npm run knip`. Delete the exports
+  and files your own change leaves unused.
 - `npm run review:full` (what the gate runs) only for changes to test
   infrastructure, repository-wide configuration, or cross-cutting
   architecture.

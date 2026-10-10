@@ -55,6 +55,33 @@ const IMPORT_CYCLE_STEP = { step: "import-cycles", args: [] };
  */
 export const STATIC_CHECK_STEPS = [...TYPECHECK_STEPS, IMPORT_CYCLE_STEP];
 
+/**
+ * The unused-code check (knip, configured by knip.jsonc): orphaned files,
+ * exports, and dependencies. It resolves imports of the prepared workspace's
+ * generated files, so it runs after `prepare`.
+ *
+ * @type {ReviewStep}
+ */
+export const KNIP_STEP = { step: "knip", args: [] };
+
+/**
+ * Steps of `review:full`: prepare, then lint, the whole-program checks, and
+ * knip together, then the whole test suite and the production bundle
+ * assertion (P7: no development-only module ships).
+ *
+ * @returns {ReviewPlanEntry[]}
+ */
+export function fullExecutionPlan() {
+  return [
+    { step: "prepare", args: [] },
+    {
+      concurrent: [{ step: "lint", args: [] }, ...STATIC_CHECK_STEPS, KNIP_STEP],
+    },
+    { step: "test", args: [] },
+    { step: "bundle", args: [] },
+  ];
+}
+
 /** @param {string} file */
 function isTypedSource(file) {
   return TYPED_SOURCE_ROOTS.some(

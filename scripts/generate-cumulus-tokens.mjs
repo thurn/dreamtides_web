@@ -21,9 +21,11 @@
 // existing key).
 //
 // The generated file is disposable workspace state. Development, review, and
-// build entry points materialize it before TypeScript reads it.
+// build entry points materialize it before TypeScript reads it. The generator
+// leaves an up-to-date file untouched, so a workspace refresh never
+// hot-updates a dev server running on the same checkout.
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative, resolve } from "node:path";
 import { parseCssTokens } from "./lib/cumulus-css-tokens.mjs";
@@ -101,15 +103,32 @@ export function token(name: TokenName): string {
 `;
 }
 
+/**
+ * Writes `source` to `path` unless the file already holds exactly that text,
+ * so an unchanged file keeps its modification time and file watchers stay
+ * quiet.
+ *
+ * @param {string} path
+ * @param {string} source
+ * @returns {boolean} whether the file was written
+ */
+export function writeIfChanged(path, source) {
+  if (existsSync(path) && readFileSync(path, "utf8") === source) return false;
+  writeFileSync(path, source);
+  return true;
+}
+
 function main() {
   const css = readFileSync(CSS_PATH, "utf8");
   const tokens = parseCssTokens(css);
   const source = buildTokensSource(tokens);
-  writeFileSync(OUT_PATH, source);
+  const written = writeIfChanged(OUT_PATH, source);
 
   const uniqueCount = dedupeLastWins(tokens).size;
   const duplicateCount = tokens.length - uniqueCount;
-  console.log(`Wrote ${relative(ROOT, OUT_PATH)}`);
+  console.log(
+    `${written ? "Wrote" : "Unchanged"} ${relative(ROOT, OUT_PATH)}`,
+  );
   console.log(
     `Tokens: ${uniqueCount} unique (${duplicateCount} duplicate declaration${duplicateCount === 1 ? "" : "s"} deduped last-wins)`,
   );

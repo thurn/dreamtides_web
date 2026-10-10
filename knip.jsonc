@@ -1,8 +1,9 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
-  // Run with `npx knip`. Vite, Vitest, ESLint, and the package.json scripts
-  // supply the default entry points; the entries below are the ones knip
-  // cannot infer.
+  // Run with `npm run knip`; `npm run review:full` runs it beside lint after
+  // preparing the workspace, whose generated files it resolves. Vite, Vitest,
+  // ESLint, and the package.json scripts supply the default entry points; the
+  // entries below are the ones knip cannot infer.
   "entry": [
     // review.mjs spawns these by path rather than importing them.
     "scripts/run-eslint.mjs",

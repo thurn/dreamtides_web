@@ -4,6 +4,7 @@
   "aliases": {
     "bead-area-excludes-state-types": "bead-areas-incomplete",
     "bead-areas-omit-engine-plumbing": "bead-areas-incomplete",
+    "bead-areas-omit-restated-rule": "bead-areas-incomplete",
     "bead-areas-omit-seed-source": "bead-areas-incomplete",
     "bead-areas-omit-type-fallout": "bead-areas-incomplete",
     "floating-site-nodes-never-stable": "browser-qa-scripting",

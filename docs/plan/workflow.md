@@ -22,7 +22,7 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
   subagent, and lands on `staging` before the next bead starts. At most one
   Claude subagent of any kind runs at a time. Subagents share the parent's
   session ID, so **only the orchestrator** calls Beads, the Tollgate queue,
-  or `tg worktree`. See [Dispatch](#dispatch).
+  `tg worktree`, or `tg update`. See [Dispatch](#dispatch).
 - **The Hive project is `dreamtides_web`.** Track T beads are filed in it,
   even though they change `~/tollgate` ([D45](decisions.md#d45-tollgate-track)).
   Never claim, edit, or close beads of another project.
@@ -100,8 +100,9 @@ edge. Then:
 2. The bead keeps its worktree and stays claimed. Its notes record the
    checkpoint.
 3. The orchestrator dispatches the prerequisite.
-4. After the prerequisite lands, a new subagent rebases the checkpoint with
-   `tg update`, finishes, and amends it into the bead's single commit.
+4. After the prerequisite lands, the orchestrator rebases the checkpoint
+   ([Updating a worktree](#updating-a-worktree)). A new subagent then
+   finishes the bead and amends it into the bead's single commit.
 [Introspection](#introspection) improvement beads, `ci-fix` beads, and
 review follow-ups are filed the same way. They preempt other ready work
 (below).
@@ -152,6 +153,13 @@ or test assertion.
 Name a fallout area for every exported type, field, or signature the bead
 changes or deletes. Name the file instead when the bead reshapes most of its
 exports.
+
+Fallout also covers what the bead's own change orphans, wherever it lives:
+an export or a whole file that nothing uses once the change is made, and the
+tests that cover only that code. Delete them in the same commit; `npm run
+knip` lists them, and `review:full` fails while any remain. An export or
+file that was already unused before the change is a pre-existing issue, not
+fallout.
 
 #### Hub areas
 
@@ -311,8 +319,8 @@ Every brief contains, verbatim or by exact path:
   - Follow AGENTS.md: UUIDs not names, no images committed, tunables in data
     modules, copy in UI modules, logging, current-state docs, and test rules
     ([D19](decisions.md#d19-test-pruning)).
-  - Never run `bd` or `hbd`, `tg candidate`, `tg approve`, `tg cancel`, or
-    `tg worktree`. Never push, never create branches, never touch the primary
+  - Never run `bd` or `hbd`, `tg candidate`, `tg approve`, `tg cancel`,
+    `tg update`, or `tg worktree`. Never push, never create branches, never touch the primary
     checkout except to write browser captures. Run `mkdir -p` on the capture
     directory once, then pass each capture's absolute path as the
     `browser_take_screenshot` `filename`, in the form
@@ -398,11 +406,25 @@ When a subagent returns:
 
   Use the `wt` bounded loop: at most one unchanged retry per stated
   hypothesis, then 15 minutes of focused diagnosis, then repair or roll back.
-- **Conflicted with the queue prefix:** the subagent rebases the worktree with
-  `tg update` and amends, then the orchestrator resubmits.
+- **Conflicted with the queue prefix:** the orchestrator updates the worktree
+  ([Updating a worktree](#updating-a-worktree)), then resubmits.
 
 **Every bead starts from landed code.** Never base a worktree on an
 unpromoted commit.
+
+### Updating a worktree
+
+Only the orchestrator rebases a bead's worktree onto `staging`, because
+`tg update` records a Tollgate intent under the session's identity:
+
+1. From the worktree root, run `tg --no-launch update`.
+2. Check that no update intent is left pending: the worktree's `HEAD^`
+   equals `staging`, `git -C <worktree> status --short` is empty with no
+   rebase in progress, and `tg --no-launch doctor` reports no
+   `worktree-update` block.
+3. **On a conflict,** hand the same worktree to a subagent with the conflict.
+   It resolves the conflict, amends the bead's single commit, and returns.
+   The orchestrator then repeats steps 1 and 2.
 
 ### The orchestrator as implementer
 
@@ -453,7 +475,8 @@ Run the cheapest relevant check first:
 1. **While iterating:** `npm test -- <file>` for focused tests. Use
    `npx vitest run <file> -t '<name>'` for one case.
 2. **Before committing:** `npm run review`, the diff-aware lint, typecheck,
-   and related tests.
+   and related tests, and `npm run knip`, which lists unused files, exports,
+   and dependencies (see [Fallout areas](#fallout-areas)).
 3. **Only when the change touches** test infrastructure, repository-wide
    config, or cross-cutting architecture: `npm run review:full` locally. It is
    heavy (D17). Otherwise the gate or release stage is the aggregate.

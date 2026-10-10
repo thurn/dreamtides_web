@@ -3,10 +3,12 @@
 import { describe, expect, it } from "vitest";
 import {
   buildReviewPlan,
+  fullExecutionPlan,
   GATE_RELATED_TEST_FILE_CAP,
   gateExecutionPlan,
   importersOf,
   importSearchNeedles,
+  KNIP_STEP,
   relatedTestRunDecision,
   reviewNeedsPreparedWorkspace,
   STATIC_CHECK_STEPS,
@@ -339,5 +341,23 @@ describe("related test cap", () => {
     expect(
       relatedTestRunDecision(["a.test.ts", "a.test.ts", "b.test.ts"], 2),
     ).toEqual({ run: true, testFileCount: 2 });
+  });
+});
+
+describe("full review plan", () => {
+  it("runs knip beside lint and the whole-program checks, after prepare", () => {
+    const [prepare, checks] = fullExecutionPlan();
+
+    expect(prepare).toEqual({ step: "prepare", args: [] });
+    expect(checks).toEqual({
+      concurrent: [{ step: "lint", args: [] }, ...STATIC_CHECK_STEPS, KNIP_STEP],
+    });
+  });
+
+  it("runs the whole test suite and the bundle assertion after the checks", () => {
+    expect(fullExecutionPlan().slice(2)).toEqual([
+      { step: "test", args: [] },
+      { step: "bundle", args: [] },
+    ]);
   });
 });
