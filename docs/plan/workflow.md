@@ -282,16 +282,24 @@ Work that any session may notice, but exactly one must do, is a bead with a
 | Duty | Label | Key |
 | --- | --- | --- |
 | Filing a phase | `filing` | `filing=phase-<n>` |
-| Fixing a red release run | `ci-fix` | `release_run=<run-id>` |
+| Fixing a red release run | `ci-fix` | `release_step=<failing step>` |
 | A fired friction trigger | `introspection` | `trigger=<tag>/phase-<n>` |
-| A due retrospective | `retrospective` | `retrospective=phase-<n>/<covered-count>` |
+| A due retrospective | `retrospective` | `retrospective=phase-<n>/since-<previous>` |
 | A review returned after its session drained | `review` | `review_of=<bead-id>` |
 
-Before filing one, look for the key:
-`hbd list --metadata-field <key>=<value> --all --json`. If a bead exists,
-another session owns the duty. After filing, look again. If two open beads
-carry the key, the one with the later creation time is cancelled by its filer
-(`hive_resolution=cancelled`, reason "duplicate of <id>").
+A key names the duty, never a value that moves while the duty is pending: a
+`ci-fix` is keyed by the release step that fails, not by the run, because
+every later run on a newer `staging` tip fails the same way until the fix
+lands; a retrospective is keyed by the retrospective it follows, as
+`npm run friction:triggers` reports it, not by the count of beads it covers.
+
+Before filing one, look for an unfinished bead with the key:
+`hbd list --metadata-field <key>=<value> --status open,in_progress --json`.
+If one exists, another session owns the duty; add what you saw (such as a
+newer failing run's ID) to its notes and continue. After filing, look again.
+If two unfinished beads carry the key, the one with the later creation time is
+cancelled by its filer (`hive_resolution=cancelled`, reason "duplicate of
+<id>").
 
 ### Serialization edges
 
@@ -597,13 +605,17 @@ Candidates submitted after the switch follow staged mode.
 - **A bead lands** when it is promoted to `staging`.
 - **At every dispatch boundary,** read `tg --no-launch release status`. If
   the latest release run failed:
-  1. Check for a `ci-fix` [shared-duty bead](#shared-duty-beads) keyed
-     `release_run=<run-id>`. If one exists, another session owns the repair;
-     continue.
+  1. For each failing step, check for an unfinished `ci-fix`
+     [shared-duty bead](#shared-duty-beads) keyed `release_step=<step>`. If
+     one exists, another session owns the repair: append the run's ID to its
+     notes and continue.
   2. Otherwise diagnose it yourself with `tg diagnose`: the failing steps,
      the tested OID, and the range since the last green `release`.
-  3. File the `ci-fix` bead with that key. Its areas are the failing tests
-     plus the files the fix will touch, not the whole range.
+  3. File the `ci-fix` bead with that key, and the run's ID in its
+     description. Its areas are the failing tests plus the files the fix will
+     touch, not the whole range. A run whose failure has a different cause
+     at the same step, found while that bead is open, goes in the open
+     bead's notes as a second failure for it to fix.
 
   It is the next bead claimed, ahead of all other ready work.
   Tollgate's `max_release_lag = 5` pauses ordinary promotion if the streak
@@ -862,8 +874,12 @@ of every **phase gate**. `npm run friction:triggers` reports, per phase, the
 friction files that no recorded retrospective covers and marks a phase whose
 count reaches `retrospectiveCadence` (10) as due. The session that sees a
 phase due files a `retrospective` [shared-duty bead](#shared-duty-beads)
-keyed `retrospective=phase-<n>/<covered-count>`. The session that claims it
-runs the retrospective as a read-only subagent.
+keyed `retrospective=phase-<n>/since-<previous>`, where `<previous>` is the
+last recorded retrospective's bead (its date when it names none, or `start`
+when the phase has none). The key holds while more friction files
+land, until the retrospective's own ledger line moves the report on. The
+session that claims it runs the retrospective as a read-only subagent, over
+every friction file uncovered when it starts.
 
 1. Run the Hive `sage` skill read-only, scoped to this project's workflow
    since the last retrospective. Its inputs:
@@ -1186,9 +1202,11 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - **QA ports.** Each session takes the first free port from 5174 for its
   bead and records it ([Dispatch](#dispatch-a-bead)).
 - **Soaks and tournaments.** Run them in batches of at most 30 minutes, with
-  4 worker processes while only one executor session runs and its bead is not
-  `heavy`, and 2 otherwise. They may overlap Tollgate validation and running
-  beads.
+  worker processes sized to the idle capacity: up to 8 on a quiet machine,
+  fewer while several sessions validate. They may overlap Tollgate validation
+  and running beads.
+- **Load.** There is no hard load target. Back off when load or memory
+  pressure visibly slows the run or other work.
 - Watch memory pressure: `memory_pressure`, or `vm_stat` compressed pages.
   Under pressure, each session finishes its running bead and pauses soaks and
   tournaments. Under sustained pressure a session drains itself with

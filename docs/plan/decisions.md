@@ -517,7 +517,9 @@ fixes it at its cause.
 
 ### D17. Machine resources
 
-The machine is shared with other agents. Keep sustained load at about 6 cores:
+The machine (18 cores, 64 GB) is shared with other agents. There is no hard
+load target: use the machine, and back off when load or memory pressure
+visibly slows the run or other work.
 
 - **Vitest:** `JOURNEY_TEST_WORKERS=2`, locally and in Tollgate.
 - **Implementation:** one implementation subagent per executor session
@@ -540,8 +542,8 @@ The machine is shared with other agents. Keep sustained load at about 6 cores:
   port.
 - **Fuzz soaks and tournaments:**
   - batches of at most 30 minutes;
-  - 4 worker processes while only one executor session runs and its bead is
-    not `heavy`, otherwise 2;
+  - worker processes sized to the idle capacity: up to 8 on a quiet
+    machine, fewer while several sessions validate;
   - they may overlap Tollgate validation and running beads.
 - **Memory pressure:** when `memory_pressure` reports warn or critical, each
   session finishes its running bead and pauses soaks and tournaments until it
