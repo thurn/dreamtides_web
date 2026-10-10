@@ -96,7 +96,7 @@ setup, the AI override path in the policy host, and the guidance triggers.
 2. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
    and land the beads it files.
 3. Run the independent review over the phase diff.
-4. Check that the gate passes. In staged mode, confirm `release == staging`.
+4. Check that the gate passes. In staged mode, confirm `release` contains every commit of the phase.
 5. Update `metrics.md`, including the D19 suite budgets.
 6. Close the epic.
 

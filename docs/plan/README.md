@@ -1,8 +1,8 @@
 # Dreamtides Web: End-to-End Delivery Plan
 
-One orchestrating Claude Code session, running unattended and implementing
-one bead at a time through subagents, turns this fork of the journey prototype into the
-complete Dreamtides web game:
+One or more executor sessions, Claude Code or Codex, running unattended and
+each implementing one bead at a time, turn this fork of the journey prototype
+into the complete Dreamtides web game:
 
 - A full rules engine that automates every card, dreamsign, avatar, and
   Dreamwell card.
@@ -125,7 +125,7 @@ work starts.
 Workflow and architecture friction is fixed while the run is underway
 ([D42](decisions.md#d42-continuous-introspection)). Every bead records its
 friction. A cause that recurs, or a budget that keeps being exceeded, files an
-improvement bead that runs next. Retrospectives run after every 10th bead of a
+improvement bead that preempts other ready work. Retrospectives run after every 10th bead of a
 phase and at every gate.
 
 The run ends when the Phase 7 epic closes.
@@ -140,31 +140,35 @@ Shared design references:
 
 ## Operating model
 
-**One orchestrating session; one bead at a time**
-([D43](decisions.md#d43-orchestrated-sequential-execution)).
+**Peer executor sessions, each working one bead at a time**
+([D43](decisions.md#d43-peer-executor-sessions)).
 
 - **Beads.** Each unit of work is one native Beads bead in the Hive store,
   with `hive_project=dreamtides_web`. Beads form a dependency graph, not a
   chain. Each bead declares the areas it may change.
-- **The orchestrator** follows the Hive executor role in explicitly
-  authorized continuous mode, restricted to project `dreamtides_web`. It owns
-  every Beads call, every Tollgate queue action, worktree creation, reviews,
-  retrospectives, and ledgers.
-- **Sequential.** One bead runs at a time, implemented by one subagent. It
-  lands on `staging` before the next bead is dispatched. At most one Claude
-  subagent of any kind runs at a time, which keeps the run within the
-  account's usage limits.
+- **Executor sessions.** Any number of top-level Claude Code or Codex
+  sessions follow the Hive executor role in explicitly authorized continuous
+  mode, restricted to project `dreamtides_web`. Each claims a ready bead, owns
+  its Beads calls, Tollgate queue actions, worktree, review, and ledger lines,
+  and lands it before claiming the next. The operator starts and stops
+  sessions to set capacity; one session is sequential execution.
+- **Concurrency is in the graph.** Beads that would change the same code
+  non-additively carry a
+  [serialization edge](workflow.md#serialization-edges), so `bd ready` only
+  offers beads that can run side by side. Shared duties (phase filing,
+  retrospectives, release fixes) are beads too.
 - **Delivery.** Each bead is one Conventional Commit in a Tollgate worktree.
-  The orchestrator submits it with `tg candidate <oid>`, authorizes it with
+  Its session submits it with `tg candidate <oid>`, authorizes it with
   `tg approve <id> --wait`, and waits for the gate stage (about 60 s). This
   plan grants promotion authority for in-scope work.
-- **Other helpers:**
-  - the independent reviewer (the Codex CLI), run asynchronously, since it
-    uses no Claude usage;
-  - read-only subagents for mason audits, retrospectives, QA, and the
-    fallback cold review, run one at a time between implementation
-    subagents;
-  - background processes the session owns, such as dev servers, fuzz soaks,
+- **Helpers:**
+  - one implementation subagent per session, or the session itself;
+  - the independent reviewer from the other model family (the Codex CLI for
+    Claude Code sessions' beads, the Claude Code CLI for Codex sessions'),
+    run asynchronously;
+  - read-only subagents for mason audits, retrospectives, and QA, run by the
+    session that needs them;
+  - background processes each session owns, such as dev servers, fuzz soaks,
     and tournaments.
 
 ## Starting and resuming the run
@@ -193,26 +197,35 @@ The bead IDs for each section are on those pages. Later phases are filed when
 their earliest start approaches, per
 [workflow](workflow.md#filing-a-phase).
 
-The operator manages keep-alive and launches a single session in
-`~/dreamtides_web` with:
+The operator manages keep-alive and sets capacity by starting and stopping
+executor sessions. Start each one in `~/dreamtides_web`, in Claude Code or
+Codex, with:
 
 ```text
 /executor dreamtides_web — continuous mode is explicitly authorized for project
-dreamtides_web. Execute docs/plan/README.md end to end, phase by phase, without
-pausing for approval. Promotion of in-scope plan work is authorized.
+dreamtides_web. Execute docs/plan/README.md as one of its executor sessions,
+without pausing for approval. Promotion of in-scope plan work is authorized.
 ```
 
-If the operator ever restarts the run in a **new** session, the old session's
-claimed bead blocks the new actor. Before relaunching:
+(In Codex, invoke the `executor` skill with the same text.) A new session
+claims the next ready bead. When nothing is ready while other sessions still
+hold work, it waits for them with `hive executor await`.
 
-1. Release that session's bead assignments.
-2. Leave its worktrees alone. The new session restarts those beads from fresh
-   worktrees; see
-   [workflow](workflow.md#re-entry-after-compaction-or-restart).
+To **scale down**, tell a session to stop after its current bead. It lands
+that bead, claims nothing new, and stops; the remaining sessions continue. One
+remaining session is sequential execution.
+
+A session that ends while holding a bead is best **resumed**: it finishes its
+claimed bead from its notes; see
+[workflow](workflow.md#re-entry-after-compaction-or-restart). When it cannot
+be resumed, the operator says so, and another session releases the bead under
+Hive's abandoned-assignment repair and restarts it from a fresh worktree; the
+old worktree is left alone.
+See [workflow § Starting, scaling, and
+draining](workflow.md#starting-scaling-and-draining).
 
 A session that resumes holding several claimed beads finishes them one at a
-time, in selection order, before dispatching new work; see
-[workflow](workflow.md#re-entry-after-compaction-or-restart).
+time, in selection order, before claiming new work.
 
 ## Global invariants
 

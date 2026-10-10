@@ -1,7 +1,7 @@
 # Workflow
 
-This page tells the executing session how to do the work. The phase pages say
-what the work is.
+This page tells each executor session how to do the work. The phase pages
+say what the work is.
 
 The rules here combine three sources:
 
@@ -14,32 +14,80 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
 
 ## Identity and scope
 
-- **There is one orchestrating Claude Code session**
-  ([D43](decisions.md#d43-orchestrated-sequential-execution)). Its actor is
-  `"${CLAUDE_CODE_SESSION_ID:?}"`, expanded inside the same command as each
-  Beads call.
-- **Work is sequential.** One bead runs at a time, implemented by one
-  subagent, and lands on `staging` before the next bead starts. At most one
-  Claude subagent of any kind runs at a time. Subagents share the parent's
-  session ID, so **only the orchestrator** calls Beads, the Tollgate queue,
-  `tg worktree`, or `tg update`. See [Dispatch](#dispatch).
+- **One or more executor sessions run the plan**
+  ([D43](decisions.md#d43-peer-executor-sessions)). Each is a top-level Claude
+  Code or Codex session started in `~/dreamtides_web`, and each runs this whole
+  page for its own beads. The operator starts and stops sessions to set
+  capacity; one session is sequential execution.
+- **A session's actor is its own host ID:** `"${CLAUDE_CODE_SESSION_ID:?}"`
+  in Claude Code and `"${CODEX_THREAD_ID:?}"` in Codex, expanded inside the
+  same command as each Beads call. Never use the other host's variable, even
+  when it is inherited.
+- **Each session works one bead at a time.** It claims one ready bead,
+  implements it through one subagent or itself, and waits for it to land on
+  `staging` before claiming the next. Subagents share their session's ID, so
+  **only the top-level session** calls Beads, the Tollgate queue,
+  `tg worktree`, or `tg update`, and only for its own beads. See
+  [Dispatch](#dispatch).
+- **Sessions coordinate only through Beads and Tollgate.** Claims keep them
+  off each other's beads, and [serialization
+  edges](#serialization-edges) keep ready beads from conflicting. A session
+  never touches another session's bead, worktree, candidate, or processes.
 - **The Hive project is `dreamtides_web`.** Track T beads are filed in it,
   even though they change `~/tollgate` ([D45](decisions.md#d45-tollgate-track)).
   Never claim, edit, or close beads of another project.
-- **Continuous mode is explicitly authorized.** Dispatch the next ready bead
-  as soon as the previous one lands, until the Phase 7 epic closes.
+- **Continuous mode is explicitly authorized.** Each session claims the next
+  ready bead as soon as its previous one lands, until the Phase 7 epic closes
+  or the operator drains it ([Starting, scaling, and
+  draining](#starting-scaling-and-draining)).
 - **The run ends when the Phase 7 epic closes,** with the Track T epic also
-  closed. Nothing is filed to run after it. The session then stops.
+  closed. Nothing is filed to run after it. Every session then stops.
 - **The run is silent.** Send no push notifications or other outbound
-  messages. Progress lives in bead notes and the session title.
+  messages. Progress lives in bead notes and session titles.
+
+### Starting, scaling, and draining
+
+- **Start a session** in `~/dreamtides_web`, in either host, with the launch
+  prompt in [README § Starting and resuming the
+  run](README.md#starting-and-resuming-the-run). It opts in with
+  `hive executor start --project dreamtides_web --session <its ID>
+  --continuous` and claims ready work.
+- **Wait instead of stopping.** When `bd ready` has nothing for a session but
+  other sessions still hold beads that open beads wait on, the session runs
+  `/Users/dthurn/hive/bin/hive executor await --session <its ID> --json`:
+  in Claude Code as a background command, ending the turn until it reports;
+  in Codex in the foreground, repeated on `ExecutorAwaitTimeout`. It resumes
+  on `ExecutorWorkReady` or `ExecutorWorkAssigned`. `ExecutorQueueDrained`
+  means no other session holds work that open beads wait on, and the session
+  stops with kind `drained`.
+- **Drain a session** by telling it to stop. It lands its current bead,
+  claims nothing new, and runs `hive executor stop --kind pause`. Asked to
+  stop at once, it checkpoints the bead, settles its candidate and processes,
+  records the worktree and next action in the notes, and releases the claim
+  so another session restarts the bead from a fresh worktree.
+- **A session that ends while holding a bead** is resumed when its host can
+  resume it; [re-entry](#re-entry-after-compaction-or-restart) picks the bead
+  up. Only when the operator says the session will not return does another
+  session release the bead, under Hive's abandoned-assignment repair
+  (`~/hive/skills/shared/repair.md`): no candidate queued or running, no live
+  process in its worktree, the worktree recorded in the notes. The next
+  claimant restarts from a fresh worktree. A bead that has gone quiet is not
+  abandoned: its session may be waiting out a usage limit.
 
 ## Beads
 
-Define the routing prefix in every shell command that touches Beads:
+Define the routing prefix in every shell command that touches Beads, with
+your host's actor variable:
 
 ```sh
+# Claude Code
 hbd() { env BEADS_DIR=/Users/dthurn/brain/.beads BEADS_DOLT_AUTO_START=0 BD_NON_INTERACTIVE=1 BD_NO_HOOKS=true bd --sandbox --dolt-auto-commit off --actor "${CLAUDE_CODE_SESSION_ID:?}" "$@"; }
+# Codex
+hbd() { env BEADS_DIR=/Users/dthurn/brain/.beads BEADS_DOLT_AUTO_START=0 BD_NON_INTERACTIVE=1 BD_NO_HOOKS=true bd --sandbox --dolt-auto-commit off --actor "${CODEX_THREAD_ID:?}" "$@"; }
 ```
+
+Examples on this page write the Claude Code variable; Codex sessions use
+`CODEX_THREAD_ID` in its place.
 
 **Never initialize a store, start a second server, or fall back to another
 database.** The operator authorizes restarting the configured Dolt server when
@@ -47,9 +95,12 @@ it is down; see [recovery](#failure-and-recovery).
 
 ### Filing a phase
 
-File a phase as soon as its **earliest start** (stated on its phase page) is
-reachable within the next few dispatches. Do not wait for the previous gate.
-Phases 2 and 3 and Track T are already filed.
+Filing a phase is a [shared-duty bead](#shared-duty-beads) (label `filing`,
+key `filing=phase-<n>`), so exactly one session files it. Its prerequisites
+are the beads that make the phase's **earliest start** (stated on its phase
+page) reachable within the next few dispatches. Do not wait for the previous
+gate. The one phase left to file is Phase 7, through `hv-bzvq`. The session
+that claims a filing bead files the phase as below and closes it.
 
 1. **Create the epic.** Create it ready, then inspect it.
 
@@ -72,19 +123,21 @@ Phases 2 and 3 and Track T are already filed.
 
    Omit `hive_project` for now: the child has prerequisites.
 
-3. **Add the edges in the phase page's task graph,** and only those:
-   `hbd dep add <child> <prerequisite>`. Never chain beads that the graph
-   leaves unordered; selection order sequences them.
+3. **Add the edges in the phase page's task graph:**
+   `hbd dep add <child> <prerequisite>`.
    - The mason task depends on every implementation task.
    - The gate task depends on the mason task and on the previous phase's
      gate task.
+   - Then add [serialization edges](#serialization-edges) between beads the
+     graph leaves unordered that would change the same code, against this
+     phase's beads and every other unfinished bead.
 
    Inspect the edges with `hbd show <id> --json`, and run `hbd dep cycles`.
 4. **Make the children selectable.** Only after the edges are correct, set
    `--set-metadata hive_project=dreamtides_web` on each child.
-5. **File content batches separately.** The orchestrator files the Phase 5
-   batches from the inventory after the inventory task lands, because their
-   composition depends on it. Use the same pattern.
+5. **File content batches separately.** The Phase 5 batches are filed from
+   the inventory after the inventory task lands, because their composition
+   depends on it. Use the same pattern.
 6. **Cross-phase edges to unfiled beads** are added when the later of the
    two beads is filed. For example, filing Phase 6 adds 6.1's edge to the
    Phase 5 batch with the Tutorial card.
@@ -99,8 +152,9 @@ edge. Then:
    worktree and returns.
 2. The bead keeps its worktree and stays claimed. Its notes record the
    checkpoint.
-3. The orchestrator dispatches the prerequisite.
-4. After the prerequisite lands, the orchestrator rebases the checkpoint
+3. The session dispatches the prerequisite itself, or leaves it ready for
+   another session and waits for it to land.
+4. After the prerequisite lands, the session rebases the checkpoint
    ([Updating a worktree](#updating-a-worktree)). A new subagent then
    finishes the bead and amends it into the bead's single commit.
 [Introspection](#introspection) improvement beads, `ci-fix` beads, and
@@ -126,10 +180,13 @@ Areas: src/rules/journey/, src/content/economy.ts, fold hubs, fallout: SiteState
 - Track T beads list paths in `~/tollgate` or the other repositories they
   touch.
 
-Areas bound what the subagent may change. If a subagent discovers it must
-change something outside its areas, it stops and reports. The orchestrator
-widens the bead's areas when the change belongs to the bead, or files the
-change as a new bead.
+Areas bound what the subagent may change, and they decide the bead's
+[serialization edges](#serialization-edges). If a subagent discovers it must
+change something outside its areas, it stops and reports. Its session widens
+the bead's areas when the change belongs to the bead, or files the change as a
+new bead. A widening that overlaps another session's in-progress bead
+non-additively is filed as a new bead, serialized after that bead, rather than
+widened.
 
 A gate bead's long checks (soaks, playthroughs, reviews) hold no areas. It
 takes the plan-pages area only to commit its evidence.
@@ -190,7 +247,7 @@ the same rights as any area. Write its name in the `Areas:` line.
 
 #### Listing fallout before dispatch
 
-Before writing or dispatching a bead's `Areas:` line, the orchestrator lists
+Before writing or dispatching a bead's `Areas:` line, its session lists
 the importers of every exported symbol the bead will change. From the
 worktree root:
 
@@ -216,30 +273,103 @@ git grep -lwE "$syms" -- src scripts
 Every listed file outside the bead's areas gets a fallout area, a hub area, or
 a wider area.
 
+### Shared-duty beads
+
+Work that any session may notice, but exactly one must do, is a bead with a
+**duty key** in its metadata:
+
+| Duty | Label | Key |
+| --- | --- | --- |
+| Filing a phase | `filing` | `filing=phase-<n>` |
+| Fixing a red release run | `ci-fix` | `release_run=<run-id>` |
+| A fired friction trigger | `introspection` | `trigger=<tag>/phase-<n>` |
+| A due retrospective | `retrospective` | `retrospective=phase-<n>/<covered-count>` |
+| A review returned after its session drained | `review` | `review_of=<bead-id>` |
+
+Before filing one, look for the key:
+`hbd list --metadata-field <key>=<value> --all --json`. If a bead exists,
+another session owns the duty. After filing, look again. If two open beads
+carry the key, the one with the later creation time is cancelled by its filer
+(`hive_resolution=cancelled`, reason "duplicate of <id>").
+
+### Serialization edges
+
+Several sessions claim ready beads at once, so `bd ready` must never offer two
+beads that conflict. A **serialization edge** is an ordinary blocking edge
+that orders two beads the task graph leaves unordered because both would
+change the same code.
+
+**Add an edge** when two unfinished beads would change the same code
+non-additively:
+
+- the same function, component, or entity module;
+- a substantive edit to the same logic file, such as
+  `src/engine/effects/interpreter.ts`, `src/engine/triggers/matcher.ts`, or
+  `src/engine/rules/costs.ts`;
+- the same screen, view model, or journey site.
+
+**Add no edge** for additive edits to shared registries and hub files:
+
+- a new union member in `src/engine/dsl/types.ts` or a new builder;
+- an entry in `src/engine/effects/primitives/index.ts`,
+  `src/content/specs/index.ts`, or another registration list;
+- appended tests in a shared group test file;
+- a new section of `docs/rules.md`, and the per-bead evidence files;
+- hub areas (`engine hubs`, `fold hubs`) taken only for such additions.
+
+When two sessions collide there, Tollgate reports a merge conflict on the
+later candidate, and its session rebases with `tg update`
+([Updating a worktree](#updating-a-worktree)). When unsure, add the edge.
+
+**How to add one:**
+
+- Point it in selection order: the later bead depends on the earlier one.
+  Against a bead that is already in progress, the unclaimed bead depends on
+  it.
+- `hbd dep add <later> <earlier>`, then append
+  `Serialized after <earlier>: <shared code>` to the later bead's notes.
+- Never point an edge at a bead's ancestor or create a cycle; run
+  `hbd dep cycles`.
+
+**Every filer adds them,** whether filing a phase, a content batch, a mason
+finding, an improvement, a `ci-fix`, or a review follow-up. Check the new
+bead's areas against every unfinished bead in the project, including beads in
+progress.
+
+**A serialization edge is not a prerequisite.** When its blocker is cancelled
+or superseded, remove the edge (`hbd dep remove`) and add it to the
+replacement bead where the overlap remains. A cancelled task-graph
+prerequisite still means repair.
+
 ### Selection order
 
 At every dispatch boundary, pick from `hbd ready` (filtered to
-`hive_project=dreamtides_web`, task beads only, never epics). Use this
-priority order:
+`hive_project=dreamtides_web`, task beads only, never epics, never claimed).
+Use this priority order:
 
 1. `ci-fix` beads, which fix a red release run or a failed candidate on an
    already-promoted base;
-2. introspection, review-follow-up, and `test-cut` beads;
+2. introspection, review-follow-up, `test-cut`, `filing`, and
+   `retrospective` beads;
 3. the lowest phase number first, then Track T, then later phases;
 4. within a phase, page order.
 
+If the claim loses to another session, pick again. If nothing is ready, wait
+or stop as [Starting, scaling, and
+draining](#starting-scaling-and-draining) says.
 
 ### Claiming and working
 
 - **Claim on dispatch,** never before: `hbd update <id> --claim --json`, by
-  the orchestrator. Proceed only on acknowledgement. Per D43, the orchestrator
-  holds one claimed bead, plus any bead checkpointed behind a prerequisite.
-- **Retitle the session** with the native title tool: `set_session_title` on
-  session `self`, in the Claude desktop app. Use
-  `⚒️ [<id>] <phase summary>`. A failed rename is reported and
-  retried; it never blocks.
+  the session. Proceed only on acknowledgement. Per D43, a session holds one
+  claimed bead, plus any bead checkpointed behind a prerequisite.
+- **Retitle the session** with the host's native title tool:
+  `set_session_title` on session `self` in the Claude desktop app, or
+  `set_thread_title` in Codex. Use `⚒️ [<id>] <phase summary>`. A failed
+  rename is reported and retried; it never blocks.
 - **Record transitions** with `hbd update <id> --append-notes '...'`:
-  - worktree path, branch, and the subagent's agent ID;
+  - the session's host and ID, the worktree path, branch, QA port, and the
+    subagent's agent ID;
   - candidate ID and source OID;
   - key measurements;
   - decisions made;
@@ -256,7 +386,7 @@ Close a bead when its commit has **landed**:
   contains the tested OID, and remote `master` equals `release`.
 - **Staged mode:** the candidate is promoted to `staging`.
 - **Track T beads:** the candidate is promoted in its own repository, and
-  for `~/tollgate` the orchestrator has self-installed it and `doctor` is
+  for `~/tollgate` its session has self-installed it and `doctor` is
   healthy ([D45](decisions.md#d45-tollgate-track)).
 
 In every mode, the worktree must be cleaned up.
@@ -269,28 +399,33 @@ hbd close <id> --reason '<one-line outcome>'
 A gate bead closes only when all of these hold:
 
 - its [retrospective](#retrospectives)'s beads have closed;
-- its review is resolved;
+- its review is resolved, and no bead of the phase carries the
+  `review-debt` label;
 - its phase evidence is written;
-- in staged mode, `release` equals `staging`.
+- in staged mode, `release` contains every commit of the phase. Other
+  sessions may keep landing later work meanwhile.
 
 ## Dispatch
 
 ### Dispatch a bead
 
-1. **Create the worktree** (orchestrator):
+1. **Create the worktree** (the session):
    `tg --no-launch worktree create wt/<slug>`. In staged mode it is based on
-   `staging`, which holds every earlier bead. Record its path.
+   `staging`, which holds every landed bead. Record its path.
 2. **List the fallout** in the worktree
    ([Listing fallout before dispatch](#listing-fallout-before-dispatch)).
    Add the fallout, hub, or wider areas the listing calls for to the bead's
    `Areas:` line, and record each widening in the bead notes.
-3. **Use port 5174** for the bead's QA dev server, and 5175 or higher for a
-   QA helper. Never use 5173.
+3. **Pick the bead's QA port:** the first port from 5174 with no listener
+   (`lsof -nP -iTCP:<port> -sTCP:LISTEN`), and the next free ones for QA
+   helpers. Never use 5173. Servers start with `--strictPort`; when another
+   session binds the port first, take the next free one. Record the port that
+   bound in the notes.
 4. **Launch the implementation subagent** with the Agent tool, with the
    [brief](#implementation-brief). Record its agent ID in the bead notes.
-5. **Wait for it to return.** Launch no other subagent meanwhile. Background
-   processes that use no Claude usage (Codex reviews, soaks, tournaments)
-   may keep running.
+5. **Wait for it to return.** The session launches no other subagent
+   meanwhile. Its background processes (reviews, soaks, tournaments) may keep
+   running. A session that implements the bead itself follows the same brief.
 
 ### Implementation brief
 
@@ -299,11 +434,11 @@ Every brief contains, verbatim or by exact path:
 - the bead ID, title, description, acceptance criteria, and `Areas:` line;
 - whether the bead is core-review ([Reviews](#reviews));
 - the phase-page section to read, and the read-first list;
-- the worktree path, QA port 5174, and the capture directory
+- the worktree path, the bead's QA port, and the capture directory
   `/Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/`
   ([Screenshots](#screenshots));
-- whether the bead is `heavy` or `browser` (D17). The orchestrator sizes
-  any soak or tournament it runs meanwhile to match;
+- whether the bead is `heavy` or `browser` (D17). The session sizes any
+  soak or tournament it runs meanwhile to match;
 - these rules:
   - Work only inside the worktree and only within the areas. Run
     `npm install` first.
@@ -327,8 +462,9 @@ Every brief contains, verbatim or by exact path:
     `/Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/<name>.png`
     ([Screenshots](#screenshots)).
   - Run the [validation ladder](#validation-ladder), plus browser QA when
-    runtime behavior or presentation changes. Close the browser context and
-    stop the dev server when done.
+    runtime behavior or presentation changes. Run every heavy command under
+    the [heavy slot](#resources). Close the browser context and stop the dev
+    server when done.
   - Write the bead's [friction file](#friction-ledger) and any other
     per-bead evidence files.
   - Record pre-existing issues in the bead's own
@@ -386,7 +522,7 @@ When a subagent returns:
    This plan grants promotion authority for in-scope work and in-scope CI
    repairs.
 3. **Start the review** in the background if the bead is core-review
-   ([Reviews](#reviews)).
+   ([Reviews](#reviews)), with the other model family's reviewer.
 4. **Record** the candidate in the bead notes.
 5. **Wait for the gate** (D43): run
    `tg --no-launch approve <candidate-id> --wait` as a background command and
@@ -397,8 +533,8 @@ When a subagent returns:
 
 - **Landed:** close the bead (see [Closing](#closing)), then dispatch the
   next ready bead.
-- **Failed:** the bead stays the current bead. Dispatch nothing else until
-  it lands.
+- **Failed:** the bead stays the session's current bead. The session claims
+  nothing else until it lands.
   1. Run `tg diagnose` on it.
   2. Hand the same worktree back to a subagent with the failure, or repair it
      yourself if the fix is small.
@@ -406,16 +542,19 @@ When a subagent returns:
 
   Use the `wt` bounded loop: at most one unchanged retry per stated
   hypothesis, then 15 minutes of focused diagnosis, then repair or roll back.
-- **Conflicted with the queue prefix:** the orchestrator updates the worktree
-  ([Updating a worktree](#updating-a-worktree)), then resubmits.
+- **Conflicted** with the queue prefix or with a bead another session
+  landed first: the session updates the worktree
+  ([Updating a worktree](#updating-a-worktree)), then resubmits. Repeated
+  conflicts on the same file with the same bead mean a missing
+  [serialization edge](#serialization-edges); add it for later beads.
 
 **Every bead starts from landed code.** Never base a worktree on an
 unpromoted commit.
 
 ### Updating a worktree
 
-Only the orchestrator rebases a bead's worktree onto `staging`, because
-`tg update` records a Tollgate intent under the session's identity:
+Only the session that owns a bead rebases its worktree onto `staging`,
+because `tg update` records a Tollgate intent under the session's identity:
 
 1. From the worktree root, run `tg --no-launch update`.
 2. Check that no update intent is left pending: the worktree's `HEAD^`
@@ -424,19 +563,21 @@ Only the orchestrator rebases a bead's worktree onto `staging`, because
    `worktree-update` block.
 3. **On a conflict,** hand the same worktree to a subagent with the conflict.
    It resolves the conflict, amends the bead's single commit, and returns.
-   The orchestrator then repeats steps 1 and 2.
+   Conflicts in additive registries and append-only files keep both sides.
+   The session then repeats steps 1 and 2.
 
-### The orchestrator as implementer
+### A session as implementer
 
-When a phase page says the orchestrator implements a bead (for example Phase
-3.2–3.4), it does so in its own worktree, using the same brief rules. No
-subagent runs meanwhile.
+A session may implement a bead itself instead of through a subagent, for
+example when a phase page asks for one author across several beads (Phase
+3.2–3.4), or in a Codex session. It works in its own worktree, under the same
+brief rules, and runs no implementation subagent meanwhile.
 
 ## Staged validation
 
 [D44](decisions.md#d44-staged-validation) has two modes. Track T bead T9
-switches from interim to staged. Before T9 applies the new policy, the
-orchestrator lets every in-flight candidate land and holds new submissions.
+switches from interim to staged. Before T9 applies the new policy, every
+in-flight candidate lands and new submissions are held.
 Candidates submitted after the switch follow staged mode.
 
 ### Interim mode
@@ -444,8 +585,7 @@ Candidates submitted after the switch follow staged mode.
 - **The gate** runs `dependencies → trox → review:full` until Phase 2.4b
   removes trox, then `dependencies → review:full`.
 - **A bead lands** when it is promoted to `release` and pushed.
-- **The orchestrator waits** for each candidate to land before the next
-  bead.
+- **Each session waits** for its candidate to land before its next bead.
 
 ### Staged mode
 
@@ -456,12 +596,15 @@ Candidates submitted after the switch follow staged mode.
 - **A bead lands** when it is promoted to `staging`.
 - **At every dispatch boundary,** read `tg --no-launch release status`. If
   the latest release run failed:
-  1. Diagnose it yourself with `tg diagnose`: the failing steps, the tested
-     OID, and the range since the last green `release`.
-  2. File a `ci-fix` bead. Its areas are the failing tests plus the files the
-     fix will touch, not the whole range.
+  1. Check for a `ci-fix` [shared-duty bead](#shared-duty-beads) keyed
+     `release_run=<run-id>`. If one exists, another session owns the repair;
+     continue.
+  2. Otherwise diagnose it yourself with `tg diagnose`: the failing steps,
+     the tested OID, and the range since the last green `release`.
+  3. File the `ci-fix` bead with that key. Its areas are the failing tests
+     plus the files the fix will touch, not the whole range.
 
-  It is the next bead dispatched, ahead of all other ready work.
+  It is the next bead claimed, ahead of all other ready work.
   Tollgate's `max_release_lag = 5` pauses ordinary promotion if the streak
   grows anyway. The `ci-fix` candidate is approved with
   `tg approve --release-fix <id>`, which bypasses that pause (T5).
@@ -515,23 +658,28 @@ Tests follow AGENTS.md and [D19](decisions.md#d19-test-pruning):
 
 ## Reviews
 
-The independent review is a fresh `gpt-5.6-sol` reviewer run through the
-Codex CLI. It runs:
+The independent review is a fresh reviewer from the other model family than
+the session that implemented the work
+([D18](decisions.md#d18-review-cadence)): `gpt-5.6-sol` through the Codex CLI
+for a Claude Code session's beads, and `claude-opus-5-5` through the Claude
+Code CLI for a Codex session's beads. It runs:
 
 - for every bead marked **core-review** on the phase and track pages,
   **asynchronously** ([D18](decisions.md#d18-review-cadence));
 - on every phase gate bead, and the Track T gate, covering the whole diff and
   blocking the gate.
 
-Use the binary path, not the shell alias. The alias adds
-`--dangerously-bypass-approvals-and-sandbox`. Run it in the background with
-stdin closed.
+Use the binary path, not the shell alias; the Codex alias adds
+`--dangerously-bypass-approvals-and-sandbox`. Run the review in the background
+with stdin closed.
 
 Tollgate removes the bead's worktree when the bead lands, so the review runs
 in a **review snapshot**: a detached worktree at the bead's exact commit,
-under the orchestrator's scratch directory. It is created with
+under the session's scratch directory. It is created with
 `git worktree add --detach` (read-only use, like `wt-sequence`'s review
 snapshots) and removed when the review returns.
+
+**From a Claude Code session,** review with Codex:
 
 ```sh
 /Users/dthurn/.local/bin/codex exec -m gpt-5.6-sol -s read-only -C "$SNAPSHOT" \
@@ -549,8 +697,19 @@ EOF
 )" < /dev/null
 ```
 
-The review output lands in the orchestrator's scratch directory, outside
-any worktree.
+**From a Codex session,** review with Claude. Write the same prompt to
+`$SCRATCH/review-<bead-id>.prompt` and pass it on stdin, because
+`--allowedTools` takes several values:
+
+```sh
+cd "$SNAPSHOT" && /Users/dthurn/.local/bin/claude -p --model claude-opus-5-5 \
+  --tools Read,Grep,Glob,Bash --permission-mode dontAsk \
+  --allowedTools 'Bash(git diff:*)' 'Bash(git log:*)' 'Bash(git show:*)' \
+  < "$SCRATCH/review-<bead-id>.prompt" > "$SCRATCH/review-<bead-id>.md"
+```
+
+The review output lands in the session's scratch directory, outside any
+worktree.
 
 Then follow the `independent-review` skill's steps 3–6:
 
@@ -560,24 +719,31 @@ Then follow the `independent-review` skill's steps 3–6:
 - **Record** each disposition (accepted, rejected, or unresolved) in the
   original bead's notes. The original bead may close before its review
   returns. Its follow-up carries the outcome.
+- **Before draining,** a session waits for its pending reviews and records
+  their dispositions. A session that must stop first files each pending
+  review as a `review` [shared-duty bead](#shared-duty-beads) keyed
+  `review_of=<bead-id>`, with the base and head OIDs, so another session runs
+  it.
 
 For a phase gate, use the phase's first commit's parent as the base. Phases
 overlap, so list the phase's commits for the reviewer with
 `git log --grep 'Bead: <epic-id>.'` on the `Bead:` trailers, not just a
 range.
 
-**When Codex is unavailable** (a usage limit or service error), follow this
-procedure:
+**When the reviewer's family is unavailable** (a usage limit, a signed-out
+CLI, or a service error), follow this procedure:
 
-1. Record `review-debt` in the bead notes, with the base and head OIDs.
+1. Record `review-debt` in the bead notes, with the base and head OIDs,
+   and add the label `review-debt` to the bead. Any session may retry it.
 2. Continue.
 3. Retry once at each later dispatch boundary. When it succeeds, review the
-   debt's exact range, and file a follow-up bead for confirmed findings.
-4. At a gate, if debt remains and Codex has failed for over 6 hours, run a
-   **fallback cold review**:
-   - an Agent-tool subagent with the `warden` skill and no inherited context;
+   debt's exact range, file a follow-up bead for confirmed findings, and
+   remove the label.
+4. At a gate, if debt remains and the reviewer's family has failed for over
+   6 hours, run a **fallback cold review** from the session's own family:
+   - a subagent with the `warden` skill and no inherited context;
    - given the same scope and diff;
-   - labelled "fallback (not Sol)" in the notes.
+   - labelled "fallback (same family)" in the notes.
 
    Never describe a fallback as the independent review.
 
@@ -585,16 +751,19 @@ procedure:
 
 Every phase ends with a mason pass, immediately before its gate.
 
-1. **Audit.** Run the Hive `mason` skill read-only, as a subagent.
+1. **Audit.** The session that claims the mason task runs the Hive `mason`
+   skill read-only, as a subagent.
    - Scope it to the code the phase created or touched, plus the phase page's
      stated focus.
    - Exclude code a later phase deletes or replaces.
    - Include the phase's tests. Over-specified or slow tests are findings.
-2. **File.** The audit subagent returns its findings. The orchestrator files
-   each one as a bounded bead (label `mason`) with an `Areas:` line. Its edges: after the mason task, before the gate. Never
-   chain mason beads to each other unless their areas overlap.
-3. **Implement all of them in the phase,** one at a time. Nothing is deferred
-   to a later phase or past the run. Each bead preserves behavior and
+2. **File.** The audit subagent returns its findings. The session files
+   each one as a bounded bead (label `mason`) with an `Areas:` line. Its
+   edges: after the mason task, before the gate, plus
+   [serialization edges](#serialization-edges) where mason beads overlap
+   each other or other unfinished work.
+3. **Implement all of them in the phase,** in parallel where their edges
+   allow. Nothing is deferred to a later phase or past the run. Each bead preserves behavior and
    rendering. Its evidence is the same as any bead's, plus screenshots for
    touched screens. Engine beads also keep the fuzz smoke green.
 4. **Close the mason task** after its audit is recorded in its notes and its
@@ -620,7 +789,8 @@ its own commit:
 {"bead":"hv-xxx","phase":3,"implementMin":95,"localValidationS":{"review":38,"focused":12,"fuzz":40},"hostLoad":12.4,"testDelta":{"files":-3,"lines":-820,"jsdomFiles":-2},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
 ```
 
-- **`implementMin`** is the subagent's wall time from dispatch to commit.
+- **`implementMin`** is the implementer's wall time from dispatch to
+  commit.
 - **`hostLoad`** is `sysctl -n vm.loadavg`'s 1-minute value when the
   validation ran. Always read timings next to it.
 - **`testDelta`** counts test files, test lines, and `jsdom` test files,
@@ -649,8 +819,10 @@ File an **improvement bead** when either of these holds:
 
 An improvement bead:
 
-- is filed as soon as the trigger fires, at the next dispatch boundary, and
-  preempts the remaining phase tasks (edges first, then `hive_project`);
+- is a [shared-duty bead](#shared-duty-beads) keyed
+  `trigger=<tag>/phase-<n>`, filed as soon as the trigger fires, at the next
+  dispatch boundary, and preempts the remaining phase tasks (edges first,
+  then `hive_project`);
 - carries the label `introspection` and names the evidence: friction files,
   bead IDs, and measurements;
 - targets the cause, not the symptom: a faster check, a fixed flaky test, a
@@ -665,30 +837,32 @@ An improvement bead:
 A friction cause that is a prerequisite of a running bead is handled as a
 prerequisite bead at once, without waiting for a trigger.
 
-The orchestrator runs **`npm run friction:triggers`** at every dispatch
+Each session runs **`npm run friction:triggers`** at every dispatch
 boundary. It reads the friction files and `friction.jsonl`, normalizes tags
 through the alias map, and lists every fired tag trigger with its disposition
 from the ledger `docs/plan/evidence/introspection.jsonl`. It exits non-zero
 when a fired trigger has no disposition. Each fired trigger gets one ledger
-line per phase. The improvement bead appends its own line in its commit; the
-orchestrator has the next dispatched bead append a `reason` line:
+line per phase, written by the trigger's bead in its own commit: a `bead`
+line when it fixes the cause, or a `reason` line when it closes without a fix:
 
 ```json
 {"tag":"playwright-screenshot-root","phase":2,"bead":"hv-47xj.54"}
 {"tag":"worktree-write-hook-misfire","phase":3,"reason":"harness issue: the Write/Edit hook refuses .worktrees paths; no repository fix"}
 ```
 
-- **`bead`** is the improvement bead filed for the trigger.
-- **`reason`** records why no bead is filed, such as a harness issue
+- **`bead`** is the improvement bead that fixed the trigger.
+- **`reason`** records why the cause is not fixed, such as a harness issue
   outside the repository or friction that a decision makes by design.
 
 ### Retrospectives
 
 Run a retrospective **after every 10th closed bead within a phase** and as part
-of every **phase gate**. Run it as a read-only subagent at a dispatch
-boundary, before the next bead is dispatched. `npm run friction:triggers`
-reports, per phase, the friction files that no recorded retrospective covers
-and marks a phase whose count reaches `retrospectiveCadence` (10) as due.
+of every **phase gate**. `npm run friction:triggers` reports, per phase, the
+friction files that no recorded retrospective covers and marks a phase whose
+count reaches `retrospectiveCadence` (10) as due. The session that sees a
+phase due files a `retrospective` [shared-duty bead](#shared-duty-beads)
+keyed `retrospective=phase-<n>/<covered-count>`. The session that claims it
+runs the retrospective as a read-only subagent.
 
 1. Run the Hive `sage` skill read-only, scoped to this project's workflow
    since the last retrospective. Its inputs:
@@ -710,8 +884,8 @@ and marks a phase whose count reaches `retrospectiveCadence` (10) as due.
 4. Record the summary and the filed bead IDs in the phase epic's notes.
 5. Return a retrospective line for `docs/plan/evidence/introspection.jsonl`
    listing the friction beads it covered, and a disposition line for each
-   fired trigger it resolved. The orchestrator has the next dispatched bead
-   append them:
+   fired trigger it resolved. The retrospective bead appends them in its
+   own commit:
 
    ```json
    {"retrospective":"2026-10-09","phase":2,"bead":"hv-47xj.18","covers":["hv-47xj.1","hv-47xj.2"]}
@@ -727,9 +901,10 @@ If it is unavailable, run `playwright-mcp-service start` and retry. **Never
 launch browsers directly.** The project details (scenes, URL parameters,
 assert-before-acting) are in the README's Browser QA section.
 
-Subagents may share the orchestrator's MCP connection, and with it one
-browser context. Only one subagent runs at a time (D17), so interactive MCP QA
-never shares a context. Script-driven tools such as the card sweep and
+A session's subagents may share its MCP connection, and with it one browser
+context. Each session runs one browser-QA subagent at a time (D17), and
+separate sessions get isolated contexts, so interactive MCP QA never shares a
+context. Script-driven tools such as the card sweep and
 `scripts/screenshot-runtime.mjs` open their own MCP client, on their own
 port.
 
@@ -780,10 +955,10 @@ node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--pro
 
 ### Servers and contexts
 
-- Run an interactive QA dev server from the bead's worktree on port 5174:
-  `npm run dev -- --port 5174`. Never use 5173.
+- Run an interactive QA dev server from the bead's worktree on the bead's
+  QA port: `npm run dev -- --port <port> --strictPort`. Never use 5173.
 - Report the server's PID or process group in the return's runtime ledger.
-  The orchestrator records it in the bead notes.
+  The session records it in the bead notes.
 - Kill only that PID. Never use `pkill -f vite` or other broad patterns.
 - Close the MCP browser context before returning.
 - Before each screenshot, assert `location.href` and `window.innerWidth`.
@@ -798,8 +973,8 @@ write there even though they otherwise leave the primary checkout alone.
 Captures are never committed; reference each by filename only.
 
 The shared Playwright MCP accepts a `filename` only inside its client's first
-MCP root, which is the primary checkout for the orchestrator's connection, and
-it does not create directories. Create the bead's directory once, then pass
+MCP root, which is the primary checkout for a session started there, and it
+does not create directories. Create the bead's directory once, then pass
 the absolute path straight to `browser_take_screenshot`:
 
 ```sh
@@ -872,7 +1047,7 @@ mobile:
 {"uuid":"7be2e6d7-abff-4c44-a0c3-35460da1693c","variant":"amplified","mode":"judged","verdict":"fail","notes":"return marker missing on banished card","bead":"hv-xxx","commit":"<oid>","screens":["windcutter-amp.png"]}
 ```
 
-`commit` is the base OID the bead was built on. The orchestrator adds the
+`commit` is the base OID the bead was built on. The session adds the
 landed OID in the bead notes. `screens` lists capture filenames in the bead's
 [capture directory](#screenshots).
 
@@ -919,10 +1094,11 @@ decision:
 
 1. **Amend `docs/rules.md`** with normative, current-state text in the right
    section. Keep its style: symbols, "you control", and so on. Write no
-   history. `docs/rules.md` is a single area. A content bead that needs a
-   rules change while another bead holds that area records the change in its
-   RD file and in its notes. The orchestrator then files a small
-   `rules-text` bead that runs next.
+   history. `docs/rules.md` is a single area, and a new section is an
+   additive edit ([Serialization edges](#serialization-edges)). A content
+   bead that needs to rewrite rules text that another in-progress bead also
+   changes records the change in its RD file and in its notes. Its session
+   then files a small `rules-text` bead, serialized after that bead.
 2. **Write the RD file** `docs/plan/evidence/rules-decisions/RD-<bead-id>-<n>.md`:
 
    ```markdown
@@ -992,23 +1168,34 @@ What to log:
 These are the [D17](decisions.md#d17-machine-resources) limits:
 
 - `JOURNEY_TEST_WORKERS=2` locally. The local Tollgate policy sets 2.
-- One implementation subagent at a time, and one Claude subagent of any
-  kind at a time.
-- **Heavy commands.** The running bead runs at most one heavy command at a
-  time. Tollgate's own validation is the other heavy slot. Track T beads run
-  cargo with `CARGO_BUILD_JOBS=4`.
-- **Labels.** The orchestrator adds `heavy` or `browser` when a bead's
-  acceptance needs heavy validation or interactive browser QA. It decides
-  from the bead's text at dispatch if the label is missing.
+- One implementation subagent per session, and one Claude or Codex subagent
+  of any kind at a time within a session.
+- **Heavy commands** run under the machine-wide heavy slot, one at a time
+  across every session:
+
+  ```sh
+  lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids <batch>
+  ```
+
+  `lockf` waits for the slot. Tollgate's own validation is the other heavy
+  slot. Track T beads run cargo with `CARGO_BUILD_JOBS=4`.
+- **Labels.** The session adds `heavy` or `browser` when a bead's acceptance
+  needs heavy validation or interactive browser QA. It decides from the
+  bead's text at dispatch if the label is missing.
+- **QA ports.** Each session takes the first free port from 5174 for its
+  bead and records it ([Dispatch](#dispatch-a-bead)).
 - **Soaks and tournaments.** Run them in batches of at most 30 minutes, with
-  4 worker processes while the running bead is not `heavy` and 2 otherwise.
-  They may overlap Tollgate validation and the running bead.
+  4 worker processes while only one executor session runs and its bead is not
+  `heavy`, and 2 otherwise. They may overlap Tollgate validation and running
+  beads.
 - Watch memory pressure: `memory_pressure`, or `vm_stat` compressed pages.
-  Under pressure, finish the running bead and pause soaks and tournaments.
-- **Claude usage limits.** When a subagent or the session hits a usage
-  limit, wait for the limit to reset, then continue the same bead from its
-  worktree ([recovery](#failure-and-recovery)). Never start extra subagents
-  to catch up.
+  Under pressure, each session finishes its running bead and pauses soaks and
+  tournaments. Under sustained pressure a session drains itself with
+  `hive executor stop --kind pressure`.
+- **Usage limits.** When a session or its subagent hits its host's usage
+  limit, the session waits for the limit to reset and continues the same bead
+  from its worktree ([recovery](#failure-and-recovery)), or drains. Never start
+  extra subagents to catch up. Sessions of the other host keep running.
 
 ## Failure and recovery
 
@@ -1018,14 +1205,17 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - **Flaky test.** If Tollgate attributes it `flaky-or-non-hermetic`, fix the
   test's hermeticity in a dedicated bead, or delete the test if it fails D19.
   Never retry until green.
-- **Codex unavailable.** Handle it as review debt; see [Reviews](#reviews).
+- **Reviewer unavailable** (either family). Handle it as review debt; see
+  [Reviews](#reviews).
 - **Playwright MCP unavailable.** Run `playwright-mcp-service start` and retry
   once. If it is still down, continue non-QA work. Record QA debt, and clear it
   before the bead closes, or before the phase gate at the latest.
-- **A subagent dies or its result is lost.** Its worktree belongs to the
-  orchestrator. Inspect it with `git -C <worktree> status --short` and
+- **A subagent dies or its result is lost.** Its worktree belongs to its
+  session. Inspect it with `git -C <worktree> status --short` and
   `git log`. Then dispatch a fresh subagent to finish from that state, with
   the original brief plus what is already done.
+- **A session ends while holding a bead.** See [Starting, scaling, and
+  draining](#starting-scaling-and-draining).
 - **Beads server down.** The Hive store is served by one external Dolt
   `sql-server` on `127.0.0.1:3307`, rooted at `/Users/dthurn/brain/.beads/dolt`.
   It is shared with other Hive projects. When a Beads call fails to connect:
@@ -1047,7 +1237,7 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
   activating repositories: `pgrep -fl tollgate-app`, and after T1a,
   `tg --no-launch doctor`. While it is unavailable:
   1. Let the running subagent finish and commit in its worktree.
-  2. Queue its commit for submission, and dispatch nothing else.
+  2. Queue its commit for submission, and claim nothing else.
   3. Retry with backoff: 1 minute, then 5, then 15.
 
   Never bypass Tollgate with raw `git push`. Never kill a Tollgate that is
@@ -1059,7 +1249,9 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
   and follow the Hive executor recovery protocol. That means:
   - repair or relax only agent-imposed constraints, and record the change;
   - never pause for approval: none is required anywhere in this plan;
-  - never defer a bead without fresh justiciar agreement.
+  - never defer a bead without fresh justiciar agreement;
+  - an empty `bd ready` while other sessions hold work is not a blocker:
+    wait with `hive executor await`.
 
   A genuine external blocker is one that stays unresolved after recovery, such
   as GitHub being unreachable for hours. For one, checkpoint the affected
@@ -1072,8 +1264,11 @@ Run this sequence on every resume. It is idempotent.
 
 1. **Read the plan.** Read [README](README.md), then this section. If the
    Phase 7 epic is closed, the run is over: stop.
-2. **Find your work.** List your unfinished assignments:
-   `hbd list --assignee "${CLAUDE_CODE_SESSION_ID:?}" --status in_progress --json`.
+2. **Find your work.** Opt in again with `hive executor start --project
+   dreamtides_web --session <your ID> --continuous`, then list your
+   unfinished assignments:
+   `hbd list --assignee "${CLAUDE_CODE_SESSION_ID:?}" --status in_progress --json`
+   (in Codex, `${CODEX_THREAD_ID:?}`).
    Normally there is one, plus any bead checkpointed behind a prerequisite.
    If there are several, finish them one at a time, in
    [selection order](#selection-order), before dispatching new work.
@@ -1094,8 +1289,7 @@ Run this sequence on every resume. It is idempotent.
    - Otherwise dispatch a fresh subagent to finish it.
 
    If the bead was claimed by a different session ID, do not touch its
-   worktree. The operator has released the bead; restart it from a fresh
-   worktree.
+   worktree. It was released to you; restart it from a fresh worktree.
 7. **Check outstanding work outside beads:**
    - pending Codex reviews (their snapshot worktrees and output files in the
      scratch directory), and recorded review debt;
@@ -1103,5 +1297,7 @@ Run this sequence on every resume. It is idempotent.
    - commits that were queued for submission while Tollgate was unavailable.
 8. **Check owned processes.** For each runtime-ledger process in the notes,
    check whether it is alive. Stop it if no running work needs it.
-9. **Dispatch the next bead** from the ready queue, reading only the phase
-   page of the bead you dispatch.
+9. **Claim the next bead** from the ready queue, reading only the phase
+   page of the bead you claim. Other sessions' beads are theirs; never
+   recover them unless the [abandoned-assignment
+   repair](#starting-scaling-and-draining) applies.

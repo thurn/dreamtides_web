@@ -45,7 +45,7 @@ Each task depends on the tasks listed after its arrow:
 - 4.8 ← 4.6, 4.7
 - 4.9 ← 4.8 and the Phase 3 gate (3.12)
 
-Tasks run one at a time, in this order: 4.0 → 4.1 → 4.5 → 4.2 → 4.3 →
+Tasks are claimed in this order: 4.0 → 4.1 → 4.5 → 4.2 → 4.3 →
 4.4 → 4.6 → 4.7 → 4.8 → 4.9. Phase 4 overlaps the end of Phase 3. The engine API that 3.2–3.4 fix
 is stable. A Phase 3 bead that must change it files a follow-up for the
 affected Phase 4 code.
@@ -285,7 +285,7 @@ and sweep tooling. Look especially for:
    and land the beads it files.
 4. Run the independent review over the phase diff.
 5. Update `metrics.md`, including the D19 suite budgets.
-6. In staged mode, confirm `release == staging`.
+6. In staged mode, confirm `release` contains every commit of the phase.
 7. Close the epic.
 
 ## Exit gate

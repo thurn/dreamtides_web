@@ -34,8 +34,8 @@ it. If nothing does, delete it. Git history keeps everything.
 
 ## Task graph
 
-Tasks run one at a time, in dependency order
-([D43](decisions.md#d43-orchestrated-sequential-execution)).
+Tasks run in dependency order
+([D43](decisions.md#d43-peer-executor-sessions)).
 
 Each task depends on the tasks listed after its arrow:
 
@@ -370,7 +370,7 @@ before and after, and lint time before and after.
 ### 2.9 Mason audit and refactors
 
 1. **Audit.** Run the Hive `mason` skill, read-only, as a subagent over the
-   surviving codebase. The orchestrator files its findings as bounded beads
+   surviving codebase. Its session files its findings as bounded beads
    (label `mason`), each with an `Areas:` line. The priorities are:
    - type safety and illegal states, especially IDs, journey and site state,
      and fold events;

@@ -51,17 +51,20 @@ Each task depends on the tasks listed after its arrow:
   and logs why.
 - 5.9 ← every task above; 5.10 ← 5.9 and the Phase 4 gate
 
-Content batches run one at a time, in inventory order
-([D43](decisions.md#d43-orchestrated-sequential-execution)). Batches touch
-disjoint entity modules, and new primitives are new files under
+Content batches are claimed in inventory order, and several run at once when
+several executor sessions run ([D43](decisions.md#d43-peer-executor-sessions)).
+Batches touch disjoint entity modules, and new primitives are new files under
 `effects/primitives/` (Phase 3.4), so each batch builds on the landed
-primitives of the batches before it.
+primitives of the batches its edges name. Registering a primitive, a DSL union
+member, or a scenario module is an additive edit that needs no edge; batches
+that substantively change the same engine logic file carry a
+[serialization edge](workflow.md#serialization-edges).
 
 ## Batch recipe
 
 Every content batch bead follows these steps exactly.
 
-1. **Dispatch.** The orchestrator claims the bead, creates its worktree, and
+1. **Dispatch.** A session claims the bead, creates its worktree, and
    briefs a subagent ([workflow](workflow.md#dispatch)).
 2. **Author the abilities** in each entity's content module, plus the
    amplified variant wherever `amplifiedText` is present. The printed text is
@@ -111,7 +114,7 @@ Every content batch bead follows these steps exactly.
 
    Record the verdicts in `docs/plan/evidence/qa-ledger/<bead-id>.jsonl`.
 9. **Validate and commit.** Run `npm run review`, then make one commit with
-   the batch's [friction file](workflow.md#friction-ledger). The orchestrator
+   the batch's [friction file](workflow.md#friction-ledger). The session
    submits, approves without waiting, and closes the bead when it lands. The
    bead notes list:
    - counts;
@@ -161,7 +164,8 @@ primitive dependency and frequency:
 15. type and subtype synergies (Warriors, Spirit Animals, Survivors, …);
 16. the remaining unique cards.
 
-When 5.1 lands, the orchestrator files one bead per batch from the inventory.
+When 5.1 lands, the session that landed it files one bead per batch from the
+inventory.
 Each gets an `Areas:` line naming its entity modules, its new primitive
 modules, its spec file, `engine hubs`, and the fallout areas its
 [fallout listing](workflow.md#listing-fallout-before-dispatch) calls for. Add batch-to-batch
@@ -173,7 +177,7 @@ edges in the [task graph](#earliest-start-and-task-graph).
 
 - The inventory covers every catalog UUID exactly once.
 - The inventory lists, for each batch, its entities, areas, and the batches
-  whose primitives it needs, so the orchestrator can file the batches with
+  whose primitives it needs, so the batches can be filed with
   their edges.
 - No batch exceeds 30 entities.
 
@@ -353,7 +357,7 @@ coverage gate must stay green after each one.
 6. **Independent review:** the full diff of engine and primitives, plus a
    deterministic 10% sample of content definitions, listed for the reviewer.
 7. Update `metrics.md`, including the D19 suite budgets. In staged mode,
-   confirm `release == staging`.
+   confirm `release` contains every commit of the phase.
 8. Close the epic.
 
 ## Exit gate

@@ -1,15 +1,17 @@
 # Plan
 
 This repository is executing [docs/plan/README.md](docs/plan/README.md)
-unattended. The decisions in [docs/plan/decisions.md](docs/plan/decisions.md)
-are binding, and [docs/plan/workflow.md](docs/plan/workflow.md) defines how
-work is filed, dispatched to implementation subagents, delivered, reviewed
-and QA'd. Hive project id: `dreamtides_web`.
+unattended by one or more peer executor sessions, Claude Code or Codex. The
+decisions in [docs/plan/decisions.md](docs/plan/decisions.md) are binding, and
+[docs/plan/workflow.md](docs/plan/workflow.md) defines how work is filed,
+serialized, claimed, implemented, delivered, reviewed and QA'd. Hive project
+id: `dreamtides_web`.
 
-An implementation subagent works only in the worktree and areas it is given,
-makes one commit, and never runs `bd`, `tg candidate`, `tg approve`,
-`tg update`, or `tg worktree`; the orchestrating session does, and it alone
-rebases a worktree with `tg --no-launch update` (docs/plan/workflow.md
+Each executor session claims and lands one bead at a time. An implementation
+subagent works only in the worktree and areas its session gives it, makes one
+commit, and never runs `bd`, `tg candidate`, `tg approve`, `tg update`, or
+`tg worktree`; its session does, for its own beads only, and alone rebases
+their worktrees with `tg --no-launch update` (docs/plan/workflow.md
 § Updating a worktree).
 
 # Delivery
@@ -22,18 +24,21 @@ rebases a worktree with `tg --no-launch update` (docs/plan/workflow.md
 - Do not create new branches unless explicitly requested. Worktree branches
   are local-only and are never pushed.
 - When work is complete, create one detailed local Conventional Commit. In
-  the plan run, a subagent stops there and the orchestrator submits it with
+  the plan run, a subagent stops there and its session submits it with
   `tg candidate <oid>`. The plan grants promotion authority for
   in-scope plan work and in-scope CI repairs: authorize the exact candidate
   with `tg approve <candidate-id> --wait` without asking, and wait for it to
-  land before dispatching the next bead. The plan runs one bead and one
-  subagent at a time (docs/plan/workflow.md). Tollgate owns regeneration,
-  certified promotion, and the leased remote push.
+  land before claiming the next bead. Each session runs one bead and one
+  implementation subagent at a time; sessions run side by side as far as the
+  bead graph's serialization edges allow (docs/plan/workflow.md). Tollgate
+  owns regeneration, certified promotion, and the leased remote push.
 - Tollgate's local gate is the only CI. Never add GitHub Actions workflows.
-- Request independent review (the `independent-review` skill, run through the
-  Codex CLI) at every plan phase gate and for every bead the phase pages mark
-  core-review; see the Reviews section of `docs/plan/workflow.md`. This
-  explicitly authorizes more than one review per session.
+- Request independent review from the other model family than the session
+  that implemented the work (the Codex CLI for Claude Code sessions, the
+  Claude Code CLI for Codex sessions) at every plan phase gate and for every
+  bead the phase pages mark core-review; see the Reviews section of
+  `docs/plan/workflow.md`. This explicitly authorizes more than one review per
+  session.
 - Never deploy, upload assets, or run `npm run deploy`. Touch other
   repositories only as decision D16 allows: for Track T, and under its
   tooling-fix exception, where a Hive or Tollgate defect blocking the run is

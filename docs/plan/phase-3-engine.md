@@ -44,9 +44,9 @@ Each task depends on the tasks listed after its arrow:
 - 3.11 ← 3.9, 3.10
 - 3.12 ← 3.11 and the Phase 2 gate (2.10)
 
-**The orchestrator implements 3.2–3.4 itself,** in sequence. They fix the
-architecture every later bead builds on. After 3.4 the tasks run one at a
-time: 3.5 stack → 3.6 triggers → 3.7 continuous effects → 3.8 zones →
+**One session implements 3.2–3.4 itself,** in sequence. They fix the
+architecture every later bead builds on. After 3.4 the tasks run in order:
+3.5 stack → 3.6 triggers → 3.7 continuous effects → 3.8 zones →
 3.9 loops → 3.10 views. 3.2–3.4 make the engine **registry-based** (below),
 so each task adds files rather than editing shared switches. A task that
 must edit a shared core file (`state/`, `steps/runner`,

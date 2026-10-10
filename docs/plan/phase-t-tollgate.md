@@ -12,8 +12,8 @@
 - Skills and Hive use `staging` and `release` correctly.
 - `dreamtides_web` runs a gate stage of about 60 s or less.
 
-Track T beads run **between the phases' beads**, one at a time like every
-other bead ([D43](decisions.md#d43-orchestrated-sequential-execution)). Its
+Track T beads run **alongside the phases' beads**, claimed like every other
+bead ([D43](decisions.md#d43-peer-executor-sessions)). Its
 work happens in
 `~/tollgate`, except T8. The operator granted standing promotion authority for
 Track T beads ([D45](decisions.md#d45-tollgate-track)).
@@ -28,7 +28,7 @@ Track T beads ([D45](decisions.md#d45-tollgate-track)).
 - this page's [incident record](#incident-2026-10-05).
 
 **In `~/tollgate`, every bead** is implemented by a subagent, while the
-orchestrator submits, approves, and self-installs it. Every bead:
+session submits, approves, and self-installs it. Every bead:
 
 - follows that repository's conventions;
 - runs its local checks (`cargo test` for the touched crates, plus the UI
@@ -312,7 +312,7 @@ Update every consumer of the ref model:
 
   Change it through `tg config validate` then `apply`. Record the old and new
   text in `metrics.md`.
-- **Switch over.** The orchestrator switches to the
+- **Switch over.** The session switches to the
   [staged mode](workflow.md#staged-validation) of the workflow from the next
   dispatch.
 

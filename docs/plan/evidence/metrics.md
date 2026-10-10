@@ -292,7 +292,7 @@ environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2", T
 ### Staged validation policy (T9)
 
 Bead hv-ki3p.10 drafts the staged-mode policy of
-[D44](../decisions.md#d44-staged-validation); the orchestrator applies
+[D44](../decisions.md#d44-staged-validation); the session that owns T9 applies
 exactly the text of [`t9-policy.toml`](t9-policy.toml) with
 `tg config validate` then `apply`. Tollgate step names allow only
 `[A-Za-z0-9._-]`, so the steps are `review-gate`, `review-full`, and
@@ -562,7 +562,7 @@ which removes the Trox, RON, and Rust steps (about 80 s at this load).
 ## Budget revision (2026-10-05 replan)
 
 The replan ([D19](../decisions.md#d19-test-pruning),
-[D43](../decisions.md#d43-orchestrated-parallel-execution),
+[D43](../decisions.md#d43-peer-executor-sessions),
 [D44](../decisions.md#d44-staged-validation)) revises the budgets. Reasons:
 
 - The suite dominated every gate.
