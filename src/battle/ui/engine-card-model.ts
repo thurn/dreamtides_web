@@ -48,8 +48,8 @@ interface CardDefinitions {
  * The part of a variant the dealt display data depends on: the
  * transfiguration and the Fast, Reclaim, and type changes of the deck entry.
  * The spark bonus and cost reduction change only spark and cost, which the
- * model takes from the engine's characteristics. (A multi-cost card's orb
- * labels are the exception: they are the dealt definition's.)
+ * model takes from the engine's characteristics, a multi-cost card's orb
+ * labels included (`engineOrbLabels`).
  */
 function serializedDisplayVariant(transfiguration: TransfigurationType | null, mods: DeckMods | null | undefined): string {
   return JSON.stringify([
@@ -101,6 +101,20 @@ export function createEngineCardModels(sources: EngineCardSources): EngineCardMo
   };
 }
 
+/**
+ * A multi-cost card's orb labels at its engine cost: the printing's X orbs
+ * stay, and its fixed orbs become one orb, in the first fixed orb's place,
+ * showing `cost`, the fixed energy after deck-entry and in-battle cost
+ * changes. A printing with only X orbs gains a leading fixed orb when its
+ * cost rises above 0.
+ */
+function engineOrbLabels(printed: readonly string[], cost: number): string[] {
+  const labels: string[] = printed.filter((label) => label === "X");
+  const fixedAt = printed.findIndex((label) => label !== "X");
+  if (fixedAt >= 0 || cost > 0) labels.splice(Math.max(fixedAt, 0), 0, String(cost));
+  return labels;
+}
+
 function buildModel(
   sources: EngineCardSources,
   definitions: DefinitionIndex,
@@ -141,7 +155,8 @@ function buildModel(
   const name = definition?.name ?? card?.name ?? parseCardName("Card");
   const imageNumber = definition?.imageNumber ?? card?.imageNumber ?? 0;
   const art = definition?.art ?? card?.art;
-  const energyCosts = definition?.energyCosts ?? card?.energyCosts;
+  const printedOrbs = definition?.energyCosts ?? card?.energyCosts;
+  const energyCosts = printedOrbs === undefined ? undefined : engineOrbLabels(printedOrbs, characteristics.cost);
   return {
     cardId,
     ...(definition?.transfigurationDisplay === undefined

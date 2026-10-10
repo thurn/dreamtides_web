@@ -10,6 +10,7 @@ import { boardState, placeFigment, type BoardSetup } from "../../engine/testing/
 import { DSL } from "../../engine/testing/dsl-cards";
 import { LOOP, LOOP_CARDS } from "../../engine/testing/loop-cards";
 import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture } from "../../engine/testing/prompt-lab";
+import { CONTINUOUS } from "../../engine/testing/continuous-cards";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { ZONE_FIGMENT, zoneCatalog } from "../../engine/testing/zone-cards";
 import { NO_PROMPTS } from "../../engine/steps/sources";
@@ -496,6 +497,54 @@ describe("engine card models", () => {
     const shown = models(engine.view(state, "player").instances[ids.player.hand[0]]).displaySnapshot;
 
     expect([shown.renderedText, shown.reclaimCost]).toEqual([printed.renderedText, null]);
+  });
+
+  /** A dealt multi-cost event ("1 X") of `cardId`, its deck entry's cost reduction applied to its orbs. */
+  function dealtMultiCost(cardId: CardId, energyCostReduction: number): BattleDeckCardDefinition {
+    const modification = energyCostReduction === 0 ? null : { energyCostReduction };
+    return {
+      ...dealt(cardId, modification, "multi-cost copy"),
+      battleCardKind: "event",
+      energyCost: 1 - energyCostReduction,
+      printedEnergyCost: 1,
+      energyCosts: [String(1 - energyCostReduction), "X"],
+    };
+  }
+
+  it("shows each multi-cost copy's orbs at its own deck-entry cost", () => {
+    const cardId = DSL.fixedPlusXPoints.id;
+    const { state, ids } = board({
+      player: { hand: [cardId, { cardId, deckMods: { ...NO_DECK_MODS, costReduction: 1 } }] },
+    });
+    const view = engine.view(state, "player");
+    const models = createEngineCardModels({
+      definitions: [dealtMultiCost(cardId, 0), dealtMultiCost(cardId, 1)],
+      cards: new Map(),
+      figment: () => undefined,
+    });
+    const orbs = ids.player.hand.map((instance) => models(view.instances[instance]).displaySnapshot.energyCosts);
+
+    expect(orbs).toEqual([
+      ["1", "X"],
+      ["0", "X"],
+    ]);
+  });
+
+  it("shows an in-battle cost change on multi-cost orbs and leaves single-cost cards orb-free", () => {
+    const multiCost = DSL.fixedPlusXPoints.id;
+    const singleCost = DSL.drawTwo.id;
+    const { state, ids } = board({ player: { front: [CONTINUOUS.eventTax.id], hand: [multiCost, singleCost] } });
+    const view = engine.view(state, "player");
+    const models = createEngineCardModels({
+      definitions: [dealtMultiCost(multiCost, 0)],
+      cards: new Map(),
+      figment: () => undefined,
+    });
+    const [taxedMulti, taxedSingle] = ids.player.hand.map((instance) => models(view.instances[instance]).displaySnapshot);
+
+    expect(taxedMulti.energyCosts).toEqual(["2", "X"]);
+    expect(taxedSingle.energyCosts).toBeUndefined();
+    expect(taxedSingle.energyCost).toBe(view.instances[ids.player.hand[1]].characteristics.cost);
   });
 });
 
