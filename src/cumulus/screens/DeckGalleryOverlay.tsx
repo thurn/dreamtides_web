@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { token } from "../primitives/tokens";
-import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
+import { menuTriggerClearance } from "../primitives/chrome-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 
 export interface DeckGalleryOverlayProps {
@@ -43,9 +43,10 @@ export function DeckGalleryOverlay({
   
   const isDesktop = useIsDesktop();
   const clearsMobileMenu = !isDesktop && clearMobileJourneyMenu;
-  const mobileMenuClearance =
-    `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ` +
-    `${String(MENU_BUTTON_PX)}px + ${token("--space-s")})`;
+  const mobileMenuClearance = menuTriggerClearance({
+    isDesktop: false,
+    gap: token("--space-s"),
+  });
 
   useEffect(() => {
     if (!isOpen) return undefined;

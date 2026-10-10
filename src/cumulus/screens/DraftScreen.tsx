@@ -28,9 +28,7 @@ import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
 import {
   debugRerollCornerStyle,
-  MENU_BUTTON_PX,
-  MENU_EDGE_INSET_DESKTOP_PX,
-  MENU_EDGE_INSET_MOBILE_PX,
+  menuTriggerClearance,
 } from "../primitives/chrome-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
@@ -89,18 +87,6 @@ const DESKTOP_OFFER_CARD_WIDTH_PX = 300;
 const DRAFT_ROW_MIN_WIDTH_PX = 1260;
 const NOOP = (): void => undefined;
 
-function topSafeOpFor(isDesktop: boolean): string {
-  const edgeInset = isDesktop
-    ? MENU_EDGE_INSET_DESKTOP_PX
-    : MENU_EDGE_INSET_MOBILE_PX;
-  // The menu disc sits at `top: max(safe-inset-top, edgeInset)` with height
-  // MENU_BUTTON_PX, so this band clears its bottom edge.
-  return (
-    `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
-    `calc(max(var(--safe-area-inset-top), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px))`
-  );
-}
-
 function offerCellWidthFor(params: {
   columns: number;
   rows: number;
@@ -142,7 +128,8 @@ export function DraftScreen({
   const offerGridGap = isDesktop
     ? DESKTOP_OFFER_GRID_GAP
     : MOBILE_OFFER_GRID_GAP;
-  const topSafeOp = topSafeOpFor(isDesktop);
+  // The top band clears the menu disc's bottom edge.
+  const topSafeOp = menuTriggerClearance({ isDesktop });
   const topSafe = `calc(${topSafeOp})`;
   const rerollCorner = debugRerollCornerStyle(isDesktop);
   const offerCellWidth = offerCellWidthFor({

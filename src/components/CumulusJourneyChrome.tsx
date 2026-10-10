@@ -14,10 +14,7 @@ import { useJourney } from "../state/journey-context";
 import { JourneyStatusBar } from "../cumulus/components/hud/JourneyStatusBar";
 import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
-import {
-  MENU_BUTTON_PX,
-  MENU_EDGE_INSET_MOBILE_PX,
-} from "../cumulus/primitives/chrome-geometry";
+import { menuTriggerClearance } from "../cumulus/primitives/chrome-geometry";
 import type { JourneyMutationSource } from "../state/journey-context";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
 import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
@@ -31,9 +28,7 @@ const NOOP = (): void => undefined;
  * app-chrome layer, so a panel above its bottom edge would sit under it. The
  * desktop trigger sits in the top-end corner, clear of the centred panel.
  */
-const MOBILE_CHROME_FALLBACK_TOP =
-  `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
-  `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ${String(MENU_BUTTON_PX)}px))`;
+const MOBILE_CHROME_FALLBACK_TOP = menuTriggerClearance({ isDesktop: false });
 
 /**
  * The error fallback shared by every chrome boundary (card-tutorial guidance,
