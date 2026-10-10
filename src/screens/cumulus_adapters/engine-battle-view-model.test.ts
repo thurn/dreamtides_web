@@ -13,6 +13,11 @@ import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, prom
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { ZONE_FIGMENT, zoneCatalog } from "../../engine/testing/zone-cards";
 import { NO_PROMPTS } from "../../engine/steps/sources";
+import { NO_DECK_MODS, type DeckMods } from "../../engine/dsl/types";
+import type { BattleDeckCardDefinition } from "../../battle/types";
+import { parseCardName, parseCardSubtype, type CardId } from "../../types/card-identity";
+import type { CardData } from "../../types/cards";
+import type { CardKeywordModification } from "../../types/journey";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
 import type { Answer } from "../../engine/prompts/types";
 import { parseBattleCardId, parseBattleId, parseBattleSlotViewId } from "../../types/identifiers";
@@ -420,6 +425,77 @@ describe("buildEngineBattleScreenModel", () => {
     expect(won.view.result).toMatchObject({ outcome: "victory", playerScore: 4, essenceReward: 100 });
     expect(lost.view.result).toEqual({ outcome: "defeat", dismissed: false });
     expect(won.affordances.canAct).toBe(false);
+  });
+});
+
+describe("engine card models", () => {
+  /** A dealt definition of `cardId`: a deck entry's display, its keyword changes applied. */
+  function dealt(cardId: CardId, keywordModification: CardKeywordModification | null, renderedText: string): BattleDeckCardDefinition {
+    return {
+      sourceDeckEntryId: null,
+      cardId,
+      cardNumber: 1,
+      name: parseCardName("Fixture Card"),
+      battleCardKind: "character",
+      subtype: parseCardSubtype("Fixture"),
+      energyCost: 2,
+      printedEnergyCost: 2,
+      printedSpark: 1,
+      isFast: keywordModification?.fast === true,
+      timing: keywordModification?.fast === true ? "fast" : "standard",
+      reclaimCost: keywordModification?.reclaim ?? null,
+      renderedText,
+      imageNumber: 0,
+      transfiguration: null,
+      ...(keywordModification === null ? {} : { keywordModification }),
+      isBane: false,
+    };
+  }
+
+  it("shows each copy of a card with its own deck-entry modifications", () => {
+    const cardId = SYNTHETIC.vanilla1.id;
+    const plain = dealt(cardId, null, "plain copy");
+    const reclaim = dealt(cardId, { reclaim: 2 }, "reclaim copy");
+    const fast = dealt(cardId, { fast: true }, "fast copy");
+    const mods = (change: Partial<DeckMods>): DeckMods => ({ ...NO_DECK_MODS, ...change });
+    const { state, ids } = board({
+      player: {
+        hand: [cardId, { cardId, deckMods: mods({ reclaim: 2 }) }, { cardId, deckMods: mods({ fast: true, sparkBonus: 1 }) }],
+      },
+    });
+    const view = engine.view(state, "player");
+    const models = createEngineCardModels({ definitions: [plain, reclaim, fast], cards: new Map(), figment: () => undefined });
+    const shown = ids.player.hand.map((instance) => {
+      const model = models(view.instances[instance]);
+      return [model.displaySnapshot.renderedText, model.displaySnapshot.isFast, model.displaySnapshot.reclaimCost];
+    });
+
+    expect(shown).toEqual([plain, reclaim, fast].map((definition) => [definition.renderedText, definition.isFast, definition.reclaimCost]));
+  });
+
+  it("shows the catalog card for a copy in a variant no deck entry dealt", () => {
+    const cardId = SYNTHETIC.vanilla1.id;
+    const reclaim = dealt(cardId, { reclaim: 2 }, "reclaim copy");
+    const printed: CardData = {
+      name: parseCardName("Fixture Card"),
+      id: cardId,
+      cardNumber: 1,
+      cardType: "Character",
+      subtype: parseCardSubtype("Fixture"),
+      isStarter: false,
+      energyCost: 2,
+      spark: 1,
+      isFast: false,
+      reclaimCost: null,
+      renderedText: "printed card",
+      imageNumber: 0,
+      artOwned: false,
+    };
+    const { state, ids } = board({ player: { hand: [cardId] } });
+    const models = createEngineCardModels({ definitions: [reclaim], cards: new Map([[cardId, printed]]), figment: () => undefined });
+    const shown = models(engine.view(state, "player").instances[ids.player.hand[0]]).displaySnapshot;
+
+    expect([shown.renderedText, shown.reclaimCost]).toEqual([printed.renderedText, null]);
   });
 });
 

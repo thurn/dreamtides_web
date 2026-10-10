@@ -133,8 +133,12 @@ export function engineDeckEntry(
   };
 }
 
-/** The deck-entry modifications of a journey deck entry, or `null` when it has none. */
-function deckModsOf(entry: DeckEntry): DeckMods | null {
+/**
+ * The deck-entry modifications of a journey deck entry, or `null` when it has
+ * none. A dealt card definition carries the same type and keyword changes, so
+ * the battle screen reads its display variant through this too.
+ */
+export function deckModsOf(entry: Pick<DeckEntry, "sparkBonus" | "keywordModification" | "typeChange">): DeckMods | null {
   const keywords = entry.keywordModification ?? null;
   const reclaim = wholeOrNull(keywords?.setReclaim ?? keywords?.reclaim);
   const costReduction = Math.max(0, wholeOrNull(keywords?.energyCostReduction) ?? 0);
