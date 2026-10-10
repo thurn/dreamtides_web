@@ -27,6 +27,7 @@ import { actionForStep, nextAutomaticStep, stepForAction } from "../steps/driver
 import { IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "../steps/errors";
 import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
+import type { EventObserver } from "../steps/types";
 import { NO_PROMPTS } from "../steps/sources";
 import { loopSignature } from "./signature";
 import { checkpointSide } from "./tracker";
@@ -45,9 +46,9 @@ function sameStep(a: Step, b: Step): boolean {
 }
 
 /** Replays one recorded step; `null` when its prompts differ from the recording. */
-function replayStep(start: BattleState, recorded: LoopStep, automatic: boolean, catalog: EngineCatalog) {
+function replayStep(start: BattleState, recorded: LoopStep, automatic: boolean, catalog: EngineCatalog, observeEvent?: EventObserver) {
   try {
-    const result = runStep(start, recorded.step, NO_PROMPTS, catalog, { prefix: recorded.answers, automatic, replay: true });
+    const result = runStep(start, recorded.step, NO_PROMPTS, catalog, { prefix: recorded.answers, automatic, replay: true, observeEvent });
     return result.kind === "done" && result.answers.length === recorded.answers.length ? result : null;
   } catch (error) {
     if (error instanceof ReplayDivergence || error instanceof UnrecordedPrompt || error instanceof IllegalAnswer) return null;
@@ -56,7 +57,7 @@ function replayStep(start: BattleState, recorded: LoopStep, automatic: boolean, 
 }
 
 /** Runs one iteration of `candidate` from `start`, a checkpoint equivalent to the loop's. */
-export function replayIteration(start: BattleState, candidate: LoopCandidate, catalog: EngineCatalog): IterationOutcome {
+export function replayIteration(start: BattleState, candidate: LoopCandidate, catalog: EngineCatalog, observeEvent?: EventObserver): IterationOutcome {
   const memo = createLegalityMemo();
   const actor = candidate.side;
   const events: EngineEvent[] = [];
@@ -82,7 +83,7 @@ export function replayIteration(start: BattleState, candidate: LoopCandidate, ca
         if (next === null) return stopped(atDecision());
         if (!sameStep(next, step.step)) return stopped("diverged");
       }
-      const result = replayStep(state, step, index > 0, catalog);
+      const result = replayStep(state, step, index > 0, catalog, observeEvent);
       if (result === null) return stopped("changedChoice");
       state = result.state;
       events.push(...result.events);

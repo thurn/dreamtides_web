@@ -47,6 +47,22 @@ import {
 export type EngineIntentEventType = "BATTLE_ACTION" | "BATTLE_ANSWER" | "BATTLE_CANCEL";
 
 const adapters = new WeakMap<Engine, FoldAdapter>();
+const presentationAdapters = new WeakMap<Engine, FoldAdapter>();
+const eventStates = new WeakMap<EngineEvent, BattleState>();
+
+/**
+ * A presentation-only replay adapter, observing detached states at each
+ * emitted event. Ordinary folds and legality searches take no snapshots.
+ * The adapter's replay memo retains the states of its event objects.
+ */
+export function presentationAdapterFor(engine: Engine): FoldAdapter {
+  let adapter = presentationAdapters.get(engine);
+  if (adapter === undefined) {
+    adapter = createFoldAdapter(engine, { observeEvent: (event, state) => eventStates.set(event, state) });
+    presentationAdapters.set(engine, adapter);
+  }
+  return adapter;
+}
 let collecting: EngineLogRecord[] | null = null;
 /**
  * The engine log records of recently folded events, by seq, oldest first.
@@ -65,8 +81,8 @@ function keepLog(seq: number, records: readonly EngineLogRecord[]): void {
 }
 
 /**
- * The one fold adapter of `engine`, shared by the reducer, the replay, and
- * the presentation feed. Sharing is safe:
+ * The fold adapter of `engine`, shared by the reducer and event-log replay.
+ * Sharing is safe:
  *
  * - its only state is the re-run memo, keyed by an immutable committed state
  *   and the in-flight record, so every caller gets the run it would compute
@@ -92,15 +108,19 @@ export function foldAdapterFor(engine: Engine): FoldAdapter {
  * The states of one applied intent's batch: `state`, the state its events
  * arrive with (`to`'s pending prompt's display, else its committed state),
  * and `before`, the state they started from (the same of `from`).
+ * `eventStates` align with `published`; an unobserved event uses `state`.
  */
 export function batchStates(
   adapter: FoldAdapter,
   from: BattleSlice,
   to: BattleSlice,
-): { readonly before: BattleState; readonly state: BattleState } {
+  published: readonly EngineEvent[] = [],
+): { readonly before: BattleState; readonly state: BattleState; readonly eventStates: readonly BattleState[] } {
+  const state = adapter.pending(to)?.display ?? to.committed;
   return {
     before: adapter.pending(from)?.display ?? from.committed,
-    state: adapter.pending(to)?.display ?? to.committed,
+    state,
+    eventStates: published.map((event) => eventStates.get(event) ?? state),
   };
 }
 

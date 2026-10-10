@@ -22,7 +22,7 @@ export const loopIteration: StepDefinition<LoopIterationStep> = {
     if (run === null || candidate?.id !== run.loop) {
       throw new Error("loopIteration without an accepted loop");
     }
-    const outcome = replayIteration(state, candidate, ctx.catalog);
+    const outcome = replayIteration(state, candidate, ctx.catalog, ctx.observeEvent);
     ctx.adopt({ ...outcome.state, version: state.version }, outcome.events);
     const { loops } = ctx.state;
     let reason: LoopEndReason | null = outcome.stop;

@@ -6,14 +6,17 @@ import { isWellFormedPrompt, MalformedPrompt, promptCards } from "../prompts/str
 import type { AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
 import type { Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
+import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
 import { showPrivately } from "../view/knowledge";
 import { purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
-import type { AnswerSource, RecordedAnswer, StepContext } from "./types";
+import type { AnswerSource, EventObserver, RecordedAnswer, StepContext } from "./types";
 
 export interface ContextOptions {
+  /** Presentation observation; failures never change step execution. */
+  readonly observeEvent?: EventObserver;
   /** Answers recorded by earlier runs of this step, replayed in order. */
   readonly prefix?: readonly RecordedAnswer[];
   /** The side that may cancel this step before its commit point. */
@@ -59,6 +62,10 @@ export class Context implements StepContext {
     private readonly source: AnswerSource,
     private readonly options: ContextOptions = {},
   ) {}
+
+  get observeEvent(): EventObserver | undefined {
+    return this.options.observeEvent;
+  }
 
   choose<P extends Prompt>(spec: PromptSpec<P>): AnswerFor<P> {
     const cancellable =
@@ -163,6 +170,13 @@ export class Context implements StepContext {
   emit(event: EngineEvent): void {
     eventDefinition(event.kind);
     this.events.push(event);
+    if (this.observeEvent !== undefined) {
+      try {
+        this.observeEvent(event, cloneState(this.state));
+      } catch {
+        // Observation is disposable; rules still match and resolve the event.
+      }
+    }
     matchEvent(this, event);
   }
 

@@ -222,12 +222,12 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
 
   // Each applied intent's events join the presentation queue; the prompt
   // after them shows once the queue is idle ("present, then ask").
-  usePublishedEngineEvents(engine, slice, ({ events, batch, before, seq }) => {
+  usePublishedEngineEvents(engine, slice, ({ events, batch, before, eventStates, seq }) => {
     const view = engine.view(batch.state, HUMAN);
     const items = presentationItems(events, HUMAN, batch, before, (source) => {
       const instance = typeof source === "string" ? view.instances[source] : undefined;
       return instance === undefined ? null : cards(instance).displaySnapshot.name;
-    });
+    }, eventStates);
     presentation.enqueue(items);
     if (items.length > 0) {
       logEvent("battle_engine_presentation_queued", {

@@ -21,7 +21,7 @@ import { beginBattleStep } from "../steps/kinds/begin-battle";
 import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { INTERACTIVE } from "../steps/sources";
-import type { RecordedAnswer, StepResult } from "../steps/types";
+import type { EventObserver, RecordedAnswer, StepResult } from "../steps/types";
 
 export interface InFlight {
   readonly step: Step;
@@ -124,6 +124,8 @@ export interface FoldAdapter {
 }
 
 export interface FoldOptions {
+  /** Observes event states on presentation runs; never persisted in the slice. */
+  readonly observeEvent?: EventObserver;
   /**
    * Development check: after an answer, the re-run step must reproduce the
    * events its previous run (the same step with one answer fewer) published.
@@ -247,6 +249,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     const cached = byState?.get(key);
     if (cached !== undefined) return cached;
     const result = runStep(committed, inFlight.step, INTERACTIVE, engine.catalog, {
+      observeEvent: options.observeEvent,
       prefix: inFlight.answers,
       automatic: inFlight.automatic,
       searches: engine.memo.searches,

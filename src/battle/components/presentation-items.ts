@@ -6,8 +6,8 @@
 // kind to its visual (`EVENT_PRESENTATION`), and plays the resulting items in
 // order (`battle-presentation.ts`):
 //
-// - The board shows the state that arrived with the batch of the item being
-//   presented, so an opponent's plays arrive one at a time even when the AI
+// - Travel items show the state at their event; other items show the batch
+//   state, so an opponent's plays arrive one at a time even when the AI
 //   host has already moved on; when the queue is idle it shows the fold.
 //   While an opponent's play is revealed, the board shows the state before
 //   it, so its effects land as the card travels to its destination. Until a
@@ -131,7 +131,7 @@ export interface PresentationItem {
   readonly dwellMs: number;
   readonly visual: PresentationVisual | null;
   readonly notice: EngineBattleNotice | null;
-  /** The board while the item is presented: its batch's state, or the state before it for a reveal. */
+  /** The board while presented: a travel's event state, the batch state, or the state before a reveal. */
   readonly batch: PresentationBatch;
 }
 
@@ -170,6 +170,7 @@ export function presentationItems(
   batch: PresentationBatch,
   before: BattleState,
   sourceName: NoticeSourceName,
+  eventStates: readonly BattleState[] = [],
 ): PresentationItem[] {
   const { eventDwellMs } = BATTLE.presentation;
   // Items before the batch's first new turn show its state in the turn it
@@ -183,6 +184,11 @@ export function presentationItems(
   return events.flatMap((raw, index): PresentationItem[] => {
     const event = eventSeenBy(raw, human, batch.state);
     if (event === null) return [];
+    const travelState = eventStates[index];
+    const travelBatch = travelState === undefined ? null : {
+      key: parsePresentationId(`${batch.key}:event:${String(index)}`),
+      state: travelState,
+    };
     const item = (
       presentation: PresentationItem["presentation"],
       dwellMs: number,
@@ -198,9 +204,11 @@ export function presentationItems(
         batch:
           presentation === "reveal"
             ? { key: parsePresentationId(`${batch.key}:before`), state: before }
-            : turnAt(index) === batch.state.turn
-              ? batch
-              : beforeTurn,
+            : presentation === "travel" && travelBatch !== null
+              ? travelBatch
+              : turnAt(index) === batch.state.turn
+                ? batch
+                : beforeTurn,
       },
     ];
     switch (event.kind) {

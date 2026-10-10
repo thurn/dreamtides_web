@@ -5,6 +5,9 @@ import type { BattleState } from "../state/types";
 import type { Side } from "../state/ids";
 import type { Step } from "./kinds";
 
+/** Receives an emitted event and a detached snapshot of its state, for presentation. */
+export type EventObserver = (event: EngineEvent, state: BattleState) => void;
+
 /** Supplies answers to prompts that have no recorded answer. May throw `Suspend`. */
 export interface AnswerSource {
   answer(prompt: Prompt, work: BattleState): Answer;
@@ -25,6 +28,8 @@ export interface RecordedAnswer {
 export interface StepContext {
   readonly state: BattleState;
   readonly catalog: EngineCatalog;
+  /** Optional presentation observation, forwarded by nested step replay. */
+  readonly observeEvent?: EventObserver;
   /** Raises a prompt and returns its answer, synchronously. */
   choose<P extends Prompt>(prompt: PromptSpec<P>): AnswerFor<P>;
   /** Marks the point after which this step can no longer be cancelled. */

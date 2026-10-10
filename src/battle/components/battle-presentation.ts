@@ -18,7 +18,7 @@ import type { Engine, EngineEvent } from "../../engine";
 import type { BattleSlice } from "../../engine/fold/slice";
 import type { BattleState } from "../../engine/state/types";
 import type { EngineBattleNotice } from "../../runtime/battle-prompt-messages";
-import { batchStates, foldEngineIntent, foldAdapterFor } from "../../rules/battle/engine-battle";
+import { batchStates, foldEngineIntent, presentationAdapterFor } from "../../rules/battle/engine-battle";
 import { useEventOutcomes } from "../../session/hooks";
 import type { PresentationId } from "../../types/identifiers";
 import { enqueuePresentation, sliceKey, type PresentationBatch, type PresentationItem } from "./presentation-items";
@@ -111,6 +111,8 @@ export interface PublishedBatch {
   readonly events: readonly EngineEvent[];
   readonly batch: PresentationBatch;
   readonly before: BattleState;
+  /** State after each event in `events`, in the same order. */
+  readonly eventStates: readonly BattleState[];
   readonly seq: number;
 }
 
@@ -134,13 +136,13 @@ export function usePublishedEngineEvents(
   });
   useEventOutcomes((event, seq, outcome) => {
     if (outcome !== "applied") return;
-    const adapter = foldAdapterFor(engine);
+    const adapter = presentationAdapterFor(engine);
     const from = sliceRef.current;
     const result = foldEngineIntent(adapter, from, event.type, event.payload);
     if (result.kind === "bounced") return;
     sliceRef.current = result.slice;
     if (result.kind === "threw") return;
-    const { state, before } = batchStates(adapter, from, result.slice);
-    publishRef.current({ events: result.published, batch: { key: sliceKey(result.slice), state }, before, seq });
+    const { state, before, eventStates } = batchStates(adapter, from, result.slice, result.published);
+    publishRef.current({ events: result.published, batch: { key: sliceKey(result.slice), state }, before, eventStates, seq });
   });
 }

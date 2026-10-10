@@ -7,11 +7,18 @@ import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { PresentationQueue } from "../../battle/components/battle-presentation";
 import { enqueuePresentation, presentationItems, type PresentationItem } from "../../battle/components/presentation-items";
 import { BATTLE } from "../../content/battle";
-import { createEngine, type BattleState, type InstanceView } from "../../engine";
+import { createEngine, type BattleState, type Engine, type InstanceView } from "../../engine";
 import { createCatalog } from "../../engine/catalog";
-import { createFoldAdapter } from "../../engine/fold/slice";
+import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../../engine/fold/slice";
+import { boardState, type BoardSetup } from "../../engine/testing/board";
+import { DSL } from "../../engine/testing/dsl-cards";
+import { event as eventAbility } from "../../engine/dsl/builders";
+import { discard } from "../../engine/effects/primitives";
+import { SYNTHETIC, syntheticId } from "../../engine/testing/synthetic-cards";
+import { LOOP } from "../../engine/testing/loop-cards";
+import { batchStates, presentationAdapterFor } from "../../rules/battle/engine-battle";
 import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
-import { PROMPT_LAB_DEFINITIONS, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
+import { LAB, PROMPT_LAB_DEFINITIONS, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
 import { battleSeed } from "../../engine/state/ids";
 import type { CommittedEvent } from "../../eventlog/local-log";
 import type { GameEvent } from "../../eventlog/types";
@@ -88,7 +95,111 @@ function queueItem(
   return { key: pid(key), presentation, dwellMs, visual: null, notice, batch: { key: pid(key), state: queueState } };
 }
 
+
+/** A live presentation feed over a synthetic board, using the same observed adapter as the screen. */
+function observedBoard(setup: BoardSetup, engine: Engine = labEngine) {
+  const { state, ids } = boardState(engine.catalog, setup);
+  const adapter = presentationAdapterFor(engine);
+  let slice: BattleSlice = { committed: state, inFlight: null, attempt: 0, publishedEvents: 0 };
+  const apply = (intent: BattleIntent) => {
+    const before = slice;
+    const outcome = adapter.reduce(slice, intent);
+    if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("fixture intent failed");
+    slice = outcome.slice;
+    const states = batchStates(adapter, before, slice, outcome.published);
+    const batch = { key: pid(`observed:${String(slice.attempt)}`), state: states.state };
+    return {
+      ...states,
+      events: outcome.published,
+      items: presentationItems(outcome.published, "player", batch, states.before, () => null, states.eventStates),
+      batch,
+    };
+  };
+  return { ids, adapter, apply, slice: () => slice };
+}
+
 describe("presentation items", () => {
+  it("travels two draws one card at a time, without changing the authoritative outcome", () => {
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [DSL.drawTwo.id], energy: 2, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] } });
+    const from = fixture.slice();
+    const intent: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } };
+    const normal = createFoldAdapter(labEngine).reduce(from, intent);
+    const shown = fixture.apply(intent);
+    const drawn = fixture.ids.player.deck;
+    const drawItems = shown.items.filter((item) => item.presentation === "travel" && item.batch.state.sides.player.hand.includes(drawn[0]));
+    const first = drawItems[0];
+    const second = drawItems[1];
+    expect(first?.batch.state.sides.player.hand).toEqual([drawn[0]]);
+    expect(second?.batch.state.sides.player.hand).toEqual(drawn);
+    expect(first?.batch.state.instances[drawn[1]].zone).toBe("deck");
+    expect(second?.batch.state.instances[drawn[1]].zone).toBe("hand");
+    expect(first?.batch.key).not.toBe(second?.batch.key);
+    expect(first?.batch.key).not.toBe(shown.batch.key);
+    if (normal.kind !== "applied") throw new Error("normal fold failed");
+    expect(fixture.slice()).toEqual(normal.slice);
+    expect(shown.events).toEqual(normal.published);
+    const hidden = presentationItems(shown.events, "enemy", shown.batch, shown.before, () => null, shown.eventStates);
+    expect(hidden.every((item) => labEngine.view(item.batch.state, "enemy").sides.player.hand.known.length === 0)).toBe(true);
+  });
+
+  it("aligns snapshots with newly published events after a suspended draw/discard step is answered", () => {
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [LAB.drawTwoThenDiscard.id, SYNTHETIC.vanilla1.id], energy: 2, deck: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id] } });
+    const first = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } });
+    expect(first.events.filter((event) => event.kind === "cardDrawn")).toHaveLength(2);
+    const pending = fixture.adapter.pending(fixture.slice());
+    if (pending === null) throw new Error("no discard prompt");
+    const answered = fixture.apply({ kind: "answer", side: "player", promptId: pending.prompt.id, value: [fixture.ids.player.hand[1]] });
+    expect(answered.events.some((event) => event.kind === "cardDrawn")).toBe(false);
+    expect(answered.eventStates).toHaveLength(answered.events.length);
+    const discardAt = answered.events.findIndex((event) => event.kind === "discarded");
+    expect(discardAt).toBeGreaterThanOrEqual(0);
+    expect(answered.eventStates[discardAt]?.sides.player.void).toContain(fixture.ids.player.hand[1]);
+    expect(answered.eventStates[discardAt]?.sides.player.hand).not.toContain(fixture.ids.player.hand[1]);
+    expect(first.eventStates[first.events.findIndex((event) => event.kind === "cardDrawn")]?.sides.player.hand).toEqual([fixture.ids.player.hand[1], fixture.ids.player.deck[0]]);
+  });
+
+  it("travels multiple discards in their emitted order", () => {
+    const doubleDiscard = { ...LAB.drawTwoThenDiscard, id: syntheticId(0x5101), abilities: () => [eventAbility(discard(2))] };
+    const engine = createEngine(createCatalog([...PROMPT_LAB_DEFINITIONS.cards, doubleDiscard], [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments));
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [doubleDiscard.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id], energy: 2 } }, engine);
+    fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } });
+    const pending = fixture.adapter.pending(fixture.slice());
+    if (pending === null) throw new Error("no discard prompt");
+    const discards = fixture.ids.player.hand.slice(1, 3);
+    const answered = fixture.apply({ kind: "answer", side: "player", promptId: pending.prompt.id, value: discards });
+    expect(answered.events.filter((event) => event.kind === "discarded")).toHaveLength(2);
+    const items = answered.items.filter((item) => item.presentation === "travel");
+    expect(items[0]?.batch.state.sides.player.hand).toEqual([discards[1], fixture.ids.player.hand[3]]);
+    expect(items[0]?.batch.state.sides.player.void).toContain(discards[0]);
+    expect(items[0]?.batch.state.sides.player.void).not.toContain(discards[1]);
+    expect(items[1]?.batch.state.sides.player.hand).toEqual([fixture.ids.player.hand[3]]);
+    expect(items[1]?.batch.state.sides.player.void).toEqual(expect.arrayContaining(discards));
+  });
+
+  it("retains event snapshots through adopted loop iterations", () => {
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [LOOP.bouncer.id], deck: [SYNTHETIC.vanilla1.id] } });
+    fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand", slot: { rank: "back", index: 0 } } });
+    const loop = fixture.slice().committed.loops.candidate;
+    if (loop === null) throw new Error("no loop offer");
+    const repeated = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "repeatLoop", loop: loop.id, count: 2 } });
+    const returned = repeated.events.flatMap((event, index) => event.kind === "returnedToHand" ? [repeated.eventStates[index]] : []);
+    expect(returned.map((state) => state.sides.player.score)).toEqual([2, 3]);
+    expect(returned.every((state) => state.sides.player.hand.includes(fixture.ids.player.hand[0]))).toBe(true);
+  });
+
+  it("keeps observer errors and snapshot mutations outside the rules outcome", () => {
+    const { state, ids } = boardState(labEngine.catalog, { active: "player", phase: "day", player: { hand: [DSL.drawTwo.id], energy: 2, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] } });
+    const slice: BattleSlice = { committed: state, inFlight: null, attempt: 0, publishedEvents: 0 };
+    const intent: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } };
+    const observer = vi.fn((_event, snapshot: BattleState) => {
+      snapshot.sides.player.score = 999;
+      throw new Error("synthetic observer failure");
+    });
+    const observed = createFoldAdapter(labEngine, { observeEvent: observer }).reduce(slice, intent);
+    expect(observer).toHaveBeenCalled();
+    expect(observed).toEqual(createFoldAdapter(labEngine).reduce(slice, intent));
+  });
+
   it("reveals the opponent's play over the board before it, then holds the card off the board after it until it travels", () => {
     const [registered] = steps("present-opponent");
     const reveal = registered?.items[0];

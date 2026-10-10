@@ -7,9 +7,11 @@ import { Context } from "./context";
 import { Suspend } from "./errors";
 import { feasibilityGuard, type SearchMemo } from "./feasibility";
 import { stepDefinition, type Step } from "./kinds";
-import type { AnswerSource, RecordedAnswer, StepResult } from "./types";
+import type { AnswerSource, EventObserver, RecordedAnswer, StepResult } from "./types";
 
 export interface RunOptions {
+  /** Optional detached event snapshots for a presentation replay. */
+  readonly observeEvent?: EventObserver;
   readonly prefix?: readonly RecordedAnswer[];
   readonly dryRun?: boolean;
   /**
@@ -56,6 +58,7 @@ export function runStep(
   if (options.automatic !== true) work.automaticChoices = 0;
   const definition = stepDefinition(step.kind);
   const ctx = new Context(work, catalog, source, {
+    observeEvent: options.observeEvent,
     prefix: options.prefix,
     dryRun: options.dryRun,
     replay: options.replay,
