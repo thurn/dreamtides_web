@@ -1064,7 +1064,7 @@ const JOURNEY_FAILED_SCENE: QaScene = {
         reason: "score_target_reached",
         siteId,
         siteLabel: "Battle",
-        dreamscapeIdOrNone: node.id,
+        nodeIdOrNone: node.id,
         turnNumber: 6,
         playerScore: 4,
         enemyScore: 10,

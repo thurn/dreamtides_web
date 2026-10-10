@@ -713,6 +713,26 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
       ],
     },
   }),
+  // Engine intents over the journey battle's engine slice: legal and illegal
+  // actions, and answers or cancels of real and stale prompt ids.
+  (rng) => ({
+    type: "BATTLE_ACTION",
+    payload: {
+      side: pick(rng, ["player", "enemy"]),
+      action: pick(rng, [
+        { kind: "pass" },
+        { kind: "play", card: `i${String(Math.abs(smallInt(rng, 12)))}`, from: "hand" },
+      ]),
+    },
+  }),
+  (rng) => ({
+    type: pick(rng, ["BATTLE_ANSWER", "BATTLE_CANCEL"]),
+    payload: {
+      side: "player",
+      promptId: `${String(Math.abs(smallInt(rng, 6)))}:${String(Math.abs(smallInt(rng, 6)))}:0`,
+      value: smallInt(rng, 2),
+    },
+  }),
   () => ({ type: "SET_CARD_NOTE", payload: { instanceId: "i1", note: "hi" } }),
   (rng) => ({
     type: "RESOLVE_PROMPT",

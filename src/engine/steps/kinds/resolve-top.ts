@@ -1,4 +1,4 @@
-import { printedCard } from "../../catalog";
+import { instanceCard } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { resolveEffect } from "../../effects/interpreter";
 import { instanceOrigin, originAbilities } from "../../rules/activation";
@@ -22,7 +22,7 @@ export interface ResolveTopStep {
 function resolveCard(ctx: StepContext, item: CardStackItem): void {
   const { state, catalog } = ctx;
   const instance = instanceOf(state, item.instance);
-  const definition = printedCard(catalog, instance.printing);
+  const definition = instanceCard(catalog, instance);
   ctx.emit({ kind: "resolved", instance: item.instance });
   definition.synthetic?.resolve?.(ctx, item);
   // Each event ability resolves with its own play-time modes and targets.

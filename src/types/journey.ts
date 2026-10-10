@@ -299,7 +299,8 @@ export interface JourneyFailureSummary {
   reason: JourneyFailureReason;
   siteId: SiteId;
   siteLabel: string;
-  dreamscapeIdOrNone: AtlasNodeId | null;
+  /** The Atlas node of the lost battle. */
+  nodeIdOrNone: AtlasNodeId | null;
   turnNumber: number;
   playerScore: number;
   enemyScore: number;

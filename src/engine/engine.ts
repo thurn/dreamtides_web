@@ -8,6 +8,7 @@ import type { Side } from "./state/ids";
 import { initialState } from "./state/create";
 import type { BattleInit, BattleState } from "./state/types";
 import { runToDecision, stepForAction, type StepObserver } from "./steps/driver";
+import { beginBattleStep } from "./steps/kinds/begin-battle";
 import type { AnswerSource, RecordedAnswer } from "./steps/types";
 import { determinize, type Decklists } from "./view/determinize";
 import { view, type BattleView } from "./view/view";
@@ -68,7 +69,7 @@ export function createEngine(catalog: EngineCatalog): Engine {
       const start = initialState(init, catalog);
       return runToDecision(
         start,
-        { kind: "beginBattle", dreamwell: init.dreamwell },
+        beginBattleStep(init),
         source,
         catalog,
         memo,

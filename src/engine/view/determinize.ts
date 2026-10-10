@@ -26,7 +26,7 @@
 import type { EngineCatalog } from "../catalog";
 import { emptyLoopTracker } from "../loops/types";
 import { buildDreamwellDeck } from "../rules/dreamwell";
-import { freshStatus } from "../state/create";
+import { freshStatus, variantOf } from "../state/create";
 import type { InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, DeckEntry, PayableEffect, QueuedTrigger, SideState } from "../state/types";
@@ -73,8 +73,8 @@ function remaining(entries: readonly DeckEntry[], visible: readonly InstanceView
   for (const instance of visible) {
     const { printing } = instance;
     if (printing.kind !== "card" || instance.status.created) continue;
-    const amplified = instance.variant.amplified;
-    if (!take((entry) => entry.cardId === printing.cardId && (entry.amplified === true) === amplified)) {
+    const variant = JSON.stringify(instance.variant);
+    if (!take((entry) => entry.cardId === printing.cardId && JSON.stringify(variantOf(entry)) === variant)) {
       take((entry) => entry.cardId === printing.cardId);
     }
   }
@@ -116,7 +116,7 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
       owner,
       controller: holder,
       zone,
-      variant: { amplified: entry.amplified === true },
+      variant: variantOf(entry),
       status: freshStatus(created),
       enteredZoneAt: 0,
     };

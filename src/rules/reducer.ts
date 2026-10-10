@@ -34,6 +34,11 @@ import type { JourneyState } from "../types/journey";
 import { readDraftSiteProgress } from "../data/draft-site-bootstrap";
 import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/battle-events";
+import {
+  pendingEnginePrompt,
+  reduceEngineIntent,
+} from "./battle/engine-battle";
+import type { Engine } from "../engine";
 import * as deck from "./journey/deck";
 import * as draft from "./journey/draft";
 import * as lifecycle from "./journey/lifecycle";
@@ -60,10 +65,11 @@ export type ReduceResult =
  * Rules 1–6:
  *   1. CAS-exempt types (`SET_CARD_NOTE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
  *      skip rules 2–4.
- *   2. A RESOLVE_PROMPT matching the open prompt skips rules 3–4.
+ *   2. A RESOLVE_PROMPT matching the open prompt, or a BATTLE_ANSWER or
+ *      BATTLE_CANCEL matching the open engine prompt, skips rules 3–4.
  *   3. An unknown intervening window, or one holding an applied partner event
  *      that is not decision-neutral, bounces.
- *   4. A pending prompt bounces any non-(matching-resolve) intent.
+ *   4. A pending prompt (prototype or engine) bounces any other intent.
  *   5. Route to the domain case; invalid-in-state or unimplemented → bounce.
  *   6. Return the new state (applied) or the untouched state (bounced).
  *
@@ -92,8 +98,9 @@ export function reduceGameEvent(
       : state;
   const exempt = isCasExempt(event.type); // rule 1
   const matchingResolve = isMatchingResolve(routedState, event); // rule 2
+  const matchingEngineAnswer = isMatchingEngineAnswer(routedState, event); // rule 2
 
-  if (!exempt && !matchingResolve) {
+  if (!exempt && !matchingResolve && !matchingEngineAnswer) {
     // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
     if (ctx.intervening === "unknown") {
       return bounce(state, "unknown_conflict");
@@ -102,7 +109,10 @@ export function reduceGameEvent(
       return bounce(state, "partner_conflict");
     }
     // rule 4 — prompt gate
-    if (routedState.battle?.pendingPrompt != null) {
+    if (
+      routedState.battle?.pendingPrompt != null ||
+      pendingEnginePrompt(routedState.battle, battleEngine()) !== null
+    ) {
       return bounce(state, "prompt_pending");
     }
   }
@@ -305,6 +315,29 @@ export function isMatchingResolve(state: FoldState, event: GameEvent): boolean {
     Number.isFinite(promptId) &&
     promptId === pending.promptId
   );
+}
+
+/**
+ * Rule 2 for engine prompts: true when `event` is a `BATTLE_ANSWER` or
+ * `BATTLE_CANCEL` naming the prompt the journey battle's in-flight engine
+ * step is suspended on. A prompt id names the committed state, the attempt,
+ * and the answers so far, so nothing intervening can have changed what it
+ * asks. Exported for direct unit testing.
+ */
+export function isMatchingEngineAnswer(
+  state: FoldState,
+  event: GameEvent,
+): boolean {
+  if (event.type !== "BATTLE_ANSWER" && event.type !== "BATTLE_CANCEL") {
+    return false;
+  }
+  const pending = pendingEnginePrompt(state.battle, battleEngine());
+  return pending !== null && event.payload?.promptId === pending.prompt.id;
+}
+
+/** The engine journey battles play on, from the registered battle-init provider. */
+function battleEngine(): Engine | null {
+  return battleEvents.getBattleInitProvider()?.engine ?? null;
 }
 
 /**
@@ -692,6 +725,15 @@ export function routeDomain(
       );
     case "SET_CARD_NOTE":
       return foldCase(state, battleEvents.setCardNote(state, payload, ctx));
+
+    // --- engine intents of a journey battle ---
+    case "BATTLE_ACTION":
+    case "BATTLE_ANSWER":
+    case "BATTLE_CANCEL":
+      return foldCase(
+        state,
+        reduceEngineIntent(state, type, payload, ctx, battleEngine()),
+      );
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":

@@ -4,7 +4,7 @@
  * copy is a created card, so it ceases to exist instead of entering a deck, a
  * hand, a void, or the Banished zone (rules/zones.ts).
  */
-import { printedCard } from "../catalog";
+import { instanceCard } from "../catalog";
 import { eventAbilities } from "../effects/abilities";
 import { chooseForCopy, purposeOf } from "../effects/interpreter";
 import { instanceOrigin } from "./activation";
@@ -33,7 +33,7 @@ export function copyOnStack(ctx: StepContext, original: InstanceId, controller: 
   const item = state.stack[index];
   if (item?.kind !== "card") return null;
   const source = instanceOf(state, original);
-  const definition = printedCard(catalog, source.printing);
+  const definition = instanceCard(catalog, source);
   if (definition.cardType === "character" && freeBackSlotsAfterStack(state, catalog, controller) <= 0) {
     ctx.emit({ kind: "capacityReached", side: controller, instance: null, missing: 1 });
     return null;

@@ -1,5 +1,6 @@
 import type { CardSubtype } from "../../types/card-identity";
-import type { CardFilter, Condition, Keyword, Variant } from "../dsl/types";
+import type { TransfigurationType } from "../../types/journey";
+import type { CardFilter, Condition, DeckMods, Keyword, Variant } from "../dsl/types";
 import type { LoopTracker } from "../loops/types";
 import type {
   AbilitySource,
@@ -64,11 +65,46 @@ export interface BattleConfig {
   readonly dreamwell: DreamwellConfig;
 }
 
-/** One journey deck entry as the battle receives it. */
+/** One journey deck entry as the battle receives it: its card and full variant (D39). */
 export interface DeckEntry {
   readonly cardId: CardId;
   /** Played as its amplified text (the Amplified transfiguration). */
   readonly amplified?: boolean;
+  /** The entry's journey transfigurations. */
+  readonly transfigurations?: readonly TransfigurationType[];
+  /** The entry's deck-entry modifications. */
+  readonly deckMods?: DeckMods;
+}
+
+/**
+ * Extra opening-hand cards (NextBattleOpeningHand): after the ordinary hand,
+ * the side draws `count` more cards, taking the first deck cards that match
+ * `filter` when it has one.
+ */
+export interface OpeningHandDraw {
+  readonly count: number;
+  readonly filter: CardFilter | null;
+}
+
+/**
+ * The next-battle effects a journey carries into one battle (D39). Battle
+ * setup consumes them once: the opening hand and starting energy in the
+ * `beginBattle` step, the cost discount on the side's deck instances.
+ */
+export interface NextBattleEffects {
+  /** NextBattleOpeningHand, in the order they are drawn. */
+  readonly openingHand: readonly OpeningHandDraw[];
+  /** NextBattleStartingEnergy: the current and maximum energy the side begins with. */
+  readonly startingEnergy: number;
+  /**
+   * NextBattleSmallerHandAndCostDiscount: each changes the ordinary opening
+   * hand by `openingHandDelta` and reduces the energy cost of every card the
+   * side's deck starts with by `costReduction` for the battle.
+   */
+  readonly smallerHandAndCostDiscount: readonly {
+    readonly openingHandDelta: number;
+    readonly costReduction: number;
+  }[];
 }
 
 /** Everything a battle needs to start. */
@@ -84,6 +120,8 @@ export interface BattleInit {
   readonly avatars?: Readonly<Partial<Record<Side, AvatarId>>>;
   /** Each side's dreamsigns, in order. */
   readonly dreamsigns?: Readonly<Partial<Record<Side, readonly DreamsignId[]>>>;
+  /** Each side's next-battle effects. */
+  readonly nextBattle?: Readonly<Partial<Record<Side, NextBattleEffects>>>;
 }
 
 export interface CardStatus {

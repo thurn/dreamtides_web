@@ -52,6 +52,8 @@ import type {
   TutorialRunId,
 } from "../types/identifiers";
 import type { BattleSide, BattlefieldSlotId } from "../battle/types";
+import type { Action as EngineAction, Answer as EngineAnswer } from "../engine";
+import type { PromptId } from "../types/identifiers";
 import { parseIntentKey } from "../types/identifiers";
 import type {
   AuguryAcceptPayload,
@@ -394,6 +396,27 @@ export interface GameActions {
   setCardNote: (
     instanceId: BattleCardId,
     note: { noteId: NoteId; text: string; expiry: unknown },
+  ) => Promise<number>;
+
+  // --- engine intents of a journey battle ---
+  /** Take a top-level engine action for `side`. */
+  battleAction: (
+    side: BattleSide,
+    action: EngineAction,
+    actor?: EventActor,
+  ) => Promise<number>;
+  /** Answer the engine prompt `promptId` for `side`. */
+  answerPrompt: (
+    side: BattleSide,
+    promptId: PromptId,
+    value: EngineAnswer,
+    actor?: EventActor,
+  ) => Promise<number>;
+  /** Cancel the play or activation suspended on the engine prompt `promptId`. */
+  cancelPrompt: (
+    side: BattleSide,
+    promptId: PromptId,
+    actor?: EventActor,
   ) => Promise<number>;
 }
 
@@ -842,5 +865,13 @@ export function makeActions(append: AppendFn): GameActions {
       emit("RESOLVE_PROMPT", { promptId, resolution }, intentKey, actor),
     setCardNote: (instanceId, note) =>
       emit("SET_CARD_NOTE", { instanceId, note }),
+
+    // --- engine intents of a journey battle ---
+    battleAction: (side, action, actor) =>
+      emit("BATTLE_ACTION", { side, action }, undefined, actor),
+    answerPrompt: (side, promptId, value, actor) =>
+      emit("BATTLE_ANSWER", { side, promptId, value }, undefined, actor),
+    cancelPrompt: (side, promptId, actor) =>
+      emit("BATTLE_CANCEL", { side, promptId }, undefined, actor),
   };
 }

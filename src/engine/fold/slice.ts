@@ -1,7 +1,8 @@
 /**
  * The battle slice of the fold (D31): plain data that suspends a step at a
  * prompt by recording its answers and replaying the step on each new
- * answer. Phase 4 wires it into the journey fold; tests drive it directly.
+ * answer. The journey fold holds one per journey battle
+ * (`src/rules/battle/engine-battle.ts`).
  */
 import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
@@ -15,6 +16,7 @@ import { initialState } from "../state/create";
 import type { Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
 import { actionForStep, boundedLegality, nextAutomaticStep, stepForAction } from "../steps/driver";
+import { beginBattleStep } from "../steps/kinds/begin-battle";
 import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { INTERACTIVE } from "../steps/sources";
@@ -329,7 +331,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       log([{ event: "engine.battleStarted", version: committed.version, init }]);
       return advance({
         committed,
-        inFlight: { step: { kind: "beginBattle", dreamwell: init.dreamwell }, automatic: true, answers: [] },
+        inFlight: { step: beginBattleStep(init), automatic: true, answers: [] },
         publishedEvents: 0,
         attempt: 0,
       }, false);

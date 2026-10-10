@@ -1,4 +1,4 @@
-import { printedCard, type EngineCatalog } from "../catalog";
+import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics, type Characteristics } from "../continuous/characteristics";
 import { fixedEnergy } from "./energy";
 import { hasKeyword } from "../rules/keywords";
@@ -30,7 +30,7 @@ export function resolvePlayer(controller: Side, ref: PlayerRef): Side {
  * playing a card.
  */
 function costOf(state: BattleState, catalog: EngineCatalog, id: InstanceId): number {
-  return fixedEnergy(printedCard(catalog, instanceOf(state, id).printing).costs);
+  return fixedEnergy(instanceCard(catalog, instanceOf(state, id)).costs);
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */

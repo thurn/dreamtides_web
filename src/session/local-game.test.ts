@@ -12,9 +12,11 @@ import type { EngineConfig, GameEvent, Genesis } from "../eventlog/types";
 import { decodeEvent, decodeGenesis, isFoldableGenesis } from "../eventlog/wire";
 import type { FoldState } from "../rules/fold-state";
 import {
+  FIXTURE_ENGINE,
   clearReplayFixtureProviders,
   registerReplayFixtureProviders,
 } from "../rules/replay/fixture-providers";
+import { pendingEnginePrompt } from "../rules/battle/engine-battle";
 import battleFixture from "../rules/replay/fixtures/battle.json";
 import { GAME_ENGINE_CONFIG, replayLog } from "../rules/replay/replay";
 import {
@@ -140,30 +142,36 @@ describe("local game persistence", () => {
     expect(reloaded.log.state().battle).toBeNull();
   });
 
-  it("reloads mid-battle from a checkpoint plus the events after it", async () => {
+  it("reloads mid-prompt from a checkpoint plus the events after it", async () => {
     const repository = createGameRepository(createMemoryKeyValueStore());
     const options = { ...OPTIONS, checkpointInterval: BEGIN_BATTLE_INDEX + 1 };
     const live = await newGame(repository, parseGameId("battle1"), options);
     play(live, SCRIPT.slice(0, BEGIN_BATTLE_INDEX + 1));
     await live.flush();
-    play(live, SCRIPT.slice(BEGIN_BATTLE_INDEX + 1, BEGIN_BATTLE_INDEX + 3));
-    expect(live.log.state().battle).not.toBeNull();
+    // The battle's first card is played and its step waits at a prompt.
+    play(live, SCRIPT.slice(BEGIN_BATTLE_INDEX + 1, BEGIN_BATTLE_INDEX + 2));
+    const pending = pendingEnginePrompt(live.log.state().battle, FIXTURE_ENGINE);
+    expect(pending).not.toBeNull();
 
     const reloaded = await reopen(repository, live, options);
     expect(reloaded.opened).toMatchObject({
       checkpointSeq: BEGIN_BATTLE_INDEX + 1,
       checkpointRejected: false,
-      replayedEvents: 2,
+      replayedEvents: 1,
     });
     expect(hash(reloaded)).toBe(hash(live));
+    expect(
+      pendingEnginePrompt(reloaded.log.state().battle, FIXTURE_ENGINE),
+    ).toEqual(pending);
     expect(await replayStored(repository, live.gameId)).toBe(hash(live));
     expect(reloaded.log.events()).toEqual(live.log.events());
     expect(reloaded.log.events().map((e) => e.seq)).toEqual(
-      Array.from({ length: BEGIN_BATTLE_INDEX + 3 }, (_, index) => index + 1),
+      Array.from({ length: BEGIN_BATTLE_INDEX + 2 }, (_, index) => index + 1),
     );
 
-    play(live, SCRIPT.slice(BEGIN_BATTLE_INDEX + 3));
-    play(reloaded, SCRIPT.slice(BEGIN_BATTLE_INDEX + 3));
+    play(live, SCRIPT.slice(BEGIN_BATTLE_INDEX + 2));
+    play(reloaded, SCRIPT.slice(BEGIN_BATTLE_INDEX + 2));
+    expect(reloaded.log.state().battle).toBeNull();
     expect(hash(reloaded)).toBe(hash(live));
   });
 

@@ -124,15 +124,13 @@
     {
       "seq": 10,
       "event": {
-        "type": "BATTLE_COMMAND",
+        "type": "BATTLE_ACTION",
         "payload": {
-          "command": {
-            "id": "DEBUG_EDIT",
-            "edit": {
-              "kind": "DRAW_DREAMWELL_CARD",
-              "side": "player",
-              "turnNumber": 2
-            }
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i4",
+            "from": "hand"
           }
         },
         "actor": "alice",
@@ -143,12 +141,11 @@
     {
       "seq": 11,
       "event": {
-        "type": "RESOLVE_PROMPT",
+        "type": "BATTLE_ANSWER",
         "payload": {
-          "promptId": 10,
-          "resolution": {
-            "kind": "foresee"
-          }
+          "side": "player",
+          "promptId": "4:4:0",
+          "value": 1
         },
         "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -158,12 +155,11 @@
     {
       "seq": 12,
       "event": {
-        "type": "RESOLVE_PROMPT",
+        "type": "BATTLE_ANSWER",
         "payload": {
-          "promptId": 10,
-          "resolution": {
-            "kind": "foresee"
-          }
+          "side": "player",
+          "promptId": "4:4:0",
+          "value": 1
         },
         "actor": "bob",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -171,5 +167,5 @@
       }
     }
   ],
-  "finalHash": "a74a99c60fef147f5b2a85ae1c7c87a58dac229f18f02941ab83f5120667f10d"
+  "finalHash": "f32693882dde980a24bdffc7cb90d9a521785d775468c12ac0d1a3cc655a7afc"
 }

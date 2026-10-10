@@ -50,19 +50,13 @@
     {
       "seq": 4,
       "event": {
-        "type": "BATTLE_COMMAND",
+        "type": "BATTLE_ACTION",
         "payload": {
-          "command": {
-            "id": "DEBUG_EDIT",
-            "edit": {
-              "kind": "MOVE_CARD_TO_ZONE",
-              "battleCardId": "bc-det",
-              "destination": {
-                "side": "player",
-                "zone": "frontRank",
-                "slotId": "F0"
-              }
-            }
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i4",
+            "from": "hand"
           }
         },
         "actor": "p1",
@@ -73,16 +67,10 @@
     {
       "seq": 5,
       "event": {
-        "type": "BATTLE_COMMAND",
+        "type": "BATTLE_CANCEL",
         "payload": {
-          "command": {
-            "id": "DEBUG_EDIT",
-            "edit": {
-              "kind": "DRAW_DREAMWELL_CARD",
-              "side": "player",
-              "turnNumber": 2
-            }
-          }
+          "side": "player",
+          "promptId": "4:4:0"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -92,11 +80,13 @@
     {
       "seq": 6,
       "event": {
-        "type": "RESOLVE_PROMPT",
+        "type": "BATTLE_ACTION",
         "payload": {
-          "promptId": 5,
-          "resolution": {
-            "kind": "foresee"
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i4",
+            "from": "hand"
           }
         },
         "actor": "p1",
@@ -107,11 +97,11 @@
     {
       "seq": 7,
       "event": {
-        "type": "BATTLE_COMMAND",
+        "type": "BATTLE_ANSWER",
         "payload": {
-          "command": {
-            "id": "SKIP_TO_REWARDS"
-          }
+          "side": "player",
+          "promptId": "4:6:0",
+          "value": 1
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",

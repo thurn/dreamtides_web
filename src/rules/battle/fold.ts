@@ -20,6 +20,8 @@ import type {
   BattleZoneId,
   FrontRankSlotId,
 } from "../../battle/types";
+import type { BattleInit as EngineBattleInit } from "../../engine";
+import type { BattleSlice } from "../../engine/fold/slice";
 import type { TutorialBattleAiActionOverride } from "../../types/tutorial";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import { selectBattleTriggeredEffectSteps } from "./battle-card-effects-table";
@@ -141,6 +143,15 @@ export interface BattleFoldState {
    */
   mode?: BattleMode;
   init: BattleInit;
+  /**
+   * The engine battle of a journey battle (`engine-battle.ts`): its engine
+   * init and the battle slice its `BATTLE_ACTION`, `BATTLE_ANSWER`, and
+   * `BATTLE_CANCEL` intents fold. A tutorial-mode battle has none. Until the
+   * battle screen renders the engine (Phase 4.2), the prototype `board`
+   * below is what the screen plays, and `END_BATTLE` reads the engine's
+   * result first.
+   */
+  engine?: EngineBattleFold;
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
@@ -181,6 +192,14 @@ export interface BattleFoldState {
   dawnFired: DawnFiredMarker;
   /** Once-per-controller-turn guard for authored Dawn scripts. */
   triggerDawnFired?: DawnFiredMarker;
+}
+
+/** A journey battle's engine battle: plain data, so it persists and replays with the fold. */
+export interface EngineBattleFold {
+  /** The init the engine battle started from; it never changes. */
+  readonly init: EngineBattleInit;
+  /** The committed state, the in-flight step, and its recorded answers (D31). */
+  readonly slice: BattleSlice;
 }
 
 /** One tangible tutorial reveal whose identity survives replay and remounts. */

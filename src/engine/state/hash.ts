@@ -88,7 +88,7 @@ const STATUS_FIELDS = {
   x: true,
 } as const satisfies Record<keyof CardStatus, true>;
 
-const VARIANT_FIELDS = { amplified: true } as const satisfies Record<
+const VARIANT_FIELDS = { amplified: true, transfigurations: true, deckMods: true } as const satisfies Record<
   keyof Variant,
   true
 >;
@@ -268,6 +268,8 @@ class StructuralHasher {
     this.feed(instance.controller);
     this.feed(instance.zone);
     this.feed(instance.variant.amplified);
+    this.feed(instance.variant.transfigurations);
+    this.feed(instance.variant.deckMods);
     this.feed(status.exhausted);
     this.feed(status.gainedSpark);
     this.feed(status.counters);

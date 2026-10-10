@@ -1,4 +1,4 @@
-import { printedCard, type EngineCatalog, type PrintedCard } from "../catalog";
+import { instanceCard, type EngineCatalog, type PrintedCard } from "../catalog";
 import { characteristicsOf } from "../continuous/characteristics";
 import { costModifier } from "../continuous/costs";
 import type { Cost, Speed, Variant } from "../dsl/types";
@@ -43,7 +43,7 @@ export function routeCosts(definition: PrintedCard, variant: Variant, route: Pla
  */
 export function routePayable(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): boolean {
   const instance = instanceOf(state, id);
-  const costs = routeCosts(printedCard(catalog, instance.printing), instance.variant, route);
+  const costs = routeCosts(instanceCard(catalog, instance), instance.variant, route);
   return (
     costsPayable(state, side, id, costs, costModifier(state, catalog, id, side)) &&
     (route !== "offering" || state.sides[side].hand.some((card) => card !== id))
@@ -56,7 +56,7 @@ export function playRoutes(state: BattleState, catalog: EngineCatalog, id: Insta
   if (from === "void") {
     const reclaimable =
       hasKeyword(state, catalog, id, "reclaim") ||
-      printedCard(catalog, instance.printing).abilities(instance.variant).some((ability) => ability.kind === "reclaim");
+      instanceCard(catalog, instance).abilities(instance.variant).some((ability) => ability.kind === "reclaim");
     return reclaimable ? ["reclaim"] : [];
   }
   return hasKeyword(state, catalog, id, "offering") ? ["hand", "offering"] : ["hand"];
@@ -131,7 +131,7 @@ export function canPlay(
   if (instance.zone !== from || instance.controller !== side) {
     return false;
   }
-  const definition = printedCard(catalog, instance.printing);
+  const definition = instanceCard(catalog, instance);
   if (!timingAllows(state, side, definition.speed)) {
     return false;
   }

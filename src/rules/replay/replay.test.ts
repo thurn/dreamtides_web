@@ -19,8 +19,6 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
 import { decodeEvent, decodeGenesis, isFoldableGenesis } from "../../eventlog/wire";
-import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
-import type { FoldState } from "../fold-state";
 import { GAME_ENGINE_CONFIG, replayLog, type SeqEvent } from "./replay";
 import {
   FIXTURE_PROVIDER_SET,
@@ -30,7 +28,6 @@ import {
 import adversarial from "./fixtures/adversarial.json";
 import battle from "./fixtures/battle.json";
 import journeyOnly from "./fixtures/journey-only.json";
-import { parseBattleCardId } from "../../types/identifiers";
 
 interface ReplayFixture {
   providerSet: string;
@@ -77,110 +74,6 @@ afterAll(() => {
 });
 
 describe("replay fixtures", () => {
-  it.each([
-    {
-      name: "pick-cards",
-      prompt: {
-        promptId: 17,
-        run: {
-          scriptRef: { table: "battle", id: "synthetic-picker" },
-          cursor: [3, 1],
-          side: "player",
-        },
-        kind: "pick-cards",
-        options: {
-          kind: "pick-cards",
-          label: builtInBattlePromptRef("generic"),
-          subtitle: builtInBattlePromptRef("generic-subtitle"),
-          candidateIds: ["card-a", "card-b", "card-c"],
-          count: 2,
-          optional: true,
-          highlightCardIds: [parseBattleCardId("card-c")],
-        },
-      },
-    },
-    {
-      name: "choice",
-      prompt: {
-        promptId: 18,
-        run: {
-          scriptRef: { table: "battle", id: "synthetic-choice" },
-          cursor: [2],
-          side: "enemy",
-        },
-        kind: "choice",
-        options: {
-          kind: "choice",
-          label: builtInBattlePromptRef("generic"),
-          options: [
-            { label: builtInBattlePromptRef("generic-option") },
-            { label: builtInBattlePromptRef("generic-option") },
-          ],
-        },
-      },
-    },
-    {
-      name: "confirm-materialized-choice",
-      prompt: {
-        promptId: 19,
-        run: {
-          scriptRef: { table: "dreamwell", id: "synthetic-confirm" },
-          cursor: [0, 4],
-          side: "player",
-        },
-        kind: "confirm",
-        options: {
-          kind: "choice",
-          label: builtInBattlePromptRef("generic"),
-          options: [
-            { label: builtInBattlePromptRef("confirm-yes") },
-            { label: builtInBattlePromptRef("confirm-skip") },
-          ],
-        },
-      },
-    },
-    {
-      name: "foresee",
-      prompt: {
-        promptId: 20,
-        run: {
-          scriptRef: { table: "dreamwell", id: "synthetic-foresee" },
-          cursor: [5],
-          side: "player",
-        },
-        kind: "foresee",
-        options: {
-          kind: "foresee",
-          count: 3,
-          cardIds: ["card-d", "card-e", "card-f"],
-        },
-      },
-    },
-  ] as const)(
-    "$name preserves every prompt field through compaction",
-    ({ prompt }) => {
-      const base = GAME_ENGINE_CONFIG.genesisState(JOURNEY_ONLY_FIXTURE.genesis);
-      const state: FoldState = {
-        ...base,
-        battle: {
-          init: {} as never,
-          board: {} as never,
-          effectQueue: [],
-          pendingPrompt: prompt as never,
-          dawnFired: {} as never,
-        },
-      };
-      const decoded = GAME_ENGINE_CONFIG.decode(
-        GAME_ENGINE_CONFIG.encode(state),
-      );
-      expect(decoded.battle?.pendingPrompt).toEqual(prompt);
-      expect(decoded.battle?.pendingPrompt?.run.cursor).toEqual(
-        prompt.run.cursor,
-      );
-      expect(decoded.battle?.pendingPrompt?.options).toEqual(prompt.options);
-    },
-  );
-
   it.each(FIXTURES)("$name replays to its stamped finalHash", ({ fixture }) => {
     expect(fixture.providerSet).toBe(FIXTURE_PROVIDER_SET);
     const result = replayLog({

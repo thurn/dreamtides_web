@@ -40,7 +40,6 @@ import type {
   BattleSide,
   BattleInit,
 } from "../../battle/types";
-import { frontRankSlotId } from "../../battle/types";
 import {
   emptyBackRankSlots,
   emptyFrontRankSlots,
@@ -93,6 +92,14 @@ import { parseBattleCardId } from "../../types/identifiers";
 import { parseOpponentId } from "../../types/identifiers";
 import { parseDreamwellCardName } from "../../types/catalog-names";
 import { opponentsFixture } from "../../testing/opponents-fixture";
+import { createEngine, type BattleInit as EngineBattleInit, type Engine } from "../../engine";
+import { battleSeed } from "../../engine/state/ids";
+import { DSL, DSL_CARDS } from "../../engine/testing/dsl-cards";
+import {
+  SYNTHETIC,
+  SYNTHETIC_DREAMWELL,
+  testCatalog,
+} from "../../engine/testing/synthetic-cards";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import {
   testCardId,
@@ -125,13 +132,9 @@ const DRAFT_POOL_COPIES_BY_CARD: DraftPoolCopiesByCard = {
   "103": 4,
 };
 
-/** Battle-card instance ids the battle-fixture BATTLE_COMMANDs move. */
-export const BATTLE_CARD_DETERMINISTIC = parseBattleCardId("bc-det");
-export const BATTLE_CARD_FORESEE = parseBattleCardId("bc-foresee");
-
-/** The front-rank slots the two battle cards deploy into. */
-export const DETERMINISTIC_SLOT = frontRankSlotId(0);
-export const FORESEE_SLOT = frontRankSlotId(1);
+/** Battle-card instance ids in the prototype battle board's hand. */
+const BATTLE_CARD_DETERMINISTIC = parseBattleCardId("bc-det");
+const BATTLE_CARD_FORESEE = parseBattleCardId("bc-foresee");
 
 // ---------------------------------------------------------------------------
 // Seeded PRNG (no Math.random)
@@ -475,7 +478,7 @@ function makeInit(siteId: SiteId): BattleInit {
     battleEntryKey: parseBattleEntryKey(`fixture:${siteId}`),
     seed: 1,
     siteId,
-    dreamscapeId: NODE_ID,
+    nodeId: NODE_ID,
     completionLevelAtStart: 0,
     isFinalBoss: false,
     essenceReward: 75,
@@ -530,8 +533,41 @@ function makeInit(siteId: SiteId): BattleInit {
   };
 }
 
+/**
+ * The synthetic engine the fixtures play battles on: the engine's synthetic
+ * and DSL test cards, never catalog content.
+ */
+export const FIXTURE_ENGINE: Engine = createEngine(
+  testCatalog(DSL_CARDS),
+);
+
+/** A 0● event whose play-time mode prompt chooses between drawing a card and 1 point. */
+export const FIXTURE_POINTS_CARD_ID = DSL.chooseDrawOrPoints.id;
+
+/** Mode index of {@link FIXTURE_POINTS_CARD_ID}'s 1-point mode. */
+export const FIXTURE_POINTS_MODE = 1;
+
+/**
+ * The fixture engine battle: every player card is the points event and the
+ * battle is won at 1 point, so playing one card and choosing its points mode
+ * ends it.
+ */
+function fixtureEngineInit(siteId: SiteId): EngineBattleInit {
+  return {
+    seed: battleSeed(`fixture:${siteId}`),
+    scoreToWin: 1,
+    startingSide: "player",
+    decks: {
+      player: Array.from({ length: 10 }, () => ({ cardId: FIXTURE_POINTS_CARD_ID })),
+      enemy: Array.from({ length: 10 }, () => ({ cardId: SYNTHETIC.vanilla1.id })),
+    },
+    dreamwell: SYNTHETIC_DREAMWELL.map((card) => card.id),
+  };
+}
+
 export function fixtureBattleInitProvider(): BattleInitProvider {
   return {
+    engine: FIXTURE_ENGINE,
     beginBattle: ({ journey, siteId }) => {
       const site = Object.values(journey.atlas.nodes)
         .flatMap((node) => node.sites)
@@ -576,7 +612,7 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
         pendingPrompt: null,
         dawnFired: emptyDawnFired(),
       };
-      return battle;
+      return { battle, engineInit: fixtureEngineInit(siteId) };
     },
   };
 }
@@ -585,7 +621,7 @@ function fixtureBattleCompletionProvider(): BattleCompletionProvider {
   return {
     advanceAtlas: ({ journey, battle, completionLevel }) => {
       if (
-        battle.init.dreamscapeId !== NODE_ID ||
+        battle.init.nodeId !== NODE_ID ||
         completionLevel !== 1 ||
         journey.atlas.nodes[NODE_ID] === undefined ||
         journey.atlas.nodes[NEXT_NODE_ID] === undefined

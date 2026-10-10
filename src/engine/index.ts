@@ -46,6 +46,8 @@ export type {
   CardStackItem,
   DeckEntry,
   DreamsignEmblem,
+  NextBattleEffects,
+  OpeningHandDraw,
   Expiry,
   FloatingChange,
   FloatingEffect,

@@ -125,9 +125,9 @@ function logBattleVictory(
   if (before.battle?.board.result !== "victory") return;
   const init = before.battle.init;
   const completedNode =
-    init.dreamscapeId === null
+    init.nodeId === null
       ? undefined
-      : before.journey.atlas.nodes[init.dreamscapeId];
+      : before.journey.atlas.nodes[init.nodeId];
   const availableForwardIds = (completedNode?.forwardIds ?? []).filter(
     (nodeId) => after.journey.atlas.nodes[nodeId]?.state === "available",
   );
@@ -135,16 +135,16 @@ function logBattleVictory(
     gameSeq: seq,
     battleId: init.battleId,
     siteId: init.siteId,
-    dreamscapeId: init.dreamscapeId,
+    dreamscapeId: init.nodeId,
     essenceReward: init.essenceReward,
     essenceBefore: before.journey.essence,
     essenceAfter: after.journey.essence,
     completionLevelBefore: before.journey.completionLevel,
     completionLevelAfter: after.journey.completionLevel,
     completedNodeState:
-      init.dreamscapeId === null
+      init.nodeId === null
         ? null
-        : (after.journey.atlas.nodes[init.dreamscapeId]?.state ?? null),
+        : (after.journey.atlas.nodes[init.nodeId]?.state ?? null),
     availableForwardIds,
     availableForwardDreamscapeIds: availableForwardIds.map(
       (nodeId) => after.journey.atlas.nodes[nodeId]?.dreamscapeId ?? null,

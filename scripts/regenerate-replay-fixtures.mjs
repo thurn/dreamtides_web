@@ -26,15 +26,16 @@ import { dirname, resolve } from "node:path";
 
 import { parseEventActor, parseEventType } from "../src/eventlog/types.ts";
 import { replayLog } from "../src/rules/replay/replay.ts";
+import { pendingEnginePrompt } from "../src/rules/battle/engine-battle.ts";
 import { SELECTION_RULES_VERSION } from "../src/reward-selection/types.ts";
 import { parseJourneySeed } from "../src/types/journey-seed.ts";
 import { parseReducerVersion } from "../src/types/reducer-version.ts";
 import {
-  BATTLE_CARD_DETERMINISTIC,
   BATTLE_SITE_ID,
-  DETERMINISTIC_SLOT,
   AVATAR_ID,
   ESSENCE_SITE_ID,
+  FIXTURE_ENGINE,
+  FIXTURE_POINTS_MODE,
   FIXTURE_PROVIDER_SET,
   NODE_ID,
   SHOP_SITE_ID,
@@ -89,29 +90,43 @@ function chain(actor, steps) {
 }
 
 /**
- * A DEBUG_EDIT battle command payload.
+ * The first card in the player's hand of the engine battle `events` fold to.
  *
- * @param {Payload} edit
- * @returns {Payload}
+ * @param {Genesis} gen
+ * @param {SeqEvent[]} events
+ * @returns {string}
  */
-function debugEdit(edit) {
-  return { command: { id: "DEBUG_EDIT", edit } };
+function firstHandCard(gen, events) {
+  const { finalState } = replayLog({ genesis: gen, events });
+  const card = finalState.battle?.engine?.slice.committed.sides.player.hand[0];
+  if (card === undefined) {
+    throw new Error("the engine battle has no card in the player's hand");
+  }
+  return card;
 }
 
 /**
- * @param {string} battleCardId
- * @param {string} slotId
+ * The id of the engine prompt `events` fold to.
+ *
+ * @param {Genesis} gen
+ * @param {SeqEvent[]} events
+ * @returns {string}
  */
-function moveToFront(battleCardId, slotId) {
-  return debugEdit({
-    kind: "MOVE_CARD_TO_ZONE",
-    battleCardId,
-    destination: { side: "player", zone: "frontRank", slotId },
-  });
+function pendingPromptId(gen, events) {
+  const { finalState } = replayLog({ genesis: gen, events });
+  const pending = pendingEnginePrompt(finalState.battle, FIXTURE_ENGINE);
+  if (pending === null) throw new Error("no engine prompt is pending");
+  return pending.prompt.id;
 }
 
-function drawDreamwell() {
-  return debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 });
+/**
+ * A BATTLE_ACTION playing `card` from the player's hand.
+ *
+ * @param {string} card
+ * @returns {Payload}
+ */
+function playFromHand(card) {
+  return { side: "player", action: { kind: "play", card, from: "hand" } };
 }
 
 /**
@@ -184,32 +199,33 @@ function journeyOnlyFixture() {
 }
 
 // ---------------------------------------------------------------------------
-// (b) battle: begin -> move character -> Dreamwell prompt -> resolve -> victory
+// (b) battle: begin -> play -> cancel at the prompt -> play -> answer -> victory
 // ---------------------------------------------------------------------------
 
 function battleFixture() {
   const gen = genesis("fixture-battle");
-  // Events up to the prompt-parking command; discover the promptId by folding.
-  const prefix = chain("p1", [
+  const begun = chain("p1", [
     ["START_JOURNEY", { avatarId: AVATAR_ID }],
     ["ENTER_SITE", { siteId: BATTLE_SITE_ID }],
     ["BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }],
-    ["BATTLE_COMMAND", moveToFront(BATTLE_CARD_DETERMINISTIC, DETERMINISTIC_SLOT)],
-    ["BATTLE_COMMAND", drawDreamwell()],
   ]);
-  const parked = replayLog({ genesis: gen, events: prefix });
-  const promptId = parked.finalState.battle?.pendingPrompt?.promptId;
-  if (typeof promptId !== "number") {
-    throw new Error(
-      `battle fixture: Dreamwell reveal did not park a prompt: ${JSON.stringify(
-        parked.outcomes,
-      )}`,
-    );
-  }
+  const card = firstHandCard(gen, begun);
+  // Play the points card, cancel at its mode prompt, then play it again.
+  const played = [...begun, ev(4, "BATTLE_ACTION", playFromHand(card), "p1", 3)];
+  const cancelled = [
+    ...played,
+    ev(5, "BATTLE_CANCEL", { side: "player", promptId: pendingPromptId(gen, played) }, "p1", 4),
+  ];
+  const replayed = [...cancelled, ev(6, "BATTLE_ACTION", playFromHand(card), "p1", 5)];
   const events = [
-    ...prefix,
-    ev(6, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "p1", 5),
-    ev(7, "BATTLE_COMMAND", { command: { id: "SKIP_TO_REWARDS" } }, "p1", 6),
+    ...replayed,
+    ev(
+      7,
+      "BATTLE_ANSWER",
+      { side: "player", promptId: pendingPromptId(gen, replayed), value: FIXTURE_POINTS_MODE },
+      "p1",
+      6,
+    ),
     ev(8, "END_BATTLE", {}, "p1", 7),
   ];
   expectOutcomes("battle", events, gen, {
@@ -242,7 +258,7 @@ function battleFixture() {
 
 function adversarialFixture() {
   const gen = genesis("fixture-adversarial");
-  const prefix = [
+  const begun = [
     ev(1, "START_JOURNEY", { avatarId: AVATAR_ID }, "alice", 0),
     // bob's essence adjust applies; alice's, based on the pre-bob state, sees
     // bob's applied non-neutral event in its window and BOUNCES (CAS rule 3).
@@ -255,20 +271,23 @@ function adversarialFixture() {
     ev(6, "OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }, "bob", 4),
     ev(7, "ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }, "alice", 6),
     ev(8, "ENTER_SITE", { siteId: BATTLE_SITE_ID }, "alice", 7),
-    // Begin a battle and park a Dreamwell Foresee prompt.
     ev(9, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }, "alice", 8),
-    ev(10, "BATTLE_COMMAND", drawDreamwell(), "alice", 9),
   ];
-  const parked = replayLog({ genesis: gen, events: prefix });
-  const promptId = parked.finalState.battle?.pendingPrompt?.promptId;
-  if (typeof promptId !== "number") {
-    throw new Error("adversarial fixture: Dreamwell reveal did not park a prompt");
-  }
+  // Park an engine prompt: alice plays the points card.
+  const prefix = [
+    ...begun,
+    ev(10, "BATTLE_ACTION", playFromHand(firstHandCard(gen, begun)), "alice", 9),
+  ];
+  const answer = {
+    side: "player",
+    promptId: pendingPromptId(gen, prefix),
+    value: FIXTURE_POINTS_MODE,
+  };
   const events = [
     ...prefix,
-    // Prompt race — alice's matching resolve applies, bob's duplicate bounces.
-    ev(11, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "alice", 10),
-    ev(12, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "bob", 10),
+    // Prompt race — alice's matching answer applies, bob's duplicate bounces.
+    ev(11, "BATTLE_ANSWER", answer, "alice", 10),
+    ev(12, "BATTLE_ANSWER", answer, "bob", 10),
   ];
   expectOutcomes("adversarial", events, gen, {
     1: "applied",

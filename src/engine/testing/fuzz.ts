@@ -20,6 +20,7 @@ import { battleSeed } from "../state/ids";
 import type { BattleInit, BattleResult, BattleState, DeckEntry } from "../state/types";
 import { stepForAction, type StepObserver } from "../steps/driver";
 import type { Step } from "../steps/kinds";
+import { beginBattleStep } from "../steps/kinds/begin-battle";
 import { initialState } from "../state/create";
 import { eventLogRecords, legalityLogRecords, stepLogRecords, type EngineLogRecord } from "../log";
 import { InlineSource } from "../steps/sources";
@@ -348,7 +349,7 @@ export function fuzzGameLog(engine: Engine, game: FuzzGame): EngineLogRecord[] {
     records.push(...eventLogRecords(events, previous.version), ...stepLogRecords(previous, state));
     previous = state;
   };
-  let step: Step = { kind: "beginBattle", dreamwell: game.init.dreamwell };
+  let step: Step = beginBattleStep(game.init);
   try {
     const created = engine.createBattle(game.init, replaySource(game.startAnswers), observe);
     records.push(...legalityLogRecords(created.bounded));

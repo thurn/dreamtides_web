@@ -7,7 +7,8 @@
  * emblems (read live). They apply layer by layer:
  *
  * 1. copiable values: the printed card for its variant, a figment's type
- *    and spark, or what a figment copy copied (catalog.ts `printedCard`);
+ *    and spark, or what a figment copy copied, with a deck entry's
+ *    modifications (catalog.ts `instanceCard`);
  * 2. type changes: "has all character types";
  * 3. ability adds and removes: keywords gained and lost;
  * 4. base-spark setting;
@@ -22,7 +23,7 @@
  * ability's selectors and values read the characteristics the layers before
  * its own produced, so no layer depends on itself.
  */
-import { printedCard, type EngineCatalog } from "../catalog";
+import { instanceCard, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { matchesCharacterWith, matchingCharactersWith, type CharacteristicsReader } from "../dsl/selectors";
 import type { CharacterRef, Keyword } from "../dsl/types";
@@ -255,7 +256,7 @@ export class Layers {
   private copiable(id: InstanceId): Characteristics {
     const instance = this.state.instances[id];
     if (instance === undefined) throw new Error(`Unknown instance ${id}`);
-    const definition = printedCard(this.catalog, instance.printing);
+    const definition = instanceCard(this.catalog, instance);
     const keywords = new Set<Keyword>();
     for (const ability of definition.abilities(instance.variant)) {
       if (ability.kind === "keyword") keywords.add(ability.keyword);

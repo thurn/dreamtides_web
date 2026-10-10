@@ -19,7 +19,7 @@ import type {
   StackItem,
   TurnState,
 } from "../state/types";
-import { printedCard, type EngineCatalog } from "../catalog";
+import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics } from "../continuous/characteristics";
 import { adjustedEnergy, costModifier } from "../continuous/costs";
 import { fixedEnergy } from "../dsl/energy";
@@ -235,7 +235,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   for (const instance of Object.values(state.instances)) {
     if (knows(state, instance, viewer)) {
       const card = layers.of(instance.id);
-      const printed = fixedEnergy(playCosts(printedCard(catalog, instance.printing), instance.variant));
+      const printed = fixedEnergy(playCosts(instanceCard(catalog, instance), instance.variant));
       instances[instance.id] = {
         id: instance.id,
         printing: { ...instance.printing },

@@ -1,6 +1,7 @@
 import type { CardSubtype } from "../types/card-identity";
 import type { CharacteristicsMemo } from "./continuous/characteristics";
-import type { AbilityList, CardCost, Speed } from "./dsl/types";
+import { energy, reclaim } from "./dsl/builders";
+import type { AbilityList, CardCost, DeckMods, Speed, Variant } from "./dsl/types";
 import type { AvatarId, CardId, DreamsignId, DreamwellCardId, FigmentId, InstanceId } from "./state/ids";
 import type { CardStackItem, Printing } from "./state/types";
 import type { StepContext } from "./steps/types";
@@ -145,6 +146,61 @@ export function printedCard(catalog: EngineCatalog, printing: Printing): Printed
       };
     }
   }
+}
+
+/**
+ * The printed card an instance is played as (layer 1): its printing's card
+ * with its variant's deck-entry modifications applied (D39), in the
+ * prototype's order: the type change, then the cost reduction, Fast, and
+ * Reclaim, then the spark bonus. A character with no printed spark, an
+ * Event turned into a Character, has 0 spark and takes no spark bonus, as
+ * in the prototype.
+ */
+export function instanceCard(
+  catalog: EngineCatalog,
+  instance: { readonly printing: Printing; readonly variant: Variant },
+): PrintedCard {
+  const printed = printedCard(catalog, instance.printing);
+  const mods = instance.variant.deckMods;
+  return mods === undefined ? printed : modifiedCard(printed, mods);
+}
+
+function modifiedCard(card: PrintedCard, mods: DeckMods): PrintedCard {
+  const cardType = mods.typeChange?.cardType ?? card.cardType;
+  let remaining = mods.costReduction;
+  const costs = card.costs.map((cost): CardCost => {
+    if (cost.cost !== "energy" || remaining <= 0) return cost;
+    const cut = Math.min(cost.amount, remaining);
+    remaining -= cut;
+    return { ...cost, amount: cost.amount - cut };
+  });
+  const { reclaim: reclaimCost } = mods;
+  return {
+    ...card,
+    cardType,
+    subtype: mods.typeChange?.subtype ?? card.subtype,
+    costs,
+    spark:
+      cardType === "event"
+        ? null
+        : card.spark === null
+          ? 0
+          : card.spark === "x"
+            ? "x"
+            : Math.max(0, card.spark + mods.sparkBonus),
+    speed: mods.fast && card.speed === "standard" ? "fast" : card.speed,
+    abilities:
+      reclaimCost === null
+        ? card.abilities
+        : (variant) => {
+            // The granted cost replaces a printed reclaim in place, so every ability keeps its index.
+            const granted = reclaim(energy(reclaimCost));
+            const abilities = card.abilities(variant);
+            return abilities.some((ability) => ability.kind === "reclaim")
+              ? abilities.map((ability) => (ability.kind === "reclaim" ? granted : ability))
+              : [...abilities, granted];
+          },
+  };
 }
 
 /** The catalog card a printing names, for prompt purposes and logs; `null` for a figment. */

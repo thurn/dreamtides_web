@@ -31,6 +31,11 @@ import {
 } from "./game-controls";
 import type { LocalGame } from "./local-game";
 import { keepLocalPlayerInControl } from "./single-controller";
+import { logEvent } from "../logging";
+import {
+  clearEngineLogRecords,
+  takeEngineLogRecords,
+} from "../rules/battle/engine-battle";
 
 /** A committed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -91,6 +96,18 @@ export function LocalGameProvider({
       }),
     [game],
   );
+
+  useEffect(() => {
+    // Records the open replay kept were logged when their events committed.
+    clearEngineLogRecords();
+    return game.log.subscribe((record) => {
+      // Each engine log record of an applied event is logged once, as its
+      // event commits; a replay on reload logs none again.
+      const records = takeEngineLogRecords(record.seq);
+      if (record.outcome !== "applied") return;
+      for (const { event, ...fields } of records) logEvent(event, fields);
+    });
+  }, [game]);
 
   useEffect(
     () => keepLocalPlayerInControl(game, { claimUnownedBattle }),

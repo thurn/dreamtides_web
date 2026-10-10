@@ -1,4 +1,4 @@
-import { printedCard, type EngineCatalog } from "../catalog";
+import { instanceCard, type EngineCatalog } from "../catalog";
 import { checkpointSide } from "../loops/tracker";
 import { changedInstance } from "../rules/floating";
 import { characteristics } from "../continuous/characteristics";
@@ -49,7 +49,7 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
       const instance = state.instances[id];
       if (instance?.zone !== "play" || instance.controller !== side) {
         problems.push(`${id} in ${side} play but recorded as ${instance?.zone ?? "missing"}`);
-      } else if (printedCard(catalog, instance.printing).cardType !== "character") {
+      } else if (instanceCard(catalog, instance).cardType !== "character") {
         problems.push(`${id} is in play but is not a character`);
       }
     }
@@ -98,7 +98,7 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
       problems.push(`${instance.id} has memoized characteristics that differ from a fresh evaluation`);
     }
     if (instance.zone === "hand") {
-      const definition = printedCard(catalog, instance.printing);
+      const definition = instanceCard(catalog, instance);
       const cost = adjustedEnergy(fixedEnergy(playCosts(definition, instance.variant)), costModifier(state, catalog, instance.id, instance.controller, fresh));
       if (cost < 0) problems.push(`${instance.id} has a negative effective cost`);
     }

@@ -18,6 +18,7 @@ import type {
   SideState,
   TurnState,
 } from "./types";
+import type { Variant } from "../dsl/types";
 
 /**
  * A deep copy of plain data with JSON semantics: an `undefined` or function
@@ -90,6 +91,13 @@ function copyPrinting(printing: Printing): Printing {
   }
 }
 
+/** A variant: the plain `{ amplified }` shape typed, a modified one (optional fields) by `copyJson`. */
+function copyVariant(variant: Variant): Variant {
+  return variant.transfigurations === undefined && variant.deckMods === undefined
+    ? { amplified: variant.amplified }
+    : copyJson(variant);
+}
+
 function copyInstance(instance: CardInstance): CardInstance {
   return {
     id: instance.id,
@@ -97,7 +105,7 @@ function copyInstance(instance: CardInstance): CardInstance {
     owner: instance.owner,
     controller: instance.controller,
     zone: instance.zone,
-    variant: { amplified: instance.variant.amplified },
+    variant: copyVariant(instance.variant),
     status: copyStatus(instance.status),
     enteredZoneAt: instance.enteredZoneAt,
   };

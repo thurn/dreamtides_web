@@ -19,7 +19,7 @@ export function JourneyFailedScreenAdapter() {
         result: summary.result,
         reason: summary.reason,
         siteId: summary.siteId,
-        dreamscapeIdOrNone: summary.dreamscapeIdOrNone,
+        dreamscapeIdOrNone: summary.nodeIdOrNone,
         turnNumber: summary.turnNumber,
         playerScore: summary.playerScore,
         enemyScore: summary.enemyScore,

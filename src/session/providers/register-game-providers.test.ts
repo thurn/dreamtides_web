@@ -469,6 +469,8 @@ describe("registerGameProviders (real content providers)", () => {
       const battle = node.sites.find(({ type }) => type === "Battle");
       apply("ENTER_SITE", { siteId: battle?.id });
       apply("BEGIN_BATTLE", { siteId: battle?.id });
+      // The real provider starts every journey battle's engine battle.
+      expect(state.battle?.engine?.slice.committed.result).toBeNull();
       apply("BATTLE_COMMAND", { command: { id: "SKIP_TO_REWARDS" } });
       apply("END_BATTLE", {});
 

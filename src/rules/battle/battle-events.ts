@@ -118,6 +118,12 @@ import {
   type PendingPrompt,
 } from "./fold";
 import { matchTutorialGuidance } from "./tutorial-guidance";
+import { engineBattleResult, startEngineBattle } from "./engine-battle";
+import type { Engine } from "../../engine";
+import type {
+  BattleInit as EngineBattleInit,
+  BattleResult as EngineBattleResult,
+} from "../../engine";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import {
   isBattleFieldSlotAddressValid,
@@ -193,10 +199,16 @@ import { parseCardId } from "../../types/card-identity";
  */
 export interface BattleInitProvider {
   /**
+   * The engine that plays journey battles: `BEGIN_BATTLE` starts each
+   * battle's engine battle on it, and the engine intents fold over it.
+   */
+  readonly engine: Engine;
+  /**
    * Build the initial {@link BattleFoldState} for `siteId` deterministically
-   * from `(journey, rng, timestamp)`, or `null` to bounce (e.g. the site is not a
-   * battle, or its content is unavailable). Must not mutate `journey`. The result
-   * must populate the immutable `init` (`BattleInit`) and set `effectQueue: []`
+   * from `(journey, rng, timestamp)`, with the engine init of the same
+   * battle, or `null` to bounce (e.g. the site is not a battle, or its
+   * content is unavailable). Must not mutate `journey`. The battle must
+   * populate the immutable `init` (`BattleInit`) and set `effectQueue: []`
    * and `pendingPrompt: null`.
    */
   beginBattle(input: {
@@ -206,7 +218,13 @@ export interface BattleInitProvider {
     seq: number;
     rng: (drawIndex: number) => number;
     timestamp: string;
-  }): BattleFoldState | null;
+  }): BattleStart | null;
+}
+
+/** A new journey battle: the prototype battle and the engine init of the same battle. */
+export interface BattleStart {
+  readonly battle: BattleFoldState;
+  readonly engineInit: EngineBattleInit;
 }
 
 /**
@@ -324,7 +342,7 @@ export function beginBattle(
   if (provider === null) {
     return null;
   }
-  const battle = provider.beginBattle({
+  const start = provider.beginBattle({
     journey: state.journey,
     siteId: parseSiteId(siteId),
     seedOverride,
@@ -332,6 +350,15 @@ export function beginBattle(
     rng: ctx.rng,
     timestamp: ctx.timestamp,
   });
+  if (start === null) {
+    return null;
+  }
+  const battle = startEngineBattle(
+    start.battle,
+    start.engineInit,
+    provider.engine,
+    ctx.seq,
+  );
   if (battle === null) {
     return null;
   }
@@ -498,9 +525,12 @@ export function setBattleAutomation(
 const FINAL_COMPLETION_LEVEL = 7;
 
 /**
- * `END_BATTLE {}`: derive the terminal result from the folded battle board and
- * commit the complete journey handoff. Returns `null` while the battle is not
- * terminal or when its durable identity no longer matches the journey state.
+ * `END_BATTLE {}`: derive the terminal result from the folded battle and
+ * commit the complete journey handoff. The engine battle's result decides
+ * once it has one; otherwise the prototype board's result does, while the
+ * battle screen still plays the prototype board. Returns `null` while the
+ * battle is not terminal or when its durable identity no longer matches the
+ * journey state.
  */
 export function endBattle(
   state: FoldState,
@@ -510,6 +540,12 @@ export function endBattle(
   const battle = state.battle;
   if (battle === null || battleModeOf(battle).kind !== "journey") {
     return null;
+  }
+  const engineResult = engineBattleResult(battle);
+  if (engineResult !== null) {
+    return engineResult.kind === "victory" && engineResult.winner === "player"
+      ? applyVictory(state, battle, ctx)
+      : applyEngineDefeat(state, battle, engineResult);
   }
   if (battle.board.result === "victory") {
     return applyVictory(state, battle, ctx);
@@ -532,13 +568,13 @@ function applyVictory(
 ): FoldState | null {
   const journey = state.journey;
   const init = battle.init;
-  const dreamscapeId = init.dreamscapeId;
+  const nodeId = init.nodeId;
   if (
-    dreamscapeId === null ||
-    journey.currentDreamscape !== dreamscapeId ||
+    nodeId === null ||
+    journey.currentDreamscape !== nodeId ||
     journey.completionLevel !== init.completionLevelAtStart ||
     activeSiteIdOf(journey) !== init.siteId ||
-    journey.atlas.nodes[dreamscapeId] === undefined ||
+    journey.atlas.nodes[nodeId] === undefined ||
     findSite(journey, init.siteId)?.type !== "Battle" ||
     !canVisitSite(journey, init.siteId)
   ) {
@@ -616,9 +652,49 @@ function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
 }
 
 /**
+ * Defeat or draw of the engine battle: the failure summary comes from the
+ * engine's committed state. A draw by the turn limit, or by an unbreakable
+ * loop (the resolution cap or a mandatory loop), reports the turn limit; any
+ * other ending reports the score target.
+ */
+function applyEngineDefeat(
+  state: FoldState,
+  battle: BattleFoldState,
+  result: EngineBattleResult,
+): FoldState {
+  const journey = state.journey;
+  const committed = battle.engine!.slice.committed;
+  const siteId = activeSiteIdOf(journey) ?? battle.init.siteId;
+  const drawWithoutWinner =
+    result.kind === "draw" &&
+    (result.reason === "turnLimit" ||
+      result.reason === "resolutionCap" ||
+      result.reason === "mandatoryLoop");
+  return {
+    ...state,
+    journey: {
+      ...journey,
+      failureSummary: {
+        battleId: battle.init.battleId,
+        result: result.kind === "draw" ? "draw" : "defeat",
+        reason: drawWithoutWinner ? "turn_limit_reached" : "score_target_reached",
+        siteId,
+        siteLabel: siteId,
+        nodeIdOrNone: journey.currentDreamscape,
+        turnNumber: committed.turn.turnNumber,
+        playerScore: committed.sides.player.score,
+        enemyScore: committed.sides.enemy.score,
+      },
+      screen: { type: "journeyFailed" },
+    },
+    battle: null,
+  };
+}
+
+/**
  * Derive the failure summary from the immutable battle `init`, the terminal
  * `board`, and the journey slice. `battleId`, `turnNumber`, and both scores come
- * from the board; `dreamscapeIdOrNone` comes from the active journey position;
+ * from the board; `nodeIdOrNone` comes from the active journey position;
  * the win / turn-limit thresholds come from `init`.
  *
  * The failure `reason` mirrors the battle result evaluation:
@@ -657,7 +733,7 @@ function deriveFailureSummary(
     reason,
     siteId,
     siteLabel: siteId,
-    dreamscapeIdOrNone: journey.currentDreamscape,
+    nodeIdOrNone: journey.currentDreamscape,
     turnNumber: board.turnNumber,
     playerScore: board.sides.player.score,
     enemyScore: board.sides.enemy.score,

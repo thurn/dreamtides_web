@@ -141,12 +141,12 @@ export function foldInvariantViolations(
       });
     }
     if (
-      init.dreamscapeId === null ||
-      journey.currentDreamscape !== init.dreamscapeId
+      init.nodeId === null ||
+      journey.currentDreamscape !== init.nodeId
     ) {
       violations.push({
         code: "battle_dreamscape_mismatch",
-        detail: `${init.dreamscapeId ?? "none"}/${
+        detail: `${init.nodeId ?? "none"}/${
           journey.currentDreamscape ?? "none"
         }`,
       });

@@ -427,7 +427,7 @@ describe("journey-failed-view-model", () => {
         reason: "score_target_reached",
         siteId: parseSiteId("site-uuid"),
         siteLabel: "Battle",
-        dreamscapeIdOrNone: parseAtlasNodeId("dreamscape-uuid"),
+        nodeIdOrNone: parseAtlasNodeId("dreamscape-uuid"),
         turnNumber: 6,
         playerScore: 4,
         enemyScore: 10,

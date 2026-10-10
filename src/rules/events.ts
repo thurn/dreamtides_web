@@ -15,6 +15,7 @@ import type {
   NoteId,
   OfferId,
   PresentationId,
+  PromptId,
   ShuffleCommitment,
   SiteId,
   TutorialActionId,
@@ -313,6 +314,12 @@ export interface EventPayloads {
     messageIndex?: number;
   };
   RESOLVE_PROMPT: { promptId: number; resolution: unknown };
+  // Engine intents of a journey battle (engine-design § Fold integration).
+  // Each names its side; `action` is an engine `Action` and `value` an engine
+  // `Answer`, validated by the domain case and the engine fold adapter.
+  BATTLE_ACTION: { side: BattleSide; action: unknown };
+  BATTLE_ANSWER: { side: BattleSide; promptId: PromptId; value: unknown };
+  BATTLE_CANCEL: { side: BattleSide; promptId: PromptId };
   // `note` is the `{ noteId, text, expiry }` shape the battle note editor
   // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this
   // file stays import-light (the domain case narrows it).
@@ -476,6 +483,9 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BATTLE_AI_BLOCK: true,
   COMPLETE_TUTORIAL_BATTLE_PRESENTATION: true,
   RESOLVE_PROMPT: true,
+  BATTLE_ACTION: true,
+  BATTLE_ANSWER: true,
+  BATTLE_CANCEL: true,
   SET_CARD_NOTE: true,
 };
 

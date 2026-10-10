@@ -86,7 +86,8 @@ return the state, every event, and every answer.
 
 The battle slice adapter (`fold/slice.ts`, `createFoldAdapter`) turns
 intents into engine calls and keeps the in-flight step record
-([below](#fold-integration)). Phase 4.1 wires it into the journey fold.
+([below](#fold-integration)). The journey fold holds each journey battle's
+slice (`src/rules/battle/engine-battle.ts`).
 
 ## State model
 
@@ -167,9 +168,9 @@ turn limit, hand limit, opening hand sizes, starting side, first-draw skip),
 the loop limits ([Loops](#loops)), `autoAnswerForcedPrompts`, and the
 Dreamwell construction rules (`config.dreamwell`). `initialState`
 (`state/create.ts`) fills the config once from `src/content/battle.ts`,
-`src/content/dreamwell-rules.ts`, and the `BattleInit`'s score target and
-starting side, so a serialized state determines its own replay. The
-next-battle effects (D39) join `BattleInit` in Phase 4.1.
+`src/content/dreamwell-rules.ts`, and the `BattleInit`'s score target,
+starting side, and next-battle opening-hand changes (D39), so a serialized
+state determines its own replay.
 
 **`BattleState` never contains a pending prompt.** Prompts exist only while a
 step runs. In interactive play they are reconstructed from the in-flight
@@ -1075,9 +1076,10 @@ cards use event-like abilities; a drawn Dreamwell card applies only its
 
 ## Transfigurations
 
-Phase 5.7a builds these transforms; the engine `Variant` carries only the
-amplified flag until then. Each transfiguration is a pure transform of an
-entity's abilities, with an eligibility predicate.
+Phase 5.7a builds these transforms. Until then the engine `Variant` carries
+each deck entry's transfigurations and applies only Amplified, as its
+amplified flag. Each transfiguration is a pure transform of an entity's
+abilities, with an eligibility predicate.
 
 There are nine ([F6](decisions.md#established-facts)):
 
@@ -1103,34 +1105,46 @@ of the two in agreement.
 ## Deck-entry modifications
 
 This follows [D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects).
-Phase 4.1 plumbs each deck entry's full variant and the next-battle effects
-into `BattleInit`, and Phase 5.7b applies them; today `Variant` and
-`DeckEntry` carry only the amplified flag. The full variant:
+Each engine `DeckEntry` carries its deck entry's full variant, and
+`BattleInit.nextBattle` the next-battle effects;
+`src/battle/integration/engine-battle-init.ts` builds both from the journey.
+Phase 5.7a adds the transfiguration transforms, and Phase 5.7b proves every
+modification on real content. The variant (`dsl/types.ts`):
 
 ```ts
 interface Variant {
   amplified: boolean;
-  transfigurations: TransfigurationType[];
-  deckMods: {
+  transfigurations?: TransfigurationType[];   // with deckMods, absent on an unmodified entry
+  deckMods?: {
     sparkBonus: number;                // additive, after transfigurations
     costReduction: number;             // energy cost, min 0
     fast: boolean;
     reclaim: number | null;            // granted or overridden Reclaim cost
-    typeChange: { cardType: CardType; subtype: CardSubtype } | null;
+    typeChange: { cardType: "character" | "event"; subtype: CardSubtype } | null;
   };
 }
 ```
 
+- **Applied in layer 1.** `instanceCard` (`catalog.ts`) is the printed card
+  an instance plays as: its card with the deck modifications applied. Costs,
+  speed, Reclaim, timing, the view, and the layer evaluation all read it.
 - **Order** matches `resolveDeckEntryCard` in `src/card-type-change.ts`:
   transfiguration transforms, then type and keyword changes, then the spark
-  bonus.
+  bonus. An Event turned into a Character has 0 spark and takes no spark
+  bonus, as in the prototype.
 - **Abilities are kept.** A type change alters the characteristics that
   selectors and timing read, never the ability list.
-- **Granted Reclaim** is the same keyword that Enduring adds, with the
-  modification's cost.
-- **Next-battle effects** are `BattleInit` fields: extra opening-hand cards
-  (with an optional predicate), starting energy, and the smaller-hand cost
-  discount. Battle setup consumes them once.
+- **Granted Reclaim** is the same Reclaim ability that Enduring adds, with
+  the modification's cost; it replaces a printed Reclaim in place.
+- **Next-battle effects** (`NextBattleEffects`, per side): extra
+  opening-hand draws with an optional card-filter predicate
+  (NextBattleOpeningHand), starting energy (NextBattleStartingEnergy), and
+  a smaller ordinary hand with a cost reduction on every card the side's
+  deck starts with (NextBattleSmallerHandAndCostDiscount). Battle setup
+  consumes them once: `battleConfig` the hand size, `initialState` the cost
+  reduction (`dealtDeck`), and the `beginBattle` step the draws and energy.
+  The journey's victory transition then spends the battle modifiers they
+  came from.
 - **Displayed text** keeps coming from the existing deck-entry text
   transforms, like transfigured text.
 
@@ -1361,8 +1375,8 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 - **The UI renders only views.** The Phase 4.6 debug reveal switches that
   side's view to omniscient.
 - **Determinization** (D22) is `engine.determinize(view, decklists, random)
-  → BattleState`. The decklists are `DeckEntry` lists with each entry's
-  variant (D39; today the amplified flag). It
+  → BattleState`. The decklists are the dealt decks (`dealtDeck`):
+  `DeckEntry` lists with each entry's full variant (D39). It
   deals the cards the view hides from what each decklist has left after the
   cards the view shows, keeps every known card at its known position, and
   reads nothing but the view, so states that look alike to the viewer give

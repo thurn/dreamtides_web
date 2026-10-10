@@ -1,4 +1,4 @@
-import type { CardData } from "../../types/cards";
+import type { CardData, Rarity } from "../../types/cards";
 import type { JourneySeed } from "../../types/journey-seed";
 import type {
   AffiliationContent,
@@ -75,7 +75,7 @@ import { parseBattleId } from "../../types/identifiers";
  * deck entry they copy. Decks at or above the threshold (and empty decks) are
  * returned unchanged.
  */
-function padBattleDeck(
+export function padBattleDeck(
   deck: readonly JourneyState["deck"][number][],
   minimumDeckSize: number,
 ): JourneyState["deck"][number][] {
@@ -520,7 +520,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     battleEntryKey: battleEntryKey,
     seed,
     siteId: site.id,
-    dreamscapeId: state.currentDreamscape,
+    nodeId: state.currentDreamscape,
     completionLevelAtStart,
     isFinalBoss: completionLevelAtStart === layerCount - 1,
     essenceReward,
@@ -706,6 +706,7 @@ export function buildEnemyDescriptor(
   const portraitSeed = Math.floor(random() * 1_000_000);
   return {
     id: parseOpponentId(`enemy:${opponentAvatar.id}:${String(portraitSeed)}`),
+    avatarId: opponentAvatar.id,
     name: opponentAvatar.name,
     // The Avatar's title (e.g. "Wreckoner") rides the descriptor as its
     // subtitle so the Battle Start name plate and the in-battle side summary can
@@ -778,7 +779,7 @@ function finalizeEnemyDeck(
   if (chosen.length === 0) {
     chosen = rng.shuffle(
       Array.from(cardDatabase.values()).filter(
-        (card) => !card.isStarter && card.energyCost !== null,
+        (card) => isEnemyFillerCard(card) && card.energyCost !== null,
       ),
     );
   }
@@ -823,7 +824,7 @@ function padEnemyDeck(
   const filler = rng.shuffle(
     Array.from(cardDatabase.values()).filter(
       (card) =>
-        !card.isStarter &&
+        isEnemyFillerCard(card) &&
         card.energyCost !== null &&
         !seen.has(card.cardNumber),
     ),
@@ -834,6 +835,18 @@ function padEnemyDeck(
     deck.push(card);
   }
   return deck;
+}
+
+/**
+ * Rarities that identify authored-flow cards (Starter, Tutorial, Special:
+ * Nightmares, Contemplation, the tutorial cards), which never enter a normal
+ * draft pool and so never fill an opponent deck.
+ */
+const NON_POOL_RARITIES: ReadonlySet<Rarity> = new Set(["Starter", "Tutorial", "Special"]);
+
+/** Whether a catalog card may fill a short opponent deck: a draftable, non-starter card. */
+function isEnemyFillerCard(card: CardData): boolean {
+  return !card.isStarter && (card.rarity === undefined || !NON_POOL_RARITIES.has(card.rarity));
 }
 
 function cloneBattleDeckCardDefinition(

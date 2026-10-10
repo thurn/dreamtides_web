@@ -3,9 +3,10 @@ import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
 import { emptyLoopTracker } from "../loops/types";
 import { emptyTurnLog } from "../rules/turn-log";
 import type { EngineCatalog } from "../catalog";
+import { NO_DECK_MODS, type Variant } from "../dsl/types";
 import type { InstanceId, Side } from "./ids";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES } from "./ids";
-import type { BattleConfig, BattleInit, BattleState, CardInstance, CardStatus, SideState } from "./types";
+import type { BattleConfig, BattleInit, BattleState, CardInstance, CardStatus, DeckEntry, SideState } from "./types";
 
 /** The status of a card new to the battle: ready, unchanged, and not created unless `created`. */
 export function freshStatus(created = false): CardStatus {
@@ -29,6 +30,47 @@ function emptySide(): SideState {
   };
 }
 
+/**
+ * The variant a deck entry is played as. An entry without transfigurations
+ * or deck modifications plays the plain `{ amplified }` variant.
+ */
+export function variantOf(entry: DeckEntry): Variant {
+  const amplified = entry.amplified === true;
+  const transfigurations = entry.transfigurations ?? [];
+  const deckMods = entry.deckMods ?? NO_DECK_MODS;
+  const modified =
+    deckMods.sparkBonus !== 0 ||
+    deckMods.costReduction !== 0 ||
+    deckMods.fast ||
+    deckMods.reclaim !== null ||
+    deckMods.typeChange !== null;
+  if (transfigurations.length === 0 && !modified) return { amplified };
+  return {
+    amplified,
+    transfigurations: [...transfigurations],
+    deckMods: { ...deckMods, typeChange: deckMods.typeChange === null ? null : { ...deckMods.typeChange } },
+  };
+}
+
+/** The total of one next-battle number over a side's smaller-hand-and-cost-discount effects. */
+function discountTotal(init: BattleInit, side: Side, field: "openingHandDelta" | "costReduction"): number {
+  return (init.nextBattle?.[side]?.smallerHandAndCostDiscount ?? []).reduce((total, effect) => total + effect[field], 0);
+}
+
+/**
+ * A side's deck as the battle deals it: each entry with the cost reduction of
+ * the side's next-battle cost discounts added to its deck modifications.
+ * Determinization reads the dealt decks as the known decklists (D22).
+ */
+export function dealtDeck(init: BattleInit, side: Side): DeckEntry[] {
+  const discount = discountTotal(init, side, "costReduction");
+  return init.decks[side].map((entry) =>
+    discount === 0
+      ? entry
+      : { ...entry, deckMods: { ...(entry.deckMods ?? NO_DECK_MODS), costReduction: (entry.deckMods?.costReduction ?? 0) + discount } },
+  );
+}
+
 export function battleConfig(init: BattleInit): BattleConfig {
   const startingSide: Side = init.startingSide ?? (BATTLE.startingSide === "enemy" ? "enemy" : "player");
   return {
@@ -36,8 +78,8 @@ export function battleConfig(init: BattleInit): BattleConfig {
     turnLimit: BATTLE.turnLimit,
     handLimit: BATTLE.handLimit,
     openingHandSize: {
-      player: BATTLE.playerOpeningHandSize,
-      enemy: BATTLE.enemyOpeningHandSize,
+      player: Math.max(0, BATTLE.playerOpeningHandSize + discountTotal(init, "player", "openingHandDelta")),
+      enemy: Math.max(0, BATTLE.enemyOpeningHandSize + discountTotal(init, "enemy", "openingHandDelta")),
     },
     startingSide,
     skipFirstDraw: BATTLE.skipPlayerOpeningDraw,
@@ -108,7 +150,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
       catalog.dreamsign(dreamsign);
       state.sides[side].dreamsigns.push({ id: dreamsign });
     }
-    for (const entry of init.decks[side]) {
+    for (const entry of dealtDeck(init, side)) {
       catalog.card(entry.cardId);
       const id: InstanceId = `i${state.nextInstance}`;
       state.nextInstance += 1;
@@ -118,7 +160,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
         owner: side,
         controller: side,
         zone: "deck",
-        variant: { amplified: entry.amplified === true },
+        variant: variantOf(entry),
         status: freshStatus(),
         enteredZoneAt: 0,
       };

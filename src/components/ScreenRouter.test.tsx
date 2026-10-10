@@ -377,7 +377,7 @@ describe("ScreenRouter terminal routing", () => {
     state.avatar = fixtureAvatar("73000000-0000-4000-8000-000000000001");
     state.failureSummary = {
       battleId, siteId, result: "defeat", reason: "score_target_reached", siteLabel: "Battle",
-      dreamscapeIdOrNone: parseAtlasNodeId("router-failure-dreamscape"),
+      nodeIdOrNone: parseAtlasNodeId("router-failure-dreamscape"),
       turnNumber: 6, playerScore: 4, enemyScore: 10,
     };
     const { container, mutations } = mountRouter({ state });

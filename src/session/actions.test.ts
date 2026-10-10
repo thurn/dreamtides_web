@@ -37,7 +37,7 @@ import { parseAtlasNodeId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
 import { parseShuffleCommitment } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
-import { parseNoteId } from "../types/identifiers";
+import { parseNoteId, parsePromptId } from "../types/identifiers";
 import { parseJourneyId } from "../types/identifiers";
 import { parseTutorialRunId } from "../types/identifiers";
 import { parseCardTutorialScreenKey } from "../types/identifiers";
@@ -277,6 +277,9 @@ function captureAllDrafts(): EventDraft[] {
     text: "t",
     expiry: null,
   });
+  void actions.battleAction("player", { kind: "pass" });
+  void actions.answerPrompt("player", parsePromptId("1:1:0"), 1);
+  void actions.cancelPrompt("player", parsePromptId("1:1:0"));
 
   return drafts;
 }
@@ -296,6 +299,28 @@ describe("game actions facade", () => {
   it("covers every known event type (no orphaned reducer case, no drift)", () => {
     const produced = new Set(drafts.map((d) => d.type));
     expect([...produced].sort()).toEqual([...KNOWN_EVENT_TYPES].sort());
+  });
+
+  it("writes each engine intent with its side and, for the AI host, its actor", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
+    const promptId = parsePromptId("4:2:1");
+    const ai = testEventActor("ai:enemy");
+    void actions.battleAction("enemy", { kind: "play", card: "i3", from: "hand" }, ai);
+    void actions.answerPrompt("player", promptId, ["i7"]);
+    void actions.cancelPrompt("player", promptId);
+    expect(captured).toEqual([
+      {
+        type: "BATTLE_ACTION",
+        payload: { side: "enemy", action: { kind: "play", card: "i3", from: "hand" } },
+        actor: ai,
+      },
+      { type: "BATTLE_ANSWER", payload: { side: "player", promptId, value: ["i7"] } },
+      { type: "BATTLE_CANCEL", payload: { side: "player", promptId } },
+    ]);
   });
 
   it("routes each creator's event without a bounce-caused-by-unknown-type", () => {

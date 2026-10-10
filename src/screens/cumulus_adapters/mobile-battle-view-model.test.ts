@@ -66,7 +66,7 @@ function makeInit(): BattleInit {
     battleEntryKey: parseBattleEntryKey("battle-entry-fixture"),
     seed: 42,
     siteId: parseSiteId("battle-site-fixture"),
-    dreamscapeId: parseAtlasNodeId("dreamscape-fixture"),
+    nodeId: parseAtlasNodeId("dreamscape-fixture"),
     completionLevelAtStart: 2,
     isFinalBoss: false,
     essenceReward: 30,

@@ -23,8 +23,8 @@ export function buildBattleStartView(
 ): BattleStartView {
   const enemy = init.enemyDescriptor;
   const node =
-    init.dreamscapeId !== null
-      ? init.atlasSnapshot.nodes[init.dreamscapeId]
+    init.nodeId !== null
+      ? init.atlasSnapshot.nodes[init.nodeId]
       : undefined;
   const battleStartGuidance =
     tutorial?.isTutorialJourney === true

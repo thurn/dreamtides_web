@@ -6,12 +6,39 @@
  * the layer evaluation in continuous/ applies while their source is in play.
  */
 import type { CardSubtype } from "../../types/card-identity";
+import type { TransfigurationType } from "../../types/journey";
 import type { Effect } from "../effects/registry";
 import type { Zone } from "../state/ids";
 
-/** The variant a card instance is played as. Phase 4 adds transfigurations and deck modifications. */
+/**
+ * A journey deck entry's modifications (D39), applied to its copiable values
+ * after its transfigurations (catalog.ts `instanceCard`): a type change, then
+ * the cost reduction, Fast, and Reclaim keyword changes, then the spark bonus.
+ * Abilities are kept: a type change never alters the ability list.
+ */
+export interface DeckMods {
+  /** Additive spark of a character, after transfigurations. */
+  readonly sparkBonus: number;
+  /** Reduction of the card's energy cost, never below 0. */
+  readonly costReduction: number;
+  readonly fast: boolean;
+  /** A granted or overridden Reclaim energy cost. */
+  readonly reclaim: number | null;
+  readonly typeChange: { readonly cardType: "character" | "event"; readonly subtype: CardSubtype } | null;
+}
+
+export const NO_DECK_MODS: DeckMods = { sparkBonus: 0, costReduction: 0, fast: false, reclaim: null, typeChange: null };
+
+/**
+ * The variant a card instance is played as: the amplified flag, the journey
+ * transfigurations of its deck entry, and its deck-entry modifications.
+ * Transfigurations other than Amplified are carried for Phase 5.7a's
+ * ability transforms; an instance without them omits both optional fields.
+ */
 export interface Variant {
   readonly amplified: boolean;
+  readonly transfigurations?: readonly TransfigurationType[];
+  readonly deckMods?: DeckMods;
 }
 
 export const BASE_VARIANT: Variant = { amplified: false };

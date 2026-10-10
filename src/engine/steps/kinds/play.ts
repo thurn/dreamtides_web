@@ -1,4 +1,4 @@
-import { printedCard, printedCardId } from "../../catalog";
+import { instanceCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { costModifier } from "../../continuous/costs";
@@ -46,7 +46,7 @@ export const play: StepDefinition<PlayStep> = {
     if (!canPlay(state, catalog, side, step.card, step.from)) {
       throw new Error(`Card ${step.card} cannot be played now`);
     }
-    const definition = printedCard(catalog, instance.printing);
+    const definition = instanceCard(catalog, instance);
     const cardId = printedCardId(instance.printing);
     const origin = instanceOrigin(instance);
     const modifier = costModifier(state, catalog, step.card, side);
