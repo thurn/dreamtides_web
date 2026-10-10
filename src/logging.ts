@@ -87,9 +87,16 @@ export function setJourneyLogCapture(capture: JourneyLogMirror | null): void {
   journeyLogCapture = capture;
 }
 
-/** Deliver one journey-log record to the dev-server sink and the capture. */
+/**
+ * Deliver one journey-log record to the capture and, in development builds,
+ * the dev-server sink. Production builds compile the sink out and keep only the
+ * capture (D40).
+ */
 function deliverJourneyLogRecord(record: JourneyLogRecord): void {
-  postLogRecordToDevServer(record);
+  // `import.meta.env` is absent outside Vite (engine scripts under tsx).
+  if (import.meta.env?.DEV === true) {
+    postLogRecordToDevServer(record);
+  }
   if (journeyLogCapture !== null) {
     try {
       journeyLogCapture(record);
@@ -164,26 +171,14 @@ export function logEvent(
 
 /**
  * Posts one record to the Vite dev-server `/api/log` middleware, which appends
- * it to `logs/journey-log.jsonl`. Best effort: a no-op without `fetch` or under
- * Vitest (`import.meta.env.MODE === "test"`), and a failed request is
- * swallowed so logging never wedges the caller.
+ * it to `logs/journey-log.jsonl`. Development builds only. Best effort: a no-op
+ * without `fetch` or under Vitest (`import.meta.env.MODE === "test"`, which
+ * keeps test runs from opening sockets against nothing, bug-092), and a failed
+ * request is swallowed so logging never wedges the caller.
  */
 function postLogRecordToDevServer(record: Readonly<Record<string, unknown>>): void {
-  if (typeof fetch !== "function") {
+  if (typeof fetch !== "function" || import.meta.env?.MODE === "test") {
     return;
-  }
-  // `import.meta.env.MODE === "test"` is set by Vitest; skipping the fetch
-  // there avoids opening sockets against nothing and makes the test-time
-  // behavior deterministic (bug-092).
-  try {
-    const env = (import.meta as { env?: { MODE?: string } }).env;
-    if (env?.MODE === "test") {
-      return;
-    }
-  } catch {
-    // If `import.meta.env` is unavailable (older runtimes), fall through to
-    // the real fetch — the `.catch` handler below still guards against
-    // unhandled rejections.
   }
   fetch("/api/log", {
     method: "POST",
@@ -204,8 +199,8 @@ export interface JourneyLogMirrorDeps {
   /** Console transport. Defaults to a single-line `console.log`. */
   log?: (line: string) => void;
   /**
-   * Dev-server transport. Defaults to a best-effort `/api/log` POST plus the
-   * installed journey-log capture.
+   * Dev-server transport. Defaults to the installed journey-log capture plus,
+   * in development builds, a best-effort `/api/log` POST.
    */
   post?: (record: JourneyLogRecord) => void;
 }

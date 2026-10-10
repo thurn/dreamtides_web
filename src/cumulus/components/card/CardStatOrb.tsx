@@ -106,9 +106,10 @@ interface CardStatOrbProps {
   /**
    * Upper bound (px) for the digit auto-shrink search. The displayed size is
    * the smaller of the CSS digit ceiling and the fitted size, so this only
-   * needs to sit at or above the rendered digit size.
+   * needs to sit at or above the rendered digit size. `null` while the caller
+   * has not measured its own size yet: the digit fits once the bound is known.
    */
-  numberCapPx: number;
+  numberCapPx: number | null;
   ariaLabel?: string;
   /**
    * Monochrome hammer marker for a transfiguration-changed stat, shared with
@@ -153,7 +154,12 @@ export function CardStatOrb({
   // The digit box edge equals the CSS digit size; the digit sits over the
   // glyph's body so it reads over the fullest region rather than the edges.
   const numberBoxSize = numberSizeVar;
-  const { ref, fontSize } = useFitText(numberCapPx, 6, [value, numberCapPx]);
+  const { ref, fontSize } = useFitText(
+    numberCapPx ?? 0,
+    6,
+    [value, numberCapPx],
+    { enabled: numberCapPx !== null },
+  );
 
   // The digit's font-size is the smaller of the box-relative ceiling and the
   // fitted size, so a single digit fills the box (and tracks the CSS orb size

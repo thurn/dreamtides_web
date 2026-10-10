@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import "./CardView.css";
 import type { CardData, Rarity } from "../../../types/cards";
@@ -611,18 +611,26 @@ function buildAttributeChips(
  * Tracks the rendered card width. The width drives both the text-scale
  * metadata (`data-card-text-scale`, asserted by tests and used as the
  * baseline font ceiling) and the pixel sizes of the orbs and frame text.
+ *
+ * The first measurement runs in a layout effect, so the card re-renders at its
+ * real width before the browser paints. `measured` stays false until then: the
+ * card's text fits wait for it, so each fits once, at the real width, instead
+ * of at the default width and again (each fit forces repeated layouts).
  */
 function useCardMetrics(large: boolean): {
   cardRef: RefObject<HTMLDivElement | null>;
+  measured: boolean;
   textScale: number;
   widthPx: number;
 } {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [widthPx, setWidthPx] = useState<number | null>(null);
+  const [measured, setMeasured] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = cardRef.current;
     if (element === null) {
+      setMeasured(true);
       return;
     }
     const measuredElement = element;
@@ -646,6 +654,9 @@ function useCardMetrics(large: boolean): {
     }
 
     updateWidth();
+    // A card with no layout width yet (detached or undisplayed) fits at the
+    // default width now and re-fits when the observer reports its width.
+    setMeasured(true);
 
     if (typeof ResizeObserver === "undefined") {
       window.addEventListener("resize", updateWidth);
@@ -662,6 +673,7 @@ function useCardMetrics(large: boolean): {
 
   return {
     cardRef,
+    measured,
     textScale: computeCardTextScale(widthPx, large),
     widthPx: widthPx ?? (large ? 220 : 156),
   };
@@ -811,7 +823,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   // art fill band can size itself to the box (null until measured / no box).
   const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
-  const { cardRef, textScale, widthPx } = useCardMetrics(large);
+  const { cardRef, measured, textScale, widthPx } = useCardMetrics(large);
 
   // Auto-shrink against the established three-line fit, then lift the result by
   // the shared typography scale. The rendered box permits a fourth line so a
@@ -844,6 +856,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     [card.renderedText, textScale, rulesTextPresentation],
     {
       eager: eagerRulesFit,
+      enabled: measured,
       renderScale: CARD_TYPOGRAPHY_SCALE,
       measurementMaxHeightPx: rulesFitAreaHeightPx,
     },
@@ -882,8 +895,8 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   // CardStatOrb), so these caps only bound the search. The name / type / rules
   // text use fixed `cqw` sizes (no per-card auto-shrink) so every card on a
   // surface shares one type scale, matching the design spec.
-  const energyOrbCapPx = widthPx * ENERGY_ORB_RATIO;
-  const sparkOrbCapPx = widthPx * SPARK_ORB_RATIO;
+  const energyOrbCapPx = measured ? widthPx * ENERGY_ORB_RATIO : null;
+  const sparkOrbCapPx = measured ? widthPx * SPARK_ORB_RATIO : null;
 
   // Selection ring, stacked as box-shadows so it composes with the rounded
   // corners.
@@ -1157,9 +1170,10 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   const sparkFontVar = battlefieldPresentation
     ? "calc(var(--cv-spark-orb-font-size) * 2.5)"
     : "var(--cv-spark-orb-font-size)";
-  const sparkCapPx = battlefieldPresentation
-    ? sparkOrbCapPx * 2.5
-    : sparkOrbCapPx;
+  const sparkCapPx =
+    battlefieldPresentation && sparkOrbCapPx !== null
+      ? sparkOrbCapPx * 2.5
+      : sparkOrbCapPx;
   const sparkOrbNode =
     card.spark !== null || card.sparkVariable === true ? (
       <CardStatOrb

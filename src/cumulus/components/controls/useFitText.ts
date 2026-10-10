@@ -2,7 +2,8 @@ import { useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 /**
  * Shrinks text to fit its box. Returns a ref to attach to the text element and
- * the computed font size in px. The element must be a fixed-size box (e.g. an
+ * the computed font size in px (the ceiling, `maxFontPx * renderScale`, until
+ * the first fit). The element must be a fixed-size box (e.g. an
  * absolutely-positioned layer, or a flex child with a definite width) with
  * `overflow: hidden`; the hook finds the largest font size in
  * `[minFontPx, maxFontPx]` for which the content neither overflows the box nor
@@ -10,8 +11,12 @@ import { useLayoutEffect, useRef, useState, type RefObject } from "react";
  *
  * The fit recomputes when `deps` change (pass the text content and any
  * baseline scale), when the box's available size changes, and once the web
- * fonts finish loading — the last guards against a transient overflow when the
- * initial layout pass runs against fallback font metrics.
+ * fonts finish loading if a font was still loading after the fit — the last
+ * guards against a transient overflow when the initial layout pass runs
+ * against fallback font metrics. While `enabled` is false the hook does not
+ * fit at all: a caller whose fit bounds depend on a measurement it has not
+ * made yet passes `false` until it has, so the text is fitted once, at the
+ * real bounds, rather than at a placeholder and again.
  *
  * The resize observer watches the element itself but only re-fits when the
  * element's *available* box (client size) changes, so the hook's own
@@ -36,6 +41,11 @@ export function useFitText(
   options?: {
     eager?: boolean;
     /**
+     * Fit only while true (default true). The fit runs, before paint, in the
+     * layout pass that turns this true.
+     */
+    enabled?: boolean;
+    /**
      * Multiply the fitted measurement size before rendering it. Use with
      * `measurementMaxHeightPx` when a type-scale lift must preserve the
      * relative shrink ratios established by an earlier fit contract.
@@ -50,14 +60,17 @@ export function useFitText(
   },
 ): { ref: RefObject<HTMLDivElement | null>; fontSize: number } {
   const eager = options?.eager ?? false;
+  const enabled = options?.enabled ?? true;
   const renderScale = options?.renderScale ?? 1;
   const measurementMaxHeightPx = options?.measurementMaxHeightPx;
   const ref = useRef<HTMLDivElement | null>(null);
-  const [fontSize, setFontSize] = useState(maxFontPx * renderScale);
+  // The fitted size, or null before the first fit (disabled, or deferred off
+  // screen), when the hook reports the unfitted ceiling.
+  const [fittedFontSize, setFontSize] = useState<number | null>(null);
 
   useLayoutEffect(() => {
     const element = ref.current;
-    if (element === null) {
+    if (element === null || !enabled) {
       return;
     }
 
@@ -120,8 +133,14 @@ export function useFitText(
       measure();
 
       // Re-fit once the real fonts are ready so glyph metrics that differ from
-      // the fallback font cannot leave the text overflowing its box.
-      if (typeof document !== "undefined" && "fonts" in document) {
+      // the fallback font cannot leave the text overflowing its box. When no
+      // font is loading after the fit (the fit's own layout starts any load it
+      // needs), the fit already used the real metrics and needs no repeat.
+      if (
+        typeof document !== "undefined" &&
+        "fonts" in document &&
+        document.fonts.status === "loading"
+      ) {
         void document.fonts.ready.then(() => {
           if (!cancelled) {
             measure();
@@ -202,10 +221,11 @@ export function useFitText(
     maxFontPx,
     minFontPx,
     eager,
+    enabled,
     renderScale,
     measurementMaxHeightPx,
     ...deps,
   ]);
 
-  return { ref, fontSize };
+  return { ref, fontSize: fittedFontSize ?? maxFontPx * renderScale };
 }

@@ -8,6 +8,7 @@ import {
   createBattleProtoNoteClearedLogEvent,
   createBattleProtoNoteDismissedLogEvent,
   clearLogContext,
+  createJourneyLogMirror,
   getLogEntries,
   logEvent,
   logEventOnce,
@@ -194,6 +195,34 @@ describe("resetLog", () => {
     expect(getLogEntries()).toHaveLength(0);
     const entry = logEvent("after_reset");
     expect(entry.seq).toBe(1);
+  });
+});
+
+describe("dev-server log sink", () => {
+  function postsAfterLogging(env: { DEV: boolean; MODE: string }): number {
+    vi.stubEnv("DEV", env.DEV);
+    vi.stubEnv("MODE", env.MODE);
+    const post = vi.fn(() => Promise.resolve(new Response()));
+    vi.stubGlobal("fetch", post);
+    try {
+      logEvent("sink_probe");
+      createJourneyLogMirror({ log: () => {} })({
+        event: "sink_probe",
+        seq: 1,
+      });
+      return post.mock.calls.length;
+    } finally {
+      vi.unstubAllGlobals();
+      vi.unstubAllEnvs();
+    }
+  }
+
+  it("posts every journey-log record to /api/log in a development build", () => {
+    expect(postsAfterLogging({ DEV: true, MODE: "development" })).toBe(2);
+  });
+
+  it("never posts in a production build", () => {
+    expect(postsAfterLogging({ DEV: false, MODE: "production" })).toBe(0);
   });
 });
 

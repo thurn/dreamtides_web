@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import {
   GLOSSARY,
   glossaryRulesTextForms,
@@ -240,6 +240,107 @@ describe("CardView", () => {
     for (const term of extractGlossaryTerms(renderedText)) {
       expect(description).toContain(term.definition);
     }
+  });
+
+  describe("text fit", () => {
+    /**
+     * Gives every card root a layout width of `widthPx` and counts the fit
+     * probes per text element: each fit reads the element's `scrollHeight`,
+     * once in jsdom, where everything fits at the ceiling.
+     */
+    function measureCards(widthPx: number): Map<Element, number> {
+      vi.restoreAllMocks();
+      onTestFinished(() => {
+        vi.restoreAllMocks();
+      });
+      const probes = new Map<Element, number>();
+      vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(
+        function (this: HTMLElement) {
+          return this.classList.contains("card-view") ? widthPx : 0;
+        },
+      );
+      vi.spyOn(Element.prototype, "scrollHeight", "get").mockImplementation(
+        function (this: Element) {
+          probes.set(this, (probes.get(this) ?? 0) + 1);
+          return 0;
+        },
+      );
+      return probes;
+    }
+
+    function fitCounts(
+      container: HTMLElement,
+      probes: Map<Element, number>,
+    ): number[] {
+      return Array.from(
+        container.querySelectorAll(
+          "[data-card-rules-text], [data-card-stat-value]",
+        ),
+        (element) => probes.get(element) ?? 0,
+      );
+    }
+
+    function withFonts(fonts: Pick<FontFaceSet, "ready" | "status">): void {
+      Object.defineProperty(document, "fonts", {
+        configurable: true,
+        value: fonts,
+      });
+      onTestFinished(() => {
+        Reflect.deleteProperty(document, "fonts");
+      });
+    }
+
+    it("fits the rules text and stat digits once per mount, at the measured width", () => {
+      const probes = measureCards(300);
+      const fontSizes: number[] = [];
+      const { container } = renderInCumulus(
+        <CardView
+          card={card()}
+          onRulesFontSizeChange={(px) => fontSizes.push(px)}
+        />,
+      );
+      // Rules text, energy digit, spark digit.
+      expect(fitCounts(container, probes)).toEqual([1, 1, 1]);
+
+      measureCards(150);
+      const halfSizes: number[] = [];
+      renderInCumulus(
+        <CardView
+          card={card()}
+          onRulesFontSizeChange={(px) => halfSizes.push(px)}
+        />,
+      );
+      expect(
+        (fontSizes[fontSizes.length - 1] ?? 0) /
+          (halfSizes[halfSizes.length - 1] ?? 1),
+      ).toBeCloseTo(2);
+    });
+
+    it("re-fits after the web fonts load only when a font was loading", async () => {
+      let fontsLoaded = () => {};
+      withFonts({
+        status: "loading",
+        ready: new Promise<FontFaceSet>((resolve) => {
+          fontsLoaded = () => resolve(document.fonts);
+        }),
+      });
+      const probes = measureCards(300);
+      const { container } = renderInCumulus(<CardView card={card()} />);
+      expect(fitCounts(container, probes)).toEqual([1, 1, 1]);
+      await act(async () => {
+        fontsLoaded();
+        await Promise.resolve();
+      });
+      expect(fitCounts(container, probes)).toEqual([2, 2, 2]);
+
+      const loadedProbes = measureCards(300);
+      withFonts({ status: "loaded", ready: Promise.resolve(document.fonts) });
+      const loaded = renderInCumulus(<CardView card={card()} />);
+      await act(async () => {
+        await Promise.resolve();
+      });
+      expect(fitCounts(loaded.container, loadedProbes)).toEqual([1, 1, 1]);
+    });
   });
 
   describe("transfiguration rules marker", () => {
