@@ -83,6 +83,17 @@ export function attachGameLog(
           bounceReason: record.bounceReason ?? "invalid_action",
         });
       }
+      if (outcome === "applied") {
+        for (const diagnostic of record.logRecords ?? []) {
+          mirror({
+            ...diagnostic.fields,
+            event: diagnostic.event,
+            timestamp: event.clientTimestamp,
+            gameId,
+            seq,
+          });
+        }
+      }
       if (record.error !== undefined) {
         const { message, stack } = record.error;
         mirror({

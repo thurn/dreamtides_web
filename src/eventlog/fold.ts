@@ -18,6 +18,7 @@ import type {
   GameEvent,
   Genesis,
   ReducerResult,
+  ReducerLogRecord,
 } from "./types";
 
 /** One event's result: its seq, the event, and how the reducer resolved it. */
@@ -25,6 +26,8 @@ export interface FoldOutcome {
   seq: number;
   event: GameEvent;
   outcome: EventOutcome;
+  /** Diagnostics from an applied reducer result; never part of folded state. */
+  logRecords?: readonly ReducerLogRecord[];
   /** Machine-readable cause for clear logging and player-facing feedback. */
   bounceReason?: BounceReason;
   /**
@@ -196,6 +199,9 @@ export function foldEvents<S>(
       seq,
       event,
       outcome: result.outcome,
+      ...(result.outcome === "applied" && result.logRecords !== undefined
+        ? { logRecords: result.logRecords }
+        : {}),
       ...(result.outcome === "bounced"
         ? {
             interveningSeqs,

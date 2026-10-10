@@ -27,6 +27,7 @@ import type {
   EventType,
   GameEvent,
   Genesis,
+  ReducerLogRecord,
 } from "./types";
 import type { IntentKey } from "../types/identifiers";
 
@@ -59,6 +60,7 @@ export interface LocalLogRecord<S> {
   seq: number;
   event: GameEvent;
   outcome: EventOutcome;
+  logRecords?: readonly ReducerLogRecord[];
   bounceReason?: BounceReason;
   /** A reducer throw contained as a bounce (production builds only). */
   error?: FoldError;
@@ -263,6 +265,7 @@ export function createLocalLog<S>(options: LocalLogOptions<S>): LocalLog<S> {
       seq,
       event,
       outcome: outcome.outcome,
+      ...(outcome.logRecords === undefined ? {} : { logRecords: outcome.logRecords }),
       stateBefore,
       stateAfter: state,
       ...(outcome.bounceReason === undefined

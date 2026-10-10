@@ -21,6 +21,7 @@ import type {
   EventContext,
   EventType,
   GameEvent,
+  ReducerLogRecord,
 } from "../eventlog/types";
 import {
   CAS_EXEMPT_EVENT_TYPES,
@@ -48,14 +49,20 @@ import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
+import { siteIdFromUnknown } from "../types/identifiers";
+import {
+  journeyModifierRegistry,
+  type JourneyModifierRegistry,
+} from "./journey/modifier-registry";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
-  | { state: FoldState; outcome: "applied"; bounceReason?: never }
+  | { state: FoldState; outcome: "applied"; bounceReason?: never; logRecords?: readonly ReducerLogRecord[] }
   | {
       state: FoldState;
       outcome: "bounced";
       bounceReason: BounceReason;
+      logRecords?: never;
     };
 
 /**
@@ -80,6 +87,7 @@ export function reduceGameEvent(
   state: FoldState,
   event: GameEvent,
   ctx: EventContext,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): ReduceResult {
   const exempt = isCasExempt(event.type); // rule 1
   const matchingResolve = isMatchingResolve(state, event); // rule 2
@@ -131,9 +139,44 @@ export function reduceGameEvent(
     }
     // Invariant checks stay outside the sanctioned domain-error catch. A
     // semantic programmer error must reach fold containment and diagnostics.
-    return enforceInvariants(event, result);
+    return finishTransition(state, event, result, modifiers);
   }
-  return enforceInvariants(event, routeDomain(state, event, ctx));
+  return finishTransition(state, event, routeDomain(state, event, ctx), modifiers);
+}
+
+/** Apply journey hooks only after domain validation, before final invariants. */
+function finishTransition(
+  before: FoldState,
+  event: GameEvent,
+  result: ReduceResult,
+  modifiers: JourneyModifierRegistry,
+): ReduceResult {
+  if (
+    result.outcome === "applied" &&
+    result.state.journey !== before.journey &&
+    event.type !== "LOAD_STATE" &&
+    event.type !== "RESET_JOURNEY" &&
+    isKnownEventType(event.type)
+  ) {
+    const siteId = siteIdFromUnknown(event.payload?.siteId) ??
+      (before.journey.screen.type === "site" ? before.journey.screen.siteId : null);
+    const applied = modifiers.apply({
+      before: before.journey,
+      journey: result.state.journey,
+      eventType: event.type,
+      siteId,
+    });
+    result = {
+      ...result,
+      state: applied.journey === result.state.journey
+        ? result.state
+        : { ...result.state, journey: applied.journey },
+      ...(applied.logRecords.length === 0
+        ? {}
+        : { logRecords: [...(result.logRecords ?? []), ...applied.logRecords] }),
+    };
+  }
+  return enforceInvariants(event, result);
 }
 
 function enforceInvariants(

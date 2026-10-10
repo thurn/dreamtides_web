@@ -197,12 +197,20 @@ export type BounceReason =
   | "malformed_event"
   | "fold_error";
 
+/** Host-delivered diagnostics, separate from persisted state and intent events. */
+export interface ReducerLogRecord {
+  event: string;
+  fields: Readonly<Record<string, unknown>>;
+}
+
 /** A reducer's deterministic result for one event. */
 export interface ReducerResult<S> {
   state: S;
   outcome: EventOutcome;
   /** Required by the game reducer for bounces; optional for generic engine clients. */
   bounceReason?: BounceReason;
+  /** Only applied outcomes publish these records; the host adds game identity. */
+  logRecords?: readonly ReducerLogRecord[];
 }
 
 /**
