@@ -33,11 +33,11 @@ import type { JourneyState } from "../types/journey";
 import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/battle-events";
 import {
+  applyEngineDebug,
   pendingEnginePrompt,
   reduceEngineIntent,
 } from "./battle/engine-battle";
 import type { Engine } from "../engine";
-import { engineDebugActions } from "../engine/development";
 import { journeyBattleOf, tutorialBattleOf } from "./battle/fold";
 import * as deck from "./journey/deck";
 import * as draft from "./journey/draft";
@@ -211,19 +211,16 @@ function reduceEngineDebug(
   state: FoldState,
   payload: Record<string, unknown>,
 ): FoldState | null {
-  const debug = engineDebugActions();
   const engine = battleEngine();
   const battle = journeyBattleOf(state.battle);
-  if (debug === null || engine === null || battle === null) {
+  if (engine === null || battle === null) {
     return null;
   }
   const fold = battle.engine;
-  const op = debug.debugOpFromUnknown(payload.op);
-  if (op === null) return null;
-  const outcome = debug.applyDebugOp(engine, fold.slice, op);
-  return outcome.kind === "rejected"
+  const applied = applyEngineDebug(engine, fold.slice, payload);
+  return applied === null
     ? null
-    : { ...state, battle: { ...battle, engine: { ...fold, slice: outcome.slice } } };
+    : { ...state, battle: { ...battle, engine: { ...fold, slice: applied.slice } } };
 }
 
 /** The engine journey battles play on, from the registered battle-init provider. */

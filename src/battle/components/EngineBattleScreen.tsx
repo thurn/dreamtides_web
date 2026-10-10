@@ -48,7 +48,11 @@ import {
   engineBattleNoticeCopy,
   type EngineAbilityOption,
 } from "../../runtime/battle-prompt-messages";
-import { battleLogEntries, battleLogTurns } from "../../screens/cumulus_adapters/engine-battle-log-view-model";
+import {
+  battleLogTurns,
+  engineBattleLog,
+  warmEngineBattleLog,
+} from "../../screens/cumulus_adapters/engine-battle-log-view-model";
 import { buildBattleAvatarStatus } from "../../screens/cumulus_adapters/mobile-battle-view-model";
 import {
   buildEngineBattleScreenModel,
@@ -64,7 +68,7 @@ import {
   targetAnswer,
   type PendingEnginePrompt,
 } from "../../screens/cumulus_adapters/prompt-host-view-model";
-import { useActions, useGameState } from "../../session/hooks";
+import { useActions, useGameEvents, useGameState } from "../../session/hooks";
 import { useJourney } from "../../state/journey-context";
 import { parseCardId, type CardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -81,10 +85,8 @@ import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import { createEngineCardModels, type EngineCardModels } from "../ui/engine-card-model";
 import {
-  battleLogStore,
   presentationItems,
   sliceKey,
-  useBattleLog,
   usePresentationQueue,
   usePublishedEngineEvents,
 } from "./battle-presentation";
@@ -189,7 +191,6 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
 
   // Each applied intent's events join the presentation queue; the prompt
   // after them shows once the queue is idle ("present, then ask").
-  // Each batch also joins the battle log.
   usePublishedEngineEvents(engine, slice, ({ events, batch, before, seq }) => {
     const view = engine.view(batch.state, HUMAN);
     const items = presentationItems(events, HUMAN, batch, before, (source) => {
@@ -197,9 +198,6 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       return instance === undefined ? null : cards(instance).displaySnapshot.name;
     });
     presentation.enqueue(items);
-    battleLogStore(battleId).append(
-      battleLogEntries(events, HUMAN, batch.state, view, engine.view(before, HUMAN), `${battleId}:${String(seq)}`),
-    );
     if (items.length > 0) {
       logEvent("battle_engine_presentation_queued", {
         battleId,
@@ -214,10 +212,47 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       });
     }
   });
-  const logEntries = useBattleLog(battleId);
+  // The battle log is rebuilt from the event log, so a reload or a debug
+  // undo shows the entries of the fold's path. Its replay follows the fold
+  // one intent per task, so opening the log only finishes it.
+  const gameEvents = useGameEvents();
+  const battleRef = useRef(battle);
+  battleRef.current = battle;
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const warm = () => {
+      timer = warmEngineBattleLog(engine, battleRef.current, gameEvents, HUMAN) ? setTimeout(warm, 0) : null;
+    };
+    timer = setTimeout(warm, 0);
+    return () => {
+      if (timer !== null) clearTimeout(timer);
+    };
+  }, [engine, gameEvents, slice]);
+  const battleLog = useMemo(() => {
+    if (!logOpen) return null;
+    const started = performance.now();
+    const log = engineBattleLog(engine, battle, gameEvents, HUMAN);
+    return { log, ms: Math.round(performance.now() - started) };
+    // `battle` changes with every applied event; the log only with the slice.
+  }, [engine, gameEvents, logOpen, slice]);
+  useEffect(() => {
+    if (battleLog === null) return;
+    const { log, ms } = battleLog;
+    logEvent("battle_engine_log_built", {
+      battleId,
+      rebuilt: log !== null,
+      startSeq: log?.startSeq ?? null,
+      folded: log?.folded ?? null,
+      entries: log?.entries.length ?? null,
+      ms,
+    });
+  }, [battleId, battleLog]);
   const logTurns = useMemo(
-    () => (logOpen ? battleLogTurns(logEntries, HUMAN, cards, (event) => dreamwell(event.card)?.name ?? null) : []),
-    [cards, dreamwell, logEntries, logOpen],
+    () =>
+      battleLog?.log == null
+        ? []
+        : battleLogTurns(battleLog.log.entries, HUMAN, cards, (event) => dreamwell(event.card)?.name ?? null),
+    [battleLog, cards, dreamwell],
   );
   const noticeView = useMemo(
     () =>
@@ -495,10 +530,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       if (prompt !== null) submitAnswer(arrangeAnswer(prompt, model.engine, resolution), editor);
     },
     onPromptNoticeDismiss: presentation.dismissNotice,
-    onBattleLogOpen: () => {
-      logEvent("battle_engine_log_opened", { battleId, entries: logEntries.length });
-      setLogOpen(true);
-    },
+    onBattleLogOpen: () => setLogOpen(true),
     onAllForward: () => repositionShortcut(affordances.allForward, "all-forward"),
     onAllBack: () => repositionShortcut(affordances.allBack, "all-back"),
     onRepeatLoop: (count) => {

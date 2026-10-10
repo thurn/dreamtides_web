@@ -34,9 +34,8 @@ import type { Action } from "../../engine/rules/actions";
 import type { AbilitySource } from "../../engine/state/ids";
 import type { BattleState } from "../../engine/state/types";
 import type { EngineBattleNotice } from "../../runtime/battle-prompt-messages";
-import type { EngineBattleLogEntry } from "../../screens/cumulus_adapters/engine-battle-log-view-model";
 import { useEventOutcomes } from "../../session/hooks";
-import type { BattleId, DreamwellCardId, PresentationId } from "../../types/identifiers";
+import type { DreamwellCardId, PresentationId } from "../../types/identifiers";
 import { parsePresentationId, parsePromptId } from "../../types/identifiers";
 
 /**
@@ -351,48 +350,6 @@ export function usePresentationQueue(): PresentationState {
   const enqueue = useCallback((items: readonly PresentationItem[]) => queue.enqueue(items), [queue]);
   const dismissNotice = useCallback(() => queue.dismissNotice(), [queue]);
   return { head: snapshot.queue[0] ?? null, notice: snapshot.notice, enqueue, dismissNotice };
-}
-
-/**
- * The battle log of each battle this session: its newest
- * `BATTLE.presentation.logEntryCap` entries, kept across remounts of the
- * screen. The log is built from presented batches, so a reload starts it
- * afresh from the settled board.
- */
-class BattleLogStore {
-  private entries: readonly EngineBattleLogEntry[] = [];
-  private readonly listeners = new Set<() => void>();
-
-  readonly snapshot = (): readonly EngineBattleLogEntry[] => this.entries;
-
-  readonly subscribe = (listener: () => void): (() => void) => {
-    this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
-  };
-
-  append(entries: readonly EngineBattleLogEntry[]): void {
-    if (entries.length === 0) return;
-    this.entries = [...this.entries, ...entries].slice(-BATTLE.presentation.logEntryCap);
-    for (const listener of [...this.listeners]) listener();
-  }
-}
-
-const battleLogs = new Map<BattleId, BattleLogStore>();
-
-/** The battle log store of `battleId`. */
-export function battleLogStore(battleId: BattleId): BattleLogStore {
-  let store = battleLogs.get(battleId);
-  if (store === undefined) {
-    store = new BattleLogStore();
-    battleLogs.set(battleId, store);
-  }
-  return store;
-}
-
-/** The battle log entries of `battleId`, live. */
-export function useBattleLog(battleId: BattleId): readonly EngineBattleLogEntry[] {
-  const store = battleLogStore(battleId);
-  return useSyncExternalStore(store.subscribe, store.snapshot);
 }
 
 /** The engine intent an applied `BATTLE_*` event carries; the fold validated its shape. */

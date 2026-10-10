@@ -13,6 +13,12 @@ import { createCatalog } from "../../engine/catalog";
 import { EVENT_DEFINITIONS } from "../../engine/events";
 import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
 import { boardState, placeFigment, type BoardSetup } from "../../engine/testing/board";
+import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
+import { battleSeed } from "../../engine/state/ids";
+import type { CommittedEvent } from "../../eventlog/local-log";
+import type { GameEvent } from "../../eventlog/types";
+import type { JourneyBattleFoldState } from "../../rules/battle/fold";
+import { testEventActor } from "../../types/test-identities";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { LOOP, LOOP_CARDS } from "../../engine/testing/loop-cards";
 import {
@@ -32,9 +38,10 @@ import {
   parseDreamwellCardId,
   parsePresentationId as pid,
   parsePromptId,
+  parseSiteId,
 } from "../../types/identifiers";
 import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
-import { battleLogEntries, battleLogTurns } from "./engine-battle-log-view-model";
+import { battleLogEntries, battleLogTurns, engineBattleLog } from "./engine-battle-log-view-model";
 import {
   buildEngineBattleScreenModel,
   engineStatuses,
@@ -906,5 +913,78 @@ describe("presentation", () => {
     expect(turns).toHaveLength(1);
     expect(seenByPlayer.some((entry) => entry.event.kind === "cardDrawn" && entry.event.side === "enemy")).toBe(false);
     expect(seenByPlayer.some((entry) => entry.event.kind === "laneResolved")).toBe(true);
+  });
+});
+
+describe("battle log from the event log", () => {
+  const siteId = parseSiteId("site-battle-log");
+  const logEngine = () => createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
+
+  /** A journey battle whose sides pass `passes` times, with the events that started and played it. */
+  function passedBattle(engine: ReturnType<typeof logEngine>, passes: number) {
+    const fold = createFoldAdapter(engine);
+    const init = fuzzInit(battleSeed("battle-log"), SYNTHETIC_FUZZ_POOL);
+    const events: CommittedEvent[] = [];
+    const commit = (type: string, payload: Record<string, unknown>) => {
+      const seq = events.length + 1;
+      const event: GameEvent = {
+        type: type as GameEvent["type"],
+        payload,
+        actor: testEventActor("p1"),
+        clientTimestamp: "1970-01-01T00:00:00.000Z",
+        basedOnSeq: seq - 1,
+      };
+      events.push({ seq, event });
+    };
+    commit("BEGIN_BATTLE", { siteId });
+    const started = fold.start(init);
+    if (started.kind !== "applied") throw new Error("not started");
+    let slice = started.slice;
+    for (let index = 0; index < passes; index++) {
+      const side = engine.decision(slice.committed)?.side;
+      if (side === undefined) break;
+      commit("BATTLE_ACTION", { side, action: { kind: "pass" } });
+      const outcome = fold.reduce(slice, { kind: "battleAction", side, action: { kind: "pass" } });
+      if (outcome.kind === "applied") slice = outcome.slice;
+    }
+    const battle = {
+      mode: { kind: "journey" },
+      init: { siteId, battleId: parseBattleId("battle-log-fixture") },
+      engine: { init, slice },
+    } as unknown as JourneyBattleFoldState;
+    return { battle, events };
+  }
+
+  it("shows the same entries after a reload, and never what the human could not see", () => {
+    const engine = logEngine();
+    const { battle, events } = passedBattle(engine, 12);
+    const live = engineBattleLog(engine, battle, events, "player");
+    const reloaded = engineBattleLog(
+      logEngine(),
+      JSON.parse(JSON.stringify(battle)) as JourneyBattleFoldState,
+      JSON.parse(JSON.stringify(events)) as CommittedEvent[],
+      "player",
+    );
+    const entries = live?.entries ?? [];
+    const drawn = (side: "player" | "enemy") =>
+      entries.some((entry) => entry.event.kind === "cardDrawn" && entry.event.side === side);
+
+    expect(new Set(entries.map((entry) => entry.turnNumber)).size).toBeGreaterThan(2);
+    expect(reloaded?.entries).toEqual(entries);
+    expect(drawn("player")).toBe(true);
+    expect(drawn("enemy")).toBe(false);
+  });
+
+  it("follows the fold as the event list grows, and is null for a list that does not reproduce it", () => {
+    const engine = logEngine();
+    const { battle, events } = passedBattle(engine, 12);
+    const growing = events.slice(0, 6);
+    const early = engineBattleLog(engine, battle, growing, "player");
+    growing.push(...events.slice(6));
+
+    expect(early).toBeNull();
+    expect(engineBattleLog(engine, battle, growing, "player")?.entries).toEqual(
+      engineBattleLog(engine, battle, events, "player")?.entries,
+    );
   });
 });

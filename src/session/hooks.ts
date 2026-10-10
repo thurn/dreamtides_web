@@ -20,7 +20,7 @@ import {
 } from "react";
 import { BounceToast, bounceMessageForReason } from "../components/BounceToast";
 import { makeActions, type AppendFn, type GameActions } from "./actions";
-import type { EventDraft } from "../eventlog/local-log";
+import type { CommittedEvent, EventDraft } from "../eventlog/local-log";
 import type { EventOutcome, GameEvent } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
 import { tutorialBattleOf } from "../rules/battle/fold";
@@ -163,6 +163,15 @@ export function useConfirmedGameState(): FoldState {
 /** Seq of the newest committed event; 0 for a new game. */
 export function useConfirmedHead(): number | null {
   return useLogSnapshot((game) => game.log.head());
+}
+
+/**
+ * The game's committed events in seq order: a read-only list that grows with
+ * each append, so its identity names the open game. It does not re-render
+ * on its own; read it beside `useGameState`.
+ */
+export function useGameEvents(): readonly CommittedEvent[] {
+  return useLocalGameContext().game.log.events();
 }
 
 /** The local player's id: the default actor of every intent. */

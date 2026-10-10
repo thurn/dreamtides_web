@@ -8,20 +8,29 @@
 // The adapter's engine log records are kept for the event being folded and
 // handed to the host once (`takeEngineLogRecords`), which logs them only when
 // that event applied, so a replay on reload never logs a battle twice.
+//
+// `replayEngineBattle` folds a battle's intents again from the event log, to
+// recover what each applied intent published (the battle log's source); it
+// counts only when it reproduces the fold's slice.
 
-import type { Engine, EngineLogRecord } from "../../engine";
+import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
 import type { BattleInit as EngineBattleInit } from "../../engine";
+import type { DebugOp } from "../../engine/debug/debug-actions";
+import { engineDebugActions } from "../../engine/development";
 import {
   createFoldAdapter,
   type BattleIntent,
+  type BattleSlice,
   type FoldAdapter,
   type PendingPrompt,
 } from "../../engine/fold/slice";
 import type { Answer } from "../../engine/prompts/types";
 import type { Action } from "../../engine/rules/actions";
 import type { AbilitySource, InstanceId, Side, Slot } from "../../engine/state/ids";
-import type { BattleResult as EngineBattleResult } from "../../engine/state/types";
-import type { EventContext } from "../../eventlog/types";
+import type { BattleResult as EngineBattleResult, BattleState } from "../../engine/state/types";
+import { hashState } from "../../eventlog/hash";
+import type { CommittedEvent } from "../../eventlog/local-log";
+import type { EventContext, StateHash } from "../../eventlog/types";
 import { parsePromptId, type PromptId } from "../../types/identifiers";
 import type { FoldState } from "../fold-state";
 import { journeyBattleOf, type BattleFoldState, type EngineBattleFold, type JourneyBattleFoldState } from "./fold";
@@ -116,6 +125,39 @@ export function pendingEnginePrompt(
   return adapterFor(engine).pending(fold.slice);
 }
 
+function isEngineIntentEventType(type: string): type is EngineIntentEventType {
+  return type === "BATTLE_ACTION" || type === "BATTLE_ANSWER" || type === "BATTLE_CANCEL";
+}
+
+/** One engine intent folded over a slice: the next slice, or why it bounced or threw. */
+type IntentFold =
+  | { readonly kind: "applied"; readonly slice: BattleSlice; readonly published: readonly EngineEvent[] }
+  | { readonly kind: "bounced" }
+  | { readonly kind: "threw"; readonly slice: BattleSlice; readonly error: unknown };
+
+/**
+ * Folds the engine intent an event of `type` carries over `slice`. A throw
+ * from the engine outside the adapter's own error boundary drops the
+ * in-flight step and keeps the committed state; with nothing in flight the
+ * intent bounces.
+ */
+function foldIntent(
+  adapter: FoldAdapter,
+  slice: BattleSlice,
+  type: EngineIntentEventType,
+  payload: Record<string, unknown>,
+): IntentFold {
+  const intent = engineIntentFromPayload(type, payload);
+  if (intent === null) return { kind: "bounced" };
+  try {
+    const outcome = adapter.reduce(slice, intent);
+    return outcome.kind === "bounced" ? outcome : { kind: "applied", slice: outcome.slice, published: outcome.published };
+  } catch (error) {
+    if (slice.inFlight === null) return { kind: "bounced" };
+    return { kind: "threw", slice: { ...slice, inFlight: null, publishedEvents: 0 }, error };
+  }
+}
+
 /**
  * Folds one engine intent over the battle's engine slice. `null` bounces:
  * no journey engine battle, a malformed payload, or an intent the adapter
@@ -141,26 +183,259 @@ export function reduceEngineIntent(
   const battle = journeyBattleOf(state.battle);
   if (battle === null || engine === null) return null;
   const fold = battle.engine;
-  const intent = engineIntentFromPayload(type, payload);
-  if (intent === null) return null;
-  let slice = fold.slice;
-  try {
-    const outcome = collectLog(ctx.seq, () => adapterFor(engine).reduce(fold.slice, intent));
-    if (outcome.kind === "bounced") return null;
-    slice = outcome.slice;
-  } catch (error) {
-    if (fold.slice.inFlight === null) return null;
+  const folded = collectLog(ctx.seq, () => foldIntent(adapterFor(engine), fold.slice, type, payload));
+  if (folded.kind === "bounced") return null;
+  if (folded.kind === "threw" && fold.slice.inFlight !== null) {
     keepLog(ctx.seq, [
       {
         event: "engine.error",
         version: fold.slice.committed.version,
         step: fold.slice.inFlight.step,
-        message: error instanceof Error ? error.message : String(error),
+        message: folded.error instanceof Error ? folded.error.message : String(folded.error),
       },
     ]);
-    slice = { ...fold.slice, inFlight: null, publishedEvents: 0 };
   }
-  return { ...state, battle: { ...battle, engine: { ...fold, slice } } };
+  return { ...state, battle: { ...battle, engine: { ...fold, slice: folded.slice } } };
+}
+
+/**
+ * The engine debug action (D4) a `BATTLE_DEBUG` payload carries, applied to
+ * `slice` in a development build; `null` when it is malformed or rejected,
+ * and always in a production build.
+ */
+export function applyEngineDebug(
+  engine: Engine,
+  slice: BattleSlice,
+  payload: Record<string, unknown>,
+): { readonly slice: BattleSlice; readonly op: DebugOp } | null {
+  const debug = engineDebugActions();
+  if (debug === null) return null;
+  const op = debug.debugOpFromUnknown(payload.op);
+  if (op === null) return null;
+  const outcome = debug.applyDebugOp(engine, slice, op);
+  return outcome.kind === "rejected" ? null : { slice: outcome.slice, op };
+}
+
+// ---------------------------------------------------------------------------
+// Replay from the event log
+// ---------------------------------------------------------------------------
+
+/** One applied engine intent of a replay: its seq, the events it published, the state they arrive with, and the state they started from. */
+export interface EngineIntentBatch {
+  readonly seq: number;
+  readonly events: readonly EngineEvent[];
+  readonly state: BattleState;
+  readonly before: BattleState;
+}
+
+/**
+ * A journey battle's intents folded again from the event log, and what
+ * `derive` made of each applied intent's batch. A debug undo drops the items
+ * of the history entries it undoes, so `items` always describe the path to
+ * `slice`.
+ */
+export interface EngineBattleReplay<T> {
+  /** The event list replayed; a replay continues only over the same list. */
+  readonly events: readonly CommittedEvent[];
+  /** Index into `events` of the event the battle started from: its `BEGIN_BATTLE`, or the `LOAD_STATE` that loaded it. */
+  readonly start: number;
+  /** Index into `events` of the next event to fold. */
+  readonly next: number;
+  readonly slice: BattleSlice;
+  readonly items: readonly T[];
+  /** `items.length` at the slice history's base and after each of its entries; `null` without history. */
+  readonly marks: readonly number[] | null;
+  /** Whether this replay, or the one it continues, once reproduced the fold's slice. */
+  readonly reproduced: boolean;
+}
+
+/**
+ * Where a replay stands after a call: `done` when it has folded every event
+ * and reproduces the fold's slice, `partial` when its budget ran out first,
+ * and `failed` when no start reproduces the slice. `folded` counts the
+ * engine intents and debug actions the call folded.
+ */
+export type EngineBattleReplayProgress<T> =
+  | { readonly kind: "done" | "partial"; readonly replay: EngineBattleReplay<T>; readonly folded: number }
+  | { readonly kind: "failed"; readonly folded: number };
+
+const replayAdapters = new WeakMap<Engine, FoldAdapter>();
+
+/** A log-free adapter: a replay folds intents that were logged when they applied. */
+function replayAdapterFor(engine: Engine): FoldAdapter {
+  let adapter = replayAdapters.get(engine);
+  if (adapter === undefined) {
+    adapter = createFoldAdapter(engine);
+    replayAdapters.set(engine, adapter);
+  }
+  return adapter;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * The slice `event` would start `battle`'s engine battle from: a
+ * `BEGIN_BATTLE` at its site starts it from its init, and a `LOAD_STATE`
+ * loads the slice it carries for a battle at its site. Whether the event
+ * applied is not known here; the replay's final check decides.
+ */
+function startSlice(engine: Engine, battle: JourneyBattleFoldState, event: CommittedEvent["event"]): BattleSlice | null {
+  const { payload } = event;
+  if (event.type === "BEGIN_BATTLE") {
+    if (payload.siteId !== battle.init.siteId) return null;
+    const outcome = replayAdapterFor(engine).start(battle.engine.init);
+    return outcome.kind === "applied" && outcome.error === null ? outcome.slice : null;
+  }
+  if (event.type === "LOAD_STATE") {
+    const loaded = payload.battle;
+    if (!isRecord(loaded) || !isRecord(loaded.init) || loaded.init.siteId !== battle.init.siteId) return null;
+    const fold = loaded.engine;
+    return isRecord(fold) && isRecord(fold.slice) ? (fold.slice as unknown as BattleSlice) : null;
+  }
+  return null;
+}
+
+/** `marks` aligned with `slice`'s history; `before` and `after` are `items.length` before and after the change. */
+function alignMarks(marks: readonly number[] | null, slice: BattleSlice, before: number, after: number): number[] | null {
+  const entries = slice.history?.entries.length;
+  if (entries === undefined) return null;
+  const aligned = marks === null ? [before] : [...marks];
+  while (aligned.length < entries + 1) aligned.push(after);
+  return aligned;
+}
+
+/** A replay of `battle` from the newest start before index `before` of `events`, with nothing folded after it. */
+function startBefore<T>(
+  engine: Engine,
+  battle: JourneyBattleFoldState,
+  events: readonly CommittedEvent[],
+  before: number,
+): EngineBattleReplay<T> | null {
+  for (let index = before - 1; index >= 0; index--) {
+    const event = events[index]?.event;
+    if (event === undefined) continue;
+    let slice: BattleSlice | null;
+    try {
+      slice = startSlice(engine, battle, event);
+    } catch {
+      slice = null;
+    }
+    if (slice !== null) {
+      return {
+        events,
+        start: index,
+        next: index + 1,
+        slice,
+        items: [],
+        marks: alignMarks(null, slice, 0, 0),
+        reproduced: false,
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * Folds `replay`'s events from `replay.next`, until the end of its list or
+ * until it has folded `budget` engine intents and debug actions. `null` when
+ * the engine throws outside every boundary the reducer contains.
+ */
+function foldRest<T>(
+  engine: Engine,
+  replay: EngineBattleReplay<T>,
+  derive: (batch: EngineIntentBatch) => readonly T[],
+  budget: number,
+): { readonly replay: EngineBattleReplay<T>; readonly folded: number } | null {
+  const adapter = replayAdapterFor(engine);
+  const { events } = replay;
+  let { slice, marks } = replay;
+  let items = [...replay.items];
+  let folded = 0;
+  let index = replay.next;
+  try {
+    for (; index < events.length && folded < budget; index++) {
+      const committed = events[index];
+      if (committed === undefined) continue;
+      const { type, payload } = committed.event;
+      if (isEngineIntentEventType(type)) {
+        folded += 1;
+        const result = foldIntent(adapter, slice, type, payload);
+        if (result.kind === "bounced") continue;
+        const count = items.length;
+        if (result.kind === "applied") {
+          const before = adapter.pending(slice)?.display ?? slice.committed;
+          const state = adapter.pending(result.slice)?.display ?? result.slice.committed;
+          items.push(...derive({ seq: committed.seq, events: result.published, state, before }));
+        }
+        slice = result.slice;
+        marks = alignMarks(marks, slice, count, items.length);
+      } else if (type === "BATTLE_DEBUG") {
+        folded += 1;
+        const applied = applyEngineDebug(engine, slice, payload);
+        if (applied === null) continue;
+        slice = applied.slice;
+        if (applied.op.kind === "undo" && marks !== null) {
+          const keptMarks = marks.slice(0, applied.op.keep + 1);
+          items = items.slice(0, keptMarks[keptMarks.length - 1] ?? 0);
+          marks = keptMarks;
+        }
+        marks = alignMarks(marks, slice, items.length, items.length);
+      }
+    }
+  } catch {
+    return null;
+  }
+  return { replay: { ...replay, next: index, slice, items, marks }, folded };
+}
+
+/**
+ * Replays `battle`'s engine intents from `events`, the game's committed
+ * events, calling `derive` with each applied intent's batch, until it is
+ * done or has folded `budget` intents. It continues `previous` over the same
+ * list when it can. Otherwise, or when a continued replay that once
+ * reproduced the fold diverges from it, it starts from the newest event that
+ * can start the battle, then from older ones, until one reproduces the
+ * fold's slice: the fold is the truth, and a replay that disagrees with it
+ * describes nothing.
+ *
+ * It folds each intent as the reducer does. The root CAS policy bounces
+ * nothing here that the adapter does not, except an intent based before a
+ * partner's event, which the final check catches.
+ */
+export function replayEngineBattle<T>(
+  engine: Engine,
+  battle: JourneyBattleFoldState,
+  events: readonly CommittedEvent[],
+  derive: (batch: EngineIntentBatch) => readonly T[],
+  previous: EngineBattleReplay<T> | null = null,
+  budget = Number.POSITIVE_INFINITY,
+): EngineBattleReplayProgress<T> {
+  let targetHash: StateHash | null = null;
+  const reproduces = (replay: EngineBattleReplay<T>): boolean => {
+    targetHash ??= hashState(battle.engine.slice);
+    return hashState(replay.slice) === targetHash;
+  };
+  let replay =
+    previous !== null && previous.events === events && previous.next <= events.length
+      ? previous
+      : startBefore<T>(engine, battle, events, events.length);
+  // A replay that once reproduced the fold and then diverges searches every
+  // start again (the battle changed); any other failed start tries older ones.
+  let restart = replay?.reproduced === true;
+  let folded = 0;
+  while (replay !== null) {
+    const result = foldRest(engine, replay, derive, budget - folded);
+    if (result !== null) {
+      folded += result.folded;
+      if (result.replay.next < events.length) return { kind: "partial", replay: result.replay, folded };
+      if (reproduces(result.replay)) return { kind: "done", replay: { ...result.replay, reproduced: true }, folded };
+    }
+    replay = startBefore<T>(engine, battle, events, restart ? events.length : replay.start);
+    restart = false;
+  }
+  return { kind: "failed", folded };
 }
 
 /** The engine battle's result once its battle is over, else `null`. */
@@ -185,10 +460,6 @@ function engineIntentFromPayload(type: EngineIntentEventType, payload: Record<st
   if (type === "BATTLE_CANCEL") return { kind: "cancel", side, promptId };
   const value = answerFromUnknown(payload.value);
   return value === null ? null : { kind: "answer", side, promptId, value };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function sideFromUnknown(value: unknown): Side | null {
