@@ -478,7 +478,7 @@ export const TUTORIAL = {
       horizontalOffset: 0,
       verticalOffset: 0,
       bubbleWidth: 500,
-      text: "To [yellow]discover[/yellow] a card, reveal 3 matching cards from your deck and pick one to draw.",
+      text: "To [yellow]discover[/yellow] a card, privately look at 3 random matching cards from your deck. Pick one for your hand, then shuffle.",
       delay: {
         "card-seen": 1,
       },

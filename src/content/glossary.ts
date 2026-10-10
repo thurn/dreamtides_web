@@ -211,7 +211,7 @@ export const GLOSSARY = [
     category: "Keywords",
     term: "Discover",
     definition:
-      "Reveal three matching cards from your deck and choose one to draw.",
+      "Privately look at three random matching cards from your deck, put one into your hand, then shuffle your deck.",
     priority: 95,
     matchesTermInRulesText: true,
     variants: [],
