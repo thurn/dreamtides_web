@@ -68,12 +68,28 @@ import {
 import {
   DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
   MOBILE_BATTLE_INSPECTOR_RAIL_TRACK,
-  MOBILE_BATTLE_COMPACT_RANK_THRESHOLD,
-  MOBILE_BATTLE_MAX_BACK_RANK_SLOTS,
-  MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
-  MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
-  MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
+import {
+  DESKTOP_PLAY_AREA_HEIGHT_PERCENT,
+  battlefieldCardSize,
+  battlefieldDensityBackSlotCount,
+  battlefieldTrackWidth,
+  desktopBattlefieldLayoutBackSlotCount,
+  desktopControlCardSize,
+  findBattleCardView,
+  mobileBattlefieldDensity,
+  mobileBattlefieldWindow,
+  visibleMobileRankSlots,
+  visibleRankSlots,
+} from "./battle-board/layout";
+import {
+  closestOpenBackRankSlot,
+  dropMobileCardAtPoint,
+  findSlotElement,
+  sameSlotTarget,
+  slotTargetFromElement,
+  slotTargetIsEligible,
+} from "./battle-board/drop-resolution";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
   BattleResultSurface,
@@ -92,7 +108,6 @@ import type { PresentationId, PromptId } from "../../types/identifiers";
 import type { BattleCardId } from "../../types/identifiers";
 import type { BattleSlotViewId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import { parseBattleSlotViewId } from "../../types/identifiers";
 import { formatNumber } from "../../runtime/format-number";
 
 export { BATTLEFIELD_CARD_EXHAUSTED_FILTER } from "../components/battle/BattlefieldCard";
@@ -532,9 +547,6 @@ export interface MobileBattleZoneTarget {
   readonly zone: MobileBattleDropZone;
 }
 
-/** Named non-instance sentinel used while dragging a catalog card from the pool viewer. */
-export type MobileBattlePendingCardId = BattleCardId | "pool-viewer-card";
-
 export interface MobileBattleBrowseZoneTarget {
   readonly owner: MobileBattleOwner;
   readonly zone: MobileBattleBrowseZone;
@@ -546,7 +558,7 @@ export interface MobileBattleInteractions {
   /** The player may answer the pending prompt; defaults to `canInteract`. */
   readonly canPrompt?: boolean;
   readonly nearSide?: MobileBattleOwner;
-  readonly pendingCardId: MobileBattlePendingCardId | null;
+  readonly pendingCardId: BattleCardId | null;
   readonly pendingCardSource?: MobileBattleCardSource | null;
   readonly pendingCardOwner?: MobileBattleOwner | null;
   /** Battlefield ranks the current gesture may use; every rendered cell in an allowed rank participates. */
@@ -655,13 +667,7 @@ function pickerCandidate(
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
-const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
-const BATTLEFIELD_COMPACT_SIDE_INSET_PERCENT = 3;
-const BATTLEFIELD_FULL_SIDE_INSET_PERCENT = 1;
 const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
-const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
-const BATTLEFIELD_FULL_WIDTH_PERCENT =
-  100 - BATTLEFIELD_FULL_SIDE_INSET_PERCENT * 2;
 const FIGMENT_MERGE_ANIMATION_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const FIGMENT_MERGE_NOTICE_MS = motionTimeSeconds("--dur-slow") * 4 * 1_000;
 const BATTLE_OVERLAY_CSS = `
@@ -724,7 +730,6 @@ const PLAYER_HAND_TOP = `calc(${token("--space-6xl")} - ${token("--space-xl")} +
 
 const MOBILE_GRID_ROWS =
   "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)";
-const DESKTOP_PLAY_AREA_HEIGHT_PERCENT = 23;
 const DESKTOP_GRID_ROWS = `minmax(0, 8fr) minmax(0, 11fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, 11fr) minmax(0, 24fr)`;
 const BATTLEFIELD_CENTER_OFFSET = token("--space-m");
 
@@ -1546,354 +1551,6 @@ function BattleCardSurface({
         interaction={semanticInteraction}
       />
     </div>
-  );
-}
-
-function desktopBattlefieldLayoutBackSlotCount(view: MobileBattleView): number {
-  const sides = [view.enemy, view.player] as const;
-  return Math.max(
-    DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
-    ...sides.map((side) => side.backRank.length),
-    ...sides.map((side) => side.frontRank.length + 1),
-  );
-}
-
-function mobileBattlefieldWindow(view: MobileBattleView): {
-  readonly backSlotCount: number;
-  readonly frontSlotCount: number;
-  readonly startIndex: number;
-} {
-  const sides = [view.enemy, view.player] as const;
-  const backOccupancies = sides.map((side) =>
-    rankOccupancy(side.backRank, "back"),
-  );
-  const frontOccupancies = sides.map((side) =>
-    rankOccupancy(side.frontRank, "front"),
-  );
-  // A back-rank character at B<i> may move forward to F<i-1> or F<i>, so
-  // the front window covers both front lanes beside every occupied back slot.
-  const backFrontReach = backOccupancies
-    .filter((occupancy) => occupancy.highestOccupiedIndex >= 0)
-    .map((occupancy) => ({
-      count: occupancy.count,
-      lowestOccupiedIndex: Math.max(0, occupancy.lowestOccupiedIndex - 1),
-      highestOccupiedIndex: Math.min(
-        MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS - 1,
-        occupancy.highestOccupiedIndex,
-      ),
-    }));
-  const frontSlotCount = Math.min(
-    MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
-    Math.max(
-      MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
-      ...frontOccupancies.map(
-        (occupancy) => occupancy.highestOccupiedIndex + 1,
-      ),
-      ...backFrontReach.map((reach) => reach.highestOccupiedIndex + 1),
-      ...frontOccupancies.map((occupancy) => occupancy.count + 1),
-      ...backOccupancies.map((occupancy) => occupancy.count),
-    ),
-  );
-  const backSlotCount = Math.max(
-    MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
-    Math.min(frontSlotCount + 1, MOBILE_BATTLE_MAX_BACK_RANK_SLOTS),
-  );
-  const maximumStart = MOBILE_BATTLE_MAX_BACK_RANK_SLOTS - backSlotCount;
-  const centeredStart = Math.floor(maximumStart / 2);
-  const occupiedRanges = [
-    ...backOccupancies.map((occupancy) => ({
-      ...occupancy,
-      slotCount: backSlotCount,
-    })),
-    ...[...frontOccupancies, ...backFrontReach].map((occupancy) => ({
-      ...occupancy,
-      slotCount: frontSlotCount,
-    })),
-  ].filter((occupancy) => occupancy.highestOccupiedIndex >= 0);
-  const minimumStart = Math.max(
-    0,
-    ...occupiedRanges.map(
-      (occupancy) => occupancy.highestOccupiedIndex - occupancy.slotCount + 1,
-    ),
-  );
-  const maximumOccupiedStart = Math.min(
-    maximumStart,
-    ...occupiedRanges.map((occupancy) => occupancy.lowestOccupiedIndex),
-  );
-  const startIndex =
-    occupiedRanges.length > 0 && minimumStart <= maximumOccupiedStart
-      ? Math.min(Math.max(centeredStart, minimumStart), maximumOccupiedStart)
-      : centeredStart;
-  return {
-    frontSlotCount,
-    backSlotCount,
-    startIndex,
-  };
-}
-
-function rankOccupancy(
-  slots: readonly MobileBattleSlotView[],
-  rank: MobileBattleRank,
-): {
-  readonly count: number;
-  readonly lowestOccupiedIndex: number;
-  readonly highestOccupiedIndex: number;
-} {
-  let count = 0;
-  let lowestOccupiedIndex = Number.POSITIVE_INFINITY;
-  let highestOccupiedIndex = -1;
-  slots.forEach((slot, index) => {
-    if (slot.card === null) return;
-    count += 1;
-    const occupiedIndex = canonicalRankIndex(slot.id, rank) ?? index;
-    lowestOccupiedIndex = Math.min(lowestOccupiedIndex, occupiedIndex);
-    highestOccupiedIndex = Math.max(highestOccupiedIndex, occupiedIndex);
-  });
-  return {
-    count,
-    lowestOccupiedIndex:
-      lowestOccupiedIndex === Number.POSITIVE_INFINITY
-        ? -1
-        : lowestOccupiedIndex,
-    highestOccupiedIndex,
-  };
-}
-
-function battlefieldDensityBackSlotCount(view: MobileBattleView): number {
-  const sides = [view.enemy, view.player] as const;
-  const occupiedCount = (slots: readonly MobileBattleSlotView[]) =>
-    slots.filter((slot) => slot.card !== null).length;
-  return Math.max(
-    ...sides.map((side) => occupiedCount(side.backRank)),
-    ...sides.map((side) => occupiedCount(side.frontRank) + 1),
-  );
-}
-
-function mobileBattlefieldDensity(layoutBackSlotCount: number): {
-  readonly gap: string;
-  readonly sideInsetPercent: number;
-} {
-  if (layoutBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
-    return {
-      gap: "0px",
-      sideInsetPercent: BATTLEFIELD_FULL_SIDE_INSET_PERCENT,
-    };
-  }
-  if (layoutBackSlotCount > MOBILE_BATTLE_COMPACT_RANK_THRESHOLD) {
-    return {
-      gap: token("--space-xxs"),
-      sideInsetPercent: BATTLEFIELD_COMPACT_SIDE_INSET_PERCENT,
-    };
-  }
-  return {
-    gap: token("--space-xs"),
-    sideInsetPercent: BATTLEFIELD_SIDE_INSET_PERCENT,
-  };
-}
-
-function battlefieldCardSize(
-  layoutBackSlotCount: number,
-  isDesktop: boolean,
-  densityBackSlotCount: number,
-  centerOffset: string,
-): string {
-  const slotCount = Math.max(layoutBackSlotCount, 1);
-  if (!isDesktop && densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
-    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-xxs")}) / ${String(MOBILE_BATTLE_MAX_BACK_RANK_SLOTS)}), calc((100cqh - ${centerOffset} - ${centerOffset}) / 2))`;
-  }
-  const horizontalGapCount = Math.max(slotCount - 1, 0);
-  const density = isDesktop
-    ? {
-        gap: token("--space-xs"),
-        sideInsetPercent: BATTLEFIELD_SIDE_INSET_PERCENT,
-      }
-    : mobileBattlefieldDensity(densityBackSlotCount);
-  const battlefieldWidthPercent = 100 - density.sideInsetPercent * 2;
-  return `min(22cqw, calc((${String(battlefieldWidthPercent)}cqw - ${String(horizontalGapCount)} * ${density.gap}) / ${String(slotCount)}), calc((100cqh - ${density.gap} - ${centerOffset} - ${centerOffset}) / 2))`;
-}
-
-function desktopControlCardSize(layoutBackSlotCount: number): string {
-  const slotCount = Math.max(layoutBackSlotCount, 1);
-  const horizontalGapCount = Math.max(slotCount - 1, 0);
-  const pairedPlayAreaHeight = DESKTOP_PLAY_AREA_HEIGHT_PERCENT * 2;
-  return `min(22cqw, calc((${String(BATTLEFIELD_WIDTH_PERCENT)}cqw - ${String(horizontalGapCount)} * ${token("--space-xs")}) / ${String(slotCount)}), calc((${String(pairedPlayAreaHeight)}dvh - 3 * ${token("--space-xs")}) / 4))`;
-}
-
-function battlefieldTrackWidth(
-  slotCount: number,
-  cardSize: string,
-  gap: string,
-): string {
-  if (gap === "0px") {
-    const slotWidthPercent =
-      BATTLEFIELD_FULL_WIDTH_PERCENT / MOBILE_BATTLE_MAX_BACK_RANK_SLOTS;
-    return `${String(slotCount * slotWidthPercent)}cqw`;
-  }
-  const gapCount = Math.max(slotCount - 1, 0);
-  return `calc(${String(slotCount)} * ${cardSize} + ${String(gapCount)} * ${gap})`;
-}
-
-function visibleRankSlots(
-  slots: readonly MobileBattleSlotView[],
-  rank: MobileBattleRank,
-  slotCount: number,
-): readonly MobileBattleSlotView[] {
-  if (slots.length >= slotCount) return slots.slice(0, slotCount);
-  const prefix = rank === "back" ? "B" : "F";
-  return [
-    ...slots,
-    ...Array.from({ length: slotCount - slots.length }, (_unused, offset) => ({
-      id: parseBattleSlotViewId(`${prefix}${String(slots.length + offset)}`),
-      card: null,
-    })),
-  ];
-}
-
-function canonicalRankIndex(
-  slotId: BattleSlotViewId,
-  rank: MobileBattleRank,
-): number | null {
-  const prefix = rank === "back" ? "B" : "F";
-  const match = new RegExp(`^${prefix}(\\d+)$`).exec(slotId);
-  if (match === null) return null;
-  const index = Number.parseInt(match[1] ?? "", 10);
-  return Number.isSafeInteger(index) && index >= 0 ? index : null;
-}
-
-/**
- * Selects a centered window from the canonical battle formation on mobile.
- * Occupied edge cells pull the window just far enough to remain visible, while
- * compact tutorial-only formations keep their authored local slot identities.
- */
-function visibleMobileRankSlots(
-  slots: readonly MobileBattleSlotView[],
-  rank: MobileBattleRank,
-  slotCount: number,
-  startIndex: number,
-): readonly MobileBattleSlotView[] {
-  const maximumSlotCount =
-    rank === "back"
-      ? MOBILE_BATTLE_MAX_BACK_RANK_SLOTS
-      : MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS;
-  const canonicalSlots = slots.map((slot) => ({
-    slot,
-    index: canonicalRankIndex(slot.id, rank),
-  }));
-  const usesCanonicalSlots = canonicalSlots.every(
-    (entry) => entry.index !== null,
-  );
-  if (!usesCanonicalSlots) {
-    return visibleRankSlots(slots, rank, slotCount);
-  }
-
-  const prefix = rank === "back" ? "B" : "F";
-  const slotsByIndex = new Map(
-    canonicalSlots.flatMap(({ slot, index }) =>
-      index === null || index >= maximumSlotCount ? [] : [[index, slot]],
-    ),
-  );
-  const normalizedSlots = Array.from(
-    { length: maximumSlotCount },
-    (_unused, index) =>
-      slotsByIndex.get(index) ?? {
-        id: parseBattleSlotViewId(`${prefix}${String(index)}`),
-        card: null,
-      },
-  );
-  const visibleCount = Math.min(Math.max(slotCount, 1), normalizedSlots.length);
-  const maximumStart = normalizedSlots.length - visibleCount;
-  const start = Math.min(Math.max(startIndex, 0), maximumStart);
-  return normalizedSlots.slice(start, start + visibleCount);
-}
-
-function sameSlotTarget(
-  left: MobileBattleSlotTarget,
-  right: MobileBattleSlotTarget,
-): boolean {
-  return (
-    left.owner === right.owner &&
-    left.rank === right.rank &&
-    left.slotId === right.slotId
-  );
-}
-
-function slotTargetFromElement(
-  element: Element | null | undefined,
-): MobileBattleSlotTarget | null {
-  const slot = element?.closest<HTMLElement>(
-    '[data-battle-mobile-drop-kind="slot"]',
-  );
-  const owner = slot?.dataset.battleMobileDropOwner;
-  const rank = slot?.dataset.battleMobileDropRank;
-  const slotId = slot?.dataset.battleMobileDropSlotId;
-  if (
-    (owner !== "player" && owner !== "enemy") ||
-    (rank !== "back" && rank !== "front") ||
-    slotId === undefined
-  ) {
-    return null;
-  }
-  return { owner, rank, slotId: parseBattleSlotViewId(slotId) };
-}
-
-function findBattleCardView(
-  view: MobileBattleView,
-  battleCardId: BattleCardId,
-): MobileBattleCardView | null {
-  const cards = [
-    ...view.player.backRank.flatMap((slot) =>
-      slot.card === null ? [] : [slot.card],
-    ),
-    ...view.player.frontRank.flatMap((slot) =>
-      slot.card === null ? [] : [slot.card],
-    ),
-    ...view.enemy.backRank.flatMap((slot) =>
-      slot.card === null ? [] : [slot.card],
-    ),
-    ...view.enemy.frontRank.flatMap((slot) =>
-      slot.card === null ? [] : [slot.card],
-    ),
-    ...view.playerHand,
-    ...view.enemyHand,
-  ];
-  return cards.find((card) => card.id === battleCardId) ?? null;
-}
-
-function findSlotElement(target: MobileBattleSlotTarget): HTMLElement | null {
-  return (
-    [
-      ...document.querySelectorAll<HTMLElement>(
-        '[data-battle-mobile-drop-kind="slot"]',
-      ),
-    ].find((element) => {
-      const elementTarget = slotTargetFromElement(element);
-      return elementTarget !== null && sameSlotTarget(elementTarget, target);
-    }) ?? null
-  );
-}
-
-function slotTargetIsEligible(
-  interactions: MobileBattleInteractions,
-  target: MobileBattleSlotTarget,
-): boolean {
-  if (
-    interactions.sourceSlotTarget !== null &&
-    interactions.sourceSlotTarget !== undefined &&
-    sameSlotTarget(interactions.sourceSlotTarget, target)
-  ) {
-    return false;
-  }
-  if (interactions.isSlotDropEligible !== undefined) {
-    return interactions.isSlotDropEligible(target);
-  }
-  if (interactions.eligibleSlotRanks !== undefined) {
-    return interactions.eligibleSlotRanks.includes(target.rank);
-  }
-  return (
-    interactions.eligibleSlotTargets === undefined ||
-    interactions.eligibleSlotTargets.some((eligibleTarget) =>
-      sameSlotTarget(eligibleTarget, target),
-    )
   );
 }
 
@@ -2806,277 +2463,6 @@ function SharedHandCardReveal({
       />
     </motion.div>
   );
-}
-
-function dropMobileCardAtPoint(
-  interactions: MobileBattleInteractions,
-  clientX: number,
-  clientY: number,
-  placementClientX: number,
-  placementClientY: number,
-): void {
-  const hitTarget = document.elementFromPoint(clientX, clientY);
-  if (interactions.pendingCardSource === "near-hand") {
-    const battleScreen = hitTarget?.closest<HTMLElement>(
-      "[data-battle-mobile]",
-    );
-    interactions.onHandCardDrop?.(
-      battleScreen === undefined || battleScreen === null
-        ? undefined
-        : closestOpenBackRankSlot(
-            battleScreen,
-            interactions.nearSide ?? interactions.pendingCardOwner ?? "player",
-            clientX,
-            clientY,
-          ),
-    );
-    return;
-  }
-  if (
-    interactions.eligibleSlotRanks !== undefined ||
-    interactions.eligibleSlotTargets !== undefined ||
-    interactions.isSlotDropEligible !== undefined
-  ) {
-    if (
-      !Number.isFinite(clientX) ||
-      !Number.isFinite(clientY) ||
-      !Number.isFinite(placementClientX) ||
-      !Number.isFinite(placementClientY)
-    ) {
-      interactions.onBattlefieldDropRejected?.({
-        reason: "invalid-release-point",
-        clientX,
-        clientY,
-      });
-      return;
-    }
-    const battleScreen =
-      hitTarget?.closest<HTMLElement>("[data-battle-mobile]") ??
-      document.querySelector<HTMLElement>("[data-battle-mobile]");
-    if (battleScreen === null) {
-      interactions.onBattlefieldDropRejected?.({
-        reason: "battlefield-unavailable",
-        clientX,
-        clientY,
-      });
-      return;
-    }
-    const placementHitTarget = document.elementFromPoint(
-      placementClientX,
-      placementClientY,
-    );
-    const resolution = resolveBattlefieldSlot(
-      battleScreen,
-      interactions.pendingCardOwner ?? interactions.nearSide ?? "player",
-      interactions,
-      clientX,
-      clientY,
-      placementHitTarget,
-      placementClientX,
-      placementClientY,
-    );
-    interactions.onBattlefieldDropResolved?.(resolution);
-    if (resolution.chosenTarget === null) {
-      interactions.onBattlefieldDropRejected?.({
-        reason: "no-eligible-slot",
-        clientX,
-        clientY,
-      });
-      return;
-    }
-    const chosenCandidate = resolution.candidates.find((candidate) =>
-      sameSlotTarget(
-        candidate.target,
-        resolution.chosenTarget as MobileBattleSlotTarget,
-      ),
-    );
-    if (chosenCandidate?.eligible !== true) {
-      interactions.onBattlefieldDropRejected?.({
-        reason:
-          interactions.sourceSlotTarget !== null &&
-          interactions.sourceSlotTarget !== undefined &&
-          sameSlotTarget(interactions.sourceSlotTarget, resolution.chosenTarget)
-            ? "source-slot"
-            : "ineligible-slot",
-        clientX,
-        clientY,
-      });
-      return;
-    }
-    interactions.onSlotDrop(resolution.chosenTarget);
-    return;
-  }
-  const target = hitTarget?.closest<HTMLElement>(
-    "[data-battle-mobile-drop-kind]",
-  );
-  if (target === undefined || target === null) return;
-  const owner = target.dataset.battleMobileDropOwner;
-  if (owner !== "enemy" && owner !== "player") return;
-  if (
-    interactions.pendingCardOwner !== null &&
-    interactions.pendingCardOwner !== undefined &&
-    interactions.pendingCardOwner !== owner
-  ) {
-    return;
-  }
-  if (target.dataset.battleMobileDropKind === "slot") {
-    const rank = target.dataset.battleMobileDropRank;
-    const slotId = target.dataset.battleMobileDropSlotId;
-    if ((rank !== "back" && rank !== "front") || slotId === undefined) return;
-    interactions.onSlotDrop({
-      owner,
-      rank,
-      slotId: parseBattleSlotViewId(slotId),
-    });
-    return;
-  }
-  const zone = target.dataset.battleMobileDropZone;
-  if (zone !== "deck" && zone !== "hand" && zone !== "void") return;
-  interactions.onZoneDrop({ owner, zone });
-}
-
-function resolveBattlefieldSlot(
-  battleScreen: HTMLElement,
-  owner: MobileBattleOwner,
-  interactions: MobileBattleInteractions,
-  clientX: number,
-  clientY: number,
-  placementHitTarget: Element | null,
-  placementClientX: number,
-  placementClientY: number,
-): MobileBattleDropResolution {
-  const candidates: MobileBattleDropCandidate[] = [];
-  const slots = battleScreen.querySelectorAll<HTMLElement>(
-    `[data-battle-mobile-drop-kind="slot"][data-battle-mobile-drop-owner="${owner}"]`,
-  );
-  slots.forEach((slot) => {
-    const rank = slot.dataset.battleMobileDropRank;
-    const slotId = slot.dataset.battleMobileDropSlotId;
-    if ((rank !== "back" && rank !== "front") || slotId === undefined) {
-      return;
-    }
-    const target = {
-      owner,
-      rank,
-      slotId: parseBattleSlotViewId(slotId),
-    } as const;
-    const bounds = slot.getBoundingClientRect();
-    const centerX = bounds.left + bounds.width / 2;
-    const centerY = bounds.top + bounds.height / 2;
-    const deltaX = placementClientX - centerX;
-    const deltaY = placementClientY - centerY;
-    const distanceSquared = deltaX * deltaX + deltaY * deltaY;
-    const edgeDeltaX = Math.max(
-      bounds.left - placementClientX,
-      0,
-      placementClientX - bounds.right,
-    );
-    const edgeDeltaY = Math.max(
-      bounds.top - placementClientY,
-      0,
-      placementClientY - bounds.bottom,
-    );
-    candidates.push({
-      target,
-      eligible: slotTargetIsEligible(interactions, target),
-      rect: {
-        left: bounds.left,
-        top: bounds.top,
-        width: bounds.width,
-        height: bounds.height,
-        centerX,
-        centerY,
-      },
-      deltaX,
-      deltaY,
-      distanceSquared,
-      containsRelease:
-        clientX >= bounds.left &&
-        clientX <= bounds.right &&
-        clientY >= bounds.top &&
-        clientY <= bounds.bottom,
-      containsPlacement:
-        placementClientX >= bounds.left &&
-        placementClientX <= bounds.right &&
-        placementClientY >= bounds.top &&
-        placementClientY <= bounds.bottom,
-      edgeDistanceSquared: edgeDeltaX * edgeDeltaX + edgeDeltaY * edgeDeltaY,
-    });
-  });
-  candidates.sort(
-    (left, right) =>
-      left.distanceSquared - right.distanceSquared ||
-      `${left.target.rank}:${left.target.slotId}`.localeCompare(
-        `${right.target.rank}:${right.target.slotId}`,
-      ),
-  );
-  const hitSlot = placementHitTarget?.closest<HTMLElement>(
-    `[data-battle-mobile-drop-kind="slot"][data-battle-mobile-drop-owner="${owner}"]`,
-  );
-  const directHit =
-    hitSlot === null || hitSlot === undefined
-      ? undefined
-      : candidates.find(
-          (candidate) =>
-            candidate.target.rank === hitSlot.dataset.battleMobileDropRank &&
-            candidate.target.slotId === hitSlot.dataset.battleMobileDropSlotId,
-        );
-  const contained = candidates.find((candidate) => candidate.containsPlacement);
-  const nearest = candidates[0];
-  const withinSnapTolerance =
-    nearest !== undefined &&
-    nearest.edgeDistanceSquared <=
-      Math.min(nearest.rect.width, nearest.rect.height) ** 2 / 4;
-  const chosen =
-    directHit ?? contained ?? (withinSnapTolerance ? nearest : undefined);
-  return {
-    releasePoint: { clientX, clientY },
-    placementPoint: {
-      clientX: placementClientX,
-      clientY: placementClientY,
-    },
-    candidates,
-    chosenTarget: chosen?.target ?? null,
-    strategy:
-      directHit !== undefined || contained !== undefined
-        ? "direct-hit"
-        : chosen === undefined
-          ? "none"
-          : "nearest-center",
-  };
-}
-
-function closestOpenBackRankSlot(
-  battleScreen: HTMLElement,
-  owner: MobileBattleOwner,
-  clientX: number,
-  clientY: number,
-): MobileBattleSlotTarget | undefined {
-  if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) return undefined;
-
-  let closest:
-    { readonly slotId: BattleSlotViewId; readonly distanceSquared: number } | undefined;
-  const slots = battleScreen.querySelectorAll<HTMLElement>(
-    `[data-battle-rank="${owner}-back"] [data-battle-slot-filled="false"]`,
-  );
-  slots.forEach((slot) => {
-    const slotId = slot.dataset.battleSlotId;
-    if (slotId === undefined) return;
-    const bounds = slot.getBoundingClientRect();
-    const deltaX = clientX - (bounds.left + bounds.width / 2);
-    const deltaY = clientY - (bounds.top + bounds.height / 2);
-    const distanceSquared = deltaX * deltaX + deltaY * deltaY;
-    if (closest === undefined || distanceSquared < closest.distanceSquared) {
-      closest = {
-        slotId: parseBattleSlotViewId(slotId),
-        distanceSquared,
-      };
-    }
-  });
-
-  return closest === undefined
-    ? undefined
-    : { owner, rank: "back", slotId: closest.slotId };
 }
 
 function pickerZoneCaption(
