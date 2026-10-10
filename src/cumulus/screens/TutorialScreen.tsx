@@ -885,7 +885,7 @@ function TutorialAvatarArrival({
       onAnimationComplete={onComplete}
       style={{
         position: "absolute",
-        zIndex: 40,
+        zIndex: token("--layer-app-stage-travel"),
         top: 0,
         left: 0,
         width: trajectory.width,
@@ -1437,7 +1437,7 @@ function TutorialChallengeAnimation({
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: 40,
+        zIndex: token("--layer-app-stage-travel"),
         overflow: "hidden",
         pointerEvents: "none",
       }}

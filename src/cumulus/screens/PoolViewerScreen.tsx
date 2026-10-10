@@ -80,7 +80,7 @@ const rootStyle: CSSProperties = {
   color: token("--text-on-glass"),
   position: "fixed",
   inset: 0,
-  zIndex: 60,
+  zIndex: token("--layer-app-overlay"),
   background: token("--scrim-gallery"),
   overflowY: "auto",
 };

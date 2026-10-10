@@ -913,7 +913,7 @@ function LadderDreamsignReward({
           position: "fixed",
           top: 0,
           left: 0,
-          zIndex: 42,
+          zIndex: token("--layer-app-status-bar-travel"),
           width: trajectory.source.width,
           height: trajectory.source.height,
           transformOrigin: "top left",

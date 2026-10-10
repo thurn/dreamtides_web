@@ -103,7 +103,8 @@ export function DreamsignRevelationScreen({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: view.purge === null ? undefined : 80,
+        zIndex:
+          view.purge === null ? undefined : token("--layer-app-screen-modal"),
         overflow: "hidden",
         touchAction: "none",
       }}

@@ -307,18 +307,29 @@
   --layer-app-status-bar: 40; /* @kind other */
   /* Owned-Dreamsign strip docked beside the status bar, one step above it. */
   --layer-app-status-bar-dreamsigns: calc(var(--layer-app-status-bar) + 1); /* @kind other */
+  /* Dreamsign travelling into the docked strip, one step above it. */
+  --layer-app-status-bar-travel: calc(var(--layer-app-status-bar-dreamsigns) + 1); /* @kind other */
+  /* Scripted tutorial stage travels (an Avatar's arrival, a challenge clash)
+     above the stage's dialogue, on the status bar's layer. */
+  --layer-app-stage-travel: var(--layer-app-status-bar); /* @kind other */
   /* Radial announcement over its screen, above the status bar and below the
      app chrome. */
   --layer-app-announcement: 55; /* @kind other */
   /* App-shell overlays on the app chrome's layer: dialogs, galleries, deck
-     viewers, zone browsers, developer rails, status toasts, and purchase
-     travels. */
+     and pool viewers, zone browsers, developer rails and their hosts, status
+     toasts, purchase travels, and the battle's figment merge animation. */
   --layer-app-overlay: var(--layer-app-chrome); /* @kind other */
   /* Owned-Dreamsign window opened from the status bar, above the app chrome. */
   --layer-app-status-bar-window: 70; /* @kind other */
-  /* Battle result surface and battle prompt banner, above the app-shell
+  /* Battle result surface and battle prompt banners, above the app-shell
      overlays (a cancellable gallery prompt stays cancellable). */
   --layer-app-battle-overlay: 80; /* @kind other */
+  /* A routed screen lifted onto the battle overlay layer while it hosts its
+     own modal choice (an at-cap Dreamsign replacement or purge), so the
+     choice sits above the status bar window and the app-shell overlays. */
+  --layer-app-screen-modal: var(--layer-app-battle-overlay); /* @kind other */
+  /* Tutorial victory screen, above the battle overlays. */
+  --layer-app-tutorial-victory: calc(var(--layer-app-battle-overlay) + 10); /* @kind other */
   /* Select option menus, above every app-shell overlay. */
   --layer-app-menu: 90; /* @kind other */
   /* Card-attached merge-target announcement, above every app-shell surface

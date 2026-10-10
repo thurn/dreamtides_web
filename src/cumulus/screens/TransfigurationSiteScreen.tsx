@@ -348,7 +348,7 @@ export function TransfigurationSiteScreen({
                 top: travel.source.top,
                 width: travel.source.width,
                 height: travel.source.height,
-                zIndex: 60,
+                zIndex: token("--layer-app-overlay"),
                 pointerEvents: "none",
                 transformOrigin: "top left",
                 willChange: "transform",

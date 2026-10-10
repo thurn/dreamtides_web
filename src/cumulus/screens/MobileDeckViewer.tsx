@@ -108,7 +108,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 60,
+        zIndex: token("--layer-app-overlay"),
         display: "flex",
         flexDirection: "column",
       }}

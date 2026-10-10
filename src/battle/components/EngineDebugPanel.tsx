@@ -127,13 +127,13 @@ export default function EngineDebugPanel({
 
   if (!open) {
     return (
-      <div style={{ position: "fixed", right: token("--space-m"), top: token("--space-m"), zIndex: 60 }}>
+      <div style={{ position: "fixed", right: token("--space-m"), top: token("--space-m"), zIndex: token("--layer-app-overlay") }}>
         <IconButton glyph={GLYPHS.bug} size="sm" label={COPY.open} onPress={() => setOpen(true)} testId="engine-debug-open" />
       </div>
     );
   }
   return (
-    <div style={{ position: "fixed", right: 0, top: 0, width: RAIL_WIDTH, maxWidth: "100vw", zIndex: 60 }}>
+    <div style={{ position: "fixed", right: 0, top: 0, width: RAIL_WIDTH, maxWidth: "100vw", zIndex: token("--layer-app-overlay") }}>
       <DeveloperRail
         id="engine-debug-panel"
         side="right"

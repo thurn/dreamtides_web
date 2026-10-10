@@ -164,7 +164,10 @@ export function DreamscapeScreen({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: view.replacement === null ? undefined : 80,
+        zIndex:
+          view.replacement === null
+            ? undefined
+            : token("--layer-app-screen-modal"),
         overflow: "hidden",
         background: token("--bg-app"),
         touchAction: "none",

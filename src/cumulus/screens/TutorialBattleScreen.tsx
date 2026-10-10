@@ -378,7 +378,7 @@ export function TutorialBattleScreen({
             width: "90vw",
             maxWidth: 416,
             transform: "translateX(-50%)",
-            zIndex: 80,
+            zIndex: token("--layer-app-battle-overlay"),
           }}
         >
           <GlassPanel
@@ -490,7 +490,7 @@ function TutorialVictorySurface({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 90,
+        zIndex: token("--layer-app-tutorial-victory"),
         minHeight: "100dvh",
         boxSizing: "border-box",
         overflow: "hidden",
