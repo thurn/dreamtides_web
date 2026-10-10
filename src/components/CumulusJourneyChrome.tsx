@@ -14,6 +14,10 @@ import { useJourney } from "../state/journey-context";
 import { JourneyStatusBar } from "../cumulus/components/hud/JourneyStatusBar";
 import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
+import {
+  MENU_BUTTON_PX,
+  MENU_EDGE_INSET_MOBILE_PX,
+} from "../cumulus/primitives/chrome-geometry";
 import type { JourneyMutationSource } from "../state/journey-context";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
 import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
@@ -21,22 +25,49 @@ import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
 const NOOP = (): void => undefined;
 
 /**
+ * The top offset that drops a mobile chrome error fallback below the journey
+ * menu's hamburger trigger. The trigger sits in the top-start corner at
+ * `top: max(safe-inset-top, edgeInset)` with height MENU_BUTTON_PX on the same
+ * app-chrome layer, so a panel above its bottom edge would sit under it. The
+ * desktop trigger sits in the top-end corner, clear of the centred panel.
+ */
+const MOBILE_CHROME_FALLBACK_TOP =
+  `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
+  `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ${String(MENU_BUTTON_PX)}px))`;
+
+/**
  * The error fallback shared by every chrome boundary (card-tutorial guidance,
  * status bar, journey menu). The default panel keeps its in-flow placement at
  * the top of the chrome; the wrapper raises it onto the app-chrome layer so
  * the routed screen's positioned scene art cannot cover it or swallow its
- * clicks.
+ * clicks, and on mobile shifts it below the menu trigger so no text sits
+ * under the trigger.
  */
 function renderChromeErrorFallback({
   scope,
   reset,
 }: ErrorBoundaryFallbackProps): ReactNode {
+  return <ChromeErrorFallbackLayer scope={scope} onRetry={reset} />;
+}
+
+function ChromeErrorFallbackLayer({
+  scope,
+  onRetry,
+}: {
+  readonly scope: string;
+  readonly onRetry: () => void;
+}): ReactNode {
+  const isDesktop = useIsDesktop();
   return (
     <div
       data-journey-chrome-error-layer={scope}
-      style={{ position: "relative", zIndex: token("--layer-app-chrome") }}
+      style={{
+        position: "relative",
+        zIndex: token("--layer-app-chrome"),
+        ...(isDesktop ? {} : { top: MOBILE_CHROME_FALLBACK_TOP }),
+      }}
     >
-      <DefaultErrorBoundaryFallback scope={scope} onRetry={reset} />
+      <DefaultErrorBoundaryFallback scope={scope} onRetry={onRetry} />
     </div>
   );
 }
