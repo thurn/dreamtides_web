@@ -2,10 +2,12 @@
 // board from `engine.view(display, human)`, which is the intermediate state
 // while a step is suspended on a prompt, and the human's affordances from
 // the engine's legal actions. The prompt host's surfaces come from
-// `prompt-host-view-model.ts`.
+// `prompt-host-view-model.ts`; an ability chooser the human opens replaces
+// the surface with a choice whose options take its actions (`withChooser`).
 //
 // Pure and React-free. Instance IDs reach the screen as battle-card IDs and
-// come back through `instanceIdIn`; nothing here reads card names.
+// come back through the model's `instances` index, built once per model;
+// nothing here reads card names except to label a chooser's options.
 
 import type { BattleStatusBadgeView } from "../../cumulus/components/battle/BattleStatusBadges";
 import type { DreamwellCardModel } from "../../cumulus/components/battle/DreamwellCard";
@@ -22,23 +24,37 @@ import type {
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import type { Action, BattleView, EffectId, InstanceId, InstanceView, LoopId, Side, Slot } from "../../engine";
-import { opponent } from "../../engine";
+import { opponent, sourceKey } from "../../engine";
 import type { PresentationVisual } from "../../battle/components/presentation-items";
-import { engineStatusLabel, type EngineStatusCopy } from "../../runtime/battle-prompt-messages";
+import {
+  ENGINE_ABILITY_CHOOSER_TITLE,
+  engineAbilityOptionLabel,
+  engineStatusLabel,
+  type EngineAbilityOption,
+  type EngineStatusCopy,
+} from "../../runtime/battle-prompt-messages";
 import type { EngineCardModels } from "../../battle/ui/engine-card-model";
 import { formatPhaseLabel, formatSideLabel } from "../../battle/ui/format";
 import {
   parseBattleCardId,
   parseBattleSlotViewId,
+  type AvatarId,
   type BattleCardId,
   type BattleId,
   type BattleSlotViewId,
+  type DreamsignId,
   type DreamwellCardId,
   type PresentationId,
 } from "../../types/identifiers";
 import type { BattlePromptNoticeView } from "../../cumulus/screens/battle-overlays/BattlePromptHost";
 import type { Decision } from "../../engine";
-import { buildPromptHost, type PendingEnginePrompt, type PromptHostModel } from "./prompt-host-view-model";
+import {
+  buildPromptHost,
+  promptViewFields,
+  type PendingEnginePrompt,
+  type PromptChoiceOption,
+  type PromptHostModel,
+} from "./prompt-host-view-model";
 
 type PlayAction = Extract<Action, { kind: "play" }>;
 type ActivateAction = Extract<Action, { kind: "activate" }>;
@@ -114,6 +130,8 @@ export interface EngineBattleViewInput {
 export interface EngineBattleScreenModel {
   /** The engine view the screen view was built from. */
   readonly engine: BattleView;
+  /** Every instance of `engine` by the battle card id the screen names it with. */
+  readonly instances: ReadonlyMap<BattleCardId, InstanceView>;
   readonly view: MobileBattleView;
   readonly affordances: EngineBattleAffordances;
   readonly prompt: PromptHostModel;
@@ -243,6 +261,10 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
           payToEnd.set(id, [...(payToEnd.get(id) ?? []), action]);
         }
         break;
+      }
+      default: {
+        const unhandled: never = action;
+        throw new Error(`No affordance for the legal action ${JSON.stringify(unhandled)}`);
       }
     }
   }
@@ -470,9 +492,11 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
   const farHand = cardsOf(knownHand(far));
   const nearHandIds = hiddenZoneIds(view, human, "hand");
   const farHandIds = hiddenZoneIds(view, far, "hand");
+  const instances = new Map(Object.values(view.instances).map((instance) => [parseBattleCardId(instance.id), instance]));
   const prompt = buildPromptHost({
     human,
     view,
+    instances,
     prompt: input.prompt,
     decision: input.decision,
     presented: input.presented,
@@ -484,6 +508,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
   const dreamwell = visual?.kind === "dreamwell" ? (input.dreamwellCard?.(visual.card) ?? null) : null;
   return {
     engine: view,
+    instances,
     affordances,
     prompt,
     cardOverlay:
@@ -502,10 +527,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       far: sides[far],
       nearHand: { owner: human, position: "near", cardIds: nearHandIds, cards: nearHand },
       farHand: { owner: far, position: "far", cardIds: farHandIds, cards: farHand },
-      promptNotice: prompt.promptNotice,
-      cardPicker: prompt.cardPicker,
-      choicePrompt: prompt.choicePrompt,
-      promptHost: prompt.host,
+      ...promptViewFields(prompt),
       dreamwell: visual?.kind === "dreamwell" && dreamwell !== null ? { side: visual.side, model: dreamwell } : null,
       playReveal:
         visual?.kind === "reveal" && revealed !== undefined ? { card: cardView(revealed), from: visual.from } : null,
@@ -594,7 +616,7 @@ export function figmentMergeTargets(
   legionnaire: (figment: InstanceView) => boolean,
 ): MobileBattleFigmentMergeTarget[] {
   const view = model.engine;
-  const source = Object.values(view.instances).find((instance) => instance.id === id);
+  const source = model.instances.get(id);
   if (source?.printing.kind !== "figment" || source.zone !== "play") return [];
   const sourcePrinting = source.printing;
   const moves = model.affordances.repositions.get(id) ?? [];
@@ -631,4 +653,106 @@ export function figmentMergeTargets(
     });
   }
   return targets;
+}
+
+/** A chooser the human opened: a character's abilities, the void's Reclaim plays, or the emblems' abilities. */
+export type EngineChooser =
+  | { readonly kind: "card"; readonly id: BattleCardId }
+  | { readonly kind: "void" }
+  | { readonly kind: "emblems" };
+
+/** An Avatar's or Dreamsign's display name, by its UUID. */
+export type EngineEmblemNamer = (emblem: "avatar" | "dreamsign", id: AvatarId | DreamsignId) => string | null;
+
+/** A chooser is local to the screen, not an engine prompt: no prompt id names it. */
+const CHOOSER_KEY = 0;
+
+/**
+ * The model with the chooser the human opened as its prompt surface: a
+ * choice whose options take the chooser's actions, ending in Cancel. The
+ * model is unchanged while no chooser is open or it offers nothing now.
+ */
+export function withChooser(
+  model: EngineBattleScreenModel,
+  chooser: EngineChooser | null,
+  cards: EngineCardModels,
+  emblemName: EngineEmblemNamer,
+): EngineBattleScreenModel {
+  const options = chooserOptions(chooser, model.affordances, model.engine, cards, emblemName);
+  if (options.length === 0) return model;
+  const prompt: PromptHostModel = {
+    ...model.prompt,
+    surface: { kind: "choice", key: CHOOSER_KEY, label: ENGINE_ABILITY_CHOOSER_TITLE, options },
+  };
+  return { ...model, prompt, view: { ...model.view, ...promptViewFields(prompt) } };
+}
+
+/** The options of the chooser the human opened, each with what it does; empty when none is open or it offers nothing. */
+function chooserOptions(
+  chooser: EngineChooser | null,
+  affordances: EngineBattleAffordances,
+  view: BattleView,
+  cards: EngineCardModels,
+  emblemName: EngineEmblemNamer,
+): PromptChoiceOption[] {
+  if (chooser === null) return [];
+  const option = (copy: EngineAbilityOption, select: PromptChoiceOption["select"]): PromptChoiceOption => ({
+    label: engineAbilityOptionLabel(copy),
+    select,
+  });
+  const act = (copy: EngineAbilityOption, action: Action): PromptChoiceOption => option(copy, { kind: "action", action });
+  const cancel = option({ kind: "cancel" }, { kind: "close" });
+  const payment = (action: PayToEndAction): PromptChoiceOption => {
+    const effect = view.payable.find((payable) => payable.id === action.effect);
+    const source = effect?.source ?? null;
+    let name: string | null = null;
+    if (typeof source === "string") {
+      const instance = view.instances[source];
+      name = instance === undefined ? null : cards(instance).displaySnapshot.name;
+    } else if (source !== null) {
+      const side = view.sides[source.side];
+      const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
+      name = id === undefined ? null : emblemName(source.kind, id);
+    }
+    return act({ kind: "payToEnd", cost: effect?.cost ?? 0, name }, action);
+  };
+  switch (chooser.kind) {
+    case "card": {
+      const activations = affordances.activations.get(chooser.id) ?? [];
+      const payments = (affordances.payToEnd.get(chooser.id) ?? []).map(payment);
+      if (activations.length + payments.length === 0) return [];
+      return [...activations.map((action, index) => act({ kind: "ability", index }, action)), ...payments, cancel];
+    }
+    case "void": {
+      const plays = [...affordances.voidPlays.values()].flatMap((action) => {
+        const instance = view.instances[action.card];
+        return instance === undefined ? [] : [act({ kind: "reclaim", name: cards(instance).displaySnapshot.name }, action)];
+      });
+      if (plays.length === 0) return [];
+      return [...plays, option({ kind: "browseVoid" }, { kind: "browseVoid" }), cancel];
+    }
+    case "emblems": {
+      const emblems = affordances.emblemActivations.flatMap((action, _index, all) => {
+        const source = action.source;
+        if (typeof source === "string") return [];
+        const siblings = all.filter((other) => sourceKey(other.source) === sourceKey(source));
+        const side = view.sides[source.side];
+        const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
+        return [
+          act(
+            {
+              kind: "emblem",
+              emblem: source.kind,
+              name: id === undefined ? null : emblemName(source.kind, id),
+              index: siblings.indexOf(action),
+              count: siblings.length,
+            },
+            action,
+          ),
+        ];
+      });
+      const all = [...emblems, ...affordances.statusPayToEnd.map(payment)];
+      return all.length === 0 ? [] : [...all, cancel];
+    }
+  }
 }

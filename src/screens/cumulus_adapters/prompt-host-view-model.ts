@@ -1,24 +1,29 @@
 // The prompt host's view model (engine-design § UI contract): the decision
 // pending for the human, whatever raised it, mapped onto one surface per
-// prompt kind, and each surface's selection mapped back onto an engine
-// answer. Pure and React-free.
+// prompt kind. Each surface arm carries the answer its selection gives, so
+// a selection maps back onto an engine answer without re-reading the prompt.
+// Pure and React-free.
 //
 // | kind | surface |
 // | --- | --- |
-// | chooseTargets | on-board highlighting (one target among characters in play, with Skip when it may be none), else the card picker |
-// | chooseCards | the card picker (on the board for hand and battlefield cards, else the gallery) |
-// | chooseMode, confirm, payOrDecline | the choice buttons of the control row |
-// | arrange | the Foresee editor (back on top in any order, or into the void), else the arrangement editor |
-// | chooseNumber | the prompt host's number picker |
+// | chooseTargets | `targets`: on-board highlighting (one target among characters in play, with Skip when it may be none), else `picker` |
+// | chooseCards | `picker`: the card picker (on the board for hand and battlefield cards, else the gallery) |
+// | chooseMode, confirm, payOrDecline | `choice`: the choice buttons of the control row |
+// | arrange | `arrange`: the Foresee editor (back on top in any order, or into the void), else the arrangement editor |
+// | chooseNumber | `number`: the prompt host's number picker |
 //
-// Besides prompts, the host shows the human's response window (P1: a
-// `respond` decision only exists while the human holds a legal response),
-// its heading over the opponent's card at reading size and the control
-// row's Pass, and the presentation's notices. While the opponent answers,
-// the human sees only a waiting notice: "choosing" for a private prompt
-// (`privateTo`), "acting" for any other prompt or decision. A prompt or
-// response window shows only once the presentation has finished every
-// event before it ("present, then ask"); until then only its notice shows.
+// Besides prompts, the host shows the human's response window (`respond`;
+// P1: a `respond` decision only exists while the human holds a legal
+// response), its heading over the opponent's card at reading size and the
+// control row's Pass, and the presentation's notices. While the opponent
+// answers, the human sees only a waiting notice (`waiting`): "choosing" for
+// a private prompt (`privateTo`), "acting" for any other prompt or decision.
+// A prompt or response window shows only once the presentation has finished
+// every event before it ("present, then ask"); until then the prompt is
+// `held` and only its notice shows.
+//
+// `promptViewFields` is the one projection of a host model onto the battle
+// screen's prompt fields.
 //
 // Every answer is checked against the prompt the engine raised before it is
 // submitted; the fold checks it again and bounces a stale or illegal one.
@@ -33,10 +38,11 @@ import type {
   MobileBattleCardPickerCandidateView,
   MobileBattleCardPickerView,
   MobileBattleCardView,
-  MobileBattleChoicePromptView,
+  MobileBattlePromptKey,
   MobileBattlePromptNoticeView,
+  MobileBattleView,
 } from "../../cumulus/screens/MobileBattleScreen";
-import type { BattleView, Decision, InstanceId, InstanceView, Prompt, Side } from "../../engine";
+import type { Action, BattleView, Decision, InstanceId, InstanceView, Prompt, Side } from "../../engine";
 import { isLegalAnswer, legalAnswers } from "../../engine/prompts/answers";
 import type { Answer, ArrangeAnswer, ArrangeDestination } from "../../engine/prompts/types";
 import {
@@ -59,6 +65,8 @@ export type EngineCardViewBuilder = (instance: InstanceView) => MobileBattleCard
 export interface PromptHostInput {
   readonly human: Side;
   readonly view: BattleView;
+  /** Every instance of `view` by the battle card id the screen names it with. */
+  readonly instances: ReadonlyMap<BattleCardId, InstanceView>;
   readonly prompt: PendingEnginePrompt | null;
   /** The committed state's top-level decision, when no step is in flight. */
   readonly decision: Decision | null;
@@ -70,17 +78,102 @@ export interface PromptHostInput {
   readonly cardView: EngineCardViewBuilder;
 }
 
+/** What one choice button of the control row does when chosen. */
+export type ChoiceSelection =
+  /** Answers the pending prompt. */
+  | { readonly kind: "answer"; readonly answer: Answer }
+  /** Takes a top-level action: an ability chooser's activation, Reclaim play, or payment. */
+  | { readonly kind: "action"; readonly action: Action }
+  /** Opens the human's void in the zone browser. */
+  | { readonly kind: "browseVoid" }
+  /** Closes an ability chooser without acting. */
+  | { readonly kind: "close" };
+
+export interface PromptChoiceOption {
+  readonly label: string;
+  readonly select: ChoiceSelection;
+}
+
+/** The control row's choice buttons: what they ask, and each option with what it does. */
+export interface PromptChoices {
+  readonly key: MobileBattlePromptKey;
+  readonly label: string;
+  readonly options: readonly PromptChoiceOption[];
+}
+
+/** The surface the human answers the pending decision on, with the answer each selection gives. */
+export type PromptSurface =
+  /** Nothing to answer: no prompt, or the human's own top-level decision. */
+  | { readonly kind: "none" }
+  /** The opponent answers a prompt or decision. */
+  | { readonly kind: "waiting"; readonly notice: MobileBattlePromptNoticeView }
+  /** The human's prompt waits for the presentation of the events before it. */
+  | { readonly kind: "held" }
+  /** The human's response window: Pass, or a response from the board. */
+  | { readonly kind: "respond" }
+  /**
+   * Characters a tap answers a one-target prompt with (`ids`, the legal
+   * ones); an "up to one" prompt also offers Skip as a choice button.
+   */
+  | {
+      readonly kind: "targets";
+      readonly ids: readonly BattleCardId[];
+      readonly skip: PromptChoices | null;
+      readonly answer: (id: BattleCardId) => Answer | null;
+    }
+  | {
+      readonly kind: "picker";
+      readonly picker: MobileBattleCardPickerView;
+      readonly answer: (ids: readonly BattleCardId[]) => Answer | null;
+    }
+  | ({ readonly kind: "choice" } & PromptChoices)
+  | { readonly kind: "number"; readonly answer: (value: number) => Answer | null }
+  | {
+      readonly kind: "arrange";
+      readonly editor: BattlePromptArrangeView["surface"];
+      readonly answer: (result: BattleForeseeResult) => Answer | null;
+    };
+
 export interface PromptHostModel {
+  /** The prompt host's banner, editors, loop offer, and notice, or `null` when it shows none. */
   readonly host: BattlePromptHostView | null;
-  readonly cardPicker: MobileBattleCardPickerView | null;
-  readonly choicePrompt: MobileBattleChoicePromptView | null;
-  /** The answer each choice button submits, by option index. */
-  readonly choiceAnswers: readonly Answer[];
-  readonly promptNotice: MobileBattlePromptNoticeView | null;
-  /** Characters a tap answers a one-target prompt with; an "up to one" prompt also offers Skip as a choice button. */
-  readonly targetIds: readonly BattleCardId[];
+  readonly surface: PromptSurface;
   /** The card that asks, or the opponent's card the response window answers, at reading size. */
   readonly sourceCard: MobileBattleCardView | null;
+}
+
+/** The choice buttons a surface offers in the control row, or `null`. */
+export function surfaceChoices(surface: PromptSurface): PromptChoices | null {
+  switch (surface.kind) {
+    case "choice":
+      return surface;
+    case "targets":
+      return surface.skip;
+    default:
+      return null;
+  }
+}
+
+/** The battle screen's prompt fields for a prompt host model. */
+export function promptViewFields(
+  model: PromptHostModel,
+): Pick<MobileBattleView, "promptNotice" | "cardPicker" | "choicePrompt" | "promptHost"> {
+  const { surface } = model;
+  const choices = surfaceChoices(surface);
+  return {
+    promptNotice: surface.kind === "waiting" ? surface.notice : null,
+    cardPicker: surface.kind === "picker" ? surface.picker : null,
+    choicePrompt:
+      choices === null
+        ? null
+        : {
+            key: choices.key,
+            label: choices.label,
+            options: choices.options.map((option) => ({ label: option.label })),
+            canResolve: true,
+          },
+    promptHost: model.host,
+  };
 }
 
 const EMPTY_HOST: BattlePromptHostView = {
@@ -93,12 +186,9 @@ const EMPTY_HOST: BattlePromptHostView = {
   notice: null,
 };
 
-const NOTHING: Omit<PromptHostModel, "host" | "promptNotice" | "sourceCard"> = {
-  cardPicker: null,
-  choicePrompt: null,
-  choiceAnswers: [],
-  targetIds: [],
-};
+const NONE: PromptSurface = { kind: "none" };
+const HELD: PromptSurface = { kind: "held" };
+const RESPOND: PromptSurface = { kind: "respond" };
 
 function visible(view: BattleView, ids: readonly InstanceId[]): InstanceView[] {
   return ids.flatMap((id) => {
@@ -138,18 +228,22 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
     const top = view.stack[view.stack.length - 1];
     const stackInstance = top?.kind === "card" ? view.instances[top.instance] : undefined;
     const stackCard = respond && stackInstance !== undefined ? cardView(stackInstance) : null;
-    const waiting = input.decision !== null && input.decision.side !== human;
+    const waiting = input.decision !== null && input.decision.side !== human ? input.decision.side : null;
     return {
-      ...NOTHING,
       host: hostOf(
         respond
           ? {
               heading: engineResponseWindowHeading(stackCard === null ? null : stackCard.model.displaySnapshot.name),
               loopOffer: null,
             }
-          : { loopOffer: waiting ? null : input.loopOffer },
+          : { loopOffer: waiting === null ? input.loopOffer : null },
       ),
-      promptNotice: waiting ? { promptSide: input.decision?.side ?? human, reason: "opponent-acting" } : null,
+      surface:
+        waiting !== null
+          ? { kind: "waiting", notice: { promptSide: waiting, reason: "opponent-acting" } }
+          : respond
+            ? RESPOND
+            : NONE,
       sourceCard: stackCard,
     };
   }
@@ -159,17 +253,19 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
     // The opponent answers; a private prompt's cards never reach this view,
     // and the human learns only that the opponent is choosing.
     return {
-      ...NOTHING,
       host: hostOf({ loopOffer: null }),
-      promptNotice: {
-        promptSide: prompt.side,
-        reason: prompt.privateTo === undefined ? "opponent-acting" : "opponent-choosing",
+      surface: {
+        kind: "waiting",
+        notice: {
+          promptSide: prompt.side,
+          reason: prompt.privateTo === undefined ? "opponent-acting" : "opponent-choosing",
+        },
       },
       sourceCard: input.presented ? sourceCard : null,
     };
   }
   if (!input.presented) {
-    return { ...NOTHING, host: hostOf({ loopOffer: null }), promptNotice: null, sourceCard: null };
+    return { host: hostOf({ loopOffer: null }), surface: HELD, sourceCard: null };
   }
   const { min, max } = bounds(prompt);
   const host = (fields: Partial<BattlePromptHostView>) =>
@@ -186,8 +282,15 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
       loopOffer: null,
       ...fields,
     });
-  const shown = { promptNotice: null, sourceCard };
-  const modal = { promptNotice: null, sourceCard: null };
+  const cardsAnswer = (ids: readonly BattleCardId[]): Answer | null => {
+    const answer: InstanceId[] = [];
+    for (const id of ids) {
+      const instance = input.instances.get(id);
+      if (instance === undefined) return null;
+      answer.push(instance.id);
+    }
+    return isLegalAnswer(prompt, answer) ? answer : null;
+  };
   switch (prompt.kind) {
     case "chooseTargets":
     case "chooseCards": {
@@ -198,23 +301,22 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         const banner = host({});
         const skip = min === 0 && isLegalAnswer(prompt, []);
         return {
-          ...NOTHING,
-          ...shown,
           host: banner,
-          targetIds: candidates
-            .filter((instance) => isLegalAnswer(prompt, [instance.id]))
-            .map((instance) => parseBattleCardId(instance.id)),
-          ...(skip
-            ? {
-                choicePrompt: {
+          surface: {
+            kind: "targets",
+            ids: candidates
+              .filter((instance) => isLegalAnswer(prompt, [instance.id]))
+              .map((instance) => parseBattleCardId(instance.id)),
+            skip: skip
+              ? {
                   key: prompt.id,
                   label: banner?.heading?.title ?? "",
-                  options: [{ label: enginePromptOptionLabel({ kind: "skip" }) }],
-                  canResolve: true,
-                },
-                choiceAnswers: [[]],
-              }
-            : {}),
+                  options: [{ label: enginePromptOptionLabel({ kind: "skip" }), select: { kind: "answer", answer: [] } }],
+                }
+              : null,
+            answer: (id) => cardsAnswer([id]),
+          },
+          sourceCard,
         };
       }
       const pickerCandidates = candidates.map(
@@ -231,26 +333,29 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         (candidate) => candidate.zone === "hand" || candidate.zone === "backRank" || candidate.zone === "frontRank",
       );
       return {
-        ...NOTHING,
         // The gallery is modal: it names its prompt and offers Cancel beside
         // its one answer control. With both Skip and Submit, the banner
         // above it offers Cancel instead.
-        ...(onBoard ? shown : modal),
         host: onBoard || (prompt.cancellable && min === 0) ? host({}) : host({ heading: null, cancellable: false }),
-        cardPicker: {
-          key: prompt.id,
-          label: enginePromptHeading({ kind: prompt.kind, role: prompt.purpose.role, min, max, sourceName: null }).title,
-          side: human,
-          candidateOwner: pickerCandidates[0]?.owner ?? null,
-          candidates: pickerCandidates,
-          candidateIds: pickerCandidates.map((candidate) => candidate.instanceId),
-          count: max,
-          minCount: min,
-          optional: min === 0,
-          canResolve: true,
-          presentation: onBoard ? "board" : "gallery",
-          cancellable: prompt.cancellable && min > 0,
+        surface: {
+          kind: "picker",
+          picker: {
+            key: prompt.id,
+            label: enginePromptHeading({ kind: prompt.kind, role: prompt.purpose.role, min, max, sourceName: null }).title,
+            side: human,
+            candidateOwner: pickerCandidates[0]?.owner ?? null,
+            candidates: pickerCandidates,
+            candidateIds: pickerCandidates.map((candidate) => candidate.instanceId),
+            count: max,
+            minCount: min,
+            optional: min === 0,
+            canResolve: true,
+            presentation: onBoard ? "board" : "gallery",
+            cancellable: prompt.cancellable && min > 0,
+          },
+          answer: cardsAnswer,
         },
+        sourceCard: onBoard ? sourceCard : null,
       };
     }
     case "arrange": {
@@ -262,18 +367,27 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         max,
         sourceName: sourceCard?.model.displaySnapshot.name ?? null,
       });
-      return { ...NOTHING, ...modal, host: host({ heading: null, arrange: arrangeView(prompt, view, cardView, heading) }) };
+      const arrange = arrangeView(prompt, view, cardView, heading);
+      return {
+        host: host({ heading: null, arrange }),
+        surface: {
+          kind: "arrange",
+          editor: arrange.surface,
+          answer: (result) => arrangeAnswer(prompt, input.instances, result),
+        },
+        sourceCard: null,
+      };
     }
     case "chooseNumber":
       return {
-        ...NOTHING,
-        ...shown,
         host: host({
           number: {
             label: engineNumberPickerLabel(prompt.purpose.role),
             values: [...legalAnswers(prompt)].filter((answer): answer is number => typeof answer === "number"),
           },
         }),
+        surface: { kind: "number", answer: (value) => (isLegalAnswer(prompt, value) ? value : null) },
+        sourceCard,
       };
     case "chooseMode": {
       const texts =
@@ -289,18 +403,18 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
               : { kind: "mode", index: option.mode, text: texts?.[option.mode] ?? null },
           answer: option.mode,
         })),
-        host,
-        shown,
+        host({}),
+        sourceCard,
       );
     }
     case "confirm":
-      return choice(prompt, [{ copy: { kind: "yes" }, answer: true }, { copy: { kind: "no" }, answer: false }], host, shown);
+      return choice(prompt, [{ copy: { kind: "yes" }, answer: true }, { copy: { kind: "no" }, answer: false }], host({}), sourceCard);
     case "payOrDecline":
       return choice(
         prompt,
         [{ copy: { kind: "pay", energy: prompt.energy }, answer: true }, { copy: { kind: "decline" }, answer: false }],
-        host,
-        shown,
+        host({}),
+        sourceCard,
       );
   }
 }
@@ -308,22 +422,20 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
 function choice(
   prompt: PendingEnginePrompt,
   options: readonly { readonly copy: EnginePromptOptionCopy; readonly answer: Answer }[],
-  host: (fields: Partial<BattlePromptHostView>) => BattlePromptHostView | null,
-  shown: Pick<PromptHostModel, "promptNotice" | "sourceCard">,
+  host: BattlePromptHostView | null,
+  sourceCard: MobileBattleCardView | null,
 ): PromptHostModel {
-  const legal = options.filter((option) => isLegalAnswer(prompt, option.answer));
-  const view = host({});
   return {
-    ...NOTHING,
-    ...shown,
-    host: view,
-    choicePrompt: {
+    host,
+    surface: {
+      kind: "choice",
       key: prompt.id,
-      label: view?.heading?.title ?? "",
-      options: legal.map((option) => ({ label: enginePromptOptionLabel(option.copy) })),
-      canResolve: true,
+      label: host?.heading?.title ?? "",
+      options: options
+        .filter((option) => isLegalAnswer(prompt, option.answer))
+        .map((option) => ({ label: enginePromptOptionLabel(option.copy), select: { kind: "answer", answer: option.answer } })),
     },
-    choiceAnswers: legal.map((option) => option.answer),
+    sourceCard,
   };
 }
 
@@ -397,40 +509,12 @@ function arrangeView(
   };
 }
 
-/** The instance a battle card id names in `view`, or `null`. */
-export function instanceIdIn(view: BattleView, id: BattleCardId): InstanceId | null {
-  const instance = Object.values(view.instances).find((candidate) => candidate.id === id);
-  return instance === undefined ? null : instance.id;
-}
-
-function cardsAnswer(prompt: PendingEnginePrompt, view: BattleView, ids: readonly BattleCardId[]): Answer | null {
-  const answer: InstanceId[] = [];
-  for (const id of ids) {
-    const instance = instanceIdIn(view, id);
-    if (instance === null) return null;
-    answer.push(instance);
-  }
-  return isLegalAnswer(prompt, answer) ? answer : null;
-}
-
-/** The answer tapping `id` gives a board target prompt, or `null` when it is not a legal target. */
-export function targetAnswer(prompt: PendingEnginePrompt, view: BattleView, id: BattleCardId): Answer | null {
-  return prompt.kind === "chooseTargets" ? cardsAnswer(prompt, view, [id]) : null;
-}
-
-/** The answer a card-picker submission gives, or `null` when it is not legal (outside the prompt's bounds). */
-export function pickerAnswer(prompt: PendingEnginePrompt, view: BattleView, ids: readonly BattleCardId[]): Answer | null {
-  return prompt.kind === "chooseTargets" || prompt.kind === "chooseCards" ? cardsAnswer(prompt, view, ids) : null;
-}
-
-/** The answer a number-picker submission gives, or `null` when it is not legal. */
-export function numberAnswer(prompt: PendingEnginePrompt, value: number): Answer | null {
-  return prompt.kind === "chooseNumber" && isLegalAnswer(prompt, value) ? value : null;
-}
-
 /** The arrangement an arrangement editor's confirmation gives, or `null` when it is not legal. */
-export function arrangeAnswer(prompt: PendingEnginePrompt, view: BattleView, result: BattleForeseeResult): Answer | null {
-  if (prompt.kind !== "arrange") return null;
+function arrangeAnswer(
+  prompt: ArrangeEnginePrompt,
+  instances: ReadonlyMap<BattleCardId, InstanceView>,
+  result: BattleForeseeResult,
+): Answer | null {
   const arrangement: { card: InstanceId; to: ArrangeDestination }[] = [];
   for (const [ids, to] of [
     [result.orderedCardIds, "top"],
@@ -439,9 +523,9 @@ export function arrangeAnswer(prompt: PendingEnginePrompt, view: BattleView, res
     [result.handCardIds ?? [], "hand"],
   ] as const) {
     for (const id of ids) {
-      const card = instanceIdIn(view, id);
-      if (card === null) return null;
-      arrangement.push({ card, to });
+      const card = instances.get(id);
+      if (card === undefined) return null;
+      arrangement.push({ card: card.id, to });
     }
   }
   const answer: ArrangeAnswer = arrangement;

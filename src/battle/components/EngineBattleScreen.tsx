@@ -28,7 +28,6 @@ import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOve
 import { BattleEventLogOverlay } from "../../cumulus/screens/battle-overlays/BattleEventLogOverlay";
 import {
   MobileBattleScreen,
-  type MobileBattleChoicePromptView,
   type MobileBattleInteractions,
   type MobileBattleSlotTarget,
   type MobileBattleView,
@@ -42,13 +41,7 @@ import { logEvent, logEventOnce } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { journeyBattleOf } from "../../rules/battle/fold";
 import { PAGE_DEBUG_PANEL, PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
-import {
-  ENGINE_ABILITY_CHOOSER_TITLE,
-  ENGINE_BATTLE_LOG_COPY,
-  engineAbilityOptionLabel,
-  engineBattleNoticeCopy,
-  type EngineAbilityOption,
-} from "../../runtime/battle-prompt-messages";
+import { ENGINE_BATTLE_LOG_COPY, engineBattleNoticeCopy } from "../../runtime/battle-prompt-messages";
 import {
   battleLogTurns,
   engineBattleLog,
@@ -60,31 +53,25 @@ import {
   figmentMergeTargets,
   handPlayAction,
   repositionForDrop,
-  type EngineBattleScreenModel,
+  withChooser,
+  type EngineChooser,
+  type EngineEmblemNamer,
 } from "../../screens/cumulus_adapters/engine-battle-view-model";
 import {
-  arrangeAnswer,
-  numberAnswer,
-  pickerAnswer,
-  targetAnswer,
+  surfaceChoices,
+  type ChoiceSelection,
   type PendingEnginePrompt,
 } from "../../screens/cumulus_adapters/prompt-host-view-model";
 import { useActions, useGameEvents, useGameState } from "../../session/hooks";
 import { useJourney } from "../../state/journey-context";
 import { parseCardId, type CardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import {
-  parseBattleCardId,
-  type AvatarId,
-  type BattleCardId,
-  type DreamsignId,
-  type DreamwellCardId,
-} from "../../types/identifiers";
+import { parseBattleCardId, type BattleCardId, type DreamwellCardId } from "../../types/identifiers";
 import { engineIntentKey } from "../engine-ai/engine-ai-driver";
 import { useEngineAi } from "../engine-ai/use-engine-ai";
 import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/figment-catalog";
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
-import { createEngineCardModels, type EngineCardModels } from "../ui/engine-card-model";
+import { createEngineCardModels } from "../ui/engine-card-model";
 import { usePresentationQueue, usePublishedEngineEvents } from "./battle-presentation";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
 import { presentationItems, sliceKey } from "./presentation-items";
@@ -97,10 +84,6 @@ const HUMAN: Side = "player";
 
 type Drag = { readonly id: BattleCardId; readonly source: "near-hand" | "battlefield" };
 type BrowsedZone = { readonly side: Side; readonly zone: "void" | "banished" };
-/** A chooser the human opened: a character's abilities, the void's Reclaim plays, or the emblems' abilities. */
-type Chooser = { readonly kind: "card"; readonly id: BattleCardId } | { readonly kind: "void" } | { readonly kind: "emblems" };
-type ChooserOption = { readonly copy: EngineAbilityOption; readonly action: Action | "browseVoid" | null };
-type PayToEndAction = Extract<Action, { kind: "payToEnd" }>;
 
 export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const battle = journeyBattleOf(useGameState().battle);
@@ -110,7 +93,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   useEngineAi(PAGE_ENEMY_POLICY);
 
   const [drag, setDrag] = useState<Drag | null>(null);
-  const [abilityChooser, setAbilityChooser] = useState<Chooser | null>(null);
+  const [abilityChooser, setAbilityChooser] = useState<EngineChooser | null>(null);
   const presentation = usePresentationQueue();
   const [browsed, setBrowsed] = useState<BrowsedZone | null>(null);
   const [logOpen, setLogOpen] = useState(false);
@@ -275,7 +258,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     [presentation.notice],
   );
 
-  const model = useMemo(
+  const board = useMemo(
     () =>
       buildEngineBattleScreenModel({
         battleId,
@@ -304,9 +287,22 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       }),
     [avatars, battleId, cards, derived, dreamwell, engine, head, init, noticeView, resultDismissed],
   );
-  const { affordances, prompt: surface } = model;
+  const emblemName = useCallback<EngineEmblemNamer>(
+    (emblem, id) =>
+      emblem === "avatar"
+        ? (journeyContent.avatars.find((avatar) => avatar.id === id)?.name ?? null)
+        : (journeyContent.dreamsignTemplates.find((dreamsign) => dreamsign.id === id)?.name ?? null),
+    [journeyContent],
+  );
+  // An ability chooser the human opened is the prompt surface while it offers anything.
+  const model = useMemo(
+    () => withChooser(board, abilityChooser, cards, emblemName),
+    [abilityChooser, board, cards, emblemName],
+  );
+  const { affordances } = model;
+  const { surface } = model.prompt;
   const prompt = derived.prompt;
-  const promptShown = surface.host?.key ?? null;
+  const promptShown = model.prompt.host?.key ?? null;
   useEffect(() => {
     if (promptShown === null || prompt === null) return;
     logEventOnce(`battle_engine_prompt_shown:${battleId}:${prompt.id}`, "battle_engine_prompt_shown", {
@@ -438,21 +434,24 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     [battleId, derived.decisionKey, model, submitAction],
   );
 
-  const chooserOptions = chooserOptionsFor(abilityChooser, affordances, model.engine, cards, (emblem, id) =>
-    emblem === "avatar"
-      ? (journeyContent.avatars.find((avatar) => avatar.id === id)?.name ?? null)
-      : (journeyContent.dreamsignTemplates.find((dreamsign) => dreamsign.id === id)?.name ?? null),
-  );
-  const chooser: MobileBattleChoicePromptView | null =
-    chooserOptions.length === 0
-      ? null
-      : {
-          // A local chooser, not an engine prompt: no prompt id names it.
-          key: 0,
-          label: ENGINE_ABILITY_CHOOSER_TITLE,
-          options: chooserOptions.map((option) => ({ label: engineAbilityOptionLabel(option.copy) })),
-          canResolve: true,
-        };
+  const choose = (select: ChoiceSelection): void => {
+    switch (select.kind) {
+      case "answer":
+        submitAnswer(select.answer, "choice-prompt");
+        return;
+      case "action":
+        setAbilityChooser(null);
+        submitAction(select.action, select.action.kind === "payToEnd" ? "pay-to-end-chooser" : "ability-chooser");
+        return;
+      case "browseVoid":
+        setAbilityChooser(null);
+        setBrowsed({ side: HUMAN, zone: "void" });
+        return;
+      case "close":
+        setAbilityChooser(null);
+        return;
+    }
+  };
 
   const repositionShortcut = useCallback(
     (plan: readonly Action[], shortcut: string): void => {
@@ -465,6 +464,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
 
   const statusActionable = affordances.emblemActivations.length > 0 || affordances.statusPayToEnd.length > 0;
   const draggedCard = drag?.source === "battlefield" ? drag.id : null;
+  const targetIds = surface.kind === "targets" ? surface.ids : [];
   const interactions: MobileBattleInteractions = {
     canInteract: affordances.canAct && result === null,
     nearSide: HUMAN,
@@ -482,16 +482,16 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         }),
     targetSelectionCardId: derived.playing === null ? null : parseBattleCardId(derived.playing),
     canPrompt: prompt !== null && prompt.side === HUMAN && result === null,
-    targetSelectionPrompt: surface.targetIds.length > 0 ? "legal-target" : null,
-    targetableCardIds: surface.targetIds,
+    targetSelectionPrompt: targetIds.length > 0 ? "legal-target" : null,
+    targetableCardIds: targetIds,
     onHandCardActivate: (id) => playHandCard(id, undefined, "hand-tap"),
     onHandCardDrop: (target) => {
       if (drag?.source !== "near-hand") return;
       playHandCard(drag.id, target, "hand-drag");
     },
     onBattlefieldCardActivate: (id) => {
-      if (surface.targetIds.length > 0) {
-        if (prompt !== null) submitAnswer(targetAnswer(prompt, model.engine, id), "board-target");
+      if (surface.kind === "targets" && surface.ids.length > 0) {
+        submitAnswer(surface.answer(id), "board-target");
         return;
       }
       // A payment to end an effect always opens the chooser, which names its price.
@@ -541,11 +541,10 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     },
     onPromptCancel: cancelPrompt,
     onPromptNumberSubmit: (value) => {
-      if (prompt !== null) submitAnswer(numberAnswer(prompt, value), "number-picker");
+      if (surface.kind === "number") submitAnswer(surface.answer(value), "number-picker");
     },
     onPromptArrangeSubmit: (resolution) => {
-      const editor = surface.host?.arrange?.surface === "arrangement" ? "arrangement-editor" : "foresee-editor";
-      if (prompt !== null) submitAnswer(arrangeAnswer(prompt, model.engine, resolution), editor);
+      if (surface.kind === "arrange") submitAnswer(surface.answer(resolution), `${surface.editor}-editor`);
     },
     onPromptNoticeDismiss: presentation.dismissNotice,
     onBattleLogOpen: () => setLogOpen(true),
@@ -557,22 +556,14 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       }
     },
     onCardPickerSubmit: (ids) => {
-      if (prompt !== null) submitAnswer(pickerAnswer(prompt, model.engine, ids), "card-picker");
+      if (surface.kind === "picker") submitAnswer(surface.answer(ids), "card-picker");
     },
     onCardPickerSkip: () => {
-      if (prompt !== null) submitAnswer(pickerAnswer(prompt, model.engine, []), "card-picker-skip");
+      if (surface.kind === "picker") submitAnswer(surface.answer([]), "card-picker-skip");
     },
     onChoicePromptChoose: (index) => {
-      if (chooser !== null) {
-        const option = chooserOptions[index];
-        setAbilityChooser(null);
-        if (option?.action === "browseVoid") setBrowsed({ side: HUMAN, zone: "void" });
-        else if (option !== undefined && option.action !== null) {
-          submitAction(option.action, option.action.kind === "payToEnd" ? "pay-to-end-chooser" : "ability-chooser");
-        }
-        return;
-      }
-      submitAnswer(surface.choiceAnswers[index] ?? null, "choice-prompt");
+      const option = surfaceChoices(surface)?.options[index];
+      if (option !== undefined) choose(option.select);
     },
     onResultAction: (action) => handleResultAction(action),
   };
@@ -593,8 +584,6 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     }
   }
 
-  const view: MobileBattleView =
-    chooser === null ? model.view : { ...model.view, choicePrompt: chooser };
   const browsedCards =
     browsed === null
       ? []
@@ -606,7 +595,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   return (
     <>
       <MobileBattleScreen
-        view={view}
+        view={model.view}
         interactions={interactions}
         cardOverlay={model.cardOverlay}
         inspectorDefault="collapsed"
@@ -638,73 +627,6 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       ) : null}
     </>
   );
-}
-
-/** The options of the chooser the human opened, each with the action it takes; empty when none is open. */
-function chooserOptionsFor(
-  chooser: Chooser | null,
-  affordances: EngineBattleScreenModel["affordances"],
-  view: EngineBattleScreenModel["engine"],
-  cards: EngineCardModels,
-  emblemName: (emblem: "avatar" | "dreamsign", id: AvatarId | DreamsignId) => string | null,
-): ChooserOption[] {
-  if (chooser === null) return [];
-  const cancel: ChooserOption = { copy: { kind: "cancel" }, action: null };
-  const payment = (action: PayToEndAction): ChooserOption => {
-    const effect = view.payable.find((payable) => payable.id === action.effect);
-    const source = effect?.source ?? null;
-    let name: string | null = null;
-    if (typeof source === "string") {
-      const instance = view.instances[source];
-      name = instance === undefined ? null : cards(instance).displaySnapshot.name;
-    } else if (source !== null) {
-      const side = view.sides[source.side];
-      const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
-      name = id === undefined ? null : emblemName(source.kind, id);
-    }
-    return { copy: { kind: "payToEnd", cost: effect?.cost ?? 0, name }, action };
-  };
-  if (chooser.kind === "card") {
-    const activations = affordances.activations.get(chooser.id) ?? [];
-    const payments = (affordances.payToEnd.get(chooser.id) ?? []).map(payment);
-    if (activations.length + payments.length === 0) return [];
-    return [
-      ...activations.map((action, index): ChooserOption => ({ copy: { kind: "ability", index }, action })),
-      ...payments,
-      cancel,
-    ];
-  }
-  if (chooser.kind === "void") {
-    const plays = [...affordances.voidPlays.values()].flatMap((action): ChooserOption[] => {
-      const instance = view.instances[action.card];
-      return instance === undefined
-        ? []
-        : [{ copy: { kind: "reclaim", name: cards(instance).displaySnapshot.name }, action }];
-    });
-    if (plays.length === 0) return [];
-    return [...plays, { copy: { kind: "browseVoid" }, action: "browseVoid" }, cancel];
-  }
-  const options = affordances.emblemActivations.flatMap((action, _index, all): ChooserOption[] => {
-    const source = action.source;
-    if (typeof source === "string") return [];
-    const siblings = all.filter((other) => JSON.stringify(other.source) === JSON.stringify(source));
-    const side = view.sides[source.side];
-    const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
-    return [
-      {
-        copy: {
-          kind: "emblem",
-          emblem: source.kind,
-          name: id === undefined ? null : emblemName(source.kind, id),
-          index: siblings.indexOf(action),
-          count: siblings.length,
-        },
-        action,
-      },
-    ];
-  });
-  const all = [...options, ...affordances.statusPayToEnd.map(payment)];
-  return all.length === 0 ? [] : [...all, cancel];
 }
 
 function sourceSlotOf(view: MobileBattleView, id: BattleCardId): MobileBattleSlotTarget | null {
