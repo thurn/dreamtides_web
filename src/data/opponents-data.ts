@@ -25,8 +25,7 @@ export function parseOpponentsData(value: unknown): OpponentsData {
     candidate.battle === undefined ||
     candidate.dreamwell === undefined ||
     candidate.progression === undefined ||
-    candidate.ai === undefined ||
-    !Array.isArray(candidate.journeyAiDeck)
+    candidate.ai === undefined
   ) {
     throw new Error(
       "Failed to load opponent data: malformed opponents document",
@@ -37,13 +36,8 @@ export function parseOpponentsData(value: unknown): OpponentsData {
     ...decoded,
     contentHash: parseContentHash(candidate.contentHash),
     foldHash: parseFoldHash(candidate.foldHash),
-    journeyAiDeck: decoded.journeyAiDeck.map((entry) => ({
-      ...entry,
-      cardId: entry.cardId,
-    })),
     ai: {
       ...decoded.ai,
-      journeyDefaultPreset: decoded.ai.journeyDefaultPreset,
       tutorialDefaultPreset: decoded.ai.tutorialDefaultPreset,
       presets: Object.fromEntries(
         Object.entries(decoded.ai.presets).map(([key, preset]) => [

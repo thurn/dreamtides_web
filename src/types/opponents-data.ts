@@ -1,4 +1,3 @@
-import type { CardId } from "./card-identity";
 import type { AiDifficultyPresetId, IdentityRecord } from "./identifiers";
 
 export type OpponentMode = "expectiminimax" | "worstCase";
@@ -29,7 +28,6 @@ export interface AiDifficultyPreset {
   opponentMode: OpponentMode;
   sampleCount: number;
   searchDepth: number;
-  journeyPlanningBudgetMs: number;
   tutorialExpansionBudget: number;
 }
 
@@ -71,9 +69,7 @@ export interface OpponentsData {
     legendariesFromLayer: number;
     starterDilution: number[];
   };
-  journeyAiDeck: Array<{ cardId: CardId; count: number }>;
   ai: {
-    journeyDefaultPreset: AiDifficultyPresetId;
     tutorialDefaultPreset: AiDifficultyPresetId;
     evaluation: AiEvaluationWeights;
     opponentModel: AiOpponentModelTuning;
@@ -81,14 +77,11 @@ export interface OpponentsData {
   };
 }
 
-export function resolveBattleAiConfiguration(
+/** The tutorial battle's planner configuration: its preset plus shared tuning. */
+export function resolveTutorialAiConfiguration(
   data: OpponentsData,
-  use: "journey" | "tutorial",
 ): ResolvedBattleAiConfiguration {
-  const id =
-    use === "journey"
-      ? data.ai.journeyDefaultPreset
-      : data.ai.tutorialDefaultPreset;
+  const id = data.ai.tutorialDefaultPreset;
   const preset = data.ai.presets[id];
   if (preset === undefined) throw new Error(`Missing compiled AI preset ${id}`);
   return {

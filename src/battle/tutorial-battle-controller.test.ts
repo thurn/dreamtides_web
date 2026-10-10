@@ -9,8 +9,9 @@ import type {
   BattleMutableState,
 } from "./types";
 import { opponentsFixture } from "../testing/opponents-fixture";
-import { resolveBattleAiConfiguration } from "../types/opponents-data";
+import { resolveTutorialAiConfiguration } from "../types/opponents-data";
 import type { BattleCardId } from "../types/identifiers";
+import { parseAiDifficultyPresetId } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
 import { parsePresentationId } from "../types/identifiers";
@@ -20,10 +21,8 @@ import { parseTutorialRunId } from "../types/identifiers";
 import { testCardId } from "../types/test-identities";
 
 const DRIVER = parseClientId("client-driver");
-const TUTORIAL_AI_CONFIGURATION = resolveBattleAiConfiguration(
-  opponentsFixture(),
-  "tutorial",
-);
+const TUTORIAL_AI_CONFIGURATION =
+  resolveTutorialAiConfiguration(opponentsFixture());
 
 function stateFor(
   boardOverrides: Partial<BattleMutableState> = {},
@@ -552,5 +551,34 @@ describe("tutorial battle controller", () => {
         presentationId: parsePresentationId("challenge-resolved:player:4:F0"),
       },
     });
+  });
+});
+
+describe("tutorial AI configuration", () => {
+  it("resolves the tutorial preset with the shared evaluation and opponent model", () => {
+    const data = opponentsFixture();
+    const standardId = parseAiDifficultyPresetId("standard");
+    const tutorialId = parseAiDifficultyPresetId("tutorial-only");
+    const tutorialPreset = {
+      ...data.ai.presets[standardId],
+      id: tutorialId,
+      beamWidth: 3,
+      tutorialExpansionBudget: 7,
+    };
+    data.ai.presets = { ...data.ai.presets, [tutorialId]: tutorialPreset };
+    data.ai.tutorialDefaultPreset = tutorialId;
+
+    expect(resolveTutorialAiConfiguration(data)).toEqual({
+      ...tutorialPreset,
+      evaluation: data.ai.evaluation,
+      opponentModel: data.ai.opponentModel,
+    });
+  });
+
+  it("rejects a tutorial preset id the data does not define", () => {
+    const data = opponentsFixture();
+    data.ai.tutorialDefaultPreset = parseAiDifficultyPresetId("missing");
+
+    expect(() => resolveTutorialAiConfiguration(data)).toThrow();
   });
 });

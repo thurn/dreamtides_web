@@ -55,7 +55,7 @@ import type {
   TutorialBattleConfiguration,
 } from "../../types/tutorial";
 import { advanceAtlas } from "../../atlas/atlas-generator";
-import { resolveBattleAiConfiguration } from "../../types/opponents-data";
+import { resolveTutorialAiConfiguration } from "../../types/opponents-data";
 import { tutorialCardConstantId } from "../../data/tutorial-actions";
 import { parseJourneyId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
@@ -398,10 +398,7 @@ function createTutorialBattleInit(
     handLimit: content.opponentsData.battle.handLimit,
     opponentsContentHash: content.opponentsData.contentHash,
     opponentAbilityActive: false,
-    aiConfiguration: resolveBattleAiConfiguration(
-      content.opponentsData,
-      "tutorial",
-    ),
+    aiConfiguration: resolveTutorialAiConfiguration(content.opponentsData),
     startingSide: "player",
     playerDrawSkipsTurnOne: false,
     tutorialTriggers: content.tutorial.triggers,

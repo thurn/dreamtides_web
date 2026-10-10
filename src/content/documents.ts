@@ -134,7 +134,6 @@ export const opponentsDocument = lazy(() =>
     battle: BATTLE,
     dreamwell: DREAMWELL_RULES,
     progression: OPPONENTS.progression,
-    journeyAiDeck: AI.journeyAiDeck,
     ai: AI.ai,
   }),
 );

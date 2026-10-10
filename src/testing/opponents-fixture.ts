@@ -1,19 +1,6 @@
 import type { OpponentsData } from "../types/opponents-data";
 import { parseAiDifficultyPresetId } from "../types/identifiers";
-import { testCardId, testContentHash, testFoldHash } from "../types/test-identities";
-
-const STARTER_IDS = [
-  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-  "647f5150-b2e0-424b-9480-27557642524e",
-  "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-  "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
-  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-  "4408b942-09a0-4f4e-a403-10c708c6e3c5",
-  "2162742c-09d0-4e62-ae49-0f8f79b45adc",
-  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-  "944e15d2-d680-4ebe-8d18-36826f4b1535",
-] as const;
+import { testContentHash, testFoldHash } from "../types/test-identities";
 
 /** Stable synthetic opponent input for tests which are not testing compilation. */
 export function opponentsFixture(): OpponentsData {
@@ -23,7 +10,6 @@ export function opponentsFixture(): OpponentsData {
     opponentMode: "expectiminimax" as const,
     sampleCount: 8,
     searchDepth: 16,
-    journeyPlanningBudgetMs: 100,
     tutorialExpansionBudget: 256,
   };
   return {
@@ -59,12 +45,7 @@ export function opponentsFixture(): OpponentsData {
       legendariesFromLayer: 5,
       starterDilution: [10, 5],
     },
-    journeyAiDeck: STARTER_IDS.map((cardId) => ({
-      cardId: testCardId(cardId),
-      count: 3,
-    })),
     ai: {
-      journeyDefaultPreset: parseAiDifficultyPresetId("standard"),
       tutorialDefaultPreset: parseAiDifficultyPresetId("standard"),
       evaluation: {
         scoreDifference: 10,
