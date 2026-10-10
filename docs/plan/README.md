@@ -108,8 +108,8 @@ improvement loop ends on its plateau stop rule.
 | T | Tollgate | [phase-t-tollgate.md](phase-t-tollgate.md) | now | Fast restarts; staged validation live for this repository; skills and Hive consistent |
 | 3 | Rules engine core | [phase-3-engine.md](phase-3-engine.md) | now (3.1); 3.2 after the Phase 2 lint, script, and battle-test cuts | Headless deterministic engine; prompt protocol proven by property tests; stack, triggers, layers, zones, DSL, loops, views; soak clean |
 | 4 | Battle UI on the engine | [phase-4-battle-ui.md](phase-4-battle-ui.md) | 4.0 after the Phase 2 gate; 4.1 after 3.4 | Engine battles in the existing UI against placeholder bots; one `PromptHost` for every prompt; journey sandbox and old AI removed; card-lab and sweep ready |
-| 5 | Content | [phase-5-content.md](phase-5-content.md) | 5.1 after 3.4; 5.6 after 5.1; card batches after the Phase 3 gate and 4.6 | Every entity is implemented, audited, swept, and judged; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass |
-| 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | 6.0 after the Phase 2 gate; 6.1 after the Phase 4 gate and the first card batch | Tutorial battle and journey guidance work end to end; tutorial sandbox deleted |
+| 5 | Content | [phase-5-content.md](phase-5-content.md) | 5.1 after 3.4; 5.6 after 5.1; the card pilot after the Phase 3 gate, 4.6, and 4.7 | Every entity is implemented, audited, swept, and judged; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass |
+| 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | 6.0 after the Phase 2 gate; 6.1 after the Phase 4 gate and the Phase 5 pilot beads | Tutorial battle and journey guidance work end to end; tutorial sandbox deleted |
 | 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | 7.1 after 4.5; 7.2 after the Phase 5 gate | Every AI build task done; champion plateaus for three iterations; final acceptance; report; docs end state |
 
 Every phase ends with a **mason pass** just before its gate. Every bead it

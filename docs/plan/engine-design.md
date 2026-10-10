@@ -43,7 +43,7 @@ emerges.
 Step kinds, engine event kinds, and DSL primitives are each **registered from
 their own module** through typed registries (`steps/kinds/index.ts`,
 `events/index.ts`, `effects/primitives/index.ts`). Engine tasks and content
-batches then add files instead of editing central switches.
+beads then add files instead of editing central switches.
 
 ```text
 src/engine/
@@ -71,7 +71,7 @@ src/engine/
                fuzz harness, invariants, redaction checks
 src/content/   typed catalogs (D32) with co-located abilities (D5)
   cards/ dreamsigns/ avatars/ dreamwell/ figments/
-  specs/       per-batch scenario modules, their registry, and the one runner test
+  specs/       per-bead scenario modules, their registry, and the one runner test
   battle.ts, dreamwell-rules.ts, opponents.ts, ai.ts, atlas.ts, apollyon.ts, …   data modules
 ```
 
@@ -1057,7 +1057,7 @@ the cards a cost chooses ("abandon a character") still match it: a cost is
 not an effect, and its cards are not targets (rules § Targeting).
 
 **Primitive catalog.** The registered primitives and DSL builders, by group,
-with the ones Phase 5 adds as content batches need them, each with tests.
+with the ones Phase 5 primitive beads add, each with tests.
 
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
@@ -1571,8 +1571,8 @@ Greedy unless `?ai=random|greedy` selects one.
   top-level actions in order, and scripted answers to every non-automatic
   prompt, run through `engine.apply` with a `ScriptedSource`. It fails if a
   prompt has no scripted answer or answers are left over. Primitive tests call
-  it directly. Phase 5 writes one scenario module per content batch, per D20:
-  `src/content/specs/<batch-slug>.scenarios.ts`, a plain module whose default
+  it directly. Phase 5 writes at most one scenario module per content bead, per D20:
+  `src/content/specs/<bead-key>.scenarios.ts`, a plain module whose default
   export is a `ScenarioModule`, a slug and its `NamedScenario`s, each a name,
   a spec, and a `check` on the result. `src/content/specs/index.ts` registers
   every module, and one test file, `src/content/specs/specs.test.ts`, runs
@@ -1582,9 +1582,9 @@ Greedy unless `?ai=random|greedy` selects one.
   content test, it runs in the `node` environment:
 
   ```ts
-  // src/content/specs/<batch-slug>.scenarios.ts
+  // src/content/specs/<bead-key>.scenarios.ts
   export default {
-    slug: "<batch-slug>",
+    slug: "<bead-key>",
     scenarios: [{
       name: `${dissolver.id} dissolves the chosen enemy`,
       spec: {

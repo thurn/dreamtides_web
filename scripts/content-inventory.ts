@@ -5,8 +5,8 @@
  *   npx tsx scripts/content-inventory.ts --check   # exits 1 when the file is stale
  *
  * Emits docs/plan/evidence/content-inventory.json: one record per catalog
- * entity, the Phase 5 card batches, and the routing of every other entity
- * to its Phase 5 task.
+ * entity and the Phase 5 bead plan, with every pending entity routed to the
+ * bead that implements it.
  *
  * - **Entities.** The coverage gate's enumeration (cards, dreamsigns,
  *   avatars, Dreamwell cards, figments; src/engine/content-gates.test.ts),
@@ -20,17 +20,20 @@
  * - **Primitives** in `PRIMITIVES` are probed against src/engine: a primitive
  *   module exists when its file is listed in effects/primitives/index.ts, a
  *   builder when src/engine/dsl exports it, and a DSL addition when its probe
- *   pattern matches. Only primitives that do not exist yet create batch
- *   edges: a batch depends on the earlier batch that first needs each new
- *   primitive it needs.
- * - **Batches.** Each card joins the latest family (in the § 5.1 order) among
- *   its tags, and a keyword card that needs no new primitive joins the
- *   keyword family; Starter, Tutorial, and Special cards form batch 1. A
- *   family smaller than `MIN_BATCH` joins the next family. Families split
- *   into batches of at most `MAX_BATCH` entities, sized so that each
- *   introduces about `MAX_NEW_PRIMITIVES` new primitives.
- * - **Tasks.** Every other entity routes to its Phase 5 task (5.3–5.8), with
- *   the card batches whose primitives it needs.
+ *   pattern matches. Only primitives that do not exist yet create bead
+ *   edges: a bead depends on the bead that introduces each new primitive
+ *   its entities need.
+ * - **Families.** Each card joins the latest family (in the § 5.1 order)
+ *   among its tags, and a keyword card that needs no new primitive joins the
+ *   keyword family; Starter, Tutorial, and Special cards form the pilot.
+ * - **Beads.** Each section (5.2–5.6, 5.7a) is planned family by family. Every
+ *   new primitive the family first needs gets a primitive bead, which also
+ *   takes up to `MAX_EXEMPLARS` entities that need only it. The family's
+ *   other entities, ordered by tags so similar entities sit together, fill
+ *   composition beads up to `TARGET_WEIGHT` and `MAX_ENTITIES`. The fixed
+ *   tasks (the card checkpoint, 5.7, 5.7b, and 5.8) are split as their page
+ *   sections describe. Every bead outside 5.6 that has no other edge waits
+ *   for the pilot beads.
  *
  * Output is deterministic: no timestamps, and every list is sorted.
  */
@@ -49,10 +52,15 @@ import { TRANSFIGURATION } from "../src/content/transfiguration";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUTPUT = "docs/plan/evidence/content-inventory.json";
-const MAX_BATCH = 30;
-const TARGET_BATCH = 25;
-const MIN_BATCH = 12;
-const MAX_NEW_PRIMITIVES = 4;
+// Bead sizing (phase-5-content.md § Bead sizing). A bead's weight is the sum
+// of its entities' weights; see `weight`.
+const TARGET_WEIGHT = 9;
+const MAX_ENTITIES = 6;
+const MAX_EXEMPLARS = 3;
+const WEIGHT_TEXT_UNIT = 120;
+const WEIGHT_AMPLIFIED = 0.4;
+const WEIGHT_TAG = 0.2;
+const APOLLYON_PER_BEAD = 2;
 
 /** Code-unit order, independent of the host locale. */
 const compare = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
@@ -1035,52 +1043,14 @@ function buildEntities(): EntityRecord[] {
 }
 
 // ---------------------------------------------------------------------------
-// Batching.
+// Bead planning (phase-5-content.md § Bead sizing).
 
 /**
- * Splits one family's cards into batches of near-equal size. The batch count
- * covers both TARGET_BATCH entities and MAX_NEW_PRIMITIVES new primitives
- * per batch, without dropping below MIN_BATCH entities. Cards that share
- * their most widely needed new primitive form a cluster; each cluster goes to
- * the batch it adds the fewest new primitives to, so the new primitives
- * spread across the family's batches. Cards that need no new primitive fill
- * the smallest batches.
+ * An entity's rough authoring cost: one unit, plus its printed text length,
+ * its amplified text, and the tags past the third.
  */
-function splitFamily(cards: readonly EntityRecord[], introduced: ReadonlySet<string>): EntityRecord[][] {
-  const pending = (card: EntityRecord): string[] => card.requiredPrimitives.new.filter((name) => !introduced.has(name));
-  const frequency = new Map<string, number>();
-  for (const card of cards) for (const name of pending(card)) frequency.set(name, (frequency.get(name) ?? 0) + 1);
-  const ranked = [...frequency.keys()].sort((a, b) => (frequency.get(b) ?? 0) - (frequency.get(a) ?? 0) || compare(a, b));
-  const byEntities = Math.ceil(cards.length / TARGET_BATCH);
-  const byPrimitives = Math.ceil(frequency.size / MAX_NEW_PRIMITIVES);
-  const count = Math.max(1, Math.min(Math.max(byEntities, byPrimitives), Math.floor(cards.length / MIN_BATCH)), Math.ceil(cards.length / MAX_BATCH));
-  const capacity = Math.max(Math.ceil(cards.length / count), MAX_BATCH - 5);
-  const clusters = new Map<string, EntityRecord[]>();
-  const filler: EntityRecord[] = [];
-  for (const card of [...cards].sort((a, b) => compare(a.id, b.id))) {
-    const names = pending(card);
-    const primary = ranked.find((name) => names.includes(name));
-    if (primary === undefined) filler.push(card);
-    else clusters.set(primary, [...(clusters.get(primary) ?? []), card]);
-  }
-  const chunks = Array.from({ length: count }, () => ({ cards: [] as EntityRecord[], primitives: new Set<string>() }));
-  type Chunk = (typeof chunks)[number];
-  const smallest = (candidates: readonly Chunk[], score: (chunk: Chunk) => number): Chunk =>
-    candidates.reduce((best, chunk) => (score(chunk) < score(best) || (score(chunk) === score(best) && chunk.cards.length < best.cards.length) ? chunk : best));
-  const ordered = [...clusters.entries()].sort((a, b) => b[1].length - a[1].length || compare(a[0], b[0]));
-  for (const [, cluster] of ordered) {
-    const names = new Set(cluster.flatMap(pending));
-    const fitting = chunks.filter((chunk) => chunk.cards.length + cluster.length <= capacity);
-    const target = smallest(fitting.length > 0 ? fitting : chunks, (chunk) => new Set([...chunk.primitives, ...names]).size);
-    target.cards.push(...cluster);
-    for (const name of names) target.primitives.add(name);
-  }
-  for (const card of filler) smallest(chunks, (chunk) => chunk.cards.length).cards.push(card);
-  return chunks
-    .filter((chunk) => chunk.cards.length > 0)
-    .map((chunk) => ({ ...chunk, cards: [...chunk.cards].sort((a, b) => compare(a.id, b.id)) }))
-    .sort((a, b) => b.primitives.size - a.primitives.size || compare(a.cards[0]?.id ?? "", b.cards[0]?.id ?? ""))
-    .map((chunk) => chunk.cards);
+function weight(record: EntityRecord): number {
+  return 1 + (record.text?.length ?? 0) / WEIGHT_TEXT_UNIT + (record.amplifiedText === undefined ? 0 : WEIGHT_AMPLIFIED) + WEIGHT_TAG * Math.max(0, record.tags.length - 3);
 }
 
 // The engine files that read each DSL type, which a DSL addition also edits.
@@ -1123,155 +1093,317 @@ interface IntroducedPrimitive {
 
 const introduction = (name: string): IntroducedPrimitive => ({ name, kind: primitive(name).kind, module: primitive(name).module ?? null });
 
-interface Batch {
-  readonly id: string;
+const kebab = (name: string): string => name.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();
+
+/**
+ * - "primitive": introduces one new primitive or DSL form, with tests on
+ *   synthetic cards, plus the few entities that first need only it;
+ * - "composition": entities whose primitives all exist by the time it runs;
+ * - "task": a fixed Phase 5 task, split where its page section allows.
+ */
+type BeadKind = "primitive" | "composition" | "task";
+
+interface Bead {
+  readonly key: string;
   readonly order: number;
-  readonly slug: string;
-  readonly families: readonly number[];
-  readonly familyName: string;
-  readonly count: number;
+  readonly section: string;
+  readonly kind: BeadKind;
+  readonly title: string;
   readonly entities: readonly { readonly id: string; readonly kind: EntityKind; readonly status: string }[];
+  readonly weight: number;
   readonly introduces: readonly IntroducedPrimitive[];
-  readonly dependsOn: readonly string[];
-  readonly implicitDependsOn: readonly string[];
   readonly newPromptKinds: readonly string[];
-  readonly spec: string;
-  readonly areasLine: string;
+  readonly dependsOn: readonly string[];
+  serializedAfter: { readonly bead: string; readonly code: string }[];
+  readonly externalDependsOn: readonly string[];
+  readonly pilot: boolean;
+  readonly coreReview: boolean;
+  readonly scenarios: string;
   readonly areas: readonly string[];
+  readonly sharedAreas: readonly string[];
   readonly falloutHints: readonly string[];
   readonly knownDecisions: readonly object[];
 }
 
-function buildBatches(records: readonly EntityRecord[]): { batches: Batch[]; introducedBy: Map<string, string> } {
-  const cards = records.filter((record) => record.kind === "card");
-  const introducedBy = new Map<string, string>();
-  const batches: Batch[] = [];
-  // A family smaller than MIN_BATCH joins the next family's batches.
-  const groups: { members: EntityRecord[]; families: Family[] }[] = [];
-  let carried: { members: EntityRecord[]; families: Family[] } = { members: [], families: [] };
-  const lastFamily = FAMILIES[FAMILIES.length - 1]?.family;
-  for (const entry of FAMILIES) {
-    if (entry.family === 0) continue;
-    const members = [...carried.members, ...cards.filter((card) => card.family === entry.family)];
-    const families = [...carried.families, entry];
-    if (members.length === 0) continue;
-    if (members.length < MIN_BATCH && entry.family !== lastFamily && entry.family !== 1) {
-      carried = { members, families };
-      continue;
+/** One planned content section: the entities it covers and the primitives each needs there. */
+interface Section {
+  readonly section: string;
+  readonly slug: string;
+  readonly name: string;
+  readonly members: readonly EntityRecord[];
+  readonly needsOf: (record: EntityRecord) => readonly string[];
+  readonly pilot?: boolean;
+  readonly extraDependsOn?: readonly string[];
+  readonly externalDependsOn?: readonly string[];
+}
+
+const SPECS_INDEX = "src/content/specs/index.ts";
+
+class Planner {
+  readonly beads: Bead[] = [];
+  readonly introducedBy = new Map<string, string>();
+  private readonly promptsSeen = new Set<string>();
+  private pilotKeys: string[] = [];
+
+  /**
+   * Plans one section: primitive beads family by family, then composition
+   * beads over the section's remaining entities in family order, so a
+   * family's remainder shares a bead with the next family's first entities.
+   */
+  planSection(section: Section): void {
+    const families = [...new Set(section.members.map((record) => record.family))].sort((a, b) => a - b);
+    const left: EntityRecord[] = [];
+    for (const family of families) {
+      const members = section.members.filter((record) => record.family === family).sort((a, b) => compare(a.id, b.id));
+      left.push(...this.planPrimitives(section, members, familyName(section, family)));
     }
-    carried = { members: [], families: [] };
-    groups.push({ members, families });
+    const ordered = left.sort((a, b) => a.family - b.family || compare(a.tags.join(","), b.tags.join(",")) || compare(a.id, b.id));
+    const chunks: EntityRecord[][] = [];
+    let chunk: EntityRecord[] = [];
+    let total = 0;
+    for (const record of ordered) {
+      if (chunk.length > 0 && (total + weight(record) > TARGET_WEIGHT || chunk.length >= MAX_ENTITIES)) {
+        chunks.push(chunk);
+        chunk = [];
+        total = 0;
+      }
+      chunk.push(record);
+      total += weight(record);
+    }
+    if (chunk.length > 0) chunks.push(chunk);
+    chunks.forEach((members, index) => {
+      const names = [...new Set(members.map((record) => familyName(section, record.family)))];
+      const number = String(index + 1).padStart(2, "0");
+      this.add(section, "composition", `${section.slug}-${number}`, `${section.section} ${names.join(" / ")} (${String(index + 1)}/${String(chunks.length)})`, members, []);
+    });
+    if (section.pilot === true) this.pilotKeys = this.beads.filter((bead) => bead.section === section.section).map((bead) => bead.key);
   }
-  for (const { members, families } of groups) {
-    const slug = families.map((entry) => entry.slug).join("-");
-    const chunks = splitFamily(members, new Set(introducedBy.keys()));
-    chunks.forEach((chunk, index) => {
-      const order = batches.length + 1;
-      const id = `B${String(order).padStart(2, "0")}`;
-      const batchSlug = chunks.length === 1 ? slug : `${slug}-${String(index + 1)}`;
-      const needs = new Set(chunk.flatMap((card) => card.requiredPrimitives.new));
-      const introduces = [...needs].filter((need) => !introducedBy.has(need)).sort(compare);
-      for (const need of introduces) introducedBy.set(need, id);
-      const dependsOn = [...new Set([...needs].map((need) => introducedBy.get(need) ?? id).filter((batch) => batch !== id))].sort(compare);
-      const files = areaFiles(introduces);
-      const seenPrompts = new Set(batches.flatMap((batch) => batch.newPromptKinds));
-      const newPromptKinds = [...new Set(chunk.flatMap((card) => card.promptKinds))]
-        .filter((spec) => PROMPT_EXISTS.get(spec) !== true && !seenPrompts.has(spec))
-        .sort(compare);
-      const fallout = new Set(files.fallout);
-      if (newPromptKinds.length > 0) fallout.add("PromptRole");
-      const spec = `src/content/specs/${batchSlug}.spec.ts`;
-      const areas = [
-        ...chunk.map((card) => card.module ?? card.id).sort(compare),
-        ...files.modules,
-        ...(files.modules.some((file) => file.startsWith(P)) ? [`${P}index.ts`] : []),
-        ...files.groups,
-        spec,
-        "engine hubs",
-        ...[...fallout].sort(compare).map((symbol) => `fallout: ${symbol}`),
-      ];
-      for (const card of chunk) card.routing.push(id);
-      batches.push({
-        id,
-        order,
-        slug: batchSlug,
-        families: families.map((entry) => entry.family),
-        familyName: families.map((entry) => entry.name).join("; "),
-        count: chunk.length,
-        entities: chunk.map((card) => ({ id: card.id, kind: card.kind, status: card.status ?? "pending" })),
-        introduces: introduces.map(introduction),
-        dependsOn,
-        implicitDependsOn: order === 1 ? [] : ["B01"],
-        newPromptKinds,
-        spec,
-        areasLine: `Areas: ${[...new Set(areas)].join(", ")}`,
-        areas: [...new Set(areas)],
-        falloutHints: [...fallout].sort(compare),
-        knownDecisions: chunk
-          .filter((card) => card.clarifications ?? card.rulesDecisions ?? card.cardIssues ?? card.correction)
-          .map((card) => ({
-            id: card.id,
-            ...(card.clarifications ? { clarifications: card.clarifications } : {}),
-            ...(card.rulesDecisions ? { rulesDecisions: card.rulesDecisions } : {}),
-            ...(card.cardIssues ? { cardIssues: card.cardIssues } : {}),
-            ...(card.correction ? { note: card.correction } : {}),
-          })),
-      });
+
+  /**
+   * Adds a primitive bead for each new primitive the family first needs, most
+   * widely needed first, and returns the members no primitive bead took.
+   */
+  private planPrimitives(section: Section, members: readonly EntityRecord[], name: string): EntityRecord[] {
+    const pending = (record: EntityRecord): string[] => section.needsOf(record).filter((need) => !this.introducedBy.has(need));
+    const frequency = new Map<string, number>();
+    for (const record of members) for (const need of pending(record)) frequency.set(need, (frequency.get(need) ?? 0) + 1);
+    const ranked = [...frequency.keys()].sort((a, b) => (frequency.get(b) ?? 0) - (frequency.get(a) ?? 0) || compare(a, b));
+    const left = new Set(members);
+    for (const need of ranked) {
+      const key = `prim-${kebab(need)}`;
+      this.introducedBy.set(need, key);
+      const ready = [...left]
+        .filter((record) => section.needsOf(record).includes(need) && section.needsOf(record).every((other) => this.introducedBy.has(other)))
+        .sort((a, b) => weight(a) - weight(b) || compare(a.id, b.id));
+      const exemplars: EntityRecord[] = [];
+      let total = 0;
+      for (const record of ready) {
+        if (exemplars.length >= MAX_EXEMPLARS || total + weight(record) > TARGET_WEIGHT) break;
+        exemplars.push(record);
+        total += weight(record);
+      }
+      for (const record of exemplars) left.delete(record);
+      this.add(section, "primitive", key, `${section.section} primitive ${need} (${name})`, exemplars, [need]);
+    }
+    return [...left];
+  }
+
+  /** A fixed task bead, outside the per-entity planning. */
+  addTask(section: string, key: string, title: string, members: readonly EntityRecord[], dependsOn: readonly string[], externalDependsOn: readonly string[], areas: readonly string[], coreReview: boolean): void {
+    this.beads.push({
+      key,
+      order: this.beads.length + 1,
+      section,
+      kind: "task",
+      title,
+      entities: members.map((record) => ({ id: record.id, kind: record.kind, status: record.status ?? "pending" })),
+      weight: round(members.reduce((sum, record) => sum + weight(record), 0)),
+      introduces: [],
+      newPromptKinds: [],
+      dependsOn: [...new Set(dependsOn)].sort(compare),
+      serializedAfter: [],
+      externalDependsOn: [...externalDependsOn],
+      pilot: false,
+      coreReview,
+      scenarios: `src/content/specs/${key}.scenarios.ts`,
+      areas: [...areas],
+      sharedAreas: [],
+      falloutHints: [],
+      knownDecisions: [],
     });
   }
-  return { batches, introducedBy };
+
+  private add(section: Section, kind: BeadKind, key: string, title: string, members: readonly EntityRecord[], introduces: readonly string[]): void {
+    const needs = new Set(members.flatMap((record) => section.needsOf(record)));
+    const dependsOn = new Set([...needs].map((need) => this.introducedBy.get(need) ?? key).filter((other) => other !== key));
+    for (const other of section.extraDependsOn ?? []) dependsOn.add(other);
+    const pilot = section.pilot === true;
+    // Every bead after the pilot waits for it; an edge to another planned bead already implies it.
+    if (!pilot && section.section !== "5.6" && dependsOn.size === 0) for (const other of this.pilotKeys) dependsOn.add(other);
+    const newPromptKinds = [...new Set(members.flatMap((record) => record.promptKinds))]
+      .filter((spec) => PROMPT_EXISTS.get(spec) !== true && !this.promptsSeen.has(spec))
+      .sort(compare);
+    for (const spec of newPromptKinds) this.promptsSeen.add(spec);
+    const files = areaFiles(introduces);
+    const fallout = new Set(files.fallout);
+    if (newPromptKinds.length > 0) fallout.add("PromptRole");
+    const scenarios = `src/content/specs/${key}.scenarios.ts`;
+    const shared = [
+      ...files.modules,
+      ...(files.modules.some((file) => file.startsWith(P)) ? [`${P}index.ts`] : []),
+      ...files.groups,
+      ...(introduces.length > 0 || newPromptKinds.length > 0 ? ["engine hubs"] : []),
+      ...[...fallout].sort(compare).map((symbol) => `fallout: ${symbol}`),
+    ];
+    const areas = [...members.map((record) => record.module ?? record.id).sort(compare), ...shared, scenarios, SPECS_INDEX];
+    for (const record of members) record.routing.push(key);
+    this.beads.push({
+      key,
+      order: this.beads.length + 1,
+      section: section.section,
+      kind,
+      title,
+      entities: members.map((record) => ({ id: record.id, kind: record.kind, status: record.status ?? "pending" })),
+      weight: round(members.reduce((sum, record) => sum + weight(record), 0)),
+      introduces: introduces.map(introduction),
+      newPromptKinds,
+      dependsOn: [...dependsOn].sort(compare),
+      serializedAfter: [],
+      externalDependsOn: [...(section.externalDependsOn ?? [])],
+      pilot,
+      coreReview: introduces.length > 0 || newPromptKinds.length > 0,
+      scenarios,
+      areas: [...new Set(areas)],
+      sharedAreas: [...new Set(shared)],
+      falloutHints: [...fallout].sort(compare),
+      knownDecisions: members
+        .filter((record) => record.clarifications ?? record.rulesDecisions ?? record.cardIssues ?? record.correction)
+        .map((record) => ({
+          id: record.id,
+          ...(record.clarifications ? { clarifications: record.clarifications } : {}),
+          ...(record.rulesDecisions ? { rulesDecisions: record.rulesDecisions } : {}),
+          ...(record.cardIssues ? { cardIssues: record.cardIssues } : {}),
+          ...(record.correction ? { note: record.correction } : {}),
+        })),
+    });
+  }
+
+  keysOf(section: string): string[] {
+    return this.beads.filter((bead) => bead.section === section).map((bead) => bead.key);
+  }
 }
 
-/** Splits a task's entities into groups of at most MAX_BATCH, by family. */
-function groupTask(entities: readonly EntityRecord[]): string[][] {
-  const ordered = [...entities].sort((a, b) => a.family - b.family || compare(a.id, b.id));
-  const size = Math.ceil(ordered.length / Math.ceil(ordered.length / MAX_BATCH));
-  const groups: string[][] = [];
-  for (let index = 0; index < ordered.length; index += size) groups.push(ordered.slice(index, index + size).map((entity) => entity.id));
-  return groups;
-}
-
-const TASKS: readonly { readonly task: string; readonly title: string; readonly fixedDependsOn: readonly string[] }[] = [
-  { task: "5.3", title: "Dreamwell cards", fixedDependsOn: ["the energy-and-points batches (phase page)", "Phase 4.7"] },
-  { task: "5.4", title: "Avatars", fixedDependsOn: [] },
-  { task: "5.5", title: "Dreamsigns: battle effects", fixedDependsOn: [] },
-  { task: "5.6", title: "Dreamsigns: journey effects", fixedDependsOn: ["5.1", "Phase 4.1"] },
-  { task: "5.7a", title: "Transfiguration transforms", fixedDependsOn: ["5.6", "the Phase 3 gate"] },
-  { task: "5.7b", title: "Deck-entry modifications", fixedDependsOn: ["5.7a", "every card batch"] },
-  { task: "5.8", title: "Apollyon incarnations", fixedDependsOn: ["every card batch", "5.4", "5.5", "Phase 7.1"] },
-];
+// Shared files a bead only appends to (workflow.md § Serialization edges): a
+// new union member, registry entry, builder, or group test needs no edge.
+const ADDITIVE_FILES: ReadonlySet<string> = new Set([`${P}index.ts`, DSL_TYPES, DSL_TRIGGERS, "src/engine/dsl/builders.ts", SPECS_INDEX]);
 
 /**
- * The non-card tasks, in TASKS order. A primitive no card batch introduces
- * belongs to the first task that needs it; a later task that needs it too
- * depends on that task.
+ * Adds serialization edges (workflow.md § Serialization edges): each bead
+ * that changes an entity module or engine logic file another bead also
+ * changes waits for the previous such bead in plan order, unless a planning
+ * edge already orders them.
  */
-function buildTasks(records: readonly EntityRecord[], introducedBy: ReadonlyMap<string, string>): { tasks: object[]; taskIntroduces: Map<string, string> } {
-  const taskIntroduces = new Map<string, string>();
-  const tasks = TASKS.map(({ task, title, fixedDependsOn }) => {
-    const entities = records.filter((record) => record.routing.includes(task));
-    // 5.6 owns the journey hooks and the type remap; every other task owns engine primitives.
-    const owns = (name: string): boolean => (primitive(name).kind === "journey" || name === "typeRemap") === (task === "5.6");
-    const needs = new Set(entities.flatMap((entity) => entity.requiredPrimitives.new).filter(owns));
-    const introduces = [...needs].filter((need) => !introducedBy.has(need) && !taskIntroduces.has(need)).sort(compare);
-    const dependsOnTasks = [...new Set([...needs].flatMap((need) => taskIntroduces.get(need) ?? []))].sort(compare);
-    for (const need of introduces) taskIntroduces.set(need, task);
-    const counts: Partial<Record<EntityKind, number>> = {};
-    for (const entity of entities) counts[entity.kind] = (counts[entity.kind] ?? 0) + 1;
-    return {
-      task,
-      title,
-      count: entities.length,
-      counts,
-      dependsOnBatches: [...new Set([...needs].flatMap((need) => introducedBy.get(need) ?? []))].sort(compare),
-      dependsOnTasks,
-      fixedDependsOn,
-      introduces: introduces.map(introduction),
-      groups: entities.length > MAX_BATCH ? groupTask(entities) : [entities.map((entity) => entity.id).sort(compare)],
-      entities: entities.map((entity) => ({ id: entity.id, kind: entity.kind })).sort((a, b) => compare(a.kind, b.kind) || compare(a.id, b.id)),
-    };
+function serialize(beads: readonly Bead[]): void {
+  const last = new Map<string, string>();
+  const byKey = new Map(beads.map((bead) => [bead.key, bead]));
+  const reaches = (from: string, to: string, seen = new Set<string>()): boolean => {
+    if (from === to) return true;
+    if (seen.has(from)) return false;
+    seen.add(from);
+    const bead = byKey.get(from);
+    return bead !== undefined && [...bead.dependsOn, ...bead.serializedAfter.map((edge) => edge.bead)].some((next) => reaches(next, to, seen));
+  };
+  for (const bead of beads) {
+    const code = bead.areas.filter((area) => (area.startsWith("src/content/") && !area.startsWith("src/content/specs/")) || (area.startsWith("src/engine/") && !ADDITIVE_FILES.has(area) && !area.endsWith(".test.ts")));
+    for (const file of code) {
+      const previous = last.get(file);
+      if (previous !== undefined && !reaches(bead.key, previous)) bead.serializedAfter.push({ bead: previous, code: file });
+      last.set(file, bead.key);
+    }
+  }
+}
+
+const round = (value: number): number => Math.round(value * 10) / 10;
+
+function familyName(section: Section, family: number): string {
+  const entry = FAMILIES.find((candidate) => candidate.family === family);
+  return entry === undefined || family === 0 || section.pilot === true ? section.name : `${section.name}: ${entry.name}`;
+}
+
+// 5.6 owns the journey hooks and the type remap; every other section owns engine primitives.
+const isJourneyNeed = (name: string): boolean => primitive(name).kind === "journey" || name === "typeRemap";
+
+// The exploration effects of 5.7b, one bead per modification kind.
+const DECK_ENTRY_BEADS: readonly { readonly key: string; readonly title: string; readonly effectKinds: readonly string[] }[] = [
+  { key: "deck-mods-spark-bonus", title: "spark bonus", effectKinds: ["increase-spark-all", "purge-random-subtype-and-increase-spark"] },
+  { key: "deck-mods-cost-reduction", title: "cost reduction", effectKinds: ["reduce-cost-all-and-gain-nightmares"] },
+  { key: "deck-mods-fast", title: "Fast", effectKinds: ["make-fast-all", "make-predicate-fast-and-gain-nightmares"] },
+  { key: "deck-mods-reclaim", title: "granted and overridden Reclaim", effectKinds: ["purge-duplicates-and-grant-reclaim"] },
+  { key: "deck-mods-subtype-change", title: "subtype change", effectKinds: ["change-subtype-all", "change-subtype-selected"] },
+  { key: "deck-mods-card-type-change", title: "card-type change", effectKinds: ["change-card-type-selected"] },
+  { key: "next-battle-opening-hand", title: "next-battle opening hand", effectKinds: ["next-battle-opening-hand"] },
+  { key: "next-battle-starting-energy", title: "next-battle starting energy", effectKinds: ["next-battle-starting-energy"] },
+  { key: "next-battle-smaller-hand", title: "next-battle smaller hand and cost discount", effectKinds: ["next-battle-smaller-hand-and-cost-discount"] },
+];
+
+function planBeads(records: readonly EntityRecord[]): Planner {
+  const planner = new Planner();
+  const routed = (task: string): EntityRecord[] => records.filter((record) => record.routing.includes(task));
+  const engineNeeds = (record: EntityRecord): readonly string[] => record.requiredPrimitives.new.filter((name) => !isJourneyNeed(name));
+  const cards = routed("5.2");
+  planner.planSection({ section: "5.2", slug: "pilot", name: "Starter, Tutorial, Nightmare, and Contemplation", members: cards.filter((record) => record.family === 1), needsOf: engineNeeds, pilot: true });
+  planner.planSection({ section: "5.2", slug: "cards", name: "cards", members: cards.filter((record) => record.family !== 1), needsOf: engineNeeds });
+  const cardKeys = planner.keysOf("5.2");
+  planner.addTask("5.2", "card-checkpoint", "5.2 card coverage checkpoint", [], cardKeys, [], ["docs/plan/evidence/qa-ledger/", "docs/plan/evidence/pre-existing/"], false);
+  // Each section's shared setup is one bead the section's other beads wait for.
+  const pilotKeys = planner.keysOf("5.2").filter((key) => planner.beads.find((bead) => bead.key === key)?.pilot === true);
+  planner.addTask("5.3", "dreamwell-lab", "5.3 Card-lab variant that forces the next Dreamwell draw", [], pilotKeys, ["Phase 4.7"], ["scripts/qa/", "src/screens/"], false);
+  planner.planSection({ section: "5.3", slug: "dreamwell", name: "Dreamwell cards", members: routed("5.3"), needsOf: engineNeeds, extraDependsOn: ["dreamwell-lab"] });
+  planner.addTask("5.4", "avatar-lab", "5.4 Card-lab avatar scene (?goto=card-lab&avatar=<uuid>)", [], pilotKeys, [], ["scripts/qa/", "src/screens/"], false);
+  planner.planSection({ section: "5.4", slug: "avatars", name: "Avatars", members: routed("5.4"), needsOf: engineNeeds, extraDependsOn: ["avatar-lab"] });
+  planner.addTask("5.5", "dreamsign-lab", "5.5 Card-lab dreamsign scene (?goto=card-lab&dreamsign=<uuid>)", [], pilotKeys, [], ["scripts/qa/", "src/screens/"], false);
+  planner.planSection({ section: "5.5", slug: "dreamsigns-battle", name: "Dreamsigns: battle effects", members: routed("5.5"), needsOf: engineNeeds, extraDependsOn: ["dreamsign-lab"] });
+  planner.addTask("5.6", "journey-registry", "5.6 Journey-modifier registry keyed by dreamsign UUID, with modifier logging", [], [], ["5.1", "Phase 4.1"], ["src/rules/journey/", "engine hubs"], true);
+  planner.planSection({
+    section: "5.6",
+    slug: "dreamsigns-journey",
+    name: "Dreamsigns: journey effects (P8)",
+    members: routed("5.6"),
+    needsOf: (record) => record.requiredPrimitives.new.filter(isJourneyNeed),
+    extraDependsOn: ["journey-registry"],
   });
-  return { tasks, taskIntroduces };
+  planner.planSection({
+    section: "5.7a",
+    slug: "transfigurations",
+    name: "Transfiguration transforms",
+    members: routed("5.7a"),
+    needsOf: (record) => record.requiredPrimitives.new,
+    extraDependsOn: [planner.introducedBy.get("journeyTransfiguration") ?? "5.6"],
+    externalDependsOn: ["the Phase 3 gate"],
+  });
+  const transfigurationKeys = planner.keysOf("5.7a");
+  planner.addTask("5.7", "transfiguration-sweep", "5.7 Transfiguration sweep sample", [], [...transfigurationKeys, "card-checkpoint"], [], ["docs/plan/evidence/qa-ledger/"], false);
+  const deckEntry = routed("5.7b");
+  planner.addTask("5.7b", "deck-mods-foundation", "5.7b Deck-entry modifications: exhaustive mapping, card-lab mods, fuzz mods", [], [...transfigurationKeys, "card-checkpoint"], [], ["src/engine/", "scripts/qa/", "engine hubs"], true);
+  for (const { key, title, effectKinds } of DECK_ENTRY_BEADS) {
+    const members = deckEntry.filter((record) => effectKinds.includes(record.effectKind ?? ""));
+    planner.addTask("5.7b", key, `5.7b Deck-entry modifications: ${title}`, members, ["deck-mods-foundation"], [], [], false);
+    for (const record of members) record.routing.push(key);
+  }
+  const apollyon = routed("5.8").sort((a, b) => compare(a.id, b.id));
+  const contentKeys = ["card-checkpoint", ...planner.keysOf("5.4"), ...planner.keysOf("5.5")];
+  planner.addTask("5.8", "apollyon-design", "5.8 Apollyon incarnations: provisional mechanics design (D6)", apollyon, [], [], ["docs/design.md", "docs/plan/evidence/rules-decisions/"], true);
+  const implementationKeys: string[] = [];
+  for (let index = 0; index < apollyon.length; index += APOLLYON_PER_BEAD) {
+    const members = apollyon.slice(index, index + APOLLYON_PER_BEAD);
+    const key = `apollyon-${String(index / APOLLYON_PER_BEAD + 1).padStart(2, "0")}`;
+    implementationKeys.push(key);
+    planner.addTask("5.8", key, `5.8 Apollyon incarnations (${String(index / APOLLYON_PER_BEAD + 1)}/${String(Math.ceil(apollyon.length / APOLLYON_PER_BEAD))})`, members, ["apollyon-design", ...contentKeys], [], [], false);
+    for (const record of members) record.routing.push(key);
+  }
+  planner.addTask("5.8", "apollyon-sanity", "5.8 Apollyon sanity matrix and frozen deck pool", [], implementationKeys, ["Phase 7.1"], [], false);
+  serialize(planner.beads);
+  return planner;
 }
 
 // ---------------------------------------------------------------------------
@@ -1308,10 +1440,17 @@ function main(): void {
   const missingModules = records.filter((record) => gated.includes(record.kind) && record.module === undefined);
   if (missingModules.length > 0) throw new Error(`no module for ${missingModules.map((record) => record.id).join(", ")}`);
 
-  const { batches, introducedBy } = buildBatches(records);
-  const oversized = batches.filter((batch) => batch.count > MAX_BATCH);
-  if (oversized.length > 0) throw new Error(`batches over ${String(MAX_BATCH)}: ${oversized.map((batch) => batch.id).join(", ")}`);
-  const { tasks, taskIntroduces } = buildTasks(records, introducedBy);
+  const planner = planBeads(records);
+  const { beads, introducedBy } = planner;
+  const oversized = beads.filter((bead) => bead.kind === "composition" && bead.entities.length > MAX_ENTITIES);
+  if (oversized.length > 0) throw new Error(`composition beads over ${String(MAX_ENTITIES)} entities: ${oversized.map((bead) => bead.key).join(", ")}`);
+  const keys = beads.map((bead) => bead.key);
+  const duplicateKeys = [...new Set(keys.filter((key, index) => keys.indexOf(key) !== index))];
+  if (duplicateKeys.length > 0) throw new Error(`duplicate bead keys: ${duplicateKeys.join(", ")}`);
+  const dangling = beads.flatMap((bead) => [...bead.dependsOn, ...bead.serializedAfter.map((edge) => edge.bead)].filter((key) => !keys.includes(key)).map((key) => `${bead.key} -> ${key}`));
+  if (dangling.length > 0) throw new Error(`edges to unknown beads: ${dangling.join(", ")}`);
+  const unrouted = records.filter((record) => record.status === "pending" && !record.routing.some((route) => keys.includes(route)));
+  if (unrouted.length > 0) throw new Error(`pending entities in no bead: ${unrouted.map((record) => record.id).join(", ")}`);
 
   const count = (match: (record: EntityRecord) => boolean): Record<string, number> =>
     Object.fromEntries(KIND_ORDER.map((kind) => [kind, records.filter((record) => record.kind === kind && match(record)).length]));
@@ -1320,7 +1459,7 @@ function main(): void {
   const promptUsage = new Map<string, number>();
   for (const record of records) for (const spec of record.promptKinds) promptUsage.set(spec, (promptUsage.get(spec) ?? 0) + 1);
   const promptFirst = new Map<string, string>();
-  for (const batch of batches) for (const spec of batch.newPromptKinds) if (!promptFirst.has(spec)) promptFirst.set(spec, batch.id);
+  for (const bead of beads) for (const spec of bead.newPromptKinds) if (!promptFirst.has(spec)) promptFirst.set(spec, bead.key);
 
   const inventory = {
     generatedBy: relative(ROOT, fileURLToPath(import.meta.url)),
@@ -1330,22 +1469,23 @@ function main(): void {
       duplicateIds: duplicates.length,
       pendingByKind: count((record) => record.status === "pending"),
       cardsWithAmplifiedText: records.filter((record) => record.kind === "card" && record.amplifiedText !== undefined).length,
-      batches: batches.length,
-      largestBatch: Math.max(...batches.map((batch) => batch.count)),
+      beads: beads.length,
+      beadsBySection: Object.fromEntries([...new Set(beads.map((bead) => bead.section))].map((section) => [section, beads.filter((bead) => bead.section === section).length])),
+      beadsByKind: Object.fromEntries((["primitive", "composition", "task"] as const).map((kind) => [kind, beads.filter((bead) => bead.kind === kind).length])),
+      largestCompositionBead: Math.max(...beads.filter((bead) => bead.kind === "composition").map((bead) => bead.entities.length)),
       newPrimitives: [...PRIMITIVE_BY_NAME.values()].filter((entry) => !entry.exists && usage.has(entry.name)).length,
       notes: [
-        "Batch dependsOn lists only primitive edges: the earlier batch that introduces each new primitive the batch needs. Every batch after B01 also depends on B01, which validates the recipe (implicitDependsOn).",
+        "Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md § Serialization edges) are added at filing, from sharedAreas and entity modules.",
         "Primitive and prompt existence is probed against src/engine when the script runs; DSL-addition probe patterns name the expected shape and are a planning aid.",
-        "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; a batch subagent reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss.",
+        "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss.",
       ],
     },
     gaps: GAPS.map((entry) => ({
       ...entry,
       exists: primitive(entry.primitive).exists,
-      introducedBy: introducedBy.get(entry.primitive) ?? taskIntroduces.get(entry.primitive) ?? null,
+      introducedBy: introducedBy.get(entry.primitive) ?? null,
     })),
-    batches,
-    tasks,
+    beads,
     primitives: [...PRIMITIVE_BY_NAME.values()]
       .filter((entry) => usage.has(entry.name))
       .sort((a, b) => Number(a.exists) - Number(b.exists) || compare(a.name, b.name))
@@ -1355,12 +1495,12 @@ function main(): void {
         module: entry.module ?? null,
         exists: entry.exists,
         usedBy: usage.get(entry.name),
-        introducedBy: entry.exists ? null : (introducedBy.get(entry.name) ?? taskIntroduces.get(entry.name) ?? null),
+        introducedBy: entry.exists ? null : (introducedBy.get(entry.name) ?? null),
         ...(entry.note === undefined ? {} : { note: entry.note }),
       })),
     promptKinds: [...promptUsage.keys()]
       .sort(compare)
-      .map((spec) => ({ kind: spec, exists: PROMPT_EXISTS.get(spec) ?? false, usedBy: promptUsage.get(spec), firstBatch: promptFirst.get(spec) ?? null })),
+      .map((spec) => ({ kind: spec, exists: PROMPT_EXISTS.get(spec) ?? false, usedBy: promptUsage.get(spec), firstBead: promptFirst.get(spec) ?? null })),
     entities: [...records].sort((a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind) || compare(a.id, b.id)),
   };
 
@@ -1375,7 +1515,7 @@ function main(): void {
     return;
   }
   writeFileSync(target, output);
-  console.log(`wrote ${OUTPUT}: ${String(records.length)} entities, ${String(batches.length)} batches`);
+  console.log(`wrote ${OUTPUT}: ${String(records.length)} entities, ${String(beads.length)} beads`);
 }
 
 main();

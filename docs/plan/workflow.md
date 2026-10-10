@@ -135,12 +135,13 @@ that claims a filing bead files the phase as below and closes it.
    Inspect the edges with `hbd show <id> --json`, and run `hbd dep cycles`.
 4. **Make the children selectable.** Only after the edges are correct, set
    `--set-metadata hive_project=dreamtides_web` on each child.
-5. **File content batches separately.** The Phase 5 batches are filed from
-   the inventory after the inventory task lands, because their composition
-   depends on it. Use the same pattern.
+5. **File content beads separately.** The Phase 5 content beads are filed
+   from the inventory (`content-inventory.json`, whose `beads` list carries
+   their planning and serialization edges) after it is generated, because
+   their composition depends on it. Use the same pattern.
 6. **Cross-phase edges to unfiled beads** are added when the later of the
    two beads is filed. For example, filing Phase 6 adds 6.1's edge to the
-   Phase 5 batch with the Tutorial card.
+   Phase 5 pilot beads, which carry the Tutorial card.
 
 **Follow-up work gets a new bead** with the right edges. It never gets a
 reopen.
@@ -331,7 +332,7 @@ later candidate, and its session rebases with `tg update`
 - Never point an edge at a bead's ancestor or create a cycle; run
   `hbd dep cycles`.
 
-**Every filer adds them,** whether filing a phase, a content batch, a mason
+**Every filer adds them,** whether filing a phase, a content bead, a mason
 finding, an improvement, a `ci-fix`, or a review follow-up. Check the new
 bead's areas against every unfinished bead in the project, including beads in
 progress.
@@ -627,9 +628,9 @@ Run the cheapest relevant check first:
    committing: `npm run fuzz:engine -- --games 200`, introduced in Phase 3.2.
    It is heavy. In staged mode the release stage runs it, and a bead runs it
    locally only when it changes the fuzzer or the step runner.
-   - **Phase 5 content batches always run their weighted fuzz** locally
-     (batch recipe step 6), in both modes, because it targets the batch's
-     own cards. They carry the `heavy` label.
+   - **Phase 5 content beads always run their weighted fuzz** locally
+     (bead recipe step 6), in both modes, because it targets the bead's
+     own entities. They carry the `heavy` label.
    - **Whichever of Phase 3.2 and T9 lands second** adds the fuzz smoke to
      the release stage of the local Tollgate policy. Both are authorized to
      change the policy for this.
@@ -648,7 +649,7 @@ Tests follow AGENTS.md and [D19](decisions.md#d19-test-pruning):
 
 - Never gate on timing, statistics, UI strings, or mutable production data.
 - Engine and content tests run in `node`.
-- Scenario specs are one file per batch.
+- Scenario specs are at most one file per Phase 5 content bead.
 - **Delete before you add:** a bead that replaces behavior deletes the tests
   of the replaced behavior in the same commit.
 
