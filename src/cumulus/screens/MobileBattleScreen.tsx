@@ -22,6 +22,7 @@ import {
   CARD_ASPECT_RATIO_VALUE,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
+import type { BattleStatusBadgeView } from "../components/battle/BattleStatusBadges";
 import { BattlePhaseIndicator } from "../components/battle/BattlePhaseIndicator";
 import {
   BattlefieldCard,
@@ -108,6 +109,8 @@ export interface MobileBattleCardView {
   readonly layoutMotion?: "travel" | "snap";
   /** Stored-time counters held by this battle instance. */
   readonly storedTime: number;
+  /** Lasting statuses shown as badges on the battlefield card. */
+  readonly statuses?: readonly BattleStatusBadgeView[];
   /** Draw the green playable-card outline on this hand card. */
   readonly showPlayableOutline: boolean;
 }
@@ -126,6 +129,8 @@ export interface MobileBattleStatusView {
   readonly maxEnergy: number;
   readonly points: number;
   readonly pointsToWin: number;
+  /** Lasting statuses of this side, shown as badges under its status display. */
+  readonly statuses?: readonly BattleStatusBadgeView[];
 }
 
 /** Every zone owned by one side of the battle. */
@@ -206,10 +211,23 @@ export interface MobileBattleView {
   readonly result: MobileBattleResultView | null;
   /** One shared hand card presented over the battlefield at reading size. */
   readonly revealedHandCard?: MobileBattleCardView | null;
+  /**
+   * The opponent's card being played, at reading size: it arrives from the
+   * opponent's hand or void and, once this clears, travels to where the
+   * board shows it.
+   */
+  readonly playReveal?: MobileBattlePlayRevealView | null;
   /** The prompt host's heading, number picker, arrangement, loop offer, and notices. */
   readonly promptHost?: BattlePromptHostView | null;
   /** All Forward and All Back, when the near side may reposition. */
   readonly rankShortcuts?: MobileBattleRankShortcutsView | null;
+}
+
+/** A played card presented at reading size before it travels to its destination. */
+export interface MobileBattlePlayRevealView {
+  readonly card: MobileBattleCardView;
+  /** The zone it was played from, where its reveal starts. */
+  readonly from: "hand" | "void";
 }
 
 export type MobileBattlePromptCopy = string;
@@ -607,6 +625,8 @@ export interface MobileBattleInteractions {
   readonly onPromptArrangeSubmit?: (result: BattleForeseeResult) => void;
   /** Dismisses the prompt host's notice. */
   readonly onPromptNoticeDismiss?: () => void;
+  /** Opens the battle log; the log control shows only with this handler. */
+  readonly onBattleLogOpen?: () => void;
   /** Moves every eligible near-side back-rank character forward. */
   readonly onAllForward?: () => void;
   /** Moves every near-side front-rank character back. */
@@ -688,6 +708,14 @@ const DESKTOP_SIDE_PILE_HEIGHT =
 const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-m");
 const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
+// The mobile hand fan spreads up to 82% of the row. A hand of six or more
+// cards, which would reach that cap, spreads over 62% centered at 55% of the
+// row instead (each card face sits left of its fan position), which keeps
+// its leftmost card's uncovered strip on screen and as wide as the others.
+const MOBILE_HAND_FAN_SPREAD = 82;
+const MOBILE_HAND_CROWDED_FAN_SPREAD = 62;
+const MOBILE_HAND_CROWDED_FAN_CENTER = 55;
+const MOBILE_HAND_FAN_SPACING = 18;
 // Canonical full-card reading size, constrained on narrow screens so the
 // shared reveal stays fully visible beside the battlefield.
 const SHARED_HAND_CARD_REVEAL_WIDTH = "min(240px, 45vw)";
@@ -970,13 +998,14 @@ function centeredFanPosition(params: {
   count: number;
   maximumSpread: number;
   spacing: number;
+  center?: number;
 }): { left: string; normalized: number } {
-  const { index, count, maximumSpread, spacing } = params;
+  const { index, count, maximumSpread, spacing, center = 50 } = params;
   if (count <= 1) return { left: "50%", normalized: 0 };
   const spread = Math.min(maximumSpread, (count - 1) * spacing);
   const normalized = index / (count - 1) - 0.5;
   return {
-    left: `${String(50 + normalized * spread)}%`,
+    left: `${String(center + normalized * spread)}%`,
     normalized,
   };
 }
@@ -1173,6 +1202,7 @@ function SideZones({
       maxEnergy={side.status.maxEnergy}
       points={side.status.points}
       pointsToWin={side.status.pointsToWin}
+      statuses={side.status.statuses}
       testId={`${owner}-battle-status`}
     />
   );
@@ -1508,6 +1538,7 @@ function BattleCardSurface({
           card: card.model,
           exhausted: card.exhausted,
           storedMemory: card.storedTime,
+          statuses: card.statuses,
           figment: card.figment,
           selection:
             selection === undefined
@@ -1559,6 +1590,18 @@ function mobileBattlefieldWindow(view: MobileBattleView): {
   const frontOccupancies = sides.map((side) =>
     rankOccupancy(side.frontRank, "front"),
   );
+  // A back-rank character at B<i> may move forward to F<i-1> or F<i>, so
+  // the front window covers both front lanes beside every occupied back slot.
+  const backFrontReach = backOccupancies
+    .filter((occupancy) => occupancy.highestOccupiedIndex >= 0)
+    .map((occupancy) => ({
+      count: occupancy.count,
+      lowestOccupiedIndex: Math.max(0, occupancy.lowestOccupiedIndex - 1),
+      highestOccupiedIndex: Math.min(
+        MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS - 1,
+        occupancy.highestOccupiedIndex,
+      ),
+    }));
   const frontSlotCount = Math.min(
     MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
     Math.max(
@@ -1566,7 +1609,7 @@ function mobileBattlefieldWindow(view: MobileBattleView): {
       ...frontOccupancies.map(
         (occupancy) => occupancy.highestOccupiedIndex + 1,
       ),
-      ...backOccupancies.map((occupancy) => occupancy.highestOccupiedIndex),
+      ...backFrontReach.map((reach) => reach.highestOccupiedIndex + 1),
       ...frontOccupancies.map((occupancy) => occupancy.count + 1),
       ...backOccupancies.map((occupancy) => occupancy.count),
     ),
@@ -1582,7 +1625,7 @@ function mobileBattlefieldWindow(view: MobileBattleView): {
       ...occupancy,
       slotCount: backSlotCount,
     })),
-    ...frontOccupancies.map((occupancy) => ({
+    ...[...frontOccupancies, ...backFrontReach].map((occupancy) => ({
       ...occupancy,
       slotCount: frontSlotCount,
     })),
@@ -2432,11 +2475,19 @@ function NearHand({
         const isPickerCandidate = pickerCandidateIds.has(card.id);
         const isPickerSelected = selectedPickerCardIds.includes(card.id);
         const isPickerHighlighted = candidate?.highlighted === true;
+        const crowded =
+          !isDesktop &&
+          (cards.length - 1) * MOBILE_HAND_FAN_SPACING >= MOBILE_HAND_FAN_SPREAD;
         const { left, normalized } = centeredFanPosition({
           index,
           count: cards.length,
-          maximumSpread: isDesktop ? 72 : 82,
-          spacing: isDesktop ? 16 : 18,
+          maximumSpread: isDesktop
+            ? 72
+            : crowded
+              ? MOBILE_HAND_CROWDED_FAN_SPREAD
+              : MOBILE_HAND_FAN_SPREAD,
+          spacing: isDesktop ? 16 : MOBILE_HAND_FAN_SPACING,
+          ...(crowded ? { center: MOBILE_HAND_CROWDED_FAN_CENTER } : {}),
         });
         const rotation = normalized * (isDesktop ? 8 : 18);
         const drop = normalized * normalized * (isDesktop ? 8 : 18);
@@ -2631,6 +2682,72 @@ function TargetingCardStage({
         showRulesText
         selection={{ selected: true, kind: "selected" }}
       />
+    </div>
+  );
+}
+
+/**
+ * The opponent's played card at reading size: it grows out of the opponent's
+ * hand (or void), and when the screen clears it the board's copy of the card,
+ * which shares its layout identity, travels from here to its destination.
+ */
+function BattlePlayReveal({
+  reveal,
+  farOwner,
+}: {
+  readonly reveal: MobileBattlePlayRevealView;
+  readonly farOwner: MobileBattleOwner;
+}) {
+  const reduceMotion = useReducedMotion();
+  const [origin] = useState(() => {
+    const selector =
+      reveal.from === "void"
+        ? `[data-battle-zone="${farOwner}-void"]`
+        : `[data-battle-mobile-row="far-hand"]`;
+    const rect = document.querySelector(selector)?.getBoundingClientRect();
+    return rect === undefined || rect.width === 0
+      ? { x: 0, y: 0 }
+      : {
+          x: rect.left + rect.width / 2 - window.innerWidth / 2,
+          y: rect.top + rect.height / 2 - window.innerHeight / 2,
+        };
+  });
+  return (
+    <div
+      data-battle-play-reveal=""
+      data-battle-play-reveal-from={reveal.from}
+      style={{
+        position: "fixed",
+        left: "50%",
+        top: "50%",
+        width: SHARED_HAND_CARD_REVEAL_WIDTH,
+        transform: "translate(-50%, -50%)",
+        zIndex: token("--layer-reveal"),
+        pointerEvents: "none",
+      }}
+    >
+      <motion.div
+        layoutId={reduceMotion ? undefined : battleCardLayoutId(reveal.card.id)}
+        data-battle-card-id={reveal.card.id}
+        data-battle-card-layout-id={
+          reduceMotion ? undefined : battleCardLayoutId(reveal.card.id)
+        }
+        initial={
+          reduceMotion
+            ? false
+            : { opacity: 0, scale: 0.45, x: origin.x, y: origin.y }
+        }
+        animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+        transition={{
+          duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+          ease: [0.22, 0.61, 0.36, 1],
+        }}
+      >
+        <GameCard
+          model={reveal.card.model}
+          testId={`battle-play-reveal:${reveal.card.id}`}
+        />
+      </motion.div>
     </div>
   );
 }
@@ -4768,7 +4885,11 @@ export function MobileBattleScreen({
           isDesktop={isDesktop}
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
-          nextPhaseAction={view.dreamwell === null ? "nextPhase" : "continue"}
+          nextPhaseAction={
+            view.dreamwell === null || phaseNavigation !== "both"
+              ? "nextPhase"
+              : "continue"
+          }
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
           rankShortcuts={view.rankShortcuts ?? null}
@@ -4805,6 +4926,13 @@ export function MobileBattleScreen({
           onCardDragChange={handleCardDragChange}
           interactions={interactions}
         />
+        {view.playReveal === undefined || view.playReveal === null ? null : (
+          <BattlePlayReveal
+            key={view.playReveal.card.id}
+            reveal={view.playReveal}
+            farOwner={far.owner}
+          />
+        )}
       </BattleCardLayoutGroup>
       {view.revealedHandCard !== undefined && view.revealedHandCard !== null ? (
         <div
@@ -4845,6 +4973,15 @@ export function MobileBattleScreen({
           gap: token("--space-xs"),
         }}
       >
+        {interactions?.onBattleLogOpen === undefined ? null : (
+          <IconButton
+            glyph={GLYPHS.list}
+            size="sm"
+            label={"Open battle log"}
+            testId="battle-log-open"
+            onPress={interactions.onBattleLogOpen}
+          />
+        )}
         {isDesktop &&
         banishedCardCount > 0 &&
         interactions?.onZoneOpen !== undefined ? (

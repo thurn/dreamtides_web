@@ -53,13 +53,28 @@ export const BATTLE = {
   // Whether a prompt with exactly one legal answer (a forced choice) is
   // answered automatically instead of being asked; the answer is recorded.
   autoAnswerForcedPrompts: true,
-  // The battle screen's minimal presentation of engine events ("present,
-  // then ask"): how long each event it presents (a draw, a play, a discard,
-  // a notice) holds back the prompt that follows it, and the most a backlog
-  // of events may hold one back, so a long loop never stalls the next prompt.
+  // The battle screen's presentation of engine events ("present, then
+  // ask"). Each presented event holds back the next prompt and the board's
+  // next change for its dwell: a card's travel between zones or a notice
+  // (`eventDwellMs`); the opponent's play at reading size before it travels
+  // to its destination (`opponentPlayRevealDwellMs`, the tutorial's reveal
+  // pacing); a character's scored points (`scoreDwellMs`, four slow motion
+  // steps of its announcement); a Dreamwell card's reveal
+  // (`dreamwellRevealDwellMs`); and a new turn's announcement
+  // (`turnAnnouncementDwellMs`, the announcement's display time). A backlog
+  // of travels longer than `maxBacklogMs` drops its oldest ones, and one of
+  // more than `maxQueuedReveals` opponent plays drops its oldest reveals, so
+  // a long loop never stalls the next prompt. The battle log keeps the
+  // newest `logEntryCap` entries of a battle.
   presentation: {
     eventDwellMs: 450,
     maxBacklogMs: 2700,
+    opponentPlayRevealDwellMs: 2000,
+    scoreDwellMs: 1680,
+    dreamwellRevealDwellMs: 2000,
+    turnAnnouncementDwellMs: 2100,
+    maxQueuedReveals: 4,
+    logEntryCap: 400,
   },
   // Side that takes the first turn. Valid values are `Player` and `Enemy`.
   startingSide: "player",

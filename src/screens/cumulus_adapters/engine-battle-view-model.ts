@@ -7,7 +7,10 @@
 // Pure and React-free. Instance IDs reach the screen as battle-card IDs and
 // come back through `instanceIdIn`; nothing here reads card names.
 
+import type { BattleStatusBadgeView } from "../../cumulus/components/battle/BattleStatusBadges";
+import type { DreamwellCardModel } from "../../cumulus/components/battle/DreamwellCard";
 import type {
+  MobileBattleCardOverlayView,
   MobileBattleCardView,
   MobileBattleFigmentMergeTarget,
   MobileBattleInspectorSideView,
@@ -20,6 +23,8 @@ import type {
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import type { Action, BattleView, InstanceId, InstanceView, LoopId, Side, Slot } from "../../engine";
 import { opponent } from "../../engine";
+import type { PresentationVisual } from "../../battle/components/battle-presentation";
+import { engineStatusLabel, type EngineStatusCopy } from "../../runtime/battle-prompt-messages";
 import type { EngineCardModels } from "../../battle/ui/engine-card-model";
 import { formatPhaseLabel, formatSideLabel } from "../../battle/ui/format";
 import {
@@ -28,6 +33,8 @@ import {
   type BattleCardId,
   type BattleId,
   type BattleSlotViewId,
+  type DreamwellCardId,
+  type PresentationId,
 } from "../../types/identifiers";
 import type { BattlePromptNoticeView } from "../../cumulus/screens/battle-overlays/BattlePromptHost";
 import type { Decision } from "../../engine";
@@ -91,6 +98,12 @@ export interface EngineBattleViewInput {
   readonly opponentName: string;
   readonly essenceReward: number;
   readonly resultDismissed: boolean;
+  /** The presentation's current visual and its key, or `null` while it shows none. */
+  readonly visual?: { readonly key: PresentationId; readonly visual: PresentationVisual } | null;
+  /** The opponent's card the visual reveals, as the human sees it once played. */
+  readonly revealedCard?: InstanceView | null;
+  /** A Dreamwell card's display model, by its UUID. */
+  readonly dreamwellCard?: (card: DreamwellCardId) => DreamwellCardModel | null;
 }
 
 export interface EngineBattleScreenModel {
@@ -99,6 +112,8 @@ export interface EngineBattleScreenModel {
   readonly view: MobileBattleView;
   readonly affordances: EngineBattleAffordances;
   readonly prompt: PromptHostModel;
+  /** The card-score announcement of a challenger being presented, if any. */
+  readonly cardOverlay: MobileBattleCardOverlayView | null;
 }
 
 const NO_AFFORDANCES: EngineBattleAffordances = {
@@ -279,21 +294,104 @@ function hiddenZoneIds(view: BattleView, side: Side, zone: "hand" | "deck"): Bat
   });
 }
 
+/** Lasting statuses, by the card they mark and by the side they concern. */
+interface EngineStatuses {
+  readonly cards: ReadonlyMap<InstanceId, BattleStatusBadgeView[]>;
+  readonly sides: Readonly<Record<Side, BattleStatusBadgeView[]>>;
+}
+
+/**
+ * The status indicators of `view` for `human`: each floating effect with a
+ * duration (spark, base spark, all types, a granted or lost keyword,
+ * disabled triggers, a temporary character) marks its card; a banished card
+ * returning to play, a pending cost change, and a waiting delayed ability
+ * mark their side, as does an exhausted Avatar; an effect lasting until a
+ * player pays marks each card it affects.
+ */
+export function engineStatuses(view: BattleView, human: Side): EngineStatuses {
+  const cards = new Map<InstanceId, BattleStatusBadgeView[]>();
+  const sides: Record<Side, BattleStatusBadgeView[]> = { player: [], enemy: [] };
+  const badge = (kind: BattleStatusBadgeView["kind"], status: EngineStatusCopy): BattleStatusBadgeView => ({
+    kind,
+    label: engineStatusLabel(status, human),
+  });
+  const mark = (instance: InstanceId, entry: BattleStatusBadgeView) => {
+    if (view.instances[instance] !== undefined) cards.set(instance, [...(cards.get(instance) ?? []), entry]);
+  };
+  for (const { change, expiry, controller } of view.floating) {
+    const lasting = expiry.at !== "never";
+    switch (change.kind) {
+      case "spark":
+        if (lasting) mark(change.instance, badge("duration", { kind: "spark", amount: change.amount, expiry }));
+        break;
+      case "baseSpark":
+        if (lasting) mark(change.instance, badge("duration", { kind: "baseSpark", value: change.value, expiry }));
+        break;
+      case "allTypes":
+        if (lasting) mark(change.instance, badge("duration", { kind: "allTypes", expiry }));
+        break;
+      case "keyword":
+        mark(change.instance, badge("keyword", { kind: "keyword", keyword: change.keyword, gains: change.gains, expiry }));
+        break;
+      case "disableTriggers":
+        mark(change.instance, badge("triggersDisabled", { kind: "triggersDisabled", expiry }));
+        break;
+      case "temporary":
+        mark(change.instance, badge("duration", { kind: "temporary", expiry }));
+        break;
+      case "banishedUntil":
+        sides[view.instances[change.instance]?.owner ?? change.side].push(badge("returns", { kind: "returns", expiry }));
+        break;
+      case "cost":
+        sides[change.player].push(
+          badge("costModifier", {
+            kind: "cost",
+            amount: change.amount,
+            cardType: change.filter.cardType ?? null,
+            next: change.next,
+            expiry,
+          }),
+        );
+        break;
+      case "trigger":
+        sides[controller].push(badge("delayedTrigger", { kind: "delayedTrigger", once: change.once, expiry }));
+        break;
+    }
+  }
+  for (const payable of view.payable) {
+    for (const instance of payable.affects) {
+      mark(instance, badge("payable", { kind: "payable", payer: payable.payer, cost: payable.cost }));
+    }
+  }
+  for (const side of ["player", "enemy"] as const) {
+    if (view.sides[side].avatar?.exhausted === true) sides[side].push(badge("exhausted", { kind: "avatarExhausted" }));
+  }
+  return { cards, sides };
+}
+
 export function buildEngineBattleScreenModel(input: EngineBattleViewInput): EngineBattleScreenModel {
   const { view, human } = input;
   const affordances = affordancesOf(view, human, input.legal);
   const far = opponent(human);
-  const cardView = (instance: InstanceView, playable = false): MobileBattleCardView => ({
-    id: parseBattleCardId(instance.id),
-    model: input.cards(instance),
-    exhausted: instance.status.exhausted,
-    figment: instance.printing.kind !== "card",
-    storedTime: instance.status.counters,
-    showPlayableOutline: playable,
-  });
+  const visual = input.visual?.visual ?? null;
+  // The opponent's card being revealed stays off the board until it travels there.
+  const held = visual?.kind === "reveal" ? visual.instance : null;
+  const statuses = engineStatuses(view, human);
+  const cardView = (instance: InstanceView, playable = false): MobileBattleCardView => {
+    const marks = statuses.cards.get(instance.id);
+    return {
+      id: parseBattleCardId(instance.id),
+      model: input.cards(instance),
+      exhausted: instance.status.exhausted,
+      figment: instance.printing.kind !== "card",
+      storedTime: instance.status.counters,
+      showPlayableOutline: playable,
+      ...(marks === undefined ? {} : { statuses: marks }),
+    };
+  };
   const cardsOf = (ids: readonly InstanceId[], playable: (id: InstanceId) => boolean = () => false) =>
     ids.flatMap((id) => {
-      const instance = view.instances[id];
+      const instance = id === held ? undefined : view.instances[id];
       return instance === undefined ? [] : [cardView(instance, playable(id))];
     });
   const actionable = (id: InstanceId): boolean => {
@@ -304,7 +402,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
     const state = view.sides[side];
     const rank = (ids: readonly (InstanceId | null)[], rankName: Slot["rank"]) =>
       ids.map((id, index) => {
-        const instance = id === null ? undefined : view.instances[id];
+        const instance = id === null || id === held ? undefined : view.instances[id];
         return {
           id: slotViewId({ rank: rankName, index }),
           card: instance === undefined ? null : cardView(instance, side === human && actionable(instance.id)),
@@ -324,6 +422,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
         maxEnergy: state.maxEnergy,
         points: state.score,
         pointsToWin: view.config.scoreToWin,
+        ...(statuses.sides[side].length === 0 ? {} : { statuses: statuses.sides[side] }),
       },
     };
   };
@@ -343,10 +442,21 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
     loopOffer: affordances.loop === null ? null : { maxCount: affordances.loop.maxCount },
     cardView: (instance) => cardView(instance),
   });
+  const revealed = visual?.kind === "reveal" ? (input.revealedCard ?? undefined) : undefined;
+  const dreamwell = visual?.kind === "dreamwell" ? (input.dreamwellCard?.(visual.card) ?? null) : null;
   return {
     engine: view,
     affordances,
     prompt,
+    cardOverlay:
+      visual?.kind === "score" && input.visual !== null && input.visual !== undefined
+        ? {
+            kind: "points-scored",
+            presentationId: input.visual.key,
+            battleCardId: parseBattleCardId(visual.instance),
+            points: visual.points,
+          }
+        : null,
     view: {
       battleId: input.battleId,
       perspective: human,
@@ -359,7 +469,9 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       cardPicker: prompt.cardPicker,
       choicePrompt: prompt.choicePrompt,
       promptHost: prompt.host,
-      dreamwell: null,
+      dreamwell: visual?.kind === "dreamwell" && dreamwell !== null ? { side: visual.side, model: dreamwell } : null,
+      playReveal:
+        visual?.kind === "reveal" && revealed !== undefined ? { card: cardView(revealed), from: visual.from } : null,
       activeSide: view.turn.active,
       isOpeningTurn: view.turn.turnNumber === 1,
       phase: mobilePhase(view),

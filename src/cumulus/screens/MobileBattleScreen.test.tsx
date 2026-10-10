@@ -503,6 +503,55 @@ describe("MobileBattleScreen", () => {
     expect(onHandCardActivate).not.toHaveBeenCalled();
   });
 
+  it("opens the battle log from its control only when the screen offers one", () => {
+    const onBattleLogOpen = vi.fn();
+    expect(mount(makeView()).querySelector('[data-testid="battle-log-open"]')).toBeNull();
+    click(query(mount(makeView(), { onBattleLogOpen }), '[data-testid="battle-log-open"]'));
+    expect(onBattleLogOpen).toHaveBeenCalledTimes(1);
+  });
+
+  it("presents the opponent's play at reading size and badges lasting statuses on cards and status displays", () => {
+    const view = makeView();
+    const [empty, filled, secondEmpty] = view.player.backRank;
+    if (empty === undefined || filled?.card == null || secondEmpty === undefined) throw new Error("fixture has no back rank");
+    const badged = { ...filled, card: { ...filled.card, statuses: [{ kind: "duration", label: "a" }] } } as const;
+    const player = {
+      ...view.player,
+      backRank: [empty, badged, secondEmpty],
+      status: { ...view.player.status, statuses: [{ kind: "costModifier", label: "b" }] },
+    } satisfies MobileBattleSideView;
+    const played = makeCard(90, cardId("enemy-played"));
+    const container = mount({ ...view, player, near: player, playReveal: { card: played, from: "hand" } });
+
+    expect(query(container, "[data-battle-play-reveal]").querySelector(`[data-battle-card-id="${played.id}"]`)).not.toBeNull();
+    expect(
+      query(container, `[data-battle-rank="player-back"] [data-battle-card-id="${badged.card.id}"]`).querySelector(
+        '[data-battle-status-badge="duration"]',
+      ),
+    ).not.toBeNull();
+    expect(query(container, '[data-testid="player-battle-status"]').querySelector('[data-battle-status-badge="costModifier"]')).not.toBeNull();
+    expect(query(container, '[data-testid="enemy-battle-status"]').querySelector("[data-battle-status-badges]")).toBeNull();
+  });
+
+  it("shows on mobile the front lanes on both sides of every occupied back-rank position", () => {
+    const view = makeView();
+    const canonical = (rank: "B" | "F", count: number, filled: readonly number[]) =>
+      Array.from({ length: count }, (_unused, index) => ({
+        id: parseBattleSlotViewId(`${rank}${String(index)}`),
+        card: filled.includes(index) ? makeCard(70 + index, cardId(`player-${rank}${String(index)}`)) : null,
+      }));
+    const player = { ...view.player, backRank: canonical("B", 10, [0, 4, 6]), frontRank: canonical("F", 9, []) };
+    const enemy = { ...view.enemy, backRank: canonical("B", 10, []), frontRank: canonical("F", 9, []) };
+    const container = mount({ ...view, player, near: player, enemy, far: enemy });
+    const shown = (rank: string) =>
+      [...query(container, `[data-battle-rank="${rank}"]`).querySelectorAll("[data-battle-slot-id]")].map((slot) =>
+        slot.getAttribute("data-battle-slot-id"),
+      );
+
+    expect(shown("player-front")).toEqual(expect.arrayContaining(["F0", "F3", "F4", "F5", "F6"]));
+    expect(shown("player-back")).toEqual(expect.arrayContaining(["B0", "B4", "B6"]));
+  });
+
   it("replaces the phase advance with choice-prompt options", () => {
     const [onChoicePromptChoose, onNextPhase] = [vi.fn(), vi.fn()];
     const container = mount(

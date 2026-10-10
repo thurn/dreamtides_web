@@ -1,7 +1,11 @@
+import { BATTLE } from "../content/battle";
 import type { TutorialGuidancePresentation } from "../rules/battle/fold";
 
-/** Minimum readable window for an automated opponent card before it is played. */
-export const TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS = 2_000;
+/**
+ * Minimum readable window for an automated opponent card before it is
+ * played: the reveal pacing the journey battle's opponent plays share.
+ */
+export const TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS = BATTLE.presentation.opponentPlayRevealDwellMs;
 
 /**
  * Complete duration of one tutorial Challenge result animation. This matches

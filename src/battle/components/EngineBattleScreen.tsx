@@ -7,8 +7,10 @@
 // Game flow lives in the fold: whether the human may act comes from the
 // engine's pending decision and prompt, never from React state. Local state
 // here is presentation only: the card being dragged, an ability chooser,
-// an open zone browser, a dismissed result, and the presentation queue that
-// holds a prompt back until the events before it are presented.
+// an open zone browser or battle log, a dismissed result, and the
+// presentation queue (`battle-presentation.ts`). While the queue presents a
+// batch older than the fold, the board shows that batch's state and takes no
+// input; a prompt waits until the queue is idle.
 //
 // Every prompt reaches the human through the prompt host
 // (`prompt-host-view-model.ts`, `BattlePromptHost`): its surfaces answer
@@ -23,6 +25,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOverlay";
+import { BattleEventLogOverlay } from "../../cumulus/screens/battle-overlays/BattleEventLogOverlay";
 import {
   MobileBattleScreen,
   type MobileBattleChoicePromptView,
@@ -39,10 +42,12 @@ import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
+  ENGINE_BATTLE_LOG_COPY,
   engineAbilityOptionLabel,
   engineBattleNoticeCopy,
   type EngineAbilityOption,
 } from "../../runtime/battle-prompt-messages";
+import { battleLogEntries, battleLogTurns } from "../../screens/cumulus_adapters/engine-battle-log-view-model";
 import { buildBattleAvatarStatus } from "../../screens/cumulus_adapters/mobile-battle-view-model";
 import {
   buildEngineBattleScreenModel,
@@ -68,11 +73,20 @@ import {
   type AvatarId,
   type BattleCardId,
   type DreamsignId,
+  type DreamwellCardId,
 } from "../../types/identifiers";
 import { useEngineAi } from "../engine-ai/use-engine-ai";
 import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/figment-catalog";
+import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import { createEngineCardModels, type EngineCardModels } from "../ui/engine-card-model";
-import { presentationItems, usePresentationQueue, usePublishedEngineEvents } from "./battle-presentation";
+import {
+  battleLogStore,
+  presentationItems,
+  sliceKey,
+  useBattleLog,
+  usePresentationQueue,
+  usePublishedEngineEvents,
+} from "./battle-presentation";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
 
 /** The side the local player plays in a journey battle. */
@@ -95,6 +109,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const [abilityChooser, setAbilityChooser] = useState<Chooser | null>(null);
   const presentation = usePresentationQueue();
   const [browsed, setBrowsed] = useState<BrowsedZone | null>(null);
+  const [logOpen, setLogOpen] = useState(false);
   const [resultDismissed, setResultDismissed] = useState(false);
 
   const fold = battle?.engine;
@@ -125,9 +140,23 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     [init, journeyContent],
   );
 
+  const dreamwell = useMemo(() => {
+    const byId = new Map(init.dreamwellDeck.map((definition) => [definition.id, definition]));
+    return (card: DreamwellCardId) => byId.get(card) ?? null;
+  }, [init]);
+
+  // The board shows the batch being presented while it is older than the
+  // fold: the opponent's plays arrive one at a time.
+  const head = presentation.head;
+  const presentedState = head !== null && head.batch.key !== sliceKey(slice) ? head.batch.state : null;
+
   // Everything the engine derives is memoized on the slice, which changes
-  // only when an engine intent applies.
+  // only when an engine intent applies, and on the batch being presented.
   const derived = useMemo(() => {
+    if (presentedState !== null) {
+      const view = engine.view(presentedState, HUMAN);
+      return { view, prompt: null, playing: null, decision: null, legal: [], decisionKey: "" };
+    }
     const pending = pendingEnginePrompt(battle, engine);
     const display = pending?.display ?? slice.committed;
     const decision = engine.decision(slice.committed);
@@ -151,19 +180,40 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       decisionKey: `${String(slice.committed.version)}:${String(slice.attempt)}:decision`,
     };
     // `battle` changes with every fold; the engine battle only with its slice.
-  }, [engine, slice]);
+  }, [engine, slice, presentedState]);
 
   // Each applied intent's events join the presentation queue; the prompt
   // after them shows once the queue is idle ("present, then ask").
-  usePublishedEngineEvents(engine, slice, (events, state, seq) => {
-    presentation.enqueue(
-      presentationItems(events, HUMAN, state, `${battleId}:${String(seq)}`, (event) => {
-        const source = typeof event.purpose.source === "string" ? state.instances[event.purpose.source] : undefined;
-        const view = source === undefined ? undefined : engine.view(state, HUMAN).instances[source.id];
-        return view === undefined ? null : cards(view).displaySnapshot.name;
-      }),
+  // Each batch also joins the battle log.
+  usePublishedEngineEvents(engine, slice, ({ events, batch, before, seq }) => {
+    const view = engine.view(batch.state, HUMAN);
+    const items = presentationItems(events, HUMAN, batch, before, (source) => {
+      const instance = typeof source === "string" ? view.instances[source] : undefined;
+      return instance === undefined ? null : cards(instance).displaySnapshot.name;
+    });
+    presentation.enqueue(items);
+    battleLogStore(battleId).append(
+      battleLogEntries(events, HUMAN, batch.state, view, engine.view(before, HUMAN), `${battleId}:${String(seq)}`),
     );
+    if (items.length > 0) {
+      logEvent("battle_engine_presentation_queued", {
+        battleId,
+        seq,
+        batch: batch.key,
+        items: items.map((item) => ({
+          presentation: item.presentation,
+          dwellMs: item.dwellMs,
+          visual: item.visual?.kind ?? null,
+          instance: item.visual !== null && "instance" in item.visual ? item.visual.instance : null,
+        })),
+      });
+    }
   });
+  const logEntries = useBattleLog(battleId);
+  const logTurns = useMemo(
+    () => (logOpen ? battleLogTurns(logEntries, HUMAN, cards, (event) => dreamwell(event.card)?.name ?? null) : []),
+    [cards, dreamwell, logEntries, logOpen],
+  );
   const noticeView = useMemo(
     () =>
       presentation.notice === null
@@ -182,15 +232,24 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         prompt: derived.prompt,
         playing: derived.playing,
         decision: derived.decision,
-        presented: presentation.idle,
+        presented: head === null,
         notice: noticeView,
         cards,
         avatars,
         opponentName: init.enemyDescriptor.name,
         essenceReward: init.essenceReward,
         resultDismissed,
+        visual: head?.visual == null ? null : { key: head.key, visual: head.visual },
+        revealedCard:
+          head?.visual?.kind === "reveal"
+            ? (engine.view(head.visual.after, HUMAN).instances[head.visual.instance] ?? null)
+            : null,
+        dreamwellCard: (card) => {
+          const definition = dreamwell(card);
+          return definition === null ? null : dreamwellCardModel(definition);
+        },
       }),
-    [avatars, battleId, cards, derived, init, noticeView, presentation.idle, resultDismissed],
+    [avatars, battleId, cards, derived, dreamwell, engine, head, init, noticeView, resultDismissed],
   );
   const { affordances, prompt: surface } = model;
   const prompt = derived.prompt;
@@ -424,9 +483,14 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       if (prompt !== null) submitAnswer(numberAnswer(prompt, value), "number-picker");
     },
     onPromptArrangeSubmit: (resolution) => {
-      if (prompt !== null) submitAnswer(arrangeAnswer(prompt, model.engine, resolution), "foresee-editor");
+      const editor = surface.host?.arrange?.surface === "arrangement" ? "arrangement-editor" : "foresee-editor";
+      if (prompt !== null) submitAnswer(arrangeAnswer(prompt, model.engine, resolution), editor);
     },
     onPromptNoticeDismiss: presentation.dismissNotice,
+    onBattleLogOpen: () => {
+      logEvent("battle_engine_log_opened", { battleId, entries: logEntries.length });
+      setLogOpen(true);
+    },
     onAllForward: () => repositionShortcut(affordances.allForward, "all-forward"),
     onAllBack: () => repositionShortcut(affordances.allBack, "all-back"),
     onRepeatLoop: (count) => {
@@ -484,6 +548,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       <MobileBattleScreen
         view={view}
         interactions={interactions}
+        cardOverlay={model.cardOverlay}
         inspectorDefault="collapsed"
         inspectorVisibility="hidden"
         phaseNavigation={derived.view.stack.length > 0 ? "pass" : "next-phase"}
@@ -496,6 +561,16 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           onClose={() => setBrowsed(null)}
         />
       )}
+      {logOpen ? (
+        <BattleEventLogOverlay
+          title={ENGINE_BATTLE_LOG_COPY.title}
+          subtitle={ENGINE_BATTLE_LOG_COPY.subtitle}
+          closeLabel={ENGINE_BATTLE_LOG_COPY.close}
+          emptyText={ENGINE_BATTLE_LOG_COPY.empty}
+          turns={logTurns}
+          onClose={() => setLogOpen(false)}
+        />
+      ) : null}
     </>
   );
 }

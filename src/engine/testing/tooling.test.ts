@@ -10,7 +10,8 @@ import { DSL, DSL_CARDS } from "./dsl-cards";
 import { createCatalog } from "../catalog";
 import { createFoldAdapter } from "../fold/slice";
 import { labBoard } from "./lab-solver";
-import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture } from "./prompt-lab";
+import { EVENT_DEFINITIONS } from "../events";
+import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture, promptLabPresentation } from "./prompt-lab";
 import { runNamedScenario, scenarioRegistryProblems } from "../../content/specs/runner";
 import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from "./scenario";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
@@ -64,6 +65,16 @@ describe("prompt lab", () => {
     expect(stop("respond").decision).toEqual({ kind: "respond", side: "player" });
     expect(stop("loop").legal).toContain("repeatLoop");
     expect(stop("reclaim").legal).toEqual(expect.arrayContaining(["play", "activate"]));
+  });
+
+  it("publishes every event kind through the presentation steps but the Dreamwell draw and a bounded search", () => {
+    const published = new Set(
+      PROMPT_LAB_FIXTURES.flatMap((fixture) =>
+        promptLabPresentation(labEngine, fixture).flatMap((step) => step.published.map((event) => event.kind)),
+      ),
+    );
+    const missing = Object.keys(EVENT_DEFINITIONS).filter((kind) => !published.has(kind as keyof typeof EVENT_DEFINITIONS));
+    expect(missing.sort()).toEqual(["dreamwellDrawn", "feasibilityBounded"]);
   });
 });
 

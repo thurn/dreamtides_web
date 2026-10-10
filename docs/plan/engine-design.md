@@ -1389,40 +1389,58 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 
 ## Presentation
 
-Phase 4.4 builds this. Every engine event kind (`events/kinds/`; each
-declares whether it is private to one side and what it redacts, and the
-presentation reads `eventSeenBy`) maps to an existing animation,
-particle, or log line:
+Every engine event kind (`events/kinds/`; each declares whether it is
+private to one side and what it redacts, and the presentation reads
+`eventSeenBy`) maps to an existing animation, notice, indicator, or log
+line. `EVENT_PRESENTATION` in `src/battle/components/battle-presentation.ts`
+names each kind's presentation, and a missing kind is a type error:
 
-- dissolve, banish, materialize;
-- spark change;
-- figment create and merge;
-- prevent, copy, control change;
-- trigger fired;
-- points scored;
-- energy change;
-- `noLegalTarget`;
-- auto-answered prompts (`promptAutoAnswered`, private to the answering
-  side, emitted wherever a forced answer is chosen or replayed).
+- **travel:** a card changing zone or position (draw, play, discard,
+  dissolve, banish, materialize, return, erode, abandon, create, copy,
+  control change, prevent, reposition, figment merge, reveal) moves by the
+  board's shared-layout travel, held for `BATTLE.presentation.eventDwellMs`;
+- **reveal:** the opponent's play shows at reading size for the tutorial's
+  reveal pacing (`opponentPlayRevealDwellMs`, which the tutorial's
+  opponent plays share) over the board as it was before the play, then
+  travels to its
+  destination as the board shows the play's result;
+- **score:** a lane that scores shows the card-score announcement on its
+  challenger;
+- **dreamwell:** a side's Dreamwell card shows beside its status display;
+- **turn:** the turn announcement;
+- **notice:** an automatic answer (`promptAutoAnswered`, private to the
+  answering side), a full back rank, and an ability with no legal target
+  raise a brief notice;
+- **status:** energy, points, spark, exhaustion, counters, durations,
+  phase, and result changes show at once in the numbers, badges, and
+  indicators the board renders;
+- **none:** bookkeeping with no visual by design: the paired zone-exit
+  events of a move (`leftPlay`, `leftVoid`), a trigger joining the queue
+  (its resolution is logged), an ability finishing (`abilityResolved`,
+  `pendingAbility`), and a bounded feasibility search.
 
-The battle screen's presentation queue
-(`src/battle/components/battle-presentation.ts`) recomputes each applied
-intent's published events, keeps the ones the human may see
-(`eventSeenBy`), and plays them in order; the prompt host shows a prompt
-only once the queue is idle. Phase 4.4 maps each kind to its visual on it.
+The battle screen recomputes each applied intent's published events,
+keeps the ones the human may see, and plays their items in order. While it
+presents a batch older than the fold, the board shows that batch's state
+and takes no input, so the opponent's plays arrive one at a time even when
+the AI host has moved on; the prompt host shows a prompt only once the
+queue is idle. A backlog drops its oldest travels past `maxBacklogMs` and
+its oldest opponent reveals past `maxQueuedReveals`, never a turn, score,
+Dreamwell card, or the item on screen. Presentation is client timing only:
+the fold and the AI host never read it, and a reload shows the settled
+board.
 
-New statuses get Cumulus-consistent indicators:
+Lasting statuses get Cumulus status badges (`BattleStatusBadges`): on a
+card, a change with a duration, a granted or lost keyword, disabled
+triggers, and an effect lasting until a player pays; under a side's status
+display, a banished card that returns to play, a pending cost change, a
+waiting delayed ability, and an exhausted Avatar. Each badge's accessible
+name says what it is and how long it lasts.
 
-- temporary banish return;
-- granted keyword;
-- disabled triggers;
-- pending cost modifiers;
-- reclaim until end of turn.
-
-AI plays reuse the reveal pacing: the full card at reading size, a 2 s dwell,
-then travel to its destination. The AI host submits its next intent only after
-the previous presentation finishes. That is client presentation timing; it
-doesn't gate the fold.
+The battle log (the battle screen's log control) lists one plain-English
+line per presented event, grouped by turn, from the UI copy module
+(`engineBattleLogText`). Entries keep instance IDs and resolve names only
+for display.
 
 ## Policy interface
 

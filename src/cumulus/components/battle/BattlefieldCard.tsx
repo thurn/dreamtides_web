@@ -27,6 +27,12 @@ import {
 import { motionTimeSeconds } from "../../primitives/motion-time";
 import { token } from "../../primitives/tokens";
 import { battleCardLayoutId } from "./battle-card-layout";
+import {
+  BATTLE_STATUS_BADGE_SIZE,
+  BATTLE_STATUS_BADGE_STYLE,
+  BattleStatusBadges,
+  type BattleStatusBadgeView,
+} from "./BattleStatusBadges";
 import { useTutorialObstacle } from "../overlay/tutorial-placement";
 import type { BattleCardId } from "../../../types/identifiers";
 import type { PresentationId } from "../../../types/identifiers";
@@ -66,6 +72,8 @@ export interface BattlefieldCardModel {
   readonly exhausted: boolean;
   /** Prepared stored-memory count shown on the card. */
   readonly storedMemory: number;
+  /** Lasting statuses (durations, keywords, disabled triggers, payable effects), one badge each. */
+  readonly statuses?: readonly BattleStatusBadgeView[];
   /** Whether to use the canonical Figment treatment. */
   readonly figment: boolean;
   /** Optional semantic selection treatment prepared by the board. */
@@ -174,22 +182,10 @@ function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
   };
 }
 
-const BADGE_SIZE = "min(26cqw, 28px)";
+const BADGE_SIZE = BATTLE_STATUS_BADGE_SIZE;
 const BADGE_STYLE: CSSProperties = {
+  ...BATTLE_STATUS_BADGE_STYLE,
   position: "absolute",
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  minWidth: BADGE_SIZE,
-  height: BADGE_SIZE,
-  border: `1px solid ${token("--text-on-accent")}`,
-  borderRadius: token("--radius-pill"),
-  background: token("--surface-card"),
-  color: token("--text-primary"),
-  font: token("--t-popover-meta"),
-  boxShadow: token("--shadow-sm"),
-  boxSizing: "border-box",
-  pointerEvents: "none",
   zIndex: 4,
 };
 
@@ -270,6 +266,7 @@ function StatusIndicators({
       data-battle-card-status-indicators=""
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
     >
+      <BattleStatusBadges badges={model.statuses ?? []} placement="card" />
       {model.exhausted && (
         <div
           aria-label={"Exhausted"}

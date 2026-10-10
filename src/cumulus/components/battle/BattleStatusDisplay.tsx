@@ -7,6 +7,7 @@ import {
   type AvatarVisual,
 } from "../hud/AvatarPortrait";
 import { InlineGlyph } from "../typography/InlineGlyph";
+import { BattleStatusBadges, type BattleStatusBadgeView } from "./BattleStatusBadges";
 import type { AvatarId, OpponentId } from "../../../types/identifiers";
 import { formatNumber } from "../../../runtime/format-number";
 
@@ -38,6 +39,8 @@ export interface BattleStatusDisplayProps {
   readonly points: number;
   /** Battle points required to win. */
   readonly pointsToWin: number;
+  /** Lasting statuses of this combatant (pending cost changes, returning cards, waiting abilities, an exhausted Avatar), one badge each under the card. */
+  readonly statuses?: readonly BattleStatusBadgeView[];
   /** Optional stable test id for the complete status card. */
   readonly testId?: DomTestId;
 }
@@ -56,6 +59,7 @@ export function BattleStatusDisplay({
   maxEnergy,
   points,
   pointsToWin,
+  statuses = [],
   testId,
 }: BattleStatusDisplayProps) {
 
@@ -72,6 +76,7 @@ export function BattleStatusDisplay({
       data-points-to-win={String(pointsToWin)}
       data-testid={testId}
       style={{
+        position: "relative",
         width: "100%",
         height: "100%",
         boxSizing: "border-box",
@@ -127,6 +132,7 @@ export function BattleStatusDisplay({
           value={`${String(points)}/${String(pointsToWin)}`}
         />
       </div>
+      <BattleStatusBadges badges={statuses} placement="status" />
     </div>
   );
 }
