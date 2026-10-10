@@ -14,6 +14,7 @@ import {
   importersOf,
   importSearchNeedles,
   reviewNeedsPreparedWorkspace,
+  STATIC_CHECK_STEPS,
   TYPECHECK_STEPS,
 } from "./review-plan.mjs";
 import {
@@ -353,6 +354,9 @@ function commandFor(step, extraArgs = []) {
       ["--import", "tsx", join(root, "scripts", "setup-assets.ts")],
     ];
   }
+  if (step === "import-cycles") {
+    return [process.execPath, [join(root, "scripts", "import-cycles.mjs")]];
+  }
   if (step === "test-related-capped") {
     return [
       process.execPath,
@@ -459,10 +463,11 @@ function executionPlan() {
   const needsPreparedWorkspace = reviewNeedsPreparedWorkspace(reviewPlan);
 
   if (task === "full") {
-    // Lint and typecheck share no state, so they overlap.
+    // Lint, typecheck and the import-cycle check share no state, so they
+    // overlap.
     return [
       { step: "prepare", args: [] },
-      { concurrent: [{ step: "lint", args: [] }, ...TYPECHECK_STEPS] },
+      { concurrent: [{ step: "lint", args: [] }, ...STATIC_CHECK_STEPS] },
       { step: "test", args: [] },
     ];
   }
@@ -514,7 +519,7 @@ function executionPlan() {
     if (reviewPlan.lintFiles.length > 0) {
       steps.push({ step: "lint", args: reviewPlan.lintFiles });
     }
-    if (reviewPlan.shouldTypecheck) steps.push({ concurrent: TYPECHECK_STEPS });
+    if (reviewPlan.shouldTypecheck) steps.push({ concurrent: STATIC_CHECK_STEPS });
     if (reviewPlan.testInputs.length > 0) {
       steps.push({ step: "test-related", args: reviewPlan.testInputs });
     }

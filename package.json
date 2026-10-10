@@ -13,6 +13,7 @@
     "test": "node scripts/review.mjs test",
     "test:full": "node scripts/review.mjs test-full",
     "typecheck": "node scripts/review.mjs typecheck",
+    "import-cycles": "node scripts/import-cycles.mjs",
     "review": "node scripts/review.mjs quick",
     "review:full": "node scripts/review.mjs full",
     "review:gate": "node scripts/review.mjs gate",

@@ -40,6 +40,21 @@ export const TYPECHECK_STEPS = [
   { step: "typecheck-node", args: [] },
 ];
 
+/**
+ * The import-cycle check (scripts/import-cycles.mjs) reads the whole
+ * application module graph, like the typecheck, and runs beside it.
+ *
+ * @type {ReviewStep}
+ */
+const IMPORT_CYCLE_STEP = { step: "import-cycles", args: [] };
+
+/**
+ * The whole-program checks: both typechecks and the import-cycle check.
+ *
+ * @type {ReviewStep[]}
+ */
+export const STATIC_CHECK_STEPS = [...TYPECHECK_STEPS, IMPORT_CYCLE_STEP];
+
 /** @param {string} file */
 function isTypedSource(file) {
   return TYPED_SOURCE_ROOTS.some(
@@ -252,14 +267,15 @@ export function relatedTestRunDecision(testFiles, cap) {
 
 /**
  * Steps of the gate stage's `review:gate` for a plan built from the files
- * changed against `HEAD^`: prepare, then the full typecheck alongside lint of
- * the changed sources, then the capped related tests.
+ * changed against `HEAD^`: prepare, then the full typecheck and the
+ * import-cycle check alongside lint of the changed sources, then the capped
+ * related tests.
  *
  * @param {ReviewPlan} reviewPlan
  * @returns {ReviewPlanEntry[]}
  */
 export function gateExecutionPlan(reviewPlan) {
-  const checks = [...TYPECHECK_STEPS];
+  const checks = [...STATIC_CHECK_STEPS];
   if (reviewPlan.lintFiles.length > 0) {
     checks.push({ step: "lint", args: reviewPlan.lintFiles });
   }

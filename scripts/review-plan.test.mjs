@@ -9,6 +9,7 @@ import {
   importSearchNeedles,
   relatedTestRunDecision,
   reviewNeedsPreparedWorkspace,
+  STATIC_CHECK_STEPS,
   TYPECHECK_STEPS,
 } from "./review-plan.mjs";
 
@@ -175,7 +176,7 @@ describe("deleted modules", () => {
       { step: "prepare", args: [] },
       {
         concurrent: [
-          ...TYPECHECK_STEPS,
+          ...STATIC_CHECK_STEPS,
           { step: "lint", args: ["scripts/dev.test.mjs"] },
         ],
       },
@@ -271,7 +272,7 @@ describe("gate review plan", () => {
   it("always prepares and typechecks, even for documentation-only commits", () => {
     expect(gateExecutionPlan(buildReviewPlan(["docs/notes.md"]))).toEqual([
       { step: "prepare", args: [] },
-      { concurrent: TYPECHECK_STEPS },
+      { concurrent: STATIC_CHECK_STEPS },
     ]);
   });
 
@@ -279,6 +280,14 @@ describe("gate review plan", () => {
     expect(TYPECHECK_STEPS.map(({ step }) => step)).toEqual([
       "typecheck",
       "typecheck-node",
+    ]);
+  });
+
+  it("checks import cycles beside the typechecks", () => {
+    expect(STATIC_CHECK_STEPS.map(({ step }) => step)).toEqual([
+      "typecheck",
+      "typecheck-node",
+      "import-cycles",
     ]);
   });
 
@@ -291,7 +300,7 @@ describe("gate review plan", () => {
       { step: "prepare", args: [] },
       {
         concurrent: [
-          ...TYPECHECK_STEPS,
+          ...STATIC_CHECK_STEPS,
           { step: "lint", args: ["scripts/tool.mjs", "src/state/example.ts"] },
         ],
       },

@@ -42,6 +42,7 @@ the origin that hosts it (see `.env.example`).
 | `npm run review` | Diff-aware pre-commit check: data validation, lint, typecheck, related tests |
 | `npm run review:full` | Everything the Tollgate gate runs |
 | `npm run typecheck` | Incremental typecheck |
+| `npm run import-cycles` | Fails on a module-load read inside an import cycle |
 | `npm run build` | Production build into `dist/` |
 | `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check, every 10th game replayed interactively through the fold |
 | `npm run prepare-workspace` | Refresh art links and generated adapters |
@@ -53,6 +54,15 @@ configs and `scripts/`, whose JavaScript modules it checks through their JSDoc
 types. The `src/` typecheck emits declarations only, so an edit that keeps a
 module's API rechecks only that module, and a fresh worktree seeds its build
 information from `.git/journey-review/`. `review:full` never uses that shared copy.
+
+Beside the typecheck, `npm run import-cycles` (`scripts/import-cycles.mjs`)
+guards the production bundle's module evaluation order. A cycle whose modules
+reference each other only inside function bodies is allowed. A module that
+reads a cycle partner's binding while it loads fails the check, because the
+bundle may evaluate that partner later and throw "Cannot access … before
+initialization" at page load, which the dev server hides. Registries that
+share a cycle with their entries, such as the effect primitives and the step
+kinds, therefore read each entry through a getter.
 
 ## Browser QA
 

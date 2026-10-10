@@ -2,6 +2,12 @@
  * The step-kind registry. Each kind is declared in its own module; adding a
  * kind adds its module, one import, one union member, and one entry below.
  * The `satisfies` clause makes a missing entry a type error.
+ *
+ * The loop-iteration kind replays steps through the runner, which looks
+ * definitions up here, so this module shares an import cycle with it, and a
+ * production bundle can evaluate a kind's module after this one. Each entry
+ * is a getter, so the table reads a definition when it is looked up, never
+ * while modules load (scripts/import-cycles.mjs).
  */
 import { activate, type ActivateStep } from "./activate";
 import { advancePhase, type AdvancePhaseStep } from "./advance-phase";
@@ -33,18 +39,40 @@ export type StepKind = Step["kind"];
 
 export type StepOf<K extends StepKind> = Extract<Step, { kind: K }>;
 
-export const STEP_DEFINITIONS = {
-  activate,
-  advancePhase,
-  beginBattle,
-  challengeLane,
-  loopIteration,
-  payToEnd,
-  play,
-  repeatLoop,
-  reposition,
-  resolveTop,
-  resolveTrigger,
+const STEP_DEFINITIONS = {
+  get activate() {
+    return activate;
+  },
+  get advancePhase() {
+    return advancePhase;
+  },
+  get beginBattle() {
+    return beginBattle;
+  },
+  get challengeLane() {
+    return challengeLane;
+  },
+  get loopIteration() {
+    return loopIteration;
+  },
+  get payToEnd() {
+    return payToEnd;
+  },
+  get play() {
+    return play;
+  },
+  get repeatLoop() {
+    return repeatLoop;
+  },
+  get reposition() {
+    return reposition;
+  },
+  get resolveTop() {
+    return resolveTop;
+  },
+  get resolveTrigger() {
+    return resolveTrigger;
+  },
 } as const satisfies { readonly [K in StepKind]: StepDefinition<StepOf<K>> };
 
 export function stepDefinition<K extends StepKind>(kind: K): StepDefinition<StepOf<K>> {
