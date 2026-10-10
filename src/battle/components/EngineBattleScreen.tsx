@@ -22,7 +22,7 @@
 // a double click) is applied at most once by the log. A stale intent
 // bounces in the fold and the screen re-renders from the fold.
 
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOverlay";
 import { BattleEventLogOverlay } from "../../cumulus/screens/battle-overlays/BattleEventLogOverlay";
@@ -85,6 +85,40 @@ const HUMAN: Side = "player";
 
 type Drag = { readonly id: BattleCardId; readonly source: "near-hand" | "battlefield" };
 type BrowsedZone = { readonly side: Side; readonly zone: "void" | "banished" };
+
+/** The board handlers this screen supplies. */
+type BoardHandlers = Required<
+  Pick<
+    MobileBattleInteractions,
+    | "onHandCardActivate"
+    | "onHandCardDrop"
+    | "onBattlefieldCardActivate"
+    | "onStatusActivate"
+    | "onCardDragStart"
+    | "onCardDragEnd"
+    | "onSlotDrop"
+    | "onFigmentMerge"
+    | "onBattlefieldDropRejected"
+    | "onZoneDrop"
+    | "onZoneOpen"
+    | "onNextPhase"
+    | "onPromptCancel"
+    | "onPromptNumberSubmit"
+    | "onPromptArrangeSubmit"
+    | "onPromptNoticeDismiss"
+    | "onBattleLogOpen"
+    | "onAllForward"
+    | "onAllBack"
+    | "onRepeatLoop"
+    | "onCardPickerSubmit"
+    | "onCardPickerSkip"
+    | "onChoicePromptChoose"
+    | "onResultAction"
+  >
+>;
+
+/** No target: one array, so the board's memoized regions see an unchanged prop. */
+const NO_TARGETS: readonly BattleCardId[] = [];
 
 export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const battle = journeyBattleOf(useGameState().battle);
@@ -465,26 +499,11 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
 
   const statusActionable = affordances.emblemActivations.length > 0 || affordances.statusPayToEnd.length > 0;
   const draggedCard = drag?.source === "battlefield" ? drag.id : null;
-  const targetIds = surface.kind === "targets" ? surface.ids : [];
-  const interactions: MobileBattleInteractions = {
-    canInteract: affordances.canAct && result === null,
-    nearSide: HUMAN,
-    pendingCardId: drag?.id ?? null,
-    pendingCardSource: drag?.source ?? null,
-    pendingCardOwner: drag === null ? null : HUMAN,
-    ...(draggedCard === null
-      ? {}
-      : {
-          eligibleSlotTargets: (affordances.repositions.get(draggedCard) ?? []).map((move) => move.target),
-          sourceSlotTarget: sourceSlotOf(model.view, draggedCard),
-          figmentMergeTargets: figmentMergeTargets(model, HUMAN, draggedCard, (figment) =>
-            figment.printing.kind === "figment" && parseCardId(figment.printing.figment) === LEGIONNAIRE_FIGMENT_ID,
-          ),
-        }),
-    targetSelectionCardId: derived.playing === null ? null : parseBattleCardId(derived.playing),
-    canPrompt: prompt !== null && prompt.side === HUMAN && result === null,
-    targetSelectionPrompt: targetIds.length > 0 ? "legal-target" : null,
-    targetableCardIds: targetIds,
+  const targetIds = surface.kind === "targets" ? surface.ids : NO_TARGETS;
+  // The board's handlers keep one identity for the screen's life and run the
+  // latest committed render's code, so the interactions below change only
+  // with the values they carry and the board's memoized regions can skip.
+  const handlers = useStableHandlers<BoardHandlers>({
     onHandCardActivate: (id) => playHandCard(id, undefined, "hand-tap"),
     onHandCardDrop: (target) => {
       if (drag?.source !== "near-hand") return;
@@ -501,7 +520,6 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       if (options.length === 1 && payments.length === 0) submitAction(options[0], "battlefield-tap");
       else if (options.length + payments.length > 0) setAbilityChooser({ kind: "card", id });
     },
-    activatableStatusOwner: statusActionable ? HUMAN : null,
     onStatusActivate: (owner) => {
       if (owner === HUMAN && statusActionable) setAbilityChooser({ kind: "emblems" });
     },
@@ -567,7 +585,42 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       if (option !== undefined) choose(option.select);
     },
     onResultAction: (action) => handleResultAction(action),
-  };
+  });
+  // A battlefield drag's destinations, recomputed only while one is under way.
+  const dragTargets = useMemo(
+    () =>
+      draggedCard === null
+        ? null
+        : {
+            eligibleSlotTargets: (affordances.repositions.get(draggedCard) ?? []).map((move) => move.target),
+            sourceSlotTarget: sourceSlotOf(model.view, draggedCard),
+            figmentMergeTargets: figmentMergeTargets(model, HUMAN, draggedCard, (figment) =>
+              figment.printing.kind === "figment" && parseCardId(figment.printing.figment) === LEGIONNAIRE_FIGMENT_ID,
+            ),
+          },
+    [affordances, draggedCard, model],
+  );
+  const canInteract = affordances.canAct && result === null;
+  const targetSelectionCardId = derived.playing === null ? null : parseBattleCardId(derived.playing);
+  const canPrompt = prompt !== null && prompt.side === HUMAN && result === null;
+  const activatableStatusOwner = statusActionable ? HUMAN : null;
+  const interactions = useMemo<MobileBattleInteractions>(
+    () => ({
+      canInteract,
+      nearSide: HUMAN,
+      pendingCardId: drag?.id ?? null,
+      pendingCardSource: drag?.source ?? null,
+      pendingCardOwner: drag === null ? null : HUMAN,
+      ...dragTargets,
+      targetSelectionCardId,
+      canPrompt,
+      targetSelectionPrompt: targetIds.length > 0 ? "legal-target" : null,
+      targetableCardIds: targetIds,
+      activatableStatusOwner,
+      ...handlers,
+    }),
+    [activatableStatusOwner, canInteract, canPrompt, drag, dragTargets, handlers, targetIds, targetSelectionCardId],
+  );
 
   function handleResultAction(action: MobileBattleResultAction): void {
     if (result === null) return;
@@ -636,4 +689,25 @@ function sourceSlotOf(view: MobileBattleView, id: BattleCardId): MobileBattleSlo
     if (slot !== undefined) return { owner: view.near.owner, rank, slotId: slot.id };
   }
   return null;
+}
+
+type Handler = (...args: never[]) => void;
+
+/**
+ * `handlers` with one identity for the component's life: each calls the
+ * handler of the same name from the latest committed render, so it reads the
+ * state of that render when it runs.
+ */
+function useStableHandlers<T extends Record<keyof T, Handler>>(handlers: T): T {
+  const latest = useRef(handlers);
+  useLayoutEffect(() => {
+    latest.current = handlers;
+  });
+  return useMemo(() => {
+    const stable: Record<string, Handler> = {};
+    for (const key of Object.keys(latest.current)) {
+      stable[key] = (...args: never[]) => (latest.current as Record<string, Handler>)[key](...args);
+    }
+    return stable as T;
+  }, []);
 }

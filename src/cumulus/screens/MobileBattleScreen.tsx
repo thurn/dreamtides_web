@@ -1,7 +1,10 @@
 import type { DomTestId } from "../types/dom";
 import {
+  memo,
   useCallback,
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -90,6 +93,7 @@ import {
   slotTargetFromElement,
   slotTargetIsEligible,
 } from "./battle-board/drop-resolution";
+import { useSharedFields } from "./battle-board/structural-sharing";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
   BattleResultSurface,
@@ -113,6 +117,9 @@ import { formatNumber } from "../../runtime/format-number";
 export { BATTLEFIELD_CARD_EXHAUSTED_FILTER } from "../components/battle/BattlefieldCard";
 const CARD_PICKER_HIGHLIGHT_SELECTION: GameCardSelection = "highlighted";
 const CARD_PICKER_SELECTION: GameCardSelection = "selected";
+/** No cards: one array, so a memoized region sees an unchanged prop. */
+const NO_CARD_IDS: readonly BattleCardId[] = [];
+const NO_CARDS: readonly MobileBattleCardView[] = [];
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
@@ -995,7 +1002,7 @@ function centeredFanPosition(params: {
   };
 }
 
-function FarHand({
+const FarHand = memo(function FarHand({
   owner,
   cardIds,
   cards,
@@ -1134,7 +1141,7 @@ function FarHand({
       })}
     </div>
   );
-}
+});
 
 function toDeckPile(
   cardIds: readonly BattleCardId[],
@@ -1154,7 +1161,7 @@ function toVoidPile(
   }));
 }
 
-function SideZones({
+const SideZones = memo(function SideZones({
   activeSide,
   dreamwell,
   isDesktop,
@@ -1166,6 +1173,7 @@ function SideZones({
   interactions,
 }: {
   readonly activeSide: MobileBattleOwner;
+  /** This side's Dreamwell card while its reveal is surfaced. */
   readonly dreamwell: MobileBattleDreamwellView | null;
   readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
@@ -1398,7 +1406,7 @@ function SideZones({
       </div>
     </div>
   );
-}
+});
 
 interface BattleCardSurfaceInteraction {
   readonly draggable: boolean;
@@ -1554,7 +1562,7 @@ function BattleCardSurface({
   );
 }
 
-function Rank({
+const Rank = memo(function Rank({
   isDesktop,
   owner,
   position,
@@ -1906,7 +1914,7 @@ function Rank({
       </div>
     </div>
   );
-}
+});
 
 function PlayArea({
   isDesktop,
@@ -2031,7 +2039,7 @@ function PlayArea({
   );
 }
 
-function NearHand({
+const NearHand = memo(function NearHand({
   owner,
   cards,
   totalCount,
@@ -2276,7 +2284,7 @@ function NearHand({
       })}
     </div>
   );
-}
+});
 
 function TargetingCardStage({
   card,
@@ -3655,7 +3663,7 @@ function BattleInspectorRail({
 
 /** Responsive battle table composed entirely from physical battle objects. */
 export function MobileBattleScreen({
-  view,
+  view: receivedView,
   interactions,
   cardOverlay = null,
   inspectorDefault = "responsive",
@@ -3671,7 +3679,14 @@ export function MobileBattleScreen({
   inspectorVisibility = "available",
   cardLayoutGroup = "owned",
 }: MobileBattleScreenProps) {
-  
+  // Each view keeps the previous view's unchanged parts, so a memoized region
+  // whose side an intent did not change skips rendering.
+  const view = useSharedFields(receivedView);
+  // Event handlers read the committed view when they run.
+  const latestView = useRef(view);
+  useLayoutEffect(() => {
+    latestView.current = view;
+  }, [view]);
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
   const inspectorStartsOpen = inspectorDefault === "responsive" && isDockLayout;
@@ -3728,7 +3743,7 @@ export function MobileBattleScreen({
     ) === true;
   const nearHandCards =
     view.inspector.isNearHandHidden && !nearHandNeededByPrompt
-      ? []
+      ? NO_CARDS
       : view.perspective === "player"
         ? view.playerHand
         : view.nearHand.cards;
@@ -3786,7 +3801,7 @@ export function MobileBattleScreen({
   const selectedPickerCardIds =
     cardPickerSelection.pickerKey === cardPickerKey
       ? cardPickerSelection.ids
-      : [];
+      : NO_CARD_IDS;
   const turnAnnouncementComplete =
     view.isOpeningTurn ||
     (completedTurnAnnouncement?.battleId === view.battleId &&
@@ -3811,7 +3826,10 @@ export function MobileBattleScreen({
 
   const beginFigmentMerge = useCallback(
     (target: MobileBattleFigmentMergeTarget): void => {
-      const sourceCard = findBattleCardView(view, target.sourceBattleCardId);
+      const sourceCard = findBattleCardView(
+        latestView.current,
+        target.sourceBattleCardId,
+      );
       const sourceElement =
         [
           ...document.querySelectorAll<HTMLElement>("[data-battle-card-id]"),
@@ -3838,7 +3856,7 @@ export function MobileBattleScreen({
       setHoveredMergeTarget(null);
       interactions?.onFigmentMerge?.(target.sourceBattleCardId, target.target);
     },
-    [interactions, view],
+    [interactions],
   );
 
   const handlePresentedSlotDrop = useCallback(
@@ -3866,13 +3884,16 @@ export function MobileBattleScreen({
     [beginFigmentMerge, interactions],
   );
 
-  const presentedInteractions =
-    interactions === undefined
-      ? undefined
-      : {
-          ...interactions,
-          onSlotDrop: handlePresentedSlotDrop,
-        };
+  const presentedInteractions = useMemo(
+    () =>
+      interactions === undefined
+        ? undefined
+        : {
+            ...interactions,
+            onSlotDrop: handlePresentedSlotDrop,
+          },
+    [handlePresentedSlotDrop, interactions],
+  );
 
   useEffect(() => {
     if (mergeNotice === null) return;
@@ -3996,11 +4017,11 @@ export function MobileBattleScreen({
     (dragging: boolean, cardId?: BattleCardId): void => {
       setIsCardDragActive(dragging);
       if (dragging && cardId !== undefined) {
-        snapLayoutOriginView.current = view;
+        snapLayoutOriginView.current = latestView.current;
         setSnapLayoutCardId(cardId);
       }
     },
-    [view],
+    [],
   );
 
   useEffect(() => {
@@ -4137,7 +4158,9 @@ export function MobileBattleScreen({
         />
         <SideZones
           activeSide={view.activeSide}
-          dreamwell={visibleDreamwell}
+          dreamwell={
+            visibleDreamwell?.side === far.owner ? visibleDreamwell : null
+          }
           isDesktop={isDesktop}
           owner={far.owner}
           position="far"
@@ -4230,7 +4253,9 @@ export function MobileBattleScreen({
         )}
         <SideZones
           activeSide={view.activeSide}
-          dreamwell={visibleDreamwell}
+          dreamwell={
+            visibleDreamwell?.side === near.owner ? visibleDreamwell : null
+          }
           isDesktop={isDesktop}
           owner={near.owner}
           position="near"
