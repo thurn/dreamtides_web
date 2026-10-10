@@ -177,6 +177,13 @@ export type EngineAbilityOption =
       readonly index: number;
       readonly count: number;
     }
+  | {
+      readonly kind: "payToEnd";
+      /** Energy the payment costs. */
+      readonly cost: number;
+      /** The name of the effect's source card or emblem, when the player can name it. */
+      readonly name: string | null;
+    }
   | { readonly kind: "browseVoid" }
   | { readonly kind: "cancel" };
 
@@ -191,6 +198,8 @@ export function engineAbilityOptionLabel(option: EngineAbilityOption): string {
       const name = option.name ?? (option.emblem === "avatar" ? "Your Avatar" : "Your Dreamsign");
       return option.count > 1 ? `${name}: Ability ${String(option.index + 1)}` : name;
     }
+    case "payToEnd":
+      return `End ${option.name ?? "the Effect"} (${String(option.cost)} Energy)`;
     case "browseVoid":
       return "View Your Void";
     case "cancel":

@@ -101,6 +101,7 @@ type BrowsedZone = { readonly side: Side; readonly zone: "void" | "banished" };
 /** A chooser the human opened: a character's abilities, the void's Reclaim plays, or the emblems' abilities. */
 type Chooser = { readonly kind: "card"; readonly id: BattleCardId } | { readonly kind: "void" } | { readonly kind: "emblems" };
 type ChooserOption = { readonly copy: EngineAbilityOption; readonly action: Action | "browseVoid" | null };
+type PayToEndAction = Extract<Action, { kind: "payToEnd" }>;
 
 export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const battle = journeyBattleOf(useGameState().battle);
@@ -409,6 +410,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     [derived.decisionKey, submitAction],
   );
 
+  const statusActionable = affordances.emblemActivations.length > 0 || affordances.statusPayToEnd.length > 0;
   const draggedCard = drag?.source === "battlefield" ? drag.id : null;
   const interactions: MobileBattleInteractions = {
     canInteract: affordances.canAct && result === null,
@@ -439,13 +441,15 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         if (prompt !== null) submitAnswer(targetAnswer(prompt, model.engine, id), "board-target");
         return;
       }
+      // A payment to end an effect always opens the chooser, which names its price.
       const options = affordances.activations.get(id) ?? [];
-      if (options.length === 1) submitAction(options[0], "battlefield-tap");
-      else if (options.length > 1) setAbilityChooser({ kind: "card", id });
+      const payments = affordances.payToEnd.get(id) ?? [];
+      if (options.length === 1 && payments.length === 0) submitAction(options[0], "battlefield-tap");
+      else if (options.length + payments.length > 0) setAbilityChooser({ kind: "card", id });
     },
-    activatableStatusOwner: affordances.emblemActivations.length > 0 ? HUMAN : null,
+    activatableStatusOwner: statusActionable ? HUMAN : null,
     onStatusActivate: (owner) => {
-      if (owner === HUMAN && affordances.emblemActivations.length > 0) setAbilityChooser({ kind: "emblems" });
+      if (owner === HUMAN && statusActionable) setAbilityChooser({ kind: "emblems" });
     },
     onCardDragStart: (id, source) => {
       if (affordances.canAct) setDrag({ id, source });
@@ -513,7 +517,9 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         const option = chooserOptions[index];
         setAbilityChooser(null);
         if (option?.action === "browseVoid") setBrowsed({ side: HUMAN, zone: "void" });
-        else if (option !== undefined && option.action !== null) submitAction(option.action, "ability-chooser");
+        else if (option !== undefined && option.action !== null) {
+          submitAction(option.action, option.action.kind === "payToEnd" ? "pay-to-end-chooser" : "ability-chooser");
+        }
         return;
       }
       submitAnswer(surface.choiceAnswers[index] ?? null, "choice-prompt");
@@ -594,10 +600,29 @@ function chooserOptionsFor(
 ): ChooserOption[] {
   if (chooser === null) return [];
   const cancel: ChooserOption = { copy: { kind: "cancel" }, action: null };
+  const payment = (action: PayToEndAction): ChooserOption => {
+    const effect = view.payable.find((payable) => payable.id === action.effect);
+    const source = effect?.source ?? null;
+    let name: string | null = null;
+    if (typeof source === "string") {
+      const instance = view.instances[source];
+      name = instance === undefined ? null : cards(instance).displaySnapshot.name;
+    } else if (source !== null) {
+      const side = view.sides[source.side];
+      const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
+      name = id === undefined ? null : emblemName(source.kind, id);
+    }
+    return { copy: { kind: "payToEnd", cost: effect?.cost ?? 0, name }, action };
+  };
   if (chooser.kind === "card") {
     const activations = affordances.activations.get(chooser.id) ?? [];
-    if (activations.length === 0) return [];
-    return [...activations.map((action, index): ChooserOption => ({ copy: { kind: "ability", index }, action })), cancel];
+    const payments = (affordances.payToEnd.get(chooser.id) ?? []).map(payment);
+    if (activations.length + payments.length === 0) return [];
+    return [
+      ...activations.map((action, index): ChooserOption => ({ copy: { kind: "ability", index }, action })),
+      ...payments,
+      cancel,
+    ];
   }
   if (chooser.kind === "void") {
     const plays = [...affordances.voidPlays.values()].flatMap((action): ChooserOption[] => {
@@ -628,7 +653,8 @@ function chooserOptionsFor(
       },
     ];
   });
-  return options.length === 0 ? [] : [...options, cancel];
+  const all = [...options, ...affordances.statusPayToEnd.map(payment)];
+  return all.length === 0 ? [] : [...all, cancel];
 }
 
 function sourceSlotOf(view: MobileBattleView, id: BattleCardId): MobileBattleSlotTarget | null {

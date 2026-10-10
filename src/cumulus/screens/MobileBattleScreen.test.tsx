@@ -508,11 +508,20 @@ describe("MobileBattleScreen", () => {
     expect(onBattleLogOpen).toHaveBeenCalledTimes(1);
   });
 
-  it("presents the opponent's play at reading size and badges lasting statuses on cards and status displays", () => {
+  it("presents the opponent's play at reading size and badges lasting statuses, marking the actionable ones", () => {
     const view = makeView();
     const [empty, filled, secondEmpty] = view.player.backRank;
     if (empty === undefined || filled?.card == null || secondEmpty === undefined) throw new Error("fixture has no back rank");
-    const badged = { ...filled, card: { ...filled.card, statuses: [{ kind: "duration", label: "a" }] } } as const;
+    const badged = {
+      ...filled,
+      card: {
+        ...filled.card,
+        statuses: [
+          { kind: "duration", label: "a" },
+          { kind: "payable", label: "c", actionable: true },
+        ],
+      },
+    } as const;
     const player = {
       ...view.player,
       backRank: [empty, badged, secondEmpty],
@@ -527,6 +536,11 @@ describe("MobileBattleScreen", () => {
         '[data-battle-status-badge="duration"]',
       ),
     ).not.toBeNull();
+    expect(
+      [...container.querySelectorAll("[data-battle-status-badge-actionable]")].map((badge) =>
+        badge.getAttribute("data-battle-status-badge"),
+      ),
+    ).toEqual(["payable"]);
     expect(query(container, '[data-testid="player-battle-status"]').querySelector('[data-battle-status-badge="costModifier"]')).not.toBeNull();
     expect(query(container, '[data-testid="enemy-battle-status"]').querySelector("[data-battle-status-badges]")).toBeNull();
   });
@@ -548,6 +562,58 @@ describe("MobileBattleScreen", () => {
 
     expect(shown("player-front")).toEqual(expect.arrayContaining(["F0", "F3", "F4", "F5", "F6"]));
     expect(shown("player-back")).toEqual(expect.arrayContaining(["B0", "B4", "B6"]));
+  });
+
+  it("fans the mobile hand symmetrically about the row's centre at every hand size", () => {
+    for (let count = 1; count <= 8; count += 1) {
+      const view = makeView();
+      const cards = Array.from({ length: count }, (_unused, index) =>
+        makeCard(40 + index, cardId(`player-hand-${String(index)}`)),
+      );
+      const container = mount({
+        ...view,
+        playerHand: cards,
+        nearHand: { ...view.nearHand, cardIds: cards.map((card) => card.id), cards },
+      });
+      const fan = [
+        ...query(container, '[data-battle-mobile-row="near-hand"]').querySelectorAll<HTMLElement>(":scope > div"),
+      ].map((wrapper) => ({
+        left: Number.parseFloat(wrapper.style.left),
+        rotation: Number.parseFloat(/rotate\((-?[\d.]+)deg\)/u.exec(wrapper.style.transform)?.[1] ?? "NaN"),
+      }));
+
+      expect(fan, String(count)).toHaveLength(count);
+      fan.forEach((card, index) => {
+        const mirror = fan[count - 1 - index];
+        expect(card.left + (mirror?.left ?? Number.NaN), `${String(count)}:${String(index)}`).toBeCloseTo(100);
+        expect(card.rotation + (mirror?.rotation ?? Number.NaN), `${String(count)}:${String(index)}`).toBeCloseTo(0);
+      });
+    }
+  });
+
+  it("steps the prompt's source card aside while a choice on the battlefield is open", () => {
+    const view = { ...makeView(), revealedHandCard: makeCard(91, cardId("asking-card")) };
+    const backCard = view.player.backRank[1]?.card;
+    const handCard = view.playerHand[0];
+    if (backCard == null || handCard === undefined) throw new Error("fixture has no cards");
+    const picker = (card: MobileBattleCardView, zone: "hand" | "backRank") => ({
+      key: 7,
+      label: "Choose",
+      side: "player" as const,
+      candidates: [{ instanceId: card.id, cardUuid: card.model.cardId, owner: "player" as const, zone, card, highlighted: false }],
+      candidateIds: [card.id],
+      count: 1,
+      optional: false,
+      canResolve: true,
+      presentation: "board" as const,
+    });
+    const placement = (container: HTMLElement) =>
+      query(container, "[data-battle-revealed-hand-card]").dataset.battleRevealedHandCardPlacement;
+
+    expect(placement(mount(view))).toBe("reading");
+    expect(placement(mount(view, { targetableCardIds: [backCard.id] }))).toBe("aside");
+    expect(placement(mount({ ...view, cardPicker: picker(backCard, "backRank") }))).toBe("aside");
+    expect(placement(mount({ ...view, cardPicker: picker(handCard, "hand") }))).toBe("reading");
   });
 
   it("replaces the phase advance with choice-prompt options", () => {

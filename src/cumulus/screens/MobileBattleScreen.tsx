@@ -689,14 +689,14 @@ const DESKTOP_SIDE_PILE_HEIGHT =
 const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-m");
 const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
-// The mobile hand fan spreads up to 82% of the row. A hand of six or more
-// cards, which would reach that cap, spreads over 62% centered at 55% of the
-// row instead (each card face sits left of its fan position), which keeps
-// its leftmost card's uncovered strip on screen and as wide as the others.
-const MOBILE_HAND_FAN_SPREAD = 82;
-const MOBILE_HAND_CROWDED_FAN_SPREAD = 62;
-const MOBILE_HAND_CROWDED_FAN_CENTER = 55;
+// The mobile hand fans about the row's centre, its card centres up to 50%
+// of the row apart and its outer cards tilted 6° each way, so the outer
+// cards' top corners stay inside the row and every card's uncovered strip
+// stays on screen.
+const MOBILE_HAND_FAN_SPREAD = 50;
 const MOBILE_HAND_FAN_SPACING = 18;
+/** Degrees between the mobile fan's outer cards' tilts. */
+const MOBILE_HAND_FAN_ROTATION = 12;
 // Canonical full-card reading size, constrained on narrow screens so the
 // shared reveal stays fully visible beside the battlefield.
 const SHARED_HAND_CARD_REVEAL_WIDTH = "min(240px, 45vw)";
@@ -979,14 +979,13 @@ function centeredFanPosition(params: {
   count: number;
   maximumSpread: number;
   spacing: number;
-  center?: number;
 }): { left: string; normalized: number } {
-  const { index, count, maximumSpread, spacing, center = 50 } = params;
+  const { index, count, maximumSpread, spacing } = params;
   if (count <= 1) return { left: "50%", normalized: 0 };
   const spread = Math.min(maximumSpread, (count - 1) * spacing);
   const normalized = index / (count - 1) - 0.5;
   return {
-    left: `${String(center + normalized * spread)}%`,
+    left: `${String(50 + normalized * spread)}%`,
     normalized,
   };
 }
@@ -2456,21 +2455,14 @@ function NearHand({
         const isPickerCandidate = pickerCandidateIds.has(card.id);
         const isPickerSelected = selectedPickerCardIds.includes(card.id);
         const isPickerHighlighted = candidate?.highlighted === true;
-        const crowded =
-          !isDesktop &&
-          (cards.length - 1) * MOBILE_HAND_FAN_SPACING >= MOBILE_HAND_FAN_SPREAD;
         const { left, normalized } = centeredFanPosition({
           index,
           count: cards.length,
-          maximumSpread: isDesktop
-            ? 72
-            : crowded
-              ? MOBILE_HAND_CROWDED_FAN_SPREAD
-              : MOBILE_HAND_FAN_SPREAD,
+          maximumSpread: isDesktop ? 72 : MOBILE_HAND_FAN_SPREAD,
           spacing: isDesktop ? 16 : MOBILE_HAND_FAN_SPACING,
-          ...(crowded ? { center: MOBILE_HAND_CROWDED_FAN_CENTER } : {}),
         });
-        const rotation = normalized * (isDesktop ? 8 : 18);
+        const rotation =
+          normalized * (isDesktop ? 8 : MOBILE_HAND_FAN_ROTATION);
         const drop = normalized * normalized * (isDesktop ? 8 : 18);
         const cardContent = (
           <BattleCardSurface
@@ -2733,13 +2725,22 @@ function BattlePlayReveal({
   );
 }
 
+/**
+ * Where the shared card shows: at reading size beside the battlefield, or
+ * aside, at the targeting stage's size and place, while a choice on the
+ * battlefield would otherwise sit under it.
+ */
+type SharedHandCardRevealPlacement = "reading" | "aside";
+
 function SharedHandCardReveal({
   card,
   isDesktop,
+  placement,
   interactions,
 }: {
   readonly card: MobileBattleCardView;
   readonly isDesktop: boolean;
+  readonly placement: SharedHandCardRevealPlacement;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const reduceMotion = useReducedMotion();
@@ -2749,6 +2750,7 @@ function SharedHandCardReveal({
   return (
     <motion.div
       data-battle-revealed-hand-card=""
+      data-battle-revealed-hand-card-placement={placement}
       data-battle-card-id={card.id}
       initial={
         reduceMotion
@@ -2762,13 +2764,26 @@ function SharedHandCardReveal({
       }}
       style={{
         gridColumn: 1,
-        gridRow: "3 / 5",
-        alignSelf: "center",
-        justifySelf: "end",
-        width: SHARED_HAND_CARD_REVEAL_WIDTH,
-        marginRight: token(isDesktop ? "--space-2xl" : "--space-s"),
         zIndex: token("--layer-reveal"),
         pointerEvents: "auto",
+        ...(placement === "reading"
+          ? {
+              gridRow: "3 / 5",
+              alignSelf: "center",
+              justifySelf: "end",
+              width: SHARED_HAND_CARD_REVEAL_WIDTH,
+              marginRight: token(isDesktop ? "--space-2xl" : "--space-s"),
+            }
+          : {
+              gridRow: 5,
+              alignSelf: "start",
+              justifySelf: "start",
+              width: isDesktop
+                ? DESKTOP_TARGETING_CARD_STAGE_WIDTH
+                : TARGETING_CARD_STAGE_WIDTH,
+              marginTop: token("--space-xs"),
+              marginLeft: token("--space-s"),
+            }),
       }}
     >
       <BattleCardSurface
@@ -3364,14 +3379,15 @@ function ControlRow({
                   token("--space-xs"),
                 )
               : undefined,
-            maxWidth: isDesktop ? "100%" : undefined,
+            maxWidth: "100%",
             gap: token("--space-s"),
             position: "relative",
             zIndex: 10,
             pointerEvents: "auto",
           }}
         >
-          {rankShortcuts === null ? null : (
+          {/* A choice takes the whole row; long options wrap rather than leave the screen. */}
+          {rankShortcuts === null || choicePrompt !== null ? null : (
             <div
               data-battle-rank-shortcuts=""
               style={{ display: "flex", gap: token("--space-xs") }}
@@ -3429,6 +3445,7 @@ function ControlRow({
               display: hasAlternateNextControls ? "flex" : "grid",
               alignItems: hasAlternateNextControls ? "center" : undefined,
               justifyContent: hasAlternateNextControls ? "flex-end" : undefined,
+              flexWrap: hasAlternateNextControls ? "wrap" : undefined,
               gap: hasAlternateNextControls ? token("--space-s") : undefined,
             }}
           >
@@ -4368,6 +4385,18 @@ export function MobileBattleScreen({
     view.cardPicker?.presentation === "board" ? view.cardPicker : null;
   const galleryCardPicker =
     view.cardPicker?.presentation === "gallery" ? view.cardPicker : null;
+  // While a choice on the battlefield is open, the shared card steps aside
+  // to the targeting stage, as a card being played does, so it covers no
+  // candidate of a full rank.
+  const battlefieldChoice =
+    (interactions?.targetableCardIds?.length ?? 0) > 0 ||
+    (boardCardPicker?.candidates.some(
+      (candidate) =>
+        candidate.zone === "backRank" || candidate.zone === "frontRank",
+    ) ??
+      false);
+  const revealedHandCardPlacement: SharedHandCardRevealPlacement =
+    battlefieldChoice ? "aside" : "reading";
   const selectedPickerCardIds =
     cardPickerSelection.pickerKey === cardPickerKey
       ? cardPickerSelection.ids
@@ -4864,8 +4893,10 @@ export function MobileBattleScreen({
           }}
         >
           <SharedHandCardReveal
+            key={revealedHandCardPlacement}
             card={view.revealedHandCard}
             isDesktop={isDesktop}
+            placement={revealedHandCardPlacement}
             interactions={interactions}
           />
         </div>

@@ -487,6 +487,58 @@ describe("buildEngineBattleScreenModel", () => {
     ]);
   });
 
+  it("offers paying to end an effect on each character it changes, which ends it and spends its price", () => {
+    const fixture = promptLabFixture("pay-to-end");
+    if (fixture === null) throw new Error("no fixture pay-to-end");
+    const { slice } = promptLabBattle(engine, fixture);
+    const state = slice.committed;
+    const [effect] = state.payable;
+    if (effect === undefined) throw new Error("no payable effect");
+    const model = screenOf(state);
+    const affected = effect.affects.map(id);
+    const nearBack = model.view.near.backRank.flatMap((cell) => (cell.card === null ? [] : [cell.card]));
+
+    expect([...model.affordances.payToEnd.keys()].sort()).toEqual([...affected].sort());
+    for (const card of affected) {
+      expect(model.affordances.payToEnd.get(card)).toEqual([{ kind: "payToEnd", effect: effect.id }]);
+    }
+    expect(model.affordances.statusPayToEnd).toEqual([]);
+    for (const card of nearBack.filter((entry) => affected.includes(entry.id))) {
+      expect(card.showPlayableOutline).toBe(true);
+      expect(card.statuses?.find((badge) => badge.kind === "payable")?.actionable).toBe(true);
+    }
+    const [first] = affected;
+    const action = first === undefined ? undefined : model.affordances.payToEnd.get(first)?.[0];
+    if (action === undefined) throw new Error("no payment");
+    const outcome = adapter.reduce(slice, { kind: "battleAction", side: "player", action });
+    if (outcome.kind !== "applied") throw new Error(`bounced: ${outcome.reason}`);
+    const paid = screenOf(outcome.slice.committed);
+    expect(outcome.slice.committed.payable).toEqual([]);
+    expect(outcome.slice.committed.sides.player.currentEnergy).toBe(state.sides.player.currentEnergy - effect.cost);
+    expect(paid.affordances.payToEnd.size).toBe(0);
+    expect(engineStatuses(paid.engine, "player").cards.size).toBe(0);
+  });
+
+  it("offers no payment the player cannot afford, and one for an effect changing no character from the status display", () => {
+    const fixture = promptLabFixture("pay-to-end");
+    if (fixture === null) throw new Error("no fixture pay-to-end");
+    const state = promptLabBattle(engine, fixture).slice.committed;
+    const [effect] = state.payable;
+    if (effect === undefined) throw new Error("no payable effect");
+    const poor = structuredClone(state);
+    poor.sides.player.currentEnergy = effect.cost - 1;
+    const unattached = structuredClone(state);
+    unattached.payable = [{ ...effect, affects: [] }];
+    const broke = screenOf(poor);
+
+    expect(broke.affordances.payToEnd.size).toBe(0);
+    const payable = [...engineStatuses(broke.engine, "player").cards.values()].flat().filter((badge) => badge.kind === "payable");
+    expect(payable).toHaveLength(effect.affects.length);
+    expect(payable.some((badge) => badge.actionable === true)).toBe(false);
+    expect(screenOf(unattached).affordances.statusPayToEnd).toEqual([{ kind: "payToEnd", effect: effect.id }]);
+    expect(screenOf(unattached).affordances.payToEnd.size).toBe(0);
+  });
+
   it("offers the loop on offer with the iteration cap", () => {
     const { state, ids } = board({ player: { back: [LOOP.freePoints.id] } });
     const source = ids.player.back[0];
@@ -704,6 +756,24 @@ describe("presentation", () => {
     expect(model.cardOverlay).toMatchObject({ kind: "points-scored", battleCardId: score.visual.instance, points: score.visual.points });
     expect(challenge.items.some((item) => item.presentation === "turn")).toBe(true);
     expect(noTarget?.presentation).toBe("notice");
+  });
+
+  it("presents a challenge's scores in the turn they happen, then announces the new turn", () => {
+    const challenge = steps("present-challenge")[1];
+    if (challenge === undefined) throw new Error("no challenge");
+    const scoreAt = challenge.items.findIndex((item) => item.presentation === "score");
+    const turnAt = challenge.items.findIndex((item) => item.presentation === "turn");
+    const score = challenge.items[scoreAt];
+    const turn = challenge.items[turnAt];
+    if (score?.visual?.kind !== "score" || turn === undefined) throw new Error("no score or turn");
+
+    expect(scoreAt).toBeLessThan(turnAt);
+    expect(challenge.before.turn.active).toBe("player");
+    expect(challenge.after.turn.active).toBe("enemy");
+    expect(score.batch.key).not.toBe(challenge.batch.key);
+    expect(labModel(score.batch.state, score.visual).view.activeSide).toBe("player");
+    expect(turn.batch).toBe(challenge.batch);
+    expect(labModel(turn.batch.state, null).view.activeSide).toBe("enemy");
   });
 
   it("shows a Dreamwell card beside its side while its reveal is presented", () => {

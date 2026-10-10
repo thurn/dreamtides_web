@@ -10,7 +10,9 @@
 //   presented, so an opponent's plays arrive one at a time even when the AI
 //   host has already moved on; when the queue is idle it shows the fold.
 //   While an opponent's play is revealed, the board shows the state before
-//   it, so its effects land as the card travels to its destination.
+//   it, so its effects land as the card travels to its destination. Until a
+//   batch's new turn is presented, its board stays in the turn it started
+//   in, so the turn announcement follows what happened before it.
 // - The prompt host shows a prompt only while the queue is idle, so the
 //   events before a prompt (the draws of "draw 2, then discard") are
 //   presented first.
@@ -167,6 +169,14 @@ export function presentationItems(
   sourceName: NoticeSourceName,
 ): PresentationItem[] {
   const { eventDwellMs } = BATTLE.presentation;
+  // Items before the batch's first new turn show its state in the turn it
+  // started in, so the turn announcement waits for them (a challenge's
+  // scores, then the new turn).
+  const turnIndex = events.findIndex((event) => event.kind === "turnStarted");
+  const beforeTurn: PresentationBatch = {
+    key: parsePresentationId(`${batch.key}:before-turn`),
+    state: { ...batch.state, turn: before.turn },
+  };
   return events.flatMap((raw, index): PresentationItem[] => {
     const event = eventSeenBy(raw, human, batch.state);
     if (event === null) return [];
@@ -182,7 +192,12 @@ export function presentationItems(
         dwellMs,
         visual,
         notice,
-        batch: presentation === "reveal" ? { key: parsePresentationId(`${batch.key}:before`), state: before } : batch,
+        batch:
+          presentation === "reveal"
+            ? { key: parsePresentationId(`${batch.key}:before`), state: before }
+            : index < turnIndex
+              ? beforeTurn
+              : batch,
       },
     ];
     switch (event.kind) {

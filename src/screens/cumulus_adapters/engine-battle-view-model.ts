@@ -21,7 +21,7 @@ import type {
   MobileBattleView,
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
-import type { Action, BattleView, InstanceId, InstanceView, LoopId, Side, Slot } from "../../engine";
+import type { Action, BattleView, EffectId, InstanceId, InstanceView, LoopId, Side, Slot } from "../../engine";
 import { opponent } from "../../engine";
 import type { PresentationVisual } from "../../battle/components/battle-presentation";
 import { engineStatusLabel, type EngineStatusCopy } from "../../runtime/battle-prompt-messages";
@@ -43,6 +43,7 @@ import { buildPromptHost, type PendingEnginePrompt, type PromptHostModel } from 
 type PlayAction = Extract<Action, { kind: "play" }>;
 type ActivateAction = Extract<Action, { kind: "activate" }>;
 type RepositionAction = Extract<Action, { kind: "reposition" }>;
+type PayToEndAction = Extract<Action, { kind: "payToEnd" }>;
 
 /** One legal reposition of a character: its destination and the action that moves it there. */
 export interface EngineReposition {
@@ -73,6 +74,10 @@ export interface EngineBattleAffordances {
   readonly allBack: readonly RepositionAction[];
   /** The loop on offer, with the most repetitions one request may ask for. */
   readonly loop: { readonly loop: LoopId; readonly maxCount: number } | null;
+  /** Paying to end an effect (C7), by each character in play the effect changes. */
+  readonly payToEnd: ReadonlyMap<BattleCardId, readonly PayToEndAction[]>;
+  /** Paying to end an effect that changes no character in play, offered from the human's status display. */
+  readonly statusPayToEnd: readonly PayToEndAction[];
 }
 
 export interface EngineBattleViewInput {
@@ -127,6 +132,8 @@ const NO_AFFORDANCES: EngineBattleAffordances = {
   allForward: [],
   allBack: [],
   loop: null,
+  payToEnd: new Map(),
+  statusPayToEnd: [],
 };
 
 function slotViewId(slot: Slot): BattleSlotViewId {
@@ -191,6 +198,8 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
   const emblemActivations: ActivateAction[] = [];
   const repositions = new Map<BattleCardId, EngineReposition[]>();
   const moves: RepositionAction[] = [];
+  const payToEnd = new Map<BattleCardId, PayToEndAction[]>();
+  const statusPayToEnd: PayToEndAction[] = [];
   let pass: Action | null = null;
   let loop: EngineBattleAffordances["loop"] = null;
   const side = view.sides[human];
@@ -224,8 +233,17 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
       case "repeatLoop":
         loop = { loop: action.loop, maxCount: view.config.loopIterationCap };
         break;
-      case "payToEnd":
+      case "payToEnd": {
+        const affected = (view.payable.find((effect) => effect.id === action.effect)?.affects ?? []).filter(
+          (instance) => view.instances[instance]?.zone === "play",
+        );
+        if (affected.length === 0) statusPayToEnd.push(action);
+        for (const instance of affected) {
+          const id = parseBattleCardId(instance);
+          payToEnd.set(id, [...(payToEnd.get(id) ?? []), action]);
+        }
         break;
+      }
     }
   }
   return {
@@ -239,6 +257,8 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
     allForward: shortcutPlan(side.backRank, side.frontRank, "front", moves),
     allBack: shortcutPlan(side.frontRank, side.backRank, "back", moves),
     loop,
+    payToEnd,
+    statusPayToEnd,
   };
 }
 
@@ -306,9 +326,14 @@ interface EngineStatuses {
  * disabled triggers, a temporary character) marks its card; a banished card
  * returning to play, a pending cost change, and a waiting delayed ability
  * mark their side, as does an exhausted Avatar; an effect lasting until a
- * player pays marks each card it affects.
+ * player pays marks each card it affects, as actionable while it is in
+ * `payableNow`, the effects the human may pay to end now.
  */
-export function engineStatuses(view: BattleView, human: Side): EngineStatuses {
+export function engineStatuses(
+  view: BattleView,
+  human: Side,
+  payableNow: ReadonlySet<EffectId> = new Set(),
+): EngineStatuses {
   const cards = new Map<InstanceId, BattleStatusBadgeView[]>();
   const sides: Record<Side, BattleStatusBadgeView[]> = { player: [], enemy: [] };
   const badge = (kind: BattleStatusBadgeView["kind"], status: EngineStatusCopy): BattleStatusBadgeView => ({
@@ -359,9 +384,9 @@ export function engineStatuses(view: BattleView, human: Side): EngineStatuses {
     }
   }
   for (const payable of view.payable) {
-    for (const instance of payable.affects) {
-      mark(instance, badge("payable", { kind: "payable", payer: payable.payer, cost: payable.cost }));
-    }
+    const entry = badge("payable", { kind: "payable", payer: payable.payer, cost: payable.cost });
+    const shown = payableNow.has(payable.id) ? { ...entry, actionable: true } : entry;
+    for (const instance of payable.affects) mark(instance, shown);
   }
   for (const side of ["player", "enemy"] as const) {
     if (view.sides[side].avatar?.exhausted === true) sides[side].push(badge("exhausted", { kind: "avatarExhausted" }));
@@ -376,7 +401,10 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
   const visual = input.visual?.visual ?? null;
   // The opponent's card being revealed stays off the board until it travels there.
   const held = visual?.kind === "reveal" ? visual.instance : null;
-  const statuses = engineStatuses(view, human);
+  const payableNow = new Set(
+    [...affordances.payToEnd.values(), affordances.statusPayToEnd].flat().map((action) => action.effect),
+  );
+  const statuses = engineStatuses(view, human, payableNow);
   const cardView = (instance: InstanceView, playable = false): MobileBattleCardView => {
     const marks = statuses.cards.get(instance.id);
     return {
@@ -396,7 +424,11 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
     });
   const actionable = (id: InstanceId): boolean => {
     const battleCardId = parseBattleCardId(id);
-    return affordances.plays.has(battleCardId) || affordances.activations.has(battleCardId);
+    return (
+      affordances.plays.has(battleCardId) ||
+      affordances.activations.has(battleCardId) ||
+      affordances.payToEnd.has(battleCardId)
+    );
   };
   const sideView = (side: Side): MobileBattleSideView => {
     const state = view.sides[side];
@@ -405,7 +437,13 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
         const instance = id === null || id === held ? undefined : view.instances[id];
         return {
           id: slotViewId({ rank: rankName, index }),
-          card: instance === undefined ? null : cardView(instance, side === human && actionable(instance.id)),
+          card:
+            instance === undefined
+              ? null
+              : cardView(
+                  instance,
+                  (side === human && actionable(instance.id)) || affordances.payToEnd.has(parseBattleCardId(instance.id)),
+                ),
         };
       });
     return {

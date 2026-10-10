@@ -416,6 +416,27 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     presents: [{ side: "player", answer: () => false }],
   },
   {
+    name: "pay-to-end",
+    description: "The player's Day, with the AI's effect on the player's characters lasting until the player pays 2●",
+    setup: {
+      active: "enemy",
+      phase: "day",
+      player: { back: [vanillas[0], vanillas[1]], energy: 3, deck: deck(8) },
+      enemy: { hand: [STACK.payableEffect.id], energy: 5, deck: deck(8) },
+    },
+    script: [play("enemy", (ids) => at(ids.enemy.hand, 0)), { passUntilDayOf: "player" }],
+    presents: [
+      {
+        side: "player",
+        action: (_ids, state) => {
+          const effect = state.payable[0];
+          if (effect === undefined) throw new Error("pay-to-end registers no payable effect");
+          return { kind: "payToEnd", effect: effect.id };
+        },
+      },
+    ],
+  },
+  {
     name: "loop",
     description: "A free activated ability once used: the loop shortcut is on offer",
     setup: {

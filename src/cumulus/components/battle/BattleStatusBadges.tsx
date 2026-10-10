@@ -2,6 +2,7 @@ import type { CSSProperties, ReactElement } from "react";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { cardSelectionShadowLayers } from "../card/CardView";
 
 /**
  * A lasting battle status shown as a badge: a change with a duration, a
@@ -23,6 +24,12 @@ export interface BattleStatusBadgeView {
   readonly kind: BattleStatusBadgeKind;
   /** Accessible name: the status and how long it lasts. */
   readonly label: string;
+  /**
+   * The player may act on the status now (pay to end an effect): the badge
+   * carries the playable ring its card carries, and pressing the card offers
+   * the action.
+   */
+  readonly actionable?: boolean;
 }
 
 const BADGE_GLYPHS: Readonly<Record<BattleStatusBadgeKind, Glyph>> = {
@@ -90,12 +97,16 @@ export function BattleStatusBadges({
           role="img"
           aria-label={badge.label}
           data-battle-status-badge={badge.kind}
+          data-battle-status-badge-actionable={badge.actionable === true ? "true" : undefined}
           style={{
             ...BATTLE_STATUS_BADGE_STYLE,
             width: BATTLE_STATUS_BADGE_SIZE,
             borderRadius: token("--radius-compact"),
             background: token("--surface-status-badge"),
             color: token("--text-on-accent"),
+            ...(badge.actionable === true
+              ? { boxShadow: cardSelectionShadowLayers("playable").join(", ") }
+              : {}),
           }}
         >
           <InlineGlyph glyph={BADGE_GLYPHS[badge.kind]} />
