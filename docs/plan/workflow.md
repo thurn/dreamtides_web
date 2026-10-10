@@ -952,6 +952,17 @@ node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--pro
   `qa.captureDir`), and `qa.trace` (per-task main-thread attribution from a
   CDP trace on the page's clock). The README's Browser QA section lists them
   all.
+- **Battles.** `qa.battle` is the one battle driver. It reads the phase,
+  the side, the prompt the player owes, and whether the player may pass from
+  the screen's data attributes, plus `window.__engineProbe` with `debug=1`;
+  answers each prompt with its first legal choice; passes, in a main phase
+  or a respond window; and `qa.battle.playUntil(predicate, { timeout })`
+  plays until the predicate holds, failing with a diagnostic on `__caps`, a
+  battle that ends first, no progress within its stall limit, or the
+  timeout. `qa.battle.enterFirstBattle()` walks the front door to the first
+  battle, also with `--prod`. A scenario that plays a battle uses these
+  rather than its own pass loop or phase polling; a scenario-specific step
+  (a response, a dismissed overlay) goes in `playUntil`'s `before` hook.
 - **Long walks.** One MCP call's response is lost past about 300 s. A walk
   that may take longer is split into steps (an array default export; each
   step is its own call on the same page and reads the previous step's

@@ -35,7 +35,7 @@ import { createConnection, createServer } from "node:net";
 import { loadavg, tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { createQa } from "./prelude.mjs";
+import { createBattleDriver, createQa } from "./prelude.mjs";
 import {
   connectPlaywrightMcp,
   parseMcpResult,
@@ -148,8 +148,9 @@ export function resolveScenarioPath(scenario, { primaryCheckout, bead }) {
 }
 
 /**
- * The `browser_run_code_unsafe` source: the prelude, the scenario, and the
- * call that returns the prelude's report.
+ * The `browser_run_code_unsafe` source: the prelude (`createQa` and the
+ * battle driver it builds), the scenario, and the call that returns the
+ * prelude's report.
  *
  * @param {string} scenarioSource
  * @param {import("./prelude.mjs").QaConfig} config
@@ -158,6 +159,7 @@ export function resolveScenarioPath(scenario, { primaryCheckout, bead }) {
 export function buildScenarioCode(scenarioSource, config) {
   return `async (page) => {
   const createQa = ${createQa.toString()};
+  const createBattleDriver = ${createBattleDriver.toString()};
   const scenario = ${scenarioSource};
   const qa = await createQa(page, ${JSON.stringify(config)});
   let result = null;

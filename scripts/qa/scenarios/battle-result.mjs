@@ -9,15 +9,10 @@
 // and the surface's content, and asserts an empty `__caps`. A victory waits
 // for the reward's count-up to enable Continue.
 //
-// It reads `window.__engineProbe` (the debug panel's) for the decision and
-// the scores. The debug panel's controls carry no test IDs beyond the open
-// button and the rail; the side tabs and the Score stepper are found by
-// role, and the stepper by its developer-tool label.
-
-/**
- * @typedef {{ slice: { committed: { config: { scoreToWin: number }, sides: Record<string, { score: number }>, result: unknown }, inFlight: unknown }, decision: { side: string } | null, pending: unknown }} ResultProbe
- * @typedef {Window & { __engineProbe?: ResultProbe }} ResultWindow
- */
+// It reads the decision and the scores through `qa.battle`, from the debug
+// panel's `window.__engineProbe`. The debug panel's controls carry no test
+// IDs beyond the open button and the rail; the side tabs and the Score
+// stepper are found by role, and the stepper by its developer-tool label.
 
 /** @param {import("../prelude.mjs").Qa} qa */
 export default async function battleResult(qa) {
@@ -30,32 +25,15 @@ export default async function battleResult(qa) {
   await qa.open(`/?goto=battle-playable&seed=${seed}&debug=1`);
   await qa.waitVisible("[data-battle-mobile]", { timeout: 30_000 });
 
-  /** The scores, the win score, and whether the human holds a settled decision. */
-  const read = () =>
-    page.evaluate((side) => {
-      const probe = /** @type {ResultWindow} */ (window).__engineProbe;
-      if (probe === undefined) return null;
-      const { committed, inFlight } = probe.slice;
-      return {
-        score: committed.sides[side]?.score ?? 0,
-        scoreToWin: committed.config.scoreToWin,
-        ended: committed.result !== null,
-        humanDecides: inFlight === null && probe.decision?.side === "player",
-      };
-    }, winner);
-  const until = async (/** @type {string} */ label, /** @type {(state: NonNullable<Awaited<ReturnType<typeof read>>>) => boolean} */ test, timeout = 60_000) => {
-    const deadline = Date.now() + timeout;
-    for (;;) {
-      const state = await read();
-      if (state !== null && test(state)) return state;
-      if (Date.now() > deadline) throw new Error(`battle-result: timed out waiting for ${label} (${JSON.stringify(state)})`);
-      await qa.sleep(150);
-    }
-  };
-
+  /** @param {import("../prelude.mjs").BattleState} battle */
+  const score = (battle) => battle.probe?.scores[winner] ?? 0;
   // A debug action applies at a decision boundary; the human's is one the AI host does not race.
-  const start = await until("the human's decision", (state) => state.humanDecides);
-  qa.note("start", start);
+  const start = await qa.battle.waitFor(
+    (battle) => battle.probe !== null && !battle.probe.inFlight && battle.probe.decision?.side === "player",
+    { label: "the human's decision" },
+  );
+  const scoreToWin = start.probe?.scoreToWin ?? 0;
+  qa.note("start", { score: score(start), scoreToWin });
   await qa.click("[data-testid=engine-debug-open]");
   await qa.waitVisible("[data-testid=engine-debug-panel]");
   if (winner === "enemy") {
@@ -64,12 +42,15 @@ export default async function battleResult(qa) {
     await page.waitForFunction((selector) => document.querySelector(selector)?.getAttribute("aria-selected") === "true", enemyTab, { timeout: 5_000 });
   }
   const increase = '[data-testid=engine-debug-panel] [role=group][aria-label="Score"] button:last-of-type';
-  for (let score = start.score; score < start.scoreToWin; score++) {
+  for (let reached = score(start); reached < scoreToWin; reached++) {
     await qa.click(increase);
-    await until(`score ${String(score + 1)}`, (state) => state.score > score || state.ended, 10_000);
+    await qa.battle.waitFor((battle) => score(battle) > reached || battle.probe?.ended === true, {
+      label: `score ${String(reached + 1)}`,
+      timeout: 10_000,
+    });
   }
-  const end = await until("the battle's end", (state) => state.ended, 10_000);
-  qa.note("end", end);
+  const end = await qa.battle.waitFor((battle) => battle.probe?.ended === true, { label: "the battle's end", timeout: 10_000 });
+  qa.note("end", { score: score(end), scoreToWin });
 
   const surface = `[data-battle-result-surface=${outcome}]`;
   const settled = async () => {
@@ -102,5 +83,5 @@ export default async function battleResult(qa) {
   await qa.assertCaps("on the result surface");
   await qa.capture(name);
   await qa.capture(`${name}-content`, { element: "[data-battle-result-layout-content]", pad: 8 });
-  return { outcome, viewport: qa.viewportName, scoreToWin: end.scoreToWin, surface: geometry };
+  return { outcome, viewport: qa.viewportName, scoreToWin, surface: geometry };
 }

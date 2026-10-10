@@ -63,7 +63,6 @@ async function tutorialWalk(qa) {
     await qa.assertCaps(`${viewport} ${name}`);
     const state = await page.evaluate(() => ({
       path: location.pathname,
-      phase: document.querySelector("[data-battle-phase]")?.getAttribute("data-battle-phase") ?? null,
       sides: [...document.querySelectorAll("[role=group][aria-label]")]
         .map((element) => element.getAttribute("aria-label") ?? "")
         .filter((label) => /\d+ of \d+/.test(label))
@@ -71,8 +70,9 @@ async function tutorialWalk(qa) {
       speech: document.querySelector("[data-character-dialogue-visible=true], [data-tutorial-avatar-dialogue]")?.textContent?.replace(/\s+/g, " ").slice(0, 80) ?? null,
     }), null);
     const shown = await visibleGuidance();
+    const { phase } = await qa.battle.state();
     /** @type {Beat} */
-    const entry = { beat: name, ...state, guidance: shown === null ? null : `${shown.kind}:${shown.side}:${String(shown.trigger)}` };
+    const entry = { beat: name, ...state, phase, guidance: shown === null ? null : `${shown.kind}:${shown.side}:${String(shown.trigger)}` };
     carry.beats.push(entry);
     qa.note(name, entry);
     if (options.capture === true) {
@@ -341,52 +341,41 @@ async function tutorialWalk(qa) {
     const resolved = await nextGuidance("challenge-resolved", "player", null, 15_000);
     await beat("26-mira-challenge-resolved");
 
-    // 27–30 Until Victory: press the phase button whenever the player holds it
-    // and no guidance shows; record the guidance the enemy's turn raises. On
-    // the authored enemy turn the guidance is 27 (figment) and 28 (the enemy's
-    // card play), and the first press is 29 (Start Challenge against the
-    // enemy's challenge), then End Turn and Start Challenge for Victory.
+    // 27–30 Until Victory: `qa.battle` presses the phase button whenever the
+    // player holds it and no guidance shows; the guidance the enemy's turn
+    // raises is recorded and cleared first. On the authored enemy turn the
+    // guidance is 27 (figment) and 28 (the enemy's card play), and the first
+    // press is 29 (Start Challenge against the enemy's challenge), then End
+    // Turn and Start Challenge for Victory.
     const victory = "[data-testid=tutorial-battle-new-journey]";
-    const deadline = Date.now() + Number(qa.args.liveTimeoutMs ?? "150000");
     let presses = 0;
     /** @type {string | null} */
     let lastPresentation = resolved.presentation;
-    for (;;) {
-      await qa.assertCaps(`${viewport} live battle`);
-      const state = await page.evaluate(({ win, next }) => {
-        const dom = /** @type {Window & { __qa?: import("../prelude.mjs").QaDom }} */ (window).__qa;
-        const button = dom?.hitPoint({ selector: next }, 0.95) ?? null;
-        const element = dom?.rendered({ selector: next }, 0.95) ?? null;
-        return {
-          victory: dom?.rendered({ selector: win }, 0.95) != null,
-          press: button !== null && button.covered === null && element !== null && !element.hasAttribute("disabled") && element.getAttribute("aria-disabled") !== "true",
-        };
-      }, { win: victory, next: phaseNext });
-      if (state.victory) break;
-      const shown = await visibleGuidance();
-      if (shown !== null) {
-        if (shown.presentation !== lastPresentation) {
-          lastPresentation = shown.presentation;
-          const name = shown.kind === "figment-created" ? "27-mira-figment" : shown.side === "enemy" && shown.kind === "card-play" ? "28-mira-dissolved" : `guidance-${shown.kind}-${shown.side}`;
-          carry.observed.push(name);
-          await beat(name);
+    await qa.battle.playUntil(() => qa.isVisible(victory), {
+      label: "the live tutorial battle",
+      timeout: Number(qa.args.liveTimeoutMs ?? "150000"),
+      before: async (battle) => {
+        await qa.assertCaps(`${viewport} live battle`);
+        const shown = await visibleGuidance();
+        if (shown !== null) {
+          if (shown.presentation !== lastPresentation) {
+            lastPresentation = shown.presentation;
+            const name = shown.kind === "figment-created" ? "27-mira-figment" : shown.side === "enemy" && shown.kind === "card-play" ? "28-mira-dissolved" : `guidance-${shown.kind}-${shown.side}`;
+            carry.observed.push(name);
+            await beat(name);
+          }
+          await guidanceCleared();
+          return true;
         }
-        await guidanceCleared();
-        continue;
-      }
-      if (Date.now() > deadline) throw new Error(`tutorial-walk ${viewport}: no Victory after ${String(presses)} phase presses`);
-      if (state.press) {
-        // A press the screen ignores while input is in flight is pressed again on the next pass.
+        if (!battle.canPass) return false;
+        // Guidance that shows as the button frees takes the press.
         await qa.sleep(600);
-        if ((await visibleGuidance()) !== null) continue;
+        if ((await visibleGuidance()) !== null) return true;
         presses += 1;
         await beat(`live-press-${String(presses)}`);
-        await qa.click(phaseNext);
-        await qa.sleep(800);
-        continue;
-      }
-      await qa.sleep(200);
-    }
+        return false;
+      },
+    });
     qa.note("live presses", { presses, observed: carry.observed });
     await qa.waitVisible("[data-tutorial-victory-screen]");
     await qa.sleep(1_500);

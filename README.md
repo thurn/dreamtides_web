@@ -173,14 +173,64 @@ The helpers:
   without it before quoting an absolute number.
 - `qa.caps()`, `qa.assertCaps(label)`, `qa.note(label, data)`,
   `qa.sleep(ms)`, and `qa.page` for anything else.
+- `qa.isVisible(target, { minOpacity? })`: whether the target is rendered
+  now, without waiting.
 - Waits and clicks fail at once when `__caps` records an error or rejection.
+
+**Battles.** `qa.battle` is the one battle driver; a scenario that plays a
+battle uses it rather than its own pass loop:
+
+- `qa.battle.state()` reads the battle from the screen's data attributes:
+  `phase` and `side` (`[data-battle-phase]`, `[data-battle-side]`; `near` is
+  the human's turn) as `at` (`near:day`), the prompt the player owes
+  (`prompt`: its `surface`, `id`, `candidates`, and whether it is
+  `answerable`), whether the phase button can be pressed (`canPass`:
+  rendered, enabled, and uncovered), what a pass answers (`window`: `main`,
+  or `respond` for any pass in the far side's turn), the side the screen
+  waits on, the result surface, and a `board` signature of every rendered
+  card's place.
+  With `debug=1` it adds `probe`, from the debug panel's
+  `window.__engineProbe`: the engine's decision (`main` or `respond`), its
+  pending prompt with candidates, the stack size, whether an intent is in
+  flight, the scores, and the event count; then `prompt` and `window`
+  follow the engine exactly. The screen marks no candidate of a card
+  awaiting a target on the board, so answering those needs `debug=1`.
+- `qa.battle.answer()` answers the owed prompt with its first legal choice,
+  through the surface that shows it: the Foresee or arrangement confirm,
+  the number picker's submit, a choice prompt's first option, or the first
+  candidate of the card picker (gallery or board) or of a card's targets,
+  then the picker's submit (or Skip). `qa.battle.pass()` presses the phase
+  button, a main-phase pass or a pass in a respond window, and reports
+  whether the battle moved on. `qa.battle.tap(selector)` clicks the first
+  point that hits an element, as on a card in a fanned hand.
+- `qa.battle.playUntil(predicate, { timeout?, stallMs?, pollMs?, label?,
+  before?, passWhen? })` reads the battle until `predicate(state, run)`
+  holds; meanwhile it answers each owed prompt, else passes (when
+  `passWhen(state)`, default always), else waits. `before(state, run)` runs
+  first and returns true when the scenario acted itself, such as a response
+  or a dismissed overlay. `run` counts `turns` (each time the turn changes
+  sides), `passes`, `responds` (passes in the far side's turn whose
+  `window` is `respond`), and `answers`, with the `history` of `at` values. A run fails
+  with a diagnostic (the state, the last action, and the history) on any
+  `__caps` entry, a result surface the predicate does not accept, no
+  progress within `stallMs` (default 45 s), or `timeout` (default 120 s);
+  progress is any change of the phase, prompt, board, or probe, so a press
+  the screen ignores is pressed again rather than counted.
+- `qa.battle.waitFor(predicate, { timeout?, pollMs?, label? })` waits
+  without acting.
+- `qa.battle.enterFirstBattle({ seed?, query?, atFrontDoor? })` opens a
+  fresh game (`/?seed=<seed>&<query>`, seed 1) and walks the front door to
+  the first battle: Avatar selection, every Layer 1 site, and Battle Start,
+  up to the player's phase button. It uses no development-only parameter,
+  so it runs with `--prod`; `query: "debug=1"` adds the probe in a dev run.
 
 Tracked scenarios:
 
 - `smoke` walks a fresh seed-1 game from the front door through Avatar
-  selection, every Layer 1 site, and Battle Start, then passes until the AI
-  has taken one turn. It uses no development-only parameter, so phase gates
-  run it with `--prod`.
+  selection, every Layer 1 site, and Battle Start
+  (`qa.battle.enterFirstBattle`), then plays until the AI has taken one
+  turn. It uses no development-only parameter, so phase gates run it with
+  `--prod`.
 - `battle-result` (`--arg outcome=victory|defeat`) opens
   `?goto=battle-playable&debug=1`, raises the winner's score to the battle's
   `scoreToWin` through the engine debug panel at the human's decision,
@@ -197,9 +247,10 @@ Tracked scenarios:
   screen's Begin, the scripted stage, the live tutorial battle to Victory, and
   New Journey to the tutorial Avatar offer. It runs three steps per viewport
   (front door and scripted stage, live battle, Avatar offer) and asserts an
-  empty `__caps` at every beat. After the player's guided turn it presses the
-  phase button until Victory and only records the guidance the enemy's turn
-  raises, so it reaches Victory whichever policy plays the enemy
+  empty `__caps` at every beat. After the player's guided turn `qa.battle`
+  presses the phase button until Victory, and the scenario only records and
+  clears the guidance the enemy's turn raises, so it reaches Victory
+  whichever policy plays the enemy
   (`--arg ai=<policy>` adds `?ai=` to the entry). Its waits use test IDs,
   data attributes, and card UUIDs, never copy.
 - `card-lab-play` is the card sweep's per-card run (below).
@@ -365,13 +416,14 @@ node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter> \
 The sweep (workflow § Card QA) opens one runner session (its own dev server
 and MCP client) and, for each card, side, and variant, runs
 `scripts/qa/scenarios/card-lab-play.mjs` in the card-lab with `debug=1`: it
-plays the card through the UI, answers each human prompt with its first
-legal choice, and passes until the stack is empty. A run fails on `__caps`
+plays the card through the UI, and `qa.battle` answers each human prompt
+with its first legal choice and passes until the stack is empty. A run
+fails on `__caps`
 errors, a rejected lab, a human decision with no visible enabled control,
 the card outside its expected zone (a character in play, an event in a void
 or the Banished zone), no `resolved` engine event for it, no visible board
-change, or no settled board within `--timeout` seconds (default 60); the
-sweep then goes on. A card whose text is pending is recorded `pending`
+change, or no settled board within `--timeout` seconds (default 60) or the
+driver's stall limit; the sweep then goes on. A card whose text is pending is recorded `pending`
 rather than `pass`, and a variant the card cannot take is recorded `skip`
 without a run. Verdicts append to `docs/plan/evidence/qa-ledger/<id>.jsonl`;
 `--capture` writes each settled board to `artifacts/qa/<id>/`. It exits 1

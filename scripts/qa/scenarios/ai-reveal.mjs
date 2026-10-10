@@ -4,8 +4,9 @@
 // which the AI holds the Day with energy and playable cards, and waits for
 // the reveal. Whichever policy answers the AI host (the worker's, or the
 // Random fallback when the worker is slow), the scenario asserts only the
-// surface: if the AI ends its turn without playing, it passes the human's
-// turn until the AI plays (up to `--arg turns=<n>`, default 4 human turns).
+// surface: if the AI ends its turn without playing, `qa.battle` passes the
+// human's turn until the AI plays (up to `--arg turns=<n>`, default 4 human
+// passes).
 // It captures the viewport and the revealed card once the card has grown to
 // the reveal's width, asserts the card leaves the reveal again (it travels), and asserts
 // an empty `__caps`. `--arg trace=1` wraps the wait in `qa.trace`, so the
@@ -18,35 +19,20 @@ export default async function aiReveal(qa) {
   const turns = Number(qa.args.turns ?? "4");
   const name = `ai-reveal-${qa.viewportName}`;
   const reveal = "[data-battle-play-reveal]";
-  const pass = "[data-battle-phase-next] button";
   await qa.open(`/?goto=prompt-lab-present-opponent&seed=${seed}`);
   await qa.waitVisible("[data-battle-mobile]", { timeout: 30_000 });
 
-  /** Polls until the reveal shows (`reveal`), or the human may pass with no reveal yet (`pass`). */
-  const next = async () => {
-    const deadline = Date.now() + 60_000;
-    for (;;) {
-      const state = await page.evaluate(
-        ({ revealSelector, passSelector }) => {
-          const dom = /** @type {Window & { __qa?: import("../prelude.mjs").QaDom }} */ (window).__qa;
-          if (dom?.rendered({ selector: revealSelector }, 0.95) != null) return "reveal";
-          const button = dom?.rendered({ selector: passSelector }, 0.95) ?? null;
-          return button !== null && !button.hasAttribute("disabled") && button.getAttribute("aria-disabled") !== "true" ? "pass" : null;
-        },
-        { revealSelector: reveal, passSelector: pass },
-      );
-      if (state !== null) return state;
-      if (Date.now() > deadline) throw new Error("ai-reveal: neither a reveal nor the human's pass within 60 s");
-      await qa.sleep(50);
-    }
-  };
+  // The driver passes the human's turns until the reveal shows.
   const waitForReveal = async () => {
-    for (let passed = 0; ; passed++) {
-      if ((await next()) === "reveal") return passed;
-      if (passed >= turns) throw new Error(`ai-reveal: the AI played nothing over ${String(turns)} human turns`);
-      await qa.click(pass);
-      await qa.sleep(500);
-    }
+    const run = await qa.battle.playUntil(
+      async (battle, progress) => {
+        if (await qa.isVisible(reveal)) return true;
+        if (progress.passes >= turns && battle.canPass) throw new Error(`ai-reveal: the AI played nothing over ${String(turns)} human turns`);
+        return false;
+      },
+      { label: "the AI's play reveal", timeout: 60_000 * (turns + 1), pollMs: 50 },
+    );
+    return run.passes;
   };
 
   let passed;

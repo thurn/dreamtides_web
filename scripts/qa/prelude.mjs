@@ -1,8 +1,8 @@
-// The helper prelude of `scripts/qa/run-scenario.mjs`. The runner sends
-// `createQa`'s source, with the scenario's, to the Playwright MCP's
-// `browser_run_code_unsafe`, so both run inside the MCP server process with a
-// Playwright `page`. `createQa` therefore reads nothing from this module's
-// scope, and the MCP's code sandbox has no `URL` global.
+// The helper prelude of `scripts/qa/run-scenario.mjs`. The runner sends the
+// source of `createQa` and `createBattleDriver`, with the scenario's, to the
+// Playwright MCP's `browser_run_code_unsafe`, so they run inside the MCP
+// server process with a Playwright `page`. They therefore read nothing else
+// from this module's scope, and the MCP's code sandbox has no `URL` global.
 
 /**
  * The error buffer the init script installs on every document.
@@ -143,6 +143,127 @@
  */
 
 /**
+ * The control a prompt the player owes is answered through: the Foresee or
+ * arrangement editor's confirm, the number picker, a choice prompt's
+ * options, the card picker's gallery, the card picker on the board, or the
+ * targets of a card awaiting them (`[data-battle-targeting-card-stage]`).
+ * The screen marks no candidate of a `target` surface, so only the probe
+ * (`debug=1`) names them.
+ *
+ * @typedef {"foresee" | "arrange" | "number" | "choice" | "gallery" | "board" | "target"} BattleSurface
+ */
+
+/**
+ * The part of the engine debug panel's `window.__engineProbe` (`debug=1`,
+ * `src/battle/components/EngineDebugPanel.tsx`) the battle driver reads.
+ *
+ * @typedef {object} EngineProbeView
+ * @property {{ kind: string, side: string } | null} decision
+ * @property {{ kind: string, side: string, id: string, candidates?: string[] } | null} pending
+ * @property {unknown[]} events
+ * @property {{ committed: { stack: unknown[], result: unknown, sides: Record<string, { score: number }>, config: { scoreToWin: number } }, inFlight: unknown }} slice
+ */
+
+/**
+ * What the engine debug panel's `window.__engineProbe` (`debug=1`) adds to a
+ * battle state.
+ *
+ * @typedef {object} BattleProbeState
+ * @property {{ kind: string, side: string } | null} decision The pending top-level decision (`main` or `respond`); null while an intent is in flight.
+ * @property {{ kind: string, side: string, id: string, candidates: string[] } | null} pending The pending prompt of either side.
+ * @property {number} stack
+ * @property {boolean} inFlight
+ * @property {boolean} ended
+ * @property {Record<string, number>} scores Each side's score, by `player` and `enemy`.
+ * @property {number} scoreToWin
+ * @property {number} events Engine events published so far.
+ */
+
+/**
+ * The prompt the player owes.
+ *
+ * @typedef {object} BattlePrompt
+ * @property {BattleSurface | null} surface Null while the probe reports a prompt the screen does not show yet.
+ * @property {string | null} kind The engine's prompt kind with the probe, else the surface.
+ * @property {string | null} id
+ * @property {string[]} candidates A card prompt's candidates: the probe's instance ids, else the rendered candidates' ids.
+ * @property {boolean} answerable Its control is rendered and enabled.
+ */
+
+/**
+ * The battle as the screen shows it, plus the probe's view with `debug=1`.
+ *
+ * @typedef {object} BattleState
+ * @property {string | null} phase `[data-battle-phase]`: `dawn`, `day`, `dusk`, `night`, or `challenge`.
+ * @property {"near" | "far" | null} side Whose turn it is (`[data-battle-side]`); `near` is the human's.
+ * @property {string | null} at `<side>:<phase>`.
+ * @property {BattlePrompt | null} prompt
+ * @property {"main" | "respond" | null} window
+ *   What the player's pass answers: with the probe, the human's pending
+ *   decision; without it, `respond` whenever the player may pass in the far
+ *   side's turn, else `main`.
+ * @property {boolean} canPass The phase button is rendered, enabled, and uncovered.
+ * @property {string | null} waiting The side the screen says it waits on (`[data-battle-prompt-waiting]`).
+ * @property {"victory" | "defeat" | null} result The result surface shown.
+ * @property {string} board Every rendered battle card with the rank, row, or zone it sits in.
+ * @property {BattleProbeState | null} probe
+ * @property {number} caps The current document's `__caps` entries.
+ */
+
+/**
+ * What a `playUntil` run did.
+ *
+ * @typedef {object} BattleRun
+ * @property {string} label
+ * @property {string[]} history Each `at` the run saw, in order, repeats collapsed.
+ * @property {number} turns How many times the turn passed to the other side.
+ * @property {number} passes Phase-button presses.
+ * @property {number} responds Passes in the far side's turn whose `window` is `respond`.
+ * @property {number} answers Prompts answered.
+ * @property {number} ms
+ */
+
+/**
+ * @typedef {object} PlayOptions
+ * @property {number} [timeout] The run's time limit (default 120 000 ms).
+ * @property {number} [stallMs] Fail when the battle shows no progress this long (default 45 000 ms).
+ * @property {number} [pollMs] The wait between reads while nothing can act (default 100 ms).
+ * @property {string} [label] Names the run in its log line and errors.
+ * @property {(state: BattleState, run: BattleRun) => boolean | Promise<boolean>} [before]
+ *   Runs before the driver acts; returning true means it acted itself (it
+ *   responded, or dismissed something), which counts as progress, and the
+ *   driver reads the battle again.
+ * @property {(state: BattleState) => boolean} [passWhen] Whether to pass in this state (default always).
+ */
+
+/**
+ * `qa.battle`: one battle driver for every scenario.
+ *
+ * @typedef {object} BattleDriver
+ * @property {() => Promise<BattleState>} state
+ * @property {(state?: BattleState) => Promise<boolean>} pass
+ *   Presses the phase button (a main-phase pass, or a pass in a respond
+ *   window); true once the battle shows progress.
+ * @property {(state?: BattleState) => Promise<boolean>} answer
+ *   Answers the prompt the player owes with its first legal choice; false
+ *   when its control is not ready.
+ * @property {(selector: string) => Promise<boolean>} tap
+ *   Clicks the first point of the element that `elementFromPoint` resolves
+ *   to it, as on a card in a fanned hand; false when no point does.
+ * @property {(predicate: (state: BattleState, run: BattleRun) => boolean | Promise<boolean>, options?: PlayOptions) => Promise<BattleRun & { state: BattleState }>} playUntil
+ *   Until `predicate` holds: answers each prompt the player owes, else
+ *   passes, else waits. Fails with a diagnostic on `__caps`, a battle that
+ *   ends first, no progress within `stallMs`, or `timeout`.
+ * @property {(predicate: (state: BattleState) => boolean | Promise<boolean>, options?: { timeout?: number, pollMs?: number, label?: string }) => Promise<BattleState>} waitFor
+ *   Waits, without acting, until `predicate` holds.
+ * @property {(options?: { seed?: string, query?: string, atFrontDoor?: () => Promise<void> }) => Promise<{ sites: Array<string | null> }>} enterFirstBattle
+ *   Opens a fresh game (`/?seed=<seed>&<query>`, seed 1) and walks the front
+ *   door to the first battle with no development-only parameter: Avatar
+ *   selection, every Layer 1 site, and Battle Start, up to the player's
+ *   phase button. `atFrontDoor` runs once the front door shows.
+ */
+
+/**
  * The helpers a scenario receives.
  *
  * @typedef {object} Qa
@@ -176,6 +297,9 @@
  *   wait.
  * @property {(target: string | Target, options?: { timeout?: number, minOpacity?: number }) => Promise<void>} waitVisible
  *   Waits until the target is rendered at `minOpacity` (default 0.95).
+ * @property {(target: string | Target, options?: { minOpacity?: number }) => Promise<boolean>} isVisible
+ *   Whether the target is rendered at `minOpacity` (default 0.95) now.
+ * @property {BattleDriver} battle
  * @property {() => Promise<void>} rest Moves the pointer outside the viewport.
  * @property {(name: string, options?: { fullPage?: boolean, clip?: Rect, element?: string | Target, pad?: number, minOpacity?: number }) => Promise<string>} capture
  *   Writes `<captureDir>/<name>.png` at CSS scale, pointer at rest: the
@@ -578,7 +702,7 @@ export async function createQa(page, config) {
     };
   };
 
-  /** @type {Qa} */
+  /** @type {Omit<Qa, "battle">} */
   const qa = {
     page,
     baseUrl: config.baseUrl,
@@ -629,6 +753,12 @@ export async function createQa(page, config) {
     },
 
     waitVisible,
+    async isVisible(rawTarget, { minOpacity = 0.95 } = {}) {
+      return page.evaluate(
+        ({ target, threshold }) => (/** @type {QaWindow} */ (window).__qa?.rendered(target, threshold) ?? null) !== null,
+        { target: asTarget(rawTarget), threshold: minOpacity },
+      );
+    },
     rest,
 
     async capture(name, { fullPage = false, clip, element, pad = 0, minOpacity = 0.95 } = {}) {
@@ -732,5 +862,438 @@ export async function createQa(page, config) {
       return { result, error, log, captures, caps: capsLog, traces };
     },
   };
-  return qa;
+  return { ...qa, battle: createBattleDriver(qa) };
+}
+
+/**
+ * The battle driver behind `qa.battle`. It reads the battle from the
+ * screen's data attributes, and from `window.__engineProbe` when the URL
+ * carries `debug=1`, and acts only through the pointer, as a player would.
+ * The runner sends its source beside `createQa`'s, so it reads nothing else
+ * from this module's scope.
+ *
+ * @param {Omit<Qa, "battle">} qa
+ * @returns {BattleDriver}
+ */
+export function createBattleDriver(qa) {
+  const page = qa.page;
+  const PASS = "[data-battle-phase-next] button";
+  const SUBMIT = "[data-testid=battle-card-picker-submit]";
+  const SKIP = "[data-testid=battle-card-picker-skip]";
+  /** @type {Record<Exclude<BattleSurface, "gallery" | "board" | "target">, string>} */
+  const CONTROLS = {
+    foresee: "[data-testid=battle-foresee-confirm]",
+    arrange: "[data-testid=battle-arrange-confirm]",
+    number: "[data-testid=battle-number-picker-submit]",
+    choice: "[data-battle-choice-prompt-controls] [data-testid=battle-choice-prompt-option-0]",
+  };
+  /** How long an action waits for the battle to show its effect. */
+  const SETTLE_MS = 10_000;
+
+  /** @type {BattleDriver["state"]} */
+  const state = () =>
+    page.evaluate(
+      ({ pass, submit, skip, controls }) => {
+        const win = /** @type {QaWindow & { __engineProbe?: EngineProbeView }} */ (window);
+        const dom = win.__qa;
+        /** @param {string} selector */
+        const shown = (selector) => dom?.rendered({ selector }, 0.95) ?? null;
+        /** @param {Element | null} element */
+        const enabled = (element) =>
+          element !== null && !element.hasAttribute("disabled") && element.getAttribute("aria-disabled") !== "true";
+
+        const indicator = document.querySelector("[data-battle-phase]");
+        const phase = indicator?.getAttribute("data-battle-phase") ?? null;
+        const rawSide = indicator?.getAttribute("data-battle-side") ?? null;
+        const side = rawSide === "near" || rawSide === "far" ? rawSide : null;
+
+        // The phase button's row also holds a choice prompt's options or a number picker.
+        const next = document.querySelector("[data-battle-phase-next]");
+        const passRow =
+          next !== null &&
+          !next.hasAttribute("data-battle-choice-prompt-controls") &&
+          next.querySelector("[data-battle-number-picker]") === null;
+        const passHit = passRow ? (dom?.hitPoint({ selector: pass }, 0.95) ?? null) : null;
+        const canPass = passHit !== null && passHit.covered === null && enabled(shown(pass));
+
+        /** @type {Array<[BattleSurface, string]>} */
+        const surfaces = [
+          ["foresee", controls.foresee],
+          ["arrange", controls.arrange],
+          ["number", controls.number],
+          ["choice", controls.choice],
+          ["gallery", "[data-battle-card-picker-gallery]"],
+          ["board", "[data-battle-card-picker-controls]"],
+          ["target", "[data-battle-targeting-card-stage]"],
+        ];
+        const surface = surfaces.find(([, selector]) => shown(selector) !== null) ?? null;
+        /** @type {string[]} */
+        let rendered = [];
+        if (surface?.[0] === "gallery") {
+          rendered = [...document.querySelectorAll("[data-battle-card-picker-gallery] [data-testid^='battle-card-picker-candidate-']")]
+            .map((element) => (element.getAttribute("data-testid") ?? "").replace("battle-card-picker-candidate-", ""));
+        } else if (surface?.[0] === "board") {
+          rendered = [...document.querySelectorAll("[data-battle-card-picker-candidate=true]")]
+            .map((element) =>
+              element.getAttribute("data-battle-card-id") ??
+              element.querySelector("[data-battle-card-id]")?.getAttribute("data-battle-card-id") ??
+              element.getAttribute("data-battle-slot-id") ??
+              "")
+            .filter((id) => id !== "");
+        }
+
+        const probe = win.__engineProbe;
+        /** @type {BattleProbeState | null} */
+        const probed = probe === undefined
+          ? null
+          : {
+              decision: probe.decision === null ? null : { kind: probe.decision.kind, side: probe.decision.side },
+              pending: probe.pending === null
+                ? null
+                : { kind: probe.pending.kind, side: probe.pending.side, id: probe.pending.id, candidates: [...(probe.pending.candidates ?? [])] },
+              stack: probe.slice.committed.stack.length,
+              inFlight: probe.slice.inFlight !== null,
+              ended: probe.slice.committed.result !== null,
+              scores: Object.fromEntries(Object.entries(probe.slice.committed.sides).map(([key, value]) => [key, value.score])),
+              scoreToWin: probe.slice.committed.config.scoreToWin,
+              events: probe.events.length,
+            };
+
+        // With the probe, the player owes a prompt exactly when the engine says so.
+        const owed = probed?.pending?.side === "player" ? probed.pending : null;
+        /** @type {BattlePrompt | null} */
+        let prompt = null;
+        if (probed === null ? surface !== null : owed !== null) {
+          const candidates = owed !== null && owed.candidates.length > 0 ? owed.candidates : rendered;
+          prompt = {
+            surface: surface?.[0] ?? null,
+            kind: owed?.kind ?? surface?.[0] ?? null,
+            id: owed?.id ?? document.querySelector("[data-battle-prompt-banner]")?.getAttribute("data-battle-prompt-id") ?? null,
+            candidates,
+            answerable: surface === null
+              ? false
+              : surface[0] === "target"
+                ? candidates.length > 0
+                : surface[0] === "gallery" || surface[0] === "board"
+                  ? candidates.length > 0 || enabled(shown(submit)) || enabled(shown(skip))
+                  : enabled(shown(surface[1])),
+          };
+        }
+
+        /** @type {"main" | "respond" | null} */
+        let passWindow = null;
+        if (probed !== null) {
+          const kind = probed.decision?.side === "player" ? probed.decision.kind : null;
+          passWindow = kind === "main" || kind === "respond" ? kind : null;
+        } else if (canPass) {
+          passWindow = side === "far" ? "respond" : "main";
+        }
+        const result = document.querySelector("[data-battle-result-surface]")?.getAttribute("data-battle-result-surface") ?? null;
+        const caps = win.__caps;
+        return {
+          phase,
+          side,
+          at: side === null || phase === null ? null : `${side}:${phase}`,
+          prompt,
+          window: passWindow,
+          canPass,
+          waiting: document.querySelector("[data-battle-prompt-waiting]")?.getAttribute("data-battle-prompt-waiting") ?? null,
+          result: result === "victory" || result === "defeat" ? result : null,
+          board: [...document.querySelectorAll("[data-battle-card-id]")]
+            .map((element) => {
+              const rank = element.closest("[data-battle-rank]")?.getAttribute("data-battle-rank");
+              const row = element.closest("[data-battle-mobile-row]")?.getAttribute("data-battle-mobile-row");
+              return `${String(element.getAttribute("data-battle-card-id"))}@${String(rank ?? row ?? element.getAttribute("data-battle-card-zone"))}`;
+            })
+            .sort()
+            .join(","),
+          probe: probed,
+          caps: caps === undefined ? 0 : caps.errors.length + caps.rejections.length + caps.consoleErrors.length,
+        };
+      },
+      { pass: PASS, submit: SUBMIT, skip: SKIP, controls: CONTROLS },
+    );
+
+  /**
+   * What changes when the battle moves on; the phase button's enabled state
+   * does not count, so a press the screen ignores is no progress.
+   *
+   * @param {BattleState} battle
+   */
+  const progressKey = (battle) =>
+    JSON.stringify([
+      battle.at,
+      battle.prompt === null ? null : [battle.prompt.surface, battle.prompt.id],
+      battle.waiting,
+      battle.result,
+      battle.board,
+      battle.probe === null
+        ? null
+        : [battle.probe.events, battle.probe.stack, battle.probe.decision, battle.probe.pending?.id ?? null],
+    ]);
+
+  /** @param {BattleState} battle */
+  const describe = (battle) =>
+    JSON.stringify({
+      at: battle.at,
+      prompt: battle.prompt,
+      window: battle.window,
+      canPass: battle.canPass,
+      waiting: battle.waiting,
+      result: battle.result,
+      probe: battle.probe === null ? null : { ...battle.probe, scores: undefined },
+    });
+
+  /**
+   * @param {BattleState} battle
+   * @param {string} label
+   */
+  const failOnCaps = async (battle, label) => {
+    if (battle.caps > 0) throw new Error(`${label}: __caps ${JSON.stringify(await qa.caps())} at ${describe(battle)}`);
+  };
+
+  /**
+   * Reads the battle until its progress key leaves `before`; false after `timeout`.
+   *
+   * @param {string} before
+   * @param {number} timeout
+   * @param {string} label
+   */
+  const settle = async (before, timeout, label) => {
+    const deadline = Date.now() + timeout;
+    for (;;) {
+      const battle = await state();
+      await failOnCaps(battle, label);
+      if (progressKey(battle) !== before) return true;
+      if (Date.now() >= deadline) return false;
+      await qa.sleep(100);
+    }
+  };
+
+  /** @type {BattleDriver["tap"]} */
+  const tap = async (selector) => {
+    const point = await page.evaluate((target) => {
+      const element = document.querySelector(target);
+      if (element === null) return null;
+      const box = element.getBoundingClientRect();
+      for (const fy of [0.5, 0.3, 0.7, 0.15]) {
+        for (let x = Math.max(1, box.left + 4); x < Math.min(innerWidth - 1, box.right); x += 4) {
+          const y = Math.min(innerHeight - 2, box.top + box.height * fy);
+          const hit = document.elementFromPoint(x, y);
+          if (hit !== null && element.contains(hit)) return { x, y };
+        }
+      }
+      return null;
+    }, selector);
+    if (point === null) return false;
+    await page.mouse.click(point.x, point.y);
+    await qa.rest();
+    return true;
+  };
+
+  /** @param {string} selector */
+  const enabledControl = (selector) =>
+    page.evaluate((target) => {
+      const element = /** @type {QaWindow} */ (window).__qa?.rendered({ selector: target }, 0.95) ?? null;
+      return element !== null && element.getAttribute("aria-disabled") !== "true" && !element.hasAttribute("disabled");
+    }, selector);
+
+  /** Candidate taps per prompt, so a prompt that wants more than one card takes the next. */
+  /** @type {Map<string, number>} */
+  const taps = new Map();
+
+  /** @type {BattleDriver["answer"]} */
+  const answer = async (given) => {
+    const battle = given ?? (await state());
+    const prompt = battle.prompt;
+    if (prompt === null || prompt.surface === null) return false;
+    const before = progressKey(battle);
+    if (prompt.surface === "gallery" || prompt.surface === "board" || prompt.surface === "target") {
+      const key = `${String(prompt.id)}:${prompt.surface}:${String(battle.at)}`;
+      const count = taps.get(key) ?? 0;
+      const candidate = prompt.candidates[count % Math.max(1, prompt.candidates.length)];
+      let tapped = false;
+      if (candidate !== undefined) {
+        taps.set(key, count + 1);
+        for (const selector of [
+          `[data-testid="battle-card-picker-candidate-${candidate}"]`,
+          `[data-battlefield-card][data-battle-card-id="${candidate}"]`,
+          `[data-battle-card-id="${candidate}"]`,
+          `[data-battle-slot-id="${candidate}"]`,
+        ]) {
+          if (selector.startsWith("[data-testid") && !(await enabledControl(selector))) continue;
+          if (await tap(selector)) {
+            tapped = true;
+            break;
+          }
+        }
+        await qa.sleep(250);
+      }
+      if (await enabledControl(SUBMIT)) {
+        await qa.click(SUBMIT);
+      } else if (!tapped && (await enabledControl(SKIP))) {
+        await qa.click(SKIP);
+      } else {
+        // A target is taken on the tap; a picker that wants another card shows no progress.
+        if (tapped) await settle(before, 2_000, `answer ${prompt.surface}`);
+        return tapped;
+      }
+    } else {
+      const control = CONTROLS[prompt.surface];
+      if (!(await enabledControl(control))) return false;
+      await qa.click(control);
+    }
+    await settle(before, SETTLE_MS, `answer ${prompt.surface}`);
+    return true;
+  };
+
+  /** @type {BattleDriver["pass"]} */
+  const pass = async (given) => {
+    const battle = given ?? (await state());
+    if (!battle.canPass) return false;
+    const before = progressKey(battle);
+    try {
+      await qa.click(PASS, { timeout: 5_000 });
+    } catch {
+      // Covered or gone since the read (an overlay, the turn moving on): the caller reads again.
+      return false;
+    }
+    return settle(before, SETTLE_MS, `pass at ${String(battle.at)}`);
+  };
+
+  /** @type {BattleDriver["playUntil"]} */
+  const playUntil = async (predicate, { timeout = 120_000, stallMs = 45_000, pollMs = 100, label = "playUntil", before, passWhen = () => true } = {}) => {
+    const started = Date.now();
+    /** @type {BattleRun} */
+    const run = { label, history: [], turns: 0, passes: 0, responds: 0, answers: 0, ms: 0 };
+    let lastKey = "";
+    let lastProgress = started;
+    let lastAction = "none";
+    let lastRespond = "";
+    /** @type {number | null} */
+    let endedAt = null;
+    /** @param {string} reason @param {BattleState} battle */
+    const fail = (reason, battle) =>
+      new Error(`qa.battle ${label}: ${reason}; last action ${lastAction}; ${describe(battle)}; history ${run.history.slice(-10).join(" > ")}`);
+    for (;;) {
+      const battle = await state();
+      await failOnCaps(battle, `qa.battle ${label}`);
+      const previous = run.history[run.history.length - 1];
+      if (battle.at !== null && battle.at !== previous) {
+        if (previous !== undefined && !previous.startsWith(`${String(battle.side)}:`)) run.turns += 1;
+        run.history.push(battle.at);
+      }
+      const key = progressKey(battle);
+      if (key !== lastKey) {
+        lastKey = key;
+        lastProgress = Date.now();
+      }
+      run.ms = Date.now() - started;
+      if (await predicate(battle, run)) {
+        qa.note(`qa.battle ${label}`, { ...run });
+        return { ...run, state: battle };
+      }
+      // The result surface ends the battle; the predicate gets a few reads to see it.
+      endedAt = battle.result === null ? null : (endedAt ?? Date.now());
+      if (endedAt !== null) {
+        if (Date.now() - endedAt > 3_000) throw fail(`the battle ended in ${String(battle.result)} first`, battle);
+        await qa.sleep(pollMs);
+        continue;
+      }
+      if (Date.now() - started > timeout) throw fail(`timed out after ${String(timeout)} ms`, battle);
+      if (Date.now() - lastProgress > stallMs) throw fail(`stalled: no progress for ${String(stallMs)} ms`, battle);
+      if (before !== undefined && (await before(battle, run))) {
+        lastAction = "the scenario's own";
+        lastProgress = Date.now();
+        continue;
+      }
+      // A prompt the player owes is answered, never passed; its control may still be presenting.
+      if (battle.prompt !== null) {
+        if (battle.prompt.answerable && (await answer(battle))) {
+          run.answers += 1;
+          lastAction = `answer ${String(battle.prompt.kind)} at ${String(battle.at)}`;
+        } else {
+          await qa.sleep(pollMs);
+        }
+        continue;
+      }
+      if (battle.canPass && passWhen(battle)) {
+        run.passes += 1;
+        if (battle.window === "respond" && battle.side === "far" && key !== lastRespond) {
+          run.responds += 1;
+          lastRespond = key;
+        }
+        lastAction = `pass (${String(battle.window)}) at ${String(battle.at)}`;
+        await pass(battle);
+        continue;
+      }
+      await qa.sleep(pollMs);
+    }
+  };
+
+  /** @type {BattleDriver["waitFor"]} */
+  const waitFor = async (predicate, { timeout = 60_000, pollMs = 150, label = "waitFor" } = {}) => {
+    const deadline = Date.now() + timeout;
+    for (;;) {
+      const battle = await state();
+      await failOnCaps(battle, `qa.battle ${label}`);
+      if (await predicate(battle)) return battle;
+      if (Date.now() > deadline) throw new Error(`qa.battle ${label}: timed out after ${String(timeout)} ms; ${describe(battle)}`);
+      await qa.sleep(pollMs);
+    }
+  };
+
+  /** @type {BattleDriver["enterFirstBattle"]} */
+  const enterFirstBattle = async ({ seed = "1", query = "", atFrontDoor } = {}) => {
+    await qa.open(`/?seed=${seed}${query === "" ? "" : `&${query}`}`);
+    const choose = "[data-journey-screen=journeyStart] button[data-glass-variant=accent]";
+    await qa.waitVisible(choose);
+    if (atFrontDoor !== undefined) await atFrontDoor();
+    await qa.click(choose);
+    await qa.click("[role=dialog] button[data-glass-variant=accent]");
+    await qa.waitVisible("[data-journey-screen=dreamscape] [data-site-type]");
+
+    // Visit every open site; the Battle site opens once the others are visited.
+    const openSite = "[data-journey-screen=dreamscape] [data-site-type][data-interactive=true]";
+    /** @type {Array<string | null>} */
+    const sites = [];
+    for (let visit = 0; visit < 12; visit++) {
+      await qa.waitVisible(openSite);
+      const site = await page.evaluate(
+        (selector) => document.querySelector(selector)?.getAttribute("data-site-type") ?? null,
+        openSite,
+      );
+      sites.push(site);
+      const path = page.url();
+      await qa.click(`${openSite}[data-site-type=${String(site)}]`);
+      if (site === "Battle") break;
+      await page.waitForFunction((from) => location.href !== from, path, { timeout: 10_000 });
+      if (site === "Draft") {
+        const pick = "[data-journey-screen=site] [role=button][data-card-id]";
+        while (page.url().includes("/draft")) {
+          const length = await page.evaluate(() => document.body.innerText.length, null);
+          await qa.click(pick);
+          await page.waitForFunction(
+            (was) => !location.pathname.endsWith("/draft") || document.body.innerText.length !== was,
+            length,
+            { timeout: 10_000 },
+          );
+          await qa.sleep(400);
+        }
+      } else if (site === "DreamsignRevelation") {
+        await qa.click("[data-testid=dreamsign-revelation-art-0]");
+      } else if (site === "Purge") {
+        await qa.click("[data-testid=cumulus-purge-header-action]");
+      } else {
+        throw new Error(`qa.battle enterFirstBattle: no route through a ${String(site)} site`);
+      }
+      await page.waitForFunction(() => /\/dreamscape\/[^/]+$/.test(location.pathname), null, { timeout: 10_000 });
+    }
+    qa.note("qa.battle enterFirstBattle", { sites });
+    await qa.click("[data-testid=cumulus-battle-start-begin]");
+    await qa.waitVisible(PASS, { timeout: 30_000 });
+    return { sites };
+  };
+
+  return { state, pass, answer, tap, playUntil, waitFor, enterFirstBattle };
 }
