@@ -32,14 +32,12 @@ import JourneyDebugEditor from "./screens/JourneyDebugEditor";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import {
+  DECK_VIEWER_SCENE_ID,
+  POOL_VIEWER_SCENE_ID,
   contentConfigFromRuntime,
   type RuntimeConfig,
 } from "./runtime/runtime-config";
-import {
-  DECK_VIEWER_SCENE_ID,
-  POOL_VIEWER_SCENE_ID,
-  findQaScene,
-} from "./runtime/qa-scenes";
+import { findQaScene } from "./runtime/qa-scene-entry";
 import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
 
 /** Inner component that renders the gameplay router and retained app overlays. */

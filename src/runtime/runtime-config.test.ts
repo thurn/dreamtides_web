@@ -49,6 +49,14 @@ describe("runtime-config", () => {
       });
     });
 
+    it("folds the card-lab parameters into its scene id, with the default variant and side", () => {
+      const card = "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481";
+      expect(parseRuntimeConfig(`?goto=card-lab&card=${card}&variant=amplified&as=enemy`).gotoScene).toBe(
+        `card-lab:${card}:amplified:enemy`,
+      );
+      expect(parseRuntimeConfig(`?goto=card-lab&card=${card}`).gotoScene).toBe(`card-lab:${card}:base:player`);
+    });
+
     describe("gambleGameId", () => {
       it("forces any implemented Gamble game by its URL value", () => {
         expect(parseRuntimeConfig("?gambleGame=three-gate").gambleGameId).toBe(

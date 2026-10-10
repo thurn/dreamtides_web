@@ -7,18 +7,19 @@ import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import type { CharacterSelector } from "../dsl/types";
-import type { CardId, InstanceId, Side } from "../state/ids";
-import type { BattleState } from "../state/types";
+import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
+import { variantOf } from "../state/create";
+import type { BattleState, DeckEntry } from "../state/types";
+import { boardState, type BoardSetup, type SideSetup } from "./board";
+import { LAB_OVERRIDES } from "./lab-overrides";
+import { SYNTHETIC } from "./synthetic-cards";
 
 function printedCardIdOf(state: BattleState, id: InstanceId): CardId | null {
   const instance = state.instances[id];
   return instance === undefined ? null : printedCardId(instance.printing);
 }
-import { boardState, type BoardSetup, type SideSetup } from "./board";
-import { LAB_OVERRIDES } from "./lab-overrides";
-import { SYNTHETIC } from "./synthetic-cards";
 
-/** Energy the lab gives the player: enough for the card plus any X. */
+/** Energy the lab gives the side playing the card: enough for the card plus any X. */
 export const LAB_ENERGY = 10;
 
 /** A character definition that satisfies a selector, from the catalog when it names a subtype. */
@@ -48,34 +49,41 @@ function characterFor(
 }
 
 /**
- * Solves a lab board for `cardId`: the player is active in Day with the card
- * in hand and ample energy, and every play-time target spec gets a matching
- * character on the side it selects. Throws if the card is still unplayable.
+ * Solves a lab board for `card` (a deck entry plays its variant): `side` is
+ * active in its Day with the card in hand and ample energy, and every
+ * play-time target spec gets a matching character on the side it selects,
+ * relative to `side`. Throws if the card is still unplayable.
  */
 export function labBoard(
   engine: Engine,
-  cardId: CardId,
+  card: CardId | DeckEntry,
   pool: readonly EngineCardDefinition[],
+  side: Side = "player",
 ): { setup: BoardSetup; state: BattleState } {
+  const entry: DeckEntry = typeof card === "string" ? { cardId: card } : card;
+  const cardId = entry.cardId;
   const definition = engine.catalog.card(cardId);
   const back: Record<Side, CardId[]> = { player: [], enemy: [] };
-  for (const specs of eventTargetSpecs(definition, { amplified: false })) {
+  for (const specs of eventTargetSpecs(definition, variantOf(entry))) {
     for (const spec of specs) {
       // A stack target needs an item on the stack, which a Day board never has; lab overrides supply one.
       if (spec.kind !== "target") continue;
-      const side: Side = spec.selector.controller === "you" ? "player" : "enemy";
+      const targetSide = spec.selector.controller === "you" ? side : opponent(side);
       for (let index = 0; index < (spec.count ?? 1); index++) {
-        back[side].push(characterFor(engine, spec.selector, pool));
+        back[targetSide].push(characterFor(engine, spec.selector, pool));
       }
     }
   }
   const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
-  const player: SideSetup = { hand: [cardId], energy: LAB_ENERGY, back: back.player, deck };
-  const enemy: SideSetup = { back: back.enemy, deck };
-  const setup: BoardSetup = { active: "player", phase: "day", player, enemy, ...LAB_OVERRIDES[cardId] };
+  const sides: Record<Side, SideSetup> = {
+    player: { back: back.player, deck },
+    enemy: { back: back.enemy, deck },
+  };
+  sides[side] = { ...sides[side], hand: [entry], energy: LAB_ENERGY };
+  const setup: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
   const { state } = boardState(engine.catalog, setup);
   const playable = engine
-    .legalActions(state, "player")
+    .legalActions(state, side)
     .some((action) => action.kind === "play" && printedCardIdOf(state, action.card) === cardId);
   if (!playable) {
     throw new Error(`The lab board for ${cardId} does not make it playable; add a lab override`);

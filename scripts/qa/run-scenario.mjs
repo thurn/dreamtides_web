@@ -238,28 +238,40 @@ async function waitUntilServing(baseUrl, child, timeoutMs) {
 }
 
 /** @param {string} message */
-function say(message) {
+export function say(message) {
   process.stderr.write(`[qa] ${message}\n`);
 }
 
-async function main() {
-  const options = parseRunnerArgs(process.argv.slice(2));
+/**
+ * @typedef {object} QaSession
+ * @property {number} port
+ * @property {number | null} serverPid
+ * @property {string} captureDir
+ * @property {Record<string, number>} wallMs Build and serve times.
+ * @property {(scenarioSource: string, args: Record<string, string>, timeoutMs: number) => Promise<import("./prelude.mjs").QaResult>} run
+ *   Runs one scenario function's source with the helper prelude on the session's server.
+ * @property {() => Promise<void>} close Closes the MCP client and stops the server's process group.
+ * @property {() => boolean} closed Whether the session has closed, as on SIGINT.
+ */
+
+/**
+ * Serves `options.cwd` (default: this checkout) on the runner's port and
+ * opens its MCP client, for one or more scenario runs: the runner's own
+ * `main`, and tools built on it such as the card sweep. Stops everything on
+ * `close()`, SIGINT, or SIGTERM.
+ *
+ * @param {{ bead: string, label: string, port: number | null, prod: boolean, minify: boolean, cwd: string | null }} options
+ * @returns {Promise<QaSession>}
+ */
+export async function openQaSession(options) {
   const checkout = options.cwd ?? repoRoot;
   const primaryCheckout = primaryCheckoutOf(repoRoot);
-  const scenarioPath = resolveScenarioPath(options.scenario, { primaryCheckout, bead: options.bead });
-  const scenarioName = basename(scenarioPath, ".mjs");
-  const reportName = `${scenarioName}${options.prod ? "-prod" : ""}`;
   const captureDir = join(primaryCheckout, "artifacts", "qa", options.bead);
   mkdirSync(captureDir, { recursive: true });
-  const scenario = await loadScenario(scenarioPath);
-  const scenarioSource = scenario.toString();
-
-  const startedAt = Date.now();
-  const hostLoad = loadavg()[0];
   const port = options.port ?? (await findFreePort());
   if (!(await isPortFree(port))) throw new Error(`port ${String(port)} is in use`);
   const baseUrl = `http://localhost:${String(port)}`;
-  const serverLog = join(captureDir, `${reportName}.server.log`);
+  const serverLog = join(captureDir, `${options.label}.server.log`);
   const logFd = openSync(serverLog, "w");
   const outDir = options.prod ? mkdtempSync(join(tmpdir(), "dreamtides-qa-")) : null;
   /** @type {import("node:child_process").ChildProcess | null} */
@@ -272,7 +284,7 @@ async function main() {
   const wallMs = {};
 
   let cleaned = false;
-  const cleanup = async () => {
+  const close = async () => {
     if (cleaned) return;
     cleaned = true;
     if (mcp !== null) {
@@ -292,12 +304,12 @@ async function main() {
   for (const signal of /** @type {const} */ (["SIGINT", "SIGTERM"])) {
     process.once(signal, () => {
       say(`${signal}: stopping`);
-      void cleanup().finally(() => process.exit(signal === "SIGINT" ? 130 : 143));
+      void close().finally(() => process.exit(signal === "SIGINT" ? 130 : 143));
     });
   }
 
   try {
-    say(`${scenarioName} for ${options.bead}: serving ${checkout} ${options.prod ? "(production build)" : "(dev)"} on port ${String(port)}; server log ${serverLog}`);
+    say(`${options.label} for ${options.bead}: serving ${checkout} ${options.prod ? "(production build)" : "(dev)"} on port ${String(port)}; server log ${serverLog}`);
     const serveStart = Date.now();
     if (outDir !== null) {
       for (const [command, args] of /** @type {Array<[string, string[]]>} */ ([
@@ -318,44 +330,67 @@ async function main() {
     say(`server pid ${String(server.pid)} (process group) serving ${baseUrl}`);
 
     mcp = await connectPlaywrightMcp({
-      name: `qa-${scenarioName}-${String(process.pid)}`,
+      name: `qa-${options.label}-${String(process.pid)}`,
       roots: [...new Set([primaryCheckout, repoRoot, checkout])],
     });
+  } catch (error) {
+    await close();
+    throw error;
+  }
+  const client = mcp;
+  return {
+    port,
+    serverPid: server.pid ?? null,
+    captureDir,
+    wallMs,
+    async run(scenarioSource, args, timeoutMs) {
+      const code = buildScenarioCode(scenarioSource, { baseUrl, bead: options.bead, captureDir, prod: options.prod, args });
+      return /** @type {import("./prelude.mjs").QaResult} */ (
+        parseMcpResult(await client.call("browser_run_code_unsafe", { code }, { timeoutMs }))
+      );
+    },
+    close,
+    closed: () => cleaned,
+  };
+}
+
+async function main() {
+  const options = parseRunnerArgs(process.argv.slice(2));
+  const primaryCheckout = primaryCheckoutOf(repoRoot);
+  const scenarioPath = resolveScenarioPath(options.scenario, { primaryCheckout, bead: options.bead });
+  const scenarioName = basename(scenarioPath, ".mjs");
+  const reportName = `${scenarioName}${options.prod ? "-prod" : ""}`;
+  const scenario = await loadScenario(scenarioPath);
+
+  const startedAt = Date.now();
+  const hostLoad = loadavg()[0];
+  const session = await openQaSession({ ...options, label: reportName });
+  try {
     const scenarioStart = Date.now();
-    const code = buildScenarioCode(scenarioSource, {
-      baseUrl,
-      bead: options.bead,
-      captureDir,
-      prod: options.prod,
-      args: options.args,
-    });
-    const report = /** @type {import("./prelude.mjs").QaResult} */ (
-      parseMcpResult(await mcp.call("browser_run_code_unsafe", { code }, { timeoutMs: options.timeoutS * 1000 }))
-    );
-    wallMs.scenario = Date.now() - scenarioStart;
-    wallMs.total = Date.now() - startedAt;
+    const report = await session.run(scenario.toString(), options.args, options.timeoutS * 1000);
+    const wallMs = { ...session.wallMs, scenario: Date.now() - scenarioStart, total: Date.now() - startedAt };
     const ok = report.error === null && report.caps.length === 0;
     const summary = {
       scenario: scenarioName,
       bead: options.bead,
       mode: options.prod ? "prod" : "dev",
-      checkout,
-      port,
-      serverPid: server.pid ?? null,
+      checkout: options.cwd ?? repoRoot,
+      port: session.port,
+      serverPid: session.serverPid,
       hostLoad,
       wallMs,
       ok,
       ...report,
     };
     const json = JSON.stringify(summary, null, 2);
-    writeFileSync(join(captureDir, `${reportName}.result.json`), `${json}\n`);
+    writeFileSync(join(session.captureDir, `${reportName}.result.json`), `${json}\n`);
     process.stdout.write(`${json}\n`);
     say(`${ok ? "PASS" : "FAIL"} ${scenarioName} in ${String(Math.round(wallMs.scenario / 100) / 10)} s (total ${String(Math.round(wallMs.total / 100) / 10)} s, load ${hostLoad.toFixed(2)})`);
     if (report.error !== null) say(`scenario error: ${report.error}`);
     for (const entry of report.caps) say(`__caps on ${entry.href}: ${JSON.stringify(entry.caps)}`);
     process.exitCode = ok ? 0 : 1;
   } finally {
-    await cleanup();
+    await session.close();
   }
 }
 

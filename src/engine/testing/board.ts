@@ -1,8 +1,9 @@
 import type { EngineCatalog } from "../catalog";
-import { freshStatus, initialState } from "../state/create";
+import { BASE_VARIANT, type Variant } from "../dsl/types";
+import { freshStatus, initialState, variantOf } from "../state/create";
 import type { AvatarId, CardId, DreamsignId, InstanceId, Phase, Side, Slot } from "../state/ids";
 import { battleSeed, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, Printing } from "../state/types";
+import type { BattleState, CardInstance, DeckEntry, Printing } from "../state/types";
 
 /** Places a ready figment or figment copy directly into play at the open `slot`, for rules tests. */
 export function placeFigment(state: BattleState, side: Side, slot: Slot, printing: Printing, amplified = false): InstanceId {
@@ -26,8 +27,8 @@ export interface SideSetup {
   /** Front-rank cards by lane index (`F0`…); `null` leaves a lane empty. */
   readonly front?: readonly (CardId | null)[];
   readonly back?: readonly (CardId | null)[];
-  /** Hand cards; `{ cardId, amplified: true }` places an amplified variant. */
-  readonly hand?: readonly (CardId | { readonly cardId: CardId; readonly amplified: boolean })[];
+  /** Hand cards; a deck entry places its variant, such as `{ cardId, amplified: true }`. */
+  readonly hand?: readonly (CardId | DeckEntry)[];
   readonly deck?: readonly CardId[];
   readonly void?: readonly CardId[];
   readonly energy?: number;
@@ -77,7 +78,7 @@ export function boardState(
     player: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[], void: [] as InstanceId[] },
     enemy: { front: [] as (InstanceId | null)[], back: [] as (InstanceId | null)[], hand: [] as InstanceId[], deck: [] as InstanceId[], void: [] as InstanceId[] },
   };
-  const mint = (side: Side, cardId: CardId, zone: CardInstance["zone"], amplified = false): InstanceId => {
+  const mint = (side: Side, cardId: CardId, zone: CardInstance["zone"], variant: Variant = BASE_VARIANT): InstanceId => {
     catalog.card(cardId);
     const id: InstanceId = `i${state.nextInstance}`;
     state.nextInstance += 1;
@@ -87,7 +88,7 @@ export function boardState(
       owner: side,
       controller: side,
       zone,
-      variant: { amplified },
+      variant,
       status: freshStatus(),
       enteredZoneAt: 0,
     };
@@ -118,10 +119,7 @@ export function boardState(
       ids[side].back.push(id);
     });
     for (const entry of sideSetup.hand ?? []) {
-      const id =
-        typeof entry === "string"
-          ? mint(side, entry, "hand")
-          : mint(side, entry.cardId, "hand", entry.amplified);
+      const id = typeof entry === "string" ? mint(side, entry, "hand") : mint(side, entry.cardId, "hand", variantOf(entry));
       sideState.hand.push(id);
       ids[side].hand.push(id);
     }

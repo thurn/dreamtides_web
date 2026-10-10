@@ -1,5 +1,5 @@
 import { testJourneySeed } from "../types/test-identities";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
@@ -35,7 +35,8 @@ import {
   beginBattle,
   registerBattleInitProvider,
 } from "../rules/battle/battle-events";
-import { initialFoldState } from "../rules/fold-state";
+import { initialFoldState, type FoldState } from "../rules/fold-state";
+import { reduceGameEvent } from "../rules/reducer";
 import { validateLoadedState } from "../rules/journey/lifecycle";
 import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 import {
@@ -57,6 +58,7 @@ import {
   testDreamsignId,
   testDreamwellCardId,
   testDreamwellCardName,
+  testEventActor,
 } from "../types/test-identities";
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
@@ -407,6 +409,69 @@ describe("the battle layer QA scenes", () => {
       expect(slice.committed.version, scene.id).toBe(battle?.engine?.slice.committed.version);
       expect(slice.inFlight === null || engine.decision(slice.committed) === null, scene.id).toBe(true);
       expect(battle?.init.playerDeckOrder.some((definition) => definition.renderedText.length > 0), scene.id).toBe(true);
+    }
+  });
+
+  it("loads a card-lab battle, reports a request it cannot serve, and folds debug actions that replay identically", () => {
+    const content = battleSceneContent();
+    const [card] = content.cardDatabase.values();
+    if (card === undefined) throw new Error("no fixture card");
+    const provider = createBattleInitProvider(content);
+    const labOf = (token: string) => {
+      const sceneId = parseQaSceneId(token);
+      const journey = buildQaScene(sceneId, content, SCENE_OPTIONS);
+      if (journey === null) throw new Error(`${token} did not build`);
+      return { journey, battle: buildQaSceneBattle(sceneId, content, journey) };
+    };
+    const report = () => (globalThis as { __cardLab?: { status: string; reason: string | null } }).__cardLab;
+    const errors = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    try {
+      const { journey, battle } = labOf(`card-lab:${card.id}:base:player`);
+      const slice = battle?.engine?.slice;
+      expect(report()).toMatchObject({ status: "ready" });
+      expect(slice?.history?.entries).toEqual([]);
+      expect(
+        slice?.committed.sides.player.hand.map((id) => slice.committed.instances[id]?.printing),
+      ).toEqual([{ kind: "card", cardId: card.id }]);
+      const asEnemy = labOf(`card-lab:${card.id}:base:enemy`).battle?.engine?.slice.committed;
+      expect(asEnemy?.sides.enemy.hand).toEqual([]);
+
+      for (const [token, reason] of [
+        [`card-lab:${testCardId("missing")}:base:player`, "unknownCard"],
+        [`card-lab:${card.id}:bogus:player`, "unknownVariant"],
+        [`card-lab:${card.id}:base:nobody`, "unknownSide"],
+      ] as const) {
+        expect(labOf(token).battle?.engine?.slice.history, token).toBeUndefined();
+        expect(report(), token).toMatchObject({ status: "rejected", reason });
+      }
+      expect(errors).toHaveBeenCalledTimes(3);
+
+      registerBattleInitProvider(provider);
+      let seq = 0;
+      const fold = (state: FoldState, op: unknown) =>
+        reduceGameEvent(
+          state,
+          {
+            type: "BATTLE_DEBUG",
+            payload: { op },
+            actor: testEventActor("p1"),
+            clientTimestamp: new Date(0).toISOString(),
+            basedOnSeq: seq,
+          },
+          { contentConfig: TEST_CONTENT_CONFIG, seq: ++seq, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() },
+        );
+      const loaded = validateLoadedState({ ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey }, { snapshot: journey, battle });
+      if (loaded === null) throw new Error("LOAD_STATE refused the card-lab battle");
+      const energized = fold(loaded, { kind: "setEnergy", side: "player", energy: 3 });
+      expect(energized.outcome).toBe("applied");
+      expect(energized.state.battle?.engine?.slice.committed.sides.player.currentEnergy).toBe(3);
+      expect(fold(loaded, { kind: "setEnergy", side: "player", energy: 3 }).state).toEqual(energized.state);
+      expect(fold(energized.state, { kind: "setEnergy", side: "player" }).outcome).toBe("bounced");
+      expect(fold(energized.state, { kind: "undo", keep: 0 }).state.battle?.engine?.slice.committed).toEqual(slice?.committed);
+      expect(fold({ ...energized.state, battle: null }, { kind: "undo", keep: 0 }).outcome).toBe("bounced");
+    } finally {
+      errors.mockRestore();
+      registerBattleInitProvider(null);
     }
   });
 

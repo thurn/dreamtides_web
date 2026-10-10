@@ -15,6 +15,18 @@ import type { FoldHash } from "../types/content-hash";
 import { AI } from "../content/ai";
 import { POLICY_IDS, type PolicyId } from "../engine/policy/types";
 
+/**
+ * The scene id that opens the deck-viewer overlay. The overlay is App-local
+ * state (not a `Screen`), so parking on it takes two steps: the scene builds
+ * the underlying dreamscape state (giving the run a full deck to show), and
+ * `JourneyApp` opens the overlay when it sees this scene id. App and the
+ * scene registry (`qa-scenes.ts`) name it from here.
+ */
+export const DECK_VIEWER_SCENE_ID = parseQaSceneId("deckviewer");
+
+/** App-local Pool Viewer overlay scene, parked over a populated dreamscape. */
+export const POOL_VIEWER_SCENE_ID = parseQaSceneId("poolviewer");
+
 export interface RuntimeConfig {
   seedOverride: number | null;
   aiMode: boolean;
@@ -152,6 +164,13 @@ export const PAGE_ENEMY_POLICY: PolicyId = parseEnemyPolicy(
   typeof location === "undefined" ? null : new URLSearchParams(location.search).get("ai"),
 );
 
+/**
+ * Whether the URL the page loaded with asks for the engine battle screen's
+ * debug panel (`?debug=1`, D4), which only a development build shows (P7).
+ */
+export const PAGE_DEBUG_PANEL: boolean =
+  import.meta.env.DEV && typeof location !== "undefined" && new URLSearchParams(location.search).get("debug") === "1";
+
 type QaParams = Pick<
   RuntimeConfig,
   | "gotoScene"
@@ -178,7 +197,7 @@ function parseQaParams(params: URLSearchParams): QaParams {
     };
   }
   return {
-    gotoScene: parseGotoScene(params.get("goto")),
+    gotoScene: parseGotoScene(params),
     explorationCardId: parseExplorationCardId(params.get("card")),
     explorationDreamsignCount: parseQaDreamsignInteger(
       params.get("dreamsignCount"),
@@ -233,12 +252,17 @@ function parseTutorialPlaybackSpeed(rawSpeed: string | null): number {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
 }
 
-function parseGotoScene(rawScene: string | null): QaSceneId | null {
-  if (rawScene === null) {
-    return null;
-  }
-  const trimmed = rawScene.trim();
-  return trimmed === "" ? null : parseQaSceneId(trimmed);
+/**
+ * The `?goto=` scene. `goto=card-lab` folds the lab's `card`, `variant`
+ * (default `base`), and `as` (default `player`) into the scene id
+ * `card-lab:<card>:<variant>:<as>`, which the scene registry resolves.
+ */
+function parseGotoScene(params: URLSearchParams): QaSceneId | null {
+  const trimmed = (params.get("goto") ?? "").trim();
+  if (trimmed === "") return null;
+  if (trimmed.toLowerCase() !== "card-lab") return parseQaSceneId(trimmed);
+  const token = (name: string, fallback: string) => (params.get(name) ?? fallback).trim().toLowerCase().replace(/:/gu, "");
+  return parseQaSceneId(`card-lab:${token("card", "")}:${token("variant", "base")}:${token("as", "player")}`);
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

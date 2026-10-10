@@ -1,6 +1,7 @@
 /**
- * The card-lab setup solver, the prompt lab, pending-entity semantics (D36),
- * and the Phase 5 scenario-module runner.
+ * The card-lab setup solver and battle, the engine debug actions (D4), the
+ * prompt lab, pending-entity semantics (D36), and the Phase 5
+ * scenario-module runner.
  */
 import { describe, expect, it, vi } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
@@ -10,6 +11,9 @@ import { DSL, DSL_CARDS } from "./dsl-cards";
 import { createCatalog } from "../catalog";
 import { createFoldAdapter } from "../fold/slice";
 import { labBoard } from "./lab-solver";
+import { cardLabBattle } from "./card-lab";
+import { applyDebugOp, debugOpFromUnknown, withHistory, type DebugOp } from "../debug/debug-actions";
+import type { BattleSlice } from "../fold/slice";
 import { EVENT_DEFINITIONS } from "../events";
 import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture, promptLabPresentation } from "./prompt-lab";
 import { runNamedScenario, scenarioRegistryProblems } from "../../content/specs/runner";
@@ -32,6 +36,104 @@ describe("card-lab setup solver", () => {
     const { state } = labBoard(engine, DSL.dissolveEnemy.id, []);
     expect(state.sides.enemy.backRank.filter((id) => id !== null)).toHaveLength(1);
     expect(state.sides.player.backRank.filter((id) => id !== null)).toHaveLength(0);
+  });
+});
+
+describe("card-lab battle", () => {
+  it("deals the card's variant to the side playing it, and opens with the enemy's play as the enemy", () => {
+    const entry = { cardId: DSL.dissolveEnemy.id, amplified: true };
+    const asPlayer = cardLabBattle(engine, { entry, variant: "amplified", side: "player" }, []);
+    const [card] = asPlayer.slice.committed.sides.player.hand;
+    expect(card === undefined ? undefined : asPlayer.slice.committed.instances[card]?.variant.amplified).toBe(true);
+    expect(asPlayer.init.decks.player).toContainEqual(entry);
+    expect(engine.decision(asPlayer.slice.committed)).toEqual({ kind: "main", side: "player" });
+
+    const asEnemy = cardLabBattle(engine, { entry: { cardId: DSL.drawTwo.id }, variant: "base", side: "enemy" }, []);
+    const played = Object.values(asEnemy.slice.committed.instances).find(
+      (instance) => instance.printing.kind === "card" && instance.printing.cardId === DSL.drawTwo.id,
+    );
+    expect(played?.zone).toBe("stack");
+    expect(engine.decision(asEnemy.slice.committed)).toEqual({ kind: "respond", side: "player" });
+  });
+});
+
+describe("engine debug actions", () => {
+  /** A lab whose card prompts for its mode when played. */
+  const lab = (): BattleSlice => withHistory(cardLabBattle(engine, { entry: { cardId: DSL.chooseDrawOrPoints.id }, variant: "base", side: "player" }, []).slice);
+  const apply = (slice: BattleSlice, op: DebugOp): BattleSlice => {
+    const outcome = applyDebugOp(engine, slice, op);
+    if (outcome.kind === "rejected") throw new Error(`${op.kind} rejected: ${outcome.reason}`);
+    return outcome.slice;
+  };
+  const rejection = (slice: BattleSlice, op: unknown) => {
+    const parsed = debugOpFromUnknown(op);
+    if (parsed === null) return "malformed";
+    const outcome = applyDebugOp(engine, slice, parsed);
+    return outcome.kind === "rejected" ? outcome.reason : null;
+  };
+
+  it("sets energy and score, adds cards, and forces the next draw, each a new committed version", () => {
+    let slice = apply(lab(), { kind: "setEnergy", side: "enemy", energy: 4 });
+    slice = apply(slice, { kind: "addCard", side: "enemy", card: SYNTHETIC.vanilla2.id, zone: "play" });
+    slice = apply(slice, { kind: "addCard", side: "player", card: DSL.drawTwo.id, zone: "deck" });
+    slice = apply(slice, { kind: "forceDraw", side: "player", card: SYNTHETIC.vanilla1.id });
+    const { sides, instances, version } = slice.committed;
+    expect(sides.enemy.currentEnergy).toBe(4);
+    expect(sides.enemy.backRank.filter((id) => id !== null)).toHaveLength(1);
+    const top = sides.player.deck[0];
+    expect(top === undefined ? undefined : instances[top]?.printing).toEqual({ kind: "card", cardId: SYNTHETIC.vanilla1.id });
+    expect(version).toBe(lab().committed.version + 4);
+    expect(slice.history?.entries).toHaveLength(4);
+  });
+
+  it("ends the battle when a score reaches the score to win", () => {
+    const slice = apply(lab(), { kind: "setScore", side: "enemy", score: lab().committed.config.scoreToWin });
+    expect(slice.committed.result).toEqual({ kind: "victory", winner: "enemy", reason: "score" });
+    expect(rejection(slice, { kind: "setEnergy", side: "player", energy: 1 })).toBe("battleOver");
+  });
+
+  it("rejects malformed, impossible, and mid-step actions, changing nothing", () => {
+    const slice = lab();
+    expect(rejection(slice, { kind: "setEnergy", side: "player", energy: -1 })).toBe("malformed");
+    expect(rejection(slice, { kind: "addCard", side: "player", card: syntheticId(999), zone: "hand" })).toBe("unknownCard");
+    expect(rejection(slice, { kind: "addCard", side: "player", card: DSL.drawTwo.id, zone: "play" })).toBe("notACharacter");
+    expect(rejection(slice, { kind: "forceDraw", side: "enemy", card: DSL.drawTwo.id })).toBe("notInDeck");
+    expect(rejection(apply(slice, { kind: "addCard", side: "enemy", card: SYNTHETIC.vanilla2.id, zone: "play" }), { kind: "undo", keep: 9 })).toBe("noHistory");
+    expect(rejection(lab(), { kind: "undo", keep: 0 })).toBe("noHistory");
+    const [card] = slice.committed.sides.player.hand;
+    if (card === undefined) throw new Error("no lab card");
+    const playing = createFoldAdapter(engine).reduce(slice, { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } });
+    if (playing.kind !== "applied" || playing.slice.inFlight === null) throw new Error("the play did not suspend at its mode");
+    expect(rejection(playing.slice, { kind: "setScore", side: "player", score: 1 })).toBe("stepInFlight");
+  });
+
+  it("undoes to an earlier intent by replaying the history, and continues above every attempt used", () => {
+    const adapter = createFoldAdapter(engine);
+    const start = lab();
+    const [card] = start.committed.sides.player.hand;
+    if (card === undefined) throw new Error("no lab card");
+    const played = adapter.reduce(start, { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } });
+    const mode = played.kind === "applied" ? adapter.pending(played.slice) : null;
+    if (played.kind !== "applied" || mode === null) throw new Error("the play did not suspend at its mode");
+    const answered = adapter.reduce(played.slice, { kind: "answer", side: "player", promptId: mode.prompt.id, value: 0 });
+    if (answered.kind !== "applied") throw new Error("the mode answer bounced");
+    const energized = apply(answered.slice, { kind: "mark" });
+    expect(energized.history?.entries.map((entry) => Object.keys(entry)[0])).toEqual(["intent", "intent", "debug"]);
+
+    const undone = apply(energized, { kind: "undo", keep: 0 });
+    expect(undone.committed).toEqual(start.committed);
+    expect(undone.inFlight).toBeNull();
+    expect(undone.attempt).toBeGreaterThan(energized.attempt);
+    // The undone play applies again, with prompt ids no earlier attempt used.
+    const again = adapter.reduce(undone, { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } });
+    if (again.kind !== "applied") throw new Error("the replayed play bounced");
+    expect(adapter.pending(again.slice)?.prompt.id).not.toBe(adapter.pending(played.slice)?.prompt.id);
+    // A second undo replays through the first.
+    expect(apply(again.slice, { kind: "undo", keep: 1 })).toMatchObject({ committed: start.committed, inFlight: null });
+    // The same actions over the same slice fold identically, as a reload replays them.
+    expect(apply(apply(start, { kind: "setEnergy", side: "player", energy: 2 }), { kind: "undo", keep: 0 })).toEqual(
+      apply(apply(start, { kind: "setEnergy", side: "player", energy: 2 }), { kind: "undo", keep: 0 }),
+    );
   });
 });
 

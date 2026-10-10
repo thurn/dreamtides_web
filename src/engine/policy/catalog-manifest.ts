@@ -22,7 +22,7 @@ import {
   contentFigmentDefinitions,
 } from "../content-catalog";
 import type { AbilityList } from "../dsl/types";
-import { developmentLabDefinitions } from "../testing/prompt-lab";
+import { developmentLabDefinitions } from "../development";
 import type { AvatarId, CardId, DreamsignId } from "../state/ids";
 import { SIDES } from "../state/ids";
 import type { BattleInit } from "../state/types";

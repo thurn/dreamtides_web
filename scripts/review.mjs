@@ -354,6 +354,9 @@ function commandFor(step, extraArgs = []) {
       ["--import", "tsx", join(root, "scripts", "setup-assets.ts")],
     ];
   }
+  if (step === "bundle") {
+    return [process.execPath, [join(root, "scripts", "qa", "check-production-bundle.mjs")]];
+  }
   if (step === "import-cycles") {
     return [process.execPath, [join(root, "scripts", "import-cycles.mjs")]];
   }
@@ -469,6 +472,8 @@ function executionPlan() {
       { step: "prepare", args: [] },
       { concurrent: [{ step: "lint", args: [] }, ...STATIC_CHECK_STEPS] },
       { step: "test", args: [] },
+      // The production bundle assertion (P7): no development-only module ships.
+      { step: "bundle", args: [] },
     ];
   }
   if (task === "gate") {

@@ -53,6 +53,7 @@ import type {
 } from "../types/identifiers";
 import type { BattleSide, BattlefieldSlotId } from "../battle/types";
 import type { Action as EngineAction, Answer as EngineAnswer } from "../engine";
+import type { DebugOp as EngineDebugOp } from "../engine/debug/debug-actions";
 import type { PromptId } from "../types/identifiers";
 import { parseIntentKey } from "../types/identifiers";
 import type {
@@ -423,6 +424,8 @@ export interface GameActions {
     promptId: PromptId,
     actor?: EventActor,
   ) => Promise<number>;
+  /** Apply an engine debug action (D4); development builds only. */
+  battleDebug: (op: EngineDebugOp) => Promise<number>;
 }
 
 /**
@@ -878,5 +881,6 @@ export function makeActions(append: AppendFn): GameActions {
       emit("BATTLE_ANSWER", { side, promptId, value }, intentKey, actor),
     cancelPrompt: (side, promptId, actor) =>
       emit("BATTLE_CANCEL", { side, promptId }, undefined, actor),
+    battleDebug: (op) => emit("BATTLE_DEBUG", { op }),
   };
 }

@@ -185,8 +185,11 @@ For exploratory QA with the MCP tools directly:
 ### URL parameters
 
 Read once at page load (`src/runtime/runtime-config.ts`). Only development
-builds honor `goto`, `card`, and `gambleGame`, and only they show the journey
-menu's developer commands.
+builds honor `goto`, `card`, `variant`, `as`, `debug`, and `gambleGame`, and
+only they show the journey menu's developer commands. A production build
+compiles the QA scenes, the labs, and the debug panel out (P7):
+`vite.config.ts` fails a production build whose chunks render any of them,
+and `npm run review:full` runs that build.
 
 | Parameter | Effect |
 | --- | --- |
@@ -196,7 +199,9 @@ menu's developer commands.
 | `ai=random` / `ai=greedy` | The policy the AI host runs for the enemy of the engine battle (default `greedy`) |
 | `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
-| `card=<uuid>` | With an Exploration scene, use that source card's encounter |
+| `card=<uuid>` | With an Exploration scene, use that source card's encounter; with `goto=card-lab`, the card to play |
+| `variant=<v>` / `as=<side>` | With `goto=card-lab`: the variant (default `base`) and the side playing it (`player` or `enemy`, default `player`) |
+| `debug=1` | Show the engine battle screen's debug panel |
 | `tutorialSpeed=<x>` | Tutorial playback speed multiplier |
 | `deviceFrame=<json>` | Inject device safe-area and cutout metrics |
 
@@ -228,21 +233,74 @@ scene on every load.
   battle replaced by a synthetic one (`src/engine/testing/prompt-lab.ts`) that
   stops at a prompt, response window, or decision of the battle screen's
   prompt host. Development builds add the lab's synthetic cards to the journey
-  engine and the AI worker's catalog. Fixtures: `targets` (board targets with
-  Cancel; up to two targets on the card picker), `auto-target` (an automatic
-  answer and its notice), `choices` (a mode, a you-may, and an X cost),
-  `up-to-one-target` (one optional target, or Skip), `arrange` (a cancellable
-  arrangement among the top, the bottom, and the hand), `foresee`, `draw-discard` (present, then ask), `offering` (play route and
-  offering cost), `void-cost` (the gallery card picker), `reclaim` (Reclaim
-  from the void, Avatar and Dreamsign abilities from the status display),
-  `capacity` (a full back rank), `ai-discard` (the human discards during the
-  AI's turn), `ai-foresee` (the AI's private prompt), `respond` (a response
-  window), `prevent` (pay or decline), and `loop` (the loop shortcut). Add a
-  fixture to `PROMPT_LAB_FIXTURES`; the card-lab reuses its board-and-script
-  shape.
+  engine and the AI worker's catalog (`src/engine/development.ts`). Fixtures:
+  `targets` (board targets with Cancel; up to two targets on the card picker),
+  `auto-target` (an automatic answer and its notice), `choices` (a mode, a
+  you-may, and an X cost), `up-to-one-target` (one optional target, or Skip),
+  `arrange` (a cancellable arrangement among the top, the bottom, and the
+  hand), `foresee`, `draw-discard` (present, then ask), `offering` (play route
+  and offering cost), `void-cost` (the gallery card picker), `reclaim`
+  (Reclaim from the void, Avatar and Dreamsign abilities from the status
+  display), `capacity` (a full back rank), `ai-discard` (the human discards
+  during the AI's turn), `ai-foresee` (the AI's private prompt), `respond` (a
+  response window), `prevent` (pay or decline), `loop` (the loop shortcut),
+  and the presentation fixtures `present-zones`, `present-status`,
+  `present-challenge`, `present-costs`, `present-ending`, and
+  `present-opponent`, which publish every engine event kind as a judged pass
+  takes their `presents` steps through the UI. Add a fixture to
+  `PROMPT_LAB_FIXTURES`.
+- **Card-lab** (`goto=card-lab&card=<uuid>&variant=<v>&as=<player|enemy>`):
+  the playable battle with one catalog card on a deterministic lab board
+  (`src/engine/testing/card-lab.ts`). The setup solver
+  (`src/engine/testing/lab-solver.ts`) gives the side playing the card ample
+  energy and a character for each play-time target, on the side it selects;
+  `src/engine/testing/lab-overrides.ts` adjusts the board per card UUID when
+  the solver cannot make the card playable. `variant` is `base`,
+  `amplified`, `empowered`, `kindled`, `resonant`, `inspired`, `enduring`,
+  `hastened`, `attuned`, or `perfected`; the deck carries the variant, so
+  its transfigured text shows. With `as=enemy` the battle opens on the AI's
+  play of the card, on the stack, with the human holding a no-effect
+  Interrupt so the response window shows it; the AI host answers its prompts.
+  A request the content cannot serve (an unknown UUID, an unknown or
+  ineligible variant, an unplayable board) loads the plain playable battle
+  and reports why: a console error, a `debug_card_lab_rejected` log line,
+  and `window.__cardLab`, which also lists the card's eligible variants.
+- **Engine debug panel** (`debug=1` on any engine battle): engine debug
+  actions (D4, `src/engine/debug/debug-actions.ts`) written to the log as
+  `BATTLE_DEBUG` intents, so a reload replays them: add a card by UUID to a
+  hand, deck top, void, Banished zone, or back rank; set a side's energy or
+  score (reaching the score to win ends the battle); force a deck card to the
+  top; reveal every hand and deck; and undo to an earlier intent. Each
+  action applies only at a decision boundary and keeps the engine
+  invariants, or bounces. Undo replays the battle's history (the lab board,
+  or the state before the first debug action of a journey battle; Start
+  History begins one) through the engine, so it never reaches across a
+  battle. The panel publishes `window.__engineProbe` for the card sweep.
 
-Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
-`QA_SCENES`; site scenes use the `siteScene` helper.
+To add a scene, register it in `QA_SCENES`; site scenes use the `siteScene`
+helper.
+
+### Card sweep
+
+```bash
+node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter> \
+  [--variants all|<v>,...] [--as player|enemy|both] [--timeout <s>] [--port <n>] [--capture]
+```
+
+The sweep (workflow § Card QA) opens one runner session (its own dev server
+and MCP client) and, for each card, side, and variant, runs
+`scripts/qa/scenarios/card-lab-play.mjs` in the card-lab with `debug=1`: it
+plays the card through the UI, answers each human prompt with its first
+legal choice, and passes until the stack is empty. A run fails on `__caps`
+errors, a rejected lab, a human decision with no visible enabled control,
+the card outside its expected zone (a character in play, an event in a void
+or the Banished zone), no `resolved` engine event for it, no visible board
+change, or no settled board within `--timeout` seconds (default 60); the
+sweep then goes on. A card whose text is pending is recorded `pending`
+rather than `pass`, and a variant the card cannot take is recorded `skip`
+without a run. Verdicts append to `docs/plan/evidence/qa-ledger/<id>.jsonl`;
+`--capture` writes each settled board to `artifacts/qa/<id>/`. It exits 1
+when any verdict is `fail`.
 
 ## Architecture
 

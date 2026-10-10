@@ -39,6 +39,8 @@ import {
   reduceEngineIntent,
 } from "./battle/engine-battle";
 import type { Engine } from "../engine";
+import { engineDebugActions } from "../engine/development";
+import { battleModeOf } from "./battle/fold";
 import * as deck from "./journey/deck";
 import * as draft from "./journey/draft";
 import * as lifecycle from "./journey/lifecycle";
@@ -333,6 +335,32 @@ export function isMatchingEngineAnswer(
   }
   const pending = pendingEnginePrompt(state.battle, battleEngine());
   return pending !== null && event.payload?.promptId === pending.prompt.id;
+}
+
+/**
+ * `BATTLE_DEBUG { op }`: an engine debug action (D4) over a journey battle's
+ * engine slice, in a development build; `null` bounces it, as a production
+ * build always does. CAS-exempt, so an undo also applies while a prompt is
+ * pending; every other action needs a decision boundary.
+ */
+function reduceEngineDebug(
+  state: FoldState,
+  payload: Record<string, unknown>,
+): FoldState | null {
+  const debug = engineDebugActions();
+  const engine = battleEngine();
+  const battle = state.battle;
+  const fold = battle?.engine;
+  if (debug === null || engine === null || battle == null || fold === undefined) {
+    return null;
+  }
+  if (battleModeOf(battle).kind !== "journey") return null;
+  const op = debug.debugOpFromUnknown(payload.op);
+  if (op === null) return null;
+  const outcome = debug.applyDebugOp(engine, fold.slice, op);
+  return outcome.kind === "rejected"
+    ? null
+    : { ...state, battle: { ...battle, engine: { ...fold, slice: outcome.slice } } };
 }
 
 /** The engine journey battles play on, from the registered battle-init provider. */
@@ -734,6 +762,9 @@ export function routeDomain(
         state,
         reduceEngineIntent(state, type, payload, ctx, battleEngine()),
       );
+
+    case "BATTLE_DEBUG":
+      return foldCase(state, reduceEngineDebug(state, payload));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":

@@ -9,6 +9,7 @@ import type { EngineEvent } from "../events";
 import { eventLogRecords, legalityLogRecords, promptOpenedRecord, stepLogRecords, type EngineLogRecord } from "../log";
 import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
+import type { DebugOp } from "../debug/debug-actions";
 import type { Answer, Prompt, PromptId } from "../prompts/types";
 import { allowedBy, type Action } from "../rules/actions";
 import { parsePromptId } from "../../types/identifiers";
@@ -42,7 +43,26 @@ export interface BattleSlice {
    * committed state. It is persisted with the slice, so ids survive reloads.
    */
   readonly attempt: number;
+  /**
+   * Development only (D4): the slice a debug undo replays from and every
+   * intent and debug action applied since. The first engine debug action,
+   * or a card-lab or prompt-lab scene, starts it; journey battles never
+   * carry it otherwise.
+   */
+  readonly history?: SliceHistory;
 }
+
+/** What a debug undo replays: a base slice without history, then its entries in order. */
+export interface SliceHistory {
+  readonly base: BattleSlice;
+  readonly entries: readonly HistoryEntry[];
+}
+
+/** An applied intent, an applied debug action, or the attempt counter an undo continued with. */
+export type HistoryEntry =
+  | { readonly intent: BattleIntent }
+  | { readonly debug: DebugOp }
+  | { readonly attempt: number };
 
 export type BattleIntent =
   | { readonly kind: "battleAction"; readonly side: Side; readonly action: Action }
@@ -338,59 +358,66 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     },
     pending,
     reduce(slice, intent) {
-      if (slice.committed.result !== null) return { kind: "bounced", reason: "battleOver" };
-      switch (intent.kind) {
-        case "battleAction": {
-          if (slice.inFlight !== null) {
-            const current = replay(slice, slice.inFlight);
-            return current.kind === "error" ? failed(slice, current.error) : { kind: "bounced", reason: "stepInFlight" };
-          }
-          const decision = engine.decision(slice.committed);
-          if (decision?.side !== intent.side) return { kind: "bounced", reason: "notYourDecision" };
-          const legal = engine.legalActions(slice.committed, intent.side);
-          if (!legal.some((action) => allowedBy(action, intent.action, slice.committed))) {
-            return { kind: "bounced", reason: "illegalAction" };
-          }
-          return advance(opened(slice, stepForAction(slice.committed, intent.action), false), false);
-        }
-        case "answer": {
-          if (slice.inFlight === null) return { kind: "bounced", reason: "noPendingPrompt" };
-          const current = replay(slice, slice.inFlight);
-          if (current.kind === "error") return failed(slice, current.error);
-          const { prompt } = current.pending;
-          if (prompt.id !== intent.promptId) return { kind: "bounced", reason: "stalePrompt" };
-          if (prompt.side !== intent.side) return { kind: "bounced", reason: "notYourPrompt" };
-          if (!isLegalAnswer(prompt, intent.value)) return { kind: "bounced", reason: "illegalAnswer" };
-          const fingerprint = promptFingerprint(prompt);
-          log([{ event: "engine.promptAnswered", version: slice.committed.version, promptId: prompt.id, side: intent.side, fingerprint, value: intent.value }]);
-          return advance({
-            ...slice,
-            inFlight: {
-              ...slice.inFlight,
-              answers: [
-                ...slice.inFlight.answers,
-                { fingerprint, value: intent.value },
-              ],
-            },
-          }, true);
-        }
-        case "cancel": {
-          if (slice.inFlight === null) return { kind: "bounced", reason: "noPendingPrompt" };
-          const current = replay(slice, slice.inFlight);
-          if (current.kind === "error") return failed(slice, current.error);
-          const { prompt } = current.pending;
-          if (prompt.id !== intent.promptId) return { kind: "bounced", reason: "stalePrompt" };
-          if (prompt.side !== intent.side) return { kind: "bounced", reason: "notYourPrompt" };
-          if (!prompt.cancellable) return { kind: "bounced", reason: "notCancellable" };
-          log([{ event: "engine.promptCancelled", version: slice.committed.version, promptId: prompt.id, side: intent.side }]);
-          return {
-            kind: "applied",
-            slice: { ...recovered(slice), attempt: slice.attempt + 1 },
-            published: [],
-            error: null,
-          };
-        }
-      }
+      const outcome = reduceIntent(slice, intent);
+      const history = slice.history;
+      if (outcome.kind === "bounced" || history === undefined) return outcome;
+      return { ...outcome, slice: { ...outcome.slice, history: { ...history, entries: [...history.entries, { intent }] } } };
     },
   };
+
+  function reduceIntent(slice: BattleSlice, intent: BattleIntent): IntentOutcome {
+    if (slice.committed.result !== null) return { kind: "bounced", reason: "battleOver" };
+    switch (intent.kind) {
+      case "battleAction": {
+        if (slice.inFlight !== null) {
+          const current = replay(slice, slice.inFlight);
+          return current.kind === "error" ? failed(slice, current.error) : { kind: "bounced", reason: "stepInFlight" };
+        }
+        const decision = engine.decision(slice.committed);
+        if (decision?.side !== intent.side) return { kind: "bounced", reason: "notYourDecision" };
+        const legal = engine.legalActions(slice.committed, intent.side);
+        if (!legal.some((action) => allowedBy(action, intent.action, slice.committed))) {
+          return { kind: "bounced", reason: "illegalAction" };
+        }
+        return advance(opened(slice, stepForAction(slice.committed, intent.action), false), false);
+      }
+      case "answer": {
+        if (slice.inFlight === null) return { kind: "bounced", reason: "noPendingPrompt" };
+        const current = replay(slice, slice.inFlight);
+        if (current.kind === "error") return failed(slice, current.error);
+        const { prompt } = current.pending;
+        if (prompt.id !== intent.promptId) return { kind: "bounced", reason: "stalePrompt" };
+        if (prompt.side !== intent.side) return { kind: "bounced", reason: "notYourPrompt" };
+        if (!isLegalAnswer(prompt, intent.value)) return { kind: "bounced", reason: "illegalAnswer" };
+        const fingerprint = promptFingerprint(prompt);
+        log([{ event: "engine.promptAnswered", version: slice.committed.version, promptId: prompt.id, side: intent.side, fingerprint, value: intent.value }]);
+        return advance({
+          ...slice,
+          inFlight: {
+            ...slice.inFlight,
+            answers: [
+              ...slice.inFlight.answers,
+              { fingerprint, value: intent.value },
+            ],
+          },
+        }, true);
+      }
+      case "cancel": {
+        if (slice.inFlight === null) return { kind: "bounced", reason: "noPendingPrompt" };
+        const current = replay(slice, slice.inFlight);
+        if (current.kind === "error") return failed(slice, current.error);
+        const { prompt } = current.pending;
+        if (prompt.id !== intent.promptId) return { kind: "bounced", reason: "stalePrompt" };
+        if (prompt.side !== intent.side) return { kind: "bounced", reason: "notYourPrompt" };
+        if (!prompt.cancellable) return { kind: "bounced", reason: "notCancellable" };
+        log([{ event: "engine.promptCancelled", version: slice.committed.version, promptId: prompt.id, side: intent.side }]);
+        return {
+          kind: "applied",
+          slice: { ...recovered(slice), attempt: slice.attempt + 1 },
+          published: [],
+          error: null,
+        };
+      }
+    }
+  }
 }

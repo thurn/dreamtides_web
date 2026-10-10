@@ -280,6 +280,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.battleAction("player", { kind: "pass" });
   void actions.answerPrompt("player", parsePromptId("1:1:0"), 1);
   void actions.cancelPrompt("player", parsePromptId("1:1:0"));
+  void actions.battleDebug({ kind: "mark" });
 
   return drafts;
 }

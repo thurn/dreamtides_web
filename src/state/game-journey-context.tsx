@@ -29,7 +29,7 @@ function importedSnapshotWithSeed(snapshot: unknown, seed: JourneySeed): unknown
     : snapshot;
 }
 import { mergeCardKeywordModification } from "../card-type-change";
-import { buildQaScene, buildQaSceneBattle } from "../runtime/qa-scenes";
+import { buildQaScene, buildQaSceneBattle } from "../runtime/qa-scene-entry";
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import {
   updateCardSourcePublication,

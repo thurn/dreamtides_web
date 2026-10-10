@@ -1,5 +1,5 @@
 import type { JourneyContent } from "../data/journey-content";
-import type { JourneyState, SiteState, SiteType } from "../types/journey";
+import type { DeckEntry, JourneyState, SiteState, SiteType } from "../types/journey";
 import { initialJourneyState } from "../rules/fold-state";
 import { activeSiteIdOf } from "../rules/journey/sites";
 import { createDreamsign } from "../data/dreamsigns";
@@ -16,7 +16,20 @@ import { startJourneyBattle } from "../rules/battle/battle-events";
 import { takeEngineLogRecords } from "../rules/battle/engine-battle";
 import type { BattleFoldState } from "../rules/battle/fold";
 import type { BattleDeckCardDefinition } from "../battle/types";
-import type { Engine, EngineCardDefinition } from "../engine";
+import { contentCardDefinitions, type BattleInit as EngineBattleInit, type Engine, type EngineCardDefinition } from "../engine";
+import { withHistory } from "../engine/debug/debug-actions";
+import type { BattleSlice } from "../engine/fold/slice";
+import {
+  CARD_LAB_VARIANTS,
+  cardLabBattle,
+  cardLabVariant,
+  variantTransfiguration,
+  type CardLabRequest,
+  type CardLabVariant,
+} from "../engine/testing/card-lab";
+import { engineDeckEntry } from "../battle/integration/engine-battle-init";
+import { logEvent } from "../logging";
+import type { CardData } from "../types/cards";
 import {
   PROMPT_LAB_CARD_TEXT,
   PROMPT_LAB_DEFINITIONS,
@@ -28,10 +41,11 @@ import { initializeDraftState } from "../draft/draft-engine";
 import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
 import { parseSiteId } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
-import { parseCardName, type CardId } from "../types/card-identity";
+import { isCardId, parseCardId, parseCardName, type CardId } from "../types/card-identity";
 import { parseDeckEntryId } from "../types/identifiers";
 import { parseQaSceneId, type QaSceneId } from "../types/identifiers";
 import type { JourneySeed } from "../types/journey-seed";
+import { DECK_VIEWER_SCENE_ID, POOL_VIEWER_SCENE_ID } from "./runtime-config";
 
 export interface QaSceneBuildOptions {
   /** Exact authored encounter source-card UUID for Exploration QA scenes. */
@@ -89,6 +103,8 @@ export interface QaScene {
    * synthetic battle replaces the loaded battle's engine battle.
    */
   promptLab?: PromptLabFixture;
+  /** The card-lab request's URL tokens, resolved against the content when the scene loads. */
+  cardLab?: CardLabTokens;
   /**
    * Builds the parked journey state from current journey content, or returns null
    * when required content is missing.
@@ -432,6 +448,122 @@ function promptLabScene(fixture: PromptLabFixture): QaScene {
   };
 }
 
+/** A card-lab scene's raw URL tokens: `card-lab:<card>:<variant>:<as>`. */
+interface CardLabTokens {
+  readonly card: string;
+  readonly variant: string;
+  readonly side: string;
+}
+
+const CARD_LAB_PREFIX = "card-lab:";
+
+type CardLabResolution =
+  | { readonly kind: "ok"; readonly request: CardLabRequest; readonly card: CardData; readonly eligible: readonly CardLabVariant[] }
+  | {
+      readonly kind: "rejected";
+      readonly reason: "unknownCard" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable";
+      readonly eligible: readonly CardLabVariant[];
+      readonly detail?: string;
+    };
+
+/** Resolves a card-lab request against the content: the card, its eligible variants, and its deck entry. */
+function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens): CardLabResolution {
+  const cardId = isCardId(tokens.card) ? parseCardId(tokens.card) : null;
+  const card = [...journeyContent.cardDatabase.values()].find((candidate) => candidate.id === cardId);
+  if (card === undefined) return { kind: "rejected", reason: "unknownCard", eligible: [] };
+  const eligible: CardLabVariant[] = [
+    "base",
+    ...CARD_LAB_VARIANTS.filter((variant) => {
+      const transfiguration = variantTransfiguration(variant);
+      return transfiguration !== null && eligibleTransfigurations(journeyContent.transfigurationData, card).includes(transfiguration);
+    }),
+  ];
+  const variant = cardLabVariant(tokens.variant);
+  if (variant === null) return { kind: "rejected", reason: "unknownVariant", eligible };
+  if (tokens.side !== "player" && tokens.side !== "enemy") return { kind: "rejected", reason: "unknownSide", eligible };
+  if (!eligible.includes(variant)) return { kind: "rejected", reason: "ineligibleVariant", eligible };
+  const entry = engineDeckEntry(cardLabDeckEntry(card, variant), card, journeyContent.transfigurationData);
+  return { kind: "ok", request: { entry, variant, side: tokens.side }, card, eligible };
+}
+
+/** The journey deck entry of the lab card, so the battle deals its transfigured display. */
+function cardLabDeckEntry(card: CardData, variant: CardLabVariant): DeckEntry {
+  return {
+    entryId: parseDeckEntryId("card-lab"),
+    cardNumber: card.cardNumber,
+    transfiguration: variantTransfiguration(variant),
+    isBane: false,
+  };
+}
+
+/**
+ * The card-lab scene `card-lab:<card>:<variant>:<as>` (`?goto=card-lab&card=
+ * <uuid>&variant=<v>&as=<side>`, which `parseRuntimeConfig` folds into this
+ * id): the playable Layer 1 battle, its deck holding the lab card's variant,
+ * with its engine battle replaced by the card-lab battle
+ * (`src/engine/testing/card-lab.ts`). A request the content cannot serve
+ * loads the plain battle and reports why (`publishCardLab`).
+ */
+function cardLabScene(id: QaSceneId): QaScene {
+  const [card = "", variant = "base", side = "player"] = id.slice(CARD_LAB_PREFIX.length).split(":");
+  const tokens: CardLabTokens = { card, variant, side };
+  return {
+    id,
+    label: "Card Lab",
+    description: "One catalog card in one variant on a solved lab board, for the card sweep and judged card QA.",
+    loadsBattle: true,
+    cardLab: tokens,
+    build: (journeyContent, options) => {
+      const state = battleLayerSceneState(1)(journeyContent, options);
+      const resolved = resolveCardLab(journeyContent, tokens);
+      if (state === null || resolved.kind !== "ok") return state;
+      return { ...state, deck: [...state.deck, cardLabDeckEntry(resolved.card, resolved.request.variant)] };
+    },
+  };
+}
+
+/**
+ * Reports a card-lab load: logged with the request, and published as
+ * `window.__cardLab` for the card sweep. A rejection is also a console
+ * error, so a QA run records it.
+ */
+function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution): void {
+  const report = {
+    card: tokens.card,
+    variant: tokens.variant,
+    side: tokens.side,
+    status: resolved.kind === "ok" ? "ready" : "rejected",
+    reason: resolved.kind === "ok" ? null : resolved.reason,
+    detail: resolved.kind === "ok" ? null : (resolved.detail ?? null),
+    eligibleVariants: resolved.eligible,
+    cardStatus: resolved.kind === "ok" ? cardLabContentStatus(resolved.request.entry.cardId) : null,
+    cardType: resolved.kind === "ok" ? resolved.card.cardType : null,
+  };
+  (globalThis as { __cardLab?: unknown }).__cardLab = report;
+  logEvent(resolved.kind === "ok" ? "debug_card_lab_loaded" : "debug_card_lab_rejected", report);
+  if (resolved.kind !== "ok") console.error(`card-lab: ${resolved.reason} for ${JSON.stringify(tokens)}`);
+}
+
+/** Whether a card's abilities are authored, pending (it plays text-less, D36), or vanilla. */
+function cardLabContentStatus(cardId: CardId): string | null {
+  return contentCardDefinitions().find((definition) => definition.id === cardId)?.status ?? null;
+}
+
+/** `battle` with its engine battle replaced by the card-lab battle, or unchanged and reported when it cannot be built. */
+function withCardLab(battle: BattleFoldState, tokens: CardLabTokens, journeyContent: JourneyContent, engine: Engine): BattleFoldState {
+  let resolved = resolveCardLab(journeyContent, tokens);
+  let lab: ReturnType<typeof cardLabBattle> | null = null;
+  if (resolved.kind === "ok") {
+    try {
+      lab = cardLabBattle(engine, resolved.request, contentCardDefinitions());
+    } catch (error) {
+      resolved = { kind: "rejected", reason: "unplayable", eligible: resolved.eligible, detail: error instanceof Error ? error.message : String(error) };
+    }
+  }
+  publishCardLab(tokens, resolved);
+  return lab === null ? battle : withLabBattle(battle, lab);
+}
+
 /** Display data for a lab card the battle screen shows: its QA name and text, and its printed values. */
 function labCardDefinition(definition: EngineCardDefinition): BattleDeckCardDefinition {
   const text = PROMPT_LAB_CARD_TEXT[definition.id];
@@ -456,14 +588,17 @@ function labCardDefinition(definition: EngineCardDefinition): BattleDeckCardDefi
   };
 }
 
-/** `battle` with its engine battle replaced by `fixture`'s, and display data for every lab card. */
-function withPromptLab(battle: BattleFoldState, fixture: PromptLabFixture, engine: Engine): BattleFoldState {
-  const lab = promptLabBattle(engine, fixture);
+/**
+ * `battle` with its engine battle replaced by a lab battle, whose history
+ * starts at the lab board so a debug undo reaches its start, and display
+ * data for every lab card.
+ */
+function withLabBattle(battle: BattleFoldState, lab: { init: EngineBattleInit; slice: BattleSlice }): BattleFoldState {
   const labCards = PROMPT_LAB_DEFINITIONS.cards.filter((definition) => definition.id in PROMPT_LAB_CARD_TEXT);
   return {
     ...battle,
     init: { ...battle.init, playerDeckOrder: [...battle.init.playerDeckOrder, ...labCards.map(labCardDefinition)] },
-    engine: lab,
+    engine: { init: lab.init, slice: withHistory(lab.slice) },
   };
 }
 
@@ -641,18 +776,6 @@ const REWARD_AT_CAP_SCENE: QaScene = {
     };
   },
 };
-
-/**
- * The scene id that opens the deck-viewer overlay. The overlay is App-local
- * state (not a `Screen`), so parking on it takes two steps: this scene builds
- * the underlying dreamscape state (giving the run a full deck to show), and
- * `JourneyApp` opens the overlay when it sees this scene id. Exported so App and
- * this registry name it from one place rather than duplicating the string.
- */
-export const DECK_VIEWER_SCENE_ID = parseQaSceneId("deckviewer");
-
-/** App-local Pool Viewer overlay scene, parked over a populated dreamscape. */
-export const POOL_VIEWER_SCENE_ID = parseQaSceneId("poolviewer");
 
 /**
  * The deck-viewer overlay, parked on the starter dreamscape so the run carries
@@ -1308,9 +1431,16 @@ export const QA_SCENES: readonly QaScene[] = [
   ...PROMPT_LAB_FIXTURES.map(promptLabScene),
 ];
 
+const cardLabScenes = new Map<string, QaScene>();
+
 /** Returns the QA scene for `id`, or null when `id` is not registered. */
 export function findQaScene(id: QaSceneId): QaScene | null {
   const normalized = id.trim().toLowerCase();
+  if (normalized.startsWith(CARD_LAB_PREFIX)) {
+    const scene = cardLabScenes.get(normalized) ?? cardLabScene(parseQaSceneId(normalized));
+    cardLabScenes.set(normalized, scene);
+    return scene;
+  }
   return QA_SCENES.find((scene) => scene.id === normalized) ?? null;
 }
 
@@ -1348,8 +1478,11 @@ export function buildQaSceneBattle(
   });
   settleDeferredOpponentLog(QA_SCENE_BATTLE_SEQ, false);
   takeEngineLogRecords(QA_SCENE_BATTLE_SEQ);
-  const lab = findQaScene(id)?.promptLab;
-  return battle === null || lab === undefined ? battle : withPromptLab(battle, lab, provider.engine);
+  const scene = findQaScene(id);
+  if (battle === null || scene === null) return battle;
+  if (scene.promptLab !== undefined) return withLabBattle(battle, promptLabBattle(provider.engine, scene.promptLab));
+  if (scene.cardLab !== undefined) return withCardLab(battle, scene.cardLab, journeyContent, provider.engine);
+  return battle;
 }
 
 /**

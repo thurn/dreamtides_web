@@ -22,7 +22,7 @@
 // a double click) is applied at most once by the log. A stale intent
 // bounces in the fold and the screen re-renders from the fold.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOverlay";
 import { BattleEventLogOverlay } from "../../cumulus/screens/battle-overlays/BattleEventLogOverlay";
@@ -39,7 +39,7 @@ import type { Action, Answer, Engine, InstanceId, Side } from "../../engine";
 import { promptView } from "../../engine";
 import { logEvent, logEventOnce } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
-import { PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
+import { PAGE_DEBUG_PANEL, PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
   ENGINE_BATTLE_LOG_COPY,
@@ -88,6 +88,9 @@ import {
   usePublishedEngineEvents,
 } from "./battle-presentation";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
+
+/** The engine debug panel (`?debug=1`, D4); a production build compiles it out (P7). */
+const EngineDebugPanel = import.meta.env.DEV ? lazy(() => import("./EngineDebugPanel")) : null;
 
 /** The side the local player plays in a journey battle. */
 const HUMAN: Side = "player";
@@ -570,6 +573,11 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           turns={logTurns}
           onClose={() => setLogOpen(false)}
         />
+      ) : null}
+      {EngineDebugPanel !== null && PAGE_DEBUG_PANEL ? (
+        <Suspense fallback={null}>
+          <EngineDebugPanel engine={engine} battle={battle} battleId={battleId} />
+        </Suspense>
       ) : null}
     </>
   );

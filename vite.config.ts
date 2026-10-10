@@ -58,6 +58,53 @@ function journeyLogPlugin(): Plugin {
   };
 }
 
+/**
+ * Source modules compiled only into development builds (P7): the QA scenes,
+ * the prompt-lab and card-lab, the engine's test tooling, the engine debug
+ * actions, and the battle screen's debug panel. Development builds load them
+ * behind `import.meta.env.DEV` (`src/runtime/qa-scene-entry.ts`,
+ * `src/engine/development.ts`, `EngineBattleScreen`).
+ */
+const DEV_ONLY_MODULES = [
+  "src/engine/testing/",
+  "src/engine/debug/",
+  "src/runtime/qa-scenes.ts",
+  "src/runtime/qa-journey-foundation.ts",
+  "src/battle/components/EngineDebugPanel.tsx",
+];
+
+/**
+ * Fails a production build, the app's or the policy worker's, whose chunks
+ * render any development-only module: the production bundle assertion that
+ * `npm run review:full` and every `--prod` QA run make.
+ */
+function devOnlyModulesPlugin(): Plugin {
+  let production = false;
+  return {
+    name: "dev-only-modules",
+    apply: "build",
+    configResolved(config) {
+      production = config.isProduction;
+    },
+    generateBundle(_options, bundle) {
+      if (!production) return;
+      const leaked = Object.values(bundle).flatMap((output) =>
+        output.type !== "chunk"
+          ? []
+          : Object.entries(output.modules)
+              .filter(([id, module]) => {
+                const file = path.relative(__dirname, id.split("?")[0] ?? id);
+                return module.renderedLength > 0 && DEV_ONLY_MODULES.some((prefix) => file.startsWith(prefix));
+              })
+              .map(([id]) => `${output.fileName}: ${path.relative(__dirname, id)}`),
+      );
+      if (leaked.length > 0) {
+        this.error(`The production bundle holds development-only modules (P7):\n${leaked.join("\n")}`);
+      }
+    },
+  };
+}
+
 export default defineConfig({
   define: {
     "import.meta.env.VITE_BUILD_GIT_SHA": JSON.stringify(buildGitSha),
@@ -66,11 +113,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
     journeyLogPlugin(),
+    devOnlyModulesPlugin(),
   ],
   // The AI's policy worker (src/battle/engine-ai/policy.worker.ts) is an ES
   // module worker, so its chunks can share the app's code-split modules.
   worker: {
     format: "es",
+    plugins: () => [devOnlyModulesPlugin()],
   },
   server: {
     watch: {

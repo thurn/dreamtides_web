@@ -8,15 +8,17 @@
  * catalog content; the lab's own cards use synthetic ids 0x300+.
  *
  * Development builds add `PROMPT_LAB_DEFINITIONS` to the journey engine and
- * the policy worker's catalog (`developmentLabDefinitions`), so a lab battle
- * folds, replays on reload, and plays against the AI host like any battle.
+ * the policy worker's catalog (`developmentLabDefinitions`, `../development.ts`),
+ * so a lab battle folds, replays on reload, and plays against the AI host
+ * like any battle. The card-lab (`card-lab.ts`) plays the same definitions.
  *
  * The `present-*` fixtures (and the prompt fixtures with `presents` steps)
  * are the battle screen's presentation cases: each lists the intents a
  * judged QA pass takes through the UI after the scene loads, and together
  * they publish every engine event kind (`promptLabPresentation`).
  */
-import { printedCardId, type EmblemDefinitions, type EngineCardDefinition, type EngineFigmentDefinition, type SyntheticHooks } from "../catalog";
+import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
+import type { LabDefinitions } from "../development";
 import { enemyCharacter, energy, event, upTo } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
@@ -118,11 +120,7 @@ export const LAB = {
 } as const satisfies Record<string, EngineCardDefinition>;
 
 /** Every definition a lab battle may name: the synthetic, DSL, stack, loop, trigger, continuous, zone, and lab cards. */
-export const PROMPT_LAB_DEFINITIONS: {
-  readonly cards: readonly EngineCardDefinition[];
-  readonly emblems: EmblemDefinitions;
-  readonly figments: readonly EngineFigmentDefinition[];
-} = {
+export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
   cards: [
     ...SYNTHETIC_CARDS,
     ...DSL_CARDS,
@@ -136,17 +134,6 @@ export const PROMPT_LAB_DEFINITIONS: {
   emblems: SYNTHETIC_EMBLEMS,
   figments: ZONE_FIGMENTS,
 };
-
-const NO_DEFINITIONS: typeof PROMPT_LAB_DEFINITIONS = { cards: [], emblems: {}, figments: [] };
-
-/**
- * The lab definitions in a development build, and none in a production
- * build, whose catalogs hold content only (P7). Every fold of one build
- * sees the same answer, as provider registration requires.
- */
-export function developmentLabDefinitions(): typeof PROMPT_LAB_DEFINITIONS {
-  return import.meta.env?.DEV === true ? PROMPT_LAB_DEFINITIONS : NO_DEFINITIONS;
-}
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
@@ -628,17 +615,17 @@ export function promptLabFixture(name: string): PromptLabFixture | null {
   return PROMPT_LAB_FIXTURES.find((fixture) => fixture.name === name) ?? null;
 }
 
-/** Every card a side's setup places, as the decklist the battle dealt. */
+/** Every card a side's setup places, with its variant, as the decklist the battle dealt. */
 function labDeck(setup: BoardSetup, side: Side): DeckEntry[] {
   const sideSetup = setup[side] ?? {};
   const placed = [
     ...(sideSetup.front ?? []),
     ...(sideSetup.back ?? []),
-    ...(sideSetup.hand ?? []).map((entry) => (typeof entry === "string" ? entry : entry.cardId)),
+    ...(sideSetup.hand ?? []),
     ...(sideSetup.deck ?? []),
     ...(sideSetup.void ?? []),
   ];
-  return placed.flatMap((cardId) => (cardId === null ? [] : [{ cardId }]));
+  return placed.flatMap((entry) => (entry === null ? [] : [typeof entry === "string" ? { cardId: entry } : entry]));
 }
 
 /**

@@ -320,6 +320,10 @@ export interface EventPayloads {
   BATTLE_ACTION: { side: BattleSide; action: unknown };
   BATTLE_ANSWER: { side: BattleSide; promptId: PromptId; value: unknown };
   BATTLE_CANCEL: { side: BattleSide; promptId: PromptId };
+  // An engine debug action (D4) of a journey battle, development builds
+  // only: `op` is a `DebugOp` (src/engine/debug/debug-actions.ts), validated
+  // by the domain case. A production build bounces it.
+  BATTLE_DEBUG: { op: unknown };
   // `note` is the `{ noteId, text, expiry }` shape the battle note editor
   // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this
   // file stays import-light (the domain case narrows it).
@@ -352,6 +356,7 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "COMPLETE_CARD_TUTORIAL_GUIDANCE",
   "SET_CARD_NOTE",
   "SET_CARD_SOURCE_DEBUG",
+  "BATTLE_DEBUG",
   "OPEN_SITE",
   "ENTER_DRAFT_SITE",
 ]);
@@ -486,6 +491,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BATTLE_ACTION: true,
   BATTLE_ANSWER: true,
   BATTLE_CANCEL: true,
+  BATTLE_DEBUG: true,
   SET_CARD_NOTE: true,
 };
 

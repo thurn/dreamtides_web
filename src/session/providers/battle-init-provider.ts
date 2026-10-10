@@ -46,7 +46,7 @@ import {
   type EngineDreamwellDefinition,
 } from "../../engine";
 import { energy, energyX } from "../../engine/dsl/builders";
-import { developmentLabDefinitions } from "../../engine/testing/prompt-lab";
+import { developmentLabDefinitions } from "../../engine/development";
 import type { CardData } from "../../types/cards";
 import { createEngineBattleInit } from "../../battle/integration/engine-battle-init";
 import type { JourneyState } from "../../types/journey";
@@ -166,7 +166,7 @@ const contentEngines = new WeakMap<JourneyContent, Engine>();
  * Avatar, and Dreamsign of the content modules, with their abilities, plus
  * any the loaded journey content adds, by UUID, and in a development build
  * the prompt lab's synthetic definitions (`developmentLabDefinitions`), which
- * the `?goto=prompt-lab-<fixture>` QA scenes play. An entity the content
+ * the prompt-lab and card-lab QA scenes play. An entity the content
  * modules do not define plays text-less, as a pending entity does (D36).
  * Built once per content; the engine is pure, so one instance serves every
  * battle.
