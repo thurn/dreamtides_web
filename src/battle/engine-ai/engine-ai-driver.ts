@@ -5,10 +5,10 @@
 // records the intent, so replaying the log never runs the AI again.
 //
 // Failure paths:
-// - The policy host fails (the worker crashes, errors, or misses its budget
-//   plus grace): the decision is answered by the Random policy on the main
-//   thread (O(1) per decision), logged as `ai.error`, so a battle never
-//   waits on a dead worker.
+// - The policy host fails (the worker crashes, errors, fails to boot, or
+//   misses its budget plus grace once ready): the decision is answered by
+//   the Random policy on the main thread (O(1) per decision), logged as
+//   `ai.error`, so a battle never waits on a dead worker.
 // - The fold moves on before the answer arrives (the decision is stale):
 //   the answer is discarded and logged as `ai.stale`. A stale prompt answer
 //   would bounce anyway (its prompt id names the decision), and a stale

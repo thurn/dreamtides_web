@@ -1,6 +1,8 @@
 // Runs the AI host for the enemy of the current journey battle's engine
-// battle: one Web Worker policy host per battle, fed every fold. The AI's
-// answers are intents in the log; this hook never holds game state.
+// battle: one Web Worker policy host per battle, fed every fold. The host
+// boots its worker when the battle starts and logs each boot as
+// `ai.workerBoot`. The AI's answers are intents in the log; this hook never
+// holds game state.
 
 import { useEffect, useMemo, useState } from "react";
 import { AI } from "../../content/ai";
@@ -25,12 +27,14 @@ export function useEngineAi(policy: PolicyId): void {
   const actions = useActions();
   const clientId = useClientId();
   const engine = getBattleInitProvider()?.engine ?? null;
-  const engineInit = journeyBattleOf(state.battle)?.engine.init ?? null;
+  const battle = journeyBattleOf(state.battle);
+  const engineInit = battle?.engine.init ?? null;
+  const battleId = battle?.init.battleId ?? null;
   const actor = useMemo(() => aiEventActor(clientId), [clientId]);
   const [driver, setDriver] = useState<EngineAiDriver | null>(null);
 
   useEffect(() => {
-    if (engine === null || engineInit === null) return undefined;
+    if (engine === null || engineInit === null || battleId === null) return undefined;
     const created = new EngineAiDriver({
       side: "enemy",
       policy,
@@ -39,6 +43,11 @@ export function useEngineAi(policy: PolicyId): void {
         manifest: catalogManifest(engine.catalog, engineInit),
         createWorker: browserPolicyWorker,
         graceMs: AI.enginePolicy.workerGraceMs,
+        bootTimeoutMs: AI.enginePolicy.workerBootTimeoutMs,
+        now: () => performance.now(),
+        onBoot: (boot) => {
+          logEvent("ai.workerBoot", { battleId, side: "enemy", ...boot });
+        },
       }),
       submit: actionsSubmitter(actions, actor),
       log: (event, fields) => {
@@ -53,7 +62,7 @@ export function useEngineAi(policy: PolicyId): void {
     return () => {
       created.dispose();
     };
-  }, [actions, actor, engine, engineInit, policy]);
+  }, [actions, actor, battleId, engine, engineInit, policy]);
 
   useEffect(() => {
     driver?.update(state);

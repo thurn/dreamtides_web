@@ -1513,10 +1513,19 @@ Planner, and ISMCTS** arrive in Phase 7.
 A catalog holds functions, so the worker builds its own from the content
 modules plus the battle's `CatalogManifest` (`policy/catalog-manifest.ts`):
 plain definitions of every entity the battle init names, played text-less
-when the content modules lack them. `createWorkerPolicyHost` fails a request
-the worker reports failed, crashes on, or leaves unanswered past its
-wall-clock budget plus `workerGraceMs`, and starts a fresh worker for the
-next request.
+when the content modules lack them. `createWorkerPolicyHost` boots its worker
+when the battle starts, in a handshake: the worker posts `loaded` once its
+message handler is installed (a message that reaches a module worker while
+its modules evaluate can be lost), the host sends `init`, and the worker
+answers `ready` once its engine is built. The host holds each request until
+the worker is ready. A request fails when the worker reports it failed,
+crashes, fails to boot within `workerBootTimeoutMs`, or leaves it unanswered
+past its wall-clock budget plus `workerGraceMs`, counted from when the host
+sends it, so a slow boot never times a decision out. After a missed
+deadline the host terminates the worker and boots a replacement at once, so
+the next decision finds a warm worker; after a crash or failed boot, the
+next request starts a fresh one. Each boot logs one `ai.workerBoot` line:
+the worker's ordinal, its cause, its outcome, and its milliseconds.
 
 **The AI host** (`src/battle/engine-ai/`) drives the enemy of every journey
 battle: `useEngineAi` feeds each fold to an `EngineAiDriver`, which asks the

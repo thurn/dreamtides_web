@@ -16,6 +16,6 @@ const scope = globalThis as unknown as WorkerScope;
 const handle = createPolicyWorkerHandler(() => performance.now());
 
 scope.onmessage = (event) => {
-  const reply = handle(event.data);
-  if (reply !== null) scope.postMessage(reply);
+  scope.postMessage(handle(event.data));
 };
+scope.postMessage({ type: "loaded" });

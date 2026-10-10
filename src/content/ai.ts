@@ -49,8 +49,14 @@ export const AI = {
       response: { wallClockMs: 500, iterations: 64 },
     },
     // How long past its budget the host waits for the worker before it
-    // answers with the main-thread Random fallback.
+    // answers with the main-thread Random fallback. The host sends a decision
+    // only once the worker is ready, so its boot never counts against one.
     workerGraceMs: 2000,
+    // How long the worker may take to boot (load its modules and build its
+    // engine) before the host answers its decisions with the fallback. It
+    // bounds only a worker that never starts: a development server compiles
+    // the worker's modules on its first boot.
+    workerBootTimeoutMs: 30000,
     // Choices answered in one run of automatic steps after which a policy
     // declines every optional prompt, so a self-retriggering "you may" ends.
     optionalChainCap: 8,
