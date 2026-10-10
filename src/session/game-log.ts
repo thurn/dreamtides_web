@@ -16,6 +16,7 @@ import {
 } from "../logging";
 import type { FoldState } from "../rules/fold-state";
 import { engineBattleResult } from "../rules/battle/engine-battle";
+import { journeyBattleOf } from "../rules/battle/fold";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import type { LocalGame } from "./local-game";
 
@@ -123,14 +124,10 @@ function logBattleVictory(
   before: FoldState,
   after: FoldState,
 ): void {
-  const battle = before.battle;
+  const battle = journeyBattleOf(before.battle);
   if (battle === null) return;
   const engineResult = engineBattleResult(battle);
-  const won =
-    engineResult === null
-      ? battle.board.result === "victory"
-      : engineResult.kind === "victory" && engineResult.winner === "player";
-  if (!won) return;
+  if (engineResult?.kind !== "victory" || engineResult.winner !== "player") return;
   const init = battle.init;
   const completedNode =
     init.nodeId === null

@@ -1,30 +1,12 @@
-import type { BattleMutableState, BattleSide } from "../types";
+// tutorial-only until Phase 6
 
-/**
- * Pure helper that predicts the side/turnNumber pair that the next
- * start-of-turn belongs to. The note editor uses it to compute the
- * `atStartOfTurn` expiry for a freshly created card note: a note created on
- * the active side expires the moment that side hands off, so the relevant
- * pair is the opposing side and — when the enemy is finishing its turn — the
- * incremented turn number.
- */
-export function nextStartOfTurnPair(
-  state: Pick<BattleMutableState, "activeSide" | "turnNumber">,
-): {
-  side: BattleSide;
-  turnNumber: number;
-} {
-  const endingSide = state.activeSide;
-  const side: BattleSide = endingSide === "player" ? "enemy" : "player";
-  const turnNumber = state.turnNumber + (endingSide === "enemy" ? 1 : 0);
-  return { side, turnNumber };
-}
+import type { BattleSide } from "../types";
 
 /**
  * Whether the side entering its turn draws a card during the start-of-turn Draw
  * phase. The single source of truth for the opening-turn draw rule — every draw
- * path (handoff planner, basic automation, the manual AI-mode handoff in
- * `PlayableBattleScreen`) MUST route through this so the rule cannot drift.
+ * path (the handoff planner and basic automation) MUST route through this so
+ * the rule cannot drift.
  *
  * Only the first player skips their opening Draw (rules §Battle start: "The
  * first player's first turn skips the Draw phase"). The first player is the side

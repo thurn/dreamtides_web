@@ -9,12 +9,16 @@ import { parseCardId, parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { JourneyContent } from "../../data/journey-content";
 import { genesisFoldState } from "../fold-state";
-import { reduceGameEvent } from "../reducer";
+import { reduceGameEvent as reduceAnyGameEvent } from "../reducer";
 import { registerTutorialBattleInitProvider } from "./battle-events";
 import { createTutorialBattleInitProvider } from "../../session/providers/battle-init-provider";
 import { planTutorialBattleController } from "../../battle/tutorial-battle-controller";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
-import type { FoldState } from "../fold-state";
+import {
+  asTutorialFold,
+  asTutorialResult,
+  type TutorialFoldState as FoldState,
+} from "../../battle/test-support";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
@@ -34,6 +38,10 @@ import { parseJourneyId } from "../../types/identifiers";
 import { parseClientId } from "../../types/identifiers";
 import { testDreamwellCardId, testTutorialActionId, testTutorialTriggerId, testCardId, testAvatarId, testTutorialAiActionOverrideId, testGlossaryEntryId, testDreamwellCardName } from "../../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
+
+const reduceGameEvent = (
+  ...args: Parameters<typeof reduceAnyGameEvent>
+) => asTutorialResult(reduceAnyGameEvent(...args));
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
@@ -283,7 +291,7 @@ function content(): JourneyContent {
 }
 
 function terminalTutorialState(): FoldState {
-  const state = genesisFoldState(GENESIS);
+  const state = asTutorialFold(genesisFoldState(GENESIS));
   return {
     ...state,
     frontDoor: {
@@ -2117,74 +2125,6 @@ describe("tutorial battle lifecycle", () => {
     ).toBe("applied");
   });
 
-  it("leaves journey-mode command, play, gesture, and blocking actor behavior unchanged", () => {
-    registerTutorialBattleInitProvider(
-      createTutorialBattleInitProvider(content()),
-    );
-    const started = begin().state;
-    const journeyState = {
-      ...started,
-      playtestControl: {
-        mode: "collaborative" as const,
-        controllerClientId: null,
-      },
-      battle: {
-        ...started.battle!,
-        mode: { kind: "journey" as const },
-        board: { ...started.battle!.board, phase: "day" as const },
-      },
-    };
-    const observer = "client-observer";
-    const scoreCommand = {
-      id: "DEBUG_EDIT",
-      edit: { kind: "SET_SCORE", side: "enemy", value: 8 },
-      sourceSurface: "test",
-    };
-    expect(
-      reduceTutorial(
-        journeyState,
-        "BATTLE_COMMAND",
-        { command: scoreCommand },
-        observer,
-      ).outcome,
-    ).toBe("applied");
-    expect(
-      reduceTutorial(
-        journeyState,
-        "BATTLE_GESTURE",
-        { commands: [scoreCommand] },
-        observer,
-      ).outcome,
-    ).toBe("applied");
-    expect(
-      reduceTutorial(
-        journeyState,
-        "BATTLE_PLAY_CARD",
-        {
-          battleCardId: journeyState.battle.board.sides.player.hand[0],
-          targetBattleCardIds: [],
-          aiChoices: [],
-        },
-        observer,
-      ).outcome,
-    ).toBe("applied");
-    const blockingState = {
-      ...journeyState,
-      battle: {
-        ...journeyState.battle,
-        board: { ...journeyState.battle.board, phase: "dusk" as const },
-      },
-    };
-    expect(
-      reduceTutorial(
-        blockingState,
-        "BATTLE_AI_BLOCK",
-        { aiSide: "enemy" },
-        observer,
-      ).outcome,
-    ).toBe("applied");
-  });
-
   it("runs initial and post-Dreamwell Dawn triggers exactly once through the tutorial controller", () => {
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(content()),
@@ -2602,34 +2542,5 @@ describe("tutorial battle lifecycle", () => {
       continued.state.battle!.board.sides.enemy.backRank.B4,
     ).not.toBeNull();
     expect(continued.state.battle!.board.sides.enemy.backRank.B0).toBeNull();
-  });
-
-  it("normalizes a mode-less persisted battle to journey mode through LOAD_STATE", () => {
-    registerTutorialBattleInitProvider(
-      createTutorialBattleInitProvider(content()),
-    );
-    const battle = begin().state.battle!;
-    const legacy = JSON.parse(JSON.stringify(battle)) as Record<
-      string,
-      unknown
-    >;
-    delete legacy.mode;
-    const state = terminalTutorialState();
-    const loaded = reduceGameEvent(
-      state,
-      {
-        type: "LOAD_STATE",
-        payload: { snapshot: state.journey, battle: legacy },
-        actor: testEventActor("client-a"),
-        basedOnSeq: 41,
-        clientTimestamp: CTX.timestamp,
-      },
-      CTX,
-    );
-    expect(loaded.outcome).toBe("applied");
-    expect(loaded.state.battle?.mode).toEqual({ kind: "journey" });
-    expect(JSON.parse(JSON.stringify(begin().state.battle))).toMatchObject({
-      mode: { kind: "tutorial" },
-    });
   });
 });

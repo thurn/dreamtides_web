@@ -19,39 +19,22 @@
 // leaks into other suites.
 //
 // Determinism rails (src/rules/): no `Math.random`, no live clock. Randomness
-// comes from a seeded PRNG here and from `ctx.rng` inside the reducer; the
-// Dreamwell scripts are selected from the live effects table by structure so
-// fixtures stay resilient to card catalog edits while still covering the
-// active automation runner.
+// comes from a seeded PRNG here and from `ctx.rng` inside the reducer, and
+// battles play on the engine's synthetic test cards, so fixtures stay
+// resilient to card catalog edits.
 
 import type { ResolvedAvatarPackage } from "../../types/content";
-import {
-  parseCardName,
-  parseCardSubtype,
-} from "../../types/card-identity";
 import type {
   DraftPoolCopiesByCard,
   PoolDraftState,
 } from "../../types/draft";
-import type {
-  BattleCardInstance,
-  BattleCardStatus,
-  BattleMutableState,
-  BattleSide,
-  BattleInit,
-} from "../../battle/types";
-import {
-  emptyBackRankSlots,
-  emptyFrontRankSlots,
-} from "../../battle/test-support";
+import type { BattleInit } from "../../battle/types";
 import type {
   DreamscapeNode,
   RuntimeShopSlot,
   SiteState,
 } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
-import { emptyDawnFired, type BattleFoldState } from "../battle/fold";
-import { DREAMWELL_EFFECTS } from "../battle/dreamwell-effects-table";
 import {
   registerBattleCompletionProvider,
   registerBattleInitProvider,
@@ -81,16 +64,12 @@ import {
 } from "../journey/test-content-providers";
 import type { AvatarId } from "../../types/identifiers";
 import type { JourneySeed } from "../../types/journey-seed";
-import type { BattleCardId } from "../../types/identifiers";
-import type { CardId } from "../../types/card-identity";
 import type { SiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseBattleId } from "../../types/identifiers";
 import { parseBattleEntryKey } from "../../types/identifiers";
-import { parseBattleCardId } from "../../types/identifiers";
 import { parseOpponentId } from "../../types/identifiers";
-import { parseDreamwellCardName } from "../../types/catalog-names";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { createEngine, type BattleInit as EngineBattleInit, type Engine } from "../../engine";
 import { battleSeed } from "../../engine/state/ids";
@@ -102,7 +81,6 @@ import {
 } from "../../engine/testing/synthetic-cards";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import {
-  testCardId,
   testContentHash,
   testAvatarId,
   testDreamscapeId,
@@ -131,10 +109,6 @@ const DRAFT_POOL_COPIES_BY_CARD: DraftPoolCopiesByCard = {
   "102": 4,
   "103": 4,
 };
-
-/** Battle-card instance ids in the prototype battle board's hand. */
-const BATTLE_CARD_DETERMINISTIC = parseBattleCardId("bc-det");
-const BATTLE_CARD_FORESEE = parseBattleCardId("bc-foresee");
 
 // ---------------------------------------------------------------------------
 // Seeded PRNG (no Math.random)
@@ -386,92 +360,10 @@ function siteProvider(): SiteContentProvider {
 }
 
 // ---------------------------------------------------------------------------
-// Battle-init provider — a board with two scripted cards in the player's hand
+// Battle-init provider — a journey battle on the synthetic engine
 // ---------------------------------------------------------------------------
 
-function defaultStatus(): BattleCardStatus {
-  return {
-    isExhausted: false,
-    counters: 0,
-    reclaimed: false,
-    offering: false,
-    ephemeral: false,
-    veil: false,
-    grantedVengeful: false,
-    grantedAwakened: false,
-  };
-}
-
-function makeInstance(
-  battleCardId: BattleCardId,
-  cardId: CardId,
-  controller: BattleSide = "player",
-): BattleCardInstance {
-  return {
-    battleCardId,
-    definition: {
-      sourceDeckEntryId: null,
-      cardId,
-      cardNumber: 0,
-      name: parseCardName("Fixture Card"),
-      battleCardKind: "character",
-      subtype: parseCardSubtype("Warrior"),
-      energyCost: 0,
-      printedEnergyCost: 0,
-      printedSpark: 1,
-      isFast: false,
-      reclaimCost: null,
-      renderedText: "",
-      imageNumber: 0,
-      transfiguration: null,
-      isBane: false,
-    },
-    owner: controller,
-    controller,
-    sparkDelta: 0,
-    staticSparkBonus: 0,
-    isRevealedToPlayer: true,
-    status: defaultStatus(),
-    markers: { isPrevented: false, isCopied: false },
-    notes: [],
-    provenance: {
-      kind: "journey-deck",
-      sourceBattleCardId: null,
-      chosenSpark: null,
-      chosenSubtype: null,
-      createdAtTurnNumber: null,
-      createdAtSide: null,
-      createdAtMs: null,
-    },
-  };
-}
-
-function makeSide(): BattleMutableState["sides"][BattleSide] {
-  return {
-    currentEnergy: 0,
-    maxEnergy: 0,
-    score: 0,
-    visibility: {},
-    deck: [],
-    hand: [],
-    void: [],
-    banished: [],
-    backRank: emptyBackRankSlots(),
-    frontRank: emptyFrontRankSlots(),
-    fatigueCount: 0,
-    dreamwellCardIndex: null,
-    dreamwellDrawnTurn: null,
-  };
-}
-
 function makeInit(siteId: SiteId): BattleInit {
-  const foresee = Object.values(DREAMWELL_EFFECTS).find((script) => {
-    const first = script.steps[0];
-    return first?.kind === "prompt" && first.prompt.kind === "foresee";
-  });
-  if (foresee === undefined) {
-    throw new Error("replay fixture requires a Foresee Dreamwell script");
-  }
   const opponentData = opponentsFixture();
   return {
     battleId: parseBattleId(`battle-${siteId}`),
@@ -494,17 +386,7 @@ function makeInit(siteId: SiteId): BattleInit {
     playerDrawSkipsTurnOne: true,
     journeyDeckEntries: [],
     playerDeckOrder: [],
-    dreamwellDeck: [
-      {
-        id: foresee.id,
-        name: parseDreamwellCardName("Fixture Dreamwell"),
-        renderedText: "",
-        energyAdded: 0,
-        order: 0,
-        cardNumber: 0,
-        imageNumber: 0,
-      },
-    ],
+    dreamwellDeck: [],
     enemyDescriptor: {
       id: parseOpponentId("fixture-enemy"),
       name: "Fixture Enemy",
@@ -579,40 +461,7 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
       ) {
         return null;
       }
-      const player = makeSide();
-      player.hand = [BATTLE_CARD_DETERMINISTIC, BATTLE_CARD_FORESEE];
-      const enemy = makeSide();
-      const board: BattleMutableState = {
-        battleId: parseBattleId(`battle-${siteId}`),
-        activeSide: "player",
-        turnNumber: 2,
-        phase: "dreamwell",
-        result: null,
-        forcedResult: null,
-        dreamwellDeckIndex: 0,
-        nextBattleCardOrdinal: 1000,
-        sides: { player, enemy },
-        cardInstances: {
-          [BATTLE_CARD_DETERMINISTIC]: makeInstance(
-            BATTLE_CARD_DETERMINISTIC,
-            testCardId("00000000-0000-0000-0000-000000000001"),
-            "player",
-          ),
-          [BATTLE_CARD_FORESEE]: makeInstance(
-            BATTLE_CARD_FORESEE,
-            testCardId("00000000-0000-0000-0000-000000000002"),
-            "player",
-          ),
-        },
-      };
-      const battle: BattleFoldState = {
-        init: makeInit(siteId),
-        board,
-        effectQueue: [],
-        pendingPrompt: null,
-        dawnFired: emptyDawnFired(),
-      };
-      return { battle, engineInit: fixtureEngineInit(siteId) };
+      return { init: makeInit(siteId), engineInit: fixtureEngineInit(siteId) };
     },
   };
 }

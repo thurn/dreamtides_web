@@ -8,7 +8,6 @@ import type {
 } from "../types/journey";
 import type { ArtCrop } from "../types/cards";
 import type { CardTransfigurationDisplay } from "../runtime/transfiguration-display";
-import type { BattleDebugEdit } from "./debug/commands";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
 import type { DeckEntryId } from "../types/identifiers";
 import type { CardId, CardName, CardSubtype } from "../types/card-identity";
@@ -20,7 +19,6 @@ import type { AtlasNodeId, AvatarId } from "../types/identifiers";
 import type { BattleCardId } from "../types/identifiers";
 import type {
   BattleEntryKey,
-  BattleHistoryCommandId,
   AiDifficultyPresetId,
   DreamwellCardId,
   NoteId,
@@ -40,10 +38,6 @@ export type { BackRankSlotId, BattlefieldSlotId, BattleSide, FrontRankSlotId };
 /** Fixed battlefield capacity per side (rules §The Play Area). */
 export const FRONT_RANK_SLOTS = 9;
 export const BACK_RANK_SLOTS = 10;
-
-/** Compatibility aliases for consumers that require the smallest legal board. */
-export const MIN_FRONT_RANK_SLOTS = FRONT_RANK_SLOTS;
-export const MIN_BACK_RANK_SLOTS = BACK_RANK_SLOTS;
 
 /** The id of the back-rank reserve slot at `index` (0-based, left to right). */
 export function backRankSlotId(index: number): BackRankSlotId {
@@ -116,28 +110,6 @@ export function ensureContiguousRankSlots<K extends BattlefieldSlotId>(
 }
 
 /**
- * Fills any gap in `rank` from index 0 up to its highest materialized slot with
- * `null`, returning the same record. Restores the contiguous lane positions
- * after a transport (e.g. RTDB) drops `null`-valued interior slots.
- */
-export function densifyRank<K extends BattlefieldSlotId>(
-  rank: Record<K, BattleCardId | null>,
-  prefix: "B" | "F",
-): Record<K, BattleCardId | null> {
-  let maxIndex = -1;
-  for (const slotId of Object.keys(rank) as K[]) {
-    maxIndex = Math.max(maxIndex, slotIndex(slotId));
-  }
-  for (let i = 0; i <= maxIndex; i += 1) {
-    const id = `${prefix}${i}` as K;
-    if (!(id in rank)) {
-      rank[id] = null;
-    }
-  }
-  return rank;
-}
-
-/**
  * Builds a slot Record with every slot in `slotIds` initialized to `null`. Used
  * by the empty-rank factories and the AI forward model. The returned
  * `Record<K, null>` is assignable to the wider `Record<K, string | null>` /
@@ -155,7 +127,6 @@ export function createEmptySlotRecord<K extends BattlefieldSlotId>(
 export type BattleZoneId =
   "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank";
 export type BattlefieldZone = "backRank" | "frontRank";
-export type BrowseableZone = "deck" | "hand" | "void" | "banished";
 export type MarkerDiffState = "set" | "cleared" | "unchanged";
 
 export type BattlePhase =
@@ -170,14 +141,6 @@ export type BattlePhase =
 export type BattleResult = "victory" | "defeat" | "draw";
 export type BattleCardKind = "character" | "event";
 export type BattleCardTiming = "standard" | "fast" | "interrupt";
-export type BattleHistoryEntryKind =
-  | "numeric-state"
-  | "card-instance"
-  | "zone-move"
-  | "battlefield-position"
-  | "visibility"
-  | "battle-flow"
-  | "result";
 export type BattleResultReason =
   "score_target_reached" | "turn_limit_reached" | "forced_result";
 export type BattleAiDecisionStage =
@@ -220,21 +183,6 @@ export type BattleCommandSourceSurface =
   | "debug-menu"
   | "debug-panel"
   | "phase-controls";
-
-/**
- * Narrowed pointer to the entity a command operates on. The `ref` string is a
- * free-form identifier scoped to `kind`: card instance id for `"card"`,
- * `"side:zone:slotId"` for `"slot"`, the side name for `"side"`, and
- * `"side:zone"` for `"zone"`.
- */
-export type BattleCommandTarget =
-  | { kind: "card"; ref: BattleCardId }
-  | {
-      kind: "slot";
-      ref: `${BattleSide}:${BattlefieldZone}:${BattlefieldSlotId}`;
-    }
-  | { kind: "side"; ref: BattleSide }
-  | { kind: "zone"; ref: `${BattleSide}:${BattleZoneId}` };
 
 /**
  * Emission context threaded from the reducer through engine helpers so log
@@ -612,13 +560,6 @@ export interface BattleMutableState {
   cardInstances: IdentityRecord<BattleCardId, BattleCardInstance>;
 }
 
-export interface BattleUiState {
-  selectedCardId: BattleCardId | null;
-  selectedSide: BattleSide | null;
-  openZone: { side: BattleSide; zone: BattleZoneId } | null;
-  inspectorTab: "card" | "player" | "enemy" | "log";
-}
-
 export interface BattleFieldSlotAddress {
   side: BattleSide;
   zone: BattlefieldZone;
@@ -742,87 +683,3 @@ export interface BattleTransitionData {
   aiChoices: BattleAiChoiceTrace[];
   logEvents: BattleDeferredLogEvent[];
 }
-
-export interface BattleHistoryEntryMetadata {
-  commandId: BattleHistoryCommandId;
-  label: string;
-  kind: BattleHistoryEntryKind;
-  isComposite: boolean;
-  actor: BattleCommandActor;
-  sourceSurface: BattleCommandSourceSurface;
-  targets: readonly BattleCommandTarget[];
-  timestamp: number;
-  /**
-   * Spec §H-4 envelope slot for per-command arguments. Populated at dispatch
-   * time by `createBattleCommandMetadata`. Optional because some entries carry
-   * no user-facing arguments to preserve.
-   */
-  payload?: Record<string, unknown>;
-  /**
-   * Spec §H-4 reverse-delta slot. The Phase 1 battle module uses full-state
-   * snapshots (`BattleHistoryEntry.before`) to drive undo (spec §H-6 "undo is
-   * exact, records enough state to reverse"). Individual commands may still
-   * attach a reverse delta here for debugging, inspector tooling, or future
-   * non-snapshot undo; leave `null` when snapshot-based undo is sufficient.
-   */
-  undoPayload: Record<string, unknown> | null;
-}
-
-export interface BattleHistorySnapshot {
-  mutable: BattleMutableState;
-  lastTransition: BattleReducerTransition | null;
-}
-
-export interface BattleHistoryEntry {
-  metadata: BattleHistoryEntryMetadata;
-  before: BattleHistorySnapshot;
-  after: BattleHistorySnapshot;
-}
-
-export interface BattleHistory {
-  past: BattleHistoryEntry[];
-  future: BattleHistoryEntry[];
-}
-
-export interface BattleReducerState {
-  mutable: BattleMutableState;
-  history: BattleHistory;
-  lastTransition: BattleReducerTransition | null;
-  transitionId: number;
-  lastActivity: BattleActivity | null;
-  activityId: number;
-}
-
-export interface BattleReducerTransition extends BattleTransitionData {
-  metadata: BattleHistoryEntryMetadata;
-}
-
-export interface BattleCommandActivity {
-  kind: "command";
-  metadata: BattleHistoryEntryMetadata;
-}
-
-export interface BattleHistoryActivity {
-  kind: "undo" | "redo";
-  metadata: BattleHistoryEntryMetadata;
-}
-
-export type BattleActivity = BattleCommandActivity | BattleHistoryActivity;
-
-export type BattleReducerAction =
-  | {
-      type: "DEBUG_EDIT";
-      edit: BattleDebugEdit;
-      metadata: BattleHistoryEntryMetadata;
-      /**
-       * AI choice trace(s) carried from the command envelope onto the resulting
-       * transition's `aiChoices`. Omitted for human/debug commands.
-       */
-      aiChoices?: BattleAiChoiceTrace[];
-    }
-  | {
-      type: "FORCE_RESULT";
-      result: BattleResult;
-      metadata: BattleHistoryEntryMetadata;
-      aiChoices?: BattleAiChoiceTrace[];
-    };

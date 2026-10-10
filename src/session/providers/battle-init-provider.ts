@@ -1,9 +1,10 @@
-// Real BattleInitProvider: turns journey state into a fresh battle fold slice,
-// and the engine init of the same battle, on `BEGIN_BATTLE`. Battle construction is ALREADY fully seeded — `createBattleInit`
-// derives all of its randomness from a `BattleRng` stream keyed by
-// `deriveBattleSeed(journey.seed:battleEntryKey)`, and `createInitialBattleState`
-// is pure — so it needs no `ctx.rng`: given the same journey seed and site, every
-// fold builds a byte-identical battle. The `battleEntryKey` is derived
+// Real BattleInitProvider: turns journey state into a journey battle's init,
+// and the engine init of the same battle, on `BEGIN_BATTLE`. Battle
+// construction is ALREADY fully seeded — `createBattleInit` derives all of its
+// randomness from a `BattleRng` stream keyed by
+// `deriveBattleSeed(journey.seed:battleEntryKey)` — so it needs no `ctx.rng`:
+// given the same journey seed and site, every fold builds a byte-identical
+// battle. The `battleEntryKey` is derived
 // deterministically from `(siteId, completionLevel, dreamscapeId)` so it is
 // identical across replays too.
 
@@ -232,8 +233,8 @@ function textlessCard(card: CardData): EngineCardDefinition {
 }
 
 /**
- * The battle-init provider over loaded journey content: the prototype
- * battle and, for the same battle, the engine init `engine` plays.
+ * The battle-init provider over loaded journey content: the journey battle's
+ * init and, for the same battle, the engine init `engine` plays.
  */
 export function createBattleInitProvider(
   content: JourneyContent,
@@ -250,15 +251,8 @@ export function createBattleInitProvider(
         (emit) => deferredOpponentLogs.set(seq, emit),
       );
       if (init === null) return null;
-      const board = createInitialBattleState(init);
       return {
-        battle: {
-          init,
-          board,
-          effectQueue: [],
-          pendingPrompt: null,
-          dawnFired: emptyDawnFired(),
-        },
+        init,
         engineInit: createEngineBattleInit({
           init,
           journey,
@@ -310,6 +304,9 @@ export function createBattleCompletionProvider(
     },
   };
 }
+
+// tutorial-only until Phase 6: from here to the end of this file builds the
+// standalone tutorial battle's sandbox board.
 
 /**
  * Builds the authored post-tutorial snapshot without needing a journey Battle

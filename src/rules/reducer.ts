@@ -40,7 +40,7 @@ import {
 } from "./battle/engine-battle";
 import type { Engine } from "../engine";
 import { engineDebugActions } from "../engine/development";
-import { battleModeOf } from "./battle/fold";
+import { journeyBattleOf, tutorialBattleOf } from "./battle/fold";
 import * as deck from "./journey/deck";
 import * as draft from "./journey/draft";
 import * as lifecycle from "./journey/lifecycle";
@@ -65,7 +65,7 @@ export type ReduceResult =
  * Folds a single event over the game's state per the CAS policy.
  *
  * Rules 1–6:
- *   1. CAS-exempt types (`SET_CARD_NOTE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
+ *   1. CAS-exempt types (`SET_CARD_SOURCE_DEBUG`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
  *      skip rules 2–4.
  *   2. A RESOLVE_PROMPT matching the open prompt, or a BATTLE_ANSWER or
  *      BATTLE_CANCEL matching the open engine prompt, skips rules 3–4.
@@ -112,7 +112,7 @@ export function reduceGameEvent(
     }
     // rule 4 — prompt gate
     if (
-      routedState.battle?.pendingPrompt != null ||
+      tutorialBattleOf(routedState.battle)?.pendingPrompt != null ||
       pendingEnginePrompt(routedState.battle, battleEngine()) !== null
     ) {
       return bounce(state, "prompt_pending");
@@ -138,7 +138,7 @@ export function reduceGameEvent(
         state: {
           ...routedState,
           battle: {
-            ...routedState.battle!,
+            ...tutorialBattleOf(routedState.battle)!,
             pendingPrompt: null,
             effectQueue: [],
           },
@@ -282,14 +282,10 @@ function isPlayerControlledIntent(event: GameEvent): boolean {
  * testing (its effect is otherwise only observable once the exempt types gain
  * domain cases).
  *
- * The invariant this exemption leans on is NOT "no exempt type alters battle
- * state" — `SET_CARD_NOTE` does write `board.cardInstances[id].notes`. The
- * real invariant is narrower: no CAS-exempt type alters DECISION-RELEVANT
- * battle state. A note carries no game-rules meaning (it never gates or
- * changes what any other event does), so it is safe for it to apply through a
- * partner's intervening window and even while a prompt is open. Any future
- * CAS-exempt type must uphold this same narrower invariant, not the broader
- * (and already false) one.
+ * The invariant this exemption leans on is that no CAS-exempt type alters
+ * DECISION-RELEVANT battle state a partner could have decided on, so it is
+ * safe for it to apply through a partner's intervening window and even while
+ * a prompt is open. Any future CAS-exempt type must uphold this invariant.
  */
 export function isCasExempt(type: EventType): boolean {
   return isKnownEventType(type) && CAS_EXEMPT_EVENT_TYPES.has(type);
@@ -307,7 +303,7 @@ export function isMatchingResolve(state: FoldState, event: GameEvent): boolean {
   if (event.type !== "RESOLVE_PROMPT") {
     return false;
   }
-  const pending = state.battle?.pendingPrompt;
+  const pending = tutorialBattleOf(state.battle)?.pendingPrompt;
   if (pending == null) {
     return false;
   }
@@ -349,12 +345,11 @@ function reduceEngineDebug(
 ): FoldState | null {
   const debug = engineDebugActions();
   const engine = battleEngine();
-  const battle = state.battle;
-  const fold = battle?.engine;
-  if (debug === null || engine === null || battle == null || fold === undefined) {
+  const battle = journeyBattleOf(state.battle);
+  if (debug === null || engine === null || battle === null) {
     return null;
   }
-  if (battleModeOf(battle).kind !== "journey") return null;
+  const fold = battle.engine;
   const op = debug.debugOpFromUnknown(payload.op);
   if (op === null) return null;
   const outcome = debug.applyDebugOp(engine, fold.slice, op);
@@ -416,7 +411,7 @@ export function routeDomain(
   const journey = state.journey;
   const type: GameEventType = event.type;
   if (
-    state.battle?.tutorialPresentation != null &&
+    tutorialBattleOf(state.battle)?.tutorialPresentation != null &&
     type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
     (type === "END_BATTLE" ||
       type === "BATTLE_COMMAND" ||
@@ -424,8 +419,7 @@ export function routeDomain(
       type === "BATTLE_PLAY_CARD" ||
       type === "BATTLE_GESTURE" ||
       type === "BATTLE_AI_BLOCK" ||
-      type === "RESOLVE_PROMPT" ||
-      type === "SET_CARD_NOTE")
+      type === "RESOLVE_PROMPT")
   ) {
     return bounce(state);
   }
@@ -700,8 +694,6 @@ export function routeDomain(
     // --- battle lifecycle (create / tear down the battle slice) ---
     case "BEGIN_BATTLE":
       return foldCase(state, battleEvents.beginBattle(state, payload, ctx));
-    case "SET_BATTLE_AUTOMATION":
-      return foldCase(state, battleEvents.setBattleAutomation(state, payload));
     case "END_BATTLE":
       return foldCase(state, battleEvents.endBattle(state, payload, ctx));
     case "BATTLE_COMMAND":
@@ -745,14 +737,12 @@ export function routeDomain(
         ),
       );
 
-    // --- in-battle prompt resolution & card notes (touch the battle slice) ---
+    // --- tutorial battle prompt resolution (touches the battle slice) ---
     case "RESOLVE_PROMPT":
       return foldCase(
         state,
         battleEvents.resolvePrompt(state, payload, ctx, event.actor),
       );
-    case "SET_CARD_NOTE":
-      return foldCase(state, battleEvents.setCardNote(state, payload, ctx));
 
     // --- engine intents of a journey battle ---
     case "BATTLE_ACTION":

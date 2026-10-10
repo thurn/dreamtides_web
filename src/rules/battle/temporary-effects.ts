@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattleCardInstance, BattleMutableState } from "../../battle/types";
 
 /** True only during the exact turn/active-side window granted by Firmament Mirror. */

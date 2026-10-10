@@ -175,12 +175,6 @@ export interface MobileBattleRankShortcutsView {
 /** The complete, presentation-ready mobile battle board. */
 export type MobileBattlePhase = "dawn" | "day" | "dusk" | "night" | "challenge";
 
-/** Presentation-only state for the AI action waiting on human approval. */
-export interface MobileBattleAiApprovalView {
-  readonly description: string;
-  readonly canReject: boolean;
-}
-
 /** The active side's Dreamwell card while its reveal phase is surfaced. */
 export interface MobileBattleDreamwellView {
   readonly side: MobileBattleOwner;
@@ -195,7 +189,6 @@ export interface MobileBattleView {
   readonly nearHand: MobileBattleHandView;
   readonly farHand: MobileBattleHandView;
   readonly promptNotice: MobileBattlePromptNoticeView | null;
-  readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly dreamwell: MobileBattleDreamwellView | null;
@@ -397,15 +390,6 @@ export interface MobileBattleInspectorSideView {
   readonly canShuffle: boolean;
 }
 
-export interface MobileBattleInspectorAiView {
-  readonly proposal: string;
-  readonly kind: "Idle" | "Action" | "End Phase" | "End Turn";
-  readonly card: string;
-  readonly target: string;
-  readonly heuristicChange: string;
-  readonly liveEvaluation: string;
-}
-
 export interface MobileBattleInspectorView {
   readonly opponentName: string;
   readonly perspective: MobileBattleOwner;
@@ -421,7 +405,6 @@ export interface MobileBattleInspectorView {
   readonly sides: Readonly<
     Record<MobileBattleOwner, MobileBattleInspectorSideView>
   >;
-  readonly ai: MobileBattleInspectorAiView | null;
 }
 
 export type MobileBattleInspectorAction =
@@ -633,8 +616,6 @@ export interface MobileBattleInteractions {
   readonly onAllBack?: () => void;
   /** Repeats the loop on offer a number of times, or until the battle ends. */
   readonly onRepeatLoop?: (count: number | "untilVictory") => void;
-  readonly onApproveAiProposal?: () => void;
-  readonly onRejectAiProposal?: () => void;
   readonly onCardPickerSelectionChange?: (
     chosenIds: readonly BattleCardId[],
   ) => void;
@@ -3239,7 +3220,6 @@ function CardPickerGallery({
 }
 
 function ControlRow({
-  aiApproval,
   cardPicker,
   choicePrompt,
   promptHost,
@@ -3253,7 +3233,6 @@ function ControlRow({
   rankShortcuts,
   tutorialNextAction,
 }: {
-  readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly promptHost: BattlePromptHostView | null;
@@ -3270,8 +3249,7 @@ function ControlRow({
   
   const disabled = interactions?.canInteract !== true;
   const numberPicker = promptHost?.key != null ? promptHost.number : null;
-  const hasAlternateNextControls =
-    aiApproval !== null || choicePrompt !== null || numberPicker !== null;
+  const hasAlternateNextControls = choicePrompt !== null || numberPicker !== null;
   const requiredPickerCount =
     cardPicker === null ? 0 : cardPickerBounds(cardPicker).max;
   const canSubmitPicker =
@@ -3437,9 +3415,6 @@ function ControlRow({
           ) : null}
           <div
             data-battle-phase-next=""
-            data-battle-ai-approval-controls={
-              aiApproval === null ? undefined : ""
-            }
             data-battle-choice-prompt-controls={
               choicePrompt === null ? undefined : ""
             }
@@ -3482,7 +3457,7 @@ function ControlRow({
                   onPress={() => interactions?.onChoicePromptChoose?.(index)}
                 />
               ))
-            ) : aiApproval === null ? (
+            ) : (
               <GlassButton
                 label={
                   phaseNavigation === "end-turn" ||
@@ -3507,24 +3482,6 @@ function ControlRow({
                 }
                 onPress={() => interactions?.onNextPhase()}
               />
-            ) : (
-              <>
-                {aiApproval.canReject ? (
-                  <IconButton
-                    glyph={GLYPHS.close}
-                    size="sm"
-                    label={"Reject AI action"}
-                    disabled={interactions?.onRejectAiProposal === undefined}
-                    onPress={() => interactions?.onRejectAiProposal?.()}
-                  />
-                ) : null}
-                <GlassButton
-                  label={"Continue"}
-                  variant="accent"
-                  disabled={interactions?.onApproveAiProposal === undefined}
-                  onPress={() => interactions?.onApproveAiProposal?.()}
-                />
-              </>
             )}
           </div>
         </div>
@@ -3534,11 +3491,9 @@ function ControlRow({
 }
 
 function BattleControlMessage({
-  aiApproval,
   choicePrompt,
   promptNotice,
 }: {
-  readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly promptNotice: MobileBattlePromptNoticeView | null;
 }) {
@@ -3554,14 +3509,11 @@ function BattleControlMessage({
           )
       : choicePrompt !== null
         ? choicePrompt.label
-        : aiApproval === null
-          ? null
-          : aiApproval.description;
+        : null;
   if (message === null) return null;
   return (
     <div
       aria-live="polite"
-      data-battle-ai-approval-message={aiApproval === null ? undefined : ""}
       data-battle-choice-prompt-message={choicePrompt === null ? undefined : ""}
       data-battle-prompt-waiting={
         promptNotice === null ? undefined : promptNotice.promptSide
@@ -3582,6 +3534,9 @@ function BattleControlMessage({
   );
 }
 
+// tutorial-only until Phase 6: the debug menu and the Battle Inspector rail
+// below render only where `inspectorVisibility` is "available", which only
+// the scripted tutorial stage (`TutorialScreen`) leaves on.
 function BattleDebugMenu({
   onFillBattlefieldPreview,
   onFillAsymmetricBattlefieldPreview,
@@ -3759,7 +3714,6 @@ function BattleInspectorContent({
   const side = inspector.sides[selectedSide];
   const [erodeCount, setErodeCount] = useState(1);
   const [visibilityOpen, setVisibilityOpen] = useState(false);
-  const [aiOpen, setAiOpen] = useState(false);
   const [endBattleOpen, setEndBattleOpen] = useState(false);
   const actionGrid: CSSProperties = {
     display: "grid",
@@ -4215,49 +4169,6 @@ function BattleInspectorContent({
           />
         </div>
       </DisclosureSection>
-
-      {inspector.ai !== null ? (
-        <DisclosureSection
-          title={"AI Analysis"}
-          summary={inspector.ai.kind}
-          expanded={aiOpen}
-          placement="onGlass"
-          onExpandedChange={setAiOpen}
-        >
-          <div
-            style={{
-              display: "grid",
-              gap: token("--space-s"),
-              marginTop: token("--space-s"),
-            }}
-          >
-            <InspectorValue
-              label={"Proposal"}
-              value={inspector.ai.proposal}
-            />
-            <InspectorValue
-              label={"Kind"}
-              value={inspector.ai.kind}
-            />
-            <InspectorValue
-              label={"Card"}
-              value={inspector.ai.card}
-            />
-            <InspectorValue
-              label={"Target"}
-              value={inspector.ai.target}
-            />
-            <InspectorValue
-              label={"Heuristic change"}
-              value={inspector.ai.heuristicChange}
-            />
-            <InspectorValue
-              label={"Live evaluation"}
-              value={inspector.ai.liveEvaluation}
-            />
-          </div>
-        </DisclosureSection>
-      ) : null}
 
       <DisclosureSection
         title={"End Battle"}
@@ -4877,7 +4788,6 @@ export function MobileBattleScreen({
           interactions={presentedInteractions}
         />
         <ControlRow
-          aiApproval={view.aiApproval}
           cardPicker={boardCardPicker}
           choicePrompt={view.choicePrompt}
           promptHost={view.promptHost ?? null}
@@ -5006,7 +4916,6 @@ export function MobileBattleScreen({
           </div>
         ) : null}
         <BattleControlMessage
-          aiApproval={view.aiApproval}
           choicePrompt={
             (view.promptHost?.heading ?? null) === null ? view.choicePrompt : null
           }

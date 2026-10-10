@@ -270,7 +270,7 @@ function mountJourneyApp(): HTMLDivElement {
   return mount(
     <JourneyApp
       cardDatabase={new Map()}
-      runtimeConfig={{ seedOverride: null, aiMode: false, gameId: null }}
+      runtimeConfig={{ seedOverride: null, gameId: null }}
     />,
   );
 }
@@ -322,7 +322,6 @@ describe("App", () => {
       <App
         runtimeConfig={{
           seedOverride: null,
-          aiMode: false,
           gameId: parseGameId("ab12cd"),
         }}
       />,
@@ -343,7 +342,6 @@ describe("App", () => {
       <App
         runtimeConfig={{
           seedOverride: null,
-          aiMode: false,
           gameId: parseGameId("ab12cd"),
         }}
       />,

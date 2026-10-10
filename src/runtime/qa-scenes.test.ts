@@ -60,6 +60,7 @@ import {
   testDreamwellCardName,
   testEventActor,
 } from "../types/test-identities";
+import { journeyBattleOf } from "../rules/battle/fold";
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
@@ -371,7 +372,7 @@ describe("the battle layer QA scenes", () => {
         journey,
       };
       const loaded = validateLoadedState(fold, { snapshot: journey, battle });
-      expect(loaded?.battle?.engine).toEqual(battle?.engine);
+      expect(journeyBattleOf(loaded?.battle ?? null)?.engine).toEqual(battle?.engine);
 
       registerBattleInitProvider(createBattleInitProvider(content));
       try {
@@ -403,7 +404,7 @@ describe("the battle layer QA scenes", () => {
       const battle = buildQaSceneBattle(scene.id, content, journey);
       const fold = { ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey };
       const loaded = validateLoadedState(fold, { snapshot: journey, battle });
-      const slice = loaded?.battle?.engine?.slice;
+      const slice = journeyBattleOf(loaded?.battle ?? null)?.engine.slice;
       if (slice === undefined) throw new Error(`${scene.id} loaded no engine battle`);
 
       expect(slice.committed.version, scene.id).toBe(battle?.engine?.slice.committed.version);
@@ -433,7 +434,7 @@ describe("the battle layer QA scenes", () => {
       expect(
         slice?.committed.sides.player.hand.map((id) => slice.committed.instances[id]?.printing),
       ).toEqual([{ kind: "card", cardId: card.id }]);
-      const asEnemy = labOf(`card-lab:${card.id}:base:enemy`).battle?.engine?.slice.committed;
+      const asEnemy = journeyBattleOf(labOf(`card-lab:${card.id}:base:enemy`).battle)?.engine.slice.committed;
       expect(asEnemy?.sides.enemy.hand).toEqual([]);
 
       for (const [token, reason] of [
@@ -441,7 +442,7 @@ describe("the battle layer QA scenes", () => {
         [`card-lab:${card.id}:bogus:player`, "unknownVariant"],
         [`card-lab:${card.id}:base:nobody`, "unknownSide"],
       ] as const) {
-        expect(labOf(token).battle?.engine?.slice.history, token).toBeUndefined();
+        expect(journeyBattleOf(labOf(token).battle)?.engine.slice.history, token).toBeUndefined();
         expect(report(), token).toMatchObject({ status: "rejected", reason });
       }
       expect(errors).toHaveBeenCalledTimes(3);
@@ -464,10 +465,10 @@ describe("the battle layer QA scenes", () => {
       if (loaded === null) throw new Error("LOAD_STATE refused the card-lab battle");
       const energized = fold(loaded, { kind: "setEnergy", side: "player", energy: 3 });
       expect(energized.outcome).toBe("applied");
-      expect(energized.state.battle?.engine?.slice.committed.sides.player.currentEnergy).toBe(3);
+      expect(journeyBattleOf(energized.state.battle)?.engine.slice.committed.sides.player.currentEnergy).toBe(3);
       expect(fold(loaded, { kind: "setEnergy", side: "player", energy: 3 }).state).toEqual(energized.state);
       expect(fold(energized.state, { kind: "setEnergy", side: "player" }).outcome).toBe("bounced");
-      expect(fold(energized.state, { kind: "undo", keep: 0 }).state.battle?.engine?.slice.committed).toEqual(slice?.committed);
+      expect(journeyBattleOf(fold(energized.state, { kind: "undo", keep: 0 }).state.battle)?.engine.slice.committed).toEqual(slice?.committed);
       expect(fold({ ...energized.state, battle: null }, { kind: "undo", keep: 0 }).outcome).toBe("bounced");
     } finally {
       errors.mockRestore();

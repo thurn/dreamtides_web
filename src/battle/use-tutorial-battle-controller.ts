@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { logEvent } from "../logging";
 import {
@@ -5,7 +7,7 @@ import {
   useClientId,
   useConfirmedGameState,
 } from "../session/hooks";
-import type { BattleFoldState } from "../rules/battle/fold";
+import { tutorialBattleOf, type TutorialBattleFoldState } from "../rules/battle/fold";
 import {
   planTutorialBattleController,
   type TutorialAutomaticIntent,
@@ -35,7 +37,7 @@ export interface TutorialBattleControllerRuntime extends TutorialBattleControlle
  */
 const PRESENTATION_DWELL_MS: Readonly<
   Partial<
-    Record<NonNullable<BattleFoldState["tutorialPresentation"]>["kind"], number>
+    Record<NonNullable<TutorialBattleFoldState["tutorialPresentation"]>["kind"], number>
   >
 > = {
   "opponent-play": TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS,
@@ -45,7 +47,7 @@ const PRESENTATION_DWELL_MS: Readonly<
 
 /** The dwell this presentation is held for before automation resumes. */
 export function tutorialBattlePresentationDwellMs(
-  presentation: BattleFoldState["tutorialPresentation"],
+  presentation: TutorialBattleFoldState["tutorialPresentation"],
 ): number {
   if (presentation === null || presentation === undefined) {
     return TUTORIAL_BATTLE_PRESENTATION_DWELL_MS;
@@ -92,7 +94,7 @@ export function useTutorialBattleController({
   useEffect(() => {
     if (paused || plan.intent === null) return;
     const intent = plan.intent;
-    const battle = state.battle;
+    const battle = tutorialBattleOf(state.battle);
     if (battle === null) return;
     logTutorialIntent(battle.board.battleId, clientId, intent);
     if (plan.status !== "driver") return;

@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
 import { playEvent } from "./helpers";

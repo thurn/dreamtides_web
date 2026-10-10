@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import type { BattlePromptText } from "../../data/dreamwell-prompts";

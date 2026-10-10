@@ -31,6 +31,7 @@ import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { parseClientId } from "../../types/identifiers";
 import { testEventActor } from "../../types/test-identities";
 import { actionsSubmitter, EngineAiDriver, type EngineAiIntent } from "./engine-ai-driver";
+import { journeyBattleOf } from "../../rules/battle/fold";
 
 const GENESIS = {
   seed: "fixture-battle",
@@ -92,7 +93,7 @@ function battleLog(): LocalLog<FoldState> {
   void actions.startJourney({ avatarId: AVATAR_ID });
   void actions.enterSite(BATTLE_SITE_ID);
   void actions.beginBattle(BATTLE_SITE_ID);
-  if (log.state().battle?.engine === undefined) throw new Error("the engine battle did not start");
+  if (journeyBattleOf(log.state().battle)?.engine === undefined) throw new Error("the engine battle did not start");
   return log;
 }
 
@@ -137,11 +138,11 @@ async function run(log: LocalLog<FoldState>, drivers: readonly EngineAiDriver[],
   }
 }
 
-const ended = (state: FoldState): boolean => state.battle?.engine?.slice.committed.result != null;
+const ended = (state: FoldState): boolean => journeyBattleOf(state.battle)?.engine.slice.committed.result != null;
 
 /** The enemy's pending decision request in `state`, if it owes one. */
 function enemyRequest(state: FoldState): PolicyRequest | null {
-  const fold = state.battle?.engine;
+  const fold = journeyBattleOf(state.battle)?.engine;
   if (fold === undefined || state.battle === null) return null;
   return (
     aiDecision({
@@ -268,7 +269,7 @@ describe("failure paths", () => {
     driver.update(state);
     expect(host.asked).toHaveLength(1);
     // The battle moves on (here: it ends) before the worker answers.
-    const fold = state.battle?.engine;
+    const fold = journeyBattleOf(state.battle)?.engine;
     if (fold === undefined || state.battle === null) throw new Error("no engine battle");
     const over: FoldState = {
       ...state,

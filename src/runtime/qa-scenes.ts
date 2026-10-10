@@ -14,7 +14,7 @@ import {
 } from "../session/providers/battle-init-provider";
 import { startJourneyBattle } from "../rules/battle/battle-events";
 import { takeEngineLogRecords } from "../rules/battle/engine-battle";
-import type { BattleFoldState } from "../rules/battle/fold";
+import type { JourneyBattleFoldState } from "../rules/battle/fold";
 import type { BattleDeckCardDefinition } from "../battle/types";
 import { contentCardDefinitions, type BattleInit as EngineBattleInit, type Engine, type EngineCardDefinition } from "../engine";
 import { withHistory } from "../engine/debug/debug-actions";
@@ -550,7 +550,7 @@ function cardLabContentStatus(cardId: CardId): string | null {
 }
 
 /** `battle` with its engine battle replaced by the card-lab battle, or unchanged and reported when it cannot be built. */
-function withCardLab(battle: BattleFoldState, tokens: CardLabTokens, journeyContent: JourneyContent, engine: Engine): BattleFoldState {
+function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, journeyContent: JourneyContent, engine: Engine): JourneyBattleFoldState {
   let resolved = resolveCardLab(journeyContent, tokens);
   let lab: ReturnType<typeof cardLabBattle> | null = null;
   if (resolved.kind === "ok") {
@@ -593,7 +593,7 @@ function labCardDefinition(definition: EngineCardDefinition): BattleDeckCardDefi
  * starts at the lab board so a debug undo reaches its start, and display
  * data for every lab card.
  */
-function withLabBattle(battle: BattleFoldState, lab: { init: EngineBattleInit; slice: BattleSlice }): BattleFoldState {
+function withLabBattle(battle: JourneyBattleFoldState, lab: { init: EngineBattleInit; slice: BattleSlice }): JourneyBattleFoldState {
   const labCards = PROMPT_LAB_DEFINITIONS.cards.filter((definition) => definition.id in PROMPT_LAB_CARD_TEXT);
   return {
     ...battle,
@@ -1464,7 +1464,7 @@ export function buildQaSceneBattle(
   id: QaSceneId,
   journeyContent: JourneyContent,
   journey: JourneyState,
-): BattleFoldState | null {
+): JourneyBattleFoldState | null {
   const siteId = activeSiteIdOf(journey);
   if (siteId === null || !qaSceneLoadsBattle(id)) return null;
   const provider = createBattleInitProvider(journeyContent);

@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattleCommand } from "./debug/commands";
 import type { BattleMutableState } from "./types";
 import type { BattleId, IntentKey } from "../types/identifiers";

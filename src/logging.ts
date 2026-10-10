@@ -498,13 +498,6 @@ export function getLogEntries(): ReadonlyArray<Readonly<LogEntry>> {
   return logSnapshotCache;
 }
 
-export function subscribeLogEntries(listener: LogListener): () => void {
-  logListeners.add(listener);
-  return () => {
-    logListeners.delete(listener);
-  };
-}
-
 /** Clears the in-memory log accumulator and resets the sequence counter. */
 export function resetLog(): void {
   sequenceCounter = 0;

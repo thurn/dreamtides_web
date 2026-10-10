@@ -29,11 +29,10 @@ export const POOL_VIEWER_SCENE_ID = parseQaSceneId("poolviewer");
 
 export interface RuntimeConfig {
   seedOverride: number | null;
-  aiMode: boolean;
   /**
    * The policy the AI host runs for the enemy of every journey battle's
-   * engine battle, from `?ai=random|greedy`; any other value (including the
-   * prototype's `ai=1`) runs the journey default. Presentation-only: the
+   * engine battle, from `?ai=random|greedy`; any other value runs the
+   * journey default. Presentation-only: the
    * AI's choices reach the log as intents. `parseRuntimeConfig` always sets
    * it; it is optional only so test config literals can omit it.
    */
@@ -78,7 +77,7 @@ export interface RuntimeConfig {
 
 /**
  * Extracts the fold-relevant content slice a game pins into its genesis.
- * Presentation-only configuration such as `aiMode` is excluded so a change in
+ * Presentation-only configuration such as `enemyPolicy` is excluded so a change in
  * presentation never gates a stored game.
  */
 export function contentConfigFromRuntime(
@@ -141,7 +140,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
-    aiMode: params.get("ai") === "1",
     enemyPolicy: parseEnemyPolicy(params.get("ai")),
     tutorialPlaybackSpeed: parseTutorialPlaybackSpeed(
       params.get("tutorialSpeed"),

@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { useCallback, useEffect } from "react";
 import { useActions, useClientId, useConfirmedGameState } from "../session/hooks";
 import { logEvent } from "../logging";
@@ -6,6 +8,7 @@ import {
   tutorialGuidanceMessageDurationSeconds,
 } from "./tutorial-presentation-timing";
 import { parseIntentKey } from "../types/identifiers";
+import { tutorialBattleOf } from "../rules/battle/fold";
 
 export interface BattleTutorialGuidanceController {
   readonly advance: () => void;
@@ -17,7 +20,8 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
   const state = useConfirmedGameState();
   const actions = useActions();
   const clientId = useClientId();
-  const presentation = state.battle?.tutorialPresentation;
+  const battle = tutorialBattleOf(state.battle);
+  const presentation = battle?.tutorialPresentation;
   const isController =
     state.playtestControl?.mode !== "single-controller" ||
     state.playtestControl.controllerClientId === clientId;
@@ -25,11 +29,11 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
     presentation?.kind === "tutorial-guidance" ? presentation : null;
   const submitAdvance = useCallback(
     (reason: "timer" | "manual") => {
-      if (!isController || guidance === null || state.battle === null) return;
+      if (!isController || guidance === null || battle === null) return;
       const message = guidance.messages[guidance.messageIndex];
       if (message === undefined) return;
       logEvent("battle_tutorial_guidance_advance_requested", {
-        battleId: state.battle.board.battleId,
+        battleId: battle.board.battleId,
         presentationId: guidance.id,
         triggerId: message.triggerId,
         messageIndex: guidance.messageIndex,
@@ -47,13 +51,13 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
         )
         .catch(() => undefined);
     },
-    [actions, clientId, guidance, isController, state.battle],
+    [actions, battle, clientId, guidance, isController],
   );
 
   useEffect(() => {
-    if (guidance === null || state.battle === null) return;
+    if (guidance === null || battle === null) return;
     logEvent("battle_tutorial_guidance_presented", {
-      battleId: state.battle.board.battleId,
+      battleId: battle.board.battleId,
       presentationId: guidance.id,
       source: guidance.source,
       triggerIds: guidance.messages.map((message) => message.triggerId),
@@ -73,7 +77,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       bubbleWidths: guidance.messages.map((message) => message.bubbleWidth),
       messageIndex: guidance.messageIndex,
     });
-  }, [guidance, state.battle]);
+  }, [battle, guidance]);
 
   return {
     advance: () => submitAdvance("manual"),

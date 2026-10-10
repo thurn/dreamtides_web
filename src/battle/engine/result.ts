@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type {
   BattleEngineEmissionContext,
   BattleFlowStep,

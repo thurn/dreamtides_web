@@ -29,7 +29,7 @@ import type { Side } from "../../engine/state/ids";
 import type { EventActor } from "../../eventlog/types";
 import type { FoldState } from "../../rules/fold-state";
 import type { GameActions } from "../../session/actions";
-import { battleModeOf } from "../../rules/battle/fold";
+import { journeyBattleOf } from "../../rules/battle/fold";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { parseIntentKey, type BattleId, type IntentKey, type PromptId } from "../../types/identifiers";
 
@@ -113,9 +113,9 @@ export class EngineAiDriver {
   }
 
   private decisionIn(state: FoldState): { battleId: BattleId; request: PolicyRequest; forced: PolicyChoice | null; promptId: PromptId | null } | null {
-    const battle = state.battle;
-    const fold = battle?.engine;
-    if (battle === null || fold === undefined || battleModeOf(battle).kind !== "journey") return null;
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) return null;
+    const fold = battle.engine;
     const pending = pendingEnginePrompt(battle, this.options.engine);
     const decision = aiDecision({
       engine: this.options.engine,

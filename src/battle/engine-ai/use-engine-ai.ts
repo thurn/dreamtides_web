@@ -10,6 +10,7 @@ import type { PolicyId } from "../../engine/policy/types";
 import { aiEventActor } from "../../eventlog/types";
 import { logEvent } from "../../logging";
 import { getBattleInitProvider } from "../../rules/battle/battle-events";
+import { journeyBattleOf } from "../../rules/battle/fold";
 import { useActions, useClientId, useGameState } from "../../session/hooks";
 import { actionsSubmitter, EngineAiDriver } from "./engine-ai-driver";
 
@@ -24,7 +25,7 @@ export function useEngineAi(policy: PolicyId): void {
   const actions = useActions();
   const clientId = useClientId();
   const engine = getBattleInitProvider()?.engine ?? null;
-  const engineInit = state.battle?.engine?.init ?? null;
+  const engineInit = journeyBattleOf(state.battle)?.engine.init ?? null;
   const actor = useMemo(() => aiEventActor(clientId), [clientId]);
   const [driver, setDriver] = useState<EngineAiDriver | null>(null);
 

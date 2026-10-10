@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { selectBattleCardInstance } from "../../battle/state/selectors";
 import { selectDefaultCharacterPlaySlot } from "../../battle/state/selectors";
 import type { BattleDebugEdit } from "../../battle/debug/commands";
@@ -1019,16 +1021,4 @@ export function selectDreamwellEffectScript(
   cardId: DreamwellCardId,
 ): DreamwellEffectScript | null {
   return DREAMWELL_EFFECTS[cardId] ?? null;
-}
-
-/**
- * Returns the automation status of a dreamwell card:
- * - `"auto"` — a fully automated script exists in `DREAMWELL_EFFECTS`.
- * - `"none"` — the card id is unknown / unregistered.
- */
-export function dreamwellAutomationStatus(
-  cardId: DreamwellCardId,
-): "auto" | "none" {
-  if (cardId in DREAMWELL_EFFECTS) return "auto";
-  return "none";
 }

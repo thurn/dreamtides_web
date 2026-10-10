@@ -28,7 +28,6 @@ import { buildTransfigurationDisplay } from "../../transfiguration/transfigurati
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
-import { buildAiConfiguredDeck } from "../ai/deck";
 import {
   buildOpponentDreamsigns,
   resolveBattleAffiliation,
@@ -172,12 +171,6 @@ export interface CreateBattleInitInput {
   /** Production Tides4 pool tuning. */
   tides4Tuning?: Tides4Tuning;
   seedOverride?: number | null;
-  /**
-   * When true, the enemy deck is built from the configured journey AI deck.
-   * Used by the `?ai=1` runtime mode that pits the player against the battle AI
-   * opponent.
-   */
-  aiMode?: boolean;
   /**
    * Logging hand-off for the opponent build's reconstruction events
    * (`corpus_opponent_avatar_selected` +
@@ -343,14 +336,12 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     input.affiliations ?? [],
   );
   const poolSeed = deriveEnemyPoolSeed(seed);
-  const aiMode = input.aiMode ?? false;
 
   // Build the production opponent deck. Its reconstruction log is captured
   // so it fires with the rest of the opponent reconstruction logs, deferred to
   // transaction-commit in multiplayer.
   let emitTideDeckLog: (() => void) | null = null;
   const tideBuild =
-    aiMode ||
     input.tides4Decks === undefined ||
     input.tides4Tuning === undefined
       ? null
@@ -392,7 +383,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     chosenCards,
     cardDatabase,
     streams.enemyDeckOrder,
-    aiMode,
     opponentsData,
   ).map(freezeBattleDeckCardDefinition);
 
@@ -401,8 +391,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   // the finalized enemy deck back to the catalog `CardData` so the selection can
   // weigh rules text, rarity, and cost. `selectSignatureCards` excludes
   // Legendary cards and prefers non-starter ones, falling back to starters only
-  // when the deck has too few non-starter cards (e.g. the AI's all-starter deck
-  // in `aiMode`).
+  // when the deck has too few non-starter cards.
   const signatureCandidates = enemyDeckDefinition
     .map((definition) => cardDatabase.get(definition.cardNumber))
     .filter((card): card is CardData => card !== undefined);
@@ -750,30 +739,19 @@ function deriveEnemyPoolSeed(seed: number): number {
 }
 
 /**
- * Turns the opponent build's chosen cards (or the AI-mode / fixture path) into
- * the concrete enemy battle deck: the chosen cards padded up to
- * `MIN_BATTLE_DECK_SIZE` and shuffled into the enemy draw order.
- *
- *  - In `aiMode` the deck is the fixed AI Starter deck (3 copies of each
- *    starter), shuffled through the enemy-deck RNG stream.
- *  - Otherwise the selected corpus deck's cards are used. When `chosenCards`
- *    is `null` or empty (minimal test content), the deck uses a shuffled sample of
- *    draftable cards (non-starter, numeric cost) so the enemy always has a
- *    non-empty deck.
+ * Turns the opponent build's chosen cards (or the fixture path) into the
+ * concrete enemy battle deck: the chosen cards padded up to
+ * `MIN_BATTLE_DECK_SIZE` and shuffled into the enemy draw order. When
+ * `chosenCards` is `null` or empty (minimal test content), the deck uses a
+ * shuffled sample of draftable cards (non-starter, numeric cost) so the enemy
+ * always has a non-empty deck.
  */
 function finalizeEnemyDeck(
   chosenCards: readonly CardData[] | null,
   cardDatabase: ReadonlyMap<number, CardData>,
   rng: BattleRng,
-  aiMode: boolean,
   opponentsData: OpponentsData,
 ): BattleDeckCardDefinition[] {
-  if (aiMode) {
-    return rng
-      .shuffle(buildAiConfiguredDeck(cardDatabase, opponentsData.journeyAiDeck))
-      .map(cloneBattleDeckCardDefinition);
-  }
-
   let chosen: CardData[] = chosenCards ? [...chosenCards] : [];
 
   if (chosen.length === 0) {

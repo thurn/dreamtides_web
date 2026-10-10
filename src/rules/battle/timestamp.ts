@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+//
 // Strict ISO-8601 timestamp parsing for the battle reducer.
 //
 // `EventContext.timestamp` (== the appending event's `clientTimestamp`) is

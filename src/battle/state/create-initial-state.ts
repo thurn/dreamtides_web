@@ -1,6 +1,8 @@
+// tutorial-only until Phase 6
+
 import {
-  MIN_BACK_RANK_SLOTS,
-  MIN_FRONT_RANK_SLOTS,
+  BACK_RANK_SLOTS,
+  FRONT_RANK_SLOTS,
   backRankSlotIds,
   createEmptySlotRecord,
   frontRankSlotIds,
@@ -258,11 +260,11 @@ function createInitialSideState(
 }
 
 function createEmptyBackRank(): Record<BackRankSlotId, BattleCardId | null> {
-  return createEmptySlotRecord(backRankSlotIds(MIN_BACK_RANK_SLOTS));
+  return createEmptySlotRecord(backRankSlotIds(BACK_RANK_SLOTS));
 }
 
 function createEmptyFrontRank(): Record<FrontRankSlotId, BattleCardId | null> {
-  return createEmptySlotRecord(frontRankSlotIds(MIN_FRONT_RANK_SLOTS));
+  return createEmptySlotRecord(frontRankSlotIds(FRONT_RANK_SLOTS));
 }
 
 export function formatBattleCardId(ordinal: number): BattleCardId {

@@ -1,15 +1,18 @@
-// The authoritative in-battle slice of the coop fold state, plus the cursor
-// model that lets it stay PURE DATA (design spec §Data model, §"FoldState must
-// be pure data").
+// The authoritative in-battle slice of the fold state: a journey battle,
+// which is an engine battle (`engine-battle.ts`), or the standalone tutorial
+// battle on its sandbox board, plus the cursor model that lets the sandbox
+// stay PURE DATA (design spec §Data model, §"FoldState must be pure data").
 //
-// The battle effect system is expressed today as `EffectStep[]` scripts whose
-// steps hold `build(ctx)` / `candidates(ctx)` / `resolve(ids,ctx)` CLOSURES.
-// Closures cannot live in fold state: `baseSnapshot` serializes the state and
-// the sync tripwire hashes it, so a leaked function would either be silently
-// dropped by JSON or break the byte-exact round-trip. The fold state therefore
-// stores only a CURSOR — plain numbers — into the static script tables. The
-// live scripts (code) are re-resolved from the tables at fold time via
-// `resolveScript`; state carries ids and indices, never steps.
+// tutorial-only until Phase 6: the cursor and run model, the tutorial
+// presentations, and script resolution below. The sandbox's effect system is
+// expressed as `EffectStep[]` scripts whose steps hold `build(ctx)` /
+// `candidates(ctx)` / `resolve(ids,ctx)` CLOSURES. Closures cannot live in
+// fold state: `baseSnapshot` serializes the state and the sync tripwire
+// hashes it, so a leaked function would either be silently dropped by JSON or
+// break the byte-exact round-trip. The fold state therefore stores only a
+// CURSOR — plain numbers — into the static script tables. The live scripts
+// (code) are re-resolved from the tables at fold time via `resolveScript`;
+// state carries ids and indices, never steps.
 
 import type {
   BattleInit,
@@ -116,48 +119,52 @@ export interface PendingPrompt {
 }
 
 /**
- * The in-battle fold slice.
+ * The in-battle fold slice: a journey battle, which plays its engine battle,
+ * or the standalone tutorial battle, which plays the frozen tutorial sandbox
+ * board. {@link BattleFoldState.mode} tells them apart.
+ */
+export type BattleFoldState = JourneyBattleFoldState | TutorialBattleFoldState;
+
+/**
+ * A journey battle. `init` is the IMMUTABLE per-battle metadata the journey
+ * built (`BattleInit`): the opponent, the score target, the reward, the
+ * site and dreamscape identity, and the display definitions of both decks.
+ * `engine` is the engine battle its `BATTLE_ACTION`, `BATTLE_ANSWER`, and
+ * `BATTLE_CANCEL` intents fold, and `END_BATTLE` reads its result. Both are
+ * plain data and never change identity after `BEGIN_BATTLE`.
+ */
+export interface JourneyBattleFoldState {
+  readonly mode: JourneyBattleMode;
+  readonly init: BattleInit;
+  readonly engine: EngineBattleFold;
+}
+
+// tutorial-only until Phase 6
+/**
+ * The standalone tutorial battle on its sandbox board.
  *
  * - `init` is the IMMUTABLE per-battle metadata (`BattleInit`): `scoreToWin`,
- *   `turnLimit`, the shared `dreamwellDeck` array, `siteId`, `dreamscapeId`,
- *   `isFinalBoss`, and the enemy / avatar / dreamsign summaries. The
- *   mutable `board` carries only INDICES into it (`dreamwellDeckIndex` /
- *   `dreamwellCardIndex`), so the deck array, the win/turn-limit thresholds,
- *   and the site/dreamscape identity are unreachable without it. Keeping it on
- *   the fold slice is what lets the driver key a dreamwell-reveal script by the
- *   card UUID at `dreamwellDeck[dreamwellDeckIndex]` (Task 20) and lets a
- *   defeat classify its `JourneyFailureReason`. `BattleInit` is pure JSON
- *   (numbers, strings, frozen definition arrays, a `DreamAtlas`) with no
- *   closures, so it round-trips through the sync hash byte-for-byte like the
- *   rest of the slice. It never changes after `BEGIN_BATTLE`.
- * - `board` is today's `BattleMutableState`, relocated.
+ *   `turnLimit`, the shared `dreamwellDeck` array, `siteId`, and the enemy /
+ *   avatar summaries. The mutable `board` carries only INDICES into it
+ *   (`dreamwellDeckIndex` / `dreamwellCardIndex`), so the driver keys a
+ *   dreamwell-reveal script by the card UUID at
+ *   `dreamwellDeck[dreamwellDeckIndex]`.
+ * - `board` is the sandbox `BattleMutableState`.
  * - `effectQueue` is the FIFO of pending automation runs.
  * - `pendingPrompt` is the single open prompt (or null).
  *
- * All four are plain data.
+ * All of it is plain data.
  */
-export interface BattleFoldState {
-  /**
-   * The lifecycle that created this battle. Missing metadata on a persisted
-   * legacy battle is normalized to the ordinary journey mode at the load seam.
-   */
-  mode?: BattleMode;
+export interface TutorialBattleFoldState {
+  mode: TutorialBattleMode;
   init: BattleInit;
-  /**
-   * The engine battle of a journey battle (`engine-battle.ts`): its engine
-   * init and the battle slice its `BATTLE_ACTION`, `BATTLE_ANSWER`, and
-   * `BATTLE_CANCEL` intents fold. A tutorial-mode battle has none. The battle
-   * screen renders and plays the engine battle when there is one, and
-   * `END_BATTLE` reads the engine's result first.
-   */
-  engine?: EngineBattleFold;
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
   /**
-   * A tutorial-only, event-log-owned presentation checkpoint. The driver may
-   * schedule its completion locally, but no later automatic battle intent can
-   * run until the matching completion event folds.
+   * An event-log-owned presentation checkpoint. The driver may schedule its
+   * completion locally, but no later automatic battle intent can run until
+   * the matching completion event folds.
    */
   tutorialPresentation?: TutorialBattlePresentation | null;
   /**
@@ -191,6 +198,16 @@ export interface BattleFoldState {
   dawnFired: DawnFiredMarker;
   /** Once-per-controller-turn guard for authored Dawn scripts. */
   triggerDawnFired?: DawnFiredMarker;
+}
+
+/** The standalone tutorial battle of `battle`, or `null` for a journey battle or none. */
+export function tutorialBattleOf(battle: BattleFoldState | null): TutorialBattleFoldState | null {
+  return battle !== null && battle.mode.kind === "tutorial" ? (battle as TutorialBattleFoldState) : null;
+}
+
+/** The journey battle of `battle`, or `null` for the tutorial battle or none. */
+export function journeyBattleOf(battle: BattleFoldState | null): JourneyBattleFoldState | null {
+  return battle !== null && battle.mode.kind === "journey" ? (battle as JourneyBattleFoldState) : null;
 }
 
 /** A journey battle's engine battle: plain data, so it persists and replays with the fold. */
@@ -386,9 +403,9 @@ export interface TutorialBattleMode {
   };
 }
 
-/** Treat snapshots written before mode metadata as ordinary journey battles. */
+/** The lifecycle that created `battle`. */
 export function battleModeOf(battle: BattleFoldState): BattleMode {
-  return battle.mode ?? { kind: "journey" };
+  return battle.mode;
 }
 
 /** Per-side last cleared turn marker (see {@link BattleFoldState.dawnFired}). */

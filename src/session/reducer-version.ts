@@ -10,7 +10,7 @@
 import type { ReducerVersion } from "../types/reducer-version";
 
 export const CURRENT_REDUCER_VERSION =
-  "dreamtides-coop-v28" satisfies ReducerVersion;
+  "dreamtides-coop-v29" satisfies ReducerVersion;
 
 /** Whether this build may safely fold and append to a stored game. */
 export function isReducerVersionCompatible(

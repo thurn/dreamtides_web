@@ -1,7 +1,9 @@
+// tutorial-only until Phase 6
+
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-controller";
 import type {
-  BattleFoldState,
+  TutorialBattleFoldState,
   TutorialBattlePresentation,
 } from "../../rules/battle/fold";
 import type { TutorialBattleView } from "../../cumulus/screens/TutorialBattleScreen";
@@ -43,7 +45,7 @@ function withInactiveTutorialAvatarAbility(
  */
 function tutorialPresentationView(
   presentation: TutorialBattlePresentation | null,
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
 ): TutorialBattleView["presentation"] {
   if (presentation === null) return null;
   switch (presentation.kind) {
@@ -100,7 +102,7 @@ function tutorialPresentationView(
 }
 
 export function buildTutorialBattleView(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   controller: TutorialBattleControllerPlan,
   confirmedPromptId: number | null,
   previewVictory = false,
@@ -114,20 +116,18 @@ export function buildTutorialBattleView(
     title: battle.init.enemyDescriptor.subtitle,
   };
   const mobileOptions = {
-    aiMode: false,
     isOpponentHandRevealed: false,
     isPlayerHandHidden: false,
     pendingPrompt: battle.pendingPrompt,
     confirmedPromptId,
   } as const;
   const buildBattleView = (
-    board: BattleFoldState["board"],
+    board: TutorialBattleFoldState["board"],
   ): TutorialBattleView["battle"] => {
     const projected = buildMobileBattleView(
       battle.init,
       board,
       enemyAvatar,
-      null,
       mobileOptions,
     );
     const player = withInactiveTutorialAvatarAbility(projected.player);
@@ -205,9 +205,9 @@ export function buildTutorialBattleView(
  * folded from the game log.
  */
 function boardBeforeChallengeResolutionPresentation(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   presentation: TutorialBattlePresentation | null,
-): BattleFoldState["board"] | null {
+): TutorialBattleFoldState["board"] | null {
   if (
     presentation?.kind !== "challenge-resolved" ||
     presentation.dissolved.length === 0
@@ -256,9 +256,9 @@ function boardBeforeChallengeResolutionPresentation(
  * clears; card identity and rule state remain authoritative in the fold.
  */
 function boardBeforeOpponentPlayPresentation(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   presentation: TutorialBattlePresentation | null,
-): BattleFoldState["board"] {
+): TutorialBattleFoldState["board"] {
   if (presentation?.kind !== "opponent-play") return battle.board;
   const battleCardId = presentation.battleCardId;
   const enemy = battle.board.sides.enemy;

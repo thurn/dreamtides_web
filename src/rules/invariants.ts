@@ -1,6 +1,6 @@
 import { layerOrdinal } from "../types/layer-name";
 import type { FoldState } from "./fold-state";
-import { battleModeOf } from "./battle/fold";
+import { journeyBattleOf } from "./battle/fold";
 
 export interface FoldInvariantViolation {
   code: string;
@@ -131,15 +131,9 @@ export function foldInvariantViolations(
     });
   }
 
-  const battle = state.battle;
-  if (battle !== null && battleModeOf(battle).kind === "journey") {
+  const battle = journeyBattleOf(state.battle);
+  if (battle !== null) {
     const init = battle.init;
-    if (battle.board.battleId !== init.battleId) {
-      violations.push({
-        code: "battle_identity_mismatch",
-        detail: `${battle.board.battleId}/${init.battleId}`,
-      });
-    }
     if (
       init.nodeId === null ||
       journey.currentDreamscape !== init.nodeId

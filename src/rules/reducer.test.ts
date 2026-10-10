@@ -1,17 +1,13 @@
 import { testJourneySeed } from "../types/test-identities";
 import { testEventActor } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
-import { testCardName } from "../types/test-identities";
 
 import type { GameEvent, EventContext, Genesis } from "../eventlog/types";
 import { foldEvents } from "../eventlog/fold";
 import { hashState } from "../eventlog/hash";
-import type {
-  BattleCardInstance,
-  BattleMutableState,
-  BattleSide,
-} from "../battle/types";
+import type { BattleMutableState, BattleSide } from "../battle/types";
 import {
+  asTutorialResult,
   emptyBackRankSlots,
   emptyFrontRankSlots,
 } from "../battle/test-support";
@@ -25,11 +21,8 @@ import {
   isMatchingResolve,
   reduceGameEvent,
 } from "./reducer";
-import type { BattleCardId } from "../types/identifiers";
-import { parseBattleId } from "../types/identifiers";
-import { parseBattleCardId } from "../types/identifiers";
-import { parseNoteId } from "../types/identifiers";
-import { testCardId, testAvatarId, testFoldHash } from "../types/test-identities";
+import { parseBattleId, parseClientId } from "../types/identifiers";
+import { testAvatarId, testFoldHash } from "../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
 // ---------------------------------------------------------------------------
@@ -103,13 +96,13 @@ describe("rule 3 — compare-and-swap window", () => {
     expect(result.state.journey.essence).toBe(100);
   });
 
-  it("applies when a partner SET_CARD_NOTE (decision-neutral) intervened", () => {
+  it("applies when a partner SET_CARD_SOURCE_DEBUG (decision-neutral) intervened", () => {
     const state = foldStateWithEssence(100);
     const result = reduceGameEvent(
       state,
       adjustEssence(10, "alice"),
       ctx({
-        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "SET_CARD_NOTE" }],
+        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "SET_CARD_SOURCE_DEBUG" }],
       }),
     );
     expect(result.outcome).toBe("applied");
@@ -164,12 +157,25 @@ describe("rule 3 — compare-and-swap window", () => {
 // Rule 4 / Rule 2 — prompt gate
 // ---------------------------------------------------------------------------
 
+/** Open sandbox prompts belong to the standalone tutorial battle, which alice drives. */
+const ALICE_DRIVES_THE_TUTORIAL: FoldState["playtestControl"] = {
+  mode: "single-controller",
+  controllerClientId: parseClientId("alice"),
+};
+const TUTORIAL_MODE = {
+  kind: "tutorial",
+  tutorialRunId: "tutorial-run",
+  restartNumber: 0,
+  resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
+};
+
 function stateWithPendingPrompt(promptId: number): FoldState {
   const base = foldStateWithEssence(100);
   // The CAS policy reads only `battle.pendingPrompt.promptId`; the board is
   // cast because these tests never touch it (battle-fold construction is
   // exercised by driver.test.ts).
   const battle = {
+    mode: TUTORIAL_MODE,
     board: {},
     effectQueue: [],
     pendingPrompt: {
@@ -183,16 +189,8 @@ function stateWithPendingPrompt(promptId: number): FoldState {
       options: { kind: "foresee", count: 0, cardIds: [] },
     },
   } as unknown as NonNullable<FoldState["battle"]>;
-  return { ...base, battle };
+  return { ...base, battle, playtestControl: ALICE_DRIVES_THE_TUTORIAL };
 }
-
-// A note payload matching the `{ noteId, text, expiry }` shape SET_CARD_NOTE
-// stores (the shape the battle note editor writes).
-const NOTE_PAYLOAD = {
-  noteId: parseNoteId("n1"),
-  text: "hi",
-  expiry: { kind: "manual" },
-};
 
 function makeBattleSide(): BattleMutableState["sides"][BattleSide] {
   return {
@@ -210,98 +208,6 @@ function makeBattleSide(): BattleMutableState["sides"][BattleSide] {
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
   };
-}
-
-function makeCardInstance(battleCardId: BattleCardId): BattleCardInstance {
-  return {
-    battleCardId,
-    definition: {
-      sourceDeckEntryId: null,
-      cardId: testCardId("card-uuid"),
-      cardNumber: 0,
-      name: testCardName("Fixture Card"),
-      battleCardKind: "character",
-      subtype: "Warrior",
-      energyCost: 0,
-      printedEnergyCost: 0,
-      printedSpark: 1,
-      isFast: false,
-      reclaimCost: null,
-      renderedText: "",
-      imageNumber: 0,
-      transfiguration: null,
-      isBane: false,
-    },
-    owner: "player",
-    controller: "player",
-    sparkDelta: 0,
-    staticSparkBonus: 0,
-    isRevealedToPlayer: true,
-    status: {
-      isExhausted: false,
-      counters: 0,
-      reclaimed: false,
-      offering: false,
-      ephemeral: false,
-      veil: false,
-      grantedVengeful: false,
-      grantedAwakened: false,
-    },
-    markers: { isPrevented: false, isCopied: false },
-    notes: [],
-    provenance: {
-      kind: "journey-deck",
-      sourceBattleCardId: null,
-      chosenSpark: null,
-      chosenSubtype: null,
-      createdAtTurnNumber: null,
-      createdAtSide: null,
-      createdAtMs: null,
-    },
-  };
-}
-
-/**
- * A fold state inside a battle with one real card instance (`cardId`), and
- * optionally an open prompt. SET_CARD_NOTE needs a live card to annotate, so
- * the CAS-exempt seam tests use this rather than the board-less fixtures above.
- */
-function stateWithBattleCard(
-  cardId: BattleCardId,
-  promptId?: number,
-): FoldState {
-  const base = foldStateWithEssence(100);
-  const board: BattleMutableState = {
-    battleId: parseBattleId("b"),
-    activeSide: "player",
-    turnNumber: 3,
-    phase: "day",
-    result: null,
-    forcedResult: null,
-    dreamwellDeckIndex: 0,
-    nextBattleCardOrdinal: 100,
-    sides: { player: makeBattleSide(), enemy: makeBattleSide() },
-    cardInstances: { [cardId]: makeCardInstance(cardId) },
-  };
-  const battle = {
-    init: {} as never,
-    board,
-    effectQueue: [],
-    pendingPrompt:
-      promptId === undefined
-        ? null
-        : {
-            promptId,
-            run: {
-              scriptRef: { table: "dreamwell", id: "" },
-              cursor: [0],
-              side: "player",
-            },
-            kind: "foresee",
-            options: { kind: "foresee", count: 0, cardIds: [] },
-          },
-  } as unknown as NonNullable<FoldState["battle"]>;
-  return { ...base, battle };
 }
 
 describe("rule 4 — prompt gate", () => {
@@ -326,7 +232,7 @@ describe("rule 4 — prompt gate", () => {
     );
     // The domain case resolves the open prompt and clears it.
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.pendingPrompt).toBeNull();
+    expect(asTutorialResult(result).state.battle?.pendingPrompt).toBeNull();
   });
 
   it("bounces a RESOLVE_PROMPT whose promptId does not match, leaving the prompt open", () => {
@@ -342,45 +248,7 @@ describe("rule 4 — prompt gate", () => {
     // A stale/mismatched promptId is gated by rule 4 (a pending prompt bounces
     // any non-matching intent) and never reaches the domain case.
     expect(result.outcome).toBe("bounced");
-    expect(result.state.battle?.pendingPrompt?.promptId).toBe(1);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Rule 1 — CAS-exempt discipline
-// ---------------------------------------------------------------------------
-
-describe("rule 1 — CAS-exempt types", () => {
-  it("applies SET_CARD_NOTE through a hostile partner window", () => {
-    const state = stateWithBattleCard(parseBattleCardId("i1"));
-    const result = reduceGameEvent(
-      state,
-      event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
-      ctx({
-        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "ADJUST_ESSENCE" }],
-      }),
-    );
-    // CAS-exempt (rule 1): skips rules 2–4, so the hostile partner window never
-    // gates it. The domain case stores the note on the card.
-    expect(result.outcome).toBe("applied");
-    expect(
-      result.state.battle?.board.cardInstances[parseBattleCardId("i1")].notes,
-    ).toHaveLength(1);
-  });
-
-  it("applies SET_CARD_NOTE through an open prompt (rule 4 skipped)", () => {
-    const state = stateWithBattleCard(parseBattleCardId("i1"), 1);
-    const result = reduceGameEvent(
-      state,
-      event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
-      ctx(),
-    );
-    // CAS-exempt: applies even while a prompt is open, and leaves it intact.
-    expect(result.outcome).toBe("applied");
-    expect(
-      result.state.battle?.board.cardInstances[parseBattleCardId("i1")].notes,
-    ).toHaveLength(1);
-    expect(result.state.battle?.pendingPrompt?.promptId).toBe(1);
+    expect(asTutorialResult(result).state.battle?.pendingPrompt?.promptId).toBe(1);
   });
 });
 
@@ -459,7 +327,6 @@ describe("ADJUST_ESSENCE domain case", () => {
 
 describe("isCasExempt (rule 1)", () => {
   it("exempts presentation and site-bootstrap events", () => {
-    expect(isCasExempt("SET_CARD_NOTE")).toBe(true);
     expect(isCasExempt("SET_CARD_SOURCE_DEBUG")).toBe(true);
     expect(isCasExempt("OPEN_SITE")).toBe(true);
     expect(isCasExempt("ENTER_DRAFT_SITE")).toBe(true);
@@ -555,7 +422,7 @@ describe("isInterveningWindowClear (rule 3)", () => {
   it("ignores a decision-neutral partner event", () => {
     expect(
       isInterveningWindowClear(
-        [{ seq: 1, actor: testEventActor("bob"), type: "SET_CARD_NOTE" }],
+        [{ seq: 1, actor: testEventActor("bob"), type: "SET_CARD_SOURCE_DEBUG" }],
         testEventActor("alice"),
       ),
     ).toBe(true);
@@ -726,6 +593,7 @@ function stateWithPoisonedPrompt(promptId: number): FoldState {
     side: "player",
   };
   const battle = {
+    mode: TUTORIAL_MODE,
     init: {} as never,
     board,
     // A queued run present so the fallback's queue-clear is observable.
@@ -737,7 +605,7 @@ function stateWithPoisonedPrompt(promptId: number): FoldState {
       options: { kind: "foresee", count: 0, cardIds: [] },
     },
   } as unknown as NonNullable<FoldState["battle"]>;
-  return { ...base, battle };
+  return { ...base, battle, playtestControl: ALICE_DRIVES_THE_TUTORIAL };
 }
 
 describe("RESOLVE_PROMPT throw containment", () => {
@@ -751,8 +619,8 @@ describe("RESOLVE_PROMPT throw containment", () => {
     // The resolve applied its containment fallback: the prompt is cleared and
     // the queued automation dropped, so the game is never wedged open.
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.pendingPrompt).toBeNull();
-    expect(result.state.battle?.effectQueue).toEqual([]);
+    expect(asTutorialResult(result).state.battle?.pendingPrompt).toBeNull();
+    expect(asTutorialResult(result).state.battle?.effectQueue).toEqual([]);
   });
 
   it("does not swallow an invariant violation after domain-error recovery", () => {

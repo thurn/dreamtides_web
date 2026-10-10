@@ -1,12 +1,14 @@
+// tutorial-only until Phase 6
+
 import type { BattleTutorialGuidanceView } from "../../cumulus/screens/BattleTutorialGuidance";
-import type { BattleFoldState } from "../../rules/battle/fold";
+import type { TutorialBattleFoldState } from "../../rules/battle/fold";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
 import { tutorialGuidanceMessageDurationSeconds } from "../../battle/tutorial-presentation-timing";
 
 function guidanceDialogue(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   message: TutorialGuidanceMessage,
 ): BattleTutorialGuidanceView["dialogue"] {
   if (message.speaker === "player") {
@@ -45,7 +47,7 @@ function guidanceDialogue(
 
 /** Resolve one persisted guidance checkpoint into UUID-backed Cumulus models. */
 export function buildBattleTutorialGuidanceView(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
 ): BattleTutorialGuidanceView | null {
   const presentation = battle.tutorialPresentation;
   if (presentation?.kind !== "tutorial-guidance") return null;

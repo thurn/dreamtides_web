@@ -7,7 +7,7 @@ import {
 } from "../../types/test-identities";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import type {
-  BattleFoldState,
+  TutorialBattleFoldState,
   TutorialGuidanceMessage,
 } from "../../rules/battle/fold";
 import type { BattleCardInstance } from "../../battle/types";
@@ -30,7 +30,7 @@ describe("battle-tutorial-guidance-view-model", () => {
 
   function battleWithMessage(
     message: TutorialGuidanceMessage,
-  ): BattleFoldState {
+  ): TutorialBattleFoldState {
     return {
       tutorialPresentation: {
         id: "tutorial-guidance:support",
@@ -74,7 +74,7 @@ describe("battle-tutorial-guidance-view-model", () => {
           signatureCards: [],
         },
       },
-    } as unknown as BattleFoldState;
+    } as unknown as TutorialBattleFoldState;
   }
 
   describe("buildBattleTutorialGuidanceView", () => {
@@ -203,7 +203,7 @@ describe("battle-tutorial-guidance-view-model", () => {
       };
       battle.board = {
         cardInstances: { [battleCardId]: instance },
-      } as unknown as BattleFoldState["board"];
+      } as unknown as TutorialBattleFoldState["board"];
 
       expect(buildBattleTutorialGuidanceView(battle)).toMatchObject({
         duration: 2,

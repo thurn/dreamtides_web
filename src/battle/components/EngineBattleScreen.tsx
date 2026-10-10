@@ -39,6 +39,7 @@ import type { Action, Answer, Engine, InstanceId, Side } from "../../engine";
 import { promptView } from "../../engine";
 import { logEvent, logEventOnce } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
+import { journeyBattleOf } from "../../rules/battle/fold";
 import { PAGE_DEBUG_PANEL, PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
@@ -102,7 +103,7 @@ type Chooser = { readonly kind: "card"; readonly id: BattleCardId } | { readonly
 type ChooserOption = { readonly copy: EngineAbilityOption; readonly action: Action | "browseVoid" | null };
 
 export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
-  const battle = useGameState().battle;
+  const battle = journeyBattleOf(useGameState().battle);
   const actions = useActions();
   const { cardDatabase, journeyContent } = useJourney();
   const isDesktop = useIsDesktop();
@@ -115,10 +116,10 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const [logOpen, setLogOpen] = useState(false);
   const [resultDismissed, setResultDismissed] = useState(false);
 
-  const fold = battle?.engine;
-  if (battle === null || fold === undefined) {
-    throw new Error("EngineBattleScreen requires a journey battle with an engine battle");
+  if (battle === null) {
+    throw new Error("EngineBattleScreen requires a journey battle");
   }
+  const fold = battle.engine;
   const { init } = battle;
   const slice = fold.slice;
   const battleId = init.battleId;

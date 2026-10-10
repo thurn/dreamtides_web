@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 /**
  * Support-adjacency geometry for the staggered battlefield (rules §Support).
  *

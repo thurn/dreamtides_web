@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleResult, BattleSide } from "../types";
 import { rankSlotIds } from "../types";
@@ -134,9 +136,6 @@ function appendExhaustClearEdit(
 
 /**
  * Advance (activeSide, turnNumber) to the next turn-pair position.
- *
- * Source of truth: `advanceBattleTurnPair` in
- * `src/battle/components/PlayableBattleScreen.tsx` (~line 1454).
  * Rule: player → enemy keeps turnNumber; enemy → player increments turnNumber.
  */
 function advanceTurnPair(

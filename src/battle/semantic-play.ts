@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattleMutableState, BattleSide } from "./types";
 import { selectBattleCardLocation } from "./state/selectors";
 import semanticPlayCardIds from "./semantic-play-card-ids.json";

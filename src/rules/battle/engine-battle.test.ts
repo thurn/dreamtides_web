@@ -32,9 +32,11 @@ import {
   fixtureBattleInitProvider,
   registerReplayFixtureProviders,
 } from "../replay/fixture-providers";
+import { validateLoadedState } from "../journey/lifecycle";
 import { registerBattleInitProvider } from "./battle-events";
 import { pendingEnginePrompt, takeEngineLogRecords } from "./engine-battle";
 import type { PromptId } from "../../types/identifiers";
+import { journeyBattleOf } from "./fold";
 
 const GENESIS = {
   seed: "fixture-battle",
@@ -167,7 +169,7 @@ function begun(): FoldState {
 }
 
 function engineOf(state: FoldState) {
-  const fold = state.battle?.engine;
+  const fold = journeyBattleOf(state.battle)?.engine;
   if (fold === undefined) throw new Error("no engine battle");
   return fold;
 }
@@ -428,6 +430,38 @@ describe("stale and invalid intents", () => {
     const victorious = won();
     expect(reduce(victorious, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }).outcome).toBe("bounced");
     expect(reduce(atBattleSite(), "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }).outcome).toBe("bounced");
+  });
+
+  it("bounces the tutorial sandbox's intents on a journey battle", () => {
+    const state = begun();
+    const card = firstCard(state);
+    for (const [type, payload] of [
+      ["BATTLE_COMMAND", { command: { id: "DEBUG_EDIT", edit: { kind: "SET_SCORE", side: "player", value: 9 } } }],
+      ["BATTLE_GESTURE", { commands: [{ id: "SKIP_TO_REWARDS" }] }],
+      ["BATTLE_PLAY_CARD", { battleCardId: card, targetBattleCardIds: [] }],
+      ["BATTLE_REPOSITION_CHARACTER", { battleCardId: card, destination: { side: "player", zone: "backRank", slotId: "B0" } }],
+      ["BATTLE_AI_BLOCK", { aiSide: "enemy" }],
+      ["RESOLVE_PROMPT", { promptId: 1, resolution: { kind: "foresee" } }],
+    ] as const) {
+      const result = reduce(state, type, payload);
+      expect(result.outcome, type).toBe("bounced");
+      expect(result.state, type).toBe(state);
+    }
+  });
+});
+
+describe("LOAD_STATE", () => {
+  it("keeps a journey battle's init and engine battle, and refuses a battle that names no mode", () => {
+    const state = begun();
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const load = (payload: unknown) => validateLoadedState(state, { snapshot: state.journey, battle: payload });
+
+    expect(load({ ...battle, board: {}, effectQueue: [] })?.battle).toEqual(battle);
+    // A battle folded before the engine (reducer protocol v28 and earlier):
+    // a prototype board and no mode.
+    expect(load({ init: battle.init, board: {}, effectQueue: [], pendingPrompt: null, dawnFired: {} })).toBeNull();
+    expect(load({ mode: { kind: "journey" }, init: battle.init })).toBeNull();
   });
 });
 

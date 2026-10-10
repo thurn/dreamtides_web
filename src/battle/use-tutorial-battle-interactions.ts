@@ -1,5 +1,8 @@
+// tutorial-only until Phase 6
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEvent } from "../logging";
+import { tutorialBattleOf } from "../rules/battle/fold";
 import {
   useActions,
   useClientId,
@@ -126,7 +129,7 @@ export function useTutorialBattleInteractions(
   const pendingMovementOutcomes = useRef<PendingMovementOutcome[]>([]);
   const [movementFoldReceipt, setMovementFoldReceipt] =
     useState<MovementFoldReceipt | null>(null);
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   const board = battle?.board ?? null;
   const canDrive =
     controller.status === "driver" && board !== null && board.result === null;
@@ -161,7 +164,7 @@ export function useTutorialBattleInteractions(
     ) {
       return;
     }
-    const confirmedBoard = confirmedState.battle?.board ?? null;
+    const confirmedBoard = tutorialBattleOf(confirmedState.battle)?.board ?? null;
     const foldedLocation =
       confirmedBoard === null
         ? null
@@ -420,7 +423,7 @@ export function useTutorialBattleInteractions(
   );
   const resolvePrompt = useCallback(
     (resolution: PromptResolution): void => {
-      const prompt = state.battle?.pendingPrompt ?? null;
+      const prompt = battle?.pendingPrompt ?? null;
       if (!canAct || prompt === null || confirmedPromptId !== prompt.promptId)
         return;
       logIntent("resolve-prompt", { promptId: prompt.promptId, resolution });
@@ -429,12 +432,12 @@ export function useTutorialBattleInteractions(
           prompt.promptId,
           resolution,
           parseIntentKey(
-            `tutorial-battle:${state.battle?.board.battleId}:human-prompt:${String(prompt.promptId)}`,
+            `tutorial-battle:${battle?.board.battleId}:human-prompt:${String(prompt.promptId)}`,
           ),
         )
         .catch(() => undefined);
     },
-    [actions, canAct, confirmedPromptId, logIntent, state.battle],
+    [actions, battle, canAct, confirmedPromptId, logIntent],
   );
   const interactions = useMemo<MobileBattleInteractions>(
     () => ({

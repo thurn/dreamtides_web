@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 /**
  * The single source of truth for the AI deck's card-number families. The deck is
  * fixed and hand-encoded (`battle_ai.md` §"The AI Deck"), so these static sets
@@ -16,11 +18,4 @@ export const CHARACTER_CARD_NUMBERS: ReadonlySet<number> = new Set([
   513, // Runebound Champion
   514, // Final Witness
   515, // Rusted Colossus
-]);
-
-export const EVENT_CARD_NUMBERS: ReadonlySet<number> = new Set([
-  516, // Flashpoint Detonation
-  517, // Glimpse of What Was
-  518, // Sign of Arrival
-  519, // Worlds Await
 ]);

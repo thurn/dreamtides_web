@@ -14,6 +14,8 @@ import {
 } from "../eventlog/local-log";
 import type { GameEvent, Genesis } from "../eventlog/types";
 import { decodeEvent, decodeGenesis, isFoldableGenesis } from "../eventlog/wire";
+import { createInitialBattleState } from "../battle/state/create-initial-state";
+import { emptyDawnFired, journeyBattleOf } from "../rules/battle/fold";
 import type { FoldState } from "../rules/fold-state";
 import {
   clearReplayFixtureProviders,
@@ -88,12 +90,17 @@ function journeyInBattle(): TestGame {
 /** A standalone-tutorial fold holding a live tutorial battle nobody controls. */
 function unownedTutorialBattle(): FoldState {
   const played = journeyInBattle().log.state();
-  if (played.battle === null) throw new Error("The fixture battle did not begin.");
+  const begun = journeyBattleOf(played.battle);
+  if (begun === null) throw new Error("The fixture battle did not begin.");
   const state: FoldState = {
     ...GAME_ENGINE_CONFIG.genesisState(TUTORIAL_GENESIS),
     journey: played.journey,
     battle: {
-      ...played.battle,
+      init: begun.init,
+      board: createInitialBattleState(begun.init),
+      effectQueue: [],
+      pendingPrompt: null,
+      dawnFired: emptyDawnFired(),
       mode: {
         kind: "tutorial",
         tutorialRunId: parseTutorialRunId("tutorial-run"),

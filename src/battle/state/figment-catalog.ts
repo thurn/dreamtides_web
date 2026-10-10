@@ -204,12 +204,6 @@ export function lookupFigmentCatalogEntryById(
   return figmentCatalogEntries().find((entry) => entry.id === id);
 }
 
-/** Restore the built-in catalog, primarily for isolated consumers and tests. */
-export function resetFigmentCatalogHydration(): void {
-  hydratedEntries = null;
-  hydratedCatalog = null;
-}
-
 /**
  * Looks up the catalog entry for a (possibly non-normalized) subtype. Returns
  * `undefined` when the subtype is not one of the figment types. Reads the

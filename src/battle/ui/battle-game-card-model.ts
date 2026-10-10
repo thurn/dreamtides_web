@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { selectEffectiveSparkForInstance } from "../state/figments";
 import type { BattleCardInstance } from "../types";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";

@@ -14,9 +14,8 @@
 // stay synthetic on purpose: real-content hashes would couple this regression
 // net to the content catalogs. When an intentional reducer or rules-table
 // change moves the hashes, re-run this script to re-stamp `finalHash`. The
-// fixtures assert on HASHES only, never on card content: Dreamwell scripts are
-// selected from the live effects table by structure, and card definitions in
-// the fixtures are synthetic, so a content edit does not move them.
+// fixtures assert on HASHES only, never on card content: battles play on the
+// engine's synthetic test cards, so a content edit does not move them.
 //
 // Determinism check: run twice; the two runs must produce byte-identical files.
 
@@ -27,6 +26,7 @@ import { dirname, resolve } from "node:path";
 import { parseEventActor, parseEventType } from "../src/eventlog/types.ts";
 import { replayLog } from "../src/rules/replay/replay.ts";
 import { pendingEnginePrompt } from "../src/rules/battle/engine-battle.ts";
+import { journeyBattleOf } from "../src/rules/battle/fold.ts";
 import { SELECTION_RULES_VERSION } from "../src/reward-selection/types.ts";
 import { parseJourneySeed } from "../src/types/journey-seed.ts";
 import { parseReducerVersion } from "../src/types/reducer-version.ts";
@@ -98,7 +98,7 @@ function chain(actor, steps) {
  */
 function firstHandCard(gen, events) {
   const { finalState } = replayLog({ genesis: gen, events });
-  const card = finalState.battle?.engine?.slice.committed.sides.player.hand[0];
+  const card = journeyBattleOf(finalState.battle)?.engine.slice.committed.sides.player.hand[0];
   if (card === undefined) {
     throw new Error("the engine battle has no card in the player's hand");
   }

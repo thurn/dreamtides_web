@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import {
   supportedDeploySlots,
@@ -14,7 +16,6 @@ import type { StepContext } from "./effect-step";
 import type { EffectStep } from "./effect-step";
 import type { BattleScriptTrigger } from "./fold";
 import {
-  fnv1aHex,
   parseRulesTextHash,
   type RulesTextHash,
 } from "./rules-text-hash";
@@ -393,48 +394,11 @@ export const BATTLE_CARD_EFFECTS: IdentityRecord<
   BATTLE_CARD_EFFECT_SCRIPTS.map((script) => [script.id, script]),
 );
 
-/** Returns registered scripts whose live rules text differs from its hash. */
-export function collectAutomationHashDrift(
-  cardsById: ReadonlyMap<CardId, string>,
-): { id: CardId; expected: RulesTextHash; actual: RulesTextHash | null }[] {
-  const drift: {
-    id: CardId;
-    expected: RulesTextHash;
-    actual: RulesTextHash | null;
-  }[] = [];
-  for (const [id, script] of Object.entries(BATTLE_CARD_EFFECTS)) {
-    const cardId = parseCardId(id);
-    const text = cardsById.get(cardId);
-    const actual = text === undefined ? null : fnv1aHex(text);
-    if (actual !== script.textHash) {
-      drift.push({ id: cardId, expected: script.textHash, actual });
-    }
-  }
-  for (const [id, script] of Object.entries(BATTLE_TRIGGERED_EFFECTS)) {
-    const cardId = parseCardId(id);
-    if (
-      script.textHash === undefined ||
-      BATTLE_CARD_EFFECTS[cardId] !== undefined
-    )
-      continue;
-    const text = cardsById.get(cardId);
-    const actual = text === undefined ? null : fnv1aHex(text);
-    if (actual !== script.textHash)
-      drift.push({ id: cardId, expected: script.textHash, actual });
-  }
-  return drift;
-}
-
 /** Returns the Support script for `cardId`, or `null` when it is manual. */
 export function selectBattleCardEffectScript(
   cardId: CardId,
 ): BattleCardEffectScript | null {
   return BATTLE_CARD_EFFECTS[cardId] ?? null;
-}
-
-/** Returns whether the card has automated Support behavior. */
-export function battleCardAutomationStatus(cardId: CardId): "auto" | "none" {
-  return cardId in BATTLE_CARD_EFFECTS ? "auto" : "none";
 }
 
 /**
@@ -577,9 +541,6 @@ function resolveDiscoverChoice(
     { kind: "REORDER_DECK", side: ctx.side, order: remaining },
   ];
 }
-
-/** Compatibility export for callers that still use the former Support name. */
-export const planSupportRecompute = planStaticContributionSettlement;
 
 function pushIfChanged(
   edits: BattleDebugEdit[],

@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { PlannedAction } from "./planner";
 import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import type { BattleAiChoiceTrace } from "../types";

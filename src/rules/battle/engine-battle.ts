@@ -24,7 +24,7 @@ import type { BattleResult as EngineBattleResult } from "../../engine/state/type
 import type { EventContext } from "../../eventlog/types";
 import { parsePromptId, type PromptId } from "../../types/identifiers";
 import type { FoldState } from "../fold-state";
-import { battleModeOf, type BattleFoldState } from "./fold";
+import { journeyBattleOf, type BattleFoldState, type EngineBattleFold, type JourneyBattleFoldState } from "./fold";
 
 /** The engine intents, by the event type that carries each. */
 export type EngineIntentEventType = "BATTLE_ACTION" | "BATTLE_ANSWER" | "BATTLE_CANCEL";
@@ -95,28 +95,23 @@ export function takeEngineLogRecords(seq: number): readonly EngineLogRecord[] {
  * and runs it to its first decision or prompt. `null` when the engine
  * reports an error, which bounces the `BEGIN_BATTLE`.
  */
-export function startEngineBattle(
-  battle: BattleFoldState,
-  init: EngineBattleInit,
-  engine: Engine,
-  seq: number,
-): BattleFoldState | null {
+export function startEngineBattle(init: EngineBattleInit, engine: Engine, seq: number): EngineBattleFold | null {
   const outcome = collectLog(seq, () => adapterFor(engine).start(init));
   if (outcome.kind !== "applied" || outcome.error !== null) return null;
-  return { ...battle, engine: { init, slice: outcome.slice } };
+  return { init, slice: outcome.slice };
 }
 
 /**
  * The prompt a journey battle's in-flight engine step is suspended on, with
  * its id and intermediate state; `null` when nothing is in flight, the
- * battle has no engine battle, or the record no longer replays to a prompt
- * (the next intent then clears it).
+ * battle is not a journey battle, or the record no longer replays to a
+ * prompt (the next intent then clears it).
  */
 export function pendingEnginePrompt(
   battle: BattleFoldState | null,
   engine: Engine | null,
 ): PendingPrompt | null {
-  const fold = battle?.engine;
+  const fold = journeyBattleOf(battle)?.engine;
   if (fold === undefined || fold.slice.inFlight === null || engine === null) return null;
   return adapterFor(engine).pending(fold.slice);
 }
@@ -143,11 +138,9 @@ export function reduceEngineIntent(
   ctx: EventContext,
   engine: Engine | null,
 ): FoldState | null {
-  const battle = state.battle;
-  const fold = battle?.engine;
-  if (battle === null || fold === undefined || engine === null || battleModeOf(battle).kind !== "journey") {
-    return null;
-  }
+  const battle = journeyBattleOf(state.battle);
+  if (battle === null || engine === null) return null;
+  const fold = battle.engine;
   const intent = engineIntentFromPayload(type, payload);
   if (intent === null) return null;
   let slice = fold.slice;
@@ -171,8 +164,8 @@ export function reduceEngineIntent(
 }
 
 /** The engine battle's result once its battle is over, else `null`. */
-export function engineBattleResult(battle: BattleFoldState): EngineBattleResult | null {
-  return battle.engine?.slice.committed.result ?? null;
+export function engineBattleResult(battle: JourneyBattleFoldState): EngineBattleResult | null {
+  return battle.engine.slice.committed.result;
 }
 
 // ---------------------------------------------------------------------------

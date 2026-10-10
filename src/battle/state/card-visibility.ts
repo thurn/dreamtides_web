@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattleCardInstance, BattleSide } from "../types";
 
 /** Builds hidden-zone knowledge: the controller knows the card, the other side does not. */

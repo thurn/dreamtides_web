@@ -465,7 +465,6 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       nearHand: { owner: human, position: "near", cardIds: nearHandIds, cards: nearHand },
       farHand: { owner: far, position: "far", cardIds: farHandIds, cards: farHand },
       promptNotice: prompt.promptNotice,
-      aiApproval: null,
       cardPicker: prompt.cardPicker,
       choicePrompt: prompt.choicePrompt,
       promptHost: prompt.host,
@@ -500,7 +499,6 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
         isFarHandRevealed: false,
         isNearHandHidden: false,
         sides: { player: inspectorSide(view, "player"), enemy: inspectorSide(view, "enemy") },
-        ai: null,
       },
       result: resultView(input),
       revealedHandCard:

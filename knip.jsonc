@@ -25,9 +25,6 @@
   "ignoreIssues": {
     // The engine's public surface; its lane owns these exports.
     "src/engine/**": ["exports", "types", "duplicates"],
-    // The sandbox battle and its rules, which Phase 4 replaces wholesale.
-    "src/battle/**": ["exports", "types", "duplicates"],
-    "src/rules/battle/**": ["exports", "types", "duplicates"],
     // RuleTester-facing helpers in the custom ESLint rules.
     "eslint-rules/**": ["exports"]
   }

@@ -152,7 +152,6 @@ function makeView(): MobileBattleView {
       cards: [],
     },
     promptNotice: null,
-    aiApproval: null,
     cardPicker: null,
     choicePrompt: null,
     dreamwell: null,
@@ -178,7 +177,6 @@ function makeView(): MobileBattleView {
       isFarHandRevealed: false,
       isNearHandHidden: false,
       sides: { player: inspectorSide("player"), enemy: inspectorSide("enemy") },
-      ai: null,
     },
   };
 }

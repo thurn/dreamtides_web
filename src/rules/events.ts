@@ -12,7 +12,6 @@ import type {
   ExplorationActionId,
   FrontDoorActionId,
   JourneyId,
-  NoteId,
   OfferId,
   PresentationId,
   PromptId,
@@ -289,7 +288,6 @@ export interface EventPayloads {
 
   // --- battle events ---
   BEGIN_BATTLE: { siteId: SiteId; seedOverride?: number };
-  SET_BATTLE_AUTOMATION: { enabled: boolean };
   BATTLE_COMMAND: { command: unknown };
   BATTLE_REPOSITION_CHARACTER: {
     battleCardId: BattleCardId;
@@ -324,13 +322,6 @@ export interface EventPayloads {
   // only: `op` is a `DebugOp` (src/engine/debug/debug-actions.ts), validated
   // by the domain case. A production build bounces it.
   BATTLE_DEBUG: { op: unknown };
-  // `note` is the `{ noteId, text, expiry }` shape the battle note editor
-  // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this
-  // file stays import-light (the domain case narrows it).
-  SET_CARD_NOTE: {
-    instanceId: BattleCardId;
-    note: { noteId: NoteId; text: string; expiry: unknown };
-  };
 }
 
 /** Every event `type` string the rules layer recognizes. */
@@ -343,8 +334,8 @@ export type GameEventType = keyof EventPayloads;
 /**
  * CAS-exempt types skip CAS-policy rules 2–4 (rule 5 validation still runs).
  * Site bootstrap is serialized by an event-log intent key and may safely pass
- * a partner's CAS window. Card notes and card-source provenance carry no
- * game-rules meaning.
+ * a partner's CAS window. Card-source provenance and engine debug actions
+ * carry no game-rules meaning a partner decides on.
  */
 export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "FRONT_DOOR_ACTION",
@@ -354,7 +345,6 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "TAKE_PLAYTEST_CONTROL",
   "OPEN_CARD_TUTORIAL_GUIDANCE",
   "COMPLETE_CARD_TUTORIAL_GUIDANCE",
-  "SET_CARD_NOTE",
   "SET_CARD_SOURCE_DEBUG",
   "BATTLE_DEBUG",
   "OPEN_SITE",
@@ -375,8 +365,7 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<GameEventType> =
     "TAKE_PLAYTEST_CONTROL",
     "OPEN_CARD_TUTORIAL_GUIDANCE",
     "COMPLETE_CARD_TUTORIAL_GUIDANCE",
-    "SET_CARD_NOTE",
-    "SET_CARD_SOURCE_DEBUG",
+      "SET_CARD_SOURCE_DEBUG",
     "DISMISS_STARTING_DECK_POPUP",
     "OPEN_SITE",
     "ENTER_DRAFT_SITE",
@@ -480,7 +469,6 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SET_CARD_SOURCE_DEBUG: true,
   END_BATTLE: true,
   BEGIN_BATTLE: true,
-  SET_BATTLE_AUTOMATION: true,
   BATTLE_COMMAND: true,
   BATTLE_REPOSITION_CHARACTER: true,
   BATTLE_PLAY_CARD: true,
@@ -492,7 +480,6 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BATTLE_ANSWER: true,
   BATTLE_CANCEL: true,
   BATTLE_DEBUG: true,
-  SET_CARD_NOTE: true,
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.

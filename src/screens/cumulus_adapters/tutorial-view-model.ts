@@ -1094,7 +1094,6 @@ export function buildTutorialView(
       return {
         battleId: parseBattleId(TUTORIAL_BATTLE_ID),
         perspective: "player",
-        aiApproval: null,
         cardPicker: null,
         choicePrompt: null,
         dreamwell:
@@ -1221,7 +1220,6 @@ export function buildTutorialView(
               },
             },
           },
-          ai: null,
         },
         result: null,
       };

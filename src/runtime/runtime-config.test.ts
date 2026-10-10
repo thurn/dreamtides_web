@@ -36,7 +36,6 @@ describe("runtime-config", () => {
     it("returns the default config when no params are present", () => {
       expect(parseRuntimeConfig("")).toEqual({
         seedOverride: null,
-        aiMode: false,
         enemyPolicy: AI.enginePolicy.journeyDefault,
         tutorialPlaybackSpeed: 1,
         gameId: null,
@@ -142,21 +141,10 @@ describe("runtime-config", () => {
       });
     });
 
-    describe("aiMode", () => {
-      it("enables the journey battle AI only when ai=1", () => {
-        expect(parseRuntimeConfig("").aiMode).toBe(false);
-        expect(parseRuntimeConfig("?ai=1").aiMode).toBe(true);
-        expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
-        expect(parseRuntimeConfig("?ai=true").aiMode).toBe(false);
-        expect(parseRuntimeConfig("?ai=").aiMode).toBe(false);
-      });
-    });
-
     describe("enemyPolicy", () => {
       it("selects the engine enemy policy with ai=random or ai=greedy", () => {
         expect(parseRuntimeConfig("?ai=random").enemyPolicy).toBe("random");
         expect(parseRuntimeConfig("?ai=greedy").enemyPolicy).toBe("greedy");
-        expect(parseRuntimeConfig("?ai=random").aiMode).toBe(false);
       });
 
       it("runs the journey default for any other value", () => {

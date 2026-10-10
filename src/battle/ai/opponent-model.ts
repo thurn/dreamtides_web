@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { buildSupportContribution } from "./cards/support-contribution";
 // Namespace import so the bounded-sampling test can spy on `evaluate`.
 import * as evaluateModule from "./evaluate";

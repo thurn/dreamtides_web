@@ -1,4 +1,6 @@
-import type { BattleFoldState } from "../rules/battle/fold";
+// tutorial-only until Phase 6
+
+import type { TutorialBattleFoldState } from "../rules/battle/fold";
 import type { TutorialBattleAiActionOverride } from "../types/tutorial";
 import { battleModeOf } from "../rules/battle/fold";
 import {
@@ -45,7 +47,7 @@ export type TutorialAiActionOverridePlan =
  * is the priority order; a blocked matching action is reported explicitly.
  */
 export function planTutorialAiActionOverride(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
 ): TutorialAiActionOverridePlan {
   if (battleModeOf(battle).kind !== "tutorial") return { kind: "none" };
   for (const override of battle.tutorialAiActionOverrides ?? []) {
@@ -57,7 +59,7 @@ export function planTutorialAiActionOverride(
 
 /** Resolve and authenticate one override id against the pre-action fold. */
 export function resolveTutorialAiPlayCardOverride(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   overrideId: TutorialAiActionOverrideId,
   battleCardId: BattleCardId,
 ): TutorialBattleAiActionOverride | null {
@@ -77,9 +79,9 @@ export function resolveTutorialAiPlayCardOverride(
 
 /** Persist exact-once consumption in the same fold step as the action. */
 export function consumeTutorialAiActionOverride(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   overrideId: TutorialAiActionOverrideId | null,
-): BattleFoldState {
+): TutorialBattleFoldState {
   if (overrideId === null) return battle;
   return {
     ...battle,
@@ -91,7 +93,7 @@ export function consumeTutorialAiActionOverride(
 }
 
 function tutorialAiActionOverrideMatches(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   override: TutorialBattleAiActionOverride,
 ): boolean {
   if (
@@ -116,7 +118,7 @@ function tutorialAiActionOverrideMatches(
 }
 
 function selectPlayCard(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   override: TutorialBattleAiActionOverride,
 ): TutorialAiActionOverridePlan {
   const { board } = battle;

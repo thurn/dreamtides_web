@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { rankSlotIds } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { AiTargetChoice, StarterCardModel } from "./index";

@@ -132,11 +132,11 @@ describe("battle init provider", () => {
     const { start, slice } = begin(content, journey);
 
     expect(preview).not.toBeNull();
-    expect(start.battle.init).toEqual(preview);
-    expect(start.battle.init.seed).toBe(4242);
-    expect(start.engineInit.scoreToWin).toBe(start.battle.init.scoreToWin);
+    expect(start.init).toEqual(preview);
+    expect(start.init.seed).toBe(4242);
+    expect(start.engineInit.scoreToWin).toBe(start.init.scoreToWin);
     expect(start.engineInit.decks.enemy.map((entry) => entry.cardId)).toEqual(
-      start.battle.init.enemyDeckDefinition.map((card) => card.cardId),
+      start.init.enemyDeckDefinition.map((card) => card.cardId),
     );
     expect(start.engineInit.dreamwell).toEqual([
       testDreamwellCardId("json-safe-battle"),
@@ -160,7 +160,7 @@ describe("battle init provider", () => {
   it("names the opponent Avatar by UUID on the enemy descriptor", () => {
     const content = makeContent();
     const { start } = begin(content, makeJourney());
-    const descriptor = start.battle.init.enemyDescriptor;
+    const descriptor = start.init.enemyDescriptor;
 
     expect(content.avatars.map((avatar) => avatar.id)).toContain(
       descriptor.avatarId,

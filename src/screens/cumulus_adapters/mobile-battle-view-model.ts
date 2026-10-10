@@ -1,10 +1,11 @@
+// tutorial-only until Phase 6, except `buildBattleAvatarStatus`, which the
+// journey battle screen also uses: `buildMobileBattleView` projects the
+// standalone tutorial battle's sandbox board.
+
 import {
   selectBattleCardLocation,
   selectSidePlayAreaSize,
 } from "../../battle/state/selectors";
-import type { AiProposal } from "../../battle/ai/use-battle-ai";
-import { evaluate } from "../../battle/ai/evaluate";
-import { forwardModelFromState } from "../../battle/ai/forward-model";
 import { formatPhaseLabel, formatSideLabel } from "../../battle/ui/format";
 import {
   backRankSlotIds,
@@ -57,15 +58,7 @@ const FALLBACK_PLAYER_AVATAR = {
 
 const INACTIVE_OPPONENT_AVATAR_ABILITY = "Opponent avatar ability is not active.";
 
-export type MobileBattleInit = BattleInit;
-export type MobileBattleBoard = BattleMutableState;
-export type MobileBattleAvatar = BattleAvatarSummary;
-export type MobileBattlePendingPrompt = PendingPrompt;
-export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description"> &
-  Partial<Pick<AiProposal, "trace">>;
-
 export interface MobileBattleViewOptions {
-  readonly aiMode: boolean;
   readonly isOpponentHandRevealed: boolean;
   readonly isPlayerHandHidden: boolean;
   readonly perspectiveSide?: BattleSide;
@@ -84,9 +77,7 @@ export function buildMobileBattleView(
   init: BattleInit,
   board: BattleMutableState,
   enemyAvatar: BattleAvatarSummary,
-  aiProposal: MobileBattleAiProposal | null = null,
   viewOptions: MobileBattleViewOptions = {
-    aiMode: false,
     isOpponentHandRevealed: false,
     isPlayerHandHidden: false,
   },
@@ -160,13 +151,6 @@ export function buildMobileBattleView(
             promptSide,
           }
         : null,
-    aiApproval:
-      aiProposal === null
-        ? null
-        : {
-            description: aiProposal.description,
-            canReject: aiProposal.kind === "action",
-          },
     cardPicker: buildCardPickerView(
       ownsPrompt ? (viewOptions.pendingPrompt ?? null) : null,
       viewOptions.confirmedPromptId ?? null,
@@ -198,7 +182,7 @@ export function buildMobileBattleView(
         instance.definition.energyCost <= board.sides.player.currentEnergy &&
         starterCardHasRequiredTargets(board, instance.battleCardId),
     ),
-    inspector: buildInspectorView(init, board, aiProposal, viewOptions),
+    inspector: buildInspectorView(init, board, viewOptions),
     result: buildMobileBattleResultView(
       init,
       board,
@@ -367,7 +351,6 @@ function buildDreamwellView(
 function buildInspectorView(
   init: BattleInit,
   board: BattleMutableState,
-  aiProposal: MobileBattleAiProposal | null,
   options: MobileBattleViewOptions,
 ): MobileBattleInspectorView {
   const nextDreamwell = init.dreamwellDeck[board.dreamwellDeckIndex];
@@ -389,7 +372,6 @@ function buildInspectorView(
       player: buildInspectorSideView("player", board),
       enemy: buildInspectorSideView("enemy", board),
     },
-    ai: options.aiMode ? buildAiView(init, board, aiProposal) : null,
   };
 }
 
@@ -417,48 +399,6 @@ function buildInspectorSideView(
     canDiscard: state.hand.length > 0,
     canShuffle: state.deck.length >= 2,
   };
-}
-
-function buildAiView(
-  init: BattleInit,
-  board: BattleMutableState,
-  proposal: MobileBattleAiProposal | null,
-): NonNullable<MobileBattleInspectorView["ai"]> {
-  const trace = proposal?.trace ?? null;
-  const liveEvaluation = evaluate(
-    forwardModelFromState(board, "enemy"),
-    init.scoreToWin,
-    init.aiConfiguration.evaluation,
-  );
-  const before = trace?.heuristicScoreBefore;
-  const after = trace?.heuristicScoreAfter;
-  return {
-    proposal: proposal?.description ?? "No active proposal",
-    kind:
-      proposal === null
-        ? "Idle"
-        : proposal.kind === "action"
-          ? "Action"
-          : proposal.kind === "endPhase"
-            ? "End Phase"
-            : "End Turn",
-    card: trace?.cardName ?? trace?.battleCardId ?? "—",
-    target: trace?.targetSlotId ?? trace?.targetBattleCardId ?? "—",
-    heuristicChange:
-      before === null ||
-      before === undefined ||
-      after === null ||
-      after === undefined
-        ? "—"
-        : `${formatEvaluation(before)} → ${formatEvaluation(after)}`,
-    liveEvaluation: formatEvaluation(liveEvaluation),
-  };
-}
-
-function formatEvaluation(value: number): string {
-  if (value === Number.POSITIVE_INFINITY) return "+∞";
-  if (value === Number.NEGATIVE_INFINITY) return "−∞";
-  return value.toFixed(2);
 }
 
 function titleCase(value: string): string {

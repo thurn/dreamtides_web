@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { testCardName } from "../types/test-identities";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "./test-support";
 import { planTutorialBattleController } from "./tutorial-battle-controller";
-import type { FoldState } from "../rules/fold-state";
+import type { TutorialFoldState as FoldState } from "./test-support";
 import type {
   BattleCardInstance,
   BattleInit,

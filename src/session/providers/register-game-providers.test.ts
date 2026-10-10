@@ -69,6 +69,7 @@ import {
   testExplorationActionId,
   testJourneySeed,
 } from "../../types/test-identities";
+import { journeyBattleOf } from "../../rules/battle/fold";
 
 const AVATAR_ID = testAvatarId("avatar-real-provider");
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
@@ -469,9 +470,13 @@ describe("registerGameProviders (real content providers)", () => {
       const battle = node.sites.find(({ type }) => type === "Battle");
       apply("ENTER_SITE", { siteId: battle?.id });
       apply("BEGIN_BATTLE", { siteId: battle?.id });
-      // The real provider starts every journey battle's engine battle.
-      expect(state.battle?.engine?.slice.committed.result).toBeNull();
-      apply("BATTLE_COMMAND", { command: { id: "SKIP_TO_REWARDS" } });
+      // The real provider starts every journey battle's engine battle; a
+      // debug action wins it.
+      const engine = journeyBattleOf(state.battle)?.engine;
+      expect(engine?.slice.committed.result).toBeNull();
+      apply("BATTLE_DEBUG", {
+        op: { kind: "setScore", side: "player", score: engine?.init.scoreToWin },
+      });
       apply("END_BATTLE", {});
 
       expect(state.journey.atlas.nodes[nodeId].state).toBe("completed");

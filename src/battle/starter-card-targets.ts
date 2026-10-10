@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { selectBattleCardLocation } from "./state/selectors";
 import type { BattleMutableState } from "./types";
 import { parseBattleCardId, type BattleCardId } from "../types/identifiers";

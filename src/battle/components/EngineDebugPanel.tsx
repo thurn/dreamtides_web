@@ -24,7 +24,7 @@ import { DEBUG_ZONES, revealHiddenZones, type DebugOp, type DebugZone } from "..
 import type { BattleSlice, HistoryEntry } from "../../engine/fold/slice";
 import { logEvent } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
-import type { BattleFoldState } from "../../rules/battle/fold";
+import type { JourneyBattleFoldState } from "../../rules/battle/fold";
 import { useActions } from "../../session/hooks";
 import { useJourney } from "../../state/journey-context";
 import { isCardId, parseCardId, type CardId } from "../../types/card-identity";
@@ -83,7 +83,7 @@ export default function EngineDebugPanel({
   battleId,
 }: {
   readonly engine: Engine;
-  readonly battle: BattleFoldState;
+  readonly battle: JourneyBattleFoldState;
   readonly battleId: BattleId;
 }): ReactElement {
   const actions = useActions();
@@ -94,8 +94,7 @@ export default function EngineDebugPanel({
   const [zone, setZone] = useState<DebugZone>("hand");
   const [revealed, setRevealed] = useState(false);
   const events = useRef<EngineProbeEvent[]>([]);
-  const slice = battle.engine?.slice;
-  if (slice === undefined) throw new Error("EngineDebugPanel requires an engine battle");
+  const slice = battle.engine.slice;
 
   usePublishedEngineEvents(engine, slice, ({ events: published, seq }) => {
     for (const event of published) {

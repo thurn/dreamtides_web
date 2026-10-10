@@ -9,10 +9,14 @@
 //     "Battle has begun" is a derivable fact of the log: the state carries the
 //     battle, so a reload lands on the right screen from fold state alone. It
 //     bounces when a battle is already in progress.
-//   - `END_BATTLE {}` derives the terminal outcome from the folded board. A
-//     journey victory commits the reward, Battle-site completion, Atlas
-//     advancement, route, modifier expiry, and battle teardown atomically.
-//     Defeat/draw freezes the failure summary and tears down the battle.
+//   - `END_BATTLE {}` derives the terminal outcome from the journey battle's
+//     engine battle. A victory commits the reward, Battle-site completion,
+//     Atlas advancement, route, modifier expiry, and battle teardown
+//     atomically. Defeat/draw freezes the failure summary and tears down the
+//     battle.
+//
+// The rest of this file folds the standalone tutorial battle's sandbox
+// board; its sections are marked tutorial-only.
 //
 // The src/rules/ lint rails forbid React and any live clock/rng.
 // Battle init reads catalog-sourced card / deck / avatar data that only loads
@@ -62,9 +66,7 @@ import { automaticBattleIntentKey } from "../../battle/automatic-intent-key";
 import { drawsDreamwellCardAtStartOfTurn } from "../../battle/state/turn-utils";
 import type {
   BattleModifier,
-  JourneyFailureBattleResult,
   JourneyFailureReason,
-  JourneyFailureSummary,
   JourneyState,
   Screen,
   DreamAtlas,
@@ -105,7 +107,10 @@ import {
   newEffectRun,
   battleModeOf,
   emptyDawnFired,
-  type BattleFoldState,
+  type JourneyBattleFoldState,
+  type TutorialBattleFoldState,
+  journeyBattleOf,
+  tutorialBattleOf,
   type ChallengeCursor,
   type ChallengeResolvedPresentation,
   type ChallengeScoredEntry,
@@ -161,12 +166,11 @@ import type {
   BattleEffectScriptId,
   DeckEntryId,
   IntentKey,
-  NoteId,
   SiteId,
   TutorialAiActionOverrideId,
   TutorialRunId,
 } from "../../types/identifiers";
-import { identityKeys, parseBattleCardId, parseBattleEffectScriptId, parseNoteId, parsePresentationId, parseSiteId, tutorialAiActionOverrideIdFromUnknown } from "../../types/identifiers";
+import { identityKeys, parseBattleCardId, parseBattleEffectScriptId, parsePresentationId, parseSiteId, tutorialAiActionOverrideIdFromUnknown } from "../../types/identifiers";
 import { parseTutorialRunId } from "../../types/identifiers";
 import { parseCardId } from "../../types/card-identity";
 
@@ -176,17 +180,17 @@ import { parseCardId } from "../../types/card-identity";
 
 /**
  * The deterministic construction `BEGIN_BATTLE` needs to turn journey state into
- * a fresh {@link BattleFoldState}. The reducer resolves double-begin itself,
- * then delegates the immutable `init` (`BattleInit`) plus board / avatar /
- * opponent-deck construction — which reads async-loaded card, avatar, and
- * dreamwell data — to this provider.
+ * a fresh {@link JourneyBattleFoldState}. The reducer resolves double-begin itself,
+ * then delegates the immutable `init` (`BattleInit`) and the engine init of
+ * the same battle — which read async-loaded card, avatar, and dreamwell
+ * data — to this provider.
  *
  * The registered provider (`createBattleInitProvider`) constructs the battle
  * deterministically from folded journey state: `createBattleInit` derives all of
  * its randomness from a `BattleRng` stream keyed by
- * `deriveBattleSeed(journey.seed:battleEntryKey)`, and `createInitialBattleState`
- * is pure. That seed comes straight from the folded journey, so every client on
- * the room builds a byte-identical battle from the same journey seed and site.
+ * `deriveBattleSeed(journey.seed:battleEntryKey)`. That seed comes straight
+ * from the folded journey, so every client builds a byte-identical battle
+ * from the same journey seed and site.
  * Until a provider is registered, `BEGIN_BATTLE` bounces (a recorded no-op,
  * never a throw).
  *
@@ -204,12 +208,10 @@ export interface BattleInitProvider {
    */
   readonly engine: Engine;
   /**
-   * Build the initial {@link BattleFoldState} for `siteId` deterministically
+   * Build the immutable `init` (`BattleInit`) for `siteId` deterministically
    * from `(journey, rng, timestamp)`, with the engine init of the same
    * battle, or `null` to bounce (e.g. the site is not a battle, or its
-   * content is unavailable). Must not mutate `journey`. The battle must
-   * populate the immutable `init` (`BattleInit`) and set `effectQueue: []`
-   * and `pendingPrompt: null`.
+   * content is unavailable). Must not mutate `journey`.
    */
   beginBattle(input: {
     journey: JourneyState;
@@ -221,9 +223,9 @@ export interface BattleInitProvider {
   }): BattleStart | null;
 }
 
-/** A new journey battle: the prototype battle and the engine init of the same battle. */
+/** A new journey battle: its init and the engine init of the same battle. */
 export interface BattleStart {
-  readonly battle: BattleFoldState;
+  readonly init: BattleInit;
   readonly engineInit: EngineBattleInit;
 }
 
@@ -235,12 +237,13 @@ export interface BattleStart {
 export interface BattleCompletionProvider {
   advanceAtlas(input: {
     journey: JourneyState;
-    battle: BattleFoldState;
+    battle: JourneyBattleFoldState;
     completionLevel: number;
     rng: (drawIndex: number) => number;
   }): DreamAtlas | null;
 }
 
+// tutorial-only until Phase 6
 /** Deterministic construction seam for the authored tutorial handoff. */
 export interface TutorialBattleInitProvider {
   beginTutorialBattle(input: {
@@ -251,7 +254,7 @@ export interface TutorialBattleInitProvider {
     seq: number;
     rng: (drawIndex: number) => number;
     timestamp: string;
-  }): BattleFoldState | null;
+  }): Omit<TutorialBattleFoldState, "mode"> | null;
 }
 
 let battleInitProvider: BattleInitProvider | null = null;
@@ -354,39 +357,32 @@ export function beginBattle(
 }
 
 /**
- * The journey battle `BEGIN_BATTLE` folds: `provider`'s prototype battle with
- * its engine battle started from the engine init of the same battle, in
- * journey mode with basic automation on. `null` when the provider declines or
- * the engine battle does not start. A QA scene that opens on an active battle
- * loads exactly this battle.
+ * The journey battle `BEGIN_BATTLE` folds: `provider`'s init with its engine
+ * battle started from the engine init of the same battle. `null` when the
+ * provider declines or the engine battle does not start. A QA scene that
+ * opens on an active battle loads exactly this battle.
  */
 export function startJourneyBattle(
   provider: BattleInitProvider,
   input: Parameters<BattleInitProvider["beginBattle"]>[0],
-): BattleFoldState | null {
+): JourneyBattleFoldState | null {
   const start = provider.beginBattle(input);
   if (start === null) {
     return null;
   }
-  const battle = startEngineBattle(
-    start.battle,
-    start.engineInit,
-    provider.engine,
-    input.seq,
-  );
-  if (battle === null) {
-    return null;
-  }
-  return {
-    ...battle,
-    mode: battle.mode ?? { kind: "journey" },
-    basicAutomationEnabled: true,
-  };
+  const engine = startEngineBattle(start.engineInit, provider.engine, input.seq);
+  return engine === null
+    ? null
+    : { mode: { kind: "journey" }, init: start.init, engine };
 }
 
 // ---------------------------------------------------------------------------
 // Tutorial battle lifecycle
 // ---------------------------------------------------------------------------
+
+// tutorial-only until Phase 6: everything from here to END_BATTLE, and from
+// BATTLE_COMMAND to the end of this file, folds the standalone tutorial
+// battle's sandbox board.
 
 function nonBlankString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
@@ -426,7 +422,7 @@ export function restartTutorialBattle(
   ctx: EventContext,
   actor: EventActor,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   const battleId = payload.battleId;
   const controllerClientId = state.playtestControl?.controllerClientId ?? null;
   if (
@@ -458,11 +454,12 @@ export function exitTutorialBattle(
   actor: EventActor,
 ): FoldState | null {
   const battleId = payload.battleId;
-  const mode = state.battle === null ? null : battleModeOf(state.battle);
+  const battle = tutorialBattleOf(state.battle);
+  const mode = battle === null ? null : battleModeOf(battle);
   if (
-    state.battle === null ||
+    battle === null ||
     !nonBlankString(battleId) ||
-    battleId !== state.battle.board.battleId ||
+    battleId !== battle.board.battleId ||
     mode?.kind !== "tutorial" ||
     state.playtestControl?.controllerClientId !== actor
   ) {
@@ -515,20 +512,6 @@ function buildTutorialBattle(
   };
 }
 
-/** Keeps automation enabled when folding persisted automation-setting events. */
-export function setBattleAutomation(
-  state: FoldState,
-  payload: Record<string, unknown>,
-): FoldState | null {
-  if (state.battle === null || typeof payload.enabled !== "boolean") {
-    return null;
-  }
-  return {
-    ...state,
-    battle: { ...state.battle, basicAutomationEnabled: true },
-  };
-}
-
 // ---------------------------------------------------------------------------
 // END_BATTLE
 // ---------------------------------------------------------------------------
@@ -537,34 +520,23 @@ export function setBattleAutomation(
 const FINAL_COMPLETION_LEVEL = 7;
 
 /**
- * `END_BATTLE {}`: derive the terminal result from the folded battle and
- * commit the complete journey handoff. The engine battle's result decides
- * once it has one; otherwise the prototype board's result does, while the
- * battle screen still plays the prototype board. Returns `null` while the
- * battle is not terminal or when its durable identity no longer matches the
- * journey state.
+ * `END_BATTLE {}`: derive the terminal result from the journey battle's
+ * engine battle and commit the complete journey handoff. Returns `null`
+ * while the engine battle has no result, for the tutorial battle, or when
+ * the battle's durable identity no longer matches the journey state.
  */
 export function endBattle(
   state: FoldState,
   _payload: Record<string, unknown>,
   ctx: EventContext,
 ): FoldState | null {
-  const battle = state.battle;
-  if (battle === null || battleModeOf(battle).kind !== "journey") {
-    return null;
-  }
-  const engineResult = engineBattleResult(battle);
-  if (engineResult !== null) {
-    return engineResult.kind === "victory" && engineResult.winner === "player"
-      ? applyVictory(state, battle, ctx)
-      : applyEngineDefeat(state, battle, engineResult);
-  }
-  if (battle.board.result === "victory") {
-    return applyVictory(state, battle, ctx);
-  }
-  return battle.board.result === "defeat" || battle.board.result === "draw"
-    ? applyDefeat(state, battle)
-    : null;
+  const battle = journeyBattleOf(state.battle);
+  if (battle === null) return null;
+  const result = engineBattleResult(battle);
+  if (result === null) return null;
+  return result.kind === "victory" && result.winner === "player"
+    ? applyVictory(state, battle, ctx)
+    : applyEngineDefeat(state, battle, result);
 }
 
 /**
@@ -575,7 +547,7 @@ export function endBattle(
  */
 function applyVictory(
   state: FoldState,
-  battle: BattleFoldState,
+  battle: JourneyBattleFoldState,
   ctx: EventContext,
 ): FoldState | null {
   const journey = state.journey;
@@ -646,24 +618,6 @@ function applyVictory(
 }
 
 /**
- * Defeat bookkeeping: freeze a
- * {@link JourneyFailureSummary} from the battle board + journey slice, route to the
- * `journeyFailed` screen, and tear down the battle slice.
- */
-function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
-  const journey = state.journey;
-  return {
-    ...state,
-    journey: {
-      ...journey,
-      failureSummary: deriveFailureSummary(battle.init, battle.board, journey),
-      screen: { type: "journeyFailed" },
-    },
-    battle: null,
-  };
-}
-
-/**
  * Defeat or draw of the engine battle: the failure summary comes from the
  * engine's committed state. A draw by the turn limit reports the turn limit,
  * a draw by an unbreakable loop (the resolution cap or a mandatory loop)
@@ -671,11 +625,11 @@ function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
  */
 function applyEngineDefeat(
   state: FoldState,
-  battle: BattleFoldState,
+  battle: JourneyBattleFoldState,
   result: EngineBattleResult,
 ): FoldState {
   const journey = state.journey;
-  const committed = battle.engine!.slice.committed;
+  const committed = battle.engine.slice.committed;
   const siteId = activeSiteIdOf(journey) ?? battle.init.siteId;
   const reason: JourneyFailureReason =
     result.kind !== "draw"
@@ -703,55 +657,6 @@ function applyEngineDefeat(
       screen: { type: "journeyFailed" },
     },
     battle: null,
-  };
-}
-
-/**
- * Derive the failure summary from the immutable battle `init`, the terminal
- * `board`, and the journey slice. `battleId`, `turnNumber`, and both scores come
- * from the board; `nodeIdOrNone` comes from the active journey position;
- * the win / turn-limit thresholds come from `init`.
- *
- * The failure `reason` mirrors the battle result evaluation:
- *   - a `forcedResult` (FORCE_RESULT / SKIP_TO_REWARDS) → `forced_result`;
- *   - otherwise a turn count at/over `init.turnLimit` with the player still
- *     short of `init.scoreToWin` → `turn_limit_reached`;
- *   - otherwise `score_target_reached`.
- *
- * SEAM (Task 27, UI): `siteLabel` is a display string that needs async site
- * content the pure reducer cannot reach (it is not on `BattleInit`), so it
- * defaults to the `siteId`; the UI resolves the human-facing label when it
- * renders the `journeyFailed` screen.
- */
-function deriveFailureSummary(
-  init: BattleInit,
-  board: BattleMutableState,
-  journey: JourneyState,
-): JourneyFailureSummary {
-  const result: JourneyFailureBattleResult =
-    board.result === "draw" ? "draw" : "defeat";
-  let reason: JourneyFailureReason;
-  if (board.forcedResult !== null) {
-    reason = "forced_result";
-  } else if (
-    board.turnNumber >= init.turnLimit &&
-    board.sides.player.score < init.scoreToWin
-  ) {
-    reason = "turn_limit_reached";
-  } else {
-    reason = "score_target_reached";
-  }
-  const siteId = activeSiteIdOf(journey) ?? init.siteId;
-  return {
-    battleId: board.battleId,
-    result,
-    reason,
-    siteId,
-    siteLabel: siteId,
-    nodeIdOrNone: journey.currentDreamscape,
-    turnNumber: board.turnNumber,
-    playerScore: board.sides.player.score,
-    enemyScore: board.sides.enemy.score,
   };
 }
 
@@ -783,7 +688,7 @@ const DISCOVER_CHARACTER_SOURCE_CARD_ID = parseCardId(
 
 function openTutorialGuidance(
   state: FoldState,
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   event: TutorialTriggerEvent,
   source: TutorialGuidanceSource,
   renderedText: string,
@@ -846,8 +751,8 @@ function openTutorialGuidance(
 
 function openFigmentCreatedGuidance(
   state: FoldState,
-  before: BattleFoldState,
-  after: BattleFoldState,
+  before: TutorialBattleFoldState,
+  after: TutorialBattleFoldState,
 ): FoldState | null {
   if ((after.tutorialPresentation ?? null) !== null) return null;
   const createdFigment = Object.values(after.board.cardInstances).find(
@@ -880,7 +785,7 @@ function openFigmentCreatedGuidance(
 
 /**
  * Folds ONE battle command through the full per-command trigger pipeline against
- * `battle`, returning the next {@link BattleFoldState} or `null` to bounce when a
+ * `battle`, returning the next {@link TutorialBattleFoldState} or `null` to bounce when a
  * prompt is already pending (root rule 4 also gates this; the guard is
  * defensive). The `seq`/`random`/`nowMs` are supplied by the caller so a SINGLE
  * continuing draw counter can span several commands folded in one event (a
@@ -910,12 +815,12 @@ function openFigmentCreatedGuidance(
  * lint rails.
  */
 function applyBattleCommandStep(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   command: BattleCommand,
   seq: number,
   random: () => number,
   nowMs: number,
-): BattleFoldState | null {
+): TutorialBattleFoldState | null {
   if (battle.pendingPrompt !== null) {
     return null;
   }
@@ -1122,7 +1027,7 @@ export function isPassiveHostedBattleHandoff(
   payload: Record<string, unknown>,
   intentKey: IntentKey | undefined,
 ): boolean {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   if (
     battle === null ||
     battleModeOf(battle).kind !== "journey" ||
@@ -1169,7 +1074,7 @@ function battleCommandInternal(
   actor: EventActor | undefined,
   suppressGuidance: boolean,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   if (battle === null) {
     return null;
   }
@@ -1364,7 +1269,7 @@ export function battleRepositionCharacter(
   ctx: EventContext,
   actor?: EventActor,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   if (battle === null || battleModeOf(battle).kind !== "tutorial") return null;
   if (
     !tutorialActorIsAuthorized(
@@ -1453,7 +1358,7 @@ function voidPlaySourceIsLegal(
 
 /** Tutorial events are driver-owned; automation may only use its bound actor. */
 function tutorialActorIsAuthorized(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   actor: EventActor | undefined,
   automatic: boolean,
   controllerClientId: ClientId | null,
@@ -1469,7 +1374,7 @@ function tutorialActorIsAuthorized(
 
 /** Limits driver gestures to the tutorial's declared player controls. */
 function tutorialCommandIsAuthorized(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   command: BattleCommand,
   actor: EventActor | undefined,
   controllerClientId: ClientId | null,
@@ -1556,7 +1461,7 @@ function battlePlayCardInternal(
   actor: EventActor | undefined,
   suppressGuidance: boolean,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   const intent = coerceBattlePlayCardIntent(payload);
   const mode = battle === null ? null : battleModeOf(battle);
   const controllerClientId = state.playtestControl?.controllerClientId ?? null;
@@ -1774,7 +1679,7 @@ function battlePlayCardInternal(
 }
 
 function battlePlayCardTransition(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   intent: BattlePlayCardIntent,
   instance: BattleCardInstance,
   scriptedOverride: ReturnType<typeof resolveTutorialAiPlayCardOverride>,
@@ -1815,7 +1720,7 @@ export function completeTutorialBattlePresentation(
   ctx: EventContext,
   actor?: EventActor,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   const presentation = battle?.tutorialPresentation ?? null;
   const mode = battle === null ? null : battleModeOf(battle);
   const controllerClientId = state.playtestControl?.controllerClientId ?? null;
@@ -1845,7 +1750,7 @@ export function completeTutorialBattlePresentation(
         },
       };
     }
-    const cleared: BattleFoldState = {
+    const cleared: TutorialBattleFoldState = {
       ...battle,
       tutorialPresentation: null,
     };
@@ -2094,7 +1999,7 @@ export function battleGesture(
   ctx: EventContext,
   actor?: EventActor,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   if (battle === null) {
     return null;
   }
@@ -2221,7 +2126,7 @@ export function battleAiBlock(
   ctx: EventContext,
   actor?: EventActor,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   const aiSide = payload.aiSide;
   if (
     battle === null ||
@@ -2268,10 +2173,11 @@ export function battleAiBlock(
   let nextBattle = battle;
   if (commands.length > 0) {
     const applied = battleGesture(state, { commands }, ctx, actor);
-    if (applied === null || applied.battle === null) {
+    const appliedBattle = applied === null ? null : tutorialBattleOf(applied.battle);
+    if (appliedBattle === null) {
       return null;
     }
-    nextBattle = applied.battle;
+    nextBattle = appliedBattle;
   }
 
   const blockers = declaredBlockers(battle.board, nextBattle.board, aiSide);
@@ -2451,7 +2357,7 @@ const CHALLENGE_LANE_COUNT = FRONT_RANK_SLOTS;
  */
 function challengeStartFor(
   command: BattleCommand,
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
 ): { command: BattleCommand; cursor: ChallengeCursor } | null {
   if (battle.challengeCursor !== null && battle.challengeCursor !== undefined)
     return null;
@@ -2522,11 +2428,11 @@ function isChallengeEntryCommand(command: BattleCommand): boolean {
  * again after its queue resumes.
  */
 function driveChallengeCursor(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   seq: number,
   random: () => number,
   nowMs: number,
-): BattleFoldState {
+): TutorialBattleFoldState {
   let current = battle;
   while (
     current.challengeCursor !== null &&
@@ -2693,7 +2599,7 @@ function challengeResolvedPresentation(input: {
 
 /** Applies the result policy at every authoritative score-changing seam. */
 function scoreOrTurnLimitResult(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   board: BattleMutableState,
 ): BattleResult | null {
   if (board.result !== null) return null;
@@ -3319,7 +3225,7 @@ export function resolvePrompt(
   ctx: EventContext,
   actor?: EventActor,
 ): FoldState | null {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   if (battle === null) {
     return null;
   }
@@ -3640,115 +3546,6 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
       orderedCardIds: (orderedCardIds as string[]).map(parseBattleCardId),
       voidCardIds: (voidCardIds as string[]).map(parseBattleCardId),
     };
-  }
-  return null;
-}
-
-// ---------------------------------------------------------------------------
-// SET_CARD_NOTE
-// ---------------------------------------------------------------------------
-
-/**
- * `SET_CARD_NOTE { instanceId, note }`: attach a player annotation to an in-play
- * card, applying the `ADD_CARD_NOTE` edit for the card note editor.
- *
- * CAS-exempt (root rule 1): a note carries no game-rules meaning, so it applies
- * even through a partner's intervening window AND while a prompt is open — the
- * root reducer routes it straight to this case, skipping rules 2–4. It never
- * touches `pendingPrompt` or the effect queue, so annotating a card mid-prompt
- * does not resolve or disturb the prompt.
- *
- * The note's `createdAtMs` comes from `ctx.timestamp` (the event's
- * `clientTimestamp`), not a live clock — honoring the src/rules/ lint rails and
- * keeping two clients' folds byte-identical. `createdAtTurnNumber` /
- * `createdAtSide` are stamped from the board by `applyDebugEdit`.
- *
- * Returns the next {@link FoldState}, or `null` to bounce when:
- *   - there is no battle (no card to annotate);
- *   - `instanceId` is missing/blank, or names no live card instance; or
- *   - `note` is not a well-formed `{ noteId, text, expiry }` object.
- */
-export function setCardNote(
-  state: FoldState,
-  payload: Record<string, unknown>,
-  ctx: EventContext,
-): FoldState | null {
-  const battle = state.battle;
-  if (battle === null) {
-    return null;
-  }
-  const instanceId = payload.instanceId;
-  if (typeof instanceId !== "string" || instanceId.length === 0) {
-    return null;
-  }
-  const battleCardId = parseBattleCardId(instanceId);
-  if (battle.board.cardInstances[battleCardId] === undefined) {
-    return null;
-  }
-  const note = coerceCardNote(payload.note);
-  if (note === null) {
-    return null;
-  }
-  const board = applyDebugEdit(
-    battle.board,
-    {
-      kind: "ADD_CARD_NOTE",
-      battleCardId,
-      noteId: note.noteId,
-      text: note.text,
-      createdAtMs: isoTimestampToMs(ctx.timestamp) ?? 0,
-      expiry: note.expiry,
-    },
-    EMISSION,
-  ).state;
-  return { ...state, battle: { ...battle, board } };
-}
-
-/**
- * Validates a raw `payload.note` into the `{ noteId, text, expiry }` shape the
- * `BattleCardNoteEditor` writes, or `null` to bounce a malformed note.
- */
-function coerceCardNote(
-  raw: unknown,
-): { noteId: NoteId; text: string; expiry: BattleCardNoteExpiry } | null {
-  if (typeof raw !== "object" || raw === null) {
-    return null;
-  }
-  const noteId = (raw as { noteId?: unknown }).noteId;
-  const text = (raw as { text?: unknown }).text;
-  if (typeof noteId !== "string" || noteId.length === 0) {
-    return null;
-  }
-  if (typeof text !== "string") {
-    return null;
-  }
-  const expiry = coerceNoteExpiry((raw as { expiry?: unknown }).expiry);
-  if (expiry === null) {
-    return null;
-  }
-  return { noteId: parseNoteId(noteId), text, expiry };
-}
-
-/** Validates a raw note expiry into a {@link BattleCardNoteExpiry}, else `null`. */
-function coerceNoteExpiry(raw: unknown): BattleCardNoteExpiry | null {
-  if (typeof raw !== "object" || raw === null) {
-    return null;
-  }
-  const kind = (raw as { kind?: unknown }).kind;
-  if (kind === "manual") {
-    return { kind: "manual" };
-  }
-  if (kind === "atStartOfTurn") {
-    const side = (raw as { side?: unknown }).side;
-    const turnNumber = (raw as { turnNumber?: unknown }).turnNumber;
-    if (
-      (side === "player" || side === "enemy") &&
-      typeof turnNumber === "number" &&
-      Number.isFinite(turnNumber)
-    ) {
-      return { kind: "atStartOfTurn", side, turnNumber };
-    }
-    return null;
   }
   return null;
 }

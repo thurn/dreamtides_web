@@ -47,7 +47,6 @@ import type {
   FrontDoorActionId,
   IntentKey,
   JourneyId,
-  NoteId,
   TutorialActionId,
   TutorialRunId,
 } from "../types/identifiers";
@@ -344,7 +343,7 @@ export interface GameActions {
     siteId: SiteId,
     seedOverride?: number | null,
   ) => Promise<number>;
-  setBattleAutomation: (enabled: boolean) => Promise<number>;
+  // --- the standalone tutorial battle (tutorial-only until Phase 6) ---
   battleCommand: (
     command: unknown,
     intentKey?: IntentKey,
@@ -393,10 +392,6 @@ export interface GameActions {
     resolution: unknown,
     intentKey?: IntentKey,
     actor?: EventActor,
-  ) => Promise<number>;
-  setCardNote: (
-    instanceId: BattleCardId,
-    note: { noteId: NoteId; text: string; expiry: unknown },
   ) => Promise<number>;
 
   // --- engine intents of a journey battle ---
@@ -816,8 +811,7 @@ export function makeActions(append: AppendFn): GameActions {
           ? {}
           : { seedOverride }),
       }),
-    setBattleAutomation: (enabled) =>
-      emit("SET_BATTLE_AUTOMATION", { enabled }),
+    // --- the standalone tutorial battle (tutorial-only until Phase 6) ---
     battleCommand: (command, intentKey, actor) =>
       emit("BATTLE_COMMAND", { command }, intentKey, actor),
     battleRepositionCharacter: (battleCardId, destination) =>
@@ -871,8 +865,6 @@ export function makeActions(append: AppendFn): GameActions {
       ),
     resolvePrompt: (promptId, resolution, intentKey, actor) =>
       emit("RESOLVE_PROMPT", { promptId, resolution }, intentKey, actor),
-    setCardNote: (instanceId, note) =>
-      emit("SET_CARD_NOTE", { instanceId, note }),
 
     // --- engine intents of a journey battle ---
     battleAction: (side, action, actor, intentKey) =>

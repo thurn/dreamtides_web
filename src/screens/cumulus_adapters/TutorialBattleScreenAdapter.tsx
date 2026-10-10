@@ -7,6 +7,7 @@ import { useFrontDoor } from "../../state/front-door-context";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
 import { useBattleTutorialGuidance } from "../../state/use-battle-tutorial-guidance";
 import { buildBattleTutorialGuidanceView } from "./battle-tutorial-guidance-view-model";
+import { tutorialBattleOf } from "../../rules/battle/fold";
 
 /** Live, controller-owned continuation of the standalone tutorial handoff. */
 export function TutorialBattleScreenAdapter({
@@ -15,7 +16,7 @@ export function TutorialBattleScreenAdapter({
   readonly previewVictory?: boolean;
 }) {
   const { battle: contextBattle, mutations } = useFrontDoor();
-  const battle = contextBattle ?? null;
+  const battle = tutorialBattleOf(contextBattle ?? null);
   const controller = useTutorialBattleController({ paused: previewVictory });
   const guidanceController = useBattleTutorialGuidance();
   const {

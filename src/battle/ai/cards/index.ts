@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import type { BattlefieldSlotId } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 

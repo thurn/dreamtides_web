@@ -94,7 +94,6 @@ export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 export type BattleAttemptId = DomainIdentity<"BattleAttemptId">;
 export type BattleEffectScriptId = DomainIdentity<"BattleEffectScriptId">;
 export type BattleEntryKey = DomainIdentity<"BattleEntryKey">;
-export type BattleHistoryCommandId = DomainIdentity<"BattleHistoryCommandId">;
 export type BattleId = DomainIdentity<"BattleId">;
 export type BattleSlotViewId = DomainIdentity<"BattleSlotViewId">;
 export type ChoiceId = DomainIdentity<"ChoiceId">;
@@ -167,8 +166,6 @@ const brandBattleAttemptId = identityConstructor<BattleAttemptId>();
 const brandBattleEffectScriptId =
   identityConstructor<BattleEffectScriptId>();
 const brandBattleEntryKey = identityConstructor<BattleEntryKey>();
-const brandBattleHistoryCommandId =
-  identityConstructor<BattleHistoryCommandId>();
 const brandBattleId = identityConstructor<BattleId>();
 const brandBattleSlotViewId = identityConstructor<BattleSlotViewId>();
 const brandChoiceId = identityConstructor<ChoiceId>();
@@ -295,10 +292,6 @@ export const parseBattleEffectScriptId = identityParser(
 export const parseBattleEntryKey = identityParser(
   "Battle entry key",
   brandBattleEntryKey,
-);
-export const parseBattleHistoryCommandId = identityParser(
-  "Battle history command id",
-  brandBattleHistoryCommandId,
 );
 export const parseBattleId = identityParser("Battle id", brandBattleId);
 export const parseBattleSlotViewId = identityParser(

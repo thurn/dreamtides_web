@@ -16,7 +16,7 @@ import type {
   FrontRankSlotId,
 } from "./types";
 import { getLogEntries, resetLog } from "../logging";
-import type { FoldState } from "../rules/fold-state";
+import type { TutorialFoldState as FoldState } from "./test-support";
 import type { EventOutcome, GameEvent } from "../eventlog/types";
 import type { BattleCardId, IntentKey } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";

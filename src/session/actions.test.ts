@@ -37,7 +37,7 @@ import { parseAtlasNodeId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
 import { parseShuffleCommitment } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
-import { parseNoteId, parsePromptId } from "../types/identifiers";
+import { parsePromptId } from "../types/identifiers";
 import { parseJourneyId } from "../types/identifiers";
 import { parseTutorialRunId } from "../types/identifiers";
 import { parseCardTutorialScreenKey } from "../types/identifiers";
@@ -256,7 +256,6 @@ function captureAllDrafts(): EventDraft[] {
   void actions.setCardSourceDebug(null);
   void actions.endBattle();
   void actions.beginBattle(parseSiteId("site-1"));
-  void actions.setBattleAutomation(true);
   void actions.battleCommand({});
   void actions.battleRepositionCharacter(parseBattleCardId("battle-card-1"), {
     side: "player",
@@ -272,11 +271,6 @@ function captureAllDrafts(): EventDraft[] {
     testEventActor("tutorial-ai:client-a"),
   );
   void actions.resolvePrompt(1, {});
-  void actions.setCardNote(parseBattleCardId("instance-1"), {
-    noteId: parseNoteId("n1"),
-    text: "t",
-    expiry: null,
-  });
   void actions.battleAction("player", { kind: "pass" });
   void actions.answerPrompt("player", parsePromptId("1:1:0"), 1);
   void actions.cancelPrompt("player", parsePromptId("1:1:0"));

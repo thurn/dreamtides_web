@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { actionToCommands } from "./ai/driver";
 import { planBlockingWithDecision, type BlockingDecision } from "./ai/blocking";
 import { forwardModelFromState } from "./ai/forward-model";
@@ -19,7 +21,8 @@ import type { TutorialBattleAiActionOverride } from "../types/tutorial";
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import {
   battleModeOf,
-  type BattleFoldState,
+  tutorialBattleOf,
+  type TutorialBattleFoldState,
   type PendingPrompt,
 } from "../rules/battle/fold";
 import type { FoldState } from "../rules/fold-state";
@@ -54,7 +57,7 @@ export interface TutorialAiActionOverrideMiss {
 }
 
 export type TutorialAutomaticIntentReason =
-  | NonNullable<BattleFoldState["tutorialPresentation"]>["kind"]
+  | NonNullable<TutorialBattleFoldState["tutorialPresentation"]>["kind"]
   | "resolve-dawn-triggers"
   | "reveal-dreamwell"
   | "advance-dawn"
@@ -138,7 +141,7 @@ export interface TutorialBattleControllerPlan {
 export function planTutorialBattleController(
   input: TutorialBattleControllerInput,
 ): TutorialBattleControllerPlan {
-  const battle = input.state.battle;
+  const battle = tutorialBattleOf(input.state.battle);
   if (battle === null || battleModeOf(battle).kind !== "tutorial") {
     return idlePlan("not-tutorial");
   }
@@ -563,7 +566,7 @@ function handoffPlan(
   state: FoldState,
   reason: TutorialAutomaticIntentReason,
 ): TutorialBattleControllerPlan {
-  const battle = state.battle;
+  const battle = tutorialBattleOf(state.battle);
   if (battle === null) return idlePlan("not-tutorial");
   const flowEdit = planHandoff({
     state: battle.board,
@@ -618,7 +621,7 @@ function deterministicPromptResolution(
 }
 
 function enemyHasChallenger(state: FoldState): boolean {
-  const board = state.battle?.board;
+  const board = tutorialBattleOf(state.battle)?.board;
   if (board === undefined) return false;
   return Object.values(board.sides.enemy.frontRank).some(
     (battleCardId) => battleCardId !== null,

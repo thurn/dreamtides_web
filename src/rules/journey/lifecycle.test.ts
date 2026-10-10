@@ -488,6 +488,7 @@ describe("RESET_JOURNEY", () => {
     state = {
       ...state,
       battle: {
+        mode: { kind: "tutorial" },
         board: {},
         effectQueue: [],
         pendingPrompt: null,
@@ -585,8 +586,14 @@ describe("RESET_JOURNEY initial state", () => {
 });
 
 describe("LOAD_STATE", () => {
-  /** A structurally-valid battle slice with nothing parked (no scriptRefs). */
+  /** A structurally-valid tutorial battle slice with nothing parked (no scriptRefs). */
   const emptyBattle = {
+    mode: {
+      kind: "tutorial",
+      tutorialRunId: "tutorial-run",
+      restartNumber: 0,
+      resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
+    },
     init: {},
     board: {},
     effectQueue: [],
@@ -613,7 +620,6 @@ describe("LOAD_STATE", () => {
     });
     expect(withBattle.battle).toEqual({
       ...emptyBattle,
-      mode: { kind: "journey" },
       challengeCursor: null,
     });
   });

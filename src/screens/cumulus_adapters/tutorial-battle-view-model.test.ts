@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { testCardName } from "../../types/test-identities";
 import type { MobileBattleView } from "../../cumulus/screens/MobileBattleScreen";
-import type { BattleFoldState } from "../../rules/battle/fold";
+import type { TutorialBattleFoldState } from "../../rules/battle/fold";
 import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-controller";
 import type { BattleCardInstance } from "../../battle/types";
 import { buildMobileBattleView } from "./mobile-battle-view-model";
@@ -92,7 +92,7 @@ describe("buildTutorialBattleView", () => {
           messageIndex: 0,
           continuation: { kind: "commands", commands: [] },
         },
-      } as unknown as BattleFoldState,
+      } as unknown as TutorialBattleFoldState,
       {
         status: "driver",
         isCurrentClientDriver: true,
@@ -196,7 +196,7 @@ describe("buildTutorialBattleView", () => {
         battleCardId: parseBattleCardId(battleCardId),
         cardKind: "character",
       },
-    } as unknown as BattleFoldState;
+    } as unknown as TutorialBattleFoldState;
 
     const view = buildTutorialBattleView(
       battle,
@@ -245,7 +245,7 @@ describe("buildTutorialBattleView", () => {
         ...battle.tutorialPresentation!,
         cardKind: "event",
       },
-    } as unknown as BattleFoldState;
+    } as unknown as TutorialBattleFoldState;
     const eventView = buildTutorialBattleView(
       eventBattle,
       {
@@ -306,7 +306,7 @@ describe("buildTutorialBattleView", () => {
           battleCardId: parseBattleCardId("missing-instance"),
           cardKind: "character",
         },
-      } as unknown as BattleFoldState,
+      } as unknown as TutorialBattleFoldState,
       {
         status: "driver",
         isCurrentClientDriver: true,
@@ -364,7 +364,7 @@ describe("buildTutorialBattleView", () => {
                   dissolved: [],
                 }),
           },
-        } as unknown as BattleFoldState,
+        } as unknown as TutorialBattleFoldState,
         {
           status: "driver",
           isCurrentClientDriver: true,
@@ -451,7 +451,7 @@ describe("buildTutorialBattleView", () => {
           { battleCardId: parseBattleCardId(enemyLoser), side: "enemy" },
         ],
       },
-    } as unknown as BattleFoldState;
+    } as unknown as TutorialBattleFoldState;
 
     const view = buildTutorialBattleView(
       battle,
@@ -509,7 +509,7 @@ describe("buildTutorialBattleView", () => {
         },
         board: { result: null },
         pendingPrompt: null,
-      } as BattleFoldState,
+      } as TutorialBattleFoldState,
       {
         status: "driver",
         isCurrentClientDriver: true,
@@ -554,7 +554,7 @@ describe("buildTutorialBattleView", () => {
       },
       board: { result: null },
       pendingPrompt: null,
-    } as unknown as BattleFoldState;
+    } as unknown as TutorialBattleFoldState;
     const activeController = {
       status: "driver",
       isCurrentClientDriver: true,
@@ -575,7 +575,7 @@ describe("buildTutorialBattleView", () => {
         {
           ...battle,
           board: { result: "victory" },
-        } as BattleFoldState,
+        } as TutorialBattleFoldState,
         {
           ...activeController,
           status: "observer",

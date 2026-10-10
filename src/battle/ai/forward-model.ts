@@ -1,13 +1,14 @@
+// tutorial-only until Phase 6
+
 import {
   isFigmentInstance,
   selectEffectiveSparkForInstance,
   selectFigmentCount,
   selectFigmentSparkContext,
 } from "../state/figments";
-import { supportedDeploySlots } from "../engine/support";
 import {
-  MIN_BACK_RANK_SLOTS,
-  MIN_FRONT_RANK_SLOTS,
+  BACK_RANK_SLOTS,
+  FRONT_RANK_SLOTS,
   backRankSlotIds,
   createEmptySlotRecord,
   frontRankSlotIds,
@@ -194,7 +195,7 @@ export function forwardModelFromState(
   // demand, so the AI's board is never capped.
   const aiFrontRank: Record<FrontRankSlotId, AiCard | null> =
     createEmptySlotRecord(
-      frontRankSlotIds(modelRankWindow(ai.frontRank, MIN_FRONT_RANK_SLOTS)),
+      frontRankSlotIds(modelRankWindow(ai.frontRank, FRONT_RANK_SLOTS)),
     );
   for (const slotId of rankSlotIds(aiFrontRank)) {
     const id = ai.frontRank[slotId] ?? null;
@@ -205,7 +206,7 @@ export function forwardModelFromState(
 
   const aiBackRank: Record<BackRankSlotId, AiCard | null> =
     createEmptySlotRecord(
-      backRankSlotIds(modelRankWindow(ai.backRank, MIN_BACK_RANK_SLOTS)),
+      backRankSlotIds(modelRankWindow(ai.backRank, BACK_RANK_SLOTS)),
     );
   for (const slotId of rankSlotIds(aiBackRank)) {
     const id = ai.backRank[slotId] ?? null;
@@ -264,55 +265,6 @@ export function forwardModelFromState(
     opponentHandCount: opponent.hand.length,
     opponentVoidCount: opponent.void.length,
   };
-}
-
-/**
- * Computes the effective spark of the AI card occupying `slot`, adding support
- * bonuses from back-rank cards whose `battleCardId` appears in
- * `supportSources`.
- *
- * Base spark = `basePrintedSpark * figmentCount + sparkDelta`.
- *
- * For each occupied back-rank slot whose card's `battleCardId` is a key in
- * `supportSources`, if that back-rank slot's adjacency covers `slot` (per
- * `supportedDeploySlots`), the mapped value is added to the total. Each
- * support source contributes its full value to every slot it covers
- * independently — the value is not divided across supported slots. A figment
- * stack receives that value once per member.
- *
- * Returns 0 if `slot` is empty.
- *
- * @param supportSources - Per back-rank `AiCard` `battleCardId`, the flat
- *   spark bonus it grants to each front slot it supports.
- */
-export function effectiveSpark(
-  model: ForwardModel,
-  slot: FrontRankSlotId,
-  supportSources: ReadonlyMap<BattleCardId, number>,
-): number {
-  const card = model.aiFrontRank[slot];
-  if (card === null) {
-    return 0;
-  }
-
-  const base = card.basePrintedSpark * card.figmentCount + card.sparkDelta;
-
-  let supportBonus = 0;
-  for (const backRankSlot of rankSlotIds(model.aiBackRank)) {
-    const backRankCard = model.aiBackRank[backRankSlot];
-    if (backRankCard === null) {
-      continue;
-    }
-    const bonus = supportSources.get(backRankCard.battleCardId);
-    if (bonus === undefined) {
-      continue;
-    }
-    if (supportedDeploySlots(backRankSlot).includes(slot)) {
-      supportBonus += bonus;
-    }
-  }
-
-  return base + supportBonus * card.figmentCount;
 }
 
 function cloneAiCard(card: AiCard): AiCard {

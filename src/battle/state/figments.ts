@@ -1,6 +1,7 @@
+// tutorial-only until Phase 6
+
 import type {
   BattleCardInstance,
-  BattleFieldSlotAddress,
   BattleMutableState,
   BattleSide,
 } from "../types";
@@ -223,51 +224,6 @@ export function selectFigmentReserveSpark(
   );
 }
 
-export function findBattlefieldFigmentStack(
-  state: BattleMutableState,
-  side: BattleSide,
-  subtype: CardSubtype,
-  excludeBattleCardId: BattleCardId | null = null,
-): { battleCardId: BattleCardId; location: BattleFieldSlotAddress } | null {
-  const normalizedSubtype = normalizeFigmentSubtype(subtype);
-
-  for (const slotId of rankSlotIds(state.sides[side].backRank)) {
-    const battleCardId = state.sides[side].backRank[slotId];
-    const instance =
-      battleCardId === null ? null : state.cardInstances[battleCardId];
-    if (
-      battleCardId !== null &&
-      battleCardId !== excludeBattleCardId &&
-      isFigmentInstance(instance) &&
-      normalizeFigmentSubtype(instance.definition.subtype) === normalizedSubtype
-    ) {
-      return {
-        battleCardId,
-        location: { side, zone: "backRank", slotId },
-      };
-    }
-  }
-
-  for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
-    const battleCardId = state.sides[side].frontRank[slotId];
-    const instance =
-      battleCardId === null ? null : state.cardInstances[battleCardId];
-    if (
-      battleCardId !== null &&
-      battleCardId !== excludeBattleCardId &&
-      isFigmentInstance(instance) &&
-      normalizeFigmentSubtype(instance.definition.subtype) === normalizedSubtype
-    ) {
-      return {
-        battleCardId,
-        location: { side, zone: "frontRank", slotId },
-      };
-    }
-  }
-
-  return null;
-}
-
 /**
  * Appends new figment members to the bottom of the stack as reserves (rules
  * §Figments — Stacks). New members enter at `baseSpark` and the topmost (index
@@ -290,24 +246,6 @@ export function addFigmentsToStackInPlace(
     members.push(baseSpark);
   }
   stack.figments = members;
-}
-
-/**
- * Merges the `incoming` member sparks onto the bottom of the stack as reserves,
- * preserving stack order. Used when one figment stack moves onto another of the
- * same type.
- */
-export function mergeFigmentsIntoStackInPlace(
-  state: BattleMutableState,
-  stackBattleCardId: BattleCardId,
-  incoming: readonly number[],
-): void {
-  const stack = state.cardInstances[stackBattleCardId];
-  if (!isFigmentInstance(stack)) {
-    return;
-  }
-
-  stack.figments = [...figmentMembers(stack), ...incoming];
 }
 
 export function canMergeFigments(
@@ -419,72 +357,6 @@ export function mergeFigmentSparkInPlace(
   if (assessment.kind !== "eligible") return null;
   destination.sparkDelta += assessment.addedSpark;
   return assessment;
-}
-
-export interface BattlefieldFigmentMergeTarget {
-  readonly destinationBattleCardId: BattleCardId;
-  readonly location: BattleFieldSlotAddress;
-  readonly assessment:
-    | Extract<FigmentMergeAssessment, { kind: "eligible" }>
-    | {
-        readonly kind: "ineligible";
-        readonly reason: "exhaustion-mismatch";
-      };
-}
-
-/**
- * Lists the occupied cells that read as merge destinations for one dragged
- * figment. Exhaustion-mismatched twins remain in the list so the UI can explain
- * why the attempted merge is blocked; unrelated occupants remain ordinary swap
- * targets.
- */
-export function selectBattlefieldFigmentMergeTargets(
-  state: BattleMutableState,
-  sourceBattleCardId: BattleCardId,
-): BattlefieldFigmentMergeTarget[] {
-  const source = state.cardInstances[sourceBattleCardId];
-  if (!isFigmentInstance(source)) return [];
-  const side = source.controller;
-  const result: BattlefieldFigmentMergeTarget[] = [];
-  const visit = (
-    zone: "backRank" | "frontRank",
-    slotId: BattleFieldSlotAddress["slotId"],
-  ): void => {
-    const destinationBattleCardId =
-      zone === "backRank"
-        ? state.sides[side].backRank[slotId as `B${number}`]
-        : state.sides[side].frontRank[slotId as `F${number}`];
-    if (
-      destinationBattleCardId === null ||
-      destinationBattleCardId === sourceBattleCardId
-    ) {
-      return;
-    }
-    const assessment = assessFigmentMerge(
-      source,
-      state.cardInstances[destinationBattleCardId],
-    );
-    if (
-      assessment.kind === "eligible" ||
-      assessment.reason === "exhaustion-mismatch"
-    ) {
-      result.push({
-        destinationBattleCardId,
-        location: { side, zone, slotId },
-        assessment:
-          assessment.kind === "eligible"
-            ? assessment
-            : { kind: "ineligible", reason: "exhaustion-mismatch" },
-      });
-    }
-  };
-  for (const slotId of rankSlotIds(state.sides[side].backRank)) {
-    visit("backRank", slotId);
-  }
-  for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
-    visit("frontRank", slotId);
-  }
-  return result;
 }
 
 /**

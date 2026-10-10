@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { isFrontRankSlotId, rankSlotIds } from "../types";
 import type { FrontRankSlotId, BackRankSlotId } from "../types";
 import type { AiCard, ForwardModel } from "./forward-model";
@@ -78,22 +80,6 @@ interface Challenger {
 interface BlockerChoice {
   blocker: BackRankBody;
   reason: BlockMoveReason;
-}
-
-/**
- * Plans the AI's blocking repositions against the opponent's committed
- * challengers, returning one `MOVE_CARD` action per lane the AI chooses to
- * block (back-rank body → the front-rank slot directly opposite the challenger).
- *
- * Lanes are blocked biggest-threat-first so the scarce back-rank bodies cover
- * the challengers that would score the most. A lane already holding an AI body
- * is left alone — that body already blocks it.
- */
-export function planBlocking(
-  model: ForwardModel,
-  opts: BlockingOptions,
-): PlannedAction[] {
-  return planBlockingWithDecision(model, opts).actions;
 }
 
 /**

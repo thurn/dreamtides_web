@@ -1,4 +1,6 @@
 import { testJourneySeed } from "../types/test-identities";
+import type { FoldState } from "../rules/fold-state";
+import type { TutorialBattleFoldState } from "../rules/battle/fold";
 import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type {
@@ -279,4 +281,26 @@ function makeDeckEntry(entryId: DeckEntryId, cardNumber: number): DeckEntry {
     transfiguration: null,
     isBane: false,
   };
+}
+
+// tutorial-only until Phase 6
+/** A fold whose battle, when present, is the standalone tutorial battle. */
+export type TutorialFoldState = Omit<FoldState, "battle"> & {
+  readonly battle: TutorialBattleFoldState | null;
+};
+
+/** `state`, typed as a tutorial fold; throws when it holds a journey battle. */
+export function asTutorialFold(state: FoldState): TutorialFoldState {
+  if (state.battle !== null && state.battle.mode.kind !== "tutorial") {
+    throw new Error("Expected the standalone tutorial battle.");
+  }
+  return state as TutorialFoldState;
+}
+
+/** A reduce result whose fold is typed as a tutorial fold. */
+export function asTutorialResult<Result extends { readonly state: FoldState }>(
+  result: Result,
+): Result & { readonly state: TutorialFoldState } {
+  asTutorialFold(result.state);
+  return result as Result & { readonly state: TutorialFoldState };
 }

@@ -12,7 +12,11 @@
 
 import { initialFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
-import { battleModeOf, resolveScript } from "../battle/fold";
+import { resolveScript } from "../battle/fold";
+import type {
+  JourneyBattleFoldState,
+  TutorialBattleFoldState,
+} from "../battle/fold";
 import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { ResolvedAvatarPackage } from "../../types/content";
 import type { JourneyState, SiteType } from "../../types/journey";
@@ -437,9 +441,11 @@ export function loadState(
  *   - no run field (`avatar` / `resolvedPackage` / `draftState`) that is
  *     currently non-null is nulled by the snapshot (the run-field nullability
  *     invariant the property sweep protects);
- *   - if a battle slice is supplied, it is a well-formed {@link BattleFoldState}
- *     whose every `effectQueue`/`pendingPrompt` `scriptRef` resolves in the live
- *     effect tables and whose cursors address real positions in that script.
+ *   - if a battle slice is supplied, it is a well-formed {@link BattleFoldState}:
+ *     a journey battle with its init and engine battle, or a tutorial battle
+ *     whose every `effectQueue`/`pendingPrompt` `scriptRef` resolves in the
+ *     live effect tables and whose cursors address real positions in that
+ *     script.
  *
  * Content values (card ids, costs, pool contents) are NOT asserted — only shape
  * and the fold invariants — so the check is resilient to catalog edits.
@@ -574,13 +580,42 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
 
 /**
  * Validates a raw battle payload into a {@link BattleFoldState}, or `null` when
- * it is malformed or references a script the live tables cannot resolve. The
- * board / init shapes are checked structurally; the fold-critical invariant is
- * that every parked run's `scriptRef` resolves and its `cursor` addresses a real
- * step, so the driver never drives a cursor off the end of an unknown script.
+ * it is malformed, names no known battle mode, or references a script the live
+ * tables cannot resolve. A journey battle keeps only its init and engine
+ * battle.
  */
 function asValidBattleFoldState(value: unknown): BattleFoldState | null {
-  if (!isRecord(value)) return null;
+  if (!isRecord(value) || !isRecord(value.mode)) return null;
+  if (value.mode.kind === "journey") return asValidJourneyBattle(value);
+  return value.mode.kind === "tutorial" ? asValidTutorialBattle(value) : null;
+}
+
+function asValidJourneyBattle(
+  value: Record<string, unknown>,
+): JourneyBattleFoldState | null {
+  const engine = value.engine;
+  if (
+    !isRecord(value.init) ||
+    !isRecord(engine) ||
+    !isRecord(engine.init) ||
+    !isRecord(engine.slice)
+  ) {
+    return null;
+  }
+  const loaded = value as unknown as JourneyBattleFoldState;
+  return { mode: { kind: "journey" }, init: loaded.init, engine: loaded.engine };
+}
+
+// tutorial-only until Phase 6
+/**
+ * The board / init shapes of a tutorial battle are checked structurally; the
+ * fold-critical invariant is that every parked run's `scriptRef` resolves and
+ * its `cursor` addresses a real step, so the driver never drives a cursor off
+ * the end of an unknown script.
+ */
+function asValidTutorialBattle(
+  value: Record<string, unknown>,
+): TutorialBattleFoldState | null {
   if (!isRecord(value.init) || !isRecord(value.board)) return null;
   if (!isRecord(value.dawnFired)) return null;
   if (
@@ -639,13 +674,12 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (pendingPrompt !== null) {
     if (!isValidPendingPrompt(pendingPrompt)) return null;
   }
-  const loaded = value as unknown as BattleFoldState;
+  const loaded = value as unknown as TutorialBattleFoldState;
   const board = loaded.board as unknown as Record<string, unknown>;
   const canNormalizeCards =
     isRecord(board.cardInstances) && isRecord(board.sides);
   return {
     ...loaded,
-    mode: battleModeOf(loaded),
     challengeCursor: loaded.challengeCursor ?? null,
     board: canNormalizeCards
       ? cloneBattleMutableState(loaded.board)

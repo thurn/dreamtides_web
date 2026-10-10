@@ -1,9 +1,11 @@
+// tutorial-only until Phase 6
+//
 // The fold-time effect-queue driver: the pure replacement for the reactive
 // `use-*-effect-runner.ts` hooks. It advances a battle's `effectQueue` of
 // automation runs, applying deterministic edit steps immediately and parking
 // on a `PendingPrompt` when a run needs player input, resuming when the prompt
 // resolves. Every function is an immutable-return pure transform of
-// `BattleFoldState` — it never mutates its input, so a fold can be retried and
+// `TutorialBattleFoldState` — it never mutates its input, so a fold can be retried and
 // two clients folding the same (seed, seq) converge byte-for-byte.
 //
 // CURSOR MODEL (see fold.ts). A run's position is a PATH of indices into the
@@ -23,8 +25,6 @@ import type {
   BattlefieldZone,
   BattleZoneId,
 } from "../../battle/types";
-import type { EventContext } from "../../eventlog/types";
-import { isoTimestampToMs } from "./timestamp";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { battleTriggerScriptId } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
@@ -35,7 +35,7 @@ import {
 } from "./effect-runner-core";
 import type { PromptResolution } from "./effect-runner-core";
 import type { EffectStep, StepContext } from "./effect-step";
-import type { BattleFoldState, EffectRun } from "./fold";
+import type { TutorialBattleFoldState, EffectRun } from "./fold";
 import { battleModeOf, newEffectRun, resolveScript } from "./fold";
 import { selectBattleCardLocation } from "../../battle/state/selectors";
 import type { BattleCardId } from "../../types/identifiers";
@@ -190,7 +190,7 @@ function applyEdits(
   board: BattleMutableState,
   edits: BattleDebugEdit[],
   queue?: EffectRun[],
-  battle?: BattleFoldState,
+  battle?: TutorialBattleFoldState,
 ): BattleMutableState {
   let next = board;
   for (const edit of edits) {
@@ -323,17 +323,17 @@ function isBattlefieldZone(zone: BattleZoneId): zone is BattlefieldZone {
  * Core loop shared by both entry points. Drives the queue while no prompt is
  * pending, using the caller-supplied `random`/`nowMs` so a single draw counter
  * spans the whole fold step (RESOLVE_PROMPT continues the same counter after
- * its resolution edits). Returns a fresh `BattleFoldState`.
+ * its resolution edits). Returns a fresh `TutorialBattleFoldState`.
  */
 function runQueue(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   board: BattleMutableState,
   queue: EffectRun[],
   seq: number,
   random: () => number,
   nowMs: number,
-  dawnFired: BattleFoldState["dawnFired"],
-): BattleFoldState {
+  dawnFired: TutorialBattleFoldState["dawnFired"],
+): TutorialBattleFoldState {
   let currentBoard = board;
   let currentQueue = queue;
   let stepsRun = 0;
@@ -490,31 +490,6 @@ function runQueue(
   };
 }
 
-/** Adapts `ctx.rng` (keyed by seq + drawIndex) into the `() => number` stream
- *  `StepContext.random` expects, with a single counter for the whole advance so
- *  successive draws are independent yet deterministic for (seed, seq). */
-function makeRandomStream(ctx: EventContext): () => number {
-  let drawIndex = 0;
-  return () => ctx.rng(drawIndex++);
-}
-
-/**
- * Advances `battle.effectQueue` until it needs input (a `pendingPrompt` is set)
- * or empties, applying deterministic edit steps to the board in place. A no-op
- * when a prompt is already pending. Immutable-return: `battle` is not mutated.
- */
-export function advanceEffectQueue(
-  battle: BattleFoldState,
-  ctx: EventContext,
-): BattleFoldState {
-  return advanceEffectQueueWithStream(
-    battle,
-    ctx.seq,
-    makeRandomStream(ctx),
-    isoTimestampToMs(ctx.timestamp) ?? 0,
-  );
-}
-
 /**
  * The stream-driven form of {@link advanceEffectQueue}: the caller supplies the
  * `random`/`nowMs` directly rather than an `EventContext`, so a SINGLE mutable
@@ -523,11 +498,11 @@ export function advanceEffectQueue(
  * no-op when a prompt is already pending. Immutable-return.
  */
 export function advanceEffectQueueWithStream(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   seq: number,
   random: () => number,
   nowMs: number,
-): BattleFoldState {
+): TutorialBattleFoldState {
   if (battle.pendingPrompt !== null) return battle;
   return runQueue(
     battle,
@@ -541,39 +516,18 @@ export function advanceEffectQueueWithStream(
 }
 
 /**
- * Resolves the open prompt: applies `applyPromptResolution` for the parked run,
- * applies the resulting edits, translates the resolution into the next cursor
- * (descending into `onYes` on a `confirm` "Yes"), then resumes advancing the
- * queue. Clears `pendingPrompt`. A no-op returning the input when no prompt is
- * pending. Immutable-return.
- */
-export function resolvePendingPrompt(
-  battle: BattleFoldState,
-  resolution: PromptResolution,
-  ctx: EventContext,
-): BattleFoldState {
-  return resolvePendingPromptWithStream(
-    battle,
-    resolution,
-    ctx.seq,
-    makeRandomStream(ctx),
-    isoTimestampToMs(ctx.timestamp) ?? 0,
-  );
-}
-
-/**
  * The stream-driven form of {@link resolvePendingPrompt}: the caller supplies
  * the `seq`/`random`/`nowMs` directly so the resolution's draws continue the
  * same counter a caller may use for a follow-on step (e.g. the post-drain
  * support recompute). Immutable-return.
  */
 export function resolvePendingPromptWithStream(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   resolution: PromptResolution,
   seq: number,
   random: () => number,
   nowMs: number,
-): BattleFoldState {
+): TutorialBattleFoldState {
   const pending = battle.pendingPrompt;
   if (pending === null) return battle;
 
@@ -667,7 +621,7 @@ export function resolvePendingPromptWithStream(
 
 /** Central score policy shared by every effect dispatch and prompt resolution. */
 function scoreTerminalResult(
-  battle: BattleFoldState,
+  battle: TutorialBattleFoldState,
   board: BattleMutableState,
 ): "victory" | "defeat" | null {
   if (board.result !== null) return null;

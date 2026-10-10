@@ -20,8 +20,6 @@ import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
 import { buildMobileDeckView, toDeckCardView } from "./mobile-deck-view-model";
 import { buildStartingDeckView as buildStartingDeckViewImpl } from "./starting-deck-view-model";
 import type { DraftState } from "../../types/draft";
-import { createBaseBattleDeckCardDefinition } from "../../battle/card-definition";
-import { createPoolCardDropCommand } from "../../battle/components/battle-ui-commands";
 import {
   buildPoolViewerView,
   DEFAULT_POOL_VIEWER_FILTERS,
@@ -482,23 +480,6 @@ describe("pool-viewer-view-model", () => {
       ).toBe(beta.id);
     });
 
-    it("carries a stable gallery entry through the pool-to-deck battle mutation", () => {
-      const entry = build().cards.find(
-        (item) => item.entryId === `run:${alpha.id}`,
-      );
-      if (entry === undefined) throw new Error("expected alpha pool entry");
-      const command = createPoolCardDropCommand(
-        createBaseBattleDeckCardDefinition(entry.model.displaySnapshot),
-        { side: "player", zone: "deck", position: "top" },
-        99,
-      );
-      if (command.id !== "DEBUG_EDIT") throw new Error("expected debug edit");
-      expect(command.edit).toMatchObject({
-        kind: "CREATE_CARD_FROM_DEFINITION",
-        definition: { cardId: entry.model.cardId },
-        destination: { side: "player", zone: "deck", position: "top" },
-      });
-    });
   });
 });
 

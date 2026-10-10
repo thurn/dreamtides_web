@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { starterCardModels } from "./cards/index";
 import type { AiTargetChoice } from "./cards/index";
 import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
@@ -486,52 +488,6 @@ function searchBestPlan(
   return best.actions;
 }
 
-/**
- * Cooperative variant of {@link searchBestPlan}: it explores the IDENTICAL tree
- * — same rounds, same beam, same tie-breaks — but `await`s `yieldFn` between
- * beam rounds so the browser can paint a frame and process input mid-search.
- * Keeping the AI's heavy planning off a single uninterrupted task is what keeps
- * the battle UI responsive during the AI's turn. The chosen action matches
- * {@link searchBestPlan} exactly; only the scheduling differs.
- */
-async function searchBestPlanAsync(
-  rootModel: ForwardModel,
-  opts: PlannerOptions,
-  yieldFn: () => Promise<void>,
-): Promise<PlanAction[]> {
-  const rootScore = scorePlan(rootModel, opts);
-  const root: BeamEntry = { model: rootModel, actions: [], score: rootScore };
-  let best: BeamEntry = root;
-
-  if (deadlineApproached(opts)) {
-    return best.actions;
-  }
-
-  let beam: BeamEntry[] = [root];
-  let expansionsRemaining = opts.expansionBudget ?? Number.POSITIVE_INFINITY;
-
-  const maxDepth = opts.maxSearchDepth ?? 16;
-  for (let depth = 0; depth < maxDepth; depth += 1) {
-    // Yield before each round after the first so the main thread is released
-    // between rounds rather than blocked for the whole search.
-    if (depth > 0) {
-      await yieldFn();
-    }
-    if (deadlineApproached(opts) || expansionsRemaining <= 0) {
-      break;
-    }
-    const round = expandBeamRound(beam, best, opts, expansionsRemaining);
-    best = round.best;
-    expansionsRemaining -= round.expansions;
-    if (round.done) {
-      break;
-    }
-    beam = round.beam;
-  }
-
-  return best.actions;
-}
-
 function planSortKey(entry: BeamEntry): AiActionKey {
   return parseAiActionKey(entry.actions.map(actionSortKey).join(">"));
 }
@@ -627,28 +583,6 @@ export function planNextAction(
   }
 
   const plan = searchBestPlan(model, opts);
-  if (plan.length === 0) {
-    return endTurnAction(opts.aiPresetId);
-  }
-  return buildPlannedAction(model, plan[0], opts);
-}
-
-/**
- * Cooperative variant of {@link planNextAction}: identical result, but the beam
- * search yields to the event loop (`yieldFn`) between rounds so the AI's turn
- * does not freeze the main thread. The hook drives the AI through this variant;
- * the synchronous {@link planNextAction} remains for tests and any non-UI caller.
- */
-export async function planNextActionAsync(
-  model: ForwardModel,
-  opts: PlannerOptions,
-  yieldFn: () => Promise<void>,
-): Promise<PlannedAction> {
-  if (deadlineApproached(opts)) {
-    return endTurnAction(opts.aiPresetId);
-  }
-
-  const plan = await searchBestPlanAsync(model, opts, yieldFn);
   if (plan.length === 0) {
     return endTurnAction(opts.aiPresetId);
   }

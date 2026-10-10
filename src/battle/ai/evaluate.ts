@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { buildSupportContribution } from "./cards/support-contribution";
 import { starterCardModels } from "./cards/index";
 import { rankSlotIds } from "../types";

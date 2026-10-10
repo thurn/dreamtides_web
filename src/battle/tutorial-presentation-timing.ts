@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { BATTLE } from "../content/battle";
 import type { TutorialGuidancePresentation } from "../rules/battle/fold";
 

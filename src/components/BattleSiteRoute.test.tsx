@@ -26,8 +26,7 @@ import {
   makeBattleTestState,
 } from "../battle/test-support";
 import { createTestBattleInit } from "../testing/create-battle-init";
-import { createInitialBattleState } from "../battle/state/create-initial-state";
-import { emptyDawnFired } from "../rules/battle/fold";
+import type { JourneyBattleFoldState } from "../rules/battle/fold";
 import {
   parseAtlasNodeId,
   parseBattleEntryKey,
@@ -75,7 +74,7 @@ vi.mock("../battle/components/PlayableBattleScreen", async () => {
       return (
         <div
           data-screen="cumulus-playable"
-          data-battle-id={battle.board.battleId}
+          data-battle-id={battle.init.battleId}
           data-battle-entry-key={battle.init.battleEntryKey}
         />
       );
@@ -135,12 +134,11 @@ function setFold({
       dreamwellCards: [],
       seedOverride: 1234,
     });
+    // The playable-screen mock never reads the engine battle.
     battle = {
+      mode: { kind: "journey" },
       init,
-      board: createInitialBattleState(init),
-      effectQueue: [],
-      pendingPrompt: null,
-      dawnFired: emptyDawnFired(),
+      engine: {} as JourneyBattleFoldState["engine"],
     };
   }
   mockGameState = {
@@ -186,7 +184,6 @@ function route(seedOverride: number | null = null): ReactElement {
       cardDatabase={makeBattleTestCardDatabase()}
       runtimeConfig={{
         seedOverride,
-        aiMode: false,
         gameId: null,
       }}
     />
@@ -271,7 +268,7 @@ describe("BattleSiteRoute", () => {
     const playable = view.playable();
     expect(playable?.getAttribute("data-battle-entry-key")).toBe(ENTRY_KEY);
     expect(playable?.getAttribute("data-battle-id")).toBe(
-      mockGameState.battle?.board.battleId,
+      mockGameState.battle?.init.battleId,
     );
     expect(view.start()).toBeNull();
     expect(

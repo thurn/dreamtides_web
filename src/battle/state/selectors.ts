@@ -1,15 +1,13 @@
-import type { JourneyFailureBattleResult } from "../../types/journey";
+// tutorial-only until Phase 6
+
 import type {
   BattleCardInstance,
   BattleCardLocation,
   BattleFieldCardLocation,
   BattleFieldSlotAddress,
-  BattleHistoryEntry,
   BattleMutableState,
-  BattleJourneyDeckEntry,
   BattleSide,
   BattlefieldZone,
-  FrontRankSlotId,
 } from "../types";
 import {
   BACK_RANK_SLOTS,
@@ -19,41 +17,8 @@ import {
   rankSlotIds,
   slotIndex,
 } from "../types";
-import {
-  selectEffectiveSparkForInstance,
-  selectFigmentSparkContext,
-} from "./figments";
-import { cardIsRevealedTo } from "./card-visibility";
 import { centerPreferredEmptySlot } from "../center-preferred-slot";
 import type { BattleCardId } from "../../types/identifiers";
-
-/**
- * Summary of B-5 journey deck metadata captured at battle-init time. The
- * `journeyDeckEntries` mirror on `BattleInit` is spec-mandated (every battle
- * session must retain the journey-deck identity of each card it draws from)
- * and exposed through this selector so the Battle Inspector can render the
- * "N Nightmares / M transfigured" line required by spec §B-21 without walking the
- * mutable card-instance graph (bug-037).
- */
-export function selectBattleJourneyDeckSummary(
-  journeyDeckEntries: readonly BattleJourneyDeckEntry[],
-): { totalEntries: number; nightmareCount: number; transfiguredCount: number } {
-  let nightmareCount = 0;
-  let transfiguredCount = 0;
-  for (const entry of journeyDeckEntries) {
-    if (entry.isBane) {
-      nightmareCount += 1;
-    }
-    if (entry.transfiguration !== null) {
-      transfiguredCount += 1;
-    }
-  }
-  return {
-    totalEntries: journeyDeckEntries.length,
-    nightmareCount,
-    transfiguredCount,
-  };
-}
 
 export function selectBattleCardInstance(
   state: BattleMutableState,
@@ -106,90 +71,6 @@ export function selectKindleTargetBattleCardId(
   }
 
   return null;
-}
-
-export function selectCardHasPreventedMarker(
-  instance: BattleCardInstance,
-): boolean {
-  return instance.markers.isPrevented;
-}
-
-export function selectCardHasCopiedMarker(
-  instance: BattleCardInstance,
-): boolean {
-  return instance.markers.isCopied;
-}
-
-export function selectCardHasMarker(instance: BattleCardInstance): boolean {
-  return instance.markers.isPrevented || instance.markers.isCopied;
-}
-
-export function selectCardHasNotes(instance: BattleCardInstance): boolean {
-  return instance.notes.length > 0;
-}
-
-/**
- * Returns the effective spark for a card instance, or `null` when the id
- * is missing or not resolvable. Prefer this over `selectEffectiveSparkOrZero`
- * anywhere that needs to distinguish "spark of 0" from "card gone" — e.g.
- * mid-judgment evaluation after a dissolve (spec §D-5) where a freshly-voided
- * card is no longer in `cardInstances` and must not contribute 0 to scoring
- * silently (bug-041).
- */
-export function selectEffectiveSpark(
-  state: BattleMutableState,
-  battleCardId: BattleCardId | null,
-): number | null {
-  const instance = selectBattleCardInstance(state, battleCardId);
-  if (instance === null) {
-    return null;
-  }
-
-  return selectEffectiveSparkForInstance(
-    instance,
-    selectFigmentSparkContext(state, instance),
-  );
-}
-
-/**
- * Like `selectEffectiveSpark` but coalesces a missing card to 0. Only use
- * this for display surfaces (hand tray, zone browser, inspector) where
- * rendering zero for a transient missing instance is acceptable (bug-041).
- */
-export function selectEffectiveSparkOrZero(
-  state: BattleMutableState,
-  battleCardId: BattleCardId | null,
-): number {
-  return selectEffectiveSpark(state, battleCardId) ?? 0;
-}
-
-export function selectDeployedSpark(
-  state: BattleMutableState,
-  side: BattleSide,
-  slotId: FrontRankSlotId,
-): number {
-  return selectEffectiveSparkOrZero(state, state.sides[side].frontRank[slotId]);
-}
-
-export function selectFailureOverlayResult(
-  result: BattleMutableState["result"],
-): JourneyFailureBattleResult | null {
-  if (result === "defeat" || result === "draw") {
-    return result;
-  }
-
-  return null;
-}
-
-/**
- * Returns the turn number recorded in the `after` snapshot of a history
- * entry. The compact log drawer groups entries by this value so every
- * committed action lines up under the turn it landed on (§5.5 decision 1).
- */
-export function selectHistoryEntryTurnNumber(
-  entry: BattleHistoryEntry,
-): number {
-  return entry.after.mutable.turnNumber;
 }
 
 export function selectBattleCardLocation(
@@ -278,53 +159,6 @@ export function selectBattlefieldCardLocation(
 }
 
 /**
- * Returns true when the card is an enemy hand entry that the player cannot
- * see. Consolidates the opponent-hand visibility invariant used by
- * selection filtering in the battle screen and the zone browser so all
- * three consumers of the rule share one definition (spec §I-16, I-18).
- *
- * bug-047: a missing `cardInstances[battleCardId]` on a card we've located in
- * enemy hand defaults to *hidden* rather than *visible* — a torn state where
- * the location index mentions an id with no backing instance is exactly the
- * kind of race the zone browser's placeholder is meant to handle, and
- * defaulting to visible would leak enemy hand information.
- */
-export function selectIsOpponentHandCardHidden(
-  state: BattleMutableState,
-  battleCardId: BattleCardId | null,
-): boolean {
-  if (battleCardId === null) {
-    return false;
-  }
-
-  const location = selectBattleCardLocation(state, battleCardId);
-  if (location === null) {
-    return false;
-  }
-
-  if (location.side !== "enemy" || location.zone !== "hand") {
-    return false;
-  }
-
-  const instance = state.cardInstances[battleCardId];
-  if (instance === undefined) {
-    return true;
-  }
-  return !cardIsRevealedTo(instance, "player");
-}
-
-export function selectIsHandCardHiddenTo(
-  state: BattleMutableState,
-  battleCardId: BattleCardId,
-  viewer: BattleSide,
-): boolean {
-  const location = selectBattleCardLocation(state, battleCardId);
-  if (location?.zone !== "hand" || location.side === viewer) return false;
-  const instance = state.cardInstances[battleCardId];
-  return instance === undefined || !cardIsRevealedTo(instance, viewer);
-}
-
-/**
  * The rules-level dimensions for either side. They do not depend on occupancy,
  * so presentation adapters retain stable slot positions across battle handoff.
  */
@@ -333,16 +167,6 @@ export function selectSidePlayAreaSize(
   _side: BattleSide,
 ): { frontSize: number; backSize: number } {
   return { frontSize: FRONT_RANK_SLOTS, backSize: BACK_RANK_SLOTS };
-}
-
-/**
- * The fixed play-area dimensions exposed to gameplay and presentation.
- */
-export function selectPlayAreaSize(state: BattleMutableState): {
-  frontSize: number;
-  backSize: number;
-} {
-  return selectSidePlayAreaSize(state, "player");
 }
 
 export function selectDefaultCharacterPlaySlot(

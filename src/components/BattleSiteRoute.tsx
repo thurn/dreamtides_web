@@ -99,7 +99,7 @@ export function BattleSiteRoute({
 
   return (
     <CumulusJourneyChrome variant="battle">
-      <PlayableBattleScreen site={site} aiMode={runtimeConfig.aiMode} />
+      <PlayableBattleScreen />
     </CumulusJourneyChrome>
   );
 }

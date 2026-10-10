@@ -47,19 +47,16 @@ export interface BuildPoolViewerViewInput {
   frame: "fullScreen" | "floating";
 }
 
-/** External state/effect inputs for the thin shared PoolViewer adapter. */
+/** External state/effect inputs for the thin PoolViewer adapter. */
 export interface PoolViewerAdapterInput {
   cardDatabase: ReadonlyMap<number, CardData>;
   draftState: DraftState | null;
   isOpen: boolean;
   onClose: () => void;
-  onPoolCardDragEnd?: () => void;
-  onPoolCardDragStart?: (card: CardData) => void;
   poolVariant?: PoolVariant | null;
   resolvedPackage?: ResolvedAvatarPackage | null;
   tides4Provenance?: Tides4ProvenanceSummary | null;
   title?: PoolViewerTitleKind;
-  variant?: "overlay" | "floating";
 }
 
 /** Maps complete domain inputs into deterministic screen data with UUID-based identity. */

@@ -195,7 +195,6 @@ and `npm run review:full` runs that build.
 | --- | --- |
 | `goto=<scene>` | Boot a fresh game straight onto a screen (below) |
 | `seed=<n>` | Fixed seed (non-negative integer) for the game the URL creates and its battles |
-| `ai=1` | Local AI proposes enemy battle actions for approval on the prototype board of a battle without an engine battle |
 | `ai=random` / `ai=greedy` | The policy the AI host runs for the enemy of the engine battle (default `greedy`) |
 | `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
@@ -339,9 +338,11 @@ when any verdict is `fail`.
   player's `BATTLE_ACTION`, `BATTLE_ANSWER`, and `BATTLE_CANCEL` intents; the
   view model is `src/screens/cumulus_adapters/engine-battle-view-model.ts`
   and its prompt mapping `engine-battle-prompt-view-model.ts`. The enemy is
-  the AI host in a Web Worker (`src/battle/engine-ai/`). The prototype board,
-  its structural automation, and the proposal-based AI in `src/battle/` and
-  `src/rules/battle/` still back the tutorial battle.
+  the AI host in a Web Worker (`src/battle/engine-ai/`). The standalone
+  tutorial battle (fold mode `tutorial`) plays a sandbox board with its own
+  scripted automation and planner in `src/battle/` and `src/rules/battle/`;
+  each module only it uses starts with a `// tutorial-only until Phase 6`
+  header.
 - **UI.** Screens are built from the Cumulus design system (`src/cumulus/`):
   a view-model builder and adapter in `src/screens/cumulus_adapters/` turn
   journey state into a screen's props, and `src/components/` routes screens

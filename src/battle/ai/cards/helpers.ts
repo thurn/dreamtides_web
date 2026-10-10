@@ -1,3 +1,5 @@
+// tutorial-only until Phase 6
+
 import { BACK_RANK_SLOTS, backRankSlotId } from "../../types";
 import {
   centerPreferredEmptyModelSlot,
