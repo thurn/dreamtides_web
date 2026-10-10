@@ -1014,7 +1014,10 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
   3. Retry with backoff: 1 minute, then 5, then 15.
 
   Never bypass Tollgate with raw `git push`. Never kill a Tollgate that is
-  making progress.
+  making progress. When a Tollgate defect causes the outage, fix it at its
+  cause under D16's
+  [tooling-fix exception](decisions.md#d16-pre-flight-and-the-agents-footprint)
+  instead of waiting it out.
 - **Before stopping for any reason,** invoke `justiciar` in the same session
   and follow the Hive executor recovery protocol. That means:
   - repair or relax only agent-imposed constraints, and record the change;

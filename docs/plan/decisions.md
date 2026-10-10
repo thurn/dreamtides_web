@@ -499,6 +499,20 @@ Two runtime exceptions:
 - The agent restarts the Tollgate app as Tollgate's own self-install rule
   requires after a Track T promotion (D45).
 
+One tooling-fix exception, from Hive's recovery rule
+(`~/hive/skills/shared/repair.md`, "Choosing a resolution"): a defect in Hive
+or Tollgate that blocks the run is not an external dependency, and the agent
+fixes it at its cause.
+
+- The fix is its own bead, filed in this project like a Track T bead.
+- It follows that repository's AGENTS.md. For Tollgate that means its `wt`
+  flow, its gate, and the D45 self-install: build from the promoted
+  `release` OID, install only when no validation is running, and land when
+  `tg --no-launch doctor` is healthy.
+- D45's standing promotion authority covers the fix.
+- This recovery mandate is the cross-project authorization for that
+  repository. Record the exception on both the fix bead and the blocked bead.
+
 ### D17. Machine resources
 
 The machine is shared with other agents. Keep sustained load at about 6 cores:

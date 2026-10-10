@@ -33,8 +33,11 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
   core-review; see the Reviews section of `docs/plan/workflow.md`. This
   explicitly authorizes more than one review per session.
 - Never deploy, upload assets, or run `npm run deploy`. Touch other
-  repositories only as decision D16 allows for Track T. Never touch other
-  Hive projects' beads or shared Hive configuration.
+  repositories only as decision D16 allows: for Track T, and under its
+  tooling-fix exception, where a Hive or Tollgate defect blocking the run is
+  fixed at its cause as its own bead under that repository's AGENTS.md, with
+  D45's promotion authority. Never touch other Hive projects' beads or shared
+  Hive configuration.
 - Do not print a summary of changes.
 
 # Invariants

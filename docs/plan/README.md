@@ -247,8 +247,9 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
   `master` after each promotion (`sync_user_master`). Never push worktree
   branches.
 - **Never deploy.** Touch other repositories only as
-  [D16](decisions.md#d16-pre-flight-and-the-agents-footprint) allows for
-  Track T. Never touch other Hive projects' beads or shared Hive
+  [D16](decisions.md#d16-pre-flight-and-the-agents-footprint) allows: for
+  Track T, and under its tooling-fix exception for a Hive or Tollgate defect
+  that blocks the run. Never touch other Hive projects' beads or shared Hive
   configuration.
 
 ## Evidence and ledgers
