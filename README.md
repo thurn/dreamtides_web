@@ -71,6 +71,75 @@ QA runs through the globally configured Playwright MCP service
 against your own Vite server on port **5174 or higher**. Port 5173 belongs to
 the developer. Never launch browsers directly.
 
+### Scenario runner
+
+Scripted QA runs as a scenario through the runner, which owns the server, the
+MCP client, the error buffer, and the captures:
+
+```bash
+node scripts/qa/run-scenario.mjs smoke --bead <bead-id>          # dev server
+node scripts/qa/run-scenario.mjs smoke --bead <bead-id> --prod   # vite build + vite preview
+```
+
+| Option | Effect |
+| --- | --- |
+| `--bead <id>` | Required. Captures and the report go to `artifacts/qa/<id>/` of the primary checkout |
+| `--port <n>` | Serve on `n` (5174 or higher); default: the first free port from 5174 |
+| `--prod` | Build into a temporary directory and serve it with `vite preview`; unminified, so `__caps` names real identifiers |
+| `--minify` | With `--prod`, keep the production minifier |
+| `--cwd <checkout>` | Serve another checkout, such as a detached base worktree outside the repository |
+| `--arg key=value` | Passed to the scenario as `qa.args` |
+| `--timeout <s>` | Scenario time limit (default 900) |
+
+The runner starts its server in its own process group (`scripts/dev.mjs`, or
+`vite preview`), connects its own MCP client with the primary checkout as the
+first root (`scripts/screenshot-runtime.mjs`), runs the scenario, and stops
+that process group on exit or on SIGINT/SIGTERM, then reports whether the
+port is free. It prints a JSON report (result, log, captures, every document
+whose `__caps` was not empty, wall times, host load) and writes it to
+`artifacts/qa/<bead-id>/<scenario>[-prod].result.json`, beside the server's
+log. It exits 1 when the scenario throws or any `__caps` is not empty.
+
+`<scenario>` is a module path, a tracked scenario
+(`scripts/qa/scenarios/<name>.mjs`), or a bead-local one
+(`artifacts/qa/<bead-id>/<name>.mjs`). Its default export is one
+self-contained function, `async (qa) => result`. The runner sends its source,
+after the helper prelude (`scripts/qa/prelude.mjs`), to the MCP's
+`browser_run_code_unsafe`, so it runs in the MCP server with a Playwright
+page and may not read its module's other bindings or imports. The sandbox
+has no `URL` global. The helpers:
+
+- `qa.open(route, viewport?)`: sizes the viewport (`qa.viewports.desktop`
+  1440×900 by default, or `qa.viewports.mobile` 390×844), loads the route on
+  the runner's server, and asserts the origin, the viewport, and an empty
+  `__caps`. `__caps` is installed by `page.addInitScript`, so it records
+  load-time errors too.
+- `qa.click(target, { position?, minOpacity?, rest?, timeout? })`: waits
+  until the target is rendered and `elementFromPoint` at its centre (or
+  `position` in its box) is the target or inside it, clicks there with the
+  pointer, then rests the pointer outside the viewport so no hover preview
+  stays. A click on a covered target fails naming the covering element.
+  Floating or animating targets need no stability wait.
+- `qa.waitVisible(target, { minOpacity?, timeout? })`: waits until an element
+  is in the viewport with an effective opacity (the product over its
+  ancestors) of at least 0.95, so text that is in the DOM before it fades in
+  does not count.
+- A `target` is a CSS selector or `{ text: "<regex source>" }`, the deepest
+  elements whose text matches.
+- `qa.capture(name)` writes `artifacts/qa/<bead-id>/<name>.png` at CSS scale.
+- `qa.caps()`, `qa.assertCaps(label)`, `qa.note(label, data)`,
+  `qa.sleep(ms)`, and `qa.page` for anything else.
+- Waits and clicks fail at once when `__caps` records an error or rejection.
+
+`smoke` walks a fresh seed-1 game from the front door through Avatar
+selection, every Layer 1 site, and Battle Start, then passes until the AI has
+taken one turn. It uses no development-only parameter, so phase gates run it
+with `--prod`.
+
+### Interactive QA
+
+For exploratory QA with the MCP tools directly:
+
 1. **Start and track your server:** `npm run dev -- --port 5174`. It starts a
    process tree (npm, the dev wrapper, and Vite). Stop exactly
    that tree when done, never `pkill -f vite`, and confirm the port is free:
@@ -78,7 +147,9 @@ the developer. Never launch browsers directly.
 2. **Assert before acting.** Before every measurement or screenshot, evaluate
    `() => ({ href: location.href, width: innerWidth, height: innerHeight })`
    and confirm the port and viewport. Set the viewport with `browser_resize`.
-3. **Capture errors.** Right after each full navigation, install the buffer:
+3. **Capture errors.** Right after each full navigation, install the buffer.
+   It misses errors thrown while the page loads; the runner's init script
+   does not.
 
    ```js
    () => {
@@ -160,7 +231,8 @@ scene on every load.
   engine and the AI worker's catalog. Fixtures: `targets` (board targets with
   Cancel; up to two targets on the card picker), `auto-target` (an automatic
   answer and its notice), `choices` (a mode, a you-may, and an X cost),
-  `foresee`, `draw-discard` (present, then ask), `offering` (play route and
+  `up-to-one-target` (one optional target, or Skip), `arrange` (a cancellable
+  arrangement among the top, the bottom, and the hand), `foresee`, `draw-discard` (present, then ask), `offering` (play route and
   offering cost), `void-cost` (the gallery card picker), `reclaim` (Reclaim
   from the void, Avatar and Dreamsign abilities from the status display),
   `capacity` (a full back rank), `ai-discard` (the human discards during the

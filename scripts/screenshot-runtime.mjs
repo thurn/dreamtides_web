@@ -40,10 +40,16 @@ export async function connectPlaywrightMcp({
     /**
      * @param {string} name
      * @param {Record<string, unknown>} [args]
+     * @param {{ timeoutMs?: number }} [options] The request timeout; the
+     *   SDK's default is 60 s, too short for a long scenario.
      * @returns {Promise<McpToolResult>}
      */
-    async call(name, args = {}) {
-      const result = await client.callTool({ name, arguments: args });
+    async call(name, args = {}, { timeoutMs } = {}) {
+      const result = await client.callTool(
+        { name, arguments: args },
+        undefined,
+        timeoutMs === undefined ? undefined : { timeout: timeoutMs },
+      );
       if (result.isError) {
         throw new Error(mcpText(result) || `${name} failed`);
       }

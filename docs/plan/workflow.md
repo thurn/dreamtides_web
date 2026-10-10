@@ -710,9 +710,40 @@ never shares a context. Script-driven tools such as the card sweep and
 `scripts/screenshot-runtime.mjs` open their own MCP client, on their own
 port.
 
+### Scenario runner
+
+Scripted browser QA is a scenario run by the runner, not a one-off script
+that repeats the server, error buffer, click, wait, and capture plumbing:
+
+```sh
+node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--prod]
+```
+
+- **What it owns.** It serves the worktree on the first free port from 5174
+  (dev server, or with `--prod` a `vite build` served by `vite preview`),
+  opens its own MCP client with the primary checkout as the first root,
+  installs `__caps` as an init script so load-time errors count, and stops
+  its own process group on exit or signal. The report lands in
+  `artifacts/qa/<bead-id>/<scenario>[-prod].result.json`; it exits non-zero
+  when the scenario throws or any `__caps` is not empty.
+- **Where scenarios live.** A bead's own scenarios go in its capture
+  directory, `artifacts/qa/<bead-id>/<name>.mjs`. Reusable ones are tracked in
+  `scripts/qa/scenarios/`.
+- **Helpers.** `qa.open` (asserts origin, viewport, and empty `__caps`),
+  `qa.click` (a pointer click after an `elementFromPoint` hit check, with the
+  pointer then rested outside the viewport), `qa.waitVisible` (effective
+  opacity, not DOM presence), and `qa.capture`. The README's Browser QA
+  section lists them all.
+- **Phase gates** run `smoke --prod`: front door, every Layer 1 site, Battle
+  Start, and one AI turn on a production build. `--cwd <checkout>` runs it
+  against another checkout, such as a detached base worktree outside the
+  repository.
+- **Runtime ledger.** The runner prints its server's process group and port
+  and whether the port is free after it stops; copy that line.
+
 ### Servers and contexts
 
-- Run the QA dev server from the bead's worktree on port 5174:
+- Run an interactive QA dev server from the bead's worktree on port 5174:
   `npm run dev -- --port 5174`. Never use 5173.
 - Report the server's PID or process group in the return's runtime ledger.
   The orchestrator records it in the bead notes.
@@ -748,7 +779,8 @@ refuses paths outside its roots (for example `~/.local/state`). A
 script-driven client opened with `connectPlaywrightMcp` from
 `scripts/screenshot-runtime.mjs` defaults its root to the process's working
 directory, so a script that captures passes `roots` with the primary checkout
-first to use the same form.
+first to use the same form. The scenario runner does, and `qa.capture(name)`
+writes `artifacts/qa/<bead-id>/<name>.png`.
 
 The default budget per changed surface is one desktop capture (1440×900), one
 mobile capture (390×844), and one changed interaction state. Verify each with
@@ -758,7 +790,8 @@ mobile capture (390×844), and one changed interaction state. Verify each with
 
 **Scripted sweep.** `node scripts/qa/card-sweep.mjs --cards <uuids> | --bead
 <id> [--port <port>]` drives the Playwright MCP service through
-`scripts/screenshot-runtime.mjs`. It is built in Phase 4. For each card and
+`scripts/screenshot-runtime.mjs` and the scenario runner's helper prelude
+(`scripts/qa/prelude.mjs`). It is built in Phase 4. For each card and
 variant, it:
 
 1. opens `?goto=card-lab&card=<uuid>&variant=<v>`;
