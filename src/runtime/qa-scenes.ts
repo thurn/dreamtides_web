@@ -12,7 +12,10 @@ import {
   createBattleInitProvider,
   settleDeferredOpponentLog,
 } from "../session/providers/battle-init-provider";
-import { startJourneyBattle } from "../rules/battle/journey-battle";
+import {
+  finalCompletionLevel,
+  startJourneyBattle,
+} from "../rules/battle/journey-battle";
 import { takeEngineLogRecords } from "../rules/battle/engine-battle";
 import type { JourneyBattleFoldState } from "../rules/battle/fold";
 import type { BattleDeckCardDefinition } from "../battle/types";
@@ -1202,7 +1205,8 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
     if (foundation === null) {
       return null;
     }
-    const atlas = qaAtlasForProgress(foundation, 6);
+    const finalLevel = finalCompletionLevel(journeyContent.atlasData);
+    const atlas = qaAtlasForProgress(foundation, finalLevel - 1);
     const boss = atlas.nodes[atlas.bossNodeId];
     if (boss === undefined) {
       return null;
@@ -1219,7 +1223,7 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
           [boss.id]: { ...boss, state: "completed" },
         },
       },
-      completionLevel: 7,
+      completionLevel: finalLevel,
       currentDreamscape: boss.id,
       dreamsigns,
       screen: { type: "journeyComplete" },

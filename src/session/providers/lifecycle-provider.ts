@@ -17,6 +17,7 @@ import { toJourneyAvatar } from "../../data/avatar-selection";
 import { createInitialDraftState } from "../../draft/draft-engine";
 import { deriveEntryIdCounter } from "../../rules/journey/deck";
 import type { JourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
+import { finalCompletionLevel } from "../../rules/battle/journey-battle";
 import type { JourneyState } from "../../types/journey";
 import type { JourneySeed } from "../../types/journey-seed";
 import type { DreamsignId } from "../../types/identifiers";
@@ -176,6 +177,9 @@ export function createJourneyLifecycleContentProvider(
       });
     },
     regenerateAtlas: ({ journey, completionLevel, rng }) => {
+      if (completionLevel > finalCompletionLevel(content.atlasData)) {
+        return null;
+      }
       let drawIndex = 0;
       const atlas = regenerateAtlasForProgress(
         completionLevel,
@@ -205,7 +209,7 @@ export function createJourneyLifecycleContentProvider(
         screen:
           completionLevel === 0
             ? { type: "dreamscape" }
-            : completionLevel >= 7
+            : completionLevel >= finalCompletionLevel(atlas)
               ? { type: "journeyComplete" }
               : { type: "atlas" },
       };

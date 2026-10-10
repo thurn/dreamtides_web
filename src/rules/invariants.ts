@@ -1,6 +1,7 @@
 import { layerOrdinal } from "../types/layer-name";
 import type { FoldState } from "./fold-state";
 import { journeyBattleOf } from "./battle/fold";
+import { finalCompletionLevel } from "./battle/journey-battle";
 
 export interface FoldInvariantViolation {
   code: string;
@@ -96,7 +97,10 @@ export function foldInvariantViolations(
         detail: journey.currentDreamscape,
       });
     }
-    if (journey.completionLevel > 0 && journey.completionLevel < 7) {
+    if (
+      journey.completionLevel > 0 &&
+      journey.completionLevel < finalCompletionLevel(journey.atlas)
+    ) {
       const frontier = nodes.filter(
         (node) =>
           node.state === "available" &&
@@ -121,7 +125,8 @@ export function foldInvariantViolations(
 
   if (
     journey.screen.type === "journeyComplete" &&
-    (journey.completionLevel !== 7 || journey.currentDreamscape !== null)
+    (journey.completionLevel !== finalCompletionLevel(journey.atlas) ||
+      journey.currentDreamscape !== null)
   ) {
     violations.push({
       code: "journey_complete_inconsistent",

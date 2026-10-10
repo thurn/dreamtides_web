@@ -89,6 +89,15 @@ function postVictoryState() {
   };
 }
 
+/** {@link postVictoryState} parked on the journey end screen. */
+function endScreenState() {
+  const base = postVictoryState();
+  return {
+    ...base,
+    journey: { ...base.journey, screen: { type: "journeyComplete" as const } },
+  };
+}
+
 describe("fold invariants", () => {
   it("accepts a complete atomic post-victory handoff", () => {
     expect(foldInvariantViolations(postVictoryState())).toEqual([]);
@@ -109,6 +118,22 @@ describe("fold invariants", () => {
       "atlas_frontier_missing",
     ]);
     expect(() => assertFoldInvariants(state)).toThrow(FoldInvariantError);
+  });
+
+  it("accepts the end screen once the run has won every layer of its Atlas", () => {
+    const state = endScreenState();
+    state.journey.atlas.nodes["node-two-a"].state = "completed";
+    state.journey.completionLevel = state.journey.atlas.layers.length;
+
+    expect(foldInvariantViolations(state)).toEqual([]);
+  });
+
+  it("rejects the end screen before the run has won every layer of its Atlas", () => {
+    const state = endScreenState();
+
+    expect(
+      foldInvariantViolations(state).map((violation) => violation.code),
+    ).toEqual(["journey_complete_inconsistent"]);
   });
 
   it("rejects available frontier nodes whose content was never assigned", () => {

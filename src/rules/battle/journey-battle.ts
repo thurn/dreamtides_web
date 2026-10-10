@@ -243,8 +243,18 @@ export function startJourneyBattle(
 // END_BATTLE
 // ---------------------------------------------------------------------------
 
-/** The completion level at which a run finishes and routes to the end screen. */
-const FINAL_COMPLETION_LEVEL = 7;
+/**
+ * The completion level at which a run finishes and routes to the end screen:
+ * one victory per Atlas layer, the last on the boss layer. The Atlas content
+ * catalog's layer list is the single source of this count, and the generator
+ * builds one persisted layer per catalog entry, so `atlas` is either a run's
+ * {@link DreamAtlas} or the Atlas catalog document itself.
+ */
+export function finalCompletionLevel(atlas: {
+  readonly layers: readonly unknown[];
+}): number {
+  return atlas.layers.length;
+}
 
 /**
  * `END_BATTLE {}`: derive the terminal result from the journey battle's
@@ -293,7 +303,7 @@ function applyVictory(
   }
   const newLevel = journey.completionLevel + 1;
   const screen: Screen =
-    newLevel >= FINAL_COMPLETION_LEVEL
+    newLevel >= finalCompletionLevel(journey.atlas)
       ? { type: "journeyComplete" }
       : { type: "atlas" };
   const completedJourney = completeJourneySite(journey, init.siteId);

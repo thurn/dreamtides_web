@@ -86,7 +86,11 @@ export interface JourneyLifecycleContentProvider {
     avatarId: AvatarId;
     seed: JourneySeed;
   }): JourneyState | null;
-  /** Rebuild the Atlas at the journey's authoritative progress depth. */
+  /**
+   * Rebuild the Atlas at the journey's authoritative progress depth. Returns
+   * `null` to bounce when `completionLevel` is past the content's final
+   * completion level.
+   */
   regenerateAtlas(input: {
     journey: JourneyState;
     completionLevel: number;
@@ -271,8 +275,7 @@ export function regenerateAtlas(
   if (
     completionLevel === null ||
     !Number.isSafeInteger(completionLevel) ||
-    completionLevel < 0 ||
-    completionLevel > 7
+    completionLevel < 0
   ) {
     return null;
   }

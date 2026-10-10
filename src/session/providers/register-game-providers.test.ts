@@ -14,13 +14,18 @@ import type { GameEvent, Genesis } from "../../eventlog/types";
 import { eventRng } from "../../eventlog/rng";
 import type { SeqEvent } from "../../rules/replay/replay";
 import { replayLog } from "../../rules/replay/replay";
-import { genesisFoldState } from "../../rules/fold-state";
+import { genesisFoldState, type FoldState } from "../../rules/fold-state";
 import { reduceGameEvent } from "../../rules/reducer";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { AvatarContent, DreamsignTemplate } from "../../types/content";
 import type { GambleGameDefinition } from "../../types/gamble-data";
-import type { JourneyState, SiteState, SiteType } from "../../types/journey";
+import type {
+  AtlasData,
+  JourneyState,
+  SiteState,
+  SiteType,
+} from "../../types/journey";
 import { parseCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
@@ -189,6 +194,82 @@ function expectAllApplied(outcomes: ReturnType<typeof replayLog>["outcomes"]) {
       `seq ${String(outcome.seq)} ${outcome.error?.message ?? ""}`,
     ).toBe("applied");
   }
+}
+
+/**
+ * Plays a started run through every Atlas layer with authoritative reducer
+ * events against the registered providers: each layer's non-Battle sites,
+ * then its Battle, won by a debug action. Returns the final fold state.
+ */
+function playEveryLayer(): FoldState {
+  let state = genesisFoldState(GENESIS);
+  let seq = 1;
+  const apply = (
+    type: GameEvent["type"],
+    payload: Record<string, unknown>,
+  ): void => {
+    const result = reduceGameEvent(
+      state,
+      {
+        type,
+        payload,
+        actor: testEventActor("p1"),
+        clientTimestamp: TIMESTAMP,
+        basedOnSeq: seq - 1,
+      },
+      {
+        contentConfig: TEST_CONTENT_CONFIG,
+        seq,
+        timestamp: TIMESTAMP,
+        rng: eventRng(GENESIS.seed, seq),
+        intervening: [],
+      },
+    );
+    expect(
+      result.outcome,
+      `seq ${String(seq)} ${type} ${
+        result.outcome === "bounced" ? result.bounceReason : ""
+      }`,
+    ).toBe("applied");
+    state = result.state;
+    seq += 1;
+  };
+
+  apply("START_JOURNEY", { avatarId: AVATAR_ID });
+  const layerCount = state.journey.atlas.layers.length;
+  for (let layer = 0; layer < layerCount; layer += 1) {
+    const nodeId = state.journey.currentDreamscape;
+    if (nodeId === null) throw new Error("expected a current dreamscape");
+    const node = state.journey.atlas.nodes[nodeId];
+    for (const site of node.sites.filter(({ type }) => type !== "Battle")) {
+      apply("ENTER_SITE", { siteId: site.id });
+      apply("COMPLETE_SITE", { siteId: site.id });
+    }
+    const battle = node.sites.find(({ type }) => type === "Battle");
+    apply("ENTER_SITE", { siteId: battle?.id });
+    apply("BEGIN_BATTLE", { siteId: battle?.id });
+    // The real provider starts every journey battle's engine battle; a
+    // debug action wins it.
+    const engine = journeyBattleOf(state.battle)?.engine;
+    expect(engine?.slice.committed.result).toBeNull();
+    apply("BATTLE_DEBUG", {
+      op: { kind: "setScore", side: "player", score: engine?.init.scoreToWin },
+    });
+    apply("END_BATTLE", {});
+
+    expect(state.journey.atlas.nodes[nodeId].state).toBe("completed");
+    expect(state.journey.completionLevel).toBe(layer + 1);
+    if (layer < layerCount - 1) {
+      const nextId = node.forwardIds.find(
+        (id) => state.journey.atlas.nodes[id].state === "available",
+      );
+      if (nextId === undefined) throw new Error("expected a frontier");
+      expect(state.journey.atlas.nodes[nextId].dreamscapeId).not.toBeNull();
+      apply("TRAVEL_TO_DREAMSCAPE", { nodeId: nextId });
+    }
+  }
+
+  return state;
 }
 
 describe("registerGameProviders (real content providers)", () => {
@@ -423,84 +504,69 @@ describe("registerGameProviders (real content providers)", () => {
     ).toBe(true);
   });
 
-  it("plays all seven layers through authoritative reducer events", () => {
-    let state = genesisFoldState(GENESIS);
-    let seq = 1;
-    const apply = (
-      type: GameEvent["type"],
-      payload: Record<string, unknown>,
-    ): void => {
-      const result = reduceGameEvent(
-        state,
-        {
-          type,
-          payload,
-          actor: testEventActor("p1"),
-          clientTimestamp: TIMESTAMP,
-          basedOnSeq: seq - 1,
-        },
-        {
-          contentConfig: TEST_CONTENT_CONFIG,
-          seq,
-          timestamp: TIMESTAMP,
-          rng: eventRng(GENESIS.seed, seq),
-          intervening: [],
-        },
-      );
-      expect(
-        result.outcome,
-        `seq ${String(seq)} ${type} ${
-          result.outcome === "bounced" ? result.bounceReason : ""
-        }`,
-      ).toBe("applied");
-      state = result.state;
-      seq += 1;
-    };
-
-    apply("START_JOURNEY", { avatarId: AVATAR_ID });
-    const layerCount = state.journey.atlas.layers.length;
-    for (let layer = 0; layer < layerCount; layer += 1) {
-      const nodeId = state.journey.currentDreamscape;
-      if (nodeId === null) throw new Error("expected a current dreamscape");
-      const node = state.journey.atlas.nodes[nodeId];
-      for (const site of node.sites.filter(({ type }) => type !== "Battle")) {
-        apply("ENTER_SITE", { siteId: site.id });
-        apply("COMPLETE_SITE", { siteId: site.id });
-      }
-      const battle = node.sites.find(({ type }) => type === "Battle");
-      apply("ENTER_SITE", { siteId: battle?.id });
-      apply("BEGIN_BATTLE", { siteId: battle?.id });
-      // The real provider starts every journey battle's engine battle; a
-      // debug action wins it.
-      const engine = journeyBattleOf(state.battle)?.engine;
-      expect(engine?.slice.committed.result).toBeNull();
-      apply("BATTLE_DEBUG", {
-        op: { kind: "setScore", side: "player", score: engine?.init.scoreToWin },
+  it("rebuilds debug progress up to the final completion level, onto the end screen", () => {
+    const finalLevel = makeSyntheticAtlasData().layers.length;
+    const regenerate = (completionLevel: number) =>
+      replayLog({
+        genesis: GENESIS,
+        events: [START[0], ev(2, "REGENERATE_ATLAS", { completionLevel })],
       });
-      apply("END_BATTLE", {});
 
-      expect(state.journey.atlas.nodes[nodeId].state).toBe("completed");
-      expect(state.journey.completionLevel).toBe(layer + 1);
-      if (layer < layerCount - 1) {
-        const nextId = node.forwardIds.find(
-          (id) => state.journey.atlas.nodes[id].state === "available",
-        );
-        if (nextId === undefined) throw new Error("expected a frontier");
-        expect(state.journey.atlas.nodes[nextId].dreamscapeId).not.toBeNull();
-        apply("TRAVEL_TO_DREAMSCAPE", { nodeId: nextId });
-      }
-    }
+    const final = regenerate(finalLevel);
+    expectAllApplied(final.outcomes);
+    expect(final.finalState.journey.completionLevel).toBe(finalLevel);
+    expect(final.finalState.journey.screen.type).toBe("journeyComplete");
 
-    expect(state.battle).toBeNull();
-    expect(state.journey.screen.type).toBe("journeyComplete");
-    for (const layer of state.journey.atlas.layers) {
-      expect(
-        layer.filter(
-          (nodeId) => state.journey.atlas.nodes[nodeId].state === "completed",
-        ),
-      ).toHaveLength(1);
-    }
+    const past = regenerate(finalLevel + 1);
+    expect(
+      past.outcomes.map(({ outcome, bounceReason }) => ({
+        outcome,
+        bounceReason,
+      })),
+    ).toEqual([
+      { outcome: "applied", bounceReason: undefined },
+      { outcome: "bounced", bounceReason: "invalid_action" },
+    ]);
+    expect(past.finalState.journey.completionLevel).toBe(0);
   });
+
+  it.each([
+    ["the full synthetic Atlas", (layers: AtlasData["layers"]) => layers],
+    [
+      "a two-layer Atlas",
+      (layers: AtlasData["layers"]) => [
+        layers[0],
+        { ...layers[layers.length - 1], name: LayerName.Two },
+      ],
+    ],
+  ])(
+    "finishes the run after one victory per layer of %s",
+    (_label, selectLayers) => {
+      const content = makeJourneyContent();
+      const layers = selectLayers(content.atlasData.layers);
+      registerGameProviders({
+        ...content,
+        atlasData: { ...content.atlasData, layers },
+      });
+      try {
+        const state = playEveryLayer();
+        expect(state.journey.atlas.layers).toHaveLength(layers.length);
+        expect(state.journey.completionLevel).toBe(layers.length);
+        expect(state.battle).toBeNull();
+        expect(state.journey.screen.type).toBe("journeyComplete");
+        for (const layer of state.journey.atlas.layers) {
+          expect(
+            layer.filter(
+              (nodeId) =>
+                state.journey.atlas.nodes[nodeId].state === "completed",
+            ),
+          ).toHaveLength(1);
+        }
+      } finally {
+        registerGameProviders(makeJourneyContent());
+      }
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
