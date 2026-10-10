@@ -1,0 +1,111 @@
+{
+  "bead": "hv-umm2.50",
+  "phase": 5,
+  "implementMin": 35,
+  "localValidationS": {
+    "focused": 4,
+    "review": 30.68,
+    "knip": 1.87,
+    "reviewFull": 44.26,
+    "sweep": 791,
+    "diagnostic": 32.4,
+    "checkpointReview": 22.33,
+    "checkpointKnip": 1.75,
+    "checkpointReviewFull": 42,
+    "weightedFuzz": 61.46
+  },
+  "hostLoad": 7.49,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "entities": {
+    "total": 6,
+    "authored": 4,
+    "vanilla": 2,
+    "pending": 0,
+    "amplifiedText": 0
+  },
+  "newPrimitives": 0,
+  "scenarioModules": 0,
+  "rulesDecisions": 0,
+  "cardIssues": 0,
+  "qa": {
+    "historical": {
+      "pass": 95,
+      "skip": 80,
+      "fail": 7
+    },
+    "latest": {
+      "pass": 64,
+      "skip": 56
+    },
+    "judgedRequired": 0,
+    "judgedPerformed": 0,
+    "sampleSha256FirstBytes": [
+      53,
+      217,
+      142,
+      27,
+      196,
+      196
+    ]
+  },
+  "friction": [
+    {
+      "tag": "card-sweep-presentation-readiness",
+      "minutes": 10,
+      "note": "The engine-settled predicate reaches the human control assertion before presentation finishes for all six Flashpoint player variants. A session-authorized state-based readiness condition requires battle.canPass for the human decision; all six failed cells and representative draw/foresee player and enemy paths pass afterward. The ledger retains historical failures and later passes."
+    }
+  ],
+  "runtime": {
+    "port": 5175,
+    "stoppedProcessGroups": [
+      91466,
+      8246,
+      9394,
+      9994,
+      14523
+    ],
+    "browserClientsClosed": true,
+    "ownedWriters": 0
+  },
+  "weightedFuzz": {
+    "games": 300,
+    "steps": 154619,
+    "failures": 0,
+    "replayDivergences": 0,
+    "interactiveReruns": 285,
+    "wallS": 60.2,
+    "cpuS": 66.7,
+    "targets": [
+      {
+        "uuid": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "entries": 608
+      },
+      {
+        "uuid": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "entries": 618
+      },
+      {
+        "uuid": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+        "entries": 619
+      },
+      {
+        "uuid": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+        "entries": 616
+      },
+      {
+        "uuid": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+        "entries": 621
+      },
+      {
+        "uuid": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+        "entries": 619
+      }
+    ],
+    "toolingPrerequisite": "hv-bbmp",
+    "validatedBase": "4a00ef5321705cb4bbd7a0db2ea2733efc73f0da"
+  }
+}

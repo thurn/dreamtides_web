@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 517,
   art: { x: -0.336, y: 0.839, scale: 1.17 },
   isStarter: true,
-  pending: true,
+  abilities: () => [event(p.sequence(p.draw(1), p.foresee(1)))],
+  verifiedText: "1vek3bu2vtr",
 });

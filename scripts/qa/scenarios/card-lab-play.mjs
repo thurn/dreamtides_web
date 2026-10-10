@@ -115,7 +115,8 @@ export default async function cardLabPlay(qa) {
 
     // The driver answers each human prompt with its first legal choice and
     // passes while the stack holds something, until the board settles: no
-    // prompt, an empty stack, nothing in flight, and the card out of the hand,
+    // prompt, an empty stack, nothing in flight, the card out of the hand,
+    // and a rendered, enabled control when the human owns the next decision,
     // for six reads in a row.
     let quiet = 0;
     let last = await read();
@@ -123,9 +124,10 @@ export default async function cardLabPlay(qa) {
     let passes = 0;
     try {
       const run = await qa.battle.playUntil(
-        async () => {
+        async (battle) => {
           last = await read();
-          const settled = last.pending === null && last.stack === 0 && !last.inFlight && last.zone !== "hand";
+          const controlReady = last.decision?.side !== "player" || battle.canPass || last.result !== null;
+          const settled = last.pending === null && last.stack === 0 && !last.inFlight && last.zone !== "hand" && controlReady;
           quiet = settled ? quiet + 1 : 0;
           return quiet >= 6;
         },
