@@ -51,6 +51,11 @@ export interface Engine {
     source: AnswerSource,
     observe?: StepObserver,
   ): ApplyResult;
+  /**
+   * What `side` sees of `state`. Memoized per state, its version, and side,
+   * like the characteristics: a committed state never changes, so neither
+   * does its view, and callers share one immutable view.
+   */
   view(state: BattleState, side: Side): BattleView;
   /** A complete state consistent with `view` and both decklists, sampled with `random` (D22). */
   determinize(view: BattleView, decklists: Decklists, random: () => number): BattleState;
@@ -62,6 +67,8 @@ export class IllegalAction extends Error {}
 
 export function createEngine(catalog: EngineCatalog): Engine {
   const memo = createLegalityMemo();
+  // Each state's views, checked against its version like the characteristics memo.
+  const views = new WeakMap<BattleState, { readonly version: number; readonly bySide: Partial<Record<Side, BattleView>> }>();
   return {
     catalog,
     memo,
@@ -93,8 +100,18 @@ export function createEngine(catalog: EngineCatalog): Engine {
       return runToDecision(state, stepForAction(state, action), source, catalog, memo, observe);
     },
     view(state, side) {
+      let entry = views.get(state);
+      if (entry?.version !== state.version) entry = undefined;
+      const known = entry?.bySide[side];
+      if (known !== undefined) return known;
       rememberCharacteristics(state, catalog);
-      return view(state, side, catalog);
+      const seen = view(state, side, catalog);
+      if (entry === undefined) {
+        entry = { version: state.version, bySide: {} };
+        views.set(state, entry);
+      }
+      entry.bySide[side] = seen;
+      return seen;
     },
     determinize(seen, decklists, random) {
       return determinize(seen, decklists, random, catalog);

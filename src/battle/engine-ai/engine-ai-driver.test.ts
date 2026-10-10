@@ -106,7 +106,13 @@ interface Logged {
 function driverFor(
   log: LocalLog<FoldState>,
   side: Side,
-  options: { policy?: PolicyId; host?: PolicyHost; submit?: (intent: EngineAiIntent) => void; logged?: Logged[] } = {},
+  options: {
+    policy?: PolicyId;
+    host?: PolicyHost;
+    submit?: (intent: EngineAiIntent) => void;
+    logged?: Logged[];
+    schedule?: (submission: () => void) => void;
+  } = {},
 ): EngineAiDriver {
   const actions = makeActions((draft) => Promise.resolve(log.append(draft)));
   return new EngineAiDriver({
@@ -118,6 +124,7 @@ function driverFor(
     log: (event, fields) => options.logged?.push({ event, fields }),
     now: () => 0,
     budgets: BUDGETS,
+    ...(options.schedule === undefined ? {} : { schedule: options.schedule }),
   });
 }
 
@@ -298,6 +305,49 @@ describe("failure paths", () => {
     driver.update({ ...state });
     expect(submitted).toHaveLength(2);
     expect(submitted[1]).toEqual(submitted[0]);
+  });
+
+  it("runs a scheduled submission only while its decision is in progress and its fold is the latest", async () => {
+    const log = await atEnemyDecision();
+    const state = log.state();
+    const queued: (() => void)[] = [];
+    const runQueued = () => {
+      for (const submission of queued.splice(0)) submission();
+    };
+    const submitted: EngineAiIntent[] = [];
+    const driver = driverFor(log, "enemy", { submit: (intent) => submitted.push(intent), schedule: (submission) => queued.push(submission) });
+    driver.update(state);
+    await new Promise((resolve) => setImmediate(resolve));
+    expect(queued).toHaveLength(1);
+    expect(submitted).toEqual([]);
+    runQueued();
+    expect(submitted).toHaveLength(1);
+
+    // Two unrelated folds arrive before the waiting submissions run: only the latest fold's submits.
+    driver.update({ ...state });
+    driver.update({ ...state });
+    runQueued();
+    expect(submitted).toHaveLength(2);
+    expect(submitted[1]).toEqual(submitted[0]);
+
+    // The battle moves on (here: it ends) before the submission runs: nothing is submitted.
+    driver.update({ ...state });
+    const fold = journeyBattleOf(state.battle)?.engine;
+    if (fold === undefined || state.battle === null) throw new Error("no engine battle");
+    driver.update({
+      ...state,
+      battle: { ...state.battle, engine: { ...fold, slice: { ...fold.slice, committed: { ...fold.slice.committed, result: { kind: "draw", reason: "turnLimit" } } } } },
+    });
+    runQueued();
+    expect(submitted).toHaveLength(2);
+
+    // A driver disposed while its submission waits submits nothing.
+    driver.update({ ...state });
+    await new Promise((resolve) => setImmediate(resolve));
+    expect(queued.length).toBeGreaterThan(0);
+    driver.dispose();
+    runQueued();
+    expect(submitted).toHaveLength(2);
   });
 
   it("asks nothing while the decision is the player's, or once disposed", () => {

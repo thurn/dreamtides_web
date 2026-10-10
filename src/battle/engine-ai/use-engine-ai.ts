@@ -45,6 +45,9 @@ export function useEngineAi(policy: PolicyId): void {
         logEvent(event, fields);
       },
       now: () => performance.now(),
+      schedule: (submission) => {
+        setTimeout(submission, 0);
+      },
     });
     setDriver(created);
     return () => {

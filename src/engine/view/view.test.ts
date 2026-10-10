@@ -148,6 +148,25 @@ describe("view", () => {
     }
   });
 
+  it("gives the engine's callers one view per committed state and side, equal to a fresh view", () => {
+    const engine = createEngine(catalog);
+    const { state } = fixture();
+    const player = engine.view(state, "player");
+    const enemy = engine.view(state, "enemy");
+    expect(engine.view(state, "player")).toBe(player);
+    expect(engine.view(state, "enemy")).toBe(enemy);
+    expect(player).toEqual(view(state, "player", catalog));
+    expect(enemy).toEqual(view(state, "enemy", catalog));
+    const reloaded = deserializeState(serializeState(state));
+    expect(engine.view(reloaded, "player")).not.toBe(player);
+    expect(engine.view(reloaded, "player")).toEqual(player);
+    // A state stepped in place to a new version is viewed afresh.
+    reloaded.version += 1;
+    reloaded.turn.turnNumber += 1;
+    expect(engine.view(reloaded, "player")).toEqual(view(reloaded, "player", catalog));
+    expect(engine.view(reloaded, "player").turn.turnNumber).toBe(player.turn.turnNumber + 1);
+  });
+
   it("reveals neither the instance IDs nor the card IDs of cards in decks and the opponent's hand", () => {
     for (const viewer of SIDES) {
       const { state } = fixture();

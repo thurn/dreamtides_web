@@ -568,10 +568,9 @@ describe("buildEngineBattleScreenModel", () => {
   it("reports the battle's result from the human's side", () => {
     const { state } = board({});
     state.sides.player.score = 4;
-    state.result = { kind: "victory", winner: "player", reason: "score" };
-    const won = screenOf(state);
-    state.result = { kind: "victory", winner: "enemy", reason: "score" };
-    const lost = screenOf(state);
+    // Two committed states: the engine never sees a state change after it is handed one.
+    const won = screenOf({ ...state, result: { kind: "victory", winner: "player", reason: "score" } });
+    const lost = screenOf({ ...state, result: { kind: "victory", winner: "enemy", reason: "score" } });
 
     expect(won.view.result).toMatchObject({ outcome: "victory", playerScore: 4, essenceReward: 100 });
     expect(lost.view.result).toEqual({ outcome: "defeat", dismissed: false });

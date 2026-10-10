@@ -20,6 +20,9 @@
 //   log applies at most once.
 // - A submitted intent that bounces is submitted again only once the fold
 //   has changed, never in a loop over an unchanged fold.
+// - The fold moves on while a submission waits for its task (live play
+//   submits in a task of its own): the waiting submission is dropped, and the
+//   update that saw the newer fold submits the answer again or abandons it.
 
 import type { Engine } from "../../engine";
 import { aiDecision, runPolicy, type DecisionKey, type PolicyRequest } from "../../engine/policy/decide";
@@ -65,6 +68,13 @@ export interface EngineAiDriverOptions {
   readonly now: () => number;
   /** Budgets to use instead of the live D23 budgets (deterministic hosts). */
   readonly budgets?: Parameters<typeof aiDecision>[0]["budgets"];
+  /**
+   * Runs a submission later, in a task of its own (live play), so that
+   * folding and presenting the AI's next intent never shares a main-thread
+   * task with presenting the fold that asked for it. Without it, the driver
+   * submits at once (deterministic hosts).
+   */
+  readonly schedule?: (submission: () => void) => void;
 }
 
 /** One decision the driver is working on. */
@@ -217,17 +227,34 @@ export class EngineAiDriver {
     if (this.latest !== null) this.submit(this.latest);
   }
 
-  /** Submits the answer of the decision in progress, once per fold it is current in. */
+  /**
+   * Submits the answer of the decision in progress, once per fold it is
+   * current in. A scheduled submission still runs only while its decision is
+   * in progress and its fold is the latest: when the fold has moved on, the
+   * update that saw the newer fold submits or abandons instead.
+   */
   private submit(state: FoldState): void {
     const work = this.work;
     if (work === null || work.choice === null || work.submittedAt === state) return;
     work.submittedAt = state;
     const intentKey = parseIntentKey(`engine-ai:${work.battleId}:${work.key}`);
     const { choice } = work;
+    let intent: EngineAiIntent;
     if (choice.kind === "action") {
-      this.options.submit({ kind: "action", side: work.request.side, choice, intentKey });
+      intent = { kind: "action", side: work.request.side, choice, intentKey };
     } else if (work.promptId !== null) {
-      this.options.submit({ kind: "answer", side: work.request.side, promptId: work.promptId, choice, intentKey });
+      intent = { kind: "answer", side: work.request.side, promptId: work.promptId, choice, intentKey };
+    } else {
+      return;
     }
+    const { schedule } = this.options;
+    if (schedule === undefined) {
+      this.options.submit(intent);
+      return;
+    }
+    schedule(() => {
+      if (this.work !== work || this.latest !== state) return;
+      this.options.submit(intent);
+    });
   }
 }

@@ -873,7 +873,10 @@ without changing `version`, so only committed states are memoized. The
 engine facade (`decision`, `legalActions`, `apply`, `view`) remembers each
 state it is handed in the catalog's `memo`, a `WeakMap` keyed by the state
 object and checked against `state.version`. Reads of any other state build
-a fresh evaluation. Caches never enter `BattleState`, and the fuzz
+a fresh evaluation. `view` likewise keeps each state's views by side on
+the engine, checked against `state.version`, so the screen, the
+presentation, the battle log, and the AI host share one immutable view of a
+committed state. Caches never enter `BattleState`, and the fuzz
 invariants compare the memoized evaluation with a fresh one.
 
 **Support adjacency** (`continuous/support.ts`): `B(i)` supports `F(i-1)` and
@@ -1521,7 +1524,11 @@ worker host and submits the answer as a `BATTLE_ACTION` or `BATTLE_ANSWER`
 intent with the `ai:` actor and an intent key naming the decision. A failed
 request is answered by Random on the main thread; an answer for a decision
 the fold has left is discarded; a bounced intent is submitted again only
-after the fold changes. The log holds the AI's intents, so a replay never
+after the fold changes. Live play submits each answer in a main-thread task
+of its own (a waiting submission yields to the update of any newer fold),
+so folding and presenting the AI's next intent never shares a task with
+presenting the last. The
+log holds the AI's intents, so a replay never
 runs the AI, and a reload asks again with the same seed. Each decision logs
 one `ai.decision` line: the policy, its source (worker, forced, fallback),
 the budget and what it used, the round trip, the determinization count, the
