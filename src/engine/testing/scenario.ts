@@ -36,6 +36,26 @@ export interface ScenarioResult {
   readonly ids: BoardIds;
 }
 
+/**
+ * One Phase 5 scenario spec: a spec run through `runScenario`, then `check`,
+ * which asserts on the result and throws when the card misbehaves. The name
+ * starts with the subject entity's UUID, never its name.
+ */
+export interface NamedScenario {
+  readonly name: string;
+  readonly spec: ScenarioSpec;
+  readonly check: (result: ScenarioResult) => void;
+}
+
+/**
+ * A content batch's scenario module, `src/content/specs/<slug>.scenarios.ts`,
+ * whose default export lists its scenarios under the file's slug.
+ */
+export interface ScenarioModule {
+  readonly slug: string;
+  readonly scenarios: readonly NamedScenario[];
+}
+
 /** Runs a scenario; fails if a prompt has no scripted answer or answers are left over. */
 export function runScenario(engine: Engine, spec: ScenarioSpec): ScenarioResult {
   const { state: start, ids } = boardState(engine.catalog, spec.board);

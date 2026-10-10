@@ -1,5 +1,8 @@
-/** The card-lab setup solver, the prompt lab, and pending-entity semantics (D36). */
-import { describe, expect, it } from "vitest";
+/**
+ * The card-lab setup solver, the prompt lab, pending-entity semantics (D36),
+ * and the Phase 5 scenario-module runner.
+ */
+import { describe, expect, it, vi } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import { NO_PROMPTS } from "../steps/sources";
@@ -8,7 +11,8 @@ import { createCatalog } from "../catalog";
 import { createFoldAdapter } from "../fold/slice";
 import { labBoard } from "./lab-solver";
 import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture } from "./prompt-lab";
-import { playFromHand, runScenario } from "./scenario";
+import { runNamedScenario, scenarioRegistryProblems } from "../../content/specs/runner";
+import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from "./scenario";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 
 /** A pending 1● event and a pending 2● 2✦ character. */
@@ -92,5 +96,56 @@ describe("pending entities play text-less", () => {
     expect(state.sides.player.backRank[0]).toBe(ids.player.hand[0]);
     expect(state.sides.player.currentEnergy).toBe(0);
     expect(events.filter((event) => event.kind === "pendingAbility")).toHaveLength(1);
+  });
+});
+
+describe("scenario-module runner", () => {
+  const vanillas = [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id];
+  /** Dissolving one of two enemy characters prompts for the target. */
+  const dissolve = (answers?: ScenarioSpec["answers"]): ScenarioSpec => ({
+    board: { active: "player", phase: "day", player: { hand: [DSL.dissolveEnemy.id], energy: 2, deck: vanillas }, enemy: { back: vanillas, deck: vanillas } },
+    steps: (ids) => [playFromHand(ids, "player")],
+    answers,
+  });
+  const scenario = (spec: ScenarioSpec, check: NamedScenario["check"] = () => undefined): NamedScenario => ({ name: "dissolve", spec, check });
+  const second: ScenarioSpec["answers"] = (ids) => [[ids.enemy.back[1]!]];
+
+  it("runs the spec, then the check on its result", () => {
+    const check = vi.fn<NamedScenario["check"]>(({ state, ids }) => {
+      expect(state.sides.enemy.backRank.filter((id) => id !== null)).toEqual([ids.enemy.back[0]]);
+    });
+    const result = runNamedScenario(engine, scenario(dissolve(second), check));
+    expect(check).toHaveBeenCalledWith(result);
+  });
+
+  it("fails a scenario whose check fails", () => {
+    const wrong = scenario(dissolve(second), ({ state }) => {
+      expect(state.sides.enemy.backRank.filter((id) => id !== null)).toHaveLength(2);
+    });
+    expect(() => runNamedScenario(engine, wrong)).toThrow();
+  });
+
+  it("fails on a prompt with no scripted answer without running the check", () => {
+    const check = vi.fn<NamedScenario["check"]>();
+    expect(() => runNamedScenario(engine, scenario(dissolve(), check))).toThrow();
+    expect(check).not.toHaveBeenCalled();
+  });
+
+  it("fails on scripted answers left over without running the check", () => {
+    const check = vi.fn<NamedScenario["check"]>();
+    const extra = dissolve((ids) => [[ids.enemy.back[1]!], [ids.enemy.back[0]!]]);
+    expect(() => runNamedScenario(engine, scenario(extra, check))).toThrow();
+    expect(check).not.toHaveBeenCalled();
+  });
+
+  it("reports duplicate slugs, empty modules, and duplicate scenario names", () => {
+    const spec = dissolve(second);
+    const problems = scenarioRegistryProblems([
+      { slug: "a", scenarios: [scenario(spec)] },
+      { slug: "a", scenarios: [scenario(spec), scenario(spec)] },
+      { slug: "b", scenarios: [] },
+    ]);
+    expect(problems).toHaveLength(3);
+    expect(scenarioRegistryProblems([{ slug: "a", scenarios: [scenario(spec)] }, { slug: "b", scenarios: [scenario(spec)] }])).toEqual([]);
   });
 });

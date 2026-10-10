@@ -71,6 +71,7 @@ src/engine/
                fuzz harness, invariants, redaction checks
 src/content/   typed catalogs (D32) with co-located abilities (D5)
   cards/ dreamsigns/ avatars/ dreamwell/ figments/
+  specs/       per-batch scenario modules, their registry, and the one runner test
   battle.ts, dreamwell-rules.ts, opponents.ts, ai.ts, atlas.ts, apollyon.ts, …   data modules
 ```
 
@@ -1535,19 +1536,32 @@ Greedy unless `?ai=random|greedy` selects one.
 - **Scenario specs** (`testing/scenario.ts`, `runScenario`): a board, the
   top-level actions in order, and scripted answers to every non-automatic
   prompt, run through `engine.apply` with a `ScriptedSource`. It fails if a
-  prompt has no scripted answer or answers are left over. Primitive tests use
-  it today; Phase 5 writes one file per content batch,
-  `src/content/specs/<batch-slug>.spec.ts`, per D20. Like every engine and
-  content test, they run in the `node` environment
-  ([D19](decisions.md#d19-test-pruning)):
+  prompt has no scripted answer or answers are left over. Primitive tests call
+  it directly. Phase 5 writes one scenario module per content batch, per D20:
+  `src/content/specs/<batch-slug>.scenarios.ts`, a plain module whose default
+  export is a `ScenarioModule`, a slug and its `NamedScenario`s, each a name,
+  a spec, and a `check` on the result. `src/content/specs/index.ts` registers
+  every module, and one test file, `src/content/specs/specs.test.ts`, runs
+  each registered scenario as its own named case through `runNamedScenario`
+  (`src/content/specs/runner.ts`), so the whole phase pays one file's module
+  import ([D19](decisions.md#d19-test-pruning)). Like every engine and
+  content test, it runs in the `node` environment:
 
   ```ts
-  const { state, ids } = runScenario(engine, {
-    board: { active: "player", phase: "day", player: { hand: [DSL.dissolveEnemy.id], energy: 2, deck },
-             enemy: { back: [vanilla2.id, vanilla3.id], deck } },
-    steps: (ids) => [{ side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } }],
-    answers: (ids) => [[ids.enemy.back[1]]],    // the dissolve target
-  });
+  // src/content/specs/<batch-slug>.scenarios.ts
+  export default {
+    slug: "<batch-slug>",
+    scenarios: [{
+      name: `${dissolver.id} dissolves the chosen enemy`,
+      spec: {
+        board: { active: "player", phase: "day", player: { hand: [dissolver.id], energy: 2, deck },
+                 enemy: { back: [vanilla2.id, vanilla3.id], deck } },
+        steps: (ids) => [playFromHand(ids, "player")],
+        answers: (ids) => [[ids.enemy.back[1]!]],    // the dissolve target
+      },
+      check: ({ state, ids }) => expect(state.sides.enemy.void).toContain(ids.enemy.back[1]),
+    }],
+  } satisfies ScenarioModule;
   ```
 
 - **Fuzz invariants** (`npm run fuzz:engine -- --games N [--seed]

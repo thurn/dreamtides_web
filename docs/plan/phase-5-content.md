@@ -81,8 +81,22 @@ Every content batch bead follows these steps exactly.
    composition of their primitives (D20). Signs a card needs one: unusual
    targeting, interactions between its own abilities, functional zones,
    nth-in-turn counters, or replacement effects. All of a batch's specs go in
-   **one file**, `src/content/specs/<batch-slug>.spec.ts`, in the `node`
-   environment (D19).
+   **one scenario module**, `src/content/specs/<batch-slug>.scenarios.ts`, a
+   plain module rather than a test file (D19):
+   - **Export:** a default export `{ slug: "<batch-slug>", scenarios: [...] }
+     satisfies ScenarioModule`. Each scenario is a `NamedScenario`: a `name`
+     that starts with the subject entity's UUID, a `spec` for `runScenario`,
+     and a `check` that asserts on the result with vitest's `expect`. Both
+     types come from `src/engine/testing/scenario.ts`.
+   - **Registration:** in `src/content/specs/index.ts`, one default import,
+     `import <batchSlug> from "./<batch-slug>.scenarios";`, and one entry in
+     `SCENARIO_MODULES`, in slug order.
+   - **Run:** `npm test -- src/content/specs/specs.test.ts`. That one test
+     file runs every registered scenario as its own case, named
+     `<batch-slug> > <scenario name>`, on the content catalog plus the
+     synthetic cards, in the `node` environment. Its registry case fails on
+     a module file that is not registered, a slug registered twice, a module
+     with no scenarios, or a scenario name used twice.
 6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <batch>`.
    Decks are biased to include the batch. It is heavy (D17).
 7. **Sweep** the batch in the card-lab, on the bead's port:
