@@ -12,6 +12,7 @@
 //
 // React-free.
 
+import { batchTurnAt } from "../../battle/components/presentation-items";
 import type { EngineCardModels } from "../../battle/ui/engine-card-model";
 import type {
   BattleEventLogLineView,
@@ -66,6 +67,7 @@ export function battleLogEntries(
   before: BattleView,
   keyPrefix: string,
 ): EngineBattleLogEntry[] {
+  const turnAt = batchTurnAt(events, before.turn, state.turn);
   return events.flatMap((raw, index): EngineBattleLogEntry[] => {
     const event = eventSeenBy(raw, human, state);
     if (event === null) return [];
@@ -75,7 +77,8 @@ export function battleLogEntries(
     for (const instance of [...Object.values(before.instances), ...Object.values(view.instances)]) {
       if (named.has(instance.id)) cards[instance.id] = instance;
     }
-    return [{ key: `${keyPrefix}:${String(index)}`, turnNumber: state.turn.turnNumber, active: state.turn.active, event, cards }];
+    const turn = turnAt(index);
+    return [{ key: `${keyPrefix}:${String(index)}`, turnNumber: turn.turnNumber, active: turn.active, event, cards }];
   });
 }
 

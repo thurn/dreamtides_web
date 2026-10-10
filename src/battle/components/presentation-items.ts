@@ -141,6 +141,20 @@ export function sliceKey(slice: BattleSlice): PresentationId {
   );
 }
 
+/**
+ * The turn each event in a batch belongs to: events before its first
+ * `turnStarted` belong to the ending turn, and that event and those after
+ * it belong to the arriving turn. A batch without a new turn uses `after`.
+ */
+export function batchTurnAt(
+  events: readonly EngineEvent[],
+  before: Readonly<BattleState["turn"]>,
+  after: Readonly<BattleState["turn"]>,
+): (index: number) => Readonly<BattleState["turn"]> {
+  const turnIndex = events.findIndex((event) => event.kind === "turnStarted");
+  return (index) => index < turnIndex ? before : after;
+}
+
 /** Names a prompt's or ability's source card for a notice, when the human can identify it. */
 export type NoticeSourceName = (source: AbilitySource | PromptSource | null) => string | null;
 
@@ -160,7 +174,7 @@ export function presentationItems(
   // Items before the batch's first new turn show its state in the turn it
   // started in, so the turn announcement waits for them (a challenge's
   // scores, then the new turn).
-  const turnIndex = events.findIndex((event) => event.kind === "turnStarted");
+  const turnAt = batchTurnAt(events, before.turn, batch.state.turn);
   const beforeTurn: PresentationBatch = {
     key: parsePresentationId(`${batch.key}:before-turn`),
     state: { ...batch.state, turn: before.turn },
@@ -183,9 +197,9 @@ export function presentationItems(
         batch:
           presentation === "reveal"
             ? { key: parsePresentationId(`${batch.key}:before`), state: before }
-            : index < turnIndex
-              ? beforeTurn
-              : batch,
+            : turnAt(index) === batch.state.turn
+              ? batch
+              : beforeTurn,
       },
     ];
     switch (event.kind) {

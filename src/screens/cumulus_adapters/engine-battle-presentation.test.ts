@@ -245,6 +245,37 @@ describe("presentation queue", () => {
 });
 
 describe("battle log", () => {
+  it("groups a challenge and score in the ending turn, and the turn start and later events in the arriving turn", () => {
+    const challenge = steps("present-challenge")[1];
+    if (challenge === undefined) throw new Error("no challenge");
+    const entries = battleLogEntries(
+      challenge.published,
+      "player",
+      challenge.after,
+      labEngine.view(challenge.after, "player"),
+      labEngine.view(challenge.before, "player"),
+      "turn-boundary",
+    );
+    const boundary = entries.findIndex((entry) => entry.event.kind === "turnStarted");
+    expect(boundary).toBeGreaterThan(0);
+    const ending = entries.slice(0, boundary);
+    const arriving = entries.slice(boundary);
+    expect(ending.some((entry) => entry.event.kind === "laneResolved")).toBe(true);
+    expect(ending.some((entry) => entry.event.kind === "pointsScored")).toBe(true);
+    expect(arriving.some((entry) => entry.event.kind === "turnStarted")).toBe(true);
+    expect(arriving.some((entry) => entry.event.kind === "phaseChanged")).toBe(true);
+    expect(ending.map(({ turnNumber, active }) => ({ turnNumber, active }))).toEqual(
+      ending.map(() => ({ turnNumber: challenge.before.turn.turnNumber, active: challenge.before.turn.active })),
+    );
+    expect(arriving.map(({ turnNumber, active }) => ({ turnNumber, active }))).toEqual(
+      arriving.map(() => ({ turnNumber: challenge.after.turn.turnNumber, active: challenge.after.turn.active })),
+    );
+    expect(battleLogTurns(entries, "player", cards, () => null).map((turn) => turn.turnNumber)).toEqual([
+      challenge.before.turn.turnNumber,
+      challenge.after.turn.turnNumber,
+    ]);
+  });
+
   it("writes a battle log line for what the human saw and none for what it could not see", () => {
     const entriesOf = (step: ReturnType<typeof steps>[number], key: string) =>
       battleLogEntries(
