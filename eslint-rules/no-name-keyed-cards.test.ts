@@ -94,6 +94,30 @@ ruleTester.run("no-name-keyed-cards", rule, {
       name: "Avatar ids may be compared",
       code: `const same = avatar.id === descriptor.avatarId;`,
     },
+    {
+      name: "a local copy of a card name may be rendered",
+      code: `function Label({ card }) { const name = card.name; const { name: title } = avatar; return <span title={title}>{name}</span>; }`,
+    },
+    {
+      name: "a local case-folded card name may be searched for display filtering",
+      code: `function matches(card, query) { const name = card.name.toLowerCase(); const { name: label } = card; return name.includes(query) || label.toLowerCase().includes(query); }`,
+    },
+    {
+      name: "a destructured name of a non-card value may be compared",
+      code: `function f(site, other) { const { name } = site; const label = site.name; return name === other.name || label === other.name; }`,
+    },
+    {
+      name: "a reassignable local is not followed",
+      code: `function f(card, other) { let name = card.name; name = other.id; return name === other.id; }`,
+    },
+    {
+      name: "a shadowing parameter is not the outer alias",
+      code: `const name = card.name; function f(name, other) { return name === other.name; }`,
+    },
+    {
+      name: "an element of a card-name collection is not followed",
+      code: `for (const value of cardNames) { if (value === other) {} }`,
+    },
   ],
   invalid: [
     {
@@ -139,6 +163,35 @@ ruleTester.run("no-name-keyed-cards", rule, {
       name: "Map lookup keyed by a case-folded Avatar name",
       code: `avatarsByName.get(opponentAvatar.name.toLowerCase());`,
       errors: [{ messageId: "nameKey" }],
+    },
+    {
+      name: "local alias of an Avatar name compared for equality",
+      code: `function find(avatar, descriptors) { const name = avatar.name; return descriptors.find((d) => d.label === name); }`,
+      errors: [{ messageId: "nameEquality" }],
+    },
+    {
+      name: "local alias of a card name used as Map, Set, and object keys",
+      code: `function track(card) { const key = card.name.toLowerCase(); seen.add(key); byKey.get(key); counts[key] = 1; }`,
+      errors: [
+        { messageId: "nameKey" },
+        { messageId: "nameKey" },
+        { messageId: "nameKey" },
+      ],
+    },
+    {
+      name: "destructured name of a card compared for equality",
+      code: `function same(card, other) { const { name } = card; const { name: theirs = "" } = other.card; return name === theirs; }`,
+      errors: [{ messageId: "nameEquality" }],
+    },
+    {
+      name: "nested and loop destructuring of card names used as keys",
+      code: `const { card: { name } } = offer; byName.get(name); for (const { name: label } of avatars) { seen.has(label); }`,
+      errors: [{ messageId: "nameKey" }, { messageId: "nameKey" }],
+    },
+    {
+      name: "aliases of aliases and optional or asserted card names",
+      code: `function f(card, other) { const first = card?.name as string; const second = first; return second.trim() === other.id; }`,
+      errors: [{ messageId: "nameEquality" }],
     },
   ],
 });
