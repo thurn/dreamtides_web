@@ -1,3 +1,5 @@
+import { characterYouControl, event, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 519,
   art: { x: -0.672, y: 0.839, scale: 1.17 },
   isStarter: true,
-  pending: true,
+  abilities: () => [event(p.gainSpark(target(characterYouControl()), 3))],
+  verifiedText: "1tnkhc036mc",
 });

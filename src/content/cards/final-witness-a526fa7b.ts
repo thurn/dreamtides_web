@@ -1,3 +1,5 @@
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 514,
   art: { x: 0.21, y: 1, scale: 1.17 },
   isStarter: true,
-  pending: true,
+  abilities: () => [triggered(onDissolved(), p.draw(1))],
+  verifiedText: "4umn7d0j64",
 });

@@ -1,3 +1,5 @@
+import { self, staticAbility, supporting, times } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 515,
   art: { x: -0.42, y: 1, scale: 1.17 },
   isStarter: true,
-  pending: true,
+  abilities: () => [staticAbility(p.sparkModifier(self(), times(supporting(), 2)))],
+  verifiedText: "1k4p9sy4w31",
 });
