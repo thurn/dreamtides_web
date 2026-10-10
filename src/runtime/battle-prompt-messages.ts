@@ -1,5 +1,5 @@
 import type { BuiltInBattlePromptRef } from "../data/dreamwell-prompts";
-import type { PromptKind, PromptRole } from "../engine/prompts/types";
+import type { ArrangeDestination, PromptKind, PromptRole } from "../engine/prompts/types";
 
 /** Presentation-owned copy for a stable built-in battle prompt identity. */
 export function builtInBattlePromptMessage(
@@ -45,7 +45,7 @@ export interface EnginePromptHeading {
 }
 
 function countOf(min: number, max: number, one: string, many: string): string {
-  if (max <= 1) return `${min === 0 ? "up to " : ""}a${/^[aeiou]/u.test(one) ? "n" : ""} ${one}`;
+  if (max <= 1) return min === 0 ? `up to one ${one}` : `a${/^[aeiou]/u.test(one) ? "n" : ""} ${one}`;
   if (min === max) return `${String(max)} ${many}`;
   return min === 0 ? `up to ${String(max)} ${many}` : `${String(min)} to ${String(max)} ${many}`;
 }
@@ -114,6 +114,8 @@ export type EnginePromptOptionCopy =
   | { readonly kind: "no" }
   | { readonly kind: "pay"; readonly energy: number }
   | { readonly kind: "decline" }
+  /** The empty answer of an "up to" prompt answered on the board. */
+  | { readonly kind: "skip" }
   /** A mode, with its text when the card's own text spells out each mode. */
   | { readonly kind: "mode"; readonly index: number; readonly text: string | null }
   /** A play route of the playRoute prompt, in the engine's route order: from hand, then as an Offering. */
@@ -130,6 +132,8 @@ export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string 
       return `Pay ${String(option.energy)} ●`;
     case "decline":
       return "Decline";
+    case "skip":
+      return "Skip";
     case "mode":
       return option.text ?? `Option ${String(option.index + 1)}`;
     case "route":
@@ -201,6 +205,23 @@ export function engineResponseWindowHeading(stackCardName: string | null): Engin
 /** The visible label of a chooseNumber prompt's number picker: the variable it sets. */
 export function engineNumberPickerLabel(role: PromptRole): string {
   return role === "chooseX" ? "X" : "Value";
+}
+
+/** One destination of an arrange prompt: its lane heading and the compact label of each card's destination control. */
+export function engineArrangeDestinationLabel(destination: ArrangeDestination): {
+  readonly label: string;
+  readonly shortLabel: string;
+} {
+  switch (destination) {
+    case "top":
+      return { label: "Top of Deck", shortLabel: "Top" };
+    case "bottom":
+      return { label: "Bottom of Deck", shortLabel: "Bottom" };
+    case "void":
+      return { label: "Void", shortLabel: "Void" };
+    case "hand":
+      return { label: "Hand", shortLabel: "Hand" };
+  }
 }
 
 /** Labels of the number picker of a chooseNumber prompt. */

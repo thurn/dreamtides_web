@@ -88,7 +88,7 @@ function screenAtPrompt(state: BattleState, action: Action, presented = true) {
 }
 
 /** The screen of a prompt-lab fixture's battle, at its pending prompt or decision. */
-function labScreen(name: string) {
+function labScreen(name: string, presented = true) {
   const fixture = promptLabFixture(name);
   if (fixture === null) throw new Error(`no fixture ${name}`);
   const { slice } = promptLabBattle(engine, fixture);
@@ -96,8 +96,18 @@ function labScreen(name: string) {
   return {
     slice,
     prompt: pending?.prompt ?? null,
-    model: screenOf(slice.committed, pending?.prompt ?? null, pending?.display ?? slice.committed),
+    model: screenOf(slice.committed, pending?.prompt ?? null, pending?.display ?? slice.committed, presented),
   };
+}
+
+/** The screen at the prompt of a lab fixture whose one hand card is the card it plays. */
+function labPlay(name: string) {
+  const fixture = promptLabFixture(name);
+  if (fixture === null) throw new Error(`no fixture ${name}`);
+  const { slice } = promptLabBattle(engine, fixture);
+  const play = engine.legalActions(slice.committed, "player").find((action) => action.kind === "play");
+  if (play === undefined) throw new Error(`no play in ${name}`);
+  return { ...screenAtPrompt(slice.committed, play), state: slice.committed };
 }
 
 const id = (instance: InstanceId | null | undefined) => {
@@ -221,9 +231,73 @@ describe("buildEngineBattleScreenModel", () => {
     expect(model.prompt.targetIds).toEqual(ids.enemy.back.map(id));
     expect(model.view.promptHost).toMatchObject({ key: prompt.id, cancellable: true });
     expect(model.view.cardPicker).toBeNull();
+    // Exactly one target: no empty answer, so no Skip.
+    expect(model.view.choicePrompt).toBeNull();
+    expect(model.prompt.choiceAnswers).toEqual([]);
     expect(model.affordances.canAct).toBe(false);
     expect(targetAnswer(prompt, model.engine, id(ids.player.back[0]))).toBeNull();
     expect(targetAnswer(prompt, model.engine, id(ids.enemy.back[0]))).toEqual([ids.enemy.back[0]]);
+  });
+
+  it("offers Skip beside the board targets of an up-to-one prompt, and the empty answer applies", () => {
+    const { model, prompt, slice, state } = labPlay("up-to-one-target");
+    const enemies = state.sides.enemy.backRank.filter((card): card is InstanceId => card !== null);
+
+    expect(prompt).toMatchObject({ kind: "chooseTargets", min: 0, max: 1 });
+    expect(model.prompt.targetIds).toEqual(enemies.map(id));
+    expect(model.view.cardPicker).toBeNull();
+    expect(model.view.choicePrompt).toMatchObject({ key: prompt.id, canResolve: true });
+    expect(model.view.choicePrompt?.options).toHaveLength(1);
+    expect(model.prompt.choiceAnswers).toEqual([[]]);
+    const skipped = adapter.reduce(slice, { kind: "answer", side: "player", promptId: prompt.id, value: model.prompt.choiceAnswers[0] });
+    expect(skipped.kind).toBe("applied");
+    expect(skipped.kind === "applied" ? adapter.pending(skipped.slice) : "bounced").toBeNull();
+  });
+
+  it("arranges among the top, the bottom, and the hand, starting legal and cancellable while the play is", () => {
+    const { model, prompt, slice, state } = labPlay("arrange");
+    if (prompt.kind !== "arrange") throw new Error("no arrangement");
+    const arrange = model.view.promptHost?.arrange;
+    if (arrange?.surface !== "arrangement") throw new Error("not the arrangement editor");
+    const [first, second] = prompt.cards.map(id);
+    const lanes = arrange.model.lanes;
+
+    expect(model.view.promptHost).toMatchObject({ key: prompt.id, cancellable: true, heading: null });
+    expect(lanes.map((lane) => [lane.destination, lane.min, lane.max, lane.ordered])).toEqual([
+      ["top", 0, 1, true],
+      ["bottom", 0, 1, true],
+      ["hand", 1, 1, false],
+    ]);
+    const initial = arrangeAnswer(prompt, model.engine, {
+      viewedCardIds: [first, second],
+      orderedCardIds: lanes[0].cardIds,
+      bottomCardIds: lanes[1].cardIds,
+      voidCardIds: [],
+      handCardIds: lanes[2].cardIds,
+    });
+    expect(initial).not.toBeNull();
+    const answer = arrangeAnswer(prompt, model.engine, {
+      viewedCardIds: [first, second],
+      orderedCardIds: [],
+      bottomCardIds: [first],
+      voidCardIds: [],
+      handCardIds: [second],
+    });
+    expect(answer).toEqual([
+      { card: prompt.cards[0], to: "bottom" },
+      { card: prompt.cards[1], to: "hand" },
+    ]);
+    expect(
+      arrangeAnswer(prompt, model.engine, { viewedCardIds: [first, second], orderedCardIds: [first, second], voidCardIds: [] }),
+    ).toBeNull();
+    const applied = adapter.reduce(slice, { kind: "answer", side: "player", promptId: prompt.id, value: answer! });
+    if (applied.kind !== "applied") throw new Error("bounced");
+    const committed = applied.slice.committed.sides.player;
+    expect(committed.hand).toContain(prompt.cards[1]);
+    expect(committed.deck[committed.deck.length - 1]).toBe(prompt.cards[0]);
+    const cancelled = adapter.reduce(slice, { kind: "cancel", side: "player", promptId: prompt.id });
+    if (cancelled.kind !== "applied") throw new Error("bounced");
+    expect(cancelled.slice.committed.sides.player.deck).toEqual(state.sides.player.deck);
   });
 
   it("holds a prompt back until the events before it are presented", () => {
@@ -240,12 +314,14 @@ describe("buildEngineBattleScreenModel", () => {
     expect(ready.model.view.promptHost?.heading).not.toBeNull();
   });
 
-  it("shows the opponent's prompts, private ones included, only as a waiting notice", () => {
+  it("shows the opponent's prompts only as a waiting notice: acting, or choosing when private", () => {
     const discard = labScreen("ai-discard");
     const foresee = labScreen("ai-foresee");
 
+    expect(discard.model.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
+    expect(foresee.model.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-choosing" });
+    expect(labScreen("ai-discard", false).model.view.revealedHandCard).toBeNull();
     for (const { model } of [discard, foresee]) {
-      expect(model.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-choosing" });
       expect(model.view.promptHost?.heading ?? null).toBeNull();
       expect(model.view.cardPicker).toBeNull();
       expect(model.view.promptHost?.arrange ?? null).toBeNull();
@@ -306,7 +382,10 @@ describe("buildEngineBattleScreenModel", () => {
     expect(pickerAnswer(picker.prompt, picker.model.engine, [first, second])).toEqual(ids.player.back);
     expect(pickerAnswer(picker.prompt, picker.model.engine, [first])).toEqual([ids.player.back[0]]);
     expect(pickerAnswer(picker.prompt, picker.model.engine, [first, first])).toBeNull();
-    const looked = editor.model.view.promptHost?.arrange?.cards ?? [];
+    const surface = editor.model.view.promptHost?.arrange;
+    expect(surface?.surface).toBe("foresee");
+    expect(editor.model.view.promptHost?.cancellable).toBe(false);
+    const looked = surface?.surface === "foresee" ? surface.model.cards : [];
     expect(looked).toHaveLength(2);
     const [top, bottom] = looked.map((card) => card.battleCardId);
     expect(
@@ -333,6 +412,23 @@ describe("buildEngineBattleScreenModel", () => {
     expect(respond.view.revealedHandCard?.id).toBe(id(respond.engine.stack[0]?.kind === "card" ? respond.engine.stack[0].instance : null));
     expect(respond.affordances.pass).toEqual({ kind: "pass" });
     expect(engine.decision(after)?.kind).not.toBe("respond");
+  });
+
+  it("reveals the response window's card only once presented, and never for the opponent's response", () => {
+    const unpresented = labScreen("respond", false).model;
+    const { state, ids } = board({
+      player: { hand: [DSL.drawTwo.id], energy: 2 },
+      enemy: { hand: [SYNTHETIC.interruptEvent.id], energy: 2 },
+    });
+    const played = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS).state;
+    const theirs = screenOf(played);
+
+    expect(unpresented.view.promptHost?.heading ?? null).toBeNull();
+    expect(unpresented.view.revealedHandCard).toBeNull();
+    expect(engine.decision(played)).toEqual({ kind: "respond", side: "enemy" });
+    expect(played.stack).toHaveLength(1);
+    expect(theirs.view.revealedHandCard).toBeNull();
+    expect(theirs.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
   });
 
   it("offers Reclaim plays and Avatar and Dreamsign activations", () => {

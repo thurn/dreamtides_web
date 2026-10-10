@@ -52,14 +52,23 @@ export interface BattleForeseeEditorModel {
   readonly source?: DreamwellCardModel;
 }
 
-/** The complete staged result emitted by one confirmation. */
+/**
+ * The complete staged result emitted by one confirmation: where each viewed
+ * card goes. The Foresee editor places cards on top of the deck or in the
+ * void; the arrangement editor (`BattleArrangeEditor`) also places them at
+ * the bottom of the deck or into the hand.
+ */
 export interface BattleForeseeResult {
   /** The exact original deck prefix inspected at confirmation time. */
   viewedCardIds: readonly BattleCardId[];
-  /** Cards returned to the deck, top to bottom. */
+  /** Cards returned to the top of the deck, top to bottom. */
   orderedCardIds: readonly BattleCardId[];
+  /** Cards put on the bottom of the deck, top to bottom. */
+  bottomCardIds?: readonly BattleCardId[];
   /** Cards moved to the void, in the order chosen. */
   voidCardIds: readonly BattleCardId[];
+  /** Cards put into the hand, in the order chosen. */
+  handCardIds?: readonly BattleCardId[];
 }
 
 export interface BattleForeseeEditorProps {
@@ -67,6 +76,8 @@ export interface BattleForeseeEditorProps {
   model: BattleForeseeEditorModel;
   /** Commits one complete order/void resolution. */
   onConfirm: (resolution: BattleForeseeResult) => void;
+  /** Cancels the play awaiting this arrangement; omit when it cannot be cancelled. */
+  onCancel?: () => void;
 }
 
 interface ForeseePointerDrag {
@@ -88,6 +99,7 @@ interface ForeseePointerDrag {
 export function BattleForeseeEditor({
   model,
   onConfirm,
+  onCancel,
 }: BattleForeseeEditorProps): ReactElement {
   const isDesktop = useIsDesktop();
   const cardWidthPx = isDesktop
@@ -424,6 +436,7 @@ export function BattleForeseeEditor({
     <GlassDialog
       title={`Foresee ${formatNumber(count)}`}
       desktopCenterTarget="battlefield"
+      {...(onCancel === undefined ? {} : { onClose: onCancel, closeLabel: "Cancel" })}
     >
       <div
         data-battle-cumulus-foresee=""

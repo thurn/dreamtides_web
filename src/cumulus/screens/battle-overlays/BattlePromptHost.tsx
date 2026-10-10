@@ -3,7 +3,8 @@
 // parts of a prompt (on-board targets, the card picker, choice buttons in
 // the control row) render on the battle board from the same view model;
 // this host renders the rest: the prompt's heading with its source and
-// Cancel, the response window's heading, the arrangement editor, the loop
+// Cancel, the response window's heading, the arrangement editors (each
+// with Cancel while the prompt is cancellable), the loop
 // shortcut, and brief notices. Its number picker sits in the control row,
 // beside where the choice buttons go.
 //
@@ -11,6 +12,7 @@
 // resets the number picker and the arrangement editor.
 
 import { useEffect, useState, type CSSProperties, type ReactElement } from "react";
+import { BattleArrangeEditor, type BattleArrangeEditorModel } from "../../components/battle/BattleArrangeEditor";
 import { BattleForeseeEditor, type BattleForeseeEditorModel, type BattleForeseeResult } from "../../components/battle/BattleForeseeEditor";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { NumberStepper } from "../../components/controls/NumberStepper";
@@ -39,6 +41,15 @@ export interface BattlePromptNoticeView {
   readonly message: string;
 }
 
+/**
+ * The surface of an arrange prompt: the Foresee editor when the cards go
+ * back on top in any order or into the void, else the arrangement editor
+ * over the prompt's own destinations.
+ */
+export type BattlePromptArrangeView =
+  | { readonly surface: "foresee"; readonly model: BattleForeseeEditorModel }
+  | { readonly surface: "arrangement"; readonly model: BattleArrangeEditorModel };
+
 export interface BattlePromptHostView {
   /** The pending prompt's id; local selection resets when it changes. `null` outside a prompt. */
   readonly key: PromptId | null;
@@ -47,7 +58,7 @@ export interface BattlePromptHostView {
   /** The play or activation awaiting this prompt may still be cancelled. */
   readonly cancellable: boolean;
   readonly number: BattlePromptNumberView | null;
-  readonly arrange: BattleForeseeEditorModel | null;
+  readonly arrange: BattlePromptArrangeView | null;
   /** The loop on offer, with the most repetitions one request may ask for. */
   readonly loopOffer: { readonly maxCount: number } | null;
   readonly notice: BattlePromptNoticeView | null;
@@ -90,10 +101,9 @@ export function BattlePromptHost({
   onRepeatLoop,
   onNoticeDismiss,
 }: BattlePromptHostProps): ReactElement {
+  const cancel = view.cancellable ? onCancel : undefined;
   const accessory =
-    view.cancellable && onCancel !== undefined
-      ? { label: "Cancel", testId: "battle-prompt-cancel" as const, onPress: onCancel }
-      : null;
+    cancel === undefined ? null : { label: "Cancel", testId: "battle-prompt-cancel" as const, onPress: cancel };
   return (
     <>
       {view.heading === null ? null : (
@@ -120,11 +130,19 @@ export function BattlePromptHost({
       {view.loopOffer === null || view.heading !== null ? null : (
         <BattleLoopOffer maxCount={view.loopOffer.maxCount} disabled={!canAct} onRepeat={onRepeatLoop} />
       )}
-      {view.arrange === null || view.key === null ? null : (
+      {view.arrange === null || view.key === null ? null : view.arrange.surface === "foresee" ? (
         <BattleForeseeEditor
           key={view.key}
-          model={view.arrange}
+          model={view.arrange.model}
           onConfirm={(result) => onArrangeSubmit?.(result)}
+          {...(cancel === undefined ? {} : { onCancel: cancel })}
+        />
+      ) : (
+        <BattleArrangeEditor
+          key={view.key}
+          model={view.arrange.model}
+          onConfirm={(result) => onArrangeSubmit?.(result)}
+          {...(cancel === undefined ? {} : { onCancel: cancel })}
         />
       )}
       {view.notice === null ? null : (

@@ -11,13 +11,14 @@
  * the policy worker's catalog (`developmentLabDefinitions`), so a lab battle
  * folds, replays on reload, and plays against the AI host like any battle.
  */
-import type { EmblemDefinitions, EngineCardDefinition, EngineFigmentDefinition } from "../catalog";
-import { energy, event } from "../dsl/builders";
+import { printedCardId, type EmblemDefinitions, type EngineCardDefinition, type EngineFigmentDefinition, type SyntheticHooks } from "../catalog";
+import { enemyCharacter, energy, event, upTo } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
-import type { Answer } from "../prompts/types";
+import type { Answer, ArrangePrompt } from "../prompts/types";
 import type { Action } from "../rules/actions";
+import { instanceOf, moveInstance } from "../rules/zones";
 import { BACK_RANK_SIZE, battleSeed, SIDES, type AvatarId, type CardId, type DreamsignId, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, DeckEntry } from "../state/types";
 import { boardState, type BoardSetup } from "./board";
@@ -42,12 +43,60 @@ function labEvent(index: number, cost: number, effect: Parameters<typeof event>[
   };
 }
 
+function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHooks): EngineCardDefinition {
+  return {
+    id: syntheticId(0x300 + index),
+    cardType: "event",
+    costs: [energy(cost)],
+    spark: null,
+    subtype: "",
+    speed: "standard",
+    status: "authored",
+    abilities: () => [],
+    synthetic,
+  };
+}
+
 /** The lab's own cards. */
 export const LAB = {
   /** "Draw 2 cards, then discard a card." */
   drawTwoThenDiscard: labEvent(1, 1, p.sequence(p.draw(2), p.discard(1))),
   /** "Each player discards a card." */
   eachPlayerDiscards: labEvent(2, 1, p.sequence(p.discard(1), p.discard(1, "opponent"))),
+  /** "Dissolve up to one enemy." */
+  dissolveUpToOne: labEvent(3, 1, p.dissolve(upTo(enemyCharacter(), 1))),
+  /**
+   * "As you play this, look at the top 2 cards of your deck: put one into
+   * your hand and the other on the top or bottom of your deck." A play-time
+   * arrangement among three destinations, so it may be cancelled.
+   */
+  divination: labSyntheticEvent(4, 1, {
+    play: (ctx, self) => {
+      const source = instanceOf(ctx.state, self);
+      const side = source.controller;
+      const cards = ctx.state.sides[side].deck.slice(0, 2);
+      if (cards.length < 2) return {};
+      const arrangement = ctx.choose<ArrangePrompt>({
+        kind: "arrange",
+        side,
+        privateTo: side,
+        purpose: { source: self, cardId: printedCardId(source.printing), ability: 0, role: "foresee" },
+        cards,
+        destinations: [
+          { to: "top", min: 0, max: 1 },
+          { to: "bottom", min: 0, max: 1 },
+          { to: "hand", min: 1, max: 1 },
+        ],
+      });
+      const placed = (to: ArrangePrompt["destinations"][number]["to"]) =>
+        arrangement.filter((entry) => entry.to === to).map((entry) => entry.card);
+      for (const card of placed("hand")) moveInstance(ctx, card, "hand");
+      const sideState = ctx.state.sides[side];
+      const rest = sideState.deck.filter((card) => !cards.includes(card));
+      sideState.deck = [...placed("top"), ...rest, ...placed("bottom")];
+      return {};
+    },
+  }),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 /** Every definition a lab battle may name: the synthetic, DSL, stack, loop, trigger, continuous, zone, and lab cards. */
@@ -102,6 +151,11 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [ZONE.twoWarriors.id]: { name: "Lab Muster", text: "Materialize two 1✦ Warrior figments." },
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
+  [LAB.dissolveUpToOne.id]: { name: "Lab Mercy", text: "Dissolve up to one enemy." },
+  [LAB.divination.id]: {
+    name: "Lab Divination",
+    text: "As you play this, look at the top 2 cards of your deck: put one into your hand and the other on the top or bottom of your deck.",
+  },
 };
 
 /** Instance ids of the placed cards, per side and zone, in setup order. */
@@ -166,6 +220,28 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       active: "player",
       phase: "day",
       player: { hand: [DSL.chooseDrawOrPoints.id, DSL.mayDrawTwo.id, DSL.pointsTimesX.id], energy: 5, deck: deck(8) },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+  },
+  {
+    name: "up-to-one-target",
+    description: "Up to one target among characters in play: tap a target, or Skip",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { hand: [LAB.dissolveUpToOne.id], back: [vanillas[0]], energy: 4, deck: deck(6) },
+      enemy: { back: [vanillas[1], vanillas[2]], deck: deck(6) },
+    },
+    script: [],
+  },
+  {
+    name: "arrange",
+    description: "A cancellable arrangement among the top, the bottom, and the hand",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { hand: [LAB.divination.id], energy: 2, deck: [vanillas[0], vanillas[1], vanillas[2], ...deck(4)] },
       enemy: { deck: deck(6) },
     },
     script: [],

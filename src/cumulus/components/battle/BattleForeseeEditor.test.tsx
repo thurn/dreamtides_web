@@ -13,6 +13,15 @@ import {
   BattleForeseeEditor,
   type BattleForeseeEditorModel,
 } from "./BattleForeseeEditor";
+import {
+  BattleArrangeEditor,
+  type BattleArrangeEditorModel,
+} from "./BattleArrangeEditor";
+import {
+  BattlePromptHost,
+  type BattlePromptHostView,
+} from "../../screens/battle-overlays/BattlePromptHost";
+import { parsePromptId } from "../../../types/identifiers";
 
 vi.mock("../card/CardView", () => ({
   GameCard: () => <div data-mock-game-card="" />,
@@ -408,5 +417,144 @@ describe("BattleForeseeEditor", () => {
       ).toThrow();
     }
     consoleError.mockRestore();
+  });
+});
+
+/** Two cards, one into the hand and the other on top or bottom; both start legally placed. */
+function arrangement(): BattleArrangeEditorModel {
+  const lane = (
+    destination: "top" | "bottom" | "hand",
+    min: number,
+    cardIds: readonly BattleCardId[],
+  ) => ({ destination, label: destination, shortLabel: destination, min, max: 1, ordered: destination !== "hand", cardIds });
+  return {
+    title: "Arrange",
+    subtitle: null,
+    cards: [1, 2].map((index) => ({
+      battleCardId: id(`battle-card-${String(index)}`),
+      card: syntheticGameCard(index, "Duplicate"),
+    })),
+    lanes: [
+      lane("top", 0, [id("battle-card-2")]),
+      lane("bottom", 0, []),
+      lane("hand", 1, [id("battle-card-1")]),
+    ],
+  };
+}
+
+/** Picks a card's destination from its destination menu, by lane index. */
+function sendTo(container: HTMLElement, cardId: BattleCardId, laneIndex: number): void {
+  act(() => {
+    container
+      .querySelector<HTMLElement>(`[data-battle-arrange-card="${cardId}"] [aria-haspopup="listbox"]`)
+      ?.click();
+  });
+  act(() => {
+    document.body.querySelectorAll<HTMLElement>('[role="option"]')[laneIndex]?.click();
+  });
+}
+
+const arrangeConfirm = (container: HTMLElement) =>
+  container.querySelector<HTMLButtonElement>('[data-testid="battle-arrange-confirm"]');
+
+/** The dialog's own controls outside its body: the Cancel disc, when it has one. */
+const dialogCloseButtons = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll<HTMLButtonElement>("[data-glass-dialog-panel] button")).filter(
+    (button) => button.closest("[data-glass-dialog-body]") === null,
+  );
+
+describe("BattleArrangeEditor", () => {
+  beforeEach(() => stubMatchMedia(false));
+
+  it("places cards in every allowed destination and confirms only within each lane's bounds", () => {
+    const onConfirm = vi.fn();
+    const { container } = renderInCumulus(<BattleArrangeEditor model={arrangement()} onConfirm={onConfirm} />);
+    const [first, second] = [id("battle-card-1"), id("battle-card-2")];
+
+    sendTo(container, second, 1);
+    act(() => arrangeConfirm(container)?.click());
+    expect(onConfirm).toHaveBeenLastCalledWith({
+      viewedCardIds: [first, second],
+      orderedCardIds: [],
+      bottomCardIds: [second],
+      voidCardIds: [],
+      handCardIds: [first],
+    });
+    // Both cards on the bottom leave the hand short and the bottom over: no confirmation.
+    sendTo(container, first, 1);
+    expect(container.querySelector('[data-battle-arrange-lane="hand"]')?.getAttribute("data-battle-arrange-lane-valid")).toBe("false");
+    expect(arrangeConfirm(container)?.getAttribute("aria-disabled")).toBe("true");
+    act(() => arrangeConfirm(container)?.click());
+    expect(onConfirm).toHaveBeenCalledOnce();
+  });
+
+  it("reorders the cards of an ordered lane and confirms them first to last", () => {
+    const onConfirm = vi.fn();
+    const [first, second] = [id("battle-card-1"), id("battle-card-2")];
+    const base = arrangement();
+    const model: BattleArrangeEditorModel = {
+      ...base,
+      lanes: [{ ...base.lanes[0], max: 2, cardIds: [first, second] }, { ...base.lanes[2], min: 0, cardIds: [] }],
+    };
+    const { container } = renderInCumulus(<BattleArrangeEditor model={model} onConfirm={onConfirm} />);
+    const orderButtons = (cardId: BattleCardId) =>
+      Array.from(container.querySelectorAll<HTMLElement>(`[data-battle-arrange-card="${cardId}"] button:not([aria-haspopup])`));
+
+    expect(orderButtons(first).map((button) => button.getAttribute("aria-disabled"))).toEqual(["true", null]);
+    act(() => orderButtons(first)[1]?.click());
+    expect(
+      Array.from(container.querySelectorAll('[data-battle-arrange-lane="top"] [data-battle-arrange-card]'), (card) =>
+        card.getAttribute("data-battle-arrange-card"),
+      ),
+    ).toEqual([second, first]);
+    act(() => arrangeConfirm(container)?.click());
+    expect(onConfirm).toHaveBeenCalledWith(expect.objectContaining({ orderedCardIds: [second, first], handCardIds: [] }));
+    // The unordered hand lane offers no order controls.
+    sendTo(container, first, 1);
+    expect(orderButtons(first)).toEqual([]);
+  });
+
+  it("offers Cancel only when the arrangement may be cancelled", () => {
+    const onCancel = vi.fn();
+    const without = renderInCumulus(<BattleArrangeEditor model={arrangement()} onConfirm={() => {}} />);
+    expect(dialogCloseButtons(without.container)).toEqual([]);
+    without.unmount();
+    const { container } = renderInCumulus(
+      <BattleArrangeEditor model={arrangement()} onConfirm={() => {}} onCancel={onCancel} />,
+    );
+    const [cancel] = dialogCloseButtons(container);
+    act(() => cancel?.click());
+    expect(onCancel).toHaveBeenCalledOnce();
+  });
+});
+
+describe("BattlePromptHost arrangements", () => {
+  beforeEach(() => stubMatchMedia(false));
+
+  const host = (arrange: BattlePromptHostView["arrange"], cancellable: boolean): BattlePromptHostView => ({
+    key: parsePromptId("1:0:0"),
+    heading: null,
+    cancellable,
+    number: null,
+    arrange,
+    loopOffer: null,
+    notice: null,
+  });
+
+  it("renders each arrangement surface with Cancel exactly while the prompt is cancellable", () => {
+    const onCancel = vi.fn();
+    for (const arrange of [
+      { surface: "foresee", model: makeView(3) },
+      { surface: "arrangement", model: arrangement() },
+    ] as const) {
+      const fixed = renderInCumulus(<BattlePromptHost view={host(arrange, false)} canAct={false} onCancel={onCancel} />);
+      expect(fixed.container.querySelector(arrange.surface === "foresee" ? "[data-battle-cumulus-foresee]" : "[data-battle-arrange-editor]")).not.toBeNull();
+      expect(dialogCloseButtons(fixed.container)).toEqual([]);
+      fixed.unmount();
+      const cancellable = renderInCumulus(<BattlePromptHost view={host(arrange, true)} canAct={false} onCancel={onCancel} />);
+      act(() => dialogCloseButtons(cancellable.container)[0]?.click());
+      cancellable.unmount();
+    }
+    expect(onCancel).toHaveBeenCalledTimes(2);
   });
 });
