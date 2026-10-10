@@ -240,11 +240,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       const printed = fixedEnergy(playCosts(instanceCard(catalog, instance), instance.variant));
       instances[instance.id] = {
         id: instance.id,
-        printing: { ...instance.printing },
+        printing: copy(instance.printing),
         owner: instance.owner,
         controller: instance.controller,
         zone: instance.zone,
-        variant: { ...instance.variant },
+        variant: copy(instance.variant),
         status: { ...instance.status },
         enteredZoneAt: instance.enteredZoneAt,
         characteristics: {

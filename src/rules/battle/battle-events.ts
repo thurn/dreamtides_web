@@ -342,7 +342,7 @@ export function beginBattle(
   if (provider === null) {
     return null;
   }
-  const start = provider.beginBattle({
+  const battle = startJourneyBattle(provider, {
     journey: state.journey,
     siteId: parseSiteId(siteId),
     seedOverride,
@@ -350,6 +350,21 @@ export function beginBattle(
     rng: ctx.rng,
     timestamp: ctx.timestamp,
   });
+  return battle === null ? null : { ...state, battle };
+}
+
+/**
+ * The journey battle `BEGIN_BATTLE` folds: `provider`'s prototype battle with
+ * its engine battle started from the engine init of the same battle, in
+ * journey mode with basic automation on. `null` when the provider declines or
+ * the engine battle does not start. A QA scene that opens on an active battle
+ * loads exactly this battle.
+ */
+export function startJourneyBattle(
+  provider: BattleInitProvider,
+  input: Parameters<BattleInitProvider["beginBattle"]>[0],
+): BattleFoldState | null {
+  const start = provider.beginBattle(input);
   if (start === null) {
     return null;
   }
@@ -357,18 +372,15 @@ export function beginBattle(
     start.battle,
     start.engineInit,
     provider.engine,
-    ctx.seq,
+    input.seq,
   );
   if (battle === null) {
     return null;
   }
   return {
-    ...state,
-    battle: {
-      ...battle,
-      mode: battle.mode ?? { kind: "journey" },
-      basicAutomationEnabled: true,
-    },
+    ...battle,
+    mode: battle.mode ?? { kind: "journey" },
+    basicAutomationEnabled: true,
   };
 }
 

@@ -29,12 +29,7 @@ function importedSnapshotWithSeed(snapshot: unknown, seed: JourneySeed): unknown
     : snapshot;
 }
 import { mergeCardKeywordModification } from "../card-type-change";
-import { buildQaScene, qaSceneLoadsBattle } from "../runtime/qa-scenes";
-import { activeSiteIdOf } from "../rules/journey/sites";
-import {
-  createBattleInitProvider,
-  settleDeferredOpponentLog,
-} from "../session/providers/battle-init-provider";
+import { buildQaScene, buildQaSceneBattle } from "../runtime/qa-scenes";
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import {
   updateCardSourcePublication,
@@ -160,19 +155,11 @@ export function GameJourneyProvider({
         });
         if (snapshot === null) return;
         const seededSnapshot = { ...snapshot, seed: stateRef.current.seed };
-        const activeSiteId = activeSiteIdOf(seededSnapshot);
-        const battle =
-          activeSiteId === null || !qaSceneLoadsBattle(sceneId)
-            ? null
-            : createBattleInitProvider(journeyContent).beginBattle({
-                journey: seededSnapshot,
-                siteId: activeSiteId,
-                seedOverride: null,
-                seq: 0,
-                rng: () => 0,
-                timestamp: new Date(0).toISOString(),
-              });
-        settleDeferredOpponentLog(0, false);
+        const battle = buildQaSceneBattle(
+          sceneId,
+          journeyContent,
+          seededSnapshot,
+        );
         dispatch(
           actions.loadState(
             seededSnapshot,

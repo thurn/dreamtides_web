@@ -5,6 +5,7 @@ import { deserializeState, serializeState, stateHash } from "../state/hash";
 import type { CardId, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, StackItem } from "../state/types";
+import type { Variant } from "../dsl/types";
 import { InlineSource, NO_PROMPTS, ScriptedSource } from "../steps/sources";
 import { boardState, cardIdOf, placeFigment } from "../testing/board";
 import { ZONE, ZONE_FIGMENT } from "../testing/zone-cards";
@@ -17,6 +18,7 @@ import type { ArrangeAnswer, Prompt } from "../prompts/types";
 import { PolicyRandom } from "../policy/random";
 import { determinize } from "./determinize";
 import { promptView, view } from "./view";
+import { testCardSubtype } from "../../types/test-identities";
 
 const catalog = fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL);
 const v = SYNTHETIC;
@@ -113,6 +115,34 @@ describe("view", () => {
       const before = serializeState(state);
       const hash = stateHash(state);
       vandalize(view(state, viewer, catalog));
+      expect(serializeState(state)).toBe(before);
+      expect(stateHash(state)).toBe(hash);
+    }
+  });
+
+  it("shares no object with a modified variant of its source state", () => {
+    for (const viewer of SIDES) {
+      const { state, ids } = fixture();
+      const front = ids.player.front[0];
+      const instance = front === null ? undefined : state.instances[front];
+      if (instance === undefined) throw new Error("fixture has an empty front");
+      const variant: Variant = {
+        amplified: true,
+        transfigurations: ["Empowered", "Kindled"],
+        deckMods: {
+          sparkBonus: 1,
+          costReduction: 1,
+          fast: true,
+          reclaim: 2,
+          typeChange: { cardType: "character", subtype: testCardSubtype("Ancient") },
+        },
+      };
+      state.instances[instance.id] = { ...instance, variant };
+      const before = serializeState(state);
+      const hash = stateHash(state);
+      const seen = view(state, viewer, catalog);
+      expect(seen.instances[instance.id]?.variant).toEqual(variant);
+      vandalize(seen);
       expect(serializeState(state)).toBe(before);
       expect(stateHash(state)).toBe(hash);
     }

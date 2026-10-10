@@ -8,6 +8,13 @@ import {
   qaAtlasForProgress,
 } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../session/providers/exploration-provider";
+import {
+  createBattleInitProvider,
+  settleDeferredOpponentLog,
+} from "../session/providers/battle-init-provider";
+import { startJourneyBattle } from "../rules/battle/battle-events";
+import { takeEngineLogRecords } from "../rules/battle/engine-battle";
+import type { BattleFoldState } from "../rules/battle/fold";
 import { initializeDraftState } from "../draft/draft-engine";
 import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
 import { parseSiteId } from "../types/identifiers";
@@ -1243,6 +1250,37 @@ export function findQaScene(id: QaSceneId): QaScene | null {
 /** Whether `id` intentionally bootstraps directly into active battle state. */
 export function qaSceneLoadsBattle(id: QaSceneId): boolean {
   return findQaScene(id)?.loadsBattle === true;
+}
+
+/** The fold seq a QA scene's battle is built at; its logs are discarded. */
+const QA_SCENE_BATTLE_SEQ = 0;
+
+/**
+ * The battle `LOAD_STATE` loads with `journey`, the parked state of scene
+ * `id`: for a scene that {@link qaSceneLoadsBattle}, the journey battle
+ * `BEGIN_BATTLE` folds at its active site, built by the same
+ * {@link startJourneyBattle}; otherwise, or when that battle cannot start,
+ * null. The battle start's reconstruction and engine logs are discarded, as
+ * no `BEGIN_BATTLE` is folded.
+ */
+export function buildQaSceneBattle(
+  id: QaSceneId,
+  journeyContent: JourneyContent,
+  journey: JourneyState,
+): BattleFoldState | null {
+  const siteId = activeSiteIdOf(journey);
+  if (siteId === null || !qaSceneLoadsBattle(id)) return null;
+  const battle = startJourneyBattle(createBattleInitProvider(journeyContent), {
+    journey,
+    siteId,
+    seedOverride: null,
+    seq: QA_SCENE_BATTLE_SEQ,
+    rng: () => 0,
+    timestamp: new Date(0).toISOString(),
+  });
+  settleDeferredOpponentLog(QA_SCENE_BATTLE_SEQ, false);
+  takeEngineLogRecords(QA_SCENE_BATTLE_SEQ);
+  return battle;
 }
 
 /**

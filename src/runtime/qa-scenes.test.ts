@@ -26,9 +26,18 @@ import {
 import {
   QA_SCENES,
   buildQaScene,
+  buildQaSceneBattle,
   findQaScene,
   qaSceneLoadsBattle,
 } from "./qa-scenes";
+import { createBattleInitProvider } from "../session/providers/battle-init-provider";
+import {
+  beginBattle,
+  registerBattleInitProvider,
+} from "../rules/battle/battle-events";
+import { initialFoldState } from "../rules/fold-state";
+import { validateLoadedState } from "../rules/journey/lifecycle";
+import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 import {
   makeTutorialConfiguration,
   TEST_TUTORIAL_PLAYER_AVATAR_ID,
@@ -46,6 +55,8 @@ import {
   testGuideId,
   testAvatarId,
   testDreamsignId,
+  testDreamwellCardId,
+  testDreamwellCardName,
 } from "../types/test-identities";
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
@@ -305,6 +316,74 @@ describe("the atlas layer QA scenes", () => {
 
 describe("the battle layer QA scenes", () => {
   const displayLayers = [1, 2, 3, 4, 5, 6, 7];
+
+  const battleScenes = QA_SCENES.filter((scene) =>
+    qaSceneLoadsBattle(scene.id),
+  );
+
+  it("has battle-loading scenes to open", () => {
+    expect(battleScenes.length).toBeGreaterThan(0);
+  });
+
+  for (const scene of battleScenes) {
+    it(`${scene.id} loads the battle BEGIN_BATTLE folds, and LOAD_STATE accepts it`, () => {
+      const base = makeJourneyContent();
+      const cardDatabase = new Map(base.cardDatabase);
+      const [template] = cardDatabase.values();
+      for (const cardNumber of base.poolContext.starterCardNumbers) {
+        cardDatabase.set(cardNumber, {
+          ...template,
+          id: testCardId(`qa-scene-starter-${String(cardNumber)}`),
+          cardNumber,
+          imageNumber: cardNumber,
+          isStarter: true,
+        });
+      }
+      const content: JourneyContent = {
+        ...base,
+        cardDatabase,
+        dreamwellCards: [
+          {
+            id: testDreamwellCardId("qa-scene-dreamwell"),
+            name: testDreamwellCardName("QA Scene Dreamwell"),
+            renderedText: "Synthetic Dreamwell fixture.",
+            order: 1,
+            energyAdded: 1,
+            cardNumber: 1,
+          },
+        ],
+      };
+      const journey = buildQaScene(scene.id, content, SCENE_OPTIONS);
+      if (journey === null) throw new Error("the scene did not build");
+      const battle = buildQaSceneBattle(scene.id, content, journey);
+      expect(battle?.engine).toBeDefined();
+
+      const fold = {
+        ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG),
+        journey,
+      };
+      const loaded = validateLoadedState(fold, { snapshot: journey, battle });
+      expect(loaded?.battle?.engine).toEqual(battle?.engine);
+
+      registerBattleInitProvider(createBattleInitProvider(content));
+      try {
+        const begun = beginBattle(
+          fold,
+          { siteId: activeSiteOf(journey) },
+          {
+            contentConfig: TEST_CONTENT_CONFIG,
+            seq: 0,
+            rng: () => 0,
+            intervening: [],
+            timestamp: new Date(0).toISOString(),
+          },
+        );
+        expect(begun?.battle).toEqual(battle);
+      } finally {
+        registerBattleInitProvider(null);
+      }
+    });
+  }
 
   it("loads an active battle only for the dedicated playable scene", () => {
     expect(qaSceneLoadsBattle(parseQaSceneId("battle"))).toBe(false);
