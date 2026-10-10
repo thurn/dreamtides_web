@@ -52,6 +52,8 @@ export function runStep(
   options: RunOptions = {},
 ): StepResult {
   const work = cloneState(start);
+  // A top-level action starts a new run of automatic choices.
+  if (options.automatic !== true) work.automaticChoices = 0;
   const definition = stepDefinition(step.kind);
   const ctx = new Context(work, catalog, source, {
     prefix: options.prefix,
@@ -81,6 +83,7 @@ export function runStep(
   // its player's decisions, start a new run; a forced answer does not.
   const decisionFree = options.automatic === true && step.kind !== "loopIteration" && !madeChoice(ctx.answers);
   work.automaticSteps = decisionFree ? start.automaticSteps + 1 : 0;
+  if (options.automatic === true && madeChoice(ctx.answers)) work.automaticChoices += 1;
   if (options.replay !== true) {
     checkMandatoryCycle(ctx, decisionFree);
   }

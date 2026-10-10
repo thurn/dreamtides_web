@@ -25,7 +25,7 @@ Every other section is written to fit it.
   enforces the clock, randomness, and module-state bans. The same start state
   plus the same answers always produces the same state, events, and prompts.
 - **Headless.** It runs in Vite, Vitest, Node (`tsx`, `worker_threads`), and a
-  Web Worker (the policy host, Phase 4.5).
+  Web Worker (the policy host, `src/battle/engine-ai/policy.worker.ts`).
 - **Cheap to clone.** State is plain JSON-serializable data. AI search clones
   it thousands of times per decision.
 - **Complete.** Every rule is enforced, and legality is computed rather than
@@ -65,15 +65,14 @@ src/engine/
   loops/       loop signatures, the loop tracker, loop replay, mandatory-cycle detection
   view/        per-side views, knowledge tracking, determinization
   fold/        the battle slice adapter (BattleSlice, intents, in-flight replay)
+  policy/      the Policy interface, Random and Greedy, AI decision requests, the
+               worker's catalog manifest and protocol, the policy hosts
   testing/     synthetic cards, board builder, scenario specs, card-lab setup solver,
-               fuzz harness, Random policy, invariants, redaction checks
+               fuzz harness, invariants, redaction checks
 src/content/   typed catalogs (D32) with co-located abilities (D5)
   cards/ dreamsigns/ avatars/ dreamwell/ figments/
   battle.ts, dreamwell-rules.ts, opponents.ts, ai.ts, atlas.ts, apollyon.ts, …   data modules
 ```
-
-`src/engine/policy/` (the Policy interface, Greedy, the worker host, and the
-Phase 7 bots) arrives with Phase 4.5.
 
 **The engine API** (`engine.ts`) is `createEngine(catalog)`, an `Engine`
 with `createBattle(init, source)`, `decision(state)`,
@@ -120,6 +119,7 @@ interface BattleState {
   dreamwell: DreamwellState;           // the prebuilt shared deck, the next index, and its catalog
   challenge: { challengers: InstanceId[]; blockers: Record<InstanceId, InstanceId> } | null;
   automaticSteps: number;              // automatic steps since the last top-level decision
+  automaticChoices: number;            // automatic steps with a chosen answer since the last top-level action
   loops: LoopTracker;
   result: { kind: "victory"; winner: Side; reason: WinReason } | { kind: "draw"; reason: EndReason } | null;
                                        // WinReason: "score" | "winCondition"
@@ -1418,39 +1418,89 @@ doesn't gate the fold.
 
 ## Policy interface
 
-Phase 4.5 builds `src/engine/policy/` with this interface, the worker host,
-and Greedy; Phase 7 adds the bots. Today the fuzzer's Random policy
-(`testing/random-policy.ts`, with the policy-private `PolicyRandom` stream)
-plays both sides through `InlineSource` and `engine.apply`.
+`src/engine/policy/` holds the interface, the placeholder bots, and the
+hosts; Phase 7 adds its bots there. The fuzzer plays both sides with the
+Random policy's `randomAction` and the policy-private `PolicyRandom`
+stream (`policy/random.ts`) through `InlineSource` and `engine.apply`.
 
 ```ts
+type PolicyId = "random" | "greedy";
 type PolicyDecision =
-  | { kind: "topLevel"; decision: TopLevelDecision; legal: Action[] }
+  | { kind: "topLevel"; decision: Decision; legal: readonly Action[] }
   | { kind: "prompt"; prompt: Prompt };
+type PolicyChoice = { kind: "action"; action: Action } | { kind: "answer"; value: Answer };
 
 interface Policy {
-  readonly id: string;                         // "random", "greedy", "expert", "planner@v7", …
-  decide(view: BattleView, d: PolicyDecision, ctx: PolicyContext): Action | Answer;
+  readonly id: PolicyId;
+  decide(view: BattleView, d: PolicyDecision, ctx: PolicyContext): { choice: PolicyChoice; trace: PolicyTrace };
 }
 interface PolicyContext {
-  rng: Rng;                                    // policy-private stream; never the battle RNG
+  engine: Engine;                              // determinize and simulate; never the battle's state
+  side: Side;
+  random: PolicyRandom;                        // policy-private stream; never the battle RNG
   budget: { iterations: number; wallClockMs?: number };
-  decklists: Decklists;                        // D22: each side's DeckEntry list, as determinize reads it
-  log: (entry: PolicyTrace) => void;
+  decklists: Decklists;                        // D22: each side's dealt DeckEntry list
+  now: () => number;                           // the wall-clock cap's clock
 }
 ```
 
-**Search branches on clones.** The search branches at top-level decisions on
-a clone of `committed`. It branches inside a step by re-running the step from
-the clone with a `ScriptedSource` prefix, then falling back to the policy.
-ISMCTS tree nodes are decisions of either kind.
+**A decision is a request** (`policy/decide.ts`). `aiDecision` builds a
+`PolicyRequest` from the battle slice for the side that owes the pending
+decision: its `view` (of `committed`, or of the suspended step's `display`
+with `promptView` of the prompt), the decision, both dealt decklists, the D23
+budget (`turnPlanning` for a main decision in the side's own Day, else
+`response`), and a seed of the battle seed, the side, and the **decision
+key**: the prompt's id, or `<version>:<attempt>:decision`. A decision with
+one legal action is `forced` and taken at once. `runPolicy` answers a request
+on any engine, so the same request always gets the same answer under an
+iteration budget, and no request carries hidden information.
 
-**Random and Greedy** arrive in Phase 4. **Expert, Planner, and ISMCTS**
-arrive in Phase 7.
+**Random** (`policy/random.ts`) picks `randomAction` and uniformly random
+legal answers. **Greedy** (`policy/greedy.ts`) samples determinizations of
+its view, applies every legal action to each, resolves the stack with both
+sides passing, and keeps the action whose evaluation (`AI.enginePolicy.greedy`:
+victory, score difference, board spark, hand cards, energy) has the best
+mean. It answers prompts with a heuristic (`policy/prompts.ts`), live and in
+simulation: accept a "you may", pay an "unless" cost it can pay, the largest
+number, and the cards it wants most (the opponent's most valuable for a
+target, its own least valuable for a cost or discard).
 
-**Live play** runs the policy in a Web Worker. The worker receives the view
-and the decision and returns an action or answer, which the client submits as
-an intent.
+**The optional-chain bound.** Answering a non-forced prompt in an automatic
+step counts as a decision, so the resolution cap never ends a
+self-retriggering "you may" a policy keeps accepting.
+`BattleState.automaticChoices` counts the automatic steps since the last
+top-level action in which a player chose an answer; every policy declines
+(`declineAnswer`: no, the fewest cards, the lowest number) once it reaches
+`AI.enginePolicy.optionalChainCap`.
+
+**Search branches on clones.** Phase 7's search branches at top-level
+decisions on a clone of `committed`. It branches inside a step by re-running
+the step from the clone with a `ScriptedSource` prefix, then falling back to
+the policy. ISMCTS tree nodes are decisions of either kind. **Expert,
+Planner, and ISMCTS** arrive in Phase 7.
+
+**Live play** runs the policy in a Web Worker
+(`src/battle/engine-ai/policy.worker.ts`, protocol `policy/worker-protocol.ts`).
+A catalog holds functions, so the worker builds its own from the content
+modules plus the battle's `CatalogManifest` (`policy/catalog-manifest.ts`):
+plain definitions of every entity the battle init names, played text-less
+when the content modules lack them. `createWorkerPolicyHost` fails a request
+the worker reports failed, crashes on, or leaves unanswered past its
+wall-clock budget plus `workerGraceMs`, and starts a fresh worker for the
+next request.
+
+**The AI host** (`src/battle/engine-ai/`) drives the enemy of every journey
+battle: `useEngineAi` feeds each fold to an `EngineAiDriver`, which asks the
+worker host and submits the answer as a `BATTLE_ACTION` or `BATTLE_ANSWER`
+intent with the `ai:` actor and an intent key naming the decision. A failed
+request is answered by Random on the main thread; an answer for a decision
+the fold has left is discarded; a bounced intent is submitted again only
+after the fold changes. The log holds the AI's intents, so a replay never
+runs the AI, and a reload asks again with the same seed. Each decision logs
+one `ai.decision` line: the policy, its source (worker, forced, fallback),
+the budget and what it used, the round trip, the determinization count, the
+top candidates with their scores and visits, and the choice. The policy is
+Greedy unless `?ai=random|greedy` selects one.
 
 ## Testing layers
 

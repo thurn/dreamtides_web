@@ -513,6 +513,14 @@ export interface BattleState {
   challenge: ChallengeState | null;
   /** Automatic steps run since the last top-level decision. */
   automaticSteps: number;
+  /**
+   * Automatic steps since the last top-level action in which a player
+   * answered a prompt by choice (not a forced answer). Each such answer
+   * counts as a decision, so nothing in the rules caps a run of them; a
+   * policy bounds its acceptance of a self-retriggering optional ability
+   * with this count.
+   */
+  automaticChoices: number;
   /** Loop detection and the loop shortcut (rules § Infinite Loops). */
   loops: LoopTracker;
   result: BattleResult | null;

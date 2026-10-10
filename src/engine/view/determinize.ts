@@ -214,6 +214,7 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
     dreamwell: { deck: [], next: 0, catalog: [] },
     challenge: copy(view.challenge),
     automaticSteps: 0,
+    automaticChoices: view.automaticChoices,
     loops: emptyLoopTracker(),
     result: copy(view.result),
   };

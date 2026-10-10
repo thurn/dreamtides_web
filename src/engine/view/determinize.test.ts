@@ -7,7 +7,7 @@ import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, DeckEntry } from "../state/types";
 import { fuzzEngineCatalog, fuzzInit, playRandomActions, playRandomGame, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { invariantViolations } from "../testing/invariants";
-import { PolicyRandom } from "../testing/random-policy";
+import { PolicyRandom } from "../policy/random";
 import { hiddenFrom } from "../testing/redaction";
 import { determinize, type Decklists } from "./determinize";
 import type { BattleView } from "./view";

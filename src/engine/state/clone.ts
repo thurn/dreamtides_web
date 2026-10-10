@@ -198,6 +198,7 @@ export function cloneState(state: BattleState): BattleState {
     dreamwell: copyDreamwell(state.dreamwell),
     challenge: copyJson(state.challenge),
     automaticSteps: state.automaticSteps,
+    automaticChoices: state.automaticChoices,
     loops: copyJson(state.loops),
     result: copyJson(state.result),
   };

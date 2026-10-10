@@ -137,6 +137,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
     dreamwell: { deck: [], next: 0, catalog: [] },
     challenge: null,
     automaticSteps: 0,
+    automaticChoices: 0,
     loops: emptyLoopTracker(),
     result: null,
   };

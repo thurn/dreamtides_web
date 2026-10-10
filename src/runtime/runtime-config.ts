@@ -12,10 +12,20 @@ import { parseCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
 import { parseQaSceneId, type QaSceneId, type GameId } from "../types/identifiers";
 import type { FoldHash } from "../types/content-hash";
+import { AI } from "../content/ai";
+import { POLICY_IDS, type PolicyId } from "../engine/policy/types";
 
 export interface RuntimeConfig {
   seedOverride: number | null;
   aiMode: boolean;
+  /**
+   * The policy the AI host runs for the enemy of every journey battle's
+   * engine battle, from `?ai=random|greedy`; any other value (including the
+   * prototype's `ai=1`) runs the journey default. Presentation-only: the
+   * AI's choices reach the log as intents. `parseRuntimeConfig` always sets
+   * it; it is optional only so test config literals can omit it.
+   */
+  enemyPolicy?: PolicyId;
   /**
    * Local playback multiplier for the standalone tutorial sequence, from
    * `?tutorialSpeed=`. A positive finite decimal; absent or invalid values use
@@ -120,6 +130,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     aiMode: params.get("ai") === "1",
+    enemyPolicy: parseEnemyPolicy(params.get("ai")),
     tutorialPlaybackSpeed: parseTutorialPlaybackSpeed(
       params.get("tutorialSpeed"),
     ),
@@ -127,6 +138,19 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     ...parseQaParams(params),
   };
 }
+
+/** The engine enemy policy `?ai=` names, else the journey default. */
+export function parseEnemyPolicy(raw: string | null): PolicyId {
+  return POLICY_IDS.find((id) => id === raw) ?? AI.enginePolicy.journeyDefault;
+}
+
+/**
+ * The enemy policy of the URL the page loaded with, read once when the
+ * runtime config module loads at page load: the battle screen runs it.
+ */
+export const PAGE_ENEMY_POLICY: PolicyId = parseEnemyPolicy(
+  typeof location === "undefined" ? null : new URLSearchParams(location.search).get("ai"),
+);
 
 type QaParams = Pick<
   RuntimeConfig,

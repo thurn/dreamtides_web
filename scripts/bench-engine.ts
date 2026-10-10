@@ -33,7 +33,7 @@ import type { BattleState } from "../src/engine/state/types";
 import type { Step } from "../src/engine/steps/kinds";
 import { runStep } from "../src/engine/steps/runner";
 import { fuzzEngineCatalog, fuzzInit, playFuzzGame, playRandomGame, replayInteractively, type FuzzPool } from "../src/engine/testing/fuzz";
-import { PolicyRandom } from "../src/engine/testing/random-policy";
+import { PolicyRandom } from "../src/engine/policy/random";
 import { determinize } from "../src/engine/view/determinize";
 import { view } from "../src/engine/view/view";
 

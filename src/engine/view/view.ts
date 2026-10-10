@@ -203,6 +203,8 @@ export interface BattleView {
   readonly dreamwell: { readonly remaining: number; readonly catalog: readonly DreamwellCardId[] };
   readonly challenge: Readonly<ChallengeState> | null;
   readonly loop: LoopView | null;
+  /** `BattleState.automaticChoices`: choices answered in automatic steps since the last top-level action. */
+  readonly automaticChoices: number;
   readonly result: BattleResult | null;
 }
 
@@ -337,6 +339,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
             side: state.loops.candidate.side,
             run: state.loops.run === null ? null : { remaining: state.loops.run.remaining, iterations: state.loops.run.iterations },
           },
+    automaticChoices: state.automaticChoices,
     result: copy(state.result),
   };
 }

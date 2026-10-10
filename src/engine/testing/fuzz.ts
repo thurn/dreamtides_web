@@ -27,7 +27,7 @@ import { InlineSource } from "../steps/sources";
 import type { RecordedAnswer } from "../steps/types";
 import { invariantViolations } from "./invariants";
 import { EventRedaction, promptRedactionViolations } from "./redaction";
-import { PolicyRandom, randomAction } from "./random-policy";
+import { PolicyRandom, randomAction } from "../policy/random";
 import { SYNTHETIC, SYNTHETIC_CARDS, SYNTHETIC_DREAMWELL, syntheticId } from "./synthetic-cards";
 import { PROMPTING_CARDS } from "./synthetic-effects";
 import { DSL_CARDS } from "./dsl-cards";

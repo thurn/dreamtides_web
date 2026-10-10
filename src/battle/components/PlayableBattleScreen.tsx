@@ -39,6 +39,8 @@ import type { JourneyContent } from "../../data/journey-content";
 import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi } from "../ai/use-battle-ai";
+import { useEngineAi } from "../engine-ai/use-engine-ai";
+import { PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
 import { aiEventActor } from "../../eventlog/types";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
@@ -410,6 +412,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     basicAutomation: true,
     aiConfiguration: battleInit.aiConfiguration,
   });
+
+  // The engine battle's enemy is always AI-driven, whatever this screen shows.
+  useEngineAi(PAGE_ENEMY_POLICY);
 
   const aiBlockingTurn = battle.aiBlockingTurn;
   useEffect(() => {

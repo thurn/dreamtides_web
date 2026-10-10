@@ -111,7 +111,8 @@ menu's developer commands.
 | --- | --- |
 | `goto=<scene>` | Boot a fresh game straight onto a screen (below) |
 | `seed=<n>` | Fixed seed (non-negative integer) for the game the URL creates and its battles |
-| `ai=1` | Local AI proposes enemy battle actions for approval |
+| `ai=1` | Local AI proposes enemy battle actions for approval on the prototype board |
+| `ai=random` / `ai=greedy` | The policy the AI host runs for the enemy of the engine battle (default `greedy`) |
 | `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
 | `card=<uuid>` | With an Exploration scene, use that source card's encounter |

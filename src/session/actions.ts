@@ -399,11 +399,15 @@ export interface GameActions {
   ) => Promise<number>;
 
   // --- engine intents of a journey battle ---
-  /** Take a top-level engine action for `side`. */
+  /**
+   * Take a top-level engine action for `side`. The AI host passes an
+   * `intentKey` naming the decision, so the log applies it at most once.
+   */
   battleAction: (
     side: BattleSide,
     action: EngineAction,
     actor?: EventActor,
+    intentKey?: IntentKey,
   ) => Promise<number>;
   /** Answer the engine prompt `promptId` for `side`. */
   answerPrompt: (
@@ -411,6 +415,7 @@ export interface GameActions {
     promptId: PromptId,
     value: EngineAnswer,
     actor?: EventActor,
+    intentKey?: IntentKey,
   ) => Promise<number>;
   /** Cancel the play or activation suspended on the engine prompt `promptId`. */
   cancelPrompt: (
@@ -867,10 +872,10 @@ export function makeActions(append: AppendFn): GameActions {
       emit("SET_CARD_NOTE", { instanceId, note }),
 
     // --- engine intents of a journey battle ---
-    battleAction: (side, action, actor) =>
-      emit("BATTLE_ACTION", { side, action }, undefined, actor),
-    answerPrompt: (side, promptId, value, actor) =>
-      emit("BATTLE_ANSWER", { side, promptId, value }, undefined, actor),
+    battleAction: (side, action, actor, intentKey) =>
+      emit("BATTLE_ACTION", { side, action }, intentKey, actor),
+    answerPrompt: (side, promptId, value, actor, intentKey) =>
+      emit("BATTLE_ANSWER", { side, promptId, value }, intentKey, actor),
     cancelPrompt: (side, promptId, actor) =>
       emit("BATTLE_CANCEL", { side, promptId }, undefined, actor),
   };

@@ -70,6 +70,7 @@ const STATE_FIELDS = {
   dreamwell: "position",
   challenge: "position",
   automaticSteps: "bookkeeping",
+  automaticChoices: "bookkeeping",
   loops: "bookkeeping",
   result: "position",
 } as const satisfies Record<keyof BattleState, SignatureRole>;
@@ -181,7 +182,7 @@ export function gainsFor(actor: Side, before: LoopResources, after: LoopResource
 export function cycleHash(state: BattleState): StateHash {
   const instances = Object.values(state.instances);
   const rank = timestampRanks(instances, state.floating);
-  const { version: _version, automaticSteps: _steps, loops: _loops, clock: _clock, instances: _instances, floating: _floating, ...rest } = state;
+  const { version: _version, automaticSteps: _steps, automaticChoices: _choices, loops: _loops, clock: _clock, instances: _instances, floating: _floating, ...rest } = state;
   return canonicalHash<StateHash>({
     ...rest,
     instances: rankedInstances(instances, rank, (instance) => instance),

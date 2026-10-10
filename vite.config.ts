@@ -67,6 +67,11 @@ export default defineConfig({
     tailwindcss(),
     journeyLogPlugin(),
   ],
+  // The AI's policy worker (src/battle/engine-ai/policy.worker.ts) is an ES
+  // module worker, so its chunks can share the app's code-split modules.
+  worker: {
+    format: "es",
+  },
   server: {
     watch: {
       // Git worktrees live under .worktrees and .claude/worktrees inside the

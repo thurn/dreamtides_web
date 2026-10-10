@@ -14,7 +14,7 @@ import { PROMPTING } from "../testing/synthetic-effects";
 import { AVATAR, DREAMSIGN, STACK } from "../testing/stack-cards";
 import { eventRedactionViolations, hiddenFrom, strings } from "../testing/redaction";
 import type { ArrangeAnswer, Prompt } from "../prompts/types";
-import { PolicyRandom } from "../testing/random-policy";
+import { PolicyRandom } from "../policy/random";
 import { determinize } from "./determinize";
 import { promptView, view } from "./view";
 
