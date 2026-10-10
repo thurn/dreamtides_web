@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { cardIdOf } from "./testing/board";
 import { xCost } from "./dsl/energy";
 import { createEngine } from "./engine";
@@ -6,18 +6,60 @@ import { battleSeed, type CardId } from "./state/ids";
 import type { BattleInit } from "./state/types";
 import { drawRandom } from "./state/rng";
 import { NO_PROMPTS } from "./steps/sources";
+import { PolicyRandom } from "./policy/random";
+import { syntheticId } from "./testing/synthetic-cards";
 import {
   DECK_SIZE,
   fuzzCatalogCards,
   fuzzEngineCatalog,
   fuzzInit,
+  randomDeck,
   playFuzzGame,
   replayFinalHash,
   SYNTHETIC_FUZZ_POOL,
+  withFuzzCardWeights,
 } from "./testing/fuzz";
 
 const pool = SYNTHETIC_FUZZ_POOL;
 const engine = createEngine(fuzzEngineCatalog(pool));
+
+describe("targeted fuzz input", () => {
+  const target = pool.cards[pool.cards.length - 1];
+  if (target === undefined) throw new Error("missing synthetic target");
+
+  it("reserves a requested card even when random picks select other cards, retaining the full pool", () => {
+    const targeted = withFuzzCardWeights(pool, `${target.id}, ${target.id}`);
+    const random = new PolicyRandom(battleSeed("targeted-picks"));
+    const pick = vi.spyOn(random, "pick").mockImplementation((values) => values[0]);
+    try {
+      const deck = randomDeck(random, targeted);
+      expect(deck.filter((entry) => entry.cardId === target.id)).toHaveLength(1);
+      expect(deck.some((entry) => entry.cardId !== target.id)).toBe(true);
+      expect(fuzzCatalogCards(targeted)).toEqual(fuzzCatalogCards(pool));
+    } finally {
+      pick.mockRestore();
+    }
+  });
+
+  it("targets both decks deterministically and keeps empty target input equivalent to omission", () => {
+    const seed = battleSeed("targeted-init");
+    const targeted = withFuzzCardWeights(pool, target.id);
+    const init = fuzzInit(seed, targeted);
+    expect(fuzzInit(seed, targeted)).toEqual(init);
+    for (const side of ["player", "enemy"] as const) {
+      expect(init.decks[side].some((entry) => entry.cardId === target.id)).toBe(true);
+    }
+    expect(fuzzInit(seed, { ...pool, weightedCardIds: [] })).toEqual(fuzzInit(seed, withFuzzCardWeights(pool, undefined)));
+  });
+
+  it("rejects empty, malformed, unavailable, and oversized target lists", () => {
+    for (const input of ["", " ", "--games", "not-a-uuid", syntheticId(0xff01)]) {
+      expect(() => withFuzzCardWeights(pool, input)).toThrow();
+    }
+    const cards = Array.from({ length: DECK_SIZE + 1 }, (_, index) => ({ ...target, id: syntheticId(0xf100 + index) }));
+    expect(() => withFuzzCardWeights({ ...pool, cards }, cards.map((card) => card.id).join(","))).toThrow();
+  });
+});
 
 describe("random streams", () => {
   it("is deterministic per seed and stream, and independent across streams", () => {

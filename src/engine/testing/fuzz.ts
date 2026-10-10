@@ -36,6 +36,7 @@ import { TRIGGER_AVATAR, TRIGGER_CARDS, TRIGGER_DREAMSIGN, TRIGGER_EMBLEMS } fro
 import { CONTINUOUS_AVATAR, CONTINUOUS_CARDS, CONTINUOUS_DREAMSIGN, CONTINUOUS_EMBLEMS } from "./continuous-cards";
 import { ZONE_CARDS, ZONE_FIGMENTS } from "./zone-cards";
 import { LOOP_CARDS } from "./loop-cards";
+import { parseCardId, type CardId } from "../../types/card-identity";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
 export interface RecordedAction {
@@ -96,9 +97,32 @@ const FUZZ_EMBLEMS: EmblemDefinitions = {
  */
 export interface FuzzPool {
   readonly cards: readonly EngineCardDefinition[];
+  /** One reserved entry per requested UUID in each otherwise random deck. */
+  readonly weightedCardIds?: readonly CardId[];
   readonly dreamwell: readonly EngineDreamwellDefinition[];
   readonly emblems: EmblemDefinitions;
   readonly figments: readonly EngineFigmentDefinition[];
+}
+
+function weightedCards(pool: FuzzPool): readonly CardId[] {
+  const targets = pool.weightedCardIds ?? [];
+  if (targets.length === 0) return targets;
+  if (targets.length > DECK_SIZE) throw new Error(`At most ${String(DECK_SIZE)} distinct card UUIDs can be targeted.`);
+  const known = new Set(pool.cards.map((card) => card.id));
+  for (const id of targets) {
+    if (!known.has(id)) throw new Error(`Fuzz target is not an available card UUID: ${id}`);
+  }
+  return targets;
+}
+
+/** Parse the CLI's card targets, retaining the full catalog and normal sampling. */
+export function withFuzzCardWeights(pool: FuzzPool, input: string | undefined): FuzzPool {
+  if (input === undefined) return pool;
+  if (input.trim().length === 0) throw new Error("--weight-uuids requires a comma-separated list of card UUIDs.");
+  const weightedCardIds = [...new Set(input.split(",").map((value) => parseCardId(value.trim())))];
+  const targeted = { ...pool, weightedCardIds };
+  weightedCards(targeted);
+  return targeted;
 }
 
 function pending(index: number, base: EngineCardDefinition, changes: Partial<EngineCardDefinition> = {}): EngineCardDefinition {
@@ -157,14 +181,18 @@ export function fuzzEngineCatalog(pool: FuzzPool, extra: readonly EngineCardDefi
 /**
  * A random deck mixing synthetic cards (vanilla, prompting, and DSL) with the
  * pool's cards; pending pool cards play text-less. A tenth of the entries are
- * amplified.
+ * amplified. Targeted runs reserve one entry for each requested UUID;
+ * the remaining entries keep the full synthetic/content mix.
  */
 export function randomDeck(random: PolicyRandom, pool: FuzzPool): DeckEntry[] {
   const synthetic = FUZZ_SYNTHETIC;
-  return Array.from({ length: DECK_SIZE }, () => ({
+  const targets = weightedCards(pool);
+  const deck = Array.from({ length: DECK_SIZE }, () => ({
     cardId: (random.next() < 0.5 ? random.pick(synthetic) : random.pick(pool.cards)).id,
     amplified: random.next() < 0.1,
   }));
+  for (const [index, cardId] of targets.entries()) deck[index] = { ...deck[index], cardId };
+  return deck;
 }
 
 export function fuzzInit(seed: BattleSeed, pool: FuzzPool): BattleInit {

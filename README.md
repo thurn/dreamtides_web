@@ -45,6 +45,7 @@ the origin that hosts it (see `.env.example`).
 | `npm run import-cycles` | Fails on a module-load read inside an import cycle |
 | `npm run build` | Production build into `dist/` |
 | `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check, every 10th game replayed interactively through the fold |
+| `npm run fuzz:engine -- --games 300 --weight-uuids <card-uuid,...>` | Target up to 30 distinct catalog card UUIDs: reserve one entry per target in each random deck, report target entry counts, and preserve targets in failure repro commands |
 | `npm run prepare-workspace` | Refresh art links and generated adapters |
 
 `npm run review` plans its checks from the diff against `master`. Lint covers

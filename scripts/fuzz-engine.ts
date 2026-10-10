@@ -2,7 +2,7 @@
  * Seeded engine fuzzer: plays Random-policy games, checks invariants after
  * every step, and replays each game to confirm its final state hash.
  *
- *   npm run fuzz:engine -- --games 200 [--seed fuzz] [--first 0] [--interactive-every 10]
+ *   npm run fuzz:engine -- --games 200 [--seed fuzz] [--first 0] [--interactive-every 10] [--weight-uuids <card UUIDs>]
  *
  * Every Nth game is also replayed through the fold, suspending at every
  * prompt, and must match the inline game exactly. The summary counts the
@@ -32,6 +32,7 @@ import {
   playFuzzGame,
   replayFinalHash,
   replayInteractively,
+  withFuzzCardWeights,
   type FuzzPool,
 } from "../src/engine/testing/fuzz";
 import { battleSeed } from "../src/engine/state/ids";
@@ -47,13 +48,18 @@ const prefix = option("seed", "fuzz");
 const first = Number.parseInt(option("first", "0"), 10);
 const runId = `${prefix}-${String(first)}-${String(games)}`;
 const interactiveEvery = Number.parseInt(option("interactive-every", "10"), 10);
+const weightIndex = process.argv.indexOf("--weight-uuids");
+const weightInput = weightIndex < 0 ? undefined : (process.argv[weightIndex + 1] ?? "");
 /** The production catalog, so the fuzzer plays real content beside the synthetic fixtures. */
-const pool: FuzzPool = {
+const pool: FuzzPool = withFuzzCardWeights({
   cards: contentCardDefinitions(),
   dreamwell: contentDreamwellDefinitions(),
   emblems: { avatars: contentAvatarDefinitions(), dreamsigns: contentDreamsignDefinitions() },
   figments: contentFigmentDefinitions(),
-};
+}, weightInput);
+const weighted = pool.weightedCardIds ?? [];
+const targetEntries = new Map(weighted.map((id) => [id, 0]));
+const weightArgument = weighted.length === 0 ? "" : ` --weight-uuids ${weighted.join(",")}`;
 const engine = createEngine(fuzzEngineCatalog(pool));
 let prompts = 0;
 let reruns = 0;
@@ -86,6 +92,12 @@ for (let index = first; index < first + games; index++) {
     failure = error instanceof Error ? (error.stack ?? error.message) : String(error);
   }
   if (game !== undefined) {
+    for (const side of ["player", "enemy"] as const) {
+      for (const entry of game.init.decks[side]) {
+        const count = targetEntries.get(entry.cardId);
+        if (count !== undefined) targetEntries.set(entry.cardId, count + 1);
+      }
+    }
     steps += game.steps;
     prompts += game.prompts;
     bounded.legality += game.boundedLegality;
@@ -101,12 +113,12 @@ for (let index = first; index < first + games; index++) {
     const gameId = parseGameId(seed);
     const timestamp = new Date().toISOString();
     const lines = [
-      JSON.stringify({ event: "fuzz.failure", gameId, timestamp, seed, failure, failedAction: game?.failedAction ?? null }),
+      JSON.stringify({ event: "fuzz.failure", gameId, timestamp, seed, failure, weightedCardIds: weighted, failedAction: game?.failedAction ?? null }),
       ...(game === undefined ? [] : fuzzGameLog(engine, game).map((record) => JSON.stringify(engineLogLine(record, gameId, timestamp)))),
     ];
     writeFileSync(`${directory}/${seed}.jsonl`, `${lines.join("\n")}\n`);
     console.error(`FAIL ${seed}: ${failure}`);
-    console.error(`  repro: npm run fuzz:engine -- --seed ${prefix} --first ${String(index)} --games 1`);
+    console.error(`  repro: npm run fuzz:engine -- --seed ${prefix} --first ${String(index)} --games 1${weightArgument}`);
   }
 }
 
@@ -120,3 +132,4 @@ console.log(
     `feasibility bounded ${JSON.stringify(bounded)}; results ${JSON.stringify(results)}; failures ${String(failures)}`,
 );
 process.exitCode = failures > 0 ? 1 : 0;
+if (weighted.length > 0) console.log(`fuzz targets: ${JSON.stringify([...targetEntries].map(([uuid, entries]) => ({ uuid, entries })))}`);
