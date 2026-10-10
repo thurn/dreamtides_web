@@ -1,10 +1,10 @@
 // chrome-geometry — the shared dreamscape-menu chrome geometry, read by the
-// menu (DreamscapeJourneyMenu) and by surfaces that must clear it through
-// menuTriggerClearance (the draft top band, the journey result screens, the
-// deck gallery, and the journey chrome's error fallback). It lives in
-// src/cumulus/ so a src/cumulus screen can import it without reaching into
-// src/components (no-external-ui-imports); the menu, which may import from
-// src/cumulus, is the other consumer.
+// menu trigger's placement (CommandMenu's app-chrome presentation, which
+// DreamscapeJourneyMenu renders) and by surfaces that must clear it through
+// menuTriggerClearance (the draft top band, the journey result screens, and
+// the journey chrome's error fallback). It lives in src/cumulus/ so Cumulus
+// components and screens can import it without reaching into src/components
+// (no-external-ui-imports).
 
 import { token } from "./tokens";
 
@@ -26,9 +26,13 @@ export const MENU_EDGE_INSET_MOBILE_PX = 18;
  * The desktop corner inset for the same menu disc. Desktop has no device cutout
  * helping the corner breathe, so the trigger sits a little farther in.
  */
-export const MENU_EDGE_INSET_DESKTOP_PX = 22;
+const MENU_EDGE_INSET_DESKTOP_PX = 22;
 
-function menuEdgeInsetPx(isDesktop: boolean): number {
+/**
+ * The menu disc's corner inset for the platform: the trigger sits at
+ * `max(safe-inset, edgeInset)` from the top and side edges.
+ */
+export function menuEdgeInsetPx(isDesktop: boolean): number {
   return isDesktop ? MENU_EDGE_INSET_DESKTOP_PX : MENU_EDGE_INSET_MOBILE_PX;
 }
 

@@ -25,10 +25,7 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
 import type { DomElementId, DomTestId } from "../../types/dom";
-import {
-  MENU_EDGE_INSET_DESKTOP_PX,
-  MENU_EDGE_INSET_MOBILE_PX,
-} from "../../primitives/chrome-geometry";
+import { menuEdgeInsetPx } from "../../primitives/chrome-geometry";
 
 export type CommandMenuCopy = string;
 export type CommandMenuStatusCopy = string;
@@ -172,9 +169,7 @@ function AppChromeCommandMenu<Id extends string>({
   const hostRef = useRef<HTMLDivElement>(null);
 
   const isDesktop = useIsDesktop();
-  const edgeInset = isDesktop
-    ? MENU_EDGE_INSET_DESKTOP_PX
-    : MENU_EDGE_INSET_MOBILE_PX;
+  const edgeInset = menuEdgeInsetPx(isDesktop);
 
   useEffect(() => {
     if (!open) return;

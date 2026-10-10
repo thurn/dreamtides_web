@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { token } from "../primitives/tokens";
-import { menuTriggerClearance } from "../primitives/chrome-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 
 export interface DeckGalleryOverlayProps {
@@ -19,8 +18,6 @@ export interface DeckGalleryOverlayProps {
   emptyLabel: string;
   /** Visible label for the primary header action. */
   actionLabel: string;
-  /** Reserve the mobile top-left band for persistent journey menu chrome. */
-  clearMobileJourneyMenu?: boolean;
   /** Dismisses the gallery. */
   onClose: () => void;
 }
@@ -37,16 +34,9 @@ export function DeckGalleryOverlay({
   cards,
   emptyLabel,
   actionLabel,
-  clearMobileJourneyMenu = false,
   onClose,
 }: DeckGalleryOverlayProps): ReactElement {
-  
   const isDesktop = useIsDesktop();
-  const clearsMobileMenu = !isDesktop && clearMobileJourneyMenu;
-  const mobileMenuClearance = menuTriggerClearance({
-    isDesktop: false,
-    gap: token("--space-s"),
-  });
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -83,7 +73,6 @@ export function DeckGalleryOverlay({
             alignItems: "center",
             justifyContent: "center",
             padding: isDesktop ? token("--space-2xl") : 0,
-            background: clearsMobileMenu ? token("--scrim-gallery") : undefined,
           }}
         >
           <div
@@ -91,12 +80,7 @@ export function DeckGalleryOverlay({
               position: "relative",
               zIndex: 1,
               width: isDesktop ? "min(100%, 1180px)" : "100%",
-              height: isDesktop
-                ? undefined
-                : clearsMobileMenu
-                  ? `calc(100% - ${mobileMenuClearance})`
-                  : "100%",
-              marginTop: clearsMobileMenu ? mobileMenuClearance : undefined,
+              height: isDesktop ? undefined : "100%",
               maxHeight: isDesktop
                 ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
                 : undefined,
