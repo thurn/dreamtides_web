@@ -84,13 +84,9 @@ import { useEngineAi } from "../engine-ai/use-engine-ai";
 import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/figment-catalog";
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import { createEngineCardModels, type EngineCardModels } from "../ui/engine-card-model";
-import {
-  presentationItems,
-  sliceKey,
-  usePresentationQueue,
-  usePublishedEngineEvents,
-} from "./battle-presentation";
+import { usePresentationQueue, usePublishedEngineEvents } from "./battle-presentation";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
+import { presentationItems, sliceKey } from "./presentation-items";
 
 /** The engine debug panel (`?debug=1`, D4); a production build compiles it out (P7). */
 const EngineDebugPanel = import.meta.env.DEV ? lazy(() => import("./EngineDebugPanel")) : null;

@@ -1,13 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
+import { PresentationQueue } from "../../battle/components/battle-presentation";
 import {
   enqueuePresentation,
   EVENT_PRESENTATION,
-  intentOfEvent,
-  PresentationQueue,
   presentationItems,
   type PresentationItem,
-} from "../../battle/components/battle-presentation";
+} from "../../battle/components/presentation-items";
 import { createEngine, type Action, type BattleState, type InstanceId, type InstanceView } from "../../engine";
 import { createCatalog } from "../../engine/catalog";
 import { EVENT_DEFINITIONS } from "../../engine/events";
@@ -661,17 +660,6 @@ describe("prompt failure paths", () => {
     expect(backlog.filter((entry) => entry.notice !== null).map((entry) => entry.key)).toEqual(["d"]);
     expect(backlog[backlog.length - 1]?.key).toBe("d");
     expect(backlog.length).toBeLessThan(22);
-  });
-
-  it("reads engine intents back from applied events and ignores other events", () => {
-    expect(intentOfEvent("BATTLE_CANCEL", { side: "player", promptId: "3:1:0" })).toEqual({
-      kind: "cancel",
-      side: "player",
-      promptId: "3:1:0",
-    });
-    expect(intentOfEvent("BATTLE_ANSWER", { side: "enemy", promptId: "3:1:0", value: true })).toMatchObject({ kind: "answer", value: true });
-    expect(intentOfEvent("BATTLE_ACTION", { side: "nobody", action: { kind: "pass" } })).toBeNull();
-    expect(intentOfEvent("END_BATTLE", { side: "player", promptId: "3:1:0" })).toBeNull();
   });
 });
 

@@ -11,7 +11,10 @@
 //
 // `replayEngineBattle` folds a battle's intents again from the event log, to
 // recover what each applied intent published (the battle log's source); it
-// counts only when it reproduces the fold's slice.
+// counts only when it reproduces the fold's slice. The battle screen's
+// presentation feed folds each applied intent again the same way: both read
+// the intent with `engineIntentOfEvent`, fold it with `foldAdapterFor`, and
+// take a batch's states with `batchStates`.
 
 import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
 import type { BattleInit as EngineBattleInit } from "../../engine";
@@ -56,7 +59,18 @@ function keepLog(seq: number, records: readonly EngineLogRecord[]): void {
   }
 }
 
-function adapterFor(engine: Engine): FoldAdapter {
+/**
+ * The one fold adapter of `engine`, shared by the reducer, the replay, and
+ * the presentation feed. Sharing is safe:
+ *
+ * - its only state is the re-run memo, keyed by an immutable committed state
+ *   and the in-flight record, so every caller gets the run it would compute
+ *   itself;
+ * - its log records are kept only inside `collectLog`, which the reducer's
+ *   fold runs synchronously and which nothing re-enters, so the records of a
+ *   replay or a presentation fold, which run outside every fold, are dropped.
+ */
+export function foldAdapterFor(engine: Engine): FoldAdapter {
   let adapter = adapters.get(engine);
   if (adapter === undefined) {
     adapter = createFoldAdapter(engine, {
@@ -67,6 +81,22 @@ function adapterFor(engine: Engine): FoldAdapter {
     adapters.set(engine, adapter);
   }
   return adapter;
+}
+
+/**
+ * The states of one applied intent's batch: `state`, the state its events
+ * arrive with (`to`'s pending prompt's display, else its committed state),
+ * and `before`, the state they started from (the same of `from`).
+ */
+export function batchStates(
+  adapter: FoldAdapter,
+  from: BattleSlice,
+  to: BattleSlice,
+): { readonly before: BattleState; readonly state: BattleState } {
+  return {
+    before: adapter.pending(from)?.display ?? from.committed,
+    state: adapter.pending(to)?.display ?? to.committed,
+  };
 }
 
 /** Runs `fold` while collecting its engine log records for the event at `seq`. */
@@ -105,7 +135,7 @@ export function takeEngineLogRecords(seq: number): readonly EngineLogRecord[] {
  * reports an error, which bounces the `BEGIN_BATTLE`.
  */
 export function startEngineBattle(init: EngineBattleInit, engine: Engine, seq: number): EngineBattleFold | null {
-  const outcome = collectLog(seq, () => adapterFor(engine).start(init));
+  const outcome = collectLog(seq, () => foldAdapterFor(engine).start(init));
   if (outcome.kind !== "applied" || outcome.error !== null) return null;
   return { init, slice: outcome.slice };
 }
@@ -122,11 +152,20 @@ export function pendingEnginePrompt(
 ): PendingPrompt | null {
   const fold = journeyBattleOf(battle)?.engine;
   if (fold === undefined || fold.slice.inFlight === null || engine === null) return null;
-  return adapterFor(engine).pending(fold.slice);
+  return foldAdapterFor(engine).pending(fold.slice);
 }
 
 function isEngineIntentEventType(type: string): type is EngineIntentEventType {
   return type === "BATTLE_ACTION" || type === "BATTLE_ANSWER" || type === "BATTLE_CANCEL";
+}
+
+/**
+ * The engine intent an event of `type` carries: `null` for any other event
+ * type and for a malformed payload. It reads a payload as the fold does, so
+ * an applied event's intent is the one the fold applied.
+ */
+export function engineIntentOfEvent(type: string, payload: Record<string, unknown>): BattleIntent | null {
+  return isEngineIntentEventType(type) ? engineIntentFromPayload(type, payload) : null;
 }
 
 /** One engine intent folded over a slice: the next slice, or why it bounced or threw. */
@@ -183,7 +222,7 @@ export function reduceEngineIntent(
   const battle = journeyBattleOf(state.battle);
   if (battle === null || engine === null) return null;
   const fold = battle.engine;
-  const folded = collectLog(ctx.seq, () => foldIntent(adapterFor(engine), fold.slice, type, payload));
+  const folded = collectLog(ctx.seq, () => foldIntent(foldAdapterFor(engine), fold.slice, type, payload));
   if (folded.kind === "bounced") return null;
   if (folded.kind === "threw" && fold.slice.inFlight !== null) {
     keepLog(ctx.seq, [
@@ -259,18 +298,6 @@ export type EngineBattleReplayProgress<T> =
   | { readonly kind: "done" | "partial"; readonly replay: EngineBattleReplay<T>; readonly folded: number }
   | { readonly kind: "failed"; readonly folded: number };
 
-const replayAdapters = new WeakMap<Engine, FoldAdapter>();
-
-/** A log-free adapter: a replay folds intents that were logged when they applied. */
-function replayAdapterFor(engine: Engine): FoldAdapter {
-  let adapter = replayAdapters.get(engine);
-  if (adapter === undefined) {
-    adapter = createFoldAdapter(engine);
-    replayAdapters.set(engine, adapter);
-  }
-  return adapter;
-}
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -285,7 +312,7 @@ function startSlice(engine: Engine, battle: JourneyBattleFoldState, event: Commi
   const { payload } = event;
   if (event.type === "BEGIN_BATTLE") {
     if (payload.siteId !== battle.init.siteId) return null;
-    const outcome = replayAdapterFor(engine).start(battle.engine.init);
+    const outcome = foldAdapterFor(engine).start(battle.engine.init);
     return outcome.kind === "applied" && outcome.error === null ? outcome.slice : null;
   }
   if (event.type === "LOAD_STATE") {
@@ -348,7 +375,7 @@ function foldRest<T>(
   derive: (batch: EngineIntentBatch) => readonly T[],
   budget: number,
 ): { readonly replay: EngineBattleReplay<T>; readonly folded: number } | null {
-  const adapter = replayAdapterFor(engine);
+  const adapter = foldAdapterFor(engine);
   const { events } = replay;
   let { slice, marks } = replay;
   let items = [...replay.items];
@@ -365,8 +392,7 @@ function foldRest<T>(
         if (result.kind === "bounced") continue;
         const count = items.length;
         if (result.kind === "applied") {
-          const before = adapter.pending(slice)?.display ?? slice.committed;
-          const state = adapter.pending(result.slice)?.display ?? result.slice.committed;
+          const { before, state } = batchStates(adapter, slice, result.slice);
           items.push(...derive({ seq: committed.seq, events: result.published, state, before }));
         }
         slice = result.slice;

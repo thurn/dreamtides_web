@@ -1395,7 +1395,7 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 Every engine event kind (`events/kinds/`; each declares whether it is
 private to one side and what it redacts, and the presentation reads
 `eventSeenBy`) maps to an existing animation, notice, indicator, or log
-line. `EVENT_PRESENTATION` in `src/battle/components/battle-presentation.ts`
+line. `EVENT_PRESENTATION` in `src/battle/components/presentation-items.ts`
 names each kind's presentation, and a missing kind is a type error:
 
 - **travel:** a card changing zone or position (draw, play, discard,

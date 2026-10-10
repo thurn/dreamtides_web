@@ -23,7 +23,7 @@ import type {
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import type { Action, BattleView, EffectId, InstanceId, InstanceView, LoopId, Side, Slot } from "../../engine";
 import { opponent } from "../../engine";
-import type { PresentationVisual } from "../../battle/components/battle-presentation";
+import type { PresentationVisual } from "../../battle/components/presentation-items";
 import { engineStatusLabel, type EngineStatusCopy } from "../../runtime/battle-prompt-messages";
 import type { EngineCardModels } from "../../battle/ui/engine-card-model";
 import { formatPhaseLabel, formatSideLabel } from "../../battle/ui/format";
