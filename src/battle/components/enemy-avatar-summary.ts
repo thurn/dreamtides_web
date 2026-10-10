@@ -1,15 +1,14 @@
 // Resolves the opposing Avatar a battle shows from the battle's enemy
-// descriptor: the journey content Avatar its id names, for portrait art and
-// focus, with the descriptor's own name, title, and ability text.
+// descriptor: the journey content Avatar its `avatarId` names, for portrait
+// art and focus, with the descriptor's own name, title, and ability text.
 
 import type { JourneyContent } from "../../data/journey-content";
-import type { AvatarId, OpponentId } from "../../types/identifiers";
-import { parseAvatarId } from "../../types/identifiers";
+import { logEventOnce } from "../../logging";
 import type { BattleAvatarSummary, BattleEnemyDescriptor } from "../types";
 
 export function resolveEnemyAvatarSummary(
   enemyDescriptor: BattleEnemyDescriptor,
-  journeyContent: JourneyContent,
+  journeyContent: Pick<JourneyContent, "avatars">,
 ): BattleAvatarSummary {
   const sourceAvatar = findEnemySourceAvatar(enemyDescriptor, journeyContent);
   return {
@@ -25,42 +24,30 @@ export function resolveEnemyAvatarSummary(
   };
 }
 
+/**
+ * The content Avatar the descriptor's `avatarId` names. A descriptor without
+ * an `avatarId` (the synthetic opponent battle init builds when no Avatar is
+ * available) has no source Avatar. An `avatarId` absent from the content is a
+ * broken battle init: it is logged with both UUIDs and the summary renders
+ * from the descriptor alone.
+ */
 function findEnemySourceAvatar(
   enemyDescriptor: BattleEnemyDescriptor,
-  journeyContent: JourneyContent,
+  journeyContent: Pick<JourneyContent, "avatars">,
 ) {
-  const sourceId = parseEnemySourceAvatarId(enemyDescriptor.id);
-  if (sourceId !== null) {
-    const byId = journeyContent.avatars.find(
-      (avatar) => avatar.id === sourceId,
+  const avatarId = enemyDescriptor.avatarId;
+  if (avatarId === undefined) {
+    return undefined;
+  }
+  const avatar = journeyContent.avatars.find(
+    (candidate) => candidate.id === avatarId,
+  );
+  if (avatar === undefined) {
+    logEventOnce(
+      `battle_enemy_avatar_missing:${enemyDescriptor.id}:${avatarId}`,
+      "battle_enemy_avatar_missing",
+      { opponentId: enemyDescriptor.id, avatarId },
     );
-    if (byId !== undefined) {
-      return byId;
-    }
   }
-
-  const descriptorName = enemyDescriptor.name.toLocaleLowerCase();
-  return journeyContent.avatars.find((avatar) => {
-    const fullName = avatar.name.toLocaleLowerCase();
-    const shortName = fullName.split(",")[0] ?? fullName;
-    return (
-      descriptorName === fullName ||
-      descriptorName === shortName ||
-      descriptorName.endsWith(` ${fullName}`) ||
-      descriptorName.endsWith(` ${shortName}`)
-    );
-  });
-}
-
-function parseEnemySourceAvatarId(enemyId: OpponentId): AvatarId | null {
-  const prefix = "enemy:";
-  if (!enemyId.startsWith(prefix)) {
-    return null;
-  }
-  const sourceAndSeed = enemyId.slice(prefix.length);
-  const seedSeparator = sourceAndSeed.lastIndexOf(":");
-  if (seedSeparator <= 0) {
-    return null;
-  }
-  return parseAvatarId(sourceAndSeed.slice(0, seedSeparator));
+  return avatar;
 }

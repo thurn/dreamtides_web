@@ -48,6 +48,7 @@ import { characteristicsOf } from "../../engine/continuous/characteristics";
 import { fixedEnergy } from "../../engine/dsl/energy";
 import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
 import type { InstanceId } from "../../engine/state/ids";
+import { resolveEnemyAvatarSummary } from "../../battle/components/enemy-avatar-summary";
 
 const SITE_ID = parseSiteId("site-7");
 
@@ -154,6 +155,19 @@ describe("battle init provider", () => {
     const count = getLogEntries().length;
     expect(settleDeferredOpponentLog(17, true)).toBe(false);
     expect(getLogEntries()).toHaveLength(count);
+  });
+
+  it("names the opponent Avatar by UUID on the enemy descriptor", () => {
+    const content = makeContent();
+    const { start } = begin(content, makeJourney());
+    const descriptor = start.battle.init.enemyDescriptor;
+
+    expect(content.avatars.map((avatar) => avatar.id)).toContain(
+      descriptor.avatarId,
+    );
+    expect(resolveEnemyAvatarSummary(descriptor, content).id).toBe(
+      descriptor.avatarId,
+    );
   });
 
   it("pads a short journey deck to the minimum battle deck size with every entry", () => {

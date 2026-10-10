@@ -85,7 +85,7 @@ export default tseslint.config(
     },
   },
   {
-    // Card names are not unique; identity is the card UUID everywhere.
+    // Card and Avatar names are not unique; identity is the UUID everywhere.
     files: SOURCE,
     rules: {
       "dreamtides/no-name-keyed-cards": "error",

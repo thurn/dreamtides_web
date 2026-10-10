@@ -690,6 +690,7 @@ function tutorialEnemyDescriptor(
 ): BattleEnemyDescriptor {
   return {
     id: parseOpponentId(`tutorial:${threxan.id}`),
+    avatarId: threxan.id,
     name: threxan.name,
     subtitle: threxan.title,
     imageNumber: threxan.imageNumber,

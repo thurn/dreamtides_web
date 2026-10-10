@@ -23,15 +23,22 @@ describe("isCardNameExpression", () => {
       "selectedCard.name",
       "cardName",
       "selected_cardName",
+      "avatar.name",
+      "opponentAvatar.name",
+      "avatarName",
+      "card.name.toLowerCase()",
+      "avatar.name.toLocaleLowerCase().trim()",
     ]) {
       expect(isCardNameExpression(expressionOf(source))).toBe(true);
     }
   });
 
-  it("does not match non-card names or card ids", () => {
+  it("does not match other names, ids, or other calls on a name", () => {
     for (const source of [
-      "avatar.name",
       "site.name",
+      "site.name.toLowerCase()",
+      "avatar.id.toLowerCase()",
+      "card.name.split(',')",
       "card.id",
       "selectedCard.id",
       "name",
@@ -79,6 +86,14 @@ ruleTester.run("no-name-keyed-cards", rule, {
       name: "non-card names may be compared",
       code: `const same = site.name === other.name;`,
     },
+    {
+      name: "a case-folded name may be searched for display filtering",
+      code: `const shown = card.name.toLocaleLowerCase().includes(query);`,
+    },
+    {
+      name: "Avatar ids may be compared",
+      code: `const same = avatar.id === descriptor.avatarId;`,
+    },
   ],
   invalid: [
     {
@@ -114,6 +129,16 @@ ruleTester.run("no-name-keyed-cards", rule, {
       name: "card names compared for equality",
       code: `const same = card.name === other.card.name; const differs = cardName !== "Ember";`,
       errors: [{ messageId: "nameEquality" }, { messageId: "nameEquality" }],
+    },
+    {
+      name: "case-folded Avatar names compared for equality",
+      code: `const same = avatar.name.toLocaleLowerCase() === descriptor.name.toLowerCase();`,
+      errors: [{ messageId: "nameEquality" }],
+    },
+    {
+      name: "Map lookup keyed by a case-folded Avatar name",
+      code: `avatarsByName.get(opponentAvatar.name.toLowerCase());`,
+      errors: [{ messageId: "nameKey" }],
     },
   ],
 });

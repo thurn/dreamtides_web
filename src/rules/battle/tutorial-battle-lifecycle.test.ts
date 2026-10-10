@@ -390,6 +390,9 @@ describe("tutorial battle lifecycle", () => {
     expect(started.outcome).toBe("applied");
     expect(started.state.battle?.mode).toMatchObject({ kind: "tutorial" });
     expect(started.state.playtestControl?.controllerClientId).toBeNull();
+    expect(started.state.battle?.init.enemyDescriptor.avatarId).toBe(
+      content().tutorial.battle.enemyAvatarId,
+    );
   });
 
   it("parks a legal card play before movement and resumes it after Mira advances", () => {

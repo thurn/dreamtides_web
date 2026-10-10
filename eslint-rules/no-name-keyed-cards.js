@@ -1,25 +1,35 @@
 /**
- * Bans using card display names as identity.
+ * Bans using card and Avatar display names as identity.
  *
- * Card names are display text and are not unique. Code may resolve a card name
- * right before rendering, but Maps, Sets, object indexes, membership checks,
- * and equality comparisons must use the card's UUID instead.
+ * Card and Avatar names are display text and are not unique. Code may resolve
+ * a name right before rendering, but Maps, Sets, object indexes, membership
+ * checks, and equality comparisons must use the UUID instead, including
+ * comparisons of a case-folded or trimmed name such as
+ * `avatar.name.toLowerCase() === other`.
  */
 
 const MAP_KEY_METHODS = new Set(["get", "has", "set", "delete"]);
 const SET_KEY_METHODS = new Set(["add", "has", "delete"]);
 const EQUALITY_OPERATORS = new Set(["===", "!==", "==", "!="]);
+const NAME_NORMALIZING_METHODS = new Set([
+  "toLowerCase",
+  "toLocaleLowerCase",
+  "toUpperCase",
+  "toLocaleUpperCase",
+  "trim",
+  "normalize",
+]);
 
 function identifierName(node) {
   return node?.type === "Identifier" ? node.name : null;
 }
 
 function isCardishIdentifier(name) {
-  return typeof name === "string" && /card/i.test(name);
+  return typeof name === "string" && /card|avatar/i.test(name);
 }
 
 function isCardNameIdentifier(name) {
-  return typeof name === "string" && /cardName/i.test(name);
+  return typeof name === "string" && /cardName|avatarName/i.test(name);
 }
 
 function containsCardishReference(node) {
@@ -35,8 +45,17 @@ function containsCardishReference(node) {
   return false;
 }
 
-/** True for `card.name`, `offer.card.name`, `cardName`, etc. */
+/**
+ * True for `card.name`, `offer.card.name`, `cardName`, `avatar.name`, etc.,
+ * and for any of them case-folded or trimmed (`avatar.name.toLowerCase()`).
+ */
 export function isCardNameExpression(node) {
+  if (
+    node?.type === "CallExpression" &&
+    NAME_NORMALIZING_METHODS.has(staticMethodName(node.callee))
+  ) {
+    return isCardNameExpression(node.callee.object);
+  }
   if (node?.type === "Identifier") {
     return isCardNameIdentifier(node.name);
   }
@@ -94,14 +113,14 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban Map/Set/object lookup identity and equality comparisons keyed by card display names.",
+        "Ban Map/Set/object lookup identity and equality comparisons keyed by card or Avatar display names.",
     },
     schema: [],
     messages: {
       nameKey:
-        "Card display names are not stable identity. Key this lookup by card UUID/id and resolve the name only for display.",
+        "Card and Avatar display names are not stable identity. Key this lookup by UUID/id and resolve the name only for display.",
       nameEquality:
-        "Card display names are not unique. Compare card UUIDs/ids and resolve the name only for display.",
+        "Card and Avatar display names are not unique. Compare UUIDs/ids and resolve the name only for display.",
     },
   },
 
