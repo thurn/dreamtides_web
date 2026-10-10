@@ -279,12 +279,15 @@ export interface DreamAtlas<Generated extends boolean = boolean> {
 export type JourneyFailureBattleResult = "defeat" | "draw";
 
 /**
- * Discriminated reason for a terminal battle result, mirrored from the
- * battle-module `BattleResultReason` type so the journey layer does not have
- * to import battle internals.
+ * Discriminated reason for a terminal battle result, derived from the engine
+ * battle's end reason so the journey layer does not have to import battle
+ * internals.
  */
 export type JourneyFailureReason =
+  /** The enemy won, or both sides won at once, by the score threshold. */
   | "score_target_reached"
+  /** The enemy won, or both sides won at once, by a "you win the game" condition (rules § Objective). */
+  | "win_condition_met"
   | "turn_limit_reached"
   | "forced_result"
   /** A draw by a mandatory loop or the resolution cap (rules § Infinite Loops). */

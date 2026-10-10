@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { parseBattleId } from "../../types/identifiers";
+import type { JourneyFailureReason } from "../../types/journey";
 import {
   testAvatarId,
   testCardId,
@@ -367,6 +368,31 @@ describe("JourneyFailedScreen", () => {
       container.querySelector('[data-testid="journey-failed-start-new-run"]'),
     );
     expect(onNewJourney).toHaveBeenCalledOnce();
+  });
+
+  it("names each failure reason with its own eyebrow", () => {
+    const reasons: readonly JourneyFailureReason[] = [
+      "score_target_reached",
+      "win_condition_met",
+      "turn_limit_reached",
+      "forced_result",
+      "unbreakable_loop",
+    ];
+    const eyebrows = reasons.map((reason) => {
+      const { container, unmount } = renderInCumulus(
+        <JourneyFailedScreen view={{ ...VIEW, reason }} onNewJourney={vi.fn()} />,
+      );
+      const eyebrow = container.querySelector<HTMLElement>(
+        "p[data-journey-failed-reason]",
+      );
+      expect(eyebrow?.dataset.journeyFailedReason).toBe(reason);
+      const text = eyebrow?.textContent ?? "";
+      unmount();
+      return text;
+    });
+
+    expect(eyebrows.every((text) => text !== "")).toBe(true);
+    expect(new Set(eyebrows).size).toBe(reasons.length);
   });
 
   it("renders a fallback without an action when the summary is missing", () => {

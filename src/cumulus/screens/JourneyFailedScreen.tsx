@@ -41,6 +41,15 @@ export interface JourneyFailedScreenProps {
   onNewJourney: () => void;
 }
 
+/** The eyebrow naming how the lost battle ended. */
+const FAILURE_REASON_LABELS: Readonly<Record<JourneyFailureReason, string>> = {
+  score_target_reached: "Score Threshold Reached",
+  win_condition_met: "Win Condition Met",
+  turn_limit_reached: "Turn Limit Reached",
+  forced_result: "Forced Result",
+  unbreakable_loop: "Endless Loop",
+};
+
 /** The sparse Cumulus journey-failure summary, paired with the victory surface. */
 export function JourneyFailedScreen({
   view,
@@ -198,13 +207,7 @@ export function JourneyFailedScreen({
                         color: token("--danger"),
                       }}
                     >
-                      {view.reason === "score_target_reached"
-                        ? "Score Threshold Reached"
-                        : view.reason === "turn_limit_reached"
-                          ? "Turn Limit Reached"
-                          : view.reason === "unbreakable_loop"
-                            ? "Endless Loop"
-                            : "Forced Result"}
+                      {FAILURE_REASON_LABELS[view.reason]}
                     </p>
                     <dl
                       data-journey-failed-summary=""

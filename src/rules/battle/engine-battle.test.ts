@@ -8,7 +8,12 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import type { EventContext, GameEvent } from "../../eventlog/types";
 import { eventRng } from "../../eventlog/rng";
-import { createEngine, type BattleInit as EngineBattleInit, type Engine } from "../../engine";
+import {
+  createEngine,
+  type BattleInit as EngineBattleInit,
+  type BattleResult as EngineBattleResult,
+  type Engine,
+} from "../../engine";
 import type { EngineCardDefinition } from "../../engine/catalog";
 import { energy, event as eventAbility } from "../../engine/dsl/builders";
 import * as primitives from "../../engine/effects/primitives";
@@ -318,6 +323,36 @@ describe("journey -> battle -> reward -> Atlas", () => {
       turnNumber: committed.turn.turnNumber,
       playerScore: 0,
       enemyScore: 1,
+    });
+  });
+
+  it("reports how the enemy won or both sides drew, by score or by a win condition", () => {
+    const summaryOf = (result: EngineBattleResult) => {
+      const state = begun();
+      const fold = engineOf(state);
+      const committed = { ...fold.slice.committed, result };
+      const ended: FoldState = {
+        ...state,
+        battle: state.battle === null ? null : { ...state.battle, engine: { ...fold, slice: { ...fold.slice, committed } } },
+      };
+      return applied(reduce(ended, "END_BATTLE", {})).journey.failureSummary;
+    };
+
+    expect(summaryOf({ kind: "victory", winner: "enemy", reason: "winCondition" })).toMatchObject({
+      result: "defeat",
+      reason: "win_condition_met",
+    });
+    expect(summaryOf({ kind: "draw", reason: "winCondition" })).toMatchObject({
+      result: "draw",
+      reason: "win_condition_met",
+    });
+    expect(summaryOf({ kind: "victory", winner: "enemy", reason: "score" })).toMatchObject({
+      result: "defeat",
+      reason: "score_target_reached",
+    });
+    expect(summaryOf({ kind: "draw", reason: "score" })).toMatchObject({
+      result: "draw",
+      reason: "score_target_reached",
     });
   });
 

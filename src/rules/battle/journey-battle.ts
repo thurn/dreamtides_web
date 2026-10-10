@@ -356,9 +356,7 @@ function applyVictory(
 
 /**
  * Defeat or draw of the engine battle: the failure summary comes from the
- * engine's committed state. A draw by the turn limit reports the turn limit,
- * a draw by an unbreakable loop (the resolution cap or a mandatory loop)
- * reports the loop, and any other ending reports the score target.
+ * engine's committed state, with its reason from `failureReasonOf`.
  */
 function applyEngineDefeat(
   state: FoldState,
@@ -368,14 +366,7 @@ function applyEngineDefeat(
   const journey = state.journey;
   const committed = battle.engine.slice.committed;
   const siteId = activeSiteIdOf(journey) ?? battle.init.siteId;
-  const reason: JourneyFailureReason =
-    result.kind !== "draw"
-      ? "score_target_reached"
-      : result.reason === "turnLimit"
-        ? "turn_limit_reached"
-        : result.reason === "resolutionCap" || result.reason === "mandatoryLoop"
-          ? "unbreakable_loop"
-          : "score_target_reached";
+  const reason = failureReasonOf(result);
   return {
     ...state,
     journey: {
@@ -395,4 +386,24 @@ function applyEngineDefeat(
     },
     battle: null,
   };
+}
+
+/**
+ * The failure reason of an engine battle ending: an enemy victory or a
+ * simultaneous-win draw reports how it was won, by the score threshold or by
+ * a "you win the game" condition; a turn-limit draw reports the turn limit;
+ * and a draw by the resolution cap or a mandatory loop reports the loop.
+ */
+function failureReasonOf(result: EngineBattleResult): JourneyFailureReason {
+  switch (result.reason) {
+    case "score":
+      return "score_target_reached";
+    case "winCondition":
+      return "win_condition_met";
+    case "turnLimit":
+      return "turn_limit_reached";
+    case "resolutionCap":
+    case "mandatoryLoop":
+      return "unbreakable_loop";
+  }
 }
