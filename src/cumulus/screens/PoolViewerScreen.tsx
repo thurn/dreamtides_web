@@ -1,11 +1,11 @@
-// PoolViewerScreen — the shared Cumulus presentation for the run-pool browser.
+// PoolViewerScreen — the Cumulus presentation for the full-screen run-pool
+// browser overlay.
 //
-// The app overlay and floating battle inspector use this same pure screen.  The
-// outer controller owns visibility, stateful domain integration, and (for the
-// battle) window dragging; this file only renders semantic view data and
-// reports stable entry ids through callbacks.
+// The outer adapter owns visibility and stateful domain integration; this file
+// only renders semantic view data and reports stable entry ids through
+// callbacks.
 
-import type { CSSProperties, DragEvent, ReactElement } from "react";
+import type { CSSProperties, ReactElement } from "react";
 import {
   parseCardSubtype,
   type CardSubtype,
@@ -22,7 +22,6 @@ import type { DeckEntryId } from "../../types/identifiers";
 import { formatNumber } from "../../runtime/format-number";
 
 export type PoolViewerSourceId = "run" | "tides" | "catalog" | "signature";
-export type PoolViewerTitleKind = "pool" | "battle";
 
 export type PoolViewerSortDirection = "asc" | "desc";
 export type PoolViewerSortId =
@@ -54,8 +53,6 @@ export type PoolViewerDisclosureView =
 export type PoolViewerDisclosureId = PoolViewerDisclosureView["id"];
 
 export interface PoolViewerView {
-  title: PoolViewerTitleKind;
-  frame: "fullScreen" | "floating";
   source: PoolViewerSourceId;
   sourceOptions: readonly PoolViewerSourceId[];
   filters: PoolViewerFilterView;
@@ -73,14 +70,6 @@ export interface PoolViewerScreenProps {
   onSourceChange: (source: PoolViewerSourceId) => void;
   onFiltersChange: (patch: Partial<PoolViewerFilterView>) => void;
   onCardPress: (entryId: DeckEntryId) => void;
-  onCardDragStart?: (
-    entryId: DeckEntryId,
-    event: DragEvent<HTMLDivElement>,
-  ) => void;
-  onCardDragEnd?: (
-    entryId: DeckEntryId,
-    event: DragEvent<HTMLDivElement>,
-  ) => void;
 }
 
 const rootStyle: CSSProperties = {
@@ -89,6 +78,11 @@ const rootStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
   color: token("--text-on-glass"),
+  position: "fixed",
+  inset: 0,
+  zIndex: 60,
+  background: token("--scrim-gallery"),
+  overflowY: "auto",
 };
 
 const controlsStyle: CSSProperties = {
@@ -99,17 +93,14 @@ const controlsStyle: CSSProperties = {
   padding: token("--space-s"),
 };
 
-/** Shared pure pool viewer for full-screen and floating integration shells. */
+/** Pure full-screen pool viewer overlay. */
 export function PoolViewerScreen({
   view,
   onClose,
   onSourceChange,
   onFiltersChange,
   onCardPress,
-  onCardDragStart,
-  onCardDragEnd,
 }: PoolViewerScreenProps): ReactElement {
-  
   const [expandedDisclosures, setExpandedDisclosures] = useState<
     ReadonlyMap<PoolViewerDisclosureId, boolean>
   >(() => new Map());
@@ -125,28 +116,9 @@ export function PoolViewerScreen({
     value: source,
     label: sourceOptionLabel(source),
   }));
-  const galleryCards = view.cards.map((card) => ({
-    ...card,
-    draggable: onCardDragStart !== undefined,
-  }));
 
   return (
-    <section
-      className="cumulus"
-      data-pool-viewer={view.frame === "fullScreen" ? "overlay" : "floating"}
-      style={{
-        ...rootStyle,
-        ...(view.frame === "fullScreen"
-          ? {
-              position: "fixed",
-              inset: 0,
-              zIndex: 60,
-              background: token("--scrim-gallery"),
-              overflowY: "auto",
-            }
-          : {}),
-      }}
-    >
+    <section className="cumulus" data-pool-viewer="overlay" style={rootStyle}>
       <div style={controlsStyle} data-pool-viewer-controls="">
         <SegmentedControl
           size="sm"
@@ -261,7 +233,7 @@ export function PoolViewerScreen({
         </DisclosureSection>
       ))}
       <CardBrowserPanel
-        title={viewerTitle(view.title)}
+        title="Pool Viewer"
         subtitle={(view.totalCount === 1 ? `${formatNumber(view.visibleCount)} of ${formatNumber(view.totalCount)} Card` : `${formatNumber(view.visibleCount)} of ${formatNumber(view.totalCount)} Cards`)}
         rightAccessory={{
           kind: "iconButton",
@@ -293,13 +265,11 @@ export function PoolViewerScreen({
             },
           },
         }}
-        cards={galleryCards}
+        cards={view.cards}
         emptyLabel={emptySourceLabel(view.source)}
-        presentation={view.frame === "fullScreen" ? "fullScreen" : "embedded"}
+        presentation="fullScreen"
         testId="pool-viewer-gallery"
         onCardPress={onCardPress}
-        onCardDragStart={onCardDragStart}
-        onCardDragEnd={onCardDragEnd}
       />
     </section>
   );
@@ -366,15 +336,6 @@ function costFilterLabel(cost: PoolViewerCostFilter): string {
       return "Cost 5+";
     case "x":
       return "Cost X";
-  }
-}
-
-function viewerTitle(title: PoolViewerTitleKind): string {
-  switch (title) {
-    case "pool":
-      return "Pool Viewer";
-    case "battle":
-      return "Battle Pool Viewer";
   }
 }
 

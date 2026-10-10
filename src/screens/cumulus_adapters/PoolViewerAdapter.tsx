@@ -17,7 +17,6 @@ export function PoolViewerAdapter({
   poolVariant = null,
   resolvedPackage = null,
   tides4Provenance = null,
-  title = "pool",
 }: PoolViewerAdapterInput) {
   const [source, setSource] = useState<PoolViewerSourceId>("run");
   const [filters, setFilters] = useState<PoolViewerFilterView>(
@@ -34,8 +33,6 @@ export function PoolViewerAdapter({
         tides4Provenance,
         source,
         filters,
-        title,
-        frame: "fullScreen",
       }),
     [
       cardDatabase,
@@ -45,7 +42,6 @@ export function PoolViewerAdapter({
       resolvedPackage,
       source,
       tides4Provenance,
-      title,
     ],
   );
 

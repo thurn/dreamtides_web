@@ -14,11 +14,7 @@ describe("bounceMessageForReason", () => {
   });
 
   it("describes every compare-and-swap bounce as a stale action", () => {
-    for (const reason of [
-      "partner_conflict",
-      "unknown_conflict",
-      "observer_read_only",
-    ] as const) {
+    for (const reason of ["partner_conflict", "unknown_conflict"] as const) {
       expect(bounceMessageForReason(reason)).toBe(STALE_ACTION_MESSAGE);
     }
   });

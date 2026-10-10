@@ -13,7 +13,6 @@ import type {
   PoolViewerFilterView,
   PoolViewerSortId,
   PoolViewerSourceId,
-  PoolViewerTitleKind,
   PoolViewerView,
 } from "../../cumulus/screens/PoolViewerScreen";
 import type { DeckEntryId } from "../../types/identifiers";
@@ -43,8 +42,6 @@ export interface BuildPoolViewerViewInput {
   tides4Provenance: Tides4ProvenanceSummary | null;
   source: PoolViewerSourceId;
   filters: PoolViewerFilterView;
-  title: PoolViewerTitleKind;
-  frame: "fullScreen" | "floating";
 }
 
 /** External state/effect inputs for the thin PoolViewer adapter. */
@@ -56,7 +53,6 @@ export interface PoolViewerAdapterInput {
   poolVariant?: PoolVariant | null;
   resolvedPackage?: ResolvedAvatarPackage | null;
   tides4Provenance?: Tides4ProvenanceSummary | null;
-  title?: PoolViewerTitleKind;
 }
 
 /** Maps complete domain inputs into deterministic screen data with UUID-based identity. */
@@ -76,8 +72,6 @@ export function buildPoolViewerView(
     input.poolVariant,
   );
   return {
-    title: input.title,
-    frame: input.frame,
     source,
     sourceOptions: sources,
     filters: input.filters,

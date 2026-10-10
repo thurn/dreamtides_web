@@ -184,8 +184,6 @@ describe("PoolViewerScreen", () => {
   it("reports stable source and card ids", () => {
     const card = fixtureCard(1);
     const view: PoolViewerView = {
-      title: "pool",
-      frame: "fullScreen",
       source: "run",
       sourceOptions: ["run", "catalog"],
       filters: {

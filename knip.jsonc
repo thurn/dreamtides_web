@@ -4,8 +4,17 @@
   // supply the default entry points; the entries below are the ones knip
   // cannot infer.
   "entry": [
-    // review.mjs spawns this by path rather than importing it.
+    // review.mjs spawns these by path rather than importing them.
     "scripts/run-eslint.mjs",
+    "scripts/review-related-tests.mjs",
+    // The QA scenario runner, its prelude and scenarios, the card sweep, and
+    // the production-bundle check, all run as `node scripts/qa/<file>` or
+    // loaded by the runner from a scenario path.
+    "scripts/qa/**/*.mjs",
+    // perf-ab.ts runs these by path; developers run them with `npx tsx`.
+    "scripts/bench-engine.ts",
+    "scripts/lib/report-resource-usage.mjs",
+    "scripts/content-inventory.ts",
     // The Playwright MCP client the Phase 4 card screenshot sweep imports.
     "scripts/screenshot-runtime.mjs",
     // Compile-time prop contract checks that `tsc` runs; nothing imports them.

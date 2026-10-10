@@ -463,11 +463,6 @@ export function rerollDraftOffer(
   return hasOffer;
 }
 
-/** Return the current offer for display. */
-export function getCurrentOffer(state: DraftState): number[] {
-  return state.currentOffer;
-}
-
 /**
  * Process a player pick. The shown cards are spent from the fixed pool.
  * Returns whether the site visit is complete.

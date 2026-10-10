@@ -422,8 +422,6 @@ describe("pool-viewer-view-model", () => {
       tides4Provenance: null,
       source: "run",
       filters: DEFAULT_POOL_VIEWER_FILTERS,
-      title: "pool",
-      frame: "fullScreen",
       ...overrides,
     });
   }

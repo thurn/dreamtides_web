@@ -16,7 +16,6 @@ export function bounceMessageForReason(
   switch (reason) {
     case "partner_conflict":
     case "unknown_conflict":
-    case "observer_read_only":
       return STALE_ACTION_MESSAGE;
     case "prompt_pending":
       return "Action not applied: finish the current choice first.";
