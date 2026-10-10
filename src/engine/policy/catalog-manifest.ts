@@ -4,7 +4,8 @@
  * modules plus a manifest of plain definitions for every entity a battle
  * names that the content modules may not define (a loaded entity plays
  * text-less, D36). Content-module definitions win, as they do in the
- * journey's catalog (`journeyContentEngine`).
+ * journey's catalog (`journeyContentEngine`); a development build adds the
+ * prompt lab's synthetic definitions, as that catalog does.
  */
 import {
   createCatalog,
@@ -21,6 +22,7 @@ import {
   contentFigmentDefinitions,
 } from "../content-catalog";
 import type { AbilityList } from "../dsl/types";
+import { developmentLabDefinitions } from "../testing/prompt-lab";
 import type { AvatarId, CardId, DreamsignId } from "../state/ids";
 import { SIDES } from "../state/ids";
 import type { BattleInit } from "../state/types";
@@ -68,16 +70,22 @@ export function catalogManifest(catalog: EngineCatalog, init: BattleInit): Catal
 
 /** The worker's catalog: the content modules, then text-less definitions for what only the manifest names. */
 export function manifestCatalog(manifest: CatalogManifest): EngineCatalog {
+  const lab = developmentLabDefinitions();
   return createCatalog(
-    [...manifest.cards.map((card) => ({ ...card, abilities: NO_ABILITIES })), ...contentCardDefinitions()],
+    [...manifest.cards.map((card) => ({ ...card, abilities: NO_ABILITIES })), ...contentCardDefinitions(), ...lab.cards],
     [...manifest.dreamwell, ...contentDreamwellDefinitions()],
     {
-      avatars: [...manifest.avatars.map((avatar) => ({ ...avatar, abilities: NO_ABILITIES })), ...contentAvatarDefinitions()],
+      avatars: [
+        ...manifest.avatars.map((avatar) => ({ ...avatar, abilities: NO_ABILITIES })),
+        ...contentAvatarDefinitions(),
+        ...(lab.emblems.avatars ?? []),
+      ],
       dreamsigns: [
         ...manifest.dreamsigns.map((dreamsign) => ({ ...dreamsign, abilities: NO_ABILITIES })),
         ...contentDreamsignDefinitions(),
+        ...(lab.emblems.dreamsigns ?? []),
       ],
     },
-    contentFigmentDefinitions(),
+    [...contentFigmentDefinitions(), ...lab.figments],
   );
 }

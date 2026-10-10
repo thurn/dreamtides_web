@@ -46,6 +46,7 @@ import {
   type EngineDreamwellDefinition,
 } from "../../engine";
 import { energy, energyX } from "../../engine/dsl/builders";
+import { developmentLabDefinitions } from "../../engine/testing/prompt-lab";
 import type { CardData } from "../../types/cards";
 import { createEngineBattleInit } from "../../battle/integration/engine-battle-init";
 import type { JourneyState } from "../../types/journey";
@@ -163,7 +164,9 @@ const contentEngines = new WeakMap<JourneyContent, Engine>();
 /**
  * The engine over loaded journey content: every card, Dreamwell card,
  * Avatar, and Dreamsign of the content modules, with their abilities, plus
- * any the loaded journey content adds, by UUID. An entity the content
+ * any the loaded journey content adds, by UUID, and in a development build
+ * the prompt lab's synthetic definitions (`developmentLabDefinitions`), which
+ * the `?goto=prompt-lab-<fixture>` QA scenes play. An entity the content
  * modules do not define plays text-less, as a pending entity does (D36).
  * Built once per content; the engine is pure, so one instance serves every
  * battle.
@@ -171,9 +174,10 @@ const contentEngines = new WeakMap<JourneyContent, Engine>();
 export function journeyContentEngine(content: JourneyContent): Engine {
   const cached = contentEngines.get(content);
   if (cached !== undefined) return cached;
+  const lab = developmentLabDefinitions();
   const engine = createEngine(
     createCatalog(
-      withLoaded(contentCardDefinitions(), [...content.cardDatabase.values()], textlessCard),
+      [...withLoaded(contentCardDefinitions(), [...content.cardDatabase.values()], textlessCard), ...lab.cards],
       withLoaded(
         contentDreamwellDefinitions(),
         content.dreamwellCards,
@@ -185,10 +189,13 @@ export function journeyContentEngine(content: JourneyContent): Engine {
         }),
       ),
       {
-        avatars: withLoaded(contentAvatarDefinitions(), content.avatars, textlessEmblem),
-        dreamsigns: withLoaded(contentDreamsignDefinitions(), content.dreamsignTemplates, textlessEmblem),
+        avatars: [...withLoaded(contentAvatarDefinitions(), content.avatars, textlessEmblem), ...(lab.emblems.avatars ?? [])],
+        dreamsigns: [
+          ...withLoaded(contentDreamsignDefinitions(), content.dreamsignTemplates, textlessEmblem),
+          ...(lab.emblems.dreamsigns ?? []),
+        ],
       },
-      contentFigmentDefinitions(),
+      [...contentFigmentDefinitions(), ...lab.figments],
     ),
   );
   contentEngines.set(content, engine);

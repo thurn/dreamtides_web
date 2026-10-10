@@ -1,8 +1,8 @@
 // The journey battle screen's view model over the engine (Phase 4.2): the
 // board from `engine.view(display, human)`, which is the intermediate state
 // while a step is suspended on a prompt, and the human's affordances from
-// the engine's legal actions. Prompt surfaces come from
-// `engine-battle-prompt-view-model.ts`.
+// the engine's legal actions. The prompt host's surfaces come from
+// `prompt-host-view-model.ts`.
 //
 // Pure and React-free. Instance IDs reach the screen as battle-card IDs and
 // come back through `instanceIdIn`; nothing here reads card names.
@@ -29,11 +29,9 @@ import {
   type BattleId,
   type BattleSlotViewId,
 } from "../../types/identifiers";
-import {
-  buildEnginePromptSurface,
-  type EnginePromptSurface,
-  type PendingEnginePrompt,
-} from "./engine-battle-prompt-view-model";
+import type { BattlePromptNoticeView } from "../../cumulus/screens/battle-overlays/BattlePromptHost";
+import type { Decision } from "../../engine";
+import { buildPromptHost, type PendingEnginePrompt, type PromptHostModel } from "./prompt-host-view-model";
 
 type PlayAction = Extract<Action, { kind: "play" }>;
 type ActivateAction = Extract<Action, { kind: "activate" }>;
@@ -54,8 +52,12 @@ export interface EngineBattleAffordances {
   readonly pass: Action | null;
   /** Hand cards with a legal play. */
   readonly plays: ReadonlyMap<BattleCardId, PlayAction>;
+  /** Void cards with a legal Reclaim play. */
+  readonly voidPlays: ReadonlyMap<BattleCardId, PlayAction>;
   /** Characters with legal activated abilities. */
   readonly activations: ReadonlyMap<BattleCardId, readonly ActivateAction[]>;
+  /** The legal activated abilities of the human's avatar and dreamsigns. */
+  readonly emblemActivations: readonly ActivateAction[];
   /** Characters the human may reposition, with every legal destination. */
   readonly repositions: ReadonlyMap<BattleCardId, readonly EngineReposition[]>;
   /** All Forward: the repositions that move eligible back-rank characters into open front-rank lanes. */
@@ -78,6 +80,12 @@ export interface EngineBattleViewInput {
   readonly prompt: PendingEnginePrompt | null;
   /** The card the human's in-flight play plays, shown awaiting its prompts. */
   readonly playing: InstanceId | null;
+  /** The committed state's top-level decision, when no step is in flight. */
+  readonly decision: Decision | null;
+  /** The presentation has finished every event before the pending prompt. */
+  readonly presented: boolean;
+  /** The presentation's current notice. */
+  readonly notice: BattlePromptNoticeView | null;
   readonly cards: EngineCardModels;
   readonly avatars: Readonly<Record<Side, Pick<MobileBattleStatusView, "avatar" | "avatarProfile">>>;
   readonly opponentName: string;
@@ -90,14 +98,16 @@ export interface EngineBattleScreenModel {
   readonly engine: BattleView;
   readonly view: MobileBattleView;
   readonly affordances: EngineBattleAffordances;
-  readonly prompt: EnginePromptSurface;
+  readonly prompt: PromptHostModel;
 }
 
 const NO_AFFORDANCES: EngineBattleAffordances = {
   canAct: false,
   pass: null,
   plays: new Map(),
+  voidPlays: new Map(),
   activations: new Map(),
+  emblemActivations: [],
   repositions: new Map(),
   allForward: [],
   allBack: [],
@@ -161,7 +171,9 @@ function shortcutPlan(
 function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]): EngineBattleAffordances {
   if (legal.length === 0) return NO_AFFORDANCES;
   const plays = new Map<BattleCardId, PlayAction>();
+  const voidPlays = new Map<BattleCardId, PlayAction>();
   const activations = new Map<BattleCardId, ActivateAction[]>();
+  const emblemActivations: ActivateAction[] = [];
   const repositions = new Map<BattleCardId, EngineReposition[]>();
   const moves: RepositionAction[] = [];
   let pass: Action | null = null;
@@ -173,12 +185,14 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
         pass = action;
         break;
       case "play":
-        if (action.from === "hand") plays.set(parseBattleCardId(action.card), action);
+        (action.from === "hand" ? plays : voidPlays).set(parseBattleCardId(action.card), action);
         break;
       case "activate":
         if (typeof action.source === "string") {
           const id = parseBattleCardId(action.source);
           activations.set(id, [...(activations.get(id) ?? []), action]);
+        } else {
+          emblemActivations.push(action);
         }
         break;
       case "reposition": {
@@ -203,7 +217,9 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
     canAct: true,
     pass,
     plays,
+    voidPlays,
     activations,
+    emblemActivations,
     repositions,
     allForward: shortcutPlan(side.backRank, side.frontRank, "front", moves),
     allBack: shortcutPlan(side.frontRank, side.backRank, "back", moves),
@@ -317,9 +333,16 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
   const farHand = cardsOf(knownHand(far));
   const nearHandIds = hiddenZoneIds(view, human, "hand");
   const farHandIds = hiddenZoneIds(view, far, "hand");
-  const prompt = buildEnginePromptSurface(input.prompt, human, view, (instance) => cardView(instance));
-  const top = view.stack[view.stack.length - 1];
-  const stackCard = top?.kind === "card" ? view.instances[top.instance] : undefined;
+  const prompt = buildPromptHost({
+    human,
+    view,
+    prompt: input.prompt,
+    decision: input.decision,
+    presented: input.presented,
+    notice: input.notice,
+    loopOffer: affordances.loop === null ? null : { maxCount: affordances.loop.maxCount },
+    cardView: (instance) => cardView(instance),
+  });
   return {
     engine: view,
     affordances,
@@ -331,11 +354,11 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       far: sides[far],
       nearHand: { owner: human, position: "near", cardIds: nearHandIds, cards: nearHand },
       farHand: { owner: far, position: "far", cardIds: farHandIds, cards: farHand },
-      promptNotice: prompt.kind === "waiting" ? { promptSide: prompt.side, reason: "opponent-choosing" } : null,
+      promptNotice: prompt.promptNotice,
       aiApproval: null,
-      cardPicker: prompt.kind === "picker" ? prompt.picker : null,
-      choicePrompt: prompt.kind === "choice" ? prompt.choice : null,
-      promptBanner: prompt.kind === "none" || prompt.kind === "waiting" ? null : prompt.banner,
+      cardPicker: prompt.cardPicker,
+      choicePrompt: prompt.choicePrompt,
+      promptHost: prompt.host,
       dreamwell: null,
       activeSide: view.turn.active,
       isOpeningTurn: view.turn.turnNumber === 1,
@@ -369,12 +392,11 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       },
       result: resultView(input),
       revealedHandCard:
-        stackCard === undefined || stackCard.id === input.playing ? null : cardView(stackCard),
+        prompt.sourceCard === null || prompt.sourceCard.id === input.playing ? null : prompt.sourceCard,
       rankShortcuts:
         affordances.canAct && [...affordances.repositions.keys()].length > 0
           ? { allForward: affordances.allForward.length > 0, allBack: affordances.allBack.length > 0 }
           : null,
-      loopOffer: affordances.loop === null ? null : { maxCount: affordances.loop.maxCount },
     },
   };
 }

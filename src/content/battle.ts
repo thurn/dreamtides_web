@@ -53,6 +53,14 @@ export const BATTLE = {
   // Whether a prompt with exactly one legal answer (a forced choice) is
   // answered automatically instead of being asked; the answer is recorded.
   autoAnswerForcedPrompts: true,
+  // The battle screen's minimal presentation of engine events ("present,
+  // then ask"): how long each event it presents (a draw, a play, a discard,
+  // a notice) holds back the prompt that follows it, and the most a backlog
+  // of events may hold one back, so a long loop never stalls the next prompt.
+  presentation: {
+    eventDwellMs: 450,
+    maxBacklogMs: 2700,
+  },
   // Side that takes the first turn. Valid values are `Player` and `Enemy`.
   startingSide: "player",
   // Whether the player omits the normal Draw phase on their first turn.

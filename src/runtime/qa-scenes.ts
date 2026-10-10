@@ -15,11 +15,20 @@ import {
 import { startJourneyBattle } from "../rules/battle/battle-events";
 import { takeEngineLogRecords } from "../rules/battle/engine-battle";
 import type { BattleFoldState } from "../rules/battle/fold";
+import type { BattleDeckCardDefinition } from "../battle/types";
+import type { Engine, EngineCardDefinition } from "../engine";
+import {
+  PROMPT_LAB_CARD_TEXT,
+  PROMPT_LAB_DEFINITIONS,
+  PROMPT_LAB_FIXTURES,
+  promptLabBattle,
+  type PromptLabFixture,
+} from "../engine/testing/prompt-lab";
 import { initializeDraftState } from "../draft/draft-engine";
 import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
 import { parseSiteId } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
-import { type CardId } from "../types/card-identity";
+import { parseCardName, type CardId } from "../types/card-identity";
 import { parseDeckEntryId } from "../types/identifiers";
 import { parseQaSceneId, type QaSceneId } from "../types/identifiers";
 import type { JourneySeed } from "../types/journey-seed";
@@ -75,6 +84,11 @@ export interface QaScene {
   landsOnJourneyStart?: boolean;
   /** Loads a folded battle slice immediately instead of the pre-battle reveal. */
   loadsBattle?: boolean;
+  /**
+   * The prompt-lab fixture (`src/engine/testing/prompt-lab.ts`) whose
+   * synthetic battle replaces the loaded battle's engine battle.
+   */
+  promptLab?: PromptLabFixture;
   /**
    * Builds the parked journey state from current journey content, or returns null
    * when required content is missing.
@@ -400,6 +414,58 @@ const PLAYABLE_BATTLE_SCENE: QaScene = {
     };
   },
 };
+
+/**
+ * A prompt-lab scene, `?goto=prompt-lab-<name>`: the playable Layer 1 battle
+ * with its engine battle replaced by the fixture's synthetic battle, parked
+ * on the prompt, response window, or decision the fixture stops at. The lab
+ * cards exist only in development builds (`developmentLabDefinitions`).
+ */
+function promptLabScene(fixture: PromptLabFixture): QaScene {
+  return {
+    id: parseQaSceneId(`prompt-lab-${fixture.name}`),
+    label: `Prompt Lab (${fixture.name})`,
+    description: fixture.description,
+    loadsBattle: true,
+    promptLab: fixture,
+    build: (journeyContent, options) => battleLayerSceneState(1)(journeyContent, options),
+  };
+}
+
+/** Display data for a lab card the battle screen shows: its QA name and text, and its printed values. */
+function labCardDefinition(definition: EngineCardDefinition): BattleDeckCardDefinition {
+  const text = PROMPT_LAB_CARD_TEXT[definition.id];
+  const cost = definition.costs.reduce((sum, cost) => sum + (cost.cost === "energy" ? cost.amount : 0), 0);
+  return {
+    sourceDeckEntryId: null,
+    cardId: definition.id,
+    cardNumber: 0,
+    name: parseCardName(text?.name ?? "Lab Card"),
+    battleCardKind: definition.cardType,
+    subtype: definition.subtype,
+    energyCost: cost,
+    printedEnergyCost: cost,
+    printedSpark: typeof definition.spark === "number" ? definition.spark : 0,
+    isFast: definition.speed !== "standard",
+    timing: definition.speed,
+    reclaimCost: null,
+    renderedText: text?.text ?? "",
+    imageNumber: 0,
+    transfiguration: null,
+    isBane: false,
+  };
+}
+
+/** `battle` with its engine battle replaced by `fixture`'s, and display data for every lab card. */
+function withPromptLab(battle: BattleFoldState, fixture: PromptLabFixture, engine: Engine): BattleFoldState {
+  const lab = promptLabBattle(engine, fixture);
+  const labCards = PROMPT_LAB_DEFINITIONS.cards.filter((definition) => definition.id in PROMPT_LAB_CARD_TEXT);
+  return {
+    ...battle,
+    init: { ...battle.init, playerDeckOrder: [...battle.init.playerDeckOrder, ...labCards.map(labCardDefinition)] },
+    engine: lab,
+  };
+}
 
 /**
  * Builds the inside-a-dreamscape overview parked on the starter dreamscape,
@@ -1239,6 +1305,7 @@ export const QA_SCENES: readonly QaScene[] = [
   ),
   JOURNEY_COMPLETE_SCENE,
   JOURNEY_FAILED_SCENE,
+  ...PROMPT_LAB_FIXTURES.map(promptLabScene),
 ];
 
 /** Returns the QA scene for `id`, or null when `id` is not registered. */
@@ -1270,7 +1337,8 @@ export function buildQaSceneBattle(
 ): BattleFoldState | null {
   const siteId = activeSiteIdOf(journey);
   if (siteId === null || !qaSceneLoadsBattle(id)) return null;
-  const battle = startJourneyBattle(createBattleInitProvider(journeyContent), {
+  const provider = createBattleInitProvider(journeyContent);
+  const battle = startJourneyBattle(provider, {
     journey,
     siteId,
     seedOverride: null,
@@ -1280,7 +1348,8 @@ export function buildQaSceneBattle(
   });
   settleDeferredOpponentLog(QA_SCENE_BATTLE_SEQ, false);
   takeEngineLogRecords(QA_SCENE_BATTLE_SEQ);
-  return battle;
+  const lab = findQaScene(id)?.promptLab;
+  return battle === null || lab === undefined ? battle : withPromptLab(battle, lab, provider.engine);
 }
 
 /**

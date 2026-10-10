@@ -1401,7 +1401,14 @@ particle, or log line:
 - points scored;
 - energy change;
 - `noLegalTarget`;
-- auto-answered prompts.
+- auto-answered prompts (`promptAutoAnswered`, private to the answering
+  side, emitted wherever a forced answer is chosen or replayed).
+
+The battle screen's presentation queue
+(`src/battle/components/battle-presentation.ts`) recomputes each applied
+intent's published events, keeps the ones the human may see
+(`eventSeenBy`), and plays them in order; the prompt host shows a prompt
+only once the queue is idle. Phase 4.4 maps each kind to its visual on it.
 
 New statuses get Cumulus-consistent indicators:
 

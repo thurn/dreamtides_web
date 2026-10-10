@@ -153,6 +153,21 @@ scene on every load.
   `gamble`/`-enhanced`, `exploration`/`-enhanced`, `exploration-duplicates`,
   `exploration-purchases`, `random-site`, `random-site-home`.
 - **End screens:** `journeycomplete`, `journeyfailed`.
+- **Prompt lab** (`prompt-lab-<fixture>`): the playable battle with its engine
+  battle replaced by a synthetic one (`src/engine/testing/prompt-lab.ts`) that
+  stops at a prompt, response window, or decision of the battle screen's
+  prompt host. Development builds add the lab's synthetic cards to the journey
+  engine and the AI worker's catalog. Fixtures: `targets` (board targets with
+  Cancel; up to two targets on the card picker), `auto-target` (an automatic
+  answer and its notice), `choices` (a mode, a you-may, and an X cost),
+  `foresee`, `draw-discard` (present, then ask), `offering` (play route and
+  offering cost), `void-cost` (the gallery card picker), `reclaim` (Reclaim
+  from the void, Avatar and Dreamsign abilities from the status display),
+  `capacity` (a full back rank), `ai-discard` (the human discards during the
+  AI's turn), `ai-foresee` (the AI's private prompt), `respond` (a response
+  window), `prevent` (pay or decline), and `loop` (the loop shortcut). Add a
+  fixture to `PROMPT_LAB_FIXTURES`; the card-lab reuses its board-and-script
+  shape.
 
 Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
 `QA_SCENES`; site scenes use the `siteScene` helper.

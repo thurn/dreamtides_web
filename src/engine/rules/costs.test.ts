@@ -155,7 +155,7 @@ describe("additional costs to play a card", () => {
     const character = ids.player.back[0]!;
     const discarded = playFirst(start, card, [1]);
     expect(discarded.answers.map((answer) => answer.auto ?? false)).toEqual([false, true]);
-    expect(discarded.events.map((event) => event.kind)).toEqual(["energyChanged", "discarded", "cardPlayed"]);
+    expect(discarded.events.map((event) => event.kind)).toEqual(["promptAutoAnswered", "energyChanged", "discarded", "cardPlayed"]);
     expect(discarded.state.sides.player.void).toEqual([fodder]);
     expect(discarded.state.instances[character].zone).toBe("play");
     expect(resolve(discarded.state).state.sides.player.hand).toHaveLength(2);

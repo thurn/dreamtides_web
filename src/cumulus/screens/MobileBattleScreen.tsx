@@ -55,6 +55,7 @@ import {
 } from "../components/status/RadialAnnouncement";
 import type { AvatarVisual } from "../components/hud/AvatarPortrait";
 import { GLYPHS } from "../primitives/glyph";
+import { Pressable } from "../primitives/Pressable";
 import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { motionTimeSeconds } from "../primitives/motion-time";
@@ -79,6 +80,12 @@ import {
   type MobileBattleResultView,
 } from "./BattleResultSurface";
 import battleBackgroundUrl from "../assets/battle-background.png";
+import type { BattleForeseeResult } from "../components/battle/BattleForeseeEditor";
+import {
+  BattlePromptHost,
+  BattlePromptNumberPicker,
+  type BattlePromptHostView,
+} from "./battle-overlays/BattlePromptHost";
 import type { BattleId } from "../../types/identifiers";
 import type { PresentationId, PromptId } from "../../types/identifiers";
 import type { BattleCardId } from "../../types/identifiers";
@@ -148,29 +155,16 @@ export interface MobileBattlePromptNoticeView {
   readonly promptSide: MobileBattleOwner;
   /**
    * Why the local viewer waits: the prompt belongs to the other seat of a
-   * shared screen (the default), or the opponent is choosing.
+   * shared screen (the default), the opponent is answering a prompt, or the
+   * opponent is taking an action.
    */
-  readonly reason?: "switch-side" | "opponent-choosing";
-}
-
-/** The pending prompt's heading, shown while its choice renders on its own surface. */
-export interface MobileBattlePromptBannerView {
-  readonly key: MobileBattlePromptKey;
-  readonly label: MobileBattlePromptCopy;
-  /** Whether the play or activation awaiting this prompt may still be cancelled. */
-  readonly cancellable: boolean;
+  readonly reason?: "switch-side" | "opponent-choosing" | "opponent-acting";
 }
 
 /** Which repositioning shortcuts can move at least one of the near side's characters. */
 export interface MobileBattleRankShortcutsView {
   readonly allForward: boolean;
   readonly allBack: boolean;
-}
-
-/** An optional loop the near side may repeat (rules § Optional Loops). */
-export interface MobileBattleLoopOfferView {
-  /** The most repetitions one request may ask for. */
-  readonly maxCount: number;
 }
 
 /** The complete, presentation-ready mobile battle board. */
@@ -212,12 +206,10 @@ export interface MobileBattleView {
   readonly result: MobileBattleResultView | null;
   /** One shared hand card presented over the battlefield at reading size. */
   readonly revealedHandCard?: MobileBattleCardView | null;
-  /** The pending prompt's heading and cancel affordance. */
-  readonly promptBanner?: MobileBattlePromptBannerView | null;
+  /** The prompt host's heading, number picker, arrangement, loop offer, and notices. */
+  readonly promptHost?: BattlePromptHostView | null;
   /** All Forward and All Back, when the near side may reposition. */
   readonly rankShortcuts?: MobileBattleRankShortcutsView | null;
-  /** The loop on offer to the near side. */
-  readonly loopOffer?: MobileBattleLoopOfferView | null;
 }
 
 export type MobileBattlePromptCopy = string;
@@ -233,10 +225,33 @@ export interface MobileBattleCardPickerView {
   readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
   readonly candidateIds: readonly BattleCardId[];
+  /** The most cards a submission holds. */
   readonly count: number;
+  /**
+   * The fewest cards a submission holds, at least one: an empty answer is
+   * the Skip control of an `optional` picker. Defaults to `count`.
+   */
+  readonly minCount?: number;
   readonly optional: boolean;
   readonly canResolve: boolean;
   readonly presentation: "board" | "gallery";
+  /**
+   * The gallery offers Cancel (`onPromptCancel`) beside its one answer
+   * control: the play awaiting it may still be cancelled.
+   */
+  readonly cancellable?: boolean;
+}
+
+/** How many cards a picker submission may hold: `max` is capped by its candidates. */
+function cardPickerBounds(cardPicker: MobileBattleCardPickerView): { readonly min: number; readonly max: number } {
+  const max = Math.min(cardPicker.count, cardPicker.candidateIds.length);
+  return { min: Math.min(Math.max(cardPicker.minCount ?? max, 1), max), max };
+}
+
+/** Whether `selected` cards make a submittable picker answer. */
+function canSubmitCardPicker(cardPicker: MobileBattleCardPickerView, selected: number): boolean {
+  const { min, max } = cardPickerBounds(cardPicker);
+  return cardPicker.canResolve && selected >= min && selected <= max;
 }
 
 /** One UUID-backed physical candidate in an authoritative card prompt. */
@@ -527,6 +542,8 @@ export interface MobileBattleBrowseZoneTarget {
 /** Intent-only gesture bridge owned by the live battle controller. */
 export interface MobileBattleInteractions {
   readonly canInteract: boolean;
+  /** The player may answer the pending prompt; defaults to `canInteract`. */
+  readonly canPrompt?: boolean;
   readonly nearSide?: MobileBattleOwner;
   readonly pendingCardId: MobileBattlePendingCardId | null;
   readonly pendingCardSource?: MobileBattleCardSource | null;
@@ -577,10 +594,19 @@ export interface MobileBattleInteractions {
   ) => void;
   readonly onZoneDrop: (target: MobileBattleZoneTarget) => void;
   readonly onZoneOpen?: (target: MobileBattleBrowseZoneTarget) => void;
+  /** The side whose status display opens its Avatar and Dreamsign abilities, while it has any. */
+  readonly activatableStatusOwner?: MobileBattleOwner | null;
+  readonly onStatusActivate?: (owner: MobileBattleOwner) => void;
   readonly onPreviousPhase?: () => void;
   readonly onNextPhase: () => void;
-  /** Cancels the play or activation awaiting the bannered prompt. */
+  /** Cancels the play or activation awaiting the prompt host's prompt. */
   readonly onPromptCancel?: () => void;
+  /** Answers the prompt host's number picker. */
+  readonly onPromptNumberSubmit?: (value: number) => void;
+  /** Answers the prompt host's arrangement. */
+  readonly onPromptArrangeSubmit?: (result: BattleForeseeResult) => void;
+  /** Dismisses the prompt host's notice. */
+  readonly onPromptNoticeDismiss?: () => void;
   /** Moves every eligible near-side back-rank character forward. */
   readonly onAllForward?: () => void;
   /** Moves every near-side front-rank character back. */
@@ -1137,6 +1163,19 @@ function SideZones({
 }) {
   const deck = toDeckPile(side.deckCardIds);
   const voidPile = toVoidPile(side.voidCards);
+  const statusDisplay = (
+    <BattleStatusDisplay
+      owner={owner}
+      relationship={position}
+      avatar={side.status.avatar}
+      avatarProfile={side.status.avatarProfile}
+      currentEnergy={side.status.currentEnergy}
+      maxEnergy={side.status.maxEnergy}
+      points={side.status.points}
+      pointsToWin={side.status.pointsToWin}
+      testId={`${owner}-battle-status`}
+    />
+  );
   const ownsVisibleDreamwell = dreamwell?.side === owner;
   const canDrop =
     interactions?.canInteract === true &&
@@ -1252,17 +1291,21 @@ function SideZones({
             maxWidth: "100%",
           }}
         >
-          <BattleStatusDisplay
-            owner={owner}
-            relationship={position}
-            avatar={side.status.avatar}
-            avatarProfile={side.status.avatarProfile}
-            currentEnergy={side.status.currentEnergy}
-            maxEnergy={side.status.maxEnergy}
-            points={side.status.points}
-            pointsToWin={side.status.pointsToWin}
-            testId={`${owner}-battle-status`}
-          />
+          {interactions?.activatableStatusOwner === owner &&
+          interactions.canInteract &&
+          interactions.onStatusActivate !== undefined ? (
+            <Pressable
+              as="button"
+              ariaLabelMessage={"Use your Avatar and Dreamsign abilities"}
+              data-battle-status-activatable={owner}
+              onClick={() => interactions.onStatusActivate?.(owner)}
+              style={{ display: "block", appearance: "none", padding: 0, border: 0, background: "transparent" }}
+            >
+              {statusDisplay}
+            </Pressable>
+          ) : (
+            statusDisplay
+          )}
           {dreamwell !== null && dreamwell.side === owner ? (
             <div
               data-battle-dreamwell-layer=""
@@ -2980,17 +3023,13 @@ function CardPickerGallery({
   readonly perspective: BattlePerspectiveSide;
 }) {
   
-  const requiredCount = Math.min(
-    cardPicker.count,
-    cardPicker.candidates.length,
-  );
+  const requiredCount = cardPickerBounds(cardPicker).max;
   const promptSubtitle: MobileBattlePromptCopy =
     cardPicker.subtitle === undefined
       ? `${formatNumber(selectedPickerCardIds.length)}/${formatNumber(requiredCount)} selected`
       : cardPicker.subtitle;
   const canSubmit =
-    cardPicker.canResolve &&
-    selectedPickerCardIds.length === requiredCount &&
+    canSubmitCardPicker(cardPicker, selectedPickerCardIds.length) &&
     interactions?.onCardPickerSubmit !== undefined;
   const submitAction = {
     label:
@@ -3011,6 +3050,11 @@ function CardPickerGallery({
   };
   const optionalWithCandidates =
     cardPicker.optional && cardPicker.candidates.length > 0;
+  const onCancel = interactions?.onPromptCancel;
+  const cancelAction =
+    cardPicker.cancellable === true && onCancel !== undefined
+      ? { label: "Cancel", testId: "battle-prompt-cancel", onPress: () => onCancel() }
+      : null;
   return (
     <div
       role="dialog"
@@ -3066,7 +3110,9 @@ function CardPickerGallery({
           footerActions={
             optionalWithCandidates
               ? [skipAction, submitAction]
-              : [cardPicker.optional ? skipAction : submitAction]
+              : cancelAction === null
+                ? [cardPicker.optional ? skipAction : submitAction]
+                : [cancelAction, cardPicker.optional ? skipAction : submitAction]
           }
           onCardPress={onPickerCardToggle}
         />
@@ -3079,6 +3125,7 @@ function ControlRow({
   aiApproval,
   cardPicker,
   choicePrompt,
+  promptHost,
   selectedPickerCardIds,
   isDesktop,
   interactions,
@@ -3092,6 +3139,7 @@ function ControlRow({
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
   readonly choicePrompt: MobileBattleChoicePromptView | null;
+  readonly promptHost: BattlePromptHostView | null;
   readonly selectedPickerCardIds: readonly BattleCardId[];
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
@@ -3104,15 +3152,14 @@ function ControlRow({
 }) {
   
   const disabled = interactions?.canInteract !== true;
-  const hasAlternateNextControls = aiApproval !== null || choicePrompt !== null;
+  const numberPicker = promptHost?.key != null ? promptHost.number : null;
+  const hasAlternateNextControls =
+    aiApproval !== null || choicePrompt !== null || numberPicker !== null;
   const requiredPickerCount =
-    cardPicker === null
-      ? 0
-      : Math.min(cardPicker.count, cardPicker.candidateIds.length);
+    cardPicker === null ? 0 : cardPickerBounds(cardPicker).max;
   const canSubmitPicker =
     cardPicker !== null &&
-    cardPicker.canResolve &&
-    selectedPickerCardIds.length === requiredPickerCount;
+    canSubmitCardPicker(cardPicker, selectedPickerCardIds.length);
   return (
     <div
       data-battle-mobile-row="control-row"
@@ -3169,13 +3216,19 @@ function ControlRow({
               whiteSpace: "nowrap",
             }}
           >
-            <span data-battle-card-picker-prompt-copy="">
-              {cardPicker.label}
-            </span>{" "}
+            {(promptHost?.heading ?? null) === null ? (
+              <>
+                <span data-battle-card-picker-prompt-copy="">
+                  {cardPicker.label}
+                </span>{" "}
+              </>
+            ) : null}
             <span data-battle-card-picker-progress-copy="">
-              {((cardPicker.candidateOwner ?? cardPicker.side) === perspective
+              {!cardPicker.candidates.every((candidate) => candidate.zone === "hand")
+                ? `${formatNumber(selectedPickerCardIds.length)}/${formatNumber(requiredPickerCount)}`
+                : (cardPicker.candidateOwner ?? cardPicker.side) === perspective
                   ? `from your hand · ${formatNumber(selectedPickerCardIds.length)}/${formatNumber(requiredPickerCount)}`
-                  : `from the opponent hand · ${formatNumber(selectedPickerCardIds.length)}/${formatNumber(requiredPickerCount)}`)}
+                  : `from the opponent hand · ${formatNumber(selectedPickerCardIds.length)}/${formatNumber(requiredPickerCount)}`}
             </span>
           </span>
           {cardPicker.optional ? (
@@ -3287,7 +3340,18 @@ function ControlRow({
               gap: hasAlternateNextControls ? token("--space-s") : undefined,
             }}
           >
-            {choicePrompt !== null ? (
+            {numberPicker !== null && promptHost?.key != null ? (
+              <BattlePromptNumberPicker
+                key={promptHost.key}
+                label={numberPicker.label}
+                values={numberPicker.values}
+                disabled={
+                  !(interactions?.canPrompt ?? !disabled) ||
+                  interactions?.onPromptNumberSubmit === undefined
+                }
+                onSubmit={(value) => interactions?.onPromptNumberSubmit?.(value)}
+              />
+            ) : choicePrompt !== null ? (
               choicePrompt.options.map((option, index) => (
                 <GlassButton
                   key={`${choicePrompt.key}:${String(index)}`}
@@ -3352,126 +3416,6 @@ function ControlRow({
   );
 }
 
-const PROMPT_BANNER_MAX_WIDTH = 416;
-// Above the gallery card picker, so a cancellable gallery prompt can still be cancelled.
-const PROMPT_BANNER_Z_INDEX = 80;
-const PROMPT_BANNER_STYLE: CSSProperties = {
-  position: "fixed",
-  left: "50%",
-  top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-6xl")})`,
-  width: "90vw",
-  maxWidth: PROMPT_BANNER_MAX_WIDTH,
-  transform: "translateX(-50%)",
-  zIndex: PROMPT_BANNER_Z_INDEX,
-};
-
-/** The pending prompt's heading, with Cancel while its play may be cancelled. */
-function BattlePromptBanner({
-  banner,
-  onCancel,
-}: {
-  readonly banner: MobileBattlePromptBannerView;
-  readonly onCancel?: () => void;
-}) {
-  return (
-    <div
-      data-battle-prompt-banner=""
-      data-battle-prompt-cancellable={banner.cancellable ? "true" : "false"}
-      role="status"
-      aria-live="polite"
-      style={PROMPT_BANNER_STYLE}
-    >
-      <GlassPanel
-        title={banner.label}
-        headerSpacing="compact"
-        headerDivider={false}
-        radius="control"
-        {...(banner.cancellable && onCancel !== undefined
-          ? {
-              rightAccessory: {
-                kind: "glassButton" as const,
-                button: {
-                  label: "Cancel",
-                  testId: "battle-prompt-cancel",
-                  onPress: onCancel,
-                },
-              },
-            }
-          : {})}
-      >
-        <span />
-      </GlassPanel>
-    </div>
-  );
-}
-
-/** Repeat the optional loop on offer a chosen number of times, or until victory. */
-function BattleLoopOffer({
-  offer,
-  disabled,
-  onRepeat,
-}: {
-  readonly offer: MobileBattleLoopOfferView;
-  readonly disabled: boolean;
-  readonly onRepeat?: (count: number | "untilVictory") => void;
-}) {
-  const [count, setCount] = useState(1);
-  const repeatCount = Math.min(count, offer.maxCount);
-  const unavailable = disabled || onRepeat === undefined;
-  return (
-    <div
-      data-battle-loop-offer=""
-      style={{ ...PROMPT_BANNER_STYLE, zIndex: PROMPT_BANNER_Z_INDEX - 1 }}
-    >
-      <GlassPanel
-        title={"Repeat This Loop?"}
-        headerSpacing="compact"
-        headerDivider={false}
-        radius="control"
-      >
-        <div style={{ display: "grid", gap: token("--space-s") }}>
-          <NumberStepper
-            label={"Repetitions"}
-            value={repeatCount}
-            size="sm"
-            decrementLabel={"Fewer repetitions"}
-            incrementLabel={"More repetitions"}
-            decrementDisabled={repeatCount <= 1}
-            incrementDisabled={repeatCount >= offer.maxCount}
-            onDecrement={() => setCount(Math.max(1, repeatCount - 1))}
-            onIncrement={() =>
-              setCount(Math.min(offer.maxCount, repeatCount + 1))
-            }
-          />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: token("--space-xs"),
-            }}
-          >
-            <GlassButton
-              label={`Repeat ×${formatNumber(repeatCount)}`}
-              placement="onGlass"
-              disabled={unavailable}
-              testId="battle-loop-repeat-count"
-              onPress={() => onRepeat?.(repeatCount)}
-            />
-            <GlassButton
-              label={"Repeat Until Victory"}
-              variant="accent"
-              placement="onGlass"
-              disabled={unavailable}
-              testId="battle-loop-repeat-until-victory"
-              onPress={() => onRepeat?.("untilVictory")}
-            />
-          </div>
-        </div>
-      </GlassPanel>
-    </div>
-  );
-}
-
 function BattleControlMessage({
   aiApproval,
   choicePrompt,
@@ -3486,7 +3430,9 @@ function BattleControlMessage({
     promptNotice !== null
       ? promptNotice.reason === "opponent-choosing"
         ? "Your opponent is choosing."
-        : builtInBattlePromptMessage(
+        : promptNotice.reason === "opponent-acting"
+          ? "Your opponent is acting."
+          : builtInBattlePromptMessage(
             builtInBattlePromptRef("switch-side", promptNotice.promptSide),
           )
       : choicePrompt !== null
@@ -4817,6 +4763,7 @@ export function MobileBattleScreen({
           aiApproval={view.aiApproval}
           cardPicker={boardCardPicker}
           choicePrompt={view.choicePrompt}
+          promptHost={view.promptHost ?? null}
           selectedPickerCardIds={selectedPickerCardIds}
           isDesktop={isDesktop}
           interactions={interactions}
@@ -4923,7 +4870,9 @@ export function MobileBattleScreen({
         ) : null}
         <BattleControlMessage
           aiApproval={view.aiApproval}
-          choicePrompt={view.choicePrompt}
+          choicePrompt={
+            (view.promptHost?.heading ?? null) === null ? view.choicePrompt : null
+          }
           promptNotice={view.promptNotice}
         />
       </div>
@@ -4976,18 +4925,14 @@ export function MobileBattleScreen({
           </div>
         </div>
       ) : null}
-      {view.promptBanner === null || view.promptBanner === undefined ? null : (
-        <BattlePromptBanner
-          banner={view.promptBanner}
+      {view.promptHost === null || view.promptHost === undefined ? null : (
+        <BattlePromptHost
+          view={view.promptHost}
+          canAct={interactions?.canInteract === true}
           onCancel={interactions?.onPromptCancel}
-        />
-      )}
-      {view.loopOffer === null || view.loopOffer === undefined ? null : (
-        <BattleLoopOffer
-          key={view.battleId}
-          offer={view.loopOffer}
-          disabled={interactions?.canInteract !== true}
-          onRepeat={interactions?.onRepeatLoop}
+          onArrangeSubmit={interactions?.onPromptArrangeSubmit}
+          onRepeatLoop={interactions?.onRepeatLoop}
+          onNoticeDismiss={interactions?.onPromptNoticeDismiss}
         />
       )}
       {galleryCardPicker !== null ? (

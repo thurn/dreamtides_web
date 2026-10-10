@@ -87,6 +87,7 @@ export class Context implements StepContext {
         throw new IllegalAnswer(prompt);
       }
       this.record(recorded, rawFingerprint, prompt.side);
+      if (recorded.auto === true) this.autoAnswered(prompt);
       return recorded.value as AnswerFor<P>;
     }
     if (this.options.replay === true) {
@@ -98,6 +99,7 @@ export class Context implements StepContext {
         throw new IllegalAnswer(prompt);
       }
       this.record({ fingerprint, value: forced, auto: true }, rawFingerprint, prompt.side);
+      this.autoAnswered(prompt);
       return forced as AnswerFor<P>;
     }
     const value = this.source.answer(prompt, this.state);
@@ -127,6 +129,16 @@ export class Context implements StepContext {
       throw new EmptyPrompt(prompt);
     }
     return prompt;
+  }
+
+  /**
+   * Tells the answering side that a forced prompt answered itself. A replay
+   * of the recorded forced answer emits it too, so every run of the step
+   * produces the same events.
+   */
+  private autoAnswered(prompt: Prompt): void {
+    const purpose = purposeView(prompt.purpose, prompt.side, this.state);
+    this.emit({ kind: "promptAutoAnswered", side: prompt.side, prompt: prompt.kind, purpose });
   }
 
   private record(answer: RecordedAnswer, rawFingerprint: PromptFingerprint, side: Side): void {

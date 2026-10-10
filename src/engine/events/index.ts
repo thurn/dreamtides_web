@@ -43,6 +43,7 @@ import { pendingAbility, type PendingAbilityEvent } from "./kinds/pending-abilit
 import { phaseChanged, type PhaseChangedEvent } from "./kinds/phase-changed";
 import { pointsScored, type PointsScoredEvent } from "./kinds/points-scored";
 import { prevented, type PreventedEvent } from "./kinds/prevented";
+import { promptAutoAnswered, type PromptAutoAnsweredEvent } from "./kinds/prompt-auto-answered";
 import { repositioned, type RepositionedEvent } from "./kinds/repositioned";
 import { resolved, type ResolvedEvent } from "./kinds/resolved";
 import { returnedToHand, type ReturnedToHandEvent } from "./kinds/returned-to-hand";
@@ -97,6 +98,7 @@ export type EngineEvent =
   | PhaseChangedEvent
   | PointsScoredEvent
   | PreventedEvent
+  | PromptAutoAnsweredEvent
   | RepositionedEvent
   | ResolvedEvent
   | ReturnedToHandEvent
@@ -152,6 +154,7 @@ export const EVENT_DEFINITIONS = {
   phaseChanged,
   pointsScored,
   prevented,
+  promptAutoAnswered,
   repositioned,
   resolved,
   returnedToHand,

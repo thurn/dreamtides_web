@@ -8,6 +8,7 @@ import {
   parseBattleCardId as cardId,
   parseBattleId,
   parseBattleSlotViewId,
+  parsePromptId,
   type BattleCardId,
 } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
@@ -21,6 +22,17 @@ import {
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
+import type { BattlePromptHostView } from "./battle-overlays/BattlePromptHost";
+
+const HOST: BattlePromptHostView = {
+  key: null,
+  heading: null,
+  cancellable: false,
+  number: null,
+  arrange: null,
+  loopOffer: null,
+  notice: null,
+};
 
 type Owner = "enemy" | "player";
 const roots: Root[] = [];
@@ -178,6 +190,18 @@ function mount(
 ): HTMLDivElement {
   const container = document.createElement("div");
   document.body.append(container);
+  const root = createRoot(container);
+  roots.push(root);
+  mountedRoots.set(container, root);
+  act(() => root.render(screen(view, overrides, props)));
+  return container;
+}
+
+function screen(
+  view: MobileBattleView,
+  overrides: Partial<MobileBattleInteractions>,
+  props: Partial<MobileBattleScreenProps>,
+) {
   const interactions: MobileBattleInteractions = {
     canInteract: true,
     pendingCardId: null,
@@ -189,21 +213,22 @@ function mount(
     onNextPhase: vi.fn(),
     ...overrides,
   };
-  const root = createRoot(container);
-  roots.push(root);
-  act(() => {
-    root.render(
-      <CumulusRoot>
-        <MobileBattleScreen
-          view={view}
-          interactions={interactions}
-          phaseNavigation="next-phase"
-          {...props}
-        />
-      </CumulusRoot>,
-    );
-  });
-  return container;
+  return (
+    <CumulusRoot>
+      <MobileBattleScreen view={view} interactions={interactions} phaseNavigation="next-phase" {...props} />
+    </CumulusRoot>
+  );
+}
+
+const mountedRoots = new WeakMap<HTMLDivElement, Root>();
+
+function rerender(
+  container: HTMLDivElement,
+  view: MobileBattleView,
+  overrides: Partial<MobileBattleInteractions> = {},
+): void {
+  const root = mountedRoots.get(container);
+  act(() => root?.render(screen(view, overrides, {})));
 }
 
 function query(parent: ParentNode, selector: string): HTMLElement {
@@ -351,34 +376,76 @@ describe("MobileBattleScreen", () => {
     ).toBeNull();
   });
 
-  it("offers Cancel on the prompt banner only while the prompt is cancellable", () => {
+  it("offers Cancel on the prompt host only while the prompt is cancellable", () => {
     const onPromptCancel = vi.fn();
-    const banner = (cancellable: boolean) =>
+    const host = (cancellable: boolean) =>
       mount(
-        { ...makeView(), promptBanner: { key: 7, label: "Choose", cancellable } },
-        { canInteract: false, onPromptCancel },
+        {
+          ...makeView(),
+          promptHost: { ...HOST, key: parsePromptId("1:0:0"), heading: { title: "Choose", detail: null }, cancellable },
+        },
+        { canInteract: false, canPrompt: true, onPromptCancel },
       );
 
-    expect(banner(false).querySelector('[data-testid="battle-prompt-cancel"]')).toBeNull();
-    click(query(banner(true), '[data-testid="battle-prompt-cancel"]'));
+    expect(host(false).querySelector('[data-testid="battle-prompt-cancel"]')).toBeNull();
+    click(query(host(true), '[data-testid="battle-prompt-cancel"]'));
     expect(onPromptCancel).toHaveBeenCalledOnce();
   });
 
   it("repeats the loop on offer a chosen number of times or until victory", () => {
     const onRepeatLoop = vi.fn();
-    const container = mount({ ...makeView(), loopOffer: { maxCount: 3 } }, { onRepeatLoop });
-    const offer = query(container, "[data-battle-loop-offer]");
-    const [, increment] = offer.querySelectorAll<HTMLElement>("[role='group'] button");
+    mount({ ...makeView(), promptHost: { ...HOST, loopOffer: { maxCount: 3 } } }, { onRepeatLoop });
+    const dialog = () => {
+      click(query(document.body, '[data-testid="battle-loop-open"]'));
+      return query(document.body, "[data-battle-loop-dialog]");
+    };
+    const [, increment] = dialog().querySelectorAll<HTMLElement>("[role='group'] button");
 
     click(increment);
-    click(query(offer, '[data-testid="battle-loop-repeat-count"]'));
-    click(query(offer, '[data-testid="battle-loop-repeat-until-victory"]'));
+    click(query(document.body, '[data-testid="battle-loop-repeat-count"]'));
+    click(query(dialog(), '[data-testid="battle-loop-repeat-until-victory"]'));
     expect(onRepeatLoop.mock.calls).toEqual([[2], ["untilVictory"]]);
+    expect(document.body.querySelector("[data-battle-loop-dialog]")).toBeNull();
   });
 
-  it("selects inline card-picker candidates from the hand and submits their ids", () => {
+  it("submits only a legal number, keeping it through a bounce and starting over when the prompt changes", () => {
+    const onPromptNumberSubmit = vi.fn();
+    const view = (key: string) => ({
+      ...makeView(),
+      promptHost: { ...HOST, key: parsePromptId(key), heading: { title: "X", detail: null }, number: { label: "X", values: [1, 3, 4] } },
+    });
+    const container = mount(view("1:0:0"), { canInteract: false, canPrompt: true, onPromptNumberSubmit });
+    const picker = () => query(container, "[data-battle-number-picker]");
+    const [decrement, increment] = picker().querySelectorAll<HTMLElement>("[role='group'] button");
+
+    expect(decrement?.getAttribute("aria-disabled")).toBe("true");
+    click(increment);
+    click(increment);
+    expect(increment?.getAttribute("aria-disabled")).toBe("true");
+    click(query(picker(), '[data-testid="battle-number-picker-submit"]'));
+    expect(onPromptNumberSubmit).toHaveBeenLastCalledWith(4);
+    // A bounced answer leaves the same prompt pending: the selection stays.
+    rerender(container, view("1:0:0"), { canInteract: false, canPrompt: true, onPromptNumberSubmit });
+    click(query(picker(), '[data-testid="battle-number-picker-submit"]'));
+    expect(onPromptNumberSubmit).toHaveBeenLastCalledWith(4);
+    rerender(container, view("1:0:1"), { canInteract: false, canPrompt: true, onPromptNumberSubmit });
+    click(query(picker(), '[data-testid="battle-number-picker-submit"]'));
+    expect(onPromptNumberSubmit).toHaveBeenLastCalledWith(1);
+  });
+
+  it("opens Avatar and Dreamsign abilities from the status display only while it has some", () => {
+    const onStatusActivate = vi.fn();
+    const inactive = mount(makeView(), { onStatusActivate });
+    const active = mount(makeView(), { onStatusActivate, activatableStatusOwner: "player" });
+
+    expect(inactive.querySelector("[data-battle-status-activatable]")).toBeNull();
+    click(query(active, '[data-battle-status-activatable="player"]'));
+    expect(onStatusActivate).toHaveBeenCalledWith("player");
+  });
+
+  it("selects card-picker candidates from the hand and submits between the fewest and most cards", () => {
     const view = makeView();
-    const candidates = view.playerHand.slice(0, 2);
+    const candidates = view.playerHand.slice(0, 3);
     const candidateIds = candidates.map((card) => card.id);
     const onCardPickerSelectionChange = vi.fn();
     const onCardPickerSubmit = vi.fn();
@@ -399,7 +466,8 @@ describe("MobileBattleScreen", () => {
             highlighted: false,
           })),
           candidateIds,
-          count: 2,
+          count: 3,
+          minCount: 2,
           optional: false,
           canResolve: true,
           presentation: "board",
@@ -424,13 +492,14 @@ describe("MobileBattleScreen", () => {
     expect(onCardPickerSelectionChange).toHaveBeenLastCalledWith([
       candidateIds[0],
     ]);
-    click(handCards[2]);
+    expect(submit().getAttribute("aria-disabled")).toBe("true");
+    click(handCards[3]);
     expect(onCardPickerSelectionChange).toHaveBeenCalledOnce();
     click(handCards[1]);
     expect(submit().getAttribute("aria-disabled")).toBeNull();
 
     click(submit());
-    expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds);
+    expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds.slice(0, 2));
     expect(onHandCardActivate).not.toHaveBeenCalled();
   });
 

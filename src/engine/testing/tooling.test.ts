@@ -1,10 +1,13 @@
-/** The card-lab setup solver and pending-entity semantics (D36). */
+/** The card-lab setup solver, the prompt lab, and pending-entity semantics (D36). */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import { NO_PROMPTS } from "../steps/sources";
 import { DSL, DSL_CARDS } from "./dsl-cards";
+import { createCatalog } from "../catalog";
+import { createFoldAdapter } from "../fold/slice";
 import { labBoard } from "./lab-solver";
+import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture } from "./prompt-lab";
 import { playFromHand, runScenario } from "./scenario";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 
@@ -24,6 +27,39 @@ describe("card-lab setup solver", () => {
     const { state } = labBoard(engine, DSL.dissolveEnemy.id, []);
     expect(state.sides.enemy.backRank.filter((id) => id !== null)).toHaveLength(1);
     expect(state.sides.player.backRank.filter((id) => id !== null)).toHaveLength(0);
+  });
+});
+
+describe("prompt lab", () => {
+  const labEngine = createEngine(
+    createCatalog(PROMPT_LAB_DEFINITIONS.cards, [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments),
+  );
+  const adapter = createFoldAdapter(labEngine);
+  const stop = (name: string) => {
+    const fixture = promptLabFixture(name);
+    if (fixture === null) throw new Error(`no fixture ${name}`);
+    const { slice } = promptLabBattle(labEngine, fixture);
+    const pending = adapter.pending(slice);
+    return {
+      prompt: pending === null ? null : { kind: pending.prompt.kind, side: pending.prompt.side, privateTo: pending.prompt.privateTo },
+      decision: slice.inFlight === null ? labEngine.decision(slice.committed) : null,
+      legal: slice.inFlight === null ? labEngine.legalActions(slice.committed, "player").map((action) => action.kind) : [],
+    };
+  };
+
+  it("builds every fixture deterministically", () => {
+    for (const fixture of PROMPT_LAB_FIXTURES) {
+      expect(promptLabBattle(labEngine, fixture), fixture.name).toEqual(promptLabBattle(labEngine, fixture));
+    }
+  });
+
+  it("stops each scripted fixture where its scene starts", () => {
+    expect(stop("ai-discard").prompt).toEqual({ kind: "chooseCards", side: "enemy", privateTo: undefined });
+    expect(stop("ai-foresee").prompt).toEqual({ kind: "arrange", side: "enemy", privateTo: "enemy" });
+    expect(stop("prevent").prompt).toMatchObject({ kind: "payOrDecline", side: "player" });
+    expect(stop("respond").decision).toEqual({ kind: "respond", side: "player" });
+    expect(stop("loop").legal).toContain("repeatLoop");
+    expect(stop("reclaim").legal).toEqual(expect.arrayContaining(["play", "activate"]));
   });
 });
 

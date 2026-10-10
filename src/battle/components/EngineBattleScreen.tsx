@@ -7,7 +7,13 @@
 // Game flow lives in the fold: whether the human may act comes from the
 // engine's pending decision and prompt, never from React state. Local state
 // here is presentation only: the card being dragged, an ability chooser,
-// an open zone browser, and a dismissed result.
+// an open zone browser, a dismissed result, and the presentation queue that
+// holds a prompt back until the events before it are presented.
+//
+// Every prompt reaches the human through the prompt host
+// (`prompt-host-view-model.ts`, `BattlePromptHost`): its surfaces answer
+// with exactly one intent keyed by the prompt's id, and Cancel only while
+// the prompt is cancellable.
 //
 // Every intent carries an intent key naming the decision or prompt it
 // answers, so a second submission for the same decision (a drag and a tap,
@@ -15,7 +21,6 @@
 // bounces in the fold and the screen re-renders from the fold.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { BattleForeseeEditor } from "../../cumulus/components/battle/BattleForeseeEditor";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOverlay";
 import {
@@ -32,20 +37,27 @@ import { promptView } from "../../engine";
 import { logEvent, logEventOnce } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
-import { enginePromptOptionLabel } from "../../runtime/battle-prompt-messages";
+import {
+  ENGINE_ABILITY_CHOOSER_TITLE,
+  engineAbilityOptionLabel,
+  engineBattleNoticeCopy,
+  type EngineAbilityOption,
+} from "../../runtime/battle-prompt-messages";
 import { buildBattleAvatarStatus } from "../../screens/cumulus_adapters/mobile-battle-view-model";
 import {
   buildEngineBattleScreenModel,
   figmentMergeTargets,
   handPlayAction,
   repositionForDrop,
+  type EngineBattleScreenModel,
 } from "../../screens/cumulus_adapters/engine-battle-view-model";
 import {
-  foreseeAnswer,
+  arrangeAnswer,
+  numberAnswer,
   pickerAnswer,
   targetAnswer,
   type PendingEnginePrompt,
-} from "../../screens/cumulus_adapters/engine-battle-prompt-view-model";
+} from "../../screens/cumulus_adapters/prompt-host-view-model";
 import { useActions, useGameState } from "../../session/hooks";
 import { useJourney } from "../../state/journey-context";
 import { parseCardId, type CardId } from "../../types/card-identity";
@@ -53,11 +65,14 @@ import type { CardData } from "../../types/cards";
 import {
   parseBattleCardId,
   parseIntentKey,
+  type AvatarId,
   type BattleCardId,
+  type DreamsignId,
 } from "../../types/identifiers";
 import { useEngineAi } from "../engine-ai/use-engine-ai";
 import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/figment-catalog";
-import { createEngineCardModels } from "../ui/engine-card-model";
+import { createEngineCardModels, type EngineCardModels } from "../ui/engine-card-model";
+import { presentationItems, usePresentationQueue, usePublishedEngineEvents } from "./battle-presentation";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
 
 /** The side the local player plays in a journey battle. */
@@ -65,6 +80,9 @@ const HUMAN: Side = "player";
 
 type Drag = { readonly id: BattleCardId; readonly source: "near-hand" | "battlefield" };
 type BrowsedZone = { readonly side: Side; readonly zone: "void" | "banished" };
+/** A chooser the human opened: a character's abilities, the void's Reclaim plays, or the emblems' abilities. */
+type Chooser = { readonly kind: "card"; readonly id: BattleCardId } | { readonly kind: "void" } | { readonly kind: "emblems" };
+type ChooserOption = { readonly copy: EngineAbilityOption; readonly action: Action | "browseVoid" | null };
 
 export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const battle = useGameState().battle;
@@ -74,7 +92,8 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   useEngineAi(PAGE_ENEMY_POLICY);
 
   const [drag, setDrag] = useState<Drag | null>(null);
-  const [abilityChooser, setAbilityChooser] = useState<BattleCardId | null>(null);
+  const [abilityChooser, setAbilityChooser] = useState<Chooser | null>(null);
+  const presentation = usePresentationQueue();
   const [browsed, setBrowsed] = useState<BrowsedZone | null>(null);
   const [resultDismissed, setResultDismissed] = useState(false);
 
@@ -127,11 +146,31 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       view,
       prompt,
       playing,
+      decision: slice.inFlight === null ? decision : null,
       legal: canAct ? engine.legalActions(slice.committed, HUMAN) : [],
       decisionKey: `${String(slice.committed.version)}:${String(slice.attempt)}:decision`,
     };
     // `battle` changes with every fold; the engine battle only with its slice.
   }, [engine, slice]);
+
+  // Each applied intent's events join the presentation queue; the prompt
+  // after them shows once the queue is idle ("present, then ask").
+  usePublishedEngineEvents(engine, slice, (events, state, seq) => {
+    presentation.enqueue(
+      presentationItems(events, HUMAN, state, `${battleId}:${String(seq)}`, (event) => {
+        const source = typeof event.purpose.source === "string" ? state.instances[event.purpose.source] : undefined;
+        const view = source === undefined ? undefined : engine.view(state, HUMAN).instances[source.id];
+        return view === undefined ? null : cards(view).displaySnapshot.name;
+      }),
+    );
+  });
+  const noticeView = useMemo(
+    () =>
+      presentation.notice === null
+        ? null
+        : { key: presentation.notice.key, ...engineBattleNoticeCopy(presentation.notice.notice) },
+    [presentation.notice],
+  );
 
   const model = useMemo(
     () =>
@@ -142,16 +181,44 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         legal: derived.legal,
         prompt: derived.prompt,
         playing: derived.playing,
+        decision: derived.decision,
+        presented: presentation.idle,
+        notice: noticeView,
         cards,
         avatars,
         opponentName: init.enemyDescriptor.name,
         essenceReward: init.essenceReward,
         resultDismissed,
       }),
-    [avatars, battleId, cards, derived, init, resultDismissed],
+    [avatars, battleId, cards, derived, init, noticeView, presentation.idle, resultDismissed],
   );
   const { affordances, prompt: surface } = model;
   const prompt = derived.prompt;
+  const promptShown = surface.host?.key ?? null;
+  useEffect(() => {
+    if (promptShown === null || prompt === null) return;
+    logEventOnce(`battle_engine_prompt_shown:${battleId}:${prompt.id}`, "battle_engine_prompt_shown", {
+      battleId,
+      promptId: prompt.id,
+      promptKind: prompt.kind,
+      role: prompt.purpose.role,
+      source: prompt.purpose.source,
+      cardId: prompt.purpose.cardId,
+      cancellable: prompt.cancellable,
+      privateTo: prompt.privateTo ?? null,
+    });
+    // Logged once per prompt id, as the prompt host shows it.
+  }, [promptShown]);
+  const noticeKey = noticeView?.key ?? null;
+  useEffect(() => {
+    if (presentation.notice === null) return;
+    logEventOnce(`battle_engine_notice_shown:${presentation.notice.key}`, "battle_engine_notice_shown", {
+      battleId,
+      key: presentation.notice.key,
+      notice: presentation.notice.notice,
+    });
+    // Logged once per notice.
+  }, [noticeKey]);
 
   const lastPassPress = useRef(Number.NEGATIVE_INFINITY);
   const openedRef = useRef(false);
@@ -254,20 +321,19 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     [battleId, derived.decisionKey, model, submitAction],
   );
 
-  const activations = abilityChooser === null ? [] : (affordances.activations.get(abilityChooser) ?? []);
+  const chooserOptions = chooserOptionsFor(abilityChooser, affordances, model.engine, cards, (emblem, id) =>
+    emblem === "avatar"
+      ? (journeyContent.avatars.find((avatar) => avatar.id === id)?.name ?? null)
+      : (journeyContent.dreamsignTemplates.find((dreamsign) => dreamsign.id === id)?.name ?? null),
+  );
   const chooser: MobileBattleChoicePromptView | null =
-    activations.length === 0
+    chooserOptions.length === 0
       ? null
       : {
           // A local chooser, not an engine prompt: no prompt id names it.
           key: 0,
-          label: "Choose an ability",
-          options: [
-            ...activations.map((_activation, index) => ({
-              label: enginePromptOptionLabel({ kind: "mode", index }),
-            })),
-            { label: "Cancel" },
-          ],
+          label: ENGINE_ABILITY_CHOOSER_TITLE,
+          options: chooserOptions.map((option) => ({ label: engineAbilityOptionLabel(option.copy) })),
           canResolve: true,
         };
 
@@ -297,21 +363,26 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           ),
         }),
     targetSelectionCardId: derived.playing === null ? null : parseBattleCardId(derived.playing),
-    targetSelectionPrompt: surface.kind === "targets" ? "legal-target" : null,
-    targetableCardIds: surface.kind === "targets" ? surface.targetIds : [],
+    canPrompt: prompt !== null && prompt.side === HUMAN && result === null,
+    targetSelectionPrompt: surface.targetIds.length > 0 ? "legal-target" : null,
+    targetableCardIds: surface.targetIds,
     onHandCardActivate: (id) => playHandCard(id, undefined, "hand-tap"),
     onHandCardDrop: (target) => {
       if (drag?.source !== "near-hand") return;
       playHandCard(drag.id, target, "hand-drag");
     },
     onBattlefieldCardActivate: (id) => {
-      if (surface.kind === "targets") {
+      if (surface.targetIds.length > 0) {
         if (prompt !== null) submitAnswer(targetAnswer(prompt, model.engine, id), "board-target");
         return;
       }
       const options = affordances.activations.get(id) ?? [];
       if (options.length === 1) submitAction(options[0], "battlefield-tap");
-      else if (options.length > 1) setAbilityChooser(id);
+      else if (options.length > 1) setAbilityChooser({ kind: "card", id });
+    },
+    activatableStatusOwner: affordances.emblemActivations.length > 0 ? HUMAN : null,
+    onStatusActivate: (owner) => {
+      if (owner === HUMAN && affordances.emblemActivations.length > 0) setAbilityChooser({ kind: "emblems" });
     },
     onCardDragStart: (id, source) => {
       if (affordances.canAct) setDrag({ id, source });
@@ -333,7 +404,8 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     },
     onZoneDrop: () => setDrag(null),
     onZoneOpen: ({ owner, zone }) => {
-      if (zone !== "deck") setBrowsed({ side: owner, zone });
+      if (owner === HUMAN && zone === "void" && affordances.voidPlays.size > 0) setAbilityChooser({ kind: "void" });
+      else if (zone !== "deck") setBrowsed({ side: owner, zone });
     },
     onNextPhase: () => {
       // A double click is one gesture: when the opponent answers within it,
@@ -348,6 +420,13 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       if (affordances.pass !== null) submitAction(affordances.pass, "pass-control");
     },
     onPromptCancel: cancelPrompt,
+    onPromptNumberSubmit: (value) => {
+      if (prompt !== null) submitAnswer(numberAnswer(prompt, value), "number-picker");
+    },
+    onPromptArrangeSubmit: (resolution) => {
+      if (prompt !== null) submitAnswer(arrangeAnswer(prompt, model.engine, resolution), "foresee-editor");
+    },
+    onPromptNoticeDismiss: presentation.dismissNotice,
     onAllForward: () => repositionShortcut(affordances.allForward, "all-forward"),
     onAllBack: () => repositionShortcut(affordances.allBack, "all-back"),
     onRepeatLoop: (count) => {
@@ -363,12 +442,13 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     },
     onChoicePromptChoose: (index) => {
       if (chooser !== null) {
-        const activation = activations[index];
+        const option = chooserOptions[index];
         setAbilityChooser(null);
-        if (activation !== undefined) submitAction(activation, "ability-chooser");
+        if (option?.action === "browseVoid") setBrowsed({ side: HUMAN, zone: "void" });
+        else if (option !== undefined && option.action !== null) submitAction(option.action, "ability-chooser");
         return;
       }
-      if (surface.kind === "choice") submitAnswer(surface.answers[index] ?? null, "choice-prompt");
+      submitAnswer(surface.choiceAnswers[index] ?? null, "choice-prompt");
     },
     onResultAction: (action) => handleResultAction(action),
   };
@@ -408,15 +488,6 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         inspectorVisibility="hidden"
         phaseNavigation={derived.view.stack.length > 0 ? "pass" : "next-phase"}
       />
-      {surface.kind === "foresee" && prompt !== null ? (
-        <BattleForeseeEditor
-          key={prompt.id}
-          model={surface.model}
-          onConfirm={(resolution) =>
-            submitAnswer(foreseeAnswer(prompt, model.engine, resolution), "foresee-editor")
-          }
-        />
-      ) : null}
       {browsed === null ? null : (
         <CardZoneBrowserOverlay<BattleCardId>
           owner={browsed.side === HUMAN ? "viewer" : "opponent"}
@@ -427,6 +498,53 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       )}
     </>
   );
+}
+
+/** The options of the chooser the human opened, each with the action it takes; empty when none is open. */
+function chooserOptionsFor(
+  chooser: Chooser | null,
+  affordances: EngineBattleScreenModel["affordances"],
+  view: EngineBattleScreenModel["engine"],
+  cards: EngineCardModels,
+  emblemName: (emblem: "avatar" | "dreamsign", id: AvatarId | DreamsignId) => string | null,
+): ChooserOption[] {
+  if (chooser === null) return [];
+  const cancel: ChooserOption = { copy: { kind: "cancel" }, action: null };
+  if (chooser.kind === "card") {
+    const activations = affordances.activations.get(chooser.id) ?? [];
+    if (activations.length === 0) return [];
+    return [...activations.map((action, index): ChooserOption => ({ copy: { kind: "ability", index }, action })), cancel];
+  }
+  if (chooser.kind === "void") {
+    const plays = [...affordances.voidPlays.values()].flatMap((action): ChooserOption[] => {
+      const instance = view.instances[action.card];
+      return instance === undefined
+        ? []
+        : [{ copy: { kind: "reclaim", name: cards(instance).displaySnapshot.name }, action }];
+    });
+    if (plays.length === 0) return [];
+    return [...plays, { copy: { kind: "browseVoid" }, action: "browseVoid" }, cancel];
+  }
+  const options = affordances.emblemActivations.flatMap((action, _index, all): ChooserOption[] => {
+    const source = action.source;
+    if (typeof source === "string") return [];
+    const siblings = all.filter((other) => JSON.stringify(other.source) === JSON.stringify(source));
+    const side = view.sides[source.side];
+    const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
+    return [
+      {
+        copy: {
+          kind: "emblem",
+          emblem: source.kind,
+          name: id === undefined ? null : emblemName(source.kind, id),
+          index: siblings.indexOf(action),
+          count: siblings.length,
+        },
+        action,
+      },
+    ];
+  });
+  return options.length === 0 ? [] : [...options, cancel];
 }
 
 function sourceSlotOf(view: MobileBattleView, id: BattleCardId): MobileBattleSlotTarget | null {

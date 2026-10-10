@@ -317,9 +317,40 @@ describe("the atlas layer QA scenes", () => {
 describe("the battle layer QA scenes", () => {
   const displayLayers = [1, 2, 3, 4, 5, 6, 7];
 
-  const battleScenes = QA_SCENES.filter((scene) =>
-    qaSceneLoadsBattle(scene.id),
+  const battleScenes = QA_SCENES.filter(
+    (scene) => qaSceneLoadsBattle(scene.id) && scene.promptLab === undefined,
   );
+  const labScenes = QA_SCENES.filter((scene) => scene.promptLab !== undefined);
+
+  /** Journey content whose starter cards and Dreamwell a battle can deal. */
+  function battleSceneContent(): JourneyContent {
+    const base = makeJourneyContent();
+    const cardDatabase = new Map(base.cardDatabase);
+    const [template] = cardDatabase.values();
+    for (const cardNumber of base.poolContext.starterCardNumbers) {
+      cardDatabase.set(cardNumber, {
+        ...template,
+        id: testCardId(`qa-scene-starter-${String(cardNumber)}`),
+        cardNumber,
+        imageNumber: cardNumber,
+        isStarter: true,
+      });
+    }
+    return {
+      ...base,
+      cardDatabase,
+      dreamwellCards: [
+        {
+          id: testDreamwellCardId("qa-scene-dreamwell"),
+          name: testDreamwellCardName("QA Scene Dreamwell"),
+          renderedText: "Synthetic Dreamwell fixture.",
+          order: 1,
+          energyAdded: 1,
+          cardNumber: 1,
+        },
+      ],
+    };
+  }
 
   it("has battle-loading scenes to open", () => {
     expect(battleScenes.length).toBeGreaterThan(0);
@@ -327,32 +358,7 @@ describe("the battle layer QA scenes", () => {
 
   for (const scene of battleScenes) {
     it(`${scene.id} loads the battle BEGIN_BATTLE folds, and LOAD_STATE accepts it`, () => {
-      const base = makeJourneyContent();
-      const cardDatabase = new Map(base.cardDatabase);
-      const [template] = cardDatabase.values();
-      for (const cardNumber of base.poolContext.starterCardNumbers) {
-        cardDatabase.set(cardNumber, {
-          ...template,
-          id: testCardId(`qa-scene-starter-${String(cardNumber)}`),
-          cardNumber,
-          imageNumber: cardNumber,
-          isStarter: true,
-        });
-      }
-      const content: JourneyContent = {
-        ...base,
-        cardDatabase,
-        dreamwellCards: [
-          {
-            id: testDreamwellCardId("qa-scene-dreamwell"),
-            name: testDreamwellCardName("QA Scene Dreamwell"),
-            renderedText: "Synthetic Dreamwell fixture.",
-            order: 1,
-            energyAdded: 1,
-            cardNumber: 1,
-          },
-        ],
-      };
+      const content = battleSceneContent();
       const journey = buildQaScene(scene.id, content, SCENE_OPTIONS);
       if (journey === null) throw new Error("the scene did not build");
       const battle = buildQaSceneBattle(scene.id, content, journey);
@@ -384,6 +390,25 @@ describe("the battle layer QA scenes", () => {
       }
     });
   }
+
+  it("loads each prompt-lab fixture's synthetic battle, which LOAD_STATE accepts and the journey engine replays", () => {
+    const content = battleSceneContent();
+    const engine = createBattleInitProvider(content).engine;
+    expect(labScenes.length).toBeGreaterThan(0);
+    for (const scene of labScenes) {
+      const journey = buildQaScene(scene.id, content, SCENE_OPTIONS);
+      if (journey === null || scene.promptLab === undefined) throw new Error(`${scene.id} did not build`);
+      const battle = buildQaSceneBattle(scene.id, content, journey);
+      const fold = { ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey };
+      const loaded = validateLoadedState(fold, { snapshot: journey, battle });
+      const slice = loaded?.battle?.engine?.slice;
+      if (slice === undefined) throw new Error(`${scene.id} loaded no engine battle`);
+
+      expect(slice.committed.version, scene.id).toBe(battle?.engine?.slice.committed.version);
+      expect(slice.inFlight === null || engine.decision(slice.committed) === null, scene.id).toBe(true);
+      expect(battle?.init.playerDeckOrder.some((definition) => definition.renderedText.length > 0), scene.id).toBe(true);
+    }
+  });
 
   it("loads an active battle only for the dedicated playable scene", () => {
     expect(qaSceneLoadsBattle(parseQaSceneId("battle"))).toBe(false);
