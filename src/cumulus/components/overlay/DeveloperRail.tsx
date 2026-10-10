@@ -44,7 +44,7 @@ export function DeveloperRail({
       data-testid={testId}
       style={{
         position: "relative",
-        zIndex: 60,
+        zIndex: token("--layer-app-overlay"),
         minWidth: 0,
         height: "100dvh",
       }}

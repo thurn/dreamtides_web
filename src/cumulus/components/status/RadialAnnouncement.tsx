@@ -608,7 +608,7 @@ function TransientAnnouncement({
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: 55,
+        zIndex: token("--layer-app-announcement"),
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -744,7 +744,7 @@ function MergeTargetAnnouncement(
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: 110,
+        zIndex: token("--layer-app-merge-target"),
         display: "grid",
         placeItems: "center",
         pointerEvents: "none",

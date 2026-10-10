@@ -75,8 +75,6 @@ export interface BattlePromptHostProps {
 }
 
 const BANNER_MAX_WIDTH = 416;
-// Above the gallery card picker, so a cancellable gallery prompt can still be cancelled.
-const BANNER_Z_INDEX = 80;
 /**
  * In the board's top row, over the opponent's hand and above the far side's
  * status display, so the banner never covers the opponent's energy and
@@ -90,7 +88,8 @@ const BANNER_STYLE: CSSProperties = {
   width: "90vw",
   maxWidth: BANNER_MAX_WIDTH,
   transform: "translateX(-50%)",
-  zIndex: BANNER_Z_INDEX,
+  // Above the gallery card picker, so a cancellable gallery prompt can still be cancelled.
+  zIndex: token("--layer-app-battle-overlay"),
 };
 
 export function BattlePromptHost({
@@ -220,7 +219,7 @@ function BattleLoopOffer({
   };
   return (
     <>
-      <div data-battle-loop-offer="" style={{ ...BANNER_STYLE, zIndex: BANNER_Z_INDEX - 1 }}>
+      <div data-battle-loop-offer="" style={{ ...BANNER_STYLE, zIndex: `calc(${token("--layer-app-battle-overlay")} - 1)` }}>
         <GlassPanel
           title={"Repeat This Loop?"}
           headerSpacing="compact"

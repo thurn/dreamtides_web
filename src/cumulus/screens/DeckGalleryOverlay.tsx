@@ -77,7 +77,7 @@ export function DeckGalleryOverlay({
             inset: 0,
             width: isDesktop ? undefined : "100dvw",
             height: isDesktop ? undefined : "100dvh",
-            zIndex: 60,
+            zIndex: token("--layer-app-overlay"),
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

@@ -301,6 +301,29 @@
   --layer-app-chrome-elevated: calc(var(--layer-app-chrome) + 5); /* @kind other */
   /* Card or pointer command menu, one step above the app chrome. */
   --layer-app-chrome-context: calc(var(--layer-app-chrome) + 1); /* @kind other */
+  /* App-shell stacking, low to high. Surfaces that share a layer stack by
+     document order. */
+  /* Journey status bar HUD, below the app chrome. */
+  --layer-app-status-bar: 40; /* @kind other */
+  /* Owned-Dreamsign strip docked beside the status bar, one step above it. */
+  --layer-app-status-bar-dreamsigns: calc(var(--layer-app-status-bar) + 1); /* @kind other */
+  /* Radial announcement over its screen, above the status bar and below the
+     app chrome. */
+  --layer-app-announcement: 55; /* @kind other */
+  /* App-shell overlays on the app chrome's layer: dialogs, galleries, deck
+     viewers, zone browsers, developer rails, status toasts, and purchase
+     travels. */
+  --layer-app-overlay: var(--layer-app-chrome); /* @kind other */
+  /* Owned-Dreamsign window opened from the status bar, above the app chrome. */
+  --layer-app-status-bar-window: 70; /* @kind other */
+  /* Battle result surface and battle prompt banner, above the app-shell
+     overlays (a cancellable gallery prompt stays cancellable). */
+  --layer-app-battle-overlay: 80; /* @kind other */
+  /* Select option menus, above every app-shell overlay. */
+  --layer-app-menu: 90; /* @kind other */
+  /* Card-attached merge-target announcement, above every app-shell surface
+     except entity reveals. */
+  --layer-app-merge-target: 110; /* @kind other */
 
   /* ---- Press-down bound ----
      CSS-only and direct usePress controls use this factor. <Pressable> and

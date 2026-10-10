@@ -312,7 +312,7 @@ function CardShopGallery({
             top: travel.sourceRect.top,
             width: travel.sourceRect.width,
             height: travel.sourceRect.height,
-            zIndex: 60,
+            zIndex: token("--layer-app-overlay"),
             pointerEvents: "none",
             transformOrigin: "top left",
             willChange: "transform, opacity",

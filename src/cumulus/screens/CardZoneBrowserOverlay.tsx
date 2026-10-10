@@ -315,7 +315,7 @@ export function CardZoneBrowserOverlay<EntryId extends string = DeckEntryId>({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 60,
+        zIndex: token("--layer-app-overlay"),
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

@@ -275,7 +275,7 @@ function QsbDreamsignStrip({
     top: box.centerY - SIGN / 2,
     display: "flex",
     alignItems: "center",
-    zIndex: 41,
+    zIndex: token("--layer-app-status-bar-dreamsigns"),
     touchAction: "pan-x pan-y",
   };
 
@@ -321,7 +321,7 @@ function QsbDreamsignWindow({
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: 70,
+        zIndex: token("--layer-app-status-bar-window"),
         display: "grid",
         placeItems: "center",
         padding: token("--gutter"),
@@ -742,7 +742,7 @@ function QsbBattleHudBar({
         right: bounds.right,
         bottom: 0,
         height: JOURNEY_STATUS_BAR_TOTAL_HEIGHT,
-        zIndex: 40,
+        zIndex: token("--layer-app-status-bar"),
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "space-between",
@@ -827,7 +827,7 @@ export function JourneyStatusBar({
           right: 0,
           bottom: 0,
           height: JOURNEY_STATUS_BAR_TOTAL_HEIGHT,
-          zIndex: 40,
+          zIndex: token("--layer-app-status-bar"),
         }}
       >
         <QsbHudBar

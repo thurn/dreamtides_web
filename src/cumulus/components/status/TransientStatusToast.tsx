@@ -37,6 +37,9 @@ export function TransientStatusToast({
       style={{
         ...glassSurfaceStyle({ radius: token("--radius-panel") }),
         position: "fixed",
+        // The --layer-app-overlay value as a literal: the session bounce
+        // toast (src/components/BounceToast.tsx) mounts this toast outside
+        // every .cumulus scope, where layer tokens do not resolve.
         zIndex: 60,
         bottom: `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-l")})`,
         left: "50%",

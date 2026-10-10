@@ -443,7 +443,7 @@ export function Select<Value extends string>({
               minWidth: anchor.width,
               maxWidth: menuMaxWidth,
               maxHeight: anchor.maxHeight,
-              zIndex: 90,
+              zIndex: token("--layer-app-menu"),
               // No inner padding: option rows run edge to edge so a selected /
               // hovered row is a full-width rectangle. Constraining the menu to
               // the available viewport height keeps every option reachable.

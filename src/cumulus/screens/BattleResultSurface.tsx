@@ -94,7 +94,7 @@ function ReopenControl({
         position: "fixed",
         right: `max(var(--safe-area-inset-right), ${token("--space-m")})`,
         bottom: `max(var(--safe-area-inset-bottom), ${token("--space-m")})`,
-        zIndex: 80,
+        zIndex: token("--layer-app-battle-overlay"),
         width: `min(${String(REOPEN_CONTROL_MAX_WIDTH_PX)}px, calc(100vw - ${token("--space-4xl")}))`,
       }}
     >
@@ -137,7 +137,7 @@ function VictoryReward({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 80,
+        zIndex: token("--layer-app-battle-overlay"),
         minHeight: "100dvh",
         boxSizing: "border-box",
         overflowY: "auto",
@@ -283,7 +283,7 @@ function DefeatOrDrawResult({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 80,
+        zIndex: token("--layer-app-battle-overlay"),
         minHeight: "100dvh",
         boxSizing: "border-box",
         overflowY: "auto",

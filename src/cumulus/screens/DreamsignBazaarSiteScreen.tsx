@@ -318,7 +318,7 @@ function DreamsignBazaarGallery({
             top: travel.sourceRect.top,
             width: travel.sourceRect.width,
             height: travel.sourceRect.height,
-            zIndex: 60,
+            zIndex: token("--layer-app-overlay"),
             display: "grid",
             placeItems: "center",
             pointerEvents: "none",
