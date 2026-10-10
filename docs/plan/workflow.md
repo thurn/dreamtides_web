@@ -716,7 +716,7 @@ Scripted browser QA is a scenario run by the runner, not a one-off script
 that repeats the server, error buffer, click, wait, and capture plumbing:
 
 ```sh
-node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--prod]
+node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--prod] [--viewports desktop,mobile]
 ```
 
 - **What it owns.** It serves the worktree on the first free port from 5174
@@ -730,10 +730,24 @@ node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--pro
   directory, `artifacts/qa/<bead-id>/<name>.mjs`. Reusable ones are tracked in
   `scripts/qa/scenarios/`.
 - **Helpers.** `qa.open` (asserts origin, viewport, and empty `__caps`),
-  `qa.click` (a pointer click after an `elementFromPoint` hit check, with the
-  pointer then rested outside the viewport), `qa.waitVisible` (effective
-  opacity, not DOM presence), and `qa.capture`. The README's Browser QA
-  section lists them all.
+  `qa.goto` (relative routes, at the current viewport), `qa.click` (a
+  pointer click after an `elementFromPoint` hit check, with the pointer then
+  rested outside the viewport), `qa.waitVisible` (effective opacity, not DOM
+  presence), `qa.capture` (viewport, full page, `clip`, or `element`, into
+  `qa.captureDir`), and `qa.trace` (per-task main-thread attribution from a
+  CDP trace on the page's clock). The README's Browser QA section lists them
+  all.
+- **Long walks.** One MCP call's response is lost past about 300 s. A walk
+  that may take longer is split into steps (an array default export; each
+  step is its own call on the same page and reads the previous step's
+  return as `qa.carry`) and viewports (`export const viewports` or
+  `--viewports`, one pass each). The runner reports a call that outlasts
+  the limit rather than waiting out `--timeout`.
+- **Unreachable states.** Reach a state through a scene, a prompt-lab
+  fixture, or the engine debug panel rather than a journey walk to it. The tracked
+  `battle-result` and `ai-reveal` scenarios park on the battle result surface
+  and the AI's play reveal; copy their approach for a new state, and add a
+  prompt-lab fixture when no scene reaches it.
 - **Phase gates** run `smoke --prod`: front door, every Layer 1 site, Battle
   Start, and one AI turn on a production build. `--cwd <checkout>` runs it
   against another checkout, such as a detached base worktree outside the

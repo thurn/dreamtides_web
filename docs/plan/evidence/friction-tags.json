@@ -11,6 +11,12 @@
     "mobile-battle-lane-window": "browser-qa-scripting",
     "mobile-hover-rest-point": "browser-qa-scripting",
     "nondeterministic-qa-scenes": "qa-scenes-nondeterministic",
+    "qa-content-lacks-prompts": "qa-scene-unreachable-state",
+    "qa-runner-mcp-timeout": "browser-qa-scripting",
+    "qa-runner-no-clip-capture": "browser-qa-scripting",
+    "qa-runner-no-cpu-profiler": "browser-qa-scripting",
+    "qa-scene-battle-bootstrap-bounce": "qa-scene-unreachable-state",
+    "qa-scene-no-ai-reveal": "qa-scene-unreachable-state",
     "speech-text-before-visible": "browser-qa-scripting",
     "unbounded-trigger-cascade-slow": "vitest-sync-hang",
     "worktree-write-hook": "worktree-write-hook-misfire"

@@ -89,7 +89,8 @@ node scripts/qa/run-scenario.mjs smoke --bead <bead-id> --prod   # vite build + 
 | `--minify` | With `--prod`, keep the production minifier |
 | `--cwd <checkout>` | Serve another checkout, such as a detached base worktree outside the repository |
 | `--arg key=value` | Passed to the scenario as `qa.args` |
-| `--timeout <s>` | Scenario time limit (default 900) |
+| `--viewports <list>` | Run the scenario once per viewport, `desktop` and/or `mobile` (default: the module's `viewports`, else `desktop`) |
+| `--timeout <s>` | Time limit for the whole run, every call included (default 900) |
 
 The runner starts its server in its own process group (`scripts/dev.mjs`, or
 `vite preview`), connects its own MCP client with the primary checkout as the
@@ -103,17 +104,43 @@ log. It exits 1 when the scenario throws or any `__caps` is not empty.
 `<scenario>` is a module path, a tracked scenario
 (`scripts/qa/scenarios/<name>.mjs`), or a bead-local one
 (`artifacts/qa/<bead-id>/<name>.mjs`). Its default export is one
-self-contained function, `async (qa) => result`. The runner sends its source,
-after the helper prelude (`scripts/qa/prelude.mjs`), to the MCP's
-`browser_run_code_unsafe`, so it runs in the MCP server with a Playwright
-page and may not read its module's other bindings or imports. The sandbox
-has no `URL` global. The helpers:
+self-contained function, `async (qa) => result`, or an array of them (the
+steps). The runner sends each one's source, after the helper prelude
+(`scripts/qa/prelude.mjs`), to the MCP's `browser_run_code_unsafe`, so it
+runs in the MCP server with a Playwright page and may not read its module's
+other bindings or imports. The sandbox has no `URL`, `setTimeout`, or
+`require`.
 
-- `qa.open(route, viewport?)`: sizes the viewport (`qa.viewports.desktop`
-  1440×900 by default, or `qa.viewports.mobile` 390×844), loads the route on
-  the runner's server, and asserts the origin, the viewport, and an empty
-  `__caps`. `__caps` is installed by `page.addInitScript`, so it records
-  load-time errors too.
+**Steps and viewports.** One MCP call's response is lost when the call
+outlasts about 300 s (likely Node fetch's body timeout in the MCP client), so
+a longer walk is split:
+
+- Each step runs in its own call on the same page, which keeps its document,
+  game, and `__caps` buffer. A step reads what the previous step returned as
+  `qa.carry` (`null` at the first step), and the last step's return is the
+  result. The same function may serve several steps, branching on `qa.step`.
+- `export const viewports = ["desktop", "mobile"]` (or `--viewports`) runs
+  every step once per viewport, `qa.viewportName` and `qa.viewport` set for
+  the pass; `qa.open` defaults to that viewport. With more than one viewport
+  the result is keyed by viewport.
+- The report lists each call's wall time in `calls`, and log lines carry
+  `at: "<viewport>#<step>"` when there was more than one call. The runner
+  warns about a call past 240 s, and stops waiting for one 15 s past the
+  300 s limit, reporting the lost response instead of waiting out
+  `--timeout`. The run stops at the first error.
+
+The helpers:
+
+- `qa.open(route, viewport?)`: sizes the viewport (`qa.viewport` by default;
+  `qa.viewports.desktop` is 1440×900 and `qa.viewports.mobile` 390×844),
+  loads the route with `qa.goto`, and also asserts the viewport. `__caps` is
+  installed by `page.addInitScript`, so it records load-time errors too.
+- `qa.goto(route, { allowErrors?, waitUntil? })`: loads a route at the
+  current viewport and asserts the origin and an empty `__caps`. `qa.url`
+  resolves its route on the runner's server: `/path?query`, `path`, and
+  `?query` are relative (the sandbox's `page.goto` rejects them), and an
+  absolute URL such as `page.url()` reloads that page. The buffer of the
+  document it leaves goes into the report.
 - `qa.click(target, { position?, minOpacity?, rest?, timeout? })`: waits
   until the target is rendered and `elementFromPoint` at its centre (or
   `position` in its box) is the target or inside it, clicks there with the
@@ -126,15 +153,45 @@ has no `URL` global. The helpers:
   does not count.
 - A `target` is a CSS selector or `{ text: "<regex source>" }`, the deepest
   elements whose text matches.
-- `qa.capture(name)` writes `artifacts/qa/<bead-id>/<name>.png` at CSS scale.
+- `qa.capture(name, { fullPage?, clip?, element?, pad?, minOpacity? })`
+  writes `artifacts/qa/<bead-id>/<name>.png` at CSS scale: the viewport, the
+  full page, a viewport rectangle `clip: { x, y, width, height }`, or the box
+  of a rendered `element` target (waited for like `waitVisible`) grown by
+  `pad` pixels. A clip is cut to the viewport; the report records it.
+  `qa.captureDir` is that directory's absolute path, for any other file.
+- `qa.trace(name, fn, { longTaskMs?, top? })` records a Chrome trace (CDP
+  `Tracing`, with the V8 sampling profiler) around `fn`, between
+  `performance.mark`s `qa-trace:<name>:start` and `:end`. It summarizes the
+  renderer main thread's tasks that start between the marks: each long task
+  (default 50 ms) with its start on the page's `performance.now()` clock (so
+  it lines up with a `PerformanceObserver` or a log line's time), its self
+  time by trace event (`FunctionCall`, `Layout`, `UpdateLayoutTree`,
+  `EventDispatch <type>`, …), and its sampled JavaScript self time by
+  function and source line, `top` (default 8) of each. It returns the
+  summary with `fn`'s return as `value`, and the report collects every
+  summary in `traces`. Tracing slows the page, so time a cost with and
+  without it before quoting an absolute number.
 - `qa.caps()`, `qa.assertCaps(label)`, `qa.note(label, data)`,
   `qa.sleep(ms)`, and `qa.page` for anything else.
 - Waits and clicks fail at once when `__caps` records an error or rejection.
 
-`smoke` walks a fresh seed-1 game from the front door through Avatar
-selection, every Layer 1 site, and Battle Start, then passes until the AI has
-taken one turn. It uses no development-only parameter, so phase gates run it
-with `--prod`.
+Tracked scenarios:
+
+- `smoke` walks a fresh seed-1 game from the front door through Avatar
+  selection, every Layer 1 site, and Battle Start, then passes until the AI
+  has taken one turn. It uses no development-only parameter, so phase gates
+  run it with `--prod`.
+- `battle-result` (`--arg outcome=victory|defeat`) opens
+  `?goto=battle-playable&debug=1`, raises the winner's score to the battle's
+  `scoreToWin` through the engine debug panel at the human's decision,
+  asserts the result surface, reloads the game and asserts it again, and
+  captures the viewport and the surface's content.
+- `ai-reveal` opens `?goto=prompt-lab-present-opponent`, where the AI holds
+  the Day, and waits for its play reveal (`[data-battle-play-reveal]`),
+  passing the human's turns if the AI plays nothing, so whichever policy
+  answers the AI host reaches it. It captures the viewport and the revealed
+  card and asserts the card travels on. `--arg trace=1` traces the wait.
+- `card-lab-play` is the card sweep's per-card run (below).
 
 ### Interactive QA
 

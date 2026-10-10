@@ -2,15 +2,22 @@
 //
 //   node scripts/qa/run-scenario.mjs <scenario> --bead <id>
 //     [--port <n>] [--prod [--minify]] [--cwd <checkout>] [--arg key=value]...
-//     [--timeout <seconds>]
+//     [--viewports desktop,mobile] [--timeout <seconds>]
 //
 // <scenario> is a path to a module, a tracked scenario name
 // (scripts/qa/scenarios/<name>.mjs), or a bead-local one
 // (artifacts/qa/<bead>/<name>.mjs in the primary checkout). The module's
-// default export is one self-contained `async (qa) => result` function: the
-// runner sends its source, after the helper prelude (`scripts/qa/prelude.mjs`),
-// to the Playwright MCP's `browser_run_code_unsafe`, so it may not read
-// bindings from its own module.
+// default export is one self-contained `async (qa) => result` function, or
+// an array of them (steps): the runner sends each one's source, after the
+// helper prelude (`scripts/qa/prelude.mjs`), to the Playwright MCP's
+// `browser_run_code_unsafe`, so it may not read bindings from its own module.
+// Each step is its own MCP call on the same page; a step reads what the
+// previous one returned as `qa.carry`, and the last step's return is the
+// result. The module may export `viewports` (`--viewports` overrides it): the
+// steps run once per viewport, each pass with `qa.viewport` set, and the
+// result is keyed by viewport when there is more than one. One MCP call's
+// response is lost when the call outlasts about five minutes, so a longer
+// walk is split into steps or viewports.
 //
 // The runner serves <checkout> (default: this one) on a free port of 5174 or
 // higher (never 5173): `scripts/dev.mjs`, or with --prod `vite build` into a
@@ -40,6 +47,18 @@ const DEVELOPER_PORT = 5173;
 const FIRST_QA_PORT = 5174;
 const repoRoot = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 
+const VIEWPORTS = /** @type {const} */ (["desktop", "mobile"]);
+
+/**
+ * One MCP call's response is lost when the call outlasts this (likely Node
+ * fetch's 300 s body timeout in the MCP client), so the runner stops waiting
+ * for a call a little after it; a walk this long is split into steps.
+ */
+const CALL_LIMIT_MS = 300_000;
+
+/** A call longer than this is near the limit, and the runner warns. */
+const LONG_CALL_MS = 240_000;
+
 /**
  * @typedef {object} RunnerOptions
  * @property {string} scenario
@@ -49,8 +68,24 @@ const repoRoot = resolve(fileURLToPath(new URL("../..", import.meta.url)));
  * @property {boolean} minify
  * @property {string | null} cwd
  * @property {Record<string, string>} args
+ * @property {import("./prelude.mjs").ViewportName[] | null} viewports `--viewports`, overriding the module's.
  * @property {number} timeoutS
  */
+
+/**
+ * @param {unknown} raw
+ * @param {string} where
+ * @returns {import("./prelude.mjs").ViewportName[]}
+ */
+function parseViewports(raw, where) {
+  const names = typeof raw === "string" ? raw.split(",") : raw;
+  if (!Array.isArray(names) || names.length === 0) throw new Error(`${where}: expected a list of ${VIEWPORTS.join(", ")}`);
+  return names.map((name) => {
+    const found = VIEWPORTS.find((viewport) => viewport === name);
+    if (found === undefined) throw new Error(`${where}: unknown viewport ${String(name)}; one of ${VIEWPORTS.join(", ")}`);
+    return found;
+  });
+}
 
 /**
  * @param {string[]} argv
@@ -58,7 +93,7 @@ const repoRoot = resolve(fileURLToPath(new URL("../..", import.meta.url)));
  */
 export function parseRunnerArgs(argv) {
   /** @type {RunnerOptions} */
-  const options = { scenario: "", bead: "", port: null, prod: false, minify: false, cwd: null, args: {}, timeoutS: 900 };
+  const options = { scenario: "", bead: "", port: null, prod: false, minify: false, cwd: null, args: {}, viewports: null, timeoutS: 900 };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     const value = () => {
@@ -72,6 +107,7 @@ export function parseRunnerArgs(argv) {
     else if (arg === "--minify") options.minify = true;
     else if (arg === "--cwd") options.cwd = resolve(value());
     else if (arg === "--timeout") options.timeoutS = Number(value());
+    else if (arg === "--viewports") options.viewports = parseViewports(value(), "--viewports");
     else if (arg === "--arg") {
       const pair = value();
       const split = pair.indexOf("=");
@@ -136,15 +172,28 @@ export function buildScenarioCode(scenarioSource, config) {
 }
 
 /**
+ * A scenario module: its steps' sources and the viewports it runs at.
+ *
+ * @typedef {{ steps: string[], viewports: import("./prelude.mjs").ViewportName[] }} ScenarioPlan
+ */
+
+/**
  * @param {string} path
- * @returns {Promise<Function>}
+ * @returns {Promise<ScenarioPlan>}
  */
 async function loadScenario(path) {
   /** @type {unknown} */
   const loaded = await import(pathToFileURL(path).href);
-  const entry = typeof loaded === "object" && loaded !== null && "default" in loaded ? loaded.default : undefined;
-  if (typeof entry !== "function") throw new Error(`${path} has no default-exported function`);
-  return entry;
+  const module = typeof loaded === "object" && loaded !== null ? /** @type {Record<string, unknown>} */ (loaded) : {};
+  const entry = module.default;
+  const steps = Array.isArray(entry) ? /** @type {unknown[]} */ (entry) : [entry];
+  if (steps.length === 0 || steps.some((step) => typeof step !== "function")) {
+    throw new Error(`${path} default-exports neither a function nor a non-empty array of functions`);
+  }
+  return {
+    steps: steps.map(String),
+    viewports: module.viewports === undefined ? ["desktop"] : parseViewports(module.viewports, `${path} viewports`),
+  };
 }
 
 /** @returns {string} */
@@ -248,10 +297,27 @@ export function say(message) {
  * @property {number | null} serverPid
  * @property {string} captureDir
  * @property {Record<string, number>} wallMs Build and serve times.
- * @property {(scenarioSource: string, args: Record<string, string>, timeoutMs: number) => Promise<import("./prelude.mjs").QaResult>} run
+ * @property {(scenarioSource: string, args: Record<string, string>, timeoutMs: number, call?: QaCall) => Promise<import("./prelude.mjs").QaResult>} run
  *   Runs one scenario function's source with the helper prelude on the session's server.
+ * @property {(plan: ScenarioPlan, args: Record<string, string>, timeoutMs: number) => Promise<PlanResult>} runPlan
+ *   Runs every step of a scenario at each of its viewports, one MCP call
+ *   each, within `timeoutMs` in all; stops at the first error.
  * @property {() => Promise<void>} close Closes the MCP client and stops the server's process group.
  * @property {() => boolean} closed Whether the session has closed, as on SIGINT.
+ */
+
+/**
+ * Which call of a scenario run this is (`QaConfig`'s run fields).
+ *
+ * @typedef {{ viewport: import("./prelude.mjs").ViewportName, step: number, steps: number, carry: unknown }} QaCall
+ */
+
+/**
+ * A scenario run's merged report. `result` is the last step's return, keyed
+ * by viewport when there is more than one; log lines carry `at`
+ * (`<viewport>#<step>`) when the run made more than one call.
+ *
+ * @typedef {import("./prelude.mjs").QaResult & { calls: Array<{ viewport: string, step: number, ms: number }> }} PlanResult
  */
 
 /**
@@ -338,16 +404,67 @@ export async function openQaSession(options) {
     throw error;
   }
   const client = mcp;
+  /** @type {QaSession["run"]} */
+  const run = async (scenarioSource, args, timeoutMs, call) => {
+    const code = buildScenarioCode(scenarioSource, { baseUrl, bead: options.bead, captureDir, prod: options.prod, args, ...call });
+    return /** @type {import("./prelude.mjs").QaResult} */ (
+      parseMcpResult(await client.call("browser_run_code_unsafe", { code }, { timeoutMs }))
+    );
+  };
   return {
     port,
     serverPid: server.pid ?? null,
     captureDir,
     wallMs,
-    async run(scenarioSource, args, timeoutMs) {
-      const code = buildScenarioCode(scenarioSource, { baseUrl, bead: options.bead, captureDir, prod: options.prod, args });
-      return /** @type {import("./prelude.mjs").QaResult} */ (
-        parseMcpResult(await client.call("browser_run_code_unsafe", { code }, { timeoutMs }))
-      );
+    run,
+    async runPlan(plan, args, timeoutMs) {
+      const deadline = Date.now() + timeoutMs;
+      const many = plan.viewports.length * plan.steps.length > 1;
+      /** @type {PlanResult} */
+      const merged = { result: null, error: null, log: [], captures: [], caps: [], traces: [], calls: [] };
+      /** @type {Record<string, unknown>} */
+      const byViewport = {};
+      for (const viewport of plan.viewports) {
+        /** @type {unknown} */
+        let carry = null;
+        for (const [step, source] of plan.steps.entries()) {
+          const remaining = deadline - Date.now();
+          if (remaining <= 0) {
+            merged.error = `timed out before ${viewport} step ${String(step)}`;
+            return merged;
+          }
+          const started = Date.now();
+          /** @type {import("./prelude.mjs").QaResult} */
+          let report;
+          try {
+            report = await run(source, args, Math.min(remaining, CALL_LIMIT_MS + 15_000), { viewport, step, steps: plan.steps.length, carry });
+          } catch (error) {
+            if (Date.now() - started < CALL_LIMIT_MS) throw error;
+            merged.error = `${viewport} step ${String(step)} ran past one MCP call's ${String(CALL_LIMIT_MS / 1000)} s limit and its response was lost; split the scenario into steps (README § Scenario runner): ${String(error)}`;
+            return merged;
+          }
+          const ms = Date.now() - started;
+          merged.calls.push({ viewport, step, ms });
+          if (ms > LONG_CALL_MS) say(`${viewport} step ${String(step)} took ${String(Math.round(ms / 1000))} s in one MCP call; split it into steps before it nears five minutes`);
+          const at = `${viewport}#${String(step)}`;
+          merged.log.push(...report.log.map((line) => (many ? { ...line, at } : line)));
+          merged.captures.push(...report.captures);
+          // A document a pass ends on is recorded again when the next pass navigates away from it.
+          const seen = new Set(merged.caps.map((entry) => JSON.stringify(entry)));
+          merged.caps.push(...report.caps.filter((entry) => !seen.has(JSON.stringify(entry))));
+          merged.traces.push(...report.traces);
+          carry = report.result;
+          if (report.error !== null) {
+            merged.error = many ? `${at}: ${report.error}` : report.error;
+            byViewport[viewport] = carry;
+            merged.result = plan.viewports.length > 1 ? byViewport : carry;
+            return merged;
+          }
+        }
+        byViewport[viewport] = carry;
+      }
+      merged.result = plan.viewports.length > 1 ? byViewport : byViewport[plan.viewports[0] ?? "desktop"] ?? null;
+      return merged;
     },
     close,
     closed: () => cleaned,
@@ -360,14 +477,15 @@ async function main() {
   const scenarioPath = resolveScenarioPath(options.scenario, { primaryCheckout, bead: options.bead });
   const scenarioName = basename(scenarioPath, ".mjs");
   const reportName = `${scenarioName}${options.prod ? "-prod" : ""}`;
-  const scenario = await loadScenario(scenarioPath);
+  const plan = await loadScenario(scenarioPath);
+  if (options.viewports !== null) plan.viewports = options.viewports;
 
   const startedAt = Date.now();
   const hostLoad = loadavg()[0];
   const session = await openQaSession({ ...options, label: reportName });
   try {
     const scenarioStart = Date.now();
-    const report = await session.run(scenario.toString(), options.args, options.timeoutS * 1000);
+    const report = await session.runPlan(plan, options.args, options.timeoutS * 1000);
     const wallMs = { ...session.wallMs, scenario: Date.now() - scenarioStart, total: Date.now() - startedAt };
     const ok = report.error === null && report.caps.length === 0;
     const summary = {
