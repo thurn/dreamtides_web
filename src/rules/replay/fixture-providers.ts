@@ -40,7 +40,7 @@ import {
   registerBattleInitProvider,
   type BattleCompletionProvider,
   type BattleInitProvider,
-} from "../battle/battle-events";
+} from "../battle/journey-battle";
 import {
   registerDeckContentProvider,
   type DeckContentProvider,

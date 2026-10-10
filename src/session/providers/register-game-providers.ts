@@ -24,8 +24,8 @@ import type { JourneyContent } from "../../data/journey-content";
 import {
   registerBattleCompletionProvider,
   registerBattleInitProvider,
-  registerTutorialBattleInitProvider,
-} from "../../rules/battle/battle-events";
+} from "../../rules/battle/journey-battle";
+import { registerTutorialBattleInitProvider } from "../../rules/battle/battle-events";
 import { registerDeckContentProvider } from "../../rules/journey/deck";
 import { registerDraftContentProvider } from "../../rules/journey/draft";
 import { registerJourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";

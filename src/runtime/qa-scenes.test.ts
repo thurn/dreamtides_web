@@ -34,7 +34,7 @@ import { createBattleInitProvider } from "../session/providers/battle-init-provi
 import {
   beginBattle,
   registerBattleInitProvider,
-} from "../rules/battle/battle-events";
+} from "../rules/battle/journey-battle";
 import { initialFoldState, type FoldState } from "../rules/fold-state";
 import { reduceGameEvent } from "../rules/reducer";
 import { validateLoadedState } from "../rules/journey/lifecycle";

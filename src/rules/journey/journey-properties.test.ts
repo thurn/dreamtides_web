@@ -85,7 +85,7 @@ import {
   testJourneyLifecycleContentProvider,
   testSiteContentProvider,
 } from "./test-content-providers";
-import { registerBattleInitProvider } from "../battle/battle-events";
+import { registerBattleInitProvider } from "../battle/journey-battle";
 import { fixtureBattleInitProvider } from "../replay/fixture-providers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import type { AvatarId } from "../../types/identifiers";

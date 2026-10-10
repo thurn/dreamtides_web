@@ -35,7 +35,7 @@ import {
   registerReplayFixtureProviders,
 } from "../replay/fixture-providers";
 import { validateLoadedState } from "../journey/lifecycle";
-import { registerBattleInitProvider } from "./battle-events";
+import { registerBattleInitProvider } from "./journey-battle";
 import {
   pendingEnginePrompt,
   replayEngineBattle,

@@ -32,8 +32,8 @@ import type {
   BattleCompletionProvider,
   BattleInitProvider,
   BattleStart,
-  TutorialBattleInitProvider,
-} from "../../rules/battle/battle-events";
+} from "../../rules/battle/journey-battle";
+import type { TutorialBattleInitProvider } from "../../rules/battle/battle-events";
 import {
   contentAvatarDefinitions,
   contentCardDefinitions,

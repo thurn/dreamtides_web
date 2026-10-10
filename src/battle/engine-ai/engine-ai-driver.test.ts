@@ -14,7 +14,7 @@ import { DSL } from "../../engine/testing/dsl-cards";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { createLocalLog, type CommittedEvent, type LocalLog } from "../../eventlog/local-log";
 import { aiEventActor } from "../../eventlog/types";
-import { registerBattleInitProvider } from "../../rules/battle/battle-events";
+import { registerBattleInitProvider } from "../../rules/battle/journey-battle";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import type { FoldState } from "../../rules/fold-state";
 import {

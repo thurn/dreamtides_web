@@ -12,7 +12,7 @@ import {
   createBattleInitProvider,
   settleDeferredOpponentLog,
 } from "../session/providers/battle-init-provider";
-import { startJourneyBattle } from "../rules/battle/battle-events";
+import { startJourneyBattle } from "../rules/battle/journey-battle";
 import { takeEngineLogRecords } from "../rules/battle/engine-battle";
 import type { JourneyBattleFoldState } from "../rules/battle/fold";
 import type { BattleDeckCardDefinition } from "../battle/types";

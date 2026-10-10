@@ -1,4 +1,4 @@
-import { getBattleInitProvider } from "../../rules/battle/battle-events";
+import { getBattleInitProvider } from "../../rules/battle/journey-battle";
 import { journeyBattleOf } from "../../rules/battle/fold";
 import { useGameState } from "../../session/hooks";
 import { EngineBattleScreen } from "./EngineBattleScreen";

@@ -32,6 +32,7 @@ import type { FoldState } from "./fold-state";
 import type { JourneyState } from "../types/journey";
 import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/battle-events";
+import * as journeyBattle from "./battle/journey-battle";
 import {
   applyEngineDebug,
   pendingEnginePrompt,
@@ -225,7 +226,7 @@ function reduceEngineDebug(
 
 /** The engine journey battles play on, from the registered battle-init provider. */
 function battleEngine(): Engine | null {
-  return battleEvents.getBattleInitProvider()?.engine ?? null;
+  return journeyBattle.getBattleInitProvider()?.engine ?? null;
 }
 
 /**
@@ -553,9 +554,9 @@ export function routeDomain(
       return journeyCase(state, deck.setDreamsignPool(journey, payload));
     // --- battle lifecycle (create / tear down the battle slice) ---
     case "BEGIN_BATTLE":
-      return foldCase(state, battleEvents.beginBattle(state, payload, ctx));
+      return foldCase(state, journeyBattle.beginBattle(state, payload, ctx));
     case "END_BATTLE":
-      return foldCase(state, battleEvents.endBattle(state, payload, ctx));
+      return foldCase(state, journeyBattle.endBattle(state, payload, ctx));
     case "BATTLE_COMMAND":
       return foldCase(
         state,
