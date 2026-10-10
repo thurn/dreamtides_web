@@ -1,9 +1,13 @@
 /** Card primitives: draw, discard, foresee, erode, discover. */
 import { describe, expect, it } from "vitest";
+import type { EngineCardDefinition } from "../../catalog";
 import { createEngine } from "../../engine";
 import { eventSeenBy } from "../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../fold/slice";
+import type { EngineLogRecord } from "../../log";
 import type { Answer, ChooseCardsPrompt, Prompt } from "../../prompts/types";
+import { instanceOrigin } from "../../rules/activation";
+import { instanceOf } from "../../rules/zones";
 import { stateHash } from "../../state/hash";
 import type { CardId, InstanceId } from "../../state/ids";
 import type { BattleState } from "../../state/types";
@@ -13,8 +17,10 @@ import type { AnswerSource } from "../../steps/types";
 import { boardState, cardIdOf, type BoardSetup } from "../../testing/board";
 import { DSL, DSL_CARDS } from "../../testing/dsl-cards";
 import { playFromHand, runScenario } from "../../testing/scenario";
-import { SYNTHETIC, testCatalog } from "../../testing/synthetic-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../../testing/synthetic-cards";
 import { promptView } from "../../view/view";
+import { resolveEffect } from "../interpreter";
+import { discover } from "./discover";
 
 const engine = createEngine(testCatalog(DSL_CARDS));
 const v = SYNTHETIC;
@@ -178,7 +184,43 @@ describe("discover", () => {
     }
     expect(stateHash(start)).toBe(before);
   });
+
+  it("offers as many cards as the saved battle's config says", () => {
+    for (const discoverOptions of [2, 4]) {
+      const { state, ids } = boardState(engine.catalog, board(DSL.discoverCharacter.id, mixed));
+      const saved = JSON.parse(JSON.stringify({ ...state, config: { ...state.config, discoverOptions } })) as BattleState;
+      const source = new PickingSource((candidates) => [candidates[0]]);
+      engine.apply(saved, "player", playFromHand(ids, "player").action, source);
+      expect((source.prompts[0] as ChooseCardsPrompt).candidates).toHaveLength(discoverOptions);
+    }
+  });
 });
+
+/** Discovers a character, then throws: a step that fails after its Discover's answer was accepted. */
+const discoverThenFail: EngineCardDefinition = {
+  id: syntheticId(920),
+  cardType: "event",
+  costs: [],
+  spark: null,
+  subtype: "",
+  speed: "standard",
+  status: "authored",
+  abilities: () => [],
+  synthetic: {
+    resolve(ctx, item) {
+      resolveEffect(ctx, discover({ cardType: "character" }), {
+        source: item.instance,
+        origin: instanceOrigin(instanceOf(ctx.state, item.instance)),
+        ability: 0,
+        controller: item.controller,
+        x: null,
+        optionalPaid: [],
+        choices: { modes: [], targets: [] },
+      });
+      throw new Error("the step fails after its discovery");
+    },
+  },
+};
 
 describe("discover across suspension", () => {
   const fold = createFoldAdapter(engine, { checkEventPrefix: true });
@@ -227,5 +269,42 @@ describe("discover across suspension", () => {
     expect(done.inFlight).toBeNull();
     expect(done.committed.sides.player.hand).toEqual([offered[2]]);
     expect(fresh.reduce(done, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [offered[2]] })).toMatchObject({ kind: "bounced" });
+  });
+
+  it("leaves the committed state and published events untouched when the step fails after the answer is accepted", () => {
+    const failingEngine = createEngine(testCatalog([...DSL_CARDS, discoverThenFail]));
+    const records: EngineLogRecord[] = [];
+    const failing = createFoldAdapter(failingEngine, { checkEventPrefix: true, log: (record) => records.push(record) });
+    const { state, ids } = boardState(failingEngine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [discoverThenFail.id], deck: [v.vanilla1.id, v.event0.id, v.vanilla2.id, v.vanilla3.id, v.vanilla5.id] },
+      enemy: { deck },
+    });
+    const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    const suspended = applied(failing.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
+    const pending = failing.pending(suspended)!;
+    expect(pending.prompt.purpose.role).toBe("discover");
+    const [chosen] = (pending.prompt as ChooseCardsPrompt).candidates;
+    const committed = JSON.parse(JSON.stringify(suspended.committed)) as BattleState;
+    const hash = stateHash(suspended.committed);
+    records.length = 0;
+
+    const outcome = failing.reduce(suspended, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [chosen] });
+    if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
+    expect(outcome.error.message).toMatch(/after its discovery/);
+    // Nothing the accepted answer did (the card into hand, cardDiscovered, the shuffle, the knowledge reset) commits or publishes.
+    expect(outcome.published).toEqual([]);
+    expect(outcome.slice).toEqual({ committed: suspended.committed, inFlight: null, publishedEvents: 0, attempt: suspended.attempt });
+    expect(stateHash(outcome.slice.committed)).toBe(hash);
+    expect(outcome.slice.committed).toEqual(committed);
+    const after = outcome.slice.committed;
+    expect(after.sides.player.hand).not.toContain(chosen);
+    expect(after.sides.player.deck).toEqual(ids.player.deck);
+    expect(after.rng).toEqual(committed.rng);
+    expect(after.rng["random:discover"]).toBeUndefined();
+    expect(after.knownTo).toEqual(committed.knownTo);
+    expect(records.map((record) => record.event)).toEqual(["engine.promptAnswered", "engine.error"]);
+    expect(failing.pending(outcome.slice)).toBeNull();
   });
 });

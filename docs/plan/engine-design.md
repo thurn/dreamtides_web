@@ -166,8 +166,9 @@ or an `EmblemRef`.
 **Engine code reads every tunable from `BattleState.config`**, never from a
 content module. `BattleConfig` holds the battle rules limits (score to win,
 turn limit, hand limit, opening hand sizes, starting side, first-draw skip),
-the loop limits ([Loops](#loops)), `autoAnswerForcedPrompts`, and the
-Dreamwell construction rules (`config.dreamwell`). `initialState`
+the loop limits ([Loops](#loops)), `autoAnswerForcedPrompts`, the
+feasibility budget, the most cards a Discover offers (`discoverOptions`), and
+the Dreamwell construction rules (`config.dreamwell`). `initialState`
 (`state/create.ts`) fills the config once from `src/content/battle.ts`,
 `src/content/dreamwell-rules.ts`, and the `BattleInit`'s score target,
 starting side, and next-battle opening-hand changes (D39), so a serialized

@@ -965,6 +965,7 @@ function isBattleConfig(value: unknown): boolean {
       value.loopIterationCap,
       value.loopHistoryActions,
       value.feasibilitySearchRuns,
+      value.discoverOptions,
     ].every(isIndex) &&
     sideRecord(isIndex)(value.openingHandSize) &&
     isSide(value.startingSide) &&

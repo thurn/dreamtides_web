@@ -118,6 +118,16 @@ function observedBoard(setup: BoardSetup, engine: Engine = labEngine) {
   return { ids, adapter, apply, slice: () => slice };
 }
 
+/** The step of the discover lab fixture that publishes its `cardDiscovered`, and the event's index in it. */
+function discovery(human: "player" | "enemy") {
+  for (const step of steps("discover", human)) {
+    const index = step.published.findIndex((event) => event.kind === "cardDiscovered");
+    const event = step.published[index];
+    if (event?.kind === "cardDiscovered" && event.instance !== null) return { step, index, instance: event.instance };
+  }
+  throw new Error("no discovery");
+}
+
 describe("presentation items", () => {
   it("travels two draws one card at a time, without changing the authoritative outcome", () => {
     const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [DSL.drawTwo.id], energy: 2, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] } });
@@ -303,6 +313,14 @@ describe("presentation items", () => {
     expect(kinds(exiled.after).enemy).toEqual(["returns"]);
     expect(kinds(reclaim.after).player).toEqual(["exhausted"]);
   });
+
+  it("travels a discovered card into its hand for both sides", () => {
+    for (const human of ["player", "enemy"] as const) {
+      const { step, index } = discovery(human);
+      const item = step.items.find((entry) => entry.key === `${step.batch.key}:${String(index)}`);
+      expect(item?.presentation).toBe("travel");
+    }
+  });
 });
 
 describe("presentation queue", () => {
@@ -415,6 +433,26 @@ describe("battle log", () => {
     expect(turns).toHaveLength(1);
     expect(seenByPlayer.some((entry) => entry.event.kind === "cardDrawn" && entry.event.side === "enemy")).toBe(false);
     expect(seenByPlayer.some((entry) => entry.event.kind === "laneResolved")).toBe(true);
+  });
+
+  it("names a discovered card in the discoverer's log entry and hides it from the opponent's", () => {
+    const { step, instance } = discovery("player");
+    const discovered = (human: "player" | "enemy") =>
+      battleLogEntries(
+        step.published,
+        human,
+        step.after,
+        labEngine.view(step.after, human),
+        labEngine.view(step.before, human),
+        `discover:${human}`,
+      ).filter((entry) => entry.event.kind === "cardDiscovered");
+    const [mine] = discovered("player");
+    const [theirs] = discovered("enemy");
+
+    expect(mine?.event).toEqual({ kind: "cardDiscovered", side: "player", instance });
+    expect(mine?.cards[instance]?.id).toBe(instance);
+    expect(theirs?.event).toEqual({ kind: "cardDiscovered", side: "player", instance: null });
+    expect(theirs?.cards).toEqual({});
   });
 
   describe("from the event log", () => {

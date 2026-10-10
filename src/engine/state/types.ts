@@ -62,6 +62,8 @@ export interface BattleConfig {
    * is conservative: nothing unproven is offered.
    */
   readonly feasibilitySearchRuns: number;
+  /** Most cards a Discover offers (rules § Keywords and Effects → Discover). */
+  readonly discoverOptions: number;
   readonly dreamwell: DreamwellConfig;
 }
 

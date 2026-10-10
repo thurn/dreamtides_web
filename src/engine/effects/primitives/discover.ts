@@ -1,4 +1,3 @@
-import { BATTLE } from "../../../content/battle";
 import { characteristics, matchesFilter } from "../../continuous/characteristics";
 import type { CardFilter } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
@@ -11,12 +10,13 @@ import { definePrimitive } from "../types";
 
 /**
  * "Discover a <filter>" (rules § Keywords and Effects → Discover): up to
- * `BATTLE.discoverOptions` cards drawn at random from the `random:discover`
- * stream among the cards in the controller's deck that match the filter are
- * shown to the controller alone; the controller puts one of them into their
- * hand (`cardDiscovered`, which names the card only to a side that can
- * identify it), and their deck is shuffled. With no matching card nothing
- * happens.
+ * `BattleConfig.discoverOptions` cards (`BATTLE.discoverOptions`, copied into
+ * the battle's serialized config when it starts) drawn at random from the
+ * `random:discover` stream among the cards in the controller's deck that
+ * match the filter are shown to the controller alone; the controller puts
+ * one of them into their hand (`cardDiscovered`, which names the card only
+ * to a side that can identify it), and their deck is shuffled. With no
+ * matching card nothing happens.
  */
 export interface DiscoverNode {
   readonly op: "discover";
@@ -45,12 +45,12 @@ export const discoverPrimitive = definePrimitive<DiscoverNode>({
   },
 });
 
-/** Up to `BATTLE.discoverOptions` distinct matching cards of `side`'s deck, in the order drawn. */
+/** Up to `config.discoverOptions` distinct matching cards of `side`'s deck, in the order drawn. */
 function discoverOptions(ctx: StepContext, side: Side, filter: CardFilter): InstanceId[] {
   const layers = characteristics(ctx.state, ctx.catalog);
   const pool = ctx.state.sides[side].deck.filter((id) => matchesFilter(layers.of(id), filter));
   const options: InstanceId[] = [];
-  while (options.length < BATTLE.discoverOptions && pool.length > 0) {
+  while (options.length < ctx.state.config.discoverOptions && pool.length > 0) {
     const [card] = pool.splice(Math.floor(ctx.random("random:discover") * pool.length), 1);
     if (card !== undefined) options.push(card);
   }

@@ -90,6 +90,7 @@ export function battleConfig(init: BattleInit): BattleConfig {
     loopHistoryActions: BATTLE.loopHistoryActions,
     autoAnswerForcedPrompts: BATTLE.autoAnswerForcedPrompts,
     feasibilitySearchRuns: BATTLE.feasibilitySearchRuns,
+    discoverOptions: BATTLE.discoverOptions,
     dreamwell: {
       recurringOrders: [...DREAMWELL_RULES.recurringOrders],
       cardsPerRecurringOrder: DREAMWELL_RULES.cardsPerRecurringOrder,
