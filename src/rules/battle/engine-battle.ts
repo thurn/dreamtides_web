@@ -27,16 +27,21 @@ import {
   type FoldAdapter,
   type PendingPrompt,
 } from "../../engine/fold/slice";
-import type { Answer } from "../../engine/prompts/types";
-import type { Action } from "../../engine/rules/actions";
-import type { AbilitySource, InstanceId, Side, Slot } from "../../engine/state/ids";
 import type { BattleResult as EngineBattleResult, BattleState } from "../../engine/state/types";
 import { hashState } from "../../eventlog/hash";
 import type { CommittedEvent } from "../../eventlog/local-log";
 import type { EventContext, StateHash } from "../../eventlog/types";
-import { parsePromptId, type PromptId } from "../../types/identifiers";
 import type { FoldState } from "../fold-state";
-import { journeyBattleOf, type BattleFoldState, type EngineBattleFold, type JourneyBattleFoldState } from "./fold";
+import {
+  actionFromUnknown,
+  answerFromUnknown,
+  journeyBattleOf,
+  promptIdFromUnknown,
+  sideFromUnknown,
+  type BattleFoldState,
+  type EngineBattleFold,
+  type JourneyBattleFoldState,
+} from "./fold";
 
 /** The engine intents, by the event type that carries each. */
 export type EngineIntentEventType = "BATTLE_ACTION" | "BATTLE_ANSWER" | "BATTLE_CANCEL";
@@ -486,97 +491,4 @@ function engineIntentFromPayload(type: EngineIntentEventType, payload: Record<st
   if (type === "BATTLE_CANCEL") return { kind: "cancel", side, promptId };
   const value = answerFromUnknown(payload.value);
   return value === null ? null : { kind: "answer", side, promptId, value };
-}
-
-function sideFromUnknown(value: unknown): Side | null {
-  return value === "player" || value === "enemy" ? value : null;
-}
-
-function promptIdFromUnknown(value: unknown): PromptId | null {
-  return typeof value === "string" && /^\d+:\d+:\d+$/u.test(value) ? parsePromptId(value) : null;
-}
-
-function isIndex(value: unknown): value is number {
-  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
-}
-
-function idFromUnknown<Prefix extends string>(value: unknown, prefix: Prefix): `${Prefix}${number}` | null {
-  return typeof value === "string" && new RegExp(`^${prefix}\\d+$`, "u").test(value)
-    ? (value as `${Prefix}${number}`)
-    : null;
-}
-
-function instanceFromUnknown(value: unknown): InstanceId | null {
-  return idFromUnknown(value, "i");
-}
-
-function slotFromUnknown(value: unknown): Slot | null {
-  if (!isRecord(value) || (value.rank !== "front" && value.rank !== "back") || !isIndex(value.index)) return null;
-  return { rank: value.rank, index: value.index };
-}
-
-function actionFromUnknown(value: unknown): Action | null {
-  if (!isRecord(value)) return null;
-  switch (value.kind) {
-    case "play": {
-      const card = instanceFromUnknown(value.card);
-      const slot = value.slot === undefined ? undefined : slotFromUnknown(value.slot);
-      if (card === null || (value.from !== "hand" && value.from !== "void") || slot === null) return null;
-      return { kind: "play", card, from: value.from, ...(slot === undefined ? {} : { slot }) };
-    }
-    case "activate": {
-      const source = abilitySourceFromUnknown(value.source);
-      return source === null || !isIndex(value.ability) ? null : { kind: "activate", source, ability: value.ability };
-    }
-    case "reposition": {
-      const card = instanceFromUnknown(value.card);
-      const to = slotFromUnknown(value.to);
-      return card === null || to === null ? null : { kind: "reposition", card, to };
-    }
-    case "pass":
-      return { kind: "pass" };
-    case "payToEnd": {
-      const effect = idFromUnknown(value.effect, "e");
-      return effect === null ? null : { kind: "payToEnd", effect };
-    }
-    case "repeatLoop": {
-      const loop = idFromUnknown(value.loop, "l");
-      const count = value.count === "untilVictory" || isIndex(value.count) ? value.count : null;
-      return loop === null || count === null ? null : { kind: "repeatLoop", loop, count };
-    }
-    default:
-      return null;
-  }
-}
-
-function abilitySourceFromUnknown(value: unknown): AbilitySource | null {
-  const instance = instanceFromUnknown(value);
-  if (instance !== null) return instance;
-  if (!isRecord(value)) return null;
-  const side = sideFromUnknown(value.side);
-  if (side === null) return null;
-  if (value.kind === "avatar") return { kind: "avatar", side };
-  return value.kind === "dreamsign" && isIndex(value.index) ? { kind: "dreamsign", side, index: value.index } : null;
-}
-
-function answerFromUnknown(value: unknown): Answer | null {
-  if (typeof value === "boolean") return value;
-  if (typeof value === "number") return Number.isSafeInteger(value) ? value : null;
-  if (!Array.isArray(value)) return null;
-  const cards: InstanceId[] = [];
-  const arrangement: { card: InstanceId; to: "top" | "bottom" | "void" | "hand" }[] = [];
-  for (const item of value as unknown[]) {
-    const card = instanceFromUnknown(item);
-    if (card !== null) {
-      cards.push(card);
-      continue;
-    }
-    if (!isRecord(item)) return null;
-    const placed = instanceFromUnknown(item.card);
-    const to = item.to;
-    if (placed === null || (to !== "top" && to !== "bottom" && to !== "void" && to !== "hand")) return null;
-    arrangement.push({ card: placed, to });
-  }
-  if (cards.length > 0 && arrangement.length > 0) return null;
-  return arrangement.length > 0 ? arrangement : cards;
 }

@@ -12,11 +12,8 @@
 
 import { initialFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
-import { resolveScript } from "../battle/fold";
-import type {
-  JourneyBattleFoldState,
-  TutorialBattleFoldState,
-} from "../battle/fold";
+import { parseJourneyBattleFoldState, resolveScript } from "../battle/fold";
+import type { TutorialBattleFoldState } from "../battle/fold";
 import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { ResolvedAvatarPackage } from "../../types/content";
 import type { JourneyState, SiteType } from "../../types/journey";
@@ -444,13 +441,15 @@ export function loadState(
  *     currently non-null is nulled by the snapshot (the run-field nullability
  *     invariant the property sweep protects);
  *   - if a battle slice is supplied, it is a well-formed {@link BattleFoldState}:
- *     a journey battle with its init and engine battle, or a tutorial battle
+ *     a journey battle whose every init field, engine init, and engine slice
+ *     parses ({@link parseJourneyBattleFoldState}), or a tutorial battle
  *     whose every `effectQueue`/`pendingPrompt` `scriptRef` resolves in the
  *     live effect tables and whose cursors address real positions in that
  *     script.
  *
- * Content values (card ids, costs, pool contents) are NOT asserted — only shape
- * and the fold invariants — so the check is resilient to catalog edits.
+ * Content values (whether a card id names a catalog card, costs, pool
+ * contents) are NOT asserted — only shape and the fold invariants — so the
+ * check is resilient to catalog edits.
  */
 export function validateLoadedState(
   state: FoldState,
@@ -588,24 +587,8 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
  */
 function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (!isRecord(value) || !isRecord(value.mode)) return null;
-  if (value.mode.kind === "journey") return asValidJourneyBattle(value);
+  if (value.mode.kind === "journey") return parseJourneyBattleFoldState(value);
   return value.mode.kind === "tutorial" ? asValidTutorialBattle(value) : null;
-}
-
-function asValidJourneyBattle(
-  value: Record<string, unknown>,
-): JourneyBattleFoldState | null {
-  const engine = value.engine;
-  if (
-    !isRecord(value.init) ||
-    !isRecord(engine) ||
-    !isRecord(engine.init) ||
-    !isRecord(engine.slice)
-  ) {
-    return null;
-  }
-  const loaded = value as unknown as JourneyBattleFoldState;
-  return { mode: { kind: "journey" }, init: loaded.init, engine: loaded.engine };
 }
 
 // tutorial-only until Phase 6
