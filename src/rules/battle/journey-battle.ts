@@ -32,7 +32,6 @@
 // by name (AGENTS.md).
 
 import type { EventContext } from "../../eventlog/types";
-import type { BattleInit } from "../../battle/types";
 import type {
   BattleModifier,
   DreamAtlas,
@@ -43,7 +42,7 @@ import type {
 import type { FoldState } from "../fold-state";
 import type { DeckEntryId, SiteId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
-import { journeyBattleOf, type JourneyBattleFoldState } from "./fold";
+import { journeyBattleOf, type JourneyBattleFoldState, type JourneyBattleInit } from "./fold";
 import { engineBattleResult, startEngineBattle } from "./engine-battle";
 import type { Engine } from "../../engine";
 import type {
@@ -64,9 +63,9 @@ import {
 /**
  * The deterministic construction `BEGIN_BATTLE` needs to turn journey state into
  * a fresh {@link JourneyBattleFoldState}. The reducer resolves double-begin itself,
- * then delegates the immutable `init` (`BattleInit`) and the engine init of
- * the same battle — which read async-loaded card, avatar, and dreamwell
- * data — to this provider.
+ * then delegates the immutable journey init ({@link JourneyBattleInit}) and the
+ * engine init of the same battle — which read async-loaded card, avatar, and
+ * dreamwell data — to this provider.
  *
  * The registered provider (`createBattleInitProvider`) constructs the battle
  * deterministically from folded journey state: `createBattleInit` derives all of
@@ -91,9 +90,8 @@ export interface BattleInitProvider {
    */
   readonly engine: Engine;
   /**
-   * Build the immutable `init` (`BattleInit`) for `siteId` deterministically
-   * from `(journey, rng, timestamp)`, with the engine init of the same
-   * battle, or `null` to bounce (e.g. the site is not a battle, or its
+   * Build the immutable journey init for `siteId` deterministically from
+   * `(journey, rng, timestamp)`, with the engine init of the same battle, or `null` to bounce (e.g. the site is not a battle, or its
    * content is unavailable). Must not mutate `journey`.
    */
   beginBattle(input: {
@@ -106,9 +104,9 @@ export interface BattleInitProvider {
   }): BattleStart | null;
 }
 
-/** A new journey battle: its init and the engine init of the same battle. */
+/** A new journey battle: its journey init and the engine init of the same battle. */
 export interface BattleStart {
-  readonly init: BattleInit;
+  readonly init: JourneyBattleInit;
   readonly engineInit: EngineBattleInit;
 }
 

@@ -47,7 +47,7 @@ import { instanceCard } from "../../engine/catalog";
 import { characteristicsOf } from "../../engine/continuous/characteristics";
 import { fixedEnergy } from "../../engine/dsl/energy";
 import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
-import type { InstanceId } from "../../engine/state/ids";
+import { battleSeed, type InstanceId } from "../../engine/state/ids";
 import { resolveEnemyAvatarSummary } from "../../battle/components/enemy-avatar-summary";
 
 const SITE_ID = parseSiteId("site-7");
@@ -131,13 +131,13 @@ describe("battle init provider", () => {
     const preview = createBattlePreview(content, journey, SITE_ID, 4242);
     const { start, slice } = begin(content, journey);
 
-    expect(preview).not.toBeNull();
-    expect(start.init).toEqual(preview);
-    expect(start.init.seed).toBe(4242);
-    expect(start.engineInit.scoreToWin).toBe(start.init.scoreToWin);
-    expect(start.engineInit.decks.enemy.map((entry) => entry.cardId)).toEqual(
-      start.init.enemyDeckDefinition.map((card) => card.cardId),
-    );
+    expect(preview?.init).toEqual(start.init);
+    expect(preview?.scoreToWin).toBe(start.engineInit.scoreToWin);
+    expect(start.engineInit.seed).toBe(battleSeed("4242"));
+    const enemyDeck = start.engineInit.decks.enemy.map((entry) => entry.cardId);
+    expect(
+      start.init.cardDefinitions.slice(-enemyDeck.length).map((card) => card.cardId),
+    ).toEqual(enemyDeck);
     expect(start.engineInit.dreamwell).toEqual([
       testDreamwellCardId("json-safe-battle"),
     ]);

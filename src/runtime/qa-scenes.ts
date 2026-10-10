@@ -597,7 +597,7 @@ function withLabBattle(battle: JourneyBattleFoldState, lab: { init: EngineBattle
   const labCards = PROMPT_LAB_DEFINITIONS.cards.filter((definition) => definition.id in PROMPT_LAB_CARD_TEXT);
   return {
     ...battle,
-    init: { ...battle.init, playerDeckOrder: [...battle.init.playerDeckOrder, ...labCards.map(labCardDefinition)] },
+    init: { ...battle.init, cardDefinitions: [...battle.init.cardDefinitions, ...labCards.map(labCardDefinition)] },
     engine: { init: lab.init, slice: withHistory(lab.slice) },
   };
 }

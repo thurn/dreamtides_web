@@ -28,7 +28,7 @@ import type {
   DraftPoolCopiesByCard,
   PoolDraftState,
 } from "../../types/draft";
-import type { BattleInit } from "../../battle/types";
+import type { JourneyBattleInit } from "../battle/fold";
 import type {
   DreamscapeNode,
   RuntimeShopSlot,
@@ -68,9 +68,7 @@ import type { SiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseBattleId } from "../../types/identifiers";
-import { parseBattleEntryKey } from "../../types/identifiers";
 import { parseOpponentId } from "../../types/identifiers";
-import { opponentsFixture } from "../../testing/opponents-fixture";
 import { createEngine, type BattleInit as EngineBattleInit, type Engine } from "../../engine";
 import { battleSeed } from "../../engine/state/ids";
 import { DSL, DSL_CARDS } from "../../engine/testing/dsl-cards";
@@ -79,9 +77,7 @@ import {
   SYNTHETIC_DREAMWELL,
   testCatalog,
 } from "../../engine/testing/synthetic-cards";
-import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import {
-  testContentHash,
   testAvatarId,
   testDreamscapeId,
   testDreamsignId,
@@ -363,30 +359,14 @@ function siteProvider(): SiteContentProvider {
 // Battle-init provider — a journey battle on the synthetic engine
 // ---------------------------------------------------------------------------
 
-function makeInit(siteId: SiteId): BattleInit {
-  const opponentData = opponentsFixture();
+function makeInit(siteId: SiteId): JourneyBattleInit {
   return {
     battleId: parseBattleId(`battle-${siteId}`),
-    battleEntryKey: parseBattleEntryKey(`fixture:${siteId}`),
-    seed: 1,
     siteId,
     nodeId: NODE_ID,
     completionLevelAtStart: 0,
-    isFinalBoss: false,
     essenceReward: 75,
-    openingHandSize: 0,
-    scoreToWin: 30,
-    turnLimit: 12,
-    maxEnergyCap: 12,
-    handLimit: 10,
-    opponentsContentHash: testContentHash("replay-opponents"),
     opponentAbilityActive: false,
-    aiConfiguration: resolveBattleAiConfiguration(opponentData, "journey"),
-    startingSide: "player",
-    playerDrawSkipsTurnOne: true,
-    journeyDeckEntries: [],
-    playerDeckOrder: [],
-    dreamwellDeck: [],
     enemyDescriptor: {
       id: parseOpponentId("fixture-enemy"),
       name: "Fixture Enemy",
@@ -397,21 +377,8 @@ function makeInit(siteId: SiteId): BattleInit {
       dreamsigns: [],
       signatureCards: [],
     },
-    enemyDeckDefinition: [],
     avatarSummary: null,
-    dreamsignSummaries: [],
-    atlasSnapshot: {
-      layers: [[NODE_ID], [NEXT_NODE_ID]],
-      nodes: {
-        [NODE_ID]: fixtureNode(),
-        [NEXT_NODE_ID]: fixtureNextNode(),
-      },
-      startingNodeId: NODE_ID,
-      bossNodeId: NEXT_NODE_ID,
-      bossIncarnationId: null,
-      currentNodeId: NODE_ID,
-      knownDreamsignCarrierIds: [],
-    },
+    cardDefinitions: [],
   };
 }
 

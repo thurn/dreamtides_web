@@ -10,13 +10,14 @@ import {
 } from "./battle-start-view-model";
 
 export function BattleStartScreenAdapter({
-  init,
+  init: preview,
   cardDatabase,
   artCatalog,
   isTutorialJourney,
   tutorialConfiguration,
   onBegin,
 }: {
+  /** The battle the screen previews. */
   init: BattleStartInit;
   cardDatabase: ReadonlyMap<number, CardData>;
   artCatalog: DreamscapeArtCatalog;
@@ -26,19 +27,20 @@ export function BattleStartScreenAdapter({
 }) {
   const view = useMemo(
     () =>
-      buildBattleStartView(init, cardDatabase, artCatalog, {
+      buildBattleStartView(preview, cardDatabase, artCatalog, {
         isTutorialJourney,
         configuration: tutorialConfiguration,
       }),
-    [init, cardDatabase, artCatalog, isTutorialJourney, tutorialConfiguration],
+    [preview, cardDatabase, artCatalog, isTutorialJourney, tutorialConfiguration],
   );
+  const { battleId, completionLevelAtStart } = preview.init;
 
   useEffect(() => {
     logEventOnce(
-      `battle_start_screen_opened:${init.battleId}`,
+      `battle_start_screen_opened:${battleId}`,
       "battle_start_screen_opened",
       {
-        battleId: init.battleId,
+        battleId,
         enemyId: view.avatar.id,
         enemyName: view.avatar.name,
         scoreToWin: view.pointsToWin,
@@ -47,25 +49,25 @@ export function BattleStartScreenAdapter({
         signatureCardIds: view.signatureCards.map((card) => card.cardId),
       },
     );
-  }, [init.battleId, view]);
+  }, [battleId, view]);
 
   const handleBegin = useCallback(() => {
     logEvent("battle_start_screen_begin_clicked", {
-      battleId: init.battleId,
+      battleId,
       enemyId: view.avatar.id,
     });
     onBegin();
-  }, [init.battleId, onBegin, view.avatar.id]);
+  }, [battleId, onBegin, view.avatar.id]);
 
   const handleGuideDialogueShown = useCallback(() => {
     const guideDialogue = view.guideDialogue;
     if (guideDialogue === undefined) return;
     logEventOnce(
-      `tutorial-battle-start-guidance:${init.battleId}`,
+      `tutorial-battle-start-guidance:${battleId}`,
       "tutorial_battle_start_guidance_shown",
       {
-        battleId: init.battleId,
-        completionLevelAtStart: init.completionLevelAtStart,
+        battleId,
+        completionLevelAtStart,
         delaySeconds: guideDialogue.delaySeconds ?? 0,
         horizontalOffsetPx: guideDialogue.horizontalOffset,
         verticalOffsetPx: guideDialogue.verticalOffset,
@@ -73,7 +75,7 @@ export function BattleStartScreenAdapter({
         text: guideDialogue.model.text,
       },
     );
-  }, [init.battleId, init.completionLevelAtStart, view.guideDialogue]);
+  }, [battleId, completionLevelAtStart, view.guideDialogue]);
 
   return (
     <BattleStartScreen

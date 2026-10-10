@@ -1,4 +1,4 @@
-import type { BattleInit } from "../../battle/types";
+import type { BattlePreview } from "../../session/providers/battle-init-provider";
 import type { CardData } from "../../types/cards";
 import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
 import type { DreamscapeArtCatalog } from "../../data/dreamscapes";
@@ -8,7 +8,8 @@ import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bub
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import { parsePresentationId } from "../../types/identifiers";
 
-export type BattleStartInit = BattleInit;
+/** The battle the Battle Start screen previews. */
+export type BattleStartInit = BattlePreview;
 
 export interface BattleStartTutorialContext {
   readonly isTutorialJourney: boolean;
@@ -16,16 +17,13 @@ export interface BattleStartTutorialContext {
 }
 
 export function buildBattleStartView(
-  init: BattleInit,
+  preview: BattleStartInit,
   cardDatabase: ReadonlyMap<number, CardData>,
   artCatalog: DreamscapeArtCatalog,
   tutorial?: BattleStartTutorialContext,
 ): BattleStartView {
+  const { init } = preview;
   const enemy = init.enemyDescriptor;
-  const node =
-    init.nodeId !== null
-      ? init.atlasSnapshot.nodes[init.nodeId]
-      : undefined;
   const battleStartGuidance =
     tutorial?.isTutorialJourney === true
       ? init.completionLevelAtStart === 0
@@ -42,7 +40,7 @@ export function buildBattleStartView(
         : undefined;
   return {
     battleId: init.battleId,
-    scene: dreamscapeSceneRef(node ?? null, artCatalog),
+    scene: dreamscapeSceneRef(preview.node, artCatalog),
     avatar: {
       id: enemy.id,
       name: enemy.name,
@@ -65,7 +63,7 @@ export function buildBattleStartView(
             },
           ];
     }),
-    pointsToWin: init.scoreToWin,
+    pointsToWin: preview.scoreToWin,
     essenceReward: init.essenceReward,
     ...(battleStartGuidance !== undefined && battleOrdinal !== undefined
       ? {

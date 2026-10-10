@@ -69,6 +69,7 @@ import type { CardData } from "../../types/cards";
 import { parseBattleCardId, type BattleCardId, type DreamwellCardId } from "../../types/identifiers";
 import { engineIntentKey } from "../engine-ai/engine-ai-driver";
 import { useEngineAi } from "../engine-ai/use-engine-ai";
+import { dreamwellCardDefinition } from "../integration/create-battle-init";
 import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/figment-catalog";
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import { createEngineCardModels } from "../ui/engine-card-model";
@@ -111,7 +112,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     const byId = new Map<CardId, CardData>();
     for (const card of cardDatabase.values()) byId.set(card.id, card);
     return createEngineCardModels({
-      definitions: [...init.playerDeckOrder, ...init.enemyDeckDefinition],
+      definitions: init.cardDefinitions,
       cards: byId,
       figment: lookupFigmentCatalogEntryById,
     });
@@ -128,9 +129,9 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   );
 
   const dreamwell = useMemo(() => {
-    const byId = new Map(init.dreamwellDeck.map((definition) => [definition.id, definition]));
+    const byId = new Map(journeyContent.dreamwellCards.map((card) => [card.id, dreamwellCardDefinition(card)]));
     return (card: DreamwellCardId) => byId.get(card) ?? null;
-  }, [init]);
+  }, [journeyContent]);
 
   // The board shows the batch being presented while it is older than the
   // fold: the opponent's plays arrive one at a time.

@@ -27,15 +27,6 @@ export function opponentAbilityIsActive(
 }
 
 /**
- * The run length for `state.atlas`: the number of authored layers and therefore
- * the number of battles in the run. An empty synthetic test atlas has one
- * effective layer.
- */
-export function resolveRunLayerCount(layers: readonly unknown[]): number {
-  return Math.max(1, layers.length);
-}
-
-/**
  * Whether an opponent at `completionLevel` carries a Dreamsign under the
  * authored zero-indexed unlock layer.
  */

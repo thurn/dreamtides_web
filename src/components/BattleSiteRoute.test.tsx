@@ -56,10 +56,10 @@ vi.mock("../screens/cumulus_adapters/BattleStartScreenAdapter", () => ({
     init,
     onBegin,
   }: {
-    init: { battleId: BattleId };
+    init: { init: { battleId: BattleId } };
     onBegin: () => void;
   }) => (
-    <div data-screen="cumulus-battle-start" data-battle-id={init.battleId}>
+    <div data-screen="cumulus-battle-start" data-battle-id={init.init.battleId}>
       <button type="button" data-cumulus-begin="" onClick={onBegin} />
     </div>
   ),
@@ -75,7 +75,6 @@ vi.mock("../battle/components/PlayableBattleScreen", async () => {
         <div
           data-screen="cumulus-playable"
           data-battle-id={battle.init.battleId}
-          data-battle-entry-key={battle.init.battleEntryKey}
         />
       );
     },
@@ -125,7 +124,7 @@ function setFold({
   const journey = makeJourneyState(overrides);
   let battle: FoldState["battle"] = null;
   if (withBattle) {
-    const init = createTestBattleInit({
+    const { init } = createTestBattleInit({
       battleEntryKey: parseBattleEntryKey(ENTRY_KEY),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
@@ -266,7 +265,6 @@ describe("BattleSiteRoute", () => {
     setFold({ withBattle: true });
     view.rerender(<StrictMode>{route(4242)}</StrictMode>);
     const playable = view.playable();
-    expect(playable?.getAttribute("data-battle-entry-key")).toBe(ENTRY_KEY);
     expect(playable?.getAttribute("data-battle-id")).toBe(
       mockGameState.battle?.init.battleId,
     );

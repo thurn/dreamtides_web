@@ -1,26 +1,34 @@
-// Builds the engine `BattleInit` of a journey battle (D39). The journey's
+// Builds the engine `BattleInit` of a journey battle (D39), which owns the
+// battle's game parameters: the seed, both decks, the Dreamwell, the score
+// target, the starting side, and the next-battle effects. The journey's
 // deck, Avatar, Dreamsigns, and next-battle modifiers are read from folded
-// journey state; the opponent's deck, Avatar, and Dreamsigns and the score
-// target come from the prototype init `createBattleInit` built for the same
-// battle, so both inits describe one opponent.
+// journey state; the opponent's deck, Avatar, and Dreamsigns come from the
+// opponent `createBattleInit` built for the same battle.
 //
 // Every input is a UUID; card names never reach the engine.
 
-import type { BattleInit as EngineBattleInit, DeckEntry as EngineDeckEntry, NextBattleEffects } from "../../engine";
+import type {
+  BattleInit as EngineBattleInit,
+  DeckEntry as EngineDeckEntry,
+  NextBattleEffects,
+} from "../../engine";
 import type { DeckMods } from "../../engine/dsl/types";
 import { battleSeed } from "../../engine/state/ids";
 import { eligibleTransfigurations } from "../../transfiguration/transfiguration-logic";
+import type { CardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import type { DreamwellCardId } from "../../types/identifiers";
+import type { AvatarId, DreamsignId, DreamwellCardId } from "../../types/identifiers";
 import type { BattleModifier, DeckEntry, JourneyState } from "../../types/journey";
 import type { TransfigurationData } from "../../types/transfiguration-data";
-import type { BattleInit } from "../types";
-import { padBattleDeck } from "./create-battle-init";
 
 export interface EngineBattleInitInput {
-  /** The prototype init `createBattleInit` built for this battle. */
-  readonly init: BattleInit;
+  /** The battle seed `createBattleInit` resolved. */
+  readonly seed: number;
+  readonly scoreToWin: number;
+  readonly startingSide: NonNullable<EngineBattleInit["startingSide"]>;
   readonly journey: Pick<JourneyState, "deck" | "avatar" | "dreamsigns" | "battleModifiers">;
+  /** The opponent `createBattleInit` built for this battle. */
+  readonly enemy: EngineBattleOpponent;
   readonly cardDatabase: ReadonlyMap<number, CardData>;
   readonly transfigurationData: TransfigurationData;
   /** Battle tuning: a shorter journey deck repeats until it reaches this size. */
@@ -29,44 +37,73 @@ export interface EngineBattleInitInput {
   readonly dreamwell: readonly DreamwellCardId[];
 }
 
+/** The opponent of a journey battle, by UUID. */
+export interface EngineBattleOpponent {
+  /** The opponent's deck, in its seeded order. */
+  readonly deck: readonly CardId[];
+  /** The opponent's Avatar while its ability is active at this layer, else `null`. */
+  readonly avatar: AvatarId | null;
+  readonly dreamsigns: readonly DreamsignId[];
+}
+
 /**
  * The engine init for a journey battle:
  *
+ * - the seed, the score target, and the starting side;
  * - the player's deck: the journey deck padded to the minimum deck size, each
  *   entry with its full variant (amplified flag, transfiguration, deck-entry
  *   modifications);
- * - the opponent's deck, Avatar (when its ability is active at this layer),
- *   and Dreamsigns, from the prototype init;
+ * - the opponent's deck, Avatar, and Dreamsigns;
  * - the player's Avatar and Dreamsigns;
- * - the shared Dreamwell, the score target, and the starting side;
+ * - the shared Dreamwell;
  * - the player's next-battle effects, from the journey's battle modifiers.
  */
 export function createEngineBattleInit(input: EngineBattleInitInput): EngineBattleInit {
-  const { init, journey } = input;
+  const { journey, enemy } = input;
   const playerDeck = padBattleDeck(journey.deck, input.minimumDeckSize).map((entry) =>
     engineDeckEntry(entry, cardOf(input.cardDatabase, entry.cardNumber), input.transfigurationData),
   );
-  const enemyAvatar = init.opponentAbilityActive ? init.enemyDescriptor.avatarId : undefined;
   const nextBattle = nextBattleEffects(journey.battleModifiers);
   return {
-    seed: battleSeed(String(init.seed)),
-    scoreToWin: init.scoreToWin,
-    startingSide: init.startingSide,
+    seed: battleSeed(String(input.seed)),
+    scoreToWin: input.scoreToWin,
+    startingSide: input.startingSide,
     decks: {
       player: playerDeck,
-      enemy: init.enemyDeckDefinition.map((definition) => ({ cardId: definition.cardId })),
+      enemy: enemy.deck.map((cardId) => ({ cardId })),
     },
     dreamwell: [...input.dreamwell],
     avatars: {
       ...(journey.avatar === null ? {} : { player: journey.avatar.id }),
-      ...(enemyAvatar === undefined ? {} : { enemy: enemyAvatar }),
+      ...(enemy.avatar === null ? {} : { enemy: enemy.avatar }),
     },
     dreamsigns: {
       player: journey.dreamsigns.map((dreamsign) => dreamsign.id),
-      enemy: init.enemyDescriptor.dreamsigns.map((dreamsign) => dreamsign.id),
+      enemy: [...enemy.dreamsigns],
     },
     ...(nextBattle === null ? {} : { nextBattle: { player: nextBattle } }),
   };
+}
+
+/**
+ * Pads a journey deck up to `minimumDeckSize` for battle by repeating
+ * whole-deck copies (e.g. a 9-card deck becomes 27). Padded entries reuse the
+ * original entry references, so they share their entry id with the journey
+ * deck entry they copy. Decks at or above the threshold (and empty decks) are
+ * returned unchanged.
+ */
+export function padBattleDeck(
+  deck: readonly JourneyState["deck"][number][],
+  minimumDeckSize: number,
+): JourneyState["deck"][number][] {
+  if (deck.length === 0 || deck.length >= minimumDeckSize) {
+    return [...deck];
+  }
+  const padded = [...deck];
+  while (padded.length < minimumDeckSize) {
+    padded.push(...deck);
+  }
+  return padded;
 }
 
 function cardOf(cardDatabase: ReadonlyMap<number, CardData>, cardNumber: number): CardData {

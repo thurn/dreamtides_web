@@ -27,7 +27,7 @@ import type {
 } from "../../battle/types";
 import { rankSlotIds } from "../../battle/types";
 import { findSite } from "../../rules/journey/sites";
-import { emptyDawnFired } from "../../rules/battle/fold";
+import { emptyDawnFired, type JourneyBattleInit } from "../../rules/battle/fold";
 import type {
   BattleCompletionProvider,
   BattleInitProvider,
@@ -49,8 +49,7 @@ import {
 import { energy, energyX } from "../../engine/dsl/builders";
 import { developmentLabDefinitions } from "../../engine/development";
 import type { CardData } from "../../types/cards";
-import { createEngineBattleInit } from "../../battle/integration/engine-battle-init";
-import type { JourneyState } from "../../types/journey";
+import type { DreamscapeNode, JourneyState } from "../../types/journey";
 import type {
   TutorialAction,
   TutorialBattleConfiguration,
@@ -91,27 +90,45 @@ function battleEntryKeyFor(
 }
 
 /**
- * Build the immutable battle preview from folded journey state and loaded
- * content. Battle construction is keyed by the journey seed and battle entry,
- * so this is byte-identical to the init `BEGIN_BATTLE` will fold without
- * creating any game state outside the reducer.
+ * What the Battle Start screen previews before `BEGIN_BATTLE`: the battle's
+ * journey init, its engine init's score target, and the Atlas node it takes
+ * place in.
+ */
+export interface BattlePreview {
+  readonly init: JourneyBattleInit;
+  readonly scoreToWin: number;
+  readonly node: DreamscapeNode | null;
+}
+
+/**
+ * Build the battle preview from folded journey state and loaded content.
+ * Battle construction is keyed by the journey seed and battle entry, so this
+ * previews exactly the battle `BEGIN_BATTLE` will fold, without creating any
+ * game state outside the reducer.
  */
 export function createBattlePreview(
   content: JourneyContent,
   journey: JourneyState,
   siteId: SiteId,
   seedOverride: number | null = null,
-): BattleInit | null {
-  return buildBattleInit(content, journey, siteId, seedOverride, () => {});
+): BattlePreview | null {
+  const start = buildBattleStart(content, journey, siteId, seedOverride, () => {});
+  if (start === null) return null;
+  const { init, engineInit } = start;
+  return {
+    init,
+    scoreToWin: engineInit.scoreToWin,
+    node: init.nodeId === null ? null : (journey.atlas.nodes[init.nodeId] ?? null),
+  };
 }
 
-function buildBattleInit(
+function buildBattleStart(
   content: JourneyContent,
   journey: JourneyState,
   siteId: SiteId,
   seedOverride: number | null,
   deferOpponentLog: (emit: () => void) => void,
-): BattleInit | null {
+): BattleStart | null {
   const site = findSite(journey, siteId);
   if (site === null || site.type !== "Battle") return null;
 
@@ -140,7 +157,6 @@ function buildBattleInit(
     tides4Tuning: content.poolContext.tides4Tuning,
     economyData: content.economyData,
     deferOpponentLog,
-    tutorialTriggers: content.tutorial.triggers,
   });
 }
 
@@ -242,27 +258,10 @@ export function createBattleInitProvider(
 ): BattleInitProvider {
   return {
     engine,
-    beginBattle: ({ journey, siteId, seedOverride, seq }): BattleStart | null => {
-      const init = buildBattleInit(
-        content,
-        journey,
-        siteId,
-        seedOverride,
-        (emit) => deferredOpponentLogs.set(seq, emit),
-      );
-      if (init === null) return null;
-      return {
-        init,
-        engineInit: createEngineBattleInit({
-          init,
-          journey,
-          cardDatabase: content.cardDatabase,
-          transfigurationData: content.transfigurationData,
-          minimumDeckSize: content.opponentsData.battle.minimumDeckSize,
-          dreamwell: content.dreamwellCards.map((card) => card.id),
-        }),
-      };
-    },
+    beginBattle: ({ journey, siteId, seedOverride, seq }): BattleStart | null =>
+      buildBattleStart(content, journey, siteId, seedOverride, (emit) =>
+        deferredOpponentLogs.set(seq, emit),
+      ),
   };
 }
 

@@ -372,51 +372,62 @@ describe("battle-start-view-model", () => {
 
   function makeInit() {
     const cardDatabase = makeBattleTestCardDatabase();
-    const base = createTestBattleInit({
+    const state = makeBattleTestState();
+    const { init: base } = createTestBattleInit({
       battleEntryKey: parseBattleEntryKey("battle-entry"),
       site: makeBattleTestSite(),
-      state: makeBattleTestState(),
+      state,
       cardDatabase,
       avatars: makeBattleTestAvatars(),
       dreamwellCards: [],
       seedOverride: 1234,
     });
     const signature = [...cardDatabase.values()].slice(0, 2);
-    return {
-      cardDatabase,
-      init: {
-        ...base,
-        scoreToWin: 15,
-        essenceReward: 90,
-        enemyDescriptor: {
-          ...base.enemyDescriptor,
-          id: parseOpponentId("opponent-uuid"),
-          name: "The Long-Named Opponent",
-          subtitle: "Keeper of the Last Horizon",
-          abilityText: "Whenever you score, foresee 1.",
-          dreamsigns: [
-            {
-              id: testDreamsignId("dreamsign-catalog-uuid"),
-              name: "A Test Sign",
-              effectDescription: "A stable test effect.",
-              imageName: "test.webp",
-              imageAlt: "A test Dreamsign",
-            },
-          ],
-          signatureCards: signature.map((card) => ({
-            cardId: card.id,
-            cardNumber: card.cardNumber,
-            name: card.name,
-          })),
-        },
+    const init = {
+      ...base,
+      essenceReward: 90,
+      enemyDescriptor: {
+        ...base.enemyDescriptor,
+        id: parseOpponentId("opponent-uuid"),
+        name: "The Long-Named Opponent",
+        subtitle: "Keeper of the Last Horizon",
+        abilityText: "Whenever you score, foresee 1.",
+        dreamsigns: [
+          {
+            id: testDreamsignId("dreamsign-catalog-uuid"),
+            name: "A Test Sign",
+            effectDescription: "A stable test effect.",
+            imageName: "test.webp",
+            imageAlt: "A test Dreamsign",
+          },
+        ],
+        signatureCards: signature.map((card) => ({
+          cardId: card.id,
+          cardNumber: card.cardNumber,
+          name: card.name,
+        })),
       },
     };
+    const node =
+      base.nodeId === null ? null : (state.atlas.nodes[base.nodeId] ?? null);
+    return {
+      cardDatabase,
+      preview: { init, scoreToWin: 15, node },
+    };
+  }
+
+  /** `preview` with its battle starting at `completionLevelAtStart`. */
+  function atLevel(
+    preview: ReturnType<typeof makeInit>["preview"],
+    completionLevelAtStart: number,
+  ) {
+    return { ...preview, init: { ...preview.init, completionLevelAtStart } };
   }
 
   describe("buildBattleStartView", () => {
     it("maps opponent identity, scene, signature UUIDs, dreamsign ids, and stakes", () => {
-      const { init, cardDatabase } = makeInit();
-      const view = buildBattleStartView(init, cardDatabase, ART_CATALOG);
+      const { preview, cardDatabase } = makeInit();
+      const view = buildBattleStartView(preview, cardDatabase, ART_CATALOG);
 
       expect(view.scene).toEqual({
         kind: "dreamscape-scene",
@@ -430,10 +441,10 @@ describe("battle-start-view-model", () => {
         abilityActive: true,
       });
       expect(view.signatureCards.map((card) => card.cardId)).toEqual(
-        init.enemyDescriptor.signatureCards.map((card) => card.cardId),
+        preview.init.enemyDescriptor.signatureCards.map((card) => card.cardId),
       );
       expect(view.dreamsigns[0]).toMatchObject({
-        id: init.enemyDescriptor.dreamsigns[0]?.id,
+        id: preview.init.enemyDescriptor.dreamsigns[0]?.id,
         imageName: "test.webp",
       });
       expect(view.dreamsigns[0]?.imageAlt).toEqual(expect.any(String));
@@ -442,7 +453,7 @@ describe("battle-start-view-model", () => {
     });
 
     it("maps authored Mira guidance for the first two tutorial-journey battles", () => {
-      const { init, cardDatabase } = makeInit();
+      const { preview, cardDatabase } = makeInit();
       const configuration = {
         firstBattle: {
           speechBubble: {
@@ -465,8 +476,8 @@ describe("battle-start-view-model", () => {
           },
         },
       };
-      const firstBattle = { ...init, completionLevelAtStart: 0 };
-      const secondBattle = { ...init, completionLevelAtStart: 1 };
+      const firstBattle = atLevel(preview, 0);
+      const secondBattle = atLevel(preview, 1);
 
       expect(
         buildBattleStartView(firstBattle, cardDatabase, ART_CATALOG, {
@@ -474,7 +485,7 @@ describe("battle-start-view-model", () => {
           configuration,
         }).guideDialogue,
       ).toEqual({
-        id: `${init.battleId}:first-battle-start-guidance`,
+        id: `${preview.init.battleId}:first-battle-start-guidance`,
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: "Mira",
@@ -492,7 +503,7 @@ describe("battle-start-view-model", () => {
           configuration,
         }).guideDialogue,
       ).toEqual({
-        id: `${init.battleId}:second-battle-start-guidance`,
+        id: `${preview.init.battleId}:second-battle-start-guidance`,
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: "Mira",
@@ -512,7 +523,7 @@ describe("battle-start-view-model", () => {
       ).toBeUndefined();
       expect(
         buildBattleStartView(
-          { ...init, completionLevelAtStart: 2 },
+          atLevel(preview, 2),
           cardDatabase,
           ART_CATALOG,
           { isTutorialJourney: true, configuration },

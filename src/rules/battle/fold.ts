@@ -15,6 +15,9 @@
 // state carries ids and indices, never steps.
 
 import type {
+  BattleAvatarSummary,
+  BattleDeckCardDefinition,
+  BattleEnemyDescriptor,
   BattleInit,
   BattleMutableState,
   BattlePhase,
@@ -34,10 +37,13 @@ import type { BattleCommand } from "../../battle/debug/commands";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import type { CardId } from "../../types/card-identity";
 import type {
+  AtlasNodeId,
   BattleCardId,
   BattleEffectScriptId,
+  BattleId,
   DreamwellCardId,
   PresentationId,
+  SiteId,
   TutorialAiActionOverrideId,
   TutorialRunId,
   TutorialTriggerId,
@@ -126,17 +132,44 @@ export interface PendingPrompt {
 export type BattleFoldState = JourneyBattleFoldState | TutorialBattleFoldState;
 
 /**
- * A journey battle. `init` is the IMMUTABLE per-battle metadata the journey
- * built (`BattleInit`): the opponent, the score target, the reward, the
- * site and dreamscape identity, and the display definitions of both decks.
+ * A journey battle. `init` is its journey side ({@link JourneyBattleInit}).
  * `engine` is the engine battle its `BATTLE_ACTION`, `BATTLE_ANSWER`, and
- * `BATTLE_CANCEL` intents fold, and `END_BATTLE` reads its result. Both are
- * plain data and never change identity after `BEGIN_BATTLE`.
+ * `BATTLE_CANCEL` intents fold, and `END_BATTLE` reads its result; its init
+ * owns every game parameter. Both are plain data and never change identity
+ * after `BEGIN_BATTLE`.
  */
 export interface JourneyBattleFoldState {
   readonly mode: JourneyBattleMode;
-  readonly init: BattleInit;
+  readonly init: JourneyBattleInit;
   readonly engine: EngineBattleFold;
+}
+
+/**
+ * The IMMUTABLE journey side of a journey battle: its identity, the journey
+ * position `END_BATTLE` hands off to, the reward a victory pays, and what the
+ * battle screen displays. The engine init of the same battle owns the game
+ * itself: the seed, both decks, the Dreamwell, the score target, the
+ * starting side, and the next-battle effects.
+ */
+export interface JourneyBattleInit {
+  readonly battleId: BattleId;
+  readonly siteId: SiteId;
+  /** The Atlas node the battle takes place in. */
+  readonly nodeId: AtlasNodeId | null;
+  readonly completionLevelAtStart: number;
+  /** The essence a victory pays. */
+  readonly essenceReward: number;
+  /** Whether the opponent's Avatar ability is active at this layer. */
+  readonly opponentAbilityActive: boolean;
+  readonly enemyDescriptor: BattleEnemyDescriptor;
+  readonly avatarSummary: BattleAvatarSummary | null;
+  /**
+   * The display definitions of the cards both decks deal: the player's deck
+   * entries in a seeded shuffled order, then the opponent's deck. The battle
+   * screen shows a card instance with the first definition of its card UUID
+   * and transfiguration.
+   */
+  readonly cardDefinitions: readonly BattleDeckCardDefinition[];
 }
 
 // tutorial-only until Phase 6

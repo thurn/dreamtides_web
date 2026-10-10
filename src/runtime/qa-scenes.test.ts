@@ -409,7 +409,7 @@ describe("the battle layer QA scenes", () => {
 
       expect(slice.committed.version, scene.id).toBe(battle?.engine?.slice.committed.version);
       expect(slice.inFlight === null || engine.decision(slice.committed) === null, scene.id).toBe(true);
-      expect(battle?.init.playerDeckOrder.some((definition) => definition.renderedText.length > 0), scene.id).toBe(true);
+      expect(battle?.init.cardDefinitions.some((definition) => definition.renderedText.length > 0), scene.id).toBe(true);
     }
   });
 
