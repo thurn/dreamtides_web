@@ -8,10 +8,12 @@
 // (scripts/qa/scenarios/card-lab-play.mjs) in the card-lab through one
 // runner session (`openQaSession`: its own dev server and MCP client), and
 // appends one QA ledger line per verdict to
-// docs/plan/evidence/qa-ledger/<bead>.jsonl. A card's base run reports the
-// variants it can take; the others are recorded as `skip` without a run. A
-// run that hangs fails at its timeout and the sweep goes on. `starter`
-// names the catalog's Starter cards. Exits 1 when any verdict is `fail`.
+// docs/plan/evidence/qa-ledger/<bead>.jsonl. The defaults sweep every
+// variant on both sides. A card's base run reports the variants it can take;
+// the others are recorded as `skip` without a run. A run that hangs fails at
+// its timeout and the sweep goes on. `starter` names the catalog's Starter
+// cards. Each ledger line's `commit` is the base OID the bead was built on,
+// `git merge-base HEAD staging`. Exits 1 when any verdict is `fail`.
 
 import { execFileSync } from "node:child_process";
 import { appendFileSync, mkdirSync, readFileSync } from "node:fs";
@@ -35,7 +37,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
  */
 export function parseSweepArgs(argv) {
   /** @type {SweepOptions} */
-  const options = { bead: "", cards: [], variants: VARIANTS, sides: ["player"], timeoutS: 60, port: null, capture: false };
+  const options = { bead: "", cards: [], variants: VARIANTS, sides: ["player", "enemy"], timeoutS: 60, port: null, capture: false };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     const value = () => {
@@ -81,11 +83,22 @@ function starterCards() {
   });
 }
 
+/** The base OID the bead was built on (workflow § Card QA, QA ledger): where HEAD leaves Tollgate's `staging` branch. */
+function baseCommit() {
+  try {
+    return execFileSync("git", ["merge-base", "HEAD", "staging"], { cwd: repoRoot, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+  } catch {
+    const head = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repoRoot, encoding: "utf8" }).trim();
+    say(`no merge base with staging; the ledger records HEAD ${head} as the commit`);
+    return head;
+  }
+}
+
 async function main() {
   const options = parseSweepArgs(process.argv.slice(2));
   const badCard = options.cards.find((card) => !UUID.test(card));
   if (badCard !== undefined) say(`${badCard} is not a UUID; the card-lab will reject it`);
-  const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repoRoot, encoding: "utf8" }).trim();
+  const commit = baseCommit();
   const ledger = join(repoRoot, "docs", "plan", "evidence", "qa-ledger", `${options.bead}.jsonl`);
   mkdirSync(dirname(ledger), { recursive: true });
   const hostLoad = loadavg()[0];

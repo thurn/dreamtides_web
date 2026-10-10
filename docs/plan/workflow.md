@@ -1028,13 +1028,15 @@ mobile capture (390×844), and one changed interaction state. Verify each with
 
 ### Card QA (Phases 4–7)
 
-**Scripted sweep.** `node scripts/qa/card-sweep.mjs --cards <uuids> | --bead
-<id> [--port <port>]` drives the Playwright MCP service through
+**Scripted sweep.** `node scripts/qa/card-sweep.mjs --bead <id> --cards
+<uuid,...> [--port <port>]` drives the Playwright MCP service through
 `scripts/screenshot-runtime.mjs` and the scenario runner's helper prelude
-(`scripts/qa/prelude.mjs`). It is built in Phase 4. For each card and
-variant, it:
+(`scripts/qa/prelude.mjs`). It is built in Phase 4. `--bead` names the
+ledger file and capture directory; `--cards` lists the cards to sweep (the
+bead's entity UUIDs, or `starter`). By default it sweeps every variant each
+card can take, as player and as enemy. For each card, side, and variant, it:
 
-1. opens `?goto=card-lab&card=<uuid>&variant=<v>`;
+1. opens `?goto=card-lab&card=<uuid>&variant=<v>&as=<side>`;
 2. plays the card through the UI;
 3. answers prompts with the first legal choice;
 4. passes until the stack is empty.
@@ -1047,7 +1049,8 @@ It flags these failures:
 - no `Resolved` engine event;
 - no visible board or log change.
 
-Results go to the bead's QA ledger file.
+Results go to the bead's QA ledger file, with `commit` set to
+`git merge-base HEAD staging`.
 
 **Judged QA.** Judge cards per [D21](decisions.md#d21-browser-qa-coverage),
 with a QA subagent. For each judged card, check all of these on desktop and

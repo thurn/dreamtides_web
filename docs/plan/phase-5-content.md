@@ -112,7 +112,15 @@ composition beads skip it.
    `verifiedText`.
 3. **Add the primitive** a primitive bead introduces, with primitive tests
    that use synthetic cards, in the primitive group's test file. The registry index
-   is the catalog (Phase 3.4).
+   is the catalog (Phase 3.4). The session widens the bead's Areas at
+   dispatch to the files the primitive's registration needs:
+   - every primitive: its getter in `src/engine/effects/registry.ts`, whose
+     `satisfies` clause makes a missing one a type error;
+   - every new engine event kind: its `EVENT_PRESENTATION` entry in
+     `src/battle/components/presentation-items.ts`, its fixture in
+     `src/engine/testing/prompt-lab.ts` (the tooling test checks every event
+     kind has one), and its battle-log line in
+     `src/runtime/battle-prompt-messages.ts`.
 4. **Resolve ambiguities** with the ladder. Check the
    [card text clarifications](decisions.md#card-text-clarifications) first:
    an entity named there is implemented exactly as its C-entry says, and the
@@ -143,9 +151,10 @@ composition beads skip it.
 6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <bead entities>`.
    Decks are biased to include the bead's entities. It is heavy (D17).
 7. **Sweep** the bead's entities in the card-lab, on the bead's port:
-   `node scripts/qa/card-sweep.mjs --bead <id> --port <port>`. Cover the base
-   and amplified variants, `as=player` and `as=enemy`. Every `fail` is fixed
-   and re-swept.
+   `node scripts/qa/card-sweep.mjs --bead <id> --cards <entity uuids> --port <port>`,
+   with the bead's entity UUIDs comma-separated. Its defaults cover every
+   variant the card can take, base and amplified among them, `as=player` and
+   `as=enemy`. Every `fail` is fixed and re-swept.
 8. **Judged QA** per D21, by the implementing subagent or a QA subagent:
    - every entity that introduces a new prompt kind, status indicator, or
      visual effect;
