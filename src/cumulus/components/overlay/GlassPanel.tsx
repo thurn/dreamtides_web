@@ -93,6 +93,13 @@ export interface GlassPanelProps {
 
 const FLOATING_ACCESSORY_PX = 48;
 
+/**
+ * Narrowest inline size the header copy accepts beside a trailing accessory.
+ * A header too narrow for this copy column plus the accessory wraps the
+ * accessory onto its own row instead of crushing the title and subtitle.
+ */
+const HEADER_COPY_MIN_INLINE = "min(176px, 100%)";
+
 function radiusToken(radius: GlassPanelRadius): string {
   if (radius === "popover") return token("--radius-compact");
   if (radius === "control") return token("--radius-control");
@@ -223,6 +230,7 @@ export function GlassPanel({
             flexShrink: 0,
             display: "flex",
             alignItems: "center",
+            flexWrap: "wrap",
             justifyContent: "space-between",
             gap: token("--space-s"),
             borderBottom: headerDivider
@@ -233,7 +241,10 @@ export function GlassPanel({
           }}
         >
           <div
+            data-glass-panel-header-copy=""
             style={{
+              flex: `1 1 ${HEADER_COPY_MIN_INLINE}`,
+              maxWidth: "max-content",
               display: "flex",
               flexDirection: "column",
               gap:
@@ -286,7 +297,18 @@ export function GlassPanel({
               </p>
             )}
           </div>
-          {!besideCutout && accessory}
+          {!besideCutout && accessory !== null && (
+            <div
+              data-glass-panel-header-accessory=""
+              style={{
+                display: "flex",
+                flexShrink: 0,
+                marginInlineStart: "auto",
+              }}
+            >
+              {accessory}
+            </div>
+          )}
         </header>
       )}
       <div
