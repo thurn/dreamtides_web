@@ -15,6 +15,7 @@ import { testCardId } from "../../types/test-identities";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   MobileBattleScreen,
+  type MobileBattleCardPickerView,
   type MobileBattleCardView,
   type MobileBattleInspectorSideView,
   type MobileBattleInteractions,
@@ -24,15 +25,7 @@ import {
 } from "./MobileBattleScreen";
 import type { BattlePromptHostView } from "./battle-overlays/BattlePromptHost";
 
-const HOST: BattlePromptHostView = {
-  key: null,
-  heading: null,
-  cancellable: false,
-  number: null,
-  arrange: null,
-  loopOffer: null,
-  notice: null,
-};
+const HOST: BattlePromptHostView = { key: null, heading: null, cancellable: false, number: null, arrange: null, loopOffer: null, notice: null };
 
 type Owner = "enemy" | "player";
 const roots: Root[] = [];
@@ -55,38 +48,17 @@ afterEach(() => {
 });
 
 function makeCard(index: number, instanceId: BattleCardId): MobileBattleCardView {
-  const id = testCardId(
-    `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
-  );
+  const id = testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`);
+  const name = parseCardName(`Fixture Card ${String(index)}`);
   const displaySnapshot = {
-    id,
-    name: parseCardName(`Fixture Card ${String(index)}`),
-    cardNumber: index,
-    cardType: "Character",
-    subtype: "Warrior",
-    isStarter: false,
-    energyCost: index % 4,
-    spark: index % 5,
-    isFast: false,
-    renderedText: "A stable fixture ability.",
-    imageNumber: index,
-    artOwned: true,
+    id, name, cardNumber: index, cardType: "Character", subtype: "Warrior", isStarter: false, energyCost: index % 4,
+    spark: index % 5, isFast: false, renderedText: "A stable fixture ability.", imageNumber: index, artOwned: true,
   } as const;
-  return {
-    id: instanceId,
-    model: { cardId: id, displaySnapshot },
-    exhausted: false,
-    figment: false,
-    storedTime: 0,
-    showPlayableOutline: false,
-  };
+  return { id: instanceId, model: { cardId: id, displaySnapshot }, exhausted: false, figment: false, storedTime: 0, showPlayableOutline: false };
 }
 
 function makeSide(owner: Owner, offset: number): MobileBattleSideView {
-  const slot = (name: string, card: MobileBattleCardView | null) => ({
-    id: parseBattleSlotViewId(`${owner}-${name}`),
-    card,
-  });
+  const slot = (name: string, card: MobileBattleCardView | null) => ({ id: parseBattleSlotViewId(`${owner}-${name}`), card });
   return {
     owner,
     position: owner === "player" ? "near" : "far",
@@ -98,59 +70,30 @@ function makeSide(owner: Owner, offset: number): MobileBattleSideView {
       slot("back-filled", makeCard(offset + 1, cardId(`${owner}-back-card`))),
       slot("back-second-empty", null),
     ],
-    frontRank: [
-      slot("front-filled", makeCard(offset + 2, cardId(`${owner}-front-card`))),
-      slot("front-empty", null),
-    ],
-    status: {
-      avatar: { imageNumber: "0007", name: owner, title: "Fixture" },
-      currentEnergy: 3,
-      maxEnergy: 3,
-      points: 5,
-      pointsToWin: 10,
-    },
+    frontRank: [slot("front-filled", makeCard(offset + 2, cardId(`${owner}-front-card`))), slot("front-empty", null)],
+    status: { avatar: { imageNumber: "0007", name: owner, title: "Fixture" }, currentEnergy: 3, maxEnergy: 3, points: 5, pointsToWin: 10 },
   };
 }
 
 function inspectorSide(side: Owner): MobileBattleInspectorSideView {
-  const zones = { hand: 4, deck: 2, void: 1, banished: 0 };
-  return {
-    side,
-    heading: side === "player" ? "Player" : "Enemy",
-    points: 5,
-    currentEnergy: 3,
-    maxEnergy: 3,
-    zones: { ...zones, backRank: 1, frontRank: 1 },
-    canDiscard: true,
-    canShuffle: true,
-  };
+  const zones = { hand: 4, deck: 2, void: 1, banished: 0, backRank: 1, frontRank: 1 };
+  return { side, heading: side === "player" ? "Player" : "Enemy", points: 5, currentEnergy: 3, maxEnergy: 3, zones, canDiscard: true, canShuffle: true };
 }
 
 function makeView(): MobileBattleView {
   const [enemy, player] = [makeSide("enemy", 1), makeSide("player", 20)];
   const hand = (owner: Owner, length: number, offset: number) =>
-    Array.from({ length }, (_, index) =>
-      makeCard(offset + index, cardId(`${owner}-hand-${String(index)}`)),
-    );
+    Array.from({ length }, (_, index) => makeCard(offset + index, cardId(`${owner}-hand-${String(index)}`)));
   const [enemyHand, playerHand] = [hand("enemy", 8, 60), hand("player", 4, 40)];
   const enemyHandCardIds = enemyHand.map((card) => card.id);
+  const nearHand = { owner: "player", position: "near", cardIds: playerHand.map((card) => card.id), cards: playerHand } as const;
   return {
     battleId: parseBattleId("battle-mobile-fixture"),
     perspective: "player",
     near: player,
     far: enemy,
-    nearHand: {
-      owner: "player",
-      position: "near",
-      cardIds: playerHand.map((card) => card.id),
-      cards: playerHand,
-    },
-    farHand: {
-      owner: "enemy",
-      position: "far",
-      cardIds: enemyHandCardIds,
-      cards: [],
-    },
+    nearHand,
+    farHand: { owner: "enemy", position: "far", cardIds: enemyHandCardIds, cards: [] },
     promptNotice: null,
     cardPicker: null,
     choicePrompt: null,
@@ -165,41 +108,34 @@ function makeView(): MobileBattleView {
     playerHand,
     result: null,
     inspector: {
-      opponentName: "enemy",
-      perspective: "player",
-      turn: "3",
-      phase: "Day",
-      activeSide: "Player",
-      result: "In progress",
-      nextDreamwellOrder: "4",
-      isOpponentHandRevealed: false,
-      isPlayerHandHidden: false,
-      isFarHandRevealed: false,
-      isNearHandHidden: false,
+      opponentName: "enemy", perspective: "player", turn: "3", phase: "Day", activeSide: "Player", result: "In progress",
+      nextDreamwellOrder: "4", isOpponentHandRevealed: false, isPlayerHandHidden: false, isFarHandRevealed: false, isNearHandHidden: false,
       sides: { player: inspectorSide("player"), enemy: inspectorSide("enemy") },
     },
   };
 }
 
-function mount(
-  view: MobileBattleView,
-  overrides: Partial<MobileBattleInteractions> = {},
-  props: Partial<MobileBattleScreenProps> = {},
-): HTMLDivElement {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  roots.push(root);
-  mountedRoots.set(container, root);
-  act(() => root.render(screen(view, overrides, props)));
-  return container;
+/** A board card picker over `entries`, each a candidate card and the zone it is in. */
+function cardPicker(
+  entries: readonly (readonly [MobileBattleCardView, "hand" | "backRank"])[],
+  bounds: { count: number; minCount?: number },
+): MobileBattleCardPickerView {
+  return {
+    key: 7,
+    label: "Choose",
+    side: "player",
+    candidates: entries.map(([card, zone]) => ({ instanceId: card.id, cardUuid: card.model.cardId, owner: "player", zone, card, highlighted: false })),
+    candidateIds: entries.map(([card]) => card.id),
+    ...bounds,
+    optional: false,
+    canResolve: true,
+    presentation: "board",
+  };
 }
 
-function screen(
-  view: MobileBattleView,
-  overrides: Partial<MobileBattleInteractions>,
-  props: Partial<MobileBattleScreenProps>,
-) {
+const mountedRoots = new WeakMap<HTMLDivElement, Root>();
+
+function screen(view: MobileBattleView, overrides: Partial<MobileBattleInteractions>, props: Partial<MobileBattleScreenProps>) {
   const interactions: MobileBattleInteractions = {
     canInteract: true,
     pendingCardId: null,
@@ -218,15 +154,22 @@ function screen(
   );
 }
 
-const mountedRoots = new WeakMap<HTMLDivElement, Root>();
-
-function rerender(
-  container: HTMLDivElement,
+function mount(
   view: MobileBattleView,
   overrides: Partial<MobileBattleInteractions> = {},
-): void {
-  const root = mountedRoots.get(container);
-  act(() => root?.render(screen(view, overrides, {})));
+  props: Partial<MobileBattleScreenProps> = {},
+): HTMLDivElement {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  roots.push(root);
+  mountedRoots.set(container, root);
+  act(() => root.render(screen(view, overrides, props)));
+  return container;
+}
+
+function rerender(container: HTMLDivElement, view: MobileBattleView, overrides: Partial<MobileBattleInteractions> = {}): void {
+  act(() => mountedRoots.get(container)?.render(screen(view, overrides, {})));
 }
 
 function query(parent: ParentNode, selector: string): HTMLElement {
@@ -240,10 +183,7 @@ function click(element: HTMLElement | undefined): void {
 }
 
 function drop(target: HTMLElement, clientX = 0, clientY = 0): void {
-  const init = { bubbles: true, cancelable: true, clientX, clientY };
-  act(() => {
-    target.dispatchEvent(new MouseEvent("drop", init));
-  });
+  act(() => void target.dispatchEvent(new MouseEvent("drop", { bubbles: true, cancelable: true, clientX, clientY })));
 }
 
 describe("MobileBattleScreen", () => {
@@ -252,27 +192,16 @@ describe("MobileBattleScreen", () => {
     const playable = view.playerHand[1];
     const container = mount({
       ...view,
-      playerHand: view.playerHand.map((card) =>
-        card === playable ? { ...card, showPlayableOutline: true } : card,
-      ),
+      playerHand: view.playerHand.map((card) => (card === playable ? { ...card, showPlayableOutline: true } : card)),
     });
 
-    for (const rank of "enemy-back enemy-front player-front player-back".split(
-      " ",
-    )) {
-      query(container, `[data-battle-rank="${rank}"]`);
-    }
+    for (const rank of ["enemy-back", "enemy-front", "player-front", "player-back"]) query(container, `[data-battle-rank="${rank}"]`);
     const farHand = query(container, '[data-battle-mobile-row="far-hand"]');
     const nearHand = query(container, '[data-battle-mobile-row="near-hand"]');
     expect(farHand.dataset.battleHandCount).toBe("8");
-    expect(
-      nearHand.querySelectorAll('[data-battle-card-zone="near-hand"]'),
-    ).toHaveLength(4);
-    expect(
-      [...container.querySelectorAll("[data-battle-card-playable] [data-battle-card-id]")].map(
-        (element) => element.getAttribute("data-battle-card-id"),
-      ),
-    ).toEqual([playable.id]);
+    expect(nearHand.querySelectorAll('[data-battle-card-zone="near-hand"]')).toHaveLength(4);
+    const outlined = container.querySelectorAll("[data-battle-card-playable] [data-battle-card-id]");
+    expect([...outlined].map((element) => element.getAttribute("data-battle-card-id"))).toEqual([playable.id]);
   });
 
   it("enables the pass control only while the player may act, with no Back control", () => {
@@ -297,10 +226,7 @@ describe("MobileBattleScreen", () => {
 
     click(query(container, '[data-testid="player-battle-deck"]'));
     click(query(container, '[data-testid="player-battle-void"]'));
-    expect(onZoneOpen.mock.calls).toEqual([
-      [{ owner: "player", zone: "deck" }],
-      [{ owner: "player", zone: "void" }],
-    ]);
+    expect(onZoneOpen.mock.calls).toEqual([[{ owner: "player", zone: "deck" }], [{ owner: "player", zone: "void" }]]);
   });
 
   it("routes pending hand-card drops through the play intent to the closest open slot", () => {
@@ -317,27 +243,17 @@ describe("MobileBattleScreen", () => {
       ["player-back-second-empty", 250],
     ] as const) {
       const slot = query(container, `[data-battle-slot-id="${slotId}"]`);
-      vi.spyOn(slot, "getBoundingClientRect").mockReturnValue(
-        new DOMRect(left, 200, 100, 140),
-      );
+      vi.spyOn(slot, "getBoundingClientRect").mockReturnValue(new DOMRect(left, 200, 100, 140));
     }
 
     drop(query(container, "[data-battle-mobile]"), 290, 280);
-    expect(onHandCardDrop).toHaveBeenLastCalledWith({
-      owner: "player",
-      rank: "back",
-      slotId: "player-back-second-empty",
-    });
+    expect(onHandCardDrop).toHaveBeenLastCalledWith({ owner: "player", rank: "back", slotId: "player-back-second-empty" });
     expect(onSlotDrop).not.toHaveBeenCalled();
   });
 
   it("accepts a repositioning drop only on a legal destination", () => {
     const onSlotDrop = vi.fn();
-    const legal = {
-      owner: "player",
-      rank: "back",
-      slotId: parseBattleSlotViewId("player-back-second-empty"),
-    } as const;
+    const legal = { owner: "player", rank: "back", slotId: parseBattleSlotViewId("player-back-second-empty") } as const;
     const container = mount(makeView(), {
       pendingCardId: cardId("player-front-card"),
       pendingCardSource: "battlefield",
@@ -345,8 +261,7 @@ describe("MobileBattleScreen", () => {
       eligibleSlotTargets: [legal],
       onSlotDrop,
     });
-    const target = (slot: string) =>
-      query(container, `[data-battle-slot-id="${slot}"]`);
+    const target = (slot: string) => query(container, `[data-battle-slot-id="${slot}"]`);
 
     expect(target("player-back-second-empty").dataset.battleDropTarget).toBe("true");
     expect(target("player-back-empty").dataset.battleDropTarget).toBeUndefined();
@@ -369,9 +284,7 @@ describe("MobileBattleScreen", () => {
     click(back);
     expect(onAllForward).toHaveBeenCalledOnce();
     expect(onAllBack).not.toHaveBeenCalled();
-    expect(
-      mount(makeView(), { onAllForward }).querySelector("[data-battle-rank-shortcuts]"),
-    ).toBeNull();
+    expect(mount(makeView(), { onAllForward }).querySelector("[data-battle-rank-shortcuts]")).toBeNull();
   });
 
   it("offers Cancel on the prompt host only while the prompt is cancellable", () => {
@@ -445,51 +358,19 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const candidates = view.playerHand.slice(0, 3);
     const candidateIds = candidates.map((card) => card.id);
-    const onCardPickerSelectionChange = vi.fn();
-    const onCardPickerSubmit = vi.fn();
-    const onHandCardActivate = vi.fn();
+    const [onCardPickerSelectionChange, onCardPickerSubmit, onHandCardActivate] = [vi.fn(), vi.fn(), vi.fn()];
+    const picker = cardPicker(candidates.map((card) => [card, "hand"] as const), { count: 3, minCount: 2 });
     const container = mount(
-      {
-        ...view,
-        cardPicker: {
-          key: 42,
-          label: "Choose",
-          side: "player",
-          candidates: candidates.map((card) => ({
-            instanceId: card.id,
-            cardUuid: card.model.cardId,
-            owner: "player",
-            zone: "hand",
-            card,
-            highlighted: false,
-          })),
-          candidateIds,
-          count: 3,
-          minCount: 2,
-          optional: false,
-          canResolve: true,
-          presentation: "board",
-        },
-      },
-      {
-        canInteract: false,
-        onHandCardActivate,
-        onCardPickerSelectionChange,
-        onCardPickerSubmit,
-      },
+      { ...view, cardPicker: picker },
+      { canInteract: false, onHandCardActivate, onCardPickerSelectionChange, onCardPickerSubmit },
     );
-    const handCards = container.querySelectorAll<HTMLElement>(
-      '[data-battle-card-zone="near-hand"] > [data-battlefield-card]',
-    );
-    const submit = () =>
-      query(container, '[data-testid="battle-card-picker-submit"]');
+    const handCards = container.querySelectorAll<HTMLElement>('[data-battle-card-zone="near-hand"] > [data-battlefield-card]');
+    const submit = () => query(container, '[data-testid="battle-card-picker-submit"]');
 
     expect(container.querySelector("[data-battle-phase-controls]")).toBeNull();
     expect(submit().getAttribute("aria-disabled")).toBe("true");
     click(handCards[0]);
-    expect(onCardPickerSelectionChange).toHaveBeenLastCalledWith([
-      candidateIds[0],
-    ]);
+    expect(onCardPickerSelectionChange).toHaveBeenLastCalledWith([candidateIds[0]]);
     expect(submit().getAttribute("aria-disabled")).toBe("true");
     click(handCards[3]);
     expect(onCardPickerSelectionChange).toHaveBeenCalledOnce();
@@ -512,16 +393,8 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const [empty, filled, secondEmpty] = view.player.backRank;
     if (empty === undefined || filled?.card == null || secondEmpty === undefined) throw new Error("fixture has no back rank");
-    const badged = {
-      ...filled,
-      card: {
-        ...filled.card,
-        statuses: [
-          { kind: "duration", label: "a" },
-          { kind: "payable", label: "c", actionable: true },
-        ],
-      },
-    } as const;
+    const statuses = [{ kind: "duration", label: "a" }, { kind: "payable", label: "c", actionable: true }] as const;
+    const badged = { ...filled, card: { ...filled.card, statuses } };
     const player = {
       ...view.player,
       backRank: [empty, badged, secondEmpty],
@@ -596,17 +469,7 @@ describe("MobileBattleScreen", () => {
     const backCard = view.player.backRank[1]?.card;
     const handCard = view.playerHand[0];
     if (backCard == null || handCard === undefined) throw new Error("fixture has no cards");
-    const picker = (card: MobileBattleCardView, zone: "hand" | "backRank") => ({
-      key: 7,
-      label: "Choose",
-      side: "player" as const,
-      candidates: [{ instanceId: card.id, cardUuid: card.model.cardId, owner: "player" as const, zone, card, highlighted: false }],
-      candidateIds: [card.id],
-      count: 1,
-      optional: false,
-      canResolve: true,
-      presentation: "board" as const,
-    });
+    const picker = (card: MobileBattleCardView, zone: "hand" | "backRank") => cardPicker([[card, zone]], { count: 1 });
     const placement = (container: HTMLElement) =>
       query(container, "[data-battle-revealed-hand-card]").dataset.battleRevealedHandCardPlacement;
 
@@ -618,22 +481,9 @@ describe("MobileBattleScreen", () => {
 
   it("replaces the phase advance with choice-prompt options", () => {
     const [onChoicePromptChoose, onNextPhase] = [vi.fn(), vi.fn()];
-    const container = mount(
-      {
-        ...makeView(),
-        choicePrompt: {
-          key: 42,
-          label: "Choose",
-          options: [{ label: "First" }, { label: "Second" }],
-          canResolve: true,
-        },
-      },
-      { canInteract: false, onChoicePromptChoose, onNextPhase },
-    );
-    const options = query(
-      container,
-      "[data-battle-choice-prompt-controls]",
-    ).querySelectorAll<HTMLButtonElement>("button");
+    const choicePrompt = { key: 42, label: "Choose", options: [{ label: "First" }, { label: "Second" }], canResolve: true };
+    const container = mount({ ...makeView(), choicePrompt }, { canInteract: false, onChoicePromptChoose, onNextPhase });
+    const options = query(container, "[data-battle-choice-prompt-controls]").querySelectorAll<HTMLButtonElement>("button");
 
     expect(options).toHaveLength(2);
     click(options[1]);

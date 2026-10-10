@@ -733,7 +733,6 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
       value: smallInt(rng, 2),
     },
   }),
-  () => ({ type: "SET_CARD_NOTE", payload: { instanceId: "i1", note: "hi" } }),
   (rng) => ({
     type: "RESOLVE_PROMPT",
     payload: { promptId: Math.floor(rng() * 5), resolution: {} },

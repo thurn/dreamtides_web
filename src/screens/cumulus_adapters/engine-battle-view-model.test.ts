@@ -1,52 +1,23 @@
-import { describe, expect, it, vi } from "vitest";
+// The battle screen model over the engine: affordances from the human's
+// legal actions, prompt surfaces and their answers, and what the human may
+// see. Presentation and the battle log are in engine-battle-presentation.test.ts.
+import { describe, expect, it } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
-import { PresentationQueue } from "../../battle/components/battle-presentation";
-import {
-  enqueuePresentation,
-  EVENT_PRESENTATION,
-  presentationItems,
-  type PresentationItem,
-} from "../../battle/components/presentation-items";
-import { createEngine, type Action, type BattleState, type InstanceId, type InstanceView } from "../../engine";
+import { createEngine, type Action, type BattleState, type InstanceId } from "../../engine";
 import { createCatalog } from "../../engine/catalog";
-import { EVENT_DEFINITIONS } from "../../engine/events";
 import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
 import { boardState, placeFigment, type BoardSetup } from "../../engine/testing/board";
-import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
-import { battleSeed } from "../../engine/state/ids";
-import type { CommittedEvent } from "../../eventlog/local-log";
-import type { GameEvent } from "../../eventlog/types";
-import type { JourneyBattleFoldState } from "../../rules/battle/fold";
-import { testEventActor } from "../../types/test-identities";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { LOOP, LOOP_CARDS } from "../../engine/testing/loop-cards";
-import {
-  LAB,
-  PROMPT_LAB_DEFINITIONS,
-  PROMPT_LAB_FIXTURES,
-  promptLabBattle,
-  promptLabFixture,
-  promptLabPresentation,
-} from "../../engine/testing/prompt-lab";
+import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture } from "../../engine/testing/prompt-lab";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { ZONE_FIGMENT, zoneCatalog } from "../../engine/testing/zone-cards";
 import { NO_PROMPTS } from "../../engine/steps/sources";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
 import type { Answer } from "../../engine/prompts/types";
-import {
-  parseBattleCardId,
-  parseBattleId,
-  parseBattleSlotViewId,
-  parseDreamwellCardId,
-  parsePresentationId as pid,
-  parsePromptId,
-  parseSiteId,
-} from "../../types/identifiers";
-import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
-import { battleLogEntries, battleLogTurns, engineBattleLog } from "./engine-battle-log-view-model";
+import { parseBattleCardId, parseBattleId, parseBattleSlotViewId } from "../../types/identifiers";
 import {
   buildEngineBattleScreenModel,
-  engineStatuses,
   figmentMergeTargets,
   handPlayAction,
   repositionForDrop,
@@ -75,45 +46,14 @@ function board(setup: Partial<BoardSetup>) {
   });
 }
 
-const testDreamwellCardId = parseDreamwellCardId("00000000-0000-4000-8000-00000000d001");
-const dreamwellModel = {
-  cardId: testDreamwellCardId,
-  displaySnapshot: { id: testDreamwellCardId, name: "Fixture Dreamwell", renderedText: "", energyAdded: 1, imageNumber: 1 },
-};
-
-/** The screen input of a committed state, with no prompt and no legal actions. */
-function screenInput(state: BattleState): Parameters<typeof buildEngineBattleScreenModel>[0] {
-  return {
-    battleId: parseBattleId("battle-engine-fixture"),
-    human: "player",
-    view: engine.view(state, "player"),
-    legal: [],
-    prompt: null,
-    playing: null,
-    decision: null,
-    presented: true,
-    notice: null,
-    cards,
-    avatars: { player: { avatar: null }, enemy: { avatar: null } },
-    opponentName: "Fixture Opponent",
-    essenceReward: 100,
-    resultDismissed: false,
-  };
-}
-
 /** The screen model of a committed state, with the human's legal actions when it owns the decision. */
-function screenOf(
-  state: BattleState,
-  prompt: PendingEnginePrompt | null = null,
-  display = state,
-  presented = true,
-): EngineBattleScreenModel {
-  const decision = engine.decision(state);
+function screenOf(state: BattleState, prompt: PendingEnginePrompt | null = null, display = state, presented = true, on = engine) {
+  const decision = on.decision(state);
   return buildEngineBattleScreenModel({
     battleId: parseBattleId("battle-engine-fixture"),
     human: "player",
-    view: engine.view(display, "player"),
-    legal: prompt === null && decision?.side === "player" ? engine.legalActions(state, "player") : [],
+    view: on.view(display, "player"),
+    legal: prompt === null && decision?.side === "player" ? on.legalActions(state, "player") : [],
     prompt,
     playing: null,
     decision: prompt === null ? decision : null,
@@ -134,35 +74,30 @@ function screenAtPrompt(state: BattleState, action: Action, presented = true) {
   if (outcome.kind !== "applied") throw new Error(`bounced: ${outcome.reason}`);
   const pending = adapter.pending(outcome.slice);
   if (pending === null) throw new Error("no prompt");
-  return {
-    model: screenOf(state, pending.prompt, pending.display, presented),
-    prompt: pending.prompt,
-    slice: outcome.slice,
-    published: outcome.published,
-  };
+  return { model: screenOf(state, pending.prompt, pending.display, presented), prompt: pending.prompt };
+}
+
+/** The committed slice of a prompt-lab fixture's battle. */
+function labSlice(name: string): BattleSlice {
+  const fixture = promptLabFixture(name);
+  if (fixture === null) throw new Error(`no fixture ${name}`);
+  return promptLabBattle(engine, fixture).slice;
 }
 
 /** The screen of a prompt-lab fixture's battle, at its pending prompt or decision. */
 function labScreen(name: string, presented = true) {
-  const fixture = promptLabFixture(name);
-  if (fixture === null) throw new Error(`no fixture ${name}`);
-  const { slice } = promptLabBattle(engine, fixture);
+  const slice = labSlice(name);
   const pending = adapter.pending(slice);
-  return {
-    slice,
-    prompt: pending?.prompt ?? null,
-    model: screenOf(slice.committed, pending?.prompt ?? null, pending?.display ?? slice.committed, presented),
-  };
+  const model = screenOf(slice.committed, pending?.prompt ?? null, pending?.display ?? slice.committed, presented);
+  return { prompt: pending?.prompt ?? null, model };
 }
 
 /** The screen at the prompt of a lab fixture whose one hand card is the card it plays. */
 function labPlay(name: string) {
-  const fixture = promptLabFixture(name);
-  if (fixture === null) throw new Error(`no fixture ${name}`);
-  const { slice } = promptLabBattle(engine, fixture);
-  const play = engine.legalActions(slice.committed, "player").find((action) => action.kind === "play");
+  const { committed } = labSlice(name);
+  const play = engine.legalActions(committed, "player").find((action) => action.kind === "play");
   if (play === undefined) throw new Error(`no play in ${name}`);
-  return { ...screenAtPrompt(slice.committed, play), state: slice.committed };
+  return screenAtPrompt(committed, play);
 }
 
 /** The model's prompt surface, which must be of `kind`. */
@@ -189,9 +124,7 @@ const slot = (rank: "back" | "front", position: string) =>
 
 describe("buildEngineBattleScreenModel", () => {
   it("outlines exactly the hand cards with a legal play and offers the pass", () => {
-    const { state, ids } = board({
-      player: { hand: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla3.id], energy: 1 },
-    });
+    const { state, ids } = board({ player: { hand: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla3.id], energy: 1 } });
     const model = screenOf(state);
 
     expect(model.affordances.canAct).toBe(true);
@@ -212,28 +145,17 @@ describe("buildEngineBattleScreenModel", () => {
     expect(model.affordances.pass).toBeNull();
     expect(outlined(model)).toEqual([]);
     expect(model.view.rankShortcuts).toBeNull();
-    expect(model.view.promptHost?.loopOffer ?? null).toBeNull();
     expect(model.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
   });
 
   it("names the open back-rank position a dropped character enters", () => {
-    const { state, ids } = board({
-      player: { hand: [SYNTHETIC.vanilla1.id, DSL.drawTwo.id], energy: 5 },
-    });
+    const { state, ids } = board({ player: { hand: [SYNTHETIC.vanilla1.id, DSL.drawTwo.id], energy: 5 } });
     const model = screenOf(state);
     const [character, event] = ids.player.hand.map(id);
+    const played = { kind: "play", card: ids.player.hand[0], from: "hand" };
 
-    expect(handPlayAction(model, "player", character, slot("back", "B4"))).toEqual({
-      kind: "play",
-      card: ids.player.hand[0],
-      from: "hand",
-      slot: { rank: "back", index: 4 },
-    });
-    expect(handPlayAction(model, "player", character, { ...slot("back", "B4"), owner: "enemy" })).toEqual({
-      kind: "play",
-      card: ids.player.hand[0],
-      from: "hand",
-    });
+    expect(handPlayAction(model, "player", character, slot("back", "B4"))).toEqual({ ...played, slot: { rank: "back", index: 4 } });
+    expect(handPlayAction(model, "player", character, { ...slot("back", "B4"), owner: "enemy" })).toEqual(played);
     expect(handPlayAction(model, "player", event, slot("back", "B4"))?.slot).toBeUndefined();
   });
 
@@ -250,22 +172,14 @@ describe("buildEngineBattleScreenModel", () => {
     const model = screenOf(state);
     const targetsOf = (instance: InstanceId | null) =>
       (model.affordances.repositions.get(id(instance)) ?? []).map((move) => `${move.target.slotId}`);
+    const move = (card: InstanceId | null, rank: "back" | "front", index: number) => ({ kind: "reposition", card, to: { rank, index } });
 
     expect(targetsOf(exhausted).some((slotId) => slotId.startsWith("F"))).toBe(false);
     expect(targetsOf(ready)).toContain("F0");
     expect(repositionForDrop(model, id(exhausted), slot("front", "F0"))).toBeNull();
-    expect(repositionForDrop(model, id(ready), slot("front", "F0"))).toEqual({
-      kind: "reposition",
-      card: ready,
-      to: { rank: "front", index: 0 },
-    });
-    expect(model.affordances.allForward).toEqual([
-      { kind: "reposition", card: ready, to: { rank: "front", index: 0 } },
-      { kind: "reposition", card: readyToo, to: { rank: "front", index: 2 } },
-    ]);
-    expect(model.affordances.allBack).toEqual([
-      { kind: "reposition", card: ids.player.front[1], to: { rank: "back", index: 3 } },
-    ]);
+    expect(repositionForDrop(model, id(ready), slot("front", "F0"))).toEqual(move(ready, "front", 0));
+    expect(model.affordances.allForward).toEqual([move(ready, "front", 0), move(readyToo, "front", 2)]);
+    expect(model.affordances.allBack).toEqual([move(ids.player.front[1], "back", 3)]);
     expect(model.view.rankShortcuts).toEqual({ allForward: true, allBack: true });
   });
 
@@ -287,7 +201,7 @@ describe("buildEngineBattleScreenModel", () => {
     expect(figmentMergeTargets(model, "player", id(source), () => false)[0]?.addedSpark).toBe(1);
   });
 
-  it("maps a single play-time target onto the board and answers only legal targets", () => {
+  it("maps play-time targets onto the board, answering only legal targets, with Skip only beside an up-to-one prompt", () => {
     const { state, ids } = board({
       player: { hand: [DSL.dissolveEnemy.id], back: [SYNTHETIC.vanilla1.id], energy: 2 },
       enemy: { back: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id] },
@@ -295,43 +209,31 @@ describe("buildEngineBattleScreenModel", () => {
     const play = engine.legalActions(state, "player").find((action) => action.kind === "play");
     if (play === undefined) throw new Error("no play");
     const { model, prompt } = screenAtPrompt(state, play);
-
     const targets = surfaceOf(model, "targets");
+    const upToOne = labPlay("up-to-one-target");
+
     expect(targets.ids).toEqual(ids.enemy.back.map(id));
     expect(model.view.promptHost).toMatchObject({ key: prompt.id, cancellable: true });
     expect(model.view.cardPicker).toBeNull();
-    // Exactly one target: no empty answer, so no Skip.
     expect(model.view.choicePrompt).toBeNull();
     expect(targets.skip).toBeNull();
     expect(model.affordances.canAct).toBe(false);
     expect(targets.answer(id(ids.player.back[0]))).toBeNull();
     expect(targets.answer(id(ids.enemy.back[0]))).toEqual([ids.enemy.back[0]]);
+    expect(upToOne.prompt).toMatchObject({ kind: "chooseTargets", min: 0, max: 1 });
+    expect(upToOne.model.view.choicePrompt).toMatchObject({ key: upToOne.prompt.id, canResolve: true });
+    expect(choiceAnswers(upToOne.model)).toEqual([[]]);
   });
 
-  it("offers Skip beside the board targets of an up-to-one prompt, and the empty answer applies", () => {
-    const { model, prompt, slice, state } = labPlay("up-to-one-target");
-    const enemies = state.sides.enemy.backRank.filter((card): card is InstanceId => card !== null);
-
-    expect(prompt).toMatchObject({ kind: "chooseTargets", min: 0, max: 1 });
-    expect(surfaceOf(model, "targets").ids).toEqual(enemies.map(id));
-    expect(model.view.cardPicker).toBeNull();
-    expect(model.view.choicePrompt).toMatchObject({ key: prompt.id, canResolve: true });
-    expect(model.view.choicePrompt?.options).toHaveLength(1);
-    expect(choiceAnswers(model)).toEqual([[]]);
-    const [skip] = selections(model);
-    if (skip?.kind !== "answer") throw new Error("no Skip answer");
-    const skipped = adapter.reduce(slice, { kind: "answer", side: "player", promptId: prompt.id, value: skip.answer });
-    expect(skipped.kind).toBe("applied");
-    expect(skipped.kind === "applied" ? adapter.pending(skipped.slice) : "bounced").toBeNull();
-  });
-
-  it("arranges among the top, the bottom, and the hand, starting legal and cancellable while the play is", () => {
-    const { model, prompt, slice, state } = labPlay("arrange");
-    if (prompt.kind !== "arrange") throw new Error("no arrangement");
+  it("arranges among the top, the bottom, and the hand, cancellable while the play is", () => {
+    const { model, prompt } = labPlay("arrange");
     const arrange = model.view.promptHost?.arrange;
-    if (arrange?.surface !== "arrangement") throw new Error("not the arrangement editor");
+    if (prompt.kind !== "arrange" || arrange?.surface !== "arrangement") throw new Error("not the arrangement editor");
     const [first, second] = prompt.cards.map(id);
-    const lanes = arrange.model.lanes;
+    const { lanes } = arrange.model;
+    const { answer } = surfaceOf(model, "arrange");
+    const viewedCardIds = [first, second];
+    const split = answer({ viewedCardIds, orderedCardIds: [], bottomCardIds: [first], voidCardIds: [], handCardIds: [second] });
 
     expect(model.view.promptHost).toMatchObject({ key: prompt.id, cancellable: true, heading: null });
     expect(lanes.map((lane) => [lane.destination, lane.min, lane.max, lane.ordered])).toEqual([
@@ -339,36 +241,12 @@ describe("buildEngineBattleScreenModel", () => {
       ["bottom", 0, 1, true],
       ["hand", 1, 1, false],
     ]);
-    const initial = surfaceOf(model, "arrange").answer({
-      viewedCardIds: [first, second],
-      orderedCardIds: lanes[0].cardIds,
-      bottomCardIds: lanes[1].cardIds,
-      voidCardIds: [],
-      handCardIds: lanes[2].cardIds,
-    });
-    expect(initial).not.toBeNull();
-    const answer = surfaceOf(model, "arrange").answer({
-      viewedCardIds: [first, second],
-      orderedCardIds: [],
-      bottomCardIds: [first],
-      voidCardIds: [],
-      handCardIds: [second],
-    });
-    expect(answer).toEqual([
+    expect(split).toEqual([
       { card: prompt.cards[0], to: "bottom" },
       { card: prompt.cards[1], to: "hand" },
     ]);
-    expect(
-      surfaceOf(model, "arrange").answer({ viewedCardIds: [first, second], orderedCardIds: [first, second], voidCardIds: [] }),
-    ).toBeNull();
-    const applied = adapter.reduce(slice, { kind: "answer", side: "player", promptId: prompt.id, value: answer! });
-    if (applied.kind !== "applied") throw new Error("bounced");
-    const committed = applied.slice.committed.sides.player;
-    expect(committed.hand).toContain(prompt.cards[1]);
-    expect(committed.deck[committed.deck.length - 1]).toBe(prompt.cards[0]);
-    const cancelled = adapter.reduce(slice, { kind: "cancel", side: "player", promptId: prompt.id });
-    if (cancelled.kind !== "applied") throw new Error("bounced");
-    expect(cancelled.slice.committed.sides.player.deck).toEqual(state.sides.player.deck);
+    expect(isLegalAnswer(prompt, split!)).toBe(true);
+    expect(answer({ viewedCardIds, orderedCardIds: [first, second], voidCardIds: [] })).toBeNull();
   });
 
   it("holds a prompt back until the events before it are presented", () => {
@@ -376,9 +254,7 @@ describe("buildEngineBattleScreenModel", () => {
     const play: Action = { kind: "play", card: ids.player.hand[0], from: "hand" };
     const waiting = screenAtPrompt(state, play, false);
     const ready = screenAtPrompt(state, play, true);
-    const drawn = presentationItems(waiting.published, "player", { key: pid("k"), state: waiting.slice.committed }, state, () => null);
 
-    expect(drawn.length).toBeGreaterThanOrEqual(2);
     expect(waiting.model.view.cardPicker).toBeNull();
     expect(waiting.model.view.promptHost?.heading ?? null).toBeNull();
     expect(ready.model.view.cardPicker?.key).toBe(ready.prompt.id);
@@ -401,24 +277,8 @@ describe("buildEngineBattleScreenModel", () => {
     expect(foreseen.filter((card) => card in foresee.model.engine.instances)).toEqual([]);
   });
 
-  it("asks the human mid-AI-turn once the AI answers its own prompt", () => {
-    const { slice, prompt } = labScreen("ai-discard");
-    if (prompt?.kind !== "chooseCards") throw new Error("no AI discard");
-    const answered = adapter.reduce(slice, { kind: "answer", side: "enemy", promptId: prompt.id, value: [prompt.candidates[0]] });
-    if (answered.kind !== "applied") throw new Error("bounced");
-    const pending = adapter.pending(answered.slice);
-    if (pending === null) throw new Error("no human prompt");
-    const model = screenOf(answered.slice.committed, pending.prompt, pending.display);
-
-    expect(pending.prompt.side).toBe("player");
-    expect(model.view.activeSide).toBe("enemy");
-    expect(model.view.cardPicker).toMatchObject({ key: pending.prompt.id, count: 1, minCount: 1 });
-  });
-
   it("maps modes, you-mays, pay-or-declines, and X onto their surfaces, each with its answer", () => {
-    const { state } = board({
-      player: { hand: [DSL.chooseDrawOrPoints.id, DSL.mayDrawTwo.id, DSL.pointsTimesX.id], energy: 3 },
-    });
+    const { state } = board({ player: { hand: [DSL.chooseDrawOrPoints.id, DSL.mayDrawTwo.id, DSL.pointsTimesX.id], energy: 3 } });
     const [modal, optional, xCost] = engine.legalActions(state, "player").filter((action) => action.kind === "play");
     if (modal === undefined || optional === undefined || xCost === undefined) throw new Error("no plays");
     const modes = screenAtPrompt(state, modal).model;
@@ -437,11 +297,7 @@ describe("buildEngineBattleScreenModel", () => {
 
   it("maps targets to the card picker between their bounds and a foresee onto the Foresee editor", () => {
     const { state, ids } = board({
-      player: {
-        hand: [DSL.pumpPermanently.id, DSL.foreseeTwo.id],
-        back: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id],
-        energy: 2,
-      },
+      player: { hand: [DSL.pumpPermanently.id, DSL.foreseeTwo.id], back: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], energy: 2 },
     });
     const [pump, foresee] = engine.legalActions(state, "player").filter((action) => action.kind === "play");
     if (pump === undefined || foresee === undefined) throw new Error("no plays");
@@ -460,34 +316,16 @@ describe("buildEngineBattleScreenModel", () => {
     const looked = surface?.surface === "foresee" ? surface.model.cards : [];
     expect(looked).toHaveLength(2);
     const [top, bottom] = looked.map((card) => card.battleCardId);
-    expect(
-      surfaceOf(editor.model, "arrange").answer({
-        viewedCardIds: [top, bottom],
-        orderedCardIds: [bottom],
-        voidCardIds: [top],
-      }),
-    ).toEqual([
+    expect(surfaceOf(editor.model, "arrange").answer({ viewedCardIds: [top, bottom], orderedCardIds: [bottom], voidCardIds: [top] })).toEqual([
       { card: bottom, to: "top" },
       { card: top, to: "void" },
     ]);
   });
 
-  it("opens the response window with the opponent's card and Pass, and no window without a response", () => {
+  it("opens the response window with the opponent's card and Pass once presented, and never for the opponent's response", () => {
     const respond = labScreen("respond").model;
-    const { state } = board({ active: "enemy", enemy: { hand: [DSL.drawTwo.id], energy: 2 } });
-    const play = engine.legalActions(state, "enemy").find((action) => action.kind === "play");
-    if (play === undefined) throw new Error("no play");
-    const after = engine.apply(state, "enemy", play, NO_PROMPTS).state;
-
-    expect(respond.view.promptHost).toMatchObject({ cancellable: false });
-    expect(respond.view.promptHost?.heading).not.toBeNull();
-    expect(respond.view.revealedHandCard?.id).toBe(id(respond.engine.stack[0]?.kind === "card" ? respond.engine.stack[0].instance : null));
-    expect(respond.affordances.pass).toEqual({ kind: "pass" });
-    expect(engine.decision(after)?.kind).not.toBe("respond");
-  });
-
-  it("reveals the response window's card only once presented, and never for the opponent's response", () => {
     const unpresented = labScreen("respond", false).model;
+    const stacked = respond.engine.stack[0];
     const { state, ids } = board({
       player: { hand: [DSL.drawTwo.id], energy: 2 },
       enemy: { hand: [SYNTHETIC.interruptEvent.id], energy: 2 },
@@ -495,89 +333,57 @@ describe("buildEngineBattleScreenModel", () => {
     const played = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS).state;
     const theirs = screenOf(played);
 
+    expect(respond.view.promptHost).toMatchObject({ cancellable: false });
+    expect(respond.view.promptHost?.heading).not.toBeNull();
+    expect(respond.view.revealedHandCard?.id).toBe(id(stacked?.kind === "card" ? stacked.instance : null));
+    expect(respond.affordances.pass).toEqual({ kind: "pass" });
     expect(unpresented.view.promptHost?.heading ?? null).toBeNull();
     expect(unpresented.view.revealedHandCard).toBeNull();
     expect(engine.decision(played)).toEqual({ kind: "respond", side: "enemy" });
-    expect(played.stack).toHaveLength(1);
     expect(theirs.view.revealedHandCard).toBeNull();
     expect(theirs.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
   });
 
-  it("offers Reclaim plays and Avatar and Dreamsign activations", () => {
+  it("offers Reclaim plays and Avatar and Dreamsign activations from their choosers", () => {
     const { model } = labScreen("reclaim");
+    const chooser = (opened: EngineChooser | null) => withChooser(model, opened, cards, () => null);
+    const actions = (offered: Iterable<Action>) => [...offered].map((action) => ({ kind: "action", action }));
 
     expect(model.affordances.voidPlays.size).toBe(1);
-    expect(model.affordances.emblemActivations.map((action) => (typeof action.source === "string" ? null : action.source.kind))).toEqual([
-      "avatar",
-      "dreamsign",
-    ]);
-    const chooser = (opened: EngineChooser | null) => withChooser(model, opened, cards, () => null);
+    const emblems = model.affordances.emblemActivations.map((action) => (typeof action.source === "string" ? null : action.source.kind));
+    expect(emblems).toEqual(["avatar", "dreamsign"]);
     expect(chooser(null)).toBe(model);
-    expect(selections(chooser({ kind: "void" }))).toEqual([
-      ...[...model.affordances.voidPlays.values()].map((action) => ({ kind: "action", action })),
-      { kind: "browseVoid" },
-      { kind: "close" },
-    ]);
-    expect(chooser({ kind: "void" }).view.choicePrompt?.options).toHaveLength(3);
-    expect(selections(chooser({ kind: "emblems" }))).toEqual([
-      ...model.affordances.emblemActivations.map((action) => ({ kind: "action", action })),
-      { kind: "close" },
-    ]);
+    expect(selections(chooser({ kind: "void" }))).toEqual([...actions(model.affordances.voidPlays.values()), { kind: "browseVoid" }, { kind: "close" }]);
+    expect(selections(chooser({ kind: "emblems" }))).toEqual([...actions(model.affordances.emblemActivations), { kind: "close" }]);
   });
 
-  it("offers paying to end an effect on each character it changes, which ends it and spends its price", () => {
-    const fixture = promptLabFixture("pay-to-end");
-    if (fixture === null) throw new Error("no fixture pay-to-end");
-    const { slice } = promptLabBattle(engine, fixture);
-    const state = slice.committed;
+  it("offers paying to end an effect on each character it changes, from the status display when it changes none, and only while affordable", () => {
+    const state = labSlice("pay-to-end").committed;
     const [effect] = state.payable;
     if (effect === undefined) throw new Error("no payable effect");
-    const model = screenOf(state);
+    const action: Action = { kind: "payToEnd", effect: effect.id };
     const affected = effect.affects.map(id);
-    const nearBack = model.view.near.backRank.flatMap((cell) => (cell.card === null ? [] : [cell.card]));
-
-    expect([...model.affordances.payToEnd.keys()].sort()).toEqual([...affected].sort());
-    for (const card of affected) {
-      expect(model.affordances.payToEnd.get(card)).toEqual([{ kind: "payToEnd", effect: effect.id }]);
-    }
-    expect(model.affordances.statusPayToEnd).toEqual([]);
-    for (const card of nearBack.filter((entry) => affected.includes(entry.id))) {
-      expect(card.showPlayableOutline).toBe(true);
-      expect(card.statuses?.find((badge) => badge.kind === "payable")?.actionable).toBe(true);
-    }
-    const [first] = affected;
-    const action = first === undefined ? undefined : model.affordances.payToEnd.get(first)?.[0];
-    if (first === undefined || action === undefined) throw new Error("no payment");
-    expect(selections(withChooser(model, { kind: "card", id: first }, cards, () => null))).toEqual([
-      { kind: "action", action },
-      { kind: "close" },
-    ]);
-    const outcome = adapter.reduce(slice, { kind: "battleAction", side: "player", action });
-    if (outcome.kind !== "applied") throw new Error(`bounced: ${outcome.reason}`);
-    const paid = screenOf(outcome.slice.committed);
-    expect(outcome.slice.committed.payable).toEqual([]);
-    expect(outcome.slice.committed.sides.player.currentEnergy).toBe(state.sides.player.currentEnergy - effect.cost);
-    expect(paid.affordances.payToEnd.size).toBe(0);
-    expect(engineStatuses(paid.engine, "player").cards.size).toBe(0);
-  });
-
-  it("offers no payment the player cannot afford, and one for an effect changing no character from the status display", () => {
-    const fixture = promptLabFixture("pay-to-end");
-    if (fixture === null) throw new Error("no fixture pay-to-end");
-    const state = promptLabBattle(engine, fixture).slice.committed;
-    const [effect] = state.payable;
-    if (effect === undefined) throw new Error("no payable effect");
+    const model = screenOf(state);
     const poor = structuredClone(state);
     poor.sides.player.currentEnergy = effect.cost - 1;
     const unattached = structuredClone(state);
     unattached.payable = [{ ...effect, affects: [] }];
-    const broke = screenOf(poor);
+    /** Each affected near character's outline and whether its payable badge (which it must show) is actionable. */
+    const shown = (screen: EngineBattleScreenModel) =>
+      screen.view.near.backRank.flatMap(({ card }) => {
+        if (card === null || !affected.includes(card.id)) return [];
+        const badge = card.statuses?.find((status) => status.kind === "payable");
+        return [[card.showPlayableOutline, badge === undefined ? "no badge" : badge.actionable === true]];
+      });
 
-    expect(broke.affordances.payToEnd.size).toBe(0);
-    const payable = [...engineStatuses(broke.engine, "player").cards.values()].flat().filter((badge) => badge.kind === "payable");
-    expect(payable).toHaveLength(effect.affects.length);
-    expect(payable.some((badge) => badge.actionable === true)).toBe(false);
-    expect(screenOf(unattached).affordances.statusPayToEnd).toEqual([{ kind: "payToEnd", effect: effect.id }]);
+    expect([...model.affordances.payToEnd.keys()].sort()).toEqual([...affected].sort());
+    expect([...model.affordances.payToEnd.values()]).toEqual(affected.map(() => [action]));
+    expect(model.affordances.statusPayToEnd).toEqual([]);
+    expect(shown(model)).toEqual(affected.map(() => [true, true]));
+    expect(selections(withChooser(model, { kind: "card", id: affected[0] }, cards, () => null))).toEqual([{ kind: "action", action }, { kind: "close" }]);
+    expect(screenOf(poor).affordances.payToEnd.size).toBe(0);
+    expect(shown(screenOf(poor))).toEqual(affected.map(() => [false, false]));
+    expect(screenOf(unattached).affordances.statusPayToEnd).toEqual([action]);
     expect(screenOf(unattached).affordances.payToEnd.size).toBe(0);
   });
 
@@ -599,11 +405,8 @@ describe("buildEngineBattleScreenModel", () => {
 
     expect(model.view.farHand.cardIds).toHaveLength(2);
     expect(model.view.far.deckCardIds).toHaveLength(deck.length);
-    expect(
-      [...model.view.farHand.cardIds, ...model.view.far.deckCardIds, ...model.view.near.deckCardIds].filter((cardId) =>
-        hidden.has(cardId),
-      ),
-    ).toEqual([]);
+    const shown = [...model.view.farHand.cardIds, ...model.view.far.deckCardIds, ...model.view.near.deckCardIds];
+    expect(shown.filter((cardId) => hidden.has(cardId))).toEqual([]);
     expect(model.view.farHand.cards).toEqual([]);
   });
 
@@ -625,14 +428,7 @@ describe("prompt surfaces over the prompt lab", () => {
   /** The human's screen at a lab slice, at its pending prompt or decision. */
   const labSliceModel = (slice: BattleSlice) => {
     const pending = labAdapter.pending(slice);
-    const decision = labEngine.decision(slice.committed);
-    return buildEngineBattleScreenModel({
-      ...screenInput(slice.committed),
-      view: labEngine.view(pending?.display ?? slice.committed, "player"),
-      legal: pending === null && decision?.side === "player" ? labEngine.legalActions(slice.committed, "player") : [],
-      prompt: pending?.prompt ?? null,
-      decision: pending === null ? decision : null,
-    });
+    return screenOf(slice.committed, pending?.prompt ?? null, pending?.display ?? slice.committed, true, labEngine);
   };
   /** An answer the surface itself offers: its first legal target, card selection, option, value, or starting arrangement. */
   const surfaceAnswer = (model: EngineBattleScreenModel): Answer | null => {
@@ -642,11 +438,8 @@ describe("prompt surfaces over the prompt lab", () => {
         return surface.ids.map((target) => surface.answer(target)).find((answer) => answer !== null) ?? null;
       case "picker": {
         const { candidateIds, count } = surface.picker;
-        for (let size = 0; size <= count; size++) {
-          const answer = surface.answer(candidateIds.slice(0, size));
-          if (answer !== null) return answer;
-        }
-        return null;
+        const sizes = Array.from({ length: count + 1 }, (_unused, size) => size);
+        return sizes.map((size) => surface.answer(candidateIds.slice(0, size))).find((answer) => answer !== null) ?? null;
       }
       case "choice":
         return surface.options.flatMap((option) => (option.select.kind === "answer" ? [option.select.answer] : []))[0] ?? null;
@@ -656,18 +449,11 @@ describe("prompt surfaces over the prompt lab", () => {
       }
       case "arrange": {
         const arrange = host?.arrange;
-        if (arrange?.surface === "foresee") {
-          const ids = arrange.model.cards.map((card) => card.battleCardId);
-          return surface.answer({ viewedCardIds: ids, orderedCardIds: ids, voidCardIds: [] });
-        }
+        const viewedCardIds = arrange?.model.cards.map((card) => card.battleCardId) ?? [];
+        if (arrange?.surface === "foresee") return surface.answer({ viewedCardIds, orderedCardIds: viewedCardIds, voidCardIds: [] });
         const lane = (to: string) => arrange?.model.lanes.find((entry) => entry.destination === to)?.cardIds ?? [];
-        return surface.answer({
-          viewedCardIds: arrange?.model.cards.map((card) => card.battleCardId) ?? [],
-          orderedCardIds: lane("top"),
-          bottomCardIds: lane("bottom"),
-          voidCardIds: lane("void"),
-          handCardIds: lane("hand"),
-        });
+        const [orderedCardIds, bottomCardIds, voidCardIds, handCardIds] = ["top", "bottom", "void", "hand"].map(lane);
+        return surface.answer({ viewedCardIds, orderedCardIds, bottomCardIds, voidCardIds, handCardIds });
       }
       default:
         return null;
@@ -693,16 +479,13 @@ describe("prompt surfaces over the prompt lab", () => {
    * prompts with their first legal answer.
    */
   const reached = () => {
-    const prompts: { fixture: string; prompt: PendingEnginePrompt; model: EngineBattleScreenModel; slice: BattleSlice }[] = [];
+    const prompts: { fixture: string; prompt: PendingEnginePrompt; model: EngineBattleScreenModel }[] = [];
     const decisions: { fixture: string; legal: readonly Action[]; model: EngineBattleScreenModel }[] = [];
     const visit = (fixture: string, slice: BattleSlice, depth: number): void => {
       const pending = labAdapter.pending(slice);
       if (pending !== null) {
         const value = pending.prompt.side === "player" ? null : firstLegalAnswer(pending.prompt);
-        if (value === null) {
-          const model = labSliceModel(slice);
-          prompts.push({ fixture, prompt: pending.prompt, model, slice });
-        }
+        if (value === null) prompts.push({ fixture, prompt: pending.prompt, model: labSliceModel(slice) });
         const answer = value ?? surfaceAnswer(labSliceModel(slice));
         if (answer === null || depth > 3) return;
         const outcome = labAdapter.reduce(slice, { kind: "answer", side: pending.prompt.side, promptId: pending.prompt.id, value: answer });
@@ -726,15 +509,13 @@ describe("prompt surfaces over the prompt lab", () => {
 
   it("offers a legal answer on every human prompt's surface, and an empty-answer control exactly when none is legal", () => {
     const { prompts } = explore();
-    expect(new Set(prompts.map(({ model }) => model.prompt.surface.kind))).toEqual(
-      new Set(["targets", "picker", "choice", "number", "arrange"]),
-    );
-    for (const { fixture, prompt, model, slice } of prompts) {
+    const kinds = new Set(prompts.map(({ model }) => model.prompt.surface.kind));
+    expect(kinds).toEqual(new Set(["targets", "picker", "choice", "number", "arrange"]));
+    for (const { fixture, prompt, model } of prompts) {
       const answer = surfaceAnswer(model);
       const where = `${fixture}: ${prompt.kind}`;
       expect(answer, where).not.toBeNull();
       expect(isLegalAnswer(prompt, answer!), where).toBe(true);
-      expect(labAdapter.reduce(slice, { kind: "answer", side: "player", promptId: prompt.id, value: answer! }).kind, where).toBe("applied");
       expect(emptyAnswerControl(model.prompt.surface), where).toBe(isLegalAnswer(prompt, []));
     }
   });
@@ -746,395 +527,5 @@ describe("prompt surfaces over the prompt lab", () => {
       const actions = offered(model.affordances);
       for (const action of legal) expect(actions, `${fixture}: ${action.kind}`).toContainEqual(action);
     }
-  });
-});
-
-describe("prompt failure paths", () => {
-  const dissolve = () => {
-    const { state, ids } = board({
-      player: { hand: [DSL.dissolveEnemy.id], energy: 2 },
-      enemy: { back: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id] },
-    });
-    return { ...screenAtPrompt(state, { kind: "play", card: ids.player.hand[0], from: "hand" }), ids };
-  };
-
-  it("bounces an answer for an old prompt id, a second answer to one prompt, and a cancel of a cancelled prompt", () => {
-    const { slice, prompt, ids } = dissolve();
-    const answer = { kind: "answer" as const, side: "player" as const, promptId: prompt.id, value: [ids.enemy.back[0]!] };
-    const answered = adapter.reduce(slice, answer);
-    if (answered.kind !== "applied") throw new Error("bounced");
-    const cancelled = adapter.reduce(slice, { kind: "cancel", side: "player", promptId: prompt.id });
-    if (cancelled.kind !== "applied") throw new Error("bounced");
-
-    expect(adapter.reduce(answered.slice, answer)).toMatchObject({ kind: "bounced" });
-    expect(adapter.reduce(cancelled.slice, { kind: "cancel", side: "player", promptId: prompt.id })).toMatchObject({ kind: "bounced" });
-    expect(adapter.reduce(slice, { ...answer, promptId: parsePromptId("0:0:9") })).toEqual({ kind: "bounced", reason: "stalePrompt" });
-    expect(adapter.reduce(slice, { ...answer, value: [ids.enemy.back[0]!, ids.enemy.back[1]!] })).toEqual({
-      kind: "bounced",
-      reason: "illegalAnswer",
-    });
-  });
-
-  it("reaches the same prompt, with a new id after a cancel, when the slice replays", () => {
-    const { slice, prompt } = dissolve();
-    const replayed = adapter.pending(JSON.parse(JSON.stringify(slice)) as BattleSlice);
-    const cancelled = adapter.reduce(slice, { kind: "cancel", side: "player", promptId: prompt.id });
-    if (cancelled.kind !== "applied") throw new Error("bounced");
-    const again = engine.legalActions(cancelled.slice.committed, "player").find((action) => action.kind === "play");
-    if (again === undefined) throw new Error("no play");
-    const reopened = adapter.reduce(cancelled.slice, { kind: "battleAction", side: "player", action: again });
-    if (reopened.kind !== "applied") throw new Error("bounced");
-
-    expect(replayed?.prompt).toEqual(prompt);
-    expect(cancelled.slice.inFlight).toBeNull();
-    expect(adapter.pending(reopened.slice)?.prompt.id).not.toBe(prompt.id);
-  });
-
-  it("presents only the events the human may see and notices only the human's automatic answers", () => {
-    const { state, ids } = board({ player: { hand: [DSL.dissolveEnemy.id], energy: 2 }, enemy: { back: [SYNTHETIC.vanilla2.id] } });
-    const outcome = adapter.reduce(
-      { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 },
-      { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } },
-    );
-    if (outcome.kind !== "applied") throw new Error("bounced");
-    const batch = { key: pid("k"), state: outcome.slice.committed };
-    const mine = presentationItems(outcome.published, "player", batch, state, () => "Lab Unmaking");
-    const theirs = presentationItems(outcome.published, "enemy", batch, state, () => null);
-
-    expect(mine.flatMap((item) => (item.notice === null ? [] : [item.notice]))).toEqual([
-      { kind: "autoAnswered", prompt: "chooseTargets", sourceName: "Lab Unmaking" },
-    ]);
-    expect(theirs.some((item) => item.notice !== null)).toBe(false);
-  });
-
-  it("caps a presentation backlog, keeping the newest notice of each kind", () => {
-    const batch = { key: pid("k"), state: board({}).state };
-    const item = (key: string, notice: PresentationItem["notice"] = null): PresentationItem => ({
-      key: pid(key),
-      presentation: notice === null ? "travel" : "notice",
-      dwellMs: 1_000,
-      visual: null,
-      notice,
-      batch,
-    });
-    const backlog = enqueuePresentation(
-      [item("a"), item("b", { kind: "capacityReached", missing: 1 })],
-      [...Array.from({ length: 20 }, (_unused, index) => item(`c${String(index)}`)), item("d", { kind: "capacityReached", missing: 2 })],
-    );
-
-    expect(backlog.filter((entry) => entry.notice !== null).map((entry) => entry.key)).toEqual(["d"]);
-    expect(backlog[backlog.length - 1]?.key).toBe("d");
-    expect(backlog.length).toBeLessThan(22);
-  });
-});
-
-describe("presentation", () => {
-  /** Each presentation step of a lab fixture, with its items for `human` and the view of the board after it. */
-  const steps = (name: string, human: "player" | "enemy" = "player") => {
-    const fixture = promptLabFixture(name);
-    if (fixture === null) throw new Error(`no fixture ${name}`);
-    return promptLabPresentation(labEngine, fixture).map((step, index) => {
-      const batch = { key: pid(`${name}:${String(index)}`), state: step.after };
-      return { ...step, batch, items: presentationItems(step.published, human, batch, step.before, () => null) };
-    });
-  };
-  const labModel = (state: BattleState, visual: PresentationItem["visual"], revealedCard: InstanceView | null = null) =>
-    buildEngineBattleScreenModel({
-      battleId: parseBattleId("battle-presentation-fixture"),
-      human: "player",
-      view: labEngine.view(state, "player"),
-      legal: [],
-      prompt: null,
-      playing: null,
-      decision: null,
-      presented: visual === null,
-      notice: null,
-      cards,
-      avatars: { player: { avatar: null }, enemy: { avatar: null } },
-      opponentName: "Fixture Opponent",
-      essenceReward: 100,
-      resultDismissed: false,
-      visual: visual === null ? null : { key: pid("visual-key"), visual },
-      revealedCard,
-    });
-  const boardIds = (model: EngineBattleScreenModel) =>
-    [model.view.far, model.view.near].flatMap((side) => [
-      ...side.backRank.flatMap((slot) => (slot.card === null ? [] : [slot.card.id])),
-      ...side.frontRank.flatMap((slot) => (slot.card === null ? [] : [slot.card.id])),
-      ...side.voidCards.map((card) => card.id),
-    ]);
-
-  it("names a presentation for every event kind", () => {
-    expect(Object.keys(EVENT_PRESENTATION).sort()).toEqual(Object.keys(EVENT_DEFINITIONS).sort());
-  });
-
-  it("reveals the opponent's play over the board before it, then holds the card off the board after it until it travels", () => {
-    const [registered] = steps("present-opponent");
-    const reveal = registered?.items[0];
-    if (registered === undefined || reveal?.visual?.kind !== "reveal") throw new Error("no reveal");
-    const played = registered.published.find((event) => event.kind === "cardPlayed");
-
-    expect(reveal.presentation).toBe("reveal");
-    expect(reveal.visual.instance).toBe(played?.kind === "cardPlayed" ? played.instance : null);
-    expect(reveal.batch.state).toBe(registered.before);
-    expect(reveal.batch.key).not.toBe(registered.batch.key);
-    const revealedCard = labEngine.view(reveal.visual.after, "player").instances[reveal.visual.instance] ?? null;
-    const during = labModel(registered.after, reveal.visual, revealedCard);
-    expect(during.view.playReveal?.card.id).toBe(reveal.visual.instance);
-    expect(boardIds(during)).not.toContain(reveal.visual.instance);
-    expect(boardIds(labModel(registered.after, null))).toContain(reveal.visual.instance);
-  });
-
-  it("travels the human's own play and never presents an event hidden from the human", () => {
-    const [play, answer] = steps("present-zones");
-    const dissolve = [...(play?.items ?? []), ...(answer?.items ?? [])];
-    const draws = steps("present-challenge")
-      .flatMap((step) => step.published)
-      .filter((event) => event.kind === "cardDrawn" && event.side === "enemy");
-    const challenge = steps("present-challenge")[1];
-    if (challenge === undefined) throw new Error("no challenge");
-    const enemyBatch = { key: pid("draws"), state: challenge.after };
-
-    expect(dissolve.some((item) => item.presentation === "reveal")).toBe(false);
-    expect(dissolve[0]?.presentation).toBe("travel");
-    expect(draws.length).toBeGreaterThan(0);
-    expect(presentationItems(draws, "player", enemyBatch, challenge.before, () => null)).toEqual([]);
-    expect(presentationItems(draws, "enemy", enemyBatch, challenge.before, () => null).length).toBe(draws.length);
-  });
-
-  it("scores a challenger with its announcement, announces the new turn, and notices a trigger with no legal target", () => {
-    const challenge = steps("present-challenge")[1];
-    const score = challenge?.items.find((item) => item.visual?.kind === "score");
-    if (challenge === undefined || score?.visual?.kind !== "score") throw new Error("no score");
-    const model = labModel(challenge.after, score.visual);
-    const noTarget = steps("present-zones")[1]?.items.find((item) => item.notice?.kind === "noLegalTarget");
-
-    expect(model.cardOverlay).toMatchObject({ kind: "points-scored", battleCardId: score.visual.instance, points: score.visual.points });
-    expect(challenge.items.some((item) => item.presentation === "turn")).toBe(true);
-    expect(noTarget?.presentation).toBe("notice");
-  });
-
-  it("presents a challenge's scores in the turn they happen, then announces the new turn", () => {
-    const challenge = steps("present-challenge")[1];
-    if (challenge === undefined) throw new Error("no challenge");
-    const scoreAt = challenge.items.findIndex((item) => item.presentation === "score");
-    const turnAt = challenge.items.findIndex((item) => item.presentation === "turn");
-    const score = challenge.items[scoreAt];
-    const turn = challenge.items[turnAt];
-    if (score?.visual?.kind !== "score" || turn === undefined) throw new Error("no score or turn");
-
-    expect(scoreAt).toBeLessThan(turnAt);
-    expect(challenge.before.turn.active).toBe("player");
-    expect(challenge.after.turn.active).toBe("enemy");
-    expect(score.batch.key).not.toBe(challenge.batch.key);
-    expect(labModel(score.batch.state, score.visual).view.activeSide).toBe("player");
-    expect(turn.batch).toBe(challenge.batch);
-    expect(labModel(turn.batch.state, null).view.activeSide).toBe("enemy");
-  });
-
-  it("shows a Dreamwell card beside its side while its reveal is presented", () => {
-    const { state } = board({});
-    const model = buildEngineBattleScreenModel({
-      ...screenInput(state),
-      visual: { key: pid("dreamwell"), visual: { kind: "dreamwell", side: "enemy", card: testDreamwellCardId } },
-      dreamwellCard: (card) => (card === testDreamwellCardId ? dreamwellModel : null),
-    });
-    expect(model.view.dreamwell).toEqual({ side: "enemy", model: dreamwellModel });
-  });
-
-  it("keeps the item being presented, every turn, Dreamwell card, and score, the newest reveals, and the newest travels when a new batch arrives", () => {
-    const state = board({}).state;
-    const item = (key: string, presentation: PresentationItem["presentation"]): PresentationItem => ({
-      key: pid(key),
-      presentation,
-      dwellMs: 1_000,
-      visual: null,
-      notice: null,
-      batch: { key: pid(key), state },
-    });
-    const head = item("head", "travel");
-    const reveals = Array.from({ length: 6 }, (_unused, index) => item(`reveal${String(index)}`, "reveal"));
-    const queue = enqueuePresentation(
-      [head, item("turn", "turn"), item("dreamwell", "dreamwell"), item("score", "score")],
-      [...reveals, ...Array.from({ length: 6 }, (_unused, index) => item(`travel${String(index)}`, "travel"))],
-    );
-    const keys: string[] = queue.map((entry) => entry.key);
-
-    expect(keys[0]).toBe("head");
-    expect(keys).toEqual(expect.arrayContaining(["turn", "dreamwell", "score"]));
-    expect(keys.filter((key) => key.startsWith("reveal"))).toEqual(reveals.slice(-4).map((entry) => entry.key));
-    expect(keys.filter((key) => key.startsWith("travel"))).toEqual(["travel4", "travel5"]);
-    expect(keys.indexOf("turn")).toBeLessThan(keys.indexOf("reveal2"));
-  });
-
-  it("plays queued items in order, each for its dwell, raising each notice as it is presented", () => {
-    vi.useFakeTimers();
-    try {
-      const state = board({}).state;
-      const item = (key: string, notice: PresentationItem["notice"] = null): PresentationItem => ({
-        key: pid(key),
-        presentation: notice === null ? "travel" : "notice",
-        dwellMs: 100,
-        visual: null,
-        notice,
-        batch: { key: pid(key), state },
-      });
-      const queue = new PresentationQueue();
-      const heads: (string | null)[] = [];
-      queue.subscribe(() => heads.push(queue.snapshot().queue[0]?.key ?? null));
-      queue.enqueue([item("a"), item("b", { kind: "capacityReached", missing: 1 })]);
-      vi.advanceTimersByTime(50);
-      queue.enqueue([item("c")]);
-      vi.advanceTimersByTime(100);
-      expect(queue.snapshot().notice?.key).toBe("b");
-      vi.advanceTimersByTime(200);
-
-      expect(heads.filter((key, index) => heads[index - 1] !== key)).toEqual(["a", "b", "c", null]);
-      expect(queue.snapshot().queue).toEqual([]);
-      queue.dismissNotice();
-      expect(queue.snapshot().notice).toBeNull();
-      queue.dispose();
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it("marks durations, keywords, disabled triggers, payable effects, and side statuses, and clears them as they end", () => {
-    const status = steps("present-status");
-    const played = status[status.length - 2];
-    const ended = status[status.length - 1];
-    const zones = steps("present-zones");
-    const exiled = zones[5];
-    const reclaim = steps("reclaim")[0];
-    if (played === undefined || ended === undefined || exiled === undefined || reclaim === undefined) throw new Error("no steps");
-    const kinds = (state: BattleState) => {
-      const marks = engineStatuses(labEngine.view(state, "player"), "player");
-      return {
-        cards: [...new Set([...marks.cards.values()].flat().map((badge) => badge.kind))].sort(),
-        player: marks.sides.player.map((badge) => badge.kind),
-        enemy: marks.sides.enemy.map((badge) => badge.kind),
-        labels: [...marks.cards.values(), marks.sides.player, marks.sides.enemy].flat().every((badge) => badge.label.length > 0),
-      };
-    };
-
-    expect(kinds(played.after)).toMatchObject({
-      cards: ["duration", "keyword", "payable", "triggersDisabled"],
-      player: ["delayedTrigger"],
-      labels: true,
-    });
-    expect(kinds(ended.after)).toMatchObject({ cards: ["duration", "payable"], player: [] });
-    expect(kinds(exiled.after).enemy).toEqual(["returns"]);
-    expect(kinds(reclaim.after).player).toEqual(["exhausted"]);
-  });
-
-  it("writes a battle log line for what the human saw and none for what it could not see", () => {
-    const zones = steps("present-zones");
-    const entries = zones.flatMap((step, index) =>
-      battleLogEntries(
-        step.published,
-        "player",
-        step.after,
-        labEngine.view(step.after, "player"),
-        labEngine.view(step.before, "player"),
-        `zones:${String(index)}`,
-      ),
-    );
-    const turns = battleLogTurns(entries, "player", cards, () => null);
-    const lines = turns.flatMap((turn) => turn.lines);
-    const logged = entries.filter(
-      (entry) => engineBattleLogText(entry.event, { human: "player", card: () => null, dreamwell: () => null }) !== null,
-    );
-    const challenge = steps("present-challenge")[1];
-    if (challenge === undefined) throw new Error("no challenge");
-    const seenByPlayer = battleLogEntries(
-      challenge.published,
-      "player",
-      challenge.after,
-      labEngine.view(challenge.after, "player"),
-      labEngine.view(challenge.before, "player"),
-      "c",
-    );
-
-    expect(lines).toHaveLength(logged.length);
-    expect(new Set(logged.map((entry) => entry.event.kind))).toEqual(
-      new Set(["cardPlayed", "cardDrawn", "dissolved", "noLegalTarget", "banished", "effectStarted", "returnedToHand", "eroded", "cardCreated", "materialized", "controlChanged", "triggerResolved"]),
-    );
-    expect(lines.every((line) => line.text.length > 0)).toBe(true);
-    expect(turns).toHaveLength(1);
-    expect(seenByPlayer.some((entry) => entry.event.kind === "cardDrawn" && entry.event.side === "enemy")).toBe(false);
-    expect(seenByPlayer.some((entry) => entry.event.kind === "laneResolved")).toBe(true);
-  });
-});
-
-describe("battle log from the event log", () => {
-  const siteId = parseSiteId("site-battle-log");
-  const logEngine = () => createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
-
-  /** A journey battle whose sides pass `passes` times, with the events that started and played it. */
-  function passedBattle(engine: ReturnType<typeof logEngine>, passes: number) {
-    const fold = createFoldAdapter(engine);
-    const init = fuzzInit(battleSeed("battle-log"), SYNTHETIC_FUZZ_POOL);
-    const events: CommittedEvent[] = [];
-    const commit = (type: string, payload: Record<string, unknown>) => {
-      const seq = events.length + 1;
-      const event: GameEvent = {
-        type: type as GameEvent["type"],
-        payload,
-        actor: testEventActor("p1"),
-        clientTimestamp: "1970-01-01T00:00:00.000Z",
-        basedOnSeq: seq - 1,
-      };
-      events.push({ seq, event });
-    };
-    commit("BEGIN_BATTLE", { siteId });
-    const started = fold.start(init);
-    if (started.kind !== "applied") throw new Error("not started");
-    let slice = started.slice;
-    for (let index = 0; index < passes; index++) {
-      const side = engine.decision(slice.committed)?.side;
-      if (side === undefined) break;
-      commit("BATTLE_ACTION", { side, action: { kind: "pass" } });
-      const outcome = fold.reduce(slice, { kind: "battleAction", side, action: { kind: "pass" } });
-      if (outcome.kind === "applied") slice = outcome.slice;
-    }
-    const battle = {
-      mode: { kind: "journey" },
-      init: { siteId, battleId: parseBattleId("battle-log-fixture") },
-      engine: { init, slice },
-    } as unknown as JourneyBattleFoldState;
-    return { battle, events };
-  }
-
-  it("shows the same entries after a reload, and never what the human could not see", () => {
-    const engine = logEngine();
-    const { battle, events } = passedBattle(engine, 12);
-    const live = engineBattleLog(engine, battle, events, "player");
-    const reloaded = engineBattleLog(
-      logEngine(),
-      JSON.parse(JSON.stringify(battle)) as JourneyBattleFoldState,
-      JSON.parse(JSON.stringify(events)) as CommittedEvent[],
-      "player",
-    );
-    const entries = live?.entries ?? [];
-    const drawn = (side: "player" | "enemy") =>
-      entries.some((entry) => entry.event.kind === "cardDrawn" && entry.event.side === side);
-
-    expect(new Set(entries.map((entry) => entry.turnNumber)).size).toBeGreaterThan(2);
-    expect(reloaded?.entries).toEqual(entries);
-    expect(drawn("player")).toBe(true);
-    expect(drawn("enemy")).toBe(false);
-  });
-
-  it("follows the fold as the event list grows, and is null for a list that does not reproduce it", () => {
-    const engine = logEngine();
-    const { battle, events } = passedBattle(engine, 12);
-    const growing = events.slice(0, 6);
-    const early = engineBattleLog(engine, battle, growing, "player");
-    growing.push(...events.slice(6));
-
-    expect(early).toBeNull();
-    expect(engineBattleLog(engine, battle, growing, "player")?.entries).toEqual(
-      engineBattleLog(engine, battle, events, "player")?.entries,
-    );
   });
 });

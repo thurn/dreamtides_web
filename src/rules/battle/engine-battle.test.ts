@@ -1,15 +1,14 @@
 // Journey -> engine battle -> reward -> Atlas through the root reducer, on
 // synthetic engine cards: BEGIN_BATTLE starts the engine battle, the engine
 // intents fold over its slice, END_BATTLE hands the result to the journey,
-// and every failure path (engine errors, reloads mid-prompt, stale and
-// invalid intents, a partner's events) leaves a deterministic fold.
+// and every failure path (engine errors, stale and invalid intents, a
+// partner's events, a loaded battle) leaves a deterministic fold. Replaying
+// a battle from the event log is in engine-battle-replay.test.ts.
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { createLocalLog, type LocalLog } from "../../eventlog/local-log";
 import type { EventContext, GameEvent } from "../../eventlog/types";
 import { eventRng } from "../../eventlog/rng";
 import { createEngine, type BattleInit as EngineBattleInit, type Engine } from "../../engine";
-import { createFoldAdapter, type BattleIntent } from "../../engine/fold/slice";
 import type { EngineCardDefinition } from "../../engine/catalog";
 import { energy, event as eventAbility } from "../../engine/dsl/builders";
 import * as primitives from "../../engine/effects/primitives";
@@ -22,7 +21,7 @@ import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { testEventActor, testJourneyMutationSource } from "../../types/test-identities";
 import type { FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
-import { GAME_ENGINE_CONFIG, replayLog } from "../replay/replay";
+import { GAME_ENGINE_CONFIG } from "../replay/replay";
 import {
   AVATAR_ID,
   BATTLE_SITE_ID,
@@ -36,13 +35,7 @@ import {
 } from "../replay/fixture-providers";
 import { validateLoadedState } from "../journey/lifecycle";
 import { registerBattleInitProvider } from "./journey-battle";
-import {
-  pendingEnginePrompt,
-  replayEngineBattle,
-  takeEngineLogRecords,
-  type EngineBattleReplay,
-  type EngineIntentBatch,
-} from "./engine-battle";
+import { pendingEnginePrompt, takeEngineLogRecords } from "./engine-battle";
 import type { PromptId } from "../../types/identifiers";
 import { journeyBattleOf } from "./fold";
 
@@ -356,50 +349,6 @@ describe("journey -> battle -> reward -> Atlas", () => {
   });
 });
 
-describe("reload", () => {
-  const log = () => {
-    const state = begun();
-    const card = firstCard(state);
-    const events = [
-      { type: "START_JOURNEY", payload: { avatarId: AVATAR_ID } },
-      { type: "ENTER_SITE", payload: { siteId: BATTLE_SITE_ID } },
-      { type: "BEGIN_BATTLE", payload: { siteId: BATTLE_SITE_ID } },
-      { type: "BATTLE_ACTION", payload: { side: "player", action: { kind: "play", card, from: "hand" } } },
-    ];
-    return events.map((event, index) => ({
-      seq: index + 1,
-      event: {
-        type: event.type as GameEvent["type"],
-        payload: event.payload,
-        actor: testEventActor("p1"),
-        clientTimestamp: "1970-01-01T00:00:00.000Z",
-        basedOnSeq: index,
-      },
-    }));
-  };
-
-  it("reproduces the fold mid-battle and the same prompt mid-prompt", () => {
-    const events = log();
-    const midBattle = replayLog({ genesis: GENESIS as never, events: events.slice(0, 3) });
-    const reloadedBattle = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(midBattle.finalState));
-    expect(GAME_ENGINE_CONFIG.hash(reloadedBattle)).toBe(midBattle.finalHash);
-
-    const live = replayLog({ genesis: GENESIS as never, events }).finalState;
-    const replayed = replayLog({ genesis: GENESIS as never, events }).finalState;
-    const reloaded = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(live));
-    const pending = pendingEnginePrompt(live.battle, FIXTURE_ENGINE);
-    expect(pending).not.toBeNull();
-    expect(pendingEnginePrompt(reloaded.battle, FIXTURE_ENGINE)).toEqual(pending);
-    expect(pendingEnginePrompt(replayed.battle, FIXTURE_ENGINE)).toEqual(pending);
-
-    seq = events.length;
-    const answeredLive = applied(answer(live, FIXTURE_POINTS_MODE));
-    seq = events.length;
-    const answeredReloaded = applied(answer(reloaded, FIXTURE_POINTS_MODE));
-    expect(GAME_ENGINE_CONFIG.hash(answeredReloaded)).toBe(GAME_ENGINE_CONFIG.hash(answeredLive));
-  });
-});
-
 describe("stale and invalid intents", () => {
   it("cancels a play at its prompt and bounces an answer to the cancelled prompt", () => {
     const state = begun();
@@ -533,193 +482,5 @@ describe("engine errors", () => {
     const result = reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toBe(state);
-  });
-});
-
-describe("replay from the event log", () => {
-  /** An applied intent's batch: its seq, its events' kinds, and the hashes of the states before and after it. */
-  type Batch = { readonly seq: number; readonly kinds: readonly string[]; readonly before: string; readonly after: string };
-  const derive = (batch: EngineIntentBatch): Batch[] => [
-    {
-      seq: batch.seq,
-      kinds: batch.events.map((event) => event.kind),
-      before: stateHash(batch.before),
-      after: stateHash(batch.state),
-    },
-  ];
-
-  /** A local game standing at the fixture battle's first decision; `published` gets each applied intent's events, recomputed from the fold. */
-  function game() {
-    const log = createLocalLog({ config: GAME_ENGINE_CONFIG, genesis: GENESIS as never, localActor: testEventActor("p1") });
-    const published: Batch[] = [];
-    const oracle = createFoldAdapter(FIXTURE_ENGINE);
-    log.subscribe((record) => {
-      const intent = intents.get(record.seq);
-      const slice = journeyBattleOf(record.stateBefore.battle)?.engine.slice;
-      if (record.outcome !== "applied" || intent === undefined || slice === undefined) return;
-      const outcome = oracle.reduce(slice, intent);
-      if (outcome.kind !== "applied") return;
-      published.push({
-        seq: record.seq,
-        kinds: outcome.published.map((event) => event.kind),
-        before: stateHash(oracle.pending(slice)?.display ?? slice.committed),
-        after: stateHash(oracle.pending(outcome.slice)?.display ?? outcome.slice.committed),
-      });
-    });
-    const intents = new Map<number, BattleIntent>();
-    const append = (type: string, payload: Record<string, unknown>, intent?: BattleIntent) => {
-      const at = log.head() + 1;
-      if (intent !== undefined) intents.set(at, intent);
-      return log.append({ type: type as GameEvent["type"], payload });
-    };
-    append("START_JOURNEY", { avatarId: AVATAR_ID });
-    append("ENTER_SITE", { siteId: BATTLE_SITE_ID });
-    append("BEGIN_BATTLE", { siteId: BATTLE_SITE_ID });
-    const fold = () => engineOf(log.state());
-    /** Plays the first card in hand; its draw-or-points prompt waits. */
-    const playCard = () => {
-      const card = fold().slice.committed.sides.player.hand[0];
-      const action = { kind: "play" as const, card, from: "hand" as const };
-      append("BATTLE_ACTION", { side: "player", action }, { kind: "battleAction", side: "player", action });
-    };
-    const answerPrompt = (value: number) => {
-      const promptId = pendingEnginePrompt(log.state().battle, FIXTURE_ENGINE)?.prompt.id;
-      if (promptId === undefined) throw new Error("no pending prompt");
-      append("BATTLE_ANSWER", { side: "player", promptId, value }, { kind: "answer", side: "player", promptId, value });
-    };
-    /** Passes for whichever side decides, `count` times. */
-    const pass = (count: number) => {
-      for (let index = 0; index < count; index++) {
-        const side = FIXTURE_ENGINE.decision(fold().slice.committed)?.side ?? "player";
-        const action = { kind: "pass" as const };
-        append("BATTLE_ACTION", { side, action }, { kind: "battleAction", side, action });
-      }
-    };
-    /** Passes until the player's decision in the player's next turn. */
-    const passToPlayer = () => {
-      const turn = fold().slice.committed.turn.turnNumber;
-      const ready = () => {
-        const { committed } = fold().slice;
-        return committed.turn.turnNumber > turn && committed.turn.active === "player" && FIXTURE_ENGINE.decision(committed)?.side === "player";
-      };
-      while (!ready()) pass(1);
-    };
-    const debug = (op: Record<string, unknown>) => append("BATTLE_DEBUG", { op });
-    return { log, published, append, fold, playCard, answerPrompt, pass, passToPlayer, debug };
-  }
-
-  const battleOf = (log: LocalLog<FoldState>) => {
-    const battle = journeyBattleOf(log.state().battle);
-    if (battle === null) throw new Error("no journey battle");
-    return battle;
-  };
-
-  /** The replay of `log`'s battle, which must reproduce its fold. */
-  function replayed(log: LocalLog<FoldState>): EngineBattleReplay<Batch> {
-    const progress = replayEngineBattle(FIXTURE_ENGINE, battleOf(log), log.events(), derive);
-    if (progress.kind !== "done") throw new Error(`replay ${progress.kind}`);
-    return progress.replay;
-  }
-
-  /** `log` reopened from a checkpoint at its head, encoded and decoded, with `tail` committed after it. */
-  function reopened(log: LocalLog<FoldState>, tail: (log: LocalLog<FoldState>) => void): LocalLog<FoldState> {
-    const checkpoint = log.checkpoint();
-    const base = { ...checkpoint, state: GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(checkpoint.state)) };
-    const history = [...log.events()];
-    tail(log);
-    return createLocalLog({
-      config: GAME_ENGINE_CONFIG,
-      genesis: GENESIS as never,
-      localActor: testEventActor("p1"),
-      base,
-      history,
-      events: log.events().slice(history.length),
-    });
-  }
-
-  it("rebuilds every applied intent's events, and the same after a reload mid-prompt from a checkpoint and tail", () => {
-    const { log, published, playCard, answerPrompt, pass, passToPlayer } = game();
-    passToPlayer();
-    playCard();
-    expect(pendingEnginePrompt(log.state().battle, FIXTURE_ENGINE)).not.toBeNull();
-    const reloaded = reopened(log, () => {
-      answerPrompt(0);
-      pass(4);
-    });
-
-    expect(published.length).toBeGreaterThan(5);
-    expect(replayed(log).items).toEqual(published);
-    expect(replayed(reloaded).items).toEqual(published);
-    expect(replayed(reloaded).slice).toEqual(engineOf(reloaded.state()).slice);
-  });
-
-  it("finds the battle's start past a BEGIN_BATTLE that bounced, and keeps the log of a battle that ended", () => {
-    const { log, published, append, playCard, answerPrompt, passToPlayer } = game();
-    passToPlayer();
-    append("BEGIN_BATTLE", { siteId: BATTLE_SITE_ID });
-    playCard();
-    answerPrompt(FIXTURE_POINTS_MODE);
-
-    expect(engineOf(log.state()).slice.committed.result).not.toBeNull();
-    expect(replayed(log).items).toEqual(published);
-  });
-
-  it("drops the undone intents' entries on a debug undo, after a reload too", () => {
-    const { log, published, pass, debug } = game();
-    pass(2);
-    debug({ kind: "mark" });
-    const marked = published.length;
-    pass(3);
-    debug({ kind: "undo", keep: 1 });
-    pass(1);
-    const kept = [...published.slice(0, marked), ...published.slice(-1)];
-
-    expect(published.length).toBe(marked + 4);
-    expect(replayed(log).items).toEqual(kept);
-    expect(replayed(reopened(log, () => undefined)).items).toEqual(kept);
-  });
-
-  it("starts a battle a LOAD_STATE loaded from its slice, and undoes to that slice's own history", () => {
-    const { log, published, append, pass, passToPlayer, debug } = game();
-    passToPlayer();
-    const battle = battleOf(log);
-    const { history: _history, ...slice } = battle.engine.slice;
-    const lab = { ...battle, engine: { ...battle.engine, slice: { ...slice, history: { base: slice, entries: [] } } } };
-    const loaded = published.length;
-    append("LOAD_STATE", { snapshot: log.state().journey, battle: lab });
-    pass(2);
-    const afterLoad = published.slice(loaded);
-
-    expect(replayed(log).items).toEqual(afterLoad);
-    debug({ kind: "undo", keep: 0 });
-    expect(replayed(log).items).toEqual([]);
-  });
-
-  it("continues a replay as the log grows and in budgeted steps, to the same result", () => {
-    const { log, published, playCard, answerPrompt, pass, passToPlayer } = game();
-    passToPlayer();
-    const early = replayed(log);
-    playCard();
-    answerPrompt(0);
-    pass(2);
-    const continued = replayEngineBattle(FIXTURE_ENGINE, battleOf(log), log.events(), derive, early);
-    let stepped = replayEngineBattle(FIXTURE_ENGINE, battleOf(log), log.events(), derive, null, 1);
-    while (stepped.kind === "partial") {
-      stepped = replayEngineBattle(FIXTURE_ENGINE, battleOf(log), log.events(), derive, stepped.replay, 1);
-    }
-
-    expect(continued).toMatchObject({ kind: "done", folded: log.events().length - early.next });
-    expect(continued.kind === "done" ? continued.replay.items : null).toEqual(published);
-    expect(stepped.kind === "done" ? stepped.replay.items : null).toEqual(published);
-  });
-
-  it("fails when no start reproduces the fold's slice", () => {
-    const { log, pass } = game();
-    pass(2);
-    const battle = battleOf(log);
-    const events = log.events().slice(0, -1);
-
-    expect(replayEngineBattle(FIXTURE_ENGINE, battle, events, derive).kind).toBe("failed");
-    expect(replayEngineBattle(FIXTURE_ENGINE, battle, log.events().slice(0, 2), derive).kind).toBe("failed");
   });
 });
