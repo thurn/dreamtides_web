@@ -8,6 +8,7 @@ import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
+  SYNTHETIC_ATLAS_DREAMSCAPES,
 } from "../testing/atlas-fixtures";
 import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
@@ -37,7 +38,8 @@ import {
 } from "../rules/battle/journey-battle";
 import { initialFoldState, type FoldState } from "../rules/fold-state";
 import { reduceGameEvent } from "../rules/reducer";
-import { validateLoadedState } from "../rules/journey/lifecycle";
+import { loadState, validateLoadedState } from "../rules/journey/lifecycle";
+import { foldInvariantViolations } from "../rules/invariants";
 import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 import {
   makeTutorialConfiguration,
@@ -124,6 +126,54 @@ function makeJourneyContent(
   };
 }
 
+/** Journey content whose starter cards and Dreamwell a battle can deal. */
+function battleSceneContent(): JourneyContent {
+  const base = makeJourneyContent();
+  const cardDatabase = new Map(base.cardDatabase);
+  const [template] = cardDatabase.values();
+  for (const cardNumber of base.poolContext.starterCardNumbers) {
+    cardDatabase.set(cardNumber, {
+      ...template,
+      id: testCardId(`qa-scene-starter-${String(cardNumber)}`),
+      cardNumber,
+      imageNumber: cardNumber,
+      isStarter: true,
+    });
+  }
+  return {
+    ...base,
+    cardDatabase,
+    dreamwellCards: [
+      {
+        id: testDreamwellCardId("qa-scene-dreamwell"),
+        name: testDreamwellCardName("QA Scene Dreamwell"),
+        renderedText: "Synthetic Dreamwell fixture.",
+        order: 1,
+        energyAdded: 1,
+        cardNumber: 1,
+      },
+    ],
+  };
+}
+
+/**
+ * {@link battleSceneContent} with the tutorial Avatar, a non-starter
+ * dreamscape for every routed signature site, and enough Dreamsign templates
+ * to fill a full Dreamsign row, so every registered scene can build.
+ */
+function invariantSceneContent(): JourneyContent {
+  return {
+    ...battleSceneContent(),
+    avatars: [makeAvatar(), makeAvatar(TUTORIAL_AVATAR_ID)],
+    dreamscapes: SYNTHETIC_ATLAS_DREAMSCAPES,
+    dreamsignTemplates: Array.from({ length: 13 }, (_, index) => ({
+      id: testDreamsignId(`invariant-dreamsign-${String(index + 1)}`),
+      name: `Dreamsign ${String(index + 1)}`,
+      effectDescription: "A QA effect.",
+    })),
+  };
+}
+
 describe("QA scenes", () => {
   it("registers each scene under a unique lowercase id", () => {
     const ids = QA_SCENES.map((scene) => scene.id);
@@ -141,6 +191,29 @@ describe("QA scenes", () => {
       scene,
     );
   });
+
+  for (const scene of QA_SCENES) {
+    it(`${scene.id} loads into a state the fold invariants accept`, () => {
+      const content = invariantSceneContent();
+      const journey = buildQaScene(scene.id, content, SCENE_OPTIONS);
+      if (journey === null) throw new Error(`${scene.id} did not build`);
+      const battle = buildQaSceneBattle(scene.id, content, journey);
+      const loaded = loadState(
+        { ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey },
+        { snapshot: journey, battle },
+        {
+          contentConfig: TEST_CONTENT_CONFIG,
+          seq: 1,
+          rng: () => 0,
+          intervening: [],
+          timestamp: new Date(0).toISOString(),
+        },
+      );
+      if (loaded === null) throw new Error(`LOAD_STATE bounced ${scene.id}`);
+
+      expect(foldInvariantViolations(loaded)).toEqual([]);
+    });
+  }
 
   it("returns null for an unknown scene id", () => {
     expect(findQaScene(parseQaSceneId("not-a-real-scene"))).toBeNull();
@@ -324,36 +397,6 @@ describe("the battle layer QA scenes", () => {
     (scene) => qaSceneLoadsBattle(scene.id) && scene.promptLab === undefined,
   );
   const labScenes = QA_SCENES.filter((scene) => scene.promptLab !== undefined);
-
-  /** Journey content whose starter cards and Dreamwell a battle can deal. */
-  function battleSceneContent(): JourneyContent {
-    const base = makeJourneyContent();
-    const cardDatabase = new Map(base.cardDatabase);
-    const [template] = cardDatabase.values();
-    for (const cardNumber of base.poolContext.starterCardNumbers) {
-      cardDatabase.set(cardNumber, {
-        ...template,
-        id: testCardId(`qa-scene-starter-${String(cardNumber)}`),
-        cardNumber,
-        imageNumber: cardNumber,
-        isStarter: true,
-      });
-    }
-    return {
-      ...base,
-      cardDatabase,
-      dreamwellCards: [
-        {
-          id: testDreamwellCardId("qa-scene-dreamwell"),
-          name: testDreamwellCardName("QA Scene Dreamwell"),
-          renderedText: "Synthetic Dreamwell fixture.",
-          order: 1,
-          energyAdded: 1,
-          cardNumber: 1,
-        },
-      ],
-    };
-  }
 
   it("has battle-loading scenes to open", () => {
     expect(battleScenes.length).toBeGreaterThan(0);

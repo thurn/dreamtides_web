@@ -1187,9 +1187,11 @@ function explorationScene(
 
 /**
  * The journey victory end screen, shown after the final boss is defeated. Built
- * by parking the run on the `journeyComplete` screen with a full completion count,
- * so the summary stats and final-deck reveal can be QA'd without playing seven
- * battles forward.
+ * by replaying every dreamscape completion through the boss
+ * ({@link qaAtlasForProgress}) and parking the run where the final victory
+ * leaves it: the `journeyComplete` screen, a full completion count, and no
+ * current dreamscape. The summary stats and final-deck reveal can then be QA'd
+ * without playing seven battles forward.
  */
 const JOURNEY_COMPLETE_SCENE: QaScene = {
   id: parseQaSceneId("journeycomplete"),
@@ -1206,9 +1208,8 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
       return null;
     }
     const finalLevel = finalCompletionLevel(journeyContent.atlasData);
-    const atlas = qaAtlasForProgress(foundation, finalLevel - 1);
-    const boss = atlas.nodes[atlas.bossNodeId];
-    if (boss === undefined) {
+    const atlas = qaAtlasForProgress(foundation, finalLevel);
+    if (atlas.nodes[atlas.bossNodeId]?.state !== "completed") {
       return null;
     }
     const dreamsigns = journeyContent.dreamsignTemplates
@@ -1216,15 +1217,9 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
       .map((template) => createDreamsign(template));
     return {
       ...foundation.state,
-      atlas: {
-        ...atlas,
-        nodes: {
-          ...atlas.nodes,
-          [boss.id]: { ...boss, state: "completed" },
-        },
-      },
+      atlas,
       completionLevel: finalLevel,
-      currentDreamscape: boss.id,
+      currentDreamscape: null,
       dreamsigns,
       screen: { type: "journeyComplete" },
     };
@@ -1232,9 +1227,12 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
 };
 
 /**
- * The journey defeat end screen, shown after a lost battle. Built with a frozen
- * failure summary describing a defeat, so the result title, reason badge, and
- * summary grid can be QA'd without losing a real battle.
+ * The journey defeat end screen, shown after a lost battle. Built from the
+ * Layer 3 keeper-battle state ({@link battleLayerSceneState}) and parked where
+ * a lost battle leaves the run: the `journeyFailed` screen inside the battle's
+ * dreamscape, with a frozen failure summary describing a defeat at its Battle
+ * site, so the result title, reason badge, and summary grid can be QA'd
+ * without losing a real battle.
  */
 const JOURNEY_FAILED_SCENE: QaScene = {
   id: parseQaSceneId("journeyfailed"),
@@ -1243,28 +1241,21 @@ const JOURNEY_FAILED_SCENE: QaScene = {
     "The defeat end screen with its failure summary, parked on the " +
     "journeyFailed screen for UI QA.",
   build: (journeyContent, options) => {
-    const foundation = createQaJourneyFoundation(
-      journeyContent,
-      options.journeySeed,
-    );
-    if (foundation === null) {
+    const state = battleLayerSceneState(3)(journeyContent, options);
+    const siteId = state === null ? null : activeSiteIdOf(state);
+    if (state === null || siteId === null) {
       return null;
     }
-    const node = foundation.starterNode;
-    const battleSite = node.sites.find((site) => site.type === "Battle");
-    const siteId = battleSite?.id ?? node.sites[0]?.id ?? parseSiteId("qa-site");
     return {
-      ...foundation.state,
-      completionLevel: 2,
-      currentDreamscape: node.id,
+      ...state,
       screen: { type: "journeyFailed" },
       failureSummary: {
         battleId: parseBattleId("qa-battle"),
         result: "defeat",
         reason: "score_target_reached",
         siteId,
-        siteLabel: "Battle",
-        nodeIdOrNone: node.id,
+        siteLabel: siteId,
+        nodeIdOrNone: state.currentDreamscape,
         turnNumber: 6,
         playerScore: 4,
         enemyScore: 10,
