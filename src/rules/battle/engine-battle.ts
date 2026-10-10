@@ -13,7 +13,7 @@
 // recover what each applied intent published (the battle log's source); it
 // counts only when it reproduces the fold's slice. The battle screen's
 // presentation feed folds each applied intent again the same way: both read
-// the intent with `engineIntentOfEvent`, fold it with `foldAdapterFor`, and
+// the intent through `foldEngineIntent`, using `foldAdapterFor`, and
 // take a batch's states with `batchStates`.
 
 import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
@@ -185,13 +185,13 @@ type IntentFold =
  * in-flight step and keeps the committed state; with nothing in flight the
  * intent bounces.
  */
-function foldIntent(
+export function foldEngineIntent(
   adapter: FoldAdapter,
   slice: BattleSlice,
-  type: EngineIntentEventType,
+  type: string,
   payload: Record<string, unknown>,
 ): IntentFold {
-  const intent = engineIntentFromPayload(type, payload);
+  const intent = engineIntentOfEvent(type, payload);
   if (intent === null) return { kind: "bounced" };
   try {
     const outcome = adapter.reduce(slice, intent);
@@ -227,7 +227,7 @@ export function reduceEngineIntent(
   const battle = journeyBattleOf(state.battle);
   if (battle === null || engine === null) return null;
   const fold = battle.engine;
-  const folded = collectLog(ctx.seq, () => foldIntent(foldAdapterFor(engine), fold.slice, type, payload));
+  const folded = collectLog(ctx.seq, () => foldEngineIntent(foldAdapterFor(engine), fold.slice, type, payload));
   if (folded.kind === "bounced") return null;
   if (folded.kind === "threw" && fold.slice.inFlight !== null) {
     keepLog(ctx.seq, [
@@ -393,7 +393,7 @@ function foldRest<T>(
       const { type, payload } = committed.event;
       if (isEngineIntentEventType(type)) {
         folded += 1;
-        const result = foldIntent(adapter, slice, type, payload);
+        const result = foldEngineIntent(adapter, slice, type, payload);
         if (result.kind === "bounced") continue;
         const count = items.length;
         if (result.kind === "applied") {

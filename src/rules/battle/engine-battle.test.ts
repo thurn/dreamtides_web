@@ -35,7 +35,7 @@ import {
 } from "../replay/fixture-providers";
 import { validateLoadedState } from "../journey/lifecycle";
 import { registerBattleInitProvider } from "./journey-battle";
-import { pendingEnginePrompt, takeEngineLogRecords } from "./engine-battle";
+import { foldAdapterFor, foldEngineIntent, pendingEnginePrompt, takeEngineLogRecords } from "./engine-battle";
 import type { PromptId } from "../../types/identifiers";
 import { journeyBattleOf } from "./fold";
 
@@ -461,7 +461,11 @@ describe("engine errors", () => {
     const before = engineOf(prompted).slice;
     faulting = true;
     // Completing the play hands the enemy priority, whose responses fault.
-    const after = applied(answer(prompted, 0, { id: promptId(prompted, TEST_ENGINE) }));
+    const id = promptId(prompted, TEST_ENGINE);
+    const after = applied(answer(prompted, 0, { id }));
+    const replayed = foldEngineIntent(foldAdapterFor(TEST_ENGINE), before, "BATTLE_ANSWER", { side: "player", promptId: id, value: 0 });
+    expect(replayed.kind).toBe("threw");
+    if (replayed.kind === "threw") expect(replayed.slice).toEqual(engineOf(after).slice);
     const fold = engineOf(after);
     expect(fold.slice.inFlight).toBeNull();
     expect(stateHash(fold.slice.committed)).toBe(stateHash(before.committed));
