@@ -665,9 +665,9 @@ function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
 
 /**
  * Defeat or draw of the engine battle: the failure summary comes from the
- * engine's committed state. A draw by the turn limit, or by an unbreakable
- * loop (the resolution cap or a mandatory loop), reports the turn limit; any
- * other ending reports the score target.
+ * engine's committed state. A draw by the turn limit reports the turn limit,
+ * a draw by an unbreakable loop (the resolution cap or a mandatory loop)
+ * reports the loop, and any other ending reports the score target.
  */
 function applyEngineDefeat(
   state: FoldState,
@@ -677,11 +677,14 @@ function applyEngineDefeat(
   const journey = state.journey;
   const committed = battle.engine!.slice.committed;
   const siteId = activeSiteIdOf(journey) ?? battle.init.siteId;
-  const drawWithoutWinner =
-    result.kind === "draw" &&
-    (result.reason === "turnLimit" ||
-      result.reason === "resolutionCap" ||
-      result.reason === "mandatoryLoop");
+  const reason: JourneyFailureReason =
+    result.kind !== "draw"
+      ? "score_target_reached"
+      : result.reason === "turnLimit"
+        ? "turn_limit_reached"
+        : result.reason === "resolutionCap" || result.reason === "mandatoryLoop"
+          ? "unbreakable_loop"
+          : "score_target_reached";
   return {
     ...state,
     journey: {
@@ -689,7 +692,7 @@ function applyEngineDefeat(
       failureSummary: {
         battleId: battle.init.battleId,
         result: result.kind === "draw" ? "draw" : "defeat",
-        reason: drawWithoutWinner ? "turn_limit_reached" : "score_target_reached",
+        reason,
         siteId,
         siteLabel: siteId,
         nodeIdOrNone: journey.currentDreamscape,

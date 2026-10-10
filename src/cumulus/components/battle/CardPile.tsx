@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import type { CSSProperties } from "react";
+import { memo, type CSSProperties } from "react";
 import { token } from "../../primitives/tokens";
 import type { DomTestId } from "../../types/dom";
 import { CardView, type GameCardModel } from "../card/CardView";
@@ -9,6 +9,9 @@ import {
   CARD_ASPECT_W,
 } from "../card/card-aspect";
 import { CardBack } from "./CardBack";
+
+/** A pile card's face; an unchanged snapshot object skips re-rendering. */
+const PileCardView = memo(CardView);
 import { battleCardLayoutId } from "./battle-card-layout";
 import { Pressable } from "../../primitives/Pressable";
 import type { BattleCardId } from "../../../types/identifiers";
@@ -174,7 +177,7 @@ export function CardPile({
             {card.face === "down" ? (
               <CardBack label={`Face-down card ${formatNumber(depth + 1)}`} />
             ) : (
-              <CardView
+              <PileCardView
                 card={card.model.displaySnapshot}
                 transfiguration={card.model.transfiguration}
                 figment={card.figment}

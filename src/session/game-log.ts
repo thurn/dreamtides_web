@@ -15,6 +15,7 @@ import {
   type JourneyLogMirror,
 } from "../logging";
 import type { FoldState } from "../rules/fold-state";
+import { engineBattleResult } from "../rules/battle/engine-battle";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import type { LocalGame } from "./local-game";
 
@@ -122,8 +123,15 @@ function logBattleVictory(
   before: FoldState,
   after: FoldState,
 ): void {
-  if (before.battle?.board.result !== "victory") return;
-  const init = before.battle.init;
+  const battle = before.battle;
+  if (battle === null) return;
+  const engineResult = engineBattleResult(battle);
+  const won =
+    engineResult === null
+      ? battle.board.result === "victory"
+      : engineResult.kind === "victory" && engineResult.winner === "player";
+  if (!won) return;
+  const init = battle.init;
   const completedNode =
     init.nodeId === null
       ? undefined
@@ -137,6 +145,7 @@ function logBattleVictory(
     siteId: init.siteId,
     dreamscapeId: init.nodeId,
     essenceReward: init.essenceReward,
+    engineResult,
     essenceBefore: before.journey.essence,
     essenceAfter: after.journey.essence,
     completionLevelBefore: before.journey.completionLevel,

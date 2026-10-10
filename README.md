@@ -111,7 +111,7 @@ menu's developer commands.
 | --- | --- |
 | `goto=<scene>` | Boot a fresh game straight onto a screen (below) |
 | `seed=<n>` | Fixed seed (non-negative integer) for the game the URL creates and its battles |
-| `ai=1` | Local AI proposes enemy battle actions for approval on the prototype board |
+| `ai=1` | Local AI proposes enemy battle actions for approval on the prototype board of a battle without an engine battle |
 | `ai=random` / `ai=greedy` | The policy the AI host runs for the enemy of the engine battle (default `greedy`) |
 | `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
@@ -176,8 +176,17 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
   content gates (`src/engine/content-gates.test.ts`) keep data and engine in
   agreement. The `dreamtides/engine-purity` lint rule
   bans the clock, ambient randomness, and module-level mutable state there.
-- **Battle.** `src/battle/` and `src/rules/battle/` hold the battle board,
-  its structural automation, and the proposal-based AI.
+- **Battle.** A journey battle is an engine battle in the fold
+  (`src/rules/battle/engine-battle.ts`). Its screen
+  (`src/battle/components/EngineBattleScreen.tsx`) renders
+  `engine.view(display, player)` through the Cumulus battle screen, takes
+  highlights, drop targets, and controls from `legalActions`, and writes the
+  player's `BATTLE_ACTION`, `BATTLE_ANSWER`, and `BATTLE_CANCEL` intents; the
+  view model is `src/screens/cumulus_adapters/engine-battle-view-model.ts`
+  and its prompt mapping `engine-battle-prompt-view-model.ts`. The enemy is
+  the AI host in a Web Worker (`src/battle/engine-ai/`). The prototype board,
+  its structural automation, and the proposal-based AI in `src/battle/` and
+  `src/rules/battle/` still back the tutorial battle.
 - **UI.** Screens are built from the Cumulus design system (`src/cumulus/`):
   a view-model builder and adapter in `src/screens/cumulus_adapters/` turn
   journey state into a screen's props, and `src/components/` routes screens

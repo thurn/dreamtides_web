@@ -146,10 +146,9 @@ export interface BattleFoldState {
   /**
    * The engine battle of a journey battle (`engine-battle.ts`): its engine
    * init and the battle slice its `BATTLE_ACTION`, `BATTLE_ANSWER`, and
-   * `BATTLE_CANCEL` intents fold. A tutorial-mode battle has none. Until the
-   * battle screen renders the engine (Phase 4.2), the prototype `board`
-   * below is what the screen plays, and `END_BATTLE` reads the engine's
-   * result first.
+   * `BATTLE_CANCEL` intents fold. A tutorial-mode battle has none. The battle
+   * screen renders and plays the engine battle when there is one, and
+   * `END_BATTLE` reads the engine's result first.
    */
   engine?: EngineBattleFold;
   board: BattleMutableState;

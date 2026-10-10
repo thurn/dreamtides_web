@@ -284,7 +284,11 @@ export type JourneyFailureBattleResult = "defeat" | "draw";
  * to import battle internals.
  */
 export type JourneyFailureReason =
-  "score_target_reached" | "turn_limit_reached" | "forced_result";
+  | "score_target_reached"
+  | "turn_limit_reached"
+  | "forced_result"
+  /** A draw by a mandatory loop or the resolution cap (rules § Infinite Loops). */
+  | "unbreakable_loop";
 
 /**
  * Frozen snapshot describing why a playable battle ended without victory.

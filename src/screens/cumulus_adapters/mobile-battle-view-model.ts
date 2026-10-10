@@ -561,6 +561,21 @@ function buildStatusView(
   abilityUnavailable: boolean,
 ): MobileBattleStatusView {
   return {
+    ...buildBattleAvatarStatus(avatar, abilityUnavailable),
+    currentEnergy: sideState.currentEnergy,
+    maxEnergy: sideState.maxEnergy,
+    points: sideState.score,
+    pointsToWin,
+  };
+}
+
+/** The Avatar identity a side's status display shows; the fallback when it has no Avatar. */
+export function buildBattleAvatarStatus(
+  summary: BattleAvatarSummary | typeof FALLBACK_PLAYER_AVATAR | null,
+  abilityUnavailable: boolean,
+): Pick<MobileBattleStatusView, "avatar" | "avatarProfile"> {
+  const avatar = summary ?? FALLBACK_PLAYER_AVATAR;
+  return {
     avatar: {
       imageNumber: avatar.imageNumber,
       name:
@@ -587,9 +602,5 @@ function buildStatusView(
           },
         }
       : {}),
-    currentEnergy: sideState.currentEnergy,
-    maxEnergy: sideState.maxEnergy,
-    points: sideState.score,
-    pointsToWin,
   };
 }

@@ -1,4 +1,5 @@
 import {
+  memo,
   useEffect,
   useRef,
   type CSSProperties,
@@ -30,6 +31,13 @@ import { useTutorialObstacle } from "../overlay/tutorial-placement";
 import type { BattleCardId } from "../../../types/identifiers";
 import type { PresentationId } from "../../../types/identifiers";
 import { formatNumber } from "../../../runtime/format-number";
+
+/**
+ * The card face. A battle re-renders on every log commit, and a card whose
+ * model object and display flags are unchanged renders the same face, so it
+ * skips the work; builders that reuse unchanged models get the saving.
+ */
+const BattleGameCard = memo(GameCard);
 
 export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
@@ -559,7 +567,7 @@ export function BattlefieldCard({
             : undefined,
         }}
       >
-        <GameCard
+        <BattleGameCard
           model={model.card}
           selection={model.exhausted ? undefined : model.selection}
           hideRulesText={model.presentation === "battlefield"}

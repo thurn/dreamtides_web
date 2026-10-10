@@ -24,8 +24,6 @@ import {
 import type {
   BattleCommandSourceSurface,
   BattleDeckCardDefinition,
-  BattleAvatarSummary,
-  BattleEnemyDescriptor,
   BattleFieldSlotAddress,
   BattleHistory,
   BattleMutableState,
@@ -33,14 +31,13 @@ import type {
   BattleSide,
   BrowseableZone,
 } from "../types";
-import type { OpponentId } from "../../types/identifiers";
 import { isBackRankSlotId, isFrontRankSlotId } from "../types";
-import type { JourneyContent } from "../../data/journey-content";
 import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi } from "../ai/use-battle-ai";
-import { useEngineAi } from "../engine-ai/use-engine-ai";
-import { PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
+import { getBattleInitProvider } from "../../rules/battle/battle-events";
+import { EngineBattleScreen } from "./EngineBattleScreen";
+import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
 import { aiEventActor } from "../../eventlog/types";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
@@ -79,13 +76,12 @@ import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuid
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 import { selectBattlefieldFigmentMergeTargets } from "../state/figments";
-import type { BattleCardId, AvatarId } from "../../types/identifiers";
+import type { BattleCardId } from "../../types/identifiers";
 import { parseBattleCardId } from "../../types/identifiers";
 import { parseBattleSlotViewId } from "../../types/identifiers";
 import { parseBattleHistoryCommandId } from "../../types/identifiers";
 import { parseBattleEffectScriptId } from "../../types/identifiers";
 import { parseIntentKey } from "../../types/identifiers";
-import { parseAvatarId } from "../../types/identifiers";
 
 // `BattleLogDrawer` renders from the append-only game fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -204,6 +200,12 @@ export function PlayableBattleScreen({
     return null; // BattleSiteRoute already shows the loading/reveal state.
   }
   void site;
+  const engine = getBattleInitProvider()?.engine ?? null;
+  // A journey battle plays its engine battle. The prototype board below is
+  // the surface of a battle without one.
+  if (battle.engine !== undefined && engine !== null) {
+    return <EngineBattleScreen key={battle.init.battleId} engine={engine} />;
+  }
   return (
     <PlayableBattleScreenInner key={battle.init.battleId} aiMode={aiMode} />
   );
@@ -412,9 +414,6 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     basicAutomation: true,
     aiConfiguration: battleInit.aiConfiguration,
   });
-
-  // The engine battle's enemy is always AI-driven, whatever this screen shows.
-  useEngineAi(PAGE_ENEMY_POLICY);
 
   const aiBlockingTurn = battle.aiBlockingTurn;
   useEffect(() => {
@@ -1859,64 +1858,6 @@ function decrementBattleTurnPair(
     return { activeSide: "player", turnNumber };
   }
   return { activeSide: "enemy", turnNumber: Math.max(1, turnNumber - 1) };
-}
-
-function resolveEnemyAvatarSummary(
-  enemyDescriptor: BattleEnemyDescriptor,
-  journeyContent: JourneyContent,
-): BattleAvatarSummary {
-  const sourceAvatar = findEnemySourceAvatar(enemyDescriptor, journeyContent);
-  return {
-    id: sourceAvatar?.id ?? enemyDescriptor.id,
-    imageNumber:
-      enemyDescriptor.imageNumber ?? sourceAvatar?.imageNumber ?? "001",
-    name: enemyDescriptor.name,
-    renderedText: enemyDescriptor.abilityText,
-    title: enemyDescriptor.subtitle,
-    ...(sourceAvatar?.portraitFocus === undefined
-      ? {}
-      : { portraitFocus: sourceAvatar.portraitFocus }),
-  };
-}
-
-function findEnemySourceAvatar(
-  enemyDescriptor: BattleEnemyDescriptor,
-  journeyContent: JourneyContent,
-) {
-  const sourceId = parseEnemySourceAvatarId(enemyDescriptor.id);
-  if (sourceId !== null) {
-    const byId = journeyContent.avatars.find(
-      (avatar) => avatar.id === sourceId,
-    );
-    if (byId !== undefined) {
-      return byId;
-    }
-  }
-
-  const descriptorName = enemyDescriptor.name.toLocaleLowerCase();
-  return journeyContent.avatars.find((avatar) => {
-    const fullName = avatar.name.toLocaleLowerCase();
-    const shortName = fullName.split(",")[0] ?? fullName;
-    return (
-      descriptorName === fullName ||
-      descriptorName === shortName ||
-      descriptorName.endsWith(` ${fullName}`) ||
-      descriptorName.endsWith(` ${shortName}`)
-    );
-  });
-}
-
-function parseEnemySourceAvatarId(enemyId: OpponentId): AvatarId | null {
-  const prefix = "enemy:";
-  if (!enemyId.startsWith(prefix)) {
-    return null;
-  }
-  const sourceAndSeed = enemyId.slice(prefix.length);
-  const seedSeparator = sourceAndSeed.lastIndexOf(":");
-  if (seedSeparator <= 0) {
-    return null;
-  }
-  return parseAvatarId(sourceAndSeed.slice(0, seedSeparator));
 }
 
 function resolveDragSourceSurface(

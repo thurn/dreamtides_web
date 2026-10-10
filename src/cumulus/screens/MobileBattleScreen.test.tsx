@@ -17,6 +17,7 @@ import {
   type MobileBattleCardView,
   type MobileBattleInspectorSideView,
   type MobileBattleInteractions,
+  type MobileBattleScreenProps,
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
@@ -173,6 +174,7 @@ function makeView(): MobileBattleView {
 function mount(
   view: MobileBattleView,
   overrides: Partial<MobileBattleInteractions> = {},
+  props: Partial<MobileBattleScreenProps> = {},
 ): HTMLDivElement {
   const container = document.createElement("div");
   document.body.append(container);
@@ -184,7 +186,6 @@ function mount(
     onCardDragEnd: vi.fn(),
     onSlotDrop: vi.fn(),
     onZoneDrop: vi.fn(),
-    onPreviousPhase: vi.fn(),
     onNextPhase: vi.fn(),
     ...overrides,
   };
@@ -193,7 +194,12 @@ function mount(
   act(() => {
     root.render(
       <CumulusRoot>
-        <MobileBattleScreen view={view} interactions={interactions} />
+        <MobileBattleScreen
+          view={view}
+          interactions={interactions}
+          phaseNavigation="next-phase"
+          {...props}
+        />
       </CumulusRoot>,
     );
   });
@@ -217,51 +223,57 @@ function drop(target: HTMLElement, clientX = 0, clientY = 0): void {
   });
 }
 
-const emptySlot = (container: HTMLElement, rank: string) =>
-  query(
-    container,
-    `[data-battle-rank="${rank}"] [data-battle-slot-filled="false"]`,
-  );
-
 describe("MobileBattleScreen", () => {
-  it("renders both battlefields, hands, piles, and phase controls", () => {
-    const container = mount(makeView());
+  it("renders both battlefields, hands, and piles, outlining only the playable cards", () => {
+    const view = makeView();
+    const playable = view.playerHand[1];
+    const container = mount({
+      ...view,
+      playerHand: view.playerHand.map((card) =>
+        card === playable ? { ...card, showPlayableOutline: true } : card,
+      ),
+    });
 
     for (const rank of "enemy-back enemy-front player-front player-back".split(
       " ",
     )) {
       query(container, `[data-battle-rank="${rank}"]`);
     }
-    query(container, '[data-battle-phase-controls="row"]');
     const farHand = query(container, '[data-battle-mobile-row="far-hand"]');
     const nearHand = query(container, '[data-battle-mobile-row="near-hand"]');
     expect(farHand.dataset.battleHandCount).toBe("8");
     expect(
-      farHand.querySelectorAll('[data-battle-card-zone="far-hand"]').length,
-    ).toBeLessThan(8);
-    expect(
       nearHand.querySelectorAll('[data-battle-card-zone="near-hand"]'),
     ).toHaveLength(4);
+    expect(
+      [...container.querySelectorAll("[data-battle-card-playable] [data-battle-card-id]")].map(
+        (element) => element.getAttribute("data-battle-card-id"),
+      ),
+    ).toEqual([playable.id]);
   });
 
-  it("dispatches phase changes and pile browsing from the controls", () => {
-    const onPreviousPhase = vi.fn();
+  it("enables the pass control only while the player may act, with no Back control", () => {
     const onNextPhase = vi.fn();
-    const onZoneOpen = vi.fn();
-    const container = mount(makeView(), {
-      onPreviousPhase,
-      onNextPhase,
-      onZoneOpen,
-    });
-    const controls = query(container, '[data-battle-phase-controls="row"]');
+    const idle = mount(makeView(), { canInteract: false, onNextPhase });
+    const idleNext = query(idle, "[data-battle-phase-next] button");
+    expect(idleNext.getAttribute("aria-disabled")).toBe("true");
+    click(idleNext);
+    expect(onNextPhase).not.toHaveBeenCalled();
 
-    click(query(controls, "[data-battle-phase-back] button"));
-    click(query(controls, "[data-battle-phase-next] button"));
+    for (const phaseNavigation of ["next-phase", "pass"] as const) {
+      const container = mount(makeView(), { onNextPhase }, { phaseNavigation });
+      expect(container.querySelector("[data-battle-phase-back]")).toBeNull();
+      click(query(container, "[data-battle-phase-next] button"));
+    }
+    expect(onNextPhase).toHaveBeenCalledTimes(2);
+  });
+
+  it("opens piles from their controls", () => {
+    const onZoneOpen = vi.fn();
+    const container = mount(makeView(), { onZoneOpen });
+
     click(query(container, '[data-testid="player-battle-deck"]'));
     click(query(container, '[data-testid="player-battle-void"]'));
-
-    expect(onPreviousPhase).toHaveBeenCalledOnce();
-    expect(onNextPhase).toHaveBeenCalledOnce();
     expect(onZoneOpen.mock.calls).toEqual([
       [{ owner: "player", zone: "deck" }],
       [{ owner: "player", zone: "void" }],
@@ -287,9 +299,6 @@ describe("MobileBattleScreen", () => {
       );
     }
 
-    drop(emptySlot(container, "enemy-back"));
-    expect(onHandCardDrop).toHaveBeenCalledOnce();
-
     drop(query(container, "[data-battle-mobile]"), 290, 280);
     expect(onHandCardDrop).toHaveBeenLastCalledWith({
       owner: "player",
@@ -299,26 +308,72 @@ describe("MobileBattleScreen", () => {
     expect(onSlotDrop).not.toHaveBeenCalled();
   });
 
-  it("accepts battlefield repositioning only on the dragged card's own side", () => {
+  it("accepts a repositioning drop only on a legal destination", () => {
     const onSlotDrop = vi.fn();
+    const legal = {
+      owner: "player",
+      rank: "back",
+      slotId: parseBattleSlotViewId("player-back-second-empty"),
+    } as const;
     const container = mount(makeView(), {
       pendingCardId: cardId("player-front-card"),
       pendingCardSource: "battlefield",
       pendingCardOwner: "player",
+      eligibleSlotTargets: [legal],
       onSlotDrop,
     });
-    const [own, opposing] = [
-      emptySlot(container, "player-back"),
-      emptySlot(container, "enemy-back"),
-    ];
+    const target = (slot: string) =>
+      query(container, `[data-battle-slot-id="${slot}"]`);
 
-    expect(own.dataset.battleDropTarget).toBe("true");
-    expect(opposing.dataset.battleDropTarget).toBeUndefined();
-    drop(opposing);
-    drop(own);
-    expect(onSlotDrop.mock.calls).toEqual([
-      [{ owner: "player", rank: "back", slotId: "player-back-empty" }],
-    ]);
+    expect(target("player-back-second-empty").dataset.battleDropTarget).toBe("true");
+    expect(target("player-back-empty").dataset.battleDropTarget).toBeUndefined();
+    expect(target("enemy-back-empty").dataset.battleDropTarget).toBeUndefined();
+    drop(target("player-back-empty"));
+    drop(target("enemy-back-empty"));
+    drop(target("player-back-second-empty"));
+    expect(onSlotDrop.mock.calls).toEqual([[legal]]);
+  });
+
+  it("enables All Forward and All Back from the shortcuts the player can use", () => {
+    const [onAllForward, onAllBack] = [vi.fn(), vi.fn()];
+    const view = { ...makeView(), rankShortcuts: { allForward: true, allBack: false } };
+    const container = mount(view, { onAllForward, onAllBack });
+    const forward = query(container, '[data-testid="battle-all-forward"]');
+    const back = query(container, '[data-testid="battle-all-back"]');
+
+    expect(back.getAttribute("aria-disabled")).toBe("true");
+    click(forward);
+    click(back);
+    expect(onAllForward).toHaveBeenCalledOnce();
+    expect(onAllBack).not.toHaveBeenCalled();
+    expect(
+      mount(makeView(), { onAllForward }).querySelector("[data-battle-rank-shortcuts]"),
+    ).toBeNull();
+  });
+
+  it("offers Cancel on the prompt banner only while the prompt is cancellable", () => {
+    const onPromptCancel = vi.fn();
+    const banner = (cancellable: boolean) =>
+      mount(
+        { ...makeView(), promptBanner: { key: 7, label: "Choose", cancellable } },
+        { canInteract: false, onPromptCancel },
+      );
+
+    expect(banner(false).querySelector('[data-testid="battle-prompt-cancel"]')).toBeNull();
+    click(query(banner(true), '[data-testid="battle-prompt-cancel"]'));
+    expect(onPromptCancel).toHaveBeenCalledOnce();
+  });
+
+  it("repeats the loop on offer a chosen number of times or until victory", () => {
+    const onRepeatLoop = vi.fn();
+    const container = mount({ ...makeView(), loopOffer: { maxCount: 3 } }, { onRepeatLoop });
+    const offer = query(container, "[data-battle-loop-offer]");
+    const [, increment] = offer.querySelectorAll<HTMLElement>("[role='group'] button");
+
+    click(increment);
+    click(query(offer, '[data-testid="battle-loop-repeat-count"]'));
+    click(query(offer, '[data-testid="battle-loop-repeat-until-victory"]'));
+    expect(onRepeatLoop.mock.calls).toEqual([[2], ["untilVictory"]]);
   });
 
   it("selects inline card-picker candidates from the hand and submits their ids", () => {

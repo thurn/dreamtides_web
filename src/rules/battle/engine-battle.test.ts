@@ -318,6 +318,23 @@ describe("journey -> battle -> reward -> Atlas", () => {
     });
   });
 
+  it("reports a draw by an unbreakable loop as the loop, and a turn-limit draw as the turn limit", () => {
+    const reasonOf = (reason: "mandatoryLoop" | "resolutionCap" | "turnLimit") => {
+      const state = begun();
+      const fold = engineOf(state);
+      const committed = { ...fold.slice.committed, result: { kind: "draw" as const, reason } };
+      const ended: FoldState = {
+        ...state,
+        battle: state.battle === null ? null : { ...state.battle, engine: { ...fold, slice: { ...fold.slice, committed } } },
+      };
+      return applied(reduce(ended, "END_BATTLE", {})).journey.failureSummary;
+    };
+
+    expect(reasonOf("mandatoryLoop")).toMatchObject({ result: "draw", reason: "unbreakable_loop" });
+    expect(reasonOf("resolutionCap")).toMatchObject({ result: "draw", reason: "unbreakable_loop" });
+    expect(reasonOf("turnLimit")).toMatchObject({ result: "draw", reason: "turn_limit_reached" });
+  });
+
   it("bounces END_BATTLE while the engine battle is in progress or waiting at a prompt", () => {
     const state = begun();
     expect(reduce(state, "END_BATTLE", {}).outcome).toBe("bounced");

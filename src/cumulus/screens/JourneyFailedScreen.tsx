@@ -202,7 +202,9 @@ export function JourneyFailedScreen({
                         ? "Score Threshold Reached"
                         : view.reason === "turn_limit_reached"
                           ? "Turn Limit Reached"
-                          : "Forced Result"}
+                          : view.reason === "unbreakable_loop"
+                            ? "Endless Loop"
+                            : "Forced Result"}
                     </p>
                     <dl
                       data-journey-failed-summary=""

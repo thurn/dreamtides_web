@@ -80,7 +80,7 @@ import {
 } from "./BattleResultSurface";
 import battleBackgroundUrl from "../assets/battle-background.png";
 import type { BattleId } from "../../types/identifiers";
-import type { PresentationId } from "../../types/identifiers";
+import type { PresentationId, PromptId } from "../../types/identifiers";
 import type { BattleCardId } from "../../types/identifiers";
 import type { BattleSlotViewId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
@@ -146,6 +146,31 @@ export interface MobileBattleHandView {
 
 export interface MobileBattlePromptNoticeView {
   readonly promptSide: MobileBattleOwner;
+  /**
+   * Why the local viewer waits: the prompt belongs to the other seat of a
+   * shared screen (the default), or the opponent is choosing.
+   */
+  readonly reason?: "switch-side" | "opponent-choosing";
+}
+
+/** The pending prompt's heading, shown while its choice renders on its own surface. */
+export interface MobileBattlePromptBannerView {
+  readonly key: MobileBattlePromptKey;
+  readonly label: MobileBattlePromptCopy;
+  /** Whether the play or activation awaiting this prompt may still be cancelled. */
+  readonly cancellable: boolean;
+}
+
+/** Which repositioning shortcuts can move at least one of the near side's characters. */
+export interface MobileBattleRankShortcutsView {
+  readonly allForward: boolean;
+  readonly allBack: boolean;
+}
+
+/** An optional loop the near side may repeat (rules § Optional Loops). */
+export interface MobileBattleLoopOfferView {
+  /** The most repetitions one request may ask for. */
+  readonly maxCount: number;
 }
 
 /** The complete, presentation-ready mobile battle board. */
@@ -187,13 +212,21 @@ export interface MobileBattleView {
   readonly result: MobileBattleResultView | null;
   /** One shared hand card presented over the battlefield at reading size. */
   readonly revealedHandCard?: MobileBattleCardView | null;
+  /** The pending prompt's heading and cancel affordance. */
+  readonly promptBanner?: MobileBattlePromptBannerView | null;
+  /** All Forward and All Back, when the near side may reposition. */
+  readonly rankShortcuts?: MobileBattleRankShortcutsView | null;
+  /** The loop on offer to the near side. */
+  readonly loopOffer?: MobileBattleLoopOfferView | null;
 }
 
 export type MobileBattlePromptCopy = string;
+/** Identifies one prompt; local selection resets when it changes. */
+export type MobileBattlePromptKey = number | PromptId;
 
 /** A UUID-safe card decision owned by the authoritative battle prompt. */
 export interface MobileBattleCardPickerView {
-  readonly key: number;
+  readonly key: MobileBattlePromptKey;
   readonly label: MobileBattlePromptCopy;
   readonly subtitle?: MobileBattlePromptCopy;
   readonly side: MobileBattleOwner;
@@ -212,14 +245,20 @@ export interface MobileBattleCardPickerCandidateView {
   readonly cardUuid: CardId;
   readonly owner: MobileBattleOwner;
   readonly zone:
-    "hand" | "deck" | "void" | "banished" | "backRank" | "frontRank";
+    | "hand"
+    | "deck"
+    | "void"
+    | "banished"
+    | "backRank"
+    | "frontRank"
+    | "stack";
   readonly card: MobileBattleCardView;
   readonly highlighted: boolean;
 }
 
 /** An in-place option decision owned by the authoritative battle prompt. */
 export interface MobileBattleChoicePromptView {
-  readonly key: number;
+  readonly key: MobileBattlePromptKey;
   readonly label: MobileBattlePromptCopy;
   readonly options: readonly {
     readonly label: MobileBattlePromptCopy;
@@ -248,8 +287,18 @@ export interface MobileBattleScreenProps {
   readonly preserveOccupiedSlotOutlines?: boolean;
   /** Initial inspector state at desktop widths. */
   readonly inspectorDefault?: "responsive" | "collapsed";
-  /** Phase controls exposed by this presentation. */
-  readonly phaseNavigation?: "both" | "end-turn" | "tutorial" | "hidden";
+  /**
+   * Phase controls exposed by this presentation: Back and Next Phase
+   * (`both`), Next Phase alone (`next-phase`), Pass alone (`pass`), the
+   * tutorial's turn controls, or none.
+   */
+  readonly phaseNavigation?:
+    | "both"
+    | "next-phase"
+    | "pass"
+    | "end-turn"
+    | "tutorial"
+    | "hidden";
   /** Visible labels exposed for otherwise unmarked battle zones. */
   readonly zoneLabels?: "none" | "voids";
   /** Optional controlled inspector state for a parent shell with another rail. */
@@ -528,8 +577,16 @@ export interface MobileBattleInteractions {
   ) => void;
   readonly onZoneDrop: (target: MobileBattleZoneTarget) => void;
   readonly onZoneOpen?: (target: MobileBattleBrowseZoneTarget) => void;
-  readonly onPreviousPhase: () => void;
+  readonly onPreviousPhase?: () => void;
   readonly onNextPhase: () => void;
+  /** Cancels the play or activation awaiting the bannered prompt. */
+  readonly onPromptCancel?: () => void;
+  /** Moves every eligible near-side back-rank character forward. */
+  readonly onAllForward?: () => void;
+  /** Moves every near-side front-rank character back. */
+  readonly onAllBack?: () => void;
+  /** Repeats the loop on offer a number of times, or until the battle ends. */
+  readonly onRepeatLoop?: (count: number | "untilVictory") => void;
   readonly onApproveAiProposal?: () => void;
   readonly onRejectAiProposal?: () => void;
   readonly onCardPickerSelectionChange?: (
@@ -1385,6 +1442,7 @@ function BattleCardSurface({
   return (
     <div
       data-battle-card-zone={zone}
+      data-battle-card-playable={card.showPlayableOutline ? "true" : undefined}
       style={{ width: "100%", position: "relative" }}
       onContextMenu={(event) => {
         if (
@@ -2898,6 +2956,9 @@ function pickerZoneCaption(
       ? "Your Void"
       : "Opponent Void";
   }
+  if (candidate.zone === "stack") {
+    return "On the Stack";
+  }
   return viewerOwned
     ? "Your Banished"
     : "Opponent Banished";
@@ -3025,6 +3086,7 @@ function ControlRow({
   nextPhaseAction,
   phaseNavigation,
   perspective,
+  rankShortcuts,
   tutorialNextAction,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
@@ -3035,8 +3097,9 @@ function ControlRow({
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
   readonly nextPhaseAction: "continue" | "nextPhase";
-  readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
+  readonly phaseNavigation: NonNullable<MobileBattleScreenProps["phaseNavigation"]>;
   readonly perspective: BattlePerspectiveSide;
+  readonly rankShortcuts: MobileBattleRankShortcutsView | null;
   readonly tutorialNextAction: "endTurn" | "startChallenge";
 }) {
   
@@ -3160,6 +3223,37 @@ function ControlRow({
             pointerEvents: "auto",
           }}
         >
+          {rankShortcuts === null ? null : (
+            <div
+              data-battle-rank-shortcuts=""
+              style={{ display: "flex", gap: token("--space-xs") }}
+            >
+              <IconButton
+                glyph={GLYPHS.chevronUp}
+                size="sm"
+                label={"All Forward"}
+                disabled={
+                  disabled ||
+                  !rankShortcuts.allForward ||
+                  interactions?.onAllForward === undefined
+                }
+                testId="battle-all-forward"
+                onPress={() => interactions?.onAllForward?.()}
+              />
+              <IconButton
+                glyph={GLYPHS.chevronDown}
+                size="sm"
+                label={"All Back"}
+                disabled={
+                  disabled ||
+                  !rankShortcuts.allBack ||
+                  interactions?.onAllBack === undefined
+                }
+                testId="battle-all-back"
+                onPress={() => interactions?.onAllBack?.()}
+              />
+            </div>
+          )}
           {phaseNavigation === "both" ? (
             <div data-battle-phase-back="">
               <IconButton
@@ -3167,7 +3261,7 @@ function ControlRow({
                 size="sm"
                 label={"Back"}
                 disabled={disabled}
-                onPress={() => interactions?.onPreviousPhase()}
+                onPress={() => interactions?.onPreviousPhase?.()}
               />
             </div>
           ) : null}
@@ -3216,7 +3310,9 @@ function ControlRow({
                     ? "End Turn"
                     : phaseNavigation === "tutorial"
                       ? "Start Challenge"
-                      : nextPhaseAction === "nextPhase"
+                      : phaseNavigation === "pass"
+                        ? "Pass"
+                        : nextPhaseAction === "nextPhase"
                         ? "Next Phase"
                         : "Continue"
                 }
@@ -3256,6 +3352,126 @@ function ControlRow({
   );
 }
 
+const PROMPT_BANNER_MAX_WIDTH = 416;
+// Above the gallery card picker, so a cancellable gallery prompt can still be cancelled.
+const PROMPT_BANNER_Z_INDEX = 80;
+const PROMPT_BANNER_STYLE: CSSProperties = {
+  position: "fixed",
+  left: "50%",
+  top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-6xl")})`,
+  width: "90vw",
+  maxWidth: PROMPT_BANNER_MAX_WIDTH,
+  transform: "translateX(-50%)",
+  zIndex: PROMPT_BANNER_Z_INDEX,
+};
+
+/** The pending prompt's heading, with Cancel while its play may be cancelled. */
+function BattlePromptBanner({
+  banner,
+  onCancel,
+}: {
+  readonly banner: MobileBattlePromptBannerView;
+  readonly onCancel?: () => void;
+}) {
+  return (
+    <div
+      data-battle-prompt-banner=""
+      data-battle-prompt-cancellable={banner.cancellable ? "true" : "false"}
+      role="status"
+      aria-live="polite"
+      style={PROMPT_BANNER_STYLE}
+    >
+      <GlassPanel
+        title={banner.label}
+        headerSpacing="compact"
+        headerDivider={false}
+        radius="control"
+        {...(banner.cancellable && onCancel !== undefined
+          ? {
+              rightAccessory: {
+                kind: "glassButton" as const,
+                button: {
+                  label: "Cancel",
+                  testId: "battle-prompt-cancel",
+                  onPress: onCancel,
+                },
+              },
+            }
+          : {})}
+      >
+        <span />
+      </GlassPanel>
+    </div>
+  );
+}
+
+/** Repeat the optional loop on offer a chosen number of times, or until victory. */
+function BattleLoopOffer({
+  offer,
+  disabled,
+  onRepeat,
+}: {
+  readonly offer: MobileBattleLoopOfferView;
+  readonly disabled: boolean;
+  readonly onRepeat?: (count: number | "untilVictory") => void;
+}) {
+  const [count, setCount] = useState(1);
+  const repeatCount = Math.min(count, offer.maxCount);
+  const unavailable = disabled || onRepeat === undefined;
+  return (
+    <div
+      data-battle-loop-offer=""
+      style={{ ...PROMPT_BANNER_STYLE, zIndex: PROMPT_BANNER_Z_INDEX - 1 }}
+    >
+      <GlassPanel
+        title={"Repeat This Loop?"}
+        headerSpacing="compact"
+        headerDivider={false}
+        radius="control"
+      >
+        <div style={{ display: "grid", gap: token("--space-s") }}>
+          <NumberStepper
+            label={"Repetitions"}
+            value={repeatCount}
+            size="sm"
+            decrementLabel={"Fewer repetitions"}
+            incrementLabel={"More repetitions"}
+            decrementDisabled={repeatCount <= 1}
+            incrementDisabled={repeatCount >= offer.maxCount}
+            onDecrement={() => setCount(Math.max(1, repeatCount - 1))}
+            onIncrement={() =>
+              setCount(Math.min(offer.maxCount, repeatCount + 1))
+            }
+          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: token("--space-xs"),
+            }}
+          >
+            <GlassButton
+              label={`Repeat ×${formatNumber(repeatCount)}`}
+              placement="onGlass"
+              disabled={unavailable}
+              testId="battle-loop-repeat-count"
+              onPress={() => onRepeat?.(repeatCount)}
+            />
+            <GlassButton
+              label={"Repeat Until Victory"}
+              variant="accent"
+              placement="onGlass"
+              disabled={unavailable}
+              testId="battle-loop-repeat-until-victory"
+              onPress={() => onRepeat?.("untilVictory")}
+            />
+          </div>
+        </div>
+      </GlassPanel>
+    </div>
+  );
+}
+
 function BattleControlMessage({
   aiApproval,
   choicePrompt,
@@ -3268,9 +3484,11 @@ function BattleControlMessage({
   
   const message: MobileBattlePromptCopy | null =
     promptNotice !== null
-      ? builtInBattlePromptMessage(
-          builtInBattlePromptRef("switch-side", promptNotice.promptSide),
-        )
+      ? promptNotice.reason === "opponent-choosing"
+        ? "Your opponent is choosing."
+        : builtInBattlePromptMessage(
+            builtInBattlePromptRef("switch-side", promptNotice.promptSide),
+          )
       : choicePrompt !== null
         ? choicePrompt.label
         : aiApproval === null
@@ -4103,7 +4321,7 @@ export function MobileBattleScreen({
     useState<FigmentMergeAnimationState | null>(null);
   const mergeAnimationSequence = useRef(1);
   const [cardPickerSelection, setCardPickerSelection] = useState<{
-    readonly pickerKey: number | null;
+    readonly pickerKey: MobileBattlePromptKey | null;
     readonly ids: readonly BattleCardId[];
   }>({ pickerKey: null, ids: [] });
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
@@ -4606,6 +4824,7 @@ export function MobileBattleScreen({
           nextPhaseAction={view.dreamwell === null ? "nextPhase" : "continue"}
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
+          rankShortcuts={view.rankShortcuts ?? null}
           tutorialNextAction={
             (view.activeSide === "enemy" && view.phase === "dusk") ||
             (view.activeSide === "player" && view.phase === "night")
@@ -4757,6 +4976,20 @@ export function MobileBattleScreen({
           </div>
         </div>
       ) : null}
+      {view.promptBanner === null || view.promptBanner === undefined ? null : (
+        <BattlePromptBanner
+          banner={view.promptBanner}
+          onCancel={interactions?.onPromptCancel}
+        />
+      )}
+      {view.loopOffer === null || view.loopOffer === undefined ? null : (
+        <BattleLoopOffer
+          key={view.battleId}
+          offer={view.loopOffer}
+          disabled={interactions?.canInteract !== true}
+          onRepeat={interactions?.onRepeatLoop}
+        />
+      )}
       {galleryCardPicker !== null ? (
         <CardPickerGallery
           cardPicker={galleryCardPicker}
@@ -4782,7 +5015,9 @@ export function MobileBattleScreen({
           inset: 0,
           display: "grid",
           gridTemplateColumns:
-            isDockLayout && isInspectorOpen
+            inspectorVisibility === "available" &&
+            isDockLayout &&
+            isInspectorOpen
               ? `minmax(0, 1fr) ${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK}`
               : "minmax(0, 1fr)",
           width: "100%",
@@ -4901,7 +5136,9 @@ export function MobileBattleScreen({
       {view.result !== null ? (
         <BattleResultSurface
           view={view.result}
-          centerOnBattlefield={isDockLayout && isInspectorOpen}
+          centerOnBattlefield={
+            inspectorVisibility === "available" && isDockLayout && isInspectorOpen
+          }
           onAction={interactions?.onResultAction}
         />
       ) : null}
