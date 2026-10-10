@@ -21,7 +21,12 @@ import { useLayoutEffect, useRef, useState, type RefObject } from "react";
  * The resize observer watches the element itself but only re-fits when the
  * element's *available* box (client size) changes, so the hook's own
  * font-size mutations — which change scroll size, not client size, for a
- * fixed-size box — cannot feed back into an observer loop.
+ * fixed-size box — cannot feed back into an observer loop. The re-fit runs in
+ * the next animation frame, never inside the observer callback: a fitted font
+ * size can resize the element's ancestors (a card's rules box grows with its
+ * text), and an ancestor that another observer watches would otherwise change
+ * size mid-delivery, which the browser reports as a "ResizeObserver loop"
+ * error. Several notifications before that frame coalesce into one fit.
  *
  * Measuring forces a synchronous layout (each candidate font size is written,
  * then `scrollHeight`/`clientHeight` are read back). A surface like the card
@@ -119,6 +124,7 @@ export function useFitText(
 
     let cancelled = false;
     let observer: ResizeObserver | null = null;
+    let refitFrame: number | null = null;
     let usesWindowResize = false;
     let started = false;
 
@@ -150,14 +156,23 @@ export function useFitText(
 
       if (typeof ResizeObserver !== "undefined") {
         observer = new ResizeObserver(() => {
-          // Only re-fit when the box we must fit into actually changed size;
-          // ignore scroll-size changes caused by our own font mutations.
-          if (
-            element.clientWidth !== lastClientW ||
-            element.clientHeight !== lastClientH
-          ) {
-            measure();
+          // Defer to the next frame so the fit's layout mutations land outside
+          // this observer delivery (see the hook's docs).
+          if (refitFrame !== null) {
+            return;
           }
+          refitFrame = requestAnimationFrame(() => {
+            refitFrame = null;
+            // Only re-fit when the box we must fit into actually changed size;
+            // ignore scroll-size changes caused by our own font mutations.
+            if (
+              !cancelled &&
+              (element.clientWidth !== lastClientW ||
+                element.clientHeight !== lastClientH)
+            ) {
+              measure();
+            }
+          });
         });
         observer.observe(element);
       } else {
@@ -211,6 +226,9 @@ export function useFitText(
     return () => {
       cancelled = true;
       viewportObserver?.disconnect();
+      if (refitFrame !== null) {
+        cancelAnimationFrame(refitFrame);
+      }
       if (observer !== null) {
         observer.disconnect();
       } else if (usesWindowResize) {

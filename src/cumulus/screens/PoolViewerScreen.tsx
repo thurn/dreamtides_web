@@ -326,12 +326,13 @@ function sortDirectionLabel(
 function costFilterLabel(cost: PoolViewerCostFilter): string {
   switch (cost) {
     case "all":
+      return "All costs";
     case "0":
     case "1":
     case "2":
     case "3":
     case "4":
-      return "All costs";
+      return `Cost ${formatNumber(Number(cost))}`;
     case "5plus":
       return "Cost 5+";
     case "x":

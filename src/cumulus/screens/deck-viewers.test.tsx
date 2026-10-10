@@ -181,9 +181,11 @@ describe("DesktopDeckViewer", () => {
 });
 
 describe("PoolViewerScreen", () => {
-  it("reports stable source and card ids", () => {
+  function poolViewerView(
+    filters: Partial<PoolViewerView["filters"]> = {},
+  ): PoolViewerView {
     const card = fixtureCard(1);
-    const view: PoolViewerView = {
+    return {
       source: "run",
       sourceOptions: ["run", "catalog"],
       filters: {
@@ -193,6 +195,7 @@ describe("PoolViewerScreen", () => {
         type: "all",
         subtype: "",
         cost: "all",
+        ...filters,
       },
       cards: [
         {
@@ -206,6 +209,10 @@ describe("PoolViewerScreen", () => {
       subtypeOptions: [{ value: "Fixture", label: "Fixture" }],
       disclosures: [{ id: "algorithm", variant: "fixture" }],
     };
+  }
+
+  it("reports stable source and card ids", () => {
+    const view = poolViewerView();
     const onSourceChange = vi.fn();
     const onCardPress = vi.fn();
     const { container } = renderInCumulus(
@@ -229,5 +236,45 @@ describe("PoolViewerScreen", () => {
       ),
     );
     expect(onCardPress).toHaveBeenCalledWith("run:pool-card");
+  });
+
+  it("labels every cost filter option distinctly and selects the exact cost", () => {
+    const onFiltersChange = vi.fn();
+    const { container } = renderInCumulus(
+      <PoolViewerScreen
+        view={poolViewerView({ cost: "3" })}
+        onClose={vi.fn()}
+        onSourceChange={vi.fn()}
+        onFiltersChange={onFiltersChange}
+        onCardPress={vi.fn()}
+      />,
+    );
+    const triggers = container.querySelectorAll(
+      '[data-pool-viewer-controls] [aria-haspopup="listbox"]',
+    );
+    click(triggers[triggers.length - 1]);
+    const options = [
+      ...document.querySelectorAll<HTMLElement>('[role="option"][data-value]'),
+    ];
+    expect(options.map((option) => option.dataset.value)).toEqual([
+      "all",
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5plus",
+      "x",
+    ]);
+    const labels = options.map((option) => (option.textContent ?? "").trim());
+    expect(labels.every((label) => label.length > 0)).toBe(true);
+    expect(new Set(labels).size).toBe(labels.length);
+    expect(
+      options.find((option) => option.getAttribute("aria-selected") === "true")
+        ?.dataset.value,
+    ).toBe("3");
+
+    click(options.find((option) => option.dataset.value === "0"));
+    expect(onFiltersChange).toHaveBeenCalledWith({ cost: "0" });
   });
 });
