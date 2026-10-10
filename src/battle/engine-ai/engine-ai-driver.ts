@@ -25,7 +25,8 @@
 //   update that saw the newer fold submits the answer again or abandons it.
 
 import type { Engine } from "../../engine";
-import { aiDecision, runPolicy, type DecisionKey, type PolicyRequest } from "../../engine/policy/decide";
+import type { DecisionKey } from "../../engine/fold/slice";
+import { aiDecision, runPolicy, type AiDecision } from "../../engine/policy/decide";
 import type { PolicyHost } from "../../engine/policy/host";
 import type { PolicyChoice, PolicyId, PolicyResult } from "../../engine/policy/types";
 import type { Side } from "../../engine/state/ids";
@@ -35,6 +36,23 @@ import type { GameActions } from "../../session/actions";
 import { journeyBattleOf } from "../../rules/battle/fold";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { parseIntentKey, type BattleId, type IntentKey, type PromptId } from "../../types/identifiers";
+
+/** Which client writes an engine intent: the human's battle screen or the AI host. */
+export type EngineIntentClient = "engine-player" | "engine-ai";
+
+/**
+ * The intent key of `client`'s intent for one decision of a journey battle,
+ * which the log applies at most once. `parts` tell apart several intents a
+ * client writes for the same decision (a reposition plan's moves).
+ */
+export function engineIntentKey(
+  client: EngineIntentClient,
+  battleId: BattleId,
+  key: DecisionKey,
+  ...parts: readonly string[]
+): IntentKey {
+  return parseIntentKey([client, battleId, key, ...parts].join(":"));
+}
 
 /** An AI intent for the session's action facade. */
 export type EngineAiIntent =
@@ -81,8 +99,8 @@ export interface EngineAiDriverOptions {
 interface Work {
   readonly battleId: BattleId;
   readonly key: DecisionKey;
-  readonly request: PolicyRequest;
-  readonly promptId: PromptId | null;
+  /** The policy request, and for a prompt the prompt id its answer names. */
+  readonly decision: AiDecision;
   /** The answer, once the policy has given it. */
   choice: PolicyChoice | null;
   /** The fold the intent was last submitted against. */
@@ -108,7 +126,7 @@ export class EngineAiDriver {
       this.abandon();
       return;
     }
-    if (this.work === null || this.work.battleId !== current.battleId || this.work.key !== current.request.key) {
+    if (this.work === null || this.work.battleId !== current.battleId || this.work.key !== current.decision.request.key) {
       this.abandon();
       this.start(current);
       return;
@@ -122,7 +140,7 @@ export class EngineAiDriver {
     this.options.host.dispose();
   }
 
-  private decisionIn(state: FoldState): { battleId: BattleId; request: PolicyRequest; forced: PolicyChoice | null; promptId: PromptId | null } | null {
+  private decisionIn(state: FoldState): { battleId: BattleId; decision: AiDecision } | null {
     const battle = journeyBattleOf(state.battle);
     if (battle === null) return null;
     const fold = battle.engine;
@@ -136,13 +154,7 @@ export class EngineAiDriver {
       policy: this.options.policy,
       ...(this.options.budgets === undefined ? {} : { budgets: this.options.budgets }),
     });
-    if (decision === null) return null;
-    return {
-      battleId: battle.init.battleId,
-      request: decision.request,
-      forced: decision.forced,
-      promptId: decision.request.decision.kind === "prompt" && pending !== null ? pending.prompt.id : null,
-    };
+    return decision === null ? null : { battleId: battle.init.battleId, decision };
   }
 
   /** Drops the decision in progress: its answer, if it still arrives, is stale. */
@@ -151,21 +163,21 @@ export class EngineAiDriver {
   }
 
   private start(current: NonNullable<ReturnType<EngineAiDriver["decisionIn"]>>): void {
+    const { decision } = current;
     const work: Work = {
       battleId: current.battleId,
-      key: current.request.key,
-      request: current.request,
-      promptId: current.promptId,
+      key: decision.request.key,
+      decision,
       choice: null,
       submittedAt: null,
     };
     this.work = work;
-    if (current.forced !== null) {
-      this.answered(work, current.forced, null, "forced", 0);
+    if (decision.forced !== null) {
+      this.answered(work, decision.forced, null, "forced", 0);
       return;
     }
     const asked = this.options.now();
-    this.options.host.decide(current.request).then(
+    this.options.host.decide(decision.request).then(
       (result) => {
         this.answered(work, result.choice, result, "worker", this.options.now() - asked);
       },
@@ -179,7 +191,7 @@ export class EngineAiDriver {
         });
         let fallback: PolicyResult;
         try {
-          fallback = runPolicy(this.options.engine, { ...work.request, policy: "random" }, this.options.now);
+          fallback = runPolicy(this.options.engine, { ...work.decision.request, policy: "random" }, this.options.now);
         } catch (fallbackError) {
           this.options.log("ai.error", {
             ...this.fields(work),
@@ -194,14 +206,15 @@ export class EngineAiDriver {
   }
 
   private fields(work: Work): Record<string, unknown> {
-    const { decision } = work.request;
+    const { request } = work.decision;
+    const { decision } = request;
     return {
       battleId: work.battleId,
-      side: work.request.side,
+      side: request.side,
       key: work.key,
       decision: decision.kind === "topLevel" ? decision.decision.kind : decision.prompt.kind,
       ...(decision.kind === "prompt" ? { role: decision.prompt.purpose.role } : {}),
-      policy: work.request.policy,
+      policy: request.policy,
     };
   }
 
@@ -211,7 +224,7 @@ export class EngineAiDriver {
     this.options.log("ai.decision", {
       ...this.fields(work),
       source,
-      budget: work.request.budget,
+      budget: work.decision.request.budget,
       used: trace?.used ?? { iterations: 0, ms: 0 },
       roundTripMs,
       determinizations: trace?.determinizations ?? 0,
@@ -237,14 +250,16 @@ export class EngineAiDriver {
     const work = this.work;
     if (work === null || work.choice === null || work.submittedAt === state) return;
     work.submittedAt = state;
-    const intentKey = parseIntentKey(`engine-ai:${work.battleId}:${work.key}`);
-    const { choice } = work;
+    const intentKey = engineIntentKey("engine-ai", work.battleId, work.key);
+    const { choice, decision } = work;
+    const { side } = decision.request;
     let intent: EngineAiIntent;
     if (choice.kind === "action") {
-      intent = { kind: "action", side: work.request.side, choice, intentKey };
-    } else if (work.promptId !== null) {
-      intent = { kind: "answer", side: work.request.side, promptId: work.promptId, choice, intentKey };
+      intent = { kind: "action", side, choice, intentKey };
+    } else if (decision.kind === "prompt") {
+      intent = { kind: "answer", side, promptId: decision.promptId, choice, intentKey };
     } else {
+      this.options.log("ai.error", { ...this.fields(work), reason: "answerWithoutPrompt", chosen: choice });
       return;
     }
     const { schedule } = this.options;

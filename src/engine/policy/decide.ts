@@ -8,7 +8,7 @@
  */
 import { AI } from "../../content/ai";
 import type { Engine } from "../engine";
-import type { BattleSlice, PendingPrompt } from "../fold/slice";
+import { sidePending, type BattleSlice, type DecisionKey, type PendingPrompt } from "../fold/slice";
 import type { PromptId } from "../prompts/types";
 import { battleSeed, type BattleSeed, type Side } from "../state/ids";
 import { dealtDeck } from "../state/create";
@@ -20,14 +20,6 @@ import { PolicyRandom, RANDOM_POLICY } from "./random";
 import type { Policy, PolicyBudget, PolicyChoice, PolicyDecision, PolicyId, PolicyResult } from "./types";
 
 export const POLICIES: Readonly<Record<PolicyId, Policy>> = { random: RANDOM_POLICY, greedy: GREEDY_POLICY };
-
-/**
- * Names one decision of a battle: a pending prompt's id
- * (`<version>:<attempt>:<answers>`), or `<version>:<attempt>:decision` for a
- * top-level decision. A decision taken, answered, or cancelled never comes
- * back under the same key.
- */
-export type DecisionKey = PromptId | `${number}:${number}:decision`;
 
 /** Which D23 budget a decision gets. */
 export type BudgetKind = keyof typeof AI.enginePolicy.budgets;
@@ -44,12 +36,19 @@ export interface PolicyRequest {
   readonly budget: PolicyBudget;
 }
 
-/** A side's pending decision: the request for its policy, or the forced choice that needs none. */
-export interface AiDecision {
-  readonly request: PolicyRequest;
-  /** The only legal action, taken at once (D23: forced decisions are instant). */
-  readonly forced: PolicyChoice | null;
-}
+/**
+ * A side's pending decision: the request for its policy, or the forced
+ * choice that needs none. A prompt's decision carries the prompt id its
+ * answer names.
+ */
+export type AiDecision =
+  | {
+      readonly kind: "topLevel";
+      readonly request: PolicyRequest;
+      /** The only legal action, taken at once (D23: forced decisions are instant). */
+      readonly forced: PolicyChoice | null;
+    }
+  | { readonly kind: "prompt"; readonly promptId: PromptId; readonly request: PolicyRequest; readonly forced: null };
 
 export interface AiDecisionInput {
   readonly engine: Engine;
@@ -80,39 +79,47 @@ export function aiDecision(input: AiDecisionInput): AiDecision | null {
   const budgets = input.budgets ?? AI.enginePolicy.budgets;
   const base = { policy: input.policy, side, decklists: battleDecklists(input.init) };
   const seedOf = (key: DecisionKey): BattleSeed => battleSeed(`${input.init.seed}|ai|${side}|${key}`);
-  if (slice.inFlight !== null) {
-    if (pending === null || pending.prompt.side !== side) return null;
-    const key: DecisionKey = pending.prompt.id;
-    const { id: _id, ...prompt } = pending.prompt;
-    return {
-      request: {
-        ...base,
-        key,
-        view: engine.view(pending.display, side),
-        decision: { kind: "prompt", prompt: promptView(prompt, side, pending.display) },
-        seed: seedOf(key),
-        budget: budgets.response,
-      },
-      forced: null,
-    };
+  const owed = sidePending(engine, slice, pending, side);
+  switch (owed.kind) {
+    case "prompt": {
+      const { key, display } = owed;
+      const { id: _id, ...prompt } = owed.prompt;
+      return {
+        kind: "prompt",
+        promptId: owed.prompt.id,
+        request: {
+          ...base,
+          key,
+          view: engine.view(display, side),
+          decision: { kind: "prompt", prompt: promptView(prompt, side, display) },
+          seed: seedOf(key),
+          budget: budgets.response,
+        },
+        forced: null,
+      };
+    }
+    case "topLevel": {
+      const { decision, legal, key } = owed;
+      const planning = decision.kind === "main" && committed.turn.phase === "day" && committed.turn.active === side;
+      const only = legal.length === 1 ? legal[0] : undefined;
+      return {
+        kind: "topLevel",
+        request: {
+          ...base,
+          key,
+          view: engine.view(committed, side),
+          decision: { kind: "topLevel", decision, legal },
+          seed: seedOf(key),
+          budget: planning ? budgets.turnPlanning : budgets.response,
+        },
+        forced: only === undefined ? null : { kind: "action", action: only },
+      };
+    }
+    case "none":
+    case "waiting":
+    case "unreplayable":
+      return null;
   }
-  const decision = engine.decision(committed);
-  if (decision?.side !== side) return null;
-  const legal = engine.legalActions(committed, side);
-  const key: DecisionKey = `${committed.version}:${slice.attempt}:decision`;
-  const planning = decision.kind === "main" && committed.turn.phase === "day" && committed.turn.active === side;
-  const only = legal.length === 1 ? legal[0] : undefined;
-  return {
-    request: {
-      ...base,
-      key,
-      view: engine.view(committed, side),
-      decision: { kind: "topLevel", decision, legal },
-      seed: seedOf(key),
-      budget: planning ? budgets.turnPlanning : budgets.response,
-    },
-    forced: only === undefined ? null : { kind: "action", action: only },
-  };
 }
 
 /** Runs the request's policy on `engine`. Pure apart from the clock. */

@@ -2,15 +2,16 @@
 // worker's catalog and protocol, and the policy hosts, on synthetic cards.
 import { describe, expect, it } from "vitest";
 
-import type { EngineCardDefinition } from "../catalog";
+import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine, type Engine } from "../engine";
-import { createFoldAdapter, type BattleSlice, type FoldAdapter } from "../fold/slice";
+import { createFoldAdapter, decisionKeyOf, sidePending, type BattleSlice, type FoldAdapter } from "../fold/slice";
 import { isLegalAnswer } from "../prompts/answers";
 import type { ConfirmPrompt, Prompt } from "../prompts/types";
 import { battleSeed, type Side } from "../state/ids";
 import type { BattleInit, BattleState, DeckEntry } from "../state/types";
 import { boardState, type BoardSetup } from "../testing/board";
 import { CYCLE, CYCLE_CARDS } from "../testing/loop-cards";
+import { PROMPT_LAB_DEFINITIONS, promptLabBattle, promptLabFixture } from "../testing/prompt-lab";
 import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { AI } from "../../content/ai";
 import { catalogManifest, manifestCatalog } from "./catalog-manifest";
@@ -216,6 +217,40 @@ describe("aiDecision", () => {
     expect(decision?.request.view).toEqual(engine.view(slice.committed, "player"));
     expect(decision?.request.budget).toEqual(AI.enginePolicy.budgets.turnPlanning);
     expect(aiDecision({ ...input, side: "player", slice: { ...slice, committed: { ...slice.committed, result: { kind: "draw", reason: "turnLimit" } } } })).toBeNull();
+  });
+
+  it("names a prompt-lab decision by the same key on the human's and the AI's paths", () => {
+    const { cards, emblems, figments } = PROMPT_LAB_DEFINITIONS;
+    const labEngine = createEngine(createCatalog(cards, [], emblems, figments));
+    const lab = createFoldAdapter(labEngine);
+    const owed = (name: string, side: Side) => {
+      const fixture = promptLabFixture(name);
+      if (fixture === null) throw new Error(`no fixture ${name}`);
+      const { init, slice } = promptLabBattle(labEngine, fixture);
+      const pending = lab.pending(slice);
+      return {
+        slice,
+        pending,
+        human: sidePending(labEngine, slice, pending, side),
+        ai: aiDecision({ engine: labEngine, init, slice, pending, side, policy: "random", budgets: ITERATIONS_ONLY }),
+      };
+    };
+
+    const prompt = owed("prevent", "player");
+    expect(prompt.human.kind).toBe("prompt");
+    expect(prompt.ai).toMatchObject({ kind: "prompt", promptId: prompt.pending?.prompt.id });
+    expect(prompt.human.kind === "prompt" ? prompt.human.key : null).toBe(prompt.ai?.request.key);
+
+    const decision = owed("respond", "player");
+    expect(decision.human.kind).toBe("topLevel");
+    expect(decision.ai?.kind).toBe("topLevel");
+    expect(decision.human.kind === "topLevel" ? decision.human.key : null).toBe(decision.ai?.request.key);
+    expect(decision.ai?.request.key).toBe(decisionKeyOf(decision.slice));
+
+    const waiting = owed("ai-discard", "player");
+    expect(waiting.ai).toBeNull();
+    expect(waiting.human).toMatchObject({ kind: "waiting", owner: "enemy" });
+    expect(owed("ai-discard", "enemy").ai?.request.key).toBe(waiting.pending?.prompt.id);
   });
 
   it("takes a decision with one legal action at once", () => {

@@ -37,6 +37,7 @@ import { DOUBLE_TAP_WINDOW_MS } from "../../cumulus/primitives/pointer-gesture";
 import { useIsDesktop } from "../../cumulus/primitives/use-is-desktop";
 import type { Action, Answer, Engine, InstanceId, Side } from "../../engine";
 import { promptView } from "../../engine";
+import { decisionKeyOf, sidePending, type DecisionKey } from "../../engine/fold/slice";
 import { logEvent, logEventOnce } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { journeyBattleOf } from "../../rules/battle/fold";
@@ -74,12 +75,12 @@ import { parseCardId, type CardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import {
   parseBattleCardId,
-  parseIntentKey,
   type AvatarId,
   type BattleCardId,
   type DreamsignId,
   type DreamwellCardId,
 } from "../../types/identifiers";
+import { engineIntentKey } from "../engine-ai/engine-ai-driver";
 import { useEngineAi } from "../engine-ai/use-engine-ai";
 import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/figment-catalog";
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
@@ -155,35 +156,51 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
 
   // Everything the engine derives is memoized on the slice, which changes
   // only when an engine intent applies, and on the batch being presented.
+  // What the human owes comes from `sidePending`, as the AI host's does.
   const derived = useMemo(() => {
+    const decisionKey: DecisionKey = decisionKeyOf(slice);
     if (presentedState !== null) {
       const view = engine.view(presentedState, HUMAN);
-      return { view, prompt: null, playing: null, decision: null, legal: [], decisionKey: "" };
+      return { view, prompt: null, playing: null, decision: null, legal: [], decisionKey, unreplayable: false };
     }
     const pending = pendingEnginePrompt(battle, engine);
-    const display = pending?.display ?? slice.committed;
-    const decision = engine.decision(slice.committed);
-    const canAct = slice.inFlight === null && decision?.side === HUMAN;
+    const owed = sidePending(engine, slice, pending, HUMAN);
     const prompt: PendingEnginePrompt | null =
-      pending === null
-        ? null
-        : pending.prompt.side === HUMAN
-          ? pending.prompt
-          : { ...promptView(pending.prompt, HUMAN, pending.display), id: pending.prompt.id };
+      owed.kind === "prompt"
+        ? owed.prompt
+        : owed.kind === "waiting" && owed.prompt !== null
+          ? { ...promptView(owed.prompt.prompt, HUMAN, owed.prompt.display), id: owed.prompt.prompt.id }
+          : null;
     const step = slice.inFlight?.step;
-    const view = engine.view(display, HUMAN);
+    const view = engine.view(pending?.display ?? slice.committed, HUMAN);
     const playing =
       step?.kind === "play" && view.instances[step.card]?.controller === HUMAN ? step.card : null;
     return {
       view,
       prompt,
       playing,
-      decision: slice.inFlight === null ? decision : null,
-      legal: canAct ? engine.legalActions(slice.committed, HUMAN) : [],
-      decisionKey: `${String(slice.committed.version)}:${String(slice.attempt)}:decision`,
+      decision: owed.kind === "topLevel" || owed.kind === "waiting" ? owed.decision : null,
+      legal: owed.kind === "topLevel" ? owed.legal : [],
+      decisionKey,
+      unreplayable: owed.kind === "unreplayable",
     };
     // `battle` changes with every fold; the engine battle only with its slice.
   }, [engine, slice, presentedState]);
+  // A step in flight that no longer replays to a prompt offers nothing until
+  // the next intent clears it; it is logged once per attempt.
+  const unreplayable = derived.unreplayable ? slice.inFlight : null;
+  useEffect(() => {
+    if (unreplayable === null) return;
+    const { version } = slice.committed;
+    logEventOnce(`battle_engine_step_unreplayable:${battleId}:${version}:${slice.attempt}`, "battle_engine_step_unreplayable", {
+      battleId,
+      version,
+      attempt: slice.attempt,
+      step: unreplayable.step,
+      answers: unreplayable.answers.length,
+    });
+    // Logged once per in-flight attempt.
+  }, [unreplayable]);
 
   // Each applied intent's events join the presentation queue; the prompt
   // after them shows once the queue is idle ("present, then ask").
@@ -356,7 +373,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   }, [affordances.canAct, slice]);
 
   const submitAction = useCallback(
-    (action: Action, surface: string, key = derived.decisionKey): void => {
+    (action: Action, surface: string, ...parts: readonly string[]): void => {
       logEvent("battle_engine_intent_requested", {
         battleId,
         intent: "battleAction",
@@ -364,7 +381,12 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         decisionKey: derived.decisionKey,
         surface,
       });
-      void actions.battleAction(HUMAN, action, undefined, parseIntentKey(`engine-player:${battleId}:${key}`));
+      void actions.battleAction(
+        HUMAN,
+        action,
+        undefined,
+        engineIntentKey("engine-player", battleId, derived.decisionKey, ...parts),
+      );
     },
     [actions, battleId, derived.decisionKey],
   );
@@ -385,7 +407,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         prompt.id,
         value,
         undefined,
-        parseIntentKey(`engine-player:${battleId}:${prompt.id}`),
+        engineIntentKey("engine-player", battleId, prompt.id),
       );
     },
     [actions, battleId, prompt],
@@ -435,10 +457,10 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const repositionShortcut = useCallback(
     (plan: readonly Action[], shortcut: string): void => {
       plan.forEach((action, index) =>
-        submitAction(action, shortcut, `${derived.decisionKey}:${shortcut}:${String(index)}`),
+        submitAction(action, shortcut, shortcut, String(index)),
       );
     },
-    [derived.decisionKey, submitAction],
+    [submitAction],
   );
 
   const statusActionable = affordances.emblemActivations.length > 0 || affordances.statusPayToEnd.length > 0;

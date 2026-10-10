@@ -11,7 +11,7 @@ import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
 import type { DebugOp } from "../debug/debug-actions";
 import type { Answer, Prompt, PromptId } from "../prompts/types";
-import { allowedBy, type Action } from "../rules/actions";
+import { allowedBy, type Action, type Decision } from "../rules/actions";
 import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
 import type { Side } from "../state/ids";
@@ -137,10 +137,71 @@ export interface FoldOptions {
   readonly log?: (record: EngineLogRecord) => void;
 }
 
+/**
+ * Names one decision of a battle: a pending prompt's id
+ * (`<version>:<attempt>:<answers>`), or `<version>:<attempt>:decision` for a
+ * top-level decision. A decision taken, answered, or cancelled never comes
+ * back under the same key.
+ */
+export type DecisionKey = PromptId | `${number}:${number}:decision`;
+
 function promptIdOf(slice: BattleSlice, answerCount: number): PromptId {
   return parsePromptId(
     `${String(slice.committed.version)}:${String(slice.attempt)}:${String(answerCount)}`,
   );
+}
+
+/** The key of the top-level decision of `slice`'s committed state. */
+export function decisionKeyOf(slice: BattleSlice): DecisionKey {
+  return `${slice.committed.version}:${slice.attempt}:decision`;
+}
+
+/** What one side owes in a slice (`sidePending`). */
+export type SidePending =
+  /** Nobody owes a top-level decision: the battle is over, or nothing is pending. */
+  | { readonly kind: "none" }
+  /** The side owes the committed state's top-level decision. */
+  | {
+      readonly kind: "topLevel";
+      readonly decision: Decision;
+      readonly legal: readonly Action[];
+      readonly key: DecisionKey;
+    }
+  /** The side owes the answer to the prompt the in-flight step is suspended on. */
+  | {
+      readonly kind: "prompt";
+      readonly prompt: PendingPrompt["prompt"];
+      readonly display: BattleState;
+      readonly key: PromptId;
+    }
+  /** The other side owes the top-level decision. */
+  | { readonly kind: "waiting"; readonly owner: Side; readonly decision: Decision; readonly prompt: null }
+  /** The other side owes the pending prompt. */
+  | { readonly kind: "waiting"; readonly owner: Side; readonly decision: null; readonly prompt: PendingPrompt }
+  /**
+   * A step is in flight but its record no longer replays to a prompt: nobody
+   * owes anything, and the next intent clears the step.
+   */
+  | { readonly kind: "unreplayable"; readonly inFlight: InFlight };
+
+/**
+ * What `side` owes in `slice`, given the slice's pending prompt (the fold
+ * adapter's `pending(slice)`). The battle screen and the AI host both read
+ * it, so the human and the AI name a decision by the same key.
+ */
+export function sidePending(engine: Engine, slice: BattleSlice, pending: PendingPrompt | null, side: Side): SidePending {
+  const { committed, inFlight } = slice;
+  if (inFlight !== null) {
+    if (pending === null) return { kind: "unreplayable", inFlight };
+    const { prompt, display } = pending;
+    return prompt.side === side
+      ? { kind: "prompt", prompt, display, key: prompt.id }
+      : { kind: "waiting", owner: prompt.side, decision: null, prompt: pending };
+  }
+  const decision = engine.decision(committed);
+  if (decision === null) return { kind: "none" };
+  if (decision.side !== side) return { kind: "waiting", owner: decision.side, decision, prompt: null };
+  return { kind: "topLevel", decision, legal: engine.legalActions(committed, side), key: decisionKeyOf(slice) };
 }
 
 function errorMessage(error: unknown): string {
