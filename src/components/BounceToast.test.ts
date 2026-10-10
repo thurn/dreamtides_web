@@ -1,5 +1,8 @@
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
+  BounceToast,
   INVALID_ACTION_MESSAGE,
   STALE_ACTION_MESSAGE,
   bounceMessageForReason,
@@ -23,5 +26,16 @@ describe("bounceMessageForReason", () => {
     expect(bounceMessageForReason("prompt_pending")).not.toBe(INVALID_ACTION_MESSAGE);
     expect(bounceMessageForReason("fold_error")).not.toBe(INVALID_ACTION_MESSAGE);
     expect(bounceMessageForReason("fold_error")).not.toBe(STALE_ACTION_MESSAGE);
+  });
+});
+
+describe("BounceToast", () => {
+  it("renders its status toast inside its own Cumulus token scope", () => {
+    // LocalGameProvider mounts the toast outside every screen's scope, so
+    // the toast's outermost element must establish one.
+    const markup = renderToStaticMarkup(createElement(BounceToast));
+    expect(markup).toMatch(
+      /^<div [^>]*class="cumulus"[^>]*>.*data-transient-status-toast/s,
+    );
   });
 });

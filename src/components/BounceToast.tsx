@@ -28,7 +28,12 @@ export function bounceMessageForReason(
   }
 }
 
-/** Shows a bounced intent's outcome on Cumulus's transient status surface. */
+/**
+ * Shows a bounced intent's outcome on Cumulus's transient status surface.
+ * `LocalGameProvider` mounts it beside the routed app tree, outside every
+ * screen's `.cumulus` subtree, so it carries its own token scope; the scope
+ * element generates no box, and the toast places itself.
+ */
 export function BounceToast({
   onDismiss,
   message = INVALID_ACTION_MESSAGE,
@@ -36,5 +41,9 @@ export function BounceToast({
   onDismiss?: () => void;
   message?: string;
 }): ReactNode {
-  return <TransientStatusToast copy={{ message }} onDismiss={onDismiss} />;
+  return (
+    <div className="cumulus" data-bounce-toast="" style={{ display: "contents" }}>
+      <TransientStatusToast copy={{ message }} onDismiss={onDismiss} />
+    </div>
+  );
 }
