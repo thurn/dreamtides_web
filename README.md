@@ -191,7 +191,26 @@ Tracked scenarios:
   passing the human's turns if the AI plays nothing, so whichever policy
   answers the AI host reaches it. It captures the viewport and the revealed
   card and asserts the card travels on. `--arg trace=1` traces the wait.
+- `tutorial-walk` walks a fresh game (`/main?seed=1`, `--arg seed=<n>`)
+  through the tutorial on desktop and mobile, beats 01–31 of
+  `docs/plan/evidence/measurements/hv-33id.1.md`: the main menu, the loading
+  screen's Begin, the scripted stage, the live tutorial battle to Victory, and
+  New Journey to the tutorial Avatar offer. It runs three steps per viewport
+  (front door and scripted stage, live battle, Avatar offer) and asserts an
+  empty `__caps` at every beat. After the player's guided turn it presses the
+  phase button until Victory and only records the guidance the enemy's turn
+  raises, so it reaches Victory whichever policy plays the enemy
+  (`--arg ai=<policy>` adds `?ai=` to the entry). Its waits use test IDs,
+  data attributes, and card UUIDs, never copy.
 - `card-lab-play` is the card sweep's per-card run (below).
+
+A dev-server run breaks when its checkout changes under it. Saving a file
+outside the module graph, such as `README.md`, reloads the page mid-step.
+Anything that runs `scripts/prepare-workspace.mjs` (`npm test`,
+`npm run review`, a build, another runner) rewrites the typed token mirror,
+and the hot update remounts the app, which restarts the game from the URL the
+page loaded with: a `?seed=` entry starts a fresh game on the main menu. Run
+and edit nothing on a checkout while a runner serves it.
 
 ### Interactive QA
 
