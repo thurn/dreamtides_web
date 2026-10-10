@@ -144,7 +144,6 @@ const mockState: FrontDoorState = {
 vi.mock("../../state/front-door-context", () => ({
   useFrontDoor: () => ({
     state: mockState,
-    isCurrentPlaytestController: false,
     mutations: {
       action: mocks.action,
       beginTutorial: mocks.beginTutorial,

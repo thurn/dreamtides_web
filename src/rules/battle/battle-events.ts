@@ -62,8 +62,6 @@ import type {
   BattleCommand,
   BattleDebugEdit,
 } from "../../battle/debug/commands";
-import { automaticBattleIntentKey } from "../../battle/automatic-intent-key";
-import { drawsDreamwellCardAtStartOfTurn } from "../../battle/state/turn-utils";
 import type {
   BattleModifier,
   JourneyFailureReason,
@@ -72,7 +70,7 @@ import type {
   DreamAtlas,
 } from "../../types/journey";
 import type { FoldState } from "../fold-state";
-import type { ClientId } from "../../types/identifiers";
+import { parseClientId } from "../../types/identifiers";
 import {
   battleCardIdFromUnknown,
   dreamwellCardIdFromUnknown,
@@ -165,7 +163,6 @@ import type {
   BattleCardId,
   BattleEffectScriptId,
   DeckEntryId,
-  IntentKey,
   SiteId,
   TutorialAiActionOverrideId,
   TutorialRunId,
@@ -424,13 +421,11 @@ export function restartTutorialBattle(
 ): FoldState | null {
   const battle = tutorialBattleOf(state.battle);
   const battleId = payload.battleId;
-  const controllerClientId = state.playtestControl?.controllerClientId ?? null;
   if (
     battle === null ||
     !nonBlankString(battleId) ||
     battleId !== battle.board.battleId ||
-    !nonBlankString(controllerClientId) ||
-    controllerClientId !== actor
+    isTutorialAutomationActor(actor)
   ) {
     return null;
   }
@@ -461,7 +456,7 @@ export function exitTutorialBattle(
     !nonBlankString(battleId) ||
     battleId !== battle.board.battleId ||
     mode?.kind !== "tutorial" ||
-    state.playtestControl?.controllerClientId !== actor
+    isTutorialAutomationActor(actor)
   ) {
     return null;
   }
@@ -471,7 +466,6 @@ export function exitTutorialBattle(
   return {
     ...reset,
     frontDoor: { phase: "journey", journeyId: null, tutorial: null },
-    playtestControl: state.playtestControl,
     journey: {
       ...reset.journey,
       screen: {
@@ -1016,57 +1010,6 @@ export function battleCommand(
   return battleCommandInternal(state, payload, ctx, actor, false);
 }
 
-/**
- * Recognizes the two journey-battle lifecycle handoffs that every connected
- * client observes and may race to append. Hosted observers remain unable to
- * submit player or debug decisions: the command envelope, intent key, and
- * folded prerequisites must all exactly match the automatic transition.
- */
-export function isPassiveHostedBattleHandoff(
-  state: FoldState,
-  payload: Record<string, unknown>,
-  intentKey: IntentKey | undefined,
-): boolean {
-  const battle = tutorialBattleOf(state.battle);
-  if (
-    battle === null ||
-    battleModeOf(battle).kind !== "journey" ||
-    typeof intentKey !== "string"
-  ) {
-    return false;
-  }
-  const command = coerceBattleCommand(payload.command);
-  if (
-    command === null ||
-    command.id !== "DEBUG_EDIT" ||
-    command.actor !== "system" ||
-    command.sourceSurface !== "auto-system" ||
-    automaticBattleIntentKey(battle.init.battleId, battle.board, command) !==
-      intentKey
-  ) {
-    return false;
-  }
-
-  const { board } = battle;
-  if (board.result !== null || board.phase !== "dreamwell") {
-    return false;
-  }
-  if (command.edit.kind === "DRAW_DREAMWELL_CARD") {
-    return (
-      drawsDreamwellCardAtStartOfTurn(board.turnNumber) &&
-      command.edit.additional !== true &&
-      command.edit.side === board.activeSide &&
-      command.edit.turnNumber === board.turnNumber
-    );
-  }
-  return (
-    command.edit.kind === "SET_PHASE" &&
-    command.edit.phase === "day" &&
-    board.turnNumber === 1 &&
-    board.sides[board.activeSide].dreamwellDrawnTurn !== board.turnNumber
-  );
-}
-
 function battleCommandInternal(
   state: FoldState,
   payload: Record<string, unknown>,
@@ -1082,15 +1025,7 @@ function battleCommandInternal(
   if (command === null) {
     return null;
   }
-  if (
-    !tutorialCommandIsAuthorized(
-      battle,
-      command,
-      actor,
-      state.playtestControl?.controllerClientId ?? null,
-    )
-  )
-    return null;
+  if (!tutorialCommandIsAuthorized(battle, command, actor)) return null;
   if (!voidPlaySourceIsLegal(battle.board, command)) return null;
 
   let drawIndex = 0;
@@ -1271,15 +1206,7 @@ export function battleRepositionCharacter(
 ): FoldState | null {
   const battle = tutorialBattleOf(state.battle);
   if (battle === null || battleModeOf(battle).kind !== "tutorial") return null;
-  if (
-    !tutorialActorIsAuthorized(
-      battle,
-      actor,
-      false,
-      state.playtestControl?.controllerClientId ?? null,
-    )
-  )
-    return null;
+  if (!tutorialActorIsAuthorized(battle, actor, false)) return null;
   const battleCardId = payload.battleCardId;
   const candidate = payload.destination;
   if (
@@ -1356,42 +1283,50 @@ function voidPlaySourceIsLegal(
     : board.phase === "dusk";
 }
 
-/** Tutorial events are driver-owned; automation may only use its bound actor. */
+/** The actor prefix `tutorialAiEventActor` gives the tutorial automation. */
+const TUTORIAL_AUTOMATION_ACTOR_PREFIX = "tutorial-ai:";
+
+/**
+ * Whether `actor` is the tutorial automation (`tutorialAiEventActor`) rather
+ * than the local player.
+ */
+function isTutorialAutomationActor(actor: EventActor | undefined): boolean {
+  return actor?.startsWith(TUTORIAL_AUTOMATION_ACTOR_PREFIX) ?? false;
+}
+
+/** The tutorial automation actor that acts alongside `actor`'s player. */
+function tutorialAutomationActorFor(actor: EventActor): EventActor {
+  return isTutorialAutomationActor(actor)
+    ? actor
+    : tutorialAiEventActor(parseClientId(actor));
+}
+
+/**
+ * Tutorial automatic steps come from the tutorial automation; every other
+ * tutorial intent comes from the local player.
+ */
 function tutorialActorIsAuthorized(
   battle: TutorialBattleFoldState,
   actor: EventActor | undefined,
   automatic: boolean,
-  controllerClientId: ClientId | null,
 ): boolean {
   const mode = battleModeOf(battle);
   if (mode.kind !== "tutorial") return true;
   if (actor === undefined) return true;
-  if (controllerClientId === null) return false;
-  return automatic
-    ? actor === `tutorial-ai:${controllerClientId}`
-    : actor === controllerClientId;
+  return isTutorialAutomationActor(actor) === automatic;
 }
 
-/** Limits driver gestures to the tutorial's declared player controls. */
+/** Limits the player's gestures to the tutorial's declared player controls. */
 function tutorialCommandIsAuthorized(
   battle: TutorialBattleFoldState,
   command: BattleCommand,
   actor: EventActor | undefined,
-  controllerClientId: ClientId | null,
 ): boolean {
   const mode = battleModeOf(battle);
   if (mode.kind !== "tutorial") return true;
   if (actor === undefined) return true;
-  if (
-    controllerClientId !== null &&
-    actor === `tutorial-ai:${controllerClientId}`
-  )
-    return true;
-  if (
-    !tutorialActorIsAuthorized(battle, actor, false, controllerClientId) ||
-    command.id !== "DEBUG_EDIT"
-  )
-    return false;
+  if (isTutorialAutomationActor(actor)) return true;
+  if (command.id !== "DEBUG_EDIT") return false;
   const edit = command.edit;
   if (edit.kind === "SET_PHASE") {
     return (
@@ -1464,17 +1399,14 @@ function battlePlayCardInternal(
   const battle = tutorialBattleOf(state.battle);
   const intent = coerceBattlePlayCardIntent(payload);
   const mode = battle === null ? null : battleModeOf(battle);
-  const controllerClientId = state.playtestControl?.controllerClientId ?? null;
   const automatic =
-    mode?.kind === "tutorial" &&
-    controllerClientId !== null &&
-    actor === `tutorial-ai:${controllerClientId}`;
+    mode?.kind === "tutorial" && isTutorialAutomationActor(actor);
   if (
     battle === null ||
     intent === null ||
     battle.pendingPrompt !== null ||
     battle.board.result !== null ||
-    !tutorialActorIsAuthorized(battle, actor, automatic, controllerClientId)
+    !tutorialActorIsAuthorized(battle, actor, automatic)
   )
     return null;
   const before = battle.board;
@@ -1723,12 +1655,8 @@ export function completeTutorialBattlePresentation(
   const battle = tutorialBattleOf(state.battle);
   const presentation = battle?.tutorialPresentation ?? null;
   const mode = battle === null ? null : battleModeOf(battle);
-  const controllerClientId = state.playtestControl?.controllerClientId ?? null;
   const presentationActorIsAuthorized =
-    mode?.kind !== "tutorial" ||
-    (controllerClientId !== null &&
-      (actor === controllerClientId ||
-        actor === `tutorial-ai:${controllerClientId}`));
+    mode?.kind !== "tutorial" || actor !== undefined;
   if (
     battle !== null &&
     presentationActorIsAuthorized &&
@@ -1755,16 +1683,14 @@ export function completeTutorialBattlePresentation(
       tutorialPresentation: null,
     };
     if (presentation.continuation.kind === "play-card") {
-      const controllerClientId =
-        state.playtestControl?.controllerClientId ?? null;
       return battlePlayCardInternal(
         { ...state, battle: cleared },
         { ...presentation.continuation.payload },
         ctx,
-          presentation.continuation.automatic &&
+        presentation.continuation.automatic &&
           mode?.kind === "tutorial" &&
-          controllerClientId !== null
-          ? tutorialAiEventActor(controllerClientId)
+          actor !== undefined
+          ? tutorialAutomationActorFor(actor)
           : undefined,
         true,
       );
@@ -1809,7 +1735,7 @@ export function completeTutorialBattlePresentation(
   if (
     battle === null ||
     mode?.kind !== "tutorial" ||
-    actor !== `tutorial-ai:${controllerClientId ?? ""}` ||
+    !isTutorialAutomationActor(actor) ||
     typeof payload.presentationId !== "string" ||
     presentation === null ||
     payload.presentationId !== presentation.id
@@ -2017,12 +1943,7 @@ export function battleGesture(
   }
   if (
     !commands.every((command) =>
-      tutorialCommandIsAuthorized(
-        battle,
-        command,
-        actor,
-        state.playtestControl?.controllerClientId ?? null,
-      ),
+      tutorialCommandIsAuthorized(battle, command, actor),
     )
   )
     return null;
@@ -2137,15 +2058,7 @@ export function battleAiBlock(
   ) {
     return null;
   }
-  if (
-    !tutorialActorIsAuthorized(
-      battle,
-      actor,
-      true,
-      state.playtestControl?.controllerClientId ?? null,
-    )
-  )
-    return null;
+  if (!tutorialActorIsAuthorized(battle, actor, true)) return null;
 
   const marker = battle.aiBlockingTurn;
   if (
@@ -3234,7 +3147,6 @@ export function resolvePrompt(
       battle,
       actor,
       battle.pendingPrompt?.run.side === "enemy",
-      state.playtestControl?.controllerClientId ?? null,
     )
   )
     return null;

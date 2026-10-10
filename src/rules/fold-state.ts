@@ -23,7 +23,6 @@ import type { BattleFoldState } from "./battle/fold";
 import { parseJourneyId } from "../types/identifiers";
 import type {
   CardTutorialScreenKey,
-  ClientId,
   JourneyId,
   TutorialTriggerId,
 } from "../types/identifiers";
@@ -39,18 +38,12 @@ export interface FrontDoorState {
   readonly tutorial: TutorialPlaybackState | null;
 }
 
-export interface PlaytestControlState {
-  readonly mode: "collaborative" | "single-controller";
-  readonly controllerClientId: ClientId | null;
-}
-
 /**
  * The complete state folded from a game's event log: the journey slice plus an
  * optional in-battle slice. `battle` is null whenever no battle is active.
  */
 export interface FoldState {
   readonly frontDoor: FrontDoorState;
-  readonly playtestControl?: PlaytestControlState;
   readonly journey: JourneyState;
   readonly battle: BattleFoldState | null;
   /** First-occurrence tutorials already presented in this game. */
@@ -71,7 +64,7 @@ export interface JourneyEconomy {
  * Builds the pre-journey fold state a fresh game shows before `START_JOURNEY`:
  * the {@link initialJourneyState} for `seed`, no battle, no tutorial history,
  * and the front door on `frontDoorEntry`. Journey games omit the entry; they
- * start on the journey phase in collaborative control.
+ * start on the journey phase.
  */
 export function initialFoldState(
   seed: JourneySeed,
@@ -84,10 +77,6 @@ export function initialFoldState(
       phase: entry,
       journeyId: entry === "main" ? null : parseJourneyId(`genesis:${seed}`),
       tutorial: null,
-    },
-    playtestControl: {
-      mode: frontDoorEntry === undefined ? "collaborative" : "single-controller",
-      controllerClientId: null,
     },
     journey: initialJourneyState(seed, economy),
     battle: null,

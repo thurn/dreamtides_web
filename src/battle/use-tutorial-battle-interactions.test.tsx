@@ -169,10 +169,6 @@ function state(): FoldState {
       journeyId: parseJourneyId("journey-uuid"),
       tutorial: null,
     },
-    playtestControl: {
-      mode: "single-controller",
-      controllerClientId: parseClientId("driver-client"),
-    },
     journey: {} as FoldState["journey"],
     tutorialTriggerIdsSeen: [],
     cardTutorialScreenKeysSeen: [],
@@ -258,8 +254,6 @@ function sameTurnRevisitState(
 const controller: TutorialBattleControllerPlan = {
   status: "driver",
   driverClientId: parseClientId("driver-client"),
-  isCurrentClientDriver: true,
-  isDriverPresent: true,
   requiresHumanDecision: true,
   intent: null,
 };

@@ -11,7 +11,6 @@ import { parseBattleId } from "../types/identifiers";
 import { parsePresentationId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
 import { parseJourneyId } from "../types/identifiers";
-import { parseClientId } from "../types/identifiers";
 import { parseTutorialRunId } from "../types/identifiers";
 import { testCardId } from "../types/test-identities";
 
@@ -35,10 +34,6 @@ function presentationState(): FoldState {
       phase: "tutorial",
       journeyId: parseJourneyId("journey"),
       tutorial: null,
-    },
-    playtestControl: {
-      mode: "single-controller",
-      controllerClientId: parseClientId("tutorial-driver"),
     },
     journey: {} as FoldState["journey"],
     tutorialTriggerIdsSeen: [],
@@ -91,7 +86,6 @@ beforeEach(() => {
   ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.useFakeTimers();
   mocks.completePresentation.mockClear();
-  mocks.clientId = "tutorial-driver";
   mocks.state = presentationState();
 });
 
@@ -201,21 +195,6 @@ describe("useTutorialBattleController", () => {
     act(() => {
       vi.advanceTimersByTime(3_000);
     });
-    expect(mocks.completePresentation).not.toHaveBeenCalled();
-
-    act(() => root.unmount());
-  });
-
-  it("does not drive a battle another client controls", () => {
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
-    mocks.clientId = "tutorial-viewer";
-
-    act(() => {
-      root.render(<Harness visiblePresentationId={null} />);
-    });
-
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 
     act(() => root.unmount());

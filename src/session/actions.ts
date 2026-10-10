@@ -42,7 +42,6 @@ import type { TutorialAiActionOverrideId } from "../types/identifiers";
 import type {
   AuguryArchetypeId,
   CardTutorialScreenKey,
-  ClientId,
   ExplorationActionId,
   FrontDoorActionId,
   IntentKey,
@@ -89,9 +88,6 @@ export interface GameActions {
   completeTutorialAction: (
     runId: TutorialRunId,
     actionId: TutorialActionId,
-  ) => Promise<number>;
-  takePlaytestControl: (
-    previousControllerClientId: ClientId | null,
   ) => Promise<number>;
   beginTutorialBattle: (tutorialRunId: TutorialRunId) => Promise<number>;
   restartTutorialBattle: (battleId: BattleId) => Promise<number>;
@@ -495,8 +491,6 @@ export function makeActions(append: AppendFn): GameActions {
         { runId, actionId },
         parseIntentKey(`tutorial:${runId}:complete:${actionId}`),
       ),
-    takePlaytestControl: (previousControllerClientId) =>
-      emit("TAKE_PLAYTEST_CONTROL", { previousControllerClientId }),
     beginTutorialBattle: (tutorialRunId) =>
       emit(
         "BEGIN_TUTORIAL_BATTLE",

@@ -95,7 +95,6 @@ describe("buildTutorialBattleView", () => {
       } as unknown as TutorialBattleFoldState,
       {
         status: "driver",
-        isCurrentClientDriver: true,
         requiresHumanDecision: false,
         driverClientId: "driver-client",
       } as TutorialBattleControllerPlan,
@@ -202,7 +201,6 @@ describe("buildTutorialBattleView", () => {
       battle,
       {
         status: "driver",
-        isCurrentClientDriver: true,
         requiresHumanDecision: false,
         driverClientId: "driver-client",
       } as TutorialBattleControllerPlan,
@@ -250,7 +248,6 @@ describe("buildTutorialBattleView", () => {
       eventBattle,
       {
         status: "driver",
-        isCurrentClientDriver: true,
         requiresHumanDecision: false,
         driverClientId: "driver-client",
       } as TutorialBattleControllerPlan,
@@ -309,7 +306,6 @@ describe("buildTutorialBattleView", () => {
       } as unknown as TutorialBattleFoldState,
       {
         status: "driver",
-        isCurrentClientDriver: true,
         requiresHumanDecision: false,
         driverClientId: "driver-client",
       } as TutorialBattleControllerPlan,
@@ -367,8 +363,7 @@ describe("buildTutorialBattleView", () => {
         } as unknown as TutorialBattleFoldState,
         {
           status: "driver",
-          isCurrentClientDriver: true,
-          requiresHumanDecision: false,
+            requiresHumanDecision: false,
           driverClientId: "driver-client",
         } as TutorialBattleControllerPlan,
         null,
@@ -457,7 +452,6 @@ describe("buildTutorialBattleView", () => {
       battle,
       {
         status: "driver",
-        isCurrentClientDriver: true,
         requiresHumanDecision: false,
         driverClientId: "driver-client",
       } as TutorialBattleControllerPlan,
@@ -512,7 +506,6 @@ describe("buildTutorialBattleView", () => {
       } as TutorialBattleFoldState,
       {
         status: "driver",
-        isCurrentClientDriver: true,
         requiresHumanDecision: false,
         driverClientId: "driver-client",
       } as TutorialBattleControllerPlan,
@@ -557,8 +550,6 @@ describe("buildTutorialBattleView", () => {
     } as unknown as TutorialBattleFoldState;
     const activeController = {
       status: "driver",
-      isCurrentClientDriver: true,
-      isDriverPresent: true,
       requiresHumanDecision: false,
       driverClientId: "driver-client",
     } as TutorialBattleControllerPlan;
@@ -576,11 +567,7 @@ describe("buildTutorialBattleView", () => {
           ...battle,
           board: { result: "victory" },
         } as TutorialBattleFoldState,
-        {
-          ...activeController,
-          status: "observer",
-          isCurrentClientDriver: false,
-        },
+        { ...activeController, status: "terminal" },
         null,
       ).victoryVisible,
     ).toBe(true);

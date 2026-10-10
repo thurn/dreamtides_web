@@ -41,7 +41,6 @@ import { cardIsRevealedTo } from "../../battle/state/card-visibility";
 import { starterCardHasRequiredTargets } from "../../battle/starter-card-targets";
 import {
   isDreamwellPromptRef,
-  isLegacyPromptText,
   resolveDreamwellPromptRef,
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
@@ -312,7 +311,6 @@ function resolvePromptText(
   if (isDreamwellPromptRef(text)) {
     return resolveDreamwellPromptRef(text, init.dreamwellDeck);
   }
-  if (isLegacyPromptText(text)) return text.text;
   return builtInBattlePromptMessage(text);
 }
 

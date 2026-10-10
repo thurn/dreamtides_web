@@ -3,9 +3,8 @@
 // intents to its log. Every append commits synchronously, so the displayed
 // state and the committed state are the same fold.
 //
-// The single local player is the controller of every game: `useClientId` is
-// that player's id, and the provider keeps that player in control of the
-// fold's single-controller phases (src/session/single-controller.ts).
+// The single local player makes every game decision: `useClientId` is that
+// player's id and the default actor of every intent.
 
 import {
   createContext,
@@ -31,7 +30,6 @@ import {
   type LocalGameControls,
 } from "./game-controls";
 import type { LocalGame } from "./local-game";
-import { keepLocalPlayerInControl } from "./single-controller";
 import { logEvent } from "../logging";
 import {
   clearEngineLogRecords,
@@ -65,19 +63,15 @@ const BOUNCE_TOAST_MS = 4000;
 
 /**
  * Provides `game` to the game hooks, and its `controls` to
- * `useLocalGameControls`, keeps the local player in control of the game, and
- * shows a toast when an intent bounces. `claimUnownedBattle` also claims a
- * battle nobody controls (a direct tutorial-battle entry).
+ * `useLocalGameControls`, and shows a toast when an intent bounces.
  */
 export function LocalGameProvider({
   game,
   controls = null,
-  claimUnownedBattle = false,
   children,
 }: {
   game: LocalGame<FoldState>;
   controls?: LocalGameControls | null;
-  claimUnownedBattle?: boolean;
   children: ReactNode;
 }): ReactNode {
   const [bounce, setBounce] = useState<{ token: number; message: string }>({
@@ -109,11 +103,6 @@ export function LocalGameProvider({
       for (const { event, ...fields } of records) logEvent(event, fields);
     });
   }, [game]);
-
-  useEffect(
-    () => keepLocalPlayerInControl(game, { claimUnownedBattle }),
-    [claimUnownedBattle, game],
-  );
 
   useEffect(() => {
     if (bounce.token === 0) return undefined;
@@ -176,7 +165,7 @@ export function useConfirmedHead(): number | null {
   return useLogSnapshot((game) => game.log.head());
 }
 
-/** The local player's id: the default actor of every intent and the controller. */
+/** The local player's id: the default actor of every intent. */
 export function useClientId(): ClientId {
   return useLocalGameContext().game.localPlayerId;
 }

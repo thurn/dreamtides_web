@@ -549,8 +549,8 @@ export interface BattleMutableState {
   forcedResult: BattleResult | null;
   /**
    * The hand-card instance currently presented publicly over the battlefield.
-   * The reveal is shared through the room fold and clears when the instance
-   * leaves a hand.
+   * The reveal is held in the fold and clears when the instance leaves a
+   * hand.
    */
   revealedHandCardId?: BattleCardId | null;
   /** Next index to draw from the shared `BattleInit.dreamwellDeck`. */

@@ -151,7 +151,6 @@ export function buildTutorialBattleView(
   const prompt = battle.pendingPrompt;
   const confirmedHumanPrompt =
     controller.status === "driver" &&
-    controller.isCurrentClientDriver &&
     controller.requiresHumanDecision &&
     prompt !== null &&
     confirmedPromptId === prompt.promptId;
@@ -165,9 +164,7 @@ export function buildTutorialBattleView(
       controller.status === "not-tutorial" ? "observer" : controller.status,
     driverClientId: controller.driverClientId,
     manualControls:
-      controller.status === "driver" &&
-      controller.isCurrentClientDriver &&
-      controller.requiresHumanDecision,
+      controller.status === "driver" && controller.requiresHumanDecision,
     foresee:
       confirmedHumanPrompt && prompt.options.kind === "foresee"
         ? {

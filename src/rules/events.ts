@@ -5,7 +5,6 @@ import type {
   BattleId,
   CardTutorialScreenKey,
   ChoiceId,
-  ClientId,
   DeckEntryId,
   AvatarId,
   DreamsignId,
@@ -95,7 +94,6 @@ export interface EventPayloads {
     runId: TutorialRunId;
     actionId: TutorialActionId;
   };
-  TAKE_PLAYTEST_CONTROL: { previousControllerClientId: ClientId | null };
   BEGIN_TUTORIAL_BATTLE: { tutorialRunId: TutorialRunId };
   RESTART_TUTORIAL_BATTLE: {
     battleId: BattleId;
@@ -342,7 +340,6 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "ADVANCE_FRONT_DOOR",
   "BEGIN_TUTORIAL",
   "COMPLETE_TUTORIAL_ACTION",
-  "TAKE_PLAYTEST_CONTROL",
   "OPEN_CARD_TUTORIAL_GUIDANCE",
   "COMPLETE_CARD_TUTORIAL_GUIDANCE",
   "SET_CARD_SOURCE_DEBUG",
@@ -362,8 +359,7 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<GameEventType> =
     "ADVANCE_FRONT_DOOR",
     "BEGIN_TUTORIAL",
     "COMPLETE_TUTORIAL_ACTION",
-    "TAKE_PLAYTEST_CONTROL",
-    "OPEN_CARD_TUTORIAL_GUIDANCE",
+      "OPEN_CARD_TUTORIAL_GUIDANCE",
     "COMPLETE_CARD_TUTORIAL_GUIDANCE",
       "SET_CARD_SOURCE_DEBUG",
     "DISMISS_STARTING_DECK_POPUP",
@@ -386,7 +382,6 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   ADVANCE_FRONT_DOOR: true,
   BEGIN_TUTORIAL: true,
   COMPLETE_TUTORIAL_ACTION: true,
-  TAKE_PLAYTEST_CONTROL: true,
   BEGIN_TUTORIAL_BATTLE: true,
   RESTART_TUTORIAL_BATTLE: true,
   EXIT_TUTORIAL_BATTLE: true,

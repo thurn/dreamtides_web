@@ -10,7 +10,7 @@ import type {
 } from "./types";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { resolveBattleAiConfiguration } from "../types/opponents-data";
-import type { BattleCardId, ClientId } from "../types/identifiers";
+import type { BattleCardId } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
 import { parsePresentationId } from "../types/identifiers";
@@ -20,7 +20,6 @@ import { parseTutorialRunId } from "../types/identifiers";
 import { testCardId } from "../types/test-identities";
 
 const DRIVER = parseClientId("client-driver");
-const OBSERVER = parseClientId("client-observer");
 const TUTORIAL_AI_CONFIGURATION = resolveBattleAiConfiguration(
   opponentsFixture(),
   "tutorial",
@@ -29,7 +28,6 @@ const TUTORIAL_AI_CONFIGURATION = resolveBattleAiConfiguration(
 function stateFor(
   boardOverrides: Partial<BattleMutableState> = {},
   extras: {
-    driverClientId?: ClientId;
     pendingPrompt?: unknown;
     aiBlockingTurn?: unknown;
   } = {},
@@ -40,10 +38,6 @@ function stateFor(
       phase: "tutorial",
       journeyId: parseJourneyId("journey-uuid"),
       tutorial: null,
-    },
-    playtestControl: {
-      mode: "single-controller",
-      controllerClientId: extras.driverClientId ?? DRIVER,
     },
     journey: {} as FoldState["journey"],
     tutorialTriggerIdsSeen: [],
@@ -166,12 +160,8 @@ function card(
   };
 }
 
-function plan(
-  state: FoldState,
-  clientId = DRIVER,
-  connectedClientIds: readonly ClientId[] | null = [DRIVER, OBSERVER],
-) {
-  return planTutorialBattleController({ state, clientId, connectedClientIds });
+function plan(state: FoldState) {
+  return planTutorialBattleController({ state, clientId: DRIVER });
 }
 
 describe("tutorial battle controller", () => {
@@ -201,34 +191,6 @@ describe("tutorial battle controller", () => {
     });
   });
 
-  it("assigns automatic work exclusively to the persisted, present driver", () => {
-    const state = stateFor({ phase: "dawn" });
-    expect(plan(state).intent?.kind).toBe("battle-command");
-    expect(plan(state, OBSERVER)).toMatchObject({
-      status: "observer",
-      intent: null,
-    });
-  });
-
-  it("pauses when the controller disconnects without promoting a viewer", () => {
-    const state = stateFor({ phase: "dawn" });
-    expect(plan(state, OBSERVER, [OBSERVER])).toMatchObject({
-      status: "paused-driver-absent",
-      intent: null,
-    });
-    expect(plan(state, DRIVER, [DRIVER, OBSERVER]).intent?.kind).toBe(
-      "battle-command",
-    );
-  });
-
-  it("leaves takeover explicit when several viewers remain", () => {
-    const state = stateFor({ phase: "dawn" });
-    const otherViewer = parseClientId("client-z-viewer");
-    expect(plan(state, OBSERVER, [otherViewer, OBSERVER]).intent).toBeNull();
-    expect(plan(state, otherViewer, [otherViewer, OBSERVER]).intent).toBeNull();
-    expect(plan(state, OBSERVER, null).intent).toBeNull();
-  });
-
   it("makes reload and StrictMode re-evaluation idempotent through the same key", () => {
     const state = stateFor({ phase: "dawn" });
     const first = plan(state).intent;
@@ -237,15 +199,6 @@ describe("tutorial battle controller", () => {
     expect(first?.intentKey).toBe(
       "tutorial-battle:tutorial-battle-run-uuid:player:4:dawn:dawn:triggers",
     );
-  });
-
-  it("treats the claimant of a rebuilt tutorial snapshot as the new driver", () => {
-    const state = stateFor({ phase: "dawn" }, { driverClientId: OBSERVER });
-    expect(plan(state, DRIVER)).toMatchObject({
-      status: "observer",
-      intent: null,
-    });
-    expect(plan(state, OBSERVER).status).toBe("driver");
   });
 
   it("stops at player Day and Night while advancing player Dusk through enemy blocking", () => {
@@ -592,36 +545,12 @@ describe("tutorial battle controller", () => {
       dissolved: [],
     };
 
-    expect(plan(terminal, DRIVER, [DRIVER, OBSERVER])).toMatchObject({
+    expect(plan(terminal)).toMatchObject({
       status: "driver",
       intent: {
         kind: "complete-presentation",
         presentationId: parsePresentationId("challenge-resolved:player:4:F0"),
       },
-    });
-    expect(plan(terminal, OBSERVER, [DRIVER, OBSERVER])).toMatchObject({
-      status: "terminal",
-      intent: null,
-    });
-  });
-
-  it("keeps terminal authority with the present controller and pauses after departure", () => {
-    const terminal = stateFor({ result: "victory" });
-    expect(plan(terminal, DRIVER, [DRIVER, OBSERVER])).toMatchObject({
-      status: "terminal",
-      isCurrentClientDriver: true,
-      isDriverPresent: true,
-    });
-    expect(plan(terminal, OBSERVER, [DRIVER, OBSERVER])).toMatchObject({
-      status: "terminal",
-      isCurrentClientDriver: false,
-      isDriverPresent: true,
-    });
-    expect(plan(terminal, OBSERVER, [OBSERVER])).toMatchObject({
-      status: "terminal",
-      isCurrentClientDriver: false,
-      isDriverPresent: false,
-      intent: null,
     });
   });
 });

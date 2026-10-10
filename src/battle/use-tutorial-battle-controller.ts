@@ -62,7 +62,7 @@ export function tutorialBattlePresentationDwellMs(
  * React bridge for the pure tutorial controller. It reads only the committed
  * fold and submits normal game intents; the game log remains the sole flow
  * authority and intent keys absorb StrictMode/remount/reload duplicates. The
- * local player is the only connected client.
+ * local player drives the battle.
  */
 export function useTutorialBattleController({
   paused = false,
@@ -82,12 +82,7 @@ export function useTutorialBattleController({
     [],
   );
   const plan = useMemo(
-    () =>
-      planTutorialBattleController({
-        state,
-        clientId,
-        connectedClientIds: [clientId],
-      }),
+    () => planTutorialBattleController({ state, clientId }),
     [state, clientId],
   );
 

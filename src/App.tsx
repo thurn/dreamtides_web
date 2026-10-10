@@ -619,11 +619,7 @@ function LocalGameApp({
       );
     case "ready":
       return (
-        <LocalGameProvider
-          game={status.game}
-          controls={status.controls}
-          claimUnownedBattle={directTutorialBattle}
-        >
+        <LocalGameProvider game={status.game} controls={status.controls}>
           <GameJourneyProvider journeyContent={journeyContent}>
             <FrontDoorProvider>
               <FrontDoorRouter

@@ -11,7 +11,7 @@ describe("reducer compatibility", () => {
   });
 
   it("rejects a preceding semantic reducer protocol", () => {
-    expect(isReducerVersionCompatible("dreamtides-coop-v28")).toBe(false);
+    expect(isReducerVersionCompatible("dreamtides-coop-v29")).toBe(false);
   });
 
   it("rejects an unreviewed reducer identity", () => {

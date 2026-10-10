@@ -22,14 +22,11 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
   const clientId = useClientId();
   const battle = tutorialBattleOf(state.battle);
   const presentation = battle?.tutorialPresentation;
-  const isController =
-    state.playtestControl?.mode !== "single-controller" ||
-    state.playtestControl.controllerClientId === clientId;
   const guidance =
     presentation?.kind === "tutorial-guidance" ? presentation : null;
   const submitAdvance = useCallback(
     (reason: "timer" | "manual") => {
-      if (!isController || guidance === null || battle === null) return;
+      if (guidance === null || battle === null) return;
       const message = guidance.messages[guidance.messageIndex];
       if (message === undefined) return;
       logEvent("battle_tutorial_guidance_advance_requested", {
@@ -51,7 +48,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
         )
         .catch(() => undefined);
     },
-    [actions, battle, clientId, guidance, isController],
+    [actions, battle, clientId, guidance],
   );
 
   useEffect(() => {

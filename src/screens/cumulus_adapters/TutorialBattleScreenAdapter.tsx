@@ -53,12 +53,7 @@ export function TutorialBattleScreenAdapter({
   const startNewJourney = useCallback(() => {
     const completedVictory =
       battle?.board.result === "victory" && controller.status === "terminal";
-    if (
-      battle === null ||
-      (!completedVictory && !previewVictory) ||
-      !controller.isCurrentClientDriver ||
-      !controller.isDriverPresent
-    ) {
+    if (battle === null || (!completedVictory && !previewVictory)) {
       return;
     }
     logEvent("tutorial_battle_new_journey_requested", {
@@ -71,8 +66,6 @@ export function TutorialBattleScreenAdapter({
     void exitBattle(battle.board.battleId).catch(() => undefined);
   }, [
     battle,
-    controller.isCurrentClientDriver,
-    controller.isDriverPresent,
     controller.status,
     mutations.exitTutorialBattle,
     previewVictory,

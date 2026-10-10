@@ -22,7 +22,6 @@ import type {
   EventType,
   GameEvent,
 } from "../eventlog/types";
-import { intentKeyFromUnknown } from "../types/identifiers";
 import {
   CAS_EXEMPT_EVENT_TYPES,
   DECISION_NEUTRAL_EVENT_TYPES,
@@ -31,7 +30,6 @@ import {
 } from "./events";
 import type { FoldState } from "./fold-state";
 import type { JourneyState } from "../types/journey";
-import { readDraftSiteProgress } from "../data/draft-site-bootstrap";
 import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/battle-events";
 import {
@@ -49,8 +47,6 @@ import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
-import { parseSiteId } from "../types/identifiers";
-import { parseClientId } from "../types/identifiers";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
@@ -84,23 +80,9 @@ export function reduceGameEvent(
   event: GameEvent,
   ctx: EventContext,
 ): ReduceResult {
-  const controlDecision = authorizePlaytestIntent(state, event);
-  if (controlDecision === "reject") {
-    return bounce(state, "observer_read_only");
-  }
-  const routedState: FoldState =
-    controlDecision === "claim"
-      ? {
-          ...state,
-          playtestControl: {
-            mode: "single-controller",
-            controllerClientId: parseClientId(event.actor),
-          },
-        }
-      : state;
   const exempt = isCasExempt(event.type); // rule 1
-  const matchingResolve = isMatchingResolve(routedState, event); // rule 2
-  const matchingEngineAnswer = isMatchingEngineAnswer(routedState, event); // rule 2
+  const matchingResolve = isMatchingResolve(state, event); // rule 2
+  const matchingEngineAnswer = isMatchingEngineAnswer(state, event); // rule 2
 
   if (!exempt && !matchingResolve && !matchingEngineAnswer) {
     // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
@@ -112,8 +94,8 @@ export function reduceGameEvent(
     }
     // rule 4 — prompt gate
     if (
-      tutorialBattleOf(routedState.battle)?.pendingPrompt != null ||
-      pendingEnginePrompt(routedState.battle, battleEngine()) !== null
+      tutorialBattleOf(state.battle)?.pendingPrompt != null ||
+      pendingEnginePrompt(state.battle, battleEngine()) !== null
     ) {
       return bounce(state, "prompt_pending");
     }
@@ -132,13 +114,13 @@ export function reduceGameEvent(
     // containment.
     let result: ReduceResult;
     try {
-      result = routeDomain(routedState, event, ctx);
+      result = routeDomain(state, event, ctx);
     } catch {
       result = {
         state: {
-          ...routedState,
+          ...state,
           battle: {
-            ...tutorialBattleOf(routedState.battle)!,
+            ...tutorialBattleOf(state.battle)!,
             pendingPrompt: null,
             effectQueue: [],
           },
@@ -146,20 +128,11 @@ export function reduceGameEvent(
         outcome: "applied",
       };
     }
-    const controlled =
-      result.outcome === "bounced" && controlDecision === "claim"
-        ? { ...result, state }
-        : result;
     // Invariant checks stay outside the sanctioned domain-error catch. A
     // semantic programmer error must reach fold containment and diagnostics.
-    return enforceInvariants(event, controlled);
+    return enforceInvariants(event, result);
   }
-  const result = routeDomain(routedState, event, ctx);
-  const controlled =
-    result.outcome === "bounced" && controlDecision === "claim"
-      ? { ...result, state }
-      : result;
-  return enforceInvariants(event, controlled);
+  return enforceInvariants(event, routeDomain(state, event, ctx));
 }
 
 function enforceInvariants(
@@ -170,111 +143,6 @@ function enforceInvariants(
     assertFoldInvariants(result.state);
   }
   return result;
-}
-
-type PlaytestControlDecision = "allow" | "claim" | "reject";
-
-function authorizePlaytestIntent(
-  state: FoldState,
-  event: GameEvent,
-): PlaytestControlDecision {
-  const control = state.playtestControl ?? {
-    mode: "collaborative" as const,
-    controllerClientId: null,
-  };
-  if (control.mode !== "single-controller") return "allow";
-  if (event.type === "TAKE_PLAYTEST_CONTROL") return "allow";
-  if (event.type === "COMPLETE_TUTORIAL_BATTLE_PRESENTATION") {
-    const controllerClientId = control.controllerClientId;
-    return controllerClientId !== null &&
-      (event.actor === controllerClientId ||
-        event.actor === `tutorial-ai:${controllerClientId}`)
-      ? "allow"
-      : "reject";
-  }
-  if (isPassiveHostedHandoff(state, event)) return "allow";
-  if (!isPlayerControlledIntent(event)) return "allow";
-  if (control.controllerClientId === null) {
-    if (isFirstTutorialGameplayIntent(state, event)) return "claim";
-    return state.frontDoor.phase === "main" ||
-      state.frontDoor.phase === "mainExiting" ||
-      state.frontDoor.phase === "loading"
-      ? "allow"
-      : "reject";
-  }
-  return event.actor === control.controllerClientId ? "allow" : "reject";
-}
-
-function isPassiveHostedHandoff(state: FoldState, event: GameEvent): boolean {
-  if (
-    event.type === "BATTLE_COMMAND" &&
-    battleEvents.isPassiveHostedBattleHandoff(
-      state,
-      event.payload,
-      intentKeyFromUnknown(event.intentKey) ?? undefined,
-    )
-  ) {
-    return true;
-  }
-  if (event.type === "OPEN_SITE" || event.type === "ENTER_DRAFT_SITE") {
-    const siteId = event.payload.siteId;
-    return (
-      typeof siteId === "string" &&
-      state.journey.screen.type === "site" &&
-      state.journey.screen.siteId === siteId
-    );
-  }
-  if (event.type !== "COMPLETE_SITE") return false;
-  const siteId = event.payload.siteId;
-  if (typeof siteId !== "string") return false;
-  return readDraftSiteProgress(state.journey.draftState, parseSiteId(siteId))
-    .isComplete;
-}
-
-const TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
-  "BATTLE_COMMAND",
-  "BATTLE_REPOSITION_CHARACTER",
-  "BATTLE_PLAY_CARD",
-  "BATTLE_GESTURE",
-  "RESOLVE_PROMPT",
-]);
-
-function isFirstTutorialGameplayIntent(
-  state: FoldState,
-  event: GameEvent,
-): boolean {
-  if (
-    event.type === "FRONT_DOOR_ACTION" &&
-    event.payload.surface === "tutorial" &&
-    event.payload.actionId === "play-card"
-  ) {
-    return true;
-  }
-  return (
-    state.battle?.mode?.kind === "tutorial" &&
-    isKnownEventType(event.type) &&
-    TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES.has(event.type)
-  );
-}
-
-const PASSIVE_HOSTED_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
-  "ADVANCE_FRONT_DOOR",
-  "BEGIN_TUTORIAL",
-  "COMPLETE_TUTORIAL_ACTION",
-  "BEGIN_TUTORIAL_BATTLE",
-  "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
-  "OPEN_CARD_TUTORIAL_GUIDANCE",
-  "COMPLETE_CARD_TUTORIAL_GUIDANCE",
-  "SET_CARD_SOURCE_DEBUG",
-]);
-
-function isPlayerControlledIntent(event: GameEvent): boolean {
-  if (isKnownEventType(event.type) && PASSIVE_HOSTED_EVENT_TYPES.has(event.type))
-    return false;
-  if (event.actor.startsWith("tutorial-ai:") || event.actor.startsWith("ai:")) {
-    return false;
-  }
-  return true;
 }
 
 /**
@@ -445,8 +313,6 @@ export function routeDomain(
         state,
         frontDoor.completeTutorialAction(state.frontDoor, payload),
       );
-    case "TAKE_PLAYTEST_CONTROL":
-      return takePlaytestControl(state, payload, event.actor);
     case "BEGIN_TUTORIAL_BATTLE":
       return foldCase(
         state,
@@ -499,10 +365,7 @@ export function routeDomain(
     case "REROLL_AVATAR_OFFER":
       return journeyCase(state, lifecycle.rerollAvatarOffer(journey));
     case "START_JOURNEY":
-      return startJourneyCase(
-        state,
-        lifecycle.startJourney(journey, payload, ctx),
-      );
+      return journeyCase(state, lifecycle.startJourney(journey, payload, ctx));
 
     // --- deck & transfiguration ---
     case "ADD_CARD":
@@ -772,33 +635,6 @@ export function routeDomain(
   }
 }
 
-function takePlaytestControl(
-  state: FoldState,
-  payload: Record<string, unknown>,
-  actor: EventActor,
-): ReduceResult {
-  if (
-    state.playtestControl?.mode !== "single-controller" ||
-    typeof actor !== "string" ||
-    actor.length === 0 ||
-    payload.previousControllerClientId !==
-      state.playtestControl.controllerClientId ||
-    actor === state.playtestControl.controllerClientId
-  ) {
-    return bounce(state);
-  }
-  return {
-    outcome: "applied",
-    state: {
-      ...state,
-      playtestControl: {
-        ...state.playtestControl,
-        controllerClientId: parseClientId(actor),
-      },
-    },
-  };
-}
-
 /**
  * Wrap a journey-only domain result: `null` bounces (invalid-in-state / malformed
  * payload), a new `JourneyState` is applied over the existing battle slice.
@@ -815,32 +651,6 @@ function journeyCase(
     }),
     outcome: "applied",
   };
-}
-
-/**
- * Apply a successfully assembled run and release hosted tutorial authority at
- * the exact event that enters the authored tutorial journey. The lifecycle
- * provider derives `isTutorialJourney` from the pinned Avatar offer and
- * loaded tutorial pool, so the control policy never trusts URL or payload
- * hints. A rejected start returns the untouched single-controller fold.
- */
-function startJourneyCase(
-  state: FoldState,
-  nextJourney: JourneyState | null,
-): ReduceResult {
-  if (nextJourney === null) return bounce(state);
-  return journeyCase(
-    nextJourney.isTutorialJourney === true
-      ? {
-          ...state,
-          playtestControl: {
-            mode: "collaborative",
-            controllerClientId: null,
-          },
-        }
-      : state,
-    nextJourney,
-  );
 }
 
 function frontDoorCase(

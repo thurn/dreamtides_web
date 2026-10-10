@@ -21,7 +21,7 @@ import {
   isMatchingResolve,
   reduceGameEvent,
 } from "./reducer";
-import { parseBattleId, parseClientId } from "../types/identifiers";
+import { parseBattleId } from "../types/identifiers";
 import { testAvatarId, testFoldHash } from "../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 
@@ -157,11 +157,7 @@ describe("rule 3 — compare-and-swap window", () => {
 // Rule 4 / Rule 2 — prompt gate
 // ---------------------------------------------------------------------------
 
-/** Open sandbox prompts belong to the standalone tutorial battle, which alice drives. */
-const ALICE_DRIVES_THE_TUTORIAL: FoldState["playtestControl"] = {
-  mode: "single-controller",
-  controllerClientId: parseClientId("alice"),
-};
+/** Open sandbox prompts belong to the standalone tutorial battle. */
 const TUTORIAL_MODE = {
   kind: "tutorial",
   tutorialRunId: "tutorial-run",
@@ -189,7 +185,7 @@ function stateWithPendingPrompt(promptId: number): FoldState {
       options: { kind: "foresee", count: 0, cardIds: [] },
     },
   } as unknown as NonNullable<FoldState["battle"]>;
-  return { ...base, battle, playtestControl: ALICE_DRIVES_THE_TUTORIAL };
+  return { ...base, battle };
 }
 
 function makeBattleSide(): BattleMutableState["sides"][BattleSide] {
@@ -273,6 +269,24 @@ describe("rule 5 — routing and garbage tolerance", () => {
     expect(result.state).toBe(state);
   });
 
+  it("bounces a TAKE_PLAYTEST_CONTROL intent from an older log without changing the fold", () => {
+    const state = foldStateWithEssence(100);
+    const result = reduceGameEvent(
+      state,
+      {
+        type: "TAKE_PLAYTEST_CONTROL",
+        payload: { previousControllerClientId: null },
+        actor: testEventActor("alice"),
+        clientTimestamp: "1970-01-01T00:00:00.000Z",
+        basedOnSeq: 0,
+      },
+      ctx(),
+    );
+    expect(result.outcome).toBe("bounced");
+    expect(result.bounceReason).toBe("invalid_action");
+    expect(result.state).toBe(state);
+  });
+
   it("bounces ADJUST_ESSENCE with a malformed payload", () => {
     const state = foldStateWithEssence(100);
     const result = reduceGameEvent(
@@ -330,7 +344,6 @@ describe("isCasExempt (rule 1)", () => {
     expect(isCasExempt("SET_CARD_SOURCE_DEBUG")).toBe(true);
     expect(isCasExempt("OPEN_SITE")).toBe(true);
     expect(isCasExempt("ENTER_DRAFT_SITE")).toBe(true);
-    expect(isCasExempt("TAKE_PLAYTEST_CONTROL")).toBe(true);
   });
 
   it("does not exempt ordinary intents", () => {
@@ -605,7 +618,7 @@ function stateWithPoisonedPrompt(promptId: number): FoldState {
       options: { kind: "foresee", count: 0, cardIds: [] },
     },
   } as unknown as NonNullable<FoldState["battle"]>;
-  return { ...base, battle, playtestControl: ALICE_DRIVES_THE_TUTORIAL };
+  return { ...base, battle };
 }
 
 describe("RESOLVE_PROMPT throw containment", () => {

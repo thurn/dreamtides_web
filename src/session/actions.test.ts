@@ -99,7 +99,6 @@ function captureAllDrafts(): EventDraft[] {
     parseTutorialRunId("event:1"),
     testTutorialActionId("welcome"),
   );
-  void actions.takePlaytestControl(null);
   void actions.beginTutorialBattle(parseTutorialRunId("event:1"));
   void actions.restartTutorialBattle(parseBattleId("tutorial-battle:event:1:0"));
   void actions.exitTutorialBattle(

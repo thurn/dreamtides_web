@@ -27,12 +27,6 @@ export interface DreamwellPromptRef {
   readonly choiceKey?: DreamwellChoiceKey;
 }
 
-/** Read-only compatibility shape accepted for prompts persisted before descriptors. */
-export interface LegacyPromptText {
-  readonly kind: "legacy-prompt-text";
-  readonly text: string;
-}
-
 export type BuiltInBattlePromptRef =
   | {
       readonly kind: "built-in-battle-prompt";
@@ -64,8 +58,7 @@ export type BuiltInBattlePromptRef =
       readonly side: "player" | "enemy";
     };
 
-export type BattlePromptText =
-  BuiltInBattlePromptRef | DreamwellPromptRef | LegacyPromptText;
+export type BattlePromptText = BuiltInBattlePromptRef | DreamwellPromptRef;
 
 export function builtInBattlePromptRef(
   prompt: Exclude<BuiltInBattlePromptRef["prompt"], "switch-side">,
@@ -174,16 +167,6 @@ export function isDreamwellPromptRef(
     (candidate.part === "choice"
       ? dreamwellChoiceKeyFromUnknown(candidate.choiceKey) !== null
       : candidate.choiceKey === undefined)
-  );
-}
-
-export function isLegacyPromptText(value: unknown): value is LegacyPromptText {
-  return (
-    value !== null &&
-    typeof value === "object" &&
-    !Array.isArray(value) &&
-    (value as Partial<LegacyPromptText>).kind === "legacy-prompt-text" &&
-    typeof (value as Partial<LegacyPromptText>).text === "string"
   );
 }
 

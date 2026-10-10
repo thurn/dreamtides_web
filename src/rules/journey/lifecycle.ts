@@ -36,7 +36,6 @@ import { SITE_TYPES } from "../../types/site-type";
 import {
   isBuiltInBattlePromptRef,
   isDreamwellPromptRef,
-  isLegacyPromptText,
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
 import type { AvatarId } from "../../types/identifiers";
@@ -689,9 +688,7 @@ function asValidTutorialBattle(
 
 function isPromptText(value: unknown): value is BattlePromptText {
   return (
-    isBuiltInBattlePromptRef(value) ||
-    isDreamwellPromptRef(value) ||
-    isLegacyPromptText(value)
+    isBuiltInBattlePromptRef(value) || isDreamwellPromptRef(value)
   );
 }
 

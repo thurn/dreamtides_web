@@ -281,34 +281,6 @@ describe("front-door reducer", () => {
       cardId: TUTORIAL_PLAYER_CARD_ID,
       targetSlotId: "B4",
     });
-    expect(played.state.playtestControl).toEqual({
-      mode: "single-controller",
-      controllerClientId: "player-a",
-    });
-
-    const observerIntent = reduceGameEvent(
-      played.state,
-      event("SET_ESSENCE", { value: 1 }, 0, "player-b"),
-      context(6),
-    );
-    expect(observerIntent.outcome).toBe("bounced");
-    expect(observerIntent.bounceReason).toBe("observer_read_only");
-
-    const transferred = reduceGameEvent(
-      played.state,
-      event(
-        "TAKE_PLAYTEST_CONTROL",
-        { previousControllerClientId: "player-a" },
-        0,
-        "player-b",
-      ),
-      context(7),
-    );
-    expect(transferred.outcome).toBe("applied");
-    expect(transferred.state.playtestControl?.controllerClientId).toBe(
-      "player-b",
-    );
-
     const duplicate = reduceGameEvent(
       played.state,
       event("FRONT_DOOR_ACTION", {
