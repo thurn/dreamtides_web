@@ -611,6 +611,13 @@ just to make it immediately dissolve, and an event cannot generally be played fo
 no effect merely to increase a card count. A card written with two costs, such as
 "2 X", requires paying 2● first and then X●.
 
+**A character's X:** A character played with an X cost keeps the value of X
+paid for it while it is in play, and its abilities that say X read that value:
+"When you materialize a character with cost X●" matches characters whose cost
+is exactly that X, the character itself included when its own cost equals it.
+A character that enters play without being played, as from a void or as a
+figment copy, has X = 0, and a character's X returns to 0 when it leaves play.
+
 ## Targeting
 
 Effects choose targets using ownership and type predicates. Ownership predicates

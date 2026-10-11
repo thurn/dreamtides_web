@@ -772,7 +772,9 @@ function isCardFilter(value: unknown): boolean {
   return (
     isPlainRecord(value) &&
     optional(isCardKind)(value.cardType) &&
-    optional(isString)(value.subtype)
+    optional(isString)(value.subtype) &&
+    optional(isIndex)(value.costAtMost) &&
+    optional(isIndex)(value.costAtLeast)
   );
 }
 
@@ -1240,7 +1242,9 @@ function isTurnLog(value: unknown): boolean {
           isInstanceId(played.instance) &&
           isCardKind(played.cardType) &&
           isString(played.subtype) &&
-          isBoolean(played.allTypes),
+          isBoolean(played.allTypes) &&
+          // A saved record may omit its cost (PlayedCard.cost).
+          optional(isIndex)(played.cost),
       ),
     )(value.played) &&
     sideRecord(isIndex)(value.drawn)

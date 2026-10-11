@@ -1,0 +1,6 @@
+# RD-hv-umm2.66-1: A character keeps the X paid for it while it is in play
+
+- Ladder: 5 (the simplest reading consistent with the affected printed text), after 4 (MTG 107.3m keeps the cast X only for enters-the-battlefield abilities, which would leave this text meaning cost 0● after the card entered play).
+- rules.md: § Costs, Requirements, and X → A character's X.
+- Affects: 33cf7dca-d8d2-42b7-854a-b3f503b03488.
+- Why: "When you materialize a character with cost X●" on a character with a "2 X" cost only has meaning if X is the value paid to play the card, read whenever the trigger checks a materialized character. The engine already keeps that value on the instance while it is in play (variable spark reads it), so a selector bound written as X reads the same value: the X of the source card's stack item while it is on the stack, the X it keeps while in play, and 0 for any other source. A character put into play without being played, or a figment copy, was paid no X and has X = 0; leaving play resets it. The text says "a character", not "another character", so the character matches its own materialization when its copiable cost (2●, X counting as 0) equals the paid X. Cost comparisons use the copiable cost of § Cost changes.

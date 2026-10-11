@@ -29,15 +29,21 @@ function characterFor(
   selector: CharacterSelector,
   pool: readonly EngineCardDefinition[],
 ): CardId {
+  // An X-valued cost bound depends on the X paid as the card is played, so the solver checks constant bounds only.
+  const costAtMost = typeof selector.costAtMost === "number" ? selector.costAtMost : undefined;
+  const costAtLeast = typeof selector.costAtLeast === "number" ? selector.costAtLeast : undefined;
   const fits = (card: EngineCardDefinition): boolean => {
     const spark = typeof card.spark === "number" ? card.spark : 0;
     return (
       card.cardType === "character" &&
       card.status !== "authored" &&
+      // The solver places catalog cards, never figments.
+      selector.figment !== true &&
       (selector.subtype === undefined || card.subtype === selector.subtype) &&
       (selector.sparkAtMost === undefined || spark <= selector.sparkAtMost) &&
       (selector.sparkAtLeast === undefined || spark >= selector.sparkAtLeast) &&
-      (selector.costAtMost === undefined || fixedEnergy(card.costs) <= selector.costAtMost)
+      (costAtMost === undefined || fixedEnergy(card.costs) <= costAtMost) &&
+      (costAtLeast === undefined || fixedEnergy(card.costs) >= costAtLeast)
     );
   };
   const vanilla = Object.values(SYNTHETIC).find(fits);
@@ -51,7 +57,8 @@ function characterFor(
 
 /** A matching printing for a void target on the lab's neutral setup board. */
 function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
-  const fits = (card: EngineCardDefinition): boolean => card.status !== "authored" && matchesFilter({ ...card, allTypes: false }, filter);
+  const fits = (card: EngineCardDefinition): boolean =>
+    card.status !== "authored" && matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs) }, filter);
   const found = Object.values(SYNTHETIC).find(fits) ?? pool.find(fits);
   if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
   engine.catalog.card(found.id);

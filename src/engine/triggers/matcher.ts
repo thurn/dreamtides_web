@@ -9,7 +9,7 @@
  * `dissolved` event confirms the dissolve.
  */
 import type { EngineCatalog } from "../catalog";
-import { cardMatchesFilter, matchesFilter } from "../continuous/characteristics";
+import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
@@ -219,7 +219,7 @@ function matchKind(
     case "play": {
       if (event.kind !== "cardPlayed" || event.side !== resolvePlayer(you, trigger.player)) return null;
       // Each play matches by the characteristics it was recorded with (RD-hv-7x4l.34-1).
-      const played = state.turnLog.played[event.side].filter((card) => matchesFilter(card, trigger.filter));
+      const played = state.turnLog.played[event.side].filter((card) => playedMatchesFilter(state, catalog, card, trigger.filter));
       if (played[played.length - 1]?.instance !== event.instance) return null;
       return trigger.nth === undefined || played.length === trigger.nth ? { subject: event.instance } : null;
     }

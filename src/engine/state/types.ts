@@ -384,6 +384,12 @@ export interface PlayedCard {
   readonly subtype: CardSubtype;
   /** "Has all character types" as it was played: it matches every subtype a filter names. */
   readonly allTypes: boolean;
+  /**
+   * Its copiable cost as it was played, which cost-bounded filters compare. A
+   * record in a saved state that lacks it is matched by its instance's
+   * copiable cost instead.
+   */
+  readonly cost?: number;
 }
 
 /** Counters for the current turn, reset as each turn begins. */

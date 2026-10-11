@@ -1,3 +1,6 @@
+import { characterYouControl, costExactly, keyword, x } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -8,6 +11,7 @@ export default card({
     "Veil\n\nWhen you materialize a character with cost X●, draw a card.",
   energyCost: 2,
   energyCosts: ["2", "X"],
+  xMinimum: 0,
   cardType: "Character",
   subtype: "Explorer",
   rarity: "Uncommon",
@@ -19,5 +23,6 @@ export default card({
   artOwned: true,
   cardNumber: 487,
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("veil"), triggered(whenMaterialize(characterYouControl(costExactly(x()))), p.draw(1))],
+  verifiedText: "2b1qgk0wic9",
 });

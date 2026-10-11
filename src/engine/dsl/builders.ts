@@ -7,6 +7,7 @@ import type {
   AdditionalCost,
   AdditionalCostAbility,
   AllSpec,
+  BoundValue,
   CardFilter,
   CharacterSelector,
   ChoiceCost,
@@ -29,6 +30,7 @@ import type {
   TargetSpec,
   ValueExpr,
   WinConditionAbility,
+  XValue,
   ZoneEverySpec,
   ZoneSelfSpec,
   ZoneTargetSpec,
@@ -238,8 +240,17 @@ export function ofSubtype(subtype: CardSubtype): Pick<CharacterSelector, "subtyp
   return { subtype };
 }
 
-export function x(): ValueExpr {
+/** "X": the X chosen for the card or ability as it was played. In a selector's bound, the X paid for its source card. */
+export function x(): XValue {
   return { value: "x" };
+}
+
+/**
+ * "With cost N●": equal cost bounds, for a card filter (constants) or a
+ * character selector (a constant or `x()`).
+ */
+export function costExactly<V extends BoundValue>(cost: V): { readonly costAtLeast: V; readonly costAtMost: V } {
+  return { costAtLeast: cost, costAtMost: cost };
 }
 
 export function count(of: CharacterSelector): ValueExpr {

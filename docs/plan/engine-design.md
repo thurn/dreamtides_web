@@ -1170,7 +1170,10 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   match, top first.
 - `thisCardIn(zone)`: the source while it is in its controller's zone.
 
-Filters read current characteristics (`cardMatchesFilter`). Resolving a
+Filters read current characteristics and the copiable cost
+(`cardMatchesFilter`; `matchesFilter` in `continuous/characteristics.ts` is
+the one predicate every filter user calls, a played card's turn-log record
+included). Resolving a
 reference changes nothing and emits nothing but `noLegalTarget`, so a
 reference into a hidden hand or deck names no card in any view, event,
 prompt, or log; only the primitive acting on the cards can show them
@@ -1189,7 +1192,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)` | `forEach`, `eachPlayer`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, `costAtMost`, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | figment or not |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, cost bounds that may read the source's X, figment or not, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | |
 | Values | constant, `x`, `count(selector)`, hand size, `supporting` (C9), `times`, `lockedAtResolution` | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls`, `energyAtLeast`, `costPaid`, `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |

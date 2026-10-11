@@ -1,5 +1,4 @@
-import { characteristics, matchesFilter } from "../../continuous/characteristics";
-import { copiableCostOf } from "../../dsl/selectors";
+import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from "../../continuous/characteristics";
 import type { CardFilter } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
 import { instanceOf, moveToHand } from "../../rules/zones";
@@ -49,7 +48,7 @@ export const takeFromAmongPrimitive = definePrimitive<TakeFromAmongNode>({
     const layers = characteristics(ctx.state, ctx.catalog);
     const candidates = among.filter(
       (id) =>
-        matchesFilter(layers.of(id), node.filter) &&
+        matchesFilter(filterSubjectOf(ctx.state, ctx.catalog, id, layers.of(id)), node.filter) &&
         (node.costAtMost === undefined || copiableCostOf(ctx.state, ctx.catalog, id) <= node.costAtMost),
     );
     if (candidates.length === 0) return;

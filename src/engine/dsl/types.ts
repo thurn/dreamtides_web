@@ -46,7 +46,23 @@ export const BASE_VARIANT: Variant = { amplified: false };
 /** A side relative to an effect's controller. */
 export type PlayerRef = "you" | "opponent";
 
-/** Which characters in play a selector matches. */
+/**
+ * "X" in a selector's bound: the X paid for the selector's source card, the
+ * value its stack item holds while it is on the stack and the value it keeps
+ * while it is in play; 0 for any other source (RD-hv-umm2.66-1).
+ */
+export interface XValue {
+  readonly value: "x";
+}
+
+/** A number a character selector's cost bound compares with: a constant, or the source's X. */
+export type BoundValue = number | XValue;
+
+/**
+ * Which characters in play a selector matches. Cost bounds read the
+ * copiable cost (rules § Costs, Requirements, and X → Cost changes); ✦ bounds
+ * read the effective spark, clamped at 0.
+ */
 export interface CharacterSelector {
   readonly controller: "you" | "opponent" | "any";
   readonly subtype?: CardSubtype;
@@ -54,7 +70,10 @@ export interface CharacterSelector {
   readonly another?: boolean;
   readonly sparkAtMost?: number;
   readonly sparkAtLeast?: number;
-  readonly costAtMost?: number;
+  readonly costAtMost?: BoundValue;
+  readonly costAtLeast?: BoundValue;
+  /** `true` matches only figments, figment copies included (rules § Figments); `false` ("non-figment") only other characters. */
+  readonly figment?: boolean;
   readonly exhausted?: boolean;
   readonly rank?: "front" | "back";
 }
@@ -179,7 +198,7 @@ export type PlayTimeTarget = TargetSpec | StackTargetSpec | ZoneTargetSpec;
 /** A number an effect reads when it resolves. */
 export type ValueExpr =
   | number
-  | { readonly value: "x" }
+  | XValue
   | { readonly value: "count"; readonly of: CharacterSelector }
   | { readonly value: "handSize"; readonly player: PlayerRef }
   /** The characters supporting the source (C9): 0–2 while it is in the front rank, 0 elsewhere. */
@@ -255,10 +274,19 @@ export interface EnergyXCost {
 /** A cost paid to play a card: its printed energy, fixed and X parts in printed order ("2 X" pays 2● first, then X●). */
 export type CardCost = EnergyCost | EnergyXCost;
 
-/** Which cards in a hidden or void zone a cost may use. */
+/**
+ * Which cards a filter matches, wherever they are: by effective type and
+ * subtype, and by copiable cost (rules § Costs, Requirements, and X → Cost
+ * changes), which a card keeps in every zone. A filter is plain data, kept
+ * as it is written wherever it is stored, so its bounds are constants.
+ */
 export interface CardFilter {
   readonly cardType?: "character" | "event";
   readonly subtype?: CardSubtype;
+  /** "A ≤2● cost character": copiable cost at most this. */
+  readonly costAtMost?: number;
+  /** "Cost ≥4●": copiable cost at least this; with an equal `costAtMost`, "a 2● cost character". */
+  readonly costAtLeast?: number;
 }
 
 /** A cost that pays one fixed thing (no X and no choice between costs). */

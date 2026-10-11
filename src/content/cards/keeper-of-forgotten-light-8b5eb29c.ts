@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,8 @@ export default card({
   cardNumber: 119,
   art: { x: -0.378, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenMaterialize(characterYouControl({ figment: false, costAtMost: 2 })), p.draw(1, "you", { ephemeral: true })),
+  ],
+  verifiedText: "16hvb67ip07",
 });

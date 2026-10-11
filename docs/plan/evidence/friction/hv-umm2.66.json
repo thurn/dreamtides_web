@@ -1,0 +1,46 @@
+{
+  "bead": "hv-umm2.66",
+  "phase": 5,
+  "implementMin": 65,
+  "localValidationS": {
+    "focused": 2,
+    "review": 43,
+    "knip": 3,
+    "fuzz": 58,
+    "sweep": 238
+  },
+  "hostLoad": 25.29,
+  "testDelta": {
+    "files": 0,
+    "lines": 282,
+    "jsdomFiles": 0,
+    "cases": 11
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 25,
+      "note": "The bead's two entities match materialized characters through CharacterSelector, not CardFilter: Keeper needs \"non-figment\" (the planned selectorFigment probe, readonly figment?: boolean) and Seer needs an X-valued cost bound (the selectorBounds remainder hv-umm2.55 left). Both were added to CharacterSelector here because the inventory routed these texts to cardFilterBounds; prim-selector-figment's primitive now exists."
+    },
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 20,
+      "note": "PlayedCard recorded type, subtype and allTypes but not cost, so a cost-bounded play filter read the cost from the instance, which a created card that ceased to exist no longer has (determinize test caught the throw). The session widened the areas to src/engine/rules/turn-log.ts and the fold.ts validators; recordPlayed now records the copiable cost, optional for saved records, and the adversarial replay fixture's finalHash was re-stamped."
+    }
+  ],
+  "sourceBase": "f41dc1c63788154e59223e446a4bd79682295e08",
+  "coverage": {
+    "entities": 2,
+    "pending": 0,
+    "amplifiedTexts": 0,
+    "newEffectOps": 0,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 16,
+      "skip": 24,
+      "fail": 0
+    },
+    "judged": 0
+  }
+}

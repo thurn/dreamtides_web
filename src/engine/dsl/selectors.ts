@@ -1,12 +1,11 @@
-import { instanceCard, type EngineCatalog } from "../catalog";
-import { characteristics, type Characteristics } from "../continuous/characteristics";
-import { fixedEnergy } from "./energy";
+import type { EngineCatalog } from "../catalog";
+import { characteristics, copiableCostOf, type Characteristics } from "../continuous/characteristics";
 import { hasKeyword } from "../rules/keywords";
-import { charactersInPlay, instanceOf, slotOf } from "../rules/zones";
+import { charactersInPlay, slotOf } from "../rules/zones";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import { opponent, SIDES } from "../state/ids";
+import { opponent, sourceInstance, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
-import type { CharacterSelector, PlayerRef, StackItemSelector } from "./types";
+import type { BoundValue, CharacterSelector, PlayerRef, StackItemSelector } from "./types";
 
 /**
  * Reads the characteristics a selector compares: the effective ones for
@@ -24,13 +23,21 @@ export function resolvePlayer(controller: Side, ref: PlayerRef): Side {
 }
 
 /**
- * A card's cost for cost selectors: its fixed energy, with X counting
- * as 0. Cost selectors read the copiable cost: 0● for a figment, the
- * copied cost for a figment copy (C13). Cost modifications apply only to
- * playing a card.
+ * The X paid for a source card (RD-hv-umm2.66-1): its stack item's X while
+ * it is on the stack, the X it keeps while it is in play, and 0 otherwise.
  */
-export function copiableCostOf(state: BattleState, catalog: EngineCatalog, id: InstanceId): number {
-  return fixedEnergy(instanceCard(catalog, instanceOf(state, id)).costs);
+function sourceX(state: BattleState, source: AbilitySource): number {
+  const id = sourceInstance(source);
+  if (id === null) return 0;
+  const instance = state.instances[id];
+  if (instance?.zone === "play") return instance.status.x ?? 0;
+  const item = state.stack.find((entry) => entry.kind === "card" && entry.instance === id);
+  return item?.x ?? 0;
+}
+
+/** The number a selector bound stands for, for an effect of `source`. */
+function boundOf(state: BattleState, bound: BoundValue, source: AbilitySource): number {
+  return typeof bound === "number" ? bound : sourceX(state, source);
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */
@@ -68,7 +75,13 @@ export function matchesCharacterWith(
     if (selector.sparkAtMost !== undefined && spark > selector.sparkAtMost) return false;
     if (selector.sparkAtLeast !== undefined && spark < selector.sparkAtLeast) return false;
   }
-  if (selector.costAtMost !== undefined && copiableCostOf(state, catalog, id) > selector.costAtMost) return false;
+  if (selector.costAtMost !== undefined || selector.costAtLeast !== undefined) {
+    const cost = copiableCostOf(state, catalog, id);
+    if (selector.costAtMost !== undefined && cost > boundOf(state, selector.costAtMost, source)) return false;
+    if (selector.costAtLeast !== undefined && cost < boundOf(state, selector.costAtLeast, source)) return false;
+  }
+  // A figment copy is a figment (rules § Figments → Figment Copies).
+  if (selector.figment !== undefined && (instance.printing.kind !== "card") !== selector.figment) return false;
   if (selector.exhausted !== undefined && instance.status.exhausted !== selector.exhausted) return false;
   if (selector.rank !== undefined && slotOf(state, id)?.rank !== selector.rank) return false;
   return true;

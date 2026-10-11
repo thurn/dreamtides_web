@@ -1,4 +1,4 @@
-import { matchesFilter } from "../../continuous/characteristics";
+import { filterSubjectOf, matchesEveryCard, matchesFilter } from "../../continuous/characteristics";
 import { resolvePlayer } from "../../dsl/selectors";
 import type { CardFilter, CountedZone, Keyword, PlayerRef } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
@@ -55,8 +55,8 @@ function cardsInZone(env: StaticEnv, cards: CardsInZone): InstanceId[] {
   const side = resolvePlayer(env.controller, cards.player);
   const ids = env.state.sides[side][cards.zone];
   const { filter } = cards;
-  if (filter.cardType === undefined && filter.subtype === undefined) return [...ids];
-  return ids.filter((id) => matchesFilter(env.read(id), filter));
+  if (matchesEveryCard(filter)) return [...ids];
+  return ids.filter((id) => matchesFilter(filterSubjectOf(env.state, env.catalog, id, env.read(id)), filter));
 }
 
 /** "<cards> in <your> <zone>": `player`'s cards in `zone` matching `filter`. */

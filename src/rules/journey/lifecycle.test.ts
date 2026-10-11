@@ -849,6 +849,25 @@ describe("LOAD_STATE journey battles", () => {
     expect(out.state.battle).toEqual(battle);
   });
 
+  it("loads a saved turn log whose play records carry a copiable cost or omit it, and cost-bounded filters", () => {
+    const { state, battle } = savedBattle();
+    const committed = battle.engine.slice.committed;
+    const [handCard] = committed.sides.player.hand;
+    const state_ = ["engine", "slice", "committed"];
+    const record = { instance: handCard, cardType: "character", subtype: "", allTypes: false };
+    const costChange = {
+      id: "e1", controller: "player", source: handCard, timestamp: 0, expiry: { at: "endOfTurn" },
+      change: { kind: "cost", player: "player", filter: { costAtLeast: 1, costAtMost: 2 }, amount: 1, next: false },
+    };
+    for (const [path, value] of [
+      [[...state_, "turnLog", "played", "player"], [{ ...record, cost: 2 }]],
+      [[...state_, "turnLog", "played", "player"], [record]],
+      [[...state_, "floating"], [costChange]],
+    ] as const) {
+      expect(load(state, withField(battle, path, value)).outcome, path.join(".")).toBe("applied");
+    }
+  });
+
   it("bounces a saved battle with any one field missing or malformed", () => {
     const { state, battle } = savedBattle();
     const committed = battle.engine.slice.committed;
@@ -928,6 +947,36 @@ describe("LOAD_STATE journey battles", () => {
         ],
       ],
       [[...state_, "triggerQueue"], [{}]],
+      [
+        [...state_, "turnLog", "played", "player"],
+        [{ instance: handCard, cardType: "character", subtype: "", allTypes: false, cost: -1 }],
+      ],
+      [
+        [...state_, "floating"],
+        [
+          {
+            id: "e1",
+            controller: "player",
+            source: handCard,
+            timestamp: 0,
+            expiry: { at: "endOfTurn" },
+            change: { kind: "cost", player: "player", filter: { costAtMost: "2" }, amount: 1, next: false },
+          },
+        ],
+      ],
+      [
+        [...state_, "floating"],
+        [
+          {
+            id: "e1",
+            controller: "player",
+            source: handCard,
+            timestamp: 0,
+            expiry: { at: "endOfTurn" },
+            change: { kind: "cost", player: "player", filter: { costAtLeast: 1.5 }, amount: 1, next: false },
+          },
+        ],
+      ],
       [[...state_, "dreamwell", "deck"], ["fixture dreamwell"]],
       [[...state_, "result"], { kind: "victory", winner: "player" }],
       [[...state_, "loops"], REMOVED],

@@ -1,6 +1,5 @@
 import type { EngineCatalog } from "../../catalog";
-import { characteristics, matchesFilter } from "../../continuous/characteristics";
-import { copiableCostOf } from "../../dsl/selectors";
+import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from "../../continuous/characteristics";
 import type { CardFilter, ValueExpr } from "../../dsl/types";
 import type { ChooseCardsPrompt, ChooseNumberPrompt, PromptPurpose } from "../../prompts/types";
 import { instanceOrigin, originAbilities } from "../../rules/activation";
@@ -68,7 +67,7 @@ export const discoverPrimitive = definePrimitive<DiscoverNode>({
 /** The cards of `side`'s deck that match `filter`, in deck order. */
 function matchingDeckCards(state: BattleState, catalog: EngineCatalog, side: Side, filter: CardFilter): InstanceId[] {
   const layers = characteristics(state, catalog);
-  return state.sides[side].deck.filter((id) => matchesFilter(layers.of(id), filter));
+  return state.sides[side].deck.filter((id) => matchesFilter(filterSubjectOf(state, catalog, id, layers.of(id)), filter));
 }
 
 /** Up to `config.discoverOptions` distinct matching cards of `side`'s deck, in the order drawn. */

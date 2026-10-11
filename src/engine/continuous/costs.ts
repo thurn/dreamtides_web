@@ -7,7 +7,7 @@
 import type { EngineCatalog } from "../catalog";
 import type { EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { characteristics, matchesFilter } from "./characteristics";
+import { characteristics, filterSubjectOf, matchesFilter } from "./characteristics";
 import type { Layers } from "./layers";
 
 /** The cost modifications that apply to one play of one card. */
@@ -31,7 +31,7 @@ export function costModifier(
   let increase = 0;
   let reduction = 0;
   const consumes: EffectId[] = [];
-  const played = layers.of(card);
+  const played = filterSubjectOf(state, catalog, card, layers.of(card));
   for (const { change, effect } of layers.changes(6)) {
     if (change.kind !== "cost" || change.player !== player || !matchesFilter(played, change.filter)) continue;
     if (change.amount > 0) increase += change.amount;
