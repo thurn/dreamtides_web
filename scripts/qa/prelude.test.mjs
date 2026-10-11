@@ -19,6 +19,7 @@ async function fixture() {
     evaluate,
     goto,
     waitForFunction,
+    setViewportSize: vi.fn().mockResolvedValue(undefined),
     screenshot,
     mouse: { move: vi.fn() },
     addInitScript: init,
@@ -34,6 +35,33 @@ async function fixture() {
 }
 
 describe("QA observations across navigation", () => {
+  it("verifies declared staging from immutable history and returns distinct initial physical ids after AI movement", async () => {
+    const { qa, evaluate, waitForFunction, goto } = await fixture();
+    const uuid = "5e5e5e5e-0000-4000-8000-000000000002";
+    const stage = { enemy: { hand: [uuid, uuid], energy: 4 } };
+    const base = { battleId: "fixture-battle", instances: {
+      i1: { owner: "enemy", controller: "enemy", printing: { kind: "card", cardId: uuid } },
+      i2: { owner: "enemy", controller: "enemy", printing: { kind: "card", cardId: uuid } },
+    }, sides: { player: { frontRank: [], backRank: [], hand: [], void: [], currentEnergy: 0, maxEnergy: 0 }, enemy: { frontRank: [], backRank: [], hand: ["i1", "i2"], void: [], currentEnergy: 4, maxEnergy: 4 } } };
+    const win = { __caps: { errors: [], rejections: [], consoleErrors: [] }, __cardLab: { status: "ready", stage: JSON.stringify(stage), reason: null, detail: null }, __engineProbe: { battleId: base.battleId, slice: { committed: { sides: { enemy: { hand: [] } } }, history: { base: { committed: base } } } } };
+    const context = { window: win, location: { href: "http://localhost:5174/lab" }, innerWidth: 1440, innerHeight: 900 };
+    evaluate.mockImplementation((fn, arg) => {
+      const value = /** @type {unknown} */ (runInNewContext(`(${String(fn)})(${JSON.stringify(arg)})`, context));
+      return Promise.resolve(value);
+    });
+    waitForFunction.mockImplementation((fn, arg) => {
+      const value = /** @type {unknown} */ (runInNewContext(`(${String(fn)})(${JSON.stringify(arg)})`, context));
+      return Promise.resolve({ jsonValue: () => Promise.resolve(value), dispose: () => Promise.resolve() });
+    });
+    const result = await qa.labStage(stage, { card: uuid, as: "enemy" });
+    expect(result.enemy.hand).toEqual(["i1", "i2"]);
+    expect(goto.mock.calls[0]?.[0]).toContain(`labStage=${encodeURIComponent(JSON.stringify(stage))}`);
+    base.sides.enemy.currentEnergy = 1;
+    await expect(qa.labStage(stage, { card: uuid })).rejects.toThrow(/energy mismatch/);
+    win.__cardLab.status = "rejected";
+    await expect(qa.labStage(stage, { card: uuid })).rejects.toThrow(/rejected/);
+  });
+
   it("ignores resource console errors while the installed buffer forwards application errors exactly once", async () => {
     const { qa, evaluate, listeners, init } = await fixture();
     /** @type {Map<string, (...args: any[]) => void>} */
@@ -257,7 +285,7 @@ describe("QA lab observation cache", () => {
       Object.assign(original.win, { __cardLab: report });
       original.events.get("pagehide")?.();
       expect(document(`?${query}`).win).toMatchObject({ __cardLab: report });
-      for (const field of ["game", "goto", "card", "variant", "as", "seed"]) {
+      for (const field of ["game", "goto", "card", "variant", "as", "seed", "labStage"]) {
         const stale = new URLSearchParams(query);
         stale.set(field, "different");
         expect(document(`?${stale}`).win).not.toHaveProperty("__cardLab");

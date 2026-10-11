@@ -260,7 +260,8 @@ function parseGotoScene(params: URLSearchParams): QaSceneId | null {
   if (trimmed === "") return null;
   if (trimmed.toLowerCase() !== "card-lab") return parseQaSceneId(trimmed);
   const token = (name: string, fallback: string) => (params.get(name) ?? fallback).trim().toLowerCase().replace(/:/gu, "");
-  return parseQaSceneId(`card-lab:${token("card", "")}:${token("variant", "base")}:${token("as", "player")}`);
+  const stage = params.get("labStage");
+  return parseQaSceneId(`card-lab:${token("card", "")}:${token("variant", "base")}:${token("as", "player")}${stage === null ? "" : `:${encodeURIComponent(stage)}`}`);
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

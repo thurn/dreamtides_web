@@ -368,6 +368,52 @@ A judged-QA setup can run in one call through the runner, which installs
 node scripts/qa/run-scenario.mjs card-lab-stage --bead <id> --arg card=<uuid> --arg stage=hand:player:<uuid>,play:enemy:<uuid>,void:player:<uuid>
 ```
 
+For exact ranks, supporters, both sides' energy and an opponent hand, use
+`qa.labStage(stage, { card: uuid, as: "enemy" })`. This opens a fresh
+`goto=card-lab&labStage=<URL-encoded JSON>` scene in one call. For example:
+
+```js
+const ids = await qa.labStage({
+  player: { front: [null, frontUuid], back: [null, supporterUuid, supporterUuid], energy: 7 },
+  enemy: { back: [subjectUuid, subjectUuid], hand: [spellUuid, spellUuid], energy: 9 },
+  enemyScript: [
+    { kind: "play", ref: { zone: "hand", index: 1 } },
+    { kind: "advance", ref: { zone: "back", index: 1 }, lane: 2 },
+    { kind: "challenge" },
+  ],
+}, { card: subjectUuid, as: "enemy" });
+```
+
+`player` and `enemy` accept `front`, `back`, `hand`, `void`, and `energy`.
+Supplied zones replace the solver's zones; omitted fields retain its defaults.
+Ranks use zero-based slots, with `null` holes, at most nine front and ten back
+slots. Hand and void entries, and occupied rank slots, are catalog UUIDs for
+base printings. Energy is a non-negative safe integer. Declared boards need
+not offer a play of the source card, and preserve the declared human hand and
+energy when `as=enemy`. The helper verifies the immutable initial history
+board and returns `{ battleId, player, enemy }` with physical IDs by zone,
+so duplicate UUIDs remain distinct even if the live AI has already moved.
+
+`enemyScript` selects live legal enemy Day actions through the normal intent
+driver. References name an **initial enemy physical slot**, retained across
+zone changes; a character played from hand can subsequently advance using
+that same hand reference. `advance` is a normal move to front `lane`, and
+`challenge` passes the enemy Day into normal designation, Dusk and Challenge
+resolution. Prompts and responses use the normal host and human controls.
+Successful replayed intents determine progress; pending prompts, cancellation,
+errors, response passes, reload and debug undo preserve that contract. An
+illegal or stale next action fails loudly. Malformed fields, invalid ranks,
+unknown cards or missing references reject the whole staged fixture and report
+the error; the existing plain-battle fallback receives no staged cards.
+Production builds ignore `labStage` and compile its automation out.
+
+The tracked acceptance workflow stages duplicate physical cards, advances and
+challenges the selected enemy character, and casts the human's staged spell:
+
+```bash
+node scripts/qa/run-scenario.mjs card-lab-stage --bead <id> --arg card=<character-uuid> --arg declared=1
+```
+
 For card-specific judgment, put one self-contained scenario in
 `artifacts/qa/<id>/judged.mjs` of the primary checkout. Open the lab, call
 `qa.labAddCard` for the board setup, exercise the relevant player workflow,
@@ -424,7 +470,7 @@ For exploratory QA with the MCP tools directly:
 ### URL parameters
 
 Read once at page load (`src/runtime/runtime-config.ts`). Only development
-builds honor `goto`, `card`, `variant`, `as`, `debug`, and `gambleGame`, and
+builds honor `goto`, `card`, `variant`, `as`, `labStage`, `debug`, and `gambleGame`, and
 only they show the journey menu's developer commands. A production build
 compiles the QA scenes, the labs, and the debug panel out (P7):
 `vite.config.ts` fails a production build whose chunks render any of them,
@@ -438,7 +484,8 @@ and `npm run review:full` runs that build.
 | `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
 | `card=<uuid>` | With an Exploration scene, use that source card's encounter; with `goto=card-lab`, the card to play |
-| `variant=<v>` / `as=<side>` | With `goto=card-lab`: the variant (default `base`) and the side playing it (`player` or `enemy`, default `player`) |
+| `variant=<v>` / `as=<side>` | With `goto=card-lab`: the variant (default `base`) and the active side (`player` or `enemy`, default `player`) |
+| `labStage=<JSON>` | With `goto=card-lab`, exact declared zones, rank slots, both energies and optional live enemy actions; URL-encode the JSON |
 | `debug=1` | Show the engine battle screen's debug panel |
 | `tutorialSpeed=<x>` | Tutorial playback speed multiplier |
 | `deviceFrame=<json>` | Inject device safe-area and cutout metrics |
@@ -498,7 +545,7 @@ scene on every load.
   the solver cannot make the card playable. `variant` is `base`,
   `amplified`, `empowered`, `kindled`, `resonant`, `inspired`, `enduring`,
   `hastened`, `attuned`, or `perfected`; the deck carries the variant, so
-  its transfigured text shows. With `as=enemy` the battle opens on the AI's
+  its transfigured text shows. Without `labStage`, `as=enemy` opens on the AI's
   play of the card, on the stack, with the human holding a no-effect
   Interrupt so the response window shows it; the AI host answers its prompts.
   A request the content cannot serve (an unknown UUID, an unknown or

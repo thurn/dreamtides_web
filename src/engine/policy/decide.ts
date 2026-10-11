@@ -19,6 +19,9 @@ import { GREEDY_POLICY } from "./greedy";
 import { PolicyRandom, RANDOM_POLICY } from "./random";
 import type { Policy, PolicyBudget, PolicyChoice, PolicyDecision, PolicyId, PolicyResult } from "./types";
 
+/** Lab automation is absent from production and plain Node policy hosts. */
+const lab = import.meta.env?.DEV === true ? await import("../testing/card-lab") : null;
+
 export const POLICIES: Readonly<Record<PolicyId, Policy>> = { random: RANDOM_POLICY, greedy: GREEDY_POLICY };
 
 /** Which D23 budget a decision gets. */
@@ -45,7 +48,7 @@ export type AiDecision =
   | {
       readonly kind: "topLevel";
       readonly request: PolicyRequest;
-      /** The only legal action, taken at once (D23: forced decisions are instant). */
+      /** The sole legal action or a development lab's validated scripted action, taken at once. */
       readonly forced: PolicyChoice | null;
     }
   | { readonly kind: "prompt"; readonly promptId: PromptId; readonly request: PolicyRequest; readonly forced: null };
@@ -102,6 +105,7 @@ export function aiDecision(input: AiDecisionInput): AiDecision | null {
       const { decision, legal, key } = owed;
       const planning = decision.kind === "main" && committed.turn.phase === "day" && committed.turn.active === side;
       const only = legal.length === 1 ? legal[0] : undefined;
+      const scripted = side === "enemy" ? lab?.cardLabEnemyAction(engine, input.init, slice) ?? null : null;
       return {
         kind: "topLevel",
         request: {
@@ -112,7 +116,7 @@ export function aiDecision(input: AiDecisionInput): AiDecision | null {
           seed: seedOf(key),
           budget: planning ? budgets.turnPlanning : budgets.response,
         },
-        forced: only === undefined ? null : { kind: "action", action: only },
+        forced: scripted !== null ? { kind: "action", action: scripted } : only === undefined ? null : { kind: "action", action: only },
       };
     }
     case "none":

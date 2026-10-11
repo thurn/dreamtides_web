@@ -54,6 +54,8 @@ describe("runtime-config", () => {
         `card-lab:${card}:amplified:enemy`,
       );
       expect(parseRuntimeConfig(`?goto=card-lab&card=${card}`).gotoScene).toBe(`card-lab:${card}:base:player`);
+      const stage = JSON.stringify({ enemy: { hand: [card], energy: 4 }, enemyScript: [{ kind: "challenge" }] });
+      expect(parseRuntimeConfig(`?goto=card-lab&card=${card}&labStage=${encodeURIComponent(stage)}`).gotoScene).toBe(`card-lab:${card}:base:player:${encodeURIComponent(stage)}`);
     });
 
     describe("gambleGameId", () => {

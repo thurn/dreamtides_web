@@ -12,7 +12,10 @@ import { createCatalog } from "../catalog";
 import { createFoldAdapter } from "../fold/slice";
 import { labBoard } from "./lab-solver";
 import { boardState } from "./board";
-import { cardLabBattle } from "./card-lab";
+import { cardLabBattle, cardLabEnemyAction, cardLabStageFromUnknown, type CardLabStage } from "./card-lab";
+import { aiDecision } from "../policy/decide";
+import { FRONT_RANK_SIZE } from "../state/ids";
+import { supportersOf } from "../continuous/support";
 import { applyDebugOp, debugOpFromUnknown, withHistory, type DebugOp } from "../debug/debug-actions";
 import type { BattleSlice } from "../fold/slice";
 import { EVENT_DEFINITIONS } from "../events";
@@ -122,6 +125,136 @@ describe("card-lab battle", () => {
     );
     expect(played?.zone).toBe("stack");
     expect(engine.decision(asEnemy.slice.committed)).toEqual({ kind: "respond", side: "player" });
+  });
+
+  const declared = (enemyScript: CardLabStage["enemyScript"] = []) => cardLabBattle(engine, {
+    entry: { cardId: DSL.drawTwo.id }, variant: "base", side: "enemy",
+    stage: {
+      player: { front: [null, SYNTHETIC.vanilla3.id], back: [null, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], hand: [SYNTHETIC.interruptEvent.id], energy: 7 },
+      enemy: { back: [SYNTHETIC.vanilla3.id, SYNTHETIC.vanilla3.id], hand: [DSL.chooseDrawOrPoints.id, DSL.chooseDrawOrPoints.id, SYNTHETIC.interruptEvent.id], void: [SYNTHETIC.event0.id], energy: 6 },
+      enemyScript,
+    },
+  }, []);
+
+  it("declares exact ranks, both energies and duplicate physical cards without the legacy enemy opening play", () => {
+    const lab = declared();
+    const state = lab.slice.committed;
+    expect(state.sides.player.currentEnergy).toBe(7);
+    expect(state.sides.enemy.currentEnergy).toBe(6);
+    const front = state.sides.player.frontRank[1];
+    if (front === null) throw new Error("no supported front character");
+    expect(supportersOf(state, front)).toEqual(state.sides.player.backRank.slice(1, 3));
+    expect(state.sides.player.backRank.slice(0, 3)).toEqual([null, expect.any(String), expect.any(String)]);
+    expect(state.sides.enemy.hand).toHaveLength(3);
+    expect(new Set(state.sides.enemy.hand).size).toBe(3);
+    expect(state.stack).toEqual([]);
+    expect(declared()).toEqual(lab);
+  });
+
+  it("rejects malformed declarations and impossible physical references atomically", () => {
+    const before = declared();
+    for (const stage of [
+      { player: { energy: -1 } }, { player: { front: Array(FRONT_RANK_SIZE + 1).fill(null) } },
+      { enemy: { hand: [null] } }, { enemy: { hand: ["bad-id"] } }, { typo: [] },
+      { enemyScript: [{ kind: "play", ref: { zone: "hand", index: 0, side: "player" } }] },
+      { enemyScript: [{ kind: "advance", ref: { zone: "back", index: 0 }, lane: FRONT_RANK_SIZE }] },
+    ]) expect(() => cardLabStageFromUnknown(stage)).toThrow();
+    expect(() => declared([{ kind: "play", ref: { zone: "hand", index: 3 } }])).toThrow(/physical card/);
+    expect(() => cardLabBattle(engine, { entry: { cardId: DSL.drawTwo.id }, variant: "base", side: "player", stage: { player: { front: [DSL.drawTwo.id] } } }, [])).toThrow(/characters/);
+    expect(declared()).toEqual(before);
+  });
+
+  it("replays live physical plays, cancellation, answers, response passes, advance and Challenge through validated intents", () => {
+    const lab = declared([
+      { kind: "play", ref: { zone: "hand", index: 1 } },
+      { kind: "advance", ref: { zone: "back", index: 1 }, lane: 2 }, { kind: "challenge" },
+    ]);
+    const adapter = createFoldAdapter(engine);
+    let slice = withHistory(lab.slice);
+    const selected = slice.committed.sides.enemy.hand[1];
+    const advanced = slice.committed.sides.enemy.backRank[1];
+    if (advanced === null) throw new Error("no advanced character");
+    const next = () => aiDecision({ engine, init: lab.init, slice, pending: adapter.pending(slice), side: "enemy", policy: "greedy" });
+    const apply = (intent: Parameters<typeof adapter.reduce>[1]) => {
+      const outcome = adapter.reduce(slice, intent);
+      if (outcome.kind === "bounced" || outcome.error !== null) throw new Error("declared intent failed");
+      slice = outcome.slice;
+      return outcome.published;
+    };
+    const play = { kind: "play", card: selected, from: "hand" } as const;
+    expect(next()?.forced).toEqual({ kind: "action", action: play });
+    expect(next()).toEqual(next());
+    apply({ kind: "battleAction", side: "enemy", action: play });
+    const prompt = adapter.pending(slice)?.prompt;
+    if (prompt === undefined) throw new Error("no mode prompt");
+    expect(next()?.kind).toBe("prompt");
+    expect(adapter.reduce(slice, { kind: "answer", side: "player", promptId: prompt.id, value: 1 })).toMatchObject({ kind: "bounced", reason: "notYourPrompt" });
+    apply({ kind: "cancel", side: "enemy", promptId: prompt.id });
+    expect(next()?.forced).toEqual({ kind: "action", action: play });
+    apply({ kind: "battleAction", side: "enemy", action: play });
+    expect(adapter.reduce(slice, { kind: "answer", side: "enemy", promptId: prompt.id, value: 1 })).toMatchObject({ kind: "bounced", reason: "stalePrompt" });
+    apply({ kind: "answer", side: "enemy", promptId: adapter.pending(slice)!.prompt.id, value: 1 });
+    expect(engine.decision(slice.committed)).toEqual({ kind: "respond", side: "player" });
+    apply({ kind: "battleAction", side: "player", action: { kind: "play", card: slice.committed.sides.player.hand[0], from: "hand" } });
+    expect(engine.decision(slice.committed)).toEqual({ kind: "respond", side: "enemy" });
+    expect(next()?.forced).toBeNull();
+    for (let responses = 0; responses < 4; responses += 1) {
+      const response = engine.decision(slice.committed);
+      if (response?.kind !== "respond") break;
+      apply({ kind: "battleAction", side: response.side, action: { kind: "pass" } });
+    }
+    // The next Day action keeps its initial physical id after the response.
+    expect(next()?.forced).toEqual({ kind: "action", action: { kind: "reposition", card: advanced, to: { rank: "front", index: 2 } } });
+    apply({ kind: "battleAction", side: "enemy", action: { kind: "reposition", card: advanced, to: { rank: "front", index: 2 } } });
+    expect(next()?.forced).toEqual({ kind: "action", action: { kind: "pass" } });
+    const challenged = apply({ kind: "battleAction", side: "enemy", action: { kind: "pass" } });
+    expect(challenged).toContainEqual(expect.objectContaining({ kind: "challengersDesignated", challengers: [advanced] }));
+    expect(cardLabEnemyAction(engine, lab.init, slice)).toBeNull();
+    const undone = applyDebugOp(engine, slice, { kind: "undo", keep: 0 });
+    if (undone.kind !== "applied") throw new Error("undo failed");
+    slice = undone.slice;
+    expect(next()?.forced).toEqual({ kind: "action", action: play });
+  });
+
+  it("fails loudly for invalid save metadata or a stale illegal script and leaves normal policy untouched", () => {
+    const lab = declared([{ kind: "play", ref: { zone: "void", index: 0 } }]);
+    const slice = withHistory(lab.slice);
+    expect(() => aiDecision({ engine, init: lab.init, slice, pending: null, side: "enemy", policy: "greedy" })).toThrow(/illegal or stale/);
+    const invalid = { ...lab.init, cardLabStage: { kind: "declared-card-lab", stage: { enemyScript: [{ kind: "evil" }] } } };
+    const wrongKind = { ...lab.init, cardLabStage: { kind: "other" } };
+    expect(() => cardLabEnemyAction(engine, invalid, slice)).toThrow();
+    expect(() => cardLabEnemyAction(engine, wrongKind, slice)).toThrow();
+    const ordinary = { seed: lab.init.seed, scoreToWin: lab.init.scoreToWin, decks: lab.init.decks, dreamwell: lab.init.dreamwell };
+    expect(cardLabEnemyAction(engine, ordinary, slice)).toBeNull();
+  });
+
+  it("keeps a faulted resolving play suspended from script progress until history recovery", () => {
+    const fault: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(916), synthetic: {
+      resolve: (ctx, item) => {
+        ctx.choose({ kind: "confirm", side: item.controller, purpose: { source: item.instance, cardId: null, ability: null, role: "youMay" } });
+        throw new Error("synthetic declared resolution fault");
+      },
+    } };
+    const faulty = createEngine(testCatalog([fault]));
+    const lab = cardLabBattle(faulty, { entry: { cardId: fault.id }, variant: "base", side: "enemy", stage: {
+      player: { hand: [] }, enemy: { hand: [fault.id], back: [SYNTHETIC.vanilla2.id] },
+      enemyScript: [{ kind: "play", ref: { zone: "hand", index: 0 } }, { kind: "advance", ref: { zone: "back", index: 0 }, lane: 1 }],
+    } }, []);
+    const adapter = createFoldAdapter(faulty);
+    const base = withHistory(lab.slice);
+    const action = cardLabEnemyAction(faulty, lab.init, base);
+    if (action === null) throw new Error("no scripted play");
+    const playing = adapter.reduce(base, { kind: "battleAction", side: "enemy", action });
+    if (playing.kind !== "applied") throw new Error("play bounced");
+    const prompt = adapter.pending(playing.slice)?.prompt;
+    if (prompt === undefined) throw new Error("no resolving prompt");
+    const failed = adapter.reduce(playing.slice, { kind: "answer", side: "enemy", promptId: prompt.id, value: true });
+    if (failed.kind !== "applied") throw new Error("answer bounced");
+    expect(failed.error?.message).toContain("synthetic declared resolution fault");
+    expect(cardLabEnemyAction(faulty, lab.init, failed.slice)).toBeNull();
+    const recovered = applyDebugOp(faulty, failed.slice, { kind: "undo", keep: 0 });
+    if (recovered.kind !== "applied") throw new Error("fault recovery failed");
+    expect(cardLabEnemyAction(faulty, lab.init, recovered.slice)).toEqual(action);
   });
 });
 

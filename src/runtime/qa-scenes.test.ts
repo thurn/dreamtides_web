@@ -63,6 +63,8 @@ import {
   testEventActor,
 } from "../types/test-identities";
 import { journeyBattleOf } from "../rules/battle/fold";
+import { SYNTHETIC } from "../engine/testing/synthetic-cards";
+import { aiDecision } from "../engine/policy/decide";
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
@@ -517,6 +519,48 @@ describe("the battle layer QA scenes", () => {
       errors.mockRestore();
       registerBattleInitProvider(null);
     }
+  });
+
+  it("retains declared physical targets and script progress through a serialized LOAD_STATE event", () => {
+    const content = battleSceneContent();
+    const [card] = content.cardDatabase.values();
+    if (card === undefined) throw new Error("no fixture card");
+    const stage = { player: { energy: 5 }, enemy: { back: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id], energy: 4 }, enemyScript: [{ kind: "advance", ref: { zone: "back", index: 1 }, lane: 2 }, { kind: "challenge" }] };
+    const scene = parseQaSceneId(`card-lab:${card.id}:base:enemy:${encodeURIComponent(JSON.stringify(stage))}`);
+    const journey = buildQaScene(scene, content, SCENE_OPTIONS);
+    if (journey === null) throw new Error("no declared journey");
+    const battle = buildQaSceneBattle(scene, content, journey);
+    const engine = createBattleInitProvider(content).engine;
+    const payload = JSON.parse(JSON.stringify({ snapshot: journey, battle })) as Record<string, unknown>;
+    const starting = initialFoldState(journey.seed, TEST_CONTENT_CONFIG);
+    const loaded = reduceGameEvent(starting, { type: "LOAD_STATE", payload, actor: testEventActor("p1"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: 0 }, { contentConfig: TEST_CONTENT_CONFIG, seq: 1, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+    expect(loaded.outcome).toBe("applied");
+    const fold = journeyBattleOf(loaded.state.battle)?.engine;
+    if (fold === undefined) throw new Error("LOAD_STATE lost declared engine data");
+    const physical = fold.slice.committed.sides.enemy.backRank[1];
+    const input = { engine, ...fold, pending: null, side: "enemy" as const, policy: "greedy" as const };
+    expect(aiDecision(input)?.forced).toEqual({ kind: "action", action: { kind: "reposition", card: physical, to: { rank: "front", index: 2 } } });
+    expect(aiDecision(input)).toEqual(aiDecision(input));
+    registerBattleInitProvider(createBattleInitProvider(content));
+    try {
+      const moved = reduceGameEvent(loaded.state, { type: "BATTLE_ACTION", payload: { side: "enemy", action: { kind: "reposition", card: physical, to: { rank: "front", index: 2 } } }, actor: testEventActor("ai:enemy"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: 1 }, { contentConfig: TEST_CONTENT_CONFIG, seq: 2, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+      expect(moved.outcome).toBe("applied");
+      const resumedPayload = JSON.parse(JSON.stringify({ snapshot: moved.state.journey, battle: moved.state.battle })) as Record<string, unknown>;
+      const reloaded = reduceGameEvent(starting, { type: "LOAD_STATE", payload: resumedPayload, actor: testEventActor("p1"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: 0 }, { contentConfig: TEST_CONTENT_CONFIG, seq: 3, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+      expect(reloaded.outcome).toBe("applied");
+      const resumed = journeyBattleOf(reloaded.state.battle)?.engine;
+      if (resumed === undefined) throw new Error("LOAD_STATE lost script progress");
+      expect(resumed.slice.committed.sides.enemy.frontRank[2]).toBe(physical);
+      expect(aiDecision({ ...input, ...resumed })?.forced).toEqual({ kind: "action", action: { kind: "pass" } });
+    } finally { registerBattleInitProvider(null); }
+    const rejected = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    try {
+      const badScene = parseQaSceneId(`card-lab:${card.id}:base:enemy:${encodeURIComponent(JSON.stringify({ enemy: { energy: -1 } }))}`);
+      const badJourney = buildQaScene(badScene, content, SCENE_OPTIONS);
+      if (badJourney === null) throw new Error("no rejected scene journey");
+      expect(buildQaSceneBattle(badScene, content, badJourney)?.engine.slice.history).toBeUndefined();
+      expect((globalThis as { __cardLab?: { reason: string } }).__cardLab?.reason).toBe("invalidStage");
+    } finally { rejected.mockRestore(); }
   });
 
   it("loads an active battle only for the dedicated playable scene", () => {

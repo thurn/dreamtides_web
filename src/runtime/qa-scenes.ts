@@ -25,6 +25,7 @@ import type { BattleSlice } from "../engine/fold/slice";
 import {
   CARD_LAB_VARIANTS,
   cardLabBattle,
+  cardLabStageFromUnknown,
   cardLabVariant,
   variantTransfiguration,
   type CardLabRequest,
@@ -456,6 +457,7 @@ interface CardLabTokens {
   readonly card: string;
   readonly variant: string;
   readonly side: string;
+  readonly stage?: string;
 }
 
 const CARD_LAB_PREFIX = "card-lab:";
@@ -464,7 +466,7 @@ type CardLabResolution =
   | { readonly kind: "ok"; readonly request: CardLabRequest; readonly card: CardData; readonly eligible: readonly CardLabVariant[] }
   | {
       readonly kind: "rejected";
-      readonly reason: "unknownCard" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable";
+      readonly reason: "unknownCard" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable" | "invalidStage";
       readonly eligible: readonly CardLabVariant[];
       readonly detail?: string;
     };
@@ -486,7 +488,12 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens): 
   if (tokens.side !== "player" && tokens.side !== "enemy") return { kind: "rejected", reason: "unknownSide", eligible };
   if (!eligible.includes(variant)) return { kind: "rejected", reason: "ineligibleVariant", eligible };
   const entry = engineDeckEntry(cardLabDeckEntry(card, variant), card, journeyContent.transfigurationData);
-  return { kind: "ok", request: { entry, variant, side: tokens.side }, card, eligible };
+  try {
+    const stage = tokens.stage === undefined ? undefined : cardLabStageFromUnknown(JSON.parse(tokens.stage));
+    return { kind: "ok", request: { entry, variant, side: tokens.side, ...(stage === undefined ? {} : { stage }) }, card, eligible };
+  } catch (error) {
+    return { kind: "rejected", reason: "invalidStage", eligible, detail: error instanceof Error ? error.message : String(error) };
+  }
 }
 
 /** The journey deck entry of the lab card, so the battle deals its transfigured display. */
@@ -508,8 +515,11 @@ function cardLabDeckEntry(card: CardData, variant: CardLabVariant): DeckEntry {
  * loads the plain battle and reports why (`publishCardLab`).
  */
 function cardLabScene(id: QaSceneId): QaScene {
-  const [card = "", variant = "base", side = "player"] = id.slice(CARD_LAB_PREFIX.length).split(":");
-  const tokens: CardLabTokens = { card, variant, side };
+  const [card = "", variant = "base", side = "player", encodedStage] = id.slice(CARD_LAB_PREFIX.length).split(":");
+  let stage: string | undefined;
+  try { stage = encodedStage === undefined ? undefined : decodeURIComponent(encodedStage); }
+  catch { stage = "invalid"; }
+  const tokens: CardLabTokens = { card: card.toLowerCase(), variant: variant.toLowerCase(), side: side.toLowerCase(), ...(stage === undefined ? {} : { stage }) };
   return {
     id,
     label: "Card Lab",
@@ -535,6 +545,7 @@ function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution): voi
     card: tokens.card,
     variant: tokens.variant,
     side: tokens.side,
+    stage: tokens.stage ?? null,
     status: resolved.kind === "ok" ? "ready" : "rejected",
     reason: resolved.kind === "ok" ? null : resolved.reason,
     detail: resolved.kind === "ok" ? null : (resolved.detail ?? null),
@@ -1430,10 +1441,11 @@ const cardLabScenes = new Map<string, QaScene>();
 
 /** Returns the QA scene for `id`, or null when `id` is not registered. */
 export function findQaScene(id: QaSceneId): QaScene | null {
-  const normalized = id.trim().toLowerCase();
+  const trimmed = id.trim();
+  const normalized = trimmed.toLowerCase();
   if (normalized.startsWith(CARD_LAB_PREFIX)) {
-    const scene = cardLabScenes.get(normalized) ?? cardLabScene(parseQaSceneId(normalized));
-    cardLabScenes.set(normalized, scene);
+    const scene = cardLabScenes.get(trimmed) ?? cardLabScene(parseQaSceneId(trimmed));
+    cardLabScenes.set(trimmed, scene);
     return scene;
   }
   return QA_SCENES.find((scene) => scene.id === normalized) ?? null;

@@ -1107,6 +1107,26 @@ committed probe and log before trying another addition. Run the scenario with
 `qa.assertCaps` and the sweep verdict include errors from replaced documents.
 See README § Browser QA for the helper contracts and metadata recovery.
 
+For a front character with supporters, exact rank slots, either side's hand
+or both energies, a judged scenario calls
+`qa.labStage({ player: { front, back, hand, void, energy }, enemy: { ... }, enemyScript }, { card: uuid, as: side })`.
+It opens one declared card-lab URL, validates the whole fixture, verifies its
+immutable initial history board and returns physical instance IDs by side and
+zone. UUIDs may repeat; subsequent operations use the returned physical IDs.
+Declared zones replace only supplied solver fields. Ranks include explicit
+`null` slots; declared boards need not offer a source-card play.
+
+The optional enemy script plays an initial hand/void physical reference,
+advances an initial physical reference to a front lane, or passes Day for a
+normal Challenge. The live AI driver submits validated engine intents;
+replayed history determines completion, including prompt cancellation,
+reload and undo. Response passes and human prompts follow normal battle
+controls. Invalid fixtures reject atomically and stale/illegal scripted
+actions fail loudly. Use `qa.battle` for the resulting workflow, check state,
+DOM hit points, geometry, persisted UUID/physical-ID logs and empty `__caps`.
+The tracked `card-lab-stage --arg card=<character-uuid> --arg declared=1`
+scenario exercises the declaration and live actions on desktop and mobile.
+
 **Judged QA.** Judge cards per [D21](decisions.md#d21-browser-qa-coverage),
 with a QA subagent. For each judged card, check all of these on desktop and
 mobile:

@@ -12,6 +12,13 @@
 
 /** @typedef {{ width: number, height: number }} Viewport */
 
+/** URL-boundary UUID strings; the application validates and brands them before staging.
+ * @typedef {{ front?: (string | null)[], back?: (string | null)[], hand?: string[], void?: string[], energy?: number }} LabStageSide
+ * @typedef {{ zone: "front" | "back" | "hand" | "void", index: number }} LabStageRef
+ * @typedef {{ player?: LabStageSide, enemy?: LabStageSide, enemyScript?: ({ kind: "play", ref: LabStageRef } | { kind: "advance", ref: LabStageRef, lane: number } | { kind: "challenge" })[] }} LabStageInput
+ * @typedef {{ front: (import("../../src/engine/state/ids").InstanceId | null)[], back: (import("../../src/engine/state/ids").InstanceId | null)[], hand: import("../../src/engine/state/ids").InstanceId[], void: import("../../src/engine/state/ids").InstanceId[] }} LabPhysicalSide
+ */
+
 /**
  * A CSS selector, or `text`: a regular expression source matched against the
  * whitespace-normalized text of the deepest elements that contain it.
@@ -307,6 +314,8 @@
  *   Waits for a truthy page-side observation, re-attaching across navigation.
  * @property {(zone: "hand" | "play" | "void", side: "player" | "enemy", uuid: string, options?: { timeout?: number }) => Promise<string>} labAddCard
  *   Stages one card through the debug UI, returning its new instance id after committed-state confirmation.
+ * @property {(stage: LabStageInput, options?: { card?: string, variant?: string, as?: "player" | "enemy", timeout?: number }) => Promise<{ battleId: import("../../src/types/identifiers").BattleId, player: LabPhysicalSide, enemy: LabPhysicalSide }>} labStage
+ *   Opens one declared scene, verifies its immutable initial board, and returns physical IDs even when the AI has already moved.
  * @property {BattleDriver} battle
  * @property {() => Promise<void>} rest Moves the pointer outside the viewport.
  * @property {(name: string, options?: { fullPage?: boolean, clip?: Rect, element?: string | Target, pad?: number, minOpacity?: number }) => Promise<string>} capture
@@ -398,7 +407,7 @@ export async function createQa(page, config) {
     const key = () => {
       const query = new URLSearchParams(location.search);
       return query.get("game") === null ? null : JSON.stringify(
-        ["game", "goto", "card", "variant", "as", "seed"].map((name) => query.get(name)),
+        ["game", "goto", "card", "variant", "as", "seed", "labStage"].map((name) => query.get(name)),
       );
     };
     const storageKey = "dreamtides-qa-card-lab-report";
@@ -902,6 +911,44 @@ export async function createQa(page, config) {
           await dispose(handle);
         }
       }
+    },
+    async labStage(stage, { card = qa.args.card, variant = qa.args.variant ?? "base", as: side = "player", timeout = 15_000 } = {}) {
+      if (card === undefined || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu.test(card)) throw new Error("qa.labStage requires a source card UUID");
+      const encoded = JSON.stringify(stage);
+      const deadline = Date.now() + timeout;
+      const remaining = () => Math.max(1, deadline - Date.now());
+      await qa.open(`/?goto=card-lab&card=${encodeURIComponent(card)}&variant=${encodeURIComponent(variant)}&as=${side}&seed=1&debug=1&labStage=${encodeURIComponent(encoded)}`);
+      const report = await qa.waitFor("declared lab report", () =>
+        /** @type {Window & { __cardLab?: { status: string, stage: string | null, reason: string | null, detail: string | null } }} */ (window).__cardLab ?? null,
+      null, { timeout: remaining() });
+      if (report.status !== "ready" || report.stage !== encoded) throw new Error(`qa.labStage rejected: ${report.reason ?? "request mismatch"} ${report.detail ?? ""}`);
+      const initial = await qa.waitFor("declared lab initial physical board", () => {
+        const probe = /** @type {Window & { __engineProbe?: { battleId: import("../../src/types/identifiers").BattleId, slice: import("../../src/engine/fold/slice").BattleSlice } }} */ (window).__engineProbe;
+        const base = probe?.slice.history?.base.committed;
+        return base === undefined || probe === undefined ? null : { battleId: probe.battleId, ...base };
+      }, null, { timeout: remaining() });
+      const physical = (/** @type {"player" | "enemy"} */ owner) => {
+        const state = initial.sides[owner];
+        const ids = { front: state.frontRank, back: state.backRank, hand: state.hand, void: state.void };
+        const declared = stage[owner];
+        if (declared?.energy !== undefined && (state.currentEnergy !== declared.energy || state.maxEnergy !== declared.energy)) throw new Error(`qa.labStage ${owner} energy mismatch`);
+        for (const zone of /** @type {const} */ (["front", "back", "hand", "void"])) {
+          const requested = declared?.[zone];
+          if (requested === undefined) continue;
+          if ((zone === "hand" || zone === "void") && ids[zone].length !== requested.length) throw new Error(`qa.labStage ${owner} ${zone} count mismatch`);
+          for (const [index, entry] of requested.entries()) {
+            const id = ids[zone][index];
+            if (entry === null) { if (id !== null) throw new Error("qa.labStage rank hole mismatch"); continue; }
+            const instance = id === null || id === undefined ? undefined : initial.instances[id];
+            if (instance?.owner !== owner || instance.controller !== owner || instance.printing.kind !== "card" || instance.printing.cardId !== entry.toLowerCase()) throw new Error(`qa.labStage ${owner} ${zone}[${String(index)}] printing mismatch`);
+          }
+        }
+        return ids;
+      };
+      const result = { battleId: initial.battleId, player: physical("player"), enemy: physical("enemy") };
+      await qa.assertCaps("declared lab stage", { timeout: remaining() });
+      qa.note("qa.labStage", result);
+      return result;
     },
     async labAddCard(zone, side, uuid, { timeout = 15_000 } = {}) {
       if (!["hand", "play", "void"].includes(zone) || !["player", "enemy"].includes(side) ||

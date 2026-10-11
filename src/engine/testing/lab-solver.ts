@@ -77,6 +77,7 @@ export function labBoard(
   card: CardId | DeckEntry,
   pool: readonly EngineCardDefinition[],
   side: Side = "player",
+  staged?: Partial<Record<Side, SideSetup>>,
 ): { setup: BoardSetup; state: BattleState } {
   const entry: DeckEntry = typeof card === "string" ? { cardId: card } : card;
   const cardId = entry.cardId;
@@ -104,12 +105,17 @@ export function labBoard(
     enemy: { back: back.enemy, void: voids.enemy, deck },
   };
   sides[side] = { ...sides[side], hand: [entry], energy: LAB_ENERGY };
-  const setup: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
+  const base: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
+  const setup: BoardSetup = staged === undefined ? base : {
+    ...base,
+    player: { ...base.player, ...staged.player },
+    enemy: { ...base.enemy, ...staged.enemy },
+  };
   const { state } = boardState(engine.catalog, setup);
   const playable = engine
     .legalActions(state, side)
     .some((action) => action.kind === "play" && printedCardIdOf(state, action.card) === cardId);
-  if (!playable) {
+  if (staged === undefined && !playable) {
     throw new Error(`The lab board for ${cardId} does not make it playable; add a lab override`);
   }
   return { setup, state };
