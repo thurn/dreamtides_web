@@ -1,3 +1,4 @@
+import { abandonCost, energy, reclaim } from "../../engine/dsl/builders";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +19,6 @@ export default card({
   cardNumber: 363,
   art: { x: 0.433, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [reclaim(energy(2), abandonCost({}, 2))],
+  verifiedText: "161ztf7m2hc",
 });

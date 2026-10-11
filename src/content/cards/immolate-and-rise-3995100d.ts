@@ -1,3 +1,5 @@
+import { abandonCost, event, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +19,6 @@ export default card({
   artOwned: false,
   cardNumber: 212,
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.draw(1)), reclaim(abandonCost())],
+  verifiedText: "29p4cgl19w3",
 });

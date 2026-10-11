@@ -1,3 +1,5 @@
+import { abandonCost, activated, keyword } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 78,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [keyword("veil"), activated([abandonCost()], p.gainPoints(variant.amplified ? 2 : 1))],
+  verifiedText: "13x956ljerp",
 });

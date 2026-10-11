@@ -713,7 +713,10 @@ when it changes zones.
 
 **Reclaim** / **Reclaim N●** — A card with Reclaim may be played from the void
 instead of from hand. With plain Reclaim it is played for its normal ● cost; with
-"Reclaim N●" it is played from the void for N●. A card played this way becomes
+"Reclaim N●" it is played from the void for N●. With "Reclaim – " followed by
+costs, as in "Reclaim – 2●, Abandon two characters", it is played from the
+void for exactly those costs in place of its ● cost: "Reclaim – Abandon a
+character" costs no energy, only the abandon. A card played this way becomes
 **reclaimed**: when a reclaimed card would leave play, it is banished instead.
 The reclaimed status replaces all other zone changes for that card (for example,
 an effect that would banish and then materialize a reclaimed character does not
