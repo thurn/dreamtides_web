@@ -1,6 +1,6 @@
 import { resolvePlayer } from "../../dsl/selectors";
 import type { PlayerRef, ValueExpr } from "../../dsl/types";
-import { setEnergy } from "../../rules/resources";
+import { effectEnergy } from "../../rules/resources";
 import { evaluate } from "../interpreter";
 import { definePrimitive } from "../types";
 
@@ -15,9 +15,8 @@ export const gainMaxEnergyPrimitive = definePrimitive<GainMaxEnergyNode>({
   op: "gainMaxEnergy",
   resolve(ctx, node, env) {
     const side = resolvePlayer(env.controller, node.player);
-    const state = ctx.state.sides[side];
     const amount = evaluate(ctx, node.amount, env);
-    setEnergy(ctx, side, state.currentEnergy + amount, state.maxEnergy + amount);
+    effectEnergy(ctx, side, amount, amount);
   },
 });
 

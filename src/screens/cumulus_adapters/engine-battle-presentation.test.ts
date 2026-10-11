@@ -617,7 +617,6 @@ describe("presentation completeness", () => {
   const UNLOGGED: Readonly<Partial<Record<EngineEventKind, string>>> = {
     abilityResolved: "bookkeeping: the activation is logged",
     effectEnded: "its status badge clears",
-    energyChanged: "the energy display changes",
     exhaustionChanged: "the card's exhausted pose changes",
     feasibilityBounded: "bookkeeping of the AI's search",
     leftPlay: "the move it pairs with is logged",
@@ -949,6 +948,43 @@ describe("battle log", () => {
     expect(line("player")).toEqual(
       engineBattleLogText({ ...event, side: "enemy" }, { human: "enemy", card: (id) => id, dreamwell: () => null }),
     );
+  });
+
+  it("logs one line for each side's energy an effect gains or loses, naming the amount, and none for payments or the turn's refresh", () => {
+    const deck = Array.from({ length: 6 }, () => SYNTHETIC.vanilla1.id);
+    const fixture = observedBoard({
+      active: "player",
+      phase: "day",
+      player: { hand: [DSL.drawThenEnergy.id], back: [LOOP.drain.id], energy: 3, deck },
+      enemy: { energy: 2, deck },
+    });
+    const drain = fixture.ids.player.back[0];
+    if (drain == null) throw new Error("no drain");
+    const batches = [
+      fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } }),
+      fixture.apply({ kind: "battleAction", side: "player", action: { kind: "activate", source: drain, ability: 0 } }),
+      fixture.passUntil("turnStarted"),
+    ];
+    const energy = batches.flatMap((batch) => batch.events.filter((event) => event.kind === "energyChanged"));
+    /** The energy changes the log writes a line for, as `human` saw them. */
+    const logged = (human: "player" | "enemy") =>
+      batches
+        .flatMap((batch, index) =>
+          battleLogEntries(batch.events, human, batch.state, labEngine.view(batch.state, human), labEngine.view(batch.before, human), `energy:${String(index)}`),
+        )
+        .filter((entry) => entry.event.kind === "energyChanged")
+        .filter((entry) => engineBattleLogText(entry.event, { human, card: () => null, dreamwell: () => null }) !== null)
+        .map((entry) => (entry.event.kind === "energyChanged" ? { side: entry.event.side, change: entry.event.change, cards: entry.cards } : null));
+
+    // The play's cost, and the opponent's turn refreshing its energy, change energy too.
+    expect(energy.filter((event) => event.cause === "payment").map(({ side, change }) => ({ side, change }))).toEqual([{ side: "player", change: -1 }]);
+    expect(energy.filter((event) => event.cause === "refresh").map(({ side }) => side)).toContain("enemy");
+    for (const human of SIDES) {
+      expect(logged(human)).toEqual([
+        { side: "player", change: 1, cards: {} },
+        { side: "enemy", change: -1, cards: {} },
+      ]);
+    }
   });
 
   describe("from the event log", () => {

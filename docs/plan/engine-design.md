@@ -1668,7 +1668,11 @@ line per presented event, grouped by turn, from the UI copy module
 (`engineBattleLogText`). Entries keep instance IDs and resolve names only
 for display. The opponent's draws log one count-only line each, and a
 reveal names whose hand the cards came from, since an effect may reveal
-the opponent's hand.
+the opponent's hand. Energy an effect gains or loses, current or maximum,
+logs one line naming the side and the amount: `energyChanged` carries the
+actual changes and its `cause`, and a payment or the turn's refresh
+(`payment`, `refresh`) shows on the energy display alone, with a Dreamwell
+card's own line naming the energy it adds.
 
 ## Policy interface
 

@@ -1,14 +1,36 @@
+import type { EventOf } from "../events";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { StepContext } from "../steps/types";
 import { recordDrawn } from "./turn-log";
 import { instanceOf, moveInstance } from "./zones";
 
-export function setEnergy(ctx: StepContext, side: Side, current: number, max: number): void {
+/** Sets `side`'s energy, as `cause` does; neither total goes below 0. The event carries the actual changes. */
+function changeEnergy(ctx: StepContext, side: Side, current: number, max: number, cause: EventOf<"energyChanged">["cause"]): void {
   const state = ctx.state.sides[side];
+  const before = { current: state.currentEnergy, max: state.maxEnergy };
   state.maxEnergy = Math.max(0, max);
   state.currentEnergy = Math.max(0, current);
-  ctx.emit({ kind: "energyChanged", side, current: state.currentEnergy, max: state.maxEnergy });
+  ctx.emit({
+    kind: "energyChanged",
+    side,
+    current: state.currentEnergy,
+    max: state.maxEnergy,
+    change: state.currentEnergy - before.current,
+    maxChange: state.maxEnergy - before.max,
+    cause,
+  });
+}
+
+/** Sets energy outside any effect or payment: the turn's refresh, the Dreamwell's raise, and the battle's starting energy. */
+export function setEnergy(ctx: StepContext, side: Side, current: number, max: number): void {
+  changeEnergy(ctx, side, current, max, "refresh");
+}
+
+/** An effect adds `amount` to `side`'s current energy and `maxAmount` to its maximum; either may be negative. */
+export function effectEnergy(ctx: StepContext, side: Side, amount: number, maxAmount: number): void {
+  const state = ctx.state.sides[side];
+  changeEnergy(ctx, side, state.currentEnergy + amount, state.maxEnergy + maxAmount, "effect");
 }
 
 /** Spends energy `side` has; callers check that it can pay. */
@@ -20,8 +42,7 @@ export function spendEnergy(ctx: StepContext, side: Side, amount: number): void 
   if (amount > state.currentEnergy) {
     throw new Error(`${side} cannot pay ${String(amount)}●`);
   }
-  state.currentEnergy -= amount;
-  ctx.emit({ kind: "energyChanged", side, current: state.currentEnergy, max: state.maxEnergy });
+  changeEnergy(ctx, side, state.currentEnergy - amount, state.maxEnergy, "payment");
 }
 
 /**

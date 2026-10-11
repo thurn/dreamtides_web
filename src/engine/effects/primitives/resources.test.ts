@@ -29,19 +29,25 @@ const deck = Array.from({ length: 5 }, () => SYNTHETIC.vanilla1.id);
 
 describe("resource primitives", () => {
   it("gainEnergy adds current energy for the turn only", () => {
-    const { state } = runScenario(engine, {
+    const { state, events } = runScenario(engine, {
       board: { active: "player", phase: "day", player: { hand: [DSL.gainTwoEnergy.id], energy: 3, deck }, enemy: { deck } },
       steps: (ids) => [playFromHand(ids, "player")],
     });
     expect(state.sides.player).toMatchObject({ currentEnergy: 5, maxEnergy: 3 });
+    expect(events.filter((item) => item.kind === "energyChanged")).toEqual([
+      { kind: "energyChanged", side: "player", current: 5, max: 3, change: 2, maxChange: 0, cause: "effect" },
+    ]);
   });
 
   it("gainMaxEnergy raises maximum and current energy", () => {
-    const { state } = runScenario(engine, {
+    const { state, events } = runScenario(engine, {
       board: { active: "player", phase: "day", player: { hand: [rampOne.id], energy: 3, deck }, enemy: { deck } },
       steps: (ids) => [playFromHand(ids, "player")],
     });
     expect(state.sides.player).toMatchObject({ currentEnergy: 4, maxEnergy: 4 });
+    expect(events.filter((item) => item.kind === "energyChanged")).toEqual([
+      { kind: "energyChanged", side: "player", current: 4, max: 4, change: 1, maxChange: 1, cause: "effect" },
+    ]);
   });
 
   it("gainPoints awards points without a character scoring, and losses stop at 0", () => {

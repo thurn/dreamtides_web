@@ -425,7 +425,8 @@ export interface EngineBattleLogWords {
 /**
  * The battle log's plain-English line for an engine event as the player sees
  * it, or `null` for an event the log leaves out (bookkeeping, and changes
- * the board shows on its own, such as energy and exhaustion).
+ * the board shows on its own, such as exhaustion and energy paid or
+ * refreshed).
  */
 export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWords): string | null {
   const { human } = words;
@@ -495,6 +496,13 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     }
     case "effectStarted":
       return effectStartedText(event, human, card);
+    case "energyChanged": {
+      // Payments and the turn's refresh show on the energy display alone, and a Dreamwell card's line names the energy it adds.
+      if (event.cause !== "effect") return null;
+      const [amount, unit] = event.maxChange === 0 ? [event.change, "energy"] : [event.maxChange, "maximum energy"];
+      if (amount === 0) return null;
+      return `${who(event.side)} ${amount > 0 ? "gained" : "lost"} ${plural(Math.abs(amount), unit, unit)}.`;
+    }
     case "eroded":
       return `${card(event.instance)} was eroded into ${whose(event.side)} void.`;
     case "fatigue":
@@ -566,7 +574,6 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${who(event.side)} met a condition to win the game.`;
     case "abilityResolved":
     case "effectEnded":
-    case "energyChanged":
     case "exhaustionChanged":
     case "feasibilityBounded":
     case "leftPlay":
