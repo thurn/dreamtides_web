@@ -1,3 +1,6 @@
+import { keyword } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 333,
   art: { x: 0.252, y: 0.212, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [keyword("awakened"), triggered(onDawn(), p.gainEnergy(v.amplified ? 2 : 1))],
+  verifiedText: "11po7qykjoq",
 });

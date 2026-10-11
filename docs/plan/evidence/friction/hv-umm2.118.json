@@ -1,0 +1,41 @@
+{
+  "bead": "hv-umm2.118",
+  "phase": 5,
+  "implementMin": 40,
+  "localValidationS": {
+    "focused": 3.6,
+    "review": 31.0,
+    "knip": 2.4,
+    "fuzz": 58.4,
+    "sweep": 356.8,
+    "judged": 183.7
+  },
+  "hostLoad": 9.56,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 12,
+      "note": "window.__engineProbe events carry only seq, kind and instance, so a judged scenario cannot find a Dawn trigger's energy gain by phase, source or side; it reads committed turn state, energy and the battle log instead, and waits for the status display, which lags state through the turn banner"
+    }
+  ],
+  "sourceBase": "ac81d9452bfbbd8b85b26371af1a1ef88b761987",
+  "coverage": {
+    "entities": 5,
+    "pending": 0,
+    "amplifiedTexts": 4,
+    "newEffectOps": 0,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 56,
+      "skip": 44,
+      "fail": 0
+    },
+    "judged": 2
+  }
+}

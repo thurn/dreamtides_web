@@ -1,3 +1,6 @@
+import { energy, reclaim } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 411,
   art: { x: -0.385, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(onDawn(), p.gainEnergy(v.amplified ? 2 : 1)), reclaim(energy(3))],
+  verifiedText: "2778efq4vi0",
 });
