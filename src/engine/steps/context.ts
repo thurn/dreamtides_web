@@ -10,7 +10,7 @@ import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
 import { showPrivately } from "../view/knowledge";
-import { purposeView } from "../view/view";
+import { promptView, purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
 import type { AnswerSource, ArmedDissolve, Disclosure, EventObserver, RecordedAnswer, StepContext } from "./types";
 
@@ -25,6 +25,8 @@ export interface ContextOptions {
   readonly dryRun?: boolean;
   /** A loop replay: every prompt must be answered by `prefix`, else `UnrecordedPrompt` is thrown. */
   readonly replay?: boolean;
+  /** The actor whose optional-loop history this step may extend. */
+  readonly loopActor?: Side | null;
   /** Narrows each prompt raised before the commit point to the answers with a feasible continuation. */
   readonly guard?: PromptGuard;
 }
@@ -52,6 +54,8 @@ export class Context implements StepContext {
   readonly answers: RecordedAnswer[] = [];
   /** The side that gave each answer in `answers`. */
   readonly choosers: Side[] = [];
+  /** Whether the loop actor saw each answered prompt whole when it opened. */
+  readonly promptsVisibleToActor: boolean[] = [];
   /** `answers` with the fingerprint of each prompt as rules code raised it, before any narrowing. */
   readonly rawAnswers: RecordedAnswer[] = [];
   /** The cards shown to one side alone so far (`disclose`). */
@@ -89,6 +93,14 @@ export class Context implements StepContext {
     }
     if (proof !== undefined && raw.kind !== "chooseCards") throw new Error("Only final card-cost choices carry a payability proof");
     const prompt = this.narrow(raw, proof?.allAnswersPayable);
+    const actor = this.options.loopActor;
+    // Capture visibility before the answer or ensuing effects can reveal a
+    // hidden source or candidate. Both the rules prompt and its narrowed
+    // answer surface must be visible, so feasibility cannot erase evidence
+    // that the actor lacked part of the prompt.
+    const fullyVisible = actor != null && [raw, prompt].every((surface) =>
+      JSON.stringify(promptView(surface, actor, this.state)) === JSON.stringify(surface),
+    );
     const rawFingerprint = promptFingerprint(raw);
     const fingerprint = prompt === raw ? rawFingerprint : promptFingerprint(prompt);
     const index = this.answers.length;
@@ -100,7 +112,7 @@ export class Context implements StepContext {
       if (!isLegalAnswer(prompt, recorded.value)) {
         throw new IllegalAnswer(prompt);
       }
-      this.record(recorded, rawFingerprint, prompt.side);
+      this.record(recorded, rawFingerprint, prompt.side, fullyVisible);
       if (recorded.auto === true) this.autoAnswered(prompt);
       return recorded.value as AnswerFor<P>;
     }
@@ -112,7 +124,7 @@ export class Context implements StepContext {
       if (!isLegalAnswer(prompt, forced)) {
         throw new IllegalAnswer(prompt);
       }
-      this.record({ fingerprint, value: forced, auto: true }, rawFingerprint, prompt.side);
+      this.record({ fingerprint, value: forced, auto: true }, rawFingerprint, prompt.side, fullyVisible);
       this.autoAnswered(prompt);
       return forced as AnswerFor<P>;
     }
@@ -120,7 +132,7 @@ export class Context implements StepContext {
     if (!isLegalAnswer(prompt, value)) {
       throw new IllegalAnswer(prompt);
     }
-    this.record({ fingerprint, value }, rawFingerprint, prompt.side);
+    this.record({ fingerprint, value }, rawFingerprint, prompt.side, fullyVisible);
     return value as AnswerFor<P>;
   }
 
@@ -158,10 +170,11 @@ export class Context implements StepContext {
     this.emit({ kind: "promptAutoAnswered", side: prompt.side, prompt: prompt.kind, purpose });
   }
 
-  private record(answer: RecordedAnswer, rawFingerprint: PromptFingerprint, side: Side): void {
+  private record(answer: RecordedAnswer, rawFingerprint: PromptFingerprint, side: Side, fullyVisible: boolean): void {
     this.answers.push(answer);
     this.rawAnswers.push({ ...answer, fingerprint: rawFingerprint });
     this.choosers.push(side);
+    this.promptsVisibleToActor.push(fullyVisible);
   }
 
   disclose(side: Side, cards: readonly InstanceId[]): void {

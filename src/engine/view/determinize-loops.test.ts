@@ -15,6 +15,8 @@ import { createEngine, type Engine } from "../engine";
 import { activate, board, deck, engine, offer, sourceOf, v } from "../loops/loops.fixtures";
 import { UnknownLoopRecording } from "../loops/replay";
 import { PolicyRandom } from "../policy/random";
+import { deserializeState, serializeState } from "../state/hash";
+import { revealToBoth } from "./knowledge";
 import type { CardId, Side } from "../state/ids";
 import { battleSeed, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -46,9 +48,12 @@ function freePointsOffered() {
 }
 
 /** A free "Choose one: Gain 1⍟; or gain 1●." activation answered with points, which puts its loop on offer. */
-function freeChoiceOffered() {
-  const { state, ids } = board({ player: { back: [LOOP.freeChoice.id], deck }, enemy: { deck }, scoreToWin: 10 });
-  return { state: activate(state, sourceOf(ids.player), new ScriptedSource([0])).state, lists: decklists([LOOP.freeChoice.id]) };
+function freeChoiceOffered(side: Side = "player") {
+  const { state, ids } = board({ active: side, [side]: { back: [LOOP.freeChoice.id], deck }, [side === "player" ? "enemy" : "player"]: { deck }, scoreToWin: 10 });
+  return {
+    state: engine.apply(state, side, { kind: "activate", source: sourceOf(ids[side]), ability: 0 }, new ScriptedSource([0])).state,
+    lists: side === "player" ? decklists([LOOP.freeChoice.id]) : decklists([], [LOOP.freeChoice.id]),
+  };
 }
 
 /** A free bouncer played from hand once: a loop of plays, resolutions, and triggers. */
@@ -61,15 +66,15 @@ function bouncerOffered() {
 
 const OFFERS = { freePoints: freePointsOffered, freeChoice: freeChoiceOffered, bouncer: bouncerOffered };
 
-/** Loops with no prompt in their recording, which the side that may repeat them sees. */
-const SEEN = { freePoints: freePointsOffered, bouncer: bouncerOffered };
+/** Loops whose recordings the side that may repeat them sees. */
+const SEEN = OFFERS;
 
 /**
  * "When the opponent plays a card, exhaust target character you control." —
  * working from its owner's hand, so its forced prompt names a source hidden
  * from the opponent. Two printings, alike but for their ids.
  */
-function watcher(index: number): EngineCardDefinition {
+function watcher(index: number, zone: "hand" | "play" = "hand"): EngineCardDefinition {
   return {
     id: syntheticId(0xd30 + index),
     cardType: "character",
@@ -78,26 +83,27 @@ function watcher(index: number): EngineCardDefinition {
     subtype: "Warrior",
     speed: "standard",
     status: "authored",
-    abilities: () => [triggered(whenOpponentPlays(), p.exhaust(target(characterYouControl())), { zone: "hand" })],
+    abilities: () => [triggered(whenOpponentPlays(), p.exhaust(target(characterYouControl())), { zone })],
   };
 }
 
 const WATCHERS = [watcher(0), watcher(1)] as const;
 
-const watched = createEngine(testCatalog([...LOOP_CARDS, ...WATCHERS]));
+const PUBLIC_WATCHER = watcher(2, "play");
+const watched = createEngine(testCatalog([...LOOP_CARDS, ...WATCHERS, PUBLIC_WATCHER]));
 
 /**
  * The bouncer loop while the enemy holds `watcher` in hand: each play
  * triggers it, and the enemy's target prompt is forced, since it controls
  * one character. Played twice, so the second play is the loop on offer.
  */
-function watchedOffered(watcherCard: EngineCardDefinition) {
+function watchedOffered(watcherCard: EngineCardDefinition, publicSource = false) {
   const { state } = boardState(watched.catalog, {
     active: "player",
     phase: "day",
     scoreToWin: 10,
     player: { hand: [LOOP.bouncer.id], deck },
-    enemy: { hand: [watcherCard.id], back: [v.vanilla1.id], deck },
+    enemy: { hand: publicSource ? [] : [watcherCard.id], back: [publicSource ? watcherCard.id : v.vanilla1.id], deck },
   });
   let current = state;
   for (let play = 0; play < 2; play++) {
@@ -105,7 +111,7 @@ function watchedOffered(watcherCard: EngineCardDefinition) {
     if (card === undefined) throw new Error("no card");
     current = watched.apply(current, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS).state;
   }
-  return { state: current, lists: decklists([LOOP.bouncer.id], WATCHERS.map((card) => card.id)) };
+  return { state: current, lists: decklists([LOOP.bouncer.id], [watcherCard.id]) };
 }
 
 /** Every recorded answer of the loop on offer in `state`. */
@@ -204,7 +210,6 @@ describe("determinize with a loop on offer", () => {
 
 describe("determinize with a loop whose recording answered a prompt", () => {
   const WITHHELD = {
-    "the actor's mode choice": () => ({ ...freeChoiceOffered(), over: engine }),
     "the opponent's forced prompt from a card in hand": () => ({ ...watchedOffered(WATCHERS[0]), over: watched }),
   };
 
@@ -219,6 +224,60 @@ describe("determinize with a loop whose recording answered a prompt", () => {
     const sampled = sample(state, "player", lists, "withheld", over);
     expect(over.legalActions(sampled, "player")).toEqual(over.legalActions(state, "player"));
     expect(() => over.apply(sampled, "player", loop, NO_PROMPTS)).toThrow(UnknownLoopRecording);
+  });
+
+  it("replays the opponent's forced prompt when its whole surface was public", () => {
+    const { state, lists } = watchedOffered(PUBLIC_WATCHER, true);
+    const loop = watched.legalActions(state, "player").find((action) => action.kind === "repeatLoop");
+    if (loop === undefined) throw new Error("no loop on offer");
+    expect(recordedAnswers(state).length).toBeGreaterThan(0);
+    expect(watched.view(state, "player").loop?.recording).toEqual(state.loops.candidate?.actions);
+    const real = watched.apply(state, "player", loop, NO_PROMPTS).state;
+    const simulated = watched.apply(sample(state, "player", lists, "public-forced", watched), "player", loop, NO_PROMPTS).state;
+    expect(real.result).toEqual({ kind: "victory", winner: "player", reason: "score" });
+    expect(simulated.result).toEqual(real.result);
+  });
+
+  it.each(SIDES)("replays the actor's visible mode choice after a reload: %s", (side) => {
+    const offered = freeChoiceOffered(side);
+    const state = deserializeState(serializeState(offered.state));
+    const loop = offer(state, side);
+    if (loop === undefined) throw new Error("no loop on offer");
+    expect(engine.view(state, side).loop?.recording).toEqual(state.loops.candidate?.actions);
+    const real = engine.apply(state, side, loop, NO_PROMPTS).state;
+    const simulated = engine.apply(sample(state, side, offered.lists), side, loop, NO_PROMPTS).state;
+    expect(real.result).toEqual({ kind: "victory", winner: side, reason: "score" });
+    expect(simulated.result).toEqual(real.result);
+    expect(simulated.sides[side].score).toBe(real.sides[side].score);
+    expect(engine.view(state, side === "player" ? "enemy" : "player").loop?.recording).toBeUndefined();
+  });
+
+  it("withholds legacy and incomplete prompt visibility records while preserving the offer", () => {
+    const { state, lists } = freeChoiceOffered();
+    const actions = state.loops.candidate?.actions;
+    const loop = offer(state);
+    if (actions == null || loop === undefined) throw new Error("no loop on offer");
+    for (const flags of [undefined, [], [true, true], [false]]) {
+      const restored = deserializeState(serializeState(state));
+      const candidate = restored.loops.candidate;
+      if (candidate === null) throw new Error("no candidate");
+      restored.loops.candidate = { ...candidate, actions: actions.map((action) => ({ steps: action.steps.map((step) =>
+        step.answers.length === 0 ? step : { ...step, promptsVisibleToActor: flags },
+      ) })) };
+      expect(engine.view(restored, "player").loop).toEqual({ id: loop.loop, side: "player", run: null });
+      expect(() => engine.apply(sample(restored, "player", lists), "player", loop, NO_PROMPTS)).toThrow(UnknownLoopRecording);
+      expect(engine.apply(restored, "player", loop, NO_PROMPTS).state.result?.kind).toBe("victory");
+    }
+  });
+
+  it("keeps a prompt fingerprint private even after its hidden source becomes known", () => {
+    const { state } = watchedOffered(WATCHERS[0]);
+    const source = state.sides.enemy.hand[0];
+    if (source === undefined) throw new Error("no watcher");
+    revealToBoth(state, [source]);
+    expect(watched.view(state, "player").instances[source]).toBeDefined();
+    expect(watched.view(state, "player").loop?.recording).toBeUndefined();
+    for (const answer of recordedAnswers(state)) expect(JSON.stringify(watched.view(state, "player"))).not.toContain(answer.fingerprint);
   });
 
   it("gives the side that may repeat the loop the same view whichever hidden card asked the opponent's forced prompt", () => {

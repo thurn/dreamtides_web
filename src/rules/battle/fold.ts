@@ -1299,11 +1299,24 @@ function isLoopTracker(value: unknown): boolean {
     isPlainRecord(value) &&
     nullable(isPlainRecord)(value.scope) &&
     isArrayOf(value.checkpoints, isPlainRecord) &&
-    isArrayOf(value.actions, isPlainRecord) &&
-    nullable(isPlainRecord)(value.candidate) &&
+    isArrayOf(value.actions, isLoopAction) &&
+    nullable((candidate) => isPlainRecord(candidate) && (candidate.actions === null || isArrayOf(candidate.actions, isLoopAction)))(value.candidate) &&
     nullable(isPlainRecord)(value.run) &&
     isIndex(value.nextLoop) &&
     nullable(isPlainRecord)(value.cycle)
+  );
+}
+
+/** Optional prompt-time visibility is aligned with the step's recorded answers. */
+function isLoopAction(value: unknown): boolean {
+  return isPlainRecord(value) && isArrayOf(value.steps, (step) =>
+    isPlainRecord(step) &&
+    isPlainRecord(step.step) && oneOf(STEP_KINDS)(step.step.kind) &&
+    isArrayOf(step.answers, isRecordedAnswer) &&
+    (step.promptsVisibleToActor === undefined || (
+      isArrayOf(step.promptsVisibleToActor, isBoolean) &&
+      Array.isArray(step.answers) && step.promptsVisibleToActor.length === step.answers.length
+    )),
   );
 }
 

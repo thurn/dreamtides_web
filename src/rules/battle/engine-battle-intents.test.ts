@@ -231,6 +231,34 @@ describe("LOAD_STATE", () => {
     expect(malformed.filter((scored) => load(withScore(scored)) !== null)).toEqual([]);
   });
 
+  it("loads loop prompt visibility conservatively and rejects malformed or partial metadata", () => {
+    const state = begun();
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const committed = battle.engine.slice.committed;
+    const load = (flags: unknown, where: "history" | "candidate", answered: boolean) => {
+      const action = { steps: [{
+        step: { kind: "resolveTop" },
+        answers: answered ? [{ fingerprint: "fixture", value: 0 }] : [],
+        ...(flags === undefined ? {} : { promptsVisibleToActor: flags }),
+      }] };
+      return validateLoadedState(state, { snapshot: state.journey, battle: {
+        ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: {
+          ...committed, loops: { ...committed.loops,
+            actions: where === "history" ? [action] : [],
+            candidate: where === "candidate" ? { id: "l1", side: "player", signature: "fixture", actions: [action] } : null,
+          },
+        } } },
+      } });
+    };
+    for (const where of ["history", "candidate"] as const) {
+      for (const flags of [undefined, [true], [false]]) expect(load(flags, where, true)).not.toBeNull();
+      for (const flags of [undefined, []]) expect(load(flags, where, false)).not.toBeNull();
+      for (const flags of [null, true, "true", {}, [], [true, false], [1], ["true"]]) expect(load(flags, where, true)).toBeNull();
+      expect(load([true], where, false)).toBeNull();
+    }
+  });
+
   it("keeps the captured cards of a saved delayed trigger and queued trigger, and refuses malformed ones", () => {
     const state = begun();
     const battle = journeyBattleOf(state.battle);

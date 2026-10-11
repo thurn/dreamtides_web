@@ -458,16 +458,19 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
  * repeat the loop sees it. Its steps are that side's own top-level actions,
  * which are public, and automatic steps; it is shown only while every card
  * they name is one `viewer` can identify (`visible`). A recorded answer
- * carries its prompt's fingerprint, a hash over the prompt's source card,
- * candidates, and options, any of which may be hidden from `viewer` (an
- * opponent's forced prompt from a trigger in hand, say), and nothing in the
- * recording tells which. So a recording in which any prompt was answered is
- * withheld whole: no fingerprint reaches a view.
+ * carries its prompt's fingerprint, so every answered prompt must have
+ * been fully visible to the actor when it opened, including its original
+ * and feasibility-narrowed surfaces. An absent or incomplete visibility
+ * record withholds the whole recording conservatively.
  */
 function loopRecording(candidate: LoopCandidate, viewer: Side, visible: (id: InstanceId) => boolean): { readonly recording?: readonly LoopAction[] } {
   const { actions } = candidate;
   if (candidate.side !== viewer || actions === null) return {};
-  if (actions.some((action) => action.steps.some((step) => step.answers.length > 0))) return {};
+  if (actions.some((action) => action.steps.some((step) => step.answers.length > 0 && (
+    !Array.isArray(step.promptsVisibleToActor) ||
+    step.promptsVisibleToActor.length !== step.answers.length ||
+    !step.promptsVisibleToActor.every((seen) => seen === true)
+  )))) return {};
   for (const match of JSON.stringify(actions).matchAll(/"i(\d+)"/g)) {
     if (!visible(`i${Number(match[1])}`)) return {};
   }

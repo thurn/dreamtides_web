@@ -1,5 +1,5 @@
 import type { EngineCatalog } from "../catalog";
-import { checkMandatoryCycle, trackLoops } from "../loops/tracker";
+import { checkMandatoryCycle, checkpointSide, trackLoops } from "../loops/tracker";
 import { checkVictory, endBattle } from "../rules/victory";
 import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
@@ -63,6 +63,7 @@ export function runStep(
     dryRun: options.dryRun,
     replay: options.replay,
     canceller: definition.canceller(start, step),
+    loopActor: checkpointSide(start) ?? start.loops.scope?.side,
     ...(definition.hasCommitPoint === true && options.dryRun !== true ? { guard: feasibilityGuard(start, step, catalog, options.searches) } : {}),
   });
   try {
@@ -95,7 +96,7 @@ export function runStep(
     endBattle(ctx, { kind: "draw", reason: "resolutionCap" });
   }
   if (options.replay !== true) {
-    trackLoops(start, work, step, ctx.answers, ctx.choosers, options.automatic === true);
+    trackLoops(start, work, step, ctx.answers, ctx.choosers, ctx.promptsVisibleToActor, options.automatic === true);
   }
   work.version += 1;
   return { kind: "done", state: work, events: ctx.events, answers: ctx.answers };

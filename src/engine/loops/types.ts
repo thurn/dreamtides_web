@@ -46,6 +46,12 @@ export interface LoopCheckpoint {
 export interface LoopStep {
   readonly step: Step;
   readonly answers: readonly RecordedAnswer[];
+  /**
+   * Prompt-time visibility to this history's actor, one entry per answer.
+   * Older serialized histories may omit it; their answered recordings are
+   * withheld from views because their prompt visibility is unknown.
+   */
+  readonly promptsVisibleToActor?: readonly boolean[];
 }
 
 /**

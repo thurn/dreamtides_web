@@ -1664,12 +1664,15 @@ RD-hv-7x4l.9-1). The latest such *j* wins. The engine then records a
 to the iteration cap is allowed too. Every other step withdraws the offer.
 The view shows the loop on offer and the repetition in progress. Only the
 side that may repeat the loop also sees its recording: its steps, which are
-that side's public actions and automatic steps, and only while no step
-answered a prompt and every card the steps name is one that side can
-identify. A prompt fingerprint hashes the prompt's source card, candidates,
+that side's public actions and automatic steps, and only while every
+answered prompt was fully visible to that side when it opened and every card the steps name is one that side can identify.
+Each recorded step keeps one visibility flag per answer, covering both the
+original prompt and its feasibility-narrowed answer surface. Missing or
+incomplete flags in serialized histories conservatively withhold answered
+recordings. A prompt fingerprint hashes the prompt's source card, candidates,
 and options, which may be hidden from that side (an opponent's forced prompt
-from a trigger in hand), so a recording with any answer is withheld whole
-and no fingerprint reaches a view. Determinization puts the loop the view
+from a trigger in hand), so a recording with any prompt the actor did not
+fully see is withheld whole and its fingerprints stay private. Determinization puts the loop the view
 shows back on offer, with the state's own signature and the repetition in
 progress. With the recording, search simulates accepting the loop as the
 battle would run it (D12); without it the recording is unknown

@@ -282,6 +282,28 @@ describe("optional loops", () => {
     expect(stateHash(current)).toBe(stateHash(whole.state));
   });
 
+  it("records visible prompts after a suspended activation reloads and rejects stale or wrong-side answers", () => {
+    const { state, ids } = board({ player: { back: [LOOP.freeChoice.id], deck }, enemy: { deck } });
+    const action = { kind: "activate", source: sourceOf(ids.player), ability: 0 } as const;
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const opened = fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 }, { kind: "battleAction", side: "player", action });
+    if (opened.kind !== "applied" || opened.error !== null) throw new Error("activation failed");
+    expect(offer(opened.slice.committed)).toBeUndefined();
+    const restored = JSON.parse(JSON.stringify(opened.slice)) as BattleSlice;
+    const reloaded = createFoldAdapter(engine, { checkEventPrefix: true });
+    const pending = reloaded.pending(restored);
+    if (pending === null) throw new Error("no pending mode choice");
+    const answer = { kind: "answer", side: "player", promptId: pending.prompt.id, value: 0 } as const;
+    expect(reloaded.reduce(restored, { ...answer, side: "enemy" })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+    expect(reloaded.reduce(restored, { ...answer, value: 99 })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+    const answered = reloaded.reduce(restored, answer);
+    if (answered.kind !== "applied" || answered.error !== null) throw new Error("answer failed");
+    const inline = engine.apply(state, "player", action, new ScriptedSource([0])).state;
+    expect(engine.view(answered.slice.committed, "player").loop).toEqual(engine.view(inline, "player").loop);
+    expect(engine.view(inline, "player").loop?.recording).toBeDefined();
+    expect(reloaded.reduce(answered.slice, answer)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+  });
+
   it("runs a repetition through the fold, matching the inline result, and bounces a stale offer", () => {
     const { state } = freePointsOffered();
     const loop = offer(state);

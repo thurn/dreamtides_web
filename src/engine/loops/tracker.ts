@@ -117,6 +117,7 @@ export function trackLoops(
   step: Step,
   answers: readonly RecordedAnswer[],
   choosers: readonly Side[],
+  promptsVisibleToActor: readonly boolean[],
   automatic: boolean,
 ): void {
   if (step.kind === "repeatLoop" || step.kind === "loopIteration") return;
@@ -138,13 +139,13 @@ export function trackLoops(
     }
     if (loops.scope !== null) {
       if (contested(answers, choosers, loops.scope.side)) clearHistory(loops);
-      else loops.actions.push({ steps: [{ step, answers }] });
+      else loops.actions.push({ steps: [{ step, answers, promptsVisibleToActor }] });
     }
   } else if (loops.scope !== null) {
     const last = loops.actions[loops.actions.length - 1];
     if (last !== undefined) {
       if (contested(answers, choosers, loops.scope.side)) clearHistory(loops);
-      else loops.actions[loops.actions.length - 1] = { steps: [...last.steps, { step, answers }] };
+      else loops.actions[loops.actions.length - 1] = { steps: [...last.steps, { step, answers, promptsVisibleToActor }] };
     }
   }
   const side = checkpointSide(work);

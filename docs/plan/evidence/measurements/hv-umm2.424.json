@@ -1,0 +1,261 @@
+{
+  "bead": "hv-umm2.424",
+  "base": "cf15eac7180bd312b3922dec055ef15b1df71603",
+  "measurementWindow": {
+    "start": "2026-10-11T22:37:14Z",
+    "startBasis": "Parent native claim timestamp supplied at dispatch; inclusive ownership window",
+    "end": "2026-10-11T22:46:00.045410+00:00",
+    "endBasis": "Terminal evidence preparation immediately before the single commit; measured commit-end proxy, not an observed commit completion"
+  },
+  "validationAttempts": {
+    "restamp": {
+      "name": "restamp",
+      "command": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "start": "2026-10-11T22:44:32.941745+00:00",
+      "end": "2026-10-11T22:44:33.742371+00:00",
+      "elapsedS": 0.7956801660002384,
+      "load": "{ 23.90 24.41 17.90 }",
+      "exit": 0
+    },
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-11T22:42:13.377448+00:00",
+      "end": "2026-10-11T22:42:16.880533+00:00",
+      "elapsedS": 3.4962743330002013,
+      "load": "{ 24.16 23.22 16.32 }",
+      "exit": 0
+    },
+    "restamp-repeat": {
+      "name": "restamp-repeat",
+      "command": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "start": "2026-10-11T22:44:33.801320+00:00",
+      "end": "2026-10-11T22:44:34.344073+00:00",
+      "elapsedS": 0.5398574170003485,
+      "load": "{ 23.90 24.41 17.90 }",
+      "exit": 0
+    },
+    "replay-focused": {
+      "name": "replay-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/replay/replay.test.ts"
+      ],
+      "start": "2026-10-11T22:44:34.405311+00:00",
+      "end": "2026-10-11T22:44:37.772691+00:00",
+      "elapsedS": 3.3645503329998974,
+      "load": "{ 23.90 24.41 17.90 }",
+      "exit": 0
+    },
+    "focused": {
+      "name": "focused",
+      "start": "2026-10-11T22:40:49.201145+00:00",
+      "end": "2026-10-11T22:40:52.813369+00:00",
+      "elapsedS": 3.6085024580002028,
+      "load": "{ 29.44 23.45 15.66 }",
+      "exit": 0
+    },
+    "focused-final": {
+      "name": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/determinize-loops.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "start": "2026-10-11T22:41:40.992827+00:00",
+      "end": "2026-10-11T22:41:45.543980+00:00",
+      "elapsedS": 4.546839792000355,
+      "load": "{ 24.57 23.34 16.12 }",
+      "exit": 0
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-11T22:42:05.706101+00:00",
+      "end": "2026-10-11T22:43:06.353831+00:00",
+      "elapsedS": 60.64351545799991,
+      "load": "{ 21.39 22.67 16.09 }",
+      "exit": 1
+    },
+    "fuzz": {
+      "name": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "start": "2026-10-11T22:41:45.791977+00:00",
+      "end": "2026-10-11T22:42:55.329207+00:00",
+      "elapsedS": 69.53372958399996,
+      "load": "{ 23.56 23.15 16.10 }",
+      "exit": 0
+    },
+    "review-final": {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-11T22:44:42.195526+00:00",
+      "end": "2026-10-11T22:45:36.119346+00:00",
+      "elapsedS": 53.91945745799967,
+      "load": "{ 21.38 23.85 17.77 }",
+      "exit": 0
+    }
+  },
+  "hostLoadSamples": {
+    "restamp": "{ 23.90 24.41 17.90 }",
+    "knip": "{ 24.16 23.22 16.32 }",
+    "restamp-repeat": "{ 23.90 24.41 17.90 }",
+    "replay-focused": "{ 23.90 24.41 17.90 }",
+    "focused": "{ 29.44 23.45 15.66 }",
+    "focused-final": "{ 24.57 23.34 16.12 }",
+    "review": "{ 21.39 22.67 16.09 }",
+    "fuzz": "{ 23.56 23.15 16.10 }",
+    "review-final": "{ 21.38 23.85 17.77 }"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Required final review wrapper start2026-10-11T22:44:42.195526+00:00; sysctl -n vm.loadavg one-minute value21.38"
+      }
+    }
+  },
+  "runtimeLedger": [
+    {
+      "name": "focused-test wrappers",
+      "sessions": [
+        40231,
+        55604,
+        49039
+      ],
+      "state": "exited0"
+    },
+    {
+      "name": "fuzz200 under machine-wide heavy lock",
+      "session": 71351,
+      "state": "exited0"
+    },
+    {
+      "name": "review wrappers",
+      "state": "Both exited; initial failed only stamped replay fixture, final passed262files3249cases",
+      "finalSession": 94571
+    },
+    {
+      "name": "knip wrapper",
+      "session": 7174,
+      "state": "exited0"
+    },
+    {
+      "name": "fixture generators and focused replay wrapper",
+      "session": 42293,
+      "state": "exited0; two generator runs and9replay cases"
+    },
+    {
+      "name": "long-lived watchers, servers, browser contexts",
+      "state": "none started"
+    }
+  ],
+  "fuzz": {
+    "games": 200,
+    "steps": 99885,
+    "wallS": 68.8,
+    "cpuS": 73.8,
+    "prompts": 2193,
+    "interactiveReruns": 226,
+    "failures": 0,
+    "scope": "Exact settled production source; parent-owned current base; no A/B performance claim"
+  },
+  "fallout": {
+    "enumeratedSymbols": [
+      "ContextOptions",
+      "Context",
+      "trackLoops",
+      "LoopStep",
+      "LoopAction"
+    ],
+    "mechanicalEdits": [
+      {
+        "path": "src/rules/replay/fixtures/adversarial.json",
+        "scope": "fallout: LoopStep/LoopAction serialized-state fixture hash",
+        "edit": "Only finalHash restamped; all synthetic events and other fixture bytes unchanged."
+      }
+    ],
+    "behavioralWidening": [
+      "src/rules/battle/fold.ts",
+      "src/rules/battle/engine-battle-intents.test.ts"
+    ],
+    "noCallerEditsRequired": true,
+    "compileCheck": "Both tsconfig typechecks passed in required final review; no external call-site fallout needed."
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "coverage": "Existing fold/fold-prompts.test.ts rejects illegal source answer and leaves committed state untouched; runStep tracks only after success, so no partial loop visibility is committed."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "coverage": "loops.test.ts suspended activation reload contract and determinize-loops.test.ts both actor-side serialized offered-loop replays."
+    },
+    {
+      "path": "partial write",
+      "coverage": "LOAD_STATE contract rejects partial flag arrays and invalid boolean entries in history and candidate; legacy absent field is accepted and view withheld."
+    },
+    {
+      "path": "invalid or stale input",
+      "coverage": "loops.test.ts new suspended contract invalid/repeated answers; existing stale loop offer and stale source replay contracts."
+    },
+    {
+      "path": "concurrent actors",
+      "coverage": "Fold is a pure synchronous state transition; new wrong-side prompt answer rejection plus player/enemy actor recording boundaries."
+    }
+  ],
+  "rejectedConcern": {
+    "concern": "Later prompt disclosures might change earlier prompt visibility when a suspended step replays.",
+    "disposition": "Normal suspension retains committed state unchanged (fold/slice.ts539-548). Published-knowledge recovery drops inFlight and prefix (recovered), so original prompt-time visibility reconstructs from the same start. No RecordedAnswer field change is needed."
+  },
+  "browserQA": "Not applicable: headless recording and redaction logic, no UI presentation or interaction changes.",
+  "reviewFull": "Not run: bounded metadata/view repair without test infrastructure, repository configuration, or cross-cutting architecture changes. Required review selected 262 related files itself.",
+  "testDelta": {
+    "files": 0,
+    "lines": 109,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "fixtureRestamp": {
+    "before": "d0ca29e751b16b81c93195219eedaf9b32c5bd805cfca94ffeac03551873c894",
+    "after": "2e4715d12b8a92e2a1926af45c6720c686e07853af2d23c0f14d3bd1acf19ead",
+    "cause": "Recorded LoopStep bookkeeping participates in complete replay final state hash.",
+    "determinism": "Two existing generator runs produced byte-identical three fixture files; git diff confirmed only adversarial finalHash changed."
+  },
+  "unmetWork": []
+}
