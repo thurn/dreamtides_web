@@ -107,9 +107,11 @@ export function matchesCharacterWith(
   if (selector.controller === "opponent" && instance.controller === controller) return false;
   if (selector.another === true && id === source) return false;
   const bound = (value: BoundValue): number => boundOf(state, catalog, read, value, controller, source, selectorX);
-  if (selector.subtype !== undefined || selector.sparkAtMost !== undefined || selector.sparkAtLeast !== undefined) {
+  if (selector.subtype !== undefined || selector.notSubtype !== undefined || selector.sparkAtMost !== undefined || selector.sparkAtLeast !== undefined) {
     const card = read(id);
     if (selector.subtype !== undefined && !card.allTypes && card.subtype !== selector.subtype) return false;
+    // A character with all character types is of every type, the excluded one included.
+    if (selector.notSubtype !== undefined && (card.allTypes || card.subtype === selector.notSubtype)) return false;
     // Spark is clamped at 0 for comparisons.
     const spark = card.spark ?? 0;
     if (selector.sparkAtMost !== undefined && spark > bound(selector.sparkAtMost)) return false;

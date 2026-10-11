@@ -1341,7 +1341,12 @@ while its source is in play sees that source's own dissolve. A character that
 leaves play without being dissolved — banished, returned to hand, or ceasing
 to exist without a dissolve — does not trigger it, nor does a dissolve that
 Veil turns into losing Veil or that Reclaim turns into a banish.
-"Non-figment" excludes figments and figment copies.
+"Non-figment" excludes figments and figment copies. A clause about that
+character in the same ability, such as "If it was a survivor, create two
+instead", reads it the same way, as it was just before it left play: a
+character that was a survivor only through an effect in play counts as one,
+though it is not a survivor in its owner's void, and a character with all
+character types is a survivor.
 
 An effect that dissolves several characters dissolves them one at a time: the
 characters it targets in the order they were chosen, and the others, as in
@@ -1578,6 +1583,12 @@ for instance, ceases to exist on resolution rather than moving to the void, and
 a created character that would return to hand ceases to exist instead. A
 created card that ceases to exist is gone from the battle and is not in any
 zone.
+
+An effect that creates a named card in a hand, such as "create 'Contemplation'
+in your hand", puts a new created card with that card's printed
+characteristics into that hand, which holds it like any other card. Its
+holder sees which card it is. The opponent sees the hand grow and the ability
+that created it, but no card in that hand is revealed to them.
 
 **Figments** are a character-typed subset of created cards.
 

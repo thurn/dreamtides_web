@@ -1,4 +1,11 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseCardId } from "../../types/card-identity";
+import contemplation from "./contemplation-69964b8e";
 import { card } from "../define";
+
+const CONTEMPLATION = parseCardId(contemplation.id);
 
 export default card({
   name: "Seer of the Fallen",
@@ -20,5 +27,15 @@ export default card({
   artOwned: false,
   cardNumber: 146,
   isStarter: false,
-  pending: true,
+  // Contemplation is C1. Amplified, "if it was a survivor" reads the character
+  // as it last was in play: two dissolve triggers, exactly one of which
+  // matches each dissolve (RD-hv-umm2.108-1).
+  abilities: (variant) =>
+    variant.amplified
+      ? [
+          triggered(whenDissolved(characterYouControl({ subtype: "Survivor" }), { figment: false }), p.createCard(CONTEMPLATION, 2)),
+          triggered(whenDissolved(characterYouControl({ notSubtype: "Survivor" }), { figment: false }), p.createCard(CONTEMPLATION, 1)),
+        ]
+      : [triggered(whenDissolved(characterYouControl(), { figment: false }), p.createCard(CONTEMPLATION, 1))],
+  verifiedText: "xchy5h3e1y",
 });

@@ -24,6 +24,7 @@ import {
   chooseSubtypePrimitive,
   copyCardPrimitive,
   costModifierPrimitive,
+  createCardPrimitive,
   createCopyInHandPrimitive,
   disableTriggersPrimitive,
   discardPrimitive,
@@ -116,6 +117,9 @@ const DEFINITIONS = {
   },
   get costModifier() {
     return costModifierPrimitive;
+  },
+  get createCard() {
+    return createCardPrimitive;
   },
   get createCopyInHand() {
     return createCopyInHandPrimitive;

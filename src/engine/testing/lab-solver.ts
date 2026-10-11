@@ -132,6 +132,7 @@ function characterFor(
       // The solver places catalog cards, never figments.
       selector.figment !== true &&
       (selector.subtype === undefined || card.subtype === selector.subtype) &&
+      (selector.notSubtype === undefined || card.subtype !== selector.notSubtype) &&
       meetsBounds(spark, selector.sparkAtLeast, selector.sparkAtMost) &&
       meetsBounds(cost, selector.costAtLeast, selector.costAtMost) &&
       admitsX(selector, spark, cost, xRange)

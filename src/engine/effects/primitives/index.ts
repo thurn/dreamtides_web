@@ -10,6 +10,7 @@ export * from "./choose-player";
 export * from "./choose-subtype";
 export * from "./copy-card";
 export * from "./cost-modifier";
+export * from "./create-card";
 export * from "./create-copy-in-hand";
 export * from "./disable-triggers";
 export * from "./discard";

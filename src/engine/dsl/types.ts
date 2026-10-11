@@ -85,7 +85,14 @@ export type BoundValue = number | XValue | CardCountValue;
  */
 export interface CharacterSelector {
   readonly controller: "you" | "opponent" | "any";
+  /** Only characters of this type; a character with all character types matches every type. */
   readonly subtype?: CardSubtype;
+  /**
+   * Only characters that are not of this type: "a non-survivor character".
+   * A character with all character types is of every type, so it never
+   * matches.
+   */
+  readonly notSubtype?: CardSubtype;
   /** Excludes the effect's source. */
   readonly another?: boolean;
   readonly sparkAtMost?: BoundValue;
