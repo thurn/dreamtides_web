@@ -1,0 +1,47 @@
+{
+  "bead": "hv-umm2.119",
+  "phase": 5,
+  "implementMin": 72.82,
+  "localValidationS": {
+    "focused": 5.47,
+    "review": 48.58,
+    "knip": 3.84,
+    "fuzz": 65.71,
+    "initialSweep": 722.16,
+    "stagingNegative": 2.37,
+    "repairedFocused": 3.28,
+    "repairedReview": 29.94,
+    "repairedKnip": 3.32,
+    "abandonReSweep": 183.28,
+    "knowledgeFreshControlAndTarget": 23.18,
+    "integrationFocused": 4.02,
+    "integrationReview": 33.22,
+    "integrationKnip": 2.46,
+    "workerIntegration": 42.75
+  },
+  "hostLoad": 6.95,
+  "testDelta": {
+    "files": 1,
+    "lines": 112,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "missing-primitive",
+      "minutes": 24.35,
+      "note": "Initial composition inventory omitted historical Reclaim condition. Three independent entities checkpointed; parent delivered bounded prerequisite hv-umm2.373 before resumption. This interval includes separate prerequisite work and delivery, not content coding."
+    },
+    {
+      "tag": "lab-solver-cost-staging",
+      "minutes": 13.83,
+      "note": "Initial 80-cell sweep had12 Abandon pre-play fixture rejections. Parent widened same bead for matching abandon/discard/reveal staging; six synthetic public cases fail before repair and pass after. All12 failed cells re-sweep pass. Initial opaque Knowledge initialization timeout did not recur on one fresh-context targeted check with base control. Repair interval measured from creation of the initial negative synthetic fixtures through final evidence; separate original sweep and prerequisite intervals are recorded above."
+    }
+  ],
+  "workflowIntervals": {
+    "initialContentCheckpointMin": 1.71,
+    "firstPrerequisiteIntervalMin": 24.35,
+    "initialBrowserLeaseWaitS": 279.42,
+    "workerIntegrationBrowserLeaseWaitS": 12.776
+  },
+  "acceptance": "complete: latest48 eligible passes/32 ineligible skips/0fail;13 historical failure rows preserved. Canonical worker repair hv-4a0x integrated on55ff5c40 with2 real healthy-worker enemy workflows;377 cancelled duplicate."
+}

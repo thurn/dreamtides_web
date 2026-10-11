@@ -1,3 +1,5 @@
+import { additionalCost, banishFromVoidCost, event } from "../../engine/dsl/builders";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 401,
   art: { x: -0.168, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [additionalCost(banishFromVoidCost(5)), event(draw(3))],
+  verifiedText: "dgugspw8wr",
 });

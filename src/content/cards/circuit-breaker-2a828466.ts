@@ -1,3 +1,6 @@
+import { energy, reclaim } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { gainPoints } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,9 @@ export default card({
   artOwned: false,
   cardNumber: 229,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), gainPoints(variant.amplified ? 2 : 1)),
+    reclaim(energy(0)),
+  ],
+  verifiedText: "2bw1rm5qtl8",
 });

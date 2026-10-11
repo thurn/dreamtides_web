@@ -1,3 +1,5 @@
+import { energy, event, reclaim, sourceWasReclaimed } from "../../engine/dsl/builders";
+import { gainPoints, ifThen } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,10 @@ export default card({
   artOwned: false,
   cardNumber: 239,
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.373-1: the condition reads this card's own actual Reclaim play.
+  abilities: (variant) => [
+    event(ifThen(sourceWasReclaimed(), gainPoints(variant.amplified ? 8 : 6), gainPoints(variant.amplified ? 4 : 3))),
+    reclaim(energy(4)),
+  ],
+  verifiedText: "1s7k4blnjo5",
 });

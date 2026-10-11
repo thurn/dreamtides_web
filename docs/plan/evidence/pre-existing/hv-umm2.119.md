@@ -1,0 +1,15 @@
+# hv-umm2.119 pre-existing issues
+
+- `src/engine/testing/lab-solver.ts` (`costNeeds`, lines 186–208; staging at 269): additional-cost traversal stages void-banish cards and points, but abandon/discard costs yield empty needs. A card whose only play-time alternatives require a character or another hand card receives neither, so its card-lab fixture is unplayable. This affects all six eligible variants of 7ea13d02-9d97-492e-9edb-f326eb3b4d1c on both sides. The raw twelve failed sweep verdicts are preserved in this bead's QA ledger. Resolution in this bead: the parent widened the Areas for matching abandon/discard/reveal resource staging in this same worktree. `costNeeds` collects required and optional matching hand cards and own characters through alternatives; the public synthetic labBoard/engine tests cover both sides and preservation of existing targets, void payments and points. The initial failed verdicts are preserved for linkage to the focused repaired-cell results. Card abilities are unchanged.
+- Historical observation on acceptance base `f4c9a05d9856c68f4520bcbb7d7b5730ca59ef06`: `src/engine/policy/catalog-manifest.ts` concatenated manifest definitions, authored content and development lab definitions with duplicate UUIDs, which `createCatalog` rejected. The initial sweep's development log records 114 worker boot/error/fallback messages across passing runs (6f0b709d: 21, 2a828466: 54, 6e019832: 12, c6ae1899: 27). Canonical repair `hv-4a0x`, landed at `8ad67fe22`, merges worker definitions by UUID and is included in the final integration base `55ff5c40f8be0dc22a5b30c4da413b7400196c1f`. The proposed `hv-umm2.377` filing was cancelled as a duplicate of that completed repair. Worker source is outside this bead's Areas; this bead records actual current-base enemy workflow validation below.
+
+Knowledge Restored's one empowered/player initialization timeout is an observed
+failure that was not reproduced by the one parent-authorized fresh-document
+recheck, rather than an established pre-existing code issue. It awaited `window.__cardLab` for approximately 59.7 seconds before any
+engine-probe or card-play step; that failed document wrote no development-log
+record. Its exact card/variant/side and timeout are in the QA ledger; the sweep
+does not retain the randomized URL game nonce when the initial report is absent.
+
+The fresh diagnostic base control and empowered/player cell both pass with empty caps, the same timeout and no card source change. Its report is retained as `knowledge-empowered-fresh.result.json`; the original timeout cause remains unattributed. Latest verdicts for all original cells are pass or intentional ineligible skip.
+
+Current canonical-base enemy integration: games `29td3z` (7ea13d02) and `sfoipe` (6f0b709d) both have ready worker boots and worker-source decisions with zero AI errors or fallback. Raw filtered log records are retained as `worker-integration-ai.jsonl`; both card workflows pass with empty caps. The historical worker-catalog observation is resolved by `hv-4a0x`.

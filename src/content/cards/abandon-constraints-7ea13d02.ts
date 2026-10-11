@@ -1,3 +1,5 @@
+import { abandonCost, additionalCost, choiceCost, discardCost, event } from "../../engine/dsl/builders";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,10 @@ export default card({
   cardNumber: 214,
   art: { x: 0, y: -0.104, scale: 1 },
   isStarter: false,
-  pending: true,
+  // RD-hv-7x4l.16-2: choose and pay one payable additional-cost alternative.
+  abilities: (variant) => [
+    additionalCost(choiceCost([abandonCost()], [discardCost()])),
+    event(draw(variant.amplified ? 3 : 2)),
+  ],
+  verifiedText: "1sekcok6uzp",
 });
