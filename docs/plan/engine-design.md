@@ -744,7 +744,10 @@ Designations:
   challengers.
 - At the end of Dusk, the opposing front-rank characters at the same index
   become blockers.
-- Night movement updates the pairs for the recorded challengers.
+- Night movement updates the pairs for the recorded challengers. One query,
+  `laneRoles` in `rules/challenge.ts`, names a lane's current pair: the
+  `challengeLane` step resolves it, and the `challenging` and `blocking`
+  selectors read it.
 
 Timing categories:
 

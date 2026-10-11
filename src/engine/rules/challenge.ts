@@ -1,10 +1,11 @@
 import type { InstanceId, Side } from "../state/ids";
 import { FRONT_RANK_SIZE, opponent } from "../state/ids";
+import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { gainPoints } from "./resources";
 import { hasKeyword } from "./keywords";
 import { effectiveSpark } from "./spark";
-import { dissolve, instanceOf } from "./zones";
+import { dissolve, instanceOf, slotOf } from "./zones";
 
 /**
  * End of Day: the active side's front-rank characters that are not
@@ -47,29 +48,64 @@ export function designateBlockers(ctx: StepContext): void {
   ctx.emit({ kind: "blockersDesignated", side: defending, blockers });
 }
 
+/** The characters holding the challenge roles in one front-rank lane. */
+interface LaneRoles {
+  readonly challenger: InstanceId;
+  readonly blocker: InstanceId | null;
+}
 
 /**
- * Resolves one front-rank lane. The challenger is the designated challenger
- * now in this lane; the blocker is a designated blocker now opposite it.
- * Night movement therefore re-pairs designated characters by position.
+ * The roles held now in one front-rank lane (rules § Challengers, Blockers,
+ * and Scoring → Holding a role): the designated challenger now in the active
+ * side's front rank at `lane`, and the designated blocker now directly
+ * opposite it, or `null` when no challenger is there. Night movement
+ * therefore re-pairs designated characters by position. The Challenge phase
+ * resolves these pairs, and the challenger and blocker selectors read them.
  */
-export function resolveLane(ctx: StepContext, lane: number): void {
-  const { state, catalog } = ctx;
+export function laneRoles(state: BattleState, lane: number): LaneRoles | null {
   const challenge = state.challenge;
   if (challenge === null || lane < 0 || lane >= FRONT_RANK_SIZE) {
-    return;
+    return null;
   }
   const active = state.turn.active;
-  const defending: Side = opponent(active);
   const challenger = state.sides[active].frontRank[lane] ?? null;
   if (challenger === null || !challenge.challengers.includes(challenger)) {
-    return;
+    return null;
   }
-  const opposite = state.sides[defending].frontRank[lane] ?? null;
+  const opposite = state.sides[opponent(active)].frontRank[lane] ?? null;
   const blocker =
     opposite !== null && Object.values(challenge.blockers).includes(opposite)
       ? opposite
       : null;
+  return { challenger, blocker };
+}
+
+/** The role `id` holds now in its front-rank lane's `laneRoles`, if any. */
+export function challengeRoleOf(
+  state: BattleState,
+  id: InstanceId,
+): "challenger" | "blocker" | null {
+  const slot = slotOf(state, id);
+  if (slot?.rank !== "front") {
+    return null;
+  }
+  const roles = laneRoles(state, slot.index);
+  if (roles?.challenger === id) {
+    return "challenger";
+  }
+  return roles?.blocker === id ? "blocker" : null;
+}
+
+/** Resolves one front-rank lane's `laneRoles`. */
+export function resolveLane(ctx: StepContext, lane: number): void {
+  const { state, catalog } = ctx;
+  const roles = laneRoles(state, lane);
+  if (roles === null) {
+    return;
+  }
+  const { challenger, blocker } = roles;
+  const active = state.turn.active;
+  const defending: Side = opponent(active);
   const challengerSpark = effectiveSpark(state, catalog, challenger);
   if (blocker === null) {
     gainPoints(ctx, active, challengerSpark, "challenge");

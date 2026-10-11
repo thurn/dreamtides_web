@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.336",
+  "phase": 5,
+  "implementMin": 15,
+  "localValidationS": {
+    "focused": 2,
+    "review": 39,
+    "knip": 2,
+    "fuzzBefore": 36,
+    "fuzzAfter": 36
+  },
+  "hostLoad": 7.32,
+  "testDelta": {
+    "files": 0,
+    "lines": 164,
+    "jsdomFiles": 0,
+    "cases": 6
+  },
+  "friction": [],
+  "sourceBase": "ff4584eaa239",
+  "coverage": {
+    "entities": 1,
+    "scenarioModules": 1,
+    "scenarios": 6,
+    "fuzzGames": 200
+  }
+}

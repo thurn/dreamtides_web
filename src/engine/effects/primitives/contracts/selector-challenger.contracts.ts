@@ -5,12 +5,11 @@ import { matchingCharacters } from "../../../dsl/selectors";
 import { onNight, triggered } from "../../../dsl/triggers";
 import type { CharacterSelector } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
-import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
-import type { Answer, ChooseCardsPrompt, Prompt } from "../../../prompts/types";
-import { deserializeState, serializeState, stateHash } from "../../../state/hash";
+import type { EngineEvent } from "../../../events";
+import type { Answer, Prompt } from "../../../prompts/types";
 import type { InstanceId, Side } from "../../../state/ids";
+import { opponent } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
-import { promptView } from "../../../view/view";
 import { syntheticId } from "../../../testing/synthetic-cards";
 import type { BoardSetup } from "../../../testing/board";
 import * as p from "../index";
@@ -34,17 +33,20 @@ class FirstChoices implements AnswerSource {
 }
 
 describe("challenger and blocker selectors", () => {
-  /** "▸Night: Draw a card, then discard a card unless you control a challenger" (amplified: "or blocker"). */
-  const fury: EngineCardDefinition = {
+  /** "▸Night: Gain 1 point if you control a challenger, then gain 2 points if you control a blocker." */
+  const roleProbe: EngineCardDefinition = {
     ...v.vanilla2,
     id: syntheticId(1170),
     status: "authored",
-    abilities: (variant) => {
-      const unlessBlocker = variant.amplified
-        ? p.ifThen(controls(characterYouControl({ blocking: true })), p.sequence(), p.discard(1))
-        : p.discard(1);
-      return [triggered(onNight(), p.sequence(p.draw(1), p.ifThen(controls(characterYouControl({ challenging: true })), p.sequence(), unlessBlocker)))];
-    },
+    abilities: () => [
+      triggered(
+        onNight(),
+        p.sequence(
+          p.ifThen(controls(characterYouControl({ challenging: true })), p.gainPoints(1)),
+          p.ifThen(controls(characterYouControl({ blocking: true })), p.gainPoints(2)),
+        ),
+      ),
+    ],
   };
   /** "▸Night: Return each front-rank character you control to hand." */
   const bounceFront: EngineCardDefinition = {
@@ -75,19 +77,37 @@ describe("challenger and blocker selectors", () => {
     status: "authored",
     abilities: () => [staticAbility(p.sparkModifier(all(characterYouControl({ challenging: true })), 1))],
   };
-  const roles = createEngine(testCatalog([...DSL_CARDS, fury, bounceFront, nightControl, fastDraw, retriggerNight, challengerAnthem]));
+  const roles = createEngine(testCatalog([...DSL_CARDS, roleProbe, bounceFront, nightControl, fastDraw, retriggerNight, challengerAnthem]));
   const longDeck = Array.from({ length: 8 }, () => v.vanilla1.id);
   const matching = (state: BattleState, selector: CharacterSelector, controller: Side = "player") =>
     matchingCharacters(state, roles.catalog, selector, controller, "i0");
-  const toNight = (setup: Omit<BoardSetup, "active" | "phase">, source: AnswerSource = NO) => {
+  /** Places the board in `active`'s Day and passes to its Night, after the Night triggers. */
+  const toNight = (setup: Omit<BoardSetup, "active" | "phase">, source: AnswerSource = NO, active: Side = "player") => {
     const placed = boardState(roles.catalog, {
-      active: "player",
+      active,
       phase: "day",
       ...setup,
       player: { deck: longDeck, ...setup.player },
       enemy: { deck: longDeck, ...setup.enemy },
     });
-    return { ...passUntil(roles, placed.state, at(roles, "player", "night"), source), ids: placed.ids, start: placed.state };
+    return { ...passUntil(roles, placed.state, at(roles, active, "night"), source), ids: placed.ids, start: placed.state };
+  };
+  /** The lanes the Challenge phase resolves from a Night state, through the next turn's Day. */
+  const resolvedLanes = (night: BattleState) =>
+    passUntil(roles, night, at(roles, opponent(night.turn.active), "day")).events.flatMap((event: EngineEvent) =>
+      event.kind === "laneResolved" ? [{ challenger: event.challenger, blocker: event.blocker }] : [],
+    );
+  type LanePair = { readonly challenger: InstanceId; readonly blocker: InstanceId | null };
+  /**
+   * The Challenge phase resolves `pairs` from a Night state, in lane order,
+   * and the selectors' roles name exactly those characters.
+   */
+  const expectRoles = (night: BattleState, pairs: readonly LanePair[]) => {
+    expect(resolvedLanes(night)).toEqual(pairs);
+    expect(matching(night, anyCharacter({ challenging: true })).sort()).toEqual(pairs.map((pair) => pair.challenger).sort());
+    expect(matching(night, anyCharacter({ blocking: true })).sort()).toEqual(
+      pairs.flatMap((pair) => (pair.blocker === null ? [] : [pair.blocker])).sort(),
+    );
   };
 
   it("matches the active side's designated front-rank challengers and the ready characters opposite them after Dusk, per controller", () => {
@@ -167,108 +187,104 @@ describe("challenger and blocker selectors", () => {
     expect(resolved.state.sides.player.score).toBe(3);
   });
 
-  it("discards unless its controller controls a challenger as the discard would happen, the source itself included", () => {
-    const cases: readonly { readonly setup: Omit<BoardSetup, "active" | "phase">; readonly discards: boolean }[] = [
-      { setup: { player: { back: [fury.id] }, enemy: { front: [v.vanilla2.id] } }, discards: true },
-      { setup: { player: { front: [fury.id] } }, discards: false },
-      { setup: { player: { back: [fury.id], front: [v.vanilla1.id] } }, discards: false },
-      { setup: { player: { back: [fury.id], front: [v.vanilla1.id] }, enemy: { front: [v.vanilla3.id] } }, discards: false },
-    ];
-    for (const { setup, discards } of cases) {
-      const source = new FirstChoices();
-      const { state, ids } = toNight({ ...setup, player: { ...setup.player, hand: [v.vanilla3.id] } }, source);
-      expect(state.sides.player.hand).toHaveLength(discards ? 1 : 2);
-      expect(state.sides.player.void).toHaveLength(discards ? 1 : 0);
-      expect(state.sides.enemy.void).toEqual([]);
-      expect(source.prompts.map((prompt) => prompt.side)).toEqual(discards ? ["player"] : []);
-      expect(state.sides.player.hand).toContain(ids.player.deck[0]);
-    }
-    // An exhausted front-rank character is never designated, so it is no challenger.
-    const { state: day } = boardState(roles.catalog, {
-      active: "player", phase: "day", player: { back: [fury.id], front: [v.vanilla1.id], hand: [v.vanilla3.id], deck: longDeck }, enemy: { deck: longDeck },
-    });
-    day.instances[day.sides.player.frontRank[0]!].status.exhausted = true;
-    const tired = passUntil(roles, day, at(roles, "player", "night"), new FirstChoices()).state;
-    expect(tired.sides.player.void).toHaveLength(1);
-  });
-
-  it("reads the role as it resolves, after earlier Night triggers changed it", () => {
-    const source = new FirstChoices();
-    // B0 resolves first (D14): the challenger is returned to hand, and the discard happens.
-    const after = toNight({ player: { back: [bounceFront.id, fury.id], front: [v.vanilla1.id], hand: [v.vanilla3.id] } }, source);
+  it("reads the role as a condition resolves, after earlier Night triggers changed it", () => {
+    // B0 resolves first (D14): the challenger is returned to hand before the probe reads it.
+    const after = toNight({ player: { back: [bounceFront.id, roleProbe.id], front: [v.vanilla1.id] } });
     expect(after.state.sides.player.hand).toContain(after.ids.player.front[0]);
-    expect(after.state.sides.player.void).toHaveLength(1);
-    expect(source.prompts).toHaveLength(1);
-    // With the bounce later, the challenger is still there as the discard would happen.
-    const before = toNight({ player: { back: [fury.id, bounceFront.id], front: [v.vanilla1.id], hand: [v.vanilla3.id] } }, new FirstChoices());
+    expect(after.state.sides.player.score).toBe(0);
+    // With the bounce later, the challenger is still there as the probe reads it.
+    const before = toNight({ player: { back: [roleProbe.id, bounceFront.id], front: [v.vanilla1.id] } });
     expect(before.state.sides.player.hand).toContain(before.ids.player.front[0]);
-    expect(before.state.sides.player.void).toEqual([]);
+    expect(before.state.sides.player.score).toBe(1);
   });
 
-  it("counts a blocker only for the amplified text, on the side that controls it, when the ability resolves in the opponent's Night", () => {
-    for (const amplified of [false, true]) {
-      const source = new FirstChoices();
-      const { state: night, ids } = toNight({
-        player: { front: [v.vanilla3.id], hand: [fastDraw.id], energy: 1 },
-        enemy: { front: [fury.id], hand: [retriggerNight.id, v.vanilla1.id], energy: 1 },
-      }, source);
-      const enemyFury = ids.enemy.front[0]!;
-      const stamped = structuredClone(night);
-      stamped.instances[enemyFury] = { ...stamped.instances[enemyFury], variant: { amplified } };
-      expect(matching(stamped, characterYouControl({ blocking: true }), "enemy")).toEqual([enemyFury]);
-      const played = roles.apply(stamped, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, source).state;
-      const responded = roles.apply(played, "enemy", { kind: "play", card: ids.enemy.hand[0], from: "hand" }, source).state;
-      const resolved = passUntil(roles, responded, (state) => state.stack.length === 0, source).state;
-      // The enemy drew a card; only the amplified text spares it the discard, and the player's challenger never counts for it.
-      expect(resolved.sides.enemy.hand).toHaveLength(amplified ? 2 : 1);
-      expect(resolved.sides.enemy.void).toHaveLength(amplified ? 1 : 2);
-      expect(source.prompts.filter((prompt) => prompt.kind === "chooseCards").map((prompt) => prompt.side)).toEqual(amplified ? [] : ["enemy"]);
-    }
+  it("counts a blocker for the side that controls it only when its ability resolves in the opponent's Night", () => {
+    const source = new FirstChoices();
+    const { state: night, ids } = toNight({
+      player: { front: [v.vanilla3.id], hand: [fastDraw.id], energy: 1 },
+      enemy: { front: [roleProbe.id], hand: [retriggerNight.id, v.vanilla1.id], energy: 1 },
+    }, source);
+    const probe = ids.enemy.front[0]!;
+    expect(matching(night, characterYouControl({ blocking: true }), "enemy")).toEqual([probe]);
+    const played = roles.apply(night, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, source).state;
+    const responded = roles.apply(played, "enemy", { kind: "play", card: ids.enemy.hand[0], from: "hand" }, source).state;
+    const resolved = passUntil(roles, responded, (state) => state.stack.length === 0, source).state;
+    // The enemy's blocker counts; the player's challenger never counts for it.
+    expect(resolved.sides.enemy.score).toBe(2);
   });
 
-  it("suspends on the discard with its trigger queued, reloads to the same prompt, and bounces foreign, stale, and illegal answers", () => {
-    const fold = createFoldAdapter(roles, { checkEventPrefix: true });
-    const applied = (outcome: IntentOutcome): BattleSlice => {
-      if (outcome.kind !== "applied") throw new Error(`bounced: ${outcome.reason}`);
-      if (outcome.error !== null) throw new Error(outcome.error.message);
-      return outcome.slice;
-    };
-    const { state, ids } = boardState(roles.catalog, {
-      active: "player",
+  it("holds the roles symmetrically when the enemy is active, through live control change, its Night trigger, and the Challenge phase", () => {
+    const source = new FirstChoices();
+    const { state: day, ids } = boardState(roles.catalog, {
+      active: "enemy",
       phase: "day",
-      player: { back: [fury.id], hand: [v.vanilla2.id, v.vanilla3.id], deck: longDeck },
-      enemy: { front: [v.vanilla1.id], deck: longDeck },
+      player: { front: [v.vanilla2.id, v.vanilla2.id], deck: longDeck },
+      enemy: { front: [v.vanilla3.id, v.vanilla3.id], back: [nightControl.id, roleProbe.id], deck: longDeck },
     });
-    const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
-    const dusk = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: { kind: "pass" } }));
-    const suspended = applied(fold.reduce(dusk, { kind: "battleAction", side: "enemy", action: { kind: "pass" } }));
-    const pending = fold.pending(suspended)!;
-    expect(pending.prompt).toMatchObject({ kind: "chooseCards", side: "player" });
-    // The draw is not committed while the discard waits.
-    expect(suspended.committed.sides.player.hand).toEqual(ids.player.hand);
-    expect(suspended.committed.sides.player.deck).toEqual(ids.player.deck);
-    // The opponent learns that a choice is pending, never which cards it offers.
-    expect((promptView(pending.prompt, "enemy", pending.display) as ChooseCardsPrompt).candidates).toEqual([]);
+    const [first, second] = ids.enemy.front as InstanceId[];
+    const [taken, kept] = ids.player.front as InstanceId[];
+    expect(matching(day, anyCharacter({ challenging: true }))).toEqual([]);
+    const dusk = passUntil(roles, day, (state) => state.turn.phase === "dusk").state;
+    expect(matching(dusk, characterYouControl({ challenging: true }), "enemy")).toEqual([first, second]);
+    expect(matching(dusk, anyCharacter({ blocking: true }))).toEqual([]);
 
-    const reloaded = JSON.parse(JSON.stringify(suspended)) as BattleSlice;
-    const fresh = createFoldAdapter(roles, { checkEventPrefix: true });
-    const again = fresh.pending(reloaded)!;
-    expect(again.prompt.id).toBe(pending.prompt.id);
-    const offered = (again.prompt as ChooseCardsPrompt).candidates;
-    expect([...offered].sort()).toEqual([...ids.player.hand, ids.player.deck[0]].sort());
-    const answer = (side: Side, value: readonly InstanceId[]) => fresh.reduce(reloaded, { kind: "answer", side, promptId: again.prompt.id, value });
-    expect(answer("enemy", [offered[0]])).toEqual({ kind: "bounced", reason: "notYourPrompt" });
-    expect(answer("player", [ids.player.deck[1]])).toEqual({ kind: "bounced", reason: "illegalAnswer" });
-    expect(answer("player", [])).toEqual({ kind: "bounced", reason: "illegalAnswer" });
-    // No action slips in between the trigger and its resolution.
-    expect(fresh.reduce(reloaded, { kind: "battleAction", side: "player", action: { kind: "pass" } })).toMatchObject({ kind: "bounced" });
+    // The enemy's Night triggers in D14 order: it gains control of the player's F0 blocker, then the probe reads its roles.
+    const night = passUntil(roles, dusk, at(roles, "enemy", "night"), source).state;
+    expect(source.prompts.map((prompt) => prompt.side)).toEqual(["enemy"]);
+    expect(night.instances[taken]).toMatchObject({ controller: "enemy", zone: "play" });
+    expect(matching(night, characterYouControl({ challenging: true }), "enemy")).toEqual([first, second]);
+    expect(matching(night, characterYouControl({ blocking: true }))).toEqual([kept]);
+    expect(matching(night, characterYouControl({ blocking: true }), "enemy")).toEqual([]);
+    expect(matching(night, anyCharacter({ challenging: true, blocking: false }), "enemy")).toEqual([first, second]);
+    expect(matching(night, characterYouControl({ challenging: false }), "enemy")).toEqual(
+      expect.arrayContaining([taken, ids.enemy.back[0], ids.enemy.back[1]]),
+    );
+    // A challenger counts for the active enemy; it controls no blocker during its own turn.
+    expect(night.sides.enemy.score).toBe(1);
 
-    const done = applied(answer("player", [ids.player.deck[0]]));
-    expect(done.inFlight).toBeNull();
-    expect(done.committed.turn.phase).toBe("night");
-    expect(done.committed.sides.player.void).toEqual([ids.player.deck[0]]);
-    expect(done.committed.sides.player.hand).toEqual(ids.player.hand);
-    expect(fresh.reduce(done, { kind: "answer", side: "player", promptId: again.prompt.id, value: [ids.player.hand[0]] })).toMatchObject({ kind: "bounced" });
-    expect(stateHash(deserializeState(serializeState(done.committed)))).toBe(stateHash(done.committed));
+    // The Challenge phase resolves the same pairs: F0 unblocked for 3, F1 blocked 3 against 2.
+    expect(resolvedLanes(night)).toEqual([{ challenger: first, blocker: null }, { challenger: second, blocker: kept }]);
+    const next = passUntil(roles, night, at(roles, "player", "day")).state;
+    expect(next.sides.enemy.score).toBe(5);
+    expect(next.instances[kept]?.zone).toBe("void");
+    expect(matching(next, anyCharacter({ challenging: true }))).toEqual([]);
+  });
+
+  it("matches exactly the pairs the Challenge phase resolves, for either active side and every Night repositioning", () => {
+    for (const active of ["player", "enemy"] as const) {
+      const defending = opponent(active);
+      const { state: night, ids } = toNight({
+        [active]: { front: [v.vanilla3.id, v.vanilla3.id, v.vanilla3.id] },
+        [defending]: { front: [v.vanilla2.id, v.vanilla2.id] },
+      }, NO, active);
+      const [a, b, c] = ids[active].front as InstanceId[];
+      const [blockA, blockB] = ids[defending].front as InstanceId[];
+      const moved = (change: (state: BattleState) => void) => {
+        const state = structuredClone(night);
+        change(state);
+        return state;
+      };
+      expectRoles(night, [{ challenger: a, blocker: blockA }, { challenger: b, blocker: blockB }, { challenger: c, blocker: null }]);
+      // A challenger moves to an open lane, and its blocker holds no role.
+      expectRoles(
+        moved((state) => { state.sides[active].frontRank[0] = null; state.sides[active].frontRank[4] = a; }),
+        [{ challenger: b, blocker: blockB }, { challenger: c, blocker: null }, { challenger: a, blocker: null }],
+      );
+      // A designated blocker moved opposite another challenger blocks that one.
+      expectRoles(
+        moved((state) => { state.sides[defending].frontRank[0] = null; state.sides[defending].frontRank[2] = blockA; }),
+        [{ challenger: a, blocker: null }, { challenger: b, blocker: blockB }, { challenger: c, blocker: blockA }],
+      );
+      // Two challengers trade lanes, each paired with the blocker now opposite it.
+      expectRoles(
+        moved((state) => { state.sides[active].frontRank[0] = b; state.sides[active].frontRank[1] = a; }),
+        [{ challenger: b, blocker: blockA }, { challenger: a, blocker: blockB }, { challenger: c, blocker: null }],
+      );
+      // A challenger moved to the back rank holds no role, and neither does its blocker.
+      expectRoles(
+        moved((state) => { state.sides[active].frontRank[0] = null; state.sides[active].backRank[0] = a; }),
+        [{ challenger: b, blocker: blockB }, { challenger: c, blocker: null }],
+      );
+    }
   });
 });
