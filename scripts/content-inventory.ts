@@ -22,8 +22,8 @@
  *   primitives and DSL forms it needs, and the prompt kinds it raises.
  * - **Primitives** in `PRIMITIVES` are probed against src/engine: a primitive
  *   module exists when its file is listed in effects/primitives/index.ts, a
- *   builder when src/engine/dsl exports it, and a DSL addition when its probe
- *   pattern matches. Only primitives that do not exist yet create bead
+ *   builder when src/engine/dsl exports it, and a DSL addition when its named
+ *   exported builder or registered form is present. Only primitives that do not exist yet create bead
  *   edges: a bead depends on the bead that introduces each new primitive
  *   its entities need.
  * - **Families.** Each card joins the latest family (in the § 5.1 order)
@@ -40,6 +40,7 @@
  *
  * Output is deterministic: no timestamps, and every list is sorted.
  */
+import ts from "typescript";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -72,6 +73,64 @@ const APOLLYON_PER_BEAD = 2;
 /** Code-unit order, independent of the host locale. */
 const compare = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 const read = (path: string): string => readFileSync(join(ROOT, path), "utf8");
+
+/** An authoring export, or a registered type form; representation discriminator names are irrelevant. */
+export interface InventoryCapabilityForm {
+  readonly module: string;
+  readonly symbol: string;
+  readonly kind: "builder" | "form";
+  readonly member?: string;
+  readonly option?: string;
+  readonly optionLiteral?: string;
+  readonly literal?: string;
+}
+
+/** Resolve public authoring capabilities from supplied modules, including aliases and type-only exports. */
+export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>): (forms: readonly InventoryCapabilityForm[]) => boolean {
+  const files = new Map([...sources].map(([file, text]) => [resolve(ROOT, file), text]));
+  const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler, skipLibCheck: true, noEmit: true };
+  const host = ts.createCompilerHost(options);
+  const getSourceFile = host.getSourceFile.bind(host);
+  const fileExists = host.fileExists.bind(host);
+  const readFile = host.readFile.bind(host);
+  host.fileExists = (file) => files.has(resolve(file)) || fileExists(file);
+  host.readFile = (file) => files.get(resolve(file)) ?? readFile(file);
+  const directoryExists = host.directoryExists?.bind(host);
+  host.directoryExists = (directory) => [...files.keys()].some((file) => file.startsWith(`${resolve(directory)}/`)) || (directoryExists?.(directory) ?? false);
+  host.getSourceFile = (file, language, onError, createNew) => {
+    const text = files.get(resolve(file));
+    return text === undefined ? getSourceFile(file, language, onError, createNew) : ts.createSourceFile(file, text, language, true);
+  };
+  const program = ts.createProgram({ rootNames: [...files.keys()], options, host });
+  const checker = program.getTypeChecker();
+  const variants = (type: ts.Type): readonly ts.Type[] => type.isUnion() ? type.types : [type];
+  const literal = (type: ts.Type, value: string): boolean => variants(type).some((part) => part.isStringLiteral() && part.value === value);
+  const matches = (form: InventoryCapabilityForm): boolean => {
+    const source = program.getSourceFile(resolve(ROOT, form.module));
+    const module = source === undefined ? undefined : checker.getSymbolAtLocation(source);
+    if (module === undefined || source === undefined) return false;
+    const exported = checker.getExportsOfModule(module).find((symbol) => symbol.name === form.symbol);
+    if (exported === undefined) return false;
+    const symbol = exported.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exported) : exported;
+    if (form.kind === "builder") return checker.getTypeOfSymbolAtLocation(symbol, source).getCallSignatures().length > 0;
+    if (!(symbol.flags & ts.SymbolFlags.Type)) return false;
+    const type = checker.getDeclaredTypeOfSymbol(symbol);
+    if (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.Never)) return false;
+    if (form.literal !== undefined) return literal(type, form.literal);
+    return variants(type).some((part) => {
+      const member = form.member;
+      if (member !== undefined && !part.getProperties().some((field) => literal(checker.getTypeOfSymbolAtLocation(field, source), member))) return false;
+      if (form.option === undefined) return true;
+      const option = part.getProperty(form.option);
+      if (option === undefined) return false;
+      const optionType = checker.getTypeOfSymbolAtLocation(option, source);
+      return form.optionLiteral === undefined
+        ? variants(optionType).some((value) => !(value.flags & (ts.TypeFlags.Never | ts.TypeFlags.Undefined)))
+        : literal(optionType, form.optionLiteral);
+    });
+  };
+  return (forms) => forms.some(matches);
+}
 
 // ---------------------------------------------------------------------------
 // Mechanic families, in the batch order of phase-5-content.md § 5.1.
@@ -108,7 +167,7 @@ const FAMILIES: readonly Family[] = [
 // - "primitive": a module under src/engine/effects/primitives/ (exists when
 //   index.ts lists it);
 // - "builder": an export of src/engine/dsl/ (exists when exported);
-// - "dsl": a DSL addition (exists when `probe` matches `file`);
+// - "dsl": a named exported builder or registered form (including required options);
 // - "extension": an option on an existing primitive module (exists when
 //   `probe` matches its module);
 // - "journey": a journey-modifier hook (P8), built by 5.6.
@@ -118,6 +177,7 @@ const FAMILIES: readonly Family[] = [
 const P = "src/engine/effects/primitives/";
 const DSL_TYPES = "src/engine/dsl/types.ts";
 const DSL_TRIGGERS = "src/engine/dsl/triggers.ts";
+const DSL_BUILDERS = "src/engine/dsl/builders.ts";
 
 type PrimitiveKind = "primitive" | "builder" | "dsl" | "extension" | "journey";
 
@@ -127,6 +187,7 @@ interface PrimitiveEntry {
   readonly module?: string;
   readonly contract?: string;
   readonly probe?: RegExp;
+  readonly forms?: readonly InventoryCapabilityForm[];
   readonly fallout?: readonly string[];
   readonly symbol?: string;
   readonly note?: string;
@@ -152,12 +213,14 @@ const prim = (name: string, file: string, extra: PrimitiveExtra = {}): Primitive
   ...extra,
 });
 const builder = (name: string): PrimitiveEntry => ({ name, kind: "builder" });
-const dsl = (name: string, file: string, probe: RegExp, fallout: readonly string[], extra: PrimitiveExtra = {}): PrimitiveEntry => ({
+const callable = (module: string, symbol: string): InventoryCapabilityForm => ({ module, symbol, kind: "builder" });
+const registered = (module: string, symbol: string, options: Omit<InventoryCapabilityForm, "module" | "symbol" | "kind"> = {}): InventoryCapabilityForm => ({ module, symbol, kind: "form", ...options });
+const dsl = (name: string, forms: readonly InventoryCapabilityForm[], fallout: readonly string[], extra: PrimitiveExtra = {}): PrimitiveEntry => ({
   name,
   kind: "dsl",
-  module: file,
+  module: forms[0]?.module,
   ...(isJourneyOwned({ kind: "dsl", name }) ? {} : { contract: contractPath(name) }),
-  probe,
+  forms,
   fallout,
   ...extra,
 });
@@ -228,15 +291,15 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   prim("delayed", "floating-trigger.ts", { symbol: "delayed" }),
   prim("discardRandom", "discard.ts", { symbol: "discardRandom" }),
   prim("loseKeyword", "grant.ts", { symbol: "loseKeyword" }),
-  dsl("banishFromHandCost", DSL_TYPES, /cost: "banishFromHand"/, []),
-  dsl("conditionControls", DSL_TYPES, /cond: "controls"/, []),
-  dsl("conditionEnergyAtLeast", DSL_TYPES, /cond: "energyAtLeast"/, []),
-  dsl("conditionCostPaid", DSL_TYPES, /cond: "costPaid"/, []),
-  dsl("valueHandSize", DSL_TYPES, /value: "handSize"/, []),
-  dsl("triggerNth", DSL_TYPES, /on: "play";[^\n]*nth\?/, []),
-  dsl("functionalZones", DSL_TYPES, /export type FunctionalZone/, []),
-  dsl("oncePerTurn", DSL_TYPES, /oncePerTurn\?: boolean/, []),
-  dsl("speedFast", DSL_TYPES, /export type Speed = "standard" \| "fast"/, []),
+  dsl("banishFromHandCost", [registered(DSL_TYPES, "PaymentCost", { member: "banishFromHand" })], []),
+  dsl("conditionControls", [callable(DSL_BUILDERS, "controls")], []),
+  dsl("conditionEnergyAtLeast", [registered(DSL_TYPES, "Condition", { member: "energyAtLeast" })], []),
+  dsl("conditionCostPaid", [callable(DSL_BUILDERS, "costPaid")], []),
+  dsl("valueHandSize", [registered(DSL_TYPES, "ValueExpr", { member: "handSize" })], []),
+  dsl("triggerNth", [registered(DSL_TYPES, "Trigger", { member: "play", option: "nth" })], []),
+  dsl("functionalZones", [registered(DSL_TYPES, "FunctionalZone")], []),
+  dsl("oncePerTurn", [registered(DSL_TYPES, "ActivatedAbility", { option: "oncePerTurn" })], []),
+  dsl("speedFast", [registered(DSL_TYPES, "Speed", { literal: "fast" })], []),
   ext("preventDestination", "prevent.ts", /destination\?: PreventDestination/),
 
   // Phase 5: cards group.
@@ -285,44 +348,44 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   ext("costModifierReclaim", "cost-modifier.ts", /reclaim/i, { note: "\"Reclaim abilities cost you 1● less\"" }),
   ext("costModifierActivated", "cost-modifier.ts", /activated/, { note: `cost modifiers on activated abilities (${GAP_37})` }),
   // Phase 5: DSL additions.
-  dsl("selectorFigment", DSL_TYPES, /readonly figment\?: boolean/, ["CharacterSelector"], { note: "figment or not" }),
-  dsl("selectorHasAbility", DSL_TYPES, /readonly hasAbility\?/, ["CharacterSelector", "CardFilter"], { note: "\"characters with ▸Materialized abilities\"" }),
-  dsl("stackSelectorBounds", DSL_TYPES, /interface StackItemSelector \{[^}]*costAtMost/, ["StackItemSelector"], { note: "cost and ✦ bounds on stack items (\"Prevent a played ≤2● cost card\")" }),
-  dsl("selectorChallenger", DSL_TYPES, /readonly challenging\?: boolean/, ["CharacterSelector"], { note: "challengers" }),
-  dsl("selectorBounds", DSL_TYPES, /costAtLeast\?|costExactly\?/, ["CharacterSelector"], { note: "exact, ≥, X-valued, and relative cost and ✦ bounds" }),
-  dsl("cardFilterBounds", DSL_TYPES, /interface CardFilter \{[^}]*costAtMost/, ["CardFilter"], { note: `cost and ✦ bounds on play and materialize filters (${GAP_36})` }),
-  dsl("zoneCardRefs", DSL_TYPES, /ZoneCardSpec|kind: "inZone"/, ["CardRef"], { note: "references to cards in a void, deck, or hand" }),
-  dsl("randomSelection", DSL_TYPES, /random\?: boolean;[^\n]*\n[^\n]*selection|selection: "random"/, ["CardRef"], { note: "\"a random …\" selections" }),
-  dsl("valueZoneCounts", DSL_TYPES, /value: "countCards"/, ["ValueExpr"], { note: "counts of cards in a zone" }),
-  dsl("valueCardStats", DSL_TYPES, /value: "sparkOf"|value: "costOf"/, ["ValueExpr"], { note: "\"this character's ✦\", \"that card's cost\"" }),
-  dsl("storedCounters", DSL_TYPES, /value: "storedCounters"/, ["ValueExpr", "PaymentCost"], { note: "stored ⧗ values and X⧗ costs" }),
-  dsl("conditionCardCounts", DSL_TYPES, /cond: "cardsIn";[^\n]*atLeast/, ["Condition"], { note: "\"if there are 3 or more events in your void\"" }),
-  dsl("turnHistory", DSL_TYPES, /value: "playedThisTurn"|cond: "thisTurn"/, ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
-  dsl("historyRefs", DSL_TYPES, /kind: "lastPlayed"/, ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),
-  dsl("staticZones", DSL_TYPES, /interface StaticAbility \{[^}]*zone/, ["StaticAbility"], { note: `statics that work from hand, void, or deck (C4; ${GAP_37})` }),
-  dsl("playCondition", DSL_TYPES, /kind: "playCondition"/, ["Ability"], { note: "\"Play this event only if …\"" }),
-  dsl("alternativeCost", DSL_TYPES, /kind: "alternativeCost"/, ["Ability"], { note: "\"you may play this card for …\"" }),
-  dsl("pointsCost", DSL_TYPES, /cost: "points"/, ["PaymentCost"], { note: "pay ⍟ as a cost" }),
-  dsl("returnCost", DSL_TYPES, /cost: "return"/, ["PaymentCost"], { note: "\"Return a character you control to hand:\" as a cost" }),
-  dsl("discardHandCost", DSL_TYPES, /cost: "discard";[^\n]*count: "hand"/, ["PaymentCost"], { note: "discard every eligible hand card as a cost, without a choice" }),
-  dsl("discardCostFilter", DSL_TYPES, /cost: "discard";[^\n]*filter/, ["PaymentCost"], { note: "discard a matching card or X cards as a cost" }),
-  dsl("banishXCost", DSL_TYPES, /banishFromVoid";[^\n]*count: "x";[^\n]*min: number/, ["PaymentCost"], { note: "banish X cards from your void" }),
-  dsl("banishFromAnyVoidCost", DSL_TYPES, /banishFromAnyVoid";[^\n]*player/, ["PaymentCost"], { note: "banish a card from the opponent's or any void as a cost" }),
-  dsl("whenDissolvedTrigger", DSL_TYPES, /on: "dissolved"; readonly subject/, ["Trigger"], { note: "\"when a character you control is dissolved\"" }),
-  dsl("whenDiscardSelfTrigger", DSL_TYPES, /on: "discard";[^\n]*self/, ["Trigger"], { note: "\"when you discard this card\"" }),
-  dsl("whenReclaimTrigger", DSL_TYPES, /on: "reclaim"/, ["Trigger"]),
-  dsl("whenReturnTrigger", DSL_TYPES, /on: "returnToHand"/, ["Trigger"]),
-  dsl("whenErodeTrigger", DSL_TYPES, /on: "erode"/, ["Trigger"]),
-  dsl("whenForeseeTrigger", DSL_TYPES, /on: "foresee"/, ["Trigger"]),
-  dsl("whenCopyTrigger", DSL_TYPES, /on: "copy"/, ["Trigger"], { note: `"when you copy" (${GAP_38})` }),
-  dsl("whenRemovesEnemyTrigger", DSL_TYPES, /on: "removesEnemy"/, ["Trigger"], { note: "\"when you dissolve or banish an enemy\"" }),
-  dsl("whenPutIntoVoidTrigger", DSL_TYPES, /on: "putIntoVoid"/, ["Trigger"]),
-  dsl("whenPlayFromVoidTrigger", DSL_TYPES, /from\?: "void"|fromVoid/, ["Trigger"], { note: "\"when you play a card from your void\"" }),
-  dsl("drawTriggerFilter", DSL_TYPES, /on: "draw";[^\n]*filter/, ["Trigger"], { note: "\"when you draw a character\"" }),
-  dsl("materializeNthTrigger", DSL_TYPES, /on: "materialize";[^\n]*nth/, ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
-  dsl("atEndOfTurnTrigger", DSL_TRIGGERS, /export const atEndOfTurn\b/, ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
-  dsl("firstTimeEachTurn", DSL_TYPES, /firstTimeEachTurn/, ["TriggeredAbility"], { note: "\"the first time each turn …\"" }),
-  dsl("typeRemap", "src/engine/dsl/types.ts", /typeRemap/, ["Variant"], { note: `C12 type remap for selectors and figments (${GAP_38})` }),
+  dsl("selectorFigment", [registered(DSL_TYPES, "CharacterSelector", { option: "figment" })], ["CharacterSelector"], { note: "figment or not" }),
+  dsl("selectorHasAbility", [registered(DSL_TYPES, "CharacterSelector", { option: "hasAbility" })], ["CharacterSelector", "CardFilter"], { note: "\"characters with ▸Materialized abilities\"" }),
+  dsl("stackSelectorBounds", [registered(DSL_TYPES, "StackItemSelector", { option: "costAtMost" })], ["StackItemSelector"], { note: "cost and ✦ bounds on stack items (\"Prevent a played ≤2● cost card\")" }),
+  dsl("selectorChallenger", [registered(DSL_TYPES, "CharacterSelector", { option: "challenging" })], ["CharacterSelector"], { note: "challengers" }),
+  dsl("selectorBounds", [registered(DSL_TYPES, "CharacterSelector", { option: "costAtLeast" })], ["CharacterSelector"], { note: "exact, ≥, X-valued, and relative cost and ✦ bounds" }),
+  dsl("cardFilterBounds", [registered(DSL_TYPES, "CardFilter", { option: "costAtMost" })], ["CardFilter"], { note: `cost and ✦ bounds on play and materialize filters (${GAP_36})` }),
+  dsl("zoneCardRefs", [registered(DSL_TYPES, "ZoneCardSpec")], ["CardRef"], { note: "references to cards in a void, deck, or hand" }),
+  dsl("randomSelection", [callable(DSL_BUILDERS, "randomIn")], ["CardRef"], { note: "\"a random …\" selections" }),
+  dsl("valueZoneCounts", [callable(DSL_BUILDERS, "countCards")], ["ValueExpr"], { note: "counts of cards in a zone" }),
+  dsl("valueCardStats", [callable(DSL_BUILDERS, "costOf")], ["ValueExpr"], { note: "\"this character's ✦\", \"that card's cost\"" }),
+  dsl("storedCounters", [registered(DSL_TYPES, "ValueExpr", { member: "storedCounters" })], ["ValueExpr", "PaymentCost"], { note: "stored ⧗ values and X⧗ costs" }),
+  dsl("conditionCardCounts", [callable(DSL_BUILDERS, "conditionCardCounts")], ["Condition"], { note: "\"if there are 3 or more events in your void\"" }),
+  dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn" }), registered(DSL_TYPES, "Condition", { member: "thisTurn" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
+  dsl("historyRefs", [registered("src/engine/effects/types.ts", "CardRef", { member: "lastPlayed" })], ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),
+  dsl("staticZones", [registered(DSL_TYPES, "StaticAbility", { option: "zone" })], ["StaticAbility"], { note: `statics that work from hand, void, or deck (C4; ${GAP_37})` }),
+  dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition" })], ["Ability"], { note: "\"Play this event only if …\"" }),
+  dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost" })], ["Ability"], { note: "\"you may play this card for …\"" }),
+  dsl("pointsCost", [callable(DSL_BUILDERS, "pointsCost")], ["PaymentCost"], { note: "pay ⍟ as a cost" }),
+  dsl("returnCost", [callable(DSL_BUILDERS, "returnCost")], ["PaymentCost"], { note: "\"Return a character you control to hand:\" as a cost" }),
+  dsl("discardHandCost", [callable(DSL_BUILDERS, "discardHandCost")], ["PaymentCost"], { note: "discard every eligible hand card as a cost, without a choice" }),
+  dsl("discardCostFilter", [callable(DSL_BUILDERS, "discardCostFilter")], ["PaymentCost"], { note: "discard a matching card or X cards as a cost" }),
+  dsl("banishXCost", [callable(DSL_BUILDERS, "banishXCost")], ["PaymentCost"], { note: "banish X cards from your void" }),
+  dsl("banishFromAnyVoidCost", [callable(DSL_BUILDERS, "banishFromAnyVoidCost")], ["PaymentCost"], { note: "banish a card from the opponent's or any void as a cost" }),
+  dsl("whenDissolvedTrigger", [callable(DSL_TRIGGERS, "whenDissolved")], ["Trigger"], { note: "\"when a character you control is dissolved\"" }),
+  dsl("whenDiscardSelfTrigger", [callable(DSL_TRIGGERS, "whenDiscardSelf")], ["Trigger"], { note: "\"when you discard this card\"" }),
+  dsl("whenReclaimTrigger", [registered(DSL_TYPES, "Trigger", { member: "reclaim" })], ["Trigger"]),
+  dsl("whenReturnTrigger", [registered(DSL_TYPES, "Trigger", { member: "returnToHand" })], ["Trigger"]),
+  dsl("whenErodeTrigger", [registered(DSL_TYPES, "Trigger", { member: "erode" })], ["Trigger"]),
+  dsl("whenForeseeTrigger", [registered(DSL_TYPES, "Trigger", { member: "foresee" })], ["Trigger"]),
+  dsl("whenCopyTrigger", [registered(DSL_TYPES, "Trigger", { member: "copy" })], ["Trigger"], { note: `"when you copy" (${GAP_38})` }),
+  dsl("whenRemovesEnemyTrigger", [registered(DSL_TYPES, "Trigger", { member: "removesEnemy" })], ["Trigger"], { note: "\"when you dissolve or banish an enemy\"" }),
+  dsl("whenPutIntoVoidTrigger", [callable(DSL_TRIGGERS, "whenPutIntoVoid")], ["Trigger"]),
+  dsl("whenPlayFromVoidTrigger", [registered(DSL_TYPES, "Trigger", { member: "play", option: "from", optionLiteral: "void" })], ["Trigger"], { note: "\"when you play a card from your void\"" }),
+  dsl("drawTriggerFilter", [registered(DSL_TYPES, "Trigger", { member: "draw", option: "filter" })], ["Trigger"], { note: "\"when you draw a character\"" }),
+  dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
+  dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
+  dsl("firstTimeEachTurn", [registered(DSL_TYPES, "TriggeredAbility", { option: "oncePerTurn" })], ["TriggeredAbility"], { note: "\"the first time each turn …\"" }),
+  dsl("typeRemap", [registered(DSL_TYPES, "DeckMods", { option: "typeChange" })], ["Variant"], { note: `C12 type remap for selectors and figments (${GAP_38})` }),
   // Journey-modifier registry (P8, 5.6).
   journey("journeyEssence", "essence gains and site rewards"),
   journey("journeyShop", "shop offers, pricing, restocks, duplication, the Dream Bazaar"),
@@ -745,10 +808,12 @@ function applyRules(text: string, rules: readonly Rule[]): Rule[] {
 // Probes against the engine.
 
 const primitiveIndex = read(`${P}index.ts`);
-const dslSource = readdirSync(join(ROOT, "src/engine/dsl"))
+const dslFiles = readdirSync(join(ROOT, "src/engine/dsl"))
   .filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"))
-  .map((file) => read(`src/engine/dsl/${file}`))
-  .join("\n");
+  .map((file) => `src/engine/dsl/${file}`);
+const dslSource = dslFiles.map(read).join("\n");
+const capabilityModules = [...new Set([...dslFiles, ...PRIMITIVES.flatMap((entry) => entry.forms?.map((form) => form.module) ?? [])])];
+const capabilityExists = inventoryCapabilityResolver(new Map(capabilityModules.filter((module) => existsSync(join(ROOT, module))).map((module) => [module, read(module)])));
 const promptTypes = read("src/engine/prompts/types.ts");
 
 function primitiveExists(entry: PrimitiveEntry): boolean {
@@ -760,8 +825,9 @@ function primitiveExists(entry: PrimitiveEntry): boolean {
       return entry.symbol === undefined || new RegExp(`export function ${entry.symbol}\\b`, "u").test(read(module));
     }
     case "builder":
-      return new RegExp(`export (function|const) ${entry.name}\\b`, "u").test(dslSource);
+      return capabilityExists(dslFiles.map((module) => callable(module, entry.name)));
     case "dsl":
+      return capabilityExists(entry.forms ?? []);
     case "extension":
       return existsSync(join(ROOT, module)) && (entry.probe?.test(read(module)) ?? false);
     case "journey":
@@ -1541,7 +1607,7 @@ function main(): void {
       newPrimitives: [...PRIMITIVE_BY_NAME.values()].filter((entry) => !entry.exists && usage.has(entry.name)).length,
       notes: [
         "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md § Serialization edges) are added at filing, from sharedAreas and entity modules.",
-        "Primitive and prompt existence is probed against src/engine when the script runs; DSL-addition probe patterns name the expected shape and are a planning aid.",
+        "Primitive and prompt existence is probed against src/engine when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
         "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss.",
       ],
     },
@@ -1562,6 +1628,7 @@ function main(): void {
         usedBy: usage.get(entry.name),
         introducedBy: entry.exists ? null : (introducedBy.get(entry.name) ?? null),
         ...(entry.note === undefined ? {} : { note: entry.note }),
+        ...(entry.forms === undefined ? {} : { forms: entry.forms }),
       })),
     promptKinds: [...promptUsage.keys()]
       .sort(compare)

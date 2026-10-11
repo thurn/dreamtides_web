@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.430",
+  "phase": 5,
+  "base": "42a4862527815633492db2034384edb7fe29a691",
+  "implementMin": 21.45,
+  "timingBasis": "node_modules birth 2026-10-11T20:35:22Z is setup-start proxy; includes research, parent collection and pre-freeze correction. Final interval recorded before amendment.",
+  "hostLoad": 12.7724609375,
+  "localValidationS": {
+    "installReported": 3,
+    "oldGenerator": 5.22,
+    "focused": 3.5,
+    "cliRegenerate": 1.772,
+    "cliCheck": 1.701,
+    "focusedCommand": 5.28,
+    "review": 10.636,
+    "knip": 2.736,
+    "firstReview": 12.573,
+    "firstKnip": 3.987,
+    "allCapabilitiesOldDiagnostic": 0.954,
+    "allCapabilitiesNewDiagnostic": 1.663,
+    "neverFormCliCheck": 1.87,
+    "firstGreenReview": 8.937,
+    "firstGreenKnip": 2.502,
+    "neverFormFocused": 6.442,
+    "neverFormNegative": 5.892
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 76,
+    "jsdomFiles": 0,
+    "cases": 6
+  },
+  "friction": [],
+  "details": "docs/plan/evidence/measurements/hv-umm2.430.md",
+  "wallBasis": "CLI walls measured with monotonic clock. Wrapper command walls observed from log-file creation to final output, excluding subsequent parent collection. Exact named step timings in raw logs."
+}
