@@ -1,0 +1,252 @@
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import type { EventContext, GameEvent } from "../../eventlog/types";
+import { eventRng } from "../../eventlog/rng";
+import { type Engine } from "../../engine";
+import { stateHash } from "../../engine/state/hash";
+import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
+import { testEventActor } from "../../types/test-identities";
+import type { FoldState } from "../fold-state";
+import { reduceGameEvent, type ReduceResult } from "../reducer";
+import { GAME_ENGINE_CONFIG } from "../replay/replay";
+import { AVATAR_ID, BATTLE_SITE_ID, FIXTURE_ENGINE, FIXTURE_POINTS_MODE, clearReplayFixtureProviders, registerReplayFixtureProviders } from "../replay/fixture-providers";
+import { validateLoadedState } from "../journey/lifecycle";
+import { pendingEnginePrompt } from "./engine-battle";
+import type { PromptId } from "../../types/identifiers";
+import { journeyBattleOf } from "./fold";
+
+
+
+const GENESIS = {
+  seed: "fixture-battle",
+  reducerVersion: "test",
+  createdAt: 0,
+  contentConfig: TEST_CONTENT_CONFIG,
+} as const;
+
+
+
+
+let seq = 0;
+
+
+function ctx(intervening: EventContext["intervening"] = []): EventContext {
+  return {
+    contentConfig: TEST_CONTENT_CONFIG,
+    seq,
+    rng: eventRng(GENESIS.seed as never, seq),
+    intervening,
+    timestamp: "1970-01-01T00:00:00.000Z",
+  };
+}
+
+
+function reduce(
+  state: FoldState,
+  type: string,
+  payload: Record<string, unknown>,
+  options: { actor?: string; intervening?: EventContext["intervening"] } = {},
+): ReduceResult {
+  seq += 1;
+  const event: GameEvent = {
+    type: type as GameEvent["type"],
+    payload,
+    actor: testEventActor(options.actor ?? "p1"),
+    clientTimestamp: "1970-01-01T00:00:00.000Z",
+    basedOnSeq: seq - 1,
+  };
+  return reduceGameEvent(state, event, ctx(options.intervening));
+}
+
+
+function applied(result: ReduceResult): FoldState {
+  if (result.outcome !== "applied") {
+    throw new Error(`bounced: ${String(result.bounceReason)}`);
+  }
+  return result.state;
+}
+
+
+/** A journey standing on the fixture Battle site. */
+function atBattleSite(): FoldState {
+  seq = 0;
+  let state = GAME_ENGINE_CONFIG.genesisState(GENESIS as never);
+  state = applied(reduce(state, "START_JOURNEY", { avatarId: AVATAR_ID }));
+  return applied(reduce(state, "ENTER_SITE", { siteId: BATTLE_SITE_ID }));
+}
+
+
+function begun(): FoldState {
+  return applied(reduce(atBattleSite(), "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }));
+}
+
+
+function engineOf(state: FoldState) {
+  const fold = journeyBattleOf(state.battle)?.engine;
+  if (fold === undefined) throw new Error("no engine battle");
+  return fold;
+}
+
+
+function firstCard(state: FoldState) {
+  const card = engineOf(state).slice.committed.sides.player.hand[0];
+  if (card === undefined) throw new Error("empty hand");
+  return card;
+}
+
+
+function play(state: FoldState, side = "player"): ReduceResult {
+  return reduce(state, "BATTLE_ACTION", {
+    side,
+    action: { kind: "play", card: firstCard(state), from: "hand" },
+  });
+}
+
+
+function promptId(state: FoldState, engine: Engine = FIXTURE_ENGINE) {
+  const pending = pendingEnginePrompt(state.battle, engine);
+  if (pending === null) throw new Error("no pending prompt");
+  return pending.prompt.id;
+}
+
+
+function answer(
+  state: FoldState,
+  value: unknown,
+  options: { side?: string; actor?: string; intervening?: EventContext["intervening"]; id?: PromptId } = {},
+): ReduceResult {
+  return reduce(
+    state,
+    "BATTLE_ANSWER",
+    { side: options.side ?? "player", promptId: options.id ?? promptId(state), value },
+    options,
+  );
+}
+
+
+/** A journey battle whose points card has been played and won. */
+function won(): FoldState {
+  const prompted = applied(play(begun()));
+  return applied(answer(prompted, FIXTURE_POINTS_MODE));
+}
+
+
+beforeEach(() => {
+  registerReplayFixtureProviders();
+});
+
+
+afterEach(() => {
+  clearReplayFixtureProviders();
+});
+
+
+describe("stale and invalid intents", () => {
+  it("cancels a play at its prompt and bounces an answer to the cancelled prompt", () => {
+    const state = begun();
+    const prompted = applied(play(state));
+    const id = promptId(prompted);
+    const cancelled = applied(reduce(prompted, "BATTLE_CANCEL", { side: "player", promptId: id }));
+    const fold = engineOf(cancelled);
+    expect(fold.slice.inFlight).toBeNull();
+    expect(stateHash(fold.slice.committed)).toBe(stateHash(engineOf(state).slice.committed));
+    expect(fold.slice.attempt).toBeGreaterThan(engineOf(prompted).slice.attempt);
+    expect(answer(cancelled, FIXTURE_POINTS_MODE, { id }).outcome).toBe("bounced");
+    const replayed = applied(play(cancelled));
+    expect(promptId(replayed)).not.toBe(id);
+    expect(answer(replayed, FIXTURE_POINTS_MODE, { id }).outcome).toBe("bounced");
+  });
+
+  it("bounces intents that are not the intent's side's, illegal, or malformed", () => {
+    const state = begun();
+    expect(play(state, "enemy").outcome).toBe("bounced");
+    expect(reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "play", card: "i9999", from: "hand" } }).outcome).toBe("bounced");
+    expect(reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "dance" } }).outcome).toBe("bounced");
+    expect(reduce(state, "BATTLE_ACTION", { action: { kind: "pass" } }).outcome).toBe("bounced");
+    const prompted = applied(play(state));
+    expect(answer(prompted, FIXTURE_POINTS_MODE, { side: "enemy" }).outcome).toBe("bounced");
+    expect(answer(prompted, 7).outcome).toBe("bounced");
+    expect(answer(prompted, { mode: 1 }).outcome).toBe("bounced");
+    expect(reduce(prompted, "BATTLE_CANCEL", { side: "player", promptId: "nope" }).outcome).toBe("bounced");
+    expect(reduce(prompted, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } })).toMatchObject({
+      outcome: "bounced",
+      bounceReason: "prompt_pending",
+    });
+    expect(engineOf(prompted).slice.inFlight).not.toBeNull();
+  });
+
+  it("bounces intents for a finished battle and outside a journey battle", () => {
+    const victorious = won();
+    expect(reduce(victorious, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }).outcome).toBe("bounced");
+    expect(reduce(atBattleSite(), "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }).outcome).toBe("bounced");
+  });
+
+  it("bounces the tutorial sandbox's intents on a journey battle", () => {
+    const state = begun();
+    const card = firstCard(state);
+    for (const [type, payload] of [
+      ["BATTLE_COMMAND", { command: { id: "DEBUG_EDIT", edit: { kind: "SET_SCORE", side: "player", value: 9 } } }],
+      ["BATTLE_GESTURE", { commands: [{ id: "SKIP_TO_REWARDS" }] }],
+      ["BATTLE_PLAY_CARD", { battleCardId: card, targetBattleCardIds: [] }],
+      ["BATTLE_REPOSITION_CHARACTER", { battleCardId: card, destination: { side: "player", zone: "backRank", slotId: "B0" } }],
+      ["BATTLE_AI_BLOCK", { aiSide: "enemy" }],
+      ["RESOLVE_PROMPT", { promptId: 1, resolution: { kind: "foresee" } }],
+    ] as const) {
+      const result = reduce(state, type, payload);
+      expect(result.outcome, type).toBe("bounced");
+      expect(result.state, type).toBe(state);
+    }
+  });
+});
+
+
+describe("LOAD_STATE", () => {
+  it("keeps a journey battle's init, engine battle and valid score snapshots, and refuses malformed metadata or mode", () => {
+    const state = begun();
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const load = (payload: unknown) => validateLoadedState(state, { snapshot: state.journey, battle: payload });
+
+    expect(load({ ...battle, board: {}, effectQueue: [] })?.battle).toEqual(battle);
+    // A battle folded before the engine (reducer protocol v28 and earlier):
+    // a prototype board and no mode.
+    expect(load({ init: battle.init, board: {}, effectQueue: [], pendingPrompt: null, dawnFired: {} })).toBeNull();
+    expect(load({ mode: { kind: "journey" }, init: battle.init })).toBeNull();
+    const instance = battle.engine.slice.committed.instances[firstCard(state)];
+    if (instance.printing.kind !== "card") throw new Error("no fixture card printing");
+    const trigger = {
+      source: instance.id, controller: instance.controller,
+      origin: { kind: "card", cardId: instance.printing.cardId, variant: instance.variant },
+      ability: 0, node: null, subject: null,
+    };
+    const withScore = (scored: unknown) => ({
+      ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: {
+        ...battle.engine.slice.committed, triggerQueue: [{ ...trigger, ...(scored === undefined ? {} : { scored }) }],
+      } } },
+    });
+    for (const scored of [undefined, 0, 1, 1.5, 3, Number.MAX_VALUE]) {
+      const payload = withScore(scored);
+      expect(load(payload)?.battle, String(scored)).toEqual(payload);
+    }
+    const malformed = ["not-a-number", "3", -2, NaN, Infinity, -Infinity, null, {}, [], true];
+    expect(malformed.filter((scored) => load(withScore(scored)) !== null)).toEqual([]);
+  });
+});
+
+
+describe("concurrent actors", () => {
+  it("bounces an action based before a partner's event and applies a matching answer through it", () => {
+    const state = begun();
+    const partner = [{ seq, actor: testEventActor("ai:enemy"), type: "BATTLE_ACTION" as GameEvent["type"] }];
+    expect(
+      reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }, { intervening: partner }),
+    ).toMatchObject({ outcome: "bounced", bounceReason: "partner_conflict" });
+    const prompted = applied(play(state));
+    const window = [{ seq, actor: testEventActor("ai:enemy"), type: "BATTLE_ACTION" as GameEvent["type"] }];
+    const answered = applied(answer(prompted, FIXTURE_POINTS_MODE, { intervening: window }));
+    expect(engineOf(answered).slice.committed.result).not.toBeNull();
+    expect(answer(prompted, FIXTURE_POINTS_MODE, { actor: "p2", intervening: window }).outcome).toBe("applied");
+    expect(
+      reduce(answered, "BATTLE_ANSWER", { side: "player", promptId: promptId(prompted), value: 1 }, { actor: "p2", intervening: window }).outcome,
+    ).toBe("bounced");
+  });
+});

@@ -1,0 +1,237 @@
+{
+  "bead": "hv-uzlx.4",
+  "phase": 2,
+  "implementMin": 12.66,
+  "localValidationS": {
+    "install": 3,
+    "focusedBefore": 5.84,
+    "focusedAfter": 3.95,
+    "reviewFirst": 7.04,
+    "review": 17.43,
+    "knip": 4.02
+  },
+  "hostLoad": 15.96,
+  "testDelta": {
+    "files": 12,
+    "lines": -1231,
+    "jsdomFiles": 0,
+    "cases": 0
+  },
+  "friction": [],
+  "timing": {
+    "start": "2026-10-11T14:14:43Z",
+    "basis": "Retained npm setup creation timestamp is the implementation-start proxy; native claim was 2026-10-11T14:14:00Z. Dispatch message timestamp was not retained. End measured at evidence finalization immediately before commit."
+  },
+  "baseline": "bbdabee5fdd79672f390c5ce432e2bc674a90256",
+  "preservation": {
+    "before": {
+      "files": 7,
+      "lines": 5315,
+      "cases": 142,
+      "describeTrees": 57
+    },
+    "after": {
+      "files": 19,
+      "lines": 4084,
+      "cases": 142,
+      "describeTrees": 57,
+      "maxTestLines": 379,
+      "fixtureFiles": 7,
+      "fixtureLines": 1827,
+      "maxFixtureLines": 447
+    },
+    "method": "SHA-256 multiset of exact TypeScript top-level describe statement source; includes nested describe/test bodies, assertions, and nested hooks. Before source read from baseline commit; after from all split files. Parent independently verified the same 57-tree multiset.",
+    "describeTreeHashes": [
+      "00049bda3eb963cdf67a4c43f8d2a553ecf5f76f88f740d365a225ca9459aa4d",
+      "021bc92626f9b55d3a727aa95d4e8541221c2ffb8468600ac0733ae3d0926c47",
+      "08379356300d1592605736088847fbd7ae4ed60874c03b66e876b62b362c87e2",
+      "08e50fe3adad5df2cceacf7823a26b3d7d2d3fbcb7852391c18bc985a3ff4054",
+      "0ccacd1c43da44d2667425dc1a882aa1d904c1c222f86dc9474c1c4b40c0169d",
+      "0d5c748b7597f83894914106918d1ae1be6d653eaad25f186f0e1707a7f177a7",
+      "1046aa3e26005289cc1ccb1b198dd4d227907e6356e9902331b93cf6d8c34f5e",
+      "1b754f3727089ef9ec9ee2c035931e76f75e6f847f0869e713d494be90ba6c29",
+      "1bb6d3bbfdc6bc72948977b98e7db3111959ace00b7556bf094cf4fc02c6ea96",
+      "1c60fec95b6a573c61e565ede39e5e98a50e4de3b003e7181a8e540a9a56b090",
+      "1c649e3b0e9896ba93fe34f0bd6ccfffb9cc72dd7f56bc6cda988db88a814636",
+      "1e1d1b7f878b327c0e76d1315a7a6bf5aa0496de6fe618c0064f6b8d694d8820",
+      "2204c7448fb58b082a501eb057099abedaba20945175371a651469bb884402df",
+      "24a5b91e1c484c2b5e9fdb76a227a7317f84c3e23cfee6e7d855819e34eb361f",
+      "26b4e6727b5cf1884aa58d3e65aae3568a1d4cba3123dba7e09d5d405655b4cf",
+      "289dc2e22772868f74e5235a29fa0efce69a774925f9b1758ad5db2d0ea2e830",
+      "2d54f943acad3febbce4dfd89d9d0c15a8f16dd30150428b198144781df5fa70",
+      "2d987af01041bb885a203187550042021235f810f681b990fd0c3122f5cbe435",
+      "35d95de918bc90bf7af5e9d9d0cd77adad88b71af699a3cc1501c4ba1b8f33f8",
+      "3ea0b477f6fa4f4d2ff33f2bc2e9940028d044320e17325604bb0f31b50f5401",
+      "40359690c41843e0e54bc4ff0e09b0e269cfb3c48c95dbae91a9ec60ecc9981f",
+      "44c5e930b0e82088dd5563f0bfe5c20bb5f366c998c3f7441bd3b1efde4832cc",
+      "49ba879d2d5f07e250ae15b411e6394869116f1c97ec8a013d46104b4fd877c4",
+      "585f29292138fd682b85a411f2040b147f3dfacd61542349fb548534c402404c",
+      "593e2dbb26a58bc4cf997fd979b04ce5c0967d2816d08ba15b9b072e2681f722",
+      "5c056cdab7679cedcabab448b25302ada40addd3d1a146e6183c771a8b6fe892",
+      "5f9d44517fcd436ced699cad948a5a0919584d6d97338708a5588a5fabf714ba",
+      "60c16c3eb017ce657e631da9475d566035bd0fd61ce7136cd1952b57efa4d9a9",
+      "64bee97277effc8ba02d6ebf5df10e9d5078f92136202f005763cf3c16dbdebf",
+      "6604c6a644ae837d4601a12b22eb96ba522482f38e72ec92d821ee91026e7a6a",
+      "728641c9bc7ea24ff610b226f4609557365881f200a7a937d9162144b87d842f",
+      "76a2fff3ef3629f8df7364da09dd4561eff3ed90ade033913da111468b4bf762",
+      "76b7a18422b49ab594804ba1883b2ef4a01b08e7b12ad9fb88897beaad0a6a0c",
+      "7d23885fdb07d551c83466501ef883870e32aade8fb4be1e5ec4ccc2f6b2d3e4",
+      "7d996061de3aa84853ae0db2cd7b505018b4e0bf5354f975c786e859e0987725",
+      "7de9d9f8ae2d68053f72179a6954f71244b04149c692d5b06ef8ef1b5a1498f4",
+      "81725e375be5002ede81476aecde91d12a892c49280ba6acac3add7d4a52946f",
+      "88000330037cc925bcc22cd0eb29903fea6df63db06edaf73366700dccaa9cb1",
+      "8afb573c5d2a23d5bd671f2151cf6548a02d8259037d3d68838a051a6096f7fe",
+      "8feda790efb73c59aa9a22ad02925c0cc02cfe971f2465f95086b200a8778e8c",
+      "94d9d8c8256fd276fcc3816b26db134f5eab93b2a90486fa42109f85efaa7be3",
+      "9bff5693d79cbcd8f31daff997877da748945adee461c93cd6979afa9da2baff",
+      "a1cc43d8a7248d73b8275d4490dffbf26923e788612e42126cec57c322dfccce",
+      "a1cf90613dea88975b7f417939e3e90931f6dc6f5e039eb50fd7760b942e2299",
+      "a3c3b56c947f6b4004b5712a04d0340e5ae520f9fd1ec98048a35fba43f4d30c",
+      "a4bb72b5a1ccb89e774af766828c91f5cf0ac2d1c52eb0a2fd901cd272f84937",
+      "ae433260731f9f01d0491969954d963b1275f0051271f7a69b63b7f4df403c83",
+      "b447438de626fde12e07b029892981a93d68e0f1f4b35b2ea6736c4aae8d0e12",
+      "b53abf4b7076b603d268628f29831b45058e957622d7f958225255d8f8c2cee1",
+      "bedc22b0ffaf476dffc68d46fdad7e58fefbb8635ef9633077601a25216cc960",
+      "c19a8ef83f060923a26187952ef598b637f4c7ffb7b7259eb4d7ab441a299f96",
+      "d397daebdeb258e5c67d4a7fb7b7a9b6fdb7ba92a43c99a49f73918ec00ae01b",
+      "d6ebc8c7aa2b203afe3a2cb9149ac2b10392f2f60b52c5bf1e8bcd5c729b91a0",
+      "d874e4400b230993bb13f9ec5c6c5f3d68ee4115d9c9daf0565b04fb724a1b03",
+      "d8c815d06b867d05087c15a36452fa76bfb70ef32048fda3cd728ea55ae1e023",
+      "ecdac576088d442b8ee6e5cf2e6cacf1e42a698e85b32346b7e9d5e5aa76f1e2",
+      "ede83f2973fb7d60bcaf1d5b57819df73010e27b03f1b33d84bd50ebd63130af"
+    ],
+    "fileSizes": [
+      {
+        "path": "src/rules/journey/lifecycle-fixtures.ts",
+        "lines": 228
+      },
+      {
+        "path": "src/rules/journey/lifecycle.test.ts",
+        "lines": 160
+      },
+      {
+        "path": "src/rules/journey/lifecycle-start.test.ts",
+        "lines": 185
+      },
+      {
+        "path": "src/rules/journey/lifecycle-state.test.ts",
+        "lines": 175
+      },
+      {
+        "path": "src/rules/journey/lifecycle-battles.test.ts",
+        "lines": 356
+      },
+      {
+        "path": "src/rules/journey/sites-fixtures.ts",
+        "lines": 269
+      },
+      {
+        "path": "src/rules/journey/sites.test.ts",
+        "lines": 216
+      },
+      {
+        "path": "src/rules/journey/sites-rewards.test.ts",
+        "lines": 171
+      },
+      {
+        "path": "src/rules/journey/sites-actions.test.ts",
+        "lines": 266
+      },
+      {
+        "path": "src/rules/journey/shop-fixtures.ts",
+        "lines": 218
+      },
+      {
+        "path": "src/rules/journey/shop.test.ts",
+        "lines": 258
+      },
+      {
+        "path": "src/rules/journey/shop-modifiers.test.ts",
+        "lines": 237
+      },
+      {
+        "path": "src/rules/journey/draft-fixtures.ts",
+        "lines": 222
+      },
+      {
+        "path": "src/rules/journey/draft.test.ts",
+        "lines": 155
+      },
+      {
+        "path": "src/rules/journey/draft-sites.test.ts",
+        "lines": 195
+      },
+      {
+        "path": "src/rules/reducer-fixtures.ts",
+        "lines": 168
+      },
+      {
+        "path": "src/rules/reducer.test.ts",
+        "lines": 232
+      },
+      {
+        "path": "src/rules/reducer-routing.test.ts",
+        "lines": 189
+      },
+      {
+        "path": "src/rules/reducer-containment.test.ts",
+        "lines": 98
+      },
+      {
+        "path": "src/rules/battle/engine-battle.test.ts",
+        "lines": 379
+      },
+      {
+        "path": "src/rules/battle/engine-battle-intents.test.ts",
+        "lines": 252
+      },
+      {
+        "path": "src/rules/battle/engine-battle-errors.test.ts",
+        "lines": 278
+      },
+      {
+        "path": "src/rules/journey/journey-properties-fixtures.ts",
+        "lines": 275
+      },
+      {
+        "path": "src/rules/journey/journey-properties-generators.ts",
+        "lines": 447
+      },
+      {
+        "path": "src/rules/journey/journey-properties.test.ts",
+        "lines": 181
+      },
+      {
+        "path": "src/rules/journey/journey-properties-serialization.test.ts",
+        "lines": 101
+      }
+    ],
+    "hooks": "Node environments retained. Journey property provider registration and cleanup run explicitly in beforeAll/afterAll in both split suites. Lifecycle and site global cleanup copied per split file. Battle replay provider registration/cleanup remain explicit beforeEach/afterEach in every split file; seq is file-local and reset by begun(), and used fault flags are file-local and reset in beforeEach. The unused fault scalar is omitted only from intents, whose preserved describe trees do not reference it.",
+    "fixtureTypeAdjustment": "Two extracted private packageFor seed annotations use JourneySeed instead of string, with type-only imports. Provider arguments and runtime function bodies are unchanged.",
+    "testsDeleted": 0,
+    "assertionChanges": 0
+  },
+  "validation": {
+    "focused": "7 original files / 142 tests before; 19 result files / 142 tests after. Final review also ran all 19 / 142 on final source.",
+    "review": "lint, import cycles, typecheck, typecheck-node, related tests passed; local assets restored.",
+    "knip": "passed; local assets restored.",
+    "iteration": "Initial bare typecheck exposed unused split-file fault flag. Initial review exposed two branded-seed fixture annotations; all corrected within owned test files.",
+    "full": "Not required: test organization only; no infrastructure, repository configuration, or production architecture changes.",
+    "browser": "Not required: no runtime or presentation changes.",
+    "commands": {
+      "baseline": "JOURNEY_TEST_WORKERS=2 npm test -- src/rules/journey/lifecycle.test.ts src/rules/journey/journey-properties.test.ts src/rules/journey/sites.test.ts src/rules/journey/shop.test.ts src/rules/journey/draft.test.ts src/rules/reducer.test.ts src/rules/battle/engine-battle.test.ts",
+      "after": "JOURNEY_TEST_WORKERS=2 npm test -- src/rules/journey/lifecycle.test.ts src/rules/journey/lifecycle-start.test.ts src/rules/journey/lifecycle-state.test.ts src/rules/journey/lifecycle-battles.test.ts src/rules/journey/sites.test.ts src/rules/journey/sites-rewards.test.ts src/rules/journey/sites-actions.test.ts src/rules/journey/shop.test.ts src/rules/journey/shop-modifiers.test.ts src/rules/journey/draft.test.ts src/rules/journey/draft-sites.test.ts src/rules/reducer.test.ts src/rules/reducer-routing.test.ts src/rules/reducer-containment.test.ts src/rules/battle/engine-battle.test.ts src/rules/battle/engine-battle-intents.test.ts src/rules/battle/engine-battle-errors.test.ts src/rules/journey/journey-properties.test.ts src/rules/journey/journey-properties-serialization.test.ts",
+      "review": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "knip": "JOURNEY_TEST_WORKERS=2 npm run knip"
+    }
+  },
+  "fallout": [],
+  "preExistingIssues": [],
+  "runtimeLedger": {
+    "ownedServers": 0,
+    "ports": [],
+    "browserSessions": 0,
+    "reviewProviders": 0,
+    "externalWriters": 0
+  }
+}

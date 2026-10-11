@@ -1,48 +1,26 @@
-// Journey -> engine battle -> reward -> Atlas through the root reducer, on
-// synthetic engine cards: BEGIN_BATTLE starts the engine battle, the engine
-// intents fold over its slice, END_BATTLE hands the result to the journey,
-// and every failure path (engine errors, stale and invalid intents, a
-// partner's events, a loaded battle) leaves a deterministic fold. Replaying
-// a battle from the event log is in engine-battle-replay.test.ts.
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-
 import type { EventContext, GameEvent } from "../../eventlog/types";
 import { eventRng } from "../../eventlog/rng";
-import {
-  createEngine,
-  type BattleInit as EngineBattleInit,
-  type BattleResult as EngineBattleResult,
-  type Engine,
-} from "../../engine";
+import { createEngine, type BattleInit as EngineBattleInit, type BattleResult as EngineBattleResult, type Engine } from "../../engine";
 import type { EngineCardDefinition } from "../../engine/catalog";
 import { energy, event as eventAbility } from "../../engine/dsl/builders";
 import * as primitives from "../../engine/effects/primitives";
 import type { ChooseNumberPrompt } from "../../engine/prompts/types";
 import { DSL, DSL_CARDS } from "../../engine/testing/dsl-cards";
 import { SYNTHETIC, syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
-import { stateHash } from "../../engine/state/hash";
 import { nextBattleEffects } from "../../battle/integration/engine-battle-init";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { testEventActor, testJourneyMutationSource } from "../../types/test-identities";
 import type { FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import { GAME_ENGINE_CONFIG } from "../replay/replay";
-import {
-  AVATAR_ID,
-  BATTLE_SITE_ID,
-  FIXTURE_ENGINE,
-  FIXTURE_POINTS_MODE,
-  NODE_ID,
-  NEXT_NODE_ID,
-  clearReplayFixtureProviders,
-  fixtureBattleInitProvider,
-  registerReplayFixtureProviders,
-} from "../replay/fixture-providers";
-import { validateLoadedState } from "../journey/lifecycle";
+import { AVATAR_ID, BATTLE_SITE_ID, FIXTURE_ENGINE, FIXTURE_POINTS_MODE, NODE_ID, NEXT_NODE_ID, clearReplayFixtureProviders, fixtureBattleInitProvider, registerReplayFixtureProviders } from "../replay/fixture-providers";
 import { registerBattleInitProvider } from "./journey-battle";
-import { foldAdapterFor, foldEngineIntent, pendingEnginePrompt, takeEngineLogRecords } from "./engine-battle";
+import { pendingEnginePrompt, takeEngineLogRecords } from "./engine-battle";
 import type { PromptId } from "../../types/identifiers";
 import { journeyBattleOf } from "./fold";
+
+
 
 const GENESIS = {
   seed: "fixture-battle",
@@ -51,9 +29,11 @@ const GENESIS = {
   contentConfig: TEST_CONTENT_CONFIG,
 } as const;
 
+
 // Synthetic engine cards for the failure paths. A module flag makes a hook
 // fault on demand, after the legality search has accepted the play.
 let faulting = false;
+
 
 /** A 0● event that gives the opponent 1 point: the player loses at 1 point. */
 const opponentScores: EngineCardDefinition = {
@@ -66,6 +46,7 @@ const opponentScores: EngineCardDefinition = {
   status: "authored",
   abilities: () => [eventAbility(primitives.gainPoints(1, "opponent"))],
 };
+
 
 /** A 0● event whose play-time number prompt faults on its answer while `faulting`. */
 const faultsAfterChoice: EngineCardDefinition = {
@@ -87,6 +68,7 @@ const faultsAfterChoice: EngineCardDefinition = {
   },
 };
 
+
 /** A 0● interrupt whose legality search faults while `faulting`. */
 const faultyResponse: EngineCardDefinition = {
   ...opponentScores,
@@ -101,9 +83,11 @@ const faultyResponse: EngineCardDefinition = {
   },
 };
 
+
 const TEST_ENGINE: Engine = createEngine(
   testCatalog([...DSL_CARDS, opponentScores, faultsAfterChoice, faultyResponse]),
 );
+
 
 /** Registers the fixture providers with battles on `engine` from these decks. */
 function registerBattle(
@@ -123,10 +107,13 @@ function registerBattle(
   });
 }
 
+
 const deckOf = (card: EngineCardDefinition, count = 10) =>
   Array.from({ length: count }, () => ({ cardId: card.id }));
 
+
 let seq = 0;
+
 
 function ctx(intervening: EventContext["intervening"] = []): EventContext {
   return {
@@ -137,6 +124,7 @@ function ctx(intervening: EventContext["intervening"] = []): EventContext {
     timestamp: "1970-01-01T00:00:00.000Z",
   };
 }
+
 
 function reduce(
   state: FoldState,
@@ -155,12 +143,14 @@ function reduce(
   return reduceGameEvent(state, event, ctx(options.intervening));
 }
 
+
 function applied(result: ReduceResult): FoldState {
   if (result.outcome !== "applied") {
     throw new Error(`bounced: ${String(result.bounceReason)}`);
   }
   return result.state;
 }
+
 
 /** A journey standing on the fixture Battle site. */
 function atBattleSite(): FoldState {
@@ -170,9 +160,11 @@ function atBattleSite(): FoldState {
   return applied(reduce(state, "ENTER_SITE", { siteId: BATTLE_SITE_ID }));
 }
 
+
 function begun(): FoldState {
   return applied(reduce(atBattleSite(), "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }));
 }
+
 
 function engineOf(state: FoldState) {
   const fold = journeyBattleOf(state.battle)?.engine;
@@ -180,11 +172,13 @@ function engineOf(state: FoldState) {
   return fold;
 }
 
+
 function firstCard(state: FoldState) {
   const card = engineOf(state).slice.committed.sides.player.hand[0];
   if (card === undefined) throw new Error("empty hand");
   return card;
 }
+
 
 function play(state: FoldState, side = "player"): ReduceResult {
   return reduce(state, "BATTLE_ACTION", {
@@ -193,11 +187,13 @@ function play(state: FoldState, side = "player"): ReduceResult {
   });
 }
 
+
 function promptId(state: FoldState, engine: Engine = FIXTURE_ENGINE) {
   const pending = pendingEnginePrompt(state.battle, engine);
   if (pending === null) throw new Error("no pending prompt");
   return pending.prompt.id;
 }
+
 
 function answer(
   state: FoldState,
@@ -212,12 +208,6 @@ function answer(
   );
 }
 
-/** The messages of the `engine.error` records the last folded event logged. */
-function errorMessages(): string[] {
-  return takeEngineLogRecords(seq).flatMap((record) =>
-    record.event === "engine.error" ? [record.message] : [],
-  );
-}
 
 /** A journey battle whose points card has been played and won. */
 function won(): FoldState {
@@ -225,14 +215,17 @@ function won(): FoldState {
   return applied(answer(prompted, FIXTURE_POINTS_MODE));
 }
 
+
 beforeEach(() => {
   faulting = false;
   registerReplayFixtureProviders();
 });
 
+
 afterEach(() => {
   clearReplayFixtureProviders();
 });
+
 
 describe("BEGIN_BATTLE on the engine", () => {
   it("starts the engine battle at the player's first decision, identically on every fold", () => {
@@ -268,6 +261,7 @@ describe("BEGIN_BATTLE on the engine", () => {
     expect(reduce(state, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }).outcome).toBe("bounced");
   });
 });
+
 
 describe("journey -> battle -> reward -> Atlas", () => {
   it("hands an engine victory to the journey and consumes the next-battle effects", () => {
@@ -381,163 +375,5 @@ describe("journey -> battle -> reward -> Atlas", () => {
       outcome: "bounced",
       bounceReason: "prompt_pending",
     });
-  });
-});
-
-describe("stale and invalid intents", () => {
-  it("cancels a play at its prompt and bounces an answer to the cancelled prompt", () => {
-    const state = begun();
-    const prompted = applied(play(state));
-    const id = promptId(prompted);
-    const cancelled = applied(reduce(prompted, "BATTLE_CANCEL", { side: "player", promptId: id }));
-    const fold = engineOf(cancelled);
-    expect(fold.slice.inFlight).toBeNull();
-    expect(stateHash(fold.slice.committed)).toBe(stateHash(engineOf(state).slice.committed));
-    expect(fold.slice.attempt).toBeGreaterThan(engineOf(prompted).slice.attempt);
-    expect(answer(cancelled, FIXTURE_POINTS_MODE, { id }).outcome).toBe("bounced");
-    const replayed = applied(play(cancelled));
-    expect(promptId(replayed)).not.toBe(id);
-    expect(answer(replayed, FIXTURE_POINTS_MODE, { id }).outcome).toBe("bounced");
-  });
-
-  it("bounces intents that are not the intent's side's, illegal, or malformed", () => {
-    const state = begun();
-    expect(play(state, "enemy").outcome).toBe("bounced");
-    expect(reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "play", card: "i9999", from: "hand" } }).outcome).toBe("bounced");
-    expect(reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "dance" } }).outcome).toBe("bounced");
-    expect(reduce(state, "BATTLE_ACTION", { action: { kind: "pass" } }).outcome).toBe("bounced");
-    const prompted = applied(play(state));
-    expect(answer(prompted, FIXTURE_POINTS_MODE, { side: "enemy" }).outcome).toBe("bounced");
-    expect(answer(prompted, 7).outcome).toBe("bounced");
-    expect(answer(prompted, { mode: 1 }).outcome).toBe("bounced");
-    expect(reduce(prompted, "BATTLE_CANCEL", { side: "player", promptId: "nope" }).outcome).toBe("bounced");
-    expect(reduce(prompted, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } })).toMatchObject({
-      outcome: "bounced",
-      bounceReason: "prompt_pending",
-    });
-    expect(engineOf(prompted).slice.inFlight).not.toBeNull();
-  });
-
-  it("bounces intents for a finished battle and outside a journey battle", () => {
-    const victorious = won();
-    expect(reduce(victorious, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }).outcome).toBe("bounced");
-    expect(reduce(atBattleSite(), "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }).outcome).toBe("bounced");
-  });
-
-  it("bounces the tutorial sandbox's intents on a journey battle", () => {
-    const state = begun();
-    const card = firstCard(state);
-    for (const [type, payload] of [
-      ["BATTLE_COMMAND", { command: { id: "DEBUG_EDIT", edit: { kind: "SET_SCORE", side: "player", value: 9 } } }],
-      ["BATTLE_GESTURE", { commands: [{ id: "SKIP_TO_REWARDS" }] }],
-      ["BATTLE_PLAY_CARD", { battleCardId: card, targetBattleCardIds: [] }],
-      ["BATTLE_REPOSITION_CHARACTER", { battleCardId: card, destination: { side: "player", zone: "backRank", slotId: "B0" } }],
-      ["BATTLE_AI_BLOCK", { aiSide: "enemy" }],
-      ["RESOLVE_PROMPT", { promptId: 1, resolution: { kind: "foresee" } }],
-    ] as const) {
-      const result = reduce(state, type, payload);
-      expect(result.outcome, type).toBe("bounced");
-      expect(result.state, type).toBe(state);
-    }
-  });
-});
-
-describe("LOAD_STATE", () => {
-  it("keeps a journey battle's init, engine battle and valid score snapshots, and refuses malformed metadata or mode", () => {
-    const state = begun();
-    const battle = journeyBattleOf(state.battle);
-    if (battle === null) throw new Error("no journey battle");
-    const load = (payload: unknown) => validateLoadedState(state, { snapshot: state.journey, battle: payload });
-
-    expect(load({ ...battle, board: {}, effectQueue: [] })?.battle).toEqual(battle);
-    // A battle folded before the engine (reducer protocol v28 and earlier):
-    // a prototype board and no mode.
-    expect(load({ init: battle.init, board: {}, effectQueue: [], pendingPrompt: null, dawnFired: {} })).toBeNull();
-    expect(load({ mode: { kind: "journey" }, init: battle.init })).toBeNull();
-    const instance = battle.engine.slice.committed.instances[firstCard(state)];
-    if (instance.printing.kind !== "card") throw new Error("no fixture card printing");
-    const trigger = {
-      source: instance.id, controller: instance.controller,
-      origin: { kind: "card", cardId: instance.printing.cardId, variant: instance.variant },
-      ability: 0, node: null, subject: null,
-    };
-    const withScore = (scored: unknown) => ({
-      ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: {
-        ...battle.engine.slice.committed, triggerQueue: [{ ...trigger, ...(scored === undefined ? {} : { scored }) }],
-      } } },
-    });
-    for (const scored of [undefined, 0, 1, 1.5, 3, Number.MAX_VALUE]) {
-      const payload = withScore(scored);
-      expect(load(payload)?.battle, String(scored)).toEqual(payload);
-    }
-    const malformed = ["not-a-number", "3", -2, NaN, Infinity, -Infinity, null, {}, [], true];
-    expect(malformed.filter((scored) => load(withScore(scored)) !== null)).toEqual([]);
-  });
-});
-
-describe("concurrent actors", () => {
-  it("bounces an action based before a partner's event and applies a matching answer through it", () => {
-    const state = begun();
-    const partner = [{ seq, actor: testEventActor("ai:enemy"), type: "BATTLE_ACTION" as GameEvent["type"] }];
-    expect(
-      reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }, { intervening: partner }),
-    ).toMatchObject({ outcome: "bounced", bounceReason: "partner_conflict" });
-    const prompted = applied(play(state));
-    const window = [{ seq, actor: testEventActor("ai:enemy"), type: "BATTLE_ACTION" as GameEvent["type"] }];
-    const answered = applied(answer(prompted, FIXTURE_POINTS_MODE, { intervening: window }));
-    expect(engineOf(answered).slice.committed.result).not.toBeNull();
-    expect(answer(prompted, FIXTURE_POINTS_MODE, { actor: "p2", intervening: window }).outcome).toBe("applied");
-    expect(
-      reduce(answered, "BATTLE_ANSWER", { side: "player", promptId: promptId(prompted), value: 1 }, { actor: "p2", intervening: window }).outcome,
-    ).toBe("bounced");
-  });
-});
-
-describe("engine errors", () => {
-  it("drops a step that faults mid-step and keeps the committed state", () => {
-    registerBattle(TEST_ENGINE, { player: deckOf(faultsAfterChoice), enemy: deckOf(SYNTHETIC.vanilla1) });
-    const prompted = applied(play(begun()));
-    const before = engineOf(prompted).slice;
-    takeEngineLogRecords(seq);
-    faulting = true;
-    const after = applied(answer(prompted, 1, { id: promptId(prompted, TEST_ENGINE) }));
-    const fold = engineOf(after);
-    expect(fold.slice.inFlight).toBeNull();
-    expect(stateHash(fold.slice.committed)).toBe(stateHash(before.committed));
-    expect(errorMessages()).toEqual([expect.stringContaining("synthetic step fault")]);
-    expect(pendingEnginePrompt(after.battle, TEST_ENGINE)).toBeNull();
-  });
-
-  it("contains an engine throw outside the step boundary", () => {
-    registerBattle(TEST_ENGINE, { player: deckOf(DSL.chooseDrawOrPoints), enemy: deckOf(faultyResponse) });
-    const prompted = applied(play(begun()));
-    const before = engineOf(prompted).slice;
-    faulting = true;
-    // Completing the play hands the enemy priority, whose responses fault.
-    const id = promptId(prompted, TEST_ENGINE);
-    const after = applied(answer(prompted, 0, { id }));
-    const replayed = foldEngineIntent(foldAdapterFor(TEST_ENGINE), before, "BATTLE_ANSWER", { side: "player", promptId: id, value: 0 });
-    expect(replayed.kind).toBe("threw");
-    if (replayed.kind === "threw") expect(replayed.slice).toEqual(engineOf(after).slice);
-    const fold = engineOf(after);
-    expect(fold.slice.inFlight).toBeNull();
-    expect(stateHash(fold.slice.committed)).toBe(stateHash(before.committed));
-    expect(errorMessages()).toEqual([expect.stringContaining("synthetic legality fault")]);
-  });
-
-  it("bounces an intent that faults with nothing in flight", () => {
-    const state = begun();
-    registerBattleInitProvider({
-      ...fixtureBattleInitProvider(),
-      engine: {
-        ...FIXTURE_ENGINE,
-        decision: () => {
-          throw new Error("synthetic decision fault");
-        },
-      },
-    });
-    const result = reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state).toBe(state);
   });
 });
