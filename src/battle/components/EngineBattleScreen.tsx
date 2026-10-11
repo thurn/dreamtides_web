@@ -34,7 +34,7 @@ import {
 } from "../../cumulus/screens/MobileBattleScreen";
 import { DOUBLE_TAP_WINDOW_MS } from "../../cumulus/primitives/pointer-gesture";
 import { useIsDesktop } from "../../cumulus/primitives/use-is-desktop";
-import type { Action, Answer, Engine, InstanceId, Side } from "../../engine";
+import type { Action, Answer, BattleView, Engine, InstanceId, Side } from "../../engine";
 import { promptView } from "../../engine";
 import { decisionKeyOf, sidePending, type DecisionKey } from "../../engine/fold/slice";
 import { logEvent, logEventOnce } from "../../logging";
@@ -500,6 +500,20 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const statusActionable = affordances.emblemActivations.length > 0 || affordances.statusPayToEnd.length > 0;
   const draggedCard = drag?.source === "battlefield" ? drag.id : null;
   const targetIds = surface.kind === "targets" ? surface.ids : NO_TARGETS;
+  // The chosen targets of what waits on the stack, as the board presents it.
+  const stackTargets = useMemo(() => stackTargetsOf(derived.view), [derived.view]);
+  const stackTargetsKey = stackTargets.join(",");
+  useEffect(() => {
+    if (stackTargets.length === 0) return;
+    const { version } = derived.view;
+    logEventOnce(`battle_engine_stack_targets_shown:${battleId}:${version}`, "battle_engine_stack_targets_shown", {
+      battleId,
+      version,
+      stack: derived.view.stack.map((item) => (item.kind === "card" ? item.instance : item.source)),
+      targets: stackTargets,
+    });
+    // Logged once per presented state whose stack names targets.
+  }, [stackTargetsKey, derived.view.version]);
   // The board's handlers keep one identity for the screen's life and run the
   // latest committed render's code, so the interactions below change only
   // with the values they carry and the board's memoized regions can skip.
@@ -616,10 +630,21 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       canPrompt,
       targetSelectionPrompt: targetIds.length > 0 ? "legal-target" : null,
       targetableCardIds: targetIds,
+      stackTargetCardIds: stackTargets,
       activatableStatusOwner,
       ...handlers,
     }),
-    [activatableStatusOwner, canInteract, canPrompt, drag, dragTargets, handlers, targetIds, targetSelectionCardId],
+    [
+      activatableStatusOwner,
+      canInteract,
+      canPrompt,
+      drag,
+      dragTargets,
+      handlers,
+      stackTargets,
+      targetIds,
+      targetSelectionCardId,
+    ],
   );
 
   function handleResultAction(action: MobileBattleResultAction): void {
@@ -681,6 +706,19 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       ) : null}
     </>
   );
+}
+
+/**
+ * The cards the stack's plays and abilities have chosen as targets, top item
+ * first, each once. The view already omits targets the viewer cannot see.
+ */
+function stackTargetsOf(view: BattleView): readonly BattleCardId[] {
+  const targets = new Set<InstanceId>();
+  for (const item of [...view.stack].reverse()) {
+    const choices = item.kind === "card" ? item.choices : [item.choices];
+    for (const choice of choices) for (const id of choice.targets.flat()) targets.add(id);
+  }
+  return targets.size === 0 ? NO_TARGETS : [...targets].map(parseBattleCardId);
 }
 
 function sourceSlotOf(view: MobileBattleView, id: BattleCardId): MobileBattleSlotTarget | null {

@@ -116,6 +116,8 @@ import { formatNumber } from "../../runtime/format-number";
 
 export { BATTLEFIELD_CARD_EXHAUSTED_FILTER } from "../components/battle/BattlefieldCard";
 const CARD_PICKER_HIGHLIGHT_SELECTION: GameCardSelection = "highlighted";
+/** A battlefield card a play or ability waiting on the stack has chosen as its target. */
+const STACK_TARGET_SELECTION: GameCardSelection = "selected";
 const CARD_PICKER_SELECTION: GameCardSelection = "selected";
 /** No cards: one array, so a memoized region sees an unchanged prop. */
 const NO_CARD_IDS: readonly BattleCardId[] = [];
@@ -582,6 +584,12 @@ export interface MobileBattleInteractions {
   readonly targetSelectionCardId?: BattleCardId | null;
   readonly targetSelectionPrompt?: "legal-target" | null;
   readonly targetableCardIds?: readonly BattleCardId[];
+  /**
+   * Battlefield cards the plays and abilities waiting on the stack have
+   * chosen as targets, either side's. Each carries the selection ring while
+   * no card picker or legal-target choice claims it.
+   */
+  readonly stackTargetCardIds?: readonly BattleCardId[];
   readonly onHandCardActivate: (battleCardId: BattleCardId) => void;
   readonly onBattlefieldCardActivate?: (battleCardId: BattleCardId) => void;
   readonly onTargetSelectionCancel?: () => void;
@@ -1717,6 +1725,9 @@ const Rank = memo(function Rank({
           const isPickerSelected =
             slot.card !== null && selectedPickerCardIds.includes(slot.card.id);
           const isPickerHighlighted = candidate?.highlighted === true;
+          const isStackTarget =
+            slot.card !== null &&
+            interactions?.stackTargetCardIds?.includes(slot.card.id) === true;
           return (
             <div
               key={slot.id}
@@ -1745,6 +1756,7 @@ const Rank = memo(function Rank({
               data-battle-card-picker-highlighted={
                 isPickerHighlighted ? "true" : undefined
               }
+              data-battle-stack-target={isStackTarget ? "true" : undefined}
               onDragOver={(event) => {
                 if (!canDrop) return;
                 event.preventDefault();
@@ -1834,7 +1846,9 @@ const Rank = memo(function Rank({
                       ? interactions?.targetSelectionCardId === slotCard.id ||
                         interactions?.targetableCardIds?.includes(slotCard.id)
                         ? { selected: true, kind: "highlighted" }
-                        : undefined
+                        : isStackTarget
+                          ? { selected: true, kind: STACK_TARGET_SELECTION }
+                          : undefined
                       : {
                           selected: isPickerSelected || isPickerHighlighted,
                           kind: isPickerSelected

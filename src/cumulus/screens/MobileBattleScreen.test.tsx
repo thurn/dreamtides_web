@@ -479,6 +479,38 @@ describe("MobileBattleScreen", () => {
     expect(placement(mount({ ...view, cardPicker: picker(handCard, "hand") }))).toBe("reading");
   });
 
+  it("rings the stack's chosen targets until they leave the stack, yielding to a legal-target choice", () => {
+    const view = makeView();
+    const [target, other] = [view.enemy.backRank[1]?.card, view.player.frontRank[0]?.card];
+    if (target == null || other == null) throw new Error("fixture has no battlefield cards");
+    const ring = (container: HTMLElement, id: BattleCardId) =>
+      [...query(container, `[data-battle-card-id="${id}"]`).querySelectorAll<HTMLElement>("*")]
+        .map((element) => element.style.boxShadow)
+        .filter((shadow) => shadow !== "")
+        .join(" / ");
+    const marked = (container: HTMLElement) =>
+      [...container.querySelectorAll("[data-battle-stack-target] [data-battle-card-id]")].map((element) =>
+        element.getAttribute("data-battle-card-id"),
+      );
+
+    const container = mount(view, { canInteract: false });
+    const [plainTarget, plainOther] = [ring(container, target.id), ring(container, other.id)];
+    expect(marked(container)).toEqual([]);
+    expect(plainTarget).toBe(plainOther);
+
+    rerender(container, view, { canInteract: false, stackTargetCardIds: [target.id] });
+    expect(marked(container)).toEqual([target.id]);
+    expect(ring(container, target.id)).not.toBe(plainTarget);
+    expect(ring(container, other.id)).toBe(plainOther);
+
+    rerender(container, view, { canInteract: false, stackTargetCardIds: [target.id], targetableCardIds: [target.id, other.id] });
+    expect(ring(container, target.id)).toBe(ring(container, other.id));
+
+    rerender(container, view, { canInteract: false, stackTargetCardIds: [] });
+    expect(marked(container)).toEqual([]);
+    expect(ring(container, target.id)).toBe(plainTarget);
+  });
+
   it("replaces the phase advance with choice-prompt options", () => {
     const [onChoicePromptChoose, onNextPhase] = [vi.fn(), vi.fn()];
     const choicePrompt = { key: 42, label: "Choose", options: [{ label: "First" }, { label: "Second" }], canResolve: true };
