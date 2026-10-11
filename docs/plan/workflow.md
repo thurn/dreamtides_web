@@ -570,10 +570,39 @@ because `tg update` records a Tollgate intent under the session's identity:
    equals `staging`, `git -C <worktree> status --short` is empty with no
    rebase in progress, and `tg --no-launch doctor` reports no
    `worktree-update` block.
-3. **On a conflict,** hand the same worktree to a subagent with the conflict.
-   It resolves the conflict, amends the bead's single commit, and returns.
-   Conflicts in additive registries and append-only files keep both sides.
-   The session then repeats steps 1 and 2.
+3. **On a conflict,** inspect the native result and the worktree. A failed
+   update restores the original clean source commit, so recovery starts from
+   its delta rather than conflict markers. Capture that source OID, its
+   parent OID, and the conflicting paths reported by Tollgate. Confirm the
+   source is unchanged and `doctor` has no pending update block.
+
+For a clean rollback, the session and its implementation helper recover in
+the same worktree:
+
+1. Save the owned delta and original contents of each conflicting path in
+   the session's scratch directory, outside the worktree. Preserve enough to
+   reconstruct the complete source commit, including a newly added file.
+2. The helper restores only those paths to their captured base contents and
+   amends the single commit into a temporary checkpoint. Every other owned
+   change stays intact. Record the checkpoint OID. **Never submit or approve
+   this checkpoint:** its parked changes may be required for the build.
+3. The owning session runs `tg --no-launch update` on that clean checkpoint
+   and checks its result, parent, cleanliness, and `doctor` as above. If it
+   fails, inspect the reported paths and retained state before another
+   attempt; never substitute a raw Git rebase.
+4. The helper reapplies the saved owned delta against the updated files,
+   retaining all landed peer changes. Additive registrations and appended
+   records keep both sides. Compare the combined files against both saved
+   inputs.
+5. Run proportionate checks on the combined base, then amend the bead's
+   final single commit and confirm the worktree is clean.
+   Keep prior full-suite, fuzz, and browser evidence tied to its original
+   source OID; rerun behavior checks when the resolution changes behavior.
+   Record the updated checks, exact base/source, and settled writers.
+6. Submit a new exact candidate and authorize it through the delivery loop.
+   A required review uses the final base/source range; replace an earlier
+   review-debt range in the notes. Only the session runs native update and
+   candidate actions; the helper performs the bounded edits and commits.
 
 ### A session as implementer
 

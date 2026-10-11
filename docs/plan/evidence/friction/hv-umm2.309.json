@@ -1,0 +1,25 @@
+{
+  "bead": "hv-umm2.309",
+  "phase": 5,
+  "implementMin": 2.26,
+  "localValidationS": {
+    "review": 0.44,
+    "knipStages": 3.4
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "constraints": [
+    "Documentation-only bounded recovery derived from three native conflict/update handles; no runtime, test, or tool changes.",
+    "No browser QA or new tests required for workflow prose."
+  ],
+  "sourceBase": "9086cfeb5b5c049fa505bc18767fd2d45aeb3ed8",
+  "validation": [
+    "npm run review: passed, documentation delta has no applicable executable checks",
+    "npm run knip: passed (prepare0.9s + knip2.0s + restore0.5s)",
+    "Manual recovery procedure read-through, evidence commit identity checks, JSONL parsing and git diff --check: passed"
+  ]
+}
