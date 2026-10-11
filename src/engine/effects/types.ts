@@ -82,9 +82,9 @@ export interface PrimitiveDefinition<N extends EffectNode> {
   /** Every nested effect resolved with this node, in order; validation walks them all. */
   children?(node: N): readonly EffectNode[];
   /**
-   * Nested effects that resolve later, as a floating or delayed trigger:
-   * validation and node indexing walk them, but play-time choices never
-   * reach into them; their choices are made as they resolve.
+   * Nested effects whose choices are made at resolution, such as a chosen
+   * player branch or a floating or delayed trigger: validation and node
+   * indexing walk them, but play-time choices never reach into them.
    */
   deferred?(node: N): readonly EffectNode[];
   /**

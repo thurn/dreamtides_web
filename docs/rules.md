@@ -544,6 +544,14 @@ discard two cards if their hand has at least 5 cards at that point, and one
 card otherwise. A discard effect with fewer cards available discards the
 whole hand; with an empty hand it does nothing.
 
+**Choosing a player:** "Choose a player. That player …" lets the effect's
+controller choose either player as that instruction resolves. It is not a
+modal choice or a target. The chosen player performs the instructions that
+name them, and chooses the cards they discard from their own hand. Choosing
+the opponent does not change the effect's controller: "you" still refers to
+the player who controls the ability. A following instruction to draw X cards
+draws that full amount even if fewer than X cards were discarded.
+
 **Priority:** The player with priority may respond with an Interrupt or pass.
 
 - Playing a card or activating an ability gives the **opponent** priority. A

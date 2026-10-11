@@ -1,0 +1,58 @@
+{
+  "bead": "hv-umm2.60",
+  "phase": 5,
+  "implementMin": 44.25,
+  "localValidationS": {
+    "focused": 2.727391004562378,
+    "review": 29.973252058029175,
+    "full": 48.55098795890808,
+    "knip": 2.0453319549560547,
+    "fuzz": 53.84669589996338,
+    "sweep": 339.30031991004944,
+    "judgedPlayer": 43.960309982299805,
+    "judgedEnemy": 17.437642097473145
+  },
+  "hostLoad": 3.63818359375,
+  "testDelta": {
+    "files": 0,
+    "lines": 263,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-harness-assumptions",
+      "minutes": 7,
+      "note": "Three distinct bead-local harness assumptions failed after valid UI workflows: guessed window game-id field, hit-test on pointer-transparent reveal, and regex excluding drew. Corrected against observed query/source contracts; all first artifacts/timings preserved. No product source changes."
+    },
+    {
+      "tag": "synthetic-fixture-type",
+      "minutes": 1,
+      "note": "Final typecheck rejected optionalCost in EngineCardDefinition.costs; corrected only fixture to canonical additionalCost(optionalCost(...)) ability, with no cast/runtime source edit. Canonical focused192 and final types/review passed."
+    }
+  ],
+  "queueS": {
+    "judged-player-final": 0.02,
+    "judged-enemy": 0.022,
+    "fuzz": 178.873,
+    "judged": 143.944,
+    "knip": 0.021,
+    "focused-complete": 0.019,
+    "sweep": 15.323,
+    "focused-final": 47.909,
+    "full": 38.102,
+    "judged-corrected": 0.021,
+    "judged-enemy-final": 0.019,
+    "review-final": 0.02,
+    "focused-typed": 0.019,
+    "review-passed": 0.021,
+    "knip-final": 0.021
+  },
+  "browserLeaseS": {
+    "judged-first-harness": 0.041,
+    "judged-second-harness": 52.344,
+    "judged-enemy-first-harness": 0.045,
+    "judged-enemy": 0.039,
+    "judged-player": 0.039
+  },
+  "scopeNotes": "Gross dispatch-to-commit includes queues; sweep pre-server233.983s and server/scenarios/cleanup105.318s are measured partitions, not exact lease/scenario fields. Normal shared capacity does not create a duplicate improvement filing."
+}

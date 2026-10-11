@@ -673,3 +673,29 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
   };
   env.run(effect);
 }
+
+/**
+ * Resolves a subtree chosen during resolution, choosing only its modes and
+ * targets now. The ability's context and enclosing shared duration persist;
+ * these local choices do not replace the enclosing tree's choices.
+ */
+export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv): void {
+  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role));
+  if (choices === null) return;
+  const chosen = chosenModes(effect, choices.modes);
+  const specs = collectTargets(effect, chosen);
+  const inner: EffectEnv = {
+    ...env,
+    modeOf(node) {
+      return chosen.get(node) ?? null;
+    },
+    targetsOf(spec) {
+      const index = specs.indexOf(spec);
+      return index < 0 ? null : (choices.targets[index] ?? null);
+    },
+    run(node) {
+      primitiveDefinition(node.op).resolve(ctx, node, inner);
+    },
+  };
+  inner.run(effect);
+}

@@ -1,4 +1,6 @@
 import { card } from "../define";
+import { event, x } from "../../engine/dsl/builders";
+import { choosePlayer, discard, draw, sequence } from "../../engine/effects/primitives";
 
 export default card({
   name: "Cleansing Flame",
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 124,
   art: { x: 0.092, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(choosePlayer((player) => sequence(discard(x(), player), draw(x(), player))))],
+  verifiedText: "1toqwxkfkci",
 });

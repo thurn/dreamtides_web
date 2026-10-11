@@ -81,6 +81,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Choose the value of X";
       case "chooseOne":
         return "Choose one";
+      case "choosePlayer":
+        return "Choose a player";
       case "chooseCost":
         return "Choose a cost to pay";
       case "optionalCost":
@@ -134,7 +136,9 @@ export type EnginePromptOptionCopy =
   /** A mode, with its text when the card's own text spells out each mode. */
   | { readonly kind: "mode"; readonly index: number; readonly text: string | null }
   /** A play route of the playRoute prompt, in the engine's route order: from hand, then as an Offering. */
-  | { readonly kind: "route"; readonly index: number };
+  | { readonly kind: "route"; readonly index: number }
+  /** A player relative to the answering controller. */
+  | { readonly kind: "player"; readonly index: number };
 
 /** Label of one answer button of an engine choice prompt. */
 export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string {
@@ -153,6 +157,8 @@ export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string 
       return option.text ?? `Option ${String(option.index + 1)}`;
     case "route":
       return option.index === 0 ? "Pay Its Cost" : "Play as an Offering";
+    case "player":
+      return option.index === 0 ? "You" : "Opponent";
   }
 }
 

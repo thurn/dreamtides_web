@@ -82,6 +82,8 @@ export const LAB = {
   discardChosen: labEvent(9, 1, p.discardChosen()),
   /** Choose a free Discover cost, then choose a matching character. */
   discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
+  /** Choose either player to discard and draw, preserving the source controller. */
+  choosePlayer: labEvent(11, 1, p.choosePlayer((player) => p.sequence(p.discard(1, player), p.draw(1, player)))),
   /** "Dissolve up to one enemy." */
   dissolveUpToOne: labEvent(3, 1, p.dissolve(upTo(enemyCharacter(), 1))),
   /** A pending event (D36): it plays text-less and reports its pending ability. */
@@ -150,6 +152,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.choosePlayer.id]: { name: "Lab Rekindling", text: "Choose a player. That player discards a card, then draws a card." },
   [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
   [SYNTHETIC.vanilla1.id]: { name: "Lab Recruit", text: "" },
   [SYNTHETIC.vanilla2.id]: { name: "Lab Sentry", text: "" },
@@ -264,6 +267,16 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "choose-player",
+    description: "Choose either player, then that player chooses their own discard",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [LAB.choosePlayer.id, ...vanillas], energy: 2, deck: deck(6) },
+      enemy: { hand: vanillas, deck: deck(6) },
+    },
+    script: [],
+  },
   {
     name: "costs",
     description: "Alternative and optional costs, with abandon, discard, and reveal selections",

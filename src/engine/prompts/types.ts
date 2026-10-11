@@ -14,6 +14,8 @@ export type PromptRole =
   | "chooseX"
   /** The mode of a modal ("choose one") effect. */
   | "chooseOne"
+  /** The player an effect affects: mode 0 is the controller, mode 1 their opponent. */
+  | "choosePlayer"
   /** The targets of an ability. */
   | "target"
   /** Which alternative of an "A or B" cost to pay. */

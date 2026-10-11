@@ -18,6 +18,7 @@ import {
   banishPrimitive,
   banishUntilPrimitive,
   chooseOnePrimitive,
+  choosePlayerPrimitive,
   copyCardPrimitive,
   costModifierPrimitive,
   createCopyInHandPrimitive,
@@ -80,6 +81,9 @@ const DEFINITIONS = {
   },
   get chooseOne() {
     return chooseOnePrimitive;
+  },
+  get choosePlayer() {
+    return choosePlayerPrimitive;
   },
   get copyCard() {
     return copyCardPrimitive;

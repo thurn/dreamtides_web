@@ -128,6 +128,7 @@ const ROLE_STRATEGIES = {
   playRoute: { cards: "hostile", number: "largest" },
   chooseX: { cards: "hostile", number: "largest" },
   chooseOne: { cards: "hostile", number: "largest" },
+  choosePlayer: { cards: "hostile", number: "largest" },
   target: { cards: "hostile", number: "largest" },
   chooseCost: { cards: "hostile", number: "largest" },
   optionalCost: { cards: "hostile", number: "largest" },
