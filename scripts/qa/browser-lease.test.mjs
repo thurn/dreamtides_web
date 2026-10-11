@@ -7,29 +7,62 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { acquireBrowserLease as acquireNativeBrowserLease, browserLeasePath } from "./browser-lease.mjs";
-
 import { openQaSession as openNativeQaSession } from "./run-scenario.mjs";
 import * as runtime from "../screenshot-runtime.mjs";
-
 // Fixture subprocesses stay inside Tollgate's session. The actual native
 // utility and pipe protocol run unchanged; only fixture process ownership is
 // translated from isolated groups to direct children of this test worker.
 const fixtureIo = vi.hoisted(() => ({
   gitCwd: /** @type {string | null} */ (null),
   children: /** @type {import("node:child_process").ChildProcess[]} */ ([]),
+  ready: /** @type {Promise<void>} */ (Promise.resolve()),
 }));
 vi.mock("node:child_process", async (importOriginal) => {
   const actual = /** @type {typeof import("node:child_process")} */ (await importOriginal());
   return {
     ...actual,
     spawn: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").SpawnOptions} */ options) => {
-      const child = actual.spawn(command, args, { ...options, detached: false });
+      const server = args[0] === "scripts/dev.mjs";
+      const stdio = /** @type {import("node:child_process").SpawnOptions["stdio"]} */ (server && Array.isArray(options.stdio) ? [...options.stdio, "ipc"] : options.stdio);
+      const child = actual.spawn(command, args, { ...options, stdio, detached: false });
+      if (server) fixtureIo.ready = new Promise((done, reject) => {
+        const failed = () => { child.removeListener("message", ready); reject(new Error("synthetic server exited before ready")); };
+        const ready = () => { child.removeListener("close", failed); child.removeListener("error", failed); child.removeListener("exit", failed); done(); };
+        child.once("message", ready);
+        child.once("close", failed);
+        child.once("error", failed);
+        child.once("exit", failed);
+      });
+      if (server) void fixtureIo.ready.catch(() => {});
       fixtureIo.children.push(child);
       return child;
     }),
     execFileSync: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptionsWithStringEncoding} */ options) => {
       const cwd = command === "git" && args.includes("--git-common-dir") ? fixtureIo.gitCwd : null;
       return actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
+    }),
+  };
+});
+// Socket availability and HTTP readiness are boundaries of the server runner,
+// independent of the lease/ownership contract. Native lockf pipes remain real.
+vi.mock("node:net", async (importOriginal) => {
+  const actual = /** @type {typeof import("node:net")} */ (await importOriginal());
+  const { EventEmitter } = await import("node:events");
+  return {
+    ...actual,
+    createConnection: vi.fn(() => {
+      const socket = Object.assign(new EventEmitter(), { destroy() {} });
+      queueMicrotask(() => socket.emit("error", new Error("synthetic unused port")));
+      return socket;
+    }),
+    createServer: vi.fn(() => {
+      const server = new EventEmitter();
+      return Object.assign(server, {
+        /** @param {unknown} _options @param {() => void} ready */
+        listen(_options, ready) { queueMicrotask(ready); return server; },
+        /** @param {() => void} closed */
+        close(closed) { queueMicrotask(closed); },
+      });
     }),
   };
 });
@@ -44,6 +77,7 @@ async function openQaSession(options) {
 }
 const realKill = process.kill.bind(process);
 beforeEach(() => {
+  vi.stubGlobal("fetch", vi.fn(async () => { await fixtureIo.ready; return { status: 200 }; }));
   vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
     const owned = fixtureIo.children.find((child) => child.pid === -pid);
     if (pid < 0 && owned !== undefined) {
@@ -77,8 +111,10 @@ afterEach(async () => {
     await exited;
   }
   fixtureIo.gitCwd = null;
+  fixtureIo.ready = Promise.resolve();
   vi.useRealTimers();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   for (const path of temporaryDirectories.splice(0)) rmSync(path, { recursive: true, force: true });
 });
 
@@ -98,11 +134,12 @@ function sessionFixture() {
   const { root: directory } = leaseFixture();
   const root = join(directory, "primary");
   mkdirSync(join(root, "scripts"), { recursive: true });
-  writeFileSync(join(root, "scripts", "dev.mjs"), 'import { createServer } from "node:http"; createServer((req, res) => res.end("ok")).listen(Number(process.argv.at(-1)));');
+  // A real child owns liveness until session cleanup, without a host TCP bind.
+  writeFileSync(join(root, "scripts", "dev.mjs"), 'setInterval(() => {}, 60_000); process.send("ready");');
   const git = (/** @type {string[]} */ args) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: "pipe" });
   execFileSync("git", ["init", "-q", root], { encoding: "utf8" });
   git(["add", "scripts/dev.mjs"]);
-  git(["-c", "core.hooksPath=/dev/null", "-c", "commit.gpgSign=false", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "synthetic HTTP server"]);
+  git(["-c", "core.hooksPath=/dev/null", "-c", "commit.gpgSign=false", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "synthetic session process"]);
   const worktree = join(directory, "linked-checkout");
   git(["worktree", "add", "--detach", "--quiet", worktree, "HEAD"]);
   fixtureIo.gitCwd = root;
@@ -165,23 +202,39 @@ describe("repository browser lease", () => {
     const third = await acquireBrowserLease(path);
     await third.release();
   });
-
   it("shares the real private common-Git lease and capture root across linked checkouts", async () => {
-    const { root, worktree, path } = sessionFixture();
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
-    const primary = await openQaSession({ bead: "synthetic-lease", label: "primary", port: null, prod: false, minify: false, cwd: root });
-    expect(primary.captureDir).toBe(join(root, "artifacts", "qa", "synthetic-lease"));
-    expect(existsSync(`${path}.owner.json`)).toBe(true);
-    await primary.close();
-    fixtureIo.gitCwd = worktree;
-    const linked = await openQaSession({ bead: "synthetic-lease", label: "linked", port: null, prod: false, minify: false, cwd: worktree });
-    expect(linked.captureDir).toBe(primary.captureDir);
-    expect(existsSync(`${path}.owner.json`)).toBe(true);
-    await linked.close();
-    expect(existsSync(join(primary.captureDir, "primary.server.log"))).toBe(true);
-    expect(existsSync(join(primary.captureDir, "linked.server.log"))).toBe(true);
+    const net = /** @type {typeof import("node:net")} */ (await vi.importActual("node:net"));
+    const unrelated = net.createServer();
+    unrelated.listen(0, "127.0.0.1");
+    await once(unrelated, "listening");
+    const address = unrelated.address();
+    if (address === null || typeof address === "string") throw new Error("expected owned TCP listener");
+    const port = address.port;
+    try {
+      const { root, worktree, path } = sessionFixture();
+      vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
+      const primary = await openQaSession({ bead: "synthetic-lease", label: "primary", port, prod: false, minify: false, cwd: root });
+      expect(fixtureIo.children.map((child) => child.pid)).toContain(primary.serverPid);
+      expect(primary.captureDir).toBe(join(root, "artifacts", "qa", "synthetic-lease"));
+      expect(existsSync(`${path}.owner.json`)).toBe(true);
+      await primary.close();
+      expect(existsSync(`${path}.owner.json`)).toBe(false);
+      fixtureIo.gitCwd = worktree;
+      const linked = await openQaSession({ bead: "synthetic-lease", label: "linked", port, prod: false, minify: false, cwd: worktree });
+      expect(fixtureIo.children.map((child) => child.pid)).toContain(linked.serverPid);
+      expect(linked.captureDir).toBe(primary.captureDir);
+      expect(existsSync(`${path}.owner.json`)).toBe(true);
+      await linked.close();
+      expect(existsSync(`${path}.owner.json`)).toBe(false);
+      expect(fixtureIo.children.every((child) => child.exitCode !== null || child.signalCode !== null)).toBe(true);
+      expect(existsSync(join(primary.captureDir, "primary.server.log"))).toBe(true);
+      expect(existsSync(join(primary.captureDir, "linked.server.log"))).toBe(true);
+      expect(unrelated.listening).toBe(true);
+    } finally {
+      await new Promise((/** @type {(error?: Error) => void} */ done) => unrelated.close(done));
+    }
+    expect(unrelated.listening).toBe(false);
   });
-
   it("settles an interrupted waiter without releasing its peer's lease", async () => {
     const { path } = leaseFixture();
     const holder = await acquireBrowserLease(path);
@@ -196,7 +249,6 @@ describe("repository browser lease", () => {
     const next = await acquireBrowserLease(path);
     await next.release();
   });
-
   it("recovers the native lock after parent crash while quarantining its remote ownership", async () => {
     const { root, path } = sessionFixture();
     const connect = vi.spyOn(runtime, "connectPlaywrightMcp").mockRejectedValue(new Error("unexpected synthetic connection"));
@@ -212,14 +264,12 @@ describe("repository browser lease", () => {
     expect(connect).not.toHaveBeenCalled();
     expect(existsSync(`${path}.owner.json`)).toBe(true);
   });
-
   it("rejects permanent native path failures rather than retrying them", async () => {
     const { root } = leaseFixture();
     const denied = join(root, "denied.lock");
     writeFileSync(denied, "", { mode: 0 });
     await expect(acquireBrowserLease(denied)).rejects.toThrow(/lockf exited/);
   });
-
   it("interrupts session acquisition before starting any server or MCP client", async () => {
     const { root, path } = sessionFixture();
     const holder = await acquireBrowserLease(path);
@@ -242,7 +292,6 @@ describe("repository browser lease", () => {
       await holder.release();
     }
   });
-
   it("retains the native lease through delayed close and quarantines rejected provider cleanup", async () => {
     const { root, path } = sessionFixture();
     let finishClose = /** @type {() => void} */ (() => {});
@@ -278,8 +327,6 @@ describe("repository browser lease", () => {
       await session.close().catch(() => {});
     }
   });
-
-
   it("joins an interrupted late connection before browser cleanup releases the lease", async () => {
     const { root, path } = sessionFixture();
     let finishConnection = /** @type {(client: Awaited<ReturnType<typeof runtime.connectPlaywrightMcp>>) => void} */ (() => {});
@@ -316,7 +363,6 @@ describe("repository browser lease", () => {
       await session?.close();
     }
   });
-
   it("cleans up a failed session connection and leaves the shared lease reusable", async () => {
     const { root, path } = sessionFixture();
     vi.spyOn(runtime, "connectPlaywrightMcp").mockRejectedValue(new Error("synthetic connection failure"));
@@ -328,8 +374,6 @@ describe("repository browser lease", () => {
     expect(existsSync(`${path}.owner.json`)).toBe(false);
   });
 });
-
-
 describe("MCP browser ownership confirmation", () => {
   it("quarantines semantic browser_close errors while closing the SDK transport", async () => {
     const { root, path } = sessionFixture();
@@ -342,7 +386,6 @@ describe("MCP browser ownership confirmation", () => {
     expect(sdkClose).toHaveBeenCalledOnce();
     expect(existsSync(`${path}.owner.json`)).toBe(true);
   });
-
   it.each([false, true])("closes before draining active RPC, preserving transport uncertainty=%s", async (transportRejects) => {
     const { root, path } = sessionFixture();
     let finishCall = /** @type {() => void} */ (() => {});
@@ -376,7 +419,6 @@ describe("MCP browser ownership confirmation", () => {
       await closing.catch(() => {});
     }
   });
-
   it("stops a session after an uncertain RPC without issuing subsequent verdict calls", async () => {
     const { root, path } = sessionFixture();
     const call = vi.fn().mockRejectedValue(new Error("synthetic uncertain RPC"));
@@ -389,7 +431,6 @@ describe("MCP browser ownership confirmation", () => {
     await expect(session.close()).rejects.toThrow(/provider completion is unconfirmed/);
     expect(existsSync(`${path}.owner.json`)).toBe(true);
   });
-
   it("treats a structured semantic RPC rejection as a settled provider response", async () => {
     const { root, path } = sessionFixture();
     vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
@@ -407,7 +448,6 @@ describe("MCP browser ownership confirmation", () => {
     expect(sdkClose).toHaveBeenCalledOnce();
     expect(existsSync(`${path}.owner.json`)).toBe(false);
   });
-
   it("drains semantic RPC settlement between browser close and SDK transport teardown", async () => {
     const { root, path } = sessionFixture();
     const events = /** @type {string[]} */ ([]);
@@ -446,7 +486,6 @@ describe("MCP browser ownership confirmation", () => {
       await closing;
     }
   });
-
   it("preserves a replacement ownership record after confirmed provider completion", async () => {
     const { root, path } = sessionFixture();
     const browserClose = vi.fn().mockResolvedValue(undefined);
