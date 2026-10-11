@@ -86,7 +86,7 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
       case "chooseCost":
         return "Choose a cost to pay";
       case "optionalPayment":
-        return "Pay to return your card?";
+        return "Pay the energy cost?";
       case "optionalCost":
         return "Pay the optional cost?";
       case "abandonCost":

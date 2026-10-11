@@ -634,6 +634,12 @@ the effect resolves, not as the card is played. The player can choose to pay X
 only if they can pay all of it, and Y happens only if X is paid. A player who
 cannot pay X is not offered the choice, and nothing happens.
 
+For an optional energy payment to return named cards from a void to hand, the
+choice is offered only if at least one of those cards is still in a void as
+that part resolves. If none remains there, including a source that has ceased
+to exist or already moved, that part offers no payment and spends no energy.
+If some remain, the payment covers returning those remaining cards.
+
 Other costs include spending counters stored on the card itself ("1⧗, ☾: …"),
 banishing cards from your void, and revealing cards from your hand. A revealed
 card stays in your hand.
