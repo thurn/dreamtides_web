@@ -1,187 +1,38 @@
 /**
  * Continuous effects (engine-design § Continuous effects): the layer order,
- * timestamp order and its ties, anthems and other static abilities and the
- * zones they work from (RD-hv-umm2.53-1, RD-hv-umm2.53-2), base-spark setting, type changes, keyword grants and losses, cost
- * modifications with "next card" modifiers, values locked at resolution
+ * timestamp order and its ties, static abilities, base-spark setting, type
+ * changes, keyword grants and losses, values locked at resolution
  * (RD-hv-7x4l.7-1), "until the opponent pays" changes sharing one payable
  * effect, memoization, and the view.
  */
 import { describe, expect, it } from "vitest";
-import { printedCard, type EngineCardDefinition } from "../catalog";
-import { additionalCost, all, characterYouControl, costPaid, enemyCharacter, energy, energyX, event, keyword, optionalCost, self, staticAbility, target } from "../dsl/builders";
-import { untilOpponentPays } from "../dsl/triggers";
-import { NO_DECK_MODS, type AbilityList, type FunctionalZone, type Variant } from "../dsl/types";
-import { eventSeenBy } from "../events";
 import { matchingCharacters } from "../dsl/selectors";
-import * as p from "../effects/primitives";
-import { createEngine } from "../engine";
-import type { Answer } from "../prompts/types";
-import type { Action } from "../rules/actions";
 import { hasKeyword } from "../rules/keywords";
-import { effectiveSpark } from "../rules/spark";
-import { createFoldAdapter, type BattleSlice } from "../fold/slice";
-import { deserializeState, serializeState, stateHash } from "../state/hash";
-import type { EffectId, InstanceId, Side } from "../state/ids";
-import type { BattleState, ContinuousChange } from "../state/types";
-import { runStep } from "../steps/runner";
-import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
-import { boardState, placeFigment, type BoardSetup, type SideSetup } from "../testing/board";
-import { CONTINUOUS, CONTINUOUS_CARDS, CONTINUOUS_EMBLEMS, CONTINUOUS_DREAMSIGN } from "../testing/continuous-cards";
-import { DSL, DSL_CARDS } from "../testing/dsl-cards";
-import { invariantViolations } from "../testing/invariants";
-import { SYNTHETIC, SYNTHETIC_CARDS, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { serializeState } from "../state/hash";
+import type { InstanceId } from "../state/ids";
+import { NO_PROMPTS } from "../steps/sources";
+import { placeFigment } from "../testing/board";
+import { CONTINUOUS_EMBLEMS, CONTINUOUS_DREAMSIGN } from "../testing/continuous-cards";
+import { DSL } from "../testing/dsl-cards";
 import { at, passUntil } from "../testing/trigger-harness";
 import { characteristics, characteristicsOf, rememberCharacteristics } from "./characteristics";
-import { adjustedEnergy, costModifier } from "./costs";
 import { Layers } from "./layers";
-
-/** "Enemies have base ✦ 3": a second base-setting static, for ties between static abilities. */
-const enemyBaseThree: EngineCardDefinition = {
-  id: syntheticId(0xa81),
-  cardType: "character",
-  costs: [energy(3)],
-  spark: 1,
-  subtype: "Mage",
-  speed: "standard",
-  status: "authored",
-  abilities: () => [staticAbility(p.setBaseSpark(all(enemyCharacter()), 3))],
-};
-
-/** "2 X: …" — a 2● event with an X part, to show cost modifications apply to the total. */
-const twoPlusX: EngineCardDefinition = { ...DSL.fixedPlusXPoints, id: syntheticId(0xa82), costs: [energy(2), energyX()] };
-
-function fixture(index: number, cardType: "character" | "event", cost: number, abilities: AbilityList): EngineCardDefinition {
-  return {
-    id: syntheticId(index),
-    cardType,
-    costs: [energy(cost)],
-    spark: cardType === "character" ? 1 : null,
-    subtype: cardType === "character" ? "Warrior" : "",
-    speed: "standard",
-    status: "authored",
-    abilities,
-  };
-}
-
-/** "Characters you control have Awakened." */
-const awakenedBanner = fixture(0xa83, "character", 1, () => [staticAbility(p.grant(all(characterYouControl()), "awakened"))]);
-/** "This character has Awakened.", from its own static ability. */
-const selfAwakened = fixture(0xa84, "character", 1, () => [staticAbility(p.grant(self(), "awakened"))]);
-/** "You may pay 2● to play this event. If you did, gain 2⍟." — a 0● event with an optional 2● additional cost. */
-const kicker = fixture(0xa85, "event", 0, () => [additionalCost(optionalCost(energy(2))), event(p.ifThen(costPaid(), p.gainPoints(2)))]);
-/** "Until the opponent pays 1●, enemies have −1✦ and have all character types." — two changes under one duration. */
-const weakenUntilPays = fixture(0xa86, "event", 0, () => [
-  event(p.forDuration(untilOpponentPays(1), p.sequence(p.sparkModifier(all(enemyCharacter()), -1), p.giveAllTypes(all(enemyCharacter()))))),
-]);
-/** "Until the opponent pays 1●, enemies have −1✦. Dissolve every enemy." — its changes are gone before it finishes resolving. */
-const weakenThenDissolve = fixture(0xa87, "event", 0, () => [
-  event(p.forDuration(untilOpponentPays(1), p.sequence(p.sparkModifier(all(enemyCharacter()), -1), p.dissolve(all(enemyCharacter()))))),
-]);
-
-/** "Characters you control have +1✦", working from `zone`, on a 1● character. */
-function anthemIn(index: number, zone: FunctionalZone, ...extra: AbilityList[]): EngineCardDefinition {
-  return fixture(index, "character", 1, (variant) => [
-    staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone }),
-    ...extra.flatMap((more) => more(variant)),
-  ]);
-}
-
-/** "Characters you control have +1✦." — in play only, the default. */
-const playAnthem = fixture(0xa88, "character", 1, () => [staticAbility(p.sparkModifier(all(characterYouControl()), 1))]);
-/** "If this card is in your void, characters you control have +1✦. Reclaim." */
-const voidAnthem = anthemIn(0xa89, "void", () => [keyword("reclaim")]);
-/** "While this card is in your hand, characters you control have +1✦." */
-const handAnthem = anthemIn(0xa8a, "hand");
-/** "Wherever this card is, characters you control have +1✦." — play, void, hand, and deck. */
-const anyAnthem = anthemIn(0xa8b, "any");
-/** "While this card is in your hand, characters you control have +1✦. Dissolve an enemy." — an event whose play waits on a target. */
-const handEventAnthem = fixture(0xa8c, "event", 1, () => [
-  staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone: "hand" }),
-  event(p.dissolve(target(enemyCharacter()))),
-]);
-/** "If this card is in your void, characters you control have Vengeful." */
-const voidVengeful = fixture(0xa8d, "character", 1, () => [staticAbility(p.grant(all(characterYouControl()), "vengeful"), { zone: "void" })]);
-/** "Dissolve a character you control." */
-const dissolveAlly = fixture(0xa8e, "event", 0, () => [event(p.dissolve(target(characterYouControl())))]);
-/** A malformed event that dissolves an ally, then resolves a static-only primitive, which throws. */
-const dissolveAllyThenFail = fixture(0xa8f, "event", 0, () => [
-  event(p.sequence(p.dissolve(target(characterYouControl())), p.grantCardKeyword(p.cardsIn("hand"), "offering"))),
-]);
-
-/** "Characters you control have +1✦.", working from the void only with a deck mod; its plain variants work in play. */
-const modifiedVoidAnthem = fixture(0xa91, "character", 1, (variant) => [
-  staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone: variant.deckMods === undefined ? "play" : "void" }),
-]);
-
-/** One printing whose variants have distinct static zones and spark/cost effects. */
-const variantAnthem = fixture(0xa90, "character", 1, (variant) => {
-  const modified = variant.deckMods?.costReduction ?? 0;
-  const zone = modified === 2 ? "any" : modified === 1 ? "void" : variant.amplified ? "hand" : "play";
-  const amount = modified === 2 ? 4 : modified === 1 ? 3 : variant.amplified ? 2 : 1;
-  return [
-    staticAbility(p.sparkModifier(all(characterYouControl()), amount), { zone }),
-    staticAbility(p.costModifier("you", { cardType: "character" }, -amount), { zone }),
-  ];
-});
-
-const engine = createEngine(
-  testCatalog(
-    [
-      ...CONTINUOUS_CARDS,
-      ...DSL_CARDS,
-      enemyBaseThree,
-      twoPlusX,
-      awakenedBanner,
-      selfAwakened,
-      kicker,
-      weakenUntilPays,
-      weakenThenDissolve,
-      playAnthem,
-      voidAnthem,
-      handAnthem,
-      anyAnthem,
-      handEventAnthem,
-      voidVengeful,
-      dissolveAlly,
-      dissolveAllyThenFail,
-    ],
-    CONTINUOUS_EMBLEMS,
-  ),
-);
-const catalog = engine.catalog;
-const c = CONTINUOUS;
-const v = SYNTHETIC;
-const deck = Array.from({ length: 6 }, () => v.vanilla1.id);
-
-function board(setup: Partial<BoardSetup>) {
-  return boardState(catalog, { active: "player", phase: "day", ...setup });
-}
-
-function spark(state: BattleState, id: InstanceId | null | undefined): number {
-  if (id === null || id === undefined) throw new Error("no character");
-  return effectiveSpark(state, catalog, id);
-}
-
-/** Adds a floating change at `timestamp`, as a resolving effect would. */
-function float(state: BattleState, change: ContinuousChange, timestamp: number): EffectId {
-  const id: EffectId = `e${state.nextEffect}`;
-  state.nextEffect += 1;
-  state.floating.push({ id, controller: "player", source: { kind: "avatar", side: "player" }, timestamp, expiry: { at: "endOfTurn" }, change });
-  return id;
-}
-
-function play(state: BattleState, side: Side, card: InstanceId | undefined, answers: readonly Answer[] = []) {
-  if (card === undefined) throw new Error("no card");
-  return engine.apply(state, side, { kind: "play", card, from: "hand" }, new ScriptedSource(answers));
-}
-
-/** The energy `side` would pay to play `card` now, X counted as 0. */
-function costOf(state: BattleState, card: InstanceId | undefined, side: Side = "player"): number {
-  if (card === undefined) throw new Error("no card");
-  const definition = printedCard(catalog, state.instances[card].printing);
-  const fixed = definition.costs.reduce((total, cost) => total + (cost.cost === "energy" ? cost.amount : 0), 0);
-  return adjustedEnergy(fixed, costModifier(state, catalog, card, side));
-}
+import {
+  enemyBaseThree,
+  awakenedBanner,
+  selfAwakened,
+  weakenUntilPays,
+  weakenThenDissolve,
+  engine,
+  catalog,
+  c,
+  v,
+  deck,
+  board,
+  spark,
+  float,
+  play,
+} from "./continuous.fixtures";
 
 describe("layer order", () => {
   it("sets base spark before every spark modification, whatever their timestamps", () => {
@@ -309,205 +160,6 @@ describe("static abilities", () => {
   });
 });
 
-describe("static abilities from other zones", () => {
-  /** Applies an action with every answer used, checking the invariants (the memoized evaluation matches a fresh one). */
-  const act = (state: BattleState, side: Side, action: Action, answers: readonly Answer[] = []) => {
-    const source = new ScriptedSource(answers);
-    const result = engine.apply(state, side, action, source);
-    source.assertExhausted();
-    expect(invariantViolations(result.state, catalog)).toEqual([]);
-    return result;
-  };
-  const zoneOf = (state: BattleState, id: InstanceId | null | undefined) => state.instances[id!]?.zone ?? null;
-
-  for (const reverse of [false, true]) {
-    it(`keeps each printing variant's zone and effects through reload, evaluated ${reverse ? "modified-first" : "base-first"}`, () => {
-      const cases: readonly { variant: Variant; amount: number; works: readonly ("back" | "void" | "hand" | "deck")[] }[] = [
-        { variant: { amplified: false }, amount: 1, works: ["back"] },
-        { variant: { amplified: true }, amount: 2, works: ["hand"] },
-        { variant: { amplified: false, deckMods: { ...NO_DECK_MODS, costReduction: 1 } }, amount: 3, works: ["void"] },
-        { variant: { amplified: false, deckMods: { ...NO_DECK_MODS, costReduction: 2 } }, amount: 4, works: ["back", "void", "hand", "deck"] },
-      ];
-      const variants = reverse ? [...cases].reverse() : cases;
-      // Each engine starts with a fresh catalog; subsequent boards reuse it in the chosen order.
-      const warm = createEngine(testCatalog([variantAnthem]));
-      const reloaded = createEngine(testCatalog([variantAnthem]));
-      for (const { variant, amount, works } of variants) {
-        for (const placed of ["back", "void", "hand", "deck"] as const) {
-          const setup: SideSetup = {
-            front: [v.vanilla1.id], hand: [v.vanilla5.id], energy: 4,
-            // Keep a separate hand card whose play cost we probe.
-            [placed]: placed === "hand" ? [v.vanilla5.id, variantAnthem.id] : [variantAnthem.id],
-          };
-          const { state, ids } = boardState(warm.catalog, { active: "player", phase: "day", player: setup, enemy: { front: [v.vanilla1.id] } });
-          const source = placed === "hand" ? ids.player.hand[1] : ids.player[placed][0]!;
-          state.instances[source] = { ...state.instances[source], variant };
-          const bonus = works.includes(placed) ? amount : 0;
-          const ally = ids.player.front[0]!;
-          const enemy = ids.enemy.front[0]!;
-          const card = ids.player.hand[0];
-          const check = (evaluated: BattleState, current: typeof warm) => {
-            expect(effectiveSpark(evaluated, current.catalog, ally)).toBe(1 + bonus);
-            expect(effectiveSpark(evaluated, current.catalog, enemy)).toBe(1);
-            expect(current.view(evaluated, "player").instances[card]?.characteristics.cost).toBe(5 - bonus);
-            expect(current.legalActions(evaluated, "player").some((action) => action.kind === "play" && action.card === card && action.from === "hand")).toBe(bonus > 0);
-          };
-          const saved = serializeState(state);
-          check(state, warm);
-          const restored = deserializeState(saved);
-          check(restored, warm);
-          check(restored, reloaded);
-          expect(serializeState(restored)).toBe(saved);
-          expect(serializeState(state)).toBe(saved);
-        }
-      }
-    });
-  }
-
-  it("are flagged in a catalog exactly when a printing's base or amplified variant has one", () => {
-    const outsidePlay = (cards: readonly EngineCardDefinition[]) =>
-      cards.some((card) => [false, true].some((amplified) => card.abilities({ amplified }).some((ability) => ability.kind === "static" && ability.zone !== "play")));
-    // variantAnthem works outside play only when amplified; modifiedVoidAnthem only with a deck mod.
-    const catalogs = [[], [playAnthem], [playAnthem, voidAnthem], [handAnthem], [anyAnthem], [variantAnthem], [modifiedVoidAnthem], CONTINUOUS_CARDS];
-    expect(catalogs.map((cards) => testCatalog(cards).staticsOutsidePlay())).toEqual(catalogs.map((cards) => outsidePlay([...SYNTHETIC_CARDS, ...cards])));
-    expect(testCatalog([variantAnthem]).staticsOutsidePlay()).toBe(true);
-    expect(testCatalog([modifiedVoidAnthem]).staticsOutsidePlay()).toBe(false);
-  });
-
-  it("apply from a card with deck mods in an unflagged catalog", () => {
-    const modified = createEngine(testCatalog([modifiedVoidAnthem]));
-    expect(modified.catalog.staticsOutsidePlay()).toBe(false);
-    for (const variant of [{ amplified: false }, { amplified: false, deckMods: { ...NO_DECK_MODS, costReduction: 1 } }] as const) {
-      const { state, ids } = boardState(modified.catalog, { active: "player", phase: "day", player: { front: [v.vanilla1.id], void: [modifiedVoidAnthem.id] }, enemy: { front: [v.vanilla1.id] } });
-      const source = ids.player.void[0];
-      state.instances[source] = { ...state.instances[source], variant };
-      expect(effectiveSpark(state, modified.catalog, ids.player.front[0]!)).toBe(variant.deckMods === undefined ? 1 : 2);
-      expect(invariantViolations(state, modified.catalog)).toEqual([]);
-    }
-  });
-
-  it("apply only while their card is in a zone they work from: play unless they name one, and 'any' is play, void, hand, and deck", () => {
-    const works: Record<FunctionalZone, readonly ("back" | "void" | "hand" | "deck")[]> = {
-      play: ["back"],
-      void: ["void"],
-      hand: ["hand"],
-      any: ["back", "void", "hand", "deck"],
-    };
-    const sources: Record<FunctionalZone, EngineCardDefinition> = { play: playAnthem, void: voidAnthem, hand: handAnthem, any: anyAnthem };
-    for (const zone of ["play", "void", "hand", "any"] as const) {
-      for (const placed of ["back", "void", "hand", "deck"] as const) {
-        const setup: SideSetup = { front: [v.vanilla1.id], [placed]: [sources[zone].id] };
-        const { state, ids } = board({ player: setup, enemy: { front: [v.vanilla1.id] } });
-        expect({ zone, placed, ally: spark(state, ids.player.front[0]) }).toEqual({ zone, placed, ally: works[zone].includes(placed) ? 2 : 1 });
-        expect(spark(state, ids.enemy.front[0])).toBe(1);
-      }
-    }
-  });
-
-  it("start as their card enters the zone and stop as it leaves, through played cards", () => {
-    const { state, ids } = board({ player: { back: [voidAnthem.id], front: [v.vanilla1.id], hand: [dissolveAlly.id], energy: 1, deck }, enemy: { deck } });
-    const [source] = ids.player.back;
-    const ally = ids.player.front[0];
-    expect(spark(state, ally)).toBe(1);
-    const dissolved = act(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, [[source!]]).state;
-    expect(zoneOf(dissolved, source)).toBe("void");
-    expect(spark(dissolved, ally)).toBe(2);
-    // Reclaimed, it leaves the void for play, where its ability does not work.
-    const reclaimed = act(dissolved, "player", { kind: "play", card: source!, from: "void" }).state;
-    expect(zoneOf(reclaimed, source)).toBe("play");
-    expect(spark(reclaimed, ally)).toBe(1);
-    expect(spark(reclaimed, source)).toBe(1);
-  });
-
-  it("apply from a hidden hand without naming the card to the opponent, in its view or its events", () => {
-    const { state, ids } = board({ player: { front: [v.vanilla1.id], hand: [DSL.drawTwo.id], energy: 2, deck: [handAnthem.id, handAnthem.id] }, enemy: { deck } });
-    const ally = ids.player.front[0]!;
-    const drawn = act(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" });
-    const hidden = ids.player.deck;
-    expect(drawn.state.sides.player.hand).toEqual(expect.arrayContaining([...hidden]));
-    expect(spark(drawn.state, ally)).toBe(3);
-    const seen = engine.view(drawn.state, "enemy");
-    // The opponent sees what the abilities change, never which cards hold them.
-    expect(seen.instances[ally]?.characteristics.spark).toBe(3);
-    for (const id of hidden) expect(seen.instances[id]).toBeUndefined();
-    expect(seen.sides.player.hand).toEqual({ count: 2, known: [] });
-    const published = JSON.stringify(drawn.events.map((entry) => eventSeenBy(entry, "enemy", drawn.state)));
-    for (const id of hidden) expect(published).not.toContain(`"${id}"`);
-    // Played from the hand, one stops working there, and its ability does not work in play.
-    const played = act(drawn.state, "player", { kind: "play", card: hidden[0], from: "hand" }).state;
-    expect(spark(played, ally)).toBe(2);
-    expect(spark(played, hidden[0])).toBe(2);
-  });
-
-  it("take their timestamp from when the card entered the zone they work from", () => {
-    for (const [entered, vengeful] of [[1, false], [3, true]] as const) {
-      const { state, ids } = board({ player: { front: [v.vanilla1.id], void: [voidVengeful.id] } });
-      const ally = ids.player.front[0]!;
-      float(state, { kind: "keyword", instance: ally, keyword: "vengeful", gains: false }, 2);
-      state.instances[ids.player.void[0]].enteredZoneAt = entered;
-      // The later of the static grant and the floating loss decides.
-      expect(hasKeyword(state, catalog, ally, "vengeful")).toBe(vengeful);
-    }
-  });
-
-  it("belong to the side whose void or hand holds the card", () => {
-    const { state, ids } = board({ player: { front: [v.vanilla1.id] }, enemy: { front: [v.vanilla1.id], void: [voidAnthem.id], hand: [handAnthem.id] } });
-    expect(spark(state, ids.enemy.front[0])).toBe(3);
-    expect(spark(state, ids.player.front[0])).toBe(1);
-    // A card the player owns but the enemy holds works for the enemy.
-    const held = ids.enemy.hand[0];
-    state.instances[held] = { ...state.instances[held], owner: "player" };
-    expect(new Layers(state, catalog).of(ids.enemy.front[0]!).spark).toBe(3);
-    expect(new Layers(state, catalog).of(ids.player.front[0]!).spark).toBe(1);
-  });
-
-  it("store nothing: a reloaded play waiting on a target reads the same, bounces foreign and illegal answers, and stops on the commit", () => {
-    const { state, ids } = board({ player: { front: [v.vanilla1.id], hand: [handEventAnthem.id], energy: 1, deck }, enemy: { front: [v.vanilla1.id, v.vanilla2.id], deck } });
-    const ally = ids.player.front[0];
-    const [enemy] = ids.enemy.front;
-    const reloadedState = JSON.parse(JSON.stringify(state)) as BattleState;
-    expect(stateHash(reloadedState)).toBe(stateHash(state));
-    expect(spark(reloadedState, ally)).toBe(2);
-    expect(engine.legalActions(reloadedState, "player")).toEqual(engine.legalActions(state, "player"));
-
-    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
-    const started: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
-    const suspended = fold.reduce(started, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
-    if (suspended.kind !== "applied") throw new Error("bounced");
-    const saved = JSON.parse(JSON.stringify(suspended.slice)) as BattleSlice;
-    const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
-    const pending = fresh.pending(saved)!;
-    expect(pending.prompt.id).toBe(fold.pending(suspended.slice)!.prompt.id);
-    // Until the play commits the card is still in the hand, working.
-    expect(spark(saved.committed, ally)).toBe(2);
-    const answer = (side: Side, value: Answer) => fresh.reduce(saved, { kind: "answer", side, promptId: pending.prompt.id, value });
-    expect(answer("enemy", [enemy!])).toEqual({ kind: "bounced", reason: "notYourPrompt" });
-    expect(answer("player", [ally!])).toEqual({ kind: "bounced", reason: "illegalAnswer" });
-    expect(spark(saved.committed, ally)).toBe(2);
-    const answered = answer("player", [enemy!]);
-    if (answered.kind !== "applied" || answered.error !== null) throw new Error("the answer did not apply");
-    expect(spark(answered.slice.committed, ally)).toBe(1);
-    expect(stateHash(answered.slice.committed)).toBe(stateHash(play(state, "player", ids.player.hand[0], [[enemy!]]).state));
-  });
-
-  it("start nothing when the step that moved their card fails, which commits nothing", () => {
-    const { state, ids } = board({ player: { back: [voidAnthem.id], front: [v.vanilla1.id], hand: [dissolveAllyThenFail.id], deck }, enemy: { deck } });
-    const [source] = ids.player.back;
-    const ally = ids.player.front[0];
-    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
-    const started: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
-    const played = fold.reduce(started, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
-    if (played.kind !== "applied") throw new Error("bounced");
-    const outcome = fold.reduce(played.slice, { kind: "answer", side: "player", promptId: fold.pending(played.slice)!.prompt.id, value: [source!] });
-    if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
-    // The resolution dissolved the source before it failed; none of it commits, so the source stays in play and its ability does not work.
-    const after = outcome.slice.committed;
-    expect(zoneOf(after, source)).toBe("play");
-    expect(spark(after, ally)).toBe(1);
-    expect(outcome.published.map((entry) => entry.kind)).toEqual(["cardPlayed"]);
-  });
-});
-
 describe("resolving continuous effects", () => {
   it("share one payable effect across every change of an 'until the opponent pays' node, ended by one payment", () => {
     const { state, ids } = board({ player: { hand: [weakenUntilPays.id], deck }, enemy: { front: [v.vanilla3.id, v.vanilla1.id], energy: 1, deck } });
@@ -578,106 +230,6 @@ describe("resolving continuous effects", () => {
     bonded.instances[newcomer] = { ...bonded.instances[ids.player.back[0]!], id: newcomer, enteredZoneAt: bonded.clock + 1 };
     bonded.sides.player.backRank[2] = newcomer;
     expect([...ids.player.back, newcomer].map((id) => spark(bonded, id))).toEqual([3, 3, 1]);
-  });
-});
-
-describe("cost modifications", () => {
-  it("raise costs, then lower them, never below 0", () => {
-    const { state, ids } = board({ player: { hand: [v.event1.id], energy: 0, deck }, enemy: { deck } });
-    const card = ids.player.hand[0];
-    float(state, { kind: "cost", player: "player", filter: {}, amount: -3, next: false }, 1);
-    float(state, { kind: "cost", player: "player", filter: {}, amount: 1, next: false }, 2);
-    // 1● + 1● − 3●, floored at 0 once the increase has applied.
-    expect(costOf(state, card)).toBe(0);
-    expect(engine.legalActions(state, "player")).toContainEqual({ kind: "play", card, from: "hand" });
-    expect(engine.view(state, "player").instances[card]?.characteristics.cost).toBe(0);
-  });
-
-  it("apply static increases and reductions by player and card type, in legality and payment", () => {
-    const { state, ids } = board({
-      player: { back: [c.eventTax.id, c.opponentTax.id], hand: [v.event1.id, v.vanilla3.id], dreamsigns: [CONTINUOUS_DREAMSIGN.discount.id], energy: 2, deck },
-      enemy: { hand: [v.vanilla1.id], deck },
-    });
-    expect(costOf(state, ids.player.hand[0])).toBe(2);
-    expect(costOf(state, ids.player.hand[1])).toBe(2);
-    expect(costOf(state, ids.enemy.hand[0], "enemy")).toBe(2);
-    const played = play(state, "player", ids.player.hand[1]).state;
-    expect(played.sides.player.currentEnergy).toBe(0);
-  });
-
-  it("apply to the whole energy cost of a card with an X part", () => {
-    const { state, ids } = board({ player: { back: [c.characterDiscount.id], hand: [twoPlusX.id], energy: 3, deck }, enemy: { deck } });
-    float(state, { kind: "cost", player: "player", filter: { cardType: "event" }, amount: -3, next: false }, 1);
-    // 2● + X − 3●: X may go up to 4 with 3● available.
-    const result = play(state, "player", ids.player.hand[0], [4]);
-    expect(result.state.sides.player).toMatchObject({ currentEnergy: 0, score: 4 });
-  });
-
-  it("apply to the energy of a paid optional cost, which a reduction can make free", () => {
-    for (const [energyAvailable, left] of [[0, 0], [1, 1]] as const) {
-      const { state, ids } = board({ player: { hand: [kicker.id], energy: energyAvailable, deck }, enemy: { deck } });
-      float(state, { kind: "cost", player: "player", filter: {}, amount: -2, next: false }, 1);
-      // 0● plus the optional 2●, less 2●: the option is offered and costs nothing.
-      const source = new ScriptedSource([true]);
-      const result = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, source);
-      source.assertExhausted();
-      expect(result.state.sides.player).toMatchObject({ currentEnergy: left, score: 2 });
-    }
-  });
-
-  it("use up a 'next card' modifier on the next matching play only", () => {
-    const { state, ids } = board({ player: { hand: [c.nextEventDiscount.id, v.vanilla1.id, v.event1.id, v.event1.id], energy: 2, deck }, enemy: { deck } });
-    let next = play(state, "player", ids.player.hand[0]).state;
-    expect(next.floating).toHaveLength(1);
-    // A character does not match the filter and leaves it in place; legality and views never use it up.
-    next = play(next, "player", ids.player.hand[1]).state;
-    engine.legalActions(next, "player");
-    engine.view(next, "player");
-    expect(next.floating).toHaveLength(1);
-    expect(next.sides.player.currentEnergy).toBe(1);
-    const discounted = play(next, "player", ids.player.hand[2]);
-    expect(discounted.state.floating).toEqual([]);
-    expect(discounted.events).toContainEqual({ kind: "effectEnded", effect: next.floating[0].id });
-    expect(discounted.state.sides.player.currentEnergy).toBe(1);
-    expect(costOf(discounted.state, ids.player.hand[3])).toBe(1);
-  });
-
-  it("leave a 'next card' modifier in place when a play stops before its commit point", () => {
-    const { state, ids } = board({ player: { hand: [DSL.pointsTimesX.id], energy: 3, deck }, enemy: { deck } });
-    float(state, { kind: "cost", player: "player", filter: {}, amount: -1, next: true }, 1);
-    const before = serializeState(state);
-    // The X prompt has no answer: the step throws and its private copy is dropped.
-    expect(() => runStep(state, { kind: "play", from: "hand", card: ids.player.hand[0] }, NO_PROMPTS, catalog)).toThrow();
-    expect(serializeState(state)).toBe(before);
-  });
-
-  it("survive a reload while a discounted play waits at its X prompt, and use the modifier up once", () => {
-    const { state, ids } = board({ player: { hand: [DSL.pointsTimesX.id], energy: 2, deck }, enemy: { deck } });
-    const discount = float(state, { kind: "cost", player: "player", filter: {}, amount: -1, next: true }, 1);
-    const card = ids.player.hand[0];
-    const fold = createFoldAdapter(engine);
-    const started: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
-    const suspended = fold.reduce(started, { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } });
-    if (suspended.kind !== "applied") throw new Error("bounced");
-    const reloaded = JSON.parse(JSON.stringify(suspended.slice)) as BattleSlice;
-    const fresh = createFoldAdapter(engine);
-    const pending = fresh.pending(reloaded);
-    // X goes up to 3: 2● available plus the 1● discount.
-    expect(pending?.prompt).toMatchObject({ kind: "chooseNumber", min: 1, max: 3 });
-    expect(reloaded.committed.floating.map((effect) => effect.id)).toEqual([discount]);
-    const answered = fresh.reduce(reloaded, { kind: "answer", side: "player", promptId: pending!.prompt.id, value: 3 });
-    if (answered.kind !== "applied" || answered.error !== null) throw new Error("answer failed");
-    const inline = play(state, "player", card, [3]).state;
-    expect(stateHash(answered.slice.committed)).toBe(stateHash(inline));
-    expect(inline.floating).toEqual([]);
-    expect(inline.sides.player).toMatchObject({ currentEnergy: 0, score: 3 });
-  });
-
-  it("tax the opponent's next card", () => {
-    const { state, ids } = board({ player: { hand: [c.nextCardTax.id], deck }, enemy: { hand: [v.vanilla1.id], energy: 1, deck } });
-    const taxed = play(state, "player", ids.player.hand[0]).state;
-    expect(costOf(taxed, ids.enemy.hand[0], "enemy")).toBe(2);
-    expect(costOf(taxed, ids.enemy.hand[0], "player")).toBe(1);
   });
 });
 

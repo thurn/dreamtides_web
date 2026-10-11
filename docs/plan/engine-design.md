@@ -1987,7 +1987,8 @@ Greedy unless `?ai=random|greedy` selects one.
   `synthetic-effects.ts`). These are test fixtures, not catalog content.
   `boardState` (`testing/board.ts`) builds a committed state with cards
   placed directly.
-- **Prompt properties** (`fold/fold.test.ts`): the core of Phase 3.3.
+- **Prompt properties** (`fold/fold.test.ts`, with empty candidate sets in
+  `fold/fold-prompts.test.ts`): the core of Phase 3.3.
   - **Equivalence.** For seeded synthetic games, run the game with
     `InlineSource` while recording its answers. Then replay the same answers
     through the fold, suspending and resuming at **every** prompt. Final
