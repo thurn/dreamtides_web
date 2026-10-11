@@ -122,6 +122,17 @@ export function banishFromVoidCost(count = 1, filter: CardFilter = {}): PaymentC
   return { cost: "banishFromVoid", count, filter };
 }
 
+/**
+ * "Banish X cards from your void" as a cost: the payer chooses how many
+ * matching void cards to banish, and that count is X. X is at least `min`,
+ * 1 unless X=0 does something meaningful (rules § Costs, Requirements, and X).
+ */
+export function banishXCost(options: { readonly min?: number; readonly filter?: CardFilter } = {}): PaymentCost {
+  const min = options.min ?? 1;
+  if (!Number.isSafeInteger(min) || min < 0) throw new Error("banishXCost min must be a non-negative safe integer");
+  return { cost: "banishFromVoid", count: "x", filter: options.filter ?? {}, min };
+}
+
 /** "Reveal N cards from your hand" (matching the filter) as a cost. */
 export function revealCost(count = 1, filter: CardFilter = {}): PaymentCost {
   return { cost: "reveal", count, filter };

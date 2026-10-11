@@ -8,6 +8,7 @@ import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import type { CardFilter, CharacterSelector } from "../dsl/types";
+import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
 import type { BattleState, DeckEntry } from "../state/types";
@@ -70,7 +71,8 @@ function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCa
  * active in its Day with the card in hand and ample energy, and every
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
- * `side`. Throws if the card is still unplayable.
+ * `side`. A void banish additional cost gets its count of matching cards, or
+ * its least X, in `side`'s void. Throws if the card is still unplayable.
  */
 export function labBoard(
   engine: Engine,
@@ -98,6 +100,11 @@ export function labBoard(
         back[targetSide].push(characterFor(engine, spec.selector, pool));
       }
     }
+  }
+  for (const cost of additionalCosts(definition, variantOf(entry))) {
+    if (cost.cost !== "banishFromVoid") continue;
+    const count = cost.count === "x" ? (cost.min ?? 0) : cost.count;
+    for (let index = 0; index < count; index++) voids[side].push(voidCardFor(engine, cost.filter, pool));
   }
   const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
   const sides: Record<Side, SideSetup> = {

@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.68",
+  "phase": 5,
+  "baseOid": "a22ffb25411900c41a67f8a9aced6d98acd6badf",
+  "implementMin": 60,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "review": 41,
+    "knip": 2,
+    "focused": 2,
+    "fuzz": 56,
+    "sweep": 129,
+    "judged": 77
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 5.93,
+  "testDelta": {
+    "files": 1,
+    "lines": 295,
+    "jsdomFiles": 0,
+    "cases": 14
+  },
+  "friction": [
+    {
+      "tag": "qa-scene-unreachable-state",
+      "minutes": 10,
+      "note": "The card-lab solver staged void cards only for void targets, not for a void banish additional cost, so the first sweep failed every variant as unplayable on an empty void; LAB_OVERRIDES replaces a whole side and cannot serve both as=player and as=enemy, so the solver now stages a void banish cost's count or least X."
+    }
+  ]
+}

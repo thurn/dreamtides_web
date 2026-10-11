@@ -19,9 +19,10 @@
  * after the prompts before it. Every offered answer has a searched witness
  * or a universal final-cost proof. A witness's next answer and universally
  * proven final selections spend no further runs, even with no budget left.
- * A final top-level noncapturing discard can carry that proof only when its
- * resources are payable and the caller proceeds directly to commitPoint();
- * earlier, nested, captured and manually continued costs use search.
+ * A final top-level noncapturing discard or void banish can carry that proof
+ * only when its resources are payable and the caller proceeds directly to
+ * commitPoint(); earlier, nested, captured and manually continued costs use
+ * search.
  *
  * **Replay is free and identical.** What the guard decides at a prompt, and
  * the budget it leaves, is a function of the committed state, the step, and

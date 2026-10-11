@@ -317,7 +317,7 @@ export interface CardFilter {
   readonly costAtLeast?: number;
 }
 
-/** One payment, including a discard count determined by X, with no choice between costs. */
+/** One payment, including a discard or banish count determined by X, with no choice between costs. */
 export type PaymentCost =
   | EnergyCost
   /** ☾: exhausts the source, a ready back-rank character or the avatar. */
@@ -330,8 +330,12 @@ export type PaymentCost =
   | { readonly cost: "discard"; readonly count: 1; readonly filter: CardFilter; readonly captureCost: true }
   /** N⧗: spend counters stored on the source (rules § Counters). */
   | { readonly cost: "counters"; readonly amount: number }
-  /** Banish cards from your void that match the filter. */
-  | { readonly cost: "banishFromVoid"; readonly count: number; readonly filter: CardFilter }
+  /**
+   * Banish cards from your void that match the filter. A variable count
+   * captures their count as X, which is at least `min` (absent, 0); `min`
+   * belongs to a variable count only.
+   */
+  | { readonly cost: "banishFromVoid"; readonly count: number | "x"; readonly filter: CardFilter; readonly min?: number }
   /** Banish other cards from your hand, as Offering pays. */
   | { readonly cost: "banishFromHand"; readonly count: number }
   /** Reveal cards from your hand that match the filter; they stay in hand. */

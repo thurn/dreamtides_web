@@ -25,8 +25,9 @@ import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { unannouncedChanges } from "./announced-changes";
 import { moveInstance } from "../rules/zones";
-import { event, fromVoid } from "../dsl/builders";
+import { additionalCost, banishFromVoidCost, banishXCost, event, fromVoid } from "../dsl/builders";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
+import { gainPoints } from "../effects/primitives/gain-points";
 import { cardMatchesFilter } from "../continuous/characteristics";
 import type { CardFilter } from "../dsl/types";
 
@@ -95,6 +96,22 @@ describe("card-lab setup solver", () => {
     };
     const labEngine = createEngine(testCatalog([card]));
     expect(() => labBoard(labEngine, card.id, [])).toThrow(/no card for filter/);
+  });
+
+  it("fills the playing side's void for a void banish cost: its fixed count, or its least X", () => {
+    const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(916), subtype: "Mage" };
+    const banishing = (index: number, cost: ReturnType<typeof banishXCost>): EngineCardDefinition => ({
+      ...SYNTHETIC.event0, id: syntheticId(index), status: "authored", abilities: () => [additionalCost(cost), event(gainPoints(1))],
+    });
+    const fixed = banishing(917, banishFromVoidCost(2, { subtype: "Mage" }));
+    const variable = banishing(918, banishXCost({ min: 2, filter: { subtype: "Mage" } }));
+    const labEngine = createEngine(testCatalog([fixed, variable, mage]));
+    for (const card of [fixed, variable]) for (const side of ["player", "enemy"] as const) {
+      const { state } = labBoard(labEngine, card.id, [mage], side);
+      expect(state.sides[side].void).toHaveLength(2);
+      for (const id of state.sides[side].void) expect(cardMatchesFilter(state, labEngine.catalog, id, { subtype: "Mage" })).toBe(true);
+      expect(state.sides[side === "player" ? "enemy" : "player"].void).toEqual([]);
+    }
   });
 
   it("solves a playable board for every synthetic DSL card", () => {

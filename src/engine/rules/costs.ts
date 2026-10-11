@@ -38,7 +38,7 @@ export interface PlannedCost {
 
 /** How a list of costs will be paid, settled by play-time prompts before the commit point. */
 export interface CostPlan {
-  /** Shared X chosen for energy or captured from a discarded count, or a discarded or abandoned card's cost. */
+  /** Shared X chosen for energy or captured from a discarded or banished count, or a discarded or abandoned card's cost. */
   readonly x: number | null;
   /**
    * The whole energy cost — the fixed energy (top-level, and each chosen
@@ -144,6 +144,11 @@ function choosesCards(cost: PaymentCost): cost is ChoosingCost {
   return "count" in cost;
 }
 
+/** The fewest cards a variable count accepts: a void banish's least X, else 0. */
+function leastCount(cost: ChoosingCost): number {
+  return cost.cost === "banishFromVoid" ? (cost.min ?? 0) : 0;
+}
+
 /** The cards that could pay a card-choosing cost, before excluding cards already used. */
 function cardCandidates(
   state: BattleState,
@@ -197,7 +202,8 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
  * total that `modifier` changes, so an alternative or an optional cost is
  * affordable when the modified total is. `endsPlayTime` is reserved for a
  * caller whose next operation is the commit point: it allows a final discard
- * with already-payable resources to prove all its card selections at once.
+ * or void banish with already-payable resources to prove all its card
+ * selections at once.
  * `selectorX` binds character-cost selectors during a card's play preparation
  * to its chosen energy X; activation and manual callers use the source card's X.
  */
@@ -239,8 +245,10 @@ export function planCosts(
       countersLeft - sum(list.map((cost) => (cost.cost === "counters" ? cost.amount : 0))),
       exhaustCount + list.filter((cost) => cost.cost === "exhaustSelf").length,
     )) return false;
-    const demands = list.filter(choosesCards).map((cost) => ({
-      count: cost.count === "x" ? (capturedX ?? 0) : cost.count,
+    const choosing = list.filter(choosesCards);
+    if (choosing.some((cost) => cost.count === "x" && capturedX !== null && capturedX < leastCount(cost))) return false;
+    const demands = choosing.map((cost) => ({
+      count: cost.count === "x" ? (capturedX ?? leastCount(cost)) : cost.count,
       pool: cardCandidates(state, catalog, side, source, cost, options.selectorX).filter((id) => !used.includes(id)),
     }));
     return cardsAssignable(demands);
@@ -263,24 +271,28 @@ export function planCosts(
     const candidates = cardCandidates(state, catalog, side, source, cost, options.selectorX);
     const variable = cost.count === "x";
     const count = variable ? capturedX : cost.count;
+    // An X bound earlier below a variable count's least X leaves no count to choose.
+    if (variable && capturedX !== null && capturedX < leastCount(cost)) throw new Infeasible("X is below the count's least value");
     const remaining = candidates.filter((id) => !used.includes(id));
     // Only the official play/activate callers certify that this plan is
-    // immediately followed by the commit point. This last discard cannot
-    // affect energy, remaining costs, or a captured-cost equality constraint.
+    // immediately followed by the commit point. This last discard or void
+    // banish cannot affect energy, remaining costs, or a captured-cost
+    // equality constraint: a variable count bound earlier is fixed here.
     const allAnswersPayable = options.endsPlayTime === true && !nested && isLast &&
-      cost.cost === "discard" && cost.captureCost !== true && resourcesPayable();
+      (cost.cost === "discard" || cost.cost === "banishFromVoid") && !("captureCost" in cost && cost.captureCost === true) && resourcesPayable();
     const chosen = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
       side,
       purpose: purpose(CARD_ROLE[cost.cost]),
       candidates: remaining,
-      min: count ?? 0,
-      max: count ?? remaining.length,
+      min: count ?? leastCount(cost),
+      // Too few candidates for the least X is an empty prompt, a dead end like a short fixed count.
+      max: count ?? Math.max(remaining.length, leastCount(cost)),
     }, allAnswersPayable ? { allAnswersPayable: true } : undefined);
     // A captured card cost (a discarded or abandoned card's) is read now,
     // before payment, so it holds even for a figment that then ceases to exist.
     const captures = "captureCost" in cost && cost.captureCost === true;
-    if (captures || (cost.cost === "discard" && variable)) {
+    if (captures || variable) {
       if (captures && chosen.length !== 1) throw new Error("A captured cost value requires exactly one card");
       const value = captures ? copiableCostOf(state, catalog, chosen[0]) : chosen.length;
       if (capturedX !== null && capturedX !== value) throw new Infeasible("Card payment disagrees with X");

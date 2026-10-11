@@ -1,3 +1,5 @@
+import { additionalCost, banishXCost, event, x } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,9 @@ export default card({
   artOwned: false,
   cardNumber: 440,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    additionalCost(banishXCost()),
+    event(p.putFromTop(x(), [{ to: "hand", count: 2 }, { to: "bottom", count: "rest" }])),
+  ],
+  verifiedText: "2dmrayvb9lf",
 });

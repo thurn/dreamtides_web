@@ -675,6 +675,17 @@ number of cards. This X spends no energy beyond the separately printed energy co
 When one ability also pays X●, every reference to X uses that same value:
 the discard count or captured card cost must agree with the chosen energy X.
 
+**Banish X cards from your void:** X is the number of cards the player chooses
+from their own void to pay this additional cost, as in "To play this event,
+banish X cards from your void. Look at the top X cards of your deck." X is at
+least 1 under the contextual X rule, since looking at no cards does nothing: a
+player whose void holds no card that could pay cannot play the card. The card
+being played, even when it is played from the void by Reclaim, cannot pay its
+own cost. Like a discarded X, this X spends no energy and agrees with any X●
+the same ability pays. A card banished this way is in the Banished zone, so it
+can no longer be played from the void by Reclaim. The value travels with the
+stack item, so the effect reads it even after the banished cards are gone.
+
 **A character's X:** A character played with an X cost keeps the value of X
 paid for it while it is in play, and its abilities that say X read that value:
 "When you materialize a character with cost X●" matches characters whose cost

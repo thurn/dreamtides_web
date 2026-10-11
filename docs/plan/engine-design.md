@@ -584,11 +584,12 @@ A step with a commit point (`hasCommitPoint`: `play`, `activate`) runs with a
 guard that offers each precommit answer with either a searched continuation
 or a universal final-cost proof:
 
-- A final standalone discard cost may prove every field-legal selection at
-  once, when the official play or activation caller proceeds directly to
-  `commitPoint()`. Its shared resource predicate checks energy, counters and
-  exhaustion reservations. The discard cannot capture a card cost, and its
-  selection changes neither resources nor any later cost. Earlier, nested,
+- A final standalone discard or void-banish cost may prove every
+  field-legal selection at once, when the official play or activation
+  caller proceeds directly to `commitPoint()`. Its shared resource predicate
+  checks energy, counters and exhaustion reservations. The cost cannot
+  capture a card cost, and its selection changes neither resources nor any
+  later cost. Earlier, nested,
   manually continued and captured-cost choices use searched continuations.
   A precommit prompt following such a final proof is a rules-code error; the
   fold reports the failed attempt and retains the committed state.
@@ -1093,7 +1094,8 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
   X count, or one card whose copiable cost is captured as X;
 - abandon, with a fixed count, or one character whose copiable cost is
   captured as X (`abandonCostCapture`);
-- banish from void;
+- banish matching void cards (`banishFromVoidCost`), with a fixed count, or
+  an X count at least the cost's least X (`banishXCost`, 1 by default);
 - reveal from hand;
 - counters;
 - a choice between costs ("A or B", `choiceCost`);
@@ -1117,6 +1119,10 @@ on a shared binding; a conflicting selection has no feasible continuation.
 `plus` adds a fixed offset to a value such as a captured cost. An abandon
 cost's single-card capture reads the chosen character the same way before
 payment, so a figment that then ceases to exist captures 0● (C13).
+A variable void banish binds X to the chosen count the same way, but its
+least X defaults to 1 (the energy-X default): a void with fewer matching cards
+raises an empty prompt, so the play is illegal. An X bound earlier below that
+least value is a dead end.
 
 **Energy-X legality** comes from the definition's range, which defaults to
 `min: 1`. Widen it to 0 only when X=0 does something meaningful.
