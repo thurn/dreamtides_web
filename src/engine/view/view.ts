@@ -21,7 +21,7 @@ import type {
   TurnState,
 } from "../state/types";
 import { instanceCard, type EngineCatalog } from "../catalog";
-import { characteristics } from "../continuous/characteristics";
+import { characteristics, copiableCostOf } from "../continuous/characteristics";
 import { adjustedEnergy, costModifier } from "../continuous/costs";
 import type { Layers } from "../continuous/layers";
 import { fixedEnergy } from "../dsl/energy";
@@ -163,9 +163,14 @@ export interface SideView {
   readonly dreamsigns: readonly DreamsignView[];
 }
 
-/** This turn's counters, as far as the viewer can see the cards played. */
+/** Public facts of a play, without linking an unidentified current card to it. */
+export interface PlayedCardView extends Omit<PlayedCard, "instance"> {
+  readonly instance: InstanceId | null;
+}
+
+/** This turn's public plays and draw counts. */
 export interface TurnLogView {
-  readonly played: Readonly<Record<Side, readonly PlayedCard[]>>;
+  readonly played: Readonly<Record<Side, readonly PlayedCardView[]>>;
   readonly drawn: Readonly<Record<Side, number>>;
 }
 
@@ -266,6 +271,13 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     }
   }
   const visible = (id: InstanceId): boolean => id in instances;
+  const playedView = (card: PlayedCard): PlayedCardView => {
+    const known = visible(card.instance);
+    // Legacy records can recover a cost only from a card this viewer sees.
+    // Private printing is not evidence of a publicly known historical cost.
+    const cost = card.cost ?? (known ? copiableCostOf(state, catalog, card.instance) : undefined);
+    return { ...card, instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }) };
+  };
   const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);
   const visibleChoices = (choices: EffectChoices): EffectChoices => ({
     modes: [...choices.modes],
@@ -326,8 +338,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     })),
     turnLog: {
       played: {
-        player: state.turnLog.played.player.filter((card) => visible(card.instance)).map((card) => ({ ...card })),
-        enemy: state.turnLog.played.enemy.filter((card) => visible(card.instance)).map((card) => ({ ...card })),
+        player: state.turnLog.played.player.map(playedView),
+        enemy: state.turnLog.played.enemy.map(playedView),
       },
       drawn: { ...state.turnLog.drawn },
     },

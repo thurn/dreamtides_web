@@ -75,11 +75,11 @@ export const play: StepDefinition<PlayStep> = {
     } else {
       // Offering plays the card for 0●: if its cost includes X, X is 0.
       x = route === "offering" ? (xCost(definition.costs) === null ? null : 0) : chooseX(ctx, side, costs, purpose(0, "chooseX"), modifier);
-      choices = choosePlayTime(ctx, eventAbilities(definition, instance.variant), side, step.card, purpose);
+      choices = choosePlayTime(ctx, eventAbilities(definition, instance.variant), side, step.card, purpose, x ?? 0);
     }
     const targets = choices.flatMap((choice) => choice.targets.flat());
     const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
-    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier, { endsPlayTime: true });
+    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0 });
     ctx.commitPoint();
     payCosts(ctx, side, step.card, plan);
     endFloating(ctx, (effect) => modifier.consumes.includes(effect.id));

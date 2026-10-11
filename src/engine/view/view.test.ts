@@ -491,3 +491,20 @@ describe("event redaction invariant", () => {
     expect(eventRedactionViolations([drawn, queued], state, state)).toEqual([]);
   });
 });
+
+it("keeps public play facts without exposing hidden current printing or identity, including legacy unknown costs", () => {
+  for (const viewer of SIDES) for (const storedCost of [undefined, 2]) {
+    const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: { deck: [v.vanilla2.id] }, enemy: { deck: [v.vanilla1.id] } });
+    const historical = ids.player.deck[0];
+    state.turnLog.played.player.push({ instance: historical, cardType: "character", subtype: testCardSubtype("Mage"), allTypes: true, ...(storedCost === undefined ? {} : { cost: storedCost }) });
+    const seen = view(state, viewer, catalog);
+    expect(seen.turnLog.played.player).toEqual([{ instance: null, cardType: "character", subtype: testCardSubtype("Mage"), allTypes: true, ...(storedCost === undefined ? {} : { cost: 2 }) }]);
+    expect(strings(seen).has(historical)).toBe(false);
+    const changed = cloneState(state);
+    changed.instances[historical] = { ...changed.instances[historical], printing: { kind: "card", cardId: v.vanilla5.id } };
+    expect(view(changed, viewer, catalog)).toEqual(seen);
+    // Once this viewer identifies the current card, a legacy record can recover its immutable cost.
+    changed.knownTo[viewer].push(historical);
+    expect(view(changed, viewer, catalog).turnLog.played.player[0]).toMatchObject({ instance: historical, cost: storedCost ?? 5 });
+  }
+});

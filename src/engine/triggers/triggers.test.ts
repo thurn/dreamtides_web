@@ -1,3 +1,4 @@
+import { testCardSubtype } from "../../types/test-identities";
 /**
  * Triggers (D14; rules § Ability Types → Triggered abilities): the queue and
  * its fixed order, named triggers, "when" patterns, functional zones,
@@ -74,6 +75,11 @@ const watching = () => [
   triggered(whenOpponentPlays(), p.gainEnergy(1), { zone: "any" }),
 ];
 const L = {
+  boundedPlayWatcher: local(27, "character", () => [
+    triggered(whenYouPlay({ costAtLeast: 2, costAtMost: 2 }, 2), p.gainPoints(1)),
+    triggered(whenYouPlay({ costAtMost: 0 }, 2), p.gainPoints(1)),
+    triggered(whenYouPlay({ cardType: "character" }, 2), p.gainEnergy(1)),
+  ]),
   /** "When you play a card, gain 1●. When the opponent plays a card, gain 1●." — in every zone. */
   watcher: local(1, "character", watching),
   dissolvedDraw: local(2, "character", () => [triggered(onDissolved(), p.draw(1))]),
@@ -1636,5 +1642,19 @@ describe("when a character is dissolved", () => {
     expect(() => cast(state, "player", ids.player.hand[0], [[x!], [y!]])).toThrow();
     expect(stateHash(state)).toBe(before);
     expect(state.triggerQueue).toEqual([]);
+  });
+});
+
+describe("historical played-card compatibility", () => {
+  it("plays from a reloaded legacy record whose created instance has ceased, with unknown cost distinct from zero", () => {
+    for (const [card, cost] of [[v.vanilla0.id, 0], [v.vanilla2.id, 2]] as const) {
+      const { state, ids } = board({ player: { back: [L.boundedPlayWatcher.id], hand: [card], energy: 4, deck }, enemy: { deck } });
+      state.turnLog.played.player.push({ instance: "i999", cardType: "character", subtype: testCardSubtype("Warrior"), allTypes: false });
+      const saved = deserializeState(JSON.stringify(state));
+      const after = play(saved, "player", ids.player.hand[0]).state;
+      expect(after.sides.player.score).toBe(0);
+      expect(after.sides.player.currentEnergy).toBe(5 - cost);
+      expect(after.turnLog.played.player).toHaveLength(2);
+    }
   });
 });

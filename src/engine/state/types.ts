@@ -387,7 +387,8 @@ export interface PlayedCard {
   /**
    * Its copiable cost as it was played, which cost-bounded filters compare. A
    * record in a saved state that lacks it is matched by its instance's
-   * copiable cost instead.
+   * copiable cost instead when that instance still exists. An unrecoverable
+   * historical cost is unknown and matches no cost-bounded filter.
    */
   readonly cost?: number;
 }

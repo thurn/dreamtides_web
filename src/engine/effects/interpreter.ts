@@ -183,6 +183,7 @@ export function targetCandidates(
   spec: PlayTimeTarget,
   controller: Side,
   source: AbilitySource,
+  selectorX?: number,
 ): InstanceId[] {
   switch (spec.kind) {
     case "stackTarget":
@@ -190,7 +191,7 @@ export function targetCandidates(
     case "inZone":
       return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source));
     case "target":
-      return targetable(state, catalog, matchingCharacters(state, catalog, spec.selector, controller, source));
+      return targetable(state, catalog, matchingCharacters(state, catalog, spec.selector, controller, source, selectorX));
   }
 }
 
@@ -210,16 +211,17 @@ function modeLegal(
   node: EffectNode,
   controller: Side,
   source: AbilitySource,
+  selectorX?: number,
 ): boolean {
   const definition = primitiveDefinition(node.op);
   const targetsAvailable = (definition.targets?.(node) ?? []).every(
-    (spec) => targetCandidates(state, catalog, spec, controller, source).length >= targetBounds(spec).min,
+    (spec) => targetCandidates(state, catalog, spec, controller, source, selectorX).length >= targetBounds(spec).min,
   );
   if (!targetsAvailable) return false;
   const modes = definition.modes?.(node);
   return modes === undefined
-    ? (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source))
-    : modes.some((mode) => modeLegal(state, catalog, mode, controller, source));
+    ? (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX))
+    : modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX));
 }
 
 /**
@@ -235,6 +237,7 @@ export function chooseModes(
   controller: Side,
   source: AbilitySource,
   purpose: PromptPurpose,
+  selectorX?: number,
 ): number[] {
   const modes: number[] = [];
   walkPlayTime(
@@ -246,7 +249,7 @@ export function chooseModes(
         purpose,
         options: options.map((option, index) => ({
           mode: index,
-          legal: modeLegal(ctx.state, ctx.catalog, option, controller, source),
+          legal: modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX),
         })),
       });
       modes.push(mode);
@@ -268,13 +271,14 @@ export function chooseTargets(
   controller: Side,
   source: AbilitySource,
   purpose: PromptPurpose,
+  selectorX?: number,
 ): InstanceId[][] {
   return specs.map((spec) => {
     const chosen = ctx.choose<ChooseTargetsPrompt>({
       kind: "chooseTargets",
       side: controller,
       purpose,
-      candidates: targetCandidates(ctx.state, ctx.catalog, spec, controller, source),
+      candidates: targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX),
       ...targetBounds(spec),
     });
     return [...chosen];
@@ -290,7 +294,9 @@ export interface PlayTimeAbility {
 /**
  * The play-time choices of `abilities` as `source` is played or activated:
  * every ability's modes, in order, then every ability's targets, in order.
- * Returns one entry per ability.
+ * Returns one entry per ability. `selectorX` supplies the chosen X while a
+ * card is being played before its stack item exists; other callers read the
+ * source card's stack or in-play X.
  */
 export function choosePlayTime(
   ctx: StepContext,
@@ -298,12 +304,13 @@ export function choosePlayTime(
   controller: Side,
   source: AbilitySource,
   purpose: (ability: number, role: PromptRole) => PromptPurpose,
+  selectorX?: number,
 ): EffectChoices[] {
-  const modes = abilities.map((ability) => chooseModes(ctx, ability.effect, controller, source, purpose(ability.ability, "chooseOne")));
+  const modes = abilities.map((ability) => chooseModes(ctx, ability.effect, controller, source, purpose(ability.ability, "chooseOne"), selectorX));
   return abilities.map((ability, index) => {
     const chosen = modes[index] ?? [];
     const specs = collectTargets(ability.effect, chosenModes(ability.effect, chosen));
-    return { modes: chosen, targets: chooseTargets(ctx, specs, controller, source, purpose(ability.ability, "target")) };
+    return { modes: chosen, targets: chooseTargets(ctx, specs, controller, source, purpose(ability.ability, "target"), selectorX) };
   });
 }
 

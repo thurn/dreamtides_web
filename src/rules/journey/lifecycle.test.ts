@@ -862,6 +862,7 @@ describe("LOAD_STATE journey battles", () => {
     for (const [path, value] of [
       [[...state_, "turnLog", "played", "player"], [{ ...record, cost: 2 }]],
       [[...state_, "turnLog", "played", "player"], [record]],
+      [[...state_, "turnLog", "played", "player"], [{ ...record, instance: "i999" }]],
       [[...state_, "floating"], [costChange]],
     ] as const) {
       expect(load(state, withField(battle, path, value)).outcome, path.join(".")).toBe("applied");

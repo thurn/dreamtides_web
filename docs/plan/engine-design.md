@@ -301,6 +301,13 @@ resolve(ctx, node, env) {
 }
 ```
 
+Card play preparation passes its chosen energy X directly through modal and
+target evaluation and character-cost selectors before the source reaches the
+stack. The binding is local to that play: recorded answers reconstruct it on
+replay, and cancellation discards the work without writing X to the source
+instance. Activated and manual-cost selectors read the source card's stack
+or in-play X.
+
 The atomic primitives of rules code are plain functions over the context in
 `rules/` (`zones.ts`: `moveInstance`, `dissolve`, `banish`, `materialize`, …;
 `resources.ts`: `drawCard`, `discardCard`, `setEnergy`, …). They never call
@@ -1494,6 +1501,18 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   could not (`QueuedTrigger.subjectHiddenFrom`), so a card drawn into a
   hidden hand and then discarded is never named as the draw trigger's
   subject (rules § Ability Types → Triggered abilities).
+- **Historical plays** retain public type, subtype, all-types and copiable
+  cost facts in turn order even when their card has ceased or become hidden.
+  A record links to its instance only while this viewer identifies it.
+  Otherwise its instance field is null. Determinization reserves fresh identities for
+  anonymous historical records before dealing hidden cards, without creating
+  instances for those records. Stored costs keep authoritative and simulated
+  cost-bounded play counts equal. A legacy record missing its cost recovers
+  it only from a visible instance in a view; a hidden or ceased legacy cost
+  is unknown and matches no cost bound in simulation. Authoritative rules
+  can recover a legacy cost from a live instance, so a hidden legacy record
+  may have less precise simulated counts. Public type/subtype facts remain
+  usable for unbounded filters in both paths.
 - **Knowledge** is `state.knownTo[side]`: the cards in decks and hands that
   `side` can identify beyond what their zone shows it (public zones, and its
   own hand). `view/knowledge.ts` updates it:

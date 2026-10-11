@@ -83,9 +83,11 @@ export function matchesEveryCard(filter: CardFilter): boolean {
  * type, subtype, "has all character types", and copiable cost it was played
  * with (RD-hv-7x4l.34-1), so a created card that has ceased to exist still
  * matches. A saved record without a cost reads its instance's copiable cost,
- * which never changes, and only for a filter with a cost bound.
+ * which never changes, and only for a filter with a cost bound. When that
+ * instance has ceased, an unknown historical cost matches no cost bound.
  */
 export function playedMatchesFilter(state: BattleState, catalog: EngineCatalog, played: PlayedCard, filter: CardFilter): boolean {
+  if (hasCostBound(filter) && played.cost === undefined && state.instances[played.instance] === undefined) return false;
   const cost = played.cost ?? (hasCostBound(filter) ? copiableCostOf(state, catalog, played.instance) : 0);
   return matchesFilter({ cardType: played.cardType, subtype: played.subtype, allTypes: played.allTypes, cost }, filter);
 }

@@ -35,9 +35,9 @@ function sourceX(state: BattleState, source: AbilitySource): number {
   return item?.x ?? 0;
 }
 
-/** The number a selector bound stands for, for an effect of `source`. */
-function boundOf(state: BattleState, bound: BoundValue, source: AbilitySource): number {
-  return typeof bound === "number" ? bound : sourceX(state, source);
+/** A selector bound: an explicit play-preparation X, otherwise the source card's X. */
+function boundOf(state: BattleState, bound: BoundValue, source: AbilitySource, selectorX?: number): number {
+  return typeof bound === "number" ? bound : (selectorX ?? sourceX(state, source));
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */
@@ -48,8 +48,9 @@ export function matchesCharacter(
   id: InstanceId,
   controller: Side,
   source: AbilitySource,
+  selectorX?: number,
 ): boolean {
-  return matchesCharacterWith(state, catalog, effective(state, catalog), selector, id, controller, source);
+  return matchesCharacterWith(state, catalog, effective(state, catalog), selector, id, controller, source, selectorX);
 }
 
 /** `matchesCharacter`, reading characteristics through `read`. */
@@ -61,6 +62,7 @@ export function matchesCharacterWith(
   id: InstanceId,
   controller: Side,
   source: AbilitySource,
+  selectorX?: number,
 ): boolean {
   const instance = state.instances[id];
   if (instance?.zone !== "play") return false;
@@ -77,8 +79,8 @@ export function matchesCharacterWith(
   }
   if (selector.costAtMost !== undefined || selector.costAtLeast !== undefined) {
     const cost = copiableCostOf(state, catalog, id);
-    if (selector.costAtMost !== undefined && cost > boundOf(state, selector.costAtMost, source)) return false;
-    if (selector.costAtLeast !== undefined && cost < boundOf(state, selector.costAtLeast, source)) return false;
+    if (selector.costAtMost !== undefined && cost > boundOf(state, selector.costAtMost, source, selectorX)) return false;
+    if (selector.costAtLeast !== undefined && cost < boundOf(state, selector.costAtLeast, source, selectorX)) return false;
   }
   // A figment copy is a figment (rules § Figments → Figment Copies).
   if (selector.figment !== undefined && (instance.printing.kind !== "card") !== selector.figment) return false;
@@ -123,8 +125,9 @@ export function matchingCharacters(
   selector: CharacterSelector,
   controller: Side,
   source: AbilitySource,
+  selectorX?: number,
 ): InstanceId[] {
-  return matchingCharactersWith(state, catalog, effective(state, catalog), selector, controller, source);
+  return matchingCharactersWith(state, catalog, effective(state, catalog), selector, controller, source, selectorX);
 }
 
 /** `matchingCharacters`, reading characteristics through `read`. */
@@ -135,11 +138,12 @@ export function matchingCharactersWith(
   selector: CharacterSelector,
   controller: Side,
   source: AbilitySource,
+  selectorX?: number,
 ): InstanceId[] {
   const order = [controller, ...SIDES.filter((side) => side !== controller)];
   return order.flatMap((side) =>
     charactersInPlay(state, side).filter((id) =>
-      matchesCharacterWith(state, catalog, read, selector, id, controller, source),
+      matchesCharacterWith(state, catalog, read, selector, id, controller, source, selectorX),
     ),
   );
 }

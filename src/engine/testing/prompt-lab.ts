@@ -19,7 +19,7 @@
  */
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { enemyCharacter, energy, event, upTo } from "../dsl/builders";
+import { characterYouControl, enemyCharacter, energy, energyX, event, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -67,6 +67,12 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** Choose X, then a character with exactly that copiable cost. */
+  xCostTarget: {
+    id: syntheticId(0x308), cardType: "event", costs: [energyX(0)], spark: null,
+    subtype: "", speed: "standard", status: "authored",
+    abilities: () => [event(p.gainSpark(characterTarget(characterYouControl({ costAtLeast: x(), costAtMost: x() })), 1))],
+  },
   /** "Draw 2 cards, then discard a card." */
   drawTwoThenDiscard: labEvent(1, 1, p.sequence(p.draw(2), p.discard(1))),
   /** "Each player discards a card." */
@@ -139,6 +145,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
   [SYNTHETIC.vanilla1.id]: { name: "Lab Recruit", text: "" },
   [SYNTHETIC.vanilla2.id]: { name: "Lab Sentry", text: "" },
   [SYNTHETIC.vanilla3.id]: { name: "Lab Veteran", text: "" },

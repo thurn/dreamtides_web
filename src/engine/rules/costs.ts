@@ -151,6 +151,7 @@ function cardCandidates(
   side: Side,
   source: AbilitySource,
   cost: ChoosingCost,
+  selectorX?: number,
 ): InstanceId[] {
   switch (cost.cost) {
     case "abandon":
@@ -159,7 +160,7 @@ function cardCandidates(
         const instance = state.instances[source];
         return instance?.zone === "play" && instance.controller === side ? [source] : [];
       }
-      return matchingCharacters(state, catalog, cost.selector, side, source);
+      return matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
     case "discard": {
       // Legacy inline/copied costs may omit the filter; builders emit it.
       const filter = cost.filter;
@@ -202,6 +203,8 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
  * affordable when the modified total is. `endsPlayTime` is reserved for a
  * caller whose next operation is the commit point: it allows a final discard
  * with already-payable resources to prove all its card selections at once.
+ * `selectorX` binds character-cost selectors during a card's play preparation
+ * to its chosen energy X; activation and manual callers use the source card's X.
  */
 export function planCosts(
   ctx: StepContext,
@@ -212,7 +215,7 @@ export function planCosts(
   purpose: (role: PromptRole) => PromptPurpose,
   excluded: readonly InstanceId[],
   modifier: CostModifier = NO_COST_MODIFIER,
-  options: { readonly endsPlayTime?: true } = {},
+  options: { readonly endsPlayTime?: true; readonly selectorX?: number } = {},
 ): CostPlan {
   const { state, catalog } = ctx;
   const used = [...excluded];
@@ -243,7 +246,7 @@ export function planCosts(
     )) return false;
     const demands = list.filter(choosesCards).map((cost) => ({
       count: cost.count === "x" ? (capturedX ?? 0) : cost.count,
-      pool: cardCandidates(state, catalog, side, source, cost).filter((id) => !used.includes(id)),
+      pool: cardCandidates(state, catalog, side, source, cost, options.selectorX).filter((id) => !used.includes(id)),
     }));
     return cardsAssignable(demands);
   };
@@ -262,7 +265,7 @@ export function planCosts(
       payments.push({ cost, cards: [] });
       return;
     }
-    const candidates = cardCandidates(state, catalog, side, source, cost);
+    const candidates = cardCandidates(state, catalog, side, source, cost, options.selectorX);
     const variable = cost.count === "x";
     const count = variable ? capturedX : cost.count;
     const remaining = candidates.filter((id) => !used.includes(id));

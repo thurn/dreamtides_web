@@ -1,3 +1,4 @@
+import { testCardSubtype } from "../../types/test-identities";
 /**
  * Determinization (D22): sampled states are legal, match the view (with the
  * characteristics static abilities in hidden zones give the cards it shows),
@@ -7,6 +8,8 @@ import { describe, expect, it, vi } from "vitest";
 import * as functionalZones from "../dsl/abilities";
 import type { EngineCardDefinition } from "../catalog";
 import { all, characterYouControl, energy, staticAbility } from "../dsl/builders";
+import { triggered, whenYouPlay } from "../dsl/triggers";
+import { NO_PROMPTS } from "../steps/sources";
 import type { AbilityList } from "../dsl/types";
 import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
@@ -297,3 +300,32 @@ function pairWithDifferentCards(state: BattleState, ids: readonly InstanceId[]):
   return null;
 }
 
+
+describe("historical plays in simulations", () => {
+  it("keeps ceased and hidden public play facts and fires the same cost-bounded nth trigger", () => {
+    const watcher: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla1, id: syntheticId(0x335), status: "authored",
+      abilities: () => [triggered(whenYouPlay({ costAtLeast: 2, costAtMost: 2 }, 2), p.gainPoints(1))],
+    };
+    const histories = createEngine(testCatalog([watcher]));
+    for (const viewer of SIDES) for (const ceased of [false, true]) {
+      const { state, ids } = boardState(histories.catalog, {
+        active: "player", phase: "day",
+        player: { back: [watcher.id], hand: [SYNTHETIC.vanilla2.id], energy: 4, deck: [SYNTHETIC.vanilla2.id] },
+        enemy: { deck: [SYNTHETIC.vanilla1.id] },
+      });
+      state.turnLog.played.player.push({ instance: ceased ? "i999" : ids.player.deck[0], cardType: "character", subtype: testCardSubtype("Warrior"), allTypes: false, cost: 2 });
+      const seen = histories.view(state, viewer);
+      expect(seen.turnLog.played.player).toEqual([{ instance: null, cardType: "character", subtype: testCardSubtype("Warrior"), allTypes: false, cost: 2 }]);
+      const sampled = determinize(seen, { player: [{ cardId: watcher.id }, { cardId: SYNTHETIC.vanilla2.id }, { cardId: SYNTHETIC.vanilla2.id }], enemy: [{ cardId: SYNTHETIC.vanilla1.id }] }, seeded(`history-${viewer}`), histories.catalog);
+      expect(histories.view(sampled, viewer).turnLog).toEqual(seen.turnLog);
+      const ghost = sampled.turnLog.played.player[0].instance;
+      expect(sampled.instances[ghost]).toBeUndefined();
+      expect(Number(ghost.slice(1))).toBeLessThan(sampled.nextInstance);
+      const authoritative = histories.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS).state;
+      const simulated = histories.apply(sampled, "player", { kind: "play", card: sampled.sides.player.hand[0], from: "hand" }, NO_PROMPTS).state;
+      expect(authoritative.sides.player.score).toBe(1);
+      expect(simulated.sides.player.score).toBe(authoritative.sides.player.score);
+    }
+  });
+});

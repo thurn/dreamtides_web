@@ -1,0 +1,399 @@
+{
+  "bead": "hv-umm2.335",
+  "phase": 5,
+  "base": "c3445197146c89231c17da63d6ef057c33c0c615",
+  "implementMin": 17,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 3.1232750415802,
+    "review": 29.78705596923828,
+    "knip": 2.0114800930023193,
+    "full": 55.088635206222534,
+    "fuzz": 55.84899115562439,
+    "browser": 29.46792483329773
+  },
+  "heavyQueueWaitS": 16.376273155212402,
+  "hostLoad": 16.7626953125,
+  "validationRuns": {
+    "crossCutting": {
+      "heavyWaitSeconds": 0.019555091857910156,
+      "hostLoad": [
+        16.7626953125,
+        7.3369140625,
+        7.5126953125
+      ],
+      "commands": [
+        {
+          "name": "focused",
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/triggers/triggers.test.ts",
+            "src/engine/view/determinize.test.ts",
+            "src/engine/view/view.test.ts",
+            "src/engine/rules/costs.test.ts",
+            "src/rules/journey/lifecycle.test.ts"
+          ],
+          "seconds": 3.457008123397827,
+          "exitCode": 0
+        },
+        {
+          "name": "review",
+          "command": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "seconds": 37.13479495048523,
+          "exitCode": 0
+        },
+        {
+          "name": "full",
+          "command": [
+            "npm",
+            "run",
+            "review:full"
+          ],
+          "seconds": 55.088635206222534,
+          "exitCode": 0
+        },
+        {
+          "name": "knip",
+          "command": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "seconds": 2.3002431392669678,
+          "exitCode": 0
+        },
+        {
+          "name": "fuzz",
+          "command": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--games",
+            "300"
+          ],
+          "seconds": 55.84899115562439,
+          "exitCode": 0
+        }
+      ]
+    },
+    "finalIdentityHelpers": {
+      "heavyWaitSeconds": 0.017174959182739258,
+      "hostLoad": [
+        7.89111328125,
+        9.5751953125,
+        8.57666015625
+      ],
+      "commands": [
+        {
+          "name": "focused",
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/triggers/triggers.test.ts",
+            "src/engine/view/determinize.test.ts",
+            "src/engine/view/view.test.ts",
+            "src/engine/rules/costs.test.ts",
+            "src/rules/journey/lifecycle.test.ts"
+          ],
+          "seconds": 3.1232750415802,
+          "exitCode": 0
+        },
+        {
+          "name": "review",
+          "command": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "seconds": 29.78705596923828,
+          "exitCode": 0
+        },
+        {
+          "name": "knip",
+          "command": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "seconds": 2.0114800930023193,
+          "exitCode": 0
+        }
+      ]
+    },
+    "browserUnknownRouteFailure": {
+      "heavyWaitSeconds": 16.302029132843018,
+      "executionSeconds": 23.362905979156494,
+      "exitCode": 1,
+      "hostLoad": [
+        6.1396484375,
+        8.75927734375,
+        8.3369140625
+      ],
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.335/play-time-x.mjs",
+        "--bead",
+        "hv-umm2.335",
+        "--port",
+        "5175",
+        "--timeout",
+        "300"
+      ]
+    },
+    "browserEngineSettlementPass": {
+      "heavyWaitSeconds": 0.019176959991455078,
+      "executionSeconds": 27.56666374206543,
+      "exitCode": 0,
+      "hostLoad": [
+        4.7607421875,
+        7.84033203125,
+        8.017578125
+      ],
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.335/play-time-x.mjs",
+        "--bead",
+        "hv-umm2.335",
+        "--port",
+        "5175",
+        "--timeout",
+        "300"
+      ]
+    },
+    "browserRenderedSettlementPass": {
+      "heavyWaitSeconds": 0.018337011337280273,
+      "executionSeconds": 29.46792483329773,
+      "exitCode": 0,
+      "hostLoad": [
+        3.10888671875,
+        6.67919921875,
+        7.5615234375
+      ],
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.335/play-time-x.mjs",
+        "--bead",
+        "hv-umm2.335",
+        "--port",
+        "5175",
+        "--timeout",
+        "300"
+      ]
+    }
+  },
+  "finalSourceFileSha256": {
+    "docs/plan/engine-design.md": "f0f3662c585376f3a200462316912f70bda792969cd8f79babcc0dd8a0710292",
+    "src/engine/continuous/characteristics.ts": "7a8a1cc3cdd7e118f63d136542a26499d4013818c06def05ac902427438d6f96",
+    "src/engine/dsl/selectors.ts": "4dad80e1f769d0f19211c618fcc5bb03e4d1ccebaab5315ab698e7d8ecb8a66a",
+    "src/engine/effects/interpreter.ts": "798c3aac2cb437d9a33b9dd7dfb196963d88c7060b57706a131b73d04f8c4584",
+    "src/engine/rules/costs.test.ts": "a97567d5b06067e4e5d62529d75cce2db16d2baf4abbf997d947b3be03b632b7",
+    "src/engine/rules/costs.ts": "f755747f9a44c1f16aa92e217c158f08f05b26303ad0698ebd2142d329aaf4f3",
+    "src/engine/state/types.ts": "d0e0f05db26d9793a363af84c0da43f8688ba006a2ff9d8574924c7c239986f6",
+    "src/engine/steps/kinds/play.ts": "4237e22309eedf9e58eb6e33d3cb4c4ee2129f91c03b6a19b92e6ed1afc60ba1",
+    "src/engine/testing/prompt-lab.ts": "dcb31f54a7b32a7ffe1d4870f6af54ccf710d65a0f948673ccfa37a86ec145af",
+    "src/engine/triggers/triggers.test.ts": "edca812839a1e348d1baea0f42c0a534aa297f2011afaa6ffb182ae395d0200f",
+    "src/engine/view/determinize.test.ts": "35be4f1d38419123af2ac9af813fd0b7cad0d7cabeca90c8e426031277f5fbae",
+    "src/engine/view/determinize.ts": "0e8fed5abc1bd4582c76405d264f5c87ece2b5b12731205a30398d6f5010d81a",
+    "src/engine/view/view.test.ts": "c14356dd719389f3ddbf7bd0b1034e68297eba47ddc05f3d8065d8bc94db0496",
+    "src/engine/view/view.ts": "fef37c36396071c07852bf50d43c86cb24182f97adc85a57b6d23f150c1f0668",
+    "src/rules/journey/lifecycle.test.ts": "e0f6c72611d3d009e19ea3ee635167c79d371cd450932ad6a87b4466d8b0b1af",
+    "docs/plan/evidence/pre-existing/hv-umm2.335.md": "ae8300cdd527b246545d850c68a2b8984f3e13e3b05280b58a9556bd9d0da149"
+  },
+  "fullAndFuzzSourceFileSha256": {
+    "docs/plan/engine-design.md": "bc2546d4d2bf3134149f653fd3f03b4078c3a1c52c1a94d37735fa4c598335ae",
+    "src/engine/continuous/characteristics.ts": "7a8a1cc3cdd7e118f63d136542a26499d4013818c06def05ac902427438d6f96",
+    "src/engine/dsl/selectors.ts": "4dad80e1f769d0f19211c618fcc5bb03e4d1ccebaab5315ab698e7d8ecb8a66a",
+    "src/engine/effects/interpreter.ts": "798c3aac2cb437d9a33b9dd7dfb196963d88c7060b57706a131b73d04f8c4584",
+    "src/engine/rules/costs.test.ts": "a97567d5b06067e4e5d62529d75cce2db16d2baf4abbf997d947b3be03b632b7",
+    "src/engine/rules/costs.ts": "f755747f9a44c1f16aa92e217c158f08f05b26303ad0698ebd2142d329aaf4f3",
+    "src/engine/state/types.ts": "d0e0f05db26d9793a363af84c0da43f8688ba006a2ff9d8574924c7c239986f6",
+    "src/engine/steps/kinds/play.ts": "4237e22309eedf9e58eb6e33d3cb4c4ee2129f91c03b6a19b92e6ed1afc60ba1",
+    "src/engine/testing/prompt-lab.ts": "dcb31f54a7b32a7ffe1d4870f6af54ccf710d65a0f948673ccfa37a86ec145af",
+    "src/engine/triggers/triggers.test.ts": "92265b8858ed50424dac85f54cc3330b8f3929e7c43225a87e1e55557011f44d",
+    "src/engine/view/determinize.test.ts": "38cf854776b76fd574fdb565f174bc97e7e11054f4d2d3b6ee4334389afbbd41",
+    "src/engine/view/determinize.ts": "0e8fed5abc1bd4582c76405d264f5c87ece2b5b12731205a30398d6f5010d81a",
+    "src/engine/view/view.test.ts": "c14356dd719389f3ddbf7bd0b1034e68297eba47ddc05f3d8065d8bc94db0496",
+    "src/engine/view/view.ts": "fef37c36396071c07852bf50d43c86cb24182f97adc85a57b6d23f150c1f0668",
+    "src/rules/journey/lifecycle.test.ts": "e0f6c72611d3d009e19ea3ee635167c79d371cd450932ad6a87b4466d8b0b1af"
+  },
+  "provenance": "Production bodies and developer fixture are identical for full/fuzz and final source. Two test files then replace equivalent subtype literals with testCardSubtype (parser returns the same string). Final focused/review/knip cover that exact identity-helper cleanup; no other tested body changes. Parent then clarified one documentation sentence: only the historical record instance field is null; no tested code changed.",
+  "testDelta": {
+    "files": 0,
+    "lines": 142,
+    "cases": 7,
+    "jsdomFiles": 0
+  },
+  "d19": {
+    "existingModuleContracts": {
+      "costs": "Chosen-X modal, target and payment preparation plus public fold replay/rejection outcomes.",
+      "triggers": "Historical play matching at the existing listener boundary.",
+      "view": "Public facts and hidden information projection.",
+      "determinize": "View-consistent simulation, historical counts and instance allocation.",
+      "lifecycle": "One input in the existing saved turn-log compatibility table."
+    },
+    "lineCounts": {
+      "src/engine/rules/costs.test.ts": {
+        "before": 1018,
+        "after": 1090
+      },
+      "src/engine/triggers/triggers.test.ts": {
+        "before": 1550,
+        "after": 1570
+      },
+      "src/engine/view/determinize.test.ts": {
+        "before": 299,
+        "after": 331
+      },
+      "src/engine/view/view.test.ts": {
+        "before": 493,
+        "after": 510
+      },
+      "src/rules/journey/lifecycle.test.ts": {
+        "before": 1045,
+        "after": 1046
+      }
+    },
+    "scope": "No new test module/environment. Existing costs/triggers contract groups are large; this bounded seven-case repair uses their existing harnesses. hv-umm2.314 concerns primitive group modules and is not a claim that it owns these files."
+  },
+  "negativeRegressions": {
+    "base": "c3445197146c89231c17da63d6ef057c33c0c615",
+    "log": "/tmp/hv-umm2.335-negative.log",
+    "tests": 140,
+    "passedExisting": 137,
+    "failures": 3,
+    "observed": [
+      "Unknown instance i999 from a valid-shaped legacy record without cost.",
+      "View discarded a ceased play record instead of retaining anonymous public facts.",
+      "A card with required cost-X targets was absent from legal plays before chosen-X binding."
+    ],
+    "restoration": "Tests added against the unchanged baseline production bodies first; failures precede repairs. No temporary production mutations."
+  },
+  "focused": {
+    "files": 5,
+    "tests": 190,
+    "result": "passed"
+  },
+  "review": {
+    "files": 161,
+    "tests": 2184,
+    "result": "passed"
+  },
+  "full": {
+    "files": 220,
+    "tests": 2815,
+    "result": "passed",
+    "bundle": "production bundle passed"
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 151502,
+    "failures": 0,
+    "wallS": 55.0,
+    "cpuS": 60.1,
+    "weightUuids": [],
+    "reason": "Existing primitive/view repair, no printed entity additions."
+  },
+  "compatibility": {
+    "persistedSchema": "PlayedCard retains its existing required instance and optional cost; LOAD_STATE accepts ceased-instance legacy records. No validator or migration changes.",
+    "modern": "Stored public cost/type/subtype/allTypes survive ceased or hidden current instances. Both viewers determinize and fire the authoritative cost-bounded nth trigger.",
+    "legacyUnknown": "A missing cost falls back to an existing authoritative instance. Views recover only from currently visible instances, never hidden printing. An unrecoverable cost matches no bound, including zero; known type/subtype filters remain usable. Hidden legacy simulation counts can be less precise than authoritative live-instance counts.",
+    "privacy": "Every non-visible historical instance link is null. Private hidden printing changes leave full public views equal; no historical printing UUID is exposed. Ghost IDs reserve allocator space before hidden-card minting and re-view to null.",
+    "xBoundary": "Fixed chosen energy X is passed explicitly only during official card play preparation. Mode/target and additional-cost selectors use it; recorded answers replay it. Activation/manual selectors retain the source card X; no status.x preparation writes or evolving captured-X override."
+  },
+  "qa": {
+    "report": "play-time-x.result.json",
+    "scenario": "play-time-x.mjs",
+    "log": "play-time-x-cli.log",
+    "serverLog": "play-time-x.server.log",
+    "ok": true,
+    "error": null,
+    "caps": [],
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "wallMs": {
+      "browserLeaseWait": 39,
+      "serve": 1857,
+      "scenario": 22205,
+      "total": 24122
+    },
+    "captures": [
+      "chosen-x-target-desktop.png",
+      "chosen-x-settled-desktop.png",
+      "chosen-x-target-mobile.png",
+      "chosen-x-settled-mobile.png"
+    ],
+    "workflow": "Stage one developer-only X-target event and synthetic 1/2/2-cost characters through existing prompt-lab choices/debug intents; choose X2, assert exact candidate exclusion, cancel with no payment, repeat and reload identical prompt, select one UUID, pay exactly2 energy, gain1 spark on that UUID, assert rendered spark3/void source and positive DOM geometry, caps empty.",
+    "runtimeLedger": [
+      {
+        "runnerPid": 42305,
+        "serverGroup": 42322,
+        "result": "unknownCard QA route failure; provider response settled, semantic browser close/SDK drain, process group stopped, port free, marker cleared"
+      },
+      {
+        "runnerPid": 43071,
+        "serverGroup": 43086,
+        "result": "engine-settled pass; provider response settled, semantic browser close/SDK drain, process group stopped, port free, marker cleared"
+      },
+      {
+        "runnerPid": 44299,
+        "serverGroup": 44313,
+        "result": "render-settled pass; provider response settled, semantic browser close/SDK drain, process group stopped, port free, marker cleared"
+      }
+    ],
+    "cleanup": "After actual wrapper exit all named runner/server PIDs absent, lsof5175 empty, own marker absent, native nonblocking browser lease probe succeeded. No peer/service process or unknown marker touched."
+  },
+  "friction": [
+    {
+      "kind": "fixture-correction",
+      "tag": "local-edit-correction",
+      "minutes": 1,
+      "detail": "First repaired simulation test accidentally supplied UUID arrays instead of DeckEntry objects; Unknown card undefined was fixture-only. Corrected structured decklists; retained positive-first failed log."
+    },
+    {
+      "kind": "harness-api-correction",
+      "tag": "local-edit-correction",
+      "minutes": 1,
+      "detail": "ScriptedSource has no prompts property. Observed public prompts through an AnswerSource adapter; retained focused-final failed log."
+    },
+    {
+      "kind": "developer-helper-name-collision",
+      "tag": "local-edit-correction",
+      "minutes": 1,
+      "detail": "New imported target builder collided with existing local prompt-lab target helper. Initial evaluation and node typecheck failures retained; builder aliased characterTarget and effect construction stays in abilities closure."
+    },
+    {
+      "kind": "qa-route-correction",
+      "tag": "qa-harness-selection",
+      "minutes": 1,
+      "detail": "Card-lab request resolution accepts printed content, so synthetic source URL yielded unknownCard before workflow. Corrected to existing prompt-lab-choices and debug staging. Failed result/caps retained as play-time-x-unknown-card-failed.result.json; not an app defect."
+    },
+    {
+      "kind": "qa-presentation-settlement",
+      "tag": "qa-render-settlement",
+      "minutes": 1,
+      "detail": "Initial engine-settled pass captured before spark presentation completed. Added rendered spark3 assertion, reran desktop/mobile, inspected final mobile spark3. Earlier passed report retained as play-time-x-engine-settled-pass.result.json."
+    }
+  ],
+  "rulesDecisions": [],
+  "cardIssues": 0,
+  "coreReview": "Parent session requests independent other-family review of final immutable commit; no verdict asserted here."
+}
