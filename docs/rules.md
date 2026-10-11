@@ -595,6 +595,12 @@ to pay as they play the card, and can choose to pay only if they can pay the
 whole cost. Activated abilities may have alternative and optional costs in the
 same way.
 
+**Costs while resolving:** "You may X to Y" in a resolving effect, as in
+"▸Materialized: You may discard a card to draw a card," offers the choice as
+the effect resolves, not as the card is played. The player can choose to pay X
+only if they can pay all of it, and Y happens only if X is paid. A player who
+cannot pay X is not offered the choice, and nothing happens.
+
 Other costs include spending counters stored on the card itself ("1⧗, ☾: …"),
 banishing cards from your void, and revealing cards from your hand. A revealed
 card stays in your hand.

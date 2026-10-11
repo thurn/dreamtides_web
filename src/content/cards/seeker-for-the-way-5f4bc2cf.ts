@@ -1,3 +1,6 @@
+import { conditionCardCounts, energy, reclaim } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,12 @@ export default card({
   artOwned: true,
   cardNumber: 92,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(
+      onMaterialized(),
+      p.ifThen(conditionCardCounts("hand", 1), p.optional(p.sequence(p.discard(1), p.draw(variant.amplified ? 2 : 1)))),
+    ),
+    reclaim(energy(2)),
+  ],
+  verifiedText: "fk75y40g64",
 });

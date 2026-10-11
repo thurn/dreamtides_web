@@ -1,3 +1,5 @@
+import { activated, exhaustSelf, keyword } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 388,
   art: { x: 0.42, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    keyword("awakened"),
+    activated([exhaustSelf()], p.sequence(p.draw(2), p.discard(variant.amplified ? 2 : 3))),
+  ],
+  verifiedText: "vz0dqgzjzm",
 });

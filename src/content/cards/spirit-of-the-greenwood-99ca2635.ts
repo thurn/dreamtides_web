@@ -1,3 +1,5 @@
+import { activated, characterYouControl, count, energy, exhaustSelf, keyword } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 244,
   art: { x: 0.059, y: 0, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("awakened"), activated([energy(1), exhaustSelf()], p.gainEnergy(count(characterYouControl())))],
+  verifiedText: "1idtylsuv67",
 });
