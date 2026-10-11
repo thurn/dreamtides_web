@@ -1,3 +1,5 @@
+import { event, x } from "../../engine/dsl/builders";
+import { discover } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -6,6 +8,7 @@ export default card({
   id: "20fd609a-7529-4582-a362-b8151b0ae011",
   renderedText: "Discover a card with cost X●.",
   energyCost: null,
+  xMinimum: 0,
   cardType: "Event",
   subtype: "",
   rarity: "Rare",
@@ -17,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 183,
   isStarter: false,
-  pending: true,
+  abilities: () => [event(discover({}, { costExactly: x() }))],
+  verifiedText: "2bwb3wpx7m3",
 });

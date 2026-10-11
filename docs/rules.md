@@ -718,6 +718,17 @@ card into your hand, but not which. If fewer than 3 cards match, look at
 all of them; if none match, nothing happens and your deck is not shuffled.
 Putting the card into your hand is not a draw.
 
+A cost criterion compares the card's copiable cost after its variant and
+deck-entry modifications, with X in that card's cost counting as 0. “Cost
+X●” means exactly X●. When the effect says “Choose a value of X” solely for
+this Discover criterion, choose X as the effect resolves and pay no energy
+for the choice. The canonical choices are the integers from 0 through the
+public card catalog's greatest fixed cost plus one. That last value represents
+all larger values, which have the same no-match outcome. The range depends
+on the public catalog, rather than the cards in a hidden deck or the player's
+available energy. A paid X used solely for this cost criterion can be 0
+because a zero-cost discovery is meaningful.
+
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played. Copies of cards on the stack
 follow [Copies on the stack](#playing-cards-and-the-stack); figment copies of

@@ -1,3 +1,5 @@
+import { abandonCost, activated, energy } from "../../engine/dsl/builders";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 395,
   art: { x: 0, y: 0.311, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([energy(2), abandonCost({ sparkAtLeast: 1, sparkAtMost: 1 })], draw(2))],
+  verifiedText: "i50moh3a64",
 });

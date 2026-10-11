@@ -34,7 +34,7 @@ function contentState(status: ContentStatus): ContentState {
 function cardCosts(card: CardDefinition): CardCost[] {
   const labels = card.energyCosts ?? [card.energyCost === null ? "X" : String(card.energyCost)];
   const costs = labels.map((label): CardCost => {
-    if (label === "X") return energyX();
+    if (label === "X") return energyX(card.xMinimum ?? 1);
     const amount = Number(label);
     if (!Number.isInteger(amount) || amount < 0) {
       throw new Error(`Card ${card.id} has an unreadable energy cost orb ${label}`);

@@ -37,6 +37,8 @@ export interface ManifestEmblem<Id> {
 
 /** Plain data for every card, Dreamwell card, avatar, and dreamsign a battle names. */
 export interface CatalogManifest {
+  /** The entire source catalog's public cost ceiling, including cards absent from this battle. */
+  readonly maximumFixedCost: number;
   readonly cards: readonly ManifestCard[];
   readonly dreamwell: readonly EngineDreamwellDefinition[];
   readonly avatars: readonly ManifestEmblem<AvatarId>[];
@@ -62,6 +64,7 @@ export function catalogManifest(catalog: EngineCatalog, init: BattleInit): Catal
       const { abilities: _abilities, synthetic: _synthetic, ...plain } = catalog.card(id);
       return structuredClone(plain);
     }),
+    maximumFixedCost: catalog.maximumFixedCost,
     dreamwell: unique(init.dreamwell).map((id) => ({ ...catalog.dreamwellCard(id) })),
     avatars: avatarIds.map((id) => ({ id, status: catalog.avatar(id).status })),
     dreamsigns: dreamsignIds.map((id) => ({ id, status: catalog.dreamsign(id).status })),
@@ -87,5 +90,6 @@ export function manifestCatalog(manifest: CatalogManifest): EngineCatalog {
       ],
     },
     [...contentFigmentDefinitions(), ...lab.figments],
+    manifest.maximumFixedCost,
   );
 }

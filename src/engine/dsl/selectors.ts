@@ -24,12 +24,12 @@ export function resolvePlayer(controller: Side, ref: PlayerRef): Side {
 }
 
 /**
- * A character's cost for cost selectors: its fixed energy, with X counting
- * as 0. Cost selectors read the copiable cost (C4): 0● for a figment, the
+ * A card's cost for cost selectors: its fixed energy, with X counting
+ * as 0. Cost selectors read the copiable cost: 0● for a figment, the
  * copied cost for a figment copy (C13). Cost modifications apply only to
  * playing a card.
  */
-function costOf(state: BattleState, catalog: EngineCatalog, id: InstanceId): number {
+export function copiableCostOf(state: BattleState, catalog: EngineCatalog, id: InstanceId): number {
   return fixedEnergy(instanceCard(catalog, instanceOf(state, id)).costs);
 }
 
@@ -68,7 +68,7 @@ export function matchesCharacterWith(
     if (selector.sparkAtMost !== undefined && spark > selector.sparkAtMost) return false;
     if (selector.sparkAtLeast !== undefined && spark < selector.sparkAtLeast) return false;
   }
-  if (selector.costAtMost !== undefined && costOf(state, catalog, id) > selector.costAtMost) return false;
+  if (selector.costAtMost !== undefined && copiableCostOf(state, catalog, id) > selector.costAtMost) return false;
   if (selector.exhausted !== undefined && instance.status.exhausted !== selector.exhausted) return false;
   if (selector.rank !== undefined && slotOf(state, id)?.rank !== selector.rank) return false;
   return true;

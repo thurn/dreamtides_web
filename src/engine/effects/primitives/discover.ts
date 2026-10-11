@@ -1,12 +1,20 @@
 import { characteristics, matchesFilter } from "../../continuous/characteristics";
-import type { CardFilter } from "../../dsl/types";
-import type { ChooseCardsPrompt } from "../../prompts/types";
+import { copiableCostOf } from "../../dsl/selectors";
+import type { CardFilter, ValueExpr } from "../../dsl/types";
+import type { ChooseCardsPrompt, ChooseNumberPrompt } from "../../prompts/types";
 import { moveToHand } from "../../rules/zones";
 import type { InstanceId, Side } from "../../state/ids";
 import { SIDES } from "../../state/ids";
 import { shuffleInPlace } from "../../state/rng";
 import type { StepContext } from "../../steps/types";
 import { definePrimitive } from "../types";
+import { evaluate } from "../interpreter";
+
+/** An exact cost read from the effect, or a free cost choice made as Discover resolves. */
+type DiscoverCost =
+  | { readonly costExactly: ValueExpr; readonly chooseCost?: never }
+  | { readonly chooseCost: true; readonly costExactly?: never }
+  | { readonly costExactly?: never; readonly chooseCost?: never };
 
 /**
  * "Discover a <filter>" (rules § Keywords and Effects → Discover): up to
@@ -18,16 +26,25 @@ import { definePrimitive } from "../types";
  * to a side that can identify it), and their deck is shuffled. With no
  * matching card nothing happens.
  */
-export interface DiscoverNode {
+export type DiscoverNode = DiscoverCost & {
   readonly op: "discover";
   readonly filter: CardFilter;
-}
+};
 
 export const discoverPrimitive = definePrimitive<DiscoverNode>({
   op: "discover",
   resolve(ctx, node, env) {
     const side = env.controller;
-    const options = discoverOptions(ctx, side, node.filter);
+    const cost = node.chooseCost === true
+      ? ctx.choose<ChooseNumberPrompt>({
+          kind: "chooseNumber",
+          side,
+          purpose: env.purpose("chooseX"),
+          min: 0,
+          max: ctx.catalog.maximumFixedCost + 1,
+        })
+      : node.costExactly === undefined ? undefined : evaluate(ctx, node.costExactly, env);
+    const options = discoverOptions(ctx, side, node.filter, cost);
     if (options.length === 0) return;
     const [chosen] = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
@@ -46,9 +63,11 @@ export const discoverPrimitive = definePrimitive<DiscoverNode>({
 });
 
 /** Up to `config.discoverOptions` distinct matching cards of `side`'s deck, in the order drawn. */
-function discoverOptions(ctx: StepContext, side: Side, filter: CardFilter): InstanceId[] {
+function discoverOptions(ctx: StepContext, side: Side, filter: CardFilter, cost: number | undefined): InstanceId[] {
   const layers = characteristics(ctx.state, ctx.catalog);
-  const pool = ctx.state.sides[side].deck.filter((id) => matchesFilter(layers.of(id), filter));
+  const pool = ctx.state.sides[side].deck.filter((id) =>
+    matchesFilter(layers.of(id), filter) && (cost === undefined || copiableCostOf(ctx.state, ctx.catalog, id) === cost),
+  );
   const options: InstanceId[] = [];
   while (options.length < ctx.state.config.discoverOptions && pool.length > 0) {
     const [card] = pool.splice(Math.floor(ctx.random("random:discover") * pool.length), 1);
@@ -71,6 +90,6 @@ function shuffleDeck(ctx: StepContext, side: Side): void {
   }
 }
 
-export function discover(filter: CardFilter = {}): DiscoverNode {
-  return { op: "discover", filter };
+export function discover(filter: CardFilter = {}, cost: DiscoverCost = {}): DiscoverNode {
+  return { op: "discover", filter, ...cost };
 }

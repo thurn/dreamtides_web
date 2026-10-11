@@ -1,0 +1,177 @@
+{
+  "bead": "hv-umm2.55",
+  "phase": 5,
+  "implementMin": 46.08,
+  "localValidationS": {
+    "focused": 3.17,
+    "review": 34.05,
+    "full": 56.29,
+    "knip": 2.15,
+    "fuzz": 77.66,
+    "judged": 123.562,
+    "sweep": 209
+  },
+  "hostLoad": 8.75,
+  "testDelta": {
+    "files": 0,
+    "lines": 185,
+    "jsdomFiles": 0,
+    "cases": 8
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 20,
+      "note": "Exact Discover cost and free resolution-time X required widening to Discover contracts, typed contextual X-minimum metadata, and source public-catalog ceiling propagation to policy workers. The serialized Areas were widened by the parent before shared edits."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 11,
+      "note": "Custom debug setup required settling UUID input scroll before opening Zone Select and the established raw locator sequence; a Warden tap required presentation readiness and its battlefield selector. Final desktop/mobile workflows and sweep pass; no UI source edits."
+    }
+  ],
+  "sourceBase": "b3997118ff86557a615de57c9c1519885e560636",
+  "coverage": {
+    "entities": 3,
+    "pending": 0,
+    "amplifiedTexts": 0,
+    "newEffectOps": 0,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "steps": 161735,
+    "prompts": 3535,
+    "interactiveReplays": 297,
+    "invariantFailures": 0,
+    "replayDivergences": 0,
+    "targets": [
+      {
+        "uuid": "20fd609a-7529-4582-a362-b8151b0ae011",
+        "included": 612,
+        "exercised": 356
+      },
+      {
+        "uuid": "331e2846-85d1-4667-8c64-dc6c21a418ed",
+        "included": 622,
+        "exercised": 309
+      },
+      {
+        "uuid": "2ce84a16-1295-4738-9e2d-1f57590b2269",
+        "included": 618,
+        "exercised": 271
+      }
+    ]
+  },
+  "qa": {
+    "sweepPass": 32,
+    "sweepSkip": 28,
+    "sweepFail": 0,
+    "judgedCards": 3,
+    "judgedFlows": 6,
+    "requiredSample": 0,
+    "newPromptKinds": 0,
+    "sha256FirstBytes": {
+      "20fd609a-7529-4582-a362-b8151b0ae011": 125,
+      "331e2846-85d1-4667-8c64-dc6c21a418ed": 166,
+      "2ce84a16-1295-4738-9e2d-1f57590b2269": 219
+    },
+    "captures": [
+      "beacon-free-x-desktop.png",
+      "beacon-free-x-mobile.png",
+      "beacon-cost-two-discover-desktop.png"
+    ],
+    "dimensions": {
+      "beacon-free-x-desktop.png": "2880x1800",
+      "beacon-free-x-mobile.png": "780x1688",
+      "beacon-cost-two-discover-desktop.png": "2880x1800"
+    },
+    "report": "selector-bounds-judged.result.json",
+    "caps": "empty"
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.55-1",
+    "RD-hv-umm2.55-2"
+  ],
+  "cardIssues": [],
+  "failurePaths": {
+    "midStepError": "Synthetic free-cost Discover followed by failure commits no discovery, shuffle, or draw; committed state hash and published events are unchanged.",
+    "reloadRestart": "Synthetic X and Discover prompts serialize/replay with stable IDs; actual desktop/mobile reloads both prompts, cancellable sacrifice payment, and settled outcomes.",
+    "partialWrite": "Suspended resolution preserves committed deck/hand/RNG; fatal resolution after accepted choices rolls back the entire step. No new persistence schema or asynchronous write is introduced.",
+    "invalidStaleInput": "Out-of-range/foreign answers and stale consumed prompt IDs bounce; the same card answer cannot commit twice.",
+    "concurrentActors": "A foreign answer and opponent battle action bounce while the human resolving prompt is owed; existing session writer serialization remains the persistence boundary."
+  },
+  "largeTestFiles": {
+    "cards.test.ts": "836 lines (681 at base): preserved existing card-flow, grant-card-keyword and reveal contracts; seven synthetic bound/payment cases remain in the matching primitive group to avoid another module import.",
+    "policy.test.ts": "622 lines (592 at base): one synthetic worker-catalog contract extends the existing policy-worker group."
+  },
+  "runtime": {
+    "port": 5175,
+    "serverGroupsStopped": [
+      84031,
+      85120,
+      87029,
+      88423,
+      89535,
+      91771,
+      94116,
+      1529
+    ],
+    "mcpClients": "all closed by runner cleanup; shared service retained",
+    "ownedProcesses": "none retained"
+  },
+  "validationLogs": [
+    "/tmp/hv-umm2.55-focused.log",
+    "/tmp/hv-umm2.55-review.log",
+    "/tmp/hv-umm2.55-full.log",
+    "/tmp/hv-umm2.55-knip.log",
+    "/tmp/hv-umm2.55-fuzz.log",
+    "/tmp/hv-umm2.55-judged.log",
+    "/tmp/hv-umm2.55-sweep.log",
+    "/tmp/hv-umm2.55-updated-focused.log",
+    "/tmp/hv-umm2.55-updated-review.log",
+    "/tmp/hv-umm2.55-updated-knip.log"
+  ],
+  "dispatchStartedAt": "2026-10-11T00:33:25.241004+00:00",
+  "commitPreparedAt": "2026-10-11T01:19:29.870624+00:00",
+  "originalValidation": {
+    "sourceCommit": "d0324809c49a877ca4a524c2749f9c54ab7c2aaf",
+    "sourceBase": "a47d6c04e5d4a2131e5ff57ddc540e9a22fbd9f4",
+    "localValidationS": {
+      "focused": 2.3,
+      "review": 31.54,
+      "full": 56.29,
+      "knip": 2.69,
+      "fuzz": 77.66,
+      "judged": 123.562,
+      "sweep": 209
+    },
+    "hostLoad": 8.75,
+    "qaLedgerBase": "a47d6c04e5d4a2131e5ff57ddc540e9a22fbd9f4",
+    "note": "Original full review, weighted 300-game fuzz, sweep and judged QA evidence is preserved at this source and base."
+  },
+  "compatibilityUpdate": {
+    "parkedCheckpoint": "6acde4145ab42cbdca4fc3ea7dfea5cae029e216",
+    "nativeUpdatedCheckpoint": "c04c73e7b37d78ebc4d6262568e49ed403620ee1",
+    "updatedBase": "b3997118ff86557a615de57c9c1519885e560636",
+    "savedDelta": "/tmp/hv-umm2.55-catalog-parking/catalog.delta.patch",
+    "resolution": "Parent-owned native update after temporarily parking only the catalog delta. Restored the exact nine-line delta alongside the landed StaticsMemo import, readonly statics field and statics:new Map. Removing only those three peer additions yields the saved original catalog byte-for-byte. All other bead changes are preserved.",
+    "focused": {
+      "files": 2,
+      "tests": 57,
+      "testStageS": 1.7,
+      "wallS": 3.17
+    },
+    "review": {
+      "files": 161,
+      "tests": 2034,
+      "wallS": 34.05
+    },
+    "knip": {
+      "wallS": 2.15
+    },
+    "hostLoad": 4.09,
+    "repeatFullFuzzBrowser": false,
+    "validationScope": "This is an additive catalog merge; the parent requested focused contracts, review and knip. Original full/fuzz/browser evidence remains attributed to its exact source.",
+    "preparedAt": "2026-10-11T01:26:08.169933+00:00",
+    "recoveryMin": 3.23
+  }
+}

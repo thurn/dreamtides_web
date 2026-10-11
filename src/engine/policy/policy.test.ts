@@ -6,6 +6,8 @@ import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine, type Engine } from "../engine";
 import { createFoldAdapter, decisionKeyOf, sidePending, type BattleSlice, type FoldAdapter } from "../fold/slice";
 import { isLegalAnswer } from "../prompts/answers";
+import { energy, event } from "../dsl/builders";
+import { discover } from "../effects/primitives";
 import type { ConfirmPrompt, Prompt } from "../prompts/types";
 import { battleSeed, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, BattleState, DeckEntry } from "../state/types";
@@ -291,6 +293,34 @@ describe("the policy worker", () => {
     if (decision === null) throw new Error("no enemy decision");
     return { init, request: decision.request };
   }
+
+  it("preserves public Discover choice bounds when a costly catalog card is absent from the battle manifest", () => {
+    const omitted: EngineCardDefinition = { ...weak, id: syntheticId(0x4510), costs: [energy(127)] };
+    const free: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(0x4511), status: "authored", abilities: () => [event(discover({ cardType: "character" }, { chooseCost: true }))] };
+    const source = createEngine(testCatalog([textless, weak, omitted, free]));
+    const { init } = enemyRequest();
+    const manifest = catalogManifest(source.catalog, init);
+    expect(manifest.cards.some((card) => card.id === omitted.id)).toBe(false);
+    const rebuilt = manifestCatalog(JSON.parse(JSON.stringify(manifest)) as CatalogManifest);
+    expect(rebuilt.maximumFixedCost).toBe(source.catalog.maximumFixedCost);
+    // Synthetic abilities are test-only: supply the same fixture definitions to both runners.
+    const restored = createEngine({ ...rebuilt, card: (id) => source.catalog.card(id) });
+    const pending = (candidate: Engine) => {
+      const { state, ids } = boardState(candidate.catalog, { active: "player", phase: "day", player: { hand: [free.id], energy: 1, deck: [weak.id] }, enemy: { deck: [weak.id] } });
+      const adapter = createFoldAdapter(candidate, { checkEventPrefix: true });
+      const slice: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      const outcome = adapter.reduce(slice, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
+      if (outcome.kind !== "applied") throw new Error("bounced");
+      const prompt = adapter.pending(outcome.slice)!.prompt;
+      const done = adapter.reduce(outcome.slice, { kind: "answer", side: "player", promptId: prompt.id, value: 128 });
+      return { prompt, done };
+    };
+    const main = pending(source);
+    const worker = pending(restored);
+    expect(worker.prompt).toEqual(main.prompt);
+    expect(worker.done).toEqual(main.done);
+    for (const maximumFixedCost of [-1, NaN, Infinity, 1.5]) expect(() => manifestCatalog({ ...manifest, maximumFixedCost })).toThrow();
+  });
 
   it("plays a text-less battle from its manifest exactly as the main thread's catalog does", () => {
     const { init, request } = enemyRequest();

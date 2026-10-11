@@ -2,6 +2,7 @@ import type { CardSubtype } from "../types/card-identity";
 import type { CharacteristicsMemo } from "./continuous/characteristics";
 import type { StaticsMemo } from "./continuous/layers";
 import { energy, reclaim } from "./dsl/builders";
+import { fixedEnergy } from "./dsl/energy";
 import type { AbilityList, CardCost, DeckMods, Speed, Variant } from "./dsl/types";
 import type { AvatarId, CardId, DreamsignId, DreamwellCardId, FigmentId, InstanceId } from "./state/ids";
 import type { CardStackItem, Printing } from "./state/types";
@@ -95,6 +96,8 @@ export type PrintedCard = Omit<EngineCardDefinition, "id">;
 
 /** Card, Dreamwell, avatar, and dreamsign definitions by UUID. */
 export interface EngineCatalog {
+  /** Public catalog cost ceiling, with X counting as 0; used only for free Discover cost choices. */
+  readonly maximumFixedCost: number;
   card(id: CardId): EngineCardDefinition;
   dreamwellCard(id: DreamwellCardId): EngineDreamwellDefinition;
   avatar(id: AvatarId): EngineAvatarDefinition;
@@ -217,7 +220,12 @@ export function createCatalog(
   dreamwellCards: readonly EngineDreamwellDefinition[],
   emblems: EmblemDefinitions = {},
   figments: readonly EngineFigmentDefinition[] = [],
+  /** The source catalog's public ceiling when rebuilding a subset for a policy worker. */
+  publicMaximumFixedCost?: number,
 ): EngineCatalog {
+  if (publicMaximumFixedCost !== undefined && (!Number.isSafeInteger(publicMaximumFixedCost) || publicMaximumFixedCost < 0 || publicMaximumFixedCost >= Number.MAX_SAFE_INTEGER)) {
+    throw new Error("Invalid public catalog cost ceiling");
+  }
   const figmentsById = new Map(figments.map((definition) => [definition.id, definition]));
   const cardsById = new Map(cards.map((definition) => [definition.id, definition]));
   const dreamwellById = new Map(
@@ -230,6 +238,7 @@ export function createCatalog(
   return {
     memo: new WeakMap(),
     statics: new Map(),
+    maximumFixedCost: publicMaximumFixedCost ?? [...cardsById.values()].reduce((maximum, card) => Math.max(maximum, fixedEnergy(card.costs)), 0),
     avatar: (id) => lookup(avatarsById, id, "avatar"),
     dreamsign: (id) => lookup(dreamsignsById, id, "dreamsign"),
     figment: (id) => lookup(figmentsById, id, "figment"),

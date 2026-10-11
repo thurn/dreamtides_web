@@ -53,6 +53,8 @@ interface CardFields {
   readonly amplifiedText?: string;
   /** Energy cost; `null` for a variable (X) cost. */
   readonly energyCost: number | null;
+  /** Contextual minimum for a printed X cost; authored rules metadata, rather than a printed field. */
+  readonly xMinimum?: 0 | 1;
   /** Orb labels for a card with more than one energy cost, such as `["2", "X"]`. */
   readonly energyCosts?: readonly string[];
   readonly cardType: CardType;

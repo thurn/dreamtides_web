@@ -1107,6 +1107,14 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)` | `forEach`, `eachPlayer`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, `costAtMost`, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype); players (`you`, `opponent`) | figment or not |
+
+Discover accepts an exact copiable-cost value expression alongside its card
+filter, or a free resolution-time cost choice. The free choice uses the
+existing `chooseNumber`/`chooseX` protocol over the public catalog's fixed-cost
+ceiling plus one, preserving a canonical no-match choice. The policy manifest
+carries that source-catalog ceiling even when its entity list is a subset.
+Card content may specify `xMinimum` as authored rules metadata when a paid
+X of zero has a meaningful effect; other printed X costs retain minimum one.
 | Values | constant, `x`, `count(selector)`, hand size, `supporting` (C9), `times`, `lockedAtResolution` | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls`, `energyAtLeast`, `costPaid`, `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`) | |
