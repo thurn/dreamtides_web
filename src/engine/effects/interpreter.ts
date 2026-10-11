@@ -8,9 +8,9 @@ import {
   resolvePlayer,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
-import { characteristics } from "../continuous/characteristics";
+import { cardMatchesFilter, characteristics } from "../continuous/characteristics";
 import { supportedBy } from "../continuous/support";
-import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr } from "../dsl/types";
+import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
@@ -152,7 +152,31 @@ function targetable(state: BattleState, catalog: EngineCatalog, ids: InstanceId[
   return ids.filter((id) => !layers.of(id).keywords.includes("cannotBeTargeted"));
 }
 
-/** The characters or stack cards a target spec may choose now: matching ones that can be targeted. */
+/**
+ * Whether a card is one a zone reference with a filter may name now: in
+ * `side`'s `zone`, matching the filter by its current characteristics, and
+ * not the source when the reference says "another".
+ */
+function inZoneMatching(
+  state: BattleState,
+  catalog: EngineCatalog,
+  spec: Exclude<ZoneCardSpec, { readonly pick: "self" }>,
+  side: Side,
+  source: AbilitySource,
+  id: InstanceId,
+): boolean {
+  if (!state.sides[side][spec.zone].includes(id)) return false;
+  if (spec.pick !== "top" && spec.another === true && id === sourceInstance(source)) return false;
+  return cardMatchesFilter(state, catalog, id, spec.filter);
+}
+
+/** The cards in a void a zone target may choose by its filter, in void order, targetable or not. */
+function matchingVoidCards(state: BattleState, catalog: EngineCatalog, spec: ZoneTargetSpec, controller: Side, source: AbilitySource): InstanceId[] {
+  const side = resolvePlayer(controller, spec.player);
+  return state.sides[side].void.filter((id) => inZoneMatching(state, catalog, spec, side, source, id));
+}
+
+/** The characters, stack cards, or void cards a target spec may choose now: matching ones that can be targeted. */
 export function targetCandidates(
   state: BattleState,
   catalog: EngineCatalog,
@@ -160,19 +184,20 @@ export function targetCandidates(
   controller: Side,
   source: AbilitySource,
 ): InstanceId[] {
-  return targetable(
-    state,
-    catalog,
-    spec.kind === "stackTarget"
-      ? matchingStackItems(state, catalog, spec.selector, controller, source)
-      : matchingCharacters(state, catalog, spec.selector, controller, source),
-  );
+  switch (spec.kind) {
+    case "stackTarget":
+      return targetable(state, catalog, matchingStackItems(state, catalog, spec.selector, controller, source));
+    case "inZone":
+      return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source));
+    case "target":
+      return targetable(state, catalog, matchingCharacters(state, catalog, spec.selector, controller, source));
+  }
 }
 
 /** How many targets a spec takes: "up to N" allows none. */
 function targetBounds(spec: PlayTimeTarget): { readonly min: number; readonly max: number } {
   const count = spec.kind === "stackTarget" ? 1 : (spec.count ?? 1);
-  return { min: spec.kind === "target" && spec.upTo === true ? 0 : count, max: count };
+  return { min: spec.kind !== "stackTarget" && spec.upTo === true ? 0 : count, max: count };
 }
 
 /**
@@ -523,9 +548,42 @@ export function resolveStackTargets(ctx: StepContext, spec: StackTargetSpec, env
 }
 
 /**
+ * The cards a zone reference names now (rules § Zones → References to cards
+ * in a zone): the chosen void cards still in that void, matching, and
+ * targetable, in the order chosen, reporting noLegalTarget when none remain;
+ * every matching card in the zone, in zone order; those of the top cards of
+ * the deck that match, top first; or the source while it is in its
+ * controller's zone. Naming a card reveals nothing and emits nothing but that
+ * noLegalTarget.
+ */
+function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): InstanceId[] {
+  const { state, catalog } = ctx;
+  if (ref.pick === "self") {
+    const self = sourceInstance(env.source);
+    return self !== null && state.sides[env.controller][ref.zone].includes(self) ? [self] : [];
+  }
+  const side = resolvePlayer(env.controller, ref.player);
+  const matches = (id: InstanceId): boolean => inZoneMatching(state, catalog, ref, side, env.source, id);
+  switch (ref.pick) {
+    case "every":
+      return state.sides[side][ref.zone].filter(matches);
+    case "top":
+      return state.sides[side].deck.slice(0, Math.max(0, ref.count)).filter(matches);
+    case "target": {
+      const chosen = env.targetsOf(ref) ?? [];
+      const legal = targetable(state, catalog, chosen.filter(matches));
+      if (legal.length === 0 && chosen.length > 0) {
+        ctx.emit({ kind: "noLegalTarget", source: env.source });
+      }
+      return legal;
+    }
+  }
+}
+
+/**
  * The cards a card reference names now: chosen characters still legal,
- * chosen stack cards still on the stack, or the triggering card or the
- * source wherever it is, while it exists.
+ * chosen stack cards still on the stack, the triggering card or the source
+ * wherever it is, while it exists, or the cards a zone reference names.
  */
 export function resolveCards(ctx: StepContext, ref: CardRef, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
@@ -533,6 +591,8 @@ export function resolveCards(ctx: StepContext, ref: CardRef, env: EffectEnv): In
       return resolveCharacters(ctx, ref, env);
     case "stackTarget":
       return resolveStackTargets(ctx, ref, env);
+    case "inZone":
+      return resolveZoneCards(ctx, ref, env);
     case "subject":
       return env.subject !== null && ctx.state.instances[env.subject] !== undefined ? [env.subject] : [];
     case "self": {

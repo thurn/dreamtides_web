@@ -1102,6 +1102,35 @@ not target (`all`, `supported`, counts, conditions, trigger subjects) and
 the cards a cost chooses ("abandon a character") still match it: a cost is
 not an effect, and its cards are not targets (rules § Targeting).
 
+**Zone references** (`ZoneCardSpec`, `kind: "inZone"`, in `dsl/types.ts`)
+name cards in a player's deck, hand, or void, relative to the effect's
+controller: the hand that side holds, the deck or void it owns. They are
+card references (`CardRef`), so any primitive holding one resolves them
+through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
+
+- `fromVoid(filter, { player, count, upTo, another })` ("a character from
+  your void"): a `ZoneTargetSpec`, a play-time target (`PlayTimeTarget`)
+  declared by `cardTarget`. It is chosen with the character and stack targets,
+  in a `chooseTargets` prompt with the `target` role, at play time or, for a
+  triggered ability, as it resolves; `targetCandidates` offers the matching
+  cards of that void that can be targeted, in void order. A chosen card counts
+  as the effect resolves while it is still in that void, matching and
+  targetable; none left reports `noLegalTarget`. The cost planner excludes it
+  like any target (RD-hv-umm2.59-1).
+- `everyIn(zone, filter, { player, another })`: every matching card there, in
+  zone order.
+- `topOfDeck(count, filter, player)`: those of the top `count` cards that
+  match, top first.
+- `thisCardIn(zone)`: the source while it is in its controller's zone.
+
+Filters read current characteristics (`cardMatchesFilter`). Resolving a
+reference changes nothing and emits nothing but `noLegalTarget`, so a
+reference into a hidden hand or deck names no card in any view, event,
+prompt, or log; only the primitive acting on the cards can show them
+(RD-hv-umm2.59-2). The card-lab solver stages a matching void card for each
+void target. The static `grantCardKeyword` keeps its own `cardsIn` set, read
+through the layer evaluation.
+
 **Primitive catalog.** The registered primitives and DSL builders, by group,
 with the ones Phase 5 primitive beads add, each with tests.
 
@@ -1113,7 +1142,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)` | `forEach`, `eachPlayer`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, `costAtMost`, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype); players (`you`, `opponent`) | figment or not |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, `costAtMost`, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | figment or not |
 
 Discover accepts an exact copiable-cost value expression alongside its card
 filter, or a free resolution-time cost choice. The free choice uses the

@@ -87,7 +87,7 @@ interface PromptBase {
   readonly privateTo?: Side;
 }
 
-/** Choose between `min` and `max` distinct targets in play or on the stack. */
+/** Choose between `min` and `max` distinct targets in play, on the stack, or in a void. */
 export interface ChooseTargetsPrompt extends PromptBase {
   readonly kind: "chooseTargets";
   readonly candidates: readonly InstanceId[];

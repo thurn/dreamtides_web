@@ -29,6 +29,10 @@ import type {
   TargetSpec,
   ValueExpr,
   WinConditionAbility,
+  ZoneEverySpec,
+  ZoneSelfSpec,
+  ZoneTargetSpec,
+  ZoneTopSpec,
 } from "./types";
 
 export function event(effect: Effect): Ability {
@@ -167,6 +171,46 @@ export function all(selector: CharacterSelector): AllSpec {
 
 export function self(): SelfSpec {
   return { kind: "self" };
+}
+
+/**
+ * "A character from your void": `count` void cards matching `filter`, chosen
+ * as targets; "up to N" with `upTo`, "another" with `another`, and the
+ * opponent's void with `player: "opponent"`.
+ */
+export function fromVoid(
+  filter: CardFilter = {},
+  options: { readonly player?: PlayerRef; readonly count?: number; readonly upTo?: boolean; readonly another?: boolean } = {},
+): ZoneTargetSpec {
+  return {
+    kind: "inZone",
+    pick: "target",
+    zone: "void",
+    player: options.player ?? "you",
+    filter,
+    count: options.count ?? 1,
+    ...(options.upTo === true ? { upTo: true } : {}),
+    ...(options.another === true ? { another: true } : {}),
+  };
+}
+
+/** "Events in your void", "your hand": every card in the player's zone matching `filter`, chosen by nobody. */
+export function everyIn(
+  zone: CountedZone,
+  filter: CardFilter = {},
+  options: { readonly player?: PlayerRef; readonly another?: boolean } = {},
+): ZoneEverySpec {
+  return { kind: "inZone", pick: "every", zone, player: options.player ?? "you", filter, ...(options.another === true ? { another: true } : {}) };
+}
+
+/** "The top card of your deck" (`count` cards): those of them matching `filter`. */
+export function topOfDeck(count = 1, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneTopSpec {
+  return { kind: "inZone", pick: "top", zone: "deck", player, filter, count };
+}
+
+/** "This character from your void": the source while it is in its controller's `zone`. */
+export function thisCardIn(zone: CountedZone): ZoneSelfSpec {
+  return { kind: "inZone", pick: "self", zone };
 }
 
 export function enemyCharacter(extra: Omit<CharacterSelector, "controller"> = {}): CharacterSelector {

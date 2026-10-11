@@ -1,4 +1,4 @@
-import type { TargetSpec } from "../../dsl/types";
+import type { TargetSpec, ZoneCardSpec } from "../../dsl/types";
 import { copyOnStack } from "../../rules/copies";
 import { resolveCards } from "../interpreter";
 import { type CardRef, cardTarget, definePrimitive } from "../types";
@@ -6,11 +6,11 @@ import { type CardRef, cardTarget, definePrimitive } from "../types";
 /**
  * "Copy it" or "Copy a card on the stack": a copy directly above the card,
  * controlled by the effect's controller, who may choose new modes and
- * targets (D15). It never names a character in play.
+ * targets (D15). It never names a character in play or a card in a zone.
  */
 export interface CopyCardNode {
   readonly op: "copyCard";
-  readonly card: Exclude<CardRef, TargetSpec>;
+  readonly card: Exclude<CardRef, TargetSpec | ZoneCardSpec>;
 }
 
 export const copyCardPrimitive = definePrimitive<CopyCardNode>({
@@ -21,6 +21,6 @@ export const copyCardPrimitive = definePrimitive<CopyCardNode>({
   },
 });
 
-export function copyCard(card: Exclude<CardRef, TargetSpec>): CopyCardNode {
+export function copyCard(card: Exclude<CardRef, TargetSpec | ZoneCardSpec>): CopyCardNode {
   return { op: "copyCard", card };
 }

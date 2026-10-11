@@ -4,7 +4,26 @@
  * `5e5e5e5e-…-0000000002xx`.
  */
 import type { EngineCardDefinition } from "../catalog";
-import { anyCharacter, characterYouControl, enemyCharacter, energy, energyX, event, keyword, noCardsIn, staticAbility, target, upTo, winCondition, x } from "../dsl/builders";
+import {
+  anyCharacter,
+  characterYouControl,
+  enemyCharacter,
+  energy,
+  energyX,
+  event,
+  everyIn,
+  fromVoid,
+  keyword,
+  noCardsIn,
+  staticAbility,
+  target,
+  thisCardIn,
+  topOfDeck,
+  upTo,
+  winCondition,
+  x,
+} from "../dsl/builders";
+import { onDissolved, triggered } from "../dsl/triggers";
 import type { Ability, CardCost } from "../dsl/types";
 import * as p from "../effects/primitives";
 import { syntheticId } from "./synthetic-cards";
@@ -88,6 +107,18 @@ export const DSL = {
   handOffering: authored(35, "character", 2, () => [staticAbility(p.grantCardKeyword(p.cardsIn("hand"), "offering"))], { subtype: "Mage" }),
   /** "Mage characters in your void have Reclaim." */
   voidMagesReclaim: authored(36, "character", 2, () => [staticAbility(p.grantCardKeyword(p.cardsIn("void", { cardType: "character", subtype: "Mage" }), "reclaim"))], { subtype: "Mage" }),
+  /** "Add a copy of a character in your void to your hand": a void target chosen as the card is played. */
+  copyVoidCharacter: authored(37, "event", 1, events(event(p.createCopyInHand(fromVoid({ cardType: "character" }))))),
+  /** "Add copies of up to two cards in the opponent's void to your hand." */
+  copyOpponentVoidCards: authored(38, "event", 1, events(event(p.createCopyInHand(fromVoid({}, { player: "opponent", count: 2, upTo: true }))))),
+  /** "Add a copy of each event in your void to your hand." */
+  copyVoidEvents: authored(39, "event", 1, events(event(p.createCopyInHand(everyIn("void", { cardType: "event" }))))),
+  /** "Add a copy of the top card of your deck to your hand, if it is a character." */
+  copyTopCharacter: authored(40, "event", 1, events(event(p.createCopyInHand(topOfDeck(1, { cardType: "character" }))))),
+  /** "▸Dissolved: Add a copy of another warrior in your void to your hand": a void target chosen as the trigger resolves. */
+  dissolvedCopiesVoidWarrior: authored(41, "character", 1, () => [triggered(onDissolved(), p.createCopyInHand(fromVoid({ subtype: "Warrior" }, { another: true })))], { spark: 1 }),
+  /** "▸Dissolved: Add a copy of this character from your void to your hand." */
+  dissolvedCopiesItself: authored(42, "character", 1, () => [triggered(onDissolved(), p.createCopyInHand(thisCardIn("void")))], { spark: 1 }),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

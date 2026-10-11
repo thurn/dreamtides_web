@@ -171,6 +171,24 @@ Reclaim).
 **Banished** — A permanent exile zone. Cards sent here do not return under normal
 circumstances.
 
+**References to cards in a zone.** Effects name cards in a deck, a hand, or a
+void. "Your hand" is the hand you hold; "your deck" and "your void" are the ones
+you own. A reference reads each card's current characteristics, so a card whose
+type changed matches by its new type:
+
+- "A character from your void" chooses cards there as targets (see
+  [Targeting](#targeting)).
+- "Cards in your void" and "your hand" name every matching card there, chosen by
+  nobody.
+- "The top card of your deck" names that card when it matches; with fewer cards
+  in the deck, it names the ones there are, and an empty deck names none
+  without causing Fatigue.
+- "This character from your void" names its own card only while that card is in
+  your void.
+
+Naming a card reveals nothing: only what the effect then does with a hidden
+card, such as putting a copy of it into a hand, can show it to a player.
+
 ## The Dreamwell and Energy
 
 Energy (●) is the resource used to play cards. Dreamtides uses the Dreamwell — a
@@ -582,12 +600,21 @@ card, or another card (not the source). Type predicates include
 character, event, a specific subtype, characters with a minimum spark, or cards
 with a specific energy cost.
 
-**Targets are chosen before costs are paid.** Because of this, a character used
-to pay a cost cannot also be chosen as the target of the same ability — for
+**Targets are chosen before costs are paid.** Because of this, a card used to
+pay a cost cannot also be chosen as the target of the same ability — for
 example, "Abandon a character: Return a character from your void to hand" cannot
-target the character abandoned to pay the cost (that character is in the void,
-not in play, by the time the effect chooses among in-play characters; and the
-abandoned character was selected as a cost, not a target).
+target the character abandoned to pay the cost: the target is chosen while that
+character is still in play, not in the void, and a card chosen as a target is
+never also chosen to pay a cost of the same card or ability.
+
+**Cards in a void** are targeted like characters. "Return a character from your
+void to your hand" and "Banish up to three cards from the opponent's void"
+choose cards in that void as targets when the card is played or the ability
+activated (a triggered ability chooses as it resolves), and every rule of this
+section applies to them. A chosen void card is still a legal target as the
+effect resolves only while it is in that void and still matches; one that left
+the void and came back is still the same card (see [Zone
+Changes](#zone-changes)).
 
 Each [figment](#figments) is an independent character and is targeted
 individually.

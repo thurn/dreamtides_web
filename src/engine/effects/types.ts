@@ -4,14 +4,24 @@ import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { AbilityOrigin, BattleState, ContinuousChange, Expiry, SparkGain } from "../state/types";
 import type { StepContext } from "../steps/types";
 import type { CharacteristicsReader } from "../dsl/selectors";
-import type { CharacterRef, PlayTimeTarget, SelfSpec, StackTargetSpec, SubjectSpec, TargetSpec, ValueExpr, Variant } from "../dsl/types";
+import type {
+  CharacterRef,
+  PlayTimeTarget,
+  SelfSpec,
+  StackTargetSpec,
+  SubjectSpec,
+  TargetSpec,
+  ValueExpr,
+  Variant,
+  ZoneCardSpec,
+} from "../dsl/types";
 
 /**
- * The card a copy copies: a chosen character in play or card on the stack,
- * the card the triggering event concerns ("copy it"), or the source, in
- * whatever zone it is.
+ * The cards an effect names in any zone: a chosen character in play or card
+ * on the stack, the card the triggering event concerns ("copy it"), the
+ * source in whatever zone it is, or cards in a deck, hand, or void.
  */
-export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec;
+export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec | ZoneCardSpec;
 
 /** The shape every effect node has; the registry narrows it to the primitive union. */
 export interface EffectNode {
@@ -143,11 +153,11 @@ export function characterTarget(ref: CharacterRef): readonly PlayTimeTarget[] {
 
 /**
  * The `targets` hook of a primitive holding a card reference: the reference
- * when it is a character or stack card chosen at play time, otherwise
- * nothing.
+ * when it is a character, stack card, or void card chosen at play time,
+ * otherwise nothing.
  */
 export function cardTarget(ref: CardRef): readonly PlayTimeTarget[] {
-  return ref.kind === "target" || ref.kind === "stackTarget" ? [ref] : [];
+  return ref.kind === "target" || ref.kind === "stackTarget" || (ref.kind === "inZone" && ref.pick === "target") ? [ref] : [];
 }
 
 /** Declares a primitive; the identity keeps the node type checked. */

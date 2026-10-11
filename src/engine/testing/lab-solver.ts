@@ -6,7 +6,7 @@ import { printedCardId, type EngineCardDefinition } from "../catalog";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { fixedEnergy } from "../dsl/energy";
-import type { CharacterSelector } from "../dsl/types";
+import type { CardFilter, CharacterSelector } from "../dsl/types";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
 import type { BattleState, DeckEntry } from "../state/types";
@@ -48,11 +48,23 @@ function characterFor(
   return found.id;
 }
 
+/** A card definition that matches a card filter, for a void target: a character as `characterFor` finds one, else a synthetic event. */
+function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
+  if (filter.cardType === "event") {
+    const found = filter.subtype === undefined ? SYNTHETIC.event1 : pool.find((card) => card.cardType === "event" && card.subtype === filter.subtype);
+    if (found === undefined) throw new Error(`The lab solver has no event for filter ${JSON.stringify(filter)}`);
+    engine.catalog.card(found.id);
+    return found.id;
+  }
+  return characterFor(engine, { controller: "any", ...(filter.subtype === undefined ? {} : { subtype: filter.subtype }) }, pool);
+}
+
 /**
  * Solves a lab board for `card` (a deck entry plays its variant): `side` is
  * active in its Day with the card in hand and ample energy, and every
- * play-time target spec gets a matching character on the side it selects,
- * relative to `side`. Throws if the card is still unplayable.
+ * play-time target spec gets a matching character in play, or for a void
+ * target a matching card in the void, on the side it selects, relative to
+ * `side`. Throws if the card is still unplayable.
  */
 export function labBoard(
   engine: Engine,
@@ -64,10 +76,16 @@ export function labBoard(
   const cardId = entry.cardId;
   const definition = engine.catalog.card(cardId);
   const back: Record<Side, CardId[]> = { player: [], enemy: [] };
+  const voids: Record<Side, CardId[]> = { player: [], enemy: [] };
   for (const specs of eventTargetSpecs(definition, variantOf(entry))) {
     for (const spec of specs) {
       // A stack target needs an item on the stack, which a Day board never has; lab overrides supply one.
-      if (spec.kind !== "target") continue;
+      if (spec.kind === "stackTarget") continue;
+      if (spec.kind === "inZone") {
+        const voidSide = spec.player === "you" ? side : opponent(side);
+        for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidCardFor(engine, spec.filter, pool));
+        continue;
+      }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
       for (let index = 0; index < (spec.count ?? 1); index++) {
         back[targetSide].push(characterFor(engine, spec.selector, pool));
@@ -76,8 +94,8 @@ export function labBoard(
   }
   const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
   const sides: Record<Side, SideSetup> = {
-    player: { back: back.player, deck },
-    enemy: { back: back.enemy, deck },
+    player: { back: back.player, void: voids.player, deck },
+    enemy: { back: back.enemy, void: voids.enemy, deck },
   };
   sides[side] = { ...sides[side], hand: [entry], energy: LAB_ENERGY };
   const setup: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };

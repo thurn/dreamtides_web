@@ -17,13 +17,13 @@ export interface UndeclaredTarget {
 }
 
 function isPlayTimeTarget(value: object): value is PlayTimeTarget {
-  return (
-    "kind" in value && (value.kind === "target" || value.kind === "stackTarget")
-  );
+  if (!("kind" in value)) return false;
+  if (value.kind === "target" || value.kind === "stackTarget") return true;
+  return value.kind === "inZone" && "pick" in value && value.pick === "target";
 }
 
 /**
- * The target and stack target specs in a node's own fields that its
+ * The target, stack target, and void target specs in a node's own fields that its
  * primitive's `targets` hook misses. The walk skips the nested effect nodes
  * the primitive names as children, modes, or deferred effects: each is
  * checked as a node of its own.

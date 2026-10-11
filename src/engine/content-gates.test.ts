@@ -122,6 +122,7 @@ function staticReferenceFailures(abilities: readonly Ability[]): string[] {
       if (typeof value !== "object" || value === null || seen.has(value)) return;
       seen.add(value);
       if ("kind" in value && PLAY_TIME_REFERENCES.includes(value.kind)) kinds.push(String(value.kind));
+      if ("kind" in value && value.kind === "inZone" && "pick" in value && value.pick === "target") kinds.push("inZone target");
       for (const field of Object.values(value)) visit(field);
     };
     visit(ability.effect);

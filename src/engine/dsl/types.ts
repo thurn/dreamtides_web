@@ -117,8 +117,64 @@ export interface SupportedSpec {
 /** The characters a character effect applies to. */
 export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec;
 
-/** Any target chosen at play time: characters in play or cards on the stack. */
-export type PlayTimeTarget = TargetSpec | StackTargetSpec;
+/**
+ * Cards in one of a player's decks, hands, or voids that an effect names
+ * (rules § Zones → References to cards in a zone). `player` is relative to
+ * the effect's controller: a hand is the hand that side holds, a deck or void
+ * the one it owns. A filtered reference reads each card's current
+ * characteristics. No reference reveals a card: only what an effect then
+ * does to the cards it names can.
+ */
+interface ZoneCardsBase {
+  readonly kind: "inZone";
+  readonly player: PlayerRef;
+  readonly filter: CardFilter;
+}
+
+/**
+ * "A character from your void", "up to two cards from the opponent's void":
+ * void cards chosen as targets (rules § Targeting), when the card is played
+ * or, for a triggered ability, as it resolves. A chosen card is still a
+ * legal target as the effect resolves only while it is in that void, matches
+ * the filter, and can be targeted.
+ */
+export interface ZoneTargetSpec extends ZoneCardsBase {
+  readonly pick: "target";
+  readonly zone: "void";
+  readonly count: number;
+  /** "Up to N": fewer targets, including none, are allowed. */
+  readonly upTo?: boolean;
+  /** Excludes the effect's source: "another warrior from your void". */
+  readonly another?: boolean;
+}
+
+/** "Cards in your void", "your hand", "characters in your deck": every matching card, in zone order, chosen by nobody. */
+export interface ZoneEverySpec extends ZoneCardsBase {
+  readonly pick: "every";
+  readonly zone: CountedZone;
+  /** Excludes the effect's source. */
+  readonly another?: boolean;
+}
+
+/** "The top card of your deck": those of the top `count` cards that match, top first; fewer when the deck is shorter. */
+export interface ZoneTopSpec extends ZoneCardsBase {
+  readonly pick: "top";
+  readonly zone: "deck";
+  readonly count: number;
+}
+
+/** "This character from your void": the effect's source while it is in its controller's `zone`. */
+export interface ZoneSelfSpec {
+  readonly kind: "inZone";
+  readonly pick: "self";
+  readonly zone: CountedZone;
+}
+
+/** A reference to cards in a deck, hand, or void. */
+export type ZoneCardSpec = ZoneTargetSpec | ZoneEverySpec | ZoneTopSpec | ZoneSelfSpec;
+
+/** Any target chosen at play time: characters in play, cards on the stack, or cards in a void. */
+export type PlayTimeTarget = TargetSpec | StackTargetSpec | ZoneTargetSpec;
 
 /** A number an effect reads when it resolves. */
 export type ValueExpr =
