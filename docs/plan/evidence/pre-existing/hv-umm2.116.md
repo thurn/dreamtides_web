@@ -1,0 +1,3 @@
+# Pre-existing issues found by hv-umm2.116
+
+- `src/runtime/battle-prompt-messages.ts` (`effectStartedText`, `trigger` case, and the `delayedTrigger` status label) with `src/screens/cumulus_adapters/engine-battle-view-model.ts` (side `delayedTrigger` badge): a floating or delayed trigger is shown and logged as "An ability triggers until end of turn." without its source card or what it waits for, so a player reading the log or the badge cannot tell which card created it (seen judging f160fd01-b3c3-4904-b15f-339f6fcf5ca5 as player and as enemy; captures `qr-active-desktop.png`, `qr-enemy-log-desktop.png`).

@@ -1,0 +1,43 @@
+{
+  "bead": "hv-umm2.116",
+  "phase": 5,
+  "implementMin": 25,
+  "localValidationS": {
+    "install": 4,
+    "focused": 3,
+    "review": 39,
+    "knip": 3,
+    "fuzz": 58,
+    "sweep": 502,
+    "judged": 66
+  },
+  "hostLoad": 12.17,
+  "testDelta": {
+    "files": 1,
+    "lines": 72,
+    "jsdomFiles": 0,
+    "cases": 1
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 12,
+      "note": "The judged scenario's steps are serialized into the page, so module-scope constants were undefined; after a reload the engine probe was not yet published until a qa.battle.waitFor; and the AI's floating-trigger badge renders only after the play reveal finishes, so an immediate read at the committed state saw none on mobile."
+    }
+  ],
+  "sourceBase": "27f02c36b217840ebcdaeeaa215e6f542ce9b421",
+  "coverage": {
+    "entities": 5,
+    "pending": 0,
+    "amplifiedTexts": 2,
+    "newEffectOps": 0,
+    "scenarioModules": 1,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 54,
+      "skip": 46,
+      "fail": 0
+    },
+    "judged": 2
+  }
+}

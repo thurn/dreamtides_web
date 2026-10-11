@@ -144,6 +144,13 @@ stated restriction are shown privately to you for that choice. Choose one of
 those cards; it is discarded from the opponent's hand into its owner's void.
 If the hand has no matching card, that part of the effect does nothing.
 
+**When you discard** — An ability that triggers "When you discard a card"
+triggers once for each card discarded from your hand, whatever made you
+discard it: your own effect, the opponent's effect, a cost such as "Reclaim –
+Discard a card", or the hand-limit discard during the Ending phase. A created
+card that is discarded triggers it too, though it ceases to exist instead of
+entering the void.
+
 A card leaving a hand is shown to the opponent as it enters a zone they can
 see, so a discarded card is shown to both players as it enters its owner's void.
 A created card that ceases to exist instead (see [Created
@@ -785,7 +792,10 @@ gave it.
 
 **Ephemeral** — A card drawn with Ephemeral is banished at the end of the turn if
 it is still in hand, so it must be played the turn it is drawn. It is no longer
-Ephemeral once it leaves the hand.
+Ephemeral once it leaves the hand. A card drawn with Ephemeral during the
+Ending phase after its banishment step, as by a "When you discard a card"
+ability that the hand-limit discard triggers, is banished in the next turn's
+Ending phase instead, if it is still in hand.
 
 **Vengeful** — When this character loses a challenge, it dissolves the opposing
 enemy character. In effect both characters in the challenge are dissolved.

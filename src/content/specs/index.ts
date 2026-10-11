@@ -4,5 +4,6 @@
  * one entry in `SCENARIO_MODULES`, in slug order.
  */
 import type { ScenarioModule } from "../../engine/testing/scenario";
+import cards04 from "./cards-04.scenarios";
 
-export const SCENARIO_MODULES: readonly ScenarioModule[] = [];
+export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04];

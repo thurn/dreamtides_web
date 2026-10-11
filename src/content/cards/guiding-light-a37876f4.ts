@@ -1,3 +1,5 @@
+import { energy, event, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 236,
   art: { x: 0, y: 1, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(p.sequence(p.foresee(variant.amplified ? 2 : 1), p.draw(1))), reclaim(energy(4))],
+  verifiedText: "dce8raslhb",
 });

@@ -1,3 +1,6 @@
+import { energy, event, reclaim } from "../../engine/dsl/builders";
+import { whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 269,
   art: { x: 0, y: 0.897, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.floating(whenMaterialize(), p.draw(1))), reclaim(energy(4))],
+  verifiedText: "omsi6o5xc4",
 });

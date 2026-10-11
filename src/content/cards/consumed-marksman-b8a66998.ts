@@ -1,3 +1,5 @@
+import { either, onDissolved, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,8 @@ export default card({
   cardNumber: 53,
   art: { x: 0.588, y: 0.608, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(either(onMaterialized(), onDissolved()), p.draw(variant.amplified ? 2 : 1, "you", { ephemeral: true })),
+  ],
+  verifiedText: "19ak8t542fo",
 });
