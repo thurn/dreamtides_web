@@ -245,7 +245,7 @@ const prim = (name: string, file: string, extra: PrimitiveExtra = {}): Primitive
   ...extra,
 });
 const builder = (name: string): PrimitiveEntry => ({ name, kind: "builder" });
-const callable = (module: string, symbol: string, pending?: "export"): InventoryCapabilityForm => ({ module, symbol, kind: "builder", ...(pending === undefined ? {} : { pending }) });
+const callable = (module: string, symbol: string): InventoryCapabilityForm => ({ module, symbol, kind: "builder" });
 const registered = (module: string, symbol: string, options: Omit<InventoryCapabilityForm, "module" | "symbol" | "kind"> = {}): InventoryCapabilityForm => ({ module, symbol, kind: "form", ...options });
 const dsl = (name: string, forms: readonly InventoryCapabilityForm[], fallout: readonly string[], extra: PrimitiveExtra = {}): PrimitiveEntry => ({
   name,
@@ -415,7 +415,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("whenPlayFromVoidTrigger", [registered(DSL_TYPES, "Trigger", { member: "play", option: "from", optionLiteral: "void", pending: "option" })], ["Trigger"], { note: "\"when you play a card from your void\"" }),
   dsl("drawTriggerFilter", [registered(DSL_TYPES, "Trigger", { member: "draw", option: "filter", pending: "option" })], ["Trigger"], { note: "\"when you draw a character\"" }),
   dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth", pending: "option" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
-  dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn", "export")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
+  dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
   dsl("firstTimeEachTurn", [registered(DSL_TYPES, "TriggeredAbility", { option: "oncePerTurn" })], ["TriggeredAbility"], { note: "\"the first time each turn …\"" }),
   dsl("typeRemap", [registered(DSL_TYPES, "DeckMods", { option: "typeRemap", pending: "option" })], ["Variant"], { note: `C12 type remap for selectors and figments (${GAP_38})` }),
   // Journey-modifier registry (P8, 5.6).

@@ -1,0 +1,621 @@
+{
+  "bead": "hv-umm2.451",
+  "base": "bf0c8c2b320cdd798225be0cc504b4ffdf1db7f8",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.451",
+  "dispatchWindow": {
+    "start": "2026-10-11T23:35:15+00:00",
+    "basis": "Parent dispatch time is approximate; helper receipt timestamp is not retained. Full wall includes investigation, diagnostics, coordination and verification. Final evidence boundary will immediately precede commit.",
+    "evidenceAt": "2026-10-11T23:40:29.321144+00:00",
+    "elapsedToEvidenceMin": 5.88,
+    "finalEvidenceAt": "2026-10-11T23:41:07.528343+00:00",
+    "boundary": "Final evidence-only amendment includes the commit-message artifact in the manifest. This observation immediately precedes amendment; approximate dispatch basis and sub-minute commit tail are disclosed."
+  },
+  "scope": [
+    "scripts/content-inventory.ts",
+    "docs/plan/evidence/content-inventory.json",
+    "own friction, measurement JSON and pre-existing notes"
+  ],
+  "implementation": "Retire the verified atEndOfTurn export pending annotation and unused private callable factory pending parameter. Resolver lifecycle guards and public signatures are unchanged. Actual missing intended APIs remain explicitly pending.",
+  "freshBaseMarkedObservation": {
+    "artifact": "before-public-results.json",
+    "markedForms": 19,
+    "fulfilled": [
+      "atEndOfTurnTrigger"
+    ],
+    "missingForms": 18,
+    "afterMarkedForms": 18,
+    "C12": "DeckMods.typeRemap remains absent and pending; no alternative API is inferred.",
+    "exactPublicBinding": "src/engine/dsl/triggers.ts exports callable atEndOfTurn(player?: PlayerRef): Trigger; actual call returns endOfTurn. Exact resolver validate succeeds when its pending annotation is omitted."
+  },
+  "negativeProof": {
+    "base": "bf0c8c2b320cdd798225be0cc504b4ffdf1db7f8",
+    "observedAt": "2026-10-11T23:37:21.536747+00:00",
+    "sourceSha256": "6b93a291e6bfd618fb15ccb4804a06715edc2d71f0bcced2f8a9290cbac6d53c",
+    "testSha256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "trackedInventorySha256": "6f0842f7d0d99b9c8b594d52c7742a5c14221e6b95016298226ea934b88885d5",
+    "unchangedCli": {
+      "exit": 1,
+      "wallSeconds": 3.232,
+      "log": "before-cli-check.log"
+    },
+    "publicProbe": {
+      "exit": 0,
+      "wallSeconds": 3.259
+    }
+  },
+  "diagnosticBaseline": {
+    "label": "Diagnostic baseline bypasses ONLY fulfilled-marker rejection. A console-only observer captures all 189 flags without changing generator output/filter/data/validation. This is not an unchanged CLI success.",
+    "exit": 0,
+    "wallSeconds": 2.142,
+    "diagnosticSourceSha256": "235b7f6b82e77ed3d041c773c99a87cd3416178cad1391a05c9e5e538d52bcbb",
+    "inventorySha256": "91d169229d80c398108999a6972cd1b69831d38b7e19b5d65213690b9f426d4f",
+    "sourceRestoredIdentically": true,
+    "inventoryRestoredIdentically": true,
+    "restoredSourceSha256": "6b93a291e6bfd618fb15ccb4804a06715edc2d71f0bcced2f8a9290cbac6d53c",
+    "restoredInventorySha256": "6f0842f7d0d99b9c8b594d52c7742a5c14221e6b95016298226ea934b88885d5",
+    "observedAt": "2026-10-11T23:38:02.625692+00:00"
+  },
+  "diagnosticExplanation": "Unchanged CLI exits 1 at the intentional hv-umm2.441 fulfilled-marker guard. Diagnostic baseline explicitly bypasses only that rejection while all other validation remains active. A console-only observer captures all 189 flags without changing generator output/selection. This diagnostic success is not claimed as unchanged CLI success. Source and inventory restore byte-identically in finally. Final full-availability observer likewise restores exact intended source/output.",
+  "comparison": {
+    "allAvailability": {
+      "entries": 189,
+      "unchanged": 189,
+      "differences": []
+    },
+    "freshDiagnosticVsFinal": {
+      "entities": 1209,
+      "UUIDsIdentical": true,
+      "allEntityFieldsIdentical": true,
+      "allOutputDifferences": [
+        {
+          "path": ".primitives[38].forms[0].pending",
+          "old": "export",
+          "new": null
+        }
+      ]
+    },
+    "trackedVsFreshDiagnostic": {
+      "trackedBeads": 222,
+      "freshBeads": 221,
+      "availabilityChanges": [
+        {
+          "name": "atEndOfTurnTrigger",
+          "tracked": false,
+          "fresh": true
+        },
+        {
+          "name": "gainAbilities",
+          "tracked": false,
+          "fresh": true
+        }
+      ],
+      "entityChanges": [
+        {
+          "id": "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 4,
+              "newLength": 5
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 1,
+              "newLength": 0
+            },
+            {
+              "path": ".routing[1]",
+              "old": "prim-at-end-of-turn-trigger",
+              "new": "cards-52"
+            },
+            {
+              "path": ".rulesDecisions",
+              "oldLength": 1,
+              "newLength": 3
+            },
+            {
+              "path": ".status",
+              "old": "pending",
+              "new": "authored"
+            }
+          ]
+        },
+        {
+          "id": "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-58",
+              "new": "cards-59"
+            }
+          ]
+        },
+        {
+          "id": "4f29a241-9265-4669-a189-5a2a91923e12",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-53",
+              "new": "cards-54"
+            }
+          ]
+        },
+        {
+          "id": "4fe9f53e-149a-4b9f-8fac-f75560c986f2",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-57",
+              "new": "cards-58"
+            }
+          ]
+        },
+        {
+          "id": "5931e388-1856-4e5a-85f8-a5aa34f867b1",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-56",
+              "new": "cards-57"
+            }
+          ]
+        },
+        {
+          "id": "5a27e236-86d7-442f-81d2-fb29a2b7f12a",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 5,
+              "newLength": 6
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 1,
+              "newLength": 0
+            },
+            {
+              "path": ".rulesDecisions",
+              "old": null,
+              "new": [
+                "RD-hv-umm2.86-1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6e2188f8-580e-4a66-a3e3-267d509de903",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-118",
+              "new": "cards-119"
+            }
+          ]
+        },
+        {
+          "id": "87239e3f-04f7-45bd-9b73-944ef36ad445",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 2,
+              "newLength": 3
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 2,
+              "newLength": 1
+            }
+          ]
+        },
+        {
+          "id": "890970bd-475f-4da4-b835-2fb75882a84d",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 2,
+              "newLength": 3
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 2,
+              "newLength": 1
+            }
+          ]
+        },
+        {
+          "id": "954e8d50-d494-4fb2-b4c7-74979083b774",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-54",
+              "new": "cards-55"
+            }
+          ]
+        },
+        {
+          "id": "95711262-8510-475c-a572-c1cd144d54cb",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-57",
+              "new": "cards-58"
+            }
+          ]
+        },
+        {
+          "id": "967c714f-40c5-4a77-8e22-40691a2755d4",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-58",
+              "new": "cards-59"
+            }
+          ]
+        },
+        {
+          "id": "a911ef71-799c-4240-ad13-8fabd3caeafa",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-117",
+              "new": "cards-118"
+            }
+          ]
+        },
+        {
+          "id": "af739e3d-bc61-4fab-bf81-a22e78d7e524",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-59",
+              "new": "cards-60"
+            }
+          ]
+        },
+        {
+          "id": "b765f6bb-0b8a-4847-ada4-477b9493e3ad",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 5,
+              "newLength": 6
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 3,
+              "newLength": 2
+            },
+            {
+              "path": ".rulesDecisions",
+              "old": null,
+              "new": [
+                "RD-hv-umm2.86-1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b8590328-ca72-4869-a795-c7f4b6802bed",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 2,
+              "newLength": 3
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 2,
+              "newLength": 1
+            }
+          ]
+        },
+        {
+          "id": "cd3d8e4a-618e-4c2f-be60-0363b81887f1",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-52",
+              "new": "cards-53"
+            }
+          ]
+        },
+        {
+          "id": "d76684c3-797e-44ae-a2ba-333e77d46a4d",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 2,
+              "newLength": 3
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 3,
+              "newLength": 2
+            },
+            {
+              "path": ".rulesDecisions",
+              "old": null,
+              "new": [
+                "RD-hv-umm2.86-1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "e72245f2-c153-4e79-ba8e-956d18202b48",
+          "fields": [
+            {
+              "path": ".requiredPrimitives.existing",
+              "oldLength": 3,
+              "newLength": 4
+            },
+            {
+              "path": ".requiredPrimitives.new",
+              "oldLength": 1,
+              "newLength": 0
+            },
+            {
+              "path": ".routing[1]",
+              "old": "prim-gain-abilities",
+              "new": "cards-117"
+            },
+            {
+              "path": ".rulesDecisions",
+              "old": null,
+              "new": [
+                "RD-hv-umm2.110-1",
+                "RD-hv-umm2.110-2",
+                "RD-hv-umm2.110-3"
+              ]
+            },
+            {
+              "path": ".status",
+              "old": "pending",
+              "new": "authored"
+            }
+          ]
+        },
+        {
+          "id": "f7ffe999-685d-4ea2-85de-2e567eb2a042",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-55",
+              "new": "cards-56"
+            }
+          ]
+        },
+        {
+          "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791",
+          "fields": [
+            {
+              "path": ".routing[1]",
+              "old": "cards-60",
+              "new": "cards-61"
+            }
+          ]
+        },
+        {
+          "id": "ffa4fa56-8897-465d-b812-3798e3cf5a1f",
+          "fields": [
+            {
+              "path": ".rulesDecisions",
+              "oldLength": 2,
+              "newLength": 3
+            }
+          ]
+        }
+      ],
+      "UUIDsIdentical": true,
+      "summary": [
+        {
+          "path": ".beads",
+          "old": 222,
+          "new": 221
+        },
+        {
+          "path": ".beadsByKind.composition",
+          "old": 162,
+          "new": 163
+        },
+        {
+          "path": ".beadsByKind.primitive",
+          "old": 37,
+          "new": 35
+        },
+        {
+          "path": ".beadsBySection.5.2",
+          "old": 137,
+          "new": 136
+        },
+        {
+          "path": ".newPrimitives",
+          "old": 37,
+          "new": 35
+        },
+        {
+          "path": ".pendingByKind.card",
+          "old": 382,
+          "new": 380
+        }
+      ]
+    },
+    "trackedVsFinal": {
+      "entityChangesIdenticalToInherited": true,
+      "beads": 221
+    },
+    "nativeFiledScopes": "Authoritative, no refile/materialization performed."
+  },
+  "tests": {
+    "unchangedTestSha256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "baselineCases": 92,
+    "finalCases": 91,
+    "delta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0,
+      "cases": -1
+    },
+    "explanation": "One actual metadata pending case naturally leaves the table-derived lifecycle collection. All47 capability entries/48 intended binding forms and generic lifecycle/representation guards stay collected. No test source edit, entrypoint, plain module or jsdom addition."
+  },
+  "validation": {
+    "final-cli-regenerate": {
+      "exit": 0,
+      "wallSeconds": 1.387,
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "hostLoad": 23.328125
+    },
+    "final-cli-check": {
+      "exit": 0,
+      "wallSeconds": 1.293,
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts",
+        "--check"
+      ],
+      "hostLoad": 23.328125
+    },
+    "focused-final": {
+      "exit": 0,
+      "wallSeconds": 6.33,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts"
+      ],
+      "hostLoad": 24.46875
+    },
+    "sourceSha256": "0755fd9422e217b987fd6a96df3a2bb13efeea50b3eba694cf7f00d5dd2afe93",
+    "testSha256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "inventorySha256": "2c9fd5cc6a24e8584fe42639efe8b9d2db1e260bdce459a0bec253bd148b4943",
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallSeconds": 13.404,
+      "startingHostLoad": 18.19775390625
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallSeconds": 3.164,
+      "startingHostLoad": 27.80224609375
+    }
+  },
+  "validationPolicy": "Focused existing tests, CLI regeneration/check, review and Knip for tooling-local metadata. No full, fuzz or browser validation is warranted. No engine, DSL, runtime, UI, schema or infrastructure changes.",
+  "hostLoadSamples": {
+    "final-cli-regenerate": {
+      "exit": 0,
+      "wallSeconds": 1.387,
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "hostLoad": 23.328125
+    },
+    "final-cli-check": {
+      "exit": 0,
+      "wallSeconds": 1.293,
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts",
+        "--check"
+      ],
+      "hostLoad": 23.328125
+    },
+    "focused-final": {
+      "exit": 0,
+      "wallSeconds": 6.33,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts"
+      ],
+      "hostLoad": 24.46875
+    },
+    "sourceSha256": "0755fd9422e217b987fd6a96df3a2bb13efeea50b3eba694cf7f00d5dd2afe93",
+    "testSha256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "inventorySha256": "2c9fd5cc6a24e8584fe42639efe8b9d2db1e260bdce459a0bec253bd148b4943",
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallSeconds": 13.404,
+      "startingHostLoad": 18.19775390625
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallSeconds": 3.164,
+      "startingHostLoad": 27.80224609375
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review starting one-minute load sample."
+      }
+    }
+  },
+  "runtimeLedger": {
+    "servers": [],
+    "browserSessions": [],
+    "leases": [],
+    "heavySlots": [],
+    "toolProviders": [],
+    "writers": "Every owned synchronous diagnostic/check subprocess exited; the review/Knip observer completed exit 0. No residual writers or runtime processes remain.",
+    "resourcesSettled": true,
+    "externalResources": "Parent native/shared services are outside implementation ownership and were not touched."
+  },
+  "fallout": {
+    "exportedAPI": "None",
+    "source": "Two changed lines; optional argument existed only on private callable descriptor factory. No importer/type fallout.",
+    "tests": "No source edits required; one table-derived lifecycle case retires automatically."
+  },
+  "install": {
+    "performedBy": "Parent in this fresh worktree before helper writes",
+    "exit": 0,
+    "reportedWallSeconds": 3,
+    "advisories": {
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1
+    },
+    "packageAndLockChanged": false
+  },
+  "sourceHashes": {
+    "sourceSha256": "0755fd9422e217b987fd6a96df3a2bb13efeea50b3eba694cf7f00d5dd2afe93",
+    "testSha256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "inventorySha256": "2c9fd5cc6a24e8584fe42639efe8b9d2db1e260bdce459a0bec253bd148b4943"
+  },
+  "reviewPolicy": "Non-core bounded metadata delta 4 changed non-test lines, no independent review threshold crossed; parent decides final delivery.",
+  "manifest": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.451/evidence-manifest.json",
+    "artifacts": 29,
+    "sha256": "9a21918590c98dbb55f61431cd96d32f4d578e2d5efecabaf407799605b118fa"
+  }
+}
