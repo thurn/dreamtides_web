@@ -92,7 +92,14 @@ export function abandonSelfCost(): PaymentCost {
 
 /** "Discard N cards" as a cost. */
 export function discardCost(count = 1): PaymentCost {
-  return { cost: "discard", count };
+  return discardCostFilter({}, { count });
+}
+
+/** Discard matching hand cards; capture their count or a single card’s copiable cost as X. */
+export function discardCostFilter(filter: CardFilter, options: { readonly count?: number | "x"; readonly captureCost?: never } | { readonly count?: 1; readonly captureCost: true } = {}): PaymentCost {
+  return options.captureCost === true
+    ? { cost: "discard", count: 1, filter, captureCost: true }
+    : { cost: "discard", count: options.count ?? 1, filter };
 }
 
 /** "N⧗": spend counters stored on the source. */
@@ -251,6 +258,11 @@ export function ofSubtype(subtype: CardSubtype): Pick<CharacterSelector, "subtyp
 /** "X": the X chosen for the card or ability as it was played. In a selector's bound, the X paid for its source card. */
 export function x(): XValue {
   return { value: "x" };
+}
+
+/** A fixed offset, such as "cost 1● higher". */
+export function plus(of: ValueExpr, amount: number): ValueExpr {
+  return { value: "plus", of, amount };
 }
 
 /**

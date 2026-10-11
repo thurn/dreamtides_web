@@ -7,15 +7,15 @@
 import { describe, expect, it } from "vitest";
 import { printedCardId, type EngineCardDefinition } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
-import { abandonCost, abandonSelfCost, activated, additionalCost, characterYouControl, choiceCost, discardCost, energy, event, revealCost, target } from "../dsl/builders";
+import { abandonCost, abandonSelfCost, activated, additionalCost, characterYouControl, choiceCost, countersCost, discardCost, discardCostFilter, energy, energyX, event, exhaustSelf, optionalCost, plus, revealCost, target, x } from "../dsl/builders";
 import * as p from "../effects/primitives";
 import { createEngine, IllegalAction } from "../engine";
 import { eventVisibleTo, type EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { legalityLogRecords, type EngineLogRecord } from "../log";
-import { legalAnswers } from "../prompts/answers";
+import { isLegalAnswer, legalAnswers } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
-import type { Answer, ChooseNumberPrompt, Prompt } from "../prompts/types";
+import type { Answer, ChooseCardsPrompt, ChooseNumberPrompt, Prompt } from "../prompts/types";
 import { stateHash } from "../state/hash";
 import { opponent, type CardId, type EffectId, type InstanceId, type Side } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -33,7 +33,7 @@ import { STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "../testing/stack-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import type { Action } from "./actions";
-import { cardsAssignable } from "./costs";
+import { cardsAssignable, payCosts, planCosts } from "./costs";
 import { createLegalityMemo, legalMoves, type BoundedLegality } from "./legality";
 import { BATTLE } from "../../content/battle";
 
@@ -98,6 +98,33 @@ const SEARCH = {
   targetAndAbandonSelf: fixture(12, "character", () => [activated([abandonSelfCost()], p.gainSpark(target(characterYouControl()), 1))]),
   abandonSelfTwice: fixture(13, "character", () => [activated([abandonSelfCost(), abandonSelfCost()], p.draw(1))]),
   eventAbandoningSelf: fixture(14, "event", () => [additionalCost(abandonSelfCost()), event(p.draw(1))]),
+  filteredDiscover: fixture(15, "character", () => [activated([energy(1), discardCostFilter({ cardType: "character" }, { captureCost: true })], p.discover({ cardType: "character" }, { costExactly: x() }))]),
+  exhaustedDiscover: fixture(16, "character", () => [activated([exhaustSelf(), discardCostFilter({ cardType: "character" }, { captureCost: true })], p.discover({ cardType: "character" }, { costExactly: plus(x(), 1) }))]),
+  variableDiscard: { ...fixture(17, "event", (variant) => [additionalCost(discardCostFilter({}, { count: "x" })), event(p.sequence(p.draw(x()), p.draw(variant.amplified ? 2 : 1)))]), costs: [energy(1)] },
+  filteredCosts: fixture(18, "event", () => [additionalCost(discardCostFilter({ cardType: "character" }), discardCostFilter({ subtype: "Warrior" })), event(p.gainPoints(1))]),
+  discardAndTarget: fixture(19, "event", () => [additionalCost(discardCostFilter({ cardType: "character" })), event(p.gainSpark(target(characterYouControl()), 1))]),
+  combinedX: { ...fixture(20, "event", () => [additionalCost(discardCostFilter({}, { count: "x" })), event(p.gainPoints(x()))]), costs: [energyX(0)] },
+  competingX: { ...fixture(21, "event", () => [additionalCost(discardCostFilter({ cardType: "character" }, { captureCost: true })), event(p.gainPoints(x()))]), costs: [energyX(0)] },
+  capturedThenVariable: fixture(22, "event", () => [additionalCost(discardCostFilter({ cardType: "character" }, { captureCost: true }), optionalCost(discardCostFilter({}, { count: "x" }))), event(p.gainPoints(x()))]),
+  legacyDiscard: fixture(23, "event", () => [additionalCost({ cost: "discard", count: 1 }), event(p.gainPoints(1))]),
+  canonicalDiscard: fixture(24, "event", () => [additionalCost(discardCostFilter({})), event(p.gainPoints(1))]),
+  repeatedDiscard: fixture(25, "event", () => {
+    const same = discardCostFilter({}, { count: "x" });
+    return [additionalCost(same, same), event(p.gainPoints(plus(x(), 1)))];
+  }),
+  guardedManualCost: { ...fixture(26, "event", () => []), synthetic: { play(ctx, source) {
+    const plan = planCosts(ctx, "player", source, [discardCostFilter({}, { count: "x" })], null, role => ({ source, cardId: syntheticId(0xf1a), ability: 0, role }), [source]);
+    if (plan.x !== 2) throw new Infeasible("manual cost requires two discarded cards");
+    return {};
+  } } },
+  invalidFinalProof: { ...fixture(27, "event", () => []), synthetic: { play(ctx, source) {
+    planCosts(ctx, "player", source, [discardCostFilter({}, { count: "x" })], null, role => ({ source, cardId: syntheticId(0xf1b), ability: 0, role }), [source], undefined, { endsPlayTime: true });
+    ctx.choose<ChooseNumberPrompt>({ kind: "chooseNumber", side: "player", purpose: { source, cardId: syntheticId(0xf1b), ability: 0, role: "chooseX" }, min: 0, max: 1 });
+    return {};
+  } } },
+  resourceDiscard: fixture(28, "character", () => [activated([energy(1), countersCost(1), exhaustSelf(), discardCostFilter({}, { count: "x" })], p.gainPoints(plus(x(), 1)))]),
+  duplicateExhaustDiscard: fixture(29, "character", () => [activated([exhaustSelf(), exhaustSelf(), discardCostFilter({}, { count: "x" })], p.gainPoints(plus(x(), 1)))]),
+  nestedExhaustDiscard: fixture(30, "character", () => [activated([exhaustSelf(), optionalCost(exhaustSelf()), discardCostFilter({}, { count: "x" })], p.gainPoints(plus(x(), 1)))]),
   /** An Interrupt: "To play this card, discard a card and reveal an event. Gain 1⍟." */
   revealingInterrupt: { ...fixture(10, "event", () => [additionalCost(discardCost(1), revealCost(1, { cardType: "event" })), event(p.gainPoints(1))]), speed: "interrupt" },
 } as const satisfies Record<string, EngineCardDefinition>;
@@ -742,4 +769,242 @@ describe("self-abandon costs", () => {
     expect(() => run(inPlay.state, "enemy", { kind: "activate", source: inPlay.ids.player.back[0]!, ability: 0 })).toThrow(IllegalAction);
     expect(stateHash(state)).toBe(before);
   });
+});
+
+describe("filtered discard payment values", () => {
+  it("filters current characteristics, captures copiable cost before payment, and discovers exactly that cost or one higher", () => {
+    for (const higher of [false, true]) {
+      const setup = board({ back: [higher ? SEARCH.exhaustedDiscover.id : SEARCH.filteredDiscover.id], hand: [{ cardId: v.event1.id, deckMods: { sparkBonus: 0, costReduction: 1, fast: false, reclaim: null, typeChange: { cardType: "character", subtype: "Warrior" } } }, v.vanilla2.id, v.vanilla2.id, v.event0.id], energy: 1, deck: [SEARCH.mage.id, v.vanilla1.id, v.vanilla2.id] });
+      const { state, ids } = setup;
+      const source = ids.player.back[0]!;
+      const fold = createFoldAdapter(engine);
+      const opened = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: { kind: "activate", source, ability: 0 } }));
+      const prompt = fold.pending(opened)!.prompt as ChooseCardsPrompt;
+      expect(prompt.candidates).toEqual(ids.player.hand.slice(0, 3));
+      expect(prompt.candidates[1]).not.toBe(prompt.candidates[2]);
+      const paid = run(state, "player", { kind: "activate", source, ability: 0 }, [[ids.player.hand[0]]]);
+      expect(paid.state.stack[0]?.x).toBe(0);
+      expect(paid.state.sides.player.currentEnergy).toBe(higher ? 1 : 0);
+      expect(paid.state.instances[source].status.exhausted).toBe(higher);
+      expect(paid.events).toContainEqual({ kind: "discarded", side: "player", instance: ids.player.hand[0] });
+      const saved = JSON.parse(JSON.stringify(paid.state)) as BattleState;
+      saved.instances[ids.player.hand[0]] = { ...saved.instances[ids.player.hand[0]], variant: { amplified: false } };
+      const result = resolve(saved);
+      expect(result.state.sides.player.hand).toContain(higher ? ids.player.deck[1] : ids.player.deck[0]);
+      expect(result.state.sides.player.hand).not.toContain(ids.player.deck[2]);
+    }
+  });
+
+  it("allows zero through the remaining hand count without charging energy for X, in both variants", () => {
+    for (const amplified of [false, true]) for (const count of [0, 1, 2]) {
+      const { state, ids } = board({ hand: [{ cardId: SEARCH.variableDiscard.id, amplified }, v.vanilla1.id, v.vanilla1.id], energy: 1, deck: [v.vanilla2.id, v.vanilla2.id, v.vanilla2.id, v.vanilla2.id] });
+      const paid = playFirst(state, ids.player.hand[0], [ids.player.hand.slice(1, count + 1)]);
+      expect(paid.state.stack[0]?.x).toBe(count);
+      expect(paid.state.sides.player.currentEnergy).toBe(0);
+      expect(new Set(paid.state.sides.player.void)).toEqual(new Set(ids.player.hand.slice(1, count + 1)));
+      const done = resolve(JSON.parse(JSON.stringify(paid.state)) as BattleState);
+      expect(done.state.sides.player.hand).toHaveLength(2 - count + count + (amplified ? 2 : 1));
+      const alone = board({ hand: [SEARCH.variableDiscard.id], energy: 1 });
+      expect(playFirst(alone.state, alone.ids.player.hand[0]).state.stack[0]?.x).toBe(0);
+    }
+  });
+
+  it("keeps filtered costs distinct and excludes targets, the played source, and cards outside the hand", () => {
+    const short = board({ hand: [SEARCH.filteredCosts.id, v.vanilla1.id], back: [v.vanilla1.id], void: [v.vanilla1.id] });
+    expect(plays(short.state)).not.toContain(short.ids.player.hand[0]);
+    const enough = board({ hand: [SEARCH.filteredCosts.id, SEARCH.mage.id, v.vanilla1.id] });
+    const paid = playFirst(enough.state, enough.ids.player.hand[0]);
+    expect(new Set(paid.state.sides.player.void)).toEqual(new Set(enough.ids.player.hand.slice(1)));
+    const foeOnly = board({ back: [SEARCH.filteredDiscover.id], hand: [v.event1.id], energy: 1 });
+    expect(activations(foeOnly.state)).toEqual([]);
+    const targeted = board({ hand: [SEARCH.discardAndTarget.id, v.vanilla1.id], back: [v.vanilla1.id] });
+    const result = playFirst(targeted.state, targeted.ids.player.hand[0]);
+    const item = result.state.stack[0];
+    if (item.kind !== "card") throw new Error("expected a card stack item");
+    expect(item.choices[0].targets).toEqual([[targeted.ids.player.back[0]]]);
+    expect(result.state.sides.player.void).toEqual([targeted.ids.player.hand[1]]);
+  });
+
+  it("uses one consistent X binding when an energy-X cost is present", () => {
+    const variable = board({ hand: [SEARCH.combinedX.id, v.vanilla1.id, v.vanilla1.id], energy: 2 });
+    const paid = playFirst(variable.state, variable.ids.player.hand[0], [1, [variable.ids.player.hand[1]]]);
+    expect(paid.state.stack[0]?.x).toBe(1);
+    expect(paid.state.sides.player.currentEnergy).toBe(1);
+    expect(resolve(paid.state).state.sides.player.score).toBe(1);
+    const captured = board({ hand: [SEARCH.competingX.id, v.vanilla2.id], energy: 3 });
+    const fold = createFoldAdapter(engine);
+    const opened = appliedSlice(fold.reduce(sliceOf(captured.state), { kind: "battleAction", side: "player", action: { kind: "play", card: captured.ids.player.hand[0], from: "hand" } }));
+    // Only X=2 can pay the selected card's captured cost; this sole legal answer auto-commits.
+    expect(opened.committed.stack[0]?.x).toBe(2);
+    expect(opened.committed.sides.player.currentEnergy).toBe(1);
+  });
+
+  it("uses a captured X for subsequent variable costs and optional-cost affordability", () => {
+    for (const enough of [false, true]) {
+      const { state, ids } = board({ hand: [SEARCH.capturedThenVariable.id, v.vanilla2.id, v.vanilla2.id, ...(enough ? [v.vanilla2.id] : [])] });
+      const result = playFirst(state, ids.player.hand[0], [[ids.player.hand[1]], ...(enough ? [true] : [])]);
+      expect(result.state.stack[0]).toMatchObject({ x: 2, optionalPaid: [enough] });
+      expect(result.state.sides.player.void).toHaveLength(enough ? 3 : 1);
+      expect(result.answers.filter((answer) => typeof answer.value === "boolean")).toHaveLength(enough ? 1 : 0);
+    }
+  });
+
+  it("keeps filtered and variable prompts stable through reload and rejects stale, foreign, concurrent, repeated, and out-of-range input", () => {
+    for (const variable of [false, true]) {
+      const { state, ids } = board({ back: [SEARCH.filteredDiscover.id], hand: [SEARCH.variableDiscard.id, v.vanilla1.id, v.vanilla1.id, v.event1.id], energy: 1 });
+      const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+      const action: Action = variable ? { kind: "play", card: ids.player.hand[0], from: "hand" } : { kind: "activate", source: ids.player.back[0]!, ability: 0 };
+      const opened = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action }));
+      const pending = fold.pending(opened)!;
+      const saved = JSON.parse(JSON.stringify(opened)) as BattleSlice;
+      expect(createFoldAdapter(engine).pending(saved)).toEqual(pending);
+      expect(stateHash(opened.committed)).toBe(stateHash(state));
+      expect(fold.reduce(opened, { kind: "battleAction", side: "player", action })).toEqual({ kind: "bounced", reason: "stepInFlight" });
+      for (const side of ["enemy", "player"] as const) {
+        expect(fold.reduce(opened, { kind: "answer", side, promptId: pending.prompt.id, value: [ids.enemy.hand[0]] })).toEqual({ kind: "bounced", reason: side === "enemy" ? "notYourPrompt" : "illegalAnswer" });
+      }
+      expect(fold.reduce(opened, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1], ids.player.hand[1]] })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+      if (!variable) expect(fold.reduce(opened, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[3]] })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+      expect(fold.reduce(opened, { kind: "answer", side: "player", promptId: pending.prompt.id, value: ids.player.hand })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+      expect(fold.reduce(opened, { kind: "cancel", side: "enemy", promptId: pending.prompt.id })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+      const cancelled = appliedSlice(fold.reduce(saved, { kind: "cancel", side: "player", promptId: pending.prompt.id }));
+      expect(cancelled.committed).toEqual(state);
+      expect(cancelled.inFlight).toBeNull();
+      expect(fold.reduce(cancelled, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1]] })).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+      const reopened = appliedSlice(fold.reduce(cancelled, { kind: "battleAction", side: "player", action }));
+      expect(fold.pending(reopened)!.prompt.id).not.toBe(pending.prompt.id);
+      expect(fold.reduce(reopened, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1]] })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+      const answered = appliedSlice(fold.reduce(saved, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1]] }));
+      expect(answered.committed.instances[ids.player.hand[1]].zone).toBe("void");
+      expect(fold.reduce(answered, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1]] })).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+    }
+  });
+
+  it("rolls back payment state when rules code fails after paying", () => {
+    const failing: EngineCardDefinition = {
+      ...SEARCH.variableDiscard, id: syntheticId(0xf30),
+      synthetic: { play(ctx, source) {
+        const plan = planCosts(ctx, "player", source, [energy(1), discardCostFilter({ cardType: "character" }, { captureCost: true })], null, (role) => ({ source, cardId: syntheticId(0xf30), ability: 0, role }), [source]);
+        ctx.commitPoint();
+        payCosts(ctx, "player", source, plan);
+        throw new Error("synthetic failure after payment");
+      } },
+    };
+    const catalog = testCatalog([failing]);
+    const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: { hand: [failing.id, v.vanilla2.id], energy: 1 } });
+    const before = stateHash(state);
+    const observed: EngineEvent[] = [];
+    expect(() => runStep(state, { kind: "play", card: ids.player.hand[0], from: "hand" }, new ScriptedSource([]), catalog, { observeEvent: (event) => observed.push(event) })).toThrow("synthetic failure after payment");
+    expect(observed).toContainEqual({ kind: "discarded", side: "player", instance: ids.player.hand[1] });
+    expect(observed).toContainEqual(expect.objectContaining({ kind: "energyChanged", side: "player", current: 0, max: 1 }));
+    expect(stateHash(state)).toBe(before);
+  });
+});
+
+
+describe("final discard choice coverage", () => {
+  it.each([[9, 1], [9, 256], [10, 1], [10, 256]])("keeps every subset answerable with %i hand cards and a synthetic budget of %i", (size, budget) => {
+    for (const reversed of [false, true]) {
+      const setup = board({ hand: [SEARCH.variableDiscard.id, ...Array.from({ length: size }, () => v.vanilla1.id)], energy: 1 });
+      const state = { ...setup.state, config: { ...setup.state.config, feasibilitySearchRuns: budget } };
+      if (reversed) state.sides.player.hand.reverse();
+      const card = setup.ids.player.hand[0];
+      const fold = createFoldAdapter(engine);
+      const opened = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } }));
+      const pending = fold.pending(opened)!;
+      const prompt = pending.prompt as ChooseCardsPrompt;
+      const raw = { ...prompt, max: size, allowed: undefined };
+      for (const selection of legalAnswers(raw)) {
+        expect(isLegalAnswer(prompt, selection)).toBe(true);
+      }
+      for (let count = 0; count <= size; count++) {
+        const cards = [...setup.ids.player.hand.slice(1)].reverse().slice(0, count);
+        const paid = appliedSlice(fold.reduce(opened, { kind: "answer", side: "player", promptId: pending.prompt.id, value: cards }));
+        expect(paid.committed.stack[0]?.x).toBe(count);
+        expect(paid.committed.sides.player.currentEnergy).toBe(0);
+        expect(new Set(paid.committed.sides.player.void)).toEqual(new Set(cards));
+        expect(new Set(paid.committed.sides.player.hand)).toEqual(new Set(setup.ids.player.hand.slice(1).filter(id => !cards.includes(id))));
+      }
+    }
+  });
+});
+
+
+it("uses one canonical discard builder and accepts legacy missing-filter costs", () => {
+  expect(discardCost(2)).toEqual(discardCostFilter({}, { count: 2 }));
+  for (const definition of [SEARCH.legacyDiscard, SEARCH.canonicalDiscard]) {
+    const { state, ids } = board({ hand: [definition.id, v.vanilla1.id] });
+    expect(playFirst(state, ids.player.hand[0]).state.sides.player.void).toEqual([ids.player.hand[1]]);
+  }
+});
+
+it("guards a nonterminal repeated cost object and manual plans with later constraints", () => {
+  const repeated = board({ hand: [SEARCH.repeatedDiscard.id, v.vanilla1.id, v.vanilla1.id] });
+  const fold = createFoldAdapter(engine);
+  const opened = appliedSlice(fold.reduce(sliceOf(repeated.state), { kind: "battleAction", side: "player", action: { kind: "play", card: repeated.ids.player.hand[0], from: "hand" } }));
+  const prompt = fold.pending(opened)!.prompt;
+  expect(isLegalAnswer(prompt, repeated.ids.player.hand.slice(1))).toBe(false);
+  const paid = playFirst(repeated.state, repeated.ids.player.hand[0], [[repeated.ids.player.hand[1]]]);
+  expect(paid.state.stack[0]?.x).toBe(1);
+  expect(new Set(paid.state.sides.player.void)).toEqual(new Set(repeated.ids.player.hand.slice(1)));
+  const manual = board({ hand: [SEARCH.guardedManualCost.id, v.vanilla1.id, v.vanilla1.id] });
+  expect(playFirst(manual.state, manual.ids.player.hand[0]).answers[0].value).toEqual(manual.ids.player.hand.slice(1));
+});
+
+it("rejects an unexpected precommit prompt after a universal proof without committing state", () => {
+  const { state, ids } = board({ hand: [SEARCH.invalidFinalProof.id, v.vanilla1.id, v.vanilla1.id] });
+  const fold = createFoldAdapter(engine);
+  const opened = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } }));
+  const prompt = fold.pending(opened)!.prompt;
+  const outcome = fold.reduce(opened, { kind: "answer", side: "player", promptId: prompt.id, value: [] });
+  if (outcome.kind !== "applied") throw new Error("expected a failed attempted play");
+  expect(outcome.error).not.toBeNull();
+  expect(outcome.slice.committed).toBe(state);
+  expect(outcome.slice.inFlight).toBeNull();
+});
+
+it("preserves full final-discard choices and payment after a cold fold reload", () => {
+  const { state, ids } = board({ hand: [SEARCH.variableDiscard.id, v.vanilla1.id, v.vanilla1.id], energy: 1 });
+  const fold = createFoldAdapter(engine);
+  const opened = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } }));
+  const pending = fold.pending(opened)!;
+  const cold = createFoldAdapter(createEngine(engine.catalog));
+  const saved = JSON.parse(JSON.stringify(opened)) as BattleSlice;
+  expect(cold.pending(saved)).toEqual(pending);
+  for (const value of legalAnswers(pending.prompt)) {
+    const input = { kind: "answer", side: "player", promptId: pending.prompt.id, value } as const;
+    expect(cold.reduce(saved, input)).toEqual(fold.reduce(opened, input));
+  }
+});
+
+it("offers terminal discard only with payable resources and reserves exhaustion across nested costs", () => {
+  for (const blocked of ["energy", "counters", "exhaustion", null]) {
+    const { state, ids } = board({ back: [SEARCH.resourceDiscard.id], hand: [v.vanilla1.id, v.vanilla1.id], energy: blocked === "energy" ? 0 : 1 });
+    const source = ids.player.back[0]!;
+    state.instances[source].status.counters = blocked === "counters" ? 0 : 1;
+    state.instances[source].status.exhausted = blocked === "exhaustion";
+    const action = { kind: "activate", source, ability: 0 } as const;
+    expect(activations(state)).toEqual(blocked === null ? [action] : []);
+    if (blocked === null) {
+      const paid = run(state, "player", action, [ids.player.hand]);
+      expect(paid.state.stack[0]?.x).toBe(2);
+      expect(paid.state.instances[source].status).toMatchObject({ counters: 0, exhausted: true });
+      expect(paid.state.sides.player.currentEnergy).toBe(0);
+      expect(new Set(paid.state.sides.player.void)).toEqual(new Set(ids.player.hand));
+    } else {
+      const fold = createFoldAdapter(engine);
+      const before = stateHash(state);
+      const slice = sliceOf(state);
+      expect(fold.reduce(slice, { kind: "battleAction", side: "player", action })).toMatchObject({ kind: "bounced" });
+      expect(stateHash(slice.committed)).toBe(before);
+      expect(slice.inFlight).toBeNull();
+    }
+  }
+  const twice = board({ back: [SEARCH.duplicateExhaustDiscard.id], hand: [v.vanilla1.id] });
+  expect(activations(twice.state)).toEqual([]);
+  const nested = board({ back: [SEARCH.nestedExhaustDiscard.id], hand: [v.vanilla1.id, v.vanilla1.id] });
+  const action = { kind: "activate", source: nested.ids.player.back[0]!, ability: 0 } as const;
+  const paid = run(nested.state, "player", action, [nested.ids.player.hand]);
+  expect(paid.state.stack[0]).toMatchObject({ x: 2, optionalPaid: [false] });
+  expect(paid.state.instances[action.source].status.exhausted).toBe(true);
 });

@@ -79,11 +79,11 @@ export const play: StepDefinition<PlayStep> = {
     }
     const targets = choices.flatMap((choice) => choice.targets.flat());
     const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
-    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier);
+    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier, { endsPlayTime: true });
     ctx.commitPoint();
     payCosts(ctx, side, step.card, plan);
     endFloating(ctx, (effect) => modifier.consumes.includes(effect.id));
-    moveToStack(ctx, step.card, side, { choices, x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
+    moveToStack(ctx, step.card, side, { choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
     if (route === "reclaim") instance.status.reclaimed = true;
     if (route === "offering") instance.status.offering = true;
     recordPlayed(state, catalog, side, step.card);

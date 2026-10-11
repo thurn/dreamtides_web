@@ -1,3 +1,5 @@
+import { additionalCost, discardCostFilter, event, x } from "../../engine/dsl/builders";
+import { draw, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 223,
   art: { x: 0, y: 1, scale: 1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [additionalCost(discardCostFilter({}, { count: "x" })), event(sequence(draw(x()), draw(variant.amplified ? 2 : 1)))],
+  verifiedText: "apskn7hfv1",
 });

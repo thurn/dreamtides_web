@@ -1,3 +1,5 @@
+import { activated, discardCostFilter, energy, keyword, x } from "../../engine/dsl/builders";
+import { discover } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 37,
   art: { x: 0, y: -0.681, scale: 1.77 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("veil"), activated([energy(1), discardCostFilter({ cardType: "character" }, { captureCost: true })], discover({ cardType: "character" }, { costExactly: x() }))],
+  verifiedText: "pn5ed3689o",
 });

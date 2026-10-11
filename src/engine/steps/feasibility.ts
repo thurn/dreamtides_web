@@ -161,8 +161,8 @@ interface GuardNode {
   readonly narrowed: Narrowed;
   /** The budget left after this prompt's searches. */
   readonly remaining: number;
-  /** A proven path through each offered answer, by `canonicalAnswer`. */
-  readonly witnesses: ReadonlyMap<string, readonly RecordedAnswer[]>;
+  /** A path per offered answer, or a universal proof for a final card cost. */
+  readonly witnesses: ReadonlyMap<string, readonly RecordedAnswer[]> | "all";
 }
 
 /**
@@ -317,16 +317,20 @@ function decide(
 export function feasibilityGuard(start: BattleState, step: Step, catalog: EngineCatalog, memo?: SearchMemo): PromptGuard {
   const search = stepSearch(start, step, catalog, memo);
   return {
-    narrow(prompt: Prompt, prefix: readonly RecordedAnswer[]): Narrowed {
+    narrow(prompt: Prompt, prefix: readonly RecordedAnswer[], allAnswersPayable?: true): Narrowed {
       const key = answeredPath(prefix);
       const cached = search.nodes.get(key);
       if (cached !== undefined) {
         // The safety net of replay: rules code raising a different prompt after the same answers is nondeterministic.
         const fingerprint = promptFingerprint(prompt);
+        if ((cached.witnesses === "all") !== (allAnswersPayable === true)) throw new Error("A prompt’s payability proof changed on replay");
         if (fingerprint !== cached.fingerprint) throw new ReplayDivergence(prefix.length, cached.fingerprint, fingerprint);
         return cached.narrowed.prompt === cached.raw ? { ...cached.narrowed, prompt } : cached.narrowed;
       }
-      const node = decide(start, step, catalog, search, prompt, prefix, standingAfter(search, prefix));
+      const standing = standingAfter(search, prefix);
+      const node: GuardNode = allAnswersPayable === true
+        ? { raw: prompt, fingerprint: promptFingerprint(prompt), narrowed: { prompt, unproven: 0, truncated: false }, remaining: standing.remaining, witnesses: "all" }
+        : decide(start, step, catalog, search, prompt, prefix, standing);
       search.nodes.set(key, node);
       return node.narrowed;
     },
@@ -343,5 +347,6 @@ function standingAfter(search: StepSearch, prefix: readonly RecordedAnswer[]): S
   if (last === undefined) return search.root;
   const parent = search.nodes.get(answeredPath(prefix.slice(0, -1)));
   if (parent === undefined) throw new Error("A play-time prompt was narrowed before the prompts preceding it");
+  if (parent.witnesses === "all") throw new Error("A guarded choice follows a proven final card cost before the commit point");
   return { remaining: parent.remaining, witness: parent.witnesses.get(canonicalAnswer(parent.raw, last.value)) ?? null };
 }

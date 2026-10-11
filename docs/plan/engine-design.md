@@ -540,10 +540,18 @@ runs. The fold shares the engine's memo; it is never persisted.
 
 **A legal play can always be paid along whatever path its player answers.**
 A step with a commit point (`hasCommitPoint`: `play`, `activate`) runs with a
-guard that narrows each prompt raised before the commit point to the answers
-a search proves:
+guard that offers each precommit answer with either a searched continuation
+or a universal final-cost proof:
 
-- The search that proved the path the guard stands on, its **witness**,
+- A final standalone discard cost may prove every field-legal selection at
+  once, when the official play or activation caller proceeds directly to
+  `commitPoint()`. Its shared resource predicate checks energy, counters and
+  exhaustion reservations. The discard cannot capture a card cost, and its
+  selection changes neither resources nor any later cost. Earlier, nested,
+  manually continued and captured-cost choices use searched continuations.
+  A precommit prompt following such a final proof is a rules-code error; the
+  fold reports the failed attempt and retains the committed state.
+- For a searched continuation, the path the guard stands on, its **witness**,
   settles the prompt's answers up to the witness's own for free: the
   depth-first search moved past each earlier answer only once every path
   through it had dead-ended, and the witness's answer is proven.
@@ -568,17 +576,18 @@ a search proves:
 **One budget per step.** `BattleConfig.feasibilitySearchRuns`
 (`BATTLE.feasibilitySearchRuns`) bounds every dry run of one step along one
 path of answers: legality spends from it first, and each prompt spends only
-what the prompts before it left. Every answer offered carries a witness, and
-the witness's answer at the next prompt is free, so a narrowed prompt is
+what the prompts before it left. Every answer offered carries a searched
+witness or a universal final-cost proof. The witness's next answer and
+universally proven final selections spend no further runs, so a prompt is
 never empty for a play legality offered, even with nothing left to spend.
 
 **Replay is free and identical.** The guard's searches replay the answers
 given so far against the prompts as rules code raised them
 (`Context.rawAnswers`). Its decision at a prompt, with the budget it leaves
-and the witnesses it found, is a function of the committed state, the step,
+and its witnesses or universal proof, is a function of the committed state, the step,
 and the answers before the prompt. The step's search memoizes it by those
 answers and checks the replayed prompt's fingerprint against it
-(`ReplayDivergence`), so a fold re-run makes no dry runs, and an inline run,
+(`ReplayDivergence`) and its proof mode, so a fold re-run makes no dry runs, and an inline run,
 a reload, another engine, and a loop replay compute the same prompts.
 
 **Hosts see every bound.** `ApplyResult.bounded` lists the plays and
@@ -1035,7 +1044,8 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
 
 - energy: Fixed, X, or Fixed+X (`energy`, `energyX`);
 - ☾ (`exhaustSelf`; back-rank characters and avatars only);
-- discard;
+- discard matching hand cards (`discardCostFilter`), with a fixed count, an
+  X count, or one card whose copiable cost is captured as X;
 - abandon;
 - banish from void;
 - reveal from hand;
@@ -1049,8 +1059,18 @@ alternative to pay, whether to pay the optional cost, which cards to discard,
 abandon, reveal, or banish. Payment happens after the commit point, all of it
 before the item goes on the stack. Copies don't pay.
 
-**X legality** comes from the definition's range, which defaults to `min: 1`.
-Widen it to 0 only when X=0 does something meaningful.
+Discard candidates use the shared card filter (effective type/subtype and
+copiable-cost bounds), excluding the source, targets and prior cost cards.
+A variable discard binds X to the chosen count, including zero for an
+ability with a fixed meaningful effect. Single-card cost capture reads its
+copiable cost after variant and deck-entry modifications, with an X energy
+part counting as zero, before payment. The captured value travels with the
+stack item. All energy-X, count-X and captured-X payments in one plan agree
+on a shared binding; a conflicting selection has no feasible continuation.
+`plus` adds a fixed offset to a value such as a captured cost.
+
+**Energy-X legality** comes from the definition's range, which defaults to
+`min: 1`. Widen it to 0 only when X=0 does something meaningful.
 
 ## Ability DSL and content modules
 

@@ -207,6 +207,8 @@ export type PlayTimeTarget = TargetSpec | StackTargetSpec | ZoneTargetSpec;
 export type ValueExpr =
   | number
   | XValue
+  /** A fixed amount added to a value, such as a discarded card’s cost plus one. */
+  | { readonly value: "plus"; readonly of: ValueExpr; readonly amount: number }
   | { readonly value: "count"; readonly of: CharacterSelector }
   | { readonly value: "handSize"; readonly player: PlayerRef }
   /** The characters supporting the source (C9): 0–2 while it is in the front rank, 0 elsewhere. */
@@ -297,15 +299,16 @@ export interface CardFilter {
   readonly costAtLeast?: number;
 }
 
-/** A cost that pays one fixed thing (no X and no choice between costs). */
+/** One payment, including a discard count determined by X, with no choice between costs. */
 export type PaymentCost =
   | EnergyCost
   /** ☾: exhausts the source, a ready back-rank character or the avatar. */
   | { readonly cost: "exhaustSelf" }
   /** Abandon characters you control that match the selector. */
   | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number }
-  /** Discard cards from your hand. */
-  | { readonly cost: "discard"; readonly count: number }
+  /** Discard matching hand cards. Variable count captures their count as X; captureCost captures one card’s copiable cost as X. */
+  | { readonly cost: "discard"; readonly count: number | "x"; readonly filter?: CardFilter; readonly captureCost?: never }
+  | { readonly cost: "discard"; readonly count: 1; readonly filter: CardFilter; readonly captureCost: true }
   /** N⧗: spend counters stored on the source (rules § Counters). */
   | { readonly cost: "counters"; readonly amount: number }
   /** Banish cards from your void that match the filter. */
@@ -331,12 +334,12 @@ export interface OptionalCost {
   readonly costs: readonly PaymentCost[];
 }
 
-/** A card's additional cost ("To play this card, …"): anything but X. */
+/** A card's additional cost ("To play this card, …"): any payment except an X energy cost. */
 export type AdditionalCost = PaymentCost | ChoiceCost | OptionalCost;
 
 /**
- * One cost of an activated ability or a card (engine-design § Costs). X is
- * only ever a top-level cost. Choices among costs are play-time prompts;
+ * One cost of an activated ability or a card (engine-design § Costs). An X
+ * energy cost is only ever top-level. Choices among costs are play-time prompts;
  * payment happens after the commit point, in printed order.
  */
 export type Cost = AdditionalCost | EnergyXCost;

@@ -36,13 +36,13 @@ export const activate: StepDefinition<ActivateStep> = {
     const x = chooseX(ctx, side, ability.costs, purpose("chooseX"));
     const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role));
     if (choices === undefined) throw new Error("choosePlayTime returns one entry per ability");
-    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat());
+    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), undefined, { endsPlayTime: true });
     ctx.commitPoint();
     payCosts(ctx, side, step.source, plan);
     if (ability.oncePerTurn === true) {
       state.oncePerTurn.push(oncePerTurnKey(step.source, step.ability));
     }
-    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices, x, optionalPaid: plan.optionalPaid });
+    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices, x: plan.x, optionalPaid: plan.optionalPaid });
     ctx.emit({ kind: "abilityActivated", side, source: step.source, ability: step.ability });
     state.priority = opponent(side);
   },

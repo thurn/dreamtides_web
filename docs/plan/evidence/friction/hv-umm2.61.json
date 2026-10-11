@@ -1,0 +1,234 @@
+{
+  "bead": "hv-umm2.61",
+  "phase": 5,
+  "implementMin": 33,
+  "localValidationS": {
+    "install": 2,
+    "focused": 1.3,
+    "full": 52.7,
+    "fullTest": 28.1,
+    "review": 31.18,
+    "knip": 2.04,
+    "fuzz": 78.7,
+    "sweep": 223,
+    "mobileBoundaries": 58.512,
+    "mobilePresentedReload": 11.031,
+    "successfulDiscover": 24.817,
+    "repairFocused": 3.32,
+    "repairReview": 32.62,
+    "repairKnip": 2.09,
+    "repairFull": 49.91,
+    "repairFullTest": 26.83,
+    "repairFuzz": 78.21,
+    "repairInterruptedSweep": 300.64,
+    "repairInterruptedRetry": 23.29,
+    "repairWindowInterruptedSweep": 68.24,
+    "finishInstall": 0.968,
+    "finishFocused": 2.454,
+    "finishReview": 37.108,
+    "finishKnip": 2.091,
+    "finishFull": 49.113,
+    "finishFullTest": 27.63,
+    "finishFuzz": 55.486,
+    "finishSweep": 210.92,
+    "finishLargeHand": 49.552
+  },
+  "hostLoad": 4.611328125,
+  "testDelta": {
+    "files": 0,
+    "lines": 265,
+    "jsdomFiles": 0,
+    "cases": 16
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 9,
+      "note": "Actual-flow harness corrections: a sole legal activation opens its cost directly, the debug rail closes through its existing accessible button, and the UI void projection reverses state order. Engine settlement is followed by rendered hand/void identities/counts, visibility and stable DOM geometry before final captures. Passing desktop evidence is discard-cost-flows-desktop-only.result.json; initial ability-menu failure remains /tmp/hv-umm2.61-flows.log; waiter/selector diagnostics are discard-cost-flows-selector-failure.result.json and /tmp/hv-umm2.61-flows2.log."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 4,
+      "note": "A mobile reload after only a raw engine-probe prompt timed out; evidence is discard-cost-flows-mobile-reload-failure.result.json. Focused mobile-cost-reload.result.json waits for a visibly presented enabled picker and records durable game/head/checkpoint/events/logs: head4 and prompt2:1:0 survive reload, caps empty. Remaining mobile boundaries use this control precondition and pass. The earlier probe-only timeout is an unresolved harness boundary, not a confirmed application defect; no fixed sleep masks persistence."
+    },
+    {
+      "tag": "validation-overlap",
+      "minutes": 1,
+      "note": "The default sweep initially ran outside the shared heavy lock and briefly overlapped final quick review/knip; quick review also overlapped the end of locked fuzz. Locked full review precedes these runs. After detection, remaining review and knip run sequentially in one shared lock, and all subsequent focused browser runners use the lock. Overlapping timings are not performance evidence."
+    },
+    {
+      "tag": "validation-overlap",
+      "minutes": 10,
+      "note": "Own locked repaired sweep58374/server58385 overlapped peer65 unlocked sweep62487 on5176; ERR_ABORTED and wrong prior navigation data occurred. Only own runner was SIGINT-stopped, exit130, server stopped/free. repair-sweep-interrupted.log and original ledger failures retained. After peer sweep exit, own final equivalent-source focused/review/knip passed under lock. Retry73847/server73852 then overlapped peer65 unlocked judged73309 on5176; only own runner stopped, exit130, server stopped/free; repair-sweep-overlap-retry.log retained. Navigation interference is probable, not a demonstrated application defect. Waiting for observed browser-free window before serialized rerun. Earlier lock waits behind peer perf and peer313 are separate from validation durations; no queue duration inferred. A third sweep85259/server85264 began after an observed browser-free window, then overlapped newly started unlocked peer65 desktop/mobile86506/server86533; stopped only own runner after68.24s, server stopped/free. repair-sweep-window-overlap.log preserves this attempt. Waiting for a stronger QA-completion boundary before another browser attempt. Parent filed native introspection hv-umm2.329 for automatic cross-worktree QA browser leasing."
+    },
+    {
+      "tag": "native-update-conflict",
+      "minutes": 3,
+      "note": "Native parent update cleanly rolled back on three owned paths. Saved exact base/source copies, temporarily parked only those deltas, then parent native update succeeded. Restored changed text onto updated DSL/rules, preserving peer XValue, CardFilter bounds and other landed features. No raw rebase or peer worktree modification."
+    },
+    {
+      "tag": "validation-repair",
+      "minutes": 2,
+      "note": "Initial post-update preparation identified relocated copiableCostOf export; costs imports the existing continuous/characteristics helper. Focused validation also identified expanded energy-event metadata and a new test expecting engine failure instead of the public legality bounce. Contract assertions corrected and final focused/full checks pass. Failed logs retained as /tmp/hv-umm2.61-finish-focused.log and /tmp/hv-umm2.61-finish-focused-final.log."
+    }
+  ],
+  "repairEvidence": {
+    "negative": [
+      "/tmp/hv-umm2.61-full-hand-negative.log",
+      "/tmp/hv-umm2.61-full-hand-negative2.log"
+    ],
+    "focused": "/tmp/hv-umm2.61-repair-focused-final3.log",
+    "review": "/tmp/hv-umm2.61-repair-review-final3.log",
+    "full": "/tmp/hv-umm2.61-repair-full-final2.log",
+    "knip": "/tmp/hv-umm2.61-repair-knip-final3.log",
+    "fuzz": "/tmp/hv-umm2.61-repair-fuzz.log",
+    "provenance": "Full and weighted300 fuzz cover the repaired universal-proof infrastructure. The only following behavior-preserving source edit delegates a present empty filter to the shared cardMatchesFilter short-circuit; focused/review/knip cover final source. Retained successful Discover QA is at initial source a371cc8e8596c462f2ddcd50df87eba83621458b; captured-cost paths remain searched and unchanged."
+  },
+  "repairBrowserStatus": "Completed: final updated-source default matrix has 30 pass, 30 ineligible skip, zero fail; all 10 historical failing rows are superseded by matching final UUID/side/variant outcomes. Four actual large-hand desktop/mobile X0/X9 workflows pass with empty caps. Historical error rows and interrupted logs remain as provenance.",
+  "finishEvidence": {
+    "base": "ec45233160bb6fa958b088073ffb1c04bbd1a46a",
+    "preValidationCheckpoint": "ccdd4bcf5c795e562e204dfa93db4a3d7e73a036",
+    "sourceFileSha256": {
+      "docs/plan/engine-design.md": "71d8754dbdd59e3a37538b17cc834974823aa5fb9d118919d489c1701d4b0f50",
+      "docs/rules.md": "cee8e78ea8f7ec4d23ec1d4f68d6946a9ffc90dba7f23c367bbdc591d44755c6",
+      "src/content/cards/abyssal-plunge-435ed83c.ts": "81f5bcc2b20e5fa8c615fdaa9da8ab0cbc9f0f0475cda728945c0af5dafb9667",
+      "src/content/cards/curio-dealer-4f0f0811.ts": "be46e7f7898e92951b641f4a1914cd32557d85fdfe8e8995f7ea0b7048a0c2f3",
+      "src/content/cards/lumineth-94818862.ts": "626d1428030e1f62fe89af3c8f1636ec16dfc21b0694e1d2a1de27b50dd80d2f",
+      "src/engine/dsl/builders.ts": "89a459be91e5cc62ab8eb4298047db141e893d70e2f05f6ebce1724ebc6545a8",
+      "src/engine/dsl/types.ts": "6c4e63941c7b9cc7c108edc732fbd6b5e640fec6d7ccedc19944fb336965458e",
+      "src/engine/dsl/values.ts": "856223e6a7bcac525b8eb8bc845d8b559df24aa299bd3383d330e52fb2eafee7",
+      "src/engine/rules/costs.test.ts": "5a4c4f67297831b52c16cabdc9f4881bc2fbf3d340a0ff4978dc10d57ae18e84",
+      "src/engine/rules/costs.ts": "6de066b07913f088bcf72c2d2166e7f9cec69b179bd9b76493fcfb397be49cf9",
+      "src/engine/steps/context.ts": "7e1ce764730e100d8275d45366fcf4895b9211aefecb501b78c9246eed7481ab",
+      "src/engine/steps/feasibility.ts": "1c70c9568a586d6a88b4520463ec0fa288945ba040282c361c6ca54fdcc39674",
+      "src/engine/steps/kinds/activate.ts": "5447c17100e8cb34a6f63b882c6c1e1fac921047ff9b26ba279ea67a16b83ffa",
+      "src/engine/steps/kinds/play.ts": "d1df5c6dd5ab972381637003d6d572acf745e540a6c4d76d1a6adcefd5f0a181",
+      "src/engine/steps/types.ts": "9f5c2b98e55be45dfa0f566efb9b7f3bb0c153120e59ed98fba29fb15f9ddf54"
+    },
+    "checks": {
+      "focused": {
+        "tests": 58,
+        "costCases": 48,
+        "contentGates": 10,
+        "log": "/tmp/hv-umm2.61-finish-focused-ready.log"
+      },
+      "review": {
+        "tests": 2176,
+        "files": 161,
+        "log": "/tmp/hv-umm2.61-finish-review-ready.log"
+      },
+      "knip": {
+        "log": "/tmp/hv-umm2.61-finish-knip-ready.log"
+      },
+      "full": {
+        "tests": 2807,
+        "files": 220,
+        "productionBundle": "clean",
+        "log": "/tmp/hv-umm2.61-finish-full-ready.log"
+      },
+      "fuzz": {
+        "games": 300,
+        "steps": 146868,
+        "failures": 0,
+        "boundedLegality": 0,
+        "boundedPrompts": 0,
+        "targetExercises": {
+          "94818862-2875-4ee1-8f72-7c0cdc624202": 244,
+          "435ed83c-f7a6-4a73-a684-67fcc4e49bc4": 364,
+          "4f0f0811-1a4c-4d42-a804-77dba8707792": 240
+        },
+        "log": "/tmp/hv-umm2.61-finish-fuzz-ready.log"
+      }
+    },
+    "heavyWaitS": {
+      "finalChecks": 22.522,
+      "browserBatch": 39.044
+    },
+    "defaultSweep": {
+      "log": "finish-sweep.log",
+      "rows": [
+        148,
+        207
+      ],
+      "pass": 30,
+      "skip": 30,
+      "fail": 0,
+      "historicalFailedRowsRetained": 10
+    },
+    "largeHand": {
+      "report": "large-discard-cost.result.json",
+      "log": "finish-large-hand.log",
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 21062
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 21926
+        }
+      ],
+      "wallMs": {
+        "browserLeaseWait": 39,
+        "serve": 1249,
+        "scenario": 42988,
+        "total": 44296
+      },
+      "caps": [],
+      "viewports": {
+        "desktop": [
+          1440,
+          900
+        ],
+        "mobile": [
+          390,
+          844
+        ]
+      },
+      "counts": [
+        0,
+        9
+      ],
+      "contracts": [
+        "raw bounds 0..9 with no allowed truncation and source excluded",
+        "cancel preserves committed hand and energy, then reopen",
+        "enabled presented prompt and durable game/events/log reads before reload",
+        "identical prompt after reload",
+        "exact discarded and drawn instance UUIDs, fixed energy payment 1",
+        "rendered hand/void counts, identity, visibility and stable geometry"
+      ],
+      "captures": [
+        "discard-nine-prompt-0-desktop.png",
+        "discard-nine-prompt-9-desktop.png",
+        "discard-nine-settled-desktop.png",
+        "discard-nine-prompt-0-mobile.png",
+        "discard-nine-prompt-9-mobile.png",
+        "discard-nine-settled-mobile.png"
+      ],
+      "visualInspection": [
+        "discard-nine-prompt-9-desktop.png",
+        "discard-nine-prompt-9-mobile.png",
+        "discard-nine-settled-mobile.png"
+      ]
+    },
+    "coldRepairContracts": [
+      "shared resource predicate for nested affordability, terminal proof and final validation",
+      "energy/counters/exhaust reservation legality and bounce without committed mutation",
+      "synthetic budgets 1 and 256 for all subsets with 9/10 cards in either hand order",
+      "cold public JSON fold replay produces identical pending/payment outcomes",
+      "unexpected continuation reports a fold error and rolls back without private error text"
+    ],
+    "runtime": {
+      "sweepPid": 45070,
+      "sweepServerGroup": 45082,
+      "runnerPid": 48951,
+      "runnerServerGroup": 48975,
+      "ownedServers": "stopped",
+      "port5175": "free at completion",
+      "provider": "confirmed semantic browser close and RPC drain in runner cleanup; subsequent owner records belong to separate sessions"
+    },
+    "provenance": "Final code and tests match all sourceFileSha256 values through checks, fuzz and browser QA; final evidence/ledger edits carry those results in the same single amended commit. Earlier initial-source successful activation/Discover QA remains historical provenance; final matrix exercises all current variants and both sides. No new prompt/event/persistence schema or display change, required judged sample remains zero; no scenario specs or card issues."
+  }
+}

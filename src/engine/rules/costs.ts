@@ -6,7 +6,7 @@
  * stack.
  */
 import type { EngineCatalog, PrintedCard } from "../catalog";
-import { cardMatchesFilter } from "../continuous/characteristics";
+import { cardMatchesFilter, copiableCostOf } from "../continuous/characteristics";
 import { adjustedEnergy, NO_COST_MODIFIER, type CostModifier } from "../continuous/costs";
 import { matchingCharacters } from "../dsl/selectors";
 import { fixedEnergy, minimumEnergy, xCost } from "../dsl/energy";
@@ -38,6 +38,7 @@ export interface PlannedCost {
 
 /** How a list of costs will be paid, settled by play-time prompts before the commit point. */
 export interface CostPlan {
+  /** Shared X chosen for energy or captured from a discarded count or card cost. */
   readonly x: number | null;
   /**
    * The whole energy cost — the fixed energy (top-level, and each chosen
@@ -137,7 +138,7 @@ export function costsPayable(
 }
 
 /** A cost paid with chosen cards. */
-type ChoosingCost = Extract<PaymentCost, { readonly count: number }>;
+type ChoosingCost = Extract<PaymentCost, { readonly count: number | "x" }>;
 
 function choosesCards(cost: PaymentCost): cost is ChoosingCost {
   return "count" in cost;
@@ -159,8 +160,13 @@ function cardCandidates(
         return instance?.zone === "play" && instance.controller === side ? [source] : [];
       }
       return matchingCharacters(state, catalog, cost.selector, side, source);
-    case "discard":
-      return [...state.sides[side].hand];
+    case "discard": {
+      // Legacy inline/copied costs may omit the filter; builders emit it.
+      const filter = cost.filter;
+      return filter === undefined
+        ? [...state.sides[side].hand]
+        : state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, filter));
+    }
     case "reveal":
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "banishFromVoid":
@@ -193,7 +199,9 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
  * an answer that leads to one (steps/feasibility.ts). Every energy part —
  * top-level, X, and the chosen alternatives' and optional costs' — is one
  * total that `modifier` changes, so an alternative or an optional cost is
- * affordable when the modified total is.
+ * affordable when the modified total is. `endsPlayTime` is reserved for a
+ * caller whose next operation is the commit point: it allows a final discard
+ * with already-payable resources to prove all its card selections at once.
  */
 export function planCosts(
   ctx: StepContext,
@@ -204,6 +212,7 @@ export function planCosts(
   purpose: (role: PromptRole) => PromptPurpose,
   excluded: readonly InstanceId[],
   modifier: CostModifier = NO_COST_MODIFIER,
+  options: { readonly endsPlayTime?: true } = {},
 ): CostPlan {
   const { state, catalog } = ctx;
   const used = [...excluded];
@@ -211,9 +220,14 @@ export function planCosts(
   /** The energy committed so far before cost modifications: the top-level parts and X, then each chosen nested part. */
   let baseEnergy = fixedEnergy(costs) + (x ?? 0);
   let countersLeft = storedCounters(state, source) - sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
-  let exhaustFree = canPayExhaust(state, source) && !costs.some((cost) => cost.cost === "exhaustSelf");
+  let exhaustCount = costs.filter((cost) => cost.cost === "exhaustSelf").length;
+  const exhaustCapacity = canPayExhaust(state, source) ? 1 : 0;
+  /** Shared resource check for nested choices, terminal proofs and the completed plan. */
+  const resourcesPayable = (energy = baseEnergy, counters = countersLeft, exhausts = exhaustCount): boolean =>
+    adjustedEnergy(energy, modifier) <= available && counters >= 0 && exhausts <= exhaustCapacity;
   const payments: PlannedCost[] = [];
   const optionalPaid: boolean[] = [];
+  let capturedX = x;
 
   /**
    * Whether every cost in a nested list could be paid on top of what is
@@ -222,45 +236,60 @@ export function planCosts(
    * (`cardsAssignable`).
    */
   const affordable = (list: readonly PaymentCost[]): boolean => {
-    if (adjustedEnergy(baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))), modifier) > available) return false;
-    if (sum(list.map((cost) => (cost.cost === "counters" ? cost.amount : 0))) > countersLeft) return false;
-    const exhausts = list.filter((cost) => cost.cost === "exhaustSelf").length;
-    if (exhausts > (exhaustFree ? 1 : 0)) return false;
+    if (!resourcesPayable(
+      baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))),
+      countersLeft - sum(list.map((cost) => (cost.cost === "counters" ? cost.amount : 0))),
+      exhaustCount + list.filter((cost) => cost.cost === "exhaustSelf").length,
+    )) return false;
     const demands = list.filter(choosesCards).map((cost) => ({
-      count: cost.count,
+      count: cost.count === "x" ? (capturedX ?? 0) : cost.count,
       pool: cardCandidates(state, catalog, side, source, cost).filter((id) => !used.includes(id)),
     }));
     return cardsAssignable(demands);
   };
 
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
-  const plan = (cost: PaymentCost, nested: boolean): void => {
+  const plan = (cost: PaymentCost, nested: boolean, isLast = false): void => {
     if (cost.cost === "energy") {
       if (nested) baseEnergy += cost.amount;
       return;
     }
     if (nested) {
       if (cost.cost === "counters") countersLeft -= cost.amount;
-      if (cost.cost === "exhaustSelf") exhaustFree = false;
+      if (cost.cost === "exhaustSelf") exhaustCount += 1;
     }
     if (!choosesCards(cost)) {
       payments.push({ cost, cards: [] });
       return;
     }
     const candidates = cardCandidates(state, catalog, side, source, cost);
+    const variable = cost.count === "x";
+    const count = variable ? capturedX : cost.count;
+    const remaining = candidates.filter((id) => !used.includes(id));
+    // Only the official play/activate callers certify that this plan is
+    // immediately followed by the commit point. This last discard cannot
+    // affect energy, remaining costs, or a captured-cost equality constraint.
+    const allAnswersPayable = options.endsPlayTime === true && !nested && isLast &&
+      cost.cost === "discard" && cost.captureCost !== true && resourcesPayable();
     const chosen = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
       side,
       purpose: purpose(CARD_ROLE[cost.cost]),
-      candidates: candidates.filter((id) => !used.includes(id)),
-      min: cost.count,
-      max: cost.count,
-    });
+      candidates: remaining,
+      min: count ?? 0,
+      max: count ?? remaining.length,
+    }, allAnswersPayable ? { allAnswersPayable: true } : undefined);
+    if (cost.cost === "discard" && (variable || cost.captureCost === true)) {
+      if (cost.captureCost === true && chosen.length !== 1) throw new Error("A discarded cost value requires exactly one card");
+      const value = cost.captureCost === true ? copiableCostOf(state, catalog, chosen[0]) : chosen.length;
+      if (capturedX !== null && capturedX !== value) throw new Infeasible("Discard payment disagrees with X");
+      capturedX = value;
+    }
     used.push(...chosen);
     payments.push({ cost, cards: [...chosen] });
   };
 
-  for (const cost of costs) {
+  for (const [index, cost] of costs.entries()) {
     switch (cost.cost) {
       case "energyX":
         break;
@@ -283,16 +312,15 @@ export function planCosts(
         break;
       }
       default:
-        plan(cost, false);
+        plan(cost, false, index === costs.length - 1);
     }
   }
   const total = adjustedEnergy(baseEnergy, modifier);
-  // A path of choices can reach this point with more energy than the side
-  // has, such as an X a play hook allowed past the cost modifications: a
-  // dead end before the commit point, never a failed payment after it.
-  if (total > available) throw new Infeasible(`${side} cannot pay ${String(total)}●`);
+  // Every completed plan uses the same resource check as its nested choices
+  // and terminal proof: an unaffordable plan is a dead end before commitment.
+  if (!resourcesPayable()) throw new Infeasible(`${side} cannot pay the planned resources`);
   const fixed = Math.min(total, adjustedEnergy(baseEnergy - (x ?? 0), modifier));
-  return { x, energy: { fixed, x: total - fixed }, payments, optionalPaid };
+  return { x: capturedX, energy: { fixed, x: total - fixed }, payments, optionalPaid };
 }
 
 /** One card-choosing cost's need: how many distinct cards, from which candidates. */

@@ -64,8 +64,12 @@ export interface StepContext {
   readonly catalog: EngineCatalog;
   /** Optional presentation observation, forwarded by nested step replay. */
   readonly observeEvent?: EventObserver;
-  /** Raises a prompt and returns its answer, synchronously. */
-  choose<P extends Prompt>(prompt: PromptSpec<P>): AnswerFor<P>;
+  /**
+   * Raises a prompt and returns its answer. A final card-cost caller may prove
+   * every field-legal answer payable when the next operation is the commit
+   * point; validation, cancellation, replay and guard memo checks still apply.
+   */
+  choose<P extends Prompt>(prompt: PromptSpec<P>, proof?: { readonly allAnswersPayable: true }): AnswerFor<P>;
   /** Marks the point after which this step can no longer be cancelled. */
   commitPoint(): void;
   /**

@@ -35,7 +35,7 @@ export interface ContextOptions {
  * the fingerprint of the prompt as rules code raised it, before narrowing.
  */
 export interface PromptGuard {
-  narrow(prompt: Prompt, prefix: readonly RecordedAnswer[]): Narrowed;
+  narrow(prompt: Prompt, prefix: readonly RecordedAnswer[], allAnswersPayable?: true): Narrowed;
 }
 
 /** A narrowed prompt, and the answers it withholds only because the step's feasibility budget ran out. */
@@ -70,7 +70,7 @@ export class Context implements StepContext {
     return this.options.observeEvent;
   }
 
-  choose<P extends Prompt>(spec: PromptSpec<P>): AnswerFor<P> {
+  choose<P extends Prompt>(spec: PromptSpec<P>, proof?: { readonly allAnswersPayable: true }): AnswerFor<P> {
     const cancellable =
       !this.committed && this.options.canceller != null && spec.side === this.options.canceller;
     const raw = { ...spec, cancellable } as Prompt;
@@ -84,7 +84,8 @@ export class Context implements StepContext {
       // The chooser sees the cards as the prompt opens, whoever answers it.
       this.disclose(raw.privateTo, promptCards(raw));
     }
-    const prompt = this.narrow(raw);
+    if (proof !== undefined && raw.kind !== "chooseCards") throw new Error("Only final card-cost choices carry a payability proof");
+    const prompt = this.narrow(raw, proof?.allAnswersPayable);
     const rawFingerprint = promptFingerprint(raw);
     const fingerprint = prompt === raw ? rawFingerprint : promptFingerprint(prompt);
     const index = this.answers.length;
@@ -126,10 +127,10 @@ export class Context implements StepContext {
    * Answers withheld only because the step's feasibility budget ran out are
    * reported with a `feasibilityBounded` event.
    */
-  private narrow(raw: Prompt): Prompt {
+  private narrow(raw: Prompt, allAnswersPayable?: true): Prompt {
     const guard = this.options.guard;
     if (guard === undefined || this.committed) return raw;
-    const { prompt, unproven, truncated } = guard.narrow(raw, this.rawAnswers);
+    const { prompt, unproven, truncated } = guard.narrow(raw, this.rawAnswers, allAnswersPayable);
     if (unproven > 0 || truncated) {
       // Only the answering side sees the event, so it names the source as that side may see it.
       const purpose = purposeView(raw.purpose, raw.side, this.state);

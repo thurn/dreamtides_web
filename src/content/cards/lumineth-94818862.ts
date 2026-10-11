@@ -1,3 +1,5 @@
+import { activated, discardCostFilter, exhaustSelf, plus, x } from "../../engine/dsl/builders";
+import { discover } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 371,
   art: { x: 0.252, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([exhaustSelf(), discardCostFilter({ cardType: "character" }, { captureCost: true })], discover({ cardType: "character" }, { costExactly: plus(x(), 1) }))],
+  verifiedText: "s86vhqsz8p",
 });

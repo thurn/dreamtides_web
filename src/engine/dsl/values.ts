@@ -20,6 +20,8 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
   switch (value.value) {
     case "x":
       return scope.x ?? 0;
+    case "plus":
+      return evaluateValue(state, value.of, scope) + value.amount;
     case "count":
       return scope.count(value.of);
     case "handSize":

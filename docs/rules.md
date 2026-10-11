@@ -641,6 +641,20 @@ just to make it immediately dissolve, and an event cannot generally be played fo
 no effect merely to increase a card count. A card written with two costs, such as
 "2 X", requires paying 2● first and then X●.
 
+A discard cost may restrict the card's current type or subtype. It chooses only
+cards held in the paying player's hand, excluding the card being played and
+cards already chosen as costs or targets. When an effect reads the discarded
+card's cost, that value is captured before payment from its copiable values,
+after variant transforms and deck-entry modifications, with an X energy part
+counting as 0. The value persists with the stack item even if that card changes
+zones or characteristics before resolution.
+
+**Discard X cards:** X is the number of cards chosen to pay this additional
+cost. Choosing zero is legal when the effect still draws a fixed number of
+cards. This X spends no energy beyond the separately printed energy costs.
+When one ability also pays X●, every reference to X uses that same value:
+the discard count or captured card cost must agree with the chosen energy X.
+
 **A character's X:** A character played with an X cost keeps the value of X
 paid for it while it is in play, and its abilities that say X read that value:
 "When you materialize a character with cost X●" matches characters whose cost
