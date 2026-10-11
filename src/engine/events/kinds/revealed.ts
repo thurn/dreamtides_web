@@ -2,8 +2,9 @@ import type { InstanceId, Side } from "../../state/ids";
 import { publicEvent } from "../types";
 
 /**
- * Cards in `side`'s hand were revealed to both players, by a reveal cost
- * `side` paid or an effect revealing that hand; they stay in hand.
+ * Announces the listed cards from `side`'s hand to both players. The list
+ * can contain a subset of the hand, including a chosen card, or the whole
+ * hand. `side` holds that hand; the cards stay in hand.
  */
 export interface RevealedEvent {
   readonly kind: "revealed";

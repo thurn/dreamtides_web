@@ -1,0 +1,358 @@
+{
+  "bead": "hv-umm2.444",
+  "baseOid": "ae7e66c4b86afba771247d3163dce99b7256a0c1",
+  "reviewOf": "hv-umm2.439",
+  "scope": "Two existing source comment updates only; TypeScript token sequence remains identical. No test, event, type, rule, knowledge or UI behavior changes.",
+  "dispatchAt": "2026-10-11T23:01:46.649868+00:00",
+  "provisionalPreparationAt": "2026-10-11T23:03:20.870274+00:00",
+  "install": {
+    "command": "npm install",
+    "toolSessionId": 56136,
+    "actualExit": 0,
+    "npmReportedWallSecondsApproximate": 2,
+    "exactStartEndAndDescendantPids": "Not captured for this initial direct tool invocation; no exact wrapper duration is claimed.",
+    "terminalObservationAt": "2026-10-11T23:02:38.675269+00:00"
+  },
+  "tokenProof": {
+    "typescriptVersion": "5.8.3",
+    "results": [
+      {
+        "path": "src/engine/events/kinds/revealed.ts",
+        "originalSHA256": "4d54a4f2c5c7c3137e321d9f09f29793ea298039c66433a239cc5c2b3a093c1c",
+        "currentSHA256": "14d8ecf353a32d056f64b8df283e15a2918dab97bc1c918adba8b5dfcb52f062",
+        "tokenCount": 52,
+        "tokenSHA256": "8aa6e70fd8c34051654b9c41699910ebee7d46b848d6f43088bed0fc75a10952",
+        "equal": true,
+        "scanner": "TypeScript createScanner, skipTrivia=true, Standard, Latest; exact token kinds and token text"
+      },
+      {
+        "path": "src/engine/effects/primitives/play-restriction.ts",
+        "originalSHA256": "be0ad6cfe9b1a863b7f8617f78c7a2835fbb1efbdc533221ac74ff7bef25aad9",
+        "currentSHA256": "fa6c1ee2dcb902d67aeaa15bec5d776ed6e521306f90527c44a2c8dc4db34663",
+        "tokenCount": 696,
+        "tokenSHA256": "521126692ac20f73e0cb51954bc2827818fba882924a6fa1a29f2993d80231af",
+        "equal": true,
+        "scanner": "TypeScript createScanner, skipTrivia=true, Standard, Latest; exact token kinds and token text"
+      }
+    ]
+  },
+  "validation": {
+    "token-proof": {
+      "command": [
+        "node",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/444-implementation-evidence/token-proof.cjs",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/444-implementation-evidence"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chosen-reveal-docs",
+      "startedAt": "2026-10-11T23:03:04.715512+00:00",
+      "endedAt": "2026-10-11T23:03:04.888696+00:00",
+      "wallSeconds": 0.17303212499973597,
+      "actualExit": 0,
+      "pid": 97246,
+      "observedPids": [
+        97246
+      ],
+      "liveObservedPids": [],
+      "hostLoadSamples": [
+        {
+          "at": "2026-10-11T23:03:04.718937+00:00",
+          "raw": "{ 31.85 19.57 17.42 }",
+          "oneMinute": 31.85,
+          "scope": "token-proof start"
+        },
+        {
+          "at": "2026-10-11T23:03:04.908307+00:00",
+          "raw": "{ 31.94 19.79 17.51 }",
+          "oneMinute": 31.94,
+          "scope": "token-proof end"
+        }
+      ],
+      "workers": 2
+    },
+    "diff-check": {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chosen-reveal-docs",
+      "startedAt": "2026-10-11T23:03:20.943591+00:00",
+      "endedAt": "2026-10-11T23:03:21.123480+00:00",
+      "wallSeconds": 0.1797618339996916,
+      "actualExit": 0,
+      "pid": 99586,
+      "observedPids": [
+        99586
+      ],
+      "liveObservedPids": [],
+      "hostLoadSamples": [
+        {
+          "at": "2026-10-11T23:03:20.946960+00:00",
+          "raw": "{ 30.74 20.14 17.67 }",
+          "oneMinute": 30.74,
+          "scope": "diff-check start"
+        },
+        {
+          "at": "2026-10-11T23:03:21.143968+00:00",
+          "raw": "{ 30.74 20.14 17.67 }",
+          "oneMinute": 30.74,
+          "scope": "diff-check end"
+        }
+      ],
+      "workers": 2
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chosen-reveal-docs",
+      "startedAt": "2026-10-11T23:03:21.193185+00:00",
+      "endedAt": "2026-10-11T23:04:14.833292+00:00",
+      "wallSeconds": 53.63946812499944,
+      "actualExit": 0,
+      "pid": 99623,
+      "observedPids": [
+        4590,
+        99623,
+        99649,
+        99711,
+        99715,
+        99728,
+        99818,
+        99819,
+        99820,
+        99821,
+        99822,
+        99823,
+        99861
+      ],
+      "liveObservedPids": [],
+      "hostLoadSamples": [
+        {
+          "at": "2026-10-11T23:03:21.195715+00:00",
+          "raw": "{ 30.74 20.14 17.67 }",
+          "oneMinute": 30.74,
+          "scope": "review start"
+        },
+        {
+          "at": "2026-10-11T23:04:14.855308+00:00",
+          "raw": "{ 18.36 18.59 17.26 }",
+          "oneMinute": 18.36,
+          "scope": "review end"
+        }
+      ],
+      "workers": 2
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chosen-reveal-docs",
+      "startedAt": "2026-10-11T23:04:22.876415+00:00",
+      "endedAt": "2026-10-11T23:04:25.694139+00:00",
+      "wallSeconds": 2.817403792000732,
+      "actualExit": 0,
+      "pid": 5240,
+      "observedPids": [
+        5240,
+        5259,
+        5308,
+        5321,
+        5325,
+        5373,
+        5507
+      ],
+      "liveObservedPids": [],
+      "hostLoadSamples": [
+        {
+          "at": "2026-10-11T23:04:22.878986+00:00",
+          "raw": "{ 17.93 18.49 17.23 }",
+          "oneMinute": 17.93,
+          "scope": "knip start"
+        },
+        {
+          "at": "2026-10-11T23:04:25.715472+00:00",
+          "raw": "{ 17.45 18.38 17.20 }",
+          "oneMinute": 17.45,
+          "scope": "knip end"
+        }
+      ],
+      "workers": 2
+    },
+    "friction-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chosen-reveal-docs",
+      "startedAt": "2026-10-11T23:05:11.633468+00:00",
+      "endedAt": "2026-10-11T23:05:11.807512+00:00",
+      "wallSeconds": 0.17393137500039302,
+      "actualExit": 0,
+      "pid": 7977,
+      "observedPids": [
+        7977
+      ],
+      "liveObservedPids": [],
+      "hostLoadSamples": [
+        {
+          "at": "2026-10-11T23:05:11.636684+00:00",
+          "raw": "{ 11.13 16.59 16.60 }",
+          "oneMinute": 11.13,
+          "scope": "friction-schema start"
+        },
+        {
+          "at": "2026-10-11T23:05:11.827291+00:00",
+          "raw": "{ 11.13 16.59 16.60 }",
+          "oneMinute": 11.13,
+          "scope": "friction-schema end"
+        }
+      ],
+      "workers": 2
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "required review start"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-11T23:03:04.718937+00:00",
+      "raw": "{ 31.85 19.57 17.42 }",
+      "oneMinute": 31.85,
+      "scope": "token-proof start"
+    },
+    {
+      "at": "2026-10-11T23:03:04.908307+00:00",
+      "raw": "{ 31.94 19.79 17.51 }",
+      "oneMinute": 31.94,
+      "scope": "token-proof end"
+    },
+    {
+      "at": "2026-10-11T23:03:20.946960+00:00",
+      "raw": "{ 30.74 20.14 17.67 }",
+      "oneMinute": 30.74,
+      "scope": "diff-check start"
+    },
+    {
+      "at": "2026-10-11T23:03:21.143968+00:00",
+      "raw": "{ 30.74 20.14 17.67 }",
+      "oneMinute": 30.74,
+      "scope": "diff-check end"
+    },
+    {
+      "at": "2026-10-11T23:03:21.195715+00:00",
+      "raw": "{ 30.74 20.14 17.67 }",
+      "oneMinute": 30.74,
+      "scope": "review start"
+    },
+    {
+      "at": "2026-10-11T23:04:14.855308+00:00",
+      "raw": "{ 18.36 18.59 17.26 }",
+      "oneMinute": 18.36,
+      "scope": "review end"
+    },
+    {
+      "at": "2026-10-11T23:04:22.878986+00:00",
+      "raw": "{ 17.93 18.49 17.23 }",
+      "oneMinute": 17.93,
+      "scope": "knip start"
+    },
+    {
+      "at": "2026-10-11T23:04:25.715472+00:00",
+      "raw": "{ 17.45 18.38 17.20 }",
+      "oneMinute": 17.45,
+      "scope": "knip end"
+    },
+    {
+      "at": "2026-10-11T23:05:11.636684+00:00",
+      "raw": "{ 11.13 16.59 16.60 }",
+      "oneMinute": 11.13,
+      "scope": "friction-schema start"
+    },
+    {
+      "at": "2026-10-11T23:05:11.827291+00:00",
+      "raw": "{ 11.13 16.59 16.60 }",
+      "oneMinute": 11.13,
+      "scope": "friction-schema end"
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "validationScope": "Required review then sequential Knip. No new tests, full review, fuzz, browser QA or core review for a comment-only accepted follow-up.",
+  "sourceHashes": {
+    "src/engine/events/kinds/revealed.ts": "14d8ecf353a32d056f64b8df283e15a2918dab97bc1c918adba8b5dfcb52f062",
+    "src/engine/effects/primitives/play-restriction.ts": "fa6c1ee2dcb902d67aeaa15bec5d776ed6e521306f90527c44a2c8dc4db34663"
+  },
+  "preExistingIssues": "None encountered in the bounded source review. Install reported package audit advisories; no dependency repair attempted.",
+  "preAckPreparationAt": "2026-10-11T23:05:11.564386+00:00",
+  "validationSummary": {
+    "review": "actual exit 0; both TypeScript projects, lint, import cycles, 417 friction records (41 historical unknowns), 3317 related cases across 261 files",
+    "knip": "actual exit 0; sequential after terminal review",
+    "diffCheck": "actual exit 0",
+    "tokenProof": "actual exit 0, exact non-trivia token kinds/text equal to originals for both changed source files"
+  },
+  "measurementWindow": {
+    "dispatchAt": "2026-10-11T23:01:46.649868+00:00",
+    "preAckPreparationAt": "2026-10-11T23:05:11.564386+00:00",
+    "status": "Final preparation immediately before the single measured commit; includes all parent coordination and ACK waits.",
+    "finalPreparationAt": "2026-10-11T23:07:24.039561+00:00",
+    "dispatchToFinalPreparationMin": 5.623161550000001,
+    "commitRuntimeSidecar": "444-implementation-evidence/commit-runtime.json in origin session scratch records actual commit start/end/exit/PID and exact dispatch-to-commit-end duration."
+  },
+  "resourceAudit": {
+    "at": "2026-10-11T23:05:34.702188+00:00",
+    "observedCheckPids": [
+      4590,
+      5240,
+      5259,
+      5308,
+      5321,
+      5325,
+      5373,
+      5507,
+      7977,
+      97246,
+      99586,
+      99623,
+      99649,
+      99711,
+      99715,
+      99728,
+      99818,
+      99819,
+      99820,
+      99821,
+      99822,
+      99823,
+      99861
+    ],
+    "liveObservedCheckPids": [],
+    "exactWorktreeCwdMatches": [],
+    "exactWorktreeCommandMatches": [],
+    "lsofExit": 0,
+    "installDescendantCapture": "Uncaptured; covered only by settled install tool exit0 and this exact-worktree cwd/command live scan.",
+    "runtimeScope": "No server, browser, provider, watcher or heavy command was started. No process was killed."
+  },
+  "finalPreparationAt": "2026-10-11T23:07:24.039561+00:00",
+  "provenance": {
+    "parentCommitAckReceived": true,
+    "baseOid": "ae7e66c4b86afba771247d3163dce99b7256a0c1",
+    "sourceHashesFrozen": {
+      "src/engine/events/kinds/revealed.ts": "14d8ecf353a32d056f64b8df283e15a2918dab97bc1c918adba8b5dfcb52f062",
+      "src/engine/effects/primitives/play-restriction.ts": "fa6c1ee2dcb902d67aeaa15bec5d776ed6e521306f90527c44a2c8dc4db34663"
+    },
+    "postAckEdits": "Only own friction/measurement temporal and provenance fields."
+  }
+}

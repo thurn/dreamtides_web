@@ -13,8 +13,10 @@ import { definePrimitive } from "../types";
  *
  * - `chosen`: "Choose a card in the opponent's hand. That card cannot be
  *   played": the controller privately chooses one card of the opponent's
- *   hand as the effect resolves (role `restrictChosen`), and no player can
- *   play that card, wherever it is (RD-hv-umm2.109-1, RD-hv-umm2.109-2);
+ *   hand as the effect resolves (role `restrictChosen`), then reveals the
+ *   selected card to both players before handling the duration. While the
+ *   restriction applies, no player can play that card, wherever it is
+ *   (RD-hv-umm2.109-1, RD-hv-umm2.109-2);
  * - `matching`: "The opponent cannot play events": `player` cannot play the
  *   cards matching `filter`, by their effective characteristics;
  * - `perTurn`: "Players may only play one card per turn": each player
@@ -34,8 +36,9 @@ export type PlayRestriction =
  * rules/timing.ts `canPlay`, so every route of play is restricted, while a
  * card put into play without being played, or a copy, is not. A `chosen`
  * restriction with a "while this is in play" duration whose source has left
- * play still makes its choice, and restricts nothing (RD-hv-7x4l.6-4,
- * RD-hv-umm2.109-1). A static ability holds only `matching` and `perTurn`.
+ * play still makes and publicly announces its choice, applying no
+ * restriction (RD-hv-7x4l.6-4, RD-hv-umm2.109-1). A static ability holds
+ * only `matching` and `perTurn`.
  */
 export interface PlayRestrictionNode {
   readonly op: "playRestriction";

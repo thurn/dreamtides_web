@@ -1,0 +1,19 @@
+{
+  "bead": "hv-umm2.444",
+  "phase": 5,
+  "implementMin": 5.623161550000001,
+  "localValidationS": {
+    "token-proof": 0.17303212499973597,
+    "diff-check": 0.1797618339996916,
+    "review": 53.63946812499944,
+    "knip": 2.817403792000732,
+    "friction-schema": 0.17393137500039302
+  },
+  "hostLoad": 30.74,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
