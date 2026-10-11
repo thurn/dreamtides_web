@@ -12,14 +12,15 @@ import { createCatalog } from "../../engine/catalog";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../../engine/fold/slice";
 import { boardState, type BoardSetup } from "../../engine/testing/board";
 import { DSL } from "../../engine/testing/dsl-cards";
-import { event as eventAbility } from "../../engine/dsl/builders";
-import { discard } from "../../engine/effects/primitives";
+import { enemyCharacter, event as eventAbility, target } from "../../engine/dsl/builders";
+import { atStartOfTurn, triggered } from "../../engine/dsl/triggers";
+import { banishUntil, discard, draw } from "../../engine/effects/primitives";
 import { SYNTHETIC, syntheticId } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
 import { batchStates, presentationAdapterFor } from "../../rules/battle/engine-battle";
 import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
 import { LAB, PROMPT_LAB_DEFINITIONS, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
-import { battleSeed } from "../../engine/state/ids";
+import { battleSeed, PHASES, SIDES, type InstanceId } from "../../engine/state/ids";
 import type { CommittedEvent } from "../../eventlog/local-log";
 import type { GameEvent } from "../../eventlog/types";
 import type { JourneyBattleFoldState } from "../../rules/battle/fold";
@@ -115,7 +116,58 @@ function observedBoard(setup: BoardSetup, engine: Engine = labEngine) {
       batch,
     };
   };
-  return { ids, adapter, apply, slice: () => slice };
+  /** Passes for whichever side decides until a batch publishes `kind`; that batch. */
+  const passUntil = (kind: EngineEvent["kind"]) => {
+    for (let passes = 0; passes < 40; passes += 1) {
+      const side = engine.decision(slice.committed)?.side;
+      if (side === undefined) break;
+      const applied = apply({ kind: "battleAction", side, action: { kind: "pass" } });
+      if (applied.events.some((event) => event.kind === kind)) return applied;
+    }
+    throw new Error(`no batch publishes ${kind}`);
+  };
+  return { ids, adapter, apply, passUntil, slice: () => slice };
+}
+
+/** Where a card is on a board: its zone and holder, its position in play, or gone. */
+function placeOf(state: BattleState, id: InstanceId): string {
+  const instance = state.instances[id] as BattleState["instances"][InstanceId] | undefined;
+  if (instance === undefined) return "gone";
+  const side = state.sides[instance.controller];
+  const slot = instance.zone === "play" ? `${String(side.backRank.indexOf(id))}/${String(side.frontRank.indexOf(id))}` : "";
+  return `${instance.zone}:${instance.controller}:${slot}`;
+}
+
+const withoutRepeats = (places: readonly string[]) => places.filter((place, index) => places[index - 1] !== place);
+
+/**
+ * Every item's board in event order only moves forward: each card visits its
+ * places in the order the batch moved it, never returning to one it left,
+ * and the turn, phase, and scores never go back.
+ */
+function expectForward(batch: { readonly before: BattleState; readonly state: BattleState; readonly eventStates: readonly (BattleState | undefined)[]; readonly items: readonly PresentationItem[] }) {
+  const observed = batch.eventStates.filter((state): state is BattleState => state !== undefined);
+  expect(observed).toHaveLength(batch.eventStates.length);
+  const trajectory = [batch.before, ...observed, batch.state];
+  const boards = batch.items.map((item) => item.batch.state);
+  const cards = new Set(trajectory.flatMap((state) => Object.keys(state.instances) as InstanceId[]));
+  for (const id of cards) {
+    const path = withoutRepeats(trajectory.map((state) => placeOf(state, id)));
+    let at = 0;
+    for (const place of withoutRepeats(boards.map((state) => placeOf(state, id)))) {
+      const next = path.indexOf(place, at);
+      expect({ id, place, forward: next >= 0 }).toEqual({ id, place, forward: true });
+      at = next;
+    }
+  }
+  const progress = (state: BattleState) => [
+    state.turn.turnNumber * PHASES.length + PHASES.indexOf(state.turn.phase),
+    ...SIDES.map((side) => state.sides[side].score),
+  ];
+  boards.forEach((state, index) => {
+    const previous = progress(boards[index - 1] ?? batch.before);
+    expect(progress(state).map((value, at) => value >= (previous[at] ?? value))).toEqual(previous.map(() => true));
+  });
 }
 
 /** The step of the discover lab fixture that publishes its `cardDiscovered`, and the event's index in it. */
@@ -176,6 +228,11 @@ describe("presentation items", () => {
     expect(answered.eventStates[discardAt]?.sides.player.void).toContain(fixture.ids.player.hand[1]);
     expect(answered.eventStates[discardAt]?.sides.player.hand).not.toContain(fixture.ids.player.hand[1]);
     expect(first.eventStates[first.events.findIndex((event) => event.kind === "cardDrawn")]?.sides.player.hand).toEqual([fixture.ids.player.hand[1], fixture.ids.player.deck[0]]);
+    // The card resolving through the prompt leaves the stack from the answer's first item.
+    expect(first.state.instances[fixture.ids.player.hand[0]]?.zone).toBe("stack");
+    expect(answered.items.length).toBeGreaterThan(0);
+    expect(answered.items.map((item) => item.batch.state.instances[fixture.ids.player.hand[0]]?.zone)).toEqual(answered.items.map(() => "void"));
+    expectForward(answered);
   });
 
   it("travels multiple discards in their emitted order", () => {
@@ -203,8 +260,108 @@ describe("presentation items", () => {
     if (loop === null) throw new Error("no loop offer");
     const repeated = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "repeatLoop", loop: loop.id, count: 2 } });
     const returned = repeated.events.flatMap((event, index) => event.kind === "returnedToHand" ? [repeated.eventStates[index]] : []);
-    expect(returned.map((state) => state.sides.player.score)).toEqual([2, 3]);
-    expect(returned.every((state) => state.sides.player.hand.includes(fixture.ids.player.hand[0]))).toBe(true);
+    expect(returned.map((state) => state?.sides.player.score)).toEqual([2, 3]);
+    expect(returned.every((state) => state?.sides.player.hand.includes(fixture.ids.player.hand[0]))).toBe(true);
+  });
+
+  it("travels a resolving event card off the stack as it resolves, before its draws", () => {
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [DSL.drawTwo.id], energy: 2, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] } });
+    const card = fixture.ids.player.hand[0];
+    const shown = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } });
+    const resolvedAt = shown.events.findIndex((event) => event.kind === "resolved");
+    const resolved = shown.items.find((item) => item.key === `${shown.batch.key}:${String(resolvedAt)}`);
+    const later = shown.items.slice(shown.items.indexOf(resolved ?? shown.items[0]));
+
+    expect(resolved?.presentation).toBe("travel");
+    expect(later.length).toBeGreaterThan(2);
+    expect(later.map((item) => item.batch.state.instances[card]?.zone)).toEqual(later.map(() => "void"));
+    expect(later.every((item) => item.batch.state.stack.length === 0)).toBe(true);
+    expect(resolved?.batch.state.sides.player.hand).toEqual([]);
+    expectForward(shown);
+  });
+
+  it("presents a scoring lane, then a dissolving tie, then the next turn's start-of-turn trigger and draw, never stepping back", () => {
+    const turnDraw = { ...SYNTHETIC.vanilla1, id: syntheticId(0x5102), status: "authored" as const, abilities: () => [triggered(atStartOfTurn(), draw(1))] };
+    const engine = createEngine(createCatalog([...PROMPT_LAB_DEFINITIONS.cards, turnDraw], [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments));
+    const fixture = observedBoard({
+      active: "player",
+      phase: "day",
+      player: { front: [SYNTHETIC.vanilla3.id, SYNTHETIC.vanilla1.id], deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla1.id] },
+      enemy: { front: [null, SYNTHETIC.vanilla1.id], back: [turnDraw.id], deck: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id] },
+    }, engine);
+    const challenge = fixture.passUntil("laneResolved");
+    const kinds = challenge.events.map((event) => event.kind);
+    const lanes = challenge.events.flatMap((event) => (event.kind === "laneResolved" ? [event.scored] : []));
+    const turnAt = kinds.indexOf("turnStarted");
+    const ending = challenge.items.filter((item) => Number(item.key.split(":").pop()) < turnAt);
+
+    expect(lanes).toEqual([3, 0]);
+    expect(kinds.filter((kind) => kind === "dissolved")).toHaveLength(2);
+    expect(turnAt).toBeGreaterThan(kinds.lastIndexOf("dissolved"));
+    expect(kinds.filter((kind, index) => kind === "cardDrawn" && index > turnAt)).toHaveLength(2);
+    expect(ending.length).toBeGreaterThan(2);
+    expect(ending.map((item) => item.batch.state.turn.active)).toEqual(ending.map(() => challenge.before.turn.active));
+    expectForward(challenge);
+  });
+
+  it("presents an automatic answer's notice before the play it answered travels", () => {
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [DSL.dissolveEnemy.id], energy: 4, deck: [SYNTHETIC.vanilla1.id] }, enemy: { back: [SYNTHETIC.vanilla2.id], deck: [SYNTHETIC.vanilla1.id] } });
+    const shown = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } });
+    const presentations = shown.items.map((item) => item.presentation);
+
+    expect(presentations[0]).toBe("notice");
+    expect(presentations.slice(1).filter((presentation) => presentation === "travel").length).toBeGreaterThan(1);
+    expect(shown.items[0]?.batch.state.instances[fixture.ids.player.hand[0]]?.zone).toBe("hand");
+    expectForward(shown);
+  });
+
+  it("keeps a card returning as the next turn begins in the ending turn until the turn is announced", () => {
+    const exileUntilNextTurn = { ...DSL.dissolveEnemy, id: syntheticId(0x5103), abilities: () => [eventAbility(banishUntil(target(enemyCharacter()), "untilYourNextTurn"))] };
+    const engine = createEngine(createCatalog([...PROMPT_LAB_DEFINITIONS.cards, exileUntilNextTurn], [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments));
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [exileUntilNextTurn.id], energy: 4, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla1.id] }, enemy: { back: [SYNTHETIC.vanilla2.id], deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla1.id] } }, engine);
+    fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } });
+    expect(fixture.slice().committed.instances[fixture.ids.enemy.back[0] ?? fixture.ids.player.hand[0]]?.zone).toBe("banished");
+    fixture.passUntil("turnStarted");
+    const returning = fixture.passUntil("turnStarted");
+    const turnAt = returning.events.findIndex((event) => event.kind === "turnStarted");
+    const materializedAt = returning.events.findIndex((event) => event.kind === "materialized");
+    const materialized = returning.items.find((item) => item.key === `${returning.batch.key}:${String(materializedAt)}`);
+
+    expect(materializedAt).toBeGreaterThanOrEqual(0);
+    expect(materializedAt).toBeLessThan(turnAt);
+    expect(returning.eventStates[materializedAt]?.turn.active).toBe("player");
+    expect(materialized?.batch.state.turn).toMatchObject({ active: returning.before.turn.active, turnNumber: returning.before.turn.turnNumber });
+    expectForward(returning);
+  });
+
+  it("falls back through the batch's turn boundary for events the presentation did not observe", () => {
+    const fixture = promptLabFixture("present-challenge");
+    if (fixture === null) throw new Error("no fixture");
+    const { state, ids } = boardState(labEngine.catalog, fixture.setup);
+    const adapter = createFoldAdapter(labEngine);
+    let slice: BattleSlice = { committed: state, inFlight: null, attempt: 0, publishedEvents: 0 };
+    const reposition: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "reposition", card: ids.player.back[2] ?? ids.player.front[0] ?? ids.enemy.front[0] ?? ids.player.deck[0], to: { rank: "front", index: 2 } } };
+    const intents: BattleIntent[] = [reposition];
+    for (let passes = 0; passes < 40; passes += 1) {
+      const intent = intents.shift() ?? { kind: "battleAction", side: labEngine.decision(slice.committed)?.side ?? "player", action: { kind: "pass" } };
+      const from = slice;
+      const outcome = adapter.reduce(slice, intent);
+      if (outcome.kind !== "applied") throw new Error("fixture intent failed");
+      slice = outcome.slice;
+      const turnAt = outcome.published.findIndex((event) => event.kind === "turnStarted");
+      if (turnAt < 0) continue;
+      const states = batchStates(adapter, from, slice, outcome.published);
+      const batch = { key: pid("unobserved"), state: states.state };
+      const items = presentationItems(outcome.published, "player", batch, states.before, () => null, states.eventStates);
+      const at = (item: PresentationItem) => Number(item.key.split(":").pop());
+
+      expect(states.eventStates).toEqual(outcome.published.map(() => undefined));
+      expect(items.some((item) => at(item) < turnAt)).toBe(true);
+      expect(items.filter((item) => at(item) < turnAt).every((item) => item.batch.state.turn === states.before.turn)).toBe(true);
+      expect(items.filter((item) => at(item) >= turnAt).every((item) => item.batch === batch)).toBe(true);
+      return;
+    }
+    throw new Error("no new turn");
   });
 
   it("keeps observer errors and snapshot mutations outside the rules outcome", () => {

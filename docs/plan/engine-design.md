@@ -1424,9 +1424,9 @@ names each kind's presentation, and a missing kind is a type error:
   board's shared-layout travel, held for `BATTLE.presentation.eventDwellMs`;
 - **reveal:** the opponent's play shows at reading size for the tutorial's
   reveal pacing (`opponentPlayRevealDwellMs`, which the tutorial's
-  opponent plays share) over the board as it was before the play, then
-  travels to its
-  destination as the board shows the play's result;
+  opponent plays share) over the board the previous item showed (the
+  board before the batch when the play comes first), then travels to its
+  destination as the next item shows its own event's board;
 - **score:** a lane that scores shows the card-score announcement on its
   challenger;
 - **dreamwell:** a side's Dreamwell card shows beside its status display;
@@ -1443,13 +1443,30 @@ names each kind's presentation, and a missing kind is a type error:
   `pendingAbility`), and a bounded feasibility search.
 
 The battle screen recomputes each applied intent's published events,
-keeps the ones the human may see, and plays their items in order. While it
-presents a batch older than the fold, the board shows that batch's state
-and takes no input, so the opponent's plays arrive one at a time even when
-the AI host has moved on; the prompt host shows a prompt only once the
-queue is idle. A backlog drops its oldest travels past `maxBacklogMs` and
-its oldest opponent reveals past `maxQueuedReveals`, never a turn, score,
-Dreamwell card, or the item on screen. Presentation is client timing only:
+keeps the ones the human may see, and plays their items in order. Its
+presentation fold adapter (`presentationAdapterFor`) observes a detached
+state at each event as the rules emit it (`batchStates`), and each item
+shows its own event's board (`eventBoards` in `presentation-items.ts`), so
+a batch's board only moves forward in event order and takes no input while
+an item plays; the opponent's plays arrive one at a time even when the AI
+host has moved on, and the prompt host shows a prompt only once the queue
+is idle. On those boards:
+
+- an event before the batch's new turn shows the turn it belongs to
+  (`batchTurnAt`, shared with the battle log), including a card banished
+  until that turn that returns before the turn is announced;
+- a card whose move the rules announce before making it (a resolving card,
+  the characters of a lane that scored nothing, a created card discarded
+  or dissolved) shows at its destination from that event on, so a
+  resolving event card leaves the stack as it resolves and its effects
+  follow; a card still resolving at a prompt stays on the stack until the
+  answer's batch, whose first item shows it gone;
+- an event with no observed state, outside the presentation adapter, shows
+  the batch's final state in the turn `batchTurnAt` gives it.
+
+A backlog drops its oldest travels past `maxBacklogMs` and its oldest
+opponent reveals past `maxQueuedReveals`, never a turn, score, Dreamwell
+card, or the item on screen. Presentation is client timing only:
 the fold and the AI host never read it, and a reload shows the settled
 board.
 

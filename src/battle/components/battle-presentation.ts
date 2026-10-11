@@ -111,8 +111,8 @@ export interface PublishedBatch {
   readonly events: readonly EngineEvent[];
   readonly batch: PresentationBatch;
   readonly before: BattleState;
-  /** State after each event in `events`, in the same order. */
-  readonly eventStates: readonly BattleState[];
+  /** The state observed at each event in `events`, in the same order; `undefined` where none was. */
+  readonly eventStates: readonly (BattleState | undefined)[];
   readonly seq: number;
 }
 

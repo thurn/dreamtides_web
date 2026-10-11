@@ -170,7 +170,10 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   // The board shows the batch being presented while it is older than the
   // fold: the opponent's plays arrive one at a time.
   const head = presentation.head;
-  const presentedState = head !== null && head.batch.key !== sliceKey(slice) ? head.batch.state : null;
+  const foldKey = sliceKey(slice);
+  const presentedState = head !== null && head.batch.key !== foldKey ? head.batch.state : null;
+  // The board on screen: a presented item's, else the fold's.
+  const boardKey = presentedState !== null && head !== null ? head.batch.key : foldKey;
 
   // Everything the engine derives is memoized on the slice, which changes
   // only when an engine intent applies, and on the batch being presented.
@@ -234,11 +237,18 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         battleId,
         seq,
         batch: batch.key,
+        // Each item's board: its key names the event whose state it shows
+        // (`<batch>:event:<index>`), and its stack shows which cards it
+        // holds there, so a log reconstructs every board the human saw.
         items: items.map((item) => ({
+          key: item.key,
           presentation: item.presentation,
           dwellMs: item.dwellMs,
           visual: item.visual?.kind ?? null,
           instance: item.visual !== null && "instance" in item.visual ? item.visual.instance : null,
+          board: item.batch.key,
+          version: item.batch.state.version,
+          stack: item.batch.state.stack.map((entry) => (entry.kind === "card" ? entry.instance : entry.source)),
         })),
       });
     }
@@ -506,14 +516,16 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   useEffect(() => {
     if (stackTargets.length === 0) return;
     const { version } = derived.view;
-    logEventOnce(`battle_engine_stack_targets_shown:${battleId}:${version}`, "battle_engine_stack_targets_shown", {
+    logEventOnce(`battle_engine_stack_targets_shown:${battleId}:${boardKey}`, "battle_engine_stack_targets_shown", {
       battleId,
       version,
+      board: boardKey,
       stack: derived.view.stack.map((item) => (item.kind === "card" ? item.instance : item.source)),
       targets: stackTargets,
     });
-    // Logged once per presented state whose stack names targets.
-  }, [stackTargetsKey, derived.view.version]);
+    // Logged once per presented board whose stack names targets: the
+    // boards of one step's events share its version, never their key.
+  }, [stackTargetsKey, boardKey]);
   // The board's handlers keep one identity for the screen's life and run the
   // latest committed render's code, so the interactions below change only
   // with the values they carry and the board's memoized regions can skip.

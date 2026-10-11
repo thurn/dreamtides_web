@@ -6,13 +6,14 @@
 // kind to its visual (`EVENT_PRESENTATION`), and plays the resulting items in
 // order (`battle-presentation.ts`):
 //
-// - Travel items show the state at their event; other items show the batch
-//   state, so an opponent's plays arrive one at a time even when the AI
-//   host has already moved on; when the queue is idle it shows the fold.
-//   While an opponent's play is revealed, the board shows the state before
-//   it, so its effects land as the card travels to its destination. Until a
-//   batch's new turn is presented, its board stays in the turn it started
-//   in, so the turn announcement follows what happened before it.
+// - Each item shows the board at its own event (`eventBoards`), so a batch's
+//   board only moves forward and an opponent's plays arrive one at a time
+//   even when the AI host has already moved on; when the queue is idle it
+//   shows the fold. An opponent's play is revealed over the board just
+//   before it, so its effects land as the card travels to its destination.
+//   Until a batch's new turn is presented, its board stays in the turn it
+//   started in (`batchTurnAt`), so the turn announcement follows what
+//   happened before it.
 // - An opponent's play shows at reading size for the tutorial's reveal
 //   pacing, held off the board meanwhile, then travels to its destination.
 
@@ -21,7 +22,7 @@ import type { EngineEvent, InstanceId, Side } from "../../engine";
 import { eventSeenBy, type EngineEventKind } from "../../engine/events";
 import type { BattleSlice } from "../../engine/fold/slice";
 import type { PromptSource } from "../../engine/prompts/types";
-import type { AbilitySource } from "../../engine/state/ids";
+import { SIDES, type AbilitySource } from "../../engine/state/ids";
 import type { BattleState } from "../../engine/state/types";
 import type { EngineBattleNotice } from "../../runtime/battle-prompt-messages";
 import type { DreamwellCardId, PresentationId } from "../../types/identifiers";
@@ -132,7 +133,7 @@ export interface PresentationItem {
   readonly dwellMs: number;
   readonly visual: PresentationVisual | null;
   readonly notice: EngineBattleNotice | null;
-  /** The board while presented: a travel's event state, the batch state, or the state before a reveal. */
+  /** The board while presented: its event's board (`eventBoards`), or for a reveal the board shown before it. */
   readonly batch: PresentationBatch;
 }
 
@@ -157,13 +158,181 @@ export function batchTurnAt(
   return (index) => index < turnIndex ? before : after;
 }
 
+/** Where a card is: its zone and the side holding it, its position in play, or `gone` once it ceased to exist. */
+function placeOf(state: BattleState, id: InstanceId): string {
+  const instance = state.instances[id];
+  if (instance === undefined) return "gone";
+  const side = instance.controller;
+  if (instance.zone !== "play") return `${instance.zone}:${side}`;
+  const back = state.sides[side].backRank.indexOf(id);
+  return back >= 0 ? `play:${side}:back:${String(back)}` : `play:${side}:front:${String(state.sides[side].frontRank.indexOf(id))}`;
+}
+
+/** Whether `event` names `id` in any of its fields. */
+function namesCard(event: EngineEvent, id: InstanceId): boolean {
+  return Object.values(event as unknown as Readonly<Record<string, unknown>>).some(
+    (value) => value === id || (Array.isArray(value) && (value as readonly unknown[]).includes(id)),
+  );
+}
+
+/** Whether an event of this kind is presented as an item rather than at once or not at all. */
+function presentedAsItem(event: EngineEvent): boolean {
+  const presentation: EventPresentation = EVENT_PRESENTATION[event.kind];
+  return presentation !== "status" && presentation !== "none";
+}
+
+/**
+ * The cards an event announces before rules code moves them: a resolving
+ * card, which leaves the stack once its effects resolve; the characters of
+ * a lane that scored nothing, which dissolve after; and a created card
+ * discarded or dissolved, which ceases to exist after.
+ */
+function announcedMoves(event: EngineEvent): readonly InstanceId[] {
+  switch (event.kind) {
+    case "resolved":
+    case "discarded":
+    case "dissolved":
+      return [event.instance];
+    case "laneResolved":
+      return event.scored > 0 ? [] : event.blocker === null ? [event.challenger] : [event.challenger, event.blocker];
+    default:
+      return [];
+  }
+}
+
+type ZoneList = "deck" | "hand" | "void" | "banished";
+
+/**
+ * `state` showing `id` where `settled` has it, or `state` when it cannot:
+ * the board of an event that announced a move before the move landed.
+ */
+function settle(state: BattleState, id: InstanceId, settled: BattleState): BattleState {
+  const place = settled.instances[id];
+  if (place?.zone === "stack") return state;
+  const without = (list: readonly InstanceId[]) => list.filter((entry) => entry !== id);
+  const vacate = (rank: readonly (InstanceId | null)[]) => rank.map((entry) => (entry === id ? null : entry));
+  const sides = { ...state.sides };
+  for (const side of SIDES) {
+    const held = state.sides[side];
+    sides[side] = {
+      ...held,
+      deck: without(held.deck),
+      hand: without(held.hand),
+      void: without(held.void),
+      banished: without(held.banished),
+      backRank: vacate(held.backRank),
+      frontRank: vacate(held.frontRank),
+    };
+  }
+  if (place?.zone === "play") {
+    const target = settled.sides[place.controller];
+    const rank = target.backRank.includes(id) ? "backRank" : "frontRank";
+    const index = target[rank].indexOf(id);
+    const holder = sides[place.controller];
+    if (index < 0 || holder[rank][index] !== null) return state;
+    sides[place.controller] = { ...holder, [rank]: holder[rank].map((entry, at) => (at === index ? id : entry)) };
+  } else if (place !== undefined) {
+    const zone: ZoneList = place.zone;
+    const holder = sides[place.controller];
+    const list = settled.sides[place.controller][zone];
+    sides[place.controller] = { ...holder, [zone]: list[0] === id ? [id, ...holder[zone]] : [...holder[zone], id] };
+  }
+  const knownTo = { ...state.knownTo };
+  for (const side of SIDES) {
+    knownTo[side] = settled.knownTo[side].includes(id) ? [...without(state.knownTo[side]), id] : without(state.knownTo[side]);
+  }
+  return {
+    ...state,
+    sides,
+    knownTo,
+    instances: Object.fromEntries([
+      ...Object.entries(state.instances).filter(([key]) => key !== id),
+      ...(place === undefined ? [] : [[id, place] as const]),
+    ]),
+    stack: state.stack.filter((item) => item.kind !== "card" || item.instance !== id),
+  };
+}
+
+/**
+ * The board each event of a batch shows, aligned with `events`: the state
+ * observed at the event (`observed`; `undefined` where none was), so that a
+ * batch's board only moves forward:
+ *
+ * - An event before the batch's new turn shows the turn it belongs to
+ *   (`turnAt`), even where the rules had already begun the next turn, as
+ *   when a card banished until that turn returns before it is announced.
+ * - A card whose move an event announces before it lands
+ *   (`announcedMoves`) shows at its destination from that event on: a
+ *   resolving card leaves the stack as it resolves, never staying there
+ *   through its effects; a card the batch began resolving leaves it from the
+ *   batch's first event. A card still resolving when the batch ends, held by
+ *   a prompt, stays on the stack.
+ */
+function eventBoards(
+  events: readonly EngineEvent[],
+  before: BattleState,
+  after: BattleState,
+  observed: readonly (BattleState | undefined)[],
+  turnAt: (index: number) => Readonly<BattleState["turn"]>,
+): (BattleState | undefined)[] {
+  let carried: Readonly<BattleState["turn"]> = before.turn;
+  const boards = events.map((_event, index): BattleState | undefined => {
+    const state = observed[index];
+    if (state === undefined) return undefined;
+    const owner = turnAt(index);
+    const sameTurn = (turn: Readonly<BattleState["turn"]>) => turn.turnNumber === owner.turnNumber && turn.active === owner.active;
+    if (sameTurn(state.turn)) {
+      carried = state.turn;
+      return state;
+    }
+    return { ...state, turn: sameTurn(carried) ? carried : owner };
+  });
+  /** The first state from `start` in which `id` has left where it is in `from`; between them, only items naming it unless `anyItems`. */
+  const landing = (start: number, from: BattleState, id: InstanceId, anyItems: boolean) => {
+    const place = placeOf(from, id);
+    for (let index = start; index < events.length; index += 1) {
+      const state = observed[index];
+      const event = events[index];
+      if (state === undefined || event === undefined) return null;
+      if (placeOf(state, id) !== place) return { index, state };
+      if (!anyItems && presentedAsItem(event) && !namesCard(event, id)) return null;
+    }
+    return placeOf(after, id) === place ? null : { index: events.length, state: after };
+  };
+  const show = (from: number, id: InstanceId, landed: { readonly index: number; readonly state: BattleState } | null) => {
+    if (landed === null) return;
+    for (let index = Math.max(from, 0); index < landed.index; index += 1) {
+      const board = boards[index];
+      if (board !== undefined) boards[index] = settle(board, id, landed.state);
+    }
+  };
+  for (const item of before.stack) {
+    if (item.kind === "card" && !events.some((event) => namesCard(event, item.instance))) {
+      show(0, item.instance, landing(0, before, item.instance, true));
+    }
+  }
+  events.forEach((event, index) => {
+    const state = observed[index];
+    const previous = index === 0 ? before : observed[index - 1];
+    if (state === undefined || previous === undefined) return;
+    for (const id of announcedMoves(event)) {
+      if (placeOf(state, id) !== placeOf(previous, id)) continue;
+      show(index, id, landing(index + 1, state, id, event.kind === "resolved"));
+    }
+  });
+  return boards;
+}
+
 /** Names a prompt's or ability's source card for a notice, when the human can identify it. */
 export type NoticeSourceName = (source: AbilitySource | PromptSource | null) => string | null;
 
 /**
  * The items `human` is shown for `events`, judged in `batch.state`, the
  * state that arrives with them; `before` is the state they started from.
- * `sourceName` names a notice's source card.
+ * `sourceName` names a notice's source card. `eventStates` are the states
+ * observed at each event (`batchStates`); an item shows its event's board
+ * (`eventBoards`), and an item whose event went unobserved the batch's
+ * state in the turn `batchTurnAt` gives it.
  */
 export function presentationItems(
   events: readonly EngineEvent[],
@@ -171,7 +340,7 @@ export function presentationItems(
   batch: PresentationBatch,
   before: BattleState,
   sourceName: NoticeSourceName,
-  eventStates: readonly BattleState[] = [],
+  eventStates: readonly (BattleState | undefined)[] = [],
 ): PresentationItem[] {
   const { eventDwellMs } = BATTLE.presentation;
   // Items before the batch's first new turn show its state in the turn it
@@ -182,36 +351,37 @@ export function presentationItems(
     key: parsePresentationId(`${batch.key}:before-turn`),
     state: { ...batch.state, turn: before.turn },
   };
+  const boards = eventBoards(events, before, batch.state, eventStates, turnAt);
+  // The board the previous item showed: a reveal holds it.
+  let shown: PresentationBatch = { key: parsePresentationId(`${batch.key}:before`), state: before };
   return events.flatMap((raw, index): PresentationItem[] => {
     const event = eventSeenBy(raw, human, batch.state);
     if (event === null) return [];
-    const travelState = eventStates[index];
-    const travelBatch = travelState === undefined ? null : {
-      key: parsePresentationId(`${batch.key}:event:${String(index)}`),
-      state: travelState,
-    };
+    const own = boards[index];
+    const board: PresentationBatch =
+      own !== undefined
+        ? { key: parsePresentationId(`${batch.key}:event:${String(index)}`), state: own }
+        : turnAt(index) === batch.state.turn
+          ? batch
+          : beforeTurn;
     const item = (
       presentation: PresentationItem["presentation"],
       dwellMs: number,
       visual: PresentationVisual | null = null,
       notice: EngineBattleNotice | null = null,
-    ): PresentationItem[] => [
-      {
-        key: parsePresentationId(`${batch.key}:${String(index)}`),
-        presentation,
-        dwellMs,
-        visual,
-        notice,
-        batch:
-          presentation === "reveal"
-            ? { key: parsePresentationId(`${batch.key}:before`), state: before }
-            : presentation === "travel" && travelBatch !== null
-              ? travelBatch
-              : turnAt(index) === batch.state.turn
-                ? batch
-                : beforeTurn,
-      },
-    ];
+    ): PresentationItem[] => {
+      if (presentation !== "reveal") shown = board;
+      return [
+        {
+          key: parsePresentationId(`${batch.key}:${String(index)}`),
+          presentation,
+          dwellMs,
+          visual,
+          notice,
+          batch: shown,
+        },
+      ];
+    };
     switch (event.kind) {
       case "promptAutoAnswered":
         return event.side === human

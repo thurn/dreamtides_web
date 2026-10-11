@@ -13,8 +13,9 @@
 // recover what each applied intent published (the battle log's source); it
 // counts only when it reproduces the fold's slice. The battle screen's
 // presentation feed folds each applied intent again the same way: both read
-// the intent through `foldEngineIntent`, using `foldAdapterFor`, and
-// take a batch's states with `batchStates`.
+// the intent through `foldEngineIntent`, the replay using `foldAdapterFor`
+// and the feed `presentationAdapterFor`, which observes the state at each
+// event, and the feed takes a batch's states with `batchStates`.
 
 import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
 import type { BattleInit as EngineBattleInit } from "../../engine";
@@ -108,19 +109,25 @@ export function foldAdapterFor(engine: Engine): FoldAdapter {
  * The states of one applied intent's batch: `state`, the state its events
  * arrive with (`to`'s pending prompt's display, else its committed state),
  * and `before`, the state they started from (the same of `from`).
- * `eventStates` align with `published`; an unobserved event uses `state`.
+ * `eventStates` align with `published`: the state observed at each event
+ * by the presentation adapter, `undefined` for an event it did not observe,
+ * whose presentation falls back to the batch's turn boundary
+ * (`batchTurnAt`).
  */
 export function batchStates(
   adapter: FoldAdapter,
   from: BattleSlice,
   to: BattleSlice,
   published: readonly EngineEvent[] = [],
-): { readonly before: BattleState; readonly state: BattleState; readonly eventStates: readonly BattleState[] } {
-  const state = adapter.pending(to)?.display ?? to.committed;
+): {
+  readonly before: BattleState;
+  readonly state: BattleState;
+  readonly eventStates: readonly (BattleState | undefined)[];
+} {
   return {
     before: adapter.pending(from)?.display ?? from.committed,
-    state,
-    eventStates: published.map((event) => eventStates.get(event) ?? state),
+    state: adapter.pending(to)?.display ?? to.committed,
+    eventStates: published.map((event) => eventStates.get(event)),
   };
 }
 
