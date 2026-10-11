@@ -112,7 +112,25 @@
  * @property {number} [step] This call's step index (default 0).
  * @property {number} [steps] The scenario's step count (default 1).
  * @property {unknown} [carry] What the previous step of this viewport returned (default `null`).
+ * @property {boolean} [exportGameLog] Put the current game's persisted log in
+ *   the report (`QaResult.gameLog`) at the last step or on an error.
  */
+
+/**
+ * The current game's persisted journey log as the game menu's JSONL export
+ * writes it: `lines` are the stored JSONL lines, oldest first. The game is
+ * the URL's `?game=` (`selectedBy: "url"`), else the most recently updated
+ * stored game (`"latest"`). With no game, `gameId` and `selectedBy` are null
+ * and `reason` says why.
+ *
+ * @typedef {object} GameLogRead
+ * @property {string | null} gameId
+ * @property {"url" | "latest" | null} selectedBy
+ * @property {string[]} lines
+ * @property {string | null} reason
+ */
+
+/** One parsed journey-log line. @typedef {Record<string, unknown>} GameLogRow */
 
 /** @typedef {{ x: number, y: number, width: number, height: number }} Rect */
 
@@ -150,6 +168,8 @@
  * @property {Array<{ path: string, href: string, width: number, height: number, clip?: Rect }>} captures
  * @property {Array<{ href: string, caps: Caps }>} caps Every document whose buffer was not empty.
  * @property {TraceSummary[]} traces
+ * @property {GameLogRead} [gameLog] With `exportGameLog`, at the last step or
+ *   on an error: the persisted log, or why there is none.
  */
 
 /**
@@ -427,10 +447,29 @@
  * @property {(error: unknown) => boolean} isTimeout Recognizes structured helper deadline failures through causes.
  * @property {(label: string, data?: unknown) => void} note Adds a line to the report's log.
  * @property {(ms: number) => Promise<void>} sleep
+ * @property {GameLogHelpers} gameLog
  * @property {(result: unknown, error: string | null) => Promise<QaResult>} finish
  *   The call's report. The current document's buffer goes into it only at
  *   the scenario's last step or on an error: a later step reads the same
- *   document.
+ *   document. So does the persisted game log, with `exportGameLog`.
+ */
+
+/**
+ * `qa.gameLog`: the current game's persisted journey log (`GameLogRead`),
+ * read inside the page and awaited there, so results are plain data. Lines
+ * captured in the last moment may still be queued for writing; poll with
+ * `waitFor` for rows a scenario expects.
+ *
+ * @typedef {object} GameLogHelpers
+ * @property {(options?: { timeout?: number }) => Promise<GameLogRead>} read
+ * @property {(options?: { timeout?: number }) => Promise<GameLogRow[]>} rows
+ *   The parsed lines, oldest first; empty with no game. Fails on a line that
+ *   is not a JSON object.
+ * @property {<R>(label: string, predicate: (rows: GameLogRow[], log: GameLogRead) => R | Promise<R>, options?: { timeout?: number, pollMs?: number }) => Promise<NonNullable<R>>} waitFor
+ *   Reads the rows until `predicate` returns a truthy value, and returns it.
+ *   The predicate runs in the runner's sandbox, not the page, so it may use
+ *   the scenario's variables. Fails on `__caps` or after `timeout` (default
+ *   15 000 ms, polling every `pollMs`, default 250 ms).
  */
 
 /**
@@ -951,6 +990,101 @@ export async function createQa(page, config) {
     };
   };
 
+  /**
+   * Reads the persisted log inside the page, as `game-repository.ts` stores
+   * it in `browser-repository.ts`'s database: one `records` store whose
+   * `game/<gameId>/log/<chunk>` values are arrays of JSONL lines, in key order.
+   *
+   * @param {number} [timeout]
+   * @returns {Promise<GameLogRead>}
+   */
+  const readGameLog = async (timeout) => {
+    if (!onOrigin(page.url())) return { gameId: null, selectedBy: null, lines: [], reason: `the page ${page.url()} is not on ${origin}` };
+    return read(async () => {
+      const DATABASE = "dreamtides-local-games";
+      const STORE = "records";
+      const END = "￿";
+      const none = (/** @type {string} */ reason) => ({ gameId: null, selectedBy: null, lines: [], reason });
+      /** @returns {Promise<unknown>} */
+      const result = (/** @type {IDBRequest} */ request) => new Promise((resolve, reject) => {
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error ?? new Error("IndexedDB request failed"));
+      });
+      if (typeof indexedDB === "undefined") return none("IndexedDB is unavailable");
+      if (typeof indexedDB.databases === "function" && !(await indexedDB.databases()).some((database) => database.name === DATABASE)) {
+        return none("no local games database");
+      }
+      const open = indexedDB.open(DATABASE);
+      // Never create the application's database without its store.
+      open.onupgradeneeded = () => open.transaction?.abort();
+      /** @type {IDBDatabase} */
+      let database;
+      try {
+        database = /** @type {IDBDatabase} */ (await result(open));
+      } catch {
+        return none("no local games database");
+      }
+      try {
+        if (!database.objectStoreNames.contains(STORE)) return none("no local games store");
+        const range = (/** @type {string} */ prefix) =>
+          result(database.transaction(STORE, "readonly").objectStore(STORE).getAll(IDBKeyRange.bound(prefix, `${prefix}${END}`, false, true)));
+        /** @type {"url" | "latest"} */
+        let selectedBy = "url";
+        let gameId = new URLSearchParams(location.search).get("game");
+        if (gameId === null) {
+          selectedBy = "latest";
+          let updatedAt = -Infinity;
+          for (const record of /** @type {unknown[]} */ (await range("games/"))) {
+            if (typeof record !== "object" || record === null || !("gameId" in record) || typeof record.gameId !== "string" ||
+                !("updatedAt" in record) || typeof record.updatedAt !== "number" || record.updatedAt <= updatedAt) continue;
+            gameId = record.gameId;
+            updatedAt = record.updatedAt;
+          }
+          if (gameId === null) return none("no stored game");
+        }
+        const chunks = /** @type {unknown[]} */ (await range(`game/${gameId}/log/`));
+        /** @type {string[]} */
+        const lines = [];
+        for (const chunk of chunks) {
+          if (!Array.isArray(chunk)) throw new Error(`game ${String(gameId)} has a malformed log chunk`);
+          for (const line of /** @type {unknown[]} */ (chunk)) {
+            if (typeof line !== "string") throw new Error(`game ${String(gameId)} has a malformed log line`);
+            lines.push(line);
+          }
+        }
+        return { gameId, selectedBy, lines, reason: null };
+      } finally {
+        database.close();
+      }
+    }, null, timeout === undefined ? undefined : { timeout });
+  };
+
+  /** @param {GameLogRead} log */
+  const parseGameLogRows = (log) => log.lines.map((line, index) => {
+    const row = /** @type {unknown} */ (JSON.parse(line));
+    if (typeof row !== "object" || row === null || Array.isArray(row)) throw new Error(`game ${String(log.gameId)} log line ${String(index)} is not an object`);
+    return /** @type {GameLogRow} */ (row);
+  });
+
+  /** @type {GameLogHelpers} */
+  const gameLog = {
+    read: ({ timeout } = {}) => readGameLog(timeout),
+    rows: async ({ timeout } = {}) => parseGameLogRows(await readGameLog(timeout)),
+    async waitFor(label, predicate, { timeout = 15_000, pollMs = 250 } = {}) {
+      const deadline = Date.now() + timeout;
+      for (;;) {
+        assertObserved(label);
+        const log = await readGameLog(Math.max(1, deadline - Date.now()));
+        const value = await predicate(parseGameLogRows(log), log);
+        if (value) return /** @type {NonNullable<typeof value>} */ (value);
+        if (Date.now() >= deadline) {
+          throw timeoutError(`${label}: the persisted log of game ${String(log.gameId)} (${String(log.lines.length)} lines${log.reason === null ? "" : `; ${log.reason}`}) did not satisfy the predicate within ${String(timeout)} ms`);
+        }
+        await page.waitForTimeout(Math.min(pollMs, Math.max(1, deadline - Date.now())));
+      }
+    },
+  };
+
   /** @type {Omit<Qa, "battle">} */
   const qa = {
     page,
@@ -1247,10 +1381,24 @@ export async function createQa(page, config) {
 
     sleep: (ms) => page.waitForTimeout(ms),
 
+    gameLog,
+
     async finish(result, error) {
       try {
-        if (step === steps - 1 || error !== null) await recordCaps();
-        return { result, error, log, captures, caps: [...observed.values()], traces };
+        const last = step === steps - 1 || error !== null;
+        /** @type {{ gameLog?: GameLogRead }} */
+        const exported = {};
+        // Before the caps read, which may fail on a broken page: the log is
+        // what explains the failure.
+        if (last && config.exportGameLog === true) {
+          try {
+            exported.gameLog = await readGameLog();
+          } catch (failure) {
+            exported.gameLog = { gameId: null, selectedBy: null, lines: [], reason: `log read failed: ${failure instanceof Error ? failure.message : String(failure)}` };
+          }
+        }
+        if (last) await recordCaps();
+        return { result, error, log, captures, caps: [...observed.values()], traces, ...exported };
       } finally {
         page.off("console", consoleMessage);
       }

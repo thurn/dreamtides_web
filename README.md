@@ -159,6 +159,15 @@ whose `__caps` was not empty, wall times, host load) and writes it to
 `artifacts/qa/<bead-id>/<scenario>[-prod].result.json`, beside the server's
 log. It exits 1 when the scenario throws or any `__caps` is not empty.
 
+**Game logs.** At each viewport pass's last call, also when the scenario
+throws, the runner reads the current game's persisted journey log (the
+lines the game menu's JSONL export downloads) and saves it as
+`artifacts/qa/<bead-id>/<scenario>[-prod]-<viewport>.jsonl` before the
+browser closes. When a call fails without a report, one export-only call
+follows while the session can still run. The report's `gameLogs` lists each
+pass's file, game id, and row count; a pass with no game writes no file,
+removes a stale one, and records the `reason` without failing the run.
+
 `<scenario>` is a module path, a tracked scenario
 (`scripts/qa/scenarios/<name>.mjs`), or a bead-local one
 (`artifacts/qa/<bead-id>/<name>.mjs`). Its default export is one
@@ -249,6 +258,17 @@ The helpers:
   instances. It submits once and rejects stale or concurrent battle changes;
   the selected side and zone attributes are checked before submission;
   a timeout after submission requires inspecting state before another call.
+- `qa.gameLog` reads the current game's persisted journey log inside the
+  page: the URL's `?game=`, else the most recently updated stored game.
+  `qa.gameLog.read()` returns `{ gameId, selectedBy, lines, reason }`, the
+  stored JSONL lines oldest first, with `gameId: null` and a `reason` when
+  there is no game; it never creates the application's database.
+  `qa.gameLog.rows()` parses the lines into records, and
+  `qa.gameLog.waitFor(label, (rows, log) => value, { timeout?, pollMs? })`
+  rereads until the predicate returns a truthy value and returns it. The
+  predicate runs in the runner's sandbox, so it may use the scenario's
+  variables. Use these rather than opening `dreamtides-local-games` in a
+  scenario.
 - `qa.caps()`, `qa.assertCaps(label)`, `qa.note(label, data)`,
   `qa.sleep(ms)`, and `qa.page` for anything else.
 - `qa.isVisible(target, { minOpacity? })`: whether the target is rendered

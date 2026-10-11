@@ -25,7 +25,9 @@
 // minification unless --minify, so `__caps` names the real identifiers; the
 // chunking and module evaluation order are the production bundle's. It opens its own MCP client, whose
 // first root is the primary checkout, so captures land in
-// artifacts/qa/<bead>/. It prints the result as JSON, writes it beside the
+// artifacts/qa/<bead>/. Each viewport pass's persisted game log is saved there
+// as <scenario>[-prod]-<viewport>.jsonl before the browser closes, also when the
+// scenario throws. It prints the result as JSON, writes it beside the
 // captures as <scenario>.result.json, stops its own process group, and exits
 // non-zero when the scenario throws or any document's __caps is not empty.
 
@@ -317,9 +319,10 @@ export function say(message) {
  * @property {Record<string, number>} wallMs Browser lease wait, build, and serve times.
  * @property {(scenarioSource: string, args: Record<string, string>, timeoutMs: number, call?: QaCall) => Promise<import("./prelude.mjs").QaResult>} run
  *   Runs one scenario function's source with the helper prelude on the session's server.
- * @property {(plan: ScenarioPlan, args: Record<string, string>, timeoutMs: number) => Promise<PlanResult>} runPlan
+ * @property {(plan: ScenarioPlan, args: Record<string, string>, timeoutMs: number, options?: { gameLogName?: string }) => Promise<PlanResult>} runPlan
  *   Runs every step of a scenario at each of its viewports, one MCP call
- *   each, within `timeoutMs` in all; stops at the first error.
+ *   each, within `timeoutMs` in all; stops at the first error. With
+ *   `gameLogName`, saves each pass's game log (`runScenarioPlan`).
  * @property {() => Promise<void>} close Closes the MCP client and stops the server's process group.
  * @property {() => boolean} closed Whether cleanup started or provider completion
  *   is uncertain, making the session non-runnable.
@@ -328,7 +331,14 @@ export function say(message) {
 /**
  * Which call of a scenario run this is (`QaConfig`'s run fields).
  *
- * @typedef {{ viewport: import("./prelude.mjs").ViewportName, step: number, steps: number, carry: unknown }} QaCall
+ * @typedef {{ viewport: import("./prelude.mjs").ViewportName, step: number, steps: number, carry: unknown, exportGameLog?: boolean }} QaCall
+ */
+
+/**
+ * One viewport pass's saved game log: the JSONL file and its row count, or
+ * (`path: null`) why the pass had none.
+ *
+ * @typedef {{ viewport: string, path: string | null, gameId: string | null, selectedBy: "url" | "latest" | null, rows: number, reason: string | null }} SavedGameLog
  */
 
 /**
@@ -336,8 +346,114 @@ export function say(message) {
  * by viewport when there is more than one; log lines carry `at`
  * (`<viewport>#<step>`) when the run made more than one call.
  *
- * @typedef {import("./prelude.mjs").QaResult & { calls: Array<{ viewport: string, step: number, ms: number }> }} PlanResult
+ * @typedef {Omit<import("./prelude.mjs").QaResult, "gameLog"> & { calls: Array<{ viewport: string, step: number, ms: number }>, gameLogs: SavedGameLog[] }} PlanResult
  */
+
+/** A scenario that only reports, for exporting the game log after a failed call. */
+const EXPORT_ONLY_SOURCE = "async () => null";
+
+/**
+ * Runs every step of `plan` at each of its viewports through `run`, one call
+ * each, within `timeoutMs` in all; stops at the first error.
+ *
+ * With `gameLogName`, each viewport pass's last call (or the call that
+ * failed) reads the current game's persisted log in the page, and the log is
+ * written to `<captureDir>/<gameLogName>-<viewport>.jsonl` before the next
+ * call, so it is saved before the session closes the browser, also when the
+ * scenario throws. When a call itself fails, one export-only call follows
+ * while the session is still runnable. A pass with no game writes no file
+ * and records why.
+ *
+ * @param {QaSession["run"]} run
+ * @param {ScenarioPlan} plan
+ * @param {Record<string, string>} args
+ * @param {number} timeoutMs
+ * @param {{ captureDir: string, gameLogName?: string, runnable: () => boolean }} options
+ * @returns {Promise<PlanResult>}
+ */
+export async function runScenarioPlan(run, plan, args, timeoutMs, { captureDir, gameLogName, runnable }) {
+  const deadline = Date.now() + timeoutMs;
+  const many = plan.viewports.length * plan.steps.length > 1;
+  const exportGameLog = gameLogName !== undefined;
+  /** @type {PlanResult} */
+  const merged = { result: null, error: null, log: [], captures: [], caps: [], traces: [], calls: [], gameLogs: [] };
+  /** @type {Record<string, unknown>} */
+  const byViewport = {};
+  const none = (/** @type {string} */ reason) => ({ gameId: null, selectedBy: null, lines: [], reason });
+  const save = (/** @type {string} */ viewport, /** @type {import("./prelude.mjs").GameLogRead} */ gameLog) => {
+    if (gameLogName === undefined) return;
+    const path = join(captureDir, `${gameLogName}-${viewport}.jsonl`);
+    if (gameLog.gameId === null) {
+      // A file left by an earlier run would pass for this one's.
+      rmSync(path, { force: true });
+      merged.gameLogs.push({ viewport, path: null, gameId: null, selectedBy: null, rows: 0, reason: gameLog.reason });
+      say(`${viewport}: no game log (${String(gameLog.reason)})`);
+      return;
+    }
+    writeFileSync(path, gameLog.lines.map((line) => `${line}\n`).join(""));
+    merged.gameLogs.push({ viewport, path, gameId: gameLog.gameId, selectedBy: gameLog.selectedBy, rows: gameLog.lines.length, reason: gameLog.reason });
+    say(`${viewport}: game ${gameLog.gameId} log, ${String(gameLog.lines.length)} rows, at ${path}`);
+  };
+  // After a call failed without a report, the page still holds its game.
+  const recover = async (/** @type {import("./prelude.mjs").ViewportName} */ viewport) => {
+    if (!exportGameLog) return;
+    if (!runnable()) {
+      save(viewport, none("the call failed and the session cannot run another to export the log"));
+      return;
+    }
+    try {
+      const report = await run(EXPORT_ONLY_SOURCE, args, 30_000,
+        { viewport, step: plan.steps.length - 1, steps: plan.steps.length, carry: null, exportGameLog });
+      save(viewport, report.gameLog ?? none("the export call returned no log"));
+    } catch (error) {
+      save(viewport, none(`the export call failed: ${String(error)}`));
+    }
+  };
+  for (const viewport of plan.viewports) {
+    /** @type {unknown} */
+    let carry = null;
+    for (const [step, source] of plan.steps.entries()) {
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) {
+        merged.error = `timed out before ${viewport} step ${String(step)}`;
+        if (step > 0) await recover(viewport);
+        return merged;
+      }
+      const started = Date.now();
+      /** @type {import("./prelude.mjs").QaResult} */
+      let report;
+      try {
+        report = await run(source, args, Math.min(remaining, CALL_LIMIT_MS + 15_000), { viewport, step, steps: plan.steps.length, carry, exportGameLog });
+      } catch (error) {
+        await recover(viewport);
+        if (Date.now() - started < CALL_LIMIT_MS) throw error;
+        merged.error = `${viewport} step ${String(step)} ran past one MCP call's ${String(CALL_LIMIT_MS / 1000)} s limit and its response was lost; split the scenario into steps (README § Scenario runner): ${String(error)}`;
+        return merged;
+      }
+      const ms = Date.now() - started;
+      merged.calls.push({ viewport, step, ms });
+      if (ms > LONG_CALL_MS) say(`${viewport} step ${String(step)} took ${String(Math.round(ms / 1000))} s in one MCP call; split it into steps before it nears five minutes`);
+      const at = `${viewport}#${String(step)}`;
+      merged.log.push(...report.log.map((line) => (many ? { ...line, at } : line)));
+      merged.captures.push(...report.captures);
+      // A document a pass ends on is recorded again when the next pass navigates away from it.
+      const seen = new Set(merged.caps.map((entry) => JSON.stringify(entry)));
+      merged.caps.push(...report.caps.filter((entry) => !seen.has(JSON.stringify(entry))));
+      merged.traces.push(...report.traces);
+      if (report.gameLog !== undefined) save(viewport, report.gameLog);
+      carry = report.result;
+      if (report.error !== null) {
+        merged.error = many ? `${at}: ${report.error}` : report.error;
+        byViewport[viewport] = carry;
+        merged.result = plan.viewports.length > 1 ? byViewport : carry;
+        return merged;
+      }
+    }
+    byViewport[viewport] = carry;
+  }
+  merged.result = plan.viewports.length > 1 ? byViewport : byViewport[plan.viewports[0] ?? "desktop"] ?? null;
+  return merged;
+}
 
 /**
  * Serves `options.cwd` (default: this checkout) on the runner's port and
@@ -520,55 +636,8 @@ export async function openQaSession(options) {
     captureDir,
     wallMs,
     run,
-    async runPlan(plan, args, timeoutMs) {
-      const deadline = Date.now() + timeoutMs;
-      const many = plan.viewports.length * plan.steps.length > 1;
-      /** @type {PlanResult} */
-      const merged = { result: null, error: null, log: [], captures: [], caps: [], traces: [], calls: [] };
-      /** @type {Record<string, unknown>} */
-      const byViewport = {};
-      for (const viewport of plan.viewports) {
-        /** @type {unknown} */
-        let carry = null;
-        for (const [step, source] of plan.steps.entries()) {
-          const remaining = deadline - Date.now();
-          if (remaining <= 0) {
-            merged.error = `timed out before ${viewport} step ${String(step)}`;
-            return merged;
-          }
-          const started = Date.now();
-          /** @type {import("./prelude.mjs").QaResult} */
-          let report;
-          try {
-            report = await run(source, args, Math.min(remaining, CALL_LIMIT_MS + 15_000), { viewport, step, steps: plan.steps.length, carry });
-          } catch (error) {
-            if (Date.now() - started < CALL_LIMIT_MS) throw error;
-            merged.error = `${viewport} step ${String(step)} ran past one MCP call's ${String(CALL_LIMIT_MS / 1000)} s limit and its response was lost; split the scenario into steps (README § Scenario runner): ${String(error)}`;
-            return merged;
-          }
-          const ms = Date.now() - started;
-          merged.calls.push({ viewport, step, ms });
-          if (ms > LONG_CALL_MS) say(`${viewport} step ${String(step)} took ${String(Math.round(ms / 1000))} s in one MCP call; split it into steps before it nears five minutes`);
-          const at = `${viewport}#${String(step)}`;
-          merged.log.push(...report.log.map((line) => (many ? { ...line, at } : line)));
-          merged.captures.push(...report.captures);
-          // A document a pass ends on is recorded again when the next pass navigates away from it.
-          const seen = new Set(merged.caps.map((entry) => JSON.stringify(entry)));
-          merged.caps.push(...report.caps.filter((entry) => !seen.has(JSON.stringify(entry))));
-          merged.traces.push(...report.traces);
-          carry = report.result;
-          if (report.error !== null) {
-            merged.error = many ? `${at}: ${report.error}` : report.error;
-            byViewport[viewport] = carry;
-            merged.result = plan.viewports.length > 1 ? byViewport : carry;
-            return merged;
-          }
-        }
-        byViewport[viewport] = carry;
-      }
-      merged.result = plan.viewports.length > 1 ? byViewport : byViewport[plan.viewports[0] ?? "desktop"] ?? null;
-      return merged;
-    },
+    runPlan: (plan, args, timeoutMs, options = {}) =>
+      runScenarioPlan(run, plan, args, timeoutMs, { ...options, captureDir, runnable: () => cleanup === null && !uncertainCall }),
     close,
     closed: () => cleanup !== null || uncertainCall,
   };
@@ -588,7 +657,7 @@ async function main() {
   const session = await openQaSession({ ...options, label: reportName });
   try {
     const scenarioStart = Date.now();
-    const report = await session.runPlan(plan, options.args, options.timeoutS * 1000);
+    const report = await session.runPlan(plan, options.args, options.timeoutS * 1000, { gameLogName: reportName });
     const wallMs = { ...session.wallMs, scenario: Date.now() - scenarioStart, total: Date.now() - startedAt };
     const ok = report.error === null && report.caps.length === 0;
     const summary = {

@@ -55,27 +55,14 @@ export default async function enemyActivate(qa) {
     return { slot: element?.closest("[data-battle-slot-id]")?.getAttribute("data-battle-slot-id"), rank: element?.closest("[data-battle-rank]")?.getAttribute("data-battle-rank"), x: box?.x ?? -1, y: box?.y ?? -1, width: box?.width ?? 0, height: box?.height ?? 0, viewport: { width: innerWidth, height: innerHeight } };
   }, selector);
   if (geometry.slot !== "B1" || geometry.rank !== "enemy-back" || geometry.width <= 0 || geometry.height <= 0 || geometry.x < 0 || geometry.y < 0 || geometry.x + geometry.width > geometry.viewport.width || geometry.y + geometry.height > geometry.viewport.height) throw new Error(`activation source geometry ${JSON.stringify(geometry)}`);
-  const logs = await qa.waitFor("persisted enemy activation and UUID prompt logs", async ({ source, target, card }) => {
-    const game = new URLSearchParams(location.search).get("game");
-    if (game === null) return null;
-    /** @type {IDBDatabase} */
-    const database = await new Promise((resolve, reject) => { const request = indexedDB.open("dreamtides-local-games"); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error ?? new Error("activation log read failed")); });
-    try {
-      const prefix = `game/${game}/log/`;
-      /** @type {unknown[]} */
-      const chunks = await new Promise((resolve, reject) => { const request = database.transaction("records", "readonly").objectStore("records").getAll(IDBKeyRange.bound(prefix, `${prefix}￿`, false, true)); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error ?? new Error("activation log read failed")); });
-      /** @param {unknown} value @returns {value is Record<string, unknown>} */
-      const record = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
-      const records = chunks.flatMap((chunk) => {
-        if (!Array.isArray(chunk)) throw new Error("invalid activation log chunk");
-        return /** @type {unknown[]} */ (chunk).map((line) => { if (typeof line !== "string") throw new Error("invalid activation log line"); const entry = /** @type {unknown} */ (JSON.parse(line)); if (!record(entry)) throw new Error("invalid activation log record"); return entry; });
-      });
-      const action = records.find((line) => line.event === "engine.action" && line.side === "enemy" && record(line.action) && line.action.kind === "activate" && line.action.source === source && line.action.ability === 0);
-      const opened = records.find((line) => line.event === "engine.promptOpened" && line.side === "enemy" && line.cardId === card);
-      const answered = records.find((line) => line.event === "engine.promptAnswered" && line.side === "enemy" && Array.isArray(line.value) && line.value.includes(target));
-      return action !== undefined && opened !== undefined && answered !== undefined ? { game, action, opened, answered } : null;
-    } finally { database.close(); }
-  }, { source, target, card });
+  const logs = await qa.gameLog.waitFor("persisted enemy activation and UUID prompt logs", (records, { gameId }) => {
+    /** @param {unknown} value @returns {value is Record<string, unknown>} */
+    const record = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
+    const action = records.find((line) => line.event === "engine.action" && line.side === "enemy" && record(line.action) && line.action.kind === "activate" && line.action.source === source && line.action.ability === 0);
+    const opened = records.find((line) => line.event === "engine.promptOpened" && line.side === "enemy" && line.cardId === card);
+    const answered = records.find((line) => line.event === "engine.promptAnswered" && line.side === "enemy" && Array.isArray(line.value) && line.value.includes(target));
+    return action !== undefined && opened !== undefined && answered !== undefined ? { game: gameId, action, opened, answered } : null;
+  });
   await qa.assertCaps("declared enemy activation, cost, target and persisted intent");
   await qa.capture(`card-lab-enemy-activate-${qa.viewportName}`);
   return { battleId: ids.battleId, ids, source: { instance: source, card, ability: 0, exhausted: state.instances[source]?.status.exhausted }, target: { instance: target, card: targetCard, zone: state.instances[target]?.zone }, activation: activation.events, effect: effects.events, answers, geometry, controlGeometry: control.geometry, logs };

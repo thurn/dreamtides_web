@@ -129,39 +129,15 @@ export default async function cardLabStage(qa) {
       { label: "declared human energy pays for the spell", timeout: 60_000, passWhen: (battle) => (battle.probe?.stack ?? 0) > 0 });
     const paid = (await read()).state.sides.player;
     if (paid.currentEnergy !== 5 || paid.maxEnergy !== 7) throw new Error("declared human spell requires exact 7 to 5 energy payment");
-    const logs = await qa.waitFor("persisted declared script action logs", async ({ played, selected }) => {
-      const game = new URLSearchParams(location.search).get("game");
-      if (game === null) return null;
-      /** @type {Promise<IDBDatabase>} */
-      const opened = new Promise((resolve, reject) => {
-        const request = indexedDB.open("dreamtides-local-games");
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error ?? new Error("declared lab database open failed"));
+    const logs = await qa.gameLog.waitFor("persisted declared script action logs", (rows) => {
+      const actions = rows.flatMap((entry) => {
+        if (entry.event !== "engine.action" || entry.side !== "enemy" || !("action" in entry)) return [];
+        const action = entry.action;
+        if (action === null || typeof action !== "object" || !("kind" in action) || typeof action.kind !== "string") throw new Error("declared lab action log malformed");
+        return [{ kind: action.kind, card: "card" in action && typeof action.card === "string" ? action.card : null }];
       });
-      const database = await opened;
-      try {
-        const prefix = `game/${game}/log/`;
-        /** @type {Promise<unknown[]>} */
-        const reading = new Promise((resolve, reject) => {
-          const request = database.transaction("records", "readonly").objectStore("records").getAll(IDBKeyRange.bound(prefix, `${prefix}￿`, false, true));
-          request.onsuccess = () => resolve(request.result);
-          request.onerror = () => reject(request.error ?? new Error("declared lab log read failed"));
-        });
-        const chunks = await reading;
-        const actions = chunks.flatMap((chunk) => {
-          if (!Array.isArray(chunk)) throw new Error("declared lab log chunk malformed");
-          return chunk.flatMap((line) => {
-            if (typeof line !== "string") throw new Error("declared lab log line malformed");
-            const entry = /** @type {unknown} */ (JSON.parse(line));
-            if (entry === null || typeof entry !== "object" || !("event" in entry) || entry.event !== "engine.action" || !("side" in entry) || entry.side !== "enemy" || !("action" in entry)) return [];
-            const action = entry.action;
-            if (action === null || typeof action !== "object" || !("kind" in action) || typeof action.kind !== "string") throw new Error("declared lab action log malformed");
-            return [{ kind: action.kind, card: "card" in action && typeof action.card === "string" ? action.card : null }];
-          });
-        });
-        return actions.some((action) => action.kind === "play" && action.card === played) && actions.some((action) => action.kind === "reposition" && action.card === selected) && actions.some((action) => action.kind === "pass") ? actions : null;
-      } finally { database.close(); }
-    }, { played, selected });
+      return actions.some((action) => action.kind === "play" && action.card === played) && actions.some((action) => action.kind === "reposition" && action.card === selected) && actions.some((action) => action.kind === "pass") ? actions : null;
+    });
     await qa.assertCaps("declared staging, live script, Challenge and human spell");
     if (qa.viewportName === "desktop") await qa.capture("card-lab-declared-spell-desktop");
     return { ids, selected, played, geometry, resolved, logs, payment: { current: paid.currentEnergy, maximum: paid.maxEnergy } };

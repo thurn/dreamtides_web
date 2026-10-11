@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.407",
+  "phase": 5,
+  "implementMin": 13,
+  "measurementWindow": "Implementation subagent wall time from its first command (npm install, 2026-10-11T20:16Z) through commit preparation, including research, the three real runner runs, and validation; elapsed rather than productive editing time",
+  "hostLoad": 22.744140625,
+  "hostLoadMeasuredFor": "final npm run review starting 1-minute load",
+  "localValidationS": {
+    "focused-new": 1.3,
+    "focused-final": 6,
+    "review-final": 12,
+    "knip": 3,
+    "qa-card-lab-enemy-activate": 25.9,
+    "qa-card-lab-stage-no-game": 8.3,
+    "qa-card-lab-stage-throw": 10.9,
+    "qa-card-lab-stage-declared": 80.2
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 276,
+    "cases": 8,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "sourceBase": "af246c115b8ca85d86b886b89d81a4bd49de9fa4",
+  "runtimeLedger": {
+    "realBrowserSessions": 4,
+    "applicationQAServers": [
+      { "processGroup": 93746, "port": 5174, "portFreeAfterStop": true },
+      { "processGroup": 96922, "port": 5174, "portFreeAfterStop": true },
+      { "processGroup": 504, "port": 5174, "portFreeAfterStop": true },
+      { "processGroup": 20647, "port": 5174, "portFreeAfterStop": true }
+    ]
+  }
+}
