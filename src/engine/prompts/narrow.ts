@@ -42,6 +42,8 @@ export function narrowPrompt(prompt: Prompt, feasible: readonly Answer[]): Promp
         ...prompt,
         options: prompt.options.map((option) => ({ mode: option.mode, legal: option.legal && keys.has(canonicalAnswer(prompt, option.mode)) })),
       };
+    case "chooseSlot":
+      return { ...prompt, allowed: feasible as readonly number[] };
     case "chooseNumber": {
       const values = (feasible as readonly number[]).slice().sort((a, b) => a - b);
       const [min] = values;

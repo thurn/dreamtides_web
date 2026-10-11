@@ -290,6 +290,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   const visibleChoices = (choices: EffectChoices): EffectChoices => ({
     modes: [...choices.modes],
     targets: choices.targets.map((list) => list.filter(visible)),
+    ...(choices.abandonedPosition === undefined ? {} : { abandonedPosition: copy(choices.abandonedPosition) }),
   });
   const floatingVisible = (effect: FloatingEffect): boolean => {
     const changed = changedInstance(effect.change);
@@ -406,6 +407,7 @@ export function promptView(prompt: Prompt, viewer: Side, display: BattleState): 
       const { allowed: _allowed, ...rest } = copy(prompt);
       return { ...rest, purpose, cards: prompt.cards.filter(visible) };
     }
+    case "chooseSlot":
     case "chooseMode":
     case "chooseNumber":
     case "confirm":

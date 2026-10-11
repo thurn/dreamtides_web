@@ -297,6 +297,21 @@ characters. The active player repositions during their Day phase; the opposing
 player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
+**Movement by an effect:** An ability that moves a character resolves within
+its current controller's battlefield and preserves its identity, controller,
+exhaustion, and other state. The ability's controller chooses an unoccupied position
+when the effect says to move to an unoccupied character position. Effect
+movement can put an exhausted character in the front rank and follows the
+ability's timing. It does not swap occupants. If the character is absent from
+play or the required destination is occupied, that movement does nothing.
+
+An activated ability that moves this character to the position of the
+character abandoned for its single-character cost remembers that character's
+side and position immediately before payment. The destination survives the
+abandoned character leaving play or ceasing to exist. The movement happens
+only if its source is still in play on that side and that position is open.
+The source can be abandoned for its own cost; its absent source does not move.
+
 Dragging a figment onto a matching figment is an exception to the swap rule;
 see [Combining Figments](#merging-figments).
 

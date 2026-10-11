@@ -1,0 +1,5 @@
+# RD-hv-umm2.96-1: Movement by an effect uses an open position in either rank
+- Ladder: 2 (implemented Phasing rule), then 5 (the simplest reading consistent with the three movement texts)
+- rules.md: § The Play Area → Movement by an effect
+- Affects: 629fe4d4-826f-41b9-a913-458a503856a8, c61c8b29-6911-4bbf-b1c4-0c18b22ed33f, 8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd
+- Why: Rules § Phasing and RD-hv-7x4l.8-5 already implement movement within an effect, including exhausted front-rank movement, while the source remains in play and the destination is open. The three Fast activated movement effects follow that rule: their resolution moves a character without a player's ordinary repositioning action or an occupied-position swap. Choosing an empty position occurs at resolution. Movement preserves the physical instance and every status; Support reads its new adjacency live. The older reference rules use Reserve and Judgment, so those differing rank restrictions are not current text precedent. Card names are resolved only by the UI.

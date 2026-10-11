@@ -1,4 +1,4 @@
-import type { InstanceId } from "../state/ids";
+import { BACK_RANK_SIZE, FRONT_RANK_SIZE, type InstanceId } from "../state/ids";
 import { allowedAnswers, canonicalAnswer, fieldsAllow } from "./answers";
 import type { Prompt } from "./types";
 
@@ -38,6 +38,9 @@ function wellFormedFields(prompt: Prompt): boolean {
     case "chooseTargets":
     case "chooseCards":
       return distinct(prompt.candidates) && bounded(prompt.min, prompt.max);
+    case "chooseSlot":
+      return distinct(prompt.slots.map((slot) => `${slot.rank}:${String(slot.index)}`)) &&
+        prompt.slots.every((slot) => isBound(slot.index) && (slot.rank === "front" ? slot.index < FRONT_RANK_SIZE : slot.rank === "back" && slot.index < BACK_RANK_SIZE));
     case "chooseMode":
       return (
         distinct(prompt.options.map((option) => option.mode)) &&
@@ -73,6 +76,7 @@ export function promptCards(prompt: Prompt): readonly InstanceId[] {
       return prompt.candidates;
     case "arrange":
       return prompt.cards;
+    case "chooseSlot":
     case "chooseMode":
     case "chooseNumber":
     case "confirm":

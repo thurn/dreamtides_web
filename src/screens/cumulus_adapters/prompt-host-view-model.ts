@@ -392,6 +392,16 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         surface: { kind: "number", answer: (value) => (isLegalAnswer(prompt, value) ? value : null) },
         sourceCard,
       };
+    case "chooseSlot":
+      return choice(
+        prompt,
+        prompt.slots.map((slot, index) => ({
+          copy: { kind: "position", rank: slot.rank, index: slot.index },
+          answer: index,
+        })),
+        host({}),
+        sourceCard,
+      );
     case "chooseMode": {
       const texts =
         prompt.purpose.role === "chooseOne" && sourceCard !== null

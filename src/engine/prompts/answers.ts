@@ -46,6 +46,8 @@ export function fieldsAllow(prompt: Prompt, value: Answer): boolean {
         value.every((id) => prompt.candidates.includes(id))
       );
     }
+    case "chooseSlot":
+      return typeof value === "number" && Number.isInteger(value) && value >= 0 && value < prompt.slots.length;
     case "chooseMode":
       return (
         typeof value === "number" &&
@@ -109,6 +111,8 @@ export function hasLegalAnswer(prompt: Prompt): boolean {
       return prompt.min <= prompt.max && prompt.min <= prompt.candidates.length;
     case "chooseMode":
       return prompt.options.some((option) => option.legal);
+    case "chooseSlot":
+      return prompt.slots.length > 0;
     case "chooseNumber":
       return prompt.min <= prompt.max;
     case "arrange": {
@@ -184,6 +188,9 @@ export function* legalAnswers(prompt: Prompt): Generator<Answer> {
     case "chooseMode":
       for (const option of prompt.options) if (option.legal) yield option.mode;
       return;
+    case "chooseSlot":
+      for (let index = 0; index < prompt.slots.length; index++) yield index;
+      return;
     case "chooseNumber":
       for (let value = prompt.min; value <= prompt.max; value++) yield value;
       return;
@@ -230,6 +237,8 @@ export function forcedAnswer(
       const legal = prompt.options.filter((option) => option.legal);
       return legal.length === 1 ? legal[0]?.mode : undefined;
     }
+    case "chooseSlot":
+      return prompt.slots.length === 1 ? 0 : undefined;
     case "chooseNumber":
       return prompt.min === prompt.max ? prompt.min : undefined;
     case "arrange": {
@@ -273,6 +282,8 @@ export function randomLegalAnswer(prompt: Prompt, random: () => number): Answer 
       const legal = prompt.options.filter((option) => option.legal);
       return legal[pickIndex(legal.length)]?.mode ?? 0;
     }
+    case "chooseSlot":
+      return pickIndex(prompt.slots.length);
     case "chooseNumber":
       return prompt.min + pickIndex(prompt.max - prompt.min + 1);
     case "arrange": {

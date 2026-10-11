@@ -2,6 +2,7 @@ import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { abilityOrigin, activatedAbilityAt, canActivate, oncePerTurnKey, sourceController } from "../../rules/activation";
 import type { PromptRole } from "../../prompts/types";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
+import { slotOf } from "../../rules/zones";
 import type { AbilitySource } from "../../state/ids";
 import { opponent } from "../../state/ids";
 import type { StepDefinition } from "../types";
@@ -37,12 +38,15 @@ export const activate: StepDefinition<ActivateStep> = {
     const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role));
     if (choices === undefined) throw new Error("choosePlayTime returns one entry per ability");
     const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), undefined, { endsPlayTime: true });
+    const abandoned = plan.payments.find(({ cost }) => cost.cost === "abandon")?.cards[0];
+    const position = abandoned === undefined ? null : slotOf(state, abandoned);
+    const captured = position === null ? choices : { ...choices, abandonedPosition: { side, slot: { ...position } } };
     ctx.commitPoint();
     payCosts(ctx, side, step.source, plan);
     if (ability.oncePerTurn === true) {
       state.oncePerTurn.push(oncePerTurnKey(step.source, step.ability));
     }
-    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices, x: plan.x, optionalPaid: plan.optionalPaid });
+    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices: captured, x: plan.x, optionalPaid: plan.optionalPaid });
     ctx.emit({ kind: "abilityActivated", side, source: step.source, ability: step.ability });
     state.priority = opponent(side);
   },

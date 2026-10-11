@@ -1,3 +1,5 @@
+import { activated, energy, keyword, self } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 381,
   art: { x: 0.252, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  verifiedText: "1nil7k8siwl",
+  abilities: () => [keyword("awakened"), activated([energy(1)], p.move(self()), { speed: "fast" })],
 });

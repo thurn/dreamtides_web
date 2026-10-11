@@ -82,6 +82,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Choose the value of X";
       case "chooseOne":
         return "Choose one";
+      case "move":
+        return "Choose a Position";
       case "choosePlayer":
         return "Choose a player";
       case "chooseCost":
@@ -157,7 +159,9 @@ export type EnginePromptOptionCopy =
   /** A play route of the voidRoute prompt, in the engine's route order: by a play permission, then by Reclaim. */
   | { readonly kind: "voidRoute"; readonly index: number }
   /** A player relative to the answering controller. */
-  | { readonly kind: "player"; readonly index: number };
+  | { readonly kind: "player"; readonly index: number }
+  /** A battlefield position, in its rank's left-to-right numbering. */
+  | { readonly kind: "position"; readonly rank: "front" | "back"; readonly index: number };
 
 /** Label of one answer button of an engine choice prompt. */
 export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string {
@@ -180,6 +184,8 @@ export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string 
       return option.index === 0 ? "Pay Its Cost" : "Play as an Offering";
     case "voidRoute":
       return option.index === 0 ? "Pay Its Cost" : "Reclaim";
+    case "position":
+      return `${option.rank === "front" ? "F" : "B"}${String(option.index)}`;
     case "player":
       return option.index === 0 ? "You" : "Opponent";
   }
@@ -349,6 +355,8 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
       return "value of X you could choose";
     case "chooseOne":
       return "mode you could choose";
+    case "move":
+      return "unoccupied position";
     case "choosePlayer":
       return "player you could choose";
     case "chooseCost":

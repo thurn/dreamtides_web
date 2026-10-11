@@ -1,0 +1,178 @@
+{
+  "bead": "hv-umm2.96",
+  "phase": 5,
+  "measurementWindow": "native claim 2026-10-11T17:28:01Z to final second-integration amended commit timestamp 2026-10-11T18:57:43Z",
+  "implementMin": 89.7,
+  "localValidationS": {
+    "focusedSettled": 3.648084792017471,
+    "review": 37.991072459029965,
+    "knip": 3.5161846669507213,
+    "full": 73.94565466605127,
+    "fuzz": 78.16968037502375,
+    "preflight": 1.1968744170153514,
+    "sweepCommandIncludingLease": 292.86761737498455,
+    "judgedFirstCommandIncludingLease": 52.638446416996885,
+    "judgedSecondCommandIncludingLease": 535.9865383749711,
+    "judgedThirdCommandIncludingLease": 859.88766675,
+    "judgedFinalCommandIncludingLease": 107.906891667,
+    "integrationFocused": 8.156027292017825,
+    "integrationReview": 50.38393112504855,
+    "integrationKnip": 5.383464417012874,
+    "integrationSecondFocused": 9.142833749996498,
+    "integrationSecondReview": 50.93830316700041,
+    "integrationSecondKnip": 5.984259000048041
+  },
+  "queueWaitS": {
+    "full": 0.024034000001847744,
+    "fuzz": 0.02013962500495836,
+    "sweepBrowserLease": 103.549,
+    "judgedFirstBrowserLease": 35.795,
+    "scope": "unmeasured separately from interleaved read-only discovery",
+    "judgedSecondBrowserLease": 505.449,
+    "judgedThirdBrowserLease": 793.215,
+    "judgedFinalBrowserLease": 0.043
+  },
+  "hostLoad": {
+    "fullStart": [
+      8.31884765625,
+      7.25341796875,
+      7.59033203125
+    ],
+    "fullEnd": [
+      10.1083984375,
+      8.18310546875,
+      7.921875
+    ],
+    "fuzzStart": [
+      9.40283203125,
+      8.09423828125,
+      7.89306640625
+    ],
+    "fuzzEnd": [
+      8.5634765625,
+      8.08251953125,
+      7.90087890625
+    ],
+    "sweep": 20.05615234375
+  },
+  "testDelta": {
+    "files": 0,
+    "plainContractModules": 1,
+    "lines": 282,
+    "cases": 14,
+    "jsdomFiles": 0
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.96-1",
+    "RD-hv-umm2.96-2"
+  ],
+  "cardIssues": [],
+  "sweep": {
+    "cells": 60,
+    "pass": 28,
+    "skip": 32,
+    "fail": 0,
+    "attempts": 60,
+    "executionS": 184.18422045800003,
+    "totalS": 287.733220458
+  },
+  "judged": {
+    "workflows": 6,
+    "pass": 6,
+    "fail": 0,
+    "caps": [],
+    "captures": 10,
+    "rawReport": "judged.result.json",
+    "rawReportSha256": "6e1161a6005a4a4ace847c05cd15cf77e20fd78279ba8bc19ace49514b2931e0",
+    "retainedQaHarnessFailures": 3,
+    "scenarioS": 100.944,
+    "totalS": 102.575
+  },
+  "observations": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": null,
+      "note": "Discovery required explicit activate/interpreter/optional saved-position validation and numeric prompt-role dispatch areas. Root recorded widening before writes; the native interpreter owner had completed and its tested commit was already an ancestor of this worktree. Scope-only wait is not separated from discovery."
+    },
+    {
+      "tag": "synthetic-fixture-correction",
+      "minutes": null,
+      "note": "Initial typecheck caught boolean verifiedText instead of the canonical string hash. Initial focused checks exposed wrong announced-change argument order, the public fold published field, and an opponent selector. These were corrected before settled validation. Parent review replaced incidental slot-enumeration and random-choice assertions with membership and public legal-answer contracts, and strengthened rank bounds and saved-position validation."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": null,
+      "note": "First judged attempt passed the eighteen-choice desktop movement, then failed its Medic numeric read. The full nine-slot front rank was compared against three expected allies; QA also parsed the spark container including accessible copy rather than its dedicated data-card-stat-value digit. Original raw report, exact script and captures are retained. No original first numeric values were retained, and no product failure is inferred. The corrected matrix records raw text and the numeric field, with physical source/allies visibly present."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": null,
+      "note": "The second judged attempt waited for a null card ID because qa.labStage returns full rank arrays with empty positions. Its log shows three Medic physical front IDs plus six nulls. Final fixture readers filter actual physical IDs before visibility and numeric reads. Both original failed scripts/reports/captures and empty caps are retained; no production mutation follows these harness errors."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": null,
+      "note": "Third judged run records completed Medic/Marksman desktop workflows, but an intended paid-position response hold was absent. A no-effect enemy Interrupt hand did not establish enemy play; the observed driver was back at empty-stack main after its cost answer. Exact failed script/report/four captures remain. No product mutation follows this fixture diagnosis."
+    },
+    {
+      "tag": "admission-merge-conflict",
+      "minutes": null,
+      "note": "Exact original candidate admission conflicted on four additive hubs. The first native update restored the original clean source. Authorized park/reapply preserved other owned files, then owning-session native update succeeded on6643319. Only saved additive hubs were restored, preserving peer registrations. Updated focused588/review2759/knip pass. Repair active duration is not independently measured or threshold-qualified."
+    },
+    {
+      "tag": "admission-merge-conflict",
+      "minutes": null,
+      "note": "Second terminal admission conflicts only in prompt policy, a distinct file from prior four hubs. Owning-session native update failed and restored965420 clean. Parked only policy, native update succeeded on5761464, restored two chooseSlot cases and move entry with ACKed peer-required chain:finite. Exact reverse preserves all peer body/tunables/roles; other29 owned files unchanged. Independent active repair duration is unmeasured and not threshold-qualified."
+    }
+  ],
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 23.967516666666665,
+      "note": "Completed browser lease waits total1438.051s: sweep103.549, judged first35.795, second505.449, third793.215, final0.043. Acquisition retries a nonblocking lock without FIFO ordering. This is measured waiting, distinct from execution and QA diagnosis. Peer providers and servers remain untouched."
+    }
+  ],
+  "nativeclaimStart": "2026-10-11T17:28:01Z",
+  "helperDispatchExact": "unmeasured",
+  "implementMinBasis": "Inclusive native claim to final amended commit proxy, including setup/dispatch/implementation/all waits and same-bead integration repair; exact helper dispatch timestamp unavailable.",
+  "commitTimestamp": "2026-10-11T18:57:43Z",
+  "rootColdQaAck": "Final COMMIT ACK after root independent six-workflow, capture, hash and owned-group verification",
+  "originalSource": "7475562df3c899fc622e11a2111aed7e3f9860c1",
+  "originalCommitTimestamp": "2026-10-11T18:42:54Z",
+  "originalImplementMin": 74.88333333333334,
+  "updatedBase": "5761464cf1453a43092c2310a08d22e90d5d5fb2",
+  "integration": {
+    "originalCandidate": "01a12c46-b3c9-7be2-aa4c-cf09fa7eed11",
+    "parkedCheckpoint": "99db892375190cf476efb535648fa65a3ed0ab3f",
+    "updatedCheckpoint": "7a013bf22f78e8fd2cdec3ce73f6c761709136c4",
+    "base": "6643319ac14e84046359425ed1242f22a3f3b450",
+    "parkedPaths": 4,
+    "unchangedOthers": 19,
+    "nativePeerAutomergeFiles": 7,
+    "browserOrHeavyReruns": 0,
+    "priorFullFuzzBrowserSource": "7475562df3c899fc622e11a2111aed7e3f9860c1"
+  },
+  "firstIntegrationSource": "96542028445b888c24e9a3e2c4c162b06681ca39",
+  "firstIntegrationCommitTimestamp": "2026-10-11T18:51:16Z",
+  "firstIntegrationImplementMin": 83.25,
+  "secondIntegration": {
+    "candidate": "01a12c4e-5dfc-73b2-abc2-0fd13be51fe7",
+    "source": "96542028445b888c24e9a3e2c4c162b06681ca39",
+    "parkedCheckpoint": "9ee0d72187d7165c4cbd963b7e00eb8c631631aa",
+    "updatedCheckpoint": "9166f188958f51896ea6ee69a3e2b8baaec6dbdc",
+    "base": "5761464cf1453a43092c2310a08d22e90d5d5fb2",
+    "parkedPaths": 1,
+    "otherOwnedFilesUnchanged": 29,
+    "schemaAdaptation": "Own move role registers required peer chain:finite after explicit root ACK",
+    "browserOrHeavyReruns": 0,
+    "priorFullFuzzBrowserSource": "7475562df3c899fc622e11a2111aed7e3f9860c1",
+    "checks": {
+      "focusedCases": 589,
+      "focusedFiles": 3,
+      "reviewCases": 2761,
+      "reviewFiles": 260,
+      "knip": "pass",
+      "ownGroupsRemaining": []
+    }
+  }
+}

@@ -1,3 +1,5 @@
+import { abandonCost, activated, self, staticAbility, supported } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 145,
   art: { x: 0, y: -0.34, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  verifiedText: "3qtryx3tpd",
+  abilities: () => [staticAbility(p.sparkModifier(supported(), 3)), activated([abandonCost()], p.move(self(), { to: "abandonedCost" }), { speed: "fast" })],
 });

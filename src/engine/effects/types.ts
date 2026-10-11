@@ -1,7 +1,7 @@
 import type { EngineCatalog } from "../catalog";
 import type { PromptPurpose, PromptRole } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import type { AbilityOrigin, BattleState, ContinuousChange, Expiry, SparkGain } from "../state/types";
+import type { AbandonedPosition, AbilityOrigin, BattleState, ContinuousChange, Expiry, SparkGain } from "../state/types";
 import type { StepContext } from "../steps/types";
 import type { CharacteristicsReader } from "../dsl/selectors";
 import type {
@@ -80,6 +80,8 @@ export interface EffectEnv {
   readonly x: number | null;
   /** Whether each optional cost of the item was paid, in printed order (the `costPaid` condition). */
   readonly optionalPaid: readonly boolean[];
+  /** The position vacated by this activation's single-character abandonment cost. */
+  readonly abandonedPosition: AbandonedPosition | null;
   /** The duration a `forDuration` node gives the continuous primitives inside it; `null` outside one. */
   readonly duration: SharedDuration | null;
   /** The cards this resolution's nodes moved, for "that card" values (`costOf`). */

@@ -1,0 +1,5 @@
+# RD-hv-umm2.96-2: An abandonment cost remembers its vacated side and position
+- Ladder: 5 (the simplest reading consistent with the single-character cost and its movement effect)
+- rules.md: § The Play Area → Movement by an effect
+- Affects: 8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd
+- Why: The selected character pays the cost before the ability waits on the stack; a created character may cease to exist and a response may occupy its vacated position. The ability retains that public side and position before paying its single-character abandonment cost and uses it when resolving, across responses and serialized state. This is not a target and adds no position choice. Movement fails if its source leaves play, changes to the other controller, or the position becomes occupied. The printed cost permits abandoning the source itself; the cost succeeds and its absent source does not move. Existing Phasing's open-position rule determines the occupied-destination case. No general multiple-abandonment position rule is introduced.

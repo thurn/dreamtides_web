@@ -785,6 +785,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     variant: options.origin.kind === "card" ? options.origin.variant : BASE_VARIANT,
     x: options.x,
     optionalPaid: options.optionalPaid,
+    abandonedPosition: options.choices.abandonedPosition ?? null,
     duration: null,
     moved: movedCardRecord(ctx, options.root ?? effect),
     modeOf(node) {

@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { activated, banishFromAnyVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
+import { activated, banishFromAnyVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -68,6 +68,12 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** A Fast activation that chooses an empty position for its source. */
+  mover: {
+    id: syntheticId(0x372), cardType: "character", costs: [energy(1)], spark: 1,
+    subtype: "Warrior", speed: "standard", status: "authored",
+    abilities: () => [activated([energy(1)], p.move(self()), { speed: "fast" })],
+  },
   /** Choose X, then a character with exactly that copiable cost. */
   xCostTarget: {
     id: syntheticId(0x308), cardType: "event", costs: [energyX(0)], spark: null,
@@ -232,6 +238,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [ZONE.handEcho.id]: { name: "Lab Reflection", text: "Add an ephemeral copy of a character you control to your hand." },
   [ZONE.ephemeralDraw.id]: { name: "Lab Glimpse", text: "Draw 2 cards with ephemeral." },
   [ZONE.reclaimer.id]: { name: "Lab Revenant", text: "Reclaim" },
+  [LAB.mover.id]: { name: "Lab Mover", text: "❖ – 1●: Move this character to an unoccupied position." },
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
   [LAB.dissolveUpToOne.id]: { name: "Lab Mercy", text: "Dissolve up to one enemy." },
@@ -323,6 +330,12 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "move", description: "Choose an empty battlefield position during a Fast activation",
+    setup: { active: "player", phase: "night",
+      player: { back: [LAB.mover.id], energy: 2, deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [{ side: "player", action: (ids) => ({ kind: "activate", source: at(ids.player.back, 0), ability: 0 }) }],
+  },
   {
     name: "optional-payment", description: "Pay or decline a resolution-time return from the void",
     setup: { active: "player", phase: "day", player: { hand: [LAB.optionalReturn.id], void: [vanillas[0]], energy: 1, deck: deck(6) }, enemy: { deck: deck(6) } },

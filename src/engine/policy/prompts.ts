@@ -58,6 +58,7 @@ export function declineAnswer(prompt: Prompt): Answer {
     case "chooseNumber":
       value = prompt.min;
       break;
+    case "chooseSlot":
     case "chooseMode":
     case "arrange":
       value = firstLegalAnswer(prompt);
@@ -155,6 +156,7 @@ const ROLE_STRATEGIES = {
   // A mode or player steers the chooser's own effect, which may be the one that retriggers.
   chooseOne: { cards: "hostile", number: "largest", chain: "loopable" },
   choosePlayer: { cards: "hostile", number: "largest", chain: "loopable" },
+  move: { cards: "hostile", number: "largest", chain: "finite" },
   // An "up to N" target accepts fewer.
   target: { cards: "hostile", number: "largest", chain: "loopable" },
   chooseCost: { cards: "hostile", number: "largest", chain: "loopable" },
@@ -248,6 +250,7 @@ export function greedyAnswer(prompt: Prompt, info: CardInfoOf, discoverCosts: Di
     case "chooseNumber":
       value = ROLE_STRATEGIES[prompt.purpose.role].number === "discoverCost" ? discoverCostAnswer(prompt, discoverCosts(prompt)) : prompt.max;
       break;
+    case "chooseSlot":
     case "chooseMode":
     case "arrange":
       value = firstLegalAnswer(prompt);

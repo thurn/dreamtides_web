@@ -182,6 +182,12 @@ export interface CardInstance {
   enteredZoneAt: number;
 }
 
+/** The public position vacated by the single character abandoned for an activation. */
+export interface AbandonedPosition {
+  readonly side: Side;
+  readonly slot: Slot;
+}
+
 /**
  * The play-time choices for one effect: its modes, one per modal node on the
  * chosen path, and its targets, one list per target spec, both in walk order.
@@ -189,6 +195,8 @@ export interface CardInstance {
 export interface EffectChoices {
   readonly modes: readonly number[];
   readonly targets: readonly (readonly InstanceId[])[];
+  /** Captured before paying the activation's single-character abandonment cost. */
+  readonly abandonedPosition?: AbandonedPosition;
 }
 
 interface StackItemBase {

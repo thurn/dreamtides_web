@@ -15,6 +15,9 @@ export function promptFingerprint(prompt: Prompt): PromptFingerprint {
     case "chooseCards":
       fields.push([...prompt.candidates].sort(), prompt.min, prompt.max);
       break;
+    case "chooseSlot":
+      fields.push(prompt.slots);
+      break;
     case "chooseMode":
       fields.push(prompt.options);
       break;

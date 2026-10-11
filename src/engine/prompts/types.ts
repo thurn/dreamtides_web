@@ -1,4 +1,4 @@
-import type { AvatarId, CardId, DreamsignId, InstanceId, Side } from "../state/ids";
+import type { AvatarId, CardId, DreamsignId, InstanceId, Side, Slot } from "../state/ids";
 
 /**
  * The stable key of a prompt's choice, which the UI copy module renders. The
@@ -18,6 +18,8 @@ export type PromptRole =
   | "chooseOne"
   /** The player an effect affects: mode 0 is the controller, mode 1 their opponent. */
   | "choosePlayer"
+  /** The unoccupied battlefield position a character moves to. */
+  | "move"
   /** The targets of an ability. */
   | "target"
   /** Which alternative of an "A or B" cost to pay. */
@@ -145,6 +147,13 @@ export interface ChooseCardsPrompt extends PromptBase {
   readonly allowed?: readonly (readonly InstanceId[])[];
 }
 
+/** Choose an unoccupied battlefield position; the answer is its index in slots. */
+export interface ChooseSlotPrompt extends PromptBase {
+  readonly kind: "chooseSlot";
+  readonly slots: readonly Slot[];
+  readonly allowed?: readonly number[];
+}
+
 export interface ModeOption {
   readonly mode: number;
   readonly legal: boolean;
@@ -231,6 +240,7 @@ export type Prompt =
   | ChooseCardsPrompt
   | ChooseModePrompt
   | ChooseNumberPrompt
+  | ChooseSlotPrompt
   | ChooseTargetsPrompt
   | ConfirmPrompt
   | PayOrDeclinePrompt;
@@ -244,7 +254,7 @@ export type Answer = readonly InstanceId[] | number | boolean | ArrangeAnswer;
 
 export type AnswerFor<P extends Prompt> = P extends ChooseTargetsPrompt | ChooseCardsPrompt
   ? readonly InstanceId[]
-  : P extends ChooseModePrompt | ChooseNumberPrompt
+  : P extends ChooseModePrompt | ChooseNumberPrompt | ChooseSlotPrompt
     ? number
     : P extends ConfirmPrompt | PayOrDeclinePrompt
       ? boolean

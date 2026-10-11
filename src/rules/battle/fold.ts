@@ -1096,11 +1096,18 @@ function isAbilityOrigin(value: unknown): boolean {
   }
 }
 
+function isAbandonedPosition(value: unknown): boolean {
+  if (!isPlainRecord(value) || !isSide(value.side)) return false;
+  const slot = slotFromUnknown(value.slot);
+  return slot !== null && slot.index < (slot.rank === "front" ? FRONT_RANK_SIZE : BACK_RANK_SIZE);
+}
+
 function isEffectChoices(value: unknown): boolean {
   return (
     isPlainRecord(value) &&
     isArrayOf(value.modes, isIndex) &&
-    isArrayOf(value.targets, arrayOf(isInstanceId))
+    isArrayOf(value.targets, arrayOf(isInstanceId)) &&
+    optional(isAbandonedPosition)(value.abandonedPosition)
   );
 }
 
