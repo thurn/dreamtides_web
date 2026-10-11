@@ -1342,8 +1342,13 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   resolves (the captured X of an abandon cost for "with higher cost"), keeps
   only cards whose copiable cost is greater. The deck is not shuffled:
   `resolveNode` resolves a node whose own references pick from a deck at
-  random, then has each viewer forget the deck places the cards that
-  actually left leave open, through `forgetDeckPositions` (RD-hv-umm2.83-1).
+  random under `StepContext.settlingKnowledge` with
+  `randomDeckRemovalSettler` (view/knowledge.ts), which runs before each
+  event is observed or matched, before each prompt, and once after the
+  node. Each run has each viewer forget the deck places the cards that have
+  actually left so far leave open (`forgetDeckPositions` over the decks as
+  the node began), so no presented state shows which slots the picks took,
+  and knows again a place a later removal determines (RD-hv-umm2.83-1).
 - `thisCardIn(zone)`: the source while it is in its controller's zone.
 
 Filters read current characteristics and the copiable cost

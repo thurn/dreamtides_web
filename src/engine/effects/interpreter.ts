@@ -13,11 +13,11 @@ import { cardMatchesFilter, characteristics, copiableCostOf } from "../continuou
 import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import { SIDES, sourceInstance } from "../state/ids";
+import { sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
-import { forgetDeckPositions } from "../view/knowledge";
+import { randomDeckRemovalSettler } from "../view/knowledge";
 import { primitiveDefinition } from "./registry";
 import type { CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
 
@@ -731,10 +731,18 @@ function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
 /** Resolves one node of an effect in `env`, tracking the cards it moves (`MovedCards`). */
 export function resolveNode(ctx: StepContext, node: EffectNode, env: EffectEnv): void {
   const resolve = (): void => primitiveDefinition(node.op).resolve(ctx, node, env);
-  env.moved.track(node, picksAtRandomFromDeck(node) ? () => forgettingRandomDeckPositions(ctx, resolve) : resolve);
+  env.moved.track(node, picksAtRandomFromDeck(node) ? () => ctx.settlingKnowledge(randomDeckRemovalSettler(ctx.state), resolve) : resolve);
 }
 
-/** Whether `node`'s own card references, not its child nodes', pick cards at random from a deck. */
+/**
+ * Whether `node`'s own card references, not its child nodes', pick cards at
+ * random from a deck. Such a node resolves under `randomDeckRemovalSettler`
+ * (rules § Keywords and Effects → Put on top or on the bottom of a deck,
+ * RD-hv-umm2.83-1): the cards that leave a deck are seen leaving in deck
+ * order, but which unseen slots they left is random, so as each leaves,
+ * before anything observes it, each viewer loses track of the known deck
+ * places the removals so far leave open. The deck is not shuffled.
+ */
 function picksAtRandomFromDeck(node: EffectNode): boolean {
   const visit = (value: unknown): boolean => {
     if (typeof value !== "object" || value === null || "op" in value) return false;
@@ -742,31 +750,6 @@ function picksAtRandomFromDeck(node: EffectNode): boolean {
     return Object.values(value).some(visit);
   };
   return Object.values(node).some(visit);
-}
-
-/**
- * Resolves a node that picks deck cards at random, then has each viewer lose
- * track of the deck positions the visible result cannot determine (rules §
- * Keywords and Effects → Put on top or on the bottom of a deck, RD-hv-umm2.83-1):
- * the cards that left a deck are seen leaving in deck order, but which
- * unseen slots they left is random. The deck is not shuffled.
- */
-function forgettingRandomDeckPositions(ctx: StepContext, resolve: () => void): void {
-  const { sides, knownTo } = ctx.state;
-  const before: BattleState = {
-    ...ctx.state,
-    sides: { player: { ...sides.player, deck: [...sides.player.deck] }, enemy: { ...sides.enemy, deck: [...sides.enemy.deck] } },
-    knownTo: { player: [...knownTo.player], enemy: [...knownTo.enemy] },
-  };
-  resolve();
-  const left = SIDES.flatMap((side) => before.sides[side].deck.filter((id) => !ctx.state.sides[side].deck.includes(id)));
-  if (left.length === 0) return;
-  const knew = SIDES.map((viewer) => [...before.knownTo[viewer]]);
-  forgetDeckPositions(before, left);
-  for (const [index, viewer] of SIDES.entries()) {
-    const forgotten = new Set(knew[index].filter((id) => !before.knownTo[viewer].includes(id)));
-    if (forgotten.size > 0) ctx.state.knownTo[viewer] = ctx.state.knownTo[viewer].filter((id) => !forgotten.has(id));
-  }
 }
 
 /** Resolves an effect tree with plain synchronous rules code, under the modes chosen at play time. */

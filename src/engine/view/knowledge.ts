@@ -11,7 +11,8 @@
  * - filtered draws and ordered deck placements retain only inferable
  *   positions, using viewer-known slots and public removal bounds; the
  *   filtered-draw primitive proves its ability's literal filter while this
- *   module owns forgetting (`forgetFilteredDrawPositions`, `forgetDeckPositions`);
+ *   module owns forgetting (`forgetFilteredDrawPositions`, `forgetDeckPositions`,
+ *   and `randomDeckRemovalSettler` as random picks leave a deck);
  * - a `privateTo` prompt shows its cards to its chooser only, and the other
  *   side loses track of those still in a deck, whose order the chooser may
  *   change;
@@ -194,6 +195,72 @@ export function forgetDeckPositions(state: BattleState, cards: readonly Instance
   for (const { viewer, forgotten } of viewers) {
     state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !forgotten.has(id));
   }
+}
+
+function sameIds(a: readonly InstanceId[], b: readonly InstanceId[]): boolean {
+  return a.length === b.length && a.every((id, index) => id === b[index]);
+}
+
+/**
+ * Deck knowledge while cards picked at random leave decks, unshuffled
+ * (RD-hv-umm2.83-1): each viewer sees the cards leave, in deck order, but
+ * not which unseen places they left. Captures both decks and both viewers'
+ * knowledge before any pick and returns a settler, which the caller runs
+ * after each removal and before anything observes the state, prompts
+ * included (`StepContext.settlingKnowledge`). Each run measures the cards
+ * that have left each captured deck so far, in its order, and has each
+ * viewer lose track of the known cards whose places those removals leave
+ * open (`forgetDeckPositions` over the captured decks), so no presented
+ * state places a known card where it shows which slots the picks took.
+ *
+ * A later removal can determine a place an earlier one left open; the
+ * viewer then knows the card again, so once the picks are done each viewer
+ * knows what the whole removal determines. A card is known again only
+ * while it sits where it was captured and nothing but the removals has
+ * changed the decks or either viewer's knowledge since the last run;
+ * otherwise what this settler forgot stays forgotten.
+ */
+export function randomDeckRemovalSettler(state: BattleState): () => void {
+  const decks = { player: [...state.sides.player.deck], enemy: [...state.sides.enemy.deck] };
+  const knew = { player: [...state.knownTo.player], enemy: [...state.knownTo.enemy] };
+  const entered = new Map([...decks.player, ...decks.enemy].map((id) => [id, state.instances[id]?.enteredZoneAt]));
+  const withheld = { player: new Set<InstanceId>(), enemy: new Set<InstanceId>() };
+  let settled = knew;
+  let removals = "";
+  let undisturbed = true;
+  return () => {
+    const left = SIDES.flatMap((owner) => decks[owner].filter((id) => !state.sides[owner].deck.includes(id)));
+    const gone = new Set(left);
+    const remaining = (ids: readonly InstanceId[]) => ids.filter((id) => !gone.has(id));
+    undisturbed &&= SIDES.every((viewer) => sameIds(remaining(state.knownTo[viewer]), remaining(settled[viewer])));
+    const key = left.join(" ");
+    if (key !== removals) {
+      removals = key;
+      const intact = undisturbed && SIDES.every((owner) => sameIds(state.sides[owner].deck, remaining(decks[owner])));
+      const measured: BattleState = {
+        ...state,
+        sides: { player: { ...state.sides.player, deck: decks.player }, enemy: { ...state.sides.enemy, deck: decks.enemy } },
+        knownTo: { player: [...knew.player], enemy: [...knew.enemy] },
+      };
+      forgetDeckPositions(measured, left);
+      for (const viewer of SIDES) {
+        const open = new Set(knew[viewer].filter((id) => !measured.knownTo[viewer].includes(id)));
+        const known = state.knownTo[viewer];
+        const forgetting = new Set(known.filter((id) => open.has(id) && !withheld[viewer].has(id)));
+        const regained = intact
+          ? [...withheld[viewer]].filter((id) => !open.has(id) && !gone.has(id) && state.instances[id]?.enteredZoneAt === entered.get(id))
+          : [];
+        for (const id of forgetting) withheld[viewer].add(id);
+        for (const id of regained) withheld[viewer].delete(id);
+        const keep = new Set([...known.filter((id) => !forgetting.has(id)), ...regained]);
+        // Known-again cards return to their captured order, ahead of anything learned since.
+        state.knownTo[viewer] = regained.length === 0
+          ? known.filter((id) => keep.has(id))
+          : [...knew[viewer].filter((id) => keep.has(id)), ...known.filter((id) => keep.has(id) && !knew[viewer].includes(id))];
+      }
+    }
+    settled = { player: [...state.knownTo.player], enemy: [...state.knownTo.enemy] };
+  };
 }
 
 /** Both sides learn the revealed cards. */

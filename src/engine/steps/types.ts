@@ -82,6 +82,14 @@ export interface StepContext {
   /** Records an event; triggered abilities it matches join the trigger queue. */
   emit(event: EngineEvent): void;
   /**
+   * Runs `run` while `settle` keeps knowledge current as cards move: it runs
+   * before each event `run` emits is observed or matched, before each prompt
+   * `run` raises, and once more after `run` returns, so no presented state
+   * shows knowledge the moves so far have made stale
+   * (`randomDeckRemovalSettler`, view/knowledge.ts).
+   */
+  settlingKnowledge(settle: () => void, run: () => void): void;
+  /**
    * The trigger matcher's step-local record of armed dissolves, by departing
    * character. A dissolve emits `leftPlay` and `dissolved` within one call
    * with no prompt between them, so the record never needs to outlive the

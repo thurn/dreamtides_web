@@ -58,6 +58,8 @@ export class Context implements StepContext {
   readonly disclosed: Disclosure[] = [];
   readonly armedDissolves = new Map<InstanceId, ArmedDissolve>();
   committed = false;
+  /** The knowledge settlers of the `settlingKnowledge` calls running now, outermost first. */
+  private readonly settlers: (() => void)[] = [];
 
   constructor(
     readonly state: BattleState,
@@ -71,6 +73,7 @@ export class Context implements StepContext {
   }
 
   choose<P extends Prompt>(spec: PromptSpec<P>, proof?: { readonly allAnswersPayable: true }): AnswerFor<P> {
+    this.settleKnowledge();
     const cancellable =
       !this.committed && this.options.canceller != null && spec.side === this.options.canceller;
     const raw = { ...spec, cancellable } as Prompt;
@@ -178,9 +181,24 @@ export class Context implements StepContext {
     this.committed = true;
   }
 
-  /** Records an event and matches it against triggered abilities, which queue (D14). */
+  settlingKnowledge(settle: () => void, run: () => void): void {
+    this.settlers.push(settle);
+    try {
+      run();
+    } finally {
+      this.settlers.pop();
+    }
+    settle();
+  }
+
+  private settleKnowledge(): void {
+    for (const settle of this.settlers) settle();
+  }
+
+  /** Records an event and matches it against triggered abilities, which queue (D14), once knowledge is settled (`settlingKnowledge`). */
   emit(event: EngineEvent): void {
     eventDefinition(event.kind);
+    this.settleKnowledge();
     this.events.push(event);
     if (this.observeEvent !== undefined) {
       try {
