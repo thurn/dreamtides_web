@@ -619,6 +619,22 @@ value). Overruns are judged only at comparable load.
 The Phase 2.11 test cut must reach the first three. The rest are monitored
 from the bead that introduces them.
 
+### Budget revision (2026-10-11, test-file size)
+
+[D19](../decisions.md#d19-test-pruning) budgets suite wall time and test-file
+size, not file count. The test-file and `jsdom` file-count rows above, and
+the per-phase test-file ceilings in hv-47xj.22 and the
+[Phase 4 gate](#d19-suite-budgets-2), are withdrawn. Reason: with
+`isolate: false`, import averages about 0.1 s per file (20.8 s across 211
+files at the Phase 2 gate), while the count cap pushed beads to merge
+contracts into existing files: at `1859bf668`, 53 of 216 test files were
+over the ~500-line rule. Gates still record the file counts, for
+information only.
+
+| Budget | Value | Measured as |
+| --- | --- | --- |
+| Test files over ~500 lines | 0 without a recorded reason | `wc -l` over test files; each survivor's reason is in its bead notes |
+
 ## Engine performance targets (2026-10-05, bead hv-7x4l.10)
 
 Measured against the

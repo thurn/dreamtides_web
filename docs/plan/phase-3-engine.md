@@ -75,8 +75,9 @@ These apply to every Phase 3 bead ([D19](decisions.md#d19-test-pruning)):
 - **Environment.** Engine tests run in `node`, never `jsdom`.
 - **Fixtures.** Synthetic definitions live in
   `src/engine/testing/synthetic-cards.ts`.
-- **File grain.** Use one test file per engine module or rules area, never
-  one per scenario. Property tests use a small fixed number of seeds; the
+- **File grain.** Group tests by engine module or rules area, never one file
+  per scenario. Split an area into several files when it passes D19's
+  ~500-line limit. Property tests use a small fixed number of seeds; the
   fuzzer provides breadth.
 - **Ported contracts.** Port prototype contracts from git at the OID recorded
   in Phase 2.11a's notes (`git show <oid>:<path>`). Never resurrect the old

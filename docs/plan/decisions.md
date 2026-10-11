@@ -771,17 +771,17 @@ screenshot QA, the fuzzer, or the sweep. Delete:
 
 **Size rules:**
 
-- **Test files over ~500 lines are split or cut.** The bead notes record why
-  any survives.
-- **Prefer fewer files.** Module import dominates suite time, and each file
-  pays it again.
+- **A test file stays under ~500 lines.** A bead that would grow a file past
+  it splits the file along its contracts or rules areas in the same commit.
+  The bead notes record why any file over the limit survives.
+- **File count is not a budget.** Split freely along module and contract
+  lines, and never merge unrelated contracts into one file to save a file.
+  The shared project runs with `isolate: false`, so an added file costs about
+  0.1 s of cumulative import (Phase 2 gate: 20.8 s across 211 files), and the
+  suite wall budget catches any real cost.
 
-**Budgets.** Every phase gate measures these. The Phase 2 test-cut beads must
-reach them:
-
-- full suite at most 60 s, at 2 workers and low host load;
-- at most 220 test files;
-- at most 80 `jsdom` test files.
+**Budget.** Every phase gate measures it: the full suite runs in at most
+60 s, at 2 workers and low host load.
 
 **New tests (Phases 3–7):**
 
