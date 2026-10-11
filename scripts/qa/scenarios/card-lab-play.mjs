@@ -24,7 +24,7 @@
  * @typedef {{ seq: number, kind: string, instance: string | null }} ProbeEvent
  * @typedef {{ slice: { committed: { instances: Record<string, ProbeInstance>, stack: unknown[], result: unknown }, inFlight: unknown }, decision: { side: string } | null, pending: ProbePrompt | null, events: ProbeEvent[] }} EngineProbe
  * @typedef {Window & { __cardLab?: CardLabReport, __engineProbe?: EngineProbe }} LabWindow
- * @typedef {{ verdict: "pass" | "fail" | "pending" | "skip", notes: string, lab?: CardLabReport, screens?: string[] }} CardLabPlayResult
+ * @typedef {{ verdict: "pass" | "fail" | "pending" | "skip", notes: string, failureKinds: ("timeout" | "product" | "unknown")[], lab?: CardLabReport, screens?: string[] }} CardLabPlayResult
  */
 
 /**
@@ -36,23 +36,29 @@ export default async function cardLabPlay(qa) {
   const deadline = Date.now() + Number(qa.args.timeoutMs ?? "60000");
   /** @type {string[]} */
   const failures = [];
+  /** @type {CardLabPlayResult["failureKinds"]} */
+  const failureKinds = [];
+  const fail = (/** @type {string} */ message, /** @type {CardLabPlayResult["failureKinds"][number]} */ kind = "product") => {
+    failures.push(message);
+    failureKinds.push(kind);
+  };
   /**
    * @param {CardLabPlayResult["verdict"]} verdict
-   * @param {Omit<CardLabPlayResult, "verdict" | "notes"> & Record<string, unknown>} extra
+   * @param {Omit<CardLabPlayResult, "verdict" | "notes" | "failureKinds"> & Record<string, unknown>} extra
    * @returns {CardLabPlayResult}
    */
-  const outcome = (verdict, extra = {}) => ({ verdict, notes: failures.join("; "), ...extra });
+  const outcome = (verdict, extra = {}) => ({ verdict, notes: failures.join("; "), failureKinds, ...extra });
 
-  await qa.open(`/?goto=card-lab&card=${card}&variant=${variant}&as=${side}&seed=1&debug=1`, qa.viewport, { allowErrors: true });
   const caps = async () => {
     const buffer = await qa.caps();
     return buffer === null ? [] : [...buffer.errors, ...buffer.rejections, ...buffer.consoleErrors];
   };
 
   try {
+    await qa.open(`/?goto=card-lab&card=${card}&variant=${variant}&as=${side}&seed=1&debug=1`, qa.viewport, { allowErrors: true });
     const lab = await qa.waitFor("the card-lab report", () => /** @type {LabWindow} */ (window).__cardLab ?? null, null, { timeout: Math.max(1, deadline - Date.now()), allowErrors: true });
     if (lab.status !== "ready") {
-      failures.push(`card-lab ${String(lab.reason)}${lab.detail === null ? "" : `: ${String(lab.detail)}`}`);
+      fail(`card-lab ${String(lab.reason)}${lab.detail === null ? "" : `: ${String(lab.detail)}`}`);
       return outcome(lab.reason === "ineligibleVariant" ? "skip" : "fail", { lab });
     }
     await qa.waitFor("the engine probe", () => (/** @type {LabWindow} */ (window).__engineProbe === undefined ? null : true), null, { timeout: Math.max(1, deadline - Date.now()) });
@@ -127,16 +133,16 @@ export default async function cardLabPlay(qa) {
       answered = run.answers;
       passes = run.passes;
     } catch (error) {
-      failures.push(error instanceof Error ? error.message : String(error));
+      fail(error instanceof Error ? error.message : String(error), qa.isTimeout(error) ? "timeout" : "unknown");
       last = await read();
     }
 
     const human = last.decision?.side === "player" || last.pending?.side === "player";
     if (human && !(await qa.battle.state()).canPass && last.pending === null && last.result === null) {
-      failures.push("the human decides with no visible, enabled control");
+      fail("the human decides with no visible, enabled control");
     }
     if (!last.events.some((event) => event.kind === "resolved" && event.instance === labInstance)) {
-      failures.push("no resolved event for the card");
+      fail("no resolved event for the card");
     }
     const expected = lab.cardType === "Character" ? ["play"] : ["void", "banished"];
     // The AI may activate a character after it resolves. A self-abandon cost
@@ -147,11 +153,11 @@ export default async function cardLabPlay(qa) {
       resolved >= 0 && materialized > resolved && event.kind === "abandoned" && event.instance === labInstance && index > materialized && event.seq > last.events[materialized].seq,
     );
     if (lab.cardType === "Character" && resolved >= 0 && materialized > resolved && abandonedAfterResolution) expected.push("void");
-    if (!expected.includes(String(last.zone))) failures.push(`the card is in ${String(last.zone)}, not ${expected.join(" or ")}`);
+    if (!expected.includes(String(last.zone))) fail(`the card is in ${String(last.zone)}, not ${expected.join(" or ")}`);
     await qa.sleep(600);
-    if ((await qa.battle.state()).board === before) failures.push("no visible board change");
+    if ((await qa.battle.state()).board === before) fail("no visible board change");
     const errors = await caps();
-    if (errors.length > 0 && !failures.some((failure) => failure.includes("__caps"))) failures.push(`__caps: ${errors.join(" | ")}`);
+    if (errors.length > 0 && !failures.some((failure) => failure.includes("__caps"))) fail(`__caps: ${errors.join(" | ")}`);
 
     const screens = [];
     if (qa.args.capture !== undefined && qa.args.capture !== "") {
@@ -168,7 +174,7 @@ export default async function cardLabPlay(qa) {
       screens,
     });
   } catch (error) {
-    failures.push(error instanceof Error ? error.message : String(error));
+    fail(error instanceof Error ? error.message : String(error), qa.isTimeout(error) ? "timeout" : "unknown");
     return outcome("fail");
   }
 }

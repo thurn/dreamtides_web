@@ -106,6 +106,7 @@
  * @property {string} bead
  * @property {string} captureDir Absolute capture directory of the bead.
  * @property {boolean} prod
+ * @property {number} [timeoutMs] This call's execution budget; helper deadlines share it.
  * @property {Record<string, string>} args `--arg key=value` pairs.
  * @property {ViewportName} [viewport] The viewport this pass runs at (default `desktop`).
  * @property {number} [step] This call's step index (default 0).
@@ -359,11 +360,11 @@
  * @property {(route: string) => string} url
  *   The absolute URL of `route` (`/path?query`, `path`, or `?query`) on the
  *   runner's server; an absolute URL is returned as is.
- * @property {(route: string, options?: { allowErrors?: boolean, waitUntil?: "load" | "domcontentloaded" | "networkidle" }) => Promise<{ href: string, width: number, height: number }>} goto
+ * @property {(route: string, options?: { allowErrors?: boolean, waitUntil?: "load" | "domcontentloaded" | "networkidle", timeout?: number }) => Promise<{ href: string, width: number, height: number }>} goto
  *   Loads `route` (resolved by `url`) at the current viewport, and asserts
  *   the origin and an empty `__caps` (unless `allowErrors`). The buffer of
  *   the document it leaves goes into the report.
- * @property {(route: string, viewport?: Viewport, options?: { allowErrors?: boolean }) => Promise<{ href: string, width: number, height: number }>} open
+ * @property {(route: string, viewport?: Viewport, options?: { allowErrors?: boolean, timeout?: number }) => Promise<{ href: string, width: number, height: number }>} open
  *   Sizes the viewport (default `qa.viewport`), then `goto`s `route` and
  *   also asserts the viewport.
  * @property {(target: string | Target, options?: { position?: { x?: number, y?: number }, rest?: boolean, timeout?: number, minOpacity?: number }) => Promise<{ x: number, y: number }>} click
@@ -401,6 +402,8 @@
  *   report's `traces`; `value` is what `fn` returned.
  * @property {() => Promise<Caps | null>} caps
  * @property {(label: string, options?: { timeout?: number }) => Promise<void>} assertCaps Throws unless `__caps` is empty.
+ * @property {(message: string, cause?: unknown) => Error} timeoutError Creates a structured helper deadline failure.
+ * @property {(error: unknown) => boolean} isTimeout Recognizes structured helper deadline failures through causes.
  * @property {(label: string, data?: unknown) => void} note Adds a line to the report's log.
  * @property {(ms: number) => Promise<void>} sleep
  * @property {(result: unknown, error: string | null) => Promise<QaResult>} finish
@@ -420,6 +423,21 @@
  * @returns {Promise<Qa>}
  */
 export async function createQa(page, config) {
+  const callDeadline = config.timeoutMs === undefined ? null : Date.now() + config.timeoutMs;
+  const timeoutError = (/** @type {string} */ message, /** @type {unknown} */ cause = undefined) => {
+    const error = new Error(message, cause === undefined ? undefined : { cause });
+    error.name = "QaTimeoutError";
+    return error;
+  };
+  const isTimeout = (/** @type {unknown} */ error) => {
+    const seen = new Set();
+    while (typeof error === "object" && error !== null && !seen.has(error)) {
+      seen.add(error);
+      if ("name" in error && (error.name === "QaTimeoutError" || error.name === "TimeoutError")) return true;
+      error = "cause" in error ? error.cause : null;
+    }
+    return false;
+  };
   const viewports = {
     desktop: { width: 1440, height: 900 },
     mobile: { width: 390, height: 844 },
@@ -585,7 +603,7 @@ export async function createQa(page, config) {
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         if (!/Execution context was destroyed|Cannot find context with specified id/i.test(message)) throw error;
-        if (Date.now() >= deadline) throw new Error(`qa.read: navigation did not settle within ${String(timeout)} ms`, { cause: error });
+        if (Date.now() >= deadline) throw timeoutError(`qa.read: navigation did not settle within ${String(timeout)} ms`, error);
         await page.waitForTimeout(Math.min(100, Math.max(1, deadline - Date.now())));
       }
     }
@@ -631,9 +649,9 @@ export async function createQa(page, config) {
   };
 
   // Records the current document's buffer before a navigation replaces it.
-  const recordCaps = async () => {
+  const recordCaps = async (timeout = 15_000) => {
     if (!onOrigin(page.url())) return;
-    const state = await readState();
+    const state = await readState(timeout);
     mergeCaps(state);
   };
 
@@ -678,7 +696,7 @@ export async function createQa(page, config) {
       }, probe, { timeout: Math.max(1, deadline - Date.now()) });
       if (outcome.caps !== null) throw new Error(`${label}: __caps recorded ${outcome.caps}`);
       if (outcome.point !== null) return outcome.point;
-      if (Date.now() >= deadline) throw new Error(`${label}: timed out after ${String(timeout)} ms`);
+      if (Date.now() >= deadline) throw timeoutError(`${label}: timed out after ${String(timeout)} ms`);
       await page.waitForTimeout(100);
     }
   };
@@ -689,13 +707,24 @@ export async function createQa(page, config) {
     await poll(`waitVisible ${describe(target)}`, { kind: "rendered", target, minOpacity }, timeout);
   };
 
-  /** @type {Qa["goto"]} */
-  const goto = async (route, { allowErrors = false, waitUntil = "domcontentloaded" } = {}) => {
-    await recordCaps();
+  /**
+   * @param {string} route
+   * @param {{allowErrors: boolean, waitUntil: "load" | "domcontentloaded" | "networkidle"}} options
+   * @param {number | null} deadline
+   */
+  const navigate = async (route, { allowErrors, waitUntil }, deadline) => {
+    const remaining = () => {
+      if (deadline === null) return 15_000;
+      const budget = deadline - Date.now();
+      if (budget <= 0) throw timeoutError("qa.open/goto: navigation deadline expired");
+      return budget;
+    };
+    await recordCaps(remaining());
     // DOMContentLoaded settles the navigation without depending on resource
     // load under host pressure; the helpers wait for their actual UI contracts.
-    await page.goto(url(route), { waitUntil });
-    const state = await readState();
+    await page.goto(url(route), { waitUntil, ...(deadline === null ? {} : { timeout: remaining() }) });
+    const state = await readState(remaining());
+    remaining();
     if (!onOrigin(state.href)) throw new Error(`goto ${route}: landed on ${state.href}, not ${origin}`);
     if (state.caps === null) throw new Error(`goto ${route}: the __caps init script did not run`);
     if (allowErrors) {
@@ -703,7 +732,8 @@ export async function createQa(page, config) {
       await read(() => {
         const caps = /** @type {QaWindow} */ (window).__caps;
         if (caps !== undefined) for (const values of Object.values(caps)) values.length = 0;
-      }, null);
+      }, null, { timeout: remaining() });
+      remaining();
     }
     if (!allowErrors) assertObserved(`goto ${route}`);
     if (!allowErrors && capsCount(state.caps) > 0) {
@@ -711,6 +741,11 @@ export async function createQa(page, config) {
     }
     return { href: state.href, width: state.width, height: state.height };
   };
+
+
+  /** @type {Qa["goto"]} */
+  const goto = (route, { allowErrors = false, waitUntil = "domcontentloaded", timeout } = {}) =>
+    navigate(route, { allowErrors, waitUntil }, timeout === undefined ? null : Date.now() + timeout);
 
   /**
    * Summarizes the renderer main thread's tasks between a trace's marks.
@@ -911,10 +946,13 @@ export async function createQa(page, config) {
     carry: config.carry ?? null,
     url,
     goto,
+    timeoutError,
+    isTimeout,
 
-    async open(route, viewport = viewports[viewportName], { allowErrors = false } = {}) {
+    async open(route, viewport = viewports[viewportName], { allowErrors = false, timeout } = {}) {
+      const deadline = timeout === undefined ? null : Date.now() + timeout;
       await page.setViewportSize(viewport);
-      const state = await goto(route, { allowErrors });
+      const state = await navigate(route, { allowErrors, waitUntil: "domcontentloaded" }, deadline);
       if (state.width !== viewport.width || state.height !== viewport.height) {
         throw new Error(
           `open ${route}: viewport is ${String(state.width)}x${String(state.height)}, not ${String(viewport.width)}x${String(viewport.height)}`,
@@ -974,18 +1012,23 @@ export async function createQa(page, config) {
           // A reload can land between resolving the waiter and serializing
           // its handle too; every re-attachment keeps the original deadline.
           if (/Execution context was destroyed|Cannot find context with specified id/i.test(message) && Date.now() < deadline) continue;
+          if (error instanceof Error && error.name === "TimeoutError") throw timeoutError(`${label}: ${message}`, error);
           throw new Error(`${label}: ${message}`, { cause: error });
         } finally {
           await dispose(handle);
         }
       }
     },
-    async labStage(stage, { card = qa.args.card, variant = qa.args.variant ?? "base", as: side = "player", timeout = 15_000 } = {}) {
+    async labStage(stage, { card = qa.args.card, variant = qa.args.variant ?? "base", as: side = "player", timeout = callDeadline === null ? 15_000 : Math.max(1, callDeadline - Date.now()) } = {}) {
       if (card === undefined || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu.test(card)) throw new Error("qa.labStage requires a source card UUID");
       const encoded = JSON.stringify(stage);
-      const deadline = Date.now() + timeout;
-      const remaining = () => Math.max(1, deadline - Date.now());
-      await qa.open(`/?goto=card-lab&card=${encodeURIComponent(card)}&variant=${encodeURIComponent(variant)}&as=${side}&seed=1&debug=1&labStage=${encodeURIComponent(encoded)}`);
+      const deadline = Math.min(Date.now() + timeout, callDeadline ?? Date.now() + timeout);
+      const remaining = () => {
+        const budget = deadline - Date.now();
+        if (budget <= 0) throw timeoutError("qa.labStage: call or explicit staging deadline expired");
+        return budget;
+      };
+      await qa.open(`/?goto=card-lab&card=${encodeURIComponent(card)}&variant=${encodeURIComponent(variant)}&as=${side}&seed=1&debug=1&labStage=${encodeURIComponent(encoded)}`, qa.viewport, { timeout: remaining() });
       const report = await qa.waitFor("declared lab report", () =>
         /** @type {Window & { __cardLab?: { status: string, stage: string | null, reason: string | null, detail: string | null } }} */ (window).__cardLab ?? null,
       null, { timeout: remaining() });
@@ -1530,7 +1573,7 @@ export function createBattleDriver(qa) {
         await qa.sleep(pollMs);
         continue;
       }
-      if (Date.now() - started > timeout) throw fail(`timed out after ${String(timeout)} ms`, battle);
+      if (Date.now() - started > timeout) throw qa.timeoutError(fail(`timed out after ${String(timeout)} ms`, battle).message);
       if (Date.now() - lastProgress > stallMs) throw fail(`stalled: no progress for ${String(stallMs)} ms`, battle);
       if (before !== undefined && (await before(battle, run))) {
         lastAction = "the scenario's own";
@@ -1568,7 +1611,7 @@ export function createBattleDriver(qa) {
       const battle = await state();
       await failOnCaps(battle, `qa.battle ${label}`);
       if (await predicate(battle)) return battle;
-      if (Date.now() > deadline) throw new Error(`qa.battle ${label}: timed out after ${String(timeout)} ms; ${describe(battle)}`);
+      if (Date.now() > deadline) throw qa.timeoutError(`qa.battle ${label}: timed out after ${String(timeout)} ms; ${describe(battle)}`);
       await qa.sleep(pollMs);
     }
   };

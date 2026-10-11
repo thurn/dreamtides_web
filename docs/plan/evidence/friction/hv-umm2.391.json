@@ -1,0 +1,239 @@
+{
+  "bead": "hv-umm2.391",
+  "phase": 5,
+  "implementMin": 19.224,
+  "measurementWindow": "native claim to pre-commit evidence; exact commit time in handoff",
+  "localValidationS": {
+    "focused": 2.051,
+    "review": 12.756,
+    "focused-final": 3.554,
+    "review-final": 12.858,
+    "review-settled": 12.749,
+    "knip-settled": 3.159,
+    "review-cleanup": 11.732,
+    "knip-cleanup": 2.167,
+    "focused-budget": 2.995,
+    "review-budget": 13.116,
+    "knip-budget": 2.631,
+    "full": 70.811
+  },
+  "hostLoad": [
+    {
+      "label": "focused",
+      "exit": 0,
+      "seconds": 2.051,
+      "loadBefore": [
+        14.0986328125,
+        8.21044921875,
+        8.3642578125
+      ],
+      "loadAfter": [
+        15.45166015625,
+        8.58837890625,
+        8.49658203125
+      ]
+    },
+    {
+      "label": "review",
+      "exit": 2,
+      "seconds": 12.756,
+      "loadBefore": [
+        15.45166015625,
+        8.58837890625,
+        8.49658203125
+      ],
+      "loadAfter": [
+        17.34521484375,
+        9.21240234375,
+        8.71875
+      ]
+    },
+    {
+      "label": "focused-final",
+      "exit": 0,
+      "seconds": 3.554,
+      "loadBefore": [
+        19.51513671875,
+        11.32763671875,
+        9.5380859375
+      ],
+      "loadAfter": [
+        19.51513671875,
+        11.32763671875,
+        9.5380859375
+      ]
+    },
+    {
+      "label": "review-final",
+      "exit": 1,
+      "seconds": 12.858,
+      "loadBefore": [
+        19.51513671875,
+        11.32763671875,
+        9.5380859375
+      ],
+      "loadAfter": [
+        19.84521484375,
+        11.7744140625,
+        9.72705078125
+      ]
+    },
+    {
+      "label": "review-settled",
+      "exit": 0,
+      "seconds": 12.749,
+      "loadBefore": [
+        15.162109375,
+        11.3369140625,
+        9.62939453125
+      ],
+      "loadAfter": [
+        14.95751953125,
+        11.4228515625,
+        9.6796875
+      ]
+    },
+    {
+      "label": "knip-settled",
+      "exit": 0,
+      "seconds": 3.159,
+      "loadBefore": [
+        14.95751953125,
+        11.4228515625,
+        9.6796875
+      ],
+      "loadAfter": [
+        14.07958984375,
+        11.29931640625,
+        9.64599609375
+      ]
+    },
+    {
+      "label": "review-cleanup",
+      "exit": 0,
+      "seconds": 11.732,
+      "loadBefore": [
+        6.5244140625,
+        9.611328125,
+        9.13232421875
+      ],
+      "loadAfter": [
+        5.98193359375,
+        9.39306640625,
+        9.06005859375
+      ]
+    },
+    {
+      "label": "knip-cleanup",
+      "exit": 0,
+      "seconds": 2.167,
+      "loadBefore": [
+        5.98193359375,
+        9.39306640625,
+        9.06005859375
+      ],
+      "loadAfter": [
+        5.82275390625,
+        9.30322265625,
+        9.0302734375
+      ]
+    },
+    {
+      "label": "focused-budget",
+      "exit": 0,
+      "seconds": 2.995,
+      "loadBefore": [
+        2.81982421875,
+        7.26025390625,
+        8.26220703125
+      ],
+      "loadAfter": [
+        2.994140625,
+        7.22265625,
+        8.24267578125
+      ]
+    },
+    {
+      "label": "review-budget",
+      "exit": 0,
+      "seconds": 13.116,
+      "loadBefore": [
+        2.994140625,
+        7.22265625,
+        8.24267578125
+      ],
+      "loadAfter": [
+        3.7587890625,
+        7.19287109375,
+        8.21435546875
+      ]
+    },
+    {
+      "label": "knip-budget",
+      "exit": 0,
+      "seconds": 2.631,
+      "loadBefore": [
+        3.7587890625,
+        7.19287109375,
+        8.21435546875
+      ],
+      "loadAfter": [
+        3.7587890625,
+        7.19287109375,
+        8.21435546875
+      ]
+    },
+    {
+      "label": "full",
+      "exit": 0,
+      "seconds": 70.811,
+      "loadBefore": [
+        4.13037109375,
+        6.81005859375,
+        8.015625
+      ],
+      "loadAfter": [
+        16.89404296875,
+        9.98388671875,
+        9.1064453125
+      ]
+    }
+  ],
+  "testDelta": {
+    "files": 2,
+    "lines": 155,
+    "jsdomFiles": 0,
+    "cases": 8
+  },
+  "browser": {
+    "stage": {
+      "browserLeaseWait": 41,
+      "serve": 1254,
+      "scenario": 26661,
+      "total": 27982
+    },
+    "sweep": {
+      "browserLeaseWait": 41,
+      "serve": 943,
+      "scenario": 13227.748916,
+      "cleanup": 225.03241700000035,
+      "execution": 14417.687375,
+      "total": 14458.687375
+    },
+    "wrappers": [
+      {
+        "label": "qa-stage",
+        "exit": 0,
+        "seconds": 33.234
+      },
+      {
+        "label": "qa-sweep",
+        "exit": 0,
+        "seconds": 19.483
+      }
+    ],
+    "sourceFrozen": true
+  },
+  "friction": [],
+  "improvementBeads": []
+}

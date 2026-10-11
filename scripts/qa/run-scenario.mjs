@@ -505,7 +505,7 @@ export async function openQaSession(options) {
   const run = async (scenarioSource, args, timeoutMs, call) => {
     if (cleanup !== null) throw new Error("QA session is closed");
     if (uncertainCall) throw new Error("QA session requires provider reconciliation");
-    const code = buildScenarioCode(scenarioSource, { baseUrl, bead: options.bead, captureDir, prod: options.prod, args, ...call });
+    const code = buildScenarioCode(scenarioSource, { baseUrl, bead: options.bead, captureDir, prod: options.prod, args, timeoutMs: Math.min(timeoutMs, CALL_LIMIT_MS), ...call });
     const rpc = client.call("browser_run_code_unsafe", { code }, { timeoutMs });
     const settled = rpc.then(() => {}, (/** @type {unknown} */ error) => {
       if (!(error instanceof McpToolResponseError)) uncertainCall = true;

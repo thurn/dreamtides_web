@@ -13,12 +13,12 @@
 // the others are recorded as `skip` without a run. A run that hangs fails at
 // its timeout and the sweep goes on. `starter` names the catalog's Starter
 // cards. Each ledger line's `commit` is the base OID the bead was built on,
-// `git merge-base HEAD staging`. Exits 1 when any verdict is `fail`.
+// `git merge-base HEAD staging`. Exits 1 when any effective cell verdict is `fail`.
 
 import { execFileSync } from "node:child_process";
-import { appendFileSync, mkdirSync, readFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { loadavg } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { openQaSession, say } from "./run-scenario.mjs";
 import cardLabPlay from "./scenarios/card-lab-play.mjs";
@@ -94,6 +94,58 @@ function baseCommit() {
   }
 }
 
+/**
+ * Runs one cell, retaining every attempt. Only an explicit timeout-only
+ * scenario result from a healthy, settled session permits one fresh retry.
+ * @param {{ run: (attempt: number) => Promise<import("./prelude.mjs").QaResult>,
+ * closed: () => boolean,
+ * save: (report: import("./prelude.mjs").QaResult, attempt: number) => string,
+ * record: (line: Record<string, unknown>) => void }} operations
+ * @returns {Promise<import("./scenarios/card-lab-play.mjs").CardLabPlayResult>}
+ */
+export async function runSweepCell({ run, closed, save, record }) {
+  for (const attempt of [1, 2]) {
+    /** @type {import("./prelude.mjs").QaResult} */
+    let report;
+    try { report = await run(attempt); }
+    catch (error) {
+      report = { result: null, error: error instanceof Error ? (error.stack ?? error.message) : String(error),
+        caps: [], log: [], captures: [], traces: [] };
+    }
+    const rawReport = save(report, attempt);
+    const value = report.result;
+    const raw = typeof value === "object" && value !== null && "verdict" in value &&
+      ["pass", "fail", "pending", "skip"].includes(String(value.verdict)) && "notes" in value && typeof value.notes === "string"
+      ? /** @type {import("./scenarios/card-lab-play.mjs").CardLabPlayResult} */ (value) : null;
+    let result = raw ?? { verdict: "fail", notes: report.error ?? "the scenario returned nothing", failureKinds: ["unknown"] };
+    if (report.error !== null || (result.verdict !== "skip" && report.caps.length > 0)) {
+      result = { ...result, verdict: "fail",
+        failureKinds: [...(result.failureKinds ?? []), "unknown"],
+        notes: [result.notes, report.error, report.caps.length > 0 ? `__caps: ${JSON.stringify(report.caps)}` : null].filter(Boolean).join("; ") };
+    }
+    const retry = attempt === 1 && !closed() && report.error === null && report.caps.length === 0 &&
+      result.verdict === "fail" && Array.isArray(result.failureKinds) && result.failureKinds.length > 0 &&
+      result.failureKinds.every((kind) => kind === "timeout");
+    record({ verdict: result.verdict, notes: result.notes, screens: result.screens ?? [], attempt,
+      effective: !retry, failureKinds: result.failureKinds ?? [], rawReport });
+    if (!retry) return result;
+  }
+  throw new Error("sweep cell exhausted without an effective verdict");
+}
+
+/** Effective cells and raw attempts are separate public summary counters. */
+export function createSweepCounts() {
+  /** @type {Record<string, number>} */
+  const counts = {};
+  /** @type {Record<string, number>} */
+  const attemptCounts = {};
+  return { counts, attemptCounts, record: (/** @type {Record<string, unknown>} */ line) => {
+    const verdict = String(line.verdict);
+    attemptCounts[verdict] = (attemptCounts[verdict] ?? 0) + 1;
+    if (line.effective !== false) counts[verdict] = (counts[verdict] ?? 0) + 1;
+  } };
+}
+
 async function main() {
   const options = parseSweepArgs(process.argv.slice(2));
   const badCard = options.cards.find((card) => !UUID.test(card));
@@ -102,55 +154,51 @@ async function main() {
   const ledger = join(repoRoot, "docs", "plan", "evidence", "qa-ledger", `${options.bead}.jsonl`);
   mkdirSync(dirname(ledger), { recursive: true });
   const hostLoad = loadavg()[0];
-  const startedAt = Date.now();
   const startedClock = performance.now();
-  /** @type {Record<string, number>} */
-  const counts = {};
+  const totals = createSweepCounts();
+  const { counts, attemptCounts } = totals;
   const record = (/** @type {Record<string, unknown>} */ line) => {
     appendFileSync(ledger, `${JSON.stringify({ ...line, mode: "sweep", bead: options.bead, commit })}\n`);
     const verdict = String(line.verdict);
-    counts[verdict] = (counts[verdict] ?? 0) + 1;
+    totals.record(line);
     say(`${verdict.padEnd(7)} ${String(line.uuid)} ${String(line.variant)}${line.as === "enemy" ? " as enemy" : ""}${line.notes === "" ? "" : ` (${String(line.notes)})`}`);
   };
 
   const session = await openQaSession({ bead: options.bead, label: "card-sweep", port: options.port, prod: false, minify: false, cwd: null });
+  /** @type {string | null} */
+  let invocationDir = null;
   const scenarioStarted = performance.now();
   let scenarioMs = 0;
   let cleanupMs = 0;
   try {
-    for (const card of options.cards) {
+    const artifacts = mkdtempSync(join(session.captureDir, "sweep-"));
+    invocationDir = artifacts;
+    const invocation = basename(artifacts);
+    cells: for (const card of options.cards) {
       for (const side of options.sides) {
         /** @type {string[] | null} */
         let eligible = null;
         for (const variant of options.variants) {
-          if (session.closed()) return;
+          if (session.closed()) break cells;
           const base = { uuid: card, variant, ...(side === "enemy" ? { as: "enemy" } : {}) };
           if (eligible !== null && !eligible.includes(variant)) {
-            record({ ...base, verdict: "skip", notes: "the card cannot take this variant", screens: [] });
+            record({ ...base, verdict: "skip", notes: "the card cannot take this variant", screens: [], attempt: 1, effective: true });
             continue;
           }
           const capture = options.capture ? `sweep-${card.slice(0, 8)}-${variant}-${side}` : "";
           const timeoutMs = options.timeoutS * 1000;
-          /** @type {{ verdict: string, notes?: string, screens?: string[], lab?: { eligibleVariants?: string[] } }} */
-          let result;
-          try {
-            const report = await session.run(
-              cardLabPlay.toString(),
-              { card, variant, as: side, timeoutMs: String(timeoutMs), capture },
-              timeoutMs + 30_000,
-            );
-            result = /** @type {typeof result | null} */ (report.result) ?? { verdict: "fail", notes: report.error ?? "the scenario returned nothing" };
-            // The report also owns errors arriving after the scenario's last
-            // read, or from a document navigation replaced. A lab rejection
-            // for an ineligible variant remains the accepted skip outcome.
-            if (report.error !== null || (result.verdict !== "skip" && report.caps.length > 0)) {
-              result = { ...result, verdict: "fail", notes: [result.notes, report.error, report.caps.length > 0 ? `__caps: ${JSON.stringify(report.caps)}` : null].filter(Boolean).join("; ") };
-            }
-          } catch (error) {
-            result = { verdict: "fail", notes: `the run failed: ${error instanceof Error ? error.message : String(error)}` };
-          }
+          const result = await runSweepCell({
+            run: (attempt) => session.run(cardLabPlay.toString(),
+              { card, variant, as: side, timeoutMs: String(timeoutMs), capture: capture === "" ? "" : `${invocation}/${capture}-attempt-${String(attempt)}` }, timeoutMs + 30_000),
+            closed: session.closed,
+            save: (report, attempt) => {
+              const filename = `sweep-${card}-${variant}-${side}-attempt-${String(attempt)}.result.json`;
+              writeFileSync(join(artifacts, filename), JSON.stringify(report, null, 2) + "\n");
+              return `${invocation}/${filename}`;
+            },
+            record: (line) => record({ ...base, ...line }),
+          });
           eligible ??= Array.isArray(result.lab?.eligibleVariants) ? result.lab.eligibleVariants : null;
-          record({ ...base, verdict: result.verdict, notes: result.notes ?? "", screens: result.screens ?? [] });
         }
       }
     }
@@ -160,8 +208,14 @@ async function main() {
     await session.close();
     cleanupMs = performance.now() - cleanupStarted;
   }
-  say(JSON.stringify({ event: "cardSweepSummary", counts, hostLoad, wallMs: { ...session.wallMs, scenario: scenarioMs, cleanup: cleanupMs, total: performance.now() - startedClock } }));
-  say(`swept in ${String(Math.round((Date.now() - startedAt) / 1000))} s at load ${hostLoad.toFixed(2)}: ${JSON.stringify(counts)}; ledger ${ledger}`);
+  const total = performance.now() - startedClock;
+  const browserLeaseWait = session.wallMs.browserLeaseWait ?? 0;
+  const summary = { event: "cardSweepSummary", counts, attemptCounts, hostLoad,
+    wallMs: { ...session.wallMs, scenario: scenarioMs, cleanup: cleanupMs, execution: total - browserLeaseWait, total } };
+  if (invocationDir !== null) writeFileSync(join(invocationDir, "summary.json"), JSON.stringify(summary, null, 2) + "\n");
+  writeFileSync(join(session.captureDir, "card-sweep.summary.json"), JSON.stringify(summary, null, 2) + "\n");
+  say(JSON.stringify(summary));
+  say(`sweep total ${(total / 1000).toFixed(1)} s: browser lease wait ${(browserLeaseWait / 1000).toFixed(1)} s, execution ${((total - browserLeaseWait) / 1000).toFixed(1)} s at load ${hostLoad.toFixed(2)}: cells ${JSON.stringify(counts)}, attempts ${JSON.stringify(attemptCounts)}; ledger ${ledger}`);
   process.exitCode = (counts.fail ?? 0) > 0 ? 1 : 0;
 }
 

@@ -416,7 +416,11 @@ node scripts/qa/run-scenario.mjs card-lab-stage --bead <id> --arg card=<uuid> --
 ```
 
 For exact ranks, supporters, both sides' energy and an opponent hand, use
-`qa.labStage(stage, { card: uuid, as: "enemy" })`. This opens a fresh
+`qa.labStage(stage, { card: uuid, as: "enemy" })`. Staging defaults to the
+remaining scenario-call deadline, including navigation and successive load
+observations. An explicit `timeout` shares that absolute limit. Direct helper
+callers without a configured call budget use the existing 15 s default.
+This opens a fresh
 `goto=card-lab&labStage=<URL-encoded JSON>` scene in one call. For example:
 
 ```js
@@ -639,11 +643,19 @@ errors, a rejected lab, a human decision with no visible enabled control,
 the card outside its expected zone (a character in play, an event in a void
 or the Banished zone), no `resolved` engine event for it, no visible board
 change, or no settled board within `--timeout` seconds (default 60) or the
-driver's stall limit; the sweep then goes on. A card whose text is pending is recorded `pending`
+driver's stall limit. A cell whose structured failures are all deadline
+timeouts, with an empty report error buffer and a runnable session, gets
+one fresh retry. Semantic failures, mixed failures, stalls, and transport
+exceptions each retain a failing effective verdict. A card whose text is pending is recorded `pending`
 rather than `pass`, and a variant the card cannot take is recorded `skip`
 without a run. Verdicts append to `docs/plan/evidence/qa-ledger/<id>.jsonl`;
 `--capture` writes each settled board to `artifacts/qa/<id>/`. It exits 1
-when any verdict is `fail`.
+when any effective cell verdict is `fail`. Ledger attempts carry
+`attempt`, `effective`, `failureKinds`, and `rawReport`; both the timeout
+failure and its retry are retained. Each invocation owns a unique artifact
+subdirectory, with separate reports and captures per attempt. Summaries show
+effective cell counts and raw attempt counts separately, plus total wall
+time, browser lease wait, and execution excluding that wait.
 
 ## Architecture
 

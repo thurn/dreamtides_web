@@ -1270,7 +1270,15 @@ It flags these failures:
 - no visible board or log change.
 
 Results go to the bead's QA ledger file, with `commit` set to
-`git merge-base HEAD staging`.
+`git merge-base HEAD staging`. A timeout-only cell gets one fresh retry
+when every structured failure is a deadline timeout, the complete report
+has no errors, and the session is runnable. Mixed semantic failures, stalls,
+unknown errors and transport exceptions keep their failing verdict.
+Both attempt ledger lines and complete raw reports remain in invocation-
+unique artifact directories; captures are distinct per attempt. Effective
+cell counts and exit status use the final attempt. Summary output separates
+raw attempt counts, effective cells, total wall time, browser lease wait and
+execution excluding lease wait.
 
 **Judged setup.** One runner call opens and stages a board with load-time
 `__caps` capture, desktop/mobile captures, and automatic runtime cleanup:
@@ -1292,6 +1300,10 @@ See README § Browser QA for the helper contracts and metadata recovery.
 For a front character with supporters, exact rank slots, either side's hand
 or both energies, a judged scenario calls
 `qa.labStage({ player: { front, back, hand, void, energy }, enemy: { ... }, enemyScript }, { card: uuid, as: side })`.
+Its default timeout is the remaining scenario-call deadline, including
+navigation and successive load observations. An explicit staging timeout
+shares that absolute limit. Direct helper callers without a configured call
+budget use the existing 15 s default.
 It opens one declared card-lab URL, validates the whole fixture, verifies its
 immutable initial history board and returns physical instance IDs by side and
 zone. UUIDs may repeat; subsequent operations use the returned physical IDs.
