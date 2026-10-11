@@ -1149,6 +1149,21 @@ the ability that enters the void partway through no longer sees the rest
 from play. Both players see which card entered the void, even one eroded
 from a hidden deck or discarded from a hidden hand.
 
+**When you discard this card:** An ability such as "When you discard this
+card, it gains reclaim 0●" works from the void. It triggers once its card has
+been discarded from your hand into your void, whatever made you discard it,
+as with "When you discard a card": your own effect, the opponent's effect,
+including one where the opponent chooses the card, a cost, or the hand-limit
+discard during the Ending phase. "You" is the card's owner, whose void it
+goes to, so a card you own that the opponent discards from their hand does
+not trigger it, nor does a created card, which ceases to exist instead of
+entering the void. A card that enters the void any other way, such as by
+being dissolved or eroded, does not trigger it, and a card already in the void
+does not see other cards discarded. "It" and "this card" name the card while
+it is in your void: if it leaves the void before the ability resolves, the
+ability does nothing to it. Both players see the card and the ability
+trigger, even when it was discarded from a hidden hand.
+
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it
 resolves it does nothing unless Y is still true.

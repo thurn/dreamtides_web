@@ -1,3 +1,6 @@
+import { energy, enemyCharacter, event, target, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDiscardSelf } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 368,
   art: { x: -0.047, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [
+    event(p.dissolve(target(enemyCharacter({ sparkAtMost: v.amplified ? 3 : 2 })))),
+    triggered(whenDiscardSelf(), p.grantReclaim(thisCardIn("void"), { costs: [energy(0)] }), { zone: "void" }),
+  ],
+  verifiedText: "1wa1svt778f",
 });

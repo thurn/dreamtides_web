@@ -8,7 +8,9 @@
  * play, as its `leftPlay` event announces it, and trigger as they were
  * then, for the side that controlled their sources, once its `dissolved`
  * event confirms the dissolve. "When … is put into your void" abilities
- * match a card's `enteredVoid`, as it is once in the void (RD-hv-umm2.77-1).
+ * match a card's `enteredVoid`, as it is once in the void (RD-hv-umm2.77-1),
+ * and "When you discard this card" abilities their own card's `discarded`,
+ * from the void it went to (RD-hv-umm2.82-1).
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
@@ -238,8 +240,10 @@ function matchKind(
         ? { subject: event.instance }
         : null;
     case "discard":
+      // "When you discard this card" matches only its own card, which `discarded` announces once it is in the void (RD-hv-umm2.82-1).
       return event.kind === "discarded" &&
         event.side === resolvePlayer(you, trigger.player) &&
+        (trigger.self !== true || event.instance === self) &&
         filterMatches(catalog, state, trigger.filter, event.instance)
         ? { subject: event.instance }
         : null;

@@ -1309,7 +1309,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
 
 Discover accepts an exact copiable-cost value expression or a strict lower
 bound (`costGreaterThan`) alongside its card filter, or a free

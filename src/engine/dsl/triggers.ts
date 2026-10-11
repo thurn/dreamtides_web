@@ -15,17 +15,31 @@ import type {
   TriggerSubject,
 } from "./types";
 
-/** "When …, …". Works in play unless `zone` names a functional zone. */
+/** Whether `trigger`, or one of its `either` branches, is "When you discard this card". */
+function concernsOwnDiscard(trigger: Trigger): boolean {
+  return trigger.on === "either" ? trigger.triggers.some(concernsOwnDiscard) : trigger.on === "discard" && trigger.self === true;
+}
+
+/**
+ * "When …, …". Works in play unless `zone` names a functional zone. "When
+ * you discard this card" sees its card only in the void it was discarded
+ * into, so an ability with it must work in the void, and only there: a
+ * discarded created card, announced while still in hand, never enters one.
+ */
 export function triggered(
   trigger: Trigger,
   effect: Effect,
   options: { readonly zone?: FunctionalZone; readonly condition?: Condition; readonly oncePerTurn?: boolean } = {},
 ): TriggeredAbility {
+  const zone = options.zone ?? "play";
+  if (concernsOwnDiscard(trigger) && zone !== "void") {
+    throw new Error(`"When you discard this card" works from the void, not "${zone}"`);
+  }
   return {
     kind: "triggered",
     trigger,
     effect,
-    zone: options.zone ?? "play",
+    zone,
     ...(options.condition === undefined ? {} : { condition: options.condition }),
     ...(options.oncePerTurn === true ? { oncePerTurn: true } : {}),
   };
@@ -70,6 +84,15 @@ export function whenDraw(player: PlayerRef = "you", nth?: number): Trigger {
 
 export function whenDiscard(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
   return { on: "discard", player, filter };
+}
+
+/**
+ * "When you discard this card": its own discard, by any cause, matched once
+ * the card is in its owner's void. The ability works from the void, so
+ * `triggered` requires `zone: "void"`.
+ */
+export function whenDiscardSelf(): Trigger {
+  return { on: "discard", player: "you", filter: {}, self: true };
 }
 
 export function whenAbandon(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {

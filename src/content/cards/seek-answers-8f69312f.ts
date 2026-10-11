@@ -1,3 +1,6 @@
+import { event, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDiscardSelf } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 505,
   art: { x: -0.21, y: 0.242, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(p.sequence(p.draw(2), p.discard(1))),
+    triggered(whenDiscardSelf(), p.grantReclaim(thisCardIn("void")), { zone: "void" }),
+  ],
+  verifiedText: "1sd8napbutq",
 });

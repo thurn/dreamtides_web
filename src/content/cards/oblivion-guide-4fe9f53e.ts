@@ -1,3 +1,6 @@
+import { energy, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDiscardSelf } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +20,6 @@ export default card({
   artOwned: true,
   cardNumber: 375,
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenDiscardSelf(), p.grantReclaim(thisCardIn("void"), { costs: [energy(0)] }), { zone: "void" })],
+  verifiedText: "14ntb5937bu",
 });

@@ -428,7 +428,14 @@ export type Trigger =
   | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly nth?: number }
   | { readonly on: "materialize"; readonly subject: TriggerSubject }
   | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
-  | { readonly on: "discard"; readonly player: PlayerRef; readonly filter: CardFilter }
+  /**
+   * "When you discard a card": each card matching `filter` discarded from
+   * `player`'s hand, whatever caused the discard (rules § Zones → Hand). With
+   * `self`, "When you discard this card": only the ability's own card, once
+   * it is in the void it was discarded into, so the ability works from the
+   * void (rules § Ability Types → When you discard this card).
+   */
+  | { readonly on: "discard"; readonly player: PlayerRef; readonly filter: CardFilter; readonly self?: true }
   | { readonly on: "abandon"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "leavesPlay"; readonly subject: TriggerSubject }
   /**
