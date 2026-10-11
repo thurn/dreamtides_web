@@ -8,6 +8,7 @@
 import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
 import type { Effect } from "../effects/registry";
+import type { EffectNode } from "../effects/types";
 import type { Zone } from "../state/ids";
 
 /**
@@ -203,10 +204,27 @@ export type ZoneCardSpec = ZoneTargetSpec | ZoneEverySpec | ZoneTopSpec | ZoneSe
 /** Any target chosen at play time: characters in play, cards on the stack, or cards in a void. */
 export type PlayTimeTarget = TargetSpec | StackTargetSpec | ZoneTargetSpec;
 
+/**
+ * "That card" in a resolving effect: the cards that changed zones or ceased
+ * to exist while `node`, a node of the same effect, last resolved, as they
+ * were just before it resolved (rules § Zone Changes → Cards an effect moved).
+ * Before `node` resolves it names no card.
+ */
+export interface MovedCardRef {
+  readonly kind: "movedCards";
+  readonly node: EffectNode;
+}
+
 /** A number an effect reads when it resolves. */
 export type ValueExpr =
   | number
   | XValue
+  /**
+   * "That card's cost": the copiable cost of the cards `of` names, captured
+   * just before they moved, so a card that then ceased to exist still has
+   * one; their total when there are several, and 0 when there are none.
+   */
+  | { readonly value: "costOf"; readonly of: MovedCardRef }
   /** A fixed amount added to a value, such as a discarded card’s cost plus one. */
   | { readonly value: "plus"; readonly of: ValueExpr; readonly amount: number }
   | { readonly value: "count"; readonly of: CharacterSelector }
@@ -304,8 +322,9 @@ export type PaymentCost =
   | EnergyCost
   /** ☾: exhausts the source, a ready back-rank character or the avatar. */
   | { readonly cost: "exhaustSelf" }
-  /** Abandon characters you control that match the selector. */
-  | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number }
+  /** Abandon characters you control that match the selector; captureCost captures one character’s copiable cost as X. */
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number; readonly captureCost?: never }
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: 1; readonly captureCost: true }
   /** Discard matching hand cards. Variable count captures their count as X; captureCost captures one card’s copiable cost as X. */
   | { readonly cost: "discard"; readonly count: number | "x"; readonly filter: CardFilter; readonly captureCost?: never }
   | { readonly cost: "discard"; readonly count: 1; readonly filter: CardFilter; readonly captureCost: true }

@@ -1091,7 +1091,8 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
 - ☾ (`exhaustSelf`; back-rank characters and avatars only);
 - discard matching hand cards (`discardCostFilter`), with a fixed count, an
   X count, or one card whose copiable cost is captured as X;
-- abandon;
+- abandon, with a fixed count, or one character whose copiable cost is
+  captured as X (`abandonCostCapture`);
 - banish from void;
 - reveal from hand;
 - counters;
@@ -1113,7 +1114,9 @@ copiable cost after variant and deck-entry modifications, with an X energy
 part counting as zero, before payment. The captured value travels with the
 stack item. All energy-X, count-X and captured-X payments in one plan agree
 on a shared binding; a conflicting selection has no feasible continuation.
-`plus` adds a fixed offset to a value such as a captured cost.
+`plus` adds a fixed offset to a value such as a captured cost. An abandon
+cost's single-card capture reads the chosen character the same way before
+payment, so a figment that then ceases to exist captures 0● (C13).
 
 **Energy-X legality** comes from the definition's range, which defaults to
 `min: 1`. Widen it to 0 only when X=0 does something meaningful.
@@ -1272,20 +1275,34 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices) | `forEach`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, cost bounds that may read the source's X, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | |
-| Values | constant, `x`, `count(selector)`, hand size, `supporting` (C9), `times`, `lockedAtResolution` | stored counters, turn counters |
+| Values | constant, `x`, `count(selector)`, hand size, `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`), `energyAtLeast`, `costPaid`, `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
 | Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
 
-Discover accepts an exact copiable-cost value expression alongside its card
-filter, or a free resolution-time cost choice. The free choice is a
+Discover accepts an exact copiable-cost value expression or a strict lower
+bound (`costGreaterThan`) alongside its card filter, or a free
+resolution-time cost choice. The free choice is a
 `chooseNumber` prompt with its own `discoverCost` role (a paid X keeps
 `chooseX`) over the public catalog's fixed-cost ceiling plus one, preserving
 a canonical no-match choice. The policy manifest
 carries that source-catalog ceiling even when its entity list is a subset.
 Card content may specify `xMinimum` as authored rules metadata when a paid
 X of zero has a meaningful effect; other printed X costs retain minimum one.
+
+**"That card"** in a resolving effect is `cardsMovedBy(node)`, naming the
+cards an earlier node of the same effect moved (rules § Zone Changes → Cards
+an effect moved); `costOf` reads their copiable cost, totalled, and 0 when the
+node moved none. Every node runs through `resolveNode` (`effects/interpreter.ts`),
+and the resolution's `MovedCards` record (`EffectEnv.moved`), shared by every
+nested environment, tracks only the nodes such a value names: before one
+resolves it reads the copiable cost of every card in the battle, and
+afterwards keeps those that changed zones or ceased to exist meanwhile,
+replacing the node's previous record. A created card that ceased to exist so
+keeps its cost. The record lives only as long as the resolution, so a step's
+replay rebuilds it from the step's answers. Static abilities read no moved
+card.
 
 `conditionCardCounts` counts the specified player’s cards in a deck, hand, or
 void when the condition is checked. Its optional typed filter reads effective

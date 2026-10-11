@@ -9,14 +9,18 @@ import { SIDES } from "../../state/ids";
 import { shuffleInPlace } from "../../state/rng";
 import type { BattleState } from "../../state/types";
 import type { StepContext } from "../../steps/types";
-import { definePrimitive, type EffectNode } from "../types";
+import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 import { evaluate, everyNode } from "../interpreter";
 
-/** An exact cost read from the effect, or a free cost choice made as Discover resolves. */
+/**
+ * An exact cost or a strict lower bound read from the effect ("cost greater
+ * than that card's cost"), or a free cost choice made as Discover resolves.
+ */
 type DiscoverCost =
-  | { readonly costExactly: ValueExpr; readonly chooseCost?: never }
-  | { readonly chooseCost: true; readonly costExactly?: never }
-  | { readonly costExactly?: never; readonly chooseCost?: never };
+  | { readonly costExactly: ValueExpr; readonly costGreaterThan?: never; readonly chooseCost?: never }
+  | { readonly costGreaterThan: ValueExpr; readonly costExactly?: never; readonly chooseCost?: never }
+  | { readonly chooseCost: true; readonly costExactly?: never; readonly costGreaterThan?: never }
+  | { readonly costExactly?: never; readonly costGreaterThan?: never; readonly chooseCost?: never };
 
 /**
  * "Discover a <filter>" (rules § Keywords and Effects → Discover): up to
@@ -37,16 +41,7 @@ export const discoverPrimitive = definePrimitive<DiscoverNode>({
   op: "discover",
   resolve(ctx, node, env) {
     const side = env.controller;
-    const cost = node.chooseCost === true
-      ? ctx.choose<ChooseNumberPrompt>({
-          kind: "chooseNumber",
-          side,
-          purpose: env.purpose("discoverCost"),
-          min: 0,
-          max: ctx.catalog.maximumFixedCost + 1,
-        })
-      : node.costExactly === undefined ? undefined : evaluate(ctx, node.costExactly, env);
-    const options = discoverOptions(ctx, side, node.filter, cost);
+    const options = discoverOptions(ctx, side, node.filter, costMatcher(ctx, node, env));
     if (options.length === 0) return;
     const [chosen] = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
@@ -70,10 +65,36 @@ function matchingDeckCards(state: BattleState, catalog: EngineCatalog, side: Sid
   return state.sides[side].deck.filter((id) => matchesFilter(filterSubjectOf(state, catalog, id, layers.of(id)), filter));
 }
 
+/**
+ * Which copiable costs a Discover's cost criterion accepts, settled as it
+ * resolves: a free cost choice prompts first, and a value is read once.
+ */
+function costMatcher(ctx: StepContext, node: DiscoverNode, env: EffectEnv): (cost: number) => boolean {
+  if (node.chooseCost === true) {
+    const chosen = ctx.choose<ChooseNumberPrompt>({
+      kind: "chooseNumber",
+      side: env.controller,
+      purpose: env.purpose("discoverCost"),
+      min: 0,
+      max: ctx.catalog.maximumFixedCost + 1,
+    });
+    return (cost) => cost === chosen;
+  }
+  if (node.costExactly !== undefined) {
+    const exactly = evaluate(ctx, node.costExactly, env);
+    return (cost) => cost === exactly;
+  }
+  if (node.costGreaterThan !== undefined) {
+    const above = evaluate(ctx, node.costGreaterThan, env);
+    return (cost) => cost > above;
+  }
+  return () => true;
+}
+
 /** Up to `config.discoverOptions` distinct matching cards of `side`'s deck, in the order drawn. */
-function discoverOptions(ctx: StepContext, side: Side, filter: CardFilter, cost: number | undefined): InstanceId[] {
+function discoverOptions(ctx: StepContext, side: Side, filter: CardFilter, costMatches: (cost: number) => boolean): InstanceId[] {
   const pool = matchingDeckCards(ctx.state, ctx.catalog, side, filter).filter(
-    (id) => cost === undefined || copiableCostOf(ctx.state, ctx.catalog, id) === cost,
+    (id) => costMatches(copiableCostOf(ctx.state, ctx.catalog, id)),
   );
   const options: InstanceId[] = [];
   while (options.length < ctx.state.config.discoverOptions && pool.length > 0) {

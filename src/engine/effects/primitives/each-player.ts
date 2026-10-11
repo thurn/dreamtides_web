@@ -1,5 +1,5 @@
 import { opponent } from "../../state/ids";
-import { everyNode, everyTarget } from "../interpreter";
+import { everyNode, everyTarget, resolveNode } from "../interpreter";
 import { primitiveDefinition } from "../registry";
 import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 
@@ -28,7 +28,7 @@ export const eachPlayerPrimitive = definePrimitive<EachPlayerNode>({
         ...env,
         controller: side,
         run(effect) {
-          primitiveDefinition(effect.op).resolve(ctx, effect, inner);
+          resolveNode(ctx, effect, inner);
         },
       };
       inner.run(node.effect);

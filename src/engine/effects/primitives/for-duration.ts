@@ -1,6 +1,6 @@
 import type { Duration } from "../../dsl/types";
 import { sharedDuration } from "../../rules/durations";
-import { primitiveDefinition } from "../registry";
+import { resolveNode } from "../interpreter";
 import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 
 /**
@@ -25,7 +25,7 @@ export const forDurationPrimitive = definePrimitive<ForDurationNode>({
       ...env,
       duration,
       run(effect) {
-        primitiveDefinition(effect.op).resolve(ctx, effect, inner);
+        resolveNode(ctx, effect, inner);
       },
     };
     inner.run(node.effect);

@@ -8,7 +8,7 @@ import {
   resolvePlayer,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
-import { cardMatchesFilter, characteristics } from "../continuous/characteristics";
+import { cardMatchesFilter, characteristics, copiableCostOf } from "../continuous/characteristics";
 import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
@@ -17,7 +17,7 @@ import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../st
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
 import { primitiveDefinition } from "./registry";
-import type { CardRef, EffectEnv, EffectNode } from "./types";
+import type { CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
 
 /** The mode chosen at play time for each modal node of an effect. */
 export type ChosenModes = ReadonlyMap<EffectNode, number>;
@@ -476,6 +476,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     source: env.source,
     x: env.x,
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source).length,
+    movedCosts: (ref) => env.moved.costs(ref.node),
   });
 }
 
@@ -662,6 +663,53 @@ export interface ResolveOptions {
   readonly choices: EffectChoices;
 }
 
+/** The nodes whose moved cards a value somewhere in `effect` reads (`MovedCardRef`). */
+function movedCardNodes(effect: EffectNode): Set<EffectNode> {
+  const nodes = new Set<EffectNode>();
+  const seen = new Set<object>();
+  const visit = (value: unknown): void => {
+    if (typeof value !== "object" || value === null || seen.has(value)) return;
+    seen.add(value);
+    if ("kind" in value && value.kind === "movedCards" && "node" in value) nodes.add(value.node as EffectNode);
+    for (const field of Object.values(value)) visit(field);
+  };
+  visit(effect);
+  return nodes;
+}
+
+/**
+ * A fresh record of the cards the nodes of `root` move as one resolution
+ * runs, kept only for the nodes a value of `root` reads them from.
+ */
+function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
+  const read = movedCardNodes(root);
+  const recorded = new Map<EffectNode, readonly number[]>();
+  return {
+    track(node, resolve) {
+      if (!read.has(node)) {
+        resolve();
+        return;
+      }
+      const { state, catalog } = ctx;
+      const before = Object.values(state.instances).map(({ id }) => ({ id, cost: copiableCostOf(state, catalog, id) }));
+      const since = state.clock;
+      resolve();
+      recorded.set(node, before.filter(({ id }) => {
+        const now = state.instances[id];
+        return now === undefined || now.enteredZoneAt > since;
+      }).map(({ cost }) => cost));
+    },
+    costs(node) {
+      return recorded.get(node) ?? [];
+    },
+  };
+}
+
+/** Resolves one node of an effect in `env`, tracking the cards it moves (`MovedCards`). */
+export function resolveNode(ctx: StepContext, node: EffectNode, env: EffectEnv): void {
+  env.moved.track(node, () => primitiveDefinition(node.op).resolve(ctx, node, env));
+}
+
 /** Resolves an effect tree with plain synchronous rules code, under the modes chosen at play time. */
 export function resolveEffect(ctx: StepContext, effect: EffectNode, options: ResolveOptions): void {
   const chosen = chosenModes(effect, options.choices.modes);
@@ -678,6 +726,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     x: options.x,
     optionalPaid: options.optionalPaid,
     duration: null,
+    moved: movedCardRecord(ctx, options.root ?? effect),
     modeOf(node) {
       return chosen.get(node) ?? null;
     },
@@ -686,7 +735,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
       return index < 0 ? null : (options.choices.targets[index] ?? null);
     },
     run(node) {
-      primitiveDefinition(node.op).resolve(ctx, node, env);
+      resolveNode(ctx, node, env);
     },
     purpose(role) {
       return purposeOf(options.source, options.origin, options.ability, role);
@@ -716,7 +765,7 @@ export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: E
       return index < 0 ? env.targetsOf(spec) : (choices.targets[index] ?? env.targetsOf(spec));
     },
     run(node) {
-      primitiveDefinition(node.op).resolve(ctx, node, inner);
+      resolveNode(ctx, node, inner);
     },
   };
   inner.run(effect);

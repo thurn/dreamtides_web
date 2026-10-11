@@ -660,6 +660,14 @@ after variant transforms and deck-entry modifications, with an X energy part
 counting as 0. The value persists with the stack item even if that card changes
 zones or characteristics before resolution.
 
+An abandon cost may likewise name the abandoned character's cost, as in
+"Abandon a character: A player erodes X, where X is that character's cost."
+That value is captured before payment from the character's copiable values in
+the same way and persists with the stack item. A figment, which ceases to exist
+when abandoned, has a cost of 0●, and a figment copy has the cost it copied.
+Any character the player controls can pay the cost, including the character
+whose ability it is.
+
 **Discard X cards:** X is the number of cards chosen to pay this additional
 cost. The variable-discard DSL admits zero; authors use it only when zero
 has a meaningful effect under the contextual X rule, such as drawing a fixed
@@ -850,7 +858,8 @@ all of them; if none match, nothing happens and your deck is not shuffled.
 Putting the card into your hand is not a draw.
 
 A cost criterion compares the card's copiable cost (see [Cost
-changes](#costs-requirements-and-x)). “Cost X●” means exactly X●. When the
+changes](#costs-requirements-and-x)). “Cost X●” means exactly X●, and
+“cost greater than X●” means more than X●. When the
 effect says “Choose a value of X” solely for this Discover criterion, choose
 X as the effect resolves and pay no energy for the choice. The canonical
 choices are the integers from 0 through the public card catalog's greatest
@@ -1183,6 +1192,13 @@ Gained spark and persistent statuses (such as reclaimed and Offering) travel
 with the card across zones, while spark or keywords a card merely _has_ from a static
 ability, and any counters on the card, do not (see [Spark](#spark) and
 [Counters](#counters)).
+
+**Cards an effect moved:** When a resolving effect refers back to a card one
+of its own parts moved, as in "You may discard a card to discover a character
+with cost greater than that card's cost," it reads that card's cost as it was
+just before the move: its copiable cost (see [Cost
+changes](#costs-requirements-and-x)). A card that ceased to exist instead of
+moving, such as a created card discarded from a hand, still has that cost.
 
 ## Created Cards
 

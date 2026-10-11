@@ -40,6 +40,24 @@ export interface SharedDuration {
   finish(ctx: StepContext): void;
 }
 
+/**
+ * The cards nodes of one resolving effect moved, for the nodes a value of the
+ * effect reads them from (`MovedCardRef`), shared by every nested environment
+ * of that resolution. A step's replay rebuilds it from the step's answers,
+ * like everything else the resolution computed.
+ */
+export interface MovedCards {
+  /**
+   * Resolves `node` through `resolve`. For a node a value reads, it first
+   * reads the copiable cost of every card in the battle, and afterwards
+   * records those that changed zones or ceased to exist meanwhile, replacing
+   * what the node recorded the last time it resolved.
+   */
+  track(node: EffectNode, resolve: () => void): void;
+  /** The copiable costs, read just before it resolved, of the cards `node` moved the last time it resolved; none before that. */
+  costs(node: EffectNode): readonly number[];
+}
+
 /** What a primitive sees while it resolves. */
 export interface EffectEnv {
   /** The card or emblem whose ability this is. */
@@ -62,6 +80,8 @@ export interface EffectEnv {
   readonly optionalPaid: readonly boolean[];
   /** The duration a `forDuration` node gives the continuous primitives inside it; `null` outside one. */
   readonly duration: SharedDuration | null;
+  /** The cards this resolution's nodes moved, for "that card" values (`costOf`). */
+  readonly moved: MovedCards;
   /** The mode chosen at play time for a modal node of this effect, or `null` for a node off the chosen path. */
   modeOf(node: EffectNode): number | null;
   /** The targets chosen at play time for a target spec in this effect, or `null` if none were chosen. */

@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.67",
+  "phase": 5,
+  "baseOid": "ebeecef8dd46162a76c7f1375f790c57925221b9",
+  "implementMin": 55,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "review": 33,
+    "knip": 2.6,
+    "focused": 2,
+    "fuzz": 58,
+    "sweep": 117,
+    "judged": 61
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 6.85,
+  "testDelta": {
+    "files": 1,
+    "lines": 320,
+    "jsdomFiles": 0,
+    "cases": 12
+  },
+  "friction": [
+    {
+      "tag": "qa-scene-unreachable-state",
+      "minutes": 12,
+      "note": "The card-lab solver deck holds only 1● characters and qa.labStage/qa.labAddCard cannot stage deck cards, so a Discover lower bound has nothing to offer; the judged scenario drove the engine debug panel's deck zone directly to put 2●, 3● and 5● characters on top of the deck."
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+import { cardsMovedBy, conditionCardCounts, costOf } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,10 @@ export default card({
   artOwned: false,
   cardNumber: 185,
   isStarter: false,
-  pending: true,
+  abilities: () => {
+    const payment = p.discard(1);
+    const discovery = p.discover({ cardType: "character" }, { costGreaterThan: costOf(cardsMovedBy(payment)) });
+    return [triggered(onMaterialized(), p.ifThen(conditionCardCounts("hand", 1), p.optional(p.sequence(payment, discovery))))];
+  },
+  verifiedText: "29mwwv7ru0",
 });

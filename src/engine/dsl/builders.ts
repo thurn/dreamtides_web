@@ -1,6 +1,7 @@
 /** Builders for abilities, targets, selectors, and values. Primitive builders live in their modules. */
 import type { CardSubtype } from "../../types/card-identity";
 import type { Effect } from "../effects/registry";
+import type { EffectNode } from "../effects/types";
 import type {
   Ability,
   ActivatedAbility,
@@ -18,6 +19,7 @@ import type {
   EnergyXCost,
   FunctionalZone,
   Keyword,
+  MovedCardRef,
   OptionalCost,
   PaymentCost,
   PlayerRef,
@@ -83,6 +85,14 @@ export function exhaustSelf(): PaymentCost {
 /** "Abandon a character" (or N characters) matching the selector; always your own. */
 export function abandonCost(extra: Omit<CharacterSelector, "controller"> = {}, count = 1): PaymentCost {
   return { cost: "abandon", selector: { controller: "you", ...extra }, count };
+}
+
+/**
+ * "Abandon a character: …, where X is that character's cost": one matching
+ * character, whose copiable cost is captured as X before it is abandoned.
+ */
+export function abandonCostCapture(extra: Omit<CharacterSelector, "controller"> = {}): PaymentCost {
+  return { cost: "abandon", selector: { controller: "you", ...extra }, count: 1, captureCost: true };
 }
 
 /** "Abandon this character": only the ability's source pays. */
@@ -263,6 +273,16 @@ export function x(): XValue {
 /** A fixed offset, such as "cost 1● higher". */
 export function plus(of: ValueExpr, amount: number): ValueExpr {
   return { value: "plus", of, amount };
+}
+
+/** "That card", for a value: the cards `node`, an earlier node of the same effect, moved. */
+export function cardsMovedBy(node: EffectNode): MovedCardRef {
+  return { kind: "movedCards", node };
+}
+
+/** "That card's cost": the copiable cost of the cards a node moved, read just before they moved. */
+export function costOf(of: MovedCardRef): ValueExpr {
+  return { value: "costOf", of };
 }
 
 /**

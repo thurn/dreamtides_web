@@ -38,7 +38,7 @@ export interface PlannedCost {
 
 /** How a list of costs will be paid, settled by play-time prompts before the commit point. */
 export interface CostPlan {
-  /** Shared X chosen for energy or captured from a discarded count or card cost. */
+  /** Shared X chosen for energy or captured from a discarded count, or a discarded or abandoned card's cost. */
   readonly x: number | null;
   /**
    * The whole energy cost — the fixed energy (top-level, and each chosen
@@ -277,10 +277,13 @@ export function planCosts(
       min: count ?? 0,
       max: count ?? remaining.length,
     }, allAnswersPayable ? { allAnswersPayable: true } : undefined);
-    if (cost.cost === "discard" && (variable || cost.captureCost === true)) {
-      if (cost.captureCost === true && chosen.length !== 1) throw new Error("A discarded cost value requires exactly one card");
-      const value = cost.captureCost === true ? copiableCostOf(state, catalog, chosen[0]) : chosen.length;
-      if (capturedX !== null && capturedX !== value) throw new Infeasible("Discard payment disagrees with X");
+    // A captured card cost (a discarded or abandoned card's) is read now,
+    // before payment, so it holds even for a figment that then ceases to exist.
+    const captures = "captureCost" in cost && cost.captureCost === true;
+    if (captures || (cost.cost === "discard" && variable)) {
+      if (captures && chosen.length !== 1) throw new Error("A captured cost value requires exactly one card");
+      const value = captures ? copiableCostOf(state, catalog, chosen[0]) : chosen.length;
+      if (capturedX !== null && capturedX !== value) throw new Infeasible("Card payment disagrees with X");
       capturedX = value;
     }
     used.push(...chosen);

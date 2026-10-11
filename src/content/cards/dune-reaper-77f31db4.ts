@@ -1,3 +1,5 @@
+import { abandonCostCapture, activated, x } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 488,
   art: { x: -0.322, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonCostCapture()], p.choosePlayer((player) => p.erode(x(), player)))],
+  verifiedText: "1kpl0u6f8nt",
 });
