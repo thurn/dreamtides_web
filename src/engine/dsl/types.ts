@@ -202,12 +202,18 @@ export interface ZoneTargetSpec extends ZoneCardsBase {
   readonly another?: boolean;
 }
 
-/** "Cards in your void", "your hand", "characters in your deck": every matching card, in zone order, chosen by nobody. */
+/**
+ * "Cards in your void", "your hand", "characters in your deck": every
+ * matching card, in zone order, chosen by nobody. `costAtMost`, read once as
+ * the effect resolves, keeps only cards whose copiable cost is at most that
+ * value ("each ≤X● cost character in your void").
+ */
 export interface ZoneEverySpec extends ZoneCardsBase {
   readonly pick: "every";
   readonly zone: CountedZone;
   /** Excludes the effect's source. */
   readonly another?: boolean;
+  readonly costAtMost?: ValueExpr;
 }
 
 /** "The top card of your deck": those of the top `count` cards that match, top first; fewer when the deck is shorter. */
@@ -512,6 +518,12 @@ export type Trigger =
   | { readonly on: "challengeWith"; readonly count: number; readonly selector: CharacterSelector }
   | { readonly on: "startOfTurn" }
   | { readonly on: "startOfFirstTurn" }
+  /**
+   * "At end of turn": as the Ending phase of each turn begins, or with
+   * `player` only of that player's turns ("At the end of your turn"). It
+   * triggers before the Ending phase's cleanup (rules § Turn Structure).
+   */
+  | { readonly on: "endOfTurn"; readonly player?: PlayerRef }
   /** Combined triggers such as "▸Materialized, ▸Dawn" fire on each occasion. */
   | { readonly on: "either"; readonly triggers: readonly Trigger[] };
 

@@ -102,7 +102,8 @@ interface BattleState {
   clock: number;                       // zone-entry clock for enteredZoneAt
   readonly config: BattleConfig;       // every engine tunable (below)
   turn: TurnState;                     // round, turnNumber, active, phase, sideTurns, extra, lastNormal,
-                                       // extraTurns (last element first, C8), challengeLane, beginning
+                                       // extraTurns (last element first, C8), challengeLane, beginning,
+                                       // endingCleanup (present only while Ending's cleanup waits)
   sides: Record<Side, SideState>;
   instances: Record<InstanceId, CardInstance>;
   knownTo: Record<Side, InstanceId[]>; // hidden cards each side can identify (view/knowledge.ts)
@@ -749,9 +750,13 @@ The phase machine follows rules § Turn Structure, encoded once:
 6. **Night.** `▸Night` and `▸Challenge` triggers, then a Fast window for the
    active side.
 7. **Challenge.** One `challengeLane` step per lane, F0→F8.
-8. **Ending.** The hand-limit prompt (P6). Then ephemeral and offering
-   banishes. Then "until end of turn" expiry and F3 returns. Then exhaust
-   clears for everything, avatars included.
+8. **Ending.** "At end of turn" triggers (`atEndOfTurn`) match the
+   `phaseChanged` that enters it and resolve first (RD-hv-umm2.86-1): while
+   any wait, the optional persisted `turn.endingCleanup: true` holds the
+   cleanup for the next automatic `advancePhase`; with none, the cleanup runs
+   in the entering step. The cleanup is the hand-limit prompt (P6), then
+   ephemeral and offering banishes, then "until end of turn" expiry and F3
+   returns, then exhaust clears for everything, avatars included.
 
 A new turn (`beginNextTurn`, `rules/turn.ts`) takes pending extra turns
 first, most recent first (C8), and is a draw once more than `turnLimit`
@@ -1379,8 +1384,9 @@ emits nothing but `noLegalTarget`, so a
 reference into a hidden hand or deck names no card in any view, event,
 prompt, or log; only the primitive acting on the cards can show them
 (RD-hv-umm2.59-2). The card-lab solver stages a matching void card for each
-void target, a played character's ▸Materialized triggers included, and a
-matching opponent hand card for each choice from the opponent's hand
+void target, a played character's ▸Materialized triggers included, one
+matching void card for each "each … in your void" a materialize takes (within
+its cost bound at the least X), and a matching opponent hand card for each choice from the opponent's hand
 (`discardChosen`, `banishChosen`). The static `grantCardKeyword` keeps its own `cardsIn` set, read
 through the layer evaluation.
 
@@ -1395,12 +1401,12 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `randomIn`, `thisCardIn`) | |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn` with an optional `costAtMost` value read as the effect resolves, `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
 
 Discover accepts an exact copiable-cost value expression or a strict lower
 bound (`costGreaterThan`) alongside its card filter, or a free

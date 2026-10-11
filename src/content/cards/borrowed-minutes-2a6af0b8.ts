@@ -1,3 +1,6 @@
+import { everyIn, event, x } from "../../engine/dsl/builders";
+import { atEndOfTurn } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -8,6 +11,7 @@ export default card({
     "Materialize each ≤X● cost character in your void. Banish them at end of turn.",
   energyCost: 1,
   energyCosts: ["1", "X"],
+  xMinimum: 0,
   cardType: "Event",
   subtype: "",
   rarity: "Common",
@@ -19,5 +23,13 @@ export default card({
   artOwned: false,
   cardNumber: 370,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(
+      p.withMaterialized(
+        p.materialize(everyIn("void", { cardType: "character" }, { costAtMost: x() })),
+        p.delayed(atEndOfTurn(), p.banishCards([p.capturedCards()])),
+      ),
+    ),
+  ],
+  verifiedText: "dg9bv8tlnw",
 });

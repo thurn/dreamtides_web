@@ -158,6 +158,7 @@ function copyTurn(turn: TurnState): TurnState {
     extraTurns: turn.extraTurns.slice(),
     challengeLane: turn.challengeLane,
     beginning: turn.beginning,
+    ...(turn.endingCleanup === true ? { endingCleanup: true } : {}),
   };
 }
 

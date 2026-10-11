@@ -176,6 +176,24 @@ function opponentHandChoices(effect: Effect): CardFilter[] {
 }
 
 /**
+ * The void cards an effect materializes by "each … in your void"
+ * (`materialize(everyIn("void", …))`): each needs one matching card in that
+ * void, whose copiable cost meets the reference's cost bound for the least X
+ * the play can choose ("each ≤X● cost character in your void").
+ */
+function voidMaterializations(effect: Effect, xRange: XRange | null): { player: PlayerRef; filter: CardFilter }[] {
+  return everyNode(effect).flatMap((node) => {
+    const materialized = node as Effect;
+    if (materialized.op !== "materialize" || "op" in materialized.from) return [];
+    const { from } = materialized;
+    if (from.kind !== "inZone" || from.pick !== "every" || from.zone !== "void") return [];
+    const bound = from.costAtMost;
+    const atMost = bound === undefined ? undefined : typeof bound === "number" ? bound : typeof bound === "object" && bound.value === "x" ? xRange?.min ?? 0 : 0;
+    return [{ player: from.player, filter: { ...from.filter, ...(atMost === undefined ? {} : { costAtMost: Math.min(atMost, from.filter.costAtMost ?? atMost) }) } }];
+  });
+}
+
+/**
  * The characters an effect's `abandon` nodes choose as it resolves ("Each
  * player abandons a non-figment character"): each needs a matching character
  * its chooser controls, relative to the effect's controller, so that the
@@ -281,7 +299,9 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
  * and a choice from the opponent's hand gets a matching card in that hand
  * (`opponentHandChoices`); a character abandoned as the effect resolves gets
- * a matching character on each chooser's side (`abandonChoices`). A void banish additional cost gets matching void cards
+ * a matching character on each chooser's side (`abandonChoices`); "each …
+ * in your void" a materialize takes gets one matching void card
+ * (`voidMaterializations`). A void banish additional cost gets matching void cards
  * (`costNeeds`): a payer-void banish its fixed count, or its least X, in
  * `side`'s void; a banish from a selected void its fixed count in the
  * opponent's void when it names the opponent, else in `side`'s void; discard and reveal costs get matching cards
@@ -322,6 +342,9 @@ export function labBoard(
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
+  for (const { player, filter } of played.flatMap((effect) => voidMaterializations(effect, xRange))) {
+    voids[player === "you" ? side : opponent(side)].push(cardFor(engine, filter, pool));
+  }
   for (const { choosers, selector } of played.flatMap(abandonChoices)) {
     for (const chooser of choosers) back[chooser === "you" ? side : opponent(side)].push(characterFor(engine, selector, pool, xRange));
   }

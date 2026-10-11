@@ -43,15 +43,30 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
       state.turn.challengeLane = 0;
       return;
     case "ending":
-      discardToHandLimit(ctx);
-      banishEndOfTurnStatuses(ctx);
-      // "Until end of turn" ends; cards banished until then return (F3).
-      expireAt(ctx, { at: "endOfTurn" });
-      clearExhaustion(ctx);
+      // "At end of turn" abilities triggered as the phase began; while they
+      // wait, the cleanup waits for them in the next automatic step.
+      if (state.triggerQueue.length > 0) {
+        state.turn.endingCleanup = true;
+        return;
+      }
+      endingCleanup(ctx);
       return;
     default:
       return;
   }
+}
+
+/**
+ * The Ending phase's cleanup, after its "at end of turn" abilities resolve:
+ * the hand-limit discard, Ephemeral and Offering banishes, "until end of
+ * turn" expiry with F3 returns, then exhaustion clears.
+ */
+function endingCleanup(ctx: StepContext): void {
+  discardToHandLimit(ctx);
+  banishEndOfTurnStatuses(ctx);
+  // "Until end of turn" ends; cards banished until then return (F3).
+  expireAt(ctx, { at: "endOfTurn" });
+  clearExhaustion(ctx);
 }
 
 /** Ending: the active side chooses cards to discard down to the hand limit (P6). */
@@ -200,13 +215,20 @@ function startTurn(ctx: StepContext, extra: boolean): void {
 
 /**
  * Leaves the current phase and enters the next, or starts the next turn
- * after Ending. A turn that is still beginning enters its Dreamwell phase.
+ * after Ending. A turn that is still beginning enters its Dreamwell phase,
+ * and an Ending phase whose cleanup waited for its "at end of turn"
+ * abilities runs it.
  */
 export function advancePhase(ctx: StepContext): void {
   const { state } = ctx;
   if (state.turn.beginning) {
     state.turn.beginning = false;
     enterPhase(ctx, "dreamwell");
+    return;
+  }
+  if (state.turn.endingCleanup === true) {
+    delete state.turn.endingCleanup;
+    endingCleanup(ctx);
     return;
   }
   const current = state.turn.phase;

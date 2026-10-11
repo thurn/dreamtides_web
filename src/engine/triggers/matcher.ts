@@ -60,6 +60,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   challengeWith: ["challengersDesignated"],
   startOfTurn: ["turnStarted"],
   startOfFirstTurn: ["turnStarted"],
+  endOfTurn: ["phaseChanged"],
 };
 
 /** Event kinds some trigger can match; other events skip the matcher. */
@@ -298,6 +299,12 @@ function matchKind(
       return event.kind === "turnStarted" && event.side === you ? NO_SUBJECT : null;
     case "startOfFirstTurn":
       return event.kind === "turnStarted" && event.side === you && state.turn.sideTurns[you] === 1 ? NO_SUBJECT : null;
+    case "endOfTurn":
+      return event.kind === "phaseChanged" &&
+        event.phase === "ending" &&
+        (trigger.player === undefined || event.active === resolvePlayer(you, trigger.player))
+        ? NO_SUBJECT
+        : null;
   }
 }
 

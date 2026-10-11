@@ -148,6 +148,15 @@ export function whenYouChallengeWith(count: number, selector: CharacterSelector 
 export const atStartOfTurn = (): Trigger => ({ on: "startOfTurn" });
 export const atStartOfFirstTurn = (): Trigger => ({ on: "startOfFirstTurn" });
 
+/**
+ * "At end of turn": as the Ending phase of the current turn begins, before
+ * its cleanup, or with `player` only of that player's turns ("At the end of
+ * your turn"). Inside `delayed`, "Banish them at end of turn".
+ */
+export function atEndOfTurn(player?: PlayerRef): Trigger {
+  return { on: "endOfTurn", ...(player === undefined ? {} : { player }) };
+}
+
 /** A combined trigger: "▸Materialized, ▸Dawn". */
 export function either(...triggers: readonly Trigger[]): Trigger {
   return { on: "either", triggers };

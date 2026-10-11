@@ -615,8 +615,10 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
   const side = resolvePlayer(env.controller, ref.player);
   const matches = (id: InstanceId): boolean => inZoneMatching(state, catalog, ref, side, env.source, id);
   switch (ref.pick) {
-    case "every":
-      return state.sides[side][ref.zone].filter(matches);
+    case "every": {
+      const atMost = ref.costAtMost === undefined ? null : evaluate(ctx, ref.costAtMost, env);
+      return state.sides[side][ref.zone].filter((id) => matches(id) && (atMost === null || copiableCostOf(state, catalog, id) <= atMost));
+    }
     case "top":
       return state.sides[side].deck.slice(0, Math.max(0, ref.count)).filter(matches);
     case "random": {

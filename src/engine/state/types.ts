@@ -525,6 +525,12 @@ export interface TurnState {
    * triggered as it began resolve first. `phase` is `"dreamwell"` meanwhile.
    */
   beginning: boolean;
+  /**
+   * Present only while the Ending phase has begun and its cleanup has not:
+   * the abilities that triggered at end of turn resolve first. `phase` is
+   * `"ending"` meanwhile. Only `true` counts.
+   */
+  endingCleanup?: true;
 }
 
 export interface ChallengeState {

@@ -387,7 +387,9 @@ and Ending run as automatic bookends.
    (see [Challengers, Blockers, and Scoring](#challengers-blockers-and-scoring)).
    No cards may be played during this phase, though triggered and static
    abilities still function and can modify spark.
-8. **Ending** — These happen in order:
+8. **Ending** — As the Ending phase begins, "at end of turn" abilities
+   trigger, and they resolve before anything below happens (see [Ability
+   Types](#ability-types)). Then these happen in order:
    1. If the active player has more than 10 cards in hand, they choose cards
       from their hand and discard them down to 10.
    2. Cards with the relevant end-of-turn statuses (Ephemeral, Offering) are
@@ -985,9 +987,11 @@ open back-rank position. Their owner stays the same. A selected character
 that cannot enter because the back rank has filled stays in its source zone.
 
 "Materialize each ≤X● cost character in your void. Banish them at end of
-turn": "them" names exactly the characters that materialize put into play,
-never one that stayed in its zone, one already in play, or one another part
-of the effect put into play. A later part of the same effect, or a floating
+turn" compares X with each void character's copiable cost (see [Cost
+changes](#costs-requirements-and-x)) as the effect resolves; X may be 0, which
+materializes each 0● cost character there. "Them" names exactly the
+characters that materialize put into play, never one that stayed in its zone,
+one already in play, or one another part of the effect put into play. A later part of the same effect, or a floating
 or delayed trigger it creates, acts on each of them that is in play as it
 resolves, whoever controls it then. Card identity persists across zones (see
 [Zone Changes](#zone-changes)), so one that left play and has entered play
@@ -1341,7 +1345,16 @@ types as it is played is a play of every subtype. A later change to its types
 does not change which of these abilities its play matched or counted toward.
 "At the start of your turn" abilities trigger as each of your turns begins and
 resolve before its Dreamwell phase; "At the start of your first turn" triggers
-only as your first turn of the battle begins.
+only as your first turn of the battle begins. "At end of turn" abilities
+trigger as the Ending phase of each turn begins, and "At the end of your turn"
+abilities as the Ending phase of each of your turns begins, extra turns
+included; they resolve before the rest of the Ending phase (see [Turn
+Structure](#turn-structure)). A delayed "at end of turn" trigger, as in
+"Banish them at end of turn", triggers at the end of the turn it was created
+in. One created during the Ending phase, after that turn's "at end of turn"
+abilities triggered, triggers at the end of the next turn instead, and a
+character that enters play then does not trigger "At the end of your turn"
+that turn.
 
 Each player sees a triggered ability trigger and resolve when they can see its
 card, avatar, or dreamsign, but not a hidden card the triggering event

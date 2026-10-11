@@ -10,8 +10,10 @@
  * created in the other side's hand, needs only the event its owner sees.
  *
  * One rules change is announced by its phase instead: the Ending readies
- * every exhausted character (rules § Exhaust and Awaken) in a step that
- * publishes `phaseChanged`.
+ * every exhausted character (rules § Exhaust and Awaken) in its cleanup,
+ * which runs in the step that publishes `phaseChanged` for it or, when "at
+ * end of turn" abilities triggered, in the step that ends the cleanup's wait
+ * (`turn.endingCleanup`).
  */
 import { eventSeenBy, type EngineEvent } from "../events";
 import { SIDES, type InstanceId, type Zone } from "../state/ids";
@@ -41,7 +43,7 @@ function unchanged(before: BattleState, was: CardInstance | undefined, after: Ba
   return Object.entries(was.status).every(([field, value]) => status[field] === value);
 }
 
-/** Whether a card's only change is the Ending's readying, in a step that changed phase. */
+/** Whether a card's only change is the Ending's readying, in a step that changed phase or ran the waiting Ending cleanup. */
 function readiedByPhase(events: readonly EngineEvent[], before: BattleState, after: BattleState, id: InstanceId): boolean {
   const was = before.instances[id];
   const is = after.instances[id];
@@ -50,7 +52,7 @@ function readiedByPhase(events: readonly EngineEvent[], before: BattleState, aft
     is !== undefined &&
     was.status.exhausted &&
     !is.status.exhausted &&
-    events.some((event) => event.kind === "phaseChanged") &&
+    (events.some((event) => event.kind === "phaseChanged") || (before.turn.endingCleanup === true && after.turn.endingCleanup === undefined)) &&
     placeOf(before, was, { ...was.status, exhausted: false }) === placeOf(after, is)
   );
 }

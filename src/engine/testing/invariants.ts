@@ -133,6 +133,10 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
   if (candidate !== null && run === null && checkpointSide(state) !== candidate.side) {
     problems.push(`loop ${candidate.id} is on offer away from its player's checkpoint`);
   }
+  // An Ending cleanup waits only in the Ending phase, and only for its triggers or a battle that ended meanwhile.
+  if (state.turn.endingCleanup !== undefined && (state.turn.endingCleanup !== true || state.turn.phase !== "ending")) {
+    problems.push(`an Ending cleanup marker ${JSON.stringify(state.turn.endingCleanup)} waits in the ${state.turn.phase} phase`);
+  }
   // Knowledge lists only cards in decks and hands, and each side's view hides the rest.
   for (const side of SIDES) {
     for (const id of state.knownTo[side]) {

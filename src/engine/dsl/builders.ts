@@ -277,13 +277,26 @@ export function fromVoid(
   };
 }
 
-/** "Events in your void", "your hand": every card in the player's zone matching `filter`, chosen by nobody. */
+/**
+ * "Events in your void", "your hand": every card in the player's zone
+ * matching `filter`, chosen by nobody; `costAtMost` keeps only cards whose
+ * copiable cost is at most that value as the effect resolves ("each ≤X● cost
+ * character").
+ */
 export function everyIn(
   zone: CountedZone,
   filter: CardFilter = {},
-  options: { readonly player?: PlayerRef; readonly another?: boolean } = {},
+  options: { readonly player?: PlayerRef; readonly another?: boolean; readonly costAtMost?: ValueExpr } = {},
 ): ZoneEverySpec {
-  return { kind: "inZone", pick: "every", zone, player: options.player ?? "you", filter, ...(options.another === true ? { another: true } : {}) };
+  return {
+    kind: "inZone",
+    pick: "every",
+    zone,
+    player: options.player ?? "you",
+    filter,
+    ...(options.another === true ? { another: true } : {}),
+    ...(options.costAtMost === undefined ? {} : { costAtMost: options.costAtMost }),
+  };
 }
 
 /** "The top card of your deck" (`count` cards): those of them matching `filter`. */
