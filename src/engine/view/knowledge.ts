@@ -12,7 +12,7 @@
  *   positions, using viewer-known slots and public removal bounds; the
  *   filtered-draw primitive proves its ability's literal filter while this
  *   module owns forgetting (`forgetFilteredDrawPositions`, `forgetDeckPositions`,
- *   and `randomDeckRemovalSettler` as random picks leave a deck);
+ *   and `randomDeckRemovalSettler` as anonymous removals leave a deck);
  * - a shuffled deck drops out of both sides' knowledge (`forgetShuffledDeck`);
  * - a `privateTo` prompt shows its cards to its chooser only, and the other
  *   side loses track of those still in a deck, whose order the chooser may
@@ -152,6 +152,9 @@ export function forgetFilteredDrawPositions(
   }
 }
 
+/** Public exclusive prefix bounds; an absent owner/viewer entry permits the whole deck. */
+export type DeckRemovalBounds = Readonly<Partial<Record<Side, Readonly<Partial<Record<Side, number>>>>>>;
+
 /**
  * Before an ordered, unshuffled placement, forget only deck positions its
  * public movement cannot determine. `cards` has original source-zone order;
@@ -167,14 +170,15 @@ export function forgetFilteredDrawPositions(
  * no evidence. Original decks and both viewers' knowledge are captured before
  * any forgetting or ordinary zone movement.
  */
-export function forgetDeckPositions(state: BattleState, cards: readonly InstanceId[]): void {
+export function forgetDeckPositions(state: BattleState, cards: readonly InstanceId[], bounds: DeckRemovalBounds = {}): void {
   const decks = SIDES.map((owner) => [...state.sides[owner].deck]);
   const viewers = SIDES.map((viewer) => ({ viewer, known: new Set(state.knownTo[viewer]), forgotten: new Set<InstanceId>() }));
-  for (const deck of decks) {
+  for (const [ownerIndex, deck] of decks.entries()) {
     const movers = cards.filter((id) => deck.includes(id));
     if (movers.length === 0) continue;
     const moving = new Set(movers);
-    for (const { known, forgotten } of viewers) {
+    for (const { viewer, known, forgotten } of viewers) {
+      const possible = new Set(deck.slice(0, bounds[SIDES[ownerIndex]]?.[viewer] ?? deck.length).filter((id) => !known.has(id)));
       const anchors = [
         { original: -1, placed: -1 },
         ...deck.flatMap((id, original) => known.has(id) && moving.has(id) ? [{ original, placed: movers.indexOf(id) }] : []),
@@ -184,12 +188,12 @@ export function forgetDeckPositions(state: BattleState, cards: readonly Instance
         const before = anchors[index - 1];
         const after = anchors[index];
         const interval = deck.slice(before.original + 1, after.original);
-        const anonymous = interval.filter((id) => !known.has(id)).length;
+        const anonymous = interval.filter((id) => possible.has(id)).length;
         const removed = after.placed - before.placed - 1;
         let preceding = 0;
         for (const id of interval) {
           if (!known.has(id)) {
-            preceding += 1;
+            if (possible.has(id)) preceding += 1;
           } else if (!removalsBeforeAreForced(removed, preceding, anonymous - preceding)) {
             forgotten.add(id);
           }
@@ -214,12 +218,14 @@ function sameIds(a: readonly InstanceId[], b: readonly InstanceId[]): boolean {
 }
 
 /**
- * Deck knowledge while cards picked at random leave decks, unshuffled
+ * Deck knowledge while cards leave anonymous deck positions, unshuffled
  * (RD-hv-umm2.83-1): each viewer sees the cards leave, in deck order, but
  * not which unseen places they left. Captures both decks and both viewers'
  * knowledge before any pick and returns a settler, which the caller runs
  * after each removal and before anything observes the state, prompts
- * included (`StepContext.settlingKnowledge`). Each run measures the cards
+ * included (`StepContext.settlingKnowledge`). Optional captured public bounds
+ * restrict possible anonymous origins to a prefix for each owner/viewer;
+ * absent bounds permit the whole deck. Each run measures the cards
  * that have left each captured deck so far, in its order, and has each
  * viewer lose track of the known cards whose places those removals leave
  * open (`forgetDeckPositions` over the captured decks), so no presented
@@ -232,7 +238,7 @@ function sameIds(a: readonly InstanceId[], b: readonly InstanceId[]): boolean {
  * changed the decks or either viewer's knowledge since the last run;
  * otherwise what this settler forgot stays forgotten.
  */
-export function randomDeckRemovalSettler(state: BattleState): () => void {
+export function randomDeckRemovalSettler(state: BattleState, bounds: DeckRemovalBounds = {}): () => void {
   const decks = { player: [...state.sides.player.deck], enemy: [...state.sides.enemy.deck] };
   const knew = { player: [...state.knownTo.player], enemy: [...state.knownTo.enemy] };
   const entered = new Map([...decks.player, ...decks.enemy].map((id) => [id, state.instances[id]?.enteredZoneAt]));
@@ -254,7 +260,7 @@ export function randomDeckRemovalSettler(state: BattleState): () => void {
         sides: { player: { ...state.sides.player, deck: decks.player }, enemy: { ...state.sides.enemy, deck: decks.enemy } },
         knownTo: { player: [...knew.player], enemy: [...knew.enemy] },
       };
-      forgetDeckPositions(measured, left);
+      forgetDeckPositions(measured, left, bounds);
       for (const viewer of SIDES) {
         const open = new Set(knew[viewer].filter((id) => !measured.knownTo[viewer].includes(id)));
         const known = state.knownTo[viewer];

@@ -1,0 +1,210 @@
+{
+  "bead": "hv-umm2.409",
+  "base": "d08eeff0e586ca530fc9473079ee6d6d3405583a",
+  "sourceSha256": {
+    "src/engine/effects/interpreter.ts": "6998cf10df4b3fae4c25557c1ddce3f890b14df204dfbe83c72a0123e22f855e",
+    "src/engine/view/knowledge.ts": "e0e97eb35b2dcc7621eb60ff80903eba644c1f66f27daae48bf108dca533b6cf",
+    "src/engine/effects/primitives/contracts/materialize-deck-knowledge.contracts.ts": "9be822dec85e4150165da7125391bd822bfca1a15087cf6a6c9ab493f6033187"
+  },
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.409",
+  "commands": {
+    "related": {
+      "wallSeconds": 4.02,
+      "hostLoad": 31.837890625,
+      "exit": 0
+    },
+    "review": {
+      "wallSeconds": 40.72,
+      "hostLoad": 30.7294921875,
+      "exit": 0
+    },
+    "knip": {
+      "wallSeconds": 3.83,
+      "hostLoad": 24.7607421875,
+      "exit": 0
+    }
+  },
+  "baselines": [
+    {
+      "provenance": "initial-unchanged-source-provenance.json",
+      "contract": "initial-contract.ts",
+      "log": "initial-unchanged-negative.log",
+      "failed": 10,
+      "passed": 11,
+      "wallSeconds": 5.54,
+      "meaning": "Actual partial filtered/plain/whole removals and intermediate full-removal observation across both owners, plus visible opaque resolver. Exact top/known-selected/zero removals/replay/rollback controls pass."
+    },
+    {
+      "provenance": "hidden-source-unchanged-source-provenance.json",
+      "contract": "hidden-source-contract.ts",
+      "log": "hidden-source-unchanged-negative.log",
+      "failed": 12,
+      "passed": 11,
+      "meaning": "Adds declared but hidden source controls; production untouched."
+    },
+    {
+      "provenance": "unchanged-source-provenance.json",
+      "contract": "final-baseline-contract.ts",
+      "log": "unchanged-negative.log",
+      "failed": 14,
+      "passed": 11,
+      "wallSeconds": 3.48,
+      "meaning": "Adds hidden branch top2/top5 with identical actual public removals/events. Enemy must hide middle and retain tail using the declared public max5. Final preproduction source hashes retained."
+    }
+  ],
+  "finalTypedNegative": {
+    "base": "d08eeff0e586ca530fc9473079ee6d6d3405583a",
+    "contractSha256": "9be822dec85e4150165da7125391bd822bfca1a15087cf6a6c9ab493f6033187",
+    "finalSourceSha256": {
+      "src/engine/effects/interpreter.ts": "6998cf10df4b3fae4c25557c1ddce3f890b14df204dfbe83c72a0123e22f855e",
+      "src/engine/view/knowledge.ts": "e0e97eb35b2dcc7621eb60ff80903eba644c1f66f27daae48bf108dca533b6cf"
+    },
+    "originalSourceSha256": {
+      "src/engine/effects/interpreter.ts": "6f5ee0f27bc76582ee17998319818c1a2a9f040b7ed5e8d5c2c6f891ddd873be",
+      "src/engine/view/knowledge.ts": "5ad351dde09501da5e3db0facffa8a5f0ac93d4f3d07d77fbcc4f79d226b64cb"
+    },
+    "hostLoad": 31.837890625,
+    "exit": 1,
+    "wallSeconds": 3.73,
+    "restoredIdentically": true,
+    "log": "final-contract-original-source-negative.log",
+    "failed": 14,
+    "passed": 11,
+    "meaning": "Exact portable final contract against original interpreter/knowledge sources. Temporary source restoration is enclosed in finally; final production fingerprints match afterwards."
+  },
+  "focusedInitial": {
+    "log": "focused.log",
+    "passed": 25,
+    "testRunnerSeconds": 2.09,
+    "reportedPrepareTestRestoreSeconds": 4.1,
+    "timingScope": "Complete wall not retained; prepare0.8+test2.5+restoration0.8 reported, Vitest2.09s."
+  },
+  "related": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/view/view-knowledge.test.ts src/engine/view/determinize.test.ts src/engine/fold/fold-observation.test.ts",
+    "log": "related.log",
+    "files": 4,
+    "cases": 680,
+    "result": "pass; existing materialize/random-selection/put-in-deck/view/fold contracts unchanged"
+  },
+  "review": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+    "log": "review.log",
+    "files": 261,
+    "cases": 2835,
+    "result": "pass; lint, import cycles, both typechecks and related tests; assets restored"
+  },
+  "knip": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+    "log": "knip.log",
+    "result": "pass; assets restored; no orphaned exports or files"
+  },
+  "portabilityCorrection": {
+    "log": "pre-portability-review.log",
+    "times": "pre-portability-command-times.json",
+    "reviewWallSeconds": 56.35,
+    "meaning": "Behavioral tests passed; unused NO_PROMPTS and unsupported Array.at caused lint/typecheck errors. Test-only import/indexing cleanup; production and smoke unchanged. Contract remains153lines; hash changes from preproduction2e6f087f97bf55fd878c84ce8e5fcd2bf5a7384db11ad82faefb090bcc50debc to final9be822dec85e4150165da7125391bd822bfca1a15087cf6a6c9ab493f6033187. Final typed negative/related/review/Knip certify final bytes."
+  },
+  "smoke": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm run fuzz:engine -- --games 50 --seed hv-umm2.409",
+    "log": "fuzz50.log",
+    "seed": "hv-umm2.409",
+    "games": 50,
+    "steps": 24503,
+    "prompts": 532,
+    "interactiveReruns": 76,
+    "failures": 0,
+    "engineWallSeconds": 15.5,
+    "cpuSeconds": 18.3,
+    "timingScope": "Fuzzer-reported engine wall/CPU; complete npm startup wall not retained. No performance claim or threshold. Thin50-game run outside heavy lock.",
+    "sourceTie": {
+      "src/engine/effects/interpreter.ts": "6998cf10df4b3fae4c25557c1ddce3f890b14df204dfbe83c72a0123e22f855e",
+      "src/engine/view/knowledge.ts": "e0e97eb35b2dcc7621eb60ff80903eba644c1f66f27daae48bf108dca533b6cf",
+      "src/engine/effects/primitives/contracts/materialize-deck-knowledge.contracts.ts": "9be822dec85e4150165da7125391bd822bfca1a15087cf6a6c9ab493f6033187"
+    },
+    "reuse": "Only contract portability corrections after smoke; production bytes match final fingerprints."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 25,
+    "plainContractModulesAdded": 1,
+    "plainContractLines": 153
+  },
+  "design": {
+    "seam": "resolveNode/StepContext.settlingKnowledge/randomDeckRemovalSettler; direct materialize deck top/every references only. Existing random detection and other top/every operations retain their current routing.",
+    "bounds": "Readonly per-deck-owner/per-viewer data captured once. Missing entries permit whole deck. Only anonymous slots inside a proven exclusive prefix count as possible origins; actual hidden mover indices supply no proof.",
+    "publicProof": "Current source origin and declared root must match; source identified to viewer; opaque synthetic resolvers rejected. Conservatively take maximum literal top count across every materialize deck ref in the declared ability, independent of hidden branch selection. Missing/unsafe/unbounded/discover references use whole-deck fallback.",
+    "counts": "Settler measures only cards actually leaving each captured deck, before every observed event and prompt. Partial capacity does not count held candidates; zero removals retain knowledge. Known movers anchor exact positions. Later removals may regain forced positions.",
+    "defaults": "Default bounds cover all anonymous slots, matching the existing random/ordered-placement interval calculation. Existing random-selection and materialize contracts unchanged and pass.",
+    "logging": "Existing materialized/zone/capacity UUID events and fold snapshots reconstruct movement; no new event, grammar, schema, tunable or presentation kind."
+  },
+  "coverage": "Both deck owners/both viewers; filtered and unfiltered top4 plus everyIn deck; top1 exact/known-selected exact; below-prefix retention; partial capacity1; zero count and capacity0 after public hand materialization; before-second-removal forgetting and eventual reacquisition; opaque visible source; hidden declared source; hidden literal-count branch public max; deterministic fresh-engine JSON replay; actual throw rollback.",
+  "failurePaths": {
+    "errorPartialWrite": "Public synthetic resolution throws after actual materialization; fold rolls back ranks, deck and knowledge and publishes no materialized event.",
+    "reloadRestart": "Cold JSON-loaded initial battle on a fresh engine repeats public events, final state hash and both views. Existing random-selection saved-stack/prompt replay contracts unchanged and pass.",
+    "invalidStaleConcurrent": "No new action, prompt, intent, schema or concurrency transition; existing fold/primitive recovery contracts run in related/review. Bounds are synchronous transient data, not client input."
+  },
+  "fallout": {
+    "files": [],
+    "importers": [
+      {
+        "api": "forgetDeckPositions",
+        "path": "src/engine/effects/primitives/put-in-deck.ts",
+        "status": "Unchanged default caller; no bounds passed, existing placement behavior covered by contracts."
+      },
+      {
+        "api": "forgetDeckPositions",
+        "path": "src/engine/view/knowledge.ts",
+        "status": "Internal settler now forwards captured bounds; explicitly declared Area."
+      },
+      {
+        "api": "randomDeckRemovalSettler",
+        "path": "src/engine/effects/interpreter.ts",
+        "status": "Only external caller; supplies bounds for direct materialize top/every, preserves random default. Explicitly declared Area."
+      }
+    ],
+    "type": "New optional readonly DeckRemovalBounds data options; no forced changes to other consumers. Both typechecks pass."
+  },
+  "rulesDecision": "No gameplay ambiguity, normative or card issue added: implements current hidden-information/deck-position inference contract. No immutable entity or data change.",
+  "validationChoice": {
+    "full": "Not warranted: bounded56 changed source lines including comments within existing observer/knowledge seam, unchanged persisted schema, test infrastructure/config/runner.",
+    "browser": "Not run: internal engine privacy projection; public per-viewer deck positions, event snapshots and determinization tests are the acceptance. No UI/presentation/body change.",
+    "review": "Parent requests asynchronous cold Claude review for shared privacy invariant despite non-test diff below100; parent owns snapshot/provider and native delivery."
+  },
+  "runtimeLedger": {
+    "install": "npm install complete; reported2s,17 advisories. Lock/package unchanged.",
+    "commands": "All install/negative/focused/related/review/Knip/fuzz jobs exited. Final temporary baseline source restored byte-identically in finally; no outstanding writer.",
+    "server": "none",
+    "browserProvider": "none",
+    "browserLease": "none",
+    "heavyLock": "none; thin50-game smoke only",
+    "remainingOwnedProcesses": []
+  },
+  "artifactSha256": {
+    "final-baseline-contract.ts": "2e6f087f97bf55fd878c84ce8e5fcd2bf5a7384db11ad82faefb090bcc50debc",
+    "hidden-source-unchanged-negative.log": "4e5eb9d655e476e831bc37524ebd3426a69b2950ba5517376c2b2b3ae3115920",
+    "initial-contract.ts": "50f2fa550be4c054056574ea3839af93078842fede2e3684c5b45105dfd0f2be",
+    "pre-portability-command-times.json": "de9556ca3a11f3cbc6bbf119354cc99d3847336dec77eb310f9f53fc7de589b4",
+    "final-contract-original-source-negative.log": "882ec5a559a84a38cebaaff3b4b862a38b6202c1e3e308420b9aedc2d2a25c54",
+    "unchanged-source-provenance.json": "fbb06f9c3f1bad969a36b556d72025a65b5c9ade015b12c7b63c31f58471cdf9",
+    "initial-unchanged-source-provenance.json": "e4f230112f4eff7ff9e6c759434303d3e3ea5182a4ceb74fbab5b2c1be8ce498",
+    "command-times.json": "c09f623c9bf59588169ff854977173558dc45c7386badc479203bb40f07c8ede",
+    "pre-portability-review.log": "64404ec87234c8e5bec1b02b6c6eaa032d6b88f32f2f62728f16b3f1bd5a1237",
+    "unchanged-negative.log": "e409659ec48e0c8dd0f20873781901c8c4bbbdc6eba67b825757ee05f085c2be",
+    "related.log": "afdbe968510f5659ca677fcbcb17a3d36889e37c6a27733eb4d864866aa91e42",
+    "hidden-source-contract.ts": "386d408b57953a59b0c991a0376f34c19f0cdc31912a6ef804e08659f1689133",
+    "pre-portability-related.log": "919c83e35d88a57333d182eae4685cd9fe5fb038478eda715f88581b6b45d125",
+    "review.log": "9f52ea6950c516ba72153b383bcd51a48de57f20c7a4ef2a4eb3dcd319bf5510",
+    "final-negative-provenance.json": "999b34be4836f4bea29034b4c2b08624c3a71d50f7b34fe25c7a6962ea51b263",
+    "fuzz50.log": "91271580256a2134777ff36b43ed323afed5ba85e17ee374f8cd425d25de0ae9",
+    "knip.log": "036ae34d073bac7343eba400ada876c709f1b84a01fd44cf5b5465401e1c8b49",
+    "initial-unchanged-negative.log": "6faf9d521e693c8bcf21bdea331e0659c2a46680d09a310aa974cf34308ac556",
+    "focused.log": "901529b9b03aeeca3a7c229568f1c4ed9f921ab64b8127c4ecde6f7cf426255b",
+    "final-source-fingerprints.json": "4c1f7d92324eb121295638b1f904cbac3b12bee49145c90fa0a3ff33a1804834",
+    "hidden-source-unchanged-source-provenance.json": "8fa4a888a1cc8b2371cb8a7434458ce1735b7bdf05ba2fbf8de046b93715afbf"
+  },
+  "outstanding": [
+    "Parent-owned cold Claude privacy review and native candidate approval/promotion. No implementation or local validation work remains."
+  ]
+}

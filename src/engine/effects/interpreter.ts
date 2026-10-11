@@ -17,7 +17,9 @@ import { sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
-import { randomDeckRemovalSettler } from "../view/knowledge";
+import { randomDeckRemovalSettler, seesSource, type DeckRemovalBounds } from "../view/knowledge";
+import { abilityOrigin, originAbilities } from "../rules/activation";
+import type { MaterializeNode } from "./primitives/materialize";
 import { primitiveDefinition } from "./registry";
 import type { CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
 
@@ -731,7 +733,31 @@ function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
 /** Resolves one node of an effect in `env`, tracking the cards it moves (`MovedCards`). */
 export function resolveNode(ctx: StepContext, node: EffectNode, env: EffectEnv): void {
   const resolve = (): void => primitiveDefinition(node.op).resolve(ctx, node, env);
-  env.moved.track(node, picksAtRandomFromDeck(node) ? () => ctx.settlingKnowledge(randomDeckRemovalSettler(ctx.state), resolve) : resolve);
+  const bounds = picksAtRandomFromDeck(node) ? {} : materializeDeckBounds(ctx, node, env);
+  env.moved.track(node, bounds === null ? resolve : () => ctx.settlingKnowledge(randomDeckRemovalSettler(ctx.state, bounds), resolve));
+}
+
+/** Public deck-materialization windows, independent of the selected hidden branch. */
+function materializeDeckBounds(ctx: StepContext, node: EffectNode, env: EffectEnv): DeckRemovalBounds | null {
+  if (node.op !== "materialize") return null;
+  const { from } = node as MaterializeNode;
+  if ("op" in from || from.zone !== "deck" || (from.pick !== "top" && from.pick !== "every")) return null;
+  if (from.pick === "every") return {};
+  const origin = abilityOrigin(ctx.state, env.source);
+  if (origin === null || JSON.stringify(origin) !== JSON.stringify(env.origin)) return {};
+  if (origin.kind === "card" && ctx.catalog.card(origin.cardId).synthetic?.resolve !== undefined) return {};
+  const ability = originAbilities(ctx.catalog, origin)[env.ability];
+  if (ability === undefined || !("effect" in ability) || JSON.stringify(ability.effect) !== JSON.stringify(env.root)) return {};
+  const refs = everyNode(ability.effect).filter((part) => part.op === "materialize").map((part) => (part as MaterializeNode).from);
+  if (refs.some((ref) => "op" in ref)) return {};
+  const decks = refs.filter((ref): ref is ZoneCardSpec => !("op" in ref) && ref.zone === "deck");
+  if (decks.length === 0 || decks.some((ref) => ref.pick !== "top" || !Number.isSafeInteger(ref.count))) return {};
+  const limit = Math.max(0, ...decks.map((ref) => ref.pick === "top" ? ref.count : 0));
+  if (from.count > limit) return {};
+  const owner = resolvePlayer(env.controller, from.player);
+  const viewers: Partial<Record<Side, number>> = {};
+  for (const viewer of ["player", "enemy"] as const) if (seesSource(ctx.state, env.source, viewer)) viewers[viewer] = limit;
+  return { [owner]: viewers };
 }
 
 /**
