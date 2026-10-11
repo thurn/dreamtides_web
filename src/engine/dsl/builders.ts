@@ -15,6 +15,7 @@ import type {
   CountedZone,
   EnergyCost,
   EnergyXCost,
+  FunctionalZone,
   Keyword,
   OptionalCost,
   PaymentCost,
@@ -34,9 +35,13 @@ export function event(effect: Effect): Ability {
   return { kind: "event", effect };
 }
 
-/** An always-on ability holding a continuous primitive: "Warriors you control have +1✦." */
-export function staticAbility(effect: Effect): StaticAbility {
-  return { kind: "static", effect };
+/**
+ * An always-on ability holding a continuous primitive: "Warriors you control
+ * have +1✦." Works in play unless `zone` names a functional zone: "If this
+ * card is in your void, characters you control have +1✦" works from "void".
+ */
+export function staticAbility(effect: Effect, options: { readonly zone?: FunctionalZone } = {}): StaticAbility {
+  return { kind: "static", effect, zone: options.zone ?? "play" };
 }
 
 /** "Cost: Effect". Standard speed unless stated. */

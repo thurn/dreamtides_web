@@ -3,8 +3,9 @@
  * effective characteristics are computed from its copiable values and every
  * continuous change, never stored. Changes come from two places: floating
  * effects in `state.floating` (made by resolving effects, with values and
- * cards fixed as they resolved) and static abilities of cards in play and
- * emblems (read live). They apply layer by layer:
+ * cards fixed as they resolved) and static abilities (read live) of emblems
+ * and of cards in the zones the abilities work from: play, unless an
+ * ability names a functional zone. They apply layer by layer:
  *
  * 1. copiable values: the printed card for its variant, a figment's type
  *    and spark, or what a figment copy copied, with a deck entry's
@@ -17,7 +18,8 @@
  * 6. cost modifications (continuous/costs.ts).
  *
  * Within a layer, changes apply in timestamp order. A static ability's
- * timestamp is its source's `enteredZoneAt` (0 for an emblem); a floating
+ * timestamp is its source's `enteredZoneAt`, when the card entered the zone
+ * the ability works from (0 for an emblem); a floating
  * effect's is its `timestamp`. Ties go to static abilities first, in source
  * order, then floating effects in creation order (RD-hv-7x4l.7-2). A static
  * ability's selectors and values read the characteristics the layers before
@@ -26,15 +28,15 @@
 import { instanceCard, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { matchesCharacterWith, matchingCharactersWith, type CharacteristicsReader } from "../dsl/selectors";
-import type { CharacterRef, Keyword } from "../dsl/types";
+import type { Ability, CharacterRef, FunctionalZone, Keyword, StaticAbility } from "../dsl/types";
 import { evaluateValue } from "../dsl/values";
 import { primitiveDefinition } from "../effects/registry";
 import type { EffectNode, Layer, StaticEnv } from "../effects/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
 import { charactersInPlay } from "../rules/zones";
-import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
+import type { AbilitySource, EffectId, InstanceId, Side, Zone } from "../state/ids";
 import { SIDES, sourceInstance } from "../state/ids";
-import type { AbilityOrigin, BattleState, ContinuousChange, FloatingChange } from "../state/types";
+import type { BattleState, CardInstance, ContinuousChange, FloatingChange } from "../state/types";
 import { supportedBy } from "./support";
 
 /** A card's effective characteristics. */
@@ -75,7 +77,7 @@ export interface OrderedChange {
   readonly order: number;
 }
 
-/** A static ability of a source in play, with its ordering keys. */
+/** A static ability that applies now, with its ordering keys. */
 interface StaticEntry {
   readonly source: AbilitySource;
   readonly controller: Side;
@@ -89,15 +91,64 @@ function instanceNumber(id: InstanceId): number {
   return Number(id.slice(1));
 }
 
+/** The zones a card's static ability works from (rules § Ability Types → Static abilities, RD-hv-umm2.53-1). */
+const WORKS_FROM: Readonly<Record<FunctionalZone, readonly Zone[]>> = {
+  play: ["play"],
+  void: ["void"],
+  hand: ["hand"],
+  any: ["play", "void", "hand", "deck"],
+};
+
+/** A card's static abilities, and whether any of them works outside play. */
+interface CardStatics {
+  readonly abilities: readonly StaticAbility[];
+  readonly outsidePlay: boolean;
+}
+
+/**
+ * A catalog's card statics by printing, then by variant: the plain base and
+ * amplified variants in slots 0 and 1, any other by its JSON. A card's
+ * abilities are plain data for its printing and variant, so each catalog
+ * reads them once, and each card outside play, most of which have no static
+ * ability working there, costs an evaluation two lookups. Derived data,
+ * never persisted.
+ */
+export type StaticsMemo = Map<string, Map<string | 0 | 1, CardStatics>>;
+
+function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatics {
+  const { printing, variant } = instance;
+  const printed = printing.kind === "figment" ? `figment:${printing.figment}` : printing.cardId;
+  let byVariant = catalog.statics.get(printed);
+  if (byVariant === undefined) {
+    byVariant = new Map();
+    catalog.statics.set(printed, byVariant);
+  }
+  const plain = printing.kind === "figment" || (variant.transfigurations === undefined && variant.deckMods === undefined);
+  const key = plain ? (variant.amplified ? 1 : 0) : JSON.stringify(variant);
+  let statics = byVariant.get(key);
+  if (statics === undefined) {
+    const abilities = originAbilities(catalog, instanceOrigin(instance)).filter((ability): ability is StaticAbility => ability.kind === "static");
+    statics = { abilities, outsidePlay: abilities.some((ability) => ability.zone !== "play") };
+    byVariant.set(key, statics);
+  }
+  return statics;
+}
+
+/** The zones outside play a card's static ability may work from. */
+const OUTSIDE_PLAY = ["void", "hand", "deck"] as const;
+
 /**
  * Every static ability that applies now, in source order: each side's avatar
- * and dreamsigns (player first), then cards in play by instance number.
+ * and dreamsigns (player first), then cards by instance number. An emblem's
+ * static abilities always apply; a card's apply while the card is in a zone
+ * the ability works from, and one in a hidden zone stays hidden: no event or
+ * view names it (RD-hv-umm2.53-2).
  */
 function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry[] {
   const entries: StaticEntry[] = [];
-  const add = (source: AbilitySource, controller: Side, origin: AbilityOrigin, timestamp: number): void => {
-    for (const ability of originAbilities(catalog, origin)) {
-      if (ability.kind !== "static") continue;
+  const add = (source: AbilitySource, controller: Side, abilities: readonly Ability[], timestamp: number, zone: Zone | null): void => {
+    for (const ability of abilities) {
+      if (ability.kind !== "static" || (zone !== null && !WORKS_FROM[ability.zone].includes(zone))) continue;
       const continuous = primitiveDefinition(ability.effect.op).continuous;
       if (continuous === undefined) throw new Error(`A static ability holds ${ability.effect.op}, which is not continuous`);
       entries.push({ source, controller, node: ability.effect, layer: continuous.layer, timestamp, order: entries.length });
@@ -105,16 +156,26 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
   };
   for (const side of SIDES) {
     const { avatar, dreamsigns } = state.sides[side];
-    if (avatar !== null) add({ kind: "avatar", side }, side, { kind: "avatar", id: avatar.id }, 0);
+    if (avatar !== null) add({ kind: "avatar", side }, side, originAbilities(catalog, { kind: "avatar", id: avatar.id }), 0, null);
     dreamsigns.forEach((dreamsign, index) => {
-      add({ kind: "dreamsign", side, index }, side, { kind: "dreamsign", id: dreamsign.id }, 0);
+      add({ kind: "dreamsign", side, index }, side, originAbilities(catalog, { kind: "dreamsign", id: dreamsign.id }), 0, null);
     });
   }
-  const cards = SIDES.flatMap((side) => charactersInPlay(state, side)).sort((a, b) => instanceNumber(a) - instanceNumber(b));
+  const cards: InstanceId[] = [];
+  for (const side of SIDES) {
+    cards.push(...charactersInPlay(state, side));
+    for (const zone of OUTSIDE_PLAY) {
+      for (const id of state.sides[side][zone]) {
+        const instance = state.instances[id];
+        if (instance !== undefined && cardStatics(catalog, instance).outsidePlay) cards.push(id);
+      }
+    }
+  }
+  cards.sort((a, b) => instanceNumber(a) - instanceNumber(b));
   for (const id of cards) {
     const instance = state.instances[id];
     if (instance === undefined) continue;
-    add(id, instance.controller, instanceOrigin(instance), instance.enteredZoneAt);
+    add(id, instance.controller, cardStatics(catalog, instance).abilities, instance.enteredZoneAt, instance.zone);
   }
   return entries;
 }

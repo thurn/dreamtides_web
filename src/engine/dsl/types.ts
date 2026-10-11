@@ -301,9 +301,9 @@ export type Trigger =
   | { readonly on: "either"; readonly triggers: readonly Trigger[] };
 
 /**
- * Where a triggered ability works: in play, or the functional zones "void",
- * "hand", and "any" (play, void, hand, and deck). An emblem's abilities
- * always work.
+ * Where a triggered or static ability works: in play, or the functional
+ * zones "void", "hand", and "any" (play, void, hand, and deck). An emblem's
+ * abilities always work.
  */
 export type FunctionalZone = "play" | "void" | "hand" | "any";
 
@@ -321,12 +321,16 @@ export interface TriggeredAbility {
 
 /**
  * An always-on ability (rules § Ability Types → Static abilities): its
- * effect is a continuous primitive that applies while its source is in play
- * (an emblem always is), with values read live.
+ * effect is a continuous primitive that applies while its source is in
+ * `zone` (an emblem's always applies), with values read live. A card's static
+ * working from a hand or deck applies without revealing the card
+ * (RD-hv-umm2.53-2).
  */
 export interface StaticAbility {
   readonly kind: "static";
   readonly effect: Effect;
+  /** Where its card must be for it to apply: "If this card is in your void, …" works from "void" (RD-hv-umm2.53-1). */
+  readonly zone: FunctionalZone;
 }
 
 /**

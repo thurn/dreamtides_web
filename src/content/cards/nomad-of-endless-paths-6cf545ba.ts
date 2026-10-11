@@ -1,3 +1,5 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 279,
   art: { x: -0.313, y: -0.471, scale: 1.77 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(p.grantCardKeyword(p.cardsIn("hand"), "offering"))],
+  verifiedText: "r6dv1q9za0",
 });

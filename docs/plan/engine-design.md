@@ -819,9 +819,9 @@ Effective characteristics are computed, never stored
 reads it through `effectiveSpark`, `hasKeyword`, the selectors, the cost
 code, and the view. Changes come from two sources:
 
-- **Static abilities** (`staticAbility(effect)`), on cards in play and on
-  emblems, read live. They change characters in play and, through
-  `grantCardKeyword`, cards in a hand, deck, or void.
+- **Static abilities** (`staticAbility(effect, { zone })`), on emblems and
+  on cards in the zones they work from, read live. They change characters in
+  play and, through `grantCardKeyword`, cards in a hand, deck, or void.
 - **Floating records** in `state.floating`, made by resolving effects. Their
   characters and values are fixed as they resolve, and each carries its
   `timestamp`.
@@ -850,10 +850,11 @@ analog:
 Ordering within a layer:
 
 - Changes apply in timestamp order. A static ability's timestamp is its
-  source's `enteredZoneAt` (0 for an emblem).
+  source's `enteredZoneAt`, when it entered the zone the ability works from
+  (0 for an emblem).
 - Ties go to static abilities first, in source order (emblems, player first,
-  then cards by instance number), then floating records in creation order
-  (RD-hv-7x4l.7-2).
+  then cards in any zone by instance number), then floating records in
+  creation order (RD-hv-7x4l.7-2).
 - A static ability's selectors and values read the characteristics of the
   layers before its own, so no layer depends on itself.
 - Cost selectors (`costAtMost`) read the copiable cost (C4, C13).
@@ -868,6 +869,30 @@ floating record per character. `lockedAtResolution(value)` marks the intent.
 declare a `continuous` hook: their layer and the changes they make while a
 static ability holds them. Their `resolve` makes floating records for their
 own duration, else the enclosing `forDuration`'s, else permanently.
+
+**Static abilities working outside play.** A `StaticAbility` carries a
+`zone: FunctionalZone`, the type triggered abilities use: `"play"` (the
+`staticAbility` default), `"void"`, `"hand"`, or `"any"` (play, void, hand,
+and deck). `collectStatics` in `layers.ts` gathers each emblem's static
+abilities, then each card's in play, a void, a hand, or a deck whose `zone`
+covers where the card is, with the card's `controller` (a hand's holder, else
+its owner) and `enteredZoneAt` (RD-hv-umm2.53-1). Examples:
+
+- "If this card is in your void, characters you control have +1✦":
+  `staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone:
+  "void" })`;
+- "This character costs 1● less for each warrior you control": a self-cost
+  static with `zone: "any"`, so it applies as the card is played from a hand
+  or a void.
+
+Whether an ability works depends only on its card's zone, never on
+characteristics, so gathering reads no layer. The catalog's `statics` memo
+keeps each card's static abilities by printing and variant, so a card
+outside play with none working there costs the evaluation one lookup.
+Nothing about a working ability is recorded: it emits no event and adds no
+floating record, so a source in a hidden zone is named by no event or view
+(RD-hv-umm2.53-2), and a step that fails after moving the source commits
+nothing.
 
 **Cards outside play.** `grantCardKeyword(cardsIn(zone, filter, player),
 keyword)` is the static "Cards in your hand have Offering" (layer 3): each

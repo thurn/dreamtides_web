@@ -837,6 +837,14 @@ left play, using the ability as it was when activated.
 is in play, such as cost reductions, spark bonuses for matching characters, or
 other rule changes. Avatar and dreamsign static abilities always apply.
 
+**Where static abilities work:** A card's static ability that names another
+zone, such as "If this card is in your void, characters you control have
++1✦", applies while the card is in that zone instead, and stops as the card
+leaves it. Its controller is the player whose void, hand, or deck the card is
+in. A static ability that works from your hand or deck does not reveal its
+card: the opponent sees what the ability changes, but not which card it comes
+from.
+
 A static ability can also change cards in a hand, a deck, or a void, as in
 "Cards in your hand have Offering." "Your hand" is the hand you hold; "your
 deck" and "your void" are the ones you own. Each card that matches has the
@@ -852,7 +860,8 @@ with a duration change the same card, they apply in this order: changes to its
 types ("has all character types"), then keywords it gains or loses, then base
 spark it is given, then changes to its spark, then changes to its cost. Within
 each step, effects apply in the order they began: a static ability when its
-source entered play (an avatar's or dreamsign's at the start of the battle),
+source entered play, or the zone the ability works from (an avatar's or
+dreamsign's at the start of the battle),
 and any other effect when it resolved. Among effects that began at the same
 moment, static abilities apply first — avatars and dreamsigns, then cards in
 the order they were created for the battle — then the other effects, in the

@@ -1,5 +1,6 @@
 import type { CardSubtype } from "../types/card-identity";
 import type { CharacteristicsMemo } from "./continuous/characteristics";
+import type { StaticsMemo } from "./continuous/layers";
 import { energy, reclaim } from "./dsl/builders";
 import type { AbilityList, CardCost, DeckMods, Speed, Variant } from "./dsl/types";
 import type { AvatarId, CardId, DreamsignId, DreamwellCardId, FigmentId, InstanceId } from "./state/ids";
@@ -104,6 +105,8 @@ export interface EngineCatalog {
    * catalog (continuous/characteristics.ts). Derived data, never persisted.
    */
   readonly memo: CharacteristicsMemo;
+  /** Each card's static abilities by printing and variant (continuous/layers.ts). Derived data, never persisted. */
+  readonly statics: StaticsMemo;
 }
 
 export interface EmblemDefinitions {
@@ -226,6 +229,7 @@ export function createCatalog(
   );
   return {
     memo: new WeakMap(),
+    statics: new Map(),
     avatar: (id) => lookup(avatarsById, id, "avatar"),
     dreamsign: (id) => lookup(dreamsignsById, id, "dreamsign"),
     figment: (id) => lookup(figmentsById, id, "figment"),

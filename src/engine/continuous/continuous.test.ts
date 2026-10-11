@@ -1,20 +1,22 @@
 /**
  * Continuous effects (engine-design § Continuous effects): the layer order,
- * timestamp order and its ties, anthems and other static abilities,
- * base-spark setting, type changes, keyword grants and losses, cost
+ * timestamp order and its ties, anthems and other static abilities and the
+ * zones they work from (RD-hv-umm2.53-1, RD-hv-umm2.53-2), base-spark setting, type changes, keyword grants and losses, cost
  * modifications with "next card" modifiers, values locked at resolution
  * (RD-hv-7x4l.7-1), "until the opponent pays" changes sharing one payable
  * effect, memoization, and the view.
  */
 import { describe, expect, it } from "vitest";
 import { printedCard, type EngineCardDefinition } from "../catalog";
-import { additionalCost, all, characterYouControl, costPaid, enemyCharacter, energy, energyX, event, optionalCost, self, staticAbility } from "../dsl/builders";
+import { additionalCost, all, characterYouControl, costPaid, enemyCharacter, energy, energyX, event, keyword, optionalCost, self, staticAbility, target } from "../dsl/builders";
 import { untilOpponentPays } from "../dsl/triggers";
-import type { AbilityList } from "../dsl/types";
+import type { AbilityList, FunctionalZone } from "../dsl/types";
+import { eventSeenBy } from "../events";
 import { matchingCharacters } from "../dsl/selectors";
 import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
 import type { Answer } from "../prompts/types";
+import type { Action } from "../rules/actions";
 import { hasKeyword } from "../rules/keywords";
 import { effectiveSpark } from "../rules/spark";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
@@ -23,9 +25,10 @@ import type { EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState, ContinuousChange } from "../state/types";
 import { runStep } from "../steps/runner";
 import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
-import { boardState, placeFigment, type BoardSetup } from "../testing/board";
+import { boardState, placeFigment, type BoardSetup, type SideSetup } from "../testing/board";
 import { CONTINUOUS, CONTINUOUS_CARDS, CONTINUOUS_EMBLEMS, CONTINUOUS_DREAMSIGN } from "../testing/continuous-cards";
 import { DSL, DSL_CARDS } from "../testing/dsl-cards";
+import { invariantViolations } from "../testing/invariants";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { at, passUntil } from "../testing/trigger-harness";
 import { characteristics, characteristicsOf, rememberCharacteristics } from "./characteristics";
@@ -75,8 +78,59 @@ const weakenThenDissolve = fixture(0xa87, "event", 0, () => [
   event(p.forDuration(untilOpponentPays(1), p.sequence(p.sparkModifier(all(enemyCharacter()), -1), p.dissolve(all(enemyCharacter()))))),
 ]);
 
+/** "Characters you control have +1✦", working from `zone`, on a 1● character. */
+function anthemIn(index: number, zone: FunctionalZone, ...extra: AbilityList[]): EngineCardDefinition {
+  return fixture(index, "character", 1, (variant) => [
+    staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone }),
+    ...extra.flatMap((more) => more(variant)),
+  ]);
+}
+
+/** "Characters you control have +1✦." — in play only, the default. */
+const playAnthem = fixture(0xa88, "character", 1, () => [staticAbility(p.sparkModifier(all(characterYouControl()), 1))]);
+/** "If this card is in your void, characters you control have +1✦. Reclaim." */
+const voidAnthem = anthemIn(0xa89, "void", () => [keyword("reclaim")]);
+/** "While this card is in your hand, characters you control have +1✦." */
+const handAnthem = anthemIn(0xa8a, "hand");
+/** "Wherever this card is, characters you control have +1✦." — play, void, hand, and deck. */
+const anyAnthem = anthemIn(0xa8b, "any");
+/** "While this card is in your hand, characters you control have +1✦. Dissolve an enemy." — an event whose play waits on a target. */
+const handEventAnthem = fixture(0xa8c, "event", 1, () => [
+  staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone: "hand" }),
+  event(p.dissolve(target(enemyCharacter()))),
+]);
+/** "If this card is in your void, characters you control have Vengeful." */
+const voidVengeful = fixture(0xa8d, "character", 1, () => [staticAbility(p.grant(all(characterYouControl()), "vengeful"), { zone: "void" })]);
+/** "Dissolve a character you control." */
+const dissolveAlly = fixture(0xa8e, "event", 0, () => [event(p.dissolve(target(characterYouControl())))]);
+/** A malformed event that dissolves an ally, then resolves a static-only primitive, which throws. */
+const dissolveAllyThenFail = fixture(0xa8f, "event", 0, () => [
+  event(p.sequence(p.dissolve(target(characterYouControl())), p.grantCardKeyword(p.cardsIn("hand"), "offering"))),
+]);
+
 const engine = createEngine(
-  testCatalog([...CONTINUOUS_CARDS, ...DSL_CARDS, enemyBaseThree, twoPlusX, awakenedBanner, selfAwakened, kicker, weakenUntilPays, weakenThenDissolve], CONTINUOUS_EMBLEMS),
+  testCatalog(
+    [
+      ...CONTINUOUS_CARDS,
+      ...DSL_CARDS,
+      enemyBaseThree,
+      twoPlusX,
+      awakenedBanner,
+      selfAwakened,
+      kicker,
+      weakenUntilPays,
+      weakenThenDissolve,
+      playAnthem,
+      voidAnthem,
+      handAnthem,
+      anyAnthem,
+      handEventAnthem,
+      voidVengeful,
+      dissolveAlly,
+      dissolveAllyThenFail,
+    ],
+    CONTINUOUS_EMBLEMS,
+  ),
 );
 const catalog = engine.catalog;
 const c = CONTINUOUS;
@@ -236,6 +290,139 @@ describe("static abilities", () => {
     const { state, ids } = board({ player: { back: [c.vengefulBanner.id, v.vanilla1.id] } });
     expect(hasKeyword(state, catalog, ids.player.back[1]!, "vengeful")).toBe(true);
     expect(hasKeyword(state, catalog, ids.player.back[0]!, "vengeful")).toBe(false);
+  });
+});
+
+describe("static abilities from other zones", () => {
+  /** Applies an action with every answer used, checking the invariants (the memoized evaluation matches a fresh one). */
+  const act = (state: BattleState, side: Side, action: Action, answers: readonly Answer[] = []) => {
+    const source = new ScriptedSource(answers);
+    const result = engine.apply(state, side, action, source);
+    source.assertExhausted();
+    expect(invariantViolations(result.state, catalog)).toEqual([]);
+    return result;
+  };
+  const zoneOf = (state: BattleState, id: InstanceId | null | undefined) => state.instances[id!]?.zone ?? null;
+
+  it("apply only while their card is in a zone they work from: play unless they name one, and 'any' is play, void, hand, and deck", () => {
+    const works: Record<FunctionalZone, readonly ("back" | "void" | "hand" | "deck")[]> = {
+      play: ["back"],
+      void: ["void"],
+      hand: ["hand"],
+      any: ["back", "void", "hand", "deck"],
+    };
+    const sources: Record<FunctionalZone, EngineCardDefinition> = { play: playAnthem, void: voidAnthem, hand: handAnthem, any: anyAnthem };
+    for (const zone of ["play", "void", "hand", "any"] as const) {
+      for (const placed of ["back", "void", "hand", "deck"] as const) {
+        const setup: SideSetup = { front: [v.vanilla1.id], [placed]: [sources[zone].id] };
+        const { state, ids } = board({ player: setup, enemy: { front: [v.vanilla1.id] } });
+        expect({ zone, placed, ally: spark(state, ids.player.front[0]) }).toEqual({ zone, placed, ally: works[zone].includes(placed) ? 2 : 1 });
+        expect(spark(state, ids.enemy.front[0])).toBe(1);
+      }
+    }
+  });
+
+  it("start as their card enters the zone and stop as it leaves, through played cards", () => {
+    const { state, ids } = board({ player: { back: [voidAnthem.id], front: [v.vanilla1.id], hand: [dissolveAlly.id], energy: 1, deck }, enemy: { deck } });
+    const [source] = ids.player.back;
+    const ally = ids.player.front[0];
+    expect(spark(state, ally)).toBe(1);
+    const dissolved = act(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, [[source!]]).state;
+    expect(zoneOf(dissolved, source)).toBe("void");
+    expect(spark(dissolved, ally)).toBe(2);
+    // Reclaimed, it leaves the void for play, where its ability does not work.
+    const reclaimed = act(dissolved, "player", { kind: "play", card: source!, from: "void" }).state;
+    expect(zoneOf(reclaimed, source)).toBe("play");
+    expect(spark(reclaimed, ally)).toBe(1);
+    expect(spark(reclaimed, source)).toBe(1);
+  });
+
+  it("apply from a hidden hand without naming the card to the opponent, in its view or its events", () => {
+    const { state, ids } = board({ player: { front: [v.vanilla1.id], hand: [DSL.drawTwo.id], energy: 2, deck: [handAnthem.id, handAnthem.id] }, enemy: { deck } });
+    const ally = ids.player.front[0]!;
+    const drawn = act(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" });
+    const hidden = ids.player.deck;
+    expect(drawn.state.sides.player.hand).toEqual(expect.arrayContaining([...hidden]));
+    expect(spark(drawn.state, ally)).toBe(3);
+    const seen = engine.view(drawn.state, "enemy");
+    // The opponent sees what the abilities change, never which cards hold them.
+    expect(seen.instances[ally]?.characteristics.spark).toBe(3);
+    for (const id of hidden) expect(seen.instances[id]).toBeUndefined();
+    expect(seen.sides.player.hand).toEqual({ count: 2, known: [] });
+    const published = JSON.stringify(drawn.events.map((entry) => eventSeenBy(entry, "enemy", drawn.state)));
+    for (const id of hidden) expect(published).not.toContain(`"${id}"`);
+    // Played from the hand, one stops working there, and its ability does not work in play.
+    const played = act(drawn.state, "player", { kind: "play", card: hidden[0], from: "hand" }).state;
+    expect(spark(played, ally)).toBe(2);
+    expect(spark(played, hidden[0])).toBe(2);
+  });
+
+  it("take their timestamp from when the card entered the zone they work from", () => {
+    for (const [entered, vengeful] of [[1, false], [3, true]] as const) {
+      const { state, ids } = board({ player: { front: [v.vanilla1.id], void: [voidVengeful.id] } });
+      const ally = ids.player.front[0]!;
+      float(state, { kind: "keyword", instance: ally, keyword: "vengeful", gains: false }, 2);
+      state.instances[ids.player.void[0]].enteredZoneAt = entered;
+      // The later of the static grant and the floating loss decides.
+      expect(hasKeyword(state, catalog, ally, "vengeful")).toBe(vengeful);
+    }
+  });
+
+  it("belong to the side whose void or hand holds the card", () => {
+    const { state, ids } = board({ player: { front: [v.vanilla1.id] }, enemy: { front: [v.vanilla1.id], void: [voidAnthem.id], hand: [handAnthem.id] } });
+    expect(spark(state, ids.enemy.front[0])).toBe(3);
+    expect(spark(state, ids.player.front[0])).toBe(1);
+    // A card the player owns but the enemy holds works for the enemy.
+    const held = ids.enemy.hand[0];
+    state.instances[held] = { ...state.instances[held], owner: "player" };
+    expect(new Layers(state, catalog).of(ids.enemy.front[0]!).spark).toBe(3);
+    expect(new Layers(state, catalog).of(ids.player.front[0]!).spark).toBe(1);
+  });
+
+  it("store nothing: a reloaded play waiting on a target reads the same, bounces foreign and illegal answers, and stops on the commit", () => {
+    const { state, ids } = board({ player: { front: [v.vanilla1.id], hand: [handEventAnthem.id], energy: 1, deck }, enemy: { front: [v.vanilla1.id, v.vanilla2.id], deck } });
+    const ally = ids.player.front[0];
+    const [enemy] = ids.enemy.front;
+    const reloadedState = JSON.parse(JSON.stringify(state)) as BattleState;
+    expect(stateHash(reloadedState)).toBe(stateHash(state));
+    expect(spark(reloadedState, ally)).toBe(2);
+    expect(engine.legalActions(reloadedState, "player")).toEqual(engine.legalActions(state, "player"));
+
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const started: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    const suspended = fold.reduce(started, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
+    if (suspended.kind !== "applied") throw new Error("bounced");
+    const saved = JSON.parse(JSON.stringify(suspended.slice)) as BattleSlice;
+    const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
+    const pending = fresh.pending(saved)!;
+    expect(pending.prompt.id).toBe(fold.pending(suspended.slice)!.prompt.id);
+    // Until the play commits the card is still in the hand, working.
+    expect(spark(saved.committed, ally)).toBe(2);
+    const answer = (side: Side, value: Answer) => fresh.reduce(saved, { kind: "answer", side, promptId: pending.prompt.id, value });
+    expect(answer("enemy", [enemy!])).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+    expect(answer("player", [ally!])).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+    expect(spark(saved.committed, ally)).toBe(2);
+    const answered = answer("player", [enemy!]);
+    if (answered.kind !== "applied" || answered.error !== null) throw new Error("the answer did not apply");
+    expect(spark(answered.slice.committed, ally)).toBe(1);
+    expect(stateHash(answered.slice.committed)).toBe(stateHash(play(state, "player", ids.player.hand[0], [[enemy!]]).state));
+  });
+
+  it("start nothing when the step that moved their card fails, which commits nothing", () => {
+    const { state, ids } = board({ player: { back: [voidAnthem.id], front: [v.vanilla1.id], hand: [dissolveAllyThenFail.id], deck }, enemy: { deck } });
+    const [source] = ids.player.back;
+    const ally = ids.player.front[0];
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const started: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    const played = fold.reduce(started, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
+    if (played.kind !== "applied") throw new Error("bounced");
+    const outcome = fold.reduce(played.slice, { kind: "answer", side: "player", promptId: fold.pending(played.slice)!.prompt.id, value: [source!] });
+    if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
+    // The resolution dissolved the source before it failed; none of it commits, so the source stays in play and its ability does not work.
+    const after = outcome.slice.committed;
+    expect(zoneOf(after, source)).toBe("play");
+    expect(spark(after, ally)).toBe(1);
+    expect(outcome.published.map((entry) => entry.kind)).toEqual(["cardPlayed"]);
   });
 });
 
