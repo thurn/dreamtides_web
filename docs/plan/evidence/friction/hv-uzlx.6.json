@@ -1,0 +1,24 @@
+{
+  "bead": "hv-uzlx.6",
+  "phase": 5,
+  "baseOid": "bbdabee5fdd79672f390c5ce432e2bc674a90256",
+  "implementMin": 6.95,
+  "localValidationS": {
+    "focusedBefore": 7.281,
+    "focused": 7.561,
+    "reviewFailed": 5.655,
+    "review": 22.62,
+    "knip": 3.666
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 6.90966796875,
+  "testDelta": {
+    "files": 8,
+    "lines": -207,
+    "jsdomFiles": 2,
+    "cases": 0,
+    "fixtureModules": 5,
+    "fixtureLines": 483
+  },
+  "friction": []
+}
