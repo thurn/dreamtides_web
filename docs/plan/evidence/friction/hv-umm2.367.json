@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.367",
+  "phase": 5,
+  "baseOid": "adb7ccb5c820120fdfe4cad27b15c2538bcc064e",
+  "implementMin": 3.62,
+  "implementMinEstimated": true,
+  "implementationTimingBasis": "From first fresh-worktree npm install timestamp to precommit evidence write; excludes brief/read-only setup before that timestamp and final commit overhead.",
+  "localValidationS": {
+    "friction-dispatch": 0.349013090133667,
+    "review": 0.35096001625061035,
+    "knip": 5.230166912078857
+  },
+  "hostLoad": 20.48,
+  "validationLoad": {
+    "friction-dispatch": "{ 22.32 15.93 13.68 }",
+    "review": "{ 20.17 15.77 13.66 }",
+    "knip": "{ 20.48 15.90 13.72 }"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "checks": {
+    "review": "exit 0; two documentation files changed; no applicable checks",
+    "knip": "exit 0; preparation, unused-code check, and local-art restoration completed",
+    "frictionDispatch": "exit 0; all fired tags dispositioned; phase 5 own-worktree snapshot 20/25 uncovered since hv-umm2.355"
+  },
+  "rulesAuthority": "RD-hv-8395-1",
+  "fallout": [],
+  "runtimeEvidence": "runtime-final.json in session scratch: all tracked PIDs absent; no worktree-rooted command or working directory outside inspection processes.",
+  "validationProvenance": "review.json and knip.json record identical documentation before/after SHA256 values. Evidence files follow document checks. Historical engine validation belongs to hv-8395.",
+  "delivery": "Owning session handles exact-commit verification and native candidate/promotion actions."
+}

@@ -908,9 +908,11 @@ used solely for this cost criterion can be 0 because a zero-cost discovery
 is meaningful.
 
 **Look at the top N cards** — Look at the top N cards of your deck, or all of
-them if fewer remain. Only you see the cards you look at, and you keep knowing
-each one that stays in your deck until the deck is shuffled; your opponent sees
-how many you looked at.
+them if fewer remain. Only you see the cards you look at. You keep knowing the
+position of each one that stays in your deck while visible movement determines
+it; ambiguous movement can make you lose track of it, and shuffling ends all
+position tracking (see **Put on top or on the bottom of a deck** below). Your
+opponent sees how many you looked at.
 With an empty deck nothing happens, and there is no Fatigue.
 
 "Draw K of the cards," as in "Look at the top 4 cards of your deck. Choose one:
