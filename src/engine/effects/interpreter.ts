@@ -17,8 +17,9 @@ import { sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
-import { randomDeckRemovalSettler, seesSource, type DeckRemovalBounds } from "../view/knowledge";
+import { randomDeckRemovalSettler, seesSource, type DeckRemovalBounds, type UnorderedDeckRemovals } from "../view/knowledge";
 import { abilityOrigin, originAbilities } from "../rules/activation";
+import type { BanishCardsNode, BanishNamedCardsNode } from "./primitives/banish-cards";
 import type { MaterializeNode } from "./primitives/materialize";
 import { primitiveDefinition } from "./registry";
 import type { CapturedCardsSpec, CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
@@ -741,8 +742,21 @@ function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
 /** Resolves one node of an effect in `env`, tracking the cards it moves (`MovedCards`). */
 export function resolveNode(ctx: StepContext, node: EffectNode, env: EffectEnv): void {
   const resolve = (): void => primitiveDefinition(node.op).resolve(ctx, node, env);
+  const windows = deckRemovalWindows(ctx, node, env);
+  env.moved.track(node, windows === null ? resolve : () =>
+    ctx.settlingKnowledge(randomDeckRemovalSettler(ctx.state, windows.bounds, windows.unordered), resolve));
+}
+
+/** What each viewer can tell of the deck places `node`'s removals leave: a public prefix, and whether they leave in deck order. */
+interface DeckRemovalWindows {
+  readonly bounds: DeckRemovalBounds;
+  readonly unordered: UnorderedDeckRemovals;
+}
+
+function deckRemovalWindows(ctx: StepContext, node: EffectNode, env: EffectEnv): DeckRemovalWindows | null {
+  if (node.op === "banishCards") return banishDeckWindows(ctx, node as BanishCardsNode, env);
   const bounds = picksAtRandomFromDeck(node) ? {} : materializeDeckBounds(ctx, node, env);
-  env.moved.track(node, bounds === null ? resolve : () => ctx.settlingKnowledge(randomDeckRemovalSettler(ctx.state, bounds), resolve));
+  return bounds === null ? null : { bounds, unordered: {} };
 }
 
 /**
@@ -784,6 +798,46 @@ function publicTopDeckLimit(effect: EffectNode): number | null {
   const decks = refs.filter((ref): ref is ZoneCardSpec => !("op" in ref) && ref.zone === "deck");
   if (decks.length === 0 || decks.some((ref) => ref.pick !== "top" || !Number.isSafeInteger(ref.count))) return null;
   return Math.max(0, ...decks.map((ref) => ref.pick === "top" ? ref.count : 0));
+}
+
+/** The deck references of a named banishment, each with the deck's owner. */
+function banishedDecks(node: BanishNamedCardsNode, controller: Side): { readonly ref: ZoneCardSpec; readonly owner: Side }[] {
+  return node.cards.flatMap((ref) => ref.kind !== "inZone" || ref.zone !== "deck" ? []
+    : [{ ref, owner: ref.pick === "self" ? controller : resolvePlayer(controller, ref.player) }]);
+}
+
+/**
+ * Public deck windows for a named banishment (rules § Keywords and Effects →
+ * Banish), independent of the selected hidden branch. Its cards leave in
+ * reference order, each reference's in deck order. A viewer who can
+ * attribute the ability bounds a deck's anonymous removals by the deepest
+ * fixed top count its declared named banishments take from that deck, and
+ * sees them leave in deck order only when each of those banishments names
+ * that deck once, by top or every cards. Otherwise the whole deck is
+ * possible, and the order shows nothing of the cards' places.
+ */
+function banishDeckWindows(ctx: StepContext, node: BanishCardsNode, env: EffectEnv): DeckRemovalWindows | null {
+  if (node.from !== "cards") return null;
+  const owners = new Set(banishedDecks(node, env.controller).map(({ owner }) => owner));
+  if (owners.size === 0) return null;
+  const bounds: Partial<Record<Side, Partial<Record<Side, number>>>> = {};
+  const unordered: Partial<Record<Side, Side[]>> = {};
+  for (const owner of owners) {
+    bounds[owner] = {};
+    unordered[owner] = [];
+    for (const viewer of ["player", "enemy"] as const) {
+      const effect = publicAbilityEffect(ctx, env, viewer);
+      const declared = (effect === null ? [] : everyNode(effect))
+        .filter((part): part is BanishNamedCardsNode => part.op === "banishCards" && (part as BanishCardsNode).from === "cards")
+        .map((part) => banishedDecks(part, env.controller).filter((deck) => deck.owner === owner).map(({ ref }) => ref));
+      const refs = declared.flat();
+      if (refs.length > 0 && refs.every((ref) => ref.pick === "top" && Number.isSafeInteger(ref.count))) {
+        bounds[owner][viewer] = Math.max(...refs.map((ref) => ref.pick === "top" ? ref.count : 0));
+      }
+      if (refs.length === 0 || declared.some((named) => named.length > 1 || named.some((ref) => ref.pick === "random"))) unordered[owner].push(viewer);
+    }
+  }
+  return { bounds, unordered };
 }
 
 /**

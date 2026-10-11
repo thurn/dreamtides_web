@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.433",
+  "base": "cf7b071f411f9742cf91e81fee37143e01a5d59e",
+  "measurementWindow": {
+    "scope": "Claim through commit preparation by the claiming Claude Code session acting as implementer, including research, verification and waits."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": { "measuredFor": "npm run review starting one-minute host load (sysctl vm.loadavg)." }
+    }
+  },
+  "baseLeakProof": {
+    "source": "cf7b071f411f9742cf91e81fee37143e01a5d59e with only src/engine/effects/primitives/contracts/banish-deck-knowledge.contracts.ts added",
+    "command": "npx vitest run src/engine/effects/primitives/contracts.test.ts -t 'banishCards deck knowledge'",
+    "result": "12 failed, 5 passed. banishCards([topOfDeck(3, character)]) removed the unknown slot-0 character; both viewers' views still placed the known slot-1 card at exact index 0 although slot 2 was equally possible. The crossed two-reference, opaque, hidden-source and asymmetric-viewer cases also retained positions their public movement leaves open."
+  },
+  "mutations": [
+    { "change": "settler ignores the unordered viewers", "result": "both crossed reference-order contracts fail" },
+    { "change": "every viewer uses the controller's public ability proof", "result": "both asymmetric-viewer contracts fail" }
+  ],
+  "validation": {
+    "focusedContracts": "src/engine/effects/primitives/contracts.test.ts 1019/1019",
+    "review": { "seconds": 54, "exit": 0 },
+    "knip": { "seconds": 3, "exit": 0 },
+    "fuzzSmoke": "npm run fuzz:engine -- --games 100: 100 games, 49512 steps, 35.7 s wall, failures 0"
+  },
+  "hostLoadSamples": [{ "step": "review", "oneMinute": 30.24 }]
+}
