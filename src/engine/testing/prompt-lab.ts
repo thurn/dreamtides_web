@@ -974,8 +974,9 @@ function labDeck(setup: BoardSetup, side: Side): DeckEntry[] {
  * definitions: its engine init (the decks are the placed cards, so the AI's
  * determinization deals from them) and its slice after the script. Throws
  * when a scripted intent bounces or errors, so a stale fixture fails loudly.
+ * An optional observer receives each successful script step's published events.
  */
-export function promptLabBattle(engine: Engine, fixture: PromptLabFixture): { init: BattleInit; slice: BattleSlice } {
+export function promptLabBattle(engine: Engine, fixture: PromptLabFixture, published?: (events: readonly EngineEvent[]) => void): { init: BattleInit; slice: BattleSlice } {
   const { state, ids } = boardState(engine.catalog, fixture.setup);
   const avatars: Partial<Record<Side, AvatarId>> = {};
   const dreamsigns: Partial<Record<Side, readonly DreamsignId[]>> = {};
@@ -995,7 +996,11 @@ export function promptLabBattle(engine: Engine, fixture: PromptLabFixture): { in
   };
   const adapter = createFoldAdapter(engine);
   let slice: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
-  for (const step of fixture.script) slice = applyLabStep(engine, adapter, fixture, ids, slice, step).slice;
+  for (const step of fixture.script) {
+    const result = applyLabStep(engine, adapter, fixture, ids, slice, step);
+    slice = result.slice;
+    published?.(result.published);
+  }
   return { init, slice };
 }
 

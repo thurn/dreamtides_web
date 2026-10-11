@@ -1,0 +1,8 @@
+{"uuid":"7ea13d02-9d97-492e-9edb-f326eb3b4d1c","variant":"base","verdict":"pass","notes":"","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}
+{"uuid":"7ea13d02-9d97-492e-9edb-f326eb3b4d1c","variant":"amplified","verdict":"pass","notes":"","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}
+{"uuid":"7ea13d02-9d97-492e-9edb-f326eb3b4d1c","variant":"base","as":"enemy","verdict":"pass","notes":"","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}
+{"uuid":"7ea13d02-9d97-492e-9edb-f326eb3b4d1c","variant":"amplified","as":"enemy","verdict":"pass","notes":"","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}
+{"uuid":"967c714f-40c5-4a77-8e22-40691a2755d4","variant":"base","verdict":"pass","notes":"","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}
+{"uuid":"967c714f-40c5-4a77-8e22-40691a2755d4","variant":"amplified","verdict":"skip","notes":"the card cannot take this variant","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}
+{"uuid":"967c714f-40c5-4a77-8e22-40691a2755d4","variant":"base","as":"enemy","verdict":"pass","notes":"","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}
+{"uuid":"967c714f-40c5-4a77-8e22-40691a2755d4","variant":"amplified","as":"enemy","verdict":"skip","notes":"the card cannot take this variant","screens":[],"mode":"sweep","bead":"hv-umm2.388","commit":"a23c624c1ba9c5f57f7399a9cbba00a7566cd6fc"}

@@ -608,6 +608,8 @@ helper.
 
 ### Card sweep
 
+Run `npm run lab:preflight -- --cards <uuid,...> [--variants all|<v>,...] [--as player|enemy|both]` first for Node-only fixture and resolution checks; the browser sweep provides acceptance.
+
 ```bash
 node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter> \
   [--variants all|<v>,...] [--as player|enemy|both] [--timeout <s>] [--port <n>] [--capture]

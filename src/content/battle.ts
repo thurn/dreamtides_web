@@ -57,6 +57,9 @@ export const BATTLE = {
   // Whether a prompt with exactly one legal answer (a forced choice) is
   // answered automatically instead of being asked; the answer is recorded.
   autoAnswerForcedPrompts: true,
+  // Tooling only: maximum submitted intents for one Node card-lab preflight.
+  // Exhaustion reports a stalled fixture while browser acceptance stays separate.
+  labPreflight: { maxIntents: 256 },
   // The battle screen's presentation of engine events ("present, then
   // ask"). Each presented event holds back the next prompt and the board's
   // next change for its dwell: a card's travel between zones or a notice

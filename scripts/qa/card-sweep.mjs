@@ -103,6 +103,7 @@ async function main() {
   mkdirSync(dirname(ledger), { recursive: true });
   const hostLoad = loadavg()[0];
   const startedAt = Date.now();
+  const startedClock = performance.now();
   /** @type {Record<string, number>} */
   const counts = {};
   const record = (/** @type {Record<string, unknown>} */ line) => {
@@ -113,6 +114,9 @@ async function main() {
   };
 
   const session = await openQaSession({ bead: options.bead, label: "card-sweep", port: options.port, prod: false, minify: false, cwd: null });
+  const scenarioStarted = performance.now();
+  let scenarioMs = 0;
+  let cleanupMs = 0;
   try {
     for (const card of options.cards) {
       for (const side of options.sides) {
@@ -151,8 +155,12 @@ async function main() {
       }
     }
   } finally {
+    scenarioMs = performance.now() - scenarioStarted;
+    const cleanupStarted = performance.now();
     await session.close();
+    cleanupMs = performance.now() - cleanupStarted;
   }
+  say(JSON.stringify({ event: "cardSweepSummary", counts, hostLoad, wallMs: { ...session.wallMs, scenario: scenarioMs, cleanup: cleanupMs, total: performance.now() - startedClock } }));
   say(`swept in ${String(Math.round((Date.now() - startedAt) / 1000))} s at load ${hostLoad.toFixed(2)}: ${JSON.stringify(counts)}; ledger ${ledger}`);
   process.exitCode = (counts.fail ?? 0) > 0 ? 1 : 0;
 }

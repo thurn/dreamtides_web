@@ -1229,6 +1229,25 @@ mobile capture (390×844), and one changed interaction state. Verify each with
 
 ### Card QA (Phases 4–7)
 
+**Engine preflight.** Before the scripted browser sweep, run
+`npm run lab:preflight -- --cards <uuid,...> [--variants all|<v>,...]
+[--as player|enemy|both]` with the sweep's same cards and options. It builds
+the existing card-lab fixtures in Node, answers both sides with the engine's
+first legal answer, and passes until the stack is empty without a prompt or
+in-flight step. The enemy fixture includes its scripted play; this checks
+that prepaid lab play, rather than a policy-selected AI action. It stops
+before further Day actions. Content UUIDs take precedence over lab definitions.
+
+JSONL rows carry UUID, side, variant, verdict, classified failure reason,
+physical source instance, final zone, actual public events (including fixture
+script events), and elapsed milliseconds. Pending definitions report
+`pending`; ineligible variants report `skip`. Fixture failures, missing legal
+plays, engine errors, bounded intent-guard exhaustion, absent source-scoped
+resolution, and unexpected source zones report `fail` and exit 1. Invalid
+command arguments exit 2. The final summary reports counts, wall time, and
+host load. Preflight measures engine behavior; the browser sweep remains the
+acceptance check for controls, rendered state, worker behavior, and `__caps`.
+
 **Scripted sweep.** `node scripts/qa/card-sweep.mjs --bead <id> --cards
 <uuid,...> [--port <port>]` drives the Playwright MCP service through
 `scripts/screenshot-runtime.mjs` and the scenario runner's helper prelude

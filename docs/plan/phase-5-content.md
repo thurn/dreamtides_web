@@ -232,7 +232,11 @@ composition beads skip it.
      with no scenarios, or a scenario name used twice.
 6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <bead entities>`.
    Decks are biased to include the bead's entities. It is heavy (D17).
-7. **Sweep** the bead's entities in the card-lab, on the bead's port:
+7. **Preflight and sweep** the bead's entities in the card-lab. First run
+   `npm run lab:preflight -- --cards <entity uuids>` in Node to catch fixture
+   staging and engine resolution failures before starting a browser. Use the
+   same `--variants` and `--as` options for a focused preflight and sweep.
+   Then run the browser sweep on the bead's port:
    `node scripts/qa/card-sweep.mjs --bead <id> --cards <entity uuids> --port <port>`,
    with the bead's entity UUIDs comma-separated. Its defaults cover every
    variant the card can take, base and amplified among them, `as=player` and

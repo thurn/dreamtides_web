@@ -8,6 +8,7 @@
  */
 import type { EngineCardDefinition } from "../catalog";
 import type { Engine } from "../engine";
+import type { EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES, type CardId, type Side } from "../state/ids";
 import type { BattleInit, DeckEntry } from "../state/types";
@@ -258,13 +259,14 @@ export function cardLabFixture(engine: Engine, request: CardLabRequest, pool: re
   };
 }
 
-/** The card-lab battle: its engine init and its slice, at the card's play. */
+/** The card-lab battle: its init and slice at play, with optional scripted-event observation. */
 export function cardLabBattle(
   engine: Engine,
   request: CardLabRequest,
   pool: readonly EngineCardDefinition[],
+  published?: (events: readonly EngineEvent[]) => void,
 ): { init: BattleInit; slice: BattleSlice } {
-  const lab = promptLabBattle(engine, cardLabFixture(engine, request, pool));
+  const lab = promptLabBattle(engine, cardLabFixture(engine, request, pool), published);
   if (request.stage === undefined) return lab;
   const stage = cardLabStageFromUnknown(request.stage);
   enemyActions(engine, stage, lab.slice);

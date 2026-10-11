@@ -1,0 +1,107 @@
+{
+  "bead": "hv-umm2.388",
+  "phase": 5,
+  "implementMin": 16.964,
+  "measurementWindow": "native claim to pre-commit evidence; final commit time in handoff",
+  "localValidationS": {
+    "focused-settled": 3.081,
+    "review-settled": 35.567,
+    "knip-settled": 2.29,
+    "full": 58.777
+  },
+  "hostLoad": {
+    "focused-settled": {
+      "exit": 0,
+      "wallS": 3.080730959016364,
+      "loadStart": [
+        2.61865234375,
+        4.84716796875,
+        7.02197265625
+      ],
+      "loadEnd": [
+        2.61865234375,
+        4.84716796875,
+        7.02197265625
+      ],
+      "log": "/tmp/hv-umm2-388-checks/focused-settled.log"
+    },
+    "review-settled": {
+      "exit": 0,
+      "wallS": 35.56653750000987,
+      "loadStart": [
+        2.61865234375,
+        4.84716796875,
+        7.02197265625
+      ],
+      "loadEnd": [
+        4.42626953125,
+        5.07666015625,
+        7.0185546875
+      ],
+      "log": "/tmp/hv-umm2-388-checks/review-settled.log"
+    },
+    "knip-settled": {
+      "exit": 0,
+      "wallS": 2.289884208003059,
+      "loadStart": [
+        4.42626953125,
+        5.07666015625,
+        7.0185546875
+      ],
+      "loadEnd": [
+        4.55224609375,
+        5.091796875,
+        7.01220703125
+      ],
+      "log": "/tmp/hv-umm2-388-checks/knip-settled.log"
+    },
+    "full": {
+      "exit": 0,
+      "wallS": 58.77653299999656,
+      "loadStart": [
+        4.55224609375,
+        5.091796875,
+        7.01220703125
+      ],
+      "loadEnd": [
+        4.06787109375,
+        4.908203125,
+        6.82470703125
+      ],
+      "log": "/tmp/hv-umm2-388-checks/full.log"
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 70,
+    "jsdomFiles": 0,
+    "cases": 6
+  },
+  "comparison": {
+    "headlessMainMs": 15.313209000000029,
+    "headlessCommandS": 0.9192289159982465,
+    "browserCommandS": 79.7428032499738,
+    "browserWallMs": {
+      "browserLeaseWait": 39,
+      "serve": 1251,
+      "scenario": 73185.749834,
+      "cleanup": 229.28937499999302,
+      "total": 74732.519583
+    },
+    "counts": {
+      "pass": 6,
+      "pending": 0,
+      "skip": 2,
+      "fail": 0
+    },
+    "rowsMatch": true,
+    "sourceFrozen": true
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "note": "Initial synthetic catalog double-added built-in UUIDs; corrected to createCatalog without changing the duplicate guard. Setup-response fixture used the wrong SideState field; corrected to currentEnergy. Typecheck caught wrapper-only event.seq assumption and unbranded subtype; use ordered EngineEvents and parseCardSubtype. Initial review 39.933 s and failed focused iterations 3.076 s/2.143 s are retained. All corrections preceded final settled validation."
+    }
+  ],
+  "improvementBeads": []
+}
