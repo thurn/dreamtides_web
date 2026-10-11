@@ -894,10 +894,14 @@ conditional forms such as "Prevent an event unless the opponent pays 2●," and
 forms that send the card elsewhere: on top of its owner's deck, into its
 owner's hand, or into your hand (see [Zones](#zones) → Hand).
 
-**Abandon** — Move one of your own characters from play to the void. Abandon
-cannot be prevented and targets only your own characters, and it fires the
-character's ▸Dissolved trigger. It is frequently used as a cost. A figment that
-is abandoned ceases to exist after firing its dissolved triggers.
+**Abandon** — Move one of your own characters from play to the void. When an
+effect tells a player to abandon a character, that player chooses a matching
+character they control as the effect resolves. This choice does not target,
+so a character that cannot be targeted by effects can be abandoned. With no
+matching character, that part does nothing and the rest of the effect still
+happens. Abandon cannot be prevented, and it fires the character's ▸Dissolved
+trigger. It is frequently used as a cost. A figment that is abandoned ceases
+to exist after firing its dissolved triggers.
 
 **Foresee N** — Look at the top N cards of your deck, reorder them in any order,
 and optionally send any of them to the void. Only you see the cards you look

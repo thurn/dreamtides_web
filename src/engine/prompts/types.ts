@@ -24,6 +24,8 @@ export type PromptRole =
   | "optionalCost"
   /** The characters abandoned to pay a cost. */
   | "abandonCost"
+  /** The character its controller chooses to abandon as an effect resolves; not a target. */
+  | "abandon"
   /** The cards discarded to pay a cost. */
   | "discardCost"
   /** The cards revealed to pay a cost. */

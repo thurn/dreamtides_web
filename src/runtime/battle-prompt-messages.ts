@@ -88,6 +88,7 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
       case "optionalCost":
         return "Pay the optional cost?";
       case "abandonCost":
+      case "abandon":
         return cards("abandon", "character", "characters");
       case "discardCost":
       case "discard":
@@ -336,6 +337,7 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
     case "optionalCost":
       return "way to pay its cost";
     case "abandonCost":
+    case "abandon":
       return "character you could abandon";
     case "revealCost":
       return "card you could reveal";

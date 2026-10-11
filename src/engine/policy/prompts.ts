@@ -133,6 +133,7 @@ const ROLE_STRATEGIES = {
   chooseCost: { cards: "hostile", number: "largest" },
   optionalCost: { cards: "hostile", number: "largest" },
   abandonCost: { cards: "loss", number: "largest" },
+  abandon: { cards: "loss", number: "largest" },
   discardCost: { cards: "loss", number: "largest" },
   revealCost: { cards: "loss", number: "largest" },
   banishCost: { cards: "loss", number: "largest" },

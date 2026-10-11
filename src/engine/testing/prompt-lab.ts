@@ -104,6 +104,8 @@ export const LAB = {
   discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
   /** Choose either player to discard and draw, preserving the source controller. */
   choosePlayer: labEvent(0x60, 1, p.choosePlayer((player) => p.sequence(p.discard(1, player), p.draw(1, player)))),
+  /** Choose one of your characters to abandon during resolution. */
+  abandon: labEvent(0x62, 1, p.abandon()),
   /** "Dissolve up to one enemy." */
   dissolveUpToOne: labEvent(3, 1, p.dissolve(upTo(enemyCharacter(), 1))),
   /** A pending event (D36): it plays text-less and reports its pending ability. */
@@ -172,6 +174,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.abandon.id]: { name: "Lab Farewell", text: "Abandon a character." },
   [LAB.putFromTopThenShuffle.id]: { name: "Lab Recollection", text: "Look at the top 2 cards of your deck. Put one on top of your deck and the other into your void. Shuffle your void into your deck." },
   [LAB.choosePlayer.id]: { name: "Lab Rekindling", text: "Choose a player. That player discards a card, then draws a card." },
   [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
@@ -296,6 +299,16 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "abandon",
+    description: "Choose one public battlefield character to abandon as the effect resolves",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [LAB.abandon.id], back: [vanillas[0], vanillas[0]], energy: 2, deck: deck(6) },
+      enemy: { back: [vanillas[1]], hand: [vanillas[2]], deck: deck(6) },
+    },
+    script: [],
+  },
   {
     name: "choose-player",
     description: "Choose either player, then that player chooses their own discard",
