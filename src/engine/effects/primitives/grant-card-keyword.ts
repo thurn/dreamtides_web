@@ -1,4 +1,4 @@
-import { characteristics, matchesFilter } from "../../continuous/characteristics";
+import { matchesFilter } from "../../continuous/characteristics";
 import { resolvePlayer } from "../../dsl/selectors";
 import type { CardFilter, CountedZone, Keyword, PlayerRef } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
@@ -22,9 +22,10 @@ export interface CardsInZone {
  * it, each card in the zone that matches the filter has the keyword, and
  * loses it as it leaves the zone or the ability stops applying (rules §
  * Ability Types → Static abilities, RD-hv-umm2.52-1). The filter reads the
- * type changes of layer 2. It is a static "have" only, so resolving it is an
- * engine error: a floating record would name hidden cards in the public
- * `effectStarted` event.
+ * type changes of layer 2 through the evaluation expanding the ability. It is
+ * a static "have" only (`staticOnly`), so resolving it is an engine error: a
+ * floating record would name hidden cards in the public `effectStarted`
+ * event.
  */
 export interface GrantCardKeywordNode {
   readonly op: "grantCardKeyword";
@@ -36,6 +37,7 @@ const LAYER: Layer = 3;
 
 export const grantCardKeywordPrimitive = definePrimitive<GrantCardKeywordNode>({
   op: "grantCardKeyword",
+  staticOnly: true,
   resolve() {
     throw new Error("grantCardKeyword is a static ability's 'have' and never resolves");
   },
@@ -54,9 +56,7 @@ function cardsInZone(env: StaticEnv, cards: CardsInZone): InstanceId[] {
   const ids = env.state.sides[side][cards.zone];
   const { filter } = cards;
   if (filter.cardType === undefined && filter.subtype === undefined) return [...ids];
-  // The layer evaluation of this state, read through the layer before this one, never this one.
-  const read = characteristics(env.state, env.catalog).reader(LAYER - 1);
-  return ids.filter((id) => matchesFilter(read(id), filter));
+  return ids.filter((id) => matchesFilter(env.read(id), filter));
 }
 
 /** "<cards> in <your> <zone>": `player`'s cards in `zone` matching `filter`. */

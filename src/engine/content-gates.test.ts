@@ -2,7 +2,8 @@
  * The content gates (engine-design § Content gates): the sanctioned
  * data-to-engine contract test. Every catalog entity is pending, vanilla, or
  * authored; authored abilities build for both variants from registered
- * primitives, declare every play-time target they hold, and keep play-time
+ * primitives, hold static-only primitives only as a static ability's whole
+ * effect, declare every play-time target they hold, and keep play-time
  * targets and triggering-card references out of static abilities; each
  * authored entity's verifiedText matches its text; and every figment has a
  * unique UUID and a non-negative integer base spark. Each check collects its
@@ -17,12 +18,16 @@ import { DREAMSIGNS } from "../content/dreamsigns";
 import { DREAMWELL_CARDS } from "../content/dreamwell";
 import { FIGMENTS } from "../content/figments";
 import { abilityEffect } from "./dsl/abilities";
-import { all, characterYouControl, staticAbility, target } from "./dsl/builders";
-import { triggeringCard } from "./dsl/triggers";
+import { activated, all, characterYouControl, energy, event, staticAbility, target } from "./dsl/builders";
+import { onMaterialized, triggered, triggeringCard } from "./dsl/triggers";
 import type { Ability } from "./dsl/types";
 import { expectedVerifiedText } from "./dsl/verified-text";
 import { engineCardFromContent } from "./content-catalog";
 import { everyNode } from "./effects/interpreter";
+import { chooseOne } from "./effects/primitives/choose-one";
+import { draw } from "./effects/primitives/draw";
+import { cardsIn, grantCardKeyword } from "./effects/primitives/grant-card-keyword";
+import { sequence } from "./effects/primitives/sequence";
 import { sparkModifier } from "./effects/primitives/spark-modifier";
 import { primitiveDefinition } from "./effects/registry";
 import { undeclaredAbilityTargets } from "./testing/target-audit";
@@ -75,18 +80,27 @@ function authoredFailures(check: (abilities: readonly Ability[]) => readonly str
 
 /**
  * Every node of each ability's effect, every mode of a modal node included,
- * is a registered primitive, and a static ability holds a continuous
- * primitive, which the layer evaluation applies.
+ * is a registered primitive; a static ability holds a continuous primitive,
+ * which the layer evaluation applies; and a static-only primitive, which
+ * never resolves, is held only as a static ability's whole effect, never in
+ * an event, trigger, or activation or nested in another node.
  */
 function primitiveFailures(abilities: readonly Ability[]): string[] {
   return abilities.flatMap((ability, index) => {
     const effect = abilityEffect(ability);
     if (effect === null) return [];
     return attempt(() => {
-      everyNode(effect);
-      return ability.kind === "static" && primitiveDefinition(effect.op).continuous === undefined
-        ? [`static ${effect.op} is not a continuous primitive`]
-        : [];
+      const nodes = everyNode(effect);
+      const failures =
+        ability.kind === "static" && primitiveDefinition(effect.op).continuous === undefined
+          ? [`static ${effect.op} is not a continuous primitive`]
+          : [];
+      for (const node of nodes) {
+        if (primitiveDefinition(node.op).staticOnly === true && (ability.kind !== "static" || node !== effect)) {
+          failures.push(`${ability.kind} ability holds the static-only ${node.op} outside a static ability's whole effect`);
+        }
+      }
+      return failures;
     }).map((message) => `ability ${String(index)}: ${message}`);
   });
 }
@@ -150,6 +164,19 @@ describe("content gates", () => {
     expect(staticReferenceFailures([staticAbility(sparkModifier(all(characterYouControl()), 1))])).toEqual([]);
     expect(staticReferenceFailures([staticAbility(sparkModifier(target(characterYouControl()), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(triggeringCard(), 1))])).toHaveLength(1);
+  });
+
+  it("rejects a static-only primitive anywhere but as a static ability's whole effect", () => {
+    const grant = grantCardKeyword(cardsIn("hand"), "offering");
+    expect(primitiveFailures([staticAbility(grant), staticAbility(grant, { zone: "void" })])).toEqual([]);
+    const misplaced: readonly Ability[] = [
+      event(grant),
+      event(sequence(draw(1), grant)),
+      event(chooseOne(draw(1), grant)),
+      triggered(onMaterialized(), grant),
+      activated([energy(1)], grant),
+    ];
+    for (const ability of misplaced) expect(primitiveFailures([ability]), ability.kind).toHaveLength(1);
   });
 
   it("gives every figment a unique UUID and a non-negative integer base spark", () => {

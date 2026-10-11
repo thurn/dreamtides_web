@@ -867,8 +867,13 @@ floating record per character. `lockedAtResolution(value)` marks the intent.
 **Continuous primitives** (`setBaseSpark`, `grant`/`loseKeyword`,
 `giveAllTypes`, `sparkModifier`, `costModifier`, `grantCardKeyword`) each
 declare a `continuous` hook: their layer and the changes they make while a
-static ability holds them. Their `resolve` makes floating records for their
-own duration, else the enclosing `forDuration`'s, else permanently.
+static ability holds them. The hook reads through `StaticEnv`: `characters`
+and `value` resolve references and values live, and `read` is the reader of
+the layers before its own in the evaluation expanding the ability, never
+another evaluation of the state. Except for the static-only
+`grantCardKeyword` (**Cards outside play**, below), their `resolve` makes
+floating records for their own duration, else the enclosing
+`forDuration`'s, else permanently.
 
 **Static abilities working outside play.** A `StaticAbility` carries a
 `zone: FunctionalZone`, the type triggered abilities use: `"play"` (the
@@ -898,11 +903,12 @@ nothing.
 keyword)` is the static "Cards in your hand have Offering" (layer 3): each
 card in that player's hand (the hand it holds), deck, or void (the ones it
 owns) whose layer-2 type and subtype match the filter has the keyword while
-it is there (RD-hv-umm2.52-1). It reads layer 2 through the state's layer
-evaluation (`characteristics(state).reader(2)`), since `StaticEnv` resolves
-only character references. It is static only: its `resolve` throws, since a
+it is there (RD-hv-umm2.52-1). It reads layer 2 through `StaticEnv.read`,
+so a fresh evaluation, such as the invariant check's, never consults a
+memoized one. It is static only (`staticOnly`): its `resolve` throws, since a
 floating record naming a card in a hidden zone would name it in the public
-`effectStarted` event. A dreamsign's "your deck" (C4) is a separate
+`effectStarted` event, and the content gate rejects it anywhere but as a
+static ability's whole effect. A dreamsign's "your deck" (C4) is a separate
 reference that `cardsIn` does not express.
 
 **Memoization:** the layer evaluation of a state is cached lazily, per card
@@ -1068,7 +1074,8 @@ can't use `import.meta.glob`.
 `targets`, an optional `deferred` hook naming effects that run later and so
 are excluded from play-time target collection, `entersPlay` for a primitive
 that puts characters into play, a `continuous` hook for a continuous
-primitive, and `resolve`. A primitive holding a character or card reference
+primitive, `staticOnly` for a primitive only a static ability holds, and
+`resolve`. A primitive holding a character or card reference
 declares it with the `characterTarget` or `cardTarget` helper. The registry
 finds each definition by that name at call time. `primitives/index.ts` lists one `export *` line
 per primitive and is the authoritative catalog; `effects/registry.ts` derives
@@ -1216,6 +1223,10 @@ and figment. Each check names every offending entity:
   both variants, every node of each effect (every mode included) is a
   registered primitive, and every static ability holds a continuous
   primitive.
+- **Static-only primitives.** A primitive marked `staticOnly`
+  (`grantCardKeyword`) appears only as a static ability's whole effect,
+  never in an event, triggered, or activated ability or nested in another
+  node, since resolving it throws.
 - **Undeclared targets.** Every play-time target spec a primitive holds is
   declared by its `targets` hook (`undeclaredAbilityTargets`,
   `testing/target-audit.ts`), so play-time choices never miss one.

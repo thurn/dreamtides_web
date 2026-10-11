@@ -3,6 +3,7 @@ import type { PromptPurpose, PromptRole } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { AbilityOrigin, BattleState, ContinuousChange, Expiry, SparkGain } from "../state/types";
 import type { StepContext } from "../steps/types";
+import type { CharacteristicsReader } from "../dsl/selectors";
 import type { CharacterRef, PlayTimeTarget, SelfSpec, StackTargetSpec, SubjectSpec, TargetSpec, ValueExpr, Variant } from "../dsl/types";
 
 /**
@@ -90,6 +91,12 @@ export interface PrimitiveDefinition<N extends EffectNode> {
    * rank would be full (rules § Battlefield Capacity).
    */
   readonly entersPlay?: boolean;
+  /**
+   * Whether only a static ability may hold the node, as its whole effect: a
+   * static "have" that never resolves, so `resolve` throws. The content
+   * gate rejects one anywhere else in an ability.
+   */
+  readonly staticOnly?: boolean;
   /** For a continuous primitive, the layer it applies in and its changes while a static ability holds it. */
   readonly continuous?: ContinuousDefinition<N>;
 }
@@ -113,6 +120,11 @@ export interface StaticEnv {
   /** The characters a reference covers now; a target or the triggering card covers none. */
   characters(ref: CharacterRef): InstanceId[];
   value(expr: ValueExpr): number;
+  /**
+   * Any card's characteristics after the layers before this primitive's own,
+   * read through the evaluation expanding the ability, never another one.
+   */
+  readonly read: CharacteristicsReader;
 }
 
 export interface ContinuousDefinition<N extends EffectNode> {

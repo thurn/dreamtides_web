@@ -271,6 +271,7 @@ export class Layers {
       source: entry.source,
       controller: entry.controller,
       characters,
+      read,
       value: (expr) =>
         evaluateValue(state, expr, {
           controller: entry.controller,

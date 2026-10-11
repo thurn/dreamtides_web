@@ -16,7 +16,8 @@ import { instanceOrigin } from "../../rules/activation";
 import { hasKeyword } from "../../rules/keywords";
 import { playRoutes } from "../../rules/timing";
 import { instanceOf } from "../../rules/zones";
-import { stateHash } from "../../state/hash";
+import { Layers } from "../../continuous/layers";
+import { deserializeState, serializeState, stateHash } from "../../state/hash";
 import type { CardId, InstanceId } from "../../state/ids";
 import type { BattleState } from "../../state/types";
 import { IllegalAnswer } from "../../steps/errors";
@@ -362,6 +363,13 @@ const opponentHandOffering: EngineCardDefinition = {
   abilities: () => [staticAbility(grantCardKeyword(cardsIn("hand", {}, "opponent"), "offering"))],
 };
 
+/** "Characters in your deck have Vengeful." */
+const deckCharactersVengeful: EngineCardDefinition = {
+  ...opponentHandOffering,
+  id: syntheticId(923),
+  abilities: () => [staticAbility(grantCardKeyword(cardsIn("deck", { cardType: "character" }), "vengeful"))],
+};
+
 /** A malformed event that resolves the static-only primitive. */
 const resolvesCardKeyword: EngineCardDefinition = {
   id: syntheticId(922),
@@ -375,7 +383,7 @@ const resolvesCardKeyword: EngineCardDefinition = {
 };
 
 describe("grantCardKeyword", () => {
-  const zones = createEngine(zoneCatalog([opponentHandOffering, resolvesCardKeyword]));
+  const zones = createEngine(zoneCatalog([opponentHandOffering, resolvesCardKeyword, deckCharactersVengeful]));
   const filler = Array.from({ length: 6 }, () => v.vanilla1.id);
   const setup = (player: SideSetup, enemy: SideSetup = {}): BoardSetup => ({
     active: "player",
@@ -459,6 +467,46 @@ describe("grantCardKeyword", () => {
     const legal = zones.legalActions(settled, "player");
     expect(legal).toContainEqual({ kind: "play", card: warrior, from: "void" });
     expect(legal.some((action) => action.kind === "play" && action.card === plainWarrior)).toBe(false);
+  });
+
+  it("reads layer 2 through the evaluation expanding it, never another evaluation of the state", () => {
+    const plain = placed(setup({ back: [DSL.voidMagesReclaim.id], void: [v.vanilla2.id] }));
+    const mage = placed(setup({ back: [DSL.voidMagesReclaim.id], void: [ZONE.sacrifice.id] }));
+    const card = plain.ids.player.void[0];
+    expect(mage.ids.player.void[0]).toBe(card);
+    expect(new Layers(mage.state, zones.catalog).of(card).keywords).toContain("reclaim");
+    // An evaluation of another state answers for this one, as a stale memo would; a fresh evaluation never consults it.
+    zones.catalog.memo.set(plain.state, { version: plain.state.version, layers: new Layers(mage.state, zones.catalog) });
+    expect(new Layers(plain.state, zones.catalog).of(card).keywords).not.toContain("reclaim");
+  });
+
+  it("covers its controller's deck cards that match, naming them in no view that does not know them, and stores nothing", () => {
+    const placedState = placed(
+      setup({ back: [deckCharactersVengeful.id], deck: [v.vanilla1.id, v.event1.id, v.vanilla2.id] }, { deck: [v.vanilla2.id] }),
+    );
+    const { ids } = placedState;
+    const [first, spell, known] = ids.player.deck;
+    const state: BattleState = { ...placedState.state, knownTo: { ...placedState.state.knownTo, player: [known] } };
+    expect(invariantViolations(state, zones.catalog)).toEqual([]);
+    for (const card of [first, known]) expect(has(state, card, "vengeful")).toBe(true);
+    for (const card of [spell, ids.player.back[0], ids.enemy.deck[0]]) expect(has(state, card, "vengeful")).toBe(false);
+    const names = (seen: object, id: InstanceId | undefined) => JSON.stringify(seen).includes(`"${id!}"`);
+    // The player's view names only the deck card the player knows, with its granted keyword.
+    const mine = zones.view(state, "player");
+    expect(mine.sides.player.deck).toEqual({ count: 3, known: [{ id: known, index: 2 }] });
+    expect(mine.instances[known]?.characteristics.keywords).toContain("vengeful");
+    for (const card of [first, spell]) expect(names(mine, card)).toBe(false);
+    // The opponent's view names none of them.
+    const theirs = zones.view(state, "enemy");
+    expect(theirs.sides.player.deck).toEqual({ count: 3, known: [] });
+    for (const card of ids.player.deck) expect(names(theirs, card)).toBe(false);
+    // A serialization round trip reads the same keywords and the same views.
+    const reloaded = deserializeState(serializeState(state));
+    expect(stateHash(reloaded)).toBe(stateHash(state));
+    expect(reloaded.floating).toEqual([]);
+    for (const card of ids.player.deck) expect(has(reloaded, card, "vengeful")).toBe(has(state, card, "vengeful"));
+    expect(zones.view(reloaded, "player")).toEqual(mine);
+    expect(zones.view(reloaded, "enemy")).toEqual(theirs);
   });
 
   it("applies each side's static to its own controller's zone, and resolves a player reference from that controller", () => {
