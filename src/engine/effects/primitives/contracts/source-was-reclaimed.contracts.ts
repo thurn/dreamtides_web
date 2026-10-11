@@ -1,9 +1,11 @@
-/** Historical Reclaim play provenance through legal play, copies and replay. */
+/** Historical Reclaim play provenance through legal play, re-entry by effect, copies and replay. */
 import { describe, expect, it } from "vitest";
 import { parseAvatarId } from "../../../../types/identifiers";
 import type { EngineCardDefinition } from "../../../catalog";
 import { activated, abandonSelfCost, additionalCost, discardCost, energy, event, keyword, reclaim, sourceWasReclaimed, stackItem } from "../../../dsl/builders";
+import { onMaterialized, triggered } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
+import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { Action } from "../../../rules/actions";
 import { cloneState } from "../../../state/clone";
@@ -15,6 +17,8 @@ import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
 import { boardState } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
+import { at, passUntil } from "../../../testing/trigger-harness";
+import { ZONE } from "../../../testing/zone-cards";
 import { copyCard } from "../copy-card";
 import { discard } from "../discard";
 import { gainPoints } from "../gain-points";
@@ -53,11 +57,15 @@ const offering: EngineCardDefinition = {
   ...conditional, id: syntheticId(1405),
   abilities: () => [keyword("offering"), event(ifThen(sourceWasReclaimed(), gainPoints(7), gainPoints(2)))],
 };
+const reentry: EngineCardDefinition = {
+  ...conditional, id: syntheticId(1407), cardType: "character", spark: 1,
+  abilities: () => [triggered(onMaterialized(), ifThen(sourceWasReclaimed(), gainPoints(7), gainPoints(2))), reclaim(energy(3))],
+};
 const avatar = {
   id: parseAvatarId("5e5e5e5e-0000-4000-8000-000000001406"), status: "authored" as const,
   abilities: () => [activated([], ifThen(sourceWasReclaimed(), gainPoints(7), gainPoints(2)))],
 };
-const engine = createEngine(testCatalog([conditional, copy, prompted, missingSource, fails, offering], { avatars: [avatar] }));
+const engine = createEngine(testCatalog([conditional, copy, prompted, missingSource, fails, offering, reentry, ZONE.exile], { avatars: [avatar] }));
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id];
 const action = (card: InstanceId, from: "hand" | "void"): Action => ({ kind: "play", card, from });
 const sliceOf = (committed: BattleState): BattleSlice => ({ committed, inFlight: null, publishedEvents: 0, attempt: 0 });
@@ -105,6 +113,31 @@ describe("sourceWasReclaimed", () => {
     const differentHistory = cloneState(cleared);
     differentHistory.instances[card].status.playedViaReclaim = false;
     expect(stateHash(differentHistory)).not.toBe(stateHash(cleared));
+  });
+
+  it("a Reclaim-played character returned to play by an effect keeps its Reclaim play provenance", () => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player", phase: "day", player: { void: [reentry.id], deck, energy: 8 }, enemy: { hand: [ZONE.exile.id], deck, energy: 8 },
+    });
+    const card = ids.player.void[0];
+    const effectPoints = (events: readonly EngineEvent[]) =>
+      events.flatMap((event) => (event.kind === "pointsScored" && event.side === "player" && event.cause === "effect" ? [event.amount] : []));
+    const entered = engine.apply(state, "player", action(card, "void"), NO_PROMPTS);
+    expect(entered.state.instances[card].zone).toBe("play");
+    expect(effectPoints(entered.events)).toEqual([7]);
+    // Arrange the independent replacement flag as an effect that removes it would, so leaving play is not a banish.
+    const cleared = cloneState(entered.state);
+    cleared.instances[card].status.reclaimed = false;
+    const enemyDay = passUntil(engine, cleared, at(engine, "enemy", "day")).state;
+    const exiled = engine.apply(enemyDay, "enemy", action(ids.enemy.hand[0], "hand"), new ScriptedSource([[card]])).state;
+    expect(exiled.instances[card].zone).toBe("banished");
+    const returned = passUntil(engine, exiled, at(engine, "player", "day"));
+    expect(returned.events).toContainEqual(expect.objectContaining({ kind: "materialized", instance: card }));
+    expect(returned.events.some((event) => event.kind === "cardPlayed" && event.instance === card)).toBe(false);
+    expect(returned.state.instances[card].zone).toBe("play");
+    expect(returned.state.instances[card].status.playedViaReclaim).toBe(true);
+    expect(effectPoints(returned.events)).toEqual([7]);
+    expect(invariantViolations(returned.state, engine.catalog)).toEqual([]);
   });
 
   it("a new normal play resets prior Reclaim provenance", () => {
