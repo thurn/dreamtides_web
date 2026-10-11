@@ -27,6 +27,7 @@ import {
   discardChosenPrimitive,
   discoverPrimitive,
   dissolvePrimitive,
+  doubleEnergyPrimitive,
   eachPlayerPrimitive,
   drawPrimitive,
   erodePrimitive,
@@ -110,6 +111,9 @@ const DEFINITIONS = {
   },
   get dissolve() {
     return dissolvePrimitive;
+  },
+  get doubleEnergy() {
+    return doubleEnergyPrimitive;
   },
   get eachPlayer() {
     return eachPlayerPrimitive;

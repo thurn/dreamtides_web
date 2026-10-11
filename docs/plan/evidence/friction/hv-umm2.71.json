@@ -1,0 +1,52 @@
+{
+  "bead": "hv-umm2.71",
+  "phase": 5,
+  "sourceBase": "e41edcb9d041f3349fac7fb6dce7a6329ca6439f",
+  "implementMin": 18.2,
+  "localValidationS": {
+    "install": 2.368,
+    "focused": 3.911,
+    "review": 41.066,
+    "knip": 2.756,
+    "fuzz": 56.442,
+    "sweep": 72.315,
+    "judged": 30.533
+  },
+  "hostLoad": 3.58,
+  "testDelta": {
+    "files": 0,
+    "lines": 99,
+    "jsdomFiles": 0,
+    "cases": 19
+  },
+  "coverage": {
+    "entities": 1,
+    "pending": 0,
+    "amplifiedTexts": 0,
+    "newEffectOps": 1,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 12,
+      "skip": 8,
+      "fail": 0
+    },
+    "judged": {
+      "pass": 4,
+      "appFailures": 0,
+      "harnessFailures": 2
+    }
+  },
+  "friction": [
+    {
+      "tag": "dispatch-brief-drift",
+      "minutes": 1,
+      "note": "Initial brief imposed heavy.lock on install/light checks/browser work. Session corrected the overconstraint to current D17/workflow; browser runs take only the native browser lease, while fuzz300 takes heavy.lock. Completed install/focused waits are retained as measured evidence."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 6,
+      "note": "Declared enemy script setup stalled without published source events; cause/provenance is unconfirmed. The final judged enemy uses the native ordinary preplayed stack fixture and human response pass. A second assertion compared durable game-event sequence with the independent logging sequence; final checks correlate current game, durable sequence, action kind and physical source separately."
+    }
+  ]
+}

@@ -13,6 +13,7 @@ export * from "./discard";
 export * from "./discard-chosen";
 export * from "./discover";
 export * from "./dissolve";
+export * from "./double-energy";
 export * from "./each-player";
 export * from "./draw";
 export * from "./erode";
