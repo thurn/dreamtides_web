@@ -1208,7 +1208,13 @@ prompts for its mode, a mode whose required targets have no candidates is not
 legal, and the walk descends only into the chosen mode, so only its targets
 are chosen. The stack item stores the chosen modes and targets, and the node
 resolves its stored mode. One target spec object used in several places is
-one target. Validation walks `children`, which list every mode.
+one target. Validation walks `children`, which list every mode. A subtree
+selected during resolution reuses enclosing bindings for the same modal node
+and target spec objects, including mode zero and an empty target selection.
+It prompts for unbound choices, while nested subtrees read their nearest
+enclosing bindings. Inherited targets use the ordinary resolution-time
+legality checks; an invalid target reports `noLegalTarget` for its effect
+part, and trailing effects continue.
 
 **Untargetable cards** (C17) have the `cannotBeTargeted` keyword, printed
 or granted through layer 3 (`grant(…, "cannotBeTargeted", duration)`).

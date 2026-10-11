@@ -1,0 +1,453 @@
+{
+  "bead": "hv-umm2.350",
+  "phase": 5,
+  "baseOid": "bccb8d418beec1d79163ae27030ba64a9bbf5a7c",
+  "implementMin": 10,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "installReported": 2,
+    "focused-final": 5.429483890533447,
+    "review-final": 38.248382329940796,
+    "knip": 2.8014228343963623,
+    "full": 52.28471326828003,
+    "fuzz": 60.43578124046326
+  },
+  "heavyQueueWaitS": 188.0998411178589,
+  "hostLoad": 14.36279296875,
+  "testDelta": {
+    "files": 0,
+    "lines": 110,
+    "jsdomFiles": 0,
+    "cases": 7
+  },
+  "friction": [
+    {
+      "tag": "serialized-fixture-type-assertion",
+      "minutes": 1,
+      "note": "A new JSON reload fixture used an annotated variable with JSON.parse, which lint classified as unsafe any assignment.",
+      "disposition": "Use the existing fixture pattern JSON.parse(...) as BattleSlice at the serialized test boundary; no production or environment cast. Required frozen focused and review then pass."
+    }
+  ],
+  "design": {
+    "bindings": "Private typed choice readers passed only from resolveChosenEffect; modes and target specs use object identity and nearest enclosing readers.",
+    "ordering": "Complete walk-order modes/specs retain inherited entries as well as new choices; mode zero and empty targets are bound values.",
+    "feasibility": "Inherited targets bypass fresh-choice candidate checks; inherited modal nodes follow their selected child during new-mode feasibility. Actual primitive legality reports noLegalTarget and trailing effects proceed.",
+    "storage": "No schema, event kind, cache, UI or persistence change. Existing prompt/action logs replay bindings from recorded answers."
+  },
+  "sourceFileSha256": {
+    "src/engine/effects/interpreter.ts": "5d975feb1e17846d5a7eb0cefd1ac491b4d0f934ad9f44dd2582e0735bdb7436",
+    "src/engine/effects/primitives/contracts/choose-player.contracts.ts": "b1df103a43a57c6b8a67bd9b28861d212218e6f09d44e162e9f6750231815d14",
+    "docs/plan/engine-design.md": "f4f69a089f1999443d755ba97f06df47b0524e9d6e75f194b15d84a328804019"
+  },
+  "negativeRegression": {
+    "log": "negative.log",
+    "exitCode": 1,
+    "productionUnchanged": true,
+    "result": "Both active-side cases expose an extra non-cancellable chooseOne prompt after choosePlayer; initial mode zero and physical target binding assertions pass.",
+    "executionS": 2.1639459133148193,
+    "queueS": 0.0207521915435791
+  },
+  "validationRuns": [
+    {
+      "label": "negative",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reuses enclosing shared mode zero"
+      ],
+      "queueS": 0.0207521915435791,
+      "hostLoad": [
+        20.44921875,
+        15.779296875,
+        12.33935546875
+      ],
+      "wrapperPid": 29095,
+      "running": false,
+      "commandPid": 29098,
+      "executionS": 2.1639459133148193,
+      "exitCode": 1
+    },
+    {
+      "label": "positive",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "choosePlayer"
+      ],
+      "queueS": 0.019870996475219727,
+      "hostLoad": [
+        5.35888671875,
+        11.71240234375,
+        11.185546875
+      ],
+      "wrapperPid": 33241,
+      "running": false,
+      "commandPid": 33242,
+      "executionS": 2.2575230598449707,
+      "exitCode": 0
+    },
+    {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "queueS": 0.019324302673339844,
+      "hostLoad": [
+        4.71923828125,
+        10.85546875,
+        10.89404296875
+      ],
+      "wrapperPid": 33889,
+      "running": false,
+      "commandPid": 33890,
+      "executionS": 5.26422381401062,
+      "exitCode": 0
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 72.91981792449951,
+      "hostLoad": [
+        3.2421875,
+        8.8603515625,
+        10.1220703125
+      ],
+      "wrapperPid": 35339,
+      "running": false,
+      "commandPid": 35341,
+      "executionS": 3.966830015182495,
+      "exitCode": 1
+    },
+    {
+      "label": "focused-cancelled",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/rules/copies.test.ts"
+      ],
+      "queueS": 76.43127608299255,
+      "hostLoad": [
+        3.84521484375,
+        7.3525390625,
+        9.38623046875
+      ],
+      "wrapperPid": 37033,
+      "running": false,
+      "commandPid": 37035,
+      "exitCode": 130,
+      "cancelled": true,
+      "reason": "parent requested unequal modal value contract before final frozen validation; process group SIGINT, all owned members absent"
+    },
+    {
+      "label": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/rules/copies.test.ts"
+      ],
+      "queueS": 24.05738091468811,
+      "hostLoad": [
+        4.9375,
+        7.0625,
+        9.15771484375
+      ],
+      "wrapperPid": 37959,
+      "running": false,
+      "commandPid": 37972,
+      "executionS": 5.429483890533447,
+      "exitCode": 0
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 8.420945882797241,
+      "hostLoad": [
+        4.27099609375,
+        6.560546875,
+        8.86181640625
+      ],
+      "wrapperPid": 38687,
+      "running": false,
+      "commandPid": 38689,
+      "executionS": 38.248382329940796,
+      "exitCode": 0
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "queueS": 0.02068018913269043,
+      "hostLoad": [
+        3.8583984375,
+        5.9609375,
+        8.45166015625
+      ],
+      "wrapperPid": 39694,
+      "running": false,
+      "commandPid": 39695,
+      "executionS": 2.8014228343963623,
+      "exitCode": 0
+    },
+    {
+      "label": "full",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "queueS": 6.167635917663574,
+      "hostLoad": [
+        4.1826171875,
+        5.9296875,
+        8.396484375
+      ],
+      "wrapperPid": 40138,
+      "running": false,
+      "commandPid": 40142,
+      "executionS": 52.28471326828003,
+      "exitCode": 0
+    },
+    {
+      "label": "fuzz",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2.350"
+      ],
+      "queueS": 0.022156715393066406,
+      "hostLoad": [
+        14.36279296875,
+        8.31298828125,
+        9.115234375
+      ],
+      "wrapperPid": 44377,
+      "running": false,
+      "commandPid": 44379,
+      "executionS": 60.43578124046326,
+      "exitCode": 0
+    }
+  ],
+  "checks": {
+    "focused": {
+      "files": 4,
+      "tests": 311,
+      "copiesExplicit": true
+    },
+    "review": {
+      "files": 157,
+      "tests": 2266
+    },
+    "full": {
+      "files": 216,
+      "tests": 2900,
+      "productionBundle": true
+    },
+    "knip": "passed",
+    "fuzz": {
+      "games": 300,
+      "steps": 153351,
+      "prompts": 2677,
+      "interactiveReruns": 294,
+      "failures": 0,
+      "seed": "hv-umm2.350"
+    }
+  },
+  "failurePathMatrix": [
+    {
+      "path": "same shared modal object and target identity, mode zero",
+      "test": "reuses enclosing shared mode zero and target without another prompt with %s active",
+      "coverage": "both active sides; actual base negative exposes extra non-cancellable chooseOne prompt; fixed completed fold, exact prompt roles, original physical target gains three times and other target unchanged"
+    },
+    {
+      "path": "same modal object mode one",
+      "test": "retains a shared points mode without fresh mode or target choices",
+      "coverage": "two human answers only; all three executions keep points mode, score9 and characters unchanged"
+    },
+    {
+      "path": "new branch-local choices versus inherited identical-selector objects; restart/reload and duplicate input",
+      "test": "prompts distinct local objects alongside inherited bindings and reloads at the local target",
+      "coverage": "exact opened prompt sequence; JSON serialized in-flight local target replayed with new adapter; same prompt/state outcome; duplicate answer bounced"
+    },
+    {
+      "path": "full ordered modal choices with unequal inherited/new values",
+      "test": "keeps unequal inherited and fresh modal values in their public choice order",
+      "coverage": "inherited1/new0 yields score6 and local physical target spark4; exact opened and answered log records"
+    },
+    {
+      "path": "nearest enclosing bindings across nested scopes",
+      "test": "inherits both root and nearest local bindings through nested chosen branches",
+      "coverage": "root target retained from play; middle target retained in deeper chosen subtree; exact answers and separate final public sparks"
+    },
+    {
+      "path": "bound empty target selection",
+      "test": "keeps a bound empty target selection even when candidates exist",
+      "coverage": "empty[] remains selected despite two candidates; no target reprompt, unchanged characters, trailing points"
+    },
+    {
+      "path": "invalidated inherited target, inherited modal feasibility inside unbound local mode, trailing effects",
+      "test": "rechecks an invalid inherited target without choosing a replacement or skipping trailing effects",
+      "coverage": "actual sharedMode then banish; invalid physical target causes two noLegalTarget during bound modal execution; fresh local mode still selectable and final score3"
+    },
+    {
+      "path": "source, controller, X, optional paid, duration and root provenance",
+      "tests": [
+        "%s controls both choices of affected side and keeps X independent of the discarded count",
+        "keeps the source ability's optional-cost binding inside the selected branch",
+        "keeps trailing you effects, enclosing duration, and delayed trigger root provenance"
+      ],
+      "coverage": "existing choose-player public contracts retained"
+    },
+    {
+      "path": "failure rollback, wrong-side, stale, concurrent, post-commit cancellation",
+      "test": "reloads both sequential prompts, rejects stale, wrong-side and concurrent intents, and commits exactly once",
+      "coverage": "existing public choosePlayer contract retained"
+    },
+    {
+      "path": "paid preparation cancellation",
+      "test": "cancels paid-X preparation before player selection with no partial binding or payment",
+      "coverage": "existing public choosePlayer contract retained"
+    },
+    {
+      "path": "unbound resolution choices lacking legal modes/targets",
+      "tests": [
+        "does nothing and reports noLegalTarget for a resolution-time choice with no option",
+        "does nothing when a trigger's required target has no candidates"
+      ],
+      "files": [
+        "src/engine/fold/fold.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "coverage": "existing default no-reader behavior"
+    },
+    {
+      "path": "copies choose independently and retain original only for no legal option",
+      "test": "keeps the original's choices one at a time, choosing anew wherever a legal option exists",
+      "file": "src/engine/rules/copies.test.ts",
+      "coverage": "explicit final focused coverage plus full; chooseForCopy receives no reader and preserves current behavior"
+    },
+    {
+      "path": "malformed, divergent, illegal/overlong stored prefixes and input actor errors",
+      "tests": [
+        "reports a reloaded divergent, illegal, complete, or overlong recorded prefix as an engine error",
+        "treats a malformed prompt, including duplicate candidates a forced answer would accept, as an engine error"
+      ],
+      "file": "src/engine/fold/fold.test.ts",
+      "coverage": "existing replay boundary tests; no new persistence field/error protocol"
+    },
+    {
+      "path": "runtime character/stack/void legality",
+      "coverage": "shared prepare reader is typed PlayTimeTarget; interpreter runtime resolvers unchanged. New invalidation tests characters through actual banish; existing void/copy/stack contracts validate resolver behavior. No new private helper mirror tests."
+    }
+  ],
+  "runtime": {
+    "pids": [
+      29095,
+      29098,
+      33241,
+      33242,
+      33889,
+      33890,
+      34220,
+      34228,
+      35339,
+      35341,
+      35998,
+      36007,
+      37033,
+      37035,
+      37959,
+      37972,
+      38687,
+      38689,
+      39694,
+      39695,
+      40138,
+      40142,
+      41124,
+      41163,
+      41536,
+      41651,
+      41902,
+      42011,
+      42111,
+      42205,
+      42299,
+      42405,
+      42498,
+      42580,
+      44377,
+      44379
+    ],
+    "containedSyntheticServerGroups": [
+      41124,
+      41163,
+      41536,
+      41651,
+      41902,
+      42011,
+      42111,
+      42205,
+      42299,
+      42405,
+      42498,
+      42580
+    ],
+    "allKnownPidsAbsent": true,
+    "pidProbeExit": 1,
+    "pidProbeOutput": "",
+    "allCheckSessionsSettled": true,
+    "realBrowserProviders": false,
+    "taskServers": false,
+    "cancelledRun": {
+      "exitCode": 130,
+      "group": 35998,
+      "limits": "Initial ps saw waiting lockf; slot acquired during cancellation, command37035 received same owned group SIGINT; retained cancelled log and no pass claim."
+    }
+  },
+  "validationProvenance": "Final runtime, contract and engine-design hashes frozen before final focused/review/knip/full/fuzz; only own friction/measurement/pre-existing evidence written afterward. Original negative, earlier positive/focused, failed lint and cancelled run retained separately.",
+  "excludedValidation": {
+    "browser": "No presentation, player control, routing or interaction protocol changes; public engine fold/scenario contracts cover changed bindings.",
+    "weightedFuzz": "No printed content authored or edited; required 300-game unweighted engine smoke passed."
+  },
+  "frictionTriggerResult": {
+    "phase5Cadence": "25/85 since hv-umm2.339; retrospective due",
+    "allFiredTagsDispositioned": true,
+    "scanExitCode": 0,
+    "parentHandlesNativeRetrospective": true
+  }
+}

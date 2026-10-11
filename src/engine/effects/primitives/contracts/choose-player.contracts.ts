@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { additionalCost, all, costPaid, energy, energyX, event, optionalCost, target, x } from "../../../dsl/builders";
+import { additionalCost, all, costPaid, energy, energyX, event, optionalCost, target, upTo, x } from "../../../dsl/builders";
 import { whenYouPlay } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -18,6 +18,7 @@ import { playFromHand, runScenario } from "../../../testing/scenario";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { promptView, view } from "../../../view/view";
 import { resolveEffect } from "../../interpreter";
+import { banish } from "../banish";
 import { chooseOne } from "../choose-one";
 import { choosePlayer } from "../choose-player";
 import { discard } from "../discard";
@@ -55,6 +56,29 @@ const sharedChoices: EngineCardDefinition = {
   ...trailing, id: syntheticId(986),
   abilities: () => [event(sequence(sharedMode, choosePlayer(() => sharedMode), sharedMode))],
 };
+const localTarget = target({ controller: "opponent" });
+const localMode = chooseOne(gainSpark(localTarget, 2), gainPoints(5));
+const mixedChoices: EngineCardDefinition = {
+  ...trailing, id: syntheticId(988),
+  abilities: () => [event(sequence(sharedMode, choosePlayer(() => sequence(sharedMode, localMode))))],
+};
+const inheritedNested: EngineCardDefinition = {
+  ...trailing, id: syntheticId(989),
+  abilities: () => [event(sequence(sharedMode, choosePlayer(() => sequence(
+    localMode, choosePlayer(() => sequence(sharedMode, localMode)),
+  ))))],
+};
+const emptyTarget = upTo({ controller: "opponent" }, 1);
+const emptyChoices: EngineCardDefinition = {
+  ...trailing, id: syntheticId(990),
+  abilities: () => [event(sequence(gainSpark(emptyTarget, 1), choosePlayer(() => sequence(gainSpark(emptyTarget, 2), gainPoints(2)))))],
+};
+const invalidChoices: EngineCardDefinition = {
+  ...trailing, id: syntheticId(991),
+  abilities: () => [event(sequence(sharedMode, banish(sharedTarget), choosePlayer(() => sequence(
+    sharedMode, chooseOne(sequence(sharedMode, gainPoints(2)), gainPoints(5)), gainPoints(1),
+  ))))],
+};
 const duration: EngineCardDefinition = {
   ...trailing, id: syntheticId(983),
   abilities: () => [event(forDuration("untilEndOfTurn", choosePlayer((player) => sparkModifier(all({ controller: player }), 2))))],
@@ -75,7 +99,7 @@ const failing: EngineCardDefinition = {
     },
   },
 };
-const engine = createEngine(testCatalog([swap, trailing, nested, duration, root, failing, sharedChoices, paid]));
+const engine = createEngine(testCatalog([swap, trailing, nested, duration, root, failing, sharedChoices, paid, mixedChoices, inheritedNested, emptyChoices, invalidChoices]));
 const deck = Array.from({ length: 6 }, () => v.vanilla1.id);
 const hand = [v.vanilla1.id, v.vanilla1.id, v.vanilla2.id];
 const setup = (controller: Side = "player", card = swap.id, selectedHand: readonly CardId[] = hand): BoardSetup => ({
@@ -172,22 +196,108 @@ describe("choosePlayer", () => {
     expect(alternate.state.sides.player.score).toBe(3);
   });
 
-  it("keeps enclosing target and mode bindings when their same objects are chosen within the selected subtree", () => {
+  it.each(["player", "enemy"] as const)("reuses enclosing shared mode zero and target without another prompt with %s active", (controller) => {
+    const other = opponent(controller);
+    const records: EngineLogRecord[] = [];
+    const board = { ...setup(controller, sharedChoices.id), [other]: { back: [v.vanilla1.id, v.vanilla2.id], deck } };
+    const { fold, slice, ids } = opened(board, records);
+    const mode = fold.pending(slice)!.prompt;
+    const targetSlice = applied(fold.reduce(slice, { kind: "answer", side: controller, promptId: mode.id, value: 0 }));
+    const targetPrompt = fold.pending(targetSlice)!.prompt;
+    const selected = ids[other].back[0]!;
+    const branchSlice = applied(fold.reduce(targetSlice, { kind: "answer", side: controller, promptId: targetPrompt.id, value: [selected] }));
+    const branch = fold.pending(branchSlice)!.prompt;
+    expect(branch.purpose.role).toBe("choosePlayer");
+    const done = applied(fold.reduce(branchSlice, { kind: "answer", side: controller, promptId: branch.id, value: 1 }));
+    expect(fold.pending(done)).toBeNull();
+    expect(records.filter((record) => record.event === "engine.promptOpened").map((record) => record.role)).toEqual(["chooseOne", "target", "choosePlayer"]);
+    expect(effectiveSpark(done.committed, engine.catalog, selected)).toBe(4);
+    expect(effectiveSpark(done.committed, engine.catalog, ids[other].back[1]!)).toBe(2);
+    expect(done.committed.sides[controller].score).toBe(0);
+    expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
+  });
+
+  it("retains a shared points mode without fresh mode or target choices", () => {
     const result = runScenario(engine, {
       board: { ...setup("player", sharedChoices.id), enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } },
-      steps: (ids) => [playFromHand(ids, "player")],
-      answers: (ids) => [0, [ids.enemy.back[0]!], 1, 0, [ids.enemy.back[1]!]],
+      steps: (ids) => [playFromHand(ids, "player")], answers: () => [1, 1],
     });
+    expect(result.answers.map((answer) => answer.value)).toEqual([1, 1]);
+    expect(result.state.sides.player.score).toBe(9);
+    expect(effectiveSpark(result.state, engine.catalog, result.ids.enemy.back[0]!)).toBe(1);
+    expect(effectiveSpark(result.state, engine.catalog, result.ids.enemy.back[1]!)).toBe(2);
+  });
+
+  it("prompts distinct local objects alongside inherited bindings and reloads at the local target", () => {
+    const records: EngineLogRecord[] = [];
+    const { fold, slice, ids } = opened({ ...setup("player", mixedChoices.id), enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } }, records);
+    let current = slice;
+    for (const value of [0, [ids.enemy.back[0]!], 1, 0]) {
+      const prompt = fold.pending(current)!.prompt;
+      current = applied(fold.reduce(current, { kind: "answer", side: "player", promptId: prompt.id, value }));
+    }
+    const local = fold.pending(current)!.prompt;
+    expect(local).toMatchObject({ kind: "chooseTargets", candidates: ids.enemy.back, cancellable: false });
+    expect(records.filter((record) => record.event === "engine.promptOpened").map((record) => record.role)).toEqual(["chooseOne", "target", "choosePlayer", "chooseOne", "target"]);
+    const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
+    const saved = JSON.parse(JSON.stringify(current)) as BattleSlice;
+    expect(fresh.pending(saved)!.prompt).toEqual(local);
+    const intent = { kind: "answer" as const, side: "player" as const, promptId: local.id, value: [ids.enemy.back[1]!] };
+    const done = applied(fresh.reduce(saved, intent));
+    expect(done).toEqual(applied(fold.reduce(current, intent)));
+    expect(fresh.pending(done)).toBeNull();
+    expect(effectiveSpark(done.committed, engine.catalog, ids.enemy.back[0]!)).toBe(3);
+    expect(effectiveSpark(done.committed, engine.catalog, ids.enemy.back[1]!)).toBe(4);
+    expect(fresh.reduce(done, intent)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+  });
+
+  it("keeps unequal inherited and fresh modal values in their public choice order", () => {
+    const records: EngineLogRecord[] = [];
+    const { fold, slice, ids } = opened({ ...setup("player", mixedChoices.id), enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } }, records);
+    let done = slice;
+    for (const value of [1, 1, 0, [ids.enemy.back[1]!]]) {
+      const prompt = fold.pending(done)!.prompt;
+      done = applied(fold.reduce(done, { kind: "answer", side: "player", promptId: prompt.id, value }));
+    }
+    expect(fold.pending(done)).toBeNull();
+    expect(records.filter((record) => record.event === "engine.promptOpened").map((record) => record.role)).toEqual(["chooseOne", "choosePlayer", "chooseOne", "target"]);
+    expect(records.filter((record) => record.event === "engine.promptAnswered").map((record) => record.value)).toEqual([1, 1, 0, [ids.enemy.back[1]!]]);
+    expect(done.committed.sides.player.score).toBe(6);
+    expect(effectiveSpark(done.committed, engine.catalog, ids.enemy.back[0]!)).toBe(1);
+    expect(effectiveSpark(done.committed, engine.catalog, ids.enemy.back[1]!)).toBe(4);
+  });
+
+  it("inherits both root and nearest local bindings through nested chosen branches", () => {
+    const result = runScenario(engine, {
+      board: { ...setup("player", inheritedNested.id), enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } },
+      steps: (ids) => [playFromHand(ids, "player")],
+      answers: (ids) => [0, [ids.enemy.back[0]!], 1, 0, [ids.enemy.back[1]!], 1],
+    });
+    expect(result.answers.map((answer) => answer.value)).toEqual([0, [result.ids.enemy.back[0]!], 1, 0, [result.ids.enemy.back[1]!], 1]);
     expect(effectiveSpark(result.state, engine.catalog, result.ids.enemy.back[0]!)).toBe(3);
-    expect(effectiveSpark(result.state, engine.catalog, result.ids.enemy.back[1]!)).toBe(3);
-    expect(result.state.sides.player.score).toBe(0);
-    const differentMode = runScenario(engine, {
-      board: { ...setup("player", sharedChoices.id), enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } },
-      steps: (ids) => [playFromHand(ids, "player")],
-      answers: (ids) => [0, [ids.enemy.back[0]!], 1, 1],
+    expect(effectiveSpark(result.state, engine.catalog, result.ids.enemy.back[1]!)).toBe(6);
+  });
+
+  it("keeps a bound empty target selection even when candidates exist", () => {
+    const result = runScenario(engine, {
+      board: { ...setup("player", emptyChoices.id), enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } },
+      steps: (ids) => [playFromHand(ids, "player")], answers: () => [[], 1],
     });
-    expect(effectiveSpark(differentMode.state, engine.catalog, differentMode.ids.enemy.back[0]!)).toBe(3);
-    expect(differentMode.state.sides.player.score).toBe(3);
+    expect(result.answers.map((answer) => answer.value)).toEqual([[], 1]);
+    expect(effectiveSpark(result.state, engine.catalog, result.ids.enemy.back[0]!)).toBe(1);
+    expect(effectiveSpark(result.state, engine.catalog, result.ids.enemy.back[1]!)).toBe(2);
+    expect(result.state.sides.player.score).toBe(2);
+  });
+
+  it("rechecks an invalid inherited target without choosing a replacement or skipping trailing effects", () => {
+    const result = runScenario(engine, {
+      board: { ...setup("player", invalidChoices.id), enemy: { back: [v.vanilla1.id], deck } },
+      steps: (ids) => [playFromHand(ids, "player")], answers: () => [0, 1, 0],
+    });
+    expect(result.state.instances[result.ids.enemy.back[0]!].zone).toBe("banished");
+    expect(result.state.sides.player.score).toBe(3);
+    expect(result.events.filter((event) => event.kind === "noLegalTarget")).toHaveLength(2);
+    expect(result.answers.map((answer) => answer.value)).toEqual([0, [result.ids.enemy.back[0]!], 1, 0]);
   });
 
   it("keeps trailing you effects, enclosing duration, and delayed trigger root provenance", () => {

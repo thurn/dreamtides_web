@@ -201,6 +201,8 @@ function targetBounds(spec: PlayTimeTarget): { readonly min: number; readonly ma
   return { min: spec.kind !== "stackTarget" && spec.upTo === true ? 0 : count, max: count };
 }
 
+type ChoiceBindings = Pick<EffectEnv, "modeOf" | "targetsOf">;
+
 /**
  * Whether a mode could be chosen now: every required target in it has
  * enough candidates, and each modal node inside it has such a mode.
@@ -212,16 +214,25 @@ function modeLegal(
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
+  inherited?: ChoiceBindings,
 ): boolean {
   const definition = primitiveDefinition(node.op);
   const targetsAvailable = (definition.targets?.(node) ?? []).every(
-    (spec) => targetCandidates(state, catalog, spec, controller, source, selectorX).length >= targetBounds(spec).min,
+    (spec) => {
+      const bound = inherited?.targetsOf(spec) ?? null;
+      return bound !== null ||
+        targetCandidates(state, catalog, spec, controller, source, selectorX).length >= targetBounds(spec).min;
+    },
   );
   if (!targetsAvailable) return false;
   const modes = definition.modes?.(node);
-  return modes === undefined
-    ? (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX))
-    : modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX));
+  if (modes === undefined) {
+    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, inherited));
+  }
+  const bound = inherited?.modeOf(node) ?? null;
+  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, inherited));
+  const chosen = modes[bound];
+  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, inherited);
 }
 
 /**
@@ -353,7 +364,9 @@ function promptTargets(
  * choice with no legal option makes that part of the effect do nothing (rules
  * § Targeting): a target spec with fewer candidates than it requires gets no
  * targets and no prompt, and a modal node with no legal mode makes the whole
- * effect do nothing (`null`). Each emits noLegalTarget.
+ * effect do nothing (`null`). Each emits noLegalTarget. Enclosing bindings
+ * reuse the same modal node or target spec objects, including mode zero and
+ * empty target selections; their legality is checked as the effect resolves.
  */
 export function chooseOnResolution(
   ctx: StepContext,
@@ -361,13 +374,19 @@ export function chooseOnResolution(
   controller: Side,
   source: AbilitySource,
   purpose: (role: PromptRole) => PromptPurpose,
+  inherited?: ChoiceBindings,
 ): EffectChoices | null {
   const modes: number[] = [];
   let blocked = false;
   walkPlayTime(
     effect,
-    (_, options) => {
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source));
+    (node, options) => {
+      const bound = inherited?.modeOf(node) ?? null;
+      if (bound !== null) {
+        modes.push(bound);
+        return bound;
+      }
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, undefined, inherited));
       if (blocked || !legal.includes(true)) {
         blocked = true;
         return 0;
@@ -383,6 +402,8 @@ export function chooseOnResolution(
     return null;
   }
   const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
+    const bound = inherited?.targetsOf(spec) ?? null;
+    if (bound !== null) return [...bound];
     const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source);
     const bounds = targetBounds(spec);
     if (candidates.length < bounds.min) {
@@ -675,23 +696,24 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
 }
 
 /**
- * Resolves a subtree chosen during resolution, choosing only its modes and
- * targets now. The ability's context and enclosing shared duration persist;
- * these local choices do not replace the enclosing tree's choices.
+ * Resolves a subtree chosen during resolution, reusing enclosing object
+ * bindings and choosing its unbound modes and targets now. The ability's
+ * context and enclosing shared duration persist; nested subtrees read their
+ * nearest enclosing choices.
  */
 export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv): void {
-  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role));
+  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env);
   if (choices === null) return;
   const chosen = chosenModes(effect, choices.modes);
   const specs = collectTargets(effect, chosen);
   const inner: EffectEnv = {
     ...env,
     modeOf(node) {
-      return chosen.get(node) ?? null;
+      return chosen.get(node) ?? env.modeOf(node);
     },
     targetsOf(spec) {
       const index = specs.indexOf(spec);
-      return index < 0 ? null : (choices.targets[index] ?? null);
+      return index < 0 ? env.targetsOf(spec) : (choices.targets[index] ?? env.targetsOf(spec));
     },
     run(node) {
       primitiveDefinition(node.op).resolve(ctx, node, inner);
