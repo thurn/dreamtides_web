@@ -1326,8 +1326,10 @@ layer depends on itself. A bound reads the count each time the selector is
 checked, so a chosen target is checked against the count again as the effect
 resolves. A hand or deck count takes no filter, since which hidden cards
 match is not public; counts read only public information and name no card.
-The card-lab solver stages, for an upper ✦ or cost bound by a void count, a
-character with ✦ and as many matching cards in that void.
+The card-lab solver stages, for an upper ✦ or cost bound by a count, a
+character with at least 1✦ or 1● and as many cards in the counted zone:
+matching cards in a void, or cards in a hand beside the played card or in a
+deck beside its 8. It does not stage a lower bound by a count.
 
 `conditionCardCounts` counts the specified player’s cards in a deck, hand, or
 void when the condition is checked. Its optional typed filter reads effective
@@ -2044,7 +2046,11 @@ Greedy unless `?ai=random|greedy` selects one.
   random transfigurations and deck-entry modifications.
 - **The card-lab setup solver** (`testing/lab-solver.ts`) is shared by
   specs, the card-lab scene (Phase 4.6), and the sweep. It synthesizes a
-  minimal legal board for an entity from its selectors and costs. Per-entity
+  minimal legal board for an entity from its selectors and costs. A staged
+  target's ✦ and cost admit an X the play can choose, for an X-valued bound
+  on a card with an energy X cost. It places synthetic vanilla cards, then
+  pool cards without authored abilities, and an authored card only when no
+  other card matches, such as a subtype only authored cards carry. Per-entity
   overrides live in `src/engine/testing/lab-overrides.ts`.
 
 ## Performance targets

@@ -25,7 +25,15 @@ import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { unannouncedChanges } from "./announced-changes";
 import { moveInstance } from "../rules/zones";
-import { additionalCost, banishFromVoidCost, banishXCost, choiceCost, event, fromVoid, optionalCost, pointsCost } from "../dsl/builders";
+import { additionalCost, banishFromVoidCost, banishXCost, choiceCost, countCards, enemyCharacter, energy, energyX, event, fromVoid, optionalCost, pointsCost, target, x } from "../dsl/builders";
+import { dissolve } from "../effects/primitives/dissolve";
+import { passUntil } from "./trigger-harness";
+import { invariantViolations } from "./invariants";
+import { copiableCostOf } from "../continuous/characteristics";
+import { effectiveSpark } from "../rules/spark";
+import type { Engine } from "../engine";
+import type { BattleState } from "../state/types";
+import type { InstanceId, Side } from "../state/ids";
 import { banishCards, banishChosen } from "../effects/primitives/banish-cards";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { onMaterialized, triggered } from "../dsl/triggers";
@@ -48,6 +56,35 @@ const silentMill: EngineCardDefinition = {
   },
 };
 const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter, silentMill]));
+
+/**
+ * Plays `card` on its lab board as `side`, choosing the X equal to the staged
+ * enemy's ✦ or cost when the card has an X, and resolves it: whether that
+ * enemy was dissolved, with no invariant violated.
+ */
+function dissolvesStagedEnemy(labEngine: Engine, card: EngineCardDefinition, pool: readonly EngineCardDefinition[], side: Side): boolean {
+  const { state } = labBoard(labEngine, card.id, pool, side);
+  const enemies = state.sides[side === "player" ? "enemy" : "player"].backRank.filter((id): id is InstanceId => id !== null);
+  expect(enemies).toHaveLength(1);
+  const [enemy] = enemies as [InstanceId];
+  const play = labEngine.legalActions(state, side).find((action) => action.kind === "play");
+  if (play === undefined) throw new Error(`no play for ${card.id}`);
+  const xFor = (prompt: { readonly min: number; readonly max: number }): number => {
+    const value = [effectiveSpark(state, labEngine.catalog, enemy), copiableCostOf(state, labEngine.catalog, enemy)].find((candidate) => candidate >= prompt.min && candidate <= prompt.max);
+    if (value === undefined) throw new Error("no X within the prompt's range matches the staged enemy");
+    return value;
+  };
+  const played = labEngine.apply(state, side, play, {
+    answer(prompt) {
+      if (prompt.kind === "chooseNumber") return xFor(prompt);
+      if (prompt.kind === "chooseTargets") return prompt.candidates.slice(0, 1);
+      throw new Error(`Unexpected ${prompt.kind}`);
+    },
+  });
+  const resolved: BattleState = passUntil(labEngine, played.state, (next) => next.stack.length === 0).state;
+  expect(invariantViolations(resolved, labEngine.catalog)).toEqual([]);
+  return resolved.instances[enemy]?.zone === "void";
+}
 
 describe("card-lab setup solver", () => {
   it("stages subtype-only and combined type/subtype void targets with canonical filter matching", () => {
@@ -189,6 +226,54 @@ describe("card-lab setup solver", () => {
     const { state } = labBoard(engine, DSL.dissolveEnemy.id, []);
     expect(state.sides.enemy.backRank.filter((id) => id !== null)).toHaveLength(1);
     expect(state.sides.player.backRank.filter((id) => id !== null)).toHaveLength(0);
+  });
+
+  it("stages the hand and deck cards a count-bounded target needs, so the card resolves on it", () => {
+    /** A 10● 10✦ character: only a deck staged past its 8 cards admits it. */
+    const giant: EngineCardDefinition = { ...SYNTHETIC.vanilla5, id: syntheticId(927), spark: 10 };
+    const dissolver = (index: number, selector: Parameters<typeof enemyCharacter>[0]): EngineCardDefinition => ({
+      ...SYNTHETIC.event0, id: syntheticId(index), status: "authored", abilities: () => [event(dissolve(target(enemyCharacter(selector))))],
+    });
+    // The source has left the hand when its target is checked on resolution.
+    const yourHand = dissolver(928, { sparkAtLeast: 1, sparkAtMost: countCards("hand") });
+    const theirHand = dissolver(929, { costAtLeast: 1, sparkAtMost: countCards("hand", undefined, "opponent") });
+    const yourDeck = dissolver(930, { sparkAtLeast: 9, sparkAtMost: countCards("deck") });
+    const labEngine = createEngine(testCatalog([yourHand, theirHand, yourDeck, giant]));
+    for (const card of [yourHand, theirHand, yourDeck]) for (const side of ["player", "enemy"] as const) {
+      expect(dissolvesStagedEnemy(labEngine, card, [giant], side), `${card.id} as ${side}`).toBe(true);
+    }
+  });
+
+  it("stages a target an exact X bound admits at an X the play can choose", () => {
+    const exactly = (index: number, selector: Parameters<typeof enemyCharacter>[0]): EngineCardDefinition => ({
+      ...SYNTHETIC.event0, id: syntheticId(index), status: "authored", costs: [energy(1), energyX()], abilities: () => [event(dissolve(target(enemyCharacter(selector))))],
+    });
+    const sparkX = exactly(931, { sparkAtLeast: x(), sparkAtMost: x() });
+    const costX = exactly(932, { costAtLeast: x(), costAtMost: x() });
+    const labEngine = createEngine(testCatalog([sparkX, costX]));
+    for (const card of [sparkX, costX]) for (const side of ["player", "enemy"] as const) {
+      expect(dissolvesStagedEnemy(labEngine, card, [], side), `${card.id} as ${side}`).toBe(true);
+    }
+  });
+
+  it("stages an authored printing for a void count or void target whose subtype only authored cards carry", () => {
+    const ancient: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(933), subtype: "Ancient", status: "authored", abilities: () => [] };
+    const counting: EngineCardDefinition = {
+      ...SYNTHETIC.event0, id: syntheticId(934), status: "authored",
+      abilities: () => [event(dissolve(target(enemyCharacter({ sparkAtMost: countCards("void", { subtype: "Ancient" }) }))))],
+    };
+    const copying: EngineCardDefinition = {
+      ...SYNTHETIC.event0, id: syntheticId(935), status: "authored", abilities: () => [event(createCopyInHand(fromVoid({ subtype: "Ancient" })))],
+    };
+    const labEngine = createEngine(testCatalog([counting, copying, ancient]));
+    for (const side of ["player", "enemy"] as const) {
+      for (const card of [counting, copying]) {
+        const { state } = labBoard(labEngine, card.id, [ancient], side);
+        expect(state.sides[side].void.length).toBeGreaterThan(0);
+        for (const id of state.sides[side].void) expect(cardMatchesFilter(state, labEngine.catalog, id, { subtype: "Ancient" })).toBe(true);
+      }
+      expect(dissolvesStagedEnemy(labEngine, counting, [ancient], side)).toBe(true);
+    }
   });
 });
 

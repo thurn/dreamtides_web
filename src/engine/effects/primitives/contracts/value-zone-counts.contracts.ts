@@ -8,6 +8,7 @@ import type { EngineCardDefinition } from "../../../catalog";
 import { all, characterYouControl, countCards, enemyCharacter, event, everyIn, self, staticAbility, target } from "../../../dsl/builders";
 import { BASE_VARIANT, NO_DECK_MODS } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
+import { copiableCostOf } from "../../../continuous/characteristics";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { ChooseTargetsPrompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
@@ -68,8 +69,17 @@ const weighThenFail: EngineCardDefinition = {
   },
 };
 
+/** "Dissolve an enemy with cost less than or equal to the number of cards in your void." */
+const weighCost = card(1513, "event", () => [event(dissolve(target(enemyCharacter({ costAtMost: countCards("void") }))))], "interrupt");
+/** "Dissolve an enemy with cost greater than or equal to the number of cards in your void." */
+const weighCostAbove = card(1514, "event", () => [event(dissolve(target(enemyCharacter({ costAtLeast: countCards("void") }))))], "interrupt");
+/** Characters whose cost differs from their ✦: a 1● 4✦ one and a 3● 1✦ one. */
+const cheapStrong: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(1515), spark: 4 };
+const costlyWeak: EngineCardDefinition = { ...v.vanilla3, id: syntheticId(1516), spark: 1 };
+
 const engine = createEngine(testCatalog([
   weigh, yourVoid, cheapCharacters, theirVoid, yourHand, theirHand, yourDeck, emptyTheirVoid, pumpYours, walker, hoarder, lowAnthem, weighThenFail,
+  weighCost, weighCostAbove, cheapStrong, costlyWeak,
 ]));
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id, v.vanilla5.id];
 const other = (side: Side): Side => (side === "player" ? "enemy" : "player");
@@ -233,6 +243,43 @@ describe("countCards as a ✦ bound", () => {
       const spark = effectiveSpark(state, engine.catalog, enemy);
       expect(spark).toBeGreaterThan(0);
       expect(state.sides[side].void).toHaveLength(spark);
+    }
+  });
+});
+
+describe("countCards as a cost bound", () => {
+  it("offers enemies by copiable cost, not ✦, within an upper or lower bound by the count, for either controller", () => {
+    for (const side of ["player", "enemy"] as const) {
+      for (const [source, within] of [[weighCost, [0, 2]], [weighCostAbove, [1, 2]]] as const) {
+        const { state, ids } = board(side,
+          { hand: [source.id], void: [v.event0.id, v.event1.id] },
+          { back: [cheapStrong.id, costlyWeak.id, v.vanilla2.id], void: [v.event0.id] });
+        const theirs = ids[other(side)].back as InstanceId[];
+        expect([...offered(state, side, ids[side].hand[0])].sort()).toEqual(within.map((index) => theirs[index]).sort());
+      }
+    }
+  });
+
+  it("rechecks the count as the effect resolves: emptying the void leaves no legal target, and raising the target's ✦ does not", () => {
+    for (const [response, dissolved] of [[emptyTheirVoid, false], [pumpYours, true]] as const) {
+      const { state, ids } = board("player", { hand: [weighCost.id], void: [v.event0.id] }, { hand: [response.id], energy: 1, back: [cheapStrong.id] });
+      const enemy = ids.enemy.back[0]!;
+      const played = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, { answer: () => [enemy] });
+      const responded = engine.apply(played.state, "enemy", { kind: "play", card: ids.enemy.hand[0], from: "hand" }, NO_PROMPTS);
+      const resolved = passUntil(engine, responded.state, (next) => next.stack.length === 0);
+      expect(resolved.state.instances[enemy]?.zone).toBe(dissolved ? "void" : "play");
+      if (!dissolved) expect([...responded.events, ...resolved.events]).toContainEqual({ kind: "noLegalTarget", source: ids.player.hand[0] });
+      expect(invariantViolations(resolved.state, engine.catalog)).toEqual([]);
+    }
+  });
+
+  it("the lab solver stages an enemy with a cost and as many void cards, so the card is playable", () => {
+    for (const side of ["player", "enemy"] as const) {
+      const { state } = labBoard(engine, weighCost.id, [], side);
+      const enemy = state.sides[other(side)].backRank.find((id) => id !== null)!;
+      const cost = copiableCostOf(state, engine.catalog, enemy);
+      expect(cost).toBeGreaterThan(0);
+      expect(state.sides[side].void).toHaveLength(cost);
     }
   });
 });

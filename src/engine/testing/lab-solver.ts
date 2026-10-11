@@ -8,8 +8,8 @@ import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
-import { fixedEnergy } from "../dsl/energy";
-import type { Ability, AdditionalCost, BoundValue, CardCountValue, CardFilter, CharacterSelector, PaymentCost, TriggeredAbility } from "../dsl/types";
+import { fixedEnergy, xCost } from "../dsl/energy";
+import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, TriggeredAbility } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -30,56 +30,112 @@ function constantBound(bound: BoundValue | undefined): number | undefined {
   return typeof bound === "number" ? bound : undefined;
 }
 
-/** A selector bound that counts the cards in a void, or null. */
-function voidCount(bound: BoundValue | undefined): Extract<CardCountValue, { zone: "void" }> | null {
-  return typeof bound === "object" && bound.value === "countCards" && bound.zone === "void" ? bound : null;
+/** A selector bound that counts the cards in a zone, or null. */
+function countBound(bound: BoundValue | undefined): CardCountValue | null {
+  return typeof bound === "object" && bound.value === "countCards" ? bound : null;
+}
+
+function isXBound(bound: BoundValue | undefined): boolean {
+  return typeof bound === "object" && bound.value === "x";
+}
+
+function sparkOf(card: EngineCardDefinition): number {
+  return typeof card.spark === "number" ? card.spark : 0;
+}
+
+/** The X a lab play may choose: an energy X cost's least X up to the lab's energy left after the fixed cost. */
+interface XRange {
+  readonly min: number;
+  readonly max: number;
+}
+
+function labXRange(costs: readonly CardCost[]): XRange | null {
+  const variable = xCost(costs);
+  return variable === null ? null : { min: variable.min, max: LAB_ENERGY - fixedEnergy(costs) };
 }
 
 /**
- * The void cards an upper ✦ or cost bound by a void count needs so that the
- * staged character meets it: as many cards matching the count's filter as
- * the character's ✦ or copiable cost, in the void the count reads.
+ * Whether a ✦ or cost meets a selector's constant bounds, and is at least 1
+ * under an upper bound by a count, so that the cards `countNeeds` stages
+ * for it are ones the count reads. A lower bound by a count is not staged.
  */
-function voidCountNeeds(engine: Engine, selector: CharacterSelector, character: CardId): { readonly count: Extract<CardCountValue, { zone: "void" }>; readonly cards: number }[] {
+function meetsBounds(value: number, atLeast: BoundValue | undefined, atMost: BoundValue | undefined): boolean {
+  const least = constantBound(atLeast);
+  const most = constantBound(atMost);
+  return (least === undefined || value >= least) && (most === undefined || value <= most) && (countBound(atMost) === null || value >= 1);
+}
+
+/**
+ * Whether some X in `range` meets every X-valued bound of the selector for a
+ * character with this ✦ and copiable cost. A card whose X is not an energy
+ * choice (`range` null) has its X bounds unchecked.
+ */
+function admitsX(selector: CharacterSelector, spark: number, cost: number, range: XRange | null): boolean {
+  if (range === null) return true;
+  let least = range.min;
+  let most = range.max;
+  for (const [value, atLeast, atMost] of [[spark, selector.sparkAtLeast, selector.sparkAtMost], [cost, selector.costAtLeast, selector.costAtMost]] as const) {
+    if (isXBound(atLeast)) most = Math.min(most, value);
+    if (isXBound(atMost)) least = Math.max(least, value);
+  }
+  return least <= most;
+}
+
+/** Cards a zone count must read for a staged character to meet an upper bound by that count. */
+interface CountNeed {
+  readonly count: CardCountValue;
+  readonly cards: number;
+}
+
+/**
+ * The cards an upper ✦ or cost bound by a zone count needs so that the
+ * staged character meets it: as many as the character's ✦ or copiable cost,
+ * in the zone the count reads, matching a void count's filter.
+ */
+function countNeeds(engine: Engine, selector: CharacterSelector, character: CardId): CountNeed[] {
   const card = engine.catalog.card(character);
-  const spark = typeof card.spark === "number" ? card.spark : 0;
   return [
-    { count: voidCount(selector.sparkAtMost), cards: spark },
-    { count: voidCount(selector.costAtMost), cards: fixedEnergy(card.costs) },
+    { count: countBound(selector.sparkAtMost), cards: sparkOf(card) },
+    { count: countBound(selector.costAtMost), cards: fixedEnergy(card.costs) },
   ].flatMap(({ count, cards }) => (count === null ? [] : [{ count, cards }]));
 }
 
-/** A character definition that satisfies a selector, from the catalog when it names a subtype. */
+/**
+ * The first printing that fits: a synthetic vanilla card, then a pool card
+ * with no authored abilities (vanilla, or pending, which plays text-less),
+ * and only when authored content alone fits, such as a subtype no other card
+ * carries, an authored card, so that the board does not depend on which
+ * content is authored yet.
+ */
+function firstFitting(pool: readonly EngineCardDefinition[], fits: (card: EngineCardDefinition) => boolean): EngineCardDefinition | undefined {
+  return Object.values(SYNTHETIC).find(fits) ?? pool.find((card) => card.status !== "authored" && fits(card)) ?? pool.find(fits);
+}
+
+/**
+ * A character definition that satisfies a selector's subtype, constant
+ * bounds, and upper bounds by a count (`meetsBounds`), and whose ✦ and cost
+ * admit an X the play can choose (`admitsX`).
+ */
 function characterFor(
   engine: Engine,
   selector: CharacterSelector,
   pool: readonly EngineCardDefinition[],
+  xRange: XRange | null,
 ): CardId {
-  // An X-valued cost bound depends on the X paid as the card is played, and a zone count on the board
-  // (`voidCountNeeds` stages it), so the solver checks constant bounds only.
-  const costAtMost = constantBound(selector.costAtMost);
-  const costAtLeast = constantBound(selector.costAtLeast);
-  const sparkAtMost = constantBound(selector.sparkAtMost);
-  const sparkAtLeast = constantBound(selector.sparkAtLeast);
-  // A ✦ bound by a void count gets a character with ✦, so the void cards staged for it are ones the count reads.
-  const sparkCounted = voidCount(selector.sparkAtMost) !== null;
   const fits = (card: EngineCardDefinition): boolean => {
-    const spark = typeof card.spark === "number" ? card.spark : 0;
+    const spark = sparkOf(card);
+    const cost = fixedEnergy(card.costs);
     return (
       card.cardType === "character" &&
-      card.status !== "authored" &&
       // The solver places catalog cards, never figments.
       selector.figment !== true &&
       (selector.subtype === undefined || card.subtype === selector.subtype) &&
-      (sparkAtMost === undefined || spark <= sparkAtMost) &&
-      (sparkAtLeast === undefined || spark >= sparkAtLeast) &&
-      (!sparkCounted || spark >= 1) &&
-      (costAtMost === undefined || fixedEnergy(card.costs) <= costAtMost) &&
-      (costAtLeast === undefined || fixedEnergy(card.costs) >= costAtLeast)
+      meetsBounds(spark, selector.sparkAtLeast, selector.sparkAtMost) &&
+      meetsBounds(cost, selector.costAtLeast, selector.costAtMost) &&
+      admitsX(selector, spark, cost, xRange)
     );
   };
-  const vanilla = Object.values(SYNTHETIC).find(fits);
-  const found = vanilla ?? pool.find(fits);
+  const found = firstFitting(pool, fits);
   if (found === undefined) {
     throw new Error(`The lab solver has no character for selector ${JSON.stringify(selector)}`);
   }
@@ -89,9 +145,7 @@ function characterFor(
 
 /** A matching printing for a void target or an opponent hand choice on the lab's neutral setup board. */
 function cardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
-  const fits = (card: EngineCardDefinition): boolean =>
-    card.status !== "authored" && matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs) }, filter);
-  const found = Object.values(SYNTHETIC).find(fits) ?? pool.find(fits);
+  const found = firstFitting(pool, (card) => matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs) }, filter));
   if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
   engine.catalog.card(found.id);
   return found.id;
@@ -154,8 +208,10 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * active in its Day with the card in hand and ample energy, and every
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
- * `side`, with matching void cards for an upper ✦ or cost bound by a void
- * count (`voidCountNeeds`); a ▸Materialized trigger's void targets get their void cards too,
+ * `side`, whose ✦ and cost admit an X the play can choose, with as many
+ * cards in the counted zone as an upper ✦ or cost bound by a zone count
+ * needs (`countNeeds`): matching void cards, or cards in a hand beside the
+ * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
  * and a choice from the opponent's hand gets a matching card in that hand
  * (`opponentHandChoices`). A void banish additional cost gets its count of matching cards, or
  * its least X, in `side`'s void, and a ⍟ additional cost gets that many
@@ -175,6 +231,9 @@ export function labBoard(
   const back: Record<Side, CardId[]> = { player: [], enemy: [] };
   const voids: Record<Side, CardId[]> = { player: [], enemy: [] };
   const hands: Record<Side, CardId[]> = { player: [], enemy: [] };
+  const decks: Record<Side, CardId[]> = { player: [], enemy: [] };
+  const zones = { void: voids, hand: hands, deck: decks };
+  const xRange = labXRange(definition.costs);
   const variant = variantOf(entry);
   const abilities = definition.abilities(variant);
   const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
@@ -196,23 +255,25 @@ export function labBoard(
       }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
       for (let index = 0; index < (spec.count ?? 1); index++) {
-        const character = characterFor(engine, spec.selector, pool);
+        const character = characterFor(engine, spec.selector, pool, xRange);
         back[targetSide].push(character);
-        for (const { count, cards } of voidCountNeeds(engine, spec.selector, character)) {
-          const voidSide = count.player === "you" ? side : opponent(side);
-          for (let card = 0; card < cards; card++) voids[voidSide].push(cardFor(engine, count.filter, pool));
+        for (const { count, cards } of countNeeds(engine, spec.selector, character)) {
+          const countSide = count.player === "you" ? side : opponent(side);
+          for (let card = 0; card < cards; card++) {
+            zones[count.zone][countSide].push(count.zone === "void" ? cardFor(engine, count.filter, pool) : SYNTHETIC.vanilla1.id);
+          }
         }
       }
     }
   }
   const { voidCards, points: score } = costNeeds(additionalCosts(definition, variant));
   for (const filter of voidCards) voids[side].push(cardFor(engine, filter, pool));
-  const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
+  const deck = (of: Side): CardId[] => [...Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id), ...decks[of]];
   const sides: Record<Side, SideSetup> = {
-    player: { back: back.player, void: voids.player, deck, ...(hands.player.length > 0 ? { hand: hands.player } : {}) },
-    enemy: { back: back.enemy, void: voids.enemy, deck, ...(hands.enemy.length > 0 ? { hand: hands.enemy } : {}) },
+    player: { back: back.player, void: voids.player, deck: deck("player"), ...(hands.player.length > 0 ? { hand: hands.player } : {}) },
+    enemy: { back: back.enemy, void: voids.enemy, deck: deck("enemy"), ...(hands.enemy.length > 0 ? { hand: hands.enemy } : {}) },
   };
-  sides[side] = { ...sides[side], hand: [entry], energy: LAB_ENERGY, ...(score > 0 ? { score } : {}) };
+  sides[side] = { ...sides[side], hand: [entry, ...hands[side]], energy: LAB_ENERGY, ...(score > 0 ? { score } : {}) };
   const base: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
   const setup: BoardSetup = staged === undefined ? base : {
     ...base,
