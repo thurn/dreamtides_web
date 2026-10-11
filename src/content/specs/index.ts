@@ -7,5 +7,6 @@ import type { ScenarioModule } from "../../engine/testing/scenario";
 import cards04 from "./cards-04.scenarios";
 import primLosePoints from "./prim-lose-points.scenarios";
 import primSelectorChallenger from "./prim-selector-challenger.scenarios";
+import primWhenPutIntoVoidTrigger from "./prim-when-put-into-void-trigger.scenarios";
 
-export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, primLosePoints, primSelectorChallenger];
+export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, primLosePoints, primSelectorChallenger, primWhenPutIntoVoidTrigger];

@@ -912,6 +912,19 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   prompt between them. Several characters dissolved by one effect are
   dissolved one at a time, so a card dissolved earlier is not armed for
   later ones.
+- **"When … is put into your void"** (rules § Ability Types → When a card is
+  put into a void; RD-hv-umm2.77-1): the `putIntoVoid` trigger
+  (`whenPutIntoVoid(player, filter)`) does not look back. `relocate` emits
+  `enteredVoid { instance, side, from }` once a card is in its owner's void,
+  whatever route moved it (dissolve, abandon, discard, erode, foresee, a
+  looked-at card's "rest", a prevented or resolved card leaving the stack),
+  and the matcher matches it like any other event: the void owner against
+  `player`, the filter against the card as it is in the void, and the
+  ordinary functional-zone check, so an ability that works in play never
+  sees its own card enter a void. Created cards cease to exist and
+  reclaimed cards are banished instead, so they never emit it.
+  `enteredVoid` is bookkeeping (`none` presentation, no log line): the move
+  it pairs with presents and logs the card.
 
 ## Continuous effects
 
@@ -1296,7 +1309,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`), `energyAtLeast`, `costPaid`, `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
 
 Discover accepts an exact copiable-cost value expression or a strict lower
 bound (`costGreaterThan`) alongside its card filter, or a free
@@ -1785,8 +1798,9 @@ names each kind's presentation, and a missing kind is a type error:
 - **status:** energy, points, spark, exhaustion, counters, durations,
   phase, and result changes show at once in the numbers, badges, and
   indicators the board renders;
-- **none:** bookkeeping with no visual by design: the paired zone-exit
-  events of a move (`leftPlay`, `leftVoid`), a trigger joining the queue
+- **none:** bookkeeping with no visual by design: the paired zone-exit and
+  void-entry events of a move (`leftPlay`, `leftVoid`, `enteredVoid`), a
+  trigger joining the queue
   (its resolution is logged), an ability finishing (`abilityResolved`,
   `pendingAbility`), and a bounded feasibility search.
 
@@ -1824,7 +1838,9 @@ was chosen for, never sits over the next prompt. On those boards:
   from that event on, so a resolving event card leaves the stack as it
   resolves and its effects follow, and a created hand copy shows in its
   hand at its own item; a card still resolving at a prompt stays on the
-  stack until the answer's batch, whose first item shows it gone;
+  stack until the answer's batch, whose first item shows it gone unless an
+  event presented as an item names it (its bookkeeping `enteredVoid` does
+  not);
 - an event with no observed state (past the per-intent limit, as in a long
   loop, or folded while no feed was registered) shows the batch's final
   state in the turn `batchTurnAt` gives it.

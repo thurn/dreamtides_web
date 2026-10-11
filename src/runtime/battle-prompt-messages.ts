@@ -659,6 +659,7 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${who(event.side)} met a condition to win the game.`;
     case "abilityResolved":
     case "effectEnded":
+    case "enteredVoid":
     case "exhaustionChanged":
     case "feasibilityBounded":
     case "leftPlay":

@@ -43,10 +43,11 @@ import { parsePresentationId } from "../../types/identifiers";
  * - `status`: a number, badge, or indicator the board shows at once (energy,
  *   points, spark, exhaustion, counters, durations, phase, result), with no
  *   dwell;
- * - `none`: bookkeeping with no visual by design: the paired zone-exit
- *   events of a move (`leftPlay`, `leftVoid`), a trigger joining the queue
- *   (its resolution is logged), an activated ability or a drawn card's
- *   ability finishing, and a bounded feasibility search.
+ * - `none`: bookkeeping with no visual by design: the paired zone-exit and
+ *   void-entry events of a move (`leftPlay`, `leftVoid`, `enteredVoid`), a
+ *   trigger joining the queue (its resolution is logged), an activated
+ *   ability or a drawn card's ability finishing, and a bounded feasibility
+ *   search.
  */
 export type EventPresentation = "travel" | "reveal" | "score" | "dreamwell" | "turn" | "notice" | "status" | "none";
 
@@ -77,6 +78,7 @@ export const EVENT_PRESENTATION = {
   effectEnded: "status",
   effectStarted: "status",
   energyChanged: "status",
+  enteredVoid: "none",
   eroded: "travel",
   exhaustionChanged: "status",
   fatigue: "status",
@@ -315,7 +317,8 @@ function settle(state: BattleState, id: InstanceId, settled: BattleState): Battl
  *   through its effects; a created card shows in its hand, rank, or stack
  *   position from its creation; a created card prevented or abandoned is
  *   gone from that event. A card the batch began resolving leaves the stack
- *   from the batch's first event. A card still resolving when the batch
+ *   from the batch's first event unless an event presented as an item names
+ *   it; bookkeeping such as its `enteredVoid` does not hold it there. A card still resolving when the batch
  *   ends, held by a prompt, stays on the stack, and a card created but not
  *   listed when it ends shows once the answer lists it.
  */
@@ -358,7 +361,7 @@ function eventBoards(
     }
   };
   for (const item of before.stack) {
-    if (item.kind === "card" && !events.some((event) => namesCard(event, item.instance))) {
+    if (item.kind === "card" && !events.some((event) => presentedAsItem(event) && namesCard(event, item.instance))) {
       show(0, item.instance, landing(0, before, item.instance, true));
     }
   }

@@ -28,6 +28,7 @@ import { dreamwellDrawn, type DreamwellDrawnEvent } from "./kinds/dreamwell-draw
 import { effectEnded, type EffectEndedEvent } from "./kinds/effect-ended";
 import { effectStarted, type EffectStartedEvent } from "./kinds/effect-started";
 import { energyChanged, type EnergyChangedEvent } from "./kinds/energy-changed";
+import { enteredVoid, type EnteredVoidEvent } from "./kinds/entered-void";
 import { eroded, type ErodedEvent } from "./kinds/eroded";
 import { exhaustionChanged, type ExhaustionChangedEvent } from "./kinds/exhaustion-changed";
 import { fatigue, type FatigueEvent } from "./kinds/fatigue";
@@ -89,6 +90,7 @@ export type EngineEvent =
   | EffectEndedEvent
   | EffectStartedEvent
   | EnergyChangedEvent
+  | EnteredVoidEvent
   | ErodedEvent
   | ExhaustionChangedEvent
   | FatigueEvent
@@ -151,6 +153,7 @@ export const EVENT_DEFINITIONS = {
   effectEnded,
   effectStarted,
   energyChanged,
+  enteredVoid,
   eroded,
   exhaustionChanged,
   fatigue,

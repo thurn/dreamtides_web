@@ -222,6 +222,26 @@ describe("presentation items", () => {
     expectForward(answered);
   });
 
+  it("moves a card that resumes resolving off the stack from the answer's first item, though the bookkeeping of its void entry names it", () => {
+    const discardOne = { ...LAB.drawTwoThenDiscard, id: syntheticId(0x5104), abilities: () => [eventAbility(discard(1))] };
+    const engine = createEngine(createCatalog([...PROMPT_LAB_DEFINITIONS.cards, discardOne], [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments));
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [discardOne.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], energy: 2 } }, engine);
+    const card = fixture.ids.player.hand[0];
+    const first = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card, from: "hand" } });
+    expect(first.state.instances[card]?.zone).toBe("stack");
+    const pending = fixture.adapter.pending(fixture.slice());
+    if (pending === null) throw new Error("no discard prompt");
+    const answered = fixture.apply({ kind: "answer", side: "player", promptId: pending.prompt.id, value: [fixture.ids.player.hand[1]] });
+    // The answer's events name the resolving card only in its void entry, which presents nothing.
+    const naming = answered.events.filter((event) => Object.values(event).includes(card));
+    expect(naming.map((event) => event.kind)).toEqual(["enteredVoid"]);
+    expect(naming.every((event) => !presentedAsItem(event))).toBe(true);
+    expect(answered.items.length).toBeGreaterThan(0);
+    expect(answered.items.map((item) => item.batch.state.instances[card]?.zone)).toEqual(answered.items.map(() => "void"));
+    expect(answered.items.every((item) => item.batch.state.stack.length === 0)).toBe(true);
+    expectForward(answered);
+  });
+
   it("travels multiple discards in their emitted order", () => {
     const doubleDiscard = { ...LAB.drawTwoThenDiscard, id: syntheticId(0x5101), abilities: () => [eventAbility(discard(2))] };
     const engine = createEngine(createCatalog([...PROMPT_LAB_DEFINITIONS.cards, doubleDiscard], [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments));
@@ -674,6 +694,7 @@ describe("presentation completeness", () => {
   const UNLOGGED: Readonly<Partial<Record<EngineEventKind, string>>> = {
     abilityResolved: "bookkeeping: the activation is logged",
     effectEnded: "its status badge clears",
+    enteredVoid: "the move it pairs with is logged",
     exhaustionChanged: "the card's exhausted pose changes",
     feasibilityBounded: "bookkeeping of the AI's search",
     leftPlay: "the move it pairs with is logged",

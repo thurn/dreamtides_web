@@ -142,8 +142,10 @@ function removeFromZone(state: BattleState, instance: CardInstance): void {
  * zone instead. It is never exhausted outside play: exhaustion marks a
  * character in play (rules § Exhaust and Awaken), and a card that returns to
  * play enters exhausted unless awakened. Leaving play clears its counters
- * (rules § Counters). Returns the zone it went to, or `null` when it ceased
- * to exist.
+ * (rules § Counters). A card put into a void is announced by
+ * `enteredVoid` once it is there, whatever route moved it, so "is put into
+ * your void" triggers see it in the void. Returns the zone it went to, or
+ * `null` when it ceased to exist.
  */
 function relocate(
   ctx: StepContext,
@@ -160,7 +162,8 @@ function relocate(
   }
   const destination = instance.status.reclaimed ? "banished" : to;
   const receiver = destination === "hand" ? holder : instance.owner;
-  const leavingPlay = instance.zone === "play";
+  const from = instance.zone;
+  const leavingPlay = from === "play";
   depart(ctx, instance, destination);
   const seers = detach(state, instance);
   instance.controller = receiver;
@@ -178,6 +181,7 @@ function relocate(
     instance.status.counters = 0;
   }
   instance.status.x = null;
+  if (destination === "void") ctx.emit({ kind: "enteredVoid", instance: id, side: receiver, from });
   return destination;
 }
 

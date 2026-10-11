@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.77",
+  "phase": 5,
+  "baseOid": "72f5910d2c799354a5a6ac76276e8b30aaa10f2e",
+  "implementMin": 35,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 3,
+    "fullSuite": 36,
+    "review": 41,
+    "knip": 3,
+    "fuzz": 62,
+    "sweep": 117
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 11.7,
+  "testDelta": {
+    "files": 1,
+    "lines": 421,
+    "jsdomFiles": 0,
+    "cases": 13
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 12,
+      "note": "every route into a void passes only through relocate in src/engine/rules/zones.ts, and announcing it moved presentation-items' resolving-card rule and four event-list assertions; none was in the filed areas, so the subagent stopped for a widening"
+    }
+  ]
+}

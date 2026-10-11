@@ -1527,6 +1527,7 @@ describe("when a character is dissolved", () => {
     const result = apply(state, "player", { kind: "activate", source: sacrifice!, ability: 0 }, [[fodder!]]);
     expect(result.events.filter((entry) => "instance" in entry && entry.instance === fodder).map((entry) => entry.kind)).toEqual([
       "leftPlay",
+      "enteredVoid",
       "abandoned",
       "dissolved",
     ]);

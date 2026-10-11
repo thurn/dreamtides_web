@@ -1,3 +1,5 @@
+import { onDawn, triggered, whenPutIntoVoid } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,9 @@ export default card({
   cardNumber: 179,
   art: { x: 0, y: 1, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [
+    triggered(onDawn(), p.sequence(p.abandon(), p.erode(v.amplified ? 2 : 1))),
+    triggered(whenPutIntoVoid("you", { cardType: "character", costAtMost: 2 }), p.draw(1)),
+  ],
+  verifiedText: "5fxyx3pog0",
 });

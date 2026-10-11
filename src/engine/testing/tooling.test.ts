@@ -45,17 +45,17 @@ import type { AdditionalCost, CardFilter } from "../dsl/types";
 const pendingEvent: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(904), status: "pending" };
 const pendingCharacter: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(905), status: "pending" };
 /** "Put the top card of your deck into your void", moving it with no event: a primitive with a presentation gap. */
-const silentMill: EngineCardDefinition = {
+const silentBanish: EngineCardDefinition = {
   ...SYNTHETIC.event1,
   id: syntheticId(906),
   synthetic: {
     resolve: (ctx, item) => {
       const [top] = ctx.state.sides[item.controller].deck;
-      if (top !== undefined) moveInstance(ctx, top, "void");
+      if (top !== undefined) moveInstance(ctx, top, "banished");
     },
   },
 };
-const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter, silentMill]));
+const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter, silentBanish]));
 
 /**
  * Plays `card` on its lab board as `side`, choosing the X equal to the staged
@@ -566,18 +566,18 @@ describe("announced changes", () => {
     const { state, ids } = boardState(engine.catalog, {
       active: "player",
       phase: "day",
-      player: { hand: [silentMill.id], energy: 1, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] },
+      player: { hand: [silentBanish.id], energy: 1, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] },
       enemy: { deck: [SYNTHETIC.vanilla1.id] },
     });
     const card = ids.player.hand[0];
-    const milled = ids.player.deck[0];
-    if (card === undefined || milled === undefined) throw new Error("no lab cards");
+    const banished = ids.player.deck[0];
+    if (card === undefined || banished === undefined) throw new Error("no lab cards");
     // The opponent cannot respond, so the play resolves in its own step.
     const played = engine.apply(state, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS);
-    expect(played.state.instances[milled]?.zone).toBe("void");
+    expect(played.state.instances[banished]?.zone).toBe("banished");
     const problems = unannouncedChanges(played.events, state, played.state);
     expect(problems).toHaveLength(1);
-    expect(problems[0]).toContain(milled);
+    expect(problems[0]).toContain(banished);
   });
 });
 

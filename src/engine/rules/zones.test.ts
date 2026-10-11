@@ -120,7 +120,7 @@ describe("zone-change replacements", () => {
 
     const abandon = act(state, "player", { kind: "activate", source: ids.player.back[1]!, ability: 0 }, [[veiled]]);
     expect(where(abandon.state, veiled)).toBe("void");
-    expect(kinds(abandon.events, veiled)).toEqual(["leftPlay", "abandoned", "dissolved"]);
+    expect(kinds(abandon.events, veiled)).toEqual(["leftPlay", "enteredVoid", "abandoned", "dissolved"]);
   });
 
   it("applies the replacements in order: a reclaimed Veil character is banished, a Veil figment only loses Veil", () => {

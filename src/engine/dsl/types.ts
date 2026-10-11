@@ -449,6 +449,15 @@ export type Trigger =
   /** "When the opponent scores ⍟": a character the opponent controls scores. */
   | { readonly on: "opponentScores" }
   | { readonly on: "leavesVoid"; readonly player: PlayerRef; readonly filter: CardFilter }
+  /**
+   * "When a … is put into your void": each card matching `filter` that
+   * enters `player`'s void, by any route and from any zone, matched as it is
+   * in that void once it is there. The ability must work where its card is
+   * as the card arrives, so an ability that works in play never sees its own
+   * card put into a void (rules § Ability Types → When a card is put into a
+   * void).
+   */
+  | { readonly on: "putIntoVoid"; readonly player: PlayerRef; readonly filter: CardFilter }
   /** "When you challenge with N or more …": once, as challengers are designated (C10). */
   | { readonly on: "challengeWith"; readonly count: number; readonly selector: CharacterSelector }
   | { readonly on: "startOfTurn" }

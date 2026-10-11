@@ -7,7 +7,8 @@
  * dissolved" abilities are matched against the character as it last was in
  * play, as its `leftPlay` event announces it, and trigger as they were
  * then, for the side that controlled their sources, once its `dissolved`
- * event confirms the dissolve.
+ * event confirms the dissolve. "When … is put into your void" abilities
+ * match a card's `enteredVoid`, as it is once in the void (RD-hv-umm2.77-1).
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
@@ -53,6 +54,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   scores: ["laneResolved"],
   opponentScores: ["laneResolved"],
   leavesVoid: ["leftVoid"],
+  putIntoVoid: ["enteredVoid"],
   challengeWith: ["challengersDesignated"],
   startOfTurn: ["turnStarted"],
   startOfFirstTurn: ["turnStarted"],
@@ -270,6 +272,13 @@ function matchKind(
         : null;
     case "leavesVoid":
       return event.kind === "leftVoid" &&
+        event.side === resolvePlayer(you, trigger.player) &&
+        filterMatches(catalog, state, trigger.filter, event.instance)
+        ? { subject: event.instance }
+        : null;
+    case "putIntoVoid":
+      // The card is in the void as `enteredVoid` announces it, so it matches by its characteristics there (RD-hv-umm2.77-1).
+      return event.kind === "enteredVoid" &&
         event.side === resolvePlayer(you, trigger.player) &&
         filterMatches(catalog, state, trigger.filter, event.instance)
         ? { subject: event.instance }

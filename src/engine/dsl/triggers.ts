@@ -109,6 +109,14 @@ export function whenLeavesVoid(player: PlayerRef = "you", filter: CardFilter = {
   return { on: "leavesVoid", player, filter };
 }
 
+/**
+ * "When a card matching `filter` is put into your void" (or the opponent's,
+ * with `player`): every route into that void, matched in the void.
+ */
+export function whenPutIntoVoid(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
+  return { on: "putIntoVoid", player, filter };
+}
+
 /** "When you challenge with `count` or more characters matching `selector`" (C10). */
 export function whenYouChallengeWith(count: number, selector: CharacterSelector = { controller: "you" }): Trigger {
   return { on: "challengeWith", count, selector };

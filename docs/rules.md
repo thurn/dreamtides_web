@@ -1117,6 +1117,30 @@ triggers abilities on its own, so a card dissolved earlier by the same effect
 is in the void when the later ones are dissolved, and its "when … is
 dissolved" ability does not see them.
 
+**When a card is put into a void:** An ability such as "When a ≤2● cost
+character is put into your void" triggers once for each matching card that
+enters that void, by any route and from any zone: dissolved or abandoned from
+play, discarded from a hand, eroded or otherwise put there from a deck,
+prevented or resolved from the stack, or put there by any other effect. "Your
+void" is the void of the player who controls the ability. A card always goes
+to its owner's void, so a character you own that the opponent controls enters
+your void when it is dissolved, and an opponent's character you control
+enters theirs. The ability sees the card as it is once it is in the void: its
+type, subtype, and cost there, not types or other changes it had only in play.
+The cost it reads is the card's cost for conditions ([Cost
+changes](#costs-requirements-and-x)), which effects that change what a card
+costs to play do not affect. The ability triggers only if it works where its
+card is as the card enters the void, so an ability that works in play never
+sees its own card put into a void, and one that works in the void sees its
+own card arrive. A card that is banished, returned to a hand, or put into a
+deck does not trigger it, nor does a figment or other created card, which
+ceases to exist instead of entering a void, or a reclaimed card, which is
+banished instead. An effect that puts several cards into a void puts them
+there one at a time, and each triggers the ability on its own; a card with
+the ability that enters the void partway through no longer sees the rest
+from play. Both players see which card entered the void, even one eroded
+from a hidden deck or discarded from a hidden hand.
+
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it
 resolves it does nothing unless Y is still true.
