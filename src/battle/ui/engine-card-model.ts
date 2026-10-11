@@ -157,6 +157,7 @@ function buildModel(
   const art = definition?.art ?? card?.art;
   const printedOrbs = definition?.energyCosts ?? card?.energyCosts;
   const energyCosts = printedOrbs === undefined ? undefined : engineOrbLabels(printedOrbs, characteristics.cost);
+  const printedEnergyCost = definition === undefined ? card?.energyCost : definition.printedEnergyCost;
   return {
     cardId,
     ...(definition?.transfigurationDisplay === undefined
@@ -169,7 +170,7 @@ function buildModel(
       cardType,
       subtype: characteristics.subtype,
       isStarter: card?.isStarter ?? false,
-      energyCost: characteristics.cost,
+      energyCost: printedEnergyCost === null ? null : characteristics.cost,
       ...(energyCosts === undefined ? {} : { energyCosts }),
       spark: characteristics.spark,
       isFast: definition?.isFast ?? card?.isFast ?? false,

@@ -1,0 +1,139 @@
+{
+  "bead": "hv-umm2.348",
+  "phase": 5,
+  "implementMin": 15.445,
+  "localValidationS": {
+    "focused": 2.637568950653076,
+    "review": 18.55726385116577,
+    "knip": 3.7569799423217773,
+    "judgedPlayer": 208.81710171699524,
+    "judgedEnemy": 152.45686864852905
+  },
+  "hostLoad": 3.62,
+  "testDelta": {
+    "files": 0,
+    "lines": 55,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 3,
+      "note": "Retained four manual harness failures: full tucked-hand bounds, duplicate declaration before startup, phase-specific held/shared reveal selector, and immediate presentation-event gate. Acceptance uses visible hand orb/full held-reveal bounds and exact physical state/structured discard-draw counts. All failed runtime owners settled."
+    }
+  ],
+  "queueS": {
+    "judged-player-final": 0.01905679702758789,
+    "judged-enemy": 0.0192110538482666,
+    "knip": 0.021931886672973633,
+    "focused": 0.021007061004638672,
+    "judged-player-fifth": 0.019224166870117188,
+    "judged-player": 0.021138906478881836,
+    "judged-player-corrected": 0.019572973251342773,
+    "review": 0.01952505111694336,
+    "focused-corrected": 0.01868915557861328,
+    "judged-player-fourth": 0.01975393295288086
+  },
+  "attemptExecutionS": {
+    "judged-player-final": 29.059474229812622,
+    "judged-enemy": 152.45686864852905,
+    "knip": 3.7569799423217773,
+    "focused": 3.5263020992279053,
+    "judged-player-fifth": 208.81710171699524,
+    "judged-player": 12.964661121368408,
+    "judged-player-corrected": 0.11641216278076172,
+    "review": 18.55726385116577,
+    "focused-corrected": 2.637568950653076,
+    "judged-player-fourth": 28.637315034866333
+  },
+  "browserLeaseS": {
+    "playerFirstHarness": 0.042,
+    "playerThirdHarness": 0.041,
+    "playerFourthHarness": 4.677,
+    "playerFinal": 161.071,
+    "enemyFinal": 133.655
+  },
+  "helperStartedAt": "2026-10-11T08:20:27Z",
+  "commitBoundaryAt": "2026-10-11T08:35:53.710498+00:00",
+  "scopeNotes": "Original helper duration includes native/heavy waits and failed harness attempts. Original authored source/test bytes and QA are retained. Fresh install was completed by executor before original dispatch. Integration failure, two executor native updates and prerequisite .351 repair/wait are distinct from the original implementation interval; this finishing pass records its own interval and passing integrated checks. Prior .60 tag qa-harness-assumptions uses canonical browser-qa-scripting in this bead; shared friction catalog untouched.",
+  "finishing": {
+    "measurementStartUtc": "2026-10-11T09:02:51+00:00",
+    "measurementStartNote": "Captured after the initial instruction and clean-state read; original implementation interval is preserved separately.",
+    "integratedBase": "5da790bf43dbce9d2ad7fe399765302bd294834b",
+    "preAmendSource": "20d7925a3a53e98acbe99931d4a103a7a51f54fd",
+    "originalSource": "de6fa1ea1245a07e8c88c20137a2ef2f48e3e8d0",
+    "adapterSha256": "4ef796947dbfa172fd4338948f931c143cd7d46f585d047b25b598e2c94163bf",
+    "authoredTestBlockSha256": "8f00dbb58d7f243658ad60819f966e8e5a43d89c9cbeb25a1cb03ee96b390142",
+    "sourceAndAuthoredTestAddedLinesIdentical": true,
+    "checks": {
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
+        ],
+        "startedAt": "2026-10-11T09:03:29.435914+00:00",
+        "finishedAt": "2026-10-11T09:03:32.548436+00:00",
+        "queueS": 0.01837015151977539,
+        "executionS": 3.1153860092163086,
+        "load": "{ 7.54 10.62 9.29 }",
+        "exitCode": 0
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "startedAt": "2026-10-11T09:03:32.575316+00:00",
+        "finishedAt": "2026-10-11T09:03:49.730952+00:00",
+        "queueS": 0.020765066146850586,
+        "executionS": 17.15782403945923,
+        "load": "{ 7.26 10.51 9.26 }",
+        "exitCode": 0
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "startedAt": "2026-10-11T09:04:46.591342+00:00",
+        "finishedAt": "2026-10-11T09:04:48.662275+00:00",
+        "queueS": 56.85379385948181,
+        "executionS": 2.0736541748046875,
+        "load": "{ 5.33 9.22 8.87 }",
+        "exitCode": 0
+      }
+    },
+    "runtimeOwners": "One sequential check wrapper and its lock/check children; all completed. No browser, server, provider, database or transport started.",
+    "amendBoundaryUtc": "2026-10-11T09:06:36+00:00",
+    "startToAmendS": 225.0,
+    "startToAmendMin": 3.75
+  },
+  "integration": {
+    "failedCandidate": "01a12a1b-ed97-7623-b740-56f328d9241e",
+    "failedTestedOid": "6db2a8ba8ffba186c203b867b384189d9aa1dd1f",
+    "failureBaseline": "035f9058f4040ab5b786111db353bfd369c7afc7",
+    "firstNativeUpdateSource": "899a60bac3cf102f025b42850a0ed60a692936c9",
+    "sameFailuresAuthoredAdapterExecutionS": 2.284,
+    "sameFailuresBaselineAdapterExecutionS": 1.681,
+    "prerequisiteBead": "hv-umm2.351",
+    "prerequisitePromotedSourceAndTestedOid": "5da790bf43dbce9d2ad7fe399765302bd294834b",
+    "prerequisiteGateS": 13.619,
+    "prerequisiteFullResult": {
+      "files": 216,
+      "cases": 2886,
+      "passed": 2885,
+      "failed": 1,
+      "knownFailureBead": "hv-umm2.353",
+      "executionS": 48.404,
+      "queueS": 49.219
+    },
+    "secondNativeUpdateSource": "20d7925a3a53e98acbe99931d4a103a7a51f54fd",
+    "nativeActionOwner": "root executor",
+    "originalCommitToFinishingMeasurementStartS": 1617.289502,
+    "intervalNote": "Executor integration/repair/wait interval; not authored implementation minutes."
+  }
+}

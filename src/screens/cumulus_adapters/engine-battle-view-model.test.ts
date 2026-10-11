@@ -613,6 +613,61 @@ describe("engine card models", () => {
     expect([shown.renderedText, shown.reclaimCost]).toEqual([printed.renderedText, null]);
   });
 
+  it.each([
+    { definitionCost: null, catalogCost: 2, matching: true, reduction: 0, expected: null },
+    { definitionCost: 2, catalogCost: null, matching: true, reduction: 0, expected: 1 },
+    { definitionCost: 2, catalogCost: null, matching: true, reduction: 1, expected: 0 },
+    { definitionCost: 2, catalogCost: null, matching: false, reduction: 0, expected: null },
+    { definitionCost: null, catalogCost: 2, matching: false, reduction: 1, expected: 0 },
+  ])("preserves a single X from the selected printing and effective fixed costs: %j", ({ definitionCost, catalogCost, matching, reduction, expected }) => {
+    const cardId = SYNTHETIC.vanilla1.id;
+    const definition = { ...dealt(cardId, matching ? null : { reclaim: 2 }, "fixture"), printedEnergyCost: definitionCost };
+    const printed: CardData = {
+      id: cardId,
+      name: definition.name,
+      cardNumber: 1,
+      cardType: "Character",
+      subtype: definition.subtype,
+      isStarter: false,
+      energyCost: catalogCost,
+      spark: 1,
+      isFast: false,
+      renderedText: "fixture",
+      imageNumber: 0,
+      artOwned: false,
+    };
+    const { state, ids } = board({ player: { hand: [{ cardId, deckMods: { ...NO_DECK_MODS, costReduction: reduction } }] } });
+    const models = createEngineCardModels({ definitions: [definition], cards: new Map([[cardId, printed]]), figment: () => undefined });
+    const snapshot = models(engine.view(state, "player").instances[ids.player.hand[0]]).displaySnapshot;
+
+    expect(snapshot.energyCost).toBe(expected);
+    expect(snapshot.energyCosts).toBeUndefined();
+  });
+
+  it("shows a catalog single X at zero effective cost without a dealt definition", () => {
+    const cardId = DSL.pointsTimesX.id;
+    const printed: CardData = {
+      id: cardId,
+      name: parseCardName("Fixture Card"),
+      cardNumber: 1,
+      cardType: "Event",
+      subtype: parseCardSubtype("Fixture"),
+      isStarter: false,
+      energyCost: null,
+      spark: null,
+      isFast: false,
+      renderedText: "fixture",
+      imageNumber: 0,
+      artOwned: false,
+    };
+    const { state, ids } = board({ player: { hand: [cardId] } });
+    const models = createEngineCardModels({ definitions: [], cards: new Map([[cardId, printed]]), figment: () => undefined });
+    const snapshot = models(engine.view(state, "player").instances[ids.player.hand[0]]).displaySnapshot;
+
+    expect(snapshot.energyCost).toBeNull();
+    expect(snapshot.energyCosts).toBeUndefined();
+  });
+
   /** A dealt multi-cost event ("1 X") of `cardId`, its deck entry's cost reduction applied to its orbs. */
   function dealtMultiCost(cardId: CardId, energyCostReduction: number): BattleDeckCardDefinition {
     const modification = energyCostReduction === 0 ? null : { energyCostReduction };
