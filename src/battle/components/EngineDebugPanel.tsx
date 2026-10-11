@@ -144,16 +144,18 @@ export default function EngineDebugPanel({
         testId="engine-debug-panel"
       >
         <div style={{ display: "grid", gap: token("--space-m") }}>
-          <SegmentedControl
-            options={[
-              { value: "player", label: COPY.side.player },
-              { value: "enemy", label: COPY.side.enemy },
-            ]}
-            value={side}
-            onChange={(value) => setSide(value === "enemy" ? "enemy" : "player")}
-            size="sm"
-            full
-          />
+          <div data-engine-debug-side={side}>
+            <SegmentedControl
+              options={[
+                { value: "player", label: COPY.side.player },
+                { value: "enemy", label: COPY.side.enemy },
+              ]}
+              value={side}
+              onChange={(value) => setSide(value === "enemy" ? "enemy" : "player")}
+              size="sm"
+              full
+            />
+          </div>
           <TextField
             label={COPY.card}
             value={cardText}
@@ -161,16 +163,19 @@ export default function EngineDebugPanel({
             {...(cardText !== "" && card === null ? { error: COPY.cardError } : {})}
             testId="engine-debug-card"
           />
-          <Select
-            options={DEBUG_ZONES.map((value) => ({ value, label: COPY.zones[value] }))}
-            value={zone}
-            onChange={setZone}
-            size="sm"
-            full
-            ariaLabel={COPY.zone}
-          />
+          <div data-engine-debug-zone={zone}>
+            <Select
+              options={DEBUG_ZONES.map((value) => ({ value, label: COPY.zones[value] }))}
+              value={zone}
+              onChange={setZone}
+              size="sm"
+              full
+              ariaLabel={COPY.zone}
+            />
+          </div>
           <GlassButton
             label={COPY.add}
+            testId="engine-debug-add"
             placement="onGlass"
             size="compact"
             disabled={card === null}

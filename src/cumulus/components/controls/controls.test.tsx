@@ -374,12 +374,24 @@ describe("Select", () => {
     expect(below?.style.maxHeight).toBe("572px");
   });
 
-  it("stays open while its options scroll and closes on page scroll", () => {
+  it("stays open on menu and sibling scrolls, and closes on ancestor and page scrolls", () => {
     const menu = openWithTrigger(100, 142)!;
+    const trigger = document.querySelector('[aria-haspopup="listbox"]')!;
+    const sibling = document.createElement("input");
+    trigger.parentElement!.append(sibling);
+    act(() => {
+      sibling.dispatchEvent(new Event("scroll"));
+    });
+    expect(document.body.querySelector('[role="listbox"]')).toBe(menu);
     act(() => {
       menu.dispatchEvent(new Event("scroll"));
     });
     expect(document.body.querySelector('[role="listbox"]')).toBe(menu);
+    act(() => {
+      trigger.parentElement!.dispatchEvent(new Event("scroll"));
+    });
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    click(trigger);
     act(() => {
       window.dispatchEvent(new Event("scroll"));
     });

@@ -28,7 +28,7 @@
 // the Select is dropped into. It opens on the side with enough viewport space
 // when possible and scrolls within the available height when neither side can
 // fit every option. It closes on selection, on Escape, on an outside press, and
-// on scroll/resize (a menu detached from its moved trigger reads as a bug, so it
+// on ancestor scroll/resize (a menu detached from its moved trigger reads as a bug, so it
 // dismisses rather than chases).
 
 import {
@@ -206,7 +206,10 @@ export function Select<Value extends string>({
       const target = e.target;
       if (target instanceof Node && menuRef.current?.contains(target) === true)
         return;
-      close();
+      // An input's horizontal scroll on blur and sibling scrollers leave
+      // this anchor in place. Only a scroll that can move the trigger closes it.
+      if (target === e.currentTarget || target === document ||
+          (target instanceof Node && target.contains(triggerRef.current))) close();
     }
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onOutside, true);

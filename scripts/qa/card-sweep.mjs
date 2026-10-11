@@ -136,6 +136,12 @@ async function main() {
               timeoutMs + 30_000,
             );
             result = /** @type {typeof result | null} */ (report.result) ?? { verdict: "fail", notes: report.error ?? "the scenario returned nothing" };
+            // The report also owns errors arriving after the scenario's last
+            // read, or from a document navigation replaced. A lab rejection
+            // for an ineligible variant remains the accepted skip outcome.
+            if (report.error !== null || (result.verdict !== "skip" && report.caps.length > 0)) {
+              result = { ...result, verdict: "fail", notes: [result.notes, report.error, report.caps.length > 0 ? `__caps: ${JSON.stringify(report.caps)}` : null].filter(Boolean).join("; ") };
+            }
           } catch (error) {
             result = { verdict: "fail", notes: `the run failed: ${error instanceof Error ? error.message : String(error)}` };
           }

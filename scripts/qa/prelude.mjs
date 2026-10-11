@@ -41,20 +41,22 @@
 
 /**
  * The part of Playwright's `Page` the prelude and scenarios use. `locator`
- * and `getByRole` stay loose: scenarios may reach for any locator API.
+ * exposes text entry; `getByRole` stays loose for scenario-specific locators.
  *
  * @typedef {object} QaPage
  * @property {(url: string, options?: { waitUntil?: "load" | "domcontentloaded" | "networkidle", timeout?: number }) => Promise<unknown>} goto
+ * @property {(event: string, listener: (...args: any[]) => void) => unknown} on
+ * @property {(event: string, listener: (...args: any[]) => void) => unknown} off
  * @property {() => string} url
  * @property {(size: Viewport) => Promise<void>} setViewportSize
  * @property {(script: () => void) => Promise<void>} addInitScript
  * @property {<R, A>(fn: (arg: A) => R | Promise<R>, arg: A) => Promise<R>} evaluate
- * @property {<A>(fn: (arg: A) => unknown, arg: A, options?: { timeout?: number, polling?: number | "raf" }) => Promise<{ jsonValue(): Promise<unknown> }>} waitForFunction
+ * @property {<A>(fn: (arg: A) => unknown, arg: A, options?: { timeout?: number, polling?: number | "raf" }) => Promise<{ jsonValue(): Promise<unknown>, dispose(): Promise<void> }>} waitForFunction
  * @property {(ms: number) => Promise<void>} waitForTimeout
  * @property {(selector: string, options?: { state?: "attached" | "visible" | "hidden" | "detached", timeout?: number }) => Promise<unknown>} waitForSelector
  * @property {(options: { path: string, scale?: "css" | "device", fullPage?: boolean }) => Promise<unknown>} screenshot
  * @property {{ click(x: number, y: number): Promise<void>, move(x: number, y: number, options?: { steps?: number }): Promise<void>, down(): Promise<void>, up(): Promise<void> }} mouse
- * @property {(selector: string) => any} locator
+ * @property {(selector: string) => { fill(value: string, options?: { timeout?: number }): Promise<void> }} locator
  * @property {(role: string, options?: { name?: string | RegExp, exact?: boolean }) => any} getByRole
  * @property {() => { newCDPSession(page: QaPage): Promise<CdpSession> }} context
  */
@@ -299,6 +301,12 @@
  *   Waits until the target is rendered at `minOpacity` (default 0.95).
  * @property {(target: string | Target, options?: { minOpacity?: number }) => Promise<boolean>} isVisible
  *   Whether the target is rendered at `minOpacity` (default 0.95) now.
+ * @property {<R, A>(fn: (arg: A) => R | Promise<R>, arg: A, options?: { timeout?: number }) => Promise<R>} read
+ *   Evaluates an observation, retrying only destroyed navigation contexts within one deadline.
+ * @property {<R, A>(label: string, fn: (arg: A) => R | Promise<R>, arg: A, options?: { timeout?: number, pollMs?: number, allowErrors?: boolean }) => Promise<NonNullable<R>>} waitFor
+ *   Waits for a truthy page-side observation, re-attaching across navigation.
+ * @property {(zone: "hand" | "play" | "void", side: "player" | "enemy", uuid: string, options?: { timeout?: number }) => Promise<string>} labAddCard
+ *   Stages one card through the debug UI, returning its new instance id after committed-state confirmation.
  * @property {BattleDriver} battle
  * @property {() => Promise<void>} rest Moves the pointer outside the viewport.
  * @property {(name: string, options?: { fullPage?: boolean, clip?: Rect, element?: string | Target, pad?: number, minOpacity?: number }) => Promise<string>} capture
@@ -315,7 +323,7 @@
  *   functions, `top` (default 8) of each. The summary also goes into the
  *   report's `traces`; `value` is what `fn` returned.
  * @property {() => Promise<Caps | null>} caps
- * @property {(label: string) => Promise<void>} assertCaps Throws unless `__caps` is empty.
+ * @property {(label: string, options?: { timeout?: number }) => Promise<void>} assertCaps Throws unless `__caps` is empty.
  * @property {(label: string, data?: unknown) => void} note Adds a line to the report's log.
  * @property {(ms: number) => Promise<void>} sleep
  * @property {(result: unknown, error: string | null) => Promise<QaResult>} finish
@@ -357,11 +365,47 @@ export async function createQa(page, config) {
   /** @type {TraceSummary[]} */
   const traces = [];
 
+  // Observe errors outside the document too: a reload must not discard them.
+  /** @type {QaResult["caps"]} */
+  const observed = [];
+  const pageError = (/** @type {Error} */ error) => {
+    observed.push({ href: page.url(), caps: { errors: [error.message], rejections: [], consoleErrors: [] } });
+  };
+  const consoleMessage = (/** @type {{ type(): string, text(): string }} */ message) => {
+    if (message.type() === "error") observed.push({ href: page.url(), caps: { errors: [], rejections: [], consoleErrors: [message.text()] } });
+  };
+  page.on("pageerror", pageError);
+  page.on("console", consoleMessage);
+
   // Every call of a run (each step, each card of a sweep) adds this script
   // again; the first to run on a document installs the buffer.
-  await page.addInitScript(() => {
+  try {
+    await page.addInitScript(() => {
     const qaWindow = /** @type {QaWindow} */ (window);
     if (qaWindow.__caps !== undefined) return;
+    // One tab-scoped observation, tied to the exact persisted game/request.
+    // It preserves the scene's published outcome, including rejection, while
+    // the saved battle resumes. It never builds or writes application state.
+    const key = () => {
+      const query = new URLSearchParams(location.search);
+      return query.get("game") === null ? null : JSON.stringify(
+        ["game", "goto", "card", "variant", "as", "seed"].map((name) => query.get(name)),
+      );
+    };
+    const storageKey = "dreamtides-qa-card-lab-report";
+    const stored = sessionStorage.getItem(storageKey);
+    if (stored !== null) {
+      const saved = /** @type {unknown} */ (JSON.parse(stored));
+      if (typeof saved === "object" && saved !== null && "key" in saved && "report" in saved && saved.key === key()) {
+        Object.assign(window, { __cardLab: saved.report });
+      }
+    }
+    addEventListener("pagehide", () => {
+      const report = /** @type {Window & { __cardLab?: unknown }} */ (window).__cardLab;
+      const request = key();
+      if (request !== null && report !== undefined) sessionStorage.setItem(storageKey, JSON.stringify({ key: request, report }));
+      else sessionStorage.removeItem(storageKey);
+    });
     /** @type {Caps} */
     const caps = { errors: [], rejections: [], consoleErrors: [] };
     qaWindow.__caps = caps;
@@ -429,14 +473,38 @@ export async function createQa(page, config) {
         return { x, y, covered };
       },
     };
-  });
+    });
+  } catch (error) {
+    page.off("pageerror", pageError);
+    page.off("console", consoleMessage);
+    throw error;
+  }
 
   /** @param {Caps | null} caps */
   const capsCount = (caps) =>
     caps === null ? 0 : caps.errors.length + caps.rejections.length + caps.consoleErrors.length;
 
-  const readState = () =>
-    page.evaluate(
+  /** @type {Qa["read"]} */
+  const read = async (fn, arg, { timeout = 15_000 } = {}) => {
+    const deadline = Date.now() + timeout;
+    for (;;) {
+      try {
+        return await page.evaluate(fn, arg);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        if (!/Execution context was destroyed|Cannot find context with specified id/i.test(message)) throw error;
+        if (Date.now() >= deadline) throw new Error(`qa.read: navigation did not settle within ${String(timeout)} ms`, { cause: error });
+        await page.waitForTimeout(Math.min(100, Math.max(1, deadline - Date.now())));
+      }
+    }
+  };
+
+  const assertObserved = (/** @type {string} */ label) => {
+    if (observed.length > 0) throw new Error(`${label}: __caps ${JSON.stringify(observed)}`);
+  };
+
+  const readState = (timeout = 15_000) =>
+    read(
       () => ({
         href: location.href,
         width: innerWidth,
@@ -444,6 +512,7 @@ export async function createQa(page, config) {
         caps: /** @type {QaWindow} */ (window).__caps ?? null,
       }),
       null,
+      { timeout },
     );
 
   // Records the current document's buffer before a navigation replaces it.
@@ -479,10 +548,11 @@ export async function createQa(page, config) {
   const poll = async (label, probe, timeout) => {
     const deadline = Date.now() + timeout;
     for (;;) {
-      const outcome = await page.evaluate(({ kind, target, minOpacity, offset }) => {
+      assertObserved(label);
+      const outcome = await read(({ kind, target, minOpacity, offset }) => {
         const qaWindow = /** @type {QaWindow} */ (window);
         const caps = qaWindow.__caps;
-        if (caps !== undefined && caps.errors.length + caps.rejections.length > 0) {
+        if (caps !== undefined && caps.errors.length + caps.rejections.length + caps.consoleErrors.length > 0) {
           return { caps: JSON.stringify(caps), point: null };
         }
         const dom = qaWindow.__qa;
@@ -492,7 +562,7 @@ export async function createQa(page, config) {
         }
         const hit = dom.hitPoint(target, minOpacity, offset);
         return { caps: null, point: hit !== null && hit.covered === null ? hit : null };
-      }, probe);
+      }, probe, { timeout: Math.max(1, deadline - Date.now()) });
       if (outcome.caps !== null) throw new Error(`${label}: __caps recorded ${outcome.caps}`);
       if (outcome.point !== null) return outcome.point;
       if (Date.now() >= deadline) throw new Error(`${label}: timed out after ${String(timeout)} ms`);
@@ -507,12 +577,15 @@ export async function createQa(page, config) {
   };
 
   /** @type {Qa["goto"]} */
-  const goto = async (route, { allowErrors = false, waitUntil = "load" } = {}) => {
+  const goto = async (route, { allowErrors = false, waitUntil = "domcontentloaded" } = {}) => {
     await recordCaps();
+    // DOMContentLoaded settles the navigation without depending on resource
+    // load under host pressure; the helpers wait for their actual UI contracts.
     await page.goto(url(route), { waitUntil });
     const state = await readState();
     if (!onOrigin(state.href)) throw new Error(`goto ${route}: landed on ${state.href}, not ${origin}`);
     if (state.caps === null) throw new Error(`goto ${route}: the __caps init script did not run`);
+    if (!allowErrors) assertObserved(`goto ${route}`);
     if (!allowErrors && capsCount(state.caps) > 0) {
       throw new Error(`goto ${route}: load-time errors ${JSON.stringify(state.caps)}`);
     }
@@ -736,7 +809,7 @@ export async function createQa(page, config) {
       try {
         point = await poll(`click ${describe(target)}`, { kind: "hit", target, minOpacity, offset: position }, timeout);
       } catch (error) {
-        const last = await page.evaluate(
+        const last = await read(
           ({ probeTarget, threshold, offset }) =>
             /** @type {QaWindow} */ (window).__qa?.hitPoint(probeTarget, threshold, offset) ?? null,
           { probeTarget: target, threshold: minOpacity, offset: position },
@@ -753,8 +826,82 @@ export async function createQa(page, config) {
     },
 
     waitVisible,
+    read,
+    async waitFor(label, fn, arg, { timeout = 15_000, pollMs = 100, allowErrors = false } = {}) {
+      const deadline = Date.now() + timeout;
+      if (!allowErrors) await qa.assertCaps(label, { timeout });
+      const dispose = async (/** @type {Awaited<ReturnType<QaPage["waitForFunction"]>> | null} */ handle) => {
+        if (handle === null) return;
+        try {
+          await handle.dispose();
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          if (!/Execution context was destroyed|Cannot find context with specified id/i.test(message)) throw error;
+        }
+      };
+      for (;;) {
+        /** @type {Awaited<ReturnType<QaPage["waitForFunction"]>> | null} */
+        let handle = null;
+        try {
+          // Native waiting survives navigation and bounds async predicates.
+          handle = await page.waitForFunction(fn, arg, { timeout: Math.max(1, deadline - Date.now()), polling: pollMs });
+          const value = await handle.jsonValue();
+          if (!allowErrors) await qa.assertCaps(label, { timeout: Math.max(1, deadline - Date.now()) });
+          return /** @type {NonNullable<Awaited<ReturnType<typeof fn>>>} */ (value);
+        } catch (error) {
+          if (!allowErrors) assertObserved(label);
+          const message = error instanceof Error ? error.message : String(error);
+          // A reload can land between resolving the waiter and serializing
+          // its handle too; every re-attachment keeps the original deadline.
+          if (/Execution context was destroyed|Cannot find context with specified id/i.test(message) && Date.now() < deadline) continue;
+          throw new Error(`${label}: ${message}`, { cause: error });
+        } finally {
+          await dispose(handle);
+        }
+      }
+    },
+    async labAddCard(zone, side, uuid, { timeout = 15_000 } = {}) {
+      if (!["hand", "play", "void"].includes(zone) || !["player", "enemy"].includes(side) ||
+          !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u.test(uuid)) {
+        throw new Error("qa.labAddCard: invalid zone, side, or card UUID");
+      }
+      const deadline = Date.now() + timeout;
+      const remaining = () => Math.max(1, deadline - Date.now());
+      const snapshot = () => read(() => {
+        const probe = /** @type {Window & { __engineProbe?: { battleId: string, slice: { committed: { version: number, instances: Record<string, { id: string, owner: string, zone: string, printing: { kind: string, cardId?: string } }> }, inFlight: unknown } } }} */ (window).__engineProbe;
+        if (probe === undefined) throw new Error("qa.labAddCard: missing engine probe (use debug=1)");
+        return { battleId: probe.battleId, version: probe.slice.committed.version, instances: probe.slice.committed.instances, inFlight: probe.slice.inFlight !== null };
+      }, null, { timeout: remaining() });
+      const before = await snapshot();
+      if (before.inFlight) throw new Error("qa.labAddCard: an intent is in flight");
+      if (!(await qa.isVisible("[data-testid=engine-debug-panel]"))) await qa.click("[data-testid=engine-debug-open]", { timeout: remaining() });
+      await qa.click(`[data-engine-debug-side] button:nth-of-type(${side === "player" ? "1" : "2"})`, { timeout: remaining() });
+      const field = page.locator("[data-testid=engine-debug-card]");
+      await field.fill(uuid, { timeout: remaining() });
+      await qa.click("[data-engine-debug-zone] button", { timeout: remaining() });
+      await qa.click(`[role=option][data-value="${zone}"]`, { timeout: remaining() });
+      const still = await snapshot();
+      if (still.battleId !== before.battleId || still.version !== before.version || still.inFlight ||
+          JSON.stringify(still.instances) !== JSON.stringify(before.instances)) throw new Error("qa.labAddCard: battle changed while staging");
+      await qa.click("[data-testid=engine-debug-add]", { timeout: remaining() });
+      let instance = null;
+      for (;;) {
+        await qa.assertCaps("qa.labAddCard", { timeout: remaining() });
+        const after = await snapshot();
+        if (after.battleId !== before.battleId) throw new Error("qa.labAddCard: battle changed after submit");
+        const added = Object.values(after.instances).filter((entry) => !(entry.id in before.instances) &&
+          entry.owner === side && entry.zone === zone && entry.printing.kind === "card" && entry.printing.cardId === uuid);
+        if (added.length > 1 || after.version > before.version + 1) throw new Error("qa.labAddCard: ambiguous concurrent changes");
+        instance = after.inFlight ? null : added[0]?.id ?? null;
+        if (instance !== null) break;
+        if (Date.now() >= deadline) throw new Error("qa.labAddCard: timed out confirming the submitted intent; do not retry blindly");
+        await page.waitForTimeout(Math.min(100, remaining()));
+      }
+      qa.note("qa.labAddCard", { uuid, side, zone, instance, battleId: before.battleId });
+      return instance;
+    },
     async isVisible(rawTarget, { minOpacity = 0.95 } = {}) {
-      return page.evaluate(
+      return read(
         ({ target, threshold }) => (/** @type {QaWindow} */ (window).__qa?.rendered(target, threshold) ?? null) !== null,
         { target: asTarget(rawTarget), threshold: minOpacity },
       );
@@ -773,7 +920,7 @@ export async function createQa(page, config) {
       let region = clip;
       if (element !== undefined) {
         const target = asTarget(element);
-        const box = await page.evaluate(
+        const box = await read(
           ({ probeTarget, threshold }) => {
             const found = /** @type {QaWindow} */ (window).__qa?.rendered(probeTarget, threshold) ?? null;
             if (found === null) return null;
@@ -827,9 +974,9 @@ export async function createQa(page, config) {
       /** @type {unknown} */
       let value;
       try {
-        marks.start = await page.evaluate((label) => performance.mark(`${label}:start`).startTime, mark);
+        marks.start = await read((label) => performance.mark(`${label}:start`).startTime, mark);
         value = await fn();
-        await page.evaluate((label) => {
+        await read((label) => {
           performance.mark(`${label}:end`);
         }, mark);
       } finally {
@@ -843,11 +990,21 @@ export async function createQa(page, config) {
     },
 
     async caps() {
-      return (await readState()).caps;
+      const current = (await readState()).caps;
+      if (observed.length === 0) return current;
+      const merged = { errors: [...(current?.errors ?? [])], rejections: [...(current?.rejections ?? [])], consoleErrors: [...(current?.consoleErrors ?? [])] };
+      for (const entry of observed) {
+        merged.errors.push(...entry.caps.errors);
+        merged.rejections.push(...entry.caps.rejections);
+        merged.consoleErrors.push(...entry.caps.consoleErrors);
+      }
+      return merged;
     },
 
-    async assertCaps(label) {
-      const state = await readState();
+    async assertCaps(label, { timeout = 15_000 } = {}) {
+      assertObserved(label);
+      const state = await readState(timeout);
+      if (state.caps === null) throw new Error(`${label}: __caps init script is missing`);
       if (capsCount(state.caps) > 0) throw new Error(`${label}: __caps ${JSON.stringify(state.caps)}`);
     },
 
@@ -858,8 +1015,13 @@ export async function createQa(page, config) {
     sleep: (ms) => page.waitForTimeout(ms),
 
     async finish(result, error) {
-      if (step === steps - 1 || error !== null) await recordCaps();
-      return { result, error, log, captures, caps: capsLog, traces };
+      try {
+        if (step === steps - 1 || error !== null) await recordCaps();
+        return { result, error, log, captures, caps: [...capsLog, ...observed], traces };
+      } finally {
+        page.off("pageerror", pageError);
+        page.off("console", consoleMessage);
+      }
     },
   };
   return { ...qa, battle: createBattleDriver(qa) };
@@ -892,7 +1054,7 @@ export function createBattleDriver(qa) {
 
   /** @type {BattleDriver["state"]} */
   const state = () =>
-    page.evaluate(
+    qa.read(
       ({ pass, submit, skip, controls }) => {
         const win = /** @type {QaWindow & { __engineProbe?: EngineProbeView }} */ (window);
         const dom = win.__qa;
@@ -1049,7 +1211,7 @@ export function createBattleDriver(qa) {
    * @param {string} label
    */
   const failOnCaps = async (battle, label) => {
-    if (battle.caps > 0) throw new Error(`${label}: __caps ${JSON.stringify(await qa.caps())} at ${describe(battle)}`);
+    await qa.assertCaps(`${label} at ${describe(battle)}`);
   };
 
   /**
@@ -1072,7 +1234,7 @@ export function createBattleDriver(qa) {
 
   /** @type {BattleDriver["tap"]} */
   const tap = async (selector) => {
-    const point = await page.evaluate((target) => {
+    const point = await qa.read((target) => {
       const element = document.querySelector(target);
       if (element === null) return null;
       const box = element.getBoundingClientRect();
@@ -1093,7 +1255,7 @@ export function createBattleDriver(qa) {
 
   /** @param {string} selector */
   const enabledControl = (selector) =>
-    page.evaluate((target) => {
+    qa.read((target) => {
       const element = /** @type {QaWindow} */ (window).__qa?.rendered({ selector: target }, 0.95) ?? null;
       return element !== null && element.getAttribute("aria-disabled") !== "true" && !element.hasAttribute("disabled");
     }, selector);
@@ -1259,7 +1421,7 @@ export function createBattleDriver(qa) {
     const sites = [];
     for (let visit = 0; visit < 12; visit++) {
       await qa.waitVisible(openSite);
-      const site = await page.evaluate(
+      const site = await qa.read(
         (selector) => document.querySelector(selector)?.getAttribute("data-site-type") ?? null,
         openSite,
       );
@@ -1271,7 +1433,7 @@ export function createBattleDriver(qa) {
       if (site === "Draft") {
         const pick = "[data-journey-screen=site] [role=button][data-card-id]";
         while (page.url().includes("/draft")) {
-          const length = await page.evaluate(() => document.body.innerText.length, null);
+          const length = await qa.read(() => document.body.innerText.length, null);
           await qa.click(pick);
           await page.waitForFunction(
             (was) => !location.pathname.endsWith("/draft") || document.body.innerText.length !== was,

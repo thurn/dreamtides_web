@@ -170,7 +170,9 @@ The helpers:
   loads the route with `qa.goto`, and also asserts the viewport. `__caps` is
   installed by `page.addInitScript`, so it records load-time errors too.
 - `qa.goto(route, { allowErrors?, waitUntil? })`: loads a route at the
-  current viewport and asserts the origin and an empty `__caps`. `qa.url`
+  current viewport and asserts the origin and an empty `__caps`. The default
+  navigation wait is DOMContentLoaded; helpers wait for the relevant UI.
+  `qa.url`
   resolves its route on the runner's server: `/path?query`, `path`, and
   `?query` are relative (the sandbox's `page.goto` rejects them), and an
   absolute URL such as `page.url()` reloads that page. The buffer of the
@@ -205,11 +207,33 @@ The helpers:
   summary with `fn`'s return as `value`, and the report collects every
   summary in `traces`. Tracing slows the page, so time a cost with and
   without it before quoting an absolute number.
+- `qa.read(fn, arg, { timeout? })` observes the page, re-attaching when
+  navigation destroys its execution context. It retries only navigation
+  context errors within the original deadline; application exceptions propagate.
+- `qa.waitFor(label, fn, arg, { timeout?, pollMs?, allowErrors? })` uses
+  Playwright's navigation-safe waiter until a page-side predicate returns a
+  truthy value. Its timeout also bounds async predicates interrupted by reload.
+  The default is 15 s; errors fail the wait unless `allowErrors` is explicit.
+- `qa.labAddCard(zone, side, uuid, { timeout? })` drives the engine debug
+  panel (`debug=1`) to stage one card into `hand`, `play`, or `void`, for
+  `player` or `enemy`. It returns the new instance id after checking the
+  committed printing UUID, owner, and zone. Repeated UUIDs create distinct
+  instances. It submits once and rejects stale or concurrent battle changes;
+  a timeout after submission requires inspecting state before another call.
 - `qa.caps()`, `qa.assertCaps(label)`, `qa.note(label, data)`,
   `qa.sleep(ms)`, and `qa.page` for anything else.
 - `qa.isVisible(target, { minOpacity? })`: whether the target is rendered
   now, without waiting.
-- Waits and clicks fail at once when `__caps` records an error or rejection.
+- Waits and clicks check `__caps`, including console errors. Host-side
+  Playwright observers retain errors from documents replaced by navigation;
+  `qa.caps()`, battle waits, sweep verdicts, and the final report include them.
+  Observers are detached when the call finishes.
+
+The init script preserves one exact published `__cardLab` report in tab-scoped
+session storage across a reload of the same persisted `game`, `goto`, `card`,
+`variant`, `as`, and `seed` request. Ready and rejected outcomes are preserved
+as published; another request or game cannot use the cached report. This is QA
+observation metadata: the saved battle and its event log remain authoritative.
 
 **Battles.** `qa.battle` is the one battle driver; a scenario that plays a
 battle uses it rather than its own pass loop:
@@ -288,6 +312,14 @@ Tracked scenarios:
   (`--arg ai=<policy>` adds `?ai=` to the entry). Its waits use test IDs,
   data attributes, and card UUIDs, never copy.
 - `card-lab-play` is the card sweep's per-card run (below).
+- `card-lab-stage` opens a lab with `--arg card=<uuid>` and stages
+  `--arg stage=hand:player:<uuid>,play:enemy:<uuid>,void:player:<uuid>` through
+  the debug UI. It captures desktop and mobile with the error init script.
+- `qa-helper-recovery` (`--arg card=<character uuid>`) verifies the first
+  Zone click, all six staging combinations, and a forced reload during a
+  pending observation. It checks that the exact report and committed battle
+  survive, and that an absent observation times out. `--arg error=1` injects
+  a departing-document error and intentionally exits with a failing report.
 
 A dev-server run breaks when its checkout changes under it. Saving a file
 outside the module graph, such as `README.md`, reloads the page mid-step.
@@ -299,9 +331,24 @@ and edit nothing on a checkout while a runner serves it.
 
 ### Interactive QA
 
+A judged-QA setup can run in one call through the runner, which installs
+`__caps` before loading the app and handles server/context cleanup:
+
+```bash
+node scripts/qa/run-scenario.mjs card-lab-stage --bead <id> --arg card=<uuid> --arg stage=hand:player:<uuid>,play:enemy:<uuid>,void:player:<uuid>
+```
+
+For card-specific judgment, put one self-contained scenario in
+`artifacts/qa/<id>/judged.mjs` of the primary checkout. Open the lab, call
+`qa.labAddCard` for the board setup, exercise the relevant player workflow,
+then call `qa.assertCaps` and `qa.capture`. Run it with
+`node scripts/qa/run-scenario.mjs judged --bead <id> --viewports desktop,mobile`.
+The report preserves load-time and departing-document errors throughout the
+pass; a later step uses the same game and buffer through `qa.carry`.
+
 For exploratory QA with the MCP tools directly:
 
-1. **Start and track your server:** `npm run dev -- --port 5174`. It starts a
+1. **Start and track your server:** `npm run dev -- --port 5174 --strictPort`. It starts a
    process tree (npm, the dev wrapper, and Vite). Stop exactly
    that tree when done, never `pkill -f vite`, and confirm the port is free:
    `lsof -iTCP:5174 -sTCP:LISTEN -n -P`.
@@ -314,6 +361,7 @@ For exploratory QA with the MCP tools directly:
 
    ```js
    () => {
+     if (window.__caps !== undefined) return;
      window.__caps = { errors: [], rejections: [], consoleErrors: [] };
      addEventListener('error', e => window.__caps.errors.push(String(e.message)));
      addEventListener('unhandledrejection', e =>

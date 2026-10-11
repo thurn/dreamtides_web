@@ -983,6 +983,13 @@ node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--pro
 - **Runtime ledger.** The runner prints its server's process group and port
   and whether the port is free after it stops; copy that line.
 
+The prelude's `qa.waitFor(label, predicate, arg, { timeout? })` re-attaches
+across navigation within one bounded wait. `qa.read` retries only destroyed
+navigation contexts; actual predicate exceptions propagate. Node-side error
+observers retain departing-document failures in `qa.caps()` and the report.
+The init script caches one exact published lab report for the same persisted
+game/request tuple; it observes metadata and never changes the saved battle.
+
 ### Servers and contexts
 
 - Run an interactive QA dev server from the bead's worktree on the bead's
@@ -1053,6 +1060,23 @@ It flags these failures:
 
 Results go to the bead's QA ledger file, with `commit` set to
 `git merge-base HEAD staging`.
+
+**Judged setup.** One runner call opens and stages a board with load-time
+`__caps` capture, desktop/mobile captures, and automatic runtime cleanup:
+
+```sh
+node scripts/qa/run-scenario.mjs card-lab-stage --bead <id> --arg card=<uuid> --arg stage=hand:player:<uuid>,play:enemy:<uuid>,void:player:<uuid>
+```
+
+A bead-local judged scenario uses `qa.labAddCard(zone, side, uuid)` for each
+setup card, then drives and judges its specific workflow. The helper returns
+the newly committed instance id and verifies printing UUID, side, and zone,
+so repeated UUIDs remain distinct. It opens Zone with one click, submits once,
+and rejects concurrent/stale state; after a submission timeout inspect the
+committed probe and log before trying another addition. Run the scenario with
+`node scripts/qa/run-scenario.mjs judged --bead <id> --viewports desktop,mobile`.
+`qa.assertCaps` and the sweep verdict include errors from replaced documents.
+See README § Browser QA for the helper contracts and metadata recovery.
 
 **Judged QA.** Judge cards per [D21](decisions.md#d21-browser-qa-coverage),
 with a QA subagent. For each judged card, check all of these on desktop and

@@ -32,7 +32,6 @@
  * @returns {Promise<CardLabPlayResult>}
  */
 export default async function cardLabPlay(qa) {
-  const page = qa.page;
   const { card, variant, as: side } = qa.args;
   const deadline = Date.now() + Number(qa.args.timeoutMs ?? "60000");
   /** @type {string[]} */
@@ -45,37 +44,23 @@ export default async function cardLabPlay(qa) {
   const outcome = (verdict, extra = {}) => ({ verdict, notes: failures.join("; "), ...extra });
 
   await qa.open(`/?goto=card-lab&card=${card}&variant=${variant}&as=${side}&seed=1&debug=1`, qa.viewport, { allowErrors: true });
-  /**
-   * @template T
-   * @param {string} label
-   * @param {() => T | null | false} predicate
-   * @returns {Promise<T>}
-   */
-  const wait = async (label, predicate) => {
-    for (;;) {
-      const value = await page.evaluate(predicate, null);
-      if (value !== null && value !== false) return /** @type {T} */ (value);
-      if (Date.now() > deadline) throw new Error(`timed out waiting for ${label}`);
-      await qa.sleep(150);
-    }
-  };
   const caps = async () => {
     const buffer = await qa.caps();
     return buffer === null ? [] : [...buffer.errors, ...buffer.rejections, ...buffer.consoleErrors];
   };
 
   try {
-    const lab = await wait("the card-lab report", () => /** @type {LabWindow} */ (window).__cardLab ?? null);
+    const lab = await qa.waitFor("the card-lab report", () => /** @type {LabWindow} */ (window).__cardLab ?? null, null, { timeout: Math.max(1, deadline - Date.now()), allowErrors: true });
     if (lab.status !== "ready") {
       failures.push(`card-lab ${String(lab.reason)}${lab.detail === null ? "" : `: ${String(lab.detail)}`}`);
       return outcome(lab.reason === "ineligibleVariant" ? "skip" : "fail", { lab });
     }
-    await wait("the engine probe", () => (/** @type {LabWindow} */ (window).__engineProbe === undefined ? null : true));
+    await qa.waitFor("the engine probe", () => (/** @type {LabWindow} */ (window).__engineProbe === undefined ? null : true), null, { timeout: Math.max(1, deadline - Date.now()) });
     await qa.waitVisible("[data-battle-mobile]", { timeout: Math.max(1000, deadline - Date.now()) });
 
     /** The probe as plain data: the lab card's instance, zones, decision, prompt, and events. */
     const read = () =>
-      page.evaluate(
+      qa.read(
         ({ cardId, owner }) => {
           const probe = /** @type {LabWindow} */ (window).__engineProbe;
           if (probe === undefined) throw new Error("the engine probe is gone");
@@ -95,6 +80,7 @@ export default async function cardLabPlay(qa) {
           };
         },
         { cardId: card, owner: side },
+        { timeout: Math.max(1, deadline - Date.now()) },
       );
     const start = await read();
     const before = (await qa.battle.state()).board;
