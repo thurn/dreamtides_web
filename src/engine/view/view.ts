@@ -7,6 +7,7 @@ import type {
   BattleConfig,
   BattleResult,
   BattleState,
+  CardInstance,
   CardStatus,
   ChallengeState,
   EffectChoices,
@@ -22,6 +23,7 @@ import type {
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics } from "../continuous/characteristics";
 import { adjustedEnergy, costModifier } from "../continuous/costs";
+import type { Layers } from "../continuous/layers";
 import { fixedEnergy } from "../dsl/energy";
 import type { Keyword, Variant } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
@@ -231,13 +233,25 @@ function hiddenZone(ids: readonly InstanceId[], visible: (id: InstanceId) => boo
   return { count: ids.length, known };
 }
 
+/** A card's characteristics as a view shows them, read from `layers`, the evaluation of `state`. */
+export function characteristicsView(state: BattleState, catalog: EngineCatalog, layers: Layers, instance: CardInstance): CharacteristicsView {
+  const card = layers.of(instance.id);
+  const printed = fixedEnergy(playCosts(instanceCard(catalog, instance), instance.variant));
+  return {
+    cardType: card.cardType,
+    subtype: card.subtype,
+    allTypes: card.allTypes,
+    keywords: [...card.keywords],
+    spark: card.spark,
+    cost: adjustedEnergy(printed, costModifier(state, catalog, instance.id, instance.controller, layers)),
+  };
+}
+
 export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): BattleView {
   const layers = characteristics(state, catalog);
   const instances: Record<InstanceId, InstanceView> = {};
   for (const instance of Object.values(state.instances)) {
     if (knows(state, instance, viewer)) {
-      const card = layers.of(instance.id);
-      const printed = fixedEnergy(playCosts(instanceCard(catalog, instance), instance.variant));
       instances[instance.id] = {
         id: instance.id,
         printing: copy(instance.printing),
@@ -247,14 +261,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         variant: copy(instance.variant),
         status: { ...instance.status },
         enteredZoneAt: instance.enteredZoneAt,
-        characteristics: {
-          cardType: card.cardType,
-          subtype: card.subtype,
-          allTypes: card.allTypes,
-          keywords: [...card.keywords],
-          spark: card.spark,
-          cost: adjustedEnergy(printed, costModifier(state, catalog, instance.id, instance.controller, layers)),
-        },
+        characteristics: characteristicsView(state, catalog, layers, instance),
       };
     }
   }

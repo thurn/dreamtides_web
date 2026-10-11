@@ -11,7 +11,14 @@
  * out is rebuilt as follows:
  *
  * - hidden cards are fresh instances numbered after every instance the view
- *   names, with fresh status;
+ *   names, with fresh status, entering their zones at 0;
+ * - the view shows what a static ability working from a hand or a deck
+ *   changes but not its card (RD-hv-umm2.53-2), so the deal is then
+ *   reconciled with it: hidden cards with such abilities move between their
+ *   side's hand and deck and are dated until every card the view shows has
+ *   the characteristics it shows (`reconcile`), which also gives the
+ *   viewer's cards the costs the view shows, and so the viewer its legal
+ *   actions;
  * - a hidden card in a hand comes from its holder's decklist, else from the
  *   other side's, else it is a created copy of a holder's decklist entry;
  * - the battle seed is drawn from `random`, so later shuffles and Dreamwell
@@ -24,13 +31,15 @@
  *   names its controller's avatar as its source.
  */
 import type { EngineCatalog } from "../catalog";
+import { Layers } from "../continuous/layers";
 import { emptyLoopTracker } from "../loops/types";
+import { instanceOrigin, originAbilities } from "../rules/activation";
 import { buildDreamwellDeck } from "../rules/dreamwell";
 import { freshStatus, variantOf } from "../state/create";
 import type { InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, DeckEntry, PayableEffect, QueuedTrigger, SideState } from "../state/types";
-import type { BattleView, HiddenZoneView, InstanceView } from "./view";
+import { characteristicsView, type BattleView, type CharacteristicsView, type HiddenZoneView, type InstanceView } from "./view";
 
 /** Each side's journey decklist, with each entry's variant (D39). */
 export type Decklists = Readonly<Record<Side, readonly DeckEntry[]>>;
@@ -98,6 +107,13 @@ function slots(zone: HiddenZoneView): (InstanceId | null)[] {
  * the knowledge the view reports, drawing every random choice from `random`.
  */
 export function determinize(view: BattleView, decklists: Decklists, random: () => number, catalog: EngineCatalog): BattleState {
+  const state = deal(view, decklists, random, catalog);
+  reconcile(state, view, catalog);
+  return state;
+}
+
+/** A state dealing every hidden card at random, each entering its zone at 0. */
+function deal(view: BattleView, decklists: Decklists, random: () => number, catalog: EngineCatalog): BattleState {
   const viewer = view.viewer;
   const instances: Record<InstanceId, CardInstance> = {};
   for (const instance of Object.values(view.instances)) instances[instance.id] = instanceFromView(instance);
@@ -221,4 +237,164 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
   buildDreamwellDeck(state, catalog, view.dreamwell.catalog);
   state.dreamwell.deck = state.dreamwell.deck.slice(0, view.dreamwell.remaining);
   return state;
+}
+
+/** The hidden zones a card's static abilities work from (RD-hv-umm2.53-1). */
+interface HiddenStatics {
+  readonly hand: boolean;
+  readonly deck: boolean;
+}
+
+/** A hidden card's place: the zone list it is in and its index there. */
+interface HiddenSlot {
+  readonly side: Side;
+  readonly zone: "deck" | "hand";
+  readonly index: number;
+}
+
+/** A card's printing and variant, as a key: cards with the same key have the same abilities. */
+function identity({ printing, variant }: CardInstance): string {
+  const printed = printing.kind === "figment" ? `figment:${printing.figment}` : printing.cardId;
+  const plain = variant.transfigurations === undefined && variant.deckMods === undefined;
+  return `${printed}|${plain ? String(variant.amplified) : JSON.stringify(variant)}`;
+}
+
+/**
+ * How far a card's characteristics are from those the view shows: a count
+ * of differing types and keywords (1 for the same keywords in another
+ * order) plus the spark and cost differences. 0 exactly when they are equal.
+ */
+function difference(seen: CharacteristicsView, sampled: CharacteristicsView): number {
+  const missing =
+    seen.keywords.filter((keyword) => !sampled.keywords.includes(keyword)).length +
+    sampled.keywords.filter((keyword) => !seen.keywords.includes(keyword)).length;
+  const reordered = missing === 0 && seen.keywords.some((keyword, index) => sampled.keywords[index] !== keyword);
+  const spark = seen.spark === null || sampled.spark === null ? Number(seen.spark !== sampled.spark) : Math.abs(seen.spark - sampled.spark);
+  return (
+    Number(seen.cardType !== sampled.cardType) +
+    Number(seen.subtype !== sampled.subtype) +
+    Number(seen.allTypes !== sampled.allTypes) +
+    (reordered ? 1 : missing) +
+    spark +
+    Math.abs(seen.cost - sampled.cost)
+  );
+}
+
+/** How far `state` is from showing the viewer the characteristics `view` shows, with the evaluation it was read from. */
+function distance(state: BattleState, view: BattleView, catalog: EngineCatalog): { readonly total: number; readonly layers: Layers } {
+  const layers = new Layers(state, catalog);
+  let total = 0;
+  for (const seen of Object.values(view.instances)) {
+    const instance = state.instances[seen.id];
+    if (instance !== undefined) total += difference(seen.characteristics, characteristicsView(state, catalog, layers, instance));
+  }
+  return { total, layers };
+}
+
+/**
+ * Makes a dealt state show the viewer what `view` shows when a hidden card's
+ * static ability changes a card the viewer sees (RD-hv-umm2.53-2): the
+ * viewer sees the change but not its card, so the deal may have put the
+ * source in a zone where its ability does not work, or another card in its
+ * place, or dated it before a change it followed. Only hidden cards whose
+ * static abilities work from a hand or a deck move, so a state without one
+ * is left as dealt.
+ *
+ * It descends on `distance`. Each move changes one such card: it swaps the
+ * card with a hidden card of the same owner in its side's other hidden zone
+ * (the first card with no such ability, or the first of each other card
+ * with one); dates it at 0, or at or just after the timestamp of a keyword
+ * or base-spark change, so it applies just before or just after that
+ * change; or does both. It takes the
+ * first move that brings the state closer and stops at distance 0 or when
+ * no move does, so a view no hidden card explains (a floating effect whose
+ * source the viewer cannot see, say) keeps the deal's closest state. It
+ * draws nothing from `random` and reads only the view and the deal.
+ */
+function reconcile(state: BattleState, view: BattleView, catalog: EngineCatalog): void {
+  const memo = new Map<string, HiddenStatics | null>();
+  const statics = (id: InstanceId): HiddenStatics | null => {
+    const instance = state.instances[id];
+    if (instance === undefined) return null;
+    const key = identity(instance);
+    let found = memo.get(key);
+    if (found === undefined) {
+      const zones = originAbilities(catalog, instanceOrigin(instance)).flatMap((ability) => (ability.kind === "static" ? [ability.zone] : []));
+      const hand = zones.includes("hand") || zones.includes("any");
+      found = hand ? { hand, deck: zones.includes("any") } : null;
+      memo.set(key, found);
+    }
+    return found;
+  };
+  const at = (slot: HiddenSlot): InstanceId => state.sides[slot.side][slot.zone][slot.index];
+  const hidden: HiddenSlot[] = SIDES.flatMap((side) =>
+    (["deck", "hand"] as const).flatMap((zone) =>
+      state.sides[side][zone].flatMap((id, index) => (id in view.instances ? [] : [{ side, zone, index }])),
+    ),
+  );
+  if (!hidden.some((slot) => statics(at(slot)) !== null)) return;
+  const swap = (a: HiddenSlot, b: HiddenSlot): void => {
+    const first = at(a);
+    const second = at(b);
+    state.sides[a.side][a.zone][a.index] = second;
+    state.sides[b.side][b.zone][b.index] = first;
+    state.instances[first].zone = b.zone;
+    state.instances[second].zone = a.zone;
+  };
+  /** Each move as a change and its undoing, for the source at `slot`. */
+  function* moves(slot: HiddenSlot, layers: Layers): Generator<{ readonly make: () => void; readonly undo: () => void }> {
+    const source = state.instances[at(slot)];
+    const works = statics(source.id);
+    if (works === null) return;
+    const partners: HiddenSlot[] = [];
+    if (!source.status.created) {
+      const kinds = new Set<string>([identity(source)]);
+      for (const other of hidden) {
+        const partner = state.instances[at(other)];
+        if (other.side !== slot.side || other.zone === slot.zone || partner.owner !== source.owner || partner.status.created) continue;
+        const kind = statics(partner.id) === null ? "none" : identity(partner);
+        if (kinds.has(kind)) continue;
+        kinds.add(kind);
+        partners.push(other);
+      }
+    }
+    const times = new Set<number>([0]);
+    for (const layer of [3, 4] as const) {
+      for (const { timestamp } of layers.changes(layer)) times.add(timestamp).add(timestamp + 1);
+    }
+    const original = source.enteredZoneAt;
+    for (const partner of [null, ...partners]) {
+      const zone = partner === null ? slot.zone : partner.zone;
+      const dates = works[zone] ? [original, ...[...times].filter((time) => time !== original).sort((a, b) => a - b)] : [original];
+      for (const date of dates) {
+        if (partner === null && date === original) continue;
+        yield {
+          make: () => {
+            if (partner !== null) swap(slot, partner);
+            source.enteredZoneAt = date;
+          },
+          undo: () => {
+            source.enteredZoneAt = original;
+            if (partner !== null) swap(slot, partner);
+          },
+        };
+      }
+    }
+  }
+  let current = distance(state, view, catalog);
+  descent: while (current.total > 0) {
+    for (const slot of hidden) {
+      for (const move of moves(slot, current.layers)) {
+        move.make();
+        const next = distance(state, view, catalog);
+        if (next.total < current.total) {
+          current = next;
+          continue descent;
+        }
+        move.undo();
+      }
+    }
+    break;
+  }
+  state.clock = Math.max(state.clock, ...hidden.map((slot) => state.instances[at(slot)].enteredZoneAt));
 }

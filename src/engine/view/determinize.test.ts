@@ -1,14 +1,24 @@
-/** Determinization (D22): sampled states are legal, match the view, are seeded, and never read hidden information. */
+/**
+ * Determinization (D22): sampled states are legal, match the view (with the
+ * characteristics static abilities in hidden zones give the cards it shows),
+ * are seeded, and never read hidden information.
+ */
 import { describe, expect, it } from "vitest";
+import type { EngineCardDefinition } from "../catalog";
+import { all, characterYouControl, energy, staticAbility } from "../dsl/builders";
+import type { AbilityList } from "../dsl/types";
+import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
 import { stateHash } from "../state/hash";
 import type { InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, DeckEntry } from "../state/types";
+import { boardState, cardIdOf, type SideSetup } from "../testing/board";
 import { fuzzEngineCatalog, fuzzInit, playRandomActions, playRandomGame, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { invariantViolations } from "../testing/invariants";
 import { PolicyRandom } from "../policy/random";
 import { hiddenFrom } from "../testing/redaction";
+import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { determinize, type Decklists } from "./determinize";
 import type { BattleView } from "./view";
 
@@ -38,10 +48,9 @@ function seeded(label: string): () => number {
 
 /** A view without the parts determinization rebuilds approximately (see determinize.ts). */
 function comparable(seen: BattleView): unknown {
-  const { triggerQueue, payable, instances, ...rest } = seen;
+  const { triggerQueue, payable, ...rest } = seen;
   return {
     ...rest,
-    instances: Object.fromEntries(Object.entries(instances).map(([id, { characteristics: _characteristics, ...instance }]) => [id, instance])),
     triggerQueue: triggerQueue.filter((trigger) => trigger.source !== null),
     payable: payable.map(({ source: _source, ...effect }) => effect),
   };
@@ -135,6 +144,109 @@ describe("determinize", () => {
       }
     });
     expect(swapped).toBeGreaterThan(0);
+  });
+});
+
+/** A 1● character with one static ability working from a hand. */
+function handStatic(index: number, abilities: AbilityList): EngineCardDefinition {
+  return {
+    id: syntheticId(0x7e0 + index),
+    cardType: "character",
+    costs: [energy(1)],
+    spark: 1,
+    subtype: "Warrior",
+    speed: "standard",
+    status: "authored",
+    abilities,
+  };
+}
+
+/** "While this card is in your hand, characters you control have +1✦." */
+const handAnthem = handStatic(0, () => [staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone: "hand" })]);
+/** "While this card is in your hand, characters the opponent plays cost 1● more." */
+const handTax = handStatic(1, () => [staticAbility(p.costModifier("opponent", { cardType: "character" }, 1), { zone: "hand" })]);
+/** "While this card is in your hand, characters you control have Vengeful." */
+const handVengeful = handStatic(2, () => [staticAbility(p.grant(all(characterYouControl()), "vengeful"), { zone: "hand" })]);
+
+const hiddenCatalog = testCatalog([handAnthem, handTax, handVengeful]);
+const hiddenEngine = createEngine(hiddenCatalog);
+const filler = SYNTHETIC.vanilla1.id;
+
+/**
+ * The player's Day with the enemy's hand and deck hidden from it: the player
+ * holds a 2● character with 2●, and the enemy has a character in play, the
+ * given hand, and a deck of fillers. Returned with each side's decklist: the
+ * cards each side holds.
+ */
+function hiddenBoard(enemyHand: SideSetup["hand"]): { state: BattleState; decklists: Decklists; ids: ReturnType<typeof boardState>["ids"] } {
+  const { state, ids } = boardState(hiddenCatalog, {
+    active: "player",
+    phase: "day",
+    player: { front: [filler], hand: [SYNTHETIC.vanilla2.id], energy: 2, deck: Array.from({ length: 6 }, () => filler) },
+    enemy: { front: [filler], hand: enemyHand, deck: Array.from({ length: 12 }, () => filler) },
+  });
+  const decklist = (side: Side): DeckEntry[] =>
+    Object.values(state.instances)
+      .filter((instance) => instance.owner === side)
+      .map((instance) => ({ cardId: cardIdOf(state, instance.id) }));
+  return { state, decklists: { player: decklist("player"), enemy: decklist("enemy") }, ids };
+}
+
+describe("determinize with static abilities working from a hidden zone", () => {
+  const SEEDS = Array.from({ length: 24 }, (_, n) => `hidden-static-${String(n)}`);
+
+  it("reproduces the characteristics and legal actions the view shows", () => {
+    const { state, decklists, ids } = hiddenBoard([filler, handAnthem.id, filler, handTax.id]);
+    const seen = hiddenEngine.view(state, "player");
+    // The hand anthem and tax show on cards the player sees, though neither source does.
+    expect(seen.instances[ids.enemy.front[0]!]?.characteristics.spark).toBe(2);
+    expect(seen.instances[ids.player.hand[0]]?.characteristics.cost).toBe(3);
+    for (const seed of SEEDS) {
+      const sampled = determinize(seen, decklists, seeded(seed), hiddenCatalog);
+      expect(invariantViolations(sampled, hiddenCatalog)).toEqual([]);
+      expect(comparable(hiddenEngine.view(sampled, "player"))).toEqual(comparable(seen));
+      expect(hiddenEngine.legalActions(sampled, "player")).toEqual(hiddenEngine.legalActions(state, "player"));
+    }
+  });
+
+  it("dates a hidden source after a change it followed, and before one that followed it", () => {
+    for (const [lostAt, vengeful] of [[3, true], [7, false]] as const) {
+      const { state, decklists, ids } = hiddenBoard([filler, handVengeful.id, filler]);
+      const enemy = ids.enemy.front[0]!;
+      state.instances[ids.enemy.hand[1]].enteredZoneAt = 5;
+      state.clock = 8;
+      state.floating.push({
+        id: `e${state.nextEffect}`,
+        controller: "player",
+        source: ids.player.front[0]!,
+        timestamp: lostAt,
+        expiry: { at: "endOfTurn" },
+        change: { kind: "keyword", instance: enemy, keyword: "vengeful", gains: false },
+      });
+      state.nextEffect += 1;
+      const seen = hiddenEngine.view(state, "player");
+      expect(seen.instances[enemy]?.characteristics.keywords.includes("vengeful")).toBe(vengeful);
+      for (const seed of SEEDS) {
+        const sampled = determinize(seen, decklists, seeded(seed), hiddenCatalog);
+        expect(invariantViolations(sampled, hiddenCatalog)).toEqual([]);
+        expect(comparable(hiddenEngine.view(sampled, "player"))).toEqual(comparable(seen));
+      }
+    }
+  });
+
+  it("keeps the closest legal state, deterministically, when no deal from the decklists explains the view", () => {
+    const { state, decklists, ids } = hiddenBoard([filler, handAnthem.id, handAnthem.id]);
+    const enemy = ids.enemy.front[0]!;
+    // The enemy's decklist names one hand anthem of the two the view's +2✦ needs.
+    const short: Decklists = { ...decklists, enemy: [...decklists.enemy.filter((entry) => entry.cardId !== handAnthem.id), { cardId: handAnthem.id }, { cardId: filler }] };
+    const seen = hiddenEngine.view(state, "player");
+    expect(seen.instances[enemy]?.characteristics.spark).toBe(3);
+    for (const seed of SEEDS) {
+      const sampled = determinize(seen, short, seeded(seed), hiddenCatalog);
+      expect(invariantViolations(sampled, hiddenCatalog)).toEqual([]);
+      expect(stateHash(determinize(seen, short, seeded(seed), hiddenCatalog))).toBe(stateHash(sampled));
+      expect(hiddenEngine.view(sampled, "player").instances[enemy]?.characteristics.spark).toBe(2);
+    }
   });
 });
 

@@ -1453,6 +1453,23 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   does not carry: queued triggers and floating effects from sources the
   viewer cannot see, the opponent's knowledge, loop history, and the
   automatic-step count. Only the AI uses it.
+  - A static ability working from a hand or a deck shows in the view only
+    as what it changes (RD-hv-umm2.53-2), so after dealing, determinization
+    reconciles the sample with the characteristics the view shows its cards
+    having (`characteristicsView`, shared with `view`). Only when a hidden
+    card has such an ability does it run: it descends on a distance (type,
+    keyword, spark, and cost differences summed over the cards the view
+    shows), each move swapping one such card with a hidden card of the same
+    owner in its side's other hidden zone, dating it just before or after a
+    keyword or base-spark change, or both, and stops at distance 0 or when
+    no move brings the sample closer. Matching characteristics match each
+    card's cost with X counted as 0, so the viewer's legal actions in a
+    sample are those of the state it viewed, unless a cost reduction that a
+    cost of 0 absorbs would lower what an X play costs there. A view
+    that no deal explains, such as one whose floating effect from a source
+    the viewer cannot see was left out, keeps the closest sample found. The
+    reconciliation draws nothing, so a deal it leaves unchanged is the deal
+    of the same draws without it.
 
 ## Presentation
 
