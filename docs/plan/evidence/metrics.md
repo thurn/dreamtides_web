@@ -226,6 +226,7 @@ Monitored, never gated. "Overrun" means more than 50% over the budget.
 | `npm run review`, typical one-file logic change | ≤ 45 s | 65.2 s | wall of the bead's pre-commit `npm run review` |
 | `npm run review`, docs-only change | ≤ 5 s | 0.2 s | same |
 | `npm run review`, one-value data change | ≤ 20 s | 9.9 s | same |
+| `npm run review`, content-module change (card authoring) | ≤ 40 s | 30.7–38.2 s (load 3.8–14.3) | same |
 | Focused test file, `npm test -- <file>` | ≤ 10 s | 15.7 s | wall |
 | Typecheck step | ≤ 10 s | 9.6–10.8 s | `[review] typecheck finished in` |
 | Lint, whole `src/` | ≤ 20 s | 18.4 s | `[review] lint finished in` (review:full) |
@@ -233,7 +234,12 @@ Monitored, never gated. "Overrun" means more than 50% over the budget.
 | Workspace prepare, warm | ≤ 5 s | 4.0–4.1 s | `node scripts/prepare-workspace.mjs` |
 
 The review and focused-test budgets start below the baseline on purpose:
-Phase 1.3 targets them. The fuzz-smoke budget is in the
+Phase 1.3 targets them. The content-module row (Phase 5 retrospective hv-umm2.311) covers card
+authoring: a change under `src/content/` selects the catalog's importer graph
+as related tests (133–136 files, about 1,550 tests), and that local run is
+the only time they run before `staging`, because `review:gate` caps related
+tests at 40 files. Measured 30.7 s at load 7.5 (hv-umm2.50), 32 s at load
+3.8 (hv-umm2.51), and 38.2 s at load 14.3 (hv-umm2.297). The fuzz-smoke budget is in the
 [Phase 2 gate budget revision](#budget-revision-phase-2-retrospective).
 
 ## Tollgate policy

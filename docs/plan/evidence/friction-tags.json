@@ -10,6 +10,8 @@
     "bead-areas-omit-restated-rule": "bead-areas-incomplete",
     "bead-areas-omit-seed-source": "bead-areas-incomplete",
     "bead-areas-omit-type-fallout": "bead-areas-incomplete",
+    "card-sweep-needs-cards": "plan-brief-mismatch",
+    "card-sweep-presentation-readiness": "browser-qa-scripting",
     "floating-site-nodes-never-stable": "browser-qa-scripting",
     "fuzz-throughput-noise": "host-load-noise",
     "mobile-battle-lane-window": "browser-qa-scripting",
