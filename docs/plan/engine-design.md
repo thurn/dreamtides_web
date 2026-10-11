@@ -1749,7 +1749,9 @@ Each item shows its own event's board (`eventBoards` in
 `presentation-items.ts`), so a batch's board only moves forward in event
 order and takes no input while an item plays; the opponent's plays arrive
 one at a time even when the AI host has moved on, and the prompt host shows
-a prompt only once the queue is idle. On those boards:
+a prompt only once the queue is idle and no notice is up
+(`promptPresentable`), so an automatic answer's notice, which names what it
+was chosen for, never sits over the next prompt. On those boards:
 
 - an event before the batch's new turn shows the turn it belongs to
   (`batchTurnAt`, shared with the battle log), including a card banished

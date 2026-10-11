@@ -6,8 +6,9 @@
 // the reducer's fold observed at them, turns them into items
 // (`presentation-items.ts`), and plays the items in order
 // (`usePresentationQueue`). The prompt host shows a prompt only while the
-// queue is idle, so the events before a prompt (the draws of "draw 2, then
-// discard") are presented first.
+// queue is idle and no notice is up (`promptPresentable`), so the events
+// before a prompt (the draws of "draw 2, then discard") and an automatic
+// answer's notice are presented first.
 //
 // Presentation never gates game flow: the fold and the AI host do not read
 // it. A reload starts with an empty queue, so a reloaded board shows the

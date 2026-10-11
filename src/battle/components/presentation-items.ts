@@ -141,6 +141,19 @@ export interface PresentationItem {
   readonly batch: PresentationBatch;
 }
 
+/**
+ * Whether the human's pending decision may show: once no item is presented
+ * and the last notice has cleared (it dismisses itself, or the player taps
+ * it), so a notice about what just happened never stands over the next
+ * prompt's controls or reads as describing that prompt.
+ */
+export function promptPresentable(
+  head: PresentationItem | null,
+  notice: { readonly notice: EngineBattleNotice } | null,
+): boolean {
+  return head === null && notice === null;
+}
+
 /** A slice's identity for presentation: two slices with one key render the same board. */
 export function sliceKey(slice: BattleSlice): PresentationId {
   return parsePresentationId(
@@ -425,7 +438,12 @@ export function presentationItems(
     switch (event.kind) {
       case "promptAutoAnswered":
         return event.side === human
-          ? item("notice", eventDwellMs, null, { kind: "autoAnswered", prompt: event.prompt, sourceName: sourceName(event.purpose.source) })
+          ? item("notice", eventDwellMs, null, {
+              kind: "autoAnswered",
+              prompt: event.prompt,
+              role: event.purpose.role,
+              sourceName: sourceName(event.purpose.source),
+            })
           : [];
       case "capacityReached":
         return event.side === human ? item("notice", eventDwellMs, null, { kind: "capacityReached", missing: event.missing }) : [];

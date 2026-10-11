@@ -267,7 +267,13 @@ export const ENGINE_NUMBER_PICKER_COPY = {
 
 /** A brief notice about something the engine did on the player's behalf. */
 export type EngineBattleNotice =
-  | { readonly kind: "autoAnswered"; readonly prompt: PromptKind; readonly sourceName: string | null }
+  /** A prompt with one legal answer answered itself; `role` names what the answer was for. */
+  | {
+      readonly kind: "autoAnswered";
+      readonly prompt: PromptKind;
+      readonly role: PromptRole;
+      readonly sourceName: string | null;
+    }
   | { readonly kind: "capacityReached"; readonly missing: number }
   /** An ability found nothing to target; `sourceName` names it when the player can identify it. */
   | { readonly kind: "noLegalTarget"; readonly sourceName: string | null };
@@ -292,14 +298,65 @@ export function engineBattleNoticeCopy(notice: EngineBattleNotice): { readonly t
           : `${String(notice.missing)} characters could not enter your full back rank.`,
     };
   }
-  const what = notice.prompt === "chooseTargets" ? "target" : notice.prompt === "chooseCards" ? "card" : "choice";
+  const what = autoAnsweredChoice(notice.prompt, notice.role);
   return {
     title: "Chosen for You",
     message:
       notice.sourceName === null
-        ? `There was only one possible ${what}, so it was chosen automatically.`
-        : `${notice.sourceName} had only one possible ${what}, so it was chosen automatically.`,
+        ? `There was only one ${what}, so it was chosen for you.`
+        : `There was only one ${what} for ${notice.sourceName}, so it was chosen for you.`,
   };
+}
+
+/** What an automatically answered prompt had only one of, from what it was for. */
+function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
+  switch (role) {
+    case "target":
+      return kind === "chooseTargets" ? "legal target" : "card you could choose";
+    case "discardToHandLimit":
+    case "discardCost":
+    case "discard":
+      return "card you could discard";
+    case "discardChosen":
+      return "card of theirs you could discard";
+    case "playRoute":
+      return "way to play it";
+    case "chooseX":
+    case "discoverCost":
+      return "value of X you could choose";
+    case "chooseOne":
+      return "mode you could choose";
+    case "choosePlayer":
+      return "player you could choose";
+    case "chooseCost":
+    case "optionalCost":
+      return "way to pay its cost";
+    case "abandonCost":
+      return "character you could abandon";
+    case "revealCost":
+      return "card you could reveal";
+    case "banishCost":
+      return "void card you could banish";
+    case "offeringCost":
+      return "offering you could choose";
+    case "foresee":
+      return "way to arrange the top of your deck";
+    case "discover":
+      return "card you could discover";
+    case "lookAtTop":
+      return "card you could draw";
+    case "chooseAmong":
+      return "card you could put into your hand";
+    case "chooseFromOpponentHand":
+      return "card you could take from their hand";
+    case "shuffleInto":
+      return "card you could shuffle into your deck";
+    case "putInDeck":
+      return "way to place the cards you looked at";
+    case "youMay":
+    case "preventUnlessPays":
+      return "answer you could give";
+  }
 }
 
 /** The battle log's heading, empty state, and turn headings. */

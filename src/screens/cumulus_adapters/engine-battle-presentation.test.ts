@@ -5,7 +5,14 @@
 import { describe, expect, it, vi } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { PRESENTATION_OBSERVATION, PresentationQueue } from "../../battle/components/battle-presentation";
-import { enqueuePresentation, EVENT_PRESENTATION, presentationItems, presentedAsItem, type PresentationItem } from "../../battle/components/presentation-items";
+import {
+  enqueuePresentation,
+  EVENT_PRESENTATION,
+  presentationItems,
+  presentedAsItem,
+  promptPresentable,
+  type PresentationItem,
+} from "../../battle/components/presentation-items";
 import { BATTLE } from "../../content/battle";
 import { createEngine, type BattleState, type BattleView, type Engine, type EngineEvent, type EngineEventKind, type InstanceView } from "../../engine";
 import type { Keyword } from "../../engine/dsl/types";
@@ -16,7 +23,7 @@ import { boardState, type BoardSetup } from "../../engine/testing/board";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { enemyCharacter, event as eventAbility, target } from "../../engine/dsl/builders";
 import { atStartOfTurn, triggered } from "../../engine/dsl/triggers";
-import { banishUntil, discard, draw } from "../../engine/effects/primitives";
+import { banishUntil, discard, discover, draw, sequence } from "../../engine/effects/primitives";
 import { SYNTHETIC, syntheticId } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
 import { STACK } from "../../engine/testing/stack-cards";
@@ -28,7 +35,7 @@ import { battleSeed, SIDES, type InstanceId } from "../../engine/state/ids";
 import type { CommittedEvent } from "../../eventlog/local-log";
 import type { GameEvent } from "../../eventlog/types";
 import type { JourneyBattleFoldState } from "../../rules/battle/fold";
-import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
+import { engineBattleLogText, engineBattleNoticeCopy } from "../../runtime/battle-prompt-messages";
 import { testEventActor } from "../../types/test-identities";
 import {
   parseBattleId,
@@ -74,11 +81,12 @@ function labModel(
   state: BattleState,
   visual: PresentationItem["visual"],
   extra: Partial<Parameters<typeof buildEngineBattleScreenModel>[0]> = {},
+  on: Engine = labEngine,
 ): EngineBattleScreenModel {
   return buildEngineBattleScreenModel({
     battleId: parseBattleId("battle-presentation-fixture"),
     human: "player",
-    view: labEngine.view(state, "player"),
+    view: on.view(state, "player"),
     legal: [],
     prompt: null,
     playing: null,
@@ -86,7 +94,7 @@ function labModel(
     presented: visual === null,
     notice: null,
     cards,
-    printedKeywords: enginePrintedKeywords(labEngine.catalog),
+    printedKeywords: enginePrintedKeywords(on.catalog),
     avatars: { player: { avatar: null }, enemy: { avatar: null } },
     opponentName: "Fixture Opponent",
     essenceReward: 100,
@@ -510,9 +518,58 @@ describe("presentation items", () => {
       steps("auto-target", human).flatMap((step) => step.items.flatMap((item) => (item.notice === null ? [] : [item.notice])));
     const noTarget = steps("present-zones")[1]?.items.find((item) => item.notice?.kind === "noLegalTarget");
 
-    expect(notices("player")).toEqual([expect.objectContaining({ kind: "autoAnswered", prompt: "chooseTargets" })]);
+    expect(notices("player")).toEqual([expect.objectContaining({ kind: "autoAnswered", prompt: "chooseTargets", role: "target" })]);
     expect(notices("enemy")).toEqual([]);
     expect(noTarget?.presentation).toBe("notice");
+  });
+
+  it("names the purpose of an automatic answer, and holds the next prompt until its notice clears", () => {
+    // "Discard a card, then discover a character": one other hand card forces the discard, and the offer follows.
+    const discardThenDiscover = {
+      ...LAB.drawTwoThenDiscard,
+      id: syntheticId(0x5103),
+      abilities: () => [eventAbility(sequence(discard(1), discover({ cardType: "character" })))],
+    };
+    const engine = createEngine(createCatalog([...PROMPT_LAB_DEFINITIONS.cards, discardThenDiscover], [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments));
+    const fixture = observedBoard(
+      {
+        active: "player",
+        phase: "day",
+        player: { hand: [discardThenDiscover.id, SYNTHETIC.vanilla1.id], energy: 2, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id] },
+      },
+      engine,
+    );
+    const shown = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } });
+    const pending = fixture.adapter.pending(fixture.slice());
+    if (pending === null) throw new Error("no discover offer");
+    const item = shown.items.find((entry) => entry.notice?.kind === "autoAnswered");
+    const notice = item?.notice;
+    if (item === undefined || notice?.kind !== "autoAnswered") throw new Error("no automatic answer notice");
+    const offerNotice = { ...notice, role: pending.prompt.purpose.role };
+    const screen = (presented: boolean, shownNotice: typeof notice | null) =>
+      labModel(
+        pending.display,
+        null,
+        {
+          prompt: pending.prompt,
+          presented,
+          notice: shownNotice === null ? null : { key: item.key, ...engineBattleNoticeCopy(shownNotice) },
+        },
+        engine,
+      );
+    const whileNotice = screen(promptPresentable(null, { notice }), notice);
+    const afterNotice = screen(promptPresentable(null, null), null);
+
+    expect(pending.prompt.purpose.role).toBe("discover");
+    expect(notice).toEqual(expect.objectContaining({ prompt: pending.prompt.kind, role: "discard" }));
+    expect(engineBattleNoticeCopy(notice).message).not.toBe(engineBattleNoticeCopy(offerNotice).message);
+    expect(promptPresentable(item, null)).toBe(false);
+    expect(whileNotice.prompt.surface.kind).toBe("held");
+    expect(whileNotice.prompt.host?.key ?? null).toBeNull();
+    expect(whileNotice.prompt.host?.heading ?? null).toBeNull();
+    expect(whileNotice.prompt.host?.notice?.key).toBe(item.key);
+    expect(afterNotice.prompt.surface.kind).not.toBe("held");
+    expect(afterNotice.prompt.host?.notice ?? null).toBeNull();
   });
 
   it("shows a Dreamwell card beside its side while its reveal is presented", () => {

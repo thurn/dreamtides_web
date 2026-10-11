@@ -76,7 +76,7 @@ import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import { createEngineCardModels } from "../ui/engine-card-model";
 import { usePresentationQueue, usePublishedEngineEvents } from "./battle-presentation";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
-import { presentationItems, sliceKey } from "./presentation-items";
+import { presentationItems, promptPresentable, sliceKey } from "./presentation-items";
 
 /** The engine debug panel (`?debug=1`, D4); a production build compiles it out (P7). */
 const EngineDebugPanel = import.meta.env.DEV ? lazy(() => import("./EngineDebugPanel")) : null;
@@ -315,7 +315,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         prompt: derived.prompt,
         playing: derived.playing,
         decision: derived.decision,
-        presented: head === null,
+        presented: promptPresentable(head, presentation.notice),
         notice: noticeView,
         cards,
         printedKeywords,
@@ -333,7 +333,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           return definition === null ? null : dreamwellCardModel(definition);
         },
       }),
-    [avatars, battleId, cards, derived, dreamwell, engine, head, init, noticeView, printedKeywords, resultDismissed],
+    [avatars, battleId, cards, derived, dreamwell, engine, head, init, noticeView, presentation.notice, printedKeywords, resultDismissed],
   );
   const emblemName = useCallback<EngineEmblemNamer>(
     (emblem, id) =>
