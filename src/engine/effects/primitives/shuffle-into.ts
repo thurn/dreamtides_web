@@ -1,10 +1,9 @@
 import type { ZoneCardSpec } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
+import { shuffleDeck } from "../../rules/shuffle";
 import { instanceOf, moveInstance } from "../../rules/zones";
 import type { InstanceId, Side, Zone } from "../../state/ids";
 import { SIDES } from "../../state/ids";
-import { shuffleInPlace } from "../../state/rng";
-import type { StepContext } from "../../steps/types";
 import { identifies } from "../../view/knowledge";
 import { resolveCards } from "../interpreter";
 import { cardTarget, definePrimitive } from "../types";
@@ -74,25 +73,11 @@ export const shuffleIntoPrimitive = definePrimitive<ShuffleIntoNode>({
       }
     }
     for (const deck of SIDES.filter((owner) => owner === side || entered[owner].cards.length > 0)) {
-      shuffleDeck(ctx, deck);
+      shuffleDeck(ctx.state, deck);
       ctx.emit({ kind: "shuffledIntoDeck", side: deck, ...entered[deck] });
     }
   },
 });
-
-/**
- * Shuffles `side`'s deck from its `shuffle:<side>` stream. Neither side can
- * place a card in it afterwards, so every card in it drops out of both
- * sides' knowledge (view/knowledge.ts).
- */
-function shuffleDeck(ctx: StepContext, side: Side): void {
-  const { state } = ctx;
-  const deck = state.sides[side].deck;
-  shuffleInPlace(state, `shuffle:${side}`, deck);
-  for (const viewer of SIDES) {
-    state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !deck.includes(id));
-  }
-}
 
 /**
  * "Shuffle <cards> into your deck": the cards each reference names, then,

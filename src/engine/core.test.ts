@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { cardIdOf } from "./testing/board";
 import { xCost } from "./dsl/energy";
 import { createEngine } from "./engine";
+import { createCatalog } from "./catalog";
 import { battleSeed, type CardId } from "./state/ids";
 import type { BattleInit } from "./state/types";
 import { drawRandom } from "./state/rng";
@@ -31,6 +32,25 @@ import { DREAMWELL_RULES } from "../content/dreamwell-rules";
 
 const pool = SYNTHETIC_FUZZ_POOL;
 const engine = createEngine(fuzzEngineCatalog(pool));
+
+describe("card catalog identity", () => {
+  const first = pool.cards[0];
+  if (first === undefined) throw new Error("missing synthetic card");
+  const different = { ...first, spark: first.spark === 1 ? 2 : 1 };
+
+  it("rejects definitions sharing a card UUID before exposing a catalog", () => {
+    expect(() => createCatalog([first, different], [])).toThrow();
+    expect(() => createCatalog([different, first], [])).toThrow();
+    expect(() => createCatalog([first, first], [])).toThrow();
+  });
+
+  it("keeps distinct card UUIDs even when their other metadata agrees", () => {
+    const second = { ...first, id: syntheticId(0xf500) };
+    const catalog = createCatalog([first, second], []);
+    expect(catalog.card(first.id).id).toBe(first.id);
+    expect(catalog.card(second.id).id).toBe(second.id);
+  });
+});
 
 describe("targeted fuzz input", () => {
   const target = pool.cards[pool.cards.length - 1];

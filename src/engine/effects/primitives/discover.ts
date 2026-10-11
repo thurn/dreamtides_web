@@ -3,10 +3,9 @@ import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from 
 import type { CardFilter, ValueExpr } from "../../dsl/types";
 import type { ChooseCardsPrompt, ChooseNumberPrompt, PromptPurpose } from "../../prompts/types";
 import { instanceOrigin, originAbilities } from "../../rules/activation";
+import { shuffleDeck } from "../../rules/shuffle";
 import { moveToHand } from "../../rules/zones";
 import type { InstanceId, Side } from "../../state/ids";
-import { SIDES } from "../../state/ids";
-import { shuffleInPlace } from "../../state/rng";
 import type { BattleState } from "../../state/types";
 import type { StepContext } from "../../steps/types";
 import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
@@ -55,7 +54,7 @@ export const discoverPrimitive = definePrimitive<DiscoverNode>({
     if (chosen === undefined) throw new Error("discover answered with no card");
     moveToHand(ctx, chosen, side);
     ctx.emit({ kind: "cardDiscovered", side, instance: chosen });
-    shuffleDeck(ctx, side);
+    shuffleDeck(ctx.state, side);
   },
 });
 
@@ -102,20 +101,6 @@ function discoverOptions(ctx: StepContext, side: Side, filter: CardFilter, costM
     if (card !== undefined) options.push(card);
   }
   return options;
-}
-
-/**
- * Shuffles `side`'s deck from its `shuffle:<side>` stream. Neither side can
- * place a card in it afterwards, so every card in it drops out of both
- * sides' knowledge (view/knowledge.ts), the offered cards it kept included.
- */
-function shuffleDeck(ctx: StepContext, side: Side): void {
-  const { state } = ctx;
-  const deck = state.sides[side].deck;
-  shuffleInPlace(state, `shuffle:${side}`, deck);
-  for (const viewer of SIDES) {
-    state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !deck.includes(id));
-  }
 }
 
 function isFreeCostDiscover(node: EffectNode): node is DiscoverNode & { readonly chooseCost: true } {

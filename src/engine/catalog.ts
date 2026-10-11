@@ -246,7 +246,7 @@ export function printedCardId(printing: Printing): CardId | null {
   return printing.kind === "figment" ? null : printing.cardId;
 }
 
-/** Builds a catalog over the given definitions; unknown UUIDs throw. */
+/** Builds a catalog over unique card definitions; duplicate and unknown UUIDs throw. */
 export function createCatalog(
   cards: readonly EngineCardDefinition[],
   dreamwellCards: readonly EngineDreamwellDefinition[],
@@ -257,6 +257,11 @@ export function createCatalog(
 ): EngineCatalog {
   if (publicMaximumFixedCost !== undefined && (!Number.isSafeInteger(publicMaximumFixedCost) || publicMaximumFixedCost < 0 || publicMaximumFixedCost >= Number.MAX_SAFE_INTEGER)) {
     throw new Error("Invalid public catalog cost ceiling");
+  }
+  const cardIds = new Set<CardId>();
+  for (const { id } of cards) {
+    if (cardIds.has(id)) throw new Error(`Duplicate card UUID ${id}`);
+    cardIds.add(id);
   }
   const figmentsById = new Map(figments.map((definition) => [definition.id, definition]));
   const cardsById = new Map(cards.map((definition) => [definition.id, definition]));

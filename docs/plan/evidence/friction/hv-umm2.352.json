@@ -1,0 +1,51 @@
+{
+  "bead": "hv-umm2.352",
+  "phase": 5,
+  "implementMin": 14.02,
+  "ownershipStartUtc": "2026-10-11T10:28:40+00:00",
+  "localValidationS": {
+    "baselineFocused": 6.9,
+    "catalogRed": 1.7,
+    "focused": 4.3,
+    "review": 33.7,
+    "knip": 3.7,
+    "full": 59.1,
+    "reviewInitialFailure": 3.8,
+    "typecheckDiagnosisFailure": 10.8,
+    "reviewSeedFailure": 6.3,
+    "baselineFuzz": 54.2,
+    "afterFuzz": 55.4,
+    "exactFinalCore": 4.6,
+    "exactFinalReview": 31.1,
+    "exactFinalKnip": 1.9
+  },
+  "hostLoad": 20.53,
+  "hostLoadSamples": {
+    "baselineFocused": 5.65,
+    "fullStart": 4.84,
+    "fullEnd": 20.53
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 63,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "queueS": {
+    "full": 0
+  },
+  "queueResolutionS": 1,
+  "fuzzCpuS": {
+    "baseline": 59.4,
+    "after": 60.8
+  },
+  "fullResult": {
+    "files": 216,
+    "cases": 2951,
+    "passed": 2951,
+    "failed": 0,
+    "followedByTestOnlyChange": "Positive catalog lookups assert returned branded UUIDs instead of definition object references; exact final core/review/knip passed."
+  },
+  "resourcesClosed": true,
+  "productionSourceSha256": "2d35a718895eb2ee0f1e9aff6ded91a34e3538f54dad95058a63feb11fda5a93"
+}

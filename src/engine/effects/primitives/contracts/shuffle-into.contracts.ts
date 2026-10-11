@@ -8,9 +8,9 @@ import { greedyAnswer } from "../../../policy/prompts";
 import type { Answer, ChooseCardsPrompt, Prompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
-import { stateHash } from "../../../state/hash";
+import { deserializeState, serializeState, stateHash } from "../../../state/hash";
 import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
-import { type CardId, type InstanceId } from "../../../state/ids";
+import { battleSeed, SIDES, type CardId, type InstanceId } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
 import type { AnswerSource } from "../../../steps/types";
 import { unannouncedChanges } from "../../../testing/announced-changes";
@@ -22,6 +22,7 @@ import { passUntil } from "../../../testing/trigger-harness";
 import { promptView, view } from "../../../view/view";
 import { resolveEffect } from "../../interpreter";
 import { createCopyInHand } from "../create-copy-in-hand";
+import { discover } from "../discover";
 import { draw } from "../draw";
 import { lookAtTop } from "../look-at-top";
 import { sequence } from "../sequence";
@@ -199,6 +200,48 @@ describe("shuffleInto", () => {
     expect(once.state.sides.player.deck).toHaveLength(8);
     expect(once.state.sides.player.hand).toEqual([]);
     expect(once.state.sides.player.void).toEqual([once.ids.player.hand[0]]);
+  });
+
+  it("matches Discover's deck order, shuffle stream and knowledge reset through serialized replay", () => {
+    // Separate valid catalogs give the same source UUID two effects that
+    // take the sole character out of an otherwise identical deck.
+    const effects = [discover({ cardType: "character" }), sequence(lookAtTop(1, { draw: 1 }), shuffleInto())];
+    for (const side of SIDES) {
+      for (const size of [0, 1, 5]) {
+        for (const seed of [battleSeed("shared-shuffle-a"), battleSeed("shared-shuffle-b")]) {
+          const outcomes = effects.map((effect) => {
+            const card = eventCard(9, effect);
+            const local = createEngine(testCatalog([card]));
+            const other = side === "player" ? "enemy" : "player";
+            const { state: initial, ids } = boardState(local.catalog, {
+              active: side, phase: "day",
+              [side]: { hand: [card.id], deck: [v.vanilla1.id, ...Array.from({ length: size }, () => v.event0.id)] },
+              [other]: { deck },
+            });
+            const state = { ...initial, seed };
+            state.rng = { "shuffle:player": 7, "shuffle:enemy": 11, "random:unrelated": 3 };
+            const retained = ids[other].deck[0];
+            for (const viewer of SIDES) state.knownTo[viewer] = [...ids[side].deck, retained];
+            const action = playFromHand(ids, side).action;
+            const resolve = (start: BattleState) => {
+              const source = firstCards(1);
+              const played = local.apply(start, side, action, source);
+              return passUntil(local, played.state, (next) => next.stack.length === 0, source).state;
+            };
+            const result = resolve(state);
+            expect(resolve(deserializeState(serializeState(state)))).toEqual(result);
+            expect(deserializeState(serializeState(result))).toEqual(result);
+            expect(result.sides[side].hand).toEqual([ids[side].deck[0]]);
+            expect(result.sides[other].deck).toEqual(ids[other].deck);
+            expect(result.knownTo).toEqual({ player: [retained], enemy: [retained] });
+            expect(result.rng[`shuffle:${other}`]).toBe(state.rng[`shuffle:${other}`]);
+            expect(result.rng["random:unrelated"]).toBe(state.rng["random:unrelated"]);
+            return { deck: result.sides[side].deck, shuffle: result.rng[`shuffle:${side}`], knownTo: result.knownTo };
+          });
+          expect(outcomes[0]).toEqual(outcomes[1]);
+        }
+      }
+    }
   });
 
   it("makes a created card cease to exist instead, and sends a card to its owner's deck, shuffling each deck it enters", () => {
