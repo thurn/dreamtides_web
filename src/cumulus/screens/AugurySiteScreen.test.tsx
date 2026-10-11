@@ -3,24 +3,17 @@
 import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseStableDigest } from "../../types/stable-digest";
-import { parseCardName, type CardId } from "../../types/card-identity";
-import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { AugurySiteScreen, type AugurySiteView } from "./AugurySiteScreen";
 import {
-  StartingDeckOverlay,
-  type StartingDeckView,
-} from "./StartingDeckOverlay";
-import {
   parseAuguryCardViewId,
   parseChoiceId,
-  parseDeckEntryId,
   parseOfferId,
   parseSiteId,
 } from "../../types/identifiers";
 import {
-  testCardId,
   testGuideArtKey,
   testGuideId,
   testOfferTileId,
@@ -28,6 +21,7 @@ import {
 import type { CardViewProps } from "../components/card/CardView";
 import type { DomTestId } from "../types/dom";
 import { renderInCumulus } from "../testing/render";
+import { card, stubMatchMedia } from "./augury-and-starting-deck.fixtures";
 
 // GameCard does not expose its selection state in the DOM; this stub surfaces
 // it as `data-selection` and keeps the card-art pipeline out of these tests.
@@ -58,38 +52,6 @@ vi.mock("../components/card/CardView", async () => {
     ),
   };
 });
-
-function stubMatchMedia(matches: (query: string) => boolean): void {
-  window.matchMedia = (query: string) => ({
-    matches: matches(query),
-    media: query,
-    onchange: null,
-    addEventListener: () => undefined,
-    removeEventListener: () => undefined,
-    addListener: () => undefined,
-    removeListener: () => undefined,
-    dispatchEvent: () => false,
-  });
-}
-
-function card(index: number): CardData {
-  return {
-    id: testCardId(
-      `81000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
-    ),
-    name: parseCardName(`Fixture ${String(index)}`),
-    cardNumber: index,
-    cardType: "Character",
-    subtype: "Warrior",
-    isStarter: false,
-    energyCost: 1,
-    spark: 1,
-    isFast: false,
-    renderedText: "",
-    imageNumber: index,
-    artOwned: true,
-  };
-}
 
 function q(container: ParentNode, marker: string): HTMLElement | null {
   return container.querySelector<HTMLElement>(`[data-testid="${marker}"]`);
@@ -395,111 +357,5 @@ describe("AugurySiteScreen", () => {
     expect(container.textContent).toContain("Fixture unavailable");
     expect(container.querySelectorAll("button")).toHaveLength(1);
     expect(container.querySelector("[data-glass-panel-frame]")).toBeNull();
-  });
-});
-
-describe("StartingDeckOverlay", () => {
-  function makeView(cardCount = 2): StartingDeckView {
-    return {
-      cards: Array.from({ length: cardCount }, (_, index) => {
-        const displaySnapshot = card(index + 1);
-        return {
-          entryId: parseDeckEntryId(`entry-${String(index + 1)}`),
-          model: { cardId: displaySnapshot.id, displaySnapshot },
-          testId: `starting-deck-modal-card-entry-${String(index + 1)}`,
-        };
-      }),
-    };
-  }
-
-  function mount(
-    props: Partial<Parameters<typeof StartingDeckOverlay>[0]> = {},
-  ): HTMLDivElement {
-    return renderInCumulus(
-      <StartingDeckOverlay
-        isOpen
-        view={makeView()}
-        onClose={vi.fn()}
-        {...props}
-      />,
-    ).container;
-  }
-
-  const gallery = (container: HTMLElement): HTMLElement | null =>
-    container.querySelector("[data-gallery-frame]");
-  const cards = (container: HTMLElement): Element[] =>
-    Array.from(
-      container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),
-    );
-
-  beforeEach(() => stubMatchMedia(() => false));
-
-  it("renders nothing when closed", () => {
-    const container = mount({ isOpen: false });
-    expect(container.querySelector('[role="dialog"]')).toBeNull();
-    expect(cards(container)).toHaveLength(0);
-  });
-
-  it("renders the starting cards in acquisition order in a full-bleed scrolling mobile gallery", () => {
-    const container = mount();
-
-    expect(container.querySelector('[role="dialog"]')).not.toBeNull();
-    expect(cards(container).map((c) => c.getAttribute("data-testid"))).toEqual([
-      "starting-deck-modal-card-entry-1",
-      "starting-deck-modal-card-entry-2",
-    ]);
-    expect(gallery(container)?.dataset.galleryFrame).toBe("fullBleed");
-    expect(gallery(container)?.dataset.galleryColumns).toBe("4");
-    expect(
-      container.querySelector<HTMLElement>("[data-glass-panel-content] > div")
-        ?.style.overflowY,
-    ).toBe("auto");
-  });
-
-  it("bounds a large deck in a floating desktop panel with a scrolling peek", () => {
-    stubMatchMedia(
-      (query) => query.includes("min-width") && !query.includes("min-height"),
-    );
-    const container = mount({ view: makeView(20) });
-
-    expect(gallery(container)?.parentElement?.style.maxHeight).toContain(
-      "100vh",
-    );
-    expect(gallery(container)?.dataset.galleryFrame).toBe("floating");
-    expect(gallery(container)?.dataset.galleryColumns).toBe("5");
-    expect(gallery(container)?.dataset.galleryVisibleRows).toBe("2.5");
-    expect(cards(container)).toHaveLength(20);
-  });
-
-  it("closes from its single action or Escape, never from a panel or backdrop click", () => {
-    const onClose = vi.fn();
-    const container = mount({ onClose });
-
-    const backdrop = container.querySelector('[role="dialog"]');
-    act(() => {
-      gallery(container)?.parentElement?.dispatchEvent(
-        new MouseEvent("click", { bubbles: true }),
-      );
-      backdrop?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    });
-    expect(onClose).not.toHaveBeenCalled();
-
-    const buttons = container.querySelectorAll("button");
-    expect(buttons).toHaveLength(1);
-    act(() => buttons[0]?.click());
-    expect(onClose).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-    });
-    expect(onClose).toHaveBeenCalledTimes(2);
-  });
-
-  it("renders the empty-state placeholder when the deck is empty", () => {
-    const container = mount({ view: { cards: [] } });
-    expect(
-      container.querySelector('[role="dialog"] [data-card-gallery-empty]'),
-    ).not.toBeNull();
-    expect(cards(container)).toHaveLength(0);
   });
 });

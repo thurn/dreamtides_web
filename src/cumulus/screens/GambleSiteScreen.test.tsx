@@ -1,49 +1,25 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+// GambleSiteScreen: Three-Gate Wager, Ladder Climb, and Starway Stairs.
+// Four-Suit Reprise and Blackjack have their own GambleSiteScreen.*.test.tsx.
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { artRef } from "../primitives/art";
-import {
-  GambleSiteScreen,
-  type BlackjackSiteView,
-  type FourSuitRepriseSiteView,
-  type GambleSiteScreenProps,
-  type GravokWagerSiteView,
-  type LadderClimbSiteView,
-  type StarwayStairsSiteView,
+import type {
+  GravokWagerSiteView,
+  LadderClimbSiteView,
+  StarwayStairsSiteView,
 } from "./GambleSiteScreen";
-import { transfigurationPresentationFixture } from "../test-helpers/transfiguration-fixture";
 import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
-import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
 import {
   testDreamsignId,
   testGambleResultId,
-  testGuideArtKey,
-  testGuideId,
-  testShuffleCommitment,
 } from "../../types/test-identities";
-import { renderInCumulus } from "../testing/render";
-import { syntheticGameCard } from "../test-helpers/component-test-fixtures";
+import { SITE, advance, renderGamble, tid } from "./GambleSiteScreen.fixtures";
 
 const JACKPOT = dreamsignViewFixture({
   id: testDreamsignId("00000000-0000-4000-8000-000000000041"),
   name: "Fixture Jackpot",
   effectDescription: "Foresee 1.",
 });
-
-const SITE = {
-  siteId: parseSiteId("fixture-gamble-site"),
-  scene: null,
-  isFarpoint: false,
-  runtimeReady: true,
-  guide: {
-    id: testGuideId("fixture-guide"),
-    name: "Fixture Guide",
-    line: "A fixture gamble.",
-    art: artRef.dreamGuide(testGuideArtKey("fixture-guide")),
-    headTargetX: 0.6,
-  },
-} as const;
 
 const GRAVOK: GravokWagerSiteView = {
   ...SITE,
@@ -139,147 +115,6 @@ function starwayAfterTierOne(busted: boolean): StarwayStairsSiteView {
     cashOutReward: busted ? null : 60,
     terminalReason: busted ? "bust" : null,
   };
-}
-
-function fourSuitCardView(index: number) {
-  const model = syntheticGameCard(index);
-  return {
-    entryId: parseDeckEntryId(`four-suit-entry-${String(index)}`),
-    cardId: model.cardId,
-    model,
-  };
-}
-
-const FOUR_SUIT: FourSuitRepriseSiteView = {
-  ...SITE,
-  gameId: "four-suit-reprise",
-  drawCost: 25,
-  canAffordDraw: true,
-  roundNumber: 1,
-  maxRounds: 3,
-  essenceReward: 100,
-  outcomes: [
-    { suit: "spades", outcome: "transfiguration" },
-    { suit: "diamonds", outcome: "essence" },
-    { suit: "hearts", outcome: "duplication" },
-    { suit: "clubs", outcome: "purge" },
-  ],
-  phase: "choose",
-  cards: [fourSuitCardView(1), fourSuitCardView(2)],
-  result: null,
-  canPlayAgain: false,
-};
-
-function spadesResult(
-  overrides: Partial<NonNullable<FourSuitRepriseSiteView["result"]>> = {},
-): FourSuitRepriseSiteView {
-  const target = FOUR_SUIT.cards[0];
-  return {
-    ...FOUR_SUIT,
-    phase: "result",
-    cards: [FOUR_SUIT.cards[1]],
-    result: {
-      id: testGambleResultId("four-suit-result-1"),
-      roundNumber: 1,
-      card: { rank: "A", suit: "spades" },
-      outcome: "transfiguration",
-      resultRevealed: false,
-      resultSettled: false,
-      essenceGained: 0,
-      target,
-      transfigurationCandidate: {
-        entryId: target.entryId,
-        model: target.model,
-        availability: "available",
-        reforgedType: null,
-        forms: [
-          {
-            type: "Empowered",
-            presentation: transfigurationPresentationFixture("Empowered"),
-            effectDetails: { fixture: true },
-            pricing: { kind: "unpriced" },
-            previewModel: target.model,
-          },
-        ],
-      },
-      chosenTransfiguration: null,
-      ...overrides,
-    },
-    canPlayAgain: overrides.resultSettled === true,
-  };
-}
-
-const BLACKJACK: BlackjackSiteView = {
-  ...SITE,
-  gameId: "blackjack",
-  handId: testShuffleCommitment("fixture-blackjack-hand"),
-  wagerCost: 50,
-  prizeEssence: 300,
-  attemptNumber: 1,
-  maxAttempts: 3,
-  target: 21,
-  canAffordWager: true,
-  playerCards: [],
-  playerTotal: null,
-  dealerCards: [],
-  dealerTotal: null,
-  dealerRevealed: false,
-  outcome: null,
-  essenceAwarded: 0,
-  resultSettled: false,
-  resultId: null,
-  canPlayAgain: false,
-};
-
-const BLACKJACK_HANDS = {
-  playerCards: [
-    { rank: "10", suit: "clubs" },
-    { rank: "8", suit: "hearts" },
-  ],
-  playerTotal: 18,
-  dealerCards: [
-    { rank: "9", suit: "spades" },
-    { rank: "9", suit: "diamonds" },
-  ],
-} as const;
-
-type View = GambleSiteScreenProps["view"];
-type Callbacks = Omit<GambleSiteScreenProps, "view">;
-
-const tid = (marker: string) => `[data-testid="${marker}"]`;
-
-function renderGamble(view: View, callbacks: Partial<Callbacks> = {}) {
-  const props: Callbacks = {
-    onChooseGate: () => undefined,
-    onLeave: () => undefined,
-    onOutcomeShown: () => undefined,
-    onPlayAgain: () => undefined,
-    onDrawLadder: () => undefined,
-    onLadderOutcomeShown: () => undefined,
-    onReplaceDreamsign: () => undefined,
-    ...callbacks,
-  };
-  const rendered = renderInCumulus(<GambleSiteScreen view={view} {...props} />);
-  const query = (selector: string) =>
-    rendered.container.querySelector<HTMLElement>(selector);
-  return {
-    ...rendered,
-    query,
-    count: (selector: string) =>
-      rendered.container.querySelectorAll(selector).length,
-    tap: (selector: string) => {
-      const button = query(selector);
-      expect(button).not.toBeNull();
-      act(() => button?.click());
-    },
-    show: (next: View) => {
-      rendered.rerender(<GambleSiteScreen view={next} {...props} />);
-    },
-  };
-}
-
-function advance(ms = 10_000): void {
-  void act(() => vi.advanceTimersByTime(ms));
 }
 
 globalThis.ResizeObserver = class {
@@ -475,125 +310,5 @@ describe("GambleSiteScreen — Starway Stairs", () => {
 
     screen.show({ ...busted, canPlayAgain: false });
     expect(screen.query(tid("gamble-starway-play-again"))).toBeNull();
-  });
-});
-
-describe("GambleSiteScreen — Four-Suit Reprise", () => {
-  it("selects, reselects, and draws against a card by entry id", () => {
-    const onDrawFourSuit = vi.fn();
-    const screen = renderGamble(FOUR_SUIT, { onDrawFourSuit });
-    const pick = tid("gamble-four-suit-card-four-suit-entry-1");
-
-    expect(screen.query("[data-four-suit-picker]")).not.toBeNull();
-    screen.tap(pick);
-    expect(screen.query("[data-four-suit-picker]")).toBeNull();
-    expect(
-      screen.query('[data-four-suit-target="four-suit-entry-1"]'),
-    ).not.toBeNull();
-    expect(screen.count("[data-four-suit-outcome]")).toBe(4);
-
-    screen.tap(tid("gamble-four-suit-choose-again"));
-    expect(screen.query("[data-four-suit-picker]")).not.toBeNull();
-    screen.tap(pick);
-    screen.tap(tid("gamble-four-suit-draw"));
-    expect(onDrawFourSuit).toHaveBeenCalledWith("four-suit-entry-1");
-  });
-
-  it("chooses a free Transfiguration after Spades, then replays once settled", () => {
-    vi.useFakeTimers();
-    const onFourSuitOutcomeShown = vi.fn();
-    const onChooseFourSuitTransfiguration = vi.fn();
-    const onPlayAgainFourSuit = vi.fn();
-    const screen = renderGamble(spadesResult(), {
-      onFourSuitOutcomeShown,
-      onChooseFourSuitTransfiguration,
-      onPlayAgainFourSuit,
-    });
-
-    advance(2_000);
-    expect(onFourSuitOutcomeShown).toHaveBeenCalledOnce();
-    screen.show(spadesResult({ resultRevealed: true }));
-    advance();
-    expect(screen.query(tid("cumulus-transfiguration-detail"))).not.toBeNull();
-    screen.tap(tid("cumulus-transfiguration-form-Empowered"));
-    screen.tap(tid("cumulus-transfiguration-confirm"));
-    expect(onChooseFourSuitTransfiguration).toHaveBeenCalledWith("Empowered");
-
-    screen.show(
-      spadesResult({
-        resultRevealed: true,
-        resultSettled: true,
-        chosenTransfiguration: "Empowered",
-      }),
-    );
-    advance();
-    expect(screen.query("[data-four-suit-target]")).toBeNull();
-    screen.tap(tid("gamble-four-suit-play-again"));
-    expect(onPlayAgainFourSuit).toHaveBeenCalledOnce();
-    expect(screen.query(tid("gamble-four-suit-play-again"))).toBeNull();
-  });
-});
-
-describe("GambleSiteScreen — Blackjack", () => {
-  it("deals, conceals the dealer hole card, and hits while the player turn is open", () => {
-    vi.useFakeTimers();
-    const onDealBlackjack = vi.fn();
-    const onHitBlackjack = vi.fn();
-    const screen = renderGamble(BLACKJACK, { onDealBlackjack, onHitBlackjack });
-
-    expect(screen.query("[data-blackjack-prize]")).not.toBeNull();
-    screen.tap(tid("gamble-blackjack-deal"));
-    expect(onDealBlackjack).toHaveBeenCalledOnce();
-
-    screen.show({ ...BLACKJACK, ...BLACKJACK_HANDS, dealerTotal: 9 });
-
-    void act(() => vi.runAllTimers());
-    expect(screen.count("[data-blackjack-card]")).toBe(4);
-    expect(screen.count('[data-playing-card-state="concealed"]')).toBe(1);
-    screen.tap(tid("gamble-blackjack-hit"));
-    expect(onHitBlackjack).toHaveBeenCalledOnce();
-  });
-
-  it("settles on the announcement, then conceals and clears the table before playing again", () => {
-    vi.useFakeTimers();
-    const onBlackjackOutcomeShown = vi.fn();
-    const onPlayAgainBlackjack = vi.fn();
-    const push: BlackjackSiteView = {
-      ...BLACKJACK,
-      ...BLACKJACK_HANDS,
-      dealerTotal: 18,
-      dealerRevealed: true,
-      outcome: "push",
-      essenceAwarded: 50,
-      resultId: testGambleResultId("fixture-blackjack-push"),
-      canPlayAgain: true,
-    };
-    const screen = renderGamble(push, {
-      onBlackjackOutcomeShown,
-      onPlayAgainBlackjack,
-    });
-    const phase = () =>
-      screen.query("[data-blackjack-departure-phase]")?.dataset
-        .blackjackDeparturePhase;
-
-    void act(() => vi.runAllTimers());
-    expect(onBlackjackOutcomeShown).toHaveBeenCalledOnce();
-    expect(screen.count('[data-playing-card-state="drawn"]')).toBe(4);
-    screen.show({ ...push, resultSettled: true });
-    void act(() => vi.runAllTimers());
-    const cards = [
-      ...screen.container.querySelectorAll("[data-blackjack-card]"),
-    ];
-    screen.tap(tid("gamble-blackjack-play-again"));
-    expect(phase()).toBe("concealing");
-    expect(screen.count('[data-playing-card-state="concealed"]')).toBe(4);
-    void act(() => vi.advanceTimersToNextTimer());
-    expect(phase()).toBe("departing");
-    expect([
-      ...screen.container.querySelectorAll("[data-blackjack-card]"),
-    ]).toEqual(cards);
-    expect(onPlayAgainBlackjack).not.toHaveBeenCalled();
-    void act(() => vi.advanceTimersToNextTimer());
-    expect(onPlayAgainBlackjack).toHaveBeenCalledOnce();
   });
 });

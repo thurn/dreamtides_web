@@ -1,0 +1,30 @@
+{
+  "bead": "hv-uzlx.3",
+  "phase": 5,
+  "baseOid": "c7fb96e0a38d05c8c67de71fbe9482f316d29ab5",
+  "implementMin": 40,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focusedBefore": 13,
+    "focused": 15,
+    "review": 24,
+    "knip": 3
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 22.47,
+  "testDelta": {
+    "files": 28,
+    "lines": 61,
+    "jsdomFiles": 28,
+    "cases": 0,
+    "fixtureModules": 10,
+    "fixtureLines": 632
+  },
+  "friction": [
+    {
+      "tag": "fixtures-lint-scope",
+      "minutes": 3,
+      "note": "eslint's TESTS glob matches only *.test.{ts,tsx}, so a sibling *.fixtures.ts module gets the production checkSemanticNames identity rule; the essence-site guide(seed: string) helper failed it once moved, and its seed is now typed as Parameters<typeof testGuideId>[0]"
+    }
+  ]
+}
