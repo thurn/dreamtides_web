@@ -53,6 +53,7 @@ import {
   sequencePrimitive,
   setBaseSparkPrimitive,
   sparkModifierPrimitive,
+  takeFromAmongPrimitive,
   triggerAbilityPrimitive,
   winTheGamePrimitive,
 } from "./primitives";
@@ -182,6 +183,9 @@ const DEFINITIONS = {
   },
   get sparkModifier() {
     return sparkModifierPrimitive;
+  },
+  get takeFromAmong() {
+    return takeFromAmongPrimitive;
   },
   get triggerAbility() {
     return triggerAbilityPrimitive;

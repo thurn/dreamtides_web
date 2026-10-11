@@ -149,6 +149,11 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [DSL.pointsTimesX.id]: { name: "Lab Surge", text: "Gain X⍟." },
   [DSL.foreseeTwo.id]: { name: "Lab Scrying", text: "Foresee 2." },
   [DSL.discoverCharacter.id]: { name: "Lab Arrival", text: "Discover a character." },
+  [DSL.erodeTakeCharacter.id]: {
+    name: "Lab Sifting Sands",
+    text: "Erode 3. You may put a ≤2● cost character from among those cards into your hand.",
+  },
+  [DSL.takeFromOpponentHand.id]: { name: "Lab Pickpocket", text: "Look at the opponent's hand. Put a card from it into your hand." },
   [STACK.preventUnlessPays.id]: { name: "Lab Denial", text: "Prevent a card the opponent played unless they pay 2●." },
   [STACK.banishVoidToDraw.id]: { name: "Lab Exhumation", text: "To play this card, banish 2 cards from your void. Draw a card." },
   [LOOP.freePoints.id]: { name: "Lab Engine", text: "Gain 1⍟." },
@@ -332,6 +337,34 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     },
     script: [],
     presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.deck, 2)] }],
+  },
+  {
+    name: "take-from-among",
+    description: "Erode 3, then up to one ≤2● cost character from among the eroded cards into the hand, or Skip",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: {
+        hand: [DSL.erodeTakeCharacter.id],
+        energy: 2,
+        deck: [vanillas[0], vanillas[2], SYNTHETIC.interruptEvent.id, vanillas[1], ...deck(3)],
+      },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.deck, 0)] }],
+  },
+  {
+    name: "take-from-opponent-hand",
+    description: "Look at the opponent's hand: a private pick of one of its cards, which goes into the human's hand",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { hand: [DSL.takeFromOpponentHand.id], energy: 2, deck: deck(6) },
+      enemy: { hand: [vanillas[0], vanillas[1], vanillas[2]], deck: deck(6) },
+    },
+    script: [],
+    presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.enemy.hand, 1)] }],
   },
   {
     name: "draw-discard",

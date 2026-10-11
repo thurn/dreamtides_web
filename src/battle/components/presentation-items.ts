@@ -65,6 +65,7 @@ export const EVENT_PRESENTATION = {
   cardDiscovered: "travel",
   cardDrawn: "travel",
   cardPlayed: "reveal",
+  cardTaken: "travel",
   ceasedToExist: "travel",
   challengersDesignated: "status",
   controlChanged: "travel",

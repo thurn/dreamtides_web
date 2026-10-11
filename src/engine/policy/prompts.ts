@@ -107,7 +107,7 @@ const LOSS_ROLES: readonly PromptRole[] = [
 ];
 
 /** Roles whose chosen card the chooser gains: it picks its most valuable offered card. */
-const GAIN_ROLES: readonly PromptRole[] = ["discover"];
+const GAIN_ROLES: readonly PromptRole[] = ["discover", "chooseAmong", "chooseFromOpponentHand"];
 
 /** How much Greedy wants `id` chosen for a prompt of `role`. */
 function cardWant(role: PromptRole, info: CardInfo | null): number {

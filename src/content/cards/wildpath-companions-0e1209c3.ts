@@ -1,3 +1,5 @@
+import { onChallenge, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 298,
   art: { x: 0.029, y: 0, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onChallenge(), p.takeFromAmong(p.movedBy(p.erode(3)), { filter: { cardType: "character" }, costAtMost: 2, optional: true }))],
+  verifiedText: "2af4tmvlsmo",
 });

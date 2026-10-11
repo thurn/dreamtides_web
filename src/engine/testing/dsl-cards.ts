@@ -119,6 +119,10 @@ export const DSL = {
   dissolvedCopiesVoidWarrior: authored(41, "character", 1, () => [triggered(onDissolved(), p.createCopyInHand(fromVoid({ subtype: "Warrior" }, { another: true })))], { spark: 1 }),
   /** "▸Dissolved: Add a copy of this character from your void to your hand." */
   dissolvedCopiesItself: authored(42, "character", 1, () => [triggered(onDissolved(), p.createCopyInHand(thisCardIn("void")))], { spark: 1 }),
+  /** "Erode 3. You may put a ≤2● cost character from among those cards into your hand." */
+  erodeTakeCharacter: authored(43, "event", 0, events(event(p.takeFromAmong(p.movedBy(p.erode(3)), { filter: { cardType: "character" }, costAtMost: 2, optional: true })))),
+  /** "Look at the opponent's hand. Put a card from it into your hand." */
+  takeFromOpponentHand: authored(44, "event", 0, events(event(p.takeFromAmong(p.opponentHand())))),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

@@ -150,10 +150,16 @@ A created card that ceases to exist instead (see [Created
 Cards](#created-cards)), such as a discarded or Ephemeral one, enters no zone and
 is not shown.
 
+An effect can let you look at the opponent's hand, as in "Look at the
+opponent's hand. Put a card from it into your hand." Only you see its cards.
+You keep knowing each of them while it stays in that hand, but not the cards
+the opponent puts into it later. The opponent sees which card you put into
+your hand, since it left their hand. An empty hand gives you nothing to choose.
+
 An effect can put a card the opponent owns into your hand, as in "Prevent a
-played card, then put that card into your hand." That card is in your hand
-like any other: you may play it, discard it, or use it to pay a cost, and you
-control it when you play it. Its owner does not change, so whenever it would
+played card, then put that card into your hand," or "Put a card from it into
+your hand." That card is in your hand like any other: you may play it, discard
+it, or use it to pay a cost, and you control it when you play it. Its owner does not change, so whenever it would
 go to a deck, a void, the Banished zone, or its owner's hand, it goes to its
 owner's.
 
@@ -699,6 +705,16 @@ remove the reclaimed status.
 **Erode N** — Put the top N cards of your deck into your void; those cards are
 the **eroded** cards. Erode can also be directed at a player, as in "The opponent
 erodes 2." Eroding with an empty deck causes Fatigue.
+
+An effect that goes on to put a card "from among those cards" into your hand,
+as in "Erode 3. You may put a ≤2● cost character from among those cards into
+your hand," chooses one of the cards that Erode just put into the void, all of
+which both players see. A card that was already in the void, or that Fatigue
+kept from being eroded, is not among them. A cost criterion compares the
+card's copiable cost, with X in its cost counting as 0, as for Discover. With
+"You may" you can choose none. If no eroded card matches, nothing is chosen.
+"Return … to your hand" works the same way. Putting the card into your hand is
+not a draw.
 
 **Fatigue** — If a player would draw from an empty deck, or erode from an empty
 deck, they suffer Fatigue instead. For each card they would have drawn or eroded,

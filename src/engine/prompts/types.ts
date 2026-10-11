@@ -38,6 +38,10 @@ export type PromptRole =
   | "foresee"
   /** The card a discover puts into its controller's hand. */
   | "discover"
+  /** The card put into its controller's hand from among the cards an effect just moved. */
+  | "chooseAmong"
+  /** The card its controller puts into their hand from the opponent's hand, which they look at. */
+  | "chooseFromOpponentHand"
   /** Whether to do a "you may". */
   | "youMay"
   /** Whether the prevented card's controller pays to stop the prevention. */

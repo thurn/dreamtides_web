@@ -101,6 +101,10 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Arrange the top of your deck";
       case "discover":
         return cards("discover");
+      case "chooseAmong":
+        return cards("put", "card", "cards", " into your hand");
+      case "chooseFromOpponentHand":
+        return cards("take", "card", "cards", " from their hand");
       case "youMay":
         return "Do you want to do this?";
       case "preventUnlessPays":
@@ -462,6 +466,11 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${who(event.side)} drew ${named(event.instance)}.`;
     case "cardPlayed":
       return `${who(event.side)} played ${named(event.instance)}.`;
+    case "cardTaken": {
+      const holder = event.holder === human ? "your" : event.holder === event.side ? "their" : "your opponent's";
+      const zone = event.from === "banished" ? "Banished zone" : event.from;
+      return `${who(event.side)} put ${named(event.instance)} from ${holder} ${zone} into ${event.side === human ? "your" : "their"} hand.`;
+    }
     case "ceasedToExist":
       // A copy leaving the stack as it resolves is no news.
       return event.from === "stack" ? null : `${card(event.instance)} ceased to exist.`;
