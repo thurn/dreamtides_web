@@ -57,8 +57,9 @@ inventory's `beads` list is the graph. Its edges:
   inventory lists them per bead (`serializedAfter`): a bead that changes an
   entity module or an engine logic file another bead also changes waits for
   the previous one. Appending to `primitives/index.ts`, `dsl/types.ts`,
-  `dsl/builders.ts`, `dsl/triggers.ts`, `specs/index.ts`, or a primitive
-  group test file is additive and needs no edge.
+  `dsl/builders.ts`, `dsl/triggers.ts`, or `specs/index.ts` is additive and
+  needs no edge. Each primitive or DSL form has its own contract module;
+  beads that change the same contract module carry a serialization edge.
 
 Content beads are claimed in inventory order, and several run at once when
 several executor sessions run ([D43](decisions.md#d43-peer-executor-sessions)).
@@ -79,7 +80,9 @@ Phase 5 beads are sized like the rest of the run: about 30–60 minutes of
 implementation each. The inventory plans three kinds:
 
 - **Primitive beads** introduce exactly one new primitive or DSL form, with
-  primitive tests on synthetic cards, plus up to three entities that need
+  primitive tests on synthetic cards in
+  `src/engine/effects/primitives/contracts/<primitive-kebab>.contracts.ts`,
+  plus up to three entities that need
   only it. They are core-review beads, as is any bead that introduces a new
   prompt kind.
 - **Composition beads** implement 1–6 entities whose primitives all exist by
@@ -111,8 +114,14 @@ composition beads skip it.
    implemented. Replace `pending: true` with the abilities and set
    `verifiedText`.
 3. **Add the primitive** a primitive bead introduces, with primitive tests
-   that use synthetic cards, in the primitive group's test file. The registry index
-   is the catalog (Phase 3.4). The session widens the bead's Areas at
+   that use synthetic cards, in
+   `src/engine/effects/primitives/contracts/<primitive-kebab>.contracts.ts`
+   (the introduced primitive or DSL form name in kebab case).
+   `contracts.test.ts` eagerly discovers these plain modules through
+   `import.meta.glob`; a new form needs only its contract module. Preserve
+   coherent contracts under 500 lines, with small shared synthetic fixtures
+   when needed. Run `npm test -- src/engine/effects/primitives/contracts.test.ts`.
+   The registry index is the catalog (Phase 3.4). The session widens the bead's Areas at
    dispatch to the files the primitive's registration needs:
    - every primitive: its getter in `src/engine/effects/registry.ts`, whose
      `satisfies` clause makes a missing one a type error;
@@ -236,7 +245,7 @@ The inventory then plans the Phase 5 beads ([§ Bead sizing](#bead-sizing)),
 family by family within each section, and lists each bead's key, kind,
 entities, weight, introduced primitive, new prompt kinds, planning edges,
 serialization edges, scenario module, and `Areas:` files. The Areas name the
-entity modules, the new primitive's module and group test file, the
+entity modules, the new primitive's module and contract module, the
 scenario module and `specs/index.ts`, `engine hubs` for primitive beads, and
 the fallout areas its
 [fallout listing](workflow.md#listing-fallout-before-dispatch) calls for.

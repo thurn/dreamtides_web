@@ -105,7 +105,7 @@ const FAMILIES: readonly Family[] = [
 // - "extension": an option on an existing primitive module (exists when
 //   `probe` matches its module);
 // - "journey": a journey-modifier hook (P8), built by 5.6.
-// `group` is the primitive group test file; `fallout` names the exported
+// `contract` is the synthetic contract module for the introduced form; `fallout` names the exported
 // symbols a new form changes, for the batch's fallout listing.
 
 const P = "src/engine/effects/primitives/";
@@ -118,7 +118,7 @@ interface PrimitiveEntry {
   readonly name: string;
   readonly kind: PrimitiveKind;
   readonly module?: string;
-  readonly group?: string;
+  readonly contract?: string;
   readonly probe?: RegExp;
   readonly fallout?: readonly string[];
   readonly symbol?: string;
@@ -130,11 +130,13 @@ interface PrimitiveExtra {
   readonly note?: string;
 }
 
-const prim = (name: string, file: string, group: string, extra: PrimitiveExtra = {}): PrimitiveEntry => ({
+const contractPath = (name: string): string => `${P}contracts/${kebab(name)}.contracts.ts`;
+
+const prim = (name: string, file: string, extra: PrimitiveExtra = {}): PrimitiveEntry => ({
   name,
   kind: "primitive",
   module: `${P}${file}`,
-  group: `${P}${group}.test.ts`,
+  contract: contractPath(name),
   ...extra,
 });
 const builder = (name: string): PrimitiveEntry => ({ name, kind: "builder" });
@@ -142,16 +144,17 @@ const dsl = (name: string, file: string, probe: RegExp, fallout: readonly string
   name,
   kind: "dsl",
   module: file,
+  ...(name === "typeRemap" ? {} : { contract: contractPath(name) }),
   probe,
   fallout,
   ...extra,
 });
-const ext = (name: string, file: string, probe: RegExp, group: string, extra: PrimitiveExtra = {}): PrimitiveEntry => ({
+const ext = (name: string, file: string, probe: RegExp, extra: PrimitiveExtra = {}): PrimitiveEntry => ({
   name,
   kind: "extension",
   module: `${P}${file}`,
   probe,
-  group: `${P}${group}.test.ts`,
+  contract: contractPath(name),
   ...extra,
 });
 const journey = (name: string, note: string): PrimitiveEntry => ({ name, kind: "journey", note });
@@ -162,42 +165,42 @@ const GAP_36 = "engine gap noted by 3.6 (d24ea640)";
 
 const PRIMITIVES: readonly PrimitiveEntry[] = [
   // Registered primitives (Phase 3).
-  prim("awaken", "awaken.ts", "characters"),
-  prim("banish", "banish.ts", "characters"),
-  prim("banishUntil", "banish-until.ts", "characters"),
-  prim("chooseOne", "choose-one.ts", "flow"),
-  prim("copyCard", "copy-card.ts", "stack"),
-  prim("costModifier", "cost-modifier.ts", "resources"),
-  prim("createCopyInHand", "create-copy-in-hand.ts", "cards"),
-  prim("disableTriggers", "disable-triggers.ts", "characters"),
-  prim("discard", "discard.ts", "cards"),
-  prim("dissolve", "dissolve.ts", "characters"),
-  prim("draw", "draw.ts", "cards"),
-  prim("erode", "erode.ts", "cards"),
-  prim("exhaust", "exhaust.ts", "characters"),
-  prim("floating", "floating-trigger.ts", "flow"),
-  prim("forDuration", "for-duration.ts", "flow"),
-  prim("foresee", "foresee.ts", "cards"),
-  prim("gainControl", "gain-control.ts", "characters"),
-  prim("gainEnergy", "gain-energy.ts", "resources"),
-  prim("gainMaxEnergy", "gain-max-energy.ts", "resources"),
-  prim("gainPoints", "gain-points.ts", "resources"),
-  prim("gainSpark", "gain-spark.ts", "characters"),
-  prim("giveAllTypes", "give-all-types.ts", "characters"),
-  prim("grant", "grant.ts", "characters"),
-  prim("ifThen", "if-then.ts", "flow"),
-  prim("materializeFigmentCopy", "materialize-figment-copy.ts", "characters"),
-  prim("materializeFigments", "materialize-figments.ts", "characters"),
-  prim("optional", "optional.ts", "flow"),
-  prim("phase", "phase.ts", "characters"),
-  prim("prevent", "prevent.ts", "stack"),
-  prim("repeat", "repeat.ts", "flow"),
-  prim("returnToHand", "return-to-hand.ts", "characters"),
-  prim("sequence", "sequence.ts", "flow"),
-  prim("setBaseSpark", "set-base-spark.ts", "characters"),
-  prim("sparkModifier", "spark-modifier.ts", "characters"),
-  prim("triggerAbility", "trigger-ability.ts", "characters"),
-  prim("winTheGame", "win-the-game.ts", "flow"),
+  prim("awaken", "awaken.ts"),
+  prim("banish", "banish.ts"),
+  prim("banishUntil", "banish-until.ts"),
+  prim("chooseOne", "choose-one.ts"),
+  prim("copyCard", "copy-card.ts"),
+  prim("costModifier", "cost-modifier.ts"),
+  prim("createCopyInHand", "create-copy-in-hand.ts"),
+  prim("disableTriggers", "disable-triggers.ts"),
+  prim("discard", "discard.ts"),
+  prim("dissolve", "dissolve.ts"),
+  prim("draw", "draw.ts"),
+  prim("erode", "erode.ts"),
+  prim("exhaust", "exhaust.ts"),
+  prim("floating", "floating-trigger.ts"),
+  prim("forDuration", "for-duration.ts"),
+  prim("foresee", "foresee.ts"),
+  prim("gainControl", "gain-control.ts"),
+  prim("gainEnergy", "gain-energy.ts"),
+  prim("gainMaxEnergy", "gain-max-energy.ts"),
+  prim("gainPoints", "gain-points.ts"),
+  prim("gainSpark", "gain-spark.ts"),
+  prim("giveAllTypes", "give-all-types.ts"),
+  prim("grant", "grant.ts"),
+  prim("ifThen", "if-then.ts"),
+  prim("materializeFigmentCopy", "materialize-figment-copy.ts"),
+  prim("materializeFigments", "materialize-figments.ts"),
+  prim("optional", "optional.ts"),
+  prim("phase", "phase.ts"),
+  prim("prevent", "prevent.ts"),
+  prim("repeat", "repeat.ts"),
+  prim("returnToHand", "return-to-hand.ts"),
+  prim("sequence", "sequence.ts"),
+  prim("setBaseSpark", "set-base-spark.ts"),
+  prim("sparkModifier", "spark-modifier.ts"),
+  prim("triggerAbility", "trigger-ability.ts"),
+  prim("winTheGame", "win-the-game.ts"),
   // Registered DSL builders.
   ...[
     "keyword", "reclaim", "additionalCost", "optionalCost", "choiceCost", "abandonCost", "discardCost",
@@ -209,10 +212,10 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
     "whenLeavesVoid", "whenYouChallengeWith", "atStartOfTurn", "atStartOfFirstTurn", "sourceIn", "triggeringCard",
     "whileSourceInPlay", "untilEndOfTurn", "untilYourNextTurn", "untilOpponentPays",
   ].map((name) => builder(name)),
-  prim("gainAdditionalSpark", "gain-spark.ts", "characters", { symbol: "gainAdditionalSpark" }),
-  prim("delayed", "floating-trigger.ts", "flow", { symbol: "delayed" }),
-  prim("discardRandom", "discard.ts", "cards", { symbol: "discardRandom" }),
-  prim("loseKeyword", "grant.ts", "characters", { symbol: "loseKeyword" }),
+  prim("gainAdditionalSpark", "gain-spark.ts", { symbol: "gainAdditionalSpark" }),
+  prim("delayed", "floating-trigger.ts", { symbol: "delayed" }),
+  prim("discardRandom", "discard.ts", { symbol: "discardRandom" }),
+  prim("loseKeyword", "grant.ts", { symbol: "loseKeyword" }),
   dsl("banishFromHandCost", DSL_TYPES, /cost: "banishFromHand"/, []),
   dsl("conditionControls", DSL_TYPES, /cond: "controls"/, []),
   dsl("conditionEnergyAtLeast", DSL_TYPES, /cond: "energyAtLeast"/, []),
@@ -222,53 +225,53 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("functionalZones", DSL_TYPES, /export type FunctionalZone/, []),
   dsl("oncePerTurn", DSL_TYPES, /oncePerTurn\?: boolean/, []),
   dsl("speedFast", DSL_TYPES, /export type Speed = "standard" \| "fast"/, []),
-  ext("preventDestination", "prevent.ts", /destination\?: PreventDestination/, "stack"),
+  ext("preventDestination", "prevent.ts", /destination\?: PreventDestination/),
 
   // Phase 5: cards group.
-  prim("discover", "discover.ts", "cards", { note: "Discover (engine-design § Primitive catalog)" }),
-  prim("lookAtTop", "look-at-top.ts", "cards", { note: "lookAtTop(n, distribute)" }),
-  prim("reveal", "reveal.ts", "cards"),
-  prim("shuffleInto", "shuffle-into.ts", "cards"),
-  prim("putInDeck", "put-in-deck.ts", "cards", { note: "putOnTop / putOnBottom" }),
-  prim("drawMatching", "draw-matching.ts", "cards", { note: "draw a card matching a filter (\"Draw a warrior\")" }),
-  prim("discardChosen", "discard-chosen.ts", "cards", { note: "discard a card the controller chooses from the opponent's hand" }),
-  prim("takeFromAmong", "take-from-among.ts", "cards", { note: "put chosen cards from among looked-at or eroded cards into hand" }),
-  prim("returnFromVoid", "return-from-void.ts", "cards", { note: "return a card from a void to its owner's hand" }),
-  prim("banishCards", "banish-cards.ts", "cards", { note: "banish cards from a void or hand, optionally until a duration" }),
-  prim("grantReclaim", "grant-reclaim.ts", "cards", { note: `a card in a void gains Reclaim, costed or not (${GAP_38})` }),
-  prim("grantCardKeyword", "grant-card-keyword.ts", "cards", { note: "cards in hand, void, or deck gain a keyword" }),
-  prim("modifyCardCost", "modify-card-cost.ts", "cards", { note: "\"it costs 0● this turn\", \"reduce its cost by 1●\"" }),
-  prim("createCard", "create-card.ts", "cards", { note: "create a named or random catalog card in hand (C1, C11)" }),
+  prim("discover", "discover.ts", { note: "Discover (engine-design § Primitive catalog)" }),
+  prim("lookAtTop", "look-at-top.ts", { note: "lookAtTop(n, distribute)" }),
+  prim("reveal", "reveal.ts"),
+  prim("shuffleInto", "shuffle-into.ts"),
+  prim("putInDeck", "put-in-deck.ts", { note: "putOnTop / putOnBottom" }),
+  prim("drawMatching", "draw-matching.ts", { note: "draw a card matching a filter (\"Draw a warrior\")" }),
+  prim("discardChosen", "discard-chosen.ts", { note: "discard a card the controller chooses from the opponent's hand" }),
+  prim("takeFromAmong", "take-from-among.ts", { note: "put chosen cards from among looked-at or eroded cards into hand" }),
+  prim("returnFromVoid", "return-from-void.ts", { note: "return a card from a void to its owner's hand" }),
+  prim("banishCards", "banish-cards.ts", { note: "banish cards from a void or hand, optionally until a duration" }),
+  prim("grantReclaim", "grant-reclaim.ts", { note: `a card in a void gains Reclaim, costed or not (${GAP_38})` }),
+  prim("grantCardKeyword", "grant-card-keyword.ts", { note: "cards in hand, void, or deck gain a keyword" }),
+  prim("modifyCardCost", "modify-card-cost.ts", { note: "\"it costs 0● this turn\", \"reduce its cost by 1●\"" }),
+  prim("createCard", "create-card.ts", { note: "create a named or random catalog card in hand (C1, C11)" }),
   // Phase 5: resources group.
-  prim("doubleEnergy", "double-energy.ts", "resources"),
-  prim("loseEnergy", "lose-energy.ts", "resources"),
-  prim("losePoints", "lose-points.ts", "resources", { note: "C14: stops at 0" }),
-  prim("storeCounters", "store-counters.ts", "resources", { note: "store N⧗ (engine-design: store)" }),
+  prim("doubleEnergy", "double-energy.ts"),
+  prim("loseEnergy", "lose-energy.ts"),
+  prim("losePoints", "lose-points.ts", { note: "C14: stops at 0" }),
+  prim("storeCounters", "store-counters.ts", { note: "store N⧗ (engine-design: store)" }),
   // Phase 5: characters group.
-  prim("abandon", "abandon.ts", "characters", { note: "abandon(chooser, predicate) as an effect" }),
-  prim("materialize", "materialize.ts", "characters", { note: `materialize(from, selection) from void, deck, or hand (${GAP_38})` }),
-  prim("rematerialize", "rematerialize.ts", "characters"),
-  prim("move", "move.ts", "characters", { note: "move(slotRule)" }),
-  prim("loseAllAbilities", "lose-all-abilities.ts", "characters"),
-  prim("gainAbilities", "gain-abilities.ts", "characters"),
-  prim("chooseSubtype", "choose-subtype.ts", "characters", { note: "choose a character type and record it on the source" }),
+  prim("abandon", "abandon.ts", { note: "abandon(chooser, predicate) as an effect" }),
+  prim("materialize", "materialize.ts", { note: `materialize(from, selection) from void, deck, or hand (${GAP_38})` }),
+  prim("rematerialize", "rematerialize.ts"),
+  prim("move", "move.ts", { note: "move(slotRule)" }),
+  prim("loseAllAbilities", "lose-all-abilities.ts"),
+  prim("gainAbilities", "gain-abilities.ts"),
+  prim("chooseSubtype", "choose-subtype.ts", { note: "choose a character type and record it on the source" }),
   // Phase 5: stack group.
-  ext("copyCardTimes", "copy-card.ts", /times/, "stack", { note: "copying more than once" }),
-  ext("preventUnlessAbandons", "prevent.ts", /unlessAbandons/, "stack"),
-  prim("playRestriction", "play-restriction.ts", "stack", { note: "continuous: limits which cards a player may play" }),
+  ext("copyCardTimes", "copy-card.ts", /times/, { note: "copying more than once" }),
+  ext("preventUnlessAbandons", "prevent.ts", /unlessAbandons/),
+  prim("playRestriction", "play-restriction.ts", { note: "continuous: limits which cards a player may play" }),
   // Phase 5: flow group.
-  prim("eachPlayer", "each-player.ts", "flow"),
-  prim("choosePlayer", "choose-player.ts", "flow"),
-  prim("ruleModifier", "rule-modifier.ts", "flow", { note: "continuous changes to turn rules: draw counts, energy carry-over, ephemeral retention, Offering payment" }),
-  prim("drawDreamwell", "draw-dreamwell.ts", "resources", { note: "C16: draw an additional Dreamwell card" }),
-  prim("takeExtraTurn", "take-extra-turn.ts", "flow", { note: "C8" }),
+  prim("eachPlayer", "each-player.ts"),
+  prim("choosePlayer", "choose-player.ts"),
+  prim("ruleModifier", "rule-modifier.ts", { note: "continuous changes to turn rules: draw counts, energy carry-over, ephemeral retention, Offering payment" }),
+  prim("drawDreamwell", "draw-dreamwell.ts", { note: "C16: draw an additional Dreamwell card" }),
+  prim("takeExtraTurn", "take-extra-turn.ts", { note: "C8" }),
   // Phase 5: continuous permissions.
-  prim("playFromZone", "play-from-zone.ts", "cards", { note: "continuous: cards may be played from the void or the top of the deck" }),
-  prim("reclaimNotBanished", "reclaim-not-banished.ts", "cards", { note: `continuous: cards you reclaim are not banished (${GAP_38})` }),
+  prim("playFromZone", "play-from-zone.ts", { note: "continuous: cards may be played from the void or the top of the deck" }),
+  prim("reclaimNotBanished", "reclaim-not-banished.ts", { note: `continuous: cards you reclaim are not banished (${GAP_38})` }),
   // Phase 5: cost modifiers.
-  ext("costModifierNth", "cost-modifier.ts", /nthInTurn|nth:/, "resources", { note: "\"the first warrior you play each turn costs…\"" }),
-  ext("costModifierReclaim", "cost-modifier.ts", /reclaim/i, "resources", { note: "\"Reclaim abilities cost you 1● less\"" }),
-  ext("costModifierActivated", "cost-modifier.ts", /activated/, "resources", { note: `cost modifiers on activated abilities (${GAP_37})` }),
+  ext("costModifierNth", "cost-modifier.ts", /nthInTurn|nth:/, { note: "\"the first warrior you play each turn costs…\"" }),
+  ext("costModifierReclaim", "cost-modifier.ts", /reclaim/i, { note: "\"Reclaim abilities cost you 1● less\"" }),
+  ext("costModifierActivated", "cost-modifier.ts", /activated/, { note: `cost modifiers on activated abilities (${GAP_37})` }),
   // Phase 5: DSL additions.
   dsl("selectorFigment", DSL_TYPES, /readonly figment\?: boolean/, ["CharacterSelector"], { note: "figment or not" }),
   dsl("selectorHasAbility", DSL_TYPES, /readonly hasAbility\?/, ["CharacterSelector", "CardFilter"], { note: "\"characters with ▸Materialized abilities\"" }),
@@ -1069,20 +1072,20 @@ const DSL_READERS: Readonly<Record<string, readonly string[]>> = {
   Variant: [],
 };
 
-function areaFiles(names: readonly string[]): { modules: string[]; groups: string[]; fallout: string[] } {
+function areaFiles(names: readonly string[]): { modules: string[]; contracts: string[]; fallout: string[] } {
   const modules = new Set<string>();
-  const groups = new Set<string>();
+  const contracts = new Set<string>();
   const fallout = new Set<string>();
   for (const name of names) {
     const entry = primitive(name);
     if (entry.module !== undefined && entry.kind !== "journey") modules.add(entry.module);
-    if (entry.group !== undefined) groups.add(entry.group);
+    if (entry.contract !== undefined) contracts.add(entry.contract);
     for (const symbol of entry.fallout ?? []) {
       fallout.add(symbol);
       for (const file of DSL_READERS[symbol] ?? []) modules.add(file);
     }
   }
-  return { modules: [...modules].sort(compare), groups: [...groups].sort(compare), fallout: [...fallout].sort(compare) };
+  return { modules: [...modules].sort(compare), contracts: [...contracts].sort(compare), fallout: [...fallout].sort(compare) };
 }
 
 interface IntroducedPrimitive {
@@ -1093,7 +1096,9 @@ interface IntroducedPrimitive {
 
 const introduction = (name: string): IntroducedPrimitive => ({ name, kind: primitive(name).kind, module: primitive(name).module ?? null });
 
-const kebab = (name: string): string => name.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();
+function kebab(name: string): string {
+  return name.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();
+}
 
 /**
  * - "primitive": introduces one new primitive or DSL form, with tests on
@@ -1251,7 +1256,7 @@ class Planner {
     const shared = [
       ...files.modules,
       ...(files.modules.some((file) => file.startsWith(P)) ? [`${P}index.ts`] : []),
-      ...files.groups,
+      ...files.contracts,
       ...(introduces.length > 0 || newPromptKinds.length > 0 ? ["engine hubs"] : []),
       ...[...fallout].sort(compare).map((symbol) => `fallout: ${symbol}`),
     ];
@@ -1294,7 +1299,7 @@ class Planner {
 }
 
 // Shared files a bead only appends to (workflow.md § Serialization edges): a
-// new union member, registry entry, builder, or group test needs no edge.
+// new union member, registry entry, or builder needs no edge. Contract modules serialize by their path.
 const ADDITIVE_FILES: ReadonlySet<string> = new Set([`${P}index.ts`, DSL_TYPES, DSL_TRIGGERS, "src/engine/dsl/builders.ts", SPECS_INDEX]);
 
 /**

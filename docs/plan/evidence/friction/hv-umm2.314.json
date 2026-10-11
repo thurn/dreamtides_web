@@ -1,0 +1,954 @@
+{
+  "bead": "hv-umm2.314",
+  "phase": 5,
+  "base": "4ffded8b287d53f1a5f1c7160767137c7fd1c3e8",
+  "implementMin": 12,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 2.5717564999940805,
+    "review": 8.688833458989393,
+    "full": 48.77404058299726,
+    "knip": 1.9730565419886261,
+    "baselineTest": 32.36533508298453,
+    "baselineCollection": 17.7095768340223,
+    "finalCollection": 16.173970707983244,
+    "relatedSelection": 5.926265665999381
+  },
+  "validationRuns": [
+    {
+      "stage": "install",
+      "seconds": 2.3224765000049956,
+      "load_start": [
+        5.751953125,
+        8.84130859375,
+        8.3515625
+      ],
+      "load_end": [
+        7.052734375,
+        9.0595703125,
+        8.43115234375
+      ],
+      "pid": 60188,
+      "exit": 0
+    },
+    {
+      "stage": "baseline-list",
+      "seconds": 13.159179540991317,
+      "load_start": [
+        5.875,
+        8.65185546875,
+        8.29833984375
+      ],
+      "load_end": [
+        5.39794921875,
+        8.40771484375,
+        8.216796875
+      ],
+      "pid": 60585,
+      "exit": 1
+    },
+    {
+      "stage": "baseline-test",
+      "seconds": 32.36533508298453,
+      "load_start": [
+        5.35595703125,
+        8.20263671875,
+        8.146484375
+      ],
+      "load_end": [
+        5.22900390625,
+        7.89599609375,
+        8.0361328125
+      ],
+      "pid": 61329,
+      "exit": 0
+    },
+    {
+      "stage": "baseline-list-prepared",
+      "seconds": 17.7095768340223,
+      "load_start": [
+        4.81201171875,
+        7.7177734375,
+        7.970703125
+      ],
+      "load_end": [
+        5.0615234375,
+        7.63232421875,
+        7.935546875
+      ],
+      "pid": 63385,
+      "exit": 0
+    },
+    {
+      "stage": "migrated-focused",
+      "seconds": 1.9502070419839583,
+      "load_start": [
+        3.796875,
+        6.84912109375,
+        7.6240234375
+      ],
+      "load_end": [
+        3.796875,
+        6.84912109375,
+        7.6240234375
+      ],
+      "pid": 64756,
+      "exit": 1
+    },
+    {
+      "stage": "migrated-focused-corrected",
+      "seconds": 2.564067375002196,
+      "load_start": [
+        3.623046875,
+        6.0869140625,
+        7.26513671875
+      ],
+      "load_end": [
+        3.57275390625,
+        6.03564453125,
+        7.23974609375
+      ],
+      "pid": 66205,
+      "exit": 1
+    },
+    {
+      "stage": "relocated-typecheck",
+      "seconds": 3.832874832995003,
+      "load_start": [
+        3.564453125,
+        5.95166015625,
+        7.19580078125
+      ],
+      "load_end": [
+        3.91943359375,
+        5.9853515625,
+        7.2001953125
+      ],
+      "pid": 66606,
+      "exit": 0
+    },
+    {
+      "stage": "focused-final",
+      "seconds": 2.5717564999940805,
+      "load_start": [
+        4.0009765625,
+        5.84033203125,
+        7.1123046875
+      ],
+      "load_end": [
+        4.80126953125,
+        5.9755859375,
+        7.15234375
+      ],
+      "pid": 67162,
+      "exit": 0
+    },
+    {
+      "stage": "list-final",
+      "seconds": 16.173970707983244,
+      "load_start": [
+        4.80126953125,
+        5.9755859375,
+        7.15234375
+      ],
+      "load_end": [
+        5.6201171875,
+        6.10498046875,
+        7.177734375
+      ],
+      "pid": 67273,
+      "exit": 0
+    },
+    {
+      "stage": "related-probe",
+      "seconds": 5.926265665999381,
+      "load_start": [
+        5.6201171875,
+        6.10498046875,
+        7.177734375
+      ],
+      "load_end": [
+        5.41015625,
+        6.05322265625,
+        7.15283203125
+      ],
+      "pid": 67481,
+      "exit": 0,
+      "queue_wait_seconds": null
+    },
+    {
+      "stage": "review",
+      "seconds": 8.45308166698669,
+      "load_start": [
+        5.09521484375,
+        5.9521484375,
+        7.09716796875
+      ],
+      "load_end": [
+        4.6923828125,
+        5.837890625,
+        7.04296875
+      ],
+      "pid": 67853,
+      "exit": 0,
+      "queue_wait_seconds": 0.016990184783935547
+    },
+    {
+      "stage": "full",
+      "seconds": 48.77404058299726,
+      "load_start": [
+        4.525390625,
+        5.74658203125,
+        6.98876953125
+      ],
+      "load_end": [
+        4.65869140625,
+        5.59814453125,
+        6.861328125
+      ],
+      "pid": 68265,
+      "exit": 0,
+      "queue_wait_seconds": 0.019344091415405273
+    },
+    {
+      "stage": "knip",
+      "seconds": 2.2458530409785453,
+      "load_start": [
+        3.7587890625,
+        5.15966796875,
+        6.60205078125
+      ],
+      "load_end": [
+        3.7587890625,
+        5.15966796875,
+        6.60205078125
+      ],
+      "pid": 71214,
+      "exit": 0,
+      "queue_wait_seconds": 0.019569873809814453
+    },
+    {
+      "stage": "final-review",
+      "seconds": 8.688833458989393,
+      "load_start": [
+        3.78564453125,
+        4.6904296875,
+        6.20947265625
+      ],
+      "load_end": [
+        4.4462890625,
+        4.79931640625,
+        6.22998046875
+      ],
+      "pid": 73203,
+      "exit": 0,
+      "queue_wait_seconds": 0.017091751098632812
+    },
+    {
+      "stage": "final-knip",
+      "seconds": 1.9730565419886261,
+      "load_start": [
+        4.46533203125,
+        4.69384765625,
+        6.08837890625
+      ],
+      "load_end": [
+        4.828125,
+        4.76513671875,
+        6.10498046875
+      ],
+      "pid": 74283,
+      "exit": 0,
+      "queue_wait_seconds": 0.017050981521606445
+    }
+  ],
+  "heavyQueueWaitS": 0.09004688262939453,
+  "heavyQueueWaitCoverage": "Final review/full/knip waits measured separately; initial install/baseline/focused/list/probe waits were not instrumented and are null, not zero. Command durations begin inside the acquired heavy slot.",
+  "hostLoad": 4.525390625,
+  "testDelta": {
+    "cases": 0,
+    "files": -4,
+    "addedTestModules": 1,
+    "deletedTestModules": 5,
+    "addedPlainContracts": 34,
+    "addedSupportModules": 5,
+    "jsdomFiles": 0,
+    "oldGroupLines": 3401,
+    "plainContractAndSupportLines": 3840,
+    "runnerLines": 2,
+    "mechanicalTestLinesDelta": 441,
+    "maxContractLines": 462,
+    "maxSupportLines": 56
+  },
+  "collectionParity": {
+    "baseline_cases": 2823,
+    "final_cases": 2823,
+    "baseline_files": 220,
+    "final_files": 216,
+    "normalized_full_case_name_multiplicities_identical": true,
+    "cases_moved": 142,
+    "multiset_sha256": "2fe993175f690bcbd9a3aef5a102937b0a66ff908ca33be4e31f346e3eca2be2",
+    "baseline_list_sha256": "374e4945534fdc5f587b028b885ec041c4196f4479b4f8467c67f56343523757",
+    "final_list_sha256": "52ff9c1cf2d91ff21b7c4d3fcc76745a41429067aab3995f0f321a4e4663e401"
+  },
+  "orderedBodyParity": {
+    "it_blocks": 142,
+    "key": [
+      "original_group",
+      "full_case_name"
+    ],
+    "comparison": "Ordered TypeScript token sequences within each entire it(...) call, ignoring trivia; keyed records retain multiplicity.",
+    "all_equal": true,
+    "fixture_declaration_sequences_equal_after_export_modifiers": true,
+    "original_fixture_declarations": 68,
+    "moved_fixture_declarations": 73,
+    "mechanical_exception": "Support declarations add export modifiers; contract imports replace file-local access. Repeated dependencies are exact copies."
+  },
+  "relatedSelection": {
+    "primitiveImplementation": {
+      "path": "src/engine/effects/primitives/discover.ts",
+      "relatedFiles": 157,
+      "runnerSelected": true
+    },
+    "plainContract": {
+      "path": "src/engine/effects/primitives/contracts/discover.contracts.ts",
+      "relatedFiles": 1,
+      "runnerSelected": true
+    },
+    "mechanism": "Vitest getRelevantTestSpecifications, same API used by review-related-tests.mjs"
+  },
+  "performanceComparison": {
+    "workers": 2,
+    "baselineCommandS": 32.36533508298453,
+    "finalFullCommandS": 48.77404058299726,
+    "baselineVitestDurationS": 29.99,
+    "finalVitestDurationS": 27.73,
+    "baselineReleaseTestStepS": 30.3,
+    "finalReleaseTestStepS": 28.1,
+    "relativeChangePercent": -7.26072607260726,
+    "withinTenPercent": true,
+    "baselineLoadStart": [
+      5.35595703125,
+      8.20263671875,
+      8.146484375
+    ],
+    "baselineLoadEnd": [
+      5.22900390625,
+      7.89599609375,
+      8.0361328125
+    ],
+    "finalLoadStart": [
+      4.525390625,
+      5.74658203125,
+      6.98876953125
+    ],
+    "finalLoadEnd": [
+      4.65869140625,
+      5.59814453125,
+      6.861328125
+    ],
+    "interpretation": "Same source baseline, machine and two workers; similar one-minute load. Measured test step meets acceptance; lower longer-window load prevents attributing the measured improvement solely to module organization. No timing threshold added to CI."
+  },
+  "inventoryRegeneration": {
+    "tracked_inventory_sha256": "3f795395cbfc539fa36134f0c8b334826f8c1a9b2eac7c8b1cbaf059fb8c437c",
+    "current_generator_baseline_sha256": "8c05a5f9859a91aad37b634b068e539968758e06b2e8c287653c6283ace85188",
+    "final_generated_sha256": "f8ba7e3c2e0d2f8c234ad5e03f2a4c5645c12873a3f84b57db7961627d8b9f41",
+    "entities": 1209,
+    "entity_uuid_sets_equal": true,
+    "tracked_beads": 247,
+    "current_beads": 239,
+    "final_beads": 239,
+    "baseline_removed_keys": [
+      "prim-card-filter-bounds",
+      "prim-condition-card-counts",
+      "prim-discard-chosen",
+      "prim-discard-cost-filter",
+      "prim-discover",
+      "prim-grant-card-keyword",
+      "prim-look-at-top",
+      "prim-reveal",
+      "prim-selector-bounds",
+      "prim-selector-challenger",
+      "prim-selector-figment",
+      "prim-static-zones",
+      "prim-take-from-among",
+      "prim-zone-card-refs"
+    ],
+    "baseline_added_keys": [
+      "cards-100",
+      "cards-101",
+      "cards-102",
+      "cards-98",
+      "cards-99",
+      "pilot-03"
+    ],
+    "mapping_delta_fields_only": [
+      "areas",
+      "sharedAreas"
+    ]
+  },
+  "sourceFileSha256": {
+    "scripts/content-inventory.ts": "87fc5e1b0e8e61b02b2d9aef1168e2d7682cbadd141e2a177b5bc5cffde1cbc3",
+    "docs/plan/phase-5-content.md": "419d980a14a79af0f5ee442b10affb705a74ed2e363bc1c4303ff9fc9b203cd7",
+    "docs/plan/evidence/content-inventory.json": "f8ba7e3c2e0d2f8c234ad5e03f2a4c5645c12873a3f84b57db7961627d8b9f41",
+    "src/engine/effects/primitives/contracts.test.ts": "326f74ddd5a9c4283a117c4c6a2a42d6b11c008e8988da6c3f2df65a1994d853",
+    "src/engine/effects/primitives/contracts/awaken.contracts.ts": "4c1dba9fb4859bfab696ac507a8175c48c9f6b98469cdcd54114a2211354b1b1",
+    "src/engine/effects/primitives/contracts/banish.contracts.ts": "e1c0935b3915c15e338f78e9bd6eb16f6864341df78ac35663a847f894825bc2",
+    "src/engine/effects/primitives/contracts/cannot-be-targeted.contracts.ts": "5f00b3b1f4b6b852b3f0783791f51d7ea0217c494aafad61dd8eee6439642c8e",
+    "src/engine/effects/primitives/contracts/card-filter-bounds.contracts.ts": "c62412cd412122773b1838248df72bc8616ebe689830f03b4495b1e0b488333b",
+    "src/engine/effects/primitives/contracts/cards-support.ts": "6a031ee85c80ea5add748e1c2214c053608fe1e0c04ba89ac9195c9cc8ab6c07",
+    "src/engine/effects/primitives/contracts/characters-support.ts": "7e2634186ee6157c939899840f1b35e5695f389e11e1e4d9fbd028ac16358383",
+    "src/engine/effects/primitives/contracts/choose-one.contracts.ts": "36c50bd3a43daf26520acf233379506819cdfb084ffbac9d85e84cef50c06866",
+    "src/engine/effects/primitives/contracts/condition-card-counts.contracts.ts": "d8a2c5d61761e774ec935446490b1ded55a387f3044f4e9b78945f201fce9aee",
+    "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts": "3da6fb89398ef25cf39f061c7d530b8ace8cf8f9390d8ddd160fa1c0facc4b9c",
+    "src/engine/effects/primitives/contracts/discard-random.contracts.ts": "ea9745ae0c65d94172137a25770108307503b3b34bd36ef6a28f50ccc66386a6",
+    "src/engine/effects/primitives/contracts/discard.contracts.ts": "bcdde4bd1f63813ef8dfb9f630e691830ee50d98146dc40e2fac401ce0003cb1",
+    "src/engine/effects/primitives/contracts/discover.contracts.ts": "e40a2ec6c23545674cb44bf432e7f6ab99dfdc1f15ef595f77177a6ac27a68d8",
+    "src/engine/effects/primitives/contracts/dissolve.contracts.ts": "df76eb2a19c671b2fd5c7dea812913e7b51f2013af8c3a584be35e69a772e8ed",
+    "src/engine/effects/primitives/contracts/draw.contracts.ts": "a45c952d91286712e83046e23bd8d967cb3b3989a6926e5b81a498750ba1331e",
+    "src/engine/effects/primitives/contracts/erode.contracts.ts": "76f0b05c42cf3457d855fb47ebb8fb52bdf077eb94445cf70ccc5302fd2e7164",
+    "src/engine/effects/primitives/contracts/flow-support.ts": "663048afd3c0ee63adf7a29354d565b02f5c47ee60cf2ac67a04ac7160526510",
+    "src/engine/effects/primitives/contracts/foresee.contracts.ts": "ab64cc3151222d80525673a4f4b284f693fc24ff21790566533c4fd82ff5798a",
+    "src/engine/effects/primitives/contracts/gain-energy.contracts.ts": "405e1d805abb19ba70cb892ffa0b39a36ed4a188ac53435b933b579faa15a66e",
+    "src/engine/effects/primitives/contracts/gain-max-energy.contracts.ts": "7681f476a518b45fa08c83ab089a083b039497110c3cbf58114c586e4acabedf",
+    "src/engine/effects/primitives/contracts/gain-points.contracts.ts": "81f783e1b33c2f71e3509f232945654329e4500fc87e178e6b29b8e8d3027a60",
+    "src/engine/effects/primitives/contracts/gain-spark.contracts.ts": "ce2b9d4ac02f217593509881dba1e597cdc9c290e4ae06b46346df196eafe687",
+    "src/engine/effects/primitives/contracts/grant-card-keyword.contracts.ts": "a4ecfccce335421031e1b5e02fc7f184f6f2c17351a8f94b948132bf0d1f823d",
+    "src/engine/effects/primitives/contracts/if-then.contracts.ts": "7b63f168e57e4369731eb6ca046b687ad205a22c30ee98d5f1dff3f44c7c598e",
+    "src/engine/effects/primitives/contracts/look-at-top.contracts.ts": "741bd848ec3fd8208c27206e8b64f3fe388a7864422e851a2bca4962d3e04b53",
+    "src/engine/effects/primitives/contracts/optional.contracts.ts": "949b11df02ef7c355181000c3b55742c6c138d6072178597033563eb13964510",
+    "src/engine/effects/primitives/contracts/play-time-targets.contracts.ts": "68e985a1338290b9c2a07702303f49a9240f6280ade82a93feb9286d06392bd8",
+    "src/engine/effects/primitives/contracts/prevent.contracts.ts": "6c069a21579d5364f5474e2ee8fc09b00c5ff708dcda6ad20e9a3a3d775719a8",
+    "src/engine/effects/primitives/contracts/primitive-registry.contracts.ts": "265fccdc08a427295ceb4802efdbb46fec6db94c2f97d7dcaaa13c88cacb0293",
+    "src/engine/effects/primitives/contracts/repeat.contracts.ts": "45cd1fe16233201f005e39259d75ac5a5cfdf9ae0b410c525308a21a64609acc",
+    "src/engine/effects/primitives/contracts/resources-support.ts": "3ce4e8dbc27fb24d7e59ee3ac3b9dd6495021369241a8179b7c7499ac79f194f",
+    "src/engine/effects/primitives/contracts/return-to-hand.contracts.ts": "55a8ac8272881cfbd92a78de45c2a21bc49744a8087a0919286902ee96074cc3",
+    "src/engine/effects/primitives/contracts/reveal.contracts.ts": "e51c838759abb6129f9b8c8961d52ecfbb1e0c413ca7f852c2b97ab97d08e53d",
+    "src/engine/effects/primitives/contracts/selector-bounds.contracts.ts": "e84f92e45aff26dfadb5b8a5833ca595fbcbd7beb380379e6e4de8a20f1a93be",
+    "src/engine/effects/primitives/contracts/selector-challenger.contracts.ts": "fc49cba1dd95c90e49eb958a14ca014d7e26702a591a6791912c538273882775",
+    "src/engine/effects/primitives/contracts/sequence.contracts.ts": "d1b39cd64f57fef8abbd87cbd9be6dae7d0ff0e1f5dd2cf30599ccf3aaee1c11",
+    "src/engine/effects/primitives/contracts/stack-support.ts": "8604c26ed1c38036c7cee4cc90fd53bbfe20dbd09a507e1fd00bfd31d9a91f76",
+    "src/engine/effects/primitives/contracts/take-from-among.contracts.ts": "8d30a5bd4556c044ecd8615d3a3407de3bf419f18f87f2ea5ed89253c1ad6973",
+    "src/engine/effects/primitives/contracts/win-the-game.contracts.ts": "caedb14fbed26131a1b9a5a322b50c3945d7e56021919bf4880952522f42da0b",
+    "src/engine/effects/primitives/contracts/zone-card-refs.contracts.ts": "a05b96a450f2094783b5a0f03c94b4d4786ff64cf86258f99e29382afce41650"
+  },
+  "runtimeLedger": {
+    "commands": [
+      {
+        "stage": "install",
+        "seconds": 2.3224765000049956,
+        "load_start": [
+          5.751953125,
+          8.84130859375,
+          8.3515625
+        ],
+        "load_end": [
+          7.052734375,
+          9.0595703125,
+          8.43115234375
+        ],
+        "pid": 60188,
+        "exit": 0
+      },
+      {
+        "stage": "baseline-list",
+        "seconds": 13.159179540991317,
+        "load_start": [
+          5.875,
+          8.65185546875,
+          8.29833984375
+        ],
+        "load_end": [
+          5.39794921875,
+          8.40771484375,
+          8.216796875
+        ],
+        "pid": 60585,
+        "exit": 1
+      },
+      {
+        "stage": "baseline-test",
+        "seconds": 32.36533508298453,
+        "load_start": [
+          5.35595703125,
+          8.20263671875,
+          8.146484375
+        ],
+        "load_end": [
+          5.22900390625,
+          7.89599609375,
+          8.0361328125
+        ],
+        "pid": 61329,
+        "exit": 0
+      },
+      {
+        "stage": "baseline-list-prepared",
+        "seconds": 17.7095768340223,
+        "load_start": [
+          4.81201171875,
+          7.7177734375,
+          7.970703125
+        ],
+        "load_end": [
+          5.0615234375,
+          7.63232421875,
+          7.935546875
+        ],
+        "pid": 63385,
+        "exit": 0
+      },
+      {
+        "stage": "migrated-focused",
+        "seconds": 1.9502070419839583,
+        "load_start": [
+          3.796875,
+          6.84912109375,
+          7.6240234375
+        ],
+        "load_end": [
+          3.796875,
+          6.84912109375,
+          7.6240234375
+        ],
+        "pid": 64756,
+        "exit": 1
+      },
+      {
+        "stage": "migrated-focused-corrected",
+        "seconds": 2.564067375002196,
+        "load_start": [
+          3.623046875,
+          6.0869140625,
+          7.26513671875
+        ],
+        "load_end": [
+          3.57275390625,
+          6.03564453125,
+          7.23974609375
+        ],
+        "pid": 66205,
+        "exit": 1
+      },
+      {
+        "stage": "relocated-typecheck",
+        "seconds": 3.832874832995003,
+        "load_start": [
+          3.564453125,
+          5.95166015625,
+          7.19580078125
+        ],
+        "load_end": [
+          3.91943359375,
+          5.9853515625,
+          7.2001953125
+        ],
+        "pid": 66606,
+        "exit": 0
+      },
+      {
+        "stage": "focused-final",
+        "seconds": 2.5717564999940805,
+        "load_start": [
+          4.0009765625,
+          5.84033203125,
+          7.1123046875
+        ],
+        "load_end": [
+          4.80126953125,
+          5.9755859375,
+          7.15234375
+        ],
+        "pid": 67162,
+        "exit": 0
+      },
+      {
+        "stage": "list-final",
+        "seconds": 16.173970707983244,
+        "load_start": [
+          4.80126953125,
+          5.9755859375,
+          7.15234375
+        ],
+        "load_end": [
+          5.6201171875,
+          6.10498046875,
+          7.177734375
+        ],
+        "pid": 67273,
+        "exit": 0
+      },
+      {
+        "stage": "related-probe",
+        "seconds": 5.926265665999381,
+        "load_start": [
+          5.6201171875,
+          6.10498046875,
+          7.177734375
+        ],
+        "load_end": [
+          5.41015625,
+          6.05322265625,
+          7.15283203125
+        ],
+        "pid": 67481,
+        "exit": 0,
+        "queue_wait_seconds": null
+      },
+      {
+        "stage": "review",
+        "seconds": 8.45308166698669,
+        "load_start": [
+          5.09521484375,
+          5.9521484375,
+          7.09716796875
+        ],
+        "load_end": [
+          4.6923828125,
+          5.837890625,
+          7.04296875
+        ],
+        "pid": 67853,
+        "exit": 0,
+        "queue_wait_seconds": 0.016990184783935547
+      },
+      {
+        "stage": "full",
+        "seconds": 48.77404058299726,
+        "load_start": [
+          4.525390625,
+          5.74658203125,
+          6.98876953125
+        ],
+        "load_end": [
+          4.65869140625,
+          5.59814453125,
+          6.861328125
+        ],
+        "pid": 68265,
+        "exit": 0,
+        "queue_wait_seconds": 0.019344091415405273
+      },
+      {
+        "stage": "knip",
+        "seconds": 2.2458530409785453,
+        "load_start": [
+          3.7587890625,
+          5.15966796875,
+          6.60205078125
+        ],
+        "load_end": [
+          3.7587890625,
+          5.15966796875,
+          6.60205078125
+        ],
+        "pid": 71214,
+        "exit": 0,
+        "queue_wait_seconds": 0.019569873809814453
+      },
+      {
+        "stage": "final-review",
+        "seconds": 8.688833458989393,
+        "load_start": [
+          3.78564453125,
+          4.6904296875,
+          6.20947265625
+        ],
+        "load_end": [
+          4.4462890625,
+          4.79931640625,
+          6.22998046875
+        ],
+        "pid": 73203,
+        "exit": 0,
+        "queue_wait_seconds": 0.017091751098632812
+      },
+      {
+        "stage": "final-knip",
+        "seconds": 1.9730565419886261,
+        "load_start": [
+          4.46533203125,
+          4.69384765625,
+          6.08837890625
+        ],
+        "load_end": [
+          4.828125,
+          4.76513671875,
+          6.10498046875
+        ],
+        "pid": 74283,
+        "exit": 0,
+        "queue_wait_seconds": 0.017050981521606445
+      }
+    ],
+    "synthetic_ownership_test_servers": [
+      {
+        "stage": "baseline-test",
+        "pid": 61548,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 61583,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 61897,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62017,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62107,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62197,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62260,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62357,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62444,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62507,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62575,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "baseline-test",
+        "pid": 62644,
+        "port": 5174,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 68684,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 68713,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69040,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69158,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69255,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69346,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69409,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69498,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69575,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69639,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69723,
+        "port": 5175,
+        "reported_stopped": true
+      },
+      {
+        "stage": "full",
+        "pid": 69786,
+        "port": 5175,
+        "reported_stopped": true
+      }
+    ],
+    "ps_after_commands": "",
+    "browser_qa_started": false,
+    "persistent_resources": []
+  },
+  "evidenceDirectory": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/314-implementation-evidence",
+  "friction": [
+    {
+      "tag": "workspace-prepare-before-vitest",
+      "minutes": 1,
+      "detail": "Initial direct list on fresh install lacked generated token mirrors; test:full prepared workspace, then collection succeeded. Failed log retained."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2,
+      "detail": "Mechanical extractor initially omitted wrapper describe import and support dependencies. Retained both failed focused runs; corrected imports/exports, typecheck/focused/full passed. Ordered body and fixture token sequences preserve every original contract."
+    },
+    {
+      "tag": "inventory-generator-drift",
+      "minutes": 1,
+      "detail": "Unchanged generator already produced239 rather than tracked247 beads. Parent approved current regeneration with identical1209 entity UUIDs; mapping-only delta changes bead areas/sharedAreas. Exact baseline/key/hash drift retained; native task graph remains parent-owned."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.5,
+      "detail": "Parent requested reuse of existing kebab function. Exact188-entry comparison found one pre-commit mapping correction, banishXCost -> banish-xcost, explicitly acknowledged. Existing bead-key naming semantics unchanged; all other187 mappings identical."
+    }
+  ],
+  "rulesDecisions": [],
+  "cardIssues": 0,
+  "coreReview": "No new engine behavior; parent owns any required independent review and native delivery.",
+  "formMappingEvidence": {
+    "file": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/314-implementation-evidence/hv-umm2.314-form-contract-paths.json",
+    "sha256": "17a25c2891747634e8ab93117544c592bc8ca483e1f22c1dd0bc262a1ed20a28",
+    "entries": 188,
+    "contractPaths": 124,
+    "builderJourneyAndTypeRemapPaths": null
+  },
+  "fullSourceFileSha256": {
+    "scripts/content-inventory.ts": "b2a06f8ca0096889bae51f60f38b7f757de965d92d2428206410632bb866dde4",
+    "docs/plan/phase-5-content.md": "419d980a14a79af0f5ee442b10affb705a74ed2e363bc1c4303ff9fc9b203cd7",
+    "docs/plan/evidence/content-inventory.json": "a0688c1f364866c80e260918ad7f2bcab204f49ab9c7fd3ccc5be6f1341adc70",
+    "src/engine/effects/primitives/contracts.test.ts": "326f74ddd5a9c4283a117c4c6a2a42d6b11c008e8988da6c3f2df65a1994d853",
+    "src/engine/effects/primitives/contracts/awaken.contracts.ts": "4c1dba9fb4859bfab696ac507a8175c48c9f6b98469cdcd54114a2211354b1b1",
+    "src/engine/effects/primitives/contracts/banish.contracts.ts": "e1c0935b3915c15e338f78e9bd6eb16f6864341df78ac35663a847f894825bc2",
+    "src/engine/effects/primitives/contracts/cannot-be-targeted.contracts.ts": "5f00b3b1f4b6b852b3f0783791f51d7ea0217c494aafad61dd8eee6439642c8e",
+    "src/engine/effects/primitives/contracts/card-filter-bounds.contracts.ts": "c62412cd412122773b1838248df72bc8616ebe689830f03b4495b1e0b488333b",
+    "src/engine/effects/primitives/contracts/cards-support.ts": "6a031ee85c80ea5add748e1c2214c053608fe1e0c04ba89ac9195c9cc8ab6c07",
+    "src/engine/effects/primitives/contracts/characters-support.ts": "7e2634186ee6157c939899840f1b35e5695f389e11e1e4d9fbd028ac16358383",
+    "src/engine/effects/primitives/contracts/choose-one.contracts.ts": "36c50bd3a43daf26520acf233379506819cdfb084ffbac9d85e84cef50c06866",
+    "src/engine/effects/primitives/contracts/condition-card-counts.contracts.ts": "d8a2c5d61761e774ec935446490b1ded55a387f3044f4e9b78945f201fce9aee",
+    "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts": "3da6fb89398ef25cf39f061c7d530b8ace8cf8f9390d8ddd160fa1c0facc4b9c",
+    "src/engine/effects/primitives/contracts/discard-random.contracts.ts": "ea9745ae0c65d94172137a25770108307503b3b34bd36ef6a28f50ccc66386a6",
+    "src/engine/effects/primitives/contracts/discard.contracts.ts": "bcdde4bd1f63813ef8dfb9f630e691830ee50d98146dc40e2fac401ce0003cb1",
+    "src/engine/effects/primitives/contracts/discover.contracts.ts": "e40a2ec6c23545674cb44bf432e7f6ab99dfdc1f15ef595f77177a6ac27a68d8",
+    "src/engine/effects/primitives/contracts/dissolve.contracts.ts": "df76eb2a19c671b2fd5c7dea812913e7b51f2013af8c3a584be35e69a772e8ed",
+    "src/engine/effects/primitives/contracts/draw.contracts.ts": "a45c952d91286712e83046e23bd8d967cb3b3989a6926e5b81a498750ba1331e",
+    "src/engine/effects/primitives/contracts/erode.contracts.ts": "76f0b05c42cf3457d855fb47ebb8fb52bdf077eb94445cf70ccc5302fd2e7164",
+    "src/engine/effects/primitives/contracts/flow-support.ts": "663048afd3c0ee63adf7a29354d565b02f5c47ee60cf2ac67a04ac7160526510",
+    "src/engine/effects/primitives/contracts/foresee.contracts.ts": "ab64cc3151222d80525673a4f4b284f693fc24ff21790566533c4fd82ff5798a",
+    "src/engine/effects/primitives/contracts/gain-energy.contracts.ts": "405e1d805abb19ba70cb892ffa0b39a36ed4a188ac53435b933b579faa15a66e",
+    "src/engine/effects/primitives/contracts/gain-max-energy.contracts.ts": "7681f476a518b45fa08c83ab089a083b039497110c3cbf58114c586e4acabedf",
+    "src/engine/effects/primitives/contracts/gain-points.contracts.ts": "81f783e1b33c2f71e3509f232945654329e4500fc87e178e6b29b8e8d3027a60",
+    "src/engine/effects/primitives/contracts/gain-spark.contracts.ts": "ce2b9d4ac02f217593509881dba1e597cdc9c290e4ae06b46346df196eafe687",
+    "src/engine/effects/primitives/contracts/grant-card-keyword.contracts.ts": "a4ecfccce335421031e1b5e02fc7f184f6f2c17351a8f94b948132bf0d1f823d",
+    "src/engine/effects/primitives/contracts/if-then.contracts.ts": "7b63f168e57e4369731eb6ca046b687ad205a22c30ee98d5f1dff3f44c7c598e",
+    "src/engine/effects/primitives/contracts/look-at-top.contracts.ts": "741bd848ec3fd8208c27206e8b64f3fe388a7864422e851a2bca4962d3e04b53",
+    "src/engine/effects/primitives/contracts/optional.contracts.ts": "949b11df02ef7c355181000c3b55742c6c138d6072178597033563eb13964510",
+    "src/engine/effects/primitives/contracts/play-time-targets.contracts.ts": "68e985a1338290b9c2a07702303f49a9240f6280ade82a93feb9286d06392bd8",
+    "src/engine/effects/primitives/contracts/prevent.contracts.ts": "6c069a21579d5364f5474e2ee8fc09b00c5ff708dcda6ad20e9a3a3d775719a8",
+    "src/engine/effects/primitives/contracts/primitive-registry.contracts.ts": "265fccdc08a427295ceb4802efdbb46fec6db94c2f97d7dcaaa13c88cacb0293",
+    "src/engine/effects/primitives/contracts/repeat.contracts.ts": "45cd1fe16233201f005e39259d75ac5a5cfdf9ae0b410c525308a21a64609acc",
+    "src/engine/effects/primitives/contracts/resources-support.ts": "3ce4e8dbc27fb24d7e59ee3ac3b9dd6495021369241a8179b7c7499ac79f194f",
+    "src/engine/effects/primitives/contracts/return-to-hand.contracts.ts": "55a8ac8272881cfbd92a78de45c2a21bc49744a8087a0919286902ee96074cc3",
+    "src/engine/effects/primitives/contracts/reveal.contracts.ts": "e51c838759abb6129f9b8c8961d52ecfbb1e0c413ca7f852c2b97ab97d08e53d",
+    "src/engine/effects/primitives/contracts/selector-bounds.contracts.ts": "e84f92e45aff26dfadb5b8a5833ca595fbcbd7beb380379e6e4de8a20f1a93be",
+    "src/engine/effects/primitives/contracts/selector-challenger.contracts.ts": "fc49cba1dd95c90e49eb958a14ca014d7e26702a591a6791912c538273882775",
+    "src/engine/effects/primitives/contracts/sequence.contracts.ts": "d1b39cd64f57fef8abbd87cbd9be6dae7d0ff0e1f5dd2cf30599ccf3aaee1c11",
+    "src/engine/effects/primitives/contracts/stack-support.ts": "8604c26ed1c38036c7cee4cc90fd53bbfe20dbd09a507e1fd00bfd31d9a91f76",
+    "src/engine/effects/primitives/contracts/take-from-among.contracts.ts": "8d30a5bd4556c044ecd8615d3a3407de3bf419f18f87f2ea5ed89253c1ad6973",
+    "src/engine/effects/primitives/contracts/win-the-game.contracts.ts": "caedb14fbed26131a1b9a5a322b50c3945d7e56021919bf4880952522f42da0b",
+    "src/engine/effects/primitives/contracts/zone-card-refs.contracts.ts": "a05b96a450f2094783b5a0f03c94b4d4786ff64cf86258f99e29382afce41650"
+  },
+  "fullSourceToFinal": "Only inventory naming uses the existing hoisted kebab function; banishXCost canonical contract path is banish-xcost. All primitive contract/support/runner code hashes match full validation. Final review/knip and generator check passed; unchanged full suite was not repeated.",
+  "namingConsolidation": {
+    "entries": 188,
+    "identical": 187,
+    "changes": [
+      {
+        "before": {
+          "name": "banishXCost",
+          "kind": "dsl",
+          "contract": "src/engine/effects/primitives/contracts/banish-x-cost.contracts.ts"
+        },
+        "after": {
+          "name": "banishXCost",
+          "kind": "dsl",
+          "contract": "src/engine/effects/primitives/contracts/banish-xcost.contracts.ts"
+        }
+      }
+    ],
+    "existing_bead_key_semantics_unchanged": true
+  },
+  "failurePathCoverage": [
+    {
+      "boundary": "fresh workspace collection",
+      "evidence": "Initial token-mirror failure retained; test:full prepares generated workspace, complete actual collection then succeeds."
+    },
+    {
+      "boundary": "module import and fixture linking",
+      "evidence": "Failed focused attempts retained; repaired linking passes typecheck,142 focused cases,2,823 full cases and lint/knip."
+    },
+    {
+      "boundary": "lost or reordered contracts",
+      "evidence": "Actual full-name/project/file multiplicity parity and ordered tokens keyed by group/full name establish all142 moved bodies and fixture declaration sequences."
+    },
+    {
+      "boundary": "changed-source related discovery",
+      "evidence": "Actual getRelevantTestSpecifications selects runner for primitive implementation and plain contract module."
+    },
+    {
+      "boundary": "reload, stale/concurrent answers, partial state publication",
+      "evidence": "Unchanged assertions include these existing engine workflows. Test organization introduces no player runtime, state transition, prompt, persistence, provider lifecycle or rollout boundary; no extra mirror cases needed."
+    }
+  ]
+}

@@ -1,22 +1,16 @@
-/** Stack primitives: prevent, its "unless the opponent pays" prompt and destinations; "cannot be prevented". */
 import { describe, expect, it } from "vitest";
-import { stackItem } from "../../dsl/builders";
-import { matchingStackItems } from "../../dsl/selectors";
-import { createEngine } from "../../engine";
-import type { Answer } from "../../prompts/types";
-import type { CardId, InstanceId, Side } from "../../state/ids";
-import type { BattleState } from "../../state/types";
-import { NO_PROMPTS, ScriptedSource } from "../../steps/sources";
-import { boardState } from "../../testing/board";
-import { DSL, DSL_CARDS } from "../../testing/dsl-cards";
-import { invariantViolations } from "../../testing/invariants";
-import { STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "../../testing/stack-cards";
-import { SYNTHETIC, testCatalog } from "../../testing/synthetic-cards";
-import { view } from "../../view/view";
-
-const engine = createEngine(testCatalog([...DSL_CARDS, ...STACK_CARDS], SYNTHETIC_EMBLEMS));
-const v = SYNTHETIC;
-const deck = [v.vanilla1.id, v.vanilla1.id, v.vanilla1.id];
+import { stackItem } from "../../../dsl/builders";
+import { matchingStackItems } from "../../../dsl/selectors";
+import type { Answer } from "../../../prompts/types";
+import type { CardId, InstanceId, Side } from "../../../state/ids";
+import type { BattleState } from "../../../state/types";
+import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
+import { boardState } from "../../../testing/board";
+import { DSL } from "../../../testing/dsl-cards";
+import { invariantViolations } from "../../../testing/invariants";
+import { STACK } from "../../../testing/stack-cards";
+import { view } from "../../../view/view";
+import { engine, v, deck } from "./stack-support";
 
 /** The player plays its first hand card; the enemy answers with its first hand card. */
 function playAndAnswer(player: CardId, enemy: CardId, answers: readonly Answer[] = [], setup: (state: BattleState, played: InstanceId) => void = () => {}) {
