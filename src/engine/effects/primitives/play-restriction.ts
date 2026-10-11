@@ -4,6 +4,7 @@ import type { CardFilter, Duration, PlayerRef } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
 import { opponent, SIDES, type Side } from "../../state/ids";
 import type { ContinuousChange } from "../../state/types";
+import { revealToBoth } from "../../view/knowledge";
 import { definePrimitive } from "../types";
 
 /**
@@ -61,6 +62,8 @@ export const playRestrictionPrimitive = definePrimitive<PlayRestrictionNode>({
           max: 1,
         });
         if (chosen === undefined) throw new Error("restrictChosen answered with no card");
+        revealToBoth(ctx.state, [chosen]);
+        ctx.emit({ kind: "revealed", side: opponent(env.controller), instances: [chosen] });
         changes = [{ kind: "cannotPlay", player: null, instance: chosen, filter: {} }];
         break;
       }

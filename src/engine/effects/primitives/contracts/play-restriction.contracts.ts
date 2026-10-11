@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
 import type { EngineCardDefinition } from "../../../catalog";
-import { activated, energy, enemyCharacter, event, everyIn, reclaim, staticAbility, target } from "../../../dsl/builders";
+import { activated, anyCharacter, energy, event, everyIn, keyword, reclaim, staticAbility, target } from "../../../dsl/builders";
 import { onMaterialized, triggered } from "../../../dsl/triggers";
 import { createEngine, IllegalAction } from "../../../engine";
-import type { EngineEvent } from "../../../events";
+import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { ChooseCardsPrompt } from "../../../prompts/types";
 import type { Action } from "../../../rules/actions";
@@ -14,6 +14,7 @@ import { instanceOf } from "../../../rules/zones";
 import { stateHash } from "../../../state/hash";
 import { battleSeed, SIDES, type InstanceId, type Side } from "../../../state/ids";
 import type { BattleState, FloatingChange } from "../../../state/types";
+import { runStep } from "../../../steps/runner";
 import { ScriptedSource } from "../../../steps/sources";
 import { boardState, type BoardSetup } from "../../../testing/board";
 import { determinizationDivergences } from "../../../testing/determinization-fidelity";
@@ -23,6 +24,9 @@ import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synth
 import { at, passUntil } from "../../../testing/trigger-harness";
 import { promptView, view } from "../../../view/view";
 import { resolveEffect } from "../../interpreter";
+import { discardChosen } from "../discard-chosen";
+import { playFromZone } from "../play-from-zone";
+import { opponentHand, takeFromAmong } from "../take-from-among";
 import { dissolve } from "../dissolve";
 import { materialize } from "../materialize";
 import { cannotPlay, cannotPlayChosen, playLimitPerTurn } from "../play-restriction";
@@ -53,8 +57,8 @@ const PR = {
   canonist: card(3, "character", 0, () => [staticAbility(playLimitPerTurn(1))]),
   /** A 0● Interrupt event with "Reclaim 0●". */
   reclaimer: card(4, "event", 0, () => [reclaim(energy(0))], "interrupt"),
-  /** A 0● Interrupt: "Dissolve an enemy character." */
-  dissolver: card(5, "event", 0, () => [event(dissolve(target(enemyCharacter())))], "interrupt"),
+  /** A 0● Interrupt: "Dissolve a character." */
+  dissolver: card(5, "event", 0, () => [event(dissolve(target(anyCharacter())))], "interrupt"),
   /** "0●: Materialize every character in your hand." */
   summoner: card(6, "character", 0, () => [activated([energy(0)], materialize(everyIn("hand", { cardType: "character" })))]),
   /** Chooses an opponent hand card for a restriction this turn, then fails. */
@@ -70,6 +74,10 @@ const PR = {
       },
     },
   } satisfies EngineCardDefinition,
+  discarder: card(8, "event", 0, () => [event(discardChosen())]),
+  taker: card(9, "event", 0, () => [event(takeFromAmong(opponentHand()))]),
+  offering: card(10, "character", 10, () => [keyword("offering")]),
+  permission: card(11, "character", 0, () => [staticAbility(playFromZone("void", {}, { player: "opponent" }))]),
 } as const;
 
 const engine = createEngine(testCatalog(Object.values(PR)));
@@ -102,6 +110,12 @@ function run(start: BattleState, actions: readonly (readonly [Side, Action])[], 
 
 /** Passes until the stack is empty. */
 const resolveStack = (state: BattleState) => passUntil(engine, state, (next) => next.stack.length === 0).state;
+const playResolved = (state: BattleState, side: Side, id: InstanceId, answers: ScriptedSource) => {
+  const cast = run(state, [[side, play(id)]], answers).state;
+  const done = passUntil(engine, cast, (next) => next.stack.length === 0, answers).state;
+  answers.assertExhausted();
+  return done;
+};
 
 const board = (player: BoardSetup["player"], enemy: BoardSetup["enemy"], active: Side = "player"): BoardSetup => ({
   active, phase: "day", player: { deck, energy: 5, ...player }, enemy: { deck, energy: 5, ...enemy },
@@ -150,6 +164,9 @@ describe("playRestriction: a chosen card in the opponent's hand", () => {
     expect(eventRedactionViolations(outcome.published, slice.committed, after)).toEqual([]);
     for (const viewer of SIDES) {
       expect(outcome.published.some((e) => e.kind === "effectStarted"), viewer).toBe(true);
+      expect(outcome.published.filter((e) => e.kind === "revealed").map((e) => eventSeenBy(e, viewer, after))).toEqual([
+        { kind: "revealed", side: "enemy", instances: [hand[2]] },
+      ]);
       expect(view(after, viewer, engine.catalog).floating.map(({ change }) => change)).toEqual([after.floating[0].change]);
     }
     expect(invariantViolations(after, engine.catalog)).toEqual([]);
@@ -164,39 +181,46 @@ describe("playRestriction: a chosen card in the opponent's hand", () => {
     expect(determinizationDivergences(engine, enemyDay, { player: [{ cardId: PR.pursuer.id }, ...deck.map((cardId) => ({ cardId }))], enemy: [v.vanilla1.id, v.event1.id, v.vanilla1.id, ...deck].map((cardId) => ({ cardId })) }, battleSeed("restriction"), 0)).toEqual([]);
   });
 
-  it("follows the chosen card to the void and another hand, and ends as its source leaves play", () => {
+  it.each(["void", "otherHand"] as const)("follows the chosen physical card through real movement to %s, then ends on source departure", (destination) => {
+    const utility = destination === "void" ? PR.discarder : PR.taker;
     const { state, ids } = boardState(engine.catalog, board(
-      { back: [PR.pursuer.id], hand: [v.event1.id] },
-      { void: [PR.reclaimer.id], hand: [PR.dissolver.id] },
-      "enemy",
+      { hand: [PR.pursuer.id, utility.id, PR.dissolver.id] },
+      { hand: [PR.reclaimer.id, PR.reclaimer.id] },
     ));
-    const [pursuer] = ids.player.back;
-    const [voidCard] = ids.enemy.void;
-    const [held] = ids.player.hand;
-    state.instances[held] = { ...state.instances[held], owner: "enemy" };
-    for (const [index, instance] of [voidCard, held].entries()) {
-      state.floating.push({
-        id: `e${index + 1}`, controller: "player", source: pursuer!, timestamp: 0,
-        expiry: { at: "sourceLeavesPlay", source: pursuer! }, change: { kind: "cannotPlay", player: null, instance, filter: {} },
-      });
-    }
-    state.nextEffect = 3;
-    expect(invariantViolations(state, engine.catalog)).toEqual([]);
-    // Reclaim from the void is a play; the card in the player's hand is unplayable for its holder too.
-    expect(plays(state, "enemy")).toEqual([ids.enemy.hand[0]]);
-    expect(canPlay(state, engine.catalog, "player", held, "hand")).toBe(false);
-    const { state: freed, events } = run(state, [["enemy", play(ids.enemy.hand[0])]], new ScriptedSource([[pursuer!]]));
-    const resolved = resolveStack(freed);
-    expect(events.concat(passUntil(engine, freed, (next) => next.stack.length === 0).events).filter((e) => e.kind === "effectEnded")).toHaveLength(2);
-    expect(resolved.floating).toEqual([]);
-    expect(plays(resolved, "enemy")).toContain(voidCard);
+    const [pursuer, mover, dissolver] = ids.player.hand;
+    const [chosen, twin] = ids.enemy.hand;
+    const restricted = playResolved(state, "player", pursuer, new ScriptedSource([[chosen]]));
+    expect(restrictions(restricted)).toEqual([{ kind: "cannotPlay", player: null, instance: chosen, filter: {} }]);
+    const moved = playResolved(restricted, "player", mover, new ScriptedSource([[chosen]]));
+    expect(moved.instances[chosen]).toMatchObject({ zone: destination === "void" ? "void" : "hand", controller: destination === "void" ? "enemy" : "player" });
+    expect(moved.instances[chosen].printing).toEqual(moved.instances[twin].printing);
+    expect(restrictions(moved)).toEqual(restrictions(restricted));
+    const holder = destination === "void" ? "enemy" : "player";
+    const ready = holder === "enemy" ? passUntil(engine, moved, at(engine, "enemy", "day")).state : moved;
+    const from = destination === "void" ? "void" : "hand";
+    expect(plays(ready, holder)).not.toContain(chosen);
+    expect(canPlay(ready, engine.catalog, holder, chosen, from)).toBe(false);
+    expect(() => runStep(ready, { kind: "play", card: chosen, from }, new ScriptedSource([]), engine.catalog)).toThrow();
+    expect(playRestricted(ready, engine.catalog, "enemy", twin)).toBe(false);
+    const playerDay = holder === "enemy" ? passUntil(engine, ready, at(engine, "player", "day")).state : ready;
+    const freed = playResolved(playerDay, "player", dissolver, new ScriptedSource([]));
+    expect(freed.instances[pursuer].zone).toBe("void");
+    expect(restrictions(freed)).toEqual([]);
+    const freeWindow = holder === "enemy" ? passUntil(engine, freed, at(engine, "enemy", "day")).state : freed;
+    expect(plays(freeWindow, holder)).toContain(chosen);
+    expect(invariantViolations(freeWindow, engine.catalog)).toEqual([]);
   });
 
   it("still chooses but restricts nothing when the source is not in play, and does nothing for an empty hand", () => {
     const { state, ids } = boardState(engine.catalog, board({ hand: [PR.outOfPlay.id, PR.outOfPlay.id] }, { hand: [v.vanilla1.id, v.event1.id] }));
     const answers = new ScriptedSource([[ids.enemy.hand[1]]]);
     const first = run(state, [["player", play(ids.player.hand[0])]], answers);
-    const chose = resolveStack(first.state);
+    const tail = passUntil(engine, first.state, (next) => next.stack.length === 0);
+    const chose = tail.state;
+    const revealed = [...first.events, ...tail.events].filter((e) => e.kind === "revealed");
+    for (const viewer of SIDES) expect(revealed.map((e) => eventSeenBy(e, viewer, chose))).toEqual([
+      { kind: "revealed", side: "enemy", instances: [ids.enemy.hand[1]] },
+    ]);
     answers.assertExhausted();
     expect(chose.floating).toEqual([]);
     expect(chose.knownTo.player).toEqual(expect.arrayContaining(ids.enemy.hand));
@@ -205,6 +229,35 @@ describe("playRestriction: a chosen card in the opponent's hand", () => {
     const none = resolveStack(run(empty, [["player", play(emptyIds.player.hand[0])]]).state);
     expect(none.floating).toEqual([]);
     expect(none.sides.player.backRank).toContain(emptyIds.player.hand[0]);
+  });
+});
+
+describe("playRestriction: every route of playing", () => {
+  it.each(["hand", "offering", "reclaim", "permission"] as const)("blocks %s at legality and the direct play step, with a playable unrestricted control", (route) => {
+    const definition = route === "offering" ? PR.offering : route === "reclaim" ? PR.reclaimer : v.vanilla1;
+    const { state, ids } = boardState(engine.catalog, board(
+      { hand: [PR.pursuer.id, PR.discarder.id], back: route === "permission" ? [PR.permission.id] : [] },
+      { hand: [definition.id, definition.id, v.event0.id] },
+    ));
+    const [chosen, twin] = ids.enemy.hand;
+    const restricted = playResolved(state, "player", ids.player.hand[0], new ScriptedSource([[chosen]]));
+    const inVoid = route === "permission" || route === "reclaim";
+    const moved = inVoid ? playResolved(restricted, "player", ids.player.hand[1], new ScriptedSource([[chosen]])) : restricted;
+    const ready = passUntil(engine, moved, at(engine, "enemy", "day")).state;
+    const from = inVoid ? "void" : "hand";
+    expect(plays(ready, "enemy")).not.toContain(chosen);
+    expect(() => engine.apply(ready, "enemy", play(chosen, from), new ScriptedSource([]))).toThrow(IllegalAction);
+    expect(() => runStep(ready, { kind: "play", card: chosen, from }, new ScriptedSource([]), engine.catalog)).toThrow();
+    const unrestricted = { ...ready, floating: ready.floating.filter(({ change }) => change.kind !== "cannotPlay") };
+    expect(plays(unrestricted, "enemy")).toContain(chosen);
+    const positive = engine.apply(unrestricted, "enemy", play(chosen, from), new ScriptedSource(route === "offering" ? [[twin]] : []));
+    expect(positive.state.turnLog.played.enemy).toHaveLength(1);
+    if (route === "offering") {
+      expect(positive.state.instances[chosen].status.offering).toBe(true);
+      expect(positive.state.instances[twin].zone).toBe("banished");
+    }
+    if (route === "reclaim") expect(positive.state.instances[chosen].status.playedViaReclaim).toBe(true);
+    expect(invariantViolations(positive.state, engine.catalog)).toEqual([]);
   });
 });
 
@@ -276,7 +329,12 @@ describe("playRestriction recovery", () => {
     expect(fresh.reduce(saved, { kind: "battleAction", side: "enemy", action: { kind: "pass" } })).toEqual({ kind: "bounced", reason: "stepInFlight" });
     expect(fresh.reduce(saved, { kind: "cancel", side: "player", promptId: pending.prompt.id })).toEqual({ kind: "bounced", reason: "notCancellable" });
     expect(stateHash(saved.committed)).toBe(committed);
-    const done = applied(answer("player", [ids.enemy.hand[1]]));
+    const completion = answer("player", [ids.enemy.hand[1]]);
+    const done = applied(completion);
+    if (completion.kind !== "applied") throw new Error("answer bounced");
+    expect(completion.published.filter((e) => e.kind === "revealed")).toEqual([
+      { kind: "revealed", side: "enemy", instances: [ids.enemy.hand[1]] },
+    ]);
     expect(restrictions(done.committed)).toHaveLength(1);
     expect(answer("player", [ids.enemy.hand[0]], done)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
   });
