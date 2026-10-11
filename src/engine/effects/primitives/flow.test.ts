@@ -1,7 +1,7 @@
 /** Flow primitives: sequence, chooseOne, optional, ifThen, repeat; X. */
 import { describe, expect, it } from "vitest";
 import type { EngineAvatarDefinition, EngineCardDefinition, EngineDreamsignDefinition, EngineFigmentDefinition } from "../../catalog";
-import { enemyCharacter, energyX, event, stackItem, target } from "../../dsl/builders";
+import { enemyCharacter, energyX, event, fromVoid, stackItem, target } from "../../dsl/builders";
 import { createEngine } from "../../engine";
 import { createFoldAdapter } from "../../fold/slice";
 import { boardState } from "../../testing/board";
@@ -242,6 +242,9 @@ describe("primitive play-time targets", () => {
     const stackStray = { kind: "stackTarget" as const, selector: stackItem({}) };
     const listed = { ...dissolve(target(enemyCharacter())), extra: [stackStray] };
     expect(undeclaredTargets(listed)).toEqual([stackStray]);
+    const voidStray = fromVoid({ subtype: "Warrior" });
+    const voidNode = { ...gainPoints(1), extra: [voidStray] };
+    expect(undeclaredTargets(voidNode)).toEqual([voidStray]);
   });
 
   it("checks declared specs and nested effect nodes as nodes of their own", () => {

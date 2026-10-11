@@ -22,6 +22,10 @@ import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { unannouncedChanges } from "./announced-changes";
 import { moveInstance } from "../rules/zones";
+import { event, fromVoid } from "../dsl/builders";
+import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
+import { cardMatchesFilter } from "../continuous/characteristics";
+import type { CardFilter } from "../dsl/types";
 
 /** A pending 1● event and a pending 2● 2✦ character. */
 const pendingEvent: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(904), status: "pending" };
@@ -40,6 +44,36 @@ const silentMill: EngineCardDefinition = {
 const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter, silentMill]));
 
 describe("card-lab setup solver", () => {
+  it("stages subtype-only and combined type/subtype void targets with canonical filter matching", () => {
+    const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(907), subtype: "Mage" };
+    const filters: readonly CardFilter[] = [{ subtype: "" }, { cardType: "event", subtype: "" }, { cardType: "character", subtype: "Mage" }];
+    for (const [index, filter] of filters.entries()) {
+      const card: EngineCardDefinition = {
+        ...SYNTHETIC.event0,
+        id: syntheticId(908 + index),
+        status: "authored",
+        abilities: () => [event(createCopyInHand(fromVoid(filter, { player: "opponent", count: 2 })))],
+      };
+      const labEngine = createEngine(testCatalog([card, mage]));
+      const { state } = labBoard(labEngine, card.id, [mage], "enemy");
+      expect(state.sides.player.void).toHaveLength(2);
+      expect(new Set(state.sides.player.void).size).toBe(2);
+      for (const id of state.sides.player.void) expect(cardMatchesFilter(state, labEngine.catalog, id, filter)).toBe(true);
+      expect(state.sides.enemy.void).toEqual([]);
+    }
+  });
+
+  it("rejects a void filter whose type and subtype cannot match any setup printing", () => {
+    const card: EngineCardDefinition = {
+      ...SYNTHETIC.event0,
+      id: syntheticId(911),
+      status: "authored",
+      abilities: () => [event(createCopyInHand(fromVoid({ cardType: "event", subtype: "Mage" })))],
+    };
+    const labEngine = createEngine(testCatalog([card]));
+    expect(() => labBoard(labEngine, card.id, [])).toThrow(/no card for filter/);
+  });
+
   it("solves a playable board for every synthetic DSL card", () => {
     for (const card of DSL_CARDS) {
       expect(() => labBoard(engine, card.id, []), card.id).not.toThrow();

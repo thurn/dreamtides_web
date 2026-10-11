@@ -3,6 +3,7 @@
  * played. Specs, the card-lab scene, and the sweep share it.
  */
 import { printedCardId, type EngineCardDefinition } from "../catalog";
+import { matchesFilter } from "../continuous/characteristics";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { fixedEnergy } from "../dsl/energy";
@@ -48,15 +49,13 @@ function characterFor(
   return found.id;
 }
 
-/** A card definition that matches a card filter, for a void target: a character as `characterFor` finds one, else a synthetic event. */
+/** A matching printing for a void target on the lab's neutral setup board. */
 function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
-  if (filter.cardType === "event") {
-    const found = filter.subtype === undefined ? SYNTHETIC.event1 : pool.find((card) => card.cardType === "event" && card.subtype === filter.subtype);
-    if (found === undefined) throw new Error(`The lab solver has no event for filter ${JSON.stringify(filter)}`);
-    engine.catalog.card(found.id);
-    return found.id;
-  }
-  return characterFor(engine, { controller: "any", ...(filter.subtype === undefined ? {} : { subtype: filter.subtype }) }, pool);
+  const fits = (card: EngineCardDefinition): boolean => matchesFilter({ ...card, allTypes: false }, filter);
+  const found = Object.values(SYNTHETIC).find(fits) ?? pool.find(fits);
+  if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
+  engine.catalog.card(found.id);
+  return found.id;
 }
 
 /**

@@ -18,12 +18,13 @@ import { DREAMSIGNS } from "../content/dreamsigns";
 import { DREAMWELL_CARDS } from "../content/dreamwell";
 import { FIGMENTS } from "../content/figments";
 import { abilityEffect } from "./dsl/abilities";
-import { activated, all, characterYouControl, energy, event, staticAbility, target } from "./dsl/builders";
+import { activated, all, characterYouControl, energy, event, fromVoid, staticAbility, target } from "./dsl/builders";
 import { onMaterialized, triggered, triggeringCard } from "./dsl/triggers";
 import type { Ability } from "./dsl/types";
 import { expectedVerifiedText } from "./dsl/verified-text";
 import { engineCardFromContent } from "./content-catalog";
 import { everyNode } from "./effects/interpreter";
+import { createCopyInHand } from "./effects/primitives/create-copy-in-hand";
 import { chooseOne } from "./effects/primitives/choose-one";
 import { draw } from "./effects/primitives/draw";
 import { cardsIn, grantCardKeyword } from "./effects/primitives/grant-card-keyword";
@@ -165,6 +166,7 @@ describe("content gates", () => {
     expect(staticReferenceFailures([staticAbility(sparkModifier(all(characterYouControl()), 1))])).toEqual([]);
     expect(staticReferenceFailures([staticAbility(sparkModifier(target(characterYouControl()), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(triggeringCard(), 1))])).toHaveLength(1);
+    expect(staticReferenceFailures([staticAbility(createCopyInHand(fromVoid()))])).toHaveLength(1);
   });
 
   it("rejects a static-only primitive anywhere but as a static ability's whole effect", () => {

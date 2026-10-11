@@ -1,0 +1,25 @@
+{
+  "bead": "hv-umm2.312",
+  "phase": 5,
+  "implementMin": 4.1,
+  "localValidationS": {
+    "install": 3,
+    "focusedInitialFailure": 3.9,
+    "reviewTypeFailure": 21.6,
+    "focusedCorrectionFailure": 2.93,
+    "focused": 2.93,
+    "review": 11.57,
+    "knip": 3.03,
+    "target-auditRegression": 3.46,
+    "static-referenceRegression": 2.89,
+    "lab-filterRegression": 2.17
+  },
+  "heavyQueueWaitS": 0.02,
+  "hostLoad": 23.96,
+  "testDelta": {
+    "files": 0,
+    "lines": 128,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

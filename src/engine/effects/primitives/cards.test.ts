@@ -25,6 +25,9 @@ import {
   x,
 } from "../../dsl/builders";
 import { NO_DECK_MODS } from "../../dsl/types";
+import { onDissolved, triggered } from "../../dsl/triggers";
+import { parseFigmentId } from "../../state/ids";
+import { materializeFigments } from "./materialize-figments";
 import type { Keyword, PlayerRef } from "../../dsl/types";
 import type { Action } from "../../rules/actions";
 import { instanceOrigin } from "../../rules/activation";
@@ -1157,9 +1160,19 @@ const copyVoidThenFail: EngineCardDefinition = {
   },
 };
 
+/** A triggered copy that fails after its resolution-time void choice and copy. */
+const triggeredCopyVoidThenFail: EngineCardDefinition = {
+  ...DSL.dissolvedCopiesVoidWarrior,
+  id: syntheticId(966),
+  abilities: () => [triggered(onDissolved(), sequence(
+    createCopyInHand(fromVoid({ subtype: "Warrior" }, { another: true })),
+    materializeFigments(parseFigmentId("5e5e5e5e-0000-4000-8000-000000000fff")),
+  ))],
+};
+
 describe("zone card references", () => {
   const zoneEngine = createEngine(
-    testCatalog([...DSL_CARDS, sweepOpponentVoid, cycleOpponentVoid, banishToCopyVoidCard, copyOpponentHiddenCards, copyVoidThenFail, copySelfFromVoid]),
+    testCatalog([...DSL_CARDS, sweepOpponentVoid, cycleOpponentVoid, banishToCopyVoidCard, copyOpponentHiddenCards, copyVoidThenFail, copySelfFromVoid, triggeredCopyVoidThenFail]),
   );
   const printed = (state: BattleState, ids: readonly InstanceId[]) => ids.map((id) => cardIdOf(state, id));
   const playable = (state: BattleState, card: InstanceId) =>
@@ -1322,15 +1335,17 @@ describe("zone card references", () => {
   });
 
   it("reveals no card a reference into a hand or deck names: no event names it and neither side learns it", () => {
-    const result = runScenario(zoneEngine, {
-      board: {
-        active: "player",
-        phase: "day",
-        player: { hand: [copyOpponentHiddenCards.id], energy: 1, deck },
-        enemy: { hand: [v.vanilla1.id, v.event0.id], deck: [v.vanilla3.id, v.vanilla5.id] },
-      },
-      steps: (ids) => [playFromHand(ids, "player")],
+    const records: EngineLogRecord[] = [];
+    const fold = createFoldAdapter(zoneEngine, { checkEventPrefix: true, log: (record) => records.push(record) });
+    const { state, ids } = boardState(zoneEngine.catalog, {
+      active: "player", phase: "day",
+      player: { hand: [copyOpponentHiddenCards.id], energy: 1, deck },
+      enemy: { hand: [v.vanilla1.id, v.event0.id], deck: [v.vanilla3.id, v.vanilla5.id] },
     });
+    const outcome = fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 }, {
+      kind: "battleAction", side: "player", action: playFromHand(ids, "player").action,
+    });
+    const result = { state: applied(outcome).committed, ids, events: outcome.kind === "applied" ? outcome.published : [] };
     const named = [...result.ids.enemy.hand, ...result.ids.enemy.deck];
     expect(printed(result.state, result.state.sides.player.hand)).toEqual([v.vanilla1.id, v.event0.id, v.vanilla3.id]);
     for (const side of ["player", "enemy"] as const) {
@@ -1341,6 +1356,10 @@ describe("zone card references", () => {
     expect(seen.sides.enemy.deck.known).toEqual([]);
     for (const id of named) expect(seen.instances[id]).toBeUndefined();
     expect(JSON.stringify(result.events.map((event) => eventSeenBy(event, "player", result.state)))).not.toMatch(new RegExp(named.join("|")));
+    expect(records.some((record) => record.event === "engine.action")).toBe(true);
+    for (const record of records) {
+      for (const id of named) expect(JSON.stringify(record)).not.toContain(JSON.stringify(id));
+    }
     // The copies are private to the hand that holds them.
     for (const event of result.events.filter((item) => item.kind === "cardCreated")) expect(eventSeenBy(event, "enemy", result.state)).toBeNull();
   });
@@ -1370,10 +1389,80 @@ describe("zone card references", () => {
     for (const illegal of [[ids.player.void[1]], [ids.enemy.void[0]], [], [ids.player.void[0], ids.player.void[2]]]) {
       expect(answer("player", illegal)).toEqual({ kind: "bounced", reason: "illegalAnswer" });
     }
+    const laterAttempt = { ...reloaded, attempt: reloaded.attempt + 1 };
+    expect(fresh.reduce(laterAttempt, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.void[2]] })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+    expect(fresh.reduce(reloaded, { kind: "battleAction", side: "player", action: { kind: "pass" } })).toEqual({ kind: "bounced", reason: "stepInFlight" });
+    const cancelled = applied(fresh.reduce(reloaded, { kind: "cancel", side: "player", promptId: pending.prompt.id }));
+    expect(cancelled).toEqual({ ...start, attempt: reloaded.attempt + 1 });
+    expect(stateHash(cancelled.committed)).toBe(stateHash(state));
+    const retried = applied(fresh.reduce(cancelled, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
+    expect(fresh.pending(retried)?.prompt.id).not.toBe(pending.prompt.id);
+    expect(fresh.reduce(retried, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.void[2]] })).toEqual({ kind: "bounced", reason: "stalePrompt" });
     const done = applied(answer("player", [ids.player.void[2]]));
     expect(done.inFlight).toBeNull();
     expect(printed(done.committed, done.committed.sides.player.hand)).toEqual([v.vanilla2.id]);
-    expect(fresh.reduce(done, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.void[2]] })).toMatchObject({ kind: "bounced" });
+    expect(fresh.reduce(done, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.void[2]] })).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+  });
+
+  const suspendTriggeredVoidChoice = (source = DSL.dissolvedCopiesVoidWarrior) => {
+    const records: EngineLogRecord[] = [];
+    const fold = createFoldAdapter(zoneEngine, { checkEventPrefix: true, log: (record) => records.push(record) });
+    const { state, ids } = boardState(zoneEngine.catalog, {
+      active: "player", phase: "day",
+      player: { hand: [DSL.dissolveEnemy.id], energy: 2, deck },
+      enemy: { back: [source.id], void: [v.vanilla1.id, v.event0.id, v.vanilla2.id], deck },
+    });
+    const slice = applied(fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 }, {
+      kind: "battleAction", side: "player", action: playFromHand(ids, "player").action,
+    }));
+    return { state, ids, slice, records, fold };
+  };
+
+  it("reloads the non-cancellable triggered void choice with its dissolve and trigger queue committed, rejecting foreign, stale, cancel and concurrent inputs", () => {
+    const { ids, slice, fold, records } = suspendTriggeredVoidChoice();
+    const pending = fold.pending(slice)!;
+    expect(pending.prompt).toMatchObject({ kind: "chooseTargets", side: "enemy", cancellable: false, candidates: [ids.enemy.void[0], ids.enemy.void[2]] });
+    expect(slice.committed.sides.enemy.void).toContain(ids.enemy.back[0]);
+    expect(slice.committed.triggerQueue).toHaveLength(1);
+    expect(slice.committed.sides.player.void).toContain(ids.player.hand[0]);
+    const saved = JSON.parse(JSON.stringify(slice)) as BattleSlice;
+    const fresh = createFoldAdapter(zoneEngine, { checkEventPrefix: true, log: (record) => records.push(record) });
+    expect(fresh.pending(saved)).toEqual(pending);
+    const answer = { kind: "answer" as const, side: "enemy" as const, promptId: pending.prompt.id, value: [ids.enemy.void[2]] };
+    expect(fresh.reduce(saved, { ...answer, side: "player" })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+    expect(fresh.reduce({ ...saved, attempt: saved.attempt + 1 }, answer)).toEqual({ kind: "bounced", reason: "stalePrompt" });
+    expect(fresh.reduce(saved, { kind: "cancel", side: "enemy", promptId: pending.prompt.id })).toEqual({ kind: "bounced", reason: "notCancellable" });
+    expect(fresh.reduce(saved, { kind: "battleAction", side: "player", action: { kind: "pass" } })).toEqual({ kind: "bounced", reason: "stepInFlight" });
+    const outcome = fresh.reduce(saved, answer);
+    const done = applied(outcome);
+    expect(done.inFlight).toBeNull();
+    expect(done.committed.triggerQueue).toEqual([]);
+    expect(printed(done.committed, done.committed.sides.enemy.hand)).toEqual([v.vanilla2.id]);
+    expect(done.committed.sides.enemy.void).toEqual(saved.committed.sides.enemy.void);
+    expect(fresh.reduce(done, answer)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+    expect(records.filter((record) => record.event === "engine.trigger" && record.detail.kind === "triggerResolved")).toHaveLength(1);
+    expect(invariantViolations(done.committed, zoneEngine.catalog)).toEqual([]);
+  });
+
+  it("rolls back a failed triggered resolution after its void answer while retaining the committed dissolve and queued trigger", () => {
+    const { ids, slice, fold, records } = suspendTriggeredVoidChoice(triggeredCopyVoidThenFail);
+    const pending = fold.pending(slice)!;
+    const before = stateHash(slice.committed);
+    const resolvedBefore = records.filter((record) => record.event === "engine.trigger" && record.detail.kind === "triggerResolved");
+    const outcome = fold.reduce(JSON.parse(JSON.stringify(slice)) as BattleSlice, {
+      kind: "answer", side: "enemy", promptId: pending.prompt.id, value: [ids.enemy.void[2]],
+    });
+    if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected a triggered resolution error");
+    expect(outcome.error.message).toContain("5e5e5e5e-0000-4000-8000-000000000fff");
+    expect(outcome.published).toEqual([]);
+    expect(outcome.slice).toEqual({ ...slice, inFlight: null, publishedEvents: 0 });
+    expect(stateHash(outcome.slice.committed)).toBe(before);
+    expect(outcome.slice.committed.triggerQueue).toHaveLength(1);
+    expect(outcome.slice.committed.sides.enemy.void).toContain(ids.enemy.back[0]);
+    expect(outcome.slice.committed.sides.enemy.hand).toEqual([]);
+    expect(records.filter((record) => record.event === "engine.error")).toHaveLength(1);
+    expect(records.filter((record) => record.event === "engine.trigger" && record.detail.kind === "triggerResolved")).toEqual(resolvedBefore);
+    expect(invariantViolations(outcome.slice.committed, zoneEngine.catalog)).toEqual([]);
   });
 
   it("commits and publishes nothing when the step fails after its references resolved", () => {
