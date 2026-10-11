@@ -165,6 +165,11 @@ export function costPaid(optional = 0): Condition {
   return { cond: "costPaid", optional };
 }
 
+/** "If this card was reclaimed": its latest actual committed play used Reclaim, independent of its replacement status. */
+export function sourceWasReclaimed(): Condition {
+  return { cond: "sourceWasReclaimed" };
+}
+
 /**
  * "If you control a challenger": at least `atLeast` characters in play match
  * the selector, whose controller is relative to the effect's controller.

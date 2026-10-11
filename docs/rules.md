@@ -856,6 +856,14 @@ Gaining plain Reclaim keeps the cost the card already had: a card with
 "Reclaim 2●" that gains reclaim is still played from the void for 2●. A card
 that loses Reclaim loses every Reclaim cost it gained before.
 
+**Was reclaimed:** An effect that checks whether its source card was reclaimed
+checks whether that card's latest actual committed play used Reclaim. Removing
+the reclaimed status does not change how the card was played. Playing the card
+again records that new play's method. The recorded method persists across zone
+changes; materializing the card without playing it keeps that method. A created
+copy on the stack is not played
+and does not inherit the original's Reclaim play method.
+
 **Erode N** — Put the top N cards of your deck into your void; those cards are
 the **eroded** cards. Erode can also be directed at a player, as in "The opponent
 erodes 2." Eroding with an empty deck causes Fatigue.

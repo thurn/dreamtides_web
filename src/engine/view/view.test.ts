@@ -37,7 +37,7 @@ function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("v
     controller: holder,
     zone,
     variant: { amplified: false },
-    status: { exhausted: false, gainedSpark: 1, counters: 2, created: false, reclaimed: false, offering: false, ephemeral: false, x: null },
+    status: { exhausted: false, gainedSpark: 1, counters: 2, created: false, reclaimed: false, playedViaReclaim: false, offering: false, ephemeral: false, x: null },
     enteredZoneAt: 3,
   };
   if (zone === "stack") {

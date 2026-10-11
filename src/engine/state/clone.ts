@@ -64,6 +64,7 @@ function copyStatus(status: CardStatus): CardStatus {
     counters: status.counters,
     created: status.created,
     reclaimed: status.reclaimed,
+    playedViaReclaim: status.playedViaReclaim,
     offering: status.offering,
     ephemeral: status.ephemeral,
     x: status.x,

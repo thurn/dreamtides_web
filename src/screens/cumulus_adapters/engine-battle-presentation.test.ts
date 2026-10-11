@@ -779,7 +779,7 @@ describe("presentation completeness", () => {
     expect(labels.every((label) => label.length > 0)).toBe(true);
   });
 
-  it("badges every card status flag but exhaustion, which the card's own pose shows", () => {
+  it("badges active status flags, with exhaustion shown by the pose and historical play provenance unbadged", () => {
     const { view: plain, id } = changedCharacter((instance) => instance);
     const flags = (Object.keys(plain.instances[id]?.status ?? {}) as (keyof InstanceView["status"])[]).filter(
       (flag) => typeof plain.instances[id]?.status[flag] === "boolean",
@@ -790,7 +790,7 @@ describe("presentation completeness", () => {
       return badges.length > 0 && badges.every((badge) => badge.label.length > 0);
     });
     expect(badgesOf(plain, id)).toEqual([]);
-    expect(flags.filter((flag) => !badged.includes(flag))).toEqual(["exhausted"]);
+    expect(flags.filter((flag) => !badged.includes(flag))).toEqual(["exhausted", "playedViaReclaim"]);
   });
 });
 

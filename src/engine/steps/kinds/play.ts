@@ -85,6 +85,7 @@ export const play: StepDefinition<PlayStep> = {
     endFloating(ctx, (effect) => modifier.consumes.includes(effect.id));
     moveToStack(ctx, step.card, side, { choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
     if (route === "reclaim") instance.status.reclaimed = true;
+    instance.status.playedViaReclaim = route === "reclaim";
     if (route === "offering") instance.status.offering = true;
     recordPlayed(state, catalog, side, step.card);
     ctx.emit({ kind: "cardPlayed", side, instance: step.card });

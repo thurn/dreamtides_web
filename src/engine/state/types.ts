@@ -142,6 +142,8 @@ export interface CardStatus {
   created: boolean;
   /** Played by Reclaim; it is banished instead of any other zone change. */
   reclaimed: boolean;
+  /** The latest actual committed play used Reclaim; independent of the mutable zone-change replacement status. */
+  playedViaReclaim: boolean;
   /** Played by Offering; it is banished during each Ending, wherever it is. */
   offering: boolean;
   /** Drawn or created with Ephemeral; it is banished during Ending while it is in a hand. */

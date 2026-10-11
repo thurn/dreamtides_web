@@ -361,6 +361,8 @@ const CARD_STATUS_BADGES = {
   gainedSpark: null,
   counters: null,
   x: null,
+  // Historical play provenance has no active status indicator.
+  playedViaReclaim: null,
   created: { badge: "created", copy: { kind: "created" } },
   reclaimed: { badge: "duration", copy: { kind: "reclaimed" } },
   offering: { badge: "duration", copy: { kind: "offering" } },

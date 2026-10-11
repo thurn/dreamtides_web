@@ -507,6 +507,10 @@ export function conditionHolds(
       return state.sides[scope.controller].currentEnergy >= condition.amount;
     case "costPaid":
       return scope.optionalPaid[condition.optional] === true;
+    case "sourceWasReclaimed": {
+      const instance = sourceInstance(scope.source);
+      return instance !== null && state.instances[instance]?.status.playedViaReclaim === true;
+    }
     case "sourceIn": {
       const instance = sourceInstance(scope.source);
       return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;

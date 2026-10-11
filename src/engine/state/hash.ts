@@ -83,6 +83,7 @@ const STATUS_FIELDS = {
   counters: true,
   created: true,
   reclaimed: true,
+  playedViaReclaim: true,
   offering: true,
   ephemeral: true,
   x: true,
@@ -275,6 +276,7 @@ class StructuralHasher {
     this.feed(status.counters);
     this.feed(status.created);
     this.feed(status.reclaimed);
+    this.feed(status.playedViaReclaim);
     this.feed(status.offering);
     this.feed(status.ephemeral);
     this.feed(status.x);

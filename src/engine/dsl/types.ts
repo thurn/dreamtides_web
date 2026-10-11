@@ -284,6 +284,8 @@ export type Condition =
    * the Stack → Copies on the stack).
    */
   | { readonly cond: "costPaid"; readonly optional: number }
+  /** Whether the source's latest actual committed play used Reclaim; a created stack copy was not played. */
+  | { readonly cond: "sourceWasReclaimed" }
   /** "If this card is in your void": the source instance is in `zone`. An emblem is always in play. */
   | { readonly cond: "sourceIn"; readonly zone: Zone }
   /** Count the player's cards in `zone` matching `filter`, within the inclusive bounds. */
