@@ -36,7 +36,7 @@ import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { parseClientId, parseGameId } from "../../types/identifiers";
 import { testJourneySeed } from "../../types/test-identities";
 import { usePublishedEngineEvents, type PublishedBatch } from "./battle-presentation";
-import { probeEvents } from "./EngineDebugPanel";
+import { probeEvents } from "./engine-probe-events";
 import { presentedAsItem, sliceKey } from "./presentation-items";
 
 // Counts every step context: each step run and each legality or feasibility search.

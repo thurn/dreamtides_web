@@ -163,7 +163,8 @@
  */
 
 /**
- * One engine event the debug panel's probe recorded: the applied intent's
+ * One engine event retained from eager development battle-load observation:
+ * live batches use the applied intent's
  * log `seq` and the event's `index` in that intent's published batch, which
  * name it uniquely and order it, and the engine's own `event`, unredacted,
  * with its typed identities (`side`, `source`, `controller`, `instance`).
@@ -177,8 +178,12 @@
  */
 
 /**
- * A position in one battle's recorded engine events: after the event keyed
+ * A position in one battle's recorded engine events, collected from battle
+ * load before the lazy debug panel mounts: after the event keyed
  * `(seq, index)`; `seq` and `index` are -1 before the first event.
+ * Lab constructor events share the actual loading intent's seq and contiguous
+ * indices; live events use their applied intent's seq. These are not
+ * engine.action log sequence numbers. A reload begins a fresh observation history.
  *
  * @typedef {{ battleId: import("../../src/types/identifiers").BattleId, seq: number, index: number }} EventCursor
  */

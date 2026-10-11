@@ -1,3 +1,5 @@
+import type { EngineEvent } from "../engine";
+import { rememberInitialProbeEvents } from "../battle/components/engine-probe-events";
 import type { JourneyContent } from "../data/journey-content";
 import type { DeckEntry, JourneyState, SiteState, SiteType } from "../types/journey";
 import { initialJourneyState } from "../rules/fold-state";
@@ -567,15 +569,16 @@ function cardLabContentStatus(cardId: CardId): string | null {
 function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, journeyContent: JourneyContent, engine: Engine): JourneyBattleFoldState {
   let resolved = resolveCardLab(journeyContent, tokens);
   let lab: ReturnType<typeof cardLabBattle> | null = null;
+  const published: EngineEvent[] = [];
   if (resolved.kind === "ok") {
     try {
-      lab = cardLabBattle(engine, resolved.request, contentCardDefinitions());
+      lab = cardLabBattle(engine, resolved.request, contentCardDefinitions(), (events) => published.push(...events));
     } catch (error) {
       resolved = { kind: "rejected", reason: "unplayable", eligible: resolved.eligible, detail: error instanceof Error ? error.message : String(error) };
     }
   }
   publishCardLab(tokens, resolved);
-  return lab === null ? battle : withLabBattle(battle, lab);
+  return lab === null ? battle : withLabBattle(battle, lab, published);
 }
 
 /** Display data for a lab card the battle screen shows: its QA name and text, and its printed values. */
@@ -607,13 +610,15 @@ function labCardDefinition(definition: EngineCardDefinition): BattleDeckCardDefi
  * starts at the lab board so a debug undo reaches its start, and display
  * data for every lab card.
  */
-function withLabBattle(battle: JourneyBattleFoldState, lab: { init: EngineBattleInit; slice: BattleSlice }): JourneyBattleFoldState {
+function withLabBattle(battle: JourneyBattleFoldState, lab: { init: EngineBattleInit; slice: BattleSlice }, published: readonly EngineEvent[] = []): JourneyBattleFoldState {
   const labCards = PROMPT_LAB_DEFINITIONS.cards.filter((definition) => definition.id in PROMPT_LAB_CARD_TEXT);
-  return {
+  const loaded = {
     ...battle,
     init: { ...battle.init, cardDefinitions: [...battle.init.cardDefinitions, ...labCards.map(labCardDefinition)] },
     engine: { init: lab.init, slice: withHistory(lab.slice) },
   };
+  rememberInitialProbeEvents(loaded.init, published);
+  return loaded;
 }
 
 /**
@@ -1487,7 +1492,11 @@ export function buildQaSceneBattle(
   takeEngineLogRecords(QA_SCENE_BATTLE_SEQ);
   const scene = findQaScene(id);
   if (battle === null || scene === null) return battle;
-  if (scene.promptLab !== undefined) return withLabBattle(battle, promptLabBattle(provider.engine, scene.promptLab));
+  if (scene.promptLab !== undefined) {
+    const published: EngineEvent[] = [];
+    const lab = promptLabBattle(provider.engine, scene.promptLab, (events) => published.push(...events));
+    return withLabBattle(battle, lab, published);
+  }
   if (scene.cardLab !== undefined) return withCardLab(battle, scene.cardLab, journeyContent, provider.engine);
   return battle;
 }

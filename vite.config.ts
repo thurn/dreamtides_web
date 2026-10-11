@@ -71,6 +71,7 @@ const DEV_ONLY_MODULES = [
   "src/runtime/qa-scenes.ts",
   "src/runtime/qa-journey-foundation.ts",
   "src/battle/components/EngineDebugPanel.tsx",
+  "src/battle/components/engine-probe-events.ts",
 ];
 
 /**

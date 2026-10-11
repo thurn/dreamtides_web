@@ -76,6 +76,7 @@ import { LEGIONNAIRE_FIGMENT_ID, lookupFigmentCatalogEntryById } from "../state/
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import { createEngineCardModels } from "../ui/engine-card-model";
 import { usePresentationQueue, usePublishedEngineEvents } from "./battle-presentation";
+import { EngineProbeHistory } from "./engine-probe-events";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
 import { presentationItems, promptPresentable, sliceKey } from "./presentation-items";
 
@@ -143,6 +144,12 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const { init } = battle;
   const slice = fold.slice;
   const battleId = init.battleId;
+  const gameEvents = useGameEvents();
+  const probeRef = useRef<{ readonly init: typeof init; readonly history: EngineProbeHistory } | null>(null);
+  if (import.meta.env.DEV && PAGE_DEBUG_PANEL && probeRef.current?.init !== init) {
+    probeRef.current = { init, history: new EngineProbeHistory(init, gameEvents) };
+  }
+  const probeHistory = import.meta.env.DEV ? probeRef.current?.history ?? null : null;
 
   const cards = useMemo(() => {
     const byId = new Map<CardId, CardData>();
@@ -229,6 +236,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   // Each applied intent's events join the presentation queue; the prompt
   // after them shows once the queue is idle ("present, then ask").
   usePublishedEngineEvents(engine, slice, ({ events, batch, before, eventStates, seq }) => {
+    if (import.meta.env.DEV) probeHistory?.append({ events, seq });
     const view = engine.view(batch.state, HUMAN);
     const items = presentationItems(events, HUMAN, batch, before, (source) => {
       const instance = typeof source === "string" ? view.instances[source] : undefined;
@@ -259,7 +267,6 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   // The battle log is rebuilt from the event log, so a reload or a debug
   // undo shows the entries of the fold's path. Its replay follows the fold
   // one intent per task, so opening the log only finishes it.
-  const gameEvents = useGameEvents();
   const battleRef = useRef(battle);
   battleRef.current = battle;
   useEffect(() => {
@@ -724,6 +731,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
             battle={battle}
             battleId={battleId}
             openerVisible={model.view.cardPicker?.presentation !== "gallery"}
+            events={probeHistory?.events ?? []}
           />
         </Suspense>
       ) : null}

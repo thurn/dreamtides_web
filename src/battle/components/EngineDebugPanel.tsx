@@ -9,7 +9,7 @@
 // (`scripts/qa/card-sweep.mjs`) and the battle QA driver's event helpers
 // (`qa.battle.events`, `scripts/qa/prelude.mjs`).
 
-import { useEffect, useRef, useState, type ReactElement } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import { DeveloperRail } from "../../cumulus/components/overlay/DeveloperRail";
 import { GlassButton } from "../../cumulus/components/controls/GlassButton";
 import { IconButton } from "../../cumulus/components/controls/IconButton";
@@ -19,8 +19,7 @@ import { Select } from "../../cumulus/components/controls/Select";
 import { TextField } from "../../cumulus/components/controls/TextField";
 import { GLYPHS } from "../../cumulus/primitives/glyph";
 import { token } from "../../cumulus/primitives/tokens";
-import type { Decision, Engine, EngineEvent, EngineEventKind, Prompt, Side } from "../../engine";
-import type { InstanceId } from "../../engine/state/ids";
+import type { Decision, Engine, Prompt, Side } from "../../engine";
 import type { BattleId, PromptId } from "../../types/identifiers";
 import { DEBUG_ZONES, revealHiddenZones, type DebugOp, type DebugZone } from "../../engine/debug/debug-actions";
 import type { BattleSlice, HistoryEntry } from "../../engine/fold/slice";
@@ -30,7 +29,7 @@ import type { JourneyBattleFoldState } from "../../rules/battle/fold";
 import { useActions } from "../../session/hooks";
 import { useJourney } from "../../state/journey-context";
 import { isCardId, parseCardId, type CardId } from "../../types/card-identity";
-import { usePublishedEngineEvents, type PublishedBatch } from "./battle-presentation";
+import type { EngineProbeEvent } from "./engine-probe-events";
 
 /** Developer-tool labels: QA copy, not player copy. */
 const COPY = {
@@ -56,34 +55,6 @@ const COPY = {
 /** The rail's width on screen. */
 const RAIL_WIDTH = 320;
 
-/**
- * One published engine event as the probe records it. The applied intent's
- * log `seq` and the event's `index` in that intent's batch name it uniquely
- * and order it, so a repeated event (two draws in one batch) stays distinct.
- * `event` is the engine's own event, unredacted like the rest of the probe:
- * its identities (`side`, `source`, `controller`, `instance`, `node`) are the
- * engine's, never names or display strings.
- */
-interface EngineProbeEvent {
-  readonly seq: number;
-  readonly index: number;
-  readonly kind: EngineEventKind;
-  /** The event's `instance` field, for the kinds that carry one. */
-  readonly instance: InstanceId | null;
-  readonly event: EngineEvent;
-}
-
-/** The probe's records of one applied intent's published events, in order. */
-export function probeEvents({ events, seq }: Pick<PublishedBatch, "events" | "seq">): EngineProbeEvent[] {
-  return events.map((event, index) => ({
-    seq,
-    index,
-    kind: event.kind,
-    instance: "instance" in event ? event.instance : null,
-    event,
-  }));
-}
-
 /** The development-only state the card sweep reads. */
 interface EngineProbe {
   readonly battleId: BattleId;
@@ -106,12 +77,15 @@ export default function EngineDebugPanel({
   battle,
   battleId,
   openerVisible,
+  events,
 }: {
   readonly engine: Engine;
   readonly battle: JourneyBattleFoldState;
   readonly battleId: BattleId;
   /** View-only visibility of the closed opener; the probe and open rail stay mounted. */
   readonly openerVisible: boolean;
+  /** Eager battle-load observations, independent of this lazy panel. */
+  readonly events: readonly EngineProbeEvent[];
 }): ReactElement | null {
   const actions = useActions();
   const { cardDatabase } = useJourney();
@@ -120,12 +94,8 @@ export default function EngineDebugPanel({
   const [cardText, setCardText] = useState("");
   const [zone, setZone] = useState<DebugZone>("hand");
   const [revealed, setRevealed] = useState(false);
-  const events = useRef<EngineProbeEvent[]>([]);
   const slice = battle.engine.slice;
 
-  usePublishedEngineEvents(engine, slice, (published) => {
-    for (const entry of probeEvents(published)) events.current.push(entry);
-  });
   useEffect(() => {
     const pending = pendingEnginePrompt(battle, engine);
     const probe: EngineProbe = {
@@ -133,9 +103,13 @@ export default function EngineDebugPanel({
       slice,
       pending: pending?.prompt ?? null,
       decision: slice.inFlight === null ? engine.decision(slice.committed) : null,
-      events: events.current,
+      events,
     };
-    (window as { __engineProbe?: EngineProbe }).__engineProbe = probe;
+    const target = window as { __engineProbe?: EngineProbe };
+    target.__engineProbe = probe;
+    return () => {
+      if (target.__engineProbe === probe) delete target.__engineProbe;
+    };
   });
 
   const cardName = (id: CardId | null): string =>

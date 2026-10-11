@@ -1,0 +1,125 @@
+{
+  "bead": "hv-umm2.390",
+  "phase": 5,
+  "implementMin": 15.743,
+  "measurementWindow": "native claim to pre-commit evidence; exact commit time in delivery handoff",
+  "localValidationS": {
+    "focused": 3.258,
+    "review": 11.595,
+    "knip": 2.999,
+    "full": 62.092,
+    "review-final": 14.172,
+    "knip-final": 2.605
+  },
+  "hostLoad": [
+    {
+      "label": "focused",
+      "exit": 0,
+      "seconds": 3.258,
+      "loadBefore": [
+        8.380859375,
+        10.400390625,
+        9.27978515625
+      ],
+      "loadAfter": [
+        8.380859375,
+        10.400390625,
+        9.27978515625
+      ]
+    },
+    {
+      "label": "review",
+      "exit": 0,
+      "seconds": 11.595,
+      "loadBefore": [
+        8.380859375,
+        10.400390625,
+        9.27978515625
+      ],
+      "loadAfter": [
+        9.07763671875,
+        10.47314453125,
+        9.32568359375
+      ]
+    },
+    {
+      "label": "knip",
+      "exit": 0,
+      "seconds": 2.999,
+      "loadBefore": [
+        9.07763671875,
+        10.47314453125,
+        9.32568359375
+      ],
+      "loadAfter": [
+        9.07763671875,
+        10.47314453125,
+        9.32568359375
+      ]
+    },
+    {
+      "label": "full",
+      "exit": 0,
+      "seconds": 62.092,
+      "loadBefore": [
+        9.07763671875,
+        10.47314453125,
+        9.32568359375
+      ],
+      "loadAfter": [
+        7.40966796875,
+        9.8291015625,
+        9.17529296875
+      ]
+    },
+    {
+      "label": "review-final",
+      "exit": 0,
+      "seconds": 14.172,
+      "loadBefore": [
+        5.6279296875,
+        9.10546875,
+        8.93603515625
+      ],
+      "loadAfter": [
+        5.2236328125,
+        8.83935546875,
+        8.84326171875
+      ]
+    },
+    {
+      "label": "knip-final",
+      "exit": 0,
+      "seconds": 2.605,
+      "loadBefore": [
+        5.2236328125,
+        8.83935546875,
+        8.84326171875
+      ],
+      "loadAfter": [
+        5.28564453125,
+        8.7919921875,
+        8.826171875
+      ]
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 59,
+    "jsdomFiles": 0,
+    "cases": 3
+  },
+  "browser": {
+    "wallMs": {
+      "browserLeaseWait": 40,
+      "serve": 1263,
+      "scenario": 15387,
+      "total": 16713
+    },
+    "commandS": 22.008,
+    "hostLoad": 4.3193359375,
+    "sourceFrozen": true
+  },
+  "friction": [],
+  "improvementBeads": []
+}

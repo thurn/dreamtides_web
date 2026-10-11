@@ -308,13 +308,21 @@ battle uses it rather than its own pass loop:
   the screen ignores is pressed again rather than counted.
 - `qa.battle.waitFor(predicate, { timeout?, pollMs?, label? })` waits
   without acting.
-- With `debug=1`, the probe records each engine event an applied intent
-  published as `{ seq, index, kind, instance, event }`: the intent's log
+- With `debug=1`, battle-load observation starts in the eager battle
+  screen and remains available when the lazy debug panel mounts. The probe
+  records each engine event an applied intent published as `{ seq, index, kind, instance, event }`: the intent's log
   sequence and the event's index in its batch name and order it, so a
   repeated event (two draws in one batch) stays distinct, and `event` is
   the engine's own unredacted event with its identities (`side`, `source`,
-  `controller`, `instance`, `node`). A reload records only the events
-  published after it. The event helpers only read it:
+  `controller`, `instance`, `node`). Lab constructor script events are
+  genuine engine publications retained under the matching `LOAD_STATE`
+  intent's sequence, with contiguous indices across setup steps. These are
+  load setup observations, rather than separately committed play actions or
+  `engine.action` log sequences. Live batches retain their own intent
+  sequences. A reload records events published after it; constructor
+  observations belong to the original development load. History belongs to
+  the current mounted battle, and the panel clears its probe on unmount.
+  The event helpers only read it:
   - `qa.battle.eventCursor()` returns `{ battleId, seq, index }`, the
     position after the last recorded event (`-1`s before the first).
   - `qa.battle.events(cursor, { match?, limit? })` returns `{ events,
