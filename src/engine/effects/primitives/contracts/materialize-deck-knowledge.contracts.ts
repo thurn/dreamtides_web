@@ -18,7 +18,7 @@ import { materialize } from "../materialize";
 import { sequence } from "../sequence";
 import { ifThen } from "../if-then";
 
-type Mode = "filtered" | "plain" | "whole" | "single" | "known" | "empty" | "blocked" | "opaque" | "hidden" | "branchShort" | "branchLong" | "failure";
+type Mode = "filtered" | "plain" | "whole" | "single" | "known" | "empty" | "blocked" | "opaque" | "hidden" | "asymmetric" | "branchShort" | "branchLong" | "failure";
 function fixture(owner: Side, mode: Mode, full = false) {
   const player = owner === "player" ? "you" : "opponent";
   const from = mode === "whole" ? everyIn("deck", { cardType: "character" }, { player })
@@ -31,19 +31,20 @@ function fixture(owner: Side, mode: Mode, full = false) {
   const hiddenSource: EngineCardDefinition = { ...defined, id: syntheticId(0x40901) };
   const synthetic: SyntheticHooks = { resolve(ctx, item) {
     const deck = ctx.state.sides.player.deck;
-    const source = mode === "hidden" ? deck[deck.length - 1] : item.instance;
+    const hand = ctx.state.sides.player.hand;
+    const source = mode === "hidden" ? deck[deck.length - 1] : mode === "asymmetric" ? hand[hand.length - 1] : item.instance;
     resolveEffect(ctx, effect, { source, origin: instanceOrigin(instanceOf(ctx.state, source)), ability: 0,
       controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] } });
     if (mode === "failure") throw new Error("synthetic deck materialization failure");
   } };
-  const source: EngineCardDefinition = ["opaque", "hidden", "failure"].includes(mode) ? { ...defined, abilities: () => [], synthetic } : defined;
+  const source: EngineCardDefinition = ["opaque", "hidden", "asymmetric", "failure"].includes(mode) ? { ...defined, abilities: () => [], synthetic } : defined;
   const engine = createEngine(testCatalog([source, hiddenSource]));
   const deck = mode === "single" ? [v.vanilla1.id, v.event0.id, v.vanilla2.id, v.event1.id]
     : mode === "known" ? [v.vanilla1.id, v.event0.id, v.vanilla2.id, v.event1.id]
     : full ? [v.vanilla1.id, v.event0.id, v.vanilla2.id, v.event1.id]
     : [v.event0.id, v.vanilla1.id, v.event1.id, branch ? v.event0.id : v.vanilla2.id, v.event0.id, mode === "hidden" ? hiddenSource.id : v.vanilla3.id];
   const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day",
-    player: { hand: [source.id, ...(mode === "blocked" ? [v.vanilla1.id] : branch ? [mode === "branchShort" ? v.event1.id : v.event0.id] : [])], back: full ? [] : Array.from({ length: 9 }, () => v.vanilla1.id), deck: owner === "player" ? deck : [mode === "hidden" ? hiddenSource.id : v.event1.id] },
+    player: { hand: [source.id, ...(mode === "blocked" ? [v.vanilla1.id] : mode === "asymmetric" ? [hiddenSource.id] : branch ? [mode === "branchShort" ? v.event1.id : v.event0.id] : [])], back: full ? [] : Array.from({ length: 9 }, () => v.vanilla1.id), deck: owner === "player" ? deck : [mode === "hidden" ? hiddenSource.id : v.event1.id] },
     enemy: { deck: owner === "enemy" ? deck : [v.event1.id] } });
   const known = mode === "single" || full ? [ids[owner].deck[1], ids[owner].deck[3]]
     : mode === "known" ? [ids[owner].deck[0], ids[owner].deck[1], ids[owner].deck[3]]
@@ -122,6 +123,26 @@ describe("materialize deck knowledge", () => {
     }
   });
   }
+  it.each(SIDES)("bounds %s's deck removal only for the viewer who identifies the source, through observation and cold replay", owner => {
+    const f = fixture(owner, "asymmetric"); const first = observe(f);
+    const cold = { ...f, engine: createEngine(f.engine.catalog), state: JSON.parse(JSON.stringify(f.state)) as BattleState };
+    const second = observe(cold);
+    expect(left(f.state, first.state, owner)).toEqual([f.deck[1]]);
+    expect(stateHash(second.state)).toBe(stateHash(first.state));
+    expect(second.events).toEqual(first.events);
+    for (const [run, result] of [[f, first], [cold, second]] as const) {
+      for (const state of [...result.snapshots.filter(s => left(f.state, s, owner).length > 0), result.state]) {
+        for (const viewer of SIDES) {
+          expect(sees(run.engine, state, viewer, f.deck[0])).toBe(true);
+          expect(sees(run.engine, state, viewer, f.deck[2])).toBe(false);
+        }
+        expect(run.engine.view(state, "player").sides[owner].deck.known).toContainEqual({ id: f.deck[4], index: 3 });
+        expect(sees(run.engine, state, "enemy", f.deck[4])).toBe(false);
+      }
+    }
+    for (const viewer of SIDES) expect(cold.engine.view(second.state, viewer)).toEqual(f.engine.view(first.state, viewer));
+    expect(eventRedactionViolations(first.events, f.state, first.state)).toEqual([]);
+  });
   it.each(SIDES)("uses the public maximum count across hidden branches on %s's deck", owner => {
     const short = fixture(owner, "branchShort"); const longer = fixture(owner, "branchLong");
     const first = observe(short); const second = observe(longer);

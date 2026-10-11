@@ -168,6 +168,15 @@ describe("drawMatching", () => {
     expect(engine.view(run(unknownFilter.state, unknownFilter.ids.player.hand[0]).state, "enemy").sides.player.deck.known).toEqual([]);
   });
 
+  it("keeps the public filter bound only for the viewer who identifies the source", () => {
+    const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [v.event0.id, hiddenTrigger.id], deck: [v.vanilla1.id, v.vanilla2.id, v.event1.id] }, enemy: { deck: filler } });
+    state.knownTo = { player: [ids.player.deck[1]], enemy: [ids.player.deck[1]] };
+    const result = run(state, ids.player.hand[0]);
+    expect(result.state.sides.player.hand).toEqual([ids.player.hand[1], ids.player.deck[0]]);
+    expect(engine.view(result.state, "player").sides.player.deck.known).toEqual([{ id: ids.player.deck[1], index: 0 }]);
+    expect(engine.view(result.state, "enemy").sides.player.deck.known).toEqual([]);
+  });
+
   it("keeps anonymous removal bounds when an ability contains different literal draw filters", () => {
     const { state, ids } = board(mixedFilters.id, [v.vanilla1.id, v.vanilla2.id, v.event1.id]);
     state.knownTo.enemy = [ids.player.deck[1]];

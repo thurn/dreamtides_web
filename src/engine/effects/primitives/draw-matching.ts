@@ -1,12 +1,11 @@
 import { cardMatchesFilter, matchesEveryCard } from "../../continuous/characteristics";
 import { resolvePlayer } from "../../dsl/selectors";
 import type { CardFilter, PlayerRef } from "../../dsl/types";
-import { abilityOrigin, originAbilities } from "../../rules/activation";
 import { drawCard } from "../../rules/resources";
 import type { Side } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
-import { forgetFilteredDrawPositions, identifies } from "../../view/knowledge";
-import { everyNode } from "../interpreter";
+import { forgetFilteredDrawPositions } from "../../view/knowledge";
+import { everyNode, publicAbilityEffect } from "../interpreter";
 import { definePrimitive, type EffectEnv } from "../types";
 
 /** Draw the first matching card in deck order, without looking at or shuffling the rest. */
@@ -18,13 +17,10 @@ export interface DrawMatchingNode {
 
 /** Whether the source's public ability determines this filter independently of a hidden branch. */
 function publicFilter(ctx: StepContext, env: EffectEnv, filter: CardFilter, viewer: Side): boolean {
-  if (typeof env.source === "string" && !identifies(ctx.state, env.source, viewer)) return false;
-  const origin = abilityOrigin(ctx.state, env.source);
-  if (origin === null || JSON.stringify(origin) !== JSON.stringify(env.origin)) return false;
-  const ability = originAbilities(ctx.catalog, origin)[env.ability];
-  if (ability === undefined || !("effect" in ability)) return false;
-  const nodes = everyNode(ability.effect).filter((node): node is DrawMatchingNode => node.op === "drawMatching");
-  // Multiple filters in one ability, or an opaque synthetic resolver, supply no public predicate proof.
+  const effect = publicAbilityEffect(ctx, env, viewer);
+  if (effect === null) return false;
+  const nodes = everyNode(effect).filter((node): node is DrawMatchingNode => node.op === "drawMatching");
+  // Differing filters in one ability supply no public predicate proof.
   return nodes.length > 0 && nodes.every((node) =>
     node.filter.cardType === filter.cardType && node.filter.subtype === filter.subtype &&
     node.filter.costAtMost === filter.costAtMost && node.filter.costAtLeast === filter.costAtLeast,

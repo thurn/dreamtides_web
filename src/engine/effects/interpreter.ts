@@ -745,27 +745,45 @@ export function resolveNode(ctx: StepContext, node: EffectNode, env: EffectEnv):
   env.moved.track(node, bounds === null ? resolve : () => ctx.settlingKnowledge(randomDeckRemovalSettler(ctx.state, bounds), resolve));
 }
 
+/**
+ * The declared effect `viewer` can attribute to the ability `env` resolves:
+ * `viewer` identifies its source, which still has the origin the ability
+ * resolves from, and that origin's declaration at `env.ability` is the tree
+ * resolving. `null` when nothing public proves it, as for an opaque synthetic
+ * resolver; callers then infer nothing from the ability's text.
+ */
+export function publicAbilityEffect(ctx: StepContext, env: EffectEnv, viewer: Side): EffectNode | null {
+  if (!seesSource(ctx.state, env.source, viewer)) return null;
+  const origin = abilityOrigin(ctx.state, env.source);
+  if (origin === null || JSON.stringify(origin) !== JSON.stringify(env.origin)) return null;
+  if (origin.kind === "card" && ctx.catalog.card(origin.cardId).synthetic?.resolve !== undefined) return null;
+  const ability = originAbilities(ctx.catalog, origin)[env.ability];
+  if (ability === undefined || !("effect" in ability) || JSON.stringify(ability.effect) !== JSON.stringify(env.root)) return null;
+  return ability.effect;
+}
+
 /** Public deck-materialization windows, independent of the selected hidden branch. */
 function materializeDeckBounds(ctx: StepContext, node: EffectNode, env: EffectEnv): DeckRemovalBounds | null {
   if (node.op !== "materialize") return null;
   const { from } = node as MaterializeNode;
   if ("op" in from || from.zone !== "deck" || (from.pick !== "top" && from.pick !== "every")) return null;
   if (from.pick === "every") return {};
-  const origin = abilityOrigin(ctx.state, env.source);
-  if (origin === null || JSON.stringify(origin) !== JSON.stringify(env.origin)) return {};
-  if (origin.kind === "card" && ctx.catalog.card(origin.cardId).synthetic?.resolve !== undefined) return {};
-  const ability = originAbilities(ctx.catalog, origin)[env.ability];
-  if (ability === undefined || !("effect" in ability) || JSON.stringify(ability.effect) !== JSON.stringify(env.root)) return {};
-  const refs = everyNode(ability.effect).filter((part) => part.op === "materialize").map((part) => (part as MaterializeNode).from);
-  if (refs.some((ref) => "op" in ref)) return {};
-  const decks = refs.filter((ref): ref is ZoneCardSpec => !("op" in ref) && ref.zone === "deck");
-  if (decks.length === 0 || decks.some((ref) => ref.pick !== "top" || !Number.isSafeInteger(ref.count))) return {};
-  const limit = Math.max(0, ...decks.map((ref) => ref.pick === "top" ? ref.count : 0));
-  if (from.count > limit) return {};
-  const owner = resolvePlayer(env.controller, from.player);
   const viewers: Partial<Record<Side, number>> = {};
-  for (const viewer of ["player", "enemy"] as const) if (seesSource(ctx.state, env.source, viewer)) viewers[viewer] = limit;
-  return { [owner]: viewers };
+  for (const viewer of ["player", "enemy"] as const) {
+    const effect = publicAbilityEffect(ctx, env, viewer);
+    const limit = effect === null ? null : publicTopDeckLimit(effect);
+    if (limit !== null && from.count <= limit) viewers[viewer] = limit;
+  }
+  return { [resolvePlayer(env.controller, from.player)]: viewers };
+}
+
+/** The deepest deck prefix any materialization in `effect` takes from, when each takes a fixed top count. */
+function publicTopDeckLimit(effect: EffectNode): number | null {
+  const refs = everyNode(effect).filter((part) => part.op === "materialize").map((part) => (part as MaterializeNode).from);
+  if (refs.some((ref) => "op" in ref)) return null;
+  const decks = refs.filter((ref): ref is ZoneCardSpec => !("op" in ref) && ref.zone === "deck");
+  if (decks.length === 0 || decks.some((ref) => ref.pick !== "top" || !Number.isSafeInteger(ref.count))) return null;
+  return Math.max(0, ...decks.map((ref) => ref.pick === "top" ? ref.count : 0));
 }
 
 /**
