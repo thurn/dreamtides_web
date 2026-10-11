@@ -1504,9 +1504,12 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   what it describes from that side. `eventVisibleTo` is whether
   `eventSeenBy` shows the side anything. The kinds that can name a hidden
   card:
-  - `cardDrawn`, a `pendingAbility` for a drawn card, and a `cardCreated`
-    in a hand are private to the side holding the hand;
-    `feasibilityBounded` is private to the answering side;
+  - a `pendingAbility` for a drawn card and a `cardCreated` in a hand are
+    private to the side holding the hand; `feasibilityBounded` is private
+    to the answering side;
+  - `cardDrawn` is public, and names the card only to the drawing side, so
+    the opponent sees each draw as a count and never learns the card from
+    it, even when it can identify the card later in the same batch;
   - `cardDiscovered` is public, and names the card only to a side that can
     identify it, so the opponent sees that a card was discovered but not
     which;
@@ -1663,7 +1666,9 @@ name says what it is and how long it lasts.
 The battle log (the battle screen's log control) lists one plain-English
 line per presented event, grouped by turn, from the UI copy module
 (`engineBattleLogText`). Entries keep instance IDs and resolve names only
-for display.
+for display. The opponent's draws log one count-only line each, and a
+reveal names whose hand the cards came from, since an effect may reveal
+the opponent's hand.
 
 ## Policy interface
 

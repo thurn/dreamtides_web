@@ -554,7 +554,8 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     case "returnedToHand":
       return `${card(event.instance)} returned to ${whose(event.side)} hand.`;
     case "revealed":
-      return `${who(event.side)} revealed ${event.instances.map(named).join(", ")}.`;
+      // `side` is whose hand the cards were revealed from, which is not always who revealed them (an opponent's effect may reveal it).
+      return `Revealed from ${whose(event.side)} hand: ${event.instances.map(named).join(", ")}.`;
     case "sparkGained":
       return `${card(event.instance)}: ${engineStatusLabel({ kind: "spark", amount: event.amount, expiry: event.expiry }, human)}.`;
     case "triggerResolved":

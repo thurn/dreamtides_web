@@ -1917,7 +1917,11 @@ describe("lookAtTop", () => {
     expect(eventSeenBy(look, "enemy", state)).toEqual({ ...look, cards: [null, null, null] });
     expect(state.knownTo.player).toEqual([d1]);
     expect(state.knownTo.enemy).toEqual([]);
-    expect(events.some((item) => item.kind === "cardDrawn" && eventSeenBy(item, "enemy", state) !== null)).toBe(false);
+    // The opponent sees each draw as a count, never the card drawn.
+    expect(events.filter((item) => item.kind === "cardDrawn").map((item) => eventSeenBy(item, "enemy", state))).toEqual([
+      { kind: "cardDrawn", side: "player", instance: null },
+      { kind: "cardDrawn", side: "player", instance: null },
+    ]);
   });
 
   it("chooses the mode as the card is played, before the look: one card drawn, or two that gain ephemeral", () => {

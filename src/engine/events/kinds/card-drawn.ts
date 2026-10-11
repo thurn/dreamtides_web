@@ -1,13 +1,22 @@
 import type { InstanceId, Side } from "../../state/ids";
 import type { EventDefinition } from "../types";
 
+/** `side` drew a card: it went from the top of that side's deck into its hand. */
 export interface CardDrawnEvent {
   readonly kind: "cardDrawn";
   readonly side: Side;
-  readonly instance: InstanceId;
+  /** `null` as the other side sees the event (`eventSeenBy`). */
+  readonly instance: InstanceId | null;
 }
 
+/**
+ * Both sides see that a card was drawn, as the hand's count is public; only
+ * the drawing side sees which. The other side never learns the card from
+ * the draw, even when it can identify it later in the batch (a card drawn
+ * and then discarded or revealed).
+ */
 export const cardDrawn: EventDefinition<CardDrawnEvent> = {
   kind: "cardDrawn",
-  privateTo: (event) => event.side,
+  privateTo: () => null,
+  redact: (event, viewer) => (viewer === event.side || event.instance === null ? event : { ...event, instance: null }),
 };

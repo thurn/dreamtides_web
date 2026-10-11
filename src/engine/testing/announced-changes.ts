@@ -6,8 +6,8 @@
  * ends, is named by an event the step publishes. A card change in a public
  * zone (into, out of, or within the stack, play, a void, or the Banished
  * zone) is named by an event each side may see, perhaps with fields
- * redacted (`eventSeenBy`); a change hidden from a side, such as a draw into
- * the other side's hand, needs only the event its owner sees.
+ * redacted (`eventSeenBy`); a change hidden from a side, such as a card
+ * created in the other side's hand, needs only the event its owner sees.
  *
  * One rules change is announced by its phase instead: the Ending readies
  * every exhausted character (rules § Exhaust and Awaken) in a step that

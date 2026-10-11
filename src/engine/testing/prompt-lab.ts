@@ -75,6 +75,8 @@ export const LAB = {
   dissolveUpToOne: labEvent(3, 1, p.dissolve(upTo(enemyCharacter(), 1))),
   /** A pending event (D36): it plays text-less and reports its pending ability. */
   sketch: { ...labEvent(6, 0, p.draw(1)), status: "pending" },
+  /** "Reveal the opponent's hand. Draw a card." */
+  spyglass: labEvent(7, 0, p.sequence(p.reveal("opponent"), p.draw(1))),
   /** "Put 2 memory counters on each character you control." */
   hourglass: labSyntheticEvent(5, 0, {
     resolve: (ctx, item) => {
@@ -171,6 +173,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
   [LAB.dissolveUpToOne.id]: { name: "Lab Mercy", text: "Dissolve up to one enemy." },
   [LAB.sketch.id]: { name: "Lab Sketch", text: "" },
+  [LAB.spyglass.id]: { name: "Lab Spyglass", text: "Reveal the opponent's hand. Draw a card." },
   [LAB.hourglass.id]: { name: "Lab Hourglass", text: "Put 2 memory counters on each character you control." },
   [DSL.dissolveEnemy.id]: { name: "Lab Unmaking", text: "Fast. Dissolve an enemy." },
   [DSL.banishEnemyWithSparkAtMostTwo.id]: { name: "Lab Exile", text: "Banish an enemy with spark 2 or less." },
@@ -702,6 +705,18 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     },
     script: [],
     presents: [playHand(0), playHand(1)],
+  },
+  {
+    name: "present-reveal",
+    description: "Presentation: the AI reveals the human's hand and draws a card, then draws for its next turn",
+    setup: {
+      active: "enemy",
+      phase: "day",
+      player: { hand: [vanillas[0], SYNTHETIC.interruptEvent.id], deck: deck(8) },
+      enemy: { hand: [LAB.spyglass.id], energy: 2, deck: deck(8) },
+    },
+    script: [],
+    presents: [play("enemy", (ids) => at(ids.enemy.hand, 0)), { passUntilDayOf: "player" }, { passUntilDayOf: "enemy" }],
   },
   {
     name: "present-opponent",

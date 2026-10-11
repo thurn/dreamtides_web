@@ -463,18 +463,25 @@ describe("presentation items", () => {
     expect(boardIds(labModel(registered.after, null))).toContain(reveal.visual.instance);
   });
 
-  it("travels the human's own play and never presents an event hidden from the human", () => {
+  it("travels the human's own play, and the opponent's draws without the cards drawn", () => {
     const [play, answer] = steps("present-zones");
     const dissolve = [...(play?.items ?? []), ...(answer?.items ?? [])];
     const challenge = steps("present-challenge")[1];
     if (challenge === undefined) throw new Error("no challenge");
     const draws = challenge.published.filter((event) => event.kind === "cardDrawn" && event.side === "enemy");
+    const drawn = draws.flatMap((event) => (event.kind === "cardDrawn" && event.instance !== null ? [event.instance] : []));
     const enemyBatch = { key: pid("draws"), state: challenge.after };
+    const shown = presentationItems(draws, "player", enemyBatch, challenge.before, () => null);
+    const identified = new Set(shown.flatMap((item) => Object.keys(labEngine.view(item.batch.state, "player").instances)));
 
     expect(dissolve.some((item) => item.presentation === "reveal")).toBe(false);
     expect(dissolve[0]?.presentation).toBe("travel");
-    expect(draws.length).toBeGreaterThan(0);
-    expect(presentationItems(draws, "player", enemyBatch, challenge.before, () => null)).toEqual([]);
+    expect(drawn.length).toBeGreaterThan(0);
+    expect(drawn).toHaveLength(draws.length);
+    expect(shown.map((item) => ({ presentation: item.presentation, visual: item.visual }))).toEqual(
+      draws.map(() => ({ presentation: "travel", visual: null })),
+    );
+    expect(drawn.filter((id) => identified.has(id))).toEqual([]);
     expect(presentationItems(draws, "enemy", enemyBatch, challenge.before, () => null).length).toBe(draws.length);
   });
 
@@ -818,7 +825,11 @@ describe("battle log", () => {
     );
     expect(lines.every((line) => line.text.length > 0)).toBe(true);
     expect(turns).toHaveLength(1);
-    expect(seenByPlayer.some((entry) => entry.event.kind === "cardDrawn" && entry.event.side === "enemy")).toBe(false);
+    expect(seenByPlayer.filter((entry) => entry.event.kind === "cardDrawn" && entry.event.side === "enemy").map((entry) => entry.event)).toEqual(
+      challenge.published
+        .filter((event) => event.kind === "cardDrawn" && event.side === "enemy")
+        .map(() => ({ kind: "cardDrawn", side: "enemy", instance: null })),
+    );
     expect(seenByPlayer.some((entry) => entry.event.kind === "laneResolved")).toBe(true);
   });
 
@@ -869,6 +880,77 @@ describe("battle log", () => {
     expect(line("enemy", theirs?.event)).not.toBeNull();
   });
 
+  /** The battle log entries of each step of the reveal lab fixture, for `human`. */
+  const revealLog = (human: "player" | "enemy") =>
+    steps("present-reveal", human).flatMap((step, index) =>
+      battleLogEntries(
+        step.published,
+        human,
+        step.after,
+        labEngine.view(step.after, human),
+        labEngine.view(step.before, human),
+        `reveal:${human}:${String(index)}`,
+      ),
+    );
+
+  it("logs every opponent draw for the human as a count, never naming the card drawn", () => {
+    const published = steps("present-reveal").flatMap((step) => step.published);
+    const drawnBy = (side: "player" | "enemy") =>
+      published.flatMap((event) => (event.kind === "cardDrawn" && event.side === side && event.instance !== null ? [event.instance] : []));
+    const draws = (human: "player" | "enemy", side: "player" | "enemy") =>
+      revealLog(human).filter((entry) => entry.event.kind === "cardDrawn" && entry.event.side === side);
+    const enemyDrawn = drawnBy("enemy");
+    const playerDrawn = drawnBy("player");
+    const lines = draws("player", "enemy").map((entry) =>
+      engineBattleLogText(entry.event, { human: "player", card: (id) => id, dreamwell: () => null }),
+    );
+
+    // The effect's draw and the turn's draw.
+    expect(enemyDrawn).toHaveLength(2);
+    expect(playerDrawn.length).toBeGreaterThan(0);
+    expect(draws("enemy", "enemy").map((entry) => entry.event)).toEqual(
+      enemyDrawn.map((instance) => ({ kind: "cardDrawn", side: "enemy", instance })),
+    );
+    expect(draws("player", "enemy").map((entry) => entry.event)).toEqual(
+      enemyDrawn.map(() => ({ kind: "cardDrawn", side: "enemy", instance: null })),
+    );
+    expect(draws("player", "enemy").map((entry) => entry.cards)).toEqual(enemyDrawn.map(() => ({})));
+    expect(lines.every((line) => line !== null && enemyDrawn.every((id) => !line.includes(id)))).toBe(true);
+    expect(enemyDrawn.filter((id) => JSON.stringify(revealLog("player")).includes(id))).toEqual([]);
+    expect(draws("player", "player").map((entry) => entry.event)).toEqual(
+      playerDrawn.map((instance) => ({ kind: "cardDrawn", side: "player", instance })),
+    );
+    expect(draws("enemy", "player").map((entry) => entry.event)).toEqual(
+      playerDrawn.map(() => ({ kind: "cardDrawn", side: "player", instance: null })),
+    );
+  });
+
+  it("logs the opponent's reveal of the human's hand for both sides, naming whose hand it was", () => {
+    const resolved = steps("present-reveal").find((step) => step.published.some((published) => published.kind === "revealed"));
+    const event = resolved?.published.find((published) => published.kind === "revealed");
+    if (event?.kind !== "revealed") throw new Error("no reveal");
+    const revealedOf = (human: "player" | "enemy") => revealLog(human).filter((entry) => entry.event.kind === "revealed");
+    const line = (human: "player" | "enemy") => {
+      const [entry] = revealedOf(human);
+      return entry === undefined ? null : engineBattleLogText(entry.event, { human, card: (id) => id, dreamwell: () => null });
+    };
+
+    expect(event.side).toBe("player");
+    expect(event.instances).toEqual(resolved?.before.sides.player.hand);
+    for (const human of SIDES) {
+      const [entry, ...rest] = revealedOf(human);
+      expect(rest).toEqual([]);
+      expect(entry?.event).toEqual({ kind: "revealed", side: "player", instances: event.instances });
+      expect(Object.keys(entry?.cards ?? {}).sort()).toEqual([...event.instances].sort());
+    }
+    expect(line("player")).not.toBeNull();
+    expect(line("enemy")).not.toBeNull();
+    expect(line("player")).not.toEqual(line("enemy"));
+    expect(line("player")).toEqual(
+      engineBattleLogText({ ...event, side: "enemy" }, { human: "enemy", card: (id) => id, dreamwell: () => null }),
+    );
+  });
+
   describe("from the event log", () => {
     const siteId = parseSiteId("site-battle-log");
     const logEngine = () => createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
@@ -908,7 +990,7 @@ describe("battle log", () => {
       return { battle, events };
     }
 
-    it("shows the same entries after a reload, and never what the human could not see", () => {
+    it("shows the same entries after a reload, and the opponent's draws without the cards drawn", () => {
       const engine = logEngine();
       const { battle, events } = passedBattle(engine, 12);
       const entries = engineBattleLog(engine, battle, events, "player")?.entries ?? [];
@@ -924,7 +1006,12 @@ describe("battle log", () => {
       expect(new Set(entries.map((entry) => entry.turnNumber)).size).toBeGreaterThan(2);
       expect(reloaded?.entries).toEqual(entries);
       expect(drawn("player")).toBe(true);
-      expect(drawn("enemy")).toBe(false);
+      expect(drawn("enemy")).toBe(true);
+      expect(
+        entries.filter((entry) => entry.event.kind === "cardDrawn" && entry.event.side === "enemy").every(
+          (entry) => entry.event.kind === "cardDrawn" && entry.event.instance === null && Object.keys(entry.cards).length === 0,
+        ),
+      ).toBe(true);
     });
 
     it("follows the fold as the event list grows, and is null for a list that does not reproduce it", () => {
