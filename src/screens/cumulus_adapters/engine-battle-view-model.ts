@@ -408,7 +408,8 @@ export function enginePrintedKeywords(catalog: EngineCatalog): EnginePrintedKeyw
  * `CARD_STATUS_BADGES` badges (Offering, Reclaim, Ephemeral, and a created
  * card); a banished card returning to play, a pending
  * cost change, a waiting delayed ability, and a play permission naming no
- * card mark their side (one naming a card marks it), as does an
+ * card mark their side (one naming a card marks it), as does each applicable
+ * static void-play permission and an
  * exhausted Avatar; an effect lasting until a player pays marks each card it
  * affects, as actionable while it is in `payableNow`, the effects the human
  * may pay to end now.
@@ -429,6 +430,11 @@ export function engineStatuses(
   const mark = (instance: InstanceId, entry: BattleStatusBadgeView) => {
     if (view.instances[instance] !== undefined) cards.set(instance, [...(cards.get(instance) ?? []), entry]);
   };
+  for (const change of view.staticPlayPermissions ?? []) {
+    const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry: { at: "never" } };
+    if (change.instance === null) sides[change.player].push(badge("duration", status));
+    else mark(change.instance, badge("duration", status));
+  }
   for (const { change, expiry, controller, source } of view.floating) {
     const lasting = expiry.at !== "never";
     switch (change.kind) {

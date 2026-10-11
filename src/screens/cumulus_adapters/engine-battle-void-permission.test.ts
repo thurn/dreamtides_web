@@ -1,6 +1,6 @@
 // The battle screen model of play permissions: the void plays a permission
 // offers, the void chooser's options for them, and the statuses a floating
-// permission shows.
+// or static permission shows.
 import { describe, expect, it, vi } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { createEngine, type BattleState, type InstanceId } from "../../engine";
@@ -10,7 +10,12 @@ import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { zoneCatalog } from "../../engine/testing/zone-cards";
 import { parseBattleCardId, parseBattleId } from "../../types/identifiers";
 import { engineAbilityOptionLabel, engineBattleLogText, engineStatusLabel, type EngineStatusCopy } from "../../runtime/battle-prompt-messages";
-import { buildEngineBattleScreenModel, enginePrintedKeywords, withChooser } from "./engine-battle-view-model";
+import { buildEngineBattleScreenModel, enginePrintedKeywords, engineStatuses, withChooser } from "./engine-battle-view-model";
+import { energy, staticAbility } from "../../engine/dsl/builders";
+import { playFromZone } from "../../engine/effects/primitives/play-from-zone";
+import { CHOSEN_SUBTYPE } from "../../engine/effects/primitives/choose-subtype";
+import { cloneState } from "../../engine/state/clone";
+import { syntheticId } from "../../engine/testing/synthetic-cards";
 import { surfaceChoices } from "./prompt-host-view-model";
 import type { FloatingEffect } from "../../engine/state/types";
 import type { CardFilter } from "../../engine/dsl/types";
@@ -58,6 +63,8 @@ describe("play permissions on the battle screen", () => {
     expect(ringed("player")).toEqual([id(character)]);
     expect(ringed("enemy")).toEqual([]);
     expect(ringed("player")).not.toContain(id(spell));
+    expect(model.view.player.status.statuses).toHaveLength(1);
+    expect(model.view.enemy.status.statuses).toBeUndefined();
 
     const options = surfaceChoices(withChooser(model, { kind: "void" }, cards, () => null, engine.catalog).prompt.surface)?.options ?? [];
     const instance = engine.view(state, "player").instances[character];
@@ -65,6 +72,85 @@ describe("play permissions on the battle screen", () => {
       label: engineAbilityOptionLabel({ kind: "playFromVoid", name: cards(instance).displaySnapshot.name }),
       select: { kind: "action", action: { kind: "play", card: character, from: "void" } },
     });
+  });
+
+  it.each([
+    { subtype: testCardSubtype("Fixture Warrior") },
+    { cardType: "character", costAtMost: 2 },
+    { cardType: "character", costAtLeast: 0, costAtMost: 0 },
+    { cardType: "event", costAtLeast: 4 },
+  ] satisfies readonly CardFilter[])("passes the complete live static filter to existing status copy: %j", (filter) => {
+    const source = {
+      id: syntheticId(0x3931), cardType: "character" as const, costs: [energy(4)], spark: 3,
+      subtype: testCardSubtype("Fixture Ancient"), speed: "standard" as const, status: "authored" as const,
+      abilities: () => [staticAbility(playFromZone("void", filter))],
+    };
+    const local = createEngine(zoneCatalog([source]));
+    const { state } = boardState(local.catalog, { active: "player", phase: "day", player: { back: [source.id], deck } });
+    const statusCopy = vi.spyOn(copy, "engineStatusLabel");
+    try {
+      const badges = engineStatuses(local.view(state, "player"), "player", () => []);
+      expect(statusCopy.mock.calls.filter(([status]) => status.kind === "playFrom").map(([status]) => status)).toEqual([
+        { kind: "playFrom", named: false, filter, next: false, expiry: { at: "never" } },
+      ]);
+      expect(badges.sides.player).toHaveLength(1);
+      expect(badges.sides.enemy).toEqual([]);
+      expect(badges.cards.size).toBe(0);
+      const older = { ...local.view(state, "player"), staticPlayPermissions: undefined };
+      expect(engineStatuses(older, "player", () => []).sides.player).toEqual([]);
+    } finally {
+      statusCopy.mockRestore();
+    }
+  });
+
+  it("keeps named hidden floating permissions private and visible floating badges single", () => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player", phase: "day", player: { back: [LAB.voidPermit.id], void: [SYNTHETIC.vanilla1.id], deck },
+      enemy: { hand: [SYNTHETIC.vanilla2.id], deck },
+    });
+    const source = ids.player.back[0]!;
+    for (const [index, instance] of [ids.player.void[0], ids.enemy.hand[0]].entries()) {
+      state.floating.push({ id: `e${903 + index}`, controller: "player", source, timestamp: 1, expiry: { at: "endOfTurn" },
+        change: { kind: "playFrom", player: "player", zone: "void", instance, filter: {}, next: false } });
+    }
+    const seen = engine.view(state, "player");
+    expect(seen.floating).toHaveLength(1);
+    expect(JSON.stringify(seen)).not.toContain(`"${ids.enemy.hand[0]}"`);
+    const badges = engineStatuses(seen, "player", () => []);
+    expect(badges.sides.player).toHaveLength(1);
+    expect(badges.cards.get(ids.player.void[0])).toHaveLength(1);
+    expect(badges.cards.has(ids.enemy.hand[0])).toBe(false);
+  });
+
+  it("updates side badges with the live source condition, controller and lifetime", () => {
+    const sourceCard = {
+      id: syntheticId(0x3932), cardType: "character" as const, costs: [energy(4)], spark: 3,
+      subtype: testCardSubtype("Fixture Ancient"), speed: "standard" as const, status: "authored" as const,
+      abilities: () => [staticAbility(playFromZone("void", { subtype: CHOSEN_SUBTYPE }))],
+    };
+    const local = createEngine(zoneCatalog([sourceCard]));
+    const { state, ids } = boardState(local.catalog, { active: "player", phase: "day", player: { back: [sourceCard.id], deck } });
+    const statuses = (next: BattleState) => engineStatuses(local.view(next, "player"), "player", () => []).sides;
+    expect(statuses(state)).toEqual({ player: [], enemy: [] });
+    const source = ids.player.back[0]!;
+    const active = cloneState(state);
+    active.version += 1;
+    active.floating.push({ id: "e905", controller: "player", source, timestamp: 1, expiry: { at: "sourceLeavesPlay", source },
+      change: { kind: "subtype", instance: source, subtype: testCardSubtype("Fixture Chosen") } });
+    expect(statuses(active).player).toHaveLength(1);
+    const taken = cloneState(active);
+    taken.version += 1;
+    taken.instances[source] = { ...taken.instances[source], controller: "enemy" };
+    taken.sides.player.backRank[0] = null;
+    taken.sides.enemy.backRank[0] = source;
+    expect(statuses(taken).player).toEqual([]);
+    expect(statuses(taken).enemy).toHaveLength(1);
+    const departed = cloneState(taken);
+    departed.version += 1;
+    departed.instances[source] = { ...departed.instances[source], zone: "void" };
+    departed.sides.enemy.backRank[0] = null;
+    departed.sides.player.void.push(source);
+    expect(statuses(departed)).toEqual({ player: [], enemy: [] });
   });
 
   it("badges a floating permission on the card it names, or on its player's side, and logs it as it starts", () => {

@@ -1,0 +1,344 @@
+{
+  "bead": "hv-umm2.393",
+  "claimWindow": {
+    "start": "2026-10-11T22:48:58Z",
+    "end": "2026-10-11T22:59:37.042291+00:00",
+    "elapsedMinutes": 10.65070485
+  },
+  "base": "2d6441af8b76317867ba74feaf98035234d13b91",
+  "hostLoadSamples": [
+    {
+      "scope": "final npm run review start",
+      "at": "2026-10-11T22:56:28Z",
+      "oneMinute": 9.90478515625
+    },
+    {
+      "scope": "focused tests final3file run",
+      "oneMinute": 14.9169921875
+    },
+    {
+      "scope": "npm run knip",
+      "oneMinute": 7.4970703125
+    }
+  ],
+  "commands": {
+    "focused": {
+      "scope": "view/static-play-permissions, view/view, adapter/engine-battle-void-permission; 3 files,44 tests before final additional badge lifecycle contract",
+      "seconds": 2.5,
+      "workers": 2
+    },
+    "review": {
+      "scope": "final source + view/adapter contracts;116 related test files, including view-dependent policy/presentation/cost paths",
+      "workers": 2,
+      "seconds": 29.5,
+      "result": "pass:116files2291tests, types/lint/importcycles"
+    },
+    "knip": {
+      "scope": "whole repository unused exports/files",
+      "seconds": 2.2
+    }
+  },
+  "qa": {
+    "baseline": {
+      "sourceBase": "2d6441af8b76317867ba74feaf98035234d13b91",
+      "sourceFilesSha256": {
+        "src/engine/view/view.ts": "4c842ef5539842da07568368ebb1aa49ab10407cbaf516db3336ffddefece703",
+        "src/screens/cumulus_adapters/engine-battle-view-model.ts": "5bd6562d5bad6192f98f2d4d37e70dbaceed20ed14133d5e8933a30ffca0a4e9"
+      },
+      "sourceVerification": "git diff --exit-code against base restricted to the two restored production files, then SHA256 before runner browser acquired",
+      "wallMs": {
+        "browserLeaseWait": 30693,
+        "serve": 2536,
+        "scenario": 17745,
+        "total": 51001
+      },
+      "hostLoad": 18.17138671875
+    },
+    "final": {
+      "wallMs": {
+        "browserLeaseWait": 48,
+        "serve": 949,
+        "scenario": 18087,
+        "total": 19110
+      },
+      "hostLoad": 6.60009765625,
+      "geometry": {
+        "desktop": {
+          "label": "May play \u22642 energy cost characters from the void",
+          "x": 706,
+          "y": 653.8571166992188,
+          "width": 28,
+          "height": 28,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "mobile": {
+          "label": "May play \u22642 energy cost characters from the void",
+          "x": 181,
+          "y": 642.109375,
+          "width": 28,
+          "height": 28,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        }
+      },
+      "games": [
+        "3fbh6s",
+        "fbxdbe"
+      ],
+      "screens": [
+        "baseline-god-desktop.png",
+        "baseline-god-mobile.png",
+        "live-god-desktop.png",
+        "live-god-mobile.png",
+        "live-god-void-choice-desktop.png",
+        "live-god-void-choice-mobile.png",
+        "live-god-removed-desktop.png",
+        "live-god-removed-mobile.png"
+      ],
+      "semanticReport": "final-live.result.json"
+    },
+    "attempts": [
+      "Baseline pass; resources closed",
+      "Live attempt1 failed QA harness option count (existing play + browse + cancel); semantic report preserved",
+      "Live attempt2 workflow passed; overlapping review isolated art temporarily; recaptured sequentially after materialization restore",
+      "Final live attempt3 workflow and loaded-art captures passed"
+    ],
+    "runtime": {
+      "port": 5174,
+      "processGroups": [
+        51570,
+        57254,
+        57750,
+        59162,
+        74825
+      ],
+      "cleanup": "All five owned process groups absent in final ps. Each runner reported stopped group and free port on cleanup; after last cleanup an unrelated peer reused 5174 (node77286), left untouched. Provider calls and browser close settled before runner exits."
+    },
+    "evidenceLocation": "primary gitignored artifacts/qa/hv-umm2.393/",
+    "mobileGeometry": {
+      "result": {
+        "ids": {
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "player": {
+            "front": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "back": [
+              "i1",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "hand": [
+              "i2"
+            ],
+            "void": [
+              "i11",
+              "i12",
+              "i13"
+            ]
+          },
+          "enemy": {
+            "front": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "back": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "hand": [],
+            "void": []
+          }
+        },
+        "geometry": {
+          "label": "May play \u22642 energy cost characters from the void",
+          "x": 181,
+          "y": 642.109375,
+          "width": 28,
+          "height": 28,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        "overlap": {
+          "badge": {
+            "x": 181,
+            "y": 642.109375,
+            "width": 28,
+            "height": 28,
+            "right": 209,
+            "bottom": 670.109375
+          },
+          "hand": {
+            "x": 120.1328125,
+            "y": 664.109375,
+            "width": 149.734375,
+            "height": 209.625,
+            "right": 269.8671875,
+            "bottom": 873.734375
+          },
+          "status": {
+            "x": 107.421875,
+            "y": 601.109375,
+            "width": 175.15625,
+            "height": 54,
+            "right": 282.578125,
+            "bottom": 655.109375
+          },
+          "badgeAncestors": [
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": "status",
+              "z": "4",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "3",
+              "overflow": "visible"
+            },
+            {
+              "tag": "MAIN",
+              "data": null,
+              "z": "auto",
+              "overflow": "clip"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "hidden"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "DIV",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "BODY",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            },
+            {
+              "tag": "HTML",
+              "data": null,
+              "z": "auto",
+              "overflow": "visible"
+            }
+          ]
+        }
+      },
+      "wallMs": {
+        "browserLeaseWait": 49,
+        "serve": 1260,
+        "scenario": 9955,
+        "total": 11290
+      },
+      "hostLoad": 16.5908203125,
+      "capture": "geometry-god-mobile.png",
+      "verdict": "visual fail:6px badge/hand rect overlap; lower badge border obscured by hand selection ring",
+      "rendererPaths": [
+        "src/cumulus/components/battle/BattleStatusBadges.tsx status placement",
+        "src/cumulus/screens/MobileBattleScreen.tsx NearHand/SideZones row geometry"
+      ]
+    }
+  },
+  "paths": {
+    "failure": "projection is derived and mutates no engine state; no failure effectStarted or partial state introduced",
+    "reload": "serialize/deserialize synthetic contract yields same projection; metadata absent from persisted state",
+    "partial": "optional field supports older presentation views; adapter absent-field contract",
+    "stale": "engine committed-view cache version transitions tested for source condition/control/departure; prior source view retained unchanged",
+    "actors": "both engine view sides tested; adapter verifies transferred permission badges enemy side",
+    "namedHidden": "existing floating view boundary omits named hidden card; adapter verifies no card badge; static API takes filters rather than named cards",
+    "floating": "static projection excludes effect!==null; existing named floating badge remains single"
+  },
+  "publicViewFallout": "enumerated engine policy/view/testing/contracts, BattleScreen, log/model/prompt adapter importers; optional additive field changes no callers",
+  "reviewFull": "not needed: additive optional presentation field and adapter consume no rules/persisted state/cross-cutting architecture changes",
+  "testDelta": {
+    "files": 1,
+    "lines": 184,
+    "jsdomFiles": 0
+  },
+  "rulesDecisions": []
+}

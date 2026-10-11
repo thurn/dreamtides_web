@@ -190,8 +190,9 @@ export interface LoopView {
   readonly run: { readonly remaining: number | "untilVictory"; readonly iterations: number } | null;
   /**
    * The loop's recorded actions, each with its steps, present only in the
-   * view of the side that may repeat it, only while no step answered a
-   * prompt, and only while the steps name no card that side cannot
+   * view of the side that may repeat it, when every answered prompt was fully
+   * visible to that side when it opened, and while the steps and their
+   * answers name no card that side cannot
    * identify (`loopRecording`), so that a determinization of that view
    * repeats the loop as the battle would. Without it a determinization
    * offers the loop but cannot repeat it.
@@ -255,6 +256,12 @@ export interface BattleView {
    * changed card the viewer cannot see.
    */
   readonly floating: readonly FloatingEffectView[];
+  /**
+   * Currently applicable static void-play permissions, derived from layer 6
+   * for presentation. Sources are not identified; a permission naming a card
+   * the viewer cannot identify is omitted. Absent in older presentation views.
+   */
+  readonly staticPlayPermissions?: readonly Extract<FloatingChange, { readonly kind: "playFrom" }>[];
   /** Triggered abilities waiting to resolve, first in, first out. */
   readonly triggerQueue: readonly QueuedTriggerView[];
   readonly turnLog: TurnLogView;
@@ -423,6 +430,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       affects: effect.affects.filter(visible),
     })),
     floating,
+    staticPlayPermissions: layers.changes(6).flatMap(({ change, effect }) =>
+      effect === null && change.kind === "playFrom" && (change.instance === null || visible(change.instance))
+        ? [copy(change)]
+        : [],
+    ),
     triggerQueue,
     turnLog: {
       played: {
