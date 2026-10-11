@@ -41,7 +41,7 @@ function grantedReclaimCosts(state: BattleState, catalog: EngineCatalog, id: Ins
   return granted;
 }
 
-/** Explicit Reclaim replaces ordinary energy; a plain keyword keeps the normal cost. */
+/** Explicit Reclaim replaces the normal base; a plain keyword keeps it. */
 function explicitReclaimCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId): readonly Cost[] | null {
   const granted = grantedReclaimCosts(state, catalog, id);
   if (granted !== null) return granted;
@@ -49,10 +49,10 @@ function explicitReclaimCosts(state: BattleState, catalog: EngineCatalog, id: In
   return instanceCard(catalog, instance).abilities(instance.variant).find((ability) => ability.kind === "reclaim")?.costs ?? null;
 }
 
-/** Cost changes for the selected route; chosen replacement energy is paid on top of a setter. */
+/** Cost changes for the selected route; explicit replacement routes exclude own base setters. */
 export function routeCostModifier(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): CostModifier {
   const replaced = route === "offering" || (route === "reclaim" && explicitReclaimCosts(state, catalog, id) !== null);
-  return costModifier(state, catalog, id, side, undefined, replaced ? { ordinaryEnergy: 0 } : {});
+  return costModifier(state, catalog, id, side, undefined, { applyOwnSet: !replaced });
 }
 
 /**

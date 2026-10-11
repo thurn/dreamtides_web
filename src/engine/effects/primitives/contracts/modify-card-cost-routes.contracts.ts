@@ -20,6 +20,8 @@ import { costModifier } from "../cost-modifier";
 import { grantReclaim } from "../grant-reclaim";
 import { playFromZone } from "../play-from-zone";
 import { sequence } from "../sequence";
+import { discard } from "../discard";
+import { returnFromVoid } from "../return-from-void";
 import type { Effect } from "../../registry";
 
 const deck = Array.from({ length: 8 }, () => v.vanilla1.id);
@@ -36,6 +38,7 @@ interface SetupOptions {
   readonly abilities?: readonly Ability[];
   readonly costs?: readonly CardCost[];
   readonly set?: number;
+  readonly more?: number;
   readonly effects?: readonly Effect[];
   readonly utility?: Effect;
   readonly keepInHand?: boolean;
@@ -47,9 +50,11 @@ function prepared(side: Side, reclaimEnergy: number, optionalEnergy: boolean, av
     costs: options.costs ?? v.vanilla2.costs,
     abilities: () => [...(options.abilities ?? [reclaim(energy(reclaimEnergy))]), ...(optionalEnergy ? [additionalCost(optionalCost(energy(1)))] : [])],
   };
+  const drawnEffect = modifyCardCost(drawMatching({ cardType: "character", costAtMost: 2 }), { set: options.set ?? 0 });
+  const drawEffect = options.more === undefined ? drawnEffect : modifyCardCost(drawnEffect, { increase: options.more });
   const setter: EngineCardDefinition = {
     ...v.event0, id: syntheticId(0x41901), status: "authored",
-    abilities: () => [event(sequence(modifyCardCost(drawMatching({ cardType: "character", costAtMost: 2 }), { set: options.set ?? 0 }), ...(options.effects ?? [])))],
+    abilities: () => [event(sequence(drawEffect, ...(options.effects ?? [])))],
   };
   const discarder: EngineCardDefinition = {
     ...v.event0, id: syntheticId(0x41902), status: "authored",
@@ -67,7 +72,7 @@ function prepared(side: Side, reclaimEnergy: number, optionalEnergy: boolean, av
   });
   const source = ids[side].deck[0];
   const drawn = resolved(engine, engine.apply(initial, side, { kind: "play", card: ids[side].hand[0], from: "hand" }, NO_PROMPTS).state);
-  expect(engine.view(drawn, side).instances[source]?.characteristics.cost).toBe(options.displayedCost ?? Math.max(0, options.set ?? 0));
+  expect(engine.view(drawn, side).instances[source]?.characteristics.cost).toBe(options.displayedCost ?? Math.max(0, (options.set ?? 0) + (options.more ?? 0)));
   if (options.keepInHand) return { engine, state: drawn, source, utility: ids[side].hand[2], fodder: ids[side].hand[1] };
   const state = resolved(engine, engine.apply(drawn, side, { kind: "play", card: ids[side].hand[1], from: "hand" }, NO_PROMPTS).state);
   expect(state.instances[source].zone).toBe("void");
@@ -152,7 +157,7 @@ describe("modifyCardCost route components", () => {
   it.each(SIDES)("%s preserves Offering's additional energy and banishment with a nonzero setter", (side) => {
     const { engine, state, source, fodder } = prepared(side, 0, true, 3, { abilities: [keyword("offering")], set: 2, keepInHand: true });
     const result = engine.apply(state, side, { kind: "play", card: source, from: "hand" }, new ScriptedSource([1, true]));
-    expect(result.state.sides[side].currentEnergy).toBe(0);
+    expect(result.state.sides[side].currentEnergy).toBe(2);
     expect(result.state.instances[fodder].zone).toBe("banished");
     expect(result.state.instances[source].status.offering).toBe(true);
     expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
@@ -213,4 +218,41 @@ describe("modifyCardCost route components", () => {
     expect(fresh.reduce(paid, { kind: "answer", side, promptId: optional.prompt.id, value: true }).kind).toBe("bounced");
     expect(invariantViolations(paid.committed, engine.catalog)).toEqual([]);
   });
+
+  it.each(SIDES)("%s replaces a nonzero own setter with explicit Reclaim", (side) => {
+    const { engine, state, source } = prepared(side, 5, false, 7, { set: 2 });
+    const action = { kind: "play", card: source, from: "void" } as const;
+    const five = { ...state, sides: { ...state.sides, [side]: { ...state.sides[side], currentEnergy: 5 } } };
+    const offeredAtFive = engine.legalActions(five, side).some(candidate => candidate.kind === "play" && candidate.card === source && candidate.from === "void");
+    const result = engine.apply(state, side, action, NO_PROMPTS);
+    expect({ offeredAtFive, energyPaid: 7 - result.state.sides[side].currentEnergy }).toEqual({ offeredAtFive: true, energyPaid: 5 });
+    expect(result.state.instances[source].status.playedViaReclaim).toBe(true);
+    expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+  });
+
+  it.each(SIDES)("%s uses its latest normal setter and keeps increases on both chosen routes", (side) => {
+    const { engine, state, source, utility } = prepared(side, 5, false, 11, {
+      set: 4, more: 2, effects: [playFromZone("void", { cardType: "character" })],
+      utility: sequence(
+        modifyCardCost(returnFromVoid(everyIn("void", { cardType: "character" })), { set: 2 }),
+        costModifier("you", { cardType: "character" }, 3),
+        costModifier("you", { cardType: "character" }, -1),
+        discard(1),
+      ),
+    });
+    const modified = resolved(engine, engine.apply(state, side, { kind: "play", card: utility, from: "hand" }, NO_PROMPTS).state);
+    expect(engine.view(modified, side).instances[source]?.characteristics.cost).toBe(6);
+    expect(modified.instances[source].zone).toBe("void");
+    for (const [route, paid, reclaimed] of [[0, 6, false], [1, 9, true]] as const) {
+      const result = engine.apply(modified, side, { kind: "play", card: source, from: "void" }, new ScriptedSource([route]));
+      expect(result.state.sides[side].currentEnergy).toBe(11 - paid);
+      expect(result.state.instances[source].status.playedViaReclaim).toBe(reclaimed);
+      expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+    }
+    const short = { ...modified, sides: { ...modified.sides, [side]: { ...modified.sides[side], currentEnergy: 8 } } };
+    const normal = engine.apply(short, side, { kind: "play", card: source, from: "void" }, NO_PROMPTS);
+    expect(normal.state.sides[side].currentEnergy).toBe(2);
+    expect(normal.state.instances[source].status.playedViaReclaim).toBe(false);
+  });
+
 });

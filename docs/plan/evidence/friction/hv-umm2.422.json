@@ -1,0 +1,46 @@
+{
+  "bead": "hv-umm2.422",
+  "phase": 5,
+  "base": "9d430c1d28bdc0bb98207086a78735b2c05214c7",
+  "implementMin": 8.33,
+  "timingBasis": "node_modules creation 2026-10-11T19:56:32.321788+00:00 is retained setup/dispatch proxy, not exact native dispatch. End at final commit preparation 2026-10-11T20:04:52.000641+00:00. Includes planning, regression development/diagnostic, docs and checks. Command wall includes workspace preparation/restoration.",
+  "localValidationS": {
+    "installReported": 3,
+    "fixtureOptionDiagnostic": 5.61,
+    "firstRegression": 3.75,
+    "unchangedFinalRegression": 3.38,
+    "related": 4.28,
+    "review": 61.5,
+    "knip": 4.46
+  },
+  "hostLoad": 24.86767578125,
+  "hostLoadSamples": {
+    "related": 23.37646484375,
+    "review": 24.86767578125,
+    "knip": 29.56396484375
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 4
+  },
+  "plainContractModulesUpdated": 1,
+  "plainContractLinesDelta": 42,
+  "plainContractFinalLines": 258,
+  "friction": [],
+  "frictionAssessment": "No additional problem exceeded approximately10min. Initial fixture option correction is a local edit diagnostic below the threshold, retained separately; selecting a fully funded route in the negative is regression refinement. No runtime/load/performance assertion.",
+  "measurements": "docs/plan/evidence/measurements/hv-umm2.422.json",
+  "runtimeLedger": {
+    "install": "npm install complete, reported3s;17 advisories retained as pre-existing. Package/lock unchanged.",
+    "tests": "All unchanged-source negative, focused, related, review and Knip jobs exited; no outstanding writers. No temporary production source restoration was needed: negatives ran before mutation.",
+    "server": "none",
+    "browserProvider": "none",
+    "nativeBrowserLease": "none",
+    "heavyLock": "none",
+    "remainingOwnedProcesses": []
+  },
+  "outstanding": [
+    "Parent-owned native candidate approval/promotion. No implementation or local acceptance work remains."
+  ]
+}

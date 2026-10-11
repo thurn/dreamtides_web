@@ -1,0 +1,146 @@
+{
+  "bead": "hv-umm2.422",
+  "base": "9d430c1d28bdc0bb98207086a78735b2c05214c7",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.422",
+  "sourceSha256": {
+    "src/engine/continuous/costs.ts": "fc9300299d323aab7d6b4968ccdd98cbfba7b72a050f2350a19c4281405a273b",
+    "src/engine/rules/timing.ts": "8717c006e04f027de406970faf0d613552951a2f6851d363592209a0808198d8",
+    "src/engine/effects/primitives/contracts/modify-card-cost-routes.contracts.ts": "8cee7fef94cf9126327264a03bc74e06cd11119531d8e685ed4cd37f5fc5806f",
+    "docs/rules.md": "2af008c887335f182a2677515c323818f449d44f4bf2758af0db800ba7256c64",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.101-1.md": "405ea4e871b757ab5425b79bc9c3a28d11bbf09974d2f5176dfff33ad7f0a290",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.419-1.md": "d36c932bc1390e33cf900b1942c3f3e46e8b9ccc2ab955ead7832a815e3f785f",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.422-1.md": "8d3cb4e6049b90a592240fa4fa6b5106fb1ccf3a8d82e6fc7a73f33b9addf554",
+    "docs/plan/evidence/pre-existing/hv-umm2.422.md": "97075dca7be291e8da84ffa3958918c0884294a9962ccecf9e7a6217b511b6a1"
+  },
+  "untouchedBaseNegative": {
+    "base": "9d430c1d28bdc0bb98207086a78735b2c05214c7",
+    "sourceSha256": {
+      "src/engine/continuous/costs.ts": "a261031758350ae30902f98fdfe0f3ff5b06e260be9dea388bea61d17bcec87f",
+      "src/engine/rules/timing.ts": "1778922594305d0a3d6d4fff2d2dcdb1f1054c5c6fd6462955b5e5b547c8e1aa"
+    },
+    "contractSha256": "8cee7fef94cf9126327264a03bc74e06cd11119531d8e685ed4cd37f5fc5806f",
+    "hostLoad": 18.064453125,
+    "exit": 1,
+    "wallSeconds": 3.38,
+    "sourceUnchanged": true,
+    "log": "unchanged-negative.log",
+    "failed": 6,
+    "passed": 20,
+    "meaning": "Both sides: Offering/set2/optional1 pays3 instead of1; printed2/set2/Reclaim5 is withheld at5 and pays7; two public setters plus own increase/tax/reduction have a funded explicit Reclaim route paying11 instead of9. Original zero branches pass."
+  },
+  "diagnostics": [
+    {
+      "log": "fixture-option-diagnostic-unchanged-negative.log",
+      "provenance": "fixture-option-diagnostic-unchanged-source-provenance.json",
+      "meaning": "Initial test fixture supplied more instead of the public increase field; constructor rejected the invalid option. It is not a semantic negative witness. Production unchanged."
+    },
+    {
+      "log": "first-regression-unchanged-negative.log",
+      "provenance": "first-regression-unchanged-source-provenance.json",
+      "wallSeconds": 3.75,
+      "failed": 6,
+      "passed": 20,
+      "meaning": "First corrected regression proves Offering and printed Reclaim surcharge; latest-setter case allowed only normal route at9 energy on old base. Final unchanged-source case funds11 energy so actual explicit Reclaim payment is observed directly."
+    }
+  ],
+  "focused": {
+    "log": "focused.log",
+    "passed": 26,
+    "testRunnerSeconds": 1.39,
+    "reportedPrepareTestRestoreSeconds": 3.1,
+    "timingScope": "Full focused wall not retained; reported stages0.8prepare+1.7test+0.6restoration, Vitest1.39s."
+  },
+  "commands": {
+    "related": {
+      "wallSeconds": 4.28,
+      "hostLoad": 23.37646484375,
+      "exit": 0
+    },
+    "review": {
+      "wallSeconds": 61.5,
+      "hostLoad": 24.86767578125,
+      "exit": 0
+    },
+    "knip": {
+      "wallSeconds": 4.46,
+      "hostLoad": 29.56396484375,
+      "exit": 0
+    }
+  },
+  "related": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/continuous/continuous-costs.test.ts src/engine/rules/costs.test.ts src/engine/rules/costs-play-x.test.ts",
+    "log": "related.log",
+    "files": 4,
+    "cases": 642
+  },
+  "review": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+    "log": "review.log",
+    "files": 260,
+    "cases": 2798,
+    "result": "pass; lint, cycles, both typechecks and related tests; materializations restored"
+  },
+  "knip": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+    "log": "knip.log",
+    "result": "pass; no orphaned exports or files; materializations restored"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 4,
+    "plainContractModulesAdded": 0,
+    "plainContractModulesUpdated": 1,
+    "plainContractLinesDelta": 42,
+    "plainContractFinalLines": 258,
+    "retainedCases": 22,
+    "finalCases": 26
+  },
+  "coverage": "Retained original22 contracts including four zero witnesses; contested Offering payment expectation follows chosen replacement base. New both-side nonzero printed Reclaim and latest-two-public-setters composition; normal permission base/view6 and explicit Reclaim9 include own-card increase2, tax3 and reduction1; shortbudget8 selects only the normal permission. Existing X/grants/mandatory/optional/choice-group/points/cancel/reload and unchanged101 contracts pass. No private modifier-result assertions.",
+  "fallout": {
+    "files": [],
+    "signature": "Optional sixth costModifier options changes ordinaryEnergy to applyOwnSet. Only timing supplied the option and is explicitly in Areas. Default consumers and CostModifier result shape remain unchanged; both typechecks pass. Shared explicit-Reclaim selector and post-choice play body preserved."
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.422-1: D10 ladder4 replacement-route precedence with official source SHA/link, prototype/Rust limits, affected UUIDs and sections.",
+    "RD101-1 and RD419-1 current precedence explanations updated in declared Areas."
+  ],
+  "validationChoice": {
+    "independentReview": "Not core-marked; bounded24 changed production lines including comments, no architectural/state invariant addition; parent says existing419 cold review plus this accepted follow-up requires no extra reviewer.",
+    "full": "Not warranted: no test infrastructure/configuration/cross-cutting architecture change.",
+    "fuzz": "Not run: deterministic public synthetic regressions directly cover nonzero route arithmetic. No content entity authoring or runner/fuzzer changes.",
+    "browser": "Not run or reused as422 acceptance. Current authored own setters are zero; no UI/prompt/presentation change. Historical419 zero workflow is source efb6ef56651eb9d4fa5d6fb5425326d5089ed29d only.",
+    "D20": "No real-card scenario or entrypoint; bounded engine follow-up uses the existing synthetic public contract module."
+  },
+  "runtimeLedger": {
+    "install": "npm install complete, reported3s;17 advisories retained as pre-existing. Package/lock unchanged.",
+    "tests": "All unchanged-source negative, focused, related, review and Knip jobs exited; no outstanding writers. No temporary production source restoration was needed: negatives ran before mutation.",
+    "server": "none",
+    "browserProvider": "none",
+    "nativeBrowserLease": "none",
+    "heavyLock": "none",
+    "remainingOwnedProcesses": []
+  },
+  "artifactSha256": {
+    "first-regression-unchanged-negative.log": "39ab178ad8999245594aadaaa9b965f1dd72e686a84c686cf6fdbe8e828aa780",
+    "unchanged-source-provenance.json": "d55de9bc6c014b43754eec5451a8ebd24d7d2a579b30d91b2844538176e165da",
+    "command-times.json": "fb8a5998ebcb299f94ed38c63f0381ab647d295f479647239b9d80365384cb6a",
+    "unchanged-negative.log": "de053adf306c5d65e97cefb09e7c5fc4dc50cdd8467850f55df5e9ff81987571",
+    "related.log": "50c861399aa75a4052f32604a51b81b8c08716337dd334b37fc58559a6f0de5d",
+    "fixture-option-diagnostic-unchanged-source-provenance.json": "be7a03fe045cf284dda2a26b0b01d71628a97aadd62ea8b4af44cb9da0e185fd",
+    "review.log": "53e8bdf817e0688919b0e891617912b4cf84a2bd39121f1a9eb51aa48b1c0a32",
+    "first-regression-unchanged-source-provenance.json": "506895ddc16d57f74d7f91369982b713c8fa985700ca183d947db1a0f2aaf31b",
+    "fixture-option-diagnostic-unchanged-negative.log": "34d53b1a6d60a04b2727a901dd3107b2ba5be5c8858c952d0d84a1083999e19c",
+    "knip.log": "1083d21ccf3f1b204abd2248e01d67e007e3651935d6fb3d6fd758253554ba99",
+    "focused.log": "7eb9d8cba574d7ba5979ff0d5022ea3985e44006ff16f4ea35cbc9fa4246c2ff",
+    "doc-only-check.log": "b99e31e68e1b32a8c5aba68d314df5f6bc0111c59aa1052d58eb1dfd3223edd6"
+  },
+  "outstanding": [
+    "Parent-owned native candidate approval/promotion. No implementation or local acceptance work remains."
+  ],
+  "docOnlyCheck": {
+    "log": "doc-only-check.log",
+    "result": "pass; authorized normal-route wording clarification after mandatory review. No production/test change or aggregate rerun."
+  }
+}

@@ -752,16 +752,16 @@ costs 2● more" or "Draw a ≤2● cost card. It costs 0●," change that card'
 energy cost whoever plays it. "It" is the card that instruction put into a
 hand; when the instruction put no card there, because it had no target, the
 deck was empty or held no match, or a created card ceased to exist instead,
-nothing changes. "It costs N●" gives the card N● in place of its ● cost, its
-copiable cost; X, additional costs, and the energy of a chosen alternative or
-optional cost are still paid on top of it. On an explicit Reclaim or Offering
-route, the ordinary ● component is 0: the set value adds to that route's
-replacement costs and any additional costs. Plain Reclaim and play permissions
-use the ordinary copiable ● component. The route chosen for the play determines
-both affordability and payment. If several such changes set the
-same card's cost, the latest applies. Then every increase applies, then every
-reduction, as for any cost change: a card set to 0● costs 1● while "Characters
-cost 1● more" applies to it. Like any effect, the change lasts until its
+nothing changes. "It costs N●" sets the card's normal ● base in place of its
+copiable ● cost. Hand plays, play permissions and plain Reclaim use that base;
+explicit printed or granted Reclaim and Offering replace it with their own
+route costs. X and additional mandatory, optional or alternative-choice costs
+are paid on top of the chosen base. An alternative within an additional cost
+is distinct from choosing a full replacement play route. The route chosen for
+the play determines both affordability and payment. If several changes set the
+same card's normal base, the latest applies. Then every increase applies, then every
+reduction, as for any cost change: a normal play of a card set to 0● costs 1●
+while "Characters cost 1● more" applies to it. Like any effect, the change lasts until its
 duration ends, wherever the card is, and with no stated duration it is
 permanent: a card returned to hand costing 2● more still costs 2● more if it is
 played and later returns to a hand again. The card's cost for conditions is
@@ -983,7 +983,10 @@ instead of from hand. With plain Reclaim it is played for its normal ● cost; w
 "Reclaim N●" it is played from the void for N●. With "Reclaim – " followed by
 costs, as in "Reclaim – 2●, Abandon two characters", it is played from the
 void for exactly those costs in place of its ● cost: "Reclaim – Abandon a
-character" costs no energy, only the abandon. A card played this way becomes
+character" costs no energy, only the abandon. Explicit Reclaim replaces the
+normal base, including any "It costs N●" setter. Additional costs and energy
+increases or reductions still apply to the chosen Reclaim costs.
+A card played this way becomes
 **reclaimed**: when a reclaimed card would leave play, it is banished instead.
 The reclaimed status replaces all other zone changes for that card (for example,
 an effect that would banish and then materialize a reclaimed character does not
@@ -1074,7 +1077,8 @@ it to hand and replaying it, does not prevent the end-of-turn banishment. Other
 costs (such as "To play this card, …") must still be paid; if the card's cost
 includes X, X is 0. The player chooses between Offering and the card's own costs
 as they play it, from the ways they can pay; cost changes apply to the 0● cost
-as to any play.
+as to any play. Offering replaces the normal base, including any "It costs
+N●" setter; increases, reductions and additional costs still apply.
 A card that has Offering from another ability, as with "Cards in your hand
 have Offering," can be played this way while it has the keyword in hand. A
 card played from the void is never played by Offering (see [Playing from the
