@@ -10,7 +10,10 @@
  * decision, so the resolution cap never ends a self-retriggering "you may"
  * that a policy keeps accepting (RD-hv-7x4l.20). Every policy therefore
  * declines optional prompts once the run of automatic steps already holds
- * `optionalChainCap` chosen answers (`BattleState.automaticChoices`).
+ * `optionalChainCap` chosen answers (`BattleState.automaticChoices`). Greedy
+ * declines only a role whose prompt can sustain such a chain (`chain:
+ * "loopable"`); it keeps answering a finite choice, such as an "unless" cost
+ * that keeps its own card on the stack, as it would before the cap.
  */
 import { AI } from "../../content/ai";
 import { instanceCard, type EngineCatalog } from "../catalog";
@@ -122,41 +125,80 @@ function discoverCostAnswer(prompt: ChooseNumberPrompt, costs: ReadonlySet<numbe
   return found.length === 0 ? prompt.max : Math.max(...found);
 }
 
-/** Every role registers its card ranking and number choice, including roles used by other prompt kinds. */
+/**
+ * Every role registers its card ranking, its number choice, and how the
+ * optional-chain bound treats it, including roles used by other prompt kinds.
+ *
+ * `chain: "loopable"`: the chooser decides how much of its own effect
+ * happens (a "you may", an optional payment, how many targets or cards,
+ * which mode or route), so a policy that keeps accepting can sustain a
+ * self-retriggering chain; once the chain is spent Greedy declines it.
+ *
+ * `chain: "finite"`: every legal answer commits the chooser to the same
+ * fixed amount (exactly N cards, a free cost to look for), or the prompt is
+ * an "unless" cost paid in a finite resource against the opposing side's
+ * prevent. Declining it is not doing less of the chooser's own effect, so it
+ * cannot end a chain the chooser drives, and Greedy answers it the same past
+ * the cap.
+ *
+ * Play-time roles (routes, X, cost alternatives, optional costs, and the
+ * cards that pay a cost) are raised only in top-level steps, which start a
+ * new run, so the bound never reaches them; they stay loopable because an
+ * optional cost or a variable ("X") count chooses how much to pay.
+ */
 const ROLE_STRATEGIES = {
-  discardToHandLimit: { cards: "loss", number: "largest" },
-  playRoute: { cards: "hostile", number: "largest" },
-  voidRoute: { cards: "hostile", number: "largest" },
-  chooseX: { cards: "hostile", number: "largest" },
-  chooseOne: { cards: "hostile", number: "largest" },
-  choosePlayer: { cards: "hostile", number: "largest" },
-  target: { cards: "hostile", number: "largest" },
-  chooseCost: { cards: "hostile", number: "largest" },
-  optionalCost: { cards: "hostile", number: "largest" },
-  optionalPayment: { cards: "hostile", number: "largest" },
-  abandonCost: { cards: "loss", number: "largest" },
-  returnCost: { cards: "loss", number: "largest" },
-  abandon: { cards: "loss", number: "largest" },
-  discardCost: { cards: "loss", number: "largest" },
-  revealCost: { cards: "loss", number: "largest" },
-  banishCost: { cards: "loss", number: "largest" },
-  banishAnyVoidCost: { cards: "hostile", number: "largest" },
-  offeringCost: { cards: "loss", number: "largest" },
-  discard: { cards: "loss", number: "largest" },
-  discardChosen: { cards: "hostile", number: "largest" },
-  banishChosen: { cards: "hostile", number: "largest" },
-  foresee: { cards: "hostile", number: "largest" },
-  lookAtTop: { cards: "gain", number: "largest" },
-  discover: { cards: "gain", number: "largest" },
-  discoverCost: { cards: "hostile", number: "discoverCost" },
-  chooseAmong: { cards: "gain", number: "largest" },
-  chooseFromOpponentHand: { cards: "gain", number: "largest" },
-  shuffleInto: { cards: "loss", number: "largest" },
-  putInDeck: { cards: "gain", number: "largest" },
-  youMay: { cards: "hostile", number: "largest" },
-  preventUnlessPays: { cards: "hostile", number: "largest" },
-  preventUnlessAbandons: { cards: "hostile", number: "largest" },
-} as const satisfies Record<PromptRole, { readonly cards: "loss" | "gain" | "hostile"; readonly number: "largest" | "discoverCost" }>;
+  // Exactly the excess over the hand limit, once per turn's ending.
+  discardToHandLimit: { cards: "loss", number: "largest", chain: "finite" },
+  playRoute: { cards: "hostile", number: "largest", chain: "loopable" },
+  voidRoute: { cards: "hostile", number: "largest", chain: "loopable" },
+  chooseX: { cards: "hostile", number: "largest", chain: "loopable" },
+  // A mode or player steers the chooser's own effect, which may be the one that retriggers.
+  chooseOne: { cards: "hostile", number: "largest", chain: "loopable" },
+  choosePlayer: { cards: "hostile", number: "largest", chain: "loopable" },
+  // An "up to N" target accepts fewer.
+  target: { cards: "hostile", number: "largest", chain: "loopable" },
+  chooseCost: { cards: "hostile", number: "largest", chain: "loopable" },
+  optionalCost: { cards: "hostile", number: "largest", chain: "loopable" },
+  // "You may pay N●" for the chooser's own effect; a chain that makes energy can keep paying.
+  optionalPayment: { cards: "hostile", number: "largest", chain: "loopable" },
+  abandonCost: { cards: "loss", number: "largest", chain: "loopable" },
+  returnCost: { cards: "loss", number: "largest", chain: "loopable" },
+  // Exactly one character, chosen after an effect or an accepted "unless" cost has committed to it.
+  abandon: { cards: "loss", number: "largest", chain: "finite" },
+  discardCost: { cards: "loss", number: "largest", chain: "loopable" },
+  revealCost: { cards: "loss", number: "largest", chain: "loopable" },
+  banishCost: { cards: "loss", number: "largest", chain: "loopable" },
+  banishAnyVoidCost: { cards: "hostile", number: "largest", chain: "loopable" },
+  offeringCost: { cards: "loss", number: "largest", chain: "loopable" },
+  // Exactly N cards, so which and never how many; likewise discardChosen, banishChosen, lookAtTop, discover, and shuffleInto.
+  discard: { cards: "loss", number: "largest", chain: "finite" },
+  discardChosen: { cards: "hostile", number: "largest", chain: "finite" },
+  banishChosen: { cards: "hostile", number: "largest", chain: "finite" },
+  // Where each looked-at card goes steers the chooser's own next draws.
+  foresee: { cards: "hostile", number: "largest", chain: "loopable" },
+  lookAtTop: { cards: "gain", number: "largest", chain: "finite" },
+  discover: { cards: "gain", number: "largest", chain: "finite" },
+  // A free cost to look for, never paid: no answer does less.
+  discoverCost: { cards: "hostile", number: "discoverCost", chain: "finite" },
+  // An optional take accepts none.
+  chooseAmong: { cards: "gain", number: "largest", chain: "loopable" },
+  chooseFromOpponentHand: { cards: "gain", number: "largest", chain: "loopable" },
+  shuffleInto: { cards: "loss", number: "largest", chain: "finite" },
+  // A look-at-top arrangement can put cards into the chooser's hand.
+  putInDeck: { cards: "gain", number: "largest", chain: "loopable" },
+  youMay: { cards: "hostile", number: "largest", chain: "loopable" },
+  // "Unless" costs: declining lets the opposing prevent take the chooser's card.
+  preventUnlessPays: { cards: "hostile", number: "largest", chain: "finite" },
+  preventUnlessAbandons: { cards: "hostile", number: "largest", chain: "finite" },
+} as const satisfies Record<
+  PromptRole,
+  { readonly cards: "loss" | "gain" | "hostile"; readonly number: "largest" | "discoverCost"; readonly chain: "loopable" | "finite" }
+>;
+
+/** Whether Greedy declines `prompt` because the optional chain is spent: only a loopable role, past the cap. */
+export function greedyDeclinesChain(prompt: Prompt, automaticChoices: number): boolean {
+  return ROLE_STRATEGIES[prompt.purpose.role].chain === "loopable" && optionalChainSpent(automaticChoices);
+}
 
 /** How much Greedy wants `id` chosen for a prompt of `role`. */
 function cardWant(role: PromptRole, info: CardInfo | null): number {
@@ -182,10 +224,11 @@ function selectionOf(value: Answer): readonly InstanceId[] | null {
  * the highest cost its deck can find), the first legal mode, and for a
  * selection the cards it wants most, giving up its least valuable cards for
  * costs and discards. A prompt that lists its legal answers gets the best of
- * them. After the optional chain is spent it declines.
+ * them. After the optional chain is spent it declines a loopable role's
+ * prompt (`greedyDeclinesChain`).
  */
 export function greedyAnswer(prompt: Prompt, info: CardInfoOf, discoverCosts: DiscoverCostsOf, automaticChoices: number): Answer {
-  if (optionalChainSpent(automaticChoices)) return declineAnswer(prompt);
+  if (greedyDeclinesChain(prompt, automaticChoices)) return declineAnswer(prompt);
   const allowed = allowedAnswers(prompt);
   if (allowed !== undefined && allowed.length > 0) {
     if (prompt.kind !== "chooseTargets" && prompt.kind !== "chooseCards") {

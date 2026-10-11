@@ -7,7 +7,7 @@ import { createFoldAdapter, decisionKeyOf, sidePending, type BattleSlice, type F
 import { isLegalAnswer } from "../prompts/answers";
 import { energy, event } from "../dsl/builders";
 import { discover } from "../effects/primitives";
-import type { ConfirmPrompt, Prompt } from "../prompts/types";
+import type { ConfirmPrompt, Prompt, PromptRole } from "../prompts/types";
 import { battleSeed, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
 import { boardState } from "../testing/board";
@@ -88,6 +88,28 @@ describe("the optional-chain bound", () => {
         expect(result.choice).toEqual({ kind: "answer", value: false });
         expect(result.trace.declined).toBe("optionalChain");
       }
+    }
+  });
+
+  it("keeps Greedy paying a finite unless cost once the chain is spent, while declining loopable prompts", () => {
+    const { state, ids } = board({ enemy: { back: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla1.id], deck }, player: { deck } });
+    const [valuable, least] = ids.enemy.back;
+    if (valuable === null || valuable === undefined || least === null || least === undefined) throw new Error("no characters");
+    const view = { ...engine.view(state, "enemy"), automaticChoices: AI.enginePolicy.optionalChainCap };
+    const base = (role: PromptRole) => ({ side: "enemy" as const, purpose: { source: null, cardId: null, ability: 0, role }, cancellable: false });
+    const greedy = (prompt: Prompt) =>
+      runPolicy(engine, { ...topLevelRequest(state, "enemy", "greedy", { player: [], enemy: [] }), view, decision: { kind: "prompt", prompt } });
+    const cases: readonly { prompt: Prompt; value: unknown; declined: boolean }[] = [
+      { prompt: { ...base("preventUnlessAbandons"), kind: "confirm" }, value: true, declined: false },
+      { prompt: { ...base("abandon"), kind: "chooseCards", candidates: [valuable, least], min: 1, max: 1 }, value: [least], declined: false },
+      { prompt: { ...base("preventUnlessPays"), kind: "payOrDecline", energy: 1, payable: true }, value: true, declined: false },
+      { prompt: { ...base("youMay"), kind: "confirm" }, value: false, declined: true },
+      { prompt: { ...base("optionalPayment"), kind: "payOrDecline", energy: 1, payable: true }, value: false, declined: true },
+    ];
+    for (const { prompt, value, declined } of cases) {
+      const result = greedy(prompt);
+      expect(result.choice).toEqual({ kind: "answer", value });
+      expect(result.trace.declined).toBe(declined ? "optionalChain" : undefined);
     }
   });
 

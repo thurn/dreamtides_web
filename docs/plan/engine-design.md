@@ -1997,7 +1997,13 @@ self-retriggering "you may" a policy keeps accepting.
 `BattleState.automaticChoices` counts the automatic steps since the last
 top-level action in which a player chose an answer; every policy declines
 (`declineAnswer`: no, the fewest cards, the lowest number) once it reaches
-`AI.enginePolicy.optionalChainCap`.
+`AI.enginePolicy.optionalChainCap`. Greedy declines only a prompt whose
+role is loopable (`chain` in `policy/prompts.ts`): one where the chooser
+decides how much of its own effect happens, such as a "you may" or an
+optional payment. A finite role keeps its usual answer past the cap: a
+fixed-count choice of which cards, a free Discover cost, or an "unless" cost
+such as `preventUnlessAbandons`, whose decline lets the opposing prevent take
+the chooser's card rather than ending a chain the chooser drives.
 
 **Search branches on clones.** Phase 7's search branches at top-level
 decisions on a clone of `committed`. It branches inside a step by re-running

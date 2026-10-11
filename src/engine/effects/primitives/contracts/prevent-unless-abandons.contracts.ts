@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { AI } from "../../../../content/ai";
 import type { EngineCardDefinition } from "../../../catalog";
 import { event, stackItem } from "../../../dsl/builders";
 import { onDissolved, triggered } from "../../../dsl/triggers";
@@ -13,7 +14,6 @@ import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
 import { stateHash } from "../../../state/hash";
 import { opponent, type InstanceId, type Side } from "../../../state/ids";
-import type { BattleState } from "../../../state/types";
 import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
 import { unannouncedChanges } from "../../../testing/announced-changes";
 import { boardState, placeFigment } from "../../../testing/board";
@@ -55,10 +55,11 @@ const engine = createEngine(testCatalog([ransom, study, keeper, plain, failing])
 const deck = Array.from({ length: 5 }, () => v.vanilla1.id);
 
 /**
- * `prevented` plays the study holding two characters and a figment; its
- * opponent holds `answer` and one character of its own.
+ * `prevented` plays the study holding two characters of unequal spark (a
+ * 2-spark vanilla, then the 1-spark keeper) and a figment; its opponent
+ * holds `answer` and one character of its own.
  */
-function board(prevented: Side, answer: EngineCardDefinition = ransom, back = [v.vanilla1.id, keeper.id]) {
+function board(prevented: Side, answer: EngineCardDefinition = ransom, back = [v.vanilla2.id, keeper.id]) {
   const { state, ids } = boardState(engine.catalog, {
     active: prevented, phase: "day",
     [prevented]: { hand: [study.id], back, energy: 3, deck },
@@ -246,19 +247,23 @@ describe("prevent unless the opponent abandons", () => {
     expect(fold.pending(outcome.slice)).toBeNull();
   });
 
-  it("gives Greedy a legal answer to both prompts, accepting the unless cost", () => {
-    const { fold, slice } = opened("enemy");
-    const greedy = (state: BattleState, from: BattleSlice) => {
+  // At the optional-chain cap the unless cost is still paid: declining it is not doing less, it loses the card.
+  it.each([0, AI.enginePolicy.optionalChainCap])("has Greedy pay the unless cost with its least valuable character after %i automatic choices", (automaticChoices) => {
+    const { fold, slice, ids } = opened("enemy");
+    const greedy = (from: BattleSlice) => {
       const { prompt } = fold.pending(from)!;
-      const value = greedyAnswer(prompt, stateCardInfo(state, engine.catalog, prompt.side), () => new Set(), 0);
+      const value = greedyAnswer(prompt, stateCardInfo(from.committed, engine.catalog, prompt.side), () => new Set(), automaticChoices);
       expect(isLegalAnswer(prompt, value)).toBe(true);
       return value;
     };
-    expect(greedy(slice.committed, slice)).toBe(true);
+    expect(greedy(slice)).toBe(true);
     const accepted = answer(fold, slice, true).slice;
-    const chosen = greedy(accepted.committed, accepted) as readonly InstanceId[];
-    const done = answer(fold, accepted, chosen).slice;
-    expect(done.committed.instances[chosen[0]].zone).toBe("void");
+    const [valuable, least] = [ids.enemy.back[0]!, ids.enemy.back[1]!];
+    expect(greedy(accepted)).toEqual([least]);
+    const done = answer(fold, accepted, [least]).slice;
+    expect(done.committed.instances[least].zone).toBe("void");
+    expect(done.committed.instances[valuable].zone).toBe("play");
+    expect(done.committed.sides.enemy.hand).toHaveLength(2);
     expect(fold.pending(done)).toBeNull();
   });
 });

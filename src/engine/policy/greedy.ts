@@ -15,7 +15,7 @@ import { opponent, type Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { InlineSource } from "../steps/sources";
 import type { BattleView, SideView } from "../view/view";
-import { greedyAnswer, optionalChainSpent, stateCardInfo, stateDiscoverCosts, viewCardInfo, type DiscoverCostsOf } from "./prompts";
+import { greedyAnswer, greedyDeclinesChain, stateCardInfo, stateDiscoverCosts, viewCardInfo, type DiscoverCostsOf } from "./prompts";
 import type { Policy, PolicyCandidate, PolicyChoice, PolicyContext, PolicyDecision, PolicyResult } from "./types";
 
 const GREEDY = AI.enginePolicy.greedy;
@@ -155,7 +155,7 @@ export const GREEDY_POLICY: Policy = {
         determinizations,
         candidates: [],
         chosen,
-        ...(optionalChainSpent(view.automaticChoices) ? { declined: "optionalChain" as const } : {}),
+        ...(greedyDeclinesChain(decision.prompt, view.automaticChoices) ? { declined: "optionalChain" as const } : {}),
       },
     };
   },
