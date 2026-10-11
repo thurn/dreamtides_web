@@ -1,0 +1,956 @@
+{
+  "bead": "hv-umm2.399",
+  "base": "5f305f63f2e656bb0e28d9e01712f5718ba89789",
+  "measurementWindow": {
+    "start": "2026-10-11T20:36:00Z",
+    "startScope": "native claim proxy; exact helper dispatch timestamp not retained",
+    "endScope": "Terminal preparation after final parent source, evidence and resource acknowledgement, immediately before schema validation and successful commit. Exact commit start, end and gap are recorded in the external handoff and native notes.",
+    "end": "2026-10-11T21:03:37.090961+00:00",
+    "minutes": 27.618182683333334
+  },
+  "implementation": {
+    "copy": "Full canonical printed activation cost/effect paragraphs mapped by catalog activated ordinal and actual action.ability. Positive cost-leading syntax and exact catalog-count agreement guard unsupported display shapes.",
+    "fallback": "A numbered actual ability index when a complete mapping is unavailable.",
+    "scope": "Five production UI/model files and three existing test files; gameplay/card data unchanged."
+  },
+  "authoredCoverage": {
+    "report": "authored-coverage.json",
+    "sha256": "bb57d97d90485a06f86fe2ee96f9eafac8590377323bbb9c48028a55284e41ea",
+    "summary": {
+      "cards": 32,
+      "variants": 64,
+      "multiActivatedVariants": 2,
+      "missing": 0
+    },
+    "uuids": [
+      "017a7b4b-3ccf-4635-9956-28a72b22274e",
+      "07ceb104-0b27-473a-bc72-e6225479ed83",
+      "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
+      "2ce84a16-1295-4738-9e2d-1f57590b2269",
+      "31ecf933-c897-41a5-ab94-822ea65898d8",
+      "33874387-2490-48ed-93bc-a47a16e399ad",
+      "47b1d6b7-0388-4bb9-abfc-ed832d902e9f",
+      "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed",
+      "4f0f0811-1a4c-4d42-a804-77dba8707792",
+      "629fe4d4-826f-41b9-a913-458a503856a8",
+      "738a5af0-f848-4d48-bceb-9a43c9b11066",
+      "77f31db4-0397-49a7-8886-f5459ee960e9",
+      "7e4cca36-5134-415a-b30a-c4876b58976c",
+      "7ffb1179-6c94-4f80-9613-ece2b799f19d",
+      "8896c178-757e-4775-b117-a4357ebfe30f",
+      "8951e112-92d2-4246-9859-39320620231b",
+      "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
+      "94818862-2875-4ee1-8f72-7c0cdc624202",
+      "99ca2635-a91a-46ba-a9d3-4d2581c354f3",
+      "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
+      "b957466e-f748-4a95-89b2-8509dc762223",
+      "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
+      "cd3d8e4a-618e-4c2f-be60-0363b81887f1",
+      "cfa78375-85b7-47e9-95f5-b31e6d112c52",
+      "d30bd488-f921-49cb-a44f-353c54cb6548",
+      "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d",
+      "db4618f6-121b-4c97-98d3-c29849c5824e",
+      "de946f5a-1e27-4d40-ae44-9ef8cc041949",
+      "e3193b23-2002-40a9-91fc-e0713200355e",
+      "ed02e610-2e68-4457-95a6-c7c6db60ca40",
+      "f10a9ba9-f5eb-4011-9426-a89c5de3b550",
+      "f4082c01-fdc8-4583-afdb-76bac980b3bf"
+    ],
+    "multiActivatedVariants": [
+      {
+        "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "amplified": false,
+        "activated": [
+          0,
+          1
+        ],
+        "paragraphs": [
+          "Abandon a character: Store 1\u29d7.",
+          "2\u29d7: Gain 1\u25cf."
+        ]
+      },
+      {
+        "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "amplified": true,
+        "activated": [
+          0,
+          1
+        ],
+        "paragraphs": [
+          "Abandon a character: Store 2\u29d7.",
+          "2\u29d7: Gain 1\u25cf."
+        ]
+      }
+    ],
+    "missing": []
+  },
+  "validation": {
+    "focused-settled": {
+      "label": "focused-settled",
+      "pid": 75647,
+      "pgid": 75647,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-affordances.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-void-permission.test.ts",
+        "src/cumulus/screens/MobileBattleScreen.prompts.test.tsx"
+      ],
+      "start": "2026-10-11T20:47:56.454302+00:00",
+      "end": "2026-10-11T20:48:01.709403+00:00",
+      "seconds": 5.254973167029675,
+      "exit": 0,
+      "loadBefore": [
+        4.2080078125,
+        11.8525390625,
+        17.21337890625
+      ],
+      "loadAfter": [
+        4.35107421875,
+        11.75537109375,
+        17.1474609375
+      ]
+    },
+    "knip": {
+      "label": "knip",
+      "pid": 74228,
+      "pgid": 74228,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-11T20:46:58.694351+00:00",
+      "end": "2026-10-11T20:47:02.456182+00:00",
+      "seconds": 3.761677709000651,
+      "exit": 0,
+      "loadBefore": [
+        4.51611328125,
+        13.443359375,
+        18.099609375
+      ],
+      "loadAfter": [
+        4.51611328125,
+        13.443359375,
+        18.099609375
+      ]
+    },
+    "knip-serial": {
+      "label": "knip-serial",
+      "pid": 78887,
+      "pgid": 78887,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-11T20:49:43.162166+00:00",
+      "end": "2026-10-11T20:49:45.840431+00:00",
+      "seconds": 2.6781749579822645,
+      "exit": 0,
+      "loadBefore": [
+        9.88427734375,
+        11.35986328125,
+        16.3759765625
+      ],
+      "loadAfter": [
+        9.57275390625,
+        11.2705078125,
+        16.31494140625
+      ]
+    },
+    "knip-final": {
+      "label": "knip-final",
+      "pid": 76930,
+      "pgid": 76930,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-11T20:48:32.397812+00:00",
+      "end": "2026-10-11T20:48:35.877784+00:00",
+      "seconds": 3.4798233750043437,
+      "exit": 0,
+      "loadBefore": [
+        5.11328125,
+        11.20947265625,
+        16.76025390625
+      ],
+      "loadAfter": [
+        5.90478515625,
+        11.27197265625,
+        16.74951171875
+      ]
+    },
+    "focused": {
+      "label": "focused",
+      "pid": 72452,
+      "pgid": 72452,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-affordances.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-void-permission.test.ts",
+        "src/cumulus/screens/MobileBattleScreen.prompts.test.tsx"
+      ],
+      "start": "2026-10-11T20:45:23.149967+00:00",
+      "end": "2026-10-11T20:45:28.165949+00:00",
+      "seconds": 5.015832207980566,
+      "exit": 1,
+      "loadBefore": [
+        5.86328125,
+        16.9423828125,
+        19.7587890625
+      ],
+      "loadAfter": [
+        6.1142578125,
+        16.81005859375,
+        19.6953125
+      ]
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "pid": 73678,
+      "pgid": 73678,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-affordances.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-void-permission.test.ts",
+        "src/cumulus/screens/MobileBattleScreen.prompts.test.tsx"
+      ],
+      "start": "2026-10-11T20:46:28.515405+00:00",
+      "end": "2026-10-11T20:46:32.673843+00:00",
+      "seconds": 4.158323000010569,
+      "exit": 0,
+      "loadBefore": [
+        4.763671875,
+        14.439453125,
+        18.607421875
+      ],
+      "loadAfter": [
+        4.763671875,
+        14.439453125,
+        18.607421875
+      ]
+    },
+    "review-serial": {
+      "label": "review-serial",
+      "pid": 78241,
+      "pgid": 78241,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-11T20:49:17.971170+00:00",
+      "end": "2026-10-11T20:49:37.122043+00:00",
+      "seconds": 19.150639500003308,
+      "exit": 0,
+      "loadBefore": [
+        8.439453125,
+        11.2509765625,
+        16.48974609375
+      ],
+      "loadAfter": [
+        10.1357421875,
+        11.43359375,
+        16.431640625
+      ]
+    },
+    "review": {
+      "label": "review",
+      "pid": 74126,
+      "pgid": 74126,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-11T20:46:57.559467+00:00",
+      "end": "2026-10-11T20:47:12.732533+00:00",
+      "seconds": 15.1728793749935,
+      "exit": 1,
+      "loadBefore": [
+        4.47412109375,
+        13.5859375,
+        18.17724609375
+      ],
+      "loadAfter": [
+        4.4365234375,
+        13.1318359375,
+        17.93408203125
+      ]
+    },
+    "review-final": {
+      "label": "review-final",
+      "pid": 76839,
+      "pgid": 76839,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-11T20:48:31.238179+00:00",
+      "end": "2026-10-11T20:48:50.264050+00:00",
+      "seconds": 19.025578083004802,
+      "exit": 0,
+      "loadBefore": [
+        5.11328125,
+        11.20947265625,
+        16.76025390625
+      ],
+      "loadAfter": [
+        6.9462890625,
+        11.24072265625,
+        16.642578125
+      ]
+    }
+  },
+  "validationDispositions": [
+    "Initial focused fixture passed an array to variadic chooseOne; fixture corrected.",
+    "Initial review rejected two unbound synthetic nameOf references; forwarding closures satisfy lint.",
+    "Two parallel review/Knip pairs are retained. Final review and Knip ran serially to completion, including asset restoration, before runtime freeze."
+  ],
+  "hostLoadBasis": "Final serial review starting 1-minute host load; scalar copied into the friction record.",
+  "testDelta": {
+    "files": 0,
+    "lines": 63,
+    "jsdomFiles": 0,
+    "cases": 2
+  },
+  "frozen": {
+    "at": "2026-10-11T20:50:01.099037+00:00",
+    "base": "5f305f63f2e656bb0e28d9e01712f5718ba89789",
+    "sourceHashes": {
+      "src/battle/components/EngineBattleScreen.tsx": "002acdefa7f296de9069335d872fc1b0a698d0b2d842feae45a89409a6eb499f",
+      "src/cumulus/screens/MobileBattleScreen.prompts.test.tsx": "41a71fd5fd08b30bf2e6bba11c6b954214e419dbabe7406adad98a908c36a0d8",
+      "src/cumulus/screens/MobileBattleScreen.tsx": "77bb9a87fdc1056379a3107ab90c838d72afd23d002afcf7b090ec15770fdf7d",
+      "src/runtime/battle-prompt-messages.ts": "f1afa5301d467e49c51b0a3613ccbe7231bff7148a62032a02551dbfc215c417",
+      "src/screens/cumulus_adapters/engine-battle-view-model-affordances.test.ts": "eca941dc63a6c904411ede454a2658b8225c4bde675d0c02628c28f8202cdb05",
+      "src/screens/cumulus_adapters/engine-battle-view-model.ts": "b98078e0eafc67966ad89dd866b18ee92fe489c980c31b1f417ac0f690aaabe1",
+      "src/screens/cumulus_adapters/engine-battle-void-permission.test.ts": "4f931732b0843cc8b6673d46ae6bb8d8285b727e74ed2714545ccc10833df75e",
+      "src/screens/cumulus_adapters/prompt-host-view-model.ts": "b5b5f9991ca809851cf1a8a719a0fd6309d9f0d5ecc651d75521c967ab85919d"
+    },
+    "qaScriptSHA256": "8f92c64d16316df7d4174ecb85db04f3d57768a50963426c36c0dc283cce7785"
+  },
+  "browserAttempts": [
+    {
+      "attempt": 1,
+      "report": "judged.result.json.attempt1",
+      "sha256": "f47f18435b1b5f050ea25ed9cd017cc9f8b11bc51fb1d87152822a55dcaba2d6",
+      "script": "judged.mjs.attempt1",
+      "error": "Error: abandon prompt: TimeoutError: page.waitForFunction: Timeout 14990ms exceeded.",
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 52,
+        "serve": 1609,
+        "scenario": 20463,
+        "total": 22150
+      },
+      "wrapper": {
+        "label": "judged-desktop",
+        "pid": 79990,
+        "pgid": 79990,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "judged",
+          "--bead",
+          "hv-umm2.399",
+          "--viewports",
+          "desktop"
+        ],
+        "start": "2026-10-11T20:50:12.641160+00:00",
+        "end": "2026-10-11T20:50:39.974883+00:00",
+        "seconds": 27.33339441701537,
+        "exit": 1,
+        "loadBefore": [
+          7.11474609375,
+          10.55615234375,
+          15.91162109375
+        ],
+        "loadAfter": [
+          7.15234375,
+          10.28271484375,
+          15.62841796875
+        ]
+      },
+      "disposition": "The next source tap preceded settled board presentation after the first successful store; corrected with visible counter and normal main-control wait.",
+      "scope": "Harness failure; no product verdict asserted."
+    },
+    {
+      "attempt": 2,
+      "report": "judged.result.json.attempt2",
+      "sha256": "b374c7314d7b5bc8312b4b8be66ccc4a693c826b01f4c3da1501f27477f24328",
+      "script": "judged.mjs.attempt2",
+      "error": "Harness rejected the actual error-buffer object as if it were an array; exact geometry payload is retained in the raw report.",
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 61605,
+        "serve": 1563,
+        "scenario": 8699,
+        "total": 71893
+      },
+      "wrapper": {
+        "label": "judged-desktop-corrected",
+        "pid": 84249,
+        "pgid": 84249,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "judged",
+          "--bead",
+          "hv-umm2.399",
+          "--viewports",
+          "desktop"
+        ],
+        "start": "2026-10-11T20:51:54.856825+00:00",
+        "end": "2026-10-11T20:53:11.896963+00:00",
+        "seconds": 77.03949016699335,
+        "exit": 1,
+        "loadBefore": [
+          8.17919921875,
+          9.71630859375,
+          14.9482421875
+        ],
+        "loadAfter": [
+          7.32080078125,
+          9.0986328125,
+          14.26953125
+        ]
+      },
+      "disposition": "Harness assumed window.__caps was an array; actual errors/rejections/consoleErrors arrays were all empty. Canonical qa.assertCaps used for corrected run.",
+      "scope": "Harness failure; no product verdict asserted."
+    }
+  ],
+  "browserVerdicts": {
+    "desktop": {
+      "report": "judged.result.json.desktop-pass",
+      "sha256": "335041d2495f7289a06423164dd7580dc9497c481380f11bf6551fcf143f5c61",
+      "ok": true,
+      "error": null,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 70864,
+        "serve": 1862,
+        "scenario": 35508,
+        "total": 108260
+      },
+      "wrapper": {
+        "label": "judged-desktop-settled",
+        "pid": 94672,
+        "pgid": 94672,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "judged",
+          "--bead",
+          "hv-umm2.399",
+          "--viewports",
+          "desktop"
+        ],
+        "start": "2026-10-11T20:54:00.256577+00:00",
+        "end": "2026-10-11T20:55:53.982477+00:00",
+        "seconds": 113.72494474996347,
+        "exit": 0,
+        "loadBefore": [
+          9.8125,
+          9.47216796875,
+          14.10986328125
+        ],
+        "loadAfter": [
+          25.11279296875,
+          13.62353515625,
+          15.0517578125
+        ]
+      },
+      "source": "i1",
+      "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+      "chooser": {
+        "group": {
+          "x": 1006,
+          "y": 585,
+          "width": 434,
+          "height": 315,
+          "right": 1440,
+          "bottom": 900,
+          "inViewport": true
+        },
+        "heading": {
+          "x": 1019,
+          "y": 610,
+          "width": 162.09375,
+          "height": 25.75,
+          "right": 1181.09375,
+          "bottom": 635.75,
+          "inViewport": true
+        },
+        "headingInGroup": true,
+        "remoteMessages": 0,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      "fullControlGeometry": [
+        {
+          "index": 0,
+          "box": {
+            "x": 1019,
+            "y": 660.75,
+            "width": 124,
+            "height": 60,
+            "right": 1143,
+            "bottom": 720.75,
+            "inViewport": true
+          },
+          "centerHit": true,
+          "enabled": true,
+          "textReadable": true,
+          "textRangeBounds": [
+            [
+              1044.078125,
+              667.75,
+              73.828125,
+              17
+            ],
+            [
+              1045.65625,
+              681.75,
+              70.671875,
+              17
+            ],
+            [
+              1050.390625,
+              695.75,
+              61.21875,
+              17
+            ]
+          ],
+          "scrollWidth": 122,
+          "clientWidth": 122
+        },
+        {
+          "index": 1,
+          "box": {
+            "x": 1151,
+            "y": 660.75,
+            "width": 124,
+            "height": 60,
+            "right": 1275,
+            "bottom": 720.75,
+            "inViewport": true
+          },
+          "centerHit": true,
+          "enabled": true,
+          "textReadable": true,
+          "textRangeBounds": [
+            [
+              1170.046875,
+              681.75,
+              85.890625,
+              17
+            ]
+          ],
+          "scrollWidth": 122,
+          "clientWidth": 122
+        },
+        {
+          "index": 2,
+          "box": {
+            "x": 1283,
+            "y": 660.75,
+            "width": 124,
+            "height": 60,
+            "right": 1407,
+            "bottom": 720.75,
+            "inViewport": true
+          },
+          "centerHit": true,
+          "enabled": true,
+          "textReadable": true,
+          "textRangeBounds": [
+            [
+              1321.203125,
+              681.75,
+              47.578125,
+              17
+            ]
+          ],
+          "scrollWidth": 122,
+          "clientWidth": 122
+        }
+      ],
+      "cancelPreservedSlice": true,
+      "intentAbilities": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "finalCounters": 1,
+      "eventKeys": {
+        "storeActivation": [
+          [
+            7,
+            4
+          ]
+        ],
+        "storeCounter": [
+          [
+            7,
+            6
+          ]
+        ],
+        "spendActivation": [
+          [
+            8,
+            1
+          ]
+        ],
+        "spendCounter": [
+          [
+            8,
+            0
+          ]
+        ],
+        "energy": [
+          [
+            8,
+            3
+          ]
+        ]
+      },
+      "captures": [
+        "soulbinder-chooser-desktop.png",
+        "soulbinder-store-result-desktop.png",
+        "soulbinder-spend-result-desktop.png"
+      ],
+      "notes": "Base card. UI activation0 twice establishes counters2; cancel/reopen; explicit option0 sacrifices third distinct physical card for counters3; explicit option1 spends2 counters for one energy. Stable source fields, UUID and B0 location are preserved. No hand geometry claim; declared human hand is empty."
+    },
+    "mobile": {
+      "report": "judged.result.json.mobile-pass",
+      "sha256": "28dbb4a64d4d486d462a451280bcd8c69551ee07a7950b114336ce83b162d8a5",
+      "ok": true,
+      "error": null,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 45,
+        "serve": 2463,
+        "scenario": 22833,
+        "total": 25369
+      },
+      "wrapper": {
+        "label": "judged-mobile",
+        "pid": 22328,
+        "pgid": 22328,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "judged",
+          "--bead",
+          "hv-umm2.399",
+          "--viewports",
+          "mobile"
+        ],
+        "start": "2026-10-11T20:59:41.768812+00:00",
+        "end": "2026-10-11T21:00:12.552408+00:00",
+        "seconds": 30.783248874999117,
+        "exit": 0,
+        "loadBefore": [
+          21.1484375,
+          16.32568359375,
+          15.81298828125
+        ],
+        "loadAfter": [
+          21.54638671875,
+          16.88330078125,
+          16.03173828125
+        ]
+      },
+      "source": "i1",
+      "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+      "chooser": {
+        "group": {
+          "x": 0,
+          "y": 616.109375,
+          "width": 390,
+          "height": 227.875,
+          "right": 390,
+          "bottom": 843.984375,
+          "inViewport": true
+        },
+        "heading": {
+          "x": 21,
+          "y": 677.109375,
+          "width": 162.09375,
+          "height": 25.75,
+          "right": 183.09375,
+          "bottom": 702.859375,
+          "inViewport": true
+        },
+        "headingInGroup": true,
+        "remoteMessages": 0,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      "fullControlGeometry": [
+        {
+          "index": 0,
+          "box": {
+            "x": 21,
+            "y": 727.859375,
+            "width": 110.65625,
+            "height": 60,
+            "right": 131.65625,
+            "bottom": 787.859375,
+            "inViewport": true
+          },
+          "centerHit": true,
+          "enabled": true,
+          "textReadable": true,
+          "textRangeBounds": [
+            [
+              39.40625,
+              734.859375,
+              73.828125,
+              17
+            ],
+            [
+              40.984375,
+              748.859375,
+              70.671875,
+              17
+            ],
+            [
+              45.71875,
+              762.859375,
+              61.21875,
+              17
+            ]
+          ],
+          "scrollWidth": 109,
+          "clientWidth": 109
+        },
+        {
+          "index": 1,
+          "box": {
+            "x": 139.65625,
+            "y": 727.859375,
+            "width": 110.671875,
+            "height": 60,
+            "right": 250.328125,
+            "bottom": 787.859375,
+            "inViewport": true
+          },
+          "centerHit": true,
+          "enabled": true,
+          "textReadable": true,
+          "textRangeBounds": [
+            [
+              152.046875,
+              748.859375,
+              85.890625,
+              17
+            ]
+          ],
+          "scrollWidth": 109,
+          "clientWidth": 109
+        },
+        {
+          "index": 2,
+          "box": {
+            "x": 258.328125,
+            "y": 727.859375,
+            "width": 110.65625,
+            "height": 60,
+            "right": 368.984375,
+            "bottom": 787.859375,
+            "inViewport": true
+          },
+          "centerHit": true,
+          "enabled": true,
+          "textReadable": true,
+          "textRangeBounds": [
+            [
+              289.859375,
+              748.859375,
+              47.578125,
+              17
+            ]
+          ],
+          "scrollWidth": 109,
+          "clientWidth": 109
+        }
+      ],
+      "cancelPreservedSlice": true,
+      "intentAbilities": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "finalCounters": 1,
+      "eventKeys": {
+        "storeActivation": [
+          [
+            7,
+            4
+          ]
+        ],
+        "storeCounter": [
+          [
+            7,
+            6
+          ]
+        ],
+        "spendActivation": [
+          [
+            8,
+            1
+          ]
+        ],
+        "spendCounter": [
+          [
+            8,
+            0
+          ]
+        ],
+        "energy": [
+          [
+            8,
+            3
+          ]
+        ]
+      },
+      "captures": [
+        "soulbinder-chooser-mobile.png",
+        "soulbinder-store-result-mobile.png",
+        "soulbinder-spend-result-mobile.png"
+      ],
+      "notes": "The same normal base-card workflow passes at 390 by 844. All three controls fit in the viewport with enabled center hits and complete text Range rectangles inside their buttons. The source stays at B0 with stable fields except stored counters. The declared hand is empty; no hand geometry claim."
+    }
+  },
+  "sourceFrozenMatches": true,
+  "finalQaScriptSHA256": "5a29100dd37a61166fcad5ddc8cff8bec8fe69cd7f194dfea258bf83fc3a598d",
+  "coldReview": {
+    "desktop": "Parent inspected chooser and spend-result; passed.",
+    "mobile": "Parent inspected chooser and spend-result; passed.",
+    "scope": "Changed ability chooser composition and outcomes. No hand layout claim."
+  },
+  "runtimeLedger": {
+    "checkedAt": "2026-10-11T21:01:47.277407+00:00",
+    "groups": [
+      {
+        "label": "focused-settled",
+        "pgid": 75647,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "knip",
+        "pgid": 74228,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "knip-serial",
+        "pgid": 78887,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "judged-desktop-corrected",
+        "pgid": 84249,
+        "exit": 1,
+        "present": false
+      },
+      {
+        "label": "judged-desktop",
+        "pgid": 79990,
+        "exit": 1,
+        "present": false
+      },
+      {
+        "label": "knip-final",
+        "pgid": 76930,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "focused",
+        "pgid": 72452,
+        "exit": 1,
+        "present": false
+      },
+      {
+        "label": "judged-desktop-settled",
+        "pgid": 94672,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "focused-final",
+        "pgid": 73678,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "judged-mobile",
+        "pgid": 22328,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "review-serial",
+        "pgid": 78241,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "review",
+        "pgid": 74126,
+        "exit": 1,
+        "present": false
+      },
+      {
+        "label": "review-final",
+        "pgid": 76839,
+        "exit": 0,
+        "present": false
+      },
+      {
+        "label": "own QA server",
+        "pgid": 80009,
+        "present": false
+      },
+      {
+        "label": "own QA server",
+        "pgid": 91992,
+        "present": false
+      },
+      {
+        "label": "own QA server",
+        "pgid": 4475,
+        "present": false
+      },
+      {
+        "label": "own QA server",
+        "pgid": 22362,
+        "present": false
+      }
+    ],
+    "allAbsent": true,
+    "browser": "All four runner calls have actual terminal exits and reports. Each runner closes its task browser context, completes its scenario RPC, closes its MCP client/transport and releases its automatic lease. No outstanding call or retained context. Shared provider remains running.",
+    "ports": "Each runner reports its own server stopped and port 5174 free on exit. Parent independently confirmed all four server groups absent."
+  },
+  "qaTimingScope": "Browser lease wait is separate from serve and scenario execution. Earlier attempts are harness failures with partial proofs; final desktop and mobile are complete product verdicts.",
+  "qaSampleScope": "Soulbinder base card desktop and mobile. Read-only authored coverage separately examines 32 presently authored activated cards in both base and amplified variants, not pending definitions or every transfiguration."
+}

@@ -352,8 +352,8 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   );
   // An ability chooser the human opened is the prompt surface while it offers anything.
   const model = useMemo(
-    () => withChooser(board, abilityChooser, cards, emblemName),
-    [abilityChooser, board, cards, emblemName],
+    () => withChooser(board, abilityChooser, cards, emblemName, engine.catalog),
+    [abilityChooser, board, cards, emblemName, engine],
   );
   const { affordances } = model;
   const { surface } = model.prompt;

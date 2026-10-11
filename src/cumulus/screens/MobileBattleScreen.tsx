@@ -311,6 +311,8 @@ export interface MobileBattleCardPickerCandidateView {
 
 /** An in-place option decision owned by the authoritative battle prompt. */
 export interface MobileBattleChoicePromptView {
+  /** Local action choices share a titled panel with their options. */
+  readonly presentation?: "chooser";
   readonly key: MobileBattlePromptKey;
   readonly label: MobileBattlePromptCopy;
   readonly options: readonly {
@@ -2702,7 +2704,7 @@ function ControlRow({
     phaseNavigation !== "hidden" &&
     numberPicker === null &&
     choicePrompt !== null &&
-    choicePrompt.options.length > CHOICE_PROMPT_ROW_OPTION_CAP
+    (choicePrompt.presentation === "chooser" || choicePrompt.options.length > CHOICE_PROMPT_ROW_OPTION_CAP)
       ? choicePrompt
       : null;
   return (
@@ -2961,7 +2963,7 @@ function ControlRow({
 }
 
 /**
- * A choice prompt with more options than the control row holds: a glass panel
+ * A local action chooser or a choice exceeding the control row: a glass panel
  * whose option grid scrolls within it. On desktop it stands beside the
  * player's zones, from the control row to the bottom gutter; on a phone it
  * takes the hand's place below the player's zones. Either way the battlefield
@@ -2981,6 +2983,9 @@ function BattleChoiceChooser({
   return (
     <div
       data-battle-choice-chooser=""
+      data-battle-ability-chooser={choicePrompt.presentation === "chooser" ? "" : undefined}
+      role={choicePrompt.presentation === "chooser" ? "group" : undefined}
+      aria-label={choicePrompt.presentation === "chooser" ? choicePrompt.label : undefined}
       style={{
         gridColumn: 1,
         gridRow: isDesktop ? "5 / 7" : 6,
@@ -3003,7 +3008,10 @@ function BattleChoiceChooser({
         pointerEvents: "none",
       }}
     >
-      <GlassPanel testId="battle-choice-chooser-panel">
+      <GlassPanel
+        testId="battle-choice-chooser-panel"
+        {...(choicePrompt.presentation === "chooser" ? { title: choicePrompt.label, headerSpacing: "compact" as const } : {})}
+      >
         <div
           role="group"
           aria-label={choicePrompt.label}
@@ -4500,7 +4508,7 @@ export function MobileBattleScreen({
         ) : null}
         <BattleControlMessage
           choicePrompt={
-            (view.promptHost?.heading ?? null) === null ? view.choicePrompt : null
+            (view.promptHost?.heading ?? null) === null && view.choicePrompt?.presentation !== "chooser" ? view.choicePrompt : null
           }
           promptNotice={view.promptNotice}
         />

@@ -33,6 +33,7 @@ import type { PresentationVisual } from "../../battle/components/presentation-it
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
   engineAbilityOptionLabel,
+  engineActivatedAbilityTexts,
   engineStatusLabel,
   type EngineAbilityOption,
   type EngineStatusCopy,
@@ -805,12 +806,13 @@ export function withChooser(
   chooser: EngineChooser | null,
   cards: EngineCardModels,
   emblemName: EngineEmblemNamer,
+  catalog: EngineCatalog,
 ): EngineBattleScreenModel {
-  const options = chooserOptions(chooser, model.affordances, model.engine, cards, emblemName);
+  const options = chooserOptions(chooser, model.affordances, model.engine, cards, emblemName, catalog, model.instances);
   if (options.length === 0) return model;
   const prompt: PromptHostModel = {
     ...model.prompt,
-    surface: { kind: "choice", key: CHOOSER_KEY, label: ENGINE_ABILITY_CHOOSER_TITLE, options },
+    surface: { kind: "choice", key: CHOOSER_KEY, label: ENGINE_ABILITY_CHOOSER_TITLE, options, presentation: "chooser" },
   };
   return { ...model, prompt, view: { ...model.view, ...promptViewFields(prompt) } };
 }
@@ -822,6 +824,8 @@ function chooserOptions(
   view: BattleView,
   cards: EngineCardModels,
   emblemName: EngineEmblemNamer,
+  catalog: EngineCatalog,
+  instances: EngineBattleScreenModel["instances"],
 ): PromptChoiceOption[] {
   if (chooser === null) return [];
   const option = (copy: EngineAbilityOption, select: PromptChoiceOption["select"]): PromptChoiceOption => ({
@@ -849,7 +853,15 @@ function chooserOptions(
       const activations = affordances.activations.get(chooser.id) ?? [];
       const payments = (affordances.payToEnd.get(chooser.id) ?? []).map(payment);
       if (activations.length + payments.length === 0) return [];
-      return [...activations.map((action, index) => act({ kind: "ability", index }, action)), ...payments, cancel];
+      const instance = instances.get(chooser.id);
+      const abilities = instance === undefined ? [] : instanceCard(catalog, instance).abilities(instance.variant);
+      const activatedIndices = abilities.flatMap((ability, index) => ability.kind === "activated" ? [index] : []);
+      const texts = instance === undefined ? null : engineActivatedAbilityTexts(cards(instance).displaySnapshot.renderedText, activatedIndices.length);
+      return [...activations.map((action) => act({
+        kind: "ability",
+        index: action.ability,
+        text: texts?.[activatedIndices.indexOf(action.ability)] ?? null,
+      }, action)), ...payments, cancel];
     }
     case "void": {
       const plays = [...affordances.voidPlays.values()].flatMap((action) => {

@@ -97,6 +97,8 @@ export interface PromptChoiceOption {
 
 /** The control row's choice buttons: what they ask, and each option with what it does. */
 export interface PromptChoices {
+  /** A local action chooser uses its titled panel even with a short option list. */
+  readonly presentation?: "chooser";
   readonly key: MobileBattlePromptKey;
   readonly label: string;
   readonly options: readonly PromptChoiceOption[];
@@ -172,6 +174,7 @@ export function promptViewFields(
             label: choices.label,
             options: choices.options.map((option) => ({ label: option.label })),
             canResolve: true,
+            ...(choices.presentation === undefined ? {} : { presentation: choices.presentation }),
           },
     promptHost: model.host,
   };

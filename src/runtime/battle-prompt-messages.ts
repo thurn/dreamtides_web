@@ -221,12 +221,27 @@ export function enginePromptModeTexts(renderedText: string, count: number): stri
   return modes.length === count ? modes.map(sentence) : null;
 }
 
+/**
+ * Authored cost/effect paragraphs in activated-ability order. Positive cost
+ * prefixes exclude triggers, modal instructions, and quoted granted abilities.
+ * The catalog count must agree before a paragraph is associated with an action.
+ * Full paragraphs preserve payment qualifiers, modes, and timing restrictions.
+ */
+export function engineActivatedAbilityTexts(renderedText: string, count: number): readonly string[] | null {
+  const costStart = /^(?:❖{1,2}\s*[–-]?\s*)?(?:☾|(?:\d+|X)\s*[●⧗⍟]|(?:abandon|discard|return|banish|pay|reveal)\b)/iu;
+  const paragraphs = renderedText.split(/\n\s*\n/u).map((text) => text.trim()).filter((text) => {
+    const colon = text.indexOf(":");
+    return colon > 0 && colon < text.length - 1 && costStart.test(text);
+  });
+  return paragraphs.length === count ? paragraphs : null;
+}
+
 /** The heading of an ability chooser the player opened on a card or emblem. */
 export const ENGINE_ABILITY_CHOOSER_TITLE = "Choose an ability";
 
 /** One option of an ability chooser the player opened on a card, the void, or the status display. */
 export type EngineAbilityOption =
-  | { readonly kind: "ability"; readonly index: number }
+  | { readonly kind: "ability"; readonly index: number; readonly text: string | null }
   /** Play a card from the void, by a play permission or Reclaim. */
   | { readonly kind: "playFromVoid"; readonly name: string }
   | {
@@ -252,7 +267,7 @@ export type EngineAbilityOption =
 export function engineAbilityOptionLabel(option: EngineAbilityOption): string {
   switch (option.kind) {
     case "ability":
-      return `Ability ${String(option.index + 1)}`;
+      return option.text ?? `Ability ${String(option.index + 1)}`;
     case "playFromVoid":
       return `Play ${option.name}`;
     case "emblem": {

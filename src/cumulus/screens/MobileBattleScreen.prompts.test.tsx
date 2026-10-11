@@ -173,6 +173,25 @@ describe("MobileBattleScreen", () => {
     expect(onNextPhase).not.toHaveBeenCalled();
   });
 
+  it("groups a local chooser heading with even a short option list and its actions", () => {
+    const onChoicePromptChoose = vi.fn();
+    const choicePrompt = { key: 44, label: "Fixture action choice", presentation: "chooser" as const, options: [{ label: "Fixture payment and effect" }, { label: "Fixture other payment and effect" }, { label: "Fixture dismissal" }], canResolve: true };
+    const container = mount({ ...makeView(), choicePrompt }, { canInteract: true, onChoicePromptChoose });
+    const group = query(container, "[data-battle-ability-chooser]");
+    const heading = group.querySelector("h2");
+    const options = group.querySelectorAll<HTMLButtonElement>("button");
+    expect(heading).not.toBeNull();
+    expect(heading !== null && group.contains(heading)).toBe(true);
+    expect(group.getAttribute("role")).toBe("group");
+    expect(group.getAttribute("aria-label")?.length).toBeGreaterThan(0);
+    expect(options).toHaveLength(choicePrompt.options.length);
+    expect(container.querySelector("[data-battle-choice-prompt-message]")).toBeNull();
+    expect(container.querySelector("[data-battle-phase-next]")).toBeNull();
+    click(options[1]);
+    click(options[2]);
+    expect(onChoicePromptChoose.mock.calls).toEqual([[1], [2]]);
+  });
+
   it("keeps up to four options in the control row and moves a longer choice to a bounded scrolling chooser", () => {
     const choice = (count: number) => ({
       key: 43,

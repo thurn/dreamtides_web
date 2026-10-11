@@ -59,7 +59,7 @@ describe("play permissions on the battle screen", () => {
     expect(ringed("enemy")).toEqual([]);
     expect(ringed("player")).not.toContain(id(spell));
 
-    const options = surfaceChoices(withChooser(model, { kind: "void" }, cards, () => null).prompt.surface)?.options ?? [];
+    const options = surfaceChoices(withChooser(model, { kind: "void" }, cards, () => null, engine.catalog).prompt.surface)?.options ?? [];
     const instance = engine.view(state, "player").instances[character];
     expect(options[0]).toEqual({
       label: engineAbilityOptionLabel({ kind: "playFromVoid", name: cards(instance).displaySnapshot.name }),

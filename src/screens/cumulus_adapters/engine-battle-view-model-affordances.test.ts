@@ -2,12 +2,16 @@
 // plays, passes, repositions, merges, Reclaim, activations, paying to end
 // an effect, and loops.
 import { describe, expect, it } from "vitest";
-import { type Action, type InstanceId } from "../../engine";
-import { placeFigment } from "../../engine/testing/board";
+import { createEngine, type Action, type InstanceId } from "../../engine";
+import { boardState, placeFigment } from "../../engine/testing/board";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
-import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
 import { ZONE, ZONE_FIGMENT } from "../../engine/testing/zone-cards";
+import { activated, discardCost, energy, keyword } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import type { EngineCardModels } from "../../battle/ui/engine-card-model";
+import { surfaceChoices } from "./prompt-host-view-model";
 import { NO_PROMPTS } from "../../engine/steps/sources";
 import { parseBattleSlotViewId, type BattleCardId } from "../../types/identifiers";
 import {
@@ -107,9 +111,49 @@ describe("buildEngineBattleScreenModel", () => {
     expect(figmentMergeTargets(model, "player", id(source), () => false)[0]?.addedSpark).toBe(1);
   });
 
+  it("labels usable activations by their authored cost and effect at the actual ability index", () => {
+    const paragraphs = ["5●: Store 2⧗.", "2●, discard a card: Choose one: Gain 3●; or store 1⧗."];
+    const authored = {
+      ...SYNTHETIC.vanilla0,
+      id: syntheticId(0x399),
+      status: "authored" as const,
+      abilities: () => [keyword("awakened"), activated([energy(5)], p.storeCounters(2)), activated([energy(2), discardCost()], p.chooseOne(p.gainEnergy(3), p.storeCounters(1)))],
+    };
+    const on = createEngine(testCatalog([authored]));
+    const copy: EngineCardModels = Object.assign((instance: Parameters<EngineCardModels>[0]) => {
+      const card = cards(instance);
+      return { ...card, displaySnapshot: { ...card.displaySnapshot, renderedText: ["Awakened", 'When a character is abandoned: Gain 1●.', ...paragraphs].join("\n\n") } };
+    }, { nameOf: (identity: Parameters<EngineCardModels["nameOf"]>[0]) => cards.nameOf(identity) });
+    const options = (energy: number, cardModels = copy) => {
+      const { state, ids } = boardState(on.catalog, { active: "player", phase: "day", player: { back: [authored.id], hand: [SYNTHETIC.vanilla1.id], energy }, enemy: {} });
+      const model = screenOf(state, null, state, true, on);
+      const chosen = withChooser(model, { kind: "card", id: id(ids.player.back[0]) }, cardModels, () => null, on.catalog);
+      expect(chosen.view.choicePrompt?.presentation).toBe("chooser");
+      return surfaceChoices(chosen.prompt.surface)?.options.filter((option) => option.select.kind === "action") ?? [];
+    };
+    const both = options(5);
+    expect(both).toHaveLength(2);
+    expect(new Set(both.map((option) => option.label)).size).toBe(both.length);
+    expect(both.map((option) => option.select)).toMatchObject([
+      { kind: "action", action: { kind: "activate", ability: 1 } },
+      { kind: "action", action: { kind: "activate", ability: 2 } },
+    ]);
+    expect(options(2)).toHaveLength(1);
+    expect(options(2)[0]?.label).toBe(both[1]?.label);
+    const incomplete: EngineCardModels = Object.assign((instance: Parameters<EngineCardModels>[0]) => {
+      const card = copy(instance);
+      return { ...card, displaySnapshot: { ...card.displaySnapshot, renderedText: paragraphs[0] } };
+    }, { nameOf: (identity: Parameters<EngineCardModels["nameOf"]>[0]) => cards.nameOf(identity) });
+    const fallback = options(2, incomplete);
+    expect(fallback).toHaveLength(1);
+    expect(fallback[0]?.select).toEqual(options(2)[0]?.select);
+    expect(fallback[0]?.label).not.toBe(both[1]?.label);
+    expect(fallback[0]?.label.length).toBeGreaterThan(0);
+  });
+
   it("offers Reclaim plays and Avatar and Dreamsign activations from their choosers", () => {
     const { model } = labScreen("reclaim");
-    const chooser = (opened: EngineChooser | null) => withChooser(model, opened, cards, () => null);
+    const chooser = (opened: EngineChooser | null) => withChooser(model, opened, cards, () => null, engine.catalog);
     const actions = (offered: Iterable<Action>) => [...offered].map((action) => ({ kind: "action", action }));
 
     expect(model.affordances.voidPlays.size).toBe(1);
@@ -185,7 +229,7 @@ describe("buildEngineBattleScreenModel", () => {
     expect([...model.affordances.payToEnd.values()]).toEqual(affected.map(() => [action]));
     expect(model.affordances.statusPayToEnd).toEqual([]);
     expect(shown(model)).toEqual(affected.map(() => [true, true]));
-    expect(selections(withChooser(model, { kind: "card", id: affected[0] }, cards, () => null))).toEqual([{ kind: "action", action }, { kind: "close" }]);
+    expect(selections(withChooser(model, { kind: "card", id: affected[0] }, cards, () => null, engine.catalog))).toEqual([{ kind: "action", action }, { kind: "close" }]);
     expect(screenOf(poor).affordances.payToEnd.size).toBe(0);
     expect(shown(screenOf(poor))).toEqual(affected.map(() => [false, false]));
     expect(screenOf(unattached).affordances.statusPayToEnd).toEqual([action]);
