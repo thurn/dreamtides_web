@@ -29,6 +29,21 @@ there.
 - **Deck size.** Decks are tuned to land near 30 cards. A deck below 25 cards
   is padded with extra copies of itself for each battle.
 
+## Dreamsign journey effects
+
+A Dreamsign's journey effect reacts to each change the player's journey goes
+through: a site reward, a purchase, a pick, a battle reward, and so on.
+
+- **Timing.** The effect applies after the change, to its result.
+- **Holding.** Only the Dreamsigns held once the change completes apply. A
+  Dreamsign gained by a change applies to that same change; one lost or
+  replaced by a change does not.
+- **Order.** Held Dreamsigns apply in the order they are held, once per held
+  copy, each seeing the result of the ones before it.
+- **Administrative edits.** Debug, QA, and developer edits, such as setting
+  essence to an exact value, and loading or resetting a whole journey, never
+  trigger journey effects: they write exactly the state they name.
+
 ## Cards, rarity, and Nightmare
 
 - Dreamtides has no card rarity. The one exception is the **legendary** tag:

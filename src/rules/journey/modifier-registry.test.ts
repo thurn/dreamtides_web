@@ -13,14 +13,34 @@ import {
   testEventActor,
   testJourneySeed,
 } from "../../types/test-identities";
+import { testCardId } from "../../types/test-identities";
+import {
+  ADMINISTRATIVE_EVENT_TYPES,
+  type AdministrativeEventType,
+  type GameEventType,
+} from "../events";
 import type { FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
+import {
+  AVATAR_ID,
+  BATTLE_SITE_ID,
+  DRAFT_SITE_ID,
+  clearReplayFixtureProviders,
+  registerReplayFixtureProviders,
+} from "../replay/fixture-providers";
 import { GAME_ENGINE_CONFIG } from "../replay/replay";
+import { registerDeckContentProvider } from "./deck";
+import { registerDraftContentProvider } from "./draft";
+import { registerJourneyLifecycleContentProvider } from "./lifecycle";
 import {
   createJourneyModifierRegistry,
   type JourneyModifierDefinition,
   type JourneyModifierRegistry,
 } from "./modifier-registry";
+import {
+  testDraftContentProvider,
+  testJourneyLifecycleContentProvider,
+} from "./test-content-providers";
 
 const FIRST = testDreamsignId("modifier-first");
 const SECOND = testDreamsignId("modifier-second");
@@ -81,9 +101,81 @@ function local(registry: JourneyModifierRegistry, state = initial(), devMode = t
 }
 
 afterEach(() => {
+  clearReplayFixtureProviders();
   resetLog();
   vi.restoreAllMocks();
 });
+
+type Intent = { readonly type: GameEventType; readonly payload: Record<string, unknown> };
+
+/**
+ * Synthetic content seams over the replay fixture providers: every Dreamsign
+ * UUID resolves, any card resolves to one number, and drafts deal packs of 2.
+ */
+function registerSyntheticProviders(): void {
+  registerReplayFixtureProviders();
+  registerDeckContentProvider({
+    resolveCardNumber: () => 100,
+    resolveDreamsign: (id) => ({ id, name: "same fixture name", effectDescription: "" }),
+  });
+  registerDraftContentProvider(testDraftContentProvider({
+    resolveCardNumber: () => 100,
+    draftConfigFor: () => ({ packSize: 2, sitePickCount: 5, rarityCaps: [] }),
+  }));
+}
+
+/** How one administrative intent reaches a state where it applies. */
+interface AdministrativeCase {
+  /** A fixture-provider seed whose run atlas the case needs. */
+  readonly seed?: string;
+  /** Gameplay intents appended after the run starts and a Dreamsign is gained. */
+  readonly prefix?: readonly Intent[];
+  /** Content seams the intent needs beyond the synthetic providers. */
+  readonly setup?: () => void;
+  readonly payload: (state: FoldState) => Record<string, unknown>;
+}
+
+const AUGURY_SITE = parseSiteId("modifier-augury");
+const ADD_ENTRY: readonly Intent[] = [{ type: "ADD_CARD", payload: { cardId: testCardId("modifier-card") } }];
+const firstEntryId = (state: FoldState) => state.journey.deck[0]?.entryId;
+
+/** Keyed by the administrative type: classifying a new one requires a case here. */
+const ADMINISTRATIVE_CASES: Readonly<Record<AdministrativeEventType, AdministrativeCase>> = {
+  SET_ESSENCE: { payload: () => ({ value: 99 }) },
+  SET_MAX_DREAMSIGNS: { payload: () => ({ value: 5 }) },
+  RESET_JOURNEY: { payload: () => ({}) },
+  LOAD_STATE: { payload: (state) => ({ snapshot: { ...state.journey, essence: 77 } }) },
+  REGENERATE_ATLAS: {
+    setup: () => registerJourneyLifecycleContentProvider(testJourneyLifecycleContentProvider({
+      regenerateAtlas: ({ journey }) => ({ ...journey }),
+    })),
+    payload: () => ({}),
+  },
+  SET_DECK_ENTRY_STAT_OVERRIDE: { prefix: ADD_ENTRY, payload: (state) => ({ entryId: firstEntryId(state), override: { spark: 3 } }) },
+  SET_DECK_ENTRY_KEYWORDS: { prefix: ADD_ENTRY, payload: (state) => ({ entryId: firstEntryId(state), keywords: null }) },
+  SET_DECK_ENTRY_TYPE: { prefix: ADD_ENTRY, payload: (state) => ({ entryId: firstEntryId(state), typeChange: null }) },
+  SET_DREAMSIGN_POOL: { payload: () => ({ ids: [] }) },
+  SET_DRAFT_STATE: { payload: (state) => ({ draftState: state.journey.draftState }) },
+  REROLL_DRAFT_OFFER: {
+    prefix: [
+      { type: "ENTER_SITE", payload: { siteId: DRAFT_SITE_ID } },
+      { type: "ENTER_DRAFT_SITE", payload: { siteId: DRAFT_SITE_ID } },
+    ],
+    payload: () => ({ siteId: DRAFT_SITE_ID }),
+  },
+  REROLL_AUGURY: { payload: () => ({ siteId: AUGURY_SITE }) },
+  FORCE_AUGURY_ARCHETYPE: { payload: () => ({ siteId: AUGURY_SITE, archetypeId: null }) },
+  SET_CARD_SOURCE_DEBUG: { payload: () => ({ state: null }) },
+  BATTLE_DEBUG: {
+    // This fixture seed's run atlas holds only the Battle site.
+    seed: "fixture-battle",
+    prefix: [
+      { type: "ENTER_SITE", payload: { siteId: BATTLE_SITE_ID } },
+      { type: "BEGIN_BATTLE", payload: { siteId: BATTLE_SITE_ID } },
+    ],
+    payload: () => ({ op: { kind: "setScore", side: "player", score: 0 } }),
+  },
+};
 
 describe("journey modifier registry", () => {
   it("looks up copied definitions by UUID and rejects duplicate registrations", () => {
@@ -251,5 +343,60 @@ describe("journey modifier registry", () => {
     log.append({ type: "RESET_JOURNEY", payload: {} });
     expect(log.state().journey.dreamsigns).toEqual([]);
     expect(callback).not.toHaveBeenCalled();
+  });
+
+  it("runs no journey hook for any administrative intent", () => {
+    expect(new Set(Object.keys(ADMINISTRATIVE_CASES))).toEqual(ADMINISTRATIVE_EVENT_TYPES);
+    for (const type of ADMINISTRATIVE_EVENT_TYPES) {
+      registerSyntheticProviders();
+      const hook = vi.fn<JourneyModifierDefinition["afterJourneyEvent"]>(() => null);
+      const { seed, prefix = [], setup, payload } = ADMINISTRATIVE_CASES[type];
+      const log = local(
+        createJourneyModifierRegistry([{ dreamsignId: FIRST, afterJourneyEvent: hook }]),
+        GAME_ENGINE_CONFIG.genesisState(seed === undefined ? GENESIS : { ...GENESIS, seed: testJourneySeed(seed) }),
+      );
+      const records: LocalLogRecord<FoldState>[] = [];
+      log.subscribe((record) => records.push(record));
+      for (const intent of [
+        { type: "START_JOURNEY", payload: { avatarId: AVATAR_ID } },
+        { type: "ADD_DREAMSIGN", payload: { dreamsignId: FIRST } },
+        ...prefix,
+      ] satisfies readonly Intent[]) {
+        log.append(intent);
+      }
+      expect(records.map((record) => record.outcome), type).not.toContain("bounced");
+      expect(hook, type).toHaveBeenCalled();
+      hook.mockClear();
+      setup?.();
+      const before = log.state();
+      log.append({ type, payload: payload(before) });
+      expect(records[records.length - 1]?.outcome, type).toBe("applied");
+      expect(log.state(), type).not.toBe(before);
+      expect(hook, type).not.toHaveBeenCalled();
+      clearReplayFixtureProviders();
+    }
+  });
+
+  it("applies a Dreamsign an event gains to that event and skips one it removes or replaces", () => {
+    registerSyntheticProviders();
+    const registry = createJourneyModifierRegistry([FIRST, SECOND].map((dreamsignId) => ({
+      dreamsignId,
+      afterJourneyEvent: ({ journey }) => ({
+        journey: { ...journey, essence: journey.essence + 1 },
+        before: { essence: journey.essence },
+        after: { essence: journey.essence + 1 },
+      }),
+    })));
+    const log = local(registry, initial([FIRST]));
+    const records: LocalLogRecord<FoldState>[] = [];
+    log.subscribe((record) => records.push(record));
+    const applied = () => records[records.length - 1]?.logRecords?.map(({ fields }) => [fields.dreamsignId, fields.eventType, fields.heldIndex]);
+    log.append({ type: "ADD_DREAMSIGN", payload: { dreamsignId: SECOND } });
+    expect(applied()).toEqual([[FIRST, "ADD_DREAMSIGN", 0], [SECOND, "ADD_DREAMSIGN", 1]]);
+    log.append({ type: "REMOVE_DREAMSIGN", payload: { dreamsignId: FIRST } });
+    expect(applied()).toEqual([[SECOND, "REMOVE_DREAMSIGN", 0]]);
+    log.append({ type: "ADD_DREAMSIGN", payload: { dreamsignId: FIRST, purgeIndex: 0 } });
+    expect(applied()).toEqual([[FIRST, "ADD_DREAMSIGN", 0]]);
+    expect(log.state().journey.essence).toBe(24);
   });
 });

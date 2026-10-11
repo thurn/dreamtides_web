@@ -26,6 +26,7 @@ import type {
 import {
   CAS_EXEMPT_EVENT_TYPES,
   DECISION_NEUTRAL_EVENT_TYPES,
+  isGameplayEventType,
   isKnownEventType,
   type GameEventType,
 } from "./events";
@@ -144,7 +145,12 @@ export function reduceGameEvent(
   return finishTransition(state, event, routeDomain(state, event, ctx), modifiers);
 }
 
-/** Apply journey hooks only after domain validation, before final invariants. */
+/**
+ * Apply journey hooks only after domain validation, before final invariants,
+ * and only for a gameplay intent that changed the journey. Administrative
+ * intents (`EVENT_INTENT_CLASSES` in ./events) write exactly the state they
+ * name.
+ */
 function finishTransition(
   before: FoldState,
   event: GameEvent,
@@ -154,9 +160,8 @@ function finishTransition(
   if (
     result.outcome === "applied" &&
     result.state.journey !== before.journey &&
-    event.type !== "LOAD_STATE" &&
-    event.type !== "RESET_JOURNEY" &&
-    isKnownEventType(event.type)
+    isKnownEventType(event.type) &&
+    isGameplayEventType(event.type)
   ) {
     const siteId = siteIdFromUnknown(event.payload?.siteId) ??
       (before.journey.screen.type === "site" ? before.journey.screen.siteId : null);

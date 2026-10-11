@@ -2,9 +2,12 @@ import type { ReducerLogRecord } from "../../eventlog/types";
 import type { DreamsignId, SiteId } from "../../types/identifiers";
 import { parseDreamsignId } from "../../types/identifiers";
 import type { JourneyState } from "../../types/journey";
-import type { GameEventType } from "../events";
+import type { GameplayEventType } from "../events";
 
-/** A pure hook over a validated journey transition, separate from the battle DSL. */
+/**
+ * A pure hook over a validated gameplay journey transition, separate from the
+ * battle DSL. Administrative intents never reach a hook.
+ */
 export interface JourneyModifierDefinition {
   readonly dreamsignId: DreamsignId;
   /**
@@ -15,7 +18,7 @@ export interface JourneyModifierDefinition {
   readonly afterJourneyEvent: (input: {
     readonly before: Readonly<JourneyState>;
     readonly journey: Readonly<JourneyState>;
-    readonly eventType: GameEventType;
+    readonly eventType: GameplayEventType;
   }) => {
     readonly journey: JourneyState;
     /** Numeric rule values only: catalog names and copy cannot enter diagnostics. */
@@ -29,7 +32,7 @@ export interface JourneyModifierRegistry {
   apply(input: {
     before: JourneyState;
     journey: JourneyState;
-    eventType: GameEventType;
+    eventType: GameplayEventType;
     siteId: SiteId | null;
   }): { journey: JourneyState; logRecords: readonly ReducerLogRecord[] };
 }
@@ -62,7 +65,10 @@ export function createJourneyModifierRegistry(
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
       // Snapshot the post-domain holdings: hooks run in held order, once per
-      // held copy. A hook changing the holdings does not alter this iteration.
+      // copy held after the event, so a Dreamsign the event gains applies to
+      // it and one the event removes does not (docs/design.md § Dreamsign
+      // journey effects). A hook changing the holdings does not alter this
+      // iteration.
       for (const [heldIndex, { id }] of journey.dreamsigns.entries()) {
         const definition = byId.get(id);
         const applied = definition?.afterJourneyEvent({ before, journey: next, eventType });
