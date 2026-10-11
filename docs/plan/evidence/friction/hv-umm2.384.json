@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.384",
+  "phase": 5,
+  "baseOid": "6c84b1be6ed7b5c9d3c6afe3375994799aa355b6",
+  "implementMin": 21.511,
+  "implementMeasuredThrough": "2026-10-11T16:29:41.630335+00:00",
+  "localValidationS": {
+    "install": 2.756,
+    "negative": 5.5,
+    "negative-fixed-fixture": 6.08,
+    "focused": 3.846,
+    "focused-final": 3.862,
+    "review": 18.755,
+    "knip": 3.873,
+    "fuzz-200": 85.206,
+    "browser-1": 199.959,
+    "browser-2": 24.376
+  },
+  "hostLoad": 4.767578125,
+  "testDelta": {
+    "files": 0,
+    "lines": 106,
+    "jsdomFiles": 0,
+    "cases": 3
+  },
+  "friction": [],
+  "timingNote": "Wall interval from native dispatch at 16:08:11Z through immediate commit start, including research, ACKs, checks, queues, browser QA and evidence authoring."
+}

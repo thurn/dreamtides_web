@@ -6,7 +6,9 @@ import type { BattleState } from "../../../state/types";
 import { unannouncedChanges } from "../../../testing/announced-changes";
 import type { EngineEvent } from "../../../events";
 import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
-import { Answering, engine, fromHand, KEEP, placed, playOn, reclaim, resolveStack, zoneOf } from "./reclaim-not-banished-support";
+import { SYNTHETIC } from "../../../testing/synthetic-cards";
+import { passUntil } from "../../../testing/trigger-harness";
+import { act, Answering, engine, fromHand, fromVoid, KEEP, placed, playOn, reclaim, resolveStack, zoneOf } from "./reclaim-not-banished-support";
 
 function applied(outcome: IntentOutcome): BattleSlice {
   if (outcome.kind !== "applied" || outcome.error !== null) throw new Error(`expected an applied intent, got ${JSON.stringify(outcome)}`);
@@ -23,6 +25,71 @@ function covered(hand: Parameters<typeof placed>[0]["hand"] = [KEEP.dissolveOne.
 }
 
 describe("reclaimNotBanished recovery", () => {
+  it("determinizes a covered reclaimed character before a source-first wipe with the same departures", () => {
+    const { state, ids } = placed({ back: [KEEP.keeper.id], void: [KEEP.revenant.id], hand: [KEEP.wipe.id], energy: 3 });
+    const keeper = ids.player.back[0]!;
+    const revenant = ids.player.void[0];
+    const current = reclaim(state, revenant);
+    expect(current.sides.player.backRank.slice(0, 2)).toEqual([keeper, revenant]);
+    const filler = Array.from({ length: 4 }, () => ({ cardId: SYNTHETIC.vanilla1.id }));
+    const sampled = engine.determinize(engine.view(current, "player"), {
+      player: [...filler, ...[KEEP.keeper.id, KEEP.revenant.id, KEEP.wipe.id].map((cardId) => ({ cardId }))],
+      enemy: filler,
+    }, () => 0.5);
+    const wipe = (start: BattleState) => {
+      const played = act(start, "player", fromHand(start.sides.player.hand[0]));
+      const resolved = passUntil(engine, played.state, (next) => next.stack.length === 0);
+      return { state: resolved.state, events: [...played.events, ...resolved.events] };
+    };
+    const actual = wipe(current);
+    const simulated = wipe(sampled);
+    expect(actual.events.filter((event) => event.kind === "leftPlay").map((event) => event.instance)).toEqual([keeper, revenant]);
+    expect(zoneOf(actual.state, keeper)).toBe("void");
+    expect(zoneOf(actual.state, revenant)).toBe("banished");
+    expect(zoneOf(simulated.state, revenant)).toBe(zoneOf(actual.state, revenant));
+    expect(simulated.state.sides.player.score).toBe(actual.state.sides.player.score);
+    expect(simulated.events).toEqual(actual.events);
+    expect(sampled.instances[revenant].status.reclaimed).toBe(true);
+    expect(sampled.instances[revenant]).not.toHaveProperty("reclaimCovered");
+  });
+
+  it("determinizes a covered reclaimed event on the stack before its source leaves with the same destination", () => {
+    const { state, ids } = placed(
+      { back: [KEEP.keeper.id], void: [KEEP.spell.id], energy: 3 },
+      { hand: [KEEP.dissolveInterrupt.id], deck: [], energy: 1 },
+    );
+    const keeper = ids.player.back[0]!;
+    const spell = ids.player.void[0];
+    const current = act(state, "player", fromVoid(spell)).state;
+    expect(current.stack).toContainEqual(expect.objectContaining({ kind: "card", instance: spell }));
+    expect(zoneOf(current, spell)).toBe("stack");
+    expect(current.instances[spell].status.reclaimed).toBe(true);
+    expect(engine.decision(current)).toMatchObject({ side: "enemy", kind: "respond" });
+    const filler = Array.from({ length: 4 }, () => ({ cardId: SYNTHETIC.vanilla1.id }));
+    const sampled = engine.determinize(engine.view(current, "player"), {
+      player: [...filler, ...[KEEP.keeper.id, KEEP.spell.id].map((cardId) => ({ cardId }))],
+      enemy: [{ cardId: KEEP.dissolveInterrupt.id }],
+    }, () => 0.5);
+    const departing = (start: BattleState) => {
+      const played = act(start, "enemy", fromHand(start.sides.enemy.hand[0]), new Answering(() => [keeper]));
+      const resolved = passUntil(engine, played.state, (next) => next.stack.length === 0);
+      return { state: resolved.state, events: [...played.events, ...resolved.events] };
+    };
+    const actual = departing(current);
+    const simulated = departing(sampled);
+    expect(zoneOf(actual.state, keeper)).toBe("void");
+    expect(zoneOf(actual.state, spell)).toBe("banished");
+    expect(actual.state.sides.player.score).toBe(1);
+    expect(zoneOf(simulated.state, spell)).toBe(zoneOf(actual.state, spell));
+    expect(simulated.state.sides.player.score).toBe(actual.state.sides.player.score);
+    const departures = (events: readonly EngineEvent[]) => events.filter((event) =>
+      (event.kind === "leftPlay" || event.kind === "banished" || event.kind === "resolved") && event.instance === spell,
+    );
+    expect(departures(simulated.events)).toEqual(departures(actual.events));
+    expect(sampled.instances[spell].status.reclaimed).toBe(true);
+    expect(sampled.instances[spell]).not.toHaveProperty("reclaimCovered");
+  });
+
   it("decides as the dissolve commits: a reload mid-target-choice and a cancel keep the reclaimed card, and stale input is bounced", () => {
     const { state, revenant, ids } = covered();
     const fold = createFoldAdapter(engine, { checkEventPrefix: true });

@@ -148,7 +148,8 @@ describe("view", () => {
         .map((instance) => instance.id);
       expect(Object.keys(seen.instances).sort()).toEqual([...visible].sort());
       for (const id of visible) {
-        const { characteristics: _effective, ...instance } = seen.instances[id] ?? { characteristics: null };
+        const { characteristics: _effective, reclaimCovered, ...instance } = seen.instances[id] ?? { characteristics: null, reclaimCovered: null };
+        expect(reclaimCovered).toBe(false);
         expect(instance).toEqual(state.instances[id]);
       }
       for (const side of SIDES) {

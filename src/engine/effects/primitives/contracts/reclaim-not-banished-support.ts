@@ -75,6 +75,8 @@ export const KEEP = {
       },
     },
   },
+  /** Interrupt: dissolve a character while another card waits on the stack. */
+  dissolveInterrupt: card(11, "event", 0, () => [event(dissolve(target(anyCharacter())))], "interrupt"),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 export const engine = createEngine(zoneCatalog(Object.values(KEEP)));

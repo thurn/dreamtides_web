@@ -507,6 +507,7 @@ export function engineStatuses(
     }
     for (const [status, shown] of Object.entries(CARD_STATUS_BADGES) as [keyof CardStatus, CardStatusBadge | null][]) {
       if (shown === null || instance.status[status] !== true) continue;
+      if (status === "reclaimed" && instance.reclaimCovered) continue;
       if (status === "created" && instance.printing.kind !== "card") continue;
       mark(instance.id, badge(shown.badge, shown.copy));
     }

@@ -95,7 +95,7 @@ function remaining(entries: readonly DeckEntry[], visible: readonly InstanceView
 }
 
 function instanceFromView(instance: InstanceView): CardInstance {
-  const { characteristics: _characteristics, ...rest } = copy(instance);
+  const { characteristics: _characteristics, reclaimCovered: _reclaimCovered, ...rest } = copy(instance);
   return { ...rest, variant: { ...rest.variant }, status: { ...rest.status } };
 }
 

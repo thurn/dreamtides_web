@@ -186,18 +186,29 @@ describe("reclaimNotBanished", () => {
     expect(() => reclaimNotBanishedPrimitive.resolve(undefined as never, reclaimNotBanished(), undefined as never)).toThrow();
   });
 
-  it("shows a reclaimed card in play or on the stack without the reclaimed status while its owner's ability applies, and one in the Banished zone with it", () => {
+  it("preserves raw reclaimed status and separately shows its owner's coverage in play and on the stack", () => {
     const { state, ids } = placed({ back: [KEEP.keeper.id, KEEP.revenant.id], hand: [KEEP.dissolveOne.id] }, { back: [KEEP.revenant.id] });
     const [keeper, mine] = ids.player.back;
     const [theirs] = ids.enemy.back;
     for (const id of [mine, theirs]) state.instances[id!].status.reclaimed = true;
     for (const viewer of ["player", "enemy"] as const) {
       const seen = engine.view(state, viewer).instances;
-      expect([seen[mine!]?.status.reclaimed, seen[theirs!]?.status.reclaimed]).toEqual([false, true]);
+      expect([seen[mine!]?.status.reclaimed, seen[theirs!]?.status.reclaimed]).toEqual([true, true]);
+      expect([seen[mine!]?.reclaimCovered, seen[theirs!]?.reclaimCovered]).toEqual([true, false]);
     }
-    // The source leaves: the status shows again, read from the new state.
+    // Coverage follows the source's current presence; the raw status stays set.
     const gone = playOn(state, ids.player.hand[0], keeper).state;
-    expect(engine.view(gone, "enemy").instances[mine!]?.status.reclaimed).toBe(true);
+    for (const viewer of ["player", "enemy"] as const) {
+      expect(engine.view(gone, viewer).instances[mine!]).toMatchObject({ status: { reclaimed: true }, reclaimCovered: false });
+    }
+
+    const pending = placed({ back: [KEEP.keeper.id], void: [KEEP.spell.id], energy: 3 }, { hand: [KEEP.dissolveInterrupt.id], energy: 1 });
+    const spell = pending.ids.player.void[0];
+    const stacked = act(pending.state, "player", fromVoid(spell)).state;
+    expect(stacked.stack).toContainEqual(expect.objectContaining({ kind: "card", instance: spell }));
+    for (const viewer of ["player", "enemy"] as const) {
+      expect(engine.view(stacked, viewer).instances[spell]).toMatchObject({ zone: "stack", status: { reclaimed: true }, reclaimCovered: true });
+    }
 
     const banished = placed({ back: [KEEP.keeper.id], void: [KEEP.revenant.id] });
     const card = banished.ids.player.void[0];
@@ -205,6 +216,8 @@ describe("reclaimNotBanished", () => {
     banished.state.sides.player.void = [];
     banished.state.sides.player.banished = [card];
     banished.state.instances[card].zone = "banished";
-    expect(engine.view(banished.state, "player").instances[card]?.status.reclaimed).toBe(true);
+    for (const viewer of ["player", "enemy"] as const) {
+      expect(engine.view(banished.state, viewer).instances[card]).toMatchObject({ status: { reclaimed: true }, reclaimCovered: false });
+    }
   });
 });

@@ -5,6 +5,7 @@ import { type InstanceId } from "../../engine";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { ZONE } from "../../engine/testing/zone-cards";
+import { act, engine as reclaimEngine, fromVoid, KEEP, placed, playOn, reclaim } from "../../engine/effects/primitives/contracts/reclaim-not-banished-support";
 import { parseBattleCardId } from "../../types/identifiers";
 import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
 import {
@@ -14,6 +15,28 @@ import {
 import { board, cards, deck, engine, screenOf } from "./engine-battle-view-model.fixtures";
 
 describe("buildEngineBattleScreenModel", () => {
+  it("suppresses covered Reclaim badges in play and on the stack, and shows uncovered and banished cards by instance", () => {
+    const { state, ids } = placed({ back: [KEEP.keeper.id], void: [KEEP.revenant.id], hand: [KEEP.dissolveOne.id, KEEP.dissolveOne.id], energy: 3 });
+    const keeper = ids.player.back[0]!;
+    const revenant = ids.player.void[0];
+    const covered = reclaim(state, revenant);
+    const uncovered = playOn(covered, ids.player.hand[0], keeper).state;
+    const banished = playOn(uncovered, ids.player.hand[1], revenant).state;
+    const pending = placed({ back: [KEEP.keeper.id], void: [KEEP.spell.id], energy: 3 }, { hand: [KEEP.dissolveInterrupt.id], energy: 1 });
+    const spell = pending.ids.player.void[0];
+    const stacked = act(pending.state, "player", fromVoid(spell)).state;
+    expect(stacked.stack).toContainEqual(expect.objectContaining({ kind: "card", instance: spell }));
+    const printed = enginePrintedKeywords(reclaimEngine.catalog);
+    for (const viewer of ["player", "enemy"] as const) {
+      const badges = (current: typeof state, id: InstanceId) => engineStatuses(reclaimEngine.view(current, viewer), viewer, printed).cards.get(id)?.map((badge) => badge.kind) ?? [];
+      expect(badges(covered, revenant)).toEqual([]);
+      expect(badges(stacked, spell)).toEqual([]);
+      expect(badges(uncovered, revenant)).toEqual(["duration"]);
+      expect(badges(banished, revenant)).toEqual(["duration"]);
+      expect(banished.instances[revenant]).toMatchObject({ zone: "banished", status: { reclaimed: true } });
+    }
+  });
+
   it("shows hidden cards only as positions", () => {
     const { state, ids } = board({ enemy: { hand: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] } });
     const model = screenOf(state);

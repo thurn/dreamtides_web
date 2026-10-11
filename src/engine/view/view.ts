@@ -58,7 +58,10 @@ export interface InstanceView {
   readonly controller: Side;
   readonly zone: Zone;
   readonly variant: Readonly<Variant>;
+  /** Persisted status flags, including Reclaim's departure replacement. */
   readonly status: Readonly<CardStatus>;
+  /** The card's reclaimed departure replacement is covered by its owner's current ability in play or on the stack. */
+  readonly reclaimCovered: boolean;
   readonly enteredZoneAt: number;
   readonly characteristics: CharacteristicsView;
 }
@@ -268,8 +271,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         controller: instance.controller,
         zone: instance.zone,
         variant: copy(instance.variant),
-        // "Cards you reclaim are not banished" removes the reclaimed status while it applies.
-        status: { ...instance.status, reclaimed: banishedAsReclaimed(state, catalog, instance, layers) },
+        status: copy(instance.status),
+        reclaimCovered: instance.status.reclaimed && !banishedAsReclaimed(state, catalog, instance, layers),
         enteredZoneAt: instance.enteredZoneAt,
         characteristics: characteristicsView(state, catalog, layers, instance),
       };
