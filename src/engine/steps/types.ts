@@ -1,8 +1,8 @@
 import type { EngineCatalog } from "../catalog";
 import type { EngineEvent } from "../events";
 import type { Answer, AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
-import type { BattleState } from "../state/types";
-import type { EffectId, InstanceId, OncePerTurnKey, Side } from "../state/ids";
+import type { AbilityOrigin, BattleState, FloatingEffect } from "../state/types";
+import type { AbilitySource, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import type { Step } from "./kinds";
 
 /**
@@ -31,15 +31,28 @@ export interface Disclosure {
   readonly cards: readonly InstanceId[];
 }
 
+/** A source whose triggered abilities match an event: an emblem, or a card in play or another zone. */
+export interface TriggerListener {
+  readonly source: AbilitySource;
+  /** The side whose ability it is, which controls what it triggers. */
+  readonly controller: Side;
+  readonly origin: AbilityOrigin;
+  /** The source's zone; an emblem counts as in play. */
+  readonly zone: Zone;
+  readonly emblem: boolean;
+}
+
 /**
- * The "when … is dissolved" abilities a character's `leftPlay` armed, as it
- * last was in play, for its `dissolved` event to fire (triggers/matcher.ts):
- * card and emblem abilities by source and index, floating and delayed
- * triggers by effect.
+ * The "when … is dissolved" abilities a character's `leftPlay` armed, each
+ * as it was then, for its `dissolved` event to fire (triggers/matcher.ts):
+ * card and emblem abilities by source and index, with their sources as they
+ * were, so a card's ability triggers for the side that controlled it then;
+ * and floating and delayed triggers, in creation order, so one whose
+ * duration ended as the character left play still triggers.
  */
 export interface ArmedDissolve {
-  readonly abilities: ReadonlySet<OncePerTurnKey>;
-  readonly floating: ReadonlySet<EffectId>;
+  readonly abilities: ReadonlyMap<OncePerTurnKey, TriggerListener>;
+  readonly floating: readonly FloatingEffect[];
 }
 
 /**

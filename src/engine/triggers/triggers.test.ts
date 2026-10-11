@@ -23,6 +23,7 @@ import {
   whenLeavesPlay,
   whenOpponentPlays,
   whenYouPlay,
+  whileSourceInPlay,
 } from "../dsl/triggers";
 import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
@@ -1254,6 +1255,10 @@ describe("when a character is dissolved", () => {
     dissolveThenFail: local(37, "event", () => [
       event(p.sequence(p.dissolve(target(characterYouControl())), p.gainAdditionalSpark(target(characterYouControl()), 1))),
     ]),
+    /** "▸Materialized: While this character is in play, when a character you control is dissolved, gain 1●." */
+    whileInPlayWatch: local(38, "character", () => [
+      triggered(onMaterialized(), p.floating(whenDissolved(characterYouControl()), gain(), whileSourceInPlay())),
+    ]),
   } as const;
   const E = createEngine(
     testCatalog(
@@ -1337,6 +1342,44 @@ describe("when a character is dissolved", () => {
     expect(result.state.sides.player.void).toEqual([stolen]);
     expect(queued(result.events)).toEqual([ids.enemy.back[0]]);
     expect(queued(result.events)).not.toContain(mine);
+  });
+
+  it("triggers a stolen watcher's own dissolve for the side that controlled it, ordered among that side's abilities", () => {
+    const { state, ids } = setup({
+      active: "enemy",
+      player: { back: [D.allyWatch.id, D.allyWatch.id], deck },
+      enemy: { back: [D.allyWatch.id], hand: [ZONE.seize.id, D.dissolveOwn.id], energy: 3, deck },
+    });
+    const [stolen, mine] = ids.player.back;
+    const theirs = ids.enemy.back[0];
+    const seized = cast(state, "enemy", ids.enemy.hand[0], [[stolen!]]);
+    expect(seized.state.instances[stolen!]?.controller).toBe("enemy");
+    const result = cast(seized.state, "enemy", ids.enemy.hand[1], [[stolen!]]);
+    expect(result.state.sides.player.void).toEqual([stolen]);
+    const triggers = result.events.flatMap((entry) => (entry.kind === "triggerQueued" ? [[entry.source, entry.controller]] : []));
+    expect(triggers).toEqual([
+      [theirs, "enemy"],
+      [stolen, "enemy"],
+    ]);
+    expect(queued(result.events)).not.toContain(mine);
+    expect(result.state.sides.enemy.currentEnergy).toBe(seized.state.sides.enemy.currentEnergy + 2);
+    expect(result.state.sides.player.currentEnergy).toBe(seized.state.sides.player.currentEnergy);
+  });
+
+  it("triggers a floating trigger lasting while its source is in play on that source's own dissolve, and not after", () => {
+    const { state, ids } = setup({ player: { back: [v.vanilla1.id], hand: [D.whileInPlayWatch.id, D.dissolveOwn.id, D.dissolveOwn.id], deck }, enemy: { deck } });
+    const [watch, first, second] = ids.player.hand;
+    const vanilla = ids.player.back[0];
+    const played = cast(state, "player", watch);
+    expect(played.state.instances[watch]?.zone).toBe("play");
+    const own = cast(played.state, "player", first, [[watch]]);
+    expect(own.state.instances[watch]?.zone).toBe("void");
+    expect(own.state.floating.filter((effect) => effect.source === watch)).toEqual([]);
+    expect(queued(own.events)).toEqual([watch]);
+    expect(own.state.sides.player.currentEnergy).toBe(played.state.sides.player.currentEnergy + 1);
+    const later = cast(own.state, "player", second);
+    expect(later.state.instances[vanilla!]?.zone).toBe("void");
+    expect(queued(later.events)).toEqual([]);
   });
 
   it("tells figments from other characters, and sees a dissolved figment before it ceases to exist", () => {

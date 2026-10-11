@@ -845,7 +845,11 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   where its card is and whose selector (and `figment` flag) matches the
   character still in play, the departing card's own abilities among them.
   The character's `dissolved` event then matches exactly the armed
-  abilities, in the fixed order, wherever their cards now are. A departure
+  abilities, in the fixed order, wherever their cards now are. Each armed
+  ability keeps its listener as armed: it triggers for the side that
+  controlled its card as the character left play (RD-hv-umm2.333-1), and an
+  armed floating trigger fires even when its duration ended as the
+  character left play. A departure
   with no `dissolved` (a banish, a return to hand, a figment ceasing to
   exist undissolved) triggers nothing. The armed abilities wait on the
   step's context (`StepContext.armedDissolves`), never in battle state:

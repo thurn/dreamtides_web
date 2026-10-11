@@ -881,11 +881,16 @@ figment. "A character you control" includes the character with the ability,
 which triggers on its own dissolve; "another character you control" does not.
 The ability triggers only if it worked where its card was as that character
 left play, so an ability that works in play sees its own card dissolved, and
-one that works from the void does not. A character that leaves play without
-being dissolved — banished, returned to hand, or ceasing to exist without a
-dissolve — does not trigger it, nor does a dissolve that Veil turns into losing
-Veil or that Reclaim turns into a banish. "Non-figment" excludes figments and
-figment copies.
+one that works from the void does not. It triggers for the player who
+controlled its card as that character left play, among that player's
+abilities, even when its card is the dissolved character and goes to its
+owner's void. A floating or delayed trigger that existed as the character left
+play triggers even if its duration ended as the character left, so one lasting
+while its source is in play sees that source's own dissolve. A character that
+leaves play without being dissolved — banished, returned to hand, or ceasing
+to exist without a dissolve — does not trigger it, nor does a dissolve that
+Veil turns into losing Veil or that Reclaim turns into a banish.
+"Non-figment" excludes figments and figment copies.
 
 An effect that dissolves several characters dissolves them one at a time: the
 characters it targets in the order they were chosen, and the others, as in
