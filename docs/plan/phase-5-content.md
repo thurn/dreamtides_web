@@ -125,6 +125,24 @@ composition beads skip it.
    and briefs a subagent with its filed Entities, Areas, acceptance criteria,
    and dependencies ([workflow](workflow.md#dispatch)). Read inventory
    `entities` records by each filed UUID to inspect the current catalog data.
+   Before writing the brief, match each entity's printed text against the
+   mechanic families below. For every listed file the bead's `Areas:` line
+   does not already cover, add it with
+   [serialization edges](workflow.md#serialization-edges) against unfinished
+   beads whose Areas name it, unless an in-progress bead holds it
+   non-additively, in which case the bead waits behind that one. Record the
+   check, matches or none, in the bead notes. These files stay out of
+   `engine hubs` because their edits change logic, not registration entries.
+
+   | Mechanic family in the printed text | Files it routes through |
+   | --- | --- |
+   | A granted or changed cost, or a new way to play a card (from the void, a hand, the deck, for a different cost) | `src/engine/rules/timing.ts` (`routeCosts`, `playRoutes`), `src/engine/steps/kinds/play.ts`, `src/engine/rules/legality.ts` |
+   | A card entering or leaving a zone, or the stack, with an announcement or a remembered move | `src/engine/rules/zones.ts` (`relocate`), `src/engine/rules/stack.ts` |
+   | A number read from the board (counts, bounds on spark or cost, "for each") | `src/engine/dsl/selectors.ts`, `src/engine/dsl/values.ts`, `src/engine/effects/interpreter.ts`, `src/engine/continuous/layers.ts` |
+   | A condition ("if", "unless", "while", an intervening "if you control") | `src/engine/effects/interpreter.ts` (`conditionHolds`) |
+   | A continuous grant or permission ("gains", "can", "until end of turn") | `src/engine/continuous/layers.ts`, `src/engine/rules/floating.ts`, `src/rules/battle/fold.ts` |
+   | A void or pile card that shows a new status or play affordance | `src/cumulus/components/card/CardChoiceGrid.tsx`, `src/cumulus/components/battle/CardPile.tsx`, `src/cumulus/screens/MobileBattleScreen.tsx` (`SideZones`) |
+
 2. **Author the abilities** in each entity's content module, plus the
    amplified variant wherever `amplifiedText` is present. The printed text is
    canonical (D5): read it clause by clause and check that every clause is

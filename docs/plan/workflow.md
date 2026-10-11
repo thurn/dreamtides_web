@@ -304,7 +304,9 @@ git grep -lwE "$syms" -- src scripts
   fallout.
 
 Every listed file outside the bead's areas gets a fallout area, a hub area, or
-a wider area.
+a wider area. A Phase 5 content bead also matches its entities' printed text
+against the [recipe's mechanic-family table](phase-5-content.md#bead-recipe)
+and widens to each engine plumbing file it names before dispatch.
 
 ### Shared-duty beads
 
