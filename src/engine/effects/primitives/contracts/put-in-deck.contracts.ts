@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { enemyCharacter, event, everyIn, target, topOfDeck, x } from "../../../dsl/builders";
-import { onMaterialized, triggered } from "../../../dsl/triggers";
+import { enemyCharacter, event, everyIn, fromVoid, self, target, topOfDeck, x } from "../../../dsl/builders";
+import { onMaterialized, triggered, triggeringCard, whenYouPlay } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -66,7 +66,18 @@ const ponderThenFail: EngineCardDefinition = {
   },
 };
 
-const engine = createEngine(testCatalog([...DSL_CARDS, ponder, ponderRest, tuck, ponderThenShuffle, cycleTop, voidOnTop, crow, ponderThenFail]));
+const opaqueDeck = eventCard(9, putInDeck([everyIn("deck", { cardType: "event" })], "bottom"));
+const mixedDeck = eventCard(10, putInDeck([everyIn("deck", { cardType: "character" })], "bottom"));
+const reversedVoid = eventCard(11, putInDeck([everyIn("void", { costAtLeast: 2 }), everyIn("void", { costAtMost: 1 })], "top"));
+const chosenVoid = eventCard(12, putInDeck([fromVoid({}, { count: 2 })], "bottom"));
+const selfOnStack = eventCard(13, putInDeck([self()], "top"));
+const subjectOnStack: EngineCardDefinition = {
+  ...crow, id: syntheticId(0x630e),
+  abilities: () => [triggered(whenYouPlay(), putInDeck([triggeringCard()], "top"))],
+};
+const arrangeMany = eventCard(15, putFromTop(3, [{ to: "top", count: 2 }, { to: "bottom", count: 1 }]));
+
+const engine = createEngine(testCatalog([...DSL_CARDS, ponder, ponderRest, tuck, ponderThenShuffle, cycleTop, voidOnTop, crow, ponderThenFail, opaqueDeck, mixedDeck, reversedVoid, chosenVoid, selfOnStack, subjectOnStack, arrangeMany]));
 
 /** Answers each prompt from `respond`, keeping every prompt and the state it was asked in. */
 class Answers implements AnswerSource {
@@ -245,6 +256,101 @@ describe("putInDeck", () => {
     expect(placed(onTop.events)).toMatchObject([{ to: "deckTop", cards: voided }]);
   });
 
+  for (const card of [opaqueDeck, mixedDeck]) {
+    it(`forgets uncertain deck positions after an opaque relocation (${card.id})`, () => {
+      const { state, ids } = boardState(engine.catalog, setup(card.id, { deck: [v.event0.id, v.vanilla1.id, v.vanilla2.id] }));
+      const tracked = ids.player.deck[1];
+      const otherDeck = ids.enemy.deck[0];
+      state.knownTo = { player: [tracked, otherDeck], enemy: [tracked, otherDeck] };
+      const played = engine.apply(state, "player", playFromHand(ids, "player").action, inOrder());
+      const resolved = passUntil(engine, played.state, (next) => next.stack.length === 0, inOrder());
+      const after = resolved.state;
+      expect(eventRedactionViolations([...played.events, ...resolved.events], state, after)).toEqual([]);
+      for (const side of ["player", "enemy"] as const) {
+        expect(view(after, side, engine.catalog).sides.enemy.deck.known).toEqual([{ id: otherDeck, index: 0 }]);
+        expect(view(after, side, engine.catalog).sides.player.deck.known).toEqual([]);
+        expect(after.knownTo[side]).not.toContain(tracked);
+      }
+    });
+  }
+
+  it("retains inferable deck positions for an exact top-prefix relocation", () => {
+    const { state, ids } = boardState(engine.catalog, setup(cycleTop.id));
+    const tracked = ids.player.deck[3];
+    state.knownTo = { player: [tracked], enemy: [tracked] };
+    const played = engine.apply(state, "player", playFromHand(ids, "player").action, inOrder());
+    const after = passUntil(engine, played.state, (next) => next.stack.length === 0, inOrder()).state;
+    for (const side of ["player", "enemy"] as const) expect(known(after, side)).toEqual([{ id: tracked, index: 1 }]);
+  });
+
+  for (const card of [reversedVoid, chosenVoid]) {
+    it(`uses original source-zone order (${card.id})`, () => {
+      const source = new Answers((prompt) => prompt.kind === "chooseTargets" ? prompt.candidates.slice(0, 2).reverse() : []);
+      const result = play(setup(card.id, { void: [v.vanilla1.id, v.vanilla2.id] }), source);
+      expect(placed(result.events).flatMap((event) => event.cards)).toEqual(result.ids.player.void);
+      expect(result.state.sides.player.deck).toEqual(card === reversedVoid
+        ? [...result.ids.player.void, ...result.start.sides.player.deck]
+        : [...result.start.sides.player.deck, ...result.ids.player.void]);
+    });
+  }
+
+  it("keeps the player's chosen order within a looked-at destination", () => {
+    const result = play(setup(arrangeMany.id), new Answers((prompt) => {
+      if (prompt.kind !== "arrange") throw new Error("expected arrangement");
+      return [{ card: prompt.cards[1], to: "top" }, { card: prompt.cards[0], to: "top" }, { card: prompt.cards[2], to: "bottom" }];
+    }));
+    expect(result.state.sides.player.deck.slice(0, 2)).toEqual([result.ids.player.deck[1], result.ids.player.deck[0]]);
+  });
+
+  for (const subject of [false, true]) {
+    it(`skips resolved references still on the stack (subject: ${subject})`, () => {
+      const card = subject ? v.event0 : selfOnStack;
+      const result = play({ ...setup(card.id), player: { ...setup(card.id).player, back: subject ? [subjectOnStack.id] : [] } }, inOrder());
+      expect(placed(result.events)).toEqual([]);
+      expect(result.events.some((event) => event.kind === "noLegalTarget")).toBe(true);
+      expect(result.state.sides.player.deck).not.toContain(result.ids.player.hand[0]);
+    });
+  }
+
+  for (const position of ["beforeLook", "afterShuffle", "knownBeforeShuffle"] as const) {
+    it(`judges event-local visibility (${position})`, () => {
+      const result = play(setup(ponderThenShuffle.id), inOrder());
+      const hidden = result.ids.player.deck[0];
+      // Deliberately malformed public payload exercises the detector, not game rules.
+      const leak: EngineEvent = { kind: "countersChanged", instance: hidden, counters: 1 };
+      const before = structuredClone(result.start);
+      if (position === "knownBeforeShuffle") before.knownTo.player = [hidden];
+      const events = position === "beforeLook" ? [leak, ...result.events] : [...result.events, leak];
+      const violations = eventRedactionViolations(events, before, result.state);
+      expect(violations).toHaveLength(2);
+      expect(violations.every((violation) => violation.includes(hidden))).toBe(true);
+      expect(eventRedactionViolations(result.events, before, result.state)).toEqual([]);
+    });
+  }
+
+  for (const corruptShuffle of [false, true]) {
+    it(`rejects placement metadata that widens a private identity (shuffle: ${corruptShuffle})`, () => {
+      const result = play(setup(ponderThenShuffle.id), inOrder());
+      const placement = placed(result.events).find((event) => event.to === "deckTop");
+      const hidden = placement?.cards[0];
+      if (placement === undefined || hidden == null) throw new Error("expected a private top placement");
+      expect(placement.from).toEqual(["deck"]);
+      expect(placement.seenBy).toEqual([["player"]]);
+      expect(eventRedactionViolations(result.events, result.start, result.state)).toEqual([]);
+      const corrupted = result.events.map((event): EngineEvent => {
+        if (event === placement) return { ...event, seenBy: [["player", "enemy"]] };
+        if (corruptShuffle && event.kind === "shuffledIntoDeck") {
+          // Malformed payload names a private deck card as though it entered the shuffle.
+          return { ...event, cards: [hidden], from: ["deck"], seenBy: [["player", "enemy"]] };
+        }
+        return event;
+      });
+      const violations = eventRedactionViolations(corrupted, result.start, result.state);
+      expect(violations).toHaveLength(corruptShuffle ? 2 : 1);
+      expect(violations.every((violation) => violation.includes(hidden))).toBe(true);
+    });
+  }
+
   it("is deterministic and Greedy answers its arrangement legally", () => {
     const source = inOrder();
     const once = play(setup(ponderRest.id), source);
@@ -319,11 +425,22 @@ describe("putInDeck in the fold", () => {
       value: [{ card: c, to: "top" }, { card: a, to: "bottom" }, { card: b, to: "hand" }],
     });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
-    expect(outcome.error.message).toMatch(/after its placements/);
     expect(outcome.published).toEqual([]);
     const { committed } = outcome.slice;
     expect(committed.sides).toEqual(state.sides);
-    expect(committed.knownTo.enemy).toEqual(state.knownTo.enemy);
+    const recovered = JSON.parse(JSON.stringify(suspended)) as BattleSlice;
+    const fresh = fold();
+    const replayed = fresh.reduce(recovered, { kind: "answer", side: "player", promptId: fresh.pending(recovered)!.prompt.id,
+      value: [{ card: c, to: "top" }, { card: a, to: "bottom" }, { card: b, to: "hand" }] });
+    if (replayed.kind !== "applied" || replayed.error === null) throw new Error("expected replayed engine error");
+    expect(stateHash(replayed.slice.committed)).toBe(stateHash(committed));
+    expect(committed.knownTo).toEqual({ player: [a, b, c], enemy: [] });
+    for (const side of ["player", "enemy"] as const) {
+      const visible = view(committed, side, engine.catalog);
+      expect(view(replayed.slice.committed, side, engine.catalog)).toEqual(visible);
+      expect(visible.sides.player.deck.known).toEqual(side === "player" ? [a, b, c].map((id, index) => ({ id, index })) : []);
+      for (const id of [a, b, c]) expect(visible.instances[id]?.printing).toEqual(side === "player" ? state.instances[id].printing : undefined);
+    }
     expect(adapter.pending(outcome.slice)).toBeNull();
   });
 });

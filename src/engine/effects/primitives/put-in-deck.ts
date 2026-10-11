@@ -1,10 +1,10 @@
 import type { ValueExpr } from "../../dsl/types";
 import type { ArrangeDestination, ArrangePrompt, ArrangeSlot } from "../../prompts/types";
-import { instanceOf, moveInstance, moveToHand } from "../../rules/zones";
+import { charactersInPlay, instanceOf, moveInstance, moveToHand } from "../../rules/zones";
 import type { InstanceId, Side, Zone } from "../../state/ids";
 import { SIDES } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
-import { identifies } from "../../view/knowledge";
+import { forgetDeckPositions, identifies } from "../../view/knowledge";
 import { evaluate, resolveCards } from "../interpreter";
 import { cardTarget, definePrimitive, type CardRef } from "../types";
 
@@ -23,9 +23,11 @@ export interface LookedAtPlace {
  * the references name moves to that end of its owner's deck through the
  * ordinary zone change, so a created card ceases to exist instead and a
  * reclaimed card is banished. Cards put there together keep the order the
- * references name them in, the first nearest the top. The deck is not
- * shuffled, so each side that saw a card go there keeps knowing where it is
- * (view/knowledge.ts).
+ * source zones held them in, the first nearest the top. The deck is not
+ * shuffled. Fully observed relocations and exact unfiltered top-prefix
+ * moves retain inferable positions. An opaque same-deck relocation drops
+ * that viewer's ambiguous deck tracking; the event keeps movement identity
+ * visibility independently (view/knowledge.ts).
  */
 export interface PutCardsInDeckNode {
   readonly op: "putInDeck";
@@ -64,7 +66,18 @@ export const putInDeckPrimitive = definePrimitive<PutInDeckNode>({
   resolve(ctx, node, env) {
     if (node.from === "cards") {
       const named = [...new Set(node.cards.flatMap((ref) => resolveCards(ctx, ref, env)))];
-      placeAll(ctx, named, node.at === "top" ? "deckTop" : "deckBottom");
+      const eligible = named.filter((id) => instanceOf(ctx.state, id).zone !== "stack");
+      if (eligible.length !== named.length) ctx.emit({ kind: "noLegalTarget", source: env.source });
+      const ordered = sourceZoneOrder(ctx, eligible);
+      const seers = new Map(ordered.map((id) => [id, SIDES.filter((viewer) => identifies(ctx.state, id, viewer))]));
+      const exactPrefix = node.cards.every((ref) => ref.kind === "inZone" && ref.pick === "top" && Object.keys(ref.filter).length === 0);
+      for (const owner of SIDES) {
+        const movers = ordered.filter((id) => instanceOf(ctx.state, id).zone === "deck" && instanceOf(ctx.state, id).owner === owner);
+        for (const viewer of SIDES) {
+          if (!exactPrefix && movers.some((id) => seers.get(id)?.includes(viewer) !== true)) forgetDeckPositions(ctx.state, owner, viewer);
+        }
+      }
+      placeAll(ctx, ordered, node.at === "top" ? "deckTop" : "deckBottom", seers);
       return;
     }
     const side = env.controller;
@@ -107,6 +120,25 @@ function lookedAtSlots(places: readonly LookedAtPlace[], cards: number): Arrange
   });
 }
 
+/** Source-zone buckets follow first reference occurrence; each uses its original zone order. */
+function sourceZoneOrder(ctx: StepContext, ids: readonly InstanceId[]): InstanceId[] {
+  const groups: { readonly owner: Side; readonly zone: Zone; readonly ids: InstanceId[] }[] = [];
+  for (const id of ids) {
+    const instance = instanceOf(ctx.state, id);
+    let group = groups.find((item) => item.owner === instance.controller && item.zone === instance.zone);
+    if (group === undefined) {
+      group = { owner: instance.controller, zone: instance.zone, ids: [] };
+      groups.push(group);
+    }
+    group.ids.push(id);
+  }
+  return groups.flatMap((group) => {
+    const order = group.zone === "play" ? charactersInPlay(ctx.state, group.owner)
+      : group.zone === "stack" ? [] : ctx.state.sides[group.owner][group.zone];
+    return order.filter((id) => group.ids.includes(id));
+  });
+}
+
 type Place = "deckTop" | "deckBottom" | "void";
 
 /**
@@ -115,7 +147,7 @@ type Place = "deckTop" | "deckBottom" | "void";
  * void a card entered. A card already in that place is put there again (a
  * looked-at card kept on top).
  */
-function placeAll(ctx: StepContext, ids: readonly InstanceId[], place: Place): void {
+function placeAll(ctx: StepContext, ids: readonly InstanceId[], place: Place, seers?: ReadonlyMap<InstanceId, readonly Side[]>): void {
   const entered: Record<Side, { cards: InstanceId[]; from: Zone[]; seenBy: Side[][] }> = {
     player: { cards: [], from: [], seenBy: [] },
     enemy: { cards: [], from: [], seenBy: [] },
@@ -133,7 +165,7 @@ function placeAll(ctx: StepContext, ids: readonly InstanceId[], place: Place): v
       const into = entered[instance.owner];
       into.cards.push(id);
       into.from.push(from);
-      into.seenBy.push(SIDES.filter((viewer) => identifies(ctx.state, id, viewer)));
+      into.seenBy.push(place === "void" ? [...SIDES] : [...(seers?.get(id) ?? SIDES.filter((viewer) => identifies(ctx.state, id, viewer)))]);
     }
   }
   for (const side of SIDES) {

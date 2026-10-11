@@ -21,10 +21,10 @@ import { createCatalog } from "../../engine/catalog";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../../engine/fold/slice";
 import { boardState, type BoardSetup } from "../../engine/testing/board";
 import { DSL } from "../../engine/testing/dsl-cards";
-import { enemyCharacter, event as eventAbility, target } from "../../engine/dsl/builders";
+import { enemyCharacter, event as eventAbility, target, everyIn } from "../../engine/dsl/builders";
 import { atStartOfTurn, triggered } from "../../engine/dsl/triggers";
-import { banishUntil, discard, discover, draw, sequence } from "../../engine/effects/primitives";
-import { SYNTHETIC, syntheticId } from "../../engine/testing/synthetic-cards";
+import { banishUntil, discard, discover, draw, sequence, putFromTop, shuffleInto } from "../../engine/effects/primitives";
+import { SYNTHETIC, syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
 import { STACK } from "../../engine/testing/stack-cards";
 import { ZONE } from "../../engine/testing/zone-cards";
@@ -824,6 +824,53 @@ describe("presentation queue", () => {
 });
 
 describe("battle log", () => {
+  it.each(SIDES)("retains event-authorized physical printing and variant through shuffle for %s", (human) => {
+    const source = { ...SYNTHETIC.event0, id: syntheticId(0x3590), status: "authored" as const,
+      abilities: () => [eventAbility(sequence(putFromTop(2, [{ to: "top", count: 1 }, { to: "void", count: 1 }]), shuffleInto([everyIn("void"), everyIn("hand")])))] };
+    const engine = createEngine(testCatalog([source]));
+    const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day",
+      player: { hand: [source.id, SYNTHETIC.vanilla3.id], deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] }, enemy: { deck: [] } });
+    const [privateCard, publicCard] = ids.player.deck;
+    state.instances[publicCard] = { ...state.instances[publicCard], variant: { amplified: true, transfigurations: ["Amplified"] } };
+    const answers = { answer: () => [{ card: privateCard, to: "top" }, { card: publicCard, to: "void" }] as const };
+    const applied = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, answers);
+    const entries = (human: "player" | "enemy") => battleLogEntries(applied.events, human, applied.state,
+      engine.view(applied.state, human), engine.view(state, human), `placements:${human}`);
+    expect(applied.events.filter((event) => event.kind === "shuffledIntoDeck")).toHaveLength(1);
+    expect(applied.events.filter((event) => event.kind === "cardsPlaced")).toHaveLength(2);
+    {
+      expect(engine.view(state, human).instances[publicCard]).toBeUndefined();
+      expect(engine.view(applied.state, human).instances[publicCard]).toBeUndefined();
+      const placed = entries(human).find((entry) => entry.event.kind === "cardsPlaced" && entry.event.to === "void");
+      expect(placed?.event).toMatchObject({ cards: [publicCard] });
+      expect(placed).toMatchObject({ identities: { [publicCard]: {
+        printing: { kind: "card", cardId: SYNTHETIC.vanilla2.id }, variant: state.instances[publicCard].variant,
+      } } });
+      if (placed === undefined) throw new Error("missing placement");
+      const models = createEngineCardModels({ definitions: [], cards: new Map(), figment: () => undefined });
+      const nameOf = vi.spyOn(models, "nameOf");
+      battleLogTurns([placed], human, models, () => null);
+      expect(nameOf).toHaveBeenCalledExactlyOnceWith({ printing: state.instances[publicCard].printing, variant: state.instances[publicCard].variant });
+      nameOf.mockClear();
+      const privatePlacement = entries("enemy").find((entry) => entry.event.kind === "cardsPlaced" && entry.event.to === "deckTop");
+      if (privatePlacement === undefined) throw new Error("missing private placement");
+      battleLogTurns([privatePlacement], "enemy", models, () => null);
+      expect(nameOf).not.toHaveBeenCalled();
+      const shuffle = entries(human).find((entry) => entry.event.kind === "shuffledIntoDeck");
+      if (shuffle === undefined) throw new Error("missing shuffle");
+      expect(shuffle).toMatchObject({ identities: { [publicCard]: { printing: state.instances[publicCard].printing, variant: state.instances[publicCard].variant } } });
+      battleLogTurns([shuffle], human, models, () => null);
+      expect(nameOf).toHaveBeenCalledExactlyOnceWith({ printing: state.instances[publicCard].printing, variant: state.instances[publicCard].variant });
+      if (human === "enemy") {
+        expect(shuffle.event).toMatchObject({ cards: [publicCard, null] });
+        expect(shuffle.identities[ids.player.hand[1]]).toBeUndefined();
+        expect(shuffle.cards[ids.player.hand[1]]).toBeUndefined();
+      }
+    }
+    const hidden = entries("enemy").find((entry) => entry.event.kind === "cardsPlaced" && entry.event.to === "deckTop");
+    expect(hidden?.event).toMatchObject({ cards: [null] });
+    expect(hidden).toMatchObject({ identities: {} });
+  });
   it("groups a challenge and score in the ending turn, and the turn start and later events in the arriving turn", () => {
     const challenge = steps("present-challenge")[1];
     if (challenge === undefined) throw new Error("no challenge");

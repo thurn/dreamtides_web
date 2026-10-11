@@ -110,6 +110,12 @@ export function settleKnowledge(state: BattleState, instance: CardInstance, seer
   for (const side of seers) learn(state, side, instance);
 }
 
+/** An opaque relocation within a deck makes its remembered exact positions uncertain for `viewer`. */
+export function forgetDeckPositions(state: BattleState, owner: Side, viewer: Side): void {
+  const deck = state.sides[owner].deck;
+  state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !deck.includes(id));
+}
+
 /** Both sides learn the revealed cards. */
 export function revealToBoth(state: BattleState, ids: readonly InstanceId[]): void {
   for (const id of ids) {

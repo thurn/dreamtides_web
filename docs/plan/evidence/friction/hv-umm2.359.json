@@ -1,0 +1,232 @@
+{
+  "bead": "hv-umm2.359",
+  "phase": 5,
+  "baseOid": "d4d4cbcc422ae07d6bae9f56a5a9887fb509f508",
+  "implementMin": 66,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 4.073409795761108,
+    "review": 36.506394147872925,
+    "knip": 3.359076738357544,
+    "full": 54.04386377334595,
+    "fuzz": 55.66998076438904
+  },
+  "heavyQueueWaitS": 0.0492243766784668,
+  "hostLoad": 5.0302734375,
+  "testDelta": {
+    "files": 0,
+    "lines": 164,
+    "jsdomFiles": 0,
+    "cases": 16,
+    "note": "15 explicit new cases plus one existing fixture-enumeration case for mirrored presentation."
+  },
+  "friction": [
+    {
+      "tag": "redaction-event-time-assumption",
+      "minutes": 8,
+      "note": "The first event-local detector implementation trusted shuffle seenBy as its own authorization, masking an existing corrupt-metadata mutation contract. Cold review identified the same self-authorization risk in placement metadata.",
+      "disposition": "Ordered prior draw/look/placement exposure judges the shuffle before clearing tracking; the original mutation contract passes unchanged. Public movement facts and previous observed/boundary knowledge validate placements independently of seenBy; both mutation negatives pass after repair."
+    },
+    {
+      "tag": "qa-prompt-shape-assumption",
+      "minutes": 2,
+      "note": "The first browser predicate compared BattlePrompt to a string, so the battle driver continued past the arrangement. A later draft reload route omitted the persisted game query and compared a fresh scene history.",
+      "disposition": "Preserved the failed script/report/log and corrected the predicate to prompt.kind after actual runner exit and cleanup. Captured canonical pathname/search preserves the actual game; both successful viewer workflows retain exact history across reload."
+    }
+  ],
+  "negativeRegression": {
+    "manifest": "negative-manifest.json",
+    "contracts": "negative-final-contracts.log",
+    "contractsExit": 1,
+    "contractsFailed": 8,
+    "contractsPassed": 14,
+    "ui": "negative-final-ui.log",
+    "uiExit": 1,
+    "uiFailed": 2,
+    "productionUnchanged": true,
+    "shuffleExtension": {
+      "log": "negative-shuffle-log.log",
+      "exit": 1,
+      "failed": 2,
+      "passedGuards": "Placement metadata/nameOf/denied private placement pass before missing shuffle identity assertion.",
+      "finalContract": "Real source shuffles public void card and private hand card; enemy sees [publicCard,null]."
+    }
+  },
+  "historicalScope": {
+    "reportedCommit": "d0f45c",
+    "sameProductionPaths": [
+      "src/engine/effects/primitives/put-in-deck.ts",
+      "src/engine/testing/redaction.ts",
+      "src/screens/cumulus_adapters/engine-battle-log-view-model.ts"
+    ],
+    "finding6": "Current prerequisite hv-umm2.353 already guards committed deck positions; expanded rollback/reload contracts pass before and after this bead.",
+    "arrangeOrder": "RD-hv-umm2.63-2 explicitly preserves player order; its reversed multi-card arrangement is a positive contract.",
+    "reversedTargets": "Existing target resolution already preserves source-zone order; filtered multiple references reproduce the confirmed ordering defect."
+  },
+  "checks": {
+    "focused": {
+      "files": 2,
+      "tests": 284
+    },
+    "review": {
+      "files": 157,
+      "tests": 2330
+    },
+    "full": {
+      "files": 216,
+      "tests": 2969,
+      "productionBundle": true
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 153879,
+      "prompts": 2937,
+      "interactiveReruns": 301,
+      "failures": 0,
+      "seed": "hv-umm2.359-updated"
+    },
+    "knip": "passed",
+    "browser": {
+      "chooser": {
+        "ok": true,
+        "desktopMobile": true,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 74872,
+          "serve": 947,
+          "scenario": 19073,
+          "total": 94914
+        },
+        "source": "chooser-positive-put-in-deck-log.result.json"
+      },
+      "opponent": {
+        "ok": true,
+        "desktopMobile": true,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 39,
+          "serve": 948,
+          "scenario": 16407,
+          "total": 17419
+        },
+        "report": "put-in-deck-opponent-log.result.json",
+        "privacy": "Exact redacted private placement ID/row; no global name-uniqueness assumption.",
+        "publicIdentity": "Both public placement and following authorized shuffle resolve the same physical UUID."
+      }
+    }
+  },
+  "implementationReady": true,
+  "pending": [
+    "fresh parent cold review of updated exact range and Tollgate delivery"
+  ],
+  "validationProvenance": "Updated focused/review/knip/full and300-game fuzz ran on native base d4d4cbcc422ae07d6bae9f56a5a9887fb509f508 with the restored peer-inclusive presentation contract and facts-based detector repair. Original full/fuzz/UI evidence remains tied to07b47. Retained UI log/model/render/putInDeck bytes are exact; peer shuffle helper extraction has a directly compared identical body. The new base contains other peer engine changes; its current checks provide that basis.",
+  "limits": [
+    "Generic event-redaction boundary identification remains before-or-after; ordered transient visibility and shuffle invalidation address the confirmed review defect.",
+    "Physical printing and variant are immutable for tracked instances; fallback copies only these fields for redacted authorized cardsPlaced/shuffledIntoDeck IDs.",
+    "Player-arranged deck groups retain RD63-2 order. Ordinary reference groups use original source-zone order.",
+    "Opaque mixed deck groups conservatively forget exact ranks even for known movers while event movement identity remains authorized.",
+    "cardsPlaced redaction uses event seenBy, while detector authorization independently uses public movement facts and earlier observed/boundary visibility."
+  ],
+  "frictionTriggerResult": {
+    "allFiredTagsDispositioned": true,
+    "phase5Cadence": "phase 5  12 of 97 friction files since the 2026-10-11 retrospective (hv-umm2.355)",
+    "exit": 0
+  },
+  "originalValidatedEvidence": {
+    "sourceOid": "07b47dfe3fd575d8804c3626de475ee8ddb9f4b2",
+    "baseOid": "75d315c46e4a4c620491b215ab7b9455ca213858",
+    "localValidationS": {
+      "focused": 5.013159990310669,
+      "review": 33.031481981277466,
+      "knip": 3.908863067626953,
+      "full": 55.61377286911011,
+      "fuzz": 53.61432480812073
+    },
+    "heavyQueueWaitS": 0.04670453071594238,
+    "hostLoad": 21.84130859375,
+    "checks": {
+      "focused": {
+        "files": 2,
+        "tests": 284
+      },
+      "review": {
+        "files": 157,
+        "tests": 2330
+      },
+      "full": {
+        "files": 216,
+        "tests": 2969,
+        "productionBundle": true
+      },
+      "fuzz": {
+        "games": 300,
+        "steps": 153879,
+        "prompts": 2937,
+        "interactiveReruns": 301,
+        "failures": 0,
+        "seed": "hv-umm2.359-updated"
+      },
+      "knip": "passed",
+      "browser": {
+        "chooser": {
+          "ok": true,
+          "desktopMobile": true,
+          "caps": [],
+          "wallMs": {
+            "browserLeaseWait": 74872,
+            "serve": 947,
+            "scenario": 19073,
+            "total": 94914
+          },
+          "source": "chooser-positive-put-in-deck-log.result.json"
+        },
+        "opponent": {
+          "ok": true,
+          "desktopMobile": true,
+          "caps": [],
+          "wallMs": {
+            "browserLeaseWait": 39,
+            "serve": 948,
+            "scenario": 16407,
+            "total": 17419
+          },
+          "report": "put-in-deck-opponent-log.result.json",
+          "privacy": "Exact redacted private placement ID/row; no global name-uniqueness assumption.",
+          "publicIdentity": "Both public placement and following authorized shuffle resolve the same physical UUID."
+        }
+      }
+    },
+    "validationProvenance": "Final focused/review/knip/full include both log event kinds and mirrored fixture. The 300-game fuzz ran on identical engine/fuzzer/catalog/policy runtime bytes; subsequent changes are additive prompt-lab fixture data, detector documentation, and the UI log predicate/contract. The synthetic fuzz catalog does not import prompt-lab. Own evidence edits follow the passing checks."
+  },
+  "nativeUpdate": {
+    "failedCandidate": "01a12a8b-1993-72b3-b840-bf6a6f30bf0d",
+    "candidateOutcome": "merge-conflict-with-adopted-base",
+    "firstUpdateExit": 5,
+    "cleanRollbackSource": "07b47dfe3fd575d8804c3626de475ee8ddb9f4b2",
+    "parkedCheckpoint": "bd9acc250c7d726f45de4a0171d9d061fc8b69eb",
+    "updatedCheckpoint": "a77ce45d38c572c4e5c719ccb640e09054d3c5fd",
+    "updatedBase": "d4d4cbcc422ae07d6bae9f56a5a9887fb509f508",
+    "parkedPath": "src/screens/cumulus_adapters/engine-battle-presentation.test.ts",
+    "other12UnchangedDuringPark": true,
+    "ownedContractByteIdentical": true,
+    "allPeerBodyAndImportsRetained": true,
+    "provenance": "359-rebase-evidence/reapply-verification.json; parent alone ran native updates, with clean successful checkpoint and healthy doctor."
+  },
+  "coldReviewRepair": {
+    "reviewedSource": "07b47dfe3fd575d8804c3626de475ee8ddb9f4b2",
+    "report": "review-hv-umm2.359.md",
+    "verdict": "one medium actionable finding",
+    "finding": "cardsPlaced seenBy could authorize its own hidden payload and propagate corrupt placement knowledge into shuffle validation",
+    "negativeManifest": "negative-review-placement-manifest.json",
+    "negativeExit": 1,
+    "negativeFailed": 2,
+    "durationS": 1.27,
+    "failedAssertions": [
+      "placement expected1 received0",
+      "placement plus shuffle expected2 received0"
+    ],
+    "fix": "Placement exposure derives from public source/destination facts; hidden movement uses earlier actual observations or boundary knowledge. Metadata under test does not seed observed knowledge.",
+    "currentPrimitiveContractLines": 446,
+    "positiveCoverage": "Actual untouched event batch zero; mixed opaque known movers remain valid; public void and private look paths and existing corrupt-shuffle contract pass."
+  }
+}

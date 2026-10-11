@@ -8,8 +8,8 @@ import type { EventDefinition } from "../types";
  *
  * `cards`, `from`, and `seenBy` run parallel: each card, topmost first for a
  * deck (in the order it went for a void), the zone it left, and the sides
- * that could identify it where it went, which are the sides that saw it go
- * there.
+ * that could identify it as it moved. Movement identity remains visible
+ * even when an opaque same-deck relocation makes its final index uncertain.
  */
 export interface CardsPlacedEvent {
   readonly kind: "cardsPlaced";
@@ -24,7 +24,7 @@ export interface CardsPlacedEvent {
 
 /**
  * Both sides see how many cards went where and from which zones; a side
- * sees which card only when it could identify the card where it went: both
+ * sees which card only when it could identify the card as it moved: both
  * sides for a card from a void or from play, or one put into a void; the
  * looker for a looked-at card; the holder for a hand card. The redaction
  * reads the event's own `seenBy`, so a later shuffle in the same step that

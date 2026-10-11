@@ -1593,7 +1593,11 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - a revealed card becomes known to both sides;
   - a card put on top of or on the bottom of a deck (`putInDeck`,
     `putFromTop`) stays known, at its new place, to every side that could
-    see it go there, until the deck is shuffled;
+    see it go there, until the deck is shuffled. An opaque relocation within
+    that deck drops positional memory for a side that cannot identify every
+    mover; exact unfiltered top-prefix moves and fully observed moves keep
+    inferable positions. The placement event retains movement visibility
+    independently of final positional memory;
   - shuffling a deck (`shuffleInto`, Discover) drops every card in it out
     of both sides' knowledge;
   - a `privateTo` prompt shows its cards to its chooser only as it opens,
@@ -1641,9 +1645,13 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     looked at; the looker learned them through its prompt private to it;
   - `cardsPlaced` is public, and names each card put on top of or on the
     bottom of a deck, or into a void, only to a side that could identify it
-    where it went (both sides for a card from a void or from play or into a
+    as it moved (both sides for a card from a void or from play or into a
     void, the looker for a looked-at card), read from the event's own
-    `seenBy`, so a later shuffle in the same step does not change it;
+    `seenBy`, so a later shuffle in the same step does not change it. The UI
+    log keeps only an event-authorized physical printing and variant when
+    both boundary views hide that card, resolving its name through the same
+    UUID and dealt-variant lookup as visible cards. The same bounded identity
+    lookup serves authorized `shuffledIntoDeck` IDs;
   - `shuffledIntoDeck` is public, and names each card that entered the
     shuffled deck only to a side that could identify it as it left its
     zone (both sides for a void, the holder for a hand), read from the

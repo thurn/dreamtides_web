@@ -141,7 +141,9 @@ function anyString(value: unknown, test: (text: string) => boolean): boolean {
 /**
  * Whether the raw `event` showed `id` to `side` as it happened: it put the
  * card into `side`'s own hand (a draw, a take, a discovery, or a return to
- * hand), or `side` looked at it on top of its own deck.
+ * hand), `side` looked at it on top of its own deck, or a placement
+ * entered a void or left a public zone. Movement facts are independent of
+ * the placement's `seenBy` metadata being checked.
  */
 function shownDuring(event: EngineEvent, side: Side, id: InstanceId): boolean {
   switch (event.kind) {
@@ -152,6 +154,22 @@ function shownDuring(event: EngineEvent, side: Side, id: InstanceId): boolean {
       return event.side === side && event.instance === id;
     case "lookedAtTop":
       return event.side === side && event.cards.includes(id);
+    case "cardsPlaced": {
+      const index = event.cards.indexOf(id);
+      if (index < 0) return false;
+      if (event.to === "void") return true;
+      switch (event.from[index]) {
+        case "stack":
+        case "play":
+        case "void":
+        case "banished":
+          return true;
+        case "deck":
+        case "hand":
+        default:
+          return false;
+      }
+    }
     default:
       return false;
   }
@@ -190,11 +208,14 @@ function printedIndex(state: BattleState): Map<CardId, InstanceId[]> {
  * as identified when the side could identify it in the last checked state
  * that held it, or, failing that, when the side saw the `cardCreated` event
  * that made it. A card that entered the side's own hand during the events,
- * or that the side looked at on top of its own deck (`shownDuring`), counts
- * as identified too, wherever it went next: a side always sees its own hand
- * and the cards it looks at, so a card it drew, or looked at and placed, and
- * then shuffled into its deck in the same step was seen though it is hidden
- * before and after.
+ * or that the side looked at on top of its own deck (`shownDuring`), becomes
+ * identified in that event and subsequent payloads until a shuffle ends
+ * tracking. Public source or destination facts expose placements; hidden
+ * source placements rely on earlier observation or boundary knowledge,
+ * independently of the `seenBy` metadata under test. A shuffle is judged
+ * against earlier observed visibility before invalidating deck
+ * tracking, so its `seenBy` does not authorize its own payload. Generic
+ * boundary identification remains the before-or-after state contract.
  *
  * IDs are detected by walking every string of the payload, keys included:
  * - an instance ID is a string with the `InstanceId` shape (`i<n>`);
@@ -231,13 +252,15 @@ export class EventRedaction {
     this.remember(before);
     this.remember(after);
     const problems: string[] = [];
+    const shuffled = new Set<InstanceId>();
+    const shown: Record<Side, Set<InstanceId>> = { player: new Set(), enemy: new Set() };
     for (const event of events) {
       for (const viewer of SIDES) {
         const seen = eventSeenBy(event, viewer, after);
         if (seen === null) continue;
         const identified = (id: InstanceId): boolean => {
-          if (events.some((moved) => shownDuring(moved, viewer, id))) return true;
-          if (id in before.instances || id in after.instances) return identifies(before, id, viewer) || identifies(after, id, viewer);
+          if (shownDuring(event, viewer, id) || shown[viewer].has(id)) return true;
+          if (id in before.instances || id in after.instances) return (!shuffled.has(id) && identifies(before, id, viewer)) || identifies(after, id, viewer);
           const held = this.lastHeld.get(id);
           if (held !== undefined) return identifies(held, id, viewer);
           return events.some((created) => {
@@ -258,6 +281,19 @@ export class EventRedaction {
         const leaked = namedStrings(seen, "", []).filter(({ path, text }) => path !== "kind" && hidden(text));
         if (leaked.length > 0) {
           problems.push(`${viewer} sees a ${event.kind} event naming cards hidden from it: ${leaked.map(({ path, text }) => `${path}=${text}`).join(", ")}`);
+        }
+      }
+      const subjects = event.kind === "lookedAtTop" || event.kind === "cardsPlaced" ? event.cards
+        : event.kind === "cardDrawn" || event.kind === "cardTaken" || event.kind === "cardDiscovered" || event.kind === "returnedToHand" ? [event.instance] : [];
+      for (const viewer of SIDES) for (const id of subjects) {
+        if (id !== null && shownDuring(event, viewer, id)) shown[viewer].add(id);
+      }
+      if (event.kind === "shuffledIntoDeck") {
+        for (const id of [...before.sides[event.side].deck, ...after.sides[event.side].deck, ...event.cards]) {
+          if (id !== null) {
+            shuffled.add(id);
+            for (const viewer of SIDES) shown[viewer].delete(id);
+          }
         }
       }
     }

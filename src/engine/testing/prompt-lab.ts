@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { characterYouControl, enemyCharacter, energy, energyX, event, fromVoid, target as characterTarget, upTo, x } from "../dsl/builders";
+import { characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -93,6 +93,11 @@ export const LAB = {
     { to: "hand", count: 1 },
     { to: "void", count: "rest" },
   ])),
+  /** A placement that publicly exposes one card, followed by an actual blind shuffle. */
+  putFromTopThenShuffle: labEvent(0x59, 0, p.sequence(
+    p.putFromTop(2, [{ to: "top", count: 1 }, { to: "void", count: 1 }]),
+    p.shuffleInto([everyIn("void")]),
+  )),
   /** Choose a free Discover cost, then choose a matching character. */
   discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
   /** Choose either player to discard and draw, preserving the source controller. */
@@ -165,6 +170,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.putFromTopThenShuffle.id]: { name: "Lab Recollection", text: "Look at the top 2 cards of your deck. Put one on top of your deck and the other into your void. Shuffle your void into your deck." },
   [LAB.choosePlayer.id]: { name: "Lab Rekindling", text: "Choose a player. That player discards a card, then draws a card." },
   [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
   [SYNTHETIC.vanilla1.id]: { name: "Lab Recruit", text: "" },
@@ -494,6 +500,26 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       target((ids) => at(ids.player.void, 0)),
       { side: "player", answer: (ids) => [at(ids.player.hand, 1), at(ids.player.hand, 2)] },
     ],
+  },
+  {
+    name: "put-in-deck-log",
+    description: "Public placement retains its authorized log identity through a later blind shuffle",
+    setup: { active: "player", phase: "day",
+      player: { hand: [LAB.putFromTopThenShuffle.id], energy: 2, deck: [vanillas[0], vanillas[1]] }, enemy: { deck: deck(6) } },
+    script: [],
+    presents: [playHand(0), { side: "player", answer: (ids) => [
+      { card: at(ids.player.deck, 0), to: "top" }, { card: at(ids.player.deck, 1), to: "void" },
+    ] }],
+  },
+  {
+    name: "put-in-deck-opponent-log",
+    description: "Opponent's public placement remains named in the human log after a blind shuffle",
+    setup: { active: "enemy", phase: "day",
+      player: { deck: deck(6) }, enemy: { hand: [LAB.putFromTopThenShuffle.id], energy: 2, deck: [vanillas[0], vanillas[1]] } },
+    script: [play("enemy", (ids) => at(ids.enemy.hand, 0))],
+    presents: [{ side: "enemy", answer: (ids) => [
+      { card: at(ids.enemy.deck, 0), to: "top" }, { card: at(ids.enemy.deck, 1), to: "void" },
+    ] }],
   },
   {
     name: "put-in-deck",

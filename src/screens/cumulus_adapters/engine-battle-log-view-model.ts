@@ -13,7 +13,7 @@
 // React-free.
 
 import { batchTurnAt } from "../../battle/components/presentation-items";
-import type { EngineCardModels } from "../../battle/ui/engine-card-model";
+import type { EngineCardIdentity, EngineCardModels } from "../../battle/ui/engine-card-model";
 import type {
   BattleEventLogLineView,
   BattleEventLogTurnView,
@@ -37,6 +37,8 @@ export interface EngineBattleLogEntry {
   readonly event: EngineEvent;
   /** The instances the event names, as the human could see them when it happened. */
   readonly cards: Readonly<Record<InstanceId, InstanceView>>;
+  /** Physical identities authorized by a placement or shuffle but hidden in both boundary views. */
+  readonly identities: Readonly<Record<InstanceId, EngineCardIdentity>>;
 }
 
 /** Every string `value` holds: field values, array items, and record keys, which include the instance IDs it names. */
@@ -77,8 +79,16 @@ export function battleLogEntries(
     for (const instance of [...Object.values(before.instances), ...Object.values(view.instances)]) {
       if (named.has(instance.id)) cards[instance.id] = instance;
     }
+    const identities: Record<InstanceId, EngineCardIdentity> = {};
+    if (event.kind === "cardsPlaced" || event.kind === "shuffledIntoDeck") {
+      for (const id of event.cards) {
+        if (id === null || cards[id] !== undefined) continue;
+        const instance = state.instances[id];
+        if (instance?.printing.kind === "card") identities[id] = { printing: { ...instance.printing }, variant: structuredClone(instance.variant) };
+      }
+    }
     const turn = turnAt(index);
-    return [{ key: `${keyPrefix}:${String(index)}`, turnNumber: turn.turnNumber, active: turn.active, event, cards }];
+    return [{ key: `${keyPrefix}:${String(index)}`, turnNumber: turn.turnNumber, active: turn.active, event, cards, identities }];
   });
 }
 
@@ -205,7 +215,9 @@ export function battleLogTurns(
       human,
       card: (id) => {
         const instance = id === null ? undefined : entry.cards[id];
-        return instance === undefined ? null : cards(instance).displaySnapshot.name;
+        if (instance !== undefined) return cards(instance).displaySnapshot.name;
+        const identity = id === null ? undefined : entry.identities[id];
+        return identity === undefined ? null : cards.nameOf(identity);
       },
       dreamwell: dreamwellName,
     });

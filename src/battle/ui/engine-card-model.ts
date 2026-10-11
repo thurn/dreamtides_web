@@ -13,7 +13,7 @@ import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import type { InstanceView } from "../../engine";
 import type { DeckMods } from "../../engine/dsl/types";
 import { figmentCardDisplayName } from "../../data/figment-card-display";
-import { parseCardId, parseCardName, type CardId } from "../../types/card-identity";
+import { parseCardId, parseCardName, type CardId, type CardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { TransfigurationType } from "../../types/journey";
 import { deckModsOf } from "../integration/engine-battle-init";
@@ -29,8 +29,18 @@ export interface EngineCardSources {
   readonly figment: (id: CardId) => FigmentCatalogEntry | undefined;
 }
 
+/** An event-authorized physical printing and its immutable display variant. */
+export type EngineCardIdentity = {
+  readonly printing: Extract<InstanceView["printing"], { readonly kind: "card" }>;
+  readonly variant: InstanceView["variant"];
+};
+
 /** Builds card models for one battle, reusing the model of an unchanged instance. */
-export type EngineCardModels = (instance: InstanceView) => GameCardModel;
+export interface EngineCardModels {
+  (instance: InstanceView): GameCardModel;
+  /** Resolves the name of an event-authorized physical identity without fabricating a full view. */
+  nameOf(identity: EngineCardIdentity): CardName;
+}
 
 /**
  * Dealt card definitions by card UUID: the first of each display variant,
@@ -61,7 +71,7 @@ function serializedDisplayVariant(transfiguration: TransfigurationType | null, m
   ]);
 }
 
-function instanceDisplayVariant(instance: InstanceView): string {
+function instanceDisplayVariant(instance: Pick<InstanceView, "variant">): string {
   return serializedDisplayVariant(instance.variant.transfigurations?.[0] ?? null, instance.variant.deckMods);
 }
 
@@ -82,7 +92,7 @@ export function createEngineCardModels(sources: EngineCardSources): EngineCardMo
     definitions.set(definition.cardId, indexed);
   }
   const cache = new Map<string, GameCardModel>();
-  return (instance) => {
+  return Object.assign((instance: InstanceView) => {
     const { characteristics } = instance;
     const key = [
       instance.id,
@@ -98,7 +108,19 @@ export function createEngineCardModels(sources: EngineCardSources): EngineCardMo
     const model = buildModel(sources, definitions, instance);
     cache.set(key, model);
     return model;
-  };
+  }, { nameOf: (identity: EngineCardIdentity) => cardName(sources, definitions, identity.printing.cardId, identity.variant) });
+}
+
+/** The dealt display definition selected by the immutable UUID and variant. */
+function displayDefinition(definitions: DefinitionIndex, cardId: CardId, variant: InstanceView["variant"]): BattleDeckCardDefinition | undefined {
+  const transfiguration = variant.transfigurations?.[0] ?? null;
+  const indexed = definitions.get(cardId);
+  return indexed?.byVariant.get(instanceDisplayVariant({ variant })) ??
+    (transfiguration === null ? undefined : indexed?.byTransfiguration.get(transfiguration));
+}
+
+function cardName(sources: EngineCardSources, definitions: DefinitionIndex, cardId: CardId, variant: InstanceView["variant"]): CardName {
+  return displayDefinition(definitions, cardId, variant)?.name ?? sources.cards.get(cardId)?.name ?? parseCardName("Card");
 }
 
 /**
@@ -146,13 +168,9 @@ function buildModel(
     };
   }
   const cardId = printing.cardId;
-  const transfiguration = instance.variant.transfigurations?.[0] ?? null;
-  const indexed = definitions.get(cardId);
-  const definition =
-    indexed?.byVariant.get(instanceDisplayVariant(instance)) ??
-    (transfiguration === null ? undefined : indexed?.byTransfiguration.get(transfiguration));
+  const definition = displayDefinition(definitions, cardId, instance.variant);
   const card = sources.cards.get(cardId);
-  const name = definition?.name ?? card?.name ?? parseCardName("Card");
+  const name = cardName(sources, definitions, cardId, instance.variant);
   const imageNumber = definition?.imageNumber ?? card?.imageNumber ?? 0;
   const art = definition?.art ?? card?.art;
   const printedOrbs = definition?.energyCosts ?? card?.energyCosts;
