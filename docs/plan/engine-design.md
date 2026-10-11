@@ -1498,6 +1498,10 @@ adapter's re-run memo, never in the slice, so they are never persisted or
 hashed and never change a run. The feed reads the same slice and intent
 from that adapter, whose memoized runs it reuses without running a step or
 legality search again, and takes the observed states with `batchStates`.
+A run the adapter memoized while nothing observed (a reload's log replay)
+runs once more when an observed fold reaches it, as when a play cancelled
+after a reload is retried, and its memoized events keep the states that
+run observed, within the same per-intent limit.
 Each item shows its own event's board (`eventBoards` in
 `presentation-items.ts`), so a batch's board only moves forward in event
 order and takes no input while an item plays; the opponent's plays arrive
@@ -1508,11 +1512,13 @@ a prompt only once the queue is idle. On those boards:
   (`batchTurnAt`, shared with the battle log), including a card banished
   until that turn that returns before the turn is announced;
 - a card whose move the rules announce before making it (a resolving card,
-  the characters of a lane that scored nothing, a created card discarded
-  or dissolved) shows at its destination from that event on, so a
-  resolving event card leaves the stack as it resolves and its effects
-  follow; a card still resolving at a prompt stays on the stack until the
-  answer's batch, whose first item shows it gone;
+  the characters of a lane that scored nothing, a created card discarded,
+  dissolved, abandoned, or prevented, and a created card before its
+  creator lists it in a hand, rank, or the stack) shows at its destination
+  from that event on, so a resolving event card leaves the stack as it
+  resolves and its effects follow, and a created hand copy shows in its
+  hand at its own item; a card still resolving at a prompt stays on the
+  stack until the answer's batch, whose first item shows it gone;
 - an event with no observed state (past the per-intent limit, as in a long
   loop, or folded while no feed was registered) shows the batch's final
   state in the turn `batchTurnAt` gives it.

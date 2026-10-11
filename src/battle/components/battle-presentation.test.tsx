@@ -1,13 +1,15 @@
 // @vitest-environment jsdom
 // Published events follow the authoritative fold, including a legality
 // fault after an answer and a feed mounted over a reloaded prompt, and the
-// feed reads the reducer's observed states without running the rules again.
+// feed reads the reducer's observed states without running the rules again,
+// including a play retried after a reload memoized its run unobserved.
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEngine, type Engine } from "../../engine";
 import type { EngineCardDefinition } from "../../engine/catalog";
-import { energy } from "../../engine/dsl/builders";
+import { enemyCharacter, energy, event, target } from "../../engine/dsl/builders";
+import { chooseOne, dissolve, draw, gainPoints } from "../../engine/effects/primitives";
 import type { BattleSlice } from "../../engine/fold/slice";
 import { DSL, DSL_CARDS } from "../../engine/testing/dsl-cards";
 import { syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
@@ -66,13 +68,27 @@ const faultyResponse: EngineCardDefinition = {
     },
   },
 };
+// A play whose first mode is forced with no enemy in play (an automatic
+// answer the human is shown) before a cancellable choice of modes.
+const forcedThenChoice: EngineCardDefinition = {
+  id: syntheticId(0x4104),
+  cardType: "event",
+  costs: [energy(0)],
+  spark: null,
+  subtype: "",
+  speed: "standard",
+  status: "authored",
+  abilities: () => [event(chooseOne(dissolve(target(enemyCharacter())), draw(1))), event(chooseOne(draw(1), gainPoints(1)))],
+};
+let playerCard: EngineCardDefinition = DSL.chooseDrawOrPoints;
 let engine: Engine;
 const roots: Root[] = [];
 const games: LocalGame<FoldState>[] = [];
 
 beforeEach(() => {
   faulting = false;
-  engine = createEngine(testCatalog([...DSL_CARDS, faultyResponse]));
+  playerCard = DSL.chooseDrawOrPoints;
+  engine = createEngine(testCatalog([...DSL_CARDS, faultyResponse, forcedThenChoice]));
   registerReplayFixtureProviders();
   const base = fixtureBattleInitProvider();
   registerBattleInitProvider({
@@ -83,7 +99,7 @@ beforeEach(() => {
       const deck = (card: EngineCardDefinition) => Array.from({ length: 10 }, () => ({ cardId: card.id }));
       return {
         ...start,
-        engineInit: { ...start.engineInit, decks: { player: deck(DSL.chooseDrawOrPoints), enemy: deck(faultyResponse) } },
+        engineInit: { ...start.engineInit, decks: { player: deck(playerCard), enemy: deck(faultyResponse) } },
       };
     },
   });
@@ -208,6 +224,28 @@ describe("published engine event subscriber", () => {
     if (folded.kind !== "applied") throw new Error("play did not apply");
     expect(folded.published.length).toBeGreaterThan(0);
     expect(folded.published.map((event) => foldAdapterFor(engine).observed(event))).toEqual(folded.published.map(() => undefined));
+  });
+
+  it("observes a play cancelled and retried after a reload, whose run the reload memoized unobserved", async () => {
+    playerCard = forcedThenChoice;
+    const { game, repository } = await battleGame();
+    game.log.append(play(game));
+    await game.close();
+    // The reload replays the play with no feed mounted, memoizing its run unobserved.
+    const reopened = await openLocalGame(repository, GAME_ENGINE_CONFIG, game.gameId);
+    if (reopened === null) throw new Error("missing stored game");
+    games.push(reopened);
+    const batches = mountFeed(reopened);
+    act(() => {
+      reopened.log.append({ type: "BATTLE_CANCEL", payload: { side: "player", promptId: promptOf(reopened).id } });
+      reopened.log.append(play(reopened));
+    });
+    const retry = batches[batches.length - 1];
+    const presented = (retry?.events ?? []).flatMap((engineEvent, index) => (presentedAsItem(engineEvent) ? [retry?.eventStates[index]] : []));
+    expect(retry?.seq).toBe(reopened.log.head());
+    expect(retry?.events.some((engineEvent) => engineEvent.kind === "promptAutoAnswered")).toBe(true);
+    expect(presented.length).toBeGreaterThan(0);
+    expect(presented.every((state) => state !== undefined)).toBe(true);
   });
 
   it("starts a reloaded prompt with no historical batches and publishes its answer", async () => {

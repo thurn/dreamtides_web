@@ -158,14 +158,35 @@ export function batchTurnAt(
   return (index) => index < turnIndex ? before : after;
 }
 
-/** Where a card is: its zone and the side holding it, its position in play, or `gone` once it ceased to exist. */
+/** The place of a card rules code created but has not yet listed in its zone (`createInstance`'s caller lists it). */
+const UNLISTED = "unlisted";
+
+/**
+ * Where a card is: its zone and the side holding it, its position in play,
+ * `gone` once it ceased to exist, or `UNLISTED` while it is created but not
+ * yet in its zone's list.
+ */
 function placeOf(state: BattleState, id: InstanceId): string {
   const instance = state.instances[id];
   if (instance === undefined) return "gone";
   const side = instance.controller;
-  if (instance.zone !== "play") return `${instance.zone}:${side}`;
-  const back = state.sides[side].backRank.indexOf(id);
-  return back >= 0 ? `play:${side}:back:${String(back)}` : `play:${side}:front:${String(state.sides[side].frontRank.indexOf(id))}`;
+  switch (instance.zone) {
+    case "play": {
+      const back = state.sides[side].backRank.indexOf(id);
+      if (back >= 0) return `play:${side}:back:${String(back)}`;
+      const front = state.sides[side].frontRank.indexOf(id);
+      return front >= 0 ? `play:${side}:front:${String(front)}` : UNLISTED;
+    }
+    case "stack":
+      return stackIndex(state, id) >= 0 ? `stack:${side}` : UNLISTED;
+    default:
+      return state.sides[side][instance.zone].includes(id) ? `${instance.zone}:${side}` : UNLISTED;
+  }
+}
+
+/** The stack position of the card `id`, or -1. */
+function stackIndex(state: BattleState, id: InstanceId): number {
+  return state.stack.findIndex((item) => item.kind === "card" && item.instance === id);
 }
 
 /** Whether `event` names `id` in any of its fields. */
@@ -184,14 +205,18 @@ export function presentedAsItem(event: EngineEvent): boolean {
 /**
  * The cards an event announces before rules code moves them: a resolving
  * card, which leaves the stack once its effects resolve; the characters of
- * a lane that scored nothing, which dissolve after; and a created card
- * discarded or dissolved, which ceases to exist after.
+ * a lane that scored nothing, which dissolve after; a created card
+ * discarded, dissolved, abandoned, or prevented, which ceases to exist
+ * after; and a created card, which its creator lists in its zone after.
  */
 function announcedMoves(event: EngineEvent): readonly InstanceId[] {
   switch (event.kind) {
     case "resolved":
     case "discarded":
     case "dissolved":
+    case "abandoned":
+    case "prevented":
+    case "cardCreated":
       return [event.instance];
     case "laneResolved":
       return event.scored > 0 ? [] : event.blocker === null ? [event.challenger] : [event.challenger, event.blocker];
@@ -208,10 +233,13 @@ type ZoneList = "deck" | "hand" | "void" | "banished";
  */
 function settle(state: BattleState, id: InstanceId, settled: BattleState): BattleState {
   const place = settled.instances[id];
-  if (place?.zone === "stack") return state;
+  const stackAt = stackIndex(settled, id);
+  const stackItem = settled.stack[stackAt];
+  if (place?.zone === "stack" && (stackItem === undefined || stackIndex(state, id) >= 0)) return state;
   const without = (list: readonly InstanceId[]) => list.filter((entry) => entry !== id);
   const vacate = (rank: readonly (InstanceId | null)[]) => rank.map((entry) => (entry === id ? null : entry));
   const sides = { ...state.sides };
+  const stack = state.stack.filter((item) => item.kind !== "card" || item.instance !== id);
   for (const side of SIDES) {
     const held = state.sides[side];
     sides[side] = {
@@ -231,6 +259,9 @@ function settle(state: BattleState, id: InstanceId, settled: BattleState): Battl
     const holder = sides[place.controller];
     if (index < 0 || holder[rank][index] !== null) return state;
     sides[place.controller] = { ...holder, [rank]: holder[rank].map((entry, at) => (at === index ? id : entry)) };
+  } else if (place?.zone === "stack") {
+    // A created stack copy joins the stack where it lands: nothing else on the stack moves while its creator lists it.
+    if (stackItem !== undefined) stack.splice(Math.min(stackAt, stack.length), 0, stackItem);
   } else if (place !== undefined) {
     const zone: ZoneList = place.zone;
     const holder = sides[place.controller];
@@ -249,7 +280,7 @@ function settle(state: BattleState, id: InstanceId, settled: BattleState): Battl
       ...Object.entries(state.instances).filter(([key]) => key !== id),
       ...(place === undefined ? [] : [[id, place] as const]),
     ]),
-    stack: state.stack.filter((item) => item.kind !== "card" || item.instance !== id),
+    stack,
   };
 }
 
@@ -264,9 +295,12 @@ function settle(state: BattleState, id: InstanceId, settled: BattleState): Battl
  * - A card whose move an event announces before it lands
  *   (`announcedMoves`) shows at its destination from that event on: a
  *   resolving card leaves the stack as it resolves, never staying there
- *   through its effects; a card the batch began resolving leaves it from the
- *   batch's first event. A card still resolving when the batch ends, held by
- *   a prompt, stays on the stack.
+ *   through its effects; a created card shows in its hand, rank, or stack
+ *   position from its creation; a created card prevented or abandoned is
+ *   gone from that event. A card the batch began resolving leaves the stack
+ *   from the batch's first event. A card still resolving when the batch
+ *   ends, held by a prompt, stays on the stack, and a card created but not
+ *   listed when it ends shows once the answer lists it.
  */
 function eventBoards(
   events: readonly EngineEvent[],
@@ -316,8 +350,10 @@ function eventBoards(
     const previous = index === 0 ? before : observed[index - 1];
     if (state === undefined || previous === undefined) return;
     for (const id of announcedMoves(event)) {
-      if (placeOf(state, id) !== placeOf(previous, id)) continue;
-      show(index, id, landing(index + 1, state, id, event.kind === "resolved"));
+      const place = placeOf(state, id);
+      // An event naming a card after its move already shows it there; a card created but not yet listed is still moving.
+      if (place !== UNLISTED && place !== placeOf(previous, id)) continue;
+      show(index, id, landing(index + 1, state, id, event.kind === "resolved" || place === UNLISTED));
     }
   });
   return boards;

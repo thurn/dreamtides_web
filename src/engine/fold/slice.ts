@@ -129,9 +129,11 @@ export interface FoldAdapter {
   /**
    * Applies `intent`. With `observation`, the steps this call runs observe
    * their newly published events (`observed`). A run the adapter memoized
-   * earlier is not run again: its events keep what the call that ran it
-   * observed, so a second call with the same slice and intent publishes the
-   * same event objects with the same observed states.
+   * earlier publishes its memoized event objects: an observed run's keep
+   * what the call that ran it observed, so a second call with the same slice
+   * and intent publishes the same events with the same observed states, and
+   * a run memoized while nothing observed (a reload's log replay) is run
+   * once more to observe them, without changing its outcome.
    */
   reduce(slice: BattleSlice, intent: BattleIntent, observation?: FoldObservation): IntentOutcome;
   /**
@@ -283,14 +285,18 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
   // Non-persisted observed states (`observed`), by published event: the
   // events of a memoized run keep theirs while it is memoized.
   const states = new WeakMap<EngineEvent, BattleState>();
+  // The memoized runs an observed fold ran: a run memoized while nothing
+  // observed (a reload's log replay) is run again when a fold observes it.
+  const observedRuns = new WeakSet<StepResult>();
 
   /**
    * Observes one run of an intent's fold, after the `skip` events an earlier
    * run of the step published before suspending, which a re-run emits again
    * first and in order: copies the state at a presented event while the
-   * intent's limit allows, and gives any other event the latest copy.
+   * intent's limit allows, and gives any other event the latest copy, kept
+   * in `into`.
    */
-  function observer(progress: Observing, skip: number): EventObserver {
+  function observer(progress: Observing, skip: number, into: Pick<WeakMap<EngineEvent, BattleState>, "set"> = states): EventObserver {
     let seen = 0;
     return (event, snapshot) => {
       seen += 1;
@@ -299,13 +305,41 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
         progress.latest = progress.remaining > 0 ? snapshot() : undefined;
         progress.remaining -= 1;
       }
-      if (progress.latest !== undefined) states.set(event, progress.latest);
+      if (progress.latest !== undefined) into.set(event, progress.latest);
     };
   }
 
+  /** Runs the in-flight step; `observe` receives its events. */
+  function runOnce(committed: BattleState, inFlight: InFlight, observe: EventObserver | undefined): StepResult {
+    return runStep(committed, inFlight.step, INTERACTIVE, engine.catalog, {
+      observeEvent: observe,
+      prefix: inFlight.answers,
+      automatic: inFlight.automatic,
+      searches: engine.memo.searches,
+    });
+  }
+
   /**
-   * The run of an in-flight step, observed by `progress` when the adapter
-   * has not memoized it; a memoized run's events keep their earlier states.
+   * Observes `cached`, a run memoized while nothing observed (a reload's log
+   * replay), by running its step again under `progress`: the engine is
+   * deterministic, so that run's events match the memoized ones position by
+   * position, and each memoized event keeps the state observed at its match.
+   */
+  function observeMemoized(committed: BattleState, inFlight: InFlight, cached: StepResult, progress: Observing, skip: number): void {
+    const fresh = new Map<EngineEvent, BattleState>();
+    const again = runOnce(committed, inFlight, observer(progress, skip, fresh));
+    cached.events.forEach((event, index) => {
+      const match = again.events[index];
+      const state = match === undefined ? undefined : fresh.get(match);
+      if (state !== undefined) states.set(event, state);
+    });
+  }
+
+  /**
+   * The run of an in-flight step, observed by `progress`. A memoized run is
+   * returned again with its event objects: one an observed fold ran keeps
+   * the states it observed, and one memoized unobserved is observed now
+   * (`observeMemoized`).
    */
   function run(committed: BattleState, inFlight: InFlight, progress: Observing | null = null, skip = 0): StepResult {
     const key = JSON.stringify(inFlight);
@@ -313,15 +347,17 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     const cached = byState?.get(key);
     if (cached !== undefined) {
       const last = cached.events[cached.events.length - 1];
-      if (progress !== null && last !== undefined && cached.events.length > skip) progress.latest = states.get(last);
+      if (progress === null || last === undefined || cached.events.length <= skip) return cached;
+      if (observedRuns.has(cached)) {
+        progress.latest = states.get(last);
+      } else {
+        observeMemoized(committed, inFlight, cached, progress, skip);
+        observedRuns.add(cached);
+      }
       return cached;
     }
-    const result = runStep(committed, inFlight.step, INTERACTIVE, engine.catalog, {
-      observeEvent: progress === null ? undefined : observer(progress, skip),
-      prefix: inFlight.answers,
-      automatic: inFlight.automatic,
-      searches: engine.memo.searches,
-    });
+    const result = runOnce(committed, inFlight, progress === null ? undefined : observer(progress, skip));
+    if (progress !== null) observedRuns.add(result);
     if (byState === undefined) {
       byState = new Map();
       runs.set(committed, byState);

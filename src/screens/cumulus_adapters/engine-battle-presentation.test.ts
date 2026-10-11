@@ -19,6 +19,8 @@ import { atStartOfTurn, triggered } from "../../engine/dsl/triggers";
 import { banishUntil, discard, draw } from "../../engine/effects/primitives";
 import { SYNTHETIC, syntheticId } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
+import { STACK } from "../../engine/testing/stack-cards";
+import { ZONE } from "../../engine/testing/zone-cards";
 import { batchStates, foldAdapterFor } from "../../rules/battle/engine-battle";
 import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
 import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
@@ -286,6 +288,89 @@ describe("presentation items", () => {
     expect(later.every((item) => item.batch.state.stack.length === 0)).toBe(true);
     expect(resolved?.batch.state.sides.player.hand).toEqual([]);
     expectForward(shown);
+  });
+
+  it("shows a created hand copy in its hand from its own item", () => {
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [ZONE.handEcho.id], back: [SYNTHETIC.vanilla1.id], energy: 2, deck: [SYNTHETIC.vanilla2.id] }, enemy: { deck: [SYNTHETIC.vanilla1.id] } });
+    const created = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } });
+    const at = created.events.findIndex((event) => event.kind === "cardCreated");
+    const event = created.events[at];
+    if (event?.kind !== "cardCreated") throw new Error("no created copy");
+    const item = created.items.find((entry) => entry.key === `${created.batch.key}:${String(at)}`);
+
+    // The rules announce the copy before listing it in the hand.
+    expect(created.eventStates[at]?.sides.player.hand).not.toContain(event.instance);
+    expect(item?.presentation).toBe("travel");
+    expect(item?.batch.state.sides.player.hand).toEqual([event.instance]);
+    expect(item?.batch.state.instances[event.instance]?.zone).toBe("hand");
+    expectForward(created);
+  });
+
+  it("shows a created stack copy on the stack from its own item, and gone from the item that prevents it", () => {
+    const fixture = observedBoard({
+      active: "player",
+      phase: "day",
+      player: { hand: [DSL.drawTwo.id], back: [ZONE.echo.id], energy: 4, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] },
+      enemy: { hand: [STACK.preventEvent.id], energy: 2, deck: [SYNTHETIC.vanilla1.id] },
+    });
+    const original = fixture.ids.player.hand[0];
+    const copied = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: original, from: "hand" } });
+    const createdAt = copied.events.findIndex((event) => event.kind === "cardCreated");
+    const created = copied.events[createdAt];
+    if (created?.kind !== "cardCreated") throw new Error("no stack copy");
+    const copy = created.instance;
+    const createdItem = copied.items.find((entry) => entry.key === `${copied.batch.key}:${String(createdAt)}`);
+    const stackCards = (state: BattleState | undefined) => state?.stack.flatMap((entry) => (entry.kind === "card" ? [entry.instance] : []));
+
+    // The rules announce the copy before listing it on the stack.
+    expect(stackCards(copied.eventStates[createdAt])).toEqual([original]);
+    expect(stackCards(createdItem?.batch.state)).toEqual([original, copy]);
+    expectForward(copied);
+
+    fixture.apply({ kind: "battleAction", side: "enemy", action: { kind: "play", card: fixture.ids.enemy.hand[0], from: "hand" } });
+    const pending = fixture.adapter.pending(fixture.slice());
+    if (pending === null) throw new Error("no prevent target prompt");
+    // The player has no response, so the prevent resolves in the answer's batch.
+    const prevented = fixture.apply({ kind: "answer", side: "enemy", promptId: pending.prompt.id, value: [copy] });
+    const preventedAt = prevented.events.findIndex((event) => event.kind === "prevented");
+    const preventedItem = prevented.items.find((entry) => entry.key === `${prevented.batch.key}:${String(preventedAt)}`);
+
+    expect(prevented.events[preventedAt]).toMatchObject({ instance: copy, to: null });
+    // The rules announce the prevented copy while it is still on the stack.
+    expect(stackCards(prevented.eventStates[preventedAt])).toContain(copy);
+    expect(preventedItem?.presentation).toBe("travel");
+    expect(preventedItem?.batch.state.instances[copy]).toBeUndefined();
+    expect(stackCards(preventedItem?.batch.state)).not.toContain(copy);
+    expectForward(prevented);
+  });
+
+  it("shows an abandoned figment gone from the item that abandons it", () => {
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [ZONE.twoWarriors.id], back: [STACK.abandonToDraw.id], energy: 10, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id] }, enemy: { deck: [SYNTHETIC.vanilla1.id] } });
+    const materialized = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand" } });
+    const createdAt = materialized.events.findIndex((event) => event.kind === "cardCreated");
+    const created = materialized.events[createdAt];
+    if (created?.kind !== "cardCreated") throw new Error("no figment");
+    const figment = created.instance;
+    const createdItem = materialized.items.find((entry) => entry.key === `${materialized.batch.key}:${String(createdAt)}`);
+    expect(createdItem?.batch.state.sides.player.backRank).toContain(figment);
+    expectForward(materialized);
+
+    const source = fixture.ids.player.back[0];
+    if (source === null || source === undefined) throw new Error("no abandon source");
+    fixture.apply({ kind: "battleAction", side: "player", action: { kind: "activate", source, ability: 0 } });
+    const pending = fixture.adapter.pending(fixture.slice());
+    if (pending === null) throw new Error("no abandon prompt");
+    const abandoned = fixture.apply({ kind: "answer", side: "player", promptId: pending.prompt.id, value: [figment] });
+    const abandonedAt = abandoned.events.findIndex((event) => event.kind === "abandoned");
+    const item = abandoned.items.find((entry) => entry.key === `${abandoned.batch.key}:${String(abandonedAt)}`);
+
+    expect(abandoned.events[abandonedAt]).toMatchObject({ instance: figment });
+    // The rules announce the abandoned figment while it is still in play.
+    expect(abandoned.eventStates[abandonedAt]?.sides.player.backRank).toContain(figment);
+    expect(item?.presentation).toBe("travel");
+    expect(item?.batch.state.sides.player.backRank).not.toContain(figment);
+    expect(item?.batch.state.instances[figment]).toBeUndefined();
+    expectForward(abandoned);
   });
 
   it("presents a scoring lane, then a dissolving tie, then the next turn's start-of-turn trigger and draw, never stepping back", () => {
