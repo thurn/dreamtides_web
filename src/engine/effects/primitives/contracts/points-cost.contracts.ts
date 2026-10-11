@@ -8,7 +8,7 @@
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { activated, additionalCost, choiceCost, discardCost, energy, event, optionalCost, pointsCost } from "../../../dsl/builders";
+import { activated, additionalCost, choiceCost, discardCost, energy, event, optionalCost, pointsCost, staticAbility } from "../../../dsl/builders";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -24,6 +24,7 @@ import type { AnswerSource } from "../../../steps/types";
 import { boardState, type SideSetup } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
+import { costModifier } from "../cost-modifier";
 import { draw } from "../draw";
 import { gainEnergy } from "../gain-energy";
 
@@ -68,7 +69,12 @@ const overpays = synthetic(1405, () => [], {
   },
 });
 
-const engine = createEngine(testCatalog([pricedCharacter, discardOrPoints, optionalPoints, pointsActivator, failsAfterPaying, overpays, twoPointCosts]));
+/** "Characters you play cost 2● less." */
+const characterDiscount = synthetic(1407, () => [staticAbility(costModifier("you", { cardType: "character" }, -2))], { cardType: "character", costs: [energy(1)], spark: 1, subtype: "Warrior" });
+/** "Characters you play cost 2● more." */
+const characterTax = synthetic(1408, () => [staticAbility(costModifier("you", { cardType: "character" }, 2))], { cardType: "character", costs: [energy(1)], spark: 1, subtype: "Warrior" });
+
+const engine = createEngine(testCatalog([pricedCharacter, discardOrPoints, optionalPoints, pointsActivator, failsAfterPaying, overpays, twoPointCosts, characterDiscount, characterTax]));
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id, v.vanilla5.id];
 
 /** The enemy holds an Interrupt, so the played item waits on the stack until the enemy passes. */
@@ -123,6 +129,20 @@ describe("pointsCost", () => {
       const resolved = resolve(paid.state).state;
       expect(resolved.instances[card].zone).toBe("play");
       expect(resolved.sides.player.score).toBe(score - 4);
+    }
+  });
+
+  it("keeps the ⍟ cost exact under energy cost reductions and increases, which change only the energy", () => {
+    for (const [modifier, energyPaid] of [[characterDiscount, 0], [characterTax, 4]] as const) {
+      const short = board({ hand: [pricedCharacter.id], back: [modifier.id], score: 3, energy: 9 });
+      expect(plays(short.state)).toEqual([]);
+      const { state, ids } = board({ hand: [pricedCharacter.id], back: [modifier.id], score: 4, energy: 9 });
+      const card = ids.player.hand[0];
+      expect(plays(state)).toEqual([card]);
+      const paid = run(state, "player", play(card));
+      expect(paid.state.sides.player.score).toBe(0);
+      expect(paid.state.sides.player.currentEnergy).toBe(9 - energyPaid);
+      expect(pointEvents(paid.events)).toEqual([{ kind: "pointsScored", side: "player", amount: -4, cause: "effect" }]);
     }
   });
 
