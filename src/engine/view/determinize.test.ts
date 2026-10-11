@@ -182,6 +182,72 @@ describe("determinize", () => {
   });
 });
 
+describe("determinize source-independent floating costs", () => {
+  const current = createEngine(testCatalog());
+  function fixture(viewer: Side, ceased: boolean, cardCost: boolean) {
+    const other = opponent(viewer);
+    const { state, ids } = boardState(current.catalog, {
+      active: viewer, phase: "day",
+      [viewer]: { hand: [SYNTHETIC.vanilla2.id], energy: 2 },
+      [other]: { hand: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla5.id] },
+    });
+    const card = ids[viewer].hand[0];
+    const [source] = ids[other].hand;
+    if (ceased) {
+      state.sides[other].hand.shift();
+      delete state.instances[source];
+    }
+    state.floating.push({
+      id: "e1", controller: other, source, timestamp: state.clock, expiry: { at: "never" },
+      change: cardCost ? { kind: "cardCost", instance: card, mode: "increase", amount: 1 }
+        : { kind: "cost", player: viewer, filter: {}, amount: 1, next: true },
+    });
+    state.nextEffect = 2;
+    const entries = (side: Side) => Object.values(state.instances).filter((item) => item.owner === side)
+      .map((item) => ({ cardId: cardIdOf(state, item.id) }));
+    return { state, card, source, decklists: { player: entries("player"), enemy: entries("enemy") } };
+  }
+
+  const cases = SIDES.flatMap((viewer) => [false, true].flatMap((ceased) => [false, true].map((cardCost) => ({ viewer, ceased, cardCost }))));
+  it.each(cases)("preserves cost and legality for $viewer (ceased=$ceased, cardCost=$cardCost)", ({ viewer, ceased, cardCost }) => {
+    const { state, card, source, decklists } = fixture(viewer, ceased, cardCost);
+    const seen = current.view(state, viewer);
+    const sampled = current.determinize(seen, decklists, seeded("anonymous-cost"));
+    expect(seen.instances[card].characteristics.cost).toBe(3);
+    expect(current.view(sampled, viewer).instances[card].characteristics.cost).toBe(3);
+    expect(seen.floating).toEqual([{ ...state.floating[0], source: null }]);
+    expect(current.legalActions(state, viewer).some((action) => action.kind === "play" && action.card === card)).toBe(false);
+    expect(current.legalActions(sampled, viewer)).toEqual(current.legalActions(state, viewer));
+    expect(determinizationDivergences(current, state, decklists, battleSeed("anonymous-cost"), 0)).toEqual([]);
+    const lossy = { ...current, determinize: (...args: Parameters<typeof current.determinize>) => {
+      const result = current.determinize(...args);
+      result.floating = result.floating.filter((effect) => effect.id !== "e1");
+      return result;
+    } };
+    const problems = determinizationDivergences(lossy, state, decklists, battleSeed("anonymous-cost"), 0).filter((problem) => problem.startsWith(`${viewer}'s`));
+    expect(problems.some((problem) => problem.includes("floating effect e1 missing"))).toBe(true);
+    expect(problems.some((problem) => problem.includes("extra legal action") && problem.includes(card))).toBe(true);
+    if (!ceased) {
+      const altered = structuredClone(state);
+      const other = state.sides[opponent(viewer)].hand[1];
+      altered.instances[source] = { ...altered.instances[source], printing: state.instances[other].printing };
+      altered.instances[other] = { ...altered.instances[other], printing: state.instances[source].printing };
+      expect(current.view(altered, viewer)).toEqual(seen);
+      expect(stateHash(current.determinize(current.view(altered, viewer), decklists, seeded("anonymous-cost")))).toBe(stateHash(sampled));
+    }
+  });
+
+  it.each(SIDES)("keeps hidden changed-card and expiry identities private for %s", (viewer) => {
+    const { state, source } = fixture(viewer, false, true);
+    const hiddenTarget = { ...state.floating[0], change: { kind: "cardCost", instance: source, mode: "increase", amount: 1 } } as const;
+    state.floating = [hiddenTarget];
+    expect(current.view(state, viewer).floating).toEqual([]);
+    const { state: expiryState } = fixture(viewer, false, false);
+    expiryState.floating[0] = { ...expiryState.floating[0], expiry: { at: "sourceLeavesPlay", source } };
+    expect(current.view(expiryState, viewer).floating).toEqual([]);
+  });
+});
+
 /** A captured scoring trigger, including neutral and legacy optional snapshots. */
 function scoringQueue(scored: number | undefined) {
   const scorer: EngineCardDefinition = {

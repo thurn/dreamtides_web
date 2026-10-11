@@ -113,7 +113,7 @@ export interface PayableEffectView {
 export interface FloatingEffectView {
   readonly id: EffectId;
   readonly controller: Side;
-  /** A play permission survives its source becoming hidden or ceasing; its source is then null. */
+  /** Costs and play permissions retain their changes with a hidden or ceased source redacted to null. */
   readonly source: AbilitySource | null;
   readonly timestamp: number;
   readonly expiry: Expiry;
@@ -302,11 +302,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   });
   const floatingVisible = (effect: FloatingEffect): boolean => {
     const changed = changedInstance(effect.change);
-    // Permissions carry their complete legality data without source identity.
-    // Other changes retain their existing source visibility boundary.
+    // Costs and permissions carry their complete legality data without source identity.
+    const sourceIndependent = effect.change.kind === "playFrom" || effect.change.kind === "cost" || effect.change.kind === "cardCost";
     const sourceSeen = visibleSource(effect.source);
     const expirySeen = effect.expiry.at !== "sourceLeavesPlay" || visible(effect.expiry.source);
-    return (sourceSeen || effect.change.kind === "playFrom") && expirySeen && (changed === null || visible(changed));
+    return (sourceSeen || sourceIndependent) && expirySeen && (changed === null || visible(changed));
   };
   const side = (which: Side): SideView => {
     const source = state.sides[which];

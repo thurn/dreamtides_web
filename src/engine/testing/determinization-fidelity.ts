@@ -11,8 +11,8 @@
  *   void, or the Banished zone;
  * - the same floating effects that name only cards the side can identify,
  *   and the same payable effects, apart from a source the side cannot see.
- *   A play permission is kept whatever its source; any other floating effect
- *   from a hidden source is one determinization drops (view/determinize.ts).
+ *   Costs and play permissions are kept whatever their source, provided their
+ *   changed card and expiry identities are visible (view/determinize.ts).
  *
  * A failure names instance IDs, effect IDs, and printed UUIDs, never names.
  */
@@ -100,7 +100,7 @@ function owedFloating(state: BattleState, effect: FloatingEffect, side: Side): b
   const changed = changedInstance(effect.change);
   if (changed !== null && !identifies(state, changed, side)) return false;
   if (effect.expiry.at === "sourceLeavesPlay" && !identifies(state, effect.expiry.source, side)) return false;
-  return effect.change.kind === "playFrom" || seesSource(state, effect.source, side);
+  return effect.change.kind === "playFrom" || effect.change.kind === "cost" || effect.change.kind === "cardCost" || seesSource(state, effect.source, side);
 }
 
 /** An effect record without its source, and with the source when `side` sees it. */
