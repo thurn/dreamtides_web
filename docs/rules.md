@@ -957,6 +957,16 @@ controller's control, in their source zone's order, each taking the leftmost
 open back-rank position. Their owner stays the same. A selected character
 that cannot enter because the back rank has filled stays in its source zone.
 
+"Materialize each ≤X● cost character in your void. Banish them at end of
+turn": "them" names exactly the characters that materialize put into play,
+never one that stayed in its zone, one already in play, or one another part
+of the effect put into play. A later part of the same effect, or a floating
+or delayed trigger it creates, acts on each of them that is in play as it
+resolves, whoever controls it then. Card identity persists across zones (see
+[Zone Changes](#zone-changes)), so one that left play and has entered play
+again is affected, while one in another zone is not. If none entered play, or
+none is in play then, that part does nothing.
+
 **Rematerialize** — Trigger an in-play character's materialization again, firing
 its ▸Materialized trigger and any "When you materialize" triggers.
 

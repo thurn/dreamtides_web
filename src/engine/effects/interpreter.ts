@@ -21,7 +21,7 @@ import { randomDeckRemovalSettler, seesSource, type DeckRemovalBounds } from "..
 import { abilityOrigin, originAbilities } from "../rules/activation";
 import type { MaterializeNode } from "./primitives/materialize";
 import { primitiveDefinition } from "./registry";
-import type { CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
+import type { CapturedCardsSpec, CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
 
 /** The mode chosen at play time for each modal node of an effect. */
 export type ChosenModes = ReadonlyMap<EffectNode, number>;
@@ -642,10 +642,16 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
 /**
  * The cards a card reference names now: chosen characters still legal,
  * chosen stack cards still on the stack, the triggering card or the source
- * wherever it is, while it exists, or the cards a zone reference names.
+ * wherever it is, while it exists, the cards a zone reference names, or the
+ * captured cards still in play, in the order they entered play. Resolving a
+ * captured reference outside a `withMaterialized` binding throws.
  */
-export function resolveCards(ctx: StepContext, ref: CardRef, env: EffectEnv): InstanceId[] {
+export function resolveCards(ctx: StepContext, ref: CardRef | CapturedCardsSpec, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
+    case "captured": {
+      if (env.captured === null) throw new Error("A captured card reference resolved outside withMaterialized");
+      return env.captured.filter((id) => ctx.state.instances[id]?.zone === "play");
+    }
     case "target":
       return resolveCharacters(ctx, ref, env);
     case "stackTarget":
@@ -680,6 +686,8 @@ export interface ResolveOptions {
   readonly gain?: SparkGain | null;
   /** The positive challenge award the scoring trigger matched. */
   readonly scored?: number | null;
+  /** The cards a floating or delayed trigger kept from its `withMaterialized` binding. */
+  readonly captured?: readonly InstanceId[] | null;
   readonly controller: Side;
   readonly x: number | null;
   /** Whether each optional cost of the item was paid, in printed order. */
@@ -797,6 +805,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     abandonedPosition: options.choices.abandonedPosition ?? null,
     duration: null,
     moved: movedCardRecord(ctx, options.root ?? effect),
+    captured: options.captured ?? null,
     modeOf(node) {
       return chosen.get(node) ?? null;
     },

@@ -24,6 +24,9 @@
  * - the battle seed is drawn from `random`, so later shuffles and Dreamwell
  *   cycles are sampled too, and the remaining Dreamwell cards are a fresh
  *   draw of that many cards from the Dreamwell catalog;
+ * - each hidden captured member the view numbers is one dealt hidden card
+ *   of its owner, printing, and variant, a different one per member
+ *   (`standIns`);
  * - queued triggers whose source the viewer cannot see, floating effects the
  *   view omits, the opponent's knowledge, loop history, and the
  *   automatic-step count start empty;
@@ -47,8 +50,17 @@ import { buildDreamwellDeck } from "../rules/dreamwell";
 import { freshStatus, variantOf } from "../state/create";
 import type { InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, DeckEntry, PayableEffect, QueuedTrigger, SideState } from "../state/types";
-import { characteristicsView, type BattleView, type CharacteristicsView, type HiddenZoneView, type InstanceView } from "./view";
+import type { BattleState, CardInstance, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState } from "../state/types";
+import {
+  characteristicsView,
+  type BattleView,
+  type CapturedCardView,
+  type CharacteristicsView,
+  type FloatingChangeView,
+  type HiddenCapturedCardView,
+  type HiddenZoneView,
+  type InstanceView,
+} from "./view";
 
 /** Each side's journey decklist, with each entry's variant (D39). */
 export type Decklists = Readonly<Record<Side, readonly DeckEntry[]>>;
@@ -142,6 +154,53 @@ function restoreLoop(state: BattleState, view: BattleView): void {
   state.loops.nextLoop = Number(loop.id.slice(1)) + 1;
 }
 
+/** A floating change from its view, with each captured card resolved by `captured`. */
+function floatingChange(change: FloatingChangeView, captured: (cards: readonly CapturedCardView[]) => InstanceId[]): FloatingChange {
+  if (change.kind !== "trigger") return copy(change);
+  const { captured: cards, ...rest } = change;
+  return cards === undefined ? copy(rest) : { ...copy(rest), captured: captured(cards) };
+}
+
+/**
+ * Resolves the captured cards a view shows: an identified card is itself,
+ * and a hidden one (`HiddenCapturedCardView`) is the dealt hidden card its
+ * `member` stands for, the same in every record. Each member gets a
+ * different dealt hidden card with its owner, of its printing and variant
+ * when one is left, else of its printing, picked at random from `random`; one with no dealt hidden card of its
+ * owner left is left out. It draws from `random` only for hidden captured
+ * cards.
+ */
+function standIns(
+  view: BattleView,
+  sides: Readonly<Record<Side, SideState>>,
+  instances: Readonly<Record<InstanceId, CardInstance>>,
+  random: () => number,
+): (cards: readonly CapturedCardView[]) => InstanceId[] {
+  const hidden = SIDES.flatMap((side) => [...sides[side].deck, ...sides[side].hand]).filter((id) => !(id in view.instances));
+  const chosen = new Map<number, InstanceId | null>();
+  const taken = new Set<InstanceId>();
+  const pick = (card: HiddenCapturedCardView): InstanceId | null => {
+    const owned = hidden.filter((id) => !taken.has(id) && instances[id].owner === card.owner);
+    const printed = owned.filter((id) => JSON.stringify(instances[id].printing) === JSON.stringify(card.printing));
+    const varied = printed.filter((id) => JSON.stringify(instances[id].variant) === JSON.stringify(card.variant));
+    const pool = [varied, printed, owned].find((ids) => ids.length > 0) ?? [];
+    if (pool.length === 0) return null;
+    const id = pool[Math.floor(random() * pool.length)];
+    taken.add(id);
+    return id;
+  };
+  return (cards) =>
+    cards.flatMap((card) => {
+      if (typeof card === "string") return [card];
+      let id = chosen.get(card.member);
+      if (id === undefined) {
+        id = pick(card);
+        chosen.set(card.member, id);
+      }
+      return id === null ? [] : [id];
+    });
+}
+
 /** A state dealing every hidden card at random, each entering its zone at 0. */
 function deal(view: BattleView, decklists: Decklists, random: () => number, catalog: EngineCatalog): BattleState {
   const viewer = view.viewer;
@@ -221,6 +280,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       }
     }
   }
+  const seed = battleSeed(`determinized|${String(Math.floor(random() * 2 ** 53))}`);
+  const captured = standIns(view, sides, instances, random);
   const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap((trigger) =>
     trigger.source === null || trigger.origin === null
       ? []
@@ -233,6 +294,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           subject: trigger.subject,
           ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
           ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+          ...(trigger.captured === undefined ? {} : { captured: captured(trigger.captured) }),
         }],
   );
   const payable: PayableEffect[] = view.payable.map((effect) => ({
@@ -245,7 +307,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   const clock = Math.max(0, ...Object.values(instances).map((instance) => instance.enteredZoneAt), ...view.floating.map((effect) => effect.timestamp));
   const state: BattleState = {
     version: view.version,
-    seed: battleSeed(`determinized|${String(Math.floor(random() * 2 ** 53))}`),
+    seed,
     rng: {},
     nextInstance: next,
     clock,
@@ -258,9 +320,10 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     priority: view.priority,
     payable,
     triggerQueue,
-    floating: view.floating.map((effect) => ({
+    floating: view.floating.map((effect): FloatingEffect => ({
       ...copy(effect),
       source: effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
+      change: floatingChange(effect.change, captured),
     })),
     turnLog: {
       played: playedCards,

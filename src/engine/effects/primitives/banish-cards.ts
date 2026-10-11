@@ -4,7 +4,7 @@ import type { ChooseCardsPrompt } from "../../prompts/types";
 import { banish } from "../../rules/zones";
 import { opponent } from "../../state/ids";
 import { resolveCards } from "../interpreter";
-import { cardTarget, definePrimitive } from "../types";
+import { cardTarget, definePrimitive, type CapturedCardsSpec } from "../types";
 
 /**
  * "Banish your hand and void", "Banish up to two cards from the opponent's
@@ -15,12 +15,14 @@ import { cardTarget, definePrimitive } from "../types";
  * (`noLegalTarget` otherwise). A created card ceases to exist instead. Each
  * banished card is announced by a public `banished` event, after `leftVoid`
  * for a card that leaves a void; a card from a hand or deck is shown to both
- * players as it enters the Banished zone.
+ * players as it enters the Banished zone. "Banish them" after a materialize
+ * names the captured cards still in play (`CapturedCardsSpec`), which leave
+ * play through the same zone change.
  */
 export interface BanishNamedCardsNode {
   readonly op: "banishCards";
   readonly from: "cards";
-  readonly cards: readonly ZoneCardSpec[];
+  readonly cards: readonly (ZoneCardSpec | CapturedCardsSpec)[];
 }
 
 /**
@@ -64,8 +66,12 @@ export const banishCardsPrimitive = definePrimitive<BanishCardsNode>({
   },
 });
 
-/** "Banish <cards>": every card the zone references name ("your hand and void", "a card from the opponent's void"). */
-export function banishCards(cards: readonly ZoneCardSpec[]): BanishNamedCardsNode {
+/**
+ * "Banish <cards>": every card the zone references name ("your hand and
+ * void", "a card from the opponent's void"), or "banish them", the captured
+ * cards of a `withMaterialized` binding (`capturedCards()`).
+ */
+export function banishCards(cards: readonly (ZoneCardSpec | CapturedCardsSpec)[]): BanishNamedCardsNode {
   if (cards.length === 0) throw new Error("banishCards needs at least one card reference");
   return { op: "banishCards", from: "cards", cards };
 }

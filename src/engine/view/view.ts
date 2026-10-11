@@ -109,6 +109,39 @@ export interface PayableEffectView {
   readonly affects: readonly InstanceId[];
 }
 
+/**
+ * A captured card (`withMaterialized`) the viewer cannot identify, now in a
+ * hidden hand or deck: its owner, printing, and variant, which every side saw
+ * as it entered play captured, and `member`, a number local to this view that is
+ * the same in every floating and queued trigger naming that card and
+ * different for different cards. Members are numbered in order of first
+ * appearance, floating effects first and then queued triggers, each in
+ * order and each list in order, so the numbering follows only what the view
+ * shows. A determinization assigns each member a different hidden card it
+ * deals with that owner, preferring that printing and variant
+ * (view/determinize.ts).
+ */
+export interface HiddenCapturedCardView {
+  readonly member: number;
+  readonly owner: Side;
+  readonly printing: Printing;
+  readonly variant: Variant;
+}
+
+/** A captured card as a view shows it: its instance when the viewer can identify it, else a hidden one. */
+export type CapturedCardView = InstanceId | HiddenCapturedCardView;
+
+type TriggerChange = Extract<FloatingChange, { readonly kind: "trigger" }>;
+
+/**
+ * A floating change as a view shows it: a trigger's captured cards, in
+ * order, each as a `CapturedCardView`; a card that ceased to exist is left
+ * out.
+ */
+export type FloatingChangeView =
+  | Exclude<FloatingChange, TriggerChange>
+  | (Omit<TriggerChange, "captured"> & { readonly captured?: readonly CapturedCardView[] });
+
 /** A change with a duration (rules § Durations). */
 export interface FloatingEffectView {
   readonly id: EffectId;
@@ -117,7 +150,7 @@ export interface FloatingEffectView {
   readonly source: AbilitySource | null;
   readonly timestamp: number;
   readonly expiry: Expiry;
-  readonly change: FloatingChange;
+  readonly change: FloatingChangeView;
 }
 
 /**
@@ -137,6 +170,12 @@ export interface QueuedTriggerView {
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
   readonly scored?: number;
+  /**
+   * The captured cards a floating or delayed trigger kept, as for a floating
+   * change; absent when it kept none, and when the viewer cannot see its
+   * source, so a hidden source's captured cards stay unknown.
+   */
+  readonly captured?: readonly CapturedCardView[];
 }
 
 /**
@@ -308,6 +347,42 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     const expirySeen = effect.expiry.at !== "sourceLeavesPlay" || visible(effect.expiry.source);
     return (sourceSeen || sourceIndependent) && expirySeen && (changed === null || visible(changed));
   };
+  const members = new Map<InstanceId, number>();
+  const capturedView = (captured: readonly InstanceId[]): CapturedCardView[] =>
+    captured.flatMap((id): CapturedCardView[] => {
+      if (visible(id)) return [id];
+      const instance = state.instances[id];
+      if (instance === undefined) return [];
+      let member = members.get(id);
+      if (member === undefined) {
+        member = members.size;
+        members.set(id, member);
+      }
+      return [{ member, owner: instance.owner, printing: copy(instance.printing), variant: copy(instance.variant) }];
+    });
+  // A trigger from a source the viewer cannot see shows none of its captured cards.
+  const changeView = (change: FloatingChange, sourceSeen: boolean): FloatingChangeView => {
+    if (change.kind !== "trigger" || change.captured === undefined) return copy(change);
+    const { captured, ...rest } = change;
+    return sourceSeen ? { ...copy(rest), captured: capturedView(captured) } : copy(rest);
+  };
+  // Hidden captured members are numbered in the order the floating effects, then the queued triggers, show them.
+  const floating = state.floating.filter(floatingVisible).map((effect): FloatingEffectView => ({
+    ...copy(effect),
+    source: visibleSource(effect.source) ? copy(effect.source) : null,
+    change: changeView(effect.change, visibleSource(effect.source)),
+  }));
+  const triggerQueue = state.triggerQueue.map((trigger): QueuedTriggerView => ({
+    controller: trigger.controller,
+    source: visibleSource(trigger.source) ? copy(trigger.source) : null,
+    origin: visibleSource(trigger.source) ? copy(trigger.origin) : null,
+    ability: trigger.ability,
+    node: trigger.node,
+    subject: seesSubject(state, trigger, viewer) ? trigger.subject : null,
+    ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
+    ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+    ...(trigger.captured === undefined || !visibleSource(trigger.source) ? {} : { captured: capturedView(trigger.captured) }),
+  }));
   const side = (which: Side): SideView => {
     const source = state.sides[which];
     return {
@@ -347,20 +422,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       source: visibleSource(effect.source) ? copy(effect.source) : null,
       affects: effect.affects.filter(visible),
     })),
-    floating: state.floating.filter(floatingVisible).map((effect) => ({
-      ...copy(effect),
-      source: visibleSource(effect.source) ? copy(effect.source) : null,
-    })),
-    triggerQueue: state.triggerQueue.map((trigger) => ({
-      controller: trigger.controller,
-      source: visibleSource(trigger.source) ? copy(trigger.source) : null,
-      origin: visibleSource(trigger.source) ? copy(trigger.origin) : null,
-      ability: trigger.ability,
-      node: trigger.node,
-      subject: seesSubject(state, trigger, viewer) ? trigger.subject : null,
-      ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
-      ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
-    })),
+    floating,
+    triggerQueue,
     turnLog: {
       played: {
         player: state.turnLog.played.player.map(playedView),

@@ -405,12 +405,20 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
   for (const effect of ordered) {
     const floating = floatingListener(ctx, effect);
     if (floating === null || effect.change.kind !== "trigger") continue;
-    const { ref, once } = effect.change;
+    const { ref, once, captured } = effect.change;
     const isArmed = armedHere.includes(effect);
     const match = matchTrigger(ctx.state, ctx.catalog, floating.trigger, event, floating.listener, true, isArmed);
     if (match === null) continue;
     if (once) endFloating(ctx, (entry) => entry.id === effect.id);
-    enqueue(ctx, { source: effect.source, controller: side, origin: ref.origin, ability: ref.ability, node: ref.node, ...match });
+    enqueue(ctx, {
+      source: effect.source,
+      controller: side,
+      origin: ref.origin,
+      ability: ref.ability,
+      node: ref.node,
+      ...match,
+      ...(captured === undefined ? {} : { captured: [...captured] }),
+    });
   }
 }
 

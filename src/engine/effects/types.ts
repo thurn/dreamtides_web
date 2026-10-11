@@ -23,6 +23,19 @@ import type {
  */
 export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec | ZoneCardSpec;
 
+/**
+ * "Them" after a materialize (`withMaterialized`): the characters the nearest
+ * enclosing binding's materialize put into play, each while it is in play as
+ * the effect naming them resolves, whoever controls it then (rules § Keywords
+ * and Effects → Materialize, RD-hv-umm2.392-1). Card identity persists across
+ * zones, so a member that left play and entered it again is named again. A
+ * floating or delayed trigger created inside the binding keeps the binding's
+ * cards for its own later resolution. Only `banishCards` accepts it.
+ */
+export interface CapturedCardsSpec {
+  readonly kind: "captured";
+}
+
 /** The shape every effect node has; the registry narrows it to the primitive union. */
 export interface EffectNode {
   readonly op: string;
@@ -86,6 +99,13 @@ export interface EffectEnv {
   readonly duration: SharedDuration | null;
   /** The cards this resolution's nodes moved, for "that card" values (`costOf`). */
   readonly moved: MovedCards;
+  /**
+   * The cards the nearest enclosing `withMaterialized` binding materialized,
+   * in the order they entered play, or those a floating or delayed trigger
+   * kept from the binding that created it (`CapturedCardsSpec`); `null`
+   * outside a binding.
+   */
+  readonly captured: readonly InstanceId[] | null;
   /** The mode chosen at play time for a modal node of this effect, or `null` for a node off the chosen path. */
   modeOf(node: EffectNode): number | null;
   /** The targets chosen at play time for a target spec in this effect, or `null` if none were chosen. */
@@ -180,7 +200,7 @@ export function characterTarget(ref: CharacterRef): readonly PlayTimeTarget[] {
  * when it is a character, stack card, or void card chosen at play time,
  * otherwise nothing.
  */
-export function cardTarget(ref: CardRef): readonly PlayTimeTarget[] {
+export function cardTarget(ref: CardRef | CapturedCardsSpec): readonly PlayTimeTarget[] {
   return ref.kind === "target" || ref.kind === "stackTarget" || (ref.kind === "inZone" && ref.pick === "target") ? [ref] : [];
 }
 

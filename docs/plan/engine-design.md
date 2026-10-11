@@ -883,7 +883,9 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   **Delayed triggers** (`delayed`) are one-shot "the next time…" floating
   triggers with `once: true`. Both are `floatingTrigger` nodes, and their
   floating record stores an `EffectRef` (origin, ability, and node index in
-  `everyNode`) into the catalog definition, so state stays plain data.
+  `everyNode`) into the catalog definition, so state stays plain data. One
+  created inside a `withMaterialized` binding also stores the binding's
+  cards (`captured`), which its queued trigger carries to its resolution.
 - **`triggerAbility`** enqueues a named trigger outside its occasion
   (`triggerNamed`).
 - **Disabled triggers** (`disableTriggers`, optionally while a condition
@@ -1379,11 +1381,11 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player), `storeCounters` (N⧗ on the source while it is in play, announced by `countersChanged`; RD-hv-umm2.94-1) | `doubleEnergy`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs)` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs | capturedCards())` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15) | copying more than once |
-| Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices) | `forEach`, `takeExtraTurn` (C8) |
+| Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
@@ -1414,6 +1416,43 @@ keeps its cost. The record lives only as long as the resolution, so a step's
 replay rebuilds it from the step's answers. Static abilities read no moved
 card. The content gate requires the named node to resolve earlier in the same
 resolution than the value that reads it (see Content gates).
+
+**"Them" after a materialize** (rules § Keywords and Effects → Materialize,
+RD-hv-umm2.392-1) is `withMaterialized(materialize(from), effect)` with
+`capturedCards()` inside `effect`. The node resolves its materialize, then
+binds as `EffectEnv.captured` the instance IDs that entered play meanwhile,
+in entry order: exactly the characters that materialize put into play, since
+a character that stays in its zone keeps its entry time and nothing else
+resolves inside the node. `effect` resolves under that binding, and the
+nearest enclosing binding applies. A `floatingTrigger` resolved under a
+binding copies it into its floating record's `captured`; the matcher copies
+that onto the `QueuedTrigger`, and `resolveQueuedTrigger` restores it as the
+binding of the trigger's resolution, so the floating effect's controller and
+the cards stay plain data through saves. `capturedCards()` names the bound
+cards in play as it resolves, under any controller, so a member that left
+play and entered again is named (identity persists across zones), and one in
+another zone is not. Only `banishCards` accepts it, banishing through the
+ordinary zone change; resolving it outside a binding throws. A view shows
+each captured card the viewer can identify by its instance ID, and any other
+one, now in a hidden hand or deck, by its owner, printing, and variant,
+which every side saw as it entered play, and a member number local to the view
+(`CapturedCardView`); a card that ceased to exist is left out. The view
+numbers hidden members in order of first appearance, floating effects then
+queued triggers, each list in order, so every record naming one card shows
+the same number, different cards show different numbers, and the numbering
+reads nothing the view hides. A determinization assigns each member number
+its own dealt hidden card of that owner, preferring that printing and
+variant (`standIns`), so a
+sampled member that returns to play is banished as the real one is, by
+every trigger naming it. The determinization-fidelity check compares
+captured cards in the same terms, numbering hidden members across all the
+owed floating effects, so it also compares which records name the same
+hidden card.
+A trigger whose source the viewer cannot see shows none of its captured
+cards: its floating record and `effectStarted` event are hidden whole, and
+its queued trigger omits them. The `effectStarted` event logs the cohort's
+instance IDs, less any a side cannot identify, and each `banished` event the
+card it banished.
 
 **Zone counts** (`countCards(zone, filter, player)`, `CardCountValue`) are a
 value and a selector bound: the cards in the player's deck, hand, or void, in

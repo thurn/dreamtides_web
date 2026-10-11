@@ -375,9 +375,11 @@ export type FloatingChange =
   | ContinuousChange
   /**
    * "Until end of turn, when …" (floating) or "the next time …" (delayed,
-   * `once`: it ends as it triggers).
+   * `once`: it ends as it triggers). One created inside a `withMaterialized`
+   * binding keeps that binding's cards as `captured`, in the order they
+   * entered play, for its effect's captured-card references.
    */
-  | { readonly kind: "trigger"; readonly ref: EffectRef; readonly once: boolean }
+  | { readonly kind: "trigger"; readonly ref: EffectRef; readonly once: boolean; readonly captured?: readonly InstanceId[] }
   /** The instance's triggered abilities do not trigger, while `while` holds if given. */
   | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition }
   /** "Banish … until …": as the effect ends, the banished card returns to play under `side` (F3). */
@@ -422,6 +424,8 @@ export interface QueuedTrigger {
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
   readonly scored?: number;
+  /** The cards its floating or delayed trigger kept from a `withMaterialized` binding; absent otherwise. */
+  readonly captured?: readonly InstanceId[];
 }
 
 /**

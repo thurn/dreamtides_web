@@ -78,6 +78,7 @@ import {
   takeFromAmongPrimitive,
   triggerAbilityPrimitive,
   winTheGamePrimitive,
+  withMaterializedPrimitive,
 } from "./primitives";
 import type { EffectNode, PrimitiveDefinition } from "./types";
 
@@ -280,6 +281,9 @@ const DEFINITIONS = {
   },
   get winTheGame() {
     return winTheGamePrimitive;
+  },
+  get withMaterialized() {
+    return withMaterializedPrimitive;
   },
 } as const satisfies { readonly [Op in Effect["op"]]: PrimitiveDefinition<Extract<Effect, { op: Op }>> };
 

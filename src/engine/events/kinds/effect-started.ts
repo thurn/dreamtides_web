@@ -22,13 +22,18 @@ export interface EffectStartedEvent {
  * source's card (a delayed trigger's `ref.origin`). So the holder of a deck
  * card it has not learned does not see the effect begin either. Likewise a
  * side that cannot identify the card the change changes (`changedInstance`),
- * such as a card just drawn into the opponent's hand, sees none of it.
+ * such as a card just drawn into the opponent's hand, sees none of it. A
+ * trigger's captured cards list only those the side can identify.
  */
 export const effectStarted: EventDefinition<EffectStartedEvent> = {
   kind: "effectStarted",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
   redact: (event, viewer, state) => {
     const changed = changedInstance(event.change);
-    return seesSource(state, event.source, viewer) && (changed === null || identifies(state, changed, viewer)) ? event : null;
+    if (!seesSource(state, event.source, viewer) || (changed !== null && !identifies(state, changed, viewer))) return null;
+    const { change } = event;
+    if (change.kind !== "trigger" || change.captured === undefined) return event;
+    const captured = change.captured.filter((id) => identifies(state, id, viewer));
+    return captured.length === change.captured.length ? event : { ...event, change: { ...change, captured } };
   },
 };

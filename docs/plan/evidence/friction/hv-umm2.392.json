@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.392",
+  "phase": 5,
+  "baseOid": "9280a034241f2283d5943bfb26b299b6436c11f2",
+  "implementMin": 125,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 3,
+    "focusedEngine": 70,
+    "reviewFailed": 110,
+    "review": 64,
+    "knip": 4
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 8.62,
+  "testDelta": {
+    "files": 2,
+    "lines": 380,
+    "jsdomFiles": 0,
+    "fixtureModules": 1,
+    "fixtureLines": 130
+  },
+  "friction": [
+    {
+      "tag": "review-repair",
+      "minutes": 80,
+      "note": "cross-model review found hidden cohort members dropped from views and determinizations (masked by a filtered fidelity comparison), unvalidated saved captured fields, and a hidden source's queued cohort shown; repaired with owner-and-printing stand-ins, fold validators, and source-gated capture; a second round numbered hidden members per view so separate same-printing cohorts keep separate stand-ins and the fidelity check compares cross-record aliasing; a third round matched stand-ins on variant, which needed seeded samples because constant-draw samples happened to pick the matching copy"
+    }
+  ]
+}

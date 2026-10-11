@@ -230,6 +230,40 @@ describe("LOAD_STATE", () => {
     const malformed = ["not-a-number", "3", -2, NaN, Infinity, -Infinity, null, {}, [], true];
     expect(malformed.filter((scored) => load(withScore(scored)) !== null)).toEqual([]);
   });
+
+  it("keeps the captured cards of a saved delayed trigger and queued trigger, and refuses malformed ones", () => {
+    const state = begun();
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const load = (payload: unknown) => validateLoadedState(state, { snapshot: state.journey, battle: payload });
+    const instance = battle.engine.slice.committed.instances[firstCard(state)];
+    if (instance.printing.kind !== "card") throw new Error("no fixture card printing");
+    const origin = { kind: "card", cardId: instance.printing.cardId, variant: instance.variant };
+    const withCaptured = (captured: unknown, where: "floating" | "queue" | "both" = "both") => {
+      const extra = captured === undefined ? {} : { captured };
+      const floatingExtra = where === "queue" ? {} : extra;
+      const queueExtra = where === "floating" ? {} : extra;
+      const committed = battle.engine.slice.committed;
+      return {
+        ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: {
+          ...committed,
+          floating: [{
+            id: "e900", controller: instance.controller, source: instance.id, timestamp: 0, expiry: { at: "never" },
+            change: { kind: "trigger", ref: { origin, ability: 0, node: 1 }, once: true, ...floatingExtra },
+          }],
+          triggerQueue: [{ source: instance.id, controller: instance.controller, origin, ability: 0, node: 1, subject: null, ...queueExtra }],
+        } } },
+      };
+    };
+    for (const captured of [undefined, [], [instance.id]]) {
+      const payload = withCaptured(captured);
+      expect(load(payload)?.battle, JSON.stringify(captured)).toEqual(payload);
+    }
+    const malformed = [null, instance.id, 3, {}, [null], [3], ["not-an-instance"], [instance.id, "e1"]];
+    for (const where of ["floating", "queue"] as const) {
+      expect(malformed.filter((captured) => load(withCaptured(captured, where)) !== null), where).toEqual([]);
+    }
+  });
 });
 
 

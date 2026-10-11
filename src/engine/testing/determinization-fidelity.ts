@@ -10,7 +10,10 @@
  *   and entry time) for every card in a public zone: the stack, play, a
  *   void, or the Banished zone;
  * - the same floating effects that name only cards the side can identify,
- *   and the same payable effects, apart from a source the side cannot see.
+ *   and the same payable effects, apart from a source the side cannot see
+ *   and the affected cards it cannot identify; a trigger's captured cards
+ *   the side cannot identify match by owner, printing, and variant, and records name
+ *   the same such card exactly where the real ones do.
  *   Costs and play permissions are kept whatever their source, provided their
  *   changed card and expiry identities are visible (view/determinize.ts).
  *
@@ -103,29 +106,77 @@ function owedFloating(state: BattleState, effect: FloatingEffect, side: Side): b
   return effect.change.kind === "playFrom" || effect.change.kind === "cost" || effect.change.kind === "cardCost" || seesSource(state, effect.source, side);
 }
 
-/** An effect record without its source, and with the source when `side` sees it. */
-function effectRecord(state: BattleState, effect: FloatingEffect | PayableEffect, side: Side): string {
+/**
+ * Numbers the captured cards `side` cannot identify in `effects`, in order
+ * of first appearance, as a view numbers its hidden members, so two records
+ * compare equal only when they name the same hidden cards as each other.
+ */
+function hiddenMembers(state: BattleState, effects: readonly (FloatingEffect | PayableEffect)[], side: Side): Map<InstanceId, number> {
+  const members = new Map<InstanceId, number>();
+  for (const effect of effects) {
+    if (!("change" in effect) || effect.change.kind !== "trigger") continue;
+    for (const id of effect.change.captured ?? []) {
+      if (state.instances[id] !== undefined && !identifies(state, id, side) && !members.has(id)) members.set(id, members.size);
+    }
+  }
+  return members;
+}
+
+/**
+ * A trigger's captured cards as `side` can tell them apart in `state`: a
+ * card it can identify by its ID, any other by its member number in
+ * `members`, owner, printing, and variant, and a card that ceased to exist not at all
+ * (view/view.ts `CapturedCardView`).
+ */
+function capturedRecord(state: BattleState, captured: readonly InstanceId[], side: Side, members: ReadonlyMap<InstanceId, number>): unknown[] {
+  return captured.flatMap((id): unknown[] => {
+    const instance = state.instances[id];
+    if (instance === undefined) return [];
+    return identifies(state, id, side) ? [id] : [{ member: members.get(id), owner: instance.owner, printing: instance.printing, variant: instance.variant }];
+  });
+}
+
+/** Where a record's captured cards are read: the state it belongs to, and its hidden members' numbers there. */
+interface CapturedScope {
+  readonly state: BattleState;
+  readonly members: ReadonlyMap<InstanceId, number>;
+}
+
+/**
+ * An effect record without its source, and with the source when `side` sees
+ * it; a payable effect's affected cards list only those `side` can
+ * identify, and a trigger's captured cards are read in `scope`
+ * (`capturedRecord`).
+ */
+function effectRecord(state: BattleState, effect: FloatingEffect | PayableEffect, side: Side, scope: CapturedScope): string {
   const { source, ...rest } = effect;
   const affects = "affects" in effect ? { affects: effect.affects.filter((id) => identifies(state, id, side)) } : {};
-  return JSON.stringify({ ...rest, ...affects, source: seesSource(state, source, side) ? source : null });
+  const change = "change" in effect && effect.change.kind === "trigger" && effect.change.captured !== undefined
+    ? { change: { ...effect.change, captured: capturedRecord(scope.state, effect.change.captured, side, scope.members) } }
+    : {};
+  return JSON.stringify({ ...rest, ...affects, ...change, source: seesSource(state, source, side) ? source : null });
 }
 
 function effectDivergences(
   kind: "floating" | "payable",
   state: BattleState,
   owed: readonly (FloatingEffect | PayableEffect)[],
+  sampledState: BattleState,
   sampled: readonly (FloatingEffect | PayableEffect)[],
   side: Side,
 ): string[] {
   const problems: string[] = [];
+  const copies = owed.flatMap((effect) => sampled.filter((other) => other.id === effect.id));
+  const real: CapturedScope = { state, members: hiddenMembers(state, owed, side) };
+  const simulated: CapturedScope = { state: sampledState, members: hiddenMembers(sampledState, copies, side) };
   for (const effect of owed) {
     const copy = sampled.find((other) => other.id === effect.id);
-    if (copy === undefined) problems.push(`${kind} effect ${effect.id} missing: ${effectRecord(state, effect, side)}`);
+    if (copy === undefined) problems.push(`${kind} effect ${effect.id} missing: ${effectRecord(state, effect, side, real)}`);
     else {
-      const real = effectRecord(state, effect, side);
-      const simulated = effectRecord(state, { ...copy, source: effect.source }, side);
+      const record = effectRecord(state, effect, side, real);
+      const copied = effectRecord(state, { ...copy, source: effect.source }, side, simulated);
       const sourced = seesSource(state, effect.source, side) && JSON.stringify(copy.source) !== JSON.stringify(effect.source);
-      if (real !== simulated || sourced) problems.push(`${kind} effect ${effect.id} ${JSON.stringify(copy)} for ${real}`);
+      if (record !== copied || sourced) problems.push(`${kind} effect ${effect.id} ${JSON.stringify(copy)} for ${record}`);
     }
   }
   for (const effect of sampled) {
@@ -147,8 +198,8 @@ export function determinizationDivergences(engine: Engine, state: BattleState, d
     const problems = [
       ...legalActionDivergences(engine, state, sampled, side),
       ...publicCardDivergences(state, sampled),
-      ...effectDivergences("floating", state, state.floating.filter((effect) => owedFloating(state, effect, side)), sampled.floating, side),
-      ...effectDivergences("payable", state, state.payable, sampled.payable, side),
+      ...effectDivergences("floating", state, state.floating.filter((effect) => owedFloating(state, effect, side)), sampled, sampled.floating, side),
+      ...effectDivergences("payable", state, state.payable, sampled, sampled.payable, side),
     ];
     return problems.map((problem) => `${side}'s determinization: ${problem}`);
   });

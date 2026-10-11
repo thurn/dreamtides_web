@@ -1193,7 +1193,7 @@ const FLOATING_CHANGE_VALIDATORS: {
     isFiniteNumber(value.amount) &&
     isBoolean(value.next),
   cardCost: (value) => isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase") && isIndex(value.amount),
-  trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once),
+  trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once) && optional(arrayOf(isInstanceId))(value.captured),
   disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
   playFrom: (value) =>
@@ -1238,6 +1238,7 @@ function isQueuedTrigger(value: unknown): boolean {
     nullable(isIndex)(value.node) &&
     nullable(isInstanceId)(value.subject) &&
     optional(arrayOf(isSide))(value.subjectHiddenFrom) &&
+    optional(arrayOf(isInstanceId))(value.captured) &&
     optional((scored) => isFiniteNumber(scored) && scored >= 0)(value.scored) &&
     optional(
       (gain) =>

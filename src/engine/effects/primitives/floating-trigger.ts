@@ -26,11 +26,17 @@ export const floatingTriggerPrimitive = definePrimitive<FloatingTriggerNode>({
     if (index < 0) throw new Error("A floating trigger is not part of its ability's effect");
     const expiry = startDuration(ctx, node.duration, env.controller, env.source, []);
     if (expiry === null) return;
+    // Inside a withMaterialized binding, the trigger keeps the binding's cards for its later resolution.
     addFloating(ctx, {
       controller: env.controller,
       source: env.source,
       expiry,
-      change: { kind: "trigger", ref: { origin: env.origin, ability: env.ability, node: index }, once: node.once },
+      change: {
+        kind: "trigger",
+        ref: { origin: env.origin, ability: env.ability, node: index },
+        once: node.once,
+        ...(env.captured === null ? {} : { captured: [...env.captured] }),
+      },
     });
   },
 });
