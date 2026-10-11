@@ -1,3 +1,5 @@
+import { characterYouControl, energy, event, reclaim, target } from "../../engine/dsl/builders";
+import { rematerialize } from "../../engine/effects/primitives/rematerialize";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 5,
   art: { x: -0.21, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(rematerialize(target(characterYouControl()))), reclaim(energy(1))],
+  verifiedText: "10iut40dalv",
 });

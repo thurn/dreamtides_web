@@ -58,6 +58,7 @@ import {
   playFromZonePrimitive,
   preventPrimitive,
   putInDeckPrimitive,
+  rematerializePrimitive,
   repeatPrimitive,
   returnFromVoidPrimitive,
   returnToHandPrimitive,
@@ -211,6 +212,9 @@ const DEFINITIONS = {
   },
   get putInDeck() {
     return putInDeckPrimitive;
+  },
+  get rematerialize() {
+    return rematerializePrimitive;
   },
   get repeat() {
     return repeatPrimitive;

@@ -1,0 +1,58 @@
+{
+  "bead": "hv-umm2.85",
+  "phase": 5,
+  "implementMin": 14.26,
+  "measurementWindow": "native claim to pre-commit evidence",
+  "localValidationS": {
+    "install": 2.729,
+    "focusedVitest": 2.0,
+    "reviewLogInterval": 52.509,
+    "knipLogInterval": 3.448,
+    "fuzz": 75.25,
+    "sweepLogInterval": 130.535,
+    "preparedConfirmationLogInterval": 134.589
+  },
+  "queueWaitS": {
+    "fuzz": 0.0278,
+    "browser": "not separately emitted by card-sweep CLI"
+  },
+  "hostLoad": {
+    "fuzzStart": [
+      16.75830078125,
+      17.611328125,
+      17.744140625
+    ],
+    "fuzzEnd": [
+      13.30224609375,
+      16.275390625,
+      17.22021484375
+    ],
+    "sweepStart": 14.24,
+    "confirmationStart": 3.63
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 230,
+    "jsdomFiles": 0,
+    "cases": 9
+  },
+  "friction": [
+    {
+      "tag": "synthetic-fixture-correction",
+      "minutes": 1.4,
+      "note": "Initial assertions omitted automatic response-pass events and used resolveCard instead of resolveTop; readonly fixture fields now use whole-instance spreads. One unsafe JSON clone replaced with typed structuredClone. Production primitive unchanged."
+    },
+    {
+      "tag": "validation-materialization-overlap",
+      "minutes": 0.88,
+      "note": "Final review (14:30:12.392\u201314:31:04.901 UTC) overlapped sweep server (started14:30:13 UTC) and restored linked art during it. All production bytes frozen by14:28:22; only synthetic structuredClone changed after fuzz start, before sweep. Sweep certifies behavioral outcomes and caps; no screenshot/art or judged claims. Future preparation/serving sequencing is serial."
+    }
+  ],
+  "preparedConfirmation": {
+    "cases": 6,
+    "ineligibleSkips": 2,
+    "noConcurrentWorkspaceMutations": true,
+    "includesBrowserQueue": true,
+    "serverGroup": 62757
+  }
+}

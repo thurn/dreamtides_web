@@ -1,3 +1,6 @@
+import { characterYouControl, target, upTo } from "../../engine/dsl/builders";
+import { onChallenge, triggered } from "../../engine/dsl/triggers";
+import { rematerialize } from "../../engine/effects/primitives/rematerialize";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 2,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onChallenge(), rematerialize(variant.amplified ? upTo(characterYouControl(), 2) : target(characterYouControl())))],
+  verifiedText: "mo1vhw2frb",
 });
