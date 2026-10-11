@@ -1,0 +1,97 @@
+// @vitest-environment node
+import { describe, expect, it } from "vitest";
+import { testCardId } from "../../types/test-identities";
+import type { CardData } from "../../types/cards";
+import type { DeckEntry } from "../../types/journey";
+import { parseCardName } from "../../types/card-identity";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { buildMobileDeckView, toDeckCardView } from "./mobile-deck-view-model";
+
+describe("mobile-deck-view-model", () => {
+  const transfigurationData = transfigurationFixture();
+
+  function makeCard(overrides: Partial<CardData> = {}): CardData {
+    return {
+      name: parseCardName("Test Event"),
+      id: testCardId("test-event"),
+      cardNumber: 1,
+      cardType: "Event",
+      subtype: "",
+      isStarter: false,
+      energyCost: 1,
+      spark: null,
+      isFast: false,
+      renderedText: "Draw a card.",
+      imageNumber: 1,
+      artOwned: true,
+      ...overrides,
+    };
+  }
+
+  function makeEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
+    return {
+      entryId: parseDeckEntryId("entry-1"),
+      cardNumber: 1,
+      transfiguration: null,
+      isBane: false,
+      ...overrides,
+    };
+  }
+
+  function database(...cards: CardData[]): Map<number, CardData> {
+    return new Map(cards.map((card) => [card.cardNumber, card]));
+  }
+
+  describe("toDeckCardView", () => {
+    it("resolves a plain entry to its card, keyed by entryId and carrying no transfiguration", () => {
+      const card = makeCard({ cardNumber: 7 });
+      const entry = makeEntry({
+        entryId: parseDeckEntryId("e7"),
+        cardNumber: 7,
+      });
+
+      const view = toDeckCardView(transfigurationData, entry, database(card));
+
+      expect(view).not.toBeNull();
+      expect(view?.entryId).toBe("e7");
+      expect(view?.model.cardId).toBe(card.id);
+      expect(view?.model.transfiguration).toBeUndefined();
+      expect(view?.isBane).toBe(false);
+    });
+
+    it("carries a transfiguration display descriptor for a transfigured entry", () => {
+      const card = makeCard({ cardNumber: 4, cardType: "Character", spark: 2 });
+      const entry = makeEntry({
+        cardNumber: 4,
+        transfiguration: "Kindled",
+        sparkBonus: 1,
+      });
+
+      const view = toDeckCardView(transfigurationData, entry, database(card));
+
+      expect(view?.model.transfiguration).toBeDefined();
+      // Kindled changes spark, so the display marks the spark as changed.
+      expect(view?.model.transfiguration?.sparkChanged).toBe(true);
+      expect(view?.model.displaySnapshot.spark).toBe(5);
+    });
+  });
+
+  describe("buildMobileDeckView", () => {
+    it("keeps distinct entryId keys even when two entries share a card (and name)", () => {
+      const card = makeCard({ cardNumber: 1 });
+      const deck = [
+        makeEntry({ entryId: parseDeckEntryId("copy-a"), cardNumber: 1 }),
+        makeEntry({ entryId: parseDeckEntryId("copy-b"), cardNumber: 1 }),
+      ];
+
+      const view = buildMobileDeckView(
+        transfigurationData,
+        deck,
+        database(card),
+      );
+
+      expect(view.cards.map((c) => c.entryId)).toEqual(["copy-a", "copy-b"]);
+    });
+  });
+});

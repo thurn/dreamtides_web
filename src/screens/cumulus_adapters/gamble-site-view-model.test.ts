@@ -6,66 +6,23 @@ import {
   gambleFixture,
   testGambleSelectionTrace,
 } from "../../testing/gamble-fixture";
-import { transfigurationFixture } from "../../testing/transfiguration-fixture";
-import type { DreamGuideContent } from "../../types/content";
 import type {
-  FourSuitRepriseSiteRuntime,
-  FourSuitRepriseTarget,
   GravokWagerSiteRuntime,
-  SiteState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
-  BlackjackSiteRuntime,
 } from "../../types/journey";
-import type { CardData } from "../../types/cards";
-import { parseCardName } from "../../types/card-identity";
 import type {
   GambleSiteView,
   GravokWagerSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
-import {
-  buildGambleGateViews,
-  buildGambleSiteView as buildGambleSiteViewImpl,
-} from "./gamble-site-view-model";
-import { parseSiteId } from "../../types/identifiers";
+import { buildGambleGateViews } from "./gamble-site-view-model";
 import { parseShuffleCommitment } from "../../types/identifiers";
-import { parseDeckEntryId } from "../../types/identifiers";
-import { testDreamscapeId, testDreamsignId, testGuideArtKey, testGuideId, testCardId } from "../../types/test-identities";
+import { testDreamsignId } from "../../types/test-identities";
+import { buildGambleSiteView, GAMBLE_SITE, GUIDE, GUIDE_LINE_SOURCE } from "./gamble-site-view-model.fixtures";
 
 expect.addEqualityTesters([annotatedTextEquality]);
 
-const buildGambleSiteView = (
-  params: Omit<
-    Parameters<typeof buildGambleSiteViewImpl>[0],
-    "gambleData" | "transfigurationData"
-  >,
-) =>
-  buildGambleSiteViewImpl({
-    ...params,
-    gambleData: gambleFixture(),
-    transfigurationData: transfigurationFixture(),
-  });
-
-const GUIDE_LINE_SOURCE = "Fixture game line.";
 const GUIDE_LINE = GUIDE_LINE_SOURCE;
-const GUIDE = {
-  id: testGuideId("fixture-gamble-guide"),
-  name: "Fixture Gamble Guide",
-  homeDreamscapeId: testDreamscapeId("fixture-home"),
-  siteType: "Gamble",
-  portraitSource: "fixture-guide.png",
-  artKey: testGuideArtKey("fixture-guide"),
-  headTargetX: 0.6,
-  dialogue: { site: [GUIDE_LINE_SOURCE] },
-  homeSpecialty: "Fixture specialty.",
-} satisfies DreamGuideContent;
-
-const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
-  id: parseSiteId("fixture-gamble-site"),
-  type: "Gamble",
-  isEnhanced: false,
-  isVisited: false,
-};
 
 const FIXTURE_SIGN_ID = testDreamsignId("fixture-sign");
 
@@ -336,214 +293,5 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     expect(view.canAffordWager).toBe(true);
     expect(view.canPlayAgain).toBe(false);
     expect(view.cashOutReward).toBeNull();
-  });
-});
-
-function fourSuitCard(index: number): CardData {
-  return {
-    name: parseCardName(`Four Suit Fixture ${String(index)}`),
-    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
-    cardNumber: index,
-    cardType: "Character",
-    subtype: "",
-    isStarter: false,
-    energyCost: 2,
-    spark: 2,
-    isFast: false,
-    renderedText: "Materialized: Gain 1 Essence.",
-    imageNumber: index,
-    artOwned: true,
-  };
-}
-
-function fourSuitTarget(
-  index: number,
-  entryId = `four-suit-entry-${String(index)}`,
-): FourSuitRepriseTarget {
-  const card = fourSuitCard(index);
-  return {
-    entryId: parseDeckEntryId(entryId),
-    cardId: card.id,
-    cardNumber: card.cardNumber,
-    cardSnapshot: card,
-    transfigurationOffers: [
-      {
-        entryId: parseDeckEntryId(entryId),
-        type: "Empowered",
-        effectDetails: { fixture: true },
-        previewCard: { ...card, energyCost: 1 },
-        essenceCost: 0,
-      },
-    ],
-  };
-}
-
-describe("gamble-site-view-model — Four-Suit Reprise", () => {
-  it("maps unpriced forms and removes every used card UUID from later rounds", () => {
-    const target = fourSuitTarget(1);
-    const sameCardCopy = {
-      ...fourSuitTarget(1, "four-suit-entry-1-copy"),
-      cardId: target.cardId,
-      cardSnapshot: target.cardSnapshot,
-    };
-    const nextTarget = fourSuitTarget(2);
-    const runtime: FourSuitRepriseSiteRuntime = {
-      kind: "gamble",
-      gameId: "four-suit-reprise",
-      selectionTrace: testGambleSelectionTrace("four-suit-reprise"),
-      isFarpoint: false,
-      drawCost: 25,
-      shuffleCommitments: [
-        parseShuffleCommitment("round-1"),
-        parseShuffleCommitment("round-2"),
-        parseShuffleCommitment("round-3"),
-      ],
-      committedCards: [
-        { rank: "4", suit: "diamonds" },
-        { rank: "7", suit: "hearts" },
-        { rank: "Q", suit: "clubs" },
-      ],
-      targets: [target, sameCardCopy, nextTarget],
-      rounds: [
-        {
-          roundNumber: 1,
-          shuffleCommitment: parseShuffleCommitment("round-1"),
-          card: { rank: "4", suit: "diamonds" },
-          targetEntryId: target.entryId,
-          targetCardId: target.cardId,
-          costPaid: 25,
-          outcome: "essence",
-          resultRevealed: true,
-          resultSettled: true,
-          essenceGained: 100,
-        },
-      ],
-      phase: "result",
-    };
-    const view = buildGambleSiteView({
-      state: {
-        ...testJourneyState(),
-        essence: 25,
-        deck: runtime.targets.map((candidate) => ({
-          entryId: candidate.entryId,
-          cardNumber: candidate.cardNumber,
-          transfiguration: null,
-          isBane: false,
-        })),
-        siteRuntime: { [GAMBLE_SITE.id]: runtime },
-      },
-      scene: null,
-      site: GAMBLE_SITE,
-      guide: GUIDE,
-      guideLine: GUIDE_LINE,
-    });
-
-    expect(view?.gameId).toBe("four-suit-reprise");
-    if (view?.gameId !== "four-suit-reprise") {
-      throw new Error("expected Four-Suit Reprise view");
-    }
-    expect(view.cards.map((card) => card.cardId)).toEqual([nextTarget.cardId]);
-    expect(view.result?.target.entryId).toBe(target.entryId);
-    expect(
-      view.result?.transfigurationCandidate.forms.map((form) => ({
-        type: form.type,
-        pricing: form.pricing,
-      })),
-    ).toEqual([
-      {
-        type: "Empowered",
-        pricing: { kind: "unpriced" },
-      },
-    ]);
-    expect(view.canPlayAgain).toBe(true);
-
-    const replayView = buildGambleSiteView({
-      state: {
-        ...testJourneyState(),
-        essence: 25,
-        deck: runtime.targets.map((candidate) => ({
-          entryId: candidate.entryId,
-          cardNumber: candidate.cardNumber,
-          transfiguration: null,
-          isBane: false,
-        })),
-        siteRuntime: {
-          [GAMBLE_SITE.id]: { ...runtime, phase: "choose" },
-        },
-      },
-      scene: null,
-      site: GAMBLE_SITE,
-      guide: GUIDE,
-      guideLine: GUIDE_LINE,
-    });
-    expect(replayView?.gameId).toBe("four-suit-reprise");
-    if (replayView?.gameId !== "four-suit-reprise") {
-      throw new Error("expected Four-Suit Reprise replay view");
-    }
-    expect(replayView.roundNumber).toBe(2);
-    expect(replayView.result).toBeNull();
-  });
-});
-
-describe("gamble-site-view-model — Blackjack", () => {
-  const runtime: BlackjackSiteRuntime = {
-    kind: "gamble",
-    gameId: "blackjack",
-    selectionTrace: testGambleSelectionTrace("blackjack"),
-    isFarpoint: false,
-    wagerCost: 50,
-    prizeEssence: 300,
-    attemptNumber: 1,
-    shuffleCommitment: parseShuffleCommitment("fixture-blackjack-commitment"),
-    committedDeck: [
-      { rank: "10", suit: "clubs" },
-      { rank: "6", suit: "hearts" },
-      { rank: "5", suit: "spades" },
-      { rank: "K", suit: "diamonds" },
-    ],
-    deckCursor: 4,
-    playerCards: [
-      { rank: "10", suit: "clubs" },
-      { rank: "6", suit: "hearts" },
-    ],
-    dealerCards: [
-      { rank: "5", suit: "spades" },
-      { rank: "K", suit: "diamonds" },
-    ],
-    dealerRevealed: false,
-    wagerPaid: true,
-    playerDecision: "deal",
-    outcome: null,
-    resultSettled: false,
-    essenceAwarded: 0,
-  };
-
-  it("maps the wager, flat prize, player hand, and concealed dealer hand", () => {
-    const view = buildGambleSiteView({
-      state: {
-        ...testJourneyState(),
-        essence: 64,
-        siteRuntime: { [GAMBLE_SITE.id]: runtime },
-      },
-      scene: null,
-      site: GAMBLE_SITE,
-      guide: GUIDE,
-      guideLine: GUIDE_LINE,
-    });
-    expect(view?.gameId).toBe("blackjack");
-    if (view?.gameId !== "blackjack") {
-      throw new Error("expected Blackjack view");
-    }
-    expect(view).toMatchObject({
-      handId: "fixture-blackjack-commitment",
-      wagerCost: 50,
-      prizeEssence: 300,
-      canAffordWager: true,
-      playerTotal: 16,
-      dealerTotal: 5,
-      dealerRevealed: false,
-      outcome: null,
-      canPlayAgain: false,
-    });
   });
 });
