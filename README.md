@@ -45,8 +45,41 @@ the origin that hosts it (see `.env.example`).
 | `npm run import-cycles` | Fails on a module-load read inside an import cycle |
 | `npm run build` | Production build into `dist/` |
 | `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check, every 10th game replayed interactively through the fold |
-| `npm run fuzz:engine -- --games 300 --weight-uuids <card-uuid,...>` | Target up to 30 distinct catalog card UUIDs: reserve one entry per target in each random deck, report target entry counts, and preserve targets in failure repro commands |
+| `npm run fuzz:engine -- --games 300 --weight-uuids <entity-uuid,...>` | Target catalog cards, avatars, authored battle Dreamsigns, Dreamwell cards, and figments; report observed inclusion and exercise counts and preserve targets in failure repro commands |
 | `npm run prepare-workspace` | Refresh art links and generated adapters |
+
+The engine fuzzer resolves `--weight-uuids` by UUID into branded, kind-specific
+identities. Repeated UUIDs are deduplicated. Unknown, malformed, ambiguous,
+journey-only, and non-recurring Dreamwell targets fail before games or log writes.
+Explicit Dreamsign targets require a non-empty authored battle ability list:
+pending, vanilla and authored-empty Dreamsigns fail because they cannot exercise
+battle text. Journey effects belong to the journey layer, outside the battle DSL. The full unweighted
+emblem pool includes synthetic fixtures and catalog avatars and Dreamsigns;
+selection uses the same seeded random policy. Catalog registration contributes
+no target coverage.
+
+Target inclusion and the `fuzz targets` summary have these contracts:
+
+| Kind | Setup | `included` | `exercised` |
+| --- | --- | --- | --- |
+| Card | Reserve one entry per UUID in each otherwise random deck, up to 30 distinct targets | Actual deck entries across both sides | `cardPlayed` events |
+| Avatar | Fill the two avatar slots from a deterministic window of requested UUIDs; one target fills both sides | Selected battle-init emblems | Applied triggered-ability resolutions and activations |
+| Dreamsign | Add every requested UUID to both sides alongside randomly selected emblems | Selected battle-init emblems | Applied triggered-ability resolutions and activations |
+| Dreamwell | In each targeted tier, choose a target window and fill the remaining candidate slots randomly to the catalog's `cardsPerRecurringOrder` limit; other tiers keep their full pool | Actual entries built into the shared Dreamwell deck at battle creation | `dreamwellDrawn` events |
+| Figment | Add synthetic first-turn Dreamsign support to the starting side; materialize one of each selected type through ordinary effects, up to the back-rank capacity | Actual figments materialized | The same materialization count |
+
+Emblem inclusion proves the requested identity participates in battle state; its
+exercise counter records triggers and activations, without claiming static-ability
+coverage or full text coverage. Dreamwell entries can remain undrawn in a short
+battle. Figment support uses catalog spark and abilities; capacity or competing
+first-turn effects can prevent materialization, which contributes zero coverage.
+Requested entities always retain their definitions in the full engine catalog.
+
+Limited target windows rotate by the absolute game ordinal (`--first`), so enough
+consecutive games select every requested avatar, Dreamwell card and figment. The
+same seed, targets, ordinal and catalog reproduce setup and outcomes. Failure
+records retain targets, actual coverage and ordinal; printed repro commands retain
+`--first`, targets and interactive replay frequency. Passing games write no logs.
 
 `npm run review` plans its checks from the diff against `master`. Lint covers
 `src/` and `scripts/`. The typecheck runs two projects side by side:

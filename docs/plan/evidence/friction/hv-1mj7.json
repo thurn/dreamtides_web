@@ -1,0 +1,203 @@
+{
+  "bead": "hv-1mj7",
+  "phase": 5,
+  "implementMin": 12,
+  "sourceBase": "0ce8c42c484a9bc9deca5fd6a40e79d04ee702c4",
+  "localValidationS": {
+    "npmInstall": 2,
+    "focused": 4.8,
+    "review": 17.13,
+    "knip": 26.26,
+    "reviewFullInitial": 49.47,
+    "reviewFullFinal": 78.57,
+    "targetedFuzz": 63.1,
+    "fuzz": 104.62
+  },
+  "timingNotes": "Command wall times include heavy-slot wait; install and focused times are reported stage totals. Mixed games themselves used 62.6 s wall / 67.4 s CPU; unweighted games used 46.0 s wall / 49.6 s CPU. implementMin is rounded dispatch-to-handoff time.",
+  "hostLoad": 4.09,
+  "hostLoadObservations": {
+    "install": 8.57,
+    "initialFullDispatch": 26.59,
+    "finalFull": 4.94,
+    "finalChecks": 4.09
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 136,
+    "jsdomFiles": 0,
+    "tests": 7
+  },
+  "friction": [],
+  "validation": {
+    "focused": "11 core tests passed at initial draft; final source has 13 core tests",
+    "review": "7 files, 96 tests passed",
+    "full": "218 files, 2598 tests passed",
+    "knip": "passed; no unused own additions",
+    "mixed": "300 games, 140854 steps, 2151 prompts, 197 interactive reruns, zero invariant/replay failures or feasibility bounds",
+    "unweighted": "200 games, 105274 steps, 1627 prompts, 185 interactive reruns, zero invariant/replay failures or feasibility bounds"
+  },
+  "smokeOptions": {
+    "mixed": {
+      "games": 300,
+      "seed": "hv-1mj7-mixed",
+      "first": 7,
+      "interactiveEvery": 10,
+      "weightUuids": [
+        "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+        "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+        "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+        "f0f5449e-01c2-4635-bce1-76b179fc2108",
+        "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+        "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        "de98477c-e216-4618-bff1-0e24bd982fdb",
+        "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+        "03e4e701-4720-4278-8198-9b7e0514d4cf",
+        "51caf26d-83bf-45a9-bc80-010d353277db",
+        "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+        "bb1a5acd-1a03-4aa3-826d-f0a301843845",
+        "86125402-a7ca-4bf2-ab36-f8a91ddd27bf",
+        "1745ab81-c8a9-4601-a3db-7dbcfa138c11"
+      ]
+    },
+    "unweighted": {
+      "games": 200,
+      "seed": "hv-1mj7-unweighted",
+      "first": 0,
+      "interactiveEvery": 10
+    }
+  },
+  "mixedTargetCoverage": [
+    {
+      "kind": "card",
+      "uuid": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+      "included": 610,
+      "exercised": 212
+    },
+    {
+      "kind": "avatar",
+      "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+      "included": 200,
+      "exercised": 0
+    },
+    {
+      "kind": "avatar",
+      "uuid": "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+      "included": 200,
+      "exercised": 0
+    },
+    {
+      "kind": "avatar",
+      "uuid": "f0f5449e-01c2-4635-bce1-76b179fc2108",
+      "included": 200,
+      "exercised": 0
+    },
+    {
+      "kind": "dreamwell",
+      "uuid": "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+      "included": 860,
+      "exercised": 237
+    },
+    {
+      "kind": "dreamwell",
+      "uuid": "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      "included": 860,
+      "exercised": 240
+    },
+    {
+      "kind": "dreamwell",
+      "uuid": "de98477c-e216-4618-bff1-0e24bd982fdb",
+      "included": 856,
+      "exercised": 233
+    },
+    {
+      "kind": "dreamwell",
+      "uuid": "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+      "included": 856,
+      "exercised": 241
+    },
+    {
+      "kind": "dreamwell",
+      "uuid": "03e4e701-4720-4278-8198-9b7e0514d4cf",
+      "included": 856,
+      "exercised": 238
+    },
+    {
+      "kind": "dreamwell",
+      "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+      "included": 856,
+      "exercised": 239
+    },
+    {
+      "kind": "dreamwell",
+      "uuid": "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+      "included": 856,
+      "exercised": 235
+    },
+    {
+      "kind": "figment",
+      "uuid": "bb1a5acd-1a03-4aa3-826d-f0a301843845",
+      "included": 300,
+      "exercised": 300
+    },
+    {
+      "kind": "figment",
+      "uuid": "86125402-a7ca-4bf2-ab36-f8a91ddd27bf",
+      "included": 301,
+      "exercised": 301
+    },
+    {
+      "kind": "figment",
+      "uuid": "1745ab81-c8a9-4601-a3db-7dbcfa138c11",
+      "included": 300,
+      "exercised": 300
+    }
+  ],
+  "contracts": {
+    "card": "included counts battle-init deck entries; exercised counts cardPlayed events",
+    "avatar": "included counts battle-init emblem selections; exercised counts applied triggers and activations, not static abilities",
+    "dreamsign": "same emblem counters; explicit targets require non-empty authored BASE_VARIANT battle abilities",
+    "dreamwell": "included counts actual built shared-deck entries; exercised counts actual draws",
+    "figment": "both counters count actual materialized target instances, including natural creators; synthetic first-turn support does not contribute unless materialization occurs"
+  },
+  "failurePaths": {
+    "errorMidStep": "Synthetic mid-game apply exception retains rotated init, failed action and actual first-turn materialization coverage.",
+    "reloadAndRepro": "Same seed/targets/ordinal reproduces complete FuzzGame and inline plus interactive replay hashes. A retained CLI diagnostic probe preserves mixed targets, ordinal and interactive replay frequency. MAX_SAFE_INTEGER rotation remains exact.",
+    "partialWrites": "New targeting has no persistent writes. Passing games write no logs. Existing synchronous failure writer partial-write/collision limitations are recorded in pre-existing evidence.",
+    "invalidAndStale": "Synthetic contracts reject unknown/malformed/empty/ambiguous/oversized card lists, non-recurring Dreamwell, pending/vanilla/authored-empty Dreamsigns, removed figment definitions, support UUID collisions and invalid ordinals. Five CLI probes each exit 1 before writing game logs.",
+    "concurrentExecution": "Pool definitions are read-only and each game allocates fresh setup/coverage. Repeated games in one engine reproduce exact outcomes and counts. Separate processes have independent target state; callers use distinct seed prefixes for the existing failure-file namespace."
+  },
+  "diagnosticProbe": "logs/fuzz/hv-1mj7-repro--1-1/hv-1mj7-repro--1.jsonl (intentional invalid ordinal, exit 1; zero battle exercise claimed)",
+  "cliRejections": [
+    {
+      "category": "malformed UUID",
+      "exit": 1
+    },
+    {
+      "category": "unknown UUID",
+      "exit": 1
+    },
+    {
+      "category": "missing value",
+      "exit": 1
+    },
+    {
+      "category": "journey-only Dreamsign",
+      "exit": 1
+    },
+    {
+      "category": "pending battle Dreamsign",
+      "exit": 1
+    }
+  ],
+  "runtimeLedger": {
+    "ownedServers": [],
+    "ownedBrowserContexts": [],
+    "ownedValidationProcesses": "all exited; no persistent runtime retained"
+  },
+  "browserQa": "inapplicable to headless fuzz harness; no UI changes",
+  "reviewNotes": [
+    "One initial lint error for raw kind metadata was repaired by eliminating that unused unsupported-target metadata path.",
+    "Production Dreamsign catalog has no authored battle lists; synthetic authored fixtures prove its contracts, and production smoke reports only available kinds.",
+    "Mixed smoke ordinals 7 through 306 have identical window arithmetic before and after large-safe-ordinal hardening; final full and unweighted checks use final source."
+  ]
+}

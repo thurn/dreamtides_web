@@ -2,7 +2,7 @@
  * Seeded engine fuzzer: plays Random-policy games, checks invariants after
  * every step, and replays each game to confirm its final state hash.
  *
- *   npm run fuzz:engine -- --games 200 [--seed fuzz] [--first 0] [--interactive-every 10] [--weight-uuids <card UUIDs>]
+ *   npm run fuzz:engine -- --games 200 [--seed fuzz] [--first 0] [--interactive-every 10] [--weight-uuids <entity UUIDs>]
  *
  * Every Nth game is also replayed through the fold, suspending at every
  * prompt, and must match the inline game exactly. The summary counts the
@@ -34,6 +34,7 @@ import {
   replayInteractively,
   withFuzzCardWeights,
   type FuzzPool,
+  type FuzzTargetCoverage,
 } from "../src/engine/testing/fuzz";
 import { battleSeed } from "../src/engine/state/ids";
 import { parseGameId } from "../src/types/identifiers";
@@ -58,8 +59,9 @@ const pool: FuzzPool = withFuzzCardWeights({
   figments: contentFigmentDefinitions(),
 }, weightInput);
 const weighted = pool.weightedCardIds ?? [];
-const targetEntries = new Map(weighted.map((id) => [id, 0]));
-const weightArgument = weighted.length === 0 ? "" : ` --weight-uuids ${weighted.join(",")}`;
+const targets = pool.targets ?? [];
+const targetCoverage: FuzzTargetCoverage[] = targets.map((target) => ({ target, included: 0, exercised: 0 }));
+const weightArgument = targets.length === 0 ? "" : ` --weight-uuids ${targets.map((target) => target.uuid).join(",")}`;
 const engine = createEngine(fuzzEngineCatalog(pool));
 let prompts = 0;
 let reruns = 0;
@@ -77,7 +79,7 @@ for (let index = first; index < first + games; index++) {
   let failure: string | null;
   let game;
   try {
-    game = playFuzzGame(engine, seed, pool);
+    game = playFuzzGame(engine, seed, pool, index);
     failure = game.failure;
     if (failure === null && replayFinalHash(engine, game) !== game.finalHash) {
       failure = "replay produced a different final hash";
@@ -92,10 +94,11 @@ for (let index = first; index < first + games; index++) {
     failure = error instanceof Error ? (error.stack ?? error.message) : String(error);
   }
   if (game !== undefined) {
-    for (const side of ["player", "enemy"] as const) {
-      for (const entry of game.init.decks[side]) {
-        const count = targetEntries.get(entry.cardId);
-        if (count !== undefined) targetEntries.set(entry.cardId, count + 1);
+    for (const coverage of game.targetCoverage) {
+      const aggregate = targetCoverage.find((entry) => entry.target.kind === coverage.target.kind && entry.target.uuid === coverage.target.uuid);
+      if (aggregate !== undefined) {
+        aggregate.included += coverage.included;
+        aggregate.exercised += coverage.exercised;
       }
     }
     steps += game.steps;
@@ -113,12 +116,12 @@ for (let index = first; index < first + games; index++) {
     const gameId = parseGameId(seed);
     const timestamp = new Date().toISOString();
     const lines = [
-      JSON.stringify({ event: "fuzz.failure", gameId, timestamp, seed, failure, weightedCardIds: weighted, failedAction: game?.failedAction ?? null }),
+      JSON.stringify({ event: "fuzz.failure", gameId, timestamp, seed, failure, weightedCardIds: weighted, targets, targetCoverage: game?.targetCoverage ?? [], ordinal: index, failedAction: game?.failedAction ?? null }),
       ...(game === undefined ? [] : fuzzGameLog(engine, game).map((record) => JSON.stringify(engineLogLine(record, gameId, timestamp)))),
     ];
     writeFileSync(`${directory}/${seed}.jsonl`, `${lines.join("\n")}\n`);
     console.error(`FAIL ${seed}: ${failure}`);
-    console.error(`  repro: npm run fuzz:engine -- --seed ${prefix} --first ${String(index)} --games 1${weightArgument}`);
+    console.error(`  repro: npm run fuzz:engine -- --seed ${prefix} --first ${String(index)} --games 1${weightArgument} --interactive-every ${String(interactiveEvery)}`);
   }
 }
 
@@ -132,4 +135,4 @@ console.log(
     `feasibility bounded ${JSON.stringify(bounded)}; results ${JSON.stringify(results)}; failures ${String(failures)}`,
 );
 process.exitCode = failures > 0 ? 1 : 0;
-if (weighted.length > 0) console.log(`fuzz targets: ${JSON.stringify([...targetEntries].map(([uuid, entries]) => ({ uuid, entries })))}`);
+if (targets.length > 0) console.log(`fuzz targets: ${JSON.stringify(targetCoverage.map(({ target, included, exercised }) => ({ ...target, included, exercised })))}`);

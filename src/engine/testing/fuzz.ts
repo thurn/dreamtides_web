@@ -16,7 +16,7 @@ import type { Answer, Prompt } from "../prompts/types";
 import type { Action } from "../rules/actions";
 import { hashString, stateHash, type StateHash } from "../state/hash";
 import type { BattleSeed, Side } from "../state/ids";
-import { battleSeed } from "../state/ids";
+import { BACK_RANK_SIZE, SIDES, battleSeed, parseFigmentId } from "../state/ids";
 import type { BattleInit, BattleResult, BattleState, DeckEntry } from "../state/types";
 import { stepForAction, type StepObserver } from "../steps/driver";
 import type { Step } from "../steps/kinds";
@@ -31,12 +31,18 @@ import { PolicyRandom, randomAction } from "../policy/random";
 import { SYNTHETIC, SYNTHETIC_CARDS, SYNTHETIC_DREAMWELL, syntheticId } from "./synthetic-cards";
 import { PROMPTING_CARDS } from "./synthetic-effects";
 import { DSL_CARDS } from "./dsl-cards";
-import { AVATAR, DREAMSIGN, STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stack-cards";
-import { TRIGGER_AVATAR, TRIGGER_CARDS, TRIGGER_DREAMSIGN, TRIGGER_EMBLEMS } from "./trigger-cards";
-import { CONTINUOUS_AVATAR, CONTINUOUS_CARDS, CONTINUOUS_DREAMSIGN, CONTINUOUS_EMBLEMS } from "./continuous-cards";
+import { STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stack-cards";
+import { TRIGGER_CARDS, TRIGGER_EMBLEMS } from "./trigger-cards";
+import { CONTINUOUS_CARDS, CONTINUOUS_EMBLEMS } from "./continuous-cards";
 import { ZONE_CARDS, ZONE_FIGMENTS } from "./zone-cards";
 import { LOOP_CARDS } from "./loop-cards";
 import { parseCardId, type CardId } from "../../types/card-identity";
+import { parseAvatarId, parseDreamsignId, parseDreamwellCardId, parseSemanticEntityId, type AvatarId, type DreamsignId, type DreamwellCardId } from "../../types/identifiers";
+import type { FigmentId, InstanceId } from "../state/ids";
+import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
+import { atStartOfFirstTurn, triggered } from "../dsl/triggers";
+import { materializeFigments } from "../effects/primitives";
+import { BASE_VARIANT } from "../dsl/types";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
 export interface RecordedAction {
@@ -47,6 +53,7 @@ export interface RecordedAction {
 
 export interface FuzzGame {
   readonly init: BattleInit;
+  readonly targetCoverage: readonly FuzzTargetCoverage[];
   /** Answers given while the battle was created. */
   readonly startAnswers: readonly RecordedAnswer[];
   readonly actions: readonly RecordedAction[];
@@ -89,6 +96,21 @@ const FUZZ_EMBLEMS: EmblemDefinitions = {
   dreamsigns: [...(SYNTHETIC_EMBLEMS.dreamsigns ?? []), ...(TRIGGER_EMBLEMS.dreamsigns ?? []), ...(CONTINUOUS_EMBLEMS.dreamsigns ?? [])],
 };
 
+/** Requested catalog entities, with each UUID retaining its domain brand. */
+export type FuzzTarget =
+  | { readonly kind: "card"; readonly uuid: CardId }
+  | { readonly kind: "avatar"; readonly uuid: AvatarId }
+  | { readonly kind: "dreamsign"; readonly uuid: DreamsignId }
+  | { readonly kind: "dreamwell"; readonly uuid: DreamwellCardId }
+  | { readonly kind: "figment"; readonly uuid: FigmentId };
+
+/** Counts observed setup inclusion and engine events; see README for each kind's units. */
+export interface FuzzTargetCoverage {
+  readonly target: FuzzTarget;
+  included: number;
+  exercised: number;
+}
+
 /**
  * The content a fuzz game draws from beside the synthetic fixtures: the
  * cards that fill half of each deck, the shared Dreamwell, and the emblems
@@ -99,13 +121,14 @@ export interface FuzzPool {
   readonly cards: readonly EngineCardDefinition[];
   /** One reserved entry per requested UUID in each otherwise random deck. */
   readonly weightedCardIds?: readonly CardId[];
+  readonly targets?: readonly FuzzTarget[];
   readonly dreamwell: readonly EngineDreamwellDefinition[];
   readonly emblems: EmblemDefinitions;
   readonly figments: readonly EngineFigmentDefinition[];
 }
 
 function weightedCards(pool: FuzzPool): readonly CardId[] {
-  const targets = pool.weightedCardIds ?? [];
+  const targets = pool.targets?.flatMap((target) => target.kind === "card" ? [target.uuid] : []) ?? pool.weightedCardIds ?? [];
   if (targets.length === 0) return targets;
   if (targets.length > DECK_SIZE) throw new Error(`At most ${String(DECK_SIZE)} distinct card UUIDs can be targeted.`);
   const known = new Set(pool.cards.map((card) => card.id));
@@ -115,14 +138,83 @@ function weightedCards(pool: FuzzPool): readonly CardId[] {
   return targets;
 }
 
-/** Parse the CLI's card targets, retaining the full catalog and normal sampling. */
+/** Available targets are resolved by UUID and retain their identity domain. */
+function availableTargets(pool: FuzzPool): FuzzTarget[] {
+  return [
+    ...pool.cards.map((card): FuzzTarget => ({ kind: "card", uuid: card.id })),
+    ...(pool.emblems.avatars ?? []).map((avatar): FuzzTarget => ({ kind: "avatar", uuid: avatar.id })),
+    ...(pool.emblems.dreamsigns ?? []).map((sign): FuzzTarget => ({ kind: "dreamsign", uuid: sign.id })),
+    ...pool.dreamwell.map((card): FuzzTarget => ({ kind: "dreamwell", uuid: card.id })),
+    ...pool.figments.map((figment): FuzzTarget => ({ kind: "figment", uuid: figment.id })),
+  ];
+}
+
+function fuzzTargets(pool: FuzzPool): readonly FuzzTarget[] {
+  const targets = pool.targets ?? weightedCards(pool).map((uuid): FuzzTarget => ({ kind: "card", uuid }));
+  const known = availableTargets(pool);
+  for (const target of targets) {
+    if (target.kind === "dreamsign") {
+      const sign = pool.emblems.dreamsigns?.find((sign) => sign.id === target.uuid);
+      if (sign?.status !== "authored" || sign.abilities(BASE_VARIANT).length === 0) {
+        throw new Error(`Dreamsign fuzz target requires non-empty authored battle abilities (journey-only, pending and vanilla targets are unsupported): ${target.uuid}`);
+      }
+    }
+    if (target.kind === "dreamwell") {
+      const order = pool.dreamwell.find((card) => card.id === target.uuid)?.order;
+      if (order === undefined || !DREAMWELL_RULES.recurringOrders.includes(order)) throw new Error(`Unsupported non-recurring Dreamwell fuzz target: ${target.uuid}`);
+    }
+    if (!known.some((entry) => entry.kind === target.kind && entry.uuid === target.uuid)) {
+      throw new Error(`Unavailable fuzz ${target.kind} target: ${target.uuid}`);
+    }
+  }
+  return targets;
+}
+
+/** Parse mixed catalog UUID targets, retaining the full engine catalog and card sampling. */
 export function withFuzzCardWeights(pool: FuzzPool, input: string | undefined): FuzzPool {
   if (input === undefined) return pool;
-  if (input.trim().length === 0) throw new Error("--weight-uuids requires a comma-separated list of card UUIDs.");
-  const weightedCardIds = [...new Set(input.split(",").map((value) => parseCardId(value.trim())))];
-  const targeted = { ...pool, weightedCardIds };
+  if (input.trim().length === 0) throw new Error("--weight-uuids requires a comma-separated list of entity UUIDs.");
+  const known = availableTargets(pool);
+  const targets = [...new Set(input.split(",").map((value) => parseSemanticEntityId(value.trim())))].map((uuid): FuzzTarget => {
+    const matches = known.filter((entry) => String(entry.uuid) === uuid);
+    if (matches.length !== 1) throw new Error(`Unknown or ambiguous fuzz target UUID: ${uuid}`);
+    switch (matches[0].kind) {
+      case "card": return { kind: "card", uuid: parseCardId(uuid) };
+      case "avatar": return { kind: "avatar", uuid: parseAvatarId(uuid) };
+      case "dreamsign": return { kind: "dreamsign", uuid: parseDreamsignId(uuid) };
+      case "dreamwell": {
+        const id = parseDreamwellCardId(uuid);
+        const order = pool.dreamwell.find((card) => card.id === id)?.order;
+        if (order === undefined || !DREAMWELL_RULES.recurringOrders.includes(order)) {
+          throw new Error(`Unsupported non-recurring Dreamwell fuzz target: ${uuid}`);
+        }
+        return { kind: "dreamwell", uuid: id };
+      }
+      case "figment": return { kind: "figment", uuid: parseFigmentId(uuid) };
+    }
+  });
+  const weightedCardIds = targets.flatMap((target) => target.kind === "card" ? [target.uuid] : []);
+  const targeted = { ...pool, weightedCardIds, targets };
   weightedCards(targeted);
+  fuzzTargets(targeted);
   return targeted;
+}
+
+/** Consecutive absolute game ordinals cover every target despite battle slot limits. */
+function targetWindow<Id>(ids: readonly Id[], capacity: number, ordinal: number): Id[] {
+  return Array.from({ length: Math.min(ids.length, capacity) }, (_, index) => ids[((ordinal % ids.length) * capacity + index) % ids.length]);
+}
+
+/** Synthetic support creates the selected types through normal materialization effects. */
+function figmentSupport(pool: FuzzPool) {
+  const ids = fuzzTargets(pool).flatMap((target) => target.kind === "figment" ? [target.uuid] : []);
+  return ids.map((uuid, index) => {
+    const id = parseDreamsignId(`5e5e5e5e-0000-4000-8000-${(0xf00 + index).toString(16).padStart(12, "0")}`);
+    if (availableTargets(pool).some((target) => String(target.uuid) === id) || FUZZ_EMBLEMS.dreamsigns?.some((sign) => sign.id === id)) {
+      throw new Error(`Fuzz figment support UUID collides with catalog content: ${id}`);
+    }
+    return { id, status: "authored" as const, abilities: () => [triggered(atStartOfFirstTurn(), materializeFigments(uuid))] };
+  });
 }
 
 function pending(index: number, base: EngineCardDefinition, changes: Partial<EngineCardDefinition> = {}): EngineCardDefinition {
@@ -172,7 +264,7 @@ export function fuzzEngineCatalog(pool: FuzzPool, extra: readonly EngineCardDefi
     pool.dreamwell,
     {
       avatars: [...(FUZZ_EMBLEMS.avatars ?? []), ...(pool.emblems.avatars ?? [])],
-      dreamsigns: [...(FUZZ_EMBLEMS.dreamsigns ?? []), ...(pool.emblems.dreamsigns ?? [])],
+      dreamsigns: [...(FUZZ_EMBLEMS.dreamsigns ?? []), ...(pool.emblems.dreamsigns ?? []), ...figmentSupport(pool)],
     },
     [...ZONE_FIGMENTS, ...pool.figments],
   );
@@ -195,20 +287,42 @@ export function randomDeck(random: PolicyRandom, pool: FuzzPool): DeckEntry[] {
   return deck;
 }
 
-export function fuzzInit(seed: BattleSeed, pool: FuzzPool): BattleInit {
+export function fuzzInit(seed: BattleSeed, pool: FuzzPool, ordinal = 0): BattleInit {
+  if (!Number.isSafeInteger(ordinal) || ordinal < 0) throw new Error("Fuzz game ordinal must be a non-negative safe integer.");
   const random = new PolicyRandom(battleSeed(`decks|${seed}`));
-  const avatars = [...Object.values(AVATAR), ...Object.values(TRIGGER_AVATAR), ...Object.values(CONTINUOUS_AVATAR)].map((avatar) => avatar.id);
-  const dreamsigns = [DREAMSIGN.points, ...Object.values(TRIGGER_DREAMSIGN), ...Object.values(CONTINUOUS_DREAMSIGN)].map((dreamsign) => dreamsign.id);
-  const someDreamsigns = () => dreamsigns.filter(() => random.next() < 0.3);
-  return {
-    seed,
-    scoreToWin: 25,
-    startingSide: random.next() < 0.5 ? "player" : "enemy",
-    decks: { player: randomDeck(random, pool), enemy: randomDeck(random, pool) },
-    dreamwell: pool.dreamwell.map((card) => card.id),
-    avatars: { player: random.pick(avatars), enemy: random.pick(avatars) },
-    dreamsigns: { player: someDreamsigns(), enemy: someDreamsigns() },
-  };
+  const targets = fuzzTargets(pool);
+  const avatars = [...(FUZZ_EMBLEMS.avatars ?? []), ...(pool.emblems.avatars ?? [])].map((avatar) => avatar.id);
+  const dreamsigns = [...(FUZZ_EMBLEMS.dreamsigns ?? []), ...(pool.emblems.dreamsigns ?? [])].map((dreamsign) => dreamsign.id);
+  const avatarTargets = targetWindow(targets.flatMap((target) => target.kind === "avatar" ? [target.uuid] : []), SIDES.length, ordinal);
+  const dreamsignTargets = targets.flatMap((target) => target.kind === "dreamsign" ? [target.uuid] : []);
+  const support = targetWindow(figmentSupport(pool), BACK_RANK_SIZE, ordinal).map((sign) => sign.id);
+  const someDreamsigns = () => [...new Set([...dreamsigns.filter(() => random.next() < 0.3), ...dreamsignTargets])];
+  const startingSide = random.next() < 0.5 ? "player" : "enemy";
+  const decks = { player: randomDeck(random, pool), enemy: randomDeck(random, pool) };
+  const dreamwell = pool.dreamwell.map((card) => card.id);
+  for (const order of DREAMWELL_RULES.recurringOrders) {
+    const tier = pool.dreamwell.filter((card) => card.order === order);
+    const tierTargets = targets.flatMap((target) => target.kind === "dreamwell" && tier.some((card) => card.id === target.uuid) ? [target.uuid] : []);
+    if (tierTargets.length === 0) continue;
+    const selected = targetWindow(tierTargets, DREAMWELL_RULES.cardsPerRecurringOrder, ordinal);
+    const remaining = tier.filter((card) => !selected.includes(card.id));
+    while (selected.length < Math.min(tier.length, DREAMWELL_RULES.cardsPerRecurringOrder)) {
+      const card = random.pick(remaining);
+      selected.push(card.id);
+      remaining.splice(remaining.indexOf(card), 1);
+    }
+    for (let index = dreamwell.length - 1; index >= 0; index--) {
+      if (tier.some((card) => card.id === dreamwell[index]) && !selected.includes(dreamwell[index])) dreamwell.splice(index, 1);
+    }
+  }
+  const chosenAvatars = { player: random.pick(avatars), enemy: random.pick(avatars) };
+  if (avatarTargets.length > 0) {
+    chosenAvatars.player = avatarTargets[0];
+    chosenAvatars.enemy = avatarTargets[1] ?? avatarTargets[0];
+  }
+  const chosenDreamsigns = { player: someDreamsigns(), enemy: someDreamsigns() };
+  chosenDreamsigns[startingSide].push(...support);
+  return { seed, scoreToWin: 25, startingSide, decks, dreamwell, avatars: chosenAvatars, dreamsigns: chosenDreamsigns };
 }
 
 function eventsDigest(events: readonly EngineEvent[]): number {
@@ -291,8 +405,18 @@ export function playRandomActions(engine: Engine, state: BattleState, policy: Po
 }
 
 /** Plays one seeded game with the Random policy on both sides, checking invariants after every step. */
-export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): FuzzGame {
-  const init = fuzzInit(seed, pool);
+export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, ordinal = 0): FuzzGame {
+  const init = fuzzInit(seed, pool, ordinal);
+  const targetCoverage = fuzzTargets(pool).map((target): FuzzTargetCoverage => ({ target, included: 0, exercised: 0 }));
+  for (const coverage of targetCoverage) {
+    const { target } = coverage;
+    for (const side of ["player", "enemy"] as const) {
+      if (target.kind === "card") coverage.included += init.decks[side].filter((entry) => entry.cardId === target.uuid).length;
+      if (target.kind === "avatar" && init.avatars?.[side] === target.uuid) coverage.included += 1;
+      if (target.kind === "dreamsign") coverage.included += init.dreamsigns?.[side]?.filter((id) => id === target.uuid).length ?? 0;
+    }
+  }
+  const createdFigments = new Map<InstanceId, FigmentId>();
   let prompts = 0;
   let steps = 0;
   let boundedLegality = 0;
@@ -317,6 +441,34 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
       },
       observe: (observed, step, stepEvents) => {
         steps += 1;
+        for (const event of stepEvents) {
+          if (event.kind === "cardCreated" && event.printing.kind === "figment") createdFigments.set(event.instance, event.printing.figment);
+          for (const coverage of targetCoverage) {
+            const { target } = coverage;
+            if (target.kind === "dreamwell" && event.kind === "dreamwellDrawn" && event.card === target.uuid) coverage.exercised += 1;
+            if (target.kind === "figment" && event.kind === "materialized" && createdFigments.get(event.instance) === target.uuid) {
+              coverage.included += 1;
+              coverage.exercised += 1;
+            }
+            if (target.kind === "card" && event.kind === "cardPlayed") {
+              const printing = observed.instances[event.instance]?.printing;
+              if (printing?.kind === "card" && printing.cardId === target.uuid) coverage.exercised += 1;
+            }
+            if ((target.kind === "avatar" || target.kind === "dreamsign") &&
+                (event.kind === "abilityActivated" || (event.kind === "triggerResolved" && event.applied))) {
+              const source = event.source;
+              if (source !== null && typeof source !== "string") {
+                const id = source.kind === "avatar" ? init.avatars?.[source.side] : init.dreamsigns?.[source.side]?.[source.index];
+                if (source.kind === target.kind && id === target.uuid) coverage.exercised += 1;
+              }
+            }
+          }
+        }
+        if (step.kind === "beginBattle") {
+          for (const coverage of targetCoverage) {
+            if (coverage.target.kind === "dreamwell") coverage.included += observed.dreamwell.deck.filter((id) => id === coverage.target.uuid).length;
+          }
+        }
         if (failure === null) {
           const problems = [...invariantViolations(observed, engine.catalog), ...eventRedaction.check(stepEvents, beforeStep, observed)];
           if (problems.length > 0) {
@@ -349,6 +501,7 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): 
   }
   return {
     init,
+    targetCoverage,
     startAnswers,
     actions,
     result: state.result,
