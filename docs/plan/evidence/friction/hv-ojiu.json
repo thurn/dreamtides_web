@@ -1,0 +1,23 @@
+{
+  "bead": "hv-ojiu",
+  "phase": 5,
+  "implementMin": 7.9,
+  "localValidationS": {
+    "baselineTestStep": 0.4,
+    "focused": 8.06,
+    "review": 21.43,
+    "knip": 3.46,
+    "fullIncludingQueue": 63.67
+  },
+  "hostLoad": 26.24,
+  "testDelta": {
+    "files": 0,
+    "lines": 56,
+    "jsdomFiles": 0,
+    "cases": 15
+  },
+  "queueWaitS": {
+    "full": null
+  },
+  "friction": []
+}

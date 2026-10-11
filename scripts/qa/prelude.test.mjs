@@ -335,9 +335,65 @@ describe("QA engine event observation", () => {
       { kind: "triggerQueued", source: { kind: "avatar", side: "enemy" }, controller: "enemy", ability: 0, node: null, subject: null },
       { kind: "cardDrawn", side: "enemy", instance: "i7" },
     ]);
-    return { qa, probe, win, click, publish: () => probe.events.push(...later) };
+    return { qa, probe, win, click, evaluate, publish: () => probe.events.push(...later) };
   }
   const keys = (/** @type {{ events: { seq: number, index: number }[] }} */ page) => page.events.map(({ seq, index }) => [seq, index]);
+  const malformed = [null, true, 7, "kind", [], () => {}].map((value) => ({ label: Array.isArray(value) ? "array" : String(value), value }));
+
+  it("rejects direct event fields instead of returning unrelated recorded events", async () => {
+    const { qa, evaluate, publish } = await probed();
+    publish();
+    const options = /** @type {Parameters<typeof qa.battle.events>[1]} */ (/** @type {unknown} */ ({ kind: "laneResolved", challenger: "i5" }));
+    await expect(qa.battle.events(null, options)).rejects.toThrow(/qa\.battle\.events:.*options.*match/);
+    expect(evaluate).not.toHaveBeenCalled();
+  });
+
+  it.each(malformed)("rejects malformed options $label before reading the page", async ({ value }) => {
+    const { qa, evaluate } = await probed();
+    const options = /** @type {Parameters<typeof qa.battle.events>[1]} */ (/** @type {unknown} */ (value));
+    await expect(qa.battle.events(null, options)).rejects.toThrow(/qa\.battle\.events:.*options.*object/);
+    expect(evaluate).not.toHaveBeenCalled();
+  });
+
+  it.each(malformed)("rejects malformed match $label before reading the page", async ({ value }) => {
+    const { qa, evaluate } = await probed();
+    const match = /** @type {import('./prelude.mjs').EventMatch} */ (/** @type {unknown} */ (value));
+    await expect(qa.battle.events(null, { match })).rejects.toThrow(/qa\.battle\.events:.*match.*object/);
+    expect(evaluate).not.toHaveBeenCalled();
+  });
+
+  it("rejects unknown own option fields even beside a valid match", async () => {
+    const { qa, evaluate } = await probed();
+    for (const value of [
+      { match: { kind: "cardDrawn" }, challenger: "i5" },
+      Object.defineProperty({}, "kind", { value: "laneResolved" }),
+      { [Symbol("kind")]: "laneResolved" },
+    ]) {
+      const options = /** @type {Parameters<typeof qa.battle.events>[1]} */ (/** @type {unknown} */ (value));
+      await expect(qa.battle.events(null, options)).rejects.toThrow(/qa\.battle\.events: unknown options field.*match/);
+    }
+    expect(evaluate).not.toHaveBeenCalled();
+  });
+
+  it("preserves default options and record prototypes with arbitrary nested event fields", async () => {
+    const { qa, probe } = await probed();
+    const empty = {};
+    Reflect.setPrototypeOf(empty, null);
+    for (const options of [undefined, {}, { match: undefined, limit: undefined }, { match: {} }, empty]) {
+      expect(keys(await qa.battle.events(null, options))).toEqual([[4, 0], [4, 1]]);
+    }
+    const detail = { tags: ["synthetic"], metadata: { value: 1 } };
+    probe.events.push(...recorded(7, [{ kind: "syntheticEvent", detail, arbitraryField: 7 }]));
+    for (const prototype of [null, { inheritedField: "ignored" }]) {
+      const match = { detail, arbitraryField: 7 };
+      Reflect.setPrototypeOf(match, prototype);
+      const options = {};
+      Reflect.setPrototypeOf(options, { match, limit: 1 });
+      expect(keys(await qa.battle.events(null, options))).toEqual([[7, 0]]);
+    }
+    const { events } = await qa.battle.events(null, { match: { detail: { ...detail, tags: ["different"] } } });
+    expect(events).toEqual([]);
+  });
 
   it("keys repeated events by sequence and batch index and observes no new event twice", async () => {
     const { qa, probe, publish } = await probed();

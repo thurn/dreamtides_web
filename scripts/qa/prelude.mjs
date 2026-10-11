@@ -321,7 +321,8 @@
  *   Reads, without acting or waiting, the recorded events after `cursor`
  *   (`null`: from the first) that have `match`'s fields, at most `limit`
  *   (default 100, at most 500). Fails when the probe is missing or shows
- *   another battle than the cursor's.
+ *   another battle than the cursor's. Options and match must be non-null,
+ *   non-array objects; unknown top-level option fields fail before reading.
  * @property {(cursor: EventCursor | null, match: EventMatch, options?: { count?: number, limit?: number, timeout?: number, label?: string }) => Promise<EventPage>} waitForEvents
  *   Waits, without acting, until at least `count` (default 1) recorded
  *   events after `cursor` have `match`'s fields, then reads them as
@@ -1652,7 +1653,18 @@ export function createBattleDriver(qa) {
   };
 
   /** @type {BattleDriver["events"]} */
-  const events = async (cursor, { match = {}, limit = 100 } = {}) => {
+  const events = async (cursor, options = {}) => {
+    if (options === null || typeof options !== "object" || Array.isArray(options)) {
+      throw new Error("qa.battle.events: options must be a non-null, non-array object; use { match: { ... }, limit }");
+    }
+    const unknown = Reflect.ownKeys(options).find((key) => key !== "match" && key !== "limit");
+    if (unknown !== undefined) {
+      throw new Error(`qa.battle.events: unknown options field ${String(unknown)}; event fields belong in match`);
+    }
+    const { match = {}, limit = 100 } = options;
+    if (match === null || typeof match !== "object" || Array.isArray(match)) {
+      throw new Error("qa.battle.events: match must be a non-null, non-array object");
+    }
     const page = await qa.read(observeEvents, { cursor, match, limit: boundedLimit(limit), count: 0 });
     if (page === null || page.error !== undefined) throw new Error(`qa.battle.events: ${page?.error ?? "no observation"}`);
     return page;

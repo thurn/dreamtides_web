@@ -326,6 +326,10 @@ battle uses it rather than its own pass loop:
     every instance the event names in the committed state as read. The
     returned cursor continues the read without skipping or repeating an
     event; a read with nothing new returns no events and the same cursor.
+    For example, `qa.battle.events(cursor, { match: { kind: "laneResolved",
+    challenger: source } })` scopes a read to that challenger. Omit options
+    for an unfiltered read. Options accept only `match` and `limit`; options
+    and `match` must be non-null, non-array objects.
   - `qa.battle.waitForEvents(cursor, match, { count?, limit?, timeout?,
     label? })` waits until `count` (default 1) such events exist, then reads
     them as `events` does, failing on `__caps` or `timeout` (default 15 s).
