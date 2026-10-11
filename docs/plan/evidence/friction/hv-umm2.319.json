@@ -1,0 +1,172 @@
+{
+  "bead": "hv-umm2.319",
+  "phase": 5,
+  "implementMin": 6,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "install": 2.448,
+    "focused": 3.797,
+    "negative": 1.845,
+    "review": 4.071,
+    "knip": 2.607,
+    "review-final": 3.487,
+    "knip-final": 1.907,
+    "review-clean": 14.106,
+    "knip-clean": 1.968
+  },
+  "heavyQueueWaitS": 0.169,
+  "hostLoad": 3.74267578125,
+  "validationRuns": [
+    {
+      "label": "install",
+      "exitCode": 0,
+      "waitS": 0.02,
+      "executionS": 2.448,
+      "hostLoad": 5.0224609375
+    },
+    {
+      "label": "focused",
+      "exitCode": 0,
+      "waitS": 0.018,
+      "executionS": 3.797,
+      "hostLoad": 2.74267578125
+    },
+    {
+      "label": "negative",
+      "exitCode": 1,
+      "waitS": 0.018,
+      "executionS": 1.845,
+      "hostLoad": 3.09375
+    },
+    {
+      "label": "review",
+      "exitCode": 1,
+      "waitS": 0.019,
+      "executionS": 4.071,
+      "hostLoad": 3.14306640625
+    },
+    {
+      "label": "knip",
+      "exitCode": 0,
+      "waitS": 0.019,
+      "executionS": 2.607,
+      "hostLoad": 3.29150390625
+    },
+    {
+      "label": "review-final",
+      "exitCode": 1,
+      "waitS": 0.018,
+      "executionS": 3.487,
+      "hostLoad": 3.04248046875
+    },
+    {
+      "label": "knip-final",
+      "exitCode": 0,
+      "waitS": 0.019,
+      "executionS": 1.907,
+      "hostLoad": 3.04248046875
+    },
+    {
+      "label": "review-clean",
+      "exitCode": 0,
+      "waitS": 0.019,
+      "executionS": 14.106,
+      "hostLoad": 3.74267578125
+    },
+    {
+      "label": "knip-clean",
+      "exitCode": 0,
+      "waitS": 0.019,
+      "executionS": 1.968,
+      "hostLoad": 3.74267578125
+    }
+  ],
+  "baseOid": "19d05793708cc0b90b64b35d5907b56091f3225f",
+  "sourceFileSha256": {
+    "src/engine/rules/costs.test.ts": "6b21514ff5d54254115adc96a55644d985b45ba06841f544f265a121172f59d7",
+    "src/engine/effects/primitives/cards.test.ts": "10e46391ebf47e83aeac9f7d4338927db0865cef4b9b561c5b748513f9df6af2",
+    "src/engine/triggers/triggers.test.ts": "8573c42ff5792e0e606f89d4b3329da67acf2d90d5ce1bd06ea64c4936fe8524"
+  },
+  "nonTestProductionDeltaLines": 0,
+  "testDelta": {
+    "files": 0,
+    "lines": 40,
+    "cases": 1,
+    "jsdomFiles": 0
+  },
+  "focused": {
+    "files": 3,
+    "tests": 211,
+    "result": "passed"
+  },
+  "review": {
+    "files": 3,
+    "tests": 211,
+    "result": "passed"
+  },
+  "negativeProbe": {
+    "command": "npm test -- src/engine/rules/costs.test.ts -t \"excludes the self-paying source from targets\"",
+    "result": "expected failure",
+    "failingAssertion": "public target prompt candidates exclude the self-paying source",
+    "assertionLocation": "src/engine/rules/costs.test.ts:753",
+    "receivedCandidates": [
+      "i1",
+      "i2",
+      "i3"
+    ],
+    "expectedCandidates": [
+      "i2",
+      "i3"
+    ],
+    "testFailures": 1,
+    "skippedTests": 47,
+    "restoration": {
+      "costsSha256": "6de066b07913f088bcf72c2d2166e7f9cec69b179bd9b76493fcfb397be49cf9",
+      "restoredExactly": true
+    },
+    "log": "/tmp/hv-umm2.319-negative.log",
+    "scope": "Temporary self-abandon candidate-vs-used exception in costs.ts, explicitly authorized by the session, restored in finally; no committed production mutation."
+  },
+  "friction": [
+    {
+      "kind": "local-edit-correction",
+      "detail": "Initial review lint found an omitted ChooseTargetsPrompt type import and unused stateCardInfo import after the heuristic test replacement. The first correction script fixed the type import but expected a different import shape for stateCardInfo, so a second lint run exposed that remaining import. Exact import correction passes final review. All failed timings retained.",
+      "tag": "local-edit-correction",
+      "minutes": 1
+    },
+    {
+      "kind": "probe-report-format",
+      "detail": "The negative test failed the intended candidates assertion. A post-run evidence parser expected the full source line; Vitest ellipsized that display. Verification uses the actual assertion values, failing location and single-test failure. Production bytes were restored by finally even when the parser failed.",
+      "tag": "probe-report-format",
+      "minutes": 1
+    }
+  ],
+  "d19": {
+    "reasonForExistingLargeModules": "Three existing shared contract groups; hv-umm2.314 owns module organization. This follow-up adds one trigger case and strengthens/replaces two existing cases with synthetic public outcomes. No new files or environments.",
+    "linesBefore": {
+      "costs": 1010,
+      "cards": 2263,
+      "triggers": 1522
+    },
+    "linesAfter": {
+      "costs": 1018,
+      "cards": 2267,
+      "triggers": 1550
+    }
+  },
+  "qa": {
+    "browser": "not required: production runtime and presentation unchanged",
+    "fuzz": "not required for test and normative documentation follow-up",
+    "full": "not required: test infrastructure, repository configuration and production architecture unchanged",
+    "runtimeLedger": []
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.319-1"
+  ],
+  "cardIssues": 0,
+  "acceptance": [
+    "Safeguard mutation fails the added public target-candidates assertion; illegal source answer bounces without changing committed state; legal ally target commits self-abandon payment.",
+    "Chosen discard fires only the hand holder's discard listener for both controllers, including a card owned by the chooser; exact UUID event, trigger and energy outcomes are asserted.",
+    "Every scripted legal opponent-hand candidate obeys discard/payment contract; chosen-discard test assertions do not depend on Greedy ordering."
+  ]
+}

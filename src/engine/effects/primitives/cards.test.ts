@@ -55,7 +55,7 @@ import { SYNTHETIC, syntheticId, testCatalog } from "../../testing/synthetic-car
 import { at, passUntil } from "../../testing/trigger-harness";
 import { ZONE, zoneCatalog } from "../../testing/zone-cards";
 import { promptView, view } from "../../view/view";
-import { declineAnswer, greedyAnswer, stateCardInfo, type DiscoverCostsOf } from "../../policy/prompts";
+import { declineAnswer, greedyAnswer, type DiscoverCostsOf } from "../../policy/prompts";
 import { identifies } from "../../view/knowledge";
 import { resolveEffect } from "../interpreter";
 import { discardChosen } from "./discard-chosen";
@@ -1051,15 +1051,19 @@ describe("discardChosen", () => {
     expect(done.committed.sides.player.void).toEqual([ids.player.hand[0]]);
   });
 
-  it("Greedy chooses the opponent's highest value while ordinary discard keeps its low-value loss ordering", () => {
-    const { pending, ids } = suspend(setup(chosenDiscard.id, [v.vanilla1.id, v.vanilla5.id]));
-    const info = stateCardInfo(pending.display, chosenEngine.catalog, "player");
-    expect(greedyAnswer(pending.prompt, info, noDiscoverCosts, 0)).toEqual([ids.enemy.hand[1]]);
-    const ownInfo = (id: InstanceId) => {
-      const candidate = info(id);
-      return candidate === null ? null : { ...candidate, mine: true };
-    };
-    expect(greedyAnswer({ ...pending.prompt, purpose: { ...pending.prompt.purpose, role: "discard" } }, ownInfo, noDiscoverCosts, 0)).toEqual([ids.enemy.hand[0]]);
+  it("discards each scripted legal hand choice with the same payment contract", () => {
+    for (const index of [0, 1]) {
+      const { state, ids } = boardState(chosenEngine.catalog, setup(chosenDiscard.id, [v.vanilla1.id, v.vanilla5.id]));
+      const chosen = ids.enemy.hand[index];
+      const answers = new ScriptedSource([[chosen]]);
+      const result = chosenEngine.apply(state, "player", playFromHand(ids, "player").action, answers);
+      answers.assertExhausted();
+      expect(result.state.sides.enemy.hand).toEqual(ids.enemy.hand.filter((id) => id !== chosen));
+      expect(result.state.sides.enemy.void).toEqual([chosen]);
+      expect(result.events.filter((e) => e.kind === "discarded")).toEqual([{ kind: "discarded", side: "enemy", instance: chosen }]);
+      expect(result.state.sides.player.void).toEqual(ids.player.hand);
+      expect(invariantViolations(result.state, chosenEngine.catalog)).toEqual([]);
+    }
   });
 
   it("reconstructs an identical private prompt on reload, rejects illegal, foreign, stale and concurrent inputs, and commits once", () => {

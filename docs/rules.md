@@ -142,6 +142,9 @@ during the Ending phase, choosing which cards to discard.
 opponent's hand, you choose as that effect resolves. Only cards that match the
 stated restriction are shown privately to you for that choice. Choose one of
 those cards; it is discarded from the opponent's hand into its owner's void.
+The opponent is the discarding player because the card leaves their hand, so
+this fires their "When you discard a card" abilities, even if you own the card.
+The choice itself does not count as you discarding a card.
 If the hand has no matching card, that part of the effect does nothing.
 
 **When you discard** — An ability that triggers "When you discard a card"

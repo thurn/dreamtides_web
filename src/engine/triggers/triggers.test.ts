@@ -127,6 +127,8 @@ const L = {
   anywhereDissolveOwn: local(24, "character", () => [triggered(whenOpponentPlays(), p.dissolve(target(characterYouControl())), { zone: "any" })]),
   /** "When the opponent plays a card, draw a card." — in every zone. */
   anywhereDraw: local(25, "character", () => [triggered(whenOpponentPlays(), p.draw(1), { zone: "any" })]),
+  /** "Discard a chosen card from the opponent's hand." */
+  chosenDiscard: local(26, "event", () => [event(p.discardChosen())]),
 } as const;
 const WATCHER_AVATAR: EngineAvatarDefinition = { id: parseAvatarId("5e5e5e5e-0000-4000-8000-000000000391"), status: "authored", abilities: watching };
 const WATCHER_SIGN: EngineDreamsignDefinition = { id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000000392"), status: "authored", abilities: watching };
@@ -428,6 +430,32 @@ describe("when patterns", () => {
     expect(resolvedSources(result.events)).toEqual([ids.player.back[2], ids.player.back[1]]);
     expect(result.state.sides.player.currentEnergy).toBe(1);
     expect(result.state.sides.player.hand).toHaveLength(3);
+  });
+
+  it("attributes a chosen discard to the hand holder and fires only that side's discard trigger", () => {
+    for (const chooser of SIDES) {
+      const holder = opponent(chooser);
+      const { state, ids } = boardState(engine.catalog, {
+        active: chooser, phase: "day",
+        [chooser]: { hand: [L.chosenDiscard.id], back: [L.discardWatcher.id], deck },
+        [holder]: { hand: [v.vanilla1.id, v.vanilla2.id], back: [L.discardWatcher.id], deck },
+      });
+      const chosen = ids[holder].hand[1];
+      // Holding a card determines the discarding side even when its owner differs.
+      state.instances[chosen] = { ...state.instances[chosen], owner: chooser };
+      const result = play(state, chooser, ids[chooser].hand[0], [[chosen]]);
+      expect(result.events.filter((entry) => entry.kind === "discarded")).toEqual([{ kind: "discarded", side: holder, instance: chosen }]);
+      expect(result.events.filter((entry) => entry.kind === "triggerQueued")).toEqual([
+        expect.objectContaining({ source: ids[holder].back[0], subject: chosen }),
+      ]);
+      expect(resolvedSources(result.events)).toEqual([ids[holder].back[0]]);
+      expect(result.state.sides[holder].currentEnergy).toBe(1);
+      expect(result.state.sides[chooser].currentEnergy).toBe(0);
+      expect(result.state.sides[holder].hand).toEqual([ids[holder].hand[0]]);
+      expect(result.state.sides[chooser].void).toContain(chosen);
+      expect(result.state.sides[holder].void).not.toContain(chosen);
+      expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+    }
   });
 
   it("fires when a card leaves your void", () => {
