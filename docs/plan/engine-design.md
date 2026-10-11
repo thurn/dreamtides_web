@@ -964,6 +964,15 @@ analog:
    when a player plays a card: the fixed energy, X, and the energy of a chosen
    alternative or paid optional cost. A "next card" modifier (`next: true`)
    ends as the card it applied to is paid for, after the commit point.
+   A `cardCost` change, made by `modifyCardCost` ("Return an enemy to hand.
+   It costs 2● more", "Draw a ≤2● cost card. It costs 0●"), names one card
+   and applies whoever plays it: the latest `"set"` replaces the card's
+   copiable cost, joined to the increases or reductions as the difference,
+   and each `"increase"` adds to them (RD-hv-umm2.101-1). `modifyCardCost`
+   runs its nested instruction and changes the cards it put into a hand
+   (RD-hv-umm2.101-2). The view and the `effectStarted` event hide the
+   change, like any floating change naming a card, from a side that cannot
+   identify that card, such as the opponent of a side that drew it.
    Play permissions (`playFrom`, `continuous/permissions.ts`) share the
    layer: they let a player play cards from the void they own. So does the
    static-only `reclaimNotBanished` change, read by `banishedAsReclaimed`
@@ -1782,9 +1791,10 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     its deck that it has not learned sees that card's triggers queue and
     resolve, and its win condition met, with the source `null`, and a
     source that has left the battle is `null` to both sides. An
-    `effectStarted` whose source a side cannot identify is hidden from it
-    whole, as the view omits that floating effect: its change can name the
-    source's card (a delayed trigger's `ref.origin`);
+    `effectStarted` whose source, or whose changed card
+    (`changedInstance`), a side cannot identify is hidden from it whole, as
+    the view omits that floating effect: its change can name the source's
+    card (a delayed trigger's `ref.origin`) or a card in a hidden hand;
   - a `triggerQueued` that a side may see shows its subject as the view's
     queued trigger does (`seesSubject`), so the opponent sees a public
     trigger queue without the card it concerns;

@@ -3,7 +3,7 @@ import type { CardFilter, Cost, Keyword } from "../engine/dsl/types";
 import type { EngineEvent } from "../engine/events";
 import type { ArrangeDestination, PromptKind, PromptRole } from "../engine/prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../engine/state/ids";
-import type { Expiry } from "../engine/state/types";
+import type { CardCostMode, Expiry } from "../engine/state/types";
 
 /** Presentation-owned copy for a stable built-in battle prompt identity. */
 export function builtInBattlePromptMessage(
@@ -517,6 +517,8 @@ export type EngineStatusCopy =
       readonly next: boolean;
       readonly expiry: Expiry;
     }
+  /** One card's own cost: set to `amount` energy, or `amount` energy more. */
+  | { readonly kind: "cardCost"; readonly mode: CardCostMode; readonly amount: number; readonly expiry: Expiry }
   | { readonly kind: "delayedTrigger"; readonly once: boolean; readonly expiry: Expiry; readonly sourceName?: string | null }
   /**
    * A play permission: a card that may be played from the void (`named`), or
@@ -570,6 +572,8 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
       const change = `${status.next ? "costs" : "cost"} ${String(Math.abs(status.amount))} energy ${status.amount < 0 ? "less" : "more"}`;
       return `${subject} ${change}${expiryPhrase(status.expiry, human)}`;
     }
+    case "cardCost":
+      return `${status.mode === "set" ? `Costs ${String(status.amount)} energy` : `Costs ${String(status.amount)} energy more`}${expiryPhrase(status.expiry, human)}`;
     case "delayedTrigger":
       return `${status.sourceName == null ? "" : `${status.sourceName}: `}${status.once ? "A delayed ability is waiting" : "An ability triggers"}${expiryPhrase(status.expiry, human)}`;
     case "playFrom": {
@@ -818,6 +822,8 @@ function effectStartedText(
         { kind: "cost", amount: change.amount, cardType: change.filter.cardType ?? null, next: change.next, expiry },
         human,
       )} for ${change.player === human ? "you" : "your opponent"}.`;
+    case "cardCost":
+      return line(card(change.instance), { kind: "cardCost", mode: change.mode, amount: change.amount, expiry });
     case "trigger":
       return `${engineStatusLabel({ kind: "delayedTrigger", once: change.once, expiry, sourceName: typeof event.source === "string" ? sourceName(event.source) : null }, human)}.`;
     case "playFrom": {

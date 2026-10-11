@@ -472,6 +472,9 @@ export function engineStatuses(
           }),
         );
         break;
+      case "cardCost":
+        mark(change.instance, badge("duration", { kind: "cardCost", mode: change.mode, amount: change.amount, expiry }));
+        break;
       case "trigger": {
         const instance = typeof source === "string" ? view.instances[source] : undefined;
         const sourceName = instance === undefined ? null : instance.printing.kind === "card"

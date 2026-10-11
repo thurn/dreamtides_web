@@ -731,6 +731,23 @@ as "≤2● cost character" or "with cost X●" is its copiable cost: its printe
 cost after its variant and deck-entry modifications, with X in it counting as
 0. Cost changes do not affect it.
 
+**A card's own cost:** "It costs N●" and "It costs N● more", following an
+instruction that puts a card into a hand, as in "Return an enemy to hand. It
+costs 2● more" or "Draw a ≤2● cost card. It costs 0●," change that card's
+energy cost whoever plays it. "It" is the card that instruction put into a
+hand; when the instruction put no card there, because it had no target, the
+deck was empty or held no match, or a created card ceased to exist instead,
+nothing changes. "It costs N●" gives the card N● in place of its ● cost, its
+copiable cost; X, additional costs, and the energy of a chosen alternative or
+optional cost are still paid on top of it. If several such changes set the
+same card's cost, the latest applies. Then every increase applies, then every
+reduction, as for any cost change: a card set to 0● costs 1● while "Characters
+cost 1● more" applies to it. Like any effect, the change lasts until its
+duration ends, wherever the card is, and with no stated duration it is
+permanent: a card returned to hand costing 2● more still costs 2● more if it is
+played and later returns to a hand again. The card's cost for conditions is
+unchanged.
+
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
 

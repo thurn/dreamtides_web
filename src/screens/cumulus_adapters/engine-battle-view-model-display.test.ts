@@ -149,4 +149,28 @@ describe("buildEngineBattleScreenModel", () => {
     expect(engineBattleLogText({ ...event, source: { kind: "avatar", side: "player" } }, { human: "player", card, dreamwell: () => null })).not.toBeNull();
     expect(card).not.toHaveBeenCalled();
   });
+
+  it("marks a card whose own cost changed for the side that sees it, and logs the change", () => {
+    const { state, ids } = board({ player: { hand: [SYNTHETIC.vanilla2.id], back: [SYNTHETIC.vanilla1.id] }, enemy: { hand: [SYNTHETIC.vanilla2.id] } });
+    const [held] = ids.player.hand;
+    const [hidden] = ids.enemy.hand;
+    const [source] = ids.player.back;
+    if (held === undefined || hidden === undefined || source == null) throw new Error("missing cards");
+    const change = (instance: InstanceId, id: `e${number}`) => ({
+      id, controller: "player" as const, source, timestamp: 0, expiry: { at: "endOfTurn" } as const,
+      change: { kind: "cardCost", instance, mode: "set", amount: 0 } as const,
+    });
+    state.floating.push(change(held, "e901"), change(hidden, "e902"));
+    const printed = enginePrintedKeywords(engine.catalog);
+    const kinds = (viewer: "player" | "enemy", id: InstanceId) => engineStatuses(engine.view(state, viewer), viewer, printed).cards.get(id)?.map((badge) => badge.kind);
+    expect(kinds("player", held)).toEqual(["duration"]);
+    expect(kinds("enemy", hidden)).toEqual(["duration"]);
+    // Neither side sees a badge on the other's hidden card, nor the change.
+    expect(kinds("enemy", held)).toBeUndefined();
+    expect(kinds("player", hidden)).toBeUndefined();
+    expect(engine.view(state, "player").instances[held]?.characteristics.cost).toBe(0);
+    const { id: _id, timestamp: _timestamp, ...started } = change(held, "e901");
+    const event = { kind: "effectStarted", effect: "e901", ...started } as const;
+    expect(engineBattleLogText(event, { human: "player", card: () => null, dreamwell: () => null })).not.toBeNull();
+  });
 });

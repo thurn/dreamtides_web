@@ -62,6 +62,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   baseSpark: 4,
   spark: 5,
   cost: 6,
+  cardCost: 6,
   playFrom: 6,
   reclaimNotBanished: 6,
 };

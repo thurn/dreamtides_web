@@ -264,6 +264,9 @@ export interface PayableEffect {
   readonly affects: readonly InstanceId[];
 }
 
+/** How a `cardCost` change changes one card's energy cost: "It costs N●" sets it, "It costs N● more" increases it. */
+export type CardCostMode = "set" | "increase";
+
 /**
  * When a floating effect ends (rules § Durations). Every boundary counts
  * extra turns as their player's turns (C8).
@@ -324,6 +327,13 @@ export type ContinuousChange =
    * that card is played.
    */
   | { readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean }
+  /**
+   * Layer 6: one card's energy cost, whoever plays it. `"set"` gives it
+   * `amount`● in place of its ● cost (its copiable cost); `"increase"` makes
+   * it cost `amount`● more. The latest set applies, then the increases, with
+   * every other cost change after them (continuous/costs.ts).
+   */
+  | { readonly kind: "cardCost"; readonly instance: InstanceId; readonly mode: CardCostMode; readonly amount: number }
   /**
    * Layer 6, a play permission: `player` may play the cards in the void it
    * owns that match `filter`, and are `instance` when it names one, for their

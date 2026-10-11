@@ -1,6 +1,7 @@
+import { changedInstance } from "../../rules/floating";
 import type { AbilitySource, EffectId, Side } from "../../state/ids";
 import type { Expiry, FloatingChange } from "../../state/types";
-import { seesSource } from "../../view/knowledge";
+import { identifies, seesSource } from "../../view/knowledge";
 import { sourcePrivacy } from "../sources";
 import type { EventDefinition } from "../types";
 
@@ -19,10 +20,15 @@ export interface EffectStartedEvent {
  * zone (`sourcePrivacy`), and a side that cannot identify the source sees
  * none of it, as the view omits the floating effect: its change can name the
  * source's card (a delayed trigger's `ref.origin`). So the holder of a deck
- * card it has not learned does not see the effect begin either.
+ * card it has not learned does not see the effect begin either. Likewise a
+ * side that cannot identify the card the change changes (`changedInstance`),
+ * such as a card just drawn into the opponent's hand, sees none of it.
  */
 export const effectStarted: EventDefinition<EffectStartedEvent> = {
   kind: "effectStarted",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
-  redact: (event, viewer, state) => (seesSource(state, event.source, viewer) ? event : null),
+  redact: (event, viewer, state) => {
+    const changed = changedInstance(event.change);
+    return seesSource(state, event.source, viewer) && (changed === null || identifies(state, changed, viewer)) ? event : null;
+  },
 };

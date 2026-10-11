@@ -3,11 +3,13 @@
  * player plays a card, its energy cost rises by every increase and then
  * falls by every reduction, never below 0. A "next card" modifier applies to
  * the next matching card its player plays and ends as that card is paid for.
+ * A card whose own cost was set ("It costs 0●") starts from the set cost in
+ * place of its ● cost before the increases (RD-hv-umm2.101-1).
  */
 import type { EngineCatalog } from "../catalog";
 import type { EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { characteristics, filterSubjectOf, matchesFilter } from "./characteristics";
+import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from "./characteristics";
 import type { Layers } from "./layers";
 
 /** The cost modifications that apply to one play of one card. */
@@ -30,13 +32,29 @@ export function costModifier(
 ): CostModifier {
   let increase = 0;
   let reduction = 0;
+  let set: number | null = null;
   const consumes: EffectId[] = [];
   const played = filterSubjectOf(state, catalog, card, layers.of(card));
   for (const { change, effect } of layers.changes(6)) {
+    if (change.kind === "cardCost") {
+      if (change.instance !== card) continue;
+      // Changes come in layer order, so the latest set applies.
+      if (change.mode === "set") set = change.amount;
+      else increase += change.amount;
+      continue;
+    }
     if (change.kind !== "cost" || change.player !== player || !matchesFilter(played, change.filter)) continue;
     if (change.amount > 0) increase += change.amount;
     else reduction -= change.amount;
     if (change.next && effect !== null) consumes.push(effect);
+  }
+  if (set !== null) {
+    // The set cost replaces the ● cost; X and other energy parts still add, and
+    // every change applies to the total once, so the difference joins the
+    // increases or the reductions with the same result.
+    const difference = set - copiableCostOf(state, catalog, card);
+    if (difference > 0) increase += difference;
+    else reduction -= difference;
   }
   return { increase, reduction, consumes };
 }

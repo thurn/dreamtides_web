@@ -39,6 +39,7 @@ export * from "./lose-points";
 export * from "./materialize";
 export * from "./materialize-figment-copy";
 export * from "./materialize-figments";
+export * from "./modify-card-cost";
 export * from "./optional";
 export * from "./phase";
 export * from "./play-from-zone";

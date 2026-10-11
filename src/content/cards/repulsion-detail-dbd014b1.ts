@@ -1,3 +1,6 @@
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 208,
   art: { x: 0, y: 0.258, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), p.modifyCardCost(p.returnToHand(target(enemyCharacter())), { increase: 2 }))],
+  verifiedText: "2c124stoe0t",
 });

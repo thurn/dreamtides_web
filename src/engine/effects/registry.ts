@@ -54,6 +54,7 @@ import {
   materializePrimitive,
   materializeFigmentCopyPrimitive,
   materializeFigmentsPrimitive,
+  modifyCardCostPrimitive,
   optionalPrimitive,
   phasePrimitive,
   playFromZonePrimitive,
@@ -203,6 +204,9 @@ const DEFINITIONS = {
   },
   get materializeFigments() {
     return materializeFigmentsPrimitive;
+  },
+  get modifyCardCost() {
+    return modifyCardCostPrimitive;
   },
   get optional() {
     return optionalPrimitive;

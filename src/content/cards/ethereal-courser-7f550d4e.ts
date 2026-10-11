@@ -1,3 +1,6 @@
+import { self } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,11 @@ export default card({
   cardNumber: 446,
   art: { x: -0.084, y: -0.29, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(
+      whenYouPlay({ subtype: "Spirit Animal" }),
+      p.modifyCardCost(p.returnToHand(self()), { set: 0 }, { duration: "untilEndOfTurn" }),
+    ),
+  ],
+  verifiedText: "18jvrscifnd",
 });
