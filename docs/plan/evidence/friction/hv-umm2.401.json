@@ -1,0 +1,107 @@
+{
+  "bead": "hv-umm2.401",
+  "phase": 5,
+  "base": "6643319ac14e84046359425ed1242f22a3f3b450",
+  "implementMin": 4.41,
+  "timingBasis": "node_modules creation 2026-10-11T18:49:06Z is setup-start proxy, not exact native dispatch. Evidence finalized 2026-10-11T18:53:30.630634+00:00. Command walls include workspace prepare/asset restoration.",
+  "hostLoad": 6.04296875,
+  "localValidationS": {
+    "installReported": 3,
+    "beforePublicCli": 2.5643648749683052,
+    "afterPublicCli": 0.866607291973196,
+    "focusedReaders": 2.7,
+    "review": 9.82,
+    "knip": 3.14
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 0
+  },
+  "friction": [],
+  "acceptance": {
+    "publicCliComparison": {
+      "base": "6643319ac14e84046359425ed1242f22a3f3b450",
+      "changedCapabilities": {
+        "banishXCost": {
+          "before": false,
+          "after": true
+        },
+        "returnCost": {
+          "before": false,
+          "after": true
+        }
+      },
+      "otherCapabilitiesUnchanged": 161,
+      "absentControl": {
+        "name": "chooseSubtype",
+        "exists": false,
+        "module": "src/engine/effects/primitives/choose-subtype.ts",
+        "fileAbsent": true
+      },
+      "entityCount": 1209,
+      "unchangedEntityFields": "All entity fields except requiredPrimitives/routing; catalog immutabledata/status/tags/identities unchanged",
+      "beads": {
+        "before": 226,
+        "after": 225
+      },
+      "changedEntityNeeds": 4,
+      "changedEntityRouting": 152,
+      "changedSourceLines": [
+        306,
+        308
+      ],
+      "beforeSourceSha256": "fa9c088ba08ea8a402e52123c36e995ebd31b41278385343cdcb305b0e60733a",
+      "afterSourceSha256": "37402bde35cd43cba51d6d86b2033d6b7881cc3fd0eff8441b435a46ccebb36f",
+      "filedInventorySha256": "594272a0f1e5cff94144769ea7a1ce59b2ddb36c089b9c1f2e9a853f0fa533a2",
+      "filedInventoryRestored": true,
+      "afterGeneratedSha256": "4dfc91f324065ae2aeefa3b7e2aa837e93cd409d7188859f53fa8f4f5757a0ed",
+      "wallSeconds": 0.866607291973196,
+      "hostLoad": 8.59716796875,
+      "exit": 0
+    },
+    "focused": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/content-gates.test.ts src/content/content-index.test.ts",
+      "files": 2,
+      "cases": 27,
+      "pass": true,
+      "log": "focused.log"
+    },
+    "review": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "pass": true,
+      "log": "review.log",
+      "testDiscovery": "No test files import this executable generator. Typecheck/node typecheck/lint/import cycles pass; the explicit focused readers and public CLI comparison are separate behavioral evidence."
+    },
+    "unused": "npm run knip passes; no exports/helpers/tests added."
+  },
+  "scope": "Exactly existing returnCost and banishXCost probe entries; two added/two deleted registration lines at306/308. Every other source line unchanged. No engine/card/UI/rules changes or generated inventory in commit.",
+  "projectionDisposition": "Detection changes current planning:226\u2192225 beads,4 requiredPrimitives partitions,152 routing entries. Catalog/entity fields apart from requiredPrimitives/routing remain identical. Filed native UUID Entities/Areas/graph govern execution; no native work or filed inventory is regenerated.",
+  "generatedOutputDisposition": "The existing public CLI has fixed output path. Each before/after invocation captures its generated projection into ignored artifacts and restores the exact filed bytes in finally. Current filed hash594272a0... matches baseline; generator output excluded from commit. No further CLI run required.",
+  "validationScope": "Two capability registrations need no full/fuzz/browser/heavy check or independent review. No private regex mirror tests were introduced. Genuinely absent chooseSubtype capability remains false with missing module;161 other capability existence results unchanged.",
+  "runtimeLedger": {
+    "devServers": [],
+    "browserContexts": [],
+    "leases": [],
+    "heavyCommands": [],
+    "externalWriters": 0,
+    "processes": "Install, two public CLI invocations, focused checks, review and knip all exited. No runtime process started."
+  },
+  "preExisting": "Install reports17 dependency advisories (9moderate/7high/1critical); package/lock unchanged, recorded separately.",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.401",
+  "artifactSha256": {
+    "after-cli.log": "502cdb9837fb7a22f625d92e7dc545a6f375c5b3bb4b3b15ba7ec17001de01ed",
+    "after-inventory.json": "4dfc91f324065ae2aeefa3b7e2aa837e93cd409d7188859f53fa8f4f5757a0ed",
+    "before-cli.log": "43ed0a4776b42d0946c6829ea47f66480fae21d2d35ccf8827c4047c5f5a84f7",
+    "before-inventory.json": "c2460e96d810994a40bf1e1ae43b329a253967591b9704288de263200b9a2585",
+    "before-provenance.json": "c83fc5f18529a4d65a0ff899af2505d7b7bc3040739ec6205154cfbef29118e6",
+    "comparison.json": "69a92a5d0940c2342db47c1625621435d65e76422c549521ed4f9895dc0f348b",
+    "focused.log": "745f64bb9ed2abd80ffffc69ec47650b5d8022eda9d4c2f39c770173c2a87caf",
+    "knip.log": "bff8a5be3fb7d013a07e68e0addacfb02d0eb2811895b8f01fbdca101879fa0d",
+    "review.log": "190616159fd242314fe54754fce719cfedb3f2b7af8a6d26e6d754a417464dc5"
+  },
+  "outstanding": [
+    "Parent-owned exact native candidate approval/promotion. Implementation and proportional acceptance are complete."
+  ]
+}
