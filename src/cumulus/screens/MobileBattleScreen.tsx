@@ -754,7 +754,8 @@ const ROOT_STYLE: CSSProperties = {
   width: "100%",
   height: "100dvh",
   boxSizing: "border-box",
-  overflow: "hidden",
+  // The viewport is a clipping boundary, including during card travel.
+  overflow: "clip",
   display: "grid",
   gridTemplateColumns: "minmax(0, 1fr)",
   gridTemplateRows: MOBILE_GRID_ROWS,
@@ -2058,6 +2059,7 @@ const NearHand = memo(function NearHand({
   cards,
   totalCount,
   isDesktop,
+  isCardDragActive,
   snapLayoutCardId,
   cardPicker,
   selectedPickerCardIds,
@@ -2069,6 +2071,7 @@ const NearHand = memo(function NearHand({
   readonly cards: readonly MobileBattleCardView[];
   readonly totalCount: number;
   readonly isDesktop: boolean;
+  readonly isCardDragActive: boolean;
   readonly snapLayoutCardId: BattleCardId | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
   readonly selectedPickerCardIds: readonly BattleCardId[];
@@ -2108,7 +2111,9 @@ const NearHand = memo(function NearHand({
         zIndex: PLAYER_HAND_Z_INDEX,
         pointerEvents: "none",
         overflow:
-          interactions?.pendingCardId !== undefined &&
+          isDesktop
+            ? isCardDragActive ? "visible" : "clip"
+            : interactions?.pendingCardId !== undefined &&
           interactions.pendingCardId !== null
             ? "visible"
             : "hidden",
@@ -2122,9 +2127,6 @@ const NearHand = memo(function NearHand({
           : undefined,
         paddingLeft: isDesktop
           ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-2xl")})`
-          : undefined,
-        transform: isDesktop
-          ? `translateY(${token("--space-2xl")})`
           : undefined,
         boxSizing: isDesktop ? "border-box" : undefined,
       }}
@@ -2226,6 +2228,8 @@ const NearHand = memo(function NearHand({
               data-battle-near-hand-slot=""
               style={{
                 position: "relative",
+                // Offset the cards inside their viewport-bounded hand track.
+                top: token("--space-2xl"),
                 height: "94%",
                 minWidth: 0,
                 flex: "0 1 auto",
@@ -4295,6 +4299,7 @@ export function MobileBattleScreen({
           cards={displayedNearHandCards}
           totalCount={nearHandCards.length}
           isDesktop={isDesktop}
+          isCardDragActive={isCardDragActive}
           snapLayoutCardId={snapLayoutCardId}
           cardPicker={boardCardPicker}
           selectedPickerCardIds={selectedPickerCardIds}

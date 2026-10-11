@@ -1,0 +1,415 @@
+{
+  "bead": "hv-umm2.304",
+  "phase": 5,
+  "implementMin": 29.382606783333333,
+  "measurementStartUtc": "2026-10-11T09:17:22.933781+00:00",
+  "measurementStartNote": "Install log creation after initial instruction/skill reads; interval includes QA, check and heavy waits; not pure editing time.",
+  "commitPreparationUtc": "2026-10-11T09:46:45.890188+00:00",
+  "claimToPreparationMin": 30.231503133333334,
+  "hostLoad": 19.86962890625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "localValidationS": {
+    "interactions-held": 45.3683876991272,
+    "before-final": 34.17306923866272,
+    "touch-reveal-comparison": 16.8829026222229,
+    "touch-diagnostic": 13.085952997207642,
+    "knip": 2.685317039489746,
+    "focused": 6.313584089279175,
+    "after": 37.07985210418701,
+    "before-corrected": 78.90603303909302,
+    "interactions-diagnostic": 80.84640502929688,
+    "slot-diagnostic": 9.939218044281006,
+    "diagnostic": 11.504950046539307,
+    "review": 19.73098587989807,
+    "interactions": 28.372523069381714,
+    "before": 74.1107530593872,
+    "touch-comparison": 11.943928241729736,
+    "install": 2.431640148162842
+  },
+  "queueS": {
+    "interactions-held": 1.5927093029022217,
+    "before-final": 0.017650842666625977,
+    "touch-reveal-comparison": 0.018091201782226562,
+    "touch-diagnostic": 0.021615028381347656,
+    "knip": 0.023221969604492188,
+    "focused": 0.0229949951171875,
+    "after": 38.206470012664795,
+    "before-corrected": 0.017409086227416992,
+    "interactions-diagnostic": 247.45310401916504,
+    "slot-diagnostic": 0.018299102783203125,
+    "diagnostic": 0.019357919692993164,
+    "review": 0.02401900291442871,
+    "interactions": 156.80390405654907,
+    "before": 0.0184628963470459,
+    "touch-comparison": 0.01826786994934082,
+    "install": 0.018292903900146484
+  },
+  "checks": {
+    "interactions-held": {
+      "queue_seconds": 1.5927093029022217,
+      "execution_seconds": 45.3683876991272,
+      "load": [
+        3.69873046875,
+        7.61083984375,
+        9.017578125
+      ],
+      "exit": 1
+    },
+    "before-final": {
+      "queue_seconds": 0.017650842666625977,
+      "execution_seconds": 34.17306923866272,
+      "load": [
+        3.40576171875,
+        7.02197265625,
+        9.21923828125
+      ],
+      "exit": 0
+    },
+    "touch-reveal-comparison": {
+      "queue_seconds": 0.018091201782226562,
+      "execution_seconds": 16.8829026222229,
+      "load": [
+        3.998046875,
+        5.2138671875,
+        7.33251953125
+      ],
+      "exit": 0
+    },
+    "touch-diagnostic": {
+      "queue_seconds": 0.021615028381347656,
+      "execution_seconds": 13.085952997207642,
+      "load": [
+        3.7890625,
+        6.2119140625,
+        8.21240234375
+      ],
+      "exit": 0
+    },
+    "knip": {
+      "queue_seconds": 0.023221969604492188,
+      "execution_seconds": 2.685317039489746,
+      "load": [
+        19.86962890625,
+        9.326171875,
+        8.65576171875
+      ],
+      "exit": 0
+    },
+    "focused": {
+      "queue_seconds": 0.0229949951171875,
+      "execution_seconds": 6.313584089279175,
+      "load": [
+        12.8603515625,
+        7.26708984375,
+        7.9365234375
+      ],
+      "exit": 0
+    },
+    "after": {
+      "queue_seconds": 38.206470012664795,
+      "execution_seconds": 37.07985210418701,
+      "load": [
+        19.1328125,
+        11.03466796875,
+        10.08447265625
+      ],
+      "exit": 0
+    },
+    "before-corrected": {
+      "queue_seconds": 0.017409086227416992,
+      "execution_seconds": 78.90603303909302,
+      "load": [
+        3.4521484375,
+        8.45361328125,
+        9.9384765625
+      ],
+      "exit": 1
+    },
+    "interactions-diagnostic": {
+      "queue_seconds": 247.45310401916504,
+      "execution_seconds": 80.84640502929688,
+      "load": [
+        5.9638671875,
+        9.5556640625,
+        9.81640625
+      ],
+      "exit": 1
+    },
+    "slot-diagnostic": {
+      "queue_seconds": 0.018299102783203125,
+      "execution_seconds": 9.939218044281006,
+      "load": [
+        3.70947265625,
+        5.89501953125,
+        8.41357421875
+      ],
+      "exit": 0
+    },
+    "diagnostic": {
+      "queue_seconds": 0.019357919692993164,
+      "execution_seconds": 11.504950046539307,
+      "load": [
+        3.87841796875,
+        6.5634765625,
+        8.89013671875
+      ],
+      "exit": 0
+    },
+    "review": {
+      "queue_seconds": 0.02401900291442871,
+      "execution_seconds": 19.73098587989807,
+      "load": [
+        13.3515625,
+        7.46142578125,
+        8.0009765625
+      ],
+      "exit": 0
+    },
+    "interactions": {
+      "queue_seconds": 156.80390405654907,
+      "execution_seconds": 28.372523069381714,
+      "load": [
+        5.1943359375,
+        7.70361328125,
+        8.8388671875
+      ],
+      "exit": 1
+    },
+    "before": {
+      "queue_seconds": 0.0184628963470459,
+      "execution_seconds": 74.1107530593872,
+      "load": [
+        4.20849609375,
+        10.43798828125,
+        10.74365234375
+      ],
+      "exit": 1
+    },
+    "touch-comparison": {
+      "queue_seconds": 0.01826786994934082,
+      "execution_seconds": 11.943928241729736,
+      "load": [
+        3.8203125,
+        5.423828125,
+        7.66455078125
+      ],
+      "exit": 1
+    },
+    "install": {
+      "execution_seconds": 2.431640148162842,
+      "queue_seconds": 0.018292903900146484,
+      "load": [
+        7.9189453125,
+        13.00146484375,
+        11.59375
+      ],
+      "exit": 0,
+      "loadSample": "after install"
+    }
+  },
+  "browserReports": {
+    "overflow-before.first-harness.result.json": {
+      "ok": false,
+      "serverPid": 34201,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 39,
+        "serve": 2464,
+        "scenario": 66240,
+        "total": 68764
+      },
+      "caps": [],
+      "error": "desktop#0: Error: qa.battle route prompt: timed out after 60000 ms; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":false,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":5}}"
+    },
+    "overflow-after.result.json": {
+      "ok": true,
+      "serverPid": 51009,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 42,
+        "serve": 1259,
+        "scenario": 30441,
+        "total": 31766
+      },
+      "caps": [],
+      "error": null
+    },
+    "overflow-interactions.diagnostic.result.json": {
+      "ok": false,
+      "serverPid": 79035,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 46,
+        "serve": 1861,
+        "scenario": 73596,
+        "total": 75526
+      },
+      "caps": [],
+      "error": "mobile#0: Error: waitVisible [data-cumulus-reveal-card=primary]: timed out after 15000 ms"
+    },
+    "overflow-touch-reveal-comparison.result.json": {
+      "ok": true,
+      "serverPid": 94186,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 39,
+        "serve": 1857,
+        "scenario": 9672,
+        "total": 11590
+      },
+      "caps": [],
+      "error": null
+    },
+    "overflow-touch-comparison.result.json": {
+      "ok": false,
+      "serverPid": 90613,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 41,
+        "serve": 948,
+        "scenario": 5723,
+        "total": 6733
+      },
+      "caps": [],
+      "error": "Error: post-cancel touch comparison {\"events\":[{\"type\":\"touch\",\"x\":148.93310546875,\"y\":740.4329833984375,\"card\":\"i19\",\"uuid\":\"6cf545ba-b014-4333-a0da-573e8f97d734\"}],\"primary\":[],\"main\":[{\"height\":844,\"scroll\":844,\"top\":0}],\"frame\":{\"href\":\"http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=6cf545ba-b014-4333-a0da-573e8f97d734&variant=base&as=player&seed=1&debug=1&game=z7ytbt\",\"width\":390,\"height\":844}}"
+    },
+    "overflow-interactions.first-drag.result.json": {
+      "ok": false,
+      "serverPid": 58853,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 42,
+        "serve": 1860,
+        "scenario": 21156,
+        "total": 23084
+      },
+      "caps": [],
+      "error": "desktop#0: Error: drag clipped"
+    },
+    "overflow-touch-diagnostic.result.json": {
+      "ok": true,
+      "serverPid": 88497,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 53,
+        "serve": 1568,
+        "scenario": 6141,
+        "total": 7790
+      },
+      "caps": [],
+      "error": null
+    },
+    "overflow-before.second-harness.result.json": {
+      "ok": false,
+      "serverPid": 35959,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 40,
+        "serve": 946,
+        "scenario": 72715,
+        "total": 73721
+      },
+      "caps": [],
+      "error": "desktop#0: Error: qa.battle route prompt: timed out after 60000 ms; {\"at\":\"near:day\",\"prompt\":{\"surface\":\"board\",\"kind\":\"chooseCards\",\"id\":\"7:4:1\",\"candidates\":[\"i63\",\"i25\",\"i8\",\"i7\",\"i20\",\"i29\"],\"answerable\":true},\"window\":null,\"canPass\":false,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":null,\"pending\":{\"kind\":\"chooseCards\",\"side\":\"player\",\"id\":\"7:4:1\",\"candidates\":[\"i63\",\"i25\",\"i8\",\"i7\",\"i20\",\"i29\"]},\"stack\":0,\"inFlight\":true,\"ended\":false,\"scoreToWin\":10,\"events\":1}}"
+    },
+    "overflow-before.result.json": {
+      "ok": true,
+      "serverPid": 37382,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 39,
+        "serve": 943,
+        "scenario": 27892,
+        "total": 28897
+      },
+      "caps": [],
+      "error": null
+    },
+    "overflow-slot-diagnostic.result.json": {
+      "ok": true,
+      "serverPid": 39940,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 42,
+        "serve": 945,
+        "scenario": 3713,
+        "total": 4721
+      },
+      "caps": [],
+      "error": null
+    },
+    "overflow-diagnostic.result.json": {
+      "ok": true,
+      "serverPid": 38447,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 42,
+        "serve": 1857,
+        "scenario": 4312,
+        "total": 6231
+      },
+      "caps": [],
+      "error": null
+    },
+    "overflow-touch-comparison.first-harness.result.json": {
+      "ok": false,
+      "serverPid": 90613,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 41,
+        "serve": 948,
+        "scenario": 5723,
+        "total": 6733
+      },
+      "caps": [],
+      "error": "Error: post-cancel touch comparison {\"events\":[{\"type\":\"touch\",\"x\":148.93310546875,\"y\":740.4329833984375,\"card\":\"i19\",\"uuid\":\"6cf545ba-b014-4333-a0da-573e8f97d734\"}],\"primary\":[],\"main\":[{\"height\":844,\"scroll\":844,\"top\":0}],\"frame\":{\"href\":\"http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=6cf545ba-b014-4333-a0da-573e8f97d734&variant=base&as=player&seed=1&debug=1&game=z7ytbt\",\"width\":390,\"height\":844}}"
+    },
+    "overflow-interactions-held.result.json": {
+      "ok": false,
+      "serverPid": 81381,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 1251,
+        "scenario": 38755,
+        "total": 40074
+      },
+      "caps": [],
+      "error": "mobile#0: Error: waitVisible [data-cumulus-reveal-card=primary]: timed out after 15000 ms"
+    },
+    "overflow-interactions.result.json": {
+      "ok": false,
+      "serverPid": 79035,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 46,
+        "serve": 1861,
+        "scenario": 73596,
+        "total": 75526
+      },
+      "caps": [],
+      "error": "mobile#0: Error: waitVisible [data-cumulus-reveal-card=primary]: timed out after 15000 ms"
+    }
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 5.325800502300263,
+      "note": "Preserved missing extra Offering card / wrong generic role, sole-payable journey route, bundled drag assertion without values, pointer-rest capture behavior, and mobile primary-portal assumption. Exact diagnosed states and hidden/clip in-place gesture equivalence qualify failures; no app-error buffers. Actual native touch portal and desktop hover/drag pass."
+    }
+  ],
+  "runtimeCleanup": {
+    "at": "2026-10-11T09:46:45.818334+00:00",
+    "ownedKnownProcessesRemaining": [],
+    "ownedProviderRecord": false
+  },
+  "preExistingFollowup": {
+    "bead": "hv-umm2.361",
+    "scope": "Mobile fanned complete-source press-in-place reading clips below viewport in identical hidden/clip geometry; separate reading-layout repair.",
+    "prerequisite": "hv-umm2.304"
+  }
+}
