@@ -1,0 +1,19 @@
+{
+  "bead": "hv-31uz",
+  "phase": 5,
+  "implementMin": 10,
+  "localValidationS": {
+    "install": 2.1,
+    "review": 18,
+    "knip": 2.44,
+    "browserBaseline": 13.007,
+    "browserFinal": 12.235
+  },
+  "hostLoad": 8.89,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

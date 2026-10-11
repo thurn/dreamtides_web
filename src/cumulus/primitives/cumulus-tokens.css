@@ -319,6 +319,8 @@
      and pool viewers, zone browsers, developer rails and their hosts, status
      toasts, purchase travels, and the battle's figment merge animation. */
   --layer-app-overlay: var(--layer-app-chrome); /* @kind other */
+  /* Closed development-tool triggers sit below app-shell dialogs and rails. */
+  --layer-app-developer-trigger: calc(var(--layer-app-overlay) - 1); /* @kind other */
   /* Owned-Dreamsign window opened from the status bar, above the app chrome. */
   --layer-app-status-bar-window: 70; /* @kind other */
   /* Battle result surface and battle prompt banners, above the app-shell

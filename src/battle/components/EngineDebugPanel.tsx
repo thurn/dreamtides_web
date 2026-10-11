@@ -149,7 +149,7 @@ export default function EngineDebugPanel({
 
   if (!open) {
     return (
-      <div style={{ position: "fixed", right: token("--space-m"), top: token("--space-m"), zIndex: token("--layer-app-overlay") }}>
+      <div style={{ position: "fixed", right: token("--space-m"), top: token("--space-m"), zIndex: token("--layer-app-developer-trigger") }}>
         <IconButton glyph={GLYPHS.bug} size="sm" label={COPY.open} onPress={() => setOpen(true)} testId="engine-debug-open" />
       </div>
     );
