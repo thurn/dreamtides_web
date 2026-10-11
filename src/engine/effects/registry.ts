@@ -60,6 +60,7 @@ import {
   modifyCardCostPrimitive,
   movePrimitive,
   optionalPrimitive,
+  payToPrimitive,
   phasePrimitive,
   playFromZonePrimitive,
   playRestrictionPrimitive,
@@ -226,6 +227,9 @@ const DEFINITIONS = {
   },
   get move() {
     return movePrimitive;
+  },
+  get payTo() {
+    return payToPrimitive;
   },
   get optional() {
     return optionalPrimitive;

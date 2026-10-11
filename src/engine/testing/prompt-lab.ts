@@ -68,6 +68,8 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** A complete optional resolving energy and discard payment before drawing. */
+  resolvingPayment: labEvent(0x43800, 0, p.payTo({ energy: 2, discard: 1 }, p.draw(2))),
   /** Grant a full extra turn using the ordinary queue. */
   extraTurn: labEvent(0x11200, 0, p.takeExtraTurn()),
   /** An explicit zero-energy Reclaim route with an optional one-energy payment. */
@@ -357,6 +359,26 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "resolving-payment-energy-short",
+    description: "A resolving payment with insufficient energy",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.resolvingPayment.id, vanillas[0], vanillas[1]], energy: 1, deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [play("player", (ids) => first(ids.player.hand))],
+  },
+  {
+    name: "resolving-payment-hand-short",
+    description: "A resolving payment with an empty remaining hand",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.resolvingPayment.id], energy: 3, deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [play("player", (ids) => first(ids.player.hand))],
+  },
+  {
+    name: "resolving-payment",
+    description: "An optional fixed energy and exact discard payment during resolution",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.resolvingPayment.id, vanillas[0], vanillas[1]], energy: 3, deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [play("player", (ids) => first(ids.player.hand))],
+    presents: [{ side: "player", answer: () => true }, { side: "player", answer: (ids) => [at(ids.player.hand, 1)] }],
+  },
+
   {
     name: "route-cost-set", description: "Choose an optional payment when reclaiming a drawn card with its own cost set",
     setup: { active: "player", phase: "day",

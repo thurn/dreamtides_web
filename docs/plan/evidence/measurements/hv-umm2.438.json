@@ -1,0 +1,496 @@
+{
+  "bead": "hv-umm2.438",
+  "baseOid": "0b2bf4aaf97cab3409d29e0af459a84583afe0f8",
+  "scope": "One fixed resolving-payment primitive, additive registrations and synthetic LAB fixtures, bounded existing cost-composition rows, public synthetic contracts and own evidence. Zero content entities, new UI/prompt/event/floating kinds or shared logic bodies.",
+  "measurementBasis": {
+    "start": "2026-10-11T23:13:44+00:00",
+    "startScope": "Fresh reclaim acknowledgement from parent dispatch; the old native started_at belongs to a released untouched attempt.",
+    "end": "2026-10-11T23:31:04.698133+00:00",
+    "endScope": "Final evidence preparation immediately after parent scope, failure-path, QA and resource ACK, immediately before staging refreshed measurements and the single commit."
+  },
+  "checks": [
+    {
+      "name": "focused2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "exit": 1,
+      "wallS": 3.8688991660001193,
+      "started": "2026-10-11T23:18:57.568429+00:00",
+      "ended": "2026-10-11T23:19:01.437368+00:00",
+      "hostLoad": 13.70556640625,
+      "pid": 92536,
+      "pgid": 92536
+    },
+    {
+      "name": "focused3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "exit": 1,
+      "wallS": 4.415286540999659,
+      "started": "2026-10-11T23:19:19.322726+00:00",
+      "ended": "2026-10-11T23:19:23.738062+00:00",
+      "hostLoad": 13.05078125,
+      "pid": 94397,
+      "pgid": 94397
+    },
+    {
+      "name": "focused4",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "exit": 1,
+      "wallS": 3.7999084579996634,
+      "started": "2026-10-11T23:20:06.894136+00:00",
+      "ended": "2026-10-11T23:20:10.694084+00:00",
+      "hostLoad": 8.623046875,
+      "pid": 95377,
+      "pgid": 95377
+    },
+    {
+      "name": "focused5",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "exit": 0,
+      "wallS": 3.8589309170001798,
+      "started": "2026-10-11T23:20:24.502777+00:00",
+      "ended": "2026-10-11T23:20:28.361751+00:00",
+      "hostLoad": 7.74609375,
+      "pid": 95791,
+      "pgid": 95791
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallS": 3.4461730409993834,
+      "started": "2026-10-11T23:22:43.374771+00:00",
+      "ended": "2026-10-11T23:22:46.820985+00:00",
+      "hostLoad": 9.51123046875,
+      "pid": 99601,
+      "pgid": 99601
+    },
+    {
+      "name": "qa-early",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.438/resolving-payment.mjs",
+        "--bead",
+        "hv-umm2.438",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "early=1",
+        "--timeout",
+        "180"
+      ],
+      "exit": 0,
+      "wallS": 29.180456957999922,
+      "started": "2026-10-11T23:24:45.112812+00:00",
+      "ended": "2026-10-11T23:25:14.293579+00:00",
+      "hostLoad": 23.84912109375,
+      "pid": 17089,
+      "pgid": 17089
+    },
+    {
+      "name": "qa-final",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.438/resolving-payment.mjs",
+        "--bead",
+        "hv-umm2.438",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "exit": 0,
+      "wallS": 53.2302386249994,
+      "started": "2026-10-11T23:25:29.822739+00:00",
+      "ended": "2026-10-11T23:26:23.053505+00:00",
+      "hostLoad": 24.1142578125,
+      "pid": 21001,
+      "pgid": 21001
+    },
+    {
+      "name": "review1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 2,
+      "wallS": 44.802644374999545,
+      "started": "2026-10-11T23:20:34.097316+00:00",
+      "ended": "2026-10-11T23:21:18.900405+00:00",
+      "hostLoad": 7.08935546875,
+      "pid": 95998,
+      "pgid": 95998
+    },
+    {
+      "name": "review2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallS": 39.04053266599931,
+      "started": "2026-10-11T23:22:00.028562+00:00",
+      "ended": "2026-10-11T23:22:39.069480+00:00",
+      "hostLoad": 6.876953125,
+      "pid": 97898,
+      "pgid": 97898
+    },
+    {
+      "name": "smoke-slot",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/hv438-checks/run.py",
+        "smoke",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300"
+      ],
+      "exit": 0,
+      "wallS": 86.8002509580001,
+      "started": "2026-10-11T23:22:58.601116+00:00",
+      "ended": "2026-10-11T23:24:25.402221+00:00",
+      "hostLoad": 10.44482421875,
+      "pid": 4206,
+      "pgid": 4206
+    },
+    {
+      "name": "smoke",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300"
+      ],
+      "exit": 0,
+      "wallS": 86.77100241599965,
+      "started": "2026-10-11T23:22:58.625887+00:00",
+      "ended": "2026-10-11T23:24:25.397753+00:00",
+      "hostLoad": 10.44482421875,
+      "pid": 4209,
+      "pgid": 4209
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exit": 0,
+      "wallS": 0.08335870900009468,
+      "started": "2026-10-11T23:28:26.901313+00:00",
+      "ended": "2026-10-11T23:28:26.984676+00:00",
+      "hostLoad": 14.2578125,
+      "pid": 36380,
+      "pgid": 36380
+    },
+    {
+      "name": "triggers",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "exit": 0,
+      "wallS": 0.15259429200068553,
+      "started": "2026-10-11T23:28:27.006165+00:00",
+      "ended": "2026-10-11T23:28:27.158765+00:00",
+      "hostLoad": 14.2578125,
+      "pid": 36382,
+      "pgid": 36382
+    }
+  ],
+  "firstUnwrappedAttempts": [
+    {
+      "command": "npm install",
+      "exit": 0,
+      "reportedInstallS": 3,
+      "wrapperWallS": null,
+      "runtime": "Managed exec session 53564 completed; exact OS PID was not exposed by the tool."
+    },
+    {
+      "command": "npm test -- src/engine/effects/primitives/contracts.test.ts",
+      "exit": 1,
+      "testRunnerS": 2.59,
+      "tests": 1079,
+      "failures": 7,
+      "prepareStarted": "2026-10-11T23:18:24.829Z",
+      "restoreStarted": "2026-10-11T23:18:29.101Z",
+      "wrapperWallS": null,
+      "runtime": "Managed exec session 94299 completed; exact OS PID was not exposed."
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "typecheckS": 8.2,
+      "runtime": "Managed exec session 5914 completed; exact OS PID was not exposed."
+    }
+  ],
+  "corrections": [
+    "EnergyChanged uses change and draw is cardDrawn. Engine prompt log records contain source/card UUID/role but not ability; the prompt itself preserves ability 0.",
+    "resolveChosenEffect chooses child targets before its body, so the failing fixture uses a later opposing discard prompt after draw/reveal to expose a real published prefix.",
+    "Rollback retains published identities already in hand; a transient draw cannot expose its committed deck position. A corrupt unreplayable answer cannot reconstruct a published identity.",
+    "A deliberately mismatched fingerprint is created by the public typed promptFingerprint helper with a structurally complete cancellable:false prompt."
+  ],
+  "focusedScope": {
+    "totalCases": 1081,
+    "ownNewCases": 31,
+    "paymentCases": 24,
+    "recoveryCases": 4,
+    "costCompositionCases": 3,
+    "newPlainContractModules": 2,
+    "newSharedFixtureModules": 1,
+    "plainNewModuleLines": 317,
+    "existingCostCompositionNetLines": 31,
+    "netTestLines": 348,
+    "testEntrypointsAdded": 0,
+    "jsdomFilesAdded": 0
+  },
+  "reviewScope": {
+    "tests": 3411,
+    "files": 262,
+    "checks": [
+      "typecheck",
+      "typecheck-node",
+      "import-cycles",
+      "lint",
+      "related tests"
+    ],
+    "matchingPresentationAndAnnouncedCoverage": "The related suite includes prompt-lab tooling/announced changes and engine-battle presentation/view-model checks.",
+    "fullRun": false,
+    "workers": 2
+  },
+  "fuzz": {
+    "games": 300,
+    "weighted": false,
+    "policy": "Random",
+    "steps": 150837,
+    "prompts": 3350,
+    "interactiveReruns": 334,
+    "failures": 0,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 0
+    },
+    "coverageLimit": "The synthetic LAB primitive is outside the catalog pool; this smoke does not establish payTo-specific or activation/clause/variant fuzz coverage. Public new-form contracts and LAB QA provide that evidence.",
+    "heavyLock": "artifacts/heavy.lock",
+    "outerMinusInnerWallS": 0.029248542000459565,
+    "queueMeasurement": "Difference includes wrapper startup; not a pure queue wait."
+  },
+  "sourceFreeze": {
+    "at": "2026-10-11T23:22:59.779737+00:00",
+    "base": "0b2bf4aaf97cab3409d29e0af459a84583afe0f8",
+    "files": {
+      "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "b5ff7dc58d41fe68f264b90c71b8ea161bfeabd1e45e65b97e86bd32a1a0708b",
+      "src/engine/effects/primitives/contracts/pay-to-recovery.contracts.ts": "43cc4a976d1f6acd731093a331f46f7d96dd5bf8567876451dc8709b89bf7214",
+      "src/engine/effects/primitives/contracts/pay-to-support.ts": "2f2f0fbb4ca4efa53626000de7b60266886b185319659ef6c67461bb7f8b3224",
+      "src/engine/effects/primitives/contracts/pay-to.contracts.ts": "b99133b5ab5b20f0a6a4b4c53371eedb90869a7270a5672cb2f065fa17dfe23b",
+      "src/engine/effects/primitives/index.ts": "f5b2d48140ce5c0dc63fb065ed67e381cd8a6c7761279cf46088b54466783524",
+      "src/engine/effects/primitives/pay-to.ts": "a8aae47b9c95566a10b58afaab5fde88930f3a95c82dddd565db92ed4bca5984",
+      "src/engine/effects/registry.ts": "9171fb9c15ac3593b08b607be72ad66c387e273f4b5c279b21f432dcccc51762",
+      "src/engine/testing/prompt-lab.ts": "c0ab1f36d2b0e61a0f71d29c4466b70b9de54907fe39e7d5d827c182a90668b7"
+    }
+  },
+  "failurePaths": [
+    {
+      "transition": "Optional confirmation and exact discard planning",
+      "paths": [
+        "reload or restart mid-operation",
+        "invalid or stale input",
+        "concurrent actors"
+      ],
+      "tests": [
+        "reloads confirm, exact discard, deferred mode and target with identical prompts and commits once",
+        "rejects underfilled, oversized, duplicate, foreign and malformed discard answers without paying"
+      ],
+      "observables": "Identical fresh prompts; resources unchanged before the exact choice; wrong-side, stale, cancel and competing action intents bounce."
+    },
+    {
+      "transition": "Energy and discard payment followed by deferred child choices",
+      "paths": [
+        "error mid-step",
+        "reload or restart mid-operation",
+        "partial write"
+      ],
+      "tests": [
+        "publishes the paid prefix once and rolls a failing child back while retaining shown identities only",
+        "reloads confirm, exact discard, deferred mode and target with identical prompts and commits once",
+        "recovers a corrupted recorded answer or partial event-prefix write as an engine error"
+      ],
+      "observables": "Payment/card events publish once on successful recovery. A child error rolls gameplay back to the committed resolving-step start; shown pre-existing hand identities persist, transient drawn deck positions and unseen tail draws do not. Corrupted answers and event counts return engine errors."
+    },
+    {
+      "transition": "Whole-payment affordability and decline",
+      "paths": [
+        "error mid-step",
+        "invalid or stale input"
+      ],
+      "tests": [
+        "does not offer an independently unaffordable payment: $energy energy and $hand",
+        "does not offer an exact two-card payment when only one hand card is available",
+        "%s declines without resource changes or child choices"
+      ],
+      "observables": "Independent budget shortages offer no prompt, never partially pay and run no child. Invalid builder inputs throw before state exists."
+    },
+    {
+      "transition": "Payment atomic mutation",
+      "paths": [
+        "partial write",
+        "concurrent actors"
+      ],
+      "tests": [
+        "reloads confirm, exact discard, deferred mode and target with identical prompts and commits once",
+        "recovers a corrupted recorded answer or partial event-prefix write as an engine error"
+      ],
+      "observables": "payCosts is synchronous and opens no persistence or network write; the public fold is the only suspension/write boundary. Replayed prefixes and duplicate/competing answers cover that boundary."
+    }
+  ],
+  "qa": {
+    "early": {
+      "report": "resolving-payment-early.result.json",
+      "sha256": "9ff9d75c477d53b0e31ea7848c55520ee40d218b0c52c7f9b7193ec705903fa6",
+      "wallMs": {
+        "browserLeaseWait": 46,
+        "serve": 1866,
+        "scenario": 21993,
+        "total": 23931
+      },
+      "log": "resolving-payment-early-desktop.jsonl",
+      "logRows": 29,
+      "parentColdVerdict": "PASS for early desktop confirm/completed, actual 1440 by 900 CSS scale, visible unobstructed controls and coherent completed state; synthetic placeholder rendering expected."
+    },
+    "final": {
+      "report": "resolving-payment.result.json",
+      "sha256": "ba56b7f1861788bc15ab2f74647bb03bcb97c04b8002c36b0bad26aa432df4ce",
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 949,
+        "scenario": 46980,
+        "total": 47997
+      },
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "cases": [
+        "accepted compound payment",
+        "declined payment",
+        "insufficient energy",
+        "empty hand"
+      ],
+      "caps": [],
+      "error": null,
+      "captures": [
+        "payment-confirm-desktop.png",
+        "payment-discard-desktop.png",
+        "payment-complete-desktop.png",
+        "payment-declined-desktop.png",
+        "payment-confirm-mobile.png",
+        "payment-discard-mobile.png",
+        "payment-complete-mobile.png",
+        "payment-declined-mobile.png"
+      ],
+      "captureHashes": {
+        "payment-confirm-desktop.png": "0411c1ec0a2e9ecbc127c7f8a1be47ede0d0cf5f2d96c1fd1334eda23eb212f1",
+        "payment-discard-desktop.png": "c1be441e34f9ac6714a96cc3f6c84221a9b0574fd428c44723f66beb740c8200",
+        "payment-complete-desktop.png": "cb24a4ba2872ae0cdc6ab07f2fff06fbfd33153f626b4d7e2a7936daca0e030d",
+        "payment-declined-desktop.png": "4a9d3cf37b4e24002672fad7947a9d819b5308006fe51f2f57d6128d30148371",
+        "payment-confirm-mobile.png": "cee2238ed22435ca709f45f10adbbc12509e6ffd03cbab6ff37f3ea77d16fb45",
+        "payment-discard-mobile.png": "e4c4e650aeb9d28c38e22bd767009cb8e8be6d9696dbf9cd201e48f814b5756f",
+        "payment-complete-mobile.png": "26a74ca7881b1c3d1c2374a5011b35fb9ca4ca430016452f3ccf763df0aa69b3",
+        "payment-declined-mobile.png": "5910a2cf15efc038eca33e6a0d800f6f743eceedd5062627704202cda5f9b13f"
+      },
+      "persistedLogsScope": "The early preserved log has the accepted payment real intents and UUID context. Final report retains accepted prompt rows per viewport; runner final exports are the final empty-hand fixture (18 rows each), rather than all navigated games.",
+      "parentColdVerdict": "PASS: root inspected desktop discard and mobile confirm, discard and completed captures at 1440 by 900 / 390 by 844 CSS scale; controls, text, status and hand clear, intended hand fan clipping, no obstruction."
+    }
+  },
+  "resources": {
+    "pgids": [
+      92536,
+      94397,
+      95377,
+      95791,
+      95998,
+      97898,
+      99601,
+      4206,
+      4209,
+      17089,
+      17116,
+      21001,
+      21021,
+      36380,
+      36382
+    ],
+    "active": [],
+    "allAbsent": true,
+    "sourceMatches": true,
+    "verifiedAt": "2026-10-11T23:28:52.413613+00:00"
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.2,
+      "note": "Approximate additional failed validation time: synthetic assertions used wrong event/log fields and assumed deferred targets were selected after child bodies; recovery assertions were bounded to published hand identities and committed deck positions. Fixture fingerprint and cancellable typing were corrected. Detailed failed attempts are retained in measurements; no engine defect or shared body repair."
+    }
+  ],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "fallout": [],
+  "remaining": [],
+  "evidenceCommandCorrection": {
+    "attempt": "npm run friction:check",
+    "exit": 1,
+    "cause": "No package script has this name; discovered the existing --validate-records flag in review.mjs and friction-triggers.mjs before correction.",
+    "wrapperWallS": null
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review prepare-step start at 2026-10-11T23:22:00.223Z, load 6.876953125. Typecheck, lint and related-test starts at 2026-10-11T23:22:00.827Z through .829Z measured 6.7265625. The scalar records the prepare-step start."
+      }
+    }
+  },
+  "parentFinalAck": "/tmp/root438-resume/final-ack.json"
+}

@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.438",
+  "phase": 5,
+  "implementMin": 17.344968883333333,
+  "localValidationS": {
+    "focused2": 3.8688991660001193,
+    "focused3": 4.415286540999659,
+    "focused4": 3.7999084579996634,
+    "focused5": 3.8589309170001798,
+    "knip": 3.4461730409993834,
+    "review1": 44.802644374999545,
+    "review2": 39.04053266599931,
+    "smoke-slot": 86.8002509580001,
+    "smoke": 86.77100241599965,
+    "schema": 0.08335870900009468,
+    "triggers": 0.15259429200068553
+  },
+  "hostLoad": 6.876953125,
+  "testDelta": {
+    "files": 0,
+    "lines": 348,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.2,
+      "note": "Approximate additional failed validation time: synthetic assertions used wrong event/log fields and assumed deferred targets were selected after child bodies; recovery assertions were bounded to published hand identities and committed deck positions. Fixture fingerprint and cancellable typing were corrected. Detailed failed attempts are retained in measurements; no engine defect or shared body repair."
+    }
+  ]
+}

@@ -1206,6 +1206,15 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
 - optional additional costs (`optionalCost`);
 - Offering's banish from hand, by the Offering route.
 
+**Resolving payments** use `p.payTo({ energy: 2, discard: 1 }, effect)`.
+Its optional fixed energy and exact discard amounts default to zero. The
+controller is offered the existing optional-cost confirmation only when the
+whole payment is affordable. Acceptance plans the hand-card choice before
+spending energy or discarding, then chooses the child's modes and targets at
+resolution. Decline runs no child. This bounded form supports one unfiltered
+fixed discard demand, including a resolving source in hand, and retains the
+enclosing ability's source, controller, X and optional-cost bindings.
+
 **Cost choices are play-time prompts** before `commitPoint()`: which
 alternative to pay, whether to pay the optional cost, which cards to discard,
 abandon, reveal, or banish. Payment happens after the commit point, all of it
