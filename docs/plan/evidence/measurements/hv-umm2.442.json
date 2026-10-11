@@ -1,0 +1,2881 @@
+{
+  "bead": "hv-umm2.442",
+  "baseOid": "437ffde175ad42728e0bcabfa95ef5fd0a95d2dc",
+  "scope": "Read-only retrospective over a fixed 27-record Phase 5 snapshot; parent writes only coverage and its own evidence.",
+  "sageAudit": {
+    "bead": "hv-umm2.442",
+    "role": "Read-only sage retrospective helper",
+    "frozenScope": {
+      "base": "437ffde175ad42728e0bcabfa95ef5fd0a95d2dc",
+      "observedAt": "2026-10-11T23:03:09.479639+00:00",
+      "covers": [
+        "hv-umm2.108",
+        "hv-umm2.109",
+        "hv-umm2.112",
+        "hv-umm2.121",
+        "hv-umm2.392",
+        "hv-umm2.393",
+        "hv-umm2.399",
+        "hv-umm2.406",
+        "hv-umm2.407",
+        "hv-umm2.409",
+        "hv-umm2.413",
+        "hv-umm2.414",
+        "hv-umm2.424",
+        "hv-umm2.425",
+        "hv-umm2.426",
+        "hv-umm2.427",
+        "hv-umm2.428",
+        "hv-umm2.429",
+        "hv-umm2.430",
+        "hv-umm2.431",
+        "hv-umm2.432",
+        "hv-umm2.433",
+        "hv-umm2.434",
+        "hv-umm2.435",
+        "hv-umm2.437",
+        "hv-umm2.439",
+        "hv-umm2.440"
+      ],
+      "recordCount": 27,
+      "frictionFilesAtFreeze": 213,
+      "hashes": {
+        "docs/plan/evidence/friction/hv-umm2.108.json": "1300ca795fb6acf5c62efc43c5ec1adda51ff08209a14fe31b7eb33c06aa36f3",
+        "docs/plan/evidence/pre-existing/hv-umm2.108.md": "b23ce3e9959536acd9b875042f86599671ffe3d8f2aac991ca43f467fc489f06",
+        "docs/plan/evidence/friction/hv-umm2.109.json": "e811527725047dbc072df67134e20a4e291a0e94f47b9d6540257a42db0f5f53",
+        "docs/plan/evidence/friction/hv-umm2.112.json": "8d1efd65f5313d8071ac439de51a1420a5092c4f4f42878afb36ea3ab49d8b71",
+        "docs/plan/evidence/measurements/hv-umm2.112.json": "99ad6f39729f69201e89ed5996c3c4f6a146d82e287204e8f6ba02f8efcde3a4",
+        "docs/plan/evidence/pre-existing/hv-umm2.112.md": "53cc757d32794cc3c64ecb01ff29f22bb630af01a9d71964cc9fbab288a3aa81",
+        "docs/plan/evidence/friction/hv-umm2.121.json": "e91aedd095566edca13d9b73e88cbbdb65c376a77f29344a8c5a38ab0ad49587",
+        "docs/plan/evidence/measurements/hv-umm2.121.json": "9125cdf1607a23e14e0534d49a808527490613d9fc82c3d71c430e6293d760e6",
+        "docs/plan/evidence/pre-existing/hv-umm2.121.md": "8b3ed125e1bcc4119a43267a41f3a1dd3efea37c58b90b4ac35e1bed7a3e94dd",
+        "docs/plan/evidence/friction/hv-umm2.392.json": "5b63f51398e8486c1ccf956a853bb155ef5f22d169db09b3179ca1d2da57a8a4",
+        "docs/plan/evidence/pre-existing/hv-umm2.392.md": "9f6f873c8a079d54b8518b7095644c44b360e48ef0a22afa55653a9f34e53dad",
+        "docs/plan/evidence/friction/hv-umm2.393.json": "221f9fda4ad18d8a1f666dab7bbd6bcadc558720ad23b47897cc3a659e71cce9",
+        "docs/plan/evidence/measurements/hv-umm2.393.json": "7f3905b98b74ab584f3452ce8ac2eff6f5c1e8dc2b96512b3ec23df9acd968c7",
+        "docs/plan/evidence/pre-existing/hv-umm2.393.md": "f4a8f65eb873cb391831c583a18b3735eadb9b8d78d12822fcffe15d4e1f516c",
+        "docs/plan/evidence/friction/hv-umm2.399.json": "a7d18893ee0a619e6fd91b29cc51914242d9b3249a574ea9501673582dc85eff",
+        "docs/plan/evidence/measurements/hv-umm2.399.json": "77510db9e1be4c01b3b0e3f6d2866279c0f4f92a87467bac359862aee945eb0e",
+        "docs/plan/evidence/pre-existing/hv-umm2.399.md": "4118c73b556b17295d35d4c1c8a2cc06e807993b4c02c6f2b2a2e9df5d07ebcb",
+        "docs/plan/evidence/friction/hv-umm2.406.json": "e14a2b046ece23e4f4d8baa28d359d235804719bf0993073b845d084025d8a69",
+        "docs/plan/evidence/friction/hv-umm2.407.json": "037396477f31790c2f302aa1190a89f4bac3834f7bfe21faae87aa14156b6bb1",
+        "docs/plan/evidence/friction/hv-umm2.409.json": "fcb1c1a6a2047047d133bf08bcd20435b7f6302c3f1769306baf133ae8869b67",
+        "docs/plan/evidence/measurements/hv-umm2.409.json": "d90c87e5a58c2536014a2f768a04f8d328e56220e06aa955cd738aa03991077b",
+        "docs/plan/evidence/pre-existing/hv-umm2.409.md": "6457cec57e9ef2a8960c192f62aec168aa822899222c18c8d7f7e8a456ec732a",
+        "docs/plan/evidence/friction/hv-umm2.413.json": "ad508e7587fa3f76eaf9bc3ffc1f39f57c046d5bdd9bfbaef4c2c9e00ef82e3d",
+        "docs/plan/evidence/measurements/hv-umm2.413.md": "c9323a51d31eba4dc4d07e5eef8f2d140930393a1b2fa30cb15cd0d3c8e3761f",
+        "docs/plan/evidence/pre-existing/hv-umm2.413.md": "7606e7a7cac4f1439a246c4e4ccf053f4a87bbfb2924fd143eb16391b6652b20",
+        "docs/plan/evidence/friction/hv-umm2.414.json": "8efcfbd4921c697ff704603ca48bc00d79c6cbbda92a69d9e92ab371a6c28649",
+        "docs/plan/evidence/measurements/hv-umm2.414.md": "ffb25b7fa210f4f23c773a7c350c82c9f8bfabff55cf5d66adddc84478087766",
+        "docs/plan/evidence/pre-existing/hv-umm2.414.md": "370c4ec398e28af3338e9408df1ec453475a1def289f44c006218c1b4eb40eb1",
+        "docs/plan/evidence/friction/hv-umm2.424.json": "218e3d058578275687c4c068d544803656acc53e031b9f85999614cffea4aefb",
+        "docs/plan/evidence/measurements/hv-umm2.424.json": "e495997aaf4c8852d4969a7735cf1253bb8afdd88262d57c6604b9bc85b1d2d2",
+        "docs/plan/evidence/pre-existing/hv-umm2.424.md": "1b83cf65551d7837e3ae57b64df5bef40b73b85d28f157fd214877ee0c4acd22",
+        "docs/plan/evidence/friction/hv-umm2.425.json": "a8a194681ab7a0c699c7aa582a11b68cfd31758634372a7becb49c0622ed0beb",
+        "docs/plan/evidence/friction/hv-umm2.426.json": "21520c50df674c73f8ee56268354c77cddabe87fe7ea18130c86fa4ea916095b",
+        "docs/plan/evidence/measurements/hv-umm2.426.md": "6d38c63b1ed70e18e25da34b2b44f0d2403f6960db9ca59b31fad21c24e52b67",
+        "docs/plan/evidence/friction/hv-umm2.427.json": "8d0ba22b4b578eec20fab674e0d09c9f80c0698a6f7c0e0c20aedc945990abbb",
+        "docs/plan/evidence/friction/hv-umm2.428.json": "e2d2e5b5de8509273aa07077260c26bd68c656417cb59eacf85b5147222bb517",
+        "docs/plan/evidence/friction/hv-umm2.429.json": "12431467513f00732eafefe1c12676162321ed29b0f7347978a65ccecd2e5ecd",
+        "docs/plan/evidence/friction/hv-umm2.430.json": "460dde611cf32c3108d04afb349b9e2c59414cc46d81f9d436c3295ae910c14f",
+        "docs/plan/evidence/measurements/hv-umm2.430.md": "da68424b9355467c2addebdee3e7f5b911b73fb5b33d8dc8805ce1d7ca335752",
+        "docs/plan/evidence/pre-existing/hv-umm2.430.md": "36e612a319573a610760560ae83ca3f84cb3364d9a214079d356a98e1424c4bc",
+        "docs/plan/evidence/friction/hv-umm2.431.json": "5ac9a1a9cad26cd04d160e53b45e2893538ef83327dd3050a1faebf613f0d2e3",
+        "docs/plan/evidence/measurements/hv-umm2.431.json": "3154045124cd7f10a392c39ded5542df98cbc5a97599133091dc408d0aec5d2a",
+        "docs/plan/evidence/pre-existing/hv-umm2.431.md": "f556bb328839242a2d1d54c06f2952f27fde584beafe46eeca971eb6046d152d",
+        "docs/plan/evidence/friction/hv-umm2.432.json": "9cb011e059e8b5729350e84eb430e1cd8735416ea5c4b1b0baf366fbbbd7dc38",
+        "docs/plan/evidence/friction/hv-umm2.433.json": "b7697266bcab6f639526abbd872decabf04631a1c58203a53bbd83defe8cc0cd",
+        "docs/plan/evidence/measurements/hv-umm2.433.json": "37003fccae0ae3ad4bb5a19e2815f55b60d1f539a888ee37e6e3e56543caf42b",
+        "docs/plan/evidence/friction/hv-umm2.434.json": "ca726867dff8ff037afa8ac9434e549f210221784740f07842451dc9412462ee",
+        "docs/plan/evidence/measurements/hv-umm2.434.json": "63759f44f4f8eaf7a5d42e4118139858c7890a854692de1ab3f3bdaaf7be0a4f",
+        "docs/plan/evidence/pre-existing/hv-umm2.434.md": "8e1baa3e6eaf93d893429f50665c96e6f7e239f5ebbf8456c0e5b47c71b0c912",
+        "docs/plan/evidence/friction/hv-umm2.435.json": "fde03c85a003712f7ef0cdeae4636c3071e814f68fe65b27ed035700a8f72ff7",
+        "docs/plan/evidence/measurements/hv-umm2.435.json": "d2cf9ff57e082a00872630ef66d0153acf499e0069a590a330248369330ab90e",
+        "docs/plan/evidence/pre-existing/hv-umm2.435.md": "4d5c43856740bb0758fd4cd11a3f9023487e3a8adee03f902ed8900d635cd9bb",
+        "docs/plan/evidence/friction/hv-umm2.437.json": "10f2460f63787351767dedad530921f55e492870470c5f6d224e166551475942",
+        "docs/plan/evidence/friction/hv-umm2.439.json": "8ee4d75dfed16e21251014f3e38e2dcd798a504edae4c4291bb43da129ffbacb",
+        "docs/plan/evidence/measurements/hv-umm2.439.json": "6d9acb556e9498f1852503039d91963a46a3f56895d696e6a6b3414554a74a3b",
+        "docs/plan/evidence/pre-existing/hv-umm2.439.md": "2e45faa0bc6932a70b50c51746fe98d56e2e52ebeabde234e62b2ca42ca43a43",
+        "docs/plan/evidence/friction/hv-umm2.440.json": "20dbeb6a5ffb40c068d6155018ce95728d8fab3ec89289928b685985ce90210f",
+        "docs/plan/evidence/measurements/hv-umm2.440.json": "42f0a075b46b1a726190e7af72af2001191531b7be93a2e03a99279888e0323a",
+        "docs/plan/evidence/pre-existing/hv-umm2.440.md": "cc9464ceddfead8491c7159999b5003e8d0669358afd7b5f2209df6d7f526482"
+      },
+      "legacyMatchedCoveredRecords": 0,
+      "baseline": "hv-umm2.425"
+    },
+    "coverage": [
+      {
+        "bead": "hv-umm2.108",
+        "title": "5.2 [prim-create-card] primitive createCard (cards: type and subtype synergies) (core-review)",
+        "nativeState": "closed",
+        "finding": "Creation form and redacted source event landed. The existing-card brief confusion cost 15 minutes; current UUID authority and the 440 disposition cover it. Both core-review test findings landed in 434. Two edit-induced sweep transport failures retain their evidence; source freeze is current policy.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.108.json",
+          "hv-umm2.108 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.109",
+        "title": "5.2 [prim-play-restriction] primitive playRestriction (cards: remaining unique cards) (core-review)",
+        "nativeState": "closed",
+        "finding": "The UUID and printed-text briefing mismatch was dispositioned in 440. An API interruption cost 20 minutes and required fuzz and sweep reruns. An additive comment conflict was recovered. All three core-review findings landed in 439; its comment follow-up 444 is already canonical.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.109.json",
+          "hv-umm2.109 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.112",
+        "title": "5.2 [prim-take-extra-turn] primitive takeExtraTurn (cards: remaining unique cards) (core-review)",
+        "nativeState": "closed",
+        "finding": "Extra turns reuse the settled C8 scheduling rules. The 300-game fuzz passed; 106.67 seconds wrapper versus 69.2 seconds worker includes unseparated heavy wait. Two geometry and fixture assumptions were corrected without a source defect. Quota review exit 1 was later cleared by actual other-family exit 0 in 158.647 seconds. Its description finding landed in 437.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.112.json",
+          "hv-umm2.112 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.112.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.121",
+        "title": "5.2 [cards-09] cards: card flow (9/97)",
+        "nativeState": "closed",
+        "finding": "Five-card composition adds two D20 scenarios and changes no engine code. Weighted 300-game fuzz passed. The sweep has 100 effective cells: 52 passes and 48 skips. One initial deadline failed and its one documented fresh retry passed. Exercise counts certify card plays, not activations or clauses. The 26.9-millisecond pre-command interval is a queue and startup upper bound.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.121.json",
+          "hv-umm2.121 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.121.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.392",
+        "title": "Capture materialized card identities for deferred effects (core-review)",
+        "nativeState": "closed",
+        "finding": "Three core-review rounds repaired hidden cohort omission, source leakage, saved-state validation, aliasing and variant fidelity. The record attributes 80 minutes to review repair. Persistent status loss remains canonical 436. The configured Beads outage and 435 recovery notes describe the same incident.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.392.json",
+          "hv-umm2.392 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.393",
+        "title": "Show live static void-play permissions in battle badges",
+        "nativeState": "closed",
+        "finding": "Static-permission contracts and the actual God workflow pass. A chooser assumption and recapture after materialization retain their evidence. Cold mobile review found a real 6-pixel status badge and hand overlap, assigned to active 443. Empty caps does not clear that visual failure. Core review remained pending in frozen notes.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.393.json",
+          "hv-umm2.393 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.393.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.399",
+        "title": "Ability chooser names each ability and places its heading with the options",
+        "nativeState": "closed",
+        "finding": "The authored ability chooser passed both viewports with resource, replay and UUID log proof. Two harness failures were corrected using settled presentation and canonical caps checks. Two overlapping review and Knip pairs are retained; final checks ran sequentially before accepted frozen QA.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.399.json",
+          "hv-umm2.399 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.399.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.406",
+        "title": "The QA battle driver recognizes auto-answered prompts",
+        "nativeState": "closed",
+        "finding": "The shared auto-answer helper passed both rendered and automatic branches. After an immediate step commit, the event carries no forced answer and the public helper may return a null answer. One 10-minute observation does not establish a recurring new cost.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.406.json",
+          "hv-umm2.406 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.407",
+        "title": "One shared helper exports a game persisted log in QA scenarios",
+        "nativeState": "closed",
+        "finding": "Shared persisted-log export was verified on successful runs, throws before and after game creation, and the declared stage branch. The UUID logs are retained. FIFO work uses this stable helper.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.407.json",
+          "hv-umm2.407 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.409",
+        "title": "Materialize from a filtered or whole deck re-checks deck knowledge",
+        "nativeState": "closed",
+        "finding": "Typed deck-knowledge negative proofs, a 50-game smoke and exact cold privacy review are settled. Shared proof and asymmetric-view findings landed in 432. The reproduced sibling banishment leak landed in 433. Review debt is cleared.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.409.json",
+          "hv-umm2.409 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.409.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.413",
+        "title": "Views keep cost effects whose source the viewer cannot see",
+        "nativeState": "closed",
+        "finding": "Eight unchanged-source hidden-cost negatives were repaired while preserving source redaction. Focused view and determinization checks, review and Knip passed. No additional friction was recorded.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.413.json",
+          "hv-umm2.413 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.413.md"
+        ]
+      },
+      {
+        "bead": "hv-umm2.414",
+        "title": "Greedy simulates an accepted loop within its think budget",
+        "nativeState": "closed",
+        "finding": "The bounded Greedy loop simulation retains the original engine action and uses a catalog tunable. Setup and type mistakes were corrected. Final focused checks, review, Knip and 20 Random games passed. This smoke is not Greedy-loop fuzz, and no strict wall-time guarantee is claimed.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.414.json",
+          "hv-umm2.414 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.414.md"
+        ]
+      },
+      {
+        "bead": "hv-umm2.424",
+        "title": "Loop recordings note which prompts the actor fully saw, so samples can replay them",
+        "nativeState": "closed",
+        "finding": "Fully visible prompt metadata repairs loop sampling. The 200-game run completed 99,885 steps with zero failures. Worker wall 68.8 seconds and wrapper wall 69.534 seconds were measured under load. They do not establish a low-load regression.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.424.json",
+          "hv-umm2.424 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.424.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.425",
+        "title": "Phase 5 retrospective (since hv-umm2.402)",
+        "nativeState": "closed",
+        "finding": "The baseline retrospective record is uncovered and belongs in this covers list. Its six improvements 426\u2013431 are closed. The original 25 covered IDs are excluded from this new list.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.425.json",
+          "hv-umm2.425 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.426",
+        "title": "Floating-change kinds register through a typed table",
+        "nativeState": "closed",
+        "finding": "The typed validator table makes an omitted required member produce TS2741. All 28 public intake rows are byte-identical before and after. No tests, browser workflow or fuzz case was added. Subsequent 109 registered its kinds, with no validator omission found.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.426.json",
+          "hv-umm2.426 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.426.md"
+        ]
+      },
+      {
+        "bead": "hv-umm2.427",
+        "title": "Review validates changed friction records; measurement corrections ride the next bead",
+        "nativeState": "closed",
+        "finding": "Changed friction records are schema-validated in review and the gate. Measurement corrections use the next ordinary bead. The frozen trigger report preserves 41 audited unknown observations. Three release schema checks took 0.1\u20130.2 seconds.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.427.json",
+          "hv-umm2.427 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.428",
+        "title": "The browser lease serves waiters in order and the sweep yields it between cards",
+        "nativeState": "closed",
+        "finding": "FIFO arrival tickets, card-boundary yielding and separate wait and execution reports are verified by bounded contracts and the real two-acquirer check. Old worktree participants retain exclusion but can bypass tickets. The 121 sweep had no queued waiter and zero yields, so it does not establish improved fairness under contention.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.428.json",
+          "hv-umm2.428 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.429",
+        "title": "Cost-modifier composition contracts every new modifier must join",
+        "nativeState": "closed",
+        "finding": "All 314 typed cost-composition rows pass settled rulings. The current recipe requires a new cost mode, route or extension to join the table. No later modifier primitive in this freeze establishes a reduction in future review churn.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.429.json",
+          "hv-umm2.429 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.430",
+        "title": "Inventory capability probes read exported forms, not source regexes",
+        "nativeState": "closed",
+        "finding": "Export and form descriptors replace regex capability guesses. Representative resolver proof missed C12 meaning and complete table coverage; accepted repairs landed in 435. CLI timings alone do not establish causal speed improvement or complete correctness.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.430.json",
+          "hv-umm2.430 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.430.md"
+        ]
+      },
+      {
+        "bead": "hv-umm2.431",
+        "title": "Bead notes and friction records stay readable",
+        "nativeState": "closed",
+        "finding": "Compact seven-field records and spaced-note guidance are current. Later records 435, 439 and 440 follow the compact shape. Some transition prose remains dense. Reading-time reduction is unmeasured.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.431.json",
+          "hv-umm2.431 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.431.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.432",
+        "title": "Share public ability proof and cover asymmetric deck knowledge",
+        "nativeState": "closed",
+        "finding": "Shared public-ability proof and exactly-one-viewer contracts close the accepted 409 findings. Mutation controls discriminate incorrect visibility. The bounded 62-line non-test change does not require another cold review under the current policy.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.432.json",
+          "hv-umm2.432 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.433",
+        "title": "Settle deck knowledge while banishing named deck references",
+        "nativeState": "closed",
+        "finding": "Twelve failing unchanged-base banishment cases and unordered and asymmetric mutations close the reproduced sibling leak from 409. The 100-game smoke has zero failures. Persistent hidden-zone status loss remains separate in 436.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.433.json",
+          "hv-umm2.433 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.433.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.434",
+        "title": "createCard review: pin the production Seer of the Fallen trigger and a duplicate intent",
+        "nativeState": "closed",
+        "finding": "Production Seer base and amplified clauses and duplicate-intent contracts close the 108 findings. An additive registry conflict was recovered through the native checkpoint and update protocol. Final checks are meaningful and settled. The 72.56-minute elapsed window includes interruption and is not isolated repair time.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.434.json",
+          "hv-umm2.434 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.434.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.435",
+        "title": "Keep C12 remapping pending and contract every inventory descriptor",
+        "nativeState": "closed",
+        "finding": "Independent fixtures cover 47 descriptors and 48 forms, and preserve intended pending C12 semantics. The 54.7-minute interruption interval includes paused observation. The lost mutant observer was reconciled and intended source restored. Core review found a pending-marker lifecycle defect already assigned to 441.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.435.json",
+          "hv-umm2.435 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.435.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.437",
+        "title": "Extra-turn review: describe the present-status fixture turn sequence",
+        "nativeState": "closed",
+        "finding": "The present-status fixture description closes the 112 finding. The edit is in an executable fixture module and selects a broad gate. Its 100.645-second gate does not belong in the evidence-only comparison.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.437.json",
+          "hv-umm2.437 native notes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.439",
+        "title": "playRestriction review: announce the chosen card even when the restriction cannot start; test every play route and real zone moves",
+        "nativeState": "closed",
+        "finding": "A real chosen-card announcement negative was repaired using the existing reveal event before duration resolution. Focused contracts cover 1,019 cases, four routes and real moves. Both viewports pass normal QA. Two harness predicate failures are retained. Exact cold review took 88.429 seconds and found only comments, assigned to 444.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.439.json",
+          "hv-umm2.439 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.439.json"
+        ]
+      },
+      {
+        "bead": "hv-umm2.440",
+        "title": "Audit and disposition the plan brief mismatch trigger",
+        "nativeState": "closed",
+        "finding": "Three historical briefing causes receive one evidenced reason disposition. Current guidance and runtime source remain unchanged. Evidence-only review took 0.320 seconds and sequential Knip took 5.283 seconds. The failed scratch parser is not a focused test. Exact promotion, cleanup and runtime closure are settled.",
+        "evidence": [
+          "docs/plan/evidence/friction/hv-umm2.440.json",
+          "hv-umm2.440 native notes",
+          "docs/plan/evidence/measurements/hv-umm2.440.json"
+        ]
+      }
+    ],
+    "gate": {
+      "all": {
+        "summary": {
+          "n": 27,
+          "medianS": 53.093,
+          "minS": 14.952,
+          "maxS": 117.214
+        },
+        "samples": [
+          {
+            "id": "01a12cc1-e1fb-7012-b943-1924891ddc46",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "dbfe5b09f3579c8c9697f3c80c70530c7563627b",
+            "subject": "fix(inventory): resolve DSL capabilities from public authoring exports",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4896,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 12464,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 17.36,
+            "attemptState": "passed",
+            "tested": "b276c280d60370549316759a722268443021880c",
+            "attempts": 1,
+            "bead": "hv-umm2.430"
+          },
+          {
+            "id": "01a12d28-d774-78c3-b590-f4d93bd4aaac",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "9a6e961102e7f52022076a8ee8dad76c3e77543b",
+            "subject": "docs(plan): disposition the Phase 5 brief mismatch trigger",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5428,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 14372,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 19.8,
+            "attemptState": "passed",
+            "tested": "c259e9a8d9f7110848d5239bb47c25a5479afc09",
+            "attempts": 1,
+            "bead": "hv-umm2.440"
+          },
+          {
+            "id": "01a12caa-3a78-76e0-ba2e-e0c0ba57d4a1",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "ee55ba496acb20f940610f87d1bcc68a0f28a1ed",
+            "subject": "fix(engine): preserve floating costs with redacted sources",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4946,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 49835,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 54.781,
+            "attemptState": "passed",
+            "tested": "42a4862527815633492db2034384edb7fe29a691",
+            "attempts": 1,
+            "bead": "hv-umm2.413"
+          },
+          {
+            "id": "01a12cc9-9346-7893-bc0a-80cc545b4402",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "dfe05597ea369faeb1095c7f3690f1888b9e56b8",
+            "subject": "feat(engine): resolve controller extra turns",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5791,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 56675,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 62.466,
+            "attemptState": "passed",
+            "tested": "675dbfb8bafa6b655b56e87d88907be57f3fa7fa",
+            "attempts": 1,
+            "bead": "hv-umm2.112"
+          },
+          {
+            "id": "01a12d2e-6e48-7a81-a411-b2e0f500f2b1",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "67f1858b098e47a60dc599362b83d94c86cf28eb",
+            "subject": "fix(engine): announce the card chosen for a play restriction",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5548,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 58293,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 63.841,
+            "attemptState": "passed",
+            "tested": "ae7e66c4b86afba771247d3163dce99b7256a0c1",
+            "attempts": 1,
+            "bead": "hv-umm2.439"
+          },
+          {
+            "id": "01a12d25-3ae9-7070-b4fc-03a50d1e0339",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "402ee2797250ba25d16e939bf59ed74026a50600",
+            "subject": "fix(engine): replay loops whose prompts were fully visible",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5558,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 95780,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 101.338,
+            "attemptState": "passed",
+            "tested": "2d6441af8b76317867ba74feaf98035234d13b91",
+            "attempts": 1,
+            "bead": "hv-umm2.424"
+          },
+          {
+            "id": "01a12c9b-5e49-7320-999f-bdb6c62658dd",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "af246c115b8ca85d86b886b89d81a4bd49de9fa4",
+            "subject": "feat(qa): wait for a prompt role or its engine auto-answer",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4868,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 11653,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 16.521,
+            "attemptState": "passed",
+            "tested": "af246c115b8ca85d86b886b89d81a4bd49de9fa4",
+            "attempts": 1,
+            "bead": "hv-umm2.406"
+          },
+          {
+            "id": "01a12d1c-7938-7191-8784-c1fcf5d1ccd6",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "e2dbba3d92a2c22e1e970b75e12fd64a5071d089",
+            "subject": "docs(engine): describe the present-status fixture's extra turn",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4698,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 95947,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 100.645,
+            "attemptState": "passed",
+            "tested": "b6faa84706f3f873c25c178e116df6d3b0bcebfc",
+            "attempts": 1,
+            "bead": "hv-umm2.437"
+          },
+          {
+            "id": "01a12cc7-73be-7e83-b457-fa9ffa8d45b0",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "77a06f76cabb324c04de98c4fae65ef1b86dd725",
+            "subject": "fix(ui): label and group activated ability choices",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5317,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 19993,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 25.31,
+            "attemptState": "passed",
+            "tested": "170a9ded57a3165dc9e138afb830e482bb3db61d",
+            "attempts": 1,
+            "bead": "hv-umm2.399"
+          },
+          {
+            "id": "01a12ca1-aa0f-71a1-956f-2017660d99f6",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "037f546c203cd1d65459b289ffb60b35ccb65d6d",
+            "subject": "fix(ai): bound greedy loop simulations",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 6291,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 52465,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 58.756,
+            "attemptState": "passed",
+            "tested": "1d62fc944a60a33662eb129bd5422d810a6b1d06",
+            "attempts": 1,
+            "bead": "hv-umm2.414"
+          },
+          {
+            "id": "01a12d18-2ccf-74c3-89ad-960745b5556a",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "cf7b071f411f9742cf91e81fee37143e01a5d59e",
+            "subject": "refactor(engine): share the public ability proof between deck-knowledge bounds",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4873,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 82950,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 87.823,
+            "attemptState": "passed",
+            "tested": "cf7b071f411f9742cf91e81fee37143e01a5d59e",
+            "attempts": 1,
+            "bead": "hv-umm2.432"
+          },
+          {
+            "id": "01a12cfe-13ec-7360-b6b2-a565ea6ea123",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "5e157a319a1533a1d0330a039096a36b5839a2e4",
+            "subject": "feat(engine): capture materialized cohorts for deferred effects",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5573,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 48761,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 54.334,
+            "attemptState": "passed",
+            "tested": "190a28eacc8fc8409808c4bb8dfd41e3975c8681",
+            "attempts": 1,
+            "bead": "hv-umm2.392"
+          },
+          {
+            "id": "01a12d32-d100-7763-8b31-2e639f3cb4d9",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "b25b181dc0d6d8a981614314bbbcb106aec8e160",
+            "subject": "fix(battle): show live static void-play permission badges",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5089,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 47112,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 52.201,
+            "attemptState": "passed",
+            "tested": "437ffde175ad42728e0bcabfa95ef5fd0a95d2dc",
+            "attempts": 1,
+            "bead": "hv-umm2.393"
+          },
+          {
+            "id": "01a12cb1-80d4-7983-a283-447d59641978",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "16d5088be8c0371d8648b4231c1e0c59ef04190d",
+            "subject": "feat(qa): serve browser lease waiters in arrival order and yield per sweep card",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5639,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 12355,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 17.994,
+            "attemptState": "passed",
+            "tested": "16d5088be8c0371d8648b4231c1e0c59ef04190d",
+            "attempts": 1,
+            "bead": "hv-umm2.428"
+          },
+          {
+            "id": "01a12caa-e205-72b0-b485-8120538d43a4",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "645562a4540948a8b1c49f5b1968d530eafd7904",
+            "subject": "refactor(fold): require every floating change validator",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5452,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 47641,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 53.093,
+            "attemptState": "passed",
+            "tested": "5f305f63f2e656bb0e28d9e01712f5718ba89789",
+            "attempts": 1,
+            "bead": "hv-umm2.426"
+          },
+          {
+            "id": "01a12d19-1ac0-7f22-bfff-66080208429c",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "7d3c78b3b0f25195c6de72185da672f6a358c7ac",
+            "subject": "feat(engine): playRestriction primitive; author Grim Pursuer, Urban Desperado, Vault Infiltrator",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 6581,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 106563,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 113.144,
+            "attemptState": "passed",
+            "tested": "cf15eac7180bd312b3922dec055ef15b1df71603",
+            "attempts": 1,
+            "bead": "hv-umm2.109"
+          },
+          {
+            "id": "01a12ca0-6d5d-7741-96ce-0a2d5b7956fe",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "c79b05842e34867a20c4812cb6ff3eff9ccdf85a",
+            "subject": "docs(plan): record the Phase 5 retrospective after hv-umm2.402",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4701,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 10251,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 14.952,
+            "attemptState": "passed",
+            "tested": "7ecf9749bc0e4f745b026340a463e92ba665b97d",
+            "attempts": 1,
+            "bead": "hv-umm2.425"
+          },
+          {
+            "id": "01a12ca8-8cf8-7f83-aaa7-fa234a5f4238",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "72477a4a1fae93699834e092ea534bad1dbaa7d7",
+            "subject": "fix(engine): settle deck knowledge during filtered materialization",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5509,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 47555,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 53.064,
+            "attemptState": "passed",
+            "tested": "02c008997b4c5fa69a5cad3a88945c3b82bbf7d3",
+            "attempts": 1,
+            "bead": "hv-umm2.409"
+          },
+          {
+            "id": "01a12cdb-3758-7992-8b53-181230766e98",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "cf1eb61c3a54b2d25983e222a9cc3093db453b00",
+            "subject": "feat(content): compose card flow costs and event discovery",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4754,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 51866,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 56.62,
+            "attemptState": "passed",
+            "tested": "acdf9191a72d103b74d64462a06630ddb2ce6e6a",
+            "attempts": 1,
+            "bead": "hv-umm2.121"
+          },
+          {
+            "id": "01a12ca5-5902-7543-b8d1-de9b37ef314b",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "2982ed89c005d8e40854a111a78528ac1381d7a4",
+            "subject": "feat(review): validate changed friction records in review",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4887,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 11843,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 16.73,
+            "attemptState": "passed",
+            "tested": "dc65f9d290dd3ef92661a5aef417f1e05e4a4389",
+            "attempts": 1,
+            "bead": "hv-umm2.427"
+          },
+          {
+            "id": "01a12ca6-4a8b-73a3-919f-a3838c64e957",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "669f4ffd6b801c661e9651791ea32c331c853ed9",
+            "subject": "feat(qa): read and save each scenario pass's persisted game log",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5130,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 14292,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 19.422,
+            "attemptState": "passed",
+            "tested": "669f4ffd6b801c661e9651791ea32c331c853ed9",
+            "attempts": 1,
+            "bead": "hv-umm2.407"
+          },
+          {
+            "id": "01a12cc4-630a-7140-9414-1b3730c289e4",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "2404a3943807ef6a77ad506708252dc135e0adf9",
+            "subject": "feat(engine): createCard primitive; author Seer of the Fallen creating Contemplation",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5308,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 48977,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 54.285,
+            "attemptState": "passed",
+            "tested": "2404a3943807ef6a77ad506708252dc135e0adf9",
+            "attempts": 1,
+            "bead": "hv-umm2.108"
+          },
+          {
+            "id": "01a12d1f-666d-7261-b474-d7bc6bac2f53",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "ed842a707dd2880fd7fa20cc8270ef3f10ee7431",
+            "subject": "fix(inventory): validate intended DSL descriptor bindings",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4939,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 14764,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 19.703,
+            "attemptState": "passed",
+            "tested": "4033df20dc7267ff890cf7113ea0ba78d7cf36b0",
+            "attempts": 1,
+            "bead": "hv-umm2.435"
+          },
+          {
+            "id": "01a12caf-f4fe-7493-a263-81ce58f695c2",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "2bb2472cd1ff418322caa98c189145460d468b77",
+            "subject": "docs(workflow): keep coordination and friction records readable",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 6432,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 14669,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 21.101,
+            "attemptState": "passed",
+            "tested": "e3f0993cea73c2d47ef59583c8377fe0aeb7b68a",
+            "attempts": 1,
+            "bead": "hv-umm2.431"
+          },
+          {
+            "id": "01a12d1b-03ca-73a1-9b8c-48edfb293e9b",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "fae1d1821a16de89988205037cf9781c2237e938",
+            "subject": "test(engine): verify production Seer creation and duplicate intents",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4846,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 112368,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 117.214,
+            "attemptState": "passed",
+            "tested": "cc7784d8fbebe4aa95b3b35b2635698d0a556840",
+            "attempts": 1,
+            "bead": "hv-umm2.434"
+          },
+          {
+            "id": "01a12cae-a04f-7482-82bf-6e74ac0638ea",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "9280a034241f2283d5943bfb26b299b6436c11f2",
+            "subject": "test(engine): cost-modifier composition contract table",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 4565,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 10460,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 15.025,
+            "attemptState": "passed",
+            "tested": "9280a034241f2283d5943bfb26b299b6436c11f2",
+            "attempts": 1,
+            "bead": "hv-umm2.429"
+          },
+          {
+            "id": "01a12d22-54b2-7b51-b5c3-6cce9d70368c",
+            "kind": "gate",
+            "state": "promoted",
+            "source": "86786471367630eb930736f27c4d74127931c8e5",
+            "subject": "fix(engine): settle deck knowledge as named banishment leaves a deck",
+            "steps": [
+              {
+                "name": "dependencies",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 5616,
+                "reused_from_attempt_id": null
+              },
+              {
+                "name": "review-gate",
+                "result_class": "success",
+                "exit_code": 0,
+                "elapsed_ms": 93589,
+                "reused_from_attempt_id": null
+              }
+            ],
+            "sumStepS": 99.205,
+            "attemptState": "passed",
+            "tested": "739d2d49fa1c925be80066313d50e264a18dd571",
+            "attempts": 1,
+            "bead": "hv-umm2.433"
+          }
+        ],
+        "over60S": 8,
+        "hostLoad": null,
+        "basis": "Final sealed dependencies + review-gate step elapsed_ms, exact public candidate status. Not approval wall or a one-file benchmark."
+      },
+      "sourceTestAndFixture": {
+        "summary": {
+          "n": 24,
+          "medianS": 54.3095,
+          "minS": 15.025,
+          "maxS": 117.214
+        },
+        "over60S": 8,
+        "hostLoad": null,
+        "basis": "Final sealed dependencies + review-gate step elapsed_ms, exact public candidate status. Not approval wall or a one-file benchmark.",
+        "sampleIds": [
+          "01a12cc1-e1fb-7012-b943-1924891ddc46",
+          "01a12caa-3a78-76e0-ba2e-e0c0ba57d4a1",
+          "01a12cc9-9346-7893-bc0a-80cc545b4402",
+          "01a12d2e-6e48-7a81-a411-b2e0f500f2b1",
+          "01a12d25-3ae9-7070-b4fc-03a50d1e0339",
+          "01a12c9b-5e49-7320-999f-bdb6c62658dd",
+          "01a12d1c-7938-7191-8784-c1fcf5d1ccd6",
+          "01a12cc7-73be-7e83-b457-fa9ffa8d45b0",
+          "01a12ca1-aa0f-71a1-956f-2017660d99f6",
+          "01a12d18-2ccf-74c3-89ad-960745b5556a",
+          "01a12cfe-13ec-7360-b6b2-a565ea6ea123",
+          "01a12d32-d100-7763-8b31-2e639f3cb4d9",
+          "01a12cb1-80d4-7983-a283-447d59641978",
+          "01a12caa-e205-72b0-b485-8120538d43a4",
+          "01a12d19-1ac0-7f22-bfff-66080208429c",
+          "01a12ca8-8cf8-7f83-aaa7-fa234a5f4238",
+          "01a12cdb-3758-7992-8b53-181230766e98",
+          "01a12ca5-5902-7543-b8d1-de9b37ef314b",
+          "01a12ca6-4a8b-73a3-919f-a3838c64e957",
+          "01a12cc4-630a-7140-9414-1b3730c289e4",
+          "01a12d1f-666d-7261-b474-d7bc6bac2f53",
+          "01a12d1b-03ca-73a1-9b8c-48edfb293e9b",
+          "01a12cae-a04f-7482-82bf-6e74ac0638ea",
+          "01a12d22-54b2-7b51-b5c3-6cce9d70368c"
+        ]
+      },
+      "engineAndContent": {
+        "summary": {
+          "n": 14,
+          "medianS": 60.611000000000004,
+          "minS": 53.064,
+          "maxS": 117.214
+        },
+        "over60S": 7,
+        "hostLoad": null,
+        "basis": "Final sealed dependencies + review-gate step elapsed_ms, exact public candidate status. Not approval wall or a one-file benchmark.",
+        "sampleIds": [
+          "01a12caa-3a78-76e0-ba2e-e0c0ba57d4a1",
+          "01a12cc9-9346-7893-bc0a-80cc545b4402",
+          "01a12d2e-6e48-7a81-a411-b2e0f500f2b1",
+          "01a12d25-3ae9-7070-b4fc-03a50d1e0339",
+          "01a12ca1-aa0f-71a1-956f-2017660d99f6",
+          "01a12d18-2ccf-74c3-89ad-960745b5556a",
+          "01a12cfe-13ec-7360-b6b2-a565ea6ea123",
+          "01a12caa-e205-72b0-b485-8120538d43a4",
+          "01a12d19-1ac0-7f22-bfff-66080208429c",
+          "01a12ca8-8cf8-7f83-aaa7-fa234a5f4238",
+          "01a12cdb-3758-7992-8b53-181230766e98",
+          "01a12cc4-630a-7140-9414-1b3730c289e4",
+          "01a12d1b-03ca-73a1-9b8c-48edfb293e9b",
+          "01a12d22-54b2-7b51-b5c3-6cce9d70368c"
+        ]
+      },
+      "scripts": {
+        "summary": {
+          "n": 6,
+          "medianS": 17.677,
+          "minS": 16.521,
+          "maxS": 19.703
+        },
+        "over60S": 0,
+        "hostLoad": null,
+        "basis": "Final sealed dependencies + review-gate step elapsed_ms, exact public candidate status. Not approval wall or a one-file benchmark.",
+        "sampleIds": [
+          "01a12cc1-e1fb-7012-b943-1924891ddc46",
+          "01a12c9b-5e49-7320-999f-bdb6c62658dd",
+          "01a12cb1-80d4-7983-a283-447d59641978",
+          "01a12ca5-5902-7543-b8d1-de9b37ef314b",
+          "01a12ca6-4a8b-73a3-919f-a3838c64e957",
+          "01a12d1f-666d-7261-b474-d7bc6bac2f53"
+        ]
+      },
+      "evidenceOnly": {
+        "summary": {
+          "n": 3,
+          "medianS": 19.8,
+          "minS": 14.952,
+          "maxS": 21.101
+        },
+        "over60S": 0,
+        "hostLoad": null,
+        "basis": "Final sealed dependencies + review-gate step elapsed_ms, exact public candidate status. Not approval wall or a one-file benchmark.",
+        "sampleIds": [
+          "01a12d28-d774-78c3-b590-f4d93bd4aaac",
+          "01a12ca0-6d5d-7741-96ce-0a2d5b7956fe",
+          "01a12caf-f4fe-7493-a263-81ce58f695c2"
+        ]
+      },
+      "waits": {
+        "summary": {
+          "n": 27,
+          "medianS": 0.081287,
+          "minS": 0.038835,
+          "maxS": 0.591894
+        },
+        "basis": "Buildset creation to worker start only. Does not measure ticket admission wait, source approval-to-land, or prerequisites."
+      }
+    },
+    "release": {
+      "summary": {
+        "n": 22,
+        "medianS": 143.167,
+        "minS": 125.835,
+        "maxS": 184.706
+      },
+      "samples": [
+        {
+          "item": "01a12d2f-7ae4-74c0-9271-ee35ebf099b6",
+          "source": "ae7e66c4b86afba771247d3163dce99b7256a0c1",
+          "subject": "fix(engine): announce the card chosen for a play restriction",
+          "buildset": "01a12d2f-7b37-7000-8cc2-f40dafce7b86",
+          "sumStepS": 129.578,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4537,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 73881,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 51160,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12d29-3b95-7c92-be44-cbe7bf6346f0",
+          "source": "c259e9a8d9f7110848d5239bb47c25a5479afc09",
+          "subject": "docs(plan): disposition the Phase 5 brief mismatch trigger",
+          "buildset": "01a12d29-3be9-7830-a323-9fd7d7fe6f89",
+          "sumStepS": 142.905,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4802,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 84094,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 54009,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12d26-dcd6-7d13-b801-328d2ddc4957",
+          "source": "2d6441af8b76317867ba74feaf98035234d13b91",
+          "subject": "fix(engine): replay loops whose prompts were fully visible",
+          "buildset": "01a12d26-dd3a-7a82-ac9c-190fe9b8aaef",
+          "sumStepS": 150.842,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4579,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 82766,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 63497,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12d23-ed92-7930-bcad-52e921b16930",
+          "source": "739d2d49fa1c925be80066313d50e264a18dd571",
+          "subject": "fix(engine): settle deck knowledge as named banishment leaves a deck",
+          "buildset": "01a12d23-ee36-7aa0-8eac-52311502ec89",
+          "sumStepS": 166.564,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 5192,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 93311,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 68061,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12d20-26b0-7d22-ae00-2fa82356a336",
+          "source": "4033df20dc7267ff890cf7113ea0ba78d7cf36b0",
+          "subject": "fix(inventory): validate intended DSL descriptor bindings",
+          "buildset": "01a12d21-326b-7352-afc6-6566806a6350",
+          "sumStepS": 174.924,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4631,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 111063,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 59230,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12d1e-d7ae-7042-b9f4-652722b63d38",
+          "source": "b6faa84706f3f873c25c178e116df6d3b0bcebfc",
+          "subject": "docs(engine): describe the present-status fixture's extra turn",
+          "buildset": "01a12d1e-da26-7fe3-9ab7-f2d49b6d9cb7",
+          "sumStepS": 153.269,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4426,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 86901,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 61942,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12d1b-61eb-76c1-95f2-4931bc932b12",
+          "source": "cf15eac7180bd312b3922dec055ef15b1df71603",
+          "subject": "feat(engine): playRestriction primitive; author Grim Pursuer, Urban Desperado, Vault Infiltrator",
+          "buildset": "01a12d1c-6c02-7e70-8c59-169ef210d46b",
+          "sumStepS": 158.891,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4926,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 100979,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 52986,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12d19-97aa-7491-bc55-9ac1803f6b69",
+          "source": "cf7b071f411f9742cf91e81fee37143e01a5d59e",
+          "subject": "refactor(engine): share the public ability proof between deck-knowledge bounds",
+          "buildset": "01a12d19-9832-7503-881a-93b877e7f198",
+          "sumStepS": 184.706,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 6669,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 107195,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 70842,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cfe-fa80-7403-9ae6-ed1708d065a0",
+          "source": "190a28eacc8fc8409808c4bb8dfd41e3975c8681",
+          "subject": "feat(engine): capture materialized cohorts for deferred effects",
+          "buildset": "01a12cfe-fabd-7e92-be36-fb2060b92aab",
+          "sumStepS": 137.984,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 5816,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 80714,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 51454,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cdc-279f-7642-bbe3-ed90ac49adb1",
+          "source": "acdf9191a72d103b74d64462a06630ddb2ce6e6a",
+          "subject": "feat(content): compose card flow costs and event discovery",
+          "buildset": "01a12cdc-27e9-7062-856c-5a01f8d2de9e",
+          "sumStepS": 146.885,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4688,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 90225,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 51972,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12ccb-4597-7363-805c-425509648a0e",
+          "source": "675dbfb8bafa6b655b56e87d88907be57f3fa7fa",
+          "subject": "feat(engine): resolve controller extra turns",
+          "buildset": "01a12ccb-45f8-7093-8eb6-d0fb88aabdd1",
+          "sumStepS": 143.429,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4977,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 85863,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 52589,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cc7-e84a-7791-86f1-447172d00988",
+          "source": "170a9ded57a3165dc9e138afb830e482bb3db61d",
+          "subject": "fix(ui): label and group activated ability choices",
+          "buildset": "01a12cc7-e890-7b22-9d90-b6fe2cfcadb0",
+          "sumStepS": 165.855,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4664,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 93872,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 67319,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cc5-4b01-7703-a777-4c10e4c01ccf",
+          "source": "2404a3943807ef6a77ad506708252dc135e0adf9",
+          "subject": "feat(engine): createCard primitive; author Seer of the Fallen creating Contemplation",
+          "buildset": "01a12cc5-4b52-7801-b634-270f3f7c2aea",
+          "sumStepS": 149.207,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 5245,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 89676,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 54286,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cc2-c0b2-7992-8b86-9b8c49f05cd8",
+          "source": "b276c280d60370549316759a722268443021880c",
+          "subject": "fix(inventory): resolve DSL capabilities from public authoring exports",
+          "buildset": "01a12cc2-c125-7ae2-840e-84b80d5c7150",
+          "sumStepS": 140.621,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 5370,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 80367,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 54884,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cb2-057e-7132-beb1-89eec8575046",
+          "source": "16d5088be8c0371d8648b4231c1e0c59ef04190d",
+          "subject": "feat(qa): serve browser lease waiters in arrival order and yield per sweep card",
+          "buildset": "01a12cb3-3875-7832-bd92-3a9e0a9f49e9",
+          "sumStepS": 125.835,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4686,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 71113,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 50036,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cb0-a9b2-73a3-b5b4-44216adc7e97",
+          "source": "e3f0993cea73c2d47ef59583c8377fe0aeb7b68a",
+          "subject": "docs(workflow): keep coordination and friction records readable",
+          "buildset": "01a12cb1-33d6-73e2-826d-59599b15cc63",
+          "sumStepS": 131.614,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4873,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 77874,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 48867,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12caf-0051-7373-8efc-784bd6bcdddc",
+          "source": "9280a034241f2283d5943bfb26b299b6436c11f2",
+          "subject": "test(engine): cost-modifier composition contract table",
+          "buildset": "01a12caf-01c0-7f72-af13-09ae060b0e15",
+          "sumStepS": 141.139,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4733,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 85947,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 50459,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12cac-2bea-7ad3-b5a7-877da6483e92",
+          "source": "5f305f63f2e656bb0e28d9e01712f5718ba89789",
+          "subject": "refactor(fold): require every floating change validator",
+          "buildset": "01a12cac-488f-7700-bb3f-b31b597ba8fb",
+          "sumStepS": 134.168,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4678,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 79231,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 50259,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12ca9-a24e-7ff1-a7c2-c5479f43483d",
+          "source": "02c008997b4c5fa69a5cad3a88945c3b82bbf7d3",
+          "subject": "fix(engine): settle deck knowledge during filtered materialization",
+          "buildset": "01a12caa-0deb-7b12-8cc1-9e0d0e39926d",
+          "sumStepS": 145.556,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4689,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 85690,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 55177,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12ca6-d3be-7b10-ba9f-f9db8a0527ce",
+          "source": "669f4ffd6b801c661e9651791ea32c331c853ed9",
+          "subject": "feat(qa): read and save each scenario pass's persisted game log",
+          "buildset": "01a12ca7-f6df-70b2-a150-5ab983dad6ba",
+          "sumStepS": 136.632,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4673,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 81897,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 50062,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12ca5-c8c3-76d1-bf2b-f999dec1df82",
+          "source": "dc65f9d290dd3ef92661a5aef417f1e05e4a4389",
+          "subject": "feat(review): validate changed friction records in review",
+          "buildset": "01a12ca5-c92a-7263-961a-14fccb560a00",
+          "sumStepS": 141.413,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 4517,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 85331,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 51565,
+              "reused_from_attempt_id": null
+            }
+          ]
+        },
+        {
+          "item": "01a12ca2-c8c0-7d03-976a-0c39d7245098",
+          "source": "1d62fc944a60a33662eb129bd5422d810a6b1d06",
+          "subject": "fix(ai): bound greedy loop simulations",
+          "buildset": "01a12ca2-e4a4-7011-b9fd-d92ce0d628b1",
+          "sumStepS": 138.175,
+          "steps": [
+            {
+              "name": "dependencies",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 5101,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "review-full",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 81427,
+              "reused_from_attempt_id": null
+            },
+            {
+              "name": "fuzz",
+              "result_class": "success",
+              "exit_code": 0,
+              "elapsed_ms": 51647,
+              "reused_from_attempt_id": null
+            }
+          ]
+        }
+      ],
+      "fuzzStep": {
+        "n": 22,
+        "medianS": 52.787499999999994,
+        "minS": 48.867,
+        "maxS": 70.842
+      },
+      "reviewFullStep": {
+        "n": 22,
+        "medianS": 85.51050000000001,
+        "minS": 71.113,
+        "maxS": 111.063
+      },
+      "frozenPending393": true,
+      "frozenState": "pending",
+      "frozenLagCommits": 1,
+      "frozenHolds": [],
+      "frozenPromotionPause": null,
+      "failuresObserved": 0,
+      "caveat": "22 check-passed release items in frozen public status; two superseded items and one running item are excluded. This bounded status is not an exhaustive all-history claim. Later exact393 status became check-passed and is outside frozen release statistics."
+    },
+    "localChecks": [
+      {
+        "scope": "engineAndContent",
+        "review": {
+          "n": 15,
+          "medianS": 40.72,
+          "minS": 10,
+          "maxS": 64
+        },
+        "focused": {
+          "n": 14,
+          "medianS": 3.8379313945770264,
+          "minS": 2,
+          "maxS": 16
+        },
+        "samples": [
+          {
+            "bead": "hv-umm2.108",
+            "reviewS": 41.5,
+            "hostLoad": 20.44,
+            "focusedS": 3.3
+          },
+          {
+            "bead": "hv-umm2.109",
+            "reviewS": 48,
+            "hostLoad": 4.72,
+            "focusedS": 16
+          },
+          {
+            "bead": "hv-umm2.112",
+            "reviewS": 40.39118218421936,
+            "hostLoad": 8.10400390625,
+            "focusedS": 3.848607063293457
+          },
+          {
+            "bead": "hv-umm2.121",
+            "reviewS": 36.54573025001446,
+            "hostLoad": 6.81005859375,
+            "focusedS": 4.537289125029929
+          },
+          {
+            "bead": "hv-umm2.392",
+            "reviewS": 64,
+            "hostLoad": 8.62,
+            "focusedS": 3
+          },
+          {
+            "bead": "hv-umm2.409",
+            "reviewS": 40.72,
+            "hostLoad": 30.7294921875,
+            "focusedS": null
+          },
+          {
+            "bead": "hv-umm2.413",
+            "reviewS": 22.200861930847168,
+            "hostLoad": 29.251953125,
+            "focusedS": 3.8272557258605957
+          },
+          {
+            "bead": "hv-umm2.414",
+            "reviewS": 36.47986258403398,
+            "hostLoad": 5.15625,
+            "focusedS": 3.8203989169560373
+          },
+          {
+            "bead": "hv-umm2.424",
+            "reviewS": 53.91945745799967,
+            "hostLoad": 21.38,
+            "focusedS": 4.546839792000355
+          },
+          {
+            "bead": "hv-umm2.426",
+            "reviewS": 19.60504504200071,
+            "hostLoad": 26.23046875,
+            "focusedS": 5.959718333033379
+          },
+          {
+            "bead": "hv-umm2.429",
+            "reviewS": 10,
+            "hostLoad": 27.92,
+            "focusedS": 3
+          },
+          {
+            "bead": "hv-umm2.432",
+            "reviewS": 55,
+            "hostLoad": 6.02,
+            "focusedS": 2
+          },
+          {
+            "bead": "hv-umm2.433",
+            "reviewS": 54,
+            "hostLoad": 30.24,
+            "focusedS": 3
+          },
+          {
+            "bead": "hv-umm2.434",
+            "reviewS": 25.145838975906372,
+            "hostLoad": 19.6767578125,
+            "focusedS": 4.4864161014556885
+          },
+          {
+            "bead": "hv-umm2.439",
+            "reviewS": 59.415877833000195,
+            "hostLoad": 11.12,
+            "focusedS": 4.697395791999952
+          }
+        ],
+        "caveat": "Different selections and command wrappers; hostLoad is review-start scope, not focused-test load. No pooled causal speed claim."
+      },
+      {
+        "scope": "scripts",
+        "review": {
+          "n": 6,
+          "medianS": 10.818,
+          "minS": 9.2,
+          "maxS": 15.501
+        },
+        "focused": {
+          "n": 6,
+          "medianS": 4.3,
+          "minS": 3.3,
+          "maxS": 8.279
+        },
+        "samples": [
+          {
+            "bead": "hv-umm2.406",
+            "reviewS": 9.2,
+            "hostLoad": 7.73,
+            "focusedS": 3.3
+          },
+          {
+            "bead": "hv-umm2.407",
+            "reviewS": 12,
+            "hostLoad": 22.744140625,
+            "focusedS": 6
+          },
+          {
+            "bead": "hv-umm2.427",
+            "reviewS": 11,
+            "hostLoad": 27.38,
+            "focusedS": 3.4
+          },
+          {
+            "bead": "hv-umm2.428",
+            "reviewS": 9.98,
+            "hostLoad": 20.11,
+            "focusedS": 5.1
+          },
+          {
+            "bead": "hv-umm2.430",
+            "reviewS": 10.636,
+            "hostLoad": 12.7724609375,
+            "focusedS": 3.5
+          },
+          {
+            "bead": "hv-umm2.435",
+            "reviewS": 15.501,
+            "hostLoad": 24.02880859375,
+            "focusedS": 8.279
+          }
+        ],
+        "caveat": "Different selections and command wrappers; hostLoad is review-start scope, not focused-test load. No pooled causal speed claim."
+      },
+      {
+        "scope": "evidenceOnly",
+        "review": {
+          "n": 3,
+          "medianS": 0.32372283935546875,
+          "minS": 0.319810791999771,
+          "maxS": 1
+        },
+        "focused": {
+          "n": 0
+        },
+        "samples": [
+          {
+            "bead": "hv-umm2.425",
+            "reviewS": 1,
+            "hostLoad": 5.13,
+            "focusedS": null
+          },
+          {
+            "bead": "hv-umm2.431",
+            "reviewS": 0.32372283935546875,
+            "hostLoad": 19.373046875,
+            "focusedS": null
+          },
+          {
+            "bead": "hv-umm2.440",
+            "reviewS": 0.319810791999771,
+            "hostLoad": 24.59423828125,
+            "focusedS": null
+          }
+        ],
+        "caveat": "Different selections and command wrappers; hostLoad is review-start scope, not focused-test load. No pooled causal speed claim."
+      },
+      {
+        "scope": "viewAdapterAndUI",
+        "review": {
+          "n": 2,
+          "medianS": 24.325319750001654,
+          "minS": 19.150639500003308,
+          "maxS": 29.5
+        },
+        "focused": {
+          "n": 2,
+          "medianS": 3.8774865835148375,
+          "minS": 2.5,
+          "maxS": 5.254973167029675
+        },
+        "samples": [
+          {
+            "bead": "hv-umm2.393",
+            "reviewS": 29.5,
+            "hostLoad": 9.90478515625,
+            "focusedS": 2.5
+          },
+          {
+            "bead": "hv-umm2.399",
+            "reviewS": 19.150639500003308,
+            "hostLoad": 8.439453125,
+            "focusedS": 5.254973167029675
+          }
+        ],
+        "caveat": "Different selections and command wrappers; hostLoad is review-start scope, not focused-test load. No pooled causal speed claim."
+      },
+      {
+        "scope": "promptLabFixtureDescription",
+        "review": {
+          "n": 1,
+          "medianS": 15,
+          "minS": 15,
+          "maxS": 15
+        },
+        "focused": {
+          "n": 0
+        },
+        "samples": [
+          {
+            "bead": "hv-umm2.437",
+            "reviewS": 15,
+            "hostLoad": 10,
+            "focusedS": null
+          }
+        ],
+        "caveat": "Different selections and command wrappers; hostLoad is review-start scope, not focused-test load. No pooled causal speed claim."
+      }
+    ],
+    "D19": {
+      "threeRetainedReleaseLogs": [
+        {
+          "item": "01a12d29-3b95-7c92-be44-cbe7bf6346f0",
+          "sha256": "e6ca0741931372609522e4d3b0d6afe97e1df36ec6dd66ded67b82b4d03d90e3",
+          "format": "JSONL frames; decoded text inspected, not whole-stream JSON",
+          "frameCount": 888,
+          "steps": {
+            "test": {
+              "start": "2026-10-11T22:51:11.172Z",
+              "hostLoad1m": 21.98193359375,
+              "seconds": 53.6,
+              "exit": 0
+            },
+            "lint": {
+              "start": "2026-10-11T22:50:45.498Z",
+              "hostLoad1m": 18.31591796875,
+              "seconds": 25.7,
+              "exit": 0
+            },
+            "typecheck": {
+              "start": "2026-10-11T22:50:45.499Z",
+              "hostLoad1m": 18.31591796875,
+              "seconds": 13.1,
+              "exit": 0
+            },
+            "typecheck-node": {
+              "start": "2026-10-11T22:50:45.500Z",
+              "hostLoad1m": 18.31591796875,
+              "seconds": 5.0,
+              "exit": 0
+            }
+          },
+          "suiteFiles": 335,
+          "suiteTests": 4140
+        },
+        {
+          "item": "01a12d26-dcd6-7d13-b801-328d2ddc4957",
+          "sha256": "20fcb70be504f7c4c202d6dc711d37c68ac13062a54bb77cb3af2b89f9834ff7",
+          "format": "JSONL frames; decoded text inspected, not whole-stream JSON",
+          "frameCount": 887,
+          "steps": {
+            "test": {
+              "start": "2026-10-11T22:48:34.795Z",
+              "hostLoad1m": 14.2080078125,
+              "seconds": 53.1,
+              "exit": 0
+            },
+            "lint": {
+              "start": "2026-10-11T22:48:10.007Z",
+              "hostLoad1m": 16.1328125,
+              "seconds": 24.8,
+              "exit": 0
+            },
+            "typecheck": {
+              "start": "2026-10-11T22:48:10.008Z",
+              "hostLoad1m": 16.1328125,
+              "seconds": 12.1,
+              "exit": 0
+            },
+            "typecheck-node": {
+              "start": "2026-10-11T22:48:10.009Z",
+              "hostLoad1m": 16.1328125,
+              "seconds": 4.6,
+              "exit": 0
+            }
+          },
+          "suiteFiles": 335,
+          "suiteTests": 4140
+        },
+        {
+          "item": "01a12d2f-7ae4-74c0-9271-ee35ebf099b6",
+          "sha256": "b74b9bea00bf0016fd344b8ad18ceb3547e33d4c0dd9ec3451e01fe189ff0c4d",
+          "format": "JSONL frames; decoded text inspected, not whole-stream JSON",
+          "frameCount": 875,
+          "steps": {
+            "test": {
+              "start": "2026-10-11T22:57:55.178Z",
+              "hostLoad1m": 15.93896484375,
+              "seconds": 48.9,
+              "exit": 0
+            },
+            "lint": {
+              "start": "2026-10-11T22:57:34.179Z",
+              "hostLoad1m": 14.05615234375,
+              "seconds": 21.0,
+              "exit": 0
+            },
+            "typecheck": {
+              "start": "2026-10-11T22:57:34.180Z",
+              "hostLoad1m": 14.05615234375,
+              "seconds": 10.0,
+              "exit": 0
+            },
+            "typecheck-node": {
+              "start": "2026-10-11T22:57:34.181Z",
+              "hostLoad1m": 14.05615234375,
+              "seconds": 3.8,
+              "exit": 0
+            }
+          },
+          "suiteFiles": 335,
+          "suiteTests": 4145
+        }
+      ],
+      "testWall": {
+        "n": 3,
+        "medianS": 53.1,
+        "minS": 48.9,
+        "maxS": 53.6
+      },
+      "testStartLoadRange": [
+        14.2080078125,
+        21.98193359375
+      ],
+      "lowLoadFinalMeasurement": null,
+      "currentTrackedCounts": {
+        "entrypointFiles": 336,
+        "entrypointLines": 78550,
+        "jsdomFiles": 82,
+        "plainContractFiles": 82,
+        "basis": "Tracked test/spec entrypoints across src, scripts and eslint-rules per current Vitest include patterns; plain contracts separate. No test run. File count is descriptive, D19 actual budget is low-load full-suite wall and approximately500 lines per file, with reasons for larger files."
+      },
+      "oversizeFiles": [
+        [
+          584,
+          "src/battle/tutorial-battle-controller.test.ts"
+        ],
+        [
+          664,
+          "src/battle/use-tutorial-battle-interactions.test.tsx"
+        ],
+        [
+          2023,
+          "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+        ],
+        [
+          655,
+          "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx"
+        ],
+        [
+          575,
+          "src/screens/cumulus_adapters/tutorial-battle-view-model.test.ts"
+        ],
+        [
+          1880,
+          "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+        ]
+      ],
+      "oversizeReason": "Same six tutorial files recorded by hv-umm2.381 measurements and hv-uzlx notes; frozen sandbox remains under D38 until Phase6.1 hv-33id.2 deletes/ports contracts. No new oversized test/contract file in this freeze. File and jsdom counts are descriptive, not caps.",
+      "entrypointDeltaRecorded": 11,
+      "testLineDeltaRecorded": 3506,
+      "jsdomDeltaRecorded": 0,
+      "deltaCaveat": "This is the sum of reported testDelta fields, not a git-derived baseline 425 to head diff. Record 409 reports zero test lines and separately records 153 plain contract lines. The total 3506 therefore is not a complete all-contract growth total."
+    },
+    "improvementsSince425": {
+      "426": "Structural compile-time omission protection is proven. No timing reduction is claimed.",
+      "427": "Schema enforcement is active; three release measurements took 0.1\u20130.2 seconds. Audited unknowns are preserved.",
+      "428": "Bounded tests establish fairness behavior. New sweep reports separate wait and execution. No matched contention workload proves a waiting-time reduction.",
+      "429": "The settled composition table and future recipe obligation are established. Subsequent cost primitives have not exercised its churn-prevention claim in this freeze.",
+      "430": "Export and form descriptors address stale regex detection. Accepted C12 and table issues were repaired in 435; the marker lifecycle defect remains canonical 441.",
+      "431": "Compact later records and readable guidance are observed. Some transition prose remains dense; no reading-time reduction is measured."
+    },
+    "waitingAndFailures": {
+      "browserLease": "Recorded waits include 108 sweep 59.6 seconds, 112 initial flow 39.683 seconds, 399 settled desktop 70.864 seconds and 393 baseline 30.693 seconds. The 121 sweep waited 43 milliseconds; final 439 waited 50 milliseconds. These workloads had different content, loads, old and new participants, and demand. They do not form a comparative FIFO benchmark.",
+      "heavySlot": "The 112 wrapper took 106.671 seconds and the worker took 69.2 seconds; the difference includes unseparated lock and startup overhead. The 121 pre-command interval of 26.908 milliseconds bounds queue plus startup. Total exact heavy waiting is unknown.",
+      "reviewQuota": "The 112 unavailable attempt exited 1 before reading source and was later cleared by an actual other-family review. The 392 checkpoint mentions a usage limit. Total blocked lane time was not recorded; asynchronous review policy permits continued work.",
+      "prerequisites": "Graph serialization and native claiming are intentional. Dispatch and close timestamps do not distinguish active implementation, unattended waiting and shared-duty preemption. The 15 percent idle-lane measurement is unknown.",
+      "mergeConflicts": "The 109 and 434 additive comment and spec registry conflicts were recovered through the current same-worktree protocol. Conflicts are not red CI. No new blanket serialization edge is warranted.",
+      "BeadsOutage": "The 392 notes record 14:33\u201315:27 and the 435 notes record recovery of the same configured-server outage. This is one observed incident across two sessions. Current restart guidance applies; no recurring server defect is established.",
+      "interruptions": "An API limit interrupted the 109 sweep and lost its first fuzz observer. User continuation affected command observers in 434 and 435. The 54.7-minute interval in 435 includes interrupted observation; it is not isolated mutation repair time. Existing re-entry, source restoration and runtime protocols handled recovery.",
+      "qaFailures": "The retained failures include two edit-induced transport errors in 108, two geometry or fixture premises in 112, presentation and caps assumptions in 399, chooser and materialization assumptions in 393, two predicates in 439, and one documented fresh deadline retry in 121. Shared readiness helpers, source freeze and the one-retry policy cover the tooling causes. Empty caps does not clear the 393 visual failure.",
+      "fuzz": "All settled frozen fuzz and smoke runs reported zero failures. Weighted card exercise counters certify card plays; they do not certify every activation, clause or variant.",
+      "reviews": "Accepted follow-ups: 409 to 432 and 433; 108 to 434; 112 to 437; 109 to 439; 430 to 435; 435 to 441; 392 persistent status to 436; 439 comments to 444. The 393 review remained pending in frozen notes. No blanket all-reviews-cleared claim is made."
+    },
+    "existingUnfinishedFollowups": [
+      {
+        "bead": "hv-umm2.436",
+        "cause": "Public persistent status through hidden-zone samples",
+        "state": "open"
+      },
+      {
+        "bead": "hv-umm2.441",
+        "cause": "Fulfilled pending inventory marker lifecycle",
+        "state": "in_progress"
+      },
+      {
+        "bead": "hv-umm2.443",
+        "cause": "Mobile badge/hand renderer clearance",
+        "state": "in_progress"
+      },
+      {
+        "bead": "hv-umm2.444",
+        "cause": "Chosen reveal event/comment descriptions",
+        "state": "in_progress"
+      }
+    ],
+    "newImprovementProposals": [],
+    "newTriggerDispositions": [],
+    "budgetRecommendation": {
+      "change": false,
+      "reason": "All source/test/fixture gates have median 54.3095 seconds and the engine/content subset has median 60.611 seconds. They are mixed scopes at unknown gate load. Three full-test samples took 48.9\u201353.6 seconds at load 14.21\u201321.98, below 60 seconds; the required Phase 5 low-load two-worker measurement remains pending. Local review selections and smoke sizes differ from one-file and 200-game baselines. No evidence supports a budget relaxation or causal speed improvement of 10 percent."
+    },
+    "unknowns": [
+      "Exact source-admission/approval-to-promotion waits for every candidate",
+      "Comparable gate-stage hostload per sample",
+      "Total usage-limit, prerequisite and idle-lane waiting",
+      "Low-load Phase5 full-suite wall reading",
+      "A matched before/after FIFO contention run",
+      "Isolated productive time or repair time within interruption elapsed windows",
+      "Final393core-review outcome at frozen native-note time",
+      "Exhaustive earlier CI/release failure history outside retained500events/25releaseitems"
+    ],
+    "ledgerLine": {
+      "retrospective": "2026-10-11",
+      "phase": 5,
+      "bead": "hv-umm2.442",
+      "covers": [
+        "hv-umm2.108",
+        "hv-umm2.109",
+        "hv-umm2.112",
+        "hv-umm2.121",
+        "hv-umm2.392",
+        "hv-umm2.393",
+        "hv-umm2.399",
+        "hv-umm2.406",
+        "hv-umm2.407",
+        "hv-umm2.409",
+        "hv-umm2.413",
+        "hv-umm2.414",
+        "hv-umm2.424",
+        "hv-umm2.425",
+        "hv-umm2.426",
+        "hv-umm2.427",
+        "hv-umm2.428",
+        "hv-umm2.429",
+        "hv-umm2.430",
+        "hv-umm2.431",
+        "hv-umm2.432",
+        "hv-umm2.433",
+        "hv-umm2.434",
+        "hv-umm2.435",
+        "hv-umm2.437",
+        "hv-umm2.439",
+        "hv-umm2.440"
+      ]
+    },
+    "epicSummary": "Retrospective 442 covers all 27 frozen records since 425, including the record for 425; the future record for 442 is excluded. All 27 promoted gates have passing sealed evidence; source/test/fixture median 54.3095 seconds and engine/content median 60.611 seconds. The 22 frozen passed release buildsets have median 143.167 seconds. Three retained full-test runs took 48.9\u201353.6 seconds at load 14.21\u201321.98; the low-load phase-gate reading remains pending. Keep budgets. Improvements 426\u2013431 are landed; existing 436, 441, 443 and 444 own the remaining status, marker, renderer and prose findings. No distinct uncovered recurring cause or new improvement bead was found; all fired triggers have dispositions. Unknown queue, idle and quota waits and the frozen pending 393 review are preserved.",
+    "sourceIntegrity": {
+      "frozenHashCount": 59,
+      "allMatch": true,
+      "repoMutations": false,
+      "testsDependencyBrowserOrServersRun": false
+    }
+  },
+  "referenceSha256": {
+    "docs/plan/evidence/metrics.md": "c6ebc78ddebc90486b00c966ad981050d9df8d643e7c9ce53aae3de9f170b8b4",
+    "docs/plan/workflow.md": "a6257eec6e34c77bbc5f09cbd318d57e9b88d047071b586eddbd15ba2138f824",
+    "docs/plan/phase-5-content.md": "d6776d6ffeadde931c48ef7db60e9b5f1b46955050b8e0440632c200e509ccc9",
+    "docs/plan/decisions.md": "69847304c8e67729f2db7c3237ed77d528ffd17138acaba71d1748310efbdc2a",
+    "scripts/friction-triggers.mjs": "fed752cb98a65602dfee78b12076d8ae16be364edff9e74d8a357ec1d17b91ee",
+    "scripts/review-plan.mjs": "95f59988e0a7db7903255e56c0c0fb3c0fbb9ba4037b91c73f770fefd66eea31",
+    "vitest.config.ts": "9b4d94779222dc970bcba9c57750d199891f2ffb22d9ff95fafe86e978891d74"
+  },
+  "nativeInputSha256": {
+    "file-matches.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "bytes": 3
+    },
+    "admitted.json": {
+      "sha256": "666df83b67768bf61229712efe7eb76f4bf317ad0d99644acfdb8b823ca1e65e",
+      "bytes": 26807
+    },
+    "suite-count.json": {
+      "sha256": "7153de691f12528ac49af15a57afe64f75754520f955397fd2c10c51fafc7a7e",
+      "bytes": 403
+    },
+    "prior-improvements.json": {
+      "sha256": "f7796f71c8ce23a42b5a6cf7d1d1a55e905f7970c948ddea05b6203d8be5a44a",
+      "bytes": 160582
+    },
+    "exact-stage-samples.json": {
+      "sha256": "c1b3ab8d4a8920bbf2bcf6f33eabf56190e62a7be049f3899260952edcb5f9ec",
+      "bytes": 34707
+    },
+    "created.json": {
+      "sha256": "5feb5d5e84818a3e9d7f46b936c26969cea8e33a9fd9e1449bb3b9f2f6e207f3",
+      "bytes": 2970
+    },
+    "stage-samples.json": {
+      "sha256": "40c24b1530b85d603fb40412acf6f3d98c9d435e5b1e3b030be769c61aa4328f",
+      "bytes": 62255
+    },
+    "tg-history.json": {
+      "sha256": "38820d92efe42de501b16b05059645605e0009a7672dc6d380e1bf99ace39ac7",
+      "bytes": 672810
+    },
+    "release-status.json": {
+      "sha256": "48ce018e33a3349ca039334650a7aac6d06775a0ae8967692f26c5bfb78e8480",
+      "bytes": 27097
+    },
+    "native-uuid-references.json": {
+      "sha256": "3deeae45f1a97dfbf7591ccc592bee00de269822812fd433cb6c55df8cdd88ef",
+      "bytes": 2076
+    },
+    "duty-before.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "bytes": 3
+    },
+    "trigger-start.json": {
+      "sha256": "e5bd69ead284c52d0deac570e02c4745fe8174b35d722c106d2d57313bf2c5bc",
+      "bytes": 33650
+    },
+    "fresh-intended.json": {
+      "sha256": "75c33ef99097c4e9c6eff74df8c14c7d9503f2a4db3c7232810094a4a0a2ed1d",
+      "bytes": 31880
+    },
+    "sage-large-files.json": {
+      "sha256": "47ebfe82e63a0eb419889de8bb0fd528125d353146c9909bf5273ab7e4561c1b",
+      "bytes": 479
+    },
+    "fresh-admitted.json": {
+      "sha256": "543fa031afb76a277a7b60a33a3c0e6b974bac00ffc726db6bd8df6ca4b32bfa",
+      "bytes": 1170248
+    },
+    "tg-status.json": {
+      "sha256": "60342baef75d32c2b7c95b5a3d845f561ab422351925e99e7fc2472928ce1816",
+      "bytes": 1585013
+    },
+    "fresh-beads.json": {
+      "sha256": "21987c899e270293db35a91b7794ee731988c504fd1a1ae49269db780ced0fef",
+      "bytes": 49947
+    },
+    "claim.json": {
+      "sha256": "e2efc5bc6b422640bd6fd685de83bcab12b75b917832aaa01ff825ce849f21a7",
+      "bytes": 3732
+    },
+    "duty-after.json": {
+      "sha256": "b6ff781f67ace36f20f0d00dc15be0f8bd876952f765a5366e7755691a773de9",
+      "bytes": 3613
+    },
+    "hive_project.json": {
+      "sha256": "2ac55b49378fdccc1e33293703fdae40cc1ef7d558a0f324c8dfe56d39cc4c57",
+      "bytes": 1169970
+    },
+    "sage-gate-start-waits.json": {
+      "sha256": "3ce7eb29d6a4f45b3d7083f8680dde392b3130adbec2725111ca23bb6fa9e430",
+      "bytes": 4263
+    },
+    "covered-native.json": {
+      "sha256": "7eb31bf1e0cea02561f694bb43879de2c687647f5cb41c2b903c44b9a9a41896",
+      "bytes": 1110594
+    },
+    "intended_project.json": {
+      "sha256": "06acfba6af0a1c22058a7b9186fe5c55d89595a7025d567f07a8ee502c9aaac9",
+      "bytes": 26658
+    },
+    "freeze.json": {
+      "sha256": "e083844aa4ee3dc3a7b1eaba06772685fd25297fc5ec8c4139c019bae2d305b5",
+      "bytes": 9312
+    },
+    "install.json": {
+      "sha256": "dd6cc30712bba20fb46158cf01c8862127a4f0a18221bd8ef8b30cd8b6743a7a",
+      "bytes": 142
+    },
+    "reference-hashes.json": {
+      "sha256": "8a05608e11204450ccee913ba98126b10ca298c929c6df1132ded1a2bef5cd77",
+      "bytes": 689
+    },
+    "candidate-status/01a12cc1-e1fb-7012-b943-1924891ddc46.json": {
+      "sha256": "b6cdb2377f49e646f3c6a48d1a74c3b1524ffaf24586ee93e4180b9d20d65403",
+      "bytes": 14375
+    },
+    "candidate-status/01a12d28-d774-78c3-b590-f4d93bd4aaac.json": {
+      "sha256": "50ca03fb70ca2b6f554b2a9c94b401f3a0d3aebe383e672d1032a0aaab28915f",
+      "bytes": 14352
+    },
+    "candidate-status/01a12caa-3a78-76e0-ba2e-e0c0ba57d4a1.json": {
+      "sha256": "fb723767e19d70bd62b94a036fe5754f2de3baec23cd1a501287c8d9addec8a2",
+      "bytes": 14357
+    },
+    "candidate-status/01a12cc9-9346-7893-bc0a-80cc545b4402.json": {
+      "sha256": "033ad6932813afccd95e81fa7f5db7f89ab67d9e0dd20ecfc237f3226cd80c97",
+      "bytes": 14311
+    },
+    "candidate-status/01a12d2e-6e48-7a81-a411-b2e0f500f2b1.json": {
+      "sha256": "90d5e9005166bd7768ce505ca75b8610ccb51666a3a34f78ac28e36890d75b5c",
+      "bytes": 14380
+    },
+    "candidate-status/01a12d25-3ae9-7070-b4fc-03a50d1e0339.json": {
+      "sha256": "2307fd69c7dbc82b13b7d39beb22e7c7a12a18cecc317781cb410ea871d942d4",
+      "bytes": 14377
+    },
+    "candidate-status/01a12c9b-5e49-7320-999f-bdb6c62658dd.json": {
+      "sha256": "86c2072764c7bad785e478e0f0005129801f7715fadc4e15760082c0f01d702e",
+      "bytes": 14337
+    },
+    "candidate-status/01a12d1c-7938-7191-8784-c1fcf5d1ccd6.json": {
+      "sha256": "1c5ca28a6bbfcb48b9c3be5125025aedef4ccb343a67611f6bbbd4fd6e44828b",
+      "bytes": 14902
+    },
+    "candidate-status/01a12cc7-73be-7e83-b457-fa9ffa8d45b0.json": {
+      "sha256": "a4b315b4597856be551a9a487437fb0f52470c33c01393a55e9a88467ee5078d",
+      "bytes": 14342
+    },
+    "candidate-status/01a12ca1-aa0f-71a1-956f-2017660d99f6.json": {
+      "sha256": "82897490466f5b3383f6cf02beea4c711bf5f817ad281082512c1598f2019ff1",
+      "bytes": 14332
+    },
+    "candidate-status/01a12d18-2ccf-74c3-89ad-960745b5556a.json": {
+      "sha256": "cdc15269613b0b2739fedd912f5ed420bf84abef10143b1396636cdcbaa93bee",
+      "bytes": 14376
+    },
+    "candidate-status/01a12cfe-13ec-7360-b6b2-a565ea6ea123.json": {
+      "sha256": "556aa2abe6779ded724b416cf998cdb676405c6bad33635145495610409b43f5",
+      "bytes": 14358
+    },
+    "candidate-status/01a12d32-d100-7763-8b31-2e639f3cb4d9.json": {
+      "sha256": "e0185b19f8767ab3bc96702a41d4f9827ee5f6933edc21af522b8caf39851c8c",
+      "bytes": 14363
+    },
+    "candidate-status/01a12cb1-80d4-7983-a283-447d59641978.json": {
+      "sha256": "fdc2afe8364ce14576fa2754e59c1f5f12d7e4ee3079321dd63161ccaad60e59",
+      "bytes": 14357
+    },
+    "candidate-status/01a12caa-e205-72b0-b485-8120538d43a4.json": {
+      "sha256": "35e465d44dd036143b41d9508bdb9940d0ea000234c12cb1217dbe0d028a1c31",
+      "bytes": 14903
+    },
+    "candidate-status/01a12d19-1ac0-7f22-bfff-66080208429c.json": {
+      "sha256": "3429168826b2a89c7edd8e6b3bcd0e5c3250e4301095aad4634106619faf01cc",
+      "bytes": 14936
+    },
+    "candidate-status/01a12d33-c716-7df2-a946-6f1cd191c9a0.json": {
+      "sha256": "bb927ff79d2227cb11ae6d8fd21ec82b318d00c6c9d4ea24330b68b944b4dd79",
+      "bytes": 16871
+    },
+    "candidate-status/01a12ca0-6d5d-7741-96ce-0a2d5b7956fe.json": {
+      "sha256": "6a704a11def6663179f0a491428123af59f1f0b4abd661112f546346dfb6cf46",
+      "bytes": 14303
+    },
+    "candidate-status/01a12ca8-8cf8-7f83-aaa7-fa234a5f4238.json": {
+      "sha256": "4f79883f5e4250f0c2ff860ca20c9faffd323db5897ae703888557c3b26cd547",
+      "bytes": 14359
+    },
+    "candidate-status/01a12d26-dcd6-7d13-b801-328d2ddc4957.json": {
+      "sha256": "c2bad752509d9e209ec5af426d6f518665f2788756cde4cae752d795be9380c8",
+      "bytes": 16876
+    },
+    "candidate-status/01a12cdb-3758-7992-8b53-181230766e98.json": {
+      "sha256": "43e638240ecffba773c73b2001b021da1cac1cbf162d186e229cf233edad60f1",
+      "bytes": 14348
+    },
+    "candidate-status/01a12ca5-5902-7543-b8d1-de9b37ef314b.json": {
+      "sha256": "329f0a92c4a17a669912062cc0685dd2ea980ae3ac7bee23ec26b6e7a3f1a532",
+      "bytes": 14355
+    },
+    "candidate-status/01a12ca6-4a8b-73a3-919f-a3838c64e957.json": {
+      "sha256": "fd22f92efaedb60909734832c36abc4e20a48958d548e0de8a40d027a38ca319",
+      "bytes": 14332
+    },
+    "candidate-status/01a12cc4-630a-7140-9414-1b3730c289e4.json": {
+      "sha256": "908e25f5a5f4e12775e999c2f8cfba202ff085c4e4f44ea89cd00205e08df2b3",
+      "bytes": 14356
+    },
+    "candidate-status/01a12d1f-666d-7261-b474-d7bc6bac2f53.json": {
+      "sha256": "1bb914b552a6b854d473705771725890d4713fb7a6432f0cab413a56669c820d",
+      "bytes": 14368
+    },
+    "candidate-status/01a12caf-f4fe-7493-a263-81ce58f695c2.json": {
+      "sha256": "b5429cf2bd0a3a49bfac486be0f2610a883483f7b781f57c80a69d6e10288b5d",
+      "bytes": 14361
+    },
+    "candidate-status/01a12d1b-03ca-73a1-9b8c-48edfb293e9b.json": {
+      "sha256": "2d764f41209f8f545c5ba3f2e919e1999b73a80d9db5e70ee7314876963bbcb4",
+      "bytes": 14913
+    },
+    "candidate-status/01a12cae-a04f-7482-82bf-6e74ac0638ea.json": {
+      "sha256": "7834c5e34b1a1805d8799baaae6c7f8b203187a9d083576b870127229079c57f",
+      "bytes": 14347
+    },
+    "candidate-status/01a12d22-54b2-7b51-b5c3-6cce9d70368c.json": {
+      "sha256": "75adab33dedf7f4281f01adcd5e8ccb88ed713636d5a253caaaf4f7fb81072be",
+      "bytes": 14366
+    },
+    "candidate-status/01a12d17-df9f-7820-838a-9467968f4f30.json": {
+      "sha256": "f236747281c49ad6d2b81a317ceee9ec5fd170028afd6177735feca5d50f452c",
+      "bytes": 2231
+    },
+    "release-logs/01a12d29-3b95-7c92-be44-cbe7bf6346f0.json": {
+      "sha256": "e6ca0741931372609522e4d3b0d6afe97e1df36ec6dd66ded67b82b4d03d90e3",
+      "bytes": 4809982
+    },
+    "release-logs/01a12d26-dcd6-7d13-b801-328d2ddc4957.json": {
+      "sha256": "20fcb70be504f7c4c202d6dc711d37c68ac13062a54bb77cb3af2b89f9834ff7",
+      "bytes": 4809427
+    },
+    "release-logs/01a12d2f-7ae4-74c0-9271-ee35ebf099b6.json": {
+      "sha256": "b74b9bea00bf0016fd344b8ad18ceb3547e33d4c0dd9ec3451e01fe189ff0c4d",
+      "bytes": 4807080
+    }
+  },
+  "measurementWindow": {
+    "startUtc": "2026-10-11T22:57:53+00:00",
+    "startBasis": "Native claim acknowledgement as dispatch proxy. Includes read-only audit, coordination and verification.",
+    "preparationUtc": "2026-10-11T23:12:39.697465+00:00",
+    "endpointBasis": "Final source/evidence/resource ACK immediately before staging and commit. Actual successful commit start/end retained externally; no synthetic Git dates.",
+    "implementMin": 14.778291083333333
+  },
+  "setup": {
+    "command": "npm install",
+    "start": "2026-10-11T23:03:32.033935+00:00",
+    "seconds": 3.637417624999216,
+    "exitCode": 0,
+    "pid": 1291
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "verificationPolicy": {
+    "selection": "Evidence-only review then sequential Knip, schema and friction triggers.",
+    "browser": false,
+    "fullReview": false,
+    "fuzz": false,
+    "extraCliReview": false
+  },
+  "preExisting": [
+    {
+      "source": "npm install advisory report",
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1,
+      "independentlyAudited": false
+    },
+    {
+      "source": "Native retrospective brief",
+      "pointer": "docs/plan/metrics.md",
+      "actualPath": "docs/plan/evidence/metrics.md",
+      "sharedDocumentationUnchanged": true
+    }
+  ],
+  "readOnlyObservationCorrections": [
+    {
+      "observation": "TG logs --json emits JSONL frames; whole-stream parsing initially returned Extra data.",
+      "correction": "Decoded every frame, retained raw streams and exact hashes. No product change or lost frames.",
+      "seconds": null
+    },
+    {
+      "observation": "First release-log scratch selection used passed instead of check-passed and selected zero records.",
+      "correction": "Correct public state selected the latest three frozen successful builds. No check rerun.",
+      "seconds": null
+    }
+  ],
+  "commands": [
+    {
+      "label": "schema",
+      "pid": 48085,
+      "pgid": 48085,
+      "startedUtc": "2026-10-11T23:11:54.413448+00:00",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "hostLoadSamples": [
+        27.4658203125,
+        21.70751953125,
+        18.42578125
+      ],
+      "state": "finished",
+      "seconds": 0.111814083000354,
+      "finishedUtc": "2026-10-11T23:11:54.525448+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "trigger-after",
+      "pid": 48086,
+      "pgid": 48086,
+      "startedUtc": "2026-10-11T23:11:54.525843+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "hostLoadSamples": [
+        27.4658203125,
+        21.70751953125,
+        18.42578125
+      ],
+      "state": "finished",
+      "seconds": 0.22941287499997998,
+      "finishedUtc": "2026-10-11T23:11:54.755277+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "review",
+      "pid": 48115,
+      "pgid": 48115,
+      "startedUtc": "2026-10-11T23:11:54.755771+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoadSamples": [
+        27.4658203125,
+        21.70751953125,
+        18.42578125
+      ],
+      "state": "finished",
+      "seconds": 0.3622732920002818,
+      "finishedUtc": "2026-10-11T23:11:55.118064+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "knip",
+      "pid": 48243,
+      "pgid": 48243,
+      "startedUtc": "2026-10-11T23:11:55.118465+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "hostLoadSamples": [
+        30.15087890625,
+        22.359375,
+        18.6748046875
+      ],
+      "state": "finished",
+      "seconds": 4.472669041999325,
+      "finishedUtc": "2026-10-11T23:11:59.591192+00:00",
+      "exitCode": 0
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual npm run review friction-records step start at2026-10-11T23:11:55.031Z, one-minute load printed by review runner."
+      }
+    }
+  },
+  "reviewSelection": {
+    "changedFiles": 4,
+    "selected": "friction-records only",
+    "records": 418,
+    "historicalUnknownMeasurements": 41,
+    "testsSelected": 0,
+    "staticRuntimeChecksSelected": false
+  },
+  "runtimeLedger": {
+    "freshObservedUtc": "2026-10-11T23:12:39.635898+00:00",
+    "allOwnedCheckGroupsAbsent": true,
+    "checkGroups": [
+      48085,
+      48086,
+      48115,
+      48243
+    ],
+    "helperTerminal": true,
+    "browsers": [],
+    "servers": [],
+    "providers": []
+  },
+  "knipSelection": {
+    "sequentialAfterReview": true,
+    "prepareKnipRestorePassed": true
+  }
+}
