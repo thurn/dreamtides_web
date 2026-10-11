@@ -1,0 +1,3 @@
+# hv-umm2.114 — pre-existing QA issue
+
+- **Known hv-umm2.313 mobile debug/log overlap:** the fixed top-right debug opener in `src/battle/components/EngineDebugPanel.tsx` overlaps the centre of the battle log's close control rendered by `src/cumulus/components/overlay/GlassDialog.tsx` through `src/cumulus/screens/battle-overlays/BattleEventLogOverlay.tsx`. The mobile sampled log workflow dismisses the log with the existing `qa.battle.tap` helper, which finds and hit-checks an uncovered point within that same close control, then verifies the log unmounts. Both mobile seat cases pass with empty accumulated error buffers. This QA mitigation handles the issue documented by hv-umm2.313; this content bead changes no UI source.

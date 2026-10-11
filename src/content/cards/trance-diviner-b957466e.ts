@@ -1,3 +1,5 @@
+import { activated, discardCost } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 436,
   art: { x: 0, y: -0.038, scale: 1.36 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([discardCost()], p.draw(2, "you", { ephemeral: true }))],
+  verifiedText: "110vwdk1yav",
 });

@@ -1,0 +1,70 @@
+{
+  "bead": "hv-umm2.114",
+  "phase": 5,
+  "implementMin": 80.4,
+  "localValidationS": {
+    "focused": 2.9,
+    "review": 43.1,
+    "knip": 3.762,
+    "fuzz": 61.571,
+    "sweep": 339.966,
+    "judgedPlayer": 47.113,
+    "judgedEnemyHarnessAttempt": 79.787,
+    "judgedEnemy": 55.37,
+    "reviewFinal": 31.68,
+    "knipFinal": 2.131
+  },
+  "heavyQueueWaitS": {
+    "review": 41.558,
+    "knip": 83.54,
+    "fuzz": 0.022,
+    "sweep": 0.023,
+    "judgedPlayer": 0.021,
+    "judgedEnemyHarnessAttempt": 124.267,
+    "judgedEnemy": 229.699,
+    "reviewFinal": 0.024,
+    "knipFinal": 17.354
+  },
+  "hostLoad": 10.1377,
+  "hostLoads": {
+    "focused": 8.32,
+    "review": 15.265,
+    "knip": 24.928,
+    "fuzz": 7.916,
+    "sweep": 24.2866,
+    "judgedPlayer": 4.7236,
+    "judgedEnemyHarnessAttempt": 4.2104,
+    "judgedEnemy": 5.7505,
+    "reviewFinal": 10.1377,
+    "knipFinal": 15.4214
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-browser-ownership-prerequisite",
+      "minutes": 54.0,
+      "note": "Observed shared-MCP interference required landed hv-umm2.329 repair before browser acceptance. Provisional checkpoint~04:22:48 UTC to parent QA-resume handoff05:16:51 UTC; separate from heavy-slot queues and execution. Bounded ignored-scenario preparation happened during this interval."
+    }
+  ],
+  "implementTimingNote": "Approximate full dispatch-to-final-commit interval from parent dispatch note 2026-10-11 04:18 UTC; includes separately recorded browser-ownership prerequisite, all execution and queues.",
+  "browserLeaseWaitS": {
+    "judgedPlayer": 0.04,
+    "judgedEnemyHarnessAttempt": 0.045,
+    "judgedEnemy": 0.041
+  },
+  "qaTotals": {
+    "sweepPass": 46,
+    "sweepSkip": 54,
+    "sweepFail": 0,
+    "judgedPass": 4,
+    "judgedFail": 0,
+    "preservedHarnessFailedRuns": 1
+  },
+  "preExistingIssues": [
+    "Known hv-umm2.313 mobile debug opener/log-close overlap; documented in docs/plan/evidence/pre-existing/hv-umm2.114.md"
+  ]
+}
