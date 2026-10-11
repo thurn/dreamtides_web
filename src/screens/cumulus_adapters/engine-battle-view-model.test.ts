@@ -21,7 +21,7 @@ import type { CardData } from "../../types/cards";
 import type { CardKeywordModification } from "../../types/journey";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
 import type { Answer } from "../../engine/prompts/types";
-import { parseBattleCardId, parseBattleId, parseBattleSlotViewId } from "../../types/identifiers";
+import { parseBattleCardId, parseBattleId, parseBattleSlotViewId, parsePromptId } from "../../types/identifiers";
 import {
   buildEngineBattleScreenModel,
   enginePrintedKeywords,
@@ -329,6 +329,66 @@ describe("buildEngineBattleScreenModel", () => {
       { card: bottom, to: "top" },
       { card: top, to: "void" },
     ]);
+  });
+
+  it.each([
+    ["player", "hand", "board"],
+    ["enemy", "hand", "gallery"],
+    ["player", "back", "board"],
+    ["enemy", "front", "board"],
+  ] as const)("routes %s %s choices by their holder, preserving duplicate instances", (holder, zone, presentation) => {
+    const { state, ids } = board({ [holder]: { [zone]: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla1.id] } });
+    const candidates = ids[holder][zone].flatMap((instance) => instance === null ? [] : [instance]);
+    for (const instance of candidates) {
+      state.instances[instance] = { ...state.instances[instance], owner: holder === "player" ? "enemy" : "player" };
+    }
+    state.knownTo.player = candidates;
+    const prompt: PendingEnginePrompt = {
+      id: parsePromptId("1:0:0"),
+      kind: "chooseCards",
+      side: "player",
+      privateTo: "player",
+      candidates,
+      min: 1,
+      max: 1,
+      cancellable: false,
+      purpose: { source: null, cardId: null, ability: null, role: "discardChosen" },
+    };
+    const model = screenOf(state, prompt);
+    const picker = surfaceOf(model, "picker");
+
+    expect(picker.picker.presentation).toBe(presentation);
+    expect(picker.picker.candidateIds).toEqual(candidates.map(id));
+    expect(picker.picker.candidates.map((candidate) => candidate.owner)).toEqual([holder, holder]);
+    expect(new Set(picker.picker.candidates.map((candidate) => candidate.cardUuid)).size).toBe(1);
+    expect(picker.answer([id(candidates[0])])).toEqual([candidates[0]]);
+    expect(picker.answer([id(candidates[1])])).toEqual([candidates[1]]);
+    expect(picker.answer([id(candidates[0]), id(candidates[0])])).toBeNull();
+    if (presentation === "gallery") {
+      expect(model.view.promptHost).toBeNull();
+      expect(picker.picker.cancellable).toBe(false);
+    }
+  });
+
+  it("uses the gallery for a choice spanning the human and opposing hands", () => {
+    const { state, ids } = board({ player: { hand: [SYNTHETIC.vanilla1.id] }, enemy: { hand: [SYNTHETIC.vanilla1.id] } });
+    const candidates = [...ids.player.hand, ...ids.enemy.hand];
+    state.knownTo.player = ids.enemy.hand;
+    const prompt: PendingEnginePrompt = {
+      id: parsePromptId("1:0:0"),
+      kind: "chooseCards",
+      side: "player",
+      privateTo: "player",
+      candidates,
+      min: 1,
+      max: 1,
+      cancellable: false,
+      purpose: { source: null, cardId: null, ability: null, role: "discardChosen" },
+    };
+    const picker = surfaceOf(screenOf(state, prompt), "picker");
+    expect(picker.picker.presentation).toBe("gallery");
+    expect(picker.picker.candidateIds).toEqual(candidates.map(id));
+    expect(picker.answer([id(ids.enemy.hand[0])])).toEqual(ids.enemy.hand);
   });
 
   it("opens the response window with the opponent's card and Pass once presented, and never for the opponent's response", () => {

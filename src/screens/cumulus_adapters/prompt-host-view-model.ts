@@ -7,7 +7,7 @@
 // | kind | surface |
 // | --- | --- |
 // | chooseTargets | `targets`: on-board highlighting (one target among characters in play, with Skip when it may be none), else `picker` |
-// | chooseCards | `picker`: the card picker (on the board for hand and battlefield cards, else the gallery) |
+// | chooseCards | `picker`: the card picker (on the board for the human's hand and battlefield cards, else the gallery) |
 // | chooseMode, confirm, payOrDecline | `choice`: the choice buttons of the control row |
 // | arrange | `arrange`: the Foresee editor (back on top in any order, or into the void), else the arrangement editor |
 // | chooseNumber | `number`: the prompt host's number picker |
@@ -330,7 +330,10 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         }),
       );
       const onBoard = pickerCandidates.every(
-        (candidate) => candidate.zone === "hand" || candidate.zone === "backRank" || candidate.zone === "frontRank",
+        (candidate) =>
+          (candidate.zone === "hand" && candidate.owner === human) ||
+          candidate.zone === "backRank" ||
+          candidate.zone === "frontRank",
       );
       return {
         // The gallery is modal: it names its prompt and offers Cancel beside
