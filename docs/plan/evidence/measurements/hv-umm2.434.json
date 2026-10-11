@@ -1,0 +1,1167 @@
+{
+  "bead": "hv-umm2.434",
+  "base": "190a28eacc8fc8409808c4bb8dfd41e3975c8681",
+  "dispatchUtc": "2026-10-11T21:22:21.711000+00:00",
+  "initialObservation": {
+    "initialUtc": "2026-10-11T21:22:39.491973+00:00"
+  },
+  "provisionalPreparationUtc": "2026-10-11T21:25:32.646222+00:00",
+  "commands": [
+    {
+      "args": [
+        "npm",
+        "install"
+      ],
+      "startUtc": "2026-10-11T21:22:39.515771+00:00",
+      "endUtc": "2026-10-11T21:22:42.027557+00:00",
+      "wallSeconds": 2.5117862224578857,
+      "load": [
+        3.84765625,
+        6.0458984375,
+        11.009765625
+      ],
+      "pid": 99957,
+      "observedPids": [
+        134,
+        136,
+        99957
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "startUtc": "2026-10-11T21:24:17.452331+00:00",
+      "endUtc": "2026-10-11T21:24:22.548162+00:00",
+      "wallSeconds": 5.095830917358398,
+      "load": [
+        2.32958984375,
+        4.96826171875,
+        10.068359375
+      ],
+      "pid": 2801,
+      "observedPids": [
+        2801,
+        2818,
+        2854,
+        2864,
+        2888,
+        2893,
+        2922,
+        2934,
+        2937,
+        3002,
+        3101
+      ],
+      "exit": 1
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "startUtc": "2026-10-11T21:24:39.722078+00:00",
+      "endUtc": "2026-10-11T21:24:43.825129+00:00",
+      "wallSeconds": 4.10305118560791,
+      "load": [
+        2.3671875,
+        4.76171875,
+        9.84521484375
+      ],
+      "pid": 3525,
+      "observedPids": [
+        3525,
+        3542,
+        3593,
+        3604,
+        3605,
+        3634,
+        3636,
+        3639,
+        3726
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "prim-create-card"
+      ],
+      "startUtc": "2026-10-11T21:25:06.532158+00:00",
+      "endUtc": "2026-10-11T21:25:09.535128+00:00",
+      "wallSeconds": 3.0029702186584473,
+      "load": [
+        2.5400390625,
+        4.6044921875,
+        9.64013671875
+      ],
+      "pid": 4243,
+      "observedPids": [
+        4243,
+        4259,
+        4305,
+        4315,
+        4316,
+        4335,
+        4350,
+        4353,
+        4367,
+        4406
+      ],
+      "exit": 1
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "prim-create-card"
+      ],
+      "startUtc": "2026-10-11T21:25:09.560215+00:00",
+      "endUtc": "2026-10-11T21:25:12.526225+00:00",
+      "wallSeconds": 2.9660098552703857,
+      "load": [
+        2.49658203125,
+        4.56103515625,
+        9.59521484375
+      ],
+      "pid": 4441,
+      "observedPids": [
+        4441,
+        4458,
+        4515,
+        4525,
+        4539,
+        4545,
+        4548,
+        4605
+      ],
+      "exit": 1
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "prim-create-card"
+      ],
+      "startUtc": "2026-10-11T21:25:12.549894+00:00",
+      "endUtc": "2026-10-11T21:25:15.614216+00:00",
+      "wallSeconds": 3.064321994781494,
+      "load": [
+        2.49658203125,
+        4.56103515625,
+        9.59521484375
+      ],
+      "pid": 4646,
+      "observedPids": [
+        4646,
+        4662,
+        4700,
+        4720,
+        4727,
+        4753,
+        4760,
+        4762,
+        4823
+      ],
+      "exit": 1
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "prim-create-card"
+      ],
+      "startUtc": "2026-10-11T21:25:15.639559+00:00",
+      "endUtc": "2026-10-11T21:25:18.600523+00:00",
+      "wallSeconds": 2.9609639644622803,
+      "load": [
+        3.01708984375,
+        4.63427734375,
+        9.59130859375
+      ],
+      "pid": 4850,
+      "observedPids": [
+        4850,
+        4868,
+        4904,
+        4924,
+        4942,
+        4973,
+        4989,
+        4991,
+        5005,
+        5037
+      ],
+      "exit": 1
+    },
+    {
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-11T21:25:37.517597+00:00",
+      "endUtc": "2026-10-11T21:26:05.083584+00:00",
+      "wallSeconds": 27.56598711013794,
+      "load": [
+        6.39990234375,
+        5.251953125,
+        9.69384765625
+      ],
+      "pid": 6238,
+      "observedPids": [
+        6238,
+        6261,
+        6324,
+        6327,
+        6419,
+        6423,
+        6424,
+        6425,
+        6426,
+        6427,
+        6428,
+        6440,
+        10808
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-11T21:26:25.996952+00:00",
+      "endUtc": "2026-10-11T21:26:30.235836+00:00",
+      "wallSeconds": 4.23888373374939,
+      "load": [
+        16.2666015625,
+        8.40625,
+        10.6240234375
+      ],
+      "pid": 12906,
+      "observedPids": [
+        12906,
+        12930,
+        12942,
+        12987,
+        12993,
+        13043,
+        13056,
+        13233
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-11T21:27:04.910786+00:00",
+      "endUtc": "2026-10-11T21:27:05.072214+00:00",
+      "wallSeconds": 0.16142797470092773,
+      "load": [
+        20.1181640625,
+        10.35302734375,
+        11.23193359375
+      ],
+      "pid": 18003,
+      "observedPids": [
+        18003
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "startUtc": "2026-10-11T21:28:56.720069+00:00",
+      "endUtc": "2026-10-11T21:29:31.783806+00:00",
+      "wallSeconds": 35.0637366771698,
+      "load": [
+        11.6484375,
+        10.9541015625,
+        11.4072265625
+      ],
+      "pid": 26250,
+      "observedPids": [
+        26250,
+        26290,
+        26339,
+        26353,
+        26360,
+        26414,
+        26415,
+        26419,
+        26986
+      ],
+      "exit": 0,
+      "evidenceName": "focused-final"
+    },
+    {
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-11T22:29:31.838338+00:00",
+      "endUtc": "2026-10-11T22:29:55.992193+00:00",
+      "wallSeconds": 24.153854846954346,
+      "load": [
+        6.1474609375,
+        7.26708984375,
+        6.62744140625
+      ],
+      "pid": 71518,
+      "observedPids": [
+        71518,
+        71534,
+        71590,
+        71592,
+        71595,
+        71633,
+        71634,
+        71635,
+        71636,
+        71637,
+        71638,
+        71653,
+        72714
+      ],
+      "exit": 0,
+      "evidenceName": "review-recovered"
+    },
+    {
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-11T22:30:01.284276+00:00",
+      "endUtc": "2026-10-11T22:30:03.192270+00:00",
+      "wallSeconds": 1.907994031906128,
+      "load": [
+        7.55029296875,
+        7.50830078125,
+        6.736328125
+      ],
+      "pid": 72862,
+      "observedPids": [
+        72862,
+        72880,
+        72899,
+        72937,
+        72939,
+        72967,
+        73004
+      ],
+      "exit": 0,
+      "evidenceName": "knip-recovered"
+    },
+    {
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-11T22:30:31.534124+00:00",
+      "endUtc": "2026-10-11T22:30:31.601553+00:00",
+      "wallSeconds": 0.0674288272857666,
+      "load": [
+        6.1376953125,
+        7.158203125,
+        6.634765625
+      ],
+      "pid": 73775,
+      "observedPids": [
+        73775
+      ],
+      "exit": 0,
+      "evidenceName": "friction-recovered"
+    },
+    {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "startUtc": "2026-10-11T22:33:05.248987+00:00",
+      "endUtc": "2026-10-11T22:33:09.735403+00:00",
+      "wallSeconds": 4.4864161014556885,
+      "load": [
+        21.98779296875,
+        12.59130859375,
+        8.83349609375
+      ],
+      "pid": 85281,
+      "observedPids": [
+        85281,
+        85303,
+        85376,
+        85383,
+        85393,
+        85444,
+        85462,
+        85774
+      ],
+      "exit": 0,
+      "evidenceName": "focused-rebased"
+    },
+    {
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-11T22:33:15.088764+00:00",
+      "endUtc": "2026-10-11T22:33:40.234603+00:00",
+      "wallSeconds": 25.145838975906372,
+      "load": [
+        19.6767578125,
+        12.40625,
+        8.8115234375
+      ],
+      "pid": 86356,
+      "observedPids": [
+        86356,
+        86377,
+        86440,
+        86444,
+        86468,
+        86477,
+        86478,
+        86479,
+        86480,
+        86481,
+        86482,
+        86507,
+        88875
+      ],
+      "exit": 0,
+      "evidenceName": "review-rebased"
+    },
+    {
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-11T22:33:51.274632+00:00",
+      "endUtc": "2026-10-11T22:33:54.960609+00:00",
+      "wallSeconds": 3.685976982116699,
+      "load": [
+        25.3115234375,
+        14.33935546875,
+        9.6435546875
+      ],
+      "pid": 90487,
+      "observedPids": [
+        90487,
+        90515,
+        90561,
+        90582,
+        90590,
+        90661,
+        90905
+      ],
+      "exit": 0,
+      "evidenceName": "knip-rebased"
+    },
+    {
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-11T22:34:08.193828+00:00",
+      "endUtc": "2026-10-11T22:34:08.352078+00:00",
+      "wallSeconds": 0.1582498550415039,
+      "load": [
+        23.875,
+        14.55224609375,
+        9.80078125
+      ],
+      "pid": 94692,
+      "observedPids": [
+        94692
+      ],
+      "exit": 0,
+      "evidenceName": "friction-rebased"
+    }
+  ],
+  "observations": [
+    "The D20 harness uses the shared content and synthetic catalog. Three synthetic fixture declarations exercise production Seer without duplicating its abilities.",
+    "Initial figment assertion counted the setup figment creation. Corrected the hand-card cohort and independently assert the dissolved Survivor figment-copy identity, its original and Seer remaining in play.",
+    "Six production scenarios and one existing-entrypoint duplicate/competing-intent contract; no production behavior change.",
+    "Full suite, fuzz and browser checks are outside this bounded test-only follow-up scope.",
+    "Parent requested generous fixed energy 20 for the production Seer fixture so authored cost changes do not make its dissolve-trigger matrix brittle. Source changes were frozen after this correction.",
+    "Final focused validation passed 1,021 cases across two existing entrypoints in 35.064 seconds. Its longer transform/import observation and load sample are retained without a causal attribution.",
+    "Recovery inspection at 22:29 UTC found no exact interrupted wrapper or worktree runtime process. The final review log contains successful individual stages, but no terminal wrapper sidecar survived. One unchanged-source recovery review obtained actual exit 0, followed sequentially by Knip actual exit 0.",
+    "The interval from original dispatch through user interruption and helper recovery remains included in final preparation and commit-inclusive timing; it is not truncated to the replacement helper run."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review wrapper and review parallel validation start"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "install",
+      "sample": [
+        3.84765625,
+        6.0458984375,
+        11.009765625
+      ]
+    },
+    {
+      "command": "focused",
+      "sample": [
+        2.32958984375,
+        4.96826171875,
+        10.068359375
+      ]
+    },
+    {
+      "command": "focused-corrected",
+      "sample": [
+        2.3671875,
+        4.76171875,
+        9.84521484375
+      ]
+    },
+    {
+      "command": "probe-uuid",
+      "sample": [
+        2.5400390625,
+        4.6044921875,
+        9.64013671875
+      ]
+    },
+    {
+      "command": "probe-count",
+      "sample": [
+        2.49658203125,
+        4.56103515625,
+        9.59521484375
+      ]
+    },
+    {
+      "command": "probe-figment",
+      "sample": [
+        2.49658203125,
+        4.56103515625,
+        9.59521484375
+      ]
+    },
+    {
+      "command": "probe-subtype",
+      "sample": [
+        3.01708984375,
+        4.63427734375,
+        9.59130859375
+      ]
+    },
+    {
+      "command": "review",
+      "sample": [
+        6.39990234375,
+        5.251953125,
+        9.69384765625
+      ]
+    },
+    {
+      "command": "knip",
+      "sample": [
+        16.2666015625,
+        8.40625,
+        10.6240234375
+      ]
+    },
+    {
+      "command": "focused-final",
+      "sample": [
+        11.6484375,
+        10.9541015625,
+        11.4072265625
+      ]
+    },
+    {
+      "command": "review-recovered",
+      "sample": [
+        6.1474609375,
+        7.26708984375,
+        6.62744140625
+      ]
+    },
+    {
+      "command": "knip-recovered",
+      "sample": [
+        7.55029296875,
+        7.50830078125,
+        6.736328125
+      ]
+    },
+    {
+      "command": "focused-rebased",
+      "sample": [
+        21.98779296875,
+        12.59130859375,
+        8.83349609375
+      ]
+    },
+    {
+      "command": "review-rebased",
+      "sample": [
+        19.6767578125,
+        12.40625,
+        8.8115234375
+      ]
+    },
+    {
+      "command": "knip-rebased",
+      "sample": [
+        25.3115234375,
+        14.33935546875,
+        9.6435546875
+      ]
+    }
+  ],
+  "mutationProbes": {
+    "probe-uuid": {
+      "wrapperExit": 1,
+      "sourceSha256": "d07c1d643426f503b624a735ec937a4b9fc9c855d9572a9fc5bdfefdcf4b2608",
+      "stdout": "{\"args\": [\"npm\", \"test\", \"--\", \"src/content/specs/specs.test.ts\", \"-t\", \"prim-create-card\"], \"startUtc\": \"2026-10-11T21:25:06.532158+00:00\", \"endUtc\": \"2026-10-11T21:25:09.535128+00:00\", \"wallSeconds\": 3.0029702186584473, \"load\": [2.5400390625, 4.6044921875, 9.64013671875], \"pid\": 4243, \"observedPids\": [4243, 4259, 4305, 4315, 4316, 4335, 4350, 4353, 4367, 4406], \"exit\": 1}",
+      "failedCases": 4,
+      "passedControls": 2,
+      "assertionReason": "Created hand-card printing UUID differs from Contemplation."
+    },
+    "probe-count": {
+      "wrapperExit": 1,
+      "sourceSha256": "16e6812e537275f74541deffd0f73805e5579d78025864f0febd2ad4f75a1916",
+      "stdout": "{\"args\": [\"npm\", \"test\", \"--\", \"src/content/specs/specs.test.ts\", \"-t\", \"prim-create-card\"], \"startUtc\": \"2026-10-11T21:25:09.560215+00:00\", \"endUtc\": \"2026-10-11T21:25:12.526225+00:00\", \"wallSeconds\": 2.9660098552703857, \"load\": [2.49658203125, 4.56103515625, 9.59521484375], \"pid\": 4441, \"observedPids\": [4441, 4458, 4515, 4525, 4539, 4545, 4548, 4605], \"exit\": 1}",
+      "failedCases": 1,
+      "passedControls": 5,
+      "assertionReason": "Amplified Survivor creates one hand card instead of two."
+    },
+    "probe-figment": {
+      "wrapperExit": 1,
+      "sourceSha256": "8b6c79df85b56ebe4481e1afb7f9ce0574226cd3471c35462d77e039ba7de917",
+      "stdout": "{\"args\": [\"npm\", \"test\", \"--\", \"src/content/specs/specs.test.ts\", \"-t\", \"prim-create-card\"], \"startUtc\": \"2026-10-11T21:25:12.549894+00:00\", \"endUtc\": \"2026-10-11T21:25:15.614216+00:00\", \"wallSeconds\": 3.064321994781494, \"load\": [2.49658203125, 4.56103515625, 9.59521484375], \"pid\": 4646, \"observedPids\": [4646, 4662, 4700, 4720, 4727, 4753, 4760, 4762, 4823], \"exit\": 1}",
+      "failedCases": 2,
+      "passedControls": 4,
+      "assertionReason": "Figment dissolution creates one/two hand cards instead of zero."
+    },
+    "probe-subtype": {
+      "wrapperExit": 1,
+      "sourceSha256": "0e61dacd416e626d6bd9b6cb72c0baaf1e1fee5c3eac3096f95744cc72d4957e",
+      "stdout": "{\"args\": [\"npm\", \"test\", \"--\", \"src/content/specs/specs.test.ts\", \"-t\", \"prim-create-card\"], \"startUtc\": \"2026-10-11T21:25:15.639559+00:00\", \"endUtc\": \"2026-10-11T21:25:18.600523+00:00\", \"wallSeconds\": 2.9609639644622803, \"load\": [3.01708984375, 4.63427734375, 9.59130859375], \"pid\": 4850, \"observedPids\": [4850, 4868, 4904, 4924, 4942, 4973, 4989, 4991, 5005, 5037], \"exit\": 1}",
+      "failedCases": 2,
+      "passedControls": 4,
+      "assertionReason": "Amplified ordinary/Survivor creation counts are swapped."
+    },
+    "restoration": {
+      "originalSha256": "c0221421280d303b158cc98b75f6dbf392a0fd28e1aeb4f2d9fd7bd13e90ba49",
+      "restoredSha256": "c0221421280d303b158cc98b75f6dbf392a0fd28e1aeb4f2d9fd7bd13e90ba49",
+      "bytesEqual": true
+    }
+  },
+  "validationScope": {
+    "focused": {
+      "files": 2,
+      "cases": 1021
+    },
+    "review": {
+      "relatedFiles": 116,
+      "relatedCases": 2218,
+      "checks": [
+        "types",
+        "node types",
+        "lint",
+        "import cycles",
+        "related tests",
+        "friction records"
+      ]
+    },
+    "full": false,
+    "fuzz": false,
+    "browser": false
+  },
+  "sourceScope": {
+    "productionBehaviorChanged": false,
+    "productionSeerRestored": true,
+    "syntheticFixtures": "src/engine/testing/synthetic-cards.ts",
+    "newScenarioModule": "src/content/specs/prim-create-card.scenarios.ts",
+    "newTestEntrypoints": 0,
+    "newCases": 7
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 101,
+    "jsdomFiles": 0,
+    "detail": {
+      "src/content/specs/prim-create-card.scenarios.ts": 62,
+      "src/content/specs/index.ts": 1,
+      "src/engine/effects/primitives/contracts/create-card.contracts.ts": 23,
+      "src/engine/testing/synthetic-cards.ts": 15
+    }
+  },
+  "resources": {
+    "observedPids": [
+      134,
+      136,
+      2801,
+      2818,
+      2854,
+      2864,
+      2888,
+      2893,
+      2922,
+      2934,
+      2937,
+      3002,
+      3101,
+      3525,
+      3542,
+      3593,
+      3604,
+      3605,
+      3634,
+      3636,
+      3639,
+      3726,
+      4243,
+      4259,
+      4305,
+      4315,
+      4316,
+      4335,
+      4350,
+      4353,
+      4367,
+      4406,
+      4441,
+      4458,
+      4515,
+      4525,
+      4539,
+      4545,
+      4548,
+      4605,
+      4646,
+      4662,
+      4700,
+      4720,
+      4727,
+      4753,
+      4760,
+      4762,
+      4823,
+      4850,
+      4868,
+      4904,
+      4924,
+      4942,
+      4973,
+      4989,
+      4991,
+      5005,
+      5037,
+      6238,
+      6261,
+      6324,
+      6327,
+      6419,
+      6423,
+      6424,
+      6425,
+      6426,
+      6427,
+      6428,
+      6440,
+      10808,
+      12906,
+      12930,
+      12942,
+      12987,
+      12993,
+      13043,
+      13056,
+      13233,
+      18003,
+      26250,
+      26290,
+      26339,
+      26353,
+      26360,
+      26414,
+      26415,
+      26419,
+      26986,
+      71518,
+      71534,
+      71590,
+      71592,
+      71595,
+      71633,
+      71634,
+      71635,
+      71636,
+      71637,
+      71638,
+      71653,
+      72714,
+      72862,
+      72880,
+      72899,
+      72937,
+      72939,
+      72967,
+      73004,
+      73775,
+      85281,
+      85303,
+      85376,
+      85383,
+      85393,
+      85444,
+      85462,
+      85774,
+      86356,
+      86377,
+      86440,
+      86444,
+      86468,
+      86477,
+      86478,
+      86479,
+      86480,
+      86481,
+      86482,
+      86507,
+      88875,
+      90487,
+      90515,
+      90561,
+      90582,
+      90590,
+      90661,
+      90905,
+      94692,
+      99957
+    ],
+    "observedPidCount": 141,
+    "liveObservedPids": [],
+    "checkedUtc": "2026-10-11T22:34:22.465042+00:00",
+    "serverStarted": false,
+    "providerStarted": false,
+    "scope": "Captured command descendants across original, interruption recovery and dependency-base revalidation; interrupted wrapper sidecar remains unavailable."
+  },
+  "preAckPreparationUtc": "2026-10-11T21:27:04.882748+00:00",
+  "preAckImplementMin": 4.719529133333333,
+  "interruptedCommands": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "log": "review-final.log",
+      "wrapperExit": null,
+      "wrapperSidecarAbsent": true,
+      "recoveryCheckedUtc": "2026-10-11T22:29:43.493095+00:00",
+      "exactWrapperOrWorktreeProcessesAliveAtRecovery": false,
+      "observedLogResults": [
+        "types exit 0",
+        "node types exit 0",
+        "friction validation exit 0",
+        "cycles exit 0",
+        "lint exit 0",
+        "related tests 2218 cases across116 files exit 0",
+        "restore-local-assets exit 0"
+      ],
+      "reason": "Previous helper and its command observation were interrupted. Complete wrapper terminal status and elapsed time cannot be reconstructed from the remaining log. A recovery review is justified by missing terminal evidence, without source changes.",
+      "logSha256": "13eb308f4bad27544c0d53db9d1912a64ce3934ce3bc818dd32683bafa706b7e"
+    }
+  ],
+  "recovery": {
+    "checkedUtc": "2026-10-11T22:30:31.463293+00:00",
+    "sourceEdits": 0,
+    "priorFinalReviewUnknownExit": true,
+    "recoveryReviewExit": 0,
+    "knipRecoveryExit": 0,
+    "unknownElapsedWindow": {
+      "lastInterruptedLogPhaseUtc": "2026-10-11T21:31:36.960Z",
+      "recoveryCheckedUtc": "2026-10-11T22:29:23.765957+00:00",
+      "description": "Log phase timestamps bound observations, not the top-level command exit time or duration."
+    }
+  },
+  "preAckRecoveryPreparationUtc": "2026-10-11T22:30:31.463293+00:00",
+  "preAckRecoveryImplementMin": 68.16253821666666,
+  "finalPreparationUtc": "2026-10-11T22:34:55.049977+00:00",
+  "finalPreparationImplementMin": 72.55564961666667,
+  "commitTimingProtocol": {
+    "boundary": "Final preparation immediately before the single local commit; actual commit start, end, exit, and full dispatch-to-commit-end interval are retained in the external final-commit.json sidecar.",
+    "originalDispatchUtc": "2026-10-11T21:22:21.711000+00:00",
+    "allParentWaitsIncluded": true,
+    "userInterruptionAndRecoveryIncluded": true
+  },
+  "originalBase": "675dbfb8bafa6b655b56e87d88907be57f3fa7fa",
+  "worktreeUpdateRecovery": {
+    "originalSourceOid": "c1bb14d5c03239cb2f3155030cf343651d08902c",
+    "terminalCandidateId": "01a12d17-df9f-7820-838a-9467968f4f30",
+    "terminalCandidateState": "merge-conflict",
+    "conflictPath": "src/content/specs/index.ts",
+    "conflictingLandedRegistration": "cards09",
+    "parentNativeUpdateInitialExit": 5,
+    "initialUpdateOutcome": "Clean rollback preserving original source and clean worktree; parent doctor healthy.",
+    "temporaryCheckpoint": {
+      "utc": "2026-10-11T22:32:22.066009+00:00",
+      "ownedOid": "c1bb14d5c03239cb2f3155030cf343651d08902c",
+      "baseOid": "675dbfb8bafa6b655b56e87d88907be57f3fa7fa",
+      "temporaryCheckpointOid": "e87de4f0711d354dfb66a6d484f4c712f5e9e4d5",
+      "restoredOnly": "src/content/specs/index.ts",
+      "parkedFiles": [
+        "owned-commit.patch",
+        "owned-complete-delta.diff",
+        "owned-specs-index.ts",
+        "base-specs-index.ts"
+      ],
+      "commitStartUtc": "2026-10-11T22:32:22.037933+00:00",
+      "commitEndUtc": "2026-10-11T22:32:22.066009+00:00",
+      "exit": 0,
+      "status": "",
+      "allOtherSixPathsUnchanged": true,
+      "before": {
+        "src/content/specs/prim-create-card.scenarios.ts": "0c3bd968e1c8bf5fc30bc2971a7292a77798b39bc0485c05a39d0dcd5f6b8f52",
+        "src/content/specs/index.ts": "a17579045e8cd601eb99cdb0c29000fee7b98ad22421880c3d90de6bd7090cb3",
+        "src/engine/effects/primitives/contracts/create-card.contracts.ts": "8ad305755c9af75cbef8734660e84cf124b479a45ec3a0d237d3577116731c5a",
+        "src/engine/testing/synthetic-cards.ts": "cbbac6e426164676d59f1ed9c3f3da39e67c17aed5c7755650631e23015c92a7",
+        "docs/plan/evidence/friction/hv-umm2.434.json": "838c2489327cac1cfec490e091c329e3885da3223a6f57c533f1fc2b5664234f",
+        "docs/plan/evidence/measurements/hv-umm2.434.json": "03bb5f2c0ff3607ae85e2b8222edefe8d539d137872baaf2c07b2cc9e837f835",
+        "docs/plan/evidence/pre-existing/hv-umm2.434.md": "8e1baa3e6eaf93d893429f50665c96e6f7e239f5ebbf8456c0e5b47c71b0c912"
+      },
+      "after": {
+        "src/content/specs/prim-create-card.scenarios.ts": "0c3bd968e1c8bf5fc30bc2971a7292a77798b39bc0485c05a39d0dcd5f6b8f52",
+        "src/content/specs/index.ts": "9913cb6865700faebf95e933a0e392016e2d3488ebabdec8d62e42d9960898d5",
+        "src/engine/effects/primitives/contracts/create-card.contracts.ts": "8ad305755c9af75cbef8734660e84cf124b479a45ec3a0d237d3577116731c5a",
+        "src/engine/testing/synthetic-cards.ts": "cbbac6e426164676d59f1ed9c3f3da39e67c17aed5c7755650631e23015c92a7",
+        "docs/plan/evidence/friction/hv-umm2.434.json": "838c2489327cac1cfec490e091c329e3885da3223a6f57c533f1fc2b5664234f",
+        "docs/plan/evidence/measurements/hv-umm2.434.json": "03bb5f2c0ff3607ae85e2b8222edefe8d539d137872baaf2c07b2cc9e837f835",
+        "docs/plan/evidence/pre-existing/hv-umm2.434.md": "8e1baa3e6eaf93d893429f50665c96e6f7e239f5ebbf8456c0e5b47c71b0c912"
+      },
+      "candidateSubmissionAllowed": false,
+      "purpose": "Temporary checkpoint for parent native worktree update after clean rollback; registry registration is parked outside the worktree."
+    },
+    "parentNativeUpdateExit": 0,
+    "parentNativeUpdateResult": {
+      "oldCheckpoint": "e87de4f0711d354dfb66a6d484f4c712f5e9e4d5",
+      "updatedCheckpoint": "d76b4cf3d6123eca116440c4b6770950bd051b19",
+      "base": "190a28eacc8fc8409808c4bb8dfd41e3975c8681",
+      "clean": true,
+      "doctorHealthy": true
+    },
+    "parentDoctorHealthy": true,
+    "mergeResolution": "Reapply only the Seer import and registry entry to the updated base, retaining the landed cards09 import and entry. Other three owned source files preserve audited original hashes.",
+    "newSourceChecksReason": "Registry combination and dependency-base changes justify focused, related review and sequential Knip checks. No full suite, fuzz or browser scope change.",
+    "observedUtc": "2026-10-11T22:33:52.412671+00:00"
+  },
+  "postUpdatePreAckPreparationUtc": "2026-10-11T22:34:08.108873+00:00",
+  "postUpdatePreAckImplementMin": 71.77329788333333,
+  "postUpdateValidationScope": {
+    "focused": {
+      "files": 2,
+      "cases": 1035
+    },
+    "review": {
+      "relatedFiles": 116,
+      "relatedCases": 2233,
+      "checks": [
+        "types",
+        "node types",
+        "lint",
+        "import cycles",
+        "related tests",
+        "friction records"
+      ]
+    },
+    "full": false,
+    "fuzz": false,
+    "browser": false
+  },
+  "previousResourceAudits": [
+    {
+      "observedPids": [
+        134,
+        136,
+        2801,
+        2818,
+        2854,
+        2864,
+        2888,
+        2893,
+        2922,
+        2934,
+        2937,
+        3002,
+        3101,
+        3525,
+        3542,
+        3593,
+        3604,
+        3605,
+        3634,
+        3636,
+        3639,
+        3726,
+        4243,
+        4259,
+        4305,
+        4315,
+        4316,
+        4335,
+        4350,
+        4353,
+        4367,
+        4406,
+        4441,
+        4458,
+        4515,
+        4525,
+        4539,
+        4545,
+        4548,
+        4605,
+        4646,
+        4662,
+        4700,
+        4720,
+        4727,
+        4753,
+        4760,
+        4762,
+        4823,
+        4850,
+        4868,
+        4904,
+        4924,
+        4942,
+        4973,
+        4989,
+        4991,
+        5005,
+        5037,
+        6238,
+        6261,
+        6324,
+        6327,
+        6419,
+        6423,
+        6424,
+        6425,
+        6426,
+        6427,
+        6428,
+        6440,
+        10808,
+        12906,
+        12930,
+        12942,
+        12987,
+        12993,
+        13043,
+        13056,
+        13233,
+        18003,
+        26250,
+        26290,
+        26339,
+        26353,
+        26360,
+        26414,
+        26415,
+        26419,
+        26986,
+        71518,
+        71534,
+        71590,
+        71592,
+        71595,
+        71633,
+        71634,
+        71635,
+        71636,
+        71637,
+        71638,
+        71653,
+        72714,
+        72862,
+        72880,
+        72899,
+        72937,
+        72939,
+        72967,
+        73004,
+        73775,
+        99957
+      ],
+      "observedPidCount": 112,
+      "liveObservedPids": [],
+      "checkedUtc": "2026-10-11T22:30:45.077946+00:00",
+      "serverStarted": false,
+      "providerStarted": false,
+      "scope": "All captured command descendants from both original and recovery helpers. Interrupted wrapper descendants unavailable; exact wrapper and worktree process scan found none."
+    }
+  ],
+  "previousFinalPreparation": {
+    "finalPreparationUtc": "2026-10-11T22:31:23.858172+00:00",
+    "finalPreparationImplementMin": 69.0357862,
+    "actualOriginalCommit": {
+      "startUtc": "2026-10-11T22:31:23.901710+00:00",
+      "endUtc": "2026-10-11T22:31:23.964995+00:00",
+      "wallSeconds": 0.06328858400001991,
+      "pid": 75209,
+      "exit": 0,
+      "dispatchUtc": "2026-10-11T21:22:21.711000+00:00",
+      "dispatchToCommitEndMinutes": 69.03756658333333,
+      "finalPreparationUtc": "2026-10-11T22:31:23.858172+00:00",
+      "preparationToCommitStartSeconds": 0.043538
+    }
+  },
+  "finalAmendProtocol": {
+    "permittedBy": "Parent final amend ACK after exact combined registry, revalidation, resources and seven-path manifest audit.",
+    "boundary": "Final preparation immediately before the amended single local commit. Actual amendment start/end/exit/PID and original dispatch-to-amend-end interval retained in final-amend.json.",
+    "allWaitsIncluded": true,
+    "sameWorktreeConflictRecoveryIncluded": true
+  }
+}

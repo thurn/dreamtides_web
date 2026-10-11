@@ -123,6 +123,29 @@ describe("createCard", () => {
     expect(eventRedactionViolations(result.events, state, result.state)).toEqual([]);
   });
 
+  it("bounces duplicate and competing plays against the committed slice after creation", () => {
+    const { state, ids } = setup({ player: { hand: [S.createTwo.id], energy: 0, deck }, enemy: { deck } });
+    const fold = createFoldAdapter(E, { checkEventPrefix: true });
+    const action = { kind: "play", card: ids.player.hand[0], from: "hand" } as const;
+    const first = applied(fold.reduce(start(state), { kind: "battleAction", side: "player", action }));
+    expect(first.error).toBeNull();
+    const made = created(first.published).map((entry) => entry.instance);
+    expect(made).toHaveLength(2);
+    const before = stateHash(first.slice.committed);
+    const identities = Object.keys(first.slice.committed.instances);
+    const published: EngineEvent[] = [];
+    // Reusing the old immutable input is replay; these requests use the live committed slice.
+    for (const side of ["player", "enemy"] as const) {
+      const outcome = fold.reduce(first.slice, { kind: "battleAction", side, action });
+      if (outcome.kind === "applied") published.push(...outcome.published);
+      expect(outcome).toEqual({ kind: "bounced", reason: side === "player" ? "illegalAction" : "notYourDecision" });
+      expect(stateHash(first.slice.committed)).toBe(before);
+      expect(Object.keys(first.slice.committed.instances)).toEqual(identities);
+      expect(first.slice.committed.sides.player.hand).toEqual(made);
+    }
+    expect(created(published)).toEqual([]);
+  });
+
   it("creates into the opponent's hand when the effect says so, owned and held by the opponent", () => {
     const { state, ids } = setup({ player: { hand: [S.createForOpponent.id], energy: 0, deck }, enemy: { deck } });
     const result = cast(state, "player", ids.player.hand[0]);

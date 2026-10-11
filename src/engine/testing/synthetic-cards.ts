@@ -13,7 +13,10 @@ import {
 } from "../catalog";
 import { parseCardId } from "../../types/card-identity";
 import { parseDreamwellCardId } from "../../types/identifiers";
-import { energy, keyword } from "../dsl/builders";
+import { all, anyCharacter, energy, event as eventAbility, keyword, target } from "../dsl/builders";
+import { dissolve } from "../effects/primitives/dissolve";
+import { materializeFigmentCopy } from "../effects/primitives/materialize-figment-copy";
+import { sequence } from "../effects/primitives/sequence";
 import type { CardId } from "../state/ids";
 
 export function syntheticId(index: number): CardId {
@@ -53,6 +56,18 @@ function event(index: number, cost: number, speed: EngineCardDefinition["speed"]
 
 /** Synthetic definitions by role. */
 export const SYNTHETIC = {
+  survivorVictim: character(15, 1, 1, { subtype: "Survivor" }),
+  dissolveVictim: {
+    ...event(16, 0, "standard"), status: "authored",
+    abilities: () => [eventAbility(dissolve(target(anyCharacter())))],
+  },
+  dissolveFigmentCopy: {
+    ...event(17, 0, "standard"), status: "authored",
+    abilities: () => [eventAbility(sequence(
+      materializeFigmentCopy(target(anyCharacter())),
+      dissolve(all(anyCharacter({ figment: true }))),
+    ))],
+  },
   vanilla0: character(1, 0, 0),
   vanilla1: character(2, 1, 1),
   vanilla2: character(3, 2, 2),
