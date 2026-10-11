@@ -83,10 +83,18 @@ export interface InventoryCapabilityForm {
   readonly option?: string;
   readonly optionLiteral?: string;
   readonly literal?: string;
+  /** A deliberately unimplemented public feature; earlier binding stages must still resolve. */
+  readonly pending?: "export" | "member" | "option" | "literal";
+}
+
+export interface InventoryCapabilityResolver {
+  (forms: readonly InventoryCapabilityForm[]): boolean;
+  /** Diagnose broken bindings; only explicitly pending feature stages may be absent. */
+  validate(forms: readonly InventoryCapabilityForm[]): boolean;
 }
 
 /** Resolve public authoring capabilities from supplied modules, including aliases and type-only exports. */
-export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>): (forms: readonly InventoryCapabilityForm[]) => boolean {
+export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>): InventoryCapabilityResolver {
   const files = new Map([...sources].map(([file, text]) => [resolve(ROOT, file), text]));
   const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler, skipLibCheck: true, noEmit: true };
   const host = ts.createCompilerHost(options);
@@ -105,31 +113,46 @@ export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>
   const checker = program.getTypeChecker();
   const variants = (type: ts.Type): readonly ts.Type[] => type.isUnion() ? type.types : [type];
   const literal = (type: ts.Type, value: string): boolean => variants(type).some((part) => part.isStringLiteral() && part.value === value);
-  const matches = (form: InventoryCapabilityForm): boolean => {
+  type Failure = "module" | "export" | "form" | "member" | "option" | "literal" | "optionLiteral" | "value";
+  const failure = (form: InventoryCapabilityForm): Failure | null => {
     const source = program.getSourceFile(resolve(ROOT, form.module));
-    const module = source === undefined ? undefined : checker.getSymbolAtLocation(source);
-    if (module === undefined || source === undefined) return false;
-    const exported = checker.getExportsOfModule(module).find((symbol) => symbol.name === form.symbol);
-    if (exported === undefined) return false;
+    if (source === undefined) return "module";
+    const module = checker.getSymbolAtLocation(source);
+    const exported = module === undefined ? undefined : checker.getExportsOfModule(module).find((symbol) => symbol.name === form.symbol);
+    if (exported === undefined) return "export";
     const symbol = exported.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exported) : exported;
-    if (form.kind === "builder") return checker.getTypeOfSymbolAtLocation(symbol, source).getCallSignatures().length > 0;
-    if (!(symbol.flags & ts.SymbolFlags.Type)) return false;
+    if (form.kind === "builder") return checker.getTypeOfSymbolAtLocation(symbol, source).getCallSignatures().length > 0 ? null : "form";
+    if (!(symbol.flags & ts.SymbolFlags.Type)) return "form";
     const type = checker.getDeclaredTypeOfSymbol(symbol);
-    if (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.Never)) return false;
-    if (form.literal !== undefined) return literal(type, form.literal);
-    return variants(type).some((part) => {
+    if (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.Never)) return "form";
+    if (form.literal !== undefined) return literal(type, form.literal) ? null : "literal";
+    const matching = variants(type).filter((part) => {
       const member = form.member;
-      if (member !== undefined && !part.getProperties().some((field) => literal(checker.getTypeOfSymbolAtLocation(field, source), member))) return false;
-      if (form.option === undefined) return true;
-      const option = part.getProperty(form.option);
-      if (option === undefined) return false;
-      const optionType = checker.getTypeOfSymbolAtLocation(option, source);
-      return form.optionLiteral === undefined
-        ? variants(optionType).some((value) => !(value.flags & (ts.TypeFlags.Never | ts.TypeFlags.Undefined)))
-        : literal(optionType, form.optionLiteral);
+      return member === undefined || part.getProperties().some((field) => literal(checker.getTypeOfSymbolAtLocation(field, source), member));
     });
+    if (matching.length === 0) return "member";
+    if (form.option === undefined) return null;
+    const optionName = form.option;
+    const optionTypes = matching.flatMap((part) => {
+      const option = part.getProperty(optionName);
+      return option === undefined ? [] : [checker.getTypeOfSymbolAtLocation(option, source)];
+    });
+    if (optionTypes.length === 0) return "option";
+    const unusable = ts.TypeFlags.Never | ts.TypeFlags.Undefined | ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.Null;
+    if (!optionTypes.some((type) => variants(type).some((value) => !(value.flags & unusable)))) return "value";
+    const optionLiteral = form.optionLiteral;
+    return optionLiteral === undefined || optionTypes.some((type) => literal(type, optionLiteral)) ? null : "optionLiteral";
   };
-  return (forms) => forms.some(matches);
+  const matches = (forms: readonly InventoryCapabilityForm[]): boolean => forms.some((form) => failure(form) === null);
+  return Object.assign(matches, {
+    validate(forms: readonly InventoryCapabilityForm[]): boolean {
+      if (forms.length === 0) throw new Error("capability has no authoring descriptors");
+      const results = forms.map((form) => ({ form, failure: failure(form) }));
+      const invalid = results.filter(({ form, failure }) => failure !== null && failure !== form.pending);
+      if (invalid.length > 0) throw new Error(invalid.map(({ form, failure }) => `invalid capability binding ${form.module}:${form.symbol}${form.member === undefined ? "" : ` member=${form.member}`}${form.option === undefined ? "" : ` option=${form.option}`}${form.optionLiteral === undefined ? "" : ` value=${form.optionLiteral}`} (${failure ?? "unknown"})`).join("; "));
+      return results.some((result) => result.failure === null);
+    },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -213,7 +236,7 @@ const prim = (name: string, file: string, extra: PrimitiveExtra = {}): Primitive
   ...extra,
 });
 const builder = (name: string): PrimitiveEntry => ({ name, kind: "builder" });
-const callable = (module: string, symbol: string): InventoryCapabilityForm => ({ module, symbol, kind: "builder" });
+const callable = (module: string, symbol: string, pending?: "export"): InventoryCapabilityForm => ({ module, symbol, kind: "builder", ...(pending === undefined ? {} : { pending }) });
 const registered = (module: string, symbol: string, options: Omit<InventoryCapabilityForm, "module" | "symbol" | "kind"> = {}): InventoryCapabilityForm => ({ module, symbol, kind: "form", ...options });
 const dsl = (name: string, forms: readonly InventoryCapabilityForm[], fallout: readonly string[], extra: PrimitiveExtra = {}): PrimitiveEntry => ({
   name,
@@ -349,8 +372,8 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   ext("costModifierActivated", "cost-modifier.ts", /activated/, { note: `cost modifiers on activated abilities (${GAP_37})` }),
   // Phase 5: DSL additions.
   dsl("selectorFigment", [registered(DSL_TYPES, "CharacterSelector", { option: "figment" })], ["CharacterSelector"], { note: "figment or not" }),
-  dsl("selectorHasAbility", [registered(DSL_TYPES, "CharacterSelector", { option: "hasAbility" })], ["CharacterSelector", "CardFilter"], { note: "\"characters with ▸Materialized abilities\"" }),
-  dsl("stackSelectorBounds", [registered(DSL_TYPES, "StackItemSelector", { option: "costAtMost" })], ["StackItemSelector"], { note: "cost and ✦ bounds on stack items (\"Prevent a played ≤2● cost card\")" }),
+  dsl("selectorHasAbility", [registered(DSL_TYPES, "CharacterSelector", { option: "hasAbility", pending: "option" })], ["CharacterSelector", "CardFilter"], { note: "\"characters with ▸Materialized abilities\"" }),
+  dsl("stackSelectorBounds", [registered(DSL_TYPES, "StackItemSelector", { option: "costAtMost", pending: "option" })], ["StackItemSelector"], { note: "cost and ✦ bounds on stack items (\"Prevent a played ≤2● cost card\")" }),
   dsl("selectorChallenger", [registered(DSL_TYPES, "CharacterSelector", { option: "challenging" })], ["CharacterSelector"], { note: "challengers" }),
   dsl("selectorBounds", [registered(DSL_TYPES, "CharacterSelector", { option: "costAtLeast" })], ["CharacterSelector"], { note: "exact, ≥, X-valued, and relative cost and ✦ bounds" }),
   dsl("cardFilterBounds", [registered(DSL_TYPES, "CardFilter", { option: "costAtMost" })], ["CardFilter"], { note: `cost and ✦ bounds on play and materialize filters (${GAP_36})` }),
@@ -358,13 +381,13 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("randomSelection", [callable(DSL_BUILDERS, "randomIn")], ["CardRef"], { note: "\"a random …\" selections" }),
   dsl("valueZoneCounts", [callable(DSL_BUILDERS, "countCards")], ["ValueExpr"], { note: "counts of cards in a zone" }),
   dsl("valueCardStats", [callable(DSL_BUILDERS, "costOf")], ["ValueExpr"], { note: "\"this character's ✦\", \"that card's cost\"" }),
-  dsl("storedCounters", [registered(DSL_TYPES, "ValueExpr", { member: "storedCounters" })], ["ValueExpr", "PaymentCost"], { note: "stored ⧗ values and X⧗ costs" }),
+  dsl("storedCounters", [registered(DSL_TYPES, "ValueExpr", { member: "storedCounters", pending: "member" })], ["ValueExpr", "PaymentCost"], { note: "stored ⧗ values and X⧗ costs" }),
   dsl("conditionCardCounts", [callable(DSL_BUILDERS, "conditionCardCounts")], ["Condition"], { note: "\"if there are 3 or more events in your void\"" }),
-  dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn" }), registered(DSL_TYPES, "Condition", { member: "thisTurn" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
-  dsl("historyRefs", [registered("src/engine/effects/types.ts", "CardRef", { member: "lastPlayed" })], ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),
+  dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn", pending: "member" }), registered(DSL_TYPES, "Condition", { member: "thisTurn", pending: "member" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
+  dsl("historyRefs", [registered("src/engine/effects/types.ts", "CardRef", { member: "lastPlayed", pending: "member" })], ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),
   dsl("staticZones", [registered(DSL_TYPES, "StaticAbility", { option: "zone" })], ["StaticAbility"], { note: `statics that work from hand, void, or deck (C4; ${GAP_37})` }),
-  dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition" })], ["Ability"], { note: "\"Play this event only if …\"" }),
-  dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost" })], ["Ability"], { note: "\"you may play this card for …\"" }),
+  dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition", pending: "member" })], ["Ability"], { note: "\"Play this event only if …\"" }),
+  dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost", pending: "member" })], ["Ability"], { note: "\"you may play this card for …\"" }),
   dsl("pointsCost", [callable(DSL_BUILDERS, "pointsCost")], ["PaymentCost"], { note: "pay ⍟ as a cost" }),
   dsl("returnCost", [callable(DSL_BUILDERS, "returnCost")], ["PaymentCost"], { note: "\"Return a character you control to hand:\" as a cost" }),
   dsl("discardHandCost", [callable(DSL_BUILDERS, "discardHandCost")], ["PaymentCost"], { note: "discard every eligible hand card as a cost, without a choice" }),
@@ -373,19 +396,19 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("banishFromAnyVoidCost", [callable(DSL_BUILDERS, "banishFromAnyVoidCost")], ["PaymentCost"], { note: "banish a card from the opponent's or any void as a cost" }),
   dsl("whenDissolvedTrigger", [callable(DSL_TRIGGERS, "whenDissolved")], ["Trigger"], { note: "\"when a character you control is dissolved\"" }),
   dsl("whenDiscardSelfTrigger", [callable(DSL_TRIGGERS, "whenDiscardSelf")], ["Trigger"], { note: "\"when you discard this card\"" }),
-  dsl("whenReclaimTrigger", [registered(DSL_TYPES, "Trigger", { member: "reclaim" })], ["Trigger"]),
-  dsl("whenReturnTrigger", [registered(DSL_TYPES, "Trigger", { member: "returnToHand" })], ["Trigger"]),
-  dsl("whenErodeTrigger", [registered(DSL_TYPES, "Trigger", { member: "erode" })], ["Trigger"]),
-  dsl("whenForeseeTrigger", [registered(DSL_TYPES, "Trigger", { member: "foresee" })], ["Trigger"]),
-  dsl("whenCopyTrigger", [registered(DSL_TYPES, "Trigger", { member: "copy" })], ["Trigger"], { note: `"when you copy" (${GAP_38})` }),
-  dsl("whenRemovesEnemyTrigger", [registered(DSL_TYPES, "Trigger", { member: "removesEnemy" })], ["Trigger"], { note: "\"when you dissolve or banish an enemy\"" }),
+  dsl("whenReclaimTrigger", [registered(DSL_TYPES, "Trigger", { member: "reclaim", pending: "member" })], ["Trigger"]),
+  dsl("whenReturnTrigger", [registered(DSL_TYPES, "Trigger", { member: "returnToHand", pending: "member" })], ["Trigger"]),
+  dsl("whenErodeTrigger", [registered(DSL_TYPES, "Trigger", { member: "erode", pending: "member" })], ["Trigger"]),
+  dsl("whenForeseeTrigger", [registered(DSL_TYPES, "Trigger", { member: "foresee", pending: "member" })], ["Trigger"]),
+  dsl("whenCopyTrigger", [registered(DSL_TYPES, "Trigger", { member: "copy", pending: "member" })], ["Trigger"], { note: `"when you copy" (${GAP_38})` }),
+  dsl("whenRemovesEnemyTrigger", [registered(DSL_TYPES, "Trigger", { member: "removesEnemy", pending: "member" })], ["Trigger"], { note: "\"when you dissolve or banish an enemy\"" }),
   dsl("whenPutIntoVoidTrigger", [callable(DSL_TRIGGERS, "whenPutIntoVoid")], ["Trigger"]),
-  dsl("whenPlayFromVoidTrigger", [registered(DSL_TYPES, "Trigger", { member: "play", option: "from", optionLiteral: "void" })], ["Trigger"], { note: "\"when you play a card from your void\"" }),
-  dsl("drawTriggerFilter", [registered(DSL_TYPES, "Trigger", { member: "draw", option: "filter" })], ["Trigger"], { note: "\"when you draw a character\"" }),
-  dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
-  dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
+  dsl("whenPlayFromVoidTrigger", [registered(DSL_TYPES, "Trigger", { member: "play", option: "from", optionLiteral: "void", pending: "option" })], ["Trigger"], { note: "\"when you play a card from your void\"" }),
+  dsl("drawTriggerFilter", [registered(DSL_TYPES, "Trigger", { member: "draw", option: "filter", pending: "option" })], ["Trigger"], { note: "\"when you draw a character\"" }),
+  dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth", pending: "option" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
+  dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn", "export")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
   dsl("firstTimeEachTurn", [registered(DSL_TYPES, "TriggeredAbility", { option: "oncePerTurn" })], ["TriggeredAbility"], { note: "\"the first time each turn …\"" }),
-  dsl("typeRemap", [registered(DSL_TYPES, "DeckMods", { option: "typeChange" })], ["Variant"], { note: `C12 type remap for selectors and figments (${GAP_38})` }),
+  dsl("typeRemap", [registered(DSL_TYPES, "DeckMods", { option: "typeRemap", pending: "option" })], ["Variant"], { note: `C12 type remap for selectors and figments (${GAP_38})` }),
   // Journey-modifier registry (P8, 5.6).
   journey("journeyEssence", "essence gains and site rewards"),
   journey("journeyShop", "shop offers, pricing, restocks, duplication, the Dream Bazaar"),
@@ -398,6 +421,10 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   journey("journeyDeckEntry", "deck-entry changes from dreamsigns (D39 variant)"),
   journey("journeyBattleInit", "battle-start effects: opening hand, draw counts, hand rules"),
 ];
+
+/** Intended public DSL bindings, including their explicitly pending feature stages. */
+export const inventoryDslCapabilities = PRIMITIVES.filter((entry) => entry.kind === "dsl")
+  .map((entry) => ({ name: entry.name, forms: entry.forms ?? [] }));
 
 // ---------------------------------------------------------------------------
 // Prompt kinds, as `kind:role`. `exists` is probed against
@@ -1560,6 +1587,11 @@ function main(): void {
   if (process.argv.includes("--refresh-registration-areas")) {
     refreshRegistrationAreas();
     return;
+  }
+  // Validate real bindings only for the CLI. Synthetic tests supply their own module APIs.
+  for (const entry of inventoryDslCapabilities) {
+    try { capabilityExists.validate(entry.forms); }
+    catch (error) { throw new Error(`capability ${entry.name}: ${String(error)}`); }
   }
   const records = buildEntities();
   const ids = records.map((record) => record.id);

@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.435",
+  "phase": 5,
+  "implementMin": 86.55,
+  "localValidationS": {
+    "installReported": 3,
+    "oldCliCheck": 3.14,
+    "oldCliRegenerate": 5.744,
+    "newCliRegenerate": 1.943,
+    "newCliCheck": 1.778,
+    "focused": 8.279,
+    "review": 15.501,
+    "knip": 5.217,
+    "individualFormNegative": 5.047,
+    "allCapabilitiesBefore": 2.619,
+    "allCapabilitiesAfter": 1.58
+  },
+  "hostLoad": 24.02880859375,
+  "testDelta": {
+    "files": 0,
+    "lines": 180,
+    "jsdomFiles": 0,
+    "cases": 54
+  },
+  "friction": [
+    {
+      "tag": "implementation-session-interruption",
+      "minutes": 54.7,
+      "note": "Continuation lost the command observer with a temporary mutant in the worktree. Reconciled absent process and restored intended source before completing the negative proof."
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classifyInventoryText, inventoryCapabilityResolver, type InventoryCapabilityForm } from "./content-inventory";
+import { classifyInventoryText, inventoryCapabilityResolver, inventoryDslCapabilities, type InventoryCapabilityForm } from "./content-inventory";
 
 const requirements = (text: string) => {
   const classified = classifyInventoryText(text);
@@ -118,5 +118,185 @@ describe("inventory exported capabilities", () => {
     expect(resolver([])).toBe(false);
     expect(resolver([form("Missing"), form("Actual", { member: "present" })])).toBe(true);
     expect(resolver([form("Missing"), form("Actual", { member: "absent" })])).toBe(false);
+  });
+});
+
+
+// Independent authoring fixtures specify the intended API, including future forms.
+// They are not generated from descriptors or populated from the current engine.
+const completeAuthoringFixtures = new Map<string, string>([
+  ["src/engine/dsl/builders.ts", `
+    export function controls() {} export function costPaid() {}
+    export function randomIn() {} export function countCards() {}
+    export function costOf() {} export function conditionCardCounts() {}
+    export function pointsCost() {} export function returnCost() {}
+    export function discardHandCost() {} export function discardCostFilter() {}
+    export function banishXCost() {} export function banishFromAnyVoidCost() {}
+  `],
+  ["src/engine/dsl/triggers.ts", `
+    export function whenDissolved() {} export function whenDiscardSelf() {}
+    export function whenPutIntoVoid() {} export function atEndOfTurn() {}
+  `],
+  ["src/engine/dsl/types.ts", `
+    export type PaymentCost = { tag: "banishFromHand"; count: number };
+    export type Condition = { tag: "energyAtLeast"; amount: number } | { tag: "thisTurn" };
+    export type ValueExpr = { tag: "handSize" } | { tag: "storedCounters" } | { tag: "playedThisTurn" };
+    export type Trigger = { tag: "play"; nth?: number; from?: "hand" | "void" }
+      | { tag: "draw"; filter?: object } | { tag: "materialize"; nth?: number }
+      | { tag: "reclaim" } | { tag: "returnToHand" } | { tag: "erode" }
+      | { tag: "foresee" } | { tag: "copy" } | { tag: "removesEnemy" };
+    export type FunctionalZone = "hand" | "void" | "deck";
+    export interface ActivatedAbility { oncePerTurn?: boolean }
+    export type Speed = "standard" | "fast";
+    export interface CharacterSelector { figment?: boolean; hasAbility?: string; challenging?: boolean; costAtLeast?: number }
+    export interface StackItemSelector { costAtMost?: number }
+    export interface CardFilter { costAtMost?: number }
+    export interface ZoneCardSpec { zone: "hand" | "void" | "deck" }
+    export interface StaticAbility { zone?: FunctionalZone }
+    export type Ability = { tag: "playCondition" } | { tag: "alternativeCost" };
+    export interface TriggeredAbility { oncePerTurn?: boolean }
+    export interface DeckMods {
+      typeChange?: { cardType: "character" | "event"; subtype: string };
+      typeRemap?: { selectorSubtype: string; conditionalFigmentSubtype: string };
+    }
+  `],
+  ["src/engine/effects/types.ts", 'export type CardRef = { tag: "source" } | { tag: "lastPlayed" };'],
+]);
+const expectedCapabilityNames = [
+  "banishFromHandCost", "conditionControls", "conditionEnergyAtLeast", "conditionCostPaid",
+  "valueHandSize", "triggerNth", "functionalZones", "oncePerTurn", "speedFast",
+  "selectorFigment", "selectorHasAbility", "stackSelectorBounds", "selectorChallenger",
+  "selectorBounds", "cardFilterBounds", "zoneCardRefs", "randomSelection", "valueZoneCounts",
+  "valueCardStats", "storedCounters", "conditionCardCounts", "turnHistory", "historyRefs",
+  "staticZones", "playCondition", "alternativeCost", "pointsCost", "returnCost",
+  "discardHandCost", "discardCostFilter", "banishXCost", "banishFromAnyVoidCost",
+  "whenDissolvedTrigger", "whenDiscardSelfTrigger", "whenReclaimTrigger", "whenReturnTrigger",
+  "whenErodeTrigger", "whenForeseeTrigger", "whenCopyTrigger", "whenRemovesEnemyTrigger",
+  "whenPutIntoVoidTrigger", "whenPlayFromVoidTrigger", "drawTriggerFilter",
+  "materializeNthTrigger", "atEndOfTurnTrigger", "firstTimeEachTurn", "typeRemap",
+] as const;
+// Each independently authored row contains only that capability's intended API.
+// Virtual namespaces let all rows share one compiler/library model.
+const typesModule = "src/engine/dsl/types.ts";
+const buildersModule = "src/engine/dsl/builders.ts";
+const triggersModule = "src/engine/dsl/triggers.ts";
+const minimalApiFixtures = [
+  ["banishFromHandCost", typesModule, 'export type PaymentCost = { kind: "banishFromHand" };'],
+  ["conditionControls", buildersModule, 'export function controls() {}'],
+  ["conditionEnergyAtLeast", typesModule, 'export type Condition = { kind: "energyAtLeast" };'],
+  ["conditionCostPaid", buildersModule, 'export function costPaid() {}'],
+  ["valueHandSize", typesModule, 'export type ValueExpr = { kind: "handSize" };'],
+  ["triggerNth", typesModule, 'export type Trigger = { kind: "play"; nth?: number };'],
+  ["functionalZones", typesModule, 'export type FunctionalZone = "hand" | "deck";'],
+  ["oncePerTurn", typesModule, 'export interface ActivatedAbility { oncePerTurn?: boolean }'],
+  ["speedFast", typesModule, 'export type Speed = "standard" | "fast";'],
+  ["selectorFigment", typesModule, 'export interface CharacterSelector { figment?: boolean }'],
+  ["selectorHasAbility", typesModule, 'export interface CharacterSelector { hasAbility?: string }'],
+  ["stackSelectorBounds", typesModule, 'export interface StackItemSelector { costAtMost?: number }'],
+  ["selectorChallenger", typesModule, 'export interface CharacterSelector { challenging?: boolean }'],
+  ["selectorBounds", typesModule, 'export interface CharacterSelector { costAtLeast?: number }'],
+  ["cardFilterBounds", typesModule, 'export interface CardFilter { costAtMost?: number }'],
+  ["zoneCardRefs", typesModule, 'export interface ZoneCardSpec { zone: "hand" | "deck" }'],
+  ["randomSelection", buildersModule, 'export function randomIn() {}'],
+  ["valueZoneCounts", buildersModule, 'export function countCards() {}'],
+  ["valueCardStats", buildersModule, 'export function costOf() {}'],
+  ["storedCounters", typesModule, 'export type ValueExpr = { kind: "storedCounters" };'],
+  ["conditionCardCounts", buildersModule, 'export function conditionCardCounts() {}'],
+  ["turnHistory", typesModule, 'export type ValueExpr = { kind: "playedThisTurn" }; export type Condition = { kind: "thisTurn" };'],
+  ["historyRefs", "src/engine/effects/types.ts", 'export type CardRef = { kind: "lastPlayed" };'],
+  ["staticZones", typesModule, 'export interface StaticAbility { zone?: "hand" | "void" }'],
+  ["playCondition", typesModule, 'export type Ability = { kind: "playCondition" };'],
+  ["alternativeCost", typesModule, 'export type Ability = { kind: "alternativeCost" };'],
+  ["pointsCost", buildersModule, 'export function pointsCost() {}'],
+  ["returnCost", buildersModule, 'export function returnCost() {}'],
+  ["discardHandCost", buildersModule, 'export function discardHandCost() {}'],
+  ["discardCostFilter", buildersModule, 'export function discardCostFilter() {}'],
+  ["banishXCost", buildersModule, 'export function banishXCost() {}'],
+  ["banishFromAnyVoidCost", buildersModule, 'export function banishFromAnyVoidCost() {}'],
+  ["whenDissolvedTrigger", triggersModule, 'export function whenDissolved() {}'],
+  ["whenDiscardSelfTrigger", triggersModule, 'export function whenDiscardSelf() {}'],
+  ["whenReclaimTrigger", typesModule, 'export type Trigger = { kind: "reclaim" };'],
+  ["whenReturnTrigger", typesModule, 'export type Trigger = { kind: "returnToHand" };'],
+  ["whenErodeTrigger", typesModule, 'export type Trigger = { kind: "erode" };'],
+  ["whenForeseeTrigger", typesModule, 'export type Trigger = { kind: "foresee" };'],
+  ["whenCopyTrigger", typesModule, 'export type Trigger = { kind: "copy" };'],
+  ["whenRemovesEnemyTrigger", typesModule, 'export type Trigger = { kind: "removesEnemy" };'],
+  ["whenPutIntoVoidTrigger", triggersModule, 'export function whenPutIntoVoid() {}'],
+  ["whenPlayFromVoidTrigger", typesModule, 'export type Trigger = { kind: "play"; from?: "void" };'],
+  ["drawTriggerFilter", typesModule, 'export type Trigger = { kind: "draw"; filter?: object };'],
+  ["materializeNthTrigger", typesModule, 'export type Trigger = { kind: "materialize"; nth?: number };'],
+  ["atEndOfTurnTrigger", triggersModule, 'export function atEndOfTurn() {}'],
+  ["firstTimeEachTurn", typesModule, 'export interface TriggeredAbility { oncePerTurn?: boolean }'],
+  ["typeRemap", typesModule, 'export interface DeckMods { typeRemap?: { selectorSubtype: string; conditionalFigmentSubtype: string } }'],
+] as const;
+const scopedModule = (capability: string, module: string) => `inventory-intended/${capability}/${module}`;
+const minimalSources = new Map<string, string>();
+for (const [capability, intendedModule, source] of minimalApiFixtures) {
+  for (const module of completeAuthoringFixtures.keys()) {
+    minimalSources.set(scopedModule(capability, module), module === intendedModule ? source : "export {};");
+  }
+}
+const minimalResolver = inventoryCapabilityResolver(minimalSources);
+
+const intendedResolver = inventoryCapabilityResolver(completeAuthoringFixtures);
+
+describe("inventory descriptor contracts", () => {
+  it("covers every actual descriptor with an independent intended authoring fixture", () => {
+    expect(inventoryDslCapabilities.map(entry => entry.name).sort()).toEqual([...expectedCapabilityNames].sort());
+    expect(inventoryDslCapabilities.flatMap(entry => entry.forms).every(form => completeAuthoringFixtures.has(form.module))).toBe(true);
+    expect(minimalApiFixtures.map(([name]) => name).sort()).toEqual([...expectedCapabilityNames].sort());
+  });
+
+  it.each(inventoryDslCapabilities)("resolves $name on its intended synthetic module/export/form", ({ name, forms }) => {
+    const scopedForms = forms.map(form => ({ ...form, module: scopedModule(name, form.module) }));
+    for (const form of scopedForms) expect(minimalResolver.validate([form])).toBe(true);
+    expect(minimalResolver.validate(scopedForms)).toBe(true);
+  });
+
+  it("keeps every binding valid when representation discriminator fields are renamed", () => {
+    const resolver = inventoryCapabilityResolver(new Map([...completeAuthoringFixtures].map(([module, source]) => [module, source.replaceAll("tag:", "representation:")] )));
+    expect(inventoryDslCapabilities.map(entry => resolver.validate(entry.forms))).toEqual(expectedCapabilityNames.map(() => true));
+  });
+
+  it("distinguishes own-card subtype overrides from selector/conditional-figment remaps", () => {
+    const sources = new Map(completeAuthoringFixtures);
+    sources.set("src/engine/dsl/types.ts", 'export interface DeckMods { typeChange?: { subtype: string } }');
+    const c12 = inventoryDslCapabilities.find(entry => entry.name === "typeRemap");
+    expect(c12).toBeDefined();
+    expect(inventoryCapabilityResolver(sources).validate(c12?.forms ?? [])).toBe(false);
+  });
+
+  it("diagnoses missing modules and stale exported names instead of projecting missing capabilities", () => {
+    expect(() => intendedResolver.validate([{ ...build("missing"), module: "missing/module.ts" }])).toThrow();
+    expect(() => intendedResolver.validate([{ module: "src/engine/dsl/builders.ts", symbol: "randomFrom", kind: "builder" }])).toThrow();
+    expect(() => intendedResolver.validate([{ module: "src/engine/dsl/types.ts", symbol: "MissingType", kind: "form", pending: "option" }])).toThrow();
+    expect(() => intendedResolver.validate([])).toThrow();
+  });
+
+  it("diagnoses semantic API renames while accepting explicit rebound metadata", () => {
+    const renamed = inventoryCapabilityResolver(new Map([[moduleName, 'export interface Selector { renamedBound?: number }']]));
+    expect(() => renamed.validate([form("Selector", { option: "bound" })])).toThrow();
+    expect(renamed.validate([form("Selector", { option: "renamedBound" })])).toBe(true);
+  });
+
+  it("permits only the declared missing stage for intentional pending features", () => {
+    const resolver = resolveForms('export type Action = { tag: "present" }; export type Pending = never; export interface Present { from: "hand"; unusable?: never; unknown?: unknown; untyped?: any }');
+    expect(resolver.validate([{ ...form("Action", { member: "future" }), pending: "member" }])).toBe(false);
+    expect(resolver.validate([{ ...form("Action", { option: "future" }), pending: "option" }])).toBe(false);
+    expect(resolver.validate([{ ...build("future"), pending: "export" }])).toBe(false);
+    expect(() => resolver.validate([{ ...form("Missing", { member: "future" }), pending: "member" }])).toThrow();
+    expect(() => resolver.validate([{ ...form("Pending"), pending: "option" }])).toThrow();
+    expect(() => resolver.validate([form("Present", { option: "from", optionLiteral: "void", pending: "option" })])).toThrow();
+    for (const option of ["unusable", "unknown", "untyped"]) {
+      expect(() => resolver.validate([form("Present", { option, pending: "option" })])).toThrow();
+    }
+    expect(() => resolver.validate([{ ...form("Action", { member: "absent", option: "future" }), pending: "option" }])).toThrow();
+  });
+
+  it("validates every alternative so a working branch cannot mask a stale binding", () => {
+    expect(() => intendedResolver.validate([
+      { module: "src/engine/dsl/types.ts", symbol: "FunctionalZone", kind: "form" },
+      { module: "src/engine/dsl/types.ts", symbol: "OldZone", kind: "form" },
+    ])).toThrow();
   });
 });

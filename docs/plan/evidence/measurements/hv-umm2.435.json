@@ -1,0 +1,544 @@
+{
+  "bead": "hv-umm2.435",
+  "base": "675dbfb8bafa6b655b56e87d88907be57f3fa7fa",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.435",
+  "dispatchWindow": {
+    "nativeStartedAt": "2026-10-11T21:11:52Z",
+    "nativeUpdatedAt": "2026-10-11T21:12:51Z",
+    "setupBirthProxy": "2026-10-11T21:12:48.572327+00:00",
+    "evidenceAt": "2026-10-11T22:35:23.124698+00:00",
+    "basis": "Parent-supplied native started_at approximates helper dispatch; exact helper brief-delivery timestamp is not retained. Dispatch-to-commit wall includes coordination, diagnostics, interruption and verification; final end is recorded before commit.",
+    "elapsedToEvidenceMin": 86.55,
+    "commitBoundary": "Final evidence update immediately precedes the same single commit amendment; Git records the exact completion timestamp.",
+    "finalEvidenceAt": "2026-10-11T22:38:25.123158+00:00"
+  },
+  "scope": [
+    "scripts/content-inventory.ts",
+    "scripts/content-inventory.test.ts",
+    "docs/plan/evidence/content-inventory.json",
+    "own friction, measurements and pre-existing evidence"
+  ],
+  "capabilityModel": {
+    "entries": 47,
+    "forms": 48,
+    "pendingEntries": 18,
+    "pendingForms": 19,
+    "target": "C12 is a planned DeckMods.typeRemap authoring option for journey selectors/conditions and conditional figments. DeckMods.typeChange overrides own card type/subtype and does not satisfy C12. No engine/schema implementation is added.",
+    "authority": "docs/plan/decisions.md section C12 and native hv-umm2.270; UUID 3d86f8ce-42ac-43dc-96d5-121e6d1a6167 stays authoritative. Planning projection is not native scope.",
+    "validation": "CLI validates every alternative before planning/output writes. Missing module, wrong exported kind, unusable form/option and wrong optionLiteral diagnose. Only an explicitly declared missing export/member/option/literal stage is pending. Diagnostics identify module, symbol and member/option/value target. Strict real-engine validation runs in main only; synthetic tests do not assert current real availability."
+  },
+  "syntheticProof": {
+    "fixture": "Independently authored 47 minimal APIs under isolated virtual namespaces, each with all four module paths stubbed. One shared compiler/library model for 188 virtual modules. Separate complete authoring fixtures test representation discriminator renames. A fixed independent 47-name fixture list checks table coverage. Each of 48 individual forms plus 47 combined capability entries is validated.",
+    "testDelta": {
+      "files": 0,
+      "lines": 180,
+      "jsdomFiles": 0,
+      "cases": 54
+    },
+    "entrypointTotalCases": 68,
+    "entrypointLines": 302,
+    "newEntrypoints": 0,
+    "newJsdomFiles": 0,
+    "plainContractScenarioModules": 0,
+    "controls": "Missing/stale modules/exports, valid but wrong builder target, pending target typo, pending members, wrong option literal, never/undefined/any/unknown payloads, semantic API rename with explicit metadata rebind, every alternative prefix, and C12 own-type distinction."
+  },
+  "baseline": {
+    "check": {
+      "exit": 1,
+      "wallSeconds": 3.14
+    },
+    "regenerate": {
+      "exit": 0,
+      "wallSeconds": 5.744
+    },
+    "base": "675dbfb8bafa6b655b56e87d88907be57f3fa7fa",
+    "sourceSha256": "0a8bd1e1fe9920cbc80fd5a446a92fcc4cfb787c62ba070457307964285fe71b",
+    "trackedInventorySha256": "d8d180d61070481f1d5465e5007a4900cc8e6d18ad779c0e104188c47007efd6",
+    "currentInventorySha256": "06a75e806985e1b4dd275f5c47dba11d8505175d94bc40577b85fcdcc9ef19c5",
+    "restoredIdentically": true,
+    "C12": {
+      "name": "typeRemap",
+      "kind": "dsl",
+      "module": "src/engine/dsl/types.ts",
+      "exists": true,
+      "usedBy": 1,
+      "introducedBy": null,
+      "note": "C12 type remap for selectors and figments (engine gap noted by hv-7x4l.8 (3.8))",
+      "forms": [
+        {
+          "module": "src/engine/dsl/types.ts",
+          "symbol": "DeckMods",
+          "kind": "form",
+          "option": "typeChange"
+        }
+      ]
+    }
+  },
+  "projectionComparison": {
+    "trackedToOldCurrent": {
+      "changed": [
+        {
+          "name": "createCard",
+          "before": false,
+          "after": true
+        },
+        {
+          "name": "takeExtraTurn",
+          "before": false,
+          "after": true
+        }
+      ],
+      "unchanged": 162,
+      "namesIdentical": true
+    },
+    "oldCurrentToNew": {
+      "changed": [
+        {
+          "name": "typeRemap",
+          "before": true,
+          "after": false
+        }
+      ],
+      "unchanged": 163,
+      "namesIdentical": true
+    },
+    "entities": 1209,
+    "changedCatalogClassificationFields": [],
+    "changedNeeds": 1,
+    "changedRouting": 2,
+    "beads": {
+      "tracked": 224,
+      "oldCurrent": 222,
+      "new": 223
+    },
+    "C12gap": {
+      "gap": "C12 type remap for figments",
+      "source": "hv-7x4l.8 (3.8)",
+      "primitive": "typeRemap",
+      "exists": false,
+      "introducedBy": "prim-type-remap"
+    },
+    "C12bead": {
+      "key": "prim-type-remap",
+      "order": 198,
+      "section": "5.6",
+      "kind": "primitive",
+      "title": "5.6 primitive typeRemap (Dreamsigns: journey effects (P8))",
+      "entities": [
+        {
+          "id": "3d86f8ce-42ac-43dc-96d5-121e6d1a6167",
+          "kind": "dreamsign",
+          "status": "pending"
+        }
+      ],
+      "weight": 2.3,
+      "introduces": [
+        {
+          "name": "typeRemap",
+          "kind": "dsl",
+          "module": "src/engine/dsl/types.ts"
+        }
+      ],
+      "newPromptKinds": [],
+      "dependsOn": [
+        "journey-registry",
+        "prim-journey-deck-entry",
+        "prim-journey-on-gain"
+      ],
+      "serializedAfter": [],
+      "externalDependsOn": [],
+      "pilot": false,
+      "coreReview": true,
+      "scenarios": "src/content/specs/prim-type-remap.scenarios.ts",
+      "areas": [
+        "src/content/dreamsigns/theater-mask-3d86f8ce.ts",
+        "src/engine/dsl/types.ts",
+        "engine hubs",
+        "registration hubs",
+        "fallout: Variant",
+        "src/content/specs/prim-type-remap.scenarios.ts",
+        "src/content/specs/index.ts"
+      ],
+      "sharedAreas": [
+        "src/engine/dsl/types.ts",
+        "engine hubs",
+        "registration hubs",
+        "fallout: Variant"
+      ],
+      "falloutHints": [
+        "Variant"
+      ],
+      "knownDecisions": [
+        {
+          "id": "3d86f8ce-42ac-43dc-96d5-121e6d1a6167",
+          "clarifications": [
+            "C12"
+          ],
+          "note": "C12: a journey-level remap stored with the run (5.6), applied to battle selectors and figment types through the deck-entry variant"
+        }
+      ]
+    },
+    "C12entity": {
+      "id": "3d86f8ce-42ac-43dc-96d5-121e6d1a6167",
+      "kind": "dreamsign",
+      "name": "Theater Mask",
+      "status": "pending",
+      "rarity": "Uncommon",
+      "text": "When you gain this dreamsign, pick a character type. All cards in your deck that mention character types in their text now refer to that character type.",
+      "module": "src/content/dreamsigns/theater-mask-3d86f8ce.ts",
+      "clarifications": [
+        "C12"
+      ],
+      "tags": [
+        "journey-deck-entry",
+        "journey-on-gain",
+        "type-remap"
+      ],
+      "requiredPrimitives": {
+        "existing": [],
+        "new": [
+          "journeyDeckEntry",
+          "journeyOnGain",
+          "typeRemap"
+        ]
+      },
+      "promptKinds": [],
+      "family": 0,
+      "routing": [
+        "5.6",
+        "prim-type-remap"
+      ],
+      "correction": "C12: a journey-level remap stored with the run (5.6), applied to battle selectors and figment types through the deck-entry variant"
+    },
+    "promptBehaviorUnchanged": true
+  },
+  "allCapabilities": {
+    "base": "675dbfb8bafa6b655b56e87d88907be57f3fa7fa",
+    "before-all": {
+      "exit": 0,
+      "wallSeconds": 2.619,
+      "diagnosticSourceSha256": "855b95d89f80c651038d8426a579398ffc4c0eef05f5461af86a4723f27ab1fd"
+    },
+    "after-all": {
+      "exit": 0,
+      "wallSeconds": 1.58,
+      "diagnosticSourceSha256": "fa627664bbd4db715791051c2f1ba7647cdae9992b48d89c5f72ecbc3c462f64"
+    },
+    "comparison": {
+      "count": 189,
+      "unchanged": 188,
+      "changes": [
+        {
+          "name": "typeRemap",
+          "before": true,
+          "after": false
+        }
+      ],
+      "unusedCount": 25
+    },
+    "restoredSourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+    "restoredInventorySha256": "a0b62dee9680ca1d06c6b357b48557b071ff81ee74033c0af7cbf3fa751c8583",
+    "restoredIdentically": true
+  },
+  "tableMutationProofs": {
+    "earlier": {
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "f3e141d5b2492d434918fabde725f932d5be8d914c3b5c21a21a7e5f3491e7d0",
+      "mutations": [
+        {
+          "name": "pending-c12-target",
+          "exit": 1,
+          "wallSeconds": 6.385,
+          "mutatedSourceSha256": "b04561a0caee1e238ccecddf94e354cddf4ed8737d60c6d13260977eb84427c4",
+          "log": "pending-c12-target-negative.log"
+        },
+        {
+          "name": "existing-builder-target",
+          "exit": 1,
+          "wallSeconds": 5.571,
+          "mutatedSourceSha256": "e8d738f0252e8003c487ef5838893133e86c2289d87114c29446b9152b31c631",
+          "log": "existing-builder-target-negative.log"
+        }
+      ],
+      "restoredIdentically": true
+    },
+    "earlierPendingTypo": {
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "f3e141d5b2492d434918fabde725f932d5be8d914c3b5c21a21a7e5f3491e7d0",
+      "mutation": {
+        "before": "option: \"typeRemap\", pending: \"option\"",
+        "after": "option: \"typeRempa\", pending: \"option\""
+      },
+      "mutatedSourceSha256": "f58bdd1374777ff06f140a5e63f43d4252baf6f18c7102bfcfaec876ab589144",
+      "exit": 1,
+      "wallSeconds": 8.142,
+      "log": "pending-c12-typo-negative.log",
+      "restoredIdentically": true
+    },
+    "minimalFixtures": {
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "ce1ef7b15898c3412f1c131a90d59c349533462786b59f5679fbb32d3ed89d53",
+      "selection": "descriptor contracts (54 cases,14 unrelated controls skipped)",
+      "mutations": [
+        {
+          "name": "pending-c12-wrong-target",
+          "mutation": {
+            "before": "option: \"typeRemap\", pending: \"option\"",
+            "after": "option: \"typeChange\", pending: \"option\""
+          },
+          "exit": 1,
+          "wallSeconds": 6.765,
+          "mutatedSourceSha256": "b04561a0caee1e238ccecddf94e354cddf4ed8737d60c6d13260977eb84427c4",
+          "log": "final-pending-c12-wrong-target-negative.log"
+        },
+        {
+          "name": "pending-c12-stale-target",
+          "mutation": {
+            "before": "option: \"typeRemap\", pending: \"option\"",
+            "after": "option: \"typeRempa\", pending: \"option\""
+          },
+          "exit": 1,
+          "wallSeconds": 8.942,
+          "mutatedSourceSha256": "f58bdd1374777ff06f140a5e63f43d4252baf6f18c7102bfcfaec876ab589144",
+          "log": "final-pending-c12-stale-target-negative.log"
+        },
+        {
+          "name": "existing-builder-stale-target",
+          "mutation": {
+            "before": "callable(DSL_BUILDERS, \"randomIn\")",
+            "after": "callable(DSL_BUILDERS, \"randomFrom\")"
+          },
+          "exit": 1,
+          "wallSeconds": 9.678,
+          "mutatedSourceSha256": "e8d738f0252e8003c487ef5838893133e86c2289d87114c29446b9152b31c631",
+          "log": "final-existing-builder-stale-target-negative.log"
+        },
+        {
+          "name": "existing-builder-wrong-target",
+          "mutation": {
+            "before": "callable(DSL_BUILDERS, \"randomIn\")",
+            "after": "callable(DSL_BUILDERS, \"countCards\")"
+          },
+          "exit": 1,
+          "wallSeconds": 8.529,
+          "mutatedSourceSha256": "1fc52e59a1fcac5bed4c0d4391ef82fb822546a8f621263c4f1e960846de30bb",
+          "log": "final-existing-builder-wrong-target-negative.log"
+        }
+      ],
+      "restoredIdentically": true
+    },
+    "individualAlternative": {
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "767a337eab268c9ce74be00fd16fac11675b94d5e9cf8ab8e78a1a9e0c48f8a7",
+      "mutation": {
+        "before": "member: \"playedThisTurn\", pending: \"member\"",
+        "after": "member: \"playedThisTrun\", pending: \"member\""
+      },
+      "otherAlternative": "Condition member=thisTurn remains intact",
+      "selector": "turnHistory",
+      "mutatedSourceSha256": "1d0675e2516f2cb061a6772f8c1c0bfbe19c52b22a61b170cb06c033b1c4d7fe",
+      "exit": 1,
+      "wallSeconds": 5.047,
+      "log": "turn-history-individual-binding-negative.log",
+      "restoredIdentically": true
+    }
+  },
+  "diagnosticDispositions": {
+    "unmatchedSelector": {
+      "selector": "resolves turnHistory on",
+      "matchedCases": 0,
+      "disposition": "Skipped runs do not prove the intended mutation. Corrected selector is turnHistory. Source restored in finally.",
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "finalFixtureSha256": "767a337eab268c9ce74be00fd16fac11675b94d5e9cf8ab8e78a1a9e0c48f8a7"
+    },
+    "interruption": {
+      "observedAt": "2026-10-11T22:29:36.290160+00:00",
+      "lostObserver": "11828 unknown process id",
+      "ownershipAudit": "Parent confirmed no process has cwd in this owned worktree.",
+      "interruptedSourceSha256": "1d0675e2516f2cb061a6772f8c1c0bfbe19c52b22a61b170cb06c033b1c4d7fe",
+      "restoredSourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "767a337eab268c9ce74be00fd16fac11675b94d5e9cf8ab8e78a1a9e0c48f8a7",
+      "control": "combined-only control1passed/67skipped",
+      "emptyLog": "turn-history-interrupted-empty-negative.log",
+      "disposition": "Empty negative log is not a failure witness. Intended source restored exactly before a fresh targeted negative."
+    },
+    "combinedOnly": "Completed mutant control passed 1 case with 67 skipped and the sibling Condition alternative intact. The final individual-form assertion fails 1 case with 67 skipped for the same mutation.",
+    "priorVersions": "All earlier green and negative logs remain under their original names with their own source/fixture hashes; they are not substituted for final checks. Empty and unmatched-selector logs are diagnostics, not negative witnesses.",
+    "loadObservation": "The unmatched-filter run selected zero cases and had a long import/transform wall at host load around 20. No statistical or timing assertion is added. Final measured scopes remain separate."
+  },
+  "validationScope": "Tooling-local descriptor/CLI changes, existing entrypoint fixtures and planning data regeneration need focused checks, review and Knip. No test infrastructure/config/runner/engine architecture change, full suite, browser, fuzz or heavy-lock job. Parent owns cold review of 110 changed non-test lines.",
+  "fallout": {
+    "importers": [
+      "scripts/content-inventory.test.ts"
+    ],
+    "exportedAPI": "InventoryCapabilityResolver adds validate; inventoryDslCapabilities exposes descriptors. No required outside-source fallout.",
+    "sourceAreas": "No engine, DSL, content, decisions, workflow, configuration or runner edits."
+  },
+  "runtimeLedger": {
+    "servers": [],
+    "browsers": [],
+    "leases": [],
+    "heavyCommands": [],
+    "sharedServices": "Root-owned Beads recovery is outside implementation ownership; helper takes no service/native action.",
+    "processes": "All owned install, CLI/probe, mutation, focused, review and Knip commands have exited. No server, browser, lease, heavy-lock job, provider or implementation writer remains. The lost observer 11828 had no remaining owned process and its leftover mutant was restored exactly."
+  },
+  "checksPending": [
+    "Parent-owned independent cold review of frozen final source and native candidate/promotion."
+  ],
+  "hostLoadSamples": [
+    {
+      "log": "focused-final-individual-forms.log",
+      "step": "prepare",
+      "at": "2026-10-11T22:31:24.630Z",
+      "oneMinuteLoad": 7.318359375
+    },
+    {
+      "log": "focused-final-individual-forms.log",
+      "step": "test",
+      "at": "2026-10-11T22:31:25.415Z",
+      "oneMinuteLoad": 7.318359375
+    },
+    {
+      "log": "focused-final-individual-forms.log",
+      "step": "restore-local-assets",
+      "at": "2026-10-11T22:31:32.116Z",
+      "oneMinuteLoad": 8.01318359375
+    },
+    {
+      "log": "review-final.log",
+      "step": "prepare",
+      "at": "2026-10-11T22:32:43.647Z",
+      "oneMinuteLoad": 24.02880859375
+    },
+    {
+      "log": "review-final.log",
+      "step": "typecheck",
+      "at": "2026-10-11T22:32:44.290Z",
+      "oneMinuteLoad": 24.02880859375
+    },
+    {
+      "log": "review-final.log",
+      "step": "typecheck-node",
+      "at": "2026-10-11T22:32:44.291Z",
+      "oneMinuteLoad": 24.02880859375
+    },
+    {
+      "log": "review-final.log",
+      "step": "import-cycles",
+      "at": "2026-10-11T22:32:44.292Z",
+      "oneMinuteLoad": 24.02880859375
+    },
+    {
+      "log": "review-final.log",
+      "step": "lint",
+      "at": "2026-10-11T22:32:44.292Z",
+      "oneMinuteLoad": 23.3857421875
+    },
+    {
+      "log": "review-final.log",
+      "step": "test-related",
+      "at": "2026-10-11T22:32:44.293Z",
+      "oneMinuteLoad": 23.3857421875
+    },
+    {
+      "log": "review-final.log",
+      "step": "friction-records",
+      "at": "2026-10-11T22:32:44.294Z",
+      "oneMinuteLoad": 23.3857421875
+    },
+    {
+      "log": "review-final.log",
+      "step": "restore-local-assets",
+      "at": "2026-10-11T22:32:58.321Z",
+      "oneMinuteLoad": 24.47265625
+    },
+    {
+      "log": "knip-final.log",
+      "step": "prepare",
+      "at": "2026-10-11T22:33:47.989Z",
+      "oneMinuteLoad": 22.37939453125
+    },
+    {
+      "log": "knip-final.log",
+      "step": "knip",
+      "at": "2026-10-11T22:33:49.052Z",
+      "oneMinuteLoad": 22.37939453125
+    },
+    {
+      "log": "knip-final.log",
+      "step": "restore-local-assets",
+      "at": "2026-10-11T22:33:52.233Z",
+      "oneMinuteLoad": 25.3115234375
+    }
+  ],
+  "finalValidation": {
+    "workers": 2,
+    "focused": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- scripts/content-inventory.test.ts",
+      "exit": 0,
+      "files": 1,
+      "cases": 68,
+      "log": "focused-final-individual-forms.log",
+      "observedWrapperWallSeconds": 8.279,
+      "vitestSeconds": 6.07,
+      "testBodySeconds": 2.38
+    },
+    "review": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "exit": 0,
+      "relatedCases": 68,
+      "observedWrapperWallSeconds": 15.501,
+      "log": "review-final.log",
+      "startingOneMinuteLoad": 24.02880859375
+    },
+    "knip": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "exit": 0,
+      "observedWrapperWallSeconds": 5.217,
+      "log": "knip-final.log"
+    },
+    "cli": {
+      "regenerationAndCheck": {
+        "regenerate": {
+          "exit": 0,
+          "wallSeconds": 1.943
+        },
+        "check": {
+          "exit": 0,
+          "wallSeconds": 1.778
+        }
+      },
+      "finalSourceCheck": {
+        "command": "npx tsx scripts/content-inventory.ts --check",
+        "exit": 0,
+        "log": "final-source-cli-check.log",
+        "observedLogWallSeconds": 1.845
+      },
+      "inventoryUnchangedSinceGenerated": true
+    },
+    "wallScope": "Monotonic CLI/mutation measurements are in their provenance. Wrapper wall observations span log-file creation to final output and include prepare/asset restoration; component scopes are in raw logs. Values are observations, not timing assertions or performance claims."
+  },
+  "finalDescriptorObservation": {
+    "log": "final-descriptor-map.json",
+    "entries": 47,
+    "forms": 48,
+    "pendingEntries": 18,
+    "pendingForms": 19,
+    "availableEntries": 29,
+    "source": "Public resolver validates the current table against real module inputs only as observational evidence, not a CI assertion."
+  },
+  "interruptionScope": {
+    "observedWindowStart": "2026-10-11T21:33:51Z",
+    "observedWindowEnd": "2026-10-11T22:28:35Z",
+    "minutes": 54.7,
+    "basis": "Last completed control asset restoration to first resumed checkpoint. Underlying continuation interruption cause is not established; the command observer was unavailable and no process remained in the worktree. This interval is not engine or compiler execution time."
+  },
+  "sourceSha256": {
+    "scripts/content-inventory.ts": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+    "scripts/content-inventory.test.ts": "767a337eab268c9ce74be00fd16fac11675b94d5e9cf8ab8e78a1a9e0c48f8a7",
+    "docs/plan/evidence/content-inventory.json": "a0b62dee9680ca1d06c6b357b48557b071ff81ee74033c0af7cbf3fa751c8583"
+  },
+  "evidenceManifestSha256": "30a8f556370a3e8e47d2f3a080bc6ce2b9b8b512c5f6e0d59712a53493a1602e",
+  "evidenceManifest": "evidence-manifest.json",
+  "evidenceManifestArtifacts": 50
+}
