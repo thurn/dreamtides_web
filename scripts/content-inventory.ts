@@ -1531,7 +1531,7 @@ function main(): void {
       largestCompositionBead: Math.max(...beads.filter((bead) => bead.kind === "composition").map((bead) => bead.entities.length)),
       newPrimitives: [...PRIMITIVE_BY_NAME.values()].filter((entry) => !entry.exists && usage.has(entry.name)).length,
       notes: [
-        "Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md § Serialization edges) are added at filing, from sharedAreas and entity modules.",
+        "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md § Serialization edges) are added at filing, from sharedAreas and entity modules.",
         "Primitive and prompt existence is probed against src/engine when the script runs; DSL-addition probe patterns name the expected shape and are a planning aid.",
         "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss.",
       ],

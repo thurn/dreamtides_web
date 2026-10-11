@@ -135,10 +135,16 @@ that claims a filing bead files the phase as below and closes it.
    Inspect the edges with `hbd show <id> --json`, and run `hbd dep cycles`.
 4. **Make the children selectable.** Only after the edges are correct, set
    `--set-metadata hive_project=dreamtides_web` on each child.
-5. **File content beads separately.** The Phase 5 content beads are filed
-   from the inventory (`content-inventory.json`, whose `beads` list carries
-   their planning and serialization edges) after it is generated, because
-   their composition depends on it. Use the same pattern.
+5. **File content beads separately.** Generate `content-inventory.json`
+   and materialize its current `beads` planning projection using the same
+   pattern: explicit entity UUIDs, Areas, acceptance criteria, planning and
+   serialization edges. Filed native Entities, Areas, acceptance criteria,
+   and the native dependency graph govern execution. Read current inventory
+   `entities` records by the filed UUIDs. Titles and metadata retain the
+   original filing key and scenario slug; current positional keys do not
+   identify a filed bead's entity scope, Areas, or prerequisites. Regeneration
+   refreshes planning data; scope changes use these native filing and
+   [Areas](#areas) procedures.
 6. **Cross-phase edges to unfiled beads** are added when the later of the
    two beads is filed. For example, filing Phase 6 adds 6.1's edge to the
    Phase 5 pilot beads, which carry the Tutorial card.

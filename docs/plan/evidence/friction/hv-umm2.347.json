@@ -1,0 +1,153 @@
+{
+  "bead": "hv-umm2.347",
+  "phase": 5,
+  "baseOid": "ad52da4e1f148e2a2cac276eebd664f5ccddc277",
+  "implementMin": 3.24,
+  "localValidationS": {
+    "focused": 0.44452162500238046,
+    "review": 10.427759874990443,
+    "knip": 2.875241500005359,
+    "friction": 0.14857995900092646
+  },
+  "hostLoad": 17.39111328125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "cases": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "inventory-generator-drift",
+      "minutes": 7,
+      "note": "Current planning projection differs from native filing scopes and tracked generator status/Areas/edge output. Capture baseline drift separately; document UUID-based native execution authority and refresh the current output. Parent owns native pointer repair under hv-umm2.347."
+    }
+  ],
+  "generatorEvidence": {
+    "baselineCheckExit": 1,
+    "evidenceDirectory": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/347-implementation-evidence",
+    "baselineTrackedSha256": "05b58336b518d89fca3ae59026f437c49baababe881f78b6700572481071f5c4",
+    "beforeSha256": "1575662588dd702d61d7d8aa69680cebbbd2cd6c5900b725376a3eb9987c3a29",
+    "postSha256": "7743745454ad81db2000b60bdf4356a3013b9d2a10d055aada851dcdf49b016f",
+    "projectionAndEntityRecordsEqual": true,
+    "entireCurrentOutputEqualExceptFirstNote": true,
+    "generatorSourceEqualExceptFirstNote": true,
+    "beforeNote": "Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md \u00a7 Serialization edges) are added at filing, from sharedAreas and entity modules.",
+    "afterNote": "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md \u00a7 Serialization edges) are added at filing, from sharedAreas and entity modules.",
+    "beads": 239,
+    "entities": 1209
+  },
+  "implementMinBasis": "Measured from baseline capture; excludes preceding npm install and initial read-only design inspection.",
+  "heavyQueueWaitS": 0.025987874978454784,
+  "validationRuns": [
+    {
+      "wrapperPid": 33688,
+      "heavyQueueWaitS": 0.025987874978454784,
+      "hostLoad": [
+        17.39111328125,
+        16.18994140625,
+        13.3984375
+      ],
+      "commands": [
+        {
+          "label": "focused",
+          "command": [
+            "node",
+            "--import",
+            "tsx",
+            "scripts/content-inventory.ts",
+            "--check"
+          ],
+          "pid": 33690,
+          "exitCode": 0,
+          "seconds": 0.44452162500238046
+        },
+        {
+          "label": "review",
+          "command": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "pid": 33712,
+          "exitCode": 0,
+          "seconds": 10.427759874990443
+        },
+        {
+          "label": "knip",
+          "command": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "pid": 34473,
+          "exitCode": 0,
+          "seconds": 2.875241500005359
+        },
+        {
+          "label": "friction",
+          "command": [
+            "npm",
+            "run",
+            "friction:triggers"
+          ],
+          "pid": 34764,
+          "exitCode": 0,
+          "seconds": 0.14857995900092646
+        }
+      ]
+    }
+  ],
+  "sourceFileSha256": {
+    "docs/plan/phase-5-content.md": "d327ba01577c9864c76334130178e21e8d16c9a2dbfb59a65ad1cd9fea632a66",
+    "docs/plan/workflow.md": "867d69b6ac8e31f9aea7dfa3a137e1f8595afbfd06b8b8ff08f60bf2b8c5b5c8",
+    "scripts/content-inventory.ts": "e999730fe817df22a552dbed20068c505c154a60b2106b3caa70427e7b060ad1",
+    "docs/plan/evidence/content-inventory.json": "7743745454ad81db2000b60bdf4356a3013b9d2a10d055aada851dcdf49b016f",
+    "docs/plan/evidence/pre-existing/hv-umm2.347.md": "7a1ccf0db40b94c4660650c36a5509c8805842ca61184e77fddb2dd923076895",
+    "docs/plan/evidence/introspection.jsonl": "7292a138e17b358e9049f5da65233f8fc696aa3fc5d1d04ed6174da63f1345b9"
+  },
+  "runtimeLedger": {
+    "knownPids": [
+      33688,
+      33690,
+      33712,
+      34473,
+      34764,
+      23134,
+      23158,
+      23159
+    ],
+    "allKnownPidsAbsent": true,
+    "execSessions": [
+      {
+        "id": 40873,
+        "purpose": "install",
+        "exitCode": 0
+      },
+      {
+        "id": 94861,
+        "purpose": "baseline capture/check/friction",
+        "exitCode": 0,
+        "baselineCheckExit": 1
+      },
+      {
+        "id": 44419,
+        "purpose": "locked focused/review/knip/friction",
+        "exitCode": 0
+      }
+    ],
+    "ports": [],
+    "temporaryRepositoryProbeFiles": []
+  },
+  "qa": {
+    "full": "Not required: documentation and existing generator note only; no test infrastructure, repository configuration, or runtime behavior changes.",
+    "browser": "No runtime or presentation change; no browser, provider, or server started.",
+    "fuzz": "No printed entity authoring, engine or fuzzer behavior change."
+  },
+  "nativeAmendments": "Parent session only after certified promotion and before close; no helper native calls.",
+  "relatedTests": {
+    "selectedFiles": 0,
+    "cases": 0,
+    "result": "Related selection finds no test files for documentation and existing generator-note changes; exits 0."
+  }
+}

@@ -28,8 +28,16 @@ No content entry is left `pending`; every one has abilities or `vanilla: true`.
 ## Earliest start and task graph
 
 Phase 5 runs as about 240 small beads planned by
-`scripts/content-inventory.ts` ([§ Bead sizing](#bead-sizing)); the
-inventory's `beads` list is the graph. Its edges:
+`scripts/content-inventory.ts` ([§ Bead sizing](#bead-sizing)). The
+inventory's `beads` list is the current planning projection. Filed native
+beads' Entities, Areas, acceptance criteria, and dependency graph determine
+execution scope. Read current inventory `entities` records by those explicit
+UUIDs. A filed key identifies its original filing and scenario slug; current
+positional keys do not determine its entities, Areas, or prerequisites.
+Regeneration refreshes planning data; scope changes follow the native filing
+and Areas procedures in [workflow](workflow.md#filing-a-phase).
+
+The planning projection carries these edges:
 
 - **Primitive edges.** A bead depends on the primitive bead that introduces
   each new primitive its entities need.
@@ -66,8 +74,10 @@ inventory's `beads` list is the graph. Its edges:
   contract modules. Beads that change the same contract module carry a
   serialization edge.
 
-Content beads are claimed in inventory order, and several run at once when
-several executor sessions run ([D43](decisions.md#d43-peer-executor-sessions)).
+Sessions claim dependency-ready native content beads in
+[workflow selection order](workflow.md#selection-order), and several run at
+once when several executor sessions run
+([D43](decisions.md#d43-peer-executor-sessions)).
 Beads other than the serialized pairs touch disjoint entity modules, and new
 primitives are new files under `effects/primitives/` (Phase 3.4), so each
 bead builds on the landed primitives of the beads its edges name.
@@ -111,8 +121,10 @@ primitive bead, makes the composition bead depend on it, and moves on.
 Every content bead follows these steps exactly. Primitive beads do step 3;
 composition beads skip it.
 
-1. **Dispatch.** A session claims the bead, creates its worktree, and
-   briefs a subagent ([workflow](workflow.md#dispatch)).
+1. **Dispatch.** A session claims the native bead, creates its worktree,
+   and briefs a subagent with its filed Entities, Areas, acceptance criteria,
+   and dependencies ([workflow](workflow.md#dispatch)). Read inventory
+   `entities` records by each filed UUID to inspect the current catalog data.
 2. **Author the abilities** in each entity's content module, plus the
    amplified variant wherever `amplifiedText` is present. The printed text is
    canonical (D5): read it clause by clause and check that every clause is
@@ -173,9 +185,12 @@ composition beads skip it.
    composition of their primitives (D20). Signs a card needs one: unusual
    targeting, interactions between its own abilities, functional zones,
    nth-in-turn counters, or replacement effects. All of a bead's specs go in
-   **one scenario module**, `src/content/specs/<bead-key>.scenarios.ts` (the
-   inventory's `scenarios` path), a plain module rather than a test file
-   (D19). A bead with no specs adds no module.
+   **one scenario module**, `src/content/specs/<bead-key>.scenarios.ts`,
+   using the scenario path in the filed bead's Areas and description and its
+   original filing key as the slug. These filed identifiers determine the
+   module path even when the current planning projection groups entities
+   differently. The module is plain rather than a test file (D19). A bead
+   with no specs adds no module.
    - **Export:** a default export `{ slug: "<bead-key>", scenarios: [...] }
      satisfies ScenarioModule`. Each scenario is a `NamedScenario`: a `name`
      that starts with the subject entity's UUID, a `spec` for `runScenario`,
@@ -270,9 +285,14 @@ primitive beads, and
 the fallout areas its
 [fallout listing](workflow.md#listing-fallout-before-dispatch) calls for.
 
-Bead 5.1b (`hv-umm2.48`) files one bead per inventory record under the Phase
-5 epic, with the inventory's edges, and records each serialization edge in
-the dependent bead's notes. Bead titles carry the inventory key.
+Bead 5.1b (`hv-umm2.48`) materializes the planning projection as native
+beads under the Phase 5 epic: one bead per planned bead record, with explicit
+entity UUIDs, Areas, acceptance criteria, planning and serialization edges.
+Each serialization edge is recorded in the dependent bead's notes. Titles
+and metadata carry the original inventory key, also used for the scenario
+slug. Execution follows the filed native scope and dependency graph. For a
+filed bead, look up the inventory's `entities` by its explicit UUIDs; a
+current `beads` record with the same key is a planning record, not its scope.
 
 **Acceptance:**
 

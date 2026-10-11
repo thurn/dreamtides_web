@@ -31,3 +31,4 @@
 {"retrospective":"2026-10-11","phase":5,"bead":"hv-umm2.339","covers":["hv-umm2.113","hv-umm2.114","hv-umm2.115","hv-umm2.116","hv-umm2.310","hv-umm2.311","hv-umm2.312","hv-umm2.313","hv-umm2.316","hv-umm2.317","hv-umm2.318","hv-umm2.320","hv-umm2.321","hv-umm2.322","hv-umm2.323","hv-umm2.324","hv-umm2.326","hv-umm2.327","hv-umm2.328","hv-umm2.329","hv-umm2.330","hv-umm2.331","hv-umm2.333","hv-umm2.337","hv-umm2.56","hv-umm2.58","hv-umm2.61","hv-umm2.65","hv-umm2.66","hv-umm2.69","hv-umm2.70"]}
 {"tag":"local-edit-correction","phase":5,"reason":"self-corrected lint, typecheck, import and fixture slips during normal iteration, each 0.5-2 minutes (hv-umm2.314, .319, .335), below the friction ledger threshold; no shared cause to fix (hv-umm2.345)"}
 {"tag":"qa-scene-unreachable-state","phase":5,"bead":"hv-umm2.332"}
+{"tag":"inventory-generator-drift","phase":5,"bead":"hv-umm2.347"}
