@@ -919,7 +919,7 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
   },
   {
     name: "present-status",
-    description: "Presentation: durations, a granted keyword, disabled triggers, a cost change, a payable effect, exhaustion, points, and a floating trigger, then the turn ends",
+    description: "Presentation: durations, a granted keyword, disabled triggers, a cost change, a payable effect, exhaustion, points, a floating trigger, and an extra turn, then the player's extra turn passes into the enemy Day",
     setup: {
       active: "player",
       phase: "day",
