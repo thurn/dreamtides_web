@@ -1,0 +1,5 @@
+# Pre-existing issues found by hv-umm2.94
+
+- `src/runtime/battle-prompt-messages.ts` (`engineAbilityOptionLabel`, `kind: "ability"`): a card with more than one activatable ability opens a chooser whose options read only "Ability 1" and "Ability 2", so the player must match ordinals against the card text (seen on Soulbinder 33874387 with 2⧗ stored; captures `soulbinder-player-ability-chooser-desktop.png`, `-mobile.png`).
+- Ability chooser heading placement (`ENGINE_ABILITY_CHOOSER_TITLE`, rendered by the battle screen): "Choose an ability" appears as small text under the battle-log button in the top-left corner, far from the option buttons near the player's rank, on desktop and mobile (same captures).
+- Card-lab enemy scripts (`src/engine/testing/card-lab.ts`): an abandon cost in a scripted enemy activation is answered by the policy, which may abandon the activating source itself; a later scripted step on that source then crashes the battle screen with "Declared lab enemy action activate is illegal or stale" instead of a recoverable script failure. Judged scenarios avoid it by staging fodder with no higher value than the source.

@@ -1418,6 +1418,10 @@ Cards use counters (⧗) to track internal state.
 - Stored counters can be spent to pay costs, as in "1⧗, ☾: Draw a card", or
   referenced by abilities, as in "Supported characters have +1✦ for each stored ⧗."
 - A card's counters reset to 0 when it leaves play.
+- Only a card in play stores counters. If the card is not in play as an
+  instruction to store counters resolves, nothing is stored. So "Abandon a
+  character: Store 1⧗." paid by abandoning the card itself stores nothing, and
+  neither does a store whose card an opponent's response removed from play.
 
 ## Zone Changes
 

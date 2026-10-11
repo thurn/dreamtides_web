@@ -69,6 +69,7 @@ import {
   setBaseSparkPrimitive,
   shuffleIntoPrimitive,
   sparkModifierPrimitive,
+  storeCountersPrimitive,
   takeFromAmongPrimitive,
   triggerAbilityPrimitive,
   winTheGamePrimitive,
@@ -247,6 +248,9 @@ const DEFINITIONS = {
   },
   get sparkModifier() {
     return sparkModifierPrimitive;
+  },
+  get storeCounters() {
+    return storeCountersPrimitive;
   },
   get takeFromAmong() {
     return takeFromAmongPrimitive;

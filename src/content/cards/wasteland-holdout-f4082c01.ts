@@ -1,3 +1,6 @@
+import { activated, characterYouControl, countersCost, exhaustSelf } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 36,
   art: { x: 0, y: -0.51, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenMaterialize(characterYouControl({ figment: true })), p.storeCounters(1)),
+    activated([countersCost(1), exhaustSelf()], p.draw(1)),
+  ],
+  verifiedText: "1nmh43mgnkz",
 });
