@@ -1,3 +1,5 @@
+import { abandonSelfCost, activated } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 178,
   art: { x: -0.294, y: 0.369, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonSelfCost()], p.sequence(p.reveal("opponent"), p.draw(1, "you", { ephemeral: true })))],
+  verifiedText: "1uyjk6jzc9m",
 });

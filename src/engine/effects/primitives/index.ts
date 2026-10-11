@@ -33,6 +33,7 @@ export * from "./phase";
 export * from "./prevent";
 export * from "./repeat";
 export * from "./return-to-hand";
+export * from "./reveal";
 export * from "./sequence";
 export * from "./set-base-spark";
 export * from "./spark-modifier";

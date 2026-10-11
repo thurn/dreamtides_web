@@ -1,0 +1,139 @@
+{
+  "bead": "hv-umm2.54",
+  "phase": 5,
+  "implementMin": 14,
+  "localValidationS": {
+    "focused": 2.1,
+    "fuzz": 76,
+    "reviewFull": 44.8,
+    "sweep": 37,
+    "activated": 37.9,
+    "review": 27.49,
+    "knip": 1.82
+  },
+  "timingNotes": "Final review active wall27.49s measured by time; review-full active wall44.8s approximated from concurrent phase durations (prepare0.9, max initial checks16.1, test24.6, bundle2.4, restore0.8). Fuzzer CPU81.7s. QA runner elapsed includes serve/cleanup; sweep rounded total. Implement minutes rounded from dispatch/commit window.",
+  "hostLoad": 4.69,
+  "testDelta": {
+    "files": 0,
+    "lines": 208,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "qa": {
+    "latestSweep": {
+      "pass": 4,
+      "skip": 16,
+      "fail": 0
+    },
+    "judged": 2,
+    "fuzz": {
+      "games": 300,
+      "steps": 161082,
+      "included": 617,
+      "exercised": 319,
+      "failures": 0
+    },
+    "guardExperiment": {
+      "accepted": 1,
+      "rejected": 6
+    },
+    "runtime": [
+      {
+        "pid": 19785,
+        "port": 5174,
+        "kind": "initial sweep",
+        "stopped": true
+      },
+      {
+        "pid": 22626,
+        "port": 5174,
+        "kind": "activation selector correction",
+        "stopped": true
+      },
+      {
+        "pid": 23934,
+        "port": 5174,
+        "kind": "first activated QA",
+        "stopped": true
+      },
+      {
+        "pid": 24629,
+        "port": 5174,
+        "kind": "sweep order correction",
+        "stopped": true
+      },
+      {
+        "pid": 26020,
+        "port": 5174,
+        "kind": "final settled activated QA",
+        "stopped": true
+      },
+      {
+        "pid": 26706,
+        "port": 5174,
+        "kind": "final sweep",
+        "stopped": true
+      }
+    ]
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step and partial write",
+      "test": "commits no knowledge or reveal event when the resolving step throws after the reveal",
+      "contract": "saved input hash and knowledge preserved; staged reveal not published; engine.error recorded"
+    },
+    {
+      "path": "reload/restart during operation",
+      "test": "replays a reveal before a suspended choice after reload, rejects foreign/stale input, and publishes one reveal",
+      "contract": "stable pending prompt and displayed revealed hand; knowledge commits after answer; no duplicate reveal event"
+    },
+    {
+      "path": "reload after self payment",
+      "test": "abandons only its source from either rank, even when identical allies and enemies are present",
+      "contract": "JSON round-trip stacked ability keeps sacrificed source in void; resolves ephemeral draw and Ending banish"
+    },
+    {
+      "path": "invalid/stale input",
+      "test": "rejects foreign actors and sources outside play without substituting another controlled character",
+      "contract": "out-of-play and wrong actor refused; consumed source cannot reactivate; foreign/illegal/stale prompt answers bounce"
+    },
+    {
+      "path": "concurrent actors",
+      "test": "replays a reveal before a suspended choice after reload, rejects foreign/stale input, and publishes one reveal",
+      "contract": "enemy action during suspended operation and enemy answer bounce; successful answer commits once"
+    }
+  ],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "scenarioSpecs": "None: printed behavior composes registered reveal/draw/sequence and exact self payment.",
+  "testCasesAdded": 8,
+  "integrationRecovery": {
+    "originalSource": "d1023d261790088d1e033f3a43683f082615d8c0",
+    "originalBase": "e868d12c7416546d4d6acb4b5f8826967858f4a7",
+    "updatedBase": "8ec7314eab422188ad6982ea9a61f4c2b41901a4",
+    "nativeUpdatedCheckpoint": "ab1868cca8fa9e80720e8129e52370cc70574d33",
+    "note": "Parent native Tollgate update serialized the shared cards test file. Original reveal test suffix restored verbatim after every landed grantCardKeyword contract; imports and group header combined. Feature behavior and sweep helper are unchanged. Original QA, weighted fuzz, full review and captures refer to originalSource. Updated-base focused tests, review and knip are recorded separately.",
+    "originalTestDelta": {
+      "files": 0,
+      "lines": 210,
+      "jsdomFiles": 0
+    },
+    "updatedBaseValidation": {
+      "focused": {
+        "seconds": 2.41,
+        "files": 2,
+        "tests": 59,
+        "exit": 0
+      },
+      "review": {
+        "seconds": 33.92,
+        "exit": 0
+      },
+      "knip": {
+        "seconds": 1.94,
+        "exit": 0
+      },
+      "hostLoad": 4.06
+    }
+  }
+}

@@ -153,6 +153,14 @@ export default async function cardLabPlay(qa) {
       failures.push("no resolved event for the card");
     }
     const expected = lab.cardType === "Character" ? ["play"] : ["void", "banished"];
+    // The AI may activate a character after it resolves. A self-abandon cost
+    // puts that same instance into the void before the board settles.
+    const materialized = last.events.findIndex((event) => event.kind === "materialized" && event.instance === labInstance);
+    const resolved = last.events.findIndex((event) => event.kind === "resolved" && event.instance === labInstance);
+    const abandonedAfterResolution = last.events.some((event, index) =>
+      resolved >= 0 && materialized > resolved && event.kind === "abandoned" && event.instance === labInstance && index > materialized && event.seq > last.events[materialized].seq,
+    );
+    if (lab.cardType === "Character" && resolved >= 0 && materialized > resolved && abandonedAfterResolution) expected.push("void");
     if (!expected.includes(String(last.zone))) failures.push(`the card is in ${String(last.zone)}, not ${expected.join(" or ")}`);
     await qa.sleep(600);
     if ((await qa.battle.state()).board === before) failures.push("no visible board change");

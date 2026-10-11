@@ -48,6 +48,7 @@ import {
   preventPrimitive,
   repeatPrimitive,
   returnToHandPrimitive,
+  revealPrimitive,
   sequencePrimitive,
   setBaseSparkPrimitive,
   sparkModifierPrimitive,
@@ -165,6 +166,9 @@ const DEFINITIONS = {
   },
   get returnToHand() {
     return returnToHandPrimitive;
+  },
+  get reveal() {
+    return revealPrimitive;
   },
   get sequence() {
     return sequencePrimitive;

@@ -7,7 +7,7 @@
 import { describe, expect, it } from "vitest";
 import { printedCardId, type EngineCardDefinition } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
-import { abandonCost, activated, additionalCost, characterYouControl, choiceCost, discardCost, energy, event, revealCost, target } from "../dsl/builders";
+import { abandonCost, abandonSelfCost, activated, additionalCost, characterYouControl, choiceCost, discardCost, energy, event, revealCost, target } from "../dsl/builders";
 import * as p from "../effects/primitives";
 import { createEngine, IllegalAction } from "../engine";
 import { eventVisibleTo, type EngineEvent } from "../events";
@@ -94,6 +94,10 @@ const SEARCH = {
   opponentPair: { ...fixture(8, "event", () => []), synthetic: { play: pairHook((ctx, self) => opponent(controller(ctx, self))) } },
   /** As `ascendingPair`, but rules code throws once `a = 3` is chosen. */
   brokenPair: { ...fixture(9, "event", () => []), synthetic: { play: pairHook(controller, true) } },
+  abandonSelf: fixture(11, "character", () => [activated([abandonSelfCost()], p.draw(1, "you", { ephemeral: true }))]),
+  targetAndAbandonSelf: fixture(12, "character", () => [activated([abandonSelfCost()], p.gainSpark(target(characterYouControl()), 1))]),
+  abandonSelfTwice: fixture(13, "character", () => [activated([abandonSelfCost(), abandonSelfCost()], p.draw(1))]),
+  eventAbandoningSelf: fixture(14, "event", () => [additionalCost(abandonSelfCost()), event(p.draw(1))]),
   /** An Interrupt: "To play this card, discard a card and reveal an event. Gain 1⍟." */
   revealingInterrupt: { ...fixture(10, "event", () => [additionalCost(discardCost(1), revealCost(1, { cardType: "event" })), event(p.gainPoints(1))]), speed: "interrupt" },
 } as const satisfies Record<string, EngineCardDefinition>;
@@ -681,5 +685,61 @@ describe("legality by search", () => {
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(stateHash(outcome.slice.committed)).toBe(stateHash(state));
     expect(outcome.slice.inFlight).toBeNull();
+  });
+});
+
+
+describe("self-abandon costs", () => {
+  it("abandons only its source from either rank, even when identical allies and enemies are present", () => {
+    for (const rank of ["front", "back"] as const) {
+      const { state, ids } = boardState(engine.catalog, {
+        active: "player", phase: "day",
+        player: { deck, [rank]: [SEARCH.abandonSelf.id, SEARCH.abandonSelf.id] },
+        enemy: { deck, back: [SEARCH.abandonSelf.id], hand: [v.interruptEvent.id], energy: 5 },
+      });
+      const source = ids.player[rank][0]!;
+      const ally = ids.player[rank][1]!;
+      const activated = run(state, "player", { kind: "activate", source, ability: 0 });
+      expect(activated.state.instances[source].zone).toBe("void");
+      expect(activated.state.instances[ally].zone).toBe("play");
+      expect(activated.state.instances[ids.enemy.back[0]!].zone).toBe("play");
+      expect(activated.events.filter((item) => item.kind === "abandoned")).toEqual([{ kind: "abandoned", side: "player", instance: source }]);
+      expect(activated.answers).toEqual([expect.objectContaining({ auto: true, value: [source] })]);
+      const reloaded = JSON.parse(JSON.stringify(activated.state)) as BattleState;
+      const done = resolve(reloaded);
+      expect(done.state.sides.player.hand).toEqual([ids.player.deck[0]]);
+      expect(done.state.instances[ids.player.deck[0]].status.ephemeral).toBe(true);
+      expect(activations(done.state).some((action) => action.source === source)).toBe(false);
+      expect(() => run(done.state, "player", { kind: "activate", source, ability: 0 })).toThrow(IllegalAction);
+      const ended = run(run(run(done.state, "player", { kind: "pass" }).state, "enemy", { kind: "pass" }).state, "player", { kind: "pass" });
+      expect(ended.state.sides.player.banished).toContain(ids.player.deck[0]);
+    }
+  });
+
+  it("excludes the self-paying source from targets and cannot pay it twice or pay it from a hand", () => {
+    const { state, ids } = board({ back: [SEARCH.targetAndAbandonSelf.id, v.vanilla1.id, SEARCH.abandonSelfTwice.id], hand: [SEARCH.eventAbandoningSelf.id] });
+    const source = ids.player.back[0]!;
+    const ally = ids.player.back[1]!;
+    const done = run(state, "player", { kind: "activate", source, ability: 0 }, [[ally]]);
+    const item = done.state.stack[0];
+    if (item.kind !== "ability") throw new Error("expected an ability on the stack");
+    expect(item.choices.targets).toEqual([[ally]]);
+    expect(done.state.instances[source].zone).toBe("void");
+    expect(done.state.instances[ally].zone).toBe("play");
+    expect(activations(state).some((action) => action.source === ids.player.back[2])).toBe(false);
+    expect(plays(state)).not.toContain(ids.player.hand[0]);
+    const alone = board({ back: [SEARCH.targetAndAbandonSelf.id] });
+    expect(activations(alone.state)).toEqual([]);
+  });
+
+  it("rejects foreign actors and sources outside play without substituting another controlled character", () => {
+    const { state, ids } = board({ back: [v.vanilla1.id], hand: [SEARCH.abandonSelf.id], void: [SEARCH.abandonSelf.id] });
+    const before = stateHash(state);
+    for (const source of [...ids.player.hand, ...ids.player.void]) {
+      expect(() => run(state, "player", { kind: "activate", source, ability: 0 })).toThrow(IllegalAction);
+    }
+    const inPlay = board({ back: [SEARCH.abandonSelf.id, v.vanilla1.id] });
+    expect(() => run(inPlay.state, "enemy", { kind: "activate", source: inPlay.ids.player.back[0]!, ability: 0 })).toThrow(IllegalAction);
+    expect(stateHash(state)).toBe(before);
   });
 });

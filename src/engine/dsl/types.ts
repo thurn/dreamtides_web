@@ -210,7 +210,7 @@ export type PaymentCost =
   /** ☾: exhausts the source, a ready back-rank character or the avatar. */
   | { readonly cost: "exhaustSelf" }
   /** Abandon characters you control that match the selector. */
-  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: number }
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number }
   /** Discard cards from your hand. */
   | { readonly cost: "discard"; readonly count: number }
   /** N⧗: spend counters stored on the source (rules § Counters). */

@@ -153,6 +153,11 @@ function cardCandidates(
 ): InstanceId[] {
   switch (cost.cost) {
     case "abandon":
+      if ("kind" in cost.selector) {
+        if (typeof source !== "string") return [];
+        const instance = state.instances[source];
+        return instance?.zone === "play" && instance.controller === side ? [source] : [];
+      }
       return matchingCharacters(state, catalog, cost.selector, side, source);
     case "discard":
       return [...state.sides[side].hand];

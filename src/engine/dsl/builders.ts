@@ -74,6 +74,11 @@ export function abandonCost(extra: Omit<CharacterSelector, "controller"> = {}, c
   return { cost: "abandon", selector: { controller: "you", ...extra }, count };
 }
 
+/** "Abandon this character": only the ability's source pays. */
+export function abandonSelfCost(): PaymentCost {
+  return { cost: "abandon", selector: self(), count: 1 };
+}
+
 /** "Discard N cards" as a cost. */
 export function discardCost(count = 1): PaymentCost {
   return { cost: "discard", count };
