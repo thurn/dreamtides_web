@@ -6,7 +6,11 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
-import { readFrictionRecords, runFrictionTriggers } from "./friction-triggers.mjs";
+import {
+  readFrictionRecords,
+  runFrictionTriggers,
+  validateFrictionEvidence,
+} from "./friction-triggers.mjs";
 
 const SCRIPT = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -346,5 +350,59 @@ describe("friction record schema", () => {
     for (const unknowns of [null, {}, [historicalUnknown(), historicalUnknown()]]) {
       expect(() => runFrictionTriggers(recordFixture(validRecord(), unknowns))).toThrow();
     }
+  });
+});
+
+describe("friction evidence validation", () => {
+  /** @param {string} directory */
+  const validate = (directory) =>
+    spawnSync(process.execPath, [SCRIPT, "--validate-records", directory], {
+      encoding: "utf8",
+    });
+
+  it("passes a well-formed record and counts historical unknowns", () => {
+    const record = { ...validRecord(), hostLoad: null };
+    expect(
+      validateFrictionEvidence(recordFixture(record, [historicalUnknown()])),
+    ).toEqual({ records: 1, unknownMeasurements: 1 });
+    expect(validate(recordFixture(validRecord())).status).toBe(0);
+  });
+
+  it("passes on an undispositioned trigger that the full report fails", () => {
+    const directory = evidenceFixture(ALIASED_TRIGGER);
+    expect(runFrictionTriggers(directory).report.exitCode).toBe(1);
+    expect(validateFrictionEvidence(directory).records).toBe(5);
+    expect(validate(directory).status).toBe(0);
+  });
+
+  it("exits 2 naming the file of a malformed record", () => {
+    const directory = recordFixture({ ...validRecord(), hostLoad: "3" });
+    expect(() => validateFrictionEvidence(directory)).toThrow();
+    const cli = validate(directory);
+    expect(cli.status).toBe(2);
+    expect(cli.stderr).toContain("hv-synthetic.json");
+  });
+
+  it("exits 2 naming the file of a record that is not JSON", () => {
+    const directory = evidenceFixture({});
+    writeFileSync(join(directory, "friction", "hv-synthetic.json"), "{");
+    const cli = validate(directory);
+    expect(cli.status).toBe(2);
+    expect(cli.stderr).toContain("hv-synthetic.json");
+  });
+
+  it("exits 2 on a malformed introspection ledger line", () => {
+    const directory = evidenceFixture({ ledger: [{ tag: "x", phase: 2 }] });
+    expect(() => validateFrictionEvidence(directory)).toThrow();
+    expect(validate(directory).status).toBe(2);
+  });
+
+  it("exits 2 on an unrecognized flag", () => {
+    const cli = spawnSync(
+      process.execPath,
+      [SCRIPT, "--validate", evidenceFixture({})],
+      { encoding: "utf8" },
+    );
+    expect(cli.status).toBe(2);
   });
 });

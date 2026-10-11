@@ -16,7 +16,10 @@
 //   retrospectives {retrospective: <date>, phase, bead?, covers: [bead ids]}.
 //
 // Exits 1 when a fired trigger has no disposition, 2 on malformed input, and 0
-// otherwise.
+// otherwise. With `--validate-records` it parses the same inputs without
+// evaluating triggers or cadence, and exits 2 on malformed input and 0
+// otherwise; `npm run review` and the gate run it when the friction evidence
+// changes.
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -24,6 +27,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DEFAULT_EVIDENCE_DIR = join(ROOT, "docs/plan/evidence");
+const VALIDATE_RECORDS_FLAG = "--validate-records";
 
 /**
  * @typedef {{ bead: string, field: string, sourceSHA256: string, reason: string }} UnknownMeasurement
@@ -172,7 +176,14 @@ export function readFrictionRecords(evidenceDir) {
     : [];
   const records = files.map((name) => {
     const path = join(frictionDir, name);
-    return parseFrictionRecord(JSON.parse(readFileSync(path, "utf8")), path, historicalUnknowns, false);
+    /** @type {unknown} */
+    let raw;
+    try {
+      raw = JSON.parse(readFileSync(path, "utf8"));
+    } catch {
+      throw new Error(`${path}: invalid JSON`);
+    }
+    return parseFrictionRecord(raw, path, historicalUnknowns, false);
   });
   const legacyPath = join(evidenceDir, "friction.jsonl");
   readJsonLines(legacyPath).forEach((line, index) =>
@@ -444,14 +455,52 @@ export function runFrictionTriggers(evidenceDir) {
   return { report, text: formatReport(report, config) };
 }
 
+/**
+ * Parses the friction evidence (the tag config, per-bead records, legacy lines
+ * and the introspection ledger) without evaluating triggers or cadence, so a
+ * fired trigger never fails it. Throws on malformed input.
+ *
+ * @param {string} evidenceDir
+ * @returns {{ records: number, unknownMeasurements: number }}
+ */
+export function validateFrictionEvidence(evidenceDir) {
+  const records = readFrictionRecords(evidenceDir);
+  readLedger(evidenceDir);
+  return {
+    records: records.length,
+    unknownMeasurements: records.reduce(
+      (count, record) => count + record.unknownMeasurements.length,
+      0,
+    ),
+  };
+}
+
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : "";
 if (invokedPath === fileURLToPath(import.meta.url)) {
   try {
-    const { report, text } = runFrictionTriggers(
-      process.argv[2] ? resolve(process.argv[2]) : DEFAULT_EVIDENCE_DIR,
-    );
-    console.log(text);
-    process.exitCode = report.exitCode;
+    const args = process.argv.slice(2);
+    const validateOnly = args.includes(VALIDATE_RECORDS_FLAG);
+    const positional = args.filter((arg) => arg !== VALIDATE_RECORDS_FLAG);
+    const unknownFlag = positional.find((arg) => arg.startsWith("--"));
+    if (unknownFlag !== undefined || positional.length > 1) {
+      throw new Error(
+        `Usage: node scripts/friction-triggers.mjs [${VALIDATE_RECORDS_FLAG}] [evidence-dir]`,
+      );
+    }
+    const evidenceDir = positional[0] === undefined
+      ? DEFAULT_EVIDENCE_DIR
+      : resolve(positional[0]);
+    if (validateOnly) {
+      const { records, unknownMeasurements } = validateFrictionEvidence(evidenceDir);
+      console.log(
+        `Friction evidence valid: ${String(records)} records, ` +
+          `${String(unknownMeasurements)} historical unknown measurements`,
+      );
+    } else {
+      const { report, text } = runFrictionTriggers(evidenceDir);
+      console.log(text);
+      process.exitCode = report.exitCode;
+    }
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
     process.exitCode = 2;

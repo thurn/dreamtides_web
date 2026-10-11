@@ -8,6 +8,7 @@ import { basename, dirname, extname, posix } from "node:path";
  *   importerFiles: string[],
  *   lintFiles: string[],
  *   shouldTypecheck: boolean,
+ *   shouldValidateFriction: boolean,
  *   testInputs: string[],
  * }} ReviewPlan
  */
@@ -65,8 +66,32 @@ export const STATIC_CHECK_STEPS = [...TYPECHECK_STEPS, IMPORT_CYCLE_STEP];
 export const KNIP_STEP = { step: "knip", args: [] };
 
 /**
- * Steps of `review:full`: prepare, then lint, the whole-program checks, and
- * knip together, then the whole test suite and the production bundle
+ * The friction evidence schema check (`scripts/friction-triggers.mjs
+ * --validate-records`): it parses every friction record, the tag config and
+ * the introspection ledger, and never evaluates trigger dispositions, so a
+ * fired trigger cannot fail a review. It needs no prepared workspace.
+ *
+ * @type {ReviewStep}
+ */
+export const FRICTION_RECORDS_STEP = { step: "friction-records", args: [] };
+
+/** The friction evidence `FRICTION_RECORDS_STEP` parses. */
+const FRICTION_EVIDENCE_DIR = "docs/plan/evidence/friction/";
+const FRICTION_EVIDENCE_FILES = new Set([
+  "docs/plan/evidence/friction-tags.json",
+  "docs/plan/evidence/friction.jsonl",
+  "docs/plan/evidence/introspection.jsonl",
+]);
+
+/** @param {string} file */
+function isFrictionEvidence(file) {
+  return file.startsWith(FRICTION_EVIDENCE_DIR) ||
+    FRICTION_EVIDENCE_FILES.has(file);
+}
+
+/**
+ * Steps of `review:full`: prepare, then lint, the whole-program checks, knip,
+ * and the friction evidence schema check together, then the whole test suite and the production bundle
  * assertion (P7: no development-only module ships).
  *
  * @returns {ReviewPlanEntry[]}
@@ -75,7 +100,12 @@ export function fullExecutionPlan() {
   return [
     { step: "prepare", args: [] },
     {
-      concurrent: [{ step: "lint", args: [] }, ...STATIC_CHECK_STEPS, KNIP_STEP],
+      concurrent: [
+        { step: "lint", args: [] },
+        ...STATIC_CHECK_STEPS,
+        KNIP_STEP,
+        FRICTION_RECORDS_STEP,
+      ],
     },
     { step: "test", args: [] },
     { step: "bundle", args: [] },
@@ -239,6 +269,8 @@ export function importersOf(targets, sources) {
 
 /**
  * Plans the bounded checks for `files` changed against the review base. A
+ * changed friction evidence file, deletions included, selects the friction
+ * evidence schema check. A
  * changed path that no longer exists is a deletion: a deleted module never
  * reaches lint or Vitest itself, so `findImporters(deletedModules)` names the
  * surviving files that still import it, and those join the lint and
@@ -269,6 +301,7 @@ export function buildReviewPlan(
     importerFiles,
     lintFiles: checkedFiles.filter(isTypedSource),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
+    shouldValidateFriction: changedFiles.some(isFrictionEvidence),
     testInputs: checkedFiles.filter(isTestInput),
   };
 }
@@ -301,7 +334,8 @@ export function gateTestScope(testFiles, cap) {
 /**
  * Steps of the gate stage's `review:gate` for a plan built from the files
  * changed against `HEAD^`: prepare, then the full typecheck and the
- * import-cycle check alongside lint of the changed sources and the related
+ * import-cycle check alongside lint of the changed sources, the friction
+ * evidence schema check when the friction evidence changed, and the related
  * tests, or the whole suite when more than `GATE_RELATED_TEST_FILE_CAP` test
  * files are related.
  *
@@ -313,6 +347,7 @@ export function gateExecutionPlan(reviewPlan) {
   if (reviewPlan.lintFiles.length > 0) {
     checks.push({ step: "lint", args: reviewPlan.lintFiles });
   }
+  if (reviewPlan.shouldValidateFriction) checks.push(FRICTION_RECORDS_STEP);
   /** @type {ReviewPlanEntry[]} */
   const steps = [{ step: "prepare", args: [] }, { concurrent: checks }];
   if (reviewPlan.testInputs.length > 0) {
@@ -330,7 +365,8 @@ export function gateExecutionPlan(reviewPlan) {
 
 /**
  * Local diff-aware review: prepare when checks need it, lint the selected
- * sources beside whole-program checks and the selected related tests.
+ * sources beside whole-program checks, the selected related tests, and the
+ * friction evidence schema check when the friction evidence changed.
  *
  * @param {ReviewPlan} reviewPlan
  * @returns {ReviewPlanEntry[]}
@@ -348,6 +384,7 @@ export function quickExecutionPlan(reviewPlan) {
   if (reviewPlan.testInputs.length > 0) {
     checks.push({ step: "test-related", args: reviewPlan.testInputs });
   }
+  if (reviewPlan.shouldValidateFriction) checks.push(FRICTION_RECORDS_STEP);
   if (checks.length > 0) steps.push({ concurrent: checks });
   return steps;
 }

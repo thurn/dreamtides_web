@@ -364,6 +364,12 @@ function commandFor(step, extraArgs = []) {
   if (step === "knip") {
     return [process.execPath, [nodeModulePath("knip", "bin", "knip.js"), ...extraArgs]];
   }
+  if (step === "friction-records") {
+    return [
+      process.execPath,
+      [join(root, "scripts", "friction-triggers.mjs"), "--validate-records"],
+    ];
+  }
   if (step === "import-cycles") {
     return [process.execPath, [join(root, "scripts", "import-cycles.mjs")]];
   }

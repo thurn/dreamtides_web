@@ -3,6 +3,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildReviewPlan,
+  FRICTION_RECORDS_STEP,
   fullExecutionPlan,
   GATE_RELATED_TEST_FILE_CAP,
   gateExecutionPlan,
@@ -32,6 +33,7 @@ describe("fast review plan", () => {
       importerFiles: [],
       lintFiles: [],
       shouldTypecheck: false,
+      shouldValidateFriction: false,
       testInputs: [],
     });
   });
@@ -53,6 +55,7 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.ts",
       ],
       shouldTypecheck: true,
+      shouldValidateFriction: false,
       testInputs: [
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
@@ -126,6 +129,7 @@ describe("deleted modules", () => {
       importerFiles: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
       lintFiles: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
       shouldTypecheck: true,
+      shouldValidateFriction: false,
       testInputs: ["scripts/tool.mjs", "src/state/uses-removed.ts"],
     });
   });
@@ -348,12 +352,17 @@ describe("gate test scope", () => {
 });
 
 describe("full review plan", () => {
-  it("runs knip beside lint and the whole-program checks, after prepare", () => {
+  it("runs knip and the friction schema check beside lint and the whole-program checks, after prepare", () => {
     const [prepare, checks] = fullExecutionPlan();
 
     expect(prepare).toEqual({ step: "prepare", args: [] });
     expect(checks).toEqual({
-      concurrent: [{ step: "lint", args: [] }, ...STATIC_CHECK_STEPS, KNIP_STEP],
+      concurrent: [
+        { step: "lint", args: [] },
+        ...STATIC_CHECK_STEPS,
+        KNIP_STEP,
+        FRICTION_RECORDS_STEP,
+      ],
     });
   });
 
@@ -394,6 +403,61 @@ describe("quick review execution plan", () => {
     )).toEqual([
       { step: "prepare", args: [] },
       { concurrent: STATIC_CHECK_STEPS },
+    ]);
+  });
+});
+
+describe("friction evidence schema check", () => {
+  const record = "docs/plan/evidence/friction/hv-synthetic.json";
+
+  it.each([
+    record,
+    "docs/plan/evidence/friction-tags.json",
+    "docs/plan/evidence/friction.jsonl",
+    "docs/plan/evidence/introspection.jsonl",
+  ])("is selected when %s changes", (file) => {
+    expect(buildReviewPlan([file]).shouldValidateFriction).toBe(true);
+  });
+
+  it("is selected when a friction record is deleted", () => {
+    expect(buildReviewPlan([record], () => false).shouldValidateFriction)
+      .toBe(true);
+  });
+
+  it.each([
+    "docs/plan/evidence/pre-existing/hv-synthetic.md",
+    "docs/plan/workflow.md",
+    "scripts/friction-triggers.mjs",
+    "src/docs/plan/evidence/friction/hv-synthetic.json",
+  ])("is not selected when only %s changes", (file) => {
+    expect(buildReviewPlan([file]).shouldValidateFriction).toBe(false);
+  });
+
+  it("runs alone in the quick review without preparing the workspace", () => {
+    expect(
+      quickExecutionPlan(buildReviewPlan([record, "docs/notes.md"])),
+    ).toEqual([{ concurrent: [FRICTION_RECORDS_STEP] }]);
+  });
+
+  it("runs beside the quick review's other checks", () => {
+    const files = ["src/state/example.ts", record];
+    expect(quickExecutionPlan(buildReviewPlan(files))).toEqual([
+      { step: "prepare", args: [] },
+      {
+        concurrent: [
+          ...STATIC_CHECK_STEPS,
+          { step: "lint", args: ["src/state/example.ts"] },
+          { step: "test-related", args: ["src/state/example.ts"] },
+          FRICTION_RECORDS_STEP,
+        ],
+      },
+    ]);
+  });
+
+  it("runs beside the gate's static checks", () => {
+    expect(gateExecutionPlan(buildReviewPlan([record]))).toEqual([
+      { step: "prepare", args: [] },
+      { concurrent: [...STATIC_CHECK_STEPS, FRICTION_RECORDS_STEP] },
     ]);
   });
 });

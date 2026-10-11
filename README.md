@@ -39,10 +39,10 @@ the origin that hosts it (see `.env.example`).
 | Command | Purpose |
 | --- | --- |
 | `npm test -- <path>` | Focused Vitest file |
-| `npm run review` | Diff-aware pre-commit check: data validation, lint, typecheck, related tests |
+| `npm run review` | Diff-aware pre-commit check: data validation, lint, typecheck, related tests, and the friction record schema when friction evidence changes |
 | `npm run knip` | Unused files, exports, and dependencies |
-| `npm run review:gate` | Tollgate's gate stage: a candidate's diff against its parent, with the typecheck, import cycles, lint of the changed files, and the related tests, or the whole suite when more than 40 test files are related |
-| `npm run review:full` | Tollgate's release stage: full lint, the typecheck, import cycles, knip, the whole suite, and the production build |
+| `npm run review:gate` | Tollgate's gate stage: a candidate's diff against its parent, with the typecheck, import cycles, lint of the changed files, the friction record schema when friction evidence changes, and the related tests, or the whole suite when more than 40 test files are related |
+| `npm run review:full` | Tollgate's release stage: full lint, the typecheck, import cycles, knip, the friction record schema, the whole suite, and the production build |
 | `npm run typecheck` | Incremental typecheck |
 | `npm run import-cycles` | Fails on a module-load read inside an import cycle |
 | `npm run build` | Production build into `dist/` |

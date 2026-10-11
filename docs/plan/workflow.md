@@ -783,7 +783,9 @@ Candidates submitted after the switch follow staged mode.
   candidate changes, and runs their related tests, or the whole suite when
   more than 40 test files are related, as for every `src/engine/` and
   `src/content/` change. So those tests run on the candidate's integrated
-  tree, beside every bead promoted before it, before it lands.
+  tree, beside every bead promoted before it, before it lands. A candidate
+  that changes friction evidence also gets the friction record
+  [schema check](#friction-ledger).
 - **The release stage** (`npm run review:full`, then the fuzz smoke) runs on
   the newest `staging` tip. A pass advances `release` and remote `master`.
 - **A bead lands** when it is promoted to `staging`.
@@ -819,8 +821,8 @@ Run the cheapest relevant check first:
 1. **While iterating:** `npm test -- <file>` for focused tests. Use
    `npx vitest run <file> -t '<name>'` for one case.
 2. **Before committing:** `npm run review`, the diff-aware lint, typecheck,
-   and related tests, and `npm run knip`, which lists unused files, exports,
-   and dependencies (see [Fallout areas](#fallout-areas)).
+   related tests, and friction record schema check, and `npm run knip`,
+   which lists unused files, exports, and dependencies (see [Fallout areas](#fallout-areas)).
 3. **Only when the change touches** test infrastructure, repository-wide
    config, or cross-cutting architecture: `npm run review:full` locally. It is
    heavy (D17). Otherwise the gate stage is the aggregate: it runs the
@@ -1019,6 +1021,18 @@ its own commit:
 Zero and fractional measurements, empty notes, empty friction arrays and
 additional fields are accepted. Malformed input identifies its file/field and
 exits 2; an undispositioned trigger exits 1; a valid dispositioned report exits 0.
+
+`npm run review` and `review:gate` run the same schema validation
+(`node scripts/friction-triggers.mjs --validate-records`) whenever the diff
+changes a file under `docs/plan/evidence/friction/`, `friction-tags.json`,
+`friction.jsonl` or `introspection.jsonl`; `review:full` always runs it. It
+parses every record, the tag config and the ledger, and never evaluates
+triggers, so a malformed record fails its own bead's review and gate while a
+fired trigger fails neither.
+
+A landed record whose measurement needs correcting is corrected in the same
+session's next bead, or by the next retrospective, inside that bead's own
+commit. A measurement correction is never a bead of its own.
 
 The fixed `historicalUnknowns` inventory in `friction-tags.json` identifies
 individual historical bead/field pairs whose observations were not recorded.
