@@ -231,7 +231,9 @@ composition beads skip it.
      a module file that is not registered, a slug registered twice, a module
      with no scenarios, or a scenario name used twice.
 6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <bead entities>`.
-   Decks are biased to include the bead's entities. It is heavy (D17).
+   Decks are biased to include the bead's entities, and every game checks
+   determinization fidelity on the states it reaches (engine-design
+   § Testing layers). It is heavy (D17).
 7. **Preflight and sweep** the bead's entities in the card-lab. First run
    `npm run lab:preflight -- --cards <entity uuids>` in Node to catch fixture
    staging and engine resolution failures before starting a browser. Use the

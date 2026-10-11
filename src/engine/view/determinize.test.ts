@@ -21,12 +21,12 @@ import type { BattleState, CardInstance, DeckEntry } from "../state/types";
 import { boardState, cardIdOf, type SideSetup } from "../testing/board";
 import { fuzzEngineCatalog, fuzzInit, playRandomActions, playRandomGame, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
 import { invariantViolations } from "../testing/invariants";
+import { comparableView, determinizationDivergences } from "../testing/determinization-fidelity";
 import { PolicyRandom } from "../policy/random";
 import { hiddenFrom } from "../testing/redaction";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { at, passUntil } from "../testing/trigger-harness";
 import { determinize, type Decklists } from "./determinize";
-import type { BattleView } from "./view";
 
 const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
 
@@ -50,16 +50,6 @@ const SAMPLES = samples();
 function seeded(label: string): () => number {
   const random = new PolicyRandom(battleSeed(label));
   return () => random.next();
-}
-
-/** A view without the parts determinization rebuilds approximately (see determinize.ts). */
-function comparable(seen: BattleView): unknown {
-  const { triggerQueue, payable, ...rest } = seen;
-  return {
-    ...rest,
-    triggerQueue: triggerQueue.filter((trigger) => trigger.source !== null),
-    payable: payable.map(({ source: _source, ...effect }) => effect),
-  };
 }
 
 function entryLabel(entry: DeckEntry): string {
@@ -100,9 +90,48 @@ describe("determinize", () => {
       for (const viewer of SIDES) {
         const seen = engine.view(state, viewer);
         const sampled = determinize(seen, decklists, seeded(`view-${String(index)}-${viewer}`), engine.catalog);
-        expect(comparable(engine.view(sampled, viewer))).toEqual(comparable(seen));
+        expect(comparableView(engine.view(sampled, viewer))).toEqual(comparableView(seen));
       }
     });
+  });
+
+  it("agrees with the real state on each side's legal actions, public cards, and effects", () => {
+    SAMPLES.forEach(({ state, decklists }, index) => {
+      expect(determinizationDivergences(engine, state, decklists, battleSeed("fidelity"), index)).toEqual([]);
+    });
+  });
+
+  it("reports a sample that changes a public card's raw status or drops an anonymous play permission", () => {
+    // A side with a card in its void, whose opponent holds a card hidden from it to grant the permission.
+    const [found] = SAMPLES.flatMap(({ state, decklists }) =>
+      SIDES.filter((side) => state.sides[side].void.length > 0 && state.sides[opponent(side)].hand.length > 0).map((holder) => ({ base: state, decklists, holder })),
+    );
+    if (found === undefined) throw new Error("no sample has a void card and a hidden opposing hand card");
+    const { base, decklists, holder } = found;
+    const state = structuredClone(base);
+    const [card] = state.sides[holder].void;
+    const permission = `e${state.nextEffect}` as const;
+    state.floating.push({
+      id: permission, controller: holder, source: state.sides[opponent(holder)].hand[0], timestamp: state.clock, expiry: { at: "endOfTurn" },
+      change: { kind: "playFrom", player: holder, zone: "void", instance: null, filter: {}, next: true },
+    });
+    state.nextEffect += 1;
+    expect(determinizationDivergences(engine, state, decklists, battleSeed("fidelity-probe"), 0)).toEqual([]);
+    const lossy = {
+      ...engine,
+      determinize: (...args: Parameters<typeof engine.determinize>) => {
+        const sampled = engine.determinize(...args);
+        sampled.instances[card].status.reclaimed = !sampled.instances[card].status.reclaimed;
+        sampled.floating = sampled.floating.filter((effect) => effect.id !== permission);
+        return sampled;
+      },
+    };
+    const problems = determinizationDivergences(lossy, state, decklists, battleSeed("fidelity-probe"), 0);
+    for (const side of SIDES) {
+      const own = problems.filter((problem) => problem.startsWith(`${side}'s`));
+      expect(own.some((problem) => problem.includes(card) && problem.includes("status"))).toBe(true);
+      expect(own.some((problem) => problem.includes(permission))).toBe(true);
+    }
   });
 
   it("deals every hidden card from what each decklist has left", () => {
@@ -270,7 +299,7 @@ describe("determinize with static abilities working from a hidden zone", () => {
       const decklists: Decklists = { player: [], enemy: [filler, filler, source.id].map((cardId) => ({ cardId })) };
       for (const seed of SEEDS) {
         const sampled = determinize(seen, decklists, seeded(seed), catalog);
-        expect(comparable(current.view(sampled, "player"))).toEqual(comparable(seen));
+        expect(comparableView(current.view(sampled, "player"))).toEqual(comparableView(seen));
       }
     } finally {
       predicate.mockRestore();
@@ -300,7 +329,7 @@ describe("determinize with static abilities working from a hidden zone", () => {
     for (const seed of SEEDS) {
       const sampled = determinize(seen, decklists, seeded(seed), hiddenCatalog);
       expect(invariantViolations(sampled, hiddenCatalog)).toEqual([]);
-      expect(comparable(hiddenEngine.view(sampled, "player"))).toEqual(comparable(seen));
+      expect(comparableView(hiddenEngine.view(sampled, "player"))).toEqual(comparableView(seen));
       expect(hiddenEngine.legalActions(sampled, "player")).toEqual(hiddenEngine.legalActions(state, "player"));
     }
   });
@@ -325,7 +354,7 @@ describe("determinize with static abilities working from a hidden zone", () => {
       for (const seed of SEEDS) {
         const sampled = determinize(seen, decklists, seeded(seed), hiddenCatalog);
         expect(invariantViolations(sampled, hiddenCatalog)).toEqual([]);
-        expect(comparable(hiddenEngine.view(sampled, "player"))).toEqual(comparable(seen));
+        expect(comparableView(hiddenEngine.view(sampled, "player"))).toEqual(comparableView(seen));
       }
     }
   });

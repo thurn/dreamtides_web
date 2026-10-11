@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.404",
+  "phase": 5,
+  "baseOid": "3721853869f4265f66dd4174067efab7fd7adab0",
+  "implementMin": 36,
+  "localValidationS": {
+    "focused": 1.3,
+    "review": 12.3,
+    "knip": 3.9,
+    "review-full": 75.7,
+    "fuzz-200": 46.9,
+    "fuzz-weighted-300": 69.2,
+    "probe-fuzz-200": 43.4,
+    "perf-ab-fuzz-200x5": 480
+  },
+  "hostLoad": 4.38,
+  "testDelta": {
+    "files": 0,
+    "lines": 29,
+    "jsdomFiles": 0,
+    "cases": 2
+  },
+  "friction": [
+    {
+      "tag": "synthetic-fuzz-pool-shallow",
+      "minutes": 15,
+      "note": "No fuzz game reached a play permission whose source was hidden (a card returned to hand stays known to both sides), so the hv-umm2.379 negative probe passed until a fuzz-only fixture granted a permission and shuffled its source into the deck"
+    }
+  ],
+  "timingNote": "Two working intervals: about 11 minutes to the first divergence report (the check found the loop-offer divergence fixed by hv-umm2.412), then 25 minutes after the rebase onto staging; the wait for hv-umm2.412 is excluded."
+}

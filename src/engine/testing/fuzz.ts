@@ -6,7 +6,7 @@ import {
   type EngineDreamwellDefinition,
   type EngineFigmentDefinition,
 } from "../catalog";
-import { energy, energyX } from "../dsl/builders";
+import { activated, energy, energyX, everyIn, exhaustSelf, self } from "../dsl/builders";
 import type { ApplyResult, Engine } from "../engine";
 import type { EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
@@ -26,6 +26,7 @@ import { eventLogRecords, legalityLogRecords, stepLogRecords, type EngineLogReco
 import { InlineSource } from "../steps/sources";
 import type { RecordedAnswer } from "../steps/types";
 import { unannouncedChanges } from "./announced-changes";
+import { determinizationDivergences } from "./determinization-fidelity";
 import { invariantViolations } from "./invariants";
 import { EventRedaction, promptRedactionViolations } from "./redaction";
 import { PolicyRandom, randomAction } from "../policy/random";
@@ -42,7 +43,7 @@ import { parseAvatarId, parseDreamsignId, parseDreamwellCardId, parseSemanticEnt
 import type { FigmentId, InstanceId } from "../state/ids";
 import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
 import { atStartOfFirstTurn, triggered } from "../dsl/triggers";
-import { materializeFigments } from "../effects/primitives";
+import { materializeFigments, playFromZone, returnToHand, sequence, shuffleInto } from "../effects/primitives";
 import { BASE_VARIANT } from "../dsl/types";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
@@ -84,13 +85,39 @@ function errorText(error: unknown): string {
 export const DECK_SIZE = 30;
 /** Top-level actions after which a game counts as non-terminating. */
 export const ACTION_CAP = 20000;
+/**
+ * Steps between determinization-fidelity checks (`determinizationDivergences`):
+ * each runs at the first top-level decision after its stride's last step.
+ */
+const FIDELITY_STRIDE = 10;
+
+/**
+ * Fuzz-only fixtures for the determinization-fidelity check, ids 0xe80+:
+ * states that the production catalog and the other fixtures rarely reach.
+ */
+const FIDELITY_CARDS: readonly EngineCardDefinition[] = [
+  {
+    // "☾: You may play an event from your void. Return this character to your
+    // hand, then shuffle your hand into your deck.": a play permission whose
+    // source is then hidden from both sides.
+    id: syntheticId(0xe80),
+    cardType: "character",
+    costs: [energy(1)],
+    spark: 1,
+    subtype: "Mage",
+    speed: "standard",
+    status: "authored",
+    abilities: () => [activated([exhaustSelf()], sequence(playFromZone("void", { cardType: "event" }, { next: true }), returnToHand(self()), shuffleInto([everyIn("hand")])))],
+  },
+];
 
 /**
  * Synthetic cards the fuzzer mixes in: vanilla, prompting, DSL, stack
  * (Interrupts, prevent, activated abilities), trigger and duration,
- * continuous-effect, zone and special-mechanic, and optional-loop fixtures.
+ * continuous-effect, zone and special-mechanic, optional-loop, and
+ * determinization-fidelity fixtures.
  */
-const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS, ...LOOP_CARDS];
+const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS, ...LOOP_CARDS, ...FIDELITY_CARDS];
 
 const FUZZ_EMBLEMS: EmblemDefinitions = {
   avatars: [...(SYNTHETIC_EMBLEMS.avatars ?? []), ...(TRIGGER_EMBLEMS.avatars ?? []), ...(CONTINUOUS_EMBLEMS.avatars ?? [])],
@@ -431,6 +458,8 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, o
   let startAnswers: readonly RecordedAnswer[] = [];
   const actions: RecordedAction[] = [];
   let failedAction: FuzzGame["failedAction"] = null;
+  /** The step count at or after which the next determinization-fidelity check runs. */
+  let fidelityDue = 0;
   try {
     const game = playRandomGame(engine, init, {
       answered: (prompt, work) => {
@@ -482,8 +511,15 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, o
         }
         beforeStep = observed;
       },
-      choosing: (chosen) => {
+      choosing: (chosen, current) => {
         failedAction = chosen;
+        if (failure === null && steps >= fidelityDue) {
+          fidelityDue = steps + FIDELITY_STRIDE;
+          const problems = determinizationDivergences(engine, current, init.decks, init.seed, actions.length);
+          if (problems.length > 0) {
+            failure = `determinization fidelity before action #${String(actions.length + 1)} (after step #${String(steps)}): ${problems.join("; ")}`;
+          }
+        }
       },
       committed: (applied, chosen) => {
         if (chosen === null) {

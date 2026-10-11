@@ -2159,7 +2159,23 @@ Greedy unless `?ai=random|greedy` selects one.
   deck, was seen by that side). An instance that has left the battle is
   judged in the last checked state that held it. The
   interactive replay applies the same check to the events a suspended step
-  has published, against its display. Games must terminate. A failing game writes its engine log to
+  has published, against its display.
+
+  Every 10 steps, at the next top-level decision, it checks
+  determinization fidelity (`determinizationDivergences`,
+  `testing/determinization-fidelity.ts`): for each side, a seeded
+  `determinize(view(state, side), decklists)` must agree with the real
+  state on that side's legal actions, in order; on the full record,
+  raw status included, of every card on the stack, in play, in a void, or
+  banished; on every floating effect that names only cards the side can
+  identify (a play permission whatever its source, any other effect only
+  from a source the side sees); and on the payable effects, a source the
+  side cannot see aside. A failure names the step and the instance IDs,
+  effect IDs, and printed UUIDs that differ. The fuzz-only fixture
+  `FIDELITY_CARDS` (`testing/fuzz.ts`) grants a play permission and then
+  hides its source, a state content rarely reaches. The 12 mid-game samples
+  in `view/determinize.test.ts` run the same check and compare whole views
+  through its `comparableView`. Games must terminate. A failing game writes its engine log to
   `logs/fuzz/<run-id>/<game>.jsonl`. Phase 4.5 adds Greedy, and Phase 5 adds
   random transfigurations and deck-entry modifications.
 - **The card-lab setup solver** (`testing/lab-solver.ts`) is shared by
