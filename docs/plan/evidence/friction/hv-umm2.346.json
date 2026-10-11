@@ -130,7 +130,8 @@
     {
       "tag": "inventory-generator-drift",
       "minutes": 2,
-      "description": "Baseline --check detects five authored catalog status changes; preserve exact current output and unchanged mapping instead of refreshing shared projection in this bounded predicate/docs task. Parent disposition hv-umm2.347."
+      "description": "Baseline --check detects five authored catalog status changes; preserve exact current output and unchanged mapping instead of refreshing shared projection in this bounded predicate/docs task. Parent disposition hv-umm2.347.",
+      "note": "Baseline --check detects five authored catalog status changes; preserve exact current output and unchanged mapping instead of refreshing shared projection in this bounded predicate/docs task. Parent disposition hv-umm2.347."
     }
   ],
   "qa": {
@@ -177,5 +178,19 @@
     "initialResult": "Unsupported flag interpreted as evidence directory; corrected to documented no-argument invocation.",
     "correctedInvocation": "node scripts/friction-triggers.mjs",
     "correctedLog": "/tmp/hv-umm2.346-friction-triggers.log"
+  },
+  "hostLoad": 3.22119140625,
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "714884e26d46cbd2c3edab73f44edd66d0ffe130c9239fee171ef396a8910369",
+    "fields": {
+      "hostLoad": {
+        "source": "validationRuns[0].hostLoad[0]",
+        "measuredFor": "focused-review-knip group start"
+      },
+      "friction[0].note": {
+        "source": "friction[0].description"
+      }
+    }
   }
 }

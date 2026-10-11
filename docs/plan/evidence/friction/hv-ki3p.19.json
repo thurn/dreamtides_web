@@ -1,1 +1,32 @@
-{"bead":"hv-ki3p.19","phase":"T","lane":null,"implementMin":null,"localValidationS":null,"hostLoad":null,"testDelta":null,"friction":[{"tag":"self-install-deferred","minutes":null,"note":"self-install batched with hv-ki3p.18 after the Phase 3.10 performance measurements"}]}
+{
+  "bead": "hv-ki3p.19",
+  "phase": "T",
+  "lane": null,
+  "implementMin": null,
+  "localValidationS": null,
+  "hostLoad": null,
+  "testDelta": null,
+  "friction": [
+    {
+      "tag": "self-install-deferred",
+      "minutes": null,
+      "note": "self-install batched with hv-ki3p.18 after the Phase 3.10 performance measurements"
+    }
+  ],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "52a149d0caba20faac359358cc14ac9ac6957569343a62d03d40cf18fc82839a",
+    "fields": {
+      "hostLoad": {
+        "source": "Unrecorded observation; approved exact historical unknown",
+        "measuredFor": "unknown"
+      },
+      "implementMin": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      },
+      "friction[0].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      }
+    }
+  }
+}

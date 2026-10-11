@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
-import { runFrictionTriggers } from "./friction-triggers.mjs";
+import { readFrictionRecords, runFrictionTriggers } from "./friction-triggers.mjs";
 
 const SCRIPT = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -31,6 +31,8 @@ function frictionFile(bead, phase, tags) {
   return {
     bead,
     phase,
+    hostLoad: 2.5,
+    implementMin: 4,
     friction: tags.map((tag) => ({ tag, minutes: 10, note: "x" })),
   };
 }
@@ -44,6 +46,7 @@ function frictionFile(bead, phase, tags) {
  *   ledger?: unknown[],
  *   cadence?: number,
  *   phaseCadence?: Record<string, number>,
+ *   unknowns?: unknown,
  * }} evidence
  */
 function evidenceFixture({
@@ -52,6 +55,7 @@ function evidenceFixture({
   ledger = [],
   cadence = 3,
   phaseCadence = {},
+  unknowns = [],
 }) {
   const directory = mkdtempSync(join(tmpdir(), "friction-triggers-"));
   temporaryDirectories.push(directory);
@@ -73,6 +77,7 @@ function evidenceFixture({
       triggerBeads: 3,
       retrospectiveCadence: cadence,
       phaseRetrospectiveCadence: phaseCadence,
+      historicalUnknowns: unknowns,
       aliases: { "slow-hook": "hook-misfire", "hook-refusal": "hook-misfire" },
     }),
   );
@@ -220,5 +225,126 @@ describe("friction triggers", () => {
         }),
       ),
     ).toBe(0);
+  });
+});
+
+/** @param {unknown} record @param {unknown} unknowns */
+function recordFixture(record, unknowns = []) {
+  const directory = evidenceFixture({ unknowns });
+  /** @param {string} _key @param {unknown} value */
+  const overflowNumber = (_key, value) =>
+    value === Infinity
+      ? "__positive_overflow__"
+      : value === -Infinity
+        ? "__negative_overflow__"
+        : value;
+  writeFileSync(
+    join(directory, "friction", "hv-synthetic.json"),
+    JSON.stringify(record, overflowNumber)
+      .replaceAll('"__positive_overflow__"', "1e400")
+      .replaceAll('"__negative_overflow__"', "-1e400"),
+  );
+  return directory;
+}
+
+/** @returns {Record<string, unknown> & { friction: Record<string, unknown>[] }} */
+const validRecord = () => frictionFile("hv-synthetic", 5, ["test-tag"]);
+/** @param {string} field */
+const historicalUnknown = (field = "hostLoad") => ({
+  bead: "hv-synthetic",
+  field,
+  sourceSHA256: "a".repeat(64),
+  reason: "Historical observation was not recorded in the audited evidence.",
+});
+
+/** @type {{ field: string, value: unknown }[]} */
+const malformedFields = [];
+for (const field of ["hostLoad", "implementMin", "minutes"]) {
+  for (const value of [undefined, null, "3", [], {}, true, Infinity, -Infinity, NaN]) {
+    malformedFields.push({ field, value });
+  }
+}
+for (const value of [undefined, null, 1, [], {}]) malformedFields.push({ field: "note", value });
+for (const value of [undefined, null, "", "Bad Tag", "snake_case", "bad--tag", "-tag", "tag-"]) {
+  malformedFields.push({ field: "tag", value });
+}
+for (const value of [undefined, null, {}, "bare", ["bare-tag"], [null], [1], [[]]]) {
+  malformedFields.push({ field: "friction", value });
+}
+
+describe("friction record schema", () => {
+  it.each(malformedFields)("rejects malformed $field ($value) through reader and CLI", ({ field, value }) => {
+    const record = validRecord();
+    const object = ["minutes", "note", "tag"].includes(field) ? record.friction[0] : record;
+    if (value === undefined) delete object[field];
+    else object[field] = value;
+    const directory = recordFixture(record);
+    expect(() => readFrictionRecords(directory)).toThrow();
+    const cli = spawnSync(process.execPath, [SCRIPT, directory], { encoding: "utf8" });
+    expect(cli.status).toBe(2);
+    expect(cli.stderr).toContain("hv-synthetic.json");
+  });
+
+  it("accepts finite zero/fractional measurements, string notes and extra fields", () => {
+    const record = { ...validRecord(), hostLoad: 0, implementMin: 0.25, extra: { preserved: true },
+      friction: [{ tag: "test-tag", minutes: 0, note: "", seconds: 0 }] };
+    expect(readFrictionRecords(recordFixture(record))[0].tags).toEqual(["test-tag"]);
+    expect(runFrictionTriggers(recordFixture({ ...record, friction: [] })).report.exitCode).toBe(0);
+  });
+
+  it("keeps legacy bare-tag JSONL separate from strict per-bead records", () => {
+    const directory = evidenceFixture({ legacy: [{ bead: "hv-legacy", phase: 2, friction: ["legacy-tag"] }] });
+    expect(readFrictionRecords(directory)[0].tags).toEqual(["legacy-tag"]);
+    expect(runFrictionTriggers(directory).report.exitCode).toBe(0);
+  });
+
+  it.each(["hostLoad", "implementMin", "friction[0].minutes"])("surfaces an exact historical null $field with provenance", (field) => {
+    const record = validRecord();
+    if (field === "friction[0].minutes") record.friction[0].minutes = null;
+    else record[field] = null;
+    const unknown = historicalUnknown(field);
+    const directory = recordFixture(record, [unknown]);
+    expect(readFrictionRecords(directory)[0].unknownMeasurements).toEqual([unknown]);
+    const result = runFrictionTriggers(directory);
+    expect(result.report.unknownMeasurements).toEqual([unknown]);
+    expect(result.report.exitCode).toBe(0);
+    expect(result.text).toContain("UNKNOWN");
+    expect(result.text).toContain(unknown.reason);
+    const cli = spawnSync(process.execPath, [SCRIPT, directory], { encoding: "utf8" });
+    expect(cli.status).toBe(0);
+    expect(cli.stdout).toContain("UNKNOWN");
+  });
+
+  it.each([undefined, "3", {}, [], true])("accepts only explicit null at a configured historical field ($value)", (value) => {
+    const record = validRecord();
+    if (value === undefined) delete record.hostLoad;
+    else record.hostLoad = value;
+    const directory = recordFixture(record, [historicalUnknown()]);
+    expect(() => readFrictionRecords(directory)).toThrow();
+    expect(spawnSync(process.execPath, [SCRIPT, directory]).status).toBe(2);
+  });
+
+  it("does not exempt a different bead, field or entry index", () => {
+    const record = { ...validRecord(), hostLoad: null };
+    expect(() => readFrictionRecords(recordFixture(record, [{ ...historicalUnknown(), bead: "hv-other" }]))).toThrow();
+    expect(() => readFrictionRecords(recordFixture(record, [historicalUnknown("implementMin")]))).toThrow();
+    const entry = validRecord();
+    entry.friction[0].minutes = null;
+    expect(() => readFrictionRecords(recordFixture(entry, [historicalUnknown("friction[1].minutes")]))).toThrow();
+  });
+
+  it.each([
+    null, {}, { ...historicalUnknown(), field: "note" },
+    { ...historicalUnknown(), field: "friction[00].minutes" },
+    { ...historicalUnknown(), sourceSHA256: "bad" },
+    { ...historicalUnknown(), bead: "" }, { ...historicalUnknown(), reason: "" },
+  ])("rejects invalid historical exemption configuration ($value)", (unknown) => {
+    expect(() => runFrictionTriggers(recordFixture(validRecord(), [unknown]))).toThrow();
+  });
+
+  it("rejects an exemption collection with the wrong shape or duplicate field", () => {
+    for (const unknowns of [null, {}, [historicalUnknown(), historicalUnknown()]]) {
+      expect(() => runFrictionTriggers(recordFixture(validRecord(), unknowns))).toThrow();
+    }
   });
 });

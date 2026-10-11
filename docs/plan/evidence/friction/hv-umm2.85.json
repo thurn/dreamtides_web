@@ -16,20 +16,7 @@
     "fuzz": 0.0278,
     "browser": "not separately emitted by card-sweep CLI"
   },
-  "hostLoad": {
-    "fuzzStart": [
-      16.75830078125,
-      17.611328125,
-      17.744140625
-    ],
-    "fuzzEnd": [
-      13.30224609375,
-      16.275390625,
-      17.22021484375
-    ],
-    "sweepStart": 14.24,
-    "confirmationStart": 3.63
-  },
+  "hostLoad": 16.75830078125,
   "testDelta": {
     "files": 0,
     "lines": 230,
@@ -54,5 +41,29 @@
     "noConcurrentWorkspaceMutations": true,
     "includesBrowserQueue": true,
     "serverGroup": 62757
+  },
+  "hostLoadSamples": {
+    "fuzzStart": [
+      16.75830078125,
+      17.611328125,
+      17.744140625
+    ],
+    "fuzzEnd": [
+      13.30224609375,
+      16.275390625,
+      17.22021484375
+    ],
+    "sweepStart": 14.24,
+    "confirmationStart": 3.63
+  },
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "488b43438561cff6b385c562787e953acdc37f2bc7f89109c78cb6e7dc6609c1",
+    "fields": {
+      "hostLoad": {
+        "source": "hostLoadSamples.fuzzStart[0]",
+        "measuredFor": "fuzz start"
+      }
+    }
   }
 }

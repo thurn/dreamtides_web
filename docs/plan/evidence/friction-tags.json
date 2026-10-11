@@ -16,11 +16,14 @@
     "coupled-ci-repair-order": "cross-bead-semantic-conflict",
     "floating-site-nodes-never-stable": "browser-qa-scripting",
     "fuzz-throughput-noise": "host-load-noise",
+    "incorrect-focused-path": "local-edit-correction",
     "mobile-battle-lane-window": "browser-qa-scripting",
     "mobile-hover-rest-point": "browser-qa-scripting",
     "nondeterministic-qa-scenes": "qa-scenes-nondeterministic",
     "published-event-contract-assumption": "local-edit-correction",
+    "qa-acceptance-premise": "browser-qa-scripting",
     "qa-content-lacks-prompts": "qa-scene-unreachable-state",
+    "qa-dialog-dismissal-assumption": "browser-qa-scripting",
     "qa-harness-assumptions": "browser-qa-scripting",
     "qa-harness-selection": "browser-qa-scripting",
     "qa-no-plain-draw-two-scene": "qa-scene-unreachable-state",
@@ -31,9 +34,260 @@
     "qa-scene-battle-bootstrap-bounce": "qa-scene-unreachable-state",
     "qa-scene-no-ai-reveal": "qa-scene-unreachable-state",
     "shuffle-order-fixture-assumption": "local-edit-correction",
+    "singleton-target-auto-answer": "browser-qa-scripting",
     "speech-text-before-visible": "browser-qa-scripting",
+    "synthetic-fixture-correction": "local-edit-correction",
     "synthetic-fixture-type": "local-edit-correction",
+    "synthetic-lint-correction": "local-edit-correction",
     "unbounded-trigger-cascade-slow": "vitest-sync-hang",
     "worktree-write-hook": "worktree-write-hook-misfire"
-  }
+  },
+  "historicalUnknowns": [
+    {
+      "bead": "hv-ki3p.1",
+      "field": "friction[2].minutes",
+      "sourceSHA256": "35a74e8bc8a6c2a0641ead8b1a9835b4799e13668fd273b43dcac1af2cc2bda4",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.12",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "5e5328fac7b726a3ff7b8e93b4ff0dce2e5566e72f80b9ede78c17905297b9a2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.13",
+      "field": "hostLoad",
+      "sourceSHA256": "978754a28af982ee7b956f04847f93e879eece6d73b9ef01d4601d7d8e652134",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.14",
+      "field": "hostLoad",
+      "sourceSHA256": "c1c0c04a90cb4ef3d85749aa7f68207574252770081406896154b5ced53697f1",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.15",
+      "field": "hostLoad",
+      "sourceSHA256": "05f49d55ea56ca309fd5630ce7789b8f57cf076b9b9e3325c06a9e6ee4d44dcd",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.15",
+      "field": "implementMin",
+      "sourceSHA256": "05f49d55ea56ca309fd5630ce7789b8f57cf076b9b9e3325c06a9e6ee4d44dcd",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.16",
+      "field": "hostLoad",
+      "sourceSHA256": "0425bac345534a426712313a1db035ce2cad82fe012ae7a01bfaa490f7f790d2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.16",
+      "field": "implementMin",
+      "sourceSHA256": "0425bac345534a426712313a1db035ce2cad82fe012ae7a01bfaa490f7f790d2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.17",
+      "field": "hostLoad",
+      "sourceSHA256": "cfff3adec0dd8af61ed449e3d4c01277c5d40674a2770e372c7ab74b99f92fd2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.17",
+      "field": "implementMin",
+      "sourceSHA256": "cfff3adec0dd8af61ed449e3d4c01277c5d40674a2770e372c7ab74b99f92fd2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.18",
+      "field": "hostLoad",
+      "sourceSHA256": "ff6a744a76f35ce00d59c9979fa795a25d21addab98849e3431f21b906f5d88f",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.18",
+      "field": "implementMin",
+      "sourceSHA256": "ff6a744a76f35ce00d59c9979fa795a25d21addab98849e3431f21b906f5d88f",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.18",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "ff6a744a76f35ce00d59c9979fa795a25d21addab98849e3431f21b906f5d88f",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.19",
+      "field": "hostLoad",
+      "sourceSHA256": "52a149d0caba20faac359358cc14ac9ac6957569343a62d03d40cf18fc82839a",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.19",
+      "field": "implementMin",
+      "sourceSHA256": "52a149d0caba20faac359358cc14ac9ac6957569343a62d03d40cf18fc82839a",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.19",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "52a149d0caba20faac359358cc14ac9ac6957569343a62d03d40cf18fc82839a",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.20",
+      "field": "hostLoad",
+      "sourceSHA256": "2a87f003407177b13f293bd73775bcc306d0c7c0e74633d39563851304343e06",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.20",
+      "field": "implementMin",
+      "sourceSHA256": "2a87f003407177b13f293bd73775bcc306d0c7c0e74633d39563851304343e06",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.21",
+      "field": "hostLoad",
+      "sourceSHA256": "a738b17c484d7340e6799ab47f751176b5d709d60ffd2f8563ad8bdfa55981c2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.21",
+      "field": "implementMin",
+      "sourceSHA256": "a738b17c484d7340e6799ab47f751176b5d709d60ffd2f8563ad8bdfa55981c2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.21",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "a738b17c484d7340e6799ab47f751176b5d709d60ffd2f8563ad8bdfa55981c2",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.4",
+      "field": "hostLoad",
+      "sourceSHA256": "123a840314c7185f6b44267dad5b3271edb7b9dd47ea078a2e9665236ad11851",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.4",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "123a840314c7185f6b44267dad5b3271edb7b9dd47ea078a2e9665236ad11851",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.4",
+      "field": "friction[1].minutes",
+      "sourceSHA256": "123a840314c7185f6b44267dad5b3271edb7b9dd47ea078a2e9665236ad11851",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.5",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "8e3760a13adf1ce243050640b3a1ebef704fe79ff2db3cedc26946fea65289ac",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.5",
+      "field": "friction[1].minutes",
+      "sourceSHA256": "8e3760a13adf1ce243050640b3a1ebef704fe79ff2db3cedc26946fea65289ac",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.6",
+      "field": "hostLoad",
+      "sourceSHA256": "04203ec6c17235d0802138cafbcfa226e33dba143bafb9dbdeb2f2e067914e4c",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.6",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "04203ec6c17235d0802138cafbcfa226e33dba143bafb9dbdeb2f2e067914e4c",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.6",
+      "field": "friction[1].minutes",
+      "sourceSHA256": "04203ec6c17235d0802138cafbcfa226e33dba143bafb9dbdeb2f2e067914e4c",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.7",
+      "field": "hostLoad",
+      "sourceSHA256": "9c18c12a8a955558f2d4f783498d382600b1a550c5e01188b3b69571ab0901e4",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.7",
+      "field": "implementMin",
+      "sourceSHA256": "9c18c12a8a955558f2d4f783498d382600b1a550c5e01188b3b69571ab0901e4",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.8",
+      "field": "hostLoad",
+      "sourceSHA256": "9a32a79ccebb98a6cb792198d185c8a3d7a7e768fe9f786ec295a20d998a64a5",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.8",
+      "field": "implementMin",
+      "sourceSHA256": "9a32a79ccebb98a6cb792198d185c8a3d7a7e768fe9f786ec295a20d998a64a5",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.9",
+      "field": "hostLoad",
+      "sourceSHA256": "d8edaad92f87ba3f8a208a9343d328a52de4f9cb0596f17e7938bf99cb2d77b1",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.9",
+      "field": "implementMin",
+      "sourceSHA256": "d8edaad92f87ba3f8a208a9343d328a52de4f9cb0596f17e7938bf99cb2d77b1",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-ki3p.9",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "d8edaad92f87ba3f8a208a9343d328a52de4f9cb0596f17e7938bf99cb2d77b1",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-umm2.309",
+      "field": "hostLoad",
+      "sourceSHA256": "c4b68989e23b15faff097d25f36a6bbc6040e889d4b7f36c1957b854428a9d6f",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-umm2.382",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "1784c66729cf5bc98855b15448a56d4a9b5fc598fa01992c30e9fcf81ecaa63b",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-umm2.388",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "f1009cedbf87c818b7fe5583095634338289d7af3a64ba3fc36bfbef85b81174",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-umm2.389",
+      "field": "friction[0].minutes",
+      "sourceSHA256": "b8b54882737c02d4d68c1d35a6d83ce9aeef3e6147bfd9aa5e6db474e4391070",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    },
+    {
+      "bead": "hv-umm2.389",
+      "field": "friction[1].minutes",
+      "sourceSHA256": "b8b54882737c02d4d68c1d35a6d83ce9aeef3e6147bfd9aa5e6db474e4391070",
+      "reason": "Observation was not recorded in the historical friction record or related measurement evidence; bounded hv-umm2.408 audit preserves unknown."
+    }
+  ]
 }

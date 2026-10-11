@@ -836,22 +836,26 @@
     {
       "tag": "workspace-prepare-before-vitest",
       "minutes": 1,
-      "detail": "Initial direct list on fresh install lacked generated token mirrors; test:full prepared workspace, then collection succeeded. Failed log retained."
+      "detail": "Initial direct list on fresh install lacked generated token mirrors; test:full prepared workspace, then collection succeeded. Failed log retained.",
+      "note": "Initial direct list on fresh install lacked generated token mirrors; test:full prepared workspace, then collection succeeded. Failed log retained."
     },
     {
       "tag": "local-edit-correction",
       "minutes": 2,
-      "detail": "Mechanical extractor initially omitted wrapper describe import and support dependencies. Retained both failed focused runs; corrected imports/exports, typecheck/focused/full passed. Ordered body and fixture token sequences preserve every original contract."
+      "detail": "Mechanical extractor initially omitted wrapper describe import and support dependencies. Retained both failed focused runs; corrected imports/exports, typecheck/focused/full passed. Ordered body and fixture token sequences preserve every original contract.",
+      "note": "Mechanical extractor initially omitted wrapper describe import and support dependencies. Retained both failed focused runs; corrected imports/exports, typecheck/focused/full passed. Ordered body and fixture token sequences preserve every original contract."
     },
     {
       "tag": "inventory-generator-drift",
       "minutes": 1,
-      "detail": "Unchanged generator already produced239 rather than tracked247 beads. Parent approved current regeneration with identical1209 entity UUIDs; mapping-only delta changes bead areas/sharedAreas. Exact baseline/key/hash drift retained; native task graph remains parent-owned."
+      "detail": "Unchanged generator already produced239 rather than tracked247 beads. Parent approved current regeneration with identical1209 entity UUIDs; mapping-only delta changes bead areas/sharedAreas. Exact baseline/key/hash drift retained; native task graph remains parent-owned.",
+      "note": "Unchanged generator already produced239 rather than tracked247 beads. Parent approved current regeneration with identical1209 entity UUIDs; mapping-only delta changes bead areas/sharedAreas. Exact baseline/key/hash drift retained; native task graph remains parent-owned."
     },
     {
       "tag": "local-edit-correction",
       "minutes": 0.5,
-      "detail": "Parent requested reuse of existing kebab function. Exact188-entry comparison found one pre-commit mapping correction, banishXCost -> banish-xcost, explicitly acknowledged. Existing bead-key naming semantics unchanged; all other187 mappings identical."
+      "detail": "Parent requested reuse of existing kebab function. Exact188-entry comparison found one pre-commit mapping correction, banishXCost -> banish-xcost, explicitly acknowledged. Existing bead-key naming semantics unchanged; all other187 mappings identical.",
+      "note": "Parent requested reuse of existing kebab function. Exact188-entry comparison found one pre-commit mapping correction, banishXCost -> banish-xcost, explicitly acknowledged. Existing bead-key naming semantics unchanged; all other187 mappings identical."
     }
   ],
   "rulesDecisions": [],
@@ -950,5 +954,23 @@
       "boundary": "reload, stale/concurrent answers, partial state publication",
       "evidence": "Unchanged assertions include these existing engine workflows. Test organization introduces no player runtime, state transition, prompt, persistence, provider lifecycle or rollout boundary; no extra mirror cases needed."
     }
-  ]
+  ],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "808a4f569a5a7003bdcc7f12a4a201ba8c776dac000b13ea9af5a989152103e2",
+    "fields": {
+      "friction[0].note": {
+        "source": "friction[0].detail"
+      },
+      "friction[1].note": {
+        "source": "friction[1].detail"
+      },
+      "friction[2].note": {
+        "source": "friction[2].detail"
+      },
+      "friction[3].note": {
+        "source": "friction[3].detail"
+      }
+    }
+  }
 }

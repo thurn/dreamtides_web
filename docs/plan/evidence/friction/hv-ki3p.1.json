@@ -1,1 +1,35 @@
-{"bead":"hv-ki3p.1","phase":"T","lane":null,"implementMin":95,"localValidationS":null,"hostLoad":7.69,"testDelta":null,"friction":[{"tag":"rsp-seed-forensics","minutes":15,"note":"diagnosing the rsp seed_generations unique-constraint failure: new generation = max recorded seed + 1 ignored 23 unfinished gen-1 attempts"},{"tag":"overbroad-regex-edit","minutes":10,"note":"subagent-reported cost; the notes give no further detail"},{"tag":"review-follow-up-bead","minutes":null,"note":"core-review findings accepted and filed as follow-up bead hv-ki3p.12"}]}
+{
+  "bead": "hv-ki3p.1",
+  "phase": "T",
+  "lane": null,
+  "implementMin": 95,
+  "localValidationS": null,
+  "hostLoad": 7.69,
+  "testDelta": null,
+  "friction": [
+    {
+      "tag": "rsp-seed-forensics",
+      "minutes": 15,
+      "note": "diagnosing the rsp seed_generations unique-constraint failure: new generation = max recorded seed + 1 ignored 23 unfinished gen-1 attempts"
+    },
+    {
+      "tag": "overbroad-regex-edit",
+      "minutes": 10,
+      "note": "subagent-reported cost; the notes give no further detail"
+    },
+    {
+      "tag": "review-follow-up-bead",
+      "minutes": null,
+      "note": "core-review findings accepted and filed as follow-up bead hv-ki3p.12"
+    }
+  ],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "35a74e8bc8a6c2a0641ead8b1a9835b4799e13668fd273b43dcac1af2cc2bda4",
+    "fields": {
+      "friction[2].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      }
+    }
+  }
+}

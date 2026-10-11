@@ -9,7 +9,42 @@
     "knip-settled": 2.29,
     "full": 58.777
   },
-  "hostLoad": {
+  "hostLoad": 2.61865234375,
+  "testDelta": {
+    "files": 1,
+    "lines": 70,
+    "jsdomFiles": 0,
+    "cases": 6
+  },
+  "comparison": {
+    "headlessMainMs": 15.313209000000029,
+    "headlessCommandS": 0.9192289159982465,
+    "browserCommandS": 79.7428032499738,
+    "browserWallMs": {
+      "browserLeaseWait": 39,
+      "serve": 1251,
+      "scenario": 73185.749834,
+      "cleanup": 229.28937499999302,
+      "total": 74732.519583
+    },
+    "counts": {
+      "pass": 6,
+      "pending": 0,
+      "skip": 2,
+      "fail": 0
+    },
+    "rowsMatch": true,
+    "sourceFrozen": true
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "note": "Initial synthetic catalog double-added built-in UUIDs; corrected to createCatalog without changing the duplicate guard. Setup-response fixture used the wrong SideState field; corrected to currentEnergy. Typecheck caught wrapper-only event.seq assumption and unbranded subtype; use ordered EngineEvents and parseCardSubtype. Initial review 39.933 s and failed focused iterations 3.076 s/2.143 s are retained. All corrections preceded final settled validation.",
+      "minutes": null
+    }
+  ],
+  "improvementBeads": [],
+  "hostLoadSamples": {
     "focused-settled": {
       "exit": 0,
       "wallS": 3.080730959016364,
@@ -71,37 +106,17 @@
       "log": "/tmp/hv-umm2-388-checks/full.log"
     }
   },
-  "testDelta": {
-    "files": 1,
-    "lines": 70,
-    "jsdomFiles": 0,
-    "cases": 6
-  },
-  "comparison": {
-    "headlessMainMs": 15.313209000000029,
-    "headlessCommandS": 0.9192289159982465,
-    "browserCommandS": 79.7428032499738,
-    "browserWallMs": {
-      "browserLeaseWait": 39,
-      "serve": 1251,
-      "scenario": 73185.749834,
-      "cleanup": 229.28937499999302,
-      "total": 74732.519583
-    },
-    "counts": {
-      "pass": 6,
-      "pending": 0,
-      "skip": 2,
-      "fail": 0
-    },
-    "rowsMatch": true,
-    "sourceFrozen": true
-  },
-  "friction": [
-    {
-      "tag": "local-edit-correction",
-      "note": "Initial synthetic catalog double-added built-in UUIDs; corrected to createCatalog without changing the duplicate guard. Setup-response fixture used the wrong SideState field; corrected to currentEnergy. Typecheck caught wrapper-only event.seq assumption and unbranded subtype; use ordered EngineEvents and parseCardSubtype. Initial review 39.933 s and failed focused iterations 3.076 s/2.143 s are retained. All corrections preceded final settled validation."
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "f1009cedbf87c818b7fe5583095634338289d7af3a64ba3fc36bfbef85b81174",
+    "fields": {
+      "hostLoad": {
+        "source": "hostLoad.review-settled.loadStart[0]",
+        "measuredFor": "review start"
+      },
+      "friction[0].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      }
     }
-  ],
-  "improvementBeads": []
+  }
 }

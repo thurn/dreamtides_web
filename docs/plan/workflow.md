@@ -993,10 +993,16 @@ its own commit:
 {"bead":"hv-xxx","phase":3,"implementMin":95,"localValidationS":{"review":38,"focused":12,"fuzz":40},"hostLoad":12.4,"testDelta":{"files":-3,"lines":-820,"jsdomFiles":-2},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
 ```
 
-- **`implementMin`** is the implementer's wall time from dispatch to
-  commit.
+- **`implementMin`** is the implementer's wall time in minutes from dispatch
+  to commit, including research, coordination, queue waits and verification.
+  Record the measurement window; this measures elapsed wall time rather than
+  productive editing time.
 - **`hostLoad`** is `sysctl -n vm.loadavg`'s 1-minute value when the
-  validation ran. Always read timings next to it.
+  validation ran. Prefer the review step's starting value. An observation from
+  another validation step or command group records its actual scope in
+  `schemaNormalization.fields.hostLoad.measuredFor`. Keep detailed per-step
+  samples under `hostLoadSamples`. Always read timings next to their measured
+  scope.
 - **`testDelta`** counts test files, test lines, and `jsdom` test files,
   added minus deleted.
 - **`friction`** lists each problem that cost more than ~10 minutes: tooling,
@@ -1007,10 +1013,28 @@ its own commit:
   different words map to one canonical tag through the `aliases` in
   `docs/plan/evidence/friction-tags.json`.
 
+`npm run friction:triggers` validates each per-bead JSON file: `hostLoad`,
+`implementMin` and each friction entry's `minutes` are finite numbers;
+`friction` is an array of objects with string `note` and kebab-case `tag`.
+Zero and fractional measurements, empty notes, empty friction arrays and
+additional fields are accepted. Malformed input identifies its file/field and
+exits 2; an undispositioned trigger exits 1; a valid dispositioned report exits 0.
+
+The fixed `historicalUnknowns` inventory in `friction-tags.json` identifies
+individual historical bead/field pairs whose observations were not recorded.
+Each entry carries the audited original record's `sourceSHA256` and a `reason`.
+Only an explicit `null` at that exact numeric field is accepted; missing values
+and other types are invalid. The reader and CLI report accepted observations as
+`UNKNOWN` with provenance. They cannot support budget-at-load comparisons.
+New records require measured numeric values. Changes to the fixed inventory
+require an evidence audit and the parent session's scope acknowledgement.
+
 Gate outcomes (wall time, candidates, CI repairs) come from Tollgate's history
 at retrospective time, not from the friction file.
 `docs/plan/evidence/friction.jsonl` holds the Phase 1–2 lines written before
-the per-bead files existed. Retrospectives read both.
+the per-bead files existed. Its dedicated legacy reader accepts bare tag
+strings and historical entries without the per-bead measured fields.
+Retrospectives read both formats.
 
 ### Triggers
 

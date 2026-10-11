@@ -26,12 +26,14 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DEFAULT_EVIDENCE_DIR = join(ROOT, "docs/plan/evidence");
 
 /**
- * @typedef {{ bead: string, phase: string, tags: string[] }} FrictionRecord
+ * @typedef {{ bead: string, field: string, sourceSHA256: string, reason: string }} UnknownMeasurement
+ * @typedef {{ bead: string, phase: string, tags: string[], unknownMeasurements: UnknownMeasurement[] }} FrictionRecord
  * @typedef {{
  *   triggerBeads: number,
  *   retrospectiveCadence: number,
  *   phaseRetrospectiveCadence: Record<string, number>,
  *   aliases: Record<string, string>,
+ *   historicalUnknowns: UnknownMeasurement[],
  * }} TagConfig
  * @typedef {{ tag: string, phase: string, bead?: string, reason?: string }} Disposition
  * @typedef {{ date: string, phase: string, bead?: string, covers: string[] }} Retrospective
@@ -48,7 +50,7 @@ const DEFAULT_EVIDENCE_DIR = join(ROOT, "docs/plan/evidence");
  *   lastRetrospective: Retrospective | null,
  *   due: boolean,
  * }} Cadence
- * @typedef {{ triggers: Trigger[], cadence: Cadence[], exitCode: number }} TriggerReport
+ * @typedef {{ triggers: Trigger[], cadence: Cadence[], exitCode: number, unknownMeasurements: UnknownMeasurement[] }} TriggerReport
  */
 
 /**
@@ -106,27 +108,53 @@ function readJsonLines(path) {
 }
 
 /**
- * A friction entry is `{tag, …}`; the early `friction.jsonl` lines list bare
- * tag strings.
+ * Per-bead JSON uses measured fields; legacy JSONL has a separate bare-tag mode.
+ * Only exact configured historical fields may carry an explicit unknown null.
  *
  * @param {unknown} raw
  * @param {string} where
+ * @param {UnknownMeasurement[]} historicalUnknowns
+ * @param {boolean} legacy
  * @returns {FrictionRecord}
  */
-function parseFrictionRecord(raw, where) {
+function parseFrictionRecord(raw, where, historicalUnknowns, legacy) {
   const record = asObject(raw, where);
-  const friction = record.friction ?? [];
+  const bead = asString(record.bead, `${where} bead`);
+  const friction = legacy ? record.friction ?? [] : record.friction;
   if (!Array.isArray(friction)) {
     throw new Error(`${where}: friction must be an array`);
   }
+  /** @type {UnknownMeasurement[]} */
+  const unknownMeasurements = [];
+  /** @param {unknown} value @param {string} field */
+  const measured = (value, field) => {
+    const historical = historicalUnknowns.find((entry) => entry.bead === bead && entry.field === field);
+    if (value === null && historical !== undefined) {
+      unknownMeasurements.push(historical);
+    } else if (typeof value !== "number" || !Number.isFinite(value)) {
+      throw new Error(`${where} ${field}: expected a finite number`);
+    }
+  };
+  if (!legacy) {
+    measured(record.hostLoad, "hostLoad");
+    measured(record.implementMin, "implementMin");
+  }
   return {
-    bead: asString(record.bead, `${where} bead`),
+    bead,
     phase: asPhase(record.phase, `${where} phase`),
-    tags: friction.map((entry) =>
-      typeof entry === "string"
-        ? entry
-        : asString(asObject(entry, `${where} friction`).tag, `${where} tag`),
-    ),
+    tags: friction.map((entry, index) => {
+      if (legacy && typeof entry === "string") return entry;
+      const field = `friction[${index}]`;
+      const object = asObject(entry, `${where} ${field}`);
+      const tag = asString(object.tag, `${where} ${field}.tag`);
+      if (!legacy) {
+        measured(object.minutes, `${field}.minutes`);
+        if (typeof object.note !== "string") throw new Error(`${where} ${field}.note: expected a string`);
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tag)) throw new Error(`${where} ${field}.tag: expected kebab-case`);
+      }
+      return tag;
+    }),
+    unknownMeasurements,
   };
 }
 
@@ -135,6 +163,7 @@ function parseFrictionRecord(raw, where) {
  * @returns {FrictionRecord[]}
  */
 export function readFrictionRecords(evidenceDir) {
+  const { historicalUnknowns } = readTagConfig(evidenceDir);
   const frictionDir = join(evidenceDir, "friction");
   const files = existsSync(frictionDir)
     ? readdirSync(frictionDir)
@@ -143,11 +172,11 @@ export function readFrictionRecords(evidenceDir) {
     : [];
   const records = files.map((name) => {
     const path = join(frictionDir, name);
-    return parseFrictionRecord(JSON.parse(readFileSync(path, "utf8")), path);
+    return parseFrictionRecord(JSON.parse(readFileSync(path, "utf8")), path, historicalUnknowns, false);
   });
   const legacyPath = join(evidenceDir, "friction.jsonl");
   readJsonLines(legacyPath).forEach((line, index) =>
-    records.push(parseFrictionRecord(line, `${legacyPath}:${index + 1}`)),
+    records.push(parseFrictionRecord(line, `${legacyPath}:${index + 1}`, [], true)),
   );
   return records;
 }
@@ -173,7 +202,25 @@ export function readTagConfig(evidenceDir) {
     `${path} phaseRetrospectiveCadence`,
   );
   const aliases = asObject(config.aliases ?? {}, `${path} aliases`);
+  const rawUnknowns = config.historicalUnknowns === undefined ? [] : config.historicalUnknowns;
+  if (!Array.isArray(rawUnknowns)) throw new Error(`${path} historicalUnknowns: expected an array`);
+  const seen = new Set();
+  const historicalUnknowns = rawUnknowns.map((raw, index) => {
+    const where = `${path} historicalUnknowns[${index}]`;
+    const entry = asObject(raw, where);
+    const bead = asString(entry.bead, `${where} bead`);
+    const field = asString(entry.field, `${where} field`);
+    const sourceSHA256 = asString(entry.sourceSHA256, `${where} sourceSHA256`);
+    const reason = asString(entry.reason, `${where} reason`);
+    if (!/^(hostLoad|implementMin|friction\[(0|[1-9][0-9]*)\]\.minutes)$/.test(field)) throw new Error(`${where}: invalid measurement field`);
+    if (!/^[a-f0-9]{64}$/.test(sourceSHA256)) throw new Error(`${where}: expected source SHA-256`);
+    const key = JSON.stringify([bead, field]);
+    if (seen.has(key)) throw new Error(`${where}: duplicate historical field`);
+    seen.add(key);
+    return { bead, field, sourceSHA256, reason };
+  });
   return {
+    historicalUnknowns,
     triggerBeads: /** @type {number} */ (triggerBeads),
     retrospectiveCadence: /** @type {number} */ (retrospectiveCadence),
     phaseRetrospectiveCadence: Object.fromEntries(
@@ -313,7 +360,7 @@ export function evaluateTriggers({
   const exitCode = triggers.some((trigger) => trigger.disposition === null)
     ? 1
     : 0;
-  return { triggers, cadence, exitCode };
+  return { triggers, cadence, exitCode, unknownMeasurements: records.flatMap((record) => record.unknownMeasurements) };
 }
 
 /**
@@ -371,6 +418,9 @@ export function formatReport(report, config) {
       `  phase ${phase}  ${uncovered.length} of ${frictionFiles} friction files ${since}` +
         (due ? "  RETROSPECTIVE DUE" : ""),
     );
+  }
+  for (const unknown of report.unknownMeasurements) {
+    lines.push(`  UNKNOWN ${unknown.bead} ${unknown.field}: ${unknown.reason} (source ${unknown.sourceSHA256})`);
   }
   if (report.exitCode !== 0) {
     lines.push(

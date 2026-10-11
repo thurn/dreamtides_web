@@ -11,7 +11,27 @@
     "review-final": 14.172,
     "knip-final": 2.605
   },
-  "hostLoad": [
+  "hostLoad": 8.380859375,
+  "testDelta": {
+    "files": 1,
+    "lines": 59,
+    "jsdomFiles": 0,
+    "cases": 3
+  },
+  "browser": {
+    "wallMs": {
+      "browserLeaseWait": 40,
+      "serve": 1263,
+      "scenario": 15387,
+      "total": 16713
+    },
+    "commandS": 22.008,
+    "hostLoad": 4.3193359375,
+    "sourceFrozen": true
+  },
+  "friction": [],
+  "improvementBeads": [],
+  "hostLoadSamples": [
     {
       "label": "focused",
       "exit": 0,
@@ -103,23 +123,14 @@
       ]
     }
   ],
-  "testDelta": {
-    "files": 1,
-    "lines": 59,
-    "jsdomFiles": 0,
-    "cases": 3
-  },
-  "browser": {
-    "wallMs": {
-      "browserLeaseWait": 40,
-      "serve": 1263,
-      "scenario": 15387,
-      "total": 16713
-    },
-    "commandS": 22.008,
-    "hostLoad": 4.3193359375,
-    "sourceFrozen": true
-  },
-  "friction": [],
-  "improvementBeads": []
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "2cd6b1f803ae80580ceeb6b12b1eaa76ea3011d3814355c744eb1b4bba1d84e5",
+    "fields": {
+      "hostLoad": {
+        "source": "hostLoad[1].loadBefore[0]",
+        "measuredFor": "review start"
+      }
+    }
+  }
 }

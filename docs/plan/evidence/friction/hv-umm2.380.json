@@ -21,9 +21,23 @@
     {
       "tag": "qa-acceptance-premise",
       "min": 0.381,
-      "description": "A task-authored God static badge premise caused a 15-second badge wait timeout. Native acceptance corrected to real bounded void-play plus Echo floating badge/log; separate static permission display gap filed as hv-umm2.393. Failed scenario execution only; native coordination and script-edit time were not isolated."
+      "description": "A task-authored God static badge premise caused a 15-second badge wait timeout. Native acceptance corrected to real bounded void-play plus Echo floating badge/log; separate static permission display gap filed as hv-umm2.393. Failed scenario execution only; native coordination and script-edit time were not isolated.",
+      "minutes": 0.381,
+      "note": "A task-authored God static badge premise caused a 15-second badge wait timeout. Native acceptance corrected to real bounded void-play plus Echo floating badge/log; separate static permission display gap filed as hv-umm2.393. Failed scenario execution only; native coordination and script-edit time were not isolated."
     }
   ],
   "browserLeaseWaitS": 0.129,
-  "timingNote": "Wall from recorded install to evidence freeze includes parent ACK waits, research, native acceptance recovery and QA; not productive implementation time. Light checks and browser runs use no heavy slot. Failed and corrected executions are retained separately."
+  "timingNote": "Wall from recorded install to evidence freeze includes parent ACK waits, research, native acceptance recovery and QA; not productive implementation time. Light checks and browser runs use no heavy slot. Failed and corrected executions are retained separately.",
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "f3b0cc88dfc7004a1f39c6ba24b359c106661ea89b1ddd912b37cd303b13e7c2",
+    "fields": {
+      "friction[0].minutes": {
+        "source": "friction[0].min"
+      },
+      "friction[0].note": {
+        "source": "friction[0].description"
+      }
+    }
+  }
 }

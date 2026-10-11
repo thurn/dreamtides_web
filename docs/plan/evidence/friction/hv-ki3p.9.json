@@ -1,1 +1,34 @@
-{"bead":"hv-ki3p.9","phase":"T","lane":null,"implementMin":null,"localValidationS":{"hiveCheck":158},"hostLoad":null,"testDelta":null,"friction":[{"tag":"uncommitted-user-edits-in-skill-paths","minutes":null,"note":"wt and wt-sequence SKILL.md carried uncommitted user edits, so the skill changes were left uncommitted instead of committed"}]}
+{
+  "bead": "hv-ki3p.9",
+  "phase": "T",
+  "lane": null,
+  "implementMin": null,
+  "localValidationS": {
+    "hiveCheck": 158
+  },
+  "hostLoad": null,
+  "testDelta": null,
+  "friction": [
+    {
+      "tag": "uncommitted-user-edits-in-skill-paths",
+      "minutes": null,
+      "note": "wt and wt-sequence SKILL.md carried uncommitted user edits, so the skill changes were left uncommitted instead of committed"
+    }
+  ],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "d8edaad92f87ba3f8a208a9343d328a52de4f9cb0596f17e7938bf99cb2d77b1",
+    "fields": {
+      "hostLoad": {
+        "source": "Unrecorded observation; approved exact historical unknown",
+        "measuredFor": "unknown"
+      },
+      "implementMin": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      },
+      "friction[0].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      }
+    }
+  }
+}

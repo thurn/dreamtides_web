@@ -1,1 +1,20 @@
-{"bead":"hv-ki3p.13","phase":"T","lane":null,"implementMin":21,"localValidationS":null,"hostLoad":null,"testDelta":null,"friction":[]}
+{
+  "bead": "hv-ki3p.13",
+  "phase": "T",
+  "lane": null,
+  "implementMin": 21,
+  "localValidationS": null,
+  "hostLoad": null,
+  "testDelta": null,
+  "friction": [],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "978754a28af982ee7b956f04847f93e879eece6d73b9ef01d4601d7d8e652134",
+    "fields": {
+      "hostLoad": {
+        "source": "Unrecorded observation; approved exact historical unknown",
+        "measuredFor": "unknown"
+      }
+    }
+  }
+}

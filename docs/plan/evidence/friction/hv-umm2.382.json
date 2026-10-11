@@ -10,7 +10,50 @@
     "review": 58.507,
     "knip": 3.375
   },
-  "hostLoad": {
+  "hostLoad": 22.1240234375,
+  "testDelta": {
+    "files": 0,
+    "lines": 22,
+    "jsdomFiles": 0,
+    "cases": 1
+  },
+  "browser": {
+    "firstFailedWallMs": {
+      "browserLeaseWait": 42,
+      "serve": 1262,
+      "scenario": 19249,
+      "total": 20580
+    },
+    "finalWallMs": {
+      "browserLeaseWait": 43,
+      "serve": 1249,
+      "scenario": 9919,
+      "total": 11236
+    },
+    "load": 11.30126953125,
+    "productionFrozen": true
+  },
+  "friction": [
+    {
+      "tag": "incorrect-focused-path",
+      "note": "Initial guessed rematerialize.test.ts does not exist; command exited1 without running tests. Corrected immediately to existing contracts.test.ts and triggers-redaction.test.ts,427pass. No production change.",
+      "minutes": null
+    },
+    {
+      "tag": "synthetic-lint-correction",
+      "seconds": 4.978,
+      "note": "Initial review flagged unnecessary tuple non-null assertion; removed only that assertion, retained initial lint log and reran required final checks.",
+      "minutes": 0.08296666666666666
+    },
+    {
+      "tag": "singleton-target-auto-answer",
+      "seconds": 20.58,
+      "note": "First browser attempt resolved correctly but waited for an explicit target prompt with one eligible character; existing engine automatically answered. Actual game rkhfnr paid hand play and trigger chain retained in development JSONL. Own server70820closed. Added second eligible physical vanilla to require a real target choice, then both viewport flows pass. No source mutation or repeated checks.",
+      "minutes": 0.34299999999999997
+    }
+  ],
+  "improvementBeads": [],
+  "hostLoadSamples": {
     "review": {
       "exit": 0,
       "seconds": 58.507,
@@ -40,43 +83,25 @@
       ]
     }
   },
-  "testDelta": {
-    "files": 0,
-    "lines": 22,
-    "jsdomFiles": 0,
-    "cases": 1
-  },
-  "browser": {
-    "firstFailedWallMs": {
-      "browserLeaseWait": 42,
-      "serve": 1262,
-      "scenario": 19249,
-      "total": 20580
-    },
-    "finalWallMs": {
-      "browserLeaseWait": 43,
-      "serve": 1249,
-      "scenario": 9919,
-      "total": 11236
-    },
-    "load": 11.30126953125,
-    "productionFrozen": true
-  },
-  "friction": [
-    {
-      "tag": "incorrect-focused-path",
-      "note": "Initial guessed rematerialize.test.ts does not exist; command exited1 without running tests. Corrected immediately to existing contracts.test.ts and triggers-redaction.test.ts,427pass. No production change."
-    },
-    {
-      "tag": "synthetic-lint-correction",
-      "seconds": 4.978,
-      "note": "Initial review flagged unnecessary tuple non-null assertion; removed only that assertion, retained initial lint log and reran required final checks."
-    },
-    {
-      "tag": "singleton-target-auto-answer",
-      "seconds": 20.58,
-      "note": "First browser attempt resolved correctly but waited for an explicit target prompt with one eligible character; existing engine automatically answered. Actual game rkhfnr paid hand play and trigger chain retained in development JSONL. Own server70820closed. Added second eligible physical vanilla to require a real target choice, then both viewport flows pass. No source mutation or repeated checks."
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "1784c66729cf5bc98855b15448a56d4a9b5fc598fa01992c30e9fcf81ecaa63b",
+    "fields": {
+      "hostLoad": {
+        "source": "hostLoad.review.loadStart[0]",
+        "measuredFor": "review start"
+      },
+      "friction[0].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      },
+      "friction[1].minutes": {
+        "source": "friction[1].seconds / 60",
+        "measuredFor": "recorded failed-command/scenario wall only"
+      },
+      "friction[2].minutes": {
+        "source": "friction[2].seconds / 60",
+        "measuredFor": "recorded failed-command/scenario wall only"
+      }
     }
-  ],
-  "improvementBeads": []
+  }
 }

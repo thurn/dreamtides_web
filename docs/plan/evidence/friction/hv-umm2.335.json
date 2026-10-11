@@ -366,34 +366,60 @@
       "kind": "fixture-correction",
       "tag": "local-edit-correction",
       "minutes": 1,
-      "detail": "First repaired simulation test accidentally supplied UUID arrays instead of DeckEntry objects; Unknown card undefined was fixture-only. Corrected structured decklists; retained positive-first failed log."
+      "detail": "First repaired simulation test accidentally supplied UUID arrays instead of DeckEntry objects; Unknown card undefined was fixture-only. Corrected structured decklists; retained positive-first failed log.",
+      "note": "First repaired simulation test accidentally supplied UUID arrays instead of DeckEntry objects; Unknown card undefined was fixture-only. Corrected structured decklists; retained positive-first failed log."
     },
     {
       "kind": "harness-api-correction",
       "tag": "local-edit-correction",
       "minutes": 1,
-      "detail": "ScriptedSource has no prompts property. Observed public prompts through an AnswerSource adapter; retained focused-final failed log."
+      "detail": "ScriptedSource has no prompts property. Observed public prompts through an AnswerSource adapter; retained focused-final failed log.",
+      "note": "ScriptedSource has no prompts property. Observed public prompts through an AnswerSource adapter; retained focused-final failed log."
     },
     {
       "kind": "developer-helper-name-collision",
       "tag": "local-edit-correction",
       "minutes": 1,
-      "detail": "New imported target builder collided with existing local prompt-lab target helper. Initial evaluation and node typecheck failures retained; builder aliased characterTarget and effect construction stays in abilities closure."
+      "detail": "New imported target builder collided with existing local prompt-lab target helper. Initial evaluation and node typecheck failures retained; builder aliased characterTarget and effect construction stays in abilities closure.",
+      "note": "New imported target builder collided with existing local prompt-lab target helper. Initial evaluation and node typecheck failures retained; builder aliased characterTarget and effect construction stays in abilities closure."
     },
     {
       "kind": "qa-route-correction",
       "tag": "qa-harness-selection",
       "minutes": 1,
-      "detail": "Card-lab request resolution accepts printed content, so synthetic source URL yielded unknownCard before workflow. Corrected to existing prompt-lab-choices and debug staging. Failed result/caps retained as play-time-x-unknown-card-failed.result.json; not an app defect."
+      "detail": "Card-lab request resolution accepts printed content, so synthetic source URL yielded unknownCard before workflow. Corrected to existing prompt-lab-choices and debug staging. Failed result/caps retained as play-time-x-unknown-card-failed.result.json; not an app defect.",
+      "note": "Card-lab request resolution accepts printed content, so synthetic source URL yielded unknownCard before workflow. Corrected to existing prompt-lab-choices and debug staging. Failed result/caps retained as play-time-x-unknown-card-failed.result.json; not an app defect."
     },
     {
       "kind": "qa-presentation-settlement",
       "tag": "qa-render-settlement",
       "minutes": 1,
-      "detail": "Initial engine-settled pass captured before spark presentation completed. Added rendered spark3 assertion, reran desktop/mobile, inspected final mobile spark3. Earlier passed report retained as play-time-x-engine-settled-pass.result.json."
+      "detail": "Initial engine-settled pass captured before spark presentation completed. Added rendered spark3 assertion, reran desktop/mobile, inspected final mobile spark3. Earlier passed report retained as play-time-x-engine-settled-pass.result.json.",
+      "note": "Initial engine-settled pass captured before spark presentation completed. Added rendered spark3 assertion, reran desktop/mobile, inspected final mobile spark3. Earlier passed report retained as play-time-x-engine-settled-pass.result.json."
     }
   ],
   "rulesDecisions": [],
   "cardIssues": 0,
-  "coreReview": "Parent session requests independent other-family review of final immutable commit; no verdict asserted here."
+  "coreReview": "Parent session requests independent other-family review of final immutable commit; no verdict asserted here.",
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "792c508033e10fc7cf6630b3383f080a7eb69bfb40a591d0570a286f3cd50349",
+    "fields": {
+      "friction[0].note": {
+        "source": "friction[0].detail"
+      },
+      "friction[1].note": {
+        "source": "friction[1].detail"
+      },
+      "friction[2].note": {
+        "source": "friction[2].detail"
+      },
+      "friction[3].note": {
+        "source": "friction[3].detail"
+      },
+      "friction[4].note": {
+        "source": "friction[4].detail"
+      }
+    }
+  }
 }

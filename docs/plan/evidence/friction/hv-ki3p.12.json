@@ -1,1 +1,25 @@
-{"bead":"hv-ki3p.12","phase":"T","lane":null,"implementMin":9,"localValidationS":null,"hostLoad":4.8,"testDelta":null,"friction":[{"tag":"tollgate-app-sidecar-prep","minutes":null,"note":"tollgate-app tests need scripts/prepare-sidecar.sh debug run first"}]}
+{
+  "bead": "hv-ki3p.12",
+  "phase": "T",
+  "lane": null,
+  "implementMin": 9,
+  "localValidationS": null,
+  "hostLoad": 4.8,
+  "testDelta": null,
+  "friction": [
+    {
+      "tag": "tollgate-app-sidecar-prep",
+      "minutes": null,
+      "note": "tollgate-app tests need scripts/prepare-sidecar.sh debug run first"
+    }
+  ],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "5e5328fac7b726a3ff7b8e93b4ff0dce2e5566e72f80b9ede78c17905297b9a2",
+    "fields": {
+      "friction[0].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      }
+    }
+  }
+}

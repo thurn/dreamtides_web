@@ -21,5 +21,16 @@
     "npm run review: passed, documentation delta has no applicable executable checks",
     "npm run knip: passed (prepare0.9s + knip2.0s + restore0.5s)",
     "Manual recovery procedure read-through, evidence commit identity checks, JSONL parsing and git diff --check: passed"
-  ]
+  ],
+  "hostLoad": null,
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "c4b68989e23b15faff097d25f36a6bbc6040e889d4b7f36c1957b854428a9d6f",
+    "fields": {
+      "hostLoad": {
+        "source": "Unrecorded observation; approved exact historical unknown",
+        "measuredFor": "unknown"
+      }
+    }
+  }
 }

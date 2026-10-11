@@ -12,7 +12,47 @@
     "knip": 2.618,
     "full": 61.319
   },
-  "hostLoad": [
+  "hostLoad": 3.96875,
+  "testDelta": {
+    "files": 1,
+    "lines": 96,
+    "jsdomFiles": 0,
+    "cases": 3
+  },
+  "browser": {
+    "baseline": {
+      "wallMs": {
+        "browserLeaseWait": 43,
+        "serve": 1262,
+        "scenario": 11360,
+        "total": 12689
+      },
+      "wrapper": {
+        "label": "negative-qa",
+        "exit": 0,
+        "seconds": 17.948
+      },
+      "hostLoad": 3.0166015625
+    },
+    "final": {
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 1254,
+        "scenario": 12889,
+        "total": 14212
+      },
+      "wrapper": {
+        "label": "final-qa",
+        "exit": 0,
+        "seconds": 19.447
+      },
+      "hostLoad": 4.41455078125
+    },
+    "sourceFrozen": true
+  },
+  "friction": [],
+  "improvementBeads": [],
+  "hostLoadSamples": [
     {
       "label": "negative-review-corrected",
       "exit": 2,
@@ -119,43 +159,14 @@
       ]
     }
   ],
-  "testDelta": {
-    "files": 1,
-    "lines": 96,
-    "jsdomFiles": 0,
-    "cases": 3
-  },
-  "browser": {
-    "baseline": {
-      "wallMs": {
-        "browserLeaseWait": 43,
-        "serve": 1262,
-        "scenario": 11360,
-        "total": 12689
-      },
-      "wrapper": {
-        "label": "negative-qa",
-        "exit": 0,
-        "seconds": 17.948
-      },
-      "hostLoad": 3.0166015625
-    },
-    "final": {
-      "wallMs": {
-        "browserLeaseWait": 44,
-        "serve": 1254,
-        "scenario": 12889,
-        "total": 14212
-      },
-      "wrapper": {
-        "label": "final-qa",
-        "exit": 0,
-        "seconds": 19.447
-      },
-      "hostLoad": 4.41455078125
-    },
-    "sourceFrozen": true
-  },
-  "friction": [],
-  "improvementBeads": []
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "29a838ac83fb615ddcd494085260486f0a827d14563ea9914fd97efb3b466755",
+    "fields": {
+      "hostLoad": {
+        "source": "hostLoad[4].loadBefore[0]",
+        "measuredFor": "review start"
+      }
+    }
+  }
 }

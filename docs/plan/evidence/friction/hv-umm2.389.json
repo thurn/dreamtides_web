@@ -9,7 +9,38 @@
     "knip": 3.247,
     "full": 65.94
   },
-  "hostLoad": [
+  "hostLoad": 5.3486328125,
+  "testDelta": {
+    "files": 0,
+    "lines": 50,
+    "jsdomFiles": 0,
+    "cases": 1
+  },
+  "browser": {
+    "wallMs": {
+      "browserLeaseWait": 43,
+      "serve": 1256,
+      "scenario": 9939,
+      "total": 11260
+    },
+    "commandS": 16.534,
+    "hostLoad": 6.53662109375,
+    "sourceFrozen": true
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "note": "Synthetic contract initially referenced points and direct exhausted; corrected to public score and status.exhausted. First failed focused wall was not separately captured; second failed run was 2.925 s. Scenario strict JSDoc/JSON boundary and Promise rejection lint corrections caused review exits 2 and 1 at 12.963 s and 12.609 s, before settled checks or browser. Final review validates all executable edits.",
+      "minutes": null
+    },
+    {
+      "tag": "qa-fixture-staging",
+      "note": "Before browser, root cold inspection required exact player energy 1 for the synthetic Interrupt response control plus a payable Fast event to hold Dusk before readiness. The enemy remains at energy 0. One source with a B0 hole avoids a second free ordinary-policy activation; two void copies remain, and target identity follows the actual accepted answer rather than policy ranking. No browser retry or product change.",
+      "minutes": null
+    }
+  ],
+  "improvementBeads": [],
+  "hostLoadSamples": [
     {
       "label": "focused",
       "exit": 0,
@@ -71,32 +102,20 @@
       ]
     }
   ],
-  "testDelta": {
-    "files": 0,
-    "lines": 50,
-    "jsdomFiles": 0,
-    "cases": 1
-  },
-  "browser": {
-    "wallMs": {
-      "browserLeaseWait": 43,
-      "serve": 1256,
-      "scenario": 9939,
-      "total": 11260
-    },
-    "commandS": 16.534,
-    "hostLoad": 6.53662109375,
-    "sourceFrozen": true
-  },
-  "friction": [
-    {
-      "tag": "local-edit-correction",
-      "note": "Synthetic contract initially referenced points and direct exhausted; corrected to public score and status.exhausted. First failed focused wall was not separately captured; second failed run was 2.925 s. Scenario strict JSDoc/JSON boundary and Promise rejection lint corrections caused review exits 2 and 1 at 12.963 s and 12.609 s, before settled checks or browser. Final review validates all executable edits."
-    },
-    {
-      "tag": "qa-fixture-staging",
-      "note": "Before browser, root cold inspection required exact player energy 1 for the synthetic Interrupt response control plus a payable Fast event to hold Dusk before readiness. The enemy remains at energy 0. One source with a B0 hole avoids a second free ordinary-policy activation; two void copies remain, and target identity follows the actual accepted answer rather than policy ranking. No browser retry or product change."
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "b8b54882737c02d4d68c1d35a6d83ce9aeef3e6147bfd9aa5e6db474e4391070",
+    "fields": {
+      "hostLoad": {
+        "source": "hostLoad[1].loadBefore[0]",
+        "measuredFor": "review start"
+      },
+      "friction[0].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      },
+      "friction[1].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      }
     }
-  ],
-  "improvementBeads": []
+  }
 }

@@ -17,7 +17,45 @@
     "knip-budget": 2.631,
     "full": 70.811
   },
-  "hostLoad": [
+  "hostLoad": 15.45166015625,
+  "testDelta": {
+    "files": 2,
+    "lines": 155,
+    "jsdomFiles": 0,
+    "cases": 8
+  },
+  "browser": {
+    "stage": {
+      "browserLeaseWait": 41,
+      "serve": 1254,
+      "scenario": 26661,
+      "total": 27982
+    },
+    "sweep": {
+      "browserLeaseWait": 41,
+      "serve": 943,
+      "scenario": 13227.748916,
+      "cleanup": 225.03241700000035,
+      "execution": 14417.687375,
+      "total": 14458.687375
+    },
+    "wrappers": [
+      {
+        "label": "qa-stage",
+        "exit": 0,
+        "seconds": 33.234
+      },
+      {
+        "label": "qa-sweep",
+        "exit": 0,
+        "seconds": 19.483
+      }
+    ],
+    "sourceFrozen": true
+  },
+  "friction": [],
+  "improvementBeads": [],
+  "hostLoadSamples": [
     {
       "label": "focused",
       "exit": 0,
@@ -199,41 +237,14 @@
       ]
     }
   ],
-  "testDelta": {
-    "files": 2,
-    "lines": 155,
-    "jsdomFiles": 0,
-    "cases": 8
-  },
-  "browser": {
-    "stage": {
-      "browserLeaseWait": 41,
-      "serve": 1254,
-      "scenario": 26661,
-      "total": 27982
-    },
-    "sweep": {
-      "browserLeaseWait": 41,
-      "serve": 943,
-      "scenario": 13227.748916,
-      "cleanup": 225.03241700000035,
-      "execution": 14417.687375,
-      "total": 14458.687375
-    },
-    "wrappers": [
-      {
-        "label": "qa-stage",
-        "exit": 0,
-        "seconds": 33.234
-      },
-      {
-        "label": "qa-sweep",
-        "exit": 0,
-        "seconds": 19.483
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "e0acd1466c2607e59b5ec41a3f80a4c07dfedc093d063efc4c1d039358cf0eff",
+    "fields": {
+      "hostLoad": {
+        "source": "hostLoad[1].loadBefore[0]",
+        "measuredFor": "review start"
       }
-    ],
-    "sourceFrozen": true
-  },
-  "friction": [],
-  "improvementBeads": []
+    }
+  }
 }

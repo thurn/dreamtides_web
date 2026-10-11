@@ -31,42 +31,50 @@
     {
       "tag": "qa-harness",
       "minutes": 2,
-      "description": "Initial permanent-failure fixture used a directory that native lockf accepts. A denied-file fixture pins the actual permanent-error path; initial failure log retained."
+      "description": "Initial permanent-failure fixture used a directory that native lockf accepts. A denied-file fixture pins the actual permanent-error path; initial failure log retained.",
+      "note": "Initial permanent-failure fixture used a directory that native lockf accepts. A denied-file fixture pins the actual permanent-error path; initial failure log retained."
     },
     {
       "tag": "validation-failure",
       "minutes": 3,
-      "description": "Node JSDoc fixture typing and an async-without-await SDK mock stopped validation. Exact SDK promise typing and a returned resolved promise passed targeted review before the final full run."
+      "description": "Node JSDoc fixture typing and an async-without-await SDK mock stopped validation. Exact SDK promise typing and a returned resolved promise passed targeted review before the final full run.",
+      "note": "Node JSDoc fixture typing and an async-without-await SDK mock stopped validation. Exact SDK promise typing and a returned resolved promise passed targeted review before the final full run."
     },
     {
       "tag": "native-dependency",
       "minutes": 2,
-      "description": "Knip reports lockf as an unlisted package binary. Authorized knip.jsonc declaration identifies this macOS system dependency; final knip passes."
+      "description": "Knip reports lockf as an unlisted package binary. Authorized knip.jsonc declaration identifies this macOS system dependency; final knip passes.",
+      "note": "Knip reports lockf as an unlisted package binary. Authorized knip.jsonc declaration identifies this macOS system dependency; final knip passes."
     },
     {
       "tag": "provider-ownership",
       "minutes": 8,
-      "description": "Parent review required fail-closed provider ownership across native lease crash recovery, semantic tool errors, uncertain RPC transport failures, and browser-close/RPC-drain/SDK-teardown ordering. Final synthetic contracts and actual smoke verify those boundaries."
+      "description": "Parent review required fail-closed provider ownership across native lease crash recovery, semantic tool errors, uncertain RPC transport failures, and browser-close/RPC-drain/SDK-teardown ordering. Final synthetic contracts and actual smoke verify those boundaries.",
+      "note": "Parent review required fail-closed provider ownership across native lease crash recovery, semantic tool errors, uncertain RPC transport failures, and browser-close/RPC-drain/SDK-teardown ordering. Final synthetic contracts and actual smoke verify those boundaries."
     },
     {
       "tag": "runtime-artifact-admission",
       "minutes": 1,
-      "description": "Parent relayed a native peer admission finding for the lease and owner-record paths. Authorized tracked ignore entries cover both actual paths, and git check-ignore confirms them. Runtime logic remains at the validated full/smoke hashes."
+      "description": "Parent relayed a native peer admission finding for the lease and owner-record paths. Authorized tracked ignore entries cover both actual paths, and git check-ignore confirms them. Runtime logic remains at the validated full/smoke hashes.",
+      "note": "Parent relayed a native peer admission finding for the lease and owner-record paths. Authorized tracked ignore entries cover both actual paths, and git check-ignore confirms them. Runtime logic remains at the validated full/smoke hashes."
     },
     {
       "tag": "cold-review",
       "minutes": 10,
-      "description": "All five accepted cold findings repaired in this unlanded worktree: uncertain sessions stop further RPCs, explicit notifications replace short polling, real private linked-Git fixtures exercise production common-root resolution, all artifact writes are private, and README cleanup order matches signals."
+      "description": "All five accepted cold findings repaired in this unlanded worktree: uncertain sessions stop further RPCs, explicit notifications replace short polling, real private linked-Git fixtures exercise production common-root resolution, all artifact writes are private, and README cleanup order matches signals.",
+      "note": "All five accepted cold findings repaired in this unlanded worktree: uncertain sessions stop further RPCs, explicit notifications replace short polling, real private linked-Git fixtures exercise production common-root resolution, all artifact writes are private, and README cleanup order matches signals."
     },
     {
       "tag": "containment-escape",
       "minutes": 3,
-      "description": "Candidate 01a12945-5f6b-7e12-bb88-6c65218d8635 failed native containment at the first related test. Test-only real-spawn wrappers keep synthetic processes inside the gate group, translate negative signals only for owned fixture PIDs, end holder pipes, and join direct children. Production detached groups and gate policy remain intact."
+      "description": "Candidate 01a12945-5f6b-7e12-bb88-6c65218d8635 failed native containment at the first related test. Test-only real-spawn wrappers keep synthetic processes inside the gate group, translate negative signals only for owned fixture PIDs, end holder pipes, and join direct children. Production detached groups and gate policy remain intact.",
+      "note": "Candidate 01a12945-5f6b-7e12-bb88-6c65218d8635 failed native containment at the first related test. Test-only real-spawn wrappers keep synthetic processes inside the gate group, translate negative signals only for owned fixture PIDs, end holder pipes, and join direct children. Production detached groups and gate policy remain intact."
     },
     {
       "tag": "fixture-path",
       "minutes": 1,
-      "description": "Initial private Git resolver assertion exposed macOS /var versus /private canonical path spelling. Fixtures use realpath; the failing focused report is retained, and final review/full prove the corrected private resolver contract."
+      "description": "Initial private Git resolver assertion exposed macOS /var versus /private canonical path spelling. Fixtures use realpath; the failing focused report is retained, and final review/full prove the corrected private resolver contract.",
+      "note": "Initial private Git resolver assertion exposed macOS /var versus /private canonical path spelling. Fixtures use realpath; the failing focused report is retained, and final review/full prove the corrected private resolver contract."
     }
   ],
   "validationRuns": [
@@ -412,5 +420,35 @@
     "scripts/qa/browser-lease.test.mjs": "a915c06544dde3c9caa1c4a64f4d0d68f7f0ae7e4057e558bd265056811bc80c",
     "knip.jsonc": "f8b18122ac2e21c1a68c71e863b137a93873683a5a7c69041cde445cf9d71196"
   },
-  "postPreFixtureFullDocumentationOnly": "After final full review, README wrapping and QaSession.closed JSDoc clarification were edited; runtime and test bodies stayed fixed. Actual smoke exercised the current source."
+  "postPreFixtureFullDocumentationOnly": "After final full review, README wrapping and QaSession.closed JSDoc clarification were edited; runtime and test bodies stayed fixed. Actual smoke exercised the current source.",
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "4aa611aeba027d70a2f5f1889bb5e591ba4eaf1c65d0e100e54d875bebfa29a2",
+    "fields": {
+      "friction[0].note": {
+        "source": "friction[0].description"
+      },
+      "friction[1].note": {
+        "source": "friction[1].description"
+      },
+      "friction[2].note": {
+        "source": "friction[2].description"
+      },
+      "friction[3].note": {
+        "source": "friction[3].description"
+      },
+      "friction[4].note": {
+        "source": "friction[4].description"
+      },
+      "friction[5].note": {
+        "source": "friction[5].description"
+      },
+      "friction[6].note": {
+        "source": "friction[6].description"
+      },
+      "friction[7].note": {
+        "source": "friction[7].description"
+      }
+    }
+  }
 }

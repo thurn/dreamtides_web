@@ -132,13 +132,15 @@
       "kind": "local-edit-correction",
       "detail": "Initial review lint found an omitted ChooseTargetsPrompt type import and unused stateCardInfo import after the heuristic test replacement. The first correction script fixed the type import but expected a different import shape for stateCardInfo, so a second lint run exposed that remaining import. Exact import correction passes final review. All failed timings retained.",
       "tag": "local-edit-correction",
-      "minutes": 1
+      "minutes": 1,
+      "note": "Initial review lint found an omitted ChooseTargetsPrompt type import and unused stateCardInfo import after the heuristic test replacement. The first correction script fixed the type import but expected a different import shape for stateCardInfo, so a second lint run exposed that remaining import. Exact import correction passes final review. All failed timings retained."
     },
     {
       "kind": "probe-report-format",
       "detail": "The negative test failed the intended candidates assertion. A post-run evidence parser expected the full source line; Vitest ellipsized that display. Verification uses the actual assertion values, failing location and single-test failure. Production bytes were restored by finally even when the parser failed.",
       "tag": "probe-report-format",
-      "minutes": 1
+      "minutes": 1,
+      "note": "The negative test failed the intended candidates assertion. A post-run evidence parser expected the full source line; Vitest ellipsized that display. Verification uses the actual assertion values, failing location and single-test failure. Production bytes were restored by finally even when the parser failed."
     }
   ],
   "d19": {
@@ -168,5 +170,17 @@
     "Safeguard mutation fails the added public target-candidates assertion; illegal source answer bounces without changing committed state; legal ally target commits self-abandon payment.",
     "Chosen discard fires only the hand holder's discard listener for both controllers, including a card owned by the chooser; exact UUID event, trigger and energy outcomes are asserted.",
     "Every scripted legal opponent-hand candidate obeys discard/payment contract; chosen-discard test assertions do not depend on Greedy ordering."
-  ]
+  ],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "b7c761440380f7f945a34f64d41e899a0c093c5c621ce0bfde48efebf2c1150c",
+    "fields": {
+      "friction[0].note": {
+        "source": "friction[0].detail"
+      },
+      "friction[1].note": {
+        "source": "friction[1].detail"
+      }
+    }
+  }
 }

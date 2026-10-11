@@ -1,1 +1,37 @@
-{"bead":"hv-ki3p.6","phase":"T","lane":null,"implementMin":41,"localValidationS":null,"hostLoad":null,"testDelta":null,"friction":[{"tag":"usage-limit-interruption","minutes":null,"note":"usage limit hit after the 15:59 commit; submission waited for re-entry"},{"tag":"review-follow-up-bead","minutes":null,"note":"core-review findings accepted and filed as follow-up bead hv-ki3p.15"}]}
+{
+  "bead": "hv-ki3p.6",
+  "phase": "T",
+  "lane": null,
+  "implementMin": 41,
+  "localValidationS": null,
+  "hostLoad": null,
+  "testDelta": null,
+  "friction": [
+    {
+      "tag": "usage-limit-interruption",
+      "minutes": null,
+      "note": "usage limit hit after the 15:59 commit; submission waited for re-entry"
+    },
+    {
+      "tag": "review-follow-up-bead",
+      "minutes": null,
+      "note": "core-review findings accepted and filed as follow-up bead hv-ki3p.15"
+    }
+  ],
+  "schemaNormalization": {
+    "bead": "hv-umm2.408",
+    "originalSHA256": "04203ec6c17235d0802138cafbcfa226e33dba143bafb9dbdeb2f2e067914e4c",
+    "fields": {
+      "hostLoad": {
+        "source": "Unrecorded observation; approved exact historical unknown",
+        "measuredFor": "unknown"
+      },
+      "friction[0].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      },
+      "friction[1].minutes": {
+        "source": "Unrecorded observation; approved exact historical unknown"
+      }
+    }
+  }
+}
