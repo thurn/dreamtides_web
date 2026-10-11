@@ -223,9 +223,10 @@
  * @typedef {object} EngineProbeView
  * @property {import("../../src/types/identifiers").BattleId} battleId
  * @property {{ kind: string, side: string } | null} decision
- * @property {{ kind: string, side: string, id: string, candidates?: string[] } | null} pending
+ * @property {{ kind: string, side: string, id: string, candidates?: string[], purpose?: { role: import("../../src/engine/prompts/types").PromptRole } } | null} pending
  * @property {ProbeEvent[]} events
- * @property {{ committed: { stack: unknown[], result: unknown, sides: Record<string, { score: number }>, config: { scoreToWin: number }, instances: Partial<Record<import("../../src/engine/state/ids").InstanceId, { printing: { kind: string, cardId?: import("../../src/types/card-identity").CardId } }>> }, inFlight: unknown }} slice
+ * @property {{ committed: { stack: unknown[], result: unknown, sides: Record<string, { score: number }>, config: { scoreToWin: number }, instances: Partial<Record<import("../../src/engine/state/ids").InstanceId, { printing: { kind: string, cardId?: import("../../src/types/card-identity").CardId } }>> }, inFlight: { answers: Array<{ value: import("../../src/engine").Answer, auto?: true }> } | null, publishedEvents: number }} slice
+ *   `publishedEvents` counts the in-flight step's events already published.
  */
 
 /**
@@ -272,6 +273,19 @@
  * @property {string} board Every rendered battle card with the rank, row, or zone it sits in.
  * @property {BattleProbeState | null} probe
  * @property {number} caps The current document's `__caps` entries.
+ */
+
+/**
+ * What `qa.battle.promptOrAutoAnswer` saw first for a prompt role of the
+ * player's: the answerable rendered prompt (`rendered`, with the state that
+ * shows it), or the engine's `promptAutoAnswered` event (`autoAnswered`).
+ * `cursor` follows the auto-answered event, else the last recorded event as
+ * read. `answer` is the forced answer while its step is still in flight (the
+ * probe's recorded in-flight answers); the event itself carries none, so it
+ * is `null` once the step commits.
+ *
+ * @typedef {{ outcome: "rendered", prompt: BattlePrompt, state: BattleState, cursor: EventCursor }
+ *   | { outcome: "autoAnswered", event: ObservedEvent, answer: import("../../src/engine").Answer | null, cursor: EventCursor }} PromptOrAutoAnswer
  */
 
 /**
@@ -334,6 +348,13 @@
  *   events after `cursor` have `match`'s fields, then reads them as
  *   `events` does. Fails on `__caps`, another battle, or `timeout` (default
  *   15 000 ms).
+ * @property {(options: { role: import("../../src/engine/prompts/types").PromptRole, since: EventCursor | null, timeout?: number, pollMs?: number, label?: string }) => Promise<PromptOrAutoAnswer>} promptOrAutoAnswer
+ *   Waits, without acting, for the player's prompt whose purpose has `role`
+ *   (`debug=1`): resolves once it is rendered and answerable, or once a
+ *   player `promptAutoAnswered` event with that role is recorded after
+ *   `since` (an auto-answer the engine gave for a single legal choice),
+ *   whichever the battle reached first. Fails on `__caps`, another battle,
+ *   or `timeout` (default 15 000 ms) with a `QaTimeoutError`.
  * @property {(options?: { seed?: string, query?: string, atFrontDoor?: () => Promise<void> }) => Promise<{ sites: Array<string | null> }>} enterFirstBattle
  *   Opens a fresh game (`/?seed=<seed>&<query>`, seed 1) and walks the front
  *   door to the first battle with no development-only parameter: Avatar
@@ -1743,6 +1764,78 @@ export function createBattleDriver(qa) {
     return page;
   };
 
+  /**
+   * The page-side read behind `promptOrAutoAnswer`: the pending prompt's
+   * owner and purpose role, and the forced answer of the auto-answered event
+   * keyed `key` while its step is in flight. The in-flight step's published
+   * events are the probe's last `publishedEvents`, and their auto-answered
+   * events pair in order with the record's automatic answers; any mismatch
+   * (a reload's partial history) reports no answer.
+   *
+   * @param {{ key: { seq: number, index: number } | null }} request
+   */
+  const observeOwed = ({ key }) => {
+    const probe = /** @type {Window & { __engineProbe?: EngineProbeView }} */ (window).__engineProbe;
+    if (probe === undefined) return null;
+    const pending = probe.pending === null
+      ? null
+      : { id: probe.pending.id, side: probe.pending.side, role: probe.pending.purpose?.role ?? null };
+    /** @type {import("../../src/engine").Answer | null} */
+    let answer = null;
+    const { inFlight, publishedEvents } = probe.slice;
+    if (key !== null && inFlight !== null && publishedEvents > 0 && probe.events.length >= publishedEvents) {
+      const auto = probe.events.slice(-publishedEvents).filter((entry) => entry.kind === "promptAutoAnswered");
+      const recorded = inFlight.answers.filter((entry) => entry.auto === true);
+      const at = auto.findIndex((entry) => entry.seq === key.seq && entry.index === key.index);
+      if (at >= 0 && auto.length === recorded.length) answer = recorded[at]?.value ?? null;
+    }
+    return { pending, answer };
+  };
+
+  /** @type {BattleDriver["promptOrAutoAnswer"]} */
+  const promptOrAutoAnswer = async ({ role, since, timeout = 15_000, pollMs = 100, label = `qa.battle.promptOrAutoAnswer ${String(role)}` }) => {
+    const given = /** @type {unknown} */ (role);
+    if (typeof given !== "string" || given === "") throw new Error(`${label}: role must be a prompt purpose role`);
+    if (since === undefined) throw new Error(`${label}: since must be an event cursor, or null for every recorded event`);
+    const deadline = Date.now() + timeout;
+    /** The player's auto-answered events after `cursor`, a page at a time. */
+    const read = async (/** @type {EventCursor | null} */ cursor) => {
+      const page = await qa.read(observeEvents, { cursor, match: { kind: "promptAutoAnswered", side: "player" }, limit: 500, count: 0 });
+      if (page === null || page.error !== undefined) throw new Error(`${label}: ${page?.error ?? "no observation"}`);
+      return page;
+    };
+    /** @param {EventPage} page */
+    const pick = (page) => page.events.find(({ event }) => event.kind === "promptAutoAnswered" && event.purpose.role === role) ?? null;
+    for (;;) {
+      const battle = await state();
+      await failOnCaps(battle, label);
+      let page = await read(since);
+      let found = pick(page);
+      while (found === null && page.more) {
+        page = await read(page.cursor);
+        found = pick(page);
+      }
+      const owed = await qa.read(observeOwed, { key: found === null ? null : { seq: found.seq, index: found.index } });
+      if (owed === null) throw new Error(`${label}: missing engine probe (use debug=1)`);
+      if (found !== null) {
+        const cursor = { battleId: page.cursor.battleId, seq: found.seq, index: found.index };
+        qa.note(label, { outcome: "autoAnswered", key: [found.seq, found.index], answer: owed.answer });
+        return { outcome: "autoAnswered", event: found, answer: owed.answer, cursor };
+      }
+      const cursor = page.cursor;
+      const prompt = battle.prompt;
+      if (prompt !== null && prompt.answerable && owed.pending !== null && owed.pending.side === "player" &&
+          owed.pending.role === role && owed.pending.id === prompt.id) {
+        qa.note(label, { outcome: "rendered", id: prompt.id, surface: prompt.surface });
+        return { outcome: "rendered", prompt, state: battle, cursor };
+      }
+      if (Date.now() >= deadline) {
+        throw qa.timeoutError(`${label}: timed out after ${String(timeout)} ms with neither a rendered ${String(role)} prompt nor its auto-answer; ${describe(battle)}`);
+      }
+      await qa.sleep(pollMs);
+    }
+  };
+
   /** @type {BattleDriver["enterFirstBattle"]} */
   const enterFirstBattle = async ({ seed = "1", query = "", atFrontDoor } = {}) => {
     await qa.open(`/?seed=${seed}${query === "" ? "" : `&${query}`}`);
@@ -1795,5 +1888,5 @@ export function createBattleDriver(qa) {
     return { sites };
   };
 
-  return { state, pass, answer, tap, playUntil, waitFor, eventCursor, events, waitForEvents, enterFirstBattle };
+  return { state, pass, answer, tap, playUntil, waitFor, eventCursor, events, waitForEvents, promptOrAutoAnswer, enterFirstBattle };
 }

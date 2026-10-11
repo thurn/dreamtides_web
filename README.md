@@ -345,6 +345,26 @@ battle uses it rather than its own pass loop:
   Both fail when the probe shows another battle than the cursor's. Take a
   cursor before acting and match each expected event by its identities,
   never by its position in the order.
+- `qa.battle.promptOrAutoAnswer({ role, since, timeout?, pollMs?, label? })`
+  waits, without acting, for the player's prompt whose purpose has `role`
+  (`debug=1`). The engine answers a prompt with a single legal choice
+  itself and records `promptAutoAnswered` instead of rendering it, so a
+  scenario that plays into a prompt waits for either. It resolves with
+  `{ outcome: "rendered", prompt, state, cursor }` once that prompt is
+  rendered and answerable, or `{ outcome: "autoAnswered", event, answer,
+  cursor }` once the player's `promptAutoAnswered` event with that role is
+  recorded after `since`, whichever came first; `cursor` follows the event
+  for a chained wait. `answer` is the forced answer while its step is still
+  in flight, else `null`. Auto-answers for another role or the enemy are
+  ignored. It fails on `__caps`, another battle, or `timeout` (default
+  15 s) with a `QaTimeoutError`:
+
+  ```js
+  const since = await qa.battle.eventCursor();
+  await qa.battle.tap(`[data-battle-card-id="${card}"]`);
+  const target = await qa.battle.promptOrAutoAnswer({ role: "target", since });
+  if (target.outcome === "rendered") await qa.battle.answer(target.state);
+  ```
 - `qa.battle.enterFirstBattle({ seed?, query?, atFrontDoor? })` opens a
   fresh game (`/?seed=<seed>&<query>`, seed 1) and walks the front door to
   the first battle: Avatar selection, every Layer 1 site, and Battle Start,
