@@ -13,6 +13,7 @@
  *   filtered-draw primitive proves its ability's literal filter while this
  *   module owns forgetting (`forgetFilteredDrawPositions`, `forgetDeckPositions`,
  *   and `randomDeckRemovalSettler` as random picks leave a deck);
+ * - a shuffled deck drops out of both sides' knowledge (`forgetShuffledDeck`);
  * - a `privateTo` prompt shows its cards to its chooser only, and the other
  *   side loses track of those still in a deck, whose order the chooser may
  *   change;
@@ -26,6 +27,10 @@
  *
  * Decks start unknown to both sides; the opening shuffle happens before any
  * card is known.
+ *
+ * Every production write into a state's `knownTo` goes through a helper
+ * here; only state creation, cloning and determinization build it whole
+ * elsewhere (`dreamtides/no-direct-knowledge-writes`).
  */
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { SIDES } from "../state/ids";
@@ -194,6 +199,13 @@ export function forgetDeckPositions(state: BattleState, cards: readonly Instance
   }
   for (const { viewer, forgotten } of viewers) {
     state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !forgotten.has(id));
+  }
+}
+
+/** As a deck is shuffled, both viewers lose track of every card in it: no place in it is inferable. */
+export function forgetShuffledDeck(state: BattleState, deck: readonly InstanceId[]): void {
+  for (const viewer of SIDES) {
+    state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !deck.includes(id));
   }
 }
 

@@ -1,0 +1,1 @@
+{"bead":"hv-umm2.405","phase":5,"base":"9fe0b0862","implementMin":12,"localValidationS":{"focused":2.6,"ruleTest":1.6,"review":49,"knip":4,"reviewFull":87,"lintFull":28.6,"fuzz":51},"hostLoad":24.7,"hostLoadSamples":{"review":24.7,"fuzz":17.54},"testDelta":{"files":1,"lines":52,"jsdomFiles":0,"cases":32},"friction":[]}

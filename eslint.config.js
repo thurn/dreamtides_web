@@ -2,6 +2,7 @@ import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import enginePurity from "./eslint-rules/engine-purity.js";
 import noComposedTypeVoice from "./eslint-rules/no-composed-type-voice.js";
+import noDirectKnowledgeWrites from "./eslint-rules/no-direct-knowledge-writes.js";
 import noHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
 import noNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
 import noRawIconClasses from "./eslint-rules/no-raw-icon-classes.js";
@@ -18,6 +19,7 @@ const dreamtides = {
   rules: {
     "engine-purity": enginePurity,
     "no-composed-type-voice": noComposedTypeVoice,
+    "no-direct-knowledge-writes": noDirectKnowledgeWrites,
     "no-hardcoded-values": noHardcodedValues,
     "no-name-keyed-cards": noNameKeyedCards,
     "no-raw-icon-classes": noRawIconClasses,
@@ -182,6 +184,25 @@ export default tseslint.config(
     files: ["src/engine/**/*.ts"],
     rules: {
       "dreamtides/engine-purity": "error",
+    },
+  },
+  {
+    // Knowledge (`state.knownTo`) changes through the named helpers in
+    // view/knowledge.ts, which own its forgetting rules and timing. State
+    // creation, cloning and determinization build it whole; tests and the
+    // engine's test tooling may set it directly.
+    files: SOURCE,
+    ignores: [
+      ...TESTS,
+      "src/engine/effects/primitives/contracts/**",
+      "src/engine/testing/**",
+      "src/engine/view/knowledge.ts",
+      "src/engine/state/create.ts",
+      "src/engine/state/clone.ts",
+      "src/engine/view/determinize.ts",
+    ],
+    rules: {
+      "dreamtides/no-direct-knowledge-writes": "error",
     },
   },
   {

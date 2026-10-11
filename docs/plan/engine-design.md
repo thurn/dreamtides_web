@@ -1727,7 +1727,10 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   usable for unbounded filters in both paths.
 - **Knowledge** is `state.knownTo[side]`: the cards in decks and hands that
   `side` can identify beyond what their zone shows it (public zones, and its
-  own hand). `view/knowledge.ts` updates it:
+  own hand). Named helpers in `view/knowledge.ts` make every change to it;
+  state creation, cloning and determinization build it whole, and the
+  `dreamtides/no-direct-knowledge-writes` lint rule rejects any other
+  production write into a state's `knownTo`, through aliases too:
   - a card keeps every side that could see it as it moves, so a public move
     into a hand or deck, or a move from a hand into a deck, stays known to
     whoever watched it;
@@ -1760,7 +1763,7 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     unfiltered top-prefix moves preserve inferable positions. The placement
     event retains movement visibility independently of final positional memory;
   - shuffling a deck (`shuffleInto`, Discover) drops every card in it out
-    of both sides' knowledge;
+    of both sides' knowledge (`forgetShuffledDeck`);
   - a `privateTo` prompt shows its cards to its chooser only as it opens,
     and the other side loses track of those still in a deck, whose order the
     chooser may change. A "look at the top 4" prompt reveals those cards only
