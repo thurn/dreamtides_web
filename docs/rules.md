@@ -411,7 +411,8 @@ and it is one of that player's turns for "this turn", "next turn", "last turn",
 "once per turn", and "until your next turn". It does not advance the round
 count, so it does not count toward the turn limit (see
 [Objective](#objective)). If several extra turns are waiting, the one created
-most recently is taken first.
+most recently is taken first. After all pending extra turns finish, the normal
+turn order resumes with the opponent of the last player who took a normal turn.
 
 ## Exhaust and Awaken
 

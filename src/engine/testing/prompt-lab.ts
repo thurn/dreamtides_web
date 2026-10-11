@@ -68,6 +68,8 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** Grant a full extra turn using the ordinary queue. */
+  extraTurn: labEvent(0x11200, 0, p.takeExtraTurn()),
   /** An explicit zero-energy Reclaim route with an optional one-energy payment. */
   routeCharacter: {
     ...SYNTHETIC.vanilla2, id: syntheticId(0x41910), status: "authored",
@@ -220,6 +222,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.extraTurn.id]: { name: "Lab Moment", text: "Take an extra turn after this one." },
   [LAB.abandon.id]: { name: "Lab Farewell", text: "Abandon a character." },
   [LAB.voidPermit.id]: { name: "Lab Gatekeeper", text: "You may play characters from your void." },
   [LAB.optionalReturn.id]: { name: "Lab Return", text: "You may pay 1● to return your void cards to hand." },
@@ -918,6 +921,7 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
           DSL.exhaustEnemies.id,
           DSL.gainThreePoints.id,
           TRIGGER.floatingDraw.id,
+          LAB.extraTurn.id,
         ],
         back: [vanillas[0], vanillas[1]],
         energy: 20,
@@ -939,6 +943,7 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       playHand(5),
       playHand(6),
       playHand(7),
+      playHand(8),
       { passUntilDayOf: "enemy" },
     ],
   },

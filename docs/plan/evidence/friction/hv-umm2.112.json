@@ -1,0 +1,21 @@
+{
+  "bead": "hv-umm2.112",
+  "phase": 5,
+  "implementMin": 21.972741516666666,
+  "localValidationS": {
+    "focused": 3.848607063293457,
+    "review": 40.39118218421936,
+    "knip": 4.645098924636841,
+    "fuzz": 106.67113089561462,
+    "preflight": 1.163194179534912,
+    "sweep": 79.36003804206848,
+    "browserFlow": 40.6550989151001
+  },
+  "hostLoad": 8.10400390625,
+  "testDelta": {
+    "files": 0,
+    "lines": 216,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

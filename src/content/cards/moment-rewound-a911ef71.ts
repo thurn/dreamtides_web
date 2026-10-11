@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { takeExtraTurn } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 38,
   art: { x: -0.63, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(takeExtraTurn())],
+  verifiedText: "l5zg9ng007",
 });

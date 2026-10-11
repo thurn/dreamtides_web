@@ -804,6 +804,8 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${source(event.source)}: ${event.side === human ? "you" : "your opponent"} chose the character type ${event.subtype}.`;
     case "triggerResolved":
       return event.applied && event.source !== null ? `${source(event.source)}'s triggered ability resolved.` : null;
+    case "extraTurnGranted":
+      return `${who(event.side)} gained an extra turn after this one.`;
     case "turnStarted":
       return `${sentence(whose(event.side))} turn began${event.extra ? " (an extra turn)" : ""}.`;
     case "winConditionMet":

@@ -31,6 +31,7 @@ import { energyChanged, type EnergyChangedEvent } from "./kinds/energy-changed";
 import { enteredVoid, type EnteredVoidEvent } from "./kinds/entered-void";
 import { eroded, type ErodedEvent } from "./kinds/eroded";
 import { exhaustionChanged, type ExhaustionChangedEvent } from "./kinds/exhaustion-changed";
+import { extraTurnGranted, type ExtraTurnGrantedEvent } from "./kinds/extra-turn-granted";
 import { fatigue, type FatigueEvent } from "./kinds/fatigue";
 import { feasibilityBounded, type FeasibilityBoundedEvent } from "./kinds/feasibility-bounded";
 import { figmentsMerged, type FigmentsMergedEvent } from "./kinds/figments-merged";
@@ -94,6 +95,7 @@ export type EngineEvent =
   | EnteredVoidEvent
   | ErodedEvent
   | ExhaustionChangedEvent
+  | ExtraTurnGrantedEvent
   | FatigueEvent
   | FeasibilityBoundedEvent
   | FigmentsMergedEvent
@@ -158,6 +160,7 @@ export const EVENT_DEFINITIONS = {
   enteredVoid,
   eroded,
   exhaustionChanged,
+  extraTurnGranted,
   fatigue,
   feasibilityBounded,
   figmentsMerged,

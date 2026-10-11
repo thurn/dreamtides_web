@@ -74,6 +74,7 @@ import {
   shuffleIntoPrimitive,
   sparkModifierPrimitive,
   storeCountersPrimitive,
+  takeExtraTurnPrimitive,
   takeFromAmongPrimitive,
   triggerAbilityPrimitive,
   winTheGamePrimitive,
@@ -267,6 +268,9 @@ const DEFINITIONS = {
   },
   get storeCounters() {
     return storeCountersPrimitive;
+  },
+  get takeExtraTurn() {
+    return takeExtraTurnPrimitive;
   },
   get takeFromAmong() {
     return takeFromAmongPrimitive;

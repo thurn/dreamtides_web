@@ -81,6 +81,7 @@ export const EVENT_PRESENTATION = {
   enteredVoid: "none",
   eroded: "travel",
   exhaustionChanged: "status",
+  extraTurnGranted: "status",
   fatigue: "status",
   feasibilityBounded: "none",
   figmentsMerged: "travel",

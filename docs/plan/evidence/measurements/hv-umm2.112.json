@@ -1,0 +1,972 @@
+{
+  "bead": "hv-umm2.112",
+  "base": "16d5088be8c0371d8648b4231c1e0c59ef04190d",
+  "entityUUID": "a911ef71-799c-4240-ad13-8fabd3caeafa",
+  "measurementWindow": {
+    "dispatch": "2026-10-11T20:43:26.708Z",
+    "initialPreparationObservation": "2026-10-11T20:55:53.201865+00:00",
+    "definition": "Elapsed from exact parent dispatch through final preparation immediately before the single commit, including research, coordination, all waits and verification. Actual commit start/end and duration are retained by the parent in the commit runtime sidecar.",
+    "finalPreparationObservation": "2026-10-11T21:05:25.072491+00:00",
+    "implementMin": 21.972741516666666,
+    "parentCommitAckReceived": true
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review starting one-minute os.getloadavg observation"
+      }
+    }
+  },
+  "commands": {
+    "focused-settled": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "takeExtraTurn"
+      ],
+      "pid": 93575,
+      "exit": 0,
+      "seconds": 3.848607063293457,
+      "start": "2026-10-11T20:53:10.259545+00:00",
+      "end": "2026-10-11T20:53:14.108380+00:00",
+      "hostLoad": [
+        7.32080078125,
+        9.0986328125,
+        14.26953125
+      ]
+    },
+    "mutation-wrong-order": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "takeExtraTurn"
+      ],
+      "pid": 76263,
+      "exit": 1,
+      "seconds": 3.5724010467529297,
+      "start": "2026-10-11T20:48:11.932930+00:00",
+      "end": "2026-10-11T20:48:15.505510+00:00",
+      "hostLoad": [
+        4.44384765625,
+        11.5322265625,
+        17.00537109375
+      ]
+    },
+    "review-settled": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 93916,
+      "exit": 0,
+      "seconds": 40.39118218421936,
+      "start": "2026-10-11T20:53:24.473215+00:00",
+      "end": "2026-10-11T20:54:04.864712+00:00",
+      "hostLoad": [
+        8.10400390625,
+        9.20263671875,
+        14.216796875
+      ]
+    },
+    "review-corrected": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 77300,
+      "exit": 0,
+      "seconds": 55.366363763809204,
+      "start": "2026-10-11T20:48:44.010032+00:00",
+      "end": "2026-10-11T20:49:39.376601+00:00",
+      "hostLoad": [
+        6.767578125,
+        11.27880859375,
+        16.68798828125
+      ]
+    },
+    "browser-flow-normal": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow.mjs",
+        "--bead",
+        "hv-umm2.112",
+        "--port",
+        "5178",
+        "--viewports",
+        "desktop"
+      ],
+      "pid": 15030,
+      "exit": 0,
+      "seconds": 40.6550989151001,
+      "start": "2026-10-11T20:58:08.293104+00:00",
+      "end": "2026-10-11T20:58:48.948365+00:00",
+      "hostLoad": [
+        20.44287109375,
+        15.13623046875,
+        15.419921875
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 78964,
+      "exit": 0,
+      "seconds": 3.543576955795288,
+      "start": "2026-10-11T20:49:43.338869+00:00",
+      "end": "2026-10-11T20:49:46.882659+00:00",
+      "hostLoad": [
+        9.57275390625,
+        11.2705078125,
+        16.31494140625
+      ]
+    },
+    "knip-settled": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 97348,
+      "exit": 0,
+      "seconds": 4.645098924636841,
+      "start": "2026-10-11T20:54:18.978312+00:00",
+      "end": "2026-10-11T20:54:23.623647+00:00",
+      "hostLoad": [
+        9.638671875,
+        9.44287109375,
+        13.990234375
+      ]
+    },
+    "mutation-no-op": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "takeExtraTurn"
+      ],
+      "pid": 75938,
+      "exit": 1,
+      "seconds": 3.9074490070343018,
+      "start": "2026-10-11T20:48:04.023263+00:00",
+      "end": "2026-10-11T20:48:07.930910+00:00",
+      "hostLoad": [
+        4.48291015625,
+        11.65966796875,
+        17.08203125
+      ]
+    },
+    "browser-flow-corrected": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow.mjs",
+        "--bead",
+        "hv-umm2.112",
+        "--port",
+        "5178",
+        "--viewports",
+        "desktop"
+      ],
+      "pid": 94832,
+      "exit": 1,
+      "seconds": 74.7998878955841,
+      "start": "2026-10-11T20:54:01.359162+00:00",
+      "end": "2026-10-11T20:55:16.159524+00:00",
+      "hostLoad": [
+        9.8125,
+        9.47216796875,
+        14.10986328125
+      ]
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 74802,
+      "exit": 1,
+      "seconds": 5.999762773513794,
+      "start": "2026-10-11T20:47:28.716517+00:00",
+      "end": "2026-10-11T20:47:34.716457+00:00",
+      "hostLoad": [
+        4.361328125,
+        12.5546875,
+        17.61474609375
+      ]
+    },
+    "focused-corrected": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 75453,
+      "exit": 0,
+      "seconds": 4.850838661193848,
+      "start": "2026-10-11T20:47:49.842873+00:00",
+      "end": "2026-10-11T20:47:54.693913+00:00",
+      "hostLoad": [
+        4.2265625,
+        11.9853515625,
+        17.29150390625
+      ]
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "takeExtraTurn"
+      ],
+      "pid": 83998,
+      "exit": 0,
+      "seconds": 3.378225326538086,
+      "start": "2026-10-11T20:51:46.906161+00:00",
+      "end": "2026-10-11T20:51:50.284609+00:00",
+      "hostLoad": [
+        6.90673828125,
+        9.52197265625,
+        14.9423828125
+      ]
+    },
+    "baseline": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 72290,
+      "exit": 0,
+      "seconds": 4.698775768280029,
+      "start": "2026-10-11T20:45:18.650724+00:00",
+      "end": "2026-10-11T20:45:23.349688+00:00",
+      "hostLoad": [
+        5.50341796875,
+        17.06005859375,
+        19.81640625
+      ]
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.112",
+        "--cards",
+        "a911ef71-799c-4240-ad13-8fabd3caeafa",
+        "--port",
+        "5178"
+      ],
+      "pid": 80427,
+      "exit": 0,
+      "seconds": 79.36003804206848,
+      "start": "2026-10-11T20:50:28.493886+00:00",
+      "end": "2026-10-11T20:51:47.854154+00:00",
+      "hostLoad": [
+        7.630859375,
+        10.47998046875,
+        15.7607421875
+      ]
+    },
+    "browser-flow": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow.mjs",
+        "--bead",
+        "hv-umm2.112",
+        "--port",
+        "5178",
+        "--viewports",
+        "desktop"
+      ],
+      "pid": 85532,
+      "exit": 1,
+      "seconds": 50.002979040145874,
+      "start": "2026-10-11T20:52:11.411345+00:00",
+      "end": "2026-10-11T20:53:01.415332+00:00",
+      "hostLoad": [
+        7.82470703125,
+        9.552734375,
+        14.79736328125
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 76678,
+      "exit": 2,
+      "seconds": 34.25868892669678,
+      "start": "2026-10-11T20:48:26.777308+00:00",
+      "end": "2026-10-11T20:49:01.036254+00:00",
+      "hostLoad": [
+        4.2529296875,
+        11.1455078125,
+        16.77099609375
+      ]
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "a911ef71-799c-4240-ad13-8fabd3caeafa"
+      ],
+      "pid": 79765,
+      "exit": 0,
+      "seconds": 1.163194179534912,
+      "start": "2026-10-11T20:50:06.285259+00:00",
+      "end": "2026-10-11T20:50:07.448662+00:00",
+      "hostLoad": [
+        7.47314453125,
+        10.68408203125,
+        15.98779296875
+      ]
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "a911ef71-799c-4240-ad13-8fabd3caeafa"
+      ],
+      "pid": 79766,
+      "exit": 0,
+      "seconds": 106.67113089561462,
+      "start": "2026-10-11T20:50:06.285551+00:00",
+      "end": "2026-10-11T20:51:52.956907+00:00",
+      "hostLoad": [
+        7.47314453125,
+        10.68408203125,
+        15.98779296875
+      ]
+    },
+    "mutation-wrong-controller": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "takeExtraTurn"
+      ],
+      "pid": 76088,
+      "exit": 1,
+      "seconds": 3.951990842819214,
+      "start": "2026-10-11T20:48:07.955440+00:00",
+      "end": "2026-10-11T20:48:11.907585+00:00",
+      "hostLoad": [
+        4.48291015625,
+        11.65966796875,
+        17.08203125
+      ]
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 84893,
+      "exit": 2,
+      "seconds": 39.87402892112732,
+      "start": "2026-10-11T20:52:03.905014+00:00",
+      "end": "2026-10-11T20:52:43.779437+00:00",
+      "hostLoad": [
+        7.548828125,
+        9.5283203125,
+        14.81982421875
+      ]
+    },
+    "install": {
+      "command": "npm install",
+      "pid": 70029,
+      "exit": 0,
+      "seconds": 2.3263847827911377,
+      "start": "2026-10-11T20:43:45.716362+00:00",
+      "hostLoad": [
+        13.51953125,
+        22.0576171875,
+        21.71826171875
+      ]
+    }
+  },
+  "hostLoadSamples": {
+    "focused-settled": [
+      7.32080078125,
+      9.0986328125,
+      14.26953125
+    ],
+    "mutation-wrong-order": [
+      4.44384765625,
+      11.5322265625,
+      17.00537109375
+    ],
+    "review-settled": [
+      8.10400390625,
+      9.20263671875,
+      14.216796875
+    ],
+    "review-corrected": [
+      6.767578125,
+      11.27880859375,
+      16.68798828125
+    ],
+    "browser-flow-normal": [
+      20.44287109375,
+      15.13623046875,
+      15.419921875
+    ],
+    "knip": [
+      9.57275390625,
+      11.2705078125,
+      16.31494140625
+    ],
+    "knip-settled": [
+      9.638671875,
+      9.44287109375,
+      13.990234375
+    ],
+    "mutation-no-op": [
+      4.48291015625,
+      11.65966796875,
+      17.08203125
+    ],
+    "browser-flow-corrected": [
+      9.8125,
+      9.47216796875,
+      14.10986328125
+    ],
+    "focused": [
+      4.361328125,
+      12.5546875,
+      17.61474609375
+    ],
+    "focused-corrected": [
+      4.2265625,
+      11.9853515625,
+      17.29150390625
+    ],
+    "focused-final": [
+      6.90673828125,
+      9.52197265625,
+      14.9423828125
+    ],
+    "baseline": [
+      5.50341796875,
+      17.06005859375,
+      19.81640625
+    ],
+    "sweep": [
+      7.630859375,
+      10.47998046875,
+      15.7607421875
+    ],
+    "browser-flow": [
+      7.82470703125,
+      9.552734375,
+      14.79736328125
+    ],
+    "review": [
+      4.2529296875,
+      11.1455078125,
+      16.77099609375
+    ],
+    "preflight": [
+      7.47314453125,
+      10.68408203125,
+      15.98779296875
+    ],
+    "fuzz": [
+      7.47314453125,
+      10.68408203125,
+      15.98779296875
+    ],
+    "mutation-wrong-controller": [
+      4.48291015625,
+      11.65966796875,
+      17.08203125
+    ],
+    "review-final": [
+      7.548828125,
+      9.5283203125,
+      14.81982421875
+    ],
+    "install": [
+      13.51953125,
+      22.0576171875,
+      21.71826171875
+    ]
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 152215,
+    "failures": 0,
+    "workerWallS": 69.2,
+    "wrapperWallS": 106.67113089561462,
+    "wrapperScope": "Includes heavy lock wait, npm/tsx startup and worker execution; lock wait was not independently timestamped.",
+    "workers": 2,
+    "included": 620,
+    "exercised": 212
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 216,
+    "jsdomFiles": 0,
+    "plainContractModules": 1,
+    "cases": 11
+  },
+  "D20": {
+    "scenarioModule": false,
+    "reason": "Single instruction composes exactly one fully contracted primitive."
+  },
+  "D21": {
+    "uuidSHA256": "6a52589fd6e6d0cc6bbee7b26c0c7abee64d9b04c2120caed97dc1393f8d83aa",
+    "firstByte": 106,
+    "sampleThresholdExclusive": 26,
+    "sampled": false,
+    "newPrompt": false,
+    "newStatusIndicator": false,
+    "newVisualEffect": false,
+    "mandatoryJudgment": false,
+    "presentation": "Existing status classification and battle-log line, without a new component or animation.",
+    "voluntaryJudgment": {
+      "viewport": "desktop",
+      "scope": "Actual extra-turn workflow; voluntarily observed, outside mandatory UUID sample."
+    }
+  },
+  "failurePaths": {
+    "controller": "Both side controllers and both opponent-active Interrupt resolutions.",
+    "ordering": "Each-player grants queue player/enemy and consume enemy/player before normal enemy turn resumes.",
+    "fullTurn": "Both extra turns emit eight ordered phases, Dreamwell and Draw in round one.",
+    "limit": "Explicit synthetic limit50; extra turn proceeds at round50, subsequent normal round draws.",
+    "durationAndResets": "Ordinary end-of-turn and controller-next-turn expiry; actual paid exhaustion, energy, turnLog, sideTurns and oncePerTurn reset.",
+    "prevention": "Synthetic Prevent resolves before grant; no grant or queue entry.",
+    "suspension": "Enclosing optional prompt exposes pending.display queue while committed queue remains empty.",
+    "reload": "Fresh fold reproduces the pending prompt, completion or late failure.",
+    "wrongActor": "Foreign action and answer bounce.",
+    "stale": "Attempt-changed prompt id bounces.",
+    "concurrent": "Second action while step in flight bounces.",
+    "duplicate": "Answered prompt has no pending prompt; used physical event cannot be played again.",
+    "cancel": "Resolution-time enclosing optional prompt is not cancellable. Primitive itself introduces no prompt.",
+    "lateFault": "Synthetic hook throws after grant and optional answer; pending display had grant, recovered committed queue/RNG unchanged and fresh publication empty. Existing generic fold retains previously published event prefix and logs engine.error; full publication rollback is not claimed.",
+    "privacy": "Public granted side, hidden hand/deck and ceased source redacted."
+  },
+  "mutationProbes": {
+    "originalSHA256": "5319c2bb48f2be67d9e785af9bf8831ebdb0823722e88993d4bea0d694644610",
+    "restored": true,
+    "probes": [
+      {
+        "mutation": "no-op",
+        "exit": 1
+      },
+      {
+        "mutation": "wrong-controller",
+        "exit": 1
+      },
+      {
+        "mutation": "wrong-order",
+        "exit": 1
+      }
+    ]
+  },
+  "sourceFreeze": {
+    "base": "16d5088be8c0371d8648b4231c1e0c59ef04190d",
+    "paths": {
+      "docs/rules.md": "c51c944068360a95c51544e80e3eb83359ea22232bc7de6e37ff433e0de4ff7f",
+      "src/battle/components/presentation-items.ts": "c38514dde10e719e3b94c111aa3ce9303e49c2f99104f09496ed2337336cc272",
+      "src/content/cards/moment-rewound-a911ef71.ts": "d36ed065592a8c47c15ae87acfdd7878502277dc172ab90b460a1763c30acb86",
+      "src/engine/effects/primitives/contracts/take-extra-turn.contracts.ts": "4bcfaa1cf07a1a8c94fc80a6bdcd93f40ff00a34b824495acf4b00cf079053f8",
+      "src/engine/effects/primitives/index.ts": "3bae70330b4fa28ada3d8ebdf0d5b1e088a628d57d7de5a30f2532fa34981c07",
+      "src/engine/effects/primitives/take-extra-turn.ts": "5319c2bb48f2be67d9e785af9bf8831ebdb0823722e88993d4bea0d694644610",
+      "src/engine/effects/registry.ts": "1095000028e5aa55c110c177354d05aa4764d453de221635607e81ad8f95a30d",
+      "src/engine/events/index.ts": "8cd808e46fc0cb57d25ab86f635ad9aeeeb71f3b04d6239460c66d982ad5744e",
+      "src/engine/events/kinds/extra-turn-granted.ts": "016712754bcca0d5962ce888c3481dd2d96edb038e54e7d499d57c71620154a7",
+      "src/engine/log.ts": "09d1663d80b58de80dc909a4404e5289712241ae72bb7428d662050a4adeffa6",
+      "src/engine/testing/prompt-lab.ts": "2ec08e3149d074cfd0b3584d92d4c8f7dd356e6955a73b0cf03188eaf03f87aa",
+      "src/runtime/battle-prompt-messages.ts": "98b3e97b2915e4dc48c13bd0523826d60db7c29c96aa7dba80fd92db238cbff0"
+    },
+    "turnSHA256": "2f7b53c7231db1a2df8c83ea0a6bed6d2ecf09820a501d721d5fbd84155fc259"
+  },
+  "initialFreezeOtherPathsUnchanged": [
+    "docs/rules.md",
+    "src/battle/components/presentation-items.ts",
+    "src/content/cards/moment-rewound-a911ef71.ts",
+    "src/engine/effects/primitives/index.ts",
+    "src/engine/effects/primitives/take-extra-turn.ts",
+    "src/engine/effects/registry.ts",
+    "src/engine/events/index.ts",
+    "src/engine/events/kinds/extra-turn-granted.ts",
+    "src/engine/log.ts",
+    "src/engine/testing/prompt-lab.ts",
+    "src/runtime/battle-prompt-messages.ts"
+  ],
+  "sourceChurn": {
+    "added": 59,
+    "deleted": 1,
+    "total": 60
+  },
+  "checkFailures": {
+    "focusedInitial": "Three fixture failures: unsupported thisTurn duration spelling and two expected stalePrompt values where post-completion result is noPendingPrompt. Corrected fixtures; primitive body unchanged.",
+    "reviewInitial": "Unused Side import caused lint/type failure. First suite owned vitest PID76767 was terminated after accidental second review launch; wrapper actual exit2, retained failed evidence.",
+    "reviewFinalAttempt": "Readonly config fixture assignment caused typecheck exit2. Finished aggregate exit2; attempted scoped process termination found no live owned test PID and sent no signal. Fixture now constructs a shallow state with explicit config.",
+    "browserInitial": "Geometry sampled before grant presentation settled; caps empty and game log exported. Corrected scenario waits for existing actionable phase control.",
+    "browserLab": "After control settling, queue consumption and extra Day were observed, but card-lab promptLabBattle config dreamwell:[] cannot emit a Dreamwell card draw. Normal battle scene with populated Dreamwell supplies acceptance evidence."
+  },
+  "independentReview": {
+    "core": true,
+    "owner": "Parent executor",
+    "sequencing": "Cold other-family CLI runs asynchronously against completed immutable commit under binding workflow Reviews."
+  },
+  "browser": [
+    {
+      "label": "initial geometry precondition",
+      "report": "extra-turn-flow-initial.result.json",
+      "error": "Error: turn control geometry is not actionable\n    at extraTurnFlow (evalmachine.<anonymous>:1578:304)\n    at async evalmachine.<anonymous>:1601:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 39683,
+        "serve": 1254,
+        "scenario": 3868,
+        "total": 44829
+      },
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow-desktop.jsonl",
+          "gameId": "gyuckx",
+          "selectedBy": "url",
+          "rows": 29,
+          "reason": null
+        }
+      ],
+      "command": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow.mjs",
+          "--bead",
+          "hv-umm2.112",
+          "--port",
+          "5178",
+          "--viewports",
+          "desktop"
+        ],
+        "pid": 85532,
+        "exit": 1,
+        "seconds": 50.002979040145874,
+        "start": "2026-10-11T20:52:11.411345+00:00",
+        "end": "2026-10-11T20:53:01.415332+00:00",
+        "hostLoad": [
+          7.82470703125,
+          9.552734375,
+          14.79736328125
+        ]
+      }
+    },
+    {
+      "label": "empty card-lab Dreamwell fixture",
+      "report": "extra-turn-flow-lab.result.json",
+      "error": "Error: extra turn omitted its Dreamwell or Draw\n    at extraTurnFlow (evalmachine.<anonymous>:1589:288)\n    at async evalmachine.<anonymous>:1603:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 49139,
+        "serve": 1255,
+        "scenario": 19010,
+        "total": 69429
+      },
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow-desktop.jsonl",
+          "gameId": "fqntf6",
+          "selectedBy": "url",
+          "rows": 40,
+          "reason": null
+        }
+      ],
+      "command": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow.mjs",
+          "--bead",
+          "hv-umm2.112",
+          "--port",
+          "5178",
+          "--viewports",
+          "desktop"
+        ],
+        "pid": 94832,
+        "exit": 1,
+        "seconds": 74.7998878955841,
+        "start": "2026-10-11T20:54:01.359162+00:00",
+        "end": "2026-10-11T20:55:16.159524+00:00",
+        "hostLoad": [
+          9.8125,
+          9.47216796875,
+          14.10986328125
+        ]
+      }
+    },
+    {
+      "label": "normal battle acceptance",
+      "report": "extra-turn-flow.result.json",
+      "error": null,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 1862,
+        "scenario": 31221,
+        "total": 33155
+      },
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow-desktop.jsonl",
+          "gameId": "uoxeqk",
+          "selectedBy": "url",
+          "rows": 57,
+          "reason": null
+        }
+      ],
+      "command": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.112/extra-turn-flow.mjs",
+          "--bead",
+          "hv-umm2.112",
+          "--port",
+          "5178",
+          "--viewports",
+          "desktop"
+        ],
+        "pid": 15030,
+        "exit": 0,
+        "seconds": 40.6550989151001,
+        "start": "2026-10-11T20:58:08.293104+00:00",
+        "end": "2026-10-11T20:58:48.948365+00:00",
+        "hostLoad": [
+          20.44287109375,
+          15.13623046875,
+          15.419921875
+        ]
+      }
+    }
+  ],
+  "browserAcceptance": {
+    "gameId": "uoxeqk",
+    "rows": 57,
+    "physicalSource": "i61",
+    "uuid": "a911ef71-799c-4240-ad13-8fabd3caeafa",
+    "queued": [
+      "player"
+    ],
+    "finalTurn": {
+      "round": 1,
+      "turnNumber": 2,
+      "active": "player",
+      "phase": "day",
+      "sideTurns": {
+        "player": 2,
+        "enemy": 0
+      },
+      "extra": true,
+      "lastNormal": "player",
+      "extraTurns": [],
+      "challengeLane": null,
+      "beginning": false
+    },
+    "geometry": {
+      "x": 1117.8125,
+      "y": 597,
+      "width": 122.6875,
+      "height": 42,
+      "hit": true,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "capture": "extra-turn-day-desktop.png",
+    "captureDimensions": [
+      1440,
+      900
+    ],
+    "reportSHA256": "9a31c6bbc9e0b9d7b8d409a3bee4e37e2f7719f7d1ccb4ba77a13a866556236b",
+    "scenarioSHA256": "d9dd6b805a8fb681a93fcc9bd822ef2397b8773511274360418a38e7b84af518",
+    "logSHA256": "1b2a949b727b9c700be30655bbe3189e210e96f0238e4fce2e8e2d660fa48248",
+    "coldVisualInspection": "Visible Day control, clear empty board, newly drawn hand and Dreamwell, no covering overlay."
+  },
+  "runtimeLedger": {
+    "recordedPIDs": [
+      {
+        "pid": 2705,
+        "alive": false
+      },
+      {
+        "pid": 15030,
+        "alive": false
+      },
+      {
+        "pid": 15044,
+        "alive": false
+      },
+      {
+        "pid": 70029,
+        "alive": false
+      },
+      {
+        "pid": 72290,
+        "alive": false
+      },
+      {
+        "pid": 74802,
+        "alive": false
+      },
+      {
+        "pid": 75453,
+        "alive": false
+      },
+      {
+        "pid": 75938,
+        "alive": false
+      },
+      {
+        "pid": 76088,
+        "alive": false
+      },
+      {
+        "pid": 76263,
+        "alive": false
+      },
+      {
+        "pid": 76678,
+        "alive": false
+      },
+      {
+        "pid": 76767,
+        "alive": false
+      },
+      {
+        "pid": 77300,
+        "alive": false
+      },
+      {
+        "pid": 78964,
+        "alive": false
+      },
+      {
+        "pid": 79765,
+        "alive": false
+      },
+      {
+        "pid": 79766,
+        "alive": false
+      },
+      {
+        "pid": 80427,
+        "alive": false
+      },
+      {
+        "pid": 80890,
+        "alive": false
+      },
+      {
+        "pid": 83998,
+        "alive": false
+      },
+      {
+        "pid": 84893,
+        "alive": false
+      },
+      {
+        "pid": 85532,
+        "alive": false
+      },
+      {
+        "pid": 90929,
+        "alive": false
+      },
+      {
+        "pid": 93575,
+        "alive": false
+      },
+      {
+        "pid": 93916,
+        "alive": false
+      },
+      {
+        "pid": 94832,
+        "alive": false
+      },
+      {
+        "pid": 97348,
+        "alive": false
+      }
+    ],
+    "port": 5178,
+    "portFree": true,
+    "MCP": "CLI runners report settled browser/provider cleanup; shared singleton remains owned by service, not this task."
+  },
+  "verificationNarrative": [
+    "# hv-umm2.112 verification",
+    "Entity `a911ef71-799c-4240-ad13-8fabd3caeafa` implements its single printed instruction with `takeExtraTurn()`. C8 and RD-hv-7x4l.1-13 govern the existing turn machinery; RD-hv-umm2.112-1 records its controller, queue and resumption contract. The runtime uses the existing queue without changing turn, interpreter, view or persisted state bodies. Runtime source churn is 59 added and 1 deleted line.",
+    "The plain 216-line synthetic contract module adds 11 cases and zero test entrypoints or jsdom files. Observable coverage includes both controllers, resolution during the opponent's turn, last-in-first-out ordering, normal resumption, all eight phases with Dreamwell and Draw, the explicit round limit, real exhaustion and once-per-turn reset, duration boundaries, privacy, Prevent, reload, partial steps, late failure, wrong actors, stale/concurrent/duplicate input and resolution-prompt cancellation. The no-op, wrong-controller and wrong-order mutations fail 9, 3 and 1 cases respectively; the primitive source is restored exactly.",
+    "Final focused takeExtraTurn contracts pass all 11 cases. Final review passes 262 files and 3,182 cases, both typechecks, lint, import-cycle analysis and the new friction-record schema check; sequential Knip passes. The earlier successful focused run included the coverage gate. Weighted fuzz passes 300 games and 152,215 steps with zero failures; the entity is included 620 times and exercised 212 times. The full suite is reserved for release-stage validation because this change adds bounded primitive/event registrations and leaves cross-cutting bodies and configuration unchanged.",
+    "Node preflight and the browser sweep cover both sides and every eligible variant: 12 pass, 8 ineligible skips, zero failures. Every sweep browser report has an empty error buffer. The UUID's SHA-256 first byte is 106, outside the D21 sample below 26. Existing plain battle-log presentation introduces no prompt, status indicator or visual component. A separate desktop scenario exercises actual queue consumption and the extra turn through ordinary controls.",
+    "A grant emitted before an enclosing optional resolution prompt is visible in that step's pending display. The committed queue remains unchanged until the step completes. If a synthetic later instruction throws, the committed queue and RNG recover while the generic fold retains the previously published prefix and reports engine.error. This follows the existing fold publication contract, exercised here rather than claiming full publication rollback.",
+    "Failed checks and provisional observations remain in the structured measurement record with their actual exits. The initial unused-import review was terminated after its failed lint/type results; the final readonly fixture failure was corrected by constructing a synthetic state with explicit configuration. No passing evidence is claimed for either failure. Final timing records include all research, parent coordination, waits and verification through the preparation immediately before commit.",
+    "The accepted normal-battle desktop workflow plays physical instance `i61` with the entity UUID through the hand, records its grant, and passes normal phase controls into extra player Day. Turn number rises from 1 to 2, player turn count rises to 2, round stays 1 and the queue empties. Publications include the extra turn start, a real Dreamwell draw and a card draw. The phase control is 122.6875 \u00d7 42 CSS pixels at (1117.8125, 597), inside 1440 \u00d7 900 with a valid centre hit. `extra-turn-day-desktop.png` is 1440 \u00d7 900 and was visually inspected. The game `uoxeqk` exported 57 persisted JSONL records, including its real play intent and exactly one `engine.extraTurn` record for `i61`, before browser close. All error buffers are empty.",
+    "The initial geometry failure and the empty-Dreamwell card-lab attempt retain their complete reports and exported game logs. The accepted run uses the existing normal battle scene, normal Battle Start and debug-panel UI intents to add the UUID and supply its play energy. The lab's empty Dreamwell is a fixture limitation rather than evidence that an actual extra turn omits its draw. All three attempts' actual scopes and timings remain in JSON; only the final passing workflow is acceptance evidence.",
+    "All recorded command PIDs and four owned server groups are absent, port 5178 is free, and CLI browser/provider cleanup settled. Every final source hash matches its frozen manifest. No runtime source changed during fuzz, preflight, sweep or workflow QA.\n"
+  ],
+  "qaLedger": {
+    "sweepRows": 20,
+    "sweepPass": 12,
+    "ineligibleSkip": 8,
+    "judgedRows": 1,
+    "judgedPass": 1,
+    "harnessFailures": "Two task-harness/fixture failures retained in measurements browser entries and ignored QA artifacts; neither is a card correctness verdict."
+  }
+}

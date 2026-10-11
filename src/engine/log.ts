@@ -86,6 +86,7 @@ export type EngineLogRecord =
       readonly stream: string;
       readonly draws: number;
     })
+  | (RecordBase & { readonly event: "engine.extraTurn"; readonly detail: EventOf<"extraTurnGranted"> })
   | (RecordBase & { readonly event: "engine.winCondition"; readonly detail: EventOf<"winConditionMet"> })
   | (RecordBase & { readonly event: "engine.battleEnded"; readonly result: BattleResult })
   | (RecordBase & {
@@ -111,6 +112,8 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
     case "loopStarted":
     case "loopEnded":
       return { event: "engine.loop", version, detail: event };
+    case "extraTurnGranted":
+      return { event: "engine.extraTurn", version, detail: event };
     case "winConditionMet":
       return { event: "engine.winCondition", version, detail: event };
     case "battleEnded":
