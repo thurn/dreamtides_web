@@ -5,11 +5,13 @@
 // `triggerBeads` or more beads of one phase. Each fired trigger needs a
 // disposition line in the ledger: an improvement bead or a reason. The report
 // also counts each phase's friction files that no recorded retrospective
-// covers, so the every-10th-bead cadence is visible.
+// covers, so each phase's retrospective cadence is visible.
 //
 // Inputs, all under the evidence directory (docs/plan/evidence by default):
 // - friction/<bead-id>.json and friction.jsonl: friction records;
-// - friction-tags.json: { triggerBeads, retrospectiveCadence, aliases };
+// - friction-tags.json: { triggerBeads, retrospectiveCadence,
+//   phaseRetrospectiveCadence?, aliases }, where phaseRetrospectiveCadence
+//   maps a phase to the cadence that replaces retrospectiveCadence for it;
 // - introspection.jsonl: dispositions {tag, phase, bead | reason} and
 //   retrospectives {retrospective: <date>, phase, bead?, covers: [bead ids]}.
 //
@@ -28,6 +30,7 @@ const DEFAULT_EVIDENCE_DIR = join(ROOT, "docs/plan/evidence");
  * @typedef {{
  *   triggerBeads: number,
  *   retrospectiveCadence: number,
+ *   phaseRetrospectiveCadence: Record<string, number>,
  *   aliases: Record<string, string>,
  * }} TagConfig
  * @typedef {{ tag: string, phase: string, bead?: string, reason?: string }} Disposition
@@ -165,10 +168,24 @@ export function readTagConfig(evidenceDir) {
       `${path}: triggerBeads and retrospectiveCadence must be integers`,
     );
   }
+  const phaseCadence = asObject(
+    config.phaseRetrospectiveCadence ?? {},
+    `${path} phaseRetrospectiveCadence`,
+  );
   const aliases = asObject(config.aliases ?? {}, `${path} aliases`);
   return {
     triggerBeads: /** @type {number} */ (triggerBeads),
     retrospectiveCadence: /** @type {number} */ (retrospectiveCadence),
+    phaseRetrospectiveCadence: Object.fromEntries(
+      Object.entries(phaseCadence).map(([phase, every]) => {
+        if (!Number.isInteger(every)) {
+          throw new Error(
+            `${path}: phaseRetrospectiveCadence.${phase} must be an integer`,
+          );
+        }
+        return [phase, /** @type {number} */ (every)];
+      }),
+    ),
     aliases: Object.fromEntries(
       Object.entries(aliases).map(([alias, tag]) => [
         alias,
@@ -289,7 +306,7 @@ export function evaluateTriggers({
       frictionFiles: beads.size,
       uncovered,
       lastRetrospective: ofPhase.at(-1) ?? null,
-      due: uncovered.length >= config.retrospectiveCadence,
+      due: uncovered.length >= cadenceOf(config, phase),
     };
   });
 
@@ -297,6 +314,17 @@ export function evaluateTriggers({
     ? 1
     : 0;
   return { triggers, cadence, exitCode };
+}
+
+/**
+ * The number of uncovered friction files at which `phase` is due a
+ * retrospective.
+ *
+ * @param {TagConfig} config
+ * @param {string} phase
+ */
+function cadenceOf(config, phase) {
+  return config.phaseRetrospectiveCadence[phase] ?? config.retrospectiveCadence;
 }
 
 /**
@@ -319,8 +347,11 @@ export function formatReport(report, config) {
       `  phase ${phase}  ${tag} (${beads.length} beads) -> ${outcome}`,
     );
   }
+  const overrides = Object.entries(config.phaseRetrospectiveCadence)
+    .map(([phase, every]) => `; phase ${phase} every ${every}`)
+    .join("");
   lines.push(
-    `Retrospective cadence (every ${config.retrospectiveCadence} beads of a phase):`,
+    `Retrospective cadence (every ${config.retrospectiveCadence} beads of a phase${overrides}):`,
   );
   for (const {
     phase,

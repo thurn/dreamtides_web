@@ -1,6 +1,9 @@
 {
   "triggerBeads": 3,
   "retrospectiveCadence": 10,
+  "phaseRetrospectiveCadence": {
+    "5": 25
+  },
   "aliases": {
     "bead-area-excludes-state-types": "bead-areas-incomplete",
     "bead-areas-omit-engine-plumbing": "bead-areas-incomplete",

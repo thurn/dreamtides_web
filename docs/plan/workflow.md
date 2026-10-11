@@ -869,10 +869,12 @@ line when it fixes the cause, or a `reason` line when it closes without a fix:
 
 ### Retrospectives
 
-Run a retrospective **after every 10th closed bead within a phase** and as part
+Run a retrospective **after every 10th closed bead within a phase** (every
+25th in Phase 5, per [§ 5.2](phase-5-content.md#52-card-beads)) and as part
 of every **phase gate**. `npm run friction:triggers` reports, per phase, the
 friction files that no recorded retrospective covers and marks a phase whose
-count reaches `retrospectiveCadence` (10) as due. The session that sees a
+count reaches its cadence as due: `retrospectiveCadence` (10) in
+`friction-tags.json`, or the phase's entry in `phaseRetrospectiveCadence`. The session that sees a
 phase due files a `retrospective` [shared-duty bead](#shared-duty-beads)
 keyed `retrospective=phase-<n>/since-<previous>`, where `<previous>` is the
 last recorded retrospective's bead (its date when it names none, or `start`

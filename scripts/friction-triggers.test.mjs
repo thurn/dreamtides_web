@@ -43,6 +43,7 @@ function frictionFile(bead, phase, tags) {
  *   legacy?: unknown[],
  *   ledger?: unknown[],
  *   cadence?: number,
+ *   phaseCadence?: Record<string, number>,
  * }} evidence
  */
 function evidenceFixture({
@@ -50,6 +51,7 @@ function evidenceFixture({
   legacy = [],
   ledger = [],
   cadence = 3,
+  phaseCadence = {},
 }) {
   const directory = mkdtempSync(join(tmpdir(), "friction-triggers-"));
   temporaryDirectories.push(directory);
@@ -70,6 +72,7 @@ function evidenceFixture({
     JSON.stringify({
       triggerBeads: 3,
       retrospectiveCadence: cadence,
+      phaseRetrospectiveCadence: phaseCadence,
       aliases: { "slow-hook": "hook-misfire", "hook-refusal": "hook-misfire" },
     }),
   );
@@ -176,6 +179,23 @@ describe("friction triggers", () => {
     expect(due.cadence.map(({ phase, due: isDue }) => [phase, isDue])).toEqual([
       ["2", true],
       ["3", false],
+    ]);
+  });
+
+  it("applies a phase's own retrospective cadence in place of the default", () => {
+    /** @param {Record<string, number>} phaseCadence */
+    const report = (phaseCadence) =>
+      runFrictionTriggers(
+        evidenceFixture({ ...ALIASED_TRIGGER, cadence: 2, phaseCadence }),
+      ).report.cadence.map(({ phase, due }) => [phase, due]);
+
+    expect(report({ 2: 5 })).toEqual([
+      ["2", false],
+      ["3", false],
+    ]);
+    expect(report({ 3: 1 })).toEqual([
+      ["2", true],
+      ["3", true],
     ]);
   });
 
