@@ -949,12 +949,13 @@ If it is unavailable, run `playwright-mcp-service start` and retry. **Never
 launch browsers directly.** The project details (scenes, URL parameters,
 assert-before-acting) are in the README's Browser QA section.
 
-A session's subagents may share its MCP connection, and with it one browser
-context. Each session runs one browser-QA subagent at a time (D17), and
-separate sessions get isolated contexts, so interactive MCP QA never shares a
-context. Script-driven tools such as the card sweep and
-`scripts/screenshot-runtime.mjs` open their own MCP client, on their own
-port.
+Each session runs one browser-QA subagent at a time (D17). Scenario runs and
+card sweeps open their own MCP clients against the shared Playwright provider.
+Their automatic repository-wide browser lease coordinates CLI ownership
+across worktrees through browser and owned-server cleanup. Each run serves its
+worktree on its own port from 5174. Coordinate interactive MCP use with active
+provider owners. See [README § Browser QA](../../README.md#browser-qa) for the
+lease, ownership record, and confirmed cleanup and reconciliation contracts.
 
 ### Scenario runner
 
