@@ -240,6 +240,12 @@ const minimalResolver = inventoryCapabilityResolver(minimalSources);
 
 const intendedResolver = inventoryCapabilityResolver(completeAuthoringFixtures);
 
+// Intended API target contracts are independent of lifecycle declarations.
+const intendedBinding = (form: InventoryCapabilityForm): InventoryCapabilityForm => {
+  const { pending: _pending, ...binding } = form;
+  return binding;
+};
+
 describe("inventory descriptor contracts", () => {
   it("covers every actual descriptor with an independent intended authoring fixture", () => {
     expect(inventoryDslCapabilities.map(entry => entry.name).sort()).toEqual([...expectedCapabilityNames].sort());
@@ -248,14 +254,14 @@ describe("inventory descriptor contracts", () => {
   });
 
   it.each(inventoryDslCapabilities)("resolves $name on its intended synthetic module/export/form", ({ name, forms }) => {
-    const scopedForms = forms.map(form => ({ ...form, module: scopedModule(name, form.module) }));
+    const scopedForms = forms.map(form => ({ ...intendedBinding(form), module: scopedModule(name, form.module) }));
     for (const form of scopedForms) expect(minimalResolver.validate([form])).toBe(true);
     expect(minimalResolver.validate(scopedForms)).toBe(true);
   });
 
   it("keeps every binding valid when representation discriminator fields are renamed", () => {
     const resolver = inventoryCapabilityResolver(new Map([...completeAuthoringFixtures].map(([module, source]) => [module, source.replaceAll("tag:", "representation:")] )));
-    expect(inventoryDslCapabilities.map(entry => resolver.validate(entry.forms))).toEqual(expectedCapabilityNames.map(() => true));
+    expect(inventoryDslCapabilities.map(entry => resolver.validate(entry.forms.map(intendedBinding)))).toEqual(expectedCapabilityNames.map(() => true));
   });
 
   it("distinguishes own-card subtype overrides from selector/conditional-figment remaps", () => {
@@ -298,5 +304,62 @@ describe("inventory descriptor contracts", () => {
       { module: "src/engine/dsl/types.ts", symbol: "FunctionalZone", kind: "form" },
       { module: "src/engine/dsl/types.ts", symbol: "OldZone", kind: "form" },
     ])).toThrow();
+  });
+});
+
+
+const pendingBindings = inventoryDslCapabilities.flatMap(entry => entry.forms
+  .filter(form => form.pending !== undefined)
+  .map(form => ({ name: entry.name, symbol: form.symbol, form })));
+
+describe("pending inventory lifecycle", () => {
+  it.each(pendingBindings)("requires retirement for fulfilled $name ($symbol)", ({ name, form }) => {
+    const scoped = { ...form, module: scopedModule(name, form.module) };
+    expect(() => minimalResolver.validate([scoped])).toThrow();
+  });
+});
+
+
+const lifecyclePrefix = "inventory-lifecycle";
+const lifecycleSources = new Map([
+  [`${lifecyclePrefix}/missing.ts`, 'export type Action = { kind: "other" }; export interface Options {} export type Speed = "standard";'],
+  [`${lifecyclePrefix}/present.ts`, 'export function operation() {} export type Action = { kind: "feature" }; export interface Options { feature?: number } export type Speed = "standard" | "feature";'],
+  [`${lifecyclePrefix}/renamed.ts`, 'export function renamed() {} export type Action = { kind: "renamed" }; export interface Options { renamed?: number } export type Speed = "standard" | "renamed";'],
+  [`${lifecyclePrefix}/removed.ts`, 'export type Action = { kind: "other" }; export interface Options {} export type Speed = "standard";'],
+]);
+const lifecycleResolver = inventoryCapabilityResolver(lifecycleSources);
+const lifecycleForms: readonly InventoryCapabilityForm[] = [
+  { module: `${lifecyclePrefix}/present.ts`, symbol: "operation", kind: "builder", pending: "export" },
+  { module: `${lifecyclePrefix}/present.ts`, symbol: "Action", kind: "form", member: "feature", pending: "member" },
+  { module: `${lifecyclePrefix}/present.ts`, symbol: "Options", kind: "form", option: "feature", pending: "option" },
+  { module: `${lifecyclePrefix}/present.ts`, symbol: "Speed", kind: "form", literal: "feature", pending: "literal" },
+];
+
+describe("declared capability lifecycle", () => {
+  it.each(lifecycleForms)("requires explicit retirement of the $pending declaration", (marked) => {
+    const missing = { ...marked, module: `${lifecyclePrefix}/missing.ts` };
+    expect(lifecycleResolver.validate([missing])).toBe(false);
+    expect(() => lifecycleResolver.validate([marked])).toThrow();
+    expect(() => lifecycleResolver.validate([marked, { module: `${lifecyclePrefix}/present.ts`, symbol: "Speed", kind: "form", literal: "standard" }])).toThrow();
+    const retired = intendedBinding(marked);
+    expect(lifecycleResolver.validate([retired])).toBe(true);
+    for (const state of ["renamed", "removed"]) {
+      expect(() => lifecycleResolver.validate([{ ...retired, module: `${lifecyclePrefix}/${state}.ts` }])).toThrow();
+    }
+  });
+
+  it("diagnoses a retired history alternative even while its sibling binding remains available", () => {
+    const history = inventoryDslCapabilities.find(entry => entry.name === "turnHistory");
+    expect(history).toBeDefined();
+    const retired = history?.forms.map(intendedBinding) ?? [];
+    expect(intendedResolver.validate(retired)).toBe(true);
+    const renamed = new Map(completeAuthoringFixtures);
+    const module = "src/engine/dsl/types.ts";
+    renamed.set(module, (renamed.get(module) ?? "").replace('tag: "playedThisTurn"', 'tag: "playedThisTrun"'));
+    const resolver = inventoryCapabilityResolver(renamed);
+    const workingSibling = retired.find(form => form.symbol === "Condition");
+    expect(workingSibling).toBeDefined();
+    expect(resolver.validate(workingSibling === undefined ? [] : [workingSibling])).toBe(true);
+    expect(() => resolver.validate(retired)).toThrow();
   });
 });

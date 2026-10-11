@@ -14,7 +14,7 @@
     "total": 1209,
     "duplicateIds": 0,
     "pendingByKind": {
-      "card": 390,
+      "card": 382,
       "dreamwell": 33,
       "figment": 0,
       "avatar": 32,
@@ -24,11 +24,11 @@
       "apollyonIncarnation": 0
     },
     "cardsWithAmplifiedText": 244,
-    "beads": 223,
-    "beadsBySection": {"5.2":138,"5.3":8,"5.4":9,"5.5":31,"5.6":16,"5.7a":3,"5.7":1,"5.7b":10,"5.8":7},
-    "beadsByKind": {"primitive":38,"composition":162,"task":23},
+    "beads": 222,
+    "beadsBySection": {"5.2":137,"5.3":8,"5.4":9,"5.5":31,"5.6":16,"5.7a":3,"5.7":1,"5.7b":10,"5.8":7},
+    "beadsByKind": {"primitive":37,"composition":162,"task":23},
     "largestCompositionBead": 6,
-    "newPrimitives": 38,
+    "newPrimitives": 37,
     "notes": [
       "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md § Serialization edges) are added at filing, from sharedAreas and entity modules.",
       "Primitive and prompt existence is probed against src/engine when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
@@ -251,7 +251,7 @@
         "fallout: Trigger"
       ],
       "falloutHints": ["PromptRole","Trigger"],
-      "knownDecisions": []
+      "knownDecisions": [{"id":"2a6af0b8-11da-4d4b-8217-3bd7ed399dfa","rulesDecisions":["RD-hv-umm2.392-1"]}]
     },
     {
       "key": "prim-when-erode-trigger",
@@ -775,50 +775,8 @@
       "knownDecisions": []
     },
     {
-      "key": "prim-play-restriction",
-      "order": 17,
-      "section": "5.2",
-      "kind": "primitive",
-      "title": "5.2 primitive playRestriction (cards: remaining unique cards)",
-      "entities": [
-        {"id":"9629a58a-9f30-40f0-9199-835ea2dddc76","kind":"card","status":"pending"},
-        {"id":"d09a6760-6630-4964-9c77-decc641df713","kind":"card","status":"pending"},
-        {"id":"70716dd8-1133-4966-b01b-757ea627874c","kind":"card","status":"pending"}
-      ],
-      "weight": 4.7,
-      "introduces": [{"name":"playRestriction","kind":"primitive","module":"src/engine/effects/primitives/play-restriction.ts"}],
-      "newPromptKinds": [],
-      "dependsOn": ["pilot-01","pilot-02","pilot-03"],
-      "serializedAfter": [],
-      "externalDependsOn": [],
-      "pilot": false,
-      "coreReview": true,
-      "scenarios": "src/content/specs/prim-play-restriction.scenarios.ts",
-      "areas": [
-        "src/content/cards/grim-pursuer-70716dd8.ts",
-        "src/content/cards/urban-desperado-d09a6760.ts",
-        "src/content/cards/vault-infiltrator-9629a58a.ts",
-        "src/engine/effects/primitives/play-restriction.ts",
-        "src/engine/effects/primitives/index.ts",
-        "src/engine/effects/primitives/contracts/play-restriction.contracts.ts",
-        "engine hubs",
-        "registration hubs",
-        "src/content/specs/prim-play-restriction.scenarios.ts",
-        "src/content/specs/index.ts"
-      ],
-      "sharedAreas": [
-        "src/engine/effects/primitives/play-restriction.ts",
-        "src/engine/effects/primitives/index.ts",
-        "src/engine/effects/primitives/contracts/play-restriction.contracts.ts",
-        "engine hubs",
-        "registration hubs"
-      ],
-      "falloutHints": [],
-      "knownDecisions": [{"id":"70716dd8-1133-4966-b01b-757ea627874c","rulesDecisions":["RD-hv-7x4l.6-4"]}]
-    },
-    {
       "key": "prim-gain-abilities",
-      "order": 18,
+      "order": 17,
       "section": "5.2",
       "kind": "primitive",
       "title": "5.2 primitive gainAbilities (cards: remaining unique cards)",
@@ -856,7 +814,7 @@
     },
     {
       "key": "prim-lose-all-abilities",
-      "order": 19,
+      "order": 18,
       "section": "5.2",
       "kind": "primitive",
       "title": "5.2 primitive loseAllAbilities (cards: remaining unique cards)",
@@ -896,7 +854,7 @@
     },
     {
       "key": "cards-01",
-      "order": 20,
+      "order": 19,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (1/118)",
@@ -936,7 +894,7 @@
     },
     {
       "key": "cards-02",
-      "order": 21,
+      "order": 20,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (2/118)",
@@ -980,7 +938,7 @@
     },
     {
       "key": "cards-03",
-      "order": 22,
+      "order": 21,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (3/118)",
@@ -1013,7 +971,7 @@
     },
     {
       "key": "cards-04",
-      "order": 23,
+      "order": 22,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (4/118)",
@@ -1050,7 +1008,7 @@
     },
     {
       "key": "cards-05",
-      "order": 24,
+      "order": 23,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (5/118)",
@@ -1083,7 +1041,7 @@
     },
     {
       "key": "cards-06",
-      "order": 25,
+      "order": 24,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (6/118)",
@@ -1136,7 +1094,7 @@
     },
     {
       "key": "cards-07",
-      "order": 26,
+      "order": 25,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (7/118)",
@@ -1176,7 +1134,7 @@
     },
     {
       "key": "cards-08",
-      "order": 27,
+      "order": 26,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies (8/118)",
@@ -1214,7 +1172,7 @@
     },
     {
       "key": "cards-09",
-      "order": 28,
+      "order": 27,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: vanilla and keyword-only bodies / cards: card flow (9/118)",
@@ -1261,7 +1219,7 @@
     },
     {
       "key": "cards-10",
-      "order": 29,
+      "order": 28,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (10/118)",
@@ -1297,7 +1255,7 @@
     },
     {
       "key": "cards-11",
-      "order": 30,
+      "order": 29,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (11/118)",
@@ -1346,7 +1304,7 @@
     },
     {
       "key": "cards-12",
-      "order": 31,
+      "order": 30,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (12/118)",
@@ -1355,7 +1313,7 @@
         {"id":"2ce84a16-1295-4738-9e2d-1f57590b2269","kind":"card","status":"authored"},
         {"id":"2d180bd7-4cc7-49fb-b76c-0990656cedc0","kind":"card","status":"pending"},
         {"id":"16d2e85d-f940-43dd-9867-784b3a5ec5d7","kind":"card","status":"pending"},
-        {"id":"f82c7407-b642-4ab1-8878-171f9121b3eb","kind":"card","status":"pending"}
+        {"id":"f82c7407-b642-4ab1-8878-171f9121b3eb","kind":"card","status":"authored"}
       ],
       "weight": 8.3,
       "introduces": [],
@@ -1381,14 +1339,14 @@
     },
     {
       "key": "cards-13",
-      "order": 32,
+      "order": 31,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (13/118)",
       "entities": [
-        {"id":"e4ab6a18-c3b2-4149-a446-c7c1e8d66714","kind":"card","status":"pending"},
+        {"id":"e4ab6a18-c3b2-4149-a446-c7c1e8d66714","kind":"card","status":"authored"},
         {"id":"28f8d95a-be99-4b4c-b9ef-92a4b40fffe7","kind":"card","status":"authored"},
-        {"id":"6fa9c440-3912-4b1e-868c-840ae772fe1c","kind":"card","status":"pending"},
+        {"id":"6fa9c440-3912-4b1e-868c-840ae772fe1c","kind":"card","status":"authored"},
         {"id":"94818862-2875-4ee1-8f72-7c0cdc624202","kind":"card","status":"authored"}
       ],
       "weight": 7.8,
@@ -1421,13 +1379,13 @@
     },
     {
       "key": "cards-14",
-      "order": 33,
+      "order": 32,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (14/118)",
       "entities": [
-        {"id":"e26e0ac8-d6c9-4b0c-8672-4f73651f2586","kind":"card","status":"pending"},
-        {"id":"d26d31c0-7bd2-4d58-bed9-444e032a1087","kind":"card","status":"pending"},
+        {"id":"e26e0ac8-d6c9-4b0c-8672-4f73651f2586","kind":"card","status":"authored"},
+        {"id":"d26d31c0-7bd2-4d58-bed9-444e032a1087","kind":"card","status":"authored"},
         {"id":"20fd609a-7529-4582-a362-b8151b0ae011","kind":"card","status":"authored"},
         {"id":"331e2846-85d1-4667-8c64-dc6c21a418ed","kind":"card","status":"authored"},
         {"id":"68978d92-aa8b-4873-bb0b-6e52f12b0849","kind":"card","status":"pending"},
@@ -1465,7 +1423,7 @@
     },
     {
       "key": "cards-15",
-      "order": 34,
+      "order": 33,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (15/118)",
@@ -1503,7 +1461,7 @@
     },
     {
       "key": "cards-16",
-      "order": 35,
+      "order": 34,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (16/118)",
@@ -1538,7 +1496,7 @@
     },
     {
       "key": "cards-17",
-      "order": 36,
+      "order": 35,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (17/118)",
@@ -1578,7 +1536,7 @@
     },
     {
       "key": "cards-18",
-      "order": 37,
+      "order": 36,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (18/118)",
@@ -1615,7 +1573,7 @@
     },
     {
       "key": "cards-19",
-      "order": 38,
+      "order": 37,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (19/118)",
@@ -1658,7 +1616,7 @@
     },
     {
       "key": "cards-20",
-      "order": 39,
+      "order": 38,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (20/118)",
@@ -1710,7 +1668,7 @@
     },
     {
       "key": "cards-21",
-      "order": 40,
+      "order": 39,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (21/118)",
@@ -1748,7 +1706,7 @@
     },
     {
       "key": "cards-22",
-      "order": 41,
+      "order": 40,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: card flow (22/118)",
@@ -1789,7 +1747,7 @@
     },
     {
       "key": "cards-23",
-      "order": 42,
+      "order": 41,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (23/118)",
@@ -1825,7 +1783,7 @@
     },
     {
       "key": "cards-24",
-      "order": 43,
+      "order": 42,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (24/118)",
@@ -1860,7 +1818,7 @@
     },
     {
       "key": "cards-25",
-      "order": 44,
+      "order": 43,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (25/118)",
@@ -1896,7 +1854,7 @@
     },
     {
       "key": "cards-26",
-      "order": 45,
+      "order": 44,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (26/118)",
@@ -1931,7 +1889,7 @@
     },
     {
       "key": "cards-27",
-      "order": 46,
+      "order": 45,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (27/118)",
@@ -1966,7 +1924,7 @@
     },
     {
       "key": "cards-28",
-      "order": 47,
+      "order": 46,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (28/118)",
@@ -1999,7 +1957,7 @@
     },
     {
       "key": "cards-29",
-      "order": 48,
+      "order": 47,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (29/118)",
@@ -2034,7 +1992,7 @@
     },
     {
       "key": "cards-30",
-      "order": 49,
+      "order": 48,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (30/118)",
@@ -2069,7 +2027,7 @@
     },
     {
       "key": "cards-31",
-      "order": 50,
+      "order": 49,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (31/118)",
@@ -2104,7 +2062,7 @@
     },
     {
       "key": "cards-32",
-      "order": 51,
+      "order": 50,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points (32/118)",
@@ -2146,7 +2104,7 @@
     },
     {
       "key": "cards-33",
-      "order": 52,
+      "order": 51,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: energy and points / cards: removal (33/118)",
@@ -2187,7 +2145,7 @@
     },
     {
       "key": "cards-34",
-      "order": 53,
+      "order": 52,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (34/118)",
@@ -2218,7 +2176,7 @@
     },
     {
       "key": "cards-35",
-      "order": 54,
+      "order": 53,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (35/118)",
@@ -2255,7 +2213,7 @@
     },
     {
       "key": "cards-36",
-      "order": 55,
+      "order": 54,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (36/118)",
@@ -2288,7 +2246,7 @@
     },
     {
       "key": "cards-37",
-      "order": 56,
+      "order": 55,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (37/118)",
@@ -2326,7 +2284,7 @@
     },
     {
       "key": "cards-38",
-      "order": 57,
+      "order": 56,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (38/118)",
@@ -2363,7 +2321,7 @@
     },
     {
       "key": "cards-39",
-      "order": 58,
+      "order": 57,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (39/118)",
@@ -2402,7 +2360,7 @@
     },
     {
       "key": "cards-40",
-      "order": 59,
+      "order": 58,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (40/118)",
@@ -2437,7 +2395,7 @@
     },
     {
       "key": "cards-41",
-      "order": 60,
+      "order": 59,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (41/118)",
@@ -2475,7 +2433,7 @@
     },
     {
       "key": "cards-42",
-      "order": 61,
+      "order": 60,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal (42/118)",
@@ -2513,7 +2471,7 @@
     },
     {
       "key": "cards-43",
-      "order": 62,
+      "order": 61,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: removal / cards: materialize and recursion (43/118)",
@@ -2552,7 +2510,7 @@
     },
     {
       "key": "cards-44",
-      "order": 63,
+      "order": 62,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (44/118)",
@@ -2588,7 +2546,7 @@
     },
     {
       "key": "cards-45",
-      "order": 64,
+      "order": 63,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (45/118)",
@@ -2619,7 +2577,7 @@
     },
     {
       "key": "cards-46",
-      "order": 65,
+      "order": 64,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (46/118)",
@@ -2653,7 +2611,7 @@
     },
     {
       "key": "cards-47",
-      "order": 66,
+      "order": 65,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (47/118)",
@@ -2684,7 +2642,7 @@
     },
     {
       "key": "cards-48",
-      "order": 67,
+      "order": 66,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (48/118)",
@@ -2722,7 +2680,7 @@
     },
     {
       "key": "cards-49",
-      "order": 68,
+      "order": 67,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (49/118)",
@@ -2753,7 +2711,7 @@
     },
     {
       "key": "cards-50",
-      "order": 69,
+      "order": 68,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (50/118)",
@@ -2784,7 +2742,7 @@
     },
     {
       "key": "cards-51",
-      "order": 70,
+      "order": 69,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (51/118)",
@@ -2815,7 +2773,7 @@
     },
     {
       "key": "cards-52",
-      "order": 71,
+      "order": 70,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (52/118)",
@@ -2859,7 +2817,7 @@
     },
     {
       "key": "cards-53",
-      "order": 72,
+      "order": 71,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (53/118)",
@@ -2898,7 +2856,7 @@
     },
     {
       "key": "cards-54",
-      "order": 73,
+      "order": 72,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (54/118)",
@@ -2934,7 +2892,7 @@
     },
     {
       "key": "cards-55",
-      "order": 74,
+      "order": 73,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (55/118)",
@@ -2973,7 +2931,7 @@
     },
     {
       "key": "cards-56",
-      "order": 75,
+      "order": 74,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (56/118)",
@@ -3011,7 +2969,7 @@
     },
     {
       "key": "cards-57",
-      "order": 76,
+      "order": 75,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (57/118)",
@@ -3047,7 +3005,7 @@
     },
     {
       "key": "cards-58",
-      "order": 77,
+      "order": 76,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (58/118)",
@@ -3085,7 +3043,7 @@
     },
     {
       "key": "cards-59",
-      "order": 78,
+      "order": 77,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (59/118)",
@@ -3122,7 +3080,7 @@
     },
     {
       "key": "cards-60",
-      "order": 79,
+      "order": 78,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: materialize and recursion (60/118)",
@@ -3161,7 +3119,7 @@
     },
     {
       "key": "cards-61",
-      "order": 80,
+      "order": 79,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (61/118)",
@@ -3195,7 +3153,7 @@
     },
     {
       "key": "cards-62",
-      "order": 81,
+      "order": 80,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (62/118)",
@@ -3226,7 +3184,7 @@
     },
     {
       "key": "cards-63",
-      "order": 82,
+      "order": 81,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (63/118)",
@@ -3257,7 +3215,7 @@
     },
     {
       "key": "cards-64",
-      "order": 83,
+      "order": 82,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (64/118)",
@@ -3298,7 +3256,7 @@
     },
     {
       "key": "cards-65",
-      "order": 84,
+      "order": 83,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (65/118)",
@@ -3329,7 +3287,7 @@
     },
     {
       "key": "cards-66",
-      "order": 85,
+      "order": 84,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (66/118)",
@@ -3365,7 +3323,7 @@
     },
     {
       "key": "cards-67",
-      "order": 86,
+      "order": 85,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (67/118)",
@@ -3402,7 +3360,7 @@
     },
     {
       "key": "cards-68",
-      "order": 87,
+      "order": 86,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (68/118)",
@@ -3435,7 +3393,7 @@
     },
     {
       "key": "cards-69",
-      "order": 88,
+      "order": 87,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies (69/118)",
@@ -3468,7 +3426,7 @@
     },
     {
       "key": "cards-70",
-      "order": 89,
+      "order": 88,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: figments and Legionnaire synergies / cards: spark, Support, anthems, and base spark (70/118)",
@@ -3499,7 +3457,7 @@
     },
     {
       "key": "cards-71",
-      "order": 90,
+      "order": 89,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (71/118)",
@@ -3539,7 +3497,7 @@
     },
     {
       "key": "cards-72",
-      "order": 91,
+      "order": 90,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (72/118)",
@@ -3572,7 +3530,7 @@
     },
     {
       "key": "cards-73",
-      "order": 92,
+      "order": 91,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (73/118)",
@@ -3606,7 +3564,7 @@
     },
     {
       "key": "cards-74",
-      "order": 93,
+      "order": 92,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (74/118)",
@@ -3637,7 +3595,7 @@
     },
     {
       "key": "cards-75",
-      "order": 94,
+      "order": 93,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (75/118)",
@@ -3673,7 +3631,7 @@
     },
     {
       "key": "cards-76",
-      "order": 95,
+      "order": 94,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (76/118)",
@@ -3706,7 +3664,7 @@
     },
     {
       "key": "cards-77",
-      "order": 96,
+      "order": 95,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (77/118)",
@@ -3743,7 +3701,7 @@
     },
     {
       "key": "cards-78",
-      "order": 97,
+      "order": 96,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (78/118)",
@@ -3782,7 +3740,7 @@
     },
     {
       "key": "cards-79",
-      "order": 98,
+      "order": 97,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (79/118)",
@@ -3818,7 +3776,7 @@
     },
     {
       "key": "cards-80",
-      "order": 99,
+      "order": 98,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (80/118)",
@@ -3849,7 +3807,7 @@
     },
     {
       "key": "cards-81",
-      "order": 100,
+      "order": 99,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (81/118)",
@@ -3883,7 +3841,7 @@
     },
     {
       "key": "cards-82",
-      "order": 101,
+      "order": 100,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (82/118)",
@@ -3917,7 +3875,7 @@
     },
     {
       "key": "cards-83",
-      "order": 102,
+      "order": 101,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (83/118)",
@@ -3953,7 +3911,7 @@
     },
     {
       "key": "cards-84",
-      "order": 103,
+      "order": 102,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (84/118)",
@@ -3989,7 +3947,7 @@
     },
     {
       "key": "cards-85",
-      "order": 104,
+      "order": 103,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (85/118)",
@@ -4025,7 +3983,7 @@
     },
     {
       "key": "cards-86",
-      "order": 105,
+      "order": 104,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: spark, Support, anthems, and base spark (86/118)",
@@ -4062,7 +4020,7 @@
     },
     {
       "key": "cards-87",
-      "order": 106,
+      "order": 105,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: counters (⧗) (87/118)",
@@ -4093,7 +4051,7 @@
     },
     {
       "key": "cards-88",
-      "order": 107,
+      "order": 106,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: counters (⧗) (88/118)",
@@ -4124,7 +4082,7 @@
     },
     {
       "key": "cards-89",
-      "order": 108,
+      "order": 107,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: counters (⧗) (89/118)",
@@ -4155,7 +4113,7 @@
     },
     {
       "key": "cards-90",
-      "order": 109,
+      "order": 108,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: counters (⧗) (90/118)",
@@ -4186,7 +4144,7 @@
     },
     {
       "key": "cards-91",
-      "order": 110,
+      "order": 109,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: counters (⧗) (91/118)",
@@ -4219,7 +4177,7 @@
     },
     {
       "key": "cards-92",
-      "order": 111,
+      "order": 110,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: movement and position (92/118)",
@@ -4253,7 +4211,7 @@
     },
     {
       "key": "cards-93",
-      "order": 112,
+      "order": 111,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: movement and position / cards: Prevent and other Interrupts (93/118)",
@@ -4298,7 +4256,7 @@
     },
     {
       "key": "cards-94",
-      "order": 113,
+      "order": 112,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: Prevent and other Interrupts (94/118)",
@@ -4337,7 +4295,7 @@
     },
     {
       "key": "cards-95",
-      "order": 114,
+      "order": 113,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: Prevent and other Interrupts / cards: copies (D15) (95/118)",
@@ -4376,7 +4334,7 @@
     },
     {
       "key": "cards-96",
-      "order": 115,
+      "order": 114,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: copies (D15) (96/118)",
@@ -4413,7 +4371,7 @@
     },
     {
       "key": "cards-97",
-      "order": 116,
+      "order": 115,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: gain control / cards: cost modifiers and nth-in-turn (97/118)",
@@ -4449,7 +4407,7 @@
     },
     {
       "key": "cards-98",
-      "order": 117,
+      "order": 116,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: cost modifiers and nth-in-turn (98/118)",
@@ -4496,7 +4454,7 @@
     },
     {
       "key": "cards-99",
-      "order": 118,
+      "order": 117,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: cost modifiers and nth-in-turn (99/118)",
@@ -4529,7 +4487,7 @@
     },
     {
       "key": "cards-100",
-      "order": 119,
+      "order": 118,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: cost modifiers and nth-in-turn (100/118)",
@@ -4562,7 +4520,7 @@
     },
     {
       "key": "cards-101",
-      "order": 120,
+      "order": 119,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: cost modifiers and nth-in-turn (101/118)",
@@ -4595,7 +4553,7 @@
     },
     {
       "key": "cards-102",
-      "order": 121,
+      "order": 120,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: cost modifiers and nth-in-turn (102/118)",
@@ -4628,7 +4586,7 @@
     },
     {
       "key": "cards-103",
-      "order": 122,
+      "order": 121,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (103/118)",
@@ -4661,7 +4619,7 @@
     },
     {
       "key": "cards-104",
-      "order": 123,
+      "order": 122,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (104/118)",
@@ -4694,7 +4652,7 @@
     },
     {
       "key": "cards-105",
-      "order": 124,
+      "order": 123,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (105/118)",
@@ -4735,7 +4693,7 @@
     },
     {
       "key": "cards-106",
-      "order": 125,
+      "order": 124,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (106/118)",
@@ -4766,7 +4724,7 @@
     },
     {
       "key": "cards-107",
-      "order": 126,
+      "order": 125,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (107/118)",
@@ -4797,7 +4755,7 @@
     },
     {
       "key": "cards-108",
-      "order": 127,
+      "order": 126,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (108/118)",
@@ -4828,7 +4786,7 @@
     },
     {
       "key": "cards-109",
-      "order": 128,
+      "order": 127,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (109/118)",
@@ -4859,7 +4817,7 @@
     },
     {
       "key": "cards-110",
-      "order": 129,
+      "order": 128,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (110/118)",
@@ -4892,7 +4850,7 @@
     },
     {
       "key": "cards-111",
-      "order": 130,
+      "order": 129,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (111/118)",
@@ -4930,7 +4888,7 @@
     },
     {
       "key": "cards-112",
-      "order": 131,
+      "order": 130,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (112/118)",
@@ -4969,7 +4927,7 @@
     },
     {
       "key": "cards-113",
-      "order": 132,
+      "order": 131,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (113/118)",
@@ -5002,7 +4960,7 @@
     },
     {
       "key": "cards-114",
-      "order": 133,
+      "order": 132,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies (114/118)",
@@ -5038,7 +4996,7 @@
     },
     {
       "key": "cards-115",
-      "order": 134,
+      "order": 133,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: type and subtype synergies / cards: remaining unique cards (115/118)",
@@ -5075,7 +5033,7 @@
     },
     {
       "key": "cards-116",
-      "order": 135,
+      "order": 134,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: remaining unique cards (116/118)",
@@ -5122,17 +5080,17 @@
     },
     {
       "key": "cards-117",
-      "order": 136,
+      "order": 135,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: remaining unique cards (117/118)",
       "entities": [
         {"id":"7992dbb5-ca45-4066-aca3-ff1d6d87619e","kind":"card","status":"pending"},
         {"id":"ce09ddfa-c349-4b32-b524-fb74444cddcb","kind":"card","status":"pending"},
-        {"id":"a911ef71-799c-4240-ad13-8fabd3caeafa","kind":"card","status":"authored"},
-        {"id":"1750c85c-f547-4d21-b7e3-9e5c5fcb3171","kind":"card","status":"pending"}
+        {"id":"d09a6760-6630-4964-9c77-decc641df713","kind":"card","status":"authored"},
+        {"id":"a911ef71-799c-4240-ad13-8fabd3caeafa","kind":"card","status":"authored"}
       ],
-      "weight": 7.3,
+      "weight": 7.2,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["pilot-01","pilot-02","pilot-03"],
@@ -5145,13 +5103,14 @@
         "src/content/cards/moment-rewound-a911ef71.ts",
         "src/content/cards/moonbound-wolf-7992dbb5.ts",
         "src/content/cards/pallid-arbiter-ce09ddfa.ts",
-        "src/content/cards/sunrise-virtuoso-1750c85c.ts",
+        "src/content/cards/urban-desperado-d09a6760.ts",
         "src/content/specs/cards-117.scenarios.ts",
         "src/content/specs/index.ts"
       ],
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
+        {"id":"d09a6760-6630-4964-9c77-decc641df713","rulesDecisions":["RD-hv-umm2.109-2"]},
         {
           "id": "a911ef71-799c-4240-ad13-8fabd3caeafa",
           "clarifications": ["C8"],
@@ -5162,15 +5121,18 @@
     },
     {
       "key": "cards-118",
-      "order": 137,
+      "order": 136,
       "section": "5.2",
       "kind": "composition",
       "title": "5.2 cards: remaining unique cards (118/118)",
       "entities": [
+        {"id":"70716dd8-1133-4966-b01b-757ea627874c","kind":"card","status":"authored"},
+        {"id":"9629a58a-9f30-40f0-9199-835ea2dddc76","kind":"card","status":"authored"},
+        {"id":"1750c85c-f547-4d21-b7e3-9e5c5fcb3171","kind":"card","status":"pending"},
         {"id":"245b49b9-e1e5-4dd0-ae18-718c437b8eb0","kind":"card","status":"pending"},
         {"id":"6e2188f8-580e-4a66-a3e3-267d509de903","kind":"card","status":"pending"}
       ],
-      "weight": 3.2,
+      "weight": 8,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["pilot-01","pilot-02","pilot-03"],
@@ -5181,13 +5143,21 @@
       "scenarios": "src/content/specs/cards-118.scenarios.ts",
       "areas": [
         "src/content/cards/conduit-of-resonance-245b49b9.ts",
+        "src/content/cards/grim-pursuer-70716dd8.ts",
+        "src/content/cards/sunrise-virtuoso-1750c85c.ts",
         "src/content/cards/terminus-6e2188f8.ts",
+        "src/content/cards/vault-infiltrator-9629a58a.ts",
         "src/content/specs/cards-118.scenarios.ts",
         "src/content/specs/index.ts"
       ],
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
+        {
+          "id": "70716dd8-1133-4966-b01b-757ea627874c",
+          "rulesDecisions": ["RD-hv-7x4l.6-4","RD-hv-umm2.109-1","RD-hv-umm2.109-2"]
+        },
+        {"id":"9629a58a-9f30-40f0-9199-835ea2dddc76","rulesDecisions":["RD-hv-umm2.109-2","RD-hv-umm2.109-3"]},
         {
           "id": "6e2188f8-580e-4a66-a3e3-267d509de903",
           "clarifications": ["C15"],
@@ -5198,7 +5168,7 @@
     },
     {
       "key": "card-checkpoint",
-      "order": 138,
+      "order": 137,
       "section": "5.2",
       "kind": "task",
       "title": "5.2 card coverage checkpoint",
@@ -5336,7 +5306,6 @@
         "prim-lose-all-abilities",
         "prim-materialize-nth-trigger",
         "prim-play-condition",
-        "prim-play-restriction",
         "prim-stack-selector-bounds",
         "prim-stored-counters",
         "prim-turn-history",
@@ -5357,7 +5326,7 @@
     },
     {
       "key": "dreamwell-lab",
-      "order": 139,
+      "order": 138,
       "section": "5.3",
       "kind": "task",
       "title": "5.3 Card-lab variant that forces the next Dreamwell draw",
@@ -5378,7 +5347,7 @@
     },
     {
       "key": "prim-draw-dreamwell",
-      "order": 140,
+      "order": 139,
       "section": "5.3",
       "kind": "primitive",
       "title": "5.3 primitive drawDreamwell (Dreamwell cards: card flow)",
@@ -5414,7 +5383,7 @@
     },
     {
       "key": "dreamwell-01",
-      "order": 141,
+      "order": 140,
       "section": "5.3",
       "kind": "composition",
       "title": "5.3 Dreamwell cards / Dreamwell cards: card flow (1/6)",
@@ -5454,7 +5423,7 @@
     },
     {
       "key": "dreamwell-02",
-      "order": 142,
+      "order": 141,
       "section": "5.3",
       "kind": "composition",
       "title": "5.3 Dreamwell cards: card flow (2/6)",
@@ -5495,7 +5464,7 @@
     },
     {
       "key": "dreamwell-03",
-      "order": 143,
+      "order": 142,
       "section": "5.3",
       "kind": "composition",
       "title": "5.3 Dreamwell cards: card flow / Dreamwell cards: energy and points (3/6)",
@@ -5535,7 +5504,7 @@
     },
     {
       "key": "dreamwell-04",
-      "order": 144,
+      "order": 143,
       "section": "5.3",
       "kind": "composition",
       "title": "5.3 Dreamwell cards: energy and points / Dreamwell cards: removal (4/6)",
@@ -5572,7 +5541,7 @@
     },
     {
       "key": "dreamwell-05",
-      "order": 145,
+      "order": 144,
       "section": "5.3",
       "kind": "composition",
       "title": "5.3 Dreamwell cards: materialize and recursion (5/6)",
@@ -5607,7 +5576,7 @@
     },
     {
       "key": "dreamwell-06",
-      "order": 146,
+      "order": 145,
       "section": "5.3",
       "kind": "composition",
       "title": "5.3 Dreamwell cards: materialize and recursion / Dreamwell cards: figments and Legionnaire synergies / Dreamwell cards: spark, Support, anthems, and base spark (6/6)",
@@ -5638,7 +5607,7 @@
     },
     {
       "key": "avatar-lab",
-      "order": 147,
+      "order": 146,
       "section": "5.4",
       "kind": "task",
       "title": "5.4 Card-lab avatar scene (?goto=card-lab&avatar=<uuid>)",
@@ -5659,7 +5628,7 @@
     },
     {
       "key": "prim-history-refs",
-      "order": 148,
+      "order": 147,
       "section": "5.4",
       "kind": "primitive",
       "title": "5.4 primitive historyRefs (Avatars: type and subtype synergies)",
@@ -5699,7 +5668,7 @@
     },
     {
       "key": "avatars-01",
-      "order": 149,
+      "order": 148,
       "section": "5.4",
       "kind": "composition",
       "title": "5.4 Avatars: card flow (1/7)",
@@ -5737,7 +5706,7 @@
     },
     {
       "key": "avatars-02",
-      "order": 150,
+      "order": 149,
       "section": "5.4",
       "kind": "composition",
       "title": "5.4 Avatars: card flow / Avatars: energy and points / Avatars: materialize and recursion (2/7)",
@@ -5775,7 +5744,7 @@
     },
     {
       "key": "avatars-03",
-      "order": 151,
+      "order": 150,
       "section": "5.4",
       "kind": "composition",
       "title": "5.4 Avatars: materialize and recursion (3/7)",
@@ -5808,7 +5777,7 @@
     },
     {
       "key": "avatars-04",
-      "order": 152,
+      "order": 151,
       "section": "5.4",
       "kind": "composition",
       "title": "5.4 Avatars: figments and Legionnaire synergies / Avatars: spark, Support, anthems, and base spark / Avatars: copies (D15) (4/7)",
@@ -5843,7 +5812,7 @@
     },
     {
       "key": "avatars-05",
-      "order": 153,
+      "order": 152,
       "section": "5.4",
       "kind": "composition",
       "title": "5.4 Avatars: cost modifiers and nth-in-turn (5/7)",
@@ -5876,7 +5845,7 @@
     },
     {
       "key": "avatars-06",
-      "order": 154,
+      "order": 153,
       "section": "5.4",
       "kind": "composition",
       "title": "5.4 Avatars: cost modifiers and nth-in-turn (6/7)",
@@ -5909,7 +5878,7 @@
     },
     {
       "key": "avatars-07",
-      "order": 155,
+      "order": 154,
       "section": "5.4",
       "kind": "composition",
       "title": "5.4 Avatars: cost modifiers and nth-in-turn / Avatars: type and subtype synergies (7/7)",
@@ -5942,7 +5911,7 @@
     },
     {
       "key": "dreamsign-lab",
-      "order": 156,
+      "order": 155,
       "section": "5.5",
       "kind": "task",
       "title": "5.5 Card-lab dreamsign scene (?goto=card-lab&dreamsign=<uuid>)",
@@ -5963,7 +5932,7 @@
     },
     {
       "key": "prim-when-removes-enemy-trigger",
-      "order": 157,
+      "order": 156,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive whenRemovesEnemyTrigger (Dreamsigns: battle effects)",
@@ -6003,7 +5972,7 @@
     },
     {
       "key": "prim-when-foresee-trigger",
-      "order": 158,
+      "order": 157,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive whenForeseeTrigger (Dreamsigns: battle effects: card flow)",
@@ -6043,7 +6012,7 @@
     },
     {
       "key": "prim-lose-energy",
-      "order": 159,
+      "order": 158,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive loseEnergy (Dreamsigns: battle effects: energy and points)",
@@ -6079,7 +6048,7 @@
     },
     {
       "key": "prim-selector-has-ability",
-      "order": 160,
+      "order": 159,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive selectorHasAbility (Dreamsigns: battle effects: spark, Support, anthems, and base spark)",
@@ -6121,7 +6090,7 @@
     },
     {
       "key": "prim-when-copy-trigger",
-      "order": 161,
+      "order": 160,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive whenCopyTrigger (Dreamsigns: battle effects: copies (D15))",
@@ -6165,7 +6134,7 @@
     },
     {
       "key": "prim-cost-modifier-reclaim",
-      "order": 162,
+      "order": 161,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive costModifierReclaim (Dreamsigns: battle effects: cost modifiers and nth-in-turn)",
@@ -6205,7 +6174,7 @@
     },
     {
       "key": "prim-draw-trigger-filter",
-      "order": 163,
+      "order": 162,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive drawTriggerFilter (Dreamsigns: battle effects: cost modifiers and nth-in-turn)",
@@ -6245,7 +6214,7 @@
     },
     {
       "key": "prim-rule-modifier",
-      "order": 164,
+      "order": 163,
       "section": "5.5",
       "kind": "primitive",
       "title": "5.5 primitive ruleModifier (Dreamsigns: battle effects: remaining unique cards)",
@@ -6287,7 +6256,7 @@
     },
     {
       "key": "dreamsigns-battle-01",
-      "order": 165,
+      "order": 164,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects / Dreamsigns: battle effects: card flow (1/22)",
@@ -6322,7 +6291,7 @@
     },
     {
       "key": "dreamsigns-battle-02",
-      "order": 166,
+      "order": 165,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: card flow (2/22)",
@@ -6360,7 +6329,7 @@
     },
     {
       "key": "dreamsigns-battle-03",
-      "order": 167,
+      "order": 166,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: card flow (3/22)",
@@ -6395,7 +6364,7 @@
     },
     {
       "key": "dreamsigns-battle-04",
-      "order": 168,
+      "order": 167,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: card flow / Dreamsigns: battle effects: energy and points (4/22)",
@@ -6432,7 +6401,7 @@
     },
     {
       "key": "dreamsigns-battle-05",
-      "order": 169,
+      "order": 168,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: energy and points / Dreamsigns: battle effects: materialize and recursion (5/22)",
@@ -6465,7 +6434,7 @@
     },
     {
       "key": "dreamsigns-battle-06",
-      "order": 170,
+      "order": 169,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: materialize and recursion (6/22)",
@@ -6501,7 +6470,7 @@
     },
     {
       "key": "dreamsigns-battle-07",
-      "order": 171,
+      "order": 170,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: figments and Legionnaire synergies / Dreamsigns: battle effects: spark, Support, anthems, and base spark (7/22)",
@@ -6543,7 +6512,7 @@
     },
     {
       "key": "dreamsigns-battle-08",
-      "order": 172,
+      "order": 171,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: spark, Support, anthems, and base spark (8/22)",
@@ -6578,7 +6547,7 @@
     },
     {
       "key": "dreamsigns-battle-09",
-      "order": 173,
+      "order": 172,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: spark, Support, anthems, and base spark (9/22)",
@@ -6619,7 +6588,7 @@
     },
     {
       "key": "dreamsigns-battle-10",
-      "order": 174,
+      "order": 173,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: spark, Support, anthems, and base spark / Dreamsigns: battle effects: copies (D15) (10/22)",
@@ -6657,7 +6626,7 @@
     },
     {
       "key": "dreamsigns-battle-11",
-      "order": 175,
+      "order": 174,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: copies (D15) / Dreamsigns: battle effects: cost modifiers and nth-in-turn (11/22)",
@@ -6695,7 +6664,7 @@
     },
     {
       "key": "dreamsigns-battle-12",
-      "order": 176,
+      "order": 175,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (12/22)",
@@ -6728,7 +6697,7 @@
     },
     {
       "key": "dreamsigns-battle-13",
-      "order": 177,
+      "order": 176,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (13/22)",
@@ -6767,7 +6736,7 @@
     },
     {
       "key": "dreamsigns-battle-14",
-      "order": 178,
+      "order": 177,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (14/22)",
@@ -6802,7 +6771,7 @@
     },
     {
       "key": "dreamsigns-battle-15",
-      "order": 179,
+      "order": 178,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (15/22)",
@@ -6837,7 +6806,7 @@
     },
     {
       "key": "dreamsigns-battle-16",
-      "order": 180,
+      "order": 179,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (16/22)",
@@ -6870,7 +6839,7 @@
     },
     {
       "key": "dreamsigns-battle-17",
-      "order": 181,
+      "order": 180,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (17/22)",
@@ -6905,7 +6874,7 @@
     },
     {
       "key": "dreamsigns-battle-18",
-      "order": 182,
+      "order": 181,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn / Dreamsigns: battle effects: type and subtype synergies (18/22)",
@@ -6938,7 +6907,7 @@
     },
     {
       "key": "dreamsigns-battle-19",
-      "order": 183,
+      "order": 182,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: type and subtype synergies (19/22)",
@@ -6975,7 +6944,7 @@
     },
     {
       "key": "dreamsigns-battle-20",
-      "order": 184,
+      "order": 183,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: remaining unique cards (20/22)",
@@ -7008,7 +6977,7 @@
     },
     {
       "key": "dreamsigns-battle-21",
-      "order": 185,
+      "order": 184,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: remaining unique cards (21/22)",
@@ -7041,7 +7010,7 @@
     },
     {
       "key": "dreamsigns-battle-22",
-      "order": 186,
+      "order": 185,
       "section": "5.5",
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: remaining unique cards (22/22)",
@@ -7066,7 +7035,7 @@
     },
     {
       "key": "journey-registry",
-      "order": 187,
+      "order": 186,
       "section": "5.6",
       "kind": "task",
       "title": "5.6 Journey-modifier registry keyed by dreamsign UUID, with modifier logging",
@@ -7087,7 +7056,7 @@
     },
     {
       "key": "prim-journey-sites",
-      "order": 188,
+      "order": 187,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeySites (Dreamsigns: journey effects (P8))",
@@ -7118,7 +7087,7 @@
     },
     {
       "key": "prim-journey-transfiguration",
-      "order": 189,
+      "order": 188,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyTransfiguration (Dreamsigns: journey effects (P8))",
@@ -7151,7 +7120,7 @@
     },
     {
       "key": "prim-journey-essence",
-      "order": 190,
+      "order": 189,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyEssence (Dreamsigns: journey effects (P8))",
@@ -7184,7 +7153,7 @@
     },
     {
       "key": "prim-journey-on-gain",
-      "order": 191,
+      "order": 190,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyOnGain (Dreamsigns: journey effects (P8))",
@@ -7217,7 +7186,7 @@
     },
     {
       "key": "prim-journey-deck-entry",
-      "order": 192,
+      "order": 191,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyDeckEntry (Dreamsigns: journey effects (P8))",
@@ -7250,7 +7219,7 @@
     },
     {
       "key": "prim-journey-purge",
-      "order": 193,
+      "order": 192,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyPurge (Dreamsigns: journey effects (P8))",
@@ -7283,7 +7252,7 @@
     },
     {
       "key": "prim-journey-shop",
-      "order": 194,
+      "order": 193,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyShop (Dreamsigns: journey effects (P8))",
@@ -7316,7 +7285,7 @@
     },
     {
       "key": "prim-journey-draft",
-      "order": 195,
+      "order": 194,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyDraft (Dreamsigns: journey effects (P8))",
@@ -7349,7 +7318,7 @@
     },
     {
       "key": "prim-journey-duplication",
-      "order": 196,
+      "order": 195,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyDuplication (Dreamsigns: journey effects (P8))",
@@ -7382,7 +7351,7 @@
     },
     {
       "key": "prim-journey-battle-init",
-      "order": 197,
+      "order": 196,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyBattleInit (Dreamsigns: journey effects (P8))",
@@ -7409,7 +7378,7 @@
     },
     {
       "key": "prim-type-remap",
-      "order": 198,
+      "order": 197,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive typeRemap (Dreamsigns: journey effects (P8))",
@@ -7444,7 +7413,7 @@
     },
     {
       "key": "dreamsigns-journey-01",
-      "order": 199,
+      "order": 198,
       "section": "5.6",
       "kind": "composition",
       "title": "5.6 Dreamsigns: journey effects (P8) (1/4)",
@@ -7490,7 +7459,7 @@
     },
     {
       "key": "dreamsigns-journey-02",
-      "order": 200,
+      "order": 199,
       "section": "5.6",
       "kind": "composition",
       "title": "5.6 Dreamsigns: journey effects (P8) (2/4)",
@@ -7538,7 +7507,7 @@
     },
     {
       "key": "dreamsigns-journey-03",
-      "order": 201,
+      "order": 200,
       "section": "5.6",
       "kind": "composition",
       "title": "5.6 Dreamsigns: journey effects (P8) (3/4)",
@@ -7571,7 +7540,7 @@
     },
     {
       "key": "dreamsigns-journey-04",
-      "order": 202,
+      "order": 201,
       "section": "5.6",
       "kind": "composition",
       "title": "5.6 Dreamsigns: journey effects (P8): energy and points / Dreamsigns: journey effects (P8): spark, Support, anthems, and base spark (4/4)",
@@ -7603,7 +7572,7 @@
     },
     {
       "key": "prim-cost-modifier-activated",
-      "order": 203,
+      "order": 202,
       "section": "5.7a",
       "kind": "primitive",
       "title": "5.7a primitive costModifierActivated (Transfiguration transforms)",
@@ -7643,7 +7612,7 @@
     },
     {
       "key": "transfigurations-01",
-      "order": 204,
+      "order": 203,
       "section": "5.7a",
       "kind": "composition",
       "title": "5.7a Transfiguration transforms (1/2)",
@@ -7680,7 +7649,7 @@
     },
     {
       "key": "transfigurations-02",
-      "order": 205,
+      "order": 204,
       "section": "5.7a",
       "kind": "composition",
       "title": "5.7a Transfiguration transforms (2/2)",
@@ -7705,7 +7674,7 @@
     },
     {
       "key": "transfiguration-sweep",
-      "order": 206,
+      "order": 205,
       "section": "5.7",
       "kind": "task",
       "title": "5.7 Transfiguration sweep sample",
@@ -7726,7 +7695,7 @@
     },
     {
       "key": "deck-mods-foundation",
-      "order": 207,
+      "order": 206,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: exhaustive mapping, card-lab mods, fuzz mods",
@@ -7747,7 +7716,7 @@
     },
     {
       "key": "deck-mods-spark-bonus",
-      "order": 208,
+      "order": 207,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: spark bonus",
@@ -7880,7 +7849,7 @@
     },
     {
       "key": "deck-mods-cost-reduction",
-      "order": 209,
+      "order": 208,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: cost reduction",
@@ -7944,7 +7913,7 @@
     },
     {
       "key": "deck-mods-fast",
-      "order": 210,
+      "order": 209,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: Fast",
@@ -8000,7 +7969,7 @@
     },
     {
       "key": "deck-mods-reclaim",
-      "order": 211,
+      "order": 210,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: granted and overridden Reclaim",
@@ -8080,7 +8049,7 @@
     },
     {
       "key": "deck-mods-subtype-change",
-      "order": 212,
+      "order": 211,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: subtype change",
@@ -8134,7 +8103,7 @@
     },
     {
       "key": "deck-mods-card-type-change",
-      "order": 213,
+      "order": 212,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: card-type change",
@@ -8155,7 +8124,7 @@
     },
     {
       "key": "next-battle-opening-hand",
-      "order": 214,
+      "order": 213,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: next-battle opening hand",
@@ -8244,7 +8213,7 @@
     },
     {
       "key": "next-battle-starting-energy",
-      "order": 215,
+      "order": 214,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: next-battle starting energy",
@@ -8332,7 +8301,7 @@
     },
     {
       "key": "next-battle-smaller-hand",
-      "order": 216,
+      "order": 215,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: next-battle smaller hand and cost discount",
@@ -8383,7 +8352,7 @@
     },
     {
       "key": "apollyon-design",
-      "order": 217,
+      "order": 216,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations: provisional mechanics design (D6)",
@@ -8415,7 +8384,7 @@
     },
     {
       "key": "apollyon-01",
-      "order": 218,
+      "order": 217,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (1/5)",
@@ -8482,7 +8451,7 @@
     },
     {
       "key": "apollyon-02",
-      "order": 219,
+      "order": 218,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (2/5)",
@@ -8549,7 +8518,7 @@
     },
     {
       "key": "apollyon-03",
-      "order": 220,
+      "order": 219,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (3/5)",
@@ -8616,7 +8585,7 @@
     },
     {
       "key": "apollyon-04",
-      "order": 221,
+      "order": 220,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (4/5)",
@@ -8683,7 +8652,7 @@
     },
     {
       "key": "apollyon-05",
-      "order": 222,
+      "order": 221,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (5/5)",
@@ -8750,7 +8719,7 @@
     },
     {
       "key": "apollyon-sanity",
-      "order": 223,
+      "order": 222,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon sanity matrix and frozen deck pool",
@@ -8795,7 +8764,6 @@
     {"name":"loseEnergy","kind":"primitive","module":"src/engine/effects/primitives/lose-energy.ts","exists":false,"usedBy":1,"introducedBy":"prim-lose-energy"},
     {"name":"materializeNthTrigger","kind":"dsl","module":"src/engine/dsl/types.ts","exists":false,"usedBy":3,"introducedBy":"prim-materialize-nth-trigger","note":"\"your second spirit animal in a turn\"","forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"materialize","option":"nth","pending":"option"}]},
     {"name":"playCondition","kind":"dsl","module":"src/engine/dsl/types.ts","exists":false,"usedBy":1,"introducedBy":"prim-play-condition","note":"\"Play this event only if …\"","forms":[{"module":"src/engine/dsl/types.ts","symbol":"Ability","kind":"form","member":"playCondition","pending":"member"}]},
-    {"name":"playRestriction","kind":"primitive","module":"src/engine/effects/primitives/play-restriction.ts","exists":false,"usedBy":3,"introducedBy":"prim-play-restriction","note":"continuous: limits which cards a player may play"},
     {"name":"ruleModifier","kind":"primitive","module":"src/engine/effects/primitives/rule-modifier.ts","exists":false,"usedBy":8,"introducedBy":"prim-rule-modifier","note":"continuous changes to turn rules: draw counts, energy carry-over, ephemeral retention, Offering payment"},
     {"name":"selectorHasAbility","kind":"dsl","module":"src/engine/dsl/types.ts","exists":false,"usedBy":2,"introducedBy":"prim-selector-has-ability","note":"\"characters with ▸Materialized abilities\"","forms":[{"module":"src/engine/dsl/types.ts","symbol":"CharacterSelector","kind":"form","option":"hasAbility","pending":"option"}]},
     {"name":"stackSelectorBounds","kind":"dsl","module":"src/engine/dsl/types.ts","exists":false,"usedBy":4,"introducedBy":"prim-stack-selector-bounds","note":"cost and ✦ bounds on stack items (\"Prevent a played ≤2● cost card\")","forms":[{"module":"src/engine/dsl/types.ts","symbol":"StackItemSelector","kind":"form","option":"costAtMost","pending":"option"}]},
@@ -8885,6 +8853,7 @@
     {"name":"optionalCost","kind":"builder","module":null,"exists":true,"usedBy":2,"introducedBy":null},
     {"name":"phase","kind":"primitive","module":"src/engine/effects/primitives/phase.ts","exists":true,"usedBy":6,"introducedBy":null},
     {"name":"playFromZone","kind":"primitive","module":"src/engine/effects/primitives/play-from-zone.ts","exists":true,"usedBy":11,"introducedBy":null,"note":"continuous: cards may be played from the void or the top of the deck"},
+    {"name":"playRestriction","kind":"primitive","module":"src/engine/effects/primitives/play-restriction.ts","exists":true,"usedBy":3,"introducedBy":null,"note":"continuous: limits which cards a player may play"},
     {"name":"pointsCost","kind":"dsl","module":"src/engine/dsl/builders.ts","exists":true,"usedBy":4,"introducedBy":null,"note":"pay ⍟ as a cost","forms":[{"module":"src/engine/dsl/builders.ts","symbol":"pointsCost","kind":"builder"}]},
     {"name":"prevent","kind":"primitive","module":"src/engine/effects/primitives/prevent.ts","exists":true,"usedBy":15,"introducedBy":null},
     {"name":"preventDestination","kind":"extension","module":"src/engine/effects/primitives/prevent.ts","exists":true,"usedBy":3,"introducedBy":null},
@@ -9008,7 +8977,7 @@
     {"id":"16d2e85d-f940-43dd-9867-784b3a5ec5d7","kind":"card","name":"Fallen Angel","status":"pending","cardType":"Character","rarity":"Uncommon","cost":1,"speed":"standard","subtype":"Ancient","spark":1,"text":"Abandon another character: Foresee 1.","amplifiedText":"Abandon another character: Foresee 2.","module":"src/content/cards/fallen-angel-16d2e85d.ts","tags":["cost-abandon","foresee"],"requiredPrimitives":{"existing":["abandonCost","foresee"],"new":[]},"promptKinds":["arrange:foresee","chooseCards:abandonCost"],"family":3,"routing":["5.2","cards-12"]},
     {"id":"16f4962d-2950-4360-8f55-bc47428480ef","kind":"card","name":"Duneguard Captain","status":"pending","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Survivor","spark":1,"text":"☾: Materialize a 1✦ survivor figment.\n\n☾: Draw a card for each 3 survivors you control.","amplifiedText":"☾: Materialize a 2✦ survivor figment.\n\n☾: Draw a card for each 3 survivors you control.","module":"src/content/cards/duneguard-captain-16f4962d.ts","tags":["cost-exhaust","count-value","draw","figments","subtype-reference"],"requiredPrimitives":{"existing":["count","draw","exhaustSelf","materializeFigments","ofSubtype"],"new":[]},"promptKinds":[],"family":15,"routing":["5.2","cards-109"]},
     {"id":"174a5909-48e2-4aab-8cc5-fa3292281d1d","kind":"card","name":"Battlefield Calligrapher","status":"pending","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Mage","spark":2,"text":"When you play an event, materialize a 1✦ warrior figment.","amplifiedText":"When you play an event, materialize a 2✦ warrior figment.","module":"src/content/cards/battlefield-calligrapher-174a5909.ts","tags":["figments","trigger-play"],"requiredPrimitives":{"existing":["materializeFigments","whenYouPlay"],"new":[]},"promptKinds":[],"family":7,"routing":["5.2","cards-69"]},
-    {"id":"1750c85c-f547-4d21-b7e3-9e5c5fcb3171","kind":"card","name":"Sunrise Virtuoso","status":"pending","cardType":"Character","rarity":"Common","cost":3,"speed":"standard","subtype":"Musician","spark":3,"text":"When you materialize a character, trigger its \"▸Dawn\" ability.","module":"src/content/cards/sunrise-virtuoso-1750c85c.ts","tags":["trigger-ability","trigger-dawn","trigger-materialize"],"requiredPrimitives":{"existing":["onDawn","triggerAbility","whenMaterialize"],"new":[]},"promptKinds":[],"family":16,"routing":["5.2","cards-117"]},
+    {"id":"1750c85c-f547-4d21-b7e3-9e5c5fcb3171","kind":"card","name":"Sunrise Virtuoso","status":"pending","cardType":"Character","rarity":"Common","cost":3,"speed":"standard","subtype":"Musician","spark":3,"text":"When you materialize a character, trigger its \"▸Dawn\" ability.","module":"src/content/cards/sunrise-virtuoso-1750c85c.ts","tags":["trigger-ability","trigger-dawn","trigger-materialize"],"requiredPrimitives":{"existing":["onDawn","triggerAbility","whenMaterialize"],"new":[]},"promptKinds":[],"family":16,"routing":["5.2","cards-118"]},
     {"id":"181b4924-743b-49c3-8056-6afd08ebde1d","kind":"card","name":"Shadow Balladeer","status":"pending","cardType":"Character","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"Musician","spark":3,"text":"When you play an event, awaken each character you control.","module":"src/content/cards/shadow-balladeer-181b4924.ts","tags":["awaken","trigger-play"],"requiredPrimitives":{"existing":["awaken","whenYouPlay"],"new":[]},"promptKinds":[],"family":8,"routing":["5.2","cards-72"]},
     {"id":"18979c10-39b8-42fb-ac1d-dd784da498d1","kind":"card","name":"Fell Swoop","status":"pending","cardType":"Event","rarity":"Common","cost":1,"speed":"standard","subtype":"","spark":null,"text":"Dissolve a ≤1✦ enemy.\n\nReclaim – Discard a card","amplifiedText":"Dissolve a ≤2✦ enemy.\n\nReclaim – Discard a card","module":"src/content/cards/fell-swoop-18979c10.ts","tags":["cost-discard","dissolve","kw-reclaim","targeted"],"requiredPrimitives":{"existing":["discardCost","dissolve","reclaim"],"new":[]},"promptKinds":["chooseCards:discardCost","chooseMode:playRoute","chooseTargets:target"],"family":5,"routing":["5.2","cards-40"]},
     {"id":"18ff6a45-148a-40bf-85ae-4a51f32f406a","kind":"card","name":"Blazing Emberwing","status":"pending","cardType":"Character","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"Spirit Animal","spark":3,"text":"☾: Gain 1● for each character you control.","module":"src/content/cards/blazing-emberwing-18ff6a45.ts","tags":["cost-exhaust","count-value","gain-energy"],"requiredPrimitives":{"existing":["count","exhaustSelf","gainEnergy"],"new":[]},"promptKinds":[],"family":4,"routing":["5.2","cards-26"]},
@@ -9048,7 +9017,7 @@
     {"id":"29c4c45d-33df-42ac-bf28-387eb00264aa","kind":"card","name":"Inheritor of Sorrows","status":"pending","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Synth","spark":1,"text":"If there are 3 or more events in your void, this character has +4✦ and gains awakened.","amplifiedText":"If there are 2 or more events in your void, this character has +4✦ and gains awakened.","module":"src/content/cards/inheritor-of-sorrows-29c4c45d.ts","tags":["condition-card-count","grant-keyword","spark-static","value-zone-count","zone-cards"],"requiredPrimitives":{"existing":["conditionCardCounts","grant","sparkModifier","valueZoneCounts","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":8,"routing":["5.2","cards-72"]},
     {"id":"29d25251-8b42-4d3d-97e6-6c3abaabd9a2","kind":"card","name":"Blooming Horror","status":"pending","cardType":"Event","rarity":"Rare","cost":2,"speed":"standard","subtype":"","spark":null,"text":"Choose a player. For each card you've played this turn, that player erodes 2.","module":"src/content/cards/blooming-horror-29d25251.ts","tags":["choose-player","duration","erode","turn-history"],"requiredPrimitives":{"existing":["choosePlayer","erode","untilEndOfTurn"],"new":["turnHistory"]},"promptKinds":["choosePlayer:choosePlayer"],"family":14,"routing":["5.2","cards-98"]},
     {"id":"2a230602-a39b-4ec2-a467-97b92b389aff","kind":"card","name":"Scuttled Fortune","status":"pending","cardType":"Event","rarity":"Common","cost":1,"speed":"fast","subtype":"","spark":null,"text":"Draw a card for each character you controlled that dissolved this turn.","module":"src/content/cards/scuttled-fortune-2a230602.ts","tags":["count-value","draw","duration","turn-history"],"requiredPrimitives":{"existing":["count","draw","untilEndOfTurn"],"new":["turnHistory"]},"promptKinds":[],"family":14,"routing":["5.2","prim-turn-history"]},
-    {"id":"2a6af0b8-11da-4d4b-8217-3bd7ed399dfa","kind":"card","name":"Borrowed Minutes","status":"pending","cardType":"Event","rarity":"Common","cost":1,"costs":["1","X"],"speed":"standard","subtype":"","spark":null,"text":"Materialize each ≤X● cost character in your void. Banish them at end of turn.","module":"src/content/cards/borrowed-minutes-2a6af0b8.ts","tags":["cost-energy-x","materialize-card","selector-bounds","trigger-end-of-turn","zone-cards"],"requiredPrimitives":{"existing":["energyX","materialize","selectorBounds","zoneCardRefs"],"new":["atEndOfTurnTrigger"]},"promptKinds":["chooseCards:chooseInZone","chooseNumber:chooseX"],"family":6,"routing":["5.2","prim-at-end-of-turn-trigger"]},
+    {"id":"2a6af0b8-11da-4d4b-8217-3bd7ed399dfa","kind":"card","name":"Borrowed Minutes","status":"pending","cardType":"Event","rarity":"Common","cost":1,"costs":["1","X"],"speed":"standard","subtype":"","spark":null,"text":"Materialize each ≤X● cost character in your void. Banish them at end of turn.","module":"src/content/cards/borrowed-minutes-2a6af0b8.ts","rulesDecisions":["RD-hv-umm2.392-1"],"tags":["cost-energy-x","materialize-card","selector-bounds","trigger-end-of-turn","zone-cards"],"requiredPrimitives":{"existing":["energyX","materialize","selectorBounds","zoneCardRefs"],"new":["atEndOfTurnTrigger"]},"promptKinds":["chooseCards:chooseInZone","chooseNumber:chooseX"],"family":6,"routing":["5.2","prim-at-end-of-turn-trigger"]},
     {"id":"2a828466-450a-4637-9c68-6b54522450c0","kind":"card","name":"Circuit Breaker","status":"authored","cardType":"Character","rarity":"Uncommon","cost":4,"speed":"standard","subtype":"Synth","spark":2,"text":"▸Materialized: Gain 1⍟.\n\nReclaim 0●","amplifiedText":"▸Materialized: Gain 2⍟.\n\nReclaim 0●","module":"src/content/cards/circuit-breaker-2a828466.ts","tags":["gain-points","kw-reclaim","trigger-materialized"],"requiredPrimitives":{"existing":["gainPoints","onMaterialized","reclaim"],"new":[]},"promptKinds":["chooseMode:playRoute"],"family":2,"routing":["5.2","cards-09"]},
     {"id":"2a8dff0b-759f-40cc-af40-393a4e7129d4","kind":"card","name":"Weight of Memory","status":"authored","cardType":"Event","rarity":"Common","cost":0,"speed":"interrupt","subtype":"","spark":null,"text":"Dissolve an enemy with ✦ less than or equal to the number of cards in your void.","module":"src/content/cards/weight-of-memory-2a8dff0b.ts","rulesDecisions":["RD-hv-umm2.76-1"],"tags":["dissolve","selector-bounds","targeted","value-zone-count","zone-cards"],"requiredPrimitives":{"existing":["dissolve","selectorBounds","valueZoneCounts","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone","chooseTargets:target"],"family":5,"routing":["5.2","cards-42"]},
     {"id":"2c9711c7-800c-4e55-a488-17ea5a6813c6","kind":"card","name":"Sage of the High Hills","status":"pending","cardType":"Character","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"Musician","spark":3,"text":"When you materialize another character, gain 1⍟.","module":"src/content/cards/sage-of-the-high-hills-2c9711c7.ts","tags":["gain-points","trigger-materialize"],"requiredPrimitives":{"existing":["gainPoints","whenMaterialize"],"new":[]},"promptKinds":[],"family":4,"routing":["5.2","cards-33"]},
@@ -9190,9 +9159,9 @@
     {"id":"6e2188f8-580e-4a66-a3e3-267d509de903","kind":"card","name":"Terminus","status":"pending","cardType":"Event","rarity":"Rare","cost":1,"speed":"standard","subtype":"","spark":null,"text":"If you have no cards in your deck, you win the game.","module":"src/content/cards/terminus-6e2188f8.ts","clarifications":["C15"],"rulesDecisions":["RD-hv-7x4l.1-18","RD-hv-7x4l.43-1"],"tags":["win-the-game"],"requiredPrimitives":{"existing":["noCardsIn","winCondition"],"new":[]},"promptKinds":[],"family":16,"routing":["5.2","cards-118"],"correction":"C15 win condition; all its primitives exist"},
     {"id":"6f0b709d-0f57-46de-bfba-6a8b4df2b991","kind":"card","name":"Secrets of the Deep","status":"authored","cardType":"Event","rarity":"Common","cost":1,"speed":"standard","subtype":"","spark":null,"text":"Gain 3⍟. If you reclaimed this card, gain 6⍟ instead.\n\nReclaim 4●","amplifiedText":"Gain 4⍟. If you reclaimed this card, gain 8⍟ instead.\n\nReclaim 4●","module":"src/content/cards/secrets-of-the-deep-6f0b709d.ts","rulesDecisions":["RD-hv-umm2.373-1"],"cardIssues":["6f0b709d-0f57-46de-bfba-6a8b4df2b991--hv-umm2.119"],"tags":["gain-points","kw-reclaim"],"requiredPrimitives":{"existing":["gainPoints","reclaim"],"new":[]},"promptKinds":["chooseMode:playRoute"],"family":2,"routing":["5.2","cards-09"]},
     {"id":"6f1833a0-30f5-4718-9a3e-7620beb72bfc","kind":"card","name":"Clockwork Salvager","status":"authored","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Warrior","spark":1,"text":"When you discard a card, you may play that card from your void this turn.","module":"src/content/cards/clockwork-salvager-6f1833a0.ts","rulesDecisions":["RD-hv-umm2.81-2","RD-hv-umm2.81-3"],"tags":["duration","play-from-zone","trigger-discard","zone-cards"],"requiredPrimitives":{"existing":["playFromZone","untilEndOfTurn","whenDiscard","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":6,"routing":["5.2","cards-56"]},
-    {"id":"6fa9c440-3912-4b1e-868c-840ae772fe1c","kind":"card","name":"Underroot Diviner","status":"pending","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Visitor","spark":1,"text":"☾, Banish 3 cards from your void: Draw a card.","amplifiedText":"☾, Banish 3 cards from your void: Draw 2 cards.","module":"src/content/cards/underroot-diviner-6fa9c440.ts","tags":["cost-banish-void","cost-exhaust","draw"],"requiredPrimitives":{"existing":["banishFromVoidCost","draw","exhaustSelf"],"new":[]},"promptKinds":["chooseCards:banishCost"],"family":3,"routing":["5.2","cards-13"]},
+    {"id":"6fa9c440-3912-4b1e-868c-840ae772fe1c","kind":"card","name":"Underroot Diviner","status":"authored","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Visitor","spark":1,"text":"☾, Banish 3 cards from your void: Draw a card.","amplifiedText":"☾, Banish 3 cards from your void: Draw 2 cards.","module":"src/content/cards/underroot-diviner-6fa9c440.ts","tags":["cost-banish-void","cost-exhaust","draw"],"requiredPrimitives":{"existing":["banishFromVoidCost","draw","exhaustSelf"],"new":[]},"promptKinds":["chooseCards:banishCost"],"family":3,"routing":["5.2","cards-13"]},
     {"id":"70306382-ac0d-4b08-843a-23efb3835c94","kind":"card","name":"First Encounter","status":"pending","cardType":"Event","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"","spark":null,"text":"Materialize all characters in your void which were discarded this turn.\n\nWhen you discard this card, it gains reclaim 0●.","module":"src/content/cards/first-encounter-70306382.ts","tags":["duration","grant-reclaim","materialize-card","trigger-discard-self","turn-history","zone-cards"],"requiredPrimitives":{"existing":["grantReclaim","materialize","untilEndOfTurn","whenDiscardSelfTrigger","zoneCardRefs"],"new":["turnHistory"]},"promptKinds":["chooseCards:chooseInZone"],"family":14,"routing":["5.2","cards-101"]},
-    {"id":"70716dd8-1133-4966-b01b-757ea627874c","kind":"card","name":"Grim Pursuer","status":"pending","cardType":"Character","rarity":"Common","cost":2,"speed":"standard","subtype":"Detective","spark":2,"text":"▸Materialized: Choose a card in the opponent's hand. That card cannot be played while this character is in play.","module":"src/content/cards/grim-pursuer-70716dd8.ts","rulesDecisions":["RD-hv-7x4l.6-4"],"tags":["opponent-hand-choice","play-restriction","trigger-materialized"],"requiredPrimitives":{"existing":["onMaterialized"],"new":["playRestriction"]},"promptKinds":["chooseCards:chooseFromOpponentHand"],"family":16,"routing":["5.2","prim-play-restriction"]},
+    {"id":"70716dd8-1133-4966-b01b-757ea627874c","kind":"card","name":"Grim Pursuer","status":"authored","cardType":"Character","rarity":"Common","cost":2,"speed":"standard","subtype":"Detective","spark":2,"text":"▸Materialized: Choose a card in the opponent's hand. That card cannot be played while this character is in play.","module":"src/content/cards/grim-pursuer-70716dd8.ts","rulesDecisions":["RD-hv-7x4l.6-4","RD-hv-umm2.109-1","RD-hv-umm2.109-2"],"tags":["opponent-hand-choice","play-restriction","trigger-materialized"],"requiredPrimitives":{"existing":["onMaterialized","playRestriction"],"new":[]},"promptKinds":["chooseCards:chooseFromOpponentHand"],"family":16,"routing":["5.2","cards-118"]},
     {"id":"713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc","kind":"card","name":"Salvage Colossus","status":"authored","cardType":"Character","rarity":"Common","cost":5,"speed":"standard","subtype":"Synth","spark":4,"text":"▸Materialized: Draw 2 cards.\n\nReclaim – 3●, Banish 7 cards from your void.","module":"src/content/cards/salvage-colossus-713b9f42.ts","tags":["cost-banish-void","cost-energy","draw","kw-reclaim","trigger-materialized"],"requiredPrimitives":{"existing":["banishFromVoidCost","draw","energy","onMaterialized","reclaim"],"new":[]},"promptKinds":["chooseCards:banishCost","chooseMode:playRoute"],"family":2,"routing":["5.2","cards-03"]},
     {"id":"724a1362-3f0f-4b77-b14e-22c0b877349a","kind":"card","name":"Radiants' Captain","status":"pending","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Warrior","spark":1,"text":"2●, ☾: Draw a card, then discard a card.\n\nOnce per turn, when you discard a card, materialize a 2✦ shadow figment.","amplifiedText":"2●, ☾: Draw a card, then discard a card.\n\nOnce per turn, when you discard a card, materialize a 3✦ shadow figment.","module":"src/content/cards/radiants-captain-724a1362.ts","tags":["cost-energy","cost-exhaust","discard","draw","figments","once-per-turn","trigger-discard"],"requiredPrimitives":{"existing":["discard","draw","energy","exhaustSelf","materializeFigments","oncePerTurn","whenDiscard"],"new":[]},"promptKinds":["chooseCards:discard"],"family":7,"routing":["5.2","cards-63"]},
     {"id":"72debe2e-1f47-4a66-83c3-71bb72876663","kind":"card","name":"Wake the Fallen","status":"pending","cardType":"Event","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"","spark":null,"text":"Materialize all characters in your void which dissolved this turn.","module":"src/content/cards/wake-the-fallen-72debe2e.ts","tags":["duration","materialize-card","turn-history","zone-cards"],"requiredPrimitives":{"existing":["materialize","untilEndOfTurn","zoneCardRefs"],"new":["turnHistory"]},"promptKinds":["chooseCards:chooseInZone"],"family":14,"routing":["5.2","prim-turn-history"]},
@@ -9287,7 +9256,7 @@
     {"id":"956aaeb1-5280-4294-bf80-73079f35c5f6","kind":"card","name":"Ash Harbinger","status":"pending","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Ancient","spark":2,"text":"☾, Discard a card: Materialize a 1✦ warrior figment.\n\n☾, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy.","amplifiedText":"☾, Discard a card: Materialize a 2✦ warrior figment.\n\n☾, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy.","module":"src/content/cards/ash-harbinger-956aaeb1.ts","tags":["cost-abandon","cost-discard","cost-exhaust","dissolve","figments","targeted"],"requiredPrimitives":{"existing":["abandonCost","discardCost","dissolve","exhaustSelf","materializeFigments"],"new":[]},"promptKinds":["chooseCards:abandonCost","chooseCards:discardCost","chooseTargets:target"],"family":7,"routing":["5.2","cards-62"]},
     {"id":"95711262-8510-475c-a572-c1cd144d54cb","kind":"card","name":"Pastward Wanderer","status":"pending","cardType":"Character","rarity":"Common","cost":2,"speed":"standard","subtype":"Child","spark":1,"text":"▸Dawn: Choose an event in your void with cost less than or equal to this character's ✦. That event gains reclaim 0●.","module":"src/content/cards/pastward-wanderer-95711262.ts","tags":["grant-reclaim","selector-bounds","trigger-dawn","value-card-stat","zone-cards"],"requiredPrimitives":{"existing":["grantReclaim","onDawn","selectorBounds","valueCardStats","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":6,"routing":["5.2","cards-57"]},
     {"id":"95d37f76-eb3d-4bcd-a8af-0ae37feabd4d","kind":"card","name":"Veilpiercer","status":"pending","cardType":"Character","rarity":"Common","cost":3,"speed":"interrupt","subtype":"Synth","spark":3,"text":"▸Materialized: Return a played ≤3● cost card to the opponent's hand. It costs 2● more.","amplifiedText":"▸Materialized: Return a played ≤4● cost card to the opponent's hand. It costs 2● more.","module":"src/content/cards/veilpiercer-95d37f76.ts","tags":["bounce-enemy","card-cost","cost-modifier","prevent","prevent-destination","stack-selector-bounds","trigger-materialized"],"requiredPrimitives":{"existing":["costModifier","modifyCardCost","onMaterialized","prevent","preventDestination","returnToHand","stackItem"],"new":["stackSelectorBounds"]},"promptKinds":["chooseTargets:target"],"family":14,"routing":["5.2","cards-97"]},
-    {"id":"9629a58a-9f30-40f0-9199-835ea2dddc76","kind":"card","name":"Vault Infiltrator","status":"pending","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Warrior","spark":2,"text":"Players may only play one card per turn.","module":"src/content/cards/vault-infiltrator-9629a58a.ts","tags":["play-restriction"],"requiredPrimitives":{"existing":[],"new":["playRestriction"]},"promptKinds":[],"family":16,"routing":["5.2","prim-play-restriction"]},
+    {"id":"9629a58a-9f30-40f0-9199-835ea2dddc76","kind":"card","name":"Vault Infiltrator","status":"authored","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Warrior","spark":2,"text":"Players may only play one card per turn.","module":"src/content/cards/vault-infiltrator-9629a58a.ts","rulesDecisions":["RD-hv-umm2.109-2","RD-hv-umm2.109-3"],"tags":["play-restriction"],"requiredPrimitives":{"existing":["playRestriction"],"new":[]},"promptKinds":[],"family":16,"routing":["5.2","cards-118"]},
     {"id":"965ce3b2-a722-475c-99c5-5b35685d2404","kind":"card","name":"Dreamvale Monarch","status":"pending","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Spirit Animal","spark":1,"text":"▸Materialized: Draw a card.","module":"src/content/cards/dreamvale-monarch-965ce3b2.ts","tags":["draw","trigger-materialized"],"requiredPrimitives":{"existing":["draw","onMaterialized"],"new":[]},"promptKinds":[],"family":3,"routing":["5.2","cards-21"]},
     {"id":"967c714f-40c5-4a77-8e22-40691a2755d4","kind":"card","name":"Passage Through Oblivion","status":"authored","cardType":"Event","rarity":"Common","cost":1,"speed":"standard","subtype":"","spark":null,"text":"Rematerialize a character you control.\n\nReclaim 1●.","module":"src/content/cards/passage-through-oblivion-967c714f.ts","tags":["kw-reclaim","rematerialize","targeted"],"requiredPrimitives":{"existing":["reclaim","rematerialize"],"new":[]},"promptKinds":["chooseMode:playRoute","chooseTargets:target"],"family":6,"routing":["5.2","cards-58"]},
     {"id":"96e2c30c-930c-47af-abb0-d4fbab454d56","kind":"card","name":"Winterbough Guide","status":"pending","cardType":"Character","rarity":"Rare","cost":2,"speed":"standard","subtype":"Warrior","spark":1,"text":"▸Materialized, Dawn: Erode 1.\n\nOnce per turn, you may play a warrior from your void.","amplifiedText":"▸Materialized, Dawn: Erode 2.\n\nOnce per turn, you may play a warrior from your void.","module":"src/content/cards/winterbough-guide-96e2c30c.ts","tags":["erode","once-per-turn","play-from-zone","subtype-reference","trigger-dawn","trigger-materialized","void-zone","zone-cards"],"requiredPrimitives":{"existing":["erode","functionalZones","ofSubtype","onDawn","onMaterialized","oncePerTurn","playFromZone","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":15,"routing":["5.2","cards-114"]},
@@ -9400,12 +9369,12 @@
     {"id":"cebcd591-dbd6-40b1-813d-f7f01e1b7fdb","kind":"card","name":"Abyssal Deputy","status":"pending","cardType":"Character","rarity":"Uncommon","cost":4,"speed":"fast","subtype":"Outsider","spark":2,"text":"Phasing\n\nWhen an outsider you control scores ⍟, draw a card.","module":"src/content/cards/abyssal-deputy-cebcd591.ts","tags":["draw","kw-phasing","trigger-scores"],"requiredPrimitives":{"existing":["draw","phase","whenScores"],"new":[]},"promptKinds":[],"family":6,"routing":["5.2","cards-55"]},
     {"id":"cf173b05-7bf2-465b-91e2-41f213c536d1","kind":"card","name":"Grim Recruiter","status":"pending","cardType":"Character","rarity":"Common","cost":3,"speed":"standard","subtype":"Warrior","spark":3,"text":"Abandon a character: Store 1⧗.\n\n2●, 2⧗: Materialize two 1✦ warrior figments.","module":"src/content/cards/grim-recruiter-cf173b05.ts","tags":["cost-abandon","cost-energy","counters-cost","figments","store-counters"],"requiredPrimitives":{"existing":["abandonCost","countersCost","energy","materializeFigments","storeCounters"],"new":[]},"promptKinds":["chooseCards:abandonCost"],"family":9,"routing":["5.2","cards-87"]},
     {"id":"cfa78375-85b7-47e9-95f5-b31e6d112c52","kind":"card","name":"Ruin Scavenger","status":"authored","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Survivor","spark":1,"text":"1●, Banish a card from the opponent's void: This character gains +1✦.","amplifiedText":"1●, Banish a card from the opponent's void: This character gains +2✦.","module":"src/content/cards/ruin-scavenger-cfa78375.ts","rulesDecisions":["RD-hv-umm2.92-1"],"tags":["cost-banish-any-void","cost-banish-void","cost-energy","gain-spark"],"requiredPrimitives":{"existing":["banishFromAnyVoidCost","banishFromVoidCost","energy","gainSpark"],"new":[]},"promptKinds":["chooseCards:banishCost"],"family":8,"routing":["5.2","cards-76"]},
-    {"id":"d09a6760-6630-4964-9c77-decc641df713","kind":"card","name":"Urban Desperado","status":"pending","cardType":"Character","rarity":"Common","cost":2,"speed":"standard","subtype":"Visitor","spark":2,"text":"▸Materialized: The opponent cannot play events this turn.","module":"src/content/cards/urban-desperado-d09a6760.ts","tags":["duration","play-restriction","trigger-materialized"],"requiredPrimitives":{"existing":["onMaterialized","untilEndOfTurn"],"new":["playRestriction"]},"promptKinds":[],"family":16,"routing":["5.2","prim-play-restriction"]},
+    {"id":"d09a6760-6630-4964-9c77-decc641df713","kind":"card","name":"Urban Desperado","status":"authored","cardType":"Character","rarity":"Common","cost":2,"speed":"standard","subtype":"Visitor","spark":2,"text":"▸Materialized: The opponent cannot play events this turn.","module":"src/content/cards/urban-desperado-d09a6760.ts","rulesDecisions":["RD-hv-umm2.109-2"],"tags":["duration","play-restriction","trigger-materialized"],"requiredPrimitives":{"existing":["onMaterialized","playRestriction","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":16,"routing":["5.2","cards-117"]},
     {"id":"d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad","kind":"card","name":"Ripple Through Reality","status":"pending","cardType":"Event","rarity":"Uncommon","cost":2,"speed":"interrupt","subtype":"","spark":null,"text":"Prevent a played card. Put it on top of the opponent's deck.","amplifiedText":"Prevent a played card. Put it on the bottom of the opponent's deck.","module":"src/content/cards/ripple-through-reality-d1b7d5c6.ts","tags":["prevent","prevent-destination"],"requiredPrimitives":{"existing":["prevent","preventDestination","stackItem"],"new":[]},"promptKinds":["chooseTargets:target"],"family":11,"routing":["5.2","cards-95"],"correction":"prevent with the deckTop destination"},
     {"id":"d1c25546-dcf2-481e-8f00-9afef3adf24b","kind":"card","name":"Threshold Scout","status":"pending","cardType":"Character","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"Explorer","spark":3,"text":"▸Challenge: You may pay 2● and discard a card to draw two cards.","module":"src/content/cards/threshold-scout-d1c25546.ts","tags":["discard","draw","trigger-challenge","you-may-pay"],"requiredPrimitives":{"existing":["discard","draw","onChallenge","optional"],"new":[]},"promptKinds":["chooseCards:discard","payOrDecline:optionalPayment"],"family":3,"routing":["5.2","cards-15"]},
     {"id":"d217303e-b115-484a-b22c-0e44d5701389","kind":"card","name":"Illumination of Glory","status":"pending","cardType":"Event","rarity":"Rare","cost":4,"speed":"standard","subtype":"","spark":null,"text":"This event cannot be prevented. Gain 2⍟ for each card you have played this turn.","module":"src/content/cards/illumination-of-glory-d217303e.ts","tags":["duration","gain-points","kw-cannot-be-prevented","turn-history"],"requiredPrimitives":{"existing":["gainPoints","keyword","untilEndOfTurn"],"new":["turnHistory"]},"promptKinds":[],"family":14,"routing":["5.2","cards-101"]},
     {"id":"d24ea640-638d-4ce2-b15d-b3f4588bda6b","kind":"card","name":"Echoes of Eternity","status":"pending","cardType":"Event","rarity":"Uncommon","cost":2,"speed":"fast","subtype":"","spark":null,"text":"The next time you play a ≤2● cost event this turn, copy it.","amplifiedText":"The next time you play a ≤3● cost event this turn, copy it.","module":"src/content/cards/echoes-of-eternity-d24ea640.ts","rulesDecisions":["RD-hv-7x4l.1-3","RD-hv-7x4l.6-1","RD-hv-7x4l.8-4"],"tags":["card-filter-bounds","copy","duration","floating-trigger"],"requiredPrimitives":{"existing":["cardFilterBounds","copyCard","floating","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":12,"routing":["5.2","cards-95"]},
-    {"id":"d26d31c0-7bd2-4d58-bed9-444e032a1087","kind":"card","name":"Door to Possibility","status":"pending","cardType":"Event","rarity":"Rare","cost":1,"speed":"standard","subtype":"","spark":null,"text":"Choose a value of X. Discover an event with cost X.","module":"src/content/cards/door-to-possibility-d26d31c0.ts","tags":["cost-energy-x","discover"],"requiredPrimitives":{"existing":["discover","energyX"],"new":[]},"promptKinds":["chooseCards:discover","chooseNumber:chooseX"],"family":3,"routing":["5.2","cards-14"]},
+    {"id":"d26d31c0-7bd2-4d58-bed9-444e032a1087","kind":"card","name":"Door to Possibility","status":"authored","cardType":"Event","rarity":"Rare","cost":1,"speed":"standard","subtype":"","spark":null,"text":"Choose a value of X. Discover an event with cost X.","module":"src/content/cards/door-to-possibility-d26d31c0.ts","tags":["cost-energy-x","discover"],"requiredPrimitives":{"existing":["discover","energyX"],"new":[]},"promptKinds":["chooseCards:discover","chooseNumber:chooseX"],"family":3,"routing":["5.2","cards-14"]},
     {"id":"d2a3d344-613c-449e-9a87-0f720a85585d","kind":"card","name":"Overstory Explorer","status":"pending","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Explorer","spark":1,"text":"▸Dissolved: Gain 1 maximum ●.","amplifiedText":"▸Dissolved: Gain 2 maximum ●.","module":"src/content/cards/overstory-explorer-d2a3d344.ts","rulesDecisions":["RD-hv-umm2.342-1"],"tags":["max-energy","trigger-dissolved-self"],"requiredPrimitives":{"existing":["gainMaxEnergy","onDissolved"],"new":[]},"promptKinds":[],"family":4,"routing":["5.2","cards-33"]},
     {"id":"d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c","kind":"card","name":"Temporal Aperture","status":"pending","cardType":"Event","rarity":"Rare","cost":2,"speed":"standard","subtype":"","spark":null,"text":"To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it.","amplifiedText":"To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it with awakened.","module":"src/content/cards/temporal-aperture-d2c22fdc.ts","tags":["additional-cost","cost-abandon","discover","grant-keyword","materialize-card","selector-bounds","subtype-reference"],"requiredPrimitives":{"existing":["abandonCost","additionalCost","discover","grant","materialize","ofSubtype","selectorBounds"],"new":[]},"promptKinds":["chooseCards:abandonCost","chooseCards:discover"],"family":15,"routing":["5.2","cards-103"]},
     {"id":"d30bd488-f921-49cb-a44f-353c54cb6548","kind":"card","name":"Nightprowler","status":"authored","cardType":"Character","rarity":"Rare","cost":1,"speed":"standard","subtype":"Spirit Animal","spark":1,"text":"Abandon this character: Gain 1●.\n\nReclaim 0●","amplifiedText":"Abandon this character: Gain 2●.\n\nReclaim 0●","module":"src/content/cards/nightprowler-d30bd488.ts","tags":["cost-abandon-self","gain-energy","kw-reclaim"],"requiredPrimitives":{"existing":["abandonCost","gainEnergy","reclaim"],"new":[]},"promptKinds":["chooseMode:playRoute"],"family":2,"routing":["5.2","cards-03"]},
@@ -9422,12 +9391,12 @@
     {"id":"dbd014b1-1ec8-4762-bd96-48a2a4824de2","kind":"card","name":"Repulsion Detail","status":"authored","cardType":"Character","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"Squad","spark":2,"text":"▸Materialized: Return an enemy to hand. It costs 2● more.","module":"src/content/cards/repulsion-detail-dbd014b1.ts","rulesDecisions":["RD-hv-umm2.101-2"],"tags":["bounce-enemy","card-cost","cost-modifier","targeted","trigger-materialized"],"requiredPrimitives":{"existing":["costModifier","modifyCardCost","onMaterialized","returnToHand"],"new":[]},"promptKinds":["chooseTargets:target"],"family":14,"routing":["5.2","cards-97"]},
     {"id":"dcaba429-6fbc-4ea5-b063-871134ccd03b","kind":"card","name":"Skies of Change","status":"pending","cardType":"Event","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"","spark":null,"text":"To play this event, discard a card. Draw 2 cards.","module":"src/content/cards/skies-of-change-dcaba429.ts","tags":["additional-cost","cost-discard","draw"],"requiredPrimitives":{"existing":["additionalCost","discardCost","draw"],"new":[]},"promptKinds":["chooseCards:discardCost"],"family":3,"routing":["5.2","cards-11"]},
     {"id":"de946f5a-1e27-4d40-ae44-9ef8cc041949","kind":"card","name":"Rower of Changing Seas","status":"authored","cardType":"Character","rarity":"Common","cost":2,"speed":"standard","subtype":"Visitor","spark":1,"text":"Return a character you control to hand: Awaken a character you control.","amplifiedText":"Return a character you control to hand: Awaken up to two characters you control.","module":"src/content/cards/rower-of-changing-seas-de946f5a.ts","rulesDecisions":["RD-hv-umm2.90-1"],"tags":["awaken","cost-return","targeted"],"requiredPrimitives":{"existing":["awaken","returnCost"],"new":[]},"promptKinds":["chooseTargets:target"],"family":8,"routing":["5.2","cards-71"]},
-    {"id":"e26e0ac8-d6c9-4b0c-8672-4f73651f2586","kind":"card","name":"Lantern Keeper","status":"pending","cardType":"Character","rarity":"Uncommon","cost":1,"speed":"standard","subtype":"Visitor","spark":1,"text":"☾, Discard a card: Draw a card.","amplifiedText":"☾, Discard a card: Draw 2 cards.","module":"src/content/cards/lantern-keeper-e26e0ac8.ts","tags":["cost-discard","cost-exhaust","draw"],"requiredPrimitives":{"existing":["discardCost","draw","exhaustSelf"],"new":[]},"promptKinds":["chooseCards:discardCost"],"family":3,"routing":["5.2","cards-14"]},
+    {"id":"e26e0ac8-d6c9-4b0c-8672-4f73651f2586","kind":"card","name":"Lantern Keeper","status":"authored","cardType":"Character","rarity":"Uncommon","cost":1,"speed":"standard","subtype":"Visitor","spark":1,"text":"☾, Discard a card: Draw a card.","amplifiedText":"☾, Discard a card: Draw 2 cards.","module":"src/content/cards/lantern-keeper-e26e0ac8.ts","tags":["cost-discard","cost-exhaust","draw"],"requiredPrimitives":{"existing":["discardCost","draw","exhaustSelf"],"new":[]},"promptKinds":["chooseCards:discardCost"],"family":3,"routing":["5.2","cards-14"]},
     {"id":"e2f542eb-090f-4a22-a42c-a120eb6caaa3","kind":"card","name":"Dreamborne Leviathan","status":"pending","cardType":"Character","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"Spirit Animal","spark":2,"text":"Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment.","amplifiedText":"Once per turn, when you play a spirit animal, materialize a 2✦ spirit animal figment.","module":"src/content/cards/dreamborne-leviathan-e2f542eb.ts","rulesDecisions":["RD-hv-7x4l.34-1","RD-hv-7x4l.6-5"],"tags":["figments","once-per-turn","trigger-play"],"requiredPrimitives":{"existing":["materializeFigments","oncePerTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":7,"routing":["5.2","cards-67"]},
     {"id":"e3193b23-2002-40a9-91fc-e0713200355e","kind":"card","name":"Blood Moon Ronin","status":"authored","cardType":"Character","rarity":"Uncommon","cost":0,"speed":"standard","subtype":"Warrior","spark":1,"text":"Abandon this character: Draw a card with ephemeral.","amplifiedText":"Abandon this character: Draw 2 cards with ephemeral.","module":"src/content/cards/blood-moon-ronin-e3193b23.ts","rulesDecisions":["RD-hv-7x4l.8-3"],"tags":["cost-abandon-self","draw","ephemeral"],"requiredPrimitives":{"existing":["abandonCost","draw"],"new":[]},"promptKinds":[],"family":2,"routing":["5.2","cards-03"]},
     {"id":"e3431bd0-5a81-497f-9ec9-18275b568c00","kind":"card","name":"Return to Nowhere","status":"pending","cardType":"Event","rarity":"Common","cost":3,"speed":"fast","subtype":"","spark":null,"text":"Choose one: Dissolve a ≤2✦ enemy, draw 2 cards and discard 2 cards, or return a ≤2● cost character from your void to hand.","module":"src/content/cards/return-to-nowhere-e3431bd0.ts","tags":["choose-one","discard","dissolve","draw","return-from-void","targeted","zone-cards"],"requiredPrimitives":{"existing":["chooseOne","discard","dissolve","draw","returnFromVoid","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone","chooseCards:discard","chooseMode:chooseOne","chooseTargets:target"],"family":6,"routing":["5.2","cards-47"]},
     {"id":"e455225f-c444-44a2-8796-805cae2b755f","kind":"card","name":"Oracle of Shifting Skies","status":"pending","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Visionary","spark":1,"text":"When you play an event, foresee 1.","amplifiedText":"When you play an event, foresee 2.","module":"src/content/cards/oracle-of-shifting-skies-e455225f.ts","tags":["foresee","trigger-play"],"requiredPrimitives":{"existing":["foresee","whenYouPlay"],"new":[]},"promptKinds":["arrange:foresee"],"family":3,"routing":["5.2","cards-22"]},
-    {"id":"e4ab6a18-c3b2-4149-a446-c7c1e8d66714","kind":"card","name":"Advance Gunner","status":"pending","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Warrior","spark":1,"text":"Abandon this character: Erode 1.\n\n▸Dissolved: Draw a card.","amplifiedText":"Abandon this character: Erode 1.\n\n▸Dissolved: Draw two cards.","module":"src/content/cards/advance-gunner-e4ab6a18.ts","rulesDecisions":["RD-hv-7x4l.6-1","RD-hv-7x4l.6-5","RD-hv-umm2.342-1"],"tags":["cost-abandon-self","draw","erode","trigger-dissolved-self"],"requiredPrimitives":{"existing":["abandonCost","draw","erode","onDissolved"],"new":[]},"promptKinds":[],"family":3,"routing":["5.2","cards-13"]},
+    {"id":"e4ab6a18-c3b2-4149-a446-c7c1e8d66714","kind":"card","name":"Advance Gunner","status":"authored","cardType":"Character","rarity":"Common","cost":1,"speed":"standard","subtype":"Warrior","spark":1,"text":"Abandon this character: Erode 1.\n\n▸Dissolved: Draw a card.","amplifiedText":"Abandon this character: Erode 1.\n\n▸Dissolved: Draw two cards.","module":"src/content/cards/advance-gunner-e4ab6a18.ts","rulesDecisions":["RD-hv-7x4l.6-1","RD-hv-7x4l.6-5","RD-hv-umm2.342-1"],"tags":["cost-abandon-self","draw","erode","trigger-dissolved-self"],"requiredPrimitives":{"existing":["abandonCost","draw","erode","onDissolved"],"new":[]},"promptKinds":[],"family":3,"routing":["5.2","cards-13"]},
     {"id":"e4e8d3b9-3463-4b92-8fbe-35064f72402d","kind":"card","name":"Pinnacle Ascendant","status":"pending","cardType":"Character","rarity":"Common","cost":3,"speed":"standard","subtype":"Synth","spark":3,"text":"Characters you control have awakened.\n\nWhen you discard or erode this card, it gains reclaim 0●.","module":"src/content/cards/pinnacle-ascendant-e4e8d3b9.ts","tags":["grant-keyword","grant-reclaim","trigger-discard-self","trigger-erode"],"requiredPrimitives":{"existing":["grant","grantReclaim","whenDiscardSelfTrigger"],"new":["whenErodeTrigger"]},"promptKinds":[],"family":8,"routing":["5.2","cards-85"]},
     {"id":"e656cfd3-7481-46e5-934d-4dd242b00031","kind":"card","name":"Ordained Collapse","status":"pending","cardType":"Event","rarity":"Common","cost":3,"costs":["3","X"],"speed":"standard","subtype":"","spark":null,"text":"Dissolve each character with cost X●.","module":"src/content/cards/ordained-collapse-e656cfd3.ts","tags":["cost-energy-x","dissolve","selector-bounds"],"requiredPrimitives":{"existing":["dissolve","energyX","selectorBounds"],"new":[]},"promptKinds":["chooseNumber:chooseX"],"family":5,"routing":["5.2","cards-40"]},
     {"id":"e72245f2-c153-4e79-ba8e-956d18202b48","kind":"card","name":"Thief of Memory","status":"pending","cardType":"Character","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"Tinkerer","spark":3,"text":"☾: Banish a character from a player's void. This character gains the abilities of that character.","module":"src/content/cards/thief-of-memory-e72245f2.ts","tags":["choose-player","cost-exhaust","gain-abilities","zone-cards"],"requiredPrimitives":{"existing":["choosePlayer","exhaustSelf","zoneCardRefs"],"new":["gainAbilities"]},"promptKinds":["chooseCards:chooseInZone","choosePlayer:choosePlayer"],"family":16,"routing":["5.2","prim-gain-abilities"]},
@@ -9464,7 +9433,7 @@
     {"id":"f7b135ea-4894-46ab-b41d-ba2f74b070a1","kind":"card","name":"A New Adventure","status":"pending","cardType":"Event","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"","spark":null,"text":"Draw two cards, then discard two cards. Gain 3●.","amplifiedText":"Draw two cards, then discard one card. Gain 3●.","module":"src/content/cards/a-new-adventure-f7b135ea.ts","tags":["discard","draw","gain-energy"],"requiredPrimitives":{"existing":["discard","draw","gainEnergy"],"new":[]},"promptKinds":["chooseCards:discard"],"family":4,"routing":["5.2","cards-27"]},
     {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","kind":"card","name":"Forgotten Sleeper","status":"pending","cardType":"Character","rarity":"Uncommon","cost":4,"speed":"standard","subtype":"Synth","spark":5,"text":"If you've discarded a card this turn, this character costs 3● less.","module":"src/content/cards/forgotten-sleeper-f7c68226.ts","rulesDecisions":["RD-hv-umm2.53-1","RD-hv-umm2.53-2"],"tags":["cost-modifier","duration","self-cost","turn-history"],"requiredPrimitives":{"existing":["costModifier","staticZones","untilEndOfTurn"],"new":["turnHistory"]},"promptKinds":[],"family":14,"routing":["5.2","prim-turn-history"]},
     {"id":"f7ffe999-685d-4ea2-85de-2e567eb2a042","kind":"card","name":"Key to the Moment","status":"pending","cardType":"Event","rarity":"Uncommon","cost":3,"speed":"fast","subtype":"","spark":null,"text":"Return all but one character you control to hand. Draw a card for each character returned.","module":"src/content/cards/key-to-the-moment-f7ffe999.ts","tags":["draw","return-own-to-hand"],"requiredPrimitives":{"existing":["draw","returnToHand"],"new":[]},"promptKinds":[],"family":6,"routing":["5.2","cards-55"]},
-    {"id":"f82c7407-b642-4ab1-8878-171f9121b3eb","kind":"card","name":"Canopy Lookout","status":"pending","cardType":"Character","rarity":"Uncommon","cost":1,"speed":"standard","subtype":"Warrior","spark":1,"text":"Abandon this character: Draw a card.","amplifiedText":"Abandon this character: Draw 2 cards.","module":"src/content/cards/canopy-lookout-f82c7407.ts","tags":["cost-abandon-self","draw"],"requiredPrimitives":{"existing":["abandonCost","draw"],"new":[]},"promptKinds":[],"family":3,"routing":["5.2","cards-12"]},
+    {"id":"f82c7407-b642-4ab1-8878-171f9121b3eb","kind":"card","name":"Canopy Lookout","status":"authored","cardType":"Character","rarity":"Uncommon","cost":1,"speed":"standard","subtype":"Warrior","spark":1,"text":"Abandon this character: Draw a card.","amplifiedText":"Abandon this character: Draw 2 cards.","module":"src/content/cards/canopy-lookout-f82c7407.ts","tags":["cost-abandon-self","draw"],"requiredPrimitives":{"existing":["abandonCost","draw"],"new":[]},"promptKinds":[],"family":3,"routing":["5.2","cards-12"]},
     {"id":"f860e815-3ed9-463d-ac4d-ed8d2778f8ad","kind":"card","name":"Night Stalker","status":"pending","cardType":"Character","rarity":"Rare","cost":0,"speed":"standard","subtype":"Spirit Animal","spark":0,"text":"To play this character, discard a character.\n\n▸Materialized, Dawn: Gain 1●.","amplifiedText":"To play this character, discard a character.\n\n▸Materialized, Dawn: Gain 2●.","module":"src/content/cards/night-stalker-f860e815.ts","tags":["additional-cost","cost-discard","cost-discard-filter","gain-energy","trigger-dawn","trigger-materialized"],"requiredPrimitives":{"existing":["additionalCost","discardCost","discardCostFilter","gainEnergy","onDawn","onMaterialized"],"new":[]},"promptKinds":["chooseCards:discardCost"],"family":4,"routing":["5.2","cards-23"]},
     {"id":"f8678d24-f18b-4c94-a6c2-50efb8193b7f","kind":"card","name":"Ossuary Offering","status":"pending","cardType":"Event","rarity":"Uncommon","cost":2,"speed":"standard","subtype":"","spark":null,"text":"Draw 2 cards. The opponent gains 2⍟.","amplifiedText":"Draw 2 cards. The opponent gains 1⍟.","module":"src/content/cards/ossuary-offering-f8678d24.ts","tags":["draw","gain-points"],"requiredPrimitives":{"existing":["draw","gainPoints"],"new":[]},"promptKinds":[],"family":4,"routing":["5.2","cards-28"]},
     {"id":"f95cae7b-6502-4dbe-ae26-16853959d9a3","kind":"card","name":"Sunset Chronicler","status":"authored","cardType":"Character","rarity":"Uncommon","cost":3,"speed":"standard","subtype":"Visitor","spark":1,"text":"When a character you control is dissolved, draw a card.","module":"src/content/cards/sunset-chronicler-f95cae7b.ts","rulesDecisions":["RD-hv-umm2.333-1","RD-hv-umm2.65-1","RD-hv-umm2.65-2"],"tags":["draw","trigger-dissolved-other"],"requiredPrimitives":{"existing":["draw","whenDissolvedTrigger"],"new":[]},"promptKinds":[],"family":3,"routing":["5.2","cards-20"]},

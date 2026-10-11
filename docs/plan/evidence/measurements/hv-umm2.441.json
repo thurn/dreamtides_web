@@ -1,0 +1,378 @@
+{
+  "bead": "hv-umm2.441",
+  "base": "739d2d49fa1c925be80066313d50e264a18dd571",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.441",
+  "dispatchWindow": {
+    "start": "2026-10-11T22:48:34Z",
+    "evidenceAt": "2026-10-11T23:06:12.944332+00:00",
+    "setupBirthProxy": "2026-10-11T22:49:50.395367+00:00",
+    "basis": "Parent pre-brief UTC observation starts the dispatch window; exact helper receipt timestamp is not retained. Full wall includes research, coordination, fixtures and checks. The final evidence boundary immediately precedes commit.",
+    "elapsedToEvidenceMin": 19.7,
+    "finalEvidenceAt": "2026-10-11T23:08:15.966540+00:00"
+  },
+  "scope": [
+    "scripts/content-inventory.ts",
+    "scripts/content-inventory.test.ts",
+    "docs/plan/evidence/content-inventory.json",
+    "own compact friction, measurement JSON and pre-existing notes"
+  ],
+  "lifecyclePolicy": "Boolean existence resolution is unchanged. Validation reports malformed bindings first, then rejects any resolved form that still carries pending, including alongside an available sibling. The diagnostic names module/symbol/member/option/value/literal and requires explicit marker retirement after intended-binding verification. Missing declared stages remain pending. Retired bindings diagnose subsequent renames/removals and stale alternatives. No public alias or intended API name is inferred/rebound.",
+  "freshBaseMarkedObservation": {
+    "artifact": "before-public-results.json",
+    "markedForms": 19,
+    "fulfilled": [],
+    "retiredMetadataEdits": 0,
+    "C12": "DeckMods.typeRemap remains planned/pending; own-type typeChange is not inferred as its replacement."
+  },
+  "publicBaseline": {
+    "artifact": "before-public-results.json",
+    "actualTableBinding": "whenErodeTrigger uses Trigger member=erode pending=member. A synthetic implemented Trigger is accepted=true by unchanged validate, demonstrating the lifecycle gap without a fabricated real absent API.",
+    "provenance": {
+      "check": {
+        "exit": 1,
+        "wallSeconds": 1.65
+      },
+      "regenerate": {
+        "exit": 0,
+        "wallSeconds": 1.722
+      },
+      "base": "739d2d49fa1c925be80066313d50e264a18dd571",
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "767a337eab268c9ce74be00fd16fac11675b94d5e9cf8ab8e78a1a9e0c48f8a7",
+      "trackedInventorySha256": "a0b62dee9680ca1d06c6b357b48557b071ff81ee74033c0af7cbf3fa751c8583",
+      "currentInventorySha256": "6f0842f7d0d99b9c8b594d52c7742a5c14221e6b95016298226ea934b88885d5",
+      "restoredIdentically": true,
+      "observedAt": "2026-10-11T22:50:34.416750+00:00"
+    }
+  },
+  "negativeProofs": {
+    "first": {
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "4b8cd1f90eaec56466fba11a1e04f57f19ff7e66a15c01e9364d5b4ad8126a9d",
+      "exit": 1,
+      "cases": 87,
+      "failed": 19,
+      "passed": 68,
+      "log": "unchanged-lifecycle-negative.log"
+    },
+    "beforeProductionFinalFixture": {
+      "sourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "bdac2b4319b80ec95ec79cb3f76226bb52800209e84ce33d1dfef874bc76f4be",
+      "base": "739d2d49fa1c925be80066313d50e264a18dd571",
+      "exit": 1,
+      "cases": 92,
+      "failed": 23,
+      "passed": 69,
+      "log": "unchanged-final-fixture-negative.log",
+      "productionUntouched": true
+    },
+    "exactFinalFixture": {
+      "intendedSourceSha256": "6b93a291e6bfd618fb15ccb4804a06715edc2d71f0bcced2f8a9290cbac6d53c",
+      "baselineSourceSha256": "df90129a362ef8f049b97c22a04027db1e3d110bc332b19472dcf38a30813583",
+      "fixtureSha256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+      "additionalObservableContract": "Fulfilled pending form also diagnoses alongside an available unmarked sibling.",
+      "exit": 1,
+      "wallSeconds": 6.392,
+      "log": "exact-final-fixture-negative.log",
+      "restoredIdentically": true
+    },
+    "counts": {
+      "failed": 23,
+      "passed": 69,
+      "total": 92
+    },
+    "disposition": "Earlier negatives and fixture snapshots retain their own hashes. The exact final-fixture negative restores intended source byte-identically in finally."
+  },
+  "syntheticContracts": {
+    "positiveBindingPolicy": "All 47 actual capability entries and 48 individual intended forms omit pending deliberately for positive target checks. This avoids treating a future implemented API fixture as a current real-engine availability assertion. One shared compiler model covers the existing independent namespaced minimal APIs. Discriminator invariance remains checked.",
+    "lifecycleCases": "All 19 marked actual metadata forms diagnose on independent implemented API fixtures. Four stage cases cover missing, implemented-but-marked, explicit retirement, later rename/removal and an available sibling. Retired turnHistory diagnoses one stale alternative while its sibling remains available. Generic stage fixtures share one compiler model.",
+    "testDelta": {
+      "files": 0,
+      "lines": 63,
+      "jsdomFiles": 0,
+      "cases": 24
+    },
+    "totalCases": 92,
+    "testFileLines": 365,
+    "newEntrypoints": 0,
+    "newJsdomFiles": 0,
+    "newPlainModules": 0,
+    "guards": "Existing Never/Any/Unknown/unusable option and semantic literal checks remain unchanged."
+  },
+  "comparison": {
+    "freshOldGeneratorByteIdenticalToNew": true,
+    "allEntityFieldsIdentical": true,
+    "entities": 1209,
+    "allAvailability": {
+      "entries": 189,
+      "unchanged": 189,
+      "differences": []
+    },
+    "inheritedTrackedAvailabilityDifferences": [
+      {
+        "name": "playRestriction",
+        "tracked": false,
+        "freshOld": true
+      }
+    ],
+    "beads": {
+      "tracked": 223,
+      "freshOld": 222,
+      "new": 222
+    },
+    "C12": false
+  },
+  "allAvailabilityDiagnostic": {
+    "before-all": {
+      "exit": 0,
+      "wallSeconds": 1.42,
+      "diagnosticSourceSha256": "fa627664bbd4db715791051c2f1ba7647cdae9992b48d89c5f72ecbc3c462f64"
+    },
+    "after-all": {
+      "exit": 0,
+      "wallSeconds": 1.391,
+      "diagnosticSourceSha256": "1785b2ea4a3456f39b2e2cef95b3cc52b13cf539dc6cb2a23f8b22d35a5ed922"
+    },
+    "availability": {
+      "entries": 189,
+      "unchanged": 189,
+      "differences": []
+    },
+    "restoredIdentically": true,
+    "restoredSourceSha256": "6b93a291e6bfd618fb15ccb4804a06715edc2d71f0bcced2f8a9290cbac6d53c",
+    "restoredInventorySha256": "6f0842f7d0d99b9c8b594d52c7742a5c14221e6b95016298226ea934b88885d5"
+  },
+  "finalCli": {
+    "regenerate": {
+      "exit": 0,
+      "wallSeconds": 1.388
+    },
+    "check": {
+      "exit": 0,
+      "wallSeconds": 1.312
+    }
+  },
+  "validationScope": "Tooling-local validation and existing-entrypoint fixtures require focused checks, CLI regenerate/check, review and Knip. No engine/DSL/content/rules/decisions/workflow/config/runner edit or test infrastructure/cross-cutting architecture change; no full suite, browser, fuzz or heavy-lock job.",
+  "fallout": {
+    "publicSignature": "Unchanged resolver/descriptor signatures; shared diagnostic formatter is private.",
+    "outsideFiles": [],
+    "productionChangedLines": 15
+  },
+  "runtimeLedger": {
+    "servers": [],
+    "browsers": [],
+    "leases": [],
+    "heavyCommands": [],
+    "processes": "All owned install, CLI/probe, mutation, focused, review and Knip commands have exited. Every temporary source/inventory probe restores exact bytes. No server, browser, lease, heavy job, provider or implementation writer remains."
+  },
+  "checksPending": [
+    "Parent-owned native submission, approval and closure."
+  ],
+  "inheritedTrackedDetails": {
+    "entityIdsIdentical": true,
+    "changedEntities": 10,
+    "changedFieldsByUuid": [
+      {
+        "id": "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa",
+        "fields": [
+          "rulesDecisions"
+        ]
+      },
+      {
+        "id": "6fa9c440-3912-4b1e-868c-840ae772fe1c",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "70716dd8-1133-4966-b01b-757ea627874c",
+        "fields": [
+          "rulesDecisions",
+          "status",
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "9629a58a-9f30-40f0-9199-835ea2dddc76",
+        "fields": [
+          "rulesDecisions",
+          "status",
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "d09a6760-6630-4964-9c77-decc641df713",
+        "fields": [
+          "rulesDecisions",
+          "status",
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "d26d31c0-7bd2-4d58-bed9-444e032a1087",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "f82c7407-b642-4ab1-8878-171f9121b3eb",
+        "fields": [
+          "status"
+        ]
+      }
+    ],
+    "promptExistenceAndUsageUnchanged": true
+  },
+  "hostLoadSamples": [
+    {
+      "log": "focused-final-exact.log",
+      "step": "prepare",
+      "at": "2026-10-11T23:00:08.939Z",
+      "oneMinuteLoad": 7.888671875
+    },
+    {
+      "log": "focused-final-exact.log",
+      "step": "test",
+      "at": "2026-10-11T23:00:09.395Z",
+      "oneMinuteLoad": 7.888671875
+    },
+    {
+      "log": "focused-final-exact.log",
+      "step": "restore-local-assets",
+      "at": "2026-10-11T23:00:14.178Z",
+      "oneMinuteLoad": 7.8173828125
+    },
+    {
+      "log": "review-final.log",
+      "step": "prepare",
+      "at": "2026-10-11T23:03:29.777Z",
+      "oneMinuteLoad": 29.80224609375
+    },
+    {
+      "log": "review-final.log",
+      "step": "typecheck",
+      "at": "2026-10-11T23:03:30.510Z",
+      "oneMinuteLoad": 28.53662109375
+    },
+    {
+      "log": "review-final.log",
+      "step": "typecheck-node",
+      "at": "2026-10-11T23:03:30.511Z",
+      "oneMinuteLoad": 28.53662109375
+    },
+    {
+      "log": "review-final.log",
+      "step": "import-cycles",
+      "at": "2026-10-11T23:03:30.511Z",
+      "oneMinuteLoad": 28.53662109375
+    },
+    {
+      "log": "review-final.log",
+      "step": "lint",
+      "at": "2026-10-11T23:03:30.512Z",
+      "oneMinuteLoad": 28.53662109375
+    },
+    {
+      "log": "review-final.log",
+      "step": "test-related",
+      "at": "2026-10-11T23:03:30.512Z",
+      "oneMinuteLoad": 28.53662109375
+    },
+    {
+      "log": "review-final.log",
+      "step": "friction-records",
+      "at": "2026-10-11T23:03:30.512Z",
+      "oneMinuteLoad": 28.53662109375
+    },
+    {
+      "log": "review-final.log",
+      "step": "restore-local-assets",
+      "at": "2026-10-11T23:03:43.136Z",
+      "oneMinuteLoad": 25.6669921875
+    },
+    {
+      "log": "knip-final.log",
+      "step": "prepare",
+      "at": "2026-10-11T23:05:02.331Z",
+      "oneMinuteLoad": 12.15576171875
+    },
+    {
+      "log": "knip-final.log",
+      "step": "knip",
+      "at": "2026-10-11T23:05:02.760Z",
+      "oneMinuteLoad": 12.15576171875
+    },
+    {
+      "log": "knip-final.log",
+      "step": "restore-local-assets",
+      "at": "2026-10-11T23:05:04.670Z",
+      "oneMinuteLoad": 12.15576171875
+    }
+  ],
+  "finalChecks": {
+    "focused": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- scripts/content-inventory.test.ts",
+      "exit": 0,
+      "cases": 92,
+      "wrapperWallSeconds": 5.777,
+      "log": "focused-final-exact.log"
+    },
+    "review": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "exit": 0,
+      "relatedCases": 92,
+      "wrapperWallSeconds": 14.189,
+      "log": "review-final.log",
+      "startingOneMinuteLoad": 29.80224609375
+    },
+    "knip": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "exit": 0,
+      "wrapperWallSeconds": 2.87,
+      "log": "knip-final.log"
+    },
+    "cli": {
+      "regenerate": {
+        "exit": 0,
+        "wallSeconds": 1.388
+      },
+      "check": {
+        "exit": 0,
+        "wallSeconds": 1.312
+      }
+    },
+    "timingScope": "CLI and mutation walls are monotonic measurements in their provenance. Wrapper walls span log-file creation through final output, including prepare and asset restoration. Per-step timings are retained in logs; no performance claim or timing assertion is made."
+  },
+  "reviewThreshold": "Parent verified the bounded non-core production diff has 15 changed lines and requires no new independent review. The linked435 independent review and accepted441 finding supply follow-up provenance.",
+  "sourceSha256": {
+    "scripts/content-inventory.ts": "6b93a291e6bfd618fb15ccb4804a06715edc2d71f0bcced2f8a9290cbac6d53c",
+    "scripts/content-inventory.test.ts": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "docs/plan/evidence/content-inventory.json": "6f0842f7d0d99b9c8b594d52c7742a5c14221e6b95016298226ea934b88885d5"
+  },
+  "manifest": {
+    "file": "evidence-manifest.json",
+    "sha256": "08f6fe1d9862362c2c288192a29b7d28ec5fa121448f623877ad7d2c4096d643",
+    "artifacts": 33
+  }
+}

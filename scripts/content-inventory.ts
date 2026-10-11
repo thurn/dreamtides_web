@@ -83,13 +83,13 @@ export interface InventoryCapabilityForm {
   readonly option?: string;
   readonly optionLiteral?: string;
   readonly literal?: string;
-  /** A deliberately unimplemented public feature; earlier binding stages must still resolve. */
+  /** A deliberately unimplemented public feature; retire this marker when its binding exists. */
   readonly pending?: "export" | "member" | "option" | "literal";
 }
 
 export interface InventoryCapabilityResolver {
   (forms: readonly InventoryCapabilityForm[]): boolean;
-  /** Diagnose broken bindings; only explicitly pending feature stages may be absent. */
+  /** Diagnose broken bindings and fulfilled markers; only pending feature stages may be absent. */
   validate(forms: readonly InventoryCapabilityForm[]): boolean;
 }
 
@@ -113,6 +113,13 @@ export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>
   const checker = program.getTypeChecker();
   const variants = (type: ts.Type): readonly ts.Type[] => type.isUnion() ? type.types : [type];
   const literal = (type: ts.Type, value: string): boolean => variants(type).some((part) => part.isStringLiteral() && part.value === value);
+  const bindingTarget = (form: InventoryCapabilityForm): string => [
+    `${form.module}:${form.symbol}`,
+    form.member === undefined ? undefined : `member=${form.member}`,
+    form.option === undefined ? undefined : `option=${form.option}`,
+    form.optionLiteral === undefined ? undefined : `value=${form.optionLiteral}`,
+    form.literal === undefined ? undefined : `literal=${form.literal}`,
+  ].filter(value => value !== undefined).join(" ");
   type Failure = "module" | "export" | "form" | "member" | "option" | "literal" | "optionLiteral" | "value";
   const failure = (form: InventoryCapabilityForm): Failure | null => {
     const source = program.getSourceFile(resolve(ROOT, form.module));
@@ -149,7 +156,9 @@ export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>
       if (forms.length === 0) throw new Error("capability has no authoring descriptors");
       const results = forms.map((form) => ({ form, failure: failure(form) }));
       const invalid = results.filter(({ form, failure }) => failure !== null && failure !== form.pending);
-      if (invalid.length > 0) throw new Error(invalid.map(({ form, failure }) => `invalid capability binding ${form.module}:${form.symbol}${form.member === undefined ? "" : ` member=${form.member}`}${form.option === undefined ? "" : ` option=${form.option}`}${form.optionLiteral === undefined ? "" : ` value=${form.optionLiteral}`} (${failure ?? "unknown"})`).join("; "));
+      if (invalid.length > 0) throw new Error(invalid.map(({ form, failure }) => `invalid capability binding ${bindingTarget(form)} (${failure ?? "unknown"})`).join("; "));
+      const fulfilled = results.filter(({ form, failure }) => failure === null && form.pending !== undefined);
+      if (fulfilled.length > 0) throw new Error(fulfilled.map(({ form }) => `fulfilled pending capability ${bindingTarget(form)}: verify the intended public binding and remove pending=${form.pending ?? "unknown"}`).join("; "));
       return results.some((result) => result.failure === null);
     },
   });
