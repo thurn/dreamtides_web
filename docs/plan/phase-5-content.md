@@ -142,19 +142,26 @@ composition beads skip it.
    isolation boundary. Preserve coherent contracts under 500 lines, with
    small shared synthetic fixtures when needed. Run
    `npm test -- src/engine/effects/primitives/contracts.test.ts`.
-   The registry index is the catalog (Phase 3.4). The session widens the bead's Areas at
-   dispatch to the files the primitive's registration needs:
+   The registry index is the catalog (Phase 3.4). Every primitive bead, and
+   every bead that introduces a prompt kind, takes the
+   [`registration hubs`](workflow.md#hub-areas) area with `engine hubs`,
+   whatever the inventory predicts about its event and prompt kinds. It
+   grants these additive registration entries without widening and without
+   serialization edges; any other edit to these files needs its own area and
+   edges:
    - every primitive: its getter in `src/engine/effects/registry.ts`, whose
      `satisfies` clause makes a missing one a type error;
    - every new engine event kind: its `EVENT_PRESENTATION` entry in
      `src/battle/components/presentation-items.ts`, its fixture in
      `src/engine/testing/prompt-lab.ts` (the tooling test checks every event
      kind has one), and its battle-log line in
-     `src/runtime/battle-prompt-messages.ts`;
+     `src/runtime/battle-prompt-messages.ts` or, for a kind with no line, its
+     reasoned `UNLOGGED` entry in
+     `src/screens/cumulus_adapters/engine-battle-presentation.test.ts`;
    - every new keyword or card status: its badge copy in
      `src/runtime/battle-prompt-messages.ts`, and for a status its
      `CARD_STATUS_BADGES` entry in
-     `src/screens/cumulus_adapters/engine-battle-view-model.ts`.
+     `src/screens/cumulus_adapters/engine-battle-view-model.ts`;
    - every new prompt role: its UI copy in
      `src/runtime/battle-prompt-messages.ts`, its exhaustive Greedy strategy in
      `src/engine/policy/prompts.ts`, a reachable synthetic fixture in
@@ -280,9 +287,9 @@ family by family within each section, and lists each bead's key, kind,
 entities, weight, introduced primitive, new prompt kinds, planning edges,
 serialization edges, scenario module, and `Areas:` files. The Areas name the
 entity modules, the new form's module and its engine contract module when
-applicable, the scenario module and `specs/index.ts`, `engine hubs` for
-primitive beads, and
-the fallout areas its
+applicable, the scenario module and `specs/index.ts`, `engine hubs` and
+`registration hubs` for primitive beads and beads that introduce a prompt
+kind, and the fallout areas its
 [fallout listing](workflow.md#listing-fallout-before-dispatch) calls for.
 
 Bead 5.1b (`hv-umm2.48`) materializes the planning projection as native

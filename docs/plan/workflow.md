@@ -228,7 +228,8 @@ fallout.
 #### Hub areas
 
 A hub area names the shared files most features in a layer touch. It grants
-the same rights as any area. Write its name in the `Areas:` line.
+the same rights as any area, except `registration hubs`, which grants
+additive entries only. Write its name in the `Areas:` line.
 
 - **`engine hubs`**, taken by every bead that changes `src/engine/`:
   - `src/engine/state/`: state types, initial state, clone, hash and
@@ -251,6 +252,31 @@ the same rights as any area. Write its name in the `Areas:` line.
   - `src/session/actions.ts`, `src/session/genesis.ts`,
     `src/session/reducer-version.ts`;
   - `src/rules/replay/` and `scripts/regenerate-replay-fixtures.mjs`.
+- **`registration hubs`**, taken with `engine hubs` by every Phase 5
+  primitive bead and every bead that introduces a prompt kind
+  ([recipe step 3](phase-5-content.md#bead-recipe)). It grants additive
+  registration entries for a new primitive, event kind, keyword, card
+  status, or prompt role:
+  - the primitive's getter in `src/engine/effects/registry.ts`;
+  - an `EVENT_PRESENTATION` entry in
+    `src/battle/components/presentation-items.ts`;
+  - battle-log lines, badge copy, and prompt copy in
+    `src/runtime/battle-prompt-messages.ts`;
+  - a role's exhaustive Greedy strategy in `src/engine/policy/prompts.ts`;
+  - a role's candidate-routing or copy branch in
+    `src/screens/cumulus_adapters/prompt-host-view-model.ts`;
+  - a `CARD_STATUS_BADGES` entry in
+    `src/screens/cumulus_adapters/engine-battle-view-model.ts`;
+  - the role expectation in
+    `src/screens/cumulus_adapters/engine-battle-view-model.test.ts` and the
+    `UNLOGGED` entry in
+    `src/screens/cumulus_adapters/engine-battle-presentation.test.ts`;
+  - a lab fixture in `src/engine/testing/prompt-lab.ts`, which `engine hubs`
+    also covers.
+
+  Any other edit to these files (a changed branch, value, rendered output,
+  log line, or assertion) needs its own area and its own
+  [serialization edges](#serialization-edges).
 
 #### Listing fallout before dispatch
 
@@ -330,7 +356,8 @@ non-additively:
   `src/content/specs/index.ts`, or another registration list;
 - appended tests in a shared group test file;
 - a new section of `docs/rules.md`, and the per-bead evidence files;
-- hub areas (`engine hubs`, `fold hubs`) taken only for such additions.
+- hub areas (`engine hubs`, `fold hubs`) taken only for such additions, and
+  `registration hubs`, which grants only such additions.
 
 When two sessions collide there, Tollgate reports a merge conflict on the
 later candidate, and its session rebases with `tg update`
