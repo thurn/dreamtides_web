@@ -14,6 +14,8 @@ import { supportersOf } from "../continuous/support";
 import { applyDebugOp, withHistory } from "../debug/debug-actions";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import {
+  activated,
+  exhaustSelf,
   additionalCost,
   banishFromVoidCost,
   banishXCost,
@@ -40,6 +42,7 @@ import type { InstanceId, Side } from "../state/ids";
 import { banishCards, banishChosen } from "../effects/primitives/banish-cards";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { onMaterialized, triggered } from "../dsl/triggers";
+import { chooseOne } from "../effects/primitives/choose-one";
 import { gainPoints } from "../effects/primitives/gain-points";
 import { abandon } from "../effects/primitives/abandon";
 import { eachPlayer } from "../effects/primitives/each-player";
@@ -336,6 +339,8 @@ describe("card-lab battle", () => {
       { enemy: { hand: [null] } }, { enemy: { hand: ["bad-id"] } }, { typo: [] },
       { enemyScript: [{ kind: "play", ref: { zone: "hand", index: 0, side: "player" } }] },
       { enemyScript: [{ kind: "advance", ref: { zone: "back", index: 0 }, lane: FRONT_RANK_SIZE }] },
+      ...[undefined, -1, 0.5, "0", Number.MAX_SAFE_INTEGER + 1].map((ability) => ({ enemyScript: [{ kind: "activate", ref: { zone: "back", index: 0 }, ability }] })),
+      { enemyScript: [{ kind: "activate", ref: { zone: "back", index: 0 }, ability: 0, typo: true }] },
     ]) expect(() => cardLabStageFromUnknown(stage)).toThrow();
     expect(() => declared([{ kind: "play", ref: { zone: "hand", index: 3 } }])).toThrow(/physical card/);
     expect(() => cardLabBattle(engine, { entry: { cardId: DSL.drawTwo.id }, variant: "base", side: "player", stage: { player: { front: [DSL.drawTwo.id] } } }, [])).toThrow(/characters/);
@@ -392,6 +397,51 @@ describe("card-lab battle", () => {
     if (undone.kind !== "applied") throw new Error("undo failed");
     slice = undone.slice;
     expect(next()?.forced).toEqual({ kind: "action", action: play });
+  });
+
+  it("activates an initial physical source through prompts, cancellation, reload and history recovery", () => {
+    const card: EngineCardDefinition = { ...SYNTHETIC.vanilla3, id: syntheticId(917), abilities: () => [activated([exhaustSelf()], chooseOne(gainPoints(1), gainPoints(2)))] };
+    const activating = createEngine(testCatalog([card]));
+    const lab = cardLabBattle(activating, { entry: { cardId: card.id }, variant: "base", side: "enemy", stage: {
+      player: { hand: [] }, enemy: { back: [card.id, card.id], hand: [], energy: 0 },
+      enemyScript: [{ kind: "activate", ref: { zone: "back", index: 1 }, ability: 0 }],
+    } }, []);
+    const adapter = createFoldAdapter(activating);
+    let slice = withHistory(lab.slice);
+    const source = slice.committed.sides.enemy.backRank[1];
+    if (source === null) throw new Error("no activation source");
+    const action = { kind: "activate", source, ability: 0 } as const;
+    const next = () => cardLabEnemyAction(activating, lab.init, slice);
+    const apply = (intent: Parameters<typeof adapter.reduce>[1]) => {
+      const outcome = adapter.reduce(slice, intent);
+      if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("activation intent failed");
+      slice = outcome.slice;
+      return outcome.published;
+    };
+    expect(next()).toEqual(action);
+    apply({ kind: "battleAction", side: "enemy", action });
+    const prompt = adapter.pending(slice)?.prompt;
+    if (prompt === undefined) throw new Error("no activation mode prompt");
+    expect(next()).toBeNull();
+    apply({ kind: "cancel", side: "enemy", promptId: prompt.id });
+    expect(next()).toEqual(action);
+    expect(cardLabEnemyAction(activating, structuredClone(lab.init), structuredClone(slice))).toEqual(action);
+    const events = [...apply({ kind: "battleAction", side: "enemy", action })];
+    events.push(...apply({ kind: "answer", side: "enemy", promptId: adapter.pending(slice)!.prompt.id, value: 1 }));
+    expect(events).toContainEqual({ kind: "abilityActivated", side: "enemy", source, ability: 0 });
+    while (activating.decision(slice.committed)?.kind === "respond") {
+      const decision = activating.decision(slice.committed);
+      if (decision?.kind !== "respond") throw new Error("response missing");
+      apply({ kind: "battleAction", side: decision.side, action: { kind: "pass" } });
+    }
+    expect(slice.committed.sides.enemy.score).toBe(2);
+    expect(slice.committed.instances[source]?.status.exhausted).toBe(true);
+    expect(next()).toBeNull();
+    const undone = applyDebugOp(activating, slice, { kind: "undo", keep: 0 });
+    if (undone.kind !== "applied") throw new Error("activation undo failed");
+    expect(cardLabEnemyAction(activating, lab.init, undone.slice)).toEqual(action);
+    const unavailable = declared([{ kind: "activate", ref: { zone: "back", index: 0 }, ability: 0 }]);
+    expect(() => cardLabEnemyAction(engine, unavailable.init, withHistory(unavailable.slice))).toThrow(/illegal or stale/);
   });
 
   it("fails loudly for invalid save metadata or a stale illegal script and leaves normal policy untouched", () => {

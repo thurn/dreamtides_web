@@ -1299,6 +1299,7 @@ Declared zones replace only supplied solver fields. Ranks include explicit
 `null` slots; declared boards need not offer a source-card play.
 
 The optional enemy script plays an initial hand/void physical reference,
+activates its indexed ability with `{ kind: "activate", ref, ability }`,
 advances an initial physical reference to a front lane, or passes Day for a
 normal Challenge. The live AI driver submits validated engine intents;
 replayed history determines completion, including prompt cancellation,
@@ -1308,6 +1309,11 @@ actions fail loudly. Use `qa.battle` for the resulting workflow, check state,
 DOM hit points, geometry, persisted UUID/physical-ID logs and empty `__caps`.
 The tracked `card-lab-stage --arg card=<character-uuid> --arg declared=1`
 scenario exercises the declaration and live actions on desktop and mobile.
+The tracked `card-lab-enemy-activate` scenario exercises an enemy activation
+through the normal host, including its actual physical source, selected void
+card, exhausted cost, granted Reclaim and persisted activation intent. The
+ability index is a non-negative safe integer and the next action must be live
+legal; the script does not establish policy-selected AI play.
 
 **Judged QA.** Judge cards per [D21](decisions.md#d21-browser-qa-coverage),
 with a QA subagent. For each judged card, check all of these on desktop and

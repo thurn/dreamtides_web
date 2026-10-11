@@ -15,7 +15,7 @@
 /** URL-boundary UUID strings; the application validates and brands them before staging.
  * @typedef {{ front?: (string | null)[], back?: (string | null)[], hand?: string[], void?: string[], energy?: number }} LabStageSide
  * @typedef {{ zone: "front" | "back" | "hand" | "void", index: number }} LabStageRef
- * @typedef {{ player?: LabStageSide, enemy?: LabStageSide, enemyScript?: ({ kind: "play", ref: LabStageRef } | { kind: "advance", ref: LabStageRef, lane: number } | { kind: "challenge" })[] }} LabStageInput
+ * @typedef {{ player?: LabStageSide, enemy?: LabStageSide, enemyScript?: ({ kind: "play", ref: LabStageRef } | { kind: "advance", ref: LabStageRef, lane: number } | { kind: "activate", ref: LabStageRef, ability: number } | { kind: "challenge" })[] }} LabStageInput
  * @typedef {{ front: (import("../../src/engine/state/ids").InstanceId | null)[], back: (import("../../src/engine/state/ids").InstanceId | null)[], hand: import("../../src/engine/state/ids").InstanceId[], void: import("../../src/engine/state/ids").InstanceId[] }} LabPhysicalSide
  */
 

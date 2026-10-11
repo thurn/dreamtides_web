@@ -77,6 +77,7 @@ interface LabCardRef {
 type LabEnemyStep =
   | { readonly kind: "play"; readonly ref: LabCardRef }
   | { readonly kind: "advance"; readonly ref: LabCardRef; readonly lane: number }
+  | { readonly kind: "activate"; readonly ref: LabCardRef; readonly ability: number }
   | { readonly kind: "challenge" };
 
 /** Supplied zones replace the solver's zones; omitted fields retain its defaults. */
@@ -137,8 +138,8 @@ export function cardLabStageFromUnknown(value: unknown): CardLabStage {
   const enemyScript: LabEnemyStep[] = value.enemyScript.map((step: unknown) => {
     if (!record(step)) return invalid();
     if (step.kind === "challenge" && Object.keys(step).length === 1) return { kind: "challenge" };
-    if (step.kind !== "play" && step.kind !== "advance") return invalid();
-    if (Object.keys(step).some((key) => !["kind", "ref", ...(step.kind === "advance" ? ["lane"] : [])].includes(key))) return invalid();
+    if (step.kind !== "play" && step.kind !== "advance" && step.kind !== "activate") return invalid();
+    if (Object.keys(step).some((key) => !["kind", "ref", ...(step.kind === "advance" ? ["lane"] : step.kind === "activate" ? ["ability"] : [])].includes(key))) return invalid();
     const ref = step.ref;
     if (!record(ref) || Object.keys(ref).some((key) => key !== "zone" && key !== "index") || !integer(ref.index)) return invalid();
     const zone = ref.zone;
@@ -146,6 +147,7 @@ export function cardLabStageFromUnknown(value: unknown): CardLabStage {
     if (step.kind === "play" && zone !== "hand" && zone !== "void") return invalid();
     const parsedRef: LabCardRef = { zone, index: ref.index };
     if (step.kind === "play") return { kind: "play", ref: parsedRef };
+    if (step.kind === "activate") return integer(step.ability) ? { kind: "activate", ref: parsedRef, ability: step.ability } : invalid();
     if (!integer(step.lane) || step.lane >= FRONT_RANK_SIZE) return invalid();
     return { kind: "advance", ref: parsedRef, lane: step.lane };
   });
@@ -159,6 +161,7 @@ function enemyActions(engine: Engine, stage: CardLabStage, base: BattleSlice): A
     const cards = step.ref.zone === "front" ? side.frontRank : step.ref.zone === "back" ? side.backRank : side[step.ref.zone];
     const card = cards[step.ref.index];
     if (card === null || card === undefined || base.committed.instances[card]?.controller !== "enemy") throw new Error("Declared lab script has no enemy physical card at its reference");
+    if (step.kind === "activate") return { kind: "activate", source: card, ability: step.ability };
     if (step.kind === "advance") {
       const printing = base.committed.instances[card]?.printing;
       if (printing?.kind !== "card" || engine.catalog.card(printing.cardId).cardType !== "character") throw new Error("Declared lab advance requires a character");

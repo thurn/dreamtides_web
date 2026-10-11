@@ -436,7 +436,10 @@ so duplicate UUIDs remain distinct even if the live AI has already moved.
 `enemyScript` selects live legal enemy Day actions through the normal intent
 driver. References name an **initial enemy physical slot**, retained across
 zone changes; a character played from hand can subsequently advance using
-that same hand reference. `advance` is a normal move to front `lane`, and
+that same hand reference. `activate` names an initial physical reference and
+its non-negative safe-integer `ability` index, for example
+`{ kind: "activate", ref: { zone: "back", index: 0 }, ability: 0 }`; the
+ability must be legal in the live state. `advance` is a normal move to front `lane`, and
 `challenge` passes the enemy Day into normal designation, Dusk and Challenge
 resolution. Prompts and responses use the normal host and human controls.
 Successful replayed intents determine progress; pending prompts, cancellation,
@@ -445,6 +448,9 @@ illegal or stale next action fails loudly. Malformed fields, invalid ranks,
 unknown cards or missing references reject the whole staged fixture and report
 the error; the existing plain-battle fallback receives no staged cards.
 Production builds ignore `labStage` and compile its automation out.
+The tracked `card-lab-enemy-activate` scenario observes a declared enemy
+activation, its prompt answer, physical source and effect, and persisted intent
+logs on desktop and mobile; this is a scripted action through the normal host.
 
 The tracked acceptance workflow stages duplicate physical cards, advances and
 challenges the selected enemy character, and casts the human's staged spell:
