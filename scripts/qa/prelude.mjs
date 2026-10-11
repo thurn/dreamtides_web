@@ -37,7 +37,7 @@
  * @property {(target: Target, minOpacity: number, offset?: { x?: number, y?: number }) => HitPoint | null} hitPoint
  */
 
-/** @typedef {Window & { __caps?: Caps, __qa?: QaDom }} QaWindow */
+/** @typedef {Window & { __caps?: Caps, __qa?: QaDom, __qaDocumentId?: string }} QaWindow */
 
 /**
  * The part of Playwright's `Page` the prelude and scenarios use. `locator`
@@ -360,21 +360,30 @@ export async function createQa(page, config) {
   const log = [];
   /** @type {QaResult["captures"]} */
   const captures = [];
-  /** @type {QaResult["caps"]} */
-  const capsLog = [];
   /** @type {TraceSummary[]} */
   const traces = [];
 
   // Observe errors outside the document too: a reload must not discard them.
-  /** @type {QaResult["caps"]} */
-  const observed = [];
-  const pageError = (/** @type {Error} */ error) => {
-    observed.push({ href: page.url(), caps: { errors: [error.message], rejections: [], consoleErrors: [] } });
-  };
+  /** @type {Map<string, { href: string, caps: Caps }>} */
+  const observed = new Map();
   const consoleMessage = (/** @type {{ type(): string, text(): string }} */ message) => {
-    if (message.type() === "error") observed.push({ href: page.url(), caps: { errors: [], rejections: [], consoleErrors: [message.text()] } });
+    const prefix = "dreamtides:qa:caps:";
+    if (message.type() !== "debug" || !message.text().startsWith(prefix)) return;
+    /** @type {unknown} */
+    let event;
+    try { event = JSON.parse(message.text().slice(prefix.length)); } catch { return; }
+    if (event === null || typeof event !== "object" ||
+        !("documentId" in event) || typeof event.documentId !== "string" || !("href" in event) || typeof event.href !== "string" ||
+        !("message" in event) || typeof event.message !== "string" || !("index" in event) || typeof event.index !== "number" ||
+        !Number.isSafeInteger(event.index) || event.index < 1 || !("kind" in event) ||
+        (event.kind !== "errors" && event.kind !== "rejections" && event.kind !== "consoleErrors")) return;
+    let entry = observed.get(event.documentId);
+    if (entry === undefined) {
+      entry = { href: event.href, caps: { errors: [], rejections: [], consoleErrors: [] } };
+      observed.set(event.documentId, entry);
+    }
+    if (entry.caps[event.kind].length < event.index) entry.caps[event.kind].push(event.message);
   };
-  page.on("pageerror", pageError);
   page.on("console", consoleMessage);
 
   // Every call of a run (each step, each card of a sweep) adds this script
@@ -409,16 +418,23 @@ export async function createQa(page, config) {
     /** @type {Caps} */
     const caps = { errors: [], rejections: [], consoleErrors: [] };
     qaWindow.__caps = caps;
+    const documentId = crypto.randomUUID();
+    qaWindow.__qaDocumentId = documentId;
+    const send = console.debug.bind(console);
+    const report = (/** @type {keyof Caps} */ kind, /** @type {string} */ message) => {
+      caps[kind].push(message);
+      send(`dreamtides:qa:caps:${JSON.stringify({ documentId, href: location.href, kind, message, index: caps[kind].length })}`);
+    };
     addEventListener("error", (event) => {
-      caps.errors.push(String(event.message));
+      report("errors", String(event.message));
     });
     addEventListener("unhandledrejection", (event) => {
       const reason = /** @type {unknown} */ (event.reason);
-      caps.rejections.push(reason instanceof Error ? String(reason.stack ?? reason) : String(reason));
+      report("rejections", reason instanceof Error ? String(reason.stack ?? reason) : String(reason));
     });
     const original = console.error;
     console.error = (/** @type {unknown[]} */ ...args) => {
-      caps.consoleErrors.push(args.map(String).join(" | "));
+      report("consoleErrors", args.map(String).join(" | "));
       original.apply(console, args);
     };
 
@@ -475,7 +491,6 @@ export async function createQa(page, config) {
     };
     });
   } catch (error) {
-    page.off("pageerror", pageError);
     page.off("console", consoleMessage);
     throw error;
   }
@@ -500,7 +515,7 @@ export async function createQa(page, config) {
   };
 
   const assertObserved = (/** @type {string} */ label) => {
-    if (observed.length > 0) throw new Error(`${label}: __caps ${JSON.stringify(observed)}`);
+    if (observed.size > 0) throw new Error(`${label}: __caps ${JSON.stringify([...observed.values()])}`);
   };
 
   const readState = (timeout = 15_000) =>
@@ -510,18 +525,39 @@ export async function createQa(page, config) {
         width: innerWidth,
         height: innerHeight,
         caps: /** @type {QaWindow} */ (window).__caps ?? null,
+        documentId: /** @type {QaWindow} */ (window).__qaDocumentId ?? location.href,
       }),
       null,
       { timeout },
     );
 
+  // Merge observations by document and occurrence, retaining repeated errors.
+  const mergeCaps = (/** @type {Awaited<ReturnType<typeof readState>>} */ state) => {
+    if (state.caps === null || capsCount(state.caps) === 0) return;
+    const documentId = state.documentId ?? state.href;
+    let entry = observed.get(documentId);
+    if (entry === undefined) {
+      entry = { href: state.href, caps: { errors: [], rejections: [], consoleErrors: [] } };
+      observed.set(documentId, entry);
+    }
+    for (const kind of /** @type {const} */ (["errors", "rejections", "consoleErrors"])) {
+      const prior = entry.caps[kind];
+      const counts = new Map(prior.map((message) => [message, prior.filter((item) => item === message).length]));
+      /** @type {Map<string, number>} */
+      const seen = new Map();
+      for (const message of state.caps[kind]) {
+        const count = (seen.get(message) ?? 0) + 1;
+        seen.set(message, count);
+        if (count > (counts.get(message) ?? 0)) prior.push(message);
+      }
+    }
+  };
+
   // Records the current document's buffer before a navigation replaces it.
   const recordCaps = async () => {
     if (!onOrigin(page.url())) return;
     const state = await readState();
-    if (state.caps !== null && capsCount(state.caps) > 0) {
-      capsLog.push({ href: state.href, caps: state.caps });
-    }
+    mergeCaps(state);
   };
 
   const rest = () => page.mouse.move(-5, -5);
@@ -585,6 +621,13 @@ export async function createQa(page, config) {
     const state = await readState();
     if (!onOrigin(state.href)) throw new Error(`goto ${route}: landed on ${state.href}, not ${origin}`);
     if (state.caps === null) throw new Error(`goto ${route}: the __caps init script did not run`);
+    if (allowErrors) {
+      observed.clear();
+      await read(() => {
+        const caps = /** @type {QaWindow} */ (window).__caps;
+        if (caps !== undefined) for (const values of Object.values(caps)) values.length = 0;
+      }, null);
+    }
     if (!allowErrors) assertObserved(`goto ${route}`);
     if (!allowErrors && capsCount(state.caps) > 0) {
       throw new Error(`goto ${route}: load-time errors ${JSON.stringify(state.caps)}`);
@@ -880,6 +923,10 @@ export async function createQa(page, config) {
       await field.fill(uuid, { timeout: remaining() });
       await qa.click("[data-engine-debug-zone] button", { timeout: remaining() });
       await qa.click(`[role=option][data-value="${zone}"]`, { timeout: remaining() });
+      await qa.waitFor("qa.labAddCard fields", ({ side, zone }) =>
+        document.querySelector("[data-engine-debug-side]")?.getAttribute("data-engine-debug-side") === side &&
+        document.querySelector("[data-engine-debug-zone]")?.getAttribute("data-engine-debug-zone") === zone,
+      { side, zone }, { timeout: remaining() });
       const still = await snapshot();
       if (still.battleId !== before.battleId || still.version !== before.version || still.inFlight ||
           JSON.stringify(still.instances) !== JSON.stringify(before.instances)) throw new Error("qa.labAddCard: battle changed while staging");
@@ -913,6 +960,11 @@ export async function createQa(page, config) {
         throw new Error(`capture ${name}: fullPage takes no clip or element`);
       }
       if (element !== undefined) await waitVisible(element, { minOpacity });
+      await qa.waitFor(`capture ${name}: images`, () => [...document.images].every((image) => {
+        const rect = image.getBoundingClientRect();
+        return rect.width === 0 || rect.height === 0 || rect.bottom <= 0 || rect.right <= 0 ||
+          rect.top >= innerHeight || rect.left >= innerWidth || image.complete;
+      }), null);
       await rest();
       const state = await readState();
       if (!onOrigin(state.href)) throw new Error(`capture ${name}: page is on ${state.href}, not ${origin}`);
@@ -990,10 +1042,12 @@ export async function createQa(page, config) {
     },
 
     async caps() {
-      const current = (await readState()).caps;
-      if (observed.length === 0) return current;
-      const merged = { errors: [...(current?.errors ?? [])], rejections: [...(current?.rejections ?? [])], consoleErrors: [...(current?.consoleErrors ?? [])] };
-      for (const entry of observed) {
+      const state = await readState();
+      mergeCaps(state);
+      if (observed.size === 0) return state.caps;
+      /** @type {Caps} */
+      const merged = { errors: [], rejections: [], consoleErrors: [] };
+      for (const entry of observed.values()) {
         merged.errors.push(...entry.caps.errors);
         merged.rejections.push(...entry.caps.rejections);
         merged.consoleErrors.push(...entry.caps.consoleErrors);
@@ -1017,9 +1071,8 @@ export async function createQa(page, config) {
     async finish(result, error) {
       try {
         if (step === steps - 1 || error !== null) await recordCaps();
-        return { result, error, log, captures, caps: [...capsLog, ...observed], traces };
+        return { result, error, log, captures, caps: [...observed.values()], traces };
       } finally {
-        page.off("pageerror", pageError);
         page.off("console", consoleMessage);
       }
     },

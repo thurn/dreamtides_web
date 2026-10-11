@@ -174,6 +174,8 @@ The helpers:
 - `qa.goto(route, { allowErrors?, waitUntil? })`: loads a route at the
   current viewport and asserts the origin and an empty `__caps`. The default
   navigation wait is DOMContentLoaded; helpers wait for the relevant UI.
+  `allowErrors` clears the accepted errors from both observation buffers so
+  subsequent helpers check new failures.
   `qa.url`
   resolves its route on the runner's server: `/path?query`, `path`, and
   `?query` are relative (the sandbox's `page.goto` rejects them), and an
@@ -196,6 +198,8 @@ The helpers:
   full page, a viewport rectangle `clip: { x, y, width, height }`, or the box
   of a rendered `element` target (waited for like `waitVisible`) grown by
   `pad` pixels. A clip is cut to the viewport; the report records it.
+  Captures wait until viewport images finish loading, including failed loads;
+  offscreen lazy images do not delay the capture.
   `qa.captureDir` is that directory's absolute path, for any other file.
 - `qa.trace(name, fn, { longTaskMs?, top? })` records a Chrome trace (CDP
   `Tracing`, with the V8 sampling profiler) around `fn`, between
@@ -221,13 +225,17 @@ The helpers:
   `player` or `enemy`. It returns the new instance id after checking the
   committed printing UUID, owner, and zone. Repeated UUIDs create distinct
   instances. It submits once and rejects stale or concurrent battle changes;
+  the selected side and zone attributes are checked before submission;
   a timeout after submission requires inspecting state before another call.
 - `qa.caps()`, `qa.assertCaps(label)`, `qa.note(label, data)`,
   `qa.sleep(ms)`, and `qa.page` for anything else.
 - `qa.isVisible(target, { minOpacity? })`: whether the target is rendered
   now, without waiting.
-- Waits and clicks check `__caps`, including console errors. Host-side
-  Playwright observers retain errors from documents replaced by navigation;
+- Waits and clicks check `__caps`: application errors, unhandled rejections,
+  and calls to `console.error`. Browser resource failures are outside this
+  buffer. The init script forwards each error with its document identity;
+  host observations retain errors from documents replaced by navigation and
+  combine matching buffer entries once, preserving repeated errors;
   `qa.caps()`, battle waits, sweep verdicts, and the final report include them.
   Observers are detached when the call finishes.
 
