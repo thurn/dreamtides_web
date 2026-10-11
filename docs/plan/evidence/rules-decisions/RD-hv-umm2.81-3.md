@@ -1,0 +1,5 @@
+# RD-hv-umm2.81-3: A card played from the void is played for its normal costs or by Reclaim, never by Offering
+- Ladder: 5 (simplest reading consistent with rules.md § Keywords and Effects → Offering, "can be played this way while it has the keyword in hand", and → Reclaim)
+- rules.md: § Playing Cards and the Stack → Playing from the void; § Keywords and Effects → Offering
+- Affects: fa036c27-2234-4f76-8857-c242530627ce (God of the Veil), 6f1833a0-30f5-4718-9a3e-7620beb72bfc (Clockwork Salvager), cd3d8e4a-618e-4c2f-be60-0363b81887f1 (Echo Technician)
+- Why: a play permission says where a card may be played from, not how it is paid for, so it pays the card's normal costs and the card is not reclaimed: it goes where it normally would. A void card with Reclaim that a permission also covers keeps both ways to play it, and the player chooses as they play it (the `voidRoute` prompt: mode 0 by the permission, mode 1 by Reclaim); a Reclaim play uses up no permission. Offering applies to a card in hand, so a card played from the void is never played by Offering.

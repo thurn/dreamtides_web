@@ -39,6 +39,7 @@ export * from "./materialize-figment-copy";
 export * from "./materialize-figments";
 export * from "./optional";
 export * from "./phase";
+export * from "./play-from-zone";
 export * from "./prevent";
 export * from "./put-in-deck";
 export * from "./repeat";

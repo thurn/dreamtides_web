@@ -323,7 +323,21 @@ export type ContinuousChange =
    * (less when negative). A `next` modifier applies to one card: it ends as
    * that card is played.
    */
-  | { readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean };
+  | { readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean }
+  /**
+   * Layer 6, a play permission: `player` may play the cards in the void it
+   * owns that match `filter`, and are `instance` when it names one, for their
+   * normal costs (continuous/permissions.ts). A `next` permission allows one
+   * play: it ends as that card is played.
+   */
+  | {
+      readonly kind: "playFrom";
+      readonly player: Side;
+      readonly zone: "void";
+      readonly instance: InstanceId | null;
+      readonly filter: CardFilter;
+      readonly next: boolean;
+    };
 
 /** What a floating effect changes while it lasts. */
 export type FloatingChange =

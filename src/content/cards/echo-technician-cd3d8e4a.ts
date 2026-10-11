@@ -1,3 +1,6 @@
+import { activated, exhaustSelf } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,9 @@ export default card({
   artOwned: false,
   cardNumber: 291,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onMaterialized(), p.erode(4)),
+    activated([exhaustSelf()], p.playFromZone("void", { cardType: "event" }, { next: true })),
+  ],
+  verifiedText: "172r3zv14di",
 });

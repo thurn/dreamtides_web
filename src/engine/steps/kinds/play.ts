@@ -2,6 +2,7 @@ import { instanceCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { costModifier } from "../../continuous/costs";
+import { playPermission } from "../../continuous/permissions";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
 import { endFloating } from "../../rules/floating";
@@ -17,13 +18,14 @@ import type { StepDefinition } from "../types";
 
 /**
  * Plays a card from the hand of the side holding it, or from its owner's
- * void by Reclaim: play-time choices (Offering or the card's costs, when it
- * has Offering; X, then each event ability's modes, then its targets, then
- * the additional costs' alternatives, optional costs, and cards), then the
- * commit point, then the costs (the energy and X together after cost
+ * void by a play permission or Reclaim: play-time choices (Offering or the
+ * card's costs, when it has Offering; a permission or Reclaim, when both
+ * cover a void card; X, then each event ability's modes, then its targets,
+ * then the additional costs' alternatives, optional costs, and cards), then
+ * the commit point, then the costs (the energy and X together after cost
  * modifications, then the additional costs in printed order) and the end of
- * the "next card" cost modifiers the play used, then the card moves to the
- * stack, reclaimed or offered as it was played, and the opponent receives
+ * the "next card" cost modifiers and play permission the play used, then the
+ * card moves to the stack, reclaimed or offered as it was played, and the opponent receives
  * priority (D13). A character dropped on an open back-rank `slot` resolves
  * there if it is still open.
  */
@@ -57,7 +59,7 @@ export const play: StepDefinition<PlayStep> = {
       const mode = ctx.choose<ChooseModePrompt>({
         kind: "chooseMode",
         side,
-        purpose: purpose(0, "playRoute"),
+        purpose: purpose(0, step.from === "void" ? "voidRoute" : "playRoute"),
         options: routes.map((option, index) => ({
           mode: index,
           legal: routePayable(state, catalog, side, step.card, option),
@@ -66,6 +68,7 @@ export const play: StepDefinition<PlayStep> = {
       route = routes[mode] ?? route;
     }
     const costs = routeCosts(state, catalog, step.card, route);
+    const permission = route === "permission" ? (playPermission(state, catalog, step.card, side)?.consumes ?? null) : null;
     let x: number | null;
     let choices: readonly EffectChoices[];
     if (definition.synthetic?.play !== undefined) {
@@ -82,7 +85,7 @@ export const play: StepDefinition<PlayStep> = {
     const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0 });
     ctx.commitPoint();
     payCosts(ctx, side, step.card, plan);
-    endFloating(ctx, (effect) => modifier.consumes.includes(effect.id));
+    endFloating(ctx, (effect) => modifier.consumes.includes(effect.id) || effect.id === permission);
     moveToStack(ctx, step.card, side, { choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
     if (route === "reclaim") instance.status.reclaimed = true;
     instance.status.playedViaReclaim = route === "reclaim";

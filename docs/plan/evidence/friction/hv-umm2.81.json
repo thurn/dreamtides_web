@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.81",
+  "phase": 5,
+  "baseOid": "652cc1b4eb4f9f25d203227a78eb7ff57eab4f27",
+  "implementMin": 70,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 5,
+    "review": 47,
+    "knip": 3,
+    "fuzz": 68,
+    "sweep": 234,
+    "judged": 700
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 11.0,
+  "testDelta": {
+    "files": 3,
+    "lines": 534,
+    "jsdomFiles": 0,
+    "cases": 15
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 15,
+      "note": "the play routes, the layer table, floating-change visibility and the fold's floating validator live in rules/timing.ts, continuous/layers.ts, rules/floating.ts and rules/battle/fold.ts, and the void chooser's Reclaim label in the view model; none were in the filed areas, so the subagent stopped once for a widening"
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 20,
+      "note": "the card-lab AI worker fails every decision with a pre-existing duplicate-UUID catalog error and falls back to Random, so enemy-side judged runs used the lab's enemyScript; a page-side waitFor predicate cannot call scenario-scope helpers; labStage timed out at host load 26-35 until given a longer timeout"
+    }
+  ]
+}

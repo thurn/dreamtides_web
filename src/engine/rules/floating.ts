@@ -68,7 +68,11 @@ function sameBoundary(expiry: Expiry, boundary: Expiry): boolean {
   }
 }
 
-/** The card a floating change changes, or `null` for a trigger or a cost modifier. */
+/**
+ * The card a floating change changes, or `null` for a trigger, a cost
+ * modifier, or a play permission that names no card. A permission naming a
+ * card changes it, so the view hides it while that card is hidden.
+ */
 export function changedInstance(change: FloatingChange): InstanceId | null {
   return change.kind === "trigger" || change.kind === "cost" ? null : change.instance;
 }

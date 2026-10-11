@@ -1,0 +1,5 @@
+# RD-hv-umm2.81-2: A permission naming a card covers it whenever it is in its owner's void during the permission's duration
+- Ladder: 5 (simplest reading consistent with rules.md § Zone Changes, where card identity persists across zones, and every affected text)
+- rules.md: § Playing Cards and the Stack → Playing from the void
+- Affects: 6f1833a0-30f5-4718-9a3e-7620beb72bfc (Clockwork Salvager)
+- Why: "you may play that card from your void this turn" names the discarded card. MTG would make it a new object as it leaves the graveyard (ladder 4), but Dreamtides keeps a card's identity across zones, so the permission follows the card for the turn and covers it each time it is in the void, after a play and its return included; it is not used up by a play. It covers only the void the permission's player owns, read as it resolves: a discarded card the opponent owns goes to their void, and a discarded created card ceases to exist, so neither is covered. The permission is a floating change naming the card, so the view hides it while the card is hidden, and it ends when the card ceases to exist.

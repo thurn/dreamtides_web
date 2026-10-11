@@ -606,6 +606,35 @@ when it resolves or is Prevented. A copy of a character is not created while
 its controller's back rank would be full (see [Battlefield
 Capacity](#battlefield-capacity)).
 
+**Playing from the void:** Some abilities let a player play cards from their
+void, as in "You may play ≤2● cost characters from your void." A card played
+this way follows the timing rules and is played for its normal costs,
+additional costs included, with cost changes applying as to any play. It is not
+reclaimed, so it goes where it normally would: an event to the void as it
+resolves, a character to the void when it is dissolved. Only cards in the void
+you own are covered, never the opponent's, and a cost criterion compares the
+card's copiable cost.
+
+- A static ability, such as "You may play ≤2● cost characters from your
+  void," covers every matching card while its source is in play, any number
+  of times.
+- A permission naming a card, as in "When you discard a card, you may play
+  that card from your void this turn," covers that card whenever it is in
+  your void during the permission's duration. A card that did not reach your
+  void, such as one the opponent owns or a created card that ceased to exist,
+  is not covered.
+- "You may play an event from your void" in a resolving effect, such as an
+  activated ability, is a permission for one play, not a play during the
+  effect: it covers one matching card and ends as that card is played. With
+  no stated duration it lasts until it is used (see
+  [Durations](#durations)).
+- A play uses a lasting permission when one covers the card, and otherwise
+  the earliest permission for one play that does.
+- A void card that a permission covers and that has Reclaim can be played
+  either way: the player chooses as they play it between its normal costs and
+  Reclaim, which makes it reclaimed. Playing it by Reclaim uses up no
+  permission. Offering is a way to play a card from your hand only.
+
 **Paying to end an effect:** An effect that lasts "until the opponent pays N●"
 lets that opponent — the controller of the affected character — pay N● to end
 the effect immediately. This is a special action, available whenever that
@@ -900,7 +929,9 @@ includes X, X is 0. The player chooses between Offering and the card's own costs
 as they play it, from the ways they can pay; cost changes apply to the 0● cost
 as to any play.
 A card that has Offering from another ability, as with "Cards in your hand
-have Offering," can be played this way while it has the keyword in hand. Once
+have Offering," can be played this way while it has the keyword in hand. A
+card played from the void is never played by Offering (see [Playing from the
+void](#playing-cards-and-the-stack)). Once
 the player chooses Offering, the card is played by Offering even if it loses the
 keyword while its costs are paid, for example by abandoning the character that
 gave it.

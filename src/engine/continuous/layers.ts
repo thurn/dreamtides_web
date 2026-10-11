@@ -15,7 +15,8 @@
  * 4. base-spark setting;
  * 5. spark modifications: gained spark, spark with a duration, anthems,
  *    Support; clamped at 0;
- * 6. cost modifications (continuous/costs.ts).
+ * 6. cost modifications (continuous/costs.ts) and play permissions
+ *    (continuous/permissions.ts).
  *
  * Within a layer, changes apply in timestamp order. A static ability's
  * timestamp is its source's `enteredZoneAt`, when the card entered the zone
@@ -61,6 +62,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   baseSpark: 4,
   spark: 5,
   cost: 6,
+  playFrom: 6,
 };
 
 /** Whether a floating change is a continuous change the layers apply. */
@@ -181,9 +183,9 @@ function byTimestamp(a: OrderedChange, b: OrderedChange): number {
   );
 }
 
-/** The card a change applies to, or `null` for a cost modifier. */
+/** The card a change applies to, or `null` for a cost modifier or a play permission. */
 function changed(change: ContinuousChange): InstanceId | null {
-  return change.kind === "cost" ? null : change.instance;
+  return change.kind === "cost" || change.kind === "playFrom" ? null : change.instance;
 }
 
 /**

@@ -54,6 +54,7 @@ import {
   materializeFigmentsPrimitive,
   optionalPrimitive,
   phasePrimitive,
+  playFromZonePrimitive,
   preventPrimitive,
   putInDeckPrimitive,
   repeatPrimitive,
@@ -197,6 +198,9 @@ const DEFINITIONS = {
   },
   get phase() {
     return phasePrimitive;
+  },
+  get playFromZone() {
+    return playFromZonePrimitive;
   },
   get prevent() {
     return preventPrimitive;

@@ -126,6 +126,7 @@ function discoverCostAnswer(prompt: ChooseNumberPrompt, costs: ReadonlySet<numbe
 const ROLE_STRATEGIES = {
   discardToHandLimit: { cards: "loss", number: "largest" },
   playRoute: { cards: "hostile", number: "largest" },
+  voidRoute: { cards: "hostile", number: "largest" },
   chooseX: { cards: "hostile", number: "largest" },
   chooseOne: { cards: "hostile", number: "largest" },
   choosePlayer: { cards: "hostile", number: "largest" },

@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, target as characterTarget, upTo, x } from "../dsl/builders";
+import { characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -73,6 +73,12 @@ export const LAB = {
     id: syntheticId(0x308), cardType: "event", costs: [energyX(0)], spark: null,
     subtype: "", speed: "standard", status: "authored",
     abilities: () => [event(p.gainSpark(characterTarget(characterYouControl({ costAtLeast: x(), costAtMost: x() })), 1))],
+  },
+  /** "You may play characters from your void." */
+  voidPermit: {
+    id: syntheticId(0x371), cardType: "character", costs: [energy(2)], spark: 1,
+    subtype: "Warrior", speed: "standard", status: "authored",
+    abilities: () => [staticAbility(p.playFromZone("void", { cardType: "character" }))],
   },
   /** Return a void card after an optional resolution-time payment. */
   optionalReturn: labEvent(0x70, 0, p.returnFromVoid(everyIn("void"), { pay: 1 })),
@@ -177,6 +183,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
   [LAB.abandon.id]: { name: "Lab Farewell", text: "Abandon a character." },
+  [LAB.voidPermit.id]: { name: "Lab Gatekeeper", text: "You may play characters from your void." },
   [LAB.optionalReturn.id]: { name: "Lab Return", text: "You may pay 1● to return your void cards to hand." },
   [LAB.putFromTopThenShuffle.id]: { name: "Lab Recollection", text: "Look at the top 2 cards of your deck. Put one on top of your deck and the other into your void. Shuffle your void into your deck." },
   [LAB.choosePlayer.id]: { name: "Lab Rekindling", text: "Choose a player. That player discards a card, then draws a card." },
@@ -631,6 +638,18 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       { side: "player", action: () => ({ kind: "activate", source: { kind: "avatar", side: "player" }, ability: 0 }) },
       { side: "player", action: (ids) => ({ kind: "play", card: at(ids.player.void, 0), from: "void" }) },
     ],
+  },
+  {
+    name: "void-route",
+    description: "A void character that both a play permission and Reclaim cover: the void play route",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { back: [LAB.voidPermit.id], void: [ZONE.reclaimer.id], energy: 3, deck: deck(6) },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [{ side: "player", action: (ids) => ({ kind: "play", card: at(ids.player.void, 0), from: "void" }) }],
   },
   {
     name: "card-statuses",

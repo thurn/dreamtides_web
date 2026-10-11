@@ -406,7 +406,8 @@ export function enginePrintedKeywords(catalog: EngineCatalog): EnginePrintedKeyw
  * gains (one a static ability grants), and each status flag
  * `CARD_STATUS_BADGES` badges (Offering, Reclaim, Ephemeral, and a created
  * card); a banished card returning to play, a pending
- * cost change, and a waiting delayed ability mark their side, as does an
+ * cost change, a waiting delayed ability, and a play permission naming no
+ * card mark their side (one naming a card marks it), as does an
  * exhausted Avatar; an effect lasting until a player pays marks each card it
  * affects, as actionable while it is in `payableNow`, the effects the human
  * may pay to end now.
@@ -473,6 +474,12 @@ export function engineStatuses(
       case "trigger":
         sides[controller].push(badge("delayedTrigger", { kind: "delayedTrigger", once: change.once, expiry }));
         break;
+      case "playFrom": {
+        const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, cardType: change.filter.cardType ?? null, next: change.next, expiry };
+        if (change.instance === null) sides[change.player].push(badge("duration", status));
+        else mark(change.instance, badge("duration", status));
+        break;
+      }
     }
   }
   const floatingGains = new Map<InstanceId, Set<Keyword>>();
@@ -834,7 +841,7 @@ function chooserOptions(
     case "void": {
       const plays = [...affordances.voidPlays.values()].flatMap((action) => {
         const instance = view.instances[action.card];
-        return instance === undefined ? [] : [act({ kind: "reclaim", name: cards(instance).displaySnapshot.name }, action)];
+        return instance === undefined ? [] : [act({ kind: "playFromVoid", name: cards(instance).displaySnapshot.name }, action)];
       });
       if (plays.length === 0) return [];
       return [...plays, option({ kind: "browseVoid" }, { kind: "browseVoid" }), cancel];

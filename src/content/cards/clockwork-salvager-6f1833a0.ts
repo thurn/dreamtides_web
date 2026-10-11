@@ -1,3 +1,5 @@
+import { triggered, whenDiscard } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,8 @@ export default card({
   cardNumber: 22,
   art: { x: 0.147, y: -0.216, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenDiscard(), p.playFromZone("void", {}, { cards: { kind: "subject" }, duration: "untilEndOfTurn" })),
+  ],
+  verifiedText: "24rh2ugoi2p",
 });

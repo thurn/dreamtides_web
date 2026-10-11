@@ -75,6 +75,7 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
       case "discardToHandLimit":
         return cards("discard");
       case "playRoute":
+      case "voidRoute":
         return "Choose how to play it";
       case "chooseX":
       case "discoverCost":
@@ -146,6 +147,8 @@ export type EnginePromptOptionCopy =
   | { readonly kind: "mode"; readonly index: number; readonly text: string | null }
   /** A play route of the playRoute prompt, in the engine's route order: from hand, then as an Offering. */
   | { readonly kind: "route"; readonly index: number }
+  /** A play route of the voidRoute prompt, in the engine's route order: by a play permission, then by Reclaim. */
+  | { readonly kind: "voidRoute"; readonly index: number }
   /** A player relative to the answering controller. */
   | { readonly kind: "player"; readonly index: number };
 
@@ -166,6 +169,8 @@ export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string 
       return option.text ?? `Option ${String(option.index + 1)}`;
     case "route":
       return option.index === 0 ? "Pay Its Cost" : "Play as an Offering";
+    case "voidRoute":
+      return option.index === 0 ? "Pay Its Cost" : "Reclaim";
     case "player":
       return option.index === 0 ? "You" : "Opponent";
   }
@@ -193,7 +198,8 @@ export const ENGINE_ABILITY_CHOOSER_TITLE = "Choose an ability";
 /** One option of an ability chooser the player opened on a card, the void, or the status display. */
 export type EngineAbilityOption =
   | { readonly kind: "ability"; readonly index: number }
-  | { readonly kind: "reclaim"; readonly name: string }
+  /** Play a card from the void, by a play permission or Reclaim. */
+  | { readonly kind: "playFromVoid"; readonly name: string }
   | {
       readonly kind: "emblem";
       readonly emblem: "avatar" | "dreamsign";
@@ -218,8 +224,8 @@ export function engineAbilityOptionLabel(option: EngineAbilityOption): string {
   switch (option.kind) {
     case "ability":
       return `Ability ${String(option.index + 1)}`;
-    case "reclaim":
-      return `Reclaim ${option.name}`;
+    case "playFromVoid":
+      return `Play ${option.name}`;
     case "emblem": {
       const name = option.name ?? (option.emblem === "avatar" ? "Your Avatar" : "Your Dreamsign");
       return option.count > 1 ? `${name}: Ability ${String(option.index + 1)}` : name;
@@ -327,6 +333,7 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
     case "banishChosen":
       return "card of theirs you could banish";
     case "playRoute":
+    case "voidRoute":
       return "way to play it";
     case "chooseX":
     case "discoverCost":
@@ -441,6 +448,12 @@ function reclaimCostPhrase(costs: readonly Cost[] | undefined): string {
   return costs === undefined ? "" : ` (cost: ${costs.length === 0 ? "nothing" : costs.map(costPhrase).join(", ")})`;
 }
 
+/** The cards a play permission naming no card covers: "one event", "characters". */
+function permittedCards(status: Extract<EngineStatusCopy, { readonly kind: "playFrom" }>): string {
+  const cards = status.cardType ?? "card";
+  return status.next ? `one ${cards}` : `${cards}s`;
+}
+
 function signed(amount: number, unit: string): string {
   return `${amount < 0 ? "−" : "+"}${String(Math.abs(amount))} ${unit}`;
 }
@@ -482,6 +495,17 @@ export type EngineStatusCopy =
       readonly expiry: Expiry;
     }
   | { readonly kind: "delayedTrigger"; readonly once: boolean; readonly expiry: Expiry }
+  /**
+   * A play permission: a card that may be played from the void (`named`), or
+   * cards of `cardType` a player may play from their void, one when `next`.
+   */
+  | {
+      readonly kind: "playFrom";
+      readonly named: boolean;
+      readonly cardType: "character" | "event" | null;
+      readonly next: boolean;
+      readonly expiry: Expiry;
+    }
   | { readonly kind: "avatarExhausted" };
 
 /** The accessible name of a status indicator: the status and its duration, from `human`'s side. */
@@ -525,6 +549,8 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
     }
     case "delayedTrigger":
       return `${status.once ? "A delayed ability is waiting" : "An ability triggers"}${expiryPhrase(status.expiry, human)}`;
+    case "playFrom":
+      return `${status.named ? "Can be played from the void" : `May play ${permittedCards(status)} from the void`}${expiryPhrase(status.expiry, human)}`;
     case "avatarExhausted":
       return "Avatar exhausted";
   }
@@ -767,5 +793,11 @@ function effectStartedText(
       )} for ${change.player === human ? "you" : "your opponent"}.`;
     case "trigger":
       return `${engineStatusLabel({ kind: "delayedTrigger", once: change.once, expiry }, human)}.`;
+    case "playFrom": {
+      const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, cardType: change.filter.cardType ?? null, next: change.next, expiry };
+      if (change.instance !== null) return line(card(change.instance), status);
+      const mine = change.player === human;
+      return `${mine ? "You" : "Your opponent"} may play ${permittedCards(status)} from ${mine ? "your" : "their"} void${expiryPhrase(expiry, human)}.`;
+    }
   }
 }

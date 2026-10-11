@@ -223,7 +223,7 @@ cheap to clone and the same everywhere.
 
 ```ts
 type Action =
-  | { kind: "play"; card: InstanceId; from: "hand" | "void"; slot?: Slot }  // void: by Reclaim
+  | { kind: "play"; card: InstanceId; from: "hand" | "void"; slot?: Slot }  // void: by a play permission or Reclaim
   | { kind: "activate"; source: AbilitySource; ability: number }           // InstanceId | EmblemRef
   | { kind: "reposition"; card: InstanceId; to: Slot }      // a swap, or a figment merge
   | { kind: "pass" }                                        // pass priority, or end Day/Dusk/Night
@@ -960,6 +960,8 @@ analog:
    when a player plays a card: the fixed energy, X, and the energy of a chosen
    alternative or paid optional cost. A "next card" modifier (`next: true`)
    ends as the card it applied to is paid for, after the commit point.
+   Play permissions (`playFrom`, `continuous/permissions.ts`) share the
+   layer: they let a player play cards from the void they own.
 
 Ordering within a layer:
 
@@ -1088,9 +1090,9 @@ Other zone rules:
   `floatingEnded` materializes the card under its prior controller (F3,
   RD-hv-7x4l.8-2). A temporary figment copy's `temporary` record makes it
   cease to exist the same way.
-- **Offering, Reclaim, Ephemeral.** A `play` from `"void"` uses Reclaim's
-  costs and marks the card reclaimed; a hand play of an Offering card first
-  chooses its route (RD-hv-7x4l.8-3). Ending step 2 banishes Offering cards
+- **Offering, Reclaim, Ephemeral.** A `play` from `"void"` by Reclaim uses
+  Reclaim's costs and marks the card reclaimed; a hand play of an Offering
+  card first chooses its route (RD-hv-7x4l.8-3). Ending step 2 banishes Offering cards
   anywhere and Ephemeral cards in hands. The statuses travel with the
   instance; Ephemeral ends as the card leaves a hand.
 - **Granted Reclaim** (`grantReclaim`) starts a floating layer-3 `keyword`
@@ -1099,6 +1101,16 @@ Other zone rules:
   Reclaim for the costs of its latest costed gain since it last lost
   Reclaim, in layer-3 timestamp order, ahead of a printed or deck-entry
   Reclaim cost; a plain gain only adds the keyword (RD-hv-umm2.78-1).
+- **Play permissions** (`playFromZone`) are layer-6 `playFrom` changes:
+  from a static ability, a lasting permission naming cards by filter; from a
+  resolving effect, a floating one naming its cards or a filter, with `next`
+  for one play. `playPermission` (`continuous/permissions.ts`) reads which
+  one covers a card in the void its player owns: a lasting one, else the
+  earliest `next` one. `playRoutes` then offers the `"permission"` route,
+  for the card's normal costs, ahead of `"reclaim"`; a card with both asks
+  the `voidRoute` prompt. The play step ends the `next` permission it used
+  with its cost modifiers, after the commit point, and only for the
+  permission route (RD-hv-umm2.81-1 to -3).
 - **Copies** (`rules/copies.ts`): stack copies (D15), figment copies (C5),
   and created copies in a hand, each announced by `cardCreated`.
 
@@ -1301,7 +1313,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
 | Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs)` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
-| Costs | `costModifier(player, filter, amount, { next, duration })` | |
+| Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices) | `forEach`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | |

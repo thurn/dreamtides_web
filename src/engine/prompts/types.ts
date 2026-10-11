@@ -8,8 +8,10 @@ import type { AvatarId, CardId, DreamsignId, InstanceId, Side } from "../state/i
 export type PromptRole =
   /** The active side discards down to the hand limit at end of turn. */
   | "discardToHandLimit"
-  /** The route a card is played by: from hand, as an offering, or by reclaim. */
+  /** The route a hand card is played by: mode 0 for its costs, mode 1 as an offering. */
   | "playRoute"
+  /** The route a void card is played by: mode 0 by a play permission, for its normal costs; mode 1 by Reclaim. */
+  | "voidRoute"
   /** The value of X in a cost. */
   | "chooseX"
   /** The mode of a modal ("choose one") effect. */

@@ -1196,6 +1196,14 @@ function isFloatingChange(value: unknown): boolean {
       return isInstanceId(value.instance) && optional(isPlainRecord)(value.while);
     case "banishedUntil":
       return isInstanceId(value.instance) && isSide(value.side);
+    case "playFrom":
+      return (
+        isSide(value.player) &&
+        value.zone === "void" &&
+        nullable(isInstanceId)(value.instance) &&
+        isCardFilter(value.filter) &&
+        isBoolean(value.next)
+      );
     default:
       return false;
   }

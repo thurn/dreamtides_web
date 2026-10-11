@@ -113,7 +113,7 @@ export function legalMoves(
   return moves;
 }
 
-/** The cards `side` may legally play now, from its hand or by Reclaim from its void. */
+/** The cards `side` may legally play now, from its hand or from its void by a play permission or Reclaim. */
 export function legalPlays(
   state: BattleState,
   catalog: EngineCatalog,

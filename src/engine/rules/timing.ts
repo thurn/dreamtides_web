@@ -1,6 +1,7 @@
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics, characteristicsOf } from "../continuous/characteristics";
 import { costModifier } from "../continuous/costs";
+import { playPermission } from "../continuous/permissions";
 import type { Cost, Speed } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
@@ -11,16 +12,18 @@ import { additionalCosts, costsPayable, playCosts } from "./costs";
 import { hasKeyword } from "./keywords";
 import { instanceOf, openBackSlots } from "./zones";
 
-/** Where a played card comes from: the hand of the side holding it, or its owner's void by Reclaim. */
+/** Where a played card comes from: the hand of the side holding it, or its owner's void by a play permission or Reclaim. */
 export type PlayZone = "hand" | "void";
 
 /**
  * How a card is played: from hand for its costs; from hand by Offering, for
- * 0● (X is 0) and a card banished from hand plus its other costs; or from its
- * owner's void by Reclaim, for its reclaim costs in place of its printed
- * energy cost, or its normal costs with plain Reclaim.
+ * 0● (X is 0) and a card banished from hand plus its other costs; from its
+ * owner's void by a play permission (continuous/permissions.ts), for its
+ * normal costs; or from its owner's void by Reclaim, for its reclaim costs
+ * in place of its printed energy cost, or its normal costs with plain
+ * Reclaim.
  */
-export type PlayRoute = "hand" | "offering" | "reclaim";
+export type PlayRoute = "hand" | "offering" | "permission" | "reclaim";
 
 /**
  * The Reclaim costs an effect granted `id` (rules § Keywords and Effects →
@@ -50,6 +53,7 @@ export function routeCosts(state: BattleState, catalog: EngineCatalog, id: Insta
   const { variant } = instance;
   switch (route) {
     case "hand":
+    case "permission":
       return playCosts(definition, variant);
     case "offering":
       return [{ cost: "banishFromHand", count: 1 }, ...additionalCosts(definition, variant)];
@@ -75,14 +79,20 @@ export function routePayable(state: BattleState, catalog: EngineCatalog, side: S
   );
 }
 
-/** The routes a card in `from` could be played by, before costs and timing: Offering needs the keyword, Reclaim the keyword or a reclaim ability. */
+/**
+ * The routes a card in `from` could be played by, before costs and timing:
+ * Offering needs the keyword; from the void, a play permission covering the
+ * card for its owner comes first, then Reclaim, which needs the keyword or a
+ * reclaim ability.
+ */
 export function playRoutes(state: BattleState, catalog: EngineCatalog, id: InstanceId, from: PlayZone): PlayRoute[] {
   const instance = instanceOf(state, id);
   if (from === "void") {
+    const permitted = playPermission(state, catalog, id, instance.owner) !== null;
     const reclaimable =
       hasKeyword(state, catalog, id, "reclaim") ||
       instanceCard(catalog, instance).abilities(instance.variant).some((ability) => ability.kind === "reclaim");
-    return reclaimable ? ["reclaim"] : [];
+    return [...(permitted ? (["permission"] as const) : []), ...(reclaimable ? (["reclaim"] as const) : [])];
   }
   return hasKeyword(state, catalog, id, "offering") ? ["hand", "offering"] : ["hand"];
 }
@@ -142,8 +152,9 @@ export function freeBackSlotsAfterStack(state: BattleState, catalog: EngineCatal
 
 /**
  * Whether `side` may begin playing the card `id` from `from` now: a card in
- * its hand, even one the opponent owns, or a card it owns in its void with
- * Reclaim, by some route whose quick cost checks pass.
+ * its hand, even one the opponent owns, or a card it owns in its void that a
+ * play permission covers or that has Reclaim, by some route whose quick cost
+ * checks pass.
  */
 export function canPlay(
   state: BattleState,
