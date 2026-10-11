@@ -32,29 +32,7 @@
     "judgedThirdBrowserLease": 793.215,
     "judgedFinalBrowserLease": 0.043
   },
-  "hostLoad": {
-    "fullStart": [
-      8.31884765625,
-      7.25341796875,
-      7.59033203125
-    ],
-    "fullEnd": [
-      10.1083984375,
-      8.18310546875,
-      7.921875
-    ],
-    "fuzzStart": [
-      9.40283203125,
-      8.09423828125,
-      7.89306640625
-    ],
-    "fuzzEnd": [
-      8.5634765625,
-      8.08251953125,
-      7.90087890625
-    ],
-    "sweep": 20.05615234375
-  },
+  "hostLoad": 8.31884765625,
   "testDelta": {
     "files": 0,
     "plainContractModules": 1,
@@ -174,5 +152,29 @@
       "knip": "pass",
       "ownGroupsRemaining": []
     }
+  },
+  "hostLoadBasis": "One-minute host load at the original full-validation start.",
+  "hostLoadSamples": {
+    "fullStart": [
+      8.31884765625,
+      7.25341796875,
+      7.59033203125
+    ],
+    "fullEnd": [
+      10.1083984375,
+      8.18310546875,
+      7.921875
+    ],
+    "fuzzStart": [
+      9.40283203125,
+      8.09423828125,
+      7.89306640625
+    ],
+    "fuzzEnd": [
+      8.5634765625,
+      8.08251953125,
+      7.90087890625
+    ],
+    "sweep": 20.05615234375
   }
 }

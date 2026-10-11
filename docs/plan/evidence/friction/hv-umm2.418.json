@@ -1,0 +1,19 @@
+{
+  "bead": "hv-umm2.418",
+  "phase": 5,
+  "implementMin": 9.089432083333332,
+  "measurementWindow": "2026-10-11T19:15:07Z to pre-commit 2026-10-11T19:24:12.365925+00:00",
+  "localValidationS": {
+    "baselineFrictionAudit": 0.116943125,
+    "review": 0.605887207959313,
+    "knip": 4.438436832977459
+  },
+  "hostLoad": 3.24,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "hostLoadBasis": "One-minute sysctl host load immediately before the required review check."
+}
