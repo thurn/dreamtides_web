@@ -1515,8 +1515,9 @@ board.
 Lasting statuses get Cumulus status badges (`BattleStatusBadges`): on a
 card, a change with a duration, a granted or lost keyword (a floating
 change, or a keyword a static ability grants beyond the card's printed
-ones, on any card the viewer can see, hand cards included), the Offering
-status, disabled triggers, and an effect lasting until a player pays; a
+ones, on any card the viewer can see, hand cards included), every card
+status (`CARD_STATUS_BADGES`: Offering, ephemeral, played by Reclaim, and
+created, except a figment, whose frame shows it), disabled triggers, and an effect lasting until a player pays; a
 hand card's badges sit below its energy cost. Under a side's status
 display, a banished card that returns to play, a pending cost change, a
 waiting delayed ability, and an exhausted Avatar. Each badge's accessible
@@ -1694,6 +1695,9 @@ Greedy unless `?ai=random|greedy` selects one.
   - priority held exactly while the stack is non-empty;
   - no floating effect outliving its cards, payable effect, or source;
   - memoized characteristics equal to a fresh evaluation;
+  - every card a step creates, removes, moves, or changes the status of, and
+    every effect that begins or ends, named by a published event the right
+    sides can see (`testing/announced-changes.ts`);
   - a loop run or offer only where it belongs;
   - knowledge only of cards in decks and hands, and view redaction;
   - serialization round-trip.

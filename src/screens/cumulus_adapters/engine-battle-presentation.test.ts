@@ -5,9 +5,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { PRESENTATION_OBSERVATION, PresentationQueue } from "../../battle/components/battle-presentation";
-import { enqueuePresentation, presentationItems, type PresentationItem } from "../../battle/components/presentation-items";
+import { enqueuePresentation, EVENT_PRESENTATION, presentationItems, type PresentationItem } from "../../battle/components/presentation-items";
 import { BATTLE } from "../../content/battle";
-import { createEngine, type BattleState, type Engine, type EngineEvent, type InstanceView } from "../../engine";
+import { createEngine, type BattleState, type BattleView, type Engine, type EngineEvent, type EngineEventKind, type InstanceView } from "../../engine";
+import type { Keyword } from "../../engine/dsl/types";
+import { EVENT_DEFINITIONS, eventSeenBy } from "../../engine/events";
 import { createCatalog } from "../../engine/catalog";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../../engine/fold/slice";
 import { boardState, type BoardSetup } from "../../engine/testing/board";
@@ -19,7 +21,7 @@ import { SYNTHETIC, syntheticId } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
 import { batchStates, foldAdapterFor } from "../../rules/battle/engine-battle";
 import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
-import { LAB, PROMPT_LAB_DEFINITIONS, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
+import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
 import { battleSeed, PHASES, SIDES, type InstanceId } from "../../engine/state/ids";
 import type { CommittedEvent } from "../../eventlog/local-log";
 import type { GameEvent } from "../../eventlog/types";
@@ -508,6 +510,114 @@ describe("presentation items", () => {
       const item = step.items.find((entry) => entry.key === `${step.batch.key}:${String(index)}`);
       expect(item?.presentation).toBe("travel");
     }
+  });
+});
+
+describe("presentation completeness", () => {
+  /**
+   * The event kinds the battle log never writes a line for, and why each is
+   * shown another way or is bookkeeping. Every other kind must log a line.
+   */
+  const UNLOGGED: Readonly<Partial<Record<EngineEventKind, string>>> = {
+    abilityResolved: "bookkeeping: the activation is logged",
+    effectEnded: "its status badge clears",
+    energyChanged: "the energy display changes",
+    exhaustionChanged: "the card's exhausted pose changes",
+    feasibilityBounded: "bookkeeping of the AI's search",
+    leftPlay: "the move it pairs with is logged",
+    leftVoid: "the move it pairs with is logged",
+    pendingAbility: "bookkeeping of a text-less card",
+    phaseChanged: "the phase indicator changes",
+    promptAutoAnswered: "a notice shows it",
+    resolved: "the card travels; its effects are logged",
+    triggerQueued: "its resolution is logged",
+  };
+  /**
+   * The kinds of event the human sees that log a line and that present an
+   * item, across the prompt lab's presentation steps for both humans, and a
+   * Dreamwell draw the lab cannot publish.
+   */
+  const seen = () => {
+    const logged = new Set<EngineEventKind>();
+    const presented = new Set<EngineEventKind>();
+    const see = (events: readonly EngineEvent[], human: "player" | "enemy", state: BattleState, items: readonly PresentationItem[], key: string) => {
+      events.forEach((event, index) => {
+        const shown = eventSeenBy(event, human, state);
+        if (shown === null) return;
+        if (engineBattleLogText(shown, { human, card: () => null, dreamwell: () => null })) logged.add(event.kind);
+        if (items.some((item) => item.key === `${key}:${String(index)}`)) presented.add(event.kind);
+      });
+    };
+    for (const fixture of PROMPT_LAB_FIXTURES) {
+      for (const human of SIDES) {
+        for (const step of steps(fixture.name, human)) see(step.published, human, step.after, step.items, step.batch.key);
+      }
+    }
+    const state = steps("present-zones")[0]?.after;
+    if (state === undefined) throw new Error("no step");
+    const dreamwell: EngineEvent = { kind: "dreamwellDrawn", side: "enemy", card: parseDreamwellCardId("00000000-0000-4000-8000-00000000d001"), energyAdded: 1 };
+    const batch = { key: pid("dreamwell"), state };
+    see([dreamwell], "player", state, presentationItems([dreamwell], "player", batch, state, () => null), batch.key);
+    return { logged, presented };
+  };
+  const kinds = Object.keys(EVENT_DEFINITIONS) as EngineEventKind[];
+
+  it("logs a line for every event kind but the reasoned unlogged ones", () => {
+    const { logged } = seen();
+    expect(kinds.filter((kind) => !logged.has(kind)).sort()).toEqual(Object.keys(UNLOGGED).sort());
+  });
+
+  it("presents an item for every event kind its presentation names one for", () => {
+    const itemized = kinds.filter((kind) => EVENT_PRESENTATION[kind] !== "status" && EVENT_PRESENTATION[kind] !== "none");
+    const { presented } = seen();
+    expect(kinds.filter((kind) => presented.has(kind)).sort()).toEqual(itemized.sort());
+  });
+
+  /** A view of a lab board with its first player character changed by `change`, and that character. */
+  const changedCharacter = (change: (instance: InstanceView) => InstanceView) => {
+    const state = steps("present-status")[0]?.before;
+    const id = state?.sides.player.backRank.find((entry) => entry !== null);
+    if (state === undefined || id == null) throw new Error("no character");
+    const view = labEngine.view(state, "player");
+    const instance = view.instances[id];
+    if (instance === undefined) throw new Error("no instance");
+    const changed: BattleView = { ...view, instances: { ...view.instances, [id]: change(instance) } };
+    return { view: changed, id };
+  };
+  const badgesOf = (view: BattleView, id: InstanceId) => engineStatuses(view, "player", () => []).cards.get(id) ?? [];
+
+  it("badges every keyword a card has beyond its printed ones", () => {
+    const keywords = Object.keys({
+      vengeful: true,
+      awakened: true,
+      cannotBePrevented: true,
+      cannotBeTargeted: true,
+      veil: true,
+      reclaim: true,
+      offering: true,
+    } satisfies Record<Keyword, true>) as Keyword[];
+    const labels = keywords.map((keyword) => {
+      const { view, id } = changedCharacter((instance) => ({ ...instance, characteristics: { ...instance.characteristics, keywords: [keyword] } }));
+      const badges = badgesOf(view, id);
+      expect({ keyword, kinds: badges.map((badge) => badge.kind) }).toEqual({ keyword, kinds: ["keyword"] });
+      return badges[0]?.label ?? "";
+    });
+    expect(new Set(labels).size).toBe(keywords.length);
+    expect(labels.every((label) => label.length > 0)).toBe(true);
+  });
+
+  it("badges every card status flag but exhaustion, which the card's own pose shows", () => {
+    const { view: plain, id } = changedCharacter((instance) => instance);
+    const flags = (Object.keys(plain.instances[id]?.status ?? {}) as (keyof InstanceView["status"])[]).filter(
+      (flag) => typeof plain.instances[id]?.status[flag] === "boolean",
+    );
+    const badged = flags.filter((flag) => {
+      const { view } = changedCharacter((instance) => ({ ...instance, status: { ...instance.status, [flag]: true } }));
+      const badges = badgesOf(view, id);
+      return badges.length > 0 && badges.every((badge) => badge.label.length > 0);
+    });
+    expect(badgesOf(plain, id)).toEqual([]);
+    expect(flags.filter((flag) => !badged.includes(flag))).toEqual(["exhausted"]);
   });
 });
 

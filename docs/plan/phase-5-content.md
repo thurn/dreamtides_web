@@ -120,7 +120,21 @@ composition beads skip it.
      `src/battle/components/presentation-items.ts`, its fixture in
      `src/engine/testing/prompt-lab.ts` (the tooling test checks every event
      kind has one), and its battle-log line in
-     `src/runtime/battle-prompt-messages.ts`.
+     `src/runtime/battle-prompt-messages.ts`;
+   - every new keyword or card status: its badge copy in
+     `src/runtime/battle-prompt-messages.ts`, and for a status its
+     `CARD_STATUS_BADGES` entry in
+     `src/screens/cumulus_adapters/engine-battle-view-model.ts`.
+
+   Type errors and the presentation completeness tests
+   (`src/screens/cumulus_adapters/engine-battle-presentation.test.ts`)
+   fail on an event kind with no presentation entry, or with no log line
+   unless the test's unlogged list gives the reason, and on a keyword or
+   status flag with no badge. A primitive that moves, creates, or removes a
+   card, changes its status, or begins or ends an effect without an event
+   naming it fails the announced-change invariant
+   (`src/engine/testing/announced-changes.ts`) in the prompt-lab tooling
+   test and in every fuzz game, the step 6 smoke included.
 4. **Resolve ambiguities** with the ladder. Check the
    [card text clarifications](decisions.md#card-text-clarifications) first:
    an entity named there is implemented exactly as its C-entry says, and the
@@ -163,6 +177,13 @@ composition beads skip it.
      UUID is below 26.
 
    Record the verdicts in `docs/plan/evidence/qa-ledger/<bead-id>.jsonl`.
+
+   A judged fail whose cause lies outside the content bead's areas (a
+   battle-log line, a presentation item, a status badge, or a board marker)
+   does not widen the bead. The session files a fix bead for it, dispatched
+   next, and the content bead lands with its fail line, whose notes name the
+   fix bead. The fix bead re-judges the entity and records the verdict in
+   its own QA ledger.
 9. **Validate and commit.** Run `npm run review`, then make one commit with
    the bead's [friction file](workflow.md#friction-ledger). The session
    submits, approves without waiting, and closes the bead when it lands. The

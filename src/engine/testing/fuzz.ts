@@ -25,6 +25,7 @@ import { initialState } from "../state/create";
 import { eventLogRecords, legalityLogRecords, stepLogRecords, type EngineLogRecord } from "../log";
 import { InlineSource } from "../steps/sources";
 import type { RecordedAnswer } from "../steps/types";
+import { unannouncedChanges } from "./announced-changes";
 import { invariantViolations } from "./invariants";
 import { EventRedaction, promptRedactionViolations } from "./redaction";
 import { PolicyRandom, randomAction } from "../policy/random";
@@ -470,7 +471,11 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, o
           }
         }
         if (failure === null) {
-          const problems = [...invariantViolations(observed, engine.catalog), ...eventRedaction.check(stepEvents, beforeStep, observed)];
+          const problems = [
+            ...invariantViolations(observed, engine.catalog),
+            ...eventRedaction.check(stepEvents, beforeStep, observed),
+            ...unannouncedChanges(stepEvents, beforeStep, observed),
+          ];
           if (problems.length > 0) {
             failure = `after step ${step.kind} (#${String(steps)}): ${problems.join("; ")}`;
           }

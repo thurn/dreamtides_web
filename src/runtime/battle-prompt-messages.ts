@@ -340,6 +340,9 @@ export type EngineStatusCopy =
   | { readonly kind: "keyword"; readonly keyword: Keyword; readonly gains: boolean; readonly expiry: Expiry }
   | { readonly kind: "grantedKeyword"; readonly keyword: Keyword }
   | { readonly kind: "offering" }
+  | { readonly kind: "reclaimed" }
+  | { readonly kind: "ephemeral" }
+  | { readonly kind: "created" }
   | { readonly kind: "triggersDisabled"; readonly expiry: Expiry }
   | { readonly kind: "temporary"; readonly expiry: Expiry }
   | { readonly kind: "payable"; readonly payer: Side; readonly cost: number }
@@ -371,6 +374,12 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
         : `Has ${KEYWORD_NAMES[status.keyword]}`;
     case "offering":
       return "Played by Offering: banished at the end of the turn";
+    case "reclaimed":
+      return "Played by Reclaim: banished instead of going anywhere else";
+    case "ephemeral":
+      return "Ephemeral: banished at the end of the turn while in hand";
+    case "created":
+      return "Created by an effect: ceases to exist instead of going to a deck, hand, void, or banishment";
     case "triggersDisabled":
       return `Triggered abilities do not trigger${expiryPhrase(status.expiry, human)}`;
     case "temporary":

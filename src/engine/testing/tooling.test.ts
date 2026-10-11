@@ -11,6 +11,7 @@ import { DSL, DSL_CARDS } from "./dsl-cards";
 import { createCatalog } from "../catalog";
 import { createFoldAdapter } from "../fold/slice";
 import { labBoard } from "./lab-solver";
+import { boardState } from "./board";
 import { cardLabBattle } from "./card-lab";
 import { applyDebugOp, debugOpFromUnknown, withHistory, type DebugOp } from "../debug/debug-actions";
 import type { BattleSlice } from "../fold/slice";
@@ -19,11 +20,24 @@ import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLab
 import { runNamedScenario, scenarioRegistryProblems } from "../../content/specs/runner";
 import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from "./scenario";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
+import { unannouncedChanges } from "./announced-changes";
+import { moveInstance } from "../rules/zones";
 
 /** A pending 1● event and a pending 2● 2✦ character. */
 const pendingEvent: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(904), status: "pending" };
 const pendingCharacter: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(905), status: "pending" };
-const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter]));
+/** "Put the top card of your deck into your void", moving it with no event: a primitive with a presentation gap. */
+const silentMill: EngineCardDefinition = {
+  ...SYNTHETIC.event1,
+  id: syntheticId(906),
+  synthetic: {
+    resolve: (ctx, item) => {
+      const [top] = ctx.state.sides[item.controller].deck;
+      if (top !== undefined) moveInstance(ctx, top, "void");
+    },
+  },
+};
+const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter, silentMill]));
 
 describe("card-lab setup solver", () => {
   it("solves a playable board for every synthetic DSL card", () => {
@@ -177,6 +191,34 @@ describe("prompt lab", () => {
     );
     const missing = Object.keys(EVENT_DEFINITIONS).filter((kind) => !published.has(kind as keyof typeof EVENT_DEFINITIONS));
     expect(missing.sort()).toEqual(["dreamwellDrawn", "feasibilityBounded"]);
+  });
+
+  it("names every card each presentation step moves or changes in an event its engine step publishes", () => {
+    for (const fixture of PROMPT_LAB_FIXTURES) {
+      for (const step of promptLabPresentation(labEngine, fixture)) {
+        expect(unannouncedChanges([...step.earlier, ...step.published], step.before, step.after), fixture.name).toEqual([]);
+      }
+    }
+  });
+});
+
+describe("announced changes", () => {
+  it("reports a card an effect moves with no event naming it", () => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [silentMill.id], energy: 1, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] },
+      enemy: { deck: [SYNTHETIC.vanilla1.id] },
+    });
+    const card = ids.player.hand[0];
+    const milled = ids.player.deck[0];
+    if (card === undefined || milled === undefined) throw new Error("no lab cards");
+    // The opponent cannot respond, so the play resolves in its own step.
+    const played = engine.apply(state, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS);
+    expect(played.state.instances[milled]?.zone).toBe("void");
+    const problems = unannouncedChanges(played.events, state, played.state);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain(milled);
   });
 });
 

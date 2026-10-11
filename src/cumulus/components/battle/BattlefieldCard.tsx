@@ -72,7 +72,7 @@ export interface BattlefieldCardModel {
   readonly exhausted: boolean;
   /** Prepared stored-memory count shown on the card. */
   readonly storedMemory: number;
-  /** Lasting statuses (durations, Offering, keywords, disabled triggers, payable effects), one badge each. */
+  /** Lasting statuses (durations, card statuses, keywords, disabled triggers, payable effects), one badge each. */
   readonly statuses?: readonly BattleStatusBadgeView[];
   /** Whether to use the canonical Figment treatment. */
   readonly figment: boolean;

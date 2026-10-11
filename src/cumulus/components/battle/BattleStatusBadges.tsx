@@ -6,10 +6,11 @@ import { cardSelectionShadowLayers } from "../card/CardView";
 
 /**
  * A lasting battle status shown as a badge: a change with a duration (or a
- * banishment at the end of the turn), a keyword gained beyond the printed
- * ones or lost, disabled triggers, an effect lasting until a
- * player pays, a banished card that returns, a pending cost change, a
- * waiting delayed ability, or an exhausted Avatar.
+ * banishment the card's Offering, Reclaim, or Ephemeral status brings), a
+ * keyword gained beyond the printed ones or lost, disabled triggers, an
+ * effect lasting until a player pays, a banished card that returns, a
+ * pending cost change, a waiting delayed ability, an exhausted Avatar, or a
+ * card an effect created rather than a deck dealt.
  */
 export type BattleStatusBadgeKind =
   | "duration"
@@ -19,7 +20,8 @@ export type BattleStatusBadgeKind =
   | "returns"
   | "costModifier"
   | "delayedTrigger"
-  | "exhausted";
+  | "exhausted"
+  | "created";
 
 export interface BattleStatusBadgeView {
   readonly kind: BattleStatusBadgeKind;
@@ -42,6 +44,7 @@ const BADGE_GLYPHS: Readonly<Record<BattleStatusBadgeKind, Glyph>> = {
   costModifier: GLYPHS.energy,
   delayedTrigger: GLYPHS.bolt,
   exhausted: GLYPHS.exhaust,
+  created: GLYPHS.copy,
 };
 
 /** The badge diameter: the battle card's status-badge size. */

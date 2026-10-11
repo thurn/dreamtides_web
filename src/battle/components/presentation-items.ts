@@ -51,7 +51,7 @@ import { parsePresentationId } from "../../types/identifiers";
 export type EventPresentation = "travel" | "reveal" | "score" | "dreamwell" | "turn" | "notice" | "status" | "none";
 
 /** Every engine event kind's presentation; the `satisfies` clause makes a missing kind a type error. */
-const EVENT_PRESENTATION = {
+export const EVENT_PRESENTATION = {
   abandoned: "travel",
   abilityActivated: "status",
   abilityResolved: "none",

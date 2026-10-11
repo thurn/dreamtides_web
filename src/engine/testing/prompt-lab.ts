@@ -155,6 +155,9 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [ZONE.offeringDraw.id]: { name: "Lab Offering", text: "Offering. Draw 2 cards." },
   [ZONE.reclaimDraw.id]: { name: "Lab Echo", text: "Draw a card. Reclaim 1●." },
   [ZONE.twoWarriors.id]: { name: "Lab Muster", text: "Materialize two 1✦ Warrior figments." },
+  [ZONE.handEcho.id]: { name: "Lab Reflection", text: "Add an ephemeral copy of a character you control to your hand." },
+  [ZONE.ephemeralDraw.id]: { name: "Lab Glimpse", text: "Draw 2 cards with ephemeral." },
+  [ZONE.reclaimer.id]: { name: "Lab Revenant", text: "Reclaim" },
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
   [LAB.dissolveUpToOne.id]: { name: "Lab Mercy", text: "Dissolve up to one enemy." },
@@ -382,6 +385,21 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     script: [],
     presents: [
       { side: "player", action: () => ({ kind: "activate", source: { kind: "avatar", side: "player" }, ability: 0 }) },
+      { side: "player", action: (ids) => ({ kind: "play", card: at(ids.player.void, 0), from: "void" }) },
+    ],
+  },
+  {
+    name: "card-statuses",
+    description: "A character played by Reclaim, an ephemeral copy created in hand, and two cards drawn with ephemeral: each card status badge",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { hand: [ZONE.handEcho.id, ZONE.ephemeralDraw.id], back: [vanillas[1]], void: [ZONE.reclaimer.id], energy: 10, deck: deck(6) },
+      enemy: { deck: deck(6) },
+    },
+    script: [
+      playHand(0),
+      playHand(1),
       { side: "player", action: (ids) => ({ kind: "play", card: at(ids.player.void, 0), from: "void" }) },
     ],
   },
@@ -757,6 +775,12 @@ export interface LabPresentationStep {
   readonly published: readonly EngineEvent[];
   readonly before: BattleState;
   readonly after: BattleState;
+  /**
+   * The events the engine step this one continues published before it: a
+   * step that ends at a prompt goes on in the next, which may make a move an
+   * earlier event announced. Empty when the step begins a new engine step.
+   */
+  readonly earlier: readonly EngineEvent[];
 }
 
 /**
@@ -769,11 +793,18 @@ export function promptLabPresentation(engine: Engine, fixture: PromptLabFixture)
   const adapter = createFoldAdapter(engine);
   const shown = (slice: BattleSlice) => adapter.pending(slice)?.display ?? slice.committed;
   let slice: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
-  for (const step of fixture.script) slice = applyLabStep(engine, adapter, fixture, ids, slice, step).slice;
+  let earlier: readonly EngineEvent[] = [];
+  const apply = (step: LabStep) => {
+    const applied = applyLabStep(engine, adapter, fixture, ids, slice, step);
+    const continued = earlier;
+    slice = applied.slice;
+    earlier = adapter.pending(slice) === null ? [] : [...continued, ...applied.published];
+    return { published: applied.published, earlier: continued };
+  };
+  for (const step of fixture.script) apply(step);
   return (fixture.presents ?? []).map((step) => {
     const before = shown(slice);
-    const applied = applyLabStep(engine, adapter, fixture, ids, slice, step);
-    slice = applied.slice;
-    return { published: applied.published, before, after: shown(slice) };
+    const applied = apply(step);
+    return { ...applied, before, after: shown(slice) };
   });
 }

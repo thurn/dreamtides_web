@@ -405,8 +405,9 @@ scene on every load.
   during the AI's turn), `ai-foresee` (the AI's private prompt), `respond` (a
   response window), `prevent` (pay or decline), `loop` (the loop shortcut),
   and the presentation fixtures `present-zones`, `present-status`,
-  `present-challenge`, `present-costs`, `present-ending`, and
-  `present-opponent`, which publish every engine event kind as a judged pass
+  `present-challenge`, `present-costs`, `present-ending`,
+  `present-opponent`, and `card-statuses` (reclaimed, ephemeral, and created
+  cards), which publish every engine event kind as a judged pass
   takes their `presents` steps through the UI. Add a fixture to
   `PROMPT_LAB_FIXTURES`.
 - **Card-lab** (`goto=card-lab&card=<uuid>&variant=<v>&as=<player|enemy>`):

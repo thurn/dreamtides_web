@@ -162,11 +162,11 @@ export const PROMPTING = {
         ],
       });
       const toTop = arrangement.filter((entry) => entry.to === "top").map((entry) => entry.card);
-      for (const entry of arrangement) {
-        if (entry.to === "void") moveInstance(ctx, entry.card, "void");
-      }
+      const voided = arrangement.filter((entry) => entry.to === "void").map((entry) => entry.card);
+      for (const card of voided) moveInstance(ctx, card, "void");
       const rest = ctx.state.sides[item.controller].deck.filter((card) => !toTop.includes(card));
       ctx.state.sides[item.controller].deck = [...toTop, ...rest];
+      ctx.emit({ kind: "foresaw", side: item.controller, kept: toTop, voided });
     },
   }),
   /** "Look at the top 2 cards of your deck. Put one on top and the other on the bottom." */

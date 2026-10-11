@@ -27,6 +27,7 @@ import type { Action, BattleView, EffectId, InstanceId, InstanceView, LoopId, Si
 import { opponent, sourceKey } from "../../engine";
 import { instanceCard, type EngineCatalog } from "../../engine/catalog";
 import type { Keyword } from "../../engine/dsl/types";
+import type { CardStatus } from "../../engine/state/types";
 import type { PresentationVisual } from "../../battle/components/presentation-items";
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
@@ -340,6 +341,31 @@ function hiddenZoneIds(view: BattleView, side: Side, zone: "hand" | "deck"): Bat
   });
 }
 
+/** A card status flag shown as a badge: the badge's kind and the copy of its accessible name. */
+interface CardStatusBadge {
+  readonly badge: BattleStatusBadgeView["kind"];
+  readonly copy: Extract<EngineStatusCopy, { readonly kind: "offering" | "reclaimed" | "ephemeral" | "created" }>;
+}
+
+/**
+ * How the battle screen shows each card status, so a status the engine
+ * adds is a type error until it has one: a badge while a flag is set, or
+ * `null` for a status the card's own view shows (its exhausted pose; its
+ * spark, which counts gained spark and the X paid; its stored time). A
+ * created figment's frame already marks it, so only a created card printing
+ * gets the created badge.
+ */
+const CARD_STATUS_BADGES = {
+  exhausted: null,
+  gainedSpark: null,
+  counters: null,
+  x: null,
+  created: { badge: "created", copy: { kind: "created" } },
+  reclaimed: { badge: "duration", copy: { kind: "reclaimed" } },
+  offering: { badge: "duration", copy: { kind: "offering" } },
+  ephemeral: { badge: "duration", copy: { kind: "ephemeral" } },
+} as const satisfies { readonly [K in keyof CardStatus]: (CardStatus[K] extends boolean ? CardStatusBadge : never) | null };
+
 /** Lasting statuses, by the card they mark and by the side they concern. */
 interface EngineStatuses {
   readonly cards: ReadonlyMap<InstanceId, BattleStatusBadgeView[]>;
@@ -373,8 +399,9 @@ export function enginePrintedKeywords(catalog: EngineCatalog): EnginePrintedKeyw
  * duration (spark, base spark, all types, a granted or lost keyword,
  * disabled triggers, a temporary character) marks its card, as does each
  * keyword a visible card has beyond its `printedKeywords` and its floating
- * gains (one a static ability grants) and the Offering status that banishes
- * it at the end of the turn; a banished card returning to play, a pending
+ * gains (one a static ability grants), and each status flag
+ * `CARD_STATUS_BADGES` badges (Offering, Reclaim, Ephemeral, and a created
+ * card); a banished card returning to play, a pending
  * cost change, and a waiting delayed ability mark their side, as does an
  * exhausted Avatar; an effect lasting until a player pays marks each card it
  * affects, as actionable while it is in `payableNow`, the effects the human
@@ -449,7 +476,11 @@ export function engineStatuses(
         mark(instance.id, badge("keyword", { kind: "grantedKeyword", keyword }));
       }
     }
-    if (instance.status.offering) mark(instance.id, badge("duration", { kind: "offering" }));
+    for (const [status, shown] of Object.entries(CARD_STATUS_BADGES) as [keyof CardStatus, CardStatusBadge | null][]) {
+      if (shown === null || instance.status[status] !== true) continue;
+      if (status === "created" && instance.printing.kind !== "card") continue;
+      mark(instance.id, badge(shown.badge, shown.copy));
+    }
   }
   for (const payable of view.payable) {
     const entry = badge("payable", { kind: "payable", payer: payable.payer, cost: payable.cost });
