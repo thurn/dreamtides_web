@@ -120,6 +120,28 @@ describe("CardPile", () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
+  it("rings a playable pile only while its topmost card is face up", () => {
+    const pileSelection = (pileCards: readonly BattlePileCard[]) => {
+      const { container } = renderInCumulus(
+        <CardPile cards={pileCards} label={"Pile"} selection="playable" />,
+      );
+      return (
+        container.querySelector<HTMLElement>("[data-card-pile]")?.dataset
+          .pileSelection ?? null
+      );
+    };
+    expect(pileSelection(cards)).toBe("playable");
+    expect(pileSelection(cards.slice(1))).toBeNull();
+    expect(pileSelection([])).toBeNull();
+    const { container } = renderInCumulus(
+      <CardPile cards={cards} label={"Pile"} />,
+    );
+    expect(
+      container.querySelector<HTMLElement>("[data-card-pile]")?.dataset
+        .pileSelection,
+    ).toBeUndefined();
+  });
+
   it("draws an outlined footprint for an empty pile when requested", () => {
     const { container } = renderInCumulus(
       <CardPile

@@ -229,6 +229,19 @@ describe("MobileBattleScreen", () => {
     expect(onZoneOpen.mock.calls).toEqual([[{ owner: "player", zone: "deck" }], [{ owner: "player", zone: "void" }]]);
   });
 
+  it("rings a void pile while any card in it is playable", () => {
+    const view = makeView();
+    const playable = { ...makeCard(30, cardId("player-void-under")), showPlayableOutline: true };
+    const player = { ...view.player, voidCards: [...view.player.voidCards, playable] };
+    const ringed = (container: HTMLElement) =>
+      (["player", "enemy"] as const).map(
+        (owner) => query(container, `[data-testid="${owner}-battle-void"]`).dataset.pileSelection ?? null,
+      );
+
+    expect(ringed(mount(view))).toEqual([null, null]);
+    expect(ringed(mount({ ...view, player, near: player }))).toEqual(["playable", null]);
+  });
+
   it("routes pending hand-card drops through the play intent to the closest open slot", () => {
     const [onHandCardDrop, onSlotDrop] = [vi.fn(), vi.fn()];
     const container = mount(makeView(), {

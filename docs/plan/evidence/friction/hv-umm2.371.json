@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.371",
+  "phase": 5,
+  "baseOid": "a9cd815e411c5a125ee1e3d5bc827257003df188",
+  "implementMin": 40,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "review": 29,
+    "knip": 3,
+    "focused": 12,
+    "judged": 195
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 8.4,
+  "testDelta": {
+    "files": 0,
+    "lines": 91,
+    "jsdomFiles": 0,
+    "cases": 3
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 10,
+      "note": "the void browser's tiles come from CardChoiceGrid, which had no statuses field, and the void pile is a CardPile rendered by MobileBattleScreen's SideZones, which drops per-card fields; the three files were outside the filed areas, so the subagent stopped for a widening"
+    }
+  ]
+}

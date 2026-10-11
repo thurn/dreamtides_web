@@ -21,7 +21,7 @@ import type { CardData } from "../../types/cards";
 import type { CardKeywordModification } from "../../types/journey";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
 import type { Answer, PromptRole } from "../../engine/prompts/types";
-import { parseBattleCardId, parseBattleId, parseBattleSlotViewId, parsePromptId } from "../../types/identifiers";
+import { parseBattleCardId, parseBattleId, parseBattleSlotViewId, parsePromptId, type BattleCardId } from "../../types/identifiers";
 import {
   buildEngineBattleScreenModel,
   enginePrintedKeywords,
@@ -29,12 +29,14 @@ import {
   figmentMergeTargets,
   handPlayAction,
   repositionForDrop,
+  voidBrowserCards,
   withChooser,
   type EngineBattleAffordances,
   type EngineBattleScreenModel,
   type EngineChooser,
 } from "./engine-battle-view-model";
 import { surfaceChoices, type PendingEnginePrompt, type PromptSurface } from "./prompt-host-view-model";
+import { engineBattleLogText, engineStatusLabel, type EngineStatusCopy } from "../../runtime/battle-prompt-messages";
 
 const engine = createEngine(zoneCatalog([...LOOP_CARDS, ...Object.values(LAB)]));
 const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
@@ -424,6 +426,48 @@ describe("buildEngineBattleScreenModel", () => {
     expect(chooser(null)).toBe(model);
     expect(selections(chooser({ kind: "void" }))).toEqual([...actions(model.affordances.voidPlays.values()), { kind: "browseVoid" }, { kind: "close" }]);
     expect(selections(chooser({ kind: "emblems" }))).toEqual([...actions(model.affordances.emblemActivations), { kind: "close" }]);
+  });
+
+  it("rings the human's void cards it may play by Reclaim, and badges and logs a granted Reclaim with its stated cost", () => {
+    const { state, ids } = board({
+      player: { void: [ZONE.reclaimDraw.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], energy: 1 },
+      enemy: { void: [ZONE.reclaimDraw.id], energy: 5 },
+    });
+    const [printed, granted, plain] = ids.player.void;
+    if (printed === undefined || granted === undefined || plain === undefined) throw new Error("missing cards");
+    const free = [{ cost: "energy", amount: 0 }] as const;
+    const effect = {
+      id: "e901",
+      controller: "player",
+      source: printed,
+      timestamp: 0,
+      expiry: { at: "never" },
+      change: { kind: "keyword", instance: granted, keyword: "reclaim", gains: true, reclaimCosts: free },
+    } as const;
+    state.floating.push(effect);
+    const model = screenOf(state);
+    const ringed = (cards: readonly { readonly id: BattleCardId; readonly showPlayableOutline: boolean }[]) =>
+      cards.filter((card) => card.showPlayableOutline).map((card) => card.id).sort();
+    const gain: EngineStatusCopy = { kind: "keyword", keyword: "reclaim", gains: true, expiry: effect.expiry };
+    const costed = engineStatusLabel({ ...gain, reclaimCosts: free }, "player");
+    const browsed = voidBrowserCards(model.view.player);
+
+    expect([...model.affordances.voidPlays.keys()].sort()).toEqual([id(printed), id(granted)].sort());
+    expect(ringed(model.view.player.voidCards)).toEqual([id(printed), id(granted)].sort());
+    expect(ringed(model.view.enemy.voidCards)).toEqual([]);
+    expect(model.view.player.voidCards.find((card) => card.id === id(granted))?.statuses).toEqual([{ kind: "keyword", label: costed }]);
+    expect(costed).not.toBe(engineStatusLabel(gain, "player"));
+    expect(browsed.map((card) => [card.entryId, card.selection ?? null, card.statuses?.map((badge) => badge.label) ?? []])).toEqual([
+      [id(printed), "playable", []],
+      [id(granted), "playable", [costed]],
+      [id(plain), null, []],
+    ]);
+    expect(voidBrowserCards(model.view.enemy).map((card) => card.selection ?? null)).toEqual([null]);
+    expect(engineBattleLogText({ kind: "effectStarted", effect: effect.id, controller: "player", source: printed, expiry: effect.expiry, change: effect.change }, {
+      human: "player",
+      card: () => null,
+      dreamwell: () => null,
+    })).toContain(costed);
   });
 
   it("offers paying to end an effect on each character it changes, from the status display when it changes none, and only while affordable", () => {

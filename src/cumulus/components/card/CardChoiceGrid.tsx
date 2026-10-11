@@ -20,6 +20,10 @@ import {
   type GameCardSelection,
 } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
+import {
+  BattleStatusBadges,
+  type BattleStatusBadgeView,
+} from "../battle/BattleStatusBadges";
 import { CARD_CORNER_RADIUS } from "./card-aspect";
 import type { DeckEntryId } from "../../../types/identifiers";
 import { formatNumber } from "../../../runtime/format-number";
@@ -99,6 +103,11 @@ export interface CardChoiceGridCardView<EntryId extends string = DeckEntryId> {
   };
   /** Pending operation shown as a semantic icon over the lower-right corner. */
   operation?: CardChoiceOperation;
+  /**
+   * A battle card's lasting statuses, one badge each down the card's left
+   * edge under its energy orb, as on a hand card.
+   */
+  statuses?: readonly BattleStatusBadgeView[];
 }
 
 /** A card-sized action appended after the cards. */
@@ -406,6 +415,20 @@ function CardChoiceGridItem<EntryId extends string>({
                 : () => onCardPress(card.entryId)
             }
           />
+          {card.statuses !== undefined && card.statuses.length > 0 && (
+            <div
+              data-card-choice-statuses=""
+              style={{
+                position: "absolute",
+                inset: 0,
+                zIndex: 20,
+                containerType: "inline-size",
+                pointerEvents: "none",
+              }}
+            >
+              <BattleStatusBadges badges={card.statuses} placement="full-card" />
+            </div>
+          )}
           {card.quantityBadge !== undefined && (
             <CardChoiceQuantityBadge
               count={card.quantityBadge.count}

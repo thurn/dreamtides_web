@@ -1,5 +1,5 @@
 import type { BuiltInBattlePromptRef } from "../data/dreamwell-prompts";
-import type { Keyword } from "../engine/dsl/types";
+import type { Cost, Keyword } from "../engine/dsl/types";
 import type { EngineEvent } from "../engine/events";
 import type { ArrangeDestination, PromptKind, PromptRole } from "../engine/prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../engine/state/ids";
@@ -403,6 +403,41 @@ function expiryPhrase(expiry: Expiry, human: Side): string {
   }
 }
 
+/** One cost of a stated Reclaim cost ("Reclaim 0●"), as the player reads it. */
+function costPhrase(cost: Cost): string {
+  switch (cost.cost) {
+    case "energy":
+      return `${String(cost.amount)} energy`;
+    case "energyX":
+      return "X energy";
+    case "exhaustSelf":
+      return "exhaust it";
+    case "abandon":
+      return `abandon ${plural(cost.count, "character", "characters")}`;
+    case "discard":
+      return cost.count === "x" ? "discard X cards" : `discard ${plural(cost.count, "card", "cards")}`;
+    case "counters":
+      return `remove ${plural(cost.amount, "memory counter", "memory counters")}`;
+    case "points":
+      return `pay ${plural(cost.amount, "point", "points")}`;
+    case "banishFromVoid":
+      return `banish ${cost.count === "x" ? "X cards" : plural(cost.count, "card", "cards")} from your void`;
+    case "banishFromHand":
+      return `banish ${plural(cost.count, "other card", "other cards")} from your hand`;
+    case "reveal":
+      return `reveal ${plural(cost.count, "card", "cards")}`;
+    case "choice":
+      return cost.options.map((option) => option.map(costPhrase).join(" and ")).join(" or ");
+    case "optional":
+      return `optionally ${cost.costs.map(costPhrase).join(" and ")}`;
+  }
+}
+
+/** A stated Reclaim cost after the keyword's name; empty when the gain states none. */
+function reclaimCostPhrase(costs: readonly Cost[] | undefined): string {
+  return costs === undefined ? "" : ` (cost: ${costs.length === 0 ? "nothing" : costs.map(costPhrase).join(", ")})`;
+}
+
 function signed(amount: number, unit: string): string {
   return `${amount < 0 ? "−" : "+"}${String(Math.abs(amount))} ${unit}`;
 }
@@ -419,7 +454,14 @@ export type EngineStatusCopy =
   | { readonly kind: "spark"; readonly amount: number; readonly expiry: Expiry }
   | { readonly kind: "baseSpark"; readonly value: number; readonly expiry: Expiry }
   | { readonly kind: "allTypes"; readonly expiry: Expiry }
-  | { readonly kind: "keyword"; readonly keyword: Keyword; readonly gains: boolean; readonly expiry: Expiry }
+  | {
+      readonly kind: "keyword";
+      readonly keyword: Keyword;
+      readonly gains: boolean;
+      readonly expiry: Expiry;
+      /** A gained Reclaim's stated cost ("gains reclaim 0●"), when its grant states one. */
+      readonly reclaimCosts?: readonly Cost[];
+    }
   | { readonly kind: "grantedKeyword"; readonly keyword: Keyword }
   | { readonly kind: "offering" }
   | { readonly kind: "reclaimed" }
@@ -449,7 +491,7 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
     case "allTypes":
       return `Has all character types${expiryPhrase(status.expiry, human)}`;
     case "keyword":
-      return `${status.gains ? "Gains" : "Loses"} ${KEYWORD_NAMES[status.keyword]}${expiryPhrase(status.expiry, human)}`;
+      return `${status.gains ? "Gains" : "Loses"} ${KEYWORD_NAMES[status.keyword]}${reclaimCostPhrase(status.reclaimCosts)}${expiryPhrase(status.expiry, human)}`;
     case "grantedKeyword":
       return status.keyword === "cannotBePrevented" || status.keyword === "cannotBeTargeted"
         ? sentence(KEYWORD_NAMES[status.keyword])
@@ -702,7 +744,13 @@ function effectStartedText(
     case "allTypes":
       return line(card(change.instance), { kind: "allTypes", expiry });
     case "keyword":
-      return line(card(change.instance), { kind: "keyword", keyword: change.keyword, gains: change.gains, expiry });
+      return line(card(change.instance), {
+        kind: "keyword",
+        keyword: change.keyword,
+        gains: change.gains,
+        expiry,
+        ...(change.reclaimCosts === undefined ? {} : { reclaimCosts: change.reclaimCosts }),
+      });
     case "disableTriggers":
       return line(card(change.instance), { kind: "triggersDisabled", expiry });
     case "temporary":

@@ -57,6 +57,7 @@ import {
   withChooser,
   type EngineChooser,
   type EngineEmblemNamer,
+  voidBrowserCards,
 } from "../../screens/cumulus_adapters/engine-battle-view-model";
 import {
   surfaceChoices,
@@ -681,10 +682,12 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const browsedCards =
     browsed === null
       ? []
-      : model.engine.sides[browsed.side][browsed.zone].flatMap((id: InstanceId) => {
-          const instance = model.engine.instances[id];
-          return instance === undefined ? [] : [{ entryId: parseBattleCardId(id), model: cards(instance) }];
-        });
+      : browsed.zone === "void"
+        ? voidBrowserCards(model.view[browsed.side])
+        : model.engine.sides[browsed.side].banished.flatMap((id: InstanceId) => {
+            const instance = model.engine.instances[id];
+            return instance === undefined ? [] : [{ entryId: parseBattleCardId(id), model: cards(instance) }];
+          });
 
   return (
     <>

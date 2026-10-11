@@ -56,6 +56,11 @@ export interface CardPileProps {
   readonly onPress?: () => void;
   /** Optional stable test id for the pile as a whole. */
   readonly testId?: DomTestId;
+  /**
+   * Draw the canonical playable ring on the topmost card: the viewer may play
+   * a card from this pile now. A face-down or empty pile shows none.
+   */
+  readonly selection?: "playable";
 }
 
 /** Maximum number of physical card layers a pile paints. */
@@ -130,6 +135,7 @@ export function CardPile({
   emptyLabel,
   onPress,
   testId,
+  selection,
 }: CardPileProps) {
   const visibleCards = cards.slice(0, CARD_PILE_VISIBLE_LAYER_CAP);
   const stageStyle = cardStageStyle();
@@ -181,6 +187,7 @@ export function CardPile({
                 card={card.model.displaySnapshot}
                 transfiguration={card.model.transfiguration}
                 figment={card.figment}
+                selection={depth === 0 ? selection : undefined}
               />
             )}
           </div>
@@ -200,6 +207,7 @@ export function CardPile({
     "data-pile-count": String(cards.length),
     "data-pile-visible-count": String(visibleCards.length),
     "data-pile-empty-state": emptyState,
+    "data-pile-selection": visibleCards[0]?.face === "up" ? selection : undefined,
     "data-testid": testId,
   } as const;
 

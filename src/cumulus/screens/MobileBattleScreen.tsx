@@ -135,7 +135,10 @@ export interface MobileBattleCardView {
   readonly storedTime: number;
   /** Lasting statuses shown as badges on the battlefield card. */
   readonly statuses?: readonly BattleStatusBadgeView[];
-  /** Draw the green playable-card outline on this hand card. */
+  /**
+   * Draw the green playable-card outline on this hand card; on a void card,
+   * the viewer may play it from the void now, which rings the void pile.
+   */
   readonly showPlayableOutline: boolean;
 }
 
@@ -1399,6 +1402,7 @@ const SideZones = memo(function SideZones({
             cards={voidPile}
             label={((position === "near" ? "viewer" : "opponent") === "viewer" ? "Your void" : "Opponent’s void")}
             emptyState="outlined"
+            selection={side.voidCards.some((card) => card.showPlayableOutline) ? "playable" : undefined}
             emptyLabel={
               zoneLabels === "voids"
                 ? "Void"

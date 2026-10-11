@@ -11,6 +11,7 @@
 
 import type { BattleStatusBadgeView } from "../../cumulus/components/battle/BattleStatusBadges";
 import type { DreamwellCardModel } from "../../cumulus/components/battle/DreamwellCard";
+import type { CardChoiceGridCardView } from "../../cumulus/components/card/CardChoiceGrid";
 import type {
   MobileBattleCardOverlayView,
   MobileBattleCardView,
@@ -396,7 +397,8 @@ export function enginePrintedKeywords(catalog: EngineCatalog): EnginePrintedKeyw
 
 /**
  * The status indicators of `view` for `human`: each floating effect with a
- * duration (spark, base spark, all types, a granted or lost keyword,
+ * duration (spark, base spark, all types, a granted or lost keyword with
+ * a granted Reclaim's stated cost,
  * disabled triggers, a temporary character) marks its card, as does each
  * keyword a visible card has beyond its `printedKeywords` and its floating
  * gains (one a static ability grants), and each status flag
@@ -435,7 +437,16 @@ export function engineStatuses(
         if (lasting) mark(change.instance, badge("duration", { kind: "allTypes", expiry }));
         break;
       case "keyword":
-        mark(change.instance, badge("keyword", { kind: "keyword", keyword: change.keyword, gains: change.gains, expiry }));
+        mark(
+          change.instance,
+          badge("keyword", {
+            kind: "keyword",
+            keyword: change.keyword,
+            gains: change.gains,
+            expiry,
+            ...(change.reclaimCosts === undefined ? {} : { reclaimCosts: change.reclaimCosts }),
+          }),
+        );
         break;
       case "disableTriggers":
         mark(change.instance, badge("triggersDisabled", { kind: "triggersDisabled", expiry }));
@@ -550,7 +561,11 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       position: side === human ? "near" : "far",
       deckCardIds: hiddenZoneIds(view, side, "deck"),
       banishedCardCount: state.banished.length,
-      voidCards: cardsOf([...state.void].reverse()),
+      // Only the human's own Reclaim plays mark its void; the opponent's void stays unmarked.
+      voidCards: cardsOf(
+        [...state.void].reverse(),
+        side === human ? (id) => affordances.voidPlays.has(parseBattleCardId(id)) : undefined,
+      ),
       backRank: rank(state.backRank, "back"),
       frontRank: rank(state.frontRank, "front"),
       status: {
@@ -679,6 +694,20 @@ export function repositionForDrop(
         move.target.owner === target.owner && move.target.rank === target.rank && move.target.slotId === target.slotId,
     )?.action ?? null
   );
+}
+
+/**
+ * A void as the zone browser shows it, oldest card first: each card with its
+ * status badges, and the playable ring on each card the viewer may play from
+ * its void now.
+ */
+export function voidBrowserCards(side: MobileBattleSideView): CardChoiceGridCardView<BattleCardId>[] {
+  return [...side.voidCards].reverse().map((card) => ({
+    entryId: card.id,
+    model: card.model,
+    ...(card.statuses === undefined ? {} : { statuses: card.statuses }),
+    ...(card.showPlayableOutline ? { selection: "playable" as const } : {}),
+  }));
 }
 
 /**

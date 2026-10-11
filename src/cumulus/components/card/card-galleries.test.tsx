@@ -362,6 +362,10 @@ describe("CardChoiceGrid", () => {
             entryId: parseDeckEntryId("choice-a"),
             model: model("A"),
             testId: "choice-a",
+            statuses: [
+              { kind: "keyword", label: "Fixture keyword status" },
+              { kind: "duration", label: "Fixture duration status" },
+            ],
           },
           {
             entryId: parseDeckEntryId("choice-b"),
@@ -388,6 +392,14 @@ describe("CardChoiceGrid", () => {
         container.querySelectorAll<HTMLElement>("[data-entry-id]"),
       ).map((entry) => entry.dataset.entryId),
     ).toEqual(["choice-a", "choice-b"]);
+    const badgeKinds = (entry: string) =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(
+          `[data-entry-id="${entry}"] [data-battle-status-badges="full-card"] [data-battle-status-badge]`,
+        ),
+      ).map((badge) => badge.dataset.battleStatusBadge);
+    expect(badgeKinds("choice-a")).toEqual(["keyword", "duration"]);
+    expect(badgeKinds("choice-b")).toEqual([]);
     expect(
       container
         .querySelector('[data-card-choice-operation="copy"]')
