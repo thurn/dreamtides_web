@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.72",
+  "phase": 5,
+  "implementMin": 32.98,
+  "localValidationS": {
+    "focused": 2.6,
+    "review": 29.066439867019653,
+    "knip": 2.0458269119262695,
+    "full": 53.04386806488037,
+    "fuzz": 57.885634899139404,
+    "sweep": 115.71557211875916,
+    "judged": 58.48603010177612
+  },
+  "hostLoad": 8.28564453125,
+  "testDelta": {
+    "files": 0,
+    "lines": 246,
+    "jsdomFiles": 0,
+    "contractModules": 2,
+    "scenarioModules": 1
+  },
+  "queueWaitS": {
+    "full": 0.01998305320739746,
+    "fuzz": 40.653481006622314
+  },
+  "friction": [
+    {
+      "tag": "scope-widening-wait",
+      "minutes": 11,
+      "note": "Actual scoring required an optional trigger snapshot and DSL value form outside the original Areas. Root recorded native widening and serialization for nineteen future overlapping beads after a compaction-delayed acknowledgment."
+    }
+  ],
+  "dispositions": [
+    {
+      "tag": "qa-event-observation",
+      "bead": "hv-ojiu",
+      "note": "Parent-filed argument validation for the silently ignored top-level filter; documented nested matches supply the accepted evidence."
+    }
+  ]
+}

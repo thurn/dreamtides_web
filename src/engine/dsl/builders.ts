@@ -333,3 +333,8 @@ export function times(of: ValueExpr, factor: number): ValueExpr {
 export function lockedAtResolution(of: ValueExpr): ValueExpr {
   return { value: "locked", of };
 }
+
+/** The points awarded by the challenge that triggered this ability, captured at scoring. */
+export function scoredAmount(): ValueExpr {
+  return { value: "scored" };
+}

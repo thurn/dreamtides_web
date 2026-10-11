@@ -16,6 +16,8 @@ export interface ValueScope {
   readonly controller: Side;
   readonly source: AbilitySource;
   readonly x: number | null;
+  /** The scoring trigger's captured challenge award, absent outside its resolution. */
+  readonly scored?: number | null;
   count(selector: CharacterSelector): number;
   movedCosts?(ref: MovedCardRef): readonly number[];
 }
@@ -24,6 +26,8 @@ export interface ValueScope {
 export function evaluateValue(state: BattleState, value: ValueExpr, scope: ValueScope): number {
   if (typeof value === "number") return value;
   switch (value.value) {
+    case "scored":
+      return scope.scored ?? 0;
     case "x":
       return scope.x ?? 0;
     case "costOf":

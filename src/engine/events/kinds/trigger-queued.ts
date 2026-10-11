@@ -18,6 +18,8 @@ export interface TriggerQueuedEvent {
   readonly subjectHiddenFrom?: readonly Side[];
   /** The gain a "when … gains ✦" trigger matched; absent for any other trigger. */
   readonly gain?: SparkGain;
+  /** The positive challenge award a scoring trigger matched; absent for other triggers. */
+  readonly scored?: number;
 }
 
 /**

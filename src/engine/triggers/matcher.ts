@@ -147,6 +147,7 @@ function subjectMatches(
 interface Match {
   readonly subject: InstanceId | null;
   readonly gain?: SparkGain;
+  readonly scored?: number;
 }
 
 const NO_SUBJECT: Match = { subject: null };
@@ -261,11 +262,11 @@ function matchKind(
       return event.kind === "laneResolved" &&
         event.scored > 0 &&
         subjectMatches(state, catalog, trigger.subject, event.challenger, listener)
-        ? { subject: event.challenger }
+        ? { subject: event.challenger, scored: event.scored }
         : null;
     case "opponentScores":
       return event.kind === "laneResolved" && event.scored > 0 && state.turn.active === opponent(you)
-        ? { subject: event.challenger }
+        ? { subject: event.challenger, scored: event.scored }
         : null;
     case "leavesVoid":
       return event.kind === "leftVoid" &&
@@ -339,6 +340,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     subject: trigger.subject,
     ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
+    ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
   });
 }
 

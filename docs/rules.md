@@ -436,6 +436,11 @@ flat "gain N⍟" effect (such as an Abandon-for-points ability, or Fatigue) awar
 victory points to a player without any character scoring, and does not count as
 a character scoring.
 
+An equivalent quantity of ⍟ in an ability triggered by scoring is the number
+of points that challenge awarded, captured when the character scored. A later
+change to the character's spark does not change that quantity. Losing those
+points follows the floor of 0 in [Objective](#objective).
+
 **Challenge phase resolution:** Each front-rank lane is resolved in turn, left to
 right:
 

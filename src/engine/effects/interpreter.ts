@@ -475,6 +475,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     controller: env.controller,
     source: env.source,
     x: env.x,
+    scored: env.scored,
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source).length,
     movedCosts: (ref) => env.moved.costs(ref.node),
   });
@@ -655,6 +656,8 @@ export interface ResolveOptions {
   readonly subject?: InstanceId | null;
   /** The gain a "when … gains ✦" trigger matched. */
   readonly gain?: SparkGain | null;
+  /** The positive challenge award the scoring trigger matched. */
+  readonly scored?: number | null;
   readonly controller: Side;
   readonly x: number | null;
   /** Whether each optional cost of the item was paid, in printed order. */
@@ -721,6 +724,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     root: options.root ?? effect,
     subject: options.subject ?? null,
     gain: options.gain ?? null,
+    scored: options.scored ?? null,
     controller: options.controller,
     variant: options.origin.kind === "card" ? options.origin.variant : BASE_VARIANT,
     x: options.x,

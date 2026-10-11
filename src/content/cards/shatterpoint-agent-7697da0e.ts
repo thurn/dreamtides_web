@@ -1,3 +1,6 @@
+import { scoredAmount } from "../../engine/dsl/builders";
+import { triggered, whenScores } from "../../engine/dsl/triggers";
+import { losePoints } from "../../engine/effects/primitives/lose-points";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 402,
   art: { x: 0.456, y: 0.761, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenScores(), losePoints(scoredAmount(), "opponent"))],
+  verifiedText: "2g99owwe6aq",
 });

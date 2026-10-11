@@ -130,6 +130,8 @@ export interface QueuedTriggerView {
   readonly subject: InstanceId | null;
   /** The gain a "when … gains ✦" trigger matched, which is public; absent for any other trigger. */
   readonly gain?: SparkGain;
+  /** The positive challenge award a scoring trigger matched; absent for other triggers. */
+  readonly scored?: number;
 }
 
 /**
@@ -335,6 +337,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       node: trigger.node,
       subject: seesSubject(state, trigger, viewer) ? trigger.subject : null,
       ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
+      ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
     })),
     turnLog: {
       played: {

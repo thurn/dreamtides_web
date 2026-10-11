@@ -219,6 +219,8 @@ export interface MovedCardRef {
 export type ValueExpr =
   | number
   | XValue
+  /** The positive points awarded by the challenge that triggered this ability; 0 outside a scoring trigger. */
+  | { readonly value: "scored" }
   /**
    * "That card's cost": the copiable cost of the cards `of` names, captured
    * just before they moved, so a card that then ceased to exist still has

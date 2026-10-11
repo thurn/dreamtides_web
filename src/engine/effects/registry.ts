@@ -46,6 +46,7 @@ import {
   grantPrimitive,
   ifThenPrimitive,
   lookAtTopPrimitive,
+  losePointsPrimitive,
   materializeFigmentCopyPrimitive,
   materializeFigmentsPrimitive,
   optionalPrimitive,
@@ -168,6 +169,9 @@ const DEFINITIONS = {
   },
   get lookAtTop() {
     return lookAtTopPrimitive;
+  },
+  get losePoints() {
+    return losePointsPrimitive;
   },
   get materializeFigmentCopy() {
     return materializeFigmentCopyPrimitive;

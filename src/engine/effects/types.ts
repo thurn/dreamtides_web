@@ -72,6 +72,8 @@ export interface EffectEnv {
   readonly subject: InstanceId | null;
   /** The gain a "when … gains ✦" trigger matched; otherwise `null`. */
   readonly gain: SparkGain | null;
+  /** The positive challenge award the scoring trigger matched; otherwise `null`. */
+  readonly scored: number | null;
   readonly controller: Side;
   readonly variant: Variant;
   /** The value chosen for X, or `null`. */
