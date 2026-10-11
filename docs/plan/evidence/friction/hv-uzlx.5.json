@@ -1,0 +1,30 @@
+{
+  "bead": "hv-uzlx.5",
+  "phase": 5,
+  "baseOid": "50c6ae2413d3dd0016c61e8d2ff1674d48f2c3af",
+  "implementMin": 25,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focusedBefore": 6,
+    "focused": 5,
+    "review": 17,
+    "knip": 4
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 32.89,
+  "testDelta": {
+    "files": 11,
+    "lines": -431,
+    "jsdomFiles": 0,
+    "cases": 0,
+    "fixtureModules": 5,
+    "fixtureLines": 729
+  },
+  "friction": [
+    {
+      "tag": "fixtures-lint-scope",
+      "minutes": 1,
+      "note": "the Exploration provider's card(cardNumber, cardType, subtype) helper failed dreamtides/no-raw-string-identity once moved to a non-*.test fixtures module; its subtype is now typed as Parameters<typeof testCardSubtype>[0], as hv-uzlx.3 did for the essence-site guide seed"
+    }
+  ]
+}
