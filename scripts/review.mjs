@@ -5,7 +5,7 @@ import {
   mkdirSync,
   readFileSync,
 } from "node:fs";
-import { homedir } from "node:os";
+import { homedir, loadavg } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import {
   buildReviewPlan,
@@ -15,8 +15,8 @@ import {
   importersOf,
   importSearchNeedles,
   KNIP_STEP,
+  quickExecutionPlan,
   reviewNeedsPreparedWorkspace,
-  STATIC_CHECK_STEPS,
   TYPECHECK_STEPS,
 } from "./review-plan.mjs";
 import {
@@ -35,6 +35,7 @@ import {
   tryCreateReviewLock,
 } from "./review-lock.mjs";
 import { thrownField } from "./lib/node-errors.mjs";
+import { runConcurrentReviewSteps } from "./review-execution.mjs";
 
 /**
  * @typedef {import("./review-plan.mjs").ReviewStep} ReviewStep
@@ -410,6 +411,10 @@ async function runStep(
   const [command, args] = commandFor(step, extraArgs);
   if (!buffered) console.log(`\n[review] ${step}`);
   const startedAt = Date.now();
+  console.log(
+    `[review] ${step} started at ${new Date(startedAt).toISOString()} ` +
+    `load=${String(loadavg()[0])}`,
+  );
   const env = isolateLocalAssets
     ? {
         ...process.env,
@@ -448,23 +453,11 @@ async function runStep(
     console.log(`\n[review] ${step}`);
     process.stdout.write(Buffer.concat(output));
   }
-  console.log(`[review] ${step} finished in ${seconds}s`);
+  console.log(`[review] ${step} finished in ${seconds}s (exit ${String(exitCode)})`);
   if (step === "typecheck" && exitCode === 0 && shareTypecheckState) {
     publishTypecheckState(typecheckPaths);
   }
   return exitCode;
-}
-
-/**
- * Runs independent steps concurrently; returns the first failing exit code.
- *
- * @param {ReviewStep[]} steps
- */
-async function runConcurrentSteps(steps) {
-  const exitCodes = await Promise.all(
-    steps.map(({ step, args }) => runStep(step, args, { buffered: true })),
-  );
-  return exitCodes.find((exitCode) => exitCode !== 0) ?? 0;
 }
 
 /** @returns {ReviewPlanEntry[]} */
@@ -518,19 +511,7 @@ function executionPlan() {
           { step: "test-related", args: reviewPlan.testInputs },
         ];
   }
-  if (task === "quick") {
-    /** @type {ReviewPlanEntry[]} */
-    const steps = [];
-    if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
-    if (reviewPlan.lintFiles.length > 0) {
-      steps.push({ step: "lint", args: reviewPlan.lintFiles });
-    }
-    if (reviewPlan.shouldTypecheck) steps.push({ concurrent: STATIC_CHECK_STEPS });
-    if (reviewPlan.testInputs.length > 0) {
-      steps.push({ step: "test-related", args: reviewPlan.testInputs });
-    }
-    return steps;
-  }
+  if (task === "quick") return quickExecutionPlan(reviewPlan);
   if (task === "validate") {
     return [{ step: "prepare", args: [] }];
   }
@@ -574,7 +555,10 @@ try {
   }
   for (const entry of steps) {
     const exitCode = "concurrent" in entry
-      ? await runConcurrentSteps(entry.concurrent)
+      ? await runConcurrentReviewSteps(
+        entry.concurrent,
+        (step, args) => runStep(step, args, { buffered: true }),
+      )
       : await runStep(entry.step, entry.args);
     if ("step" in entry && entry.step === "prepare" && exitCode === 0) {
       restoreLocalAssets = true;

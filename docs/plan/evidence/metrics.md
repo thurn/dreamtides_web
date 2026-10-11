@@ -243,6 +243,24 @@ again, with the rest of the suite, on the candidate's integrated tree. Measured 
 3.8 (hv-umm2.51), and 38.2 s at load 14.3 (hv-umm2.297). The fuzz-smoke budget is in the
 [Phase 2 gate budget revision](#budget-revision-phase-2-retrospective).
 
+### Gate review concurrency (2026-10-11, hv-umm2.387)
+
+A fixed six-path engine/content selection over source `4f26b938aade`, run
+through the real gate runner under one heavy lease with two workers, gives
+a **16.640767% median paired wall improvement** across three comparable
+interleaved pairs. Serial/concurrent median runner walls are 44.395/36.657 s;
+median CPU is 110.381/113.230 s. All six runs pass 322 files and 3,273 cases.
+The third pair is slower with concurrency (44.811/47.689 s, -6.423%) and
+remains included. Gate and local quick review run selected lint and static
+checks beside tests after preparation; each step reports start load and exit.
+
+This controlled selection includes prepare and asset restoration, excluding
+unchanged dependencies and queue time. It is a measurement of review overhead
+on the current tree, separate from native Tollgate gate-stage timings.
+One-minute load samples limit contention attribution. The
+[measurement and protocol](measurements/hv-umm2.387.md) retain every arm,
+cache treatment, CPU/load readings, and the predeclared 10% acceptance rule.
+
 ## Tollgate policy
 
 The trusted policy is the local, untracked

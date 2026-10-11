@@ -10,6 +10,7 @@ import {
   importersOf,
   importSearchNeedles,
   KNIP_STEP,
+  quickExecutionPlan,
   reviewNeedsPreparedWorkspace,
   STATIC_CHECK_STEPS,
   TYPECHECK_STEPS,
@@ -180,14 +181,14 @@ describe("deleted modules", () => {
         concurrent: [
           ...STATIC_CHECK_STEPS,
           { step: "lint", args: ["scripts/dev.test.mjs"] },
-        ],
-      },
-      {
-        step: "test-gate",
-        args: [
-          "--max-related-files",
-          String(GATE_RELATED_TEST_FILE_CAP),
-          "scripts/dev.test.mjs",
+          {
+            step: "test-gate",
+            args: [
+              "--max-related-files",
+              String(GATE_RELATED_TEST_FILE_CAP),
+              "scripts/dev.test.mjs",
+            ],
+          },
         ],
       },
     ]);
@@ -293,7 +294,7 @@ describe("gate review plan", () => {
     ]);
   });
 
-  it("lints the changed sources beside the typecheck, then runs the gate tests", () => {
+  it("runs changed-source lint, static checks and gate tests together", () => {
     expect(
       gateExecutionPlan(
         buildReviewPlan(["src/state/example.ts", "scripts/tool.mjs"]),
@@ -304,15 +305,15 @@ describe("gate review plan", () => {
         concurrent: [
           ...STATIC_CHECK_STEPS,
           { step: "lint", args: ["scripts/tool.mjs", "src/state/example.ts"] },
-        ],
-      },
-      {
-        step: "test-gate",
-        args: [
-          "--max-related-files",
-          String(GATE_RELATED_TEST_FILE_CAP),
-          "scripts/tool.mjs",
-          "src/state/example.ts",
+          {
+            step: "test-gate",
+            args: [
+              "--max-related-files",
+              String(GATE_RELATED_TEST_FILE_CAP),
+              "scripts/tool.mjs",
+              "src/state/example.ts",
+            ],
+          },
         ],
       },
     ]);
@@ -360,6 +361,39 @@ describe("full review plan", () => {
     expect(fullExecutionPlan().slice(2)).toEqual([
       { step: "test", args: [] },
       { step: "bundle", args: [] },
+    ]);
+  });
+});
+
+describe("quick review execution plan", () => {
+  it("runs selected lint, static checks and related tests after preparation", () => {
+    const files = ["src/state/example.ts"];
+    expect(quickExecutionPlan(buildReviewPlan(files))).toEqual([
+      { step: "prepare", args: [] },
+      {
+        concurrent: [
+          ...STATIC_CHECK_STEPS,
+          { step: "lint", args: files },
+          { step: "test-related", args: files },
+        ],
+      },
+    ]);
+  });
+
+  it("runs test-only selections without adding static checks", () => {
+    expect(quickExecutionPlan(buildReviewPlan(["scripts/tool.cjs"]))).toEqual([
+      { step: "prepare", args: [] },
+      { concurrent: [{ step: "test-related", args: ["scripts/tool.cjs"] }] },
+    ]);
+  });
+
+  it("skips documentation but checks a deleted typed source", () => {
+    expect(quickExecutionPlan(buildReviewPlan(["docs/notes.md"]))).toEqual([]);
+    expect(quickExecutionPlan(
+      buildReviewPlan(["src/removed.ts"], () => false),
+    )).toEqual([
+      { step: "prepare", args: [] },
+      { concurrent: STATIC_CHECK_STEPS },
     ]);
   });
 });

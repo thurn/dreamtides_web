@@ -301,7 +301,7 @@ export function gateTestScope(testFiles, cap) {
 /**
  * Steps of the gate stage's `review:gate` for a plan built from the files
  * changed against `HEAD^`: prepare, then the full typecheck and the
- * import-cycle check alongside lint of the changed sources, then the related
+ * import-cycle check alongside lint of the changed sources and the related
  * tests, or the whole suite when more than `GATE_RELATED_TEST_FILE_CAP` test
  * files are related.
  *
@@ -316,7 +316,7 @@ export function gateExecutionPlan(reviewPlan) {
   /** @type {ReviewPlanEntry[]} */
   const steps = [{ step: "prepare", args: [] }, { concurrent: checks }];
   if (reviewPlan.testInputs.length > 0) {
-    steps.push({
+    checks.push({
       step: "test-gate",
       args: [
         "--max-related-files",
@@ -325,5 +325,29 @@ export function gateExecutionPlan(reviewPlan) {
       ],
     });
   }
+  return steps;
+}
+
+/**
+ * Local diff-aware review: prepare when checks need it, lint the selected
+ * sources beside whole-program checks and the selected related tests.
+ *
+ * @param {ReviewPlan} reviewPlan
+ * @returns {ReviewPlanEntry[]}
+ */
+export function quickExecutionPlan(reviewPlan) {
+  /** @type {ReviewPlanEntry[]} */
+  const steps = [];
+  if (reviewNeedsPreparedWorkspace(reviewPlan)) {
+    steps.push({ step: "prepare", args: [] });
+  }
+  const checks = reviewPlan.shouldTypecheck ? [...STATIC_CHECK_STEPS] : [];
+  if (reviewPlan.lintFiles.length > 0) {
+    checks.push({ step: "lint", args: reviewPlan.lintFiles });
+  }
+  if (reviewPlan.testInputs.length > 0) {
+    checks.push({ step: "test-related", args: reviewPlan.testInputs });
+  }
+  if (checks.length > 0) steps.push({ concurrent: checks });
   return steps;
 }
