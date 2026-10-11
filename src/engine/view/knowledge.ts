@@ -12,7 +12,11 @@
  *   side loses track of those still in a deck, whose order the chooser may
  *   change;
  * - looking at the opponent's hand (`takeFromAmong(opponentHand())`) shows
- *   every card in it to the looker only, through `showPrivately`.
+ *   every card in it to the looker only; both private kinds go through
+ *   `StepContext.disclose`, which calls `showPrivately`;
+ * - what a step showed one side alone outlives the fold discarding the
+ *   step, after an error or a cancel, once it has published a prompt
+ *   (`keepDisclosures`).
  *
  * Decks start unknown to both sides; the opening shuffle happens before any
  * card is known.
@@ -128,4 +132,44 @@ export function showPrivately(state: BattleState, side: Side, ids: readonly Inst
     }
     learn(state, side, instance);
   }
+}
+
+/** Where `instance` sits in a deck of `state`, or -1 outside a deck. */
+function deckPlace(state: BattleState, instance: CardInstance): number {
+  return instance.zone === "deck" ? state.sides[instance.controller].deck.indexOf(instance.id) : -1;
+}
+
+/** Whether a card sits in `a` (as `inA`) exactly where it sits in `b` (as `inB`): zone, controller, last zone entry, and deck place. */
+function sitsAlike(a: BattleState, inA: CardInstance, b: BattleState, inB: CardInstance): boolean {
+  return inA.zone === inB.zone && inA.controller === inB.controller && inA.enteredZoneAt === inB.enteredZoneAt && deckPlace(a, inA) === deckPlace(b, inB);
+}
+
+/**
+ * `committed` with the knowledge `disclosures` gave, as the fold keeps it
+ * when it discards an in-flight step that has published a prompt
+ * (engine-design § Decisions and prompts): `display` is the state that
+ * prompt published, and each card a disclosure showed its side becomes
+ * known to that side when the side still knows it in `display` and the
+ * card sits in `committed` exactly where it sits in `display`. Nothing else
+ * of the step carries over, and the other side's knowledge is untouched.
+ * Returns `committed` itself when no card is added.
+ */
+export function keepDisclosures(
+  committed: BattleState,
+  display: BattleState,
+  disclosures: readonly { readonly side: Side; readonly cards: readonly InstanceId[] }[],
+): BattleState {
+  let next: BattleState | null = null;
+  for (const { side, cards } of disclosures) {
+    for (const id of cards) {
+      const before = committed.instances[id];
+      const shown = display.instances[id];
+      if (before === undefined || shown === undefined || !knows(display, shown, side)) continue;
+      if (knows(next ?? committed, before, side)) continue;
+      if (!sitsAlike(committed, before, display, shown)) continue;
+      next ??= { ...committed, knownTo: { player: [...committed.knownTo.player], enemy: [...committed.knownTo.enemy] } };
+      learn(next, side, before);
+    }
+  }
+  return next ?? committed;
 }

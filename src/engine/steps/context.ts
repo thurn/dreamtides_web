@@ -4,7 +4,7 @@ import { forcedAnswer, hasLegalAnswer, isLegalAnswer } from "../prompts/answers"
 import { promptFingerprint } from "../prompts/fingerprint";
 import { isWellFormedPrompt, MalformedPrompt, promptCards } from "../prompts/structure";
 import type { AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
-import type { Side } from "../state/ids";
+import type { InstanceId, Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
 import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
@@ -12,7 +12,7 @@ import { matchEvent } from "../triggers/matcher";
 import { showPrivately } from "../view/knowledge";
 import { purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
-import type { AnswerSource, EventObserver, RecordedAnswer, StepContext } from "./types";
+import type { AnswerSource, Disclosure, EventObserver, RecordedAnswer, StepContext } from "./types";
 
 export interface ContextOptions {
   /** Presentation observation; failures never change step execution. */
@@ -54,6 +54,8 @@ export class Context implements StepContext {
   readonly choosers: Side[] = [];
   /** `answers` with the fingerprint of each prompt as rules code raised it, before any narrowing. */
   readonly rawAnswers: RecordedAnswer[] = [];
+  /** The cards shown to one side alone so far (`disclose`). */
+  readonly disclosed: Disclosure[] = [];
   committed = false;
 
   constructor(
@@ -79,7 +81,7 @@ export class Context implements StepContext {
     }
     if (raw.privateTo !== undefined) {
       // The chooser sees the cards as the prompt opens, whoever answers it.
-      showPrivately(this.state, raw.privateTo, promptCards(raw));
+      this.disclose(raw.privateTo, promptCards(raw));
     }
     const prompt = this.narrow(raw);
     const rawFingerprint = promptFingerprint(raw);
@@ -152,6 +154,11 @@ export class Context implements StepContext {
     this.answers.push(answer);
     this.rawAnswers.push({ ...answer, fingerprint: rawFingerprint });
     this.choosers.push(side);
+  }
+
+  disclose(side: Side, cards: readonly InstanceId[]): void {
+    showPrivately(this.state, side, cards);
+    this.disclosed.push({ side, cards: [...cards] });
   }
 
   adopt(state: BattleState, events: readonly EngineEvent[]): void {

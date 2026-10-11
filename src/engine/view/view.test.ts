@@ -16,7 +16,9 @@ import { AVATAR, DREAMSIGN, STACK } from "../testing/stack-cards";
 import { eventRedactionViolations, hiddenFrom, strings } from "../testing/redaction";
 import type { ArrangeAnswer, Prompt } from "../prompts/types";
 import { PolicyRandom } from "../policy/random";
+import { cloneState } from "../state/clone";
 import { determinize } from "./determinize";
+import { keepDisclosures, showPrivately } from "./knowledge";
 import { promptView, view } from "./view";
 import { testCardSubtype } from "../../types/test-identities";
 
@@ -402,6 +404,23 @@ describe("knowledge", () => {
     expect(after.sides.player.deck.slice(0, 2)).toEqual([second, top]);
     expect(view(after, "enemy", catalog).sides.player.deck.known).toEqual([]);
     expect(view(after, "player", catalog).sides.player.deck.known).toEqual([{ id: second, index: 0 }, { id: top, index: 1 }]);
+  });
+
+  it("keeps a disclosure on recovery only for cards still known where they sit, leaving the other side's knowledge alone", () => {
+    const { state: committed, ids } = foreseeBoard();
+    const [top, second, third] = ids.player.deck;
+    committed.knownTo.enemy = [top];
+    const display = cloneState(committed);
+    showPrivately(display, "player", [top, second, third]);
+    // `second` left the deck and came back within the step; the step's knowledge of `third` ended before it published.
+    display.instances[second] = { ...display.instances[second], enteredZoneAt: display.instances[second].enteredZoneAt + 1 };
+    display.knownTo.player = display.knownTo.player.filter((id) => id !== third);
+    const disclosed = [{ side: "player" as const, cards: [top, second, third] }];
+    const kept = keepDisclosures(committed, display, disclosed);
+    expect(kept).toEqual({ ...committed, knownTo: { player: [top], enemy: [top] } });
+    expect(committed.knownTo.player).toEqual([]);
+    expect(keepDisclosures(kept, display, disclosed)).toBe(kept);
+    expect(keepDisclosures(committed, display, [])).toBe(committed);
   });
 
   it("makes a card revealed from a hand known to both sides while it stays there", () => {

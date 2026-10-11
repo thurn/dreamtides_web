@@ -36,7 +36,7 @@ import { playRoutes } from "../../rules/timing";
 import { banish as banishCard, instanceOf, moveInstance, moveToHand } from "../../rules/zones";
 import { Layers } from "../../continuous/layers";
 import { deserializeState, serializeState, stateHash } from "../../state/hash";
-import { opponent as opponentOf, type CardId, type InstanceId } from "../../state/ids";
+import { opponent as opponentOf, type CardId, type InstanceId, type Side } from "../../state/ids";
 import type { BattleState } from "../../state/types";
 import { IllegalAnswer } from "../../steps/errors";
 import { NO_PROMPTS, ScriptedSource } from "../../steps/sources";
@@ -71,6 +71,15 @@ const v = SYNTHETIC;
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id, v.vanilla5.id];
 /** Greedy answers here raise no free Discover cost choice. */
 const noDiscoverCosts: DiscoverCostsOf = () => new Set();
+
+/**
+ * `committed` as the fold recovers it from a step that fails after its
+ * private prompt was published: `side` alone also knows `cards`, what that
+ * prompt's run showed it, and nothing else of the step remains.
+ */
+function knowing(committed: BattleState, side: Side, cards: readonly InstanceId[]): BattleState {
+  return { ...committed, knownTo: { ...committed.knownTo, [side]: [...committed.knownTo[side], ...cards] } };
+}
 
 describe("card primitives", () => {
   it("draw moves cards from the top of the deck to hand", () => {
@@ -341,7 +350,7 @@ describe("discover across suspension", () => {
     expect(fresh.reduce(done, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [offered[2]] })).toMatchObject({ kind: "bounced" });
   });
 
-  it("leaves the committed state and published events untouched when the step fails after the answer is accepted", () => {
+  it("keeps only the offer's private knowledge and publishes nothing when the step fails after the answer is accepted", () => {
     const failingEngine = createEngine(testCatalog([...DSL_CARDS, discoverThenFail]));
     const records: EngineLogRecord[] = [];
     const failing = createFoldAdapter(failingEngine, { checkEventPrefix: true, log: (record) => records.push(record) });
@@ -355,27 +364,34 @@ describe("discover across suspension", () => {
     const suspended = applied(failing.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
     const pending = failing.pending(suspended)!;
     expect(pending.prompt.purpose.role).toBe("discover");
-    const [chosen] = (pending.prompt as ChooseCardsPrompt).candidates;
+    const offered = (pending.prompt as ChooseCardsPrompt).candidates;
+    const [chosen] = offered;
     const committed = JSON.parse(JSON.stringify(suspended.committed)) as BattleState;
-    const hash = stateHash(suspended.committed);
+    const reloaded = JSON.parse(JSON.stringify(suspended)) as BattleSlice;
     records.length = 0;
 
-    const outcome = failing.reduce(suspended, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [chosen] });
+    const answer = { kind: "answer", side: "player", promptId: pending.prompt.id, value: [chosen] } as const;
+    const outcome = failing.reduce(suspended, answer);
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(outcome.error.message).toMatch(/after its discovery/);
-    // Nothing the accepted answer did (the card into hand, cardDiscovered, the shuffle, the knowledge reset) commits or publishes.
+    // The chooser keeps knowing the offered cards where they still sit, in the unshuffled deck; nothing else the
+    // accepted answer did (the card into hand, cardDiscovered, the shuffle, the knowledge reset) commits or publishes.
     expect(outcome.published).toEqual([]);
-    expect(outcome.slice).toEqual({ committed: suspended.committed, inFlight: null, publishedEvents: 0, attempt: suspended.attempt });
-    expect(stateHash(outcome.slice.committed)).toBe(hash);
-    expect(outcome.slice.committed).toEqual(committed);
+    expect(outcome.slice).toEqual({ committed: knowing(committed, "player", offered), inFlight: null, publishedEvents: 0, attempt: suspended.attempt });
     const after = outcome.slice.committed;
     expect(after.sides.player.hand).not.toContain(chosen);
     expect(after.sides.player.deck).toEqual(ids.player.deck);
     expect(after.rng).toEqual(committed.rng);
     expect(after.rng["random:discover"]).toBeUndefined();
-    expect(after.knownTo).toEqual(committed.knownTo);
+    expect(view(after, "player", failingEngine.catalog).sides.player.deck.known.map((card) => card.id).sort()).toEqual([...offered].sort());
+    expect(view(after, "enemy", failingEngine.catalog).sides.player.deck.known).toEqual([]);
     expect(records.map((record) => record.event)).toEqual(["engine.promptAnswered", "engine.error"]);
     expect(failing.pending(outcome.slice)).toBeNull();
+    // A reload's replay of the same intents recovers the same state, which serializes like any other.
+    const replayed = createFoldAdapter(failingEngine, { checkEventPrefix: true }).reduce(reloaded, answer);
+    if (replayed.kind !== "applied") throw new Error("expected the replayed answer to apply");
+    expect(stateHash(replayed.slice.committed)).toBe(stateHash(after));
+    expect(deserializeState(serializeState(after))).toEqual(after);
   });
 });
 
@@ -868,7 +884,7 @@ describe("selector cost and spark bounds", () => {
     expect(records.some((record) => record.event === "engine.promptAnswered")).toBe(true);
   });
 
-  it("commits no discovery, shuffle, or draw when resolution fails after both cost choices", () => {
+  it("commits no discovery, shuffle, or draw, only the offer's knowledge, when resolution fails after both cost choices", () => {
     const fold = createFoldAdapter(bounded, { checkEventPrefix: true });
     const { state, ids } = boardState(bounded.catalog, { active: "player", phase: "day", player: { hand: [freeCostThenFail.id], energy: 1, deck: [v.vanilla1.id, v.vanilla1.id] }, enemy: { deck } });
     const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
@@ -879,7 +895,8 @@ describe("selector cost and spark bounds", () => {
     const outcome = fold.reduce(waitingCard, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [prompt.candidates[0]] });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected a resolution failure");
     expect(outcome.published).toEqual([]);
-    expect(stateHash(outcome.slice.committed)).toBe(stateHash(waitingCard.committed));
+    // Only the offer's private knowledge outlives the failure.
+    expect(outcome.slice.committed).toEqual(knowing(waitingCard.committed, "player", prompt.candidates));
     expect(outcome.slice.committed.sides.player.deck).toEqual(ids.player.deck);
     expect(outcome.slice.committed.sides.player.hand).toEqual([]);
   });
@@ -1065,16 +1082,14 @@ describe("discardChosen", () => {
     expect(fresh.reduce(next, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.enemy.hand[0]] })).toMatchObject({ kind: "bounced" });
   });
 
-  it("rolls back the discard and private knowledge on an error after selection without partial event publication", () => {
+  it("rolls back the discard but keeps the prompt's private knowledge on an error after selection without partial event publication", () => {
     const { slice, pending, ids } = suspend(setup(chosenDiscardThenFail.id));
-    const hash = stateHash(slice.committed);
     const outcome = createFoldAdapter(chosenEngine, { checkEventPrefix: true }).reduce(slice, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.enemy.hand[2]] });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected synthetic failure");
     expect(outcome.published).toEqual([]);
     expect(outcome.slice.inFlight).toBeNull();
-    expect(stateHash(outcome.slice.committed)).toBe(hash);
+    expect(outcome.slice.committed).toEqual(knowing(slice.committed, "player", ids.enemy.hand));
     expect(outcome.slice.committed.sides.enemy.void).toEqual([]);
-    expect(outcome.slice.committed.knownTo.player).toEqual([]);
   });
 
   it("composes with Reclaim, paying its cost and banishing the reclaimed source after another chosen discard", () => {
@@ -1733,20 +1748,20 @@ describe("takeFromAmong", () => {
     expect(done.committed.sides.player.hand).toEqual([]);
   });
 
-  it("leaves the committed state, knowledge, and published events untouched when the step fails after the answer is accepted", () => {
+  it("keeps only the look's private knowledge and publishes nothing when the step fails after the answer is accepted", () => {
     const fold = createFoldAdapter(taking, { checkEventPrefix: true });
     const { state, ids } = boardState(taking.catalog, handBoard(takeThenFail.id, [v.vanilla1.id, v.vanilla2.id]));
     const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
     const suspended = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
     const pending = fold.pending(suspended)!;
-    const hash = stateHash(suspended.committed);
     const outcome = fold.reduce(suspended, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.enemy.hand[0]] });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(outcome.error.message).toMatch(/after its take/);
     expect(outcome.published).toEqual([]);
-    expect(stateHash(outcome.slice.committed)).toBe(hash);
+    // The looker keeps knowing the whole hand it looked at; the take and everything else roll back.
+    expect(outcome.slice.committed).toEqual(knowing(suspended.committed, "player", ids.enemy.hand));
     expect(outcome.slice.committed.sides.enemy.hand).toEqual(ids.enemy.hand);
-    expect(outcome.slice.committed.knownTo.player).toEqual([]);
+    expect(view(outcome.slice.committed, "player", taking.catalog).sides.enemy.hand.known).toEqual(ids.enemy.hand.map((id, index) => ({ id, index })));
     expect(fold.pending(outcome.slice)).toBeNull();
   });
 
@@ -1780,15 +1795,21 @@ const drawWatcher: EngineCardDefinition = {
   id: syntheticId(981), cardType: "character", costs: [energy(1)], spark: 1, subtype: "Warrior",
   speed: "standard", status: "authored", abilities: () => [triggered(whenDraw(), gainPoints(1))],
 };
-/** Looks at the top 4 cards and draws 1 of them, then throws: a step that fails after the answer is accepted. */
+/**
+ * Looks at the top 4 cards and draws 1 of them, then looks at the opponent's
+ * hand without asking (no card in it is an event), then throws: a step that
+ * fails after the answer is accepted.
+ */
 const lookThenFail: EngineCardDefinition = {
   ...lookThreeDrawTwo, id: syntheticId(982), abilities: () => [],
   synthetic: {
     resolve(ctx, item) {
-      resolveEffect(ctx, lookAtTop(4, { draw: 1 }), {
+      const env = {
         source: item.instance, origin: instanceOrigin(instanceOf(ctx.state, item.instance)),
         ability: 0, controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] },
-      });
+      };
+      resolveEffect(ctx, lookAtTop(4, { draw: 1 }), env);
+      resolveEffect(ctx, takeFromAmong(opponentHand(), { filter: { cardType: "event" } }), env);
       throw new Error("the step fails after its look");
     },
   },
@@ -1969,21 +1990,25 @@ describe("lookAtTop", () => {
     expect(fresh.reduce(done, answer)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
   });
 
-  it("leaves the committed state, knowledge, and draw count untouched and publishes nothing more when the step fails after the answer is accepted", () => {
+  it("keeps only the published look's private knowledge, leaving the draw count untouched and publishing nothing more, when the step fails after the answer is accepted", () => {
     const fold = createFoldAdapter(looking, { checkEventPrefix: true });
-    const { state, ids } = boardState(looking.catalog, board(lookThenFail.id));
+    const { state, ids } = boardState(looking.catalog, { ...board(lookThenFail.id), enemy: { deck, hand: [v.vanilla1.id, v.vanilla2.id] } });
     const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
     const suspended = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
     const pending = fold.pending(suspended)!;
-    expect(pending.prompt).toMatchObject({ kind: "chooseCards", candidates: ids.player.deck.slice(0, 4) });
-    const hash = stateHash(suspended.committed);
+    const top = ids.player.deck.slice(0, 4);
+    expect(pending.prompt).toMatchObject({ kind: "chooseCards", candidates: top });
     const outcome = fold.reduce(suspended, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.deck[2]] });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(outcome.error.message).toMatch(/after its look/);
     expect(outcome.published).toEqual([]);
-    expect(stateHash(outcome.slice.committed)).toBe(hash);
+    // The looker keeps knowing the top 4 cards where they still sit. The look at the opponent's hand after the
+    // answer was never published, so it is forgotten with the rest of the step.
+    expect(outcome.slice.committed).toEqual(knowing(suspended.committed, "player", top));
     expect(outcome.slice.committed.sides.player.deck).toEqual(ids.player.deck);
-    expect(outcome.slice.committed.knownTo.player).toEqual([]);
+    expect(view(outcome.slice.committed, "player", looking.catalog).sides.player.deck.known).toEqual(top.map((id, index) => ({ id, index })));
+    expect(view(outcome.slice.committed, "player", looking.catalog).sides.enemy.hand.known).toEqual([]);
+    expect(view(outcome.slice.committed, "enemy", looking.catalog).sides.player.deck.known).toEqual([]);
     expect(outcome.slice.committed.turnLog.drawn.player).toBe(state.turnLog.drawn.player);
     expect(fold.pending(outcome.slice)).toBeNull();
   });

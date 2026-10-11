@@ -16,6 +16,7 @@ import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
 import type { Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
+import { keepDisclosures } from "../view/knowledge";
 import { actionForStep, boundedLegality, nextAutomaticStep, stepForAction } from "../steps/driver";
 import { beginBattleStep } from "../steps/kinds/begin-battle";
 import type { Step } from "../steps/kinds";
@@ -73,7 +74,8 @@ export type BattleIntent =
  * A step that threw, or an in-flight record that no longer replays to a
  * prompt (a divergent or illegal recorded answer, answers left unused, or a
  * failed event-prefix check): the slice keeps `committed` and drops the
- * in-flight step.
+ * in-flight step, keeping only what a published prompt of the step showed
+ * one side alone (`Shown`).
  */
 export interface EngineErrorRecord {
   readonly kind: "engine_error";
@@ -238,9 +240,18 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-/** The slice with `inFlight` cleared after an engine error. */
-function recovered(slice: BattleSlice): BattleSlice {
-  return { committed: slice.committed, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
+/** The run of an in-flight step that suspended at the prompt the slice published. */
+type Shown = Extract<StepResult, { readonly kind: "suspended" }>;
+
+/**
+ * The slice with `inFlight` cleared after an engine error or a cancel. When
+ * the discarded step had published a prompt, `shown` is the run that
+ * suspended there: the committed state keeps the knowledge its private
+ * disclosures gave (`keepDisclosures`), and nothing else of the step.
+ */
+function recovered(slice: BattleSlice, shown: Shown | null = null): BattleSlice {
+  const committed = shown === null ? slice.committed : keepDisclosures(slice.committed, shown.display, shown.disclosed);
+  return { committed, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
 }
 
 /** The slice with a new in-flight step opened from `committed`. */
@@ -258,7 +269,7 @@ type Evaluation =
   | { readonly kind: "error"; readonly error: EngineErrorRecord };
 
 type Replay =
-  | { readonly kind: "pending"; readonly pending: PendingPrompt }
+  | { readonly kind: "pending"; readonly pending: PendingPrompt; readonly shown: Shown }
   | { readonly kind: "error"; readonly error: EngineErrorRecord };
 
 /** One intent's observation in progress: the copies it may still take, and the state its next unpresented event shares. */
@@ -437,6 +448,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
         prompt: { ...result.prompt, id: promptIdOf(slice, result.answers.length) },
         display: result.display,
       },
+      shown: result,
     };
   }
 
@@ -463,9 +475,12 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
    * Runs the in-flight step and the automatic steps after it until a
    * decision, a prompt, or the battle's end. `answered` is true when the
    * in-flight record just gained an answer; `progress` observes the runs.
+   * `shown` is the run that suspended at the prompt the in-flight step
+   * published, which a failure of that step recovers with (`recovered`).
    */
-  function advance(start: BattleSlice, answered: boolean, progress: Observing | null = null): IntentOutcome {
+  function advance(start: BattleSlice, answered: boolean, progress: Observing | null = null, shown: Shown | null = null): IntentOutcome {
     let slice = start;
+    let showing = shown;
     let checked = answered;
     const published: EngineEvent[] = [];
     for (;;) {
@@ -483,7 +498,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       checked = false;
       if (evaluation.kind === "error") {
         logError(slice, evaluation.error);
-        return { kind: "applied", slice: recovered(slice), published, error: evaluation.error };
+        return { kind: "applied", slice: recovered(slice, showing), published, error: evaluation.error };
       }
       const { result } = evaluation;
       const fresh = result.events.slice(slice.publishedEvents);
@@ -510,6 +525,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       }
       log(stepLogRecords(slice.committed, result.state));
       slice = { committed: result.state, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
+      showing = null;
     }
   }
 
@@ -579,7 +595,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
               { fingerprint, value: intent.value },
             ],
           },
-        }, true, startObserving(observation, current.pending.display));
+        }, true, startObserving(observation, current.pending.display), current.shown);
       }
       case "cancel": {
         if (slice.inFlight === null) return { kind: "bounced", reason: "noPendingPrompt" };
@@ -592,7 +608,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
         log([{ event: "engine.promptCancelled", version: slice.committed.version, promptId: prompt.id, side: intent.side }]);
         return {
           kind: "applied",
-          slice: { ...recovered(slice), attempt: slice.attempt + 1 },
+          slice: { ...recovered(slice, current.shown), attempt: slice.attempt + 1 },
           published: [],
           error: null,
         };

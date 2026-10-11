@@ -432,7 +432,8 @@ The intents each name their `side`:
   - Appends the answer.
 - **`cancel(promptId)`**
   - Allowed only for the answering side of a cancellable prompt.
-  - Clears `inFlight` and advances `attempt`.
+  - Clears `inFlight` and advances `attempt`, keeping the step's private
+    disclosures (below).
 
 An intent that is not allowed bounces with a reason (`battleOver`,
 `stepInFlight`, `notYourDecision`, `illegalAction`, `noPendingPrompt`,
@@ -454,8 +455,33 @@ After each applied intent, the reducer **advances**:
    recorded answer, answers left unused, a failed event-prefix check):
    - Return an `engine_error` record with the step, answers, and message, and
      log `engine.error`, for reproduction.
-   - Leave `committed` untouched, clear `inFlight`, and surface a recoverable
-     error.
+   - Clear `inFlight` and surface a recoverable error. `committed` keeps
+     nothing of the step but its private disclosures (below).
+
+**Private disclosures outlive a discarded step.** A step shows cards to one
+side alone through `ctx.disclose` (a `privateTo` prompt as it opens, a look
+at the opponent's hand), and its suspended run records them
+(`StepResult.disclosed`). When the fold discards an in-flight step that has
+published a prompt (an engine error after an answer, or a cancel), the human
+has already seen what that prompt's run disclosed, so `committed` keeps it
+(`keepDisclosures`, view/knowledge.ts):
+
+- Only the run that suspended at the published prompt counts. A disclosure
+  the failed run made after the answer, or one in a step that failed before
+  publishing any prompt, was never shown and is dropped.
+- Each disclosed card joins `knownTo` of the side it was shown to, and only
+  when that side still knows it in the published `display` state and the
+  card sits in `committed` exactly where it sits there (zone, controller,
+  last zone entry, and deck position). A disclosure that a later shuffle in
+  the same step ended, or of a card the step had moved, is dropped.
+- Nothing else of the step carries over: not its moves, random draws, or
+  events, nor the other side's loss of track of the shown deck cards, since
+  the deck was never reordered. Knowledge lifetime rules then apply as
+  usual, so a later shuffle clears it.
+- It is a pure function of the slice and the intent, so a reload's replay
+  of the log recovers the identical state, and its hash and serialization
+  are those of any other state. A record that no longer replays to its
+  prompt has no run to read disclosures from and keeps `committed` as is.
 
 Properties that follow:
 
@@ -1428,6 +1454,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - a look at the opponent's hand (`takeFromAmong` on `opponentHand`) shows
     the looker every card in it, even when what it may take is restricted
     or nothing qualifies; the prompt offers only the eligible cards.
+  - both private kinds go through `ctx.disclose`, and what a published
+    prompt's run disclosed survives the fold discarding the step
+    ([Decisions and prompts](#decisions-and-prompts)).
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: its purpose names a source card only when `side` can identify it
   (`purposeView`), even for the side answering, which otherwise sees it

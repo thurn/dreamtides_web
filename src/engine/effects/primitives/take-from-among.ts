@@ -5,7 +5,6 @@ import type { ChooseCardsPrompt } from "../../prompts/types";
 import { instanceOf, moveToHand } from "../../rules/zones";
 import { opponent, type InstanceId, type Side } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
-import { showPrivately } from "../../view/knowledge";
 import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 
 /** The cards a take chooses among. */
@@ -81,7 +80,7 @@ function cardsMovedBy(ctx: StepContext, effect: EffectNode, env: EffectEnv): Ins
 /** "Look at the opponent's hand": `side` alone sees every card in it before any is chosen. */
 function lookAtOpponentHand(ctx: StepContext, side: Side): InstanceId[] {
   const hand = [...ctx.state.sides[opponent(side)].hand];
-  showPrivately(ctx.state, side, hand);
+  ctx.disclose(side, hand);
   return hand;
 }
 

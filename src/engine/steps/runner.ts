@@ -75,6 +75,7 @@ export function runStep(
         display: work,
         events: ctx.events,
         answers: ctx.answers,
+        disclosed: ctx.disclosed,
       };
     }
     throw error;

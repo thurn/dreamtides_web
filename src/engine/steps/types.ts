@@ -2,7 +2,7 @@ import type { EngineCatalog } from "../catalog";
 import type { EngineEvent } from "../events";
 import type { Answer, AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
 import type { BattleState } from "../state/types";
-import type { Side } from "../state/ids";
+import type { InstanceId, Side } from "../state/ids";
 import type { Step } from "./kinds";
 
 /**
@@ -25,6 +25,12 @@ export interface RecordedAnswer {
   readonly auto?: true;
 }
 
+/** Cards a step showed to one side alone (`StepContext.disclose`). */
+export interface Disclosure {
+  readonly side: Side;
+  readonly cards: readonly InstanceId[];
+}
+
 /**
  * What rules code sees while a step runs. `state` is the step's private work
  * copy; rules code mutates it directly through the primitives.
@@ -38,6 +44,13 @@ export interface StepContext {
   choose<P extends Prompt>(prompt: PromptSpec<P>): AnswerFor<P>;
   /** Marks the point after which this step can no longer be cancelled. */
   commitPoint(): void;
+  /**
+   * Shows `cards` to `side` alone (`showPrivately`, view/knowledge.ts) and
+   * records the disclosure: once a prompt of the step is published, the
+   * fold keeps it even if the step later fails (engine-design § Decisions
+   * and prompts). A `privateTo` prompt discloses its cards as it opens.
+   */
+  disclose(side: Side, cards: readonly InstanceId[]): void;
   /** Records an event; triggered abilities it matches join the trigger queue. */
   emit(event: EngineEvent): void;
   /** A uniform draw in `[0, 1)` from the named stream. */
@@ -83,4 +96,6 @@ export type StepResult =
       readonly display: BattleState;
       readonly events: readonly EngineEvent[];
       readonly answers: readonly RecordedAnswer[];
+      /** What the step showed one side alone before it suspended, in order. */
+      readonly disclosed: readonly Disclosure[];
     };

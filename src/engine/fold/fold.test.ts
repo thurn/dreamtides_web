@@ -146,6 +146,27 @@ const opponentChoosesAtPlay: EngineCardDefinition = {
   },
 };
 
+// Its player looks at the top two cards of their deck while it is played, before its commit point.
+const lookAtPlay: EngineCardDefinition = {
+  ...divergent,
+  id: syntheticId(910),
+  synthetic: {
+    play: (ctx, self) => {
+      const side = ctx.state.instances[self]?.controller ?? "player";
+      ctx.choose<ChooseCardsPrompt>({
+        kind: "chooseCards",
+        side,
+        privateTo: side,
+        purpose: { source: self, cardId: null, ability: 0, role: "lookAtTop" },
+        candidates: ctx.state.sides[side].deck.slice(0, 2),
+        min: 1,
+        max: 1,
+      });
+      return {};
+    },
+  },
+};
+
 // Malformed prompts, which rules code must never raise.
 function malformed(index: number, raise: (ctx: StepContext, source: InstanceId) => void): EngineCardDefinition {
   return { ...divergent, id: syntheticId(index), synthetic: { resolve: (ctx, item) => raise(ctx, item.instance) } };
@@ -184,7 +205,7 @@ const drawThenDiscard: EngineCardDefinition = {
   abilities: () => [event(primitives.sequence(primitives.draw(1), primitives.discard(1)))],
 };
 
-const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL, [divergent, emptyPrompt, emitThenChoose, divergentPlay, opponentChoosesAtPlay, drawThenDiscard, ...MALFORMED]));
+const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL, [divergent, emptyPrompt, emitThenChoose, divergentPlay, opponentChoosesAtPlay, lookAtPlay, drawThenDiscard, ...MALFORMED]));
 const fold = createFoldAdapter(engine, { checkEventPrefix: true });
 
 function slice(setup: BoardSetup): { slice: BattleSlice; ids: ReturnType<typeof boardState>["ids"] } {
@@ -341,6 +362,17 @@ describe("cancellation", () => {
     expect(cancelled.inFlight).toBeNull();
     expect(stateHash(cancelled.committed)).toBe(stateHash(start.committed));
     expect(engine.decision(cancelled.committed)).toEqual({ kind: "main", side: "player" });
+  });
+
+  it("keeps only what the cancelled step's published private prompt showed its chooser", () => {
+    const { slice: start, ids } = slice({ active: "player", phase: "day", player: { hand: [lookAtPlay.id], deck }, enemy: { deck } });
+    const suspended = applied(play(start, ids.player.hand[0]));
+    const pending = pendingOf(suspended);
+    expect(pending.prompt).toMatchObject({ privateTo: "player", cancellable: true });
+    const cancelled = applied(fold.reduce(suspended, { kind: "cancel", side: "player", promptId: pending.prompt.id }));
+    expect(cancelled.inFlight).toBeNull();
+    const top = ids.player.deck.slice(0, 2);
+    expect(cancelled.committed).toEqual({ ...start.committed, knownTo: { ...start.committed.knownTo, player: top } });
   });
 
   it("lets only the acting side cancel, never the opponent answering a prompt in its play", () => {
