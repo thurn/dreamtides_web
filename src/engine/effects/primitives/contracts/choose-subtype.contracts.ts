@@ -4,6 +4,7 @@ import type { CardSubtype } from "../../../../types/card-identity";
 import type { EngineCardDefinition } from "../../../catalog";
 import { all, anyCharacter, characterYouControl, energy, event, self, staticAbility } from "../../../dsl/builders";
 import { onMaterialized, triggered } from "../../../dsl/triggers";
+import { matchingCharacters } from "../../../dsl/selectors";
 import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -26,6 +27,7 @@ import { CHOSEN_SUBTYPE, chooseSubtype } from "../choose-subtype";
 import { discover } from "../discover";
 import { dissolve } from "../dissolve";
 import { giveAllTypes } from "../give-all-types";
+import { gainPoints } from "../gain-points";
 import { sparkModifier } from "../spark-modifier";
 
 const character = (index: number, subtype: CardSubtype, abilities: EngineCardDefinition["abilities"] = () => []): EngineCardDefinition => ({
@@ -87,7 +89,24 @@ const rechoose = fastEvent(0x5c08, () => [], {
   },
 });
 
-const engine = createEngine(testCatalog([edge, rift, mage, survivor, shifter, unmake, failing, offBoard, rechoose]));
+const allTypes = fastEvent(0x5c09, () => [event(giveAllTypes(all(characterYouControl())))]);
+const survivorAnthem = character(0x5c0a, "Survivor", () => [staticAbility(sparkModifier(all(anyCharacter({ subtype: "Survivor" })), 2))]);
+function hiddenChoice(index: number, zone: "hand" | "deck") {
+  return fastEvent(index, () => [], {
+    resolve(ctx, item) {
+      const source = ctx.state.sides[item.controller][zone][0];
+      if (source === undefined) throw new Error("missing hidden source");
+      resolveEffect(ctx, chooseSubtype({ then: gainPoints(1) }), {
+        source, origin: instanceOrigin(instanceOf(ctx.state, source)), ability: 0,
+        controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] },
+      });
+    },
+  });
+}
+const hiddenHand = hiddenChoice(0x5c0b, "hand");
+const hiddenDeck = hiddenChoice(0x5c0c, "deck");
+
+const engine = createEngine(testCatalog([edge, rift, mage, survivor, shifter, unmake, failing, offBoard, rechoose, allTypes, survivorAnthem, hiddenHand, hiddenDeck]));
 const types = engine.catalog.characterTypes;
 const modeOf = (type: CardSubtype): number => {
   const mode = types.indexOf(type);
@@ -116,6 +135,52 @@ const chosen = (events: readonly EngineEvent[]) => events.filter((event) => even
 const subtypeOf = (state: BattleState, id: InstanceId) => characteristics(state, engine.catalog).of(id).subtype;
 
 describe("chooseSubtype", () => {
+  it("sets only the chosen type after all types, and grants all types when that effect is later", () => {
+    for (const allTypesLast of [false, true]) {
+      const result = runScenario(engine, {
+        board: { active: "player", phase: "day", player: { back: [edge.id, survivorAnthem.id], hand: [allTypes.id, rechoose.id], energy: 3, deck }, enemy: { deck } },
+        steps: (ids) => (allTypesLast ? [1, 0] : [0, 1]).map((index) => playFromHand(ids, "player", index)),
+        answers: () => [modeOf("Mage")],
+      });
+      const source = result.ids.player.back[0]!;
+      expect(characteristics(result.state, engine.catalog).of(source)).toMatchObject({ subtype: "Mage", allTypes: allTypesLast });
+      const matching = (subtype: CardSubtype) => matchingCharacters(result.state, engine.catalog, anyCharacter({ subtype }), "player", source);
+      expect(matching("Mage")).toContain(source);
+      if (allTypesLast) expect(matching("Survivor")).toContain(source);
+      else expect(matching("Survivor")).not.toContain(source);
+      expect(effectiveSpark(result.state, engine.catalog, source)).toBe(allTypesLast ? 5 : 3);
+      expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+    }
+  });
+
+  it("announces a hidden-zone source's choice to both sides and identifies only a known source", () => {
+    for (const side of ["player", "enemy"] as const) {
+      for (const zone of ["hand", "deck"] as const) {
+        for (const known of [false, true]) {
+          const card = zone === "hand" ? hiddenHand : hiddenDeck;
+          const { state, ids } = boardState(engine.catalog, {
+            active: side, phase: "day", [side]: { hand: [card.id, mage.id], energy: 2, deck },
+          });
+          const source = ids[side][zone][zone === "hand" ? 1 : 0];
+          if (known) for (const viewer of ["player", "enemy"] as const) state.knownTo[viewer].push(source);
+          const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+          const opened = applied(fold.reduce(sliceOf(state), { kind: "battleAction", side, action: playFromHand(ids, side).action }));
+          const prompt = fold.pending(opened)!.prompt;
+          const answered = fold.reduce(opened, { kind: "answer", side, promptId: prompt.id, value: modeOf("Mage") });
+          const done = applied(answered);
+          if (answered.kind !== "applied") throw new Error("expected published answer");
+          expect(chosen(answered.published)).toEqual([{ kind: "subtypeChosen", side, source, subtype: "Mage" }]);
+          for (const viewer of ["player", "enemy"] as const) {
+            expect(eventSeenBy(chosen(answered.published)[0], viewer, done.committed)).toEqual({
+              kind: "subtypeChosen", side, subtype: "Mage", source: known || (zone === "hand" && viewer === side) ? source : null,
+            });
+          }
+          expect(done.committed.instances[source]?.zone).toBe(zone);
+        }
+      }
+    }
+  });
+
   it("offers every catalog character type but the untyped placeholders in a public prompt", () => {
     expect(types).toEqual(expect.arrayContaining(["Warrior", "Mage", "Survivor", "Explorer"]));
     expect(types).not.toContain("*");
@@ -281,17 +346,29 @@ describe("chooseSubtype", () => {
     expect(current.committed.instances[ids.enemy.hand[0]]?.zone).toBe("void");
   });
 
-  it("rolls back the type announcement and the deck placement when its step fails afterwards", () => {
+  it("retains the published type announcement when the later discovery fails and rolls gameplay back", () => {
     const board: BoardSetup = { ...riftBoard(), player: { hand: [failing.id], energy: 3, deck } };
     const { fold, slice, ids } = opened(board);
     const choice = fold.pending(slice)!.prompt;
-    const picking = applied(fold.reduce(slice, { kind: "answer", side: "player", promptId: choice.id, value: modeOf("Mage") }));
+    const announced = fold.reduce(slice, { kind: "answer", side: "player", promptId: choice.id, value: modeOf("Mage") });
+    const picking = applied(announced);
+    if (announced.kind !== "applied") throw new Error("expected published announcement");
+    const published = chosen(announced.published);
+    expect(published).toEqual([{ kind: "subtypeChosen", side: "player", source: ids.player.hand[0], subtype: "Mage" }]);
+    for (const viewer of ["player", "enemy"] as const) expect(eventSeenBy(published[0], viewer, fold.pending(picking)!.display)).toEqual(published[0]);
     const discovery = fold.pending(picking)!.prompt;
     const failed = fold.reduce(picking, { kind: "answer", side: "player", promptId: discovery.id, value: [ids.player.deck[4]] });
     if (failed.kind !== "applied" || failed.error === null) throw new Error("expected the synthetic failure");
     expect(failed.published).toEqual([]);
     expect(failed.slice.inFlight).toBeNull();
-    // Only the private look at the offered cards outlives the failure (view/knowledge.ts `keepDisclosures`).
+    // The published announcement remains factual; the failed run contributes no new events.
+    expect(chosen([...announced.published, ...failed.published])).toEqual(published);
+    const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
+    const reloaded = JSON.parse(JSON.stringify(picking)) as BattleSlice;
+    expect(fresh.pending(reloaded)!.prompt).toEqual(discovery);
+    const replayed = fresh.reduce(reloaded, { kind: "answer", side: "player", promptId: discovery.id, value: [ids.player.deck[4]] });
+    expect(replayed).toEqual(failed);
+    // Published private discovery knowledge also survives at the recovered boundary.
     const committed = failed.slice.committed;
     expect({ ...committed, knownTo: picking.committed.knownTo }).toEqual(picking.committed);
     expect(committed.knownTo.enemy).toEqual(picking.committed.knownTo.enemy);

@@ -494,6 +494,10 @@ private disclosures below; recovery preserves the original error.
 Presentation retains the actual published event prefix, and the fold logs
 `engine.error` for the failed attempt. The events describe what was shown
 during the attempt.
+For example, a `subtypeChosen` announcement published as the step suspends
+at a following Discover prompt remains in that prefix if resolving the
+discovery later fails. The announcement reports the choice shown during the
+attempt; the recovered gameplay state stays at the step boundary.
 Committed zones, resources, counters and RNG remain at the step boundary.
 No events emitted by the later failing run are published. Existing action,
 prompt-answer and error records reconstruct that factual prefix and the

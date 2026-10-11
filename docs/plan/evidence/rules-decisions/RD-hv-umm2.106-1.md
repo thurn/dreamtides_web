@@ -11,4 +11,4 @@ No D-, C- or P-entry covers a resolution-time type choice; C12 concerns the jour
 
 ## Encoding
 
-`chooseSubtype` (src/engine/effects/primitives/choose-subtype.ts) asks a public `chooseMode` prompt with role `chooseSubtype`; `ChooseModePrompt.subtypes` names each mode's type, from `EngineCatalog.characterTypes` (distinct, code-unit order, without `BATTLE.untypedSubtypes`). The answer is announced by the `subtypeChosen` event, private only when its source is a card in a hand or deck. The following instruction resolves with `CHOSEN_SUBTYPE` replaced by the chosen type.
+`chooseSubtype` (src/engine/effects/primitives/choose-subtype.ts) asks a public `chooseMode` prompt with role `chooseSubtype`; `ChooseModePrompt.subtypes` names each mode's type, from `EngineCatalog.characterTypes` (distinct, code-unit order, without `BATTLE.untypedSubtypes`). The answer is announced to both sides by the `subtypeChosen` event, including when its source is a card in a hand or deck; the source is `null` for a side that cannot identify it. The following instruction resolves with `CHOSEN_SUBTYPE` replaced by the chosen type.

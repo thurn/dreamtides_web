@@ -1477,8 +1477,12 @@ and any other effect when it resolved. Among effects that began at the same
 moment, static abilities apply first — avatars and dreamsigns, then cards in
 the order they were created for the battle — then the other effects, in the
 order they were created. Where effects conflict, such as one that gives a
-keyword and one that removes it, the one applied last wins. A static ability
-decides which characters it changes, and by how much, from what the earlier
+keyword and one that removes it, the one applied last wins. An effect
+that sets a character's type replaces all character types earlier effects
+gave it: after "has all character types" then "is a Mage", it is only a
+Mage. If "has all character types" applies after "is a Mage", it has every
+character type. A static ability decides which characters it changes, and
+by how much, from what the earlier
 steps produced: an ability that changes spark reads types, keywords, and base
 spark, but not other spark changes.
 

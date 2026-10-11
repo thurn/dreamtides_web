@@ -361,7 +361,7 @@ export class Layers {
           result = { ...result, allTypes: true };
           break;
         case "subtype":
-          result = { ...result, subtype: change.subtype };
+          result = { ...result, subtype: change.subtype, allTypes: false };
           break;
         case "keyword":
           result = {

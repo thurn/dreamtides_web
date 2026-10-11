@@ -1,0 +1,184 @@
+{
+  "bead": "hv-umm2.423",
+  "phase": 5,
+  "implementMin": 9.601433816666667,
+  "measurementWindow": "native claim proxy to preparation before commit; final preparation timestamp refreshed after parent ACK immediately before successful commit; actual successful commit timing recorded in external handoff and parent native notes",
+  "measurementBasis": {
+    "start": "2026-10-11T19:56:26+00:00",
+    "startScope": "trusted native claim proxy; exact helper dispatch not retained",
+    "end": "2026-10-11T20:06:02.086029+00:00",
+    "endScope": "final preparation immediately after parent staged/resource ACK and immediately before successful commit"
+  },
+  "localValidationS": {
+    "baseline": 3.9457104580360465,
+    "focused": 4.320907166984398,
+    "focused-settled": 7.00565883301897,
+    "review": 61.76801300002262,
+    "review-settled": 45.51413316599792,
+    "knip": 3.607249291962944
+  },
+  "hostLoad": 23.6474609375,
+  "hostLoadSamples": [
+    {
+      "label": "baseline",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype"
+      ],
+      "exit": 1,
+      "seconds": 3.9457104580360465,
+      "start": "2026-10-11T20:00:57.862526+00:00",
+      "end": "2026-10-11T20:01:01.808276+00:00",
+      "loadBefore": [
+        23.19970703125,
+        17.77587890625,
+        16.3994140625
+      ],
+      "loadAfter": [
+        25.025390625,
+        18.244140625,
+        16.57275390625
+      ],
+      "pid": 77946
+    },
+    {
+      "label": "focused",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/fold/slice.test.ts",
+        "src/engine/view/view.test.ts"
+      ],
+      "exit": 0,
+      "seconds": 4.320907166984398,
+      "start": "2026-10-11T20:01:36.959102+00:00",
+      "end": "2026-10-11T20:01:41.280054+00:00",
+      "loadBefore": [
+        23.37646484375,
+        18.60498046875,
+        16.77197265625
+      ],
+      "loadAfter": [
+        23.37646484375,
+        18.60498046875,
+        16.77197265625
+      ],
+      "pid": 80103
+    },
+    {
+      "label": "focused-settled",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-observation.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/view/view.test.ts"
+      ],
+      "exit": 0,
+      "seconds": 7.00565883301897,
+      "start": "2026-10-11T20:01:53.747457+00:00",
+      "end": "2026-10-11T20:02:00.753192+00:00",
+      "loadBefore": [
+        28.98095703125,
+        20.0771484375,
+        17.328125
+      ],
+      "loadAfter": [
+        32.90625,
+        21.03857421875,
+        17.68359375
+      ],
+      "pid": 80564
+    },
+    {
+      "label": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 2,
+      "seconds": 61.76801300002262,
+      "start": "2026-10-11T20:02:08.354790+00:00",
+      "end": "2026-10-11T20:03:10.123425+00:00",
+      "loadBefore": [
+        33.1474609375,
+        21.50732421875,
+        17.89013671875
+      ],
+      "loadAfter": [
+        23.52978515625,
+        21.34765625,
+        18.10888671875
+      ],
+      "pid": 81599
+    },
+    {
+      "label": "review-settled",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "seconds": 45.51413316599792,
+      "start": "2026-10-11T20:03:14.878826+00:00",
+      "end": "2026-10-11T20:04:00.393419+00:00",
+      "loadBefore": [
+        23.6474609375,
+        21.408203125,
+        18.14892578125
+      ],
+      "loadAfter": [
+        21.1142578125,
+        21.091796875,
+        18.20068359375
+      ],
+      "pid": 89432
+    },
+    {
+      "label": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "seconds": 3.607249291962944,
+      "start": "2026-10-11T20:04:03.144987+00:00",
+      "end": "2026-10-11T20:04:06.752278+00:00",
+      "loadBefore": [
+        20.06396484375,
+        20.8740234375,
+        18.140625
+      ],
+      "loadAfter": [
+        19.8984375,
+        20.826171875,
+        18.1396484375
+      ],
+      "pid": 92252
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 77,
+    "jsdomFiles": 0,
+    "cases": 2,
+    "contractModuleLines": 394
+  },
+  "friction": [],
+  "improvementBeads": []
+}

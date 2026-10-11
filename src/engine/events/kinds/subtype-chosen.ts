@@ -1,6 +1,6 @@
 import type { CardSubtype } from "../../../types/card-identity";
 import type { AbilitySource, Side } from "../../state/ids";
-import { redactSource, sourcePrivacy } from "../sources";
+import { redactSource } from "../sources";
 import type { EventDefinition } from "../types";
 
 /**
@@ -16,13 +16,12 @@ export interface SubtypeChosenEvent {
 }
 
 /**
- * The choice is announced: both sides see it, except that one made by an
- * ability of a card in a hand or deck is private to the side holding that
- * zone, showing the source only to a side that can identify it, like
- * `triggerQueued`.
+ * Both sides see the announced type, including a choice made by an ability
+ * of a card in a hand or deck. Each side sees the source only when it can
+ * identify it.
  */
 export const subtypeChosen: EventDefinition<SubtypeChosenEvent> = {
   kind: "subtypeChosen",
-  privateTo: (event, state) => sourcePrivacy(event.source, state),
+  privateTo: () => null,
   redact: redactSource,
 };
