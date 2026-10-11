@@ -1305,6 +1305,37 @@ costs are paid. After a successful move, recalculate Support, controller-based
 effects, subtype counts, and challenger or blocker status before resolving
 resulting triggers.
 
+**Gaining abilities** — "This character gains the abilities of that
+character" gives the character every ability printed on that card for its
+variant, such as an amplified card's amplified text: its keywords and its
+triggered, activated, and static abilities, after the character's own. It
+gains none of the changes other effects made to that card, such as gained
+spark. A gained ability that works only from a hand or a void, such as
+Reclaim, does nothing while the character is in play. Each gained ability is
+an ability of the character: it activates a gained activated ability itself,
+paying its costs, ☾ included, and a gained "Once per turn" ability counts only
+its own uses by this character. Gained keywords apply with the other keywords
+in the [order of continuous effects](#ability-types), as of when the character
+gained them.
+
+A character keeps the abilities it gained while it stays in play, whoever
+controls it, and loses them as it leaves play: if it returns, it has only its
+own abilities, and a "Once per turn" ability it gains later in that turn is
+unused. A gained ability that triggers as the character leaves play, such as
+"When this character leaves play", sees it as it was just before it left. Its
+own dissolve happens once it has left, so none of its gained abilities
+triggers on that dissolve: neither a gained ▸Dissolved ability nor a gained
+"When a character you control is dissolved". A gained activated ability
+already on the stack, or a gained triggered ability already waiting to
+resolve, still resolves after the character leaves play.
+
+"Banish a character from a player's void. This character gains the abilities
+of that character" chooses a player as it resolves, then a character in that
+player's void as its target; with no character there, nothing is banished and
+nothing is gained. The character with the ability gains the abilities of the
+card it banished only if it is still in play as the ability resolves; the card
+is banished either way.
+
 **Each player** — "Each player draws two cards" and "Each player discards a
 card" happen once for each player, the active player first, then the opposing
 player, whoever controls the effect. Within each player's part, "you" and

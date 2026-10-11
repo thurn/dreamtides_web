@@ -40,7 +40,8 @@ function unchanged(before: BattleState, was: CardInstance | undefined, after: Ba
   if (was === undefined || is === undefined) return was === is;
   if (was.zone !== is.zone || was.controller !== is.controller || slotOf(before, was) !== slotOf(after, is)) return false;
   const status = is.status as unknown as Readonly<Record<string, unknown>>;
-  return Object.entries(was.status).every(([field, value]) => status[field] === value);
+  // An optional status field (`gainedAbilities`) that appears is a change too.
+  return Object.keys(status).length === Object.keys(was.status).length && Object.entries(was.status).every(([field, value]) => status[field] === value);
 }
 
 /** Whether a card's only change is the Ending's readying, in a step that changed phase or ran the waiting Ending cleanup. */

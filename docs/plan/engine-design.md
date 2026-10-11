@@ -149,7 +149,8 @@ interface CardInstance {
   readonly variant: Variant;           // { amplified }; Phases 4.1 and 5 add the rest (D39, below)
   status: { exhausted: boolean; gainedSpark: number; counters: number; created: boolean;
             reclaimed: boolean; playedViaReclaim: boolean; offering: boolean; ephemeral: boolean;
-            x: number | null };        // X paid to play it, kept while in play (variable spark)
+            x: number | null;          // X paid to play it, kept while in play (variable spark)
+            gainedAbilities?: { cardId: CardId; variant: Variant }[] };  // mirrors its `abilities` changes
   enteredZoneAt: number;               // timestamp for layer ordering
 }
 ```
@@ -858,7 +859,7 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   events no trigger lists skip the matcher.
 - **Shape.** A `TriggeredAbility` is `{ trigger, effect, zone, condition?,
   oncePerTurn? }`. A queued trigger records its source, controller, origin
-  (card variant, figment, or emblem), ability index, floating-trigger node,
+  (card variant with the abilities it gained, figment, or emblem), ability index, floating-trigger node,
   and `subject`, the card the event concerns, so it resolves even after its
   source moves or ceases to exist. A "when … gains ✦" trigger also records
   `gain`, the matched gain's amount and expiry, which the trigger's effect
@@ -883,7 +884,8 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 - **Intervening "if" conditions** are checked when the trigger matches and
   again on resolution (rules § Ability Types).
 - **Once per turn** is keyed by source key and ability index
-  (`OncePerTurnKey`, which covers emblems), and cleared as each turn begins.
+  (`OncePerTurnKey`, which covers emblems), and cleared as each turn begins;
+  the records of a character's gained abilities are also dropped as they end.
 - **Floating triggers** (`floating`) are "until end of turn, when…".
   **Delayed triggers** (`delayed`) are one-shot "the next time…" floating
   triggers with `once: true`. Both are `floatingTrigger` nodes, and their
@@ -968,7 +970,23 @@ analog:
    character is that character type" (`subtype`). A static ability naming
    its source's chosen type (`CHOSEN_SUBTYPE`) reads the latest `subtype`
    change that source made to itself, and makes no change without one.
-3. **Ability adds and removes:** keywords gained and lost (`keyword`).
+3. **Ability adds and removes:** keywords gained and lost (`keyword`), and
+   the abilities of another card a character gained (`abilities`, made by
+   `gainAbilities`; rules § Keywords and Effects → Gaining abilities). An
+   `abilities` change applies that card's keywords here, at its timestamp.
+   Its other abilities join the character's ability list:
+   `rules/floating.ts` mirrors the character's `abilities` changes, in
+   creation order, onto `status.gainedAbilities` as each begins and ends, and
+   `instanceOrigin` copies the mirror into the card origin's `gained` list,
+   so every reader of an instance's abilities (the trigger matcher,
+   activation and legality, static abilities, victory, discover,
+   determinization) sees them without the floating list, and stack items and
+   queued triggers snapshot them with the origin. `originAbilities` lists a
+   card's own abilities first, so their indexes never change. The change
+   lasts while the character is in play (`sourceLeavesPlay` on itself,
+   RD-hv-umm2.110-2); as it ends, the once-per-turn records of the gained
+   positions are dropped. The saved-state check rejects a mirror that
+   disagrees with the changes (`rules/battle/fold.ts`).
    Disabled triggers are floating records that the trigger matcher reads.
 4. **Base-spark setting:** "base ✦ becomes 7" (`baseSpark`).
 5. **Spark modifications:** permanent gained spark (`status.gainedSpark`),
@@ -1397,7 +1415,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player), `storeCounters` (N⧗ on the source while it is in play, announced by `countersChanged`; RD-hv-umm2.94-1) | `doubleEnergy`, `spendCounters` |
 | Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs | capturedCards())` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
-| Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)` |
+| Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)`, `gainAbilities(banishCards(…))` (the source, while in play, gains every ability of each card the banish moved; layer 3 `abilities`) |
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |

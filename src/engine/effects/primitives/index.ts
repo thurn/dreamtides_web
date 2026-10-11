@@ -26,6 +26,7 @@ export * from "./exhaust";
 export * from "./floating-trigger";
 export * from "./for-duration";
 export * from "./foresee";
+export * from "./gain-abilities";
 export * from "./gain-control";
 export * from "./gain-energy";
 export * from "./gain-max-energy";

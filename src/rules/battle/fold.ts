@@ -950,7 +950,8 @@ function isBattleState(value: unknown): boolean {
     isIndex(value.automaticChoices) &&
     isLoopTracker(value.loops) &&
     nullable(isBattleResult)(value.result) &&
-    hasConsistentZones(value)
+    hasConsistentZones(value) &&
+    hasMirroredGainedAbilities(value)
   );
 }
 
@@ -1076,15 +1077,25 @@ function isCardStatus(value: unknown): boolean {
     isBoolean(value.reclaimed) &&
     isBoolean(value.offering) &&
     isBoolean(value.ephemeral) &&
-    nullable(isFiniteNumber)(value.x)
+    nullable(isFiniteNumber)(value.x) &&
+    optional(isGainedAbilitiesList)(value.gainedAbilities)
   );
+}
+
+function isGainedAbilities(value: unknown): boolean {
+  return isPlainRecord(value) && parses(parseCardId)(value.cardId) && isVariant(value.variant);
+}
+
+/** A non-empty list of gained abilities: an empty one is absent instead. */
+function isGainedAbilitiesList(value: unknown): boolean {
+  return isArrayOf(value, isGainedAbilities) && value.length > 0;
 }
 
 function isAbilityOrigin(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
   switch (value.kind) {
     case "card":
-      return parses(parseCardId)(value.cardId) && isVariant(value.variant);
+      return parses(parseCardId)(value.cardId) && isVariant(value.variant) && optional(isGainedAbilitiesList)(value.gained);
     case "figment":
       return isFigmentId(value.id);
     case "avatar":
@@ -1207,6 +1218,7 @@ const FLOATING_CHANGE_VALIDATORS: {
     nullable(isInstanceId)(value.instance) &&
     isCardFilter(value.filter),
   playLimit: (value) => isSide(value.player) && isIndex(value.count),
+  abilities: (value) => isInstanceId(value.instance) && parses(parseCardId)(value.cardId) && isVariant(value.variant),
   // This continuous change is made only by static abilities, not saved floating effects.
   reclaimNotBanished: () => false,
 };
@@ -1358,6 +1370,25 @@ function hasConsistentZones(value: Record<string, unknown>): boolean {
     state.stack.every(
       (item) => item.kind !== "card" || inZone(item.instance, "stack"),
     )
+  );
+}
+
+/**
+ * Whether each instance's `status.gainedAbilities` lists exactly its
+ * `abilities` floating changes, in order, and no such change names a card
+ * that does not exist: the instance's abilities read the mirror, so a state
+ * whose mirror disagrees with its effects would change what it can do.
+ */
+function hasMirroredGainedAbilities(value: Record<string, unknown>): boolean {
+  const state = value as unknown as BattleState;
+  const gained = new Map<InstanceId, unknown[]>();
+  for (const { change } of state.floating) {
+    if (change.kind !== "abilities") continue;
+    if (!Object.prototype.hasOwnProperty.call(state.instances, change.instance)) return false;
+    gained.set(change.instance, [...(gained.get(change.instance) ?? []), { cardId: change.cardId, variant: change.variant }]);
+  }
+  return Object.values(state.instances).every(
+    (instance) => JSON.stringify(instance.status.gainedAbilities ?? []) === JSON.stringify(gained.get(instance.id) ?? []),
   );
 }
 

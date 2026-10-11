@@ -41,6 +41,7 @@ import {
   forDurationPrimitive,
   foreseePrimitive,
   gainAdditionalSparkPrimitive,
+  gainAbilitiesPrimitive,
   gainControlPrimitive,
   gainEnergyPrimitive,
   gainMaxEnergyPrimitive,
@@ -171,6 +172,9 @@ const DEFINITIONS = {
   },
   get gainAdditionalSpark() {
     return gainAdditionalSparkPrimitive;
+  },
+  get gainAbilities() {
+    return gainAbilitiesPrimitive;
   },
   get gainControl() {
     return gainControlPrimitive;

@@ -364,6 +364,8 @@ const CARD_STATUS_BADGES = {
   x: null,
   // Historical play provenance has no active status indicator.
   playedViaReclaim: null,
+  // Each `abilities` floating change it mirrors badges the card with the card it gained the abilities of.
+  gainedAbilities: null,
   created: { badge: "created", copy: { kind: "created" } },
   reclaimed: { badge: "duration", copy: { kind: "reclaimed" } },
   offering: { badge: "duration", copy: { kind: "offering" } },
@@ -402,7 +404,8 @@ export function enginePrintedKeywords(catalog: EngineCatalog): EnginePrintedKeyw
  * The status indicators of `view` for `human`: each floating effect with a
  * duration (spark, base spark, all types, a granted or lost keyword with
  * a granted Reclaim's stated cost,
- * disabled triggers, a temporary character) marks its card, as does each
+ * disabled triggers, a temporary character, the abilities of a card it
+ * gained) marks its card, as does each
  * keyword a visible card has beyond its `printedKeywords` and its floating
  * gains (one a static ability grants), and each status flag
  * `CARD_STATUS_BADGES` badges (Offering, Reclaim, Ephemeral, and a created
@@ -507,6 +510,9 @@ export function engineStatuses(
       }
       case "playLimit":
         sides[change.player].push(badge("duration", { kind: "playLimit", count: change.count, expiry }));
+        break;
+      case "abilities":
+        mark(change.instance, badge("keyword", { kind: "abilities", name: cardModels?.nameOf({ printing: { kind: "card", cardId: change.cardId }, variant: change.variant }) ?? null }));
         break;
     }
   }

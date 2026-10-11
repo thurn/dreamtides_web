@@ -24,12 +24,21 @@ export function sourceController(state: BattleState, source: AbilitySource): Sid
   return present ? source.side : null;
 }
 
-/** Where an instance's abilities come from: its card for its variant, the card a figment copy copies, or its figment type. */
+/**
+ * Where an instance's abilities come from: its card for its variant, or the
+ * card a figment copy copies, followed by the abilities it has gained; or its
+ * figment type.
+ */
 export function instanceOrigin(instance: CardInstance): AbilityOrigin {
   const { printing } = instance;
-  return printing.kind === "figment"
-    ? { kind: "figment", id: printing.figment }
-    : { kind: "card", cardId: printing.cardId, variant: instance.variant };
+  if (printing.kind === "figment") return { kind: "figment", id: printing.figment };
+  const gained = instance.status.gainedAbilities;
+  return {
+    kind: "card",
+    cardId: printing.cardId,
+    variant: instance.variant,
+    ...(gained === undefined || gained.length === 0 ? {} : { gained: [...gained] }),
+  };
 }
 
 /** Where a source's abilities come from now, or `null` when the source is gone. */
@@ -46,11 +55,16 @@ export function abilityOrigin(state: BattleState, source: AbilitySource): Abilit
   return dreamsign === undefined ? null : { kind: "dreamsign", id: dreamsign.id };
 }
 
-/** The abilities an origin grants: a card's for its variant, or an emblem's. */
+/**
+ * The abilities an origin grants: a card's for its variant, then those of
+ * each card it gained, in the order gained; or an emblem's.
+ */
 export function originAbilities(catalog: EngineCatalog, origin: AbilityOrigin): readonly Ability[] {
   switch (origin.kind) {
-    case "card":
-      return catalog.card(origin.cardId).abilities(origin.variant);
+    case "card": {
+      const own = catalog.card(origin.cardId).abilities(origin.variant);
+      return origin.gained === undefined ? own : [...own, ...origin.gained.flatMap((gained) => catalog.card(gained.cardId).abilities(gained.variant))];
+    }
     case "figment":
       return catalog.figment(origin.id).abilities(BASE_VARIANT);
     case "avatar":

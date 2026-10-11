@@ -552,6 +552,8 @@ export type EngineStatusCopy =
       readonly reclaimCosts?: readonly Cost[];
     }
   | { readonly kind: "grantedKeyword"; readonly keyword: Keyword }
+  /** The character has the abilities of the card named `name` (`null` when it is unknown), while it is in play. */
+  | { readonly kind: "abilities"; readonly name: string | null }
   | { readonly kind: "offering" }
   | { readonly kind: "reclaimed" }
   | { readonly kind: "ephemeral" }
@@ -607,6 +609,8 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
       return status.keyword === "cannotBePrevented" || status.keyword === "cannotBeTargeted"
         ? sentence(KEYWORD_NAMES[status.keyword])
         : `Has ${KEYWORD_NAMES[status.keyword]}`;
+    case "abilities":
+      return status.name === null ? "Has the abilities of another card" : `Has the abilities of ${status.name}`;
     case "offering":
       return "Played by Offering: banished at the end of the turn";
     case "reclaimed":
@@ -912,5 +916,7 @@ function effectStartedText(
     case "reclaimNotBanished":
       // Only a static ability makes this change, so no effect starts with it.
       return null;
+    case "abilities":
+      return line(card(change.instance), { kind: "abilities", name: null });
   }
 }

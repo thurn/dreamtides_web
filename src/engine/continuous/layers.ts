@@ -12,7 +12,8 @@
  *    modifications (catalog.ts `instanceCard`);
  * 2. type changes: "has all character types", and "this character is that
  *    character type";
- * 3. ability adds and removes: keywords gained and lost;
+ * 3. ability adds and removes: keywords gained and lost, and the keyword
+ *    abilities of the cards a character gained the abilities of;
  * 4. base-spark setting;
  * 5. spark modifications: gained spark, spark with a duration, anthems,
  *    Support; clamped at 0;
@@ -62,6 +63,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   allTypes: 2,
   subtype: 2,
   keyword: 3,
+  abilities: 3,
   baseSpark: 4,
   spark: 5,
   cost: 6,
@@ -117,6 +119,10 @@ export type StaticsMemo = Map<string, Map<string | 0 | 1, CardStatics>>;
 
 function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatics {
   const { printing, variant } = instance;
+  if (instance.status.gainedAbilities !== undefined) {
+    // Gained abilities belong to this instance, not to its printing and variant.
+    return { abilities: originAbilities(catalog, instanceOrigin(instance)).filter((ability): ability is StaticAbility => ability.kind === "static") };
+  }
   const printed = printing.kind === "figment" ? `figment:${printing.figment}` : printing.cardId;
   let byVariant = catalog.statics.get(printed);
   if (byVariant === undefined) {
@@ -386,6 +392,11 @@ export class Layers {
               : result.keywords.filter((keyword) => keyword !== change.keyword),
           };
           break;
+        case "abilities": {
+          const gained = this.catalog.card(change.cardId).abilities(change.variant).flatMap((ability) => (ability.kind === "keyword" ? [ability.keyword] : []));
+          result = { ...result, keywords: [...result.keywords.filter((keyword) => !gained.includes(keyword)), ...gained] };
+          break;
+        }
         case "baseSpark":
           if (result.baseSpark !== null) result = { ...result, baseSpark: change.value, spark: Math.max(0, change.value) };
           break;

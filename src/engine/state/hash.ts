@@ -87,6 +87,7 @@ const STATUS_FIELDS = {
   offering: true,
   ephemeral: true,
   x: true,
+  gainedAbilities: true,
 } as const satisfies Record<keyof CardStatus, true>;
 
 const VARIANT_FIELDS = { amplified: true, transfigurations: true, deckMods: true } as const satisfies Record<
@@ -280,6 +281,7 @@ class StructuralHasher {
     this.feed(status.offering);
     this.feed(status.ephemeral);
     this.feed(status.x);
+    this.feed(status.gainedAbilities);
     this.feed(instance.enteredZoneAt);
     this.closeSequence(this.seqA, this.seqB);
   }

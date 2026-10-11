@@ -1,0 +1,20 @@
+{
+  "bead": "hv-umm2.110",
+  "implementWindow": { "dispatch": "2026-10-11T22:45:27Z", "commit": "2026-10-11T23:31:00Z", "note": "worktree npm install finished 22:45:27Z; implementMin is elapsed wall time to commit" },
+  "hostLoadSamples": [
+    { "scope": "npm run review (first)", "load1": 5.67 },
+    { "scope": "npm run review (final)", "load1": 13.23 },
+    { "scope": "card-sweep", "load1": 15.10 },
+    { "scope": "lab:preflight", "load1": 13.09 }
+  ],
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "final npm run review start" } } },
+  "validation": {
+    "focusedContracts": { "command": "npm test -- src/engine/effects/primitives/contracts.test.ts", "cases": 1042, "gainAbilitiesCases": 11 },
+    "review": { "command": "npm run review", "wallS": 39, "files": 264, "cases": 3354 },
+    "knip": { "command": "npm run knip", "wallS": 3 },
+    "fuzz": { "command": "npm run fuzz:engine -- --games 300 --weight-uuids e72245f2-c153-4e79-ba8e-956d18202b48", "wallS": 78, "failures": 0, "included": 616, "played": 208, "sampleGains": { "games": 60, "abilitiesGained": 15, "gamesWithGain": 9, "gainedActivationsUsed": 4 } },
+    "preflight": { "pass": 8, "skip": 12, "fail": 0 },
+    "sweep": { "pass": 8, "skip": 12, "fail": 0, "wallS": 108, "port": 5174 },
+    "judged": { "entity": "e72245f2-c153-4e79-ba8e-956d18202b48", "verdict": "pass", "reason": "new status indicator", "d21Sampled": false, "port": 5175 }
+  }
+}

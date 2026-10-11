@@ -150,6 +150,21 @@ export interface CardStatus {
   ephemeral: boolean;
   /** The X paid to play the card, kept while it is in play (variable spark reads it); `null` elsewhere. */
   x: number | null;
+  /**
+   * The cards whose abilities the character has gained (rules § Keywords and
+   * Effects → Gaining abilities), in the order gained; absent when it has
+   * gained none. It mirrors the character's `abilities` floating changes, and
+   * rules/floating.ts alone writes it as they begin and end, so an
+   * instance's abilities (rules/activation.ts `instanceOrigin`) read from
+   * the instance alone.
+   */
+  gainedAbilities?: readonly GainedAbilities[];
+}
+
+/** The abilities of one card that another card gained: those of `cardId` for `variant`. */
+export interface GainedAbilities {
+  readonly cardId: CardId;
+  readonly variant: Variant;
 }
 
 /** Where an instance's copiable values (layer 1) come from. */
@@ -229,7 +244,12 @@ export interface CardStackItem extends StackItemBase {
  * activation so the ability resolves even if its source has left play.
  */
 export type AbilityOrigin =
-  | { readonly kind: "card"; readonly cardId: CardId; readonly variant: Variant }
+  /**
+   * A card's abilities for its variant, then, in order, those of each card
+   * in `gained` (rules/activation.ts `originAbilities`), so the indexes of
+   * its own abilities never change; `gained` is absent when it has none.
+   */
+  | { readonly kind: "card"; readonly cardId: CardId; readonly variant: Variant; readonly gained?: readonly GainedAbilities[] }
   | { readonly kind: "figment"; readonly id: FigmentId }
   | { readonly kind: "avatar"; readonly id: AvatarId }
   | { readonly kind: "dreamsign"; readonly id: DreamsignId };
@@ -332,6 +352,13 @@ export type ContinuousChange =
       readonly gains: boolean;
       readonly reclaimCosts?: readonly Cost[];
     }
+  /**
+   * Layer 3: the character gains the abilities of the card `cardId` for
+   * `variant` (rules § Keywords and Effects → Gaining abilities): its keyword
+   * abilities here, and every other ability through the character's
+   * `status.gainedAbilities`, which mirrors these changes.
+   */
+  | { readonly kind: "abilities"; readonly instance: InstanceId; readonly cardId: CardId; readonly variant: Variant }
   /** Layer 4: the character's base spark becomes `value`. */
   | { readonly kind: "baseSpark"; readonly instance: InstanceId; readonly value: number }
   /** Layer 5: spark gained with a duration, or spark a character has; it ends wherever the card is. */

@@ -3,10 +3,13 @@
  * with a duration, floating and delayed triggers, and disabled triggers are
  * records here, as are the continuous changes of continuous/layers.ts; each
  * ends when its expiry is reached, wherever its cards are. The layer
- * evaluation reads the continuous records in timestamp order.
+ * evaluation reads the continuous records in timestamp order. A character's
+ * `abilities` changes are mirrored onto its `status.gainedAbilities` here, as
+ * each begins and ends, so its ability list reads from the instance alone.
  */
 import type { EffectId, InstanceId, Side } from "../state/ids";
-import type { BattleState, Expiry, FloatingChange, FloatingEffect } from "../state/types";
+import { sourceKey } from "../state/ids";
+import type { BattleState, Expiry, FloatingChange, FloatingEffect, GainedAbilities } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { floatingEnded } from "./zones";
 
@@ -24,6 +27,7 @@ export function addFloating(
 ): EffectId {
   const id = mintEffectId(ctx.state);
   ctx.state.floating.push({ ...effect, id, timestamp: ctx.state.clock });
+  if (effect.change.kind === "abilities") mirrorGainedAbilities(ctx.state, effect.change.instance);
   ctx.emit({
     kind: "effectStarted",
     effect: id,
@@ -45,9 +49,45 @@ export function endFloating(ctx: StepContext, ends: (effect: FloatingEffect) => 
   if (ending.length === 0) return;
   ctx.state.floating = ctx.state.floating.filter((effect) => !ending.includes(effect));
   for (const effect of ending) {
+    if (effect.change.kind === "abilities") abilitiesEnded(ctx, effect.change.instance);
+  }
+  for (const effect of ending) {
     ctx.emit({ kind: "effectEnded", effect: effect.id });
   }
   for (const effect of ending) floatingEnded(ctx, effect);
+}
+
+/**
+ * The abilities `id` has gained: one entry per `abilities` change to it in
+ * `floating`, in creation order. Its `status.gainedAbilities` mirrors this.
+ */
+function gainedAbilitiesOf(floating: readonly FloatingEffect[], id: InstanceId): GainedAbilities[] {
+  return floating.flatMap(({ change }) => (change.kind === "abilities" && change.instance === id ? [{ cardId: change.cardId, variant: change.variant }] : []));
+}
+
+/** Sets a character's `status.gainedAbilities` to its `abilities` changes, absent when there are none. */
+function mirrorGainedAbilities(state: BattleState, id: InstanceId): void {
+  const instance = state.instances[id];
+  if (instance === undefined) return;
+  const gained = gainedAbilitiesOf(state.floating, id);
+  if (gained.length > 0) instance.status.gainedAbilities = gained;
+  else delete instance.status.gainedAbilities;
+}
+
+/**
+ * As abilities a character gained end, it no longer has them, and abilities
+ * it gains later start after its own again: the once-per-turn records of
+ * every ability past its own are dropped, so a gained "Once per turn"
+ * ability is never limited by one that ended.
+ */
+function abilitiesEnded(ctx: StepContext, id: InstanceId): void {
+  const { state } = ctx;
+  mirrorGainedAbilities(state, id);
+  const instance = state.instances[id];
+  if (instance === undefined || instance.printing.kind === "figment") return;
+  const own = ctx.catalog.card(instance.printing.cardId).abilities(instance.variant).length;
+  const prefix = `${sourceKey(id)}#`;
+  state.oncePerTurn = state.oncePerTurn.filter((key) => !key.startsWith(prefix) || Number(key.slice(prefix.length)) < own);
 }
 
 /** Ends the floating effects whose expiry is `at` this boundary. */
