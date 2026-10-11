@@ -1,6 +1,6 @@
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics, characteristicsOf } from "../continuous/characteristics";
-import { costModifier } from "../continuous/costs";
+import { costModifier, type CostModifier } from "../continuous/costs";
 import { playPermission } from "../continuous/permissions";
 import type { Cost, Speed } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
@@ -41,6 +41,20 @@ function grantedReclaimCosts(state: BattleState, catalog: EngineCatalog, id: Ins
   return granted;
 }
 
+/** Explicit Reclaim replaces ordinary energy; a plain keyword keeps the normal cost. */
+function explicitReclaimCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId): readonly Cost[] | null {
+  const granted = grantedReclaimCosts(state, catalog, id);
+  if (granted !== null) return granted;
+  const instance = instanceOf(state, id);
+  return instanceCard(catalog, instance).abilities(instance.variant).find((ability) => ability.kind === "reclaim")?.costs ?? null;
+}
+
+/** Cost changes for the selected route; chosen replacement energy is paid on top of a setter. */
+export function routeCostModifier(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): CostModifier {
+  const replaced = route === "offering" || (route === "reclaim" && explicitReclaimCosts(state, catalog, id) !== null);
+  return costModifier(state, catalog, id, side, undefined, replaced ? { ordinaryEnergy: 0 } : {});
+}
+
 /**
  * The costs of playing the card `id` by `route`, in payment order. By
  * Reclaim, a granted Reclaim cost comes first, then a printed or deck-entry
@@ -58,10 +72,8 @@ export function routeCosts(state: BattleState, catalog: EngineCatalog, id: Insta
     case "offering":
       return [{ cost: "banishFromHand", count: 1 }, ...additionalCosts(definition, variant)];
     case "reclaim": {
-      const granted = grantedReclaimCosts(state, catalog, id);
-      if (granted !== null) return [...granted, ...additionalCosts(definition, variant)];
-      const reclaim = definition.abilities(variant).find((ability) => ability.kind === "reclaim");
-      return reclaim === undefined ? playCosts(definition, variant) : [...reclaim.costs, ...additionalCosts(definition, variant)];
+      const costs = explicitReclaimCosts(state, catalog, id);
+      return costs === null ? playCosts(definition, variant) : [...costs, ...additionalCosts(definition, variant)];
     }
   }
 }
@@ -74,7 +86,7 @@ export function routeCosts(state: BattleState, catalog: EngineCatalog, id: Insta
 export function routePayable(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): boolean {
   const costs = routeCosts(state, catalog, id, route);
   return (
-    costsPayable(state, side, id, costs, costModifier(state, catalog, id, side)) &&
+    costsPayable(state, side, id, costs, routeCostModifier(state, catalog, side, id, route)) &&
     (route !== "offering" || state.sides[side].hand.some((card) => card !== id))
   );
 }

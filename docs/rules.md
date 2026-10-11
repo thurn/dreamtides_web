@@ -754,7 +754,11 @@ hand; when the instruction put no card there, because it had no target, the
 deck was empty or held no match, or a created card ceased to exist instead,
 nothing changes. "It costs N●" gives the card N● in place of its ● cost, its
 copiable cost; X, additional costs, and the energy of a chosen alternative or
-optional cost are still paid on top of it. If several such changes set the
+optional cost are still paid on top of it. On an explicit Reclaim or Offering
+route, the ordinary ● component is 0: the set value adds to that route's
+replacement costs and any additional costs. Plain Reclaim and play permissions
+use the ordinary copiable ● component. The route chosen for the play determines
+both affordability and payment. If several such changes set the
 same card's cost, the latest applies. Then every increase applies, then every
 reduction, as for any cost change: a card set to 0● costs 1● while "Characters
 cost 1● more" applies to it. Like any effect, the change lasts until its

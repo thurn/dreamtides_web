@@ -22,13 +22,17 @@ export interface CostModifier {
 
 export const NO_COST_MODIFIER: CostModifier = { increase: 0, reduction: 0, consumes: [] };
 
-/** The cost modifications that apply when `player` plays `card` now, read from `layers` (the state's evaluation). */
+/**
+ * Cost changes for a play. A selected replacement route names the ordinary
+ * energy component a setter replaces; display and normal routes use copiable cost.
+ */
 export function costModifier(
   state: BattleState,
   catalog: EngineCatalog,
   card: InstanceId,
   player: Side,
   layers: Layers = characteristics(state, catalog),
+  options: { readonly ordinaryEnergy?: number } = {},
 ): CostModifier {
   let increase = 0;
   let reduction = 0;
@@ -52,7 +56,7 @@ export function costModifier(
     // The set cost replaces the ● cost; X and other energy parts still add, and
     // every change applies to the total once, so the difference joins the
     // increases or the reductions with the same result.
-    const difference = set - copiableCostOf(state, catalog, card);
+    const difference = set - (options.ordinaryEnergy ?? copiableCostOf(state, catalog, card));
     if (difference > 0) increase += difference;
     else reduction -= difference;
   }

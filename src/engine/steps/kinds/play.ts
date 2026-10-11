@@ -1,13 +1,12 @@
 import { instanceCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { choosePlayTime, purposeOf } from "../../effects/interpreter";
-import { costModifier } from "../../continuous/costs";
 import { playPermission } from "../../continuous/permissions";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
 import { endFloating } from "../../rules/floating";
 import { instanceOrigin } from "../../rules/activation";
-import { canPlay, playRoutes, routeCosts, routePayable, type PlayRoute, type PlayZone } from "../../rules/timing";
+import { canPlay, playRoutes, routeCosts, routeCostModifier, routePayable, type PlayRoute, type PlayZone } from "../../rules/timing";
 import { recordPlayed } from "../../rules/turn-log";
 import { instanceOf, moveToStack } from "../../rules/zones";
 import type { ChooseModePrompt, PromptRole } from "../../prompts/types";
@@ -51,7 +50,6 @@ export const play: StepDefinition<PlayStep> = {
     const definition = instanceCard(catalog, instance);
     const cardId = printedCardId(instance.printing);
     const origin = instanceOrigin(instance);
-    const modifier = costModifier(state, catalog, step.card, side);
     const purpose = (ability: number, role: PromptRole) => purposeOf(step.card, origin, ability, role);
     const routes = playRoutes(state, catalog, step.card, step.from);
     let route: PlayRoute = routes[0] ?? "hand";
@@ -68,6 +66,7 @@ export const play: StepDefinition<PlayStep> = {
       route = routes[mode] ?? route;
     }
     const costs = routeCosts(state, catalog, step.card, route);
+    const modifier = routeCostModifier(state, catalog, side, step.card, route);
     const permission = route === "permission" ? (playPermission(state, catalog, step.card, side)?.consumes ?? null) : null;
     let x: number | null;
     let choices: readonly EffectChoices[];

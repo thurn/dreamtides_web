@@ -1,0 +1,47 @@
+{
+  "bead": "hv-umm2.419",
+  "phase": 5,
+  "base": "6cbf11fe2fb24f4ebe024b3b652d6f35d7d07aa4",
+  "implementMin": 26.45,
+  "timingBasis": "node_modules birth 2026-10-11T19:17:43.156817+00:00 retained setup/dispatch proxy (exact native dispatch unavailable); final commit preparation 2026-10-11T19:44:10.290645+00:00. Includes research, coordination, QA/lease waits and verification. Command wall includes preparation/restoration.",
+  "localValidationS": {
+    "installReported": 2,
+    "unchangedNegative": 4.51,
+    "focusedInitial": 4.32,
+    "firstReviewTypeCorrection": 41.96,
+    "final-contract-original-source-negative": 3.11,
+    "related-final": 3.45,
+    "review": 35.02,
+    "knip": 3.01
+  },
+  "hostLoad": 7.6650390625,
+  "hostLoadSamples": {
+    "final-contract-original-source-negative": 7.8974609375,
+    "related-final": 7.8974609375,
+    "review": 7.6650390625,
+    "knip": 7.29296875
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 22
+  },
+  "contractModules": 1,
+  "contractLines": 216,
+  "fixtureDelta": "Three additive synthetic card definitions and one unscripted prompt-lab scene;20add/1delete lines including import plumbing. No Vitest entrypoint added.",
+  "friction": [],
+  "frictionAssessment": "No individual additional problem exceeded approximately10min. Browser scripting adjustments took under10min; raw failures retained. Local type/observation corrections recorded below threshold. Expected cause regression work is implementation, not unrelated debt.",
+  "preExistingResolution": "Dispatch scalar-hostLoad reporter failure already owned and completed by canonical418; no duplicate/edit. Canonical parent recheck pass; current declared base remains unchanged.",
+  "measurements": "docs/plan/evidence/measurements/hv-umm2.419.json",
+  "runtimeLedger": {
+    "npm": "All install/test/review/knip jobs completed. Both temporary original-source probes restored production bytes in finally, final fingerprints match.",
+    "browser": "Native lease runner confirmed close/transport drain and server cleanup. Exact owned groups57354,59701,79745 absent;5174 free at final check. One queued cancelled attempt started no server/context.",
+    "heavyLock": "none; no heavy command",
+    "remainingOwnedProcesses": [],
+    "externalWriters": 0
+  },
+  "outstanding": [
+    "Parent-owned exact cold core review, native candidate approval/promotion. No implementation or local acceptance work remains."
+  ]
+}

@@ -1,0 +1,400 @@
+{
+  "bead": "hv-umm2.419",
+  "base": "6cbf11fe2fb24f4ebe024b3b652d6f35d7d07aa4",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.419",
+  "sourceSha256": {
+    "src/engine/continuous/costs.ts": "a261031758350ae30902f98fdfe0f3ff5b06e260be9dea388bea61d17bcec87f",
+    "src/engine/rules/timing.ts": "1778922594305d0a3d6d4fff2d2dcdb1f1054c5c6fd6462955b5e5b547c8e1aa",
+    "src/engine/steps/kinds/play.ts": "0205916bbaf610adbd13cf128ee16abc6d1f71d25a98f0ca1d2bc32e0ffa56f3",
+    "src/engine/testing/prompt-lab.ts": "2250d6947f2d8dc56faa12024f6b16c60c643c24c00a43179fc626ec3ca53748",
+    "src/engine/effects/primitives/contracts/modify-card-cost-routes.contracts.ts": "8ce53033511eb55615ca60b8373a53aa765f4828285a41be3c12cf55822ee89c",
+    "docs/rules.md": "9f7e553536280cf40ffc47c57bcec6f56e2cbedff299e4f7e2cda5b1419ed671",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.101-1.md": "4326636694b27180eda70bd48b9ae293e60d813e3c7418ae8a61b12b804f5037",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.419-1.md": "a4f69914e5df3bcafda561784145d10beb2403d1c61c07a42fa4d909ec085441",
+    "docs/plan/evidence/pre-existing/hv-umm2.419.md": "df6ac9489ed6d50e9f131cea2cf29a24671d790107efe639271c498ace467632"
+  },
+  "commands": {
+    "final-contract-original-source-negative": {
+      "wallSeconds": 3.11,
+      "loadStart": 7.8974609375,
+      "exit": 1
+    },
+    "related-final": {
+      "wallSeconds": 3.45,
+      "loadStart": 7.8974609375,
+      "exit": 0
+    },
+    "review": {
+      "wallSeconds": 35.02,
+      "loadStart": 7.6650390625,
+      "exit": 0
+    },
+    "knip": {
+      "wallSeconds": 3.01,
+      "loadStart": 7.29296875,
+      "exit": 0
+    }
+  },
+  "originalBaseline": {
+    "provenance": "unchanged-source-provenance.json",
+    "log": "unchanged-negative.log",
+    "cases": 4,
+    "failed": 4,
+    "wallSeconds": 4.51,
+    "sourceUnchanged": true,
+    "meaning": "Both sides offered Reclaim5 at four energy and paid3; accepted optional1 on explicit Reclaim0 retained1 energy."
+  },
+  "firstFixtureDiagnostic": {
+    "log": "initial-fixture-diagnostic.log",
+    "meaning": "Optional cases initially observed an auto-resolved stack slot; corrected to energy and accepted public answer before production edits. This incidental assertion is not the optional-energy negative witness."
+  },
+  "initialPositive": {
+    "log": "focused-initial.log",
+    "passed": 4,
+    "wallSeconds": 4.32
+  },
+  "extensionDiagnostics": {
+    "log": "focused-extended.log",
+    "fail": 4,
+    "passCount": 16,
+    "meaning": "Single legal route auto-selected, and display included mandatory additional energy; test observations corrected without production changes."
+  },
+  "finalNegative": {
+    "base": "6cbf11fe2fb24f4ebe024b3b652d6f35d7d07aa4",
+    "contractSha256": "8ce53033511eb55615ca60b8373a53aa765f4828285a41be3c12cf55822ee89c",
+    "finalSourceSha256": {
+      "src/engine/continuous/costs.ts": "a261031758350ae30902f98fdfe0f3ff5b06e260be9dea388bea61d17bcec87f",
+      "src/engine/rules/timing.ts": "1778922594305d0a3d6d4fff2d2dcdb1f1054c5c6fd6462955b5e5b547c8e1aa",
+      "src/engine/steps/kinds/play.ts": "0205916bbaf610adbd13cf128ee16abc6d1f71d25a98f0ca1d2bc32e0ffa56f3"
+    },
+    "originalSourceSha256": {
+      "src/engine/continuous/costs.ts": "7053ba99dfc7f583fb835ef1e0d3615beb4d139598378645f368a801ff07bad0",
+      "src/engine/rules/timing.ts": "6595750b0879490bea07c8d896db604c83a1819f92a4a7853ce45ad32629ffb6",
+      "src/engine/steps/kinds/play.ts": "feb76931581e498668a3737a1940d652b711b3549e640155d6a98d65c1c1d132"
+    },
+    "exit": 1,
+    "restoredIdentically": true,
+    "log": "final-contract-original-source-negative.log",
+    "cases": 4,
+    "failed": 4,
+    "wallSeconds": 3.11,
+    "preservedEarlier": "pre-type-correction-final-negative-provenance.json"
+  },
+  "focused": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/continuous/continuous-costs.test.ts src/engine/rules/costs.test.ts src/engine/rules/costs-play-x.test.ts src/engine/testing/tooling.test.ts",
+    "log": "related-final.log",
+    "files": 5,
+    "cases": 641,
+    "newCases": 22
+  },
+  "review": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+    "log": "review.log",
+    "files": 259,
+    "cases": 2766,
+    "result": "pass; lint, cycles, node/browser typechecks, related tests, workspace restoration complete"
+  },
+  "knip": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+    "log": "knip.log",
+    "result": "pass; no orphaned exports/files; workspace restored"
+  },
+  "typeCorrection": {
+    "log": "pre-type-correction-review.log",
+    "wallSeconds": 41.96,
+    "meaning": "First review behavioral checks passed259files/2766cases; test-only CardCost/Effect annotation and two unnecessary nonnull assertions corrected. Production unchanged; final exact negative/related/review/knip certify corrected bytes."
+  },
+  "failurePaths": {
+    "midStepError": "No new error-producing transition: route pricing reads state and returns numbers before payment. Existing modifyCardCost recovery contract commits/publishes no change when a resolution step fails after its change; collected by the focused runner and review.",
+    "reloadRestart": "New both-side contract serializes the suspended route prompt, uses a fresh fold, selects Reclaim, then accepts optional payment with energy1\u21920; existing101 save/parser/loaded-modifier recovery contracts also pass.",
+    "partialWrite": "New route-choice/optional prompts retain the original committed hash before commitment, cancellation restores it. Setter metadata is transient pure calculation; no new persisted field or write protocol. Existing recovery failure and atomic cost contracts pass.",
+    "invalidStaleInput": "New both-side fold rejects out-of-range route answer, wrong-side answer and duplicate answer after payment. Existing prompt fingerprints/recovery parsing remain unchanged.",
+    "concurrentActors": "Serialized intent fold is unchanged; wrong-side and already-answered intents bounce in new contracts. No concurrency mechanism or mutable route cache added; one accepted payment is observed."
+  },
+  "coverage": "Both sides: normal hand/plain Reclaim, explicit printed/granted and empty replacement costs, latest explicit grant plus plain grant, coexisting permission/Reclaim with short-budget auto-selection, Offering nonzero set+banishment, X bounds, accepted/declined optional energy, mandatory/alternative energy+points, taxes/reductions/floor, cancellation/reload. Existing101 latest-set/copiable-filter and recovery contracts retained.",
+  "browser": {
+    "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.419/route-payment.mjs --bead hv-umm2.419 --port 5174 --timeout 600",
+    "report": "route-payment.result.json",
+    "log": "route-payment.log",
+    "serverLog": "route-payment.server.log",
+    "source": "route-payment.mjs",
+    "port": 5174,
+    "serverGroup": 79745,
+    "wallMs": {
+      "browserLeaseWait": 61549,
+      "serve": 2160,
+      "scenario": 16877,
+      "total": 80615
+    },
+    "ok": true,
+    "caps": [],
+    "cases": {
+      "desktop": {
+        "game": "ij4nyf",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "character": "i3",
+        "identity": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000041910"
+        },
+        "pending": {
+          "kind": "confirm",
+          "side": "player",
+          "purpose": {
+            "source": "i3",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000041910",
+            "ability": 1,
+            "role": "optionalCost"
+          },
+          "cancellable": true,
+          "id": "4:5:0"
+        },
+        "energy": {
+          "before": 1,
+          "after": 0
+        },
+        "reclaimed": true,
+        "geometry": [
+          {
+            "id": "battle-choice-prompt-option-0",
+            "x": 1114.046875,
+            "y": 597,
+            "width": 62.4375,
+            "height": 42,
+            "disabled": false,
+            "inViewport": true
+          },
+          {
+            "id": "battle-choice-prompt-option-1",
+            "x": 1184.484375,
+            "y": 597,
+            "width": 56.015625,
+            "height": 42,
+            "disabled": false,
+            "inViewport": true
+          }
+        ],
+        "persistedActions": [
+          {
+            "event": "engine.action",
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            }
+          },
+          {
+            "event": "engine.action",
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            }
+          },
+          {
+            "event": "engine.action",
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i3",
+              "from": "void"
+            }
+          }
+        ]
+      },
+      "mobile": {
+        "game": "dca4rj",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "character": "i3",
+        "identity": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000041910"
+        },
+        "pending": {
+          "kind": "confirm",
+          "side": "player",
+          "purpose": {
+            "source": "i3",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000041910",
+            "ability": 1,
+            "role": "optionalCost"
+          },
+          "cancellable": true,
+          "id": "4:5:0"
+        },
+        "energy": {
+          "before": 1,
+          "after": 0
+        },
+        "reclaimed": true,
+        "geometry": [
+          {
+            "id": "battle-choice-prompt-option-0",
+            "x": 255.546875,
+            "y": 522.828125,
+            "width": 62.4375,
+            "height": 42,
+            "disabled": false,
+            "inViewport": true
+          },
+          {
+            "id": "battle-choice-prompt-option-1",
+            "x": 325.984375,
+            "y": 522.828125,
+            "width": 56.015625,
+            "height": 42,
+            "disabled": false,
+            "inViewport": true
+          }
+        ],
+        "persistedActions": [
+          {
+            "event": "engine.action",
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            }
+          },
+          {
+            "event": "engine.action",
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            }
+          },
+          {
+            "event": "engine.action",
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i3",
+              "from": "void"
+            }
+          }
+        ]
+      }
+    },
+    "captures": {
+      "route-payment-optional-mobile.png": {
+        "width": 390,
+        "height": 844
+      },
+      "route-payment-failure-desktop.png": {
+        "width": 1440,
+        "height": 900
+      },
+      "route-payment-optional-desktop.png": {
+        "width": 1440,
+        "height": 900
+      },
+      "route-payment-final-desktop.png": {
+        "width": 1440,
+        "height": 900
+      },
+      "route-payment-final-mobile.png": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    "judgment": "Normal existing optional controls are legible and contained at CSS1440x900/390x844. Parent cold visual check corroborates both optional captures. Mobile debug icon overlaps Cancel edge, recorded as pre-existing. No new prompt/status/visual kind or authored entity requires a separate D21 sample."
+  },
+  "historicalQa": [
+    {
+      "prefix": "first-tap-failure-",
+      "report": "first-tap-failure-route-payment.result.json",
+      "serverGroup": 57354,
+      "wallMs": {
+        "browserLeaseWait": 41,
+        "serve": 2769,
+        "scenario": 50813,
+        "total": 53644
+      },
+      "disposition": "Draw committed, subsequent hand tap lost during changing geometry. Caps empty; retained state/capture. Bounded ordinary taps only while same physical card is still hand with no pending/stack, recomputing geometry, succeeded."
+    },
+    {
+      "prefix": "second-void-readiness-",
+      "report": "second-void-readiness-route-payment.result.json",
+      "serverGroup": 59701,
+      "wallMs": {
+        "browserLeaseWait": 42,
+        "serve": 1251,
+        "scenario": 30662,
+        "total": 31980
+      },
+      "disposition": "Discard committed before presented playable affordance; early pile click opened read-only gallery. Caps empty; screenshot proves intended physical character shown. Wait for rendered playable pile, then chooser; final pending source UUID verifies intended card before confirm."
+    },
+    {
+      "log": "queued-third-script-diagnostic.log",
+      "disposition": "Cancelled a waiting runner before server/context startup to correct script assumption that Decision exposes actions. No game/runtime started."
+    }
+  ],
+  "rulesDecision": "RD-hv-umm2.419-1; authorized implementation-explanation correction in RD-hv-umm2.101-1; original normative selected energy on top retained.",
+  "preExisting": "Dependency advisories17; parent-observed scalar-hostLoad issue canonical418 completed source d3ecf6b7/landed d918679f; parent canonical staging archive validates. Mobile debug header overlap observed and retained.",
+  "fallout": "Optional sixth costModifier options parameter and new routeCostModifier used by timing/play; CostModifier result shape and persisted state unchanged. No consumer or schema fallout; no legality/rules-costs edits. Synthetic lab registrations additive.",
+  "validationChoice": {
+    "full": "Not warranted: bounded route arithmetic/callers, unchanged state schema, test infrastructure and repository configuration. Existing synthetic lab scene is additive.",
+    "fuzz": "Not run: direct deterministic synthetic payment contracts cover cause; no runner/fuzzer or content authoring changes requiring statistical coverage.",
+    "scenario": "No D20 real-card scenario: cause repair, no entity authored. Plain contracts and additive synthetic UI fixture exercise selected routes."
+  },
+  "runtimeLedger": {
+    "npm": "All install/test/review/knip jobs completed. Both temporary original-source probes restored production bytes in finally, final fingerprints match.",
+    "browser": "Native lease runner confirmed close/transport drain and server cleanup. Exact owned groups57354,59701,79745 absent;5174 free at final check. One queued cancelled attempt started no server/context.",
+    "heavyLock": "none; no heavy command",
+    "remainingOwnedProcesses": [],
+    "externalWriters": 0
+  },
+  "artifactSha256": {
+    "second-void-readiness-route-payment-failure-desktop.png": "73b97334d7f226834aa108634a4c2126219a02a6fbb58109d12aaaa1d43002a8",
+    "route-payment-optional-mobile.png": "74a0491afdbbc4d08850b787a00aefe3f8e9781c080c23177963057dda670e6d",
+    "pre-type-correction-review.log": "5c8429bcea8f85381ff545c7edc566ba51f4795c038e0e4b0e0ef7fa337f12b6",
+    "queued-third-script-diagnostic.log": "53a24cb0a8a8226dedef23c9db38b65ed5930c448f53943c9c4479d77f3cd665",
+    "initial-fixture-diagnostic.log": "e51e382e0a94ce42c848eb063cfa91cdedf51b2a081dd61444849af927621fb7",
+    "final-contract-original-source-negative.log": "3f603abf32a668fab7d258296063f7b5f01d010adf5e72f776e7b98ad56e190e",
+    "route-payment-failure-desktop.png": "73b97334d7f226834aa108634a4c2126219a02a6fbb58109d12aaaa1d43002a8",
+    "unchanged-source-provenance.json": "d2dd35d41bacdbfb5958dbd713944eed20cdb5e222dcbf1eb64c6f1947ccd189",
+    "pre-type-correction-final-command-times.json": "cb3d12763f396bd04e28f81bba550329c9deb8963622d5135fd789830394ff3d",
+    "focused-initial.log": "b0ec15b0466dbe4deffe279df7d6b48a73f4af2623443724abc30a0d8dd87dff",
+    "unchanged-negative.log": "a3bc72315269c4ad38ea410b86808623bc8cb06bfff112b317f2bf7153a35281",
+    "related-final.log": "40dc90e99dc9797f1bbd74d699eab771bd04a0b0f8a47f0feb7f4bc8ea5132bd",
+    "related.log": "a7e04c37602aa8ca42ef3c8349b0db6985c2184564e56cf9c7e013905f726211",
+    "route-payment.result.json": "acb4930286f43686f5c6d9ded2ccef5d7c0546933e8c6a02a9f0f285391ec708",
+    "pre-type-correction-related-final.log": "e8276592a0216f13a642bdbf2fbf3ffa7672124e32da97c9322d90b28aec3154",
+    "review.log": "2b23c30bb96ebd79b0b612c01cb0d95167915ee457f4eda94b74e230f4e7096a",
+    "focused-extended.log": "2c39668011c0fc143f85f0e84f2359dc0ccda8fa0f40791e9fa79b5b0a5c4917",
+    "first-tap-failure-route-payment-failure-desktop.png": "565a5d22062ce6c8ebd0d90c534394e49c85dd6caa55a02be044f8beacbb5269",
+    "final-negative-provenance.json": "8bc26b74e7158ed8f16035e5bf0f511b50ef43401b4bf4d6da3449068c73a984",
+    "first-tap-failure-route-payment.server.log": "cbb244700f0e83f39e4e049d4f99feb6a3ef77e820ec19d864c37dcca1713a4e",
+    "first-tap-failure-route-payment.mjs": "f0b2a318dc69f26d84ee8e3f166f53c1b043cf4529cbcd0df52a60ffb8669c7c",
+    "route-payment.log": "9f1e677ccefa953f158a70990180284449fe8eb48dfd13ec47703fe1276b9d9c",
+    "final-command-times.json": "1ad3850d74f5d2816e517afd707ee6c7cc28dcdd3f60acf8a349a281ac9784fa",
+    "second-void-readiness-route-payment.server.log": "14f6fcfd1f834f77c299c55ac0caa359b114675d1714998f0d0f5049295eee03",
+    "second-void-readiness-route-payment.mjs": "617ee452f2dc990cc841c79baab821218570260a039d8623930a2a4c4d4a61c4",
+    "second-void-readiness-route-payment.result.json": "ca7230fddd40b7f537241e58dcf5aa4d06e5361cf135c9757c1c2e47d057c983",
+    "route-payment-optional-desktop.png": "9c7e9dc22c594d48cab090891070005a635b6d502ff7ea122e63270af3a5ef91",
+    "pre-type-correction-final-negative-provenance.json": "22d39c0d69c6eec82de08625594283703a397034fe4e4001e86460f47395e0cf",
+    "route-payment-final-desktop.png": "5b994b65295e8e636a10967cd02cf2673e6639a12564aa2fe87cc80a86f3d75e",
+    "knip.log": "a014465186f37e02def0fa3121be7a95929d0d23d77f5e3f9fb0e476517e0835",
+    "first-tap-failure-route-payment.result.json": "ff759dc24f8c52fe0d7f4a58f1595651aec21c064f6114fd4c98c290903c043b",
+    "second-void-readiness-route-payment.log": "4a5ac67cc76d70206fd0f8ce698bcfff80ff71782d0ccbcfddbe307cc0801891",
+    "focused-extended-corrected.log": "e323863c9ffd860b5d3fee6a1725a4cb5b07c1efb509e2c0e1444b1110ea8e3c",
+    "route-payment.mjs": "e7a93db5daef9d03551c6e13b0806934422e1e3b65f600b592273fe65c4ba2dd",
+    "route-payment.server.log": "a08249b52cdf437d19db68cdfc5368d6d35dae70d8a576a6c0e9a9122115ace6",
+    "route-payment-final-mobile.png": "d1f55d6b478c48ad4b255a6022655349c6352931c7d8660d785914e529873ebd",
+    "first-tap-failure-route-payment.log": "26ce9c41043ee5c4af16fff57c09c6b0304d312bc3917889e01edd69e5e0fd20",
+    "pre-type-correction-final-contract-original-source-negative.log": "723a438478af0dc94d304cd8c20c90342a2a8271f456b5205eda1c093447db9e",
+    "doc-only-review.log": "2589a5453261d1fee65e702e47de8e956af40df6d5578f3251e3e3925fae9627"
+  },
+  "outstanding": [
+    "Parent-owned exact cold core review, native candidate approval/promotion. No implementation or local acceptance work remains."
+  ],
+  "docOnlyReview": {
+    "log": "doc-only-review.log",
+    "result": "pass; authorized current-state RD101 Why edit after mandatory review. Preserved heading/ladder/affected UUIDs, diff whitespace clean. No source/test/runtime changes or repeated aggregate."
+  }
+}

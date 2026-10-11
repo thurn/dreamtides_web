@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { activated, banishFromAnyVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
+import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, banishFromAnyVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -68,6 +68,18 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** An explicit zero-energy Reclaim route with an optional one-energy payment. */
+  routeCharacter: {
+    ...SYNTHETIC.vanilla2, id: syntheticId(0x41910), status: "authored",
+    abilities: () => [reclaim(energy(0)), additionalCost(optionalCost(energy(1)))],
+  },
+  /** Draw the synthetic character and set its ordinary energy component. */
+  routeSetter: labEvent(0x41911, 0, p.modifyCardCost(p.drawMatching({ cardType: "character", costAtMost: 2 }), { set: 0 })),
+  /** Discard the drawn character so its chosen route can be played normally. */
+  routeDiscarder: {
+    ...SYNTHETIC.event0, id: syntheticId(0x41912), status: "authored",
+    abilities: () => [additionalCost(discardCostFilter({ cardType: "character" })), event(p.gainPoints(1))],
+  },
   /** A Fast activation that chooses an empty position for its source. */
   mover: {
     id: syntheticId(0x372), cardType: "character", costs: [energy(1)], spark: 1,
@@ -330,6 +342,13 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "route-cost-set", description: "Choose an optional payment when reclaiming a drawn card with its own cost set",
+    setup: { active: "player", phase: "day",
+      player: { hand: [LAB.routeSetter.id, LAB.routeDiscarder.id], energy: 1, deck: [LAB.routeCharacter.id, ...deck(6)] },
+      enemy: { hand: [], energy: 0, deck: deck(6) } },
+    script: [],
+  },
   {
     name: "move", description: "Choose an empty battlefield position during a Fast activation",
     setup: { active: "player", phase: "night",
