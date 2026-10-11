@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createSweepCounts, parseSweepArgs, runSweepCell } from "./card-sweep.mjs";
+import { createSweepCounts, parseSweepArgs, runSweepCell, sweepCards } from "./card-sweep.mjs";
 
 /** @param {string[]} failureKinds @param {string} verdict */
 const report = (failureKinds = [], verdict = "fail") => ({
@@ -70,5 +70,54 @@ describe("sweep cell attempts", () => {
       expect(result.result.verdict).toBe("fail");
     }
     expect((await cell([report(["timeout"])], true)).saved).toHaveLength(1);
+  });
+});
+
+/**
+ * Sweeps synthetic cards through stub sessions, each standing for one held
+ * browser lease, and returns the open/card/close sequence.
+ * @param {string[]} cards @param {number[]} queued waiters seen at each boundary
+ * @param {string | null} [breaks] the card after which the session is non-runnable
+ */
+async function sweep(cards, queued, breaks = null) {
+  /** @type {string[]} */
+  const events = [];
+  let opened = 0;
+  const boundaries = [...queued];
+  const result = await sweepCards(cards, {
+    open: () => {
+      const id = ++opened;
+      let broken = false;
+      events.push(`open ${String(id)}`);
+      return Promise.resolve({ id, broken: () => { broken = true; }, closed: () => broken,
+        close: () => { events.push(`close ${String(id)}`); return Promise.resolve(); } });
+    },
+    waiters: () => boundaries.shift() ?? 0,
+    sweepCard: (card, session) => {
+      events.push(`${card} in ${String(session.id)}`);
+      if (card === breaks) session.broken();
+      return Promise.resolve();
+    },
+  });
+  return { events, result, boundaries };
+}
+
+describe("sweep lease yielding", () => {
+  it("releases and re-takes the lease at each card boundary with queued waiters", async () => {
+    const { events, result } = await sweep(["a", "b", "c"], [1, 2]);
+    expect(events).toEqual(["open 1", "a in 1", "close 1", "open 2", "b in 2", "close 2", "open 3", "c in 3", "close 3"]);
+    expect(result).toEqual({ sessions: 3, yields: 2 });
+  });
+
+  it("keeps its session across a boundary nobody waits at", async () => {
+    const { events, result } = await sweep(["a", "b", "c"], [0, 1]);
+    expect(events).toEqual(["open 1", "a in 1", "b in 1", "close 1", "open 2", "c in 2", "close 2"]);
+    expect(result).toEqual({ sessions: 2, yields: 1 });
+  });
+
+  it("stops after a card that leaves its session non-runnable", async () => {
+    const { events, boundaries } = await sweep(["a", "b", "c"], [1, 1], "b");
+    expect(events).toEqual(["open 1", "a in 1", "close 1", "open 2", "b in 2", "close 2"]);
+    expect(boundaries).toEqual([1]);
   });
 });

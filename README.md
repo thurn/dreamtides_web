@@ -131,9 +131,26 @@ node scripts/qa/run-scenario.mjs smoke --bead <bead-id> --prod   # vite build + 
 The scenario runner and card sweep automatically acquire the same native
 browser lease, `artifacts/browser-qa.lock` in the primary checkout, across all
 worktrees. A waiting command starts its server and MCP connection after the
-previous command finishes browser and server cleanup. SIGINT/SIGTERM cancels
-waiting or drains startup and cleanup before releasing the lease. An ownership
-record, `artifacts/browser-qa.lock.owner.json`, covers MCP connection and use.
+previous command finishes browser and server cleanup.
+
+Waiters are served first come, first served. Each takes a ticket,
+`artifacts/qa/.browser-qa.lock.queue/<sequence>-<pid>`, and attempts the
+kernel lock only while its ticket is the oldest live one; it refreshes the
+ticket while it waits and removes it once it holds the lease or gives up.
+Waiters reap a ticket ahead of them whose process has exited or that has not
+been refreshed for 30 s, so a killed waiter never blocks the queue. The kernel
+lock alone excludes holders: a process that takes the lock without a ticket
+may run ahead of the queue, but never alongside the holder. The card sweep
+yields at card boundaries: before each card after the first, if any process is
+queued, it closes its session (browser, server, and lease) and opens a fresh
+one behind the waiters. Its summary records `sessions`, `leaseYields`, and
+`wallMs.browserLeaseWait`, `serve`, `scenario`, and `cleanup` summed over its
+sessions, with `execution` as the total less lease wait. A lease wait that
+costs a bead friction is recorded under the canonical tag `browser-lease-wait`
+(`docs/plan/evidence/friction-tags.json` aliases its variants).
+
+SIGINT/SIGTERM cancels waiting or drains startup and cleanup before releasing
+the lease. An ownership record, `artifacts/browser-qa.lock.owner.json`, covers MCP connection and use.
 Normal cleanup closes the browser, drains active RPC calls, then closes the SDK
 transport while retaining the lease through owned server cleanup. A signal
 first aborts startup and stops the current owned server or builder, then joins
@@ -678,8 +695,9 @@ node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter> \
   [--variants all|<v>,...] [--as player|enemy|both] [--timeout <s>] [--port <n>] [--capture]
 ```
 
-The sweep (workflow § Card QA) opens one runner session (its own dev server
-and MCP client) and, for each card, side, and variant, runs
+The sweep (workflow § Card QA) opens a runner session (its own dev server
+and MCP client, reopened at a card boundary where it yields the browser lease;
+see [Browser QA](#browser-qa)) and, for each card, side, and variant, runs
 `scripts/qa/scenarios/card-lab-play.mjs` in the card-lab with `debug=1`: it
 plays the card through the UI, and `qa.battle` answers each human prompt
 with its first legal choice and passes until the stack is empty. A run

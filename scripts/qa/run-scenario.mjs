@@ -316,6 +316,7 @@ export function say(message) {
  * @property {number} port
  * @property {number | null} serverPid
  * @property {string} captureDir
+ * @property {string} leasePath The repository browser lease the session holds until `close()` settles.
  * @property {Record<string, number>} wallMs Browser lease wait, build, and serve times.
  * @property {(scenarioSource: string, args: Record<string, string>, timeoutMs: number, call?: QaCall) => Promise<import("./prelude.mjs").QaResult>} run
  *   Runs one scenario function's source with the helper prelude on the session's server.
@@ -634,6 +635,7 @@ export async function openQaSession(options) {
     port,
     serverPid: server?.pid ?? null,
     captureDir,
+    leasePath,
     wallMs,
     run,
     runPlan: (plan, args, timeoutMs, options = {}) =>

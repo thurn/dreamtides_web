@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.428",
+  "phase": 5,
+  "implementMin": 14,
+  "timingBasis": "worktree birth 2026-10-11T20:28:24Z to commit preparation ~20:42Z; includes research, install, implementation, focused runs, mutation check, real two-acquirer check and review/knip.",
+  "localValidationS": {
+    "installAndPrepare": 4.3,
+    "focusedLeaseAndSweep": 5.2,
+    "focusedFinal": 5.1,
+    "realFifoCheck": 2.4,
+    "review": 9.98,
+    "knip": 3.6
+  },
+  "hostLoad": 20.11,
+  "hostLoadSamples": {
+    "install": 29.48,
+    "review": 20.11,
+    "focusedFinal": 28.25
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 219,
+    "jsdomFiles": 0,
+    "cases": 6
+  },
+  "friction": []
+}
