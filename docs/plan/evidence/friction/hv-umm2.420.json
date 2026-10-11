@@ -1,0 +1,96 @@
+{
+  "bead": "hv-umm2.420",
+  "phase": 5,
+  "implementMin": 4.9315775513648985,
+  "measurementWindow": "Exact parent implementation dispatch through final commit preparation after parent ACK, immediately before the single commit; includes research, coordination, waits, verification and documentation",
+  "implementationDispatchedAt": "2026-10-11T19:30:07.290540+00:00",
+  "commitPreparationAt": "2026-10-11T19:35:03.185193+00:00",
+  "hostLoad": 26.19,
+  "hostLoadMeasuredFor": "npm run review starting 1-minute sysctl observation",
+  "hostLoadSamples": {
+    "install": {
+      "start": [
+        19.85,
+        16.42,
+        14.58
+      ],
+      "end": [
+        19.85,
+        16.42,
+        14.58
+      ]
+    },
+    "review": {
+      "start": [
+        26.19,
+        18.48,
+        15.43
+      ],
+      "end": [
+        26.19,
+        18.48,
+        15.43
+      ]
+    },
+    "knip": {
+      "start": [
+        26.82,
+        18.74,
+        15.53
+      ],
+      "end": [
+        26.99,
+        18.91,
+        15.61
+      ]
+    },
+    "final-cli": {
+      "start": [
+        17.26,
+        17.56,
+        15.29
+      ],
+      "end": [
+        17.26,
+        17.56,
+        15.29
+      ]
+    }
+  },
+  "localValidationS": {
+    "review": 0.27768707275390625,
+    "knip": 4.336566686630249,
+    "final-cli": 0.2662999629974365
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "sourceBase": "d918679f0daa9ce6848152533e2043c95582fc9d",
+  "checkScratch": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/420-implementation-evidence",
+  "scope": "Evidence-only repair of hv-umm2.408 dispatch-to-successful-commit timing; original observations preserved",
+  "runtimeLedger": {
+    "observedPids": 14,
+    "allObservedPidsAbsent": true,
+    "realBrowserSessions": 0,
+    "applicationQAServers": 0
+  },
+  "temporalEndpointStatus": "final preparation after parent ACK immediately before the single commit",
+  "reportComparison": {
+    "firedTriggersAndDispositionsUnchanged": true,
+    "unknownMeasurements": 41,
+    "phase5UncoveredBefore": 12,
+    "phase5UncoveredAfter": 13,
+    "phase5TotalBefore": 173,
+    "phase5TotalAfter": 174,
+    "retrospectiveDue": false
+  },
+  "earlierPreparationObservation": {
+    "implementMin": 2.0919037302335104,
+    "measurementWindow": "Exact parent implementation dispatch through provisional evidence preparation; final commit preparation endpoint is recorded after parent ACK immediately before the single commit",
+    "commitPreparationAt": "2026-10-11T19:32:12.804764+00:00",
+    "temporalEndpointStatus": "provisional before parent ACK"
+  }
+}

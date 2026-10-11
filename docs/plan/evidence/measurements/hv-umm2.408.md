@@ -224,3 +224,30 @@ passed again (exit 0, 0.283173 s). This final check includes the bead's
 own measured record. Its two observed PIDs are included in the final count of
 375 absent PIDs. Scratch runtime and staged manifests identify the exact current
 scope and hashes; no code/test changes follow full validation.
+
+
+## Commit-inclusive timing observation (hv-umm2.420)
+
+The retained successful commit command for source `a019e7b3d1f649e77d34eaf22c0b5b745b1a283d`
+started at epoch `1791745542.586529` and finished at `1791745542.7229671`
+(`2026-10-11T19:05:42.722967+00:00`), with exit 0 and command wall
+`0.13643908500671387` s. Exact dispatch remains
+`2026-10-11T18:45:35.228144+00:00` (epoch `1791744335.228144`).
+The dispatch-to-successful-commit-end calculation is
+`(1791745542.7229671 - 1791744335.228144) / 60 = 20.124913720289864` minutes.
+That is the current `implementMin` measurement window, including final
+coordination and preparation after the earlier evidence observation.
+
+The preceding evidence-preparation observation remains retained: endpoint
+`2026-10-11T19:04:10.157124+00:00`,
+`implementMin` `18.582149668534598`, and its
+original dispatch-through-preparation scope. Every other measurement and
+original JSON field retains its source value.
+
+Provenance: original friction record SHA-256
+`aaccf8eedac2fbc9a161b5d149d6deabe9ae928fc38473c7d659edd0e95e7c4c` at the source above; retained
+`408-implementation-evidence/commit-runtime.json` SHA-256
+`53d0731cbe120503e861f7aa785f298c89fa2b782230fd959ecbc042f72c9825`. The JSON
+`implementationTimingCorrection` carries the exact epochs, prior observation,
+calculation and successful terminal result. This correction is a measured
+evidence update, with zero engine, tooling, test or configuration changes.

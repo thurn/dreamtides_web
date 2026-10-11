@@ -1,8 +1,8 @@
 {
   "bead": "hv-umm2.408",
   "phase": 5,
-  "implementMin": 18.582149668534598,
-  "measurementWindow": "Exact parent implementation dispatch through commit preparation; includes research, parent recovery/ACK, queue waits, checks and documentation, rather than productive editing time",
+  "implementMin": 20.124913720289864,
+  "measurementWindow": "Exact parent implementation dispatch through the successful git commit endpoint; includes research, parent recovery/ACK, queue waits, checks, documentation and final coordination, rather than productive editing time",
   "hostLoad": 12.69970703125,
   "hostLoadMeasuredFor": "final npm run review starting 1-minute sysctl value",
   "localValidationS": {
@@ -51,5 +51,26 @@
     "scope": "Observed install start through parent native clarification; elapsed research/coordination rather than isolated edit cost"
   },
   "implementationDispatchedAt": "2026-10-11T18:45:35.228144+00:00",
-  "commitPreparationAt": "2026-10-11T19:04:10.157124+00:00"
+  "commitPreparationAt": "2026-10-11T19:04:10.157124+00:00",
+  "implementationTimingCorrection": {
+    "bead": "hv-umm2.420",
+    "sourceCommit": "a019e7b3d1f649e77d34eaf22c0b5b745b1a283d",
+    "sourceRecordSHA256": "aaccf8eedac2fbc9a161b5d149d6deabe9ae928fc38473c7d659edd0e95e7c4c",
+    "commitRuntimePath": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/408-implementation-evidence/commit-runtime.json",
+    "commitRuntimeSHA256": "53d0731cbe120503e861f7aa785f298c89fa2b782230fd959ecbc042f72c9825",
+    "previousObservation": {
+      "implementMin": 18.582149668534598,
+      "measurementWindow": "Exact parent implementation dispatch through commit preparation; includes research, parent recovery/ACK, queue waits, checks and documentation, rather than productive editing time",
+      "commitPreparationAt": "2026-10-11T19:04:10.157124+00:00"
+    },
+    "dispatchAt": "2026-10-11T18:45:35.228144+00:00",
+    "dispatchEpoch": 1791744335.228144,
+    "successfulCommitStartEpoch": 1791745542.586529,
+    "successfulCommitEndEpoch": 1791745542.7229671,
+    "successfulCommitEndAt": "2026-10-11T19:05:42.722967+00:00",
+    "commitCommandSeconds": 0.13643908500671387,
+    "commitCommandExit": 0,
+    "calculation": "(successfulCommitEndEpoch - dispatchEpoch) / 60",
+    "scope": "Elapsed dispatch through the retained successful git commit endpoint, including final coordination and preparation"
+  }
 }
