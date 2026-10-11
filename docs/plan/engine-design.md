@@ -851,7 +851,10 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   Matching at the moment of the event lets ▸Dissolved see its own dissolve and
   lets "leaves play" and "leaves your void" triggers see the card as it last
   was, through the `leftPlay` and `leftVoid` events emitted just before a card
-  moves. Nothing triggers before the first turn begins or after the battle
+  moves. A `leftPlay` into a void or nowhere arms the "when … is dissolved"
+  abilities that match the character then and records its ability origin,
+  gained abilities included; its `dissolved` event reads the dissolved card's
+  abilities from that origin (`ArmedDissolve`). Nothing triggers before the first turn begins or after the battle
   ends.
 - **Trigger events.** `TRIGGER_EVENTS` lists the engine event kinds each
   trigger kind can match. A new `Trigger` member fails to type-check until

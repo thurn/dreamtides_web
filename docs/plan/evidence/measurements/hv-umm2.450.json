@@ -1,0 +1,18 @@
+{
+  "bead": "hv-umm2.450",
+  "base": "0fa8d8b8d134f3d24d0e9b9c8502f344dc609efd",
+  "measurementWindow": { "scope": "Claim through commit preparation by the claiming Claude Code session acting as implementer, including the widening for Codex findings 1 and 3 of hv-umm2.110." },
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "Final npm run review starting one-minute host load (sysctl vm.loadavg)." } } },
+  "mutations": [
+    { "change": "matchListener reads the dissolved card's current origin", "result": "the leaving-play contract fails: queued abilities [1] instead of [1, 2, 3]" },
+    { "change": "gained statics stamped with enteredZoneAt (layers.ts at base)", "result": "the gained static ordering contract fails" },
+    { "change": "fold.ts load validation at base", "result": "the save/load contract fails on the impossible-gain states" }
+  ],
+  "validation": {
+    "focusedContracts": "src/engine/effects/primitives/contracts.test.ts plus src/rules/battle: 1111/1111",
+    "review": { "seconds": 66, "exit": 0, "note": "first run failed lint on three unnecessary assertions in the new contract code; fixed" },
+    "knip": { "exit": 0 },
+    "fuzzSmoke": "npm run fuzz:engine -- --games 150 --weight-uuids e72245f2-c153-4e79-ba8e-956d18202b48: 74274 steps, failures 0"
+  },
+  "hostLoadSamples": [{ "step": "review", "oneMinute": 27.01 }]
+}

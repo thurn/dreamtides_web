@@ -373,12 +373,15 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
  * (RD-hv-umm2.342-1); its other abilities use their current controller.
  */
 function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedDissolve): void {
-  originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
+  const dissolving = event.kind === "dissolved" && listener.source === event.instance;
+  // A dissolved card's abilities as it left play, those it had gained included (rules § Gaining abilities).
+  const departed = dissolving && armed.origin !== null ? { ...listener, origin: armed.origin } : listener;
+  originAbilities(ctx.catalog, departed.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered") return;
     const armedListener = armed.abilities.get(oncePerTurnKey(listener.source, index));
     const matching = armedListener ?? (
-      event.kind === "dissolved" && listener.source === event.instance && hasNamed(ability.trigger, "dissolved")
-        ? { ...listener, controller: event.side }
+      dissolving && hasNamed(ability.trigger, "dissolved")
+        ? { ...departed, controller: event.side }
         : listener
     );
     if (matching.controller !== side) return;
@@ -429,7 +432,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
   }
 }
 
-const NOTHING_ARMED: ArmedDissolve = { abilities: new Map(), floating: [] };
+const NOTHING_ARMED: ArmedDissolve = { abilities: new Map(), floating: [], origin: null };
 
 /** Whether `trigger`, or one of its `either` branches, is a "when … is dissolved" trigger matching `id` as it is now. */
 function dissolveMatches(state: BattleState, catalog: EngineCatalog, trigger: Trigger, id: InstanceId, listener: Listener): boolean {
@@ -446,7 +449,8 @@ function dissolveMatches(state: BattleState, catalog: EngineCatalog, trigger: Tr
  * character as it is now, still in play: its controller, types, and whether
  * it is a figment. The departing character's own abilities are among them.
  * The record keeps each armed ability as it is now, its source's controller
- * and the floating trigger itself included, and waits on the step's context
+ * and the floating trigger itself included, and where the character's own
+ * abilities come from as it leaves, and waits on the step's context
  * for the character's `dissolved` event; a departure that turns out not to
  * be a dissolve leaves it unused until the character leaves play again.
  */
@@ -469,7 +473,8 @@ function armDissolve(ctx: StepContext, event: LeftPlayEvent, departing: Departur
     const entry = floatingListener(ctx, effect);
     if (entry !== null && dissolveMatches(state, catalog, entry.trigger, event.instance, entry.listener)) floating.push(effect);
   }
-  if (abilities.size > 0 || floating.length > 0) ctx.armedDissolves.set(event.instance, { abilities, floating });
+  const leaving = state.instances[event.instance];
+  ctx.armedDissolves.set(event.instance, { abilities, floating, origin: leaving === undefined ? null : instanceOrigin(leaving) });
 }
 
 /** The abilities armed for the dissolve of `instance`, consumed by its `dissolved` event. */

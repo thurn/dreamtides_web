@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
 import type { EngineCardDefinition } from "../../../catalog";
-import { activated, all, characterYouControl, energy, enemyCharacter, event, exhaustSelf, fromVoid, keyword, staticAbility, target } from "../../../dsl/builders";
+import { activated, all, characterYouControl, energy, enemyCharacter, event, exhaustSelf, fromVoid, keyword, self, staticAbility, target } from "../../../dsl/builders";
 import { onDissolved, triggered, whenDissolved, whenLeavesPlay, whenYouPlay } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
@@ -31,6 +31,7 @@ import { dissolve } from "../dissolve";
 import { gainAbilities } from "../gain-abilities";
 import { gainPoints } from "../gain-points";
 import { returnToHand } from "../return-to-hand";
+import { setBaseSpark } from "../set-base-spark";
 import { sparkModifier } from "../spark-modifier";
 
 function card(index: number, cardType: "character" | "event", abilities: EngineCardDefinition["abilities"], speed: EngineCardDefinition["speed"] = "standard"): EngineCardDefinition {
@@ -65,6 +66,10 @@ const GA = {
   dissolver: card(4, "event", () => [event(dissolve(target(enemyCharacter())))], "interrupt"),
   /** "Return a character you control to hand." */
   returner: card(5, "event", () => [event(returnToHand(target(characterYouControl())))]),
+  /** "This character's base ✦ becomes 5." */
+  setter: card(8, "character", () => [staticAbility(setBaseSpark(self(), 5))]),
+  /** From the void: "When a character you control is dissolved, gain 8 points." */
+  haunt: card(7, "character", () => [triggered(whenDissolved(characterYouControl()), gainPoints(8), { zone: "void" })]),
   /** Resolves a gain for the player's first back-rank character, then fails. */
   gainThenFail: {
     ...card(6, "event", () => []),
@@ -221,10 +226,26 @@ describe("gainAbilities", () => {
     after.floating.push(loss(`e${after.nextEffect}`, after.clock));
     expect(hasKeyword(after, engine.catalog, collector, "vengeful")).toBe(false);
   });
+
+  it("orders a gained static ability by when it was gained, after an earlier change to the same characteristic", () => {
+    const { state, ids } = boardState(engine.catalog, board({ back: [GA.collector.id] }, { void: [GA.setter.id] }));
+    const collector = ids.player.back[0]!;
+    const baseSpark = (id: `e${number}`, timestamp: number, value: number): FloatingEffect => ({
+      id, controller: "enemy", source: collector, timestamp, expiry: { at: "never" }, change: { kind: "baseSpark", instance: collector, value },
+    });
+    expect(state.instances[collector].enteredZoneAt).toBeLessThanOrEqual(state.clock);
+    state.floating.push(baseSpark("e1", state.clock, 2));
+    state.nextEffect = 2;
+    expect(effectiveSpark(state, engine.catalog, collector)).toBe(2);
+    const after = run(state, [["player", activate(collector)]]).state;
+    expect(effectiveSpark(after, engine.catalog, collector)).toBe(5);
+    after.floating.push(baseSpark(`e${after.nextEffect}`, after.clock, 3));
+    expect(effectiveSpark(after, engine.catalog, collector)).toBe(3);
+  });
 });
 
 describe("gainAbilities: leaving play", () => {
-  it("ends as the character leaves play: a gained leaves-play ability sees the gains, its gained dissolve abilities do not", () => {
+  it("ends as the character leaves play, after its gained leaves-play and dissolve abilities see it as it left", () => {
     const { state, ids } = boardState(engine.catalog, board({ back: [GA.collector.id] }, { void: [GA.mourner.id], hand: [GA.dissolver.id] }));
     const collector = ids.player.back[0]!;
     const gained = run(state, [["player", activate(collector)]]).state;
@@ -233,13 +254,25 @@ describe("gainAbilities: leaving play", () => {
     const { state: after, events } = run(enemyDay, [["enemy", play(enemyDay.sides.enemy.hand[0])]]);
     expect(after.instances[collector]?.zone).toBe("void");
     expect(events.some((e) => e.kind === "effectEnded" && e.effect === gains(enemyDay)[0]?.id)).toBe(true);
-    // Only "When this character leaves play" triggers: its gained dissolve abilities are gone by the time it is dissolved.
-    expect(events.filter((e) => e.kind === "triggerQueued").map((e) => e.ability)).toEqual([1]);
-    expect(after.sides.player.score - enemyDay.sides.player.score).toBe(1);
+    // Its gained leaves-play, "when a character you control is dissolved" and ▸Dissolved abilities all see it as it left play.
+    expect(events.filter((e) => e.kind === "triggerQueued").map((e) => e.ability)).toEqual([1, 2, 3]);
+    expect(after.sides.player.score - enemyDay.sides.player.score).toBe(1 + 2 + 4);
     expect(gains(after)).toEqual([]);
     expect(after.instances[collector]?.status.gainedAbilities).toBeUndefined();
     expect(instanceOrigin(instanceOf(after, collector))).toEqual({ kind: "card", cardId: GA.collector.id, variant: { amplified: false } });
     expect(invariantViolations(after, engine.catalog)).toEqual([]);
+  });
+
+  it("does not let a gained ability that works only from the void see its own character dissolved", () => {
+    const { state, ids } = boardState(engine.catalog, board({ back: [GA.collector.id] }, { void: [GA.haunt.id], hand: [GA.dissolver.id] }));
+    const collector = ids.player.back[0]!;
+    const gained = run(state, [["player", activate(collector)]]).state;
+    expect(gains(gained)).toHaveLength(1);
+    const enemyDay = passUntil(engine, gained, at(engine, "enemy", "day")).state;
+    const { state: after, events } = run(enemyDay, [["enemy", play(enemyDay.sides.enemy.hand[0])]]);
+    expect(after.instances[collector]?.zone).toBe("void");
+    expect(events.some((e) => e.kind === "triggerQueued")).toBe(false);
+    expect(after.sides.player.score).toBe(enemyDay.sides.player.score);
   });
 
   it("resolves a gained activated ability already on the stack after the character leaves play", () => {
@@ -321,6 +354,14 @@ describe("gainAbilities recovery", () => {
     });
     const effect = gains(state)[0];
     const withChange = (change: Record<string, unknown>) => ({ ...state, floating: [{ ...effect, change }] }) as unknown as BattleState;
+    const withEffect = (changed: Record<string, unknown>) => ({ ...state, floating: [{ ...effect, ...changed }] });
+    const slot = state.sides.player.backRank.indexOf(collector);
+    const inVoid: BattleState = {
+      ...state,
+      sides: { ...state.sides, player: { ...state.sides.player, backRank: state.sides.player.backRank.map((id, index) => index === slot ? null : id), void: [...state.sides.player.void, collector] } },
+      instances: { ...state.instances, [collector]: { ...state.instances[collector], zone: "void" } },
+    };
+    expect(load({ ...inVoid, floating: [], instances: { ...inVoid.instances, [collector]: { ...inVoid.instances[collector], status: { ...inVoid.instances[collector].status, gainedAbilities: undefined } } } })).not.toBeNull();
     const queued = (gained: unknown) => ({ ...state, triggerQueue: [{ source: collector, controller: "player", origin: { kind: "card", cardId: GA.collector.id, variant: { amplified: false }, gained }, ability: 3, node: null, subject: null }] }) as unknown as BattleState;
     expect(load(queued([{ cardId: GA.donor.id, variant: { amplified: false } }]))).not.toBeNull();
     for (const malformed of [
@@ -328,6 +369,8 @@ describe("gainAbilities recovery", () => {
       withStatus([{ cardId: GA.mourner.id, variant: { amplified: false } }]), withStatus([{ cardId: "donor", variant: { amplified: false } }]),
       withChange({ ...effect.change, cardId: 7 }), withChange({ ...effect.change, variant: null }), withChange({ ...effect.change, instance: "i999" }),
       queued([]), queued([{ cardId: GA.donor.id }]),
+      withEffect({ expiry: { at: "never" } }), withEffect({ expiry: { at: "sourceLeavesPlay", source: "i999" } }), withEffect({ source: { kind: "avatar", side: "player" } }),
+      inVoid,
     ]) {
       expect(load(malformed)).toBeNull();
     }

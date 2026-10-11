@@ -48,11 +48,14 @@ export interface TriggerListener {
  * card and emblem abilities by source and index, with their sources as they
  * were, so a card's ability triggers for the side that controlled it then;
  * and floating and delayed triggers, in creation order, so one whose
- * duration ended as the character left play still triggers.
+ * duration ended as the character left play still triggers. `origin` is
+ * where the character's own abilities came from as it left play, abilities
+ * it gained included, which its ▸Dissolved abilities are read from.
  */
 export interface ArmedDissolve {
   readonly abilities: ReadonlyMap<OncePerTurnKey, TriggerListener>;
   readonly floating: readonly FloatingEffect[];
+  readonly origin: AbilityOrigin | null;
 }
 
 /**

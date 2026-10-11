@@ -183,7 +183,17 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
   }
   cards.sort((a, b) => instanceNumber(a.instance.id) - instanceNumber(b.instance.id));
   for (const { instance, abilities } of cards) {
-    add(instance.id, instance.controller, abilities, instance.enteredZoneAt, instance.zone);
+    const { printing } = instance;
+    if (instance.status.gainedAbilities === undefined || printing.kind !== "card") {
+      add(instance.id, instance.controller, abilities, instance.enteredZoneAt, instance.zone);
+      continue;
+    }
+    // A gained static ability is as new as its gain when that began after its character entered its zone.
+    add(instance.id, instance.controller, catalog.card(printing.cardId).abilities(instance.variant), instance.enteredZoneAt, instance.zone);
+    for (const { change, timestamp } of state.floating) {
+      if (change.kind !== "abilities" || change.instance !== instance.id) continue;
+      add(instance.id, instance.controller, catalog.card(change.cardId).abilities(change.variant), Math.max(instance.enteredZoneAt, timestamp), instance.zone);
+    }
   }
   return entries;
 }

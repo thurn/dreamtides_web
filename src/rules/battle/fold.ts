@@ -1375,16 +1375,18 @@ function hasConsistentZones(value: Record<string, unknown>): boolean {
 
 /**
  * Whether each instance's `status.gainedAbilities` lists exactly its
- * `abilities` floating changes, in order, and no such change names a card
- * that does not exist: the instance's abilities read the mirror, so a state
+ * `abilities` floating changes, in order, and each such change is a gain a
+ * character in play made, lasting while it stays there
+ * (RD-hv-umm2.110-2): the instance's abilities read the mirror, so a state
  * whose mirror disagrees with its effects would change what it can do.
  */
 function hasMirroredGainedAbilities(value: Record<string, unknown>): boolean {
   const state = value as unknown as BattleState;
   const gained = new Map<InstanceId, unknown[]>();
-  for (const { change } of state.floating) {
+  for (const { source, expiry, change } of state.floating) {
     if (change.kind !== "abilities") continue;
-    if (!Object.prototype.hasOwnProperty.call(state.instances, change.instance)) return false;
+    if (!Object.prototype.hasOwnProperty.call(state.instances, change.instance) || state.instances[change.instance].zone !== "play") return false;
+    if (source !== change.instance || expiry.at !== "sourceLeavesPlay" || expiry.source !== change.instance) return false;
     gained.set(change.instance, [...(gained.get(change.instance) ?? []), { cardId: change.cardId, variant: change.variant }]);
   }
   return Object.values(state.instances).every(
