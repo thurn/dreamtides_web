@@ -1,0 +1,1028 @@
+{
+  "bead": "hv-umm2.121",
+  "base": "170a9ded57a3165dc9e138afb830e482bb3db61d",
+  "measurementWindow": {
+    "start": "2026-10-11T21:07:38+00:00",
+    "startBasis": "Native claim timestamp is an inclusive dispatch-start proxy.",
+    "end": "2026-10-11T21:24:59.616041+00:00",
+    "endBasis": "Terminal preparation timestamp after parent final source, evidence and resource ACK, immediately before the single commit. Explicit preparation proxy, not observed commit completion.",
+    "actualCommitObservation": "Actual commit start and end are retained externally in final-handoff.json and passed to the parent for native notes."
+  },
+  "validationAttempts": {
+    "early": {
+      "label": "early",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-umm2.121",
+        "--arg",
+        "card=d26d31c0-7bd2-4d58-bed9-444e032a1087",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=player",
+        "--arg",
+        "capture=door-early-desktop",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "120"
+      ],
+      "start": "2026-10-11T21:15:31.849484+00:00",
+      "pid": 90535,
+      "pgid": 90535,
+      "hostLoad": [
+        5.6982421875,
+        11.46875,
+        15.30859375
+      ],
+      "end": "2026-10-11T21:15:46.851933+00:00",
+      "elapsedS": 15.00217979203444,
+      "exitCode": 0
+    },
+    "sweep": {
+      "label": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.121",
+        "--cards",
+        "f82c7407-b642-4ab1-8878-171f9121b3eb,e4ab6a18-c3b2-4149-a446-c7c1e8d66714,6fa9c440-3912-4b1e-868c-840ae772fe1c,e26e0ac8-d6c9-4b0c-8672-4f73651f2586,d26d31c0-7bd2-4d58-bed9-444e032a1087",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--timeout",
+        "60"
+      ],
+      "start": "2026-10-11T21:16:22.845902+00:00",
+      "pid": 91819,
+      "pgid": 91819,
+      "hostLoad": [
+        5.39697265625,
+        10.51171875,
+        14.734375
+      ],
+      "end": "2026-10-11T21:22:30.641500+00:00",
+      "elapsedS": 367.79202683403855,
+      "exitCode": 0
+    },
+    "review-final": {
+      "label": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-11T21:13:01.333155+00:00",
+      "pid": 86981,
+      "pgid": 86981,
+      "hostLoad": [
+        6.81005859375,
+        14.5732421875,
+        16.9326171875
+      ],
+      "end": "2026-10-11T21:13:37.879224+00:00",
+      "elapsedS": 36.54573025001446,
+      "exitCode": 0
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f82c7407-b642-4ab1-8878-171f9121b3eb,e4ab6a18-c3b2-4149-a446-c7c1e8d66714,6fa9c440-3912-4b1e-868c-840ae772fe1c,e26e0ac8-d6c9-4b0c-8672-4f73651f2586,d26d31c0-7bd2-4d58-bed9-444e032a1087"
+      ],
+      "start": "2026-10-11T21:13:58.793228+00:00",
+      "pid": 88364,
+      "pgid": 88364,
+      "hostLoad": [
+        8.01611328125,
+        13.54296875,
+        16.38818359375
+      ],
+      "end": "2026-10-11T21:15:19.463312+00:00",
+      "elapsedS": 80.66492825001478,
+      "exitCode": 0
+    },
+    "fuzz-lock": {
+      "label": "fuzz-lock",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/hv-umm2-121-checks/run.py",
+        "fuzz",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f82c7407-b642-4ab1-8878-171f9121b3eb,e4ab6a18-c3b2-4149-a446-c7c1e8d66714,6fa9c440-3912-4b1e-868c-840ae772fe1c,e26e0ac8-d6c9-4b0c-8672-4f73651f2586,d26d31c0-7bd2-4d58-bed9-444e032a1087"
+      ],
+      "start": "2026-10-11T21:13:58.766320+00:00",
+      "pid": 88361,
+      "pgid": 88361,
+      "hostLoad": [
+        8.01611328125,
+        13.54296875,
+        16.38818359375
+      ],
+      "end": "2026-10-11T21:15:19.467114+00:00",
+      "elapsedS": 80.69562979199691,
+      "exitCode": 0
+    },
+    "preflight": {
+      "label": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "f82c7407-b642-4ab1-8878-171f9121b3eb,e4ab6a18-c3b2-4149-a446-c7c1e8d66714,6fa9c440-3912-4b1e-868c-840ae772fe1c,e26e0ac8-d6c9-4b0c-8672-4f73651f2586,d26d31c0-7bd2-4d58-bed9-444e032a1087",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "start": "2026-10-11T21:13:58.766474+00:00",
+      "pid": 88362,
+      "pgid": 88362,
+      "hostLoad": [
+        8.01611328125,
+        13.54296875,
+        16.38818359375
+      ],
+      "end": "2026-10-11T21:14:00.062708+00:00",
+      "elapsedS": 1.2960206670104526,
+      "exitCode": 0
+    },
+    "focused": {
+      "label": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-11T21:11:54.291539+00:00",
+      "pid": 85290,
+      "pgid": 85290,
+      "hostLoad": [
+        6.673828125,
+        16.46728515625,
+        17.74267578125
+      ],
+      "end": "2026-10-11T21:11:58.828950+00:00",
+      "elapsedS": 4.537289125029929,
+      "exitCode": 0
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-11T21:12:08.066639+00:00",
+      "pid": 85637,
+      "pgid": 85637,
+      "hostLoad": [
+        6.7236328125,
+        16.1552734375,
+        17.61669921875
+      ],
+      "end": "2026-10-11T21:12:53.810578+00:00",
+      "elapsedS": 45.74326487496728,
+      "exitCode": 1
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-11T21:13:41.933682+00:00",
+      "pid": 87999,
+      "pgid": 87999,
+      "hostLoad": [
+        7.61083984375,
+        13.8583984375,
+        16.564453125
+      ],
+      "end": "2026-10-11T21:13:45.788588+00:00",
+      "elapsedS": 3.8546874999883585,
+      "exitCode": 0
+    },
+    "schema": {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-11T21:23:40.106218+00:00",
+      "pid": 1984,
+      "pgid": 1984,
+      "hostLoad": [
+        2.73583984375,
+        5.35791015625,
+        10.41455078125
+      ],
+      "end": "2026-10-11T21:23:40.189539+00:00",
+      "elapsedS": 0.08324604202061892,
+      "exitCode": 0
+    }
+  },
+  "hostLoadSamples": {
+    "early": [
+      5.6982421875,
+      11.46875,
+      15.30859375
+    ],
+    "sweep": [
+      5.39697265625,
+      10.51171875,
+      14.734375
+    ],
+    "review-final": [
+      6.81005859375,
+      14.5732421875,
+      16.9326171875
+    ],
+    "fuzz": [
+      8.01611328125,
+      13.54296875,
+      16.38818359375
+    ],
+    "fuzz-lock": [
+      8.01611328125,
+      13.54296875,
+      16.38818359375
+    ],
+    "preflight": [
+      8.01611328125,
+      13.54296875,
+      16.38818359375
+    ],
+    "focused": [
+      6.673828125,
+      16.46728515625,
+      17.74267578125
+    ],
+    "review": [
+      6.7236328125,
+      16.1552734375,
+      17.61669921875
+    ],
+    "knip": [
+      7.61083984375,
+      13.8583984375,
+      16.564453125
+    ],
+    "schema": [
+      2.73583984375,
+      5.35791015625,
+      10.41455078125
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review wrapper start 2026-10-11T21:13:01.333155+00:00; its value matches the review typecheck start load at 21:13:02.279Z."
+      }
+    }
+  },
+  "composition": {
+    "entities": 5,
+    "authoredForms": 9,
+    "newPrimitives": 0,
+    "newEngineEvents": 0,
+    "newPromptForms": 0,
+    "newStatusesOrVisualEffects": 0,
+    "newRulesDecisions": [],
+    "usedRulesDecisions": [
+      "RD-hv-7x4l.6-1",
+      "RD-hv-7x4l.6-5",
+      "RD-hv-umm2.342-1",
+      "RD-hv-umm2.55-1"
+    ],
+    "cardIssues": [],
+    "printedFields": "All five printed field sets are unchanged; base and amplified abilities were checked clause by clause and their verifiedText hashes calculated with expectedVerifiedText.",
+    "scenarioNecessity": "Advance Gunner combines its own abandonment cost with its own named Dissolved draw. Two real base/amplified scenario cases assert physical card outcomes and event order through the real engine. The other compositions need no mirrored scenario tests.",
+    "testDeltaBasis": "47 added lines in the plain scenario module; zero added test entrypoint files, two cases and zero jsdom files. Additive registry registration is not counted as a test body."
+  },
+  "checks": {
+    "focused": {
+      "tests": 41,
+      "files": 2,
+      "coverageGateIncluded": true
+    },
+    "finalReview": {
+      "tests": 2636,
+      "files": 219,
+      "staticChecks": "All passed.",
+      "scope": "Related test review and full static checks; no review:full."
+    },
+    "knip": "Passed after final review restoration, sequentially.",
+    "retainedOwnFailure": "Initial review passed all tests and both typechecks but lint rejected two unnecessary non-null assertions. Removing those assertions yielded the final passing review."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 153613,
+    "prompts": 3320,
+    "interactiveReruns": 367,
+    "failures": 0,
+    "internalWallS": 79.5,
+    "internalCpuS": 87.2,
+    "bounded": {
+      "legality": 0,
+      "prompts": 0
+    },
+    "targetCoverage": [
+      {
+        "kind": "card",
+        "uuid": "f82c7407-b642-4ab1-8878-171f9121b3eb",
+        "included": 615,
+        "exercised": 302
+      },
+      {
+        "kind": "card",
+        "uuid": "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
+        "included": 617,
+        "exercised": 288
+      },
+      {
+        "kind": "card",
+        "uuid": "6fa9c440-3912-4b1e-868c-840ae772fe1c",
+        "included": 609,
+        "exercised": 294
+      },
+      {
+        "kind": "card",
+        "uuid": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+        "included": 617,
+        "exercised": 281
+      },
+      {
+        "kind": "card",
+        "uuid": "d26d31c0-7bd2-4d58-bed9-444e032a1087",
+        "included": 619,
+        "exercised": 284
+      }
+    ],
+    "counterDefinitions": "Included counts initial deck entries across both sides. Exercised counts cardPlayed events for these card UUIDs. Neither count proves activation, clause, or variant coverage.",
+    "heavyLock": "Primary artifacts/heavy.lock via lockf -k. JOURNEY_TEST_WORKERS=2; the fuzz CLI executes its seeded games sequentially.",
+    "preCommandIntervalS": 0.026908,
+    "preCommandIntervalScope": "Upper bound on heavy-slot wait plus wrapper startup; not a separately instrumented exact queue wait."
+  },
+  "preflight": {
+    "plannedCells": 100,
+    "pass": 52,
+    "skip": 48,
+    "fail": 0,
+    "variants": "all",
+    "as": "both",
+    "scope": "Node-only staged fixture and engine resolution checks, matching the browser sweep."
+  },
+  "browser": {
+    "earlyReport": "card-lab-play.result.json",
+    "earlyReportSHA256": "a40fdfaf1757fe79ce5bbefb68d3ab78398f933dd25125d37169eb5322c6a6fa",
+    "earlyCapture": "door-early-desktop.png",
+    "earlyScope": "Normal fixed-cost event play, number answer zero, no matching Discover candidate, final void, empty caps. It does not independently establish absence of a paid zero X and does not discover a card.",
+    "earlyPersistedLog": {
+      "file": "card-lab-play-desktop.jsonl",
+      "gameId": "8v86ne",
+      "rows": 33,
+      "scope": "Persisted UUID source prompt, normal answer intent, applied BATTLE_ANSWER and engine.promptAnswered."
+    },
+    "earlyWallMs": {
+      "browserLeaseWait": 45,
+      "serve": 1557,
+      "scenario": 8192,
+      "total": 9815
+    },
+    "earlyColdReview": "Parent ACK received before the full frozen sweep.",
+    "sweep": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 52,
+        "skip": 48
+      },
+      "attemptCounts": {
+        "pass": 52,
+        "skip": 48,
+        "fail": 1
+      },
+      "hostLoad": 5.39697265625,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 43,
+        "serve": 1248,
+        "scenario": 361259.5409169999,
+        "cleanup": 164.06654100003652,
+        "execution": 362700.31745900004,
+        "total": 362743.31745900004
+      }
+    },
+    "rawReports": [
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-base-player-attempt-1.result.json",
+        "sha256": "6e5c1403dbe6fa8d82c40a04c72e3d4d9e1529ff2a2d80cc02e2af196076c7e9",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-amplified-player-attempt-1.result.json",
+        "sha256": "b98cbc56897e448c9484aca4b784681c7a421884d1aabb754c50df2e264d5c5e",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-empowered-player-attempt-1.result.json",
+        "sha256": "a6fd144475be17579afaef026bd21d451038e747b8c768f00265ae3fea7dbf7c",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-kindled-player-attempt-1.result.json",
+        "sha256": "d3417a6563b57fd0e9fb32f4f62f7b717b69001ac75cf3493003d27876cd5627",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-perfected-player-attempt-1.result.json",
+        "sha256": "48f30b4af3dafa3ee289f7f7c7ea3fd4c748d4523c15ffc738b47f9a65113a38",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-base-enemy-attempt-1.result.json",
+        "sha256": "78ab4b0776b8815d1094d8da1d851e7ed4c28805a581ff09b8db2d438e12ee27",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-amplified-enemy-attempt-1.result.json",
+        "sha256": "a7d8ad61d90256a8a75d2ee7fec8addf1018eb06571e0e002bcdfda0ae2116aa",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-empowered-enemy-attempt-1.result.json",
+        "sha256": "afc01cf82709f96f6dac90910b9348e4556dcde657eec50b13141b7c6272c388",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-kindled-enemy-attempt-1.result.json",
+        "sha256": "547d4556a5d04867dfec592d1ba702b9e71381bc60d2135ff5cf83930f855848",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-f82c7407-b642-4ab1-8878-171f9121b3eb-perfected-enemy-attempt-1.result.json",
+        "sha256": "0da464b0ada9fbf274557e85d4eca1b9fea1c3468c19591efae53af04ddc0999",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-base-player-attempt-1.result.json",
+        "sha256": "518560e583df5e4010a0a9e7e66f5b5f2877079e430bbd2eeca43344b2e75f32",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-amplified-player-attempt-1.result.json",
+        "sha256": "16bd9923933083d794ea9322e35d10eaceed8920d10f066b03f886a84b4ddf47",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-empowered-player-attempt-1.result.json",
+        "sha256": "e12eda138aaed8719b106d58a9f8d065fa74e268b790fd1fa5c616437186da1f",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-kindled-player-attempt-1.result.json",
+        "sha256": "b30d40e9fb154f7cfe777d9d0ef6d622904b3dd0b008695913d1de066cafdcf5",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-perfected-player-attempt-1.result.json",
+        "sha256": "a29bf158637ecb842bbdd8be5b8ee4aa234395348fa4a73d46e8b8675ea39e93",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-base-enemy-attempt-1.result.json",
+        "sha256": "db88494351ab1523b31cee3a235c6aae5f2f3484c90a7933f9722fbf48806057",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-amplified-enemy-attempt-1.result.json",
+        "sha256": "81af5da1a6bc98368ad69ab98d1a7738f12d7308273485759bb48b95e237103e",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-empowered-enemy-attempt-1.result.json",
+        "sha256": "0cd1e4ca3d2f355b0cad19c655b88145ba2ca0edc69d52d039ea2671e46ec1a4",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-kindled-enemy-attempt-1.result.json",
+        "sha256": "ac5a137355b4dd64a02225c8aa081dce9da4da5f88c6a0eea04a04cc1b0a8393",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e4ab6a18-c3b2-4149-a446-c7c1e8d66714-perfected-enemy-attempt-1.result.json",
+        "sha256": "2ea8aced8777ac912d2dd28ab544669822200c70f620f96eef5f042ce6988f2d",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-base-player-attempt-1.result.json",
+        "sha256": "c7f0f91a78e851afbba7dde1d20de1bbfc4d03a9eab0740ac3a44f53225ead3c",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-amplified-player-attempt-1.result.json",
+        "sha256": "5454978bc8d7ccf7e13a618a5812224e107c3f0c9d81fde0fee48fdb671d733e",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-empowered-player-attempt-1.result.json",
+        "sha256": "aa7be1c8a1f8219f819d7db3ee2d0363407eba2acdf3c6286ab78ad0d28c7e5b",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-kindled-player-attempt-1.result.json",
+        "sha256": "e5a64340e18e0e8206c8216459ef1a41956875e8534aeda3dc1a0e242e83019c",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-perfected-player-attempt-1.result.json",
+        "sha256": "85c4df1b3d7fa1c5e2160291c3181282d85824a6187faecda90bc2dc0d775bf5",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-base-enemy-attempt-1.result.json",
+        "sha256": "87d4120851a279fbaacb9fa611576e591daa0e5ce0a7db2bb4f386ae39762dac",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-amplified-enemy-attempt-1.result.json",
+        "sha256": "fbc1ce22682924ee9de70b6be9665a6e8e4361a06488b5cc494b3ca9fb9f3796",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-empowered-enemy-attempt-1.result.json",
+        "sha256": "198c412e336fc1fc9e5ef04f1327a04c615066ee63ff74e9237cd6c4b4a37e87",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-kindled-enemy-attempt-1.result.json",
+        "sha256": "8bdae2d91cbfadcb3b5437e46b6a0f399c25562e799850c12c880a5b7697cb7d",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-6fa9c440-3912-4b1e-868c-840ae772fe1c-perfected-enemy-attempt-1.result.json",
+        "sha256": "4f204ffd3303b2a9fce39221b31ba3133d97ed249a2b90875d2c91418d1b1167",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-base-player-attempt-1.result.json",
+        "sha256": "31101e6d578fc8235f1e83689e19c61ee892c777cff34afc853fc93c03573b6f",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-amplified-player-attempt-1.result.json",
+        "sha256": "e0466dfa251bcfc19edc782423b9bc4d61a61e05c9c4cb981f94593dd01c7830",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-empowered-player-attempt-1.result.json",
+        "sha256": "467627496eb3bcc6df8e909679d2b513ea6986698e2c44756d60bd4ca0c598eb",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-kindled-player-attempt-1.result.json",
+        "sha256": "553fb63d1c4c635f588b99bd8915d258dd808aecfe636141c4bdc4a3ee78d8b2",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-perfected-player-attempt-1.result.json",
+        "sha256": "efc8e70ba0bd2fde2819aac92fb1e2f523afb9130a3cf6998ceb5d6c7b68e6c3",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-base-enemy-attempt-1.result.json",
+        "sha256": "fbbab415e3b69139381100e3a2a6c7adf7e8fea70ea10913f9d1c68cf9574641",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-amplified-enemy-attempt-1.result.json",
+        "sha256": "ab6894a87794e5a1dc5041e83abb7f6d4b517ed02363fa4d95b560fcd540c470",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-empowered-enemy-attempt-1.result.json",
+        "sha256": "239d83464bba127c03b0bb888686d65c7809107eb9cba82a28c10964fb53c9d6",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-kindled-enemy-attempt-1.result.json",
+        "sha256": "e79b7acb21557e1e0549000d3026abb8eeac449f19dea3b94c6b87052ad80fbf",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-e26e0ac8-d6c9-4b0c-8672-4f73651f2586-perfected-enemy-attempt-1.result.json",
+        "sha256": "b72ea116aac1c7fd06276dd4fc7caccb4e32a22bc97390627a125c7d115bbbca",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-base-player-attempt-1.result.json",
+        "sha256": "0ee099280736b94635fd7f17742bf378d13e2aacaccbf02bb7b6e516c411a736",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-empowered-player-attempt-1.result.json",
+        "sha256": "3b665832f40f6221e86605ceb78c8b7e17b29455bbf66a1c54bdec8aec15253d",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-inspired-player-attempt-1.result.json",
+        "sha256": "39ab2c62edbc9bff76bec58b5244973c43ab59da034c86e6f27976a770cda49c",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-enduring-player-attempt-1.result.json",
+        "sha256": "935e38f931f740779d62737ef4f3ec34f6be64ed9f9d6af97965152c80970fdc",
+        "verdict": "fail",
+        "attempt": 1,
+        "effective": false,
+        "failureKinds": [
+          "timeout"
+        ],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-enduring-player-attempt-2.result.json",
+        "sha256": "05cf27be999915d088f7a84c4d2f1f5a05e9adfc4fae585d0e88094a6c994031",
+        "verdict": "pass",
+        "attempt": 2,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-hastened-player-attempt-1.result.json",
+        "sha256": "b7424106108802fc9b338dd4d92d48891c4b3a9bc1f0000de7c948db8dc26518",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-perfected-player-attempt-1.result.json",
+        "sha256": "38660cce14f79fb3439dda77b5c29b2f1f14c5aa9e6138eca424987a0caaf423",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-base-enemy-attempt-1.result.json",
+        "sha256": "85f6d4ace5b1647c685ef218ad844af2ea774380d9a95283f8b64b2f81aef839",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-empowered-enemy-attempt-1.result.json",
+        "sha256": "1fdaa9d1d01800fb3c64c7ba66a11195bcbc51bd233a8884b5eff2fa133fec79",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-inspired-enemy-attempt-1.result.json",
+        "sha256": "0e4d3a33c9f49aca2bc72ebcebec97322c2afffd75506ed0f12ed9d7f9f7d36a",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-enduring-enemy-attempt-1.result.json",
+        "sha256": "4a71c78f8e96d64455cf4afa811e1f19d570cc220b26c3ab29b7c0e4bb8d90d6",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-hastened-enemy-attempt-1.result.json",
+        "sha256": "0959dfbae778d71e9486346dc6ae865bc79c96e8a4c68efa3fc5a49d813735ce",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "sweep-XkkUkG/sweep-d26d31c0-7bd2-4d58-bed9-444e032a1087-perfected-enemy-attempt-1.result.json",
+        "sha256": "02b55354e2ab2799bc369649ef3c1028c8208975d3a6d0bd2860aa84da25f686",
+        "verdict": "pass",
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "caps": [],
+        "error": null
+      }
+    ],
+    "sweepScope": "Normal card-lab plays and first legal prompt resolution for each eligible variant and side; no claim that every activated ability ran.",
+    "retryDisposition": "Door player Enduring attempt 1 timed out waiting for the initial card-lab report. Empty caps and null outer error allowed one documented fresh retry, which passed. Both raw reports and ledger rows are retained; no source change.",
+    "judgedRequired": 0,
+    "judgedRuns": 0,
+    "sampling": "SHA-256 first bytes in native entity order: 251, 30, 51, 240, 184. None below 26, and no new prompt/status/visual form. Explicit dispositions are in the QA ledger.",
+    "captures": "One early desktop capture at CSS scale 1, 1440 by 900. No visual change requires a mobile matrix.",
+    "leaseScope": "One browser session and no boundary yields; the FIFO implementation was used without a contended yield exercise."
+  },
+  "freeze": {
+    "time": "2026-10-11T21:15:31.822459+00:00",
+    "base": "170a9ded57a3165dc9e138afb830e482bb3db61d",
+    "files": {
+      "src/content/cards/advance-gunner-e4ab6a18.ts": "7cf5cce7edb20b52739f8b4cbb69b155a8291d3ca8f7f67a87efa797648d2458",
+      "src/content/cards/canopy-lookout-f82c7407.ts": "e355cabc9d9e88ca6382ee07ba509334e088cffe7422160c7501397c8ff3ca66",
+      "src/content/cards/door-to-possibility-d26d31c0.ts": "d189b287d87ce6b81863bb92e135c4d4ef03670c7ac8e49b6e8b2cc5e93291eb",
+      "src/content/cards/lantern-keeper-e26e0ac8.ts": "3b45749b344445796abf5299faf77dd399dbc997ccba0587ed2ee2e0ae0bf59e",
+      "src/content/cards/underroot-diviner-6fa9c440.ts": "2dc7aaa7163f7811bdf445fdebcf4fb7f15bc597688f6776c5a0a7e329aad418",
+      "src/content/specs/index.ts": "7950a940ae999a4f7bf39b776615e635c16ed760fcf52bcd46cf536728fb0626",
+      "src/content/specs/cards-09.scenarios.ts": "6d2ae5ae27d7613e48fd3411926ec753491896e569864b6d1a2ec105c1b508ee"
+    },
+    "checkGroups": [
+      86981,
+      88364,
+      88361,
+      88362,
+      85290,
+      85637,
+      87999
+    ],
+    "remainingOwnedProcesses": [],
+    "checksSettled": true
+  },
+  "resources": {
+    "groups": [
+      90535,
+      91819,
+      86981,
+      88364,
+      88361,
+      88362,
+      85290,
+      85637,
+      87999,
+      90550,
+      91862,
+      1984
+    ],
+    "remainingOwnedProcesses": [],
+    "observedAt": "2026-10-11T21:24:59.616041+00:00",
+    "scope": "All recorded check, fuzz, QA runner and server process groups are absent. QA runners closed their browser and SDK sessions; each server cleanup reported port 5174 free at closure. The shared service and peer resources remain outside this ownership proof."
+  }
+}

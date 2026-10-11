@@ -1,3 +1,6 @@
+import { abandonSelfCost, activated } from "../../engine/dsl/builders";
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import { draw, erode } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,9 @@ export default card({
   cardNumber: 355,
   art: { x: 0, y: -0.362, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([abandonSelfCost()], erode(1)),
+    triggered(onDissolved(), draw(variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "iydbt55y6b",
 });

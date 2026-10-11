@@ -1,3 +1,5 @@
+import { activated, banishFromVoidCost, exhaustSelf } from "../../engine/dsl/builders";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 318,
   art: { x: 0, y: -0.471, scale: 1.77 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([exhaustSelf(), banishFromVoidCost(3)], draw(variant.amplified ? 2 : 1))],
+  verifiedText: "1c40qcy48dt",
 });

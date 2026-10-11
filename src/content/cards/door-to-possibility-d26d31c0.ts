@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { discover } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 20,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(discover({ cardType: "event" }, { chooseCost: true }))],
+  verifiedText: "1vkaflmxn0u",
 });
