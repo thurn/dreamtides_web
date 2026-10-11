@@ -1,0 +1,445 @@
+{
+  "bead": "hv-umm2.349",
+  "phase": 5,
+  "baseOid": "acbb9b71de3bd93b140a0b1e0c21b0aa5c73facb",
+  "implementMin": 25,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "installReported": 2,
+    "review": 41.53494477272034,
+    "knip": 3.342587947845459,
+    "full": 60.64220905303955,
+    "fuzz": 55.34720993041992,
+    "focused": 4.564420938491821
+  },
+  "hostLoad": 3.400390625,
+  "testDelta": {
+    "files": 0,
+    "lines": 235,
+    "jsdomFiles": 0,
+    "cases": 7
+  },
+  "friction": [
+    {
+      "tag": "published-event-contract-assumption",
+      "minutes": 1,
+      "note": "Initial negative incorrectly expected no resolved publication; resolveTop emits it before effects. Corrected the contract to keep the factual prefix and assert committed rollback; actual negative then reproduces lost printing for both active sides.",
+      "disposition": "Corrected within hv-umm2.349 before production writes; both initial and real negative logs retained."
+    }
+  ],
+  "sourceFileSha256": {
+    "src/engine/fold/slice.ts": "2db2f9726dc3e1ab8efc84abf7f97966d7c856eb1735e18a3c43ce88c32dc89f",
+    "src/engine/view/knowledge.ts": "c3fe4fbc62962d53729effe7617fe104f9fe48617236d4dedc71187c51f82f66",
+    "src/engine/effects/primitives/contracts/each-player.contracts.ts": "959613eb2d9ba298d3edcd8ccc57164b56638a67cbaa4c68e89ebf048cda4d80",
+    "docs/plan/engine-design.md": "b82214feb0288d4b90178daebf36b665724711fcc97ccae0955eda881f04b54c"
+  },
+  "design": {
+    "semantics": "Keep factual published event prefix and original engine.error; roll back gameplay and retain only matching published identities still tracked at the last published prompt.",
+    "approval": "Parent ACK before test writes; actual two-side negative before production ACK.",
+    "storage": "Recovery-only deterministic prefix replay consumes event snapshots immediately into two InstanceId/Printing/Variant maps bounded by committed physical instances; no persisted exposure schema/cache/UI event changes.",
+    "privateDisclosures": "Existing keepDisclosures API and same-place/deck/last-entry behavior unchanged.",
+    "logging": "Existing action, prompt-answer and error records reconstruct exact publications and recovered state in synthetic contract; no new log schema."
+  },
+  "negativeRegression": {
+    "reportedBase": "956235bc4",
+    "knowledgeSourceIdenticalToCurrentBase": true,
+    "log": "negative-reconstructed.log",
+    "result": "Both active-side cases fail only final post-recovery exposed printing assertion; all earlier log reconstruction, reload, unpublished-card redaction and gameplay rollback assertions pass.",
+    "exitCode": 1,
+    "initialTestAssumption": "negative.log initially expected no resolved event; resolveTop emits resolved before effects. The contract retains the actual prefix and tests committed rollback instead.",
+    "timing": "negative-reconstructed.json separates 7.773s heavy queue and 1.874s execution."
+  },
+  "failurePaths": {
+    "observedContracts": [
+      "both active sides: published first discard retained, never-published second discard hidden",
+      "all publications and actual action/prompt/error log chronology",
+      "full reconstruction from log action/answers and serialized mid-prompt reload",
+      "resources/zones rollback and pending cleared",
+      "published discard then return to hidden hand",
+      "Foresee chooser-only disclosure and committed opponent deck tracking",
+      "actual Discover blind shuffle ends newly exposed identity tracking",
+      "typed public reveal of opponent hand",
+      "valid created figment alive/abandoned-ceased: no invented committed identity"
+    ],
+    "invariantGuardsForColdReview": [
+      "recovery replay throw or non-suspended result",
+      "prompt/events/answers/display-state-hash reconstruction mismatch",
+      "fallback only proven final zone visibility and unchanged guarded private disclosure",
+      "matching printing kind/branded UUID/spark and copiable variant; Printing is readonly and no fabricated mutation contract is added",
+      "unreplayable persisted record has no Shown prefix (documented limitation)"
+    ]
+  },
+  "runtime": {
+    "allKnownPidsAbsent": true,
+    "pids": [
+      14982,
+      14983,
+      25107,
+      25108,
+      26239,
+      26240,
+      26924,
+      26925,
+      28140,
+      28141,
+      31293,
+      31295,
+      35159,
+      35161,
+      37607,
+      37674,
+      38093,
+      38276,
+      38409,
+      38538,
+      38655,
+      38778,
+      38895,
+      39013,
+      39130,
+      39236,
+      43151,
+      43152,
+      99569,
+      99570
+    ],
+    "containedSyntheticServerGroups": [
+      37607,
+      37674,
+      38093,
+      38276,
+      38409,
+      38538,
+      38655,
+      38778,
+      38895,
+      39013,
+      39130,
+      39236
+    ],
+    "pidProbeExit": 1,
+    "pidProbeOutput": "",
+    "noRunningMetadata": true,
+    "taskServers": false,
+    "realBrowserProviders": false,
+    "portsStartedOutsideContainedTests": [],
+    "initialToolSessions": {
+      "npmInstall56095": "exit0",
+      "initialNegative43347": "exit1/test assumption corrected",
+      "negativeBothSides44530": "exit1/actual regression"
+    }
+  },
+  "validationRuns": [
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retains only the knowledge already published"
+      ],
+      "queueS": 7.772721767425537,
+      "hostLoad": [
+        4.00927734375,
+        6.52880859375,
+        7.568359375
+      ],
+      "wrapperPid": 99569,
+      "commandPid": 99570,
+      "executionS": 1.8744149208068848,
+      "exitCode": 1,
+      "label": "negative-reconstructed"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retains only the knowledge already published"
+      ],
+      "queueS": 54.54483199119568,
+      "hostLoad": [
+        4.56494140625,
+        5.10205078125,
+        6.5673828125
+      ],
+      "wrapperPid": 14982,
+      "commandPid": 14983,
+      "executionS": 1.8747179508209229,
+      "exitCode": 0,
+      "label": "positive-core"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "eachPlayer"
+      ],
+      "queueS": 133.98757576942444,
+      "hostLoad": [
+        4.58251953125,
+        4.42236328125,
+        5.93798828125
+      ],
+      "wrapperPid": 25107,
+      "commandPid": 25108,
+      "executionS": 1.931772232055664,
+      "exitCode": 0,
+      "label": "focused-domain"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/view/view.test.ts"
+      ],
+      "queueS": 0.021013975143432617,
+      "hostLoad": [
+        3.8212890625,
+        4.203125,
+        5.75830078125
+      ],
+      "wrapperPid": 26239,
+      "commandPid": 26240,
+      "executionS": 4.843888759613037,
+      "exitCode": 0,
+      "label": "focused-final"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/view/view.test.ts"
+      ],
+      "queueS": 0.020122051239013672,
+      "hostLoad": [
+        3.9814453125,
+        4.20849609375,
+        5.697265625
+      ],
+      "wrapperPid": 26924,
+      "commandPid": 26925,
+      "executionS": 4.564420938491821,
+      "exitCode": 0,
+      "label": "focused-frozen"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 0.018426179885864258,
+      "hostLoad": [
+        3.400390625,
+        3.99560546875,
+        5.498046875
+      ],
+      "wrapperPid": 28140,
+      "commandPid": 28141,
+      "executionS": 41.53494477272034,
+      "exitCode": 0,
+      "label": "review"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "queueS": 0.025895118713378906,
+      "hostLoad": [
+        18.61376953125,
+        7.96044921875,
+        6.849609375
+      ],
+      "wrapperPid": 31293,
+      "commandPid": 31295,
+      "executionS": 3.342587947845459,
+      "exitCode": 0,
+      "label": "knip"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "queueS": 0.021828889846801758,
+      "hostLoad": [
+        19.30810546875,
+        9.02685546875,
+        7.26806640625
+      ],
+      "wrapperPid": 35159,
+      "commandPid": 35161,
+      "executionS": 60.64220905303955,
+      "exitCode": 0,
+      "label": "full"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2.349"
+      ],
+      "queueS": 0.019659042358398438,
+      "hostLoad": [
+        27.9453125,
+        14.95849609375,
+        9.75439453125
+      ],
+      "wrapperPid": 43151,
+      "commandPid": 43152,
+      "executionS": 55.34720993041992,
+      "exitCode": 0,
+      "label": "fuzz"
+    }
+  ],
+  "heavyQueueWaitS": 196.43207478523254,
+  "checks": {
+    "focused": {
+      "files": 3,
+      "tests": 205
+    },
+    "review": {
+      "tests": 2227
+    },
+    "full": {
+      "files": 216,
+      "tests": 2861,
+      "productionBundle": true
+    },
+    "knip": "passed",
+    "fuzz": {
+      "games": 300,
+      "steps": 151087,
+      "prompts": 2666,
+      "interactiveReruns": 274,
+      "failures": 0,
+      "seed": "hv-umm2.349"
+    }
+  },
+  "failurePathEvidence": "349-implementation-evidence/failure-paths.json",
+  "validationProvenance": "All runtime source and final contract hashes frozen before focused/review/knip/full/fuzz. A subsequent parent-approved documentation wording clarification distinguishes retained presentation events from the engine.error log record; prior and final doc hashes retained in scratch; runtime hashes unchanged.",
+  "excludedValidation": {
+    "browser": "No player presentation/workflow change; synthetic published fold/view contracts exercise runtime semantics.",
+    "weightedFuzz": "No printed entity authored or changed; explicit unweighted300-game smoke required by parent.",
+    "additionalFullRuns": "Final full passed; no runtime/test/config changes afterward."
+  },
+  "failurePathMatrix": [
+    {
+      "path": "reported knowledge loss / negative-before-positive",
+      "evidence": [
+        "negative-reconstructed.log: both active-side cases exit1 at post-recovery lost-printing assertion",
+        "positive-core.log: both cases pass after production repair"
+      ],
+      "contract": "retains only the knowledge already published before a later discard fails with %s active",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts",
+      "limits": "Executed negative on exact current base; reported956235bc4 knowledge source is byte-identical. No separate checkout or historical test module generated."
+    },
+    {
+      "path": "partial publications, unpublished failing-run cards, stable rollback, logs and restart/reload",
+      "contract": "retains only the knowledge already published before a later discard fails with %s active",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts",
+      "observables": "All three intent publications captured; first discard once, second absent; own/opposing post-recovery views, pending clear, side state values and full expected state hash. Full log action/answer replay and fresh adapter after serialized second prompt reproduce the exact event prefix and state."
+    },
+    {
+      "path": "public exposure then hidden return",
+      "contract": "keeps public identity learned during a published move even after the card returns to a hidden zone",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts"
+    },
+    {
+      "path": "chooser-only disclosure / committed other-side tracking",
+      "contract": "keeps private deck exposure limited to its chooser while retaining the other side's committed tracking",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts"
+    },
+    {
+      "path": "blind shuffle ends newly exposed tracking",
+      "contract": "respects a blind shuffle that ended tracking before the last published prompt",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts"
+    },
+    {
+      "path": "public reveal of hidden-zone identity",
+      "contract": "keeps identities from a public reveal while its cards remain in an opposing hand",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts"
+    },
+    {
+      "path": "newborn / ceased identity absent from committed state",
+      "contract": "recovers without inventing a committed identity for a published temporary figment ($id)",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts",
+      "observables": "Actual createInPlay in valid open back slot; alive and actual abandon/cease variants; no phantom instance or knownTo ID and invariants green."
+    },
+    {
+      "path": "stale / foreign / illegal / concurrent inputs",
+      "contract": "reloads to the second player's prompt after the first answered, rejecting stale, foreign, illegal and concurrent input",
+      "file": "src/engine/effects/primitives/contracts/each-player.contracts.ts",
+      "boundary": "Existing public contract unchanged; synchronous reducer keeps one in-flight step and one prompt-side actor."
+    },
+    {
+      "path": "cancellation, actor ownership and unchanged private guards",
+      "contracts": [
+        "restores the committed state when cancelled before the commit point",
+        "keeps only what the cancelled step's published private prompt showed its chooser",
+        "lets only the acting side cancel, never the opponent answering a prompt in its play",
+        "rejects a cancel after the commit point"
+      ],
+      "file": "src/engine/fold/fold.test.ts",
+      "limits": "Existing cancellation boundary contracts pass. New public effects here occur after commit, so the authored primitive prompts are non-cancellable; no invented precommit public-move fixture added."
+    },
+    {
+      "path": "original replay divergence / malformed or corrupt input error boundary",
+      "contracts": [
+        "detects a nondeterministic step on replay and leaves the committed state untouched",
+        "reports a reloaded divergent, illegal, complete, or overlong recorded prefix as an engine error",
+        "treats a malformed prompt, including duplicate candidates a forced answer would accept, as an engine error"
+      ],
+      "file": "src/engine/fold/fold.test.ts",
+      "limits": "Existing tests cover the original input/error boundary and unavailable Shown case, not direct execution of every newly added recovery-only verification branch."
+    },
+    {
+      "path": "new recovery-only replay exception / mismatch fallback",
+      "source": "src/engine/fold/slice.ts recovered()",
+      "coverage": "Cold-review invariant guards: replay throw/non-suspended result, prompt/events/answers/display hash mismatch fail closed to final published zone visibility plus guarded private disclosures; original error is retained.",
+      "limits": "Valid synthetic engine effects are deterministic and pure. No private rerun-counter/mocked helper test added to manufacture each branch. These branches have source review coverage, not claimed direct case coverage."
+    },
+    {
+      "path": "printing and variant identity mismatch",
+      "source": "src/engine/view/knowledge.ts sameIdentity()/keepPublishedKnowledge()",
+      "coverage": "Typed printing kind, branded catalog UUID and spark comparison, plus exact copiable variant; matches committed/exposure/final display.",
+      "limits": "Printing is readonly and the current valid domain has no within-step printing rewrite. No fabricated direct mutation test; union defensive guards are for cold review."
+    },
+    {
+      "path": "private exposure lifetime, shuffle, same place / last entry / deck position",
+      "contract": "keeps a disclosure on recovery only for cards still known where they sit, leaving the other side's knowledge alone",
+      "file": "src/engine/view/view.test.ts",
+      "evidence": "private-helper-provenance.json proves keepDisclosures function byte-identical to base; full existing private/view contracts pass."
+    },
+    {
+      "path": "new asynchronous writer / persistence or compensating event protocol",
+      "applicability": "None: the change is synchronous recovery within the existing fold, with no new storage field, event kind, UI state, actor, provider or partial-write boundary. Existing answers/slice replay remain authoritative."
+    }
+  ],
+  "frictionTriggerResult": {
+    "phase5Cadence": "19/79 since hv-umm2.339; below25 trigger",
+    "allFiredTagsDispositioned": true,
+    "ownTagCount": 1
+  }
+}

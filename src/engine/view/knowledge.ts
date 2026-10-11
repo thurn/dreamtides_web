@@ -14,9 +14,10 @@
  * - looking at the opponent's hand (`takeFromAmong(opponentHand())`) shows
  *   every card in it to the looker only; both private kinds go through
  *   `StepContext.disclose`, which calls `showPrivately`;
- * - what a step showed one side alone outlives the fold discarding the
- *   step, after an error or a cancel, once it has published a prompt
- *   (`keepDisclosures`).
+ * - published zone visibility and public reveals outlive an error or cancel
+ *   while the same printed identity remains tracked at the published prompt
+ *   (`keepPublishedKnowledge`); private-only exposure keeps its strict
+ *   location guards (`keepDisclosures`).
  *
  * Decks start unknown to both sides; the opening shuffle happens before any
  * card is known.
@@ -167,6 +168,69 @@ export function keepDisclosures(
       if (before === undefined || shown === undefined || !knows(display, shown, side)) continue;
       if (knows(next ?? committed, before, side)) continue;
       if (!sitsAlike(committed, before, display, shown)) continue;
+      next ??= { ...committed, knownTo: { player: [...committed.knownTo.player], enemy: [...committed.knownTo.enemy] } };
+      learn(next, side, before);
+    }
+  }
+  return next ?? committed;
+}
+
+/** Transient identities exposed in a published step prefix, bounded by its physical instances. */
+export type PublishedKnowledge = Record<Side, Map<InstanceId, Pick<CardInstance, "printing" | "variant">>>;
+
+/** Exact printed identity, including the instance's copiable variant. */
+function sameIdentity(a: Pick<CardInstance, "printing" | "variant">, b: Pick<CardInstance, "printing" | "variant">): boolean {
+  const left = a.printing;
+  const right = b.printing;
+  let same: boolean;
+  switch (left.kind) {
+    case "card":
+      same = right.kind === "card" && left.cardId === right.cardId;
+      break;
+    case "figment":
+      same = right.kind === "figment" && left.figment === right.figment && left.spark === right.spark;
+      break;
+    case "figmentCopy":
+      same = right.kind === "figmentCopy" && left.cardId === right.cardId && left.spark === right.spark;
+      break;
+  }
+  return same && JSON.stringify(a.variant) === JSON.stringify(b.variant);
+}
+
+/**
+ * Consumes one published event's state, or a prompt display, immediately:
+ * remember zone-visible identities and the typed subjects of a public
+ * reveal. Private knowledge alone is handled by `keepDisclosures`.
+ */
+export function capturePublicKnowledge(
+  committed: BattleState,
+  exposure: BattleState,
+  side: Side,
+  into: PublishedKnowledge,
+  revealed: readonly InstanceId[] = [],
+): void {
+  for (const instance of Object.values(exposure.instances)) {
+    const before = committed.instances[instance.id];
+    if (before === undefined || knows(committed, before, side) || !sameIdentity(before, instance)) continue;
+    if (!seenByZone(instance, side) && !revealed.includes(instance.id)) continue;
+    into[side].set(instance.id, { printing: instance.printing, variant: instance.variant });
+  }
+}
+
+/**
+ * Keep only published identities still tracked at the last shown prompt.
+ * The gameplay state rolls back; the matching card in it becomes known.
+ * A created/ceased identity, a changed printing, or knowledge lost to a
+ * blind shuffle supplies no identity for recovery.
+ */
+export function keepPublishedKnowledge(committed: BattleState, display: BattleState, exposures: PublishedKnowledge): BattleState {
+  let next: BattleState | null = null;
+  for (const side of SIDES) {
+    for (const [id, identity] of exposures[side]) {
+      const before = committed.instances[id];
+      const shown = display.instances[id];
+      if (before === undefined || shown === undefined || !sameIdentity(before, identity) || !sameIdentity(before, shown)) continue;
+      if (!knows(display, shown, side) || knows(next ?? committed, before, side)) continue;
       next ??= { ...committed, knownTo: { player: [...committed.knownTo.player], enemy: [...committed.knownTo.enemy] } };
       learn(next, side, before);
     }

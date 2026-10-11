@@ -1,20 +1,23 @@
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../../../catalog";
+import type { EngineCardDefinition, EngineFigmentDefinition } from "../../../catalog";
 import { enemyCharacter, event, target } from "../../../dsl/builders";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
+import type { EngineLogRecord } from "../../../log";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { ChooseCardsPrompt, PromptId } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
-import { instanceOf } from "../../../rules/zones";
+import { createInPlay, instanceOf, moveInstance, returnToHand } from "../../../rules/zones";
+import { abandonCharacter } from "../../../rules/costs";
+import { BASE_VARIANT } from "../../../dsl/types";
 import { stateHash } from "../../../state/hash";
-import { opponent, type InstanceId, type Side } from "../../../state/ids";
+import { opponent, parseFigmentId, type InstanceId, type Side } from "../../../state/ids";
 import { ScriptedSource } from "../../../steps/sources";
 import { boardState, type BoardSetup } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { playFromHand, runScenario } from "../../../testing/scenario";
 import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
-import { promptView } from "../../../view/view";
+import { promptView, view } from "../../../view/view";
 import { resolveEffect } from "../../interpreter";
 import { chooseOne } from "../choose-one";
 import { discard } from "../discard";
@@ -22,6 +25,9 @@ import { dissolve } from "../dissolve";
 import { draw } from "../draw";
 import { eachPlayer } from "../each-player";
 import { gainEnergy } from "../gain-energy";
+import { foresee } from "../foresee";
+import { discover } from "../discover";
+import { reveal } from "../reveal";
 import { sequence } from "../sequence";
 import { PickingSource, deck, v } from "./cards-support";
 
@@ -72,7 +78,82 @@ const eachDiscardsThenFail: EngineCardDefinition = {
   },
 };
 
-const eachEngine = createEngine(testCatalog([eachDiscards, eachDrawsThenYou, eachEmptiesHand, eachDiscardsForOpponent, eachDiscardsThenFail]));
+/** A discarded card returns to a hidden zone before the next prompt. */
+const discardReturnsThenFail: EngineCardDefinition = {
+  ...eachDiscardsThenFail, id: syntheticId(6205),
+  synthetic: {
+    resolve(ctx, item) {
+      const env = { source: item.instance, origin: instanceOrigin(instanceOf(ctx.state, item.instance)), ability: 0, controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] } };
+      resolveEffect(ctx, discard(1), env);
+      returnToHand(ctx, ctx.state.sides[item.controller].void[0]);
+      resolveEffect(ctx, discard(1, "opponent"), env);
+      throw new Error("synthetic failure after returning a discarded card");
+    },
+  },
+};
+
+const privateThenFail: EngineCardDefinition = {
+  ...eachDiscardsThenFail, id: syntheticId(6206),
+  synthetic: {
+    resolve(ctx, item) {
+      resolveEffect(ctx, sequence(foresee(2), eachPlayer(discard(1))), {
+        source: item.instance, origin: instanceOrigin(instanceOf(ctx.state, item.instance)), ability: 0,
+        controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] },
+      });
+      throw new Error("synthetic failure after private and public exposures");
+    },
+  },
+};
+
+/** A blind shuffle ends tracking of the publicly discarded card before the next prompt. */
+const discardShuffledThenFail: EngineCardDefinition = {
+  ...eachDiscardsThenFail, id: syntheticId(6210),
+  synthetic: {
+    resolve(ctx, item) {
+      const env = { source: item.instance, origin: instanceOrigin(instanceOf(ctx.state, item.instance)), ability: 0, controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] } };
+      resolveEffect(ctx, discard(1), env);
+      moveInstance(ctx, ctx.state.sides[item.controller].void[0], "deck");
+      resolveEffect(ctx, discover({}, { costExactly: 2 }), env);
+      resolveEffect(ctx, discard(1, "opponent"), env);
+      throw new Error("synthetic failure after a blind shuffle");
+    },
+  },
+};
+
+const revealThenFail: EngineCardDefinition = {
+  ...eachDiscardsThenFail, id: syntheticId(6211),
+  synthetic: {
+    resolve(ctx, item) {
+      resolveEffect(ctx, reveal("opponent"), {
+        source: item.instance, origin: instanceOrigin(instanceOf(ctx.state, item.instance)), ability: 0,
+        controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] },
+      });
+      eachDiscardsThenFail.synthetic!.resolve!(ctx, item);
+    },
+  },
+};
+
+const recoveryFigment: EngineFigmentDefinition = {
+  id: parseFigmentId(syntheticId(6209)), subtype: "Warrior", spark: 1, status: "authored", abilities: () => [],
+};
+
+const bornThenFail = (ceased: boolean): EngineCardDefinition => ({
+  ...eachDiscardsThenFail, id: syntheticId(ceased ? 6208 : 6207),
+  synthetic: {
+    resolve(ctx, item) {
+      const born = createInPlay(ctx, { kind: "figment", figment: recoveryFigment.id, spark: 1 }, item.controller, BASE_VARIANT, { rank: "back", index: 0 });
+      if (ceased) abandonCharacter(ctx, item.controller, born);
+      eachDiscardsThenFail.synthetic!.resolve!(ctx, item);
+    },
+  },
+});
+
+const bornAlive = bornThenFail(false);
+const bornCeased = bornThenFail(true);
+const eachEngine = createEngine(testCatalog([
+  eachDiscards, eachDrawsThenYou, eachEmptiesHand, eachDiscardsForOpponent, eachDiscardsThenFail,
+  discardReturnsThenFail, privateThenFail, discardShuffledThenFail, revealThenFail, bornAlive, bornCeased,
+], {}, [recoveryFigment]));
 
 const setup = (active: Side, card = eachDiscards.id): BoardSetup => {
   const other = opponent(active);
@@ -200,21 +281,175 @@ describe("eachPlayer", () => {
       expect(invariantViolations(done.committed, eachEngine.catalog)).toEqual([]);
     });
 
-    it("keeps nothing of either player's discard when the step fails after both answered", () => {
+    it.each(["player", "enemy"] as const)("retains only the knowledge already published before a later discard fails with %s active", (active) => {
+      const other = opponent(active);
+      const records: EngineLogRecord[] = [];
+      const fold = createFoldAdapter(eachEngine, { checkEventPrefix: true, log: (record) => records.push(record) });
+      const { state, ids } = boardState(eachEngine.catalog, setup(active, eachDiscardsThenFail.id));
+      const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      const publications: EngineEvent[] = [];
+      const collect = (outcome: IntentOutcome) => {
+        if (outcome.kind !== "applied") throw new Error("unexpected bounce");
+        publications.push(...outcome.published);
+        return outcome;
+      };
+      const first = applied(collect(fold.reduce(start, { kind: "battleAction", side: active, action: playFromHand(ids, active).action })));
+      const firstPrompt = fold.pending(first)!;
+      const exposed = ids[active].hand[1];
+      const unpublished = ids[other].hand[0];
+      const second = applied(collect(fold.reduce(first, { kind: "answer", side: active, promptId: firstPrompt.prompt.id, value: [exposed] })));
+      const secondPrompt = fold.pending(second)!;
+      expect(view(secondPrompt.display, other, eachEngine.catalog).instances[exposed]?.printing).toEqual(state.instances[exposed].printing);
+      expect(view(secondPrompt.display, active, eachEngine.catalog).instances[unpublished]).toBeUndefined();
+      const outcome = collect(fold.reduce(second, { kind: "answer", side: other, promptId: secondPrompt.prompt.id, value: [unpublished] }));
+      expect(outcome.error?.kind).toBe("engine_error");
+      expect(outcome.published).toEqual([]);
+      expect(discardedSides(publications)).toEqual([active]);
+      expect(outcome.slice.inFlight).toBeNull();
+      expect(fold.pending(outcome.slice)).toBeNull();
+      expect(outcome.slice.committed.sides[active].void).toEqual([]);
+      expect(outcome.slice.committed.sides[other].void).toEqual([]);
+      expect(outcome.slice.committed.sides).toEqual(second.committed.sides);
+      expect(view(outcome.slice.committed, active, eachEngine.catalog).instances[unpublished]).toBeUndefined();
+      const expected = { ...second.committed, knownTo: { ...second.committed.knownTo, [other]: [exposed] } };
+      expect(stateHash(second.committed)).toBe(stateHash(first.committed));
+      expect(records.filter((record) => ["engine.promptOpened", "engine.promptAnswered", "engine.error"].includes(record.event)).map((record) => record.event)).toEqual([
+        "engine.promptOpened", "engine.promptAnswered", "engine.promptOpened", "engine.promptAnswered", "engine.error",
+      ]);
+      expect(records.filter((record) => record.event === "engine.action").map((record) => record.action.kind)).toEqual(["play"]);
+      expect(records.filter((record) => record.event === "engine.promptAnswered").map((record) => record.value)).toEqual([[exposed], [unpublished]]);
+      const replayedFold = createFoldAdapter(eachEngine, { checkEventPrefix: true });
+      let replayedSlice = start;
+      const replayedEvents: EngineEvent[] = [];
+      let replayedError = false;
+      for (const record of records) {
+        const replayedOutcome = record.event === "engine.action"
+          ? replayedFold.reduce(replayedSlice, { kind: "battleAction", side: record.side, action: record.action })
+          : record.event === "engine.promptAnswered"
+            ? replayedFold.reduce(replayedSlice, { kind: "answer", side: record.side, promptId: replayedFold.pending(replayedSlice)!.prompt.id, value: record.value })
+            : null;
+        if (replayedOutcome === null) continue;
+        if (replayedOutcome.kind !== "applied") throw new Error("log replay bounced");
+        replayedEvents.push(...replayedOutcome.published);
+        replayedSlice = replayedOutcome.slice;
+        replayedError = replayedOutcome.error !== null;
+      }
+      expect(replayedError).toBe(true);
+      expect(replayedEvents).toEqual(publications);
+      expect(stateHash(replayedSlice.committed)).toBe(stateHash(outcome.slice.committed));
+      // A reload from the last published prompt recovers the same state.
+      const reloaded = createFoldAdapter(eachEngine, { checkEventPrefix: true });
+      const saved = JSON.parse(JSON.stringify(second)) as BattleSlice;
+      const again = reloaded.reduce(saved, { kind: "answer", side: other, promptId: reloaded.pending(saved)!.prompt.id, value: [unpublished] });
+      if (again.kind !== "applied") throw new Error("reload bounced");
+      expect(again.error?.kind).toBe("engine_error");
+      expect(again.published).toEqual([]);
+      expect(stateHash(again.slice.committed)).toBe(stateHash(outcome.slice.committed));
+      expect(view(again.slice.committed, active, eachEngine.catalog)).toEqual(view(outcome.slice.committed, active, eachEngine.catalog));
+      expect(view(again.slice.committed, other, eachEngine.catalog)).toEqual(view(outcome.slice.committed, other, eachEngine.catalog));
+      expect(view(outcome.slice.committed, other, eachEngine.catalog).instances[exposed]?.printing).toEqual(state.instances[exposed].printing);
+      expect(stateHash(outcome.slice.committed)).toBe(stateHash(expected));
+    });
+
+    it("keeps public identity learned during a published move even after the card returns to a hidden zone", () => {
       const fold = createFoldAdapter(eachEngine, { checkEventPrefix: true });
-      const { state, ids } = boardState(eachEngine.catalog, setup("player", eachDiscardsThenFail.id));
+      const { state, ids } = boardState(eachEngine.catalog, setup("player", discardReturnsThenFail.id));
       const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
       const first = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
-      const firstPrompt = fold.pending(first)!;
-      const second = applied(fold.reduce(first, { kind: "answer", side: "player", promptId: firstPrompt.prompt.id, value: [ids.player.hand[1]] }));
-      const secondPrompt = fold.pending(second)!;
-      const outcome = fold.reduce(second, { kind: "answer", side: "enemy", promptId: secondPrompt.prompt.id, value: [ids.enemy.hand[0]] });
-      if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected synthetic failure");
-      expect(outcome.published).toEqual([]);
-      expect(outcome.slice.inFlight).toBeNull();
-      expect(outcome.slice.committed).toEqual(second.committed);
-      expect(outcome.slice.committed.sides.player.void).toEqual([]);
-      expect(outcome.slice.committed.sides.enemy.void).toEqual([]);
+      const exposed = ids.player.hand[1];
+      const next = fold.reduce(first, { kind: "answer", side: "player", promptId: fold.pending(first)!.prompt.id, value: [exposed] });
+      const second = applied(next);
+      if (next.kind !== "applied") throw new Error("unexpected bounce");
+      expect(next.published.filter((event) => event.kind === "discarded" || event.kind === "returnedToHand").map((event) => event.kind)).toEqual(["discarded", "returnedToHand"]);
+      const pending = fold.pending(second)!;
+      expect(pending.display.instances[exposed].zone).toBe("hand");
+      expect(view(pending.display, "enemy", eachEngine.catalog).instances[exposed]?.printing).toEqual(state.instances[exposed].printing);
+      const done = fold.reduce(second, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: [ids.enemy.hand[0]] });
+      if (done.kind !== "applied") throw new Error("unexpected bounce");
+      expect(done.error?.kind).toBe("engine_error");
+      expect(done.published).toEqual([]);
+      expect(done.slice.inFlight).toBeNull();
+      expect(stateHash(done.slice.committed)).toBe(stateHash({ ...second.committed, knownTo: { player: [], enemy: [exposed] } }));
+      expect(view(done.slice.committed, "enemy", eachEngine.catalog).instances[exposed]?.printing).toEqual(state.instances[exposed].printing);
+      expect(view(done.slice.committed, "player", eachEngine.catalog).instances[ids.enemy.hand[0]]).toBeUndefined();
+    });
+
+    it("keeps private deck exposure limited to its chooser while retaining the other side's committed tracking", () => {
+      const fold = createFoldAdapter(eachEngine, { checkEventPrefix: true });
+      const { state, ids } = boardState(eachEngine.catalog, setup("player", privateThenFail.id));
+      const [top, secondCard] = ids.player.deck;
+      state.knownTo.enemy = [top];
+      const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      let slice = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
+      const privatePrompt = fold.pending(slice)!;
+      expect(view(privatePrompt.display, "enemy", eachEngine.catalog).sides.player.deck.known).toEqual([]);
+      slice = applied(fold.reduce(slice, { kind: "answer", side: "player", promptId: privatePrompt.prompt.id, value: [{ card: top, to: "top" }, { card: secondCard, to: "top" }] }));
+      const exposed = ids.player.hand[1];
+      slice = applied(fold.reduce(slice, { kind: "answer", side: "player", promptId: fold.pending(slice)!.prompt.id, value: [exposed] }));
+      const done = fold.reduce(slice, { kind: "answer", side: "enemy", promptId: fold.pending(slice)!.prompt.id, value: [ids.enemy.hand[0]] });
+      if (done.kind !== "applied") throw new Error("unexpected bounce");
+      expect(done.error?.kind).toBe("engine_error");
+      expect(done.slice.committed.knownTo).toEqual({ player: [top, secondCard], enemy: [top, exposed] });
+      expect(view(done.slice.committed, "player", eachEngine.catalog).sides.player.deck.known).toEqual([{ id: top, index: 0 }, { id: secondCard, index: 1 }]);
+      expect(view(done.slice.committed, "enemy", eachEngine.catalog).sides.player.deck.known).toEqual([{ id: top, index: 0 }]);
+      expect(stateHash(done.slice.committed)).toBe(stateHash({ ...slice.committed, knownTo: { player: [top, secondCard], enemy: [top, exposed] } }));
+    });
+
+    it("respects a blind shuffle that ended tracking before the last published prompt", () => {
+      const fold = createFoldAdapter(eachEngine, { checkEventPrefix: true });
+      const { state, ids } = boardState(eachEngine.catalog, setup("player", discardShuffledThenFail.id));
+      const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      const first = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
+      const exposed = ids.player.hand[1];
+      const second = applied(fold.reduce(first, { kind: "answer", side: "player", promptId: fold.pending(first)!.prompt.id, value: [exposed] }));
+      const pending = fold.pending(second)!;
+      expect(pending.prompt.side).toBe("enemy");
+      expect(pending.display.instances[exposed].zone).toBe("deck");
+      expect(view(pending.display, "enemy", eachEngine.catalog).instances[exposed]).toBeUndefined();
+      const discovered = ids.player.deck[1];
+      expect(view(pending.display, "player", eachEngine.catalog).instances[discovered]?.zone).toBe("hand");
+      const done = fold.reduce(second, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: [ids.enemy.hand[0]] });
+      if (done.kind !== "applied") throw new Error("unexpected bounce");
+      expect(done.error?.kind).toBe("engine_error");
+      expect(view(done.slice.committed, "enemy", eachEngine.catalog).instances[exposed]).toBeUndefined();
+      expect(stateHash(done.slice.committed)).toBe(stateHash({ ...second.committed, knownTo: { player: [discovered], enemy: [] } }));
+    });
+
+    it("keeps identities from a public reveal while its cards remain in an opposing hand", () => {
+      const fold = createFoldAdapter(eachEngine, { checkEventPrefix: true });
+      const { state, ids } = boardState(eachEngine.catalog, setup("player", revealThenFail.id));
+      const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      const first = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
+      expect(view(fold.pending(first)!.display, "player", eachEngine.catalog).sides.enemy.hand.known.map(({ id }) => id)).toEqual(ids.enemy.hand);
+      const exposed = ids.player.hand[1];
+      const second = applied(fold.reduce(first, { kind: "answer", side: "player", promptId: fold.pending(first)!.prompt.id, value: [exposed] }));
+      const done = fold.reduce(second, { kind: "answer", side: "enemy", promptId: fold.pending(second)!.prompt.id, value: [ids.enemy.hand[0]] });
+      if (done.kind !== "applied") throw new Error("unexpected bounce");
+      expect(done.error?.kind).toBe("engine_error");
+      expect(view(done.slice.committed, "player", eachEngine.catalog).sides.enemy.hand.known.map(({ id }) => id)).toEqual(ids.enemy.hand);
+      expect(stateHash(done.slice.committed)).toBe(stateHash({ ...second.committed, knownTo: { player: ids.enemy.hand, enemy: [exposed] } }));
+    });
+
+    it.each([bornAlive, bornCeased])("recovers without inventing a committed identity for a published temporary figment ($id)", (card) => {
+      const fold = createFoldAdapter(eachEngine, { checkEventPrefix: true });
+      const { state, ids } = boardState(eachEngine.catalog, setup("player", card.id));
+      const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      const firstOutcome = fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action });
+      const first = applied(firstOutcome);
+      if (firstOutcome.kind !== "applied") throw new Error("unexpected bounce");
+      const born = firstOutcome.published.find((event) => event.kind === "materialized");
+      if (born?.kind !== "materialized") throw new Error("expected a published materialize");
+      expect(first.committed.instances[born.instance]).toBeUndefined();
+      const exposed = ids.player.hand[1];
+      const second = applied(fold.reduce(first, { kind: "answer", side: "player", promptId: fold.pending(first)!.prompt.id, value: [exposed] }));
+      const done = fold.reduce(second, { kind: "answer", side: "enemy", promptId: fold.pending(second)!.prompt.id, value: [ids.enemy.hand[0]] });
+      if (done.kind !== "applied") throw new Error("unexpected bounce");
+      expect(done.error?.kind).toBe("engine_error");
+      expect(done.slice.committed.instances[born.instance]).toBeUndefined();
+      expect(done.slice.committed.knownTo.player).not.toContain(born.instance);
+      expect(done.slice.committed.knownTo.enemy).not.toContain(born.instance);
+      expect(stateHash(done.slice.committed)).toBe(stateHash({ ...second.committed, knownTo: { player: [], enemy: [exposed] } }));
+      expect(invariantViolations(done.slice.committed, eachEngine.catalog)).toEqual([]);
     });
 
     it("replays recorded answers for both players to an identical result", () => {

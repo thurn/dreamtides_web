@@ -5,7 +5,7 @@
  * (`src/rules/battle/engine-battle.ts`).
  */
 import type { Engine } from "../engine";
-import type { EngineEvent } from "../events";
+import { eventVisibleTo, type EngineEvent } from "../events";
 import { eventLogRecords, legalityLogRecords, promptOpenedRecord, stepLogRecords, type EngineLogRecord } from "../log";
 import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
@@ -14,9 +14,10 @@ import type { Answer, Prompt, PromptId } from "../prompts/types";
 import { allowedBy, type Action, type Decision } from "../rules/actions";
 import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
-import type { Side } from "../state/ids";
+import { SIDES, type Side } from "../state/ids";
+import { stateHash } from "../state/hash";
 import type { BattleInit, BattleState } from "../state/types";
-import { keepDisclosures } from "../view/knowledge";
+import { capturePublicKnowledge, keepDisclosures, keepPublishedKnowledge, type PublishedKnowledge } from "../view/knowledge";
 import { actionForStep, boundedLegality, nextAutomaticStep, stepForAction } from "../steps/driver";
 import { beginBattleStep } from "../steps/kinds/begin-battle";
 import type { Step } from "../steps/kinds";
@@ -74,8 +75,8 @@ export type BattleIntent =
  * A step that threw, or an in-flight record that no longer replays to a
  * prompt (a divergent or illegal recorded answer, answers left unused, or a
  * failed event-prefix check): the slice keeps `committed` and drops the
- * in-flight step, keeping only what a published prompt of the step showed
- * one side alone (`Shown`).
+ * in-flight step, keeping the knowledge its published events and prompt
+ * gave each side (`Shown`).
  */
 export interface EngineErrorRecord {
   readonly kind: "engine_error";
@@ -243,17 +244,6 @@ function errorMessage(error: unknown): string {
 /** The run of an in-flight step that suspended at the prompt the slice published. */
 type Shown = Extract<StepResult, { readonly kind: "suspended" }>;
 
-/**
- * The slice with `inFlight` cleared after an engine error or a cancel. When
- * the discarded step had published a prompt, `shown` is the run that
- * suspended there: the committed state keeps the knowledge its private
- * disclosures gave (`keepDisclosures`), and nothing else of the step.
- */
-function recovered(slice: BattleSlice, shown: Shown | null = null): BattleSlice {
-  const committed = shown === null ? slice.committed : keepDisclosures(slice.committed, shown.display, shown.disclosed);
-  return { committed, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
-}
-
 /** The slice with a new in-flight step opened from `committed`. */
 function opened(slice: BattleSlice, step: Step, automatic: boolean): BattleSlice {
   return {
@@ -328,6 +318,47 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       automatic: inFlight.automatic,
       searches: engine.memo.searches,
     });
+  }
+
+  /**
+   * Roll gameplay back while retaining identities already shown. Reconstruct
+   * only the published prompt's prefix, consuming event snapshots into a
+   * compact identity map. A failed/divergent reconstruction contributes no
+   * intermediate knowledge and cannot replace the original engine error.
+   */
+  function recovered(slice: BattleSlice, shown: Shown | null = null): BattleSlice {
+    let committed = slice.committed;
+    if (shown !== null) {
+      let exposures: PublishedKnowledge = { player: new Map(), enemy: new Map() };
+      for (const side of SIDES) capturePublicKnowledge(committed, shown.display, side, exposures);
+      if (slice.inFlight !== null) {
+        try {
+          const prefix: PublishedKnowledge = { player: new Map(), enemy: new Map() };
+          const again = runOnce(committed, { ...slice.inFlight, answers: shown.answers }, (event, snapshot) => {
+            const state = snapshot();
+            for (const side of SIDES) {
+              if (eventVisibleTo(event, side, state)) {
+                capturePublicKnowledge(committed, state, side, prefix, event.kind === "revealed" ? event.instances : []);
+              }
+            }
+          });
+          if (
+            again.kind === "suspended" &&
+            JSON.stringify(again.prompt) === JSON.stringify(shown.prompt) &&
+            JSON.stringify(again.events) === JSON.stringify(shown.events) &&
+            JSON.stringify(again.answers) === JSON.stringify(shown.answers) &&
+            stateHash(again.display) === stateHash(shown.display)
+          ) {
+            for (const side of SIDES) capturePublicKnowledge(committed, shown.display, side, prefix);
+            exposures = prefix;
+          }
+        } catch {
+          // The last published display still proves its zone visibility.
+        }
+      }
+      committed = keepPublishedKnowledge(keepDisclosures(committed, shown.display, shown.disclosed), shown.display, exposures);
+    }
+    return { committed, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
   }
 
   /**

@@ -439,8 +439,8 @@ The intents each name their `side`:
   - Appends the answer.
 - **`cancel(promptId)`**
   - Allowed only for the answering side of a cancellable prompt.
-  - Clears `inFlight` and advances `attempt`, keeping the step's private
-    disclosures (below).
+  - Clears `inFlight` and advances `attempt`, keeping the step's published
+    knowledge (below).
 
 An intent that is not allowed bounces with a reason (`battleOver`,
 `stepInFlight`, `notYourDecision`, `illegalAction`, `noPendingPrompt`,
@@ -463,7 +463,34 @@ After each applied intent, the reducer **advances**:
    - Return an `engine_error` record with the step, answers, and message, and
      log `engine.error`, for reproduction.
    - Clear `inFlight` and surface a recoverable error. `committed` keeps
-     nothing of the step but its private disclosures (below).
+     the gameplay state at the step boundary and the knowledge its published
+     events and prompt gave each side (below).
+
+**Published knowledge outlives a discarded step.** A published event or
+prompt can show a card in a public zone, in its holder's hand, or in a public
+reveal. Recovery retains that card's identity for the side that saw it when
+the same physical instance, printing and copiable variant exist in both the
+committed state and the last published prompt display, and the side still
+tracks it in that display. A subsequent blind shuffle or loss of tracking
+within the published prefix ends that knowledge. Created instances absent
+from the committed state and instances absent from the display contribute
+no recovered identity.
+
+The fold reconstructs only the answer prefix of the last published prompt.
+It consumes event snapshots immediately into per-side identity maps, bounded
+by the battle's physical instances. The reconstructed suspended result must
+match that prompt, answers, events and display state hash before its
+intermediate exposures count. A failed or divergent reconstruction retains
+only the zone visibility proved by the published final display and the
+private disclosures below; recovery preserves the original error.
+
+Presentation retains the actual published event prefix, and the fold logs
+`engine.error` for the failed attempt. The events describe what was shown
+during the attempt.
+Committed zones, resources, counters and RNG remain at the step boundary.
+No events emitted by the later failing run are published. Existing action,
+prompt-answer and error records reconstruct that factual prefix and the
+recovered state through log replay, including after reload.
 
 **Private disclosures outlive a discarded step.** A step shows cards to one
 side alone through `ctx.disclose` (a `privateTo` prompt as it opens, a look
@@ -481,9 +508,9 @@ has already seen what that prompt's run disclosed, so `committed` keeps it
   card sits in `committed` exactly where it sits there (zone, controller,
   last zone entry, and deck position). A disclosure that a later shuffle in
   the same step ended, or of a card the step had moved, is dropped.
-- Nothing else of the step carries over: not its moves, random draws, or
-  events, nor the other side's loss of track of the shown deck cards, since
-  the deck was never reordered. Knowledge lifetime rules then apply as
+- The gameplay state stays at its step boundary, including zones, resources
+  and RNG, and retains the other side's committed tracking of the shown deck
+  cards. Knowledge lifetime rules then apply as
   usual, so a later shuffle clears it.
 - It is a pure function of the slice and the intent, so a reload's replay
   of the log recovers the identical state, and its hash and serialization
@@ -504,8 +531,8 @@ Properties that follow:
 - **Events are deterministic,** so re-runs regenerate an identical prefix. The
   fold publishes only new events. With `checkEventPrefix` (development), it
   compares each re-run with the same step's previous answer prefix; a
-  mismatch, like any replay failure, becomes an `engine_error` that keeps
-  `committed`.
+  mismatch, like any replay failure, becomes an `engine_error` that recovers
+  the step-boundary gameplay state and any proven published knowledge.
 - **Logging.** The adapter hands its `log` callback the engine log records
   ([Randomness and replay](#randomness-and-replay)) of everything it does:
   the battle's init, each published event's record, every prompt opened,
@@ -1537,8 +1564,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - a look at the opponent's hand (`takeFromAmong` on `opponentHand`) shows
     the looker every card in it, even when what it may take is restricted
     or nothing qualifies; the prompt offers only the eligible cards.
-  - both private kinds go through `ctx.disclose`, and what a published
-    prompt's run disclosed survives the fold discarding the step
+  - both private kinds go through `ctx.disclose`; their guarded private
+    disclosures and identities exposed by published events or prompts
+    survive the fold discarding the step
     ([Decisions and prompts](#decisions-and-prompts)).
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: its purpose names a source card only when `side` can identify it
