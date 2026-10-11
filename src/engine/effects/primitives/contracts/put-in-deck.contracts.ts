@@ -16,6 +16,7 @@ import type { BattleState } from "../../../state/types";
 import type { AnswerSource } from "../../../steps/types";
 import { unannouncedChanges } from "../../../testing/announced-changes";
 import { boardState, type BoardSetup } from "../../../testing/board";
+import { invariantViolations } from "../../../testing/invariants";
 import { DSL_CARDS } from "../../../testing/dsl-cards";
 import { eventRedactionViolations } from "../../../testing/redaction";
 import { playFromHand } from "../../../testing/scenario";
@@ -52,12 +53,12 @@ const crow: EngineCardDefinition = {
   id: syntheticId(0x6306), cardType: "character", costs: [], spark: 1, subtype: "Spirit Animal", speed: "standard",
   status: "authored", abilities: () => [triggered(onMaterialized(), choosePlayer((player) => putInDeck([everyIn("void", {}, { player })], "bottom")))],
 };
-/** Looks at the top 3 and places them, then throws. */
+/** Places looked-at cards, performs a filtered same-deck relocation, then throws. */
 const ponderThenFail: EngineCardDefinition = {
   ...ponder, id: syntheticId(0x6307), abilities: () => [],
   synthetic: {
     resolve(ctx, item) {
-      resolveEffect(ctx, putFromTop(3, three), {
+      resolveEffect(ctx, sequence(putFromTop(3, three), putInDeck([everyIn("deck", { cardType: "event" })], "bottom")), {
         source: item.instance, origin: instanceOrigin(instanceOf(ctx.state, item.instance)),
         ability: 0, controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] },
       });
@@ -68,6 +69,8 @@ const ponderThenFail: EngineCardDefinition = {
 
 const opaqueDeck = eventCard(9, putInDeck([everyIn("deck", { cardType: "event" })], "bottom"));
 const mixedDeck = eventCard(10, putInDeck([everyIn("deck", { cardType: "character" })], "bottom"));
+const opaqueTop = eventCard(16, putInDeck([everyIn("deck", { cardType: "event" })], "top"));
+const partialStack = eventCard(17, putInDeck([self(), target(enemyCharacter())], "top"));
 const reversedVoid = eventCard(11, putInDeck([everyIn("void", { costAtLeast: 2 }), everyIn("void", { costAtMost: 1 })], "top"));
 const chosenVoid = eventCard(12, putInDeck([fromVoid({}, { count: 2 })], "bottom"));
 const selfOnStack = eventCard(13, putInDeck([self()], "top"));
@@ -77,7 +80,7 @@ const subjectOnStack: EngineCardDefinition = {
 };
 const arrangeMany = eventCard(15, putFromTop(3, [{ to: "top", count: 2 }, { to: "bottom", count: 1 }]));
 
-const engine = createEngine(testCatalog([...DSL_CARDS, ponder, ponderRest, tuck, ponderThenShuffle, cycleTop, voidOnTop, crow, ponderThenFail, opaqueDeck, mixedDeck, reversedVoid, chosenVoid, selfOnStack, subjectOnStack, arrangeMany]));
+const engine = createEngine(testCatalog([...DSL_CARDS, ponder, ponderRest, tuck, ponderThenShuffle, cycleTop, voidOnTop, crow, ponderThenFail, opaqueDeck, mixedDeck, opaqueTop, partialStack, reversedVoid, chosenVoid, selfOnStack, subjectOnStack, arrangeMany]));
 
 /** Answers each prompt from `respond`, keeping every prompt and the state it was asked in. */
 class Answers implements AnswerSource {
@@ -256,20 +259,48 @@ describe("putInDeck", () => {
     expect(placed(onTop.events)).toMatchObject([{ to: "deckTop", cards: voided }]);
   });
 
-  for (const card of [opaqueDeck, mixedDeck]) {
-    it(`forgets uncertain deck positions after an opaque relocation (${card.id})`, () => {
-      const { state, ids } = boardState(engine.catalog, setup(card.id, { deck: [v.event0.id, v.vanilla1.id, v.vanilla2.id] }));
-      const tracked = ids.player.deck[1];
-      const otherDeck = ids.enemy.deck[0];
-      state.knownTo = { player: [tracked, otherDeck], enemy: [tracked, otherDeck] };
+  const c = v.vanilla1.id;
+  const e = v.event0.id;
+  const relocations = [
+    { label: "known prefix", deck: [c, e, e], moved: [1, 2], seen: [[0], [0]], retained: [[0], [0]] },
+    { label: "known prefix with partial anonymous removal", deck: [c, e, c], moved: [1], seen: [[0], [0]], retained: [[0], [0]] },
+    { label: "every anonymous slot moves", deck: [e, c, e], moved: [0, 2], seen: [[1], [1]], retained: [[1], [1]] },
+    { label: "anonymous removal above", deck: [e, c, c], moved: [0], seen: [[1], [1]], retained: [[], []] },
+    { label: "anonymous removal below", deck: [c, c, e], moved: [2], seen: [[1], [1]], retained: [[], []] },
+    { label: "known mover before", deck: [e, e, c, c], moved: [0, 1], seen: [[1, 2], [2]], retained: [[1, 2], []] },
+    { label: "known mover after", deck: [c, c, e, e], moved: [2, 3], seen: [[1, 2], [1]], retained: [[1, 2], []] },
+    { label: "known mover among anonymous movers", deck: [e, e, e], moved: [0, 1, 2], seen: [[1], [1]], retained: [[1], [1]] },
+  ];
+  for (const card of [opaqueTop, opaqueDeck, mixedDeck]) for (const entry of card === mixedDeck
+    ? [{ label: "mixed character movers", deck: [e, c, c], moved: [1, 2], seen: [[1], [1]], retained: [[1], [1]] }]
+    : relocations) {
+    it(`retains only provable positions (${entry.label}, ${card.id})`, () => {
+      const board = setup(card.id, { deck: entry.deck });
+      const { state, ids } = boardState(engine.catalog, { ...board, enemy: { ...board.enemy, hand: [c] } });
+      const unaffected = [ids.enemy.deck[0], ids.enemy.hand[0]];
+      const viewers = ["player", "enemy"] as const;
+      for (const [index, side] of viewers.entries()) state.knownTo[side] = [...entry.seen[index].map((position) => ids.player.deck[position]), ...unaffected];
       const played = engine.apply(state, "player", playFromHand(ids, "player").action, inOrder());
       const resolved = passUntil(engine, played.state, (next) => next.stack.length === 0, inOrder());
       const after = resolved.state;
-      expect(eventRedactionViolations([...played.events, ...resolved.events], state, after)).toEqual([]);
-      for (const side of ["player", "enemy"] as const) {
-        expect(view(after, side, engine.catalog).sides.enemy.deck.known).toEqual([{ id: otherDeck, index: 0 }]);
-        expect(view(after, side, engine.catalog).sides.player.deck.known).toEqual([]);
-        expect(after.knownTo[side]).not.toContain(tracked);
+      const events = [...played.events, ...resolved.events];
+      const movers = entry.moved.map((position) => ids.player.deck[position]);
+      const rest = ids.player.deck.filter((_, position) => !entry.moved.includes(position));
+      const expected = card === opaqueTop ? [...movers, ...rest] : [...rest, ...movers];
+      expect(after.sides.player.deck).toEqual(expected);
+      expect(placed(events)).toHaveLength(1);
+      expect(placed(events)[0]).toMatchObject({ cards: movers, from: movers.map(() => "deck") });
+      expect(eventRedactionViolations(events, state, after)).toEqual([]);
+      expect(unannouncedChanges(events, state, after)).toEqual([]);
+      expect(invariantViolations(after, engine.catalog)).toEqual([]);
+      for (const [index, side] of viewers.entries()) {
+        const visible = view(after, side, engine.catalog);
+        const retained = entry.retained[index].map((position) => ids.player.deck[position]);
+        expect(visible.sides.enemy.deck.known).toEqual([{ id: unaffected[0], index: 0 }]);
+        expect(visible.instances[unaffected[1]].printing).toEqual(state.instances[unaffected[1]].printing);
+        expect(known(after, side)).toEqual(retained.map((id) => ({ id, index: expected.indexOf(id) })).sort((a, b) => a.index - b.index));
+        expect(eventSeenBy(placed(events)[0], side, after)).toMatchObject({ cards: entry.moved.map((position) => entry.seen[index].includes(position) ? ids.player.deck[position] : null) });
+        for (const position of entry.seen[index]) expect(visible.instances[ids.player.deck[position]]?.printing).toEqual(retained.includes(ids.player.deck[position]) ? state.instances[ids.player.deck[position]].printing : undefined);
       }
     });
   }
@@ -311,6 +342,16 @@ describe("putInDeck", () => {
       expect(result.state.sides.player.deck).not.toContain(result.ids.player.hand[0]);
     });
   }
+
+  it("skips a stack reference while moving a legal target without a failure notice", () => {
+    const board = setup(partialStack.id);
+    const result = play({ ...board, enemy: { ...board.enemy, back: [c] } }, inOrder());
+    const victim = result.ids.enemy.back[0]!;
+    expect(result.state.sides.enemy.deck[0]).toBe(victim);
+    expect(placed(result.events)).toMatchObject([{ cards: [victim], from: ["play"] }]);
+    expect(result.events.some((event) => event.kind === "noLegalTarget")).toBe(false);
+    expect(result.state.sides.player.deck).not.toContain(result.ids.player.hand[0]);
+  });
 
   for (const position of ["beforeLook", "afterShuffle", "knownBeforeShuffle"] as const) {
     it(`judges event-local visibility (${position})`, () => {
@@ -363,9 +404,10 @@ describe("putInDeck", () => {
 
 describe("putInDeck in the fold", () => {
   const fold = () => createFoldAdapter(engine, { checkEventPrefix: true });
-  const opened = (card: CardId) => {
+  const opened = (card: CardId, tracked: readonly number[] = []) => {
     const adapter = fold();
     const { state, ids } = boardState(engine.catalog, setup(card));
+    for (const side of ["player", "enemy"] as const) state.knownTo[side] = tracked.map((index) => ids.player.deck[index]);
     const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
     return { adapter, state, ids, opening: adapter.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }) };
   };
@@ -414,12 +456,13 @@ describe("putInDeck in the fold", () => {
     expect(stateHash(applied(fold().reduce(suspended, answer)).committed)).toBe(stateHash(done.committed));
   });
 
-  it("commits no placement when the step fails after it, and the opponent learns nothing", () => {
-    const { adapter, ids, opening } = opened(ponderThenFail.id);
+  it("commits no placement or positional forgetting when the step fails after a filtered relocation", () => {
+    const { adapter, ids, opening } = opened(ponderThenFail.id, [5]);
     const suspended = applied(opening);
     const state = suspended.committed;
     const pending = adapter.pending(suspended)!;
     const [a, b, c] = ids.player.deck as [InstanceId, InstanceId, InstanceId];
+    const middle = ids.player.deck[5];
     const outcome = adapter.reduce(suspended, {
       kind: "answer", side: "player", promptId: pending.prompt.id,
       value: [{ card: c, to: "top" }, { card: a, to: "bottom" }, { card: b, to: "hand" }],
@@ -434,11 +477,13 @@ describe("putInDeck in the fold", () => {
       value: [{ card: c, to: "top" }, { card: a, to: "bottom" }, { card: b, to: "hand" }] });
     if (replayed.kind !== "applied" || replayed.error === null) throw new Error("expected replayed engine error");
     expect(stateHash(replayed.slice.committed)).toBe(stateHash(committed));
-    expect(committed.knownTo).toEqual({ player: [a, b, c], enemy: [] });
+    expect(committed.knownTo.player).toHaveLength(4);
+    expect(committed.knownTo.player).toEqual(expect.arrayContaining([a, b, c, middle]));
+    expect(committed.knownTo.enemy).toEqual([middle]);
     for (const side of ["player", "enemy"] as const) {
       const visible = view(committed, side, engine.catalog);
       expect(view(replayed.slice.committed, side, engine.catalog)).toEqual(visible);
-      expect(visible.sides.player.deck.known).toEqual(side === "player" ? [a, b, c].map((id, index) => ({ id, index })) : []);
+      expect(visible.sides.player.deck.known).toEqual([...(side === "player" ? [a, b, c].map((id, index) => ({ id, index })) : []), { id: middle, index: 5 }]);
       for (const id of [a, b, c]) expect(visible.instances[id]?.printing).toEqual(side === "player" ? state.instances[id].printing : undefined);
     }
     expect(adapter.pending(outcome.slice)).toBeNull();

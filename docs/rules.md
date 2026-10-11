@@ -949,10 +949,22 @@ void longest ends up nearest the bottom. A created card ceases to exist
 instead, and a reclaimed card is banished instead (see [Zone
 Changes](#zone-changes)).
 
-A player who saw a card go into a deck this way keeps knowing where it is
-until that deck is shuffled, including a card that stays on top of your deck
-after you look at it. A card from a void or from play is seen by both
-players, and a card from the top of your deck you looked at only by you.
+A player who saw a card go into a deck this way knows its new position,
+including a card that stays on top of your deck after you look at it. A card
+from a void or from play is seen by both players, and a card from the top of
+your deck you looked at only by you. Both players see how many cards move,
+their source zones, and their ordered places in the group; the identities
+they cannot identify stay hidden.
+
+When cards move within an unshuffled deck, a player keeps knowing a card's
+position only when the positions they knew and the visible movement determine
+it. A moved card they could identify has a known new position from its place
+in the ordered group, even when other movers are unidentified. For a card
+that stays in the deck, knowing how many cards were removed before it can
+determine its new position. If the visible movement permits different
+positions for that card, the player loses track of it. Moving an exact
+unfiltered top group keeps the other known positions inferable. Shuffling
+the deck ends all position tracking in it.
 
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played. Copies of cards on the stack

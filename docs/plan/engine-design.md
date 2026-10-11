@@ -1278,7 +1278,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, in reference order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, in original source-zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
@@ -1596,11 +1596,20 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - a revealed card becomes known to both sides;
   - a card put on top of or on the bottom of a deck (`putInDeck`,
     `putFromTop`) stays known, at its new place, to every side that could
-    see it go there, until the deck is shuffled. An opaque relocation within
-    that deck drops positional memory for a side that cannot identify every
-    mover; exact unfiltered top-prefix moves and fully observed moves keep
-    inferable positions. The placement event retains movement visibility
-    independently of final positional memory;
+    see it go there, while its position remains inferable. An unshuffled
+    same-deck relocation keeps known movers: public ordered placement slots
+    and counts determine their new positions even among unidentified movers.
+    For known nonmovers, original known mover positions bound intervals;
+    their public placement slots count anonymous removals within each interval.
+    With U such removals and P anonymous original slots before a known
+    nonmover and Q after it, its rank is inferable exactly when
+    `max(0, U-Q) === min(P, U)`. Unidentified movers' actual original indices
+    do not justify positional knowledge. Original decks and viewer knowledge
+    are captured before forgetting or moving. Valid deck cards have neither
+    created nor reclaimed replacement status: ordinary zone entry makes
+    created cards cease and sends reclaimed cards to Banished. Exact
+    unfiltered top-prefix moves preserve inferable positions. The placement
+    event retains movement visibility independently of final positional memory;
   - shuffling a deck (`shuffleInto`, Discover) drops every card in it out
     of both sides' knowledge;
   - a `privateTo` prompt shows its cards to its chooser only as it opens,

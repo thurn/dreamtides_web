@@ -110,10 +110,54 @@ export function settleKnowledge(state: BattleState, instance: CardInstance, seer
   for (const side of seers) learn(state, side, instance);
 }
 
-/** An opaque relocation within a deck makes its remembered exact positions uncertain for `viewer`. */
-export function forgetDeckPositions(state: BattleState, owner: Side, viewer: Side): void {
-  const deck = state.sides[owner].deck;
-  state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !deck.includes(id));
+/**
+ * Before an ordered, unshuffled placement, forget only deck positions its
+ * public movement cannot determine. `cards` has original source-zone order;
+ * valid deck cards enter their own deck without a created/reclaimed replacement.
+ *
+ * Known movers keep their identity: the placement's ordered slots and count
+ * determine their new positions independently of unidentified mover origins.
+ * Their original positions and public slots also bound how many anonymous
+ * cards were removed between adjacent known movers. Within each such interval,
+ * U removals from P anonymous slots before a known nonmover and Q after it
+ * remove between max(0, U-Q) and min(P, U) before it. Retain it exactly when
+ * those bounds agree. Unidentified movers' actual original indices supply
+ * no evidence. Original decks and both viewers' knowledge are captured before
+ * any forgetting or ordinary zone movement.
+ */
+export function forgetDeckPositions(state: BattleState, cards: readonly InstanceId[]): void {
+  const decks = SIDES.map((owner) => [...state.sides[owner].deck]);
+  const viewers = SIDES.map((viewer) => ({ viewer, known: new Set(state.knownTo[viewer]), forgotten: new Set<InstanceId>() }));
+  for (const deck of decks) {
+    const movers = cards.filter((id) => deck.includes(id));
+    if (movers.length === 0) continue;
+    const moving = new Set(movers);
+    for (const { known, forgotten } of viewers) {
+      const anchors = [
+        { original: -1, placed: -1 },
+        ...deck.flatMap((id, original) => known.has(id) && moving.has(id) ? [{ original, placed: movers.indexOf(id) }] : []),
+        { original: deck.length, placed: movers.length },
+      ];
+      for (let index = 1; index < anchors.length; index++) {
+        const before = anchors[index - 1];
+        const after = anchors[index];
+        const interval = deck.slice(before.original + 1, after.original);
+        const anonymous = interval.filter((id) => !known.has(id)).length;
+        const removed = after.placed - before.placed - 1;
+        let preceding = 0;
+        for (const id of interval) {
+          if (!known.has(id)) {
+            preceding += 1;
+          } else if (Math.max(0, removed - (anonymous - preceding)) !== Math.min(preceding, removed)) {
+            forgotten.add(id);
+          }
+        }
+      }
+    }
+  }
+  for (const { viewer, forgotten } of viewers) {
+    state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !forgotten.has(id));
+  }
 }
 
 /** Both sides learn the revealed cards. */

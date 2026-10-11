@@ -1,0 +1,83 @@
+{
+  "bead": "hv-8395",
+  "phase": 5,
+  "baseOid": "6b08e79c6ec82b6e6b38e7601a2bc9d90916ab4f",
+  "implementMin": 19.33,
+  "implementMinEstimated": true,
+  "implementationTimingBasis": "Fresh npm-install node_modules birth time at first helper command; includes design/test/source ACK waits. Final source checks precede evidence and commit.",
+  "localValidationS": {
+    "focused-final": 4.512561798095703,
+    "review": 37.52457904815674,
+    "knip": 3.709083080291748,
+    "full": 56.74558901786804,
+    "fuzz": 59.469088077545166
+  },
+  "heavyQueueWaitS": {
+    "full": 0.024817943572998047,
+    "fuzz": 0.024605989456176758
+  },
+  "hostLoad": 25.43,
+  "validationLoad": {
+    "focused-final": "{ 4.46 6.78 9.73 }",
+    "review": "{ 5.75 6.91 9.68 }",
+    "knip": "{ 10.67 7.88 9.82 }",
+    "full": "{ 14.38 8.70 10.10 }",
+    "fuzz": "{ 25.43 12.95 11.59 }"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 45,
+    "jsdomFiles": 0,
+    "cases": 16,
+    "note": "Existing coherent module has 491 lines; 17 parameterized positional cases replace two blanket-forgetting cases, one mixed-stack notice case is added, and the existing rollback fixture exercises a known middle card and filtered relocation."
+  },
+  "friction": [],
+  "negativeRegression": {
+    "manifest": "negative-prefix-manifest.json",
+    "log": "negative-prefix-contracts.log",
+    "exit": 1,
+    "failed": 14,
+    "passed": 26,
+    "skipped": 241,
+    "productionUnchanged": true,
+    "first12FailureEvidenceRetained": "negative-final-manifest.json and negative-final-contracts.log",
+    "assertions": "Thirteen positional cases expected exact visible id/index entries but received []; the legal victim moved before the noLegalTarget assertion expected false and received true."
+  },
+  "checks": {
+    "focused": {
+      "files": 3,
+      "tests": 326
+    },
+    "review": {
+      "files": 157,
+      "tests": 2369
+    },
+    "knip": "passed",
+    "full": {
+      "files": 216,
+      "tests": 3008,
+      "productionBundle": true
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 151340,
+      "prompts": 2852,
+      "interactiveReruns": 282,
+      "failures": 0,
+      "seed": "hv-8395",
+      "weighted": false
+    }
+  },
+  "rulesDecision": "RD-hv-8395-1",
+  "fallout": [],
+  "runtimeEvidence": "runtime-final.json: all recorded wrapper/npm/controller PIDs and all 12 synthetic server groups are absent; no worktree-rooted process.",
+  "rendererProvenance": "renderer-provenance.json matches six renderer/event/authored-consumer files to the exact base; the affected combinations are synthetic future library contracts.",
+  "browserQa": "No task-specific browser workflow: the existing authored Augur Crow void consumer and presentation match the base. Full aggregate synthetic lease/server tests passed and cleaned up.",
+  "validStateLimit": "Created/reclaimed cards cannot enter valid decks. deserializeState trusts JSON; arbitrary corrupted input is outside the premise. No malformed-state support is added.",
+  "validationProvenance": "Final focused/review/knip/full/fuzz manifests share identical production and contract before/after SHA256 values. Only evidence documents are written afterward. Parent owns exact-commit other-family review and native promotion.",
+  "frictionTriggerResult": {
+    "exit": 0,
+    "allFiredTagsDispositioned": true,
+    "phase5Cadence": "15 of 100 friction files since hv-umm2.355; cadence is 25. This is the own-worktree ledger snapshot, and parent owns authoritative shared-duty resolution."
+  }
+}

@@ -67,16 +67,11 @@ export const putInDeckPrimitive = definePrimitive<PutInDeckNode>({
     if (node.from === "cards") {
       const named = [...new Set(node.cards.flatMap((ref) => resolveCards(ctx, ref, env)))];
       const eligible = named.filter((id) => instanceOf(ctx.state, id).zone !== "stack");
-      if (eligible.length !== named.length) ctx.emit({ kind: "noLegalTarget", source: env.source });
+      if (eligible.length === 0 && named.length > 0) ctx.emit({ kind: "noLegalTarget", source: env.source });
       const ordered = sourceZoneOrder(ctx, eligible);
       const seers = new Map(ordered.map((id) => [id, SIDES.filter((viewer) => identifies(ctx.state, id, viewer))]));
       const exactPrefix = node.cards.every((ref) => ref.kind === "inZone" && ref.pick === "top" && Object.keys(ref.filter).length === 0);
-      for (const owner of SIDES) {
-        const movers = ordered.filter((id) => instanceOf(ctx.state, id).zone === "deck" && instanceOf(ctx.state, id).owner === owner);
-        for (const viewer of SIDES) {
-          if (!exactPrefix && movers.some((id) => seers.get(id)?.includes(viewer) !== true)) forgetDeckPositions(ctx.state, owner, viewer);
-        }
-      }
+      if (!exactPrefix) forgetDeckPositions(ctx.state, ordered);
       placeAll(ctx, ordered, node.at === "top" ? "deckTop" : "deckBottom", seers);
       return;
     }
