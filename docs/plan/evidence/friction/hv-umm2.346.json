@@ -1,0 +1,181 @@
+{
+  "bead": "hv-umm2.346",
+  "phase": 5,
+  "baseOid": "a2311a64316010642c4e0b5a42e731828958bb91",
+  "implementMin": 7,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "installReported": 2,
+    "focused": 2.7555696964263916,
+    "review": 10.827713012695312,
+    "knip": 2.955357313156128
+  },
+  "heavyQueueWaitS": 22.086788177490234,
+  "validationRuns": [
+    {
+      "wrapperPid": 85766,
+      "waitS": 22.086788177490234,
+      "hostLoad": [
+        3.22119140625,
+        5.5126953125,
+        8.705078125
+      ],
+      "commands": [
+        {
+          "label": "focused",
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/effects/primitives/contracts.test.ts"
+          ],
+          "pid": 85778,
+          "port": null,
+          "exitCode": 0,
+          "seconds": 2.7555696964263916
+        },
+        {
+          "label": "review",
+          "command": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "pid": 85876,
+          "port": null,
+          "exitCode": 0,
+          "seconds": 10.827713012695312
+        },
+        {
+          "label": "knip",
+          "command": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "pid": 86217,
+          "port": null,
+          "exitCode": 0,
+          "seconds": 2.955357313156128
+        }
+      ]
+    }
+  ],
+  "sourceFileSha256": {
+    "scripts/content-inventory.ts": "3a4e1441162cf56464fdec05c47b6dbc8716fa043e75744c1c6dc5983b8d5acd",
+    "src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+    "docs/plan/engine-design.md": "0cd4b13d9b2793a33276e526bd6947f2150d04755dd797b467cffad4605b8857",
+    "docs/plan/phase-3-engine.md": "f139e4544c4c0888c4a59afc7c73822e4c28b7796aa710056f45703413bcce4f",
+    "docs/plan/phase-5-content.md": "dc3af908c34ffa195b3ae42b3850d9e525c0d1d4359b8ce759976595603830f8",
+    "docs/plan/evidence/pre-existing/hv-umm2.346.md": "76a3eaa488cf228819b18237899d3a0d05c2679de7af4744535997a030f75ae8"
+  },
+  "nonTestProductionDeltaLines": 9,
+  "nonTestLogicChurnLines": 7,
+  "testDelta": {
+    "files": 0,
+    "lines": 4,
+    "cases": 0,
+    "jsdomFiles": 0,
+    "description": "Runner documentation only; contract and support bodies unchanged."
+  },
+  "generatorEquivalence": {
+    "evidenceDirectory": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/346-implementation-evidence",
+    "baselineCheckExit": 1,
+    "baselineCheckLog": "baseline-check.log",
+    "trackedArtifactSha256": "f8ba7e3c2e0d2f8c234ad5e03f2a4c5645c12873a3f84b57db7961627d8b9f41",
+    "baselineSha256": "8764fcde973fc5c170ee70fb054d731f4a64ab27299fd9a475432e9458d0e297",
+    "postSha256": "8764fcde973fc5c170ee70fb054d731f4a64ab27299fd9a475432e9458d0e297",
+    "outputBytes": 1055899,
+    "byteEquivalent": true,
+    "mappingSha256": "76e16314a84391a47e47c3e5e8335daf8661c825e235c399c343fbd5a9e59baf",
+    "mappingRecords": 188,
+    "nullContractMappings": 64,
+    "mappingByteEquivalent": true,
+    "canonicalBanishXCostPath": "src/engine/effects/primitives/contracts/banish-xcost.contracts.ts",
+    "contractSupportFilesHashUnchanged": 39,
+    "trackedOutputUnchanged": true,
+    "baselineStatusChanges": [
+      {
+        "uuid": "0211963d-d097-4427-9d16-5e857621e481",
+        "tracked": "pending",
+        "current": "authored"
+      },
+      {
+        "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+        "tracked": "pending",
+        "current": "authored"
+      },
+      {
+        "uuid": "4b20e66e-2466-4518-8ef9-67f580bd6f14",
+        "tracked": "pending",
+        "current": "authored"
+      },
+      {
+        "uuid": "8571d7b3-5401-4678-9e81-e14538c8c46e",
+        "tracked": "pending",
+        "current": "authored"
+      },
+      {
+        "uuid": "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9",
+        "tracked": "pending",
+        "current": "authored"
+      }
+    ],
+    "baselineCaptureAndHashSummaryToolWallS": 0.396652125,
+    "generatorCommandTiming": "Generator captures were not separately timed; heavy command and queue timings are measured independently.",
+    "analysisMethod": "Original generator imported with process-local fs.writeFileSync redirection to external output. Temporary sibling module suppresses main() and appends runtime mapping serialization, then is deleted after import settles.",
+    "generatedArtifactDisposition": "Preserved unchanged by explicit parent ACK; hv-umm2.347 owns refresh and planning-authority documentation."
+  },
+  "friction": [
+    {
+      "tag": "inventory-generator-drift",
+      "minutes": 2,
+      "description": "Baseline --check detects five authored catalog status changes; preserve exact current output and unchanged mapping instead of refreshing shared projection in this bounded predicate/docs task. Parent disposition hv-umm2.347."
+    }
+  ],
+  "qa": {
+    "browser": "No UI/runtime behavior change; no browser, provider or server started.",
+    "full": "Not required: comments and classification-preserving predicate only; no test infrastructure behavior or configuration change.",
+    "runtimeLedger": {
+      "execSessions": [
+        {
+          "id": 12653,
+          "purpose": "install",
+          "exitCode": 0
+        },
+        {
+          "id": 47051,
+          "purpose": "baseline capture and generator check",
+          "exitCode": 1
+        },
+        {
+          "id": 39245,
+          "purpose": "post capture and equivalence",
+          "exitCode": 0
+        },
+        {
+          "id": 67801,
+          "purpose": "locked focused/review/knip",
+          "exitCode": 0
+        }
+      ],
+      "knownPids": [
+        85766,
+        85778,
+        85876,
+        86217
+      ],
+      "allKnownPidsAbsent": true,
+      "ports": [],
+      "temporarySiblingModulePresent": false
+    }
+  },
+  "fallout": "No path widening, assertion/config/mapping/data behavior change, generated artifact edit, native graph mutation or new abstraction.",
+  "frictionParser": {
+    "initialExitCode": 2,
+    "initialInvocation": "node scripts/friction-triggers.mjs --json",
+    "initialResult": "Unsupported flag interpreted as evidence directory; corrected to documented no-argument invocation.",
+    "correctedInvocation": "node scripts/friction-triggers.mjs",
+    "correctedLog": "/tmp/hv-umm2.346-friction-triggers.log"
+  }
+}

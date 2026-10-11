@@ -1163,8 +1163,11 @@ declares it with the `characterTarget` or `cardTarget` helper. The registry
 finds each definition by that name at call time. `primitives/index.ts` lists one `export *` line
 per primitive and is the authoritative catalog; `effects/registry.ts` derives
 the `Effect` union and the op lookup from it, so adding a primitive touches
-only its module, its group's test file, one index line, and one getter in the
-registry's op table, which its `satisfies` clause requires. Flow primitives
+only its module, its plain contract module under `primitives/contracts/`,
+one index line, and one getter in the registry's op table, which its
+`satisfies` clause requires. `primitives/contracts.test.ts` eagerly discovers
+`*.contracts.ts` modules through `import.meta.glob`; coherent coupled forms
+share a contract module. Flow primitives
 resolve children through the `run` callback in their environment. Play-time
 choices are collected by walking the effect tree: a modal node (`chooseOne`)
 prompts for its mode, a mode whose required targets have no candidates is not

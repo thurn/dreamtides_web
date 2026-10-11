@@ -218,12 +218,16 @@ Build:
 
 **Acceptance:**
 
-- Primitive tests use synthetic cards, with one test file per primitive
-  group, not per primitive (D19).
+- Primitive contracts use synthetic cards in plain per-form modules under
+  `effects/primitives/contracts/`, with coherent coupled forms sharing a
+  module. One `contracts.test.ts` runner eagerly discovers them through
+  `import.meta.glob` (D19).
 - The gates pass with every entity `pending` or `vanilla`.
 - The fuzzer mixes synthetic cards and full-pool pending cards into decks.
-- Adding a primitive touches only its own module, its group's test file, and
-  one line in the registry index. Show this with one primitive added after
+- Adding a primitive touches its own module, its contract module, one line
+  in the registry index, and its getter in the effect registry's op table
+  ([engine-design § Primitive registry](engine-design.md#ability-dsl-and-content-modules)).
+  Show this with one primitive added after
   the registry lands. The registry index is the primitive catalog;
   engine-design's table lists only the starting set.
 

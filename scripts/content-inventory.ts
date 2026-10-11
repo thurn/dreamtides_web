@@ -140,6 +140,11 @@ interface PrimitiveExtra {
   readonly note?: string;
 }
 
+/** Section 5.6 owns journey hooks and the type-remap DSL form. */
+function isJourneyOwned(entry: Pick<PrimitiveEntry, "kind" | "name">): boolean {
+  return entry.kind === "journey" || entry.name === "typeRemap";
+}
+
 const contractPath = (name: string): string => `${P}contracts/${kebab(name)}.contracts.ts`;
 
 const prim = (name: string, file: string, extra: PrimitiveExtra = {}): PrimitiveEntry => ({
@@ -154,7 +159,7 @@ const dsl = (name: string, file: string, probe: RegExp, fallout: readonly string
   name,
   kind: "dsl",
   module: file,
-  ...(name === "typeRemap" ? {} : { contract: contractPath(name) }),
+  ...(isJourneyOwned({ kind: "dsl", name }) ? {} : { contract: contractPath(name) }),
   probe,
   fallout,
   ...extra,
@@ -1347,7 +1352,7 @@ function familyName(section: Section, family: number): string {
 }
 
 // 5.6 owns the journey hooks and the type remap; every other section owns engine primitives.
-const isJourneyNeed = (name: string): boolean => primitive(name).kind === "journey" || name === "typeRemap";
+const isJourneyNeed = (name: string): boolean => isJourneyOwned(primitive(name));
 
 // The exploration effects of 5.7b, one bead per modification kind.
 const DECK_ENTRY_BEADS: readonly { readonly key: string; readonly title: string; readonly effectKinds: readonly string[] }[] = [

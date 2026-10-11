@@ -58,8 +58,13 @@ inventory's `beads` list is the graph. Its edges:
   entity module or an engine logic file another bead also changes waits for
   the previous one. Appending to `primitives/index.ts`, `dsl/types.ts`,
   `dsl/builders.ts`, `dsl/triggers.ts`, or `specs/index.ts` is additive and
-  needs no edge. Each primitive or DSL form has its own contract module;
-  beads that change the same contract module carry a serialization edge.
+  needs no edge. Each engine primitive or DSL form newly introduced by a
+  Phase 5 engine bead gets its own contract module. Existing coherent joint
+  contracts cover coupled forms (`exhaust` in `awaken.contracts.ts`, `grant`
+  in `cannot-be-targeted.contracts.ts`). Builders, journey hooks, and the
+  journey-owned `typeRemap` use their owning paths rather than engine
+  contract modules. Beads that change the same contract module carry a
+  serialization edge.
 
 Content beads are claimed in inventory order, and several run at once when
 several executor sessions run ([D43](decisions.md#d43-peer-executor-sessions)).
@@ -79,12 +84,12 @@ batch" is one Phase 5 content bead.
 Phase 5 beads are sized like the rest of the run: about 30–60 minutes of
 implementation each. The inventory plans three kinds:
 
-- **Primitive beads** introduce exactly one new primitive or DSL form, with
-  primitive tests on synthetic cards in
-  `src/engine/effects/primitives/contracts/<primitive-kebab>.contracts.ts`,
-  plus up to three entities that need
-  only it. They are core-review beads, as is any bead that introduces a new
-  prompt kind.
+- **Primitive beads** introduce exactly one new primitive or DSL form, plus
+  up to three entities that need only it. Newly introduced engine forms have
+  synthetic contracts in
+  `src/engine/effects/primitives/contracts/<primitive-kebab>.contracts.ts`;
+  builder and journey forms use tests at their owning paths. They are
+  core-review beads, as is any bead that introduces a new prompt kind.
 - **Composition beads** implement 1–6 entities whose primitives all exist by
   the time the bead runs. Entities are ordered by mechanic family and tags,
   so similar entities share a bead.
@@ -113,14 +118,18 @@ composition beads skip it.
    canonical (D5): read it clause by clause and check that every clause is
    implemented. Replace `pending: true` with the abilities and set
    `verifiedText`.
-3. **Add the primitive** a primitive bead introduces, with primitive tests
-   that use synthetic cards, in
+3. **Add the primitive** a primitive bead introduces. For a newly introduced
+   engine primitive or DSL form, write synthetic engine contracts in
    `src/engine/effects/primitives/contracts/<primitive-kebab>.contracts.ts`
-   (the introduced primitive or DSL form name in kebab case).
-   `contracts.test.ts` eagerly discovers these plain modules through
-   `import.meta.glob`; a new form needs only its contract module. Preserve
-   coherent contracts under 500 lines, with small shared synthetic fixtures
-   when needed. Run `npm test -- src/engine/effects/primitives/contracts.test.ts`.
+   (the introduced form name in kebab case). Builder forms, journey hooks,
+   and `typeRemap` use tests at their owning paths.
+   `contracts.test.ts` eagerly discovers the plain engine contract modules
+   through `import.meta.glob`; a new engine form needs only its contract
+   module. Modules use real engine code and synthetic fixtures and do not
+   call `vi.mock` or `vi.doMock`: the shared runner is not a module-mock
+   isolation boundary. Preserve coherent contracts under 500 lines, with
+   small shared synthetic fixtures when needed. Run
+   `npm test -- src/engine/effects/primitives/contracts.test.ts`.
    The registry index is the catalog (Phase 3.4). The session widens the bead's Areas at
    dispatch to the files the primitive's registration needs:
    - every primitive: its getter in `src/engine/effects/registry.ts`, whose
@@ -255,8 +264,9 @@ The inventory then plans the Phase 5 beads ([§ Bead sizing](#bead-sizing)),
 family by family within each section, and lists each bead's key, kind,
 entities, weight, introduced primitive, new prompt kinds, planning edges,
 serialization edges, scenario module, and `Areas:` files. The Areas name the
-entity modules, the new primitive's module and contract module, the
-scenario module and `specs/index.ts`, `engine hubs` for primitive beads, and
+entity modules, the new form's module and its engine contract module when
+applicable, the scenario module and `specs/index.ts`, `engine hubs` for
+primitive beads, and
 the fallout areas its
 [fallout listing](workflow.md#listing-fallout-before-dispatch) calls for.
 
