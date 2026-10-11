@@ -493,6 +493,15 @@ export function engineStatuses(
         else mark(change.instance, badge("duration", status));
         break;
       }
+      case "cannotPlay": {
+        const status: EngineStatusCopy = { kind: "cannotPlay", named: change.instance !== null, filter: change.filter, expiry };
+        if (change.instance !== null) mark(change.instance, badge("duration", status));
+        else for (const restricted of change.player === null ? (["player", "enemy"] as const) : [change.player]) sides[restricted].push(badge("duration", status));
+        break;
+      }
+      case "playLimit":
+        sides[change.player].push(badge("duration", { kind: "playLimit", count: change.count, expiry }));
+        break;
     }
   }
   const floatingGains = new Map<InstanceId, Set<Keyword>>();

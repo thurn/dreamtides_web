@@ -162,13 +162,15 @@ function isMaterializedTrigger(ability: Ability): ability is TriggeredAbility {
 /**
  * The filters of the opponent hand cards an effect chooses as it resolves
  * ("Discard a chosen card from the opponent's hand", "Banish a chosen
- * character from the opponent's hand"): each needs one matching card there.
+ * character from the opponent's hand", "Choose a card in the opponent's
+ * hand. That card cannot be played"): each needs one matching card there.
  */
 function opponentHandChoices(effect: Effect): CardFilter[] {
   return everyNode(effect).flatMap((node) => {
     const chosen = node as Effect;
     if (chosen.op === "discardChosen") return [chosen.filter];
     if (chosen.op === "banishCards" && chosen.from === "opponentHand") return [chosen.filter];
+    if (chosen.op === "playRestriction" && chosen.restriction.kind === "chosen") return [{}];
     return [];
   });
 }

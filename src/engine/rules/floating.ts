@@ -70,13 +70,42 @@ function sameBoundary(expiry: Expiry, boundary: Expiry): boolean {
 
 /**
  * The card a floating change changes, or `null` for a trigger, a cost
- * modifier, a play permission that names no card, or a static-only
- * `reclaimNotBanished`, which never floats. A permission or a `cardCost`
- * change naming a card changes it, so the view and the `effectStarted` event
- * hide it while that card is hidden.
+ * modifier, a play limit, a play permission or restriction that names no
+ * card, or a static-only `reclaimNotBanished`, which never floats. A
+ * permission, a restriction, or a `cardCost` change naming a card changes
+ * it, so the view and the `effectStarted` event hide it while that card is
+ * hidden.
  */
 export function changedInstance(change: FloatingChange): InstanceId | null {
-  return change.kind === "trigger" || change.kind === "cost" || change.kind === "reclaimNotBanished" ? null : change.instance;
+  switch (change.kind) {
+    case "trigger":
+    case "cost":
+    case "playLimit":
+    case "reclaimNotBanished":
+      return null;
+    default:
+      return change.instance;
+  }
+}
+
+/**
+ * Whether a floating change carries complete legality data of its own: a
+ * cost change, a play permission, or a play restriction or limit. A view and
+ * a determinization keep it, with its source redacted, when its source is
+ * hidden or has ceased to exist, so the cards a player may play and their
+ * costs read the same in every determinization (view/view.ts).
+ */
+export function carriesLegality(change: FloatingChange): boolean {
+  switch (change.kind) {
+    case "cost":
+    case "cardCost":
+    case "playFrom":
+    case "cannotPlay":
+    case "playLimit":
+      return true;
+    default:
+      return false;
+  }
 }
 
 /** Ends the floating effects that change `id`, when it ceases to exist. */

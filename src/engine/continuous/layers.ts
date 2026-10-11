@@ -67,6 +67,8 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   cost: 6,
   cardCost: 6,
   playFrom: 6,
+  cannotPlay: 6,
+  playLimit: 6,
   reclaimNotBanished: 6,
 };
 
@@ -188,9 +190,22 @@ function byTimestamp(a: OrderedChange, b: OrderedChange): number {
   );
 }
 
-/** The card a change applies to, or `null` for a cost modifier, a play permission, or a player's reclaimed cards. */
+/**
+ * The card whose characteristics a change changes, or `null` for a cost
+ * modifier, a play permission or restriction, or a player's reclaimed cards,
+ * which change how cards are played rather than what they are.
+ */
 function changed(change: ContinuousChange): InstanceId | null {
-  return change.kind === "cost" || change.kind === "playFrom" || change.kind === "reclaimNotBanished" ? null : change.instance;
+  switch (change.kind) {
+    case "cost":
+    case "playFrom":
+    case "cannotPlay":
+    case "playLimit":
+    case "reclaimNotBanished":
+      return null;
+    default:
+      return change.instance;
+  }
 }
 
 /**

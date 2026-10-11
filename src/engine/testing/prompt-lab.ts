@@ -128,6 +128,8 @@ export const LAB = {
   discardChosen: labEvent(9, 1, p.discardChosen()),
   /** Privately choose a character from the opponent's hand to banish. */
   banishChosen: labEvent(0x61, 1, p.banishChosen({ cardType: "character" })),
+  /** "Choose a card in the opponent's hand. That card cannot be played this turn." */
+  restrictChosen: labEvent(0x64, 1, p.cannotPlayChosen({ duration: "untilEndOfTurn" })),
   /** "Shuffle up to one card from your void into your deck. Draw a card, then shuffle 2 cards from your hand into your deck." */
   shuffleInto: labEvent(11, 1, p.sequence(
     p.shuffleInto([fromVoid({}, { upTo: true })]),
@@ -460,6 +462,16 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       active: "player", phase: "day",
       player: { hand: [LAB.banishChosen.id], energy: 2, deck: deck(6) },
       enemy: { hand: [...vanillas, LAB.discardChosen.id], deck: deck(6) },
+    },
+    script: [],
+  },
+  {
+    name: "restrict-chosen",
+    description: "A private gallery selection of an opponent hand card that cannot be played",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [LAB.restrictChosen.id], energy: 2, deck: deck(6) },
+      enemy: { hand: vanillas, deck: deck(6) },
     },
     script: [],
   },

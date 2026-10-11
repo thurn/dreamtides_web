@@ -61,6 +61,7 @@ import {
   optionalPrimitive,
   phasePrimitive,
   playFromZonePrimitive,
+  playRestrictionPrimitive,
   preventPrimitive,
   putInDeckPrimitive,
   rematerializePrimitive,
@@ -230,6 +231,9 @@ const DEFINITIONS = {
   },
   get playFromZone() {
     return playFromZonePrimitive;
+  },
+  get playRestriction() {
+    return playRestrictionPrimitive;
   },
   get prevent() {
     return preventPrimitive;

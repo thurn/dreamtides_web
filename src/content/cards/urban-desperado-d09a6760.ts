@@ -1,3 +1,5 @@
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +19,6 @@ export default card({
   artOwned: false,
   cardNumber: 295,
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), p.cannotPlay("opponent", { cardType: "event" }, { duration: "untilEndOfTurn" }))],
+  verifiedText: "2f14vbr4lke",
 });

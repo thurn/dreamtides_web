@@ -670,6 +670,33 @@ the effect immediately. This is a special action, available whenever that
 player could play a Fast card (❖) and never in response to a card or ability.
 It does not use the stack and cannot be responded to.
 
+**Play restrictions:** Some effects stop players from playing cards, as in
+"The opponent cannot play events this turn," "That card cannot be played while
+this character is in play," or "Players may only play one card per turn." A
+restriction applies as a player would begin to play a card, by every way of
+playing it: from a hand for its costs or by Offering, and from a void by a play
+permission or by Reclaim. A card already played is not affected, and neither
+is a card put into play without being played, such as a materialized one, nor
+a copy, which is not played. Activating an ability is not playing a card.
+
+- A restriction naming card types, as in "cannot play events," reads each
+  card's current characteristics as it would be played.
+- "Choose a card in the opponent's hand" is chosen like a [chosen
+  discard](#zones): you choose as that effect resolves, and every card in that
+  hand is shown privately to you for that choice. Both players then see which
+  card was chosen. With an empty hand, nothing is chosen and the effect does
+  nothing. "That card cannot be played" follows the card's identity across
+  zones (see [Zone Changes](#zone-changes)): no player can play it, from any
+  zone and whoever holds it, until the effect ends. If the restriction's
+  duration is already over as it would begin, such as "while this character is
+  in play" after its source has left play, the card is still chosen, but
+  nothing is restricted (see [Durations](#durations)).
+- "Players may only play one card per turn" applies to each player
+  separately: a player who has played that many cards this turn cannot play
+  another. It counts every card the player played this turn, by any route,
+  including cards played before the ability began to apply and the card with
+  the ability itself.
+
 ## Costs, Requirements, and X
 
 **Additional costs** are extra costs required to play a card, written as "To play

@@ -1,0 +1,5 @@
+# RD-hv-umm2.109-3: "Players may only play one card per turn" counts each player's plays this turn, including those made before the ability applied
+- Ladder: 4 (MTG analog: Ethersworn Canonist's ruling that it tracks spells cast earlier in the turn, so a player who already cast one before it entered cannot cast another that turn)
+- rules.md: § Playing Cards and the Stack → Play restrictions
+- Affects: 9629a58a-9f30-40f0-9199-835ea2dddc76; general for every per-turn play limit
+- Why: rules.md does not say whether the limit is per player or shared, or whether earlier plays count. Each player is limited separately, as the MTG analog reads, and the count is the turn log of cards that player played this turn, by any route; copies are never played and never count. The card with the ability counts itself, so its controller cannot play another card the turn they play it, and the opponent may still play one card that turn if they have played none. The limit is a static ability of the character while it is in play and stops only the beginning of a play.

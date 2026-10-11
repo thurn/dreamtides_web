@@ -215,6 +215,8 @@ const ROLE_STRATEGIES = {
   discard: { cards: "loss", number: "largest", chain: "finite" },
   discardChosen: { cards: "hostile", number: "largest", chain: "finite" },
   banishChosen: { cards: "hostile", number: "largest", chain: "finite" },
+  // Exactly one opponent hand card, as for discardChosen.
+  restrictChosen: { cards: "hostile", number: "largest", chain: "finite" },
   // Where each looked-at card goes steers the chooser's own next draws.
   foresee: { cards: "hostile", number: "largest", chain: "loopable" },
   lookAtTop: { cards: "gain", number: "largest", chain: "finite" },

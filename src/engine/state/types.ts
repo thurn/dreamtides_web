@@ -364,6 +364,24 @@ export type ContinuousChange =
       readonly next: boolean;
     }
   /**
+   * Layer 6, a play restriction (rules § Playing Cards and the Stack → Play
+   * restrictions): `player` cannot play the cards that match `filter`, and
+   * are `instance` when it names one; with `player` `null`, no player can
+   * play them. It covers every route of play (rules/timing.ts `canPlay`).
+   */
+  | {
+      readonly kind: "cannotPlay";
+      readonly player: Side | null;
+      readonly instance: InstanceId | null;
+      readonly filter: CardFilter;
+    }
+  /**
+   * Layer 6, a play limit: `player` cannot play a card once it has played
+   * `count` cards this turn, counting those played before the limit began
+   * (the turn log).
+   */
+  | { readonly kind: "playLimit"; readonly player: Side; readonly count: number }
+  /**
    * Layer 6, made only by a static ability (`reclaimNotBanished`): a
    * reclaimed card `player` owns is not banished instead of leaving play or
    * the stack (rules/zones.ts `banishedAsReclaimed`).

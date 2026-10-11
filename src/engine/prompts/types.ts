@@ -53,6 +53,8 @@ export type PromptRole =
   | "discardChosen"
   /** The opponent hand card the controller chooses to banish. */
   | "banishChosen"
+  /** The opponent hand card the controller chooses so that it cannot be played. */
+  | "restrictChosen"
   /** Where each looked-at card goes. */
   | "foresee"
   /** The cards its controller draws from among the top cards of their deck, which they look at. */

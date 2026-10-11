@@ -25,3 +25,8 @@ export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: S
 export function recordDrawn(state: BattleState, side: Side): void {
   state.turnLog.drawn[side] += 1;
 }
+
+/** How many cards `side` has played this turn, by every route (copies are never played). */
+export function playedThisTurn(state: BattleState, side: Side): number {
+  return state.turnLog.played[side].length;
+}

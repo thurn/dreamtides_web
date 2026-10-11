@@ -107,6 +107,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Discard an opponent card";
       case "banishChosen":
         return "Banish an opponent card";
+      case "restrictChosen":
+        return "Choose a card they can't play";
       case "revealCost":
         return cards("reveal");
       case "banishAnyVoidCost":
@@ -376,6 +378,8 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
       return "card of theirs you could discard";
     case "banishChosen":
       return "card of theirs you could banish";
+    case "restrictChosen":
+      return "card of theirs you could choose";
     case "playRoute":
     case "voidRoute":
       return "way to play it";
@@ -577,6 +581,13 @@ export type EngineStatusCopy =
       readonly next: boolean;
       readonly expiry: Expiry;
     }
+  /**
+   * A play restriction: a card no player can play (`named`), or cards
+   * matching `filter` that a player cannot play.
+   */
+  | { readonly kind: "cannotPlay"; readonly named: boolean; readonly filter: CardFilter; readonly expiry: Expiry }
+  /** A player cannot play a card once it has played `count` cards this turn. */
+  | { readonly kind: "playLimit"; readonly count: number; readonly expiry: Expiry }
   | { readonly kind: "avatarExhausted" };
 
 /** The accessible name of a status indicator: the status and its duration, from `human`'s side. */
@@ -629,6 +640,10 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
       const named = `Can be played from the void${qualified ? ` (${permittedCardKind(status.filter, false)})` : ""}`;
       return `${status.named ? named : `May play ${permittedCards(status)} from the void`}${expiryPhrase(status.expiry, human)}`;
     }
+    case "cannotPlay":
+      return `${status.named ? "Cannot be played" : `Cannot play ${permittedCardKind(status.filter, true)}`}${expiryPhrase(status.expiry, human)}`;
+    case "playLimit":
+      return `May play only ${plural(status.count, "card", "cards")} each turn${expiryPhrase(status.expiry, human)}`;
     case "avatarExhausted":
       return "Avatar exhausted";
   }
@@ -886,6 +901,14 @@ function effectStartedText(
       const mine = change.player === human;
       return `${mine ? "You" : "Your opponent"} may play ${permittedCards(status)} from ${mine ? "your" : "their"} void${expiryPhrase(expiry, human)}.`;
     }
+    case "cannotPlay": {
+      const status: EngineStatusCopy = { kind: "cannotPlay", named: change.instance !== null, filter: change.filter, expiry };
+      if (change.instance !== null) return line(card(change.instance), status);
+      const subject = change.player === null ? "Players" : change.player === human ? "You" : "Your opponent";
+      return `${subject} cannot play ${permittedCardKind(change.filter, true)}${expiryPhrase(expiry, human)}.`;
+    }
+    case "playLimit":
+      return `${change.player === human ? "You" : "Your opponent"} may play only ${plural(change.count, "card", "cards")} each turn${expiryPhrase(expiry, human)}.`;
     case "reclaimNotBanished":
       // Only a static ability makes this change, so no effect starts with it.
       return null;

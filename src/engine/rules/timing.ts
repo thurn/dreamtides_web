@@ -1,5 +1,5 @@
 import { instanceCard, type EngineCatalog } from "../catalog";
-import { characteristics, characteristicsOf } from "../continuous/characteristics";
+import { characteristics, characteristicsOf, filterSubjectOf, matchesFilter } from "../continuous/characteristics";
 import { costModifier, type CostModifier } from "../continuous/costs";
 import { playPermission } from "../continuous/permissions";
 import type { Cost, Speed } from "../dsl/types";
@@ -10,6 +10,7 @@ import { eventAbilities } from "../effects/abilities";
 import { effectEntersPlay } from "../effects/interpreter";
 import { additionalCosts, costsPayable, playCosts } from "./costs";
 import { hasKeyword } from "./keywords";
+import { playedThisTurn } from "./turn-log";
 import { instanceOf, openBackSlots } from "./zones";
 
 /** Where a played card comes from: the hand of the side holding it, or its owner's void by a play permission or Reclaim. */
@@ -163,10 +164,30 @@ export function freeBackSlotsAfterStack(state: BattleState, catalog: EngineCatal
 }
 
 /**
+ * Whether a play restriction stops `side` playing the card `id` now, by any
+ * route (rules § Playing Cards and the Stack → Play restrictions): a layer-6
+ * `cannotPlay` change for `side` or every player that names the card or
+ * whose filter its effective characteristics match, or a `playLimit` for
+ * `side` that the cards it played this turn have reached.
+ */
+export function playRestricted(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId): boolean {
+  const layers = characteristics(state, catalog);
+  for (const { change } of layers.changes(6)) {
+    if (change.kind === "playLimit") {
+      if (change.player === side && playedThisTurn(state, side) >= change.count) return true;
+    } else if (change.kind === "cannotPlay") {
+      if ((change.player !== null && change.player !== side) || (change.instance !== null && change.instance !== id)) continue;
+      if (matchesFilter(filterSubjectOf(state, catalog, id, layers.of(id)), change.filter)) return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Whether `side` may begin playing the card `id` from `from` now: a card in
  * its hand, even one the opponent owns, or a card it owns in its void that a
  * play permission covers or that has Reclaim, by some route whose quick cost
- * checks pass.
+ * checks pass, when no play restriction stops it.
  */
 export function canPlay(
   state: BattleState,
@@ -180,7 +201,7 @@ export function canPlay(
     return false;
   }
   const definition = instanceCard(catalog, instance);
-  if (!timingAllows(state, side, definition.speed)) {
+  if (!timingAllows(state, side, definition.speed) || playRestricted(state, catalog, side, id)) {
     return false;
   }
   // An X cost needs its minimum X, after cost modifications; the play's prompts check the cost choices.

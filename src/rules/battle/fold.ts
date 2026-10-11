@@ -1202,6 +1202,11 @@ const FLOATING_CHANGE_VALIDATORS: {
     nullable(isInstanceId)(value.instance) &&
     isCardFilter(value.filter) &&
     isBoolean(value.next),
+  cannotPlay: (value) =>
+    nullable(isSide)(value.player) &&
+    nullable(isInstanceId)(value.instance) &&
+    isCardFilter(value.filter),
+  playLimit: (value) => isSide(value.player) && isIndex(value.count),
   // This continuous change is made only by static abilities, not saved floating effects.
   reclaimNotBanished: () => false,
 };

@@ -984,9 +984,18 @@ analog:
    change, like any floating change naming a card, from a side that cannot
    identify that card, such as the opponent of a side that drew it.
    Play permissions (`playFrom`, `continuous/permissions.ts`) share the
-   layer: they let a player play cards from the void they own. So does the
-   static-only `reclaimNotBanished` change, read by `banishedAsReclaimed`
-   (below).
+   layer: they let a player play cards from the void they own. So do play
+   restrictions (`playRestriction`): a `cannotPlay` change stops a player, or
+   every player, playing one named card or the cards matching a filter, and
+   a `playLimit` stops a player once the turn log holds that many of its
+   plays this turn. `rules/timing.ts` `playRestricted` reads both inside
+   `canPlay`, so legality, the play step's own check, and every route of
+   play agree (RD-hv-umm2.109-2). A change naming a card is hidden like a
+   `cardCost` change, and costs, permissions, and restrictions are kept with
+   a redacted source by the view and determinization
+   (`rules/floating.ts` `carriesLegality`). The static-only
+   `reclaimNotBanished` change, read by `banishedAsReclaimed` (below), shares
+   the layer too.
 
 Ordering within a layer:
 
@@ -1007,7 +1016,7 @@ floating record per character. `lockedAtResolution(value)` marks the intent.
 
 **Continuous primitives** (`setBaseSpark`, `grant`/`loseKeyword`,
 `giveAllTypes`, `sparkModifier`, `costModifier`, `playFromZone`,
-`grantCardKeyword`, `reclaimNotBanished`) each
+`playRestriction`, `grantCardKeyword`, `reclaimNotBanished`) each
 declare a `continuous` hook: their layer and the changes they make while a
 static ability holds them. The hook reads through `StaticEnv`: `characters`
 and `value` resolve references and values live, and `read` is the reader of

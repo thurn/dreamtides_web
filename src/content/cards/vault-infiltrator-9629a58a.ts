@@ -1,3 +1,5 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 80,
   art: { x: -0.27, y: 0.416, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(p.playLimitPerTurn(1))],
+  verifiedText: "r9q2ysa1hz",
 });

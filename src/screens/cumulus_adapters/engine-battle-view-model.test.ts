@@ -121,7 +121,7 @@ describe("prompt surfaces over the prompt lab", () => {
     const roles = {
       discardToHandLimit: true, playRoute: true, voidRoute: true, chooseX: true, chooseOne: true, choosePlayer: true, chooseSubtype: true, target: true,
       chooseCost: true, optionalCost: true, optionalPayment: true, abandonCost: true, returnCost: true, abandon: true, discardCost: true, revealCost: true,
-      banishAnyVoidCost: true, banishCost: true, offeringCost: true, discard: true, discardChosen: true, banishChosen: true, foresee: true,
+      banishAnyVoidCost: true, banishCost: true, offeringCost: true, discard: true, discardChosen: true, banishChosen: true, restrictChosen: true, foresee: true,
       lookAtTop: true, discover: true, discoverCost: true, chooseAmong: true, chooseFromOpponentHand: true, shuffleInto: true, putInDeck: true,
       youMay: true, preventUnlessPays: true, move: true, preventUnlessAbandons: true,
     } satisfies Record<PromptRole, true>;

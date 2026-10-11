@@ -27,7 +27,7 @@ import type { Layers } from "../continuous/layers";
 import { fixedEnergy } from "../dsl/energy";
 import type { Keyword, Variant } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
-import { changedInstance } from "../rules/floating";
+import { carriesLegality, changedInstance } from "../rules/floating";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
 import { knows, seesSubject } from "./knowledge";
@@ -146,7 +146,7 @@ export type FloatingChangeView =
 export interface FloatingEffectView {
   readonly id: EffectId;
   readonly controller: Side;
-  /** Costs and play permissions retain their changes with a hidden or ceased source redacted to null. */
+  /** Costs, play permissions and play restrictions retain their changes with a hidden or ceased source redacted to null (`carriesLegality`). */
   readonly source: AbilitySource | null;
   readonly timestamp: number;
   readonly expiry: Expiry;
@@ -341,8 +341,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   });
   const floatingVisible = (effect: FloatingEffect): boolean => {
     const changed = changedInstance(effect.change);
-    // Costs and permissions carry their complete legality data without source identity.
-    const sourceIndependent = effect.change.kind === "playFrom" || effect.change.kind === "cost" || effect.change.kind === "cardCost";
+    // Costs, permissions and restrictions carry their complete legality data without source identity.
+    const sourceIndependent = carriesLegality(effect.change);
     const sourceSeen = visibleSource(effect.source);
     const expirySeen = effect.expiry.at !== "sourceLeavesPlay" || visible(effect.expiry.source);
     return (sourceSeen || sourceIndependent) && expirySeen && (changed === null || visible(changed));
