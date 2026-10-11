@@ -1,3 +1,6 @@
+import { fromVoid } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,11 @@ export default card({
   cardNumber: 45,
   art: { x: -0.336, y: 0.369, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [
+    triggered(
+      onMaterialized(),
+      p.banishCards([fromVoid({}, v.amplified ? { player: "opponent", count: 2, upTo: true } : { player: "opponent" })]),
+    ),
+  ],
+  verifiedText: "1k75iak8ok3",
 });

@@ -26,7 +26,9 @@ import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { unannouncedChanges } from "./announced-changes";
 import { moveInstance } from "../rules/zones";
 import { additionalCost, banishFromVoidCost, banishXCost, choiceCost, event, fromVoid, optionalCost, pointsCost } from "../dsl/builders";
+import { banishCards, banishChosen } from "../effects/primitives/banish-cards";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
+import { onMaterialized, triggered } from "../dsl/triggers";
 import { gainPoints } from "../effects/primitives/gain-points";
 import { cardMatchesFilter } from "../continuous/characteristics";
 import type { AdditionalCost, CardFilter } from "../dsl/types";
@@ -152,6 +154,28 @@ describe("card-lab setup solver", () => {
           expect(prompt?.purpose.role).toBe("optionalCost");
         }
       }
+    }
+  });
+
+  it("stages a ▸Materialized trigger's void targets and a matching card for each choice from the opponent's hand", () => {
+    const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(924), subtype: "Mage" };
+    const banisher: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla1, id: syntheticId(925), status: "authored",
+      abilities: () => [triggered(onMaterialized(), banishCards([fromVoid({ subtype: "Mage" }, { player: "opponent", count: 2, upTo: true })]))],
+    };
+    const chooser: EngineCardDefinition = {
+      ...SYNTHETIC.event0, id: syntheticId(926), status: "authored", abilities: () => [event(banishChosen({ subtype: "Mage" }))],
+    };
+    const labEngine = createEngine(testCatalog([banisher, chooser, mage]));
+    for (const side of ["player", "enemy"] as const) {
+      const other = side === "player" ? "enemy" : "player";
+      const trigger = labBoard(labEngine, banisher.id, [mage], side).state;
+      expect(trigger.sides[other].void).toHaveLength(2);
+      for (const id of trigger.sides[other].void) expect(cardMatchesFilter(trigger, labEngine.catalog, id, { subtype: "Mage" })).toBe(true);
+      expect(trigger.sides[side].void).toEqual([]);
+      const chosen = labBoard(labEngine, chooser.id, [mage], side).state;
+      expect(chosen.sides[other].hand).toHaveLength(1);
+      for (const id of chosen.sides[other].hand) expect(cardMatchesFilter(chosen, labEngine.catalog, id, { subtype: "Mage" })).toBe(true);
     }
   });
 

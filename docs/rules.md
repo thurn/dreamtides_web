@@ -767,6 +767,20 @@ Day phase begins, or as the banishing player's next turn begins. "Until this
 leaves play" does nothing if the banishing card is no longer in play when it
 would begin.
 
+Banish also reaches cards in a hand, a deck, or a void. "Banish your hand and
+void" banishes every card there, and "Banish up to two cards from the
+opponent's void" chooses those void cards as targets (see
+[Targeting](#targeting)). A card banished from a hand or a deck is shown to
+both players as it enters the Banished zone, and a created card ceases to exist
+instead (see [Created Cards](#created-cards)).
+
+"Banish a chosen character from the opponent's hand" is chosen like a [chosen
+discard](#zones): you choose as that effect resolves, and only the cards that
+match its restriction are shown privately to you for that choice. The chosen
+card goes to its owner's Banished zone. It is not a discard, so it fires no
+"When you discard a card" abilities. If the hand has no matching card, that
+part of the effect does nothing.
+
 **Materialize** — Put a character into play. This covers a character entering
 play from hand (played normally), from the void, from the deck, as a created
 figment, or returned "to play" by an effect. A materialized character enters the

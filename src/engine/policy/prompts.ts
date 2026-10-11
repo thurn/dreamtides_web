@@ -139,6 +139,7 @@ const ROLE_STRATEGIES = {
   offeringCost: { cards: "loss", number: "largest" },
   discard: { cards: "loss", number: "largest" },
   discardChosen: { cards: "hostile", number: "largest" },
+  banishChosen: { cards: "hostile", number: "largest" },
   foresee: { cards: "hostile", number: "largest" },
   lookAtTop: { cards: "gain", number: "largest" },
   discover: { cards: "gain", number: "largest" },

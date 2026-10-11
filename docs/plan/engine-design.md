@@ -1269,7 +1269,9 @@ reference changes nothing and emits nothing but `noLegalTarget`, so a
 reference into a hidden hand or deck names no card in any view, event,
 prompt, or log; only the primitive acting on the cards can show them
 (RD-hv-umm2.59-2). The card-lab solver stages a matching void card for each
-void target. The static `grantCardKeyword` keeps its own `cardsIn` set, read
+void target, a played character's ▸Materialized triggers included, and a
+matching opponent hand card for each choice from the opponent's hand
+(`discardChosen`, `banishChosen`). The static `grantCardKeyword` keeps its own `cardsIn` set, read
 through the layer evaluation.
 
 **Primitive catalog.** The registered primitives and DSL builders, by group,
@@ -1278,7 +1280,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, in original source-zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs)` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, in original source-zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |

@@ -36,6 +36,8 @@ export type PromptRole =
   | "discard"
   /** The opponent hand card the controller chooses to discard. */
   | "discardChosen"
+  /** The opponent hand card the controller chooses to banish. */
+  | "banishChosen"
   /** Where each looked-at card goes. */
   | "foresee"
   /** The cards its controller draws from among the top cards of their deck, which they look at. */

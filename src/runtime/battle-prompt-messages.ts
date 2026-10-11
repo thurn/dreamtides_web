@@ -94,6 +94,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return cards("discard");
       case "discardChosen":
         return "Discard an opponent card";
+      case "banishChosen":
+        return "Banish an opponent card";
       case "revealCost":
         return cards("reveal");
       case "banishCost":
@@ -319,6 +321,8 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
       return "card you could discard";
     case "discardChosen":
       return "card of theirs you could discard";
+    case "banishChosen":
+      return "card of theirs you could banish";
     case "playRoute":
       return "way to play it";
     case "chooseX":

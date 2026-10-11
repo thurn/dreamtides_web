@@ -16,6 +16,7 @@ import type * as primitives from "./primitives";
 import {
   awakenPrimitive,
   banishPrimitive,
+  banishCardsPrimitive,
   banishUntilPrimitive,
   chooseOnePrimitive,
   choosePlayerPrimitive,
@@ -79,6 +80,9 @@ const DEFINITIONS = {
   },
   get banish() {
     return banishPrimitive;
+  },
+  get banishCards() {
+    return banishCardsPrimitive;
   },
   get banishUntil() {
     return banishUntilPrimitive;

@@ -1,3 +1,5 @@
+import { energy, event, everyIn, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 311,
   art: { x: 0, y: 0.043, scale: 1 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [
+    event(p.sequence(p.banishCards(v.amplified ? [everyIn("hand")] : [everyIn("hand"), everyIn("void")]), p.draw(5))),
+    reclaim(energy(3)),
+  ],
+  verifiedText: "28vlvegrkci",
 });

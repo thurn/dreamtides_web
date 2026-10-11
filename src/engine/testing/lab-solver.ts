@@ -6,8 +6,10 @@ import { printedCardId, type EngineCardDefinition } from "../catalog";
 import { matchesFilter } from "../continuous/characteristics";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
+import { everyNode, everyTarget } from "../effects/interpreter";
+import type { Effect } from "../effects/registry";
 import { fixedEnergy } from "../dsl/energy";
-import type { AdditionalCost, CardFilter, CharacterSelector, PaymentCost } from "../dsl/types";
+import type { Ability, AdditionalCost, CardFilter, CharacterSelector, PaymentCost, TriggeredAbility } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -56,14 +58,33 @@ function characterFor(
   return found.id;
 }
 
-/** A matching printing for a void target on the lab's neutral setup board. */
-function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
+/** A matching printing for a void target or an opponent hand choice on the lab's neutral setup board. */
+function cardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
   const fits = (card: EngineCardDefinition): boolean =>
     card.status !== "authored" && matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs) }, filter);
   const found = Object.values(SYNTHETIC).find(fits) ?? pool.find(fits);
   if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
   engine.catalog.card(found.id);
   return found.id;
+}
+
+/** Whether an ability is a ▸Materialized trigger, which fires as the lab's play of a character enters play. */
+function isMaterializedTrigger(ability: Ability): ability is TriggeredAbility {
+  return ability.kind === "triggered" && "on" in ability.trigger && ability.trigger.on === "materialized";
+}
+
+/**
+ * The filters of the opponent hand cards an effect chooses as it resolves
+ * ("Discard a chosen card from the opponent's hand", "Banish a chosen
+ * character from the opponent's hand"): each needs one matching card there.
+ */
+function opponentHandChoices(effect: Effect): CardFilter[] {
+  return everyNode(effect).flatMap((node) => {
+    const chosen = node as Effect;
+    if (chosen.op === "discardChosen") return [chosen.filter];
+    if (chosen.op === "banishCards" && chosen.from === "opponentHand") return [chosen.filter];
+    return [];
+  });
 }
 
 /** What the lab stages for additional costs: the void cards each void banish takes, and the ⍟ paid. */
@@ -104,7 +125,9 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * active in its Day with the card in hand and ample energy, and every
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
- * `side`. A void banish additional cost gets its count of matching cards, or
+ * `side`; a ▸Materialized trigger's void targets get their void cards too,
+ * and a choice from the opponent's hand gets a matching card in that hand
+ * (`opponentHandChoices`). A void banish additional cost gets its count of matching cards, or
  * its least X, in `side`'s void, and a ⍟ additional cost gets that many
  * points in `side`'s score, wherever it sits among alternatives and
  * optional costs (`costNeeds`). Throws if the card is still unplayable.
@@ -121,13 +144,24 @@ export function labBoard(
   const definition = engine.catalog.card(cardId);
   const back: Record<Side, CardId[]> = { player: [], enemy: [] };
   const voids: Record<Side, CardId[]> = { player: [], enemy: [] };
-  for (const specs of eventTargetSpecs(definition, variantOf(entry))) {
+  const hands: Record<Side, CardId[]> = { player: [], enemy: [] };
+  const variant = variantOf(entry);
+  const abilities = definition.abilities(variant);
+  const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
+  for (const spec of materialized.flatMap(everyTarget)) {
+    if (spec.kind !== "inZone") continue;
+    const voidSide = spec.player === "you" ? side : opponent(side);
+    for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, spec.filter, pool));
+  }
+  const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
+  for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
+  for (const specs of eventTargetSpecs(definition, variant)) {
     for (const spec of specs) {
       // A stack target needs an item on the stack, which a Day board never has; lab overrides supply one.
       if (spec.kind === "stackTarget") continue;
       if (spec.kind === "inZone") {
         const voidSide = spec.player === "you" ? side : opponent(side);
-        for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidCardFor(engine, spec.filter, pool));
+        for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, spec.filter, pool));
         continue;
       }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
@@ -136,12 +170,12 @@ export function labBoard(
       }
     }
   }
-  const { voidCards, points: score } = costNeeds(additionalCosts(definition, variantOf(entry)));
-  for (const filter of voidCards) voids[side].push(voidCardFor(engine, filter, pool));
+  const { voidCards, points: score } = costNeeds(additionalCosts(definition, variant));
+  for (const filter of voidCards) voids[side].push(cardFor(engine, filter, pool));
   const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
   const sides: Record<Side, SideSetup> = {
-    player: { back: back.player, void: voids.player, deck },
-    enemy: { back: back.enemy, void: voids.enemy, deck },
+    player: { back: back.player, void: voids.player, deck, ...(hands.player.length > 0 ? { hand: hands.player } : {}) },
+    enemy: { back: back.enemy, void: voids.enemy, deck, ...(hands.enemy.length > 0 ? { hand: hands.enemy } : {}) },
   };
   sides[side] = { ...sides[side], hand: [entry], energy: LAB_ENERGY, ...(score > 0 ? { score } : {}) };
   const base: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };

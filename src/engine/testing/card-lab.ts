@@ -219,7 +219,8 @@ export function cardLabEnemyAction(engine: Engine, init: BattleInit, slice: Batt
 /**
  * The lab battle's fixture: the solved board (throws when the card stays
  * unplayable) and, as the enemy, the enemy's play of the card. The human
- * then holds a no-effect Interrupt, so the battle stops on the human's
+ * then also holds a no-effect Interrupt, beside any card the solver staged
+ * in their hand, so the battle stops on the human's
  * response window (P1) with the card on the stack, and its resolution is
  * presented when the human passes.
  */
@@ -234,7 +235,7 @@ export function cardLabFixture(engine: Engine, request: CardLabRequest, pool: re
   const responder = SYNTHETIC.interruptEvent;
   const setup: BoardSetup =
     request.side === "enemy" && stage === undefined
-      ? { ...solved, player: { ...solved.player, hand: [responder.id], energy: fixedEnergy(responder.costs) } }
+      ? { ...solved, player: { ...solved.player, hand: [...(solved.player?.hand ?? []), responder.id], energy: fixedEnergy(responder.costs) } }
       : solved;
   const name = `card-lab:${request.entry.cardId}:${request.variant}:${request.side}`;
   return {
