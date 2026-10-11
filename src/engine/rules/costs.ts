@@ -22,7 +22,7 @@ import type {
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
-import { discardCard, spendEnergy } from "./resources";
+import { discardCard, gainPoints, spendEnergy } from "./resources";
 import { banish, dissolve, instanceOf, slotOf } from "./zones";
 import { revealToBoth } from "../view/knowledge";
 import { Infeasible } from "../steps/errors";
@@ -118,9 +118,14 @@ function sum(values: readonly number[]): number {
   return values.reduce((total, value) => total + value, 0);
 }
 
+/** The ⧗ or ⍟ the costs in a list spend, not counting nested alternatives and optional costs. */
+function spent(costs: readonly Cost[], kind: "counters" | "points"): number {
+  return sum(costs.map((cost) => (cost.cost === kind ? cost.amount : 0)));
+}
+
 /**
  * Whether `side` could pay the mandatory costs that need no card choice:
- * the energy (with X at its minimum), any ☾, and any ⧗. Legality's
+ * the energy (with X at its minimum), any ☾, any ⧗, and any ⍟. Legality's
  * feasibility search checks the card choices, alternatives, and optional
  * costs.
  */
@@ -132,8 +137,8 @@ export function costsPayable(
   modifier: CostModifier = NO_COST_MODIFIER,
 ): boolean {
   if (adjustedEnergy(minimumEnergy(costs), modifier) > state.sides[side].currentEnergy) return false;
-  const counters = sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
-  if (counters > storedCounters(state, source)) return false;
+  if (spent(costs, "counters") > storedCounters(state, source)) return false;
+  if (spent(costs, "points") > state.sides[side].score) return false;
   return costs.every((cost) => cost.cost !== "exhaustSelf" || canPayExhaust(state, source));
 }
 
@@ -223,12 +228,14 @@ export function planCosts(
   const available = state.sides[side].currentEnergy;
   /** The energy committed so far before cost modifications: the top-level parts and X, then each chosen nested part. */
   let baseEnergy = fixedEnergy(costs) + (x ?? 0);
-  let countersLeft = storedCounters(state, source) - sum(costs.map((cost) => (cost.cost === "counters" ? cost.amount : 0)));
+  let countersLeft = storedCounters(state, source) - spent(costs, "counters");
+  /** The payer's ⍟ left once the top-level and chosen nested ⍟ costs are paid; never below 0 for a payable plan. */
+  let pointsLeft = state.sides[side].score - spent(costs, "points");
   let exhaustCount = costs.filter((cost) => cost.cost === "exhaustSelf").length;
   const exhaustCapacity = canPayExhaust(state, source) ? 1 : 0;
   /** Shared resource check for nested choices, terminal proofs and the completed plan. */
-  const resourcesPayable = (energy = baseEnergy, counters = countersLeft, exhausts = exhaustCount): boolean =>
-    adjustedEnergy(energy, modifier) <= available && counters >= 0 && exhausts <= exhaustCapacity;
+  const resourcesPayable = (energy = baseEnergy, counters = countersLeft, exhausts = exhaustCount, points = pointsLeft): boolean =>
+    adjustedEnergy(energy, modifier) <= available && counters >= 0 && exhausts <= exhaustCapacity && points >= 0;
   const payments: PlannedCost[] = [];
   const optionalPaid: boolean[] = [];
   let capturedX = x;
@@ -242,8 +249,9 @@ export function planCosts(
   const affordable = (list: readonly PaymentCost[]): boolean => {
     if (!resourcesPayable(
       baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))),
-      countersLeft - sum(list.map((cost) => (cost.cost === "counters" ? cost.amount : 0))),
+      countersLeft - spent(list, "counters"),
       exhaustCount + list.filter((cost) => cost.cost === "exhaustSelf").length,
+      pointsLeft - spent(list, "points"),
     )) return false;
     const choosing = list.filter(choosesCards);
     if (choosing.some((cost) => cost.count === "x" && capturedX !== null && capturedX < leastCount(cost))) return false;
@@ -262,6 +270,7 @@ export function planCosts(
     }
     if (nested) {
       if (cost.cost === "counters") countersLeft -= cost.amount;
+      if (cost.cost === "points") pointsLeft -= cost.amount;
       if (cost.cost === "exhaustSelf") exhaustCount += 1;
     }
     if (!choosesCards(cost)) {
@@ -401,6 +410,16 @@ export function abandonCharacter(ctx: StepContext, side: Side, id: InstanceId): 
   dissolve(ctx, id, null, true);
 }
 
+/**
+ * Pays ⍟ `side` has (rules § Costs, Requirements, and X → Paying ⍟): its
+ * score drops by exactly `amount`, announced as a loss of points. A plan
+ * never pays more ⍟ than its payer has, so the score never clamps here.
+ */
+function payPoints(ctx: StepContext, side: Side, amount: number): void {
+  if (amount > ctx.state.sides[side].score) throw new Error(`${side} cannot pay ${String(amount)}⍟`);
+  gainPoints(ctx, side, -amount, "effect");
+}
+
 /** Pays every planned cost after the commit point: the whole energy cost first (the fixed part, then X), then the rest in order. */
 export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, plan: CostPlan): void {
   spendEnergy(ctx, side, plan.energy.fixed);
@@ -412,6 +431,9 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
         break;
       case "counters":
         spendCounters(ctx, source, cost.amount);
+        break;
+      case "points":
+        payPoints(ctx, side, cost.amount);
         break;
       case "abandon":
         for (const id of cards) abandonCharacter(ctx, side, id);

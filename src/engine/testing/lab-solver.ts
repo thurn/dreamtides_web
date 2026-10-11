@@ -72,7 +72,8 @@ function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCa
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
  * `side`. A void banish additional cost gets its count of matching cards, or
- * its least X, in `side`'s void. Throws if the card is still unplayable.
+ * its least X, in `side`'s void, and a ⍟ additional cost gets that many
+ * points in `side`'s score. Throws if the card is still unplayable.
  */
 export function labBoard(
   engine: Engine,
@@ -101,7 +102,9 @@ export function labBoard(
       }
     }
   }
+  let score = 0;
   for (const cost of additionalCosts(definition, variantOf(entry))) {
+    if (cost.cost === "points") score += cost.amount;
     if (cost.cost !== "banishFromVoid") continue;
     const count = cost.count === "x" ? (cost.min ?? 0) : cost.count;
     for (let index = 0; index < count; index++) voids[side].push(voidCardFor(engine, cost.filter, pool));
@@ -111,7 +114,7 @@ export function labBoard(
     player: { back: back.player, void: voids.player, deck },
     enemy: { back: back.enemy, void: voids.enemy, deck },
   };
-  sides[side] = { ...sides[side], hand: [entry], energy: LAB_ENERGY };
+  sides[side] = { ...sides[side], hand: [entry], energy: LAB_ENERGY, ...(score > 0 ? { score } : {}) };
   const base: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
   const setup: BoardSetup = staged === undefined ? base : {
     ...base,

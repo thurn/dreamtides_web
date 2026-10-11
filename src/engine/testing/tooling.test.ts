@@ -25,7 +25,7 @@ import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { unannouncedChanges } from "./announced-changes";
 import { moveInstance } from "../rules/zones";
-import { additionalCost, banishFromVoidCost, banishXCost, event, fromVoid } from "../dsl/builders";
+import { additionalCost, banishFromVoidCost, banishXCost, event, fromVoid, pointsCost } from "../dsl/builders";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { gainPoints } from "../effects/primitives/gain-points";
 import { cardMatchesFilter } from "../continuous/characteristics";
@@ -111,6 +111,16 @@ describe("card-lab setup solver", () => {
       expect(state.sides[side].void).toHaveLength(2);
       for (const id of state.sides[side].void) expect(cardMatchesFilter(state, labEngine.catalog, id, { subtype: "Mage" })).toBe(true);
       expect(state.sides[side === "player" ? "enemy" : "player"].void).toEqual([]);
+    }
+  });
+
+  it("gives the playing side the ⍟ a points additional cost needs, and the other side none", () => {
+    const priced: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(919), status: "authored", abilities: () => [additionalCost(pointsCost(4)), event(gainPoints(1))] };
+    const labEngine = createEngine(testCatalog([priced]));
+    for (const side of ["player", "enemy"] as const) {
+      const { state } = labBoard(labEngine, priced.id, [], side);
+      expect(state.sides[side].score).toBe(4);
+      expect(state.sides[side === "player" ? "enemy" : "player"].score).toBe(0);
     }
   });
 

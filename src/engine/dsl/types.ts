@@ -331,6 +331,11 @@ export type PaymentCost =
   /** N⧗: spend counters stored on the source (rules § Counters). */
   | { readonly cost: "counters"; readonly amount: number }
   /**
+   * "Pay N⍟": the payer's victory points drop by N. Payable only with at
+   * least N⍟ (rules § Costs, Requirements, and X → Paying ⍟).
+   */
+  | { readonly cost: "points"; readonly amount: number }
+  /**
    * Banish cards from your void that match the filter. A variable count
    * captures their count as X, which is at least `min` (absent, 0); `min`
    * belongs to a variable count only.

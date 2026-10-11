@@ -1,0 +1,4 @@
+# Pre-existing issues found by hv-umm2.73
+
+- `src/engine/events/kinds/points-scored.ts` (`PointsScoredEvent.cause`): the cause is `challenge`, `fatigue` or `effect`, with no value for a payment, so a ⍟ cost (`pointsCost`, paid in `src/engine/rules/costs.ts`) is announced as a loss with cause `effect`; a reader tells a payment from an effect's loss only by its place in the play or activation step. A `payment` cause, like `energyChanged`'s, would name it; the event module is outside this bead's areas.
+- Sharing with hv-umm2.72 (`losePoints`): both debit ⍟ through the existing rule helper `gainPoints` in `src/engine/rules/resources.ts` with a negative amount, so no second points-debit rule exists to converge. `pointsCost` refuses an amount above the payer's score before calling it rather than relying on its floor of 0.

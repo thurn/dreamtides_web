@@ -623,6 +623,14 @@ Other costs include spending counters stored on the card itself ("1⧗, ☾: …
 banishing cards from your void, and revealing cards from your hand. A revealed
 card stays in your hand.
 
+**Paying ⍟:** A cost such as "To play this character, pay 4⍟." is paid from
+the player's own victory points. A player can pay it only with at least that
+many ⍟, so their total never goes below 0 by paying: with fewer, they cannot
+play the card, choose that alternative, or pay that optional cost. Paying
+lowers the player's total by exactly the amount and is a loss of ⍟; no other
+player gains or loses ⍟, so paying never wins the battle for anyone. Cost
+changes change energy only, never a ⍟ cost.
+
 **Cost changes:** Effects such as "Events cost you 1● more" and "The next
 character you play this turn costs 2● less" change the energy a player pays to
 play a card. Every increase applies first, then every reduction, and the cost

@@ -1098,6 +1098,9 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
   an X count at least the cost's least X (`banishXCost`, 1 by default);
 - reveal from hand;
 - counters;
+- ⍟ (`pointsCost`), payable only with the payer's full amount and paid as
+  a `pointsScored` loss; the card-lab solver gives the playing side the ⍟ a
+  top-level ⍟ additional cost needs;
 - a choice between costs ("A or B", `choiceCost`);
 - optional additional costs (`optionalCost`);
 - Offering's banish from hand, by the Offering route.

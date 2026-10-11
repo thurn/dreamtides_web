@@ -117,6 +117,12 @@ export function countersCost(amount: number): PaymentCost {
   return { cost: "counters", amount };
 }
 
+/** "Pay N⍟" as a cost: N victory points the payer must have in full. */
+export function pointsCost(amount: number): PaymentCost {
+  if (!Number.isSafeInteger(amount) || amount < 1) throw new Error("pointsCost amount must be a positive safe integer");
+  return { cost: "points", amount };
+}
+
 /** "Banish N cards from your void" (matching the filter) as a cost. */
 export function banishFromVoidCost(count = 1, filter: CardFilter = {}): PaymentCost {
   return { cost: "banishFromVoid", count, filter };

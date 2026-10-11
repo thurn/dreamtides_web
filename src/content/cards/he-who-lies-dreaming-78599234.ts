@@ -1,3 +1,4 @@
+import { additionalCost, pointsCost } from "../../engine/dsl/builders";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +19,6 @@ export default card({
   cardNumber: 413,
   art: { x: -0.012, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [additionalCost(pointsCost(4))],
+  verifiedText: "13f4hnw3gqp",
 });
