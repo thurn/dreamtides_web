@@ -68,8 +68,11 @@ export const BATTLE = {
   // (`turnAnnouncementDwellMs`, the announcement's display time). A backlog
   // of travels longer than `maxBacklogMs` drops its oldest ones, and one of
   // more than `maxQueuedReveals` opponent plays drops its oldest reveals, so
-  // a long loop never stalls the next prompt. The battle log keeps the
-  // newest `logEntryCap` entries of a battle.
+  // a long loop never stalls the next prompt. The fold copies the board at
+  // the first `maxObservedEventStates` presented events of one intent; the
+  // items after those show the board the intent ends with, so a long loop
+  // copies a bounded number of boards. The battle log keeps the newest
+  // `logEntryCap` entries of a battle.
   presentation: {
     eventDwellMs: 450,
     maxBacklogMs: 2700,
@@ -78,6 +81,7 @@ export const BATTLE = {
     dreamwellRevealDwellMs: 2000,
     turnAnnouncementDwellMs: 2100,
     maxQueuedReveals: 4,
+    maxObservedEventStates: 64,
     logEntryCap: 400,
   },
   // Side that takes the first turn. Valid values are `Player` and `Enemy`.

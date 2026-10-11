@@ -172,7 +172,7 @@ export class Context implements StepContext {
     this.events.push(event);
     if (this.observeEvent !== undefined) {
       try {
-        this.observeEvent(event, cloneState(this.state));
+        this.observeEvent(event, () => cloneState(this.state));
       } catch {
         // Observation is disposable; rules still match and resolve the event.
       }

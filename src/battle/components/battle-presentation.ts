@@ -1,9 +1,10 @@
 // The battle screen's presentation queue (engine-design § Presentation).
 //
 // The fold hands each applied engine intent's new events to presentation
-// (`IntentOutcome.published`). The screen recomputes them from the intent
-// and the slice it applied to (`usePublishedEngineEvents`), turns them into
-// items (`presentation-items.ts`), and plays the items in order
+// (`IntentOutcome.published`). The screen reads them again from the intent
+// and the slice it applied to (`usePublishedEngineEvents`), with the states
+// the reducer's fold observed at them, turns them into items
+// (`presentation-items.ts`), and plays the items in order
 // (`usePresentationQueue`). The prompt host shows a prompt only while the
 // queue is idle, so the events before a prompt (the draws of "draw 2, then
 // discard") are presented first.
@@ -14,14 +15,21 @@
 // replay are never presented again.
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useSyncExternalStore } from "react";
+import { BATTLE } from "../../content/battle";
 import type { Engine, EngineEvent } from "../../engine";
-import type { BattleSlice } from "../../engine/fold/slice";
+import type { BattleSlice, FoldObservation } from "../../engine/fold/slice";
 import type { BattleState } from "../../engine/state/types";
 import type { EngineBattleNotice } from "../../runtime/battle-prompt-messages";
-import { batchStates, foldEngineIntent, presentationAdapterFor } from "../../rules/battle/engine-battle";
+import { batchStates, foldAdapterFor, foldEngineIntent, observeEngineFolds } from "../../rules/battle/engine-battle";
 import { useEventOutcomes } from "../../session/hooks";
 import type { PresentationId } from "../../types/identifiers";
-import { enqueuePresentation, sliceKey, type PresentationBatch, type PresentationItem } from "./presentation-items";
+import {
+  enqueuePresentation,
+  presentedAsItem,
+  sliceKey,
+  type PresentationBatch,
+  type PresentationItem,
+} from "./presentation-items";
 
 /** The queue's state: the items left to present and the current notice. */
 export interface PresentationSnapshot {
@@ -117,9 +125,21 @@ export interface PublishedBatch {
 }
 
 /**
+ * What the reducer's fold observes for the feed: the state at each event that
+ * becomes an item, up to `maxObservedEventStates` per intent; the items
+ * after those show the batch's state (`presentationItems`).
+ */
+export const PRESENTATION_OBSERVATION: FoldObservation = {
+  presented: presentedAsItem,
+  limit: BATTLE.presentation.maxObservedEventStates,
+};
+
+/**
  * Calls `onPublished` with the events each applied engine intent publishes,
- * recomputed by the same deterministic fold adapter from the slice the
- * intent applied to, synchronously as the intent is folded. `slice` is the
+ * read again from the slice the intent applied to, synchronously as the
+ * intent is folded, with the states the reducer's fold observed while the
+ * feed is registered (`observeEngineFolds`). The shared fold adapter has
+ * memoized the reducer's runs, so the read runs no step again. `slice` is the
  * fold's slice as rendered; it resynchronizes the feed after anything else
  * changes it.
  */
@@ -134,9 +154,10 @@ export function usePublishedEngineEvents(
     sliceRef.current = slice;
     publishRef.current = onPublished;
   });
+  useEffect(() => observeEngineFolds(engine, PRESENTATION_OBSERVATION), [engine]);
   useEventOutcomes((event, seq, outcome) => {
     if (outcome !== "applied") return;
-    const adapter = presentationAdapterFor(engine);
+    const adapter = foldAdapterFor(engine);
     const from = sliceRef.current;
     const result = foldEngineIntent(adapter, from, event.type, event.payload);
     if (result.kind === "bounced") return;

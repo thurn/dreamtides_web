@@ -5,8 +5,12 @@ import type { BattleState } from "../state/types";
 import type { Side } from "../state/ids";
 import type { Step } from "./kinds";
 
-/** Receives an emitted event and a detached snapshot of its state, for presentation. */
-export type EventObserver = (event: EngineEvent, state: BattleState) => void;
+/**
+ * Receives an emitted event, for presentation. `snapshot` copies the state at
+ * the event, detached from the step's work state; it is valid only during the
+ * call, so an observer copies only the events it keeps.
+ */
+export type EventObserver = (event: EngineEvent, snapshot: () => BattleState) => void;
 
 /** Supplies answers to prompts that have no recorded answer. May throw `Suspend`. */
 export interface AnswerSource {

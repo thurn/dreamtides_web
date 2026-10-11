@@ -176,7 +176,7 @@ function namesCard(event: EngineEvent, id: InstanceId): boolean {
 }
 
 /** Whether an event of this kind is presented as an item rather than at once or not at all. */
-function presentedAsItem(event: EngineEvent): boolean {
+export function presentedAsItem(event: EngineEvent): boolean {
   const presentation: EventPresentation = EVENT_PRESENTATION[event.kind];
   return presentation !== "status" && presentation !== "none";
 }

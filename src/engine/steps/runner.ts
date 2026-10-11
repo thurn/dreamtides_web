@@ -10,7 +10,7 @@ import { stepDefinition, type Step } from "./kinds";
 import type { AnswerSource, EventObserver, RecordedAnswer, StepResult } from "./types";
 
 export interface RunOptions {
-  /** Optional detached event snapshots for a presentation replay. */
+  /** Observes each emitted event, for presentation (`FoldObservation`). */
   readonly observeEvent?: EventObserver;
   readonly prefix?: readonly RecordedAnswer[];
   readonly dryRun?: boolean;

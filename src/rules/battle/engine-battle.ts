@@ -12,10 +12,12 @@
 // `replayEngineBattle` folds a battle's intents again from the event log, to
 // recover what each applied intent published (the battle log's source); it
 // counts only when it reproduces the fold's slice. The battle screen's
-// presentation feed folds each applied intent again the same way: both read
-// the intent through `foldEngineIntent`, the replay using `foldAdapterFor`
-// and the feed `presentationAdapterFor`, which observes the state at each
-// event, and the feed takes a batch's states with `batchStates`.
+// presentation feed reads each applied intent again the same way: both read
+// the intent through `foldEngineIntent` on `foldAdapterFor`. While a feed is
+// registered (`observeEngineFolds`), the reducer's fold observes the state at
+// each presented event; the feed's read of the same slice and intent reuses
+// the adapter's memoized runs, so it runs no step again, and it takes the
+// batch's states, observed ones included, with `batchStates`.
 
 import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
 import type { BattleInit as EngineBattleInit } from "../../engine";
@@ -26,6 +28,7 @@ import {
   type BattleIntent,
   type BattleSlice,
   type FoldAdapter,
+  type FoldObservation,
   type PendingPrompt,
 } from "../../engine/fold/slice";
 import type { BattleResult as EngineBattleResult, BattleState } from "../../engine/state/types";
@@ -48,21 +51,25 @@ import {
 export type EngineIntentEventType = "BATTLE_ACTION" | "BATTLE_ANSWER" | "BATTLE_CANCEL";
 
 const adapters = new WeakMap<Engine, FoldAdapter>();
-const presentationAdapters = new WeakMap<Engine, FoldAdapter>();
-const eventStates = new WeakMap<EngineEvent, BattleState>();
+/** The observations registered for each engine's reducer folds, oldest first (`observeEngineFolds`). */
+const observations = new WeakMap<Engine, FoldObservation[]>();
 
 /**
- * A presentation-only replay adapter, observing detached states at each
- * emitted event. Ordinary folds and legality searches take no snapshots.
- * The adapter's replay memo retains the states of its event objects.
+ * Makes the reducer observe `observation` as it folds `engine`'s intents,
+ * until the returned function is called: a presentation feed registers while
+ * it is mounted, and reads each applied intent's observed states with
+ * `batchStates`. Folds observe nothing while no feed is registered, as when
+ * a reload replays the log, and the replay of the battle log never observes.
+ * The oldest registration applies.
  */
-export function presentationAdapterFor(engine: Engine): FoldAdapter {
-  let adapter = presentationAdapters.get(engine);
-  if (adapter === undefined) {
-    adapter = createFoldAdapter(engine, { observeEvent: (event, state) => eventStates.set(event, state) });
-    presentationAdapters.set(engine, adapter);
-  }
-  return adapter;
+export function observeEngineFolds(engine: Engine, observation: FoldObservation): () => void {
+  const registered = observations.get(engine) ?? [];
+  observations.set(engine, [...registered, observation]);
+  return () => {
+    const current = observations.get(engine) ?? [];
+    const index = current.indexOf(observation);
+    if (index >= 0) observations.set(engine, current.filter((_entry, at) => at !== index));
+  };
 }
 let collecting: EngineLogRecord[] | null = null;
 /**
@@ -82,12 +89,13 @@ function keepLog(seq: number, records: readonly EngineLogRecord[]): void {
 }
 
 /**
- * The fold adapter of `engine`, shared by the reducer and event-log replay.
- * Sharing is safe:
+ * The fold adapter of `engine`, shared by the reducer, event-log replay, and
+ * the presentation feed. Sharing is safe:
  *
  * - its only state is the re-run memo, keyed by an immutable committed state
  *   and the in-flight record, so every caller gets the run it would compute
- *   itself;
+ *   itself, and the states the reducer's folds observed at the events of
+ *   those runs, which no run reads;
  * - its log records are kept only inside `collectLog`, which the reducer's
  *   fold runs synchronously and which nothing re-enters, so the records of a
  *   replay or a presentation fold, which run outside every fold, are dropped.
@@ -109,10 +117,10 @@ export function foldAdapterFor(engine: Engine): FoldAdapter {
  * The states of one applied intent's batch: `state`, the state its events
  * arrive with (`to`'s pending prompt's display, else its committed state),
  * and `before`, the state they started from (the same of `from`).
- * `eventStates` align with `published`: the state observed at each event
- * by the presentation adapter, `undefined` for an event it did not observe,
- * whose presentation falls back to the batch's turn boundary
- * (`batchTurnAt`).
+ * `eventStates` align with `published`: the state the reducer's fold
+ * observed at each event (`FoldAdapter.observed`), `undefined` for an event
+ * it did not observe, whose presentation falls back to the batch's turn
+ * boundary (`batchTurnAt`).
  */
 export function batchStates(
   adapter: FoldAdapter,
@@ -127,7 +135,7 @@ export function batchStates(
   return {
     before: adapter.pending(from)?.display ?? from.committed,
     state: adapter.pending(to)?.display ?? to.committed,
-    eventStates: published.map((event) => eventStates.get(event)),
+    eventStates: published.map((event) => adapter.observed(event)),
   };
 }
 
@@ -207,21 +215,22 @@ type IntentFold =
   | { readonly kind: "threw"; readonly slice: BattleSlice; readonly error: unknown };
 
 /**
- * Folds the engine intent an event of `type` carries over `slice`. A throw
- * from the engine outside the adapter's own error boundary drops the
- * in-flight step and keeps the committed state; with nothing in flight the
- * intent bounces.
+ * Folds the engine intent an event of `type` carries over `slice`, observing
+ * `observation` (`FoldAdapter.reduce`). A throw from the engine outside the
+ * adapter's own error boundary drops the in-flight step and keeps the
+ * committed state; with nothing in flight the intent bounces.
  */
 export function foldEngineIntent(
   adapter: FoldAdapter,
   slice: BattleSlice,
   type: string,
   payload: Record<string, unknown>,
+  observation?: FoldObservation,
 ): IntentFold {
   const intent = engineIntentOfEvent(type, payload);
   if (intent === null) return { kind: "bounced" };
   try {
-    const outcome = adapter.reduce(slice, intent);
+    const outcome = adapter.reduce(slice, intent, observation);
     return outcome.kind === "bounced" ? outcome : { kind: "applied", slice: outcome.slice, published: outcome.published };
   } catch (error) {
     if (slice.inFlight === null) return { kind: "bounced" };
@@ -243,6 +252,9 @@ export function foldEngineIntent(
  * the prompt gate closed forever. The in-flight step is dropped and the
  * committed state kept, as for any engine error; with nothing in flight the
  * intent bounces.
+ *
+ * The fold observes the oldest registered presentation observation
+ * (`observeEngineFolds`); what it observes never enters the slice.
  */
 export function reduceEngineIntent(
   state: FoldState,
@@ -254,7 +266,8 @@ export function reduceEngineIntent(
   const battle = journeyBattleOf(state.battle);
   if (battle === null || engine === null) return null;
   const fold = battle.engine;
-  const folded = collectLog(ctx.seq, () => foldEngineIntent(foldAdapterFor(engine), fold.slice, type, payload));
+  const observation = observations.get(engine)?.[0];
+  const folded = collectLog(ctx.seq, () => foldEngineIntent(foldAdapterFor(engine), fold.slice, type, payload, observation));
   if (folded.kind === "bounced") return null;
   if (folded.kind === "threw" && fold.slice.inFlight !== null) {
     keepLog(ctx.seq, [

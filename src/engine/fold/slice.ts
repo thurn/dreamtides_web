@@ -110,10 +110,38 @@ export interface PendingPrompt {
   readonly display: BattleState;
 }
 
+/**
+ * What one intent's fold observes for presentation (`FoldAdapter.reduce`):
+ * the state at each newly published event presentation shows, copied as the
+ * rules emit it. Observed states are never part of the slice, so they are
+ * never persisted or hashed, and observing never changes a run.
+ */
+export interface FoldObservation {
+  /** Whether presentation shows `event`; only these events' states are copied. */
+  readonly presented: (event: EngineEvent) => boolean;
+  /** The most states one intent's fold copies; the presented events after them go unobserved. */
+  readonly limit: number;
+}
+
 export interface FoldAdapter {
   /** Builds a battle and advances it to the first decision or prompt. */
   start(init: BattleInit): IntentOutcome;
-  reduce(slice: BattleSlice, intent: BattleIntent): IntentOutcome;
+  /**
+   * Applies `intent`. With `observation`, the steps this call runs observe
+   * their newly published events (`observed`). A run the adapter memoized
+   * earlier is not run again: its events keep what the call that ran it
+   * observed, so a second call with the same slice and intent publishes the
+   * same event objects with the same observed states.
+   */
+  reduce(slice: BattleSlice, intent: BattleIntent, observation?: FoldObservation): IntentOutcome;
+  /**
+   * The state an observed fold copied at `event`, an event this adapter
+   * published: a presented event's own state; for any other event, the state
+   * at the latest presented event before it in its intent's fold, or the
+   * state that fold started from; `undefined` for an event no observed fold
+   * reached, and from the first presented event past the limit on.
+   */
+  observed(event: EngineEvent): BattleState | undefined;
   /**
    * The prompt the in-flight step is suspended on. Never throws: it is `null`
    * when nothing is in flight and also when the in-flight record fails to
@@ -124,8 +152,6 @@ export interface FoldAdapter {
 }
 
 export interface FoldOptions {
-  /** Observes event states on presentation runs; never persisted in the slice. */
-  readonly observeEvent?: EventObserver;
   /**
    * Development check: after an answer, the re-run step must reproduce the
    * events its previous run (the same step with one answer fewer) published.
@@ -233,6 +259,18 @@ type Replay =
   | { readonly kind: "pending"; readonly pending: PendingPrompt }
   | { readonly kind: "error"; readonly error: EngineErrorRecord };
 
+/** One intent's observation in progress: the copies it may still take, and the state its next unpresented event shares. */
+interface Observing {
+  readonly observation: FoldObservation;
+  remaining: number;
+  latest: BattleState | undefined;
+}
+
+/** An intent's observation starting from `before`, the state its published events start from. */
+function startObserving(observation: FoldObservation | undefined, before: BattleState): Observing | null {
+  return observation === undefined ? null : { observation, remaining: observation.limit, latest: before };
+}
+
 export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): FoldAdapter {
   const log = (records: readonly EngineLogRecord[]): void => {
     if (options.log !== undefined) for (const record of records) options.log(record);
@@ -242,14 +280,44 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
   // state, keyed by the in-flight record. Committed states never change, and
   // a run does not depend on the attempt.
   const runs = new WeakMap<BattleState, Map<string, StepResult>>();
+  // Non-persisted observed states (`observed`), by published event: the
+  // events of a memoized run keep theirs while it is memoized.
+  const states = new WeakMap<EngineEvent, BattleState>();
 
-  function run(committed: BattleState, inFlight: InFlight): StepResult {
+  /**
+   * Observes one run of an intent's fold, after the `skip` events an earlier
+   * run of the step published before suspending, which a re-run emits again
+   * first and in order: copies the state at a presented event while the
+   * intent's limit allows, and gives any other event the latest copy.
+   */
+  function observer(progress: Observing, skip: number): EventObserver {
+    let seen = 0;
+    return (event, snapshot) => {
+      seen += 1;
+      if (seen <= skip) return;
+      if (progress.observation.presented(event)) {
+        progress.latest = progress.remaining > 0 ? snapshot() : undefined;
+        progress.remaining -= 1;
+      }
+      if (progress.latest !== undefined) states.set(event, progress.latest);
+    };
+  }
+
+  /**
+   * The run of an in-flight step, observed by `progress` when the adapter
+   * has not memoized it; a memoized run's events keep their earlier states.
+   */
+  function run(committed: BattleState, inFlight: InFlight, progress: Observing | null = null, skip = 0): StepResult {
     const key = JSON.stringify(inFlight);
     let byState = runs.get(committed);
     const cached = byState?.get(key);
-    if (cached !== undefined) return cached;
+    if (cached !== undefined) {
+      const last = cached.events[cached.events.length - 1];
+      if (progress !== null && last !== undefined && cached.events.length > skip) progress.latest = states.get(last);
+      return cached;
+    }
     const result = runStep(committed, inFlight.step, INTERACTIVE, engine.catalog, {
-      observeEvent: options.observeEvent,
+      observeEvent: progress === null ? undefined : observer(progress, skip),
       prefix: inFlight.answers,
       automatic: inFlight.automatic,
       searches: engine.memo.searches,
@@ -287,9 +355,15 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
    * Runs the in-flight step behind the fold's error boundary. `answered`
    * carries the published event count when the record just gained an answer.
    */
-  function evaluate(committed: BattleState, inFlight: InFlight, answered: number | null): Evaluation {
+  function evaluate(
+    committed: BattleState,
+    inFlight: InFlight,
+    answered: number | null,
+    progress: Observing | null = null,
+    published = 0,
+  ): Evaluation {
     try {
-      const result = run(committed, inFlight);
+      const result = run(committed, inFlight, progress, published);
       if (result.answers.length < inFlight.answers.length) {
         throw new Error("The step finished with recorded answers left unused");
       }
@@ -352,9 +426,9 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
   /**
    * Runs the in-flight step and the automatic steps after it until a
    * decision, a prompt, or the battle's end. `answered` is true when the
-   * in-flight record just gained an answer.
+   * in-flight record just gained an answer; `progress` observes the runs.
    */
-  function advance(start: BattleSlice, answered: boolean): IntentOutcome {
+  function advance(start: BattleSlice, answered: boolean, progress: Observing | null = null): IntentOutcome {
     let slice = start;
     let checked = answered;
     const published: EngineEvent[] = [];
@@ -369,7 +443,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
         inFlight = { step: next, automatic: true, answers: [] };
         slice = { ...slice, inFlight, publishedEvents: 0, attempt: slice.attempt + 1 };
       }
-      const evaluation = evaluate(slice.committed, inFlight, checked ? slice.publishedEvents : null);
+      const evaluation = evaluate(slice.committed, inFlight, checked ? slice.publishedEvents : null, progress, slice.publishedEvents);
       checked = false;
       if (evaluation.kind === "error") {
         logError(slice, evaluation.error);
@@ -421,15 +495,16 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       }, false);
     },
     pending,
-    reduce(slice, intent) {
-      const outcome = reduceIntent(slice, intent);
+    observed: (event) => states.get(event),
+    reduce(slice, intent, observation) {
+      const outcome = reduceIntent(slice, intent, observation);
       const history = slice.history;
       if (outcome.kind === "bounced" || history === undefined) return outcome;
       return { ...outcome, slice: { ...outcome.slice, history: { ...history, entries: [...history.entries, { intent }] } } };
     },
   };
 
-  function reduceIntent(slice: BattleSlice, intent: BattleIntent): IntentOutcome {
+  function reduceIntent(slice: BattleSlice, intent: BattleIntent, observation: FoldObservation | undefined): IntentOutcome {
     if (slice.committed.result !== null) return { kind: "bounced", reason: "battleOver" };
     switch (intent.kind) {
       case "battleAction": {
@@ -443,7 +518,11 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
         if (!legal.some((action) => allowedBy(action, intent.action, slice.committed))) {
           return { kind: "bounced", reason: "illegalAction" };
         }
-        return advance(opened(slice, stepForAction(slice.committed, intent.action), false), false);
+        return advance(
+          opened(slice, stepForAction(slice.committed, intent.action), false),
+          false,
+          startObserving(observation, slice.committed),
+        );
       }
       case "answer": {
         if (slice.inFlight === null) return { kind: "bounced", reason: "noPendingPrompt" };
@@ -464,7 +543,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
               { fingerprint, value: intent.value },
             ],
           },
-        }, true);
+        }, true, startObserving(observation, current.pending.display));
       }
       case "cancel": {
         if (slice.inFlight === null) return { kind: "bounced", reason: "noPendingPrompt" };

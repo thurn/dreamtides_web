@@ -7,6 +7,7 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
+import type { EngineEvent } from "../events";
 import { promptFingerprint } from "../prompts/fingerprint";
 import { firstLegalAnswer } from "../prompts/answers";
 import type { ArrangePrompt, ChooseCardsPrompt, ChooseNumberPrompt, Prompt, PromptId, PromptPurpose } from "../prompts/types";
@@ -23,10 +24,11 @@ import * as primitives from "../effects/primitives";
 import { boardState, type BoardSetup } from "../testing/board";
 import { DSL } from "../testing/dsl-cards";
 import { fuzzEngineCatalog, playFuzzGame, replayInteractively, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
-import { SYNTHETIC, syntheticId } from "../testing/synthetic-cards";
+import { LOOP, LOOP_CARDS } from "../testing/loop-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { PROMPTING } from "../testing/synthetic-effects";
 import { parsePromptId } from "../../types/identifiers";
-import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "./slice";
+import { createFoldAdapter, type BattleIntent, type BattleSlice, type FoldObservation, type IntentOutcome } from "./slice";
 
 const v = SYNTHETIC;
 const p = PROMPTING;
@@ -648,5 +650,75 @@ describe("constrained arrangements", () => {
     const finalDeck = done.committed.sides.player.deck;
     expect(finalDeck[0]).toBe(bottom);
     expect(finalDeck[finalDeck.length - 1]).toBe(top);
+  });
+});
+
+describe("presentation observation", () => {
+  /** The kinds a synthetic presentation shows. */
+  const shownKinds: ReadonlySet<EngineEvent["kind"]> = new Set(["cardPlayed", "resolved", "materialized", "returnedToHand", "cardDrawn", "discarded"]);
+  const shown = (event: EngineEvent) => shownKinds.has(event.kind);
+
+  it("copies at most its limit of presented states in a long repeatLoop batch, without changing the fold", () => {
+    const loops = createEngine(testCatalog(LOOP_CARDS));
+    const { state, ids } = boardState(loops.catalog, { active: "player", phase: "day", scoreToWin: 1000, player: { hand: [LOOP.bouncer.id], deck } });
+    const observedFold = createFoldAdapter(loops);
+    const plainFold = createFoldAdapter(loops);
+    const start: BattleSlice = { committed: state, inFlight: null, attempt: 0, publishedEvents: 0 };
+    const playBouncer: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand", slot: { rank: "back", index: 0 } } };
+    const played = applied(plainFold.reduce(start, playBouncer));
+    const loop = played.committed.loops.candidate;
+    if (loop === null) throw new Error("no loop offer");
+    const observation: FoldObservation = { presented: shown, limit: 6 };
+    const repeat: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "repeatLoop", loop: loop.id, count: 60 } };
+    const outcome = observedFold.reduce(played, repeat, observation);
+    expect(outcome).toEqual(plainFold.reduce(played, repeat));
+    if (outcome.kind !== "applied") throw new Error("repeat bounced");
+
+    const states = outcome.published.map((event) => observedFold.observed(event));
+    const presentedAt = outcome.published.flatMap((event, index) => (shown(event) ? [index] : []));
+    const copies = new Set(states.filter((observed) => observed !== undefined && observed !== played.committed));
+    expect(presentedAt.length).toBeGreaterThan(observation.limit * 10);
+    expect(copies.size).toBe(observation.limit);
+    const kept = presentedAt.slice(0, observation.limit);
+    expect(new Set(kept.map((index) => states[index])).size).toBe(observation.limit);
+    expect(presentedAt.slice(observation.limit).every((index) => states[index] === undefined)).toBe(true);
+    expect(states.slice(presentedAt[observation.limit]).every((observed) => observed === undefined)).toBe(true);
+    // An unpresented event shares the latest presented copy, or the state the batch started from.
+    states.forEach((observed, index) => {
+      if (index >= (presentedAt[observation.limit] ?? 0) || presentedAt.includes(index)) return;
+      const latest = presentedAt.filter((at) => at < index).pop();
+      expect(observed).toBe(latest === undefined ? played.committed : states[latest]);
+    });
+    // The copies are the states at their own events: the points scored grow between them.
+    const scores = kept.map((index) => states[index]?.sides.player.score ?? -1);
+    expect(scores).toEqual([...scores].sort((a, b) => a - b));
+    expect(scores[0]).toBeLessThan(scores[scores.length - 1] ?? -1);
+  });
+
+  it("observes only the events an answer newly publishes, from the suspended display", () => {
+    const { slice: start, ids } = slice({ active: "player", phase: "day", player: { hand: [drawThenDiscard.id, v.vanilla1.id], deck }, enemy: { deck } });
+    const playCard: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } };
+    /** Plays the card, then answers its discard prompt observing `presented`; the answer's outcome and pending display. */
+    const answer = (presented: FoldObservation["presented"]) => {
+      const observedFold = createFoldAdapter(engine);
+      const seen: EngineEvent[] = [];
+      const observation: FoldObservation = { presented: (event) => (seen.push(event), presented(event)), limit: 64 };
+      const suspended = applied(observedFold.reduce(start, playCard, observation));
+      const pending = observedFold.pending(suspended);
+      if (pending === null) throw new Error("no discard prompt");
+      seen.length = 0;
+      const answered = observedFold.reduce(suspended, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1]] }, observation);
+      if (answered.kind !== "applied" || answered.published.length === 0) throw new Error("answer published nothing");
+      return { observedFold, seen, published: answered.published, display: pending.display };
+    };
+
+    const presentedAnswer = answer(shown);
+    expect(presentedAnswer.seen).toEqual(presentedAnswer.published);
+    const discarded = presentedAnswer.published.find((event) => event.kind === "discarded");
+    if (discarded === undefined) throw new Error("no discard");
+    expect(presentedAnswer.observedFold.observed(discarded)?.sides.player.void).toContain(ids.player.hand[1]);
+    const unpresented = answer(() => false);
+    expect(unpresented.seen).toEqual(unpresented.published);
+    expect(unpresented.published.every((event) => unpresented.observedFold.observed(event) === unpresented.display)).toBe(true);
   });
 });

@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
 // Published events follow the authoritative fold, including a legality
-// fault after an answer and a feed mounted over a reloaded prompt.
+// fault after an answer and a feed mounted over a reloaded prompt, and the
+// feed reads the reducer's observed states without running the rules again.
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEngine, type Engine } from "../../engine";
 import type { EngineCardDefinition } from "../../engine/catalog";
 import { energy } from "../../engine/dsl/builders";
@@ -11,7 +12,7 @@ import type { BattleSlice } from "../../engine/fold/slice";
 import { DSL, DSL_CARDS } from "../../engine/testing/dsl-cards";
 import { syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
 import type { EventDraft } from "../../eventlog/local-log";
-import { foldAdapterFor, pendingEnginePrompt } from "../../rules/battle/engine-battle";
+import { foldAdapterFor, foldEngineIntent, pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { journeyBattleOf } from "../../rules/battle/fold";
 import { registerBattleInitProvider } from "../../rules/battle/journey-battle";
 import {
@@ -31,7 +32,20 @@ import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { parseClientId, parseGameId } from "../../types/identifiers";
 import { testJourneySeed } from "../../types/test-identities";
 import { usePublishedEngineEvents, type PublishedBatch } from "./battle-presentation";
-import { sliceKey } from "./presentation-items";
+import { presentedAsItem, sliceKey } from "./presentation-items";
+
+// Counts every step context: each step run and each legality or feasibility search.
+const counted = vi.hoisted(() => ({ contexts: 0 }));
+vi.mock("../../engine/steps/context", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../engine/steps/context")>();
+  class CountedContext extends actual.Context {
+    constructor(...args: ConstructorParameters<typeof actual.Context>) {
+      super(...args);
+      counted.contexts += 1;
+    }
+  }
+  return { ...actual, Context: CountedContext };
+});
 
 let faulting = false;
 // The same fault as engine-battle.test.ts: completing the player's modal
@@ -156,6 +170,44 @@ describe("published engine event subscriber", () => {
       expect(retry?.batch).toEqual({ key: sliceKey(sliceOf(game)), state: pending?.display });
       expect(retry?.seq).toBe(game.log.head());
     });
+  });
+
+  it("reads each applied intent's observed states without running a step or search again", async () => {
+    const { game } = await battleGame();
+    // Subscribed before the feed, so it runs after the reducer's fold and before the feed's read.
+    let afterFold = -1;
+    game.log.subscribe(() => {
+      afterFold = counted.contexts;
+    });
+    const batches = mountFeed(game);
+    act(() => {
+      const before = counted.contexts;
+      game.log.append(play(game));
+      expect(afterFold).toBeGreaterThan(before);
+      expect(counted.contexts).toBe(afterFold);
+      game.log.append({ type: "BATTLE_ANSWER", payload: { side: "player", promptId: promptOf(game).id, value: 0 } });
+      expect(counted.contexts).toBe(afterFold);
+    });
+    expect(batches).toHaveLength(2);
+    const presented = batches.flatMap(({ events, eventStates }) =>
+      events.flatMap((event, index) => (presentedAsItem(event) ? [eventStates[index]] : [])),
+    );
+    expect(presented.length).toBeGreaterThan(0);
+    expect(presented.every((state) => state !== undefined)).toBe(true);
+  });
+
+  it("observes no fold once the feed unmounts", async () => {
+    const { game } = await battleGame();
+    mountFeed(game);
+    act(() => roots.splice(0).forEach((root) => root.unmount()));
+    game.log.append(play(game));
+    const from = sliceOf(game);
+    const answer: EventDraft = { type: "BATTLE_ANSWER", payload: { side: "player", promptId: promptOf(game).id, value: 0 } };
+    game.log.append(answer);
+    const folded = foldEngineIntent(foldAdapterFor(engine), from, answer.type, answer.payload);
+    if (folded.kind !== "applied") throw new Error("play did not apply");
+    expect(folded.published.length).toBeGreaterThan(0);
+    expect(folded.published.map((event) => foldAdapterFor(engine).observed(event))).toEqual(folded.published.map(() => undefined));
   });
 
   it("starts a reloaded prompt with no historical batches and publishes its answer", async () => {

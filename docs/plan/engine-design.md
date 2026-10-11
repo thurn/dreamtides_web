@@ -1467,15 +1467,23 @@ names each kind's presentation, and a missing kind is a type error:
   (its resolution is logged), an ability finishing (`abilityResolved`,
   `pendingAbility`), and a bounded feasibility search.
 
-The battle screen recomputes each applied intent's published events,
-keeps the ones the human may see, and plays their items in order. Its
-presentation fold adapter (`presentationAdapterFor`) observes a detached
-state at each event as the rules emit it (`batchStates`), and each item
-shows its own event's board (`eventBoards` in `presentation-items.ts`), so
-a batch's board only moves forward in event order and takes no input while
-an item plays; the opponent's plays arrive one at a time even when the AI
-host has moved on, and the prompt host shows a prompt only once the queue
-is idle. On those boards:
+The battle screen reads each applied intent's published events again,
+keeps the ones the human may see, and plays their items in order. While
+its feed is mounted, it registers a fold observation
+(`observeEngineFolds`, `FoldObservation`): the reducer's fold copies a
+detached state at each event that becomes an item (`presentedAsItem`) as
+the rules emit it, up to `BATTLE.presentation.maxObservedEventStates`
+copies per intent, and an event no item shows shares the latest copy, or
+the state the intent started from. The copies live beside the shared fold
+adapter's re-run memo, never in the slice, so they are never persisted or
+hashed and never change a run. The feed reads the same slice and intent
+from that adapter, whose memoized runs it reuses without running a step or
+legality search again, and takes the observed states with `batchStates`.
+Each item shows its own event's board (`eventBoards` in
+`presentation-items.ts`), so a batch's board only moves forward in event
+order and takes no input while an item plays; the opponent's plays arrive
+one at a time even when the AI host has moved on, and the prompt host shows
+a prompt only once the queue is idle. On those boards:
 
 - an event before the batch's new turn shows the turn it belongs to
   (`batchTurnAt`, shared with the battle log), including a card banished
@@ -1486,8 +1494,9 @@ is idle. On those boards:
   resolving event card leaves the stack as it resolves and its effects
   follow; a card still resolving at a prompt stays on the stack until the
   answer's batch, whose first item shows it gone;
-- an event with no observed state, outside the presentation adapter, shows
-  the batch's final state in the turn `batchTurnAt` gives it.
+- an event with no observed state (past the per-intent limit, as in a long
+  loop, or folded while no feed was registered) shows the batch's final
+  state in the turn `batchTurnAt` gives it.
 
 A backlog drops its oldest travels past `maxBacklogMs` and its oldest
 opponent reveals past `maxQueuedReveals`, never a turn, score, Dreamwell

@@ -4,7 +4,7 @@
 // battle log built from what the human saw.
 import { describe, expect, it, vi } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
-import { PresentationQueue } from "../../battle/components/battle-presentation";
+import { PRESENTATION_OBSERVATION, PresentationQueue } from "../../battle/components/battle-presentation";
 import { enqueuePresentation, presentationItems, type PresentationItem } from "../../battle/components/presentation-items";
 import { BATTLE } from "../../content/battle";
 import { createEngine, type BattleState, type Engine, type EngineEvent, type InstanceView } from "../../engine";
@@ -17,7 +17,7 @@ import { atStartOfTurn, triggered } from "../../engine/dsl/triggers";
 import { banishUntil, discard, draw } from "../../engine/effects/primitives";
 import { SYNTHETIC, syntheticId } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
-import { batchStates, presentationAdapterFor } from "../../rules/battle/engine-battle";
+import { batchStates, foldAdapterFor } from "../../rules/battle/engine-battle";
 import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
 import { LAB, PROMPT_LAB_DEFINITIONS, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
 import { battleSeed, PHASES, SIDES, type InstanceId } from "../../engine/state/ids";
@@ -103,14 +103,14 @@ function queueItem(
 }
 
 
-/** A live presentation feed over a synthetic board, using the same observed adapter as the screen. */
+/** A live presentation feed over a synthetic board, using the same shared adapter and observation as the screen. */
 function observedBoard(setup: BoardSetup, engine: Engine = labEngine) {
   const { state, ids } = boardState(engine.catalog, setup);
-  const adapter = presentationAdapterFor(engine);
+  const adapter = foldAdapterFor(engine);
   let slice: BattleSlice = { committed: state, inFlight: null, attempt: 0, publishedEvents: 0 };
   const apply = (intent: BattleIntent) => {
     const before = slice;
-    const outcome = adapter.reduce(slice, intent);
+    const outcome = adapter.reduce(slice, intent, PRESENTATION_OBSERVATION);
     if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("fixture intent failed");
     slice = outcome.slice;
     const states = batchStates(adapter, before, slice, outcome.published);
@@ -374,12 +374,19 @@ describe("presentation items", () => {
     const { state, ids } = boardState(labEngine.catalog, { active: "player", phase: "day", player: { hand: [DSL.drawTwo.id], energy: 2, deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] } });
     const slice: BattleSlice = { committed: state, inFlight: null, attempt: 0, publishedEvents: 0 };
     const intent: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } };
-    const observer = vi.fn((_event, snapshot: BattleState) => {
-      snapshot.sides.player.score = 999;
+    const presented = vi.fn((_event: EngineEvent): boolean => {
       throw new Error("synthetic observer failure");
     });
-    const observed = createFoldAdapter(labEngine, { observeEvent: observer }).reduce(slice, intent);
-    expect(observer).toHaveBeenCalled();
+    const failing = createFoldAdapter(labEngine).reduce(slice, intent, { presented, limit: 64 });
+    expect(presented).toHaveBeenCalled();
+    const adapter = createFoldAdapter(labEngine);
+    const observed = adapter.reduce(slice, intent, { presented: () => true, limit: 64 });
+    if (observed.kind !== "applied") throw new Error("fixture intent failed");
+    for (const event of observed.published) {
+      const snapshot = adapter.observed(event);
+      if (snapshot !== undefined) snapshot.sides.player.score = 999;
+    }
+    expect(failing).toEqual(createFoldAdapter(labEngine).reduce(slice, intent));
     expect(observed).toEqual(createFoldAdapter(labEngine).reduce(slice, intent));
   });
 
