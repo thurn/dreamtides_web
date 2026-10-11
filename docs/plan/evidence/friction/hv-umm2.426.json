@@ -1,0 +1,89 @@
+{
+  "bead": "hv-umm2.426",
+  "phase": 5,
+  "implementMin": 7.320817233333333,
+  "measurementWindow": {
+    "startUtc": "2026-10-11T20:25:06+00:00",
+    "endUtc": "2026-10-11T20:32:25.249034+00:00",
+    "basis": "Native claim timestamp is a dispatch proxy; measured through final preparation before commit. Actual commit start/end are retained externally at handoff."
+  },
+  "localValidationS": {
+    "focused": 5.959718333033379,
+    "review": 19.60504504200071,
+    "knip": 3.47513874998549
+  },
+  "compilerMutantS": 7.892015999997966,
+  "hostLoad": 26.23046875,
+  "hostLoadMeasuredFor": "npm run review command start; 1-minute sample",
+  "hostLoadSamples": {
+    "prepare": {
+      "startUtc": "2026-10-11T20:28:02.486485+00:00",
+      "endUtc": "2026-10-11T20:28:04.828288+00:00",
+      "load1m5m15m": [
+        34.5537109375,
+        23.7353515625,
+        17.56689453125
+      ]
+    },
+    "probe-before": {
+      "startUtc": "2026-10-11T20:28:23.817829+00:00",
+      "endUtc": "2026-10-11T20:28:25.190892+00:00",
+      "load1m5m15m": [
+        31.10205078125,
+        23.8271484375,
+        17.7802734375
+      ]
+    },
+    "probe-after": {
+      "startUtc": "2026-10-11T20:28:51.785100+00:00",
+      "endUtc": "2026-10-11T20:28:52.694443+00:00",
+      "load1m5m15m": [
+        31.4287109375,
+        24.4189453125,
+        18.1640625
+      ]
+    },
+    "missing-subtype": {
+      "startUtc": "2026-10-11T20:29:03.308052+00:00",
+      "endUtc": "2026-10-11T20:29:11.200153+00:00",
+      "load1m5m15m": [
+        29.8935546875,
+        24.45458984375,
+        18.2880859375
+      ]
+    },
+    "focused": {
+      "startUtc": "2026-10-11T20:29:18.445737+00:00",
+      "endUtc": "2026-10-11T20:29:24.405601+00:00",
+      "load1m5m15m": [
+        29.478515625,
+        24.61474609375,
+        18.45166015625
+      ]
+    },
+    "review": {
+      "startUtc": "2026-10-11T20:29:30.812764+00:00",
+      "endUtc": "2026-10-11T20:29:50.418008+00:00",
+      "load1m5m15m": [
+        26.23046875,
+        24.0830078125,
+        18.3349609375
+      ]
+    },
+    "knip": {
+      "startUtc": "2026-10-11T20:29:55.104014+00:00",
+      "endUtc": "2026-10-11T20:29:58.579199+00:00",
+      "load1m5m15m": [
+        28.11181640625,
+        24.83984375,
+        18.78173828125
+      ]
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

@@ -43,7 +43,7 @@ import {
   type Slot,
   type Zone,
 } from "../../engine/state/ids";
-import type { BattleState, EndReason } from "../../engine/state/types";
+import type { BattleState, EndReason, FloatingChange } from "../../engine/state/types";
 import type { StepKind } from "../../engine/steps/kinds";
 import { battleDeckCardDefinitionFromUnknown } from "../../battle/card-definition";
 import type { TransfigurationType } from "../../types/journey";
@@ -1174,50 +1174,46 @@ function isEffectRef(value: unknown): boolean {
   );
 }
 
+/** Saved-state validation for every floating change kind. */
+const FLOATING_CHANGE_VALIDATORS: {
+  readonly [K in FloatingChange["kind"]]: (value: Record<string, unknown>) => boolean;
+} = {
+  allTypes: (value) => isInstanceId(value.instance),
+  temporary: (value) => isInstanceId(value.instance),
+  keyword: (value) =>
+    isInstanceId(value.instance) &&
+    oneOf(KEYWORDS)(value.keyword) &&
+    isBoolean(value.gains),
+  subtype: (value) => isInstanceId(value.instance) && typeof value.subtype === "string",
+  baseSpark: (value) => isInstanceId(value.instance) && isFiniteNumber(value.value),
+  spark: (value) => isInstanceId(value.instance) && isFiniteNumber(value.amount),
+  cost: (value) =>
+    isSide(value.player) &&
+    isCardFilter(value.filter) &&
+    isFiniteNumber(value.amount) &&
+    isBoolean(value.next),
+  cardCost: (value) => isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase") && isIndex(value.amount),
+  trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once),
+  disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while),
+  banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
+  playFrom: (value) =>
+    isSide(value.player) &&
+    value.zone === "void" &&
+    nullable(isInstanceId)(value.instance) &&
+    isCardFilter(value.filter) &&
+    isBoolean(value.next),
+  // This continuous change is made only by static abilities, not saved floating effects.
+  reclaimNotBanished: () => false,
+};
+
+function isFloatingChangeKind(value: unknown): value is FloatingChange["kind"] {
+  return typeof value === "string" && Object.prototype.hasOwnProperty.call(FLOATING_CHANGE_VALIDATORS, value);
+}
+
 function isFloatingChange(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
-  switch (value.kind) {
-    case "allTypes":
-    case "temporary":
-      return isInstanceId(value.instance);
-    case "keyword":
-      return (
-        isInstanceId(value.instance) &&
-        oneOf(KEYWORDS)(value.keyword) &&
-        isBoolean(value.gains)
-      );
-    case "subtype":
-      return isInstanceId(value.instance) && typeof value.subtype === "string";
-    case "baseSpark":
-      return isInstanceId(value.instance) && isFiniteNumber(value.value);
-    case "spark":
-      return isInstanceId(value.instance) && isFiniteNumber(value.amount);
-    case "cost":
-      return (
-        isSide(value.player) &&
-        isCardFilter(value.filter) &&
-        isFiniteNumber(value.amount) &&
-        isBoolean(value.next)
-      );
-    case "cardCost":
-      return isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase") && isIndex(value.amount);
-    case "trigger":
-      return isEffectRef(value.ref) && isBoolean(value.once);
-    case "disableTriggers":
-      return isInstanceId(value.instance) && optional(isPlainRecord)(value.while);
-    case "banishedUntil":
-      return isInstanceId(value.instance) && isSide(value.side);
-    case "playFrom":
-      return (
-        isSide(value.player) &&
-        value.zone === "void" &&
-        nullable(isInstanceId)(value.instance) &&
-        isCardFilter(value.filter) &&
-        isBoolean(value.next)
-      );
-    default:
-      return false;
-  }
+  const kind = value.kind;
+  return isFloatingChangeKind(kind) && FLOATING_CHANGE_VALIDATORS[kind](value);
 }
 
 function isFloatingEffect(value: unknown): boolean {

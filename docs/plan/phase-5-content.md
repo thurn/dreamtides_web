@@ -161,7 +161,7 @@ composition beads skip it.
    small shared synthetic fixtures when needed. Run
    `npm test -- src/engine/effects/primitives/contracts.test.ts`.
    The registry index is the catalog (Phase 3.4). Every primitive bead, and
-   every bead that introduces a prompt kind, takes the
+   every bead that introduces a prompt kind or floating change kind, takes the
    [`registration hubs`](workflow.md#hub-areas) area with `engine hubs`,
    whatever the inventory predicts about its event and prompt kinds. It
    grants these additive registration entries without widening and without
@@ -180,6 +180,16 @@ composition beads skip it.
      `src/runtime/battle-prompt-messages.ts`, and for a status its
      `CARD_STATUS_BADGES` entry in
      `src/screens/cumulus_adapters/engine-battle-view-model.ts`;
+   - every new floating change kind: its saved-state validator in
+     `FLOATING_CHANGE_VALIDATORS` in `src/rules/battle/fold.ts`, its `LAYER`
+     entry in `src/engine/continuous/layers.ts` when it is continuous, its
+     status copy and `effectStarted` log line in
+     `src/runtime/battle-prompt-messages.ts`, and its duration badge in
+     `engineStatuses` in
+     `src/screens/cumulus_adapters/engine-battle-view-model.ts`. Both tables
+     require every kind in their respective unions. A continuous kind made
+     only by static abilities, such as `reclaimNotBanished`, has an explicit
+     rejecting saved-floating validator;
    - every new prompt role: its UI copy in
      `src/runtime/battle-prompt-messages.ts`, its exhaustive Greedy strategy in
      `src/engine/policy/prompts.ts`, a reachable synthetic fixture in

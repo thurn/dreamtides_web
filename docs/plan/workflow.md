@@ -311,10 +311,11 @@ additive entries only. Write its name in the `Areas:` line.
     `src/session/reducer-version.ts`;
   - `src/rules/replay/` and `scripts/regenerate-replay-fixtures.mjs`.
 - **`registration hubs`**, taken with `engine hubs` by every Phase 5
-  primitive bead and every bead that introduces a prompt kind
+  primitive bead and every bead that introduces a prompt kind or floating
+  change kind
   ([recipe step 3](phase-5-content.md#bead-recipe)). It grants additive
   registration entries for a new primitive, event kind, keyword, card
-  status, or prompt role:
+  status, prompt role, or floating change kind:
   - the primitive's getter in `src/engine/effects/registry.ts`;
   - an `EVENT_PRESENTATION` entry in
     `src/battle/components/presentation-items.ts`;
@@ -331,6 +332,21 @@ additive entries only. Write its name in the `Areas:` line.
     `src/screens/cumulus_adapters/engine-battle-presentation.test.ts`;
   - a lab fixture in `src/engine/testing/prompt-lab.ts`, which `engine hubs`
     also covers.
+
+  Every new floating change kind registers at four surfaces:
+
+  - its saved-state validator in `FLOATING_CHANGE_VALIDATORS` in
+    `src/rules/battle/fold.ts`;
+  - for a continuous kind, its `LAYER` entry in
+    `src/engine/continuous/layers.ts`;
+  - its status copy and `effectStarted` log line in
+    `src/runtime/battle-prompt-messages.ts`;
+  - its duration badge in `engineStatuses` in
+    `src/screens/cumulus_adapters/engine-battle-view-model.ts`.
+
+  The validator table covers every `FloatingChange` kind. A continuous kind
+  made only by static abilities, such as `reclaimNotBanished`, has an explicit
+  rejecting validator because saved floating effects do not carry it.
 
   Any other edit to these files (a changed branch, value, rendered output,
   log line, or assertion) needs its own area and its own
