@@ -366,7 +366,7 @@ function commandFor(step, extraArgs = []) {
   if (step === "import-cycles") {
     return [process.execPath, [join(root, "scripts", "import-cycles.mjs")]];
   }
-  if (step === "test-related-capped") {
+  if (step === "test-gate") {
     return [
       process.execPath,
       [join(root, "scripts", "review-related-tests.mjs"), ...extraArgs],

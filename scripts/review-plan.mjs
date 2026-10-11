@@ -274,29 +274,36 @@ export function buildReviewPlan(
 }
 
 /**
- * Most related test files `review:gate` runs. A larger selection is skipped
- * because the release stage runs the whole suite on the same history.
+ * Most related test files `review:gate` runs as a selection. A larger
+ * selection runs the whole suite instead: it costs only a few seconds more
+ * than a selection that size, and it also reaches the tests outside the
+ * changed files' import graph, such as a registry another candidate changed.
  */
 export const GATE_RELATED_TEST_FILE_CAP = 40;
 
 /**
- * Whether a related-test selection runs under `cap`. A file selected by more
- * than one Vitest project counts once.
+ * Which tests the gate runs for a related-test selection: the selection at
+ * or under `cap`, the whole suite over it. A file selected by more than one
+ * Vitest project counts once.
  *
  * @param {string[]} testFiles
  * @param {number} cap
- * @returns {{ run: boolean, testFileCount: number }}
+ * @returns {{ scope: "related" | "full", relatedFileCount: number }}
  */
-export function relatedTestRunDecision(testFiles, cap) {
-  const testFileCount = new Set(testFiles).size;
-  return { run: testFileCount <= cap, testFileCount };
+export function gateTestScope(testFiles, cap) {
+  const relatedFileCount = new Set(testFiles).size;
+  return {
+    scope: relatedFileCount <= cap ? "related" : "full",
+    relatedFileCount,
+  };
 }
 
 /**
  * Steps of the gate stage's `review:gate` for a plan built from the files
  * changed against `HEAD^`: prepare, then the full typecheck and the
- * import-cycle check alongside lint of the changed sources, then the capped
- * related tests.
+ * import-cycle check alongside lint of the changed sources, then the related
+ * tests, or the whole suite when more than `GATE_RELATED_TEST_FILE_CAP` test
+ * files are related.
  *
  * @param {ReviewPlan} reviewPlan
  * @returns {ReviewPlanEntry[]}
@@ -310,9 +317,9 @@ export function gateExecutionPlan(reviewPlan) {
   const steps = [{ step: "prepare", args: [] }, { concurrent: checks }];
   if (reviewPlan.testInputs.length > 0) {
     steps.push({
-      step: "test-related-capped",
+      step: "test-gate",
       args: [
-        "--max-files",
+        "--max-related-files",
         String(GATE_RELATED_TEST_FILE_CAP),
         ...reviewPlan.testInputs,
       ],

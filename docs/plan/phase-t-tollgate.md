@@ -300,8 +300,11 @@ Update every consumer of the ref model:
   - `prepare`;
   - full `typecheck`;
   - lint of the files changed against `HEAD^`;
-  - tests related to `HEAD^`, capped at 40 files. Over the cap, the step logs
-    the selection size and skips, and the release stage covers the rest.
+  - tests related to the files changed against `HEAD^`, up to 40 files.
+    Over 40, the step logs the selection size and runs the whole suite, as
+    every `src/engine/` and `src/content/` change does: the whole suite costs
+    a few seconds more than such a selection and also catches conflicts
+    between beads outside the changed files' import graph.
 - **Local Tollgate policy:**
   - steps: `dependencies` and `review:gate` in the gate stage; `review:full`,
     plus `fuzz:engine -- --games 200` once Phase 3.2 has added it, in the

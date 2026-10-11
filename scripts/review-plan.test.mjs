@@ -6,10 +6,10 @@ import {
   fullExecutionPlan,
   GATE_RELATED_TEST_FILE_CAP,
   gateExecutionPlan,
+  gateTestScope,
   importersOf,
   importSearchNeedles,
   KNIP_STEP,
-  relatedTestRunDecision,
   reviewNeedsPreparedWorkspace,
   STATIC_CHECK_STEPS,
   TYPECHECK_STEPS,
@@ -165,7 +165,7 @@ describe("deleted modules", () => {
     expect(requested).toEqual([]);
   });
 
-  it("runs the capped related tests of the importers at the gate", () => {
+  it("runs the gate tests of the importers", () => {
     expect(
       gateExecutionPlan(
         buildReviewPlan(
@@ -183,9 +183,9 @@ describe("deleted modules", () => {
         ],
       },
       {
-        step: "test-related-capped",
+        step: "test-gate",
         args: [
-          "--max-files",
+          "--max-related-files",
           String(GATE_RELATED_TEST_FILE_CAP),
           "scripts/dev.test.mjs",
         ],
@@ -293,7 +293,7 @@ describe("gate review plan", () => {
     ]);
   });
 
-  it("lints the changed sources beside the typecheck and caps related tests", () => {
+  it("lints the changed sources beside the typecheck, then runs the gate tests", () => {
     expect(
       gateExecutionPlan(
         buildReviewPlan(["src/state/example.ts", "scripts/tool.mjs"]),
@@ -307,9 +307,9 @@ describe("gate review plan", () => {
         ],
       },
       {
-        step: "test-related-capped",
+        step: "test-gate",
         args: [
-          "--max-files",
+          "--max-related-files",
           String(GATE_RELATED_TEST_FILE_CAP),
           "scripts/tool.mjs",
           "src/state/example.ts",
@@ -319,28 +319,30 @@ describe("gate review plan", () => {
   });
 });
 
-describe("related test cap", () => {
-  it("runs a selection at or under the cap", () => {
-    expect(relatedTestRunDecision(["a.test.ts", "b.test.ts"], 2)).toEqual({
-      run: true,
-      testFileCount: 2,
+describe("gate test scope", () => {
+  it("runs a related selection at or under the cap", () => {
+    expect(gateTestScope(["a.test.ts", "b.test.ts"], 2)).toEqual({
+      scope: "related",
+      relatedFileCount: 2,
     });
-    expect(relatedTestRunDecision([], 0)).toEqual({
-      run: true,
-      testFileCount: 0,
+    expect(gateTestScope([], 0)).toEqual({
+      scope: "related",
+      relatedFileCount: 0,
     });
   });
 
-  it("skips a selection over the cap and reports its size", () => {
-    expect(
-      relatedTestRunDecision(["a.test.ts", "b.test.ts", "c.test.ts"], 2),
-    ).toEqual({ run: false, testFileCount: 3 });
+  it("runs the whole suite for a selection over the cap", () => {
+    expect(gateTestScope(["a.test.ts", "b.test.ts", "c.test.ts"], 2)).toEqual({
+      scope: "full",
+      relatedFileCount: 3,
+    });
   });
 
   it("counts a file selected by several projects once", () => {
-    expect(
-      relatedTestRunDecision(["a.test.ts", "a.test.ts", "b.test.ts"], 2),
-    ).toEqual({ run: true, testFileCount: 2 });
+    expect(gateTestScope(["a.test.ts", "a.test.ts", "b.test.ts"], 2)).toEqual({
+      scope: "related",
+      relatedFileCount: 2,
+    });
   });
 });
 

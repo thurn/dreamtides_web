@@ -635,6 +635,11 @@ Candidates submitted after the switch follow staged mode.
 
 - **The gate stage** (`dependencies`, then `npm run review:gate`) promotes to
   `staging`. New worktrees, and local `master`, follow `staging`.
+  `review:gate` typechecks, checks import cycles, lints the files the
+  candidate changes, and runs their related tests, or the whole suite when
+  more than 40 test files are related, as for every `src/engine/` and
+  `src/content/` change. So those tests run on the candidate's integrated
+  tree, beside every bead promoted before it, before it lands.
 - **The release stage** (`npm run review:full`, then the fuzz smoke) runs on
   the newest `staging` tip. A pass advances `release` and remote `master`.
 - **A bead lands** when it is promoted to `staging`.
@@ -656,6 +661,10 @@ Candidates submitted after the switch follow staged mode.
   Tollgate's `max_release_lag = 5` pauses ordinary promotion if the streak
   grows anyway. The `ci-fix` candidate is approved with
   `tg approve --release-fix <id>`, which bypasses that pause (T5).
+- **A `ci-fix` bead's full-suite acceptance** excludes failures another open
+  bead owns: those of another `ci-fix` bead's step, and those an open bead's
+  description names. Its commit message names each excluded failure and the
+  bead that owns it.
 - **Flaky results** follow [Failure and recovery](#failure-and-recovery).
   Never just retry until green.
 
@@ -670,7 +679,10 @@ Run the cheapest relevant check first:
    and dependencies (see [Fallout areas](#fallout-areas)).
 3. **Only when the change touches** test infrastructure, repository-wide
    config, or cross-cutting architecture: `npm run review:full` locally. It is
-   heavy (D17). Otherwise the gate or release stage is the aggregate.
+   heavy (D17). Otherwise the gate stage is the aggregate: it runs the
+   related tests, or the whole suite when more than 40 test files are
+   related ([Staged mode](#staged-mode)). The release stage adds full lint,
+   knip, the production bundle, and the fuzz smoke.
 4. **Engine beads,** in interim mode, also run the fuzz smoke before
    committing: `npm run fuzz:engine -- --games 200`, introduced in Phase 3.2.
    It is heavy. In staged mode the release stage runs it, and a bead runs it

@@ -1,25 +1,25 @@
 import { resolve } from "node:path";
 import { createVitest } from "vitest/node";
-import { relatedTestRunDecision } from "./review-plan.mjs";
+import { gateTestScope } from "./review-plan.mjs";
 
 /**
- * Runs the Vitest files related to the given source files, unless more than
- * `--max-files` test files are related. Over the cap it logs the selection
- * size and exits successfully without running anything; the caller's broader
- * stage (the release run, for `review:gate`) runs the whole suite instead.
+ * Runs the gate's tests for the given changed source files: the Vitest files
+ * related to them when at most `--max-related-files` test files are related,
+ * and the whole suite otherwise.
  *
- * Usage: node scripts/review-related-tests.mjs --max-files <n> <file>...
+ * Usage:
+ *   node scripts/review-related-tests.mjs --max-related-files <n> <file>...
  */
 
+const usage =
+  "Usage: node scripts/review-related-tests.mjs --max-related-files <n> <file>...";
 const argv = process.argv.slice(2);
-const capIndex = argv.indexOf("--max-files");
-const maxFiles = capIndex === -1
+const capIndex = argv.indexOf("--max-related-files");
+const maxRelatedFiles = capIndex === -1
   ? Number.NaN
   : Number.parseInt(argv[capIndex + 1] ?? "", 10);
-if (!Number.isInteger(maxFiles) || maxFiles < 0) {
-  console.error(
-    "Usage: node scripts/review-related-tests.mjs --max-files <n> <file>...",
-  );
+if (!Number.isInteger(maxRelatedFiles) || maxRelatedFiles < 0) {
+  console.error(usage);
   process.exit(2);
 }
 const sources = argv
@@ -37,24 +37,24 @@ const vitest = await createVitest("test", {
   passWithNoTests: true,
 });
 try {
-  const specifications = await vitest.getRelevantTestSpecifications();
-  const decision = relatedTestRunDecision(
-    specifications.map((specification) => specification.moduleId),
-    maxFiles,
+  const related = await vitest.getRelevantTestSpecifications();
+  const decision = gateTestScope(
+    related.map((specification) => specification.moduleId),
+    maxRelatedFiles,
   );
-  if (decision.run) {
-    console.log(
-      `[review] ${String(decision.testFileCount)} related test file(s) ` +
-      `for ${String(sources.length)} changed file(s)`,
-    );
-  } else {
-    console.log(
-      `[review] skipping related tests: ${String(decision.testFileCount)} ` +
-      `related test file(s) exceed the cap of ${String(maxFiles)}; ` +
-      "the release stage runs the full suite",
-    );
-  }
-  if (decision.run && specifications.length > 0) {
+  const specifications = decision.scope === "related"
+    ? related
+    : await vitest.globTestSpecifications();
+  const selected =
+    `[review] ${String(decision.relatedFileCount)} related test file(s) ` +
+    `for ${String(sources.length)} changed file(s)`;
+  console.log(
+    decision.scope === "related"
+      ? selected
+      : `${selected} exceed ${String(maxRelatedFiles)}; running the whole ` +
+        `suite (${String(specifications.length)} test file(s))`,
+  );
+  if (specifications.length > 0) {
     await vitest.init();
     await vitest.runTestSpecifications(specifications);
   }

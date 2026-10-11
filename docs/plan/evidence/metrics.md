@@ -231,14 +231,15 @@ Monitored, never gated. "Overrun" means more than 50% over the budget.
 | Typecheck step | ≤ 10 s | 9.6–10.8 s | `[review] typecheck finished in` |
 | Lint, whole `src/` | ≤ 20 s | 18.4 s | `[review] lint finished in` (review:full) |
 | Full Tollgate gate at 2 workers | ≤ 5 min | 256.2 s median | sum of step `elapsed_ms` per buildset |
+| Tollgate gate stage (`dependencies`, `review:gate`), staged mode | ≤ 60 s ([D44](../decisions.md#d44-staged-validation)) | 19.9 s median, n = 37 code candidates (hv-umm2.355), with over-40 selections skipped | median per-buildset sum of gate-stage step `elapsed_ms`, ≥ 10 code candidates |
 | Workspace prepare, warm | ≤ 5 s | 4.0–4.1 s | `node scripts/prepare-workspace.mjs` |
 
 The review and focused-test budgets start below the baseline on purpose:
 Phase 1.3 targets them. The content-module row (Phase 5 retrospective hv-umm2.311) covers card
 authoring: a change under `src/content/` selects the catalog's importer graph
-as related tests (133–136 files, about 1,550 tests), and that local run is
-the only time they run before `staging`, because `review:gate` caps related
-tests at 40 files. Measured 30.7 s at load 7.5 (hv-umm2.50), 32 s at load
+as related tests (133–136 files, about 1,550 tests). `review:gate` runs the
+whole suite for any selection over 40 files, so the gate stage runs them
+again, with the rest of the suite, on the candidate's integrated tree. Measured 30.7 s at load 7.5 (hv-umm2.50), 32 s at load
 3.8 (hv-umm2.51), and 38.2 s at load 14.3 (hv-umm2.297). The fuzz-smoke budget is in the
 [Phase 2 gate budget revision](#budget-revision-phase-2-retrospective).
 
@@ -405,6 +406,31 @@ prepared workspace and no typecheck build info, timed with
 The `dependencies` step (`npm ci`) is separate and not included. A
 scratch commit that broke `clampEssence` failed `review:gate` with 2 failing
 related test files out of 21.
+
+### Whole suite over the related cap (2026-10-11, bead hv-umm2.356)
+
+Over 40 related test files, `review:gate` runs the whole suite (216 files)
+instead of skipping its tests. Every `src/engine/` and `src/content/` change
+selects 137–162 files, so this is the common case for Phase 5 beads.
+Details and raw rounds are in
+[`measurements/hv-umm2.356.md`](measurements/hv-umm2.356.md).
+
+- **Full suite over the uncapped selection.** Five interleaved rounds on
+  `d0f45c58e`'s diff (an engine primitive and two cards), gate environment,
+  under the heavy slot, load 6–21: the related selection (158 files)
+  median 25.4 s wall, 68.2 s CPU; the whole suite median 29.1 s wall,
+  72.8 s CPU. The suite costs about 4 s more and also catches cross-bead
+  registry and contract conflicts outside the import graph.
+- **Snapshots of the two untested conflicts.** At `035f9058f` and
+  `79aceda65`, the previous script skipped 158 and 157 related files and
+  passed in 12.0 s and 12.1 s; this script ran the whole suite and failed
+  (3 and 4 failing files) in 36.9 s and 36.7 s, load 3.9–4.7, cold
+  typecheck. The `dependencies` step is excluded.
+- **Under the cap** the step is unchanged: 1 related file, 12.3 s wall.
+- **The Tollgate gate-stage median** over at least 10 code candidates after
+  this change is read at the next phase gate or retrospective and recorded
+  in the gate-stage budget row above. The local over-cap runs plus the
+  `dependencies` step's 4.3 s median put it near 41 s, inside D44's 60 s.
 
 ## Phase 1.3 feedback-loop speedups (2026-10-05, bead hv-b8ef.3)
 
