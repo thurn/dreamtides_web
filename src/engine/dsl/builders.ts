@@ -135,6 +135,11 @@ export function banishFromVoidCost(count = 1, filter: CardFilter = {}): PaymentC
   return { cost: "banishFromVoid", count, filter };
 }
 
+/** Banish N matching cards from the selected void(s); the payer's void is the default. */
+export function banishFromAnyVoidCost(count = 1, filter: CardFilter = {}, player: PlayerRef | "any" = "you"): PaymentCost {
+  return { cost: "banishFromAnyVoid", player, count, filter };
+}
+
 /**
  * "Banish X cards from your void" as a cost: the payer chooses how many
  * matching void cards to banish, and that count is X. X is at least `min`,

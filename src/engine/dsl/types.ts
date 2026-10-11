@@ -384,6 +384,8 @@ export type PaymentCost =
    * least N⍟ (rules § Costs, Requirements, and X → Paying ⍟).
    */
   | { readonly cost: "points"; readonly amount: number }
+  /** Banish matching cards from the payer, opponent, or either public void. */
+  | { readonly cost: "banishFromAnyVoid"; readonly player: PlayerRef | "any"; readonly count: number; readonly filter: CardFilter }
   /** Banish a fixed number of cards from your void that match the filter. */
   | { readonly cost: "banishFromVoid"; readonly count: number; readonly filter: CardFilter; readonly min?: never }
   /**

@@ -104,6 +104,7 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Banish an opponent card";
       case "revealCost":
         return cards("reveal");
+      case "banishAnyVoidCost":
       case "banishCost":
         return cards("banish", "void card", "void cards");
       case "offeringCost":
@@ -360,6 +361,7 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
       return "character you could return to hand";
     case "revealCost":
       return "card you could reveal";
+    case "banishAnyVoidCost":
     case "banishCost":
       return "void card you could banish";
     case "offeringCost":
@@ -443,6 +445,8 @@ function costPhrase(cost: Cost): string {
       return `remove ${plural(cost.amount, "memory counter", "memory counters")}`;
     case "points":
       return `pay ${plural(cost.amount, "point", "points")}`;
+    case "banishFromAnyVoid":
+      return `banish ${plural(cost.count, "card", "cards")} from ${cost.player === "any" ? "either void" : cost.player === "opponent" ? "the opponent's void" : "your void"}`;
     case "banishFromVoid":
       return `banish ${cost.count === "x" ? "X cards" : plural(cost.count, "card", "cards")} from your void`;
     case "banishFromHand":

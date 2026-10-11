@@ -8,7 +8,7 @@
 import type { EngineCatalog, PrintedCard } from "../catalog";
 import { cardMatchesFilter, copiableCostOf } from "../continuous/characteristics";
 import { adjustedEnergy, NO_COST_MODIFIER, type CostModifier } from "../continuous/costs";
-import { matchingCharacters } from "../dsl/selectors";
+import { matchingCharacters, resolvePlayer } from "../dsl/selectors";
 import { fixedEnergy, minimumEnergy, xCost } from "../dsl/energy";
 import type { AdditionalCost, Cost, PaymentCost, Variant } from "../dsl/types";
 import type {
@@ -177,6 +177,10 @@ function cardCandidates(
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "reveal":
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
+    case "banishFromAnyVoid": {
+      const players = cost.player === "any" ? [side, resolvePlayer(side, "opponent")] : [resolvePlayer(side, cost.player)];
+      return players.flatMap((of) => state.sides[of].void.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter)));
+    }
     case "banishFromVoid":
       return state.sides[side].void.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "banishFromHand":
@@ -191,6 +195,7 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
   discard: "discardCost",
   reveal: "revealCost",
   banishFromVoid: "banishCost",
+  banishFromAnyVoid: "banishAnyVoidCost",
   banishFromHand: "offeringCost",
 };
 
@@ -461,6 +466,7 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
       case "discard":
         for (const id of cards) discardCard(ctx, side, id);
         break;
+      case "banishFromAnyVoid":
       case "banishFromVoid":
       case "banishFromHand":
         for (const id of cards) banish(ctx, id);

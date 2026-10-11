@@ -1,0 +1,493 @@
+{
+  "bead": "hv-umm2.92",
+  "phase": 5,
+  "base": "13c3c0a4c3563faa6f402f94ea54091cefb40e90",
+  "timingBasis": "Setup proxy is node_modules creation 2026-10-11T18:02:05Z; exact native dispatch not retained. Command walls include prepare and asset restoration. Browser lease queue is measured separately. Final timing added after runtime settlement. Final evidence UTC 2026-10-11T18:41:13.682912+00:00.",
+  "localValidationS": {
+    "installReported": 2,
+    "focused": 4.26,
+    "related": 3.62,
+    "reviewInitialTestCompatibilityError": 40.52,
+    "reviewTestAssertionError": 36.31,
+    "finalNegative": 4.018,
+    "review": 35.48,
+    "knip": 2.36,
+    "preflight": 0.87,
+    "weighted300": 60.42,
+    "weighted300Engine": 59.6,
+    "weighted300Cpu": 65.5,
+    "thinActivationReplay": 1.08,
+    "sweepWrapper": 357.2,
+    "judgedFirstScript": 62.75,
+    "judgedSecondScript": 19.16,
+    "judgedFinal": 60.14,
+    "cancelRetry": 108.73
+  },
+  "hostLoad": 5.92333984375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 15
+  },
+  "contractModules": 1,
+  "contractLines": 226,
+  "testCounting": "One plain synthetic contract module is collected by the existing runner. Existing role-expectation test entrypoint adds no cases and has net line delta 0. No new jsdom or scenario module. Costs 480 lines; contract 226 lines.",
+  "localEditCorrections": [
+    {
+      "tag": "local-edit-correction",
+      "note": "Initial review rejected test Array.at because configured target excludes it. Indexed access then carried an unnecessary assertion caught by lint. Final indexed access without assertion passes review; historical logs retained. Production delta and schema unchanged throughout."
+    }
+  ],
+  "rulesDecisions": [
+    "RD-hv-umm2.92-1"
+  ],
+  "cardIssues": [],
+  "failurePaths": {
+    "midStepError": "Synthetic public paying step throws after energy and both-owner banishment; original committed state restored, no energy/banish publication.",
+    "reloadRestart": "JSON reload before chooseCards payment and after committed payment into optional effect; fresh fold resumes to inline-identical state hash.",
+    "partialWrite": "Cancellation and error rollback preserve committed state; both owner movements and energy commit atomically.",
+    "staleInput": "Duplicate physical IDs, private-hand IDs and previous/cancelled prompt IDs bounce; committed hash unchanged.",
+    "concurrentActors": "Wrong-side answer and competing enemy action bounce while in flight; exactly one engine.action recorded and payment committed once.",
+    "sourceOrigin": "Normal source returns/created source ceases through another composed cost; captured controller and UUID origin resolve correctly. Played Reclaim source excluded from void payment. Created cards cannot persist as legal void candidates."
+  },
+  "sourceFreeze": {
+    "base": "13c3c0a4c3563faa6f402f94ea54091cefb40e90",
+    "utc": "2026-10-11T18:25:17.220338+00:00",
+    "sha256": {
+      "scripts/content-inventory.ts": "fa9c088ba08ea8a402e52123c36e995ebd31b41278385343cdcb305b0e60733a",
+      "src/content/cards/ruin-scavenger-cfa78375.ts": "097bb472fe9a6a70dbcfd873cf9640b1cea40e351490267a178ef614706a2914",
+      "src/engine/dsl/builders.ts": "a08d49b1322df9e13a7847a9b9892da13dcc247280623ea321475238c8f6f823",
+      "src/engine/dsl/types.ts": "b88aacf028270d50a2527800dbead764389cf74b085790a566f14ebf22e94783",
+      "src/engine/policy/prompts.ts": "1c54dd5140e83ed25c303708f1ceaf827b5945e61b511d73e75990c7e5d90ef2",
+      "src/engine/prompts/types.ts": "e6a5bcdc894919a54814fd6d9d9b4c185ad3f4a824006d38463653bdddbc0102",
+      "src/engine/rules/costs.ts": "c3d30e0385f544da3112f3a55ec7b627df749655af51db92ff4ff250b274ab59",
+      "src/engine/testing/lab-solver.ts": "c111226a011ffcfffff6ba0fd02868bdec0b322a84fd1d83c09544276a59ea4c",
+      "src/engine/testing/prompt-lab.ts": "c9742c20f49d760190ee8475851fe1d6e75a3e3d20cf81f284c798e18d266138",
+      "src/runtime/battle-prompt-messages.ts": "6a3560fe26b956db633650fddce3ad8c209dc739975278ea7a0dcf513708d327",
+      "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "f4463b589931de082c32c7c9717f8d7082730e2303f33d490cf24467e8226635",
+      "src/engine/effects/primitives/contracts/banish-from-any-void-cost.contracts.ts": "28abfc7fbc1ccb9e267cba6c8437c1a1fb28baef37bba056c870af18119effb3"
+    },
+    "immutablePrintedPrefixSha256": "9d7de1317ee76ecc17325627fc556804f856e0c1c9dd95f15ebdee8895e2fb20",
+    "unchangedPrintedPrefix": true,
+    "uuidSha256FirstByte": 89,
+    "hostLoad": 5.92333984375
+  },
+  "negativeProof": {
+    "finalCostsSha256": "c3d30e0385f544da3112f3a55ec7b627df749655af51db92ff4ff250b274ab59",
+    "contractSha256": "28abfc7fbc1ccb9e267cba6c8437c1a1fb28baef37bba056c870af18119effb3",
+    "negativeCostsSha256": "a9a88097ba13d2e38f2073db88156a90c341f4ebda802d209f05891fc7d881f4",
+    "exit": 1,
+    "restoredIdentically": true,
+    "wallSeconds": 4.018379582965281
+  },
+  "negativeDisposition": "Explicit opponent\u2192payer mutation fails2both-side cases,5otherpatternmatches pass,534skip; finally source restored byte-identically. Earlier negative artifacts retained separately.",
+  "d20": "Energy plus chosen opponent-void cost followed by self permanent spark is direct composition; no extra real-card scenario required.",
+  "d21": {
+    "uuidFirstByte": 89,
+    "sampled": false,
+    "mandatoryReason": "New banishAnyVoidCost role requires judged desktop/mobile normal payment workflow despite no new picker body."
+  },
+  "preExisting": [
+    "hv-umm2.401 inventory return/X probes",
+    "Dependency advisories17; package/lock unchanged"
+  ],
+  "fallout": [
+    {
+      "file": "src/runtime/battle-prompt-messages.ts",
+      "reason": "New Cost exhaustive costPhrase plus additive new-role heading/auto-answer copy; native registration/fallout scope."
+    },
+    {
+      "file": "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+      "reason": "Existing exhaustive prompt-role expectations add new role using existing chooseCards surface."
+    },
+    {
+      "file": "scripts/content-inventory.ts",
+      "reason": "Parent native Area amendment authorizes exactly existing banishFromAnyVoidCost probe tag correction; other entries unchanged."
+    }
+  ],
+  "friction": [],
+  "outstanding": [
+    "Parent exact cold core review and native candidate approval/promotion; no implementation or acceptance work remains."
+  ],
+  "browserSweep": {
+    "event": "cardSweepSummary",
+    "counts": {
+      "pass": 12,
+      "skip": 8
+    },
+    "attemptCounts": {
+      "pass": 12,
+      "skip": 8
+    },
+    "hostLoad": 4.3525390625,
+    "wallMs": {
+      "browserLeaseWait": 274877,
+      "serve": 2192,
+      "scenario": 74778.19670899998,
+      "cleanup": 283.60074999998324,
+      "execution": 77279.00895799999,
+      "total": 352156.008958
+    },
+    "sideProvenance": "Immutable raw reports include result.lab.side and rawReport side filename; skips reconstructed from retained full command order (player10 thenenemy10) and headless same-cell eligibility. Raw ledger preserved.",
+    "matrixFile": "matrix-proof.json",
+    "matrixBySide": {
+      "player": {
+        "pass": [
+          "base",
+          "amplified",
+          "empowered",
+          "kindled",
+          "attuned",
+          "perfected"
+        ],
+        "skip": [
+          "resonant",
+          "inspired",
+          "enduring",
+          "hastened"
+        ]
+      },
+      "enemy": {
+        "pass": [
+          "base",
+          "amplified",
+          "empowered",
+          "kindled",
+          "attuned",
+          "perfected"
+        ],
+        "skip": [
+          "resonant",
+          "inspired",
+          "enduring",
+          "hastened"
+        ]
+      }
+    }
+  },
+  "implementMin": 39.14,
+  "judged": {
+    "ok": true,
+    "wallMs": {
+      "browserLeaseWait": 44,
+      "serve": 1562,
+      "scenario": 53210,
+      "total": 54839
+    },
+    "rows": [
+      {
+        "side": "player",
+        "viewport": "desktop",
+        "variant": "base",
+        "source": "i1",
+        "gameId": "sdr2uz",
+        "logRows": 40,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-base-picker-desktop.png",
+          "any-void-base-selected-desktop.png",
+          "any-void-base-resolved-desktop.png"
+        ]
+      },
+      {
+        "side": "player",
+        "viewport": "desktop",
+        "variant": "amplified",
+        "source": "i1",
+        "gameId": "xzuzkt",
+        "logRows": 40,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-amplified-picker-desktop.png",
+          "any-void-amplified-selected-desktop.png",
+          "any-void-amplified-resolved-desktop.png"
+        ]
+      },
+      {
+        "side": "enemy",
+        "viewport": "desktop",
+        "variant": "base",
+        "source": "i11",
+        "gameId": "6pk438",
+        "logRows": 39,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-enemy-base-desktop.png"
+        ]
+      },
+      {
+        "side": "enemy",
+        "viewport": "desktop",
+        "variant": "amplified",
+        "source": "i11",
+        "gameId": "cvnyge",
+        "logRows": 39,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-enemy-amplified-desktop.png"
+        ]
+      },
+      {
+        "side": "player",
+        "viewport": "mobile",
+        "variant": "base",
+        "source": "i1",
+        "gameId": "vnfy73",
+        "logRows": 40,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-base-picker-mobile.png",
+          "any-void-base-selected-mobile.png",
+          "any-void-base-resolved-mobile.png"
+        ]
+      },
+      {
+        "side": "player",
+        "viewport": "mobile",
+        "variant": "amplified",
+        "source": "i1",
+        "gameId": "q5gxa3",
+        "logRows": 40,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-amplified-picker-mobile.png",
+          "any-void-amplified-selected-mobile.png",
+          "any-void-amplified-resolved-mobile.png"
+        ]
+      },
+      {
+        "side": "enemy",
+        "viewport": "mobile",
+        "variant": "base",
+        "source": "i11",
+        "gameId": "6wtmzo",
+        "logRows": 39,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-enemy-base-mobile.png"
+        ]
+      },
+      {
+        "side": "enemy",
+        "viewport": "mobile",
+        "variant": "amplified",
+        "source": "i11",
+        "gameId": "esaz27",
+        "logRows": 39,
+        "rolePrompts": 1,
+        "engineAiErrors": 0,
+        "screens": [
+          "any-void-enemy-amplified-mobile.png"
+        ]
+      }
+    ],
+    "caps": [],
+    "raw": "any-void-workflows.result.json",
+    "judgment": "Own visual inspection of desktop selected, mobile selected/amplified picker and enemy/mobile+resolved desktop verifies clear contained heading/count/OpponentVoid/card/cancel/submit surfaces and board spark 2/3. Parent independently corroborated desktop base picker/mobile amplified picker/mobile base selected. All PNGs at CSS dimensions verified 1440x900 or 390x844."
+  },
+  "cancelRetry": {
+    "wallMs": {
+      "browserLeaseWait": 79624,
+      "serve": 2164,
+      "scenario": 21635,
+      "total": 103449
+    },
+    "cases": [
+      {
+        "viewport": "desktop",
+        "gameId": "fm4ecp",
+        "cancelId": "2:3:0",
+        "reopenedId": "2:5:0",
+        "screens": [
+          "any-void-cancel-before-desktop.png",
+          "any-void-cancel-restored-desktop.png",
+          "any-void-cancel-retry-base-picker-desktop.png",
+          "any-void-cancel-retry-base-selected-desktop.png",
+          "any-void-cancel-retry-base-resolved-desktop.png"
+        ]
+      },
+      {
+        "viewport": "mobile",
+        "gameId": "x2jjsx",
+        "cancelId": "2:3:0",
+        "reopenedId": "2:5:0",
+        "screens": [
+          "any-void-cancel-before-mobile.png",
+          "any-void-cancel-restored-mobile.png",
+          "any-void-cancel-retry-base-picker-mobile.png",
+          "any-void-cancel-retry-base-selected-mobile.png",
+          "any-void-cancel-retry-base-resolved-mobile.png"
+        ]
+      }
+    ],
+    "ok": true,
+    "caps": []
+  },
+  "captureDimensions": {
+    "file": "capture-dimensions.json",
+    "verifiedPngs": 26,
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "count": 13
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "count": 13
+    },
+    "scale": "README CSS-scale"
+  },
+  "captureRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.92",
+  "historicalBrowserFailures": [
+    {
+      "raw": "any-void-workflows.result-initial.json",
+      "gameId": "zwtwvf",
+      "wallMs": {
+        "browserLeaseWait": 52462,
+        "serve": 950,
+        "scenario": 4047,
+        "total": 57480
+      },
+      "disposition": "Fresh fixture rendered human/card readiness plus null-safe transition polling; corrected workflow passed. DOM DREAMTIDES/null probe/caps[]; navigation hypothesis, no engine fault claimed.",
+      "capture": "any-void-failure-desktop-initial.png"
+    },
+    {
+      "raw": "any-void-workflows.result-gallery-selector.json",
+      "gameId": "szjmts",
+      "wallMs": {
+        "browserLeaseWait": 43,
+        "serve": 1557,
+        "scenario": 11924,
+        "total": 13549
+      },
+      "disposition": "Actual gallery panel selector replaces assumed inlinebanner. Captured real role/opponent choices/caps[]; corrected workflow passes.",
+      "capture": "any-void-failure-desktop-gallery-selector.png"
+    }
+  ],
+  "browserLeaseWaitS": 407.05,
+  "frictionAssessment": "No single diagnosed correction exceeded approximately 10 minutes: test compatibility/assertion and two QA readiness/gallery selector corrections are retained separately. Native lease wait aggregate is measured separately from execution; it is resource coordination, not engine performance. No speculative source repair or unchanged broad QA retry.",
+  "runtimeLedger": {
+    "serverGroups": [
+      84274,
+      15343,
+      20352,
+      30082,
+      50019
+    ],
+    "port": 5174,
+    "servers": "Each native runner reported own group stopped and port free; final scoped PID check recorded.",
+    "browser": "Five native runner sessions closed own MCP context/provider and released repository lease. No browser/QA ran during review asset preparation.",
+    "heavy": "One exact weighted300 command completed under shared heavy lock; single-seed public replay ran outside the heavy slot.",
+    "externalWriters": 0
+  },
+  "artifactSha256": {
+    "activation-fuzz-0.jsonl": "935e54132398967cfc6c2a552fc19d49a0db4346bc6f4015119d842761d6a4a2",
+    "activation-probe.json": "d24d86a51339b92bac1c53cd9de140ab5ef87ca955d7458a6c1b6735a4b8922e",
+    "activation-probe.log": "442616ab9ef9d49431fcc80d86ff30afc4bffce43b45e6ad08c48a8f0913358d",
+    "activation-probe.ts": "dad6e8c65898881788711ca54cd0e9271c8c4229d83b548d8558622c57e14d85",
+    "any-void-amplified-picker-desktop.png": "3408e345fd9069ad7c8d46c396f6a0b3a6f75491221fdfdcd8a776ece92ef72d",
+    "any-void-amplified-picker-mobile.png": "97ddb0406577dbf5f4bd38e5d2de6067cfee9dc2f7331ba38b09bf68536b4d8e",
+    "any-void-amplified-resolved-desktop.png": "cd815321a5cd8cefdcb5f022da7c62ab117ead884fd5ea8dad9b76433b42734c",
+    "any-void-amplified-resolved-mobile.png": "bf72000e478c71745e61276efae6ea9024bdc9e4327f4f7f86baf11ee1ccf124",
+    "any-void-amplified-selected-desktop.png": "7063820f765a2ede8be305038bb6391c41b4952ba0c6ebb5be6806b8d81cfaf0",
+    "any-void-amplified-selected-mobile.png": "2b3e57f12c102d7ef3eba225606d7b8de84723ba66823a77fcb676336b60ddfa",
+    "any-void-base-picker-desktop.png": "47822588d5b2b1d2a127786a70fb86dfcdd4dd18ebd92a01d560cd7304b86ea0",
+    "any-void-base-picker-mobile.png": "97ddb0406577dbf5f4bd38e5d2de6067cfee9dc2f7331ba38b09bf68536b4d8e",
+    "any-void-base-resolved-desktop.png": "9678cf17a7af5188f970b992f87a024e57c093c6e1efd59bbaaab4af70296e8e",
+    "any-void-base-resolved-mobile.png": "ae5721a3f46e417b3ed144183d51197294c71c870516d15e3c10cd9ef2e62d9a",
+    "any-void-base-selected-desktop.png": "a666be753216497904ac678a4a084b18451be5d0f0479c4a10ff21f98702ca24",
+    "any-void-base-selected-mobile.png": "2b3e57f12c102d7ef3eba225606d7b8de84723ba66823a77fcb676336b60ddfa",
+    "any-void-cancel-before-desktop.png": "d2df678268155e1b995f38b8d4fccc762dd6d0a262605f68ad2bd17e65da68a1",
+    "any-void-cancel-before-mobile.png": "ba209a4a2959b19ec00b85fac09e8821df7642aff010940780f23a7c64cfa4ee",
+    "any-void-cancel-restored-desktop.png": "012fc8e8ceac9966f84abe9b4a3e9a97aafc4c1199ab854a0626073c92512ec0",
+    "any-void-cancel-restored-mobile.png": "62759d7cfe258ddcf1dcba40514a74dccde49be21fcf9d3df46c7bdbbd12bcde",
+    "any-void-cancel-retry-base-picker-desktop.png": "d2df678268155e1b995f38b8d4fccc762dd6d0a262605f68ad2bd17e65da68a1",
+    "any-void-cancel-retry-base-picker-mobile.png": "ba209a4a2959b19ec00b85fac09e8821df7642aff010940780f23a7c64cfa4ee",
+    "any-void-cancel-retry-base-resolved-desktop.png": "34f38e3f6c6028c3894d9cd9a199c4cb48cac89a9ce6b3381a585ec36bb07e67",
+    "any-void-cancel-retry-base-resolved-mobile.png": "96914127331902b88afa8f820331882256dc9ef6a4fe3977ca10a72657643771",
+    "any-void-cancel-retry-base-selected-desktop.png": "727141c63fc6716b2df3744ceb7a9fe5861fcaefd7a7ccf6417b11a9576e7eb5",
+    "any-void-cancel-retry-base-selected-mobile.png": "9fb85ed6afa3249acccb1bc1536d2c1bc01208999e88b0c0362608191c650c97",
+    "any-void-cancel-retry.mjs": "2c0007a111eadd5c452fbd7dbbf48be5026f59f2596dc705a9a83c2221b92f09",
+    "any-void-cancel-retry.result.json": "9275a19d0aa56014e8b41d71517f5eb08b10cb7dd0d7634f8134fe85477dc1bc",
+    "any-void-cancel-retry.server.log": "459417f8d9acf99d04ef54c38387ed82c02eb13886c6b1f78cdf4ba08645464d",
+    "any-void-enemy-amplified-desktop.png": "f46a49b844f9d8d513ef0f9fba21b9659e889b5a22bf61f8f284a373fe7944dc",
+    "any-void-enemy-amplified-mobile.png": "29d277406c45d505a0f4cef4f284fb6a3bfb629976d74b3667c7fc916d197219",
+    "any-void-enemy-base-desktop.png": "88f9b4163502275372f807c4420025808a7fa20ad30e55918c13a6ff8a326aad",
+    "any-void-enemy-base-mobile.png": "b418100cf61f53473d8c769c028cddc4d356608693fe987b701eb1b18e011e09",
+    "any-void-enemy.mjs": "7fd44998556894c93928ea21bb61235d059adda18998aa2d70a88fc224087476",
+    "any-void-failure-desktop-gallery-selector.png": "d2df678268155e1b995f38b8d4fccc762dd6d0a262605f68ad2bd17e65da68a1",
+    "any-void-failure-desktop-initial.png": "4663e82e081c4557f259e8cf1109b0ccac975c0a3ecbea44de8ef0044a35ac64",
+    "any-void-failure-desktop.png": "d2df678268155e1b995f38b8d4fccc762dd6d0a262605f68ad2bd17e65da68a1",
+    "any-void-payment.mjs": "2ee83660ebb4a8a7013cb1b3f0e250894e9150c568458ba890b8d7f5ac2fda4d",
+    "any-void-workflows-gallery-selector.mjs": "e96a4cf5a9c65bba12b1d571202870f07ba5b40d36d689b00313766056eec528",
+    "any-void-workflows-initial.mjs": "62f86d41155523edc6d44d34c05e1f0cad00ba35423607e3083e8951f455e352",
+    "any-void-workflows.mjs": "7411ef0330981e8b6684bed2a9fe6959a4f31e8b601bcbcf94414d8fd927dd52",
+    "any-void-workflows.result-gallery-selector.json": "d42fd3a71fe8137f60ba47c0cd1923749ce6a45afdbd8f3e01c5fee1579d6ea6",
+    "any-void-workflows.result-initial.json": "e4937801baea7f7d54416436ed2eace8bd4207ac4d3698a3f27181ed983dc47b",
+    "any-void-workflows.result.json": "4fa65ea7f12758ba8503d6417d61fe89d5a608b8b23f391420238bd4ba6a2bdb",
+    "any-void-workflows.server-gallery-selector.log": "0703aed9671cbe46dd8979d846360e9d6746c430a9272fea71f0a1ebfc0c93ea",
+    "any-void-workflows.server-initial.log": "6e971f6ecda7f119243024b19359d2dbcfe5c37f1bbce7b2b90d2f5918c4ff2b",
+    "any-void-workflows.server.log": "e1b8d1d6266d2f147f149b74cc5baaacbf1c7e41ebd5adc9ca688913531cbd74",
+    "cancel-retry.log": "ed5e1209b4b64028bc7ccd7f78a0da481780542bd90afc2594f900927194af72",
+    "capture-dimensions.json": "19c4aab26123269bdbc750c7c0b67065e265a5953e1967c9fa1498740aedbc16",
+    "card-sweep.server.log": "a42ce96c82fe893917b778999d71e48eaeb5d5b41038e67dc906b573b7439453",
+    "card-sweep.summary.json": "86eaa273c0513cc6fa491e8d69d400a89e05b2ea42a0817d35fbeda77da88eb8",
+    "focused.log": "887d78c97f821c95b7f11577ebf13aa3207e1bb3f7d9623e119e1fc5aba8d10d",
+    "fuzz.log": "1b2b876b64050f5aade58cd9809fc7cac95ef23378e95cc1c9df7aedae0ef3a0",
+    "game-6pk438.jsonl": "270a3c74a3bbfc21836aae55d8010d657886de24f3821142630cc16740d89fdd",
+    "game-6wtmzo.jsonl": "218fe5027dde0fa591f0f1ddc36abec85361cceac34f945322f4c13d22964f25",
+    "game-cvnyge.jsonl": "8b3d65b97f185884cda7f1671a4ccb0fb2d7a77bd7b584a31f54b3e6cca4a199",
+    "game-esaz27.jsonl": "541ea156d2d08d8b2eb6d993ea83dab3dfb2ebd1962b7ce0a1413f63a4bae0d7",
+    "game-fm4ecp.jsonl": "2a18338b02d5632ee57bfd1e4170670ad78655ac09e523b072a87436989efa85",
+    "game-q5gxa3.jsonl": "f68fe2756194e58b929b36e00180c5f928c3da13669d7da55b8433009fbb9072",
+    "game-sdr2uz.jsonl": "e84568c32aff79921853e84b31b723f52b8c7f10c341851aaaa87015e101a33e",
+    "game-vnfy73.jsonl": "720868905aba8cc5766e00e06db04298fea27c76311d1b6b4ffee9798ddc8db8",
+    "game-x2jjsx.jsonl": "51e2de9aa346342f591837d7c8492b2164e61f31423aa9f25f6c11f99fe00f1e",
+    "game-xzuzkt.jsonl": "99208aebf69c8a88b03f220bd7e61f079f31f6cf64a8d00b19c37ecc876dd1a4",
+    "inventory-probe-diagnostic.json": "8c827727f91c55e594425e1385a76dc56f7204b6ff55db99e22421863922ee6c",
+    "judged-summary.json": "2f20183a429892ee38373a3c621fe30ee12b95e2a0472c98850a340d211103a4",
+    "knip-final.log": "da594863a71c1c87761694e000074bba8aff14052869dea3d81cc9da48abb726",
+    "knip.log": "f51fd9daa4cfd05888e86d0d7843107f4b2830c45c2a3d70fc69bdd53082433f",
+    "negative-provenance-final.json": "9ab7b39ef374555e931e4eff0bc35cbff8501ac03f929957953472d7146d20ff",
+    "negative-provenance-final2.json": "c3a7d16da08d55bb0c1ad50043e684284aca124bb05de429783a66cc9c59e1b6",
+    "negative-provenance.json": "3c72e425305124450496065057b542456068b0f7a235faafc1357910557f9040",
+    "opponent-pool-negative-final.log": "3b23fbad3d01bb58bcc3a78cbe9dcc32d9731cd71148a30d263a669232cf5101",
+    "opponent-pool-negative-final2.log": "25c28675cd88ff8fcd5d733413043ea68ad0dfa41a4723bba1f4dd413efb4303",
+    "opponent-pool-negative.log": "8b4d3946e837a8d18ac6adf3f445ecd1a0db40548c66ae7a73ef6787852b202a",
+    "preflight.log": "689737a07f0a910bb23c1d5dcc21a5d97fa44def7db19fe3523833be7dad16c3",
+    "related.log": "329c187f24ca970ebd7e229625c5891e2cbc7c7a7c82bc6cae8519162ca99fe2",
+    "review-initial-test-at-error.log": "e7eaeddc714e7da2293058761e5d7d78427e2472f869fc664ec32ce6f8675dfe",
+    "review-test-assertion-error.log": "825a07b570cf6ab2fc8e40313568e45ad34cc5ed96e3f996f2fe5d5cd0ed978a",
+    "review.log": "f8396f1e5738188931b076942c1cad3b915ce7e50d9961e9f11c4815fe717c1c",
+    "source-freeze.json": "fc71f73140cc2918b087f1bfc079ff9814e0c96502342a8634f0b3886a63f227",
+    "sweep-3gBUg4/summary.json": "86eaa273c0513cc6fa491e8d69d400a89e05b2ea42a0817d35fbeda77da88eb8",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-amplified-enemy-attempt-1.result.json": "185a04910c12006bdd68265152a764b7de77dc7d1d98720cd6857e2b8125880c",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-amplified-player-attempt-1.result.json": "37b216db9a983e55a1b37100d385aa90920d6c3c55277ff4ca4df09a417d1eb2",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-attuned-enemy-attempt-1.result.json": "04332978b4ab893da42ff26eb2acadc31717d605f4e139fb37d0a19abcfc507a",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-attuned-player-attempt-1.result.json": "4cc2312b5b3d39442fbe160a51dc23d4747faca4c45d94cb0d3f05947058a9e9",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-base-enemy-attempt-1.result.json": "85b9a83e61dc89a8017f6cab150a46736e7c6d499360978776ccce8c32283168",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-base-player-attempt-1.result.json": "65065be63c7fc5dc6e74884ea3361211bad43b0cf264022467bbfd37be283f26",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-empowered-enemy-attempt-1.result.json": "6e70a382b87ff615139ed4645950717f6cf9dcbc514ea3f214ac0f4755cbee78",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-empowered-player-attempt-1.result.json": "b4b17d315acbb446bf503fb2123ed5e2a93c3bbbd8786408b5e7b1e990b22540",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-kindled-enemy-attempt-1.result.json": "38face03fd741d02c429cb38d1e0f88eb2e72cbdf6c31135e7c39b0f4508bfb8",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-kindled-player-attempt-1.result.json": "5626731c194a1a50f2d4dbb0a158d03a1ee6ae482723d16f608b6f360c74ba11",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-perfected-enemy-attempt-1.result.json": "512f17e97bb148dee033cb3a78e9e190fb94fed14d0c8c362ecda8f65d7f13df",
+    "sweep-3gBUg4/sweep-cfa78375-85b7-47e9-95f5-b31e6d112c52-perfected-player-attempt-1.result.json": "c370e14927e39c3ebab119fc4cc38d629722663f7e5c5efe057f17b684e94023",
+    "sweep.log": "5eb3ea8eac33736449eb4fae7ed1f22b64a9b0553fe244f6d539d8456b42852a",
+    "workflow-initial-diagnosis.json": "de914a38251ae22837856db271dcf3ef6372bc7ed9a23060c56b52624432b3ef",
+    "workflows-gallery-selector.log": "d59dc5f03aaeddd3f5596797bc0d16b3d688383f9a72f8c3aab19c5c5f1e1858",
+    "workflows-initial.log": "caa0f7f9639903223d995dc4de38a7000c4766e957dd6f9ddf1dfb9e035b2ce8",
+    "workflows.log": "c9c43919c7110a3bf3039f09ccec98fbe4536cf1c953ec4f4a15a3b31e996b5e",
+    "owned-process-check.log": "005b2af1a5d6adfd5df676415dbfc722a4eda17f31cc1bf0cc26334d1a2d1869",
+    "matrix-proof.json": "bf8492c065cca33740833c911711cb4cd3090d17647fcd1bc043e975902c1530"
+  }
+}

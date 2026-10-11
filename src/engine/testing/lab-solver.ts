@@ -209,7 +209,7 @@ function stackOpener(selector: StackItemSelector): CardId | null {
 
 /** What the lab stages for additional costs: matching cards and characters, and the ⍟ paid. */
 interface CostNeeds {
-  readonly voidCards: readonly CardFilter[];
+  readonly voidCards: readonly { readonly player: PlayerRef | "any"; readonly filter: CardFilter }[];
   readonly handCards: readonly CardFilter[];
   readonly characters: readonly CharacterSelector[];
   readonly points: number;
@@ -240,7 +240,9 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
       case "points":
         return { ...empty, points: cost.amount };
       case "banishFromVoid":
-        return { ...empty, voidCards: Array.from({ length: cost.count === "x" ? cost.min : cost.count }, () => cost.filter) };
+        return { ...empty, voidCards: Array.from({ length: cost.count === "x" ? cost.min : cost.count }, () => ({ player: "you" as const, filter: cost.filter })) };
+      case "banishFromAnyVoid":
+        return { ...empty, voidCards: Array.from({ length: cost.count }, () => ({ player: cost.player, filter: cost.filter })) };
       case "return":
         return { ...empty, characters: Array.from({ length: cost.count }, () => cost.selector) };
       case "abandon": {
@@ -342,7 +344,10 @@ export function labBoard(
     }
   }
   const { voidCards, handCards, characters, points: score } = costNeeds(additionalCosts(definition, variant));
-  for (const filter of voidCards) voids[side].push(cardFor(engine, filter, pool));
+  for (const need of voidCards) {
+    const of = need.player === "opponent" ? opponent(side) : side;
+    voids[of].push(cardFor(engine, need.filter, pool));
+  }
   for (const filter of handCards) hands[side].push(cardFor(engine, filter, pool));
   for (const selector of characters) {
     const character = characterFor(engine, selector, pool, xRange);

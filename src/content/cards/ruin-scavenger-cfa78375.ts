@@ -1,3 +1,5 @@
+import { activated, banishFromAnyVoidCost, energy, self } from "../../engine/dsl/builders";
+import { gainSpark } from "../../engine/effects/primitives/gain-spark";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,6 @@ export default card({
   artOwned: false,
   cardNumber: 204,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([energy(1), banishFromAnyVoidCost(1, {}, "opponent")], gainSpark(self(), variant.amplified ? 2 : 1))],
+  verifiedText: "1lfvsxlotev",
 });

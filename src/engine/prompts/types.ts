@@ -38,6 +38,8 @@ export type PromptRole =
   | "revealCost"
   /** The void cards banished to pay a cost. */
   | "banishCost"
+  /** Void cards from either ownership paid with the new side-selecting cost. */
+  | "banishAnyVoidCost"
   /** The hand cards banished to pay a cost. */
   | "offeringCost"
   /** The cards an effect discards. */

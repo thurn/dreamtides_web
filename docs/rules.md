@@ -791,6 +791,19 @@ number of cards. This X spends no energy beyond the separately printed energy co
 When one ability also pays X●, every reference to X uses that same value:
 the discard count or captured card cost must agree with the chosen energy X.
 
+**Banish void cards as a cost:** The cost names the void or voids its payer
+may use: their own, the opponent's, or either player's. Choose the full number
+of matching, distinct physical cards before commitment; copies of the same
+card are distinct when they are different physical cards. These payment choices
+are not targets. A chosen target, the card being played (including a Reclaim
+play from a void), and cards reserved for earlier costs cannot also pay this
+cost. The full energy and card payments must be payable together.
+
+Payment sends each chosen card to its owner's Banished zone, regardless of
+which player pays. Both voids are public; choosing or banishing a void card
+discloses no unrelated hand or deck cards. Cancellation before commitment
+pays nothing, and a committed payment happens once with the play or activation.
+
 **Banish X cards from your void:** X is the number of cards the player chooses
 from their own void to pay this additional cost, as in "To play this event,
 banish X cards from your void. Look at the top X cards of your deck." X is at

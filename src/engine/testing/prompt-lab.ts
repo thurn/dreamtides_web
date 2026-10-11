@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { activated, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
+import { activated, banishFromAnyVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -79,6 +79,12 @@ export const LAB = {
     id: syntheticId(0x37f), cardType: "character", costs: [energy(1)], spark: 1,
     subtype: "Warrior", speed: "standard", status: "authored",
     abilities: () => [activated([returnCost()], p.gainPoints(1))],
+  },
+  /** Pay by banishing one of several opponent void cards in the existing gallery. */
+  anyVoidPayer: {
+    id: syntheticId(0x392), cardType: "character", costs: [energy(0)], spark: 1,
+    subtype: "Mage", speed: "standard", status: "authored",
+    abilities: () => [activated([banishFromAnyVoidCost(1, {}, "opponent")], p.gainPoints(1))],
   },
   /** "You may play characters from your void." */
   voidPermit: {
@@ -618,6 +624,11 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       player: { hand: [ZONE.offeringDraw.id, vanillas[0], vanillas[1]], energy: 3, deck: deck(6) },
       enemy: { deck: deck(6) },
     },
+    script: [],
+  },
+  {
+    name: "any-void-cost", description: "Banish an opponent void card as an activation cost",
+    setup: { active: "player", phase: "day", player: { back: [LAB.anyVoidPayer.id], deck: deck(6) }, enemy: { void: [vanillas[0], vanillas[1], vanillas[2]], deck: deck(6) } },
     script: [],
   },
   {
