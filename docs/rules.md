@@ -701,13 +701,14 @@ ability, even if paying returned the source or made it cease to exist.
 Payment choices are cancellable before commitment; payment and the
 activation commit together, and a cancelled choice pays nothing.
 
-Costs are paid in their stated order. Returning the source cannot precede a
-cost that exhausts that source or spends its positive counters: returning
-leaves play and clears those counters. Paying those source costs first,
-then returning it, is permitted. Spending zero counters changes nothing
-and needs no source, so it may follow returning a created source that
-ceases to exist. Alternatives and optional costs obey these
-same ordering requirements.
+Costs are paid in their stated order. Returning or abandoning the source
+cannot precede a cost that exhausts that source or spends its positive
+counters: leaving play clears those counters. Paying those source costs
+first, then returning or abandoning it, is permitted. Spending zero counters
+changes nothing and needs no source, so it may follow a created source
+ceasing to exist. Alternatives and optional costs obey these same ordering
+requirements; a character other than the source may pay an earlier departure
+cost while the source remains available for later payments.
 
 **Paying ⍟:** A cost such as "To play this character, pay 4⍟." is paid from
 the player's own victory points. A player can pay it only with at least that

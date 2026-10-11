@@ -242,9 +242,10 @@ export function planCosts(
   const payments: PlannedCost[] = [];
   const optionalPaid: boolean[] = [];
   let capturedX = x;
-  let sourceReturned = false;
-  // Returning leaves play and clears stored counters; zero-counter payments need no source.
-  const cannotFollowReturn = (cost: PaymentCost): boolean => cost.cost === "exhaustSelf" ||
+  let sourceDeparted = false;
+  // Returning or abandoning leaves play and clears counters; zero payments need no source.
+  const leavesPlay = (cost: PaymentCost): boolean => cost.cost === "return" || cost.cost === "abandon";
+  const cannotFollowDeparture = (cost: PaymentCost): boolean => cost.cost === "exhaustSelf" ||
     (cost.cost === "counters" && cost.amount > 0);
 
   /**
@@ -254,7 +255,7 @@ export function planCosts(
    * (`cardsAssignable`).
    */
   const affordable = (list: readonly PaymentCost[]): boolean => {
-    if (sourceReturned && list.some(cannotFollowReturn)) return false;
+    if (sourceDeparted && list.some(cannotFollowDeparture)) return false;
     if (!resourcesPayable(
       baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))),
       countersLeft - spent(list, "counters"),
@@ -266,7 +267,7 @@ export function planCosts(
     const demands = choosing.map(({ cost, index }) => ({
       count: cost.count === "x" ? (capturedX ?? leastCount(cost)) : cost.count,
       pool: cardCandidates(state, catalog, side, source, cost, options.selectorX).filter((id) =>
-        !used.includes(id) && !(cost.cost === "return" && id === source && list.slice(index + 1).some(cannotFollowReturn)),
+        !used.includes(id) && !(leavesPlay(cost) && id === source && list.slice(index + 1).some(cannotFollowDeparture)),
       ),
     }));
     return cardsAssignable(demands);
@@ -274,7 +275,7 @@ export function planCosts(
 
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
   const plan = (cost: PaymentCost, nested: boolean, isLast = false): void => {
-    if (sourceReturned && cannotFollowReturn(cost)) throw new Infeasible("A returned source cannot pay a later source cost");
+    if (sourceDeparted && cannotFollowDeparture(cost)) throw new Infeasible("A departed source cannot pay a later source cost");
     if (cost.cost === "energy") {
       if (nested) baseEnergy += cost.amount;
       return;
@@ -318,7 +319,7 @@ export function planCosts(
       if (capturedX !== null && capturedX !== value) throw new Infeasible("Card payment disagrees with X");
       capturedX = value;
     }
-    if (cost.cost === "return" && typeof source === "string" && chosen.includes(source)) sourceReturned = true;
+    if (leavesPlay(cost) && typeof source === "string" && chosen.includes(source)) sourceDeparted = true;
     used.push(...chosen);
     payments.push({ cost, cards: [...chosen] });
   };

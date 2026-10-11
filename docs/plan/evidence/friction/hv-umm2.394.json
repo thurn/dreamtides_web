@@ -1,0 +1,142 @@
+{
+  "bead": "hv-umm2.394",
+  "phase": 5,
+  "base": "c4a1a69933ffa6f72ed4be0b3c9da000033e196a",
+  "implementMin": 16.02,
+  "timingBasis": "node_modules creation 2026-10-11T17:40:38.292417+00:00 is retained setup/dispatch-start proxy, not exact native dispatch. End measured at evidence finalization 2026-10-11T17:56:39.431816+00:00. Command wall includes workspace prepare/asset restoration; stage host load recorded.",
+  "localValidationS": {
+    "installReported": 2,
+    "unchangedNegative": 5.03,
+    "focusedInitial": 4.62,
+    "focusedExtended": 4.36,
+    "related": 5.28,
+    "extendedNegative": 3.5,
+    "reviewInitial": 45.4,
+    "focusedFinal": 3.37,
+    "typedFinalNegative": 3.34,
+    "review": 40.35,
+    "knip": 4.82
+  },
+  "hostLoad": 6.3125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 18
+  },
+  "contractModules": 1,
+  "contractLines": 215,
+  "testCounting": "One plain synthetic node contract module is eagerly collected by existing primitive runner; no test entrypoint or jsdom file added. Same 13 returnCost contracts remain. costs.ts 474 lines; new contract 215 lines, both under 500. Production cost change 8 add/7 delete (15 changed lines); rules 8 add/7 delete.",
+  "friction": [],
+  "frictionAssessment": "No additional problem exceeded approximately 10 minutes beyond scoped repair. Expected failing regression/source-planning work belongs this repair; one test-only import correction is below the friction threshold and recorded separately.",
+  "localEditCorrections": [
+    {
+      "tag": "local-edit-correction",
+      "minutesApprox": 1.7,
+      "note": "Initial review17:50:03Z reported EffectNode not exported by DSL types plus resulting unsafe argument; all 257 files/2660 tests passed. Correct public registry Effect import at17:51:xx; final focused/exact-negative and review revalidate. No production/area fallout."
+    }
+  ],
+  "acceptance": {
+    "unchangedSource": {
+      "file": "unchanged-source-provenance.json",
+      "log": "unchanged-negative.log",
+      "fail": 9,
+      "passCount": 9,
+      "commandWallS": 5.03,
+      "contractLines": 198,
+      "meaning": "Both sides mandatory/nested self-abandon illegally offered (8) and suspended self answer wrongly accepted (1). Production file unchanged before first mutation."
+    },
+    "focused": {
+      "log": "focused-typed-final.log",
+      "cases": 31,
+      "newCases": 18,
+      "existingReturnCases": 13,
+      "commandWallS": 3.37
+    },
+    "related": {
+      "log": "related.log",
+      "files": 5,
+      "tests": 560,
+      "commandWallS": 5.28,
+      "commands": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/rules/costs.test.ts src/engine/rules/activation.test.ts src/engine/fold/fold.test.ts src/engine/fold/fold-prompts.test.ts"
+    },
+    "negativeFinal": {
+      "log": "typed-final-contract-original-source-negative.log",
+      "fail": 9,
+      "passCount": 9,
+      "commandWallS": 3.34,
+      "provenance": {
+        "base": "c4a1a69933ffa6f72ed4be0b3c9da000033e196a",
+        "originalCostsSha256": "33b4bfce0d3bdcb4adca20a99718591c108225133db73fccc1dd5c48c0173afa",
+        "finalCostsSha256": "b98290062dd293a16d68e69f58d2e51292e95d7da0481a3eb2527333e49940f7",
+        "finalContractSha256": "c8b6a59f6585da7285c75d179143955dc448ec8e1418656a30aea46b3d5313bc",
+        "exit": 1,
+        "restoredIdentically": true
+      },
+      "meaning": "Exact final 215-line contract against original costs source; temporary mutation restored final production byte-identically in finally."
+    },
+    "review": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "log": "review-final.log",
+      "files": 257,
+      "tests": 2660,
+      "commandWallS": 40.35,
+      "hostLoad": 6.3125,
+      "restorationHostLoad": 8.83154296875,
+      "checks": "lint, import cycles, both typechecks, related tests; assets restored"
+    },
+    "knip": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "log": "knip.log",
+      "commandWallS": 4.82,
+      "result": "pass; assets restored"
+    },
+    "reviewPolicy": "Not core-marked;15 non-test source lines changed, no exported API or architecture change. Parent confirms no independent-review threshold crossed.",
+    "full": "Not needed: local shared source-availability predicate extension within existing planner; no infrastructure/config/cross-cutting architecture.",
+    "fuzz": "Not run: deterministic synthetic contracts directly exercise all repaired source-order paths; production-card fuzz would not target these synthetic compositions. No performance claim.",
+    "browser": "Not required or run: no new card/DSL/prompt/role/presentation; engine legal-action/payment contracts are the relevant acceptance. No real server/MCP/browser lease opened."
+  },
+  "coverage": {
+    "order": "Both sides reject sole-source abandon before later exhaustion/positive counters, filter it from candidates with other payers, and permit source resources before self-abandon.",
+    "nested": "Alternatives and optional payments before/after abandonment check availability; non-source payments allow optional exhaustion/counters. Exact candidate Sets, no incidental answer counts.",
+    "zero": "Both sides ordinary/created/reclaimed self-abandon then counters0 succeed without counter payment event; prior90 zero no-op remains unchanged.",
+    "origin": "Created/reclaimed self-abandon after earlier exhaust preserves captured source UUID/controller/ability through response suspension and later targeted effect.",
+    "reload": "Pending abandonment JSON reload on fresh engine/fold; source answer excluded, foreign/stale answers bounced, cancelled precommit state unchanged; postcommit resolution reload final hash matches inline and one action logged.",
+    "rollback": "Synthetic public paying step throws after energy+two abandonments; original committed state restored, no energy/leftPlay published, no in-flight state."
+  },
+  "sourceSha256": {
+    "src/engine/rules/costs.ts": "b98290062dd293a16d68e69f58d2e51292e95d7da0481a3eb2527333e49940f7",
+    "src/engine/effects/primitives/contracts/abandon-cost-order.contracts.ts": "c8b6a59f6585da7285c75d179143955dc448ec8e1418656a30aea46b3d5313bc",
+    "docs/rules.md": "6c20b17a02e5f4db23df61b1933ca5d4f58719637a76d213d664154c2a207a51"
+  },
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.394",
+  "artifactSha256": {
+    "final-contract-original-source-negative.log": "5bcc520333f7c7d18a55f85521868909c3c1db450163b236858cc44fc7149ffc",
+    "final-negative-provenance.json": "ef1ace34782b3c525280c73db2f3e76703e03b3a343074bc3f0a99199c683201",
+    "focused-final.log": "751561328729f8df0a0421c1f9e93159908f4dc6972ffa2313f24332ccb0ccfa",
+    "focused-typed-final.log": "3a36c7f25110a383ff080888cc788d071724915d9cef8a57519c7428d13337bc",
+    "focused.log": "5395b5d82683ab35e913cf1b7273efba05e39ad5775bae0ab585c8c0766deedb",
+    "knip.log": "fd83a7c3b508431d5900d2a1db01aefb0836023c3c791635b89c716fc4fb34d4",
+    "related.log": "b119c6fdc8120de15c2243fe7369a4dceca20bf2f6343dc8926aa5df9aade890",
+    "review-final.log": "3e0d1e2a79260919c7c944afba3f58427fee948d4b534e61a6232f26104975f1",
+    "review.log": "a39bdf4f4a1be60964f51f079f81f51ecdf81ec3b8dde60731e75b1d5dbe3f57",
+    "typed-final-contract-original-source-negative.log": "53b07c453c49f3501b0cc965675725e7b7f9c4bd58ae58000a15c502a0f639bd",
+    "typed-final-negative-provenance.json": "c7266dff976f6b9c93ea03a824904e6e5a2781aa815306c529a585863db2174d",
+    "unchanged-negative.log": "5c769b49bde8f7160aca182a61b8fa9bbbb43bbdc3bae00c87913c24b2bba81a",
+    "unchanged-source-provenance.json": "871ab82cb4e0f34356240cd0577e933acf1baaf8a9cbb4ceba589a6740ca5968"
+  },
+  "fallout": [],
+  "rulesDecision": "Existing ordered-payment/target/source-independence rules; concise normative paragraph includes abandonment. No new ambiguity or RD/card issue.",
+  "runtimeLedger": {
+    "commands": "All npm/test/review/knip commands completed.",
+    "negative": "Both temporary original-source regression runs restored final costs bytes; exact final hash verified.",
+    "server": "none",
+    "browser": "none",
+    "heavyLock": "none; no heavy command",
+    "externalWriters": 0,
+    "remainingOwnedProcesses": []
+  },
+  "outstanding": [
+    "Parent-owned native candidate approval/promotion; no implementation or acceptance work remains."
+  ]
+}
