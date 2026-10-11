@@ -1,0 +1,71 @@
+{
+  "bead": "hv-umm2.80",
+  "phase": 5,
+  "implementMin": 97.96,
+  "implementTiming": "Wall estimate from approximate dispatch-note12:55:30Z through final catalog-integration evidence audit2026-10-11T14:33:27.715607+00:00; includes validation/browser queue/checkpoint/native update/catalog merge recovery. Exact spawn/install start unavailable; not productive coding time.",
+  "localValidationS": {
+    "focused": 4.834,
+    "review": 55.641,
+    "knip": 2.471,
+    "fuzz": 62.527
+  },
+  "hostLoad": 14.01220703125,
+  "testDelta": {
+    "files": 0,
+    "lines": 272,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10,
+      "note": "Approximate task-script authoring/diagnosis estimate, not an isolated timer: staging deadline45s, direct single-activation route, and source-zone predicate for startup events before probe; failed attempts retained. Source/engine checks passed independently. Integrated neutral Crosser1-spark fixture also tied pass; existing0-spark coster produces a genuine worker activation. One exact navigation-cell retry passed; raw failures retained."
+    },
+    {
+      "tag": "browser-qa-queue",
+      "minutes": 10.326,
+      "note": "Measured serialized native browser lease waits in retained scenario reports sum619.536s; sweep wait is not isolated. Queue stayed separate from execution; no cancellation/retry churn or peer ownership changes."
+    }
+  ],
+  "knownFollowUps": [
+    "hv-umm2.378"
+  ],
+  "browserLeaseWaitS": 619.536,
+  "sessionRemaining": [
+    "independent core review and candidate/promotion"
+  ],
+  "browserLeaseWaitCoverage": "Exact separate waits from retained scenario reports only; sweep aggregate waits are not isolated.",
+  "validationBases": {
+    "focusedReviewKnip": "b35650e15dd93e459b7ff6a23157348a1eda85aa",
+    "weighted300AndCurrentOpponentSweep": "8ad67fe22c3ebe6a2f7885d187f18a1fd7170313",
+    "originalHumanQA": "886003f7c43e57dbb5c8deadadd387769671f5cc"
+  },
+  "integrationRepair": {
+    "candidate": "01a12b55-7ff7-7c03-9971-b32cb181e1e6",
+    "candidateTerminal": "merge-conflict-with-adopted-base beforeCI",
+    "approveWaitExit": 1,
+    "diagnoseExit": 0,
+    "firstNativeUpdateExit": 5,
+    "rollbackClean": true,
+    "parkedOnly": "docs/plan/engine-design.md",
+    "parkingCheckpoint": "beb4ad01390d942e8df558355c6a958d64e83913",
+    "secondNativeUpdateExit": 0,
+    "updatedSource": "3fd4dc54299be47cb2b285ce76dec9570f7732d0",
+    "updatedBase": "b35650e15dd93e459b7ff6a23157348a1eda85aa",
+    "reappliedScope": "exacttwo documentation lines preservingpeerentries",
+    "priorCoreReview": "be74aef3/base8ad exit0/no findings; final-source freshreview pending"
+  },
+  "checkPreparationCollision": {
+    "commands": [
+      "catalog-integrated-review",
+      "catalog-integrated-knip"
+    ],
+    "actualExits": [
+      1,
+      1
+    ],
+    "stage": "prepare beforevalidation",
+    "cause": "own concurrent workspace preparation recreates shared asset directories",
+    "disposition": "focused restores assets; review then Knip sequential exit0; sourceunchanged"
+  }
+}

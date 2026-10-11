@@ -842,6 +842,18 @@ Putting a character directly into play (for example "return to play" or
 "materialize from your void") is not "playing" it: it costs no energy, does not
 use the stack, cannot be Prevented, and does not fire "when you play" triggers.
 
+"Discover a character and materialize it" completes the Discover first: the
+chosen card enters your hand and your deck is shuffled. That same character
+then enters play under your control. If the back rank is full when it would
+enter, it stays in your hand. If Discover finds no matching card, nothing is
+materialized. The discovered card is not a target.
+
+"Materialize up to two characters from your void" chooses those void cards as
+targets (see [Targeting](#targeting)). Characters enter under the effect
+controller's control, in their source zone's order, each taking the leftmost
+open back-rank position. Their owner stays the same. A selected character
+that cannot enter because the back rank has filled stays in its source zone.
+
 **Rematerialize** — Trigger an in-play character's materialization again, firing
 its ▸Materialized trigger and any "When you materialize" triggers.
 

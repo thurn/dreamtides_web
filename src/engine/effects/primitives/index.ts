@@ -35,6 +35,7 @@ export * from "./grant-reclaim";
 export * from "./if-then";
 export * from "./look-at-top";
 export * from "./lose-points";
+export * from "./materialize";
 export * from "./materialize-figment-copy";
 export * from "./materialize-figments";
 export * from "./optional";

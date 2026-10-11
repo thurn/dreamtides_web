@@ -1,3 +1,5 @@
+import { abandonCost, activated, exhaustSelf } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 187,
   art: { x: 0, y: 0.72, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([exhaustSelf(), abandonCost({ another: true })], p.materialize(p.discover({ cardType: "character", costAtMost: 2 })))],
+  verifiedText: "11jvybmo6hg",
 });

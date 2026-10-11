@@ -50,6 +50,7 @@ import {
   ifThenPrimitive,
   lookAtTopPrimitive,
   losePointsPrimitive,
+  materializePrimitive,
   materializeFigmentCopyPrimitive,
   materializeFigmentsPrimitive,
   optionalPrimitive,
@@ -186,6 +187,9 @@ const DEFINITIONS = {
   },
   get losePoints() {
     return losePointsPrimitive;
+  },
+  get materialize() {
+    return materializePrimitive;
   },
   get materializeFigmentCopy() {
     return materializeFigmentCopyPrimitive;

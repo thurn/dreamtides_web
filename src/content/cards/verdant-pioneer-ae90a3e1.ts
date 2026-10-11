@@ -1,3 +1,5 @@
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 296,
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), p.materialize(p.discover({ cardType: "character", costAtMost: 1 })))],
+  verifiedText: "2dert63enqh",
 });

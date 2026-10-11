@@ -1,3 +1,5 @@
+import { energy, event, fromVoid, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 254,
   art: { x: -0.342, y: 0.608, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.materialize(fromVoid({ cardType: "character", costAtMost: 2 }, { count: 2, upTo: true }))), reclaim(energy(5))],
+  verifiedText: "1qvvmcr5v6y",
 });
