@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { characterYouControl, enemyCharacter, energy, energyX, event, target as characterTarget, upTo, x } from "../dsl/builders";
+import { characterYouControl, enemyCharacter, energy, energyX, event, fromVoid, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -80,6 +80,12 @@ export const LAB = {
   eachPlayerDiscards: labEvent(2, 1, p.sequence(p.discard(1), p.discard(1, "opponent"))),
   /** Privately choose a card from the opponent's hand to discard. */
   discardChosen: labEvent(9, 1, p.discardChosen()),
+  /** "Shuffle up to one card from your void into your deck. Draw a card, then shuffle 2 cards from your hand into your deck." */
+  shuffleInto: labEvent(11, 1, p.sequence(
+    p.shuffleInto([fromVoid({}, { upTo: true })]),
+    p.draw(1),
+    p.shuffleInto([], { chooseFromHand: 2 }),
+  )),
   /** Choose a free Discover cost, then choose a matching character. */
   discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
   /** Choose either player to discard and draw, preserving the source controller. */
@@ -187,6 +193,10 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
   [LAB.dissolveUpToOne.id]: { name: "Lab Mercy", text: "Dissolve up to one enemy." },
+  [LAB.shuffleInto.id]: {
+    name: "Lab Reshuffle",
+    text: "Shuffle up to one card from your void into your deck. Draw a card, then shuffle 2 cards from your hand into your deck.",
+  },
   [LAB.sketch.id]: { name: "Lab Sketch", text: "" },
   [LAB.spyglass.id]: { name: "Lab Spyglass", text: "Reveal the opponent's hand. Draw a card." },
   [LAB.hourglass.id]: { name: "Lab Hourglass", text: "Put 2 memory counters on each character you control." },
@@ -456,6 +466,22 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       playHand(0),
       { side: "player", answer: () => 1 },
       { side: "player", answer: (ids) => [at(ids.player.deck, 1), at(ids.player.deck, 3)] },
+    ],
+  },
+  {
+    name: "shuffle-into",
+    description: "A void target shuffled into the deck, a draw, then a pick of 2 hand cards shuffled into the deck",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { hand: [LAB.shuffleInto.id, vanillas[1], vanillas[2]], void: [vanillas[0]], energy: 2, deck: deck(4) },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [
+      playHand(0),
+      target((ids) => at(ids.player.void, 0)),
+      { side: "player", answer: (ids) => [at(ids.player.hand, 1), at(ids.player.hand, 2)] },
     ],
   },
   {

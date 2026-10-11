@@ -1226,7 +1226,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })` | `draw` at cost 0, `lookAtTop` distributions to other destinations, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck) | `draw` at cost 0, `lookAtTop` distributions to other destinations, `reveal`, `putOnTop`/`Bottom` |
 | Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
@@ -1528,6 +1528,8 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     into a hand or deck, or a move from a hand into a deck, stays known to
     whoever watched it;
   - a revealed card becomes known to both sides;
+  - shuffling a deck (`shuffleInto`, Discover) drops every card in it out
+    of both sides' knowledge;
   - a `privateTo` prompt shows its cards to its chooser only as it opens,
     and the other side loses track of those still in a deck, whose order the
     chooser may change. A "look at the top 4" prompt reveals those cards only
@@ -1570,6 +1572,11 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - `lookedAtTop` is public, and names each looked-at card only to a side
     that can identify it, so the opponent sees how many cards the looker
     looked at; the looker learned them through its prompt private to it;
+  - `shuffledIntoDeck` is public, and names each card that entered the
+    shuffled deck only to a side that could identify it as it left its
+    zone (both sides for a void, the holder for a hand), read from the
+    event's own `from` and `seenBy` since after the shuffle neither side
+    can place any card in that deck;
   - `triggerQueued`, `triggerResolved`, `winConditionMet`, `effectStarted`,
     `payableEffectRegistered`, and `noLegalTarget` name an ability's
     source (`events/sources.ts`). One whose source is a card in a hand or
@@ -1905,7 +1912,9 @@ Greedy unless `?ai=random|greedy` selects one.
   `testing/redaction.ts`): each event a side may see, as that side sees it
   (`eventSeenBy`, with per-viewer field redaction applied), names no
   instance ID or printed card ID that side cannot identify (`identifies`,
-  `view/knowledge.ts`) before or after the step. An instance that has left
+  `view/knowledge.ts`) before or after the step, or that entered that
+  side's own hand during the step (a card drawn and then shuffled back into
+  the deck was seen by its drawer). An instance that has left
   the battle is judged in the last checked state that held it. The
   interactive replay applies the same check to the events a suspended step
   has published, against its display. Games must terminate. A failing game writes its engine log to

@@ -52,6 +52,7 @@ import { repositioned, type RepositionedEvent } from "./kinds/repositioned";
 import { resolved, type ResolvedEvent } from "./kinds/resolved";
 import { returnedToHand, type ReturnedToHandEvent } from "./kinds/returned-to-hand";
 import { revealed, type RevealedEvent } from "./kinds/revealed";
+import { shuffledIntoDeck, type ShuffledIntoDeckEvent } from "./kinds/shuffled-into-deck";
 import { sparkGained, type SparkGainedEvent } from "./kinds/spark-gained";
 import { triggerQueued, type TriggerQueuedEvent } from "./kinds/trigger-queued";
 import { triggerResolved, type TriggerResolvedEvent } from "./kinds/trigger-resolved";
@@ -111,6 +112,7 @@ export type EngineEvent =
   | ResolvedEvent
   | ReturnedToHandEvent
   | RevealedEvent
+  | ShuffledIntoDeckEvent
   | SparkGainedEvent
   | TriggerQueuedEvent
   | TriggerResolvedEvent
@@ -171,6 +173,7 @@ export const EVENT_DEFINITIONS = {
   resolved,
   returnedToHand,
   revealed,
+  shuffledIntoDeck,
   sparkGained,
   triggerQueued,
   triggerResolved,

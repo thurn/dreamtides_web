@@ -138,6 +138,19 @@ function anyString(value: unknown, test: (text: string) => boolean): boolean {
   return false;
 }
 
+/** Whether the raw `event` put `id` into `side`'s own hand: a draw, a take, a discovery, or a return to hand. */
+function enteredHandOf(event: EngineEvent, side: Side, id: InstanceId): boolean {
+  switch (event.kind) {
+    case "cardDrawn":
+    case "cardTaken":
+    case "cardDiscovered":
+    case "returnedToHand":
+      return event.side === side && event.instance === id;
+    default:
+      return false;
+  }
+}
+
 /** The shape of an `InstanceId`: `i` and a counter. */
 const INSTANCE_ID = /^i\d+$/;
 
@@ -170,7 +183,10 @@ function printedIndex(state: BattleState): Map<CardId, InstanceId[]> {
  * neither state has left the battle or lived only between them: it counts
  * as identified when the side could identify it in the last checked state
  * that held it, or, failing that, when the side saw the `cardCreated` event
- * that made it.
+ * that made it. A card that entered the side's own hand during the events
+ * (`enteredHandOf`) counts as identified too, wherever it went next: a side
+ * always sees its own hand, so a card it drew and then shuffled back into
+ * its deck in the same step was seen though it is hidden before and after.
  *
  * IDs are detected by walking every string of the payload, keys included:
  * - an instance ID is a string with the `InstanceId` shape (`i<n>`);
@@ -212,6 +228,7 @@ export class EventRedaction {
         const seen = eventSeenBy(event, viewer, after);
         if (seen === null) continue;
         const identified = (id: InstanceId): boolean => {
+          if (events.some((moved) => enteredHandOf(moved, viewer, id))) return true;
           if (id in before.instances || id in after.instances) return identifies(before, id, viewer) || identifies(after, id, viewer);
           const held = this.lastHeld.get(id);
           if (held !== undefined) return identifies(held, id, viewer);

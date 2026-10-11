@@ -101,6 +101,7 @@ export const EVENT_PRESENTATION = {
   resolved: "travel",
   returnedToHand: "travel",
   revealed: "travel",
+  shuffledIntoDeck: "travel",
   sparkGained: "status",
   triggerQueued: "none",
   triggerResolved: "status",

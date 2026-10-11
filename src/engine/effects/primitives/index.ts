@@ -40,6 +40,7 @@ export * from "./return-to-hand";
 export * from "./reveal";
 export * from "./sequence";
 export * from "./set-base-spark";
+export * from "./shuffle-into";
 export * from "./spark-modifier";
 export * from "./take-from-among";
 export * from "./trigger-ability";

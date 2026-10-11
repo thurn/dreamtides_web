@@ -55,6 +55,7 @@ import {
   revealPrimitive,
   sequencePrimitive,
   setBaseSparkPrimitive,
+  shuffleIntoPrimitive,
   sparkModifierPrimitive,
   takeFromAmongPrimitive,
   triggerAbilityPrimitive,
@@ -192,6 +193,9 @@ const DEFINITIONS = {
   },
   get setBaseSpark() {
     return setBaseSparkPrimitive;
+  },
+  get shuffleInto() {
+    return shuffleIntoPrimitive;
   },
   get sparkModifier() {
     return sparkModifierPrimitive;

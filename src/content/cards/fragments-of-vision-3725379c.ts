@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,6 @@ export default card({
   artOwned: false,
   cardNumber: 71,
   isStarter: false,
-  pending: true,
+  abilities: (v) => [event(p.sequence(p.draw(3), p.shuffleInto([], { chooseFromHand: v.amplified ? 1 : 2 })))],
+  verifiedText: "1d8qf71ng9c",
 });

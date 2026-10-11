@@ -1,3 +1,5 @@
+import { abandonSelfCost, activated, fromVoid } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,8 @@ export default card({
   cardNumber: 54,
   art: { x: -0.39, y: -0.308, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([abandonSelfCost()], p.sequence(p.shuffleInto([fromVoid({}, { count: 3, upTo: true })]), p.draw(1))),
+  ],
+  verifiedText: "eczdib99k8",
 });

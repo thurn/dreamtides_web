@@ -145,6 +145,7 @@ const ROLE_STRATEGIES = {
   discoverCost: { cards: "hostile", number: "discoverCost" },
   chooseAmong: { cards: "gain", number: "largest" },
   chooseFromOpponentHand: { cards: "gain", number: "largest" },
+  shuffleInto: { cards: "loss", number: "largest" },
   youMay: { cards: "hostile", number: "largest" },
   preventUnlessPays: { cards: "hostile", number: "largest" },
 } as const satisfies Record<PromptRole, { readonly cards: "loss" | "gain" | "hostile"; readonly number: "largest" | "discoverCost" }>;

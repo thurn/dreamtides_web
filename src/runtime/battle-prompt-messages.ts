@@ -110,6 +110,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return cards("put", "card", "cards", " into your hand");
       case "chooseFromOpponentHand":
         return cards("take", "card", "cards", " from their hand");
+      case "shuffleInto":
+        return cards("shuffle", "card", "cards", " into your deck");
       case "youMay":
         return "Do you want to do this?";
       case "preventUnlessPays":
@@ -570,6 +572,22 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     case "revealed":
       // `side` is whose hand the cards were revealed from, which is not always who revealed them (an opponent's effect may reveal it).
       return `Revealed from ${whose(event.side)} hand: ${event.instances.map(named).join(", ")}.`;
+    case "shuffledIntoDeck": {
+      const deck = `${whose(event.side)} deck`;
+      if (event.cards.length === 0) return `${sentence(deck)} was shuffled.`;
+      // Names the cards the player can identify and counts the rest.
+      const names = event.cards.flatMap((instance) => {
+        const name = words.card(instance);
+        return name === null ? [] : [name];
+      });
+      const hidden = event.cards.length - names.length;
+      const parts = [
+        ...names,
+        ...(hidden > 0 ? [names.length > 0 ? plural(hidden, "other card", "other cards") : plural(hidden, "card", "cards")] : []),
+      ];
+      const list = parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1] ?? ""}` : (parts[0] ?? "");
+      return `${sentence(list)} ${event.cards.length === 1 ? "was" : "were"} shuffled into ${deck}.`;
+    }
     case "sparkGained":
       return `${card(event.instance)}: ${engineStatusLabel({ kind: "spark", amount: event.amount, expiry: event.expiry }, human)}.`;
     case "triggerResolved":

@@ -874,6 +874,25 @@ cards, draw all of them. "They gain ephemeral" makes each drawn card Ephemeral.
 The cards you look at and do not draw stay on top of your deck in the same
 order.
 
+**Shuffle into a deck** — "Shuffle up to 3 cards from your void into your deck"
+or "Shuffle your hand and void into your deck" puts each of those cards into
+its owner's deck, then shuffles that deck. Your deck is shuffled even when no
+card moves, such as when you choose no cards for "up to 3" or your hand and
+void are empty. "Draw one of them and shuffle the rest back," after looking at
+the top cards of your deck, shuffles your whole deck: the rest never left it.
+
+"Shuffle 2 cards from your hand into your deck" has you choose the cards as
+that part of the effect resolves, after any earlier part such as "Draw 3
+cards"; they are not targets. With fewer cards in your hand, shuffle all of
+them. A card the opponent owns goes into the opponent's deck, which is
+shuffled too, and a created card ceases to exist instead (see [Created
+Cards](#created-cards)).
+
+Once a deck is shuffled, neither player knows where any card in it is, even
+the cards they looked at. Both players see how many cards entered the deck
+and from which zones. A card from a void is shown to both players; a card
+from a hand is shown only to a player who could see it there.
+
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played. Copies of cards on the stack
 follow [Copies on the stack](#playing-cards-and-the-stack); figment copies of

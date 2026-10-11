@@ -1,0 +1,52 @@
+{
+  "bead": "hv-umm2.64",
+  "phase": 5,
+  "implementMin": 45,
+  "localValidationS": {
+    "focused": 3,
+    "review": 37,
+    "knip": 2,
+    "fuzz": 55,
+    "sweep": 279,
+    "judged": 391
+  },
+  "hostLoad": 3.68,
+  "testDelta": {
+    "files": 0,
+    "lines": 320,
+    "jsdomFiles": 0,
+    "cases": 11
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 15,
+      "note": "The primitive needs a new PromptRole (shuffleInto, a resolution-time hand choice after draws) and a new event kind (shuffledIntoDeck: a hand-to-deck move has no announcing event). Their registration files (battle-prompt-messages.ts, presentation-items.ts, policy/prompts.ts, engine-battle-view-model.test.ts) were outside the dispatched Areas, so the subagent stopped and the session widened them."
+    },
+    {
+      "tag": "redaction-invariant-step-boundaries",
+      "minutes": 15,
+      "note": "The first weighted fuzz failed 175 games: EventRedaction judged identification only before and after a step, so a card Fragments of Vision drew and then shuffled back into the deck in the same step looked like a leak in cardDrawn and shuffledIntoDeck for its own drawer. The invariant now also counts a card that entered the viewer's own hand during the step (src/engine/testing/redaction.ts)."
+    },
+    {
+      "tag": "qa-runner-mcp-timeout",
+      "minutes": 10,
+      "note": "The first card sweep's MCP request timed out at 'Skysign inspired as enemy' (Session not found afterwards) and left the browser owner record for reconciliation; the provider session was gone and the server stopped, so the record was cleared and the full sweep re-run cleanly (30 pass, 30 skip)."
+    }
+  ],
+  "sourceBase": "956235bc4afb6f5a39d2010f8493f83f68c5f693",
+  "coverage": {
+    "entities": 3,
+    "pending": 0,
+    "amplifiedTexts": 1,
+    "newEffectOps": 1,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 30,
+      "skip": 30,
+      "fail": 0
+    },
+    "judged": 4
+  }
+}
