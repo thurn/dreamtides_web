@@ -2057,11 +2057,13 @@ Greedy unless `?ai=random|greedy` selects one.
   `testing/redaction.ts`): each event a side may see, as that side sees it
   (`eventSeenBy`, with per-viewer field redaction applied), names no
   instance ID or printed card ID that side cannot identify (`identifies`,
-  `view/knowledge.ts`) before or after the step, or that entered that
-  side's own hand or that it looked at on top of its own deck during the
-  step (a card drawn, or looked at and placed, and then shuffled back into
-  the deck was seen by that side). An instance that has left
-  the battle is judged in the last checked state that held it. The
+  `view/knowledge.ts`) before or after the step, or that it saw earlier in
+  the step. A side sees a card that enters its own hand, that it looks at on
+  top of its own deck, that enters either void, or that is revealed to both
+  sides; the card stays seen for the rest of the step until a shuffle ends
+  tracking (a card drawn, eroded or revealed, and then shuffled back into a
+  deck, was seen by that side). An instance that has left the battle is
+  judged in the last checked state that held it. The
   interactive replay applies the same check to the events a suspended step
   has published, against its display. Games must terminate. A failing game writes its engine log to
   `logs/fuzz/<run-id>/<game>.jsonl`. Phase 4.5 adds Greedy, and Phase 5 adds

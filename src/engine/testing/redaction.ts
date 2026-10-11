@@ -141,9 +141,10 @@ function anyString(value: unknown, test: (text: string) => boolean): boolean {
 /**
  * Whether the raw `event` showed `id` to `side` as it happened: it put the
  * card into `side`'s own hand (a draw, a take, a discovery, or a return to
- * hand), `side` looked at it on top of its own deck, or a placement
- * entered a void or left a public zone. Movement facts are independent of
- * the placement's `seenBy` metadata being checked.
+ * hand), `side` looked at it on top of its own deck, it put the card into a
+ * void (`enteredVoid`, by any route) or revealed it to both sides, or a
+ * placement entered a void or left a public zone. Movement facts are
+ * independent of the placement's `seenBy` metadata being checked.
  */
 function shownDuring(event: EngineEvent, side: Side, id: InstanceId): boolean {
   switch (event.kind) {
@@ -154,6 +155,10 @@ function shownDuring(event: EngineEvent, side: Side, id: InstanceId): boolean {
       return event.side === side && event.instance === id;
     case "lookedAtTop":
       return event.side === side && event.cards.includes(id);
+    case "enteredVoid":
+      return event.instance === id;
+    case "revealed":
+      return event.instances.includes(id);
     case "cardsPlaced": {
       const index = event.cards.indexOf(id);
       if (index < 0) return false;
@@ -208,13 +213,13 @@ function printedIndex(state: BattleState): Map<CardId, InstanceId[]> {
  * as identified when the side could identify it in the last checked state
  * that held it, or, failing that, when the side saw the `cardCreated` event
  * that made it. A card that entered the side's own hand during the events,
- * or that the side looked at on top of its own deck (`shownDuring`), becomes
- * identified in that event and subsequent payloads until a shuffle ends
- * tracking. Public source or destination facts expose placements; hidden
- * source placements rely on earlier observation or boundary knowledge,
- * independently of the `seenBy` metadata under test. A shuffle is judged
- * against earlier observed visibility before invalidating deck
- * tracking, so its `seenBy` does not authorize its own payload. Generic
+ * that the side looked at on top of its own deck, or that entered a void or
+ * was revealed to both sides (`shownDuring`), becomes identified in that
+ * event and subsequent payloads until a shuffle ends tracking. Public source or destination facts expose
+ * placements; hidden source placements rely on earlier observation or
+ * boundary knowledge, independently of the `seenBy` metadata under test. A
+ * shuffle is judged against earlier observed visibility before invalidating
+ * deck tracking, so its `seenBy` does not authorize its own payload. Generic
  * boundary identification remains the before-or-after state contract.
  *
  * IDs are detected by walking every string of the payload, keys included:
@@ -284,7 +289,8 @@ export class EventRedaction {
         }
       }
       const subjects = event.kind === "lookedAtTop" || event.kind === "cardsPlaced" ? event.cards
-        : event.kind === "cardDrawn" || event.kind === "cardTaken" || event.kind === "cardDiscovered" || event.kind === "returnedToHand" ? [event.instance] : [];
+        : event.kind === "revealed" ? event.instances
+        : event.kind === "cardDrawn" || event.kind === "cardTaken" || event.kind === "cardDiscovered" || event.kind === "returnedToHand" || event.kind === "enteredVoid" ? [event.instance] : [];
       for (const viewer of SIDES) for (const id of subjects) {
         if (id !== null && shownDuring(event, viewer, id)) shown[viewer].add(id);
       }

@@ -478,12 +478,12 @@ describe("event redaction invariant", () => {
     const hidden = ids.enemy.hand[0];
     const shown = ids.player.front[0];
     if (hidden === undefined || shown === null) throw new Error("fixture lacks an enemy hand card or a player front card");
-    const leakedInstance: EngineEvent = { kind: "revealed", side: "enemy", instances: [hidden] };
+    const leakedInstance: EngineEvent = { kind: "discarded", side: "enemy", instance: hidden };
     const leakedCard: EngineEvent = { kind: "pendingAbility", side: "enemy", cardId: cardIdOf(state, hidden), instance: null, reason: "played" };
     for (const leak of [leakedInstance, leakedCard]) {
       const violations = eventRedactionViolations([leak], state, state);
       expect(violations).toHaveLength(1);
-      expect(violations[0]).toContain(leak.kind === "revealed" ? hidden : cardIdOf(state, hidden));
+      expect(violations[0]).toContain(leak.kind === "discarded" ? hidden : cardIdOf(state, hidden));
     }
     const drawn: EngineEvent = { kind: "cardDrawn", side: "enemy", instance: hidden };
     const queued: EngineEvent = { kind: "triggerQueued", source: shown, controller: "player", ability: 0, node: null, subject: hidden, subjectHiddenFrom: ["player"] };

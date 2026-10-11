@@ -24,7 +24,9 @@ import { resolveEffect } from "../../interpreter";
 import { createCopyInHand } from "../create-copy-in-hand";
 import { discover } from "../discover";
 import { draw } from "../draw";
+import { erode } from "../erode";
 import { lookAtTop } from "../look-at-top";
+import { reveal } from "../reveal";
 import { sequence } from "../sequence";
 import { shuffleInto } from "../shuffle-into";
 import { opponentHand, takeFromAmong } from "../take-from-among";
@@ -47,6 +49,10 @@ const handAndVoid = eventCard(4, shuffleInto([everyIn("hand"), everyIn("void")])
 const copyThenShuffle = eventCard(5, sequence(createCopyInHand(everyIn("void")), shuffleInto([everyIn("hand")])));
 /** "Look at the opponent's hand and put a card from it into your hand, then shuffle your hand into your deck." */
 const takeThenShuffle = eventCard(6, sequence(takeFromAmong(opponentHand()), shuffleInto([everyIn("hand")])));
+/** "Erode 1, then shuffle your void into your deck." */
+const erodeThenShuffle = eventCard(10, sequence(erode(1), shuffleInto([everyIn("void")])));
+/** "Reveal your hand, then shuffle it into your deck." */
+const revealThenShuffle = eventCard(11, sequence(reveal(), shuffleInto([everyIn("hand")])));
 /** "Abandon this character: Shuffle up to 3 cards from your void into your deck." */
 const abandonShuffler: EngineCardDefinition = {
   id: syntheticId(0x6407), cardType: "character", costs: [], spark: 1, subtype: "Warrior", speed: "standard",
@@ -69,6 +75,7 @@ const shuffleThenFail: EngineCardDefinition = {
 
 const engine = createEngine(testCatalog([
   ...DSL_CARDS, voidShuffle, handShuffle, lookThenShuffle, handAndVoid, copyThenShuffle, takeThenShuffle, abandonShuffler, shuffleThenFail,
+  erodeThenShuffle, revealThenShuffle,
 ]));
 
 /** Answers each prompt from `answer`, keeping every prompt and the state it was asked in. */
@@ -166,6 +173,26 @@ describe("shuffleInto", () => {
     expect(eventRedactionViolations(events, start, state)).toEqual([]);
     const leaked = { ...shuffled, seenBy: [["player", "enemy"], ["player", "enemy"]] } as const;
     expect(eventRedactionViolations(events.map((item) => (item === shuffled ? leaked : item)), start, state)).toEqual([expect.stringMatching(/^enemy sees a shuffledIntoDeck event/)]);
+  });
+
+  it("names a deck card it eroded and then shuffled back to both sides, which saw it enter the void", () => {
+    // The card leaves the hidden deck publicly and is hidden in it again before the step ends.
+    const eroded = play(setup(erodeThenShuffle.id), firstCards(0));
+    const top = eroded.ids.player.deck[0];
+    expect(eroded.events.filter((item) => item.kind === "enteredVoid" && item.instance === top)).toEqual([{ kind: "enteredVoid", instance: top, side: "player", from: "deck" }]);
+    expect(shuffles(eroded.events)).toEqual([{ kind: "shuffledIntoDeck", side: "player", cards: [top], from: ["void"], seenBy: [["player", "enemy"]] }]);
+    expect(sorted(eroded.state.sides.player.deck)).toEqual(sorted(eroded.ids.player.deck));
+    expect(eventRedactionViolations(eroded.events, eroded.start, eroded.state)).toEqual([]);
+  });
+
+  it("names a hand card it revealed and then shuffled in to both sides, which saw the reveal", () => {
+    // The opponent learns the card from the reveal and loses it to the shuffle, so neither boundary state shows it the card.
+    const revealed = play(setup(revealThenShuffle.id, { hand: [v.vanilla2.id] }), firstCards(0));
+    const held = revealed.ids.player.hand[1];
+    expect(revealed.events.filter((item) => item.kind === "revealed")).toEqual([{ kind: "revealed", side: "player", instances: [held] }]);
+    expect(shuffles(revealed.events)).toEqual([{ kind: "shuffledIntoDeck", side: "player", cards: [held], from: ["hand"], seenBy: [["player", "enemy"]] }]);
+    expect(revealed.state.sides.player.deck).toContain(held);
+    expect(eventRedactionViolations(revealed.events, revealed.start, revealed.state)).toEqual([]);
   });
 
   it("shuffles the whole hand without asking when it holds fewer cards, and still shuffles the deck when nothing moves", () => {

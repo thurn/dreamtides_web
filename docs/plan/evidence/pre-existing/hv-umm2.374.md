@@ -1,0 +1,3 @@
+# Pre-existing issues found by hv-umm2.374
+
+- `src/engine/testing/redaction.ts` (`shownDuring`): `banished` (a hand or deck card banished into the public Banished zone), `materialized` and `cardPlayed` also announce a card leaving a hidden zone for a public one, but do not count as showing it for the rest of the step. None is followed by a same-step return to a hidden zone in the current DSL (`everyIn` cannot name the Banished zone, and nothing materializes from a hand or deck), so none produces a false event-redaction report yet; each needs the same treatment as `enteredVoid` once such content exists.
