@@ -2,6 +2,10 @@
  * Prompt answering shared by the placeholder policies: the optional-chain
  * bound and Greedy's prompt heuristic.
  *
+ * Greedy reads a free Discover cost choice from the deck of a state sampled
+ * from its own view (D22): the cards its decklist has left there, never the
+ * battle's hidden deck.
+ *
  * Answering a non-forced prompt during automatic resolution counts as a
  * decision, so the resolution cap never ends a self-retriggering "you may"
  * that a policy keeps accepting (RD-hv-7x4l.20). Every policy therefore
@@ -10,8 +14,9 @@
  */
 import { AI } from "../../content/ai";
 import { instanceCard, type EngineCatalog } from "../catalog";
+import { discoverableCosts } from "../effects/primitives/discover";
 import { allowedAnswers, firstLegalAnswer, isLegalAnswer } from "../prompts/answers";
-import type { Answer, Prompt, PromptRole } from "../prompts/types";
+import type { Answer, ChooseNumberPrompt, Prompt, PromptRole } from "../prompts/types";
 import type { InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { BattleView } from "../view/view";
@@ -95,6 +100,28 @@ export function stateCardInfo(state: BattleState, catalog: EngineCatalog, side: 
   };
 }
 
+/** The costs at which a free Discover cost choice finds a card, as the chooser sees its own deck. */
+export type DiscoverCostsOf = (prompt: ChooseNumberPrompt) => ReadonlySet<number>;
+
+/**
+ * Discover costs from a determinized state: one sampled from the chooser's
+ * view, or a simulation's work state descended from one.
+ */
+export function stateDiscoverCosts(state: BattleState, catalog: EngineCatalog): DiscoverCostsOf {
+  return (prompt) => discoverableCosts(state, catalog, prompt.side, prompt.purpose);
+}
+
+/**
+ * The cost Greedy names for a free Discover cost choice: the highest cost in
+ * range at which its deck holds a matching card, the most valuable find by
+ * Greedy's cost-as-value reading; the canonical no-match maximum only when
+ * no cost finds a card.
+ */
+function discoverCostAnswer(prompt: ChooseNumberPrompt, costs: ReadonlySet<number>): number {
+  const found = [...costs].filter((cost) => cost >= prompt.min && cost <= prompt.max);
+  return found.length === 0 ? prompt.max : Math.max(...found);
+}
+
 /** Roles whose chosen cards the chooser gives up: it picks its least valuable cards, as few as it may. */
 const LOSS_ROLES: readonly PromptRole[] = [
   "abandonCost",
@@ -129,12 +156,13 @@ function selectionOf(value: Answer): readonly InstanceId[] | null {
 
 /**
  * Greedy's answer to a prompt, without search: accept a "you may", pay an
- * "unless" cost it can pay, the largest number, the first legal mode, and
- * for a selection the cards it wants most, giving up its least valuable
- * cards for costs and discards. A prompt that lists its legal answers gets
- * the best of them. After the optional chain is spent it declines.
+ * "unless" cost it can pay, the largest number (for a free Discover cost,
+ * the highest cost its deck can find), the first legal mode, and for a
+ * selection the cards it wants most, giving up its least valuable cards for
+ * costs and discards. A prompt that lists its legal answers gets the best of
+ * them. After the optional chain is spent it declines.
  */
-export function greedyAnswer(prompt: Prompt, info: CardInfoOf, automaticChoices: number): Answer {
+export function greedyAnswer(prompt: Prompt, info: CardInfoOf, discoverCosts: DiscoverCostsOf, automaticChoices: number): Answer {
   if (optionalChainSpent(automaticChoices)) return declineAnswer(prompt);
   const allowed = allowedAnswers(prompt);
   if (allowed !== undefined && allowed.length > 0) {
@@ -153,7 +181,7 @@ export function greedyAnswer(prompt: Prompt, info: CardInfoOf, automaticChoices:
       value = prompt.payable;
       break;
     case "chooseNumber":
-      value = prompt.max;
+      value = prompt.purpose.role === "discoverCost" ? discoverCostAnswer(prompt, discoverCosts(prompt)) : prompt.max;
       break;
     case "chooseMode":
     case "arrange":

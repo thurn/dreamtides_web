@@ -159,8 +159,33 @@ describe("Greedy", () => {
       min: 1,
       max: 1,
     });
-    expect(greedyAnswer(offer("discover"), info, 0)).toEqual(["i2"]);
-    expect(greedyAnswer(offer("discard"), info, 0)).toEqual(["i3"]);
+    expect(greedyAnswer(offer("discover"), info, () => new Set(), 0)).toEqual(["i2"]);
+    expect(greedyAnswer(offer("discard"), info, () => new Set(), 0)).toEqual(["i3"]);
+  });
+
+  it("names a free Discover cost at which the deck its view samples holds a matching card", () => {
+    const free: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(0x4512), status: "authored", abilities: () => [event(discover({ cardType: "character" }, { chooseCost: true }))] };
+    // The deck's costliest card is an event, which this character Discover cannot find.
+    const costlyEvent: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(0x4513), costs: [energy(5)] };
+    const discovering = createEngine(testCatalog([free, costlyEvent]));
+    const discoveringFold = createFoldAdapter(discovering);
+    const enemyDeck = [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id, costlyEvent.id];
+    const { state, ids } = boardState(discovering.catalog, { active: "enemy", phase: "day", enemy: { hand: [free.id], energy: 1, deck: enemyDeck }, player: { deck } });
+    const init: BattleInit = { ...boardInit, decks: { player: entries(deck), enemy: entries([free.id, ...enemyDeck]) } };
+    const card = ids.enemy.hand[0];
+    if (card === undefined) throw new Error("no card");
+    const outcome = discoveringFold.reduce(sliceOf(state), { kind: "battleAction", side: "enemy", action: { kind: "play", card, from: "hand" } });
+    if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("play failed");
+    const pending = discoveringFold.pending(outcome.slice);
+    expect(pending?.prompt).toMatchObject({ kind: "chooseNumber", side: "enemy", purpose: { role: "discoverCost" } });
+    const decision = aiDecision({ engine: discovering, init, slice: outcome.slice, pending, side: "enemy", policy: "greedy", budgets: ITERATIONS_ONLY });
+    if (decision === null || pending === null) throw new Error("not the enemy's prompt");
+    const { choice } = runPolicy(discovering, decision.request);
+    // The vanilla 3● character is the costliest card the Discover can find.
+    expect(choice).toEqual({ kind: "answer", value: 3 });
+    const answered = discoveringFold.reduce(outcome.slice, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: 3 });
+    if (answered.kind !== "applied" || answered.error !== null) throw new Error("answer failed");
+    expect(answered.slice.committed.sides.enemy.hand).toEqual([ids.enemy.deck[1]]);
   });
 
   it("plays the character that adds the most board spark", () => {

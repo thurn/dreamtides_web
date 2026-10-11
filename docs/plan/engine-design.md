@@ -1145,9 +1145,10 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, `costAtMost`, exhausted, rank, "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | figment or not |
 
 Discover accepts an exact copiable-cost value expression alongside its card
-filter, or a free resolution-time cost choice. The free choice uses the
-existing `chooseNumber`/`chooseX` protocol over the public catalog's fixed-cost
-ceiling plus one, preserving a canonical no-match choice. The policy manifest
+filter, or a free resolution-time cost choice. The free choice is a
+`chooseNumber` prompt with its own `discoverCost` role (a paid X keeps
+`chooseX`) over the public catalog's fixed-cost ceiling plus one, preserving
+a canonical no-match choice. The policy manifest
 carries that source-catalog ceiling even when its entity list is a subset.
 Card content may specify `xMinimum` as authored rules metadata when a paid
 X of zero has a meaningful effect; other printed X costs retain minimum one.
@@ -1648,7 +1649,12 @@ victory, score difference, board spark, hand cards, energy) has the best
 mean. It answers prompts with a heuristic (`policy/prompts.ts`), live and in
 simulation: accept a "you may", pay an "unless" cost it can pay, the largest
 number, and the cards it wants most (the opponent's most valuable for a
-target, its own least valuable for a cost or discard).
+target, its own least valuable for a cost or discard). For a free Discover
+cost (`discoverCost`) it names the highest cost at which its deck holds a
+matching card (`discoverableCosts`), and the no-match ceiling only when none
+does. It reads that deck from a determinization: in simulation the work
+state, live one sample of its view and decklists, so the choice uses no
+hidden information.
 
 **The optional-chain bound.** Answering a non-forced prompt in an automatic
 step counts as a decision, so the resolution cap never ends a

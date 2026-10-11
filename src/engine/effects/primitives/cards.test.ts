@@ -51,7 +51,7 @@ import { SYNTHETIC, syntheticId, testCatalog } from "../../testing/synthetic-car
 import { at, passUntil } from "../../testing/trigger-harness";
 import { ZONE, zoneCatalog } from "../../testing/zone-cards";
 import { promptView, view } from "../../view/view";
-import { declineAnswer, greedyAnswer, stateCardInfo } from "../../policy/prompts";
+import { declineAnswer, greedyAnswer, stateCardInfo, type DiscoverCostsOf } from "../../policy/prompts";
 import { identifies } from "../../view/knowledge";
 import { resolveEffect } from "../interpreter";
 import { discardChosen } from "./discard-chosen";
@@ -69,6 +69,8 @@ import { cardsIn, grantCardKeyword } from "./grant-card-keyword";
 const engine = createEngine(testCatalog(DSL_CARDS));
 const v = SYNTHETIC;
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id, v.vanilla5.id];
+/** Greedy answers here raise no free Discover cost choice. */
+const noDiscoverCosts: DiscoverCostsOf = () => new Set();
 
 describe("card primitives", () => {
   it("draw moves cards from the top of the deck to hand", () => {
@@ -840,7 +842,7 @@ describe("selector cost and spark bounds", () => {
     const fresh = createFoldAdapter(bounded, { checkEventPrefix: true, log: (record) => records.push(record) });
     const saved = JSON.parse(JSON.stringify(waitingX)) as BattleSlice;
     const xPrompt = fresh.pending(saved)!.prompt;
-    expect(xPrompt).toMatchObject({ kind: "chooseNumber", min: 0, max: bounded.catalog.maximumFixedCost + 1, cancellable: false, purpose: { role: "chooseX" } });
+    expect(xPrompt).toMatchObject({ kind: "chooseNumber", min: 0, max: bounded.catalog.maximumFixedCost + 1, cancellable: false, purpose: { role: "discoverCost" } });
     expect(xPrompt.id).toBe(fold.pending(waitingX)!.prompt.id);
     const answerX = { kind: "answer", side: "player", promptId: xPrompt.id, value: 1 } as const;
     expect(fresh.reduce(saved, { ...answerX, side: "enemy" })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
@@ -1030,12 +1032,12 @@ describe("discardChosen", () => {
   it("Greedy chooses the opponent's highest value while ordinary discard keeps its low-value loss ordering", () => {
     const { pending, ids } = suspend(setup(chosenDiscard.id, [v.vanilla1.id, v.vanilla5.id]));
     const info = stateCardInfo(pending.display, chosenEngine.catalog, "player");
-    expect(greedyAnswer(pending.prompt, info, 0)).toEqual([ids.enemy.hand[1]]);
+    expect(greedyAnswer(pending.prompt, info, noDiscoverCosts, 0)).toEqual([ids.enemy.hand[1]]);
     const ownInfo = (id: InstanceId) => {
       const candidate = info(id);
       return candidate === null ? null : { ...candidate, mine: true };
     };
-    expect(greedyAnswer({ ...pending.prompt, purpose: { ...pending.prompt.purpose, role: "discard" } }, ownInfo, 0)).toEqual([ids.enemy.hand[0]]);
+    expect(greedyAnswer({ ...pending.prompt, purpose: { ...pending.prompt.purpose, role: "discard" } }, ownInfo, noDiscoverCosts, 0)).toEqual([ids.enemy.hand[0]]);
   });
 
   it("reconstructs an identical private prompt on reload, rejects illegal, foreign, stale and concurrent inputs, and commits once", () => {
@@ -1758,7 +1760,7 @@ describe("takeFromAmong", () => {
         purpose: { source: ids.player.hand[0], cardId: DSL.erodeTakeCharacter.id, ability: 0, role },
       };
       // The eroded cards are the chooser's own: a hostile-target heuristic would take none of them.
-      expect(greedyAnswer(prompt, (id) => ({ mine: role === "chooseAmong", value: value.get(id) ?? 0 }), state.automaticChoices)).toEqual([high]);
+      expect(greedyAnswer(prompt, (id) => ({ mine: role === "chooseAmong", value: value.get(id) ?? 0 }), noDiscoverCosts, state.automaticChoices)).toEqual([high]);
     }
     const optional: ChooseCardsPrompt = {
       kind: "chooseCards", side: "player", cancellable: false, candidates: [low, high], min: 0, max: 1,
@@ -1995,6 +1997,6 @@ describe("lookAtTop", () => {
       purpose: { source: ids.player.hand[0], cardId: lookThreeDrawTwo.id, ability: 0, role: "lookAtTop" },
     };
     // The looked-at cards are the chooser's own: a hostile-target heuristic would draw the least valuable.
-    expect(greedyAnswer(prompt, (id) => ({ mine: true, value: value.get(id) ?? 0 }), state.automaticChoices)).toEqual([high, mid]);
+    expect(greedyAnswer(prompt, (id) => ({ mine: true, value: value.get(id) ?? 0 }), noDiscoverCosts, state.automaticChoices)).toEqual([high, mid]);
   });
 });

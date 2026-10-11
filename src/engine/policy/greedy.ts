@@ -4,7 +4,8 @@
  * resolves the stack with both sides passing, and scores the result with a
  * simple evaluation: score difference, board spark, cards in hand, and
  * energy. The action with the best mean score wins. Prompts are answered
- * with the prompt heuristic (`greedyAnswer`), live and in simulation.
+ * with the prompt heuristic (`greedyAnswer`), live and in simulation; a
+ * live free Discover cost choice reads one determinization of the view.
  */
 import { AI } from "../../content/ai";
 import type { Engine } from "../engine";
@@ -14,7 +15,7 @@ import { opponent, type Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { InlineSource } from "../steps/sources";
 import type { BattleView, SideView } from "../view/view";
-import { greedyAnswer, optionalChainSpent, stateCardInfo, viewCardInfo } from "./prompts";
+import { greedyAnswer, optionalChainSpent, stateCardInfo, stateDiscoverCosts, viewCardInfo, type DiscoverCostsOf } from "./prompts";
 import type { Policy, PolicyCandidate, PolicyChoice, PolicyContext, PolicyDecision, PolicyResult } from "./types";
 
 const GREEDY = AI.enginePolicy.greedy;
@@ -44,10 +45,18 @@ export function evaluatePosition(view: BattleView, side: Side): number {
   );
 }
 
-/** Both sides answer simulated prompts with the prompt heuristic, over the step's own work state. */
+/**
+ * Both sides answer simulated prompts with the prompt heuristic, over the
+ * step's own work state, which descends from a determinization.
+ */
 function simulationSource(engine: Engine): InlineSource {
   const answer = (prompt: Prompt, work: BattleState) =>
-    greedyAnswer(prompt, stateCardInfo(work, engine.catalog, prompt.side), work.automaticChoices);
+    greedyAnswer(
+      prompt,
+      stateCardInfo(work, engine.catalog, prompt.side),
+      stateDiscoverCosts(work, engine.catalog),
+      work.automaticChoices,
+    );
   return new InlineSource({ player: answer, enemy: answer });
 }
 
@@ -127,9 +136,15 @@ export const GREEDY_POLICY: Policy = {
   decide(view: BattleView, decision: PolicyDecision, ctx: PolicyContext): PolicyResult {
     const started = ctx.now();
     if (decision.kind === "topLevel") return decideTopLevel(view, decision.legal, ctx, started);
+    // A free Discover cost reads the deck of one determinization of the view, sampled only when asked.
+    let determinizations = 0;
+    const discoverCosts: DiscoverCostsOf = (prompt) => {
+      determinizations += 1;
+      return stateDiscoverCosts(ctx.engine.determinize(view, ctx.decklists, () => ctx.random.next()), ctx.engine.catalog)(prompt);
+    };
     const chosen: PolicyChoice = {
       kind: "answer",
-      value: greedyAnswer(decision.prompt, viewCardInfo(view, ctx.side), view.automaticChoices),
+      value: greedyAnswer(decision.prompt, viewCardInfo(view, ctx.side), discoverCosts, view.automaticChoices),
     };
     return {
       choice: chosen,
@@ -137,7 +152,7 @@ export const GREEDY_POLICY: Policy = {
         policy: "greedy",
         budget: ctx.budget,
         used: { iterations: 0, ms: ctx.now() - started },
-        determinizations: 0,
+        determinizations,
         candidates: [],
         chosen,
         ...(optionalChainSpent(view.automaticChoices) ? { declined: "optionalChain" as const } : {}),

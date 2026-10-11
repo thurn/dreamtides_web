@@ -582,7 +582,9 @@ with a 2● reduction, a card costing 1● plus X can be played with X = 3 for 2
 A "next card" change applies to the next matching card its player plays and is
 used up when that card's costs are paid, even if the cost was already 0●. A
 card that is not played does not use it up. A card's cost for conditions such
-as "≤2● cost character" is its printed cost, unaffected by cost changes.
+as "≤2● cost character" or "with cost X●" is its copiable cost: its printed
+cost after its variant and deck-entry modifications, with X in it counting as
+0. Cost changes do not affect it.
 
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
@@ -769,16 +771,16 @@ card into your hand, but not which. If fewer than 3 cards match, look at
 all of them; if none match, nothing happens and your deck is not shuffled.
 Putting the card into your hand is not a draw.
 
-A cost criterion compares the card's copiable cost after its variant and
-deck-entry modifications, with X in that card's cost counting as 0. “Cost
-X●” means exactly X●. When the effect says “Choose a value of X” solely for
-this Discover criterion, choose X as the effect resolves and pay no energy
-for the choice. The canonical choices are the integers from 0 through the
-public card catalog's greatest fixed cost plus one. That last value represents
-all larger values, which have the same no-match outcome. The range depends
-on the public catalog, rather than the cards in a hidden deck or the player's
-available energy. A paid X used solely for this cost criterion can be 0
-because a zero-cost discovery is meaningful.
+A cost criterion compares the card's copiable cost (see [Cost
+changes](#costs-requirements-and-x)). “Cost X●” means exactly X●. When the
+effect says “Choose a value of X” solely for this Discover criterion, choose
+X as the effect resolves and pay no energy for the choice. The canonical
+choices are the integers from 0 through the public card catalog's greatest
+fixed cost plus one. That last value represents all larger values, which have
+the same no-match outcome. The range depends on the public catalog, rather
+than the cards in a hidden deck or the player's available energy. A paid X
+used solely for this cost criterion can be 0 because a zero-cost discovery
+is meaningful.
 
 **Look at the top N cards** — Look at the top N cards of your deck, or all of
 them if fewer remain. Only you see the cards you look at, and you keep knowing

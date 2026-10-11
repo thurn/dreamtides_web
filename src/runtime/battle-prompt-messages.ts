@@ -77,6 +77,7 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
       case "playRoute":
         return "Choose how to play it";
       case "chooseX":
+      case "discoverCost":
         return "Choose the value of X";
       case "chooseOne":
         return "Choose one";
@@ -227,7 +228,7 @@ export function engineResponseWindowHeading(stackCardName: string | null): Engin
 
 /** The visible label of a chooseNumber prompt's number picker: the variable it sets. */
 export function engineNumberPickerLabel(role: PromptRole): string {
-  return role === "chooseX" ? "X" : "Value";
+  return role === "chooseX" || role === "discoverCost" ? "X" : "Value";
 }
 
 /** One destination of an arrange prompt: its lane heading and the compact label of each card's destination control. */

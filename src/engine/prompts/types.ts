@@ -40,6 +40,8 @@ export type PromptRole =
   | "lookAtTop"
   /** The card a discover puts into its controller's hand. */
   | "discover"
+  /** The exact cost a Discover looks for, chosen freely as it resolves and never paid. */
+  | "discoverCost"
   /** The card put into its controller's hand from among the cards an effect just moved. */
   | "chooseAmong"
   /** The card its controller puts into their hand from the opponent's hand, which they look at. */
