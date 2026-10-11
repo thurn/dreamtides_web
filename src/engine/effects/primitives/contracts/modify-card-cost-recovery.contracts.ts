@@ -79,6 +79,11 @@ describe("modifyCardCost recovery", () => {
       parseJourneyBattleFoldState(savedJourney(sliceOf({ ...after, floating: [{ ...after.floating[0], change: { ...after.floating[0].change, ...change } }] })));
     expect(malformed({ mode: "halve" })).toBeNull();
     expect(malformed({ amount: "2" })).toBeNull();
+    // An amount the primitive refuses: a negative increase would be a reduction, and energy is whole.
+    expect(malformed({ amount: -2 })).toBeNull();
+    expect(malformed({ amount: 0.5 })).toBeNull();
+    expect(malformed({ mode: "set", amount: -1 })).toBeNull();
+    expect(malformed({ mode: "set", amount: 0 })).not.toBeNull();
     expect(malformed({ instance: 7 })).toBeNull();
   });
 

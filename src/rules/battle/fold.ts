@@ -1200,7 +1200,7 @@ function isFloatingChange(value: unknown): boolean {
         isBoolean(value.next)
       );
     case "cardCost":
-      return isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase") && isFiniteNumber(value.amount);
+      return isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase") && isIndex(value.amount);
     case "trigger":
       return isEffectRef(value.ref) && isBoolean(value.once);
     case "disableTriggers":

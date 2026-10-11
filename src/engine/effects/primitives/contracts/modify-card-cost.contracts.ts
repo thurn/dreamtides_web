@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { costModifier, adjustedEnergy } from "../../../continuous/costs";
 import { cardMatchesFilter } from "../../../continuous/characteristics";
 import { eventSeenBy, type EngineEvent } from "../../../events";
-import type { InstanceId } from "../../../state/ids";
+import type { CardId, InstanceId } from "../../../state/ids";
 import type { BattleState, FloatingEffect } from "../../../state/types";
 import { placeFigment } from "../../../testing/board";
 import { CONTINUOUS } from "../../../testing/continuous-cards";
@@ -143,6 +143,47 @@ describe("modifyCardCost with other cost changes", () => {
     const played = act(changed, "player", play(spell), source).state;
     expect(source.prompts).toContainEqual(expect.objectContaining({ kind: "chooseNumber", max: 2 }));
     expect(played.sides.player.currentEnergy).toBe(0);
+  });
+
+  it("keeps mandatory, optional and alternative additional energy paid on top of a set cost", () => {
+    /** `card` alone in the player's hand with `energy`●, its cost set to 0●. */
+    const setToZero = (card: CardId, energy: number) => {
+      const { state, ids } = placed({ hand: [card], energy });
+      const [id] = ids.player.hand;
+      return { state: withChanges(state, id, [{ kind: "cardCost", instance: id, mode: "set", amount: 0 }]), id };
+    };
+    const left = (state: BattleState, id: InstanceId, source?: Picking) => playAndResolve(state, "player", id, source).state.sides.player.currentEnergy;
+
+    // "To play this card, pay 2●": the set cost replaces only the printed 3●.
+    for (const energy of [0, 1]) {
+      const { state, id } = setToZero(MC.tithe.id, energy);
+      expect(canPlay(state, "player", id)).toBe(false);
+    }
+    const tithe = setToZero(MC.tithe.id, 3);
+    expect(canPlay(tithe.state, "player", tithe.id)).toBe(true);
+    expect(left(tithe.state, tithe.id)).toBe(1);
+
+    // "You may pay 2●": playable for 0●, and paying it spends 2●.
+    const unpaid = setToZero(MC.patron.id, 0);
+    expect(canPlay(unpaid.state, "player", unpaid.id)).toBe(true);
+    expect(left(unpaid.state, unpaid.id)).toBe(0);
+    const patron = setToZero(MC.patron.id, 3);
+    const paying = new Picking(undefined, { confirm: true });
+    expect(left(patron.state, patron.id, paying)).toBe(1);
+    expect(paying.prompts).toContainEqual(expect.objectContaining({ kind: "confirm" }));
+    expect(left(patron.state, patron.id, new Picking(undefined, { confirm: false }))).toBe(3);
+
+    // "Pay 1● or 3●": unplayable for 0●, and each alternative spends its energy.
+    const broke = setToZero(MC.toll.id, 0);
+    expect(canPlay(broke.state, "player", broke.id)).toBe(false);
+    const short = setToZero(MC.toll.id, 1);
+    expect(canPlay(short.state, "player", short.id)).toBe(true);
+    expect(left(short.state, short.id)).toBe(0);
+    const toll = setToZero(MC.toll.id, 4);
+    const dear = new Picking(undefined, { mode: 1 });
+    expect(left(toll.state, toll.id, dear)).toBe(1);
+    expect(dear.prompts).toContainEqual(expect.objectContaining({ kind: "chooseMode", options: [{ mode: 0, legal: true }, { mode: 1, legal: true }] }));
+    expect(left(toll.state, toll.id, new Picking(undefined, { mode: 0 }))).toBe(3);
   });
 
   it("returns its own source and makes it cost 0● until the turn ends, wherever it is", () => {

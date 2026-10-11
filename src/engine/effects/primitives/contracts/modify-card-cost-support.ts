@@ -1,7 +1,7 @@
 import { expect } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
-import { characterYouControl, energy, energyX, enemyCharacter, event, self, target } from "../../../dsl/builders";
+import { additionalCost, characterYouControl, choiceCost, energy, energyX, enemyCharacter, event, optionalCost, self, target } from "../../../dsl/builders";
 import { triggered, whenYouPlay } from "../../../dsl/triggers";
 import type { Answer, Prompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
@@ -58,6 +58,12 @@ export const MC = {
   quickRecall: card(5, "event", [energy(0)], () => [event(returnToHand(target(characterYouControl())))], { speed: "interrupt" }),
   /** A 2● event: "Draw a ≤2● cost card. It costs 2● more." */
   heavyDraw: card(6, "event", [energy(0)], () => [event(modifyCardCost(drawMatching({ costAtMost: 2 }), { increase: 2 }))]),
+  /** A vanilla 3● event: "To play this card, pay 2●." */
+  tithe: card(8, "event", [energy(3)], () => [additionalCost(energy(2))]),
+  /** A vanilla 3● event: "You may pay 2● to play this card." */
+  patron: card(9, "event", [energy(3)], () => [additionalCost(optionalCost(energy(2)))]),
+  /** A vanilla 3● event: "To play this card, pay 1● or 3●." */
+  toll: card(10, "event", [energy(3)], () => [additionalCost(choiceCost([energy(1)], [energy(3)]))]),
 } as const;
 
 /** Returns the chosen enemy to hand and sets its cost to 0●, then throws: a step that fails after its change. */
@@ -89,13 +95,21 @@ export function placed(player: SideSetup, enemy: SideSetup = {}) {
   return boardState(engine.catalog, { active: "player", phase: "day", player: { deck: filler, ...player }, enemy: { deck: filler, ...enemy } });
 }
 
-/** Answers target and card prompts with `pick`, and a number prompt with its maximum, keeping each prompt. */
+/**
+ * Answers target and card prompts with `pick`, a number prompt with its
+ * maximum, and a confirm or mode prompt with `answers`, keeping each prompt.
+ */
 export class Picking implements AnswerSource {
   readonly prompts: Prompt[] = [];
-  constructor(private readonly pick: (candidates: readonly InstanceId[]) => readonly InstanceId[] = (c) => [c[0]]) {}
+  constructor(
+    private readonly pick: (candidates: readonly InstanceId[]) => readonly InstanceId[] = (c) => [c[0]],
+    private readonly answers: { readonly confirm?: boolean; readonly mode?: number } = {},
+  ) {}
   answer(prompt: Prompt): Answer {
     this.prompts.push(prompt);
     if (prompt.kind === "chooseNumber") return prompt.max;
+    if (prompt.kind === "confirm" && this.answers.confirm !== undefined) return this.answers.confirm;
+    if (prompt.kind === "chooseMode" && this.answers.mode !== undefined) return this.answers.mode;
     if (prompt.kind !== "chooseTargets" && prompt.kind !== "chooseCards") throw new Error(`unexpected ${prompt.kind} prompt`);
     return this.pick(prompt.candidates);
   }
