@@ -1299,7 +1299,7 @@ export function createBattleDriver(qa) {
           ["board", "[data-battle-card-picker-controls]"],
           ["target", "[data-battle-targeting-card-stage]"],
         ];
-        const surface = surfaces.find(([, selector]) => shown(selector) !== null) ?? null;
+        let surface = surfaces.find(([, selector]) => shown(selector) !== null) ?? null;
         /** @type {string[]} */
         let rendered = [];
         if (surface?.[0] === "gallery") {
@@ -1334,10 +1334,26 @@ export function createBattleDriver(qa) {
 
         // With the probe, the player owes a prompt exactly when the engine says so.
         const owed = probed?.pending?.side === "player" ? probed.pending : null;
+        // Activated single-target choices use the visible banner and legal
+        // battlefield controls, without a card-play source stage.
+        /** @type {string[] | null} */
+        let inlineTargets = null;
+        const banner = shown("[data-battle-prompt-banner]");
+        if (surface === null && owed?.kind === "chooseTargets" &&
+            banner?.getAttribute("data-battle-prompt-id") === owed.id) {
+          inlineTargets = owed.candidates.filter((id) => {
+            const selector = `[data-battlefield-card][data-battle-card-id="${id}"]`;
+            const card = shown(selector);
+            const hit = dom?.hitPoint({ selector }, 0.95) ?? null;
+            return enabled(card) && card?.getAttribute("role") === "button" &&
+              card.closest("[data-battle-rank]") !== null && hit !== null && hit.covered === null;
+          });
+          if (inlineTargets.length > 0) surface = ["target", "[data-battle-prompt-banner]"];
+        }
         /** @type {BattlePrompt | null} */
         let prompt = null;
         if (probed === null ? surface !== null : owed !== null) {
-          const candidates = owed !== null && owed.candidates.length > 0 ? owed.candidates : rendered;
+          const candidates = inlineTargets ?? (owed !== null && owed.candidates.length > 0 ? owed.candidates : rendered);
           prompt = {
             surface: surface?.[0] ?? null,
             kind: owed?.kind ?? surface?.[0] ?? null,

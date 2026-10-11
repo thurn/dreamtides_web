@@ -1,0 +1,161 @@
+{
+  "bead": "hv-umm2.395",
+  "phase": 5,
+  "implementMin": 18.855,
+  "measurementWindow": "native claim to pre-commit evidence; exact commit timestamp in handoff",
+  "localValidationS": {
+    "negative-review-corrected": 6.848,
+    "negative-review-settled": 6.344,
+    "negative-knip": 2.967,
+    "focused": 2.32,
+    "review": 12.26,
+    "knip": 2.618,
+    "full": 61.319
+  },
+  "hostLoad": [
+    {
+      "label": "negative-review-corrected",
+      "exit": 2,
+      "seconds": 6.848,
+      "loadBefore": [
+        3.4951171875,
+        5.9423828125,
+        7.53759765625
+      ],
+      "loadAfter": [
+        3.455078125,
+        5.89306640625,
+        7.5107421875
+      ]
+    },
+    {
+      "label": "negative-review-settled",
+      "exit": 0,
+      "seconds": 6.344,
+      "loadBefore": [
+        3.0205078125,
+        5.46337890625,
+        7.26953125
+      ],
+      "loadAfter": [
+        3.0166015625,
+        5.3818359375,
+        7.21923828125
+      ]
+    },
+    {
+      "label": "negative-knip",
+      "exit": 0,
+      "seconds": 2.967,
+      "loadBefore": [
+        3.0166015625,
+        5.3818359375,
+        7.21923828125
+      ],
+      "loadAfter": [
+        3.0166015625,
+        5.3818359375,
+        7.21923828125
+      ]
+    },
+    {
+      "label": "focused",
+      "exit": 0,
+      "seconds": 2.32,
+      "loadBefore": [
+        3.87939453125,
+        4.203125,
+        6.00830078125
+      ],
+      "loadAfter": [
+        3.96875,
+        4.21630859375,
+        6.001953125
+      ]
+    },
+    {
+      "label": "review",
+      "exit": 0,
+      "seconds": 12.26,
+      "loadBefore": [
+        3.96875,
+        4.21630859375,
+        6.001953125
+      ],
+      "loadAfter": [
+        4.93408203125,
+        4.40771484375,
+        6.04833984375
+      ]
+    },
+    {
+      "label": "knip",
+      "exit": 0,
+      "seconds": 2.618,
+      "loadBefore": [
+        4.93408203125,
+        4.40771484375,
+        6.04833984375
+      ],
+      "loadAfter": [
+        4.77880859375,
+        4.38427734375,
+        6.0302734375
+      ]
+    },
+    {
+      "label": "full",
+      "exit": 0,
+      "seconds": 61.319,
+      "loadBefore": [
+        4.25390625,
+        4.31884765625,
+        5.912109375
+      ],
+      "loadAfter": [
+        4.41455078125,
+        4.38525390625,
+        5.82861328125
+      ]
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 96,
+    "jsdomFiles": 0,
+    "cases": 3
+  },
+  "browser": {
+    "baseline": {
+      "wallMs": {
+        "browserLeaseWait": 43,
+        "serve": 1262,
+        "scenario": 11360,
+        "total": 12689
+      },
+      "wrapper": {
+        "label": "negative-qa",
+        "exit": 0,
+        "seconds": 17.948
+      },
+      "hostLoad": 3.0166015625
+    },
+    "final": {
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 1254,
+        "scenario": 12889,
+        "total": 14212
+      },
+      "wrapper": {
+        "label": "final-qa",
+        "exit": 0,
+        "seconds": 19.447
+      },
+      "hostLoad": 4.41455078125
+    },
+    "sourceFrozen": true
+  },
+  "friction": [],
+  "improvementBeads": []
+}
