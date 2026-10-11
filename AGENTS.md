@@ -112,7 +112,8 @@ worktree.
 - While iterating: `npm test -- src/path/to/affected.test.ts`.
 - Before committing: `npm run review` and `npm run knip`. Delete the exports
   and files your own change leaves unused.
-- `npm run review:full` (what the gate runs) only for changes to test
+- `npm run review:full` (what Tollgate's release stage runs; its gate stage
+  runs `npm run review:gate`) only for changes to test
   infrastructure, repository-wide configuration, or cross-cutting
   architecture.
 

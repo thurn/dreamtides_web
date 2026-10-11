@@ -26,3 +26,4 @@
 {"tag":"bead-areas-incomplete","phase":5,"bead":"hv-umm2.307"}
 {"tag":"browser-qa-scripting","phase":5,"bead":"hv-umm2.308"}
 {"tag":"native-conflict-recovery","phase":5,"bead":"hv-umm2.309"}
+{"retrospective":"2026-10-10","phase":4,"bead":"hv-n5lj.10","covers":["hv-n5lj.41","hv-n5lj.42","hv-n5lj.50","hv-n5lj.51","hv-n5lj.52","hv-n5lj.53","hv-n5lj.54","hv-n5lj.55","hv-n5lj.56","hv-n5lj.57","hv-n5lj.58","hv-n5lj.59","hv-n5lj.60","hv-n5lj.61","hv-n5lj.62","hv-n5lj.10"]}

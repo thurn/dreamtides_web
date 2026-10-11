@@ -984,3 +984,139 @@ Folded from `measurements/<bead-id>.md`; each file keeps the full tables.
 | The reviews are resolved | Codex gpt-5.6-sol. Phase diff: 6 findings, 5 accepted (greedy legality hv-7x4l.38, conditional victory .39, untargetability .40, additional spark .41, copy choices .42) and 1 rejected (authored figments are 3.8 scope). hv-7x4l.38 review: 5 accepted → hv-7x4l.44. Follow-up range review: 1 accepted → hv-7x4l.47, 1 rejected (fingerprint ordering: the memo is keyed by immutable state). Rules-text beads hv-7x4l.43, .45, .46 landed with their RD files; hv-7x4l.50 added RD-hv-7x4l.50-1 and -2 (discards are seen as they enter the void; a trigger's hidden subject stays hidden). | pass |
 | D19 budgets | [above](#d19-suite-budgets-1): 23.9 s, 211 files, 49 `jsdom` | pass |
 | Metrics re-measured | this section, measured at `1530cd16f`; the closing bead confirms `release == staging` in its notes | pass |
+
+## Phase 4 gate (2026-10-10, bead hv-n5lj.10)
+
+### Re-measurement after Phase 4
+
+`npm run review:full` in the gate worktree at `staging` `e8d9c6ea0` after
+`npm install`, with `JOURNEY_TEST_WORKERS=2` and
+`DREAMTIDES_LOCAL_ASSET_HOME=.`, under the heavy slot. Host load 4.35 → 4.84.
+
+| Measurement | Phase 3 gate | After Phase 4 |
+| --- | --- | --- |
+| `review:full` lint (whole `src/` and `scripts/`) | 15.3 s | 16.3 s, concurrent with the static checks and knip |
+| `review:full` typecheck (cold) | 7.3 s, plus `typecheck-node` 2.6 s | 7.6 s, plus `typecheck-node` 3.0 s |
+| `review:full` import cycles, knip | — | 1.1 s, 1.4 s |
+| `review:full` test | 23.9 s: 211 files, 2,309 tests | **26.6 s**: 218 files, 2,593 tests |
+| `review:full` bundle (production build) | — | 2.3 s |
+| `review:full` total | 40.0 s | **46.0 s** wall (`/usr/bin/time -p`) |
+
+### Tollgate stage totals
+
+Per-buildset sums of step `elapsed_ms` from the primary checkout's
+`.git/tollgate/state.sqlite3`, opened read-only, for buildsets whose tested
+commit carries a `Bead: hv-n5lj.*` trailer (56 commits, `de6153b18` …
+`9fa16b17d`); every one passed.
+
+| Stage | Sample | Median | Range | Steps (median) |
+| --- | --- | --- | --- | --- |
+| Gate stage | 56 | **18.7 s** | 12.8–32.8 s | `dependencies` 4.3 s, `review-gate` 14.4 s (8.7–27.7) |
+| Release stage | 56 | **96.3 s** | 86.6–109.5 s | `review-full` 50.8 s (43.6–61.6), `fuzz` 40.7 s (39.4–46.9) |
+
+The gate stage matches Phase 3 (17.3 s). The release stage grew 12% (86.2 →
+96.3 s): `review-full` gained the import-cycle, knip, and production-bundle
+steps, and the suite grew by 7 files and 284 tests. The longest gate runs
+overlapped another session's buildset. No candidate failed, no CI repair
+ran, and no release run failed during the phase.
+
+### D19 suite budgets
+
+| Budget | Limit | Phase 4 ceiling (hv-47xj.22) | Measured | Command | Host load | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Full suite wall, 2 workers | ≤ 60 s | ≤ 60 s | 26.6 s | `[review] test finished in` from `review:full` | 4.35 | met |
+| Test files | ≤ 220 | 212 | 218 (216 from Phases 3–4, 2 from Phase 5) | `npx vitest list --filesOnly \| wc -l` (also `git ls-files` of test files: 218) | 4.8 | D19 cap met; Phase 4 ceiling revised to 216 |
+| `jsdom` test files | ≤ 80 | 55 | 50 | `git grep -l "@vitest-environment jsdom"` over test files | — | met |
+
+Phase 4 netted +5 test files against a planned 0 (211 → 216; Phase 5 added
+`src/content/specs/specs.test.ts` and `src/rules/journey/modifier-registry.test.ts`,
+and `scripts/qa/prelude.test.mjs` after the measurement, for 219 at `0ea9af3e2`).
+It deleted the five legacy battle files (`create-battle-init`,
+`battle-events`, `mobile-battle-view-model`, `single-controller`,
+`journey-flow.integration`) and added ten: the engine battle and its view
+model (hv-n5lj.2, .4), the policy host and its worker driver (hv-n5lj.3), the
+enemy Avatar summary (hv-n5lj.16), the import-cycle guard (hv-n5lj.15), the
+board's structural sharing (hv-n5lj.30), the presentation subscriber's fault
+containment (hv-n5lj.55), and the two files hv-n5lj.31 split out of files
+over D19's ~500-line rule (`engine-battle-presentation`,
+`engine-battle-replay`). Merging those back breaks the size rule, so the
+Phase 4 ceiling is revised to **216** with this reason, and the later
+ceilings move by the same +4: Phase 5 **220** (the D19 cap; its scenario
+specs are plain modules run by the one `specs.test.ts`, so a Phase 5 bead
+that adds a test file merges it into an existing one), Phase 6 212, Phase 7
+216.
+
+### Other budgets at this gate
+
+| Budget | Value | Measured | Host load | Status |
+| --- | --- | --- | --- | --- |
+| Typecheck step | ≤ 10 s | 7.6 s cold | 4.35 | within |
+| Lint, whole `src/` and `scripts/` | ≤ 20 s | 16.3 s; 19.1 s median in release logs (hv-n5lj.51) | 4.35 | within, 95% of budget in the release stage; watch |
+| `npm run review` | ≤ 45 s | 11.6 s median over the phase's code beads (hv-n5lj.51) | 3.1–4.6 | within |
+| Focused test | ≤ 10 s | 1.9 s median (hv-n5lj.51) | 3.1–4.6 | within |
+| Gate stage | ≤ 60 s | 18.7 s median | — | within |
+| Release stage | ≤ 5 min | 96.3 s median | — | within |
+| Fuzz smoke | ≤ 60 s | 40.7 s median `fuzz` step | — | within |
+
+### Gate browser QA
+
+Captures and reports are in the primary checkout's gitignored
+`artifacts/qa/hv-n5lj.10/` (`report.md` summarizes them), from the scenario
+runner at `46a760e3a`, host load 5.4–26.4.
+
+| Check | Result |
+| --- | --- |
+| Seed-1 journey against Greedy, desktop | Journey Complete in 785.7 s; battles 1 (10–0, 10 turns), 2 (25–0, 16 turns), and Apollyon (25–0, 14 turns) played through the UI, battles 3–6 force-resolved with the debug panel; `__caps` empty |
+| Same, mobile | Journey Complete in 642.3 s; same results; `__caps` empty |
+| Tutorial journey (D38) | The standalone `/tutorial` battle and the journey-site guidance are intact; every in-battle Mira trigger is missing from engine tutorial-journey battles (keyword card-play, Dreamwell resolve, figment created, challenge resolved, no valid targets). The list is in hv-33id.3's notes (Phase 6.2 scope). |
+| Production AI-turn trace | One 173 ms `Commit` 6.2 s into an AI turn, whose samples belong to another session's development page sharing the MCP Chromium renderer; untraced AI turns had no long task. Not an app defect (`pre-existing/hv-n5lj.10.md`). |
+| Battle-log open, production | 45 ms first open, 10–20 ms warm, no task ≥ 50 ms (load 17–21); the development build measured ~55 ms at load 3.4 |
+| AI decision sources | Production: 16 worker, 0 fallback, max round trip 207 ms. Development: 279 worker, 0 fallback; 10 searches over 1,500 ms at load 6–26, each answered within the grace period |
+| `smoke --prod` | PASS in 37.9 s, `__caps` empty |
+
+### Phase 4 measurement files
+
+Folded from `measurements/<bead-id>.md`; each file keeps the full tables.
+
+- **hv-n5lj.4 (4.2 action UI).** Development long tasks per AI-turn pass
+  fell from up to 241 ms to 58–171 ms after the card-face memo; the
+  remaining cost was the React development runtime, with engine fold work at
+  1–21 ms per sample.
+- **hv-n5lj.5 (4.3 PromptHost).** `review:full` 46 s (213 files, 2,411
+  tests), 200-game fuzz 42 s; present-then-ask timing and prompt-banner
+  geometry on both viewports.
+- **hv-n5lj.6 (4.4 presentation).** Before/after pixel comparison of the
+  seed-1 Greedy battle; test files unchanged at 214.
+- **hv-n5lj.17 (QA scenario runner).** Ported bead scripts shrank about 50%
+  with identical results and run times within load noise.
+- **hv-n5lj.21 (AI-turn long tasks, production).** JavaScript long tasks in
+  AI turns cut to 50–71 ms (minified); the 145–215 ms compositor tasks were
+  unattributed (the gate trace above attributes the one it saw to a foreign
+  page). 200-game fuzz summaries identical.
+- **hv-n5lj.22 (text fit once).** One text fit per card mount and no
+  production log POSTs; captures pixel-identical.
+- **hv-n5lj.30 (board memo boundaries).** Components rendered over two AI
+  turns 3,273 → 1,947, development render time 643 → 379 ms.
+- **hv-n5lj.37 (deck-entry card models).** Each copy of a card shows its own
+  modified text; unit and browser evidence.
+- **hv-n5lj.44 and hv-n5lj.53 (QA runner).** Relative navigation, clipped
+  captures, stepped long walks, traces, and the shared `qa.battle` driver;
+  the five tracked scenarios shrank 993 → 781 lines with unchanged wall
+  times.
+- **hv-33id.1 (6.0 tutorial baseline) and hv-umm2.47 (Phase 5 spec-file
+  layout)** belong to Phases 6 and 5; their gates fold them.
+
+### Exit gate
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| Engine battles run in the existing UI against bots | Gate QA: the seed-1 journey against Greedy reached Journey Complete on desktop and mobile with battles 1, 2 and Apollyon played through the UI, `__caps` empty; `smoke --prod` passes; AI decisions come from the worker policy host (production 16 worker, 0 fallback) | pass |
+| Every prompt flows through `PromptHost` | hv-n5lj.5 (4.3) and its follow-ups hv-n5lj.18, .19, .26 (mason M3: prompt-host surfaces as a tagged union carrying its answers); the prompt-lab fixtures cover each prompt kind | pass |
+| The journey sandbox and old AI are gone | hv-n5lj.8 (4.7), hv-n5lj.11 (single-controller playtest machinery), hv-n5lj.28 (mason M5: old journey-AI tunables); the tutorial-only sandbox is Phase 6.1 scope (D38) | pass |
+| The card-lab and sweep are working | hv-n5lj.7 (4.6); the sweep runs `card-lab-play` through the shared `qa.battle` driver (hv-n5lj.53), whose Starter sample matched hv-n5lj.7's ledger | pass |
+| Every mason bead filed this phase has landed | Audit hv-n5lj.9; mason beads hv-n5lj.23–.35, .38, .43, .50, .52 closed | pass |
+| The retrospective's improvement beads have landed | Retrospective #1 (hv-n5lj.44 line): hv-n5lj.44, .46. Retrospective #2 (hv-n5lj.51): hv-n5lj.53 (shared battle driver), hv-n5lj.54 (heavy-slot lock ignored). Gate retrospective: hv-n5lj.61 (seeded synthetic presentation check: forward progress, snapshot bound, hidden information). `npm run friction:triggers` reports no Phase 4 retrospective due | pass |
+| The review is resolved | Codex gpt-5.6-sol over the 52-commit phase diff: 4 findings, all accepted (hv-n5lj.55 presentation replay fault containment, .56 log turn boundary, .57 per-event travel boards, .58 win-condition failure reason). Follow-up range: Codex 1 finding and a cold Claude review clearing hv-n5lj.57's review debt 6 findings, all accepted → hv-n5lj.59 (every item at its own event board), .60 (bounded snapshots through the shared fold memo). Their range: Codex 2 findings, accepted → hv-n5lj.62 (created/prevented/abandoned boards, observed memo reuse); its review found nothing. No Phase 4 bead carries `review-debt` | pass |
+| D19 budgets | [above](#d19-suite-budgets-2): 26.6 s, 218 files at measurement (Phase 4 ceiling revised to 216 with its reason), 50 `jsdom` | pass, ceiling revised |
+| Metrics re-measured | this section; `release` contains every Phase 4 commit when the gate bead closes (its notes) | pass |
+

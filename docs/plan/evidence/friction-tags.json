@@ -16,6 +16,7 @@
     "mobile-hover-rest-point": "browser-qa-scripting",
     "nondeterministic-qa-scenes": "qa-scenes-nondeterministic",
     "qa-content-lacks-prompts": "qa-scene-unreachable-state",
+    "qa-no-plain-draw-two-scene": "qa-scene-unreachable-state",
     "qa-runner-mcp-timeout": "browser-qa-scripting",
     "qa-runner-no-clip-capture": "browser-qa-scripting",
     "qa-runner-no-cpu-profiler": "browser-qa-scripting",
