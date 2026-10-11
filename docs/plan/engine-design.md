@@ -1137,7 +1137,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })` | `draw` at cost 0, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })` | `draw` at cost 0, `lookAtTop` distributions to other destinations, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
 | Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
@@ -1453,6 +1453,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     identify it in the taker's hand: both sides can when it came from a
     public zone or from the opponent's hand, which the taker looked at
     through a prompt private to it;
+  - `lookedAtTop` is public, and names each looked-at card only to a side
+    that can identify it, so the opponent sees how many cards the looker
+    looked at; the looker learned them through its prompt private to it;
   - `triggerQueued`, `triggerResolved`, `winConditionMet`, `effectStarted`,
     `payableEffectRegistered`, and `noLegalTarget` name an ability's
     source (`events/sources.ts`). One whose source is a card in a hand or

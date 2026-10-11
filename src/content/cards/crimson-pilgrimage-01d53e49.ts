@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 412,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.chooseOne(p.lookAtTop(4, { draw: 1 }), p.lookAtTop(4, { draw: 2, ephemeral: true })))],
+  verifiedText: "1upyq9vm04",
 });

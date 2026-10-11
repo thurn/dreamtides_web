@@ -36,6 +36,7 @@ import { foresaw, type ForesawEvent } from "./kinds/foresaw";
 import { laneResolved, type LaneResolvedEvent } from "./kinds/lane-resolved";
 import { leftPlay, type LeftPlayEvent } from "./kinds/left-play";
 import { leftVoid, type LeftVoidEvent } from "./kinds/left-void";
+import { lookedAtTop, type LookedAtTopEvent } from "./kinds/looked-at-top";
 import { loopEnded, type LoopEndedEvent } from "./kinds/loop-ended";
 import { loopStarted, type LoopStartedEvent } from "./kinds/loop-started";
 import { materialized, type MaterializedEvent } from "./kinds/materialized";
@@ -94,6 +95,7 @@ export type EngineEvent =
   | LaneResolvedEvent
   | LeftPlayEvent
   | LeftVoidEvent
+  | LookedAtTopEvent
   | LoopEndedEvent
   | LoopStartedEvent
   | MaterializedEvent
@@ -153,6 +155,7 @@ export const EVENT_DEFINITIONS = {
   laneResolved,
   leftPlay,
   leftVoid,
+  lookedAtTop,
   loopEnded,
   loopStarted,
   materialized,

@@ -780,6 +780,20 @@ on the public catalog, rather than the cards in a hidden deck or the player's
 available energy. A paid X used solely for this cost criterion can be 0
 because a zero-cost discovery is meaningful.
 
+**Look at the top N cards** — Look at the top N cards of your deck, or all of
+them if fewer remain. Only you see the cards you look at, and you keep knowing
+each one that stays in your deck until the deck is shuffled; your opponent sees
+how many you looked at.
+With an empty deck nothing happens, and there is no Fatigue.
+
+"Draw K of the cards," as in "Look at the top 4 cards of your deck. Choose one:
+Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral," draws the K
+looked-at cards you choose. Each is a draw: it fires "when you draw" abilities
+and counts toward the cards you drew this turn. If you looked at fewer than K
+cards, draw all of them. "They gain ephemeral" makes each drawn card Ephemeral.
+The cards you look at and do not draw stay on top of your deck in the same
+order.
+
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played. Copies of cards on the stack
 follow [Copies on the stack](#playing-cards-and-the-stack); figment copies of
@@ -934,7 +948,11 @@ steps produced: an ability that changes spark reads types, keywords, and base
 spark, but not other spark changes.
 
 **Modal abilities** — Abilities that present multiple options, written as "Choose
-one:" followed by the available effects (each with its own cost where relevant).
+one:" followed by the available effects (each with its own cost where relevant). A card or activated ability's mode is chosen as it is played, before its
+targets; a triggered ability's as it resolves (see Choices above). The mode is
+chosen first even when the text puts another instruction before "Choose one:":
+for "Look at the top 4 cards of your deck. Choose one: …", the mode is chosen
+as the card is played, and the look happens as it resolves.
 
 ## Durations
 

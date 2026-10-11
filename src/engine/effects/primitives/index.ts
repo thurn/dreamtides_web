@@ -27,6 +27,7 @@ export * from "./give-all-types";
 export * from "./grant";
 export * from "./grant-card-keyword";
 export * from "./if-then";
+export * from "./look-at-top";
 export * from "./materialize-figment-copy";
 export * from "./materialize-figments";
 export * from "./optional";

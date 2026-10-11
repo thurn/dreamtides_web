@@ -42,6 +42,7 @@ import {
   grantCardKeywordPrimitive,
   grantPrimitive,
   ifThenPrimitive,
+  lookAtTopPrimitive,
   materializeFigmentCopyPrimitive,
   materializeFigmentsPrimitive,
   optionalPrimitive,
@@ -150,6 +151,9 @@ const DEFINITIONS = {
   },
   get ifThen() {
     return ifThenPrimitive;
+  },
+  get lookAtTop() {
+    return lookAtTopPrimitive;
   },
   get materializeFigmentCopy() {
     return materializeFigmentCopyPrimitive;

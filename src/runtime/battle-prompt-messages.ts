@@ -101,6 +101,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Arrange the top of your deck";
       case "discover":
         return cards("discover");
+      case "lookAtTop":
+        return cards("draw");
       case "chooseAmong":
         return cards("put", "card", "cards", " into your hand");
       case "chooseFromOpponentHand":
@@ -518,6 +520,10 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       }
       if (event.winner === null) return `${card(event.challenger)} and ${named(event.blocker)} tied their challenge.`;
       return `${card(event.challenger)} (${String(event.challengerSpark)} spark) challenged ${named(event.blocker)} (${String(event.blockerSpark)} spark).`;
+    }
+    case "lookedAtTop": {
+      const top = event.cards.length === 1 ? "card" : `${String(event.cards.length)} cards`;
+      return `${who(event.side)} looked at the top ${top} of ${event.side === human ? "your" : "their"} deck.`;
     }
     case "loopEnded":
       return `${who(event.side)} stopped repeating after ${plural(event.iterations, "repetition", "repetitions")}.`;

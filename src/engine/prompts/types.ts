@@ -36,6 +36,8 @@ export type PromptRole =
   | "discardChosen"
   /** Where each looked-at card goes. */
   | "foresee"
+  /** The cards its controller draws from among the top cards of their deck, which they look at. */
+  | "lookAtTop"
   /** The card a discover puts into its controller's hand. */
   | "discover"
   /** The card put into its controller's hand from among the cards an effect just moved. */

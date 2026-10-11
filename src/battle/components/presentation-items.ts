@@ -85,6 +85,7 @@ export const EVENT_PRESENTATION = {
   laneResolved: "score",
   leftPlay: "none",
   leftVoid: "none",
+  lookedAtTop: "status",
   loopEnded: "status",
   loopStarted: "status",
   materialized: "travel",

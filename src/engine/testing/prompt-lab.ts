@@ -154,6 +154,10 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
     text: "Erode 3. You may put a ≤2● cost character from among those cards into your hand.",
   },
   [DSL.takeFromOpponentHand.id]: { name: "Lab Pickpocket", text: "Look at the opponent's hand. Put a card from it into your hand." },
+  [DSL.lookAtTopDraw.id]: {
+    name: "Lab Pilgrimage",
+    text: "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral.",
+  },
   [STACK.preventUnlessPays.id]: { name: "Lab Denial", text: "Prevent a card the opponent played unless they pay 2●." },
   [STACK.banishVoidToDraw.id]: { name: "Lab Exhumation", text: "To play this card, banish 2 cards from your void. Draw a card." },
   [LOOP.freePoints.id]: { name: "Lab Engine", text: "Gain 1⍟." },
@@ -365,6 +369,22 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     },
     script: [],
     presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.enemy.hand, 1)] }],
+  },
+  {
+    name: "look-at-top",
+    description: "Look at the top 4: choose a mode, then a private pick of the 2 cards drawn with ephemeral; the rest stay on top",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { hand: [DSL.lookAtTopDraw.id], energy: 2, deck: [vanillas[0], vanillas[1], vanillas[2], SYNTHETIC.interruptEvent.id, ...deck(3)] },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [
+      playHand(0),
+      { side: "player", answer: () => 1 },
+      { side: "player", answer: (ids) => [at(ids.player.deck, 1), at(ids.player.deck, 3)] },
+    ],
   },
   {
     name: "draw-discard",
