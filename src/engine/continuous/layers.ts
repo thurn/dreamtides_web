@@ -92,19 +92,17 @@ function instanceNumber(id: InstanceId): number {
   return Number(id.slice(1));
 }
 
-/** A card's static abilities, and whether any of them works outside play. */
+/** A card's static abilities. */
 interface CardStatics {
   readonly abilities: readonly StaticAbility[];
-  readonly outsidePlay: boolean;
 }
 
 /**
  * A catalog's card statics by printing, then by variant: the plain base and
  * amplified variants in slots 0 and 1, any other by its JSON. A card's
  * abilities are plain data for its printing and variant, so each catalog
- * reads them once, and each card outside play, most of which have no static
- * ability working there, costs an evaluation two lookups. Derived data,
- * never persisted.
+ * reads them once. Each instance's applicable statics are selected through
+ * the shared functional-zone predicate. Derived data, never persisted.
  */
 export type StaticsMemo = Map<string, Map<string | 0 | 1, CardStatics>>;
 
@@ -121,14 +119,11 @@ function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatic
   let statics = byVariant.get(key);
   if (statics === undefined) {
     const abilities = originAbilities(catalog, instanceOrigin(instance)).filter((ability): ability is StaticAbility => ability.kind === "static");
-    statics = { abilities, outsidePlay: abilities.some((ability) => ability.zone !== "play") };
+    statics = { abilities };
     byVariant.set(key, statics);
   }
   return statics;
 }
-
-/** The zones outside play a card's static ability may work from. */
-const OUTSIDE_PLAY = ["void", "hand", "deck"] as const;
 
 /**
  * Every static ability that applies now, in source order: each side's avatar
@@ -157,12 +152,10 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
   const cards: InstanceId[] = [];
   for (const side of SIDES) {
     cards.push(...charactersInPlay(state, side));
-    for (const zone of OUTSIDE_PLAY) {
-      for (const id of state.sides[side][zone]) {
-        const instance = state.instances[id];
-        if (instance !== undefined && cardStatics(catalog, instance).outsidePlay) cards.push(id);
-      }
-    }
+  }
+  for (const instance of Object.values(state.instances)) {
+    if (instance.zone === "play") continue;
+    if (cardStatics(catalog, instance).abilities.some((ability) => worksInZone(ability.zone, instance.zone))) cards.push(instance.id);
   }
   cards.sort((a, b) => instanceNumber(a) - instanceNumber(b));
   for (const id of cards) {

@@ -32,6 +32,7 @@
  */
 import type { EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
+import { worksInZone } from "../dsl/abilities";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
 import { buildDreamwellDeck } from "../rules/dreamwell";
@@ -320,8 +321,9 @@ function reconcile(state: BattleState, view: BattleView, catalog: EngineCatalog)
     let found = memo.get(key);
     if (found === undefined) {
       const zones = originAbilities(catalog, instanceOrigin(instance)).flatMap((ability) => (ability.kind === "static" ? [ability.zone] : []));
-      const hand = zones.includes("hand") || zones.includes("any");
-      found = hand ? { hand, deck: zones.includes("any") } : null;
+      const hand = zones.some((zone) => worksInZone(zone, "hand"));
+      const deck = zones.some((zone) => worksInZone(zone, "deck"));
+      found = hand || deck ? { hand, deck } : null;
       memo.set(key, found);
     }
     return found;

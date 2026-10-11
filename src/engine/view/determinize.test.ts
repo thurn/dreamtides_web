@@ -3,7 +3,8 @@
  * characteristics static abilities in hidden zones give the cards it shows),
  * are seeded, and never read hidden information.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import * as functionalZones from "../dsl/abilities";
 import type { EngineCardDefinition } from "../catalog";
 import { all, characterYouControl, energy, staticAbility } from "../dsl/builders";
 import type { AbilityList } from "../dsl/types";
@@ -194,6 +195,43 @@ function hiddenBoard(enemyHand: SideSetup["hand"]): { state: BattleState; deckli
 
 describe("determinize with static abilities working from a hidden zone", () => {
   const SEEDS = Array.from({ length: 24 }, (_, n) => `hidden-static-${String(n)}`);
+
+  it("reconciles deck-only statics according to the shared functional-zone predicate", () => {
+    const original = functionalZones.worksInZone;
+    const predicate = vi.spyOn(functionalZones, "worksInZone").mockImplementation((zone, current) => zone === "void" ? current === "deck" : original(zone, current));
+    try {
+      const source = handStatic(3, () => [staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone: "void" })]);
+      const catalog = testCatalog([source]);
+      const current = createEngine(catalog);
+      const { state, ids } = boardState(catalog, {
+        active: "player", phase: "day",
+        enemy: { front: [filler], hand: [filler], deck: [source.id] },
+      });
+      const seen = current.view(state, "player");
+      expect(seen.instances[ids.enemy.front[0]!]?.characteristics.spark).toBe(2);
+      const decklists: Decklists = { player: [], enemy: [filler, filler, source.id].map((cardId) => ({ cardId })) };
+      for (const seed of SEEDS) {
+        const sampled = determinize(seen, decklists, seeded(seed), catalog);
+        expect(comparable(current.view(sampled, "player"))).toEqual(comparable(seen));
+      }
+    } finally {
+      predicate.mockRestore();
+    }
+  });
+
+  it("collects statics from every instance zone permitted by the shared predicate", () => {
+    const original = functionalZones.worksInZone;
+    const predicate = vi.spyOn(functionalZones, "worksInZone").mockImplementation((zone, current) => zone === "hand" ? current === "banished" : original(zone, current));
+    try {
+      const { state, ids } = hiddenBoard([handAnthem.id]);
+      const [source] = state.sides.enemy.hand.splice(0, 1);
+      state.instances[source].zone = "banished";
+      state.sides.enemy.banished.push(source);
+      expect(hiddenEngine.view(state, "player").instances[ids.enemy.front[0]!]?.characteristics.spark).toBe(2);
+    } finally {
+      predicate.mockRestore();
+    }
+  });
 
   it("reproduces the characteristics and legal actions the view shows", () => {
     const { state, decklists, ids } = hiddenBoard([filler, handAnthem.id, filler, handTax.id]);
