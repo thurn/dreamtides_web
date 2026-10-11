@@ -32,6 +32,8 @@ export type PromptRole =
   | "offeringCost"
   /** The cards an effect discards. */
   | "discard"
+  /** The opponent hand card the controller chooses to discard. */
+  | "discardChosen"
   /** Where each looked-at card goes. */
   | "foresee"
   /** The card a discover puts into its controller's hand. */

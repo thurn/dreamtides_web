@@ -138,6 +138,12 @@ the Draw phase and by card effects.
 number of cards during the turn, but the active player discards down to 10
 during the Ending phase, choosing which cards to discard.
 
+**Chosen discard** — When an effect says to discard a chosen card from the
+opponent's hand, you choose as that effect resolves. Only cards that match the
+stated restriction are shown privately to you for that choice. Choose one of
+those cards; it is discarded from the opponent's hand into its owner's void.
+If the hand has no matching card, that part of the effect does nothing.
+
 A card leaving a hand is shown to the opponent as it enters a zone they can
 see, so a discarded card is shown to both players as it enters its owner's void.
 A created card that ceases to exist instead (see [Created

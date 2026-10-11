@@ -9,6 +9,7 @@ export * from "./cost-modifier";
 export * from "./create-copy-in-hand";
 export * from "./disable-triggers";
 export * from "./discard";
+export * from "./discard-chosen";
 export * from "./discover";
 export * from "./dissolve";
 export * from "./draw";

@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 157,
   art: { x: 0, y: 0.48, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.discardChosen({ cardType: "event" }))],
+  verifiedText: "20bzr4xovk5",
 });

@@ -89,6 +89,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
       case "discardCost":
       case "discard":
         return cards("discard");
+      case "discardChosen":
+        return "Discard an opponent card";
       case "revealCost":
         return cards("reveal");
       case "banishCost":
