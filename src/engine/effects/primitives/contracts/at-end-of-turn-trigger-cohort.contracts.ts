@@ -40,13 +40,6 @@ describe("atEndOfTurn with a materialized cohort", () => {
     expect(entered).toEqual([voidIds[0], voidIds[1], voidIds[2]]);
   });
 
-  it("reads its bound once, before any card moves", () => {
-    const { state, ids } = setup({ hand: [F.countBorrow.id], void: [v.vanilla1.id, v.vanilla2.id] });
-    const raised = play(state, handCard(state, F.countBorrow)).state;
-    // Two cards in the void as it resolves: both enter, though the void holds one after the first moves.
-    expect(ids.player.void.map((id) => zone(raised, id))).toEqual(["play", "play"]);
-  });
-
   it("spares a member an opponent's response dissolved and banishes one the opponent took control of", () => {
     const { state, ids } = setup(
       { hand: [F.borrow.id, F.draw.id, F.draw.id], void: [v.vanilla1.id, v.vanilla2.id], deck: [v.event0.id, v.event0.id, v.event0.id] },

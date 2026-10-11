@@ -8,7 +8,7 @@
 import { describe, expect, it } from "vitest";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
-import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
+import { createFoldAdapter, type BattleSlice, type FoldAdapter, type IntentOutcome } from "../../../fold/slice";
 import { stateHash } from "../../../state/hash";
 import type { BattleState } from "../../../state/types";
 import { runStep } from "../../../steps/runner";
@@ -24,6 +24,17 @@ function applied(outcome: IntentOutcome): BattleSlice {
   return outcome.slice;
 }
 const isEnding = (entry: EngineEvent) => entry.kind === "phaseChanged" && entry.phase === "ending";
+const discards = (events: readonly EngineEvent[]) => events.flatMap((entry) => (entry.kind === "discarded" ? [entry.instance] : []));
+
+/** Passes through the fold from `state` until a step suspends at a prompt. */
+function untilPrompt(fold: FoldAdapter, state: BattleState): BattleSlice {
+  let slice = sliceOf(state);
+  while (fold.pending(slice) === null) {
+    const decision = engine.decision(slice.committed)!;
+    slice = applied(fold.reduce(slice, { kind: "battleAction", side: decision.side, action: { kind: "pass" } }));
+  }
+  return slice;
+}
 
 /** Borrowed Minutes for X = 2 over a void of 2●, 0●, 5● characters and an event, with a pumped resident and 12 hand cards. */
 function borrowed() {
@@ -66,10 +77,22 @@ describe("atEndOfTurn", () => {
   it("runs the Ending cleanup in the step that enters Ending when nothing triggers at end of turn", () => {
     const { state, ids } = setup({ hand: [F.pump.id, ...filler], back: [v.vanilla3.id] });
     const pumped = play(state, handCard(state, F.pump), new Answers([], [[ids.player.back[0]!]])).state;
+    const ephemeral = pumped.sides.player.hand[pumped.sides.player.hand.length - 1];
+    pumped.instances[ephemeral] = { ...pumped.instances[ephemeral], status: { ...pumped.instances[ephemeral].status, ephemeral: true } };
     const ended = endTurn(pumped);
     expect(ended.steps.some((step) => step.state.turn.endingCleanup !== undefined)).toBe(false);
-    const entering = ended.steps.find((step) => step.events.some(isEnding))!;
-    expect(entering.events.map((entry) => entry.kind)).toEqual(expect.arrayContaining(["discarded", "effectEnded"]));
+    // One step enters Ending and runs the whole cleanup; the next starts the enemy's turn.
+    const entering = ended.steps.findIndex((step) => step.events.some(isEnding));
+    expect(ended.steps.slice(entering, entering + 2).map(({ step, state: after }) => [step.kind, after.turn.active, after.turn.phase])).toEqual([
+      ["advancePhase", "player", "ending"],
+      ["advancePhase", "enemy", "dreamwell"],
+    ]);
+    expect(ended.steps.filter((step) => step.state.turn.phase === "ending")).toHaveLength(1);
+    // Ending's documented order: hand-limit discard, Ephemeral banish, then "until end of turn" expiry.
+    expect(ended.steps[entering].events.map((entry) => entry.kind)).toEqual([
+      "phaseChanged", "enteredVoid", "discarded", "enteredVoid", "discarded", "banished", "effectEnded",
+    ]);
+    expect(ended.steps[entering + 1].events[0]?.kind).toBe("turnStarted");
   });
 
   it("matches the end of any turn, or with a player only that player's turns, active side first", () => {
@@ -128,11 +151,7 @@ describe("atEndOfTurn", () => {
     const { state } = borrowed();
     const direct = endTurn(state);
     const fold = createFoldAdapter(engine, { checkEventPrefix: true });
-    let slice = sliceOf(state);
-    while (fold.pending(slice) === null) {
-      const decision = engine.decision(slice.committed)!;
-      slice = applied(fold.reduce(slice, { kind: "battleAction", side: decision.side, action: { kind: "pass" } }));
-    }
+    const slice = untilPrompt(fold, state);
     // The cohort is gone and the cleanup's discard is asked from a committed state still marked as waiting.
     expect(slice.committed.turn.endingCleanup).toBe(true);
     expect(slice.committed.triggerQueue).toEqual([]);
@@ -150,6 +169,69 @@ describe("atEndOfTurn", () => {
     expect(cold.reduce(answered, answer)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
     const settled = passUntil(engine, answered.committed, (next) => next.turn.active === "enemy" && next.turn.phase === "day" && engine.decision(next) !== null).state;
     expect(stateHash(settled)).toBe(stateHash(direct.state));
+  });
+
+  it("bounces an obsolete prompt id or attempt while the waiting cleanup's newer attempt is pending, and cleans up once", () => {
+    const { state, ids } = setup({ hand: [F.banishThenChoose.id, ...filler], back: [v.vanilla3.id, v.vanilla3.id], void: [v.vanilla1.id] });
+    const raised = play(state, handCard(state, F.banishThenChoose)).state;
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const resolving = untilPrompt(fold, raised);
+    // The trigger's own choice, asked from a committed state whose cleanup waits.
+    const trigger = fold.pending(resolving)!;
+    expect([resolving.committed.turn.endingCleanup, trigger.prompt.kind]).toEqual([true, "chooseTargets"]);
+    const triggerAnswer = { kind: "answer", side: "player", promptId: trigger.prompt.id, value: [ids.player.back[0]!] } as const;
+    const resolved = fold.reduce(resolving, triggerAnswer);
+    const cleaning = applied(resolved);
+    expect(resolved.kind === "applied" && discards(resolved.published)).toEqual([]);
+    const discard = fold.pending(cleaning)!;
+    if (discard.prompt.kind !== "chooseCards") throw new Error("expected the hand-limit discard");
+    expect([discard.prompt.purpose.role, cleaning.committed.turn.endingCleanup, cleaning.attempt]).toEqual(["discardToHandLimit", true, resolving.attempt + 1]);
+
+    // The trigger's prompt belongs to the attempt before the cleanup's.
+    expect(fold.reduce(cleaning, triggerAnswer)).toEqual({ kind: "bounced", reason: "stalePrompt" });
+    // The same discard, asked again by a newer attempt of the cleanup, has a new id; the old one is stale.
+    const answer = { kind: "answer", side: "player", promptId: discard.prompt.id, value: discard.prompt.candidates.slice(0, discard.prompt.min) } as const;
+    const newer: BattleSlice = { ...cleaning, attempt: cleaning.attempt + 1 };
+    const current = fold.pending(newer)!;
+    expect(current.prompt.id).not.toBe(discard.prompt.id);
+    expect({ ...current.prompt, id: discard.prompt.id }).toEqual(discard.prompt);
+    expect(fold.reduce(newer, answer)).toEqual({ kind: "bounced", reason: "stalePrompt" });
+    expect(fold.reduce(newer, triggerAnswer)).toEqual({ kind: "bounced", reason: "stalePrompt" });
+
+    const fresh = { ...answer, promptId: current.prompt.id };
+    const cleaned = fold.reduce(newer, fresh);
+    if (cleaned.kind !== "applied" || cleaned.error !== null) throw new Error(`expected the cleanup to apply, got ${JSON.stringify(cleaned)}`);
+    expect(discards(cleaned.published)).toEqual(answer.value);
+    expect(cleaned.slice.committed.turn.endingCleanup).toBeUndefined();
+    expect(cleaned.slice.committed.sides.player.hand).toHaveLength(raised.config.handLimit);
+    for (const stale of [triggerAnswer, answer, fresh]) expect(fold.reduce(cleaned.slice, stale)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+  });
+
+  it("lets one of two actors racing on the same persisted cleanup prompt discard, once, and bounces the other", () => {
+    const { state } = borrowed();
+    const saved = JSON.stringify(untilPrompt(createFoldAdapter(engine), state));
+    const persisted = JSON.parse(saved) as BattleSlice;
+    expect(persisted.committed.turn.endingCleanup).toBe(true);
+    // Two cold actors, such as two tabs of the same game, each read the persisted slice.
+    const [first, second] = [0, 1].map(() => createFoldAdapter(createEngine(engine.catalog), { checkEventPrefix: true }));
+    const pending = first.pending(persisted)!;
+    expect(second.pending(persisted)).toEqual(pending);
+    if (pending.prompt.kind !== "chooseCards") throw new Error("expected the hand-limit discard");
+    const { id, candidates, min } = pending.prompt;
+    const answers = [candidates.slice(0, min), candidates.slice(min, 2 * min)].map((value) => ({ kind: "answer", side: "player", promptId: id, value }) as const);
+
+    const won = first.reduce(persisted, answers[0]);
+    if (won.kind !== "applied" || won.error !== null) throw new Error(`expected the first answer to apply, got ${JSON.stringify(won)}`);
+    // Reducing never changes the slice it read, and the same intent folds identically in either actor.
+    expect(JSON.stringify(persisted)).toBe(saved);
+    expect(second.reduce(JSON.parse(saved) as BattleSlice, answers[0])).toEqual(won);
+    expect(discards(won.published)).toEqual(answers[0].value);
+    expect(won.slice.committed.turn.endingCleanup).toBeUndefined();
+
+    // The loser's answer, and a repeat of the winner's, arrive against the committed winner.
+    for (const late of answers) expect(second.reduce(won.slice, late)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+    // The winner's fold ran on to the enemy's Day, discarding only the cards it chose.
+    expect([won.slice.committed.turn.active, won.slice.committed.turn.phase, won.slice.committed.sides.player.hand.length]).toEqual(["enemy", "day", state.config.handLimit]);
   });
 
   it("commits nothing from an end-of-turn trigger step that fails after its banish", () => {

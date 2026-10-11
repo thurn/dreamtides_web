@@ -1380,8 +1380,15 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   as the effect resolves while it is still in that void, matching and
   targetable; none left reports `noLegalTarget`. The cost planner excludes it
   like any target (RD-hv-umm2.59-1).
-- `everyIn(zone, filter, { player, another })`: every matching card there, in
-  zone order.
+- `everyIn(zone, filter, { player, another, costAtMost })`: every matching
+  card there, in zone order. `costAtMost` ("each ≤X● cost character in your
+  void") is a constant or the source's X (`x()`); the builder's type admits
+  no other value. It is read once as the effect resolves, before any card
+  moves, and keeps only cards whose copiable cost (rules § Costs,
+  Requirements, and X) is at most it, so play-cost changes do not widen it
+  while deck-entry cost reductions count (RD-hv-umm2.86-2). The lab solver
+  stages one matching void card for a constant bound as printed, and for X
+  at the least X the play can choose.
 - `topOfDeck(count, filter, player)`: those of the top `count` cards that
   match, top first.
 - `randomIn(zone, count, filter, { player, costGreaterThan })` ("two random
@@ -1428,7 +1435,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn` with an optional `costAtMost` value read as the effect resolves, `topOfDeck`, `randomIn`, `thisCardIn`) | |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn` with an optional `costAtMost`, a constant or X read once as the effect resolves, `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |

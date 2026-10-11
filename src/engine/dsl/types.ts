@@ -204,16 +204,17 @@ export interface ZoneTargetSpec extends ZoneCardsBase {
 
 /**
  * "Cards in your void", "your hand", "characters in your deck": every
- * matching card, in zone order, chosen by nobody. `costAtMost`, read once as
- * the effect resolves, keeps only cards whose copiable cost is at most that
- * value ("each ≤X● cost character in your void").
+ * matching card, in zone order, chosen by nobody. `costAtMost`, a constant
+ * or the source's X, read once as the effect resolves, keeps only cards whose
+ * copiable cost is at most that value ("each ≤X● cost character in your
+ * void").
  */
 export interface ZoneEverySpec extends ZoneCardsBase {
   readonly pick: "every";
   readonly zone: CountedZone;
   /** Excludes the effect's source. */
   readonly another?: boolean;
-  readonly costAtMost?: ValueExpr;
+  readonly costAtMost?: number | XValue;
 }
 
 /** "The top card of your deck": those of the top `count` cards that match, top first; fewer when the deck is shorter. */

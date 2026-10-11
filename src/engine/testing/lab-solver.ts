@@ -188,7 +188,7 @@ function voidMaterializations(effect: Effect, xRange: XRange | null): { player: 
     const { from } = materialized;
     if (from.kind !== "inZone" || from.pick !== "every" || from.zone !== "void") return [];
     const bound = from.costAtMost;
-    const atMost = bound === undefined ? undefined : typeof bound === "number" ? bound : typeof bound === "object" && bound.value === "x" ? xRange?.min ?? 0 : 0;
+    const atMost = bound === undefined ? undefined : typeof bound === "number" ? bound : xRange?.min ?? 0;
     return [{ player: from.player, filter: { ...from.filter, ...(atMost === undefined ? {} : { costAtMost: Math.min(atMost, from.filter.costAtMost ?? atMost) }) } }];
   });
 }

@@ -2,12 +2,16 @@
 import { describe, expect, it } from "vitest";
 import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
-import { abandonCost, additionalCost, event, fromVoid } from "../dsl/builders";
+import { abandonCost, additionalCost, energyX, event, everyIn, fromVoid, x } from "../dsl/builders";
+import { copiableCostOf } from "../continuous/characteristics";
+import { materialize } from "../effects/primitives/materialize";
+import type { CardCost, ZoneEverySpec } from "../dsl/types";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { LAB, PROMPT_LAB_DEFINITIONS } from "./prompt-lab";
 import { parseCardSubtype } from "../../types/card-identity";
 import { cardLabBattle } from "./card-lab";
 import { runCardLabPreflight } from "./lab-preflight";
+import { labBoard } from "./lab-solver";
 import { STACK } from "./stack-cards";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 
@@ -39,6 +43,23 @@ describe("node card-lab preflight", () => {
     expect(result).toMatchObject({ verdict: "fail", reason: "fixtureFailed", instance: null, resolved: false, events: [] });
     const unplayable = runCardLabPreflight(engine, { ...request(LAB.drawTwoThenDiscard), stage: { player: { energy: 0 } } }, definitions.cards);
     expect(unplayable).toMatchObject({ verdict: "fail", reason: "unplayable", resolved: false, events: [] });
+  });
+
+  it("stages an 'each ≤X● cost' void materialization for the least X a play can choose, and a constant bound as printed", () => {
+    const borrowing = (index: number, costs: readonly CardCost[], costAtLeast: number, costAtMost: ZoneEverySpec["costAtMost"]): EngineCardDefinition => ({
+      ...SYNTHETIC.event0, id: syntheticId(index), status: "authored", costs,
+      abilities: () => [event(materialize(everyIn("void", { cardType: "character", costAtLeast }, { costAtMost })))],
+    });
+    // A void character costing at least 2● that X = 2 admits, and one costing exactly 3●.
+    const cases = [{ card: borrowing(1955, [energyX(2)], 2, x()), cost: 2 }, { card: borrowing(1956, SYNTHETIC.event0.costs, 3, 3), cost: 3 }];
+    const staging = createEngine(testCatalog(cases.map(({ card }) => card)));
+    for (const { card, cost } of cases) for (const side of ["player", "enemy"] as const) {
+      const { state } = labBoard(staging, card.id, [], side);
+      expect(state.sides[side].void.map((id) => copiableCostOf(state, staging.catalog, id)), `${card.id}/${side}`).toEqual([cost]);
+      const result = runCardLabPreflight(staging, request(card, side), []);
+      expect(result, `${card.id}/${side}`).toMatchObject({ verdict: "pass", resolved: true });
+      expect(result.events.filter((entry) => entry.kind === "materialized")).toHaveLength(1);
+    }
   });
 
   it("tracks the played physical source when an additional cost stages the same printing", () => {

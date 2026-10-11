@@ -1,8 +1,8 @@
 /** Shared synthetic fixtures for the `atEndOfTurn` contracts. */
 import { expect } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { characterYouControl, countCards, energy, energyX, enemyCharacter, event, everyIn, target, x } from "../../../dsl/builders";
-import type { CardCost, CardFilter, ValueExpr } from "../../../dsl/types";
+import { characterYouControl, energy, energyX, enemyCharacter, event, everyIn, target, x } from "../../../dsl/builders";
+import type { CardCost, CardFilter, ZoneEverySpec } from "../../../dsl/types";
 import { atEndOfTurn, triggered } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
@@ -45,7 +45,7 @@ const watcher = (index: number, effect: Parameters<typeof triggered>[0]): Engine
 
 const characters: CardFilter = { cardType: "character" };
 /** "Materialize each character in your void whose cost is at most `bound`. Banish them at end of turn." */
-const borrowing = (bound?: ValueExpr, then: Effect = banishCards([capturedCards()])) =>
+const borrowing = (bound?: ZoneEverySpec["costAtMost"], then: Effect = banishCards([capturedCards()])) =>
   withMaterialized(materialize(everyIn("void", characters, bound === undefined ? {} : { costAtMost: bound })), delayed(atEndOfTurn(), then));
 
 export const F = {
@@ -66,8 +66,6 @@ export const F = {
   /** "At end of turn, materialize each character in your void. Banish them at end of turn." */
   lateBorrow: spell(9, delayed(atEndOfTurn(), borrowing())),
   extraTurn: spell(10, takeExtraTurn()),
-  /** "Materialize each character in your void whose cost is at most the number of cards in your void." */
-  countBorrow: spell(11, materialize(everyIn("void", characters, { costAtMost: countCards("void") }))),
   /** "Characters you play cost 2● less this turn." */
   cheapen: spell(12, costModifier("you", characters, -2, { duration: "untilEndOfTurn" })),
   /** A character costing "1 X": its copiable cost is 1●. */

@@ -279,14 +279,14 @@ export function fromVoid(
 
 /**
  * "Events in your void", "your hand": every card in the player's zone
- * matching `filter`, chosen by nobody; `costAtMost` keeps only cards whose
- * copiable cost is at most that value as the effect resolves ("each ≤X● cost
- * character").
+ * matching `filter`, chosen by nobody; `costAtMost`, a constant or the
+ * source's X (`x()`), keeps only cards whose copiable cost is at most that
+ * value as the effect resolves ("each ≤X● cost character").
  */
 export function everyIn(
   zone: CountedZone,
   filter: CardFilter = {},
-  options: { readonly player?: PlayerRef; readonly another?: boolean; readonly costAtMost?: ValueExpr } = {},
+  options: { readonly player?: PlayerRef; readonly another?: boolean; readonly costAtMost?: ZoneEverySpec["costAtMost"] } = {},
 ): ZoneEverySpec {
   return {
     kind: "inZone",
