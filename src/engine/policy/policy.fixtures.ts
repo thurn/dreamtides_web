@@ -8,7 +8,7 @@ import { createFoldAdapter, type FoldAdapter } from "../fold/slice";
 import { battleSeed, type Side } from "../state/ids";
 import type { BattleInit, BattleState, DeckEntry } from "../state/types";
 import { boardState, type BoardSetup } from "../testing/board";
-import { CYCLE_CARDS } from "../testing/loop-cards";
+import { CYCLE_CARDS, LOOP_CARDS } from "../testing/loop-cards";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import type { PolicyRequest } from "./decide";
 import type { PolicyBudget, PolicyId } from "./types";
@@ -19,7 +19,7 @@ export const strong: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: synthet
 /** A pending (text-less) character, as a loaded card the content modules lack plays (D36). */
 export const textless: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(0x4503), status: "pending" };
 
-export const engine: Engine = createEngine(testCatalog([weak, strong, textless, ...CYCLE_CARDS]));
+export const engine: Engine = createEngine(testCatalog([weak, strong, textless, ...CYCLE_CARDS, ...LOOP_CARDS]));
 export const fold: FoldAdapter = createFoldAdapter(engine);
 
 export const ITERATIONS_ONLY: Readonly<Record<"turnPlanning" | "response", PolicyBudget>> = {

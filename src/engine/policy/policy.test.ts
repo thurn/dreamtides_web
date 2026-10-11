@@ -11,8 +11,9 @@ import type { ConfirmPrompt, Prompt, PromptRole } from "../prompts/types";
 import { battleSeed, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
 import { boardState } from "../testing/board";
-import { CYCLE } from "../testing/loop-cards";
+import { CYCLE, LOOP } from "../testing/loop-cards";
 import { PROMPT_LAB_DEFINITIONS, promptLabBattle, promptLabFixture } from "../testing/prompt-lab";
+import { NO_PROMPTS } from "../steps/sources";
 import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { AI } from "../../content/ai";
 import { aiDecision, runPolicy, type PolicyRequest } from "./decide";
@@ -185,6 +186,18 @@ describe("Greedy", () => {
     const answers = [first.state, second.state, reseeded].map((state) => runPolicy(engine, topLevelRequest(state, "enemy", "greedy", decklists)));
     expect(answers[1]).toEqual(answers[0]);
     expect(answers[2]).toEqual(answers[0]);
+  });
+
+  it("accepts a loop on offer that repeats to victory", () => {
+    const { state, ids } = board({ enemy: { back: [LOOP.freePoints.id], deck }, player: { deck }, scoreToWin: 10 });
+    const source = ids.enemy.back[0];
+    if (source == null) throw new Error("no source");
+    const once = engine.apply(state, "enemy", { kind: "activate", source, ability: 0 }, NO_PROMPTS).state;
+    const loop = engine.legalActions(once, "enemy").find((action) => action.kind === "repeatLoop");
+    expect(loop).toBeDefined();
+    const decklists = { player: entries(deck), enemy: entries([LOOP.freePoints.id, ...deck]) };
+    const result = runPolicy(engine, topLevelRequest(once, "enemy", "greedy", decklists));
+    expect(result.choice).toEqual({ kind: "action", action: loop });
   });
 
   it("stops at its iteration budget and its wall-clock cap, keeping the best candidate it weighed", () => {

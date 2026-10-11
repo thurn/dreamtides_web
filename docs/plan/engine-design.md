@@ -1601,8 +1601,14 @@ RD-hv-7x4l.9-1). The latest such *j* wins. The engine then records a
 `LoopCandidate` holding the actions from *j* to *k*, and `legalActions` offers
 `{ kind: "repeatLoop", loop, count: "untilVictory" }`; any whole `count` from 1
 to the iteration cap is allowed too. Every other step withdraws the offer.
-The view shows the loop on offer and the repetition in progress, never the
-recorded answers.
+The view shows the loop on offer and the repetition in progress. Only the
+side that may repeat the loop also sees its recording, and only while every
+card the recording names is one that side can identify: its steps are that
+side's public actions and automatic steps, every answer the opponent gave in
+it was forced, and a fingerprint is an opaque hash a replay only compares.
+Determinization puts the loop the view shows back on offer, with the
+recording, the state's own signature, and the repetition in progress, so
+search simulates accepting it as the battle would run it (D12).
 
 **Execution.** The `repeatLoop` step starts a `LoopRun`. While it runs, nobody
 has a decision and `nextAutomaticStep` returns `loopIteration`. Each
@@ -1832,7 +1838,8 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   shuffles and Dreamwell cycles are sampled too) and starts empty what a view
   does not carry: queued triggers and floating effects from sources the
   viewer cannot see, the opponent's knowledge, loop history, and the
-  automatic-step count. Only the AI uses it.
+  automatic-step count. The loop on offer and the repetition in progress
+  are the view's ([Loops](#loops)). Only the AI uses it.
   - A static ability working from a hand or a deck shows in the view only
     as what it changes (RD-hv-umm2.53-2), so after dealing, determinization
     reconciles the sample with the characteristics the view shows its cards

@@ -27,6 +27,9 @@
  * - queued triggers whose source the viewer cannot see, floating effects the
  *   view omits, the opponent's knowledge, loop history, and the
  *   automatic-step count start empty;
+ * - the loop on offer, and the repetition in progress, are the ones the view
+ *   shows (`restoreLoop`), so the viewer's legal actions include the offer
+ *   its view shows and a repetition runs on as the battle would;
  * - an effect a side may pay to end whose source the viewer cannot see
  *   names its controller's avatar as its source;
  * - a play permission whose source is hidden or ceased also uses its
@@ -36,6 +39,7 @@
 import { plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
 import { worksInZone } from "../dsl/abilities";
+import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
 import { buildDreamwellDeck } from "../rules/dreamwell";
@@ -113,7 +117,26 @@ function slots(zone: HiddenZoneView): (InstanceId | null)[] {
 export function determinize(view: BattleView, decklists: Decklists, random: () => number, catalog: EngineCatalog): BattleState {
   const state = deal(view, decklists, random, catalog);
   reconcile(state, view, catalog);
+  restoreLoop(state, view);
   return state;
+}
+
+/**
+ * Puts the loop the view shows on offer in the dealt state, with the
+ * repetition in progress. A loop is on offer only at its checkpoint, so its
+ * signature is the state's own, and it repeats its recording, which the view
+ * shows the side that may repeat it (`LoopView.recording`). Without one, the
+ * loop repeats no actions: each iteration returns to the checkpoint
+ * unchanged. The next loop number follows the loop's, and the history the
+ * tracker detects loops from starts empty: its checkpoint signatures hash
+ * cards the viewer cannot see.
+ */
+function restoreLoop(state: BattleState, view: BattleView): void {
+  const { loop } = view;
+  if (loop === null) return;
+  state.loops.candidate = { id: loop.id, side: loop.side, signature: loopSignature(state), actions: copy(loop.recording ?? []) };
+  state.loops.run = loop.run === null ? null : { loop: loop.id, remaining: loop.run.remaining, iterations: loop.run.iterations };
+  state.loops.nextLoop = Number(loop.id.slice(1)) + 1;
 }
 
 /** A state dealing every hidden card at random, each entering its zone at 0. */

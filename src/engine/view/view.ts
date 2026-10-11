@@ -1,4 +1,4 @@
-import type { LoopId } from "../loops/types";
+import type { LoopAction, LoopCandidate, LoopId } from "../loops/types";
 import type { Prompt, PromptPurpose } from "../prompts/types";
 import type { AbilitySource, AvatarId, DreamsignId, DreamwellCardId, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent } from "../state/ids";
@@ -140,9 +140,8 @@ export interface QueuedTriggerView {
 }
 
 /**
- * The loop on offer, or being repeated (rules § Optional Loops). Its
- * recorded actions and answers stay hidden: some answers are private to
- * their chooser.
+ * The loop on offer, or being repeated (rules § Optional Loops), with its
+ * recording as the side that may repeat it knows it (`loopRecordingSeen`).
  */
 export interface LoopView {
   readonly id: LoopId;
@@ -150,6 +149,13 @@ export interface LoopView {
   readonly side: Side;
   /** The repetition in progress, or `null` while the loop is only on offer. */
   readonly run: { readonly remaining: number | "untilVictory"; readonly iterations: number } | null;
+  /**
+   * The loop's recorded actions, each with its steps and their answers,
+   * present only in the view of the side that may repeat it while they name
+   * no card that side cannot identify, so that a determinization of that
+   * view repeats the loop as the battle would.
+   */
+  readonly recording?: readonly LoopAction[];
 }
 
 export interface SideView {
@@ -374,10 +380,29 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
             id: state.loops.candidate.id,
             side: state.loops.candidate.side,
             run: state.loops.run === null ? null : { remaining: state.loops.run.remaining, iterations: state.loops.run.iterations },
+            ...(loopRecordingSeen(state.loops.candidate, viewer, visible) ? { recording: copy(state.loops.candidate.actions) } : {}),
           },
     automaticChoices: state.automaticChoices,
     result: copy(state.result),
   };
+}
+
+/**
+ * Whether `viewer` sees the recording of `candidate`: only the side that may
+ * repeat the loop does, and only while every card the recording names is
+ * one it can identify (`visible`). Its steps are that side's own top-level
+ * actions, which are public, and automatic steps, which name nothing. Every
+ * answer the other side gave was forced, since a choice by the other side
+ * withdraws the offer, and a forced answer naming a card hidden from
+ * `viewer` withholds the whole recording. Each fingerprint is an opaque hash
+ * a replay only compares with the prompt it reaches.
+ */
+function loopRecordingSeen(candidate: LoopCandidate, viewer: Side, visible: (id: InstanceId) => boolean): boolean {
+  if (candidate.side !== viewer) return false;
+  for (const match of JSON.stringify(candidate.actions).matchAll(/"i(\d+)"/g)) {
+    if (!visible(`i${Number(match[1])}`)) return false;
+  }
+  return true;
 }
 
 /**
