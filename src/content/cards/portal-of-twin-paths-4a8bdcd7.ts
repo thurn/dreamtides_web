@@ -1,3 +1,5 @@
+import { event, randomIn } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,7 @@ export default card({
   cardNumber: 415,
   art: { x: 0.504, y: 0.398, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.83-1: two different matching deck cards picked at random as it resolves; fewer when fewer match.
+  abilities: () => [event(p.materialize(randomIn("deck", 2, { cardType: "character", costAtMost: 2 })))],
+  verifiedText: "d16yhy66p0",
 });

@@ -1,0 +1,4 @@
+# Pre-existing issues found by hv-umm2.83
+
+- `scripts/content-inventory.ts` line 295: the `randomSelection` probe matches `random?: boolean;` followed by a `selection` line, or `selection: "random"`, in `src/engine/dsl/types.ts`. The form this bead ships is `ZoneRandomSpec` with `pick: "random"`, so a regenerated inventory still reports `randomSelection` as `exists: false` until the probe also matches `pick: "random"`.
+- `src/engine/effects/primitives/materialize.ts`: materializing from a filtered `topOfDeck` or an `everyIn("deck", …)` reference takes cards from places a viewer may not know, yet no viewer's known deck places are re-checked, so the view can expose a known card's exact new place. No authored card uses either form with `materialize` yet; random deck picks get the check in `resolveNode` (RD-hv-umm2.83-1).

@@ -203,9 +203,22 @@ type changed matches by its new type:
   without causing Fatigue.
 - "This character from your void" names its own card only while that card is in
   your void.
+- "Two random ≤2● cost characters from your deck" names that many different
+  matching cards there, chosen at random among all of them as the effect
+  resolves. Nobody chooses them and they are not targets. With fewer matching
+  cards it names all of them; with none it names none, and the effect's other
+  parts still happen. A cost compared with another value, as in "a random
+  character with higher cost," compares each card's copiable cost (see
+  [Costs, Requirements, and X](#costs-requirements-and-x)). Choosing them does
+  not shuffle the deck.
 
 Naming a card reveals nothing: only what the effect then does with a hidden
-card, such as putting a copy of it into a hand, can show it to a player.
+card, such as putting a copy of it into a hand, can show it to a player. When
+random cards leave a deck, as in "Materialize two random characters from your
+deck," both players see which cards left and in what deck order, but not
+which places they left, so a player keeps knowing where a card still in that
+deck is only when the cards that left determine it (see **Put on top or on
+the bottom of a deck** in [Keywords and Effects](#keywords-and-effects)).
 
 **Counting cards in a zone.** "The number of cards in your void" and "for each
 character in your void" count the cards in that zone whenever the number is
@@ -721,7 +734,11 @@ zones or characteristics before resolution.
 An abandon cost may likewise name the abandoned character's cost, as in
 "Abandon a character: A player erodes X, where X is that character's cost."
 That value is captured before payment from the character's copiable values in
-the same way and persists with the stack item. A figment, which ceases to exist
+the same way and persists with the stack item. "To play this card, abandon a
+character. Materialize a random character with higher cost from your deck"
+compares with that captured cost: "higher cost" means a copiable cost greater
+than the abandoned character's. Playing the card by Reclaim pays the abandon
+too, and captures its cost the same way. A figment, which ceases to exist
 when abandoned, has a cost of 0●, and a figment copy has the cost it copied.
 Any character the player controls can pay the cost, including the character
 whose ability it is.

@@ -1,0 +1,26 @@
+{
+  "bead": "hv-umm2.83",
+  "phase": 5,
+  "baseOid": "7612c60ffcbfc10a1b68b7b867b94c1041262f9b",
+  "implementMin": 30,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 3,
+    "review": 51,
+    "knip": 4,
+    "fuzz": 59,
+    "sweep": 227,
+    "resweep": 199
+  },
+  "hostLoad": 5.5,
+  "testDelta": {
+    "files": 3,
+    "lines": 364,
+    "jsdomFiles": 0,
+    "cases": 16
+  },
+  "friction": [
+    {"tag": "inventory-generator-drift", "minutes": 5, "note": "the content-inventory randomSelection probe expects selection: \"random\" while the zone references discriminate on pick, so the shipped pick: \"random\" form still reads exists:false; logged as pre-existing, outside the bead's areas"},
+    {"tag": "sweep-during-source-edits", "minutes": 10, "note": "editing engine sources while the first sweep's dev server was serving made Vite reload mid-navigation, failing three cells with ERR_ABORTED; a full re-sweep on the final code passed every cell"}
+  ]
+}

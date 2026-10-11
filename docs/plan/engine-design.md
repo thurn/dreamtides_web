@@ -1304,13 +1304,25 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   zone order.
 - `topOfDeck(count, filter, player)`: those of the top `count` cards that
   match, top first.
+- `randomIn(zone, count, filter, { player, costGreaterThan })` ("two random
+  ≤2● cost characters from your deck"): a `ZoneRandomSpec`, not a target.
+  As it resolves it picks up to `count` different matching cards of the
+  zone, uniformly, one draw each from the `random:selection` stream, and
+  names them in the order picked; fewer match, fewer are named, and none
+  names none and draws nothing. `costGreaterThan`, a value read once as it
+  resolves (the captured X of an abandon cost for "with higher cost"), keeps
+  only cards whose copiable cost is greater. The deck is not shuffled:
+  `resolveNode` resolves a node whose own references pick from a deck at
+  random, then has each viewer forget the deck places the cards that
+  actually left leave open, through `forgetDeckPositions` (RD-hv-umm2.83-1).
 - `thisCardIn(zone)`: the source while it is in its controller's zone.
 
 Filters read current characteristics and the copiable cost
 (`cardMatchesFilter`; `matchesFilter` in `continuous/characteristics.ts` is
 the one predicate every filter user calls, a played card's turn-log record
 included). Resolving a
-reference changes nothing and emits nothing but `noLegalTarget`, so a
+reference changes nothing but a random reference's own RNG stream and
+emits nothing but `noLegalTarget`, so a
 reference into a hidden hand or deck names no card in any view, event,
 prompt, or log; only the primitive acting on the cards can show them
 (RD-hv-umm2.59-2). The card-lab solver stages a matching void card for each
@@ -1330,7 +1342,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices) | `forEach`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
@@ -1617,7 +1629,8 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 - **RNG** (`state/rng.ts`) uses named streams:
   - `shuffle:<side>`;
   - `dreamwell`;
-  - `random:<purpose>` (`random:discard`, `random:discover`).
+  - `random:<purpose>` (`random:discard`, `random:discover`,
+    `random:selection`).
 
   Each stream is a counter in `state.rng`: draw `n` of stream `s` is a hash
   of the seed, `s`, and `n`, so new random effects never perturb other

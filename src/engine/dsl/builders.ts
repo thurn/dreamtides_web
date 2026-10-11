@@ -37,6 +37,7 @@ import type {
   ZoneEverySpec,
   ZoneSelfSpec,
   ZoneTargetSpec,
+  ZoneRandomSpec,
   ZoneTopSpec,
 } from "./types";
 
@@ -273,6 +274,30 @@ export function everyIn(
 /** "The top card of your deck" (`count` cards): those of them matching `filter`. */
 export function topOfDeck(count = 1, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneTopSpec {
   return { kind: "inZone", pick: "top", zone: "deck", player, filter, count };
+}
+
+/**
+ * "Two random ≤2● cost characters from your deck" (`count` 2): different
+ * matching cards of `player`'s `zone`, picked at random as the effect
+ * resolves; `costGreaterThan` keeps only cards whose copiable cost is above
+ * that value ("with higher cost").
+ */
+export function randomIn(
+  zone: CountedZone,
+  count: number,
+  filter: CardFilter = {},
+  options: { readonly player?: PlayerRef; readonly costGreaterThan?: ValueExpr } = {},
+): ZoneRandomSpec {
+  if (!Number.isSafeInteger(count) || count < 1) throw new Error("randomIn count must be a positive safe integer");
+  return {
+    kind: "inZone",
+    pick: "random",
+    zone,
+    player: options.player ?? "you",
+    filter,
+    count,
+    ...(options.costGreaterThan === undefined ? {} : { costGreaterThan: options.costGreaterThan }),
+  };
 }
 
 /** "This character from your void": the source while it is in its controller's `zone`. */

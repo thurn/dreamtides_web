@@ -1,3 +1,5 @@
+import { abandonCostCapture, additionalCost, energy, event, randomIn, reclaim, x } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,11 @@ export default card({
   cardNumber: 503,
   art: { x: 0.126, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.83-2: "higher cost" is above the abandoned character's cost, captured as X as the cost is paid.
+  abilities: () => [
+    additionalCost(abandonCostCapture()),
+    event(p.materialize(randomIn("deck", 1, { cardType: "character" }, { costGreaterThan: x() }))),
+    reclaim(energy(3)),
+  ],
+  verifiedText: "1x8bw97gj7x",
 });

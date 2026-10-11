@@ -210,6 +210,24 @@ export interface ZoneTopSpec extends ZoneCardsBase {
   readonly count: number;
 }
 
+/**
+ * "Two random ≤2● cost characters from your deck": up to `count` different
+ * matching cards of the zone, picked uniformly without replacement from the
+ * `random:selection` stream as the effect resolves (rules § Zones →
+ * References to cards in a zone). They are chosen by nobody and are not
+ * targets; with fewer matching cards it names all of them, and with none it
+ * names none and draws nothing. `costGreaterThan`, read once as the effect
+ * resolves, keeps only cards whose copiable cost is greater ("with higher
+ * cost" than an abandoned character, RD-hv-umm2.83-2). Choosing them
+ * reveals none of them and leaves the deck unshuffled (RD-hv-umm2.83-1).
+ */
+export interface ZoneRandomSpec extends ZoneCardsBase {
+  readonly pick: "random";
+  readonly zone: CountedZone;
+  readonly count: number;
+  readonly costGreaterThan?: ValueExpr;
+}
+
 /** "This character from your void": the effect's source while it is in its controller's `zone`. */
 export interface ZoneSelfSpec {
   readonly kind: "inZone";
@@ -218,7 +236,7 @@ export interface ZoneSelfSpec {
 }
 
 /** A reference to cards in a deck, hand, or void. */
-export type ZoneCardSpec = ZoneTargetSpec | ZoneEverySpec | ZoneTopSpec | ZoneSelfSpec;
+export type ZoneCardSpec = ZoneTargetSpec | ZoneEverySpec | ZoneTopSpec | ZoneRandomSpec | ZoneSelfSpec;
 
 /** Any target chosen at play time: characters in play, cards on the stack, or cards in a void. */
 export type PlayTimeTarget = TargetSpec | StackTargetSpec | ZoneTargetSpec;

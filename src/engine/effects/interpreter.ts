@@ -13,10 +13,11 @@ import { cardMatchesFilter, characteristics, copiableCostOf } from "../continuou
 import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import { sourceInstance } from "../state/ids";
+import { SIDES, sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
+import { forgetDeckPositions } from "../view/knowledge";
 import { primitiveDefinition } from "./registry";
 import type { CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
 
@@ -167,7 +168,7 @@ function inZoneMatching(
   id: InstanceId,
 ): boolean {
   if (!state.sides[side][spec.zone].includes(id)) return false;
-  if (spec.pick !== "top" && spec.another === true && id === sourceInstance(source)) return false;
+  if ((spec.pick === "target" || spec.pick === "every") && spec.another === true && id === sourceInstance(source)) return false;
   return cardMatchesFilter(state, catalog, id, spec.filter);
 }
 
@@ -589,14 +590,18 @@ export function resolveStackTargets(ctx: StepContext, spec: StackTargetSpec, env
   return legal;
 }
 
+/** The stream a random zone reference picks its cards from (engine-design § Randomness and replay). */
+const RANDOM_SELECTION_STREAM = "random:selection";
+
 /**
  * The cards a zone reference names now (rules § Zones → References to cards
  * in a zone): the chosen void cards still in that void, matching, and
  * targetable, in the order chosen, reporting noLegalTarget when none remain;
  * every matching card in the zone, in zone order; those of the top cards of
- * the deck that match, top first; or the source while it is in its
+ * the deck that match, top first; up to `count` different matching cards
+ * picked at random, in the order picked; or the source while it is in its
  * controller's zone. Naming a card reveals nothing and emits nothing but that
- * noLegalTarget.
+ * noLegalTarget; a random pick advances only its own RNG stream.
  */
 function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): InstanceId[] {
   const { state, catalog } = ctx;
@@ -611,6 +616,16 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
       return state.sides[side][ref.zone].filter(matches);
     case "top":
       return state.sides[side].deck.slice(0, Math.max(0, ref.count)).filter(matches);
+    case "random": {
+      const above = ref.costGreaterThan === undefined ? null : evaluate(ctx, ref.costGreaterThan, env);
+      const pool = state.sides[side][ref.zone].filter((id) => matches(id) && (above === null || copiableCostOf(state, catalog, id) > above));
+      const picked: InstanceId[] = [];
+      while (picked.length < ref.count && pool.length > 0) {
+        const [card] = pool.splice(Math.floor(ctx.random(RANDOM_SELECTION_STREAM) * pool.length), 1);
+        if (card !== undefined) picked.push(card);
+      }
+      return picked;
+    }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
       const legal = targetable(state, catalog, chosen.filter(matches));
@@ -715,7 +730,43 @@ function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
 
 /** Resolves one node of an effect in `env`, tracking the cards it moves (`MovedCards`). */
 export function resolveNode(ctx: StepContext, node: EffectNode, env: EffectEnv): void {
-  env.moved.track(node, () => primitiveDefinition(node.op).resolve(ctx, node, env));
+  const resolve = (): void => primitiveDefinition(node.op).resolve(ctx, node, env);
+  env.moved.track(node, picksAtRandomFromDeck(node) ? () => forgettingRandomDeckPositions(ctx, resolve) : resolve);
+}
+
+/** Whether `node`'s own card references, not its child nodes', pick cards at random from a deck. */
+function picksAtRandomFromDeck(node: EffectNode): boolean {
+  const visit = (value: unknown): boolean => {
+    if (typeof value !== "object" || value === null || "op" in value) return false;
+    if ("kind" in value && value.kind === "inZone" && "pick" in value && value.pick === "random" && "zone" in value && value.zone === "deck") return true;
+    return Object.values(value).some(visit);
+  };
+  return Object.values(node).some(visit);
+}
+
+/**
+ * Resolves a node that picks deck cards at random, then has each viewer lose
+ * track of the deck positions the visible result cannot determine (rules §
+ * Keywords and Effects → Put on top or on the bottom of a deck, RD-hv-umm2.83-1):
+ * the cards that left a deck are seen leaving in deck order, but which
+ * unseen slots they left is random. The deck is not shuffled.
+ */
+function forgettingRandomDeckPositions(ctx: StepContext, resolve: () => void): void {
+  const { sides, knownTo } = ctx.state;
+  const before: BattleState = {
+    ...ctx.state,
+    sides: { player: { ...sides.player, deck: [...sides.player.deck] }, enemy: { ...sides.enemy, deck: [...sides.enemy.deck] } },
+    knownTo: { player: [...knownTo.player], enemy: [...knownTo.enemy] },
+  };
+  resolve();
+  const left = SIDES.flatMap((side) => before.sides[side].deck.filter((id) => !ctx.state.sides[side].deck.includes(id)));
+  if (left.length === 0) return;
+  const knew = SIDES.map((viewer) => [...before.knownTo[viewer]]);
+  forgetDeckPositions(before, left);
+  for (const [index, viewer] of SIDES.entries()) {
+    const forgotten = new Set(knew[index].filter((id) => !before.knownTo[viewer].includes(id)));
+    if (forgotten.size > 0) ctx.state.knownTo[viewer] = ctx.state.knownTo[viewer].filter((id) => !forgotten.has(id));
+  }
 }
 
 /** Resolves an effect tree with plain synchronous rules code, under the modes chosen at play time. */
