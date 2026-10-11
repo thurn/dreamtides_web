@@ -229,6 +229,25 @@ describe("a journey battle against the AI host", () => {
     expect(log.state().journey.screen.type).not.toBe("site");
   });
 
+  it("includes optional loop-simulation work in the production decision log", async () => {
+    const log = await atEnemyDecision();
+    const host = deferredHost();
+    const logged: Logged[] = [];
+    const loopSimulation = { iterationLimit: 7, simulations: 2, iterations: 9 };
+    const driver = driverFor(log, "enemy", { host, submit: () => undefined, logged });
+    try {
+      driver.update(log.state());
+      host.resolveAll((request) => {
+        const result = runPolicy(FIXTURE_ENGINE, request);
+        return { ...result, trace: { ...result.trace, loopSimulation } };
+      });
+      await new Promise((resolve) => setImmediate(resolve));
+      expect(logged.find((entry) => entry.event === "ai.decision")?.fields.loopSimulation).toEqual(loopSimulation);
+    } finally {
+      driver.dispose();
+    }
+  });
+
   it("resumes deterministically after a reload mid-AI-turn, without repeating an intent", async () => {
     const whole = battleLog();
     await run(whole, [driverFor(whole, "player"), driverFor(whole, "enemy")], ended);

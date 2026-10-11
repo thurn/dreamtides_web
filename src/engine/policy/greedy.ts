@@ -76,10 +76,27 @@ function simulationSource(engine: Engine): InlineSource {
  * then the stack resolved with both sides passing. `null` when the action
  * is not legal in this sample or the simulation fails.
  */
-function simulate(engine: Engine, state: BattleState, side: Side, action: Action): number | null {
+function simulate(
+  engine: Engine,
+  state: BattleState,
+  side: Side,
+  action: Action,
+  loops: { simulations: number; iterations: number },
+): number | null {
   const source = simulationSource(engine);
   try {
-    let current = engine.apply(state, side, action, source).state;
+    // Bound the sampled work while keeping the original action in the decision and trace.
+    const simulated = action.kind === "repeatLoop"
+      ? { ...action, count: Math.min(GREEDY.loopIterationLimit, state.config.loopIterationCap, action.count === "untilVictory" ? Infinity : action.count) }
+      : action;
+    if (simulated.kind === "repeatLoop") loops.simulations += 1;
+    const applied = engine.apply(state, side, simulated, source);
+    if (simulated.kind === "repeatLoop") {
+      for (const event of applied.events) {
+        if (event.kind === "loopEnded" && event.loop === simulated.loop) loops.iterations += event.iterations;
+      }
+    }
+    let current = applied.state;
     for (let passes = 0; passes < GREEDY.stackPassLimit && current.result === null; passes++) {
       const next = engine.decision(current);
       if (next?.kind !== "respond") break;
@@ -102,6 +119,7 @@ function decideTopLevel(view: BattleView, legal: readonly Action[], ctx: PolicyC
   const deadline = ctx.budget.wallClockMs === undefined ? Infinity : started + ctx.budget.wallClockMs;
   let iterations = 0;
   let determinizations = 0;
+  const loops = { simulations: 0, iterations: 0 };
   if (candidates.length > 1) {
     sampling: for (let sample = 0; sample < GREEDY.determinizations; sample++) {
       if (iterations >= ctx.budget.iterations || ctx.now() >= deadline) break;
@@ -110,7 +128,7 @@ function decideTopLevel(view: BattleView, legal: readonly Action[], ctx: PolicyC
       for (const [index, action] of candidates.entries()) {
         if (iterations >= ctx.budget.iterations || ctx.now() >= deadline) break sampling;
         iterations += 1;
-        const score = simulate(ctx.engine, state, ctx.side, action);
+        const score = simulate(ctx.engine, state, ctx.side, action, loops);
         const total = totals[index];
         if (score !== null && total !== undefined) {
           total.score += score;
@@ -138,6 +156,7 @@ function decideTopLevel(view: BattleView, legal: readonly Action[], ctx: PolicyC
       determinizations,
       candidates: ranked.slice(0, GREEDY.traceTopK),
       chosen,
+      ...(loops.simulations === 0 ? {} : { loopSimulation: { iterationLimit: GREEDY.loopIterationLimit, ...loops } }),
     },
   };
 }

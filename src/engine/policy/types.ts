@@ -55,6 +55,14 @@ export interface PolicyTrace {
   /** The best candidates, highest score first. */
   readonly candidates: readonly PolicyCandidate[];
   readonly chosen: PolicyChoice;
+  /** Policy-only ceiling and work observed for accepted-loop simulations. */
+  readonly loopSimulation?: {
+    readonly iterationLimit: number;
+    /** Attempts, including ones whose application failed. */
+    readonly simulations: number;
+    /** Completed repetitions reported by matching loopEnded events in successful applications. */
+    readonly iterations: number;
+  };
   /** Why a prompt was declined without weighing it: the optional-chain bound. */
   readonly declined?: "optionalChain";
 }

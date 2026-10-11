@@ -65,6 +65,8 @@ export const AI = {
       determinizations: 2,
       // Pass actions applied to resolve the stack after a simulated action.
       stackPassLimit: 32,
+      // Repetitions of one optional loop simulated per candidate; the live action keeps its requested count.
+      loopIterationLimit: 32,
       // Candidates kept in each decision's log line.
       traceTopK: 3,
       evaluation: {

@@ -231,6 +231,7 @@ export class EngineAiDriver {
       candidates: trace?.candidates ?? [],
       chosen: choice,
       ...(trace?.declined === undefined ? {} : { declined: trace.declined }),
+      ...(trace?.loopSimulation === undefined ? {} : { loopSimulation: trace.loopSimulation }),
     });
     if (this.work !== work) {
       this.options.log("ai.stale", this.fields(work));

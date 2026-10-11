@@ -1,0 +1,140 @@
+{
+  "bead": "hv-umm2.414",
+  "phase": 5,
+  "implementMin": 12.218942333333333,
+  "measurementWindow": {
+    "start": "2026-10-11T20:09:56+00:00",
+    "startBasis": "root native claim timestamp; inclusive dispatch-start proxy",
+    "end": "2026-10-11T20:22:09.136540+00:00",
+    "endBasis": "terminal preparation timestamp immediately before the single commit; explicit commit-end proxy, not observed commit completion",
+    "actualCommitObservation": "Actual commit start/end retained outside checkout in final-handoff.json and provided to parent for native notes."
+  },
+  "localValidationS": {
+    "focused": 3.8203989169560373,
+    "review": 36.47986258403398,
+    "knip": 3.2692523330333643,
+    "fuzz": 5.9679989159922116
+  },
+  "hostLoad": 5.15625,
+  "hostLoadBasis": "Required final review typecheck start 2026-10-11T20:19:33.932Z, sysctl one-minute value recorded by review runner.",
+  "hostLoadSamples": {
+    "focused-settled": "{ 5.46 9.64 13.25 }",
+    "review-settled": "{ 8.57 9.65 12.89 }",
+    "regression-contract": "{ 8.45 11.15 14.12 }",
+    "regression": "{ 8.84 11.27 14.18 }",
+    "knip": "{ 5.10 7.77 11.43 }",
+    "review-delivery": "{ 5.16 8.17 11.74 }",
+    "focused": "{ 8.58 11.00 13.99 }",
+    "focused-delivery": "{ 5.46 8.33 11.84 }",
+    "focused-final": "{ 9.38 9.70 12.74 }",
+    "fuzz-smoke": "{ 6.84 10.24 13.56 }",
+    "typecheck-repair": "{ 9.09 9.82 13.02 }",
+    "review": "{ 5.29 9.47 13.15 }",
+    "review-final": "{ 9.27 9.67 12.71 }"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 79,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "validationAttempts": {
+    "focused-settled": {
+      "seconds": 2.2146627089823596,
+      "exitCode": 0,
+      "started": "2026-10-11T20:15:20.359462+00:00",
+      "ended": "2026-10-11T20:15:22.574150+00:00"
+    },
+    "review-settled": {
+      "seconds": 41.13311266701203,
+      "exitCode": 0,
+      "started": "2026-10-11T20:16:47.454717+00:00",
+      "ended": "2026-10-11T20:17:28.588246+00:00"
+    },
+    "regression-contract": {
+      "seconds": 1.5894768330035731,
+      "exitCode": 1,
+      "started": "2026-10-11T20:13:50.616615+00:00",
+      "ended": "2026-10-11T20:13:52.206126+00:00"
+    },
+    "regression": {
+      "seconds": 0.7797034999821335,
+      "exitCode": 1,
+      "started": "2026-10-11T20:13:46.636811+00:00",
+      "ended": "2026-10-11T20:13:47.416525+00:00"
+    },
+    "knip": {
+      "seconds": 3.2692523330333643,
+      "exitCode": 0,
+      "started": "2026-10-11T20:20:12.429231+00:00",
+      "ended": "2026-10-11T20:20:15.698520+00:00"
+    },
+    "review-delivery": {
+      "seconds": 36.47986258403398,
+      "exitCode": 0,
+      "started": "2026-10-11T20:19:33.121359+00:00",
+      "ended": "2026-10-11T20:20:09.601598+00:00"
+    },
+    "focused": {
+      "seconds": 2.854161540977657,
+      "exitCode": 0,
+      "started": "2026-10-11T20:14:10.714224+00:00",
+      "ended": "2026-10-11T20:14:13.568418+00:00"
+    },
+    "focused-delivery": {
+      "seconds": 3.8203989169560373,
+      "exitCode": 0,
+      "started": "2026-10-11T20:19:24.178924+00:00",
+      "ended": "2026-10-11T20:19:27.999365+00:00"
+    },
+    "focused-final": {
+      "seconds": 2.6363845410523936,
+      "exitCode": 0,
+      "started": "2026-10-11T20:17:33.865854+00:00",
+      "ended": "2026-10-11T20:17:36.502268+00:00"
+    },
+    "fuzz-smoke": {
+      "seconds": 5.9679989159922116,
+      "exitCode": 0,
+      "started": "2026-10-11T20:14:53.891749+00:00",
+      "ended": "2026-10-11T20:14:59.859810+00:00"
+    },
+    "typecheck-repair": {
+      "seconds": 3.480436292011291,
+      "exitCode": 0,
+      "started": "2026-10-11T20:16:29.066931+00:00",
+      "ended": "2026-10-11T20:16:32.547414+00:00"
+    },
+    "review": {
+      "seconds": 48.48464141698787,
+      "exitCode": 2,
+      "started": "2026-10-11T20:15:31.573286+00:00",
+      "ended": "2026-10-11T20:16:20.058435+00:00"
+    },
+    "review-final": {
+      "seconds": 40.29494033398805,
+      "exitCode": 0,
+      "started": "2026-10-11T20:17:38.382977+00:00",
+      "ended": "2026-10-11T20:18:18.678326+00:00"
+    }
+  },
+  "observations": [
+    {
+      "cause": "unsupported-minWorkers-option",
+      "seconds": 0.7797034999821335,
+      "basis": "failed before tests; corrected option once"
+    },
+    {
+      "cause": "own-test-decision-key-type-error",
+      "seconds": 48.48464141698787,
+      "basis": "review failure duration, not an isolated repair-time measurement"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Required final review typecheck start at 2026-10-11T20:19:33.932Z; one-minute sysctl value from review runner."
+      }
+    }
+  }
+}
