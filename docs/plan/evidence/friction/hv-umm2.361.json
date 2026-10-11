@@ -1,0 +1,144 @@
+{
+  "bead": "hv-umm2.361",
+  "phase": 5,
+  "implementMin": 9.130898199999999,
+  "measurementStartUtc": "2026-10-11T09:50:26.605271+00:00",
+  "measurementStartNote": "Fresh install log creation; interval includes reads, synthetic negative proof, browser verification, checks and queues.",
+  "commitPreparationUtc": "2026-10-11T09:59:34.459163+00:00",
+  "claimUtc": "2026-10-11T09:49:38+00:00",
+  "claimToPreparationMin": 9.94098605,
+  "hostLoad": 5.2998046875,
+  "testDelta": {
+    "files": 0,
+    "lines": 38,
+    "jsdomFiles": 0
+  },
+  "localValidationS": {
+    "after-reading": 25.482436180114746,
+    "install": 2.1822798252105713,
+    "knip": 2.612776756286621,
+    "focused": 5.392383813858032,
+    "negative": 2.689343214035034,
+    "review": 23.587233066558838,
+    "before-reading": 40.132631063461304
+  },
+  "queueS": {
+    "after-reading": 0.017834901809692383,
+    "install": 0.020776033401489258,
+    "knip": 0.02025294303894043,
+    "focused": 0.021961212158203125,
+    "negative": 0.021017789840698242,
+    "review": 0.017526865005493164,
+    "before-reading": 0.01910400390625
+  },
+  "checks": {
+    "after-reading": {
+      "queueS": 0.017834901809692383,
+      "executionS": 25.482436180114746,
+      "load": [
+        8.578125,
+        16.54833984375,
+        13.40283203125
+      ],
+      "exitCode": 0
+    },
+    "install": {
+      "queueS": 0.020776033401489258,
+      "executionS": 2.1822798252105713,
+      "load": [
+        22.109375,
+        13.93212890625,
+        10.6162109375
+      ],
+      "exitCode": 0
+    },
+    "knip": {
+      "queueS": 0.02025294303894043,
+      "executionS": 2.612776756286621,
+      "load": [
+        5.419921875,
+        13.4794921875,
+        12.51806640625
+      ],
+      "exitCode": 0
+    },
+    "focused": {
+      "queueS": 0.021961212158203125,
+      "executionS": 5.392383813858032,
+      "load": [
+        24.2392578125,
+        20.03857421875,
+        13.93798828125
+      ],
+      "exitCode": 0
+    },
+    "negative": {
+      "queueS": 0.021017789840698242,
+      "executionS": 2.689343214035034,
+      "load": [
+        28.23828125,
+        17.40478515625,
+        12.17041015625
+      ],
+      "exitCode": 1
+    },
+    "review": {
+      "queueS": 0.017526865005493164,
+      "executionS": 23.587233066558838,
+      "load": [
+        5.2998046875,
+        14.16748046875,
+        12.7255859375
+      ],
+      "exitCode": 0
+    },
+    "before-reading": {
+      "queueS": 0.01910400390625,
+      "executionS": 40.132631063461304,
+      "load": [
+        26.48095703125,
+        18.80712890625,
+        13.02392578125
+      ],
+      "exitCode": 0
+    }
+  },
+  "negativeProof": {
+    "passed": 31,
+    "failed": 5,
+    "expectedFailure": "Unsafe complete source selected in place beyond viewport/safe/application edges."
+  },
+  "browser": {
+    "before": {
+      "serverPid": 34467,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 1868,
+        "scenario": 32442,
+        "total": 34378
+      },
+      "caps": [],
+      "purpose": "Observational reproduction, not a full-reading acceptance pass."
+    },
+    "after": {
+      "serverPid": 45313,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 41,
+        "serve": 1856,
+        "scenario": 18289,
+        "total": 20210
+      },
+      "caps": [],
+      "ok": true
+    }
+  },
+  "runtimeCleanup": {
+    "checkedAtUtc": "2026-10-11T09:59:34.433032+00:00",
+    "ownedServerProcesses": [],
+    "ownedCheckWrappers": [],
+    "ownedProviderRecord": false
+  },
+  "friction": []
+}

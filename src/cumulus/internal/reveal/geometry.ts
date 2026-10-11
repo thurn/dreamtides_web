@@ -290,8 +290,12 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   const distributedColumnGap = horizontalPairFits ? (safeWidth - cardWidth * 2) / 3 : 0;
   const leftColumnX = horizontalPairFits ? safeLeft + distributedColumnGap : safeLeft;
   const rightColumnX = horizontalPairFits ? leftColumnX + cardWidth + distributedColumnGap : safeRight - cardWidth;
+  const sourceFits = sourceRect.x >= safeLeft && sourceRect.y >= safeTop
+    && sourceRect.x + sourceRect.width <= safeRight
+    && sourceRect.y + sourceRect.height <= safeBottom;
   const pressInPlace = input.reason === "press" && input.primaryKind === "gameCard"
-    && input.sourceShowsCompleteGameCard && sourceRect.width >= cardWidth * 0.9 - Number.EPSILON * viewport.width;
+    && input.sourceShowsCompleteGameCard && sourceFits
+    && sourceRect.width >= cardWidth * 0.9 - Number.EPSILON * viewport.width;
 
   if (pressInPlace) {
     const rightX = sourceRect.x + sourceRect.width + CARD_GAP;

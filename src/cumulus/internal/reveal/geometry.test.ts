@@ -437,6 +437,44 @@ describe("selectRevealPlacement", () => {
     expect(selectRevealPlacement({ ...base, primaryKind: "gameCard", sourceRect: { x: 10, y: 200, width: 157.94, height: 240 }, sourceShowsCompleteGameCard: true }).pressInPlace).toBe(false);
   });
 
+  it.each([
+    { x: -20, y: 300, width: 166, height: 218 },
+    { x: 250, y: 300, width: 166, height: 218 },
+    { x: 100, y: -30, width: 166, height: 218 },
+    { x: 100, y: 640, width: 166, height: 218 },
+  ])("keeps the touch reading fully visible when a complete source crosses a safe edge", (sourceRect) => {
+    const result = selectRevealPlacement({
+      ...base, primaryKind: "gameCard", sourceShowsCompleteGameCard: true,
+      sourceRect, primarySize: { width: 200, height: 280 },
+      touchPoint: { x: sourceRect.x + sourceRect.width / 2, y: sourceRect.y + sourceRect.height / 2 },
+    });
+    expect(result.pressInPlace).toBe(false);
+    expect(result.primaryRect.x).toBeGreaterThanOrEqual(viewport.safeArea.left);
+    expect(result.primaryRect.y).toBeGreaterThanOrEqual(viewport.safeArea.top);
+    expect(result.primaryRect.x + result.primaryRect.width).toBeLessThanOrEqual(viewport.width - viewport.safeArea.right);
+    expect(result.primaryRect.y + result.primaryRect.height).toBeLessThanOrEqual(viewport.height - viewport.safeArea.bottom);
+  });
+
+  it("uses the safe application boundary for touch reading with an offset viewport", () => {
+    const boundary = { x: 30, y: 50, width: 330, height: 700 };
+    const input: RevealPlacementInput = {
+      ...base, primaryKind: "gameCard", sourceShowsCompleteGameCard: true,
+      viewport: { ...viewport, offsetLeft: 10, offsetTop: 20, boundary },
+      sourceRect: { x: boundary.x, y: boundary.y, width: 166, height: 218 },
+      primarySize: { width: 200, height: 280 },
+    };
+    expect(selectRevealPlacement(input).primaryRect).toEqual(input.sourceRect);
+    const outside = selectRevealPlacement({
+      ...input, sourceRect: { ...input.sourceRect, y: 540 },
+      touchPoint: { x: 113, y: 650 },
+    });
+    expect(outside.pressInPlace).toBe(false);
+    expect(outside.primaryRect.x).toBeGreaterThanOrEqual(boundary.x);
+    expect(outside.primaryRect.y).toBeGreaterThanOrEqual(boundary.y);
+    expect(outside.primaryRect.x + outside.primaryRect.width).toBeLessThanOrEqual(boundary.x + boundary.width);
+    expect(outside.primaryRect.y + outside.primaryRect.height).toBeLessThanOrEqual(boundary.y + boundary.height);
+  });
+
   it("places press-in-place secondaries only on a horizontally safe side", () => {
     const game = { ...base, primaryKind: "gameCard" as const, sourceShowsCompleteGameCard: true, secondarySizes: [{ width: 248, height: 80 }] };
     expect(selectRevealPlacement({ ...game, sourceRect: { x: 10, y: 200, width: 158, height: 240 } }).orientation).toBe("primary-left");
