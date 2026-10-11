@@ -443,7 +443,7 @@ describe("stale and invalid intents", () => {
 });
 
 describe("LOAD_STATE", () => {
-  it("keeps a journey battle's init and engine battle, and refuses a battle that names no mode", () => {
+  it("keeps a journey battle's init, engine battle and valid score snapshots, and refuses malformed metadata or mode", () => {
     const state = begun();
     const battle = journeyBattleOf(state.battle);
     if (battle === null) throw new Error("no journey battle");
@@ -454,6 +454,24 @@ describe("LOAD_STATE", () => {
     // a prototype board and no mode.
     expect(load({ init: battle.init, board: {}, effectQueue: [], pendingPrompt: null, dawnFired: {} })).toBeNull();
     expect(load({ mode: { kind: "journey" }, init: battle.init })).toBeNull();
+    const instance = battle.engine.slice.committed.instances[firstCard(state)];
+    if (instance.printing.kind !== "card") throw new Error("no fixture card printing");
+    const trigger = {
+      source: instance.id, controller: instance.controller,
+      origin: { kind: "card", cardId: instance.printing.cardId, variant: instance.variant },
+      ability: 0, node: null, subject: null,
+    };
+    const withScore = (scored: unknown) => ({
+      ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: {
+        ...battle.engine.slice.committed, triggerQueue: [{ ...trigger, ...(scored === undefined ? {} : { scored }) }],
+      } } },
+    });
+    for (const scored of [undefined, 0, 1, 1.5, 3, Number.MAX_VALUE]) {
+      const payload = withScore(scored);
+      expect(load(payload)?.battle, String(scored)).toEqual(payload);
+    }
+    const malformed = ["not-a-number", "3", -2, NaN, Infinity, -Infinity, null, {}, [], true];
+    expect(malformed.filter((scored) => load(withScore(scored)) !== null)).toEqual([]);
   });
 });
 

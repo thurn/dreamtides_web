@@ -1223,6 +1223,7 @@ function isQueuedTrigger(value: unknown): boolean {
     nullable(isIndex)(value.node) &&
     nullable(isInstanceId)(value.subject) &&
     optional(arrayOf(isSide))(value.subjectHiddenFrom) &&
+    optional((scored) => isFiniteNumber(scored) && scored >= 0)(value.scored) &&
     optional(
       (gain) =>
         isPlainRecord(gain) &&

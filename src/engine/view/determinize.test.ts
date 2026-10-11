@@ -7,8 +7,9 @@ import { testCardSubtype } from "../../types/test-identities";
 import { describe, expect, it, vi } from "vitest";
 import * as functionalZones from "../dsl/abilities";
 import type { EngineCardDefinition } from "../catalog";
-import { all, characterYouControl, energy, staticAbility } from "../dsl/builders";
-import { triggered, whenYouPlay } from "../dsl/triggers";
+import { all, characterYouControl, energy, scoredAmount, staticAbility } from "../dsl/builders";
+import { triggered, whenScores, whenYouPlay } from "../dsl/triggers";
+import { runStep } from "../steps/runner";
 import { NO_PROMPTS } from "../steps/sources";
 import type { AbilityList } from "../dsl/types";
 import * as p from "../effects/primitives";
@@ -23,6 +24,7 @@ import { invariantViolations } from "../testing/invariants";
 import { PolicyRandom } from "../policy/random";
 import { hiddenFrom } from "../testing/redaction";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { at, passUntil } from "../testing/trigger-harness";
 import { determinize, type Decklists } from "./determinize";
 import type { BattleView } from "./view";
 
@@ -148,6 +150,59 @@ describe("determinize", () => {
       }
     });
     expect(swapped).toBeGreaterThan(0);
+  });
+});
+
+/** A captured scoring trigger, including neutral and legacy optional snapshots. */
+function scoringQueue(scored: number | undefined) {
+  const scorer: EngineCardDefinition = {
+    ...SYNTHETIC.vanilla3, id: syntheticId(0x7f0), status: "authored", spark: scored === undefined || scored === 0 ? 3 : scored,
+    abilities: () => [triggered(whenScores(), p.losePoints(scoredAmount(), "opponent"))],
+  };
+  const current = createEngine(testCatalog([scorer]));
+  const { state } = boardState(current.catalog, {
+    active: "player", phase: "day",
+    player: { front: [scorer.id], deck: [SYNTHETIC.vanilla1.id] },
+    enemy: { score: 7, deck: [SYNTHETIC.vanilla1.id] },
+  });
+  const result = passUntil(current, state, at(current, "enemy", "day"));
+  const captured = result.steps.find((step) => step.step.kind === "challengeLane" && step.state.triggerQueue.length > 0)?.state;
+  if (captured === undefined) throw new Error("no captured scoring trigger");
+  const queued = structuredClone(captured);
+  if (scored === undefined) {
+    const { scored: _scored, ...legacy } = queued.triggerQueue[0];
+    queued.triggerQueue[0] = legacy;
+  } else if (scored === 0) queued.triggerQueue[0] = { ...queued.triggerQueue[0], scored };
+  const decklists: Decklists = {
+    player: [{ cardId: scorer.id }, { cardId: SYNTHETIC.vanilla1.id }],
+    enemy: [{ cardId: SYNTHETIC.vanilla1.id }],
+  };
+  return { current, queued, decklists };
+}
+
+describe("determinize queued scoring snapshots", () => {
+  it.each([undefined, 0, 1, 1.5, 3])("preserves the public trigger view for scored=%s", (scored) => {
+    const { current, queued, decklists } = scoringQueue(scored);
+    for (const viewer of SIDES) {
+      const seen = current.view(queued, viewer);
+      expect(seen.triggerQueue[0].scored).toBe(scored);
+      const sampled = current.determinize(seen, decklists, seeded(`scored-view-${viewer}`));
+      expect(current.view(sampled, viewer).triggerQueue).toEqual(seen.triggerQueue);
+    }
+  });
+
+  it.each([undefined, 0, 1, 1.5, 3])("resolves the same actual point loss for scored=%s", (scored) => {
+    const { current, queued, decklists } = scoringQueue(scored);
+    const authoritative = runStep(queued, { kind: "resolveTrigger" }, NO_PROMPTS, current.catalog);
+    if (authoritative.kind !== "done") throw new Error("a scoring trigger suspended");
+    expect(authoritative.state.sides.enemy.score).toBe(7 - (scored ?? 0));
+    for (const viewer of SIDES) {
+      const sampled = current.determinize(current.view(queued, viewer), decklists, seeded(`scored-effect-${viewer}`));
+      const simulated = runStep(sampled, { kind: "resolveTrigger" }, NO_PROMPTS, current.catalog);
+      if (simulated.kind !== "done") throw new Error("a sampled trigger suspended");
+      expect(simulated.events).toEqual(authoritative.events);
+      expect(simulated.state.sides.enemy.score).toBe(authoritative.state.sides.enemy.score);
+    }
   });
 });
 

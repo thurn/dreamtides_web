@@ -203,6 +203,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           node: trigger.node,
           subject: trigger.subject,
           ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
+          ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
         }],
   );
   const payable: PayableEffect[] = view.payable.map((effect) => ({
