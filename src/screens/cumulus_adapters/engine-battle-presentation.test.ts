@@ -5,7 +5,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { PRESENTATION_OBSERVATION, PresentationQueue } from "../../battle/components/battle-presentation";
-import { enqueuePresentation, EVENT_PRESENTATION, presentationItems, type PresentationItem } from "../../battle/components/presentation-items";
+import { enqueuePresentation, EVENT_PRESENTATION, presentationItems, presentedAsItem, type PresentationItem } from "../../battle/components/presentation-items";
 import { BATTLE } from "../../content/battle";
 import { createEngine, type BattleState, type BattleView, type Engine, type EngineEvent, type EngineEventKind, type InstanceView } from "../../engine";
 import type { Keyword } from "../../engine/dsl/types";
@@ -24,7 +24,7 @@ import { ZONE } from "../../engine/testing/zone-cards";
 import { batchStates, foldAdapterFor } from "../../rules/battle/engine-battle";
 import { fuzzEngineCatalog, fuzzInit, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
 import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabFixture, promptLabPresentation } from "../../engine/testing/prompt-lab";
-import { battleSeed, PHASES, SIDES, type InstanceId } from "../../engine/state/ids";
+import { battleSeed, SIDES, type InstanceId } from "../../engine/state/ids";
 import type { CommittedEvent } from "../../eventlog/local-log";
 import type { GameEvent } from "../../eventlog/types";
 import type { JourneyBattleFoldState } from "../../rules/battle/fold";
@@ -36,6 +36,16 @@ import {
   parsePresentationId as pid,
   parseSiteId,
 } from "../../types/identifiers";
+import {
+  boardRewinds,
+  expectForward,
+  hiddenInformationLeaks,
+  observationViolations,
+  presentObserved,
+  recordFuzzGame,
+  replayObservedBatches,
+  type ObservedBatch,
+} from "./__test-helpers__/presentation-checks";
 import { battleLogEntries, battleLogTurns, engineBattleLog } from "./engine-battle-log-view-model";
 import {
   buildEngineBattleScreenModel,
@@ -137,47 +147,6 @@ function observedBoard(setup: BoardSetup, engine: Engine = labEngine) {
     throw new Error(`no batch publishes ${kind}`);
   };
   return { ids, adapter, apply, passUntil, slice: () => slice };
-}
-
-/** Where a card is on a board: its zone and holder, its position in play, or gone. */
-function placeOf(state: BattleState, id: InstanceId): string {
-  const instance = state.instances[id] as BattleState["instances"][InstanceId] | undefined;
-  if (instance === undefined) return "gone";
-  const side = state.sides[instance.controller];
-  const slot = instance.zone === "play" ? `${String(side.backRank.indexOf(id))}/${String(side.frontRank.indexOf(id))}` : "";
-  return `${instance.zone}:${instance.controller}:${slot}`;
-}
-
-const withoutRepeats = (places: readonly string[]) => places.filter((place, index) => places[index - 1] !== place);
-
-/**
- * Every item's board in event order only moves forward: each card visits its
- * places in the order the batch moved it, never returning to one it left,
- * and the turn, phase, and scores never go back.
- */
-function expectForward(batch: { readonly before: BattleState; readonly state: BattleState; readonly eventStates: readonly (BattleState | undefined)[]; readonly items: readonly PresentationItem[] }) {
-  const observed = batch.eventStates.filter((state): state is BattleState => state !== undefined);
-  expect(observed).toHaveLength(batch.eventStates.length);
-  const trajectory = [batch.before, ...observed, batch.state];
-  const boards = batch.items.map((item) => item.batch.state);
-  const cards = new Set(trajectory.flatMap((state) => Object.keys(state.instances) as InstanceId[]));
-  for (const id of cards) {
-    const path = withoutRepeats(trajectory.map((state) => placeOf(state, id)));
-    let at = 0;
-    for (const place of withoutRepeats(boards.map((state) => placeOf(state, id)))) {
-      const next = path.indexOf(place, at);
-      expect({ id, place, forward: next >= 0 }).toEqual({ id, place, forward: true });
-      at = next;
-    }
-  }
-  const progress = (state: BattleState) => [
-    state.turn.turnNumber * PHASES.length + PHASES.indexOf(state.turn.phase),
-    ...SIDES.map((side) => state.sides[side].score),
-  ];
-  boards.forEach((state, index) => {
-    const previous = progress(boards[index - 1] ?? batch.before);
-    expect(progress(state).map((value, at) => value >= (previous[at] ?? value))).toEqual(previous.map(() => true));
-  });
 }
 
 /** The step of the discover lab fixture that publishes its `cardDiscovered`, and the event's index in it. */
@@ -595,6 +564,41 @@ describe("presentation items", () => {
       const item = step.items.find((entry) => entry.key === `${step.batch.key}:${String(index)}`);
       expect(item?.presentation).toBe("travel");
     }
+  });
+});
+
+describe("presentation over seeded synthetic fuzz games", () => {
+  it("moves every item's board forward, observes within the limit and only at presented events, and shows each viewer only what it may see", () => {
+    const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
+    const { maxObservedEventStates } = BATTLE.presentation;
+    const problems: string[] = [];
+    const check = (batch: ObservedBatch, key: string) => {
+      problems.push(...observationViolations(batch, maxObservedEventStates).map((problem) => `${key}: ${problem}`));
+      for (const viewer of SIDES) {
+        const presented = presentObserved(batch, viewer, `${key}:${viewer}`);
+        problems.push(...boardRewinds(presented), ...hiddenInformationLeaks(engine, viewer, batch, presented.items));
+      }
+    };
+    let batches = 0;
+    for (let index = 0; index < 12; index += 1) {
+      const game = recordFuzzGame(engine, battleSeed(`presentation-forward-${String(index)}`), SYNTHETIC_FUZZ_POOL);
+      expect(game.ended).toBe(true);
+      replayObservedBatches(engine, game, (batch) => {
+        batches += 1;
+        check(batch, `game${String(index)}:${String(batches)}`);
+      });
+    }
+    // The games' intents present a dozen events at most; a long loop's repetitions run past the per-intent limit.
+    const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [LOOP.bouncer.id], deck: [SYNTHETIC.vanilla1.id] } }, engine);
+    fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand", slot: { rank: "back", index: 0 } } });
+    const loop = fixture.slice().committed.loops.candidate;
+    if (loop === null) throw new Error("no loop offer");
+    const repeated = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "repeatLoop", loop: loop.id, count: 40 } });
+    check(repeated, "loop");
+
+    expect(batches).toBeGreaterThan(12);
+    expect(repeated.events.filter(presentedAsItem).length).toBeGreaterThan(maxObservedEventStates);
+    expect(problems).toEqual([]);
   });
 });
 
