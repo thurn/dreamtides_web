@@ -1,16 +1,17 @@
 // What the battle screen model shows the human: hidden cards only as
 // positions, status badges on the cards the viewer sees, and the result.
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { type InstanceId } from "../../engine";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { ZONE } from "../../engine/testing/zone-cards";
 import { parseBattleCardId } from "../../types/identifiers";
+import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
 import {
   enginePrintedKeywords,
   engineStatuses,
 } from "./engine-battle-view-model";
-import { board, deck, engine, screenOf } from "./engine-battle-view-model.fixtures";
+import { board, cards, deck, engine, screenOf } from "./engine-battle-view-model.fixtures";
 
 describe("buildEngineBattleScreenModel", () => {
   it("shows hidden cards only as positions", () => {
@@ -86,5 +87,43 @@ describe("buildEngineBattleScreenModel", () => {
     expect(won.view.result).toMatchObject({ outcome: "victory", playerScore: 4, essenceReward: 100 });
     expect(lost.view.result).toEqual({ outcome: "defeat", dismissed: false });
     expect(won.affordances.canAct).toBe(false);
+  });
+
+  it("keeps separate physical trigger sources and their owning sides, naming only visible identities", () => {
+    const { state, ids } = board({ player: { hand: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla1.id] }, enemy: { front: [SYNTHETIC.vanilla1.id], hand: [SYNTHETIC.vanilla1.id] } });
+    const [first, second] = ids.player.hand;
+    const [hidden] = ids.enemy.hand;
+    const [enemy] = ids.enemy.front;
+    if (first === undefined || second === undefined || hidden === undefined || enemy == null) throw new Error("missing sources");
+    const trigger = (source: InstanceId, controller: "player" | "enemy", id: `e${number}`) => ({
+      id, controller, source, timestamp: 0, expiry: { at: "endOfTurn" } as const,
+      change: { kind: "trigger", ref: { origin: { kind: "card", cardId: SYNTHETIC.vanilla1.id, variant: state.instances[source].variant }, ability: 0, node: 0 }, once: false } as const,
+    });
+    state.floating.push(trigger(first, "player", "e901"), trigger(second, "player", "e902"), trigger(enemy, "enemy", "e903"), trigger(hidden, "enemy", "e904"));
+    const model = screenOf(state);
+    expect(model.view.player.status.statuses?.filter((badge) => badge.kind === "delayedTrigger").map((badge) => badge.source))
+      .toEqual([parseBattleCardId(first), parseBattleCardId(second)]);
+    expect(model.view.enemy.status.statuses?.filter((badge) => badge.kind === "delayedTrigger").map((badge) => badge.source)).toEqual([parseBattleCardId(enemy)]);
+    const view = engine.view(state, "player");
+    const missing = { ...view, instances: { ...view.instances }, floating: view.floating.map((effect) => effect.controller === "enemy" ? { ...effect, source: null } : effect) };
+    delete missing.instances[first];
+    expect(engineStatuses(missing, "player", enginePrintedKeywords(engine.catalog), new Set(), cards).sides.player.map((badge) => badge.source))
+      .toEqual([undefined, parseBattleCardId(second)]);
+    expect(engineStatuses(missing, "player", enginePrintedKeywords(engine.catalog), new Set(), cards).sides.enemy.map((badge) => badge.source)).toEqual([undefined]);
+    expect(view.floating.map((effect) => effect.expiry)).toEqual(state.floating.slice(0, 3).map((effect) => effect.expiry));
+  });
+
+  it("resolves trigger log source through the viewer's card resolver without recovering hidden origins", () => {
+    const { state, ids } = board({ player: { hand: [SYNTHETIC.vanilla1.id] } });
+    const [source] = ids.player.hand;
+    if (source === undefined) throw new Error("missing source");
+    const event = { kind: "effectStarted", effect: "e901", controller: "player", source, expiry: { at: "endOfTurn" },
+      change: { kind: "trigger", ref: { origin: { kind: "card", cardId: SYNTHETIC.vanilla1.id, variant: state.instances[source].variant }, ability: 0, node: 0 }, once: false } } as const;
+    const card = vi.fn(() => null);
+    expect(engineBattleLogText(event, { human: "player", card, dreamwell: () => null })).not.toBeNull();
+    expect(card).toHaveBeenCalledExactlyOnceWith(source);
+    card.mockClear();
+    expect(engineBattleLogText({ ...event, source: { kind: "avatar", side: "player" } }, { human: "player", card, dreamwell: () => null })).not.toBeNull();
+    expect(card).not.toHaveBeenCalled();
   });
 });

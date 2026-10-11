@@ -494,7 +494,7 @@ export type EngineStatusCopy =
       readonly next: boolean;
       readonly expiry: Expiry;
     }
-  | { readonly kind: "delayedTrigger"; readonly once: boolean; readonly expiry: Expiry }
+  | { readonly kind: "delayedTrigger"; readonly once: boolean; readonly expiry: Expiry; readonly sourceName?: string | null }
   /**
    * A play permission: a card that may be played from the void (`named`), or
    * cards of `cardType` a player may play from their void, one when `next`.
@@ -548,7 +548,7 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
       return `${subject} ${change}${expiryPhrase(status.expiry, human)}`;
     }
     case "delayedTrigger":
-      return `${status.once ? "A delayed ability is waiting" : "An ability triggers"}${expiryPhrase(status.expiry, human)}`;
+      return `${status.sourceName == null ? "" : `${status.sourceName}: `}${status.once ? "A delayed ability is waiting" : "An ability triggers"}${expiryPhrase(status.expiry, human)}`;
     case "playFrom":
       return `${status.named ? "Can be played from the void" : `May play ${permittedCards(status)} from the void`}${expiryPhrase(status.expiry, human)}`;
     case "avatarExhausted":
@@ -646,7 +646,7 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${who(event.side)} drew ${name ?? "a Dreamwell card"} and gained ${plural(event.energyAdded, "energy", "energy")}.`;
     }
     case "effectStarted":
-      return effectStartedText(event, human, card);
+      return effectStartedText(event, human, card, words.card);
     case "energyChanged": {
       // Payments and the turn's refresh show on the energy display alone, and a Dreamwell card's line names the energy it adds.
       if (event.cause !== "effect") return null;
@@ -762,6 +762,7 @@ function effectStartedText(
   event: Extract<EngineEvent, { kind: "effectStarted" }>,
   human: Side,
   card: (instance: InstanceId | null) => string,
+  sourceName: EngineBattleLogWords["card"],
 ): string | null {
   const { change, expiry } = event;
   const line = (subject: string, status: EngineStatusCopy) => `${subject}: ${engineStatusLabel(status, human)}.`;
@@ -792,7 +793,7 @@ function effectStartedText(
         human,
       )} for ${change.player === human ? "you" : "your opponent"}.`;
     case "trigger":
-      return `${engineStatusLabel({ kind: "delayedTrigger", once: change.once, expiry }, human)}.`;
+      return `${engineStatusLabel({ kind: "delayedTrigger", once: change.once, expiry, sourceName: typeof event.source === "string" ? sourceName(event.source) : null }, human)}.`;
     case "playFrom": {
       const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, cardType: change.filter.cardType ?? null, next: change.next, expiry };
       if (change.instance !== null) return line(card(change.instance), status);

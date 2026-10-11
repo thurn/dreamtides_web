@@ -1,0 +1,52 @@
+{
+  "bead": "hv-umm2.338",
+  "phase": 5,
+  "implementMin": 19.567,
+  "measurementWindow": "native claim to commit",
+  "localValidationS": {
+    "focused-final": 3.692,
+    "review": 29.532,
+    "knip": 3.071
+  },
+  "hostLoad": 14.55322265625,
+  "testDelta": {
+    "files": 0,
+    "lines": 43,
+    "jsdomFiles": 0,
+    "cases": 2
+  },
+  "browser": {
+    "firstFailedWallMs": {
+      "browserLeaseWait": 22674,
+      "serve": 1258,
+      "scenario": 41136,
+      "total": 65091
+    },
+    "finalWallMs": {
+      "browserLeaseWait": 137647,
+      "serve": 2164,
+      "scenario": 41316,
+      "total": 181157
+    },
+    "hostLoad": 5.46240234375,
+    "frozenSource": true
+  },
+  "queueWaitS": {
+    "browserFinal": 137.647
+  },
+  "friction": [
+    {
+      "tag": "synthetic-lint-correction",
+      "seconds": 4.751,
+      "note": "First review halted on two unnecessary non-null assertions in synthetic fixture origins; removed assertions and final review/knip pass. Earlier focused probe expected a hidden-source trigger to survive engine.view; corrected to preserve the actual visibility contract and test adapter null/unavailable sources separately."
+    },
+    {
+      "tag": "qa-dialog-dismissal-assumption",
+      "seconds": 65.091,
+      "note": "Initial desktop source/draw/log checks passed, but Escape kept the existing log modal open and expiry driver timed out. Failed report, logs and captures retained; scenario uses existing named close control and DOM absence assertion. Final desktop/mobile recheck passes with identical frozen production/test hashes."
+    }
+  ],
+  "improvementBeads": [],
+  "claimToCommitS": 1174.0,
+  "commitTimestamp": "2026-10-11T15:25:02+00:00"
+}

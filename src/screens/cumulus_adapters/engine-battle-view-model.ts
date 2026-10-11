@@ -7,7 +7,7 @@
 //
 // Pure and React-free. Instance IDs reach the screen as battle-card IDs and
 // come back through the model's `instances` index, built once per model;
-// nothing here reads card names except to label a chooser's options.
+// card names are resolved only for display labels.
 
 import type { BattleStatusBadgeView } from "../../cumulus/components/battle/BattleStatusBadges";
 import type { DreamwellCardModel } from "../../cumulus/components/battle/DreamwellCard";
@@ -417,6 +417,7 @@ export function engineStatuses(
   human: Side,
   printedKeywords: EnginePrintedKeywords,
   payableNow: ReadonlySet<EffectId> = new Set(),
+  cardModels?: EngineCardModels,
 ): EngineStatuses {
   const cards = new Map<InstanceId, BattleStatusBadgeView[]>();
   const sides: Record<Side, BattleStatusBadgeView[]> = { player: [], enemy: [] };
@@ -427,7 +428,7 @@ export function engineStatuses(
   const mark = (instance: InstanceId, entry: BattleStatusBadgeView) => {
     if (view.instances[instance] !== undefined) cards.set(instance, [...(cards.get(instance) ?? []), entry]);
   };
-  for (const { change, expiry, controller } of view.floating) {
+  for (const { change, expiry, controller, source } of view.floating) {
     const lasting = expiry.at !== "never";
     switch (change.kind) {
       case "spark":
@@ -471,9 +472,17 @@ export function engineStatuses(
           }),
         );
         break;
-      case "trigger":
-        sides[controller].push(badge("delayedTrigger", { kind: "delayedTrigger", once: change.once, expiry }));
+      case "trigger": {
+        const instance = typeof source === "string" ? view.instances[source] : undefined;
+        const sourceName = instance === undefined ? null : instance.printing.kind === "card"
+          ? cardModels?.nameOf({ printing: instance.printing, variant: instance.variant })
+          : cardModels?.(instance).displaySnapshot?.name;
+        sides[controller].push({
+          ...badge("delayedTrigger", { kind: "delayedTrigger", once: change.once, expiry, sourceName }),
+          ...(instance === undefined ? {} : { source: parseBattleCardId(instance.id) }),
+        });
         break;
+      }
       case "playFrom": {
         const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, cardType: change.filter.cardType ?? null, next: change.next, expiry };
         if (change.instance === null) sides[change.player].push(badge("duration", status));
@@ -523,7 +532,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
   const payableNow = new Set(
     [...affordances.payToEnd.values(), affordances.statusPayToEnd].flat().map((action) => action.effect),
   );
-  const statuses = engineStatuses(view, human, input.printedKeywords, payableNow);
+  const statuses = engineStatuses(view, human, input.printedKeywords, payableNow, input.cards);
   const cardView = (instance: InstanceView, playable = false): MobileBattleCardView => {
     const marks = statuses.cards.get(instance.id);
     return {

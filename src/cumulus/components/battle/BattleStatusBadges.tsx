@@ -3,6 +3,7 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { cardSelectionShadowLayers } from "../card/CardView";
+import type { BattleCardId } from "../../../types/identifiers";
 
 /**
  * A lasting battle status shown as a badge: a change with a duration (or a
@@ -27,6 +28,8 @@ export interface BattleStatusBadgeView {
   readonly kind: BattleStatusBadgeKind;
   /** Accessible name: the status and how long it lasts. */
   readonly label: string;
+  /** The identifiable card that created a waiting or repeating triggered ability. */
+  readonly source?: BattleCardId;
   /**
    * The player may act on the status now (pay to end an effect): the badge
    * carries the playable ring its card carries, and pressing the card offers
@@ -110,6 +113,7 @@ export function BattleStatusBadges({
           role="img"
           aria-label={badge.label}
           data-battle-status-badge={badge.kind}
+          data-battle-status-source={badge.source}
           data-battle-status-badge-actionable={badge.actionable === true ? "true" : undefined}
           style={{
             ...BATTLE_STATUS_BADGE_STYLE,
