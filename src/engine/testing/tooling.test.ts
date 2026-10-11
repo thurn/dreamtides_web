@@ -355,6 +355,11 @@ describe("prompt lab", () => {
     };
   };
 
+  it("keeps each lab card definition's UUID unique", () => {
+    const ids = PROMPT_LAB_DEFINITIONS.cards.map(({ id }) => id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
   it("builds every fixture deterministically", () => {
     for (const fixture of PROMPT_LAB_FIXTURES) {
       expect(promptLabBattle(labEngine, fixture), fixture.name).toEqual(promptLabBattle(labEngine, fixture));

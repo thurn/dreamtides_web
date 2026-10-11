@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.351",
+  "phase": 5,
+  "implementMin": 13.82,
+  "localValidationS": {
+    "focused": 4.071414947509766,
+    "review": 22.162578105926514,
+    "knip": 2.735783815383911,
+    "full": 48.4044930934906
+  },
+  "hostLoad": 3.7421875,
+  "testDelta": {
+    "files": 0,
+    "lines": 5,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "coupled-ci-repair-order",
+      "minutes": 5,
+      "note": "Native fixture repair full validation exposed the known committed-deck leak already owned by353, while353 depends351. Same-task justiciar replaces agent-created local aggregate-pass prerequisite with honest full result plus mandatory own-check/certified-voting success; global full release/phase gate remain required. No reverse edge or peer source mutation."
+    }
+  ],
+  "queueS": {
+    "uniqueness-red": 0.022298812866210938,
+    "focused": 0.021372079849243164,
+    "review": 0.021754980087280273,
+    "knip": 0.020262956619262695,
+    "full": 49.218729972839355
+  },
+  "fullResult": {
+    "files": 216,
+    "cases": 2886,
+    "passed": 2885,
+    "failed": 1,
+    "knownFailureBead": "hv-umm2.353"
+  },
+  "implementationMode": "session as implementer",
+  "ownershipStartUtc": "2026-10-11T08:44:15+00:00"
+}

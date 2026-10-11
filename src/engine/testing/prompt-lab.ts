@@ -89,7 +89,7 @@ export const LAB = {
   /** Choose a free Discover cost, then choose a matching character. */
   discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
   /** Choose either player to discard and draw, preserving the source controller. */
-  choosePlayer: labEvent(11, 1, p.choosePlayer((player) => p.sequence(p.discard(1, player), p.draw(1, player)))),
+  choosePlayer: labEvent(0x60, 1, p.choosePlayer((player) => p.sequence(p.discard(1, player), p.draw(1, player)))),
   /** "Dissolve up to one enemy." */
   dissolveUpToOne: labEvent(3, 1, p.dissolve(upTo(enemyCharacter(), 1))),
   /** A pending event (D36): it plays text-less and reports its pending ability. */
