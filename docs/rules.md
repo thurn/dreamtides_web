@@ -1427,6 +1427,13 @@ challenges, scores, and interacts with Support on its own. A Support spark bonus
 applies once to each figment. A figment which is dissolved fires its
 '▸Dissolved' triggers before ceasing to exist.
 
+A figment named by its type, such as a **shadow figment** or a **warrior
+figment**, is a figment, figment copies included, whose current subtype is that
+type: a figment copy of a Shadow character is a shadow figment, and a Shadow
+character that is not a figment is not. "If you control no shadow figments"
+holds only while no character you control is a shadow figment, whoever
+controls other shadow figments.
+
 A figment's cost is **0●** wherever a cost is read, such as "a character with
 cost 2● or less" or "that character's cost". A figment copy has the cost it
 copied.

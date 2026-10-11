@@ -9,7 +9,7 @@ import { eventTargetSpecs } from "../effects/abilities";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, TriggeredAbility } from "../dsl/types";
+import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, TriggeredAbility } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -170,6 +170,24 @@ function opponentHandChoices(effect: Effect): CardFilter[] {
   });
 }
 
+/**
+ * The characters an effect's `abandon` nodes choose as it resolves ("Each
+ * player abandons a non-figment character"): each needs a matching character
+ * its chooser controls, relative to the effect's controller, so that the
+ * lab's first choice is not the played card itself. Inside "each player",
+ * every player chooses. The solver places no figments, so a figment-only
+ * choice stages nothing.
+ */
+function abandonChoices(effect: Effect): { readonly choosers: readonly PlayerRef[]; readonly selector: CharacterSelector }[] {
+  const nodes = everyNode(effect) as Effect[];
+  const each = new Set(nodes.flatMap((node) => (node.op === "eachPlayer" ? everyNode(node.effect) : [])));
+  return nodes.flatMap((node) => {
+    if (node.op !== "abandon" || node.predicate.figment === true) return [];
+    const choosers: readonly PlayerRef[] = each.has(node) ? ["you", "opponent"] : [node.chooser];
+    return [{ choosers, selector: { ...node.predicate, controller: "you" } }];
+  });
+}
+
 /** What the lab stages for additional costs: matching cards and characters, and the ⍟ paid. */
 interface CostNeeds {
   readonly voidCards: readonly CardFilter[];
@@ -234,7 +252,8 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * needs (`countNeeds`): matching void cards, or cards in a hand beside the
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
  * and a choice from the opponent's hand gets a matching card in that hand
- * (`opponentHandChoices`). A void banish additional cost gets its count of matching cards, or
+ * (`opponentHandChoices`); a character abandoned as the effect resolves gets
+ * a matching character on each chooser's side (`abandonChoices`). A void banish additional cost gets its count of matching cards, or
  * its least X, in `side`'s void; discard and reveal costs get matching cards
  * beside the source in hand, and abandon costs get matching own characters.
  * A ⍟ additional cost gets that many
@@ -267,6 +286,9 @@ export function labBoard(
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
+  for (const { choosers, selector } of played.flatMap(abandonChoices)) {
+    for (const chooser of choosers) back[chooser === "you" ? side : opponent(side)].push(characterFor(engine, selector, pool, xRange));
+  }
   for (const specs of eventTargetSpecs(definition, variant)) {
     for (const spec of specs) {
       // A stack target needs an item on the stack, which a Day board never has; lab overrides supply one.

@@ -1,3 +1,6 @@
+import { characterYouControl, count, keyword } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 111,
   art: { x: 0.344, y: 0.18, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("veil"), triggered(onDawn(), p.gainEnergy(count(characterYouControl({ figment: true }))))],
+  verifiedText: "ohewewgsmv",
 });

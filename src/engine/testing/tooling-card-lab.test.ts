@@ -41,6 +41,8 @@ import { banishCards, banishChosen } from "../effects/primitives/banish-cards";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { onMaterialized, triggered } from "../dsl/triggers";
 import { gainPoints } from "../effects/primitives/gain-points";
+import { abandon } from "../effects/primitives/abandon";
+import { eachPlayer } from "../effects/primitives/each-player";
 import { cardMatchesFilter } from "../continuous/characteristics";
 import type { AdditionalCost, CardFilter } from "../dsl/types";
 import { engine } from "./tooling.fixtures";
@@ -201,6 +203,27 @@ describe("card-lab setup solver", () => {
       const chosen = labBoard(labEngine, chooser.id, [mage], side).state;
       expect(chosen.sides[other].hand).toHaveLength(1);
       for (const id of chosen.sides[other].hand) expect(cardMatchesFilter(chosen, labEngine.catalog, id, { subtype: "Mage" })).toBe(true);
+    }
+  });
+
+  it("stages a matching own character for each player who abandons as a ▸Materialized trigger resolves", () => {
+    const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(927), subtype: "Mage" };
+    const each: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla1, id: syntheticId(928), status: "authored",
+      abilities: () => [triggered(onMaterialized(), eachPlayer(abandon("you", { subtype: "Mage", figment: false })))],
+    };
+    const forced: EngineCardDefinition = { ...each, id: syntheticId(929), abilities: () => [triggered(onMaterialized(), abandon("opponent", { subtype: "Mage" }))] };
+    const labEngine = createEngine(testCatalog([each, forced, mage]));
+    for (const side of ["player", "enemy"] as const) {
+      const other = side === "player" ? "enemy" : "player";
+      const both = labBoard(labEngine, each.id, [mage], side).state;
+      for (const chooser of [side, other] as const) {
+        const staged = both.sides[chooser].backRank.filter((id): id is InstanceId => id !== null);
+        expect(staged.map((id) => both.instances[id].printing)).toEqual([{ kind: "card", cardId: mage.id }]);
+      }
+      const opposing = labBoard(labEngine, forced.id, [mage], side).state;
+      expect(opposing.sides[side].backRank.filter((id) => id !== null)).toEqual([]);
+      expect(opposing.sides[other].backRank.filter((id) => id !== null)).toHaveLength(1);
     }
   });
 

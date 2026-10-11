@@ -498,11 +498,10 @@ export function conditionHolds(
   scope: ConditionScope,
 ): boolean {
   switch (condition.cond) {
-    case "controls":
-      return (
-        matchingCharacters(state, catalog, condition.selector, scope.controller, scope.source).length >=
-        condition.atLeast
-      );
+    case "controls": {
+      const count = matchingCharacters(state, catalog, condition.selector, scope.controller, scope.source).length;
+      return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);
+    }
     case "energyAtLeast":
       return state.sides[scope.controller].currentEnergy >= condition.amount;
     case "costPaid":

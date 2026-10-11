@@ -178,6 +178,14 @@ export function controls(selector: CharacterSelector, atLeast = 1): Condition {
   return { cond: "controls", selector, atLeast };
 }
 
+/**
+ * "If you control no shadow figments": no character in play matches the
+ * selector, whose controller is relative to the effect's controller.
+ */
+export function controlsNone(selector: CharacterSelector): Condition {
+  return { cond: "controls", selector, atLeast: 0, atMost: 0 };
+}
+
 /** "If you have no cards in your deck": the player (you by default) has no cards in `zone`. */
 export function noCardsIn(zone: CountedZone, player: PlayerRef = "you"): Condition {
   return { cond: "cardsIn", player, zone, atMost: 0 };

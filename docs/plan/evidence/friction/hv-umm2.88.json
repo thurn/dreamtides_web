@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.88",
+  "phase": 5,
+  "baseOid": "b35650e15dd93e459b7ff6a23157348a1eda85aa",
+  "implementMin": 75,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 4,
+    "review": 48,
+    "knip": 2,
+    "fuzz": 67,
+    "sweep": 256,
+    "resweep": 423
+  },
+  "hostLoad": 10.8,
+  "testDelta": {
+    "files": 1,
+    "lines": 343,
+    "jsdomFiles": 0,
+    "cases": 14
+  },
+  "friction": [
+    {"tag": "bead-areas-omit-engine-plumbing", "minutes": 10, "note": "\"If you control no …\" needed conditionHolds in src/engine/effects/interpreter.ts, outside the filed Areas; stopped and the session widened the bead"},
+    {"tag": "lab-solver-cost-staging", "minutes": 20, "note": "the lab solver staged no own character for a resolution-time abandon, so the sweep's first choice abandoned the played Silent Avenger itself and failed its zone check; the solver now stages one per chooser"},
+    {"tag": "host-load-noise", "minutes": 5, "note": "a re-sweep at load 26 timed out on two enemy-side variants that passed on rerun at load 11"}
+  ]
+}

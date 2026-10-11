@@ -275,7 +275,12 @@ export type Duration =
 
 /** A condition an effect checks when it resolves. */
 export type Condition =
-  | { readonly cond: "controls"; readonly selector: CharacterSelector; readonly atLeast: number }
+  /**
+   * Characters in play matching the selector number at least `atLeast` and,
+   * with `atMost`, at most that: "If you control no shadow figments" is
+   * `atLeast: 0, atMost: 0`.
+   */
+  | { readonly cond: "controls"; readonly selector: CharacterSelector; readonly atLeast: number; readonly atMost?: number }
   | { readonly cond: "energyAtLeast"; readonly amount: number }
   /**
    * "If the additional cost was paid": whether the item's optional cost at

@@ -1,3 +1,5 @@
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 234,
   art: { x: 0.782, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), p.eachPlayer(p.abandon("you", { figment: false })))],
+  verifiedText: "128zd7w1mqi",
 });
