@@ -1,0 +1,181 @@
+{
+  "bead": "hv-umm2.315",
+  "phase": 5,
+  "implementMin": 12.9,
+  "localValidationS": {
+    "focused": 3.422,
+    "review": 24.605,
+    "focused-final": 3.092,
+    "review-final": 18.473,
+    "knip": 2.716,
+    "full": 50.125,
+    "review-evidence": 21.129,
+    "knip-evidence": 2.255
+  },
+  "hostLoad": 3.01,
+  "testDelta": {
+    "files": 0,
+    "lines": 37,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "implementationInterval": {
+    "helperDispatchApproxUtc": "2026-10-11T07:01Z",
+    "dispatchNoteUtc": "2026-10-11T07:01:32Z",
+    "earliestLocalClockObservationUtc": "2026-10-11T07:01:49Z",
+    "claimUtc": "2026-10-11T06:59:06Z",
+    "claimToDispatchNoteS": 146,
+    "precision": "Helper dispatch is approximate; implementMin includes inspection, repair, negative verification and final evidence/checks through commit.",
+    "finalEvidenceFreezeUtc": "2026-10-11T07:13:54.068698+00:00",
+    "end": "Final local commit follows evidence freeze immediately; its Git committer timestamp is the interval endpoint. Helper start precision is approximately one minute."
+  },
+  "checks": [
+    {
+      "startedEpoch": 1791702484.632252,
+      "seconds": 3.422,
+      "exitCode": 0,
+      "hostLoad": "{ 3.74 9.67 11.19 }",
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/testing/tooling.test.ts"
+      ],
+      "queueS": 0.021
+    },
+    {
+      "startedEpoch": 1791702488.080662,
+      "seconds": 24.605,
+      "exitCode": 1,
+      "hostLoad": "{ 3.84 9.59 11.15 }",
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 0.023
+    },
+    {
+      "startedEpoch": 1791702572.827418,
+      "seconds": 3.092,
+      "exitCode": 0,
+      "hostLoad": "{ 3.70 8.21 10.48 }",
+      "label": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes.test.ts"
+      ],
+      "queueS": 0.02
+    },
+    {
+      "startedEpoch": 1791702575.943661,
+      "seconds": 18.473,
+      "exitCode": 0,
+      "hostLoad": "{ 3.70 8.21 10.48 }",
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 0.021
+    },
+    {
+      "startedEpoch": 1791702594.440008,
+      "seconds": 2.716,
+      "exitCode": 0,
+      "hostLoad": "{ 4.75 8.16 10.41 }",
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "queueS": 0.02
+    },
+    {
+      "startedEpoch": 1791702597.179501,
+      "seconds": 50.125,
+      "exitCode": 0,
+      "hostLoad": "{ 4.93 8.14 10.39 }",
+      "label": "full",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "queueS": 0.021
+    },
+    {
+      "startedEpoch": 1791702759.111447,
+      "seconds": 21.129,
+      "exitCode": 0,
+      "hostLoad": "{ 3.01 6.02 9.13 }",
+      "label": "review-evidence",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 0.023
+    },
+    {
+      "startedEpoch": 1791702780.2693288,
+      "seconds": 2.255,
+      "exitCode": 0,
+      "hostLoad": "{ 3.24 5.87 9.00 }",
+      "label": "knip-evidence",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "queueS": 0.025
+    }
+  ],
+  "expectedNegativeChecks": [
+    {
+      "case": "opponent-routing",
+      "seconds": 2.883,
+      "exitCode": 1,
+      "restoredSha256": "c39e0fb5638432c640140b55227c941ac86da7383a631cde17fc55f2a70b921e"
+    },
+    {
+      "case": "missing-fixture",
+      "seconds": 2.85,
+      "exitCode": 1,
+      "restoredSha256": "2cd0ee3c6c452e65e530673c29bc74ffa6f076e1f028acc65cb9ebba23307c66"
+    },
+    {
+      "case": "invalid-inventory",
+      "seconds": 0.672,
+      "exitCode": 1,
+      "writePrevented": true
+    },
+    {
+      "case": "invalid-bead",
+      "seconds": 0.614,
+      "exitCode": 1,
+      "writePrevented": true
+    }
+  ],
+  "runtimeLedger": [],
+  "fullSourceHashes": {
+    "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "3f4974be344a088d96b9a3ca5534110012a78df26b329c8acd508219851eeed2",
+    "src/engine/testing/prompt-lab.ts": "2cd0ee3c6c452e65e530673c29bc74ffa6f076e1f028acc65cb9ebba23307c66",
+    "src/engine/policy/prompts.ts": "a62c136f6454f0559268265e880dcdf091eec1eb98d390070c604b2f781adf3f",
+    "src/screens/cumulus_adapters/prompt-host-view-model.ts": "c39e0fb5638432c640140b55227c941ac86da7383a631cde17fc55f2a70b921e",
+    "scripts/content-inventory.ts": "413aca1e261646af6bfb544e45f4ed98f9ba68510a173fc215d686ff85b7ff57",
+    "docs/plan/evidence/content-inventory.json": "05b58336b518d89fca3ae59026f437c49baababe881f78b6700572481071f5c4",
+    "docs/plan/phase-5-content.md": "e5a7d96ff539951c4d57a1865f50e8d6202147bc93ed4c99278e03440eeb647e"
+  }
+}

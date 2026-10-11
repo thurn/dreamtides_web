@@ -236,14 +236,24 @@
         "engine hubs",
         "fallout: PromptRole",
         "src/content/specs/prim-choose-player.scenarios.ts",
-        "src/content/specs/index.ts"
+        "src/content/specs/index.ts",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "sharedAreas": [
         "src/engine/effects/primitives/choose-player.ts",
         "src/engine/effects/primitives/index.ts",
         "src/engine/effects/primitives/contracts/choose-player.contracts.ts",
         "engine hubs",
-        "fallout: PromptRole"
+        "fallout: PromptRole",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "falloutHints": ["PromptRole"],
       "knownDecisions": [
@@ -321,14 +331,24 @@
         "engine hubs",
         "fallout: PromptRole",
         "src/content/specs/prim-put-in-deck.scenarios.ts",
-        "src/content/specs/index.ts"
+        "src/content/specs/index.ts",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "sharedAreas": [
         "src/engine/effects/primitives/put-in-deck.ts",
         "src/engine/effects/primitives/index.ts",
         "src/engine/effects/primitives/contracts/put-in-deck.contracts.ts",
         "engine hubs",
-        "fallout: PromptRole"
+        "fallout: PromptRole",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "falloutHints": ["PromptRole"],
       "knownDecisions": []
@@ -841,14 +861,24 @@
         "engine hubs",
         "fallout: PromptRole",
         "src/content/specs/prim-return-from-void.scenarios.ts",
-        "src/content/specs/index.ts"
+        "src/content/specs/index.ts",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "sharedAreas": [
         "src/engine/effects/primitives/return-from-void.ts",
         "src/engine/effects/primitives/index.ts",
         "src/engine/effects/primitives/contracts/return-from-void.contracts.ts",
         "engine hubs",
-        "fallout: PromptRole"
+        "fallout: PromptRole",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "falloutHints": ["PromptRole"],
       "knownDecisions": [
@@ -1498,14 +1528,24 @@
         "engine hubs",
         "fallout: PromptRole",
         "src/content/specs/prim-move.scenarios.ts",
-        "src/content/specs/index.ts"
+        "src/content/specs/index.ts",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "sharedAreas": [
         "src/engine/effects/primitives/move.ts",
         "src/engine/effects/primitives/index.ts",
         "src/engine/effects/primitives/contracts/move.contracts.ts",
         "engine hubs",
-        "fallout: PromptRole"
+        "fallout: PromptRole",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "falloutHints": ["PromptRole"],
       "knownDecisions": []
@@ -1910,14 +1950,24 @@
         "engine hubs",
         "fallout: PromptRole",
         "src/content/specs/prim-choose-subtype.scenarios.ts",
-        "src/content/specs/index.ts"
+        "src/content/specs/index.ts",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "sharedAreas": [
         "src/engine/effects/primitives/choose-subtype.ts",
         "src/engine/effects/primitives/index.ts",
         "src/engine/effects/primitives/contracts/choose-subtype.contracts.ts",
         "engine hubs",
-        "fallout: PromptRole"
+        "fallout: PromptRole",
+        "src/runtime/battle-prompt-messages.ts",
+        "src/engine/policy/prompts.ts",
+        "src/engine/testing/prompt-lab.ts",
+        "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
       ],
       "falloutHints": ["PromptRole"],
       "knownDecisions": []

@@ -1,0 +1,5 @@
+# hv-umm2.315 pre-existing observations
+
+- Parent completed fresh `npm install` in approximately 2 seconds and reported 17 audit findings: 9 moderate, 7 high, and 1 critical. Dependency remediation is outside this bead.
+- The existing coherent adapter test file begins at 770 lines. The role and visibility contracts reuse its cached fixture traversal; the final file is 807 lines, with no test-file or jsdom-file increase. The approved scope explicitly requires this existing test file.
+- Normal inventory generation applies current catalog/probe results. On the captured filed inventory it changed pending card count 467 to 462, five entity statuses and their bead-member statuses, plus three serialization-edge arrays after shared registration paths were introduced. This bead preserves the filed graph through the generator's `--refresh-prompt-areas` mode. Full-generation drift is retained at `/tmp/hv-umm2.315-inventory-diff.json`; the captured source is `/tmp/hv-umm2.315-inventory-before.json`.

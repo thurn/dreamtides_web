@@ -122,25 +122,37 @@ function discoverCostAnswer(prompt: ChooseNumberPrompt, costs: ReadonlySet<numbe
   return found.length === 0 ? prompt.max : Math.max(...found);
 }
 
-/** Roles whose chosen cards the chooser gives up: it picks its least valuable cards, as few as it may. */
-const LOSS_ROLES: readonly PromptRole[] = [
-  "abandonCost",
-  "discardCost",
-  "revealCost",
-  "banishCost",
-  "offeringCost",
-  "discard",
-  "discardToHandLimit",
-];
-
-/** Roles whose chosen cards the chooser gains: it picks its most valuable offered cards. */
-const GAIN_ROLES: readonly PromptRole[] = ["discover", "lookAtTop", "chooseAmong", "chooseFromOpponentHand"];
+/** Every role registers its card ranking and number choice, including roles used by other prompt kinds. */
+const ROLE_STRATEGIES = {
+  discardToHandLimit: { cards: "loss", number: "largest" },
+  playRoute: { cards: "hostile", number: "largest" },
+  chooseX: { cards: "hostile", number: "largest" },
+  chooseOne: { cards: "hostile", number: "largest" },
+  target: { cards: "hostile", number: "largest" },
+  chooseCost: { cards: "hostile", number: "largest" },
+  optionalCost: { cards: "hostile", number: "largest" },
+  abandonCost: { cards: "loss", number: "largest" },
+  discardCost: { cards: "loss", number: "largest" },
+  revealCost: { cards: "loss", number: "largest" },
+  banishCost: { cards: "loss", number: "largest" },
+  offeringCost: { cards: "loss", number: "largest" },
+  discard: { cards: "loss", number: "largest" },
+  discardChosen: { cards: "hostile", number: "largest" },
+  foresee: { cards: "hostile", number: "largest" },
+  lookAtTop: { cards: "gain", number: "largest" },
+  discover: { cards: "gain", number: "largest" },
+  discoverCost: { cards: "hostile", number: "discoverCost" },
+  chooseAmong: { cards: "gain", number: "largest" },
+  chooseFromOpponentHand: { cards: "gain", number: "largest" },
+  youMay: { cards: "hostile", number: "largest" },
+  preventUnlessPays: { cards: "hostile", number: "largest" },
+} as const satisfies Record<PromptRole, { readonly cards: "loss" | "gain" | "hostile"; readonly number: "largest" | "discoverCost" }>;
 
 /** How much Greedy wants `id` chosen for a prompt of `role`. */
 function cardWant(role: PromptRole, info: CardInfo | null): number {
   if (info === null) return 0;
-  if (LOSS_ROLES.includes(role)) return -info.value - 1;
-  if (GAIN_ROLES.includes(role)) return info.value + 1;
+  if (ROLE_STRATEGIES[role].cards === "loss") return -info.value - 1;
+  if (ROLE_STRATEGIES[role].cards === "gain") return info.value + 1;
   // A target is assumed hostile: the opponent's most valuable card first.
   return info.mine ? -info.value - 1 : info.value + 1;
 }
@@ -181,7 +193,7 @@ export function greedyAnswer(prompt: Prompt, info: CardInfoOf, discoverCosts: Di
       value = prompt.payable;
       break;
     case "chooseNumber":
-      value = prompt.purpose.role === "discoverCost" ? discoverCostAnswer(prompt, discoverCosts(prompt)) : prompt.max;
+      value = ROLE_STRATEGIES[prompt.purpose.role].number === "discoverCost" ? discoverCostAnswer(prompt, discoverCosts(prompt)) : prompt.max;
       break;
     case "chooseMode":
     case "arrange":

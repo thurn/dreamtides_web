@@ -17,6 +17,7 @@
  * judged QA pass takes through the UI after the scene loads, and together
  * they publish every engine event kind (`promptLabPresentation`).
  */
+import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
 import { characterYouControl, enemyCharacter, energy, energyX, event, target as characterTarget, upTo, x } from "../dsl/builders";
@@ -77,6 +78,10 @@ export const LAB = {
   drawTwoThenDiscard: labEvent(1, 1, p.sequence(p.draw(2), p.discard(1))),
   /** "Each player discards a card." */
   eachPlayerDiscards: labEvent(2, 1, p.sequence(p.discard(1), p.discard(1, "opponent"))),
+  /** Privately choose a card from the opponent's hand to discard. */
+  discardChosen: labEvent(9, 1, p.discardChosen()),
+  /** Choose a free Discover cost, then choose a matching character. */
+  discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
   /** "Dissolve up to one enemy." */
   dissolveUpToOne: labEvent(3, 1, p.dissolve(upTo(enemyCharacter(), 1))),
   /** A pending event (D36): it plays text-less and reports its pending ability. */
@@ -259,6 +264,50 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "costs",
+    description: "Alternative and optional costs, with abandon, discard, and reveal selections",
+    setup: {
+      active: "player", phase: "day",
+      player: {
+        hand: [STACK.abandonOrDiscardToDraw.id, STACK.optionalKicker.id, ...vanillas],
+        back: [STACK.abandonToDraw.id, STACK.discardToDissolve.id, STACK.revealWarrior.id, vanillas[0]],
+        energy: 5, deck: deck(6),
+      },
+      enemy: { back: [vanillas[1], vanillas[2]], deck: deck(6) },
+    },
+    script: [],
+  },
+  {
+    name: "hand-limit",
+    description: "The active side discards down to its hand limit at the end of the turn",
+    setup: {
+      active: "player", phase: "night",
+      player: { hand: deck(BATTLE.handLimit + 2), deck: deck(6) },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+  },
+  {
+    name: "discard-chosen",
+    description: "A private gallery selection from the opponent's hand to discard",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [LAB.discardChosen.id], energy: 2, deck: deck(6) },
+      enemy: { hand: vanillas, deck: deck(6) },
+    },
+    script: [],
+  },
+  {
+    name: "discover-cost",
+    description: "A free Discover cost choice, followed by matching cards from the deck",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [LAB.discoverCost.id], energy: 2, deck: [...vanillas, ...deck(6)] },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+  },
   {
     name: "targets",
     description: "Board targets with Cancel, and up to two targets on the card picker",

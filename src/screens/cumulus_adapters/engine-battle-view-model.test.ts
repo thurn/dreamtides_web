@@ -20,7 +20,7 @@ import { parseCardName, parseCardSubtype, type CardId } from "../../types/card-i
 import type { CardData } from "../../types/cards";
 import type { CardKeywordModification } from "../../types/journey";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
-import type { Answer } from "../../engine/prompts/types";
+import type { Answer, PromptRole } from "../../engine/prompts/types";
 import { parseBattleCardId, parseBattleId, parseBattleSlotViewId, parsePromptId } from "../../types/identifiers";
 import {
   buildEngineBattleScreenModel,
@@ -714,7 +714,8 @@ describe("prompt surfaces over the prompt lab", () => {
   /**
    * Every human prompt and top-level decision a lab fixture reaches: its
    * own, each prompt after one of the human's legal actions, and each
-   * prompt after a human answer the surface offers. The AI answers its own
+   * prompt after each offered choice button, or one legal answer on other
+   * surfaces. The AI answers its own
    * prompts with their first legal answer.
    */
   const reached = () => {
@@ -725,10 +726,16 @@ describe("prompt surfaces over the prompt lab", () => {
       if (pending !== null) {
         const value = pending.prompt.side === "player" ? null : firstLegalAnswer(pending.prompt);
         if (value === null) prompts.push({ fixture, prompt: pending.prompt, model: labSliceModel(slice) });
-        const answer = value ?? surfaceAnswer(labSliceModel(slice));
+        const model = labSliceModel(slice);
+        const answer = value ?? surfaceAnswer(model);
         if (answer === null || depth > 3) return;
-        const outcome = labAdapter.reduce(slice, { kind: "answer", side: pending.prompt.side, promptId: pending.prompt.id, value: answer });
-        if (outcome.kind === "applied") visit(fixture, outcome.slice, depth + 1);
+        const answers = model.prompt.surface.kind === "choice"
+          ? model.prompt.surface.options.flatMap((option) => option.select.kind === "answer" ? [option.select.answer] : [])
+          : [answer];
+        for (const value of answers) {
+          const outcome = labAdapter.reduce(slice, { kind: "answer", side: pending.prompt.side, promptId: pending.prompt.id, value });
+          if (outcome.kind === "applied") visit(fixture, outcome.slice, depth + 1);
+        }
         return;
       }
       const decision = labEngine.decision(slice.committed);
@@ -748,6 +755,14 @@ describe("prompt surfaces over the prompt lab", () => {
 
   it("offers a legal answer on every human prompt's surface, and an empty-answer control exactly when none is legal", () => {
     const { prompts } = explore();
+    const roles = {
+      discardToHandLimit: true, playRoute: true, chooseX: true, chooseOne: true, target: true,
+      chooseCost: true, optionalCost: true, abandonCost: true, discardCost: true, revealCost: true,
+      banishCost: true, offeringCost: true, discard: true, discardChosen: true, foresee: true,
+      lookAtTop: true, discover: true, discoverCost: true, chooseAmong: true, chooseFromOpponentHand: true,
+      youMay: true, preventUnlessPays: true,
+    } satisfies Record<PromptRole, true>;
+    expect(new Set(prompts.map(({ prompt }) => prompt.purpose.role))).toEqual(new Set(Object.keys(roles)));
     const kinds = new Set(prompts.map(({ model }) => model.prompt.surface.kind));
     expect(kinds).toEqual(new Set(["targets", "picker", "choice", "number", "arrange"]));
     for (const { fixture, prompt, model } of prompts) {
@@ -756,6 +771,28 @@ describe("prompt surfaces over the prompt lab", () => {
       expect(answer, where).not.toBeNull();
       expect(isLegalAnswer(prompt, answer!), where).toBe(true);
       expect(emptyAnswerControl(model.prompt.surface), where).toBe(isLegalAnswer(prompt, []));
+      const { surface, host } = model.prompt;
+      const candidates = "candidates" in prompt ? prompt.candidates : prompt.kind === "arrange" ? prompt.cards : null;
+      if (candidates === null) continue;
+      const ids = candidates.map(parseBattleCardId);
+      const board = [model.view.near, model.view.far].flatMap((side) =>
+        [...side.frontRank, ...side.backRank].flatMap((slot) => slot.card === null ? [] : [slot.card.id]),
+      );
+      const visibleBoard = new Set([...model.view.nearHand.cards.map((card) => card.id), ...board]);
+      if (surface.kind === "targets") {
+        const legalTargets = candidates.filter((id) => isLegalAnswer(prompt, [id])).map(parseBattleCardId);
+        expect(new Set(surface.ids), where).toEqual(new Set(legalTargets));
+        for (const id of ids) expect(visibleBoard.has(id), where).toBe(true);
+      } else if (surface.kind === "picker") {
+        expect(new Set(surface.picker.candidates.map((candidate) => candidate.card.id)), where).toEqual(new Set(ids));
+        expect(new Set(surface.picker.candidateIds), where).toEqual(new Set(ids));
+        if (surface.picker.presentation === "board") {
+          for (const id of ids) expect(visibleBoard.has(id), where).toBe(true);
+        }
+      } else {
+        expect(surface.kind, where).toBe("arrange");
+        expect(new Set(host?.arrange?.model.cards.map((card) => card.battleCardId)), where).toEqual(new Set(ids));
+      }
     }
   });
 

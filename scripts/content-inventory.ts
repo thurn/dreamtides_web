@@ -3,6 +3,9 @@
  *
  *   npx tsx scripts/content-inventory.ts           # writes the inventory
  *   npx tsx scripts/content-inventory.ts --check   # exits 1 when the file is stale
+ *   npx tsx scripts/content-inventory.ts --refresh-prompt-areas [--check]
+ *     # refreshes only role registration Areas in the filed inventory;
+ *     # preserves its entity assignments, statuses, and dependency graph
  *
  * Emits docs/plan/evidence/content-inventory.json: one record per catalog
  * entity and the Phase 5 bead plan, with every pending entity routed to the
@@ -52,6 +55,13 @@ import { TRANSFIGURATION } from "../src/content/transfiguration";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUTPUT = "docs/plan/evidence/content-inventory.json";
+const PROMPT_REGISTRATION_FILES = [
+  "src/runtime/battle-prompt-messages.ts",
+  "src/engine/policy/prompts.ts",
+  "src/engine/testing/prompt-lab.ts",
+  "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+  "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+] as const;
 // Bead sizing (phase-5-content.md § Bead sizing). A bead's weight is the sum
 // of its entities' weights; see `weight`.
 const TARGET_WEIGHT = 9;
@@ -1258,6 +1268,7 @@ class Planner {
       ...(files.modules.some((file) => file.startsWith(P)) ? [`${P}index.ts`] : []),
       ...files.contracts,
       ...(introduces.length > 0 || newPromptKinds.length > 0 ? ["engine hubs"] : []),
+      ...(newPromptKinds.length > 0 ? PROMPT_REGISTRATION_FILES : []),
       ...[...fallout].sort(compare).map((symbol) => `fallout: ${symbol}`),
     ];
     const areas = [...members.map((record) => record.module ?? record.id).sort(compare), ...shared, scenarios, SPECS_INDEX];
@@ -1434,7 +1445,42 @@ function pretty(value: unknown, indent: string, key: string | undefined): string
   return `{\n${entries.join(",\n")}\n${indent}}`;
 }
 
+/** Refresh registration paths in a filed plan, preserving its graph instead of applying fresh probe results. */
+function refreshPromptAreas(): void {
+  const target = join(ROOT, OUTPUT);
+  const inventory: unknown = JSON.parse(readFileSync(target, "utf8"));
+  if (typeof inventory !== "object" || inventory === null || !("beads" in inventory) || !Array.isArray(inventory.beads)) {
+    throw new Error("filed inventory must contain a beads array");
+  }
+  const stringArray = (value: unknown): value is string[] => Array.isArray(value) && value.every((item) => typeof item === "string");
+  for (const bead of inventory.beads as unknown[]) {
+    if (typeof bead !== "object" || bead === null || !("key" in bead) || typeof bead.key !== "string" ||
+      !("newPromptKinds" in bead) || !stringArray(bead.newPromptKinds) ||
+      !("areas" in bead) || !stringArray(bead.areas) || !("sharedAreas" in bead) || !stringArray(bead.sharedAreas)) {
+      throw new Error("filed bead must contain a key and string arrays for newPromptKinds, areas, and sharedAreas");
+    }
+    if (bead.newPromptKinds.length === 0) continue;
+    bead.areas = [...new Set([...bead.areas, ...PROMPT_REGISTRATION_FILES])];
+    bead.sharedAreas = [...new Set([...bead.sharedAreas, ...PROMPT_REGISTRATION_FILES])];
+  }
+  const output = `${pretty(inventory, "", undefined)}\n`;
+  if (process.argv.includes("--check")) {
+    if (readFileSync(target, "utf8") !== output) {
+      console.error(`${OUTPUT} prompt Areas are stale; run npx tsx scripts/content-inventory.ts --refresh-prompt-areas`);
+      process.exit(1);
+    }
+    console.log(`${OUTPUT} prompt Areas are current`);
+    return;
+  }
+  writeFileSync(target, output);
+  console.log(`refreshed ${OUTPUT} prompt Areas`);
+}
+
 function main(): void {
+  if (process.argv.includes("--refresh-prompt-areas")) {
+    refreshPromptAreas();
+    return;
+  }
   const records = buildEntities();
   const ids = records.map((record) => record.id);
   const duplicates = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))].sort(compare);

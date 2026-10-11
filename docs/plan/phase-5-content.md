@@ -134,6 +134,12 @@ composition beads skip it.
      `src/runtime/battle-prompt-messages.ts`, and for a status its
      `CARD_STATUS_BADGES` entry in
      `src/screens/cumulus_adapters/engine-battle-view-model.ts`.
+   - every new prompt role: its UI copy in
+     `src/runtime/battle-prompt-messages.ts`, its exhaustive Greedy strategy in
+     `src/engine/policy/prompts.ts`, a reachable synthetic fixture in
+     `src/engine/testing/prompt-lab.ts`, its candidate routing in
+     `src/screens/cumulus_adapters/prompt-host-view-model.ts`, and the exhaustive
+     role expectation in `src/screens/cumulus_adapters/engine-battle-view-model.test.ts`.
 
    Type errors and the presentation completeness tests
    (`src/screens/cumulus_adapters/engine-battle-presentation.test.ts`)
@@ -144,6 +150,10 @@ composition beads skip it.
    naming it fails the announced-change invariant
    (`src/engine/testing/announced-changes.ts`) in the prompt-lab tooling
    test and in every fuzz game, the step 6 smoke included.
+   The prompt-surface completeness check in
+   `src/screens/cumulus_adapters/engine-battle-view-model.test.ts` requires a lab
+   fixture for every `PromptRole` and every offered card on a visible answer
+   surface: the gallery, the viewer's hand, the battlefield, or the stack.
 4. **Resolve ambiguities** with the ladder. Check the
    [card text clarifications](decisions.md#card-text-clarifications) first:
    an entity named there is implemented exactly as its C-entry says, and the
