@@ -74,6 +74,8 @@ export const LAB = {
     subtype: "", speed: "standard", status: "authored",
     abilities: () => [event(p.gainSpark(characterTarget(characterYouControl({ costAtLeast: x(), costAtMost: x() })), 1))],
   },
+  /** Return a void card after an optional resolution-time payment. */
+  optionalReturn: labEvent(0x70, 0, p.returnFromVoid(everyIn("void"), { pay: 1 })),
   /** "Draw 2 cards, then discard a card." */
   drawTwoThenDiscard: labEvent(1, 1, p.sequence(p.draw(2), p.discard(1))),
   /** "Each player discards a card." */
@@ -175,6 +177,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
   [LAB.abandon.id]: { name: "Lab Farewell", text: "Abandon a character." },
+  [LAB.optionalReturn.id]: { name: "Lab Return", text: "You may pay 1● to return your void cards to hand." },
   [LAB.putFromTopThenShuffle.id]: { name: "Lab Recollection", text: "Look at the top 2 cards of your deck. Put one on top of your deck and the other into your void. Shuffle your void into your deck." },
   [LAB.choosePlayer.id]: { name: "Lab Rekindling", text: "Choose a player. That player discards a card, then draws a card." },
   [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
@@ -299,6 +302,11 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "optional-payment", description: "Pay or decline a resolution-time return from the void",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.optionalReturn.id], void: [vanillas[0]], energy: 1, deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [playHand(0)],
+  },
   {
     name: "abandon",
     description: "Choose one public battlefield character to abandon as the effect resolves",

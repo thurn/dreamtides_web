@@ -1,3 +1,6 @@
+import { fromVoid } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives/return-from-void";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 62,
   art: { x: 0, y: 1, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), returnFromVoid(fromVoid({ cardType: "event" })))],
+  verifiedText: "57jzyzbzgr",
 });

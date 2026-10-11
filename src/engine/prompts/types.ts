@@ -22,6 +22,8 @@ export type PromptRole =
   | "chooseCost"
   /** Whether to pay an optional cost. */
   | "optionalCost"
+  /** Whether to pay energy for an optional effect during resolution. */
+  | "optionalPayment"
   /** The characters abandoned to pay a cost. */
   | "abandonCost"
   /** The character its controller chooses to abandon as an effect resolves; not a target. */

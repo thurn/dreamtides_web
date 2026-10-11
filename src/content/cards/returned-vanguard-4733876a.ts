@@ -1,3 +1,6 @@
+import { self } from "../../engine/dsl/builders";
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives/return-from-void";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 469,
   art: { x: 0.504, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onDissolved(), returnFromVoid(self(), { pay: 1 }))],
+  verifiedText: "2fyvwlsp2sh",
 });

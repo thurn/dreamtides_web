@@ -1,0 +1,111 @@
+{
+  "bead": "hv-umm2.79",
+  "phase": 5,
+  "implementMin": 33.82,
+  "localValidationS": {
+    "focused": 3.895833730697632,
+    "review": 33.56401205062866,
+    "knip": 2.705479145050049,
+    "fuzz": 63.87733197212219,
+    "sweep": 176.4335799217224,
+    "judged": 26.325
+  },
+  "queueWaitS": {
+    "fuzz": 0.023202180862426758,
+    "browserFirstJudged": 223.057,
+    "browserFinalJudged": 0.052
+  },
+  "hostLoad": 18.81494140625,
+  "testDelta": {
+    "files": 0,
+    "lines": 270,
+    "jsdomFiles": 0,
+    "cases": 14
+  },
+  "friction": [
+    {
+      "tag": "qa-scripting",
+      "minutes": 3.5,
+      "note": "Scenario used cursor instead of eventCursor; geometry read before rendered controls; automatic first-target assumption differed from explicit physical selection; initial probe history overclaimed. All raw failures preserved; these are harness provenance, not product changes."
+    },
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 3.7176166666666663,
+      "note": "Native queue behind peer 78, no heavy slot held."
+    },
+    {
+      "tag": "qa-worker-duplicate-uuid",
+      "minutes": 5.0,
+      "note": "Per-game logs exposed Greedy worker canonical/manifest UUID duplication, outside scope; parent filed hv-4a0x for repair and opponent rejudgment."
+    },
+    {
+      "tag": "synthetic-fixture-correction",
+      "minutes": 1.5,
+      "note": "Initial no-op fixture used rejected empty banishCards; corrected to gainEnergy(0). Assertions corrected for auto-answer and trigger order, import and readonly fixture typing. Production primitive unchanged."
+    },
+    {
+      "tag": "additive-hub-conflict",
+      "minutes": 5.93,
+      "note": "Observed checkpoint-to-precommit integration interval; native update belongs to root. Two additive hub conflicts parked, root updated natively, original registrations restored with exact peer-text subtraction proofs. Current checks rerun once; original runtime evidence retained."
+    },
+    {
+      "tag": "additive-scenario-registry-conflict",
+      "minutes": 4.81,
+      "note": "Second observed checkpoint-to-precommit interval. Separate scenario-index construction conflict parked and natively updated by root; own import/entry restored while preserving peer registry entries. One final light check set; no new runtime or test behavior."
+    }
+  ],
+  "measurementWindow": "native claim to final pre-commit evidence",
+  "integration": {
+    "originalSource": "9fb57a074a9b470d0df4a13c7c9d92a2308bf732",
+    "newBase": "a9cd815e411c5a125ee1e3d5bc827257003df188",
+    "parkedCheckpoint": "865ed9768e386f184839666aa52f900089779214",
+    "nativeUpdatedCheckpoint": "500a31756b2534cdf5ef711ba80e686412ee7cd0",
+    "checkpointCommittedAt": "2026-10-11T13:01:55Z",
+    "preCommitEvidenceAt": "2026-10-11T13:07:50.998398+00:00",
+    "localValidationS": {
+      "integration-focused": 5.376055002212524,
+      "integration-review": 55.53356862068176,
+      "integration-knip": 2.545280933380127
+    },
+    "hostLoad": {
+      "integration-focused": 26.96826171875,
+      "integration-review": 17.771484375,
+      "integration-knip": 13.90966796875
+    },
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0,
+      "cases": 0
+    },
+    "originalRuntimeEvidenceRetained": true
+  },
+  "integrationSecond": {
+    "previousCombinedSource": "e8e16011d2c1737f191d0f4de681288c25d368eb",
+    "previousBase": "a9cd815e411c5a125ee1e3d5bc827257003df188",
+    "firstRecoveryCheckpointToSourceS": 386,
+    "newBase": "c7645d9833bb7f6bd2428334431eff67a1b368e8",
+    "parkedCheckpoint": "37989f0c8154113fc67141a38cf52b58baa7de1c",
+    "nativeUpdatedCheckpoint": "f5c29ae7910d09ddb730d882212ca9a9cfb84c7c",
+    "checkpointCommittedAt": "2026-10-11T13:12:59Z",
+    "preCommitEvidenceAt": "2026-10-11T13:17:47.800106+00:00",
+    "localValidationS": {
+      "integration-second-focused": 4.385195970535278,
+      "integration-second-review": 52.177459955215454,
+      "integration-second-knip": 3.1452889442443848
+    },
+    "hostLoad": {
+      "integration-second-focused": 17.81103515625,
+      "integration-second-review": 23.99560546875,
+      "integration-second-knip": 25.50244140625
+    },
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "cases": 0,
+      "jsdomFiles": 0
+    },
+    "exactSubtractionToNewBase": true,
+    "originalCoreAndRuntimeEvidencePreserved": true
+  }
+}

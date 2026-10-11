@@ -85,6 +85,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Choose a player";
       case "chooseCost":
         return "Choose a cost to pay";
+      case "optionalPayment":
+        return "Pay to return your card?";
       case "optionalCost":
         return "Pay the optional cost?";
       case "abandonCost":
@@ -360,6 +362,7 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
     case "putInDeck":
       return "way to place the cards you looked at";
     case "youMay":
+    case "optionalPayment":
     case "preventUnlessPays":
       return "answer you could give";
   }

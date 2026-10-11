@@ -1,3 +1,5 @@
+import { abandonCost, activated, fromVoid } from "../../engine/dsl/builders";
+import { returnFromVoid } from "../../engine/effects/primitives/return-from-void";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 200,
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonCost()], returnFromVoid(fromVoid({ cardType: "character" })))],
+  verifiedText: "4zqkkhqtvl",
 });

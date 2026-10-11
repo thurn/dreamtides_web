@@ -57,6 +57,7 @@ import {
   preventPrimitive,
   putInDeckPrimitive,
   repeatPrimitive,
+  returnFromVoidPrimitive,
   returnToHandPrimitive,
   revealPrimitive,
   sequencePrimitive,
@@ -205,6 +206,9 @@ const DEFINITIONS = {
   },
   get repeat() {
     return repeatPrimitive;
+  },
+  get returnFromVoid() {
+    return returnFromVoidPrimitive;
   },
   get returnToHand() {
     return returnToHandPrimitive;

@@ -42,6 +42,7 @@ export * from "./phase";
 export * from "./prevent";
 export * from "./put-in-deck";
 export * from "./repeat";
+export * from "./return-from-void";
 export * from "./return-to-hand";
 export * from "./reveal";
 export * from "./sequence";
