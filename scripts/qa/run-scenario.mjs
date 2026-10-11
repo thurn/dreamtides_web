@@ -29,15 +29,18 @@
 // captures as <scenario>.result.json, stops its own process group, and exits
 // non-zero when the scenario throws or any document's __caps is not empty.
 
+import { randomUUID } from "node:crypto";
 import { execFileSync, spawn } from "node:child_process";
-import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, rmSync, writeFileSync } from "node:fs";
+import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import { createConnection, createServer } from "node:net";
 import { loadavg, tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBattleDriver, createQa } from "./prelude.mjs";
+import { acquireBrowserLease, browserLeasePath } from "./browser-lease.mjs";
 import {
   connectPlaywrightMcp,
+  McpToolResponseError,
   parseMcpResult,
   sleep,
   stopProcessTree,
@@ -260,9 +263,12 @@ function spawnLogged(command, args, { cwd, logFd }) {
  * @returns {Promise<number | null>}
  */
 function exitOf(child) {
-  return new Promise((done) => {
-    if (child.exitCode !== null) done(child.exitCode);
-    else child.once("exit", (code) => done(code));
+  return new Promise((done, reject) => {
+    if (child.exitCode !== null || child.signalCode !== null) done(child.exitCode);
+    else {
+      child.once("error", reject);
+      child.once("exit", (code) => done(code));
+    }
   });
 }
 
@@ -270,22 +276,32 @@ function exitOf(child) {
  * @param {string} baseUrl
  * @param {import("node:child_process").ChildProcess} child
  * @param {number} timeoutMs
+ * @param {AbortSignal} signal
  */
-async function waitUntilServing(baseUrl, child, timeoutMs) {
+async function waitUntilServing(baseUrl, child, timeoutMs, signal) {
   const deadline = Date.now() + timeoutMs;
-  while (Date.now() < deadline) {
-    if (child.exitCode !== null) {
-      throw new Error(`server exited with ${String(child.exitCode)} before serving ${baseUrl}`);
+  let failure = /** @type {Error | null} */ (null);
+  const failed = (/** @type {Error} */ error) => { failure = error; };
+  child.once("error", failed);
+  try {
+    while (Date.now() < deadline) {
+      signal.throwIfAborted();
+      if (failure !== null) throw failure;
+      if (child.exitCode !== null || child.signalCode !== null) {
+        throw new Error(`server exited with ${String(child.exitCode)} before serving ${baseUrl}`);
+      }
+      try {
+        const response = await fetch(baseUrl, { signal });
+        if (response.status < 500) return;
+      } catch {
+        // Still starting.
+      }
+      await sleep(300);
     }
-    try {
-      const response = await fetch(baseUrl);
-      if (response.status < 500) return;
-    } catch {
-      // Still starting.
-    }
-    await sleep(300);
+    throw new Error(`server did not serve ${baseUrl} within ${String(timeoutMs / 1000)} s`);
+  } finally {
+    child.removeListener("error", failed);
   }
-  throw new Error(`server did not serve ${baseUrl} within ${String(timeoutMs / 1000)} s`);
 }
 
 /** @param {string} message */
@@ -298,14 +314,15 @@ export function say(message) {
  * @property {number} port
  * @property {number | null} serverPid
  * @property {string} captureDir
- * @property {Record<string, number>} wallMs Build and serve times.
+ * @property {Record<string, number>} wallMs Browser lease wait, build, and serve times.
  * @property {(scenarioSource: string, args: Record<string, string>, timeoutMs: number, call?: QaCall) => Promise<import("./prelude.mjs").QaResult>} run
  *   Runs one scenario function's source with the helper prelude on the session's server.
  * @property {(plan: ScenarioPlan, args: Record<string, string>, timeoutMs: number) => Promise<PlanResult>} runPlan
  *   Runs every step of a scenario at each of its viewports, one MCP call
  *   each, within `timeoutMs` in all; stops at the first error.
  * @property {() => Promise<void>} close Closes the MCP client and stops the server's process group.
- * @property {() => boolean} closed Whether the session has closed, as on SIGINT.
+ * @property {() => boolean} closed Whether cleanup started or provider completion
+ *   is uncertain, making the session non-runnable.
  */
 
 /**
@@ -336,47 +353,110 @@ export async function openQaSession(options) {
   const primaryCheckout = primaryCheckoutOf(repoRoot);
   const captureDir = join(primaryCheckout, "artifacts", "qa", options.bead);
   mkdirSync(captureDir, { recursive: true });
-  const port = options.port ?? (await findFreePort());
-  if (!(await isPortFree(port))) throw new Error(`port ${String(port)} is in use`);
-  const baseUrl = `http://localhost:${String(port)}`;
-  const serverLog = join(captureDir, `${options.label}.server.log`);
-  const logFd = openSync(serverLog, "w");
-  const outDir = options.prod ? mkdtempSync(join(tmpdir(), "dreamtides-qa-")) : null;
-  /** @type {import("node:child_process").ChildProcess | null} */
-  let builder = null;
-  /** @type {import("node:child_process").ChildProcess | null} */
-  let server = null;
-  /** @type {Awaited<ReturnType<typeof connectPlaywrightMcp>> | null} */
-  let mcp = null;
+  const controller = new AbortController();
+  const { signal } = controller;
+  let port = options.port ?? FIRST_QA_PORT;
+  let logFd = /** @type {number | null} */ (null);
+  let outDir = /** @type {string | null} */ (null);
+  const leasePath = browserLeasePath(primaryCheckout);
+  const ownerPath = `${leasePath}.owner.json`;
+  let ownRecord = /** @type {string | null} */ (null);
+  let owner = /** @type {Record<string, string | number> | null} */ (null);
+  const retainOwner = (/** @type {string} */ providerState) => {
+    if (ownRecord === null || owner === null) return;
+    if (readFileSync(ownerPath, "utf8") !== ownRecord) throw new Error(`browser owner record changed: ${ownerPath}`);
+    owner.providerState = providerState;
+    const record = `${JSON.stringify(owner)}\n`;
+    writeFileSync(ownerPath, record);
+    ownRecord = record;
+  };
+  const clearOwner = () => {
+    if (ownRecord === null) return;
+    if (readFileSync(ownerPath, "utf8") !== ownRecord) throw new Error(`browser owner record changed: ${ownerPath}`);
+    unlinkSync(ownerPath);
+    ownRecord = null;
+  };
+  let lease = /** @type {Awaited<ReturnType<typeof acquireBrowserLease>> | null} */ (null);
+  let builder = /** @type {import("node:child_process").ChildProcess | null} */ (null);
+  let server = /** @type {import("node:child_process").ChildProcess | null} */ (null);
+  let mcp = /** @type {Awaited<ReturnType<typeof connectPlaywrightMcp>> | null} */ (null);
   /** @type {Record<string, number>} */
   const wallMs = {};
-
-  let cleaned = false;
-  const close = async () => {
-    if (cleaned) return;
-    cleaned = true;
-    if (mcp !== null) {
-      await mcp.close().catch((/** @type {unknown} */ error) => {
-        say(`closing the MCP client failed: ${String(error)}`);
-      });
-    }
-    await stopProcessTree(builder);
-    await stopProcessTree(server);
-    closeSync(logFd);
-    if (outDir !== null) rmSync(outDir, { recursive: true, force: true });
-    if (server !== null) {
-      const free = await isPortFree(port);
-      say(`runtime: server process group ${String(server.pid)} on port ${String(port)} stopped; port ${free ? "free" : "STILL IN USE"}`);
-    }
+  const activeCalls = /** @type {Set<Promise<void>>} */ (new Set());
+  let uncertainCall = false;
+  let startup = Promise.resolve();
+  let cleanup = /** @type {Promise<void> | null} */ (null);
+  const handlers = /** @type {Map<NodeJS.Signals, () => void>} */ (new Map());
+  const close = () => {
+    cleanup ??= (async () => {
+      // A startup connection may finish after interruption. Drain it before
+      // closing its browser and releasing the repository lease.
+      await startup.catch(() => {});
+      let closeUnconfirmed = false;
+      try {
+        try {
+          // Closing the page interrupts pending unsafe execution. Join its
+          // local RPC only afterwards; transport rejection cannot certify
+          // whether the remote invocation completed.
+          if (mcp !== null) await mcp.close(async () => { await Promise.all(activeCalls); });
+        } catch (error) {
+          closeUnconfirmed = true;
+          throw error;
+        } finally {
+          await Promise.all(activeCalls);
+        }
+        if (uncertainCall) throw new Error("browser RPC transport rejected; provider completion is unconfirmed");
+        // A settled connection failure sent no browser command. Otherwise
+        // only a confirmed browser_close permits another cooperating owner.
+        clearOwner();
+      } catch (error) {
+        retainOwner(uncertainCall ? (closeUnconfirmed ? "call-and-close-unconfirmed" : "call-unconfirmed") : "close-unconfirmed");
+        say(`browser provider requires reconciliation; owner record retained at ${ownerPath}: ${String(error)}`);
+        throw error;
+      } finally {
+        try {
+          await stopProcessTree(builder);
+          await stopProcessTree(server);
+          if (logFd !== null) closeSync(logFd);
+          if (outDir !== null) rmSync(outDir, { recursive: true, force: true });
+          if (server !== null) {
+            const free = await isPortFree(port);
+            say(`runtime: server process group ${String(server.pid)} on port ${String(port)} stopped; port ${free ? "free" : "STILL IN USE"}`);
+          }
+        } finally {
+          for (const [name, handler] of handlers) process.removeListener(name, handler);
+          await lease?.release();
+        }
+      }
+    })();
+    return cleanup;
   };
-  for (const signal of /** @type {const} */ (["SIGINT", "SIGTERM"])) {
-    process.once(signal, () => {
-      say(`${signal}: stopping`);
-      void close().finally(() => process.exit(signal === "SIGINT" ? 130 : 143));
-    });
+  for (const name of /** @type {const} */ (["SIGINT", "SIGTERM"])) {
+    const handler = () => {
+      say(`${name}: stopping`);
+      controller.abort();
+      // Build/serve startup must settle promptly. Its next await checks abort
+      // before another process is spawned; cleanup joins that startup promise.
+      void Promise.all([stopProcessTree(builder), stopProcessTree(server)])
+        .then(close).finally(() => process.exit(name === "SIGINT" ? 130 : 143));
+    };
+    handlers.set(name, handler);
+    process.once(name, handler);
   }
 
-  try {
+  startup = (async () => {
+    const waitStart = Date.now();
+    lease = await acquireBrowserLease(leasePath, { signal, onWait: () => say(`waiting for browser lease ${leasePath}`) });
+    if (existsSync(ownerPath)) throw new Error(`browser provider requires reconciliation before QA startup: ${ownerPath}`);
+    wallMs.browserLeaseWait = Date.now() - waitStart;
+    signal.throwIfAborted();
+    port = options.port ?? (await findFreePort());
+    if (!(await isPortFree(port))) throw new Error(`port ${String(port)} is in use`);
+    signal.throwIfAborted();
+    const baseUrl = `http://localhost:${String(port)}`;
+    const serverLog = join(captureDir, `${options.label}.server.log`);
+    logFd = openSync(serverLog, "w");
+    outDir = options.prod ? mkdtempSync(join(tmpdir(), "dreamtides-qa-")) : null;
     say(`${options.label} for ${options.bead}: serving ${checkout} ${options.prod ? "(production build)" : "(dev)"} on port ${String(port)}; server log ${serverLog}`);
     const serveStart = Date.now();
     if (outDir !== null) {
@@ -384,38 +464,59 @@ export async function openQaSession(options) {
         [process.execPath, ["scripts/prepare-workspace.mjs"]],
         ["vite", ["build", "--outDir", outDir, "--emptyOutDir", ...(options.minify ? [] : ["--minify", "false"])]],
       ])) {
+        signal.throwIfAborted();
         builder = spawnLogged(command, args, { cwd: checkout, logFd });
         const code = await exitOf(builder);
         if (code !== 0) throw new Error(`${command} ${args.join(" ")} exited with ${String(code)}; see ${serverLog}`);
       }
       wallMs.build = Date.now() - serveStart;
+      signal.throwIfAborted();
       server = spawnLogged("vite", ["preview", "--outDir", outDir, "--port", String(port), "--strictPort"], { cwd: checkout, logFd });
     } else {
       server = spawnLogged(process.execPath, ["scripts/dev.mjs", "--port", String(port)], { cwd: checkout, logFd });
     }
-    await waitUntilServing(baseUrl, server, 120_000);
+    await waitUntilServing(baseUrl, server, 120_000, signal);
     wallMs.serve = Date.now() - serveStart;
+    signal.throwIfAborted();
     say(`server pid ${String(server.pid)} (process group) serving ${baseUrl}`);
-
+    owner = { token: randomUUID(), pid: process.pid, bead: options.bead, label: options.label, checkout, startedAt: new Date().toISOString(), providerState: "active" };
+    const record = `${JSON.stringify(owner)}\n`;
+    writeFileSync(ownerPath, record, { flag: "wx" });
+    ownRecord = record;
     mcp = await connectPlaywrightMcp({
       name: `qa-${options.label}-${String(process.pid)}`,
       roots: [...new Set([primaryCheckout, repoRoot, checkout])],
     });
+    signal.throwIfAborted();
+  })();
+  try {
+    await startup;
   } catch (error) {
     await close();
     throw error;
   }
-  const client = mcp;
+  const baseUrl = `http://localhost:${String(port)}`;
+  const client = /** @type {Awaited<ReturnType<typeof connectPlaywrightMcp>> | null} */ (mcp);
+  if (client === null) {
+    await close();
+    throw new Error("QA startup did not create its MCP client");
+  }
   /** @type {QaSession["run"]} */
   const run = async (scenarioSource, args, timeoutMs, call) => {
+    if (cleanup !== null) throw new Error("QA session is closed");
+    if (uncertainCall) throw new Error("QA session requires provider reconciliation");
     const code = buildScenarioCode(scenarioSource, { baseUrl, bead: options.bead, captureDir, prod: options.prod, args, ...call });
-    return /** @type {import("./prelude.mjs").QaResult} */ (
-      parseMcpResult(await client.call("browser_run_code_unsafe", { code }, { timeoutMs }))
-    );
+    const rpc = client.call("browser_run_code_unsafe", { code }, { timeoutMs });
+    const settled = rpc.then(() => {}, (/** @type {unknown} */ error) => {
+      if (!(error instanceof McpToolResponseError)) uncertainCall = true;
+    });
+    activeCalls.add(settled);
+    void settled.finally(() => activeCalls.delete(settled));
+    return /** @type {import("./prelude.mjs").QaResult} */ (parseMcpResult(await rpc));
   };
   return {
     port,
-    serverPid: server.pid ?? null,
+    serverPid: server?.pid ?? null,
     captureDir,
     wallMs,
     run,
@@ -469,7 +570,7 @@ export async function openQaSession(options) {
       return merged;
     },
     close,
-    closed: () => cleaned,
+    closed: () => cleanup !== null || uncertainCall,
   };
 }
 

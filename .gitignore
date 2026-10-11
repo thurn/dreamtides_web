@@ -26,6 +26,8 @@ logs/
 .superpowers/
 artifacts/qa/
 artifacts/heavy.lock
+artifacts/browser-qa.lock
+artifacts/browser-qa.lock.owner.json
 *.tsbuildinfo
 
 .vscode

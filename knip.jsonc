@@ -25,6 +25,8 @@
     // Referenced only by the package.json `overrides` pin.
     "brace-expansion"
   ],
+  // macOS system utility holding the cross-worktree browser-QA lease.
+  "ignoreBinaries": ["lockf"],
   "ignore": [
     // The vendored brace-expansion package that the override above installs.
     "vendor/brace-expansion/**"

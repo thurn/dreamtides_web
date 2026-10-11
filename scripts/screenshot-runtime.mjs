@@ -13,6 +13,15 @@ export const DEFAULT_SCREENSHOT_PORT = 5178;
  * @typedef {Record<string, unknown>} McpToolResult
  */
 
+/** A returned tool response confirms provider completion, including rejection. */
+export class McpToolResponseError extends Error {
+  /** @param {string} tool @param {McpToolResult} result */
+  constructor(tool, result) {
+    super(mcpText(result) || `${tool} failed`, { cause: result });
+    this.name = "McpToolResponseError";
+  }
+}
+
 /**
  * @param {{ name?: string, url?: string, roots?: string[] }} [options]
  */
@@ -51,15 +60,21 @@ export async function connectPlaywrightMcp({
         timeoutMs === undefined ? undefined : { timeout: timeoutMs },
       );
       if (result.isError) {
-        throw new Error(mcpText(result) || `${name} failed`);
+        throw new McpToolResponseError(name, result);
       }
       return result;
     },
-    async close() {
+    /** @param {() => Promise<void>} [beforeTransportClose] */
+    async close(beforeTransportClose) {
       try {
-        await client.callTool({ name: "browser_close", arguments: {} });
+        const result = await client.callTool({ name: "browser_close", arguments: {} });
+        if (result.isError) throw new McpToolResponseError("browser_close", result);
       } finally {
-        await client.close();
+        try {
+          await beforeTransportClose?.();
+        } finally {
+          await client.close();
+        }
       }
     },
   };

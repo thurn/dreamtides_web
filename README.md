@@ -128,6 +128,26 @@ node scripts/qa/run-scenario.mjs smoke --bead <bead-id> --prod   # vite build + 
 | `--viewports <list>` | Run the scenario once per viewport, `desktop` and/or `mobile` (default: the module's `viewports`, else `desktop`) |
 | `--timeout <s>` | Time limit for the whole run, every call included (default 900) |
 
+The scenario runner and card sweep automatically acquire the same native
+browser lease, `artifacts/browser-qa.lock` in the primary checkout, across all
+worktrees. A waiting command starts its server and MCP connection after the
+previous command finishes browser and server cleanup. SIGINT/SIGTERM cancels
+waiting or drains startup and cleanup before releasing the lease. An ownership
+record, `artifacts/browser-qa.lock.owner.json`, covers MCP connection and use.
+Normal cleanup closes the browser, drains active RPC calls, then closes the SDK
+transport while retaining the lease through owned server cleanup. A signal
+first aborts startup and stops the current owned server or builder, then joins
+that cleanup sequence. Confirmed browser close and settled provider responses
+clear the runner's exact ownership record. An uncertain RPC makes its session
+non-runnable; a failed close, uncertain transport rejection, or caller crash
+leaves the record and subsequent CLI sessions refuse to start. Reconcile the
+recorded provider execution before clearing the record and retrying.
+Kernel lease release on pipe EOF proves local lock recovery;
+provider completion requires separate confirmation. The lease is
+separate from `artifacts/heavy.lock`, so commands also run under the external
+heavy slot required by the plan. `wallMs.browserLeaseWait` records lease wait
+separately from build, serve, and scenario execution.
+
 The runner starts its server in its own process group (`scripts/dev.mjs`, or
 `vite preview`), connects its own MCP client with the primary checkout as the
 first root (`scripts/screenshot-runtime.mjs`), runs the scenario, and stops

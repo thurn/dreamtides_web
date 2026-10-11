@@ -1,0 +1,416 @@
+{
+  "bead": "hv-umm2.329",
+  "phase": 5,
+  "implementMin": 41,
+  "localValidationS": {
+    "install": 3,
+    "review": 17.098,
+    "reviewFull": 60.657,
+    "knip": 2.389,
+    "browserSmoke": 45.877
+  },
+  "heavyQueueWaitS": 143.745,
+  "heavyQueueWaitScope": "Measured validation commands; earliest directory-lock and JSDoc probes have stage-only timing evidence. Final parent combined-lock wrapper execution is measured per command; its queue wait was not measured and is excluded.",
+  "hostLoad": 6.51220703125,
+  "testDelta": {
+    "files": 1,
+    "lines": 461,
+    "jsdomFiles": 0,
+    "cases": 16
+  },
+  "testModuleJustification": "One coherent node module pins native cross-process lease and MCP ownership contracts. Contained real native subprocesses, private Git primary/linked-worktree fixtures, private captures and server logs, and mocked SDK calls exercise lifecycle contracts without shared provider traffic. Explicit notifications observe boundaries; CI uses its normal session containment.",
+  "finalChecks": {
+    "relatedTests": 16,
+    "relatedFiles": 1,
+    "fullTests": 2750,
+    "fullFiles": 220,
+    "fullTestStageS": 29.5,
+    "bundleStageS": 2.7
+  },
+  "friction": [
+    {
+      "tag": "qa-harness",
+      "minutes": 2,
+      "description": "Initial permanent-failure fixture used a directory that native lockf accepts. A denied-file fixture pins the actual permanent-error path; initial failure log retained."
+    },
+    {
+      "tag": "validation-failure",
+      "minutes": 3,
+      "description": "Node JSDoc fixture typing and an async-without-await SDK mock stopped validation. Exact SDK promise typing and a returned resolved promise passed targeted review before the final full run."
+    },
+    {
+      "tag": "native-dependency",
+      "minutes": 2,
+      "description": "Knip reports lockf as an unlisted package binary. Authorized knip.jsonc declaration identifies this macOS system dependency; final knip passes."
+    },
+    {
+      "tag": "provider-ownership",
+      "minutes": 8,
+      "description": "Parent review required fail-closed provider ownership across native lease crash recovery, semantic tool errors, uncertain RPC transport failures, and browser-close/RPC-drain/SDK-teardown ordering. Final synthetic contracts and actual smoke verify those boundaries."
+    },
+    {
+      "tag": "runtime-artifact-admission",
+      "minutes": 1,
+      "description": "Parent relayed a native peer admission finding for the lease and owner-record paths. Authorized tracked ignore entries cover both actual paths, and git check-ignore confirms them. Runtime logic remains at the validated full/smoke hashes."
+    },
+    {
+      "tag": "cold-review",
+      "minutes": 10,
+      "description": "All five accepted cold findings repaired in this unlanded worktree: uncertain sessions stop further RPCs, explicit notifications replace short polling, real private linked-Git fixtures exercise production common-root resolution, all artifact writes are private, and README cleanup order matches signals."
+    },
+    {
+      "tag": "containment-escape",
+      "minutes": 3,
+      "description": "Candidate 01a12945-5f6b-7e12-bb88-6c65218d8635 failed native containment at the first related test. Test-only real-spawn wrappers keep synthetic processes inside the gate group, translate negative signals only for owned fixture PIDs, end holder pipes, and join direct children. Production detached groups and gate policy remain intact."
+    },
+    {
+      "tag": "fixture-path",
+      "minutes": 1,
+      "description": "Initial private Git resolver assertion exposed macOS /var versus /private canonical path spelling. Fixtures use realpath; the failing focused report is retained, and final review/full prove the corrected private resolver contract."
+    }
+  ],
+  "validationRuns": [
+    {
+      "label": "full-knip-failure",
+      "log": "/tmp/hv-umm2.329-full.log",
+      "executionS": 23.702,
+      "heavyQueueWaitS": 0.021,
+      "outcome": "failed"
+    },
+    {
+      "label": "focused-native",
+      "log": "/tmp/hv-umm2.329-focused-final.log",
+      "executionS": 4.459,
+      "heavyQueueWaitS": 0.023,
+      "outcome": "passed"
+    },
+    {
+      "label": "knip-native",
+      "log": "/tmp/hv-umm2.329-knip.log",
+      "executionS": 3.003,
+      "heavyQueueWaitS": 66.462,
+      "outcome": "passed"
+    },
+    {
+      "label": "focused-ownership",
+      "log": "/tmp/hv-umm2.329-ownership-focused.log",
+      "executionS": 5.462,
+      "heavyQueueWaitS": 35.313,
+      "outcome": "passed"
+    },
+    {
+      "label": "focused-rpc",
+      "log": "/tmp/hv-umm2.329-rpc-focused.log",
+      "executionS": 6.319,
+      "heavyQueueWaitS": 0.024,
+      "outcome": "passed"
+    },
+    {
+      "label": "full-before-transport-order",
+      "log": "/tmp/hv-umm2.329-full-final.log",
+      "executionS": 59.662,
+      "heavyQueueWaitS": 0.018,
+      "outcome": "passed"
+    },
+    {
+      "label": "review-before-transport-order",
+      "log": "/tmp/hv-umm2.329-review-final.log",
+      "executionS": 13.698,
+      "heavyQueueWaitS": 0.027,
+      "outcome": "passed"
+    },
+    {
+      "label": "full-transport-fixture-failure",
+      "log": "/tmp/hv-umm2.329-full-transport-final.log",
+      "executionS": 21.892,
+      "heavyQueueWaitS": 0.027,
+      "outcome": "failed"
+    },
+    {
+      "label": "review-transport-fixture-failure",
+      "log": "/tmp/hv-umm2.329-review-transport-final.log",
+      "executionS": 4.097,
+      "heavyQueueWaitS": 0.021,
+      "outcome": "failed"
+    },
+    {
+      "label": "review-final",
+      "log": "/tmp/hv-umm2.329-review-ready.log",
+      "executionS": 12.198,
+      "heavyQueueWaitS": 0.023,
+      "outcome": "passed"
+    },
+    {
+      "label": "full-final",
+      "log": "/tmp/hv-umm2.329-full-ready.log",
+      "executionS": 51.91,
+      "heavyQueueWaitS": 0.023,
+      "outcome": "passed"
+    },
+    {
+      "label": "knip-final",
+      "log": "/tmp/hv-umm2.329-knip-ready.log",
+      "executionS": 2.151,
+      "heavyQueueWaitS": 0.023,
+      "outcome": "passed"
+    },
+    {
+      "label": "browser-smoke",
+      "log": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.329/browser-lease-smoke.log",
+      "executionS": 42.681,
+      "heavyQueueWaitS": 0.022,
+      "outcome": "passed"
+    },
+    {
+      "label": "review-runtime-ignore",
+      "log": "/tmp/hv-umm2.329-review-ignore.log",
+      "executionS": 13.492,
+      "heavyQueueWaitS": 39.291,
+      "outcome": "passed"
+    },
+    {
+      "label": "knip-runtime-ignore",
+      "log": "/tmp/hv-umm2.329-knip-ignore.log",
+      "executionS": 2.244,
+      "heavyQueueWaitS": 0.022,
+      "outcome": "passed"
+    },
+    {
+      "label": "cold-fixture-focused-failure",
+      "log": "/tmp/hv-umm2.329-cold-focused.log",
+      "executionS": 7.838,
+      "heavyQueueWaitS": 0.021,
+      "outcome": "failed"
+    },
+    {
+      "label": "cold-review-final",
+      "log": "/tmp/hv-umm2.329-cold-review.log",
+      "executionS": 15.727,
+      "heavyQueueWaitS": 0.024,
+      "outcome": "passed"
+    },
+    {
+      "label": "cold-full-final",
+      "log": "/tmp/hv-umm2.329-cold-full.log",
+      "executionS": 53.135,
+      "heavyQueueWaitS": 2.318,
+      "outcome": "passed"
+    },
+    {
+      "label": "cold-knip-final",
+      "log": "/tmp/hv-umm2.329-cold-knip.log",
+      "executionS": 2.147,
+      "heavyQueueWaitS": 0.023,
+      "outcome": "passed"
+    },
+    {
+      "label": "cold-browser-smoke",
+      "log": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.329/browser-lease-smoke-cold.log",
+      "executionS": 45.877,
+      "heavyQueueWaitS": 0.019,
+      "outcome": "passed"
+    },
+    {
+      "label": "private-root-final-review",
+      "log": "/tmp/hv-umm2.329-private-root-review.log",
+      "executionS": 17.098,
+      "heavyQueueWaitS": null,
+      "outcome": "passed"
+    },
+    {
+      "label": "private-root-final-full",
+      "log": "/tmp/hv-umm2.329-private-root-full.log",
+      "executionS": 60.657,
+      "heavyQueueWaitS": null,
+      "outcome": "passed"
+    },
+    {
+      "label": "private-root-final-knip",
+      "log": "/tmp/hv-umm2.329-private-root-knip.log",
+      "executionS": 2.389,
+      "heavyQueueWaitS": null,
+      "outcome": "passed"
+    }
+  ],
+  "earliestFailureLogs": [
+    "/tmp/hv-umm2.329-focused-initial.log",
+    "/tmp/hv-umm2.329-review-initial.log"
+  ],
+  "coreRecoveryContracts": [
+    "cross-worktree contention and independent heavy slot",
+    "idempotent release and close",
+    "waiting SIGINT/held SIGTERM with owned process settlement",
+    "crashed caller kernel recovery with remote quarantine",
+    "permanent native utility/path failure",
+    "failed connection before browser commands",
+    "delayed connection startup settlement",
+    "failed/semantic browser close quarantine",
+    "raw active RPC drain before transport teardown",
+    "semantic response versus uncertain transport rejection",
+    "exact ownership record preservation"
+  ],
+  "providerQuarantine": "A retained ownership record prevents cooperating CLI startup. Kernel pipe EOF and PID exit establish local recovery; provider execution requires reconciliation before record clearing.",
+  "qaEvidence": [
+    "smoke.result.json",
+    "browser-lease-smoke.log",
+    "smoke.server.log",
+    "smoke-dev-front-door.png",
+    "smoke-dev-battle-start.png",
+    "smoke-dev-after-ai-turn.png",
+    "browser-lease-smoke-cold.log",
+    "pre-cold-smoke.result.json",
+    "pre-cold-browser-lease-smoke.log",
+    "pre-cold-smoke.server.log",
+    "pre-cold-smoke-dev-front-door.png",
+    "pre-cold-smoke-dev-battle-start.png",
+    "pre-cold-smoke-dev-after-ai-turn.png"
+  ],
+  "browserSmoke": {
+    "ok": true,
+    "capsCount": 0,
+    "error": null,
+    "wallMs": {
+      "browserLeaseWait": 42,
+      "serve": 947,
+      "scenario": 39687,
+      "total": 40701
+    },
+    "sites": [
+      "Draft",
+      "Draft",
+      "DreamsignRevelation",
+      "Purge",
+      "Battle"
+    ],
+    "turns": [
+      "near:day",
+      "near:night",
+      "far:dawn",
+      "far:dusk",
+      "near:dawn",
+      "near:day"
+    ],
+    "responds": 1,
+    "captureDimensions": "1440x900 CSS-scale full viewport; existing qa.capture contract; inspected after-AI image"
+  },
+  "runtimeLedger": [
+    {
+      "label": "standard-smoke",
+      "runnerPid": 79266,
+      "processGroup": 79295,
+      "port": 5175,
+      "stopped": true,
+      "portFree": true,
+      "mcpContext": "qa-smoke-79266 closed with confirmed semantic browser_close",
+      "ownerMarker": "removed",
+      "nativeLease": "released"
+    },
+    {
+      "label": "synthetic-process-contracts",
+      "stopped": true,
+      "scope": "Private temporary native lease/owner records and owned HTTP servers; all exited; SDK provider mocked, shared MCP untouched."
+    },
+    {
+      "label": "post-cold-standard-smoke",
+      "processGroup": 44725,
+      "port": 5175,
+      "stopped": true,
+      "portFree": true,
+      "mcpContext": "Own qa-smoke client closed with confirmed semantic browser_close",
+      "ownerMarker": "removed",
+      "nativeLease": "released; parent independent nonblocking probe passed"
+    },
+    {
+      "label": "post-cold-contained-fixtures",
+      "stopped": true,
+      "scope": "Real native pipe/kernel processes and HTTP children inherited the gate group; private Git primary/linked-worktree and artifact trees removed after joining sessions/children; SDK mocked."
+    }
+  ],
+  "integrationBase": "06278f9b5c00fd592386a38efa6f46886858ad9f",
+  "validatedSourceSha256": {
+    "scripts/qa/browser-lease.mjs": "f8174d1da92f2e3e5c3a20cf17f6073bc5498883581cab3cf8014d31de9a1030",
+    "scripts/qa/run-scenario.mjs": "c83f3b9a3c810aeb1ff25a4323518e1700c3c57fd21f941365891e5883caa01e",
+    "scripts/screenshot-runtime.mjs": "d0b86f20242b5c8249750f5811c635825172315d4e582b6d4f2c8a72092238d5",
+    "scripts/qa/browser-lease.test.mjs": "ef71c33bf1e995e6c83e0151d396a2648315191297cc62d0b8a694d15f3bca11",
+    "knip.jsonc": "f8b18122ac2e21c1a68c71e863b137a93873683a5a7c69041cde445cf9d71196"
+  },
+  "implementationTiming": "Estimated implementation minutes; validation command execution and heavy-slot wait are measured separately.",
+  "runtimeIgnoreRepair": {
+    "provenance": "Parent-reported native peer candidate admission finding before cold review",
+    "previousSource": "67f3c1cd5cbf7a0ab9437ca4bafdeecbf912a04c",
+    "paths": [
+      "artifacts/browser-qa.lock",
+      "artifacts/browser-qa.lock.owner.json"
+    ],
+    "validation": "git check-ignore --no-index -v confirms .gitignore lines 29 and 30; mandatory review (15 tests) and knip pass.",
+    "retainedChecks": "Prior full suite and actual shared-MCP smoke remain attributable to unchanged runtime/test/config hashes; full and smoke were not repeated for local artifact-ignore entries."
+  },
+  "preColdValidatedSourceSha256": {
+    "scripts/qa/browser-lease.mjs": "f8174d1da92f2e3e5c3a20cf17f6073bc5498883581cab3cf8014d31de9a1030",
+    "scripts/qa/run-scenario.mjs": "27cea50703c0a54d3c2e87bb997a6d6b499fc6a49cefd9c63dc3b48d3e047a2f",
+    "scripts/screenshot-runtime.mjs": "d0b86f20242b5c8249750f5811c635825172315d4e582b6d4f2c8a72092238d5",
+    "scripts/qa/browser-lease.test.mjs": "fae5dffd3b7f49fa3628c80c95122a2474ffdfb679c11887a47fb6bd2e7b7232",
+    "knip.jsonc": "f8b18122ac2e21c1a68c71e863b137a93873683a5a7c69041cde445cf9d71196"
+  },
+  "preColdFinalChecks": {
+    "relatedTests": 15,
+    "relatedFiles": 1,
+    "fullTests": 2749,
+    "fullFiles": 220,
+    "fullTestStageS": 29.5,
+    "bundleStageS": 2.7
+  },
+  "coldReviewRepair": {
+    "reviewSource": "d010fe6377045578e06f1408742529dee5fdf730",
+    "report": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/review-hv-umm2.329.md",
+    "dispositions": [
+      {
+        "finding": 1,
+        "status": "accepted and repaired",
+        "contract": "Uncertain RPC marks session non-runnable; another run rejects before RPC and closed() lets the sweep preserve its actual failed row then stop."
+      },
+      {
+        "finding": 2,
+        "status": "accepted and repaired",
+        "contract": "Mock connect, close, SDK close and process exit boundaries have explicit deferred notifications; no vi.waitFor startup polling."
+      },
+      {
+        "finding": 3,
+        "status": "accepted and repaired",
+        "contract": "Real openQaSession resolver consumes real Git common-dir results from private primary and actual linked worktree; observed native owner record and capture root agree."
+      },
+      {
+        "finding": 4,
+        "status": "accepted and repaired",
+        "contract": "Server logs, captures, native lease and owner records share only private fixture roots; successful and failed fixtures join all owned sessions/children."
+      },
+      {
+        "finding": 5,
+        "status": "accepted and repaired",
+        "contract": "README describes early owned-process stop on signals, browser close, RPC drain and SDK transport ordering; paragraph wrapped."
+      }
+    ],
+    "failedCandidate": "01a12945-5f6b-7e12-bb88-6c65218d8635",
+    "gateFailureLogs": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/329-gate-failure-logs.json",
+    "gateFailure": "containment-escape by detached descendant PID 3570; retained native failure evidence",
+    "containmentScope": "Only fixtures alter spawning/signaling. Production native holder and dev-server detached ownership behavior are unchanged."
+  },
+  "finalFixtureReviewRepair": {
+    "reviewSource": "7ede9004bfd405f2f6d43dde95512847526b4fb3",
+    "report": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/review-hv-umm2.329-final.md",
+    "finding": "Two quarantine/interruption fixture fallbacks could serve the real checkout if their guards regressed.",
+    "disposition": "accepted and repaired",
+    "contract": "Every openQaSession test uses its private fixture root as server cwd, including guard-failure fallback paths.",
+    "checks": "Final review16/full2750+bundle/knip pass; production bodies unchanged so confirmed current-source smoke retained.",
+    "validationSource": "validatedSourceSha256 records the exact sources covered by private-root-final-review, private-root-final-full and private-root-final-knip. Earlier preFixtureFullValidatedSourceSha256 and postPreFixtureFullDocumentationOnly fields record prior validation provenance.",
+    "deltaReview": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/review-hv-umm2.329-fixtures.md"
+  },
+  "preFixtureFullValidatedSourceSha256": {
+    "scripts/qa/browser-lease.mjs": "f8174d1da92f2e3e5c3a20cf17f6073bc5498883581cab3cf8014d31de9a1030",
+    "scripts/qa/run-scenario.mjs": "ab20d10091d8d08104ee1be13b92aa261ce589d00e999fac45f283cad7a3b88f",
+    "scripts/screenshot-runtime.mjs": "d0b86f20242b5c8249750f5811c635825172315d4e582b6d4f2c8a72092238d5",
+    "scripts/qa/browser-lease.test.mjs": "a915c06544dde3c9caa1c4a64f4d0d68f7f0ae7e4057e558bd265056811bc80c",
+    "knip.jsonc": "f8b18122ac2e21c1a68c71e863b137a93873683a5a7c69041cde445cf9d71196"
+  },
+  "postPreFixtureFullDocumentationOnly": "After final full review, README wrapping and QaSession.closed JSDoc clarification were edited; runtime and test bodies stayed fixed. Actual smoke exercised the current source."
+}
