@@ -30,7 +30,7 @@
  * - an effect a side may pay to end whose source the viewer cannot see
  *   names its controller's avatar as its source.
  */
-import type { EngineCatalog } from "../catalog";
+import { plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
 import { worksInZone } from "../dsl/abilities";
 import { emptyLoopTracker } from "../loops/types";
@@ -299,7 +299,9 @@ function distance(state: BattleState, view: BattleView, catalog: EngineCatalog):
  * source in a zone where its ability does not work, or another card in its
  * place, or dated it before a change it followed. Only hidden cards whose
  * static abilities work from a hand or a deck move, so a state without one
- * is left as dealt.
+ * is left as dealt; when no printing in the catalog has a static ability
+ * working outside play, only cards with transfigurations or deck mods are
+ * read.
  *
  * It descends on `distance`. Each move changes one such card: it swaps the
  * card with a hidden card of the same owner in its side's other hidden zone
@@ -314,9 +316,10 @@ function distance(state: BattleState, view: BattleView, catalog: EngineCatalog):
  */
 function reconcile(state: BattleState, view: BattleView, catalog: EngineCatalog): void {
   const memo = new Map<string, HiddenStatics | null>();
+  const printedOnlyInPlay = !catalog.staticsOutsidePlay();
   const statics = (id: InstanceId): HiddenStatics | null => {
     const instance = state.instances[id];
-    if (instance === undefined) return null;
+    if (instance === undefined || (printedOnlyInPlay && plainVariant(instance))) return null;
     const key = identity(instance);
     let found = memo.get(key);
     if (found === undefined) {

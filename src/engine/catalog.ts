@@ -1,11 +1,12 @@
 import type { CardSubtype } from "../types/card-identity";
 import type { CharacteristicsMemo } from "./continuous/characteristics";
 import type { StaticsMemo } from "./continuous/layers";
+import { worksInZone } from "./dsl/abilities";
 import { energy, reclaim } from "./dsl/builders";
 import { fixedEnergy } from "./dsl/energy";
-import type { AbilityList, CardCost, DeckMods, Speed, Variant } from "./dsl/types";
-import type { AvatarId, CardId, DreamsignId, DreamwellCardId, FigmentId, InstanceId } from "./state/ids";
-import type { CardStackItem, Printing } from "./state/types";
+import { BASE_VARIANT, type Ability, type AbilityList, type CardCost, type DeckMods, type Speed, type Variant } from "./dsl/types";
+import type { AvatarId, CardId, DreamsignId, DreamwellCardId, FigmentId, InstanceId, Zone } from "./state/ids";
+import type { CardInstance, CardStackItem, Printing } from "./state/types";
 import type { StepContext } from "./steps/types";
 
 /**
@@ -110,6 +111,15 @@ export interface EngineCatalog {
   readonly memo: CharacteristicsMemo;
   /** Each card's static abilities by printing and variant (continuous/layers.ts). Derived data, never persisted. */
   readonly statics: StaticsMemo;
+  /**
+   * Whether any card, in its base or amplified variant, or any figment has a
+   * static ability that works from a zone other than play (`worksInZone`).
+   * Read on first use and kept. When it is false, only an instance with
+   * transfigurations or deck mods (`plainVariant` false) can have such an
+   * ability, so the layer evaluation and determinization read no other
+   * card's abilities outside play. Derived data, never persisted.
+   */
+  staticsOutsidePlay(): boolean;
 }
 
 export interface EmblemDefinitions {
@@ -209,6 +219,28 @@ function modifiedCard(card: PrintedCard, mods: DeckMods): PrintedCard {
   };
 }
 
+/** Every zone but play: the compiler flags a zone added to `Zone` until it is listed here. */
+const OUTSIDE_PLAY = Object.keys({
+  deck: true,
+  hand: true,
+  stack: true,
+  void: true,
+  banished: true,
+} as const satisfies Record<Exclude<Zone, "play">, true>) as readonly Zone[];
+
+/** Whether any of `abilities` is a static ability that works from a zone other than play (`worksInZone`). */
+function hasStaticOutsidePlay(abilities: readonly Ability[]): boolean {
+  return abilities.some((ability) => ability.kind === "static" && OUTSIDE_PLAY.some((zone) => worksInZone(ability.zone, zone)));
+}
+
+/**
+ * Whether an instance's abilities are its printing's base or amplified ones:
+ * a figment, or a card with no transfigurations or deck mods.
+ */
+export function plainVariant({ printing, variant }: CardInstance): boolean {
+  return printing.kind === "figment" || (variant.transfigurations === undefined && variant.deckMods === undefined);
+}
+
 /** The catalog card a printing names, for prompt purposes and logs; `null` for a figment. */
 export function printedCardId(printing: Printing): CardId | null {
   return printing.kind === "figment" ? null : printing.cardId;
@@ -235,9 +267,16 @@ export function createCatalog(
   const dreamsignsById = new Map(
     (emblems.dreamsigns ?? []).map((definition) => [definition.id, definition]),
   );
+  let outsidePlay: boolean | undefined;
   return {
     memo: new WeakMap(),
     statics: new Map(),
+    staticsOutsidePlay() {
+      outsidePlay ??=
+        [...cardsById.values()].some((card) => [false, true].some((amplified) => hasStaticOutsidePlay(card.abilities(amplified ? { amplified } : BASE_VARIANT)))) ||
+        [...figmentsById.values()].some((figment) => hasStaticOutsidePlay(figment.abilities(BASE_VARIANT)));
+      return outsidePlay;
+    },
     maximumFixedCost: publicMaximumFixedCost ?? [...cardsById.values()].reduce((maximum, card) => Math.max(maximum, fixedEnergy(card.costs)), 0),
     avatar: (id) => lookup(avatarsById, id, "avatar"),
     dreamsign: (id) => lookup(dreamsignsById, id, "dreamsign"),

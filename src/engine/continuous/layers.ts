@@ -25,7 +25,7 @@
  * ability's selectors and values read the characteristics the layers before
  * its own produced, so no layer depends on itself.
  */
-import { instanceCard, type EngineCatalog } from "../catalog";
+import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacterWith, matchingCharactersWith, type CharacteristicsReader } from "../dsl/selectors";
@@ -114,8 +114,7 @@ function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatic
     byVariant = new Map();
     catalog.statics.set(printed, byVariant);
   }
-  const plain = printing.kind === "figment" || (variant.transfigurations === undefined && variant.deckMods === undefined);
-  const key = plain ? (variant.amplified ? 1 : 0) : JSON.stringify(variant);
+  const key = plainVariant(instance) ? (variant.amplified ? 1 : 0) : JSON.stringify(variant);
   let statics = byVariant.get(key);
   if (statics === undefined) {
     const abilities = originAbilities(catalog, instanceOrigin(instance)).filter((ability): ability is StaticAbility => ability.kind === "static");
@@ -130,7 +129,9 @@ function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatic
  * and dreamsigns (player first), then cards by instance number. An emblem's
  * static abilities always apply; a card's apply while the card is in a zone
  * the ability works from, and one in a hidden zone stays hidden: no event or
- * view names it (RD-hv-umm2.53-2).
+ * view names it (RD-hv-umm2.53-2). When no printing in the catalog has a
+ * static ability working outside play (`staticsOutsidePlay`), only cards with
+ * transfigurations or deck mods outside play are read.
  */
 function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry[] {
   const entries: StaticEntry[] = [];
@@ -149,19 +150,25 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
       add({ kind: "dreamsign", side, index }, side, originAbilities(catalog, { kind: "dreamsign", id: dreamsign.id }), 0, null);
     });
   }
-  const cards: InstanceId[] = [];
+  // Only cards with static abilities can add entries, so only they are ordered.
+  const cards: { readonly instance: CardInstance; readonly abilities: readonly StaticAbility[] }[] = [];
   for (const side of SIDES) {
-    cards.push(...charactersInPlay(state, side));
+    for (const id of charactersInPlay(state, side)) {
+      const instance = state.instances[id];
+      if (instance === undefined) continue;
+      const { abilities } = cardStatics(catalog, instance);
+      if (abilities.length > 0) cards.push({ instance, abilities });
+    }
   }
+  const printedOnlyInPlay = !catalog.staticsOutsidePlay();
   for (const instance of Object.values(state.instances)) {
-    if (instance.zone === "play") continue;
-    if (cardStatics(catalog, instance).abilities.some((ability) => worksInZone(ability.zone, instance.zone))) cards.push(instance.id);
+    if (instance.zone === "play" || (printedOnlyInPlay && plainVariant(instance))) continue;
+    const { abilities } = cardStatics(catalog, instance);
+    if (abilities.some((ability) => worksInZone(ability.zone, instance.zone))) cards.push({ instance, abilities });
   }
-  cards.sort((a, b) => instanceNumber(a) - instanceNumber(b));
-  for (const id of cards) {
-    const instance = state.instances[id];
-    if (instance === undefined) continue;
-    add(id, instance.controller, cardStatics(catalog, instance).abilities, instance.enteredZoneAt, instance.zone);
+  cards.sort((a, b) => instanceNumber(a.instance.id) - instanceNumber(b.instance.id));
+  for (const { instance, abilities } of cards) {
+    add(instance.id, instance.controller, abilities, instance.enteredZoneAt, instance.zone);
   }
   return entries;
 }

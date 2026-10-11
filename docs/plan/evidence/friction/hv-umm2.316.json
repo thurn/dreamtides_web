@@ -1,0 +1,11 @@
+{
+  "bead": "hv-umm2.316",
+  "phase": 5,
+  "implementMin": 42,
+  "localValidationS": { "profile": 82, "bisectPerfAb": 600, "perfAbFuzz": 110, "perfAbFuzz200": 80, "perfAbBench": 44, "focused": 1, "review": 44, "knip": 3, "fuzz": 34.6 },
+  "hostLoad": 6.09,
+  "testDelta": { "files": 0, "lines": 27, "jsdomFiles": 0 },
+  "friction": [
+    { "tag": "host-load-noise", "minutes": 15, "note": "the filed regression (release fuzz step 40.6 -> 54-62 s, ~420 -> ~535 us CPU per step) compared runs at load 4.5 against runs at load ~30; interleaved perf:ab at equal load put the code-attributable rise at ~7.5% per step, so the bisect had to be re-based on a common B rather than the release timings" }
+  ]
+}

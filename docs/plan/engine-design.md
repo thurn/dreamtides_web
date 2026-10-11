@@ -919,7 +919,12 @@ its owner) and `enteredZoneAt` (RD-hv-umm2.53-1). Examples:
 Whether an ability works depends only on its card's zone, never on
 characteristics, so gathering reads no layer. The catalog's `statics` memo
 keeps each card's static abilities by printing and variant, so a card
-outside play with none working there costs the evaluation one lookup.
+outside play with none working there costs the evaluation one lookup. The
+catalog's `staticsOutsidePlay()` flag, read on first use, says whether any
+card's base or amplified variant or any figment has a static ability working
+from a zone other than play. While it is false, gathering and
+determinization read only the abilities of cards outside play that carry
+transfigurations or deck mods, the variants the flag does not cover.
 Nothing about a working ability is recorded: it emits no event and adds no
 floating record, so a source in a hidden zone is named by no event or view
 (RD-hv-umm2.53-2), and a step that fails after moving the source commits

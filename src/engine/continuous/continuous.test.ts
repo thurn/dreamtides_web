@@ -29,7 +29,7 @@ import { boardState, placeFigment, type BoardSetup, type SideSetup } from "../te
 import { CONTINUOUS, CONTINUOUS_CARDS, CONTINUOUS_EMBLEMS, CONTINUOUS_DREAMSIGN } from "../testing/continuous-cards";
 import { DSL, DSL_CARDS } from "../testing/dsl-cards";
 import { invariantViolations } from "../testing/invariants";
-import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { SYNTHETIC, SYNTHETIC_CARDS, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { at, passUntil } from "../testing/trigger-harness";
 import { characteristics, characteristicsOf, rememberCharacteristics } from "./characteristics";
 import { adjustedEnergy, costModifier } from "./costs";
@@ -106,6 +106,11 @@ const dissolveAlly = fixture(0xa8e, "event", 0, () => [event(p.dissolve(target(c
 /** A malformed event that dissolves an ally, then resolves a static-only primitive, which throws. */
 const dissolveAllyThenFail = fixture(0xa8f, "event", 0, () => [
   event(p.sequence(p.dissolve(target(characterYouControl())), p.grantCardKeyword(p.cardsIn("hand"), "offering"))),
+]);
+
+/** "Characters you control have +1✦.", working from the void only with a deck mod; its plain variants work in play. */
+const modifiedVoidAnthem = fixture(0xa91, "character", 1, (variant) => [
+  staticAbility(p.sparkModifier(all(characterYouControl()), 1), { zone: variant.deckMods === undefined ? "play" : "void" }),
 ]);
 
 /** One printing whose variants have distinct static zones and spark/cost effects. */
@@ -358,6 +363,28 @@ describe("static abilities from other zones", () => {
       }
     });
   }
+
+  it("are flagged in a catalog exactly when a printing's base or amplified variant has one", () => {
+    const outsidePlay = (cards: readonly EngineCardDefinition[]) =>
+      cards.some((card) => [false, true].some((amplified) => card.abilities({ amplified }).some((ability) => ability.kind === "static" && ability.zone !== "play")));
+    // variantAnthem works outside play only when amplified; modifiedVoidAnthem only with a deck mod.
+    const catalogs = [[], [playAnthem], [playAnthem, voidAnthem], [handAnthem], [anyAnthem], [variantAnthem], [modifiedVoidAnthem], CONTINUOUS_CARDS];
+    expect(catalogs.map((cards) => testCatalog(cards).staticsOutsidePlay())).toEqual(catalogs.map((cards) => outsidePlay([...SYNTHETIC_CARDS, ...cards])));
+    expect(testCatalog([variantAnthem]).staticsOutsidePlay()).toBe(true);
+    expect(testCatalog([modifiedVoidAnthem]).staticsOutsidePlay()).toBe(false);
+  });
+
+  it("apply from a card with deck mods in an unflagged catalog", () => {
+    const modified = createEngine(testCatalog([modifiedVoidAnthem]));
+    expect(modified.catalog.staticsOutsidePlay()).toBe(false);
+    for (const variant of [{ amplified: false }, { amplified: false, deckMods: { ...NO_DECK_MODS, costReduction: 1 } }] as const) {
+      const { state, ids } = boardState(modified.catalog, { active: "player", phase: "day", player: { front: [v.vanilla1.id], void: [modifiedVoidAnthem.id] }, enemy: { front: [v.vanilla1.id] } });
+      const source = ids.player.void[0];
+      state.instances[source] = { ...state.instances[source], variant };
+      expect(effectiveSpark(state, modified.catalog, ids.player.front[0]!)).toBe(variant.deckMods === undefined ? 1 : 2);
+      expect(invariantViolations(state, modified.catalog)).toEqual([]);
+    }
+  });
 
   it("apply only while their card is in a zone they work from: play unless they name one, and 'any' is play, void, hand, and deck", () => {
     const works: Record<FunctionalZone, readonly ("back" | "void" | "hand" | "deck")[]> = {

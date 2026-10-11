@@ -3,7 +3,7 @@ import { checkpointSide } from "../loops/tracker";
 import { changedInstance } from "../rules/floating";
 import { characteristics } from "../continuous/characteristics";
 import { adjustedEnergy, costModifier } from "../continuous/costs";
-import { Layers } from "../continuous/layers";
+import { Layers, type Characteristics } from "../continuous/layers";
 import { fixedEnergy } from "../dsl/energy";
 import { playCosts } from "../rules/costs";
 import { serializeState, stateHash, deserializeState } from "../state/hash";
@@ -11,6 +11,27 @@ import type { InstanceId, Zone } from "../state/ids";
 import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { redactionViolations } from "./redaction";
+
+/** Every field of `Characteristics`: the compiler flags a field added to the interface until it is listed here. */
+const CHARACTERISTICS_FIELDS = Object.keys({
+  cardType: true,
+  subtype: true,
+  allTypes: true,
+  keywords: true,
+  baseSpark: true,
+  spark: true,
+} as const satisfies Record<keyof Characteristics, true>) as readonly (keyof Characteristics)[];
+
+/** Whether two evaluations of a card's characteristics agree on every field, arrays element by element. */
+function sameCharacteristics(a: Characteristics, b: Characteristics): boolean {
+  return CHARACTERISTICS_FIELDS.every((field) => {
+    const left = a[field];
+    const right = b[field];
+    return Array.isArray(left) && Array.isArray(right)
+      ? left.length === right.length && left.every((entry, index) => entry === right[index])
+      : left === right;
+  });
+}
 
 /** Every rules invariant that must hold after every committed step. Returns the violations. */
 export function invariantViolations(state: BattleState, catalog: EngineCatalog): string[] {
@@ -94,7 +115,7 @@ export function invariantViolations(state: BattleState, catalog: EngineCatalog):
     const card = fresh.of(instance.id);
     if (card.spark !== null && card.spark < 0) problems.push(`${instance.id} has negative spark ${String(card.spark)}`);
     if (instance.zone !== "play" && instance.status.exhausted) problems.push(`${instance.id} is exhausted outside play`);
-    if (memoized !== fresh && JSON.stringify(memoized.of(instance.id)) !== JSON.stringify(card)) {
+    if (memoized !== fresh && !sameCharacteristics(memoized.of(instance.id), card)) {
       problems.push(`${instance.id} has memoized characteristics that differ from a fresh evaluation`);
     }
     if (instance.zone === "hand") {

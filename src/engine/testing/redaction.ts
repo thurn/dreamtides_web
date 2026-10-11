@@ -47,21 +47,30 @@ function identifiable(state: BattleState, viewer: Side, id: InstanceId): boolean
   return state.instances[id] !== undefined && !hiddenFrom(state, viewer).includes(id);
 }
 
+/** The `hidden` IDs among the strings of `value`, keys included, in `hidden` order. */
 function leaks(value: unknown, hidden: readonly InstanceId[]): InstanceId[] {
-  const seen = strings(value);
+  if (hidden.length === 0) return [];
+  const sought = new Set<string>(hidden);
+  const seen = new Set<string>();
+  // Collects matches only; stops once every hidden ID is seen.
+  anyString(value, (text) => {
+    if (sought.has(text)) seen.add(text);
+    return seen.size === sought.size;
+  });
   return hidden.filter((id) => seen.has(id));
 }
 
 /** Violations of redaction in `seen`, `viewer`'s view of `state`. */
 function viewViolations(state: BattleState, viewer: Side, seen: BattleView): string[] {
   const problems: string[] = [];
-  const leaked = leaks(seen, hiddenFrom(state, viewer));
+  const hiddenIds = hiddenFrom(state, viewer);
+  const leaked = leaks(seen, hiddenIds);
   if (leaked.length > 0) problems.push(`${viewer}'s view reveals hidden cards ${leaked.join(", ")}`);
+  const hidden = new Set(hiddenIds);
   for (const side of SIDES) {
     for (const zone of ["deck", "hand"] as const) {
       const ids = state.sides[side][zone];
       const zoneView = seen.sides[side][zone];
-      const hidden = new Set(hiddenFrom(state, viewer));
       const expected = ids.flatMap((id, index) => (hidden.has(id) ? [] : [{ id, index }]));
       if (zoneView.count !== ids.length || JSON.stringify(zoneView.known) !== JSON.stringify(expected)) {
         problems.push(`${viewer}'s view of the ${side} ${zone} differs from its knowledge`);
