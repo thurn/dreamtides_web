@@ -315,7 +315,8 @@ additive entries only. Write its name in the `Areas:` line.
   change kind
   ([recipe step 3](phase-5-content.md#bead-recipe)). It grants additive
   registration entries for a new primitive, event kind, keyword, card
-  status, prompt role, or floating change kind:
+  status, prompt role, floating change kind, cost change mode, or play
+  route:
   - the primitive's getter in `src/engine/effects/registry.ts`;
   - an `EVENT_PRESENTATION` entry in
     `src/battle/components/presentation-items.ts`;
@@ -332,6 +333,8 @@ additive entries only. Write its name in the `Areas:` line.
     `src/screens/cumulus_adapters/engine-battle-presentation.test.ts`;
   - a lab fixture in `src/engine/testing/prompt-lab.ts`, which `engine hubs`
     also covers.
+  - a cost change mode's or play route's rows in
+    `src/engine/effects/primitives/contracts/cost-composition.contracts.ts`.
 
   Every new floating change kind registers at four surfaces:
 

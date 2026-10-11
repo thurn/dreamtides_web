@@ -158,7 +158,11 @@ composition beads skip it.
    module. Modules use real engine code and synthetic fixtures and do not
    call `vi.mock` or `vi.doMock`: the shared runner is not a module-mock
    isolation boundary. Preserve coherent contracts under 500 lines, with
-   small shared synthetic fixtures when needed. Run
+   small shared synthetic fixtures when needed. A cost primitive, a new
+   cost change mode, or a new play route adds its rows to the cost-composition
+   table in `cost-composition.contracts.ts`, whose mode and route tables are
+   exhaustive over `CardCostMode`, its player cost change shapes, and
+   `PlayRoute`, with expected payments derived from the settled rulings. Run
    `npm test -- src/engine/effects/primitives/contracts.test.ts`.
    The registry index is the catalog (Phase 3.4). Every primitive bead, and
    every bead that introduces a prompt kind or floating change kind, takes the
