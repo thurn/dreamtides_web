@@ -942,6 +942,25 @@ changes; materializing the card without playing it keeps that method. A created
 copy on the stack is not played
 and does not inherit the original's Reclaim play method.
 
+**Draw a matching card** — An instruction such as "Draw a ≤2● cost
+character" or "Draw an event" draws the first card in your deck, in deck
+order, that matches the stated type, subtype, and cost. Compare current type
+and subtype and copiable cost, with X in a cost counting as 0. You do not
+choose a card, look at the skipped cards, or shuffle the deck. Every other
+card stays in its existing order. The matching card is an ordinary draw:
+it counts as a card drawn this turn and fires "when you draw" abilities.
+
+The drawn card's identity is private to you except when the opponent already
+knows it. Known positions of cards left in the deck are retained only when
+public information determines their new positions. An identifiable source's
+ability with one fixed matching criterion makes that criterion public; a
+hidden source or a choice between different hidden criteria supplies no
+criterion for the opponent's position tracking. If the drawn card was
+already known, its exact removal determines the remaining positions.
+
+If a nonempty deck contains no matching card, this instruction does nothing.
+If the deck is empty, the instruction causes ordinary Fatigue.
+
 **Erode N** — Put the top N cards of your deck into your void; those cards are
 the **eroded** cards. Erode can also be directed at a player, as in "The opponent
 erodes 2." Eroding with an empty deck causes Fatigue.

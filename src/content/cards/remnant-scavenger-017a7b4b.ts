@@ -1,3 +1,5 @@
+import { activated, countCards, discardCost, exhaustSelf, self, staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 320,
   art: { x: -0.24, y: 0.28, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(p.sparkModifier(self(), countCards("void", { cardType: "character", costAtMost: 2 }))),
+    activated([exhaustSelf(), discardCost()], p.drawMatching({ cardType: "character", costAtMost: 2 })),
+  ],
+  verifiedText: "2513ssmo52e",
 });

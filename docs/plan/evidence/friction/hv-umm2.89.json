@@ -1,0 +1,406 @@
+{
+  "bead": "hv-umm2.89",
+  "phase": 5,
+  "base": "aff8a49ec164c0a03c4d4613c68f4a539852f1d7",
+  "implementMin": 38.45,
+  "timingBasis": "Worktree node_modules creation2026-10-11T15:09:15Z is retained setup/dispatch-start proxy (not an exact native dispatch timestamp); end measured at evidence finalization before commit. /usr/bin/time wall includes lock queues/runner setup; simulator/runner timings distinguished below.",
+  "localValidationS": {
+    "installReported": 2,
+    "focused": 4.46,
+    "related": 3.79,
+    "reviewInitial": 4.54,
+    "review": 62.8,
+    "knip": 3.93,
+    "weightedFuzz": 134.7,
+    "activationProbe": 57.31,
+    "sweep": 148,
+    "qaInitial": 7.42,
+    "qaAutoCost": 48.88,
+    "qaFinal": 30.49
+  },
+  "hostLoad": 4.25,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 13
+  },
+  "contractScenarioModules": 2,
+  "contractScenarioLines": 282,
+  "testCounting": "No tracked *.test.* or *.spec.* entrypoint was added. Existing primitive/content runners collect11 synthetic cases and2 actual-catalog scenarios in two plain modules,219+63 lines. Primitive68 lines; all new source modules under500.",
+  "friction": [
+    {
+      "tag": "rules-ambiguity",
+      "minutes": 13.87,
+      "note": "Setup15:09:15Z\u2192primitive creation15:23:07Z bounds briefing and D10 research/knowledge design together; approximate14-minute interval, not isolated active research time. Printed typed draw supplies no selection/shuffle/no-match rule, Rust resolver has todo, and hidden selection index requires viewer-evidence proof. Recorded ladder5 RD and local bounded proof."
+    }
+  ],
+  "acceptance": {
+    "focused": "11 drawMatching contracts pass;4.46s. Later combined5 entrypoints/524 tests pass including all primitive contracts, content scenarios/gates, view and knowledge;3.79s.",
+    "review": "255 files/2587 tests plus lint, import cycles and both typechecks pass;62.80s. Initial test-only unnecessary assertion corrected;4.54s initial failure. Assets restored before every browser request.",
+    "knip": "pass;3.93s; assets restored.",
+    "full": "Not required: local new primitive, additive getter/export and existing DSL composition. No infra/config or cross-cutting architecture change.",
+    "fuzz": {
+      "command": "JOURNEY_TEST_WORKERS=2 lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 017a7b4b-3ccf-4635-9956-28a72b22274e,8896c178-757e-4775-b117-a4357ebfe30f",
+      "seedPrefix": "fuzz",
+      "ordinals": [
+        0,
+        299
+      ],
+      "games": 300,
+      "steps": 146426,
+      "prompts": 2759,
+      "interactiveReruns": 334,
+      "bounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "failures": 0,
+      "simulationWallS": 65.5,
+      "simulationCpuS": 71.7,
+      "commandWallS": 134.7,
+      "included": [
+        618,
+        619
+      ],
+      "played": [
+        243,
+        241
+      ]
+    },
+    "activationProbe": {
+      "file": "activation-probe.json",
+      "seedOrdinals": [
+        0,
+        5
+      ],
+      "findings": [
+        {
+          "seed": "fuzz-2",
+          "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+          "source": "i31",
+          "drawCount": [
+            1,
+            2
+          ]
+        },
+        {
+          "seed": "fuzz-5",
+          "uuid": "8896c178-757e-4775-b117-a4357ebfe30f",
+          "source": "i32",
+          "drawCount": [
+            1,
+            2
+          ]
+        }
+      ],
+      "commandWallS": 57.31,
+      "cpuUserS": 2.75,
+      "note": "Public-engine deterministic replay of same weighted seeds; all6 reconstructed action logs retained. This thin probe was unnecessarily queued under heavy lock; its avoidable lock wait is included. No fuzzer changes."
+    },
+    "sweep": {
+      "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.89 --cards 017a7b4b-3ccf-4635-9956-28a72b22274e,8896c178-757e-4775-b117-a4357ebfe30f --port 5174 --capture",
+      "totalCells": 40,
+      "pass": 16,
+      "skip": 24,
+      "fail": 0,
+      "eligibleVariants": [
+        "base",
+        "empowered",
+        "kindled",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "raw": "sweep-ledger.raw.jsonl",
+      "commandOutput": "sweep.log",
+      "sideProvenance": "Script default both; absent as meansplayer. Own ledger materializes as:player explicitly; immutable raw ledger and side-marked command output retained. Every eligible variant passes for each UUID and each side.",
+      "hostLoad": 5.13
+    },
+    "activationBrowser": {
+      "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.89/draw-activation.mjs --bead hv-umm2.89 --port 5174 --viewports desktop,mobile",
+      "report": "draw-activation.result.json",
+      "wallMs": {
+        "browserLeaseWait": 43,
+        "serve": 1251,
+        "scenario": 23993,
+        "total": 25308
+      },
+      "hostLoad": 2.5908203125,
+      "caps": [],
+      "games": {
+        "desktop": {
+          "gameId": "vsqkr8",
+          "logRows": 59,
+          "scavengerVersion": 2,
+          "flameforgedVersion": 6,
+          "geometry": {
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "mobile": {
+          "gameId": "3eqybh",
+          "logRows": 59,
+          "scavengerVersion": 2,
+          "flameforgedVersion": 6,
+          "geometry": {
+            "x": 81.265625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      },
+      "history": [
+        "draw-activation-initial.result.json",
+        "draw-activation-autocost.result.json"
+      ],
+      "disposition": "Both scripting failures retained with final-pass resolution in own QA ledger. About:blank function-source scope corrected; actual auto-payment completion accepted instead of waiting for unnecessary picker. No unchanged retry/no production source correction."
+    }
+  },
+  "privacy": "Known selected exact removal and public unrestricted top draw preserve positions. Unknown selected removal possibilities use anonymous slots alone, bounded by first publicly known match only for identifiable current source/origin and identical static CardFilter nodes. Hidden source/opaque filter falls back conservatively. Forced nonmatching prefixes remain; ambiguous known positions forgotten; hidden irrelevant permutations yield identical views. Existing draw event identity redaction retained.",
+  "failurePaths": {
+    "midStepError": "Synthetic resolver draws then throws; fold retains committed stack play, deck/count/knowledge unchanged, no partial draw published.",
+    "reloadRestart": "Suspended draw prefix survives JSON BattleSlice reload/new engine; prompt/display equal and final hash equals inline.",
+    "partialWrite": "Wrong-side/invalid answer bounces and committed hash unchanged; error rollback contract protects draw/knowledge writes.",
+    "staleInput": "After owning answer commits, old prompt answer bounces; committed effects cannot cancel.",
+    "concurrentActors": "Wrong actor cannot answer; only first owning answer consumes pending prompt; subsequent competing/stale answer bounces. Primitive has no own asynchronous/input path.",
+    "cancelBeforeCommit": "Unpaid exhaust/discard prompt cancellation restores original committed state and primitive does not run."
+  },
+  "D20": "Two compact actual-catalog scenarios prove own activated matching discard changes own static spark and filtered draw preserves deck order; synthetic contracts cover primitive breadth.",
+  "D21": {
+    "sha256FirstBytes": {
+      "017a7b4b-3ccf-4635-9956-28a72b22274e": 184,
+      "8896c178-757e-4775-b117-a4357ebfe30f": 193
+    },
+    "judged": 0,
+    "reason": "Both outside10% sample (<26); no introduced prompt kind/status/visual effect or UI change. Sweep complete; supplementary desktop/mobile captures inspected and source/control geometry contained."
+  },
+  "immutablePrintedData": "Byte-equal export-default-card prefix through isStarter on both modules, compared to base. Only pending\u2192abilities/verifiedText and imports authored.",
+  "RD": "docs/plan/evidence/rules-decisions/RD-hv-umm2.89-1.md",
+  "cardIssues": [
+    "docs/plan/evidence/card-issues/017a7b4b-3ccf-4635-9956-28a72b22274e--hv-umm2.89.md",
+    "docs/plan/evidence/card-issues/8896c178-757e-4775-b117-a4357ebfe30f--hv-umm2.89.md"
+  ],
+  "sourceHashes": {
+    "src/engine/effects/primitives/draw-matching.ts": "6299ea873b4dbedb77647b473976003b1acd0032c0597ec80db855ec3287b4bc",
+    "src/engine/effects/primitives/contracts/draw-matching.contracts.ts": "d2cfe37ff6f0185cfd435ed1713bc22165d2931d8e6dc59a9929cef4d8d1b281",
+    "src/engine/effects/primitives/index.ts": "872a39ed022c5b0727a9ff599e6d94b0b5b5639a7bcbd24e6cfc22a0fbdc324d",
+    "src/engine/effects/registry.ts": "d4ac5899d8dcd4d3f6407fe2d2f489bcb5c6bc5cdb3865cc22fb641da9fbd45d",
+    "src/content/specs/prim-draw-matching.scenarios.ts": "488da2937f176d514c42534d9c6202a832ad2982cf1d8d43ad5e15df01754146",
+    "src/content/specs/index.ts": "a1c55cdb705316290ddf2fe428264bf58d176f37b36194a2961a2d4afd85f942",
+    "src/content/cards/remnant-scavenger-017a7b4b.ts": "2cad7dc981269c631a2d34a52ae5a2bb6278e57a8756a8e342b222fae370d767",
+    "src/content/cards/flameforged-8896c178.ts": "dfd06fe3a2af7b515355e76d64b20dd1b49ea613a2af659699e8150c76d336bd",
+    "docs/rules.md": "31fa0ef6092e2915efa8781ee9b2b537da666358c49f24a52f6721ebabda2286"
+  },
+  "validationArtifacts": {
+    "draw-activation.log": {
+      "sha256": "14760412d3892b6c0882946e6ff5f832cb7fecdf6fc338e737bbf779b26c7d09"
+    },
+    "draw-activation-autocost.log": {
+      "sha256": "bd36189d67e2140e7f9c9f62b053b9a20ae569adb3154a8a1c9bd82caaf70983"
+    },
+    "draw-activation.server.log": {
+      "sha256": "14f6fcfd1f834f77c299c55ac0caa359b114675d1714998f0d0f5049295eee03"
+    },
+    "sweep.log": {
+      "sha256": "fcf7832101b251fbddab34b21d339e8df863fd3592f70b0f58e46468f4b7a751"
+    },
+    "related.log": {
+      "sha256": "487d991bdf06578fd96afce509f0aea8713ce1daa15126a04fdfdd29b67c2e6f"
+    },
+    "review.log": {
+      "sha256": "5a7f4cccf7579dc9352fbe47b4ff8c5100af1d11c7628ed05fbdfca4dc3bdb5e"
+    },
+    "activation-probe.log": {
+      "sha256": "9c3e46feaa558cd5bf6255135e3f98460de81d2b2696403397d7d36bd8518058"
+    },
+    "draw-activation-initial.log": {
+      "sha256": "201f747fb30eacd5e39d42a7851f122eb3ad83e15b728df6ef7b8ed51752004e"
+    },
+    "fuzz.log": {
+      "sha256": "47f77918d9551757821291f9908c4c9bb43e2ca58bbc7164fc47f797e581bd8e"
+    },
+    "review-initial.log": {
+      "sha256": "6cbf1aafc17cad245e763c89b1cfc42eff848dac0ccee77e68508100917e63fe"
+    },
+    "knip.log": {
+      "sha256": "d1162186058add26e13ad3f5bb74bd796c51efc41d7c89a61e979020cf16cb67"
+    },
+    "focused.log": {
+      "sha256": "00a9651b7635ae4a3a86676e7fdee419c8041b70f856f1b8fb1a3de11cd7a14b"
+    },
+    "card-sweep.server.log": {
+      "sha256": "324102ca90a4f96edc89c303d14dc74e988eab72be607a46acc059dff4abd566"
+    }
+  },
+  "captureRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.89",
+  "captures": [
+    {
+      "filename": "draw-activation-autocost-failure-desktop.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "6723a9ad8399bbacc2a230da01348f157f62f591107dba70da5cb5f3941cec05"
+    },
+    {
+      "filename": "draw-activation-autocost-scavenger-desktop.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "a7981c0bc9e256b1c352ee3b8520cba601996b423fc9fc78bc0ee636c17fb47f"
+    },
+    {
+      "filename": "draw-activation-failure-desktop.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "6723a9ad8399bbacc2a230da01348f157f62f591107dba70da5cb5f3941cec05"
+    },
+    {
+      "filename": "draw-activation-flameforged-desktop.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "09e523559221e24a9499f3d696869eb65b1c876b995ab6d49ecd75b0056f2acf"
+    },
+    {
+      "filename": "draw-activation-flameforged-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "716b590057a2145f79a3179ae858b05292c3a648ba7d96bfa061aac1aa916a6c"
+    },
+    {
+      "filename": "draw-activation-scavenger-desktop.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "1859b1d2a40351471446a459a0277d4133e1b0366ff3ba6649e3af34b300ebb6"
+    },
+    {
+      "filename": "draw-activation-scavenger-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "c9aaa4836e3944da320500580bfd49f3028b161be8b54269401f9a78293a4c33"
+    },
+    {
+      "filename": "sweep-017a7b4b-base-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "c53f2bf770198dff96b8c9c889c8af63cd5381ed9c25bf58df8c4b71cd4e65df"
+    },
+    {
+      "filename": "sweep-017a7b4b-base-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ed090fc0da70209bdd6d3f0351bf7ab09532fdb5e785c256bab298ce6488dd4e"
+    },
+    {
+      "filename": "sweep-017a7b4b-empowered-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "c53f2bf770198dff96b8c9c889c8af63cd5381ed9c25bf58df8c4b71cd4e65df"
+    },
+    {
+      "filename": "sweep-017a7b4b-empowered-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ed090fc0da70209bdd6d3f0351bf7ab09532fdb5e785c256bab298ce6488dd4e"
+    },
+    {
+      "filename": "sweep-017a7b4b-kindled-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "c53f2bf770198dff96b8c9c889c8af63cd5381ed9c25bf58df8c4b71cd4e65df"
+    },
+    {
+      "filename": "sweep-017a7b4b-kindled-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ed090fc0da70209bdd6d3f0351bf7ab09532fdb5e785c256bab298ce6488dd4e"
+    },
+    {
+      "filename": "sweep-017a7b4b-perfected-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "c53f2bf770198dff96b8c9c889c8af63cd5381ed9c25bf58df8c4b71cd4e65df"
+    },
+    {
+      "filename": "sweep-017a7b4b-perfected-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ed090fc0da70209bdd6d3f0351bf7ab09532fdb5e785c256bab298ce6488dd4e"
+    },
+    {
+      "filename": "sweep-8896c178-base-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "cfee386d0f5efb7eb31c1b122a7d96706c1976cafd6034545231537cf5529dfc"
+    },
+    {
+      "filename": "sweep-8896c178-base-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "deaab8c7822f30d57d296a047b5758dee10c7f077b3fc6e8e040798b2f453632"
+    },
+    {
+      "filename": "sweep-8896c178-empowered-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "cfee386d0f5efb7eb31c1b122a7d96706c1976cafd6034545231537cf5529dfc"
+    },
+    {
+      "filename": "sweep-8896c178-empowered-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "deaab8c7822f30d57d296a047b5758dee10c7f077b3fc6e8e040798b2f453632"
+    },
+    {
+      "filename": "sweep-8896c178-kindled-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "cfee386d0f5efb7eb31c1b122a7d96706c1976cafd6034545231537cf5529dfc"
+    },
+    {
+      "filename": "sweep-8896c178-kindled-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "deaab8c7822f30d57d296a047b5758dee10c7f077b3fc6e8e040798b2f453632"
+    },
+    {
+      "filename": "sweep-8896c178-perfected-enemy.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "cfee386d0f5efb7eb31c1b122a7d96706c1976cafd6034545231537cf5529dfc"
+    },
+    {
+      "filename": "sweep-8896c178-perfected-player.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "deaab8c7822f30d57d296a047b5758dee10c7f077b3fc6e8e040798b2f453632"
+    }
+  ],
+  "runtimeLedger": {
+    "serverGroups": [
+      61552,
+      66534,
+      67804,
+      69853
+    ],
+    "port": 5174,
+    "servers": "All runner-owned process groups stopped; scoped ps shows none;5174 has no listener.",
+    "browser": "Each runner closed own MCP context/provider and released native browser lease.",
+    "heavy": "Weighted300 command completed. Thin6-seed probe unnecessarily used lock; completed and released.",
+    "externalWriters": 0
+  },
+  "fallout": [],
+  "outstanding": []
+}

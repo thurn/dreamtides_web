@@ -32,6 +32,7 @@ import {
   doubleEnergyPrimitive,
   eachPlayerPrimitive,
   drawPrimitive,
+  drawMatchingPrimitive,
   erodePrimitive,
   exhaustPrimitive,
   floatingTriggerPrimitive,
@@ -132,6 +133,9 @@ const DEFINITIONS = {
   },
   get eachPlayer() {
     return eachPlayerPrimitive;
+  },
+  get drawMatching() {
+    return drawMatchingPrimitive;
   },
   get draw() {
     return drawPrimitive;

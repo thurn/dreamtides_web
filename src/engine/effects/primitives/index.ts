@@ -18,6 +18,7 @@ export * from "./dissolve";
 export * from "./double-energy";
 export * from "./each-player";
 export * from "./draw";
+export * from "./draw-matching";
 export * from "./erode";
 export * from "./exhaust";
 export * from "./floating-trigger";

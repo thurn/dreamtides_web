@@ -1,3 +1,5 @@
+import { activated, countCards, discardCostFilter, exhaustSelf, self, staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 94,
   art: { x: 0, y: -0.585, scale: 1.7 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([exhaustSelf(), discardCostFilter({ cardType: "event" })], p.drawMatching({ cardType: "event" })),
+    staticAbility(p.sparkModifier(self(), countCards("void", { cardType: "event" }))),
+  ],
+  verifiedText: "2wldbwrqrx",
 });
