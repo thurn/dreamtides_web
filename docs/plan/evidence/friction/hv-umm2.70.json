@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.70",
+  "phase": 5,
+  "implementMin": 30,
+  "localValidationS": {
+    "focused": 3,
+    "review": 43,
+    "knip": 3,
+    "fuzz": 59,
+    "sweep": 65,
+    "judged": 71
+  },
+  "hostLoad": 9.22,
+  "testDelta": {
+    "files": 0,
+    "lines": 264,
+    "jsdomFiles": 0,
+    "cases": 7
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10,
+      "note": "The judged scenario waited for a triggerResolved probe event naming Impending Fury, but the probe's triggerResolved events carry no instance, so the first Night (whose one-card discard was auto-answered) went by and the walk ran a full round; a staged second hand card was also needed to make the discard a visible choice."
+    }
+  ],
+  "sourceBase": "37882ed4a9901a1086aabe1bc89a49c9a6af8fa5",
+  "coverage": {
+    "entities": 1,
+    "pending": 0,
+    "amplifiedTexts": 1,
+    "newEffectOps": 0,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 10,
+      "skip": 10,
+      "fail": 0
+    },
+    "judged": 3
+  }
+}

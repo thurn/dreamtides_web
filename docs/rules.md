@@ -394,6 +394,23 @@ their Day phase. **Blockers** are the opposing player's front-rank characters
 directly opposite a challenger as of the end of the Dusk phase. Repositioning
 during the Night phase can change which characters hold these designations.
 
+**Holding a role:** An effect that refers to challengers or blockers, such as
+"unless you control a challenger" or "Challengers you control have +1✦",
+checks the roles whenever it reads them, as the Challenge phase does. A
+challenger is a character designated as a challenger this turn that is in the
+active player's front rank, in any lane. A blocker is a character designated
+as a blocker this turn that is in the opposing player's front rank directly
+opposite a challenger. A designated character that leaves the front rank, a
+blocker with no challenger opposite it, and a character whose control changes
+(it moves to its new controller's back rank) hold no role. No character is a
+challenger before the end of Day or a blocker before the end of Dusk, and the
+designations last until the turn ends. A condition in an effect is checked as
+that part of the effect resolves: "Draw a card, then discard a card unless you
+control a challenger" counts challengers after the draw, as the discard would
+happen. A player controls no blockers during their own turn, so "a challenger
+or blocker" counts a blocker only when such an ability resolves during the
+opponent's turn.
+
 Abilities reading "When you challenge with N or more …", such as "When you
 challenge with 2 or more warriors", fire once, at the end of Day when
 challengers are designated, and count the designated challengers that match.

@@ -1,3 +1,6 @@
+import { characterYouControl, controls } from "../../engine/dsl/builders";
+import { onNight, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,13 @@ export default card({
   cardNumber: 240,
   art: { x: -0.084, y: 0.369, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => {
+    // "Discard a card unless you control a challenger or blocker": each role, checked as the discard would happen, skips it.
+    const unlessBlocker = variant.amplified
+      ? p.ifThen(controls(characterYouControl({ blocking: true })), p.sequence(), p.discard(1))
+      : p.discard(1);
+    const unlessChallenger = p.ifThen(controls(characterYouControl({ challenging: true })), p.sequence(), unlessBlocker);
+    return [triggered(onNight(), p.sequence(p.draw(1), unlessChallenger))];
+  },
+  verifiedText: "1u91iq6cr5p",
 });

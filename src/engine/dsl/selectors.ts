@@ -84,7 +84,36 @@ export function matchesCharacterWith(
   if (selector.figment !== undefined && (instance.printing.kind !== "card") !== selector.figment) return false;
   if (selector.exhausted !== undefined && instance.status.exhausted !== selector.exhausted) return false;
   if (selector.rank !== undefined && slotOf(state, id)?.rank !== selector.rank) return false;
+  if (selector.challenging !== undefined && isChallenger(state, id) !== selector.challenging) return false;
+  if (selector.blocking !== undefined && isBlocker(state, id) !== selector.blocking) return false;
   return true;
+}
+
+/**
+ * Whether `id` is a challenger now (rules § Challengers, Blockers, and
+ * Scoring → Holding a role): a character designated as a challenger this
+ * turn that is in the active side's front rank, in any lane. It is the
+ * character the Challenge phase resolves in that lane (`resolveLane`).
+ */
+function isChallenger(state: BattleState, id: InstanceId): boolean {
+  const challenge = state.challenge;
+  if (challenge === null || !challenge.challengers.includes(id)) return false;
+  return state.sides[state.turn.active].frontRank.includes(id);
+}
+
+/**
+ * Whether `id` is a blocker now: a character designated as a blocker this
+ * turn that is in the defending side's front rank directly opposite a
+ * challenger, the pairing `resolveLane` resolves.
+ */
+function isBlocker(state: BattleState, id: InstanceId): boolean {
+  const challenge = state.challenge;
+  if (challenge === null || !Object.values(challenge.blockers).includes(id)) return false;
+  const active = state.turn.active;
+  const lane = state.sides[opponent(active)].frontRank.indexOf(id);
+  if (lane < 0) return false;
+  const opposite = state.sides[active].frontRank[lane] ?? null;
+  return opposite !== null && isChallenger(state, opposite);
 }
 
 /** Every matching character in play, in the fixed order: the controller's side first, B0→B9 then F0→F8. */

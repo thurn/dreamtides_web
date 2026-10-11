@@ -130,6 +130,14 @@ export function costPaid(optional = 0): Condition {
   return { cond: "costPaid", optional };
 }
 
+/**
+ * "If you control a challenger": at least `atLeast` characters in play match
+ * the selector, whose controller is relative to the effect's controller.
+ */
+export function controls(selector: CharacterSelector, atLeast = 1): Condition {
+  return { cond: "controls", selector, atLeast };
+}
+
 /** "If you have no cards in your deck": the player (you by default) has no cards in `zone`. */
 export function noCardsIn(zone: CountedZone, player: PlayerRef = "you"): Condition {
   return { cond: "cardsIn", player, zone, atMost: 0 };

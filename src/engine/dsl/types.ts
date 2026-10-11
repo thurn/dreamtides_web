@@ -76,6 +76,14 @@ export interface CharacterSelector {
   readonly figment?: boolean;
   readonly exhausted?: boolean;
   readonly rank?: "front" | "back";
+  /**
+   * `true` matches only challengers, `false` only other characters, read
+   * as the selector is checked (rules § Challengers, Blockers, and Scoring →
+   * Holding a role).
+   */
+  readonly challenging?: boolean;
+  /** `true` matches only blockers, `false` only other characters, read as the selector is checked. */
+  readonly blocking?: boolean;
 }
 
 /**
