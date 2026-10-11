@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.421",
+  "phase": 5,
+  "implementMin": 22,
+  "localValidationS": {
+    "focused": 6.5,
+    "review": 14.7,
+    "knip": 2.8,
+    "judgedEdge": 39.8,
+    "judgedRift": 50.6,
+    "shortChoice": 24.6
+  },
+  "hostLoad": 17.54,
+  "hostLoadSamples": {
+    "review": 17.54,
+    "judgedEdge": 19.43,
+    "judgedRift": 27.02,
+    "shortChoice": 21.11
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 26,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": { "measuredFor": "first worktree command (about 12:46 PDT) to commit" },
+      "hostLoad": { "measuredFor": "npm run review start (1-minute load average)" },
+      "testDelta": { "measuredFor": "one chooser contract test added to MobileBattleScreen.prompts.test.tsx (175 to 201 lines)" }
+    }
+  }
+}

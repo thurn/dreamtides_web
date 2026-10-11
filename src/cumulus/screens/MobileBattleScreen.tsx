@@ -713,6 +713,14 @@ const DESKTOP_SIDE_PILE_HEIGHT =
 const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-m");
 const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
+// The phone control row is two button lines tall, and two lines hold four
+// options at any label up to half the row. A longer choice would spill over
+// the player's zones, so it moves to the bounded chooser instead.
+const CHOICE_PROMPT_ROW_OPTION_CAP = 4;
+// The chooser's narrowest option column: one short label at button type.
+const CHOICE_CHOOSER_OPTION_MIN_WIDTH = 104;
+// The desktop chooser's widest panel: four option columns.
+const DESKTOP_CHOICE_CHOOSER_MAX_WIDTH = 480;
 // The mobile hand fans about the row's centre, its card centres up to 50%
 // of the row apart and its outer cards tilted 6° each way, so the outer
 // cards' top corners stay inside the row and every card's uncovered strip
@@ -2689,7 +2697,16 @@ function ControlRow({
   const canSubmitPicker =
     cardPicker !== null &&
     canSubmitCardPicker(cardPicker, selectedPickerCardIds.length);
+  const chooserPrompt =
+    cardPicker === null &&
+    phaseNavigation !== "hidden" &&
+    numberPicker === null &&
+    choicePrompt !== null &&
+    choicePrompt.options.length > CHOICE_PROMPT_ROW_OPTION_CAP
+      ? choicePrompt
+      : null;
   return (
+    <>
     <div
       data-battle-mobile-row="control-row"
       aria-label={"Battle controls"}
@@ -2789,7 +2806,7 @@ function ControlRow({
             }
           />
         </div>
-      ) : phaseNavigation !== "hidden" ? (
+      ) : phaseNavigation !== "hidden" && chooserPrompt === null ? (
         <div
           data-battle-phase-controls="row"
           style={{
@@ -2930,6 +2947,95 @@ function ControlRow({
           </div>
         </div>
       ) : null}
+    </div>
+    {chooserPrompt === null ? null : (
+      <BattleChoiceChooser
+        key={chooserPrompt.key}
+        choicePrompt={chooserPrompt}
+        isDesktop={isDesktop}
+        interactions={interactions}
+      />
+    )}
+    </>
+  );
+}
+
+/**
+ * A choice prompt with more options than the control row holds: a glass panel
+ * whose option grid scrolls within it. On desktop it stands beside the
+ * player's zones, from the control row to the bottom gutter; on a phone it
+ * takes the hand's place below the player's zones. Either way the battlefield
+ * and the player's deck, status, and void stay uncovered.
+ */
+function BattleChoiceChooser({
+  choicePrompt,
+  isDesktop,
+  interactions,
+}: {
+  readonly choicePrompt: MobileBattleChoicePromptView;
+  readonly isDesktop: boolean;
+  readonly interactions?: MobileBattleInteractions;
+}) {
+  const disabled =
+    !choicePrompt.canResolve || interactions?.onChoicePromptChoose === undefined;
+  return (
+    <div
+      data-battle-choice-chooser=""
+      style={{
+        gridColumn: 1,
+        gridRow: isDesktop ? "5 / 7" : 6,
+        alignSelf: "stretch",
+        justifySelf: isDesktop ? "end" : "stretch",
+        width: isDesktop
+          ? `min(${String(DESKTOP_CHOICE_CHOOSER_MAX_WIDTH)}px, calc(50% - ${String(DESKTOP_SIDE_ZONES_WIDTH / 2)}px - ${token("--space-l")}))`
+          : undefined,
+        minWidth: 0,
+        minHeight: 0,
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+        paddingTop: isDesktop ? token("--space-m") : PLAYER_HAND_TOP,
+        paddingInlineStart: isDesktop ? 0 : token("--space-s"),
+        paddingInlineEnd: token(isDesktop ? "--gutter" : "--space-s"),
+        paddingBottom: token(isDesktop ? "--gutter" : "--space-s"),
+        // Above the hand fan, which it replaces while the choice is open.
+        zIndex: PLAYER_HAND_Z_INDEX + 1,
+        pointerEvents: "none",
+      }}
+    >
+      <GlassPanel testId="battle-choice-chooser-panel">
+        <div
+          role="group"
+          aria-label={choicePrompt.label}
+          data-battle-choice-prompt-controls=""
+          data-battle-choice-chooser-options=""
+          style={{
+            flex: "0 1 auto",
+            minHeight: 0,
+            overflowY: "auto",
+            overscrollBehavior: "contain",
+            touchAction: "pan-y",
+            scrollPaddingBlock: token("--space-m"),
+            padding: token("--space-m"),
+            display: "grid",
+            gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, ${String(CHOICE_CHOOSER_OPTION_MIN_WIDTH)}px), 1fr))`,
+            gap: token("--space-s"),
+          }}
+        >
+          {choicePrompt.options.map((option, index) => (
+            <GlassButton
+              key={String(index)}
+              label={option.label}
+              labelLayout="wrap"
+              size="compact"
+              placement="onGlass"
+              disabled={disabled}
+              testId={`battle-choice-prompt-option-${String(index)}`}
+              onPress={() => interactions?.onChoicePromptChoose?.(index)}
+            />
+          ))}
+        </div>
+      </GlassPanel>
     </div>
   );
 }

@@ -172,4 +172,30 @@ describe("MobileBattleScreen", () => {
     expect(onChoicePromptChoose).toHaveBeenCalledWith(1);
     expect(onNextPhase).not.toHaveBeenCalled();
   });
+
+  it("keeps up to four options in the control row and moves a longer choice to a bounded scrolling chooser", () => {
+    const choice = (count: number) => ({
+      key: 43,
+      label: "Choose",
+      options: Array.from({ length: count }, (_, index) => ({ label: `Option ${String(index)}` })),
+      canResolve: true,
+    });
+    const short = mount({ ...makeView(), choicePrompt: choice(4) }, { canInteract: true, onChoicePromptChoose: vi.fn() });
+    expect(short.querySelector("[data-battle-choice-chooser]")).toBeNull();
+    expect(query(short, "[data-battle-phase-next][data-battle-choice-prompt-controls]").querySelectorAll("button")).toHaveLength(4);
+
+    const onChoicePromptChoose = vi.fn();
+    const long = mount({ ...makeView(), choicePrompt: choice(34) }, { canInteract: true, onChoicePromptChoose });
+    const list = query(long, "[data-battle-choice-chooser] [data-battle-choice-prompt-controls]");
+    const options = list.querySelectorAll<HTMLButtonElement>("button");
+
+    expect(long.querySelector("[data-battle-phase-next]")).toBeNull();
+    expect(long.querySelectorAll("[data-battle-choice-prompt-controls]")).toHaveLength(1);
+    expect(options).toHaveLength(34);
+    expect(list.getAttribute("role")).toBe("group");
+    expect(list.style.overflowY).toBe("auto");
+    expect(list.style.minHeight).toBe("0px");
+    click(options[33]);
+    expect(onChoicePromptChoose).toHaveBeenCalledWith(33);
+  });
 });
