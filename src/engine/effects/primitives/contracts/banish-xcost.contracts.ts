@@ -4,21 +4,26 @@
  * chosen count is X, at least the cost's least X, and it travels with the
  * stack item; the final banish proves every selection without search; the
  * choice survives reload, refuses stale and foreign input, and commits with
- * the play or not at all.
+ * the play or not at all. Fractured Veil, the authored card, pays it in
+ * response at Interrupt speed.
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { additionalCost, banishXCost, energy, energyX, event, keyword, optionalCost, x } from "../../../dsl/builders";
+import fracturedVeil from "../../../../content/cards/fractured-veil-06f8cfff";
+import { engineCardFromContent } from "../../../content-catalog";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
+import type { EngineLogRecord } from "../../../log";
 import { isLegalAnswer, legalAnswers } from "../../../prompts/answers";
 import type { Answer, ArrangePrompt, ChooseCardsPrompt, ChooseNumberPrompt, Prompt } from "../../../prompts/types";
+import type { PaymentCost } from "../../../dsl/types";
 import type { Action } from "../../../rules/actions";
 import { payCosts, planCosts } from "../../../rules/costs";
 import { stateHash } from "../../../state/hash";
 import type { InstanceId, Side } from "../../../state/ids";
-import type { BattleState } from "../../../state/types";
+import type { BattleState, StackItem } from "../../../state/types";
 import { runStep } from "../../../steps/runner";
 import { ScriptedSource } from "../../../steps/sources";
 import type { AnswerSource } from "../../../steps/types";
@@ -46,19 +51,22 @@ const reclaimBanish = synthetic(1304, () => [keyword("reclaim"), additionalCost(
 const dig = synthetic(1305, () => [additionalCost(banishXCost()), event(putFromTop(x(), [{ to: "hand", count: 2 }, { to: "bottom", count: "rest" }]))]);
 /** "You may banish X cards from your void to play this event. Gain X⍟." */
 const optionalBanish = synthetic(1307, () => [additionalCost(optionalCost(banishXCost())), event(gainPoints(x()))]);
-/** Pays a banish-X plan after the commit point, then its rules code fails. */
+/** Pays a banish-X plan after the commit point, then its rules code fails when X is 1; a larger X plays on. */
 const failsAfterPaying = synthetic(1306, () => [], {
   synthetic: {
     play(ctx, source) {
       const plan = planCosts(ctx, "player", source, [banishXCost()], null, (role) => ({ source, cardId: syntheticId(1306), ability: 0, role }), [source]);
       ctx.commitPoint();
       payCosts(ctx, "player", source, plan);
-      throw new Error("synthetic failure after the banish");
+      if (plan.x === 1) throw new Error("synthetic failure after the banish");
+      return {};
     },
   },
 });
+/** Fractured Veil, the authored Interrupt-speed banishXCost card. */
+const veil = engineCardFromContent(fracturedVeil);
 
-const engine = createEngine(testCatalog([banishForPoints, banishAnyForPoints, banishCharacters, pricedBanish, reclaimBanish, dig, failsAfterPaying, optionalBanish]));
+const engine = createEngine(testCatalog([banishForPoints, banishAnyForPoints, banishCharacters, pricedBanish, reclaimBanish, dig, failsAfterPaying, optionalBanish, veil]));
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id, v.vanilla5.id];
 
 /** The enemy holds an Interrupt, so the played item waits on the stack until the enemy passes. */
@@ -87,6 +95,7 @@ function run(state: BattleState, side: Side, action: Action, answers: readonly A
 const play = (card: InstanceId, from: "hand" | "void" = "hand"): Action => ({ kind: "play", card, from });
 const resolve = (state: BattleState) => run(state, "enemy", { kind: "pass" });
 const plays = (state: BattleState) => engine.legalActions(state, "player").flatMap((action) => (action.kind === "play" ? [`${action.card} ${action.from}`] : []));
+const stackCard = (item: StackItem) => (item.kind === "card" ? item.instance : null);
 const banishedBy = (events: readonly EngineEvent[]) => events.flatMap((event) => (event.kind === "banished" ? [event.instance] : []));
 const sliceOf = (state: BattleState): BattleSlice => ({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 });
 function applied(outcome: IntentOutcome): BattleSlice {
@@ -190,6 +199,18 @@ describe("banishXCost", () => {
     }
   });
 
+  it("types a variable count with its least X, supplied as 1 by the builder, and a fixed count without one", () => {
+    const malformed: readonly PaymentCost[] = [
+      // @ts-expect-error a variable count names its least X.
+      { cost: "banishFromVoid", count: "x", filter: {} },
+      // @ts-expect-error a fixed count has no least X.
+      { cost: "banishFromVoid", count: 2, filter: {}, min: 1 },
+    ];
+    expect(malformed).toHaveLength(2);
+    expect(banishXCost()).toEqual({ cost: "banishFromVoid", count: "x", filter: {}, min: 1 });
+    expect(banishXCost({ min: 0 })).toMatchObject({ count: "x", min: 0 });
+  });
+
   it("looks at the top X cards and puts two into the hand and the rest on the bottom", () => {
     const { state, ids } = board({ hand: [dig.id], void: [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id] });
     const paid = run(state, "player", play(ids.player.hand[0]), [ids.player.void]);
@@ -274,5 +295,119 @@ describe("banishXCost across suspension and failure", () => {
     expect(banishedBy(observed)).toEqual([ids.player.void[0]]);
     expect(stateHash(state)).toBe(before);
     expect(state.sides.player.void).toEqual(ids.player.void);
+  });
+
+  it("recovers a persisted play that fails after paying: no banish publishes or commits, and a retry pays and plays", () => {
+    const { state, ids } = board({ hand: [failsAfterPaying.id], void: [v.vanilla1.id, v.vanilla2.id] });
+    const action = play(ids.player.hand[0]);
+    const opened = applied(createFoldAdapter(engine).reduce(sliceOf(state), { kind: "battleAction", side: "player", action }));
+    const saved = JSON.parse(JSON.stringify(opened)) as BattleSlice;
+    const records: EngineLogRecord[] = [];
+    const cold = createFoldAdapter(createEngine(engine.catalog), { checkEventPrefix: true, log: (record) => records.push(record) });
+    const pending = cold.pending(saved)!;
+    expect(pending.prompt.purpose.role).toBe("banishCost");
+    const answer = { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.void[0]] } as const;
+
+    const outcome = cold.reduce(saved, answer);
+    if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
+    expect(outcome.error).toMatchObject({ kind: "engine_error", step: { kind: "play", card: ids.player.hand[0] } });
+    expect(outcome.error.message).toMatch(/after the banish/);
+    // The banished event the failed run emitted is transient: nothing publishes, and the slice keeps the committed state.
+    expect(outcome.published).toEqual([]);
+    expect(outcome.slice).toEqual({ committed: state, inFlight: null, publishedEvents: 0, attempt: saved.attempt });
+    expect(stateHash(outcome.slice.committed)).toBe(stateHash(state));
+    expect(outcome.slice.committed.sides.player.void).toEqual(ids.player.void);
+    expect(outcome.slice.committed.sides.player.banished).toEqual([]);
+    expect(records.map((record) => record.event)).toEqual(["engine.promptAnswered", "engine.error"]);
+    expect(cold.pending(outcome.slice)).toBeNull();
+    // Replaying the same persisted intent recovers the same slice.
+    const replayed = createFoldAdapter(createEngine(engine.catalog)).reduce(JSON.parse(JSON.stringify(opened)) as BattleSlice, answer);
+    expect(replayed).toEqual(outcome);
+
+    // The failed attempt's prompt is gone, and stays stale once the play is retried.
+    expect(cold.reduce(outcome.slice, answer)).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+    const retried = applied(cold.reduce(outcome.slice, { kind: "battleAction", side: "player", action }));
+    const again = cold.pending(retried)!;
+    expect(again.prompt.id).not.toBe(pending.prompt.id);
+    expect(cold.reduce(retried, answer)).toEqual({ kind: "bounced", reason: "stalePrompt" });
+
+    const paid = cold.reduce(retried, { kind: "answer", side: "player", promptId: again.prompt.id, value: ids.player.void });
+    if (paid.kind !== "applied" || paid.error !== null) throw new Error(`expected the retry to apply, got ${JSON.stringify(paid)}`);
+    expect(paid.slice.inFlight).toBeNull();
+    expect(new Set(banishedBy(paid.published))).toEqual(new Set(ids.player.void));
+    expect(paid.slice.committed.sides.player.void).toEqual([]);
+    expect(paid.slice.committed.stack.map(stackCard)).toEqual([ids.player.hand[0]]);
+    expect(invariantViolations(paid.slice.committed, engine.catalog)).toEqual([]);
+  });
+});
+
+describe("Fractured Veil at Interrupt speed", () => {
+  /** The enemy's turn: it plays a standard event, and the player may respond with Fractured Veil. */
+  function responding() {
+    const setup = boardState(engine.catalog, {
+      active: "enemy",
+      phase: "day",
+      player: { deck, hand: [veil.id], void: [v.vanilla1.id, v.event0.id, v.vanilla2.id], energy: 3 },
+      enemy: { deck, hand: [v.event1.id], energy: 5 },
+    });
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const enemyPlay = play(setup.ids.enemy.hand[0]);
+    const slice = applied(fold.reduce(sliceOf(setup.state), { kind: "battleAction", side: "enemy", action: enemyPlay }));
+    return { ...setup, fold, slice };
+  }
+
+  it("opens and cancels its banish cost prompt in response, leaving the original item and the player's priority", () => {
+    const { ids, fold, slice } = responding();
+    const original = ids.enemy.hand[0];
+    expect(slice.committed.stack.map(stackCard)).toEqual([original]);
+    expect(engine.decision(slice.committed)?.side).toBe("player");
+    const response = play(ids.player.hand[0]);
+    expect(engine.legalActions(slice.committed, "player")).toContainEqual(response);
+
+    const opened = applied(fold.reduce(slice, { kind: "battleAction", side: "player", action: response }));
+    const pending = fold.pending(opened)!;
+    const prompt = pending.prompt as ChooseCardsPrompt;
+    expect(prompt).toMatchObject({ kind: "chooseCards", side: "player", min: 1, max: 3, cancellable: true });
+    expect(prompt.purpose.role).toBe("banishCost");
+    expect([...prompt.candidates].sort()).toEqual([...ids.player.void].sort());
+    expect(opened.committed).toEqual(slice.committed);
+
+    const cancelled = applied(fold.reduce(opened, { kind: "cancel", side: "player", promptId: pending.prompt.id }));
+    expect(cancelled.committed).toEqual(slice.committed);
+    expect(cancelled.inFlight).toBeNull();
+    expect(engine.decision(cancelled.committed)?.side).toBe("player");
+    expect(engine.legalActions(cancelled.committed, "player")).toContainEqual(response);
+    const reopened = applied(fold.reduce(cancelled, { kind: "battleAction", side: "player", action: response }));
+    expect(fold.reduce(reopened, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.void[0]] })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+  });
+
+  it("goes on the stack above the original item with its X and resolves first", () => {
+    const { ids, fold, slice } = responding();
+    const original = ids.enemy.hand[0];
+    const response = ids.player.hand[0];
+    const opened = applied(fold.reduce(slice, { kind: "battleAction", side: "player", action: play(response) }));
+    const chosen = ids.player.void.slice(0, 2);
+    const answered = fold.reduce(opened, { kind: "answer", side: "player", promptId: fold.pending(opened)!.prompt.id, value: chosen });
+    const paid = applied(answered);
+    // The enemy has no response, so priority passes and Fractured Veil, the top item, resolves to its arrangement.
+    const arranging = fold.pending(paid)!;
+    const arrange = arranging.prompt as ArrangePrompt;
+    expect(arrange.purpose.source).toBe(response);
+    expect(paid.committed.stack.map(stackCard)).toEqual([original, response]);
+    expect(paid.committed.stack[1]).toMatchObject({ controller: "player", x: 2 });
+    expect(paid.committed.sides.player.currentEnergy).toBe(1);
+    for (const id of chosen) expect(paid.committed.instances[id].zone).toBe("banished");
+    const [first, second] = ids.player.deck;
+    expect(arrange).toMatchObject({ kind: "arrange", side: "player", cards: [first, second] });
+
+    const outcome = fold.reduce(paid, { kind: "answer", side: "player", promptId: arranging.prompt.id, value: [{ card: first, to: "hand" }, { card: second, to: "hand" }] });
+    const resolved = applied(outcome);
+    // Neither player can respond again, so the original item resolves after Fractured Veil, from beneath it.
+    const published = [answered, outcome].flatMap((step) => (step.kind === "applied" ? step.published : []));
+    expect(published.flatMap((event) => (event.kind === "resolved" ? [event.instance] : []))).toEqual([response, original]);
+    expect(resolved.committed.stack).toEqual([]);
+    expect(resolved.committed.sides.player.hand).toEqual([first, second]);
+    expect(resolved.committed.instances[response].zone).toBe("void");
+    expect(invariantViolations(resolved.committed, engine.catalog)).toEqual([]);
   });
 });

@@ -149,9 +149,9 @@ function choosesCards(cost: PaymentCost): cost is ChoosingCost {
   return "count" in cost;
 }
 
-/** The fewest cards a variable count accepts: a void banish's least X, else 0. */
+/** The fewest cards a variable count accepts: a variable void banish's least X, else 0. */
 function leastCount(cost: ChoosingCost): number {
-  return cost.cost === "banishFromVoid" ? (cost.min ?? 0) : 0;
+  return cost.cost === "banishFromVoid" && cost.count === "x" ? cost.min : 0;
 }
 
 /** The cards that could pay a card-choosing cost, before excluding cards already used. */

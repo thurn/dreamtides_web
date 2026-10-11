@@ -1,0 +1,22 @@
+{
+  "bead": "hv-umm2.364",
+  "phase": 5,
+  "baseOid": "6b08e79c6ec82b6e6b38e7601a2bc9d90916ab4f",
+  "implementMin": 30,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "review": 39,
+    "knip": 3,
+    "focused": 2,
+    "fuzz": 37
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 3.9,
+  "testDelta": {
+    "files": 0,
+    "lines": 166,
+    "jsdomFiles": 0,
+    "cases": 5
+  },
+  "friction": []
+}

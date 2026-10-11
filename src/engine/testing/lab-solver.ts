@@ -7,7 +7,7 @@ import { matchesFilter } from "../continuous/characteristics";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { fixedEnergy } from "../dsl/energy";
-import type { CardFilter, CharacterSelector } from "../dsl/types";
+import type { AdditionalCost, CardFilter, CharacterSelector, PaymentCost } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -66,6 +66,39 @@ function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCa
   return found.id;
 }
 
+/** What the lab stages for additional costs: the void cards each void banish takes, and the ⍟ paid. */
+interface CostNeeds {
+  readonly voidCards: readonly CardFilter[];
+  readonly points: number;
+}
+
+/**
+ * The needs of costs paid together (top-level costs, one alternative, or an
+ * optional cost's), through nested alternatives and optional costs: void
+ * cards for every void banish any branch could pay, so each branch is
+ * payable and an optional one is offered, and the most ⍟ one set of
+ * branches pays, since only one alternative of a choice is paid.
+ */
+function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds {
+  const parts = costs.map((cost): CostNeeds => {
+    switch (cost.cost) {
+      case "choice": {
+        const options = cost.options.map(costNeeds);
+        return { voidCards: options.flatMap((option) => option.voidCards), points: Math.max(0, ...options.map((option) => option.points)) };
+      }
+      case "optional":
+        return costNeeds(cost.costs);
+      case "points":
+        return { voidCards: [], points: cost.amount };
+      case "banishFromVoid":
+        return { voidCards: Array.from({ length: cost.count === "x" ? cost.min : cost.count }, () => cost.filter), points: 0 };
+      default:
+        return { voidCards: [], points: 0 };
+    }
+  });
+  return { voidCards: parts.flatMap((part) => part.voidCards), points: parts.reduce((total, part) => total + part.points, 0) };
+}
+
 /**
  * Solves a lab board for `card` (a deck entry plays its variant): `side` is
  * active in its Day with the card in hand and ample energy, and every
@@ -73,7 +106,8 @@ function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCa
  * target a matching card in the void, on the side it selects, relative to
  * `side`. A void banish additional cost gets its count of matching cards, or
  * its least X, in `side`'s void, and a ⍟ additional cost gets that many
- * points in `side`'s score. Throws if the card is still unplayable.
+ * points in `side`'s score, wherever it sits among alternatives and
+ * optional costs (`costNeeds`). Throws if the card is still unplayable.
  */
 export function labBoard(
   engine: Engine,
@@ -102,13 +136,8 @@ export function labBoard(
       }
     }
   }
-  let score = 0;
-  for (const cost of additionalCosts(definition, variantOf(entry))) {
-    if (cost.cost === "points") score += cost.amount;
-    if (cost.cost !== "banishFromVoid") continue;
-    const count = cost.count === "x" ? (cost.min ?? 0) : cost.count;
-    for (let index = 0; index < count; index++) voids[side].push(voidCardFor(engine, cost.filter, pool));
-  }
+  const { voidCards, points: score } = costNeeds(additionalCosts(definition, variantOf(entry)));
+  for (const filter of voidCards) voids[side].push(voidCardFor(engine, filter, pool));
   const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
   const sides: Record<Side, SideSetup> = {
     player: { back: back.player, void: voids.player, deck },

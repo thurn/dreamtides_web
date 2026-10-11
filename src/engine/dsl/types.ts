@@ -335,12 +335,13 @@ export type PaymentCost =
    * least N⍟ (rules § Costs, Requirements, and X → Paying ⍟).
    */
   | { readonly cost: "points"; readonly amount: number }
+  /** Banish a fixed number of cards from your void that match the filter. */
+  | { readonly cost: "banishFromVoid"; readonly count: number; readonly filter: CardFilter; readonly min?: never }
   /**
-   * Banish cards from your void that match the filter. A variable count
-   * captures their count as X, which is at least `min` (absent, 0); `min`
-   * belongs to a variable count only.
+   * Banish X cards from your void that match the filter: their count is
+   * captured as X, which is at least `min` (`banishXCost` supplies 1).
    */
-  | { readonly cost: "banishFromVoid"; readonly count: number | "x"; readonly filter: CardFilter; readonly min?: number }
+  | { readonly cost: "banishFromVoid"; readonly count: "x"; readonly filter: CardFilter; readonly min: number }
   /** Banish other cards from your hand, as Offering pays. */
   | { readonly cost: "banishFromHand"; readonly count: number }
   /** Reveal cards from your hand that match the filter; they stay in hand. */

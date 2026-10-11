@@ -25,11 +25,11 @@ import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { unannouncedChanges } from "./announced-changes";
 import { moveInstance } from "../rules/zones";
-import { additionalCost, banishFromVoidCost, banishXCost, event, fromVoid, pointsCost } from "../dsl/builders";
+import { additionalCost, banishFromVoidCost, banishXCost, choiceCost, event, fromVoid, optionalCost, pointsCost } from "../dsl/builders";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { gainPoints } from "../effects/primitives/gain-points";
 import { cardMatchesFilter } from "../continuous/characteristics";
-import type { CardFilter } from "../dsl/types";
+import type { AdditionalCost, CardFilter } from "../dsl/types";
 
 /** A pending 1● event and a pending 2● 2✦ character. */
 const pendingEvent: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(904), status: "pending" };
@@ -121,6 +121,37 @@ describe("card-lab setup solver", () => {
       const { state } = labBoard(labEngine, priced.id, [], side);
       expect(state.sides[side].score).toBe(4);
       expect(state.sides[side === "player" ? "enemy" : "player"].score).toBe(0);
+    }
+  });
+
+  it("stages the void cards and ⍟ of nested alternatives and optional costs, so every branch is payable", () => {
+    const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(921), subtype: "Mage" };
+    const priced = (index: number, cost: AdditionalCost): EngineCardDefinition => ({
+      ...SYNTHETIC.event0, id: syntheticId(index), status: "authored", abilities: () => [additionalCost(cost), event(gainPoints(1))],
+    });
+    const banishMages = banishXCost({ min: 2, filter: { subtype: "Mage" } });
+    // Every alternative needs staging: an empty void and no ⍟ would leave the card unplayable.
+    const alternatives = priced(922, choiceCost([banishMages], [pointsCost(3)], [pointsCost(5)]));
+    const optional = priced(923, optionalCost(banishMages));
+    const labEngine = createEngine(testCatalog([alternatives, optional, mage]));
+    for (const side of ["player", "enemy"] as const) {
+      for (const card of [alternatives, optional]) {
+        const { state } = labBoard(labEngine, card.id, [mage], side);
+        expect(state.sides[side].void).toHaveLength(2);
+        for (const id of state.sides[side].void) expect(cardMatchesFilter(state, labEngine.catalog, id, { subtype: "Mage" })).toBe(true);
+        const action = labEngine.legalActions(state, side).find((candidate) => candidate.kind === "play");
+        if (action === undefined) throw new Error(`no play for ${card.id}`);
+        const fold = createFoldAdapter(labEngine);
+        const outcome = fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 }, { kind: "battleAction", side, action });
+        if (outcome.kind !== "applied") throw new Error(outcome.reason);
+        const prompt = fold.pending(outcome.slice)?.prompt;
+        if (card === alternatives) {
+          expect(prompt?.kind === "chooseMode" ? prompt.options.map((option) => option.legal) : prompt).toEqual([true, true, true]);
+        } else {
+          // The optional banish is offered rather than skipped as unaffordable.
+          expect(prompt?.purpose.role).toBe("optionalCost");
+        }
+      }
     }
   });
 
