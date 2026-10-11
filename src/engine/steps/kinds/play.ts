@@ -65,7 +65,7 @@ export const play: StepDefinition<PlayStep> = {
       });
       route = routes[mode] ?? route;
     }
-    const costs = routeCosts(definition, instance.variant, route);
+    const costs = routeCosts(state, catalog, step.card, route);
     let x: number | null;
     let choices: readonly EffectChoices[];
     if (definition.synthetic?.play !== undefined) {

@@ -1,6 +1,6 @@
 import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
-import type { CardFilter, Condition, DeckMods, Keyword, Variant } from "../dsl/types";
+import type { CardFilter, Condition, Cost, DeckMods, Keyword, Variant } from "../dsl/types";
 import type { LoopTracker } from "../loops/types";
 import type {
   AbilitySource,
@@ -299,8 +299,19 @@ export interface EffectRef {
 export type ContinuousChange =
   /** Layer 2: the character has all character types. */
   | { readonly kind: "allTypes"; readonly instance: InstanceId }
-  /** Layer 3: the card gains (`gains`) or loses a keyword. */
-  | { readonly kind: "keyword"; readonly instance: InstanceId; readonly keyword: Keyword; readonly gains: boolean }
+  /**
+   * Layer 3: the card gains (`gains`) or loses a keyword. A gained Reclaim
+   * may carry `reclaimCosts` ("gains reclaim 0●"): the costs of playing the
+   * card from the void in place of its printed or deck-entry Reclaim cost
+   * (rules/timing.ts `grantedReclaimCosts`).
+   */
+  | {
+      readonly kind: "keyword";
+      readonly instance: InstanceId;
+      readonly keyword: Keyword;
+      readonly gains: boolean;
+      readonly reclaimCosts?: readonly Cost[];
+    }
   /** Layer 4: the character's base spark becomes `value`. */
   | { readonly kind: "baseSpark"; readonly instance: InstanceId; readonly value: number }
   /** Layer 5: spark gained with a duration, or spark a character has; it ends wherever the card is. */

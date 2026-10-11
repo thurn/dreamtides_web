@@ -843,6 +843,19 @@ is dissolved, because the move to the void is replaced by banishment. Some
 abilities, such as "Cards you reclaim are not banished when they leave play,"
 remove the reclaimed status.
 
+A card can **gain Reclaim** from an effect, as in "Choose a card in your void to
+gain reclaim" or "Erode 1. That card gains reclaim 0●." "Choose a card in your
+void" chooses that card as a target (see [Targeting](#targeting)); "that card"
+after Erode is the card the Erode put into your void, and names no card when
+Erode caused Fatigue instead. Gained Reclaim works exactly like printed Reclaim.
+With no stated duration it is permanent and travels with the card across zones
+(see [Zone Changes](#zone-changes)); "until end of turn" ends it then, wherever
+the card is. A gained "Reclaim N●" is played from the void for N● in place of
+any printed Reclaim cost; if a card gains several, the most recent applies.
+Gaining plain Reclaim keeps the cost the card already had: a card with
+"Reclaim 2●" that gains reclaim is still played from the void for 2●. A card
+that loses Reclaim loses every Reclaim cost it gained before.
+
 **Erode N** — Put the top N cards of your deck into your void; those cards are
 the **eroded** cards. Erode can also be directed at a player, as in "The opponent
 erodes 2." Eroding with an empty deck causes Fatigue.

@@ -1080,6 +1080,12 @@ Other zone rules:
   chooses its route (RD-hv-7x4l.8-3). Ending step 2 banishes Offering cards
   anywhere and Ephemeral cards in hands. The statuses travel with the
   instance; Ephemeral ends as the card leaves a hand.
+- **Granted Reclaim** (`grantReclaim`) starts a floating layer-3 `keyword`
+  gain of `reclaim` on void cards, optionally carrying `reclaimCosts`
+  ("gains reclaim 0●"). `routeCosts` (`rules/timing.ts`) plays a card by
+  Reclaim for the costs of its latest costed gain since it last lost
+  Reclaim, in layer-3 timestamp order, ahead of a printed or deck-entry
+  Reclaim cost; a plain gain only adds the keyword (RD-hv-umm2.78-1).
 - **Copies** (`rules/copies.ts`): stack copies (D15), figment copies (C5),
   and created copies in a hand, each announced by `cardCreated`.
 

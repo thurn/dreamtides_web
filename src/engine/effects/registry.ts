@@ -46,6 +46,7 @@ import {
   giveAllTypesPrimitive,
   grantCardKeywordPrimitive,
   grantPrimitive,
+  grantReclaimPrimitive,
   ifThenPrimitive,
   lookAtTopPrimitive,
   losePointsPrimitive,
@@ -171,6 +172,9 @@ const DEFINITIONS = {
   },
   get grantCardKeyword() {
     return grantCardKeywordPrimitive;
+  },
+  get grantReclaim() {
+    return grantReclaimPrimitive;
   },
   get ifThen() {
     return ifThenPrimitive;

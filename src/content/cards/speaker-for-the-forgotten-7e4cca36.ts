@@ -1,3 +1,5 @@
+import { activated, energy } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 219,
   art: { x: 0.084, y: 0.839, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([energy(5)], p.grantReclaim(p.reclaimMovedBy(p.erode(1)), { costs: [energy(0)] }))],
+  verifiedText: "1qesnja9umn",
 });

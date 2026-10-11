@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.78",
+  "phase": 5,
+  "baseOid": "ced8c781fa4618a77fe9a8f4454db003452c2e60",
+  "implementMin": 110,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "review": 37,
+    "knip": 3,
+    "focused": 4,
+    "fuzz": 63,
+    "sweep": 377,
+    "judged": 77
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 7.0,
+  "testDelta": {
+    "files": 1,
+    "lines": 304,
+    "jsdomFiles": 0,
+    "cases": 10
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 15,
+      "note": "a granted Reclaim cost must be read where play costs are computed, rules/timing.ts routeCosts, which takes only the printed card and its variant; it was outside the filed areas, so the subagent stopped for a widening"
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10,
+      "note": "with no Reclaim play the void pile opens the void browser rather than a chooser, which then blocked the next tap until the judged scenario dismissed it; the battle driver's cursor helper is eventCursor, not cursor"
+    }
+  ]
+}

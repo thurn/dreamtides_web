@@ -1,7 +1,7 @@
-import { instanceCard, type EngineCatalog, type PrintedCard } from "../catalog";
-import { characteristicsOf } from "../continuous/characteristics";
+import { instanceCard, type EngineCatalog } from "../catalog";
+import { characteristics, characteristicsOf } from "../continuous/characteristics";
 import { costModifier } from "../continuous/costs";
-import type { Cost, Speed, Variant } from "../dsl/types";
+import type { Cost, Speed } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -22,14 +22,40 @@ export type PlayZone = "hand" | "void";
  */
 export type PlayRoute = "hand" | "offering" | "reclaim";
 
-/** The costs of playing a card by `route`, in payment order. */
-export function routeCosts(definition: PrintedCard, variant: Variant, route: PlayRoute): Cost[] {
+/**
+ * The Reclaim costs an effect granted `id` (rules § Keywords and Effects →
+ * Reclaim): those of the latest layer-3 gain of Reclaim that carries costs,
+ * in timestamp order, since the card last lost Reclaim; `null` when none
+ * applies. A plain gain of Reclaim adds the keyword and keeps the cost.
+ */
+function grantedReclaimCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId): readonly Cost[] | null {
+  let granted: readonly Cost[] | null = null;
+  for (const { change } of characteristics(state, catalog).changes(3)) {
+    if (change.kind !== "keyword" || change.keyword !== "reclaim" || change.instance !== id) continue;
+    if (!change.gains) granted = null;
+    else if (change.reclaimCosts !== undefined) granted = change.reclaimCosts;
+  }
+  return granted;
+}
+
+/**
+ * The costs of playing the card `id` by `route`, in payment order. By
+ * Reclaim, a granted Reclaim cost comes first, then a printed or deck-entry
+ * one, then the card's normal costs for plain Reclaim; the card's additional
+ * costs follow any Reclaim cost.
+ */
+export function routeCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId, route: PlayRoute): Cost[] {
+  const instance = instanceOf(state, id);
+  const definition = instanceCard(catalog, instance);
+  const { variant } = instance;
   switch (route) {
     case "hand":
       return playCosts(definition, variant);
     case "offering":
       return [{ cost: "banishFromHand", count: 1 }, ...additionalCosts(definition, variant)];
     case "reclaim": {
+      const granted = grantedReclaimCosts(state, catalog, id);
+      if (granted !== null) return [...granted, ...additionalCosts(definition, variant)];
       const reclaim = definition.abilities(variant).find((ability) => ability.kind === "reclaim");
       return reclaim === undefined ? playCosts(definition, variant) : [...reclaim.costs, ...additionalCosts(definition, variant)];
     }
@@ -42,8 +68,7 @@ export function routeCosts(definition: PrintedCard, variant: Variant, route: Pla
  * banish. The play's prompts check the other cost choices.
  */
 export function routePayable(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): boolean {
-  const instance = instanceOf(state, id);
-  const costs = routeCosts(instanceCard(catalog, instance), instance.variant, route);
+  const costs = routeCosts(state, catalog, id, route);
   return (
     costsPayable(state, side, id, costs, costModifier(state, catalog, id, side)) &&
     (route !== "offering" || state.sides[side].hand.some((card) => card !== id))

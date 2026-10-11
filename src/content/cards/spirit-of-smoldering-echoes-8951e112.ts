@@ -1,3 +1,5 @@
+import { activated, energy, fromVoid } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +19,6 @@ export default card({
   artOwned: false,
   cardNumber: 384,
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([energy(2)], p.grantReclaim(fromVoid({ cardType: "event" })))],
+  verifiedText: "27iztltk7c9",
 });
