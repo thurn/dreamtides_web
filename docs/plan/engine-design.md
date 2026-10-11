@@ -1149,7 +1149,8 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
 - energy: Fixed, X, or Fixed+X (`energy`, `energyX`);
 - ☾ (`exhaustSelf`; back-rank characters and avatars only);
 - discard matching hand cards (`discardCostFilter`), with a fixed count, an
-  X count, or one card whose copiable cost is captured as X;
+  X count, or one card whose copiable cost is captured as X; or discard the
+  whole hand (`discardHandCost`, `count: "hand"`);
 - abandon, with a fixed count, or one character whose copiable cost is
   captured as X (`abandonCostCapture`);
 - banish matching void cards (`banishFromVoidCost`), with a fixed count, or
@@ -1184,6 +1185,21 @@ A variable void banish binds X to the chosen count the same way, but its
 least X defaults to 1 (the energy-X default): a void with fewer matching cards
 raises an empty prompt, so the play is illegal. An X bound earlier below that
 least value is a dead end.
+
+A whole-hand discard (`discardHandCost`) raises no prompt and binds no X.
+`planCosts` fixes its cards as it reaches the cost: every card in the payer's
+hand except the source, the excluded cards (the played card and targets) and
+cards chosen for earlier costs, none from an empty hand. It is always
+payable on its own (RD-hv-umm2.334-1). Taking every remaining hand card, it
+leaves a later cost in the same plan no hand card: nested affordability drops
+hand cards from the pools of costs listed after it, and a top-level later
+hand cost raises an empty prompt. `payCosts` discards exactly the planned
+cards, so a card an earlier cost returns to hand stays there. A preceding
+card choice keeps its ordinary prompt, cancellation and replay; a step that
+fails after payment rolls the discards back with the rest of the attempt. The
+card-lab solver stages no hand card for it. Review provenance: the cold review
+of hv-umm2.61 (8cafea877) found that a variable-count discard cannot express
+this mandatory payment.
 
 **Energy-X legality** comes from the definition's range, which defaults to
 `min: 1`. Widen it to 0 only when X=0 does something meaningful.

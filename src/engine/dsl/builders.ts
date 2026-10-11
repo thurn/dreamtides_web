@@ -119,6 +119,11 @@ export function discardCostFilter(filter: CardFilter, options: { readonly count?
     : { cost: "discard", count: options.count ?? 1, filter };
 }
 
+/** "Discard your hand" as a cost: every eligible hand card, chosen by nobody; payable with an empty hand. */
+export function discardHandCost(): PaymentCost {
+  return { cost: "discard", count: "hand" };
+}
+
 /** "N⧗": spend counters stored on the source. */
 export function countersCost(amount: number): PaymentCost {
   return { cost: "counters", amount };

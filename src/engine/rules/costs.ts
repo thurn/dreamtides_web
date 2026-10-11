@@ -146,7 +146,12 @@ export function costsPayable(
 type ChoosingCost = Extract<PaymentCost, { readonly count: number | "x" }>;
 
 function choosesCards(cost: PaymentCost): cost is ChoosingCost {
-  return "count" in cost;
+  return "count" in cost && cost.count !== "hand";
+}
+
+/** "Discard your hand": paid with every eligible hand card, which nobody chooses. */
+function discardsHand(cost: PaymentCost): boolean {
+  return cost.cost === "discard" && cost.count === "hand";
 }
 
 /** The fewest cards a variable count accepts: a variable void banish's least X, else 0. */
@@ -210,8 +215,11 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
  * cannot be paid raises an empty prompt, and a plan whose energy total the
  * side cannot pay throws `Infeasible`: both are dead ends of that path of
  * answers, so legality's search tries the others and a real run never offers
- * an answer that leads to one (steps/feasibility.ts). Every energy part —
- * top-level, X, and the chosen alternatives' and optional costs' — is one
+ * an answer that leads to one (steps/feasibility.ts). "Discard your hand"
+ * asks nothing: it takes every card left in the payer's hand once the
+ * excluded and earlier cost cards are set aside, none from an empty hand,
+ * and leaves a later cost no hand card to choose (RD-hv-umm2.334-1). Every
+ * energy part — top-level, X, and the chosen alternatives' and optional costs' — is one
  * total that `modifier` changes, so an alternative or an optional cost is
  * affordable when the modified total is. `endsPlayTime` is reserved for a
  * caller whose next operation is the commit point: it allows a final discard
@@ -268,11 +276,15 @@ export function planCosts(
       pointsLeft - spent(list, "points"),
     )) return false;
     const choosing = list.flatMap((cost, index) => choosesCards(cost) ? [{ cost, index }] : []);
+    /** Where a whole-hand discard in the list leaves later costs no hand card. */
+    const handTaken = list.findIndex(discardsHand);
+    const hand = state.sides[side].hand;
     if (choosing.some(({ cost }) => cost.count === "x" && capturedX !== null && capturedX < leastCount(cost))) return false;
     const demands = choosing.map(({ cost, index }) => ({
       count: cost.count === "x" ? (capturedX ?? leastCount(cost)) : cost.count,
       pool: cardCandidates(state, catalog, side, source, cost, options.selectorX).filter((id) =>
-        !used.includes(id) && !(leavesPlay(cost) && id === source && list.slice(index + 1).some(cannotFollowDeparture)),
+        !used.includes(id) && !(handTaken >= 0 && index > handTaken && hand.includes(id)) &&
+        !(leavesPlay(cost) && id === source && list.slice(index + 1).some(cannotFollowDeparture)),
       ),
     }));
     return cardsAssignable(demands);
@@ -289,6 +301,13 @@ export function planCosts(
       if (cost.cost === "counters") countersLeft -= cost.amount;
       if (cost.cost === "points") pointsLeft -= cost.amount;
       if (cost.cost === "exhaustSelf") exhaustCount += 1;
+    }
+    if (discardsHand(cost)) {
+      // Nobody chooses: the hand as the costs are planned, less the source and the cards already used.
+      const cards = state.sides[side].hand.filter((id) => id !== source && !used.includes(id));
+      used.push(...cards);
+      payments.push({ cost, cards });
+      return;
     }
     if (!choosesCards(cost)) {
       payments.push({ cost, cards: [] });

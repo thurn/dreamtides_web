@@ -806,6 +806,18 @@ number of cards. This X spends no energy beyond the separately printed energy co
 When one ability also pays X●, every reference to X uses that same value:
 the discard count or captured card cost must agree with the chosen energy X.
 
+**Discard your hand:** As a cost, as in "☾, Discard your hand, abandon this
+character: Gain 3●," this discards every card in the paying player's hand
+except the card being played and cards already chosen as its targets or for
+its earlier costs. Nobody chooses the cards, and the player is not asked. The
+cost can be paid with an empty hand, discarding nothing, so it never makes a
+card or ability unplayable by itself. The cards are those in the hand as the
+card is played or the ability activated: a card that an earlier cost of the
+same ability returns to that hand stays there, and a later cost of the same
+ability that needs a card from hand has none left, so it cannot be paid. Each
+card is discarded as any other discard is: it is shown to both players as it
+enters its owner's void and triggers "When you discard a card." It sets no X.
+
 **Banish void cards as a cost:** The cost names the void or voids its payer
 may use: their own, the opponent's, or either player's. Choose the full number
 of matching, distinct physical cards before commitment; copies of the same

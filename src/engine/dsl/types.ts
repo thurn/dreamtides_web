@@ -377,6 +377,13 @@ export type PaymentCost =
   /** Discard matching hand cards. Variable count captures their count as X; captureCost captures one card’s copiable cost as X. */
   | { readonly cost: "discard"; readonly count: number | "x"; readonly filter: CardFilter; readonly captureCost?: never }
   | { readonly cost: "discard"; readonly count: 1; readonly filter: CardFilter; readonly captureCost: true }
+  /**
+   * "Discard your hand": every card in the payer's hand as the costs are
+   * chosen, except the card being played and cards used for its targets or
+   * earlier costs. Nobody chooses the cards, and an empty hand pays it
+   * (rules § Costs, Requirements, and X → Discard your hand).
+   */
+  | { readonly cost: "discard"; readonly count: "hand"; readonly filter?: never; readonly captureCost?: never }
   /** N⧗: spend counters stored on the source (rules § Counters). */
   | { readonly cost: "counters"; readonly amount: number }
   /**

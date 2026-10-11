@@ -252,6 +252,8 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
       }
       case "discard":
       case "reveal":
+        // A whole-hand discard is payable with an empty hand, so it stages no card.
+        if (cost.count === "hand") return empty;
         return { ...empty, handCards: Array.from({ length: cost.count === "x" ? 1 : cost.count }, () => cost.filter) };
       default:
         return empty;
