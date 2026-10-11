@@ -3,9 +3,10 @@
  * it cannot cross into a worker; the worker builds its own from the content
  * modules plus a manifest of plain definitions for every entity a battle
  * names that the content modules may not define (a loaded entity plays
- * text-less, D36). Content-module definitions win, as they do in the
- * journey's catalog (`journeyContentEngine`); a development build adds the
- * prompt lab's synthetic definitions, as that catalog does.
+ * text-less, D36). The catalog holds one definition per UUID: the content
+ * module's, or in a development build the prompt lab's synthetic one,
+ * composed as the journey's catalog (`journeyContentEngine`) composes them,
+ * and the manifest's text-less one only for a UUID neither defines.
  */
 import {
   createCatalog,
@@ -71,23 +72,29 @@ export function catalogManifest(catalog: EngineCatalog, init: BattleInit): Catal
   };
 }
 
-/** The worker's catalog: the content modules, then text-less definitions for what only the manifest names. */
+/** The given definitions, then a text-less one for each manifest entity they lack: one per UUID. */
+function withManifest<Id, Definition extends { readonly id: Id }, Named extends { readonly id: Id }>(
+  definitions: readonly Definition[],
+  named: readonly Named[],
+  textless: (entity: Named) => Definition,
+): Definition[] {
+  const known = new Set(definitions.map((definition) => definition.id));
+  return [...definitions, ...named.filter((entity) => !known.has(entity.id)).map(textless)];
+}
+
+function textlessEmblem<Id>(emblem: ManifestEmblem<Id>): { id: Id; status: ContentState; abilities: AbilityList } {
+  return { ...emblem, abilities: NO_ABILITIES };
+}
+
+/** The worker's catalog: the content and lab definitions, then text-less ones for what only the manifest names. */
 export function manifestCatalog(manifest: CatalogManifest): EngineCatalog {
   const lab = developmentLabDefinitions();
   return createCatalog(
-    [...manifest.cards.map((card) => ({ ...card, abilities: NO_ABILITIES })), ...contentCardDefinitions(), ...lab.cards],
-    [...manifest.dreamwell, ...contentDreamwellDefinitions()],
+    withManifest([...contentCardDefinitions(), ...lab.cards], manifest.cards, (card) => ({ ...card, abilities: NO_ABILITIES })),
+    withManifest(contentDreamwellDefinitions(), manifest.dreamwell, (card) => card),
     {
-      avatars: [
-        ...manifest.avatars.map((avatar) => ({ ...avatar, abilities: NO_ABILITIES })),
-        ...contentAvatarDefinitions(),
-        ...(lab.emblems.avatars ?? []),
-      ],
-      dreamsigns: [
-        ...manifest.dreamsigns.map((dreamsign) => ({ ...dreamsign, abilities: NO_ABILITIES })),
-        ...contentDreamsignDefinitions(),
-        ...(lab.emblems.dreamsigns ?? []),
-      ],
+      avatars: withManifest([...contentAvatarDefinitions(), ...(lab.emblems.avatars ?? [])], manifest.avatars, textlessEmblem),
+      dreamsigns: withManifest([...contentDreamsignDefinitions(), ...(lab.emblems.dreamsigns ?? [])], manifest.dreamsigns, textlessEmblem),
     },
     [...contentFigmentDefinitions(), ...lab.figments],
     manifest.maximumFixedCost,

@@ -1,0 +1,27 @@
+{
+  "bead": "hv-4a0x",
+  "phase": 5,
+  "baseOid": "b97f0aba1dc42f82d166ea1cc98e8e7d6a1d5948",
+  "implementMin": 30,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 2,
+    "review": 14,
+    "knip": 3,
+    "judged": 52
+  },
+  "hostLoad": 4.32,
+  "testDelta": {
+    "files": 1,
+    "lines": 109,
+    "jsdomFiles": 0,
+    "cases": 3
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10,
+      "note": "__engineProbe.events omits events published before the debug panel mounts, so a declared enemy-script play is missing from probe history; the judged scenario asserts the play from committed state and the durable log instead, and hidden-hand DOM placement needed rework"
+    }
+  ]
+}
