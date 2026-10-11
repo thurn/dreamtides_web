@@ -1611,13 +1611,20 @@ RD-hv-7x4l.9-1). The latest such *j* wins. The engine then records a
 `{ kind: "repeatLoop", loop, count: "untilVictory" }`; any whole `count` from 1
 to the iteration cap is allowed too. Every other step withdraws the offer.
 The view shows the loop on offer and the repetition in progress. Only the
-side that may repeat the loop also sees its recording, and only while every
-card the recording names is one that side can identify: its steps are that
-side's public actions and automatic steps, every answer the opponent gave in
-it was forced, and a fingerprint is an opaque hash a replay only compares.
-Determinization puts the loop the view shows back on offer, with the
-recording, the state's own signature, and the repetition in progress, so
-search simulates accepting it as the battle would run it (D12).
+side that may repeat the loop also sees its recording: its steps, which are
+that side's public actions and automatic steps, and only while no step
+answered a prompt and every card the steps name is one that side can
+identify. A prompt fingerprint hashes the prompt's source card, candidates,
+and options, which may be hidden from that side (an opponent's forced prompt
+from a trigger in hand), so a recording with any answer is withheld whole
+and no fingerprint reaches a view. Determinization puts the loop the view
+shows back on offer, with the state's own signature and the repetition in
+progress. With the recording, search simulates accepting the loop as the
+battle would run it (D12); without it the recording is unknown
+(`LoopCandidate.actions` is `null`), repeating the loop there throws
+`UnknownLoopRecording`, and search scores accepting it as unknown. The
+sample's detection history and mandatory-cycle mark start empty, so both
+detect from the sampled state on.
 
 **Execution.** The `repeatLoop` step starts a `LoopRun`. While it runs, nobody
 has a decision and `nextAutomaticStep` returns `loopIteration`. Each

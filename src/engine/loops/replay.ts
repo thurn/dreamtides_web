@@ -15,6 +15,10 @@
  * - **battleEnded:** the battle ended;
  * - **diverged:** a different automatic step comes next, or the iteration
  *   ends at a position other than the loop's checkpoint.
+ *
+ * A loop whose recording is unknown, as in a determinization whose view
+ * withheld it, is never repeated: its iteration throws
+ * `UnknownLoopRecording`, so search scores accepting it as unknown.
  */
 import type { EngineCatalog } from "../catalog";
 import type { EngineEvent } from "../events";
@@ -31,7 +35,14 @@ import type { EventObserver } from "../steps/types";
 import { NO_PROMPTS } from "../steps/sources";
 import { loopSignature } from "./signature";
 import { checkpointSide } from "./tracker";
-import type { LoopCandidate, LoopEndReason, LoopStep } from "./types";
+import type { LoopCandidate, LoopEndReason, LoopId, LoopStep } from "./types";
+
+/** The loop's recording is unknown here (`LoopCandidate.actions`), so it cannot be repeated. */
+export class UnknownLoopRecording extends Error {
+  constructor(readonly loop: LoopId) {
+    super(`Loop ${loop} cannot be repeated: its recording is unknown`);
+  }
+}
 
 export interface IterationOutcome {
   /** The state after the last step that ran to completion. */
@@ -58,6 +69,8 @@ function replayStep(start: BattleState, recorded: LoopStep, automatic: boolean, 
 
 /** Runs one iteration of `candidate` from `start`, a checkpoint equivalent to the loop's. */
 export function replayIteration(start: BattleState, candidate: LoopCandidate, catalog: EngineCatalog, observeEvent?: EventObserver): IterationOutcome {
+  const { actions } = candidate;
+  if (actions === null) throw new UnknownLoopRecording(candidate.id);
   const memo = createLegalityMemo();
   const actor = candidate.side;
   const events: EngineEvent[] = [];
@@ -66,7 +79,7 @@ export function replayIteration(start: BattleState, candidate: LoopCandidate, ca
   const stopped = (stop: LoopEndReason): IterationOutcome => ({ state, events, stop });
   /** Why the run cannot go on at a decision boundary that is not the actor's next action. */
   const atDecision = (): LoopEndReason => (decision(state, catalog, memo)?.side === opponent(actor) ? "opponentDecision" : "diverged");
-  for (const recorded of candidate.actions) {
+  for (const recorded of actions) {
     const [first] = recorded.steps;
     const action = first === undefined ? null : actionForStep(first.step);
     if (first === undefined || action === null) return stopped("diverged");

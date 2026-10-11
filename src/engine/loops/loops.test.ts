@@ -82,7 +82,7 @@ describe("optional loops", () => {
     const { state, ids } = board({ player: { back: [LOOP.freeChoice.id], deck }, enemy: { deck } });
     const once = activate(state, sourceOf(ids.player), new ScriptedSource([1]));
     expect(once.state.sides.player.currentEnergy).toBe(1);
-    const recorded = once.state.loops.candidate?.actions.flatMap((action) => action.steps.flatMap((step) => step.answers));
+    const recorded = once.state.loops.candidate?.actions?.flatMap((action) => action.steps.flatMap((step) => step.answers));
     expect(recorded).toEqual(once.answers);
     expect(recorded?.[0]?.value).toBe(1);
     const result = repeat(once.state, 4);
@@ -144,7 +144,7 @@ describe("optional loops", () => {
     const once = activate(state, sourceOf(ids.player), new ScriptedSource([1]));
     const candidate = once.state.loops.candidate;
     if (candidate === null) throw new Error("no candidate");
-    const [action] = candidate.actions;
+    const [action] = candidate.actions ?? [];
     const [activation, ...rest] = action?.steps ?? [];
     if (activation?.answers.length !== 1) throw new Error("unexpected recording");
     // The recorded activation answered no prompt; replaying it raises its mode choice.
@@ -163,7 +163,7 @@ describe("optional loops", () => {
     const { state } = freePointsOffered();
     const candidate = state.loops.candidate;
     if (candidate === null) throw new Error("no candidate");
-    const [action] = candidate.actions;
+    const [action] = candidate.actions ?? [];
     const [activation, resolution] = action?.steps ?? [];
     if (activation === undefined || resolution === undefined) throw new Error("unexpected recording");
     // The recorded resolution answered a prompt that the replay no longer raises.

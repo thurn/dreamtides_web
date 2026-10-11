@@ -29,7 +29,8 @@
  *   automatic-step count start empty;
  * - the loop on offer, and the repetition in progress, are the ones the view
  *   shows (`restoreLoop`), so the viewer's legal actions include the offer
- *   its view shows and a repetition runs on as the battle would;
+ *   its view shows; a repetition runs on as the battle would when the view
+ *   shows the loop's recording, and is refused when it withholds it;
  * - an effect a side may pay to end whose source the viewer cannot see
  *   names its controller's avatar as its source;
  * - a play permission whose source is hidden or ceased also uses its
@@ -125,16 +126,18 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
  * Puts the loop the view shows on offer in the dealt state, with the
  * repetition in progress. A loop is on offer only at its checkpoint, so its
  * signature is the state's own, and it repeats its recording, which the view
- * shows the side that may repeat it (`LoopView.recording`). Without one, the
- * loop repeats no actions: each iteration returns to the checkpoint
- * unchanged. The next loop number follows the loop's, and the history the
- * tracker detects loops from starts empty: its checkpoint signatures hash
- * cards the viewer cannot see.
+ * shows the side that may repeat it (`LoopView.recording`). Without one the
+ * recording is unknown (`null`): the loop is on offer, but repeating it is
+ * refused (`UnknownLoopRecording`), so search scores accepting it as
+ * unknown. The next loop number follows the loop's. The history the
+ * tracker detects loops from and the mandatory-cycle mark start empty, since
+ * both hash cards the viewer cannot see, so detection begins at the sample.
  */
 function restoreLoop(state: BattleState, view: BattleView): void {
   const { loop } = view;
   if (loop === null) return;
-  state.loops.candidate = { id: loop.id, side: loop.side, signature: loopSignature(state), actions: copy(loop.recording ?? []) };
+  const actions = loop.recording === undefined ? null : copy(loop.recording);
+  state.loops.candidate = { id: loop.id, side: loop.side, signature: loopSignature(state), actions };
   state.loops.run = loop.run === null ? null : { loop: loop.id, remaining: loop.run.remaining, iterations: loop.run.iterations };
   state.loops.nextLoop = Number(loop.id.slice(1)) + 1;
 }

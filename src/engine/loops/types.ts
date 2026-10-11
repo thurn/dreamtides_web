@@ -71,7 +71,12 @@ export interface LoopCandidate {
   readonly id: LoopId;
   readonly side: Side;
   readonly signature: LoopSignature;
-  readonly actions: readonly LoopAction[];
+  /**
+   * The recorded actions each iteration repeats, or `null` in a
+   * determinization whose view withheld them (`LoopView.recording`): there
+   * the loop is on offer, but repeating it is refused (`replayIteration`).
+   */
+  readonly actions: readonly LoopAction[] | null;
 }
 
 /** An accepted `repeatLoop` in progress: one `loopIteration` step per iteration. */

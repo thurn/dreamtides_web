@@ -141,7 +141,7 @@ export interface QueuedTriggerView {
 
 /**
  * The loop on offer, or being repeated (rules § Optional Loops), with its
- * recording as the side that may repeat it knows it (`loopRecordingSeen`).
+ * recording as the side that may repeat it knows it (`loopRecording`).
  */
 export interface LoopView {
   readonly id: LoopId;
@@ -150,10 +150,12 @@ export interface LoopView {
   /** The repetition in progress, or `null` while the loop is only on offer. */
   readonly run: { readonly remaining: number | "untilVictory"; readonly iterations: number } | null;
   /**
-   * The loop's recorded actions, each with its steps and their answers,
-   * present only in the view of the side that may repeat it while they name
-   * no card that side cannot identify, so that a determinization of that
-   * view repeats the loop as the battle would.
+   * The loop's recorded actions, each with its steps, present only in the
+   * view of the side that may repeat it, only while no step answered a
+   * prompt, and only while the steps name no card that side cannot
+   * identify (`loopRecording`), so that a determinization of that view
+   * repeats the loop as the battle would. Without it a determinization
+   * offers the loop but cannot repeat it.
    */
   readonly recording?: readonly LoopAction[];
 }
@@ -380,7 +382,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
             id: state.loops.candidate.id,
             side: state.loops.candidate.side,
             run: state.loops.run === null ? null : { remaining: state.loops.run.remaining, iterations: state.loops.run.iterations },
-            ...(loopRecordingSeen(state.loops.candidate, viewer, visible) ? { recording: copy(state.loops.candidate.actions) } : {}),
+            ...loopRecording(state.loops.candidate, viewer, visible),
           },
     automaticChoices: state.automaticChoices,
     result: copy(state.result),
@@ -388,21 +390,25 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
 }
 
 /**
- * Whether `viewer` sees the recording of `candidate`: only the side that may
- * repeat the loop does, and only while every card the recording names is
- * one it can identify (`visible`). Its steps are that side's own top-level
- * actions, which are public, and automatic steps, which name nothing. Every
- * answer the other side gave was forced, since a choice by the other side
- * withdraws the offer, and a forced answer naming a card hidden from
- * `viewer` withholds the whole recording. Each fingerprint is an opaque hash
- * a replay only compares with the prompt it reaches.
+ * The `recording` field of the view of `candidate`: present when `viewer`
+ * sees the recording, and absent when it is withheld. Only the side that may
+ * repeat the loop sees it. Its steps are that side's own top-level actions,
+ * which are public, and automatic steps; it is shown only while every card
+ * they name is one `viewer` can identify (`visible`). A recorded answer
+ * carries its prompt's fingerprint, a hash over the prompt's source card,
+ * candidates, and options, any of which may be hidden from `viewer` (an
+ * opponent's forced prompt from a trigger in hand, say), and nothing in the
+ * recording tells which. So a recording in which any prompt was answered is
+ * withheld whole: no fingerprint reaches a view.
  */
-function loopRecordingSeen(candidate: LoopCandidate, viewer: Side, visible: (id: InstanceId) => boolean): boolean {
-  if (candidate.side !== viewer) return false;
-  for (const match of JSON.stringify(candidate.actions).matchAll(/"i(\d+)"/g)) {
-    if (!visible(`i${Number(match[1])}`)) return false;
+function loopRecording(candidate: LoopCandidate, viewer: Side, visible: (id: InstanceId) => boolean): { readonly recording?: readonly LoopAction[] } {
+  const { actions } = candidate;
+  if (candidate.side !== viewer || actions === null) return {};
+  if (actions.some((action) => action.steps.some((step) => step.answers.length > 0))) return {};
+  for (const match of JSON.stringify(actions).matchAll(/"i(\d+)"/g)) {
+    if (!visible(`i${Number(match[1])}`)) return {};
   }
-  return true;
+  return { recording: copy(actions) };
 }
 
 /**
