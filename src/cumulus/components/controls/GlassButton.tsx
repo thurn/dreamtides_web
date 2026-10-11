@@ -45,6 +45,9 @@ export type GlassButtonVariant = "default" | "danger" | "accent";
 /** Horizontal density and label scale; both sizes preserve the 42px target. */
 export type GlassButtonSize = "prominent" | "standard" | "compact";
 
+/** Single-line actions or content-height labels constrained by their wrapper. */
+type GlassButtonLabelLayout = "single-line" | "wrap";
+
 /** One possible label/essence-cost state whose intrinsic width is reserved. */
 export interface GlassButtonWidthReservation {
   label: string;
@@ -98,6 +101,8 @@ const dangerChromeOnGlass: React.CSSProperties = {
 };
 
 interface GlassButtonOptions {
+  /** Wrapped labels retain the named target height as their minimum. */
+  labelLayout?: GlassButtonLabelLayout;
   /** Optional non-cost Essence value rendered directly after the label. */
   essenceValue?: number | null;
   /** Prominent primary-action sizing, standard label spacing, or compact
@@ -137,6 +142,7 @@ export function GlassButton({
   essenceCost = null,
   essenceValue = null,
   size = "standard",
+  labelLayout = "single-line",
   widthReservations = [],
   variant = "default",
   placement = "onMedia",
@@ -182,6 +188,17 @@ export function GlassButton({
         color: token("--text-on-glass"),
         textAlign: "center",
         whiteSpace: "nowrap",
+        ...(labelLayout === "wrap"
+          ? {
+              height: "auto",
+              minHeight: GLASS_BUTTON_HEIGHT[size],
+              minWidth: 0,
+              maxWidth: "100%",
+              paddingBlock: token("--space-s"),
+              whiteSpace: "normal",
+              overflowWrap: "anywhere",
+            } as const
+          : {}),
         ...chrome.trigger,
         ...variantChrome,
         opacity: disabled ? 0.5 : 1,

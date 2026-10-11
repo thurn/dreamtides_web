@@ -2648,6 +2648,7 @@ function ControlRow({
   promptHost,
   selectedPickerCardIds,
   isDesktop,
+  hasTargetingCard,
   interactions,
   layoutBackSlotCount,
   nextPhaseAction,
@@ -2661,6 +2662,7 @@ function ControlRow({
   readonly promptHost: BattlePromptHostView | null;
   readonly selectedPickerCardIds: readonly BattleCardId[];
   readonly isDesktop: boolean;
+  readonly hasTargetingCard: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
   readonly nextPhaseAction: "continue" | "nextPhase";
@@ -2673,6 +2675,7 @@ function ControlRow({
   const disabled = interactions?.canInteract !== true;
   const numberPicker = promptHost?.key != null ? promptHost.number : null;
   const hasAlternateNextControls = choicePrompt !== null || numberPicker !== null;
+  const reserveTargetingCard = !isDesktop && hasTargetingCard && choicePrompt !== null;
   const requiredPickerCount =
     cardPicker === null ? 0 : cardPickerBounds(cardPicker).max;
   const canSubmitPicker =
@@ -2693,8 +2696,13 @@ function ControlRow({
         boxSizing: "border-box",
         containerType: isDesktop ? "inline-size" : undefined,
         paddingInline: isDesktop ? 0 : token("--space-s"),
+        // Match the staged card's own inset, width, and one spacing step beside it.
+        ...(reserveTargetingCard ? {
+          paddingInlineStart: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-s")} + ${String(TARGETING_CARD_STAGE_WIDTH)}px + ${token("--space-s")})`,
+        } : {}),
         paddingTop: token(isDesktop ? "--space-m" : "--space-s"),
-        zIndex: 10,
+        // Choice controls stay above the staged card throughout its hand-to-stage travel.
+        zIndex: reserveTargetingCard ? PLAYER_HAND_Z_INDEX + 1 : 10,
         pointerEvents: "none",
       }}
     >
@@ -2788,6 +2796,7 @@ function ControlRow({
                 )
               : undefined,
             maxWidth: "100%",
+            minWidth: reserveTargetingCard ? 0 : undefined,
             gap: token("--space-s"),
             position: "relative",
             zIndex: 10,
@@ -2846,10 +2855,11 @@ function ControlRow({
               choicePrompt === null ? undefined : choicePrompt.label
             }
             style={{
-              width: hasAlternateNextControls ? undefined : "max-content",
               minWidth: hasAlternateNextControls
-                ? undefined
+                ? reserveTargetingCard ? 0 : undefined
                 : NEXT_PHASE_CONTROL_WIDTH,
+              maxWidth: reserveTargetingCard ? "100%" : undefined,
+              width: hasAlternateNextControls ? undefined : "max-content",
               display: hasAlternateNextControls ? "flex" : "grid",
               alignItems: hasAlternateNextControls ? "center" : undefined,
               justifyContent: hasAlternateNextControls ? "flex-end" : undefined,
@@ -2873,6 +2883,7 @@ function ControlRow({
                 <GlassButton
                   key={`${choicePrompt.key}:${String(index)}`}
                   label={option.label}
+                  labelLayout={reserveTargetingCard ? "wrap" : "single-line"}
                   variant={index === 0 ? "accent" : "default"}
                   disabled={
                     !choicePrompt.canResolve ||
@@ -4245,6 +4256,7 @@ export function MobileBattleScreen({
           promptHost={view.promptHost ?? null}
           selectedPickerCardIds={selectedPickerCardIds}
           isDesktop={isDesktop}
+          hasTargetingCard={targetingCard !== null}
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
           nextPhaseAction={
