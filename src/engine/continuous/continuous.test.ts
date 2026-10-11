@@ -10,7 +10,7 @@ import { describe, expect, it } from "vitest";
 import { printedCard, type EngineCardDefinition } from "../catalog";
 import { additionalCost, all, characterYouControl, costPaid, enemyCharacter, energy, energyX, event, keyword, optionalCost, self, staticAbility, target } from "../dsl/builders";
 import { untilOpponentPays } from "../dsl/triggers";
-import type { AbilityList, FunctionalZone } from "../dsl/types";
+import { NO_DECK_MODS, type AbilityList, type FunctionalZone, type Variant } from "../dsl/types";
 import { eventSeenBy } from "../events";
 import { matchingCharacters } from "../dsl/selectors";
 import * as p from "../effects/primitives";
@@ -20,7 +20,7 @@ import type { Action } from "../rules/actions";
 import { hasKeyword } from "../rules/keywords";
 import { effectiveSpark } from "../rules/spark";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
-import { serializeState, stateHash } from "../state/hash";
+import { deserializeState, serializeState, stateHash } from "../state/hash";
 import type { EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState, ContinuousChange } from "../state/types";
 import { runStep } from "../steps/runner";
@@ -107,6 +107,17 @@ const dissolveAlly = fixture(0xa8e, "event", 0, () => [event(p.dissolve(target(c
 const dissolveAllyThenFail = fixture(0xa8f, "event", 0, () => [
   event(p.sequence(p.dissolve(target(characterYouControl())), p.grantCardKeyword(p.cardsIn("hand"), "offering"))),
 ]);
+
+/** One printing whose variants have distinct static zones and spark/cost effects. */
+const variantAnthem = fixture(0xa90, "character", 1, (variant) => {
+  const modified = variant.deckMods?.costReduction ?? 0;
+  const zone = modified === 2 ? "any" : modified === 1 ? "void" : variant.amplified ? "hand" : "play";
+  const amount = modified === 2 ? 4 : modified === 1 ? 3 : variant.amplified ? 2 : 1;
+  return [
+    staticAbility(p.sparkModifier(all(characterYouControl()), amount), { zone }),
+    staticAbility(p.costModifier("you", { cardType: "character" }, -amount), { zone }),
+  ];
+});
 
 const engine = createEngine(
   testCatalog(
@@ -303,6 +314,50 @@ describe("static abilities from other zones", () => {
     return result;
   };
   const zoneOf = (state: BattleState, id: InstanceId | null | undefined) => state.instances[id!]?.zone ?? null;
+
+  for (const reverse of [false, true]) {
+    it(`keeps each printing variant's zone and effects through reload, evaluated ${reverse ? "modified-first" : "base-first"}`, () => {
+      const cases: readonly { variant: Variant; amount: number; works: readonly ("back" | "void" | "hand" | "deck")[] }[] = [
+        { variant: { amplified: false }, amount: 1, works: ["back"] },
+        { variant: { amplified: true }, amount: 2, works: ["hand"] },
+        { variant: { amplified: false, deckMods: { ...NO_DECK_MODS, costReduction: 1 } }, amount: 3, works: ["void"] },
+        { variant: { amplified: false, deckMods: { ...NO_DECK_MODS, costReduction: 2 } }, amount: 4, works: ["back", "void", "hand", "deck"] },
+      ];
+      const variants = reverse ? [...cases].reverse() : cases;
+      // Each engine starts with a fresh catalog; subsequent boards reuse it in the chosen order.
+      const warm = createEngine(testCatalog([variantAnthem]));
+      const reloaded = createEngine(testCatalog([variantAnthem]));
+      for (const { variant, amount, works } of variants) {
+        for (const placed of ["back", "void", "hand", "deck"] as const) {
+          const setup: SideSetup = {
+            front: [v.vanilla1.id], hand: [v.vanilla5.id], energy: 4,
+            // Keep a separate hand card whose play cost we probe.
+            [placed]: placed === "hand" ? [v.vanilla5.id, variantAnthem.id] : [variantAnthem.id],
+          };
+          const { state, ids } = boardState(warm.catalog, { active: "player", phase: "day", player: setup, enemy: { front: [v.vanilla1.id] } });
+          const source = placed === "hand" ? ids.player.hand[1] : ids.player[placed][0]!;
+          state.instances[source] = { ...state.instances[source], variant };
+          const bonus = works.includes(placed) ? amount : 0;
+          const ally = ids.player.front[0]!;
+          const enemy = ids.enemy.front[0]!;
+          const card = ids.player.hand[0];
+          const check = (evaluated: BattleState, current: typeof warm) => {
+            expect(effectiveSpark(evaluated, current.catalog, ally)).toBe(1 + bonus);
+            expect(effectiveSpark(evaluated, current.catalog, enemy)).toBe(1);
+            expect(current.view(evaluated, "player").instances[card]?.characteristics.cost).toBe(5 - bonus);
+            expect(current.legalActions(evaluated, "player").some((action) => action.kind === "play" && action.card === card && action.from === "hand")).toBe(bonus > 0);
+          };
+          const saved = serializeState(state);
+          check(state, warm);
+          const restored = deserializeState(saved);
+          check(restored, warm);
+          check(restored, reloaded);
+          expect(serializeState(restored)).toBe(saved);
+          expect(serializeState(state)).toBe(saved);
+        }
+      }
+    });
+  }
 
   it("apply only while their card is in a zone they work from: play unless they name one, and 'any' is play, void, hand, and deck", () => {
     const works: Record<FunctionalZone, readonly ("back" | "void" | "hand" | "deck")[]> = {

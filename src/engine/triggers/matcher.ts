@@ -7,8 +7,9 @@
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, matchesFilter } from "../continuous/characteristics";
+import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
-import type { CardFilter, FunctionalZone, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
+import type { CardFilter, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
 import { conditionHolds } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
 import { instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
@@ -119,17 +120,6 @@ function listeners(state: BattleState, side: Side, departing: Departure | null):
   }
   if (moving !== null && !OTHER_ZONES.some((zone) => zone === moving.to)) result.push(cardListener(state, moving.instance));
   return result;
-}
-
-function worksIn(zone: FunctionalZone, current: Zone): boolean {
-  switch (zone) {
-    case "play":
-      return current === "play";
-    case "any":
-      return current === "play" || current === "void" || current === "hand" || current === "deck";
-    default:
-      return current === zone;
-  }
 }
 
 function filterMatches(catalog: EngineCatalog, state: BattleState, filter: CardFilter, id: InstanceId): boolean {
@@ -341,7 +331,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
 function matchListener(ctx: StepContext, listener: Listener, event: EngineEvent): void {
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered") return;
-    const inZone = listener.emblem || worksIn(ability.zone, listener.zone);
+    const inZone = listener.emblem || worksInZone(ability.zone, listener.zone);
     const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, listener, inZone);
     if (match !== null) enqueueAbility(ctx, listener, ability, index, match);
   });
@@ -401,7 +391,7 @@ export function triggerNamed(ctx: StepContext, id: InstanceId, named: NamedTrigg
   const listener = cardListener(ctx.state, id);
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered" || !hasNamed(ability.trigger, named)) return;
-    if (named !== "dissolved" && !worksIn(ability.zone, listener.zone)) return;
+    if (named !== "dissolved" && !worksInZone(ability.zone, listener.zone)) return;
     enqueueAbility(ctx, listener, ability, index, { subject: id });
   });
 }

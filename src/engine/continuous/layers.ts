@@ -27,8 +27,9 @@
  */
 import { instanceCard, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
+import { worksInZone } from "../dsl/abilities";
 import { matchesCharacterWith, matchingCharactersWith, type CharacteristicsReader } from "../dsl/selectors";
-import type { Ability, CharacterRef, FunctionalZone, Keyword, StaticAbility } from "../dsl/types";
+import type { Ability, CharacterRef, Keyword, StaticAbility } from "../dsl/types";
 import { evaluateValue } from "../dsl/values";
 import { primitiveDefinition } from "../effects/registry";
 import type { EffectNode, Layer, StaticEnv } from "../effects/types";
@@ -91,14 +92,6 @@ function instanceNumber(id: InstanceId): number {
   return Number(id.slice(1));
 }
 
-/** The zones a card's static ability works from (rules § Ability Types → Static abilities, RD-hv-umm2.53-1). */
-const WORKS_FROM: Readonly<Record<FunctionalZone, readonly Zone[]>> = {
-  play: ["play"],
-  void: ["void"],
-  hand: ["hand"],
-  any: ["play", "void", "hand", "deck"],
-};
-
 /** A card's static abilities, and whether any of them works outside play. */
 interface CardStatics {
   readonly abilities: readonly StaticAbility[];
@@ -148,7 +141,7 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
   const entries: StaticEntry[] = [];
   const add = (source: AbilitySource, controller: Side, abilities: readonly Ability[], timestamp: number, zone: Zone | null): void => {
     for (const ability of abilities) {
-      if (ability.kind !== "static" || (zone !== null && !WORKS_FROM[ability.zone].includes(zone))) continue;
+      if (ability.kind !== "static" || (zone !== null && !worksInZone(ability.zone, zone))) continue;
       const continuous = primitiveDefinition(ability.effect.op).continuous;
       if (continuous === undefined) throw new Error(`A static ability holds ${ability.effect.op}, which is not continuous`);
       entries.push({ source, controller, node: ability.effect, layer: continuous.layer, timestamp, order: entries.length });

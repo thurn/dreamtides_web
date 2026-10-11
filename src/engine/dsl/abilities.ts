@@ -1,6 +1,14 @@
-/** Reading an ability's parts across its kinds. */
+/** Reading an ability's parts and the zones where it works. */
 import type { Effect } from "../effects/registry";
-import type { Ability } from "./types";
+import type { Zone } from "../state/ids";
+import type { Ability, FunctionalZone } from "./types";
+
+/** Where a card's static or triggered ability works; `any` excludes the stack and Banished zone. */
+export function worksInZone(zone: FunctionalZone, current: Zone): boolean {
+  return zone === "any"
+    ? current === "play" || current === "void" || current === "hand" || current === "deck"
+    : current === zone;
+}
 
 /**
  * The effect an ability resolves or applies: an event's, an activated or
