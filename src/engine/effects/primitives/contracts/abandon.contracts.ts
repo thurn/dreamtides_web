@@ -55,7 +55,12 @@ const failing: EngineCardDefinition = {
     },
   },
 };
-const engine = createEngine(testCatalog([own, other, filtered, selected, priced, protectedCharacter, watcher, source, mage, failing]));
+const xActivator: EngineCardDefinition = {
+  ...v.vanilla1, id: syntheticId(1250), status: "authored",
+  abilities: () => [activated([energyX(0)], sequence(abandon("opponent", { costAtMost: x() }), gainPoints(x())))],
+};
+const retainedXActivator: EngineCardDefinition = { ...xActivator, id: syntheticId(1251), costs: [energyX(0)] };
+const engine = createEngine(testCatalog([own, other, filtered, selected, priced, protectedCharacter, watcher, source, mage, failing, xActivator, retainedXActivator]));
 const deck = Array.from({ length: 5 }, () => v.vanilla1.id);
 function setup(controller: Side = "player", effect = own.id): BoardSetup {
   return {
@@ -152,6 +157,47 @@ describe("abandon", () => {
       expect(result.state.sides.player.score).toBe(3);
       expect(result.state.sides.player.backRank.filter(Boolean)).toEqual(result.ids.player.back);
     }
+  });
+
+  it.each([false, true])("uses source-card X for bounds and activation X for values (played X: %s)", (playedX) => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player", phase: "day",
+      player: { hand: playedX ? [retainedXActivator.id] : [], back: playedX ? [] : [xActivator.id], energy: 5, deck },
+      enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck },
+    });
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    let slice: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    const me = playedX ? ids.player.hand[0] : ids.player.back[0]!;
+    if (playedX) {
+      slice = applied(fold.reduce(slice, {
+        kind: "battleAction", side: "player",
+        action: { kind: "play", card: me, from: "hand", slot: { rank: "back", index: 0 } },
+      }));
+      const playX = fold.pending(slice)!.prompt;
+      expect(playX).toMatchObject({ kind: "chooseNumber", purpose: { role: "chooseX" } });
+      slice = applied(fold.reduce(slice, { kind: "answer", side: "player", promptId: playX.id, value: 1 }));
+      expect(fold.pending(slice)).toBeNull();
+      expect(slice.committed.instances[me]).toMatchObject({ zone: "play", status: { x: 1 } });
+    }
+    slice = applied(fold.reduce(slice, { kind: "battleAction", side: "player", action: { kind: "activate", source: me, ability: 0 } }));
+    const saved = JSON.parse(JSON.stringify(slice)) as BattleSlice;
+    const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
+    const activationX = fresh.pending(saved)!.prompt;
+    expect(activationX).toEqual(fold.pending(slice)!.prompt);
+    expect(activationX).toMatchObject({ kind: "chooseNumber", side: "player", purpose: { role: "chooseX" } });
+    const intent = { kind: "answer" as const, side: "player" as const, promptId: activationX.id, value: 3 };
+    const outcome = fresh.reduce(saved, intent);
+    const done = applied(outcome);
+    expect(done).toEqual(applied(fold.reduce(slice, intent)));
+    expect(fresh.pending(done)).toBeNull();
+    expect(done.committed.sides.player.score).toBe(3);
+    expect(done.committed.sides.enemy.void).toEqual(playedX ? [ids.enemy.back[0]] : []);
+    expect(done.committed.instances[ids.enemy.back[1]!].zone).toBe("play");
+    if (outcome.kind !== "applied") throw new Error("answer bounced");
+    expect(outcome.published.filter((e) => e.kind === "abandoned")).toEqual(
+      playedX ? [{ kind: "abandoned", instance: ids.enemy.back[0], side: "enemy" }] : [],
+    );
+    expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
   });
 
   it("abandons a borrowed Veil and untargetable character to its owner's void, firing both kinds of trigger for its controller", () => {
