@@ -16,8 +16,8 @@
  *   `StepContext.disclose`, which calls `showPrivately`;
  * - published zone visibility and public reveals outlive an error or cancel
  *   while the same printed identity remains tracked at the published prompt
- *   (`keepPublishedKnowledge`); private-only exposure keeps its strict
- *   location guards (`keepDisclosures`).
+ *   (`keepPublishedKnowledge`); recovery into a committed deck and
+ *   private-only exposure keep their strict location guards.
  *
  * Decks start unknown to both sides; the opening shuffle happens before any
  * card is known.
@@ -222,6 +222,8 @@ export function capturePublicKnowledge(
  * The gameplay state rolls back; the matching card in it becomes known.
  * A created/ceased identity, a changed printing, or knowledge lost to a
  * blind shuffle supplies no identity for recovery.
+ * A committed deck card also keeps its exact place: knowing it exposes
+ * its deck index, which a transient move does not disclose.
  */
 export function keepPublishedKnowledge(committed: BattleState, display: BattleState, exposures: PublishedKnowledge): BattleState {
   let next: BattleState | null = null;
@@ -231,6 +233,7 @@ export function keepPublishedKnowledge(committed: BattleState, display: BattleSt
       const shown = display.instances[id];
       if (before === undefined || shown === undefined || !sameIdentity(before, identity) || !sameIdentity(before, shown)) continue;
       if (!knows(display, shown, side) || knows(next ?? committed, before, side)) continue;
+      if (before.zone === "deck" && !sitsAlike(committed, before, display, shown)) continue;
       next ??= { ...committed, knownTo: { player: [...committed.knownTo.player], enemy: [...committed.knownTo.enemy] } };
       learn(next, side, before);
     }

@@ -106,19 +106,23 @@ const privateThenFail: EngineCardDefinition = {
 };
 
 /** A blind shuffle ends tracking of the publicly discarded card before the next prompt. */
-const discardShuffledThenFail: EngineCardDefinition = {
-  ...eachDiscardsThenFail, id: syntheticId(6210),
+const discardShuffledThenFail = (drawAfterShuffle: boolean): EngineCardDefinition => ({
+  ...eachDiscardsThenFail, id: syntheticId(drawAfterShuffle ? 6212 : 6210),
   synthetic: {
     resolve(ctx, item) {
       const env = { source: item.instance, origin: instanceOrigin(instanceOf(ctx.state, item.instance)), ability: 0, controller: item.controller, x: null, optionalPaid: [], choices: { modes: [], targets: [] } };
       resolveEffect(ctx, discard(1), env);
       moveInstance(ctx, ctx.state.sides[item.controller].void[0], "deck");
       resolveEffect(ctx, discover({}, { costExactly: 2 }), env);
+      if (drawAfterShuffle) resolveEffect(ctx, draw(ctx.state.sides[item.controller].deck.length), env);
       resolveEffect(ctx, discard(1, "opponent"), env);
       throw new Error("synthetic failure after a blind shuffle");
     },
   },
-};
+});
+
+const discardDiscovered = discardShuffledThenFail(false);
+const discardDiscoveredThenDrawn = discardShuffledThenFail(true);
 
 const revealThenFail: EngineCardDefinition = {
   ...eachDiscardsThenFail, id: syntheticId(6211),
@@ -152,7 +156,7 @@ const bornAlive = bornThenFail(false);
 const bornCeased = bornThenFail(true);
 const eachEngine = createEngine(testCatalog([
   eachDiscards, eachDrawsThenYou, eachEmptiesHand, eachDiscardsForOpponent, eachDiscardsThenFail,
-  discardReturnsThenFail, privateThenFail, discardShuffledThenFail, revealThenFail, bornAlive, bornCeased,
+  discardReturnsThenFail, privateThenFail, discardDiscovered, discardDiscoveredThenDrawn, revealThenFail, bornAlive, bornCeased,
 ], {}, [recoveryFigment]));
 
 const setup = (active: Side, card = eachDiscards.id): BoardSetup => {
@@ -395,24 +399,40 @@ describe("eachPlayer", () => {
       expect(stateHash(done.slice.committed)).toBe(stateHash({ ...slice.committed, knownTo: { player: [top, secondCard], enemy: [top, exposed] } }));
     });
 
-    it("respects a blind shuffle that ended tracking before the last published prompt", () => {
+    it.each([false, true])("respects a blind shuffle without revealing committed deck positions (draw afterward: %s)", (drawAfterShuffle) => {
       const fold = createFoldAdapter(eachEngine, { checkEventPrefix: true });
-      const { state, ids } = boardState(eachEngine.catalog, setup("player", discardShuffledThenFail.id));
+      const card = drawAfterShuffle ? discardDiscoveredThenDrawn : discardDiscovered;
+      const { state, ids } = boardState(eachEngine.catalog, setup("player", card.id));
       const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
       const first = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
       const exposed = ids.player.hand[1];
       const second = applied(fold.reduce(first, { kind: "answer", side: "player", promptId: fold.pending(first)!.prompt.id, value: [exposed] }));
       const pending = fold.pending(second)!;
       expect(pending.prompt.side).toBe("enemy");
-      expect(pending.display.instances[exposed].zone).toBe("deck");
+      expect(pending.display.instances[exposed].zone).toBe(drawAfterShuffle ? "hand" : "deck");
       expect(view(pending.display, "enemy", eachEngine.catalog).instances[exposed]).toBeUndefined();
       const discovered = ids.player.deck[1];
       expect(view(pending.display, "player", eachEngine.catalog).instances[discovered]?.zone).toBe("hand");
+      const drawn = pending.display.sides.player.hand.filter((id) => ids.player.deck.includes(id) && id !== discovered);
+      expect(drawn).toHaveLength(drawAfterShuffle ? ids.player.deck.length - 1 : 0);
+      for (const id of drawn) expect(view(pending.display, "player", eachEngine.catalog).instances[id]?.zone).toBe("hand");
       const done = fold.reduce(second, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: [ids.enemy.hand[0]] });
       if (done.kind !== "applied") throw new Error("unexpected bounce");
       expect(done.error?.kind).toBe("engine_error");
       expect(view(done.slice.committed, "enemy", eachEngine.catalog).instances[exposed]).toBeUndefined();
-      expect(stateHash(done.slice.committed)).toBe(stateHash({ ...second.committed, knownTo: { player: [discovered], enemy: [] } }));
+      const reloaded = createFoldAdapter(eachEngine, { checkEventPrefix: true });
+      const saved = JSON.parse(JSON.stringify(second)) as BattleSlice;
+      const again = reloaded.reduce(saved, { kind: "answer", side: "enemy", promptId: reloaded.pending(saved)!.prompt.id, value: [ids.enemy.hand[0]] });
+      if (again.kind !== "applied") throw new Error("reload bounced");
+      expect(again.error?.kind).toBe("engine_error");
+      expect(stateHash(again.slice.committed)).toBe(stateHash(done.slice.committed));
+      for (const side of ["player", "enemy"] as const) {
+        const recovered = view(done.slice.committed, side, eachEngine.catalog);
+        expect(view(again.slice.committed, side, eachEngine.catalog)).toEqual(recovered);
+        expect(recovered.sides.player.deck.known).toEqual([]);
+        for (const id of ids.player.deck) expect(recovered.instances[id]).toBeUndefined();
+      }
+      expect(stateHash(done.slice.committed)).toBe(stateHash(second.committed));
     });
 
     it("keeps identities from a public reveal while its cards remain in an opposing hand", () => {

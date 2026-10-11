@@ -1,0 +1,388 @@
+{
+  "bead": "hv-umm2.353",
+  "phase": 5,
+  "baseOid": "5da790bf43dbce9d2ad7fe399765302bd294834b",
+  "implementMin": 8,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "installReported": 2,
+    "focused": 5.960038185119629,
+    "reviewBeforeUpdate": 38.998708963394165,
+    "knipBeforeUpdate": 2.737212896347046,
+    "review": 29.60362720489502,
+    "knip": 3.196341037750244,
+    "full": 50.2383177280426,
+    "fuzz": 56.79145812988281
+  },
+  "heavyQueueWaitS": 88.69336724281311,
+  "hostLoad": 23.62841796875,
+  "testDelta": {
+    "files": 0,
+    "lines": 20,
+    "jsdomFiles": 0,
+    "cases": 1
+  },
+  "friction": [
+    {
+      "tag": "shuffle-order-fixture-assumption",
+      "minutes": 1,
+      "note": "A draft draw(1) variant could select a previously committed-hand card from the shuffled deck. Parent review identified the dependency on shuffled order.",
+      "disposition": "The synthetic fixture draws the entire remaining deck and asserts the original deck cardinality, independent of shuffled order; the final test-only negative reproduces both actual exposure paths."
+    }
+  ],
+  "negativeRegression": {
+    "log": "negative-order-independent.log",
+    "exitCode": 1,
+    "result": "Discover exposes original deck index 1; drawing the remaining shuffled deck exposes all four original deck indices. Both fail only at recovered deck.known after successful reload state/view comparisons.",
+    "productionUnchanged": true
+  },
+  "design": {
+    "guard": "Newly learned committed-deck identity requires sitsAlike at the last published prompt: zone, controller, last zone entry and deck index.",
+    "privateDisclosures": "keepDisclosures body byte-identical to base.",
+    "storage": "Existing knownTo exposes identity and exact hidden-zone index; no schema, persistence, event or UI change."
+  },
+  "validationRuns": [
+    {
+      "label": "negative",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "respects a blind shuffle"
+      ],
+      "queueS": 0.01956796646118164,
+      "hostLoad": [
+        3.50048828125,
+        7.9169921875,
+        8.4443359375
+      ],
+      "wrapperPid": 63099,
+      "commandPid": 63101,
+      "running": false,
+      "executionS": 1.8425242900848389,
+      "exitCode": 1
+    },
+    {
+      "label": "negative-both",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "respects a blind shuffle"
+      ],
+      "queueS": 50.94825196266174,
+      "hostLoad": [
+        3.7421875,
+        6.5234375,
+        7.8193359375
+      ],
+      "wrapperPid": 65026,
+      "commandPid": 65029,
+      "running": false,
+      "executionS": 1.4845798015594482,
+      "exitCode": 1
+    },
+    {
+      "label": "negative-order-independent",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "respects a blind shuffle"
+      ],
+      "queueS": 26.184637784957886,
+      "hostLoad": [
+        5.26513671875,
+        6.4677734375,
+        7.720703125
+      ],
+      "wrapperPid": 67012,
+      "commandPid": 67014,
+      "running": false,
+      "executionS": 1.5354502201080322,
+      "exitCode": 1
+    },
+    {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/view/view.test.ts"
+      ],
+      "queueS": 0.021303176879882812,
+      "hostLoad": [
+        4.91015625,
+        6.2333984375,
+        7.57666015625
+      ],
+      "wrapperPid": 67669,
+      "commandPid": 67670,
+      "running": false,
+      "executionS": 5.960038185119629,
+      "exitCode": 0
+    },
+    {
+      "label": "review-before-update",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 0.02172708511352539,
+      "hostLoad": [
+        5.28759765625,
+        6.24072265625,
+        7.5546875
+      ],
+      "wrapperPid": 67912,
+      "commandPid": 67913,
+      "running": false,
+      "executionS": 38.998708963394165,
+      "exitCode": 1
+    },
+    {
+      "label": "knip-before-update",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "queueS": 0.024172067642211914,
+      "hostLoad": [
+        6.65869140625,
+        6.333984375,
+        7.45703125
+      ],
+      "wrapperPid": 69248,
+      "commandPid": 69249,
+      "running": false,
+      "executionS": 2.737212896347046,
+      "exitCode": 0
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "queueS": 0.02230215072631836,
+      "hostLoad": [
+        23.62841796875,
+        13.83056640625,
+        9.994140625
+      ],
+      "wrapperPid": 83307,
+      "commandPid": 83309,
+      "running": false,
+      "executionS": 29.60362720489502,
+      "exitCode": 0
+    },
+    {
+      "label": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "queueS": 0.023195981979370117,
+      "hostLoad": [
+        8.4951171875,
+        11.45068359375,
+        9.4541015625
+      ],
+      "wrapperPid": 85391,
+      "commandPid": 85392,
+      "running": false,
+      "executionS": 3.196341037750244,
+      "exitCode": 0,
+      "trackedPidCount": 13
+    },
+    {
+      "label": "full-final",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "queueS": 0.023115158081054688,
+      "hostLoad": [
+        7.65625,
+        11.17236328125,
+        9.37841796875
+      ],
+      "wrapperPid": 85658,
+      "commandPid": 85659,
+      "running": false,
+      "executionS": 50.2383177280426,
+      "exitCode": 0,
+      "trackedPidCount": 138
+    },
+    {
+      "label": "fuzz-final",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2.353"
+      ],
+      "queueS": 11.405093908309937,
+      "hostLoad": [
+        7.041015625,
+        10.31591796875,
+        9.20947265625
+      ],
+      "wrapperPid": 88369,
+      "commandPid": 88371,
+      "running": false,
+      "executionS": 56.79145812988281,
+      "exitCode": 0,
+      "trackedPidCount": 112
+    }
+  ],
+  "sourceFileSha256": {
+    "src/engine/view/knowledge.ts": "487d8faf4a67ee80ab41062dc35c0fbe4c8089275bb58b1d6716bd47f7f6f8f7",
+    "src/engine/effects/primitives/contracts/each-player.contracts.ts": "66f591cffe15ca234a59145ed8740ca0dec8837ca6d7d25c0c168260ac0bb3c8",
+    "docs/plan/engine-design.md": "8759e9263df315175ea15856e08e0a92c2a9e3d950f1083bb6eeaa5bff39f9b3"
+  },
+  "runtime": {
+    "allKnownPidsAbsent": true,
+    "pidProbeExit": 1,
+    "pidProbeOutput": "",
+    "allToolSessionsExited": true,
+    "servers": false,
+    "browserProviders": false,
+    "trackedDescendants": "Final knip/full/fuzz commands captured own process descendants; ps confirms all recorded PIDs absent.",
+    "recordedPidCount": 277,
+    "pidLedger": "353-implementation-evidence/final-provenance.json"
+  },
+  "originalBaseOid": "79aceda652dad4febf6e94a6cf4d4ba5b66a0aab",
+  "parentNativeUpdate": {
+    "oldCheckpoint": "26de7c95d27c53f865f88a51cbc8069a555526e3",
+    "updatedCheckpoint": "669e19fa9c257f8e963ed6c446d1e72d842d0c6f",
+    "newBaseOid": "5da790bf43dbce9d2ad7fe399765302bd294834b",
+    "sourceBytesIdentical": true,
+    "prerequisite": "hv-umm2.351 fixture repair integrated by parent Tollgate update"
+  },
+  "preUpdateCheckpoint": {
+    "candidateReady": false,
+    "pending": [
+      "parent Tollgate update after hv-umm2.351 promotion",
+      "final focused/review/knip/full",
+      "300-game fuzz smoke",
+      "parent other-family cold review"
+    ],
+    "reviewBeforeUpdate": "Exit 1 only known hv-umm2.351 prompt-lab issue: four shuffle-into illegalAnswer failures and one missing shuffleInto role; 2247 other tests pass."
+  },
+  "checks": {
+    "focused": {
+      "files": 3,
+      "tests": 228,
+      "base": "79aceda652dad4febf6e94a6cf4d4ba5b66a0aab",
+      "validity": "Runtime and contract bytes identical after native update; final full covers integrated fixture repair."
+    },
+    "review": {
+      "files": 157,
+      "tests": 2253
+    },
+    "knip": "passed",
+    "full": {
+      "files": 216,
+      "tests": 2887,
+      "productionBundle": true
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 153076,
+      "prompts": 2602,
+      "interactiveReruns": 279,
+      "failures": 0,
+      "seed": "hv-umm2.353"
+    }
+  },
+  "failurePathMatrix": [
+    {
+      "path": "transient Discover reveals an identity but not its committed deck index",
+      "contract": "respects a blind shuffle without revealing committed deck positions (draw afterward: false)",
+      "evidence": "negative-order-independent.log fails with i5/index1; focused.log passes",
+      "observables": "Published holder hand contains the discovered committed-deck instance; recovery keeps both viewers deck.known empty and original deck instances omitted."
+    },
+    {
+      "path": "blind shuffle followed by actual draws exposes committed deck identities in a new order",
+      "contract": "respects a blind shuffle without revealing committed deck positions (draw afterward: true)",
+      "evidence": "negative-order-independent.log fails with all four original deck indices; focused.log passes",
+      "observables": "Draws all remaining synthetic deck cards independent of shuffled order; recovery omits original deck identity and index for both sides."
+    },
+    {
+      "path": "recovery after serialized pending prompt reload",
+      "contract": "both parameterized shuffle recovery cases",
+      "observables": "Fresh adapter plus serialized second prompt gives same recovered state hash and both complete views, with original committed hash unchanged."
+    },
+    {
+      "path": "shuffle loses tracking of committed-hand public discard",
+      "contract": "both parameterized shuffle recovery cases",
+      "observables": "Opponent sees no discarded instance after shuffle or recovery; own committed hand visibility is preserved."
+    },
+    {
+      "path": "published committed-hand identity retained through failure",
+      "contracts": [
+        "retains only the knowledge already published before a later discard fails with %s active",
+        "keeps public identity learned during a published move even after the card returns to a hidden zone",
+        "keeps identities from a public reveal while its cards remain in an opposing hand"
+      ],
+      "coverage": "Existing contracts unchanged and pass in focused/full."
+    },
+    {
+      "path": "chooser-only private deck memory and pre-existing opponent tracking",
+      "contracts": [
+        "keeps private deck exposure limited to its chooser while retaining the other side's committed tracking",
+        "keeps a disclosure on recovery only for cards still known where they sit, leaving the other side's knowledge alone"
+      ],
+      "coverage": "Existing contracts unchanged; keepDisclosures body hash de49ef00ef3a39f3ed4e7e488eaf18c121a2bd920dd43ff210e98bc0453c6e98 is byte-identical."
+    },
+    {
+      "path": "existing shuffleInto rollback exposes private offered card but moves another",
+      "file": "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts",
+      "coverage": "Existing contract included in focused collected primitives and final full. Its published private disclosure retains only same-place tracked information."
+    },
+    {
+      "path": "original fold error/cancel/stale/foreign/illegal input and newborn/ceased instances",
+      "coverage": "Existing fold, view and eachPlayer contracts pass; no new schema or actor boundary."
+    },
+    {
+      "path": "new committed-deck exact zone/controller/last-entry/index guard",
+      "source": "src/engine/view/knowledge.ts keepPublishedKnowledge()",
+      "coverage": "Uses existing sitsAlike guard; zone change is directly exercised by actual Discover/draw tests. Controller, last-entry and index guard branches use the existing typed location predicate; no invented private-helper tests claim branch execution."
+    }
+  ],
+  "validationProvenance": "Final review/knip/full/fuzz ran on native-updated base with checkpoint runtime, contract and design-document hashes unchanged. Only own evidence is amended afterward.",
+  "excludedValidation": {
+    "browser": "No player presentation change; real-domain fold/view contracts verify hidden-information behavior.",
+    "weightedFuzz": "No printed entities authored or changed.",
+    "additionalFocusedRuns": "Prior focused source bytes identical; final full covers integrated prerequisite.",
+    "additionalFullRuns": "Final full passed; only own evidence edited afterward."
+  },
+  "implementationReady": true,
+  "parentDeliveryRemaining": [
+    "fresh other-family cold review",
+    "candidate certification/promotion/cleanup"
+  ],
+  "frictionTriggerResult": {
+    "phase5Cadence": "23/83 since hv-umm2.339; below25 trigger",
+    "allFiredTagsDispositioned": true,
+    "ownTagCount": 1
+  }
+}

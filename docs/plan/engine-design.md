@@ -476,6 +476,13 @@ within the published prefix ends that knowledge. Created instances absent
 from the committed state and instances absent from the display contribute
 no recovered identity.
 
+Deck knowledge exposes a card's exact index as well as its identity. A newly
+learned card in the committed deck is retained only when its zone,
+controller, last zone entry and deck index match the last published display.
+Seeing a card drawn or discovered into a hand proves its identity there;
+recovery keeps its committed deck position hidden. Existing committed
+knowledge remains at the step boundary.
+
 The fold reconstructs only the answer prefix of the last published prompt.
 It consumes event snapshots immediately into per-side identity maps, bounded
 by the battle's physical instances. The reconstructed suspended result must
