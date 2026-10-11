@@ -227,3 +227,26 @@ engine events.
   `src/rules/journey/journey-properties.test.ts`: journey cases that only
   mention tutorial scenes or the seen-ID history. `journey-properties`
   generates `RESOLVE_PROMPT`; 4.1 `hv-n5lj.2` owns that generator.
+
+
+## Recapture record (hv-33id.6, 2026-10-11)
+
+hv-33id.6 recaptured all 42 beats on each viewport from historical source
+commit `2f7ef3f2e86f0c678952a169e1c950ff418c275a`
+(2026-10-09T15:45:18-07:00), Git tree
+`42edc94fbfa03e0bf2013b14e0fc38ff62963e37`. The 84 PNGs retain the filenames
+and dimensions above. Both walks enter `/main?seed=1` and continue on one
+page and game through the second Battle Start preview with an empty error
+buffer. The opponent reveal is face up; Victory has one settled New Journey
+action. Source bytes, generated tokens, linked art and the current native QA
+harness were verified before and after capture.
+
+The retained `baseline-tutorial.js` exports beats 01–30 and
+`baseline-journey.js` exports beats 31–42. `baseline.mjs` imports both as six
+native scenario steps per viewport, retaining the same page and carry. Run
+`node scripts/qa/run-scenario.mjs baseline --bead hv-33id.1 --cwd <exact-source-archive> --viewports desktop,mobile --timeout 900`
+from a current Tollgate worktree after installing the exact Git archive's
+dependencies. The runner owns its exclusive browser lease and server on a
+free port from 5174. `baseline.result.json`, `hv-33id.6-final-capture-manifest.json`
+and `hv-33id.6-runtime-final.json` record the accepted walk, file hashes and
+terminal cleanup. The temporary source archive is removed after cleanup.

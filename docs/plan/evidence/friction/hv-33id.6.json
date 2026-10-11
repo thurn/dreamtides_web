@@ -1,0 +1,673 @@
+{
+  "bead": "hv-33id.6",
+  "phase": 6,
+  "base": "10d3349a6198a9046cd6d5b1772510f705b06583",
+  "implementMin": 62.021,
+  "timingBasis": "Parent native dispatch checkpoint 2026-10-11T17:28:49.648022Z to immediate commit preparation 2026-10-11T18:30:50.901159+00:00; includes research, parent ACKs/cold review, script reconstruction, authored walks, native lease queue, checks and evidence. Exact commit time is in Git. ACK/productive splits were not independently timed; they are not invented. First repository mutation was npm install at 17:30:36.523708Z.",
+  "localValidationS": {
+    "install": 2.483,
+    "historicalInstall": 2.017,
+    "reviewPreflight": 0.239,
+    "knip": 5.743,
+    "finalScenario": 478.192,
+    "review": 0.233
+  },
+  "hostLoad": 28.57861328125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 20.012,
+      "note": "Measured extra scenario execution in failed draft/Inspector/atlas/setup diagnostics and the structurally passing matrix with two capture-readiness gaps. This conservative cost excludes hand-authoring, queue, cleanup and the accepted fourth matrix. Corrected old control role/opacity, scroll, physical UUID mapping, card flip and settled Victory action waits; runtime source remains exact."
+    }
+  ],
+  "acceptance": {
+    "captures": 84,
+    "beatsPerViewport": 42,
+    "caps": [],
+    "calls": 12,
+    "maxCallS": 62.867,
+    "desktopGame": "nh5gdt",
+    "mobileGame": "fn322x",
+    "manifestMatches": [
+      "historical",
+      "currentHarness",
+      "generated",
+      "linkedArt",
+      "task"
+    ],
+    "coldReview": "Parent reviewed complete preceding 84, corrected final06/30 on both and final14desktop/21mobile/42mobile; independent final84 structural audit passed.",
+    "scope": "Existing33id1 recapture note and own measurement/friction/pre-existing only; images/scripts/results ignored.",
+    "knipReuse": "Actual successful scan5.743s; source/test/harness/config unchanged by final docs-only scope.",
+    "review": "Staged4documentationpaths; actualexit0 .233s, no applicablechecks. No lint/typecheck/test execution claimed."
+  },
+  "artifactHashes": {
+    "baseline.result.json": "3089696dbfd81af95ba68b1efde8ed4d4fe82990e6bb6ce752ef68da5ea4ecb0",
+    "hv-33id.6-final-capture-manifest.json": "4b1ba92c73a9f47722cf3e9c7aa3bd7afce3416ebe70217749bf0bd51f04e202",
+    "hv-33id.6-matrix-04-before.manifest.json": "bc43ce8a4b044c1111f086b1a387d615ac1c5eb9bd81b1047ea09d6a1461cb15",
+    "hv-33id.6-matrix-04-after.manifest.json": "457198ee414488a7073339db9e4b0ef2d2fa701c5465377feac44c681d03cb32"
+  },
+  "runtimeLedger": [
+    {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:30:36.523708+00:00",
+      "end": "2026-10-11T17:30:39.007281+00:00",
+      "wallS": 2.483,
+      "pid": 71905,
+      "exit": 0,
+      "startLoad": [
+        6.96435546875,
+        11.83203125,
+        9.14501953125
+      ],
+      "endLoad": [
+        6.96435546875,
+        11.83203125,
+        9.14501953125
+      ],
+      "descendantPids": [
+        71952
+      ],
+      "settled": true
+    },
+    {
+      "label": "historical-install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture/node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+      "start": "2026-10-11T17:30:52.622912+00:00",
+      "end": "2026-10-11T17:30:54.639633+00:00",
+      "wallS": 2.017,
+      "pid": 72125,
+      "exit": 0,
+      "startLoad": [
+        6.220703125,
+        11.4306640625,
+        9.04833984375
+      ],
+      "endLoad": [
+        6.220703125,
+        11.4306640625,
+        9.04833984375
+      ],
+      "descendantPids": [
+        72167
+      ],
+      "settled": true
+    },
+    {
+      "label": "compat",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/compat.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "compat=1",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:31:31.394549+00:00",
+      "end": "2026-10-11T17:31:31.624073+00:00",
+      "wallS": 0.229,
+      "pid": 72818,
+      "exit": 2,
+      "startLoad": [
+        4.39697265625,
+        10.3212890625,
+        8.7509765625
+      ],
+      "endLoad": [
+        4.39697265625,
+        10.3212890625,
+        8.7509765625
+      ],
+      "descendantPids": [],
+      "settled": true
+    },
+    {
+      "label": "compat-02",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/compat.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "compat=1",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:32:04.395956+00:00",
+      "end": "2026-10-11T17:32:56.423063+00:00",
+      "wallS": 52.027,
+      "pid": 73248,
+      "exit": 0,
+      "startLoad": [
+        3.5166015625,
+        9.52783203125,
+        8.51611328125
+      ],
+      "endLoad": [
+        3.57861328125,
+        8.55810546875,
+        8.21875
+      ],
+      "descendantPids": [
+        73259,
+        73260,
+        73261,
+        73262,
+        73264,
+        73319,
+        73432,
+        73445
+      ],
+      "settled": true
+    },
+    {
+      "label": "matrix-01",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/baseline.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:35:42.655220+00:00",
+      "end": "2026-10-11T17:39:43.906011+00:00",
+      "wallS": 241.25,
+      "pid": 80337,
+      "exit": 1,
+      "startLoad": [
+        4.97509765625,
+        7.07861328125,
+        7.65869140625
+      ],
+      "endLoad": [
+        24.25927734375,
+        12.89892578125,
+        9.7451171875
+      ],
+      "descendantPids": [
+        80362,
+        80363,
+        80368,
+        80371,
+        80374,
+        80399,
+        80412
+      ],
+      "settled": true
+    },
+    {
+      "label": "matrix-02",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/baseline.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:41:36.737592+00:00",
+      "end": "2026-10-11T17:45:17.054982+00:00",
+      "wallS": 220.316,
+      "pid": 12195,
+      "exit": 1,
+      "startLoad": [
+        7.7265625,
+        10.66455078125,
+        9.283203125
+      ],
+      "endLoad": [
+        4.62939453125,
+        7.5400390625,
+        8.244140625
+      ],
+      "descendantPids": [
+        12206,
+        12207,
+        12209,
+        12210,
+        12211,
+        12249,
+        12255
+      ],
+      "settled": true
+    },
+    {
+      "label": "diagnostic",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/diagnostic.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:48:17.778983+00:00",
+      "end": "2026-10-11T17:48:18.007303+00:00",
+      "wallS": 0.228,
+      "pid": 33349,
+      "exit": 2,
+      "startLoad": [
+        5.53662109375,
+        6.72412109375,
+        7.7607421875
+      ],
+      "endLoad": [
+        5.53662109375,
+        6.72412109375,
+        7.7607421875
+      ],
+      "descendantPids": [],
+      "settled": true
+    },
+    {
+      "label": "diagnostic-02",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/diagnostic.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:48:45.860953+00:00",
+      "end": "2026-10-11T17:49:40.978408+00:00",
+      "wallS": 55.117,
+      "pid": 34073,
+      "exit": 1,
+      "startLoad": [
+        5.09326171875,
+        6.5205078125,
+        7.65673828125
+      ],
+      "endLoad": [
+        4.7763671875,
+        6.1494140625,
+        7.443359375
+      ],
+      "descendantPids": [
+        34094,
+        34095,
+        34097,
+        34099,
+        34100,
+        34142,
+        34144
+      ],
+      "settled": true
+    },
+    {
+      "label": "diagnostic-03",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/diagnostic.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:50:41.557290+00:00",
+      "end": "2026-10-11T17:55:17.848891+00:00",
+      "wallS": 276.29,
+      "pid": 43621,
+      "exit": 1,
+      "startLoad": [
+        7.03466796875,
+        6.5693359375,
+        7.51123046875
+      ],
+      "endLoad": [
+        9.40283203125,
+        8.09423828125,
+        7.89306640625
+      ],
+      "descendantPids": [
+        79602,
+        79603,
+        79604,
+        79606,
+        79607,
+        80093,
+        80247
+      ],
+      "settled": true
+    },
+    {
+      "label": "diagnostic-04",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/diagnostic.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T17:56:44.614972+00:00",
+      "end": "2026-10-11T17:59:21.978302+00:00",
+      "wallS": 157.363,
+      "pid": 92210,
+      "exit": 1,
+      "startLoad": [
+        8.35791015625,
+        8.0478515625,
+        7.8896484375
+      ],
+      "endLoad": [
+        27.71142578125,
+        16.96923828125,
+        11.58935546875
+      ],
+      "descendantPids": [
+        92221,
+        92222,
+        92225,
+        92230,
+        92237,
+        92261,
+        92268
+      ],
+      "settled": true
+    },
+    {
+      "label": "targeted",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/targeted.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T18:00:48.010427+00:00",
+      "end": "2026-10-11T18:03:02.021817+00:00",
+      "wallS": 134.011,
+      "pid": 63864,
+      "exit": 1,
+      "startLoad": [
+        20.85546875,
+        17.2890625,
+        12.2119140625
+      ],
+      "endLoad": [
+        16.54296875,
+        16.076171875,
+        12.42236328125
+      ],
+      "descendantPids": [
+        89438,
+        89440,
+        89456,
+        89460,
+        89477,
+        89927,
+        89954
+      ],
+      "settled": true
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T18:07:02.067817+00:00",
+      "end": "2026-10-11T18:07:02.306792+00:00",
+      "wallS": 0.239,
+      "pid": 18367,
+      "exit": 0,
+      "startLoad": [
+        7.16650390625,
+        11.90478515625,
+        11.6064453125
+      ],
+      "endLoad": [
+        7.16650390625,
+        11.90478515625,
+        11.6064453125
+      ],
+      "descendantPids": [],
+      "settled": true
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T18:07:10.593791+00:00",
+      "end": "2026-10-11T18:07:16.336893+00:00",
+      "wallS": 5.743,
+      "pid": 19924,
+      "exit": 0,
+      "startLoad": [
+        7.63330078125,
+        11.9228515625,
+        11.6142578125
+      ],
+      "endLoad": [
+        7.66259765625,
+        11.857421875,
+        11.5927734375
+      ],
+      "descendantPids": [
+        19956,
+        20016,
+        20031,
+        20117,
+        20498,
+        21016
+      ],
+      "settled": true
+    },
+    {
+      "label": "matrix-03",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/baseline.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T18:05:02.795962+00:00",
+      "end": "2026-10-11T18:13:00.803839+00:00",
+      "wallS": 477.974,
+      "pid": 4533,
+      "exit": 0,
+      "startLoad": [
+        9.478515625,
+        14.62109375,
+        12.40576171875
+      ],
+      "endLoad": [
+        3.87548828125,
+        6.76171875,
+        9.26220703125
+      ],
+      "descendantPids": [
+        4544,
+        4545,
+        4547,
+        4551,
+        4552,
+        4583,
+        4593
+      ],
+      "settled": true
+    },
+    {
+      "label": "matrix-04",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "node_modules/.cache/33id6-walk/baseline.mjs",
+        "--bead",
+        "hv-33id.1",
+        "--cwd",
+        "node_modules/.cache/tutorial-baseline-2f7ef3f2e",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T18:15:42.721696+00:00",
+      "end": "2026-10-11T18:23:47.799804+00:00",
+      "wallS": 485.07,
+      "pid": 32817,
+      "exit": 0,
+      "startLoad": [
+        5.072265625,
+        5.87109375,
+        8.431640625
+      ],
+      "endLoad": [
+        5.26318359375,
+        5.0126953125,
+        6.80224609375
+      ],
+      "descendantPids": [
+        32828,
+        32829,
+        32834,
+        32836,
+        32837,
+        32873,
+        32874
+      ],
+      "settled": true
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-baseline-recapture",
+      "start": "2026-10-11T18:27:58.101905+00:00",
+      "end": "2026-10-11T18:27:58.335480+00:00",
+      "wallS": 0.233,
+      "pid": 65510,
+      "exit": 0,
+      "startLoad": [
+        28.57861328125,
+        13.06982421875,
+        9.47265625
+      ],
+      "endLoad": [
+        28.57861328125,
+        13.06982421875,
+        9.47265625
+      ],
+      "descendantPids": [],
+      "settled": true
+    }
+  ],
+  "runtimeCheck": {
+    "at": "2026-10-11T18:25:46.805458+00:00",
+    "lastRunnerPids": [
+      32817,
+      32828,
+      32829,
+      32834,
+      32836,
+      32837,
+      32873,
+      32874
+    ],
+    "alive": [],
+    "ownedPort": 5174,
+    "portFree": true,
+    "allCommandsSettled": true,
+    "browserProviderCleanup": "Runner completed browser_close, settled RPC drain and SDK/server shutdown before lease release; no reconciliation warning",
+    "runtimeRows": 16,
+    "archiveRemoved": true,
+    "finalReviewPid": 65510,
+    "finalReviewTerminal": true,
+    "parentAllCompletedPidAudit": "Parent independently audited15completedrows/87recordedPIDs absent at18:27:12Z; finalreviewPID65510alsoabsent."
+  },
+  "fallout": [],
+  "outstanding": [],
+  "hostLoadSysctl": "{ 28.58 13.07 9.47 }"
+}
