@@ -1,0 +1,97 @@
+{
+  "bead": "hv-umm2.386",
+  "phase": 5,
+  "implementMin": 7.829,
+  "localValidationS": {
+    "install": 3.283,
+    "review": 0.271,
+    "knip": 4.789
+  },
+  "hostLoad": 16.03564453125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "validation": {
+    "scope": "Documentation and command examples only; no product code, test infrastructure or browser behavior changes.",
+    "examples": "Four documented shell blocks parse in zsh; exact file-based jq filters include admitted/intended project rows and explicit unpublished own ID, and exclude a foreign project. Parent independently exercised actual read-only native queries: 11 unfinished workflow-path candidates, matching improvement returns this bead, completed retrospective key returns []. No helper Beads calls or new tests.",
+    "full": "Not required for bounded documentation edits.",
+    "browser": "Not required for documentation edits.",
+    "review": "Actual exit 0; docs-only selection reported 3 changed files and no applicable checks. This is not a test-suite pass.",
+    "knip": "Actual exit 0; prepare 1.6 s, knip 2.3 s and local-asset restoration 0.7 s reported by the runner; retained command wall is 4.789 s."
+  },
+  "timing": {
+    "dispatchAtUtc": "2026-10-11T15:21:47Z",
+    "installStartedAtUtc": "2026-10-11T15:22:51Z",
+    "installFinishedAtUtc": "2026-10-11T15:22:54Z",
+    "installPid": 8662,
+    "installWrapperPid": 8646,
+    "installExitCode": 0,
+    "implementMinDefinition": "Wall time from parent dispatch timestamp to evidence refresh immediately before commit; includes reading and validation, not pure editing time. Native started_at belongs to the prior released claimant and is not this implementation start."
+  },
+  "authoringProbe": {
+    "initial": "Parent native queries succeeded, but passing full project JSON arrays via --argjson hit OS E2BIG before jq ran. This was a command-example authoring failure, not a product defect.",
+    "correction": "Guarded native writes to session temporary files; jq --slurpfile reads the arrays from files, and recorded notes carry compact matching IDs and creation times. Parent actual file-based probe and helper exact synthetic filters passed."
+  },
+  "runtime": [
+    {
+      "command": "npm install",
+      "pid": 8662,
+      "wrapper_pid": 8646,
+      "started_at_utc": "2026-10-11T15:22:51Z",
+      "finished_at_utc": "2026-10-11T15:22:54Z",
+      "exit_code": 0,
+      "elapsed_seconds": 3.2829298973083496,
+      "load_start": [
+        17.923828125,
+        12.91259765625,
+        14.49658203125
+      ],
+      "load_end": [
+        21.1328125,
+        13.66064453125,
+        14.75146484375
+      ]
+    },
+    {
+      "command": "npm run review",
+      "pid": 22278,
+      "wrapper_pid": 22264,
+      "started_at_utc": "2026-10-11T15:26:26Z",
+      "finished_at_utc": "2026-10-11T15:26:26Z",
+      "exit_code": 0,
+      "elapsed_seconds": 0.270784854888916,
+      "load_start": [
+        16.03564453125,
+        12.4228515625,
+        13.78759765625
+      ],
+      "load_end": [
+        16.03564453125,
+        12.4228515625,
+        13.78759765625
+      ]
+    },
+    {
+      "command": "npm run knip",
+      "pid": 30932,
+      "wrapper_pid": 30896,
+      "started_at_utc": "2026-10-11T15:27:43Z",
+      "finished_at_utc": "2026-10-11T15:27:47Z",
+      "exit_code": 0,
+      "elapsed_seconds": 4.789129972457886,
+      "load_start": [
+        9.68408203125,
+        11.37548828125,
+        13.27197265625
+      ],
+      "load_end": [
+        9.46875,
+        11.302734375,
+        13.23486328125
+      ]
+    }
+  ]
+}

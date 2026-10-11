@@ -93,6 +93,64 @@ Examples on this page write the Claude Code variable; Codex sessions use
 database.** The operator authorizes restarting the configured Dolt server when
 it is down; see [recovery](#failure-and-recovery).
 
+### Before filing any bead
+
+Before every filing, search unfinished project beads for the same primary
+Areas file and for each relevant matching `improvement`, `review_of`, or
+`found_by` value. This applies to phase tasks, content, prerequisites,
+findings, and follow-ups as well as shared duties. A filing held out of
+selection while its edges are prepared carries
+`intended_project=dreamtides_web`; search both admitted and intended project
+beads. Use the routing prefix above and require successful commands, so a
+failed query cannot count as an empty result. Retain full native results in
+session temporary files; pass those files to jq so inventory size does not
+consume the shell argument limit. The selected IDs are the output recorded
+in notes:
+
+```sh
+set -o pipefail
+filing_dir=$(mktemp -d "${TMPDIR:-/tmp}/dreamtides-filing.XXXXXX") || exit 1
+primary_file=src/engine/policy/catalog-manifest.ts
+hbd list --metadata-field hive_project=dreamtides_web \
+  --status open,in_progress --limit 0 --json > "$filing_dir/admitted.json" || exit 1
+hbd list --metadata-field intended_project=dreamtides_web \
+  --status open,in_progress --limit 0 --json > "$filing_dir/pending.json" || exit 1
+file_matches=$(jq -n --slurpfile admitted "$filing_dir/admitted.json" \
+  --slurpfile pending "$filing_dir/pending.json" --arg file "$primary_file" '
+  $admitted[0] + $pending[0] | unique_by(.id)
+  | map(select(((.description // "") + "\n" + (.notes // "")) | contains($file)))
+  | map({id, created_at})') || exit 1
+printf '%s\n' "$file_matches"
+
+match_key=improvement
+match_value=duplicate-filing-check/phase-5
+hbd list --metadata-field "$match_key=$match_value" \
+  --status open,in_progress --limit 0 --json > "$filing_dir/metadata.json" || exit 1
+metadata_matches=$(jq '
+  [.[] | select(.metadata.hive_project == "dreamtides_web"
+    or .metadata.intended_project == "dreamtides_web")
+    | {id, created_at}]' "$filing_dir/metadata.json") || exit 1
+printf '%s\n' "$metadata_matches"
+```
+
+Repeat the file query for each primary file and the metadata query for each
+relevant key/value. Inspect each match's Areas, cause, acceptance and edges
+with `hbd show <matched-id> --json`. A shared `found_by` can identify several
+different findings from one retrospective; a shared file can hold disjoint
+or additive work. Decide whether the existing bead already covers the cause,
+whether distinct work needs a serialization edge, or whether a shared duty
+requires its exact [duty-key check](#shared-duty-beads). Extend only a bead
+this session owns; coordinate additional evidence with a peer's owner.
+
+When distinct work needs a new bead, record the queries, returned IDs (or
+`[]`) and that scope/cause decision on its explicit ID, before admission or
+dispatch. For example, after creation:
+
+```sh
+new_bead=hv-xxx
+hbd update "$new_bead" --append-notes "Prefiling primary file $primary_file: $file_matches; $match_key=$match_value: $metadata_matches. Scope/cause disposition: <why this is distinct; required serialization or duty check>." || exit 1
+```
+
 ### Filing a phase
 
 Filing a phase is a [shared-duty bead](#shared-duty-beads) (label `filing`,
@@ -327,13 +385,70 @@ every later run on a newer `staging` tip fails the same way until the fix
 lands; a retrospective is keyed by the retrospective it follows, as
 `npm run friction:triggers` reports it, not by the count of beads it covers.
 
-Before filing one, look for an unfinished bead with the key:
-`hbd list --metadata-field <key>=<value> --status open,in_progress --json`.
-If one exists, another session owns the duty; add what you saw (such as a
-newer failing run's ID) to its notes and continue. After filing, look again.
-If two unfinished beads carry the key, the one with the later creation time is
-cancelled by its filer (`hive_resolution=cancelled`, reason "duplicate of
-<id>").
+In addition to the [general filing search](#before-filing-any-bead), query
+the exact stable duty key before creation and immediately after creation.
+Record both query outputs, their times and the resulting action in the new
+bead's notes. The after query includes its explicit ID while admission is
+pending; an empty before query does not establish the after result. These
+commands reuse the routing prefix and `filing_dir` from the general search.
+
+```sh
+duty_key=retrospective
+duty_value=phase-5/since-hv-e9fl
+hbd list --metadata-field "$duty_key=$duty_value" \
+  --status open,in_progress --limit 0 --json > "$filing_dir/duty-before.json" || exit 1
+before_matches=$(jq '
+  [.[] | select(.metadata.hive_project == "dreamtides_web"
+    or .metadata.intended_project == "dreamtides_web")
+    | {id, created_at}]
+  | sort_by(.created_at, .id)' "$filing_dir/duty-before.json") || exit 1
+before_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+printf '%s\n' "$before_matches"
+# Create only if this result has no existing duty; retain the returned ID.
+new_bead=hv-xxx
+hbd list --metadata-field "$duty_key=$duty_value" \
+  --status open,in_progress --limit 0 --json > "$filing_dir/duty-after.json" || exit 1
+after_matches=$(jq --arg new_bead "$new_bead" '
+  [.[] | select(.metadata.hive_project == "dreamtides_web"
+    or .metadata.intended_project == "dreamtides_web" or .id == $new_bead)
+    | {id, created_at}]
+  | sort_by(.created_at, .id)' "$filing_dir/duty-after.json") || exit 1
+after_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+hbd update "$new_bead" --append-notes "Duty $duty_key=$duty_value: before $before_at $before_matches; after $after_at $after_matches. Action: <continue as sole duty, or cancel this later duplicate of explicit ID>." || exit 1
+```
+
+If the before query finds a duty, use it instead of creating another. Record
+new evidence on an existing bead this session owns, or coordinate with its
+owner. If the after query finds two or more matches, the later filer immediately
+settles its own writer, review/provider operation and candidate, then cancels
+its own later bead. It records their terminal outcomes, removes gate and
+serialization edges it added that would block unfinished work on that
+cancellation, and confirms the canonical duty retains the required edges.
+Sorting is for display; if creation timestamps tie, compare the creators'
+filing records to establish the later filer, rather than ordering IDs.
+Never cancel the peer's bead. For a Phase 5 duplicate, with explicit IDs:
+
+```sh
+later_bead=hv-xxx
+earlier_bead=hv-yyy
+hbd show "$later_bead" --json
+hbd show "$earlier_bead" --json
+# After own writers/providers/candidate are settled, inspect every dependent.
+# Confirm hv-umm2.46 retains its prerequisite on the canonical earlier bead.
+hbd dep remove hv-umm2.46 "$later_bead" || exit 1
+# Repeat for each serialization edge added by this filing, when present:
+dependent_bead=hv-zzz
+hbd dep remove "$dependent_bead" "$later_bead" || exit 1
+hbd show hv-umm2.46 --json || exit 1
+hbd show "$dependent_bead" --json || exit 1
+# Verify those edges are absent and the canonical required edges remain.
+# Stop on a failed verification; only then cancel and close this own bead.
+hbd dep cycles || exit 1
+hbd update "$later_bead" --set-metadata hive_resolution=cancelled \
+  --append-notes "Duplicate of $earlier_bead; duty-query outputs recorded above. Own writer/provider/candidate outcomes: <terminal evidence>. Blocking gate/serialization edges: <explicit removals and canonical-edge verification>." || exit 1
+hbd close "$later_bead" --reason "duplicate of $earlier_bead" || exit 1
+hbd dep cycles || exit 1
+```
 
 ### Serialization edges
 
