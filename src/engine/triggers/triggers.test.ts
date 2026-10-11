@@ -10,6 +10,7 @@ import type { EngineAvatarDefinition, EngineCardDefinition, EngineDreamsignDefin
 import { all, anyCharacter, characterYouControl, enemyCharacter, energy, event, self, target } from "../dsl/builders";
 import {
   atStartOfTurn,
+  either,
   onDawn,
   onDissolved,
   onMaterialized,
@@ -1287,10 +1288,17 @@ describe("when a character is dissolved", () => {
     whileInPlayWatch: local(38, "character", () => [
       triggered(onMaterialized(), p.floating(whenDissolved(characterYouControl()), gain(), whileSourceInPlay())),
     ]),
+    /** Own named dissolve, another-character dissolve, own departure, and a functional-zone Dawn. */
+    namedWatch: local(39, "character", () => [
+      triggered(either(whenDissolved(characterYouControl({ another: true })), onDissolved()), p.optional(p.draw(1))),
+      triggered(whenLeavesPlay(), gain()),
+      triggered(whenDissolved(characterYouControl()), gain()),
+      triggered(onDawn(), gain(), { zone: "void" }),
+    ]),
   } as const;
   const E = createEngine(
     testCatalog(
-      [...ZONE_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...Object.values(D), L.sweep],
+      [...ZONE_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...Object.values(D), L.sweep, L.dissolvedEnergy],
       { dreamsigns: [TRIGGER_DREAMSIGN.dissolvedAllyOnce] },
       ZONE_FIGMENTS,
     ),
@@ -1393,6 +1401,88 @@ describe("when a character is dissolved", () => {
     expect(result.state.sides.enemy.currentEnergy).toBe(seized.state.sides.enemy.currentEnergy + 2);
     expect(result.state.sides.player.currentEnergy).toBe(seized.state.sides.player.currentEnergy);
   });
+
+  for (const controller of SIDES) {
+    for (const caster of SIDES) {
+      it(`keeps a stolen named Dissolved trigger with ${controller}, when ${caster} dissolves it, through reload`, () => {
+        const owner = opponent(controller);
+        const { state, ids } = setup({
+          active: controller,
+          [owner]: { back: [D.namedWatch.id], hand: [DSL.dissolveEnemy.id], energy: 10, deck },
+          [controller]: { back: [D.allyWatch.id], hand: [ZONE.seize.id, D.dissolveOwn.id], energy: 10, deck },
+        });
+        const stolen = ids[owner].back[0]!;
+        const seized = cast(state, controller, ids[controller].hand[0]).state;
+        const ready = passUntil(E, seized, at(E, caster, "day")).state;
+        const card = ids[caster].hand[caster === controller ? 1 : 0];
+        const action = { kind: "play", card, from: "hand" } as const;
+        const committed: BattleState[] = [];
+        const result = E.apply(ready, caster, action, new ScriptedSource([[stolen], true]), (next) => committed.push(next));
+        expect(result.events).toContainEqual({ kind: "dissolved", instance: stolen, side: controller });
+        expect(result.state.instances[stolen]).toMatchObject({ owner, controller: owner, zone: "void" });
+        expect(result.state.sides[owner].void).toContain(stolen);
+        // Departure first; on dissolve the survivor is in play, then the stolen source in the void slot.
+        expect(result.events.flatMap((entry) => entry.kind === "triggerQueued" ? [[entry.source, entry.controller, entry.ability]] : [])).toEqual([
+          [stolen, controller, 1], [ids[controller].back[0], controller, 0], [stolen, controller, 0], [stolen, controller, 2],
+        ]);
+        expect(result.events.filter((entry) => entry.kind === "triggerResolved").map((entry) => entry.controller)).toEqual(Array(4).fill(controller));
+        expect(result.state.sides[controller].currentEnergy).toBe(ready.sides[controller].currentEnergy + 3);
+        expect(result.state.sides[controller].hand).toHaveLength(ready.sides[controller].hand.length - (caster === controller ? 1 : 0) + 1);
+        expect(result.state.sides[owner].hand).toHaveLength(ready.sides[owner].hand.length - (caster === owner ? 1 : 0));
+        const waiting = committed.find((next) => next.triggerQueue.some((entry) => entry.source === stolen && entry.ability === 0));
+        if (waiting === undefined) throw new Error("no named trigger queued");
+        for (const viewer of SIDES) expect(E.view(waiting, viewer).triggerQueue.find((entry) => entry.source === stolen && entry.ability === 0)?.controller).toBe(controller);
+
+        const fold = createFoldAdapter(E, { checkEventPrefix: true });
+        let outcome = fold.reduce({ committed: ready, inFlight: null, publishedEvents: 0, attempt: 0 }, { kind: "battleAction", side: caster, action });
+        if (outcome.kind !== "applied") throw new Error("bounced");
+        const targetPrompt = fold.pending(outcome.slice)?.prompt;
+        if (targetPrompt === undefined) throw new Error("no target prompt");
+        outcome = fold.reduce(outcome.slice, { kind: "answer", side: caster, promptId: targetPrompt.id, value: [stolen] });
+        if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("target failed");
+        const reloaded = { ...outcome.slice, committed: deserializeState(JSON.stringify(outcome.slice.committed)) };
+        const pending = fold.pending(reloaded)?.prompt;
+        if (pending === undefined) throw new Error("no named trigger prompt");
+        expect(pending).toEqual(fold.pending(outcome.slice)?.prompt);
+        expect(pending.side).toBe(controller);
+        expect(pending.purpose.source).toBe(stolen);
+        expect(pending.cancellable).toBe(false);
+        expect(fold.reduce(reloaded, { kind: "answer", side: owner, promptId: pending.id, value: true })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+        expect(fold.reduce(reloaded, { kind: "answer", side: controller, promptId: targetPrompt.id, value: true })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+        const resolved = fold.reduce(reloaded, { kind: "answer", side: controller, promptId: pending.id, value: true });
+        if (resolved.kind !== "applied" || resolved.error !== null) throw new Error("named trigger failed");
+        expect(stateHash(resolved.slice.committed)).toBe(stateHash(result.state));
+        const afterDay = apply(result.state, result.state.turn.active, { kind: "pass" }).state;
+        const dawn = passUntil(E, afterDay, at(E, owner, "day"));
+        expect(dawn.events).toContainEqual(expect.objectContaining({ kind: "triggerQueued", source: stolen, controller: owner, ability: 3 }));
+        expect(dawn.events).not.toContainEqual(expect.objectContaining({ kind: "triggerQueued", source: stolen, controller, ability: 3 }));
+      });
+    }
+  }
+
+  for (const controller of SIDES) {
+    for (const kind of ["card", "figmentCopy"] as const) {
+      it(`fires a stolen created ${kind}'s own Dissolved for ${controller} before it ceases`, () => {
+        const owner = opponent(controller);
+        const { state, ids } = setup({
+          active: controller,
+          [owner]: { deck },
+          [controller]: { hand: [ZONE.seize.id, D.dissolveOwn.id], energy: 3, deck },
+        });
+        const printing = kind === "card" ? { kind, cardId: L.dissolvedEnergy.id } : { kind, cardId: L.dissolvedEnergy.id, spark: null };
+        const stolen = placeFigment(state, owner, { rank: "back", index: 0 }, printing);
+        const seized = cast(state, controller, ids[controller].hand[0]).state;
+        const result = cast(seized, controller, ids[controller].hand[1]);
+        expect(result.events.filter((entry) => "instance" in entry && entry.instance === stolen).map((entry) => entry.kind)).toEqual(["leftPlay", "dissolved", "ceasedToExist"]);
+        expect(result.events).toContainEqual(expect.objectContaining({ kind: "triggerQueued", source: stolen, controller }));
+        expect(result.events).toContainEqual(expect.objectContaining({ kind: "triggerResolved", source: stolen, controller }));
+        expect(result.state.sides[controller].currentEnergy).toBe(seized.sides[controller].currentEnergy + 1);
+        expect(result.state.sides[owner].currentEnergy).toBe(seized.sides[owner].currentEnergy);
+        expect(result.state.instances[stolen]).toBeUndefined();
+        expect(result.state.sides[owner].void).not.toContain(stolen);
+      });
+    }
+  }
 
   it("triggers a floating trigger lasting while its source is in play on that source's own dissolve, and not after", () => {
     const { state, ids } = setup({ player: { back: [v.vanilla1.id], hand: [D.whileInPlayWatch.id, D.dissolveOwn.id, D.dissolveOwn.id], deck }, enemy: { deck } });

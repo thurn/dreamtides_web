@@ -103,8 +103,8 @@ interface Departure {
  * Banished zone, or nowhere) comes after the deck (RD-hv-7x4l.17-2). Its
  * listener sees it where it is: while it leaves, still in play; once
  * dissolved, in its owner's void, controlled by its owner, so in `side`'s
- * order its listener is only a placeholder for the abilities it armed under
- * `side` (`matchListener`).
+ * order its listener supplies its own ▸Dissolved ability and the abilities
+ * it armed under `side` (`matchListener`).
  */
 function listeners(state: BattleState, side: Side, departing: Departure | null): Listener[] {
   const sideState = state.sides[side];
@@ -346,16 +346,22 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
  * Matches `listener`'s triggered abilities, in `side`'s order. An ability
  * armed for a dissolve matches as its source was when armed, and only in the
  * order of the side that controlled it then; a listener `side` does not
- * control is a dissolved card's place in that side's order, where nothing
- * else of it matches.
+ * control is a dissolved card's place in that side's order. Its own named
+ * ▸Dissolved ability uses the dissolve event's last in-play controller
+ * (RD-hv-umm2.342-1); its other abilities use their current controller.
  */
 function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedDissolve): void {
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered") return;
-    const matching = armed.abilities.get(oncePerTurnKey(listener.source, index)) ?? listener;
+    const armedListener = armed.abilities.get(oncePerTurnKey(listener.source, index));
+    const matching = armedListener ?? (
+      event.kind === "dissolved" && listener.source === event.instance && hasNamed(ability.trigger, "dissolved")
+        ? { ...listener, controller: event.side }
+        : listener
+    );
     if (matching.controller !== side) return;
     const inZone = matching.emblem || worksInZone(ability.zone, matching.zone);
-    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, matching !== listener);
+    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedListener !== undefined);
     if (match !== null) enqueueAbility(ctx, matching, ability, index, match);
   });
 }

@@ -919,8 +919,13 @@ see.
 in play. An ability that names another zone, such as "▸Dawn: If this card is in
 your void, …", works while the card is in that zone instead. Avatar and
 dreamsign abilities always work. A ▸Dissolved ability triggers from wherever
-the dissolved card went, and abilities that trigger when a card leaves play or
-leaves your void see that card as it was just before it left. Nothing triggers
+the dissolved card went. It triggers for the player who controlled the character
+as it left play, among that player's abilities, ordered by the zone it went to.
+A card dissolved into its owner's void is controlled by its owner there; this
+does not change who controls its ▸Dissolved ability. A dissolved figment or
+other created character triggers before it ceases to exist. Abilities that trigger
+when a card leaves play or leaves your void see that card as it was just before
+it left. Nothing triggers
 while the opening hands are dealt.
 
 **When a character is dissolved:** An ability such as "When a character you

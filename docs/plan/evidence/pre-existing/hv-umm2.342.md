@@ -1,0 +1,6 @@
+# Pre-existing issues found by hv-umm2.342
+
+- Fresh worktree dependency install, run by the owning session before dispatch: 17 audit findings (9 moderate, 7 high, 1 critical). Dependency repair is outside this bead's controller-matching scope.
+- Focused review preparation reports missing art in its isolated `node_modules/.cache/journey-review/local-assets` mirror; restoration links the complete local image set afterward. Internal engine tests pass without those temporary preparation images. No art changes are part of this bead.
+- `src/engine/triggers/triggers.test.ts` is an existing large primitive-contract hub (1,550 lines at the bead base). This bead adds synthetic trigger-controller contracts to the allowed existing file; splitting it would exceed the assigned areas and add import cost.
+- Actual stolen-card browser setup requires authored gain-control content. `4ef8b2e7-3525-4c25-aa30-f751467f182f` is pending on this base; executable gain-control definitions are synthetic test fixtures, and logged `DebugOp` has no control-changing operation. Mandatory live verification is owned by `hv-umm2.343` after `hv-umm2.342`, `hv-umm2.190` (`cards-78`), and `hv-umm2.332`; the Phase 5 gate `hv-umm2.46` depends on it. No browser verdict is claimed here.
