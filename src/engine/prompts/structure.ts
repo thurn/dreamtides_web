@@ -40,7 +40,7 @@ function wellFormedFields(prompt: Prompt): boolean {
     case "chooseCards":
       return distinct(prompt.candidates) && bounded(prompt.min, prompt.max);
     case "chooseSlot":
-      return distinct(prompt.slots.map((slot) => `${slot.rank}:${String(slot.index)}`)) &&
+      return (prompt.fieldSide === "player" || prompt.fieldSide === "enemy") && distinct(prompt.slots.map((slot) => `${slot.rank}:${String(slot.index)}`)) &&
         prompt.slots.every((slot) => isBound(slot.index) && (slot.rank === "front" ? slot.index < FRONT_RANK_SIZE : slot.rank === "back" && slot.index < BACK_RANK_SIZE));
     case "chooseMode": {
       const { subtypes } = prompt;

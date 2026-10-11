@@ -153,6 +153,8 @@ export interface ChooseCardsPrompt extends PromptBase {
 /** Choose an unoccupied battlefield position; the answer is its index in slots. */
 export interface ChooseSlotPrompt extends PromptBase {
   readonly kind: "chooseSlot";
+  /** The battlefield containing these positions, independent of the answering side. */
+  readonly fieldSide: Side;
   readonly slots: readonly Slot[];
   readonly allowed?: readonly number[];
 }

@@ -35,7 +35,7 @@ export const movePrimitive = definePrimitive<MoveNode>({
         );
         if (slots.length === 0) continue;
         const index = ctx.choose<ChooseSlotPrompt>({
-          kind: "chooseSlot", side: env.controller, purpose: env.purpose("move"), slots,
+          kind: "chooseSlot", side: env.controller, purpose: env.purpose("move"), fieldSide: side, slots,
         });
         to = slots[index];
       }

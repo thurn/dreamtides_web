@@ -145,6 +145,13 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
   return { title, detail };
 }
 
+/** Movement positions belong to this battlefield, relative to the human viewer. */
+export function engineMovementPromptHeading(fieldSide: Side, viewer: Side, sourceName: string | null): EnginePromptHeading {
+  const heading = enginePromptHeading({ kind: "chooseSlot", role: "move", min: 1, max: 1, sourceName });
+  const field = fieldSide === viewer ? "Your battlefield" : "Opponent’s battlefield";
+  return { ...heading, detail: heading.detail === null ? field : `${field} · ${heading.detail}` };
+}
+
 /** One answer button of an engine choice prompt. */
 export type EnginePromptOptionCopy =
   | { readonly kind: "yes" }

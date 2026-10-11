@@ -1,0 +1,206 @@
+{
+  "bead": "hv-umm2.416",
+  "phase": 5,
+  "implementMin": 20.107788983333332,
+  "measurementWindow": "native claim to final preparation before successful commit; exact successful commit gap/end recorded in external handoff and parent native notes",
+  "measurementBasis": {
+    "start": "2026-10-11T19:34:12Z",
+    "startScope": "trusted native claim proxy; exact helper dispatch not retained",
+    "end": "2026-10-11T19:54:18.467339+00:00",
+    "endScope": "final preparation before commit; successful commit timing remains external to avoid self-reference"
+  },
+  "localValidationS": {
+    "review-final": 49.738463,
+    "knip": 4.295192,
+    "focused": 5.562826,
+    "knip-settled": 3.689485,
+    "full": 73.809712,
+    "focused-settled": 4.925162,
+    "review": 49.603229,
+    "focused-corrected": 3.523176,
+    "fixture-proof": 1.05261
+  },
+  "hostLoad": 18.2685546875,
+  "hostLoadSamples": [
+    {
+      "label": "review-final",
+      "exit": 0,
+      "seconds": 49.73846283298917,
+      "loadBefore": [
+        18.2685546875,
+        15.51318359375,
+        15.0244140625
+      ],
+      "loadAfter": [
+        19.1650390625,
+        16.45556640625,
+        15.4169921875
+      ],
+      "pid": 12982
+    },
+    {
+      "label": "judged",
+      "exit": 0,
+      "seconds": 39.549479499983136,
+      "loadBefore": [
+        29.6298828125,
+        21.35009765625,
+        17.51171875
+      ],
+      "loadAfter": [
+        21.97998046875,
+        20.5498046875,
+        17.40185546875
+      ],
+      "pid": 32839
+    },
+    {
+      "label": "knip",
+      "exit": 0,
+      "seconds": 4.295192083052825,
+      "loadBefore": [
+        19.8759765625,
+        16.5478515625,
+        15.443359375
+      ],
+      "loadAfter": [
+        19.1650390625,
+        16.45556640625,
+        15.4169921875
+      ],
+      "pid": 16262
+    },
+    {
+      "label": "focused",
+      "exit": 1,
+      "seconds": 5.562825959001202,
+      "loadBefore": [
+        12.65478515625,
+        15.2724609375,
+        15.00244140625
+      ],
+      "loadAfter": [
+        11.80126953125,
+        15.0517578125,
+        14.92578125
+      ],
+      "pid": 98627
+    },
+    {
+      "label": "knip-settled",
+      "exit": 0,
+      "seconds": 3.68948541599093,
+      "loadBefore": [
+        20.65869140625,
+        16.85595703125,
+        15.57373046875
+      ],
+      "loadAfter": [
+        23.48828125,
+        17.50537109375,
+        15.810546875
+      ],
+      "pid": 18044
+    },
+    {
+      "label": "full",
+      "exit": 0,
+      "seconds": 73.809712042,
+      "loadBefore": [
+        26.09765625,
+        18.50341796875,
+        16.20849609375
+      ],
+      "loadAfter": [
+        31.1796875,
+        21.25390625,
+        17.4130859375
+      ],
+      "pid": 22371
+    },
+    {
+      "label": "focused-settled",
+      "exit": 0,
+      "seconds": 4.925161625025794,
+      "loadBefore": [
+        13.0244140625,
+        14.02880859375,
+        14.50537109375
+      ],
+      "loadAfter": [
+        12.78173828125,
+        13.9619140625,
+        14.478515625
+      ],
+      "pid": 4956
+    },
+    {
+      "label": "review",
+      "exit": 1,
+      "seconds": 49.60322908300441,
+      "loadBefore": [
+        12.3984375,
+        13.86279296875,
+        14.4404296875
+      ],
+      "loadAfter": [
+        18.1015625,
+        15.216796875,
+        14.90771484375
+      ],
+      "pid": 5903
+    },
+    {
+      "label": "focused-corrected",
+      "exit": 1,
+      "seconds": 3.5231758339796215,
+      "loadBefore": [
+        8.8720703125,
+        14.09912109375,
+        14.5849609375
+      ],
+      "loadAfter": [
+        8.6416015625,
+        13.96435546875,
+        14.5341796875
+      ],
+      "pid": 99933
+    },
+    {
+      "label": "fixture-proof",
+      "exit": 0,
+      "seconds": 1.0526095840032212,
+      "loadBefore": [
+        18.0234375,
+        15.1533203125,
+        14.8837890625
+      ],
+      "loadAfter": [
+        18.0234375,
+        15.1533203125,
+        14.8837890625
+      ],
+      "pid": 8744
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 68,
+    "jsdomFiles": 0,
+    "cases": 3,
+    "contractModuleLines": 337
+  },
+  "friction": [],
+  "improvementBeads": [],
+  "browser": {
+    "wallMs": {
+      "browserLeaseWait": 45,
+      "serve": 1307,
+      "scenario": 32934,
+      "total": 34313
+    },
+    "wrapperSeconds": 39.5494795,
+    "hostLoad": 29.6298828125,
+    "sourceFrozen": true
+  }
+}

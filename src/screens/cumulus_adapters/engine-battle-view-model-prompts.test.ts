@@ -67,6 +67,19 @@ describe("buildEngineBattleScreenModel", () => {
     expect(choiceAnswers(upToOne.model)).toEqual([[]]);
   });
 
+  it("identifies the positions’ battlefield independently of the answering side, retaining every numeric choice", () => {
+    const own = labScreen("move");
+    const transferred = labScreen("move-transferred");
+    if (own.prompt?.kind !== "chooseSlot" || transferred.prompt?.kind !== "chooseSlot") throw new Error("Expected movement prompts");
+    expect(own.prompt).toMatchObject({ side: "player", fieldSide: "player" });
+    expect(transferred.prompt).toMatchObject({ side: "player", fieldSide: "enemy" });
+    expect(own.model.view.promptHost?.heading?.detail).not.toEqual(transferred.model.view.promptHost?.heading?.detail);
+    expect(own.model.view.promptHost?.heading?.title).toEqual(transferred.model.view.promptHost?.heading?.title);
+    expect(choiceAnswers(own.model)).toEqual([...Array(18).keys()]);
+    expect(choiceAnswers(transferred.model)).toEqual([...Array(18).keys()]);
+    expect(own.model.view.choicePrompt?.options.map((option) => option.label)).toEqual(transferred.model.view.choicePrompt?.options.map((option) => option.label));
+  });
+
   it("arranges among the top, the bottom, and the hand, cancellable while the play is", () => {
     const { model, prompt } = labPlay("arrange");
     const arrange = model.view.promptHost?.arrange;

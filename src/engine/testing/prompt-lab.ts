@@ -86,6 +86,12 @@ export const LAB = {
     subtype: "Warrior", speed: "standard", status: "authored",
     abilities: () => [activated([energy(1)], p.move(self()), { speed: "fast" })],
   },
+  /** An Interrupt that takes control of a selected enemy character. */
+  transferMover: {
+    id: syntheticId(0x416), cardType: "event", costs: [energy(1)], spark: null,
+    subtype: "", speed: "interrupt", status: "authored",
+    abilities: () => [event(p.gainControl(characterTarget(enemyCharacter())))],
+  },
   /** Choose X, then a character with exactly that copiable cost. */
   xCostTarget: {
     id: syntheticId(0x308), cardType: "event", costs: [energyX(0)], spark: null,
@@ -253,6 +259,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [ZONE.handEcho.id]: { name: "Lab Reflection", text: "Add an ephemeral copy of a character you control to your hand." },
   [ZONE.ephemeralDraw.id]: { name: "Lab Glimpse", text: "Draw 2 cards with ephemeral." },
   [ZONE.reclaimer.id]: { name: "Lab Revenant", text: "Reclaim" },
+  [LAB.transferMover.id]: { name: "Lab Transfer", text: "Interrupt. Gain control of an enemy." },
   [LAB.mover.id]: { name: "Lab Mover", text: "❖ – 1●: Move this character to an unoccupied position." },
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
@@ -357,6 +364,16 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     setup: { active: "player", phase: "night",
       player: { back: [LAB.mover.id], energy: 2, deck: deck(6) }, enemy: { deck: deck(6) } },
     script: [{ side: "player", action: (ids) => ({ kind: "activate", source: at(ids.player.back, 0), ability: 0 }) }],
+  },
+  {
+    name: "move-transferred", description: "Choose a position on the opponent’s battlefield after control changes in response",
+    setup: { active: "player", phase: "night",
+      player: { back: [LAB.mover.id], energy: 2, deck: deck(6) },
+      enemy: { hand: [LAB.transferMover.id], energy: 1, deck: deck(6) } },
+    script: [
+      { side: "player", action: (ids) => ({ kind: "activate", source: at(ids.player.back, 0), ability: 0 }) },
+      play("enemy", (ids) => at(ids.enemy.hand, 0)),
+    ],
   },
   {
     name: "optional-payment", description: "Pay or decline a resolution-time return from the void",

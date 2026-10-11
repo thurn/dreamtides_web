@@ -48,6 +48,7 @@ import type { Answer, ArrangeAnswer, ArrangeDestination } from "../../engine/pro
 import {
   engineArrangeDestinationLabel,
   enginePromptHeading,
+  engineMovementPromptHeading,
   enginePromptModeTexts,
   enginePromptOptionLabel,
   engineNumberPickerLabel,
@@ -399,7 +400,7 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
           copy: { kind: "position", rank: slot.rank, index: slot.index },
           answer: index,
         })),
-        host({}),
+        host({ heading: engineMovementPromptHeading(prompt.fieldSide, human, sourceCard?.model.displaySnapshot.name ?? null) }),
         sourceCard,
       );
     case "chooseMode": {

@@ -100,7 +100,7 @@ describe("move", () => {
     const source = choose({ rank: "front", index: 2 });
     const done = activate(start, side, source);
     expect(source.prompts).toHaveLength(1);
-    expect(source.prompts[0]).toMatchObject({ kind: "chooseSlot", side, purpose: { role: "move", source: id, cardId: mover.id, ability: 1 }, cancellable: false });
+    expect(source.prompts[0]).toMatchObject({ kind: "chooseSlot", side, fieldSide: side, purpose: { role: "move", source: id, cardId: mover.id, ability: 1 }, cancellable: false });
     expect(done.state.instances[id]).toEqual(before);
     expect(slotOf(done.state, id)).toEqual({ rank: "front", index: 2 });
     expect(slotOf(done.state, start.ids[side].back[1]!)).toEqual({ rank: "back", index: 1 });
@@ -146,7 +146,7 @@ describe("move", () => {
     const start = boardState(engine.catalog, setup("player", { back: [mover.id, ...Array.from({ length: 9 }, () => v.vanilla1.id)], front: [...Array.from({ length: 8 }, () => v.vanilla1.id), null] }));
     const done = activate(start, "player", NO_PROMPTS);
     expect(slotOf(done.state, done.id)).toEqual({ rank: "front", index: 8 });
-    const prompt: ChooseSlotPrompt = { kind: "chooseSlot", side: "player", purpose: { source: done.id, cardId: mover.id, ability: 1, role: "move" }, cancellable: false, slots: [{ rank: "back", index: 3 }, { rank: "front", index: 2 }] };
+    const prompt: ChooseSlotPrompt = { kind: "chooseSlot", side: "player", fieldSide: "player", purpose: { source: done.id, cardId: mover.id, ability: 1, role: "move" }, cancellable: false, slots: [{ rank: "back", index: 3 }, { rank: "front", index: 2 }] };
     expect(isWellFormedPrompt(prompt)).toBe(true);
     expect([...legalAnswers(prompt)]).toEqual([0, 1]);
     for (const invalid of [-1, 2, 0.5, true, []]) expect(isLegalAnswer(prompt, invalid)).toBe(false);
@@ -160,6 +160,13 @@ describe("move", () => {
     expect([...legalAnswers(projected)]).toEqual([1]);
     expect(forcedAnswer(narrow, { autoAnswerForcedPrompts: true })).toBe(1);
     expect(promptFingerprint(narrow)).not.toBe(promptFingerprint(prompt));
+    expect(projected).toMatchObject({ fieldSide: "player", allowed: [1] });
+    expect(promptFingerprint({ ...prompt, fieldSide: "enemy" })).not.toBe(promptFingerprint(prompt));
+    for (const invalid of [undefined, null, "other"]) {
+      const malformed = structuredClone(prompt);
+      Reflect.set(malformed, "fieldSide", invalid);
+      expect(isWellFormedPrompt(malformed)).toBe(false);
+    }
     expect(promptFingerprint({ ...prompt, slots: [...prompt.slots].reverse() })).not.toBe(promptFingerprint(prompt));
     expect(isWellFormedPrompt({ ...prompt, slots: [prompt.slots[0], prompt.slots[0]] })).toBe(false);
     for (const slot of [{ rank: "front", index: -1 }, { rank: "front", index: 0.5 }, { rank: "front", index: 9 }, { rank: "back", index: 10 }] as const) {
@@ -193,6 +200,54 @@ describe("move", () => {
     expect(slotOf(done.committed, start.ids.player.back[0]!)).toEqual(destination);
     if (result.kind !== "applied") throw new Error("Expected applied answer");
     expect(result.published.filter((event) => event.kind === "repositioned")).toHaveLength(1);
+    expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
+  });
+
+  it.each(["player", "enemy"] as const)("%s answers for the source’s current battlefield after an Interrupt transfers control", (side) => {
+    // The response is a normal hand play, with an explicit physical target.
+    const board = boardState(engine.catalog, { ...setup(side), [opponent(side)]: { hand: [transfer.id], energy: 1, deck } });
+    const id = board.ids[side].back[0]!;
+    board.state.instances[id].status = { ...board.state.instances[id].status, counters: 3, gainedSpark: 2, reclaimed: true };
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    let slice: BattleSlice = { committed: board.state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    slice = applied(fold.reduce(slice, { kind: "battleAction", side, action: { kind: "activate", source: id, ability: 1 } }));
+    slice = applied(fold.reduce(slice, { kind: "battleAction", side: opponent(side), action: { kind: "play", card: board.ids[opponent(side)].hand[0], from: "hand" } }));
+    const target = fold.pending(slice)?.prompt;
+    if (target?.kind !== "chooseTargets") throw new Error("Expected the response’s target choice");
+    slice = applied(fold.reduce(slice, { kind: "answer", side: opponent(side), promptId: target.id, value: [id] }));
+    while (fold.pending(slice) === null) {
+      const decision = engine.decision(slice.committed);
+      if (decision === null) throw new Error("Missing response priority");
+      slice = applied(fold.reduce(slice, { kind: "battleAction", side: decision.side, action: { kind: "pass" } }));
+    }
+    const pending = fold.pending(slice)!;
+    if (pending.prompt.kind !== "chooseSlot") throw new Error("Expected movement after control transfer");
+    const prompt = pending.prompt;
+    expect(prompt).toMatchObject({ side, fieldSide: opponent(side), purpose: { source: id, cardId: mover.id } });
+    const before = structuredClone(pending.display.instances[id]);
+    expect(before).toMatchObject({ controller: opponent(side), owner: side, status: { exhausted: true, counters: 3, gainedSpark: 2, reclaimed: true } });
+    expect(prompt.slots).toHaveLength(18);
+    for (const slot of prompt.slots) {
+      const rank = slot.rank === "front" ? pending.display.sides[prompt.fieldSide].frontRank : pending.display.sides[prompt.fieldSide].backRank;
+      expect(rank[slot.index]).toBeNull();
+    }
+    const narrowed = narrowPrompt(prompt, [1]);
+    for (const viewer of [side, opponent(side)]) expect(promptView(narrowed, viewer, pending.display)).toMatchObject({ side, fieldSide: opponent(side), allowed: [1] });
+    const restored = JSON.parse(JSON.stringify(slice)) as BattleSlice;
+    const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
+    const reloaded = fresh.pending(restored)!.prompt;
+    expect(promptFingerprint(reloaded)).toBe(promptFingerprint(prompt));
+    expect(reloaded).toMatchObject({ side, fieldSide: opponent(side), slots: prompt.slots });
+    expect(fresh.reduce(restored, { kind: "answer", side: opponent(side), promptId: reloaded.id, value: 1 }).kind).toBe("bounced");
+    const destination = prompt.slots.findIndex((slot) => slot.rank === "front" && slot.index === 4);
+    const result = fresh.reduce(restored, { kind: "answer", side, promptId: reloaded.id, value: destination });
+    const done = applied(result);
+    expect(done.committed.instances[id]).toEqual(before);
+    expect(slotOf(done.committed, id)).toEqual({ rank: "front", index: 4 });
+    expect(done.committed.sides[opponent(side)].frontRank[4]).toBe(id);
+    expect(done.committed.sides[side].backRank[0]).toBeNull();
+    if (result.kind !== "applied") throw new Error("Expected applied movement");
+    expect(result.published.filter((event) => event.kind === "repositioned")).toEqual([{ kind: "repositioned", instance: id, side: opponent(side), from: { rank: "back", index: 0 }, to: { rank: "front", index: 4 }, swappedWith: null }]);
     expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
   });
 
