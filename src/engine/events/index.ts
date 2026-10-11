@@ -17,6 +17,7 @@ import { cardDiscovered, type CardDiscoveredEvent } from "./kinds/card-discovere
 import { cardDrawn, type CardDrawnEvent } from "./kinds/card-drawn";
 import { cardPlayed, type CardPlayedEvent } from "./kinds/card-played";
 import { cardTaken, type CardTakenEvent } from "./kinds/card-taken";
+import { cardsPlaced, type CardsPlacedEvent } from "./kinds/cards-placed";
 import { ceasedToExist, type CeasedToExistEvent } from "./kinds/ceased-to-exist";
 import { challengersDesignated, type ChallengersDesignatedEvent } from "./kinds/challengers-designated";
 import { controlChanged, type ControlChangedEvent } from "./kinds/control-changed";
@@ -77,6 +78,7 @@ export type EngineEvent =
   | CardDrawnEvent
   | CardPlayedEvent
   | CardTakenEvent
+  | CardsPlacedEvent
   | CeasedToExistEvent
   | ChallengersDesignatedEvent
   | ControlChangedEvent
@@ -138,6 +140,7 @@ export const EVENT_DEFINITIONS = {
   cardDrawn,
   cardPlayed,
   cardTaken,
+  cardsPlaced,
   ceasedToExist,
   challengersDesignated,
   controlChanged,

@@ -1260,7 +1260,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck) | `draw` at cost 0, `lookAtTop` distributions to other destinations, `reveal`, `putOnTop`/`Bottom` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, in reference order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
@@ -1562,6 +1562,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     into a hand or deck, or a move from a hand into a deck, stays known to
     whoever watched it;
   - a revealed card becomes known to both sides;
+  - a card put on top of or on the bottom of a deck (`putInDeck`,
+    `putFromTop`) stays known, at its new place, to every side that could
+    see it go there, until the deck is shuffled;
   - shuffling a deck (`shuffleInto`, Discover) drops every card in it out
     of both sides' knowledge;
   - a `privateTo` prompt shows its cards to its chooser only as it opens,
@@ -1607,6 +1610,11 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   - `lookedAtTop` is public, and names each looked-at card only to a side
     that can identify it, so the opponent sees how many cards the looker
     looked at; the looker learned them through its prompt private to it;
+  - `cardsPlaced` is public, and names each card put on top of or on the
+    bottom of a deck, or into a void, only to a side that could identify it
+    where it went (both sides for a card from a void or from play or into a
+    void, the looker for a looked-at card), read from the event's own
+    `seenBy`, so a later shuffle in the same step does not change it;
   - `shuffledIntoDeck` is public, and names each card that entered the
     shuffled deck only to a side that could identify it as it left its
     zone (both sides for a void, the holder for a hand), read from the
@@ -1948,8 +1956,9 @@ Greedy unless `?ai=random|greedy` selects one.
   (`eventSeenBy`, with per-viewer field redaction applied), names no
   instance ID or printed card ID that side cannot identify (`identifies`,
   `view/knowledge.ts`) before or after the step, or that entered that
-  side's own hand during the step (a card drawn and then shuffled back into
-  the deck was seen by its drawer). An instance that has left
+  side's own hand or that it looked at on top of its own deck during the
+  step (a card drawn, or looked at and placed, and then shuffled back into
+  the deck was seen by that side). An instance that has left
   the battle is judged in the last checked state that held it. The
   interactive replay applies the same check to the events a suspended step
   has published, against its display. Games must terminate. A failing game writes its engine log to

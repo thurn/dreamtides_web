@@ -50,6 +50,7 @@ import {
   optionalPrimitive,
   phasePrimitive,
   preventPrimitive,
+  putInDeckPrimitive,
   repeatPrimitive,
   returnToHandPrimitive,
   revealPrimitive,
@@ -178,6 +179,9 @@ const DEFINITIONS = {
   },
   get prevent() {
     return preventPrimitive;
+  },
+  get putInDeck() {
+    return putInDeckPrimitive;
   },
   get repeat() {
     return repeatPrimitive;

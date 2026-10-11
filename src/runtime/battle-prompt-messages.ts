@@ -112,6 +112,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return cards("take", "card", "cards", " from their hand");
       case "shuffleInto":
         return cards("shuffle", "card", "cards", " into your deck");
+      case "putInDeck":
+        return "Place the cards you looked at";
       case "youMay":
         return "Do you want to do this?";
       case "preventUnlessPays":
@@ -478,6 +480,13 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${who(event.side)} drew ${named(event.instance)}.`;
     case "cardPlayed":
       return `${who(event.side)} played ${named(event.instance)}.`;
+    case "cardsPlaced": {
+      const where =
+        event.to === "void"
+          ? `into ${whose(event.side)} void`
+          : `${event.to === "deckTop" ? "on top" : "on the bottom"} of ${whose(event.side)} deck`;
+      return `${sentence(cardList(event.cards, words))} ${event.cards.length === 1 ? "was" : "were"} put ${where}.`;
+    }
     case "cardTaken": {
       const holder = event.holder === human ? "your" : event.holder === event.side ? "their" : "your opponent's";
       const zone = event.from === "banished" ? "Banished zone" : event.from;
@@ -575,18 +584,7 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     case "shuffledIntoDeck": {
       const deck = `${whose(event.side)} deck`;
       if (event.cards.length === 0) return `${sentence(deck)} was shuffled.`;
-      // Names the cards the player can identify and counts the rest.
-      const names = event.cards.flatMap((instance) => {
-        const name = words.card(instance);
-        return name === null ? [] : [name];
-      });
-      const hidden = event.cards.length - names.length;
-      const parts = [
-        ...names,
-        ...(hidden > 0 ? [names.length > 0 ? plural(hidden, "other card", "other cards") : plural(hidden, "card", "cards")] : []),
-      ];
-      const list = parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1] ?? ""}` : (parts[0] ?? "");
-      return `${sentence(list)} ${event.cards.length === 1 ? "was" : "were"} shuffled into ${deck}.`;
+      return `${sentence(cardList(event.cards, words))} ${event.cards.length === 1 ? "was" : "were"} shuffled into ${deck}.`;
     }
     case "sparkGained":
       return `${card(event.instance)}: ${engineStatusLabel({ kind: "spark", amount: event.amount, expiry: event.expiry }, human)}.`;
@@ -609,6 +607,20 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     case "triggerQueued":
       return null;
   }
+}
+
+/** The cards a log line names: those the player can identify by name, then a count of the rest. */
+function cardList(cards: readonly (InstanceId | null)[], words: EngineBattleLogWords): string {
+  const names = cards.flatMap((instance) => {
+    const name = words.card(instance);
+    return name === null ? [] : [name];
+  });
+  const hidden = cards.length - names.length;
+  const parts = [
+    ...names,
+    ...(hidden > 0 ? [names.length > 0 ? plural(hidden, "other card", "other cards") : hidden === 1 ? "a card" : plural(hidden, "card", "cards")] : []),
+  ];
+  return parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1] ?? ""}` : (parts[0] ?? "");
 }
 
 function effectStartedText(

@@ -86,6 +86,13 @@ export const LAB = {
     p.draw(1),
     p.shuffleInto([], { chooseFromHand: 2 }),
   )),
+  /** "Look at the top 4 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand. Put the rest into your void." */
+  putFromTop: labEvent(13, 1, p.putFromTop(4, [
+    { to: "top", count: 1 },
+    { to: "bottom", count: 1 },
+    { to: "hand", count: 1 },
+    { to: "void", count: "rest" },
+  ])),
   /** Choose a free Discover cost, then choose a matching character. */
   discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
   /** Choose either player to discard and draw, preserving the source controller. */
@@ -196,6 +203,10 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.shuffleInto.id]: {
     name: "Lab Reshuffle",
     text: "Shuffle up to one card from your void into your deck. Draw a card, then shuffle 2 cards from your hand into your deck.",
+  },
+  [LAB.putFromTop.id]: {
+    name: "Lab Augury",
+    text: "Look at the top 4 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand. Put the rest into your void.",
   },
   [LAB.sketch.id]: { name: "Lab Sketch", text: "" },
   [LAB.spyglass.id]: { name: "Lab Spyglass", text: "Reveal the opponent's hand. Draw a card." },
@@ -482,6 +493,29 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       playHand(0),
       target((ids) => at(ids.player.void, 0)),
       { side: "player", answer: (ids) => [at(ids.player.hand, 1), at(ids.player.hand, 2)] },
+    ],
+  },
+  {
+    name: "put-in-deck",
+    description: "Look at the top 4: a private arrangement of one card on top, one on the bottom, one into the hand, and the rest into the void",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { hand: [LAB.putFromTop.id], energy: 2, deck: [vanillas[0], vanillas[1], vanillas[2], SYNTHETIC.interruptEvent.id, ...deck(3)] },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [
+      playHand(0),
+      {
+        side: "player",
+        answer: (ids) => [
+          { card: at(ids.player.deck, 1), to: "top" },
+          { card: at(ids.player.deck, 0), to: "bottom" },
+          { card: at(ids.player.deck, 2), to: "hand" },
+          { card: at(ids.player.deck, 3), to: "void" },
+        ],
+      },
     ],
   },
   {

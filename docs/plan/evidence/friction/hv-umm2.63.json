@@ -1,0 +1,52 @@
+{
+  "bead": "hv-umm2.63",
+  "phase": 5,
+  "implementMin": 32,
+  "localValidationS": {
+    "focused": 2,
+    "review": 37,
+    "knip": 3,
+    "fuzz": 54,
+    "sweep": 195,
+    "judged": 98
+  },
+  "hostLoad": 4.95,
+  "testDelta": {
+    "files": 0,
+    "lines": 330,
+    "jsdomFiles": 0,
+    "cases": 11
+  },
+  "friction": [
+    {
+      "tag": "base-test-failure",
+      "minutes": 15,
+      "note": "The base commit's prompt lab gives LAB.shuffleInto and LAB.choosePlayer the same synthetic id (labEvent(11)), so the shuffle-into fixture bounces and five prompt-lab cases fail in npm run review on the base; fixed in a separate bead. This bead verified its own fixture by temporarily giving shuffleInto another index locally (not committed): with it, tooling, presentation and view-model suites pass (277 cases)."
+    },
+    {
+      "tag": "inventory-generator-drift",
+      "minutes": 10,
+      "note": "The inventory planned a chooseCards:chooseInZone prompt kind, but neither card chooses cards in a zone: Augur Crow names every void card (its only choice is the existing choosePlayer), and The Power Within distributes looked-at cards, which the existing arrange prompt and arrangement editor already model. The new prompt kind is arrange:putInDeck."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 15,
+      "note": "Judged runs needed a settle wait after the arrangement editor's card travel before hit-testing Confirm on mobile, a longer qa.labStage timeout under host load, and playing to the human's main phase before opening the battle log as enemy (a response banner covers the log control on a phone); labStage's declared hand places the base printing, so the amplified judgment opens the card-lab directly."
+    }
+  ],
+  "sourceBase": "035f9058f4040ab5b786111db353bfd369c7afc7",
+  "coverage": {
+    "entities": 2,
+    "pending": 0,
+    "amplifiedTexts": 1,
+    "newEffectOps": 1,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 24,
+      "skip": 16,
+      "fail": 0
+    },
+    "judged": 3
+  }
+}

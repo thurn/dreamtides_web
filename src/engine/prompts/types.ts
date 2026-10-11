@@ -50,6 +50,8 @@ export type PromptRole =
   | "chooseFromOpponentHand"
   /** The hand cards its controller shuffles into their deck. */
   | "shuffleInto"
+  /** Where each card its controller looked at on top of their deck goes: on top of it, on the bottom, into their hand, or into their void. */
+  | "putInDeck"
   /** Whether to do a "you may". */
   | "youMay"
   /** Whether the prevented card's controller pays to stop the prevention. */

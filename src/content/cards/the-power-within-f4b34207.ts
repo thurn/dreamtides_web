@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,12 @@ export default card({
   cardNumber: 442,
   art: { x: -0.353, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [
+    event(
+      v.amplified
+        ? p.putFromTop(4, [{ to: "top", count: 1 }, { to: "bottom", count: 1 }, { to: "hand", count: 1 }, { to: "void", count: "rest" }])
+        : p.putFromTop(3, [{ to: "top", count: 1 }, { to: "bottom", count: 1 }, { to: "hand", count: 1 }]),
+    ),
+  ],
+  verifiedText: "19v3psojlhn",
 });

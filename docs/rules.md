@@ -874,6 +874,19 @@ cards, draw all of them. "They gain ephemeral" makes each drawn card Ephemeral.
 The cards you look at and do not draw stay on top of your deck in the same
 order.
 
+"Put one on top of your deck, one on the bottom of your deck, and one into
+your hand," as in "Look at the top 3 cards of your deck. Put one on top of
+your deck, one on the bottom of your deck, and one into your hand," has you
+decide where each card you looked at goes, as that effect resolves: each
+place gets exactly the number of cards it names, and "the rest," as in "Put
+the rest into your void," gets every card left over. You choose the order of
+the cards you put on top of or on the bottom of your deck together. If you
+looked at fewer cards than the named places take, you choose which places
+get them, each getting at most its number, and "the rest" gets none. Putting
+a card into your hand this way is not a draw. Your opponent sees how many
+cards went to each place and which cards went into your void, but not the
+others.
+
 **Shuffle into a deck** — "Shuffle up to 3 cards from your void into your deck"
 or "Shuffle your hand and void into your deck" puts each of those cards into
 its owner's deck, then shuffles that deck. Your deck is shuffled even when no
@@ -892,6 +905,21 @@ Once a deck is shuffled, neither player knows where any card in it is, even
 the cards they looked at. Both players see how many cards entered the deck
 and from which zones. A card from a void is shown to both players; a card
 from a hand is shown only to a player who could see it there.
+
+**Put on top or on the bottom of a deck** — "Put an enemy on top of the
+opponent's deck" or "Put all cards in a player's void on the bottom of their
+deck" puts each of those cards on top of, or on the bottom of, its owner's
+deck. The deck is not shuffled. Several cards put there at once keep their
+order, the first of them nearest the top; cards from a void go in the order
+they entered it, the most recent first, so the card that has been in the
+void longest ends up nearest the bottom. A created card ceases to exist
+instead, and a reclaimed card is banished instead (see [Zone
+Changes](#zone-changes)).
+
+A player who saw a card go into a deck this way keeps knowing where it is
+until that deck is shuffled, including a card that stays on top of your deck
+after you look at it. A card from a void or from play is seen by both
+players, and a card from the top of your deck you looked at only by you.
 
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played. Copies of cards on the stack

@@ -814,7 +814,7 @@ describe("prompt surfaces over the prompt lab", () => {
       discardToHandLimit: true, playRoute: true, chooseX: true, chooseOne: true, choosePlayer: true, target: true,
       chooseCost: true, optionalCost: true, abandonCost: true, discardCost: true, revealCost: true,
       banishCost: true, offeringCost: true, discard: true, discardChosen: true, foresee: true,
-      lookAtTop: true, discover: true, discoverCost: true, chooseAmong: true, chooseFromOpponentHand: true, shuffleInto: true,
+      lookAtTop: true, discover: true, discoverCost: true, chooseAmong: true, chooseFromOpponentHand: true, shuffleInto: true, putInDeck: true,
       youMay: true, preventUnlessPays: true,
     } satisfies Record<PromptRole, true>;
     expect(new Set(prompts.map(({ prompt }) => prompt.purpose.role))).toEqual(new Set(Object.keys(roles)));

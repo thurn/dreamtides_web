@@ -35,6 +35,7 @@ export * from "./materialize-figments";
 export * from "./optional";
 export * from "./phase";
 export * from "./prevent";
+export * from "./put-in-deck";
 export * from "./repeat";
 export * from "./return-to-hand";
 export * from "./reveal";
