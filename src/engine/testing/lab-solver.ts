@@ -278,8 +278,10 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
  * and a choice from the opponent's hand gets a matching card in that hand
  * (`opponentHandChoices`); a character abandoned as the effect resolves gets
- * a matching character on each chooser's side (`abandonChoices`). A void banish additional cost gets its count of matching cards, or
- * its least X, in `side`'s void; discard and reveal costs get matching cards
+ * a matching character on each chooser's side (`abandonChoices`). A void banish additional cost gets matching void cards
+ * (`costNeeds`): a payer-void banish its fixed count, or its least X, in
+ * `side`'s void; a banish from a selected void its fixed count in the
+ * opponent's void when it names the opponent, else in `side`'s void; discard and reveal costs get matching cards
  * beside the source in hand, and abandon costs get matching own characters.
  * A ⍟ additional cost gets that many
  * points in `side`'s score, wherever it sits among alternatives and

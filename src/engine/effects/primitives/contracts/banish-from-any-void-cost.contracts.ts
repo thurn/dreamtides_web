@@ -6,7 +6,8 @@ import type { AbilityList, Cost } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { EngineLogRecord } from "../../../log";
-import type { Answer, Prompt } from "../../../prompts/types";
+import { isLegalAnswer, legalAnswers } from "../../../prompts/answers";
+import type { Answer, ChooseCardsPrompt, Prompt } from "../../../prompts/types";
 import { payCosts, planCosts } from "../../../rules/costs";
 import { stateHash } from "../../../state/hash";
 import { SIDES, type InstanceId, type Side } from "../../../state/ids";
@@ -143,6 +144,37 @@ describe("banishFromAnyVoidCost", () => {
     expect(resolved.state.sides[side].score).toBe(1);
     expect(resolved.state.sides[foe].banished).toEqual(ids[foe].void);
     expect(invariantViolations(resolved.state, engine.catalog)).toEqual([]);
+  });
+
+  it.each(["opponent", "any"] as const)("proves every final %s void selection without spending a synthetic search budget of 1", (player) => {
+    const card = payer(12, [energy(1), banishFromAnyVoidCost(2, {}, player)]);
+    const engine = createEngine(testCatalog([card]));
+    const setup = boardState(engine.catalog, { active: "player", phase: "day", player: { back: [card.id], void: player === "any" ? [v.event0.id, v.vanilla1.id] : [], energy: 2, deck }, enemy: { void: [v.event0.id, v.vanilla1.id, v.vanilla2.id, v.event0.id].slice(0, player === "any" ? 2 : 4), deck } });
+    const state = { ...setup.state, config: { ...setup.state.config, feasibilitySearchRuns: 1 } };
+    const records: EngineLogRecord[] = [];
+    const fold = createFoldAdapter(engine, { log: (r) => records.push(r) });
+    const opening = fold.reduce(slice(state), { kind: "battleAction", side: "player", action: action(setup.ids.player.back[0]!) });
+    const opened = applied(opening);
+    expect(records.filter((r) => r.event === "engine.feasibility")).toEqual([]);
+    expect(opening.kind === "applied" && opening.published.some((e) => e.kind === "feasibilityBounded")).toBe(false);
+    const pending = fold.pending(opened);
+    const prompt = pending?.prompt as ChooseCardsPrompt;
+    expect(prompt).toMatchObject({ kind: "chooseCards", side: "player", purpose: { role: "banishAnyVoidCost" }, min: 2, max: 2 });
+    const selections = [...legalAnswers({ ...prompt, allowed: undefined })] as InstanceId[][];
+    expect(selections).toHaveLength(6);
+    expect(selections.filter((selection) => !isLegalAnswer(prompt, selection))).toEqual([]);
+    for (const selection of selections) {
+      const paid = applied(fold.reduce(opened, { kind: "answer", side: "player", promptId: pending!.prompt.id, value: selection })).committed;
+      for (const of of SIDES) {
+        const mine = selection.filter((id) => state.instances[id].owner === of);
+        expect(new Set(paid.sides[of].banished)).toEqual(new Set(mine));
+        expect(paid.sides[of].banished).toHaveLength(mine.length);
+        expect(paid.sides[of].void).toEqual(setup.ids[of].void.filter((id) => !selection.includes(id)));
+      }
+      expect(paid.sides.player.currentEnergy).toBe(1);
+      expect(paid.sides.enemy.currentEnergy).toBe(state.sides.enemy.currentEnergy);
+      expect(invariantViolations(paid, engine.catalog)).toEqual([]);
+    }
   });
 
   it("reloads/cancels a suspended payment, refuses duplicate/invalid/stale/foreign/concurrent answers, and pays once", () => {

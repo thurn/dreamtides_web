@@ -223,8 +223,8 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
  * total that `modifier` changes, so an alternative or an optional cost is
  * affordable when the modified total is. `endsPlayTime` is reserved for a
  * caller whose next operation is the commit point: it allows a final discard
- * or void banish with already-payable resources to prove all its card
- * selections at once.
+ * or void banish (from the payer's void or a selected void) with
+ * already-payable resources to prove all its card selections at once.
  * `selectorX` binds character-cost selectors during a card's play preparation
  * to its chosen energy X; activation and manual callers use the source card's X.
  */
@@ -320,11 +320,13 @@ export function planCosts(
     if (variable && capturedX !== null && capturedX < leastCount(cost)) throw new Infeasible("X is below the count's least value");
     const remaining = candidates.filter((id) => !used.includes(id));
     // Only the official play/activate callers certify that this plan is
-    // immediately followed by the commit point. This last discard or void
-    // banish cannot affect energy, remaining costs, or a captured-cost
-    // equality constraint: a variable count bound earlier is fixed here.
+    // immediately followed by the commit point. This last discard, payer-void
+    // banish, or fixed-count banish from a selected void cannot affect energy,
+    // remaining costs, or a captured-cost equality constraint: a variable
+    // count bound earlier is fixed here.
     const allAnswersPayable = options.endsPlayTime === true && !nested && isLast &&
-      (cost.cost === "discard" || cost.cost === "banishFromVoid") && !("captureCost" in cost && cost.captureCost === true) && resourcesPayable();
+      (cost.cost === "discard" || cost.cost === "banishFromVoid" || cost.cost === "banishFromAnyVoid") &&
+      !("captureCost" in cost && cost.captureCost === true) && resourcesPayable();
     const chosen = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
       side,
