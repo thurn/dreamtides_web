@@ -18,19 +18,42 @@ import { DREAMSIGNS } from "../content/dreamsigns";
 import { DREAMWELL_CARDS } from "../content/dreamwell";
 import { FIGMENTS } from "../content/figments";
 import { abilityEffect } from "./dsl/abilities";
-import { activated, all, characterYouControl, energy, event, fromVoid, staticAbility, target } from "./dsl/builders";
-import { onMaterialized, triggered, triggeringCard } from "./dsl/triggers";
+import {
+  activated,
+  all,
+  cardsMovedBy,
+  characterYouControl,
+  conditionCardCounts,
+  costOf,
+  energy,
+  event,
+  fromVoid,
+  staticAbility,
+  target,
+} from "./dsl/builders";
+import { onMaterialized, triggered, triggeringCard, whenDraw } from "./dsl/triggers";
 import type { Ability } from "./dsl/types";
 import { expectedVerifiedText } from "./dsl/verified-text";
 import { engineCardFromContent } from "./content-catalog";
 import { everyNode } from "./effects/interpreter";
 import { createCopyInHand } from "./effects/primitives/create-copy-in-hand";
 import { chooseOne } from "./effects/primitives/choose-one";
+import { choosePlayer } from "./effects/primitives/choose-player";
+import { discard } from "./effects/primitives/discard";
+import { discover } from "./effects/primitives/discover";
 import { draw } from "./effects/primitives/draw";
+import { eachPlayer } from "./effects/primitives/each-player";
+import { floating } from "./effects/primitives/floating-trigger";
+import { forDuration } from "./effects/primitives/for-duration";
+import { gainPoints } from "./effects/primitives/gain-points";
 import { cardsIn, grantCardKeyword } from "./effects/primitives/grant-card-keyword";
+import { ifThen } from "./effects/primitives/if-then";
+import { optional } from "./effects/primitives/optional";
+import { repeat } from "./effects/primitives/repeat";
 import { sequence } from "./effects/primitives/sequence";
 import { sparkModifier } from "./effects/primitives/spark-modifier";
-import { primitiveDefinition } from "./effects/registry";
+import { primitiveDefinition, type Effect } from "./effects/registry";
+import { misplacedMovedCardReads } from "./testing/moved-card-audit";
 import { undeclaredAbilityTargets } from "./testing/target-audit";
 
 interface Entity {
@@ -160,6 +183,64 @@ describe("content gates", () => {
 
   it("keeps play-time targets and triggering-card references out of every authored static ability", () => {
     expect(authoredFailures(staticReferenceFailures)).toEqual([]);
+  });
+
+  it("reads every authored entity's moved cards only after their node resolves in the same resolution", () => {
+    expect(
+      authoredFailures((abilities) =>
+        misplacedMovedCardReads(abilities).map(({ op, node, reason }) =>
+          reason === "static" ? `static ${op} reads cards a ${node} node moved` : `${op} reads cards a ${node} node moved before it resolves`,
+        ),
+      ),
+    ).toEqual([]);
+  });
+
+  it("rejects a moved-card read whose node is later, on another branch, unrelated, in another resolution, or read statically", () => {
+    /** Each shape gets a fresh payment node and the value that reads it. */
+    const shape = (build: (payment: Effect, read: Effect) => Effect): Effect => {
+      const payment = discard(1);
+      return build(payment, gainPoints(costOf(cardsMovedBy(payment))));
+    };
+    const accepted: readonly Effect[] = [
+      shape((payment, read) => sequence(payment, read)),
+      shape((payment, read) => sequence(draw(1), payment, draw(1), read)),
+      shape((payment, read) => sequence(optional(payment), read)),
+      shape((payment, read) => sequence(ifThen(conditionCardCounts("hand", 1), payment), ifThen(conditionCardCounts("hand", 1), read))),
+      shape((payment, read) => sequence(sequence(draw(1), payment), sequence(draw(1), read))),
+      shape((payment, read) => sequence(choosePlayer(() => payment), read)),
+      shape((payment, read) => sequence(payment, choosePlayer(() => read))),
+      shape((payment, read) => repeat(2, sequence(payment, read))),
+      shape((payment, read) => eachPlayer(sequence(payment, read))),
+      shape((payment) => forDuration("untilEndOfTurn", sequence(payment, sparkModifier(all(characterYouControl()), costOf(cardsMovedBy(payment)))))),
+      shape((payment, read) => sequence(draw(1), floating(whenDraw(), sequence(payment, read)))),
+      shape((payment) => ifThen(conditionCardCounts("hand", 1), optional(sequence(payment, discover({ cardType: "character" }, { costGreaterThan: costOf(cardsMovedBy(payment)) }))))),
+    ];
+    for (const effect of accepted) {
+      expect(misplacedMovedCardReads([event(effect)]), JSON.stringify(effect)).toEqual([]);
+      expect(misplacedMovedCardReads([triggered(onMaterialized(), effect)]), JSON.stringify(effect)).toEqual([]);
+    }
+
+    const rejected: readonly Effect[] = [
+      shape((payment, read) => sequence(read, payment)),
+      shape((payment, read) => sequence(sequence(read, draw(1)), payment)),
+      shape((payment, read) => sequence(draw(1), sequence(read, payment))),
+      shape((_payment, read) => sequence(discard(1), read)),
+      shape((_payment, read) => read),
+      shape((payment, read) => chooseOne(payment, read)),
+      shape((payment, read) => ifThen(conditionCardCounts("hand", 1), payment, read)),
+      shape((payment, read) => choosePlayer((player) => (player === "you" ? payment : read))),
+      shape((payment, read) => sequence(payment, floating(whenDraw(), read))),
+      shape((payment, read) => sequence(floating(whenDraw(), payment), read)),
+      shape((payment, read) => optional(sequence(read, payment))),
+    ];
+    for (const effect of rejected) {
+      expect(misplacedMovedCardReads([event(effect)]), JSON.stringify(effect)).toEqual([expect.objectContaining({ reason: "notBefore" })]);
+    }
+
+    const payment = discard(1);
+    expect(misplacedMovedCardReads([staticAbility(sparkModifier(all(characterYouControl()), costOf(cardsMovedBy(payment))))])).toEqual([
+      { op: "sparkModifier", node: "discard", reason: "static" },
+    ]);
   });
 
   it("rejects a static ability that holds a target or a triggering-card reference", () => {

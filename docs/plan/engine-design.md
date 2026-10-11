@@ -1313,7 +1313,8 @@ afterwards keeps those that changed zones or ceased to exist meanwhile,
 replacing the node's previous record. A created card that ceased to exist so
 keeps its cost. The record lives only as long as the resolution, so a step's
 replay rebuilds it from the step's answers. Static abilities read no moved
-card.
+card. The content gate requires the named node to resolve earlier in the same
+resolution than the value that reads it (see Content gates).
 
 `conditionCardCounts` counts the specified player’s cards in a deck, hand, or
 void when the condition is checked. Its optional typed filter reads effective
@@ -1427,6 +1428,17 @@ and figment. Each check names every offending entity:
   stack target, or triggering-card (`subject`) reference anywhere in its
   tree: the layer evaluation has no chosen target or triggering event to
   read.
+- **Moved-card reads.** Every `cardsMovedBy(node)` a value holds names a
+  node that resolves before that value is read, in the same resolution
+  (`misplacedMovedCardReads`, `testing/moved-card-audit.ts`): the node is,
+  or resolves within, an earlier child of an enclosing `sequence`. Other
+  containers order nothing: `chooseOne`, `ifThen`, and `choosePlayer` hold
+  alternatives, and `optional`, `repeat`, `eachPlayer`, and `forDuration`
+  one effect, so a read inside a branch may name an earlier node of that
+  branch or of an enclosing sequence. A floating trigger's effect is a
+  resolution of its own and names only its own nodes. A static ability
+  holds no moved-card read. Any other reference, to a later node, another
+  branch, or an equivalent node outside the effect, would always read 0.
 - **Printed energy cost.** Every card's printed energy cost orbs read into
   its engine costs (`engineCardFromContent`).
 - **Figment data.** Every figment has a unique UUID and a non-negative

@@ -292,7 +292,11 @@ export function plus(of: ValueExpr, amount: number): ValueExpr {
   return { value: "plus", of, amount };
 }
 
-/** "That card", for a value: the cards `node`, an earlier node of the same effect, moved. */
+/**
+ * "That card", for a value: the cards `node`, an earlier node of the same
+ * effect, moved. The content gate rejects a `node` that does not resolve
+ * before the value in the same resolution (`testing/moved-card-audit.ts`).
+ */
 export function cardsMovedBy(node: EffectNode): MovedCardRef {
   return { kind: "movedCards", node };
 }

@@ -6,7 +6,7 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonCostCapture, activated, all, cardsMovedBy, characterYouControl, conditionCardCounts, costOf, energyX, event, x } from "../../../dsl/builders";
-import { NO_DECK_MODS } from "../../../dsl/types";
+import { BASE_VARIANT, NO_DECK_MODS } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { Answer, ChooseCardsPrompt, ChooseNumberPrompt, Prompt } from "../../../prompts/types";
@@ -19,6 +19,7 @@ import type { BattleState, DeckEntry, Printing } from "../../../state/types";
 import type { AnswerSource } from "../../../steps/types";
 import { boardState, cardIdOf, placeFigment, type SideSetup } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
+import { misplacedMovedCardReads } from "../../../testing/moved-card-audit";
 import { playFromHand } from "../../../testing/scenario";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { ZONE_FIGMENT, ZONE_FIGMENTS } from "../../../testing/zone-cards";
@@ -56,7 +57,7 @@ const pointsFor = (index: number, build: (payment: ReturnType<typeof discard>) =
 const discardForPoints = pointsFor(1201, (payment) => sequence(payment, gainPoints(costOf(cardsMovedBy(payment)))));
 const discardTwoForPoints = pointsFor(1202, (payment) => sequence(payment, gainPoints(costOf(cardsMovedBy(payment)))), 2);
 const repeatedDiscard = pointsFor(1203, (payment) => repeat(2, sequence(payment, gainPoints(costOf(cardsMovedBy(payment))))));
-const readBeforeMoving = pointsFor(1204, (payment) => sequence(gainPoints(costOf(cardsMovedBy(payment))), payment));
+const declinablePayment = pointsFor(1204, (payment) => sequence(optional(payment), gainPoints(costOf(cardsMovedBy(payment)))));
 const eachDiscards = pointsFor(1205, (payment) => eachPlayer(sequence(payment, gainPoints(costOf(cardsMovedBy(payment))))));
 const pumpByDiscard = pointsFor(1206, (payment) => forDuration("untilEndOfTurn", sequence(payment, sparkModifier(all(characterYouControl()), costOf(cardsMovedBy(payment))))));
 const choosingReader = pointsFor(1207, (payment) => sequence(payment, choosePlayer((player) => gainPoints(costOf(cardsMovedBy(payment)), player))));
@@ -83,8 +84,12 @@ const pricedSacrifice = character(1211, () => [activated([energyX(0), abandonCos
 /** "Abandon a character: A player erodes X, where X is that character's cost." */
 const sacrificeToErode = character(1212, () => [activated([abandonCostCapture()], choosePlayer((player) => erode(x(), player)))]);
 
+const MOVED_CARD_READERS: readonly EngineCardDefinition[] = [
+  reclaim, discardForPoints, discardTwoForPoints, repeatedDiscard, declinablePayment, eachDiscards, pumpByDiscard, choosingReader, reclaimThenFail, sacrificeForPoints, pricedSacrifice, sacrificeToErode,
+];
+
 const engine = createEngine(testCatalog(
-  [reclaim, discardForPoints, discardTwoForPoints, repeatedDiscard, readBeforeMoving, eachDiscards, pumpByDiscard, choosingReader, reclaimThenFail, sacrificeForPoints, pricedSacrifice, sacrificeToErode],
+  MOVED_CARD_READERS,
   {},
   ZONE_FIGMENTS,
 ));
@@ -169,14 +174,18 @@ describe("costOf(cardsMovedBy(node))", () => {
     expect(declined.state.sides.player.hand).toEqual([declinable.ids.player.hand[1]]);
   });
 
-  it("totals several moved cards, reads none before the node resolves, and replaces a node's record each time it resolves", () => {
+  it("reads each card's node after it in the same resolution, as the content gate requires", () => {
+    for (const card of MOVED_CARD_READERS) expect(misplacedMovedCardReads(card.abilities(BASE_VARIANT)), card.id).toEqual([]);
+  });
+
+  it("totals several moved cards, reads none from a node that did not resolve, and replaces a node's record each time it resolves", () => {
     const two = board({ hand: [discardTwoForPoints.id, v.vanilla2.id, v.vanilla3.id] });
     expect(run(two.state, "player", playFromHand(two.ids, "player").action).state.sides.player.score).toBe(5);
 
-    const early = board({ hand: [readBeforeMoving.id, v.vanilla5.id] });
-    const before = run(early.state, "player", playFromHand(early.ids, "player").action);
-    expect(before.state.sides.player.void).toContain(early.ids.player.hand[1]);
-    expect(before.state.sides.player.score).toBe(0);
+    const declinable = board({ hand: [declinablePayment.id, v.vanilla5.id] });
+    const declined = run(declinable.state, "player", playFromHand(declinable.ids, "player").action, [false]);
+    expect(declined.state.sides.player.hand).toEqual([declinable.ids.player.hand[1]]);
+    expect(declined.state.sides.player.score).toBe(0);
 
     // Each repetition reads the card it discarded: 2 then 3, never the 2 again or a running total.
     const twice = board({ hand: [repeatedDiscard.id, v.vanilla2.id, v.vanilla3.id] });
