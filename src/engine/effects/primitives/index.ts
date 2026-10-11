@@ -7,6 +7,7 @@ export * from "./banish-cards";
 export * from "./banish-until";
 export * from "./choose-one";
 export * from "./choose-player";
+export * from "./choose-subtype";
 export * from "./copy-card";
 export * from "./cost-modifier";
 export * from "./create-copy-in-hand";

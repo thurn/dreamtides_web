@@ -4,10 +4,11 @@ import type { CardFilter, ValueExpr } from "../../dsl/types";
 import type { ChooseCardsPrompt, ChooseNumberPrompt, PromptPurpose } from "../../prompts/types";
 import { instanceOrigin, originAbilities } from "../../rules/activation";
 import { shuffleDeck } from "../../rules/shuffle";
-import { moveToHand } from "../../rules/zones";
+import { moveInstance, moveToHand } from "../../rules/zones";
 import type { InstanceId, Side } from "../../state/ids";
 import type { BattleState } from "../../state/types";
 import type { StepContext } from "../../steps/types";
+import { showPrivately } from "../../view/knowledge";
 import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 import { evaluate, everyNode } from "../interpreter";
 
@@ -30,10 +31,17 @@ type DiscoverCost =
  * one of them into their hand (`cardDiscovered`, which names the card only
  * to a side that can identify it), and their deck is shuffled. With no
  * matching card nothing happens.
+ *
+ * With `to` `"deckTop"` ("Discover … and put it on top of your deck"), the
+ * deck is shuffled and then the chosen card is put on top of it
+ * (`cardsPlaced`, naming the card to its controller alone, who keeps knowing
+ * it there).
  */
 export type DiscoverNode = DiscoverCost & {
   readonly op: "discover";
   readonly filter: CardFilter;
+  /** Where the chosen card goes; absent for the hand. */
+  readonly to?: "deckTop";
 };
 
 export const discoverPrimitive = definePrimitive<DiscoverNode>({
@@ -52,6 +60,13 @@ export const discoverPrimitive = definePrimitive<DiscoverNode>({
       max: 1,
     });
     if (chosen === undefined) throw new Error("discover answered with no card");
+    if (node.to === "deckTop") {
+      shuffleDeck(ctx.state, side);
+      moveInstance(ctx, chosen, "deck", "top");
+      showPrivately(ctx.state, side, [chosen]);
+      ctx.emit({ kind: "cardsPlaced", side, to: "deckTop", cards: [chosen], from: ["deck"], seenBy: [[side]] });
+      return;
+    }
     moveToHand(ctx, chosen, side);
     ctx.emit({ kind: "cardDiscovered", side, instance: chosen });
     shuffleDeck(ctx.state, side);
@@ -128,6 +143,6 @@ export function discoverableCosts(state: BattleState, catalog: EngineCatalog, si
   return costs;
 }
 
-export function discover(filter: CardFilter = {}, cost: DiscoverCost = {}): DiscoverNode {
-  return { op: "discover", filter, ...cost };
+export function discover(filter: CardFilter = {}, cost: DiscoverCost = {}, to: "hand" | "deckTop" = "hand"): DiscoverNode {
+  return to === "hand" ? { op: "discover", filter, ...cost } : { op: "discover", filter, ...cost, to };
 }

@@ -1,0 +1,10 @@
+# RD-hv-umm2.106-2: "This character is that character type" replaces its subtype while in play, and is its chosen type
+
+- Ladder: 4 (MTG Comprehensive Rules 205.1a, adapted: an effect that makes an object a subtype without "in addition to its other types" replaces its subtypes; 613.1d type-changing layer; 400.7 a card that changes zones is a new object without memory of earlier choices) then 5 (simplest reading consistent with the text)
+- rules.md: § Keywords and Effects → Choose a character type; § Ability Types → Order of continuous effects
+- Affects: 5832785d-fb97-40b5-a12b-bb660f5e04b6 (base, amplified)
+- Why: The printed text omits Metallic Mimic's "in addition to its other types", and a Dreamtides character has one subtype, so the chosen type replaces Explorer. The change is a type change (the first continuous step, beside "has all character types"). It lasts while the character is in play: leaving play makes it a new object, which chooses again through its own ▸Materialized ability. "The chosen type" is that same choice, so the anthem changes nothing before a type is chosen (a character with all character types gains nothing then) and nothing once the source leaves play. If the source is not in play as its ability resolves, no type is chosen, because neither clause could apply. A second choice for the same character, such as a retriggered ▸Materialized, replaces the first as the later type change. "Characters of the chosen type" is unqualified, so both players' characters of that type have the bonus, the source included (see the card issue).
+
+## Encoding
+
+The `self` form of `chooseSubtype` starts a floating layer-2 `subtype` change on its source, lasting while the source is in play (`sourceLeavesPlay`). `chosenSubtypeOf` reads the latest such change the source made to itself; `Layers.expand` substitutes it into a static ability naming `CHOSEN_SUBTYPE`, and the ability makes no change while there is none. The saved fold state accepts the change kind (rules/battle/fold.ts `isFloatingChange`).

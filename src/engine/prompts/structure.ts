@@ -25,7 +25,8 @@ function wellFormedAllowed(prompt: Prompt): boolean {
 
 /**
  * Whether rules code built `prompt` correctly: distinct candidates, cards,
- * modes, and destinations, non-negative integer bounds with `min <= max`,
+ * modes, and destinations, a distinct character type for each mode of a
+ * type choice, non-negative integer bounds with `min <= max`,
  * and distinct allowed answers its fields allow. Validation of answers and
  * auto-answers assumes this holds.
  */
@@ -41,11 +42,14 @@ function wellFormedFields(prompt: Prompt): boolean {
     case "chooseSlot":
       return distinct(prompt.slots.map((slot) => `${slot.rank}:${String(slot.index)}`)) &&
         prompt.slots.every((slot) => isBound(slot.index) && (slot.rank === "front" ? slot.index < FRONT_RANK_SIZE : slot.rank === "back" && slot.index < BACK_RANK_SIZE));
-    case "chooseMode":
+    case "chooseMode": {
+      const { subtypes } = prompt;
       return (
         distinct(prompt.options.map((option) => option.mode)) &&
-        prompt.options.every((option) => Number.isInteger(option.mode))
+        prompt.options.every((option) => Number.isInteger(option.mode)) &&
+        (subtypes === undefined || (distinct(subtypes) && prompt.options.every((option) => option.mode >= 0 && option.mode < subtypes.length)))
       );
+    }
     case "chooseNumber":
       return bounded(prompt.min, prompt.max);
     case "arrange":

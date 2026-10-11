@@ -1,3 +1,6 @@
+import { all, anyCharacter, staticAbility } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 342,
   art: { x: 0.228, y: 1, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), p.chooseSubtype({ self: true })),
+    staticAbility(p.sparkModifier(all(anyCharacter({ subtype: p.CHOSEN_SUBTYPE })), variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "1w9sdmq1ojc",
 });

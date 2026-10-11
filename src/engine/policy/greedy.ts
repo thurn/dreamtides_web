@@ -5,7 +5,8 @@
  * simple evaluation: score difference, board spark, cards in hand, and
  * energy. The action with the best mean score wins. Prompts are answered
  * with the prompt heuristic (`greedyAnswer`), live and in simulation; a
- * live free Discover cost choice reads one determinization of the view.
+ * live free Discover cost choice or character type choice reads one
+ * determinization of the view.
  */
 import { AI } from "../../content/ai";
 import type { Engine } from "../engine";
@@ -15,7 +16,16 @@ import { opponent, type Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { InlineSource } from "../steps/sources";
 import type { BattleView, SideView } from "../view/view";
-import { greedyAnswer, greedyDeclinesChain, stateCardInfo, stateDiscoverCosts, viewCardInfo, type DiscoverCostsOf } from "./prompts";
+import {
+  greedyAnswer,
+  greedyDeclinesChain,
+  stateCardInfo,
+  stateDiscoverCosts,
+  stateSubtypeCounts,
+  viewCardInfo,
+  type DiscoverCostsOf,
+  type SubtypeCountsOf,
+} from "./prompts";
 import type { Policy, PolicyCandidate, PolicyChoice, PolicyContext, PolicyDecision, PolicyResult } from "./types";
 
 const GREEDY = AI.enginePolicy.greedy;
@@ -56,6 +66,7 @@ function simulationSource(engine: Engine): InlineSource {
       stateCardInfo(work, engine.catalog, prompt.side),
       stateDiscoverCosts(work, engine.catalog),
       work.automaticChoices,
+      stateSubtypeCounts(work, engine.catalog),
     );
   return new InlineSource({ player: answer, enemy: answer });
 }
@@ -136,15 +147,17 @@ export const GREEDY_POLICY: Policy = {
   decide(view: BattleView, decision: PolicyDecision, ctx: PolicyContext): PolicyResult {
     const started = ctx.now();
     if (decision.kind === "topLevel") return decideTopLevel(view, decision.legal, ctx, started);
-    // A free Discover cost reads the deck of one determinization of the view, sampled only when asked.
+    // A free Discover cost or a character type reads the deck of one determinization of the view, sampled only when asked.
     let determinizations = 0;
-    const discoverCosts: DiscoverCostsOf = (prompt) => {
+    const sample = () => {
       determinizations += 1;
-      return stateDiscoverCosts(ctx.engine.determinize(view, ctx.decklists, () => ctx.random.next()), ctx.engine.catalog)(prompt);
+      return ctx.engine.determinize(view, ctx.decklists, () => ctx.random.next());
     };
+    const discoverCosts: DiscoverCostsOf = (prompt) => stateDiscoverCosts(sample(), ctx.engine.catalog)(prompt);
+    const subtypeCounts: SubtypeCountsOf = (prompt) => stateSubtypeCounts(sample(), ctx.engine.catalog)(prompt);
     const chosen: PolicyChoice = {
       kind: "answer",
-      value: greedyAnswer(decision.prompt, viewCardInfo(view, ctx.side), discoverCosts, view.automaticChoices),
+      value: greedyAnswer(decision.prompt, viewCardInfo(view, ctx.side), discoverCosts, view.automaticChoices, subtypeCounts),
     };
     return {
       choice: chosen,

@@ -106,6 +106,7 @@ export const EVENT_PRESENTATION = {
   revealed: "travel",
   shuffledIntoDeck: "travel",
   sparkGained: "status",
+  subtypeChosen: "status",
   triggerQueued: "none",
   triggerResolved: "status",
   turnStarted: "turn",

@@ -4,7 +4,8 @@
  *
  * Greedy reads a free Discover cost choice from the deck of a state sampled
  * from its own view (D22): the cards its decklist has left there, never the
- * battle's hidden deck.
+ * battle's hidden deck. It names a character type from the same kind of
+ * state: the type most of its characters in play and in its deck have.
  *
  * Answering a non-forced prompt during automatic resolution counts as a
  * decision, so the resolution cap never ends a self-retriggering "you may"
@@ -19,7 +20,8 @@ import { AI } from "../../content/ai";
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { discoverableCosts } from "../effects/primitives/discover";
 import { allowedAnswers, firstLegalAnswer, isLegalAnswer } from "../prompts/answers";
-import type { Answer, ChooseNumberPrompt, Prompt, PromptRole } from "../prompts/types";
+import type { CardSubtype } from "../../types/card-identity";
+import type { Answer, ChooseModePrompt, ChooseNumberPrompt, Prompt, PromptRole } from "../prompts/types";
 import type { InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { BattleView } from "../view/view";
@@ -126,6 +128,41 @@ function discoverCostAnswer(prompt: ChooseNumberPrompt, costs: ReadonlySet<numbe
   return found.length === 0 ? prompt.max : Math.max(...found);
 }
 
+/** How many characters of each type the chooser of a character type choice has, in play and in its deck. */
+export type SubtypeCountsOf = (prompt: ChooseModePrompt) => ReadonlyMap<CardSubtype, number>;
+
+/**
+ * Character type counts from a determinized state: the printed type of each
+ * character the chooser controls in play and of each character card in its
+ * deck, as `stateCardInfo` reads printed values from a step's work state.
+ */
+export function stateSubtypeCounts(state: BattleState, catalog: EngineCatalog): SubtypeCountsOf {
+  return (prompt) => {
+    const side = state.sides[prompt.side];
+    const counts = new Map<CardSubtype, number>();
+    const ids = [...side.frontRank, ...side.backRank, ...side.deck];
+    for (const id of ids) {
+      const instance = id === null ? undefined : state.instances[id];
+      if (instance === undefined) continue;
+      const card = instanceCard(catalog, instance);
+      if (card.cardType === "character") counts.set(card.subtype, (counts.get(card.subtype) ?? 0) + 1);
+    }
+    return counts;
+  };
+}
+
+/** The type Greedy names: the offered type it has most characters of, the first offered on a tie. */
+function subtypeAnswer(prompt: ChooseModePrompt, counts: ReadonlyMap<CardSubtype, number>): Answer {
+  let best: { readonly mode: number; readonly count: number } | null = null;
+  for (const option of prompt.options) {
+    const type = prompt.subtypes?.[option.mode];
+    if (!option.legal || type === undefined) continue;
+    const count = counts.get(type) ?? 0;
+    if (best === null || count > best.count) best = { mode: option.mode, count };
+  }
+  return best?.mode ?? firstLegalAnswer(prompt);
+}
+
 /**
  * Every role registers its card ranking, its number choice, and how the
  * optional-chain bound treats it, including roles used by other prompt kinds.
@@ -156,6 +193,8 @@ const ROLE_STRATEGIES = {
   // A mode or player steers the chooser's own effect, which may be the one that retriggers.
   chooseOne: { cards: "hostile", number: "largest", chain: "loopable" },
   choosePlayer: { cards: "hostile", number: "largest", chain: "loopable" },
+  // A type steers the chooser's own effect, as a mode does.
+  chooseSubtype: { cards: "hostile", number: "largest", chain: "loopable", mode: "subtype" },
   move: { cards: "hostile", number: "largest", chain: "finite" },
   // An "up to N" target accepts fewer.
   target: { cards: "hostile", number: "largest", chain: "loopable" },
@@ -194,8 +233,20 @@ const ROLE_STRATEGIES = {
   preventUnlessAbandons: { cards: "hostile", number: "largest", chain: "finite" },
 } as const satisfies Record<
   PromptRole,
-  { readonly cards: "loss" | "gain" | "hostile"; readonly number: "largest" | "discoverCost"; readonly chain: "loopable" | "finite" }
+  {
+    readonly cards: "loss" | "gain" | "hostile";
+    readonly number: "largest" | "discoverCost";
+    readonly chain: "loopable" | "finite";
+    /** A mode choice answered other than by its first legal mode: a character type by `subtypeAnswer`. */
+    readonly mode?: "subtype";
+  }
 >;
+
+/** The role's mode strategy, when it has one. */
+function modeStrategy(role: PromptRole): "subtype" | undefined {
+  const strategy: (typeof ROLE_STRATEGIES)[PromptRole] = ROLE_STRATEGIES[role];
+  return "mode" in strategy ? strategy.mode : undefined;
+}
 
 /** Whether Greedy declines `prompt` because the optional chain is spent: only a loopable role, past the cap. */
 export function greedyDeclinesChain(prompt: Prompt, automaticChoices: number): boolean {
@@ -223,13 +274,20 @@ function selectionOf(value: Answer): readonly InstanceId[] | null {
 /**
  * Greedy's answer to a prompt, without search: accept a "you may", pay an
  * "unless" cost it can pay, the largest number (for a free Discover cost,
- * the highest cost its deck can find), the first legal mode, and for a
+ * the highest cost its deck can find), the first legal mode (for a
+ * character type, the one it has most characters of), and for a
  * selection the cards it wants most, giving up its least valuable cards for
  * costs and discards. A prompt that lists its legal answers gets the best of
  * them. After the optional chain is spent it declines a loopable role's
  * prompt (`greedyDeclinesChain`).
  */
-export function greedyAnswer(prompt: Prompt, info: CardInfoOf, discoverCosts: DiscoverCostsOf, automaticChoices: number): Answer {
+export function greedyAnswer(
+  prompt: Prompt,
+  info: CardInfoOf,
+  discoverCosts: DiscoverCostsOf,
+  automaticChoices: number,
+  subtypeCounts: SubtypeCountsOf = () => new Map(),
+): Answer {
   if (greedyDeclinesChain(prompt, automaticChoices)) return declineAnswer(prompt);
   const allowed = allowedAnswers(prompt);
   if (allowed !== undefined && allowed.length > 0) {
@@ -250,8 +308,10 @@ export function greedyAnswer(prompt: Prompt, info: CardInfoOf, discoverCosts: Di
     case "chooseNumber":
       value = ROLE_STRATEGIES[prompt.purpose.role].number === "discoverCost" ? discoverCostAnswer(prompt, discoverCosts(prompt)) : prompt.max;
       break;
-    case "chooseSlot":
     case "chooseMode":
+      value = modeStrategy(prompt.purpose.role) === "subtype" ? subtypeAnswer(prompt, subtypeCounts(prompt)) : firstLegalAnswer(prompt);
+      break;
+    case "chooseSlot":
     case "arrange":
       value = firstLegalAnswer(prompt);
       break;

@@ -142,6 +142,8 @@ export const LAB = {
   discoverCost: labEvent(10, 1, p.discover({ cardType: "character" }, { chooseCost: true })),
   /** Choose either player to discard and draw, preserving the source controller. */
   choosePlayer: labEvent(0x60, 1, p.choosePlayer((player) => p.sequence(p.discard(1, player), p.draw(1, player)))),
+  /** Choose a character type, then discover a character of that type onto the top of the deck. */
+  chooseSubtype: labEvent(0x63, 1, p.chooseSubtype({ then: p.discover({ cardType: "character", subtype: p.CHOSEN_SUBTYPE }, {}, "deckTop") })),
   /** Choose one of your characters to abandon during resolution. */
   abandon: labEvent(0x62, 1, p.abandon()),
   /** "Dissolve up to one enemy." */
@@ -217,6 +219,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.optionalReturn.id]: { name: "Lab Return", text: "You may pay 1● to return your void cards to hand." },
   [LAB.putFromTopThenShuffle.id]: { name: "Lab Recollection", text: "Look at the top 2 cards of your deck. Put one on top of your deck and the other into your void. Shuffle your void into your deck." },
   [LAB.choosePlayer.id]: { name: "Lab Rekindling", text: "Choose a player. That player discards a card, then draws a card." },
+  [LAB.chooseSubtype.id]: { name: "Lab Calling", text: "Choose a character type. Discover a character of that type and put it on top of your deck." },
   [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
   [SYNTHETIC.vanilla0.id]: { name: "Lab Squire", text: "" },
   [SYNTHETIC.vanilla1.id]: { name: "Lab Recruit", text: "" },
@@ -379,6 +382,17 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       enemy: { hand: vanillas, deck: deck(6) },
     },
     script: [],
+  },
+  {
+    name: "choose-subtype",
+    description: "Choose a character type among the catalog's, then discover a character of it onto the top of the deck",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [LAB.chooseSubtype.id], energy: 2, deck: [...vanillas, ...deck(3)] },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [playHand(0), { side: "player", answer: () => 0 }],
   },
   {
     name: "costs",

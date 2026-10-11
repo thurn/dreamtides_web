@@ -666,7 +666,8 @@ interface PromptPurpose {
 
 type Prompt =
   | { kind: "chooseTargets" | "chooseCards"; candidates: InstanceId[]; min: number; max: number }  // complete legal set
-  | { kind: "chooseMode"; options: { mode: number; legal: boolean }[] }
+  | { kind: "chooseMode"; options: { mode: number; legal: boolean }[];
+      subtypes?: CardSubtype[] }   // a character type choice (role "chooseSubtype"): each mode's type
   | { kind: "chooseNumber"; min: number; max: number }
   | { kind: "arrange"; cards: InstanceId[];
       destinations: { to: "top" | "bottom" | "void" | "hand"; min: number; max: number }[] }
@@ -952,7 +953,10 @@ analog:
    transforms (transfigurations, then deck-entry modifications,
    [below](#deck-entry-modifications)) join this layer in Phase 5 (5.7a,
    5.7b).
-2. **Type changes:** "has all character types" (`allTypes`).
+2. **Type changes:** "has all character types" (`allTypes`) and "this
+   character is that character type" (`subtype`). A static ability naming
+   its source's chosen type (`CHOSEN_SUBTYPE`) reads the latest `subtype`
+   change that source made to itself, and makes no change without one.
 3. **Ability adds and removes:** keywords gained and lost (`keyword`).
    Disabled triggers are floating records that the trigger matcher reads.
 4. **Base-spark setting:** "base ✦ becomes 7" (`baseSpark`).

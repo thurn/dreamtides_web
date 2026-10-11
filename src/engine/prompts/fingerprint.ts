@@ -4,7 +4,7 @@ import type { Prompt, PromptFingerprint } from "./types";
 
 /**
  * A hash of the prompt's identifying fields: kind, side, purpose, sorted
- * candidates, bounds, options, destinations with their counts, cost, and the
+ * candidates, bounds, options with any character types they name, destinations with their counts, cost, and the
  * allowed answers of a narrowed prompt. Replaying a step compares it, so
  * nondeterministic rules code fails loudly on the first replay.
  */
@@ -20,6 +20,7 @@ export function promptFingerprint(prompt: Prompt): PromptFingerprint {
       break;
     case "chooseMode":
       fields.push(prompt.options);
+      if (prompt.subtypes !== undefined) fields.push(prompt.subtypes);
       break;
     case "chooseNumber":
       fields.push(prompt.min, prompt.max);

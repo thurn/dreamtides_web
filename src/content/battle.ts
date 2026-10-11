@@ -24,6 +24,12 @@ export const BATTLE = {
   // those in the deck that match its criterion (rules § Keywords and Effects
   // → Discover).
   discoverOptions: 3,
+  // Printed subtypes that name no character type: the empty subtype of
+  // events and the placeholders printed on characters that have all
+  // character types. "Choose a character type" offers every other subtype a
+  // catalog character or figment prints (rules § Keywords and Effects →
+  // Choose a character type).
+  untypedSubtypes: ["", "*", "X"],
   // Consecutive automatic game actions after which a battle that no player can
   // stop ends in a draw (rules § Mandatory Loops).
   resolutionCap: 100000,

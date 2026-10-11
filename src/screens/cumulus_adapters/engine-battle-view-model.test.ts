@@ -119,7 +119,7 @@ describe("prompt surfaces over the prompt lab", () => {
   it("offers a legal answer on every human prompt's surface, and an empty-answer control exactly when none is legal", () => {
     const { prompts } = explore();
     const roles = {
-      discardToHandLimit: true, playRoute: true, voidRoute: true, chooseX: true, chooseOne: true, choosePlayer: true, target: true,
+      discardToHandLimit: true, playRoute: true, voidRoute: true, chooseX: true, chooseOne: true, choosePlayer: true, chooseSubtype: true, target: true,
       chooseCost: true, optionalCost: true, optionalPayment: true, abandonCost: true, returnCost: true, abandon: true, discardCost: true, revealCost: true,
       banishAnyVoidCost: true, banishCost: true, offeringCost: true, discard: true, discardChosen: true, banishChosen: true, foresee: true,
       lookAtTop: true, discover: true, discoverCost: true, chooseAmong: true, chooseFromOpponentHand: true, shuffleInto: true, putInDeck: true,

@@ -1145,6 +1145,32 @@ than the cards in a hidden deck or the player's available energy. A paid X
 used solely for this cost criterion can be 0 because a zero-cost discovery
 is meaningful.
 
+"Discover a character … and put it on top of your deck" looks and chooses the
+same way, then shuffles your deck and puts the chosen card on top of it. The
+card never enters your hand. Your opponent sees that a card from your deck was
+put on top of it, but not which; you keep knowing it there.
+
+**Choose a character type** — As the instruction resolves, its controller
+openly chooses one character type, and both players see the choice. Any
+character type in the game may be chosen, whether or not a card in any zone
+has it: every subtype printed on a character or a figment type, except the
+placeholders printed on characters that have all character types ("*" and
+"X"). A following instruction that names "that character type", as in "Choose
+a character type. Discover a character of that type", uses the chosen type.
+
+"This character is that character type" makes the character the chosen type
+in place of its printed subtype for as long as it stays in play. It is
+a change to its types (see **Order of continuous effects**). That choice is
+the character's **chosen type**, which its own abilities name as "the chosen
+type": "Characters of the chosen type have +1✦" gives +1✦ to every character
+of that type, both players' and the character itself included. Until a type
+is chosen, and once the character leaves play, it has no chosen type, so the
+ability changes nothing. A character that has all character types gains the
+bonus only once a type is chosen. If the character is not in play as the
+ability resolves, no type is chosen. If it chooses again while it stays in
+play, the latest choice replaces the earlier one. A copy of the character
+makes its own choice as it enters play.
+
 **Look at the top N cards** — Look at the top N cards of your deck, or all of
 them if fewer remain. Only you see the cards you look at. You keep knowing the
 position of each one that stays in your deck while visible movement determines
@@ -1442,7 +1468,7 @@ figments never match it.
 
 **Order of continuous effects:** When several static abilities and effects
 with a duration change the same card, they apply in this order: changes to its
-types ("has all character types"), then keywords it gains or loses, then base
+types ("has all character types", "this character is that character type"), then keywords it gains or loses, then base
 spark it is given, then changes to its spark, then changes to its cost. Within
 each step, effects apply in the order they began: a static ability when its
 source entered play, or the zone the ability works from (an avatar's or

@@ -1186,6 +1186,8 @@ function isFloatingChange(value: unknown): boolean {
         oneOf(KEYWORDS)(value.keyword) &&
         isBoolean(value.gains)
       );
+    case "subtype":
+      return isInstanceId(value.instance) && typeof value.subtype === "string";
     case "baseSpark":
       return isInstanceId(value.instance) && isFiniteNumber(value.value);
     case "spark":

@@ -3,6 +3,7 @@ import type { CardFilter, Cost, Keyword } from "../engine/dsl/types";
 import type { EngineEvent } from "../engine/events";
 import type { ArrangeDestination, PromptKind, PromptRole } from "../engine/prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../engine/state/ids";
+import type { CardSubtype } from "../types/card-identity";
 import type { CardCostMode, Expiry } from "../engine/state/types";
 
 /** Presentation-owned copy for a stable built-in battle prompt identity. */
@@ -86,6 +87,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Choose a Position";
       case "choosePlayer":
         return "Choose a player";
+      case "chooseSubtype":
+        return "Choose a character type";
       case "chooseCost":
         return "Choose a cost to pay";
       case "optionalPayment":
@@ -160,6 +163,8 @@ export type EnginePromptOptionCopy =
   | { readonly kind: "voidRoute"; readonly index: number }
   /** A player relative to the answering controller. */
   | { readonly kind: "player"; readonly index: number }
+  /** A character type of a type choice, by its mode's index, with the type when the prompt names it. */
+  | { readonly kind: "subtype"; readonly index: number; readonly subtype: CardSubtype | null }
   /** A battlefield position, in its rank's left-to-right numbering. */
   | { readonly kind: "position"; readonly rank: "front" | "back"; readonly index: number };
 
@@ -188,6 +193,8 @@ export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string 
       return `${option.rank === "front" ? "F" : "B"}${String(option.index)}`;
     case "player":
       return option.index === 0 ? "You" : "Opponent";
+    case "subtype":
+      return option.subtype ?? `Option ${String(option.index + 1)}`;
   }
 }
 
@@ -359,6 +366,8 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
       return "unoccupied position";
     case "choosePlayer":
       return "player you could choose";
+    case "chooseSubtype":
+      return "character type you could choose";
     case "chooseCost":
     case "optionalCost":
       return "way to pay its cost";
@@ -506,6 +515,8 @@ export type EngineStatusCopy =
   | { readonly kind: "spark"; readonly amount: number; readonly expiry: Expiry }
   | { readonly kind: "baseSpark"; readonly value: number; readonly expiry: Expiry }
   | { readonly kind: "allTypes"; readonly expiry: Expiry }
+  /** The character is a character type in place of its printed one. */
+  | { readonly kind: "subtype"; readonly subtype: CardSubtype; readonly expiry: Expiry }
   | {
       readonly kind: "keyword";
       readonly keyword: Keyword;
@@ -555,6 +566,8 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
       return `Base spark ${String(status.value)}${expiryPhrase(status.expiry, human)}`;
     case "allTypes":
       return `Has all character types${expiryPhrase(status.expiry, human)}`;
+    case "subtype":
+      return `Is ${/^[aeiou]/iu.test(status.subtype) ? "an" : "a"} ${status.subtype}${expiryPhrase(status.expiry, human)}`;
     case "keyword":
       return `${status.gains ? "Gains" : "Loses"} ${KEYWORD_NAMES[status.keyword]}${reclaimCostPhrase(status.reclaimCosts)}${expiryPhrase(status.expiry, human)}`;
     case "grantedKeyword":
@@ -765,6 +778,8 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     }
     case "sparkGained":
       return `${card(event.instance)}: ${engineStatusLabel({ kind: "spark", amount: event.amount, expiry: event.expiry }, human)}.`;
+    case "subtypeChosen":
+      return `${source(event.source)}: ${event.side === human ? "you" : "your opponent"} chose the character type ${event.subtype}.`;
     case "triggerResolved":
       return event.applied && event.source !== null ? `${source(event.source)}'s triggered ability resolved.` : null;
     case "turnStarted":
@@ -816,6 +831,8 @@ function effectStartedText(
       return line(card(change.instance), { kind: "baseSpark", value: change.value, expiry });
     case "allTypes":
       return line(card(change.instance), { kind: "allTypes", expiry });
+    case "subtype":
+      return line(card(change.instance), { kind: "subtype", subtype: change.subtype, expiry });
     case "keyword":
       return line(card(change.instance), {
         kind: "keyword",

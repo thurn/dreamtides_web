@@ -10,7 +10,8 @@
  * 1. copiable values: the printed card for its variant, a figment's type
  *    and spark, or what a figment copy copied, with a deck entry's
  *    modifications (catalog.ts `instanceCard`);
- * 2. type changes: "has all character types";
+ * 2. type changes: "has all character types", and "this character is that
+ *    character type";
  * 3. ability adds and removes: keywords gained and lost;
  * 4. base-spark setting;
  * 5. spark modifications: gained spark, spark with a duration, anthems,
@@ -32,6 +33,7 @@ import { worksInZone } from "../dsl/abilities";
 import { matchesCharacterWith, matchingCharactersWith, zoneCountWith, type CharacteristicsReader } from "../dsl/selectors";
 import type { Ability, CharacterRef, Keyword, StaticAbility } from "../dsl/types";
 import { evaluateValue } from "../dsl/values";
+import { chosenSubtypeOf, mentionsChosenSubtype, withChosenSubtype } from "../effects/primitives/choose-subtype";
 import { primitiveDefinition } from "../effects/registry";
 import type { EffectNode, Layer, StaticEnv } from "../effects/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
@@ -58,6 +60,7 @@ export interface Characteristics {
 /** The layer each kind of continuous change applies in. */
 const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   allTypes: 2,
+  subtype: 2,
   keyword: 3,
   baseSpark: 4,
   spark: 5,
@@ -238,9 +241,20 @@ export class Layers {
     return (id) => this.through(id, layer);
   }
 
-  /** The changes a static ability makes now, read against the layers before its own. */
+  /**
+   * The changes a static ability makes now, read against the layers before
+   * its own. One that names its source's chosen character type
+   * (`CHOSEN_SUBTYPE`) reads it as that type, and makes no change while its
+   * source has none.
+   */
   private expand(entry: StaticEntry): readonly ContinuousChange[] {
     const { state, catalog } = this;
+    let node = entry.node;
+    if (mentionsChosenSubtype(node)) {
+      const chosen = chosenSubtypeOf(state, entry.source);
+      if (chosen === null) return [];
+      node = withChosenSubtype(node, chosen);
+    }
     const read = this.reader(entry.layer - 1);
     const self = sourceInstance(entry.source);
     const characters = (ref: CharacterRef): InstanceId[] => {
@@ -278,8 +292,8 @@ export class Layers {
           countCards: (count) => zoneCountWith(state, catalog, read, count, entry.controller),
         }),
     };
-    const continuous = primitiveDefinition(entry.node.op).continuous;
-    return continuous === undefined ? [] : continuous.changes(entry.node, env);
+    const continuous = primitiveDefinition(node.op).continuous;
+    return continuous === undefined ? [] : continuous.changes(node, env);
   }
 
   private changesTo(id: InstanceId, layer: Layer): readonly OrderedChange[] {
@@ -345,6 +359,9 @@ export class Layers {
       switch (change.kind) {
         case "allTypes":
           result = { ...result, allTypes: true };
+          break;
+        case "subtype":
+          result = { ...result, subtype: change.subtype };
           break;
         case "keyword":
           result = {

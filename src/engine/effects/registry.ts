@@ -21,6 +21,7 @@ import {
   banishUntilPrimitive,
   chooseOnePrimitive,
   choosePlayerPrimitive,
+  chooseSubtypePrimitive,
   copyCardPrimitive,
   costModifierPrimitive,
   createCopyInHandPrimitive,
@@ -106,6 +107,9 @@ const DEFINITIONS = {
   },
   get choosePlayer() {
     return choosePlayerPrimitive;
+  },
+  get chooseSubtype() {
+    return chooseSubtypePrimitive;
   },
   get copyCard() {
     return copyCardPrimitive;

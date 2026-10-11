@@ -313,6 +313,13 @@ export type ContinuousChange =
   /** Layer 2: the character has all character types. */
   | { readonly kind: "allTypes"; readonly instance: InstanceId }
   /**
+   * Layer 2: the character is the character type `subtype` in place of its
+   * printed one ("This character is that character type"). The latest such
+   * change its own source made to it is that source's chosen character type
+   * (effects/primitives/choose-subtype.ts).
+   */
+  | { readonly kind: "subtype"; readonly instance: InstanceId; readonly subtype: CardSubtype }
+  /**
    * Layer 3: the card gains (`gains`) or loses a keyword. A gained Reclaim
    * may carry `reclaimCosts` ("gains reclaim 0●"): the costs of playing the
    * card from the void in place of its printed or deck-entry Reclaim cost

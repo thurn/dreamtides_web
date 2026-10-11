@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,8 @@ export default card({
   cardNumber: 434,
   art: { x: 0.252, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(p.chooseSubtype({ then: p.discover({ cardType: "character", subtype: p.CHOSEN_SUBTYPE }, {}, "deckTop") })),
+  ],
+  verifiedText: "1xshusis4j1",
 });

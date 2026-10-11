@@ -417,7 +417,9 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
                 ? { kind: "voidRoute", index: option.mode }
                 : prompt.purpose.role === "choosePlayer"
                   ? { kind: "player", index: option.mode }
-                  : { kind: "mode", index: option.mode, text: texts?.[option.mode] ?? null },
+                  : prompt.purpose.role === "chooseSubtype"
+                    ? { kind: "subtype", index: option.mode, subtype: prompt.subtypes?.[option.mode] ?? null }
+                    : { kind: "mode", index: option.mode, text: texts?.[option.mode] ?? null },
           answer: option.mode,
         })),
         host({}),

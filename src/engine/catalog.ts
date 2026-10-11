@@ -1,3 +1,4 @@
+import { BATTLE } from "../content/battle";
 import type { CardSubtype } from "../types/card-identity";
 import type { CharacteristicsMemo } from "./continuous/characteristics";
 import type { StaticsMemo } from "./continuous/layers";
@@ -99,6 +100,12 @@ export type PrintedCard = Omit<EngineCardDefinition, "id">;
 export interface EngineCatalog {
   /** Public catalog cost ceiling, with X counting as 0; used only for free Discover cost choices. */
   readonly maximumFixedCost: number;
+  /**
+   * The character types "Choose a character type" offers, in code-unit
+   * order: every subtype a catalog character or figment prints, except the
+   * `BATTLE.untypedSubtypes` that name no type.
+   */
+  readonly characterTypes: readonly CardSubtype[];
   card(id: CardId): EngineCardDefinition;
   dreamwellCard(id: DreamwellCardId): EngineDreamwellDefinition;
   avatar(id: AvatarId): EngineAvatarDefinition;
@@ -246,6 +253,15 @@ export function printedCardId(printing: Printing): CardId | null {
   return printing.kind === "figment" ? null : printing.cardId;
 }
 
+/** The character types of `cards` and `figments`, distinct and in code-unit order, without the untyped placeholders. */
+function characterTypes(cards: readonly EngineCardDefinition[], figments: readonly EngineFigmentDefinition[]): CardSubtype[] {
+  const untyped: readonly string[] = BATTLE.untypedSubtypes;
+  const types = new Set<CardSubtype>();
+  for (const card of cards) if (card.cardType === "character") types.add(card.subtype);
+  for (const figment of figments) types.add(figment.subtype);
+  return [...types].filter((type) => !untyped.includes(type)).sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+}
+
 /** Builds a catalog over unique card definitions; duplicate and unknown UUIDs throw. */
 export function createCatalog(
   cards: readonly EngineCardDefinition[],
@@ -274,6 +290,7 @@ export function createCatalog(
   );
   let outsidePlay: boolean | undefined;
   return {
+    characterTypes: characterTypes(cards, figments),
     memo: new WeakMap(),
     statics: new Map(),
     staticsOutsidePlay() {

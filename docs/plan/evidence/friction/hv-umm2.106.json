@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.106",
+  "phase": 5,
+  "implementMin": 48,
+  "localValidationS": {
+    "focused": 4,
+    "review": 35,
+    "knip": 3,
+    "preflight": 2,
+    "fuzz": 77.5,
+    "sweep": 194,
+    "judged": 420
+  },
+  "hostLoad": 7.47,
+  "hostLoadSamples": {
+    "review": 7.47,
+    "preflight": 6.44,
+    "fuzz": 14.63,
+    "sweep": 16.34
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 382,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-omit-engine-plumbing",
+      "minutes": 12,
+      "note": "The chooseSubtype design needed rules/battle/fold.ts (persisted floating change validation), policy/greedy.ts (type-count reader for Greedy) and a new effectStarted status copy case outside the filed Areas; stopped, reported and resumed after the session widened them."
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": { "measuredFor": "first worktree command (about 12:03 PDT) to commit, including the widening round trip" },
+      "hostLoad": { "measuredFor": "npm run review start (1-minute load average)" },
+      "testDelta": { "measuredFor": "contract module 317 lines and scenario module 65 lines (plain modules, not *.test.ts files); one role-expectation line edited" }
+    }
+  }
+}

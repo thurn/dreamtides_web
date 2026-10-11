@@ -1,3 +1,4 @@
+import type { CardSubtype } from "../../types/card-identity";
 import type { AvatarId, CardId, DreamsignId, InstanceId, Side, Slot } from "../state/ids";
 
 /**
@@ -18,6 +19,8 @@ export type PromptRole =
   | "chooseOne"
   /** The player an effect affects: mode 0 is the controller, mode 1 their opponent. */
   | "choosePlayer"
+  /** The character type an effect names: the mode indexes the prompt's `subtypes`. */
+  | "chooseSubtype"
   /** The unoccupied battlefield position a character moves to. */
   | "move"
   /** The targets of an ability. */
@@ -163,6 +166,8 @@ export interface ModeOption {
 export interface ChooseModePrompt extends PromptBase {
   readonly kind: "chooseMode";
   readonly options: readonly ModeOption[];
+  /** For a character type choice (role `chooseSubtype`), the type each mode names, by mode. */
+  readonly subtypes?: readonly CardSubtype[];
 }
 
 /** Choose an integer in `[min, max]`, such as the value of X. */
