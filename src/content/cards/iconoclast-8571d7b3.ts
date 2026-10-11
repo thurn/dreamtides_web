@@ -1,3 +1,6 @@
+import { energy, reclaim } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 138,
   art: { x: 0, y: -0.386, scale: 1.4 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(whenYouPlay({ cardType: "character" }), p.erode(v.amplified ? 2 : 1)), reclaim(energy(2))],
+  verifiedText: "1cactxq04di",
 });

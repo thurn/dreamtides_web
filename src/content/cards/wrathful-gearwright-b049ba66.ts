@@ -1,3 +1,6 @@
+import { keyword } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 322,
   art: { x: 0, y: 0.242, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("vengeful"), triggered(onMaterialized(), p.draw(1))],
+  verifiedText: "s43qybwg82",
 });

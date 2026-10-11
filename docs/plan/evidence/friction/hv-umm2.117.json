@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.117",
+  "phase": 5,
+  "implementMin": 25,
+  "localValidationS": {
+    "focused": 2.8,
+    "review": 34.3,
+    "knip": 2.3,
+    "fuzz": 52.1,
+    "sweep": 532.7,
+    "judged": 68
+  },
+  "hostLoad": 7.84,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "sourceBase": "4ffded8b287d53f1a5f1c7160767137c7fd1c3e8",
+  "coverage": {
+    "entities": 5,
+    "pending": 0,
+    "amplifiedTexts": 3,
+    "newEffectOps": 0,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": {
+      "pass": 56,
+      "skip": 44,
+      "fail": 0
+    },
+    "judged": 2
+  }
+}

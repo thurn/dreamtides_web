@@ -1,3 +1,5 @@
+import { energy, event, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 334,
   art: { x: -0.504, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.draw(2)), reclaim(energy(2))],
+  verifiedText: "yxc4a5x7re",
 });

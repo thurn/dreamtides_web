@@ -1,3 +1,6 @@
+import { energy, reclaim } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 143,
   art: { x: 0.494, y: -0.356, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(onMaterialized(), p.erode(v.amplified ? 2 : 1)), reclaim(energy(0))],
+  verifiedText: "3oih1scmf6",
 });

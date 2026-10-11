@@ -1,3 +1,6 @@
+import { keyword } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 425,
   art: { x: 0, y: -0.573, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [keyword("veil"), triggered(onMaterialized(), p.draw(v.amplified ? 2 : 1))],
+  verifiedText: "j6s3eau4bd",
 });
