@@ -16,15 +16,20 @@
  * narrows each of its play-time prompts share one budget of dry runs,
  * `BattleConfig.feasibilitySearchRuns`, spent along the path of answers
  * given: legality spends from it first, and each prompt spends what is left
- * after the prompts before it. The witness path that made the play legal is
- * free at every prompt, so a narrowed prompt is never empty for a play
- * legality offered.
+ * after the prompts before it. Every offered answer has a searched witness
+ * or a universal final-cost proof. A witness's next answer and universally
+ * proven final selections spend no further runs, even with no budget left.
+ * A final top-level noncapturing discard can carry that proof only when its
+ * resources are payable and the caller proceeds directly to commitPoint();
+ * earlier, nested, captured and manually continued costs use search.
  *
  * **Replay is free and identical.** What the guard decides at a prompt, and
  * the budget it leaves, is a function of the committed state, the step, and
  * the answers before it, memoized per committed state (`SearchMemo`). A fold
- * re-run reads it back, and a cold run (a reload, another engine) computes
- * the same result.
+ * re-run reads it back, checking the raw prompt fingerprint before the
+ * separate proof-mode invariant. A cold run (a reload, another engine)
+ * computes the same result. A guarded prompt after a universal final proof
+ * is a rules-code error.
  */
 import type { EngineCatalog } from "../catalog";
 import { canonicalAnswer, legalAnswers } from "../prompts/answers";
@@ -310,9 +315,11 @@ function decide(
 
 /**
  * The guard of a real run of `step` from `start`: it narrows each play-time
- * prompt to the answers a search proves, within the step's one budget, and
- * memoizes each decision in the step's search (`memo`, when given) so a
- * re-run of the step makes no dry runs.
+ * prompt to answers with a searched witness or a universal final-cost
+ * proof. Searches share the step's remaining budget; a universal proof
+ * spends no runs and permits no later guarded precommit prompt. Each
+ * decision, including its proof mode and raw fingerprint, is memoized in
+ * the step's search (`memo`, when given), so a re-run makes no dry runs.
  */
 export function feasibilityGuard(start: BattleState, step: Step, catalog: EngineCatalog, memo?: SearchMemo): PromptGuard {
   const search = stepSearch(start, step, catalog, memo);
@@ -323,8 +330,8 @@ export function feasibilityGuard(start: BattleState, step: Step, catalog: Engine
       if (cached !== undefined) {
         // The safety net of replay: rules code raising a different prompt after the same answers is nondeterministic.
         const fingerprint = promptFingerprint(prompt);
-        if ((cached.witnesses === "all") !== (allAnswersPayable === true)) throw new Error("A prompt’s payability proof changed on replay");
         if (fingerprint !== cached.fingerprint) throw new ReplayDivergence(prefix.length, cached.fingerprint, fingerprint);
+        if ((cached.witnesses === "all") !== (allAnswersPayable === true)) throw new Error("A prompt’s payability proof changed on replay");
         return cached.narrowed.prompt === cached.raw ? { ...cached.narrowed, prompt } : cached.narrowed;
       }
       const standing = standingAfter(search, prefix);

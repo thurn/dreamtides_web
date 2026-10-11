@@ -123,9 +123,12 @@ export class Context implements StepContext {
 
   /**
    * Before the commit point of a guarded step, the prompt narrowed to the
-   * answers with a feasible continuation; a prompt left with none is empty.
-   * Answers withheld only because the step's feasibility budget ran out are
-   * reported with a `feasibilityBounded` event.
+   * answers with a searched continuation or a universal final-cost proof;
+   * a prompt left with none is empty. Searches spend the step's shared
+   * remaining budget, while universal proofs spend no runs and permit no
+   * following guarded precommit prompt. Budget-withheld answers are
+   * reported with a `feasibilityBounded` event. The guard memoizes the raw
+   * fingerprint, proof mode and decision for replay.
    */
   private narrow(raw: Prompt, allAnswersPayable?: true): Prompt {
     const guard = this.options.guard;

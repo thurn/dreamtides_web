@@ -593,8 +593,9 @@ given so far against the prompts as rules code raised them
 (`Context.rawAnswers`). Its decision at a prompt, with the budget it leaves
 and its witnesses or universal proof, is a function of the committed state, the step,
 and the answers before the prompt. The step's search memoizes it by those
-answers and checks the replayed prompt's fingerprint against it
-(`ReplayDivergence`) and its proof mode, so a fold re-run makes no dry runs, and an inline run,
+answers and checks the replayed prompt's fingerprint first
+(`ReplayDivergence`), then checks its proof mode as a separate invariant.
+A fold re-run makes no dry runs, and an inline run,
 a reload, another engine, and a loop replay compute the same prompts.
 
 **Hosts see every bound.** `ApplyResult.bounded` lists the plays and
@@ -1068,8 +1069,9 @@ before the item goes on the stack. Copies don't pay.
 
 Discard candidates use the shared card filter (effective type/subtype and
 copiable-cost bounds), excluding the source, targets and prior cost cards.
-A variable discard binds X to the chosen count, including zero for an
-ability with a fixed meaningful effect. Single-card cost capture reads its
+A variable discard binds X to the chosen count and admits zero. Authors use
+this form only when zero has a meaningful effect under the contextual X
+rule, such as an ability's fixed draw. Single-card cost capture reads its
 copiable cost after variant and deck-entry modifications, with an X energy
 part counting as zero, before payment. The captured value travels with the
 stack item. All energy-X, count-X and captured-X payments in one plan agree

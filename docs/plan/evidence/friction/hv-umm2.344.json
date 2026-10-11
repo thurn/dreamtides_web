@@ -1,0 +1,219 @@
+{
+  "bead": "hv-umm2.344",
+  "phase": 5,
+  "baseOid": "ac81d9452bfbbd8b85b26371af1a1ef88b761987",
+  "implementMin": 8,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "installReported": 2,
+    "focused": 1.97676420211792,
+    "review": 38.066789865493774,
+    "knip": 2.7767560482025146,
+    "full": 46.97225308418274
+  },
+  "heavyQueueWaitS": 0.0439300537109375,
+  "hostLoad": 8.02294921875,
+  "validationRuns": [
+    {
+      "wrapperPid": 26020,
+      "waitS": 0.022034168243408203,
+      "hostLoad": [
+        8.3818359375,
+        9.70458984375,
+        9.8212890625
+      ],
+      "commands": [
+        {
+          "label": "focused",
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/rules/costs.test.ts"
+          ],
+          "pid": 26023,
+          "port": null,
+          "exitCode": 0,
+          "seconds": 1.97676420211792
+        }
+      ]
+    },
+    {
+      "wrapperPid": 26552,
+      "waitS": 0.021895885467529297,
+      "hostLoad": [
+        8.02294921875,
+        9.54296875,
+        9.7607421875
+      ],
+      "commands": [
+        {
+          "label": "review",
+          "command": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "pid": 26554,
+          "port": null,
+          "exitCode": 0,
+          "seconds": 38.066789865493774
+        },
+        {
+          "label": "knip",
+          "command": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "pid": 27284,
+          "port": null,
+          "exitCode": 0,
+          "seconds": 2.7767560482025146
+        },
+        {
+          "label": "full",
+          "command": [
+            "npm",
+            "run",
+            "review:full"
+          ],
+          "pid": 27403,
+          "port": null,
+          "exitCode": 0,
+          "seconds": 46.97225308418274
+        }
+      ]
+    }
+  ],
+  "sourceFileSha256": {
+    "docs/plan/engine-design.md": "1aa485daaa7b144ae4806637eb7af8db5fb7c9e3fdd84f4f47ca3e93e06c66d9",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.61-1.md": "347aa6a962ceb8a5fe13ad2886cb201270a8eb712c7d571e5fcda2a046d4593f",
+    "docs/rules.md": "dad4de922ac0eeff5f17004d1ada0a27084679735470ffcb7b3dffdc946cc708",
+    "src/engine/dsl/types.ts": "9fb4e738a31175c87f7a7b71a873c49c0110222b4507a57eb6a9595dfe6d4e10",
+    "src/engine/rules/costs.test.ts": "a4bff56db5e135684cbd69c3644a47d50c3831216110b947ac5d2bab523e4745",
+    "src/engine/rules/costs.ts": "9c2179acb44c91b7408cddcc571f3f26df1bdaaab20a160dee276a829d38c09a",
+    "src/engine/steps/context.ts": "3fe50c8d0a59c88ad1ccfa0e0da65ab6d5264be1e1a49df736cfd68612877ce9",
+    "src/engine/steps/feasibility.ts": "82a0f794bbfdff8650cb0dc171ae39ac39b4b2381a88b01e61964f67d5d11599"
+  },
+  "negativeProbe": {
+    "command": "npm test -- src/engine/rules/costs.test.ts -t \"cached prompt|prompt and proof divergence\"",
+    "productionBaseOid": "ac81d9452bfbbd8b85b26371af1a1ef88b761987",
+    "feasibilityBaseSha256": "1c70c9568a586d6a88b4520463ec0fa288945ba040282c361c6ca54fdcc39674",
+    "log": "/tmp/hv-umm2.344-negative.log",
+    "exitCode": 1,
+    "failed": 1,
+    "passed": 2,
+    "skipped": 52,
+    "contract": "Public runStep rerun with a changed prompt fingerprint and proof mode must throw ReplayDivergence; unchanged source throws generic Error.",
+    "positive": "All54 cost contracts pass after fingerprint checking precedes the separate proof-mode invariant.",
+    "negativeCommandWallSeconds": null,
+    "negativeTimingNote": "The retained review log reports prepare1.6s/test1.0s/restore0.5s; initial probe lock wait and whole-command duration were not measured."
+  },
+  "nonTestProductionDeltaLines": 45,
+  "testDelta": {
+    "files": 0,
+    "lines": 57,
+    "cases": 2,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "d19": {
+    "linesBefore": 1090,
+    "linesAfter": 1147,
+    "reason": "Existing shared cost contracts; this bounded review follow-up adds three public execution/fold cases and deletes one artificial builder compatibility case. No new test module or environment."
+  },
+  "coreFailurePaths": [
+    {
+      "contract": "reports replay divergence when a cached prompt changes fingerprint and proof mode",
+      "covers": "ReplayDivergence class at exported execution API and unchanged committed-state hash."
+    },
+    {
+      "contract": "rejects a changed proof mode for the same cached prompt without replay divergence",
+      "covers": "Distinct proof-mode invariant remains guarded, Error class without error-text or private memo assertions."
+    },
+    {
+      "contract": "retains committed state and clears a failed fold attempt after prompt and proof divergence",
+      "covers": "Public fold error outcome, stateHash rollback, inFlight and pending cleared."
+    },
+    {
+      "contract": "rejects an unexpected precommit prompt after a universal proof without committing state",
+      "covers": "Terminal-continuation rule rollback uses stable state values and public pending outcomes."
+    },
+    {
+      "contract": "keeps filtered and variable prompts stable through reload and rejects stale, foreign, concurrent, repeated, and out-of-range input",
+      "covers": "Existing durable reload/partial prompt/stale/concurrent answer outcomes pass; this follow-up changes no gameflow, prompt/event/persistence schema."
+    },
+    {
+      "contract": "preserves full final-discard choices and payment after a cold fold reload",
+      "covers": "Existing cold adapter round-trip and every legal final-discard payment pass."
+    }
+  ],
+  "qa": {
+    "browser": "No runtime UI or printed-entity change; no actual browser/provider or QA server started. Full suite runs contained simulated lease fixtures.",
+    "fuzz": "Staged release runs fuzz smoke; no fuzzer, step runner or printed content changed; no additional local fuzz needed.",
+    "runtimeLedger": {
+      "execSessions": {
+        "install": {
+          "id": 67403,
+          "exitCode": 0
+        },
+        "negative": {
+          "id": 11254,
+          "exitCode": 1
+        },
+        "focused": {
+          "id": 4895,
+          "exitCode": 0
+        },
+        "final": {
+          "id": 6942,
+          "exitCode": 0
+        }
+      },
+      "knownPids": [
+        26020,
+        26552,
+        26023,
+        26554,
+        27284,
+        27403,
+        27905,
+        27941,
+        28263,
+        28390,
+        28480,
+        28568,
+        28656,
+        28732,
+        28816,
+        28886,
+        28978,
+        29064
+      ],
+      "syntheticServerPids": [
+        27905,
+        27941,
+        28263,
+        28390,
+        28480,
+        28568,
+        28656,
+        28732,
+        28816,
+        28886,
+        28978,
+        29064
+      ],
+      "syntheticServerPort": 5175,
+      "allKnownPidsAbsent": true,
+      "actualBrowserProviderStarted": false
+    }
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.61-1 current representation correction"
+  ],
+  "cardIssues": 0,
+  "preserved335": "selectorX arguments, stored source X and play-only binding logic unchanged; corresponding existing contracts pass.",
+  "fallout": "Only required-filter type, obsolete optional branch and artificial fixture/contract. No additional paths or API/schema migrations."
+}

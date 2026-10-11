@@ -653,8 +653,9 @@ counting as 0. The value persists with the stack item even if that card changes
 zones or characteristics before resolution.
 
 **Discard X cards:** X is the number of cards chosen to pay this additional
-cost. Choosing zero is legal when the effect still draws a fixed number of
-cards. This X spends no energy beyond the separately printed energy costs.
+cost. The variable-discard DSL admits zero; authors use it only when zero
+has a meaningful effect under the contextual X rule, such as drawing a fixed
+number of cards. This X spends no energy beyond the separately printed energy costs.
 When one ability also pays X●, every reference to X uses that same value:
 the discard count or captured card cost must agree with the chosen energy X.
 

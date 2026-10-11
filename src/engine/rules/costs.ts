@@ -161,13 +161,8 @@ function cardCandidates(
         return instance?.zone === "play" && instance.controller === side ? [source] : [];
       }
       return matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
-    case "discard": {
-      // Legacy inline/copied costs may omit the filter; builders emit it.
-      const filter = cost.filter;
-      return filter === undefined
-        ? [...state.sides[side].hand]
-        : state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, filter));
-    }
+    case "discard":
+      return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "reveal":
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "banishFromVoid":

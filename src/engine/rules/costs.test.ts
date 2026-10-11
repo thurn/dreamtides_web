@@ -19,8 +19,8 @@ import type { Answer, ChooseCardsPrompt, ChooseNumberPrompt, ChooseTargetsPrompt
 import { stateHash } from "../state/hash";
 import { opponent, type CardId, type EffectId, type InstanceId, type Side } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { Infeasible } from "../steps/errors";
-import { searchCommitPoint, stepSearch, type StepSearch } from "../steps/feasibility";
+import { Infeasible, ReplayDivergence } from "../steps/errors";
+import { searchCommitPoint, stepSearch, type StepSearch, type SearchMemo } from "../steps/feasibility";
 import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { promptView } from "../view/view";
@@ -110,8 +110,6 @@ const SEARCH = {
   combinedX: { ...fixture(20, "event", () => [additionalCost(discardCostFilter({}, { count: "x" })), event(p.gainPoints(x()))]), costs: [energyX(0)] },
   competingX: { ...fixture(21, "event", () => [additionalCost(discardCostFilter({ cardType: "character" }, { captureCost: true })), event(p.gainPoints(x()))]), costs: [energyX(0)] },
   capturedThenVariable: fixture(22, "event", () => [additionalCost(discardCostFilter({ cardType: "character" }, { captureCost: true }), optionalCost(discardCostFilter({}, { count: "x" }))), event(p.gainPoints(x()))]),
-  legacyDiscard: fixture(23, "event", () => [additionalCost({ cost: "discard", count: 1 }), event(p.gainPoints(1))]),
-  canonicalDiscard: fixture(24, "event", () => [additionalCost(discardCostFilter({})), event(p.gainPoints(1))]),
   repeatedDiscard: fixture(25, "event", () => {
     const same = discardCostFilter({}, { count: "x" });
     return [additionalCost(same, same), event(p.gainPoints(plus(x(), 1)))];
@@ -942,12 +940,70 @@ describe("final discard choice coverage", () => {
 });
 
 
-it("uses one canonical discard builder and accepts legacy missing-filter costs", () => {
-  expect(discardCost(2)).toEqual(discardCostFilter({}, { count: 2 }));
-  for (const definition of [SEARCH.legacyDiscard, SEARCH.canonicalDiscard]) {
-    const { state, ids } = board({ hand: [definition.id, v.vanilla1.id] });
-    expect(playFirst(state, ids.player.hand[0]).state.sides.player.void).toEqual([ids.player.hand[1]]);
+/** A fresh, deliberately switchable play hook for replay diagnostics through the execution API. */
+function proofReplayFixture() {
+  const behavior = { filtered: false, final: true };
+  const definition: EngineCardDefinition = {
+    ...fixture(35, "event", () => []),
+    synthetic: { play(ctx, source) {
+      planCosts(ctx, "player", source, [discardCostFilter(behavior.filtered ? { cardType: "character" } : {})], null,
+        role => ({ source, cardId: syntheticId(0xf23), ability: 0, role }), [source], undefined,
+        behavior.final ? { endsPlayTime: true } : {});
+      return {};
+    } },
+  };
+  const replayEngine = createEngine(testCatalog([definition]));
+  const { state, ids } = boardState(replayEngine.catalog, {
+    active: "player", phase: "day",
+    player: { hand: [definition.id, v.vanilla1.id, v.vanilla2.id, v.event1.id], deck }, enemy: { deck },
+  });
+  const step: Step = { kind: "play", card: ids.player.hand[0], from: "hand" };
+  return { behavior, replayEngine, state, ids, step };
+}
+
+it("reports replay divergence when a cached prompt changes fingerprint and proof mode", () => {
+  const { behavior, replayEngine, state, step } = proofReplayFixture();
+  const searches: SearchMemo = new WeakMap();
+  const before = stateHash(state);
+  const opened = runStep(state, step, INTERACTIVE, replayEngine.catalog, { searches });
+  expect(opened.kind).toBe("suspended");
+  behavior.filtered = true;
+  behavior.final = false;
+  expect(() => runStep(state, step, INTERACTIVE, replayEngine.catalog, { searches })).toThrow(ReplayDivergence);
+  expect(stateHash(state)).toBe(before);
+});
+
+it("rejects a changed proof mode for the same cached prompt without replay divergence", () => {
+  const { behavior, replayEngine, state, step } = proofReplayFixture();
+  const searches: SearchMemo = new WeakMap();
+  const before = stateHash(state);
+  expect(runStep(state, step, INTERACTIVE, replayEngine.catalog, { searches }).kind).toBe("suspended");
+  behavior.final = false;
+  let failure: unknown;
+  try {
+    runStep(state, step, INTERACTIVE, replayEngine.catalog, { searches });
+  } catch (error) {
+    failure = error;
   }
+  expect(failure).toBeInstanceOf(Error);
+  expect(failure).not.toBeInstanceOf(ReplayDivergence);
+  expect(stateHash(state)).toBe(before);
+});
+
+it("retains committed state and clears a failed fold attempt after prompt and proof divergence", () => {
+  const { behavior, replayEngine, state, ids, step } = proofReplayFixture();
+  const fold = createFoldAdapter(replayEngine);
+  const before = stateHash(state);
+  const opened = appliedSlice(fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: step }));
+  const pending = fold.pending(opened)!;
+  behavior.filtered = true;
+  behavior.final = false;
+  const outcome = fold.reduce(opened, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [ids.player.hand[1]] });
+  if (outcome.kind !== "applied") throw new Error("expected a failed attempted play");
+  expect(outcome.error).not.toBeNull();
+  expect(stateHash(outcome.slice.committed)).toBe(before);
+  expect(outcome.slice.inFlight).toBeNull();
+  expect(fold.pending(outcome.slice)).toBeNull();
 });
 
 it("guards a nonterminal repeated cost object and manual plans with later constraints", () => {
@@ -971,8 +1027,9 @@ it("rejects an unexpected precommit prompt after a universal proof without commi
   const outcome = fold.reduce(opened, { kind: "answer", side: "player", promptId: prompt.id, value: [] });
   if (outcome.kind !== "applied") throw new Error("expected a failed attempted play");
   expect(outcome.error).not.toBeNull();
-  expect(outcome.slice.committed).toBe(state);
+  expect(stateHash(outcome.slice.committed)).toBe(stateHash(state));
   expect(outcome.slice.inFlight).toBeNull();
+  expect(fold.pending(outcome.slice)).toBeNull();
 });
 
 it("preserves full final-discard choices and payment after a cold fold reload", () => {
