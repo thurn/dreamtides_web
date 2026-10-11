@@ -719,7 +719,12 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       ) : null}
       {EngineDebugPanel !== null && PAGE_DEBUG_PANEL ? (
         <Suspense fallback={null}>
-          <EngineDebugPanel engine={engine} battle={battle} battleId={battleId} />
+          <EngineDebugPanel
+            engine={engine}
+            battle={battle}
+            battleId={battleId}
+            openerVisible={model.view.cardPicker?.presentation !== "gallery"}
+          />
         </Suspense>
       ) : null}
     </>

@@ -1,0 +1,19 @@
+{
+  "bead": "hv-umm2.378",
+  "phase": 5,
+  "implementMin": 15.398,
+  "localValidationS": {
+    "install": 2.698,
+    "focused": 6.271,
+    "review": 21.552,
+    "knip": 2.943
+  },
+  "hostLoad": 9.07275390625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "timingNote": "Wall time from first recorded implementation install checkpoint to precommit; dispatch precedes it by an unmeasured short interval. Includes QA/research/queue/harness repair, not productive coding time."
+}

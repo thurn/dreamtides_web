@@ -105,11 +105,14 @@ export default function EngineDebugPanel({
   engine,
   battle,
   battleId,
+  openerVisible,
 }: {
   readonly engine: Engine;
   readonly battle: JourneyBattleFoldState;
   readonly battleId: BattleId;
-}): ReactElement {
+  /** View-only visibility of the closed opener; the probe and open rail stay mounted. */
+  readonly openerVisible: boolean;
+}): ReactElement | null {
   const actions = useActions();
   const { cardDatabase } = useJourney();
   const [open, setOpen] = useState(false);
@@ -148,6 +151,7 @@ export default function EngineDebugPanel({
   );
 
   if (!open) {
+    if (!openerVisible) return null;
     return (
       <div style={{ position: "fixed", right: token("--space-m"), top: token("--space-m"), zIndex: token("--layer-app-developer-trigger") }}>
         <IconButton glyph={GLYPHS.bug} size="sm" label={COPY.open} onPress={() => setOpen(true)} testId="engine-debug-open" />
