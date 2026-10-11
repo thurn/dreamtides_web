@@ -484,7 +484,7 @@ export function engineStatuses(
         break;
       }
       case "playFrom": {
-        const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, cardType: change.filter.cardType ?? null, next: change.next, expiry };
+        const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry };
         if (change.instance === null) sides[change.player].push(badge("duration", status));
         else mark(change.instance, badge("duration", status));
         break;

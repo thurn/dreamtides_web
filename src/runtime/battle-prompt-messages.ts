@@ -1,5 +1,5 @@
 import type { BuiltInBattlePromptRef } from "../data/dreamwell-prompts";
-import type { Cost, Keyword } from "../engine/dsl/types";
+import type { CardFilter, Cost, Keyword } from "../engine/dsl/types";
 import type { EngineEvent } from "../engine/events";
 import type { ArrangeDestination, PromptKind, PromptRole } from "../engine/prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../engine/state/ids";
@@ -448,10 +448,20 @@ function reclaimCostPhrase(costs: readonly Cost[] | undefined): string {
   return costs === undefined ? "" : ` (cost: ${costs.length === 0 ? "nothing" : costs.map(costPhrase).join(", ")})`;
 }
 
-/** The cards a play permission naming no card covers: "one event", "characters". */
+/** The permission's effective type/subtype and copiable-cost restriction. */
+function permittedCardKind(filter: CardFilter, many: boolean): string {
+  const { costAtLeast: lower, costAtMost: upper } = filter;
+  const cost = lower !== undefined && upper !== undefined
+    ? lower === upper ? `${String(lower)} energy cost` : `${String(lower)}–${String(upper)} energy cost`
+    : upper !== undefined ? `≤${String(upper)} energy cost`
+      : lower !== undefined ? `≥${String(lower)} energy cost` : "";
+  const cardType = filter.cardType ?? "card";
+  return [cost, filter.subtype, `${cardType}${many ? "s" : ""}`].filter(Boolean).join(" ");
+}
+
+/** The qualified cards a permission covers, one when it is consumed by the next play. */
 function permittedCards(status: Extract<EngineStatusCopy, { readonly kind: "playFrom" }>): string {
-  const cards = status.cardType ?? "card";
-  return status.next ? `one ${cards}` : `${cards}s`;
+  return `${status.next ? "one " : ""}${permittedCardKind(status.filter, !status.next)}`;
 }
 
 function signed(amount: number, unit: string): string {
@@ -497,12 +507,12 @@ export type EngineStatusCopy =
   | { readonly kind: "delayedTrigger"; readonly once: boolean; readonly expiry: Expiry; readonly sourceName?: string | null }
   /**
    * A play permission: a card that may be played from the void (`named`), or
-   * cards of `cardType` a player may play from their void, one when `next`.
+   * cards matching `filter` a player may play from their void, one when `next`.
    */
   | {
       readonly kind: "playFrom";
       readonly named: boolean;
-      readonly cardType: "character" | "event" | null;
+      readonly filter: CardFilter;
       readonly next: boolean;
       readonly expiry: Expiry;
     }
@@ -549,8 +559,11 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
     }
     case "delayedTrigger":
       return `${status.sourceName == null ? "" : `${status.sourceName}: `}${status.once ? "A delayed ability is waiting" : "An ability triggers"}${expiryPhrase(status.expiry, human)}`;
-    case "playFrom":
-      return `${status.named ? "Can be played from the void" : `May play ${permittedCards(status)} from the void`}${expiryPhrase(status.expiry, human)}`;
+    case "playFrom": {
+      const qualified = status.filter.cardType !== undefined || Boolean(status.filter.subtype) || status.filter.costAtLeast !== undefined || status.filter.costAtMost !== undefined;
+      const named = `Can be played from the void${qualified ? ` (${permittedCardKind(status.filter, false)})` : ""}`;
+      return `${status.named ? named : `May play ${permittedCards(status)} from the void`}${expiryPhrase(status.expiry, human)}`;
+    }
     case "avatarExhausted":
       return "Avatar exhausted";
   }
@@ -795,7 +808,7 @@ function effectStartedText(
     case "trigger":
       return `${engineStatusLabel({ kind: "delayedTrigger", once: change.once, expiry, sourceName: typeof event.source === "string" ? sourceName(event.source) : null }, human)}.`;
     case "playFrom": {
-      const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, cardType: change.filter.cardType ?? null, next: change.next, expiry };
+      const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry };
       if (change.instance !== null) return line(card(change.instance), status);
       const mine = change.player === human;
       return `${mine ? "You" : "Your opponent"} may play ${permittedCards(status)} from ${mine ? "your" : "their"} void${expiryPhrase(expiry, human)}.`;

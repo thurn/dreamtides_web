@@ -1,7 +1,7 @@
 // The battle screen model of play permissions: the void plays a permission
 // offers, the void chooser's options for them, and the statuses a floating
 // permission shows.
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { createEngine, type BattleState, type InstanceId } from "../../engine";
 import { boardState } from "../../engine/testing/board";
@@ -13,6 +13,9 @@ import { engineAbilityOptionLabel, engineBattleLogText, engineStatusLabel, type 
 import { buildEngineBattleScreenModel, enginePrintedKeywords, withChooser } from "./engine-battle-view-model";
 import { surfaceChoices } from "./prompt-host-view-model";
 import type { FloatingEffect } from "../../engine/state/types";
+import type { CardFilter } from "../../engine/dsl/types";
+import { testCardSubtype } from "../../types/test-identities";
+import * as copy from "../../runtime/battle-prompt-messages";
 
 const engine = createEngine(zoneCatalog(Object.values(LAB)));
 const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
@@ -85,8 +88,8 @@ describe("play permissions on the battle screen", () => {
     const once = effect(2, { kind: "playFrom", player: "player", zone: "void", instance: null, filter: { cardType: "event" }, next: true }, { at: "never" });
     state.floating.push(turn, once);
     const model = screenOf(state);
-    const namedStatus: EngineStatusCopy = { kind: "playFrom", named: true, cardType: null, next: false, expiry: turn.expiry };
-    const sideStatus: EngineStatusCopy = { kind: "playFrom", named: false, cardType: "event", next: true, expiry: once.expiry };
+    const namedStatus: EngineStatusCopy = { kind: "playFrom", named: true, filter: {}, next: false, expiry: turn.expiry };
+    const sideStatus: EngineStatusCopy = { kind: "playFrom", named: false, filter: { cardType: "event" }, next: true, expiry: once.expiry };
     expect(model.view.player.voidCards.find((card) => card.id === id(named))?.statuses).toEqual([
       { kind: "duration", label: engineStatusLabel(namedStatus, "player") },
     ]);
@@ -103,4 +106,36 @@ describe("play permissions on the battle screen", () => {
     expect(log(once, "player")).toBeTruthy();
     expect(log(once, "player")).not.toBe(log(once, "enemy"));
   });
+
+  it.each([
+    { filter: { subtype: testCardSubtype("Fixture Warrior") }, named: false, next: false },
+    { filter: { cardType: "character", costAtMost: 2 }, named: false, next: false },
+    { filter: { cardType: "character", costAtMost: 0 }, named: false, next: true },
+    { filter: { cardType: "event", costAtLeast: 4 }, named: false, next: true },
+    { filter: { costAtLeast: 2, costAtMost: 2 }, named: true, next: false },
+    { filter: { cardType: "character", subtype: testCardSubtype("Fixture Warrior"), costAtLeast: 1, costAtMost: 3 }, named: true, next: true },
+    { filter: {}, named: true, next: false },
+  ] satisfies readonly { filter: CardFilter; named: boolean; next: boolean }[])("carries the exact permission filter into its status copy: %j", ({ filter, named, next }) => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { back: [SYNTHETIC.vanilla1.id], void: [SYNTHETIC.vanilla2.id], energy: 2, deck },
+      enemy: { deck },
+    });
+    const source = ids.player.back[0]!;
+    const expiry: FloatingEffect["expiry"] = next ? { at: "never" } : { at: "endOfTurn" };
+    state.floating.push({
+      id: "e901", controller: "player", source, timestamp: 0, expiry,
+      change: { kind: "playFrom", player: "player", zone: "void", instance: named ? ids.player.void[0] : null, filter, next },
+    });
+    const statusCopy = vi.spyOn(copy, "engineStatusLabel");
+    try {
+      screenOf(state);
+      const input = statusCopy.mock.calls.find(([status]) => status.kind === "playFrom")?.[0];
+      expect(input).toMatchObject({ kind: "playFrom", named, filter, next, expiry });
+    } finally {
+      statusCopy.mockRestore();
+    }
+  });
+
 });

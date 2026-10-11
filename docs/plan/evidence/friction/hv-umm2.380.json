@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.380",
+  "phase": 5,
+  "implementMin": 20.295,
+  "localValidationS": {
+    "install": 3.049585,
+    "negative": 3.8268243750208057,
+    "focused": 3.997075541992672,
+    "reviewFailed": 4.78577195800608,
+    "review": 18.90573175001191,
+    "knip": 3.9573555419920012
+  },
+  "hostLoad": 5.73193359375,
+  "testDelta": {
+    "files": 0,
+    "lines": 35,
+    "jsdomFiles": 0,
+    "cases": 7
+  },
+  "friction": [
+    {
+      "tag": "qa-acceptance-premise",
+      "min": 0.381,
+      "description": "A task-authored God static badge premise caused a 15-second badge wait timeout. Native acceptance corrected to real bounded void-play plus Echo floating badge/log; separate static permission display gap filed as hv-umm2.393. Failed scenario execution only; native coordination and script-edit time were not isolated."
+    }
+  ],
+  "browserLeaseWaitS": 0.129,
+  "timingNote": "Wall from recorded install to evidence freeze includes parent ACK waits, research, native acceptance recovery and QA; not productive implementation time. Light checks and browser runs use no heavy slot. Failed and corrected executions are retained separately."
+}
