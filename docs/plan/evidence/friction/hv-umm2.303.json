@@ -1,0 +1,61 @@
+{
+  "bead": "hv-umm2.303",
+  "phase": 5,
+  "implementMin": 45,
+  "localValidationS": {
+    "focused": 3.2,
+    "typecheck": 8.2,
+    "review": 18.5,
+    "knip": 2.4,
+    "qaBefore": 37.2,
+    "qaAfter": 33.8
+  },
+  "hostLoad": 4.79,
+  "testDelta": {
+    "files": 0,
+    "lines": 60,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 10,
+      "note": "the engine view exposes layered keywords but not printed ones, so telling a static grant from a printed keyword needed the engine catalog, wired through EngineBattleScreen.tsx outside the original areas; the session widened them"
+    }
+  ],
+  "qa": {
+    "judged": 2,
+    "runtime": [
+      {
+        "pid": 89271,
+        "port": 5174,
+        "kind": "after scenario, first try",
+        "stopped": true
+      },
+      {
+        "pid": 91053,
+        "port": 5174,
+        "kind": "after scenario, debug-card setup",
+        "stopped": true
+      },
+      {
+        "pid": 93442,
+        "port": 5174,
+        "kind": "after scenario, orb geometry",
+        "stopped": true
+      },
+      {
+        "pid": 94683,
+        "port": 5174,
+        "kind": "before scenario (base stash)",
+        "stopped": true
+      },
+      {
+        "pid": 95734,
+        "port": 5174,
+        "kind": "final after scenario",
+        "stopped": true
+      }
+    ]
+  }
+}

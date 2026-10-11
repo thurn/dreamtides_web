@@ -25,6 +25,8 @@ import type {
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import type { Action, BattleView, EffectId, InstanceId, InstanceView, LoopId, Side, Slot } from "../../engine";
 import { opponent, sourceKey } from "../../engine";
+import { instanceCard, type EngineCatalog } from "../../engine/catalog";
+import type { Keyword } from "../../engine/dsl/types";
 import type { PresentationVisual } from "../../battle/components/presentation-items";
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
@@ -115,6 +117,8 @@ export interface EngineBattleViewInput {
   /** The presentation's current notice. */
   readonly notice: BattlePromptNoticeView | null;
   readonly cards: EngineCardModels;
+  /** Each visible instance's printed keywords, which its card text already shows (`enginePrintedKeywords`). */
+  readonly printedKeywords: EnginePrintedKeywords;
   readonly avatars: Readonly<Record<Side, Pick<MobileBattleStatusView, "avatar" | "avatarProfile">>>;
   readonly opponentName: string;
   readonly essenceReward: number;
@@ -342,18 +346,44 @@ interface EngineStatuses {
   readonly sides: Readonly<Record<Side, BattleStatusBadgeView[]>>;
 }
 
+/** An instance's printed keywords: its layer-1 keywords, which its card text shows. */
+export type EnginePrintedKeywords = (instance: InstanceView) => readonly Keyword[];
+
+/**
+ * The printed keywords of instances over `catalog`: the keyword abilities of
+ * the card each is played as, deck-entry modifications applied, cached by
+ * printing and variant.
+ */
+export function enginePrintedKeywords(catalog: EngineCatalog): EnginePrintedKeywords {
+  const cache = new Map<string, readonly Keyword[]>();
+  return (instance) => {
+    const key = JSON.stringify([instance.printing, instance.variant]);
+    const cached = cache.get(key);
+    if (cached !== undefined) return cached;
+    const keywords = instanceCard(catalog, instance)
+      .abilities(instance.variant)
+      .flatMap((ability) => (ability.kind === "keyword" ? [ability.keyword] : []));
+    cache.set(key, keywords);
+    return keywords;
+  };
+}
+
 /**
  * The status indicators of `view` for `human`: each floating effect with a
  * duration (spark, base spark, all types, a granted or lost keyword,
- * disabled triggers, a temporary character) marks its card; a banished card
- * returning to play, a pending cost change, and a waiting delayed ability
- * mark their side, as does an exhausted Avatar; an effect lasting until a
- * player pays marks each card it affects, as actionable while it is in
- * `payableNow`, the effects the human may pay to end now.
+ * disabled triggers, a temporary character) marks its card, as does each
+ * keyword a visible card has beyond its `printedKeywords` and its floating
+ * gains (one a static ability grants) and the Offering status that banishes
+ * it at the end of the turn; a banished card returning to play, a pending
+ * cost change, and a waiting delayed ability mark their side, as does an
+ * exhausted Avatar; an effect lasting until a player pays marks each card it
+ * affects, as actionable while it is in `payableNow`, the effects the human
+ * may pay to end now.
  */
 export function engineStatuses(
   view: BattleView,
   human: Side,
+  printedKeywords: EnginePrintedKeywords,
   payableNow: ReadonlySet<EffectId> = new Set(),
 ): EngineStatuses {
   const cards = new Map<InstanceId, BattleStatusBadgeView[]>();
@@ -405,6 +435,22 @@ export function engineStatuses(
         break;
     }
   }
+  const floatingGains = new Map<InstanceId, Set<Keyword>>();
+  for (const { change } of view.floating) {
+    if (change.kind === "keyword" && change.gains) {
+      floatingGains.set(change.instance, (floatingGains.get(change.instance) ?? new Set()).add(change.keyword));
+    }
+  }
+  for (const instance of Object.values(view.instances)) {
+    const printed = printedKeywords(instance);
+    const gained = floatingGains.get(instance.id);
+    for (const keyword of instance.characteristics.keywords) {
+      if (!printed.includes(keyword) && gained?.has(keyword) !== true) {
+        mark(instance.id, badge("keyword", { kind: "grantedKeyword", keyword }));
+      }
+    }
+    if (instance.status.offering) mark(instance.id, badge("duration", { kind: "offering" }));
+  }
   for (const payable of view.payable) {
     const entry = badge("payable", { kind: "payable", payer: payable.payer, cost: payable.cost });
     const shown = payableNow.has(payable.id) ? { ...entry, actionable: true } : entry;
@@ -426,7 +472,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
   const payableNow = new Set(
     [...affordances.payToEnd.values(), affordances.statusPayToEnd].flat().map((action) => action.effect),
   );
-  const statuses = engineStatuses(view, human, payableNow);
+  const statuses = engineStatuses(view, human, input.printedKeywords, payableNow);
   const cardView = (instance: InstanceView, playable = false): MobileBattleCardView => {
     const marks = statuses.cards.get(instance.id);
     return {

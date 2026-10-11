@@ -12,7 +12,7 @@ import { LOOP, LOOP_CARDS } from "../../engine/testing/loop-cards";
 import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture } from "../../engine/testing/prompt-lab";
 import { CONTINUOUS } from "../../engine/testing/continuous-cards";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
-import { ZONE_FIGMENT, zoneCatalog } from "../../engine/testing/zone-cards";
+import { ZONE, ZONE_FIGMENT, zoneCatalog } from "../../engine/testing/zone-cards";
 import { NO_PROMPTS } from "../../engine/steps/sources";
 import { NO_DECK_MODS, type DeckMods } from "../../engine/dsl/types";
 import type { BattleDeckCardDefinition } from "../../battle/types";
@@ -24,6 +24,8 @@ import type { Answer } from "../../engine/prompts/types";
 import { parseBattleCardId, parseBattleId, parseBattleSlotViewId } from "../../types/identifiers";
 import {
   buildEngineBattleScreenModel,
+  enginePrintedKeywords,
+  engineStatuses,
   figmentMergeTargets,
   handPlayAction,
   repositionForDrop,
@@ -66,6 +68,7 @@ function screenOf(state: BattleState, prompt: PendingEnginePrompt | null = null,
     presented,
     notice: null,
     cards,
+    printedKeywords: enginePrintedKeywords(on.catalog),
     avatars: { player: { avatar: null }, enemy: { avatar: null } },
     opponentName: "Fixture Opponent",
     essenceReward: 100,
@@ -414,6 +417,57 @@ describe("buildEngineBattleScreenModel", () => {
     const shown = [...model.view.farHand.cardIds, ...model.view.far.deckCardIds, ...model.view.near.deckCardIds];
     expect(shown.filter((cardId) => hidden.has(cardId))).toEqual([]);
     expect(model.view.farHand.cards).toEqual([]);
+  });
+
+  it("marks keywords beyond the printed and floating ones and the Offering status, on cards the viewer sees", () => {
+    const { state, ids } = board({
+      player: {
+        front: [DSL.handOffering.id],
+        back: [SYNTHETIC.vanilla1.id],
+        hand: [SYNTHETIC.vanilla1.id, ZONE.offeringBrute.id, SYNTHETIC.vanilla2.id],
+      },
+      enemy: { front: [DSL.handOffering.id], hand: [SYNTHETIC.vanilla1.id] },
+    });
+    const [granted, printed, floating] = ids.player.hand;
+    const [nomad] = ids.player.front;
+    const [offered] = ids.player.back;
+    if (granted === undefined || printed === undefined || floating === undefined || nomad == null || offered == null) {
+      throw new Error("missing cards");
+    }
+    const offeredCard = state.instances[offered];
+    if (offeredCard === undefined) throw new Error("missing card");
+    offeredCard.status.offering = true;
+    state.floating.push({
+      id: "e900",
+      controller: "player",
+      source: nomad,
+      timestamp: 0,
+      expiry: { at: "endOfTurn" },
+      change: { kind: "keyword", instance: floating, keyword: "offering", gains: true },
+    });
+    const model = screenOf(state);
+    const kinds = (id: InstanceId) =>
+      [...model.view.playerHand, ...model.view.player.frontRank.map((slot) => slot.card), ...model.view.player.backRank.map((slot) => slot.card)]
+        .find((card) => card?.id === parseBattleCardId(id))
+        ?.statuses?.map((badge) => badge.kind) ?? [];
+
+    expect(kinds(granted)).toEqual(["keyword"]);
+    expect(kinds(printed)).toEqual([]);
+    expect(kinds(floating)).toEqual(["keyword"]);
+    expect(kinds(nomad)).toEqual([]);
+    expect(kinds(offered)).toEqual(["duration"]);
+    expect([...model.view.playerHand, ...model.view.player.backRank.flatMap((slot) => (slot.card === null ? [] : [slot.card]))]
+      .flatMap((card) => card.statuses ?? [])
+      .every((badge) => badge.label.length > 0)).toBe(true);
+    expect(model.view.enemyHand).toEqual([]);
+
+    const printedKeywords = enginePrintedKeywords(engine.catalog);
+    const seenByPlayer = engineStatuses(engine.view(state, "player"), "player", printedKeywords).cards;
+    const seenByEnemy = engineStatuses(engine.view(state, "enemy"), "enemy", printedKeywords).cards;
+    expect(ids.enemy.hand.filter((id) => seenByPlayer.has(id))).toEqual([]);
+    expect(ids.player.hand.filter((id) => seenByEnemy.has(id))).toEqual([]);
+    expect(ids.enemy.hand.map((id) => seenByEnemy.get(id)?.map((badge) => badge.kind))).toEqual([["keyword"]]);
+    expect(seenByEnemy.get(offered)?.map((badge) => badge.kind)).toEqual(["duration"]);
   });
 
   it("reports the battle's result from the human's side", () => {

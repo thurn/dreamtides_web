@@ -50,6 +50,7 @@ import {
 import { buildBattleAvatarStatus } from "../../screens/cumulus_adapters/mobile-battle-view-model";
 import {
   buildEngineBattleScreenModel,
+  enginePrintedKeywords,
   figmentMergeTargets,
   handPlayAction,
   repositionForDrop,
@@ -151,6 +152,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       figment: lookupFigmentCatalogEntryById,
     });
   }, [cardDatabase, init]);
+  const printedKeywords = useMemo(() => enginePrintedKeywords(engine.catalog), [engine]);
   const avatars = useMemo(
     () => ({
       player: buildBattleAvatarStatus(init.avatarSummary, false),
@@ -316,6 +318,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         presented: head === null,
         notice: noticeView,
         cards,
+        printedKeywords,
         avatars,
         opponentName: init.enemyDescriptor.name,
         essenceReward: init.essenceReward,
@@ -330,7 +333,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           return definition === null ? null : dreamwellCardModel(definition);
         },
       }),
-    [avatars, battleId, cards, derived, dreamwell, engine, head, init, noticeView, resultDismissed],
+    [avatars, battleId, cards, derived, dreamwell, engine, head, init, noticeView, printedKeywords, resultDismissed],
   );
   const emblemName = useCallback<EngineEmblemNamer>(
     (emblem, id) =>

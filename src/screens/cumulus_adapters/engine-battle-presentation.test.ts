@@ -33,7 +33,12 @@ import {
   parseSiteId,
 } from "../../types/identifiers";
 import { battleLogEntries, battleLogTurns, engineBattleLog } from "./engine-battle-log-view-model";
-import { buildEngineBattleScreenModel, engineStatuses, type EngineBattleScreenModel } from "./engine-battle-view-model";
+import {
+  buildEngineBattleScreenModel,
+  enginePrintedKeywords,
+  engineStatuses,
+  type EngineBattleScreenModel,
+} from "./engine-battle-view-model";
 
 const labEngine = createEngine(
   createCatalog(PROMPT_LAB_DEFINITIONS.cards, [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments),
@@ -67,6 +72,7 @@ function labModel(
     presented: visual === null,
     notice: null,
     cards,
+    printedKeywords: enginePrintedKeywords(labEngine.catalog),
     avatars: { player: { avatar: null }, enemy: { avatar: null } },
     opponentName: "Fixture Opponent",
     essenceReward: 100,
@@ -462,7 +468,7 @@ describe("presentation items", () => {
     const reclaim = steps("reclaim")[0];
     if (played === undefined || ended === undefined || exiled === undefined || reclaim === undefined) throw new Error("no steps");
     const kinds = (state: BattleState) => {
-      const marks = engineStatuses(labEngine.view(state, "player"), "player");
+      const marks = engineStatuses(labEngine.view(state, "player"), "player", enginePrintedKeywords(labEngine.catalog));
       return {
         cards: [...new Set([...marks.cards.values()].flat().map((badge) => badge.kind))].sort(),
         player: marks.sides.player.map((badge) => badge.kind),

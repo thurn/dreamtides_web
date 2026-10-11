@@ -5,8 +5,9 @@ import { token } from "../../primitives/tokens";
 import { cardSelectionShadowLayers } from "../card/CardView";
 
 /**
- * A lasting battle status shown as a badge: a change with a duration, a
- * granted or lost keyword, disabled triggers, an effect lasting until a
+ * A lasting battle status shown as a badge: a change with a duration (or a
+ * banishment at the end of the turn), a keyword gained beyond the printed
+ * ones or lost, disabled triggers, an effect lasting until a
  * player pays, a banished card that returns, a pending cost change, a
  * waiting delayed ability, or an exhausted Avatar.
  */
@@ -46,6 +47,12 @@ const BADGE_GLYPHS: Readonly<Record<BattleStatusBadgeKind, Glyph>> = {
 /** The badge diameter: the battle card's status-badge size. */
 export const BATTLE_STATUS_BADGE_SIZE = "min(26cqw, 28px)";
 
+/**
+ * The top of a complete card's badge column: below the card's energy orb,
+ * which reaches 15.85cqw (2cqw from the top, 13.85cqw across at its largest).
+ */
+const FULL_CARD_BADGES_TOP = `calc(15.85cqw + ${token("--space-xxs")})`;
+
 /** The shared status-badge material of battle cards and status displays. */
 export const BATTLE_STATUS_BADGE_STYLE: CSSProperties = {
   display: "inline-flex",
@@ -65,7 +72,8 @@ export const BATTLE_STATUS_BADGE_STYLE: CSSProperties = {
 
 /**
  * A battle object's lasting statuses, one badge each, in a column at a
- * card's top-left corner (`card`) or a row under a status display
+ * battlefield card's top-left corner (`card`), down a complete card's left
+ * edge under its energy orb (`full-card`), or in a row under a status display
  * (`status`). Renders nothing for no statuses.
  */
 export function BattleStatusBadges({
@@ -73,7 +81,7 @@ export function BattleStatusBadges({
   placement,
 }: {
   readonly badges: readonly BattleStatusBadgeView[];
-  readonly placement: "card" | "status";
+  readonly placement: "card" | "full-card" | "status";
 }): ReactElement | null {
   if (badges.length === 0) return null;
   return (
@@ -83,12 +91,14 @@ export function BattleStatusBadges({
         position: "absolute",
         zIndex: 4,
         display: "flex",
-        flexDirection: placement === "card" ? "column" : "row",
+        flexDirection: placement === "status" ? "row" : "column",
         gap: token("--space-xxs"),
         pointerEvents: "none",
         ...(placement === "card"
           ? { top: "4%", left: "4%" }
-          : { top: "100%", left: "50%", transform: `translate(-50%, calc(-50% + ${token("--space-xxs")}))` }),
+          : placement === "full-card"
+            ? { top: FULL_CARD_BADGES_TOP, left: "4%" }
+            : { top: "100%", left: "50%", transform: `translate(-50%, calc(-50% + ${token("--space-xxs")}))` }),
       }}
     >
       {badges.map((badge, index) => (

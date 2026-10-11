@@ -1496,8 +1496,11 @@ the fold and the AI host never read it, and a reload shows the settled
 board.
 
 Lasting statuses get Cumulus status badges (`BattleStatusBadges`): on a
-card, a change with a duration, a granted or lost keyword, disabled
-triggers, and an effect lasting until a player pays; under a side's status
+card, a change with a duration, a granted or lost keyword (a floating
+change, or a keyword a static ability grants beyond the card's printed
+ones, on any card the viewer can see, hand cards included), the Offering
+status, disabled triggers, and an effect lasting until a player pays; a
+hand card's badges sit below its energy cost. Under a side's status
 display, a banished card that returns to play, a pending cost change, a
 waiting delayed ability, and an exhausted Avatar. Each badge's accessible
 name says what it is and how long it lasts.

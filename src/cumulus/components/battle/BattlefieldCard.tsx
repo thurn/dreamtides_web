@@ -72,7 +72,7 @@ export interface BattlefieldCardModel {
   readonly exhausted: boolean;
   /** Prepared stored-memory count shown on the card. */
   readonly storedMemory: number;
-  /** Lasting statuses (durations, keywords, disabled triggers, payable effects), one badge each. */
+  /** Lasting statuses (durations, Offering, keywords, disabled triggers, payable effects), one badge each. */
   readonly statuses?: readonly BattleStatusBadgeView[];
   /** Whether to use the canonical Figment treatment. */
   readonly figment: boolean;
@@ -266,7 +266,10 @@ function StatusIndicators({
       data-battle-card-status-indicators=""
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
     >
-      <BattleStatusBadges badges={model.statuses ?? []} placement="card" />
+      <BattleStatusBadges
+        badges={model.statuses ?? []}
+        placement={model.presentation === "full" ? "full-card" : "card"}
+      />
       {model.exhausted && (
         <div
           aria-label={"Exhausted"}
