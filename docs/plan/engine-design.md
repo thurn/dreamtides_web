@@ -1681,6 +1681,17 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     into a hand or deck, or a move from a hand into a deck, stays known to
     whoever watched it;
   - a revealed card becomes known to both sides;
+  - a filtered draw (`drawMatching`) delegates positional forgetting to
+    `forgetFilteredDrawPositions` in `view/knowledge.ts`. The primitive proves
+    whether its identifiable current source/origin and identical literal
+    ability filters establish a public criterion. For an unknown selected
+    card, anonymous slots before the first known match are possible removals
+    when that criterion is public; hidden sources, opaque resolvers and mixed
+    filters use the whole deck. Known nonmovers retain tracking exactly when
+    every possible removal gives the same preceding-removal count, using the
+    same anonymous-removal bounds as ordered placements below. Known selected
+    cards and public unrestricted top draws have exact removal positions;
+    unknown selected cards' actual positions supply no public evidence;
   - a card put on top of or on the bottom of a deck (`putInDeck`,
     `putFromTop`) stays known, at its new place, to every side that could
     see it go there, while its position remains inferable. An unshuffled

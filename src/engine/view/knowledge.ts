@@ -8,6 +8,10 @@
  *   returned to a hand from play, or put into a deck from a hand, stays
  *   known to whoever watched it move;
  * - a revealed card becomes known to both sides;
+ * - filtered draws and ordered deck placements retain only inferable
+ *   positions, using viewer-known slots and public removal bounds; the
+ *   filtered-draw primitive proves its ability's literal filter while this
+ *   module owns forgetting (`forgetFilteredDrawPositions`, `forgetDeckPositions`);
  * - a `privateTo` prompt shows its cards to its chooser only, and the other
  *   side loses track of those still in a deck, whose order the chooser may
  *   change;
@@ -110,6 +114,38 @@ export function settleKnowledge(state: BattleState, instance: CardInstance, seer
   for (const side of seers) learn(state, side, instance);
 }
 
+/** Whether anonymous removals have one possible count before a known card. */
+function removalsBeforeAreForced(removed: number, preceding: number, following: number): boolean {
+  return Math.max(0, removed - following) === Math.min(preceding, removed);
+}
+
+/**
+ * Before a filtered draw, forget positions ambiguous under one anonymous
+ * removal. The caller proves a public exclusive removal bound per viewer:
+ * the first known match, the whole deck for an unknown criterion, or zero
+ * for an ordinary top draw. Only unidentified slots before that bound are
+ * possible. A known selected card supplies an exact removal; an unknown
+ * selected card's actual position supplies no evidence. Empty candidate
+ * sets retain knowledge. Movement and learning the drawn card happen later.
+ */
+export function forgetFilteredDrawPositions(
+  state: BattleState,
+  deck: readonly InstanceId[],
+  drawn: InstanceId,
+  removalLimit: (viewer: Side, known: ReadonlySet<InstanceId>) => number,
+): void {
+  for (const viewer of SIDES) {
+    const known = new Set(state.knownTo[viewer]);
+    if (known.has(drawn)) continue;
+    const possible = deck.slice(0, removalLimit(viewer, known)).flatMap((id, index) => known.has(id) ? [] : [index]);
+    if (possible.length === 0) continue;
+    const ambiguous = new Set(deck.filter((id, index) => known.has(id) && !removalsBeforeAreForced(
+      1, possible.filter((place) => place < index).length, possible.filter((place) => place > index).length,
+    )));
+    state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !ambiguous.has(id));
+  }
+}
+
 /**
  * Before an ordered, unshuffled placement, forget only deck positions its
  * public movement cannot determine. `cards` has original source-zone order;
@@ -148,7 +184,7 @@ export function forgetDeckPositions(state: BattleState, cards: readonly Instance
         for (const id of interval) {
           if (!known.has(id)) {
             preceding += 1;
-          } else if (Math.max(0, removed - (anonymous - preceding)) !== Math.min(preceding, removed)) {
+          } else if (!removalsBeforeAreForced(removed, preceding, anonymous - preceding)) {
             forgotten.add(id);
           }
         }

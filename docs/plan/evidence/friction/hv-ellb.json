@@ -1,0 +1,303 @@
+{
+  "bead": "hv-ellb",
+  "phase": 5,
+  "base": "5977da923fcc21b0a4a535c0c23d1f5071ce5881",
+  "implementMin": 12.98,
+  "timingBasis": "Native parent dispatch checkpoint 2026-10-11T16:37:36Z to immediate commit preparation 2026-10-11T16:50:34.577128+00:00; wall time includes research, parent acknowledgements, installation/checks and documentation, not productive coding alone. Exact commit timestamp is in Git. Installation is the first repository mutation.",
+  "localValidationS": {
+    "install": 2.77,
+    "baseline-primitives": 3.845,
+    "baseline-knowledge": 2.211,
+    "baseline-mixed": 5.586,
+    "focused": 3.861,
+    "review": 40.199,
+    "knip": 3.321
+  },
+  "hostLoad": 14.859375,
+  "testDelta": {
+    "files": 0,
+    "lines": 12,
+    "jsdomFiles": 0,
+    "cases": 1
+  },
+  "friction": [],
+  "acceptance": {
+    "baseline": "Unchanged production: 51 drawMatching/putInDeck/putFromTop cases; 7 knowledge cases; added mixed-filter observable contract also passed on unchanged production.",
+    "focused": "76 passed / 416 skipped in two existing entrypoints, including all 12 drawMatching, 40 ordered-placement and 7 knowledge cases plus 17 existing knowledge-named primitive cases.",
+    "review": "256 files / 2623 tests pass; changed-source lint, main/node typechecks and import-cycle check all actually executed and passed.",
+    "knip": "Pass. Named knowledge export has one production caller; no orphaned exports/files.",
+    "scope": "Two production files, one contract module, knowledge header/Knowledge section/RD Privacy paragraph and own evidence. No barrel/hub/fallout, entities, rules/schema/prompt/DSL/interpreter changes.",
+    "proportionate": "Behavior-preserving internal ownership refactor. Native task explicitly excludes repeated browser/fuzz validation. review:full is not warranted because this bounded refactor changes no test infrastructure, repository-wide configuration or cross-cutting architecture; no runtime presentation or new state transition.",
+    "publicEvidence": "Known selected card skips before public-bound callback. Public unrestricted top draws return zero; empty candidates retain knowledge. First known match only uses viewer-known slots and unchanged publicFilter proof. Hidden/opaque/mixed abilities use whole deck. Helper reads no hidden printing or actual unknown selected position.",
+    "sharedInference": "Private removalsBeforeAreForced uses exact original ordered-placement max/min formula. For U=1 with nonempty candidate slots, a known position is ambiguous exactly when candidates exist both before and after it.",
+    "mixedContract": "Synthetic fixture index14: two distinct literal filters; first unknown matching draw, known matching middle card, unknown nonmatching tail; second filter has no match. The enemy view forgets the otherwise-bounding middle position."
+  },
+  "sourceHashes": {
+    "src/engine/effects/primitives/draw-matching.ts": "5ae7e1939094dd69992652accd3c5cde55771a881aacaa0daa0d63d8cbee8eb6",
+    "src/engine/view/knowledge.ts": "f555740ff9e8077359614f5608f72ad455ec75a9e46f6d1e0e88c235b3261e6e",
+    "src/engine/effects/primitives/contracts/draw-matching.contracts.ts": "6d1248a0f41a87f0402c67e288539fd2ad72e2b77ded0af4c37a0c4000b56174",
+    "src/engine/view/view-knowledge.test.ts": "26d86fe575de2876afcc7693130286e665bfe5d310ae9534a9baaafa5225d95c",
+    "docs/plan/engine-design.md": "18e3f368e62eaf59145511931b3be55891c26e1d407d4baf334a676421b4a726",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.89-1.md": "fb42efa3d495a38221937ce592b85a94a08f3acf8e8a712b3f0bf1bf10bd3198"
+  },
+  "validationArtifacts": {
+    "install.log": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789",
+    "baseline-primitives.log": "19f4205694d26c2840f82101fd52b12d81a472267a2bb33f322871e77de2d235",
+    "baseline-knowledge.log": "b0e6266fea0a1a7101b0216edcfd20cbf3c514c2e4b1a52ec543cd626a5b25d3",
+    "baseline-mixed.log": "1fdd76a4a35abbae73704bd1664a6f5becea36bfdf0feb31095b7bf0d10fdeb4",
+    "focused.log": "ecba0485444f792af8e889575d9f4491c23092a27d6a02f40d2d124cbfa50ab6",
+    "review.log": "ce437d014e1697c87aa208a58d801b43f2f894c16bad31a1148c4aaa2efcb9d6",
+    "knip.log": "19a9d10c45b989476725ebbbdffba2088d25286ed74516d16531439fdc2c6497"
+  },
+  "runtimeLedger": [
+    {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-knowledge-tracking",
+      "start": "2026-10-11T16:39:59.024035+00:00",
+      "end": "2026-10-11T16:40:01.794390+00:00",
+      "wallS": 2.77,
+      "pid": 32730,
+      "exit": 0,
+      "startLoad": [
+        4.14892578125,
+        7.35791015625,
+        8.255859375
+      ],
+      "endLoad": [
+        4.14892578125,
+        7.35791015625,
+        8.255859375
+      ],
+      "descendantPids": [
+        32799
+      ],
+      "settled": true
+    },
+    {
+      "label": "baseline-primitives",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawMatching|putInDeck|putFromTop"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-knowledge-tracking",
+      "start": "2026-10-11T16:40:08.105481+00:00",
+      "end": "2026-10-11T16:40:11.950552+00:00",
+      "wallS": 3.845,
+      "pid": 32906,
+      "exit": 0,
+      "startLoad": [
+        4.04541015625,
+        7.22998046875,
+        8.19970703125
+      ],
+      "endLoad": [
+        4.04541015625,
+        7.22998046875,
+        8.19970703125
+      ],
+      "descendantPids": [
+        32923,
+        32986,
+        32987,
+        32989,
+        33003,
+        33006,
+        33043
+      ],
+      "settled": true
+    },
+    {
+      "label": "baseline-knowledge",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/view-knowledge.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-knowledge-tracking",
+      "start": "2026-10-11T16:40:16.698841+00:00",
+      "end": "2026-10-11T16:40:18.909948+00:00",
+      "wallS": 2.211,
+      "pid": 33137,
+      "exit": 0,
+      "startLoad": [
+        4.12158203125,
+        7.19287109375,
+        8.1806640625
+      ],
+      "endLoad": [
+        4.03173828125,
+        7.123046875,
+        8.14990234375
+      ],
+      "descendantPids": [
+        33156,
+        33217,
+        33219,
+        33227,
+        33228,
+        33291
+      ],
+      "settled": true
+    },
+    {
+      "label": "baseline-mixed",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "different literal draw filters"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-knowledge-tracking",
+      "start": "2026-10-11T16:43:10.106730+00:00",
+      "end": "2026-10-11T16:43:15.692621+00:00",
+      "wallS": 5.586,
+      "pid": 36239,
+      "exit": 0,
+      "startLoad": [
+        6.79052734375,
+        6.22265625,
+        7.53955078125
+      ],
+      "endLoad": [
+        10.17041015625,
+        6.9326171875,
+        7.7822265625
+      ],
+      "descendantPids": [
+        36258,
+        36318,
+        36320,
+        36385,
+        36398,
+        36557
+      ],
+      "settled": true
+    },
+    {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "-t",
+        "drawMatching|putInDeck|putFromTop|knowledge|event redaction invariant"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-knowledge-tracking",
+      "start": "2026-10-11T16:45:07.316080+00:00",
+      "end": "2026-10-11T16:45:11.177367+00:00",
+      "wallS": 3.861,
+      "pid": 48035,
+      "exit": 0,
+      "startLoad": [
+        20.13427734375,
+        12.64892578125,
+        10.00390625
+      ],
+      "endLoad": [
+        18.76171875,
+        12.48828125,
+        9.96240234375
+      ],
+      "descendantPids": [
+        48054,
+        48113,
+        48116,
+        48170,
+        48179,
+        48306
+      ],
+      "settled": true
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-knowledge-tracking",
+      "start": "2026-10-11T16:45:28.159898+00:00",
+      "end": "2026-10-11T16:46:08.358970+00:00",
+      "wallS": 40.199,
+      "pid": 49549,
+      "exit": 0,
+      "startLoad": [
+        14.859375,
+        12.00244140625,
+        9.84619140625
+      ],
+      "endLoad": [
+        10.29248046875,
+        11.197265625,
+        9.6494140625
+      ],
+      "descendantPids": [
+        49568,
+        49627,
+        49633,
+        49670,
+        49671,
+        49672,
+        49673,
+        49674,
+        49686,
+        50743
+      ],
+      "settled": true
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-knowledge-tracking",
+      "start": "2026-10-11T16:46:13.953127+00:00",
+      "end": "2026-10-11T16:46:17.274008+00:00",
+      "wallS": 3.321,
+      "pid": 50848,
+      "exit": 0,
+      "startLoad": [
+        9.54833984375,
+        11.02783203125,
+        9.5986328125
+      ],
+      "endLoad": [
+        9.54833984375,
+        11.02783203125,
+        9.5986328125
+      ],
+      "descendantPids": [
+        50863,
+        50924,
+        50929,
+        50935,
+        50975
+      ],
+      "settled": true
+    }
+  ],
+  "runtimeCheck": {
+    "ownedPids": 48,
+    "alive": [],
+    "servers": 0,
+    "browserContexts": 0,
+    "externalWriters": 0
+  },
+  "fallout": [],
+  "outstanding": []
+}

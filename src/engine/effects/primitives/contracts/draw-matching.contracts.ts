@@ -53,7 +53,8 @@ const failure: EngineCardDefinition = {
 };
 const xCard: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x8d0c), costs: [energyX()] };
 const zero = fixture(13, () => [event(drawMatching({ cardType: "character", costAtMost: 0 }))]);
-const engine = createEngine(testCatalog([xCard, zero, small, warrior, theirEvent, watcher, pauseAfter, payBefore, emptyTwice, ordinary, hiddenTrigger, monster, opaque, failure]));
+const mixedFilters = fixture(14, () => [event(sequence(drawMatching({ cardType: "character", costAtMost: 2 }), drawMatching({ cardType: "character", costAtLeast: 8 })))]);
+const engine = createEngine(testCatalog([xCard, zero, mixedFilters, small, warrior, theirEvent, watcher, pauseAfter, payBefore, emptyTwice, ordinary, hiddenTrigger, monster, opaque, failure]));
 const filler = Array.from({ length: 4 }, () => v.vanilla1.id);
 function board(card: CardId = small.id, deck: readonly CardId[] = [v.event0.id, v.vanilla1.id, v.event1.id]) {
   return boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [card], deck }, enemy: { deck: filler } });
@@ -165,6 +166,17 @@ describe("drawMatching", () => {
     const unknownFilter = board(opaque.id, [v.vanilla1.id, v.vanilla2.id, v.event1.id]);
     unknownFilter.state.knownTo.enemy = [unknownFilter.ids.player.deck[1]];
     expect(engine.view(run(unknownFilter.state, unknownFilter.ids.player.hand[0]).state, "enemy").sides.player.deck.known).toEqual([]);
+  });
+
+  it("keeps anonymous removal bounds when an ability contains different literal draw filters", () => {
+    const { state, ids } = board(mixedFilters.id, [v.vanilla1.id, v.vanilla2.id, v.event1.id]);
+    state.knownTo.enemy = [ids.player.deck[1]];
+    const result = run(state, ids.player.hand[0]);
+    expect(result.state.sides.player.hand).toEqual([ids.player.deck[0]]);
+    expect(result.state.sides.player.deck).toEqual([ids.player.deck[1], ids.player.deck[2]]);
+    expect(result.state.turnLog.drawn.player).toBe(1);
+    expect(result.state.knownTo.enemy).toEqual([]);
+    expect(engine.view(result.state, "enemy").sides.player.deck).toEqual({ count: 2, known: [] });
   });
 
   it("rolls back a failed resolution's draw/count/knowledge changes, preserving the committed play and publishing no partial draw", () => {

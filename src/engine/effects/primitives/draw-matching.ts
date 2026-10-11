@@ -3,9 +3,9 @@ import { resolvePlayer } from "../../dsl/selectors";
 import type { CardFilter, PlayerRef } from "../../dsl/types";
 import { abilityOrigin, originAbilities } from "../../rules/activation";
 import { drawCard } from "../../rules/resources";
-import { SIDES, type InstanceId, type Side } from "../../state/ids";
+import type { Side } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
-import { identifies } from "../../view/knowledge";
+import { forgetFilteredDrawPositions, identifies } from "../../view/knowledge";
 import { everyNode } from "../interpreter";
 import { definePrimitive, type EffectEnv } from "../types";
 
@@ -31,21 +31,6 @@ function publicFilter(ctx: StepContext, env: EffectEnv, filter: CardFilter, view
   );
 }
 
-/** Forget only positions an unidentified removal makes ambiguous, without reading its actual index. */
-function forgetAmbiguousPositions(ctx: StepContext, env: EffectEnv, node: DrawMatchingNode, deck: readonly InstanceId[], drawn: InstanceId): void {
-  for (const viewer of SIDES) {
-    const known = new Set(ctx.state.knownTo[viewer]);
-    if (known.has(drawn)) continue;
-    const predicateKnown = publicFilter(ctx, env, node.filter, viewer);
-    if (predicateKnown && matchesEveryCard(node.filter)) continue; // An ordinary top draw has a public position.
-    const knownMatch = predicateKnown ? deck.findIndex((id) => known.has(id) && cardMatchesFilter(ctx.state, ctx.catalog, id, node.filter)) : -1;
-    const limit = knownMatch < 0 ? deck.length : knownMatch;
-    const possible = deck.slice(0, limit).flatMap((id, index) => known.has(id) ? [] : [index]);
-    const ambiguous = new Set(deck.filter((id, index) => known.has(id) && possible.some((place) => place < index) && possible.some((place) => place > index)));
-    ctx.state.knownTo[viewer] = ctx.state.knownTo[viewer].filter((id) => !ambiguous.has(id));
-  }
-}
-
 export const drawMatchingPrimitive = definePrimitive<DrawMatchingNode>({
   op: "drawMatching",
   resolve(ctx, node, env) {
@@ -54,7 +39,12 @@ export const drawMatchingPrimitive = definePrimitive<DrawMatchingNode>({
     if (deck.length === 0) { drawCard(ctx, side); return; }
     const drawn = deck.find((id) => cardMatchesFilter(ctx.state, ctx.catalog, id, node.filter));
     if (drawn === undefined) return;
-    forgetAmbiguousPositions(ctx, env, node, deck, drawn);
+    forgetFilteredDrawPositions(ctx.state, deck, drawn, (viewer, known) => {
+      const predicateKnown = publicFilter(ctx, env, node.filter, viewer);
+      if (predicateKnown && matchesEveryCard(node.filter)) return 0; // An ordinary top draw has a public position.
+      const knownMatch = predicateKnown ? deck.findIndex((id) => known.has(id) && cardMatchesFilter(ctx.state, ctx.catalog, id, node.filter)) : -1;
+      return knownMatch < 0 ? deck.length : knownMatch;
+    });
     // This unobservable intermediate reorder lets the ordinary draw own movement, counting and triggers.
     deck.splice(deck.indexOf(drawn), 1);
     deck.unshift(drawn);
