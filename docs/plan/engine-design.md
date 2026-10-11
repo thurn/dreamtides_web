@@ -1424,6 +1424,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     and the other side loses track of those still in a deck, whose order the
     chooser may change. A "look at the top 4" prompt reveals those cards only
     to its chooser.
+  - a look at the opponent's hand (`takeFromAmong` on `opponentHand`) shows
+    the looker every card in it, even when what it may take is restricted
+    or nothing qualifies; the prompt offers only the eligible cards.
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: its purpose names a source card only when `side` can identify it
   (`purposeView`), even for the side answering, which otherwise sees it

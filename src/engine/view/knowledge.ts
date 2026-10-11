@@ -10,7 +10,9 @@
  * - a revealed card becomes known to both sides;
  * - a `privateTo` prompt shows its cards to its chooser only, and the other
  *   side loses track of those still in a deck, whose order the chooser may
- *   change.
+ *   change;
+ * - looking at the opponent's hand (`takeFromAmong(opponentHand())`) shows
+ *   every card in it to the looker only, through `showPrivately`.
  *
  * Decks start unknown to both sides; the opening shuffle happens before any
  * card is known.
@@ -113,8 +115,9 @@ export function revealToBoth(state: BattleState, ids: readonly InstanceId[]): vo
 }
 
 /**
- * A `privateTo` prompt shows `ids` to `side` only. The other side loses track
- * of those in a deck: the chooser may reorder them.
+ * A `privateTo` prompt, or a look at the opponent's hand, shows `ids` to
+ * `side` only. The other side loses track of those in a deck: the chooser
+ * may reorder them.
  */
 export function showPrivately(state: BattleState, side: Side, ids: readonly InstanceId[]): void {
   for (const id of ids) {

@@ -152,8 +152,10 @@ is not shown.
 
 An effect can let you look at the opponent's hand, as in "Look at the
 opponent's hand. Put a card from it into your hand." Only you see its cards.
-You keep knowing each of them while it stays in that hand, but not the cards
-the opponent puts into it later. The opponent sees which card you put into
+You see every card in the hand, even when the effect lets you choose only a
+card that matches a restriction, and even when no card matches. You keep
+knowing each of them while it stays in that hand, but not the cards the
+opponent puts into it later. The opponent sees which card you put into
 your hand, since it left their hand. An empty hand gives you nothing to choose.
 
 An effect can put a card the opponent owns into your hand, as in "Prevent a

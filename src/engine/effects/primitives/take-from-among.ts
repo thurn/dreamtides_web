@@ -5,6 +5,7 @@ import type { ChooseCardsPrompt } from "../../prompts/types";
 import { instanceOf, moveToHand } from "../../rules/zones";
 import { opponent, type InstanceId, type Side } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
+import { showPrivately } from "../../view/knowledge";
 import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 
 /** The cards a take chooses among. */
@@ -16,9 +17,11 @@ export type AmongSource =
    */
   | { readonly kind: "movedBy"; readonly effect: EffectNode }
   /**
-   * "Look at the opponent's hand. Put a card from it …": the prompt is
-   * private to the controller, who alone sees the cards it offers and keeps
-   * knowing each one while it stays in that hand (view/knowledge.ts).
+   * "Look at the opponent's hand. Put a card from it …": the controller
+   * alone looks at the whole hand, whichever cards the filter and cost bound
+   * leave to choose (none, or every one), and keeps knowing each card while
+   * it stays in that hand (view/knowledge.ts). The prompt is private to the
+   * controller.
    */
   | { readonly kind: "opponentHand" };
 
@@ -43,7 +46,7 @@ export const takeFromAmongPrimitive = definePrimitive<TakeFromAmongNode>({
   children: (node) => (node.among.kind === "movedBy" ? [node.among.effect] : []),
   resolve(ctx, node, env) {
     const side = env.controller;
-    const among = node.among.kind === "movedBy" ? cardsMovedBy(ctx, node.among.effect, env) : [...ctx.state.sides[opponent(side)].hand];
+    const among = node.among.kind === "movedBy" ? cardsMovedBy(ctx, node.among.effect, env) : lookAtOpponentHand(ctx, side);
     const layers = characteristics(ctx.state, ctx.catalog);
     const candidates = among.filter(
       (id) =>
@@ -73,6 +76,13 @@ function cardsMovedBy(ctx: StepContext, effect: EffectNode, env: EffectEnv): Ins
     .filter((instance) => instance.enteredZoneAt > since && (instance.zone === "void" || instance.zone === "banished"))
     .sort((a, b) => a.enteredZoneAt - b.enteredZoneAt)
     .map((instance) => instance.id);
+}
+
+/** "Look at the opponent's hand": `side` alone sees every card in it before any is chosen. */
+function lookAtOpponentHand(ctx: StepContext, side: Side): InstanceId[] {
+  const hand = [...ctx.state.sides[opponent(side)].hand];
+  showPrivately(ctx.state, side, hand);
+  return hand;
 }
 
 /** Puts `id` into `side`'s hand and announces it; a created card ceases to exist instead. */

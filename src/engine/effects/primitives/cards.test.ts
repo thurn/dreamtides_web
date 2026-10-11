@@ -1,6 +1,6 @@
 /** Card primitives: draw, discard, foresee, erode, discover, grantCardKeyword, reveal, zone card references, and takeFromAmong. */
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../../catalog";
+import type { EngineCardDefinition, EngineCatalog } from "../../catalog";
 import { createEngine } from "../../engine";
 import { engineCardFromContent } from "../../content-catalog";
 import type { CardDefinition } from "../../../content/define";
@@ -1504,8 +1504,31 @@ const takeThenFail: EngineCardDefinition = {
   },
 };
 
+/** "Look at the opponent's hand. You may put a ≤2● character from it into your hand." */
+const takeCheapCharacterFromOpponentHand: EngineCardDefinition = {
+  ...chosenDiscard,
+  id: syntheticId(971),
+  abilities: () => [event(takeFromAmong(opponentHand(), { filter: { cardType: "character" }, costAtMost: 2, optional: true }))],
+};
+
+/** An answer source that records what the chooser's view shows of the opponent's hand as it answers. */
+class LookingSource implements AnswerSource {
+  readonly prompts: ChooseCardsPrompt[] = [];
+  readonly seen: (readonly InstanceId[])[] = [];
+  constructor(
+    private readonly catalog: EngineCatalog,
+    private readonly pick: (candidates: readonly InstanceId[]) => readonly InstanceId[],
+  ) {}
+  answer(prompt: Prompt, work: BattleState): Answer {
+    if (prompt.kind !== "chooseCards") throw new Error(`unexpected ${prompt.kind} prompt`);
+    this.prompts.push(prompt);
+    this.seen.push(view(work, prompt.side, this.catalog).sides[opponentOf(prompt.side)].hand.known.map((card) => card.id));
+    return this.pick(prompt.candidates);
+  }
+}
+
 describe("takeFromAmong", () => {
-  const taking = createEngine(testCatalog([...DSL_CARDS, takeThenFail]));
+  const taking = createEngine(testCatalog([...DSL_CARDS, takeThenFail, takeCheapCharacterFromOpponentHand, chosenDiscard]));
   const applied = (outcome: IntentOutcome): BattleSlice => {
     if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("expected an applied intent");
     return outcome.slice;
@@ -1593,6 +1616,60 @@ describe("takeFromAmong", () => {
     expect(created.state.sides.player.hand).toEqual([]);
     expect(created.events.filter((item) => item.kind === "ceasedToExist")).toHaveLength(1);
     expect(created.events.some((item) => item.kind === "cardTaken")).toBe(false);
+  });
+
+  it("looks at the whole hand when a filter and cost bound narrow the take, offering only the matching cards, and the opponent learns only the taken card", () => {
+    const source = new LookingSource(taking.catalog, (candidates) => [candidates[1]]);
+    // ≤2● characters: vanilla1 and vanilla2; vanilla3 costs 3●, event0 is an event.
+    const { start, ids, result } = play(handBoard(takeCheapCharacterFromOpponentHand.id, [v.vanilla1.id, v.vanilla3.id, v.event0.id, v.vanilla2.id]), source);
+    const [cheap, costly, anEvent, chosen] = ids.enemy.hand;
+    const [prompt] = source.prompts;
+    expect(prompt).toMatchObject({ kind: "chooseCards", side: "player", privateTo: "player", min: 0, max: 1, candidates: [cheap, chosen] });
+    expect(prompt.purpose.role).toBe("chooseFromOpponentHand");
+    // The looker sees every card in the hand as it chooses, not only those it may take.
+    expect(source.seen).toEqual([ids.enemy.hand]);
+    const { state } = result;
+    expect(state.sides.player.hand).toEqual([chosen]);
+    expect(view(state, "player", taking.catalog).sides.enemy.hand.known).toEqual([{ id: cheap, index: 0 }, { id: costly, index: 1 }, { id: anEvent, index: 2 }]);
+    expect(start.knownTo.enemy).toEqual([]);
+    expect(state.knownTo.enemy).toEqual([chosen]);
+    expect(state.knownTo.player).not.toContain(ids.enemy.deck[0]);
+    expect(invariantViolations(state, taking.catalog)).toEqual([]);
+  });
+
+  it("looks at the whole hand without asking when no card in it matches the filter and cost bound", () => {
+    const { start, ids, result } = play(handBoard(takeCheapCharacterFromOpponentHand.id, [v.vanilla3.id, v.event0.id, v.vanilla5.id]), new ScriptedSource([]));
+    expect(result.answers).toEqual([]);
+    expect(result.events.some((item) => item.kind === "cardTaken")).toBe(false);
+    const { state } = result;
+    expect(state.sides.enemy.hand).toEqual(ids.enemy.hand);
+    expect(view(state, "player", taking.catalog).sides.enemy.hand.known).toEqual(ids.enemy.hand.map((id, index) => ({ id, index })));
+    expect(state.knownTo.enemy).toEqual(start.knownTo.enemy);
+    expect(state.knownTo.player).not.toContain(ids.enemy.deck[0]);
+  });
+
+  it("forgets a looked-at card once it leaves the opponent's hand, whether discarded or ceasing to exist", () => {
+    const { state: board, ids } = boardState(taking.catalog, {
+      ...handBoard(DSL.takeFromOpponentHand.id, [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id]),
+      player: { hand: [DSL.takeFromOpponentHand.id, chosenDiscard.id, chosenDiscard.id], deck },
+    });
+    const [taken, discarded, ceasing] = ids.enemy.hand;
+    const [look, discardOne, discardAnother] = ids.player.hand;
+    const playing = (state: BattleState, card: InstanceId, pick: InstanceId) =>
+      taking.apply(state, "player", { kind: "play", card, from: "hand" }, new PickingSource(() => [pick])).state;
+    const looked = playing(board, look, taken);
+    expect([...looked.knownTo.player].sort()).toEqual([discarded, ceasing].sort());
+
+    const afterDiscard = playing(looked, discardOne, discarded);
+    expect(afterDiscard.sides.enemy.void).toEqual([discarded]);
+    expect(afterDiscard.knownTo.player).toEqual([ceasing]);
+    expect(view(afterDiscard, "player", taking.catalog).sides.enemy.hand.known).toEqual([{ id: ceasing, index: 0 }]);
+
+    afterDiscard.instances[ceasing].status.created = true;
+    const afterCeasing = playing(afterDiscard, discardAnother, ceasing);
+    expect(afterCeasing.instances[ceasing]).toBeUndefined();
+    expect(afterCeasing.knownTo.player).toEqual([]);
+    expect(invariantViolations(afterCeasing, taking.catalog)).toEqual([]);
   });
 
   it("commits nothing while the look is suspended, reloads to the same private prompt, bounces foreign, stale, and illegal answers, and resolves once", () => {
