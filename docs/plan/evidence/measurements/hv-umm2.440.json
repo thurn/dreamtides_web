@@ -1,0 +1,528 @@
+{
+  "bead": "hv-umm2.440",
+  "baseOid": "4033df20dc7267ff890cf7113ea0ba78d7cf36b0",
+  "scope": "Bounded documentation and evidence audit. Source, native task scopes and historical evidence are read only.",
+  "finding": "Current admitted brief, prompt and sweep guidance matches implemented source. A reason disposition records the distinct historical causes; no current prose/source repair is warranted.",
+  "trigger": {
+    "canonicalTag": "plan-brief-mismatch",
+    "phase": 5,
+    "inputs": [
+      "hv-umm2.109",
+      "hv-umm2.59",
+      "hv-umm2.49"
+    ],
+    "alias": {
+      "card-sweep-needs-cards": "plan-brief-mismatch"
+    },
+    "beforeExit": 1,
+    "beforeReport": "/tmp/hv-umm2-440-checks/trigger-before.log",
+    "disposition": {
+      "kind": "reason",
+      "text": "Audit hv-umm2.440: current Phase 5 briefs read filed UUID entity records under hv-umm2.347 authority; actual PromptRole and interpreter target conventions govern prompt guidance; the documented sweep requires --cards and its parser covers both sides by default (hv-umm2.296). The three observations are distinct historical briefing/invocation causes; hv-umm2.308 navigation helpers and hv-umm2.332 declared staging address separate QA causes. No demonstrably stale current guidance or further source fix was found. See measurements/hv-umm2.440.json."
+    },
+    "historicalRecordsUnchanged": true,
+    "oneNewLedgerLine": true,
+    "ledgerBaseSha256": "e6816d11146d45408b12e1d6633bf58423bc0c98818e778bbc666f32a92ad15c"
+  },
+  "audit": [
+    {
+      "bead": "hv-umm2.109",
+      "historicalObservation": "Session briefing paired each UUID with another entity display name and printed text. Its implementation followed UUID catalog data. This differs from the positional inventory scope drift repaired by hv-umm2.347.",
+      "currentGuidance": [
+        "docs/plan/phase-5-content.md: native scope authority and recipe Dispatch reads entities by filed UUID and matches printed text",
+        "docs/plan/workflow.md: Implementation brief contains exact native description, acceptance and Areas plus AGENTS UUID rules"
+      ],
+      "currentSourceProof": [
+        {
+          "uuid": "9629a58a-9f30-40f0-9199-835ea2dddc76",
+          "module": "src/content/cards/vault-infiltrator-9629a58a.ts",
+          "catalogIdMatches": true,
+          "inventoryText": "Players may only play one card per turn.",
+          "moduleText": "Players may only play one card per turn.",
+          "textMatches": true,
+          "sourceSha256": "aef6b939188d7cfbabcf39205e166704390e56812451a61bbd89589f8eebbbf4"
+        },
+        {
+          "uuid": "d09a6760-6630-4964-9c77-decc641df713",
+          "module": "src/content/cards/urban-desperado-d09a6760.ts",
+          "catalogIdMatches": true,
+          "inventoryText": "\u25b8Materialized: The opponent cannot play events this turn.",
+          "moduleText": "\u25b8Materialized: The opponent cannot play events this turn.",
+          "textMatches": true,
+          "sourceSha256": "3b1b1b623b360dd01f50dc60cbe8c814cfbd959f894750c9a4d0cbd93074f026"
+        },
+        {
+          "uuid": "70716dd8-1133-4966-b01b-757ea627874c",
+          "module": "src/content/cards/grim-pursuer-70716dd8.ts",
+          "catalogIdMatches": true,
+          "inventoryText": "\u25b8Materialized: Choose a card in the opponent's hand. That card cannot be played while this character is in play.",
+          "moduleText": "\u25b8Materialized: Choose a card in the opponent's hand. That card cannot be played while this character is in play.",
+          "textMatches": true,
+          "sourceSha256": "f7b7c6655fdf27a95e1afbed83bcbd2552178fafb11cd884aa66d17111abbc92"
+        }
+      ],
+      "disposition": "Current catalog/inventory mappings and existing authority instruction agree. No task scope, card identity or data rewrite; no claim that hv-umm2.347 repaired the later session briefing mistake."
+    },
+    {
+      "bead": "hv-umm2.59",
+      "historicalObservation": "Brief referenced an existing chooseInZone convention while its role was only a planned inventory prediction. Void picks used chooseTargets role target under RD-hv-umm2.59-1.",
+      "currentGuidance": "Phase5 registration guidance names actual role policy/copy/routing/fixture tables and their exhaustive checks, regardless of inventory prediction. Current brief guidance includes read-first source paths and native acceptance. Neither admitted document references chooseInZone.",
+      "currentSourceProof": {
+        "roleUnion": "src/engine/prompts/types.ts: PromptRole includes target, putInDeck and shuffleInto; chooseInZone absent",
+        "zoneBuilder": "src/engine/dsl/builders.ts: fromVoid emits inZone pick target",
+        "prompt": "src/engine/effects/interpreter.ts: chooseTargets raises kind chooseTargets; choosePlayTime uses purpose role target",
+        "zoneResolution": "resolveZoneCards target case reads and revalidates the chosen target references"
+      },
+      "disposition": "Current guidance matches source conventions. No new role, renderer or primitive is warranted by the historical prompt assumption."
+    },
+    {
+      "bead": "hv-umm2.49",
+      "historicalObservation": "Recipe command omitted required --cards and then default sweep selected player only; historical tag card-sweep-needs-cards aliases to plan-brief-mismatch.",
+      "currentGuidance": [
+        "Phase5 recipe Preflight and sweep includes --cards <entity uuids> and says defaults cover eligible variants on both sides",
+        "Workflow Card QA requires --cards <uuid,...> and documents both-side eligible variants"
+      ],
+      "currentSourceProof": {
+        "bead": "hv-umm2.440",
+        "cards": [
+          "9629a58a-9f30-40f0-9199-835ea2dddc76",
+          "d09a6760-6630-4964-9c77-decc641df713",
+          "70716dd8-1133-4966-b01b-757ea627874c"
+        ],
+        "variants": [
+          "base",
+          "amplified",
+          "empowered",
+          "kindled",
+          "resonant",
+          "inspired",
+          "enduring",
+          "hastened",
+          "attuned",
+          "perfected"
+        ],
+        "sides": [
+          "player",
+          "enemy"
+        ],
+        "timeoutS": 60,
+        "port": 5174,
+        "capture": false
+      },
+      "repairEvidence": {
+        "bead": "hv-umm2.296",
+        "commit": "6a61bdde3407cabf20b4b93236bf4d26f2ea19af",
+        "title": "fix(qa): sweep both sides by default and align the card-sweep recipe",
+        "frictionFile": "docs/plan/evidence/friction/hv-umm2.296.json",
+        "preExistingFile": "docs/plan/evidence/pre-existing/hv-umm2.296.md"
+      },
+      "disposition": "Current invocation and parser agree: required UUID cards and both sides by default. No command or parser change needed."
+    }
+  ],
+  "deliveredRepairs": [
+    {
+      "bead": "hv-umm2.347",
+      "landedOid": "284ddc030a275e0bd83a216bc5462ffe2369254b",
+      "actualCause": "Generated positional planning keys differ from filed native UUID scopes. Current docs establish native authority; native pointer repair happened only after promotion and fresh ownership checks.",
+      "relation": "Evidence for current UUID authority, not a claim that it prevented hv-umm2.109 session text swaps."
+    },
+    {
+      "bead": "hv-umm2.308",
+      "landedOid": "9086cfeb5b5c049fa505bc18767fd2d45aeb3ed8",
+      "actualCause": "Navigation-safe lab waits, debug Add Card interaction and error capture.",
+      "relation": "Separate browser scripting disposition already exists. Current prelude has labAddCard and workflow describes physical-ID/UUID checks. Not the sweep argument repair."
+    },
+    {
+      "bead": "hv-umm2.332",
+      "landedOid": "a2311a64316010642c4e0b5a42e731828958bb91",
+      "actualCause": "Declared ranks, hands, energies and scripted enemy staging for reachable QA workflows.",
+      "relation": "Separate unreachable-state disposition already exists. Current prelude has labStage and workflow describes it. Not a prompt role or UUID brief fix."
+    }
+  ],
+  "readOnlySourceSha256": {
+    "docs/plan/phase-5-content.md": "d6776d6ffeadde931c48ef7db60e9b5f1b46955050b8e0440632c200e509ccc9",
+    "docs/plan/workflow.md": "a6257eec6e34c77bbc5f09cbd318d57e9b88d047071b586eddbd15ba2138f824",
+    "docs/plan/evidence/content-inventory.json": "a0b62dee9680ca1d06c6b357b48557b071ff81ee74033c0af7cbf3fa751c8583",
+    "docs/plan/evidence/friction-tags.json": "d2a0591488e6363f6e2e9f0eddeae2af3d3f4ee59195ce7c9c195868c250bde1",
+    "scripts/qa/card-sweep.mjs": "6e480d3a1a9d2720bf2bb0cf94b9d32c0835048e03b5e5104d78521417365ad9",
+    "src/engine/prompts/types.ts": "2dc50b62b6d182bcee63e311154c4d2dab2e82a3a759dc99ae569d6a304d71c6",
+    "src/engine/dsl/builders.ts": "dc638664f3f756930f3ba9c14242f17b7d228323a7c1b10b1d43089643b78ef3",
+    "src/engine/effects/interpreter.ts": "2d77e3f289a30259ad6451a1660827537fb8b0232198b40ed43751c089e73b2c",
+    "src/engine/policy/prompts.ts": "42fdadbabec728975135e9b1d2276715064d03015dd415670ad88f3689e51ab5",
+    "src/runtime/battle-prompt-messages.ts": "04af7bcee15e81fe460cc3f21b036dfc54944198058a6c9d80ec0326a39e6c03",
+    "src/engine/testing/prompt-lab.ts": "550bac046b3901806ef877041d3d1d5ef82091343cee0b150785c9760a0b2979",
+    "src/screens/cumulus_adapters/prompt-host-view-model.ts": "b5b5f9991ca809851cf1a8a719a0fd6309d9f0d5ecc651d75521c967ab85919d",
+    "scripts/qa/prelude.mjs": "5615d428aceb2fc80f871404a44ba3d9429fa6c971021d75ece76e993109f92a"
+  },
+  "historicalFrictionSha256": {
+    "hv-umm2.109": "e811527725047dbc072df67134e20a4e291a0e94f47b9d6540257a42db0f5f53",
+    "hv-umm2.49": "6003564bb3378823488b7bd28617399af52385933bc1356145cfab1f4c2fab46",
+    "hv-umm2.59": "04b1346fcb44ca10edbf9f3188d3daaeeb573856a32e5640885bbb9a2730ace5",
+    "hv-umm2.347": "916df368ee8fcb5410d3a1f7292b6869b4223f87977b701c9298094cbde50532",
+    "hv-umm2.332": "f536f0964c09c64c728af0fb358cb9442b375613ef73676302ce6259d73dd22d",
+    "hv-umm2.308": "78b006ef8cba9ee911bee263c476ef6979ba2a2c0df134dc0e56525ae83d6b80",
+    "hv-umm2.296": "8135fbd6f7f5dd9c50af90b854b72d1ec33196eb3deb1744be6675504c1cbbab"
+  },
+  "preExistingObservations": [
+    {
+      "source": "npm install report",
+      "dependencyAdvisories": {
+        "total": 17,
+        "moderate": 9,
+        "high": 7,
+        "critical": 1
+      },
+      "record": "docs/plan/evidence/pre-existing/hv-umm2.440.md",
+      "independentlyAudited": false,
+      "manifestsAndLockfileUnchanged": true
+    }
+  ],
+  "verificationPolicy": {
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "newTests": false,
+    "browser": false,
+    "fullReview": false,
+    "fuzz": false,
+    "extraCliReview": false,
+    "reason": "Only a reason disposition and own evidence; no runtime, presentation, infrastructure or cross-cutting architecture change. Required review and Knip run sequentially because both prepare/restore."
+  },
+  "measurementWindow": {
+    "startUtc": "2026-10-11T22:42:33+00:00",
+    "startBasis": "Native claim is an honest dispatch proxy; includes research, coordination and verification.",
+    "finalPreparationUtc": "2026-10-11T22:49:48.084076+00:00",
+    "basis": "Provisional endpoint while evidence is prepared. Final endpoint is refreshed only after parent final ACK immediately before successful commit. Actual commit start/end are external handoff evidence without artificial Git dates.",
+    "finalPreparationBasis": "Endpoint refreshed after parent final source/evidence/resource ACK immediately before staging and commit. Committed implementMin is claim-to-preparation proxy; actual successful commit start/end and the short gap are retained externally in final-handoff.json.",
+    "implementMin": 7.251401266666666
+  },
+  "commands": [
+    {
+      "label": "install",
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "pid": 92773,
+      "pgid": 92773,
+      "startedUtc": "2026-10-11T22:45:15.405694+00:00",
+      "finishedUtc": "2026-10-11T22:45:18.471424+00:00",
+      "seconds": 3.0653911669996887,
+      "hostLoadSamples": [
+        25.283203125,
+        24.47265625,
+        18.2392578125
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "trigger-before",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "pid": 93522,
+      "pgid": 93522,
+      "startedUtc": "2026-10-11T22:45:24.181115+00:00",
+      "finishedUtc": "2026-10-11T22:45:24.412080+00:00",
+      "seconds": 0.23084437499983324,
+      "hostLoadSamples": [
+        24.85986328125,
+        24.39794921875,
+        18.24951171875
+      ],
+      "exitCode": 1
+    },
+    {
+      "label": "sweep-options",
+      "argv": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import { parseSweepArgs } from \"./scripts/qa/card-sweep.mjs\"; console.log(JSON.stringify(parseSweepArgs([\"--bead\",\"hv-umm2.440\",\"--cards\",\"9629a58a-9f30-40f0-9199-835ea2dddc76,d09a6760-6630-4964-9c77-decc641df713,70716dd8-1133-4966-b01b-757ea627874c\",\"--port\",\"5174\"]))));"
+      ],
+      "pid": 97470,
+      "pgid": 97470,
+      "startedUtc": "2026-10-11T22:45:45.900173+00:00",
+      "finishedUtc": "2026-10-11T22:45:45.954731+00:00",
+      "seconds": 0.05416391599919734,
+      "hostLoadSamples": [
+        22.45166015625,
+        23.8798828125,
+        18.24072265625
+      ],
+      "exitCode": 1
+    },
+    {
+      "label": "sweep-options-corrected",
+      "argv": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import { parseSweepArgs } from \"./scripts/qa/card-sweep.mjs\"; const options = parseSweepArgs([\"--bead\",\"hv-umm2.440\",\"--cards\",\"9629a58a-9f30-40f0-9199-835ea2dddc76,d09a6760-6630-4964-9c77-decc641df713,70716dd8-1133-4966-b01b-757ea627874c\",\"--port\",\"5174\"]); console.log(JSON.stringify(options));"
+      ],
+      "pid": 97921,
+      "pgid": 97921,
+      "startedUtc": "2026-10-11T22:45:51.675393+00:00",
+      "finishedUtc": "2026-10-11T22:45:51.903462+00:00",
+      "seconds": 0.22765762500057463,
+      "hostLoadSamples": [
+        21.6142578125,
+        23.6826171875,
+        18.2041015625
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "trigger-after",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "pid": 10765,
+      "pgid": 10765,
+      "startedUtc": "2026-10-11T22:46:56.398711+00:00",
+      "finishedUtc": "2026-10-11T22:46:56.653985+00:00",
+      "seconds": 0.2549662499995975,
+      "hostLoadSamples": [
+        24.59423828125,
+        24.1884765625,
+        18.79345703125
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 10886,
+      "pgid": 10886,
+      "startedUtc": "2026-10-11T22:46:56.702662+00:00",
+      "finishedUtc": "2026-10-11T22:46:56.775953+00:00",
+      "seconds": 0.07313350000003993,
+      "hostLoadSamples": [
+        24.59423828125,
+        24.1884765625,
+        18.79345703125
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 10930,
+      "pgid": 10930,
+      "startedUtc": "2026-10-11T22:46:56.845194+00:00",
+      "finishedUtc": "2026-10-11T22:46:57.165113+00:00",
+      "seconds": 0.319810791999771,
+      "hostLoadSamples": [
+        24.59423828125,
+        24.1884765625,
+        18.79345703125
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 11886,
+      "pgid": 11886,
+      "startedUtc": "2026-10-11T22:47:00.982778+00:00",
+      "finishedUtc": "2026-10-11T22:47:06.265820+00:00",
+      "seconds": 5.282867417000489,
+      "hostLoadSamples": [
+        24.30615234375,
+        24.13525390625,
+        18.80615234375
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "final-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 18603,
+      "pgid": 18603,
+      "startedUtc": "2026-10-11T22:47:58.586147+00:00",
+      "finishedUtc": "2026-10-11T22:47:58.652484+00:00",
+      "seconds": 0.06594225000026199,
+      "hostLoadSamples": [
+        17.44677734375,
+        22.29541015625,
+        18.45556640625
+      ],
+      "exitCode": 0
+    }
+  ],
+  "hostLoadSamples": {
+    "install": [
+      25.283203125,
+      24.47265625,
+      18.2392578125
+    ],
+    "trigger-before": [
+      24.85986328125,
+      24.39794921875,
+      18.24951171875
+    ],
+    "sweep-options": [
+      22.45166015625,
+      23.8798828125,
+      18.24072265625
+    ],
+    "sweep-options-corrected": [
+      21.6142578125,
+      23.6826171875,
+      18.2041015625
+    ],
+    "trigger-after": [
+      24.59423828125,
+      24.1884765625,
+      18.79345703125
+    ],
+    "schema": [
+      24.59423828125,
+      24.1884765625,
+      18.79345703125
+    ],
+    "review": [
+      24.59423828125,
+      24.1884765625,
+      18.79345703125
+    ],
+    "knip": [
+      24.30615234375,
+      24.13525390625,
+      18.80615234375
+    ],
+    "final-schema": [
+      17.44677734375,
+      22.29541015625,
+      18.45556640625
+    ]
+  },
+  "retainedCorrection": {
+    "label": "sweep-options",
+    "exitCode": 1,
+    "reason": "Scratch-only parser observation had an extra closing parenthesis and failed before import. Corrected argv with separate options binding passed; no repository repair or product failure."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review command start; its friction-records step records the same one-minute value.",
+        "actualReviewStepStartedUtc": "2026-10-11T22:46:57.085Z"
+      }
+    }
+  },
+  "reviewSelection": {
+    "baseOid": "4033df20dc7267ff890cf7113ea0ba78d7cf36b0",
+    "changedFilesAtExecution": 3,
+    "selection": "friction-records only",
+    "schemaRecords": 413,
+    "historicalUnknownMeasurements": 41,
+    "testsSelected": 0,
+    "staticRuntimeChecksSelected": false,
+    "result": "Passed required documentation/evidence review. This is not a full static or test-suite pass."
+  },
+  "knipSelection": {
+    "prepare": true,
+    "knip": true,
+    "restoreLocalAssets": true,
+    "allPassed": true,
+    "sequentialAfterReview": true,
+    "warningScope": "Knip creates its isolated asset workspace (0 linked card images) and restores local assets afterward (564 of 564). Intermediate missing asset warnings are the check workspace preparation; final restore exits 0."
+  },
+  "runtimeLedger": {
+    "freshObservedUtc": "2026-10-11T22:48:07.328256+00:00",
+    "commandGroups": [
+      {
+        "label": "install",
+        "pid": 92773,
+        "pgid": 92773,
+        "exitCode": 0,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "trigger-before",
+        "pid": 93522,
+        "pgid": 93522,
+        "exitCode": 1,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "sweep-options",
+        "pid": 97470,
+        "pgid": 97470,
+        "exitCode": 1,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "sweep-options-corrected",
+        "pid": 97921,
+        "pgid": 97921,
+        "exitCode": 0,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "trigger-after",
+        "pid": 10765,
+        "pgid": 10765,
+        "exitCode": 0,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "schema",
+        "pid": 10886,
+        "pgid": 10886,
+        "exitCode": 0,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "review",
+        "pid": 10930,
+        "pgid": 10930,
+        "exitCode": 0,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "knip",
+        "pid": 11886,
+        "pgid": 11886,
+        "exitCode": 0,
+        "freshProcessGroupAbsent": true
+      },
+      {
+        "label": "final-schema",
+        "pid": 18603,
+        "pgid": 18603,
+        "exitCode": 0,
+        "freshProcessGroupAbsent": true
+      }
+    ],
+    "allOwnedCommandGroupsAbsent": true,
+    "browsers": [],
+    "servers": [],
+    "ports": [],
+    "providers": [],
+    "temporaryRepositoryProbeFiles": [],
+    "scope": "Read-only parser import starts no runner/server/browser. No heavy check/provider used."
+  }
+}
