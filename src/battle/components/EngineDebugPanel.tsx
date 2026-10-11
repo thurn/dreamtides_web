@@ -6,7 +6,8 @@
 //
 // It also publishes `window.__engineProbe` (the slice, its pending prompt,
 // and the events each applied intent published) for the card sweep
-// (`scripts/qa/card-sweep.mjs`).
+// (`scripts/qa/card-sweep.mjs`) and the battle QA driver's event helpers
+// (`qa.battle.events`, `scripts/qa/prelude.mjs`).
 
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import { DeveloperRail } from "../../cumulus/components/overlay/DeveloperRail";
@@ -18,7 +19,8 @@ import { Select } from "../../cumulus/components/controls/Select";
 import { TextField } from "../../cumulus/components/controls/TextField";
 import { GLYPHS } from "../../cumulus/primitives/glyph";
 import { token } from "../../cumulus/primitives/tokens";
-import type { Decision, Engine, EngineEventKind, Prompt, Side } from "../../engine";
+import type { Decision, Engine, EngineEvent, EngineEventKind, Prompt, Side } from "../../engine";
+import type { InstanceId } from "../../engine/state/ids";
 import type { BattleId, PromptId } from "../../types/identifiers";
 import { DEBUG_ZONES, revealHiddenZones, type DebugOp, type DebugZone } from "../../engine/debug/debug-actions";
 import type { BattleSlice, HistoryEntry } from "../../engine/fold/slice";
@@ -28,7 +30,7 @@ import type { JourneyBattleFoldState } from "../../rules/battle/fold";
 import { useActions } from "../../session/hooks";
 import { useJourney } from "../../state/journey-context";
 import { isCardId, parseCardId, type CardId } from "../../types/card-identity";
-import { usePublishedEngineEvents } from "./battle-presentation";
+import { usePublishedEngineEvents, type PublishedBatch } from "./battle-presentation";
 
 /** Developer-tool labels: QA copy, not player copy. */
 const COPY = {
@@ -54,10 +56,32 @@ const COPY = {
 /** The rail's width on screen. */
 const RAIL_WIDTH = 320;
 
+/**
+ * One published engine event as the probe records it. The applied intent's
+ * log `seq` and the event's `index` in that intent's batch name it uniquely
+ * and order it, so a repeated event (two draws in one batch) stays distinct.
+ * `event` is the engine's own event, unredacted like the rest of the probe:
+ * its identities (`side`, `source`, `controller`, `instance`, `node`) are the
+ * engine's, never names or display strings.
+ */
 interface EngineProbeEvent {
   readonly seq: number;
+  readonly index: number;
   readonly kind: EngineEventKind;
-  readonly instance: string | null;
+  /** The event's `instance` field, for the kinds that carry one. */
+  readonly instance: InstanceId | null;
+  readonly event: EngineEvent;
+}
+
+/** The probe's records of one applied intent's published events, in order. */
+export function probeEvents({ events, seq }: Pick<PublishedBatch, "events" | "seq">): EngineProbeEvent[] {
+  return events.map((event, index) => ({
+    seq,
+    index,
+    kind: event.kind,
+    instance: "instance" in event ? event.instance : null,
+    event,
+  }));
 }
 
 /** The development-only state the card sweep reads. */
@@ -96,10 +120,8 @@ export default function EngineDebugPanel({
   const events = useRef<EngineProbeEvent[]>([]);
   const slice = battle.engine.slice;
 
-  usePublishedEngineEvents(engine, slice, ({ events: published, seq }) => {
-    for (const event of published) {
-      events.current.push({ seq, kind: event.kind, instance: "instance" in event ? String(event.instance) : null });
-    }
+  usePublishedEngineEvents(engine, slice, (published) => {
+    for (const entry of probeEvents(published)) events.current.push(entry);
   });
   useEffect(() => {
     const pending = pendingEnginePrompt(battle, engine);

@@ -163,14 +163,63 @@
  */
 
 /**
+ * One engine event the debug panel's probe recorded: the applied intent's
+ * log `seq` and the event's `index` in that intent's published batch, which
+ * name it uniquely and order it, and the engine's own `event`, unredacted,
+ * with its typed identities (`side`, `source`, `controller`, `instance`).
+ *
+ * @typedef {object} ProbeEvent
+ * @property {number} seq
+ * @property {number} index
+ * @property {import("../../src/engine").EngineEventKind} kind
+ * @property {import("../../src/engine/state/ids").InstanceId | null} instance
+ * @property {import("../../src/engine").EngineEvent} event
+ */
+
+/**
+ * A position in one battle's recorded engine events: after the event keyed
+ * `(seq, index)`; `seq` and `index` are -1 before the first event.
+ *
+ * @typedef {{ battleId: import("../../src/types/identifiers").BattleId, seq: number, index: number }} EventCursor
+ */
+
+/**
+ * A recorded event as `qa.battle.events` returns it, with `cards`: the
+ * printing UUID that each instance the event names (its `instance`,
+ * `source`, `subject`, and any other instance-valued field) has in the
+ * committed state as read, or `null` for an instance no longer there or not
+ * a card printing.
+ *
+ * @typedef {ProbeEvent & { cards: Partial<Record<import("../../src/engine/state/ids").InstanceId, import("../../src/types/card-identity").CardId | null>> }} ObservedEvent
+ */
+
+/**
+ * Fields an event must have, compared by value with the engine event's own
+ * fields: `{ kind: "cardDrawn", side: "enemy" }`, or
+ * `{ kind: "triggerQueued", source: { kind: "avatar", side: "player" } }`.
+ *
+ * @typedef {Partial<Record<string, unknown>>} EventMatch
+ */
+
+/**
+ * What one `qa.battle.events` read observed: the matching events after the
+ * cursor, oldest first, at most `limit`; `cursor` continues the read without
+ * skipping or repeating one (the last returned event while `more`, else the
+ * last recorded event, else the given cursor).
+ *
+ * @typedef {{ events: ObservedEvent[], cursor: EventCursor, more: boolean }} EventPage
+ */
+
+/**
  * The part of the engine debug panel's `window.__engineProbe` (`debug=1`,
  * `src/battle/components/EngineDebugPanel.tsx`) the battle driver reads.
  *
  * @typedef {object} EngineProbeView
+ * @property {import("../../src/types/identifiers").BattleId} battleId
  * @property {{ kind: string, side: string } | null} decision
  * @property {{ kind: string, side: string, id: string, candidates?: string[] } | null} pending
- * @property {unknown[]} events
- * @property {{ committed: { stack: unknown[], result: unknown, sides: Record<string, { score: number }>, config: { scoreToWin: number } }, inFlight: unknown }} slice
+ * @property {ProbeEvent[]} events
+ * @property {{ committed: { stack: unknown[], result: unknown, sides: Record<string, { score: number }>, config: { scoreToWin: number }, instances: Partial<Record<import("../../src/engine/state/ids").InstanceId, { printing: { kind: string, cardId?: import("../../src/types/card-identity").CardId } }>> }, inFlight: unknown }} slice
  */
 
 /**
@@ -265,6 +314,19 @@
  *   ends first, no progress within `stallMs`, or `timeout`.
  * @property {(predicate: (state: BattleState) => boolean | Promise<boolean>, options?: { timeout?: number, pollMs?: number, label?: string }) => Promise<BattleState>} waitFor
  *   Waits, without acting, until `predicate` holds.
+ * @property {() => Promise<EventCursor>} eventCursor
+ *   The position after the last engine event the probe (`debug=1`) has
+ *   recorded, for a later `events` or `waitForEvents` read.
+ * @property {(cursor: EventCursor | null, options?: { match?: EventMatch, limit?: number }) => Promise<EventPage>} events
+ *   Reads, without acting or waiting, the recorded events after `cursor`
+ *   (`null`: from the first) that have `match`'s fields, at most `limit`
+ *   (default 100, at most 500). Fails when the probe is missing or shows
+ *   another battle than the cursor's.
+ * @property {(cursor: EventCursor | null, match: EventMatch, options?: { count?: number, limit?: number, timeout?: number, label?: string }) => Promise<EventPage>} waitForEvents
+ *   Waits, without acting, until at least `count` (default 1) recorded
+ *   events after `cursor` have `match`'s fields, then reads them as
+ *   `events` does. Fails on `__caps`, another battle, or `timeout` (default
+ *   15 000 ms).
  * @property {(options?: { seed?: string, query?: string, atFrontDoor?: () => Promise<void> }) => Promise<{ sites: Array<string | null> }>} enterFirstBattle
  *   Opens a fresh game (`/?seed=<seed>&<query>`, seed 1) and walks the front
  *   door to the first battle with no development-only parameter: Avatar
@@ -1505,6 +1567,106 @@ export function createBattleDriver(qa) {
     }
   };
 
+  /**
+   * The page-side read behind `events` and `waitForEvents`: self-contained,
+   * since it is evaluated in the page. With `count` above 0 it returns
+   * `null` until that many events match, so a wait keeps polling; a missing
+   * probe or another battle returns an `error` at once.
+   *
+   * @param {{ cursor: EventCursor | null, match: EventMatch, limit: number, count: number }} request
+   * @returns {(EventPage & { error?: undefined }) | { error: string } | null}
+   */
+  const observeEvents = ({ cursor, match, limit, count }) => {
+    const probe = /** @type {Window & { __engineProbe?: EngineProbeView }} */ (window).__engineProbe;
+    if (probe === undefined) return { error: "missing engine probe (use debug=1)" };
+    if (cursor !== null && probe.battleId !== cursor.battleId) {
+      return { error: `the probe shows battle ${probe.battleId}, not the cursor's ${cursor.battleId}` };
+    }
+    /** @type {(a: unknown, b: unknown) => boolean} */
+    const equal = (a, b) => {
+      if (a === b) return true;
+      if (typeof a !== "object" || typeof b !== "object" || a === null || b === null || Array.isArray(a) !== Array.isArray(b)) return false;
+      const left = /** @type {Record<string, unknown>} */ (a);
+      const right = /** @type {Record<string, unknown>} */ (b);
+      const keys = Object.keys(left);
+      return keys.length === Object.keys(right).length && keys.every((key) => key in right && equal(left[key], right[key]));
+    };
+    const fresh = probe.events.filter((entry) =>
+      cursor === null || entry.seq > cursor.seq || (entry.seq === cursor.seq && entry.index > cursor.index));
+    const matching = fresh.filter((entry) => {
+      const event = /** @type {Record<string, unknown>} */ (/** @type {unknown} */ (entry.event));
+      return Object.entries(match).every(([key, value]) => equal(event[key], value));
+    });
+    if (count > 0 && matching.length < count) return null;
+    const page = matching.slice(0, limit);
+    const more = matching.length > limit;
+    const instances = probe.slice.committed.instances;
+    // The instances an event field names: an instance id, or a list of them.
+    /**
+     * @param {unknown} value
+     * @returns {import("../../src/engine/state/ids").InstanceId[]}
+     */
+    const named = (value) => {
+      /** @type {unknown[]} */
+      const items = Array.isArray(value) ? value : [value];
+      return /** @type {import("../../src/engine/state/ids").InstanceId[]} */ (
+        items.filter((item) => typeof item === "string" && /^i\d+$/.test(item) && item in instances));
+    };
+    const events = page.map((entry) => {
+      /** @type {ObservedEvent["cards"]} */
+      const cards = {};
+      for (const value of Object.values(entry.event)) {
+        for (const id of named(value)) {
+          const printing = instances[id]?.printing;
+          cards[id] = printing?.kind === "card" ? printing.cardId ?? null : null;
+        }
+      }
+      return { ...entry, cards };
+    });
+    const last = more ? page[page.length - 1] : fresh[fresh.length - 1];
+    return {
+      events,
+      more,
+      cursor: last === undefined
+        ? cursor ?? { battleId: probe.battleId, seq: -1, index: -1 }
+        : { battleId: probe.battleId, seq: last.seq, index: last.index },
+    };
+  };
+
+  /** @param {number} limit */
+  const boundedLimit = (limit) => {
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 500) throw new Error(`qa.battle.events: limit ${String(limit)} is not 1 to 500`);
+    return limit;
+  };
+
+  /** @type {BattleDriver["eventCursor"]} */
+  const eventCursor = async () => {
+    const cursor = await qa.read(() => {
+      const probe = /** @type {Window & { __engineProbe?: EngineProbeView }} */ (window).__engineProbe;
+      if (probe === undefined) return null;
+      const last = probe.events[probe.events.length - 1];
+      return { battleId: probe.battleId, seq: last?.seq ?? -1, index: last?.index ?? -1 };
+    }, null);
+    if (cursor === null) throw new Error("qa.battle.eventCursor: missing engine probe (use debug=1)");
+    return cursor;
+  };
+
+  /** @type {BattleDriver["events"]} */
+  const events = async (cursor, { match = {}, limit = 100 } = {}) => {
+    const page = await qa.read(observeEvents, { cursor, match, limit: boundedLimit(limit), count: 0 });
+    if (page === null || page.error !== undefined) throw new Error(`qa.battle.events: ${page?.error ?? "no observation"}`);
+    return page;
+  };
+
+  /** @type {BattleDriver["waitForEvents"]} */
+  const waitForEvents = async (cursor, match, { count = 1, limit = 100, timeout = 15_000, label = `qa.battle.waitForEvents ${JSON.stringify(match)}` } = {}) => {
+    if (!Number.isSafeInteger(count) || count < 1) throw new Error(`${label}: count ${String(count)} is not a positive integer`);
+    const page = await qa.waitFor(label, observeEvents, { cursor, match, limit: boundedLimit(Math.max(limit, count)), count }, { timeout });
+    if (page.error !== undefined) throw new Error(`${label}: ${page.error}`);
+    qa.note(label, { cursor, keys: page.events.map(({ seq, index }) => [seq, index]) });
+    return page;
+  };
+
   /** @type {BattleDriver["enterFirstBattle"]} */
   const enterFirstBattle = async ({ seed = "1", query = "", atFrontDoor } = {}) => {
     await qa.open(`/?seed=${seed}${query === "" ? "" : `&${query}`}`);
@@ -1557,5 +1719,5 @@ export function createBattleDriver(qa) {
     return { sites };
   };
 
-  return { state, pass, answer, tap, playUntil, waitFor, enterFirstBattle };
+  return { state, pass, answer, tap, playUntil, waitFor, eventCursor, events, waitForEvents, enterFirstBattle };
 }

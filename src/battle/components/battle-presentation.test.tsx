@@ -2,7 +2,9 @@
 // Published events follow the authoritative fold, including a legality
 // fault after an answer and a feed mounted over a reloaded prompt, and the
 // feed reads the reducer's observed states without running the rules again,
-// including a play retried after a reload memoized its run unobserved.
+// including a play retried after a reload memoized its run unobserved. The
+// engine debug probe records each published event under its intent's
+// sequence and batch index with the engine's own identities.
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -34,6 +36,7 @@ import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { parseClientId, parseGameId } from "../../types/identifiers";
 import { testJourneySeed } from "../../types/test-identities";
 import { usePublishedEngineEvents, type PublishedBatch } from "./battle-presentation";
+import { probeEvents } from "./EngineDebugPanel";
 import { presentedAsItem, sliceKey } from "./presentation-items";
 
 // Counts every step context: each step run and each legality or feasibility search.
@@ -246,6 +249,30 @@ describe("published engine event subscriber", () => {
     expect(retry?.events.some((engineEvent) => engineEvent.kind === "promptAutoAnswered")).toBe(true);
     expect(presented.length).toBeGreaterThan(0);
     expect(presented.every((state) => state !== undefined)).toBe(true);
+  });
+
+  it("records the probe's events by sequence and batch index with the engine's own identities", async () => {
+    const { game } = await battleGame();
+    const batches = mountFeed(game);
+    act(() => {
+      game.log.append(play(game));
+      game.log.append({ type: "BATTLE_ANSWER", payload: { side: "player", promptId: promptOf(game).id, value: 0 } });
+      game.log.append({ type: "BATTLE_ACTION", payload: { side: "enemy", action: { kind: "pass" } } });
+    });
+    expect(batches).toHaveLength(3);
+    const published = batches.flatMap(({ events }) => events);
+    const recorded = batches.flatMap(probeEvents);
+    expect(recorded.map(({ seq, index }) => [seq, index])).toEqual(
+      batches.flatMap(({ seq, events }) => events.map((_, index) => [seq, index])),
+    );
+    expect(new Set(recorded.map(({ seq, index }) => `${String(seq)}:${String(index)}`)).size).toBe(recorded.length);
+    expect(recorded.every((entry, at) => entry.event === published[at] && entry.kind === entry.event.kind)).toBe(true);
+    expect(recorded.every(({ event, instance }) => instance === ("instance" in event ? event.instance : null))).toBe(true);
+    const draws = recorded.flatMap(({ event, instance }) => (event.kind === "cardDrawn" ? [{ side: event.side, instance }] : []));
+    expect(draws).toHaveLength(1);
+    const drawn = draws[0]?.instance;
+    expect(draws[0]?.side).toBe("player");
+    expect(drawn === null || drawn === undefined ? null : sliceOf(game).committed.instances[drawn]?.zone).toBe("hand");
   });
 
   it("starts a reloaded prompt with no historical batches and publishes its answer", async () => {

@@ -306,6 +306,31 @@ battle uses it rather than its own pass loop:
   the screen ignores is pressed again rather than counted.
 - `qa.battle.waitFor(predicate, { timeout?, pollMs?, label? })` waits
   without acting.
+- With `debug=1`, the probe records each engine event an applied intent
+  published as `{ seq, index, kind, instance, event }`: the intent's log
+  sequence and the event's index in its batch name and order it, so a
+  repeated event (two draws in one batch) stays distinct, and `event` is
+  the engine's own unredacted event with its identities (`side`, `source`,
+  `controller`, `instance`, `node`). A reload records only the events
+  published after it. The event helpers only read it:
+  - `qa.battle.eventCursor()` returns `{ battleId, seq, index }`, the
+    position after the last recorded event (`-1`s before the first).
+  - `qa.battle.events(cursor, { match?, limit? })` returns `{ events,
+    cursor, more }` without waiting: the recorded events after `cursor`
+    (`null` for all) whose engine event has `match`'s fields, compared by
+    value (`{ kind: "cardDrawn", side: "enemy" }`, or an emblem `source`
+    such as `{ kind: "avatar", side: "player" }`), at most `limit`
+    (default 100, at most 500). Each carries `cards`, the printing UUID of
+    every instance the event names in the committed state as read. The
+    returned cursor continues the read without skipping or repeating an
+    event; a read with nothing new returns no events and the same cursor.
+  - `qa.battle.waitForEvents(cursor, match, { count?, limit?, timeout?,
+    label? })` waits until `count` (default 1) such events exist, then reads
+    them as `events` does, failing on `__caps` or `timeout` (default 15 s).
+
+  Both fail when the probe shows another battle than the cursor's. Take a
+  cursor before acting and match each expected event by its identities,
+  never by its position in the order.
 - `qa.battle.enterFirstBattle({ seed?, query?, atFrontDoor? })` opens a
   fresh game (`/?seed=<seed>&<query>`, seed 1) and walks the front door to
   the first battle: Avatar selection, every Layer 1 site, and Battle Start,
@@ -345,6 +370,14 @@ Tracked scenarios:
 - `card-lab-stage` opens a lab with `--arg card=<uuid>` and stages
   `--arg stage=hand:player:<uuid>,play:enemy:<uuid>,void:player:<uuid>` through
   the debug UI. It captures desktop and mobile with the error init script.
+- `engine-events` declares a card-lab whose player holds a floating draw
+  trigger's source (`--arg source=<uuid>`, default Quiet Reflection) and a
+  1-cost character (`--arg character=<uuid>`), on desktop and mobile. It
+  plays both through the UI and matches the source's `effectStarted`, the
+  floating `triggerQueued` and `triggerResolved` by source, controller, and
+  node, and the player's `cardDrawn` by side and the deck's top instance
+  and its printing UUID; reads twice with no new event; then passes the
+  turn and matches the enemy's `cardDrawn` the same way.
 - `qa-helper-recovery` (`--arg card=<character uuid>`) verifies the first
   Zone click, all six staging combinations, and a forced reload during a
   pending observation. It checks that the exact report and committed battle

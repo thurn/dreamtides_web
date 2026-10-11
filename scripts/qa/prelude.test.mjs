@@ -296,3 +296,93 @@ describe("QA lab observation cache", () => {
     }
   });
 });
+
+// The battle driver's engine-event helpers over a synthetic probe: recorded
+// events keyed by intent sequence and batch index, read without acting.
+describe("QA engine event observation", () => {
+  const A = "5e5e5e5e-0000-4000-8000-000000000a01";
+  const B = "5e5e5e5e-0000-4000-8000-000000000a02";
+  const C = "5e5e5e5e-0000-4000-8000-000000000a03";
+  const source = "5e5e5e5e-0000-4000-8000-000000000a04";
+  const recorded = (/** @type {number} */ seq, /** @type {Record<string, unknown>[]} */ events) =>
+    events.map((event, index) => ({ seq, index, kind: event.kind, instance: "instance" in event ? event.instance : null, event }));
+  const card = (/** @type {string} */ id, /** @type {string} */ cardId) => ({ id, printing: { kind: "card", cardId } });
+
+  async function probed() {
+    const { qa, evaluate, waitForFunction, page } = await fixture();
+    const click = vi.fn();
+    Object.assign(page, { mouse: { move: vi.fn(), click } });
+    const probe = {
+      battleId: "synthetic-battle",
+      slice: { committed: { instances: { i3: card("i3", A), i4: card("i4", A), i5: card("i5", source), i6: card("i6", B), i7: card("i7", C) } }, inFlight: null },
+      events: recorded(4, [
+        { kind: "cardDrawn", side: "player", instance: "i3" },
+        { kind: "cardDrawn", side: "player", instance: "i4" },
+      ]),
+    };
+    const win = { __caps: { errors: [], rejections: [], consoleErrors: [] }, __engineProbe: probe };
+    const context = { window: win, location: { href: "http://localhost:5174/lab" }, innerWidth: 1440, innerHeight: 900 };
+    const run = (/** @type {unknown} */ fn, /** @type {unknown} */ arg) =>
+      /** @type {unknown} */ (runInNewContext(`(${String(fn)})(${JSON.stringify(arg)})`, context));
+    evaluate.mockImplementation((fn, arg) => Promise.resolve(run(fn, arg)));
+    waitForFunction.mockImplementation((fn, arg) => {
+      const value = run(fn, arg);
+      if (!value) return Promise.reject(new Error("synthetic wait timed out"));
+      return Promise.resolve({ jsonValue: () => Promise.resolve(value), dispose: () => Promise.resolve() });
+    });
+    const later = recorded(7, [
+      { kind: "triggerQueued", source: "i5", controller: "player", ability: 0, node: 2, subject: "i6" },
+      { kind: "triggerQueued", source: { kind: "avatar", side: "enemy" }, controller: "enemy", ability: 0, node: null, subject: null },
+      { kind: "cardDrawn", side: "enemy", instance: "i7" },
+    ]);
+    return { qa, probe, win, click, publish: () => probe.events.push(...later) };
+  }
+  const keys = (/** @type {{ events: { seq: number, index: number }[] }} */ page) => page.events.map(({ seq, index }) => [seq, index]);
+
+  it("keys repeated events by sequence and batch index and observes no new event twice", async () => {
+    const { qa, probe, publish } = await probed();
+    const start = await qa.battle.eventCursor();
+    expect(start).toEqual({ battleId: "synthetic-battle", seq: 4, index: 1 });
+    for (let read = 0; read < 2; read++) expect(await qa.battle.events(start)).toEqual({ events: [], cursor: start, more: false });
+    const drawn = await qa.battle.events(null, { match: { kind: "cardDrawn", side: "player" } });
+    expect(keys(drawn)).toEqual([[4, 0], [4, 1]]);
+    expect(drawn.events.map(({ instance, cards }) => [instance, cards])).toEqual([["i3", { i3: A }], ["i4", { i4: A }]]);
+    publish();
+    const next = await qa.battle.events(start);
+    expect(keys(next)).toEqual([[7, 0], [7, 1], [7, 2]]);
+    expect(next.cursor).toEqual({ battleId: "synthetic-battle", seq: 7, index: 2 });
+    expect(await qa.battle.events(next.cursor)).toEqual({ events: [], cursor: next.cursor, more: false });
+    /** @type {number[][]} */
+    const paged = [];
+    /** @type {import('./prelude.mjs').EventCursor | null} */
+    let cursor = null;
+    for (let more = true; more;) {
+      const page = await qa.battle.events(cursor, { limit: 2 });
+      paged.push(...keys(page));
+      ({ cursor, more } = page);
+    }
+    expect(paged).toEqual(probe.events.map(({ seq, index }) => [seq, index]));
+    await expect(qa.battle.events(null, { limit: 0 })).rejects.toThrow(/limit/);
+  });
+
+  it("attributes draws by side and triggers by source and controller, whatever their order, without acting", async () => {
+    const { qa, probe, win, click, publish } = await probed();
+    const start = await qa.battle.eventCursor();
+    await expect(qa.battle.waitForEvents(start, { kind: "cardDrawn", side: "enemy" })).rejects.toThrow(/timed out/);
+    publish();
+    const snapshot = JSON.stringify(win);
+    const enemyDraw = await qa.battle.waitForEvents(start, { kind: "cardDrawn", side: "enemy" });
+    expect(enemyDraw.events.map(({ seq, index, instance, cards }) => ({ seq, index, instance, cards }))).toEqual([{ seq: 7, index: 2, instance: "i7", cards: { i7: C } }]);
+    const floating = await qa.battle.waitForEvents(start, { kind: "triggerQueued", controller: "player", source: "i5" });
+    expect(floating.events.map(({ event, cards }) => [event, cards])).toEqual([[probe.events[2]?.event, { i5: source, i6: B }]]);
+    const avatar = await qa.battle.waitForEvents(null, { kind: "triggerQueued", source: { side: "enemy", kind: "avatar" } });
+    expect(avatar.events.map(({ seq, index }) => [seq, index])).toEqual([[7, 1]]);
+    expect(keys(await qa.battle.waitForEvents(null, { kind: "cardDrawn", side: "player" }, { count: 2 }))).toEqual([[4, 0], [4, 1]]);
+    await expect(qa.battle.waitForEvents(start, { kind: "cardDrawn", side: "player" })).rejects.toThrow(/timed out/);
+    expect(JSON.stringify(win)).toBe(snapshot);
+    expect(click).not.toHaveBeenCalled();
+    probe.battleId = "another-battle";
+    await expect(qa.battle.events(start)).rejects.toThrow(/another-battle/);
+    await expect(qa.battle.waitForEvents(start, { kind: "cardDrawn" })).rejects.toThrow(/another-battle/);
+  });
+});
