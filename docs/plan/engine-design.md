@@ -820,7 +820,8 @@ reads it through `effectiveSpark`, `hasKeyword`, the selectors, the cost
 code, and the view. Changes come from two sources:
 
 - **Static abilities** (`staticAbility(effect)`), on cards in play and on
-  emblems, read live.
+  emblems, read live. They change characters in play and, through
+  `grantCardKeyword`, cards in a hand, deck, or void.
 - **Floating records** in `state.floating`, made by resolving effects. Their
   characters and values are fixed as they resolve, and each carries its
   `timestamp`.
@@ -863,10 +864,21 @@ continuous primitive evaluates its characters and value once and stores one
 floating record per character. `lockedAtResolution(value)` marks the intent.
 
 **Continuous primitives** (`setBaseSpark`, `grant`/`loseKeyword`,
-`giveAllTypes`, `sparkModifier`, `costModifier`) each declare a
-`continuous` hook: their layer and the changes they make while a static
-ability holds them. Their `resolve` makes floating records for their own
-duration, else the enclosing `forDuration`'s, else permanently.
+`giveAllTypes`, `sparkModifier`, `costModifier`, `grantCardKeyword`) each
+declare a `continuous` hook: their layer and the changes they make while a
+static ability holds them. Their `resolve` makes floating records for their
+own duration, else the enclosing `forDuration`'s, else permanently.
+
+**Cards outside play.** `grantCardKeyword(cardsIn(zone, filter, player),
+keyword)` is the static "Cards in your hand have Offering" (layer 3): each
+card in that player's hand (the hand it holds), deck, or void (the ones it
+owns) whose layer-2 type and subtype match the filter has the keyword while
+it is there (RD-hv-umm2.52-1). It reads layer 2 through the state's layer
+evaluation (`characteristics(state).reader(2)`), since `StaticEnv` resolves
+only character references. It is static only: its `resolve` throws, since a
+floating record naming a card in a hidden zone would name it in the public
+`effectStarted` event. A dreamsign's "your deck" (C4) is a separate
+reference that `cardsIn` does not express.
 
 **Memoization:** the layer evaluation of a state is cached lazily, per card
 and layer, inside a `Layers` object. A step mutates its work copy in place
@@ -1064,7 +1076,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player) | `doubleEnergy`, `store`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)` | `draw` at cost 0, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only) | `draw` at cost 0, `lookAtTop(n, distribute)`, `reveal`, `shuffleInto`, `putOnTop`/`Bottom` |
 | Characters | `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `abandon(chooser, predicate)`, `materialize(from, selection)`, `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |

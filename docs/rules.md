@@ -682,6 +682,11 @@ costs (such as "To play this card, …") must still be paid; if the card's cost
 includes X, X is 0. The player chooses between Offering and the card's own costs
 as they play it, from the ways they can pay; cost changes apply to the 0● cost
 as to any play.
+A card that has Offering from another ability, as with "Cards in your hand
+have Offering," can be played this way while it has the keyword in hand. Once
+the player chooses Offering, the card is played by Offering even if it loses the
+keyword while its costs are paid, for example by abandoning the character that
+gave it.
 
 **Ephemeral** — A card drawn with Ephemeral is banished at the end of the turn if
 it is still in hand, so it must be played the turn it is drawn. It is no longer
@@ -832,6 +837,16 @@ left play, using the ability as it was when activated.
 is in play, such as cost reductions, spark bonuses for matching characters, or
 other rule changes. Avatar and dreamsign static abilities always apply.
 
+A static ability can also change cards in a hand, a deck, or a void, as in
+"Cards in your hand have Offering." "Your hand" is the hand you hold; "your
+deck" and "your void" are the ones you own. Each card that matches has the
+change only while it is in that zone and the ability applies: it loses the
+change as it leaves the zone or as the ability's source leaves play. Which cards
+match is decided from their types after any type changes, as for characters in
+play. On a dreamsign, a static ability's "your deck" means every card that came
+from your journey deck, wherever it is during the battle; created cards and
+figments never match it.
+
 **Order of continuous effects:** When several static abilities and effects
 with a duration change the same card, they apply in this order: changes to its
 types ("has all character types"), then keywords it gains or loses, then base
@@ -905,7 +920,7 @@ So a figment with Veil that the opponent dissolves only loses Veil, while a
 reclaimed character with Veil that the opponent dissolves is banished.
 
 Gained spark and persistent statuses (such as reclaimed and Offering) travel
-with the card across zones, while spark a character merely _has_ from a static
+with the card across zones, while spark or keywords a card merely _has_ from a static
 ability, and any counters on the card, do not (see [Spark](#spark) and
 [Counters](#counters)).
 

@@ -24,6 +24,7 @@ export * from "./gain-points";
 export * from "./gain-spark";
 export * from "./give-all-types";
 export * from "./grant";
+export * from "./grant-card-keyword";
 export * from "./if-then";
 export * from "./materialize-figment-copy";
 export * from "./materialize-figments";

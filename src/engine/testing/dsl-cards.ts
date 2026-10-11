@@ -4,7 +4,7 @@
  * `5e5e5e5e-…-0000000002xx`.
  */
 import type { EngineCardDefinition } from "../catalog";
-import { anyCharacter, characterYouControl, enemyCharacter, energy, energyX, event, keyword, noCardsIn, target, upTo, winCondition, x } from "../dsl/builders";
+import { anyCharacter, characterYouControl, enemyCharacter, energy, energyX, event, keyword, noCardsIn, staticAbility, target, upTo, winCondition, x } from "../dsl/builders";
 import type { Ability, CardCost } from "../dsl/types";
 import * as p from "../effects/primitives";
 import { syntheticId } from "./synthetic-cards";
@@ -84,6 +84,10 @@ export const DSL = {
   discoverCharacter: authored(33, "event", 0, events(event(p.discover({ cardType: "character" })))),
   /** "Discover an event." */
   discoverEvent: authored(34, "event", 0, events(event(p.discover({ cardType: "event" })))),
+  /** A Mage, as Nomad of Endless Paths reads: "Cards in your hand have Offering." */
+  handOffering: authored(35, "character", 2, () => [staticAbility(p.grantCardKeyword(p.cardsIn("hand"), "offering"))], { subtype: "Mage" }),
+  /** "Mage characters in your void have Reclaim." */
+  voidMagesReclaim: authored(36, "character", 2, () => [staticAbility(p.grantCardKeyword(p.cardsIn("void", { cardType: "character", subtype: "Mage" }), "reclaim"))], { subtype: "Mage" }),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

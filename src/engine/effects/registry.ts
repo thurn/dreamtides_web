@@ -38,6 +38,7 @@ import {
   gainPointsPrimitive,
   gainSparkPrimitive,
   giveAllTypesPrimitive,
+  grantCardKeywordPrimitive,
   grantPrimitive,
   ifThenPrimitive,
   materializeFigmentCopyPrimitive,
@@ -137,6 +138,9 @@ const DEFINITIONS = {
   },
   get grant() {
     return grantPrimitive;
+  },
+  get grantCardKeyword() {
+    return grantCardKeywordPrimitive;
   },
   get ifThen() {
     return ifThenPrimitive;
