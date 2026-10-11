@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { energy, event, everyIn, fromVoid, reclaim } from "../../../dsl/builders";
+import { energy, event, everyIn, fromVoid, reclaim, topOfDeck } from "../../../dsl/builders";
 import { onMaterialized, triggered } from "../../../dsl/triggers";
+import { cardMatchesFilter } from "../../../continuous/characteristics";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { Answer, ChooseCardsPrompt, Prompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
+import { discardCard, drawCard } from "../../../rules/resources";
 import { instanceOf, moveToHand } from "../../../rules/zones";
 import { stateHash } from "../../../state/hash";
 import type { CardId, InstanceId, Side } from "../../../state/ids";
@@ -75,8 +77,29 @@ const recoverOwnVoid: EngineCardDefinition = {
   },
 };
 
+/** ❖❖ A synthetic response: its controller discards the first character in its hand, then draws a card. */
+const swapHandCharacter: EngineCardDefinition = {
+  ...v.interruptEvent,
+  id: syntheticId(0x650a),
+  synthetic: {
+    resolve(ctx, item) {
+      const side = item.controller;
+      const character = ctx.state.sides[side].hand.find((id) => cardMatchesFilter(ctx.state, ctx.catalog, id, { cardType: "character" }));
+      if (character === undefined) throw new Error("no character to discard");
+      discardCard(ctx, side, character);
+      drawCard(ctx, side);
+    },
+  },
+};
+const chosenCharacterThenFail = thenFail(11, banishChosen({ cardType: "character" }));
+/** "Banish the characters among the top 3 cards of your deck, your top card, and the top card of the opponent's deck." */
+const banishTops = eventCard(12, () => [
+  event(banishCards([topOfDeck(3, { cardType: "character" }), topOfDeck(1), topOfDeck(1, {}, "opponent")])),
+]);
+
 const engine = createEngine(testCatalog([
   handAndVoid, renounce, banishTwoFromVoid, chosenCharacter, chosenThenFail, handThenFail, banishOne, banishUpToTwo, recoverOwnVoid,
+  swapHandCharacter, chosenCharacterThenFail, banishTops,
 ]));
 
 /** Answers target and card prompts with `pick` over their candidates, recording every prompt. */
@@ -204,6 +227,38 @@ describe("banishCards", () => {
       expect(banishedOf(empty.result.events)).toEqual([]);
     }
   });
+
+  it("banishes the matching cards among the top cards of a deck, each once, and shows them to both players in the Banished zone", () => {
+    const own = [v.vanilla1.id, v.event0.id, v.vanilla2.id, v.vanilla3.id];
+    const { state, ids, result } = play(banishTops.id, { deck: own }, { deck: [v.event1.id, v.vanilla1.id] });
+    const [top, skipped, second, below] = ids.player.deck;
+    const [opposing, remaining] = ids.enemy.deck;
+    for (const [id, side] of [[top, "enemy"], [second, "enemy"], [top, "player"], [opposing, "player"]] as const) {
+      expect(view(state, side, engine.catalog).instances[id]).toBeUndefined();
+    }
+    expect(result.state.sides.player.banished.slice().sort()).toEqual([top, second].sort());
+    expect(result.state.sides.player.deck).toEqual([skipped, below]);
+    expect(result.state.sides.enemy.banished).toEqual([opposing]);
+    expect(result.state.sides.enemy.deck).toEqual([remaining]);
+    expect(banishedOf(result.events)).toEqual([
+      { kind: "banished", instance: top, side: "player" },
+      { kind: "banished", instance: second, side: "player" },
+      { kind: "banished", instance: opposing, side: "enemy" },
+    ]);
+    for (const side of ["player", "enemy"] as const) {
+      const shown = view(result.state, side, engine.catalog).instances;
+      for (const id of [top, second, opposing]) expect(shown[id]).toBeDefined();
+      expect(shown[skipped]).toBeUndefined();
+    }
+    clean(result.events, state, result.state);
+
+    const short = play(banishTops.id, { deck: [v.event0.id, v.vanilla2.id] }, { deck: [] });
+    expect(banishedOf(short.result.events).map((e) => e.kind === "banished" && e.instance)).toEqual([short.ids.player.deck[1], short.ids.player.deck[0]]);
+    expect(short.result.state.sides.player.deck).toEqual([]);
+    expect(short.result.state.sides.enemy.banished).toEqual([]);
+    expect(short.result.events.some((e) => e.kind === "fatigue")).toBe(false);
+    clean(short.result.events, short.state, short.result.state);
+  });
 });
 
 describe("banishChosen", () => {
@@ -238,6 +293,35 @@ describe("banishChosen", () => {
     expect(banishedOf(outcome.published)).toEqual([{ kind: "banished", instance: characters[1], side: "enemy" }]);
     expect(outcome.published.some((e) => e.kind === "discarded")).toBe(false);
     expect(eventRedactionViolations(outcome.published, slice.committed, done.committed)).toEqual([]);
+    expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
+  });
+
+  it("offers the opponent's hand as it resolves, after an Interrupt response changed which cards match", () => {
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player", phase: "day", player: { hand: [chosenCharacter.id], deck, energy: 3 },
+      enemy: { hand: [swapHandCharacter.id, v.vanilla1.id, v.event1.id, v.vanilla2.id, v.vanilla3.id], deck, energy: 3 },
+    });
+    const [response, discarded, unmatched, ...kept] = ids.enemy.hand;
+    const drawn = ids.enemy.deck[0];
+    let slice = applied(fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 },
+      { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action }));
+    expect(slice.committed.stack.map((item) => item.kind === "card" && item.instance)).toEqual([ids.player.hand[0]]);
+    slice = applied(fold.reduce(slice, { kind: "battleAction", side: "enemy", action: playFromHand(ids, "enemy").action }));
+    for (let passes = 0; fold.pending(slice) === null; passes++) {
+      const decision = engine.decision(slice.committed);
+      if (decision === null || passes > 10) throw new Error("the banish never prompted");
+      slice = applied(fold.reduce(slice, { kind: "battleAction", side: decision.side, action: { kind: "pass" } }));
+    }
+    const pending = fold.pending(slice)!;
+    expect(pending.display.instances[response].zone).toBe("void");
+    expect(pending.display.sides.enemy.hand).toEqual([unmatched, ...kept, drawn]);
+    expect(pending.prompt).toMatchObject({ kind: "chooseCards", side: "player", privateTo: "player", candidates: [...kept, drawn] });
+    expect(pending.display.sides.enemy.void).toContain(discarded);
+    const done = applied(fold.reduce(slice, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [drawn] }));
+    expect(done.committed.sides.enemy.banished).toEqual([drawn]);
+    expect(done.committed.sides.enemy.hand).toEqual([unmatched, ...kept]);
+    expect(done.committed.stack).toEqual([]);
     expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
   });
 
@@ -286,6 +370,19 @@ describe("banishChosen", () => {
     expect(outcome.slice.inFlight).toBeNull();
     expect(outcome.slice.committed).toEqual(knowing(slice.committed, "player", ids.enemy.hand));
     expect(outcome.slice.committed.sides.enemy.banished).toEqual([]);
+
+    // Only the cards the filtered prompt offered were shown, so only they stay known.
+    const filtered = suspend(setup(chosenCharacterThenFail.id, [v.vanilla1.id, v.event1.id, v.vanilla2.id, v.event0.id]));
+    const characters = [filtered.ids.enemy.hand[0], filtered.ids.enemy.hand[2]];
+    expect(filtered.pending.prompt).toMatchObject({ candidates: characters });
+    const recovered = createFoldAdapter(engine, { checkEventPrefix: true })
+      .reduce(filtered.slice, { kind: "answer", side: "player", promptId: filtered.pending.prompt.id, value: [characters[0]] });
+    if (recovered.kind !== "applied" || recovered.error === null) throw new Error("expected synthetic failure");
+    expect(recovered.published).toEqual([]);
+    expect(recovered.slice.committed).toEqual(knowing(filtered.slice.committed, "player", characters));
+    const shown = view(recovered.slice.committed, "player", engine.catalog).instances;
+    expect(shown[filtered.ids.enemy.hand[1]]).toBeUndefined();
+    expect(shown[filtered.ids.enemy.hand[3]]).toBeUndefined();
 
     const fold = createFoldAdapter(engine, { checkEventPrefix: true });
     const named = boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [handThenFail.id, v.vanilla1.id], deck }, enemy: { deck } });
