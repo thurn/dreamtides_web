@@ -879,6 +879,17 @@ costs are paid. After a successful move, recalculate Support, controller-based
 effects, subtype counts, and challenger or blocker status before resolving
 resulting triggers.
 
+**Each player** — "Each player draws two cards" and "Each player discards a
+card" happen once for each player, the active player first, then the opposing
+player, whoever controls the effect. Within each player's part, "you" and
+"they" mean that player: they make its choices, such as which card to discard,
+from their own hand, and the opposing player does not see those choices until
+the cards become public. One player's part, its choices included, finishes
+before the next player's part begins. "Each player discards their hand, then
+draws 6 cards" has every player discard first, then every player draw. An "each
+player" effect never asks for targets or modes, since one player would choose
+them for everyone.
+
 ## Ability Types
 
 **Event abilities** — Effects printed on event cards. They resolve when the event

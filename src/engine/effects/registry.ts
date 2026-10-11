@@ -26,6 +26,7 @@ import {
   discardChosenPrimitive,
   discoverPrimitive,
   dissolvePrimitive,
+  eachPlayerPrimitive,
   drawPrimitive,
   erodePrimitive,
   exhaustPrimitive,
@@ -103,6 +104,9 @@ const DEFINITIONS = {
   },
   get dissolve() {
     return dissolvePrimitive;
+  },
+  get eachPlayer() {
+    return eachPlayerPrimitive;
   },
   get draw() {
     return drawPrimitive;

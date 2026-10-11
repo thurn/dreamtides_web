@@ -1,0 +1,38 @@
+{
+  "bead": "hv-umm2.62",
+  "phase": 5,
+  "implementMin": 30,
+  "localValidationS": {
+    "focused": 2,
+    "review": 38,
+    "knip": 2,
+    "fuzz": 57,
+    "sweep": 297,
+    "judged": 362
+  },
+  "hostLoad": 5.3,
+  "testDelta": {
+    "files": 0,
+    "lines": 232,
+    "jsdomFiles": 0,
+    "cases": 9
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 12,
+      "note": "The greedy AI never activates a staged ready Weaver of Rhapsody (symmetric draws), so the as=enemy activation walk ran until the battle ended; and the default as=enemy card-lab gives the human one hand card, so Wasteland Arbitrator's human discard was auto-answered and no prompt appeared until a labStage two-card hand was declared."
+    }
+  ],
+  "sourceBase": "e3aa8d3338c96caafc16265d458ac14c28c50714",
+  "coverage": {
+    "entities": 3,
+    "pending": 0,
+    "amplifiedTexts": 1,
+    "newEffectOps": 1,
+    "scenarioModules": 0,
+    "weightedGames": 300,
+    "sweep": { "pass": 32, "skip": 28, "fail": 0 },
+    "judged": 3
+  }
+}

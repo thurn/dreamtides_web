@@ -12,6 +12,7 @@ export * from "./discard";
 export * from "./discard-chosen";
 export * from "./discover";
 export * from "./dissolve";
+export * from "./each-player";
 export * from "./draw";
 export * from "./erode";
 export * from "./exhaust";
