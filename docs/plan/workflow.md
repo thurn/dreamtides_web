@@ -504,9 +504,9 @@ Every brief contains, verbatim or by exact path:
     `/Users/dthurn/dreamtides_web/artifacts/qa/<bead-id>/<name>.png`
     ([Screenshots](#screenshots)).
   - Run the [validation ladder](#validation-ladder), plus browser QA when
-    runtime behavior or presentation changes. Run every heavy command under
-    the [heavy slot](#resources). Close the browser context and stop the dev
-    server when done.
+    runtime behavior or presentation changes. Run every heavy command, and
+    only those, under the [heavy slot](#resources). Close the browser context
+    and stop the dev server when done.
   - Write the bead's [friction file](#friction-ledger) and any other
     per-bead evidence files.
   - Record pre-existing issues in the bead's own
@@ -1322,8 +1322,13 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - `JOURNEY_TEST_WORKERS=2` locally. The local Tollgate policy sets 2.
 - One implementation subagent per session, and one Claude or Codex subagent
   of any kind at a time within a session.
-- **Heavy commands** run under the machine-wide heavy slot, one at a time
-  across every session:
+- **Heavy commands** are exactly D17's list: a local `npm run review:full`,
+  a fuzz run of 200 or more games (`fuzz:engine`, `perf:ab --workload fuzz`),
+  `cargo test --workspace`, and a Tollgate release build. Focused tests,
+  `npm run review`, `npm run knip`, `npm install`, `card-sweep`, and
+  `run-scenario` take no heavy slot, and no command holds the heavy slot while
+  it waits for the browser lease. Heavy commands run under the machine-wide
+  heavy slot, one at a time across every session:
 
   ```sh
   lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids <batch>

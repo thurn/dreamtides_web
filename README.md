@@ -144,9 +144,11 @@ leaves the record and subsequent CLI sessions refuse to start. Reconcile the
 recorded provider execution before clearing the record and retrying.
 Kernel lease release on pipe EOF proves local lock recovery;
 provider completion requires separate confirmation. The lease is
-separate from `artifacts/heavy.lock`, so commands also run under the external
-heavy slot required by the plan. `wallMs.browserLeaseWait` records lease wait
-separately from build, serve, and scenario execution.
+separate from `artifacts/heavy.lock`: browser runs (`run-scenario`,
+`card-sweep`) take the browser lease only, never the heavy slot, and no command
+holds the heavy slot while it waits for the browser lease.
+`wallMs.browserLeaseWait` records lease wait separately from build, serve, and
+scenario execution.
 
 The runner starts its server in its own process group (`scripts/dev.mjs`, or
 `vite preview`), connects its own MCP client with the primary checkout as the
