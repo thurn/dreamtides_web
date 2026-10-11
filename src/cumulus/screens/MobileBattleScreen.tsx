@@ -1334,6 +1334,12 @@ const SideZones = memo(function SideZones({
             position: "relative",
             width: "max-content",
             maxWidth: "100%",
+            // Side badges extend below the status object into the mobile hand track.
+            // Lift the complete anchor so its badges and phase marker stay attached.
+            transform:
+              !isDesktop && position === "near" && (side.status.statuses?.length ?? 0) > 0
+                ? `translateY(calc(-1 * (${token("--space-2xl")} + ${token("--space-xxs")})))`
+                : undefined,
           }}
         >
           {interactions?.activatableStatusOwner === owner &&

@@ -1,0 +1,468 @@
+{
+  "bead": "hv-umm2.443",
+  "claimWindow": {
+    "start": "2026-10-11T23:03:08+00:00",
+    "end": "2026-10-11T23:14:40.300139+00:00",
+    "elapsedMinutes": 11.538335649999999,
+    "endMeaning": "commit preparation timestamp, immediately before commit"
+  },
+  "base": "437ffde175ad42728e0bcabfa95ef5fd0a95d2dc",
+  "scope": "Private SideZones status-phase wrapper only; existing --space-2xl plus optical --space-xxs lift while the near mobile side has statuses. No public/export shape changes or importer fallout. Shared badge appearance and engine behavior remain owned by their existing modules.",
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "testDecision": "Existing synthetic screen presentation contracts cover badge rendering. Actual geometry is checked through browser DOM bounds; no jsdom mirror of the transform/token expression added.",
+  "baselineProvenance": {
+    "previousBead": "hv-umm2.393",
+    "previousGeometry": "geometry-god-mobile.png; mobile-geometry.result.json",
+    "source": "This base carries the landed two production files from hv-umm2.393. New baseline.result.json measures one-card and three-card hands before this wrapper edit.",
+    "previousVerdict": "visual fail: badge bottom 670.109375 vs one-card hand top 664.109375, 6 px overlap.",
+    "sourceFilesSha256": {
+      "src/engine/view/view.ts": "4bf2d8d412c4bf3de0a1faf738e65ce00c4a2f9fff4aa42cc1c2e4b5555e1719",
+      "src/screens/cumulus_adapters/engine-battle-view-model.ts": "b298022146bf67e5f92f1051aa501b8319805c98ac80c03d91ba0ec9be79ccb1",
+      "src/cumulus/screens/MobileBattleScreen.tsx": "77bb9a87fdc1056379a3107ab90c838d72afd23d002afcf7b090ec15770fdf7d"
+    }
+  },
+  "commands": {
+    "focused": {
+      "scope": "MobileBattleScreen.test.tsx existing synthetic presentation contracts",
+      "seconds": 3.5,
+      "workers": 2,
+      "result": "pass: 1 file,6 tests"
+    },
+    "review": {
+      "scope": "changed wrapper + friction and measurement evidence;14 related screen contract files",
+      "seconds": 16.0,
+      "workers": 2,
+      "result": "pass:14 files,97 tests,types,lint,import cycles,friction schema",
+      "report": "review-final.log"
+    },
+    "knip": {
+      "scope": "repository unused exports/files, prepare + restore included",
+      "seconds": 1.9,
+      "knipOnlySeconds": 1.1,
+      "result": "pass",
+      "report": "knip-final.log"
+    },
+    "measurementNote": "Wall timings from review/QA runners; read alongside command scope and loaded host samples."
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "final npm run review start",
+      "at": "2026-10-11T23:11:53.963Z",
+      "oneMinute": 27.4658203125
+    },
+    {
+      "scope": "final npm run knip start",
+      "at": "2026-10-11T23:12:19.665Z",
+      "oneMinute": 29.48046875
+    },
+    {
+      "scope": "final QA runner start",
+      "oneMinute": 30.00244140625
+    }
+  ],
+  "qa": {
+    "mode": "judged real engine/lab stage, actual God UUID; runner script through Playwright MCP",
+    "scenario": "clearance.mjs",
+    "scenarioSha256": "26d9a665b3666af1a06f519b61770e5c5c87f997f3a9a95e7e437a488e4b10ca",
+    "finalReport": "clearance.result.json",
+    "baselineReport": "baseline.result.json",
+    "wallMs": {
+      "browserLeaseWait": 48,
+      "serve": 956,
+      "scenario": 45947,
+      "total": 46977
+    },
+    "baselineWallMs": {
+      "browserLeaseWait": 48,
+      "serve": 1260,
+      "scenario": 11655,
+      "total": 12992
+    },
+    "hostLoad": 30.00244140625,
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "captureScale": "README runner CSS-scale contract; file dimensions checked",
+    "screens": [
+      "live-one-card-desktop.png",
+      "live-multiple-card-desktop.png",
+      "live-void-choice-desktop.png",
+      "live-removed-desktop.png",
+      "live-one-card-mobile.png",
+      "live-multiple-card-mobile.png",
+      "live-void-choice-mobile.png",
+      "live-removed-mobile.png"
+    ],
+    "caps": [],
+    "gameLogs": [
+      {
+        "file": "clearance-desktop.jsonl",
+        "gameId": "obk2hp",
+        "rows": 44
+      },
+      {
+        "file": "clearance-mobile.jsonl",
+        "gameId": "4dgu45",
+        "rows": 44
+      }
+    ],
+    "baselineMobileGaps": {
+      "one": [
+        -6
+      ],
+      "multiple": [
+        -3.24346923828125,
+        -6,
+        -3.24346923828125
+      ]
+    },
+    "finalMobile": {
+      "one": {
+        "badge": {
+          "x": 181,
+          "y": 616.109375,
+          "width": 28,
+          "height": 28,
+          "right": 209,
+          "bottom": 644.109375
+        },
+        "status": {
+          "x": 107.421875,
+          "y": 575.109375,
+          "width": 175.15625,
+          "height": 54,
+          "right": 282.578125,
+          "bottom": 629.109375
+        },
+        "anchorTransform": "matrix(1, 0, 0, 1, 0, -26)",
+        "hand": [
+          {
+            "x": 120.1328125,
+            "y": 664.109375,
+            "width": 149.734375,
+            "height": 209.625,
+            "right": 269.8671875,
+            "bottom": 873.734375
+          }
+        ],
+        "controls": [
+          {
+            "x": 167.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "right": 207.3125,
+            "bottom": 563.828125
+          },
+          {
+            "x": 211.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "right": 251.3125,
+            "bottom": 563.828125
+          },
+          {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "right": 382,
+            "bottom": 564.828125
+          }
+        ],
+        "handGaps": [
+          20
+        ],
+        "controlGaps": [
+          52.28125,
+          52.28125,
+          51.28125
+        ],
+        "space2xl": 24,
+        "phaseMarker": {
+          "x": 150.46875,
+          "y": 568.109375,
+          "width": 19,
+          "height": 19,
+          "right": 169.46875,
+          "bottom": 587.109375
+        },
+        "activation": null,
+        "dreamwell": null,
+        "art": [
+          {
+            "src": "/avatars/cutout/0005.png",
+            "complete": true,
+            "naturalWidth": 1024
+          },
+          {
+            "src": "/cards/695511850.webp",
+            "complete": true,
+            "naturalWidth": 462
+          },
+          {
+            "src": "/avatars/cutout/0083.png",
+            "complete": true,
+            "naturalWidth": 1024
+          }
+        ],
+        "spaceXl": 20,
+        "spaceS": 8,
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fa036c27-2234-4f76-8857-c242530627ce&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%22fa036c27-2234-4f76-8857-c242530627ce%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000010%22%5D%2C%22void%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000002%22%2C%225e5e5e5e-0000-4000-8000-000000000004%22%2C%225e5e5e5e-0000-4000-8000-00000000000b%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=4dgu45"
+        }
+      },
+      "multiple": {
+        "badge": {
+          "x": 181,
+          "y": 616.109375,
+          "width": 28,
+          "height": 28,
+          "right": 209,
+          "bottom": 644.109375
+        },
+        "status": {
+          "x": 107.421875,
+          "y": 575.109375,
+          "width": 175.15625,
+          "height": 54,
+          "right": 282.578125,
+          "bottom": 629.109375
+        },
+        "anchorTransform": "matrix(1, 0, 0, 1, 0, -26)",
+        "hand": [
+          {
+            "x": 28.42640495300293,
+            "y": 666.8659057617188,
+            "width": 170.82589721679688,
+            "height": 224.12811279296875,
+            "right": 199.2523021697998,
+            "bottom": 890.9940185546875
+          },
+          {
+            "x": 120.1328125,
+            "y": 664.109375,
+            "width": 149.734375,
+            "height": 209.625,
+            "right": 269.8671875,
+            "bottom": 873.734375
+          },
+          {
+            "x": 190.73207092285156,
+            "y": 666.8659057617188,
+            "width": 170.82591247558594,
+            "height": 224.12811279296875,
+            "right": 361.5579833984375,
+            "bottom": 890.9940185546875
+          }
+        ],
+        "controls": [
+          {
+            "x": 167.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "right": 207.3125,
+            "bottom": 563.828125
+          },
+          {
+            "x": 211.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "right": 251.3125,
+            "bottom": 563.828125
+          },
+          {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "right": 382,
+            "bottom": 564.828125
+          }
+        ],
+        "handGaps": [
+          22.75653076171875,
+          20,
+          22.75653076171875
+        ],
+        "controlGaps": [
+          52.28125,
+          52.28125,
+          51.28125
+        ],
+        "space2xl": 24,
+        "phaseMarker": {
+          "x": 150.46875,
+          "y": 568.109375,
+          "width": 19,
+          "height": 19,
+          "right": 169.46875,
+          "bottom": 587.109375
+        },
+        "activation": null,
+        "dreamwell": null,
+        "art": [
+          {
+            "src": "/avatars/cutout/0005.png",
+            "complete": true,
+            "naturalWidth": 1024
+          },
+          {
+            "src": "/cards/695511850.webp",
+            "complete": true,
+            "naturalWidth": 462
+          },
+          {
+            "src": "/avatars/cutout/0083.png",
+            "complete": true,
+            "naturalWidth": 1024
+          }
+        ],
+        "spaceXl": 20,
+        "spaceS": 8,
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fa036c27-2234-4f76-8857-c242530627ce&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%22fa036c27-2234-4f76-8857-c242530627ce%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000010%22%5D%2C%22void%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000002%22%2C%225e5e5e5e-0000-4000-8000-000000000004%22%2C%225e5e5e5e-0000-4000-8000-00000000000b%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=4dgu45"
+        }
+      },
+      "removed": {
+        "badge": null,
+        "status": {
+          "x": 107.421875,
+          "y": 601.109375,
+          "width": 175.15625,
+          "height": 54,
+          "right": 282.578125,
+          "bottom": 655.109375
+        },
+        "anchorTransform": "none",
+        "hand": [
+          {
+            "x": 63.52015686035156,
+            "y": 666.8659057617188,
+            "width": 170.82589721679688,
+            "height": 224.12811279296875,
+            "right": 234.34605407714844,
+            "bottom": 890.9940185546875
+          },
+          {
+            "x": 155.63832092285156,
+            "y": 666.8659057617188,
+            "width": 170.82591247558594,
+            "height": 224.12811279296875,
+            "right": 326.4642333984375,
+            "bottom": 890.9940185546875
+          }
+        ],
+        "controls": [
+          {
+            "x": 167.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "right": 207.3125,
+            "bottom": 563.828125
+          },
+          {
+            "x": 211.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "right": 251.3125,
+            "bottom": 563.828125
+          },
+          {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "right": 382,
+            "bottom": 564.828125
+          }
+        ],
+        "handGaps": [],
+        "controlGaps": [],
+        "space2xl": 24,
+        "phaseMarker": {
+          "x": 150.46875,
+          "y": 594.109375,
+          "width": 19,
+          "height": 19,
+          "right": 169.46875,
+          "bottom": 613.109375
+        },
+        "activation": null,
+        "dreamwell": null,
+        "art": [
+          {
+            "src": "/avatars/cutout/0005.png",
+            "complete": true,
+            "naturalWidth": 1024
+          },
+          {
+            "src": "/avatars/cutout/0083.png",
+            "complete": true,
+            "naturalWidth": 1024
+          },
+          {
+            "src": "/cards/695511850.webp",
+            "complete": true,
+            "naturalWidth": 462
+          },
+          {
+            "src": "/cards/695511850.webp",
+            "complete": true,
+            "naturalWidth": 462
+          }
+        ],
+        "spaceXl": 20,
+        "spaceS": 8,
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fa036c27-2234-4f76-8857-c242530627ce&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%22fa036c27-2234-4f76-8857-c242530627ce%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000010%22%5D%2C%22void%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000002%22%2C%225e5e5e5e-0000-4000-8000-000000000004%22%2C%225e5e5e5e-0000-4000-8000-00000000000b%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=4dgu45"
+        }
+      }
+    },
+    "desktopComparison": "Badge, status, hand-card, and phase-control bounds for both one-card and three-card states match baseline exactly. Removed-status bounds retain the same placement.",
+    "noBadgeComparison": "Mobile status returns from y575.109375 to original y601.109375 with anchor transform none; zero badge after real source removal.",
+    "visualJudgment": "Final desktop and mobile captures viewed: complete badge border and glyph clear of the hand playable ring; God and both Avatar assets loaded with positive naturalWidth. Three-card outer fans and source removal judged.",
+    "semanticWorkflow": "One eligible ordinary void-play action; cost-3 character and event remain in void; playedViaReclaim false; real removal of God clears duration badge. Persisted engine.action and UUID/physical printing provenance exported.",
+    "attachmentAlignment": "Phase marker retains y offset -7 and same x offset to status anchor; both move together. The tested main-window states expose neither activatable-status button nor Dreamwell. Both existing children retain the same relative anchor placement in source.",
+    "attempts": [
+      "Baseline harness failed because debug rail remained open after two successful additions; corrected rail closing and retained baseline-harness-error.result.json. Empty Caps.",
+      "Baseline pass:13s. A focused-test prepare briefly overlapped baseline capture time; baseline DOM measurements remain valid. Final captures follow all final review/Knip restore operations.",
+      "Initial --space-2xl-only layout passed semantics and visual clearance with18px center gap; clearance-24px.result.json retained.",
+      "Optical --space-xxs added under same authorized wrapper scope to match --space-xl20px central gap; final review,Knip,and sequential QA pass."
+    ],
+    "runtime": {
+      "port": 5174,
+      "processGroups": [
+        9283,
+        13402,
+        34884,
+        50869
+      ],
+      "cleanup": "All owned groups absent in final ps; every runner reported stopped server and free port. Final port listener absent; browser owner record absent after confirmed browser close and settled MCP response cleanup. Peer servers untouched."
+    },
+    "rejudgmentOf": "hv-umm2.393 mobile visual fail in its qa-ledger row and geometry-god-mobile.png",
+    "evidenceLocation": "primary gitignored artifacts/qa/hv-umm2.443/"
+  }
+}
