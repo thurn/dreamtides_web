@@ -692,7 +692,7 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
         ? `${who(event.side)} chose to repeat until victory.`
         : `${who(event.side)} chose to repeat ${plural(event.count, "time", "times")}.`;
     case "materialized":
-      return `${card(event.instance)} entered play.`;
+      return event.rematerialized ? `${card(event.instance)} rematerialized.` : `${card(event.instance)} entered play.`;
     case "noLegalTarget":
       return `${source(event.source)} had no legal target.`;
     case "payableEffectEnded":

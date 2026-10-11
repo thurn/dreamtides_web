@@ -1,0 +1,82 @@
+{
+  "bead": "hv-umm2.382",
+  "phase": 5,
+  "implementMin": 8.12,
+  "measurementWindow": "native claim to pre-commit evidence",
+  "localValidationS": {
+    "install": 2.384,
+    "focusedVitest": 1.69,
+    "focusedCommandWall": 4.405,
+    "review": 58.507,
+    "knip": 3.375
+  },
+  "hostLoad": {
+    "review": {
+      "exit": 0,
+      "seconds": 58.507,
+      "loadStart": [
+        22.1240234375,
+        12.9775390625,
+        14.00439453125
+      ],
+      "loadEnd": [
+        25.02001953125,
+        15.1748046875,
+        14.736328125
+      ]
+    },
+    "knip": {
+      "exit": 0,
+      "seconds": 3.375,
+      "loadStart": [
+        25.02001953125,
+        15.1748046875,
+        14.736328125
+      ],
+      "loadEnd": [
+        25.09814453125,
+        15.3544921875,
+        14.80224609375
+      ]
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 22,
+    "jsdomFiles": 0,
+    "cases": 1
+  },
+  "browser": {
+    "firstFailedWallMs": {
+      "browserLeaseWait": 42,
+      "serve": 1262,
+      "scenario": 19249,
+      "total": 20580
+    },
+    "finalWallMs": {
+      "browserLeaseWait": 43,
+      "serve": 1249,
+      "scenario": 9919,
+      "total": 11236
+    },
+    "load": 11.30126953125,
+    "productionFrozen": true
+  },
+  "friction": [
+    {
+      "tag": "incorrect-focused-path",
+      "note": "Initial guessed rematerialize.test.ts does not exist; command exited1 without running tests. Corrected immediately to existing contracts.test.ts and triggers-redaction.test.ts,427pass. No production change."
+    },
+    {
+      "tag": "synthetic-lint-correction",
+      "seconds": 4.978,
+      "note": "Initial review flagged unnecessary tuple non-null assertion; removed only that assertion, retained initial lint log and reran required final checks."
+    },
+    {
+      "tag": "singleton-target-auto-answer",
+      "seconds": 20.58,
+      "note": "First browser attempt resolved correctly but waited for an explicit target prompt with one eligible character; existing engine automatically answered. Actual game rkhfnr paid hand play and trigger chain retained in development JSONL. Own server70820closed. Added second eligible physical vanilla to require a real target choice, then both viewport flows pass. No source mutation or repeated checks."
+    }
+  ],
+  "improvementBeads": []
+}

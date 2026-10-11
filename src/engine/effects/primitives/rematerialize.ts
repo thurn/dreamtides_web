@@ -15,7 +15,7 @@ export const rematerializePrimitive = definePrimitive<RematerializeNode>({
   resolve(ctx, node, env) {
     for (const id of resolveCharacters(ctx, node.subject, env)) {
       const slot = slotOf(ctx.state, id);
-      if (slot !== null) ctx.emit({ kind: "materialized", instance: id, side: instanceOf(ctx.state, id).controller, slot });
+      if (slot !== null) ctx.emit({ kind: "materialized", instance: id, side: instanceOf(ctx.state, id).controller, slot, rematerialized: true });
     }
   },
 });

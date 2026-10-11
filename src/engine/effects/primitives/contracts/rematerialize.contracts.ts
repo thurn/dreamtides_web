@@ -3,6 +3,7 @@ import type { EngineCardDefinition } from "../../../catalog";
 import { all, characterYouControl, event, self, target, upTo } from "../../../dsl/builders";
 import { onChallenge, onMaterialized, triggered, whenMaterialize } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
+import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { Answer, Prompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
@@ -72,13 +73,34 @@ const applied = (outcome: IntentOutcome): BattleSlice => {
 };
 
 describe("rematerialize", () => {
+  it("distinguishes ordinary entry from rematerialization in public persisted events", () => {
+    const start = boardState(engine.catalog, setup(materialized, { hand: [materialized.id, single.id] }));
+    const id = start.ids.player.hand[0];
+    const entered = cast(start, "player");
+    const repeated = cast({ ...start, state: entered.state }, "player", 1, new ScriptedSource([[id]]));
+    const events = [...entered.events, ...repeated.events].filter((event) => event.kind === "materialized");
+    expect(events).toEqual([
+      { kind: "materialized", instance: id, side: "player", slot: { rank: "back", index: 0 } },
+      { kind: "materialized", instance: id, side: "player", slot: { rank: "back", index: 0 }, rematerialized: true },
+    ]);
+    expect(repeated.state.instances[id]).toEqual(entered.state.instances[id]);
+    expect(entered.state.sides.player.currentEnergy).toBe(1);
+    expect(repeated.state.sides.player.currentEnergy).toBe(2);
+    for (const viewer of ["player", "enemy"] as const) {
+      const visible = events.map((event) => eventSeenBy(event, viewer, repeated.state));
+      expect(visible).toEqual(events);
+      const reloaded = JSON.parse(JSON.stringify(visible)) as typeof visible;
+      expect(reloaded).toEqual(events);
+    }
+  });
+
   it("fires own and both sides' materialize observers FIFO without playing the character", () => {
     const start = boardState(engine.catalog, { ...setup(multiple, { back: [materialized.id, observer.id, materialized.id] }), enemy: { back: [enemyObserver.id], deck } });
     const [first, watcher, second] = start.ids.player.back;
     const result = cast(start, "player", 0, new ScriptedSource([[second!, first!]]));
     expect(result.events.filter((event) => event.kind === "materialized")).toEqual([
-      { kind: "materialized", instance: second, side: "player", slot: { rank: "back", index: 2 } },
-      { kind: "materialized", instance: first, side: "player", slot: { rank: "back", index: 0 } },
+      { kind: "materialized", instance: second, side: "player", slot: { rank: "back", index: 2 }, rematerialized: true },
+      { kind: "materialized", instance: first, side: "player", slot: { rank: "back", index: 0 }, rematerialized: true },
     ]);
     expect(result.events.filter((event) => event.kind === "triggerResolved").map((event) => event.source)).toEqual([
       watcher, second, start.ids.enemy.back[0], first, watcher, start.ids.enemy.back[0],
@@ -115,7 +137,7 @@ describe("rematerialize", () => {
     const id = start.ids.enemy.back[0]!;
     start.state.instances[id] = { ...start.state.instances[id], owner: "player" };
     const result = cast(start, "enemy", 0, new ScriptedSource([[id]]));
-    expect(result.events).toContainEqual({ kind: "materialized", instance: id, side: "enemy", slot: { rank: "back", index: 0 } });
+    expect(result.events).toContainEqual({ kind: "materialized", instance: id, side: "enemy", slot: { rank: "back", index: 0 }, rematerialized: true });
     expect(result.state.instances[id]).toEqual(start.state.instances[id]);
     expect(result.state.sides.enemy.currentEnergy).toBe(3);
     expect(result.state.sides.player.currentEnergy).toBe(0);
