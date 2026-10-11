@@ -231,7 +231,7 @@ Monitored, never gated. "Overrun" means more than 50% over the budget.
 | Typecheck step | ≤ 10 s | 9.6–10.8 s | `[review] typecheck finished in` |
 | Lint, whole `src/` | ≤ 20 s | 18.4 s | `[review] lint finished in` (review:full) |
 | Full Tollgate gate at 2 workers | ≤ 5 min | 256.2 s median | sum of step `elapsed_ms` per buildset |
-| Tollgate gate stage (`dependencies`, `review:gate`), staged mode | ≤ 60 s ([D44](../decisions.md#d44-staged-validation)) | 19.9 s median, n = 37 code candidates (hv-umm2.355), with over-40 selections skipped | median per-buildset sum of gate-stage step `elapsed_ms`, ≥ 10 code candidates |
+| Tollgate gate stage (`dependencies`, `review:gate`), staged mode | ≤ 60 s ([D44](../decisions.md#d44-staged-validation)) | 44.402 s median, n = 21 post-hv-umm2.356 code candidates (hv-e9fl), observed executed-step sums under the current coverage policy | median per-buildset sum of gate-stage step `elapsed_ms`, ≥ 10 code candidates |
 | Workspace prepare, warm | ≤ 5 s | 4.0–4.1 s | `node scripts/prepare-workspace.mjs` |
 
 The review and focused-test budgets start below the baseline on purpose:
