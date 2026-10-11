@@ -1,0 +1,21 @@
+{
+  "bead": "hv-umm2.376",
+  "phase": 5,
+  "implementMin": 4.5,
+  "localValidationS": {
+    "contracts": 3.233,
+    "mutation": 3.017,
+    "final-focused": 3.129,
+    "review": 10.63,
+    "knip": 2.964,
+    "final-review": 8.348,
+    "final-knip": 2.116
+  },
+  "hostLoad": 18.35,
+  "testDelta": {
+    "files": 0,
+    "lines": 40,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

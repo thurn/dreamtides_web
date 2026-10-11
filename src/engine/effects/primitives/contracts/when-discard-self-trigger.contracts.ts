@@ -67,6 +67,8 @@ const S = {
   chosenDiscard: card(12, "event", 0, () => [event(discardChosen())]),
   dissolveOne: card(13, "event", 0, () => [event(dissolve(target(anyCharacter())))]),
   erodeOne: card(14, "event", 0, () => [event(erode(1))]),
+  discardInterrupt: { ...card(16, "event", 0, () => [event(discard(1))]), speed: "interrupt" },
+  underlying: card(17, "event", 0, () => [event(gainEnergy(4))]),
   /** Discards the first other card of its controller's hand, then fails. */
   failing: { ...card(15, "event", 0, () => []), synthetic: {
     resolve(ctx, item) {
@@ -157,6 +159,44 @@ describe("whenDiscardSelf", () => {
     expect(ended.events).toContainEqual(expect.objectContaining({ kind: "triggerQueued", source: kept, subject: kept }));
     expect(ended.state.sides.player.void).toContain(kept);
     expect(reclaimable(ended.state, kept)).toBe(true);
+  });
+
+  it("drains an Interrupt's discard watcher and self-trigger in order before the underlying item resolves", () => {
+    const { state, ids } = setup({
+      player: { hand: [S.underlying.id], energy: 0, deck },
+      enemy: { back: [D.discardWatch.id], hand: [S.discardInterrupt.id, D.guide.id], energy: 0, deck },
+    });
+    const [underlying] = ids.player.hand;
+    const [interrupt, guide] = ids.enemy.hand;
+    const [watch] = ids.enemy.back;
+    const played = cast(state, "player", underlying);
+    expect(played.state.instances[underlying]?.zone).toBe("stack");
+    expect(played.events.some((entry) => entry.kind === "resolved")).toBe(false);
+    expect(E.legalActions(played.state, "enemy")).toContainEqual({ kind: "play", card: interrupt, from: "hand" });
+
+    const result = cast(played.state, "enemy", interrupt);
+    expect(queued(result.events)).toEqual([watch, guide]);
+    expect(controllers(result.events)).toEqual(["enemy", "enemy"]);
+    const resolutionOrder = result.events.flatMap((entry) => {
+      if (entry.kind === "resolved") return [entry.instance];
+      if (entry.kind === "triggerResolved") return [entry.source];
+      return [];
+    });
+    expect(resolutionOrder).toEqual([interrupt, watch, guide, underlying]);
+    // Observable effects also finish before the underlying effect begins.
+    const underlyingIndex = result.events.findIndex((entry) => entry.kind === "resolved" && entry.instance === underlying);
+    const watcherIndex = result.events.findIndex((entry) => entry.kind === "energyChanged" && entry.side === "enemy" && entry.cause === "effect");
+    const reclaimIndex = result.events.findIndex((entry) => entry.kind === "effectStarted" && entry.source === guide);
+    const underlyingEffectIndex = result.events.findIndex((entry) => entry.kind === "energyChanged" && entry.side === "player" && entry.cause === "effect");
+    expect(watcherIndex).toBeGreaterThan(-1);
+    expect(reclaimIndex).toBeGreaterThan(watcherIndex);
+    expect(underlyingIndex).toBeGreaterThan(reclaimIndex);
+    expect(underlyingEffectIndex).toBeGreaterThan(underlyingIndex);
+    expect(result.state.sides.enemy.currentEnergy).toBe(1);
+    expect(result.state.sides.player.currentEnergy).toBe(4);
+    expect(reclaimCosts(result.state, guide)).toEqual([energy(0)]);
+    expect(result.state.stack).toEqual([]);
+    expect(result.state.triggerQueue).toEqual([]);
   });
 
   it("does not trigger when its card is discarded from a hand by a player who does not own it", () => {
