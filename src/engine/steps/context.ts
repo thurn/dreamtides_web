@@ -12,7 +12,7 @@ import { matchEvent } from "../triggers/matcher";
 import { showPrivately } from "../view/knowledge";
 import { purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
-import type { AnswerSource, Disclosure, EventObserver, RecordedAnswer, StepContext } from "./types";
+import type { AnswerSource, ArmedDissolve, Disclosure, EventObserver, RecordedAnswer, StepContext } from "./types";
 
 export interface ContextOptions {
   /** Presentation observation; failures never change step execution. */
@@ -56,6 +56,7 @@ export class Context implements StepContext {
   readonly rawAnswers: RecordedAnswer[] = [];
   /** The cards shown to one side alone so far (`disclose`). */
   readonly disclosed: Disclosure[] = [];
+  readonly armedDissolves = new Map<InstanceId, ArmedDissolve>();
   committed = false;
 
   constructor(

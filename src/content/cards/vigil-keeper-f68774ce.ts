@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 205,
   art: { x: 0.096, y: -0.06, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenDissolved(characterYouControl({ subtype: "Survivor" })), p.draw(1))],
+  verifiedText: "1fas54m5u1z",
 });

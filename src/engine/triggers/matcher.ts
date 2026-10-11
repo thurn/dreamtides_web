@@ -3,22 +3,26 @@
  * timing and order). Every emitted engine event is matched as it happens, so
  * "leaves" triggers see their cards as they last were; matches only join the
  * trigger queue, which drains after the current step, one `resolveTrigger`
- * step per trigger, before any player receives priority.
+ * step per trigger, before any player receives priority. "When … is
+ * dissolved" abilities are matched against the character as it last was in
+ * play, as its `leftPlay` event announces it, and trigger once its
+ * `dissolved` event confirms the dissolve.
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, matchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
+import type { LeftPlayEvent } from "../events/kinds/left-play";
 import { conditionHolds } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
 import { instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
-import { charactersInPlay } from "../rules/zones";
-import type { AbilitySource, InstanceId, Side, Zone } from "../state/ids";
-import { opponent, sourceInstance } from "../state/ids";
-import type { AbilityOrigin, BattleState, QueuedTrigger, SparkGain } from "../state/types";
-import type { StepContext } from "../steps/types";
+import { charactersInPlay, isFigment } from "../rules/zones";
+import type { AbilitySource, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
+import { opponent, SIDES, sourceInstance } from "../state/ids";
+import type { AbilityOrigin, BattleState, FloatingEffect, QueuedTrigger, SparkGain } from "../state/types";
+import type { ArmedDissolve, StepContext } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
 import { triggerBody } from "./body";
 
@@ -43,6 +47,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   discard: ["discarded"],
   abandon: ["abandoned"],
   leavesPlay: ["leftPlay"],
+  dissolve: ["dissolved"],
   gainsSpark: ["sparkGained"],
   scores: ["laneResolved"],
   opponentScores: ["laneResolved"],
@@ -148,7 +153,10 @@ const NO_SUBJECT: Match = { subject: null };
 /**
  * Whether `trigger` matches `event` for `listener`. Every trigger needs its
  * ability to work in the listener's zone (`inZone`), except ▸Dissolved,
- * which fires from wherever the dissolved card went.
+ * which fires from wherever the dissolved card went, and "when … is
+ * dissolved", which matches only when `armed`: its ability matched the
+ * dissolved character, and worked where its card was, as that character left
+ * play (`armDissolve`).
  */
 function matchTrigger(
   state: BattleState,
@@ -157,15 +165,16 @@ function matchTrigger(
   event: EngineEvent,
   listener: Listener,
   inZone: boolean,
+  armed: boolean,
 ): Match | null {
   if (trigger.on === "either") {
     for (const branch of trigger.triggers) {
-      const match = matchTrigger(state, catalog, branch, event, listener, inZone);
+      const match = matchTrigger(state, catalog, branch, event, listener, inZone, armed);
       if (match !== null) return match;
     }
     return null;
   }
-  const match = matchKind(state, catalog, trigger, event, listener, inZone);
+  const match = matchKind(state, catalog, trigger, event, listener, inZone, armed);
   if (match !== null && !TRIGGER_EVENTS[trigger.on].includes(event.kind)) {
     throw new Error(`Trigger ${trigger.on} matched ${event.kind}, which TRIGGER_EVENTS does not list`);
   }
@@ -180,11 +189,15 @@ function matchKind(
   event: EngineEvent,
   listener: Listener,
   inZone: boolean,
+  armed: boolean,
 ): Match | null {
   const self = sourceInstance(listener.source);
   const you = listener.controller;
   if (trigger.on === "dissolved") {
     return event.kind === "dissolved" && self !== null && event.instance === self ? { subject: self } : null;
+  }
+  if (trigger.on === "dissolve") {
+    return event.kind === "dissolved" && armed ? { subject: event.instance } : null;
   }
   if (!inZone) return null;
   switch (trigger.on) {
@@ -328,27 +341,84 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
   });
 }
 
-function matchListener(ctx: StepContext, listener: Listener, event: EngineEvent): void {
+function matchListener(ctx: StepContext, listener: Listener, event: EngineEvent, armed: ArmedDissolve): void {
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered") return;
     const inZone = listener.emblem || worksInZone(ability.zone, listener.zone);
-    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, listener, inZone);
+    const isArmed = armed.abilities.has(oncePerTurnKey(listener.source, index));
+    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, listener, inZone, isArmed);
     if (match !== null) enqueueAbility(ctx, listener, ability, index, match);
   });
 }
 
+/** A side's floating and delayed triggers, each with the listener it matches as: an emblem of its controller. */
+function floatingListeners(ctx: StepContext, side: Side): { effect: FloatingEffect; trigger: Trigger; listener: Listener }[] {
+  return floatingTriggers(ctx.state, side).flatMap((effect) => {
+    if (effect.change.kind !== "trigger") return [];
+    const { ref } = effect.change;
+    const { trigger } = triggerBody(ctx.catalog, ref.origin, ref.ability, ref.node);
+    return [{ effect, trigger, listener: { source: effect.source, controller: side, origin: ref.origin, zone: "play", emblem: true } }];
+  });
+}
+
 /** Matches `side`'s floating and delayed triggers; a delayed trigger ends as it triggers. */
-function matchFloating(ctx: StepContext, side: Side, event: EngineEvent): void {
-  for (const effect of floatingTriggers(ctx.state, side)) {
+function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: ArmedDissolve): void {
+  for (const { effect, trigger, listener } of floatingListeners(ctx, side)) {
     if (effect.change.kind !== "trigger") continue;
     const { ref, once } = effect.change;
-    const { trigger } = triggerBody(ctx.catalog, ref.origin, ref.ability, ref.node);
-    const listener: Listener = { source: effect.source, controller: side, origin: ref.origin, zone: "play", emblem: true };
-    const match = matchTrigger(ctx.state, ctx.catalog, trigger, event, listener, true);
+    const match = matchTrigger(ctx.state, ctx.catalog, trigger, event, listener, true, armed.floating.has(effect.id));
     if (match === null) continue;
     if (once) endFloating(ctx, (entry) => entry.id === effect.id);
     enqueue(ctx, { source: effect.source, controller: side, origin: ref.origin, ability: ref.ability, node: ref.node, ...match });
   }
+}
+
+const NOTHING_ARMED: ArmedDissolve = { abilities: new Set(), floating: new Set() };
+
+/** Whether `trigger`, or one of its `either` branches, is a "when … is dissolved" trigger matching `id` as it is now. */
+function dissolveMatches(state: BattleState, catalog: EngineCatalog, trigger: Trigger, id: InstanceId, listener: Listener): boolean {
+  if (trigger.on === "either") return trigger.triggers.some((branch) => dissolveMatches(state, catalog, branch, id, listener));
+  if (trigger.on !== "dissolve") return false;
+  const instance = state.instances[id];
+  if (instance === undefined || (trigger.figment !== undefined && isFigment(instance) !== trigger.figment)) return false;
+  return matchesCharacter(state, catalog, trigger.subject, id, listener.controller, listener.source);
+}
+
+/**
+ * Arms, as a character leaves play for the void or for nowhere, every "when
+ * … is dissolved" ability that works where its card is and matches the
+ * character as it is now, still in play: its controller, types, and whether
+ * it is a figment. The departing character's own abilities are among them.
+ * The record waits on the step's context for the character's `dissolved`
+ * event; a departure that turns out not to be a dissolve leaves it unused
+ * until the character leaves play again.
+ */
+function armDissolve(ctx: StepContext, event: LeftPlayEvent, departing: Departure | null): void {
+  ctx.armedDissolves.delete(event.instance);
+  if (event.to !== "void" && event.to !== null) return;
+  const { state, catalog } = ctx;
+  const abilities = new Set<OncePerTurnKey>();
+  const floating = new Set<EffectId>();
+  for (const side of SIDES) {
+    for (const listener of listeners(state, side, departing)) {
+      originAbilities(catalog, listener.origin).forEach((ability, index) => {
+        if (ability.kind !== "triggered") return;
+        const inZone = listener.emblem || worksInZone(ability.zone, listener.zone);
+        if (inZone && dissolveMatches(state, catalog, ability.trigger, event.instance, listener)) abilities.add(oncePerTurnKey(listener.source, index));
+      });
+    }
+    for (const { effect, trigger, listener } of floatingListeners(ctx, side)) {
+      if (dissolveMatches(state, catalog, trigger, event.instance, listener)) floating.add(effect.id);
+    }
+  }
+  if (abilities.size > 0 || floating.size > 0) ctx.armedDissolves.set(event.instance, { abilities, floating });
+}
+
+/** The abilities armed for the dissolve of `instance`, consumed by its `dissolved` event. */
+function takeArmed(ctx: StepContext, instance: InstanceId): ArmedDissolve {
+  const armed = ctx.armedDissolves.get(instance);
+  ctx.armedDissolves.delete(instance);
+  return armed ?? NOTHING_ARMED;
 }
 
 /**
@@ -372,10 +442,12 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   const { state } = ctx;
   if (state.turn.turnNumber === 0 || state.result !== null || !TRIGGERING.includes(event.kind)) return;
   const departing = departure(state, event);
+  const armed = event.kind === "dissolved" ? takeArmed(ctx, event.instance) : NOTHING_ARMED;
   for (const side of [state.turn.active, opponent(state.turn.active)]) {
-    for (const listener of listeners(state, side, departing)) matchListener(ctx, listener, event);
-    matchFloating(ctx, side, event);
+    for (const listener of listeners(state, side, departing)) matchListener(ctx, listener, event, armed);
+    matchFloating(ctx, side, event, armed);
   }
+  if (event.kind === "leftPlay") armDissolve(ctx, event, departing);
 }
 
 function hasNamed(trigger: Trigger, named: NamedTrigger): boolean {

@@ -76,6 +76,18 @@ export function whenAbandon(player: PlayerRef = "you", filter: CardFilter = {}):
   return { on: "abandon", player, filter };
 }
 
+/**
+ * "When a character matching `subject` is dissolved", or with `figment`
+ * only a figment (`true`) or a non-figment (`false`) one: "When a
+ * non-figment character you control is dissolved".
+ */
+export function whenDissolved(
+  subject: CharacterSelector = { controller: "you" },
+  options: { readonly figment?: boolean } = {},
+): Trigger {
+  return { on: "dissolve", subject, ...(options.figment === undefined ? {} : { figment: options.figment }) };
+}
+
 export function whenLeavesPlay(subject: TriggerSubject = "self"): Trigger {
   return { on: "leavesPlay", subject };
 }

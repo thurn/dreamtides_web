@@ -2,7 +2,7 @@ import type { EngineCatalog } from "../catalog";
 import type { EngineEvent } from "../events";
 import type { Answer, AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
 import type { BattleState } from "../state/types";
-import type { InstanceId, Side } from "../state/ids";
+import type { EffectId, InstanceId, OncePerTurnKey, Side } from "../state/ids";
 import type { Step } from "./kinds";
 
 /**
@@ -32,6 +32,17 @@ export interface Disclosure {
 }
 
 /**
+ * The "when … is dissolved" abilities a character's `leftPlay` armed, as it
+ * last was in play, for its `dissolved` event to fire (triggers/matcher.ts):
+ * card and emblem abilities by source and index, floating and delayed
+ * triggers by effect.
+ */
+export interface ArmedDissolve {
+  readonly abilities: ReadonlySet<OncePerTurnKey>;
+  readonly floating: ReadonlySet<EffectId>;
+}
+
+/**
  * What rules code sees while a step runs. `state` is the step's private work
  * copy; rules code mutates it directly through the primitives.
  */
@@ -53,6 +64,13 @@ export interface StepContext {
   disclose(side: Side, cards: readonly InstanceId[]): void;
   /** Records an event; triggered abilities it matches join the trigger queue. */
   emit(event: EngineEvent): void;
+  /**
+   * The trigger matcher's step-local record of armed dissolves, by departing
+   * character. A dissolve emits `leftPlay` and `dissolved` within one call
+   * with no prompt between them, so the record never needs to outlive the
+   * step and is never battle state.
+   */
+  readonly armedDissolves: Map<InstanceId, ArmedDissolve>;
   /** A uniform draw in `[0, 1)` from the named stream. */
   random(stream: string): number;
   /**

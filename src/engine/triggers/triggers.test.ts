@@ -2,12 +2,12 @@
  * Triggers (D14; rules § Ability Types → Triggered abilities): the queue and
  * its fixed order, named triggers, "when" patterns, functional zones,
  * intervening conditions, once-per-turn, floating and delayed triggers,
- * triggerAbility, disabled triggers, and prompts raised by triggers through
- * the fold.
+ * triggerAbility, disabled triggers, prompts raised by triggers through the
+ * fold, and "when … is dissolved".
  */
 import { describe, expect, it, vi } from "vitest";
 import type { EngineAvatarDefinition, EngineCardDefinition, EngineDreamsignDefinition } from "../catalog";
-import { all, characterYouControl, enemyCharacter, energy, event, self, target } from "../dsl/builders";
+import { all, anyCharacter, characterYouControl, enemyCharacter, energy, event, self, target } from "../dsl/builders";
 import {
   atStartOfTurn,
   onDawn,
@@ -17,6 +17,7 @@ import {
   triggeringCard,
   untilOpponentPays,
   whenDiscard,
+  whenDissolved,
   whenDraw,
   whenGainsSpark,
   whenLeavesPlay,
@@ -36,15 +37,16 @@ import { SIDES, battleSeed, opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { runStep } from "../steps/runner";
 import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
-import type { Answer, PromptPurpose } from "../prompts/types";
-import { boardState, type BoardSetup } from "../testing/board";
-import { CONTINUOUS } from "../testing/continuous-cards";
+import type { Answer, PromptId, PromptPurpose } from "../prompts/types";
+import { boardState, placeFigment, type BoardSetup } from "../testing/board";
+import { CONTINUOUS, CONTINUOUS_CARDS } from "../testing/continuous-cards";
 import { invariantViolations } from "../testing/invariants";
 import { eventRedactionViolations } from "../testing/redaction";
-import { STACK } from "../testing/stack-cards";
-import { DSL } from "../testing/dsl-cards";
-import { SYNTHETIC, syntheticId } from "../testing/synthetic-cards";
-import { TRIGGER, TRIGGER_AVATAR, TRIGGER_DREAMSIGN } from "../testing/trigger-cards";
+import { STACK, STACK_CARDS } from "../testing/stack-cards";
+import { DSL, DSL_CARDS } from "../testing/dsl-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { TRIGGER, TRIGGER_AVATAR, TRIGGER_CARDS, TRIGGER_DREAMSIGN } from "../testing/trigger-cards";
+import { ZONE, ZONE_CARDS, ZONE_FIGMENT, ZONE_FIGMENTS } from "../testing/zone-cards";
 import { at, passUntil, triggerCatalog } from "../testing/trigger-harness";
 import { parseAvatarId, parseDreamsignId } from "../../types/identifiers";
 
@@ -1218,5 +1220,260 @@ describe("additional spark (C17)", () => {
     const before = stateHash(state);
     expect(() => play(state, "player", ids.player.hand[0], [[ids.player.back[0]!]])).toThrow();
     expect(stateHash(state)).toBe(before);
+  });
+});
+
+describe("when a character is dissolved", () => {
+  const gain = () => p.gainEnergy(1);
+  const D = {
+    /** "When a character you control is dissolved, gain 1●." — 2✦, so it survives a ✦ ≤ 1 sweep. */
+    allyWatch: local(26, "character", () => [triggered(whenDissolved(characterYouControl()), gain())], 2),
+    /** "When a character you control is dissolved, gain 1●." — 1✦. */
+    smallWatch: local(27, "character", () => [triggered(whenDissolved(characterYouControl()), gain())]),
+    /** "When another character you control is dissolved, gain 1●." */
+    otherWatch: local(28, "character", () => [triggered(whenDissolved(characterYouControl({ another: true })), gain())]),
+    /** "When a Mage you control is dissolved, gain 1●." — itself a Warrior. */
+    mageWatch: local(29, "character", () => [triggered(whenDissolved(characterYouControl({ subtype: "Mage" })), gain())], 2),
+    /** "When a figment you control is dissolved, gain 1●." */
+    figmentWatch: local(30, "character", () => [triggered(whenDissolved(characterYouControl(), { figment: true }), gain())], 2),
+    /** "When a character is dissolved, gain 1●." */
+    anyWatch: local(31, "character", () => [triggered(whenDissolved(anyCharacter()), gain())], 2),
+    /** "If this card is in your void, when a character you control is dissolved, gain 1●." */
+    voidWatch: local(32, "character", () => [triggered(whenDissolved(characterYouControl()), gain(), { zone: "void" })]),
+    /** "When a character you control is dissolved, you may draw a card." */
+    mayDrawWatch: local(33, "character", () => [triggered(whenDissolved(characterYouControl()), p.optional(p.draw(1)))], 2),
+    /** "Dissolve a character you control." */
+    dissolveOwn: local(34, "event", () => [event(p.dissolve(target(characterYouControl())))]),
+    /** "Dissolve two characters." */
+    dissolveTwo: local(35, "event", () => [event(p.dissolve(target(anyCharacter(), 2)))]),
+    /** "Until end of turn, when a character you control is dissolved, gain 1●. Dissolve each character you control with ✦ ≤ 1." */
+    floatingSweep: local(36, "event", () => [
+      event(p.sequence(p.floating(whenDissolved(characterYouControl()), gain()), p.dissolve(all(characterYouControl({ sparkAtMost: 1 }))))),
+    ]),
+    /** "Dissolve a character you control. Another character you control gains 1 additional ✦." — a definition error after the dissolve. */
+    dissolveThenFail: local(37, "event", () => [
+      event(p.sequence(p.dissolve(target(characterYouControl())), p.gainAdditionalSpark(target(characterYouControl()), 1))),
+    ]),
+  } as const;
+  const E = createEngine(
+    testCatalog(
+      [...ZONE_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...Object.values(D), L.sweep],
+      { dreamsigns: [TRIGGER_DREAMSIGN.dissolvedAllyOnce] },
+      ZONE_FIGMENTS,
+    ),
+  );
+  const warriorFigment = { kind: "figment", figment: ZONE_FIGMENT.warrior.id, spark: 1 } as const;
+
+  function setup(sides: Omit<BoardSetup, "phase" | "active"> & Partial<Pick<BoardSetup, "active">>) {
+    return boardState(E.catalog, { active: "player", phase: "day", ...sides });
+  }
+
+  function apply(state: BattleState, side: Side, action: Parameters<typeof E.apply>[2], answers: readonly Answer[] = []) {
+    const source = new ScriptedSource(answers);
+    const result = E.apply(state, side, action, answers.length === 0 ? NO_PROMPTS : source);
+    if (answers.length > 0) source.assertExhausted();
+    return result;
+  }
+
+  function cast(state: BattleState, side: Side, card: InstanceId | undefined, answers: readonly Answer[] = []) {
+    if (card === undefined) throw new Error("no card");
+    return apply(state, side, { kind: "play", card, from: "hand" }, answers);
+  }
+
+  function queued(events: readonly EngineEvent[]): (AbilitySource | null)[] {
+    return events.flatMap((entry) => (entry.kind === "triggerQueued" ? [entry.source] : []));
+  }
+
+  it("triggers once for each character you control dissolved, its own card included, until it has left play itself", () => {
+    const { state, ids } = setup({
+      player: { back: [v.vanilla1.id, D.smallWatch.id, v.vanilla1.id, D.allyWatch.id, D.otherWatch.id], hand: [L.sweep.id], deck },
+      enemy: { back: [D.allyWatch.id], deck },
+    });
+    const [x, small, y, big, other] = ids.player.back;
+    const result = cast(state, "player", ids.player.hand[0]);
+    // The sweep dissolves B0, B1, B2, then B4, one at a time. A watcher sees its own dissolve, ordered by
+    // the void it went to; once in the void it sees no later one. "Another" never sees its own.
+    expect(queued(result.events)).toEqual([small, big, other, big, other, small, big, other, big]);
+    expect(result.state.sides.player.currentEnergy).toBe(9);
+    expect(result.state.sides.enemy.currentEnergy).toBe(0);
+    expect([x, y, small, other].map((id) => result.state.instances[id!]?.zone)).toEqual(["void", "void", "void", "void"]);
+  });
+
+  it("matches each dissolve by the controller the character had, for both sides' watchers, the active side first", () => {
+    const { state, ids } = setup({
+      player: { back: [D.anyWatch.id, D.allyWatch.id, v.vanilla1.id], hand: [D.dissolveTwo.id], deck },
+      enemy: { back: [D.allyWatch.id, D.anyWatch.id, v.vanilla1.id], deck },
+    });
+    const [any, ally, mine] = ids.player.back;
+    const [enemyAlly, enemyAny, theirs] = ids.enemy.back;
+    const result = cast(state, "player", ids.player.hand[0], [[theirs!, mine!]]);
+    expect(queued(result.events)).toEqual([any, enemyAlly, enemyAny, any, ally, enemyAny]);
+    expect(result.state.sides.player.currentEnergy).toBe(3);
+    expect(result.state.sides.enemy.currentEnergy).toBe(3);
+  });
+
+  it("sees the types the character had in play, which it loses in the void", () => {
+    const { state, ids } = setup({
+      active: "enemy",
+      player: { back: [C.everyType.id, D.mageWatch.id, v.vanilla1.id], deck },
+      enemy: { hand: [DSL.dissolveEnemy.id], energy: 2, deck },
+    });
+    const [, watch, warrior] = ids.player.back;
+    const result = cast(state, "enemy", ids.enemy.hand[0], [[warrior!]]);
+    expect(result.state.instances[warrior!]?.zone).toBe("void");
+    expect(queued(result.events)).toEqual([watch]);
+  });
+
+  it("triggers for the side controlling the character as it is dissolved, not its owner", () => {
+    const { state, ids } = setup({
+      active: "enemy",
+      player: { back: [D.allyWatch.id, v.vanilla1.id], deck },
+      enemy: { back: [D.allyWatch.id], hand: [ZONE.seize.id, D.dissolveOwn.id], energy: 3, deck },
+    });
+    const [mine, stolen] = ids.player.back;
+    const seized = cast(state, "enemy", ids.enemy.hand[0], [[stolen!]]).state;
+    expect(seized.instances[stolen!]?.controller).toBe("enemy");
+    const result = cast(seized, "enemy", ids.enemy.hand[1], [[stolen!]]);
+    expect(result.state.sides.player.void).toEqual([stolen]);
+    expect(queued(result.events)).toEqual([ids.enemy.back[0]]);
+    expect(queued(result.events)).not.toContain(mine);
+  });
+
+  it("tells figments from other characters, and sees a dissolved figment before it ceases to exist", () => {
+    const { state, ids } = setup({
+      active: "enemy",
+      player: { back: [D.allyWatch.id, t.dissolvedNonFigmentEnergy.id, D.figmentWatch.id, v.vanilla1.id], deck },
+      enemy: { hand: [DSL.dissolveEnemy.id, DSL.dissolveEnemy.id], energy: 4, deck },
+    });
+    const [ally, nonFigment, figmentWatch, vanilla] = ids.player.back;
+    const figment = placeFigment(state, "player", { rank: "back", index: 4 }, warriorFigment);
+    const first = cast(state, "enemy", ids.enemy.hand[0], [[figment]]);
+    expect(first.state.instances[figment]).toBeUndefined();
+    expect(queued(first.events)).toEqual([ally, figmentWatch]);
+    const second = cast(first.state, "enemy", ids.enemy.hand[1], [[vanilla!]]);
+    expect(queued(second.events)).toEqual([ally, nonFigment]);
+  });
+
+  it("triggers on an abandon, which dissolves", () => {
+    const { state, ids } = setup({ player: { back: [D.allyWatch.id, ZONE.sacrifice.id, v.vanilla1.id], deck }, enemy: { deck } });
+    const [ally, sacrifice, fodder] = ids.player.back;
+    const result = apply(state, "player", { kind: "activate", source: sacrifice!, ability: 0 }, [[fodder!]]);
+    expect(result.events.filter((entry) => "instance" in entry && entry.instance === fodder).map((entry) => entry.kind)).toEqual([
+      "leftPlay",
+      "abandoned",
+      "dissolved",
+    ]);
+    expect(queued(result.events)).toEqual([ally]);
+  });
+
+  it("does not trigger when a character leaves play, or would be dissolved, without being dissolved", () => {
+    const { state, ids } = setup({
+      active: "enemy",
+      player: { back: [D.allyWatch.id, ZONE.veiled.id, v.vanilla1.id, v.vanilla1.id], hand: [DSL.returnAnyToHand.id], energy: 1, deck },
+      enemy: { hand: [DSL.dissolveEnemy.id, DSL.banishEnemyWithSparkAtMostTwo.id, DSL.dissolveEnemy.id], energy: 5, deck },
+    });
+    const [, veiled, reclaimed, banished] = ids.player.back;
+    state.instances[reclaimed!].status.reclaimed = true;
+    // Veil turns the opponent's dissolve into losing Veil; a reclaimed character is banished instead.
+    const veil = cast(state, "enemy", ids.enemy.hand[0], [[veiled!]]);
+    expect(veil.state.instances[veiled!]?.zone).toBe("play");
+    const banish = cast(veil.state, "enemy", ids.enemy.hand[1], [[banished!]]);
+    expect(banish.state.instances[banished!]?.zone).toBe("banished");
+    const reclaim = cast(banish.state, "enemy", ids.enemy.hand[2], [[reclaimed!]]);
+    expect(reclaim.state.instances[reclaimed!]?.zone).toBe("banished");
+    expect(queued([...veil.events, ...banish.events, ...reclaim.events])).toEqual([]);
+    // A figment returned to hand leaves play for nowhere, as a dissolved one does, but is not dissolved.
+    const own = { ...reclaim.state, turn: { ...reclaim.state.turn, active: "player" as const } };
+    const figment = placeFigment(own, "player", { rank: "back", index: 2 }, warriorFigment);
+    const returned = cast(own, "player", ids.player.hand[0], [[figment]]);
+    expect(returned.state.instances[figment]).toBeUndefined();
+    expect(queued(returned.events)).toEqual([]);
+  });
+
+  it("works where its card was as the character left play: a void ability sees others, never its own dissolve from play", () => {
+    const { state, ids } = setup({
+      active: "enemy",
+      player: { back: [D.voidWatch.id, v.vanilla1.id], void: [D.voidWatch.id], deck },
+      enemy: { hand: [DSL.dissolveEnemy.id, DSL.dissolveEnemy.id], energy: 4, deck },
+    });
+    const [inPlay, vanilla] = ids.player.back;
+    const inVoid = ids.player.void[0];
+    const first = cast(state, "enemy", ids.enemy.hand[0], [[vanilla!]]);
+    expect(queued(first.events)).toEqual([inVoid]);
+    const second = cast(first.state, "enemy", ids.enemy.hand[1]);
+    expect(second.state.instances[inPlay!]?.zone).toBe("void");
+    expect(queued(second.events)).toEqual([inVoid]);
+  });
+
+  it("is suppressed for a source whose triggers are disabled, even for its own dissolve", () => {
+    const { state, ids } = setup({
+      player: { hand: [t.silenceEnemy.id, DSL.dissolveEnemy.id], energy: 2, deck },
+      enemy: { back: [D.allyWatch.id], deck },
+    });
+    const silenced = cast(state, "player", ids.player.hand[0]).state;
+    const result = cast(silenced, "player", ids.player.hand[1]);
+    expect(result.state.instances[ids.enemy.back[0]!]?.zone).toBe("void");
+    expect(queued(result.events)).toEqual([]);
+  });
+
+  it("triggers a once-per-turn emblem once, and a floating trigger for each dissolve", () => {
+    const once = setup({ player: { dreamsigns: [TRIGGER_DREAMSIGN.dissolvedAllyOnce.id], back: [v.vanilla1.id, v.vanilla1.id], hand: [L.sweep.id], deck }, enemy: { deck } });
+    expect(cast(once.state, "player", once.ids.player.hand[0]).state.sides.player.currentEnergy).toBe(1);
+    const floating = setup({ player: { back: [v.vanilla1.id, v.vanilla1.id], hand: [D.floatingSweep.id], deck }, enemy: { deck } });
+    const result = cast(floating.state, "player", floating.ids.player.hand[0]);
+    expect(queued(result.events)).toEqual([floating.ids.player.hand[0], floating.ids.player.hand[0]]);
+    expect(result.state.sides.player.currentEnergy).toBe(2);
+  });
+
+  it("shows queued triggers and their dissolved subjects to both sides, and resolves them identically through the fold after a reload", () => {
+    const { state, ids } = setup({ player: { back: [D.mayDrawWatch.id, v.vanilla1.id, v.vanilla1.id], hand: [L.sweep.id], deck }, enemy: { deck } });
+    const [watch, x, y] = ids.player.back;
+    const committed: BattleState[] = [];
+    const answers: Answer[] = [true, false];
+    const inline = E.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, new ScriptedSource(answers), (next) => {
+      committed.push(next);
+    }).state;
+    const waiting = committed.find((next) => next.triggerQueue.length === 2);
+    if (waiting === undefined) throw new Error("no queued triggers observed");
+    for (const viewer of SIDES) {
+      expect(E.view(waiting, viewer).triggerQueue.map((entry) => [entry.source, entry.subject])).toEqual([
+        [watch, x],
+        [watch, y],
+      ]);
+    }
+    expect(inline.sides.player.hand).toHaveLength(1);
+    const fold = createFoldAdapter(E, { checkEventPrefix: true });
+    const opened = fold.reduce(
+      { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 },
+      { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } },
+    );
+    if (opened.kind !== "applied") throw new Error("bounced");
+    let slice = opened.slice;
+    let previous: PromptId | undefined;
+    for (const answer of answers) {
+      const reloaded: BattleSlice = { ...slice, committed: deserializeState(JSON.stringify(slice.committed)) };
+      const pending = fold.pending(reloaded);
+      if (pending === null) throw new Error("no prompt");
+      expect(pending.prompt).toEqual(fold.pending(slice)?.prompt);
+      expect(pending.prompt.purpose.source).toBe(watch);
+      if (previous !== undefined) {
+        expect(fold.reduce(reloaded, { kind: "answer", side: "player", promptId: previous, value: answer })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+      }
+      previous = pending.prompt.id;
+      const outcome = fold.reduce(reloaded, { kind: "answer", side: "player", promptId: pending.prompt.id, value: answer });
+      if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("answer failed");
+      slice = outcome.slice;
+    }
+    expect(slice.inFlight).toBeNull();
+    expect(stateHash(slice.committed)).toBe(stateHash(inline));
+  });
+
+  it("queues nothing and leaves the committed state alone when the effect fails after the dissolve", () => {
+    const { state, ids } = setup({ player: { back: [D.allyWatch.id, v.vanilla1.id, v.vanilla1.id], hand: [D.dissolveThenFail.id], deck }, enemy: { deck } });
+    const before = stateHash(state);
+    const [, x, y] = ids.player.back;
+    expect(() => cast(state, "player", ids.player.hand[0], [[x!], [y!]])).toThrow();
+    expect(stateHash(state)).toBe(before);
+    expect(state.triggerQueue).toEqual([]);
   });
 });

@@ -340,6 +340,15 @@ export type Trigger =
   | { readonly on: "abandon"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "leavesPlay"; readonly subject: TriggerSubject }
   /**
+   * "When a … is dissolved": each dissolve, abandons included, of a character
+   * matching `subject` as it last was in play, the ability's own card
+   * included unless the selector says `another`. `figment` limits it to
+   * figments (`true`) or to non-figments (`false`). The ability must have
+   * worked where its card was as the character left play (rules § Ability
+   * Types → When a character is dissolved).
+   */
+  | { readonly on: "dissolve"; readonly subject: CharacterSelector; readonly figment?: boolean }
+  /**
    * "When … gains ✦": each "gains +N✦" event with N ≥ 1, permanent or with a
    * duration, except an additional gain (rules § Spark → Additional spark).
    * Spark a character has never triggers it.

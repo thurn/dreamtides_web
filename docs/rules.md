@@ -863,6 +863,29 @@ the dissolved card went, and abilities that trigger when a card leaves play or
 leaves your void see that card as it was just before it left. Nothing triggers
 while the opening hands are dealt.
 
+**When a character is dissolved:** An ability such as "When a character you
+control is dissolved" triggers once for each matching character that is
+dissolved, abandoned characters included. It sees that character as it was
+just before it left play: who controlled it, its types, and whether it was a
+figment. "A character you control" includes the character with the ability,
+which triggers on its own dissolve; "another character you control" does not.
+The ability triggers only if it worked where its card was as that character
+left play, so an ability that works in play sees its own card dissolved, and
+one that works from the void does not. A character that leaves play without
+being dissolved — banished, returned to hand, or ceasing to exist without a
+dissolve — does not trigger it, nor does a dissolve that Veil turns into losing
+Veil or that Reclaim turns into a banish. "Non-figment" excludes figments and
+figment copies.
+
+An effect that dissolves several characters dissolves them one at a time: the
+characters it targets in the order they were chosen, and the others, as in
+"dissolve each character you control", in the fixed order — the effect
+controller's characters first, back rank `B0` through `B9`, then front rank
+`F0` through `F8`, then the opposing player's in the same order. Each dissolve
+triggers abilities on its own, so a card dissolved earlier by the same effect
+is in the void when the later ones are dissolved, and its "when … is
+dissolved" ability does not see them.
+
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it
 resolves it does nothing unless Y is still true.

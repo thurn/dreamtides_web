@@ -837,6 +837,22 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   with `additional: true`, which matches no trigger, so it never retriggers
   and each source adds exactly N. Spark a character has (statics, Support,
   anthems, `forDuration` changes) emits no `sparkGained` and never matches.
+- **"When … is dissolved"** (rules § Ability Types → When a character is
+  dissolved; RD-hv-umm2.65-1, RD-hv-umm2.65-2): the `dissolve` trigger
+  (`whenDissolved(selector, { figment? })`) looks back. As a character's
+  `leftPlay` announces it leaving for the void or for nowhere, the matcher
+  arms every `dissolve` ability, floating triggers included, that works
+  where its card is and whose selector (and `figment` flag) matches the
+  character still in play, the departing card's own abilities among them.
+  The character's `dissolved` event then matches exactly the armed
+  abilities, in the fixed order, wherever their cards now are. A departure
+  with no `dissolved` (a banish, a return to hand, a figment ceasing to
+  exist undissolved) triggers nothing. The armed abilities wait on the
+  step's context (`StepContext.armedDissolves`), never in battle state:
+  `leftPlay` and `dissolved` come from one synchronous dissolve with no
+  prompt between them. Several characters dissolved by one effect are
+  dissolved one at a time, so a card dissolved earlier is not armed for
+  later ones.
 
 ## Continuous effects
 
@@ -1187,7 +1203,7 @@ X of zero has a meaningful effect; other printed X costs retain minimum one.
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls`, `energyAtLeast`, `costPaid`, `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `either` | |
 
 Dreamsigns and avatars use the same DSL as emblem abilities (P4). Dreamwell
 cards use event-like abilities; a drawn Dreamwell card applies only its
