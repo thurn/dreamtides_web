@@ -10,8 +10,9 @@ import type { EngineCardDefinition } from "../catalog";
 import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
-import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES, type CardId, type Side } from "../state/ids";
+import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES, type CardId, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, DeckEntry } from "../state/types";
+import { logEvent } from "../../logging";
 import { cardIdFromUnknown } from "../../types/card-identity";
 import { actionsEqual, allowedBy, type Action } from "../rules/actions";
 import { applyDebugOp } from "../debug/debug-actions";
@@ -172,6 +173,31 @@ function enemyActions(engine: Engine, stage: CardLabStage, base: BattleSlice): A
   });
 }
 
+interface ScriptFailure {
+  readonly reason: "action-not-legal";
+  readonly actionKind: Action["kind"];
+  readonly stepIndex: number;
+  readonly historyIndex: number;
+  readonly instance: InstanceId | null;
+  readonly sourceCardId: CardId | null;
+}
+
+function enemyDayReady(engine: Engine, slice: BattleSlice): boolean {
+  const main = engine.decision(slice.committed);
+  return slice.inFlight === null && main?.kind === "main" && main.side === "enemy" &&
+    slice.committed.turn.active === "enemy" && slice.committed.turn.phase === "day";
+}
+
+/** The first invalid ready boundary in history deterministically stops a script. */
+function scriptActionFailed(engine: Engine, init: BattleInit, slice: BattleSlice, action: Action, stepIndex: number, historyIndex: number): boolean {
+  if (!enemyDayReady(engine, slice) || engine.legalActions(slice.committed, "enemy").some((legal) => allowedBy(legal, action, slice.committed))) return false;
+  const instance = action.kind === "play" || action.kind === "reposition" ? action.card : action.kind === "activate" && typeof action.source === "string" ? action.source : null;
+  const printing = instance === null ? undefined : slice.committed.instances[instance]?.printing;
+  const failure: ScriptFailure = { reason: "action-not-legal", actionKind: action.kind, stepIndex, historyIndex, instance, sourceCardId: printing?.kind === "card" ? printing.cardId : null };
+  logEvent("debug_card_lab_script_failed", { seed: init.seed, ...failure });
+  return true;
+}
+
 /**
  * The live next enemy Day action, derived from successful replayed intents.
  * Answers, response passes, cancellations and undo never act as a script cursor.
@@ -190,8 +216,9 @@ export function cardLabEnemyAction(engine: Engine, init: BattleInit, slice: Batt
   let replay = history.base;
   let cursor = 0;
   let completing = false;
-  for (const entry of history.entries) {
+  for (const [historyIndex, entry] of history.entries.entries()) {
     if (cursor === actions.length) return null;
+    if (scriptActionFailed(engine, init, replay, actions[cursor], cursor, historyIndex)) return null;
     if ("attempt" in entry) { replay = { ...replay, attempt: entry.attempt }; continue; }
     if ("debug" in entry) {
       const changed = applyDebugOp(engine, replay, entry.debug);
@@ -211,13 +238,9 @@ export function cardLabEnemyAction(engine: Engine, init: BattleInit, slice: Batt
     if (completing && replay.inFlight === null) { cursor += 1; completing = false; }
   }
   if (cursor === actions.length) return null;
-  const main = engine.decision(slice.committed);
-  if (slice.inFlight !== null || main?.kind !== "main" || main.side !== "enemy" || slice.committed.turn.active !== "enemy" || slice.committed.turn.phase !== "day") return null;
+  if (!enemyDayReady(engine, slice)) return null;
   const action = actions[cursor];
-  if (!engine.legalActions(slice.committed, "enemy").some((legal) => allowedBy(legal, action, slice.committed))) {
-    throw new Error(`Declared lab enemy action ${action.kind} is illegal or stale`);
-  }
-  return action;
+  return scriptActionFailed(engine, init, slice, action, cursor, history.entries.length) ? null : action;
 }
 
 /**

@@ -456,7 +456,12 @@ ability must be legal in the live state. `advance` is a normal move to front `la
 resolution. Prompts and responses use the normal host and human controls.
 Successful replayed intents determine progress; pending prompts, cancellation,
 errors, response passes, reload and debug undo preserve that contract. An
-illegal or stale next action fails loudly. Malformed fields, invalid ranks,
+illegal or stale next action stops the script at its first invalid enemy Day
+boundary and hands the battle to its normal policy. The per-game log carries
+`debug_card_lab_script_failed`, a stable `action-not-legal` reason, the script
+step and history indices, the physical instance and its printing UUID. Replayed
+history preserves the stop through reloads and later legality changes; debug
+undo before the failure restores the earlier script. Malformed fields, invalid ranks,
 unknown cards or missing references reject the whole staged fixture and report
 the error; the existing plain-battle fallback receives no staged cards.
 Production builds ignore `labStage` and compile its automation out.
