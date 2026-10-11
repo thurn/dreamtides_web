@@ -58,6 +58,7 @@ import { discardChosen } from "./discard-chosen";
 import { createCopyInHand } from "./create-copy-in-hand";
 import { discover } from "./discover";
 import { draw } from "./draw";
+import { erode } from "./erode";
 import { reveal } from "./reveal";
 import { sequence } from "./sequence";
 import { opponentHand, takeFromAmong } from "./take-from-among";
@@ -1818,6 +1819,51 @@ describe("lookAtTop", () => {
     const { state, ids } = boardState(looking.catalog, setup);
     return { start: state, ids, result: looking.apply(state, "player", playFromHand(ids, "player").action, source) };
   };
+
+  it("rejects draw counts that are not positive safe integers", () => {
+    for (const count of [0, -1, 0.5, Number.NaN, Number.POSITIVE_INFINITY, Number.MAX_SAFE_INTEGER + 1]) {
+      expect(() => lookAtTop(4, { draw: count })).toThrow();
+    }
+  });
+
+  it("keeps the played mode across a response, looks at the resolution-time deck, and looks at nothing when prevented", () => {
+    const erosion: EngineCardDefinition = {
+      ...v.interruptEvent, id: syntheticId(983), costs: [], status: "authored", abilities: () => [event(erode(1, "opponent"))],
+    };
+    const responding = createEngine(testCatalog([...DSL_CARDS, lookThreeDrawTwo, drawWatcher, erosion, STACK.preventEvent]));
+    for (const response of [erosion, STACK.preventEvent]) {
+      for (const [mode, drawn] of [[0, 1], [1, 2]] as const) {
+        const source = new LookAtTopSource(mode, (candidates) => candidates.slice(candidates.length - drawn));
+        const { state, ids } = boardState(responding.catalog, {
+          ...board(DSL.lookAtTopDraw.id), enemy: { hand: [response.id], energy: 1, deck },
+        });
+        const played = responding.apply(state, "player", playFromHand(ids, "player").action, source);
+        expect(played.state.stack).toHaveLength(1);
+        expect(source.prompts.map(({ prompt }) => prompt.kind)).toEqual(["chooseMode"]);
+        expect(source.prompts[0].known).toEqual([]);
+        expect(played.events.some((item) => item.kind === "lookedAtTop")).toBe(false);
+        const responded = responding.apply(played.state, "enemy", playFromHand(ids, "enemy").action, source);
+        const rest = passUntil(responding, responded.state, (next) => next.stack.length === 0, source);
+        const events = [...played.events, ...responded.events, ...rest.events];
+        if (response.id === erosion.id) {
+          const candidates = ids.player.deck.slice(1);
+          const chosen = candidates.slice(candidates.length - drawn);
+          expect(source.prompts.map(({ prompt }) => prompt.kind)).toEqual(["chooseMode", "chooseCards"]);
+          expect(source.prompts[1].prompt).toMatchObject({ min: drawn, max: drawn, candidates });
+          expect(rest.state.sides.player.hand).toEqual(chosen);
+          expect(chosen.map((id) => rest.state.instances[id].status.ephemeral)).toEqual(chosen.map(() => mode === 1));
+          expect(events.filter((item) => item.kind === "lookedAtTop")).toEqual([{ kind: "lookedAtTop", side: "player", cards: candidates }]);
+          expect(rest.state.sides.player.void).toContain(ids.player.deck[0]);
+        } else {
+          expect(source.prompts.map(({ prompt }) => prompt.kind)).toEqual(["chooseMode"]);
+          expect(events.some((item) => item.kind === "lookedAtTop" || item.kind === "cardDrawn")).toBe(false);
+          expect(rest.state.sides.player.deck).toEqual(ids.player.deck);
+          expect(rest.state.sides.player.hand).toEqual([]);
+          expect(rest.state.sides.player.void).toContain(ids.player.hand[0]);
+        }
+      }
+    }
+  });
 
   it("privately offers the top cards, draws the chosen ones in deck order as draws, and leaves the rest on top in their order", () => {
     const source = new LookAtTopSource(0, (candidates) => [candidates[2], candidates[0]]);

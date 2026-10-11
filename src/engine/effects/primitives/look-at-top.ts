@@ -18,7 +18,7 @@ import { definePrimitive } from "../types";
 export interface LookAtTopNode {
   readonly op: "lookAtTop";
   readonly count: ValueExpr;
-  /** How many of the looked-at cards the controller draws. */
+  /** How many of the looked-at cards the controller draws: a positive safe integer. */
   readonly draw: number;
   readonly ephemeral: boolean;
 }
@@ -56,5 +56,6 @@ function putOnTop(deck: InstanceId[], card: InstanceId): void {
 }
 
 export function lookAtTop(count: ValueExpr, options: { readonly draw: number; readonly ephemeral?: boolean }): LookAtTopNode {
+  if (!Number.isSafeInteger(options.draw) || options.draw <= 0) throw new Error("lookAtTop draw must be a positive safe integer");
   return { op: "lookAtTop", count, draw: options.draw, ephemeral: options.ephemeral === true };
 }
