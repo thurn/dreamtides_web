@@ -1,3 +1,5 @@
+import { conditionCardCounts, discardCost, event, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,11 @@ export default card({
   cardNumber: 358,
   art: { x: 0.192, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(variant.amplified
+      ? p.ifThen(conditionCardCounts("hand", 5, { player: "opponent" }), p.discard(2, "opponent"), p.discard(1, "opponent"))
+      : p.discard(1, "opponent")),
+    reclaim(discardCost()),
+  ],
+  verifiedText: "drt0a4hlej",
 });

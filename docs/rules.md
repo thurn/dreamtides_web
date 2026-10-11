@@ -508,6 +508,15 @@ cards and abilities require the stack to be empty at the moment they are played.
 last-in, first-out. An event resolves by applying its effect and moving to the
 void; a character resolves by entering play.
 
+**Conditional alternatives:** An effect written "Do A. If Y, do B instead"
+checks Y as that instruction resolves, before doing A. If Y holds, do B;
+otherwise, do A. A hand-size condition counts the cards before any discard
+from that instruction. For example, "The opponent discards a card. If they
+have 5 or more cards in hand, they discard two cards instead" makes them
+discard two cards if their hand has at least 5 cards at that point, and one
+card otherwise. A discard effect with fewer cards available discards the
+whole hand; with an empty hand it does nothing.
+
 **Priority:** The player with priority may respond with an Interrupt or pass.
 
 - Playing a card or activating an ability gives the **opponent** priority. A

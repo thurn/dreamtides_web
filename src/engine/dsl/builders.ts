@@ -133,6 +133,15 @@ export function noCardsIn(zone: CountedZone, player: PlayerRef = "you"): Conditi
   return { cond: "cardsIn", player, zone, atMost: 0 };
 }
 
+/** "If there are N or more <cards> in your <zone>", counted when the condition is checked. */
+export function conditionCardCounts(
+  zone: CountedZone,
+  atLeast: number,
+  options: { readonly player?: PlayerRef; readonly filter?: CardFilter; readonly atMost?: number } = {},
+): Condition {
+  return { ...options, cond: "cardsIn", player: options.player ?? "you", zone, atLeast };
+}
+
 /**
  * "If …, you win the game" on a card in play or an emblem: its controller
  * wins in the victory check whenever the condition holds (C15).

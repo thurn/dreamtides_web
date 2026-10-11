@@ -217,8 +217,9 @@ export type Condition =
   | { readonly cond: "costPaid"; readonly optional: number }
   /** "If this card is in your void": the source instance is in `zone`. An emblem is always in play. */
   | { readonly cond: "sourceIn"; readonly zone: Zone }
-  /** "If you have no cards in your deck": the player has at most `atMost` cards in `zone`. */
-  | { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: CountedZone; readonly atMost: number };
+  /** Count the player's cards in `zone` matching `filter`, within the inclusive bounds. */
+  | { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: CountedZone; readonly filter?: CardFilter; readonly atLeast: number; readonly atMost?: number }
+  | { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: CountedZone; readonly filter?: CardFilter; readonly atLeast?: number; readonly atMost: number };
 
 /** A player's zone whose cards a condition counts. */
 export type CountedZone = "deck" | "hand" | "void";

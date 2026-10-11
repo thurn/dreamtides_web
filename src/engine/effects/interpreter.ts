@@ -479,8 +479,15 @@ export function conditionHolds(
       const instance = sourceInstance(scope.source);
       return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;
     }
-    case "cardsIn":
-      return state.sides[resolvePlayer(scope.controller, condition.player)][condition.zone].length <= condition.atMost;
+    case "cardsIn": {
+      const cards = state.sides[resolvePlayer(scope.controller, condition.player)][condition.zone];
+      const filter = condition.filter;
+      const count = filter === undefined
+        ? cards.length
+        : cards.filter((id) => cardMatchesFilter(state, catalog, id, filter)).length;
+      return (condition.atLeast === undefined || count >= condition.atLeast) &&
+        (condition.atMost === undefined || count <= condition.atMost);
+    }
   }
 }
 
