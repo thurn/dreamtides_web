@@ -56,21 +56,40 @@ export interface XValue {
   readonly value: "x";
 }
 
-/** A number a character selector's cost bound compares with: a constant, or the source's X. */
-export type BoundValue = number | XValue;
+/**
+ * "The number of cards in your void", "for each character in your void": how
+ * many cards are in one of a player's decks, hands, or voids as the value is
+ * read, relative to the effect's controller like a zone reference (rules
+ * § Zones → Counting cards in a zone, RD-hv-umm2.76-1). A void count may
+ * count only the cards matching `filter`, by their current characteristics;
+ * a hand or deck count is the number of cards there, which is public, so it
+ * takes no filter and discloses nothing about the hidden cards.
+ */
+export type CardCountValue =
+  | { readonly value: "countCards"; readonly zone: "void"; readonly player: PlayerRef; readonly filter: CardFilter }
+  | { readonly value: "countCards"; readonly zone: "deck" | "hand"; readonly player: PlayerRef; readonly filter?: never };
+
+/**
+ * A number a character selector's cost or ✦ bound compares with: a constant,
+ * the source's X, or a count of cards in a zone, read each time the selector
+ * is checked.
+ */
+export type BoundValue = number | XValue | CardCountValue;
 
 /**
  * Which characters in play a selector matches. Cost bounds read the
  * copiable cost (rules § Costs, Requirements, and X → Cost changes); ✦ bounds
- * read the effective spark, clamped at 0.
+ * read the effective spark, clamped at 0. A bound that is a value is read
+ * each time the selector is checked: as targets are offered and again as a
+ * chosen target is checked on resolution.
  */
 export interface CharacterSelector {
   readonly controller: "you" | "opponent" | "any";
   readonly subtype?: CardSubtype;
   /** Excludes the effect's source. */
   readonly another?: boolean;
-  readonly sparkAtMost?: number;
-  readonly sparkAtLeast?: number;
+  readonly sparkAtMost?: BoundValue;
+  readonly sparkAtLeast?: BoundValue;
   readonly costAtMost?: BoundValue;
   readonly costAtLeast?: BoundValue;
   /** `true` matches only figments, figment copies included (rules § Figments); `false` ("non-figment") only other characters. */
@@ -231,6 +250,7 @@ export type ValueExpr =
   | { readonly value: "plus"; readonly of: ValueExpr; readonly amount: number }
   | { readonly value: "count"; readonly of: CharacterSelector }
   | { readonly value: "handSize"; readonly player: PlayerRef }
+  | CardCountValue
   /** The characters supporting the source (C9): 0–2 while it is in the front rank, 0 elsewhere. */
   | { readonly value: "supporting" }
   /** `of` multiplied by `factor`: "+2✦ for each …". */

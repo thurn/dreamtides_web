@@ -6,6 +6,7 @@ import {
   matchingCharacters,
   matchingStackItems,
   resolvePlayer,
+  zoneCount,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
 import { cardMatchesFilter, characteristics, copiableCostOf } from "../continuous/characteristics";
@@ -477,6 +478,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     x: env.x,
     scored: env.scored,
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source).length,
+    countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
     movedCosts: (ref) => env.moved.costs(ref.node),
   });
 }

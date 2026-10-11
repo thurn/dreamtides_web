@@ -1285,8 +1285,8 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Costs | `costModifier(player, filter, amount, { next, duration })` | |
 | Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices) | `forEach`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ bounds, cost bounds that may read the source's X, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | |
-| Values | constant, `x`, `count(selector)`, hand size, `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `thisCardIn`) | |
+| Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`), `energyAtLeast`, `costPaid`, `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
@@ -1315,6 +1315,19 @@ keeps its cost. The record lives only as long as the resolution, so a step's
 replay rebuilds it from the step's answers. Static abilities read no moved
 card. The content gate requires the named node to resolve earlier in the same
 resolution than the value that reads it (see Content gates).
+
+**Zone counts** (`countCards(zone, filter, player)`, `CardCountValue`) are a
+value and a selector bound: the cards in the player's deck, hand, or void, in
+a void only those matching the filter (RD-hv-umm2.76-1). `zoneCountWith` in
+`dsl/selectors.ts` counts them through a `CharacteristicsReader`: a resolving
+effect's value and every selector check read effective characteristics, and a
+static ability's value and selectors read the layers before its own, so no
+layer depends on itself. A bound reads the count each time the selector is
+checked, so a chosen target is checked against the count again as the effect
+resolves. A hand or deck count takes no filter, since which hidden cards
+match is not public; counts read only public information and name no card.
+The card-lab solver stages, for an upper ✦ or cost bound by a void count, a
+character with ✦ and as many matching cards in that void.
 
 `conditionCardCounts` counts the specified player’s cards in a deck, hand, or
 void when the condition is checked. Its optional typed filter reads effective

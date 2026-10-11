@@ -4,13 +4,14 @@ import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { resolvePlayer } from "./selectors";
-import type { CharacterSelector, MovedCardRef, ValueExpr } from "./types";
+import type { CardCountValue, CharacterSelector, MovedCardRef, ValueExpr } from "./types";
 
 /**
  * What a value reads besides the state: its controller, its source, X, how to
- * count characters, and, in a resolving effect, the copiable costs captured for
- * the cards its nodes moved. Outside one (a static ability) no node has moved
- * a card, so `movedCosts` is absent.
+ * count characters and cards in a zone, and, in a resolving effect, the
+ * copiable costs captured for the cards its nodes moved. Outside one (a static
+ * ability) no node has moved a card, so `movedCosts` is absent. A static
+ * ability's counts read the characteristics of the layers before its own.
  */
 export interface ValueScope {
   readonly controller: Side;
@@ -19,6 +20,7 @@ export interface ValueScope {
   /** The scoring trigger's captured challenge award, absent outside its resolution. */
   readonly scored?: number | null;
   count(selector: CharacterSelector): number;
+  countCards(count: CardCountValue): number;
   movedCosts?(ref: MovedCardRef): readonly number[];
 }
 
@@ -36,6 +38,8 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
       return evaluateValue(state, value.of, scope) + value.amount;
     case "count":
       return scope.count(value.of);
+    case "countCards":
+      return scope.countCards(value);
     case "handSize":
       return state.sides[resolvePlayer(scope.controller, value.player)].hand.length;
     case "supporting": {

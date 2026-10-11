@@ -1,3 +1,5 @@
+import { countCards, enemyCharacter, event, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,7 @@ export default card({
   artOwned: false,
   cardNumber: 198,
   isStarter: false,
-  pending: true,
+  // The count is read as targets are offered and again as the chosen enemy is checked on resolution (RD-hv-umm2.76-1).
+  abilities: () => [event(p.dissolve(target(enemyCharacter({ sparkAtMost: countCards("void") }))))],
+  verifiedText: "my2kt3bs24",
 });

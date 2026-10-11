@@ -1,12 +1,12 @@
 import type { EngineCatalog } from "../catalog";
-import { characteristics, copiableCostOf, type Characteristics } from "../continuous/characteristics";
+import { characteristics, copiableCostOf, filterSubjectOf, matchesEveryCard, matchesFilter, type Characteristics } from "../continuous/characteristics";
 import { challengeRoleOf } from "../rules/challenge";
 import { hasKeyword } from "../rules/keywords";
 import { charactersInPlay, slotOf } from "../rules/zones";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { opponent, sourceInstance, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
-import type { BoundValue, CharacterSelector, PlayerRef, StackItemSelector } from "./types";
+import type { BoundValue, CardCountValue, CharacterSelector, PlayerRef, StackItemSelector } from "./types";
 
 /**
  * Reads the characteristics a selector compares: the effective ones for
@@ -36,9 +36,45 @@ function sourceX(state: BattleState, source: AbilitySource): number {
   return item?.x ?? 0;
 }
 
-/** A selector bound: an explicit play-preparation X, otherwise the source card's X. */
-function boundOf(state: BattleState, bound: BoundValue, source: AbilitySource, selectorX?: number): number {
-  return typeof bound === "number" ? bound : (selectorX ?? sourceX(state, source));
+/**
+ * How many cards a zone count names now, for an effect controlled by
+ * `controller` (RD-hv-umm2.76-1): every card there, or in a void those
+ * whose characteristics, read through `read`, and copiable cost match.
+ */
+export function zoneCountWith(
+  state: BattleState,
+  catalog: EngineCatalog,
+  read: CharacteristicsReader,
+  count: CardCountValue,
+  controller: Side,
+): number {
+  const cards = state.sides[resolvePlayer(controller, count.player)][count.zone];
+  const filter = count.filter;
+  if (filter === undefined || matchesEveryCard(filter)) return cards.length;
+  return cards.filter((id) => matchesFilter(filterSubjectOf(state, catalog, id, read(id)), filter)).length;
+}
+
+/** `zoneCountWith`, reading effective characteristics. */
+export function zoneCount(state: BattleState, catalog: EngineCatalog, count: CardCountValue, controller: Side): number {
+  return zoneCountWith(state, catalog, effective(state, catalog), count, controller);
+}
+
+/**
+ * A selector bound now: a constant; for X, an explicit play-preparation X,
+ * otherwise the source card's X; or a zone count, read through `read`.
+ */
+function boundOf(
+  state: BattleState,
+  catalog: EngineCatalog,
+  read: CharacteristicsReader,
+  bound: BoundValue,
+  controller: Side,
+  source: AbilitySource,
+  selectorX?: number,
+): number {
+  if (typeof bound === "number") return bound;
+  if (bound.value === "x") return selectorX ?? sourceX(state, source);
+  return zoneCountWith(state, catalog, read, bound, controller);
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */
@@ -70,18 +106,19 @@ export function matchesCharacterWith(
   if (selector.controller === "you" && instance.controller !== controller) return false;
   if (selector.controller === "opponent" && instance.controller === controller) return false;
   if (selector.another === true && id === source) return false;
+  const bound = (value: BoundValue): number => boundOf(state, catalog, read, value, controller, source, selectorX);
   if (selector.subtype !== undefined || selector.sparkAtMost !== undefined || selector.sparkAtLeast !== undefined) {
     const card = read(id);
     if (selector.subtype !== undefined && !card.allTypes && card.subtype !== selector.subtype) return false;
     // Spark is clamped at 0 for comparisons.
     const spark = card.spark ?? 0;
-    if (selector.sparkAtMost !== undefined && spark > selector.sparkAtMost) return false;
-    if (selector.sparkAtLeast !== undefined && spark < selector.sparkAtLeast) return false;
+    if (selector.sparkAtMost !== undefined && spark > bound(selector.sparkAtMost)) return false;
+    if (selector.sparkAtLeast !== undefined && spark < bound(selector.sparkAtLeast)) return false;
   }
   if (selector.costAtMost !== undefined || selector.costAtLeast !== undefined) {
     const cost = copiableCostOf(state, catalog, id);
-    if (selector.costAtMost !== undefined && cost > boundOf(state, selector.costAtMost, source, selectorX)) return false;
-    if (selector.costAtLeast !== undefined && cost < boundOf(state, selector.costAtLeast, source, selectorX)) return false;
+    if (selector.costAtMost !== undefined && cost > bound(selector.costAtMost)) return false;
+    if (selector.costAtLeast !== undefined && cost < bound(selector.costAtLeast)) return false;
   }
   // A figment copy is a figment (rules § Figments → Figment Copies).
   if (selector.figment !== undefined && (instance.printing.kind !== "card") !== selector.figment) return false;

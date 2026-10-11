@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.76",
+  "phase": 5,
+  "baseOid": "7faf32b1b8fb929a544a0a0ed4949cd7d6edecf4",
+  "implementMin": 95,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "review": 40,
+    "knip": 3,
+    "focused": 6,
+    "fuzz": 60,
+    "sweep": 59,
+    "judged": 46
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 7.2,
+  "testDelta": {
+    "files": 1,
+    "lines": 267,
+    "jsdomFiles": 0,
+    "cases": 11
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 15,
+      "note": "a ✦ bound read from a value needs dsl/selectors.ts, and a filtered count needs the value hooks in effects/interpreter.ts and continuous/layers.ts; none was in the filed areas, so the subagent stopped for a widening"
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10,
+      "note": "board target outlines sit on the slot element, not the card, and the engine settles before the dissolve presentation, so the judged scenario had to wait for the card to leave the DOM before capturing"
+    }
+  ]
+}

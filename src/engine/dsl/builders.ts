@@ -9,6 +9,7 @@ import type {
   AdditionalCostAbility,
   AllSpec,
   BoundValue,
+  CardCountValue,
   CardFilter,
   CharacterSelector,
   ChoiceCost,
@@ -316,6 +317,20 @@ export function costExactly<V extends BoundValue>(cost: V): { readonly costAtLea
 
 export function count(of: CharacterSelector): ValueExpr {
   return { value: "count", of };
+}
+
+/**
+ * "The number of cards in your void", "for each ≤2● cost character in your
+ * void": how many cards are in the player's zone as the value is read, in a
+ * void only those matching `filter`. A value or a ✦ or cost bound. A hand or
+ * deck count takes no filter (RD-hv-umm2.76-1).
+ */
+export function countCards(zone: "void", filter?: CardFilter, player?: PlayerRef): CardCountValue;
+export function countCards(zone: "deck" | "hand", filter?: undefined, player?: PlayerRef): CardCountValue;
+export function countCards(zone: CountedZone, filter?: CardFilter, player: PlayerRef = "you"): CardCountValue {
+  if (zone === "void") return { value: "countCards", zone, player, filter: filter ?? {} };
+  if (filter !== undefined) throw new Error(`A ${zone} count takes no filter`);
+  return { value: "countCards", zone, player };
 }
 
 /** "Supported characters" (matching `extra`): the front-rank characters the source supports from the back rank. */

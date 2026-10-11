@@ -9,7 +9,7 @@ import { eventTargetSpecs } from "../effects/abilities";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy } from "../dsl/energy";
-import type { Ability, AdditionalCost, CardFilter, CharacterSelector, PaymentCost, TriggeredAbility } from "../dsl/types";
+import type { Ability, AdditionalCost, BoundValue, CardCountValue, CardFilter, CharacterSelector, PaymentCost, TriggeredAbility } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -26,15 +26,43 @@ function printedCardIdOf(state: BattleState, id: InstanceId): CardId | null {
 /** Energy the lab gives the side playing the card: enough for the card plus any X. */
 export const LAB_ENERGY = 10;
 
+function constantBound(bound: BoundValue | undefined): number | undefined {
+  return typeof bound === "number" ? bound : undefined;
+}
+
+/** A selector bound that counts the cards in a void, or null. */
+function voidCount(bound: BoundValue | undefined): Extract<CardCountValue, { zone: "void" }> | null {
+  return typeof bound === "object" && bound.value === "countCards" && bound.zone === "void" ? bound : null;
+}
+
+/**
+ * The void cards an upper ✦ or cost bound by a void count needs so that the
+ * staged character meets it: as many cards matching the count's filter as
+ * the character's ✦ or copiable cost, in the void the count reads.
+ */
+function voidCountNeeds(engine: Engine, selector: CharacterSelector, character: CardId): { readonly count: Extract<CardCountValue, { zone: "void" }>; readonly cards: number }[] {
+  const card = engine.catalog.card(character);
+  const spark = typeof card.spark === "number" ? card.spark : 0;
+  return [
+    { count: voidCount(selector.sparkAtMost), cards: spark },
+    { count: voidCount(selector.costAtMost), cards: fixedEnergy(card.costs) },
+  ].flatMap(({ count, cards }) => (count === null ? [] : [{ count, cards }]));
+}
+
 /** A character definition that satisfies a selector, from the catalog when it names a subtype. */
 function characterFor(
   engine: Engine,
   selector: CharacterSelector,
   pool: readonly EngineCardDefinition[],
 ): CardId {
-  // An X-valued cost bound depends on the X paid as the card is played, so the solver checks constant bounds only.
-  const costAtMost = typeof selector.costAtMost === "number" ? selector.costAtMost : undefined;
-  const costAtLeast = typeof selector.costAtLeast === "number" ? selector.costAtLeast : undefined;
+  // An X-valued cost bound depends on the X paid as the card is played, and a zone count on the board
+  // (`voidCountNeeds` stages it), so the solver checks constant bounds only.
+  const costAtMost = constantBound(selector.costAtMost);
+  const costAtLeast = constantBound(selector.costAtLeast);
+  const sparkAtMost = constantBound(selector.sparkAtMost);
+  const sparkAtLeast = constantBound(selector.sparkAtLeast);
+  // A ✦ bound by a void count gets a character with ✦, so the void cards staged for it are ones the count reads.
+  const sparkCounted = voidCount(selector.sparkAtMost) !== null;
   const fits = (card: EngineCardDefinition): boolean => {
     const spark = typeof card.spark === "number" ? card.spark : 0;
     return (
@@ -43,8 +71,9 @@ function characterFor(
       // The solver places catalog cards, never figments.
       selector.figment !== true &&
       (selector.subtype === undefined || card.subtype === selector.subtype) &&
-      (selector.sparkAtMost === undefined || spark <= selector.sparkAtMost) &&
-      (selector.sparkAtLeast === undefined || spark >= selector.sparkAtLeast) &&
+      (sparkAtMost === undefined || spark <= sparkAtMost) &&
+      (sparkAtLeast === undefined || spark >= sparkAtLeast) &&
+      (!sparkCounted || spark >= 1) &&
       (costAtMost === undefined || fixedEnergy(card.costs) <= costAtMost) &&
       (costAtLeast === undefined || fixedEnergy(card.costs) >= costAtLeast)
     );
@@ -125,7 +154,8 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * active in its Day with the card in hand and ample energy, and every
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
- * `side`; a ▸Materialized trigger's void targets get their void cards too,
+ * `side`, with matching void cards for an upper ✦ or cost bound by a void
+ * count (`voidCountNeeds`); a ▸Materialized trigger's void targets get their void cards too,
  * and a choice from the opponent's hand gets a matching card in that hand
  * (`opponentHandChoices`). A void banish additional cost gets its count of matching cards, or
  * its least X, in `side`'s void, and a ⍟ additional cost gets that many
@@ -166,7 +196,12 @@ export function labBoard(
       }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
       for (let index = 0; index < (spec.count ?? 1); index++) {
-        back[targetSide].push(characterFor(engine, spec.selector, pool));
+        const character = characterFor(engine, spec.selector, pool);
+        back[targetSide].push(character);
+        for (const { count, cards } of voidCountNeeds(engine, spec.selector, character)) {
+          const voidSide = count.player === "you" ? side : opponent(side);
+          for (let card = 0; card < cards; card++) voids[voidSide].push(cardFor(engine, count.filter, pool));
+        }
       }
     }
   }

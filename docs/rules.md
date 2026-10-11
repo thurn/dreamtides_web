@@ -207,6 +207,16 @@ type changed matches by its new type:
 Naming a card reveals nothing: only what the effect then does with a hidden
 card, such as putting a copy of it into a hand, can show it to a player.
 
+**Counting cards in a zone.** "The number of cards in your void" and "for each
+character in your void" count the cards in that zone whenever the number is
+read, with "your" read as for references. A void is public, so a count of it may
+count only the cards matching a type, subtype, or cost, by their current
+characteristics. The number of cards in a hand or deck is public, but which of
+them match is not: a count of a hand or deck counts every card there. A card on
+the stack is in no zone a count reads, so an event being played does not count
+itself in its own void. An ability that always applies reads the count anew as
+it changes; a resolving effect reads it as the effect resolves.
+
 ## The Dreamwell and Energy
 
 Energy (●) is the resource used to play cards. Dreamtides uses the Dreamwell — a
@@ -729,6 +739,12 @@ section applies to them. A chosen void card is still a legal target as the
 effect resolves only while it is in that void and still matches; one that left
 the void and came back is still the same card (see [Zone
 Changes](#zone-changes)).
+
+**Bounds that count.** A target restriction that reads a number, as in
+"Dissolve an enemy with ✦ less than or equal to the number of cards in your
+void", reads it each time it is checked: as targets are chosen, and again as
+the effect resolves. A chosen enemy whose ✦ is then above the number, because
+the void lost cards or the enemy gained ✦, is no longer a legal target.
 
 Each [figment](#figments) is an independent character and is targeted
 individually.

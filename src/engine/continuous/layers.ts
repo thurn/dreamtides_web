@@ -28,7 +28,7 @@
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { worksInZone } from "../dsl/abilities";
-import { matchesCharacterWith, matchingCharactersWith, type CharacteristicsReader } from "../dsl/selectors";
+import { matchesCharacterWith, matchingCharactersWith, zoneCountWith, type CharacteristicsReader } from "../dsl/selectors";
 import type { Ability, CharacterRef, Keyword, StaticAbility } from "../dsl/types";
 import { evaluateValue } from "../dsl/values";
 import { primitiveDefinition } from "../effects/registry";
@@ -271,6 +271,7 @@ export class Layers {
           source: entry.source,
           x: self === null ? null : (state.instances[self]?.status.x ?? null),
           count: (selector) => matchingCharactersWith(state, catalog, read, selector, entry.controller, entry.source).length,
+          countCards: (count) => zoneCountWith(state, catalog, read, count, entry.controller),
         }),
     };
     const continuous = primitiveDefinition(entry.node.op).continuous;
