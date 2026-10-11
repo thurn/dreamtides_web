@@ -86,6 +86,31 @@ describe("mixed entity fuzz targets", () => {
   const figments = Array.from({ length: BACK_RANK_SIZE + 1 }, (_, index) => ({ ...ZONE_FIGMENT.warrior, id: parseFigmentId(id(0xf400 + index)) }));
   const mixed: FuzzPool = { ...pool, emblems: { avatars, dreamsigns: [sign] }, dreamwell, figments };
 
+  it("randomly deals only authored emblems while retaining non-authored emblems for explicit targets", () => {
+    const pendingAvatar = { ...avatars[0], id: parseAvatarId(id(0xf330)), status: "pending" as const };
+    const vanillaAvatar = { ...avatars[0], id: parseAvatarId(id(0xf331)), status: "vanilla" as const };
+    const pendingSign = { ...sign, id: parseDreamsignId(id(0xf332)), status: "pending" as const };
+    const vanillaSign = { ...sign, id: parseDreamsignId(id(0xf333)), status: "vanilla" as const };
+    const all: FuzzPool = {
+      ...pool,
+      emblems: { avatars: [...avatars, pendingAvatar, vanillaAvatar], dreamsigns: [sign, pendingSign, vanillaSign] },
+    };
+    const catalog = fuzzEngineCatalog(all);
+    for (let index = 0; index < 16; index++) {
+      const init = fuzzInit(battleSeed(`authored-emblems-${index}`), all);
+      for (const side of ["player", "enemy"] as const) {
+        const avatar = init.avatars?.[side];
+        expect(avatar).toBeDefined();
+        expect(avatar === undefined ? undefined : catalog.avatar(avatar).status).toBe("authored");
+        for (const signId of init.dreamsigns?.[side] ?? []) expect(catalog.dreamsign(signId).status).toBe("authored");
+      }
+    }
+    for (const target of [pendingAvatar, vanillaAvatar]) {
+      const init = fuzzInit(battleSeed("explicit-non-authored-avatar"), withFuzzCardWeights(all, target.id));
+      expect(init.avatars).toEqual({ player: target.id, enemy: target.id });
+    }
+  });
+
   it("puts requested emblems in battle state and resolves their actual abilities", () => {
     const targeted = withFuzzCardWeights(mixed, [avatars[0].id, sign.id].join(","));
     const init = fuzzInit(battleSeed("target-emblems"), targeted);

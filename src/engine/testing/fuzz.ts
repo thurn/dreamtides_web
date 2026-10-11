@@ -292,8 +292,8 @@ export function fuzzInit(seed: BattleSeed, pool: FuzzPool, ordinal = 0): BattleI
   if (!Number.isSafeInteger(ordinal) || ordinal < 0) throw new Error("Fuzz game ordinal must be a non-negative safe integer.");
   const random = new PolicyRandom(battleSeed(`decks|${seed}`));
   const targets = fuzzTargets(pool);
-  const avatars = [...(FUZZ_EMBLEMS.avatars ?? []), ...(pool.emblems.avatars ?? [])].map((avatar) => avatar.id);
-  const dreamsigns = [...(FUZZ_EMBLEMS.dreamsigns ?? []), ...(pool.emblems.dreamsigns ?? [])].map((dreamsign) => dreamsign.id);
+  const avatars = [...(FUZZ_EMBLEMS.avatars ?? []), ...(pool.emblems.avatars ?? [])].filter((avatar) => avatar.status === "authored").map((avatar) => avatar.id);
+  const dreamsigns = [...(FUZZ_EMBLEMS.dreamsigns ?? []), ...(pool.emblems.dreamsigns ?? [])].filter((dreamsign) => dreamsign.status === "authored").map((dreamsign) => dreamsign.id);
   const avatarTargets = targetWindow(targets.flatMap((target) => target.kind === "avatar" ? [target.uuid] : []), SIDES.length, ordinal);
   const dreamsignTargets = targets.flatMap((target) => target.kind === "dreamsign" ? [target.uuid] : []);
   const support = targetWindow(figmentSupport(pool), BACK_RANK_SIZE, ordinal).map((sign) => sign.id);
