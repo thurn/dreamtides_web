@@ -19,6 +19,7 @@ import {
   exhaustSelf,
   optionalCost,
   revealCost,
+  returnCost,
 } from "../dsl/builders";
 import * as p from "../effects/primitives";
 import { createEngine } from "../engine";
@@ -63,6 +64,8 @@ const HAND = {
   chosenFirst: fixture(3, "event", () => [additionalCost(discardCost(1), discardHandCost()), event(p.gainPoints(1))]),
   /** "To play this event, reveal an event, then discard your hand. Gain 1⍟." */
   revealFirst: fixture(4, "event", () => [additionalCost(revealCost(1, { cardType: "event" }), discardHandCost()), event(p.gainPoints(1))]),
+  /** A returned character enters hand during payment, after the original hand is captured. */
+  returnFirst: fixture(9, "event", () => [additionalCost(returnCost(), discardHandCost()), event(p.gainPoints(1))]),
   /** A hand cost after a whole-hand discard has no card left. */
   handThenDiscard: fixture(5, "event", () => [additionalCost(discardHandCost(), discardCost(1)), event(p.gainPoints(1))]),
   /** The same order as an optional cost, and as an alternative to 1●. */
@@ -173,6 +176,21 @@ describe("discard your hand as a cost", () => {
     expect(result.events).toContainEqual({ kind: "revealed", side: "player", instances: [shown] });
     expect(discards(result.events)).toEqual([other]);
     expect(result.state.sides.player.hand).toEqual([shown]);
+  });
+
+  it("keeps a character returned by an earlier cost in hand and discards exactly the original hand", () => {
+    for (const size of [0, 2]) {
+      const { state, ids } = board({ back: [v.vanilla1.id], hand: [HAND.returnFirst.id, ...Array.from({ length: size }, () => v.vanilla2.id)] });
+      const [card, ...originalHand] = ids.player.hand;
+      const returned = ids.player.back[0]!;
+      expect(legal(state)).toContainEqual(play(card));
+      const paid = run(state, play(card));
+      expect(paid.state.sides.player.hand).toEqual([returned]);
+      expect(paid.state.sides.player.backRank).not.toContain(returned);
+      expect(discards(paid.events)).toEqual(originalHand);
+      expect(new Set(paid.state.sides.player.void)).toEqual(new Set(originalHand));
+      expect(paid.state.stack[0]).toMatchObject({ kind: "card", instance: card });
+    }
   });
 
   it("leaves a later hand cost no card, alone, as an optional cost, or as an alternative", () => {

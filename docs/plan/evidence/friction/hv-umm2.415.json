@@ -1,0 +1,95 @@
+{
+  "bead": "hv-umm2.415",
+  "phase": 5,
+  "implementMin": 11.80735045,
+  "implementationWindow": {
+    "dispatch": "2026-10-11T19:11:42.510966+00:00",
+    "commitPreparation": "2026-10-11T19:23:30.951993+00:00",
+    "scope": "elapsed wall time from dispatch through final commit preparation, including research, verification, all parent audit and acknowledgement waits, and temporal evidence correction; amend command start and duration retained in runtime sidecar",
+    "initialEvidencePreparation": "2026-10-11T19:19:50.215421+00:00"
+  },
+  "localValidationS": {
+    "focused": 2.759811208001338,
+    "review": 10.546111917006783,
+    "knip": 3.4572610830073245
+  },
+  "hostLoad": 3.7,
+  "hostLoadSamples": {
+    "install": {
+      "at": "2026-10-11T19:11:45.834109+00:00",
+      "raw": "{ 23.89 23.14 19.12 }",
+      "scope": "command start"
+    },
+    "generator-baseline": {
+      "at": "2026-10-11T19:12:58.562502+00:00",
+      "raw": "{ 11.04 19.44 18.04 }",
+      "scope": "command start"
+    },
+    "generator-baseline-capture": {
+      "at": "2026-10-11T19:14:05.255734+00:00",
+      "raw": "{ 5.65 16.02 16.85 }",
+      "scope": "command start"
+    },
+    "negative-semantics": {
+      "at": "2026-10-11T19:14:04.133374+00:00",
+      "raw": "{ 6.05 16.28 16.95 }",
+      "scope": "command start"
+    },
+    "negative-corrected": {
+      "at": "2026-10-11T19:14:25.528970+00:00",
+      "raw": "{ 4.38 15.07 16.49 }",
+      "scope": "command start"
+    },
+    "negative-final": {
+      "at": "2026-10-11T19:14:48.356525+00:00",
+      "raw": "{ 4.96 14.51 16.25 }",
+      "scope": "command start"
+    },
+    "negative-confirmed": {
+      "at": "2026-10-11T19:15:04.661265+00:00",
+      "raw": "{ 5.03 14.06 16.06 }",
+      "scope": "command start"
+    },
+    "friction-baseline": {
+      "at": "2026-10-11T19:15:40.063778+00:00",
+      "raw": "{ 4.45 12.78 15.50 }",
+      "scope": "command start"
+    },
+    "focused-final": {
+      "at": "2026-10-11T19:16:20.646652+00:00",
+      "raw": "{ 4.32 11.73 14.99 }",
+      "scope": "command start"
+    },
+    "generator-final": {
+      "at": "2026-10-11T19:16:21.773968+00:00",
+      "raw": "{ 4.32 11.73 14.99 }",
+      "scope": "command start"
+    },
+    "generator-check": {
+      "at": "2026-10-11T19:16:38.630810+00:00",
+      "raw": "{ 4.17 11.33 14.79 }",
+      "scope": "command start"
+    },
+    "review": {
+      "at": "2026-10-11T19:16:51.539250+00:00",
+      "raw": "{ 3.70 10.88 14.57 }",
+      "scope": "command start"
+    },
+    "knip": {
+      "at": "2026-10-11T19:17:16.103443+00:00",
+      "raw": "{ 5.13 10.66 14.38 }",
+      "scope": "command start"
+    },
+    "own-friction": {
+      "at": "2026-10-11T19:19:13.404812+00:00",
+      "raw": "{ 3.41 8.30 12.98 }",
+      "scope": "strict own-record reader validation command start"
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 64,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

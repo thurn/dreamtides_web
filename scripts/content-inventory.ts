@@ -41,7 +41,7 @@
  * Output is deterministic: no timestamps, and every list is sorted.
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { APOLLYON_INCARNATIONS } from "../src/content/apollyon";
 import { AVATARS } from "../src/content/avatars";
@@ -304,7 +304,8 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("alternativeCost", DSL_TYPES, /kind: "alternativeCost"/, ["Ability"], { note: "\"you may play this card for …\"" }),
   dsl("pointsCost", DSL_TYPES, /cost: "points"/, ["PaymentCost"], { note: "pay ⍟ as a cost" }),
   dsl("returnCost", DSL_TYPES, /cost: "return"/, ["PaymentCost"], { note: "\"Return a character you control to hand:\" as a cost" }),
-  dsl("discardCostFilter", DSL_TYPES, /cost: "discard";[^\n]*filter/, ["PaymentCost"], { note: "discard a matching card, X cards, or the whole hand as a cost" }),
+  dsl("discardHandCost", DSL_TYPES, /cost: "discard";[^\n]*count: "hand"/, ["PaymentCost"], { note: "discard every eligible hand card as a cost, without a choice" }),
+  dsl("discardCostFilter", DSL_TYPES, /cost: "discard";[^\n]*filter/, ["PaymentCost"], { note: "discard a matching card or X cards as a cost" }),
   dsl("banishXCost", DSL_TYPES, /banishFromVoid";[^\n]*count: "x";[^\n]*min: number/, ["PaymentCost"], { note: "banish X cards from your void" }),
   dsl("banishFromAnyVoidCost", DSL_TYPES, /banishFromAnyVoid";[^\n]*player/, ["PaymentCost"], { note: "banish a card from the opponent's or any void as a cost" }),
   dsl("whenDissolvedTrigger", DSL_TYPES, /on: "dissolved"; readonly subject/, ["Trigger"], { note: "\"when a character you control is dissolved\"" }),
@@ -550,8 +551,9 @@ const RULES: readonly Rule[] = [
   { tag: "cost-energy-x", family: 0, part: "all", re: /(^|\n|, )X●[,:]|X●: |X● cost|cost X●|Choose a value of X|with cost X\b/, needs: ["energyX"], prompts: ["chooseX"] },
   { tag: "cost-abandon", family: 0, part: "cost", re: /\bAbandon (a|an|another|two|\d|a non-figment|X)/i, needs: ["abandonCost"], prompts: ["abandonCost"] },
   { tag: "cost-abandon-self", family: 0, part: "cost", re: /\b[Aa]bandon this character/, needs: ["abandonCost"] },
-  { tag: "cost-discard", family: 0, part: "cost", re: /\bDiscard (a|an|\d|X|two|your hand)/i, needs: ["discardCost"], prompts: ["discardCost"] },
-  { tag: "cost-discard-filter", family: 0, part: "cost", re: /\bDiscard (a character|an event|a ≤|X cards|your hand)/i, needs: ["discardCostFilter"] },
+  { tag: "cost-discard-hand", family: 0, part: "cost", re: /\bDiscard your hand\b/i, needs: ["discardHandCost"] },
+  { tag: "cost-discard", family: 0, part: "cost", re: /\bDiscard (a|an|\d|X|two)/i, needs: ["discardCost"], prompts: ["discardCost"] },
+  { tag: "cost-discard-filter", family: 0, part: "cost", re: /\bDiscard (a character|an event|a ≤|X cards)/i, needs: ["discardCostFilter"] },
   { tag: "cost-banish-void", family: 0, part: "cost", re: /\bBanish (\d+|a|X) (cards?|character) from (your|the opponent's|a) void|banish \d+ cards from your void|banish X cards/i, needs: ["banishFromVoidCost"], prompts: ["banishCost"] },
   { tag: "cost-banish-any-void", family: 0, part: "cost", re: /from (the opponent's|a) void/i, needs: ["banishFromAnyVoidCost"] },
   { tag: "cost-banish-x", family: 0, part: "cost", re: /banish X cards/i, needs: ["banishXCost"], prompts: ["chooseX"] },
@@ -890,7 +892,7 @@ function splitNeeds(needs: Iterable<string>): EntityRecord["requiredPrimitives"]
   return { existing: sorted.filter((name) => primitive(name).exists), new: sorted.filter((name) => !primitive(name).exists) };
 }
 
-function finishRecord(base: EntityBase, tagged: readonly string[], correction: Correction | undefined, routing: string[]): EntityRecord {
+function classifyTags(tagged: readonly string[], correction?: Correction): Pick<EntityRecord, "tags" | "requiredPrimitives" | "promptKinds" | "family"> {
   const tags = new Set(tagged);
   for (const tag of correction?.remove ?? []) tags.delete(tag);
   for (const tag of correction?.add ?? []) tags.add(tag);
@@ -899,21 +901,32 @@ function finishRecord(base: EntityBase, tagged: readonly string[], correction: C
   let family = 0;
   for (const tag of tags) {
     const info = TAGS.get(tag);
-    if (info === undefined) throw new Error(`${base.id}: unknown tag ${tag}`);
+    if (info === undefined) throw new Error(`unknown tag ${tag}`);
     needs.push(...info.needs);
     for (const prompt of info.prompts ?? []) prompts.add(PROMPTS[prompt]);
     family = Math.max(family, info.family);
     if (UNIQUE_TAGS.has(tag)) family = 16;
   }
   return {
-    ...base,
     tags: [...tags].sort(compare),
     requiredPrimitives: splitNeeds(needs),
     promptKinds: [...prompts].sort(compare),
     family: correction?.family ?? family,
+  };
+}
+
+function finishRecord(base: EntityBase, tagged: readonly string[], correction: Correction | undefined, routing: string[]): EntityRecord {
+  return {
+    ...base,
+    ...classifyTags(tagged, correction),
     routing,
     ...(correction?.note === undefined ? {} : { correction: correction.note }),
   };
+}
+
+/** Planning requirements and prompts for printed rules text, before UUID-specific corrections. */
+export function classifyInventoryText(text: string) {
+  return classifyTags(tagsOf(text));
 }
 
 const tagsOf = (text: string, rules: readonly Rule[] = RULES): string[] => applyRules(text, rules).map((rule) => rule.tag);
@@ -1570,4 +1583,4 @@ function main(): void {
   console.log(`wrote ${OUTPUT}: ${String(records.length)} entities, ${String(beads.length)} beads`);
 }
 
-main();
+if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
