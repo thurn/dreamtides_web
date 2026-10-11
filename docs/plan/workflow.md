@@ -554,7 +554,9 @@ draining](#starting-scaling-and-draining) says.
   - review dispositions;
   - blockers and next action.
 
-  Update at meaningful transitions, not every tool call.
+  Write one entry per meaningful transition in plain sentences with normal
+  spacing between words. Include the relevant identifiers, evidence and next
+  action in that entry.
 
 ### Closing
 
@@ -1008,7 +1010,9 @@ retrospectives. None of them waits for the phase's mason pass.
 ### Friction ledger
 
 Every bead writes one file, `docs/plan/evidence/friction/<bead-id>.json`, in
-its own commit:
+its own commit. Keep new records compact, using these seven fields. Put
+measurement windows, provenance, command scopes and detailed observations in
+`docs/plan/evidence/measurements/<bead-id>.json`.
 
 ```json
 {"bead":"hv-xxx","phase":3,"implementMin":95,"localValidationS":{"review":38,"focused":12,"fuzz":40},"hostLoad":12.4,"testDelta":{"files":-3,"lines":-820,"jsdomFiles":-2},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
@@ -1016,14 +1020,15 @@ its own commit:
 
 - **`implementMin`** is the implementer's wall time in minutes from dispatch
   to commit, including research, coordination, queue waits and verification.
-  Record the measurement window; this measures elapsed wall time rather than
-  productive editing time.
+  Record the measurement window in the bead's measurement JSON; this measures
+  elapsed wall time rather than productive editing time.
 - **`hostLoad`** is `sysctl -n vm.loadavg`'s 1-minute value when the
   validation ran. Prefer the review step's starting value. An observation from
   another validation step or command group records its actual scope in
-  `schemaNormalization.fields.hostLoad.measuredFor`. Keep detailed per-step
-  samples under `hostLoadSamples`. Always read timings next to their measured
-  scope.
+  `schemaNormalization.fields.hostLoad.measuredFor` in
+  `docs/plan/evidence/measurements/<bead-id>.json`. Keep detailed per-step
+  samples under `hostLoadSamples` in that measurement JSON. Always read
+  timings next to their measured scope.
 - **`testDelta`** counts test files, test lines, and `jsdom` test files,
   added minus deleted.
 - **`friction`** lists each problem that cost more than ~10 minutes: tooling,
@@ -1425,7 +1430,7 @@ evidence lands in its own commit and is found by bead ID:
 | Record | Path |
 | --- | --- |
 | Friction | `docs/plan/evidence/friction/<bead-id>.json` |
-| Measurements | `docs/plan/evidence/measurements/<bead-id>.md` |
+| Measurements | `docs/plan/evidence/measurements/<bead-id>.md` for prose; `<bead-id>.json` in the same directory for structured measurements |
 | Test triage | `docs/plan/evidence/test-triage/<bead-id>.jsonl` |
 | QA ledger | `docs/plan/evidence/qa-ledger/<bead-id>.jsonl` |
 | Rules decisions | `docs/plan/evidence/rules-decisions/RD-<bead-id>-<n>.md` |

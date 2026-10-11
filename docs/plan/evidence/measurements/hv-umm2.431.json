@@ -1,0 +1,159 @@
+{
+  "bead": "hv-umm2.431",
+  "base": "5f305f63f2e656bb0e28d9e01712f5718ba89789",
+  "measurementWindow": {
+    "startedAt": "2026-10-11T20:35:17.670000+00:00",
+    "initialPreparedAt": "2026-10-11T20:36:55.744468+00:00",
+    "endedAt": "2026-10-11T20:37:54.964756+00:00",
+    "scope": "Implementation dispatch through final commit preparation after parental COMMITACK, including research, coordination, waits and verification.",
+    "dispatchProvenance": "Parent rollout call_7032884b35b243c88e59a4c6d3c09b30; exact dispatch recorded in 431-exact-dispatch.json.",
+    "draftPreparedAt": "2026-10-11T20:36:10.883649+00:00",
+    "finalPreparedAt": "2026-10-11T20:37:54.964756+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting one-minute host load (sysctl vm.loadavg; also recorded by os.getloadavg)."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "install": {
+      "rawVmLoadavg": null,
+      "values": [
+        25.05029296875,
+        26.63623046875,
+        21.72216796875
+      ],
+      "measuredAt": "2026-10-11T20:35:28.240575+00:00"
+    },
+    "review": {
+      "rawVmLoadavg": "{ 19.37 24.66 21.29 }",
+      "values": [
+        19.373046875,
+        24.66015625,
+        21.28564453125
+      ],
+      "measuredAt": "2026-10-11T20:36:25.933348+00:00"
+    },
+    "knip": {
+      "rawVmLoadavg": "{ 18.06 24.30 21.18 }",
+      "values": [
+        18.0615234375,
+        24.30029296875,
+        21.17822265625
+      ],
+      "measuredAt": "2026-10-11T20:36:29.033450+00:00"
+    }
+  },
+  "commands": [
+    {
+      "command": "npm install",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/readable-workflow-records",
+      "startedAt": "2026-10-11T20:35:28.240575+00:00",
+      "endedAt": "2026-10-11T20:35:30.669460+00:00",
+      "elapsedSeconds": 2.428884983062744,
+      "hostLoadSamples": [
+        25.05029296875,
+        26.63623046875,
+        21.72216796875
+      ],
+      "pid": 97924,
+      "exitCode": 0,
+      "retainedOutput": "install.json"
+    },
+    {
+      "command": "npm run review",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/readable-workflow-records",
+      "startedAt": "2026-10-11T20:36:25.933348+00:00",
+      "endedAt": "2026-10-11T20:36:26.257071+00:00",
+      "elapsedSeconds": 0.32372283935546875,
+      "hostLoadSamples": [
+        19.373046875,
+        24.66015625,
+        21.28564453125
+      ],
+      "rawVmLoadavg": "{ 19.37 24.66 21.29 }",
+      "pid": 10286,
+      "processGroup": 10286,
+      "observedPids": [
+        10286,
+        10302,
+        10330,
+        10359
+      ],
+      "liveAfter": [],
+      "wrapperPid": 10275,
+      "exitCode": 0,
+      "retainedOutput": "review.json"
+    },
+    {
+      "command": "npm run knip",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/readable-workflow-records",
+      "startedAt": "2026-10-11T20:36:29.033450+00:00",
+      "endedAt": "2026-10-11T20:36:32.501997+00:00",
+      "elapsedSeconds": 3.4685471057891846,
+      "hostLoadSamples": [
+        18.0615234375,
+        24.30029296875,
+        21.17822265625
+      ],
+      "rawVmLoadavg": "{ 18.06 24.30 21.18 }",
+      "pid": 10450,
+      "processGroup": 10450,
+      "observedPids": [
+        10450,
+        10466,
+        10520,
+        10522,
+        10523,
+        10529,
+        10551,
+        10553,
+        10700
+      ],
+      "liveAfter": [],
+      "wrapperPid": 10437,
+      "exitCode": 0,
+      "retainedOutput": "knip.json"
+    }
+  ],
+  "verification": {
+    "nonTestCodeChurn": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "fullSuite": "Not run; documentation-only change.",
+    "browser": "Not run; documentation-only change.",
+    "independentReview": "Not required; noncore documentation bead.",
+    "reviewScope": "Friction-record schema validation only: 399 records, 41 historical unknown measurements. No typecheck, lint or tests were selected for the documentation diff.",
+    "knipScope": "Workspace materialization, unused-code analysis and restoration of local assets passed. Isolated setup warned about absent art; the restore step linked the local assets."
+  },
+  "resources": {
+    "observedPids": [
+      10275,
+      10286,
+      10302,
+      10330,
+      10359,
+      10437,
+      10450,
+      10466,
+      10520,
+      10522,
+      10523,
+      10529,
+      10551,
+      10553,
+      10700,
+      97924
+    ],
+    "liveAfter": [],
+    "checkedAt": "2026-10-11T20:36:55.744468+00:00",
+    "browserSessions": 0,
+    "servers": 0,
+    "installDescendantObservation": "Install exited synchronously; its command PID is absent. Review and Knip descendants were sampled in dedicated process groups."
+  }
+}
