@@ -110,7 +110,8 @@ export interface PayableEffectView {
 export interface FloatingEffectView {
   readonly id: EffectId;
   readonly controller: Side;
-  readonly source: AbilitySource;
+  /** A play permission survives its source becoming hidden or ceasing; its source is then null. */
+  readonly source: AbilitySource | null;
   readonly timestamp: number;
   readonly expiry: Expiry;
   readonly change: FloatingChange;
@@ -289,7 +290,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   });
   const floatingVisible = (effect: FloatingEffect): boolean => {
     const changed = changedInstance(effect.change);
-    return visibleSource(effect.source) && (changed === null || visible(changed));
+    // Permissions carry their complete legality data without source identity.
+    // Other changes retain their existing source visibility boundary.
+    const sourceSeen = visibleSource(effect.source);
+    const expirySeen = effect.expiry.at !== "sourceLeavesPlay" || visible(effect.expiry.source);
+    return (sourceSeen || effect.change.kind === "playFrom") && expirySeen && (changed === null || visible(changed));
   };
   const side = (which: Side): SideView => {
     const source = state.sides[which];
@@ -330,7 +335,10 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       source: visibleSource(effect.source) ? copy(effect.source) : null,
       affects: effect.affects.filter(visible),
     })),
-    floating: state.floating.filter(floatingVisible).map((effect) => copy(effect)),
+    floating: state.floating.filter(floatingVisible).map((effect) => ({
+      ...copy(effect),
+      source: visibleSource(effect.source) ? copy(effect.source) : null,
+    })),
     triggerQueue: state.triggerQueue.map((trigger) => ({
       controller: trigger.controller,
       source: visibleSource(trigger.source) ? copy(trigger.source) : null,

@@ -28,7 +28,10 @@
  *   view omits, the opponent's knowledge, loop history, and the
  *   automatic-step count start empty;
  * - an effect a side may pay to end whose source the viewer cannot see
- *   names its controller's avatar as its source.
+ *   names its controller's avatar as its source;
+ * - a play permission whose source is hidden or ceased also uses its
+ *   controller's avatar: its filter, named card, duration, and consumption
+ *   are independent of its source identity.
  */
 import { plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
@@ -229,7 +232,10 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     priority: view.priority,
     payable,
     triggerQueue,
-    floating: view.floating.map((effect) => copy(effect)),
+    floating: view.floating.map((effect) => ({
+      ...copy(effect),
+      source: effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
+    })),
     turnLog: {
       played: playedCards,
       drawn: { ...view.turnLog.drawn },

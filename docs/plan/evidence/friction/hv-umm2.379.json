@@ -1,0 +1,236 @@
+{
+  "bead": "hv-umm2.379",
+  "phase": 5,
+  "implementMin": 32.05,
+  "localValidationS": {
+    "installReported": 3,
+    "negative": 3.95,
+    "fixedTransitionContracts": 3.04,
+    "focused": 3.4,
+    "reviewFirst": 4.3,
+    "review": 29.87,
+    "knip": 3.19,
+    "full": 62.33,
+    "fuzz": 40.72,
+    "qaFinal": 49.589
+  },
+  "hostLoad": 32.86,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 12
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10.79,
+      "note": "Measured first browser launch through final successful report, including native lease waits. Ignored QA script needed correct public probe.pending, explicit rendered prompt readiness and physical-card selectors across layouts. Cross-run resume attempts were diagnosed as isolated-context storage absence. Raw failed reports and actual final-failure DOM/probe/logs retained; no tracked source changed during QA. No unchanged retry was used."
+    }
+  ],
+  "timingBasis": "Setup creation2026-10-11T14:30:46Z is the retained dispatch-start proxy; end measured at evidence finalization immediately before commit. Validation times use /usr/bin/time, install is npm-reported duration. Load6.13 observed after full; final browser report load21.95; no performance claim.",
+  "base": "bc5280cc6579c62d3072a3a8950514b8afd8c130",
+  "sourceHashes": {
+    "src/engine/view/view.ts": "d09f6b36eb31d5d10480c11b4c33661fefa0a27309dd7ae93b235efc8fdc0d17",
+    "src/engine/view/determinize.ts": "7447c871ef8e525e570a1e37f998fe324b7577cf9f9dc523ef3a5a5ed627c447",
+    "src/engine/effects/primitives/contracts/play-from-zone-view.contracts.ts": "d46f1811a9a413103b56e58deb1145f9753794c22c4bf23e0cf653e0cbfae0b4",
+    "src/content/specs/prim-play-from-zone.scenarios.ts": "0298096003faa9b9f0ad6b7fd3583e8cde3b676cc2fa7d94a6708c04b5f694fa",
+    "src/content/specs/index.ts": "3ad698a0734dbd1a34b7b9f0193b7264b40d0a5b0372ea084f81041471a4b1ec"
+  },
+  "validationArtifacts": {
+    "negative": {
+      "file": "negative.log",
+      "sha256": "ae260caed27c70e6b19799ce76480e829cd1e270dba9ad43ca7ae559d39e0b5a"
+    },
+    "focused": {
+      "file": "focused.log",
+      "sha256": "0c12f9395c0c2bc7b7a66c94d7ae8452de9a78ecaf22fc1aebbfad4ad4d1c883"
+    },
+    "review": {
+      "file": "review.log",
+      "sha256": "7402d00a3a4d7297001642230588e0d2dd70584b9a256da948be70e320456434"
+    },
+    "knip": {
+      "file": "knip.log",
+      "sha256": "00123e8be622c254d294f733efffb0dd7b05cba63b55e21d8405febb5af5ed77"
+    },
+    "full": {
+      "file": "full.log",
+      "sha256": "69b231832e623f4ae8a752e1e369967ca3ab2911daf3a22ca68ed37362a852f0"
+    },
+    "fuzz": {
+      "file": "fuzz.log",
+      "sha256": "8cf201c495079f95bd3adb56cea010cf4ebac04202058029a1995186e43d4b5d"
+    }
+  },
+  "negativeProof": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts -t 'playFromZone view'",
+    "base": "bc5280cc6579c62d3072a3a8950514b8afd8c130",
+    "productionUnchanged": true,
+    "result": "8 failed /394 skipped. All8 fail playable() at expected missing floating permission: expected length1, received0. Permissions first granted through public engine then source actually returned/shuffled or created copy ceased, both controllers.",
+    "file": "negative.log",
+    "sha256": "ae260caed27c70e6b19799ce76480e829cd1e270dba9ad43ca7ae559d39e0b5a"
+  },
+  "acceptance": {
+    "focused": "5 files/468 tests passed: primitive contracts, view, view knowledge, determinization and all content scenarios.",
+    "review": "111 files/1550 tests plus lint, cycles and both typechecks passed. Assets restored.",
+    "knip": "passed, assets restored.",
+    "full": "321 files/3195 tests and production bundle passed under heavy lock. Nullable public view/determinization boundary justified full; assets restored before browser requests.",
+    "fuzz": {
+      "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 200",
+      "games": 200,
+      "seedPrefix": "fuzz",
+      "ordinals": [
+        0,
+        199
+      ],
+      "steps": 99687,
+      "prompts": 1877,
+      "interactiveReruns": 178,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "failures": 0
+    },
+    "browser": {
+      "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.379/permission-workflow.mjs --bead hv-umm2.379 --port 5174 --viewports desktop,mobile",
+      "report": "permission-workflow.result.json",
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 1249,
+        "scenario": 48270,
+        "total": 49589
+      },
+      "hostLoad": 21.95166015625,
+      "caps": [],
+      "verdicts": {
+        "desktop": {
+          "gameId": "tt2tte",
+          "geometry": {
+            "width": 28,
+            "height": 28,
+            "x": 706,
+            "y": 653.8571166992188,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "logRows": 57,
+          "versions": [
+            2,
+            6,
+            8
+          ]
+        },
+        "mobile": {
+          "gameId": "deyh2g",
+          "geometry": {
+            "width": 28,
+            "height": 28,
+            "x": 181,
+            "y": 642.109375,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "logRows": 55,
+          "versions": [
+            2,
+            6,
+            8
+          ]
+        }
+      },
+      "captures": [
+        {
+          "filename": "permission-workflow-granted-desktop.png",
+          "width": 1440,
+          "height": 900,
+          "sha256": "0cef00e8ede41ab8e0ef5b0faf523f1001ade4148ef33bfb1813796ad4cc5e2a"
+        },
+        {
+          "filename": "permission-workflow-hidden-desktop.png",
+          "width": 1440,
+          "height": 900,
+          "sha256": "7a41240a627597034d58e9fbbdedbb897b1ca3bb07701eb2bd126a4e178f5614"
+        },
+        {
+          "filename": "permission-workflow-void-choice-desktop.png",
+          "width": 1440,
+          "height": 900,
+          "sha256": "1687264595f5a99d2306c031d52273ad2b9dd767fbcf12171bf922261978d0d5"
+        },
+        {
+          "filename": "permission-workflow-used-desktop.png",
+          "width": 1440,
+          "height": 900,
+          "sha256": "a98639b998ebacc5e7e90e40761f90468015882b1414787fa09c3e08e1cc72cc"
+        },
+        {
+          "filename": "permission-workflow-granted-mobile.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "7a9d7ffa8d178650b45c5ba5a740720a6d87c6c746e1d8bf2710dcfa9f9b3bb5"
+        },
+        {
+          "filename": "permission-workflow-hidden-mobile.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "287764e5bab1176e85660266269f47e3e039a18520b0404f4d7e030e53d55dc9"
+        },
+        {
+          "filename": "permission-workflow-void-choice-mobile.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "707dcddedc4985873b7a2f1aa1e3204d34fbfd3d6c3740b34731de68e864822c"
+        },
+        {
+          "filename": "permission-workflow-used-mobile.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "541f7e4725583a91da97706b8c87723999996ccfaf5ae8ebf1e29874b59c9aa3"
+        }
+      ]
+    }
+  },
+  "privacy": "Only playFrom records may retain a hidden/ceased source as null. A hidden named changed card or expiry.sourceLeavesPlay identity keeps the record hidden. Tests assert no hidden source instance ID or printing UUID in either view. Anonymous permission reconstruction uses existing controller-avatar provenance; filter/named card/expiry/next data alone determines its legality. Other floating kinds retain source visibility requirements.",
+  "contracts": "8 synthetic public transition cases: two controllers \u00d7 hidden/ceased source \u00d7 next-event/named-turn permission. JSON view reload and deterministic samples preserve legal void play, Greedy trace includes successful simulations, event/character and named-card exclusions remain, play consumption and Ending expiry hold.4 actual-catalog scenarios cover God filtering and normal costs/static departure, Salvager actual discard trigger\u2192hidden source\u2192Ending, Technician actual Materialized Erode4, and Technician next-event grant\u2192hidden source\u2192sample\u2192consume. All\u2264109 lines; no synthetic contract depends on catalog data.",
+  "iteration": "Scenario setup diagnostics corrected unnecessary response passes and auto-target answers; catalog Materialized trigger tested separately from ready activation. Initial review strict lint findings fixed within test modules (typed JSON reload and direct structured match assertions). No production behavior outside view boundary changed.",
+  "historicalQa": {
+    "reports": [
+      "permission-hidden.result.json",
+      "permission-hidden-resume.result.json",
+      "permission-hidden-resume-ready.result.json",
+      "permission-hidden-fixed.result.json",
+      "permission-hidden-final.result.json"
+    ],
+    "initialGrantCapture": "Early grant filename was reused by the second fresh fixture; immutable first raw report is retained, and permission-granted-wo7ust-desktop.png preserves the attributable second-game capture. Final accepted captures use unique permission-workflow filenames.",
+    "contextInspection": "permission-hidden-fixed.result.json records old g4u2v6 databases[],gameKeys[],rows[],probe:null.",
+    "actualFailureDiagnosis": "permission-hidden-final.result.json records game7i8z96 pending shuffleInto, DOM/picker observation and persisted action logs before cleanup.",
+    "aggregateRetries": "No review/full/fuzz rerun for ignored QA script changes."
+  },
+  "fallout": [],
+  "preExistingFile": "docs/plan/evidence/pre-existing/hv-umm2.379.md",
+  "runtimeLedger": {
+    "serverGroups": [
+      36626,
+      42332,
+      60239,
+      74296,
+      76582,
+      82977
+    ],
+    "port": 5174,
+    "servers": "All owned groups stopped by runner; final group82977 absent on scoped ps check, runner reports port free.",
+    "browser": "Every run closed its context/settled provider and released native lease before next run.",
+    "heavy": "Full and fuzz commands completed; lock held only by those exact commands.",
+    "externalWriters": 0
+  },
+  "outstanding": [],
+  "contractScenarioModules": 2,
+  "contractScenarioLines": 217,
+  "testCounting": "testDelta.files/lines count tracked *.test.* or *.spec.* entrypoints: both existing runners collect the new plain contract/scenario modules. cases includes their12 additional cases; contractScenarioModules/Lines record plain-module growth separately."
+}
