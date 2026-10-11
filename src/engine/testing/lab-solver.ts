@@ -51,7 +51,7 @@ function characterFor(
 
 /** A matching printing for a void target on the lab's neutral setup board. */
 function voidCardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
-  const fits = (card: EngineCardDefinition): boolean => matchesFilter({ ...card, allTypes: false }, filter);
+  const fits = (card: EngineCardDefinition): boolean => card.status !== "authored" && matchesFilter({ ...card, allTypes: false }, filter);
   const found = Object.values(SYNTHETIC).find(fits) ?? pool.find(fits);
   if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
   engine.catalog.card(found.id);

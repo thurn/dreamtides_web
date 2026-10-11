@@ -1358,7 +1358,7 @@ describe("zone card references", () => {
     expect(JSON.stringify(result.events.map((event) => eventSeenBy(event, "player", result.state)))).not.toMatch(new RegExp(named.join("|")));
     expect(records.some((record) => record.event === "engine.action")).toBe(true);
     for (const record of records) {
-      for (const id of named) expect(JSON.stringify(record)).not.toContain(JSON.stringify(id));
+      for (const id of named) expect(JSON.stringify(record)).not.toMatch(new RegExp(`\\b${id}\\b`));
     }
     // The copies are private to the hand that holds them.
     for (const event of result.events.filter((item) => item.kind === "cardCreated")) expect(eventSeenBy(event, "enemy", result.state)).toBeNull();

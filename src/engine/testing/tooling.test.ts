@@ -46,7 +46,8 @@ const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingChar
 describe("card-lab setup solver", () => {
   it("stages subtype-only and combined type/subtype void targets with canonical filter matching", () => {
     const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(907), subtype: "Mage" };
-    const filters: readonly CardFilter[] = [{ subtype: "" }, { cardType: "event", subtype: "" }, { cardType: "character", subtype: "Mage" }];
+    const eventCard: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(912), subtype: "Ember" };
+    const filters: readonly CardFilter[] = [{ subtype: "Ember" }, { cardType: "event", subtype: "Ember" }, { cardType: "character", subtype: "Mage" }];
     for (const [index, filter] of filters.entries()) {
       const card: EngineCardDefinition = {
         ...SYNTHETIC.event0,
@@ -54,13 +55,32 @@ describe("card-lab setup solver", () => {
         status: "authored",
         abilities: () => [event(createCopyInHand(fromVoid(filter, { player: "opponent", count: 2 })))],
       };
-      const labEngine = createEngine(testCatalog([card, mage]));
-      const { state } = labBoard(labEngine, card.id, [mage], "enemy");
+      const labEngine = createEngine(testCatalog([card, mage, eventCard]));
+      const { state } = labBoard(labEngine, card.id, [mage, eventCard], "enemy");
       expect(state.sides.player.void).toHaveLength(2);
       expect(new Set(state.sides.player.void).size).toBe(2);
-      for (const id of state.sides.player.void) expect(cardMatchesFilter(state, labEngine.catalog, id, filter)).toBe(true);
+      for (const id of state.sides.player.void) {
+        expect(cardMatchesFilter(state, labEngine.catalog, id, filter)).toBe(true);
+        expect(state.instances[id]?.printing).toEqual({ kind: "card", cardId: filter.subtype === "Mage" ? mage.id : eventCard.id });
+      }
       expect(state.sides.enemy.void).toEqual([]);
     }
+  });
+
+  it("skips authored void targets in favor of a neutral matching printing", () => {
+    const neutral: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(913), subtype: "Mage" };
+    const authored: EngineCardDefinition = { ...neutral, id: syntheticId(914), status: "authored", abilities: () => [] };
+    const card: EngineCardDefinition = {
+      ...SYNTHETIC.event0,
+      id: syntheticId(915),
+      status: "authored",
+      abilities: () => [event(createCopyInHand(fromVoid({ cardType: "character", subtype: "Mage" })))],
+    };
+    const labEngine = createEngine(testCatalog([card, authored, neutral]));
+    const { state } = labBoard(labEngine, card.id, [authored, neutral]);
+    expect(state.sides.player.void).toHaveLength(1);
+    const [target] = state.sides.player.void;
+    expect(target === undefined ? undefined : state.instances[target]?.printing).toEqual({ kind: "card", cardId: neutral.id });
   });
 
   it("rejects a void filter whose type and subtype cannot match any setup printing", () => {
