@@ -222,6 +222,8 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
         return { ...empty, points: cost.amount };
       case "banishFromVoid":
         return { ...empty, voidCards: Array.from({ length: cost.count === "x" ? cost.min : cost.count }, () => cost.filter) };
+      case "return":
+        return { ...empty, characters: Array.from({ length: cost.count }, () => cost.selector) };
       case "abandon": {
         const selector = cost.selector;
         // The source is in hand as a card is played; another staged instance cannot pay a self-only cost.

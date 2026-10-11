@@ -93,6 +93,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
       case "abandonCost":
       case "abandon":
         return cards("abandon", "character", "characters");
+      case "returnCost":
+        return cards("return", "character", "characters", " to hand");
       case "discardCost":
       case "discard":
         return cards("discard");
@@ -348,6 +350,8 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
     case "abandonCost":
     case "abandon":
       return "character you could abandon";
+    case "returnCost":
+      return "character you could return to hand";
     case "revealCost":
       return "card you could reveal";
     case "banishCost":
@@ -424,6 +428,8 @@ function costPhrase(cost: Cost): string {
       return "exhaust it";
     case "abandon":
       return `abandon ${plural(cost.count, "character", "characters")}`;
+    case "return":
+      return `return ${plural(cost.count, "character", "characters")} to hand`;
     case "discard":
       return cost.count === "x" ? "discard X cards" : `discard ${plural(cost.count, "card", "cards")}`;
     case "counters":

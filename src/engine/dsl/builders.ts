@@ -102,6 +102,11 @@ export function abandonSelfCost(): PaymentCost {
   return { cost: "abandon", selector: self(), count: 1 };
 }
 
+/** "Return a character you control to hand" (or N matching characters) as a cost. */
+export function returnCost(extra: Omit<CharacterSelector, "controller"> = {}, count = 1): PaymentCost {
+  return { cost: "return", selector: { controller: "you", ...extra }, count };
+}
+
 /** "Discard N cards" as a cost. */
 export function discardCost(count = 1): PaymentCost {
   return discardCostFilter({}, { count });

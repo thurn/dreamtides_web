@@ -686,6 +686,29 @@ Other costs include spending counters stored on the card itself ("1⧗, ☾: …
 banishing cards from your void, and revealing cards from your hand. A revealed
 card stays in your hand.
 
+**Returning a character as a cost:** "Return a character you control to hand"
+chooses a matching character you control in either rank before commitment.
+It may be the source of the activated ability, but cannot be a target already
+chosen for that ability or a card reserved for another cost. The chosen
+character returns to its owner's hand. An instruction explicitly putting a
+card into "your hand" instead uses the named player's hand.
+
+An ordinary return's zone replacements apply to a return cost: a created
+character ceases to exist and a reclaimed character is banished instead.
+The cost is paid through that replacement. Once activated, the ability is
+independent of its source and resolves with its original controller and
+ability, even if paying returned the source or made it cease to exist.
+Payment choices are cancellable before commitment; payment and the
+activation commit together, and a cancelled choice pays nothing.
+
+Costs are paid in their stated order. Returning the source cannot precede a
+cost that exhausts that source or spends its positive counters: returning
+leaves play and clears those counters. Paying those source costs first,
+then returning it, is permitted. Spending zero counters changes nothing
+and needs no source, so it may follow returning a created source that
+ceases to exist. Alternatives and optional costs obey these
+same ordering requirements.
+
 **Paying ⍟:** A cost such as "To play this character, pay 4⍟." is paid from
 the player's own victory points. A player can pay it only with at least that
 many ⍟, so their total never goes below 0 by paying: with fewer, they cannot

@@ -1,0 +1,547 @@
+{
+  "bead": "hv-umm2.90",
+  "phase": 5,
+  "base": "a5545db55fe6ce723a98373590d1db6dc53d7670",
+  "implementMin": 96.63,
+  "timingBasis": "Initial dispatch/setup proxy15:59:30Z to final integration evidence 2026-10-11T17:35:19.517907+00:00, including checkpoint/prerequisite interval. Original work57.38min; resumed test-assertion/update-base interval 3.23min begins at retained production-proof artifact creation 2026-10-11T17:32:05.606089+00:00 (not exact native dispatch). Separate396 repair/CI wait is recorded independently; original timings remain below.",
+  "localValidationS": {
+    "focused": 3.93,
+    "negativeOrderedGuard": 4.19,
+    "negativeZeroNoop": 3.15,
+    "review": 35.6,
+    "knip": 2.39,
+    "preflight": 0.8
+  },
+  "hostLoad": 3.57861328125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 15
+  },
+  "contractScenarioModules": 2,
+  "contractScenarioLines": 354,
+  "testCounting": "Existing runners discover 13 synthetic cases (287 lines) and 2 actual-catalog scenarios (67 lines). No new test entrypoint; existing UI role expectation line delta0. Test-only review correction adds1 contract line versus original286, case counts unchanged; all new modules under500.",
+  "friction": [
+    {
+      "tag": "source-cost-ordering",
+      "minutes": 12.38,
+      "note": "Observed first ordered negative16:24:43Z to final acceptance matrix start16:37:06Z bounds diagnosis, bounded return planning/zero-counter correction and required final checks together, not isolated editing time. Earlier source costs remain payable; later positive source costs cannot follow self-return; zero counters need no source. Existing positive abandon cause filed separately as394."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 30.54,
+      "note": "Original ignored QA script creation16:19:07Z to final observation16:49:40Z brackets30.54 minutes of preparation, intervening source acceptance/fuzz/sweep, diagnosis and browser runs; this is an elapsed bound, not isolated active scripting time. Actual declared browser run interval16:42:07Z to16:49:40Z is7.55 minutes. Retained30s activated-target driver timeout and45s over-strong AI-action wait; inspected state before adaptive scripts. Driver cause395; no shared driver/UI body edits. Exact active preparation time unavailable."
+    }
+  ],
+  "failurePaths": {
+    "midStepError": "Synthetic paying step throws after energy plus two returns; committed state restored, no partial movement/energy published.",
+    "reloadRestart": "JSON reload both precommit chooseCards and postcommit optional effect; fresh engine/fold resumes with identical final state hash.",
+    "partialWrite": "same error rollback; cancellation leaves state identical before commitment.",
+    "staleInput": "Invalid empty/duplicate selection and cancelled/earlier prompt IDs bounce; committed hash unchanged.",
+    "concurrentActors": "Foreign-side answers and competing enemy battle action bounce while in-flight; single committed action log, paid once.",
+    "sourceDeparture": "Self-return reserves target; normal/created/reclaimed source captured origin/controller resolves after leaving/ceasing. Earlier source costs allowed; later exhaust/positive counters infeasible including nested affordability; zero payment succeeds after ceasing."
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.90-1"
+  ],
+  "cardIssues": [],
+  "immutablePrintedPrefixSha256": {
+    "de946f5a-1e27-4d40-ae44-9ef8cc041949": "92729ec9f7820629788337b650e04e9e05184b1ef6debf88ea9275c158dcc621",
+    "07ceb104-0b27-473a-bc72-e6225479ed83": "9c3c0a4fdfbd1fe496dfa06e2b223c71ec5973bf0766e1a690b5d514d901f46c"
+  },
+  "fallout": [
+    {
+      "file": "src/runtime/battle-prompt-messages.ts",
+      "reason": "Cost exhaustiveness requires additive return costPhrase branch; observed tsc before fix. Prompt copy/role registration already in native scope."
+    }
+  ],
+  "captureRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.90",
+  "runtimeLedger": {
+    "serverGroups": [
+      67746,
+      17260,
+      30824,
+      32716,
+      35435,
+      52317,
+      53538
+    ],
+    "port": 5174,
+    "servers": "Every runner reported own process-group stop. Final scoped ps finds no own group and lsof finds no5174listener.",
+    "browser": "Each native scenario/sweep runner closed own MCP context/provider and released repository browser lease.",
+    "heavy": "Both required weighted commands completed; final-source300 proof retained. Thin5-seed probe outside heavy lock.",
+    "externalWriters": 0
+  },
+  "outstanding": [
+    "Parent-owned final exact-range cold core review and native replacement candidate approval/promotion. Implementation/acceptance refresh complete; original candidate terminal failure is not delivery. Separate pre-existing394/395 remain linked."
+  ],
+  "artifactSha256": {
+    "abandon-order-probe.json": "19079542b7838ce673ce58cba00bcabf6fd555ba81848893f76cf58471f00ae1",
+    "abandon-order-probe.ts": "c66a5e6a28a29c05cd2fc61f6c1a0284457ab790ec335b7dba42879a124de1be",
+    "activation-fuzz-0.jsonl": "ff830f932ade006fad0ca83f85dba6982579352eed4fa50a6b3cd5ddf41598ff",
+    "activation-fuzz-1.jsonl": "5f3ae942ba1f3721377b402dc910715140d9b1ad3677b5abb7bc0027b75344d8",
+    "activation-fuzz-2.jsonl": "4fcc45cc3fe2ad8226f16c17ab0b2d6d4183fb7490b0bb27ebb5bff4d8583c46",
+    "activation-fuzz-3.jsonl": "cbfb736aba6cd3c66ca58e70ed1d77d85f3420dd61d7f19ac8daba8489459b17",
+    "activation-fuzz-4.jsonl": "166fd428d54e6a04807d7ff03da10e909e5db64d574fd2eac8de03372619d324",
+    "activation-probe.json": "3570d6fd256feef4cacb10dbb69470c0432f527404aed566ef03baf211e466ea",
+    "activation-probe.log": "77e5a5608800e5b8112603158f9382800fc40fe9a3f23f589e26be2ed92cdfbb",
+    "activation-probe.ts": "b9d0b5ff0bb1adfac4ffb174a2c0791a64c6a1781b087d8252413ea880ed441a",
+    "card-lab-play.result.json": "0475750398f181c5b49832ac8bdaac90b9403256d67a40497e20389725d30635",
+    "card-lab-play.server.log": "645d41fa93cf4d971265e8b89f4b19dd8ba981073f36e555953015387e044b21",
+    "card-sweep-final.server.log": "e4f7c261a81714fbb0dfc5e3cb677b78462aac56699a1e772d013ad16ebfdaa1",
+    "card-sweep-initial.server.log": "67e0253f6a4c03442f55a9c0d7f8eadefb132e6f21db2f37d84b4333f1aa0617",
+    "card-sweep.server.log": "e4f7c261a81714fbb0dfc5e3cb677b78462aac56699a1e772d013ad16ebfdaa1",
+    "counters-fixed.log": "0ce4f656f4e8d823c32e20822e0cfec451f37c2dd19b63ddeea14096f8bdb7c8",
+    "final-negative-provenance.json": "5af3dac51be052d79cfa68f96fbc8574e6d6789bec6e0197a431eb1c749f6c2a",
+    "focused-final.log": "081930e66d6714b30f1a37b2e61d16aea5fcd733e3fa608a789624ad24bc6368",
+    "focused.log": "b9b3a3ba2661dc87e69cc5ab96b1b08da82b79d6b82c2076e4251bf114286a6c",
+    "fuzz-verified.log": "ad2b16b4c5d9efa5a81a2e57bdfd5628349c293d24f49d5b06808bb7a19c6808",
+    "fuzz.log": "785b45273e0f3b7abd7c5ce530b3d5606d0a54c7a53f79434aefefe2f91335a8",
+    "initial-activation-fuzz-0.jsonl": "ff830f932ade006fad0ca83f85dba6982579352eed4fa50a6b3cd5ddf41598ff",
+    "initial-activation-fuzz-1.jsonl": "5f3ae942ba1f3721377b402dc910715140d9b1ad3677b5abb7bc0027b75344d8",
+    "initial-activation-fuzz-2.jsonl": "4fcc45cc3fe2ad8226f16c17ab0b2d6d4183fb7490b0bb27ebb5bff4d8583c46",
+    "initial-activation-fuzz-3.jsonl": "cbfb736aba6cd3c66ca58e70ed1d77d85f3420dd61d7f19ac8daba8489459b17",
+    "initial-activation-fuzz-4.jsonl": "166fd428d54e6a04807d7ff03da10e909e5db64d574fd2eac8de03372619d324",
+    "initial-activation-probe.json": "3570d6fd256feef4cacb10dbb69470c0432f527404aed566ef03baf211e466ea",
+    "initial-activation-probe.log": "2cb12d7a791bc2e24170e8cc138cc2e7114eb8f4f604a96c6987063024d99b26",
+    "kindled-enemy-recheck.log": "77c6f3cfa1759a66149990e524aedcdb51da1c1af63060ba4ecb00750ef6bf2b",
+    "knip-verified.log": "3c7d61a0b357efe7a03f8693b0ba65ff30d6c5131a2cca977ff630a5f7d88ee7",
+    "knip.log": "2436f09d032f1dda02fcbfd1cf76cb676e77b9f76a6dd56dd7930fa74f9036dd",
+    "ordered-all-negative.log": "6eaee8ae82e2c2934a2e4e91aff571c725ee30da14cf690f430760bc98a91469",
+    "ordered-fixed-final.log": "2776697ceaac61d6ebd67e0cf34571b8ea7bf47e77efca2715c4102397611934",
+    "ordered-fixed.log": "98b26bf9ea2b890468400f2083c9488471983d5e01e144b98616e7bc02d35477",
+    "ordered-guard-negative-final.log": "45f4d0048efce6abff8fdce629094fa16dd45a3e5d87a9dc120204d163f2fb14",
+    "ordered-negative-provenance.json": "1efedcc247ba16885cc6b710901494a814f5386d7ea020318dd7cbe9a55164ae",
+    "ordered-negative.log": "c9b1b471933214a671f2894ecb625ba8024c7cae5dfda4ca92cc2d7699574a08",
+    "ordered-tsc-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ordered-tsc.log": "572d8334b3c205662ff5b869a4f07a839718c04c2843d46af43406215b46b3e8",
+    "related-final-2.log": "c64a3accf95415c1cfb36ce77c3a1a8f34243b787c105227e4c393e2b81e93fd",
+    "related-final.log": "02b0860beaa1b02d81e05e85e8e2b2b04e2854931cdb1c8fda2dabbb7e074bad",
+    "related.log": "7438fd3ef1f47d3cb2b418e71c07f394e61612c26aa4bc87be450a23c6d32840",
+    "return-enemy-observation.log": "29865b468fc44a6827715c5b1ede84f661e9bcd4b92124fefd2b5517f853a3f0",
+    "return-enemy-observation.mjs": "2d65d22908963aaa3924d2724feedb7e6ab9387563f7835ece2033f54ce583bd",
+    "return-enemy-observation.result.json": "16b7198537843d9da51fff5e44683d6ee09e51895f8305cdf761e0924387e42f",
+    "return-enemy-observation.server.log": "a9ba40cf18eb8641db1384d9619629eb0c969b86716de7675ee358080f8a7248",
+    "return-payment-enemy-policy.log": "594c1623d6d4c2f1506161f2a3dc895bc00dcb9b38ecd86a62e50d0a64f1ad66",
+    "return-payment-enemy-policy.mjs": "ade2ebe44f7d35eabca1fbb34cfca101546d43a0dc90a9f0b5863b9504eac222",
+    "return-payment-enemy-policy.result.json": "2ce5de4d732fe0707421d727b5dc5a9e35bd8b9f61a3e189747dbca6e7462c4d",
+    "return-payment-enemy-policy.server.log": "bb833a66143f8b2dd8ea36ad92f3effe65df3556287051e5080c89e20842eba4",
+    "return-payment-inline-target.log": "908700844051d5c9e7ca66444214f5fabbc84838fbfc5ef397c5b3cb6fa67ddb",
+    "return-payment-inline-target.mjs": "69c6cddb702e90801a1ab097b58b65c9746ff64a4ac7045ce253358210637b52",
+    "return-payment-inline-target.result.json": "1281e2b5985339a9e772aa0d1bfaf2eb1ea0c3f714b705140d9128448ea37eba",
+    "return-payment-inline-target.server.log": "f488f24742c4432e1ef887a23790d755c5228516c2977faf5f444adb5cb0dcd5",
+    "return-payment.log": "594c1623d6d4c2f1506161f2a3dc895bc00dcb9b38ecd86a62e50d0a64f1ad66",
+    "return-payment.mjs": "ade2ebe44f7d35eabca1fbb34cfca101546d43a0dc90a9f0b5863b9504eac222",
+    "return-payment.result.json": "2ce5de4d732fe0707421d727b5dc5a9e35bd8b9f61a3e189747dbca6e7462c4d",
+    "return-payment.server.log": "bb833a66143f8b2dd8ea36ad92f3effe65df3556287051e5080c89e20842eba4",
+    "return-player-payment.log": "78c09b4e49d2b209dff6e0a2ff58dd0068e104946af74e3b07b6ffb13cd54102",
+    "return-player-payment.mjs": "1cb512136cb672266700e0f935cdf2de620adbf59458b0adb25f738ed1e327e6",
+    "return-player-payment.result.json": "c74628d11ba9977eac3d8fe629719c29fa401d86fe1be84055e9c8d827e37918",
+    "return-player-payment.server.log": "967fd3264b9155ce11063bb35124c566556eae7d4d061e024356c698d13465ed",
+    "review-final-2.log": "b07ce980f8491baa3d26fd0c3e7095301da946531d8baaacd9a04dcd1a9d198b",
+    "review-final.log": "8d1778f4551d3b35ee08f6dc289b9e6ef13e08057db8f7b9f3a97874648fbda9",
+    "review-verified.log": "1ee8ff0c61eaf03a3a53122c51f17b956f5786beee87afb8a5cad12a8add0213",
+    "review.log": "b62acc31138c9af06f3f33aed99e727a906122b7e728d11378f8e575dbccf1a8",
+    "sweep-final-ledger.raw.jsonl": "04287e270f20a20d7467cbe70a8e59d8d1875f5d1b255c7c8bf21f4eaee85845",
+    "sweep-final-matrix.log": "9b0fe63fe6c7d1a0ad09da01ad6d51efc125d87dbe9f3f09a397c634be5f64dd",
+    "sweep-initial-ledger.raw.jsonl": "28f0bba6ec069c04272010a2a4d88f849ca3061a7caa233716083b17d69495e4",
+    "sweep-initial.log": "311047a262d9b007f7c0e16d4fa4d105caf982f04d1f2197f4e8ce0094f4a533",
+    "sweep.log": "9b0fe63fe6c7d1a0ad09da01ad6d51efc125d87dbe9f3f09a397c634be5f64dd",
+    "tsc-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tsc-verified.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tsc.log": "13d6c0fdd284dcc676444405ee2cc02d4239922505fe3ba41619e9ed4af2c8a4",
+    "zero-noop-negative-final.log": "15f29040282191a67e80b4202ec4f66717d9e5c82916af2fc1718a8a2dc27651",
+    "integration-production-delta-proof.json": "b2e1fd0b2b2aceb380dd2b2e678e5b53ce9ab010226cda51939ba1d5f9eb5778",
+    "integrated-focused.log": "6a1872a1634dedd91b0f40eab0b142c69858c3d5a01ae08d2cff58e3a66859e5",
+    "integrated-negative-ordered-guard.log": "d57e1f0eb4c6b759941bfa1817ba46fa2d9465e115a0870fe904e34b99b40328",
+    "integrated-negative-zero-noop.log": "ab22ab742bbd07486609ea78ce4c83c8e53ecd85e182bb3d76e500df66a35fc1",
+    "integrated-final-negative-provenance.json": "e710741d47eb678967262b88cb1f58b867710502cf8c41421214e60935b3dc43",
+    "integrated-review.log": "b369db14498a29a5c27adcfc3beaa91aa70f8845838bf6b06d93193ac907e10c",
+    "integrated-knip.log": "ee7008dbf845d54c6da2fa510e347c38c463922fefff52c463c0e01a0eb153b9",
+    "integrated-lab-preflight.log": "2548d666d417c43864a6e3d4f59c351c8850f1982273d9ff8caf155c8fe4d0b1"
+  },
+  "originalBase": "9dc8cd5d44b4e0262f93afae6bae02db76c061f8",
+  "originalImplementMin": 57.38,
+  "integrationImplementMin": 3.23,
+  "originalTimingBasis": "Setup node_modules creation2026-10-11T15:59:30Z is retained dispatch/setup-start proxy; end is evidence finalization 2026-10-11T16:56:53.021539+00:00. Command wall includes prepare/restoration, queues and runner setup; runner/simulator timing is separate.",
+  "originalSourceRevision": "7a1857785f70f7e06391cea5f74ad9904595179daf9368f30136c3d97daa7e9d",
+  "originalSourceSha256": {
+    "docs/rules.md": "c670e189f2c0933246356c7811affcd80620a802d5a559bbc0c700f1a24b087f",
+    "src/content/cards/rower-of-changing-seas-de946f5a.ts": "45fd8e1eaf077fa308b57b24fe7375c59959867e5a8052f37391e603ea29e0f9",
+    "src/content/cards/stoneborn-leviathan-07ceb104.ts": "b3e60667e1aab3253423a13e13148011b3b86bf802a005b8bd3e5181bcd4f83d",
+    "src/content/specs/index.ts": "edfe73bda153e91aa40eb9d612c80a68c78db11dc808ec5c8523abf330ec8af2",
+    "src/content/specs/prim-return-cost.scenarios.ts": "b745ede5c85d8f0737b40c18615b96576459ad721dbbbc491db6f05240d34749",
+    "src/engine/dsl/builders.ts": "801ab94a2eafd2b63d1d0fcc2cf3e8d95df7245bccd7d5af7fc0d25036e9286a",
+    "src/engine/dsl/types.ts": "9c59a1fc6436522bfd941275734a9b9c3beab1d0d649af450aa035488f498f06",
+    "src/engine/effects/primitives/contracts/return-cost.contracts.ts": "b30c93cad0dabbefb791e9ed31600e0476043ecb0925b5bd5d55f8b704db9b4b",
+    "src/engine/policy/prompts.ts": "aab1e2807b0a230358b524d77ca982a51d91a4f5f1cdcfb9103221eb9bf911a5",
+    "src/engine/prompts/types.ts": "bcbb7d78f4d66cf3f1c8e31b8bc78b7add1261ac332c83612f967a8cc17ef41f",
+    "src/engine/rules/costs.ts": "33b4bfce0d3bdcb4adca20a99718591c108225133db73fccc1dd5c48c0173afa",
+    "src/engine/testing/lab-solver.ts": "568156e210346591d229c93d4fc99e075803df43e25b32bae0dd4bd1fd7b4e61",
+    "src/engine/testing/prompt-lab.ts": "274df5f4a5146f41e7b8c8182348a1967b0d3faa8454e2a81cf00caf51085c25",
+    "src/runtime/battle-prompt-messages.ts": "66ea83b012fdf6e8489d9044fcc0962c87ce2b376352550ae6b8d73cc5152838",
+    "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "1b7d4118ad9932119b68953ab9d1f8d22b37675e999b9d2ddb6423fa2628f977"
+  },
+  "originalNegativeProof": {
+    "finalSourceSha256": "33b4bfce0d3bdcb4adca20a99718591c108225133db73fccc1dd5c48c0173afa",
+    "contractSha256": "b30c93cad0dabbefb791e9ed31600e0476043ecb0925b5bd5d55f8b704db9b4b",
+    "negatives": {
+      "ordered-guard": {
+        "sourceSha256": "8ea8ed4e203d8ff6d1aa0caa3bb8ca630407ac39aa3b7ed8908aaa010ac80364",
+        "exit": 1,
+        "restoredIdentically": true
+      },
+      "zero-noop": {
+        "sourceSha256": "8021a5fc0413532463e092235af4c2d8fe5595b4f5ad26e39920462ce11271d7",
+        "exit": 1,
+        "restoredIdentically": true
+      }
+    }
+  },
+  "originalHostLoad": 17.52294921875,
+  "integratedSourceSha256": {
+    "docs/rules.md": "c670e189f2c0933246356c7811affcd80620a802d5a559bbc0c700f1a24b087f",
+    "src/content/cards/rower-of-changing-seas-de946f5a.ts": "45fd8e1eaf077fa308b57b24fe7375c59959867e5a8052f37391e603ea29e0f9",
+    "src/content/cards/stoneborn-leviathan-07ceb104.ts": "b3e60667e1aab3253423a13e13148011b3b86bf802a005b8bd3e5181bcd4f83d",
+    "src/content/specs/index.ts": "edfe73bda153e91aa40eb9d612c80a68c78db11dc808ec5c8523abf330ec8af2",
+    "src/content/specs/prim-return-cost.scenarios.ts": "b745ede5c85d8f0737b40c18615b96576459ad721dbbbc491db6f05240d34749",
+    "src/engine/dsl/builders.ts": "801ab94a2eafd2b63d1d0fcc2cf3e8d95df7245bccd7d5af7fc0d25036e9286a",
+    "src/engine/dsl/types.ts": "9c59a1fc6436522bfd941275734a9b9c3beab1d0d649af450aa035488f498f06",
+    "src/engine/effects/primitives/contracts/return-cost.contracts.ts": "9c1d281c2505fcfb4c03f473d39a57e9f7f945eb8c9e00bda7b80767f5c207c5",
+    "src/engine/policy/prompts.ts": "aab1e2807b0a230358b524d77ca982a51d91a4f5f1cdcfb9103221eb9bf911a5",
+    "src/engine/prompts/types.ts": "bcbb7d78f4d66cf3f1c8e31b8bc78b7add1261ac332c83612f967a8cc17ef41f",
+    "src/engine/rules/costs.ts": "33b4bfce0d3bdcb4adca20a99718591c108225133db73fccc1dd5c48c0173afa",
+    "src/engine/testing/lab-solver.ts": "568156e210346591d229c93d4fc99e075803df43e25b32bae0dd4bd1fd7b4e61",
+    "src/engine/testing/prompt-lab.ts": "51ca997cdd59a63045c74e1797aa8958e37c77bbb7c1995925ac8ff7fe59220b",
+    "src/runtime/battle-prompt-messages.ts": "933dd8beadfe218ebcb687d749ed7d6bf08ea2e0b17ada3f7ca09fdcb2e0ead4",
+    "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "1b7d4118ad9932119b68953ab9d1f8d22b37675e999b9d2ddb6423fa2628f977"
+  },
+  "integratedSourceRevision": "9e0faaf5d0738a058d7deb3548baf6e9b94b93f216f482739b100492154fddf3",
+  "negativeProof": {
+    "base": "a5545db55fe6ce723a98373590d1db6dc53d7670",
+    "finalSourceSha256": "33b4bfce0d3bdcb4adca20a99718591c108225133db73fccc1dd5c48c0173afa",
+    "contractSha256": "9c1d281c2505fcfb4c03f473d39a57e9f7f945eb8c9e00bda7b80767f5c207c5",
+    "negatives": {
+      "ordered-guard": {
+        "sourceSha256": "2cc048d65641845ca7b24c52805fbd1ed85dba41689ed8a870cdf2ee80e26020",
+        "exit": 1,
+        "restoredIdentically": true
+      },
+      "zero-noop": {
+        "sourceSha256": "8021a5fc0413532463e092235af4c2d8fe5595b4f5ad26e39920462ce11271d7",
+        "exit": 1,
+        "restoredIdentically": true
+      }
+    }
+  },
+  "integration": {
+    "base": "a5545db55fe6ce723a98373590d1db6dc53d7670",
+    "preAmendHead": "a8dc241d5ece2f1e4e7e2120f4a910f60abcd83f",
+    "originalSourceCommit": "a5ce4272af0d53cd877fb3d33adf67f3dc3e7e66",
+    "originalCandidate": "01a12be7 terminal failed; not delivered",
+    "prerequisite": {
+      "bead": "hv-umm2.396",
+      "commit": "0ad04974fcf2bb75fdd46a9edc59472787c45f32",
+      "resolution": "Promoted dedicated synthetic browser-lease readiness fixture repair; own90 production unchanged."
+    },
+    "coldReview": "Original exact-source Claude review found no correctness/architecture issue; optional incidental candidate-order/auto-answer-count notes corrected. Parent schedules final-range cold review after amendment.",
+    "testCorrection": "Three candidate comparisons use exact Set membership, with explicit kind/role/min/max checks. Nested test retains feasibility/zone/score/invariants and source-departure outcomes, without incidental result.answers count. Exact-once/rollback/reload/one-action assertions retained.",
+    "productionDeltaProof": {
+      "oldBase": "9dc8cd5d44b4e0262f93afae6bae02db76c061f8",
+      "oldSource": "a5ce4272af0d53cd877fb3d33adf67f3dc3e7e66",
+      "newBase": "a5545db55fe6ce723a98373590d1db6dc53d7670",
+      "rebasedSource": "a8dc241d5ece2f1e4e7e2120f4a910f60abcd83f",
+      "paths": {
+        "src/content/cards/rower-of-changing-seas-de946f5a.ts": {
+          "ownAddedDeletedLinesSha256": "3fde0500f3df6d35c64abb21f3c0d1d8486dccbbdadc43c5fb9650a06c440f0d",
+          "identical": true
+        },
+        "src/content/cards/stoneborn-leviathan-07ceb104.ts": {
+          "ownAddedDeletedLinesSha256": "4b1daa562951a70cd21069caf30bfcad35913fa67bf230aa41009df48b615be9",
+          "identical": true
+        },
+        "src/engine/dsl/builders.ts": {
+          "ownAddedDeletedLinesSha256": "25b8e1f3b4277f36e7be9599cb1938a20e3cfe74c6e7b2f603e55f3bc1b20be0",
+          "identical": true
+        },
+        "src/engine/dsl/types.ts": {
+          "ownAddedDeletedLinesSha256": "696cd4c68363aad69f36e47d3c50345d09e3a9314ffbb620e8ed89a3c5d5f416",
+          "identical": true
+        },
+        "src/engine/policy/prompts.ts": {
+          "ownAddedDeletedLinesSha256": "028be5bd636d16015e35d16ed0131a3e56c93435ac623a6c54fb4eb3a308f0b4",
+          "identical": true
+        },
+        "src/engine/prompts/types.ts": {
+          "ownAddedDeletedLinesSha256": "e4bdae389e3e48e9a3404d6e72f114ef64b7ec57adefbc61a098d2c4133b5cbd",
+          "identical": true
+        },
+        "src/engine/rules/costs.ts": {
+          "ownAddedDeletedLinesSha256": "a7ecaec60b846fe19956faac20eddff3ca9b2467cb5052b848cd15f2c5dc1f8a",
+          "identical": true
+        },
+        "src/engine/testing/lab-solver.ts": {
+          "ownAddedDeletedLinesSha256": "1d6f6d89c87b43180400f27445fe45532bc977bf6e62b7b955e92c792f6ace23",
+          "identical": true
+        },
+        "src/engine/testing/prompt-lab.ts": {
+          "ownAddedDeletedLinesSha256": "237cfd9f5ee580a13e6123c96f4efc8c26337b88148ab19ad5d2496cbabc7815",
+          "identical": true
+        },
+        "src/runtime/battle-prompt-messages.ts": {
+          "ownAddedDeletedLinesSha256": "daa73b69450cd421306dfcdca86413669d34f68417a9b76c3549c0e68f8a1f00",
+          "identical": true
+        }
+      },
+      "packageLockChanged": false,
+      "packageJsonChange": "lab:preflight script only; dependency set unchanged; installed modules reused"
+    },
+    "acceptanceReuse": "Original weighted300 and browser sweep/judgment are retained with original base/sourceRevision/game/capture ties. All10 own production added/deleted lines match exactly; only assertions/evidence changed. This does not relabel original game runs as runs on the integrated base. Headless preflight additionally exercises both UUIDs/all variants/both sides on new base.",
+    "full": "No local full/fuzz/browser repeat required for assertion-only repair; infrastructure prerequisite396 separately passed required full. Parent native integration gate certifies final candidate.",
+    "runtime": "No server/MCP/browser/native lease started; all current commands completed, transient negative mutations restored identically; no external writers.",
+    "validationRef": "acceptance (current updated-base checks); originalAcceptance retains earlier game/browser/check provenance."
+  },
+  "originalAcceptance": {
+    "commands": [
+      "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts -t returnCost",
+      "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts src/content/specs/specs.test.ts src/engine/content-gates.test.ts src/engine/testing/tooling.test.ts src/engine/testing/tooling-card-lab.test.ts src/screens/cumulus_adapters/engine-battle-view-model.test.ts src/engine/policy/policy.test.ts",
+      "JOURNEY_TEST_WORKERS=2 npm run review",
+      "JOURNEY_TEST_WORKERS=2 npm run knip"
+    ],
+    "focused": "Final13 returnCost synthetic cases pass2.89s; exact final negative guard probes respectively3failed/10pass and1failed/12pass, restore source byte-identically. Earlier setup/fixture corrections and ordering probes are retained as historical logs.",
+    "related": "Before source-ordering extension7 entrypoints/582 tests pass5.94s. Final review includes all these, final contracts, two actual content scenarios and content gates.",
+    "review": "Final256files/2629tests, lint, cycles and both typechecks pass44.18s. Knip pass2.43s. Assets restored before browser requests.",
+    "full": "Not required: additive cost form/role within existing atomic planner, prompt and zone pipeline; no infra/config or cross-cutting architecture change. Parent accepted scoped validation.",
+    "fuzz": {
+      "command": "JOURNEY_TEST_WORKERS=2 lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids de946f5a-1e27-4d40-ae44-9ef8cc041949,07ceb104-0b27-473a-bc72-e6225479ed83",
+      "sourceRevision": "7a1857785f70f7e06391cea5f74ad9904595179daf9368f30136c3d97daa7e9d",
+      "seedPrefix": "fuzz",
+      "ordinals": [
+        0,
+        299
+      ],
+      "games": 300,
+      "steps": 158126,
+      "prompts": 4062,
+      "interactiveReruns": 421,
+      "bounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "failures": 0,
+      "simulationWallS": 71.9,
+      "simulationCpuS": 78.6,
+      "commandWallS": 73.14,
+      "included": [
+        616,
+        611
+      ],
+      "played": [
+        309,
+        289
+      ],
+      "results": {
+        "player": 141,
+        "enemy": 159
+      }
+    },
+    "activationProbe": {
+      "file": "activation-probe.json",
+      "seedOrdinals": [
+        0,
+        4
+      ],
+      "commandWallS": 2,
+      "lock": "none; thin public replay under200games",
+      "findings": "Rower player fuzz-0/self-return; enemy fuzz-2/i31 returnsi45 awakensi43. Stone enemy fuzz-4/i32 returnsi46 gives2spark. Public reconstructed UUID action/event logs retained for all5 seeds."
+    },
+    "sweep": {
+      "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.90 --cards de946f5a-1e27-4d40-ae44-9ef8cc041949,07ceb104-0b27-473a-bc72-e6225479ed83 --port 5174",
+      "initial": {
+        "passCount": 22,
+        "skipCount": 18,
+        "failCount": 0,
+        "source": "Before return source-ordering repair; historical only"
+      },
+      "finalMatrix": {
+        "passCount": 21,
+        "skipCount": 18,
+        "failCount": 1,
+        "commandWallS": 154.6,
+        "raw": "sweep-final-ledger.raw.jsonl contains initial40 plus final40; per-row source tie in own ledger",
+        "failure": "Stone kindled/enemy ERR_ABORTED at document navigation before app report/probe; subsequent cells healthy"
+      },
+      "targeted": {
+        "passCount": 1,
+        "gameId": "8x8ati",
+        "report": "card-lab-play.result.json",
+        "commandWallS": 14.99,
+        "runnerWallMs": 9755,
+        "hypothesis": "Fresh isolated context/document readiness classifies one pre-initialization navigation abort; no source edit or blanket matrix retry"
+      },
+      "effective": {
+        "eligiblePass": 22,
+        "skip": 18,
+        "latestFailures": 0
+      },
+      "sideProvenance": "Own ledger as defaults to player when omitted by card-sweep (script default); enemy rows preserve as:enemy; immutable raw reports retained."
+    },
+    "judged": {
+      "shaFirstBytes": [
+        88,
+        239
+      ],
+      "sampled": 0,
+      "reason": "New returnCost prompt role requires desktop/mobile judgment despite both entity hashes outside sampling. Existing board picker/copy reused; Cumulus read.",
+      "player": {
+        "report": "return-player-payment.result.json",
+        "games": [
+          "rjiwdf",
+          "acfxsw"
+        ],
+        "runnerWallMs": 31485,
+        "commandWallS": 36.79,
+        "logRows": [
+          78,
+          78
+        ],
+        "caps": [],
+        "entities": 2,
+        "viewports": 2,
+        "checks": "Preselected targets excluded from cost; chosen source returns; Rower awakens target; Stone pays1energy and gives1spark. Normal controls, UUID logs, contained banner geometry and payment/resolved captures."
+      },
+      "enemy": {
+        "report": "return-enemy-observation.result.json",
+        "games": [
+          "z32vcx",
+          "8yyu44"
+        ],
+        "runnerWallMs": 26994,
+        "commandWallS": 32.29,
+        "logRows": [
+          75,
+          75
+        ],
+        "activationObserved": [
+          false,
+          true
+        ],
+        "caps": [],
+        "checks": "AI Stone actual cost prompts/answers/activations twice, resulting state plus normal handoff controls inspected. Rower activation not selected; explicitly observation, with headless enemy actual activation proof. Arbitrary Greedy action choice is not an acceptance gate (parent decision)."
+      },
+      "visual": "Viewed all four entity payment desktop/mobile captures and enemy mobile state: headings/cancel/submit readable and contained; no layout clipping; target/payment/resolved captures CSS scale per README1440x900/390x844. geometry in reports and ledger. Historical script failures retained with final dispositions. Parent independently corroborated Rower desktop/mobile and Stone mobile final picker captures."
+    }
+  },
+  "acceptance": {
+    "focused": {
+      "cases": 13,
+      "skipped": 485,
+      "commandWallS": 3.93,
+      "log": "integrated-focused.log"
+    },
+    "negativeOrdered": {
+      "failed": 3,
+      "passed": 10,
+      "commandWallS": 4.19,
+      "log": "integrated-negative-ordered-guard.log"
+    },
+    "negativeZero": {
+      "failed": 1,
+      "passed": 12,
+      "commandWallS": 3.15,
+      "log": "integrated-negative-zero-noop.log"
+    },
+    "review": {
+      "files": 258,
+      "tests": 2650,
+      "commandWallS": 35.6,
+      "hostLoad": 3.57861328125,
+      "log": "integrated-review.log",
+      "checks": "lint/cycles/both typechecks/relevant tests/content gates; assets restored"
+    },
+    "knip": {
+      "commandWallS": 2.39,
+      "log": "integrated-knip.log",
+      "result": "pass; assets restored"
+    },
+    "preflight": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run lab:preflight -- --cards de946f5a-1e27-4d40-ae44-9ef8cc041949,07ceb104-0b27-473a-bc72-e6225479ed83 --variants all --as both",
+      "counts": {
+        "pass": 22,
+        "pending": 0,
+        "skip": 18,
+        "fail": 0
+      },
+      "commandWallS": 0.8,
+      "engineElapsedMs": 16.778500000000008,
+      "hostLoad": 4.10986328125,
+      "enemyMode": "scripted-lab-play-first-legal-prompts",
+      "log": "integrated-lab-preflight.log"
+    }
+  },
+  "originalLocalValidationS": {
+    "installReported": 2,
+    "focusedFinal": 2.89,
+    "relatedBeforeOrdering": 5.94,
+    "review": 44.18,
+    "knip": 2.43,
+    "weightedFuzz": 73.14,
+    "activationProbe": 2,
+    "negativeOrderedGuard": 2.89,
+    "negativeZeroNoop": 2.94,
+    "sweepFinal": 154.6,
+    "sweepRecheck": 14.99,
+    "judgedPlayer": 36.79,
+    "enemyObservation": 32.29
+  },
+  "validationReuse": "Historical originalAcceptance/originalLocalValidationS carry weighted300 and browser evidence. Current acceptance/localValidationS are updated-base test-only checks and headless integration.",
+  "captures": [
+    {"filename":"enemy-stall-return-failure-desktop.png","width":1440,"height":900,"sha256":"f60155c2c2ae2032e6ed7bf53ba3aa6ebc46b2def0283498227e8b7dd3508ca7"},
+    {"filename":"enemy-stall-return-leviathan-payment-desktop.png","width":1440,"height":900,"sha256":"9e88b522be840fba0fb0ef5de2c06f6c38bf35009b87ee6fa3dffd2bd3b64a63"},
+    {"filename":"enemy-stall-return-leviathan-resolved-desktop.png","width":1440,"height":900,"sha256":"8ff9a3dd97a7fffa42ca6baf3b527aaf400f5b87cf66c310283b54a4192b6b05"},
+    {"filename":"enemy-stall-return-leviathan-target-desktop.png","width":1440,"height":900,"sha256":"580db9ed3ee2d00900a8422fd42a356ee2b95bd0899b142da92c83e77dc1c40a"},
+    {"filename":"enemy-stall-return-rower-payment-desktop.png","width":1440,"height":900,"sha256":"4dedb189f04806c7aa6e9b98182b0c77ab1ef7cf7e0d2bf0620c812829607521"},
+    {"filename":"enemy-stall-return-rower-resolved-desktop.png","width":1440,"height":900,"sha256":"77fb5cc30aaff38964a1b90b323fe7bc9203dcaed49e6d287c9a1933bbc16823"},
+    {"filename":"enemy-stall-return-rower-target-desktop.png","width":1440,"height":900,"sha256":"1db519f1dcdc2771fc2a566f83197a25cc526e15d5c316350ecd26f7af42f892"},
+    {"filename":"leviathan-kindled-enemy-recheck.png","width":1440,"height":900,"sha256":"e242d8bc04c879fc32dd695c25936f8c640633f65f50824e82dd0d7f8629358d"},
+    {"filename":"return-enemy-resolved-desktop.png","width":1440,"height":900,"sha256":"046b2d6a00f0af8e3ee4cb1268023778968f4d615be3590862b9e98d3f796af2"},
+    {"filename":"return-enemy-resolved-mobile.png","width":390,"height":844,"sha256":"90816b7dc97521c85901c832167c6e81c48038b0542d6134aad2f5f2d671d531"},
+    {"filename":"return-failure-desktop.png","width":1440,"height":900,"sha256":"f60155c2c2ae2032e6ed7bf53ba3aa6ebc46b2def0283498227e8b7dd3508ca7"},
+    {"filename":"return-inline-target-failure-desktop.png","width":1440,"height":900,"sha256":"cdbf643206b69cecf67bf11e9b945f4c6499dcb5b127d535d7b7abab5f4f6c3b"},
+    {"filename":"return-leviathan-payment-desktop.png","width":1440,"height":900,"sha256":"9e88b522be840fba0fb0ef5de2c06f6c38bf35009b87ee6fa3dffd2bd3b64a63"},
+    {"filename":"return-leviathan-payment-mobile.png","width":390,"height":844,"sha256":"446da16014cfaacfdb53de488b68237e4e830f4fb67184a958e93ce0476d4df6"},
+    {"filename":"return-leviathan-resolved-desktop.png","width":1440,"height":900,"sha256":"128107eeafc1569c7a2bcf85e71c4bbc5f6ecf360f021527072d53a0ae3c42d7"},
+    {"filename":"return-leviathan-resolved-mobile.png","width":390,"height":844,"sha256":"cc95c619eb0bd5a89b2453d98a4249ce1369d74d208fc313ac5e1846aa478d8f"},
+    {"filename":"return-leviathan-target-desktop.png","width":1440,"height":900,"sha256":"ea7bb6eb984b290d046e23d7d6303e984a3664f9dc6dba850503c9b9d918393d"},
+    {"filename":"return-leviathan-target-mobile.png","width":390,"height":844,"sha256":"77ed38af1250d53f28b6b29d9dcf53be7867128a03232febe38d763c574db40e"},
+    {"filename":"return-rower-payment-desktop.png","width":1440,"height":900,"sha256":"4dedb189f04806c7aa6e9b98182b0c77ab1ef7cf7e0d2bf0620c812829607521"},
+    {"filename":"return-rower-payment-mobile.png","width":390,"height":844,"sha256":"d2a2bd12ba9afdc4ac95efe3ec130f4c755b0d49c238ea9419053321e3eb2e10"},
+    {"filename":"return-rower-resolved-desktop.png","width":1440,"height":900,"sha256":"77fb5cc30aaff38964a1b90b323fe7bc9203dcaed49e6d287c9a1933bbc16823"},
+    {"filename":"return-rower-resolved-mobile.png","width":390,"height":844,"sha256":"5e79b5037dedcc50193ddf05bec3a67c9b659d064b84f067ff6bdc74377cca0b"},
+    {"filename":"return-rower-target-desktop.png","width":1440,"height":900,"sha256":"bdf4f70acfd7666cac9f048e9d202cf55f055ed675324d658f70299b4adf99ce"},
+    {"filename":"return-rower-target-mobile.png","width":390,"height":844,"sha256":"91a7ad8d177957eacbcb1c7310e0fcdc03fb66ff5621306abf3d0b72f87e6b6a"},
+    {"filename":"sweep-07ceb104-amplified-enemy.png","width":1440,"height":900,"sha256":"e242d8bc04c879fc32dd695c25936f8c640633f65f50824e82dd0d7f8629358d"},
+    {"filename":"sweep-07ceb104-amplified-player.png","width":1440,"height":900,"sha256":"e3b53bea3768234ac99a3dcc2a7af68167c8cf5bdb92e0d696924e8981997b92"},
+    {"filename":"sweep-07ceb104-attuned-enemy.png","width":1440,"height":900,"sha256":"e242d8bc04c879fc32dd695c25936f8c640633f65f50824e82dd0d7f8629358d"},
+    {"filename":"sweep-07ceb104-attuned-player.png","width":1440,"height":900,"sha256":"e3b53bea3768234ac99a3dcc2a7af68167c8cf5bdb92e0d696924e8981997b92"},
+    {"filename":"sweep-07ceb104-base-enemy.png","width":1440,"height":900,"sha256":"e242d8bc04c879fc32dd695c25936f8c640633f65f50824e82dd0d7f8629358d"},
+    {"filename":"sweep-07ceb104-base-player.png","width":1440,"height":900,"sha256":"e3b53bea3768234ac99a3dcc2a7af68167c8cf5bdb92e0d696924e8981997b92"},
+    {"filename":"sweep-07ceb104-empowered-enemy.png","width":1440,"height":900,"sha256":"e242d8bc04c879fc32dd695c25936f8c640633f65f50824e82dd0d7f8629358d"},
+    {"filename":"sweep-07ceb104-empowered-player.png","width":1440,"height":900,"sha256":"e3b53bea3768234ac99a3dcc2a7af68167c8cf5bdb92e0d696924e8981997b92"},
+    {"filename":"sweep-07ceb104-kindled-enemy.png","width":1440,"height":900,"sha256":"e242d8bc04c879fc32dd695c25936f8c640633f65f50824e82dd0d7f8629358d"},
+    {"filename":"sweep-07ceb104-kindled-player.png","width":1440,"height":900,"sha256":"e3b53bea3768234ac99a3dcc2a7af68167c8cf5bdb92e0d696924e8981997b92"},
+    {"filename":"sweep-07ceb104-perfected-enemy.png","width":1440,"height":900,"sha256":"e242d8bc04c879fc32dd695c25936f8c640633f65f50824e82dd0d7f8629358d"},
+    {"filename":"sweep-07ceb104-perfected-player.png","width":1440,"height":900,"sha256":"e3b53bea3768234ac99a3dcc2a7af68167c8cf5bdb92e0d696924e8981997b92"},
+    {"filename":"sweep-de946f5a-amplified-enemy.png","width":1440,"height":900,"sha256":"09e7ba5f56d4610031fcecfbcff9ec3c2cb2d67d06d7d32ee11e4dca69a64222"},
+    {"filename":"sweep-de946f5a-amplified-player.png","width":1440,"height":900,"sha256":"722775139ba9c3cc6a4e938a4a2498863058a0989e5f07eed669b6c15e4a16ab"},
+    {"filename":"sweep-de946f5a-base-enemy.png","width":1440,"height":900,"sha256":"09e7ba5f56d4610031fcecfbcff9ec3c2cb2d67d06d7d32ee11e4dca69a64222"},
+    {"filename":"sweep-de946f5a-base-player.png","width":1440,"height":900,"sha256":"369718e1356c7f9fc9db60722605c547728e2f5ab250a13e73b20e00d79f7ac5"},
+    {"filename":"sweep-de946f5a-empowered-enemy.png","width":1440,"height":900,"sha256":"09e7ba5f56d4610031fcecfbcff9ec3c2cb2d67d06d7d32ee11e4dca69a64222"},
+    {"filename":"sweep-de946f5a-empowered-player.png","width":1440,"height":900,"sha256":"369718e1356c7f9fc9db60722605c547728e2f5ab250a13e73b20e00d79f7ac5"},
+    {"filename":"sweep-de946f5a-kindled-enemy.png","width":1440,"height":900,"sha256":"09e7ba5f56d4610031fcecfbcff9ec3c2cb2d67d06d7d32ee11e4dca69a64222"},
+    {"filename":"sweep-de946f5a-kindled-player.png","width":1440,"height":900,"sha256":"369718e1356c7f9fc9db60722605c547728e2f5ab250a13e73b20e00d79f7ac5"},
+    {"filename":"sweep-de946f5a-perfected-enemy.png","width":1440,"height":900,"sha256":"09e7ba5f56d4610031fcecfbcff9ec3c2cb2d67d06d7d32ee11e4dca69a64222"},
+    {"filename":"sweep-de946f5a-perfected-player.png","width":1440,"height":900,"sha256":"722775139ba9c3cc6a4e938a4a2498863058a0989e5f07eed669b6c15e4a16ab"}
+  ]
+}

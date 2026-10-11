@@ -8,8 +8,9 @@ import cards04 from "./cards-04.scenarios";
 import primDrawMatching from "./prim-draw-matching.scenarios";
 import primLosePoints from "./prim-lose-points.scenarios";
 import primPlayFromZone from "./prim-play-from-zone.scenarios";
+import primReturnCost from "./prim-return-cost.scenarios";
 import primReturnFromVoid from "./prim-return-from-void.scenarios";
 import primSelectorChallenger from "./prim-selector-challenger.scenarios";
 import primWhenPutIntoVoidTrigger from "./prim-when-put-into-void-trigger.scenarios";
 
-export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, primDrawMatching, primLosePoints, primPlayFromZone, primReturnFromVoid, primSelectorChallenger, primWhenPutIntoVoidTrigger];
+export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, primDrawMatching, primLosePoints, primPlayFromZone, primReturnCost, primReturnFromVoid, primSelectorChallenger, primWhenPutIntoVoidTrigger];

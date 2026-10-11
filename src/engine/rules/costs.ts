@@ -23,7 +23,7 @@ import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { discardCard, gainPoints, spendEnergy } from "./resources";
-import { banish, dissolve, instanceOf, slotOf } from "./zones";
+import { banish, dissolve, instanceOf, returnToHand, slotOf } from "./zones";
 import { revealToBoth } from "../view/knowledge";
 import { Infeasible } from "../steps/errors";
 
@@ -171,6 +171,8 @@ function cardCandidates(
         return instance?.zone === "play" && instance.controller === side ? [source] : [];
       }
       return matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
+    case "return":
+      return matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
     case "discard":
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "reveal":
@@ -185,6 +187,7 @@ function cardCandidates(
 /** The role of the prompt choosing the cards for a cost. */
 const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
   abandon: "abandonCost",
+  return: "returnCost",
   discard: "discardCost",
   reveal: "revealCost",
   banishFromVoid: "banishCost",
@@ -239,6 +242,10 @@ export function planCosts(
   const payments: PlannedCost[] = [];
   const optionalPaid: boolean[] = [];
   let capturedX = x;
+  let sourceReturned = false;
+  // Returning leaves play and clears stored counters; zero-counter payments need no source.
+  const cannotFollowReturn = (cost: PaymentCost): boolean => cost.cost === "exhaustSelf" ||
+    (cost.cost === "counters" && cost.amount > 0);
 
   /**
    * Whether every cost in a nested list could be paid on top of what is
@@ -247,23 +254,27 @@ export function planCosts(
    * (`cardsAssignable`).
    */
   const affordable = (list: readonly PaymentCost[]): boolean => {
+    if (sourceReturned && list.some(cannotFollowReturn)) return false;
     if (!resourcesPayable(
       baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))),
       countersLeft - spent(list, "counters"),
       exhaustCount + list.filter((cost) => cost.cost === "exhaustSelf").length,
       pointsLeft - spent(list, "points"),
     )) return false;
-    const choosing = list.filter(choosesCards);
-    if (choosing.some((cost) => cost.count === "x" && capturedX !== null && capturedX < leastCount(cost))) return false;
-    const demands = choosing.map((cost) => ({
+    const choosing = list.flatMap((cost, index) => choosesCards(cost) ? [{ cost, index }] : []);
+    if (choosing.some(({ cost }) => cost.count === "x" && capturedX !== null && capturedX < leastCount(cost))) return false;
+    const demands = choosing.map(({ cost, index }) => ({
       count: cost.count === "x" ? (capturedX ?? leastCount(cost)) : cost.count,
-      pool: cardCandidates(state, catalog, side, source, cost, options.selectorX).filter((id) => !used.includes(id)),
+      pool: cardCandidates(state, catalog, side, source, cost, options.selectorX).filter((id) =>
+        !used.includes(id) && !(cost.cost === "return" && id === source && list.slice(index + 1).some(cannotFollowReturn)),
+      ),
     }));
     return cardsAssignable(demands);
   };
 
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
   const plan = (cost: PaymentCost, nested: boolean, isLast = false): void => {
+    if (sourceReturned && cannotFollowReturn(cost)) throw new Infeasible("A returned source cannot pay a later source cost");
     if (cost.cost === "energy") {
       if (nested) baseEnergy += cost.amount;
       return;
@@ -307,6 +318,7 @@ export function planCosts(
       if (capturedX !== null && capturedX !== value) throw new Infeasible("Card payment disagrees with X");
       capturedX = value;
     }
+    if (cost.cost === "return" && typeof source === "string" && chosen.includes(source)) sourceReturned = true;
     used.push(...chosen);
     payments.push({ cost, cards: [...chosen] });
   };
@@ -393,6 +405,7 @@ function exhaustForCost(ctx: StepContext, source: AbilitySource): void {
 
 /** Spends ⧗ stored on a card to pay a cost. */
 function spendCounters(ctx: StepContext, source: AbilitySource, amount: number): void {
+  if (amount === 0) return;
   if (typeof source !== "string") throw new Error("an emblem stores no counters");
   const status = instanceOf(ctx.state, source).status;
   if (amount > status.counters) throw new Error(`${source} cannot pay ${String(amount)}⧗`);
@@ -437,6 +450,12 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
         break;
       case "abandon":
         for (const id of cards) abandonCharacter(ctx, side, id);
+        break;
+      case "return":
+        for (const id of cards) {
+          if (instanceOf(ctx.state, id).controller !== side) throw new Error(`${side} cannot return ${id} to pay a cost`);
+          returnToHand(ctx, id);
+        }
         break;
       case "discard":
         for (const id of cards) discardCard(ctx, side, id);

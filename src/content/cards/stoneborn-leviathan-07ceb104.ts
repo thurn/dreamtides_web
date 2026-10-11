@@ -1,3 +1,5 @@
+import { activated, characterYouControl, energy, returnCost, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,6 @@ export default card({
   cardNumber: 502,
   art: { x: 0.378, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([energy(1), returnCost()], p.gainSpark(target(characterYouControl()), variant.amplified ? 2 : 1))],
+  verifiedText: "22gmbjoukw5",
 });

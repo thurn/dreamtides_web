@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
+import { activated, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -73,6 +73,12 @@ export const LAB = {
     id: syntheticId(0x308), cardType: "event", costs: [energyX(0)], spark: null,
     subtype: "", speed: "standard", status: "authored",
     abilities: () => [event(p.gainSpark(characterTarget(characterYouControl({ costAtLeast: x(), costAtMost: x() })), 1))],
+  },
+  /** Return a controlled character as an activation cost, choosing among public battlefield cards. */
+  returnPayer: {
+    id: syntheticId(0x37f), cardType: "character", costs: [energy(1)], spark: 1,
+    subtype: "Warrior", speed: "standard", status: "authored",
+    abilities: () => [activated([returnCost()], p.gainPoints(1))],
   },
   /** "You may play characters from your void." */
   voidPermit: {
@@ -346,6 +352,11 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       },
       enemy: { back: [vanillas[1], vanillas[2]], deck: deck(6) },
     },
+    script: [],
+  },
+  {
+    name: "return-cost", description: "Return a controlled front- or back-rank character as a cost",
+    setup: { active: "player", phase: "day", player: { front: [vanillas[0]], back: [LAB.returnPayer.id, vanillas[1]], deck: deck(6) }, enemy: { deck: deck(6) } },
     script: [],
   },
   {
