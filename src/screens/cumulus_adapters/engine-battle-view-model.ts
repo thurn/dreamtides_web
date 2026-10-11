@@ -27,8 +27,9 @@ import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultS
 import type { Action, BattleView, EffectId, InstanceId, InstanceView, LoopId, Side, Slot } from "../../engine";
 import { opponent, sourceKey } from "../../engine";
 import { instanceCard, type EngineCatalog } from "../../engine/catalog";
-import type { Keyword } from "../../engine/dsl/types";
-import type { CardStatus } from "../../engine/state/types";
+import type { Keyword, Trigger } from "../../engine/dsl/types";
+import type { CardStatus, EffectRef } from "../../engine/state/types";
+import { triggerBody } from "../../engine/triggers/body";
 import type { PresentationVisual } from "../../battle/components/presentation-items";
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
@@ -37,6 +38,7 @@ import {
   engineStatusLabel,
   type EngineAbilityOption,
   type EngineStatusCopy,
+  type TriggerMoment,
 } from "../../runtime/battle-prompt-messages";
 import type { EngineCardModels } from "../../battle/ui/engine-card-model";
 import { formatPhaseLabel, formatSideLabel } from "../../battle/ui/format";
@@ -120,6 +122,8 @@ export interface EngineBattleViewInput {
   /** The presentation's current notice. */
   readonly notice: BattlePromptNoticeView | null;
   readonly cards: EngineCardModels;
+  /** The battle's catalog, which names the moment a delayed ability fires. */
+  readonly catalog: EngineCatalog;
   /** Each visible instance's printed keywords, which its card text already shows (`enginePrintedKeywords`). */
   readonly printedKeywords: EnginePrintedKeywords;
   readonly avatars: Readonly<Record<Side, Pick<MobileBattleStatusView, "avatar" | "avatarProfile">>>;
@@ -413,7 +417,9 @@ export function enginePrintedKeywords(catalog: EngineCatalog): EnginePrintedKeyw
  * cost change, a waiting delayed ability, and a play permission naming no
  * card mark their side (one naming a card marks it), as does each applicable
  * static void-play permission and an
- * exhausted Avatar; an effect lasting until a player pays marks each card it
+ * exhausted Avatar; a waiting delayed ability also marks each card it
+ * captured that the viewer sees in play, naming the moment it fires from
+ * `catalog` when given; an effect lasting until a player pays marks each card it
  * affects, as actionable while it is in `payableNow`, the effects the human
  * may pay to end now.
  */
@@ -423,6 +429,7 @@ export function engineStatuses(
   printedKeywords: EnginePrintedKeywords,
   payableNow: ReadonlySet<EffectId> = new Set(),
   cardModels?: EngineCardModels,
+  catalog?: EngineCatalog,
 ): EngineStatuses {
   const cards = new Map<InstanceId, BattleStatusBadgeView[]>();
   const sides: Record<Side, BattleStatusBadgeView[]> = { player: [], enemy: [] };
@@ -490,10 +497,16 @@ export function engineStatuses(
         const sourceName = instance === undefined ? null : instance.printing.kind === "card"
           ? cardModels?.nameOf({ printing: instance.printing, variant: instance.variant })
           : cardModels?.(instance).displaySnapshot?.name;
-        sides[controller].push({
-          ...badge("delayedTrigger", { kind: "delayedTrigger", once: change.once, expiry, sourceName }),
+        const moment = catalog === undefined ? null : triggerMoment(catalog, change.ref, controller);
+        const waiting: BattleStatusBadgeView = {
+          ...badge("delayedTrigger", { kind: "delayedTrigger", once: change.once, expiry, sourceName, moment }),
           ...(instance === undefined ? {} : { source: parseBattleCardId(instance.id) }),
-        });
+        };
+        sides[controller].push(waiting);
+        // The view shows a card the viewer cannot identify as a hidden captured card, never by instance.
+        for (const captured of change.captured ?? []) {
+          if (typeof captured === "string" && view.instances[captured]?.zone === "play") mark(captured, waiting);
+        }
         break;
       }
       case "playFrom": {
@@ -548,6 +561,32 @@ export function engineStatuses(
   return { cards, sides };
 }
 
+/**
+ * The moment the floating or delayed trigger `ref` names fires at, its
+ * players resolved from `controller`'s side, or `null` for a trigger that
+ * is not a turn boundary or a reference the catalog has no trigger for: a
+ * status badge falls back to its generic copy rather than failing the board.
+ */
+function triggerMoment(catalog: EngineCatalog, ref: EffectRef, controller: Side): TriggerMoment | null {
+  let trigger: Trigger;
+  try {
+    ({ trigger } = triggerBody(catalog, ref.origin, ref.ability, ref.node));
+  } catch {
+    return null;
+  }
+  switch (trigger.on) {
+    case "endOfTurn":
+      return {
+        at: "endOfTurn",
+        side: trigger.player === undefined ? null : trigger.player === "you" ? controller : opponent(controller),
+      };
+    case "startOfTurn":
+      return { at: "startOfTurn" };
+    default:
+      return null;
+  }
+}
+
 export function buildEngineBattleScreenModel(input: EngineBattleViewInput): EngineBattleScreenModel {
   const { view, human } = input;
   const affordances = affordancesOf(view, human, input.legal);
@@ -558,7 +597,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
   const payableNow = new Set(
     [...affordances.payToEnd.values(), affordances.statusPayToEnd].flat().map((action) => action.effect),
   );
-  const statuses = engineStatuses(view, human, input.printedKeywords, payableNow, input.cards);
+  const statuses = engineStatuses(view, human, input.printedKeywords, payableNow, input.cards, input.catalog);
   const cardView = (instance: InstanceView, playable = false): MobileBattleCardView => {
     const marks = statuses.cards.get(instance.id);
     return {

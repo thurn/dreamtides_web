@@ -38,6 +38,7 @@ function screenOf(state: BattleState) {
     presented: true,
     notice: null,
     cards,
+    catalog: engine.catalog,
     printedKeywords: enginePrintedKeywords(engine.catalog),
     avatars: { player: { avatar: null }, enemy: { avatar: null } },
     opponentName: "Fixture Opponent",

@@ -571,7 +571,14 @@ export type EngineStatusCopy =
     }
   /** One card's own cost: set to `amount` energy, or `amount` energy more. */
   | { readonly kind: "cardCost"; readonly mode: CardCostMode; readonly amount: number; readonly expiry: Expiry }
-  | { readonly kind: "delayedTrigger"; readonly once: boolean; readonly expiry: Expiry; readonly sourceName?: string | null }
+  /** A waiting delayed (`once`) or repeating floating triggered ability, and the moment it fires when it can be named. */
+  | {
+      readonly kind: "delayedTrigger";
+      readonly once: boolean;
+      readonly expiry: Expiry;
+      readonly sourceName?: string | null;
+      readonly moment?: TriggerMoment | null;
+    }
   /**
    * A play permission: a card that may be played from the void (`named`), or
    * cards matching `filter` a player may play from their void, one when `next`.
@@ -591,6 +598,25 @@ export type EngineStatusCopy =
   /** A player cannot play a card once it has played `count` cards this turn. */
   | { readonly kind: "playLimit"; readonly count: number; readonly expiry: Expiry }
   | { readonly kind: "avatarExhausted" };
+
+/**
+ * A moment a delayed or floating triggered ability fires at: the end of a
+ * turn (of `side`'s turns only, when not `null`) or the start of a turn.
+ */
+export type TriggerMoment =
+  | { readonly at: "endOfTurn"; readonly side: Side | null }
+  | { readonly at: "startOfTurn" };
+
+/** When a triggered ability fires, as the player reads it: the next such moment for a delayed (`once`) one, else each. */
+function momentPhrase(moment: TriggerMoment, once: boolean, human: Side): string {
+  switch (moment.at) {
+    case "endOfTurn":
+      if (moment.side === null) return once ? " at end of turn" : " at the end of each turn";
+      return `${once ? " at the end of" : " at the end of each of"} ${moment.side === human ? "your" : "your opponent's"} ${once ? "turn" : "turns"}`;
+    case "startOfTurn":
+      return once ? " at the start of the next turn" : " at the start of each turn";
+  }
+}
 
 /** The accessible name of a status indicator: the status and its duration, from `human`'s side. */
 export function engineStatusLabel(status: EngineStatusCopy, human: Side): string {
@@ -638,7 +664,11 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
     case "cardCost":
       return `${status.mode === "set" ? `Costs ${String(status.amount)} energy` : `Costs ${String(status.amount)} energy more`}${expiryPhrase(status.expiry, human)}`;
     case "delayedTrigger":
-      return `${status.sourceName == null ? "" : `${status.sourceName}: `}${status.once ? "A delayed ability is waiting" : "An ability triggers"}${expiryPhrase(status.expiry, human)}`;
+      return `${status.sourceName == null ? "" : `${status.sourceName}: `}${
+        status.moment == null
+          ? status.once ? "A delayed ability is waiting" : "An ability triggers"
+          : `${status.once ? "A delayed ability triggers" : "An ability triggers"}${momentPhrase(status.moment, status.once, human)}`
+      }${expiryPhrase(status.expiry, human)}`;
     case "playFrom": {
       const qualified = status.filter.cardType !== undefined || Boolean(status.filter.subtype) || status.filter.costAtLeast !== undefined || status.filter.costAtMost !== undefined;
       const named = `Can be played from the void${qualified ? ` (${permittedCardKind(status.filter, false)})` : ""}`;

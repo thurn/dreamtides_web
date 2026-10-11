@@ -326,6 +326,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         presented: promptPresentable(head, presentation.notice),
         notice: noticeView,
         cards,
+        catalog: engine.catalog,
         printedKeywords,
         avatars,
         opponentName: init.enemyDescriptor.name,

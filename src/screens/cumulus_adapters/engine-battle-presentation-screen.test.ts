@@ -44,6 +44,7 @@ function labModel(
     presented: visual === null,
     notice: null,
     cards,
+    catalog: on.catalog,
     printedKeywords: enginePrintedKeywords(on.catalog),
     avatars: { player: { avatar: null }, enemy: { avatar: null } },
     opponentName: "Fixture Opponent",

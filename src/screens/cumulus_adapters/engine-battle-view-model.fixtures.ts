@@ -46,6 +46,7 @@ export function screenOf(state: BattleState, prompt: PendingEnginePrompt | null 
     presented,
     notice: null,
     cards,
+    catalog: on.catalog,
     printedKeywords: enginePrintedKeywords(on.catalog),
     avatars: { player: { avatar: null }, enemy: { avatar: null } },
     opponentName: "Fixture Opponent",
