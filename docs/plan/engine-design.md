@@ -961,7 +961,9 @@ analog:
    alternative or paid optional cost. A "next card" modifier (`next: true`)
    ends as the card it applied to is paid for, after the commit point.
    Play permissions (`playFrom`, `continuous/permissions.ts`) share the
-   layer: they let a player play cards from the void they own.
+   layer: they let a player play cards from the void they own. So does the
+   static-only `reclaimNotBanished` change, read by `banishedAsReclaimed`
+   (below).
 
 Ordering within a layer:
 
@@ -981,13 +983,15 @@ continuous primitive evaluates its characters and value once and stores one
 floating record per character. `lockedAtResolution(value)` marks the intent.
 
 **Continuous primitives** (`setBaseSpark`, `grant`/`loseKeyword`,
-`giveAllTypes`, `sparkModifier`, `costModifier`, `grantCardKeyword`) each
+`giveAllTypes`, `sparkModifier`, `costModifier`, `playFromZone`,
+`grantCardKeyword`, `reclaimNotBanished`) each
 declare a `continuous` hook: their layer and the changes they make while a
 static ability holds them. The hook reads through `StaticEnv`: `characters`
 and `value` resolve references and values live, and `read` is the reader of
 the layers before its own in the evaluation expanding the ability, never
 another evaluation of the state. Except for the static-only
-`grantCardKeyword` (**Cards outside play**, below), their `resolve` makes
+`grantCardKeyword` (**Cards outside play**, below) and
+`reclaimNotBanished` ([Zones](#zones-and-zone-changes)), their `resolve` makes
 floating records for their own duration, else the enclosing
 `forDuration`'s, else permanently.
 
@@ -1064,6 +1068,16 @@ apply in order, each to the change as the earlier ones left it
    triggers keep their origin.
 2. **Reclaimed cards are banished** instead of any other zone change, without
    `▸Dissolved`; a reclaimed card never leaves the Banished zone.
+   `banishedAsReclaimed` decides it as the card would leave, in `relocate`,
+   `dissolve`, and `preventCard`: a reclaimed card in play or on the stack is
+   not banished while a layer-6 `reclaimNotBanished` change of its owner's
+   applies. The static-only `reclaimNotBanished` primitive ("Cards you
+   reclaim are not banished when they leave play") makes that change while
+   its source is in play; it starts no floating record and emits no event. A
+   reclaimed card that goes where it normally would loses the reclaimed
+   status in `relocate`, under the zone-change events naming it, and the view
+   shows a covered card in play or on the stack without the status
+   (RD-hv-umm2.84-1, -2).
 3. **Veil.** A dissolve by an opposing effect removes Veil instead.
 
 Other zone rules:
@@ -1464,9 +1478,9 @@ and figment. Each check names every offending entity:
   registered primitive, and every static ability holds a continuous
   primitive.
 - **Static-only primitives.** A primitive marked `staticOnly`
-  (`grantCardKeyword`) appears only as a static ability's whole effect,
-  never in an event, triggered, or activated ability or nested in another
-  node, since resolving it throws.
+  (`grantCardKeyword`, `reclaimNotBanished`) appears only as a static
+  ability's whole effect, never in an event, triggered, or activated ability
+  or nested in another node, since resolving it throws.
 - **Undeclared targets.** Every play-time target spec a primitive holds is
   declared by its `targets` hook (`undeclaredAbilityTargets`,
   `testing/target-audit.ts`), so play-time choices never miss one.

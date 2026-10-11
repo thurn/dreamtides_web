@@ -44,6 +44,7 @@ export * from "./play-from-zone";
 export * from "./prevent";
 export * from "./put-in-deck";
 export * from "./rematerialize";
+export * from "./reclaim-not-banished";
 export * from "./repeat";
 export * from "./return-from-void";
 export * from "./return-to-hand";

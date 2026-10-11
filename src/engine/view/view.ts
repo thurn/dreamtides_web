@@ -28,6 +28,7 @@ import { fixedEnergy } from "../dsl/energy";
 import type { Keyword, Variant } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
 import { changedInstance } from "../rules/floating";
+import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
 import { knows, seesSubject } from "./knowledge";
 
@@ -266,7 +267,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         controller: instance.controller,
         zone: instance.zone,
         variant: copy(instance.variant),
-        status: { ...instance.status },
+        // "Cards you reclaim are not banished" removes the reclaimed status while it applies.
+        status: { ...instance.status, reclaimed: banishedAsReclaimed(state, catalog, instance, layers) },
         enteredZoneAt: instance.enteredZoneAt,
         characteristics: characteristicsView(state, catalog, layers, instance),
       };

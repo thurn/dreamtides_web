@@ -59,6 +59,7 @@ import {
   preventPrimitive,
   putInDeckPrimitive,
   rematerializePrimitive,
+  reclaimNotBanishedPrimitive,
   repeatPrimitive,
   returnFromVoidPrimitive,
   returnToHandPrimitive,
@@ -215,6 +216,9 @@ const DEFINITIONS = {
   },
   get rematerialize() {
     return rematerializePrimitive;
+  },
+  get reclaimNotBanished() {
+    return reclaimNotBanishedPrimitive;
   },
   get repeat() {
     return repeatPrimitive;

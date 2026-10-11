@@ -886,9 +886,23 @@ character" costs no energy, only the abandon. A card played this way becomes
 The reclaimed status replaces all other zone changes for that card (for example,
 an effect that would banish and then materialize a reclaimed character does not
 bring it back). A reclaimed character does not fire ▸Dissolved triggers when it
-is dissolved, because the move to the void is replaced by banishment. Some
-abilities, such as "Cards you reclaim are not banished when they leave play,"
-remove the reclaimed status.
+is dissolved, because the move to the void is replaced by banishment.
+
+"Cards you reclaim are not banished when they leave play" removes the
+reclaimed status from the cards you own — only a card's owner can play it from
+the void by Reclaim — while the ability applies and the card is in play or on
+the stack. Such a card goes where it normally would as it leaves, and is not
+reclaimed afterwards, wherever it went: a character to your void when it is
+dissolved, firing its ▸Dissolved abilities; an event to your void as it
+resolves or is Prevented, or where the Prevent sends it; any card to a hand, a
+deck, or the Banished zone as an effect directs, so a card banished until end
+of turn returns. It covers your cards whoever controls them, and an opposing
+player's reclaimed cards are never covered by your ability. Whether a card is
+banished is decided as it would leave: the ability covers a card reclaimed
+before its source entered play, a source leaving play covers its own
+departure, and a card that leaves after the source has left play is banished,
+even one dissolved later by the effect that dissolved the source. A card the
+reclaimed status already banished stays in the Banished zone.
 
 A card can **gain Reclaim** from an effect, as in "Choose a card in your void to
 gain reclaim" or "Erode 1. That card gains reclaim 0●." "Choose a card in your
@@ -1362,7 +1376,8 @@ the earlier ones left it:
    void, or the Banished zone (see [Created Cards](#created-cards)). A
    dissolved one is still dissolved and fires its ▸Dissolved triggers first.
 2. A reclaimed card is banished instead of any other zone change, which is no
-   longer a dissolve (see Reclaim).
+   longer a dissolve, unless an ability such as "Cards you reclaim are not
+   banished when they leave play" removes its reclaimed status (see Reclaim).
 3. A dissolve by an effect the opponent controls removes Veil instead (see
    Veil).
 

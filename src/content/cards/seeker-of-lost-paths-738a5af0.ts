@@ -1,3 +1,5 @@
+import { activated, energy, exhaustSelf, fromVoid, staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 21,
   art: { x: -0.126, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(p.reclaimNotBanished()),
+    activated([energy(2), exhaustSelf()], p.grantReclaim(fromVoid({ cardType: "character" }))),
+  ],
+  verifiedText: "at4atxoohu",
 });

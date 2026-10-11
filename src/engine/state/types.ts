@@ -337,7 +337,13 @@ export type ContinuousChange =
       readonly instance: InstanceId | null;
       readonly filter: CardFilter;
       readonly next: boolean;
-    };
+    }
+  /**
+   * Layer 6, made only by a static ability (`reclaimNotBanished`): a
+   * reclaimed card `player` owns is not banished instead of leaving play or
+   * the stack (rules/zones.ts `banishedAsReclaimed`).
+   */
+  | { readonly kind: "reclaimNotBanished"; readonly player: Side };
 
 /** What a floating effect changes while it lasts. */
 export type FloatingChange =

@@ -799,5 +799,8 @@ function effectStartedText(
       const mine = change.player === human;
       return `${mine ? "You" : "Your opponent"} may play ${permittedCards(status)} from ${mine ? "your" : "their"} void${expiryPhrase(expiry, human)}.`;
     }
+    case "reclaimNotBanished":
+      // Only a static ability makes this change, so no effect starts with it.
+      return null;
   }
 }

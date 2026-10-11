@@ -63,6 +63,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   spark: 5,
   cost: 6,
   playFrom: 6,
+  reclaimNotBanished: 6,
 };
 
 /** Whether a floating change is a continuous change the layers apply. */
@@ -183,9 +184,9 @@ function byTimestamp(a: OrderedChange, b: OrderedChange): number {
   );
 }
 
-/** The card a change applies to, or `null` for a cost modifier or a play permission. */
+/** The card a change applies to, or `null` for a cost modifier, a play permission, or a player's reclaimed cards. */
 function changed(change: ContinuousChange): InstanceId | null {
-  return change.kind === "cost" || change.kind === "playFrom" ? null : change.instance;
+  return change.kind === "cost" || change.kind === "playFrom" || change.kind === "reclaimNotBanished" ? null : change.instance;
 }
 
 /**

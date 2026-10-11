@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.84",
+  "phase": 5,
+  "baseOid": "5eb394869f188c3153f4ae38184dc9957d96af27",
+  "implementMin": 35,
+  "implementMinEstimated": true,
+  "localValidationS": {
+    "focused": 3,
+    "review": 59,
+    "knip": 4,
+    "coverageGate": 2,
+    "fuzz": 78,
+    "sweep": 228,
+    "judged": 99
+  },
+  "heavyQueueWaitS": 0,
+  "hostLoad": 25.35,
+  "testDelta": {
+    "files": 3,
+    "lines": 467,
+    "jsdomFiles": 0,
+    "cases": 16
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 10,
+      "note": "preventCard's reclaimed check lives in rules/stack.ts, and the new layer-6 change kind forces entries in continuous/layers.ts and rules/floating.ts; none were in the filed areas, so the subagent stopped once for a widening"
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 15,
+      "note": "the card-lab rejects a synthetic card as the lab subject (unknownCard), an activation with one legal target resolves before a chooser-or-stack wait can see it, and labStage failed once on mobile with 'Timeout 1ms exceeded' at a load spike (22) after the desktop pass; a mobile-only rerun passed"
+    }
+  ]
+}

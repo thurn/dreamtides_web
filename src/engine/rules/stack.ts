@@ -1,7 +1,7 @@
 /** Removing cards from the stack without resolving them (rules § Keywords and Effects → Prevent). */
 import type { InstanceId, Side } from "../state/ids";
 import type { StepContext } from "../steps/types";
-import { ceaseToExist, instanceOf, moveInstance, moveToHand } from "./zones";
+import { banishedAsReclaimed, ceaseToExist, instanceOf, moveInstance, moveToHand } from "./zones";
 
 /**
  * Where a prevented card goes: its owner's void, or a variant's "top of its
@@ -14,7 +14,8 @@ export type PreventDestination = "void" | "deckTop" | "ownerHand" | "yourHand";
  * Prevents the card `id` on the stack for `preventer`, the controller of the
  * prevent effect: it leaves the stack without resolving and goes to
  * `destination`. A created card ceases to exist instead, and a reclaimed
- * card is banished instead.
+ * card is banished instead unless its owner's "not banished" ability
+ * applies (`banishedAsReclaimed`).
  */
 export function preventCard(
   ctx: StepContext,
@@ -33,7 +34,7 @@ export function preventCard(
     ceaseToExist(ctx, id);
     return;
   }
-  if (instance.status.reclaimed) {
+  if (banishedAsReclaimed(ctx.state, ctx.catalog, instance)) {
     moveInstance(ctx, id, "banished");
     ctx.emit({ kind: "prevented", instance: id, side, to: "banished", zoneOf: owner });
     return;

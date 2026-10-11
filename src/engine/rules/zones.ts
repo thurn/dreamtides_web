@@ -7,7 +7,8 @@
  *    entering a deck, a hand, a void, or the Banished zone; a dissolved one
  *    fires ▸Dissolved first;
  * 2. a reclaimed card is banished instead of any other zone change, without
- *    ▸Dissolved;
+ *    ▸Dissolved, unless its owner's "Cards you reclaim are not banished"
+ *    ability applies as it leaves play or the stack (`banishedAsReclaimed`);
  * 3. Veil: a dissolve by an effect the opponent controls removes Veil
  *    instead (RD-hv-7x4l.8-1).
  */
@@ -15,6 +16,9 @@ import type { AbilitySource, InstanceId, Side, Slot, Zone } from "../state/ids";
 import { BACK_RANK_SIZE } from "../state/ids";
 import type { BattleState, CardInstance, EffectChoices, FloatingEffect, Printing } from "../state/types";
 import type { Variant } from "../dsl/types";
+import type { EngineCatalog } from "../catalog";
+import { characteristics } from "../continuous/characteristics";
+import type { Layers } from "../continuous/layers";
 import { freshStatus } from "../state/create";
 import type { StepContext } from "../steps/types";
 import { addFloating, endChangesTo, expireAt } from "./floating";
@@ -136,12 +140,37 @@ function removeFromZone(state: BattleState, instance: CardInstance): void {
 }
 
 /**
+ * Whether a card's zone change is replaced by banishment now because it is
+ * reclaimed (rules § Reclaim): it has the reclaimed status, and while it is
+ * in play or on the stack no layer-6 `reclaimNotBanished` change of its
+ * owner's ("Cards you reclaim are not banished when they leave play")
+ * applies. Only a card's owner can play it from the void by Reclaim, so the
+ * owner is the player who reclaimed it. Read as the card would leave, while
+ * it is still there, so a source leaving play with it sees its own departure
+ * and a card leaving after the source has left is banished. A card the
+ * reclaimed status already banished stays reclaimed in the Banished zone.
+ */
+export function banishedAsReclaimed(
+  state: BattleState,
+  catalog: EngineCatalog,
+  instance: CardInstance,
+  layers?: Layers,
+): boolean {
+  if (!instance.status.reclaimed) return false;
+  if (instance.zone !== "play" && instance.zone !== "stack") return true;
+  return !(layers ?? characteristics(state, catalog))
+    .changes(6)
+    .some(({ change }) => change.kind === "reclaimNotBanished" && change.player === instance.owner);
+}
+
+/**
  * Moves an instance to a non-play zone of `holder`, its owner unless a card
  * goes into another side's hand, after the replacements: a created card
  * ceases to exist instead, and a reclaimed card goes to its owner's Banished
- * zone instead. It is never exhausted outside play: exhaustion marks a
- * character in play (rules § Exhaust and Awaken), and a card that returns to
- * play enters exhausted unless awakened. Leaving play clears its counters
+ * zone instead (`banishedAsReclaimed`); a reclaimed card that goes where it
+ * normally would loses the reclaimed status. It is never exhausted outside
+ * play: exhaustion marks a character in play (rules § Exhaust and Awaken),
+ * and a card that returns to play enters exhausted unless awakened. Leaving play clears its counters
  * (rules § Counters). A card put into a void is announced by
  * `enteredVoid` once it is there, whatever route moved it, so "is put into
  * your void" triggers see it in the void. Returns the zone it went to, or
@@ -160,7 +189,9 @@ function relocate(
     ceaseToExist(ctx, id);
     return null;
   }
-  const destination = instance.status.reclaimed ? "banished" : to;
+  const reclaimed = banishedAsReclaimed(state, ctx.catalog, instance);
+  const destination = reclaimed ? "banished" : to;
+  if (!reclaimed) instance.status.reclaimed = false;
   const receiver = destination === "hand" ? holder : instance.owner;
   const from = instance.zone;
   const leavingPlay = from === "play";
@@ -377,7 +408,8 @@ export function ceaseToExist(
  * controlling the dissolving effect, `null` for a challenge or an abandon.
  * The replacements apply in order (RD-hv-7x4l.8-1): a created character
  * ceases to exist after firing ▸Dissolved, still a dissolve; a reclaimed
- * one is banished instead, which is no longer a dissolve; then Veil turns a
+ * one is banished instead, which is no longer a dissolve, unless its
+ * owner's "not banished" ability applies (`banishedAsReclaimed`); then Veil turns a
  * dissolve by the opponent's effect into losing Veil. An `abandoned`
  * character is announced as abandoned once it has left play, before
  * `dissolved` (rules § Abandon).
@@ -386,7 +418,7 @@ export function dissolve(ctx: StepContext, id: InstanceId, by: Side | null, aban
   const { state, catalog } = ctx;
   const instance = instanceOf(state, id);
   const side = instance.controller;
-  if (instance.status.reclaimed) {
+  if (banishedAsReclaimed(state, catalog, instance)) {
     banish(ctx, id);
     if (abandoned) ctx.emit({ kind: "abandoned", instance: id, side });
     return;

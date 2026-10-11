@@ -70,11 +70,12 @@ function sameBoundary(expiry: Expiry, boundary: Expiry): boolean {
 
 /**
  * The card a floating change changes, or `null` for a trigger, a cost
- * modifier, or a play permission that names no card. A permission naming a
+ * modifier, a play permission that names no card, or a static-only
+ * `reclaimNotBanished`, which never floats. A permission naming a
  * card changes it, so the view hides it while that card is hidden.
  */
 export function changedInstance(change: FloatingChange): InstanceId | null {
-  return change.kind === "trigger" || change.kind === "cost" ? null : change.instance;
+  return change.kind === "trigger" || change.kind === "cost" || change.kind === "reclaimNotBanished" ? null : change.instance;
 }
 
 /** Ends the floating effects that change `id`, when it ceases to exist. */
