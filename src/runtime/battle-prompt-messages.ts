@@ -126,6 +126,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Do you want to do this?";
       case "preventUnlessPays":
         return "Pay to save your card?";
+      case "preventUnlessAbandons":
+        return "Abandon to save your card?";
     }
   })();
   const detail =
@@ -142,6 +144,8 @@ export type EnginePromptOptionCopy =
   | { readonly kind: "yes" }
   | { readonly kind: "no" }
   | { readonly kind: "pay"; readonly energy: number }
+  /** Accept an "unless the opponent abandons" cost; the character is chosen next. */
+  | { readonly kind: "abandon" }
   | { readonly kind: "decline" }
   /** The empty answer of an "up to" prompt answered on the board. */
   | { readonly kind: "skip" }
@@ -163,6 +167,8 @@ export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string 
       return "No";
     case "pay":
       return `Pay ${String(option.energy)} ●`;
+    case "abandon":
+      return "Abandon";
     case "decline":
       return "Decline";
     case "skip":
@@ -375,6 +381,7 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
     case "youMay":
     case "optionalPayment":
     case "preventUnlessPays":
+    case "preventUnlessAbandons":
       return "answer you could give";
   }
 }

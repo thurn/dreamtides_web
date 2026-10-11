@@ -154,6 +154,7 @@ const ROLE_STRATEGIES = {
   putInDeck: { cards: "gain", number: "largest" },
   youMay: { cards: "hostile", number: "largest" },
   preventUnlessPays: { cards: "hostile", number: "largest" },
+  preventUnlessAbandons: { cards: "hostile", number: "largest" },
 } as const satisfies Record<PromptRole, { readonly cards: "loss" | "gain" | "hostile"; readonly number: "largest" | "discoverCost" }>;
 
 /** How much Greedy wants `id` chosen for a prompt of `role`. */

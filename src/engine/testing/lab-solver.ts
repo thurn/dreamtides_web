@@ -9,12 +9,14 @@ import { eventTargetSpecs } from "../effects/abilities";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, TriggeredAbility } from "../dsl/types";
+import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
 import type { BattleState, DeckEntry } from "../state/types";
+import { NO_PROMPTS } from "../steps/sources";
 import { boardState, type BoardSetup, type SideSetup } from "./board";
+import { DSL } from "./dsl-cards";
 import { LAB_OVERRIDES } from "./lab-overrides";
 import { SYNTHETIC } from "./synthetic-cards";
 
@@ -175,17 +177,34 @@ function opponentHandChoices(effect: Effect): CardFilter[] {
  * player abandons a non-figment character"): each needs a matching character
  * its chooser controls, relative to the effect's controller, so that the
  * lab's first choice is not the played card itself. Inside "each player",
- * every player chooses. The solver places no figments, so a figment-only
- * choice stages nothing.
+ * every player chooses. A Prevent's "unless the opponent abandons" cost
+ * gets a matching character on the opponent's side, so the choice is
+ * offered. The solver places no figments, so a figment-only choice stages
+ * nothing.
  */
 function abandonChoices(effect: Effect): { readonly choosers: readonly PlayerRef[]; readonly selector: CharacterSelector }[] {
   const nodes = everyNode(effect) as Effect[];
   const each = new Set(nodes.flatMap((node) => (node.op === "eachPlayer" ? everyNode(node.effect) : [])));
   return nodes.flatMap((node) => {
+    if (node.op === "prevent") {
+      const predicate = node.unlessAbandons;
+      return predicate === null || predicate.figment === true ? [] : [{ choosers: ["opponent"], selector: { ...predicate, controller: "you" } }];
+    }
     if (node.op !== "abandon" || node.predicate.figment === true) return [];
     const choosers: readonly PlayerRef[] = each.has(node) ? ["you", "opponent"] : [node.chooser];
     return [{ choosers, selector: { ...node.predicate, controller: "you" } }];
   });
+}
+
+/**
+ * The card the opposing side plays first so that a card with a stack target
+ * has an item to target: a vanilla character for a character selector, else
+ * a plain event. A player responds only to the opponent's items, so a
+ * selector of the player's own items stages nothing.
+ */
+function stackOpener(selector: StackItemSelector): CardId | null {
+  if (selector.controller === "you") return null;
+  return selector.cardType === "character" ? SYNTHETIC.vanilla1.id : DSL.drawTwo.id;
 }
 
 /** What the lab stages for additional costs: matching cards and characters, and the ⍟ paid. */
@@ -260,7 +279,12 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * beside the source in hand, and abandon costs get matching own characters.
  * A ⍟ additional cost gets that many
  * points in `side`'s score, wherever it sits among alternatives and
- * optional costs (`costNeeds`). Throws if the card is still unplayable.
+ * optional costs (`costNeeds`). A card with a stack target answers an
+ * item of the opponent's: unless a board is declared, the opponent is active
+ * in its Day holding a matching opener (`stackOpener`) as its first hand
+ * card, and `opener` names that side; the lab plays the opener before the
+ * card, and the card is checked for playability once it is on the stack.
+ * Throws if the card is still unplayable.
  */
 export function labBoard(
   engine: Engine,
@@ -268,7 +292,7 @@ export function labBoard(
   pool: readonly EngineCardDefinition[],
   side: Side = "player",
   staged?: Partial<Record<Side, SideSetup>>,
-): { setup: BoardSetup; state: BattleState } {
+): { setup: BoardSetup; state: BattleState; opener: Side | null } {
   const entry: DeckEntry = typeof card === "string" ? { cardId: card } : card;
   const cardId = entry.cardId;
   const definition = engine.catalog.card(cardId);
@@ -277,6 +301,7 @@ export function labBoard(
   const hands: Record<Side, CardId[]> = { player: [], enemy: [] };
   const decks: Record<Side, CardId[]> = { player: [], enemy: [] };
   const zones = { void: voids, hand: hands, deck: decks };
+  let opener: CardId | null = null;
   const xRange = labXRange(definition.costs);
   const variant = variantOf(entry);
   const abilities = definition.abilities(variant);
@@ -293,8 +318,11 @@ export function labBoard(
   }
   for (const specs of eventTargetSpecs(definition, variant)) {
     for (const spec of specs) {
-      // A stack target needs an item on the stack, which a Day board never has; lab overrides supply one.
-      if (spec.kind === "stackTarget") continue;
+      // A stack target needs an item on the stack, which a Day board never has: the opponent plays an opener first.
+      if (spec.kind === "stackTarget") {
+        opener ??= stackOpener(spec.selector);
+        continue;
+      }
       if (spec.kind === "inZone") {
         const voidSide = spec.player === "you" ? side : opponent(side);
         for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, spec.filter, pool));
@@ -332,18 +360,30 @@ export function labBoard(
     enemy: { back: back.enemy, void: voids.enemy, deck: deck("enemy"), ...(hands.enemy.length > 0 ? { hand: hands.enemy } : {}) },
   };
   sides[side] = { ...sides[side], hand: [entry, ...hands[side]], energy: LAB_ENERGY, ...(score > 0 ? { score } : {}) };
-  const base: BoardSetup = { active: side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
+  const opening = staged === undefined && opener !== null ? opponent(side) : null;
+  if (opening !== null && opener !== null) {
+    const energy = Math.max(sides[opening].energy ?? 0, fixedEnergy(engine.catalog.card(opener).costs));
+    sides[opening] = { ...sides[opening], hand: [opener, ...(sides[opening].hand ?? [])], energy };
+  }
+  const base: BoardSetup = { active: opening ?? side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
   const setup: BoardSetup = staged === undefined ? base : {
     ...base,
     player: { ...base.player, ...staged.player },
     enemy: { ...base.enemy, ...staged.enemy },
   };
-  const { state } = boardState(engine.catalog, setup);
+  const { state, ids } = boardState(engine.catalog, setup);
+  let answering = state;
+  if (opening !== null) {
+    const card = ids[opening].hand[0];
+    const play = engine.legalActions(state, opening).find((action) => action.kind === "play" && action.card === card && action.from === "hand");
+    if (play === undefined) throw new Error(`The lab board for ${cardId} cannot play its stack opener`);
+    answering = engine.apply(state, opening, play, NO_PROMPTS).state;
+  }
   const playable = engine
-    .legalActions(state, side)
+    .legalActions(answering, side)
     .some((action) => action.kind === "play" && printedCardIdOf(state, action.card) === cardId);
   if (staged === undefined && !playable) {
     throw new Error(`The lab board for ${cardId} does not make it playable; add a lab override`);
   }
-  return { setup, state };
+  return { setup, state, opener: opening };
 }

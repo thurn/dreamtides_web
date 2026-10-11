@@ -1,3 +1,5 @@
+import { event, stackItem } from "../../engine/dsl/builders";
+import { prevent } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,7 @@ export default card({
   artOwned: false,
   cardNumber: 266,
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.98-1: the opponent who controls the played card accepts or declines, then chooses the character.
+  abilities: () => [event(prevent(stackItem({ controller: "opponent" }), { unlessAbandons: { figment: false } }))],
+  verifiedText: "145z0ekixg8",
 });

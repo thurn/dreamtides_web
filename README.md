@@ -540,7 +540,7 @@ and `npm run review:full` runs that build.
 | `ai=random` / `ai=greedy` | The policy the AI host runs for the enemy of the engine battle (default `greedy`) |
 | `game=<id>` | Open that local game from IndexedDB |
 | `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
-| `card=<uuid>` | With an Exploration scene, use that source card's encounter; with `goto=card-lab`, the card to play |
+| `card=<uuid>` | With an Exploration scene, use that source card's encounter; with `goto=card-lab`, the card to play (a card that targets a stack item answers a synthetic opener the opposing side plays first) |
 | `variant=<v>` / `as=<side>` | With `goto=card-lab`: the variant (default `base`) and the active side (`player` or `enemy`, default `player`) |
 | `labStage=<JSON>` | With `goto=card-lab`, exact declared zones, rank slots, both energies and optional live enemy actions; URL-encode the JSON |
 | `debug=1` | Show the engine battle screen's debug panel |

@@ -65,7 +65,9 @@ export type PromptRole =
   /** Whether to do a "you may". */
   | "youMay"
   /** Whether the prevented card's controller pays to stop the prevention. */
-  | "preventUnlessPays";
+  | "preventUnlessPays"
+  /** Whether the prevented card's controller abandons a character to stop the prevention; the character is chosen next, with role `abandon`. */
+  | "preventUnlessAbandons";
 
 /**
  * The emblem whose ability raised a prompt: a side's avatar or one of its

@@ -123,7 +123,7 @@ describe("prompt surfaces over the prompt lab", () => {
       chooseCost: true, optionalCost: true, optionalPayment: true, abandonCost: true, returnCost: true, abandon: true, discardCost: true, revealCost: true,
       banishCost: true, offeringCost: true, discard: true, discardChosen: true, banishChosen: true, foresee: true,
       lookAtTop: true, discover: true, discoverCost: true, chooseAmong: true, chooseFromOpponentHand: true, shuffleInto: true, putInDeck: true,
-      youMay: true, preventUnlessPays: true,
+      youMay: true, preventUnlessPays: true, preventUnlessAbandons: true,
     } satisfies Record<PromptRole, true>;
     expect(new Set(prompts.map(({ prompt }) => prompt.purpose.role))).toEqual(new Set(Object.keys(roles)));
     const kinds = new Set(prompts.map(({ model }) => model.prompt.surface.kind));

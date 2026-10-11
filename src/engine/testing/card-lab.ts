@@ -20,7 +20,7 @@ import { fixedEnergy } from "../dsl/energy";
 import type { BoardSetup } from "./board";
 import { labBoard } from "./lab-solver";
 import { SYNTHETIC } from "./synthetic-cards";
-import { promptLabBattle, type PromptLabFixture } from "./prompt-lab";
+import { promptLabBattle, type LabStep, type PromptLabFixture } from "./prompt-lab";
 
 /** Every variant the card-lab plays: the base card and each transfiguration. */
 export const CARD_LAB_VARIANTS = [
@@ -226,11 +226,14 @@ export function cardLabEnemyAction(engine: Engine, init: BattleInit, slice: Batt
  * then also holds a no-effect Interrupt, beside any card the solver staged
  * in their hand, so the battle stops on the human's
  * response window (P1) with the card on the stack, and its resolution is
- * presented when the human passes.
+ * presented when the human passes. A card with a stack target first has
+ * its opponent play the solver's opener, so as the player the battle
+ * stops on the human's response window with the opener on the stack; as
+ * the enemy the human's energy covers both the opener and the Interrupt.
  */
 export function cardLabFixture(engine: Engine, request: CardLabRequest, pool: readonly EngineCardDefinition[]): PromptLabFixture {
   const stage = request.stage === undefined ? undefined : cardLabStageFromUnknown(request.stage);
-  const solved = labBoard(engine, request.entry, pool, request.side, stage).setup;
+  const { setup: solved, opener } = labBoard(engine, request.entry, pool, request.side, stage);
   if (stage !== undefined) {
     for (const side of SIDES) for (const id of [...(solved[side]?.front ?? []), ...(solved[side]?.back ?? [])]) {
       if (id !== null && engine.catalog.card(id).cardType !== "character") throw new Error("Declared lab ranks require characters");
@@ -239,26 +242,26 @@ export function cardLabFixture(engine: Engine, request: CardLabRequest, pool: re
   const responder = SYNTHETIC.interruptEvent;
   const setup: BoardSetup =
     request.side === "enemy" && stage === undefined
-      ? { ...solved, player: { ...solved.player, hand: [...(solved.player?.hand ?? []), responder.id], energy: fixedEnergy(responder.costs) } }
+      ? { ...solved, player: { ...solved.player, hand: [...(solved.player?.hand ?? []), responder.id], energy: (solved.player?.energy ?? 0) + fixedEnergy(responder.costs) } }
       : solved;
   const name = `card-lab:${request.entry.cardId}:${request.variant}:${request.side}`;
+  // Each scripted play is the side's first hand card.
+  const playFirst = (side: Side): LabStep => ({
+    side,
+    action: (ids) => {
+      const card = ids[side].hand[0];
+      if (card === undefined) throw new Error(`${name} places no ${side} hand card`);
+      return { kind: "play", card, from: "hand" };
+    },
+  });
   return {
     name,
     description: `The card-lab battle of ${request.entry.cardId} (${request.variant}) for the ${request.side}`,
     setup,
-    script:
-      request.side === "enemy" && stage === undefined
-        ? [
-            {
-              side: "enemy",
-              action: (ids) => {
-                const card = ids.enemy.hand[0];
-                if (card === undefined) throw new Error(`${name} places no enemy hand card`);
-                return { kind: "play", card, from: "hand" };
-              },
-            },
-          ]
-        : [],
+    script: [
+      ...(opener === null ? [] : [playFirst(opener)]),
+      ...(request.side === "enemy" && stage === undefined ? [playFirst("enemy")] : []),
+    ],
   };
 }
 

@@ -76,6 +76,8 @@ export const STACK = {
   preventToYourHand: card(17, "event", 0, () => [event(p.prevent(stackItem(), { destination: "yourHand" }))], "interrupt"),
   /** ❖❖ "Prevent a card the opponent played unless they pay 2●." */
   preventUnlessPays: card(4, "event", 1, () => [event(p.prevent(stackItem({ controller: "opponent" }), { unlessPays: 2 }))], "interrupt"),
+  /** ❖❖ "Prevent a card the opponent played unless they abandon a non-figment character." */
+  preventUnlessAbandons: card(24, "event", 1, () => [event(p.prevent(stackItem({ controller: "opponent" }), { unlessAbandons: { figment: false } }))], "interrupt"),
   /** "This event cannot be prevented. Draw a card." */
   unpreventableDraw: card(5, "event", 1, () => [keyword("cannotBePrevented"), event(p.draw(1))]),
   /** "1●, ☾: Draw a card." */

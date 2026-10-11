@@ -415,7 +415,14 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
       );
     }
     case "confirm":
-      return choice(prompt, [{ copy: { kind: "yes" }, answer: true }, { copy: { kind: "no" }, answer: false }], host({}), sourceCard);
+      return choice(
+        prompt,
+        prompt.purpose.role === "preventUnlessAbandons"
+          ? [{ copy: { kind: "abandon" }, answer: true }, { copy: { kind: "decline" }, answer: false }]
+          : [{ copy: { kind: "yes" }, answer: true }, { copy: { kind: "no" }, answer: false }],
+        host({}),
+        sourceCard,
+      );
     case "payOrDecline":
       return choice(
         prompt,

@@ -809,7 +809,11 @@ Further rules:
   effect names: the top of its owner's deck, its owner's hand, or the
   preventer's hand. Created cards cease to exist; reclaimed cards are
   banished. "Unless the opponent pays N●" asks the prevent effect's
-  opponent with a `payOrDecline` prompt.
+  opponent with a `payOrDecline` prompt. "Unless the opponent abandons a
+  non-figment character" (`unlessAbandons`) asks them with a `confirm`
+  prompt (role `preventUnlessAbandons`), then on acceptance with a
+  `chooseCards` prompt (role `abandon`) over the matching characters they
+  control; with none it prevents without a prompt.
 - **Activated abilities** are stack items too.
 - **Copies** follow [D15](decisions.md#d15-copies-of-cards-on-the-stack). A
   copy pushed above its original offers its controller a `chooseTargets` or
@@ -1340,7 +1344,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, optional })`, `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs)` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)` |
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
-| Stack | `prevent(selector, { unlessPays, destination })`, `copyCard` (D15) | copying more than once |
+| Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices) | `forEach`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn`, `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
@@ -2125,7 +2129,12 @@ Greedy unless `?ai=random|greedy` selects one.
   target's ✦ and cost admit an X the play can choose, for an X-valued bound
   on a card with an energy X cost. It places synthetic vanilla cards, then
   pool cards without authored abilities, and an authored card only when no
-  other card matches, such as a subtype only authored cards carry. Per-entity
+  other card matches, such as a subtype only authored cards carry. A card
+  with a stack target answers an opener: without a declared board, the
+  opposing side is active in its Day and the lab plays its synthetic opener
+  (a vanilla character or a plain event, by the stack selector) before the
+  card, and a Prevent's "unless the opponent abandons" choice gets a matching
+  character on the opposing side. Per-entity
   overrides live in `src/engine/testing/lab-overrides.ts`.
 
 ## Performance targets

@@ -6,7 +6,9 @@ import { abandonCost, additionalCost, event, fromVoid } from "../dsl/builders";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { LAB, PROMPT_LAB_DEFINITIONS } from "./prompt-lab";
 import { parseCardSubtype } from "../../types/card-identity";
+import { cardLabBattle } from "./card-lab";
 import { runCardLabPreflight } from "./lab-preflight";
+import { STACK } from "./stack-cards";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 
 const definitions = PROMPT_LAB_DEFINITIONS;
@@ -58,6 +60,21 @@ describe("node card-lab preflight", () => {
     const result = runCardLabPreflight(failing, request(fault), []);
     expect(result).toMatchObject({ verdict: "fail", reason: "engineError", resolved: false });
     expect(result.instance).not.toBeNull();
+  });
+
+  it("plays a stack-target card in answer to the opponent's staged opener, staging its unless-abandon character, on both sides", () => {
+    for (const side of ["player", "enemy"] as const) {
+      const other = side === "player" ? "enemy" : "player";
+      const { committed } = cardLabBattle(engine, request(STACK.preventUnlessAbandons, side), definitions.cards).slice;
+      expect(committed.turn.active).toBe(other);
+      expect(committed.stack.map((item) => item.controller)).toEqual(side === "player" ? [other] : [other, side]);
+      expect(committed.sides[other].backRank.filter((id) => id !== null)).toHaveLength(1);
+      // Either way the lab stops on the human's response window: with the card in hand, or holding a playable Interrupt.
+      expect(engine.decision(committed)).toMatchObject({ kind: "respond", side: "player" });
+      const result = runCardLabPreflight(engine, request(STACK.preventUnlessAbandons, side), definitions.cards);
+      expect(result, side).toMatchObject({ verdict: "pass", resolved: true, zone: "void" });
+      expect(result.events.filter((event) => event.kind === "abandoned" || event.kind === "prevented")).toHaveLength(1);
+    }
   });
 
   it("distinguishes pending definitions and bounds multi-prompt progress", () => {

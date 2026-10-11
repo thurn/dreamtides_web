@@ -1038,6 +1038,19 @@ conditional forms such as "Prevent an event unless the opponent pays 2●," and
 forms that send the card elsewhere: on top of its owner's deck, into its
 owner's hand, or into your hand (see [Zones](#zones) → Hand).
 
+In a conditional form, "the opponent" is the opponent of the Prevent's
+controller, and the played card it prevents is one that opponent played. They
+decide as the Prevent resolves, and the decision is public. "Unless the
+opponent pays 2●" lets them pay the energy or decline; a player who cannot pay
+declines. "Unless the opponent abandons a non-figment character" lets them
+accept or decline, and on accepting they choose which matching character they
+control to abandon. That choice does not target, so a character that cannot be
+targeted can be chosen. A player who controls no matching character cannot
+accept, and the card is Prevented without a choice. Paying or abandoning keeps
+the card on the stack, where it later resolves as usual; declining Prevents it.
+If the card has left the stack by the time the Prevent resolves, nobody is
+asked and nothing is paid or abandoned.
+
 **Abandon** — Move one of your own characters from play to the void. When an
 effect tells a player to abandon a character, that player chooses a matching
 character they control as the effect resolves. This choice does not target,
