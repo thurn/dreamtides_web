@@ -1,0 +1,3 @@
+# hv-umm2.507 pre-existing observations
+
+The lab solver stages an `everyIn("void", …)` materialization's card at the least X the play can choose (`voidMaterializations` in `src/engine/testing/lab-solver.ts`). A card whose `everyIn` filter carries a constant `costAtLeast` above that least X under `costAtMost: x()`, such as `everyIn("void", { costAtLeast: 1 }, { costAtMost: x() })` on an X-minimum-0 card, gets an empty filter and `cardFor` throws, although X ≥ 1 is a legal play. No catalog card prints this today. Nothing an `everyIn` reads narrows the X the lab's first-legal-answer play picks, so staging a card above the least X would materialize nothing; a fix needs the lab to pick X as well, and stays out of this bead's scope (fromVoid targets).

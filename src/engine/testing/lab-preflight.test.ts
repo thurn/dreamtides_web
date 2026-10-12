@@ -3,11 +3,17 @@ import { describe, expect, it } from "vitest";
 import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import type { EngineEvent } from "../events";
-import { abandonCost, additionalCost, energyX, event, everyIn, fromVoid, x } from "../dsl/builders";
+import { abandonCost, additionalCost, energy, energyX, event, everyIn, fromVoid, x } from "../dsl/builders";
 import { copiableCostOf } from "../continuous/characteristics";
 import { materialize } from "../effects/primitives/materialize";
 import type { CardCost, ZoneEverySpec } from "../dsl/types";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
+import { grantReclaim } from "../effects/primitives/grant-reclaim";
+import { firstLegalAnswer } from "../prompts/answers";
+import type { ChooseNumberPrompt } from "../prompts/types";
+import { hasKeyword } from "../rules/keywords";
+import type { InstanceId, Side } from "../state/ids";
+import type { BattleState } from "../state/types";
 import { LAB, PROMPT_LAB_DEFINITIONS } from "./prompt-lab";
 import { parseCardSubtype } from "../../types/card-identity";
 import { cardLabBattle } from "./card-lab";
@@ -15,6 +21,7 @@ import { dreamwellLabEvidence, runCardLabPreflight, runDreamwellLabPreflight } f
 import { labBoard } from "./lab-solver";
 import { STACK } from "./stack-cards";
 import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "./synthetic-cards";
+import { passUntil } from "./trigger-harness";
 
 const definitions = PROMPT_LAB_DEFINITIONS;
 const engine = createEngine(createCatalog(definitions.cards, [], definitions.emblems, definitions.figments));
@@ -113,6 +120,52 @@ describe("node card-lab preflight", () => {
       const result = runCardLabPreflight(staging, request(card, side), []);
       expect(result, `${card.id}/${side}`).toMatchObject({ verdict: "pass", resolved: true });
       expect(result.events.filter((entry) => entry.kind === "materialized")).toHaveLength(1);
+    }
+  });
+
+  it("stages a void target bounded by X beside a constant lower bound at an X the play can choose, and plays an X that admits it", () => {
+    /** "X●: Choose (up to) one ≥1● ≤X● cost event in your void to gain reclaim 0●", playable for X = 0. */
+    const reclaiming = (index: number, upTo: boolean): EngineCardDefinition => ({
+      ...SYNTHETIC.event0, id: syntheticId(index), status: "authored", costs: [energyX(0)],
+      abilities: () => [event(grantReclaim(fromVoid({ cardType: "event", costAtLeast: 1 }, { costAtMost: x(), upTo }), { costs: [energy(0)] }))],
+    });
+    const required = reclaiming(1957, false);
+    const optional = reclaiming(1958, true);
+    const staging = createEngine(testCatalog([required, optional]));
+    /** Plays the lab card at the X `chooseX` picks, choosing every offered target, and resolves it. */
+    const playAt = (state: BattleState, side: Side, chooseX: (prompt: ChooseNumberPrompt) => number) => {
+      const play = staging.legalActions(state, side).find((action) => action.kind === "play");
+      if (play === undefined) throw new Error("no play");
+      let chosen: number | null = null;
+      let offered: readonly InstanceId[] = [];
+      const played = staging.apply(state, side, play, {
+        answer(prompt) {
+          if (prompt.kind === "chooseNumber") return (chosen = chooseX(prompt));
+          if (prompt.kind === "chooseTargets") return (offered = prompt.candidates);
+          throw new Error(`Unexpected ${prompt.kind}`);
+        },
+      });
+      return { x: chosen, offered, resolved: passUntil(staging, played.state, (next) => next.stack.length === 0).state };
+    };
+    for (const card of [required, optional]) for (const side of ["player", "enemy"] as const) {
+      const { state } = labBoard(staging, card.id, [], side);
+      expect(state.sides[side].void, `${card.id}/${side}`).toHaveLength(1);
+      const [staged] = state.sides[side].void as [InstanceId];
+      const cost = copiableCostOf(state, staging.catalog, staged);
+      expect(cost).toBeGreaterThanOrEqual(1);
+      expect(runCardLabPreflight(staging, request(card, side), []), `${card.id}/${side}`).toMatchObject({ verdict: "pass", resolved: true });
+      // The lab answers the X prompt with its first legal answer: a required target leaves only the Xs that admit the staged card.
+      const lab = playAt(state, side, (prompt) => firstLegalAnswer(prompt) as number);
+      if (card === required) {
+        // The single legal target is chosen without a prompt.
+        expect(lab.x).toBeGreaterThanOrEqual(cost);
+        expect(hasKeyword(lab.resolved, staging.catalog, staged, "reclaim")).toBe(true);
+      } else {
+        // An optional target leaves X = 0 legal, and the staged card is offered at an X up to the lab's energy.
+        expect(lab.x).toBe(0);
+        expect(playAt(state, side, (prompt) => prompt.max).offered).toEqual([staged]);
+      }
+      expect(hasKeyword(playAt(state, side, () => cost).resolved, staging.catalog, staged, "reclaim")).toBe(true);
     }
   });
 

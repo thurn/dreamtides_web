@@ -4,7 +4,8 @@
  * up to two ≤X● cost events in your void to gain reclaim 0●". X is picked
  * before the targets, which are offered only among void cards whose copiable
  * cost is at most X, and each chosen card is checked against the bound again
- * as the effect resolves.
+ * as the effect resolves. A constant `costAtMost` bounds the targets the
+ * same way.
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
@@ -49,6 +50,10 @@ const G = {
   copier: eventCard(4, [energy(0)], () => [event(copyCard({ kind: "stackTarget", selector: stackItem({ cardType: "event" }) }))], "interrupt"),
   /** "X●: Return a character with cost X● to hand." */
   recall: eventCard(5, [energyX(0)], () => [event(returnToHand(target(anyCharacter(costExactly(x())))))]),
+  /** "1●: Choose up to two ≤1● cost events in your void to gain reclaim 0●." */
+  ledger: eventCard(6, [energy(1)], () => [
+    event(grantReclaim(fromVoid({ cardType: "event" }, { count: 2, upTo: true, costAtMost: 1 }), { costs: [energy(0)] })),
+  ]),
 } as const;
 
 const E = createEngine(testCatalog(Object.values(G)));
@@ -165,6 +170,28 @@ describe("fromVoid with an X cost bound", () => {
     const nothing = act(waiting.state, "enemy", { kind: "pass" });
     expect(nothing.events).toContainEqual(expect.objectContaining({ kind: "noLegalTarget", source: alone.ids.player.hand[0] }));
     expect(reclaimable(nothing.state, only)).toBe(false);
+  });
+
+  it("offers and re-checks a constant cost bound: at most 1● as targets are chosen and again as the effect resolves", () => {
+    const { state, ids } = setup({ hand: [G.ledger.id] });
+    const [zero, one, , , , zeroAgain] = ids.player.void;
+    const fold = createFoldAdapter(E, { checkEventPrefix: true });
+    const opened = fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 }, { kind: "battleAction", side: "player", action: play(ids.player.hand[0]) });
+    if (opened.kind !== "applied") throw new Error("bounced");
+    const targets = fold.pending(opened.slice);
+    if (targets === null || targets.prompt.kind !== "chooseTargets") throw new Error("no target prompt");
+    expect(targets.prompt.candidates).toEqual([zero, one, zeroAgain]);
+    expect([targets.prompt.min, targets.prompt.max]).toEqual([0, 2]);
+
+    // A 2● event reduced to 1● is offered; restored before the ledger resolves, it gains nothing.
+    const waiting = setup({ hand: [G.ledger.id], void: [G.event2.id, v.event1.id] }, { hand: [G.banisher.id], energy: 1 });
+    const [lowered, kept] = waiting.ids.player.void;
+    waiting.state.instances[lowered] = { ...waiting.state.instances[lowered], variant: { ...BASE_VARIANT, deckMods: { ...NO_DECK_MODS, costReduction: 1 } } };
+    const cast = act(waiting.state, "player", play(waiting.ids.player.hand[0]), [[lowered, kept]]);
+    expect(cast.state.stack).toHaveLength(1);
+    cast.state.instances[lowered] = { ...cast.state.instances[lowered], variant: BASE_VARIANT };
+    const resolved = act(cast.state, "enemy", { kind: "pass" });
+    expect([reclaimable(resolved.state, lowered), reclaimable(resolved.state, kept)]).toEqual([false, true]);
   });
 
   it("grants only the remaining target when an opponent's response banishes the other", () => {

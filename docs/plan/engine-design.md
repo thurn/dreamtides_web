@@ -1393,19 +1393,30 @@ controller: the hand that side holds, the deck or void it owns. They are
 card references (`CardRef`), so any primitive holding one resolves them
 through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
 
-- `fromVoid(filter, { player, count, upTo, another })` ("a character from
-  your void"): a `ZoneTargetSpec`, a play-time target (`PlayTimeTarget`)
-  declared by `cardTarget`. It is chosen with the character and stack targets,
-  in a `chooseTargets` prompt with the `target` role, at play time or, for a
-  triggered ability, as it resolves; `targetCandidates` offers the matching
-  cards of that void that can be targeted, in void order. A chosen card counts
-  as the effect resolves while it is still in that void, matching and
-  targetable; none left reports `noLegalTarget`. The cost planner excludes it
-  like any target (RD-hv-umm2.59-1).
+- `fromVoid(filter, { player, count, upTo, another, costAtMost })` ("a
+  character from your void"): a `ZoneTargetSpec`, a play-time target
+  (`PlayTimeTarget`) declared by `cardTarget`. It is chosen with the
+  character and stack targets, in a `chooseTargets` prompt with the `target`
+  role, at play time or, for a triggered ability, as it resolves;
+  `targetCandidates` offers the matching cards of that void that can be
+  targeted, in void order. A chosen card counts as the effect resolves while
+  it is still in that void, matching and targetable; none left reports
+  `noLegalTarget`. The cost planner excludes it like any target
+  (RD-hv-umm2.59-1). `costAtMost` ("≤X● cost events in your void") is a
+  constant or X (`x()`): the X picked as the card is played, before its
+  targets, and otherwise the source card's X; a copy reads the original's X.
+  Like a character selector's bound, it is checked against each card's
+  copiable cost twice, as the targets are offered and again as the effect
+  resolves, when a chosen card then above it is not a legal target
+  (`voidTargetMatching`, RD-hv-umm2.495-1). The lab solver stages, for a bound by X, a matching
+  void card whose copiable cost some X the play can choose admits; a
+  required target then leaves the play only the Xs at least that cost.
 - `everyIn(zone, filter, { player, another, costAtMost })`: every matching
-  card there, in zone order. `costAtMost` ("each ≤X● cost character in your
-  void") is a constant or the source's X (`x()`); the builder's type admits
-  no other value. It is read once as the effect resolves, before any card
+  card there, in zone order, chosen by nobody. `costAtMost` ("each ≤X● cost
+  character in your void") is a constant or the source's X (`x()`); the
+  builder's type admits no other value. Unlike `fromVoid`'s bound, which is
+  checked as targets are offered and again on resolution, it is read only
+  once, as the effect resolves, before any card
   moves, and keeps only cards whose copiable cost (rules § Costs,
   Requirements, and X) is at most it, so play-cost changes do not widen it
   while deck-entry cost reductions count (RD-hv-umm2.86-2). The lab solver
@@ -1457,7 +1468,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15), `banishSelfOnResolve` ("Banish this card": the resolving event goes from the stack to its owner's Banished zone as the instruction resolves, so `resolveTop` does not put it into the void; RD-hv-umm2.475-1) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn` with an optional `costAtMost`, a constant or X read once as the effect resolves, `topOfDeck`, `randomIn`, `thisCardIn`) | |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid` and `everyIn`, each with an optional `costAtMost`, a constant or X: `fromVoid` checks it as its targets are offered and again as the effect resolves (RD-hv-umm2.495-1), `everyIn` reads it once as the effect resolves (RD-hv-umm2.86-2); `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost"), `thisCharacterSpark()` (the source's effective ✦ in a resolving effect, 0 once it has left play) | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |

@@ -10,7 +10,7 @@ import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility, XValue } from "../dsl/types";
+import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility, ZoneTargetSpec } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -68,16 +68,19 @@ function meetsBounds(value: number, atLeast: BoundValue | undefined, atMost: Bou
   return (least === undefined || value >= least) && (most === undefined || value <= most) && (countBound(atMost) === null || value >= 1);
 }
 
+/** The ✦ and cost bounds of a character selector or a void reference. */
+type ValueBounds = Pick<CharacterSelector, "sparkAtLeast" | "sparkAtMost" | "costAtLeast" | "costAtMost">;
+
 /**
- * Whether some X in `range` meets every X-valued bound of the selector for a
- * character with this ✦ and copiable cost. A card whose X is not an energy
- * choice (`range` null) has its X bounds unchecked.
+ * Whether some X in `range` meets every X-valued bound for a card with this
+ * ✦ and copiable cost. A card whose X is not an energy choice (`range` null)
+ * has its X bounds unchecked.
  */
-function admitsX(selector: CharacterSelector, spark: number, cost: number, range: XRange | null): boolean {
+function admitsX(bounds: ValueBounds, spark: number, cost: number, range: XRange | null): boolean {
   if (range === null) return true;
   let least = range.min;
   let most = range.max;
-  for (const [value, atLeast, atMost] of [[spark, selector.sparkAtLeast, selector.sparkAtMost], [cost, selector.costAtLeast, selector.costAtMost]] as const) {
+  for (const [value, atLeast, atMost] of [[spark, bounds.sparkAtLeast, bounds.sparkAtMost], [cost, bounds.costAtLeast, bounds.costAtMost]] as const) {
     if (isXBound(atLeast)) most = Math.min(most, value);
     if (isXBound(atMost)) least = Math.max(least, value);
   }
@@ -147,11 +150,16 @@ function characterFor(
   return found.id;
 }
 
-/** A matching printing for a void target, an opponent hand choice, or a discovery on the lab's neutral setup board. */
-function cardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
-  const found = firstFitting(pool, (card) =>
-    matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs), spark: card.spark === null ? null : sparkOf(card) }, filter),
-  );
+/**
+ * A matching printing for a void target, an opponent hand choice, or a
+ * discovery on the lab's neutral setup board, whose copiable cost `admits`
+ * accepts.
+ */
+function cardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[], admits: (cost: number) => boolean = () => true): CardId {
+  const found = firstFitting(pool, (card) => {
+    const cost = fixedEnergy(card.costs);
+    return matchesFilter({ ...card, allTypes: false, cost, spark: card.spark === null ? null : sparkOf(card) }, filter) && admits(cost);
+  });
   if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
   engine.catalog.card(found.id);
   return found.id;
@@ -193,20 +201,34 @@ function discoveries(effect: Effect): CardFilter[] {
   });
 }
 
+/** A void reference's filter narrowed by a constant cost bound. */
+function boundedFilter(filter: CardFilter, atMost: number | undefined): CardFilter {
+  return atMost === undefined ? filter : { ...filter, costAtMost: Math.min(atMost, filter.costAtMost ?? atMost) };
+}
+
+/** X read on a card whose X is not an energy choice. */
+const NO_X: XRange = { min: 0, max: 0 };
+
 /**
- * A void reference's filter narrowed by its cost bound, a constant or X, read
- * for the least X the play can choose ("≤X● cost events in your void").
+ * A printing for a void target ("≤X● cost events in your void"): its filter
+ * narrowed by a constant cost bound, and under a bound by X a copiable cost
+ * that some X the play can choose admits (`admitsX`), as for a character
+ * target. X is picked before the targets and a play-time prompt offers only
+ * answers that lead to a legal play, so a required target leaves the play
+ * only the Xs at least its cost.
  */
-function boundedFilter(filter: CardFilter, bound: number | XValue | undefined, xRange: XRange | null): CardFilter {
-  const atMost = bound === undefined ? undefined : typeof bound === "number" ? bound : xRange?.min ?? 0;
-  return { ...filter, ...(atMost === undefined ? {} : { costAtMost: Math.min(atMost, filter.costAtMost ?? atMost) }) };
+function voidTargetFor(engine: Engine, spec: ZoneTargetSpec, pool: readonly EngineCardDefinition[], xRange: XRange | null): CardId {
+  const { filter, costAtMost } = spec;
+  if (typeof costAtMost !== "object") return cardFor(engine, boundedFilter(filter, costAtMost), pool);
+  return cardFor(engine, filter, pool, (cost) => admitsX({ costAtMost }, 0, cost, xRange ?? NO_X));
 }
 
 /**
  * The void cards an effect materializes by "each … in your void"
  * (`materialize(everyIn("void", …))`): each needs one matching card in that
- * void, whose copiable cost meets the reference's cost bound for the least X
- * the play can choose ("each ≤X● cost character in your void").
+ * void, whose copiable cost meets the reference's cost bound, a constant or
+ * the least X the play can choose ("each ≤X● cost character in your void"),
+ * since nothing it reads narrows the X the play picks.
  */
 function voidMaterializations(effect: Effect, xRange: XRange | null): { player: PlayerRef; filter: CardFilter }[] {
   return everyNode(effect).flatMap((node) => {
@@ -214,7 +236,8 @@ function voidMaterializations(effect: Effect, xRange: XRange | null): { player: 
     if (materialized.op !== "materialize" || "op" in materialized.from) return [];
     const { from } = materialized;
     if (from.kind !== "inZone" || from.pick !== "every" || from.zone !== "void") return [];
-    return [{ player: from.player, filter: boundedFilter(from.filter, from.costAtMost, xRange) }];
+    const atMost = typeof from.costAtMost === "object" ? (xRange ?? NO_X).min : from.costAtMost;
+    return [{ player: from.player, filter: boundedFilter(from.filter, atMost) }];
   });
 }
 
@@ -319,7 +342,7 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
  * `side`, whose ✦ and cost admit an X the play can choose (a void target's
- * cost bound read for the least X, `boundedFilter`), with as many
+ * cost bound by X admitting one, `voidTargetFor`), with as many
  * cards in the counted zone as an upper ✦ or cost bound by a zone count
  * needs (`countNeeds`): matching void cards, or cards in a hand beside the
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
@@ -371,7 +394,7 @@ export function labBoard(
     }
     if (spec.kind !== "inZone") continue;
     const voidSide = spec.player === "you" ? side : opponent(side);
-    for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, boundedFilter(spec.filter, spec.costAtMost, xRange), pool));
+    for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, spec, pool, xRange));
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
@@ -391,7 +414,7 @@ export function labBoard(
       }
       if (spec.kind === "inZone") {
         const voidSide = spec.player === "you" ? side : opponent(side);
-        for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, boundedFilter(spec.filter, spec.costAtMost, xRange), pool));
+        for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, spec, pool, xRange));
         continue;
       }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
