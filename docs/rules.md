@@ -668,6 +668,11 @@ card's copiable cost.
 - A static ability, such as "You may play ≤2● cost characters from your
   void," covers every matching card while its source is in play, any number
   of times.
+- A card's own ability, as in "You may play this character from your void,"
+  works while that card is in your void and covers that card only, any number
+  of times: played that way, it pays its normal costs, additional costs
+  included, and after it leaves play it can be played from your void again.
+  It covers nothing while the card is in another zone, including the stack.
 - A permission naming a card, as in "When you discard a card, you may play
   that card from your void this turn," covers that card whenever it is in
   your void during the permission's duration. A card that did not reach your
@@ -888,8 +893,8 @@ enters its owner's void and triggers "When you discard a card." It sets no X.
 may use: their own, the opponent's, or either player's. Choose the full number
 of matching, distinct physical cards before commitment; copies of the same
 card are distinct when they are different physical cards. These payment choices
-are not targets. A chosen target, the card being played (including a Reclaim
-play from a void), and cards reserved for earlier costs cannot also pay this
+are not targets. A chosen target, the card being played (including one played
+from a void), and cards reserved for earlier costs cannot also pay this
 cost. The full energy and card payments must be payable together.
 
 Payment sends each chosen card to its owner's Banished zone, regardless of
@@ -902,8 +907,7 @@ from their own void to pay this additional cost, as in "To play this event,
 banish X cards from your void. Look at the top X cards of your deck." X is at
 least 1 under the contextual X rule, since looking at no cards does nothing: a
 player whose void holds no card that could pay cannot play the card. The card
-being played, even when it is played from the void by Reclaim, cannot pay its
-own cost. Like a discarded X, this X spends no energy and agrees with any X●
+being played, even when it is played from the void, cannot pay its own cost. Like a discarded X, this X spends no energy and agrees with any X●
 the same ability pays. A card banished this way is in the Banished zone, so it
 can no longer be played from the void by Reclaim. The value travels with the
 stack item, so the effect reads it even after the banished cards are gone.

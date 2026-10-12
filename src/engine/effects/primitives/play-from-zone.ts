@@ -1,6 +1,8 @@
 import { startContinuous } from "../../continuous/resolve";
 import { resolvePlayer } from "../../dsl/selectors";
-import type { CardFilter, Duration, PlayerRef, SelfSpec, SubjectSpec, ZoneCardSpec } from "../../dsl/types";
+import { thisCardIn } from "../../dsl/builders";
+import type { CardFilter, Duration, PlayerRef, SelfSpec, SubjectSpec, ZoneCardSpec, ZoneSelfSpec } from "../../dsl/types";
+import { sourceInstance } from "../../state/ids";
 import type { ContinuousChange } from "../../state/types";
 import { resolveCards } from "../interpreter";
 import { cardTarget, definePrimitive } from "../types";
@@ -17,7 +19,9 @@ export type PermittedCards = SubjectSpec | SelfSpec | ZoneCardSpec;
  * names in that void as it resolves are covered, each through its own
  * floating change. A `next` permission covers one play and ends as that card
  * is played. A static ability holds a permission with no `cards`, which lasts
- * while it applies. `duration` `null` takes the enclosing `forDuration`'s,
+ * while it applies, or one naming its own source in the void
+ * (`playSelfFromZone`), which covers that card only while it is there.
+ * `duration` `null` takes the enclosing `forDuration`'s,
  * else lasts permanently (a `next` one then lasts until it is used). It names
  * void cards only, which are public, so its `effectStarted` event names no
  * hidden card.
@@ -49,11 +53,20 @@ export const playFromZonePrimitive = definePrimitive<PlayFromZoneNode>({
   continuous: {
     layer: 6,
     changes(node, env) {
-      if (node.cards !== null) throw new Error("A static play permission names its cards by filter");
-      return [{ kind: "playFrom", player: resolvePlayer(env.controller, node.player), zone: node.zone, instance: null, filter: node.filter, next: false }];
+      const player = resolvePlayer(env.controller, node.player);
+      const permission = { kind: "playFrom", player, zone: node.zone, filter: node.filter, next: false } as const;
+      if (node.cards === null) return [{ ...permission, instance: null }];
+      if (!isSelfInZone(node.cards)) throw new Error("A static play permission names its cards by filter, or only its own source");
+      // The source itself, only while it is in the void the permission's player owns.
+      const self = sourceInstance(env.source);
+      return self !== null && env.state.sides[player][node.zone].includes(self) ? [{ ...permission, instance: self }] : [];
     },
   },
 });
+
+function isSelfInZone(cards: PermittedCards): cards is ZoneSelfSpec {
+  return cards.kind === "inZone" && cards.pick === "self";
+}
 
 /**
  * "You may play <filter> cards from your void": for `duration` (or the
@@ -68,4 +81,14 @@ export function playFromZone(
   const { cards } = options;
   if (cards?.kind === "inZone" && cards.zone !== "void") throw new Error("playFromZone names cards in a void only");
   return { op: "playFromZone", player: options.player ?? "you", zone, cards: cards ?? null, filter, next: options.next === true, duration: options.duration ?? null };
+}
+
+/**
+ * "You may play this character from your void", held by a static ability
+ * working from the void (`staticAbility(..., { zone: "void" })`): its source
+ * may be played from the void it owns for its normal costs, additional costs
+ * included, any number of times, while it is there. No other card is covered.
+ */
+export function playSelfFromZone(zone: "void"): PlayFromZoneNode {
+  return playFromZone(zone, {}, { cards: thisCardIn(zone) });
 }

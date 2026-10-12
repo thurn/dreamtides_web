@@ -1,3 +1,5 @@
+import { additionalCost, banishFromVoidCost, staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 297,
   art: { x: 0, y: 1, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    additionalCost(banishFromVoidCost(7)),
+    staticAbility(p.playSelfFromZone("void"), { zone: "void" }),
+  ],
+  verifiedText: "ymlvggnszv",
 });
