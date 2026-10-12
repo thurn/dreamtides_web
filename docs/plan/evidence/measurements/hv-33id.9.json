@@ -1,0 +1,252 @@
+{
+  "bead": "hv-33id.9",
+  "base": "3125fefff54b66c2cdf610bb52bf1c9a60255d85",
+  "reviewOf": "hv-33id.8",
+  "originalSource": "96b2400958c7fcf312b6e661439977e7b0575275",
+  "finding": "Accepted Sol P2: JSON representation merges sparse holes/undefined/null and misses caller input mutation.",
+  "implementation": "Parent session itself, no helper. Native claim timestamp starts elapsed ownership/setup/witness/validation window; no productive-time, CPU or quota inference.",
+  "window": {
+    "start": "2026-10-12T21:04:57Z",
+    "end": "2026-10-12T21:11:04.913453+00:00"
+  },
+  "scope": {
+    "productionChange": false,
+    "exportedAPIChange": false,
+    "newCases": 0,
+    "newEntrypoints": 0,
+    "jsdomDelta": 0,
+    "testLinesAdded": 4,
+    "testLinesDeleted": 2,
+    "testLinesNet": 2,
+    "temporaryProductionMutation": "Only a hole-filling fault inside private validVictorySides for public atomic-input proof; never staged/committed, exact base bytes restored.",
+    "noFallout": true
+  },
+  "faultProof": {
+    "oldAssertionWithFault": 0,
+    "strictAssertionWithFault": 1,
+    "originalCreationSHA": "b5f6ede8d70c91dc166cdf6a000e91e2e0b3d9f79d3121f7c5f0fd372fa381d3",
+    "restoredCreationSHA": "b5f6ede8d70c91dc166cdf6a000e91e2e0b3d9f79d3121f7c5f0fd372fa381d3",
+    "sourceRestored": true,
+    "observedAt": "2026-10-12T21:07:32.962492+00:00"
+  },
+  "publicObservableProof": {
+    "oldCaseUnderFault": {
+      "exit": 0,
+      "wallS": 7.490824332999182
+    },
+    "strengthenedCaseUnderSameFault": {
+      "exit": 1,
+      "wallS": 5.191715417007799,
+      "failures": [
+        "strict caller-input structure differs",
+        "own-index presence differs"
+      ]
+    },
+    "correctedFinal": {
+      "selectedDeclaredCases": 19,
+      "exit": 0
+    },
+    "relatedCounts": [
+      " Test Files  1 passed (1)",
+      "      Tests  2238 passed (2238)"
+    ],
+    "reason": "StructuredClone and toStrictEqual retain hole/undefined/null structure; independent own-index comparison confirms the original physical slot absence."
+  },
+  "failurePaths": {
+    "inputAtomicity": "Actual mutant old-pass/new-fail proof and restored-source focused pass.",
+    "invalidInitAndSave": "Existing same case still proves constructor rejection/zero publication and malformed init/config load rejection.",
+    "defaultAndEligibility": "Existing focused declared positive and tie controls pass.",
+    "reload": "Existing declared persistence selected in focused suite; normal state fold unchanged.",
+    "staleCancelConcurrent": "Not applicable: assertion repair only, no intent/control behavior."
+  },
+  "checks": {
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-9-sparse-input-contract",
+      "start": "2026-10-12T21:10:07.698306+00:00",
+      "end": "2026-10-12T21:10:11.257665+00:00",
+      "exit": 0,
+      "wallSeconds": 3.559211542000412,
+      "pid": 32121,
+      "pgid": 32121,
+      "load": "{ 10.38 11.85 12.90 }",
+      "groupRemainingAtExit": []
+    },
+    "focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-9-sparse-input-contract",
+      "start": "2026-10-12T21:08:08.188568+00:00",
+      "end": "2026-10-12T21:08:12.512583+00:00",
+      "exit": 0,
+      "wallSeconds": 4.323887749997084,
+      "pid": 29362,
+      "pgid": 29362,
+      "load": "{ 6.79 12.78 13.38 }",
+      "groupRemainingAtExit": []
+    },
+    "worktree-create": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "worktree",
+        "create",
+        "wt/hv-33id-9-sparse-input-contract"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-12T21:05:11.789960+00:00",
+      "end": "2026-10-12T21:05:12.461421+00:00",
+      "exit": 0,
+      "wallSeconds": 0.6714214169915067,
+      "pid": 91703,
+      "pgid": 91703,
+      "load": "{ 19.05 17.92 14.99 }",
+      "groupRemainingAtExit": []
+    },
+    "old-assertion-fault": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rejects every eligible-side slot"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-9-sparse-input-contract",
+      "start": "2026-10-12T21:07:20.144369+00:00",
+      "end": "2026-10-12T21:07:27.635552+00:00",
+      "exit": 0,
+      "wallSeconds": 7.490824332999182,
+      "pid": 2195,
+      "pgid": 2195,
+      "load": "{ 7.62 13.83 13.76 }",
+      "groupRemainingAtExit": []
+    },
+    "triggers": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-9-sparse-input-contract",
+      "start": "2026-10-12T21:06:16.524737+00:00",
+      "end": "2026-10-12T21:06:16.589988+00:00",
+      "exit": 0,
+      "wallSeconds": 0.06518200000573415,
+      "pid": 97017,
+      "pgid": 97017,
+      "load": "{ 10.81 15.63 14.34 }",
+      "groupRemainingAtExit": []
+    },
+    "local-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-9-sparse-input-contract",
+      "start": "2026-10-12T21:08:56.092498+00:00",
+      "end": "2026-10-12T21:09:07.684055+00:00",
+      "exit": 0,
+      "wallSeconds": 11.59132099999988,
+      "pid": 30612,
+      "pgid": 30612,
+      "load": "{ 6.55 11.82 12.99 }",
+      "groupRemainingAtExit": []
+    },
+    "install": {
+      "argv": [
+        "npm",
+        "install",
+        "--prefer-offline",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-9-sparse-input-contract",
+      "start": "2026-10-12T21:05:41.471715+00:00",
+      "end": "2026-10-12T21:05:43.859766+00:00",
+      "exit": 0,
+      "wallSeconds": 2.3879200000083074,
+      "pid": 94663,
+      "pgid": 94663,
+      "load": "{ 13.66 16.72 14.65 }",
+      "groupRemainingAtExit": []
+    },
+    "strict-assertion-fault": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rejects every eligible-side slot"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-9-sparse-input-contract",
+      "start": "2026-10-12T21:07:27.714228+00:00",
+      "end": "2026-10-12T21:07:32.906038+00:00",
+      "exit": 1,
+      "wallSeconds": 5.191715417007799,
+      "pid": 2889,
+      "pgid": 2889,
+      "load": "{ 7.89 13.78 13.74 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "immutableManifest": {
+    "path": "/tmp/root-sparse9/immutable-manifest.json",
+    "sha256": "cad87b24b7f86b16e0619761dfcdbf8266f3ca872b15235780a2e423a07d02ab"
+  },
+  "sourceHashes": [
+    {
+      "path": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts",
+      "sha256": "a91db40cdd96118c62fb934b861e169296e0473801f0b127fdf05166176f5884"
+    }
+  ],
+  "productionGuardSHA": "b5f6ede8d70c91dc166cdf6a000e91e2e0b3d9f79d3121f7c5f0fd372fa381d3",
+  "resources": {
+    "observedGroups": [
+      2195,
+      2889,
+      29362,
+      30612,
+      32121,
+      91703,
+      94663,
+      97017
+    ],
+    "remaining": [],
+    "server": null,
+    "browser": null,
+    "reviewer": "None yet; parent exact-source fresh read-only Sol after immediate candidate, distinct independent-review namespace."
+  },
+  "validationPolicy": "Focused contracts plus required review/Knip/schema; no full/fuzz/browser for an existing assertion repair with zero production changes.",
+  "preExistingIssues": [],
+  "reviewRouting": "User-authorized temporary fresh read-only Codex CLI gpt-5.6-sol; exact source reviewed after commit/candidate, no author conversation or nested agents.",
+  "priorArtifactIncident": {
+    "bead": "hv-33id.8",
+    "cause": "Parent reviewer-launch names collided with two local-review logs after submission.",
+    "lost": [
+      "full local review stdout",
+      "full local review stderr"
+    ],
+    "retained": [
+      "exact actual0 local-review receipt, renamed alias",
+      "committed review measurements",
+      "prechange/focused/schema/native certification records"
+    ],
+    "originalManifest": "2d4d982b7c4a753b427333b20002fba720b4b20afcbae908c7217169f10207bb",
+    "separateDisposition": "/tmp/root-sparse8/post-submit-log-loss.json and native8 notes",
+    "limits": "No full original raw-byte completeness or fabricated reconstruction claim.",
+    "prevention": "All9 local validation uses local-review output prefix; reviewer uses independent-review prefix, checked disjoint before launch."
+  }
+}

@@ -218,11 +218,13 @@ describe("declared result options", () => {
     for (const victorySides of [Array<Side>(1), [undefined], [null], [["player"]]]) {
       const input = init();
       Reflect.set(input, "victorySides", victorySides);
-      const before = JSON.stringify(input);
+      const before = structuredClone(input);
+      const ownIndices = Object.keys(victorySides);
       let observations = 0;
       expect.soft(() => engine.createBattle(input, NO_PROMPTS, () => { observations++; })).toThrow();
       expect.soft(observations).toBe(0);
-      expect.soft(JSON.stringify(input)).toBe(before);
+      expect.soft(input).toStrictEqual(before);
+      expect.soft(Object.keys(input.victorySides ?? [])).toEqual(ownIndices);
       expect.soft(parseJourneyBattleFoldState(saved(input, slice(state)))).toBeNull();
       const malformed = structuredClone(state);
       Reflect.set(malformed.config, "victorySides", victorySides);
