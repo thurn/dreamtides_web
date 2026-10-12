@@ -1,0 +1,173 @@
+{
+  "bead": "hv-umm2.479",
+  "base": "f5c1488c5ca3c0bf06d9bf9db1b4776f8cfb9a14",
+  "implementationWindow": {
+    "start": "2026-10-12T03:18:18+00:00",
+    "end": "2026-10-12T03:31:19.342147+00:00",
+    "scope": "Claim to final precommit endpoint after parent acknowledgement, including research, coordination and validation. Exact git start, end, exit and process group are recorded separately in git-commit.json."
+  },
+  "rawEvidence": {
+    "directory": "artifacts/qa/hv-umm2.479",
+    "manifest": "raw-manifest.json",
+    "sha256": "76ec8dfe3f78607b9781d076f541075ef838574973f999d5b32d391efe8dfcbd",
+    "entries": 43
+  },
+  "change": "Deck membership follows ordered raw movement events from step-start decks. Each shuffle invalidates only its current members after moved cards enter. Identification boundary rules, lastHeld and cardCreated fallback stay unchanged. Current created cards cease on attempted deck entry; the typed cardCreated deck case participates in membership without a new visibility rule.",
+  "sourceProof": "source-proof.json",
+  "negativeEvidence": {
+    "command": "red-order.json",
+    "exit": 1,
+    "cases": 3,
+    "observed": [
+      "Intermediate placement leak incorrectly accepted",
+      "Public void entry incorrectly hidden before arrival between bare shuffles",
+      "A drawn hand card incorrectly invalidated by a bare deck shuffle"
+    ]
+  },
+  "checks": {
+    "red-order": {
+      "wallS": 5.008844957999827,
+      "exit": 1,
+      "receipt": "red-order.json"
+    },
+    "new-branches": {
+      "wallS": 3.5556291670000064,
+      "exit": 0,
+      "receipt": "new-branches.json"
+    },
+    "focused": {
+      "wallS": 3.4901215419995424,
+      "exit": 0,
+      "receipt": "focused.json"
+    },
+    "review": {
+      "wallS": 35.560585125000216,
+      "exit": 0,
+      "receipt": "review.json"
+    },
+    "knip": {
+      "wallS": 3.2938130000002275,
+      "exit": 0,
+      "receipt": "knip.json"
+    },
+    "full": {
+      "wallS": 116.53205899999739,
+      "exit": 0,
+      "receipt": "full.json"
+    },
+    "fuzz": {
+      "wallS": 118.1129573750004,
+      "exit": 0,
+      "receipt": "fuzz.json"
+    },
+    "schema": {
+      "wallS": 0.11780095799986157,
+      "exit": 0,
+      "receipt": "schema.json"
+    },
+    "triggers": {
+      "wallS": 0.1947052920004353,
+      "exit": 1,
+      "receipt": "triggers.json"
+    }
+  },
+  "testCounts": {
+    "newCases": 5,
+    "focused": 68,
+    "related": {
+      "files": 99,
+      "tests": 2357
+    },
+    "full": {
+      "files": 339,
+      "tests": 4577
+    },
+    "entrypointDelta": 0,
+    "jsdomDelta": 0,
+    "testLineDelta": 55
+  },
+  "fuzz": {
+    "games": 200,
+    "steps": 99875,
+    "wallS": 116.8,
+    "cpuS": 124.4,
+    "prompts": 2329,
+    "interactiveReruns": 250,
+    "failures": 0,
+    "performanceClaim": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Related review test-related start at 2026-10-12T03:24:11.928Z"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "related test-related",
+      "at": "2026-10-12T03:24:11.928Z",
+      "load": 8.31591796875
+    },
+    {
+      "step": "full test",
+      "at": "2026-10-12T03:25:35.878Z",
+      "load": 21.85888671875
+    }
+  ],
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "test": "rejects an emblem trigger's source as a definition error without committing a partial step",
+      "file": "src/engine/effects/primitives/contracts/banish-self-on-resolve.contracts.ts",
+      "disposition": "New public engine contract verifies the definition error and unchanged input. Existing suspended fault fixture separately verifies atomic recovery after banish."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "test": "keeps a suspended resolution atomic across reload, stale and foreign answers ($id)",
+      "file": "src/engine/effects/primitives/contracts/banish-self-on-resolve.contracts.ts",
+      "disposition": "Existing two-fixture public fold contract serializes and reloads pending resolution. Membership Sets are transient checker state rebuilt from each before boundary, with no new persisted operation."
+    },
+    {
+      "path": "partial write",
+      "test": "keeps a suspended resolution atomic across reload, stale and foreign answers ($id)",
+      "file": "src/engine/effects/primitives/contracts/banish-self-on-resolve.contracts.ts",
+      "disposition": "Existing fault case publishes no partial events or banished state. The checker writes only local Sets; it does not change either supplied BattleState."
+    },
+    {
+      "path": "invalid or stale input",
+      "test": "rejects an intermediate deck identity leak before a drawn card is shuffled back",
+      "file": "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts",
+      "disposition": "Deliberately corrupts per-viewer metadata on a real generated intermediate placement; unchanged checker misses the leak. Existing suspended fold case rejects stale prompt answers."
+    },
+    {
+      "path": "concurrent actors",
+      "test": "redacts nothing a side can identify when one player's part already shuffled the other's deck",
+      "file": "src/engine/effects/primitives/contracts/banish-self-on-resolve.contracts.ts",
+      "disposition": "Existing opponent-owned hand transfer regression verifies independent player/enemy deck tracking. Existing suspended fold case rejects foreign answers and another intent while in flight; checker invocation itself is synchronous."
+    }
+  ],
+  "runtimeLedger": "process-ledger.json",
+  "triggerDisposition": {
+    "report": "triggers.stdout",
+    "exit": 1,
+    "existingCause": "fuzz-only-invariant/phase-5 across 475, 86 and 87",
+    "retrospective": "26 records since 465, due",
+    "owner": "Root executor filed canonical hv-umm2.481 after 479 and before gate 46. Retrospective and trigger audit own the future shared-ledger disposition.",
+    "sourceCauses": [
+      "475 redaction checker",
+      "86 announced steps",
+      "87 determinization legality"
+    ]
+  },
+  "fallout": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "parentAcknowledgement": "/tmp/root479/precommit-ack.json",
+  "deliveryReceipts": [
+    "final-schema.json",
+    "git-add.json",
+    "git-commit.json",
+    "final-handoff.json"
+  ]
+}

@@ -259,7 +259,12 @@ export class EventRedaction {
     const problems: string[] = [];
     const shuffled = new Set<InstanceId>();
     const shown: Record<Side, Set<InstanceId>> = { player: new Set(), enemy: new Set() };
-    for (const [index, event] of events.entries()) {
+    // Membership follows movement facts, not the final deck or a later shuffle's payload.
+    const decks: Record<Side, Set<InstanceId>> = { player: new Set(before.sides.player.deck), enemy: new Set(before.sides.enemy.deck) };
+    const leaveDecks = (id: InstanceId | null): void => {
+      if (id !== null) for (const side of SIDES) decks[side].delete(id);
+    };
+    for (const event of events) {
       for (const viewer of SIDES) {
         const seen = eventSeenBy(event, viewer, after);
         if (seen === null) continue;
@@ -294,15 +299,33 @@ export class EventRedaction {
       for (const viewer of SIDES) for (const id of subjects) {
         if (id !== null && shownDuring(event, viewer, id)) shown[viewer].add(id);
       }
-      if (event.kind === "shuffledIntoDeck") {
-        // A card a later shuffle of the same deck names was not yet in it, as when each player shuffles in turn.
-        const later = new Set(events.slice(index + 1).flatMap((next) => (next.kind === "shuffledIntoDeck" && next.side === event.side ? next.cards : [])));
-        const remaining = after.sides[event.side].deck.filter((id) => !later.has(id));
-        for (const id of [...before.sides[event.side].deck, ...remaining, ...event.cards]) {
-          if (id !== null) {
-            shuffled.add(id);
-            for (const viewer of SIDES) shown[viewer].delete(id);
+      switch (event.kind) {
+        case "cardsPlaced":
+        case "shuffledIntoDeck":
+          for (const id of event.cards) {
+            leaveDecks(id);
+            if (id !== null && (event.kind === "shuffledIntoDeck" || event.to !== "void")) decks[event.side].add(id);
           }
+          break;
+        case "cardCreated":
+          if (event.zone === "deck") decks[event.side].add(event.instance);
+          break;
+        case "cardDrawn":
+        case "cardTaken":
+        case "cardDiscovered":
+        case "returnedToHand":
+        case "enteredVoid":
+        case "banished":
+        case "cardPlayed":
+        case "materialized":
+        case "ceasedToExist":
+          leaveDecks(event.instance);
+          break;
+      }
+      if (event.kind === "shuffledIntoDeck") {
+        for (const id of decks[event.side]) {
+          shuffled.add(id);
+          for (const viewer of SIDES) shown[viewer].delete(id);
         }
       }
     }

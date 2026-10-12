@@ -1,7 +1,9 @@
 /** "Banish this card": a resolving event ends in its owner's Banished zone, never its void (RD-hv-umm2.475-1). */
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../../../catalog";
+import type { EngineCardDefinition, EngineDreamsignDefinition } from "../../../catalog";
 import { energy, event, everyIn, reclaim, stackItem } from "../../../dsl/builders";
+import { triggered, whenYouPlay } from "../../../dsl/triggers";
+import { parseDreamsignId } from "../../../../types/identifiers";
 import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -50,7 +52,12 @@ const fault: EngineCardDefinition = {
     throw new Error("synthetic failure after the banish");
   } },
 };
-const engine = createEngine(testCatalog([base, quick, reclaimable, copier, prompted, fault, ...STACK_CARDS]));
+const twice: EngineCardDefinition = { ...base, id: syntheticId(0x14756), abilities: () => [event(sequence(banishSelfOnResolve(), banishSelfOnResolve(), gainPoints(1)))] };
+const invalidEmblem: EngineDreamsignDefinition = {
+  id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000014757"), status: "authored",
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }), banishSelfOnResolve())],
+};
+const engine = createEngine(testCatalog([base, quick, reclaimable, copier, prompted, fault, twice, ...STACK_CARDS], { dreamsigns: [invalidEmblem] }));
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id, v.vanilla1.id];
 const sliceOf = (state: BattleState): BattleSlice => ({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 });
 function applied(outcome: IntentOutcome): BattleSlice {
@@ -70,6 +77,23 @@ function expectBanishedPublicly(events: readonly EngineEvent[], state: BattleSta
 }
 
 describe("banishSelfOnResolve", () => {
+  it("invokes the primitive twice but moves an off-stack source only once", () => {
+    const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [twice.id], energy: 1, deck }, enemy: { deck } });
+    const card = ids.player.hand[0];
+    const result = engine.apply(state, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS);
+    expectBanishedPublicly(result.events, result.state, card, "player");
+    expect(kinds(result.events, card)).toEqual(["cardPlayed", "resolved", "banished"]);
+    expect(result.state.sides.player.score).toBe(1);
+    expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+  });
+
+  it("rejects an emblem trigger's source as a definition error without committing a partial step", () => {
+    const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [quick.id], dreamsigns: [invalidEmblem.id], energy: 1, deck }, enemy: { deck } });
+    const before = JSON.stringify(state);
+    expect(() => engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS)).toThrow(/emblem/);
+    expect(JSON.stringify(state)).toBe(before);
+  });
+
   it.each(["player", "enemy"] as const)("banishes the %s event after its shuffle and draws, never shuffling or voiding it, and replays identically", (side) => {
     const other = opponent(side);
     const { state, ids } = boardState(engine.catalog, {

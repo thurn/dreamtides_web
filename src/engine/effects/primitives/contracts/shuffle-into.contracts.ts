@@ -26,6 +26,7 @@ import { discover } from "../discover";
 import { draw } from "../draw";
 import { erode } from "../erode";
 import { lookAtTop } from "../look-at-top";
+import { putInDeck } from "../put-in-deck";
 import { reveal } from "../reveal";
 import { sequence } from "../sequence";
 import { shuffleInto } from "../shuffle-into";
@@ -73,9 +74,13 @@ const shuffleThenFail: EngineCardDefinition = {
   },
 };
 
+const repeatedPlacement = eventCard(12, sequence(putInDeck([everyIn("void")], "top"), shuffleInto(), putInDeck([everyIn("deck")], "bottom"), draw(1), shuffleInto([everyIn("hand")])));
+const entryBetweenShuffles = eventCard(13, sequence(shuffleInto(), putInDeck([everyIn("void")], "top"), shuffleInto()));
+const exitBeforeShuffle = eventCard(14, sequence(draw(1), shuffleInto(), shuffleInto([everyIn("hand")])));
+
 const engine = createEngine(testCatalog([
   ...DSL_CARDS, voidShuffle, handShuffle, lookThenShuffle, handAndVoid, copyThenShuffle, takeThenShuffle, abandonShuffler, shuffleThenFail,
-  erodeThenShuffle, revealThenShuffle,
+  erodeThenShuffle, revealThenShuffle, repeatedPlacement, entryBetweenShuffles, exitBeforeShuffle,
 ]));
 
 /** Answers each prompt from `answer`, keeping every prompt and the state it was asked in. */
@@ -113,6 +118,32 @@ const applied = (outcome: IntentOutcome): BattleSlice => {
 };
 
 describe("shuffleInto", () => {
+  it("rejects an intermediate deck identity leak before a drawn card is shuffled back", () => {
+    const result = play(setup(repeatedPlacement.id, { deck: [], void: [v.vanilla2.id] }), firstCards(0));
+    const id = result.ids.player.void[0];
+    const intermediate = result.events.find((entry) => entry.kind === "cardsPlaced" && entry.from[0] === "deck");
+    if (intermediate?.kind !== "cardsPlaced") throw new Error("missing intermediate placement");
+    expect(result.state.sides.player.deck).toEqual([id]);
+    expect(eventRedactionViolations(result.events, result.start, result.state)).toEqual([]);
+    const leaked = { ...intermediate, seenBy: [["player", "enemy"]] } as const;
+    expect(eventRedactionViolations(result.events.map((entry) => entry === intermediate ? leaked : entry), result.start, result.state)).toEqual([
+      expect.stringMatching(/^player sees a cardsPlaced event/), expect.stringMatching(/^enemy sees a cardsPlaced event/),
+    ]);
+  });
+
+  it("keeps a public card identifiable until it enters between two bare shuffles", () => {
+    const result = play(setup(entryBetweenShuffles.id, { deck: [], void: [v.vanilla2.id] }), firstCards(0));
+    expect(shuffles(result.events).map((entry) => entry.cards)).toEqual([[], []]);
+    expect(result.events).toContainEqual({ kind: "leftVoid", instance: result.ids.player.void[0], side: "player", to: "deck" });
+    expect(eventRedactionViolations(result.events, result.start, result.state)).toEqual([]);
+  });
+
+  it("keeps a drawn hand card identified when a bare shuffle affects only the remaining deck", () => {
+    const result = play(setup(exitBeforeShuffle.id, { deck: [v.vanilla2.id] }), firstCards(0));
+    expect(shuffles(result.events).map((entry) => entry.cards)).toEqual([[], [result.ids.player.deck[0]]]);
+    expect(eventRedactionViolations(result.events, result.start, result.state)).toEqual([]);
+  });
+
   it("rejects hand counts that are not non-negative safe integers", () => {
     for (const count of [-1, 0.5, Number.NaN, Number.POSITIVE_INFINITY]) expect(() => shuffleInto([], { chooseFromHand: count })).toThrow();
     expect(shuffleInto()).toEqual({ op: "shuffleInto", cards: [], chooseFromHand: 0 });
