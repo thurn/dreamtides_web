@@ -1829,6 +1829,11 @@ and figment. Each check names every offending entity:
   its engine costs (`engineCardFromContent`).
 - **Figment data.** Every figment has a unique UUID and a non-negative
   integer base spark.
+- **Apollyon recipes.** Every incarnation appears exactly once, with a unique
+  Aspect UUID distinct from selectable Avatars and incarnation UUIDs. Its pool
+  Avatar, nonempty unique archetype tides, up to 10 unique signature cards,
+  and 1–2 unique Dreamsigns resolve against their respective UUID catalogs.
+  The pure `testing/apollyon-audit.ts` verifier reports every offending UUID.
 
 The printed text is canonical and the abilities implement it (D5). There is
 no ability-to-English renderer. Correctness of an encoding is shown by

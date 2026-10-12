@@ -1,0 +1,25 @@
+{
+  "bead": "hv-qyu6",
+  "phase": 5,
+  "implementMin": 18.351647516666667,
+  "implementWindow": {
+    "start": "2026-10-12T20:23:55.169Z",
+    "end": "2026-10-12T20:42:16.267851+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.010325208000722,
+    "mutation": 4.200984333991073,
+    "review": 9.75808087499172,
+    "knip": 4.505169708005269,
+    "full": 101.48240475000057,
+    "heavySlotWait": 575.973497,
+    "schema": 0.13378808299603406
+  },
+  "hostLoad": 8.04345703125,
+  "testDelta": {
+    "files": 0,
+    "lines": 102,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

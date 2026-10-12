@@ -1,0 +1,507 @@
+{
+  "bead": "hv-qyu6",
+  "base": "3c953889bdb7cc855d737ffbac235c5adb9f528f",
+  "dispatch": {
+    "at": "2026-10-12T20:23:55.169Z",
+    "call": "call_Y2VCbjvyMyyArvWNSJQ9Gpf8",
+    "receipt": "qyu6-validation/dispatch.json"
+  },
+  "scope": {
+    "nonTestCodeLines": 63,
+    "testDelta": {
+      "files": 0,
+      "lines": 102,
+      "jsdomFiles": 0
+    },
+    "existingGateLines": 415,
+    "productionImporters": 0,
+    "soleImporter": "src/engine/content-gates.test.ts",
+    "sourceType": "pure validation-only test helper"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review starting 2026-10-12T20:28:21.565808Z"
+      }
+    }
+  },
+  "commands": [
+    {
+      "label": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-12T20:27:03.931019+00:00",
+      "loadStart": [
+        9.18017578125,
+        9.298828125,
+        9.6787109375
+      ],
+      "pid": 67524,
+      "pgid": 67524,
+      "end": "2026-10-12T20:27:09.941641+00:00",
+      "exit": 0,
+      "wallS": 6.010325208000722,
+      "cpuS": 7.788865,
+      "loadEnd": [
+        9.40576171875,
+        9.34326171875,
+        9.69189453125
+      ]
+    },
+    {
+      "label": "mutation",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-12T20:27:20.942558+00:00",
+      "loadStart": [
+        8.8818359375,
+        9.23291015625,
+        9.64794921875
+      ],
+      "pid": 68055,
+      "pgid": 68055,
+      "end": "2026-10-12T20:27:25.143908+00:00",
+      "exit": 1,
+      "wallS": 4.200984333991073,
+      "cpuS": 5.219513,
+      "loadEnd": [
+        9.45166015625,
+        9.34521484375,
+        9.68505859375
+      ]
+    },
+    {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T20:27:37.653093+00:00",
+      "loadStart": [
+        8.62548828125,
+        9.16943359375,
+        9.6181640625
+      ],
+      "pid": 80255,
+      "pgid": 80255,
+      "end": "2026-10-12T20:27:51.487622+00:00",
+      "exit": 1,
+      "wallS": 13.83435050000844,
+      "cpuS": 57.577494,
+      "loadEnd": [
+        8.21533203125,
+        9.04736328125,
+        9.56591796875
+      ]
+    },
+    {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T20:27:50.878038+00:00",
+      "loadStart": [
+        8.21533203125,
+        9.04736328125,
+        9.56591796875
+      ],
+      "pid": 89893,
+      "pgid": 89893,
+      "end": "2026-10-12T20:27:55.383415+00:00",
+      "exit": 0,
+      "wallS": 4.505169708005269,
+      "cpuS": 4.985216,
+      "loadEnd": [
+        8.11767578125,
+        9.01318359375,
+        9.55078125
+      ]
+    },
+    {
+      "label": "lint-corrected",
+      "argv": [
+        "npm",
+        "run",
+        "lint",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/engine/testing/apollyon-audit.ts"
+      ],
+      "start": "2026-10-12T20:28:12.165221+00:00",
+      "loadStart": [
+        7.58642578125,
+        8.84912109375,
+        9.482421875
+      ],
+      "pid": 97709,
+      "pgid": 97709,
+      "end": "2026-10-12T20:28:17.758195+00:00",
+      "exit": 0,
+      "wallS": 5.592793000003439,
+      "cpuS": 11.175018,
+      "loadEnd": [
+        7.69921875,
+        8.8515625,
+        9.4794921875
+      ]
+    },
+    {
+      "label": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T20:28:21.565808+00:00",
+      "loadStart": [
+        8.04345703125,
+        8.90380859375,
+        9.494140625
+      ],
+      "pid": 98058,
+      "pgid": 98058,
+      "end": "2026-10-12T20:28:31.324050+00:00",
+      "exit": 0,
+      "wallS": 9.75808087499172,
+      "cpuS": 36.810588,
+      "loadEnd": [
+        9.294921875,
+        9.1513671875,
+        9.57568359375
+      ]
+    },
+    {
+      "label": "full-locked",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/qyu6-helper/run.py",
+        "full-execution",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T20:28:36.777108+00:00",
+      "loadStart": [
+        8.95068359375,
+        9.08203125,
+        9.548828125
+      ],
+      "pid": 98734,
+      "pgid": 98734,
+      "end": "2026-10-12T20:39:54.238449+00:00",
+      "exit": 0,
+      "wallS": 677.4561583750037,
+      "cpuS": 254.752025,
+      "loadEnd": [
+        17.53857421875,
+        14.40771484375,
+        11.603515625
+      ]
+    },
+    {
+      "label": "full-execution",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T20:38:12.750605+00:00",
+      "loadStart": [
+        21.001953125,
+        14.32763671875,
+        11.265625
+      ],
+      "pid": 69948,
+      "pgid": 69948,
+      "end": "2026-10-12T20:39:54.233834+00:00",
+      "exit": 0,
+      "wallS": 101.48240475000057,
+      "cpuS": 254.72378600000002,
+      "loadEnd": [
+        17.53857421875,
+        14.40771484375,
+        11.603515625
+      ]
+    },
+    {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T20:34:05.614696+00:00",
+      "loadStart": [
+        6.650390625,
+        6.99560546875,
+        8.40283203125
+      ],
+      "pid": 6735,
+      "pgid": 6735,
+      "end": "2026-10-12T20:34:05.748632+00:00",
+      "exit": 0,
+      "wallS": 0.13378808299603406,
+      "cpuS": 0.10209,
+      "loadEnd": [
+        6.650390625,
+        6.99560546875,
+        8.40283203125
+      ]
+    },
+    {
+      "label": "schema-ready",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T20:40:35.143833+00:00",
+      "loadStart": [
+        13.26953125,
+        13.7216796875,
+        11.48095703125
+      ],
+      "pid": 91330,
+      "pgid": 91330,
+      "end": "2026-10-12T20:40:35.215121+00:00",
+      "exit": 0,
+      "wallS": 0.07115795800928026,
+      "cpuS": 0.076042,
+      "loadEnd": [
+        13.26953125,
+        13.7216796875,
+        11.48095703125
+      ]
+    }
+  ],
+  "mutationCountercheck": {
+    "beforeSHA": "972a50dc7600c3c692c8c717c968b3c43e97df3b740817e9bb57aa74f8446c60",
+    "restoredSHA": "972a50dc7600c3c692c8c717c968b3c43e97df3b740817e9bb57aa74f8446c60",
+    "mutation": "removed unknown-reference membership diagnostic in recipe-list check",
+    "result": "one stale-reference diagnostic test failed, 19 controls passed",
+    "restoration": "source byte restoration completed before review; attempt to append proof used overwritten mutation command receipt key and failed KeyError before proof write; this separate proof verifies restored bytes",
+    "verifiedAt": "2026-10-12T20:27:50.804760+00:00"
+  },
+  "normalIteration": [
+    {
+      "issue": "first aggregate lint rejected eight unnecessary non-null assertions in synthetic fixture indexes",
+      "actualOutcome": "exit1, typecheck and gate tests passed; only those assertions removed; targeted lint passed and final aggregate passed",
+      "measuredCommandWallS": 13.83435050000844,
+      "repairElapsedNotMeasured": true
+    },
+    {
+      "issue": "mutation proof metadata filename reused by command receipt",
+      "actualOutcome": "byte restoration completed, then metadata append hit KeyError before writing proof; separate proof compared exact original/restored SHA",
+      "sourceAcceptanceFailure": false
+    },
+    {
+      "issue": "read-only searches of optional scratch files/no-match queries and first full-inner observation exited1",
+      "actualOutcome": "no source/check effects; full-inner had not started while lock queued",
+      "sourceAcceptanceFailure": false
+    }
+  ],
+  "parentWitness": {
+    "start": "2026-10-12T20:24:44.510747+00:00",
+    "end": "2026-10-12T20:24:45.917943+00:00",
+    "argv": [
+      "/Users/dthurn/dreamtides_web/.worktrees/apollyon-recipe-gate/node_modules/.bin/tsx",
+      "/tmp/dreamtides-executor-01a1304d/qyu6-validation/collision-witness.ts"
+    ],
+    "exit": 0,
+    "wallS": 1.4071339580114,
+    "pid": 63743,
+    "pgid": 63743,
+    "source": "3c953889bdb7cc855d737ffbac235c5adb9f528f"
+  },
+  "reviewPolicy": {
+    "projectCore": false,
+    "nonTestCodeLines": 63,
+    "defaultThreshold": 100,
+    "decision": "Parent exempted final63 non-test lines under default substantial threshold; no phase-page core requirement. Original289 cold Sol finding/disposition retained."
+  },
+  "failurePaths": {
+    "errors": "synthetic missing/unknown/duplicate IDs, namespace collision, cardinality and reference diagnostics",
+    "reloadReplay": "pure function called repeatedly returns deterministic same report without input mutation; no runtime persistence contract changed",
+    "partialWrites": "pure function performs no I/O or mutation; no write transaction introduced",
+    "staleState": "unknown per-domain UUID references fail in canonical/synthetic gate",
+    "concurrentActors": "per-call local sets and no shared mutable state; no new runtime concurrency/transaction introduced or timing simulation claimed"
+  },
+  "runtimeQA": {
+    "required": false,
+    "reason": "only sanctioned validation gate, helper, documentation and own evidence changed",
+    "servers": [],
+    "browserSessions": [],
+    "fuzz": "not applicable: no engine behavior change",
+    "fullSuiteFixtureServers": "existing infrastructure tests reported58 temporary synthetic server groups, all absent after suite; no product workflow server/browser"
+  },
+  "pendingStatus": "all content, proposed/live abilities, loaders, battle initialization, policy and UI remain read-only",
+  "friction": "no problem measured above approximately10minutes; acquisition wait575.973497seconds is separate from101.482s full execution",
+  "heavySlot": {
+    "acquisitionWaitS": 575.973497,
+    "outerWrapperWallS": 677.4561583750037,
+    "innerExecutionWallS": 101.48240475000057,
+    "innerExecutionCpuS": 254.72378600000002,
+    "reportedOuterCpuS": 254.752025,
+    "cpuScope": "outer includes child execution; do not add outer and inner CPU",
+    "thresholdDisposition": "actual9m35.973s acquisition is below10min; retained as timing without friction entry",
+    "sharedCapacityObservation": {
+      "observer": "parent read-only at20:36:14Z",
+      "liveHolderPid": 97572,
+      "reportedTask": "peer hv-fy5h.2 tournament200games/workers2",
+      "scope": "qualified non-owned holder observation; no peer worktree inspection/mutation or task CPU attribution"
+    }
+  },
+  "fullResult": {
+    "passedTests": 6023,
+    "passedFiles": 353,
+    "workers": 2,
+    "suiteReportedWallS": 72.8,
+    "scope": "required full gate under actual load21.002\u219217.539; not low-load budget evidence",
+    "knip": "full final scope passed1.6s reported, standalone earlier4.505s"
+  },
+  "resources": {
+    "at": "2026-10-12T20:40:57.243500+00:00",
+    "commandGroups": {
+      "focused": {
+        "pgid": 67524,
+        "exit": 0,
+        "members": []
+      },
+      "mutation": {
+        "pgid": 68055,
+        "exit": 1,
+        "members": []
+      },
+      "review": {
+        "pgid": 80255,
+        "exit": 1,
+        "members": []
+      },
+      "knip": {
+        "pgid": 89893,
+        "exit": 0,
+        "members": []
+      },
+      "lint-corrected": {
+        "pgid": 97709,
+        "exit": 0,
+        "members": []
+      },
+      "review-final": {
+        "pgid": 98058,
+        "exit": 0,
+        "members": []
+      },
+      "full-locked": {
+        "pgid": 98734,
+        "exit": 0,
+        "members": []
+      },
+      "full-execution": {
+        "pgid": 69948,
+        "exit": 0,
+        "members": []
+      },
+      "schema": {
+        "pgid": 6735,
+        "exit": 0,
+        "members": []
+      },
+      "schema-ready": {
+        "pgid": 91330,
+        "exit": 0,
+        "members": []
+      }
+    },
+    "fullSyntheticFixtureServerGroups": {
+      "5980": [],
+      "6711": [],
+      "9016": [],
+      "10335": [],
+      "11190": [],
+      "12057": [],
+      "12645": [],
+      "72044": [],
+      "72198": [],
+      "72554": [],
+      "73025": [],
+      "73480": [],
+      "73951": [],
+      "74445": [],
+      "74599": [],
+      "74921": [],
+      "75588": [],
+      "75946": [],
+      "76897": [],
+      "77281": [],
+      "77435": [],
+      "77964": [],
+      "78416": [],
+      "78903": [],
+      "79786": [],
+      "80072": [],
+      "80341": [],
+      "80946": [],
+      "81268": [],
+      "81832": [],
+      "82840": [],
+      "83164": [],
+      "84077": [],
+      "85543": [],
+      "85988": [],
+      "86790": [],
+      "87914": [],
+      "88388": [],
+      "88541": [],
+      "88834": [],
+      "89507": [],
+      "89859": [],
+      "90836": [],
+      "91200": [],
+      "91396": [],
+      "91853": [],
+      "92694": [],
+      "92880": [],
+      "93643": [],
+      "93750": [],
+      "93989": [],
+      "94673": [],
+      "95241": [],
+      "95438": [],
+      "95714": [],
+      "96938": [],
+      "98715": [],
+      "99297": []
+    },
+    "scope": "reported server groups from existing full-suite infrastructure tests, not product workflow QA"
+  },
+  "sourceHashes": {
+    "src/engine/testing/apollyon-audit.ts": "972a50dc7600c3c692c8c717c968b3c43e97df3b740817e9bb57aa74f8446c60",
+    "src/engine/content-gates.test.ts": "1e1f8f88cc72d0d981dc7acc34d6cfb2b6e719787342a2b15967370a3d5472c2",
+    "docs/plan/engine-design.md": "b845a592e75dd72059995d395ddee0e861f28ce135c62f7b9fdef1bf72819753"
+  },
+  "commitPreparation": {
+    "parentAck": "qyu6-validation/parent-evidence-ack.json",
+    "freshPrecommitEndpoint": "2026-10-12T20:42:16.267851+00:00",
+    "actualGitReceipt": "qyu6-helper/git-commit.json",
+    "scope": "actual Git timestamps/exit and endpoint gap retained externally after commit"
+  }
+}

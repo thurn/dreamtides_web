@@ -13,6 +13,12 @@
 import { describe, expect, it } from "vitest";
 import { AVATARS } from "../content/avatars";
 import { APOLLYON_INCARNATIONS } from "../content/apollyon";
+import { APOLLYON_DESIGNS } from "../content/apollyon/design";
+import { TIDES } from "../content/tides";
+import { parseCardId } from "../types/card-identity";
+import { parseApollyonIncarnationId, parseAvatarId, parseDreamsignId, parseTideId } from "../types/identifiers";
+import { apollyonRecipeFailures } from "./testing/apollyon-audit";
+import type { ApollyonRecipeInput } from "./testing/apollyon-audit";
 import { CARDS } from "../content/cards";
 import type { ContentStatus, Uuid } from "../content/define";
 import { DREAMSIGNS } from "../content/dreamsigns";
@@ -309,5 +315,101 @@ describe("content gates", () => {
     expect(expectedVerifiedText("Draw two cards.", "Draw 2 cards.")).not.toBe(base);
     expect(expectedVerifiedText("Draw a card.", "Draw 3 cards.")).not.toBe(base);
     expect(expectedVerifiedText("Draw a card.")).not.toBe(base);
+  });
+});
+
+
+describe("Apollyon recipe gate", () => {
+  const incarnationId = parseApollyonIncarnationId("00000000-0000-4000-8000-000000000001");
+  const otherIncarnationId = parseApollyonIncarnationId("00000000-0000-4000-8000-000000000002");
+  const aspectId = parseAvatarId("00000000-0000-4000-8000-000000000003");
+  const avatarId = parseAvatarId("00000000-0000-4000-8000-000000000004");
+  const tideId = parseTideId("00000000-0000-4000-8000-000000000005");
+  const cardIds = Array.from({ length: 11 }, (_, index) => parseCardId(`00000000-0000-4000-8000-${String(index + 10).padStart(12, "0")}`));
+  const dreamsignIds = [1, 2, 3].map((index) => parseDreamsignId(`00000000-0000-4000-8000-${String(index + 30).padStart(12, "0")}`));
+  const refs = {
+    incarnationIds: new Set([incarnationId]), avatarIds: new Set([avatarId]),
+    tideIds: new Set([tideId]), cardIds: new Set(cardIds), dreamsignIds: new Set(dreamsignIds),
+  };
+  const valid: ApollyonRecipeInput = {
+    id: incarnationId, aspectId,
+    deckRecipe: { poolAvatarId: avatarId, archetypeTideIds: [tideId], signatureCardIds: [cardIds[0]] },
+    dreamsignIds: [dreamsignIds[0]],
+  };
+
+  it("checks every canonical incarnation and its recipe against the UUID catalogs", () => {
+    const inputs = APOLLYON_INCARNATIONS.map((incarnation): ApollyonRecipeInput => ({
+      id: parseApollyonIncarnationId(incarnation.id), aspectId: parseAvatarId(incarnation.aspect.id),
+      deckRecipe: {
+        poolAvatarId: parseAvatarId(incarnation.deckRecipe.poolAvatarId),
+        archetypeTideIds: incarnation.deckRecipe.archetypeTideIds.map(parseTideId),
+        signatureCardIds: incarnation.deckRecipe.signatureCardIds.map(parseCardId),
+      },
+      dreamsignIds: incarnation.dreamsignIds.map(parseDreamsignId),
+    }));
+    expect(apollyonRecipeFailures(inputs, {
+      incarnationIds: new Set(APOLLYON_DESIGNS.keys()),
+      avatarIds: new Set(AVATARS.map(({ id }) => parseAvatarId(id))),
+      tideIds: new Set(TIDES.tides.map(({ id }) => parseTideId(id))),
+      cardIds: new Set(CARDS.map(({ id }) => parseCardId(id))),
+      dreamsignIds: new Set(DREAMSIGNS.map(({ id }) => parseDreamsignId(id))),
+    })).toEqual([]);
+  });
+
+  it("accepts the signature and Dreamsign cardinality boundaries deterministically without mutation", () => {
+    for (const count of [0, 10]) {
+      for (const signs of [1, 2]) {
+        const input = { ...valid, deckRecipe: { ...valid.deckRecipe, signatureCardIds: cardIds.slice(0, count) }, dreamsignIds: dreamsignIds.slice(0, signs) };
+        const before = JSON.stringify(input);
+        expect(apollyonRecipeFailures([input], refs)).toEqual([]);
+        expect(apollyonRecipeFailures([input], refs)).toEqual([]);
+        expect(JSON.stringify(input)).toBe(before);
+      }
+    }
+  });
+
+  it("rejects missing, unknown and duplicate incarnations", () => {
+    expect(apollyonRecipeFailures([], refs)).toEqual([`apollyon ${incarnationId}: missing incarnation`]);
+    expect(apollyonRecipeFailures([{ ...valid, id: otherIncarnationId }], refs)).toContain(`apollyon ${otherIncarnationId}: unknown incarnation`);
+    expect(apollyonRecipeFailures([valid, { ...valid, aspectId: parseAvatarId(otherIncarnationId) }], refs)).toContain(`apollyon ${incarnationId}: duplicate incarnation`);
+  });
+
+  it("rejects duplicate Aspects and collisions with roster or any incarnation UUID", () => {
+    const two = { ...refs, incarnationIds: new Set([incarnationId, otherIncarnationId]) };
+    const other = { ...valid, id: otherIncarnationId };
+    expect(apollyonRecipeFailures([valid, other], two)).toContain(`apollyon ${otherIncarnationId}: duplicate aspect ${aspectId}`);
+    expect(apollyonRecipeFailures([{ ...valid, aspectId: avatarId }], refs)).toContain(`apollyon ${incarnationId}: aspect collides with avatar ${avatarId}`);
+    expect(apollyonRecipeFailures([{ ...valid, aspectId: parseAvatarId(otherIncarnationId) }, { ...other, aspectId }], two)).toContain(`apollyon ${incarnationId}: aspect collides with incarnation ${otherIncarnationId}`);
+  });
+
+  it("rejects references outside their respective catalogs and reports all failures", () => {
+    const unknown = "00000000-0000-4000-8000-000000000099";
+    const bad = { ...valid, deckRecipe: {
+      poolAvatarId: parseAvatarId(unknown), archetypeTideIds: [parseTideId(unknown)], signatureCardIds: [parseCardId(unknown)],
+    }, dreamsignIds: [parseDreamsignId(unknown)] };
+    expect(apollyonRecipeFailures([bad], refs)).toEqual([
+      `apollyon ${incarnationId}: unknown pool avatar ${unknown}`,
+      `apollyon ${incarnationId}: unknown archetype tide ${unknown}`,
+      `apollyon ${incarnationId}: unknown signature card ${unknown}`,
+      `apollyon ${incarnationId}: unknown dreamsign ${unknown}`,
+    ]);
+  });
+
+  it("rejects repeated recipe identities and empty archetype bias", () => {
+    expect(apollyonRecipeFailures([{ ...valid, deckRecipe: {
+      ...valid.deckRecipe, archetypeTideIds: [tideId, tideId], signatureCardIds: [cardIds[0], cardIds[0]],
+    }, dreamsignIds: [dreamsignIds[0], dreamsignIds[0]] }], refs)).toEqual([
+      `apollyon ${incarnationId}: duplicate archetype tide ${tideId}`,
+      `apollyon ${incarnationId}: duplicate signature card ${cardIds[0]}`,
+      `apollyon ${incarnationId}: duplicate dreamsign ${dreamsignIds[0]}`,
+    ]);
+    expect(apollyonRecipeFailures([{ ...valid, deckRecipe: { ...valid.deckRecipe, archetypeTideIds: [] } }], refs)).toContain(`apollyon ${incarnationId}: empty archetype tides`);
+  });
+
+  it("rejects excessive signatures and Dreamsign cardinalities outside 1–2", () => {
+    expect(apollyonRecipeFailures([{ ...valid, deckRecipe: { ...valid.deckRecipe, signatureCardIds: cardIds } }], refs)).toContain(`apollyon ${incarnationId}: signature cardinality exceeds 10`);
+    for (const signs of [[], dreamsignIds]) {
+      expect(apollyonRecipeFailures([{ ...valid, dreamsignIds: signs }], refs)).toContain(`apollyon ${incarnationId}: dreamsign cardinality outside 1–2`);
+    }
   });
 });
