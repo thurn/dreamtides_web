@@ -1,0 +1,6 @@
+# hv-umm2.204 pre-existing observations
+
+- The earlier owner's source-free assignment ran from 2026-10-12T16:21:24Z to 16:42:43Z (21 minutes 19 seconds), including installation, read-only diagnosis, prerequisite filing, serialization, coordination, and cleanup. The exact helper dispatch is unknown; the parent recorded a 16:25:05.390123Z–16:26:33.036575Z bound and the helper's first observed activity was 16:25:43Z. This history belongs to the earlier owner and is separate from this successor's dispatch, implementation, command processes, and CPU measurements.
+- That assignment identified the exact enemy Warrior OR spark-at-most-two target requirement for 41c14462-86b9-42a4-8a61-859d59ffa466. Closed prerequisite hv-umm2.556 supplies the existing nonrecursive alternative-selector form and its public synthetic contracts. The four original UUIDs and acceptance criteria govern this successor's content work.
+- The parent completed this successor's fresh installation before dispatch: 388 packages with 17 reported audit vulnerabilities. Dependency repairs are outside the four-card composition scope.
+- The isolated review asset preparation prints missing-art warnings. Its normal restoration step links the existing local art. Validation logs retain these warnings and restoration outcomes.

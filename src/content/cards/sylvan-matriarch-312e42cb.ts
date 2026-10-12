@@ -1,3 +1,6 @@
+import { characterYouControl, self } from "../../engine/dsl/builders";
+import { onMaterialized, triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import { drawMatching, gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 324,
   art: { x: 0, y: -0.237, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), drawMatching({ subtype: "Warrior" })),
+    triggered(whenMaterialize(characterYouControl({ subtype: "Warrior", figment: false })), gainSpark(self(), variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "230r1dp4lj2",
 });

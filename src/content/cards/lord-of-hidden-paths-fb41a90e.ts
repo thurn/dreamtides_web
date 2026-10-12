@@ -1,3 +1,6 @@
+import { all, characterYouControl, ofSubtype, staticAbility } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { draw, payTo, sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 459,
   art: { x: -0.21, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(sparkModifier(all(characterYouControl(ofSubtype("Spirit Animal"))), variant.amplified ? 2 : 1)),
+    triggered(whenYouPlay({ subtype: "Spirit Animal" }), payTo({ energy: 1 }, draw(1))),
+  ],
+  verifiedText: "1ut4p4zyxra",
 });
