@@ -76,3 +76,4 @@ export * from "./with-materialized";
 export * from "./pay-to";
 
 export * from "./self-cost-reduction";
+export * from "./redraw-hand";

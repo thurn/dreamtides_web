@@ -1,0 +1,696 @@
+{
+  "bead": "hv-umm2.567",
+  "base": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+  "dispatch": {
+    "at": "2026-10-12T17:49:42.482000+00:00",
+    "receipt": "redraw567-dispatch.json"
+  },
+  "sourceEnd": {
+    "at": "2026-10-12T18:05:24.854837+00:00",
+    "scope": "Final evidence freeze immediately before final schema/stage/commit; parent records actual Git committer timestamp and qualifies tail."
+  },
+  "scope": {
+    "productionEntities": 0,
+    "newPrimitives": [
+      "redrawHand"
+    ],
+    "newPromptKinds": [],
+    "newPromptRoles": [],
+    "newEventKinds": [],
+    "newStateKinds": [],
+    "newStatusIndicators": [],
+    "newVisualEffects": [],
+    "rulesDecisions": [],
+    "contractCases": 15,
+    "contractLines": 206,
+    "nonTestSourceChangedLines": 37,
+    "entitySweep": "N/A: zero production entities; guaranteed synthetic public contracts plus native prompt-lab route",
+    "d21": "No automatic new-prompt/status/visual-effect criterion; desktop/mobile judged QA explicitly required by native admission",
+    "full": "Not required: bounded additive primitive and existing resource delegation; no crosscutting body/configuration/test infrastructure change"
+  },
+  "publicGap": {
+    "old214Base": "5f83560a65f77396f7b1582211222f8ff2ee6c8f",
+    "oldProbe": "dreamwell214-redraw-gap-probe.ts",
+    "oldResult": "dreamwell214-redraw-gap-probe.json",
+    "current567Base": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+    "currentProbe": "redraw567-gap-probe.ts",
+    "currentResult": {
+      "head": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+      "rows": [
+        {
+          "side": "player",
+          "locked": false,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        },
+        {
+          "side": "player",
+          "locked": true,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        },
+        {
+          "side": "enemy",
+          "locked": false,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        },
+        {
+          "side": "enemy",
+          "locked": true,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        }
+      ]
+    },
+    "scope": "both controllers, unlocked and lockedAtResolution dynamic hand count, discards2 draws0. Original scratch hardcoded oldhead corrected for current own probe; no changed source required."
+  },
+  "validation": {
+    "receipts": {
+      "gap": {
+        "label": "gap",
+        "command": [
+          "node_modules/.bin/tsx",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/redraw567-gap-probe.ts"
+        ],
+        "start": "2026-10-12T17:54:35.664597+00:00",
+        "loadStart": [
+          13.78173828125,
+          13.66162109375,
+          12.841796875
+        ],
+        "pid": 57398,
+        "exit": 0,
+        "end": "2026-10-12T17:54:36.539231+00:00",
+        "wallS": 0.8746721744537354,
+        "loadEnd": [
+          13.78173828125,
+          13.66162109375,
+          12.841796875
+        ]
+      },
+      "negative": {
+        "label": "negative",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "redrawHand"
+        ],
+        "start": "2026-10-12T17:54:47.122617+00:00",
+        "loadStart": [
+          12.658203125,
+          13.42529296875,
+          12.76708984375
+        ],
+        "pid": 58209,
+        "exit": 1,
+        "end": "2026-10-12T17:54:51.624129+00:00",
+        "wallS": 4.501544952392578,
+        "loadEnd": [
+          12.044921875,
+          13.28515625,
+          12.72119140625
+        ]
+      },
+      "contracts": {
+        "label": "contracts",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts"
+        ],
+        "start": "2026-10-12T17:55:01.511808+00:00",
+        "loadStart": [
+          11.04150390625,
+          13.0283203125,
+          12.63623046875
+        ],
+        "pid": 59186,
+        "exit": 0,
+        "end": "2026-10-12T17:55:08.710359+00:00",
+        "wallS": 7.198580265045166,
+        "loadEnd": [
+          9.96484375,
+          12.73095703125,
+          12.53515625
+        ]
+      },
+      "review": {
+        "label": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-12T17:55:24.885090+00:00",
+        "loadStart": [
+          18.20703125,
+          14.39794921875,
+          13.13134765625
+        ],
+        "pid": 61013,
+        "exit": 2,
+        "end": "2026-10-12T17:56:21.863073+00:00",
+        "wallS": 56.97802710533142,
+        "loadEnd": [
+          21.625,
+          16.04150390625,
+          13.82421875
+        ]
+      },
+      "review-corrected": {
+        "label": "review-corrected",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-12T17:56:32.383761+00:00",
+        "loadStart": [
+          18.3486328125,
+          15.59619140625,
+          13.7041015625
+        ],
+        "pid": 15925,
+        "exit": 0,
+        "end": "2026-10-12T17:57:27.324532+00:00",
+        "wallS": 54.94079899787903,
+        "loadEnd": [
+          12.9736328125,
+          14.6337890625,
+          13.4677734375
+        ]
+      },
+      "review-final": {
+        "label": "review-final",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-12T17:59:47.667843+00:00",
+        "loadStart": [
+          8.52880859375,
+          12.265625,
+          12.69091796875
+        ],
+        "pid": 27182,
+        "exit": 0,
+        "end": "2026-10-12T18:00:33.518153+00:00",
+        "wallS": 45.850342988967896,
+        "loadEnd": [
+          6.76953125,
+          11.28955078125,
+          12.3095703125
+        ]
+      },
+      "knip": {
+        "label": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-12T17:57:40.186438+00:00",
+        "loadStart": [
+          12.8173828125,
+          14.54638671875,
+          13.4501953125
+        ],
+        "pid": 20902,
+        "exit": 0,
+        "end": "2026-10-12T17:57:45.179138+00:00",
+        "wallS": 4.9927380084991455,
+        "loadEnd": [
+          12.67138671875,
+          14.4873046875,
+          13.435546875
+        ]
+      },
+      "fuzz": {
+        "label": "fuzz",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--seed",
+          "redraw567"
+        ],
+        "start": "2026-10-12T17:55:23.730962+00:00",
+        "loadStart": [
+          18.20703125,
+          14.39794921875,
+          13.13134765625
+        ],
+        "pid": 60927,
+        "exit": -15,
+        "end": "2026-10-12T17:58:05.544963+00:00",
+        "wallS": 161.81404399871826,
+        "loadEnd": [
+          11.83251953125,
+          14.1787109375,
+          13.34912109375
+        ]
+      },
+      "fuzz-measured": {
+        "label": "fuzz-measured",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/redraw567-heavy.py"
+        ],
+        "start": "2026-10-12T17:58:05.639529+00:00",
+        "loadStart": [
+          11.83251953125,
+          14.1787109375,
+          13.34912109375
+        ],
+        "pid": 22601,
+        "exit": 0,
+        "end": "2026-10-12T18:00:57.289899+00:00",
+        "wallS": 171.65040683746338,
+        "loadEnd": [
+          6.37353515625,
+          10.91259765625,
+          12.150390625
+        ]
+      },
+      "browser": {
+        "label": "browser",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.567/redraw-hand.mjs",
+          "--bead",
+          "hv-umm2.567",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "start": "2026-10-12T18:01:08.935017+00:00",
+        "loadStart": [
+          6.54248046875,
+          10.734375,
+          12.0654296875
+        ],
+        "pid": 29194,
+        "exit": 0,
+        "end": "2026-10-12T18:01:39.958901+00:00",
+        "wallS": 31.023914098739624,
+        "loadEnd": [
+          6.80908203125,
+          10.40576171875,
+          11.89990234375
+        ]
+      },
+      "schema": {
+        "label": "schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-12T18:04:36.294436+00:00",
+        "loadStart": [
+          5.35205078125,
+          8.30908203125,
+          10.74365234375
+        ],
+        "pid": 32806,
+        "exit": 0,
+        "end": "2026-10-12T18:04:36.406207+00:00",
+        "wallS": 0.1118011474609375,
+        "loadEnd": [
+          5.35205078125,
+          8.30908203125,
+          10.74365234375
+        ]
+      },
+      "friction": {
+        "label": "friction",
+        "command": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "start": "2026-10-12T18:04:36.429627+00:00",
+        "loadStart": [
+          5.35205078125,
+          8.30908203125,
+          10.74365234375
+        ],
+        "pid": 32808,
+        "exit": 1,
+        "end": "2026-10-12T18:04:36.631354+00:00",
+        "wallS": 0.20177006721496582,
+        "loadEnd": [
+          5.35205078125,
+          8.30908203125,
+          10.74365234375
+        ]
+      }
+    },
+    "earlyFocused": {
+      "focused-first": {
+        "firstPhaseStart": "2026-10-12T17:53:20.236000+00:00",
+        "lastEndFromRoundedDuration": "2026-10-12T17:53:24.898000+00:00",
+        "phaseWallS": 4.662,
+        "scope": "native review phases, excludes shell startup/unknown outer time",
+        "tests": "7 failed | 8 passed | 2051 skipped (2066)"
+      },
+      "focused-second": {
+        "firstPhaseStart": "2026-10-12T17:53:47.813000+00:00",
+        "lastEndFromRoundedDuration": "2026-10-12T17:53:52.033000+00:00",
+        "phaseWallS": 4.22,
+        "scope": "native review phases, excludes shell startup/unknown outer time",
+        "tests": "2 failed | 13 passed | 2051 skipped (2066)"
+      },
+      "focused-final": {
+        "firstPhaseStart": "2026-10-12T17:54:23.459000+00:00",
+        "lastEndFromRoundedDuration": "2026-10-12T17:54:27.843000+00:00",
+        "phaseWallS": 4.384,
+        "scope": "native review phases, excludes shell startup/unknown outer time",
+        "tests": "15 passed | 2051 skipped (2066)"
+      }
+    },
+    "finalReview": {
+      "files": 268,
+      "tests": 4781,
+      "exit": 0
+    },
+    "contracts": {
+      "tests": 2066,
+      "exit": 0
+    },
+    "negative": {
+      "failed": 14,
+      "passed": 1,
+      "scope": "Temporary substitution using public existing locked dynamic discard/draw composition; raw log retained; exact original primitive restored before contracts/final review."
+    },
+    "fuzz": {
+      "games": 300,
+      "seed": "redraw567",
+      "steps": 153815,
+      "failures": 0,
+      "prompts": 4412,
+      "interactiveReruns": 413,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 1
+      },
+      "nativeEngineWallS": 146.9,
+      "nativeCpuS": 160.6,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "heavyReceipt": {
+        "acquiredAt": "2026-10-12T17:58:29.076033+00:00",
+        "load": [
+          10.69189453125,
+          13.72802734375,
+          13.2099609375
+        ],
+        "pid": 24046,
+        "exit": 0,
+        "endedAt": "2026-10-12T18:00:57.286211+00:00",
+        "heldWallS": 148.21020698547363
+      },
+      "launchToInsideLockMarkerS": 23.436504,
+      "waitScope": "launch-to-inside-lock marker includes tiny process startup/marker overhead; held receipt spans native command including npm startup",
+      "historicalPendingClientWallS": 161.81404399871826,
+      "historicalPendingOutcome": "Own verified no-child, zero-byte-log lock client terminated before acquisition; actual terminal -15 receipt retained. No games executed or duplicated. Marker correction enabled measured wait/execution separation.",
+      "targetCoverage": "Unweighted native pool includes DSL_CARDS; no guaranteed per-fixture fuzz exercise claimed. Public synthetic contracts guarantee primitive exercise."
+    }
+  },
+  "browser": {
+    "invocation": "run-46q3A0",
+    "rawReport": "invocations/run-46q3A0/redraw-hand.result.json",
+    "sha256": "2ecdd63b4b8ad997dc6f780911861bc534c7edf385a749667f7456009bd98796",
+    "exit": 0,
+    "caps": [],
+    "error": null,
+    "wallMs": {
+      "browserLeaseWait": 7,
+      "serve": 1366,
+      "scenario": 28949,
+      "total": 30376
+    },
+    "geometryAndState": {
+      "desktop": {
+        "source": "i1",
+        "cohort": [
+          "i2",
+          "i3"
+        ],
+        "drawn": [
+          "i4",
+          "i5"
+        ],
+        "geometry": [
+          {
+            "index": 0,
+            "x": 1114.046875,
+            "y": 597,
+            "width": 62.4375,
+            "height": 42,
+            "inViewport": true,
+            "hit": true
+          },
+          {
+            "index": 1,
+            "x": 1184.484375,
+            "y": 597,
+            "width": 56.015625,
+            "height": 42,
+            "inViewport": true,
+            "hit": true
+          }
+        ],
+        "handGeometry": [
+          {
+            "id": "i4",
+            "x": 626.599365234375,
+            "y": 731.552978515625,
+            "width": 141.18115234375,
+            "height": 189.02117919921875,
+            "zone": null
+          },
+          {
+            "id": "i5",
+            "x": 772.094482421875,
+            "y": 731.552978515625,
+            "width": 141.18115234375,
+            "height": 189.02117919921875,
+            "zone": null
+          }
+        ],
+        "discarded": [
+          "i2",
+          "i3"
+        ],
+        "draws": [
+          "i4",
+          "i5"
+        ],
+        "eventKinds": [
+          "enteredVoid",
+          "discarded",
+          "enteredVoid",
+          "discarded",
+          "cardDrawn",
+          "cardDrawn",
+          "enteredVoid"
+        ],
+        "logRows": 32,
+        "reloadedOptional": true,
+        "handCount": 2
+      },
+      "mobile": {
+        "source": "i1",
+        "cohort": [
+          "i2",
+          "i3"
+        ],
+        "drawn": [
+          "i4",
+          "i5"
+        ],
+        "geometry": [
+          {
+            "index": 0,
+            "x": 255.546875,
+            "y": 522.828125,
+            "width": 62.4375,
+            "height": 42,
+            "inViewport": true,
+            "hit": true
+          },
+          {
+            "index": 1,
+            "x": 325.984375,
+            "y": 522.828125,
+            "width": 56.015625,
+            "height": 42,
+            "inViewport": true,
+            "hit": true
+          }
+        ],
+        "handGeometry": [
+          {
+            "id": "i4",
+            "x": 63.52015686035156,
+            "y": 666.8659057617188,
+            "width": 170.82589721679688,
+            "height": 224.12811279296875,
+            "zone": null
+          },
+          {
+            "id": "i5",
+            "x": 155.63832092285156,
+            "y": 666.8659057617188,
+            "width": 170.82591247558594,
+            "height": 224.12811279296875,
+            "zone": null
+          }
+        ],
+        "discarded": [
+          "i2",
+          "i3"
+        ],
+        "draws": [
+          "i4",
+          "i5"
+        ],
+        "eventKinds": [
+          "enteredVoid",
+          "discarded",
+          "enteredVoid",
+          "discarded",
+          "cardDrawn",
+          "cardDrawn",
+          "enteredVoid"
+        ],
+        "logRows": 32,
+        "reloadedOptional": true,
+        "handCount": 2
+      }
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.567/invocations/run-46q3A0/redraw-hand-desktop.jsonl",
+        "gameId": "5aopjz",
+        "selectedBy": "url",
+        "rows": 32,
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.567/invocations/run-46q3A0/redraw-hand-mobile.jsonl",
+        "gameId": "oup5mr",
+        "selectedBy": "url",
+        "rows": 32,
+        "reason": null
+      }
+    ],
+    "logInspection": "Parsed both32row persisted logs: real play i1, optional promptOpened, true promptAnswered. Native observation events show i2/i3 discard before i4/i5 draw, without additional hand-choice prompt or duplicates after exact suspended-slice reload.",
+    "captureInspection": "Three actual device-scale PNGs inspected: desktop/mobile confirmation source copy and Yes/No readable; desktop accepted hand visible. Existing hand clipping/counter overlap recorded separately.",
+    "captures": [
+      {
+        "file": "redraw-accepted-desktop.png",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800
+      },
+      {
+        "file": "redraw-confirm-desktop.png",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800
+      },
+      {
+        "file": "redraw-confirm-mobile.png",
+        "pixelWidth": 780,
+        "pixelHeight": 1688
+      }
+    ]
+  },
+  "failurePaths": {
+    "failure": "Post-redraw invalid event-source spark instruction throws; prior committed play preserved, cohort/deck/drawcounts/trigger queue restored, no discard/draw/queued-trigger prefixes published. Real watcher makes queued-prefix rollback meaningful.",
+    "restartReload": "Both controllers interactive optional fold reconstructs from JSON; native both viewport suspended slice byte-identical on reload; final saved state hashes identical.",
+    "interrupt": "No new response window; whole redraw is one synchronous primitive instruction. Existing flow owns stack responses.",
+    "partialApplication": "Before optional acceptance no redraw prefix or committed zone effects; a later separate optional can publish a complete preview redraw, replaying identical prefix and committing once.",
+    "staleConcurrent": "Wrong-side, branded stale, invalid answer, another battle action during flight and repeated answer all bounce with one redraw."
+  },
+  "runtimeLedger": {
+    "browserRunnerPid": 29194,
+    "serverProcessGroup": 29236,
+    "port": 5174,
+    "terminalExit": 0,
+    "ownedRunnerAndServerAbsent": true,
+    "portFree": true,
+    "ownedProviderAndServerRecordsAbsent": true,
+    "noPeerSignalsOrWrites": true,
+    "allChecksAndFuzzTerminalBeforeBrowser": true,
+    "sourceCommandsResumeAfter": "2026-10-12T18:01:39.958901+00:00"
+  },
+  "frictionBoundary": {
+    "rawReport": "redraw567-friction-boundary.log",
+    "schemaRecords": 615,
+    "firedUnresolved": "additive-registry-conflict/phase-5: hv-umm2.130, hv-umm2.140, hv-umm2.553",
+    "parentNotified": true,
+    "dispositionAuthority": "Parent native shared-duty audit; 567 does not own global introspection edits",
+    "cadence": "6 of411 since hv-umm2.561",
+    "missingPrimitiveDisposition": "hv-umm2.558 existing audit",
+    "existingDisposition": {
+      "bead": "hv-umm2.563",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "testedIntegration": "2fcdd9a18c64b4bd7e24de502b145cd31956959a",
+      "scope": "Parent fresh native dedup audit confirms current integration includes canonical reasonline. Own base predates promotion; oldbase trigger failure retained, no duplicate filing/introspection row/source update required."
+    },
+    "finalOldBaseTriggerExit": 1
+  },
+  "failedCommands": [
+    {
+      "command": "node scripts/friction-records.mjs",
+      "exit": 1,
+      "reason": "own mistaken filename, no module; correct node scripts/friction-triggers.mjs --validate-records passed615records"
+    }
+  ],
+  "owed": [
+    "parent exact immutable source cold gpt-5.6-sol CLI review under temporary user routing",
+    "parent exact authorized native candidate promotion and cleanup"
+  ]
+}

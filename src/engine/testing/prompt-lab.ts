@@ -303,6 +303,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [DSL.dissolveEnemy.id]: { name: "Lab Unmaking", text: "Fast. Dissolve an enemy." },
   [DSL.pumpPermanently.id]: { name: "Lab Blessing", text: "Up to 2 characters you control gain +1✦." },
   [DSL.chooseDrawOrPoints.id]: { name: "Lab Crossroads", text: "Choose one: Draw a card; or gain 1⍟." },
+  [DSL.mayRedrawHand.id]: { name: "Lab Renewal", text: "You may discard your hand, then draw that many cards." },
   [DSL.mayDrawTwo.id]: { name: "Lab Temptation", text: "You may draw 2 cards." },
   [DSL.pointsTimesX.id]: { name: "Lab Surge", text: "Gain X⍟." },
   [DSL.foreseeTwo.id]: { name: "Lab Scrying", text: "Foresee 2." },
@@ -424,6 +425,11 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "redraw-hand", description: "An optional whole-hand discard followed by the captured number of draws",
+    setup: { active: "player", phase: "day", player: { hand: [DSL.mayRedrawHand.id, vanillas[0], vanillas[1]], energy: 3, deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [], presents: [playHand(0)],
+  },
   ...[false, true].map((met): PromptLabFixture => ({
     name: `conditional-target-${met ? "met" : "unmet"}`,
     description: "One physical enemy target whose normal board condition controls its live restriction",

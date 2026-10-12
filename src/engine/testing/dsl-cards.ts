@@ -54,6 +54,8 @@ const events = (...list: Ability[]) => () => list;
 
 /** DSL fixtures by role. */
 export const DSL = {
+  /** Optional whole-hand discard, then the captured number of ordinary draws. */
+  mayRedrawHand: authored(51, "event", 0, events(event(p.optional(p.redrawHand())))),
   drawTwo: authored(1, "event", 1, events(event(p.draw(2)))),
   gainTwoEnergy: authored(2, "event", 0, events(event(p.gainEnergy(2)))),
   gainThreePoints: authored(3, "event", 1, events(event(p.gainPoints(3)))),

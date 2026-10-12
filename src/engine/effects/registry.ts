@@ -31,6 +31,7 @@ import {
   createCardPrimitive,
   createCopyInHandPrimitive,
   disableTriggersPrimitive,
+  redrawHandPrimitive,
   discardPrimitive,
   discardChosenPrimitive,
   discoverPrimitive,
@@ -152,6 +153,9 @@ const DEFINITIONS = {
   },
   get disableTriggers() {
     return disableTriggersPrimitive;
+  },
+  get redrawHand() {
+    return redrawHandPrimitive;
   },
   get discard() {
     return discardPrimitive;
