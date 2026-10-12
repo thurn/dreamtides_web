@@ -1,3 +1,8 @@
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import { thisCharacterSpark } from "../../engine/dsl/values";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import survivor from "../figments/survivor-5256888f";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +23,10 @@ export default card({
   artOwned: false,
   cardNumber: 184,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    // X is this character's spark immediately before it was dissolved (RD-hv-umm2.460-1); its last
+    // in-play controller gets the figments (RD-hv-umm2.342-1).
+    triggered(onDissolved(), p.materializeFigments(parseFigmentId(survivor.id), thisCharacterSpark(), { spark: 1 })),
+  ],
+  verifiedText: "2aq2nppn8qm",
 });

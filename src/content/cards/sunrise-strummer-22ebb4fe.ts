@@ -1,3 +1,7 @@
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import ethereal from "../figments/ethereal-3eddb1b8";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,8 @@ export default card({
   cardNumber: 273,
   art: { x: 0.833, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onDawn(), p.materializeFigments(parseFigmentId(ethereal.id), 1, { spark: variant.amplified ? 2 : 1 })),
+  ],
+  verifiedText: "8h44nm00gi",
 });

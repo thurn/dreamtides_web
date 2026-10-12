@@ -1,3 +1,7 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import spiritAnimal from "../figments/spirit-animal-1745ab81";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +25,14 @@ export default card({
   cardNumber: 180,
   art: { x: 0.294, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // Matches the played card's subtype as it was played (RD-hv-7x4l.34-1); "once per turn" limits
+    // triggering (RD-hv-7x4l.6-5). It works in play, so its own play does not trigger it.
+    triggered(
+      whenYouPlay({ subtype: "Spirit Animal" }),
+      p.materializeFigments(parseFigmentId(spiritAnimal.id), 1, { spark: variant.amplified ? 2 : 1 }),
+      { oncePerTurn: true },
+    ),
+  ],
+  verifiedText: "wmnz46gzwb",
 });
