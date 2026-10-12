@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.591",
+  "phase": 5,
+  "implementMin": 8.312310616666666,
+  "implementWindow": {
+    "start": "2026-10-12T23:14:46+00:00",
+    "end": "2026-10-12T23:23:04.738637+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.792242334006005,
+    "review": 21.681965791998664,
+    "knip": 4.084676374986884
+  },
+  "hostLoad": 4.35595703125,
+  "testDelta": {
+    "files": 1,
+    "lines": 111,
+    "jsdomFiles": 1
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.7110333333333333,
+      "note": "Three changed-driver failures: initial scene has three held objects causing overflow; debug occurrence actions are presentation indices; initial game read precedes native scene readiness. Minutes count only42.662s failed scenario elapsed, not manual effort. All settled, no product suppressions/waivers."
+    }
+  ]
+}

@@ -116,6 +116,20 @@ export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE = `calc(${JOURNEY_STATU
  * name). The HUD renders each through `<Dreamsign variant="hud">`. */
 export type QsbDreamsign = DreamsignView;
 
+/** Catalog UUIDs identify content; the HUD renders each held occurrence. The
+ * per-UUID ordinal also preserves distinct content across list reordering. */
+function keyedDreamsigns(signs: QsbDreamsign[]): {
+  sign: QsbDreamsign;
+  key: React.Key;
+}[] {
+  const occurrences = new Map<QsbDreamsign["id"], number>();
+  return signs.map((sign) => {
+    const occurrence = occurrences.get(sign.id) ?? 0;
+    occurrences.set(sign.id, occurrence + 1);
+    return { sign, key: `${sign.id}:${String(occurrence)}` };
+  });
+}
+
 /** The active Avatar shown as a bust in the HUD. */
 export interface QsbAvatar {
   /** Stable Avatar UUID. */
@@ -181,9 +195,9 @@ function QsbOverflowStack({
         WebkitTapHighlightColor: "transparent",
       }}
     >
-      {signs.map((s, i) => (
+      {keyedDreamsigns(signs).map(({ sign: s, key }, i) => (
         <img
-          key={s.id}
+          key={key}
           src={dreamsignArtUrl(String(s.imageName))}
           alt=""
           draggable={false}
@@ -282,9 +296,9 @@ function QsbDreamsignStrip({
   if (signs.length <= STACK_THRESHOLD) {
     return (
       <div style={{ ...wrap, gap: token("--space-xxs") }}>
-        {signs.map((s) => (
+        {keyedDreamsigns(signs).map(({ sign: s, key }) => (
           <div
-            key={s.id}
+            key={key}
             style={{ width: SIGN, height: SIGN, flex: "none" }}
           >
             <Dreamsign variant="hud" dreamsign={s} />
@@ -373,9 +387,9 @@ function QsbDreamsignWindow({
             justifyItems: "center",
           }}
         >
-          {signs.map((s) => (
+          {keyedDreamsigns(signs).map(({ sign: s, key }) => (
             <div
-              key={s.id}
+              key={key}
               style={{ width: 60, height: 60 }}
             >
               <Dreamsign variant="hud" dreamsign={s} />
@@ -710,9 +724,9 @@ function QsbBattleHudBar({
           gap: token("--space-xxs"),
         }}
       >
-        {signs.map((sign, index) => (
+        {keyedDreamsigns(signs).map(({ sign, key }, index) => (
           <div
-            key={sign.id}
+            key={key}
             data-journey-status-dreamsign=""
             data-journey-status-dreamsign-column={
               dreamsignColumnCount - Math.floor(index / 2)

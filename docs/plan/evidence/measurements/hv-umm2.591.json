@@ -1,0 +1,949 @@
+{
+  "bead": "hv-umm2.591",
+  "base": "99423a54d8dac619971ead8263816a5deee1713e",
+  "implementation": "Direct same-task justiciar root; native claim23:14:46Z is ownership proxy, no implementation helper or measured model start.",
+  "baseline": "Before3: three duplicate cases fail actual React console errors, one single-copy passes. Before1 ref/semantic-element harness failures separately retained; before2 corrected harness proves duplicate errors and distinct UUID DOM preservation failure.",
+  "checks": {
+    "focused": {
+      "exit": 0,
+      "seconds": 8.792242334006005,
+      "before": "2026-10-12T23:17:04.452665+00:00",
+      "after": "2026-10-12T23:17:13.244960+00:00"
+    },
+    "review": {
+      "exit": 0,
+      "seconds": 21.681965791998664,
+      "before": "2026-10-12T23:17:25.703788+00:00",
+      "after": "2026-10-12T23:17:47.385890+00:00"
+    },
+    "knip": {
+      "exit": 0,
+      "seconds": 4.084676374986884,
+      "before": "2026-10-12T23:17:56.382262+00:00",
+      "after": "2026-10-12T23:18:00.466963+00:00"
+    }
+  },
+  "full": "Not required: private local HUD occurrence keys and public component tests; no cross-cutting architecture/test infrastructure/configuration change.",
+  "qa": {
+    "at": "2026-10-12T23:22:11.365985+00:00",
+    "changed": [],
+    "attempts": [
+      {
+        "invocation": "run-4B0T3K",
+        "server": 20421,
+        "port": 5174,
+        "ok": false,
+        "wallMs": {
+          "browserLeaseWait": 9,
+          "serve": 1688,
+          "scenario": 20334,
+          "total": 22096
+        },
+        "error": "desktop#0: Error: held occurrence count: TimeoutError: page.waitForFunction: Timeout 14999ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async heldCopies (evalmachine.<anonymous>:1674:3)\n    at async evalmachine.<anonymous>:1702:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)"
+      },
+      {
+        "invocation": "run-O9xXWC",
+        "server": 24773,
+        "port": 5274,
+        "ok": false,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1676,
+          "scenario": 9697,
+          "total": 11448
+        },
+        "error": "desktop#0: Error: missing exact occurrence removal action\n    at heldCopies (evalmachine.<anonymous>:1696:20)\n    at async evalmachine.<anonymous>:1711:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26"
+      },
+      {
+        "invocation": "run-yReyhl",
+        "server": 26793,
+        "port": 5274,
+        "ok": false,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1687,
+          "scenario": 12631,
+          "total": 14389
+        },
+        "error": "desktop#0: Error: reload changed game\n    at heldCopies (evalmachine.<anonymous>:1702:54)\n    at async evalmachine.<anonymous>:1711:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26"
+      },
+      {
+        "invocation": "run-jTuDM6",
+        "server": 31244,
+        "port": 5274,
+        "ok": true,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1362,
+          "scenario": 26072,
+          "total": 27506
+        },
+        "error": null
+      }
+    ],
+    "ownersPresent": [
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json"
+    ],
+    "serversPresent": [
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json"
+    ],
+    "final": {
+      "scenario": "held-copies",
+      "bead": "hv-umm2.591",
+      "mode": "dev",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/duplicate-dreamsign591-sol",
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 31244,
+      "invocation": "run-jTuDM6",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6",
+      "hostLoad": 8.88427734375,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1362,
+        "scenario": 26072,
+        "total": 27506
+      },
+      "ok": true,
+      "result": {
+        "desktop": {
+          "first": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "second": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+          "initialHeld": [
+            "dreamsign:0",
+            "dreamsign:0",
+            "dreamsign:0"
+          ],
+          "geometry": [
+            {
+              "x": 1165,
+              "y": 827.5,
+              "width": 58,
+              "height": 58,
+              "vw": 1440,
+              "vh": 900
+            },
+            {
+              "x": 1225,
+              "y": 827.5,
+              "width": 58,
+              "height": 58,
+              "vw": 1440,
+              "vh": 900
+            }
+          ],
+          "reveal": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "vw": 1440,
+            "vh": 900
+          },
+          "gameId": "nqk652",
+          "restoredCounts": [
+            2,
+            1
+          ],
+          "removedAction": "dreamsign:0"
+        },
+        "mobile": {
+          "first": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "second": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+          "initialHeld": [
+            "dreamsign:0",
+            "dreamsign:0",
+            "dreamsign:0"
+          ],
+          "geometry": [
+            {
+              "x": 217.453125,
+              "y": 797,
+              "width": 36,
+              "height": 36,
+              "vw": 390,
+              "vh": 844
+            },
+            {
+              "x": 255.453125,
+              "y": 797,
+              "width": 36,
+              "height": 36,
+              "vw": 390,
+              "vh": 844
+            }
+          ],
+          "reveal": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "vw": 390,
+            "vh": 844
+          },
+          "gameId": "cmymi8",
+          "restoredCounts": [
+            2,
+            1
+          ],
+          "removedAction": "dreamsign:0"
+        }
+      },
+      "error": null,
+      "log": [
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 1,
+            "expectedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+            "deadline": null,
+            "callDeadline": 1791847571401,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 1,
+                "at": 1791847271407,
+                "phase": "started",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 2,
+                "at": 1791847271407,
+                "phase": "caps-before",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": null
+              },
+              {
+                "order": 3,
+                "at": 1791847271407,
+                "phase": "goto-started",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 4,
+                "at": 1791847271410,
+                "phase": "request",
+                "observedUrl": "about:blank",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "requestUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1"
+              },
+              {
+                "order": 5,
+                "at": 1791847271464,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "frameUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1"
+              },
+              {
+                "order": 6,
+                "at": 1791847272066,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 7,
+                "at": 1791847272066,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 8,
+                "at": 1791847272069,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 9,
+                "at": 1791847272076,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                  "id": "200c0ec9-5009-4dd5-8518-91bffd9abacf",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 10,
+                "at": 1791847272076,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 11,
+                "at": 1791847272076,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 2,
+            "expectedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+            "deadline": null,
+            "callDeadline": 1791847571401,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 12,
+                "at": 1791847282209,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 13,
+                "at": 1791847282211,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                  "id": "200c0ec9-5009-4dd5-8518-91bffd9abacf",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 14,
+                "at": 1791847282211,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 15,
+                "at": 1791847282215,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "requestUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652"
+              },
+              {
+                "order": 16,
+                "at": 1791847282225,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "frameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652"
+              },
+              {
+                "order": 17,
+                "at": 1791847282777,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 18,
+                "at": 1791847282777,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 19,
+                "at": 1791847282779,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 20,
+                "at": 1791847282798,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                  "id": "26c7fea5-0709-45e5-9a4d-49402c9df507",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 21,
+                "at": 1791847282798,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 22,
+                "at": 1791847282798,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 1,
+            "expectedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+            "deadline": null,
+            "callDeadline": 1791847587075,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 1,
+                "at": 1791847287089,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 2,
+                "at": 1791847287090,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                  "id": "26c7fea5-0709-45e5-9a4d-49402c9df507",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 3,
+                "at": 1791847287090,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 4,
+                "at": 1791847287134,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "requestUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1"
+              },
+              {
+                "order": 5,
+                "at": 1791847287145,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "frameUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1"
+              },
+              {
+                "order": 6,
+                "at": 1791847287772,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 7,
+                "at": 1791847287772,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 8,
+                "at": 1791847287777,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 9,
+                "at": 1791847287790,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                  "id": "be9087b7-da38-4c12-bca6-ab278e9c12c0",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 10,
+                "at": 1791847287790,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 11,
+                "at": 1791847287790,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/?goto=dreamscape&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 2,
+            "expectedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+            "deadline": null,
+            "callDeadline": 1791847587075,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 12,
+                "at": 1791847293263,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 13,
+                "at": 1791847293264,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                  "id": "be9087b7-da38-4c12-bca6-ab278e9c12c0",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 14,
+                "at": 1791847293264,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 15,
+                "at": 1791847293267,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "requestUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8"
+              },
+              {
+                "order": 16,
+                "at": 1791847293276,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "frameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8"
+              },
+              {
+                "order": 17,
+                "at": 1791847293824,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 18,
+                "at": 1791847293824,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 19,
+                "at": 1791847293828,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 20,
+                "at": 1791847293844,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                  "id": "6bb84a0a-b09e-42fe-bbc9-993bfe6afea4",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 21,
+                "at": 1791847293844,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 22,
+                "at": 1791847293844,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "captures": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-desktop-duplicates.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-desktop-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=nqk652",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-mobile-duplicates.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-mobile-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=dreamscape&seed=1&debug=1&game=cmymi8",
+          "width": 390,
+          "height": 844
+        }
+      ],
+      "caps": [],
+      "traces": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 15912
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 10158
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-desktop.jsonl",
+          "gameId": "nqk652",
+          "selectedBy": "url",
+          "rows": 37,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-mobile.jsonl",
+          "gameId": "cmymi8",
+          "selectedBy": "url",
+          "rows": 37,
+          "reason": null
+        }
+      ]
+    },
+    "ownershipQualification": "At23:22 snapshot slot1 records existed; their identity was not read then, so ownership is unobserved. Exact root slot records all absent at23:23:04 observation; none manually cleared. Each of four owned runners awaited terminal and confirmed port-free cleanup, finalrun exit0; no provider uncertainty reported.",
+    "finalOwnerRecordAbsenceObserved": "2026-10-12T23:23:04Z"
+  },
+  "limitations": [
+    "Freeze checks tracked source including renderer; new untracked component test excluded from original git-ls-files freeze, final review includes its four final cases.",
+    "Native geometry measures the two actual held targets; reveal group bounding box is the viewport portal, not a card footprint. Parent visually inspected desktop reload and mobile actual primary/secondary detail cards, which fit within viewport. Native mobile capture uses mouse hover at mobile viewport size, not touch-hold coverage.",
+    "Same-name distinct UUID control is synthetic; native real content preserves two distinct UUIDs."
+  ],
+  "parentVisual": {
+    "desktopReload": "held-copies-desktop-reloaded.png",
+    "mobileReveal": "held-copies-mobile-reveal.png",
+    "assessment": "Both duplicate art objects remain docked; distinct art retained. Actual mobile primary and secondary cards are visible inside viewport, HUD/menu/sites remain legible; desktop reload dock fits.",
+    "dimensions": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-desktop-reloaded.png: PNG image data, 2880 x 1800, 8-bit/color RGB, non-interlaced\n/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.591/invocations/run-jTuDM6/held-copies-mobile-reveal.png:    PNG image data, 780 x 1688, 8-bit/color RGB, non-interlaced\n"
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 111,
+    "jsdomFiles": 1
+  }
+}
