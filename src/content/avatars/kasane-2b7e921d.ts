@@ -1,3 +1,6 @@
+import { activated, energy, exhaustSelf } from "../../engine/dsl/builders";
+import { triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { copyCard, delayed } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -41,5 +44,6 @@ export default avatar({
     "120ea441-f6ff-434b-973c-bde459f65368",
     "c430ed7b-523e-4580-9a53-d43d11265633",
   ],
-  pending: true,
+  abilities: () => [activated([energy(4), exhaustSelf()], delayed(whenYouPlay({ cardType: "event" }), copyCard(triggeringCard()), "untilEndOfTurn"))],
+  verifiedText: "yi6hjpn83g",
 });

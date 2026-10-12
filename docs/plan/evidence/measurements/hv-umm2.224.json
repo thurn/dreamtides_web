@@ -1,0 +1,3073 @@
+{
+  "bead": "hv-umm2.224",
+  "base": "26ad624710ea3b3ded7a9a8bf8fc43ca51096997",
+  "actualDispatch": "2026-10-12T21:07:51.378Z",
+  "modelStart": null,
+  "writeAck": "2026-10-12T21:12:59.175517+00:00",
+  "practicalCommitCutoff": "2026-10-12T21:38:33.337252+00:00",
+  "cutoffQualification": "Actual helper dispatch to this practical precommit cutoff includes research, coordination, waits, checks and QA. Actual commit process start/end and Git timestamps are retained in scratch for parent tail accounting; dates are not forced.",
+  "entityUUIDs": [
+    "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+    "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+    "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+    "6029be40-75b9-4c07-912f-9718b6c5c747",
+    "2b7e921d-0cd7-4c20-a415-9e7eede7b477"
+  ],
+  "sourceSHA256": {
+    "src/content/avatars/kael-voss-81954ca0.ts": "bf73e161391bb08e8fc73d1c70f0a643656268fcf2a12357681f21a5e4ea90ab",
+    "src/content/avatars/edran-5e28154d.ts": "c9151ba959e9981c2b97ca877fe93e4477ae2fd7403110afea476d88f2ab3203",
+    "src/content/avatars/kaleth-3c4773e4.ts": "51dcbf68529025188c96dc47763abd943bdc4786dc268214ca5f356e959f7a2a",
+    "src/content/avatars/korrax-6029be40.ts": "6dab78f665bc2fa26555d0d4740b0b4a4a1c5018d9bb9c62d63dd2a6041286c9",
+    "src/content/avatars/kasane-2b7e921d.ts": "108d421dc302cc45555580339644ad320628b091867cdd37e878feed1bca6330",
+    "src/content/specs/avatars-04.scenarios.ts": "d1088f2d0fff84caaf62f84f1a10d662c776f6a6d498c8ae7fca29e895fec13f"
+  },
+  "scope": {
+    "nonTestChangedLines": 31,
+    "authoredAvatars": 5,
+    "newPrimitiveForms": 0,
+    "amplifiedVariants": 0,
+    "scenarioModulesAdded": 1,
+    "scenarioLinesAdded": 90,
+    "scenarioCases": 4,
+    "testEntryPointsAdded": 0,
+    "jsdomFilesAdded": 0,
+    "catalogFields": "All five catalog bodies byte-identical to base after excluding pending/abilities/verifiedText status lines. Imports are additive.",
+    "fallout": "Existing content-catalog conversion, primitive registry, workspace art reader, automatic scenario discovery and runtime presentation consume the definitions. No API, schema, importer body, engine, UI, policy, hub or configuration edit."
+  },
+  "clauseAudit": [
+    {
+      "uuid": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+      "composition": "Standard activated ability: ordered energy(2), Avatar exhaust, discardCost(1); one Survivor figment with explicit base spark 1 under the controller.",
+      "figmentUUID": "5256888f-c4d6-41b2-baf0-420dbf30d269"
+    },
+    {
+      "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+      "composition": "Fast activated ability: energy(4), Avatar exhaust; one Outsider figment with explicit base spark 1 under the controller.",
+      "figmentUUID": "bf9ccca0-bada-4d97-a5f7-6b73cd2d2474"
+    },
+    {
+      "uuid": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+      "composition": "Standard energy(2)/Avatar-exhaust activation; awaken one currently controlled character, with normal target revalidation."
+    },
+    {
+      "uuid": "6029be40-75b9-4c07-912f-9718b6c5c747",
+      "composition": "Controller-active Night trigger; one controlled character gains permanent +1 spark."
+    },
+    {
+      "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+      "composition": "Standard energy(4)/Avatar-exhaust activation; delayed controller event-play trigger consumed at first match, expiring at Ending. Stack copy uses D15 choices, X/additional costs and created-card lifetime."
+    }
+  ],
+  "opponentProgression": "Existing src/content/opponents.ts abilityActiveFromLayer=1 and battle integration consumers are preserved. Lab explicitly requests the selected emblem and marks the opposite presentation unavailable.",
+  "commands": {
+    "browser-edran": {
+      "label": "browser-edran",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs",
+        "--bead",
+        "hv-umm2.224",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "index=1",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:22:42.055959+00:00",
+      "pid": 6892,
+      "pgid": 6892,
+      "end": "2026-10-12T21:23:35.184786+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        9.15576171875,
+        13.22705078125,
+        13.34130859375
+      ],
+      "elapsedSeconds": 53.12799991699285,
+      "hostLoadEnd": [
+        7.88720703125,
+        12.333984375,
+        13.0078125
+      ]
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:17:57.400231+00:00",
+      "pid": 60239,
+      "pgid": 60239,
+      "end": "2026-10-12T21:18:02.554991+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        8.3447265625,
+        11.9287109375,
+        12.71337890625
+      ],
+      "elapsedSeconds": 5.1545961249939865,
+      "hostLoadEnd": [
+        8.23681640625,
+        11.8466796875,
+        12.6796875
+      ]
+    },
+    "fuzz-weighted": {
+      "label": "fuzz-weighted",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "81954ca0-da36-49dd-915c-1ccb1b2d7b05,5e28154d-770a-4b84-8aac-9de44f5d7d02,3c4773e4-f8e1-4686-86cb-b407a42489d4,6029be40-75b9-4c07-912f-9718b6c5c747,2b7e921d-0cd7-4c20-a415-9e7eede7b477"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:14:35.305207+00:00",
+      "pid": 23002,
+      "pgid": 23002,
+      "end": "2026-10-12T21:17:17.530120+00:00",
+      "exit": 0,
+      "elapsedSeconds": 162.22266462500556
+    },
+    "browser-kaleth": {
+      "label": "browser-kaleth",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs",
+        "--bead",
+        "hv-umm2.224",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "index=2",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:23:35.209041+00:00",
+      "pid": 9630,
+      "pgid": 9630,
+      "end": "2026-10-12T21:24:31.888175+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        7.88720703125,
+        12.333984375,
+        13.0078125
+      ],
+      "elapsedSeconds": 56.67829291700036,
+      "hostLoadEnd": [
+        7.51953125,
+        11.4462890625,
+        12.62890625
+      ]
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:13:55.763171+00:00",
+      "pid": 90301,
+      "pgid": 90301,
+      "end": "2026-10-12T21:13:57.487665+00:00",
+      "exit": 1,
+      "elapsedSeconds": 1.7243947079987265
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:16:27.669797+00:00",
+      "pid": 56559,
+      "pgid": 56559,
+      "end": "2026-10-12T21:17:23.680469+00:00",
+      "exit": 1,
+      "hostLoadStart": [
+        10.9326171875,
+        12.92236328125,
+        13.087890625
+      ],
+      "elapsedSeconds": 56.00899087500875,
+      "hostLoadEnd": [
+        11.28515625,
+        12.85791015625,
+        13.0625
+      ]
+    },
+    "side-witness": {
+      "label": "side-witness",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "tsx",
+        "/tmp/codex-01a130c8-avatars224/side-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:32:24.690061+00:00",
+      "pid": 51941,
+      "pgid": 51941,
+      "end": "2026-10-12T21:32:31.780785+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        8.5576171875,
+        12.1162109375,
+        12.96923828125
+      ],
+      "elapsedSeconds": 7.090537833006238,
+      "hostLoadEnd": [
+        8.53857421875,
+        11.99658203125,
+        12.91650390625
+      ]
+    },
+    "mechanics": {
+      "label": "mechanics",
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/codex-01a130c8-avatars224/mechanics.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:17:02.605807+00:00",
+      "pid": 58871,
+      "pgid": 58871,
+      "end": "2026-10-12T21:17:05.538028+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        12.5166015625,
+        13.16455078125,
+        13.17236328125
+      ],
+      "elapsedSeconds": 2.931852916997741,
+      "hostLoadEnd": [
+        12.5166015625,
+        13.16455078125,
+        13.17236328125
+      ]
+    },
+    "review-corrected": {
+      "label": "review-corrected",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:17:40.171659+00:00",
+      "pid": 59727,
+      "pgid": 59727,
+      "end": "2026-10-12T21:18:26.703741+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        9.5966796875,
+        12.40673828125,
+        12.8974609375
+      ],
+      "elapsedSeconds": 46.53137016600522,
+      "hostLoadEnd": [
+        11.80712890625,
+        12.35107421875,
+        12.83349609375
+      ]
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "81954ca0-da36-49dd-915c-1ccb1b2d7b05,5e28154d-770a-4b84-8aac-9de44f5d7d02,3c4773e4-f8e1-4686-86cb-b407a42489d4,6029be40-75b9-4c07-912f-9718b6c5c747,2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:19:05.776435+00:00",
+      "pid": 14787,
+      "pgid": 14787,
+      "end": "2026-10-12T21:19:06.777671+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        16.7275390625,
+        13.71875,
+        13.3212890625
+      ],
+      "elapsedSeconds": 1.0011038329976145,
+      "hostLoadEnd": [
+        16.7275390625,
+        13.71875,
+        13.3212890625
+      ]
+    },
+    "focused-corrected": {
+      "label": "focused-corrected",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:14:16.024245+00:00",
+      "pid": 15289,
+      "pgid": 15289,
+      "end": "2026-10-12T21:14:24.334277+00:00",
+      "exit": 0,
+      "elapsedSeconds": 8.309807167010149
+    },
+    "browser-kasane": {
+      "label": "browser-kasane",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs",
+        "--bead",
+        "hv-umm2.224",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "index=4",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:26:18.205256+00:00",
+      "pid": 58284,
+      "pgid": 58284,
+      "end": "2026-10-12T21:27:34.837014+00:00",
+      "exit": 1,
+      "hostLoadStart": [
+        16.6796875,
+        13.16357421875,
+        13.13134765625
+      ],
+      "elapsedSeconds": 76.63058345801255,
+      "hostLoadEnd": [
+        17.2109375,
+        14.728515625,
+        13.76904296875
+      ]
+    },
+    "browser-kasane-corrected": {
+      "label": "browser-kasane-corrected",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs",
+        "--bead",
+        "hv-umm2.224",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "index=4",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:30:07.998263+00:00",
+      "pid": 15468,
+      "pgid": 15468,
+      "end": "2026-10-12T21:31:38.743687+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        11.07958984375,
+        13.75927734375,
+        13.5849609375
+      ],
+      "elapsedSeconds": 90.74405483299051,
+      "hostLoadEnd": [
+        10.37646484375,
+        12.95361328125,
+        13.2958984375
+      ]
+    },
+    "negative-no-expiry": {
+      "label": "negative-no-expiry",
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/codex-01a130c8-avatars224/negative.ts",
+        "no-expiry"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:15:12.399118+00:00",
+      "pid": 26432,
+      "pgid": 26432,
+      "end": "2026-10-12T21:15:13.525043+00:00",
+      "exit": 1,
+      "elapsedSeconds": 1.125787124998169
+    },
+    "negative-repeating": {
+      "label": "negative-repeating",
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/codex-01a130c8-avatars224/negative.ts",
+        "repeating"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:15:05.285032+00:00",
+      "pid": 25934,
+      "pgid": 25934,
+      "end": "2026-10-12T21:15:06.589519+00:00",
+      "exit": 1,
+      "elapsedSeconds": 1.3043650000035996
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.224",
+        "--avatars",
+        "81954ca0-da36-49dd-915c-1ccb1b2d7b05,5e28154d-770a-4b84-8aac-9de44f5d7d02,3c4773e4-f8e1-4686-86cb-b407a42489d4,6029be40-75b9-4c07-912f-9718b6c5c747,2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "--variants",
+        "base",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:20:09.423761+00:00",
+      "pid": 19784,
+      "pgid": 19784,
+      "end": "2026-10-12T21:20:55.654459+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        18.97509765625,
+        14.50244140625,
+        13.6162109375
+      ],
+      "elapsedSeconds": 46.22992412500025,
+      "hostLoadEnd": [
+        20.14501953125,
+        15.66259765625,
+        14.1015625
+      ]
+    },
+    "stage1-probe": {
+      "label": "stage1-probe",
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/codex-01a130c8-avatars224/stage1-probe.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:12:29.153843+00:00",
+      "pid": 64780,
+      "pgid": 64780,
+      "end": "2026-10-12T21:12:31.180334+00:00",
+      "exit": 0,
+      "elapsedSeconds": 2.026364334000391
+    },
+    "helper-setup": {
+      "label": "helper-setup",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:08:08.660745+00:00",
+      "pid": 29491,
+      "pgid": 29491,
+      "end": "2026-10-12T21:08:09.963060+00:00",
+      "exit": 0,
+      "elapsedSeconds": 1.3022130410099635
+    },
+    "browser-korrax": {
+      "label": "browser-korrax",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs",
+        "--bead",
+        "hv-umm2.224",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "index=3",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:24:31.918737+00:00",
+      "pid": 11226,
+      "pgid": 11226,
+      "end": "2026-10-12T21:26:18.170068+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        7.51953125,
+        11.4462890625,
+        12.62890625
+      ],
+      "elapsedSeconds": 106.24969645800593,
+      "hostLoadEnd": [
+        16.6796875,
+        13.16357421875,
+        13.13134765625
+      ]
+    },
+    "browser-kael": {
+      "label": "browser-kael",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs",
+        "--bead",
+        "hv-umm2.224",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "index=0",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:21:15.542585+00:00",
+      "pid": 74365,
+      "pgid": 74365,
+      "end": "2026-10-12T21:22:11.064356+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        16.5087890625,
+        15.130859375,
+        13.947265625
+      ],
+      "elapsedSeconds": 55.520901375013636,
+      "hostLoadEnd": [
+        12.642578125,
+        14.22216796875,
+        13.68408203125
+      ]
+    },
+    "schema": {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+      "start": "2026-10-12T21:37:21.731857+00:00",
+      "pid": 74974,
+      "pgid": 74974,
+      "end": "2026-10-12T21:37:21.859879+00:00",
+      "exit": 0,
+      "hostLoadStart": [
+        18.6416015625,
+        15.2509765625,
+        13.92431640625
+      ],
+      "elapsedSeconds": 0.12787208300142083,
+      "hostLoadEnd": [
+        18.6416015625,
+        15.2509765625,
+        13.92431640625
+      ]
+    }
+  },
+  "verification": {
+    "focused": {
+      "files": 2,
+      "tests": 232,
+      "passed": true
+    },
+    "review": {
+      "files": 225,
+      "tests": 4352,
+      "passed": true,
+      "receipt": "review-corrected"
+    },
+    "knip": {
+      "passed": true
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 142109,
+      "failures": 0,
+      "wallExecutionS": 161.3,
+      "cpuExecutionS": 174.8,
+      "outerS": 162.22266462500556,
+      "targets": [
+        {
+          "kind": "avatar",
+          "uuid": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "included": 120,
+          "exercised": 177
+        },
+        {
+          "kind": "avatar",
+          "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "included": 120,
+          "exercised": 485
+        },
+        {
+          "kind": "avatar",
+          "uuid": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "included": 120,
+          "exercised": 144
+        },
+        {
+          "kind": "avatar",
+          "uuid": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "included": 120,
+          "exercised": 1000
+        },
+        {
+          "kind": "avatar",
+          "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "included": 120,
+          "exercised": 100
+        }
+      ],
+      "timingQualification": "CLI execution and outer lock/startup interval are separate. Exact heavy lock acquisition time and boundary load were not captured; no queue-only or performance claim is made. Every heavy command used lockf; no full review was required for this leaf composition."
+    },
+    "preflight": {
+      "baseBothSidesPass": 10,
+      "exercised": false,
+      "qualification": "Initial first Day only, distinct from live ability exercise."
+    },
+    "sweep": {
+      "passes": 10,
+      "failures": 0,
+      "invocation": "sweep-Pnw4Mh",
+      "serverPid": 19823,
+      "slot": 1,
+      "port": 5274,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1668,
+        "scenario": 43696.73324899999,
+        "cleanup": 600.9275839999973,
+        "execution": 46039.282209000005,
+        "total": 46045.282209000005
+      }
+    },
+    "supplementalSeatObservation": {
+      "scope": "Supplemental observation of first ten weighted-300 seeds through the public fuzzer and replay log; counts are evidence, never a default-policy gate.",
+      "games": 10,
+      "results": {
+        "81954ca0-da36-49dd-915c-1ccb1b2d7b05": {
+          "player": {
+            "included": 2,
+            "exercised": 2
+          },
+          "enemy": {
+            "included": 2,
+            "exercised": 1
+          }
+        },
+        "5e28154d-770a-4b84-8aac-9de44f5d7d02": {
+          "player": {
+            "included": 2,
+            "exercised": 7
+          },
+          "enemy": {
+            "included": 2,
+            "exercised": 8
+          }
+        },
+        "3c4773e4-f8e1-4686-86cb-b407a42489d4": {
+          "player": {
+            "included": 2,
+            "exercised": 2
+          },
+          "enemy": {
+            "included": 2,
+            "exercised": 3
+          }
+        },
+        "6029be40-75b9-4c07-912f-9718b6c5c747": {
+          "player": {
+            "included": 2,
+            "exercised": 15
+          },
+          "enemy": {
+            "included": 2,
+            "exercised": 18
+          }
+        },
+        "2b7e921d-0cd7-4c20-a415-9e7eede7b477": {
+          "player": {
+            "included": 2,
+            "exercised": 1
+          },
+          "enemy": {
+            "included": 2,
+            "exercised": 0
+          }
+        }
+      }
+    },
+    "schema": {
+      "exit": 0,
+      "elapsedS": 0.12787208300142083
+    }
+  },
+  "failuresRetained": [
+    {
+      "receipt": "focused",
+      "exit": 1,
+      "cause": "Own Korrax triggered import was authored from builders instead of triggers. Corrected before successful focused verification."
+    },
+    {
+      "receipt": "review",
+      "exit": 1,
+      "cause": "Own scenario had an unnecessary non-null assertion on copies[0]. Removed; corrected review passed. Initial related tests already passed."
+    },
+    {
+      "receipt": "browser-kasane",
+      "invocation": "run-rBTKbW",
+      "exit": 1,
+      "cause": "Scratch observer finished the first hand play after 19 ms, then an immediate edge-scanned tap failed to commit the second physical card. Actual first i51 event/copy was present; no i52 action, no pending/stack/inFlight and empty Caps. No production defect was established.",
+      "repair": "Scratch workflow waits for interactive physical ID, records hand geometry, hovers an exposed exact-ID point, re-reads geometry, uses qa.click with fresh hit verification and waits six settled reads. Corrected desktop/mobile run-oihiJd passed. No repository source edit."
+    }
+  ],
+  "negativeEvidence": {
+    "receipts": [
+      "negative-repeating",
+      "negative-no-expiry"
+    ],
+    "qualification": "Intentional exit 1 scratch public-engine synthetic mutations. Both seats fail next-only expectation with two copies instead of one, and no-expiry expectation with one copy instead of zero. These are behavioral witnesses, separate from the four tracked real-content scenarios; no production module was mutated."
+  },
+  "failureReloadPartialStaleConcurrent": {
+    "midStepFailure": "Actual illegal-answer refusal on a Kael discard prompt for both controllers preserves the uncommitted payment. Insufficient energy omits activation and rejects application without energy or exhaust payment. No new exception or recovery mechanism is introduced.",
+    "reload": "Both-controller scratch structured-clone reload preserves the suspended discard prompt. Twenty native selected/opposite presentation cases preserve exact committed state and UUID through reload; Kasane additionally preserves its armed delayed effect. Constructor history is absent from the new probe cache after reload.",
+    "partialApplication": "Kael payment remains absent while its prompt is pending, and cancellation preserves the entire side state on both controllers. Costs and activation commit through the existing atomic fold. No external partial-write protocol is added.",
+    "invalidStaleInput": "An invalid deck-card answer returns illegalAnswer; cancellation and reopening mint a different prompt ID; an old answer returns stalePrompt. Both controllers observed.",
+    "concurrentActors": "Duplicate answer after commit returns noPendingPrompt. Independent controller fixtures exercise the same APIs; no shared mutable concurrency protocol is added. These semantic witnesses do not assert a policy choice or timing threshold."
+  },
+  "nativeQA": {
+    "runs": [
+      {
+        "invocation": "run-FOEqI0",
+        "rawReport": "avatar-live.result.json",
+        "ok": true,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 9658,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1655,
+          "scenario": 54160,
+          "total": 55881
+        },
+        "error": null,
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-FOEqI0/avatar-live-desktop.jsonl",
+            "gameId": "ms79i5",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-FOEqI0/avatar-live-mobile.jsonl",
+            "gameId": "3haaum",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          }
+        ],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 28375
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 25785
+          }
+        ]
+      },
+      {
+        "invocation": "run-Z9FWfM",
+        "rawReport": "avatar-live.result.json",
+        "ok": true,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 6935,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2584,
+          "scenario": 49721,
+          "total": 52376
+        },
+        "error": null,
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-Z9FWfM/avatar-live-desktop.jsonl",
+            "gameId": "ndwnow",
+            "selectedBy": "url",
+            "rows": 54,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-Z9FWfM/avatar-live-mobile.jsonl",
+            "gameId": "sovm9o",
+            "selectedBy": "url",
+            "rows": 54,
+            "reason": null
+          }
+        ],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 26060
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 23659
+          }
+        ]
+      },
+      {
+        "invocation": "run-oihiJd",
+        "rawReport": "avatar-live.result.json",
+        "ok": true,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 18670,
+        "wallMs": {
+          "browserLeaseWait": 7709,
+          "serve": 1663,
+          "scenario": 80589,
+          "total": 90013
+        },
+        "error": null,
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-oihiJd/avatar-live-desktop.jsonl",
+            "gameId": "mxrwpj",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-oihiJd/avatar-live-mobile.jsonl",
+            "gameId": "te3zpt",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          }
+        ],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 39504
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 41083
+          }
+        ]
+      },
+      {
+        "invocation": "run-rBTKbW",
+        "rawReport": "avatar-live.result.json",
+        "ok": false,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 58793,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1992,
+          "scenario": 73694,
+          "total": 75772
+        },
+        "error": "desktop#0: Error: qa.battle normal hand play: stalled: no progress for 45000 ms; last action none; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":10,\"events\":13}}; history near:day\n    at fail (evalmachine.<anonymous>:1346:7)\n    at Object.playUntil (evalmachine.<anonymous>:1373:54)\n    at async playCard (evalmachine.<anonymous>:1680:5)\n    at async avatarLive (evalmachine.<anonymous>:1771:34)\n    at async evalmachine.<anonymous>:1800:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-rBTKbW/avatar-live-desktop.jsonl",
+            "gameId": "85mzpm",
+            "selectedBy": "url",
+            "rows": 44,
+            "reason": null
+          }
+        ],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 73692
+          }
+        ]
+      },
+      {
+        "invocation": "run-yIs6UO",
+        "rawReport": "avatar-live.result.json",
+        "ok": true,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 11257,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1676,
+          "scenario": 102893,
+          "total": 104637
+        },
+        "error": null,
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-yIs6UO/avatar-live-desktop.jsonl",
+            "gameId": "a6b93n",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-yIs6UO/avatar-live-mobile.jsonl",
+            "gameId": "kac8sm",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          }
+        ],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 41886
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 61005
+          }
+        ]
+      },
+      {
+        "invocation": "run-zaIps1",
+        "rawReport": "avatar-live.result.json",
+        "ok": true,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 74414,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1366,
+          "scenario": 53374,
+          "total": 54808
+        },
+        "error": null,
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-zaIps1/avatar-live-desktop.jsonl",
+            "gameId": "r3xupk",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/invocations/run-zaIps1/avatar-live-mobile.jsonl",
+            "gameId": "qqnfy8",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          }
+        ],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 28082
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 25292
+          }
+        ]
+      }
+    ],
+    "observations": [
+      {
+        "invocation": "run-FOEqI0",
+        "viewport": "desktop",
+        "uuid": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+        "side": "player",
+        "initAvatar": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i14"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "198f88eacfaeed40a57065b76e5ff4feb0bdd6346579fa3a18cb2d6e5dd8132b"
+        },
+        "loaded": {
+          "gameId": "ysr5wn",
+          "card": "",
+          "avatar": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:23:39.913Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 9,
+        "energyAfterWholeWorkflow": 7,
+        "target": "i14",
+        "cancelled": null,
+        "played": [],
+        "liveEventKinds": [
+          "abilityActivated",
+          "abilityResolved",
+          "avatarExhaustionChanged",
+          "cardPlayed",
+          "energyChanged",
+          "exhaustionChanged",
+          "materialized",
+          "promptAutoAnswered",
+          "resolved"
+        ],
+        "executionLogCount": 1,
+        "executionLogGameIds": [
+          "ysr5wn"
+        ]
+      },
+      {
+        "invocation": "run-FOEqI0",
+        "viewport": "desktop",
+        "uuid": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i14"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "2d5f345140cb761285f9500a7f2d02aa44aaa963b8f29d4818f3473bdfef6b31"
+        },
+        "loaded": {
+          "gameId": "ms79i5",
+          "card": "",
+          "avatar": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:23:48.173Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-FOEqI0",
+        "viewport": "mobile",
+        "uuid": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+        "side": "player",
+        "initAvatar": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 606.109375,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i14"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "198f88eacfaeed40a57065b76e5ff4feb0bdd6346579fa3a18cb2d6e5dd8132b"
+        },
+        "loaded": {
+          "gameId": "7ho7v5",
+          "card": "",
+          "avatar": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:24:07.360Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 9,
+        "energyAfterWholeWorkflow": 7,
+        "target": "i14",
+        "cancelled": null,
+        "played": [],
+        "liveEventKinds": [
+          "abilityActivated",
+          "abilityResolved",
+          "avatarExhaustionChanged",
+          "cardPlayed",
+          "energyChanged",
+          "exhaustionChanged",
+          "materialized",
+          "promptAutoAnswered",
+          "resolved"
+        ],
+        "executionLogCount": 1,
+        "executionLogGameIds": [
+          "7ho7v5"
+        ]
+      },
+      {
+        "invocation": "run-FOEqI0",
+        "viewport": "mobile",
+        "uuid": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 104.578125,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i14"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "2d5f345140cb761285f9500a7f2d02aa44aaa963b8f29d4818f3473bdfef6b31"
+        },
+        "loaded": {
+          "gameId": "3haaum",
+          "card": "",
+          "avatar": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:24:13.858Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-Z9FWfM",
+        "viewport": "desktop",
+        "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "side": "player",
+        "initAvatar": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i8"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "d7485a49446f7d53364215299805bbb6a1677bf0df99f2fc8113bd35a510e121"
+        },
+        "loaded": {
+          "gameId": "g3cpqj",
+          "card": "",
+          "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:22:47.746Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 10,
+        "energyAfterWholeWorkflow": 6,
+        "target": null,
+        "cancelled": null,
+        "played": [],
+        "liveEventKinds": [
+          "abilityActivated",
+          "abilityResolved",
+          "avatarExhaustionChanged",
+          "blockersDesignated",
+          "cardCreated",
+          "challengersDesignated",
+          "energyChanged",
+          "materialized",
+          "phaseChanged"
+        ],
+        "executionLogCount": 1,
+        "executionLogGameIds": [
+          "g3cpqj"
+        ]
+      },
+      {
+        "invocation": "run-Z9FWfM",
+        "viewport": "desktop",
+        "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": true
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i18"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "2484f33fde3854d346c81bc4f03226ea09b4558952e8594cf20e8f34016659e8"
+        },
+        "loaded": {
+          "gameId": "ndwnow",
+          "card": "",
+          "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:22:53.510Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-Z9FWfM",
+        "viewport": "mobile",
+        "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "side": "player",
+        "initAvatar": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 606.109375,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i8"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "d7485a49446f7d53364215299805bbb6a1677bf0df99f2fc8113bd35a510e121"
+        },
+        "loaded": {
+          "gameId": "997t46",
+          "card": "",
+          "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:23:12.896Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 10,
+        "energyAfterWholeWorkflow": 6,
+        "target": null,
+        "cancelled": null,
+        "played": [],
+        "liveEventKinds": [
+          "abilityActivated",
+          "abilityResolved",
+          "avatarExhaustionChanged",
+          "blockersDesignated",
+          "cardCreated",
+          "challengersDesignated",
+          "energyChanged",
+          "materialized",
+          "phaseChanged"
+        ],
+        "executionLogCount": 1,
+        "executionLogGameIds": [
+          "997t46"
+        ]
+      },
+      {
+        "invocation": "run-Z9FWfM",
+        "viewport": "mobile",
+        "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "exhausted": true
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 104.578125,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i18"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "2484f33fde3854d346c81bc4f03226ea09b4558952e8594cf20e8f34016659e8"
+        },
+        "loaded": {
+          "gameId": "sovm9o",
+          "card": "",
+          "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:23:19.160Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-oihiJd",
+        "viewport": "desktop",
+        "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "side": "player",
+        "initAvatar": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i1"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "742ce707c6b8b9545f63d92536d04e70c3b51731922c32f7685d2bfb6ac843e2"
+        },
+        "loaded": {
+          "gameId": "8mcdg5",
+          "card": "",
+          "avatar": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:30:20.550Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 10,
+        "energyAfterWholeWorkflow": 2,
+        "target": null,
+        "cancelled": null,
+        "played": [
+          "i51",
+          "i52"
+        ],
+        "liveEventKinds": [
+          "cardCopied",
+          "cardCreated",
+          "cardDrawn",
+          "cardPlayed",
+          "ceasedToExist",
+          "effectEnded",
+          "energyChanged",
+          "enteredVoid",
+          "resolved",
+          "triggerQueued",
+          "triggerResolved"
+        ],
+        "executionLogCount": 3,
+        "executionLogGameIds": [
+          "8mcdg5"
+        ]
+      },
+      {
+        "invocation": "run-oihiJd",
+        "viewport": "desktop",
+        "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i6"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "4b345074ec22ae2a999f2eccab2d027755a467a06bf9e94d16b5c75990310d0b"
+        },
+        "loaded": {
+          "gameId": "mxrwpj",
+          "card": "",
+          "avatar": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:30:37.447Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-oihiJd",
+        "viewport": "mobile",
+        "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "side": "player",
+        "initAvatar": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 606.109375,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i1"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "742ce707c6b8b9545f63d92536d04e70c3b51731922c32f7685d2bfb6ac843e2"
+        },
+        "loaded": {
+          "gameId": "zfycaa",
+          "card": "",
+          "avatar": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:30:59.754Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 10,
+        "energyAfterWholeWorkflow": 2,
+        "target": null,
+        "cancelled": null,
+        "played": [
+          "i51",
+          "i52"
+        ],
+        "liveEventKinds": [
+          "cardCopied",
+          "cardCreated",
+          "cardDrawn",
+          "cardPlayed",
+          "ceasedToExist",
+          "effectEnded",
+          "energyChanged",
+          "enteredVoid",
+          "resolved",
+          "triggerQueued",
+          "triggerResolved"
+        ],
+        "executionLogCount": 3,
+        "executionLogGameIds": [
+          "zfycaa"
+        ]
+      },
+      {
+        "invocation": "run-oihiJd",
+        "viewport": "mobile",
+        "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 104.578125,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i6"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "4b345074ec22ae2a999f2eccab2d027755a467a06bf9e94d16b5c75990310d0b"
+        },
+        "loaded": {
+          "gameId": "te3zpt",
+          "card": "",
+          "avatar": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:31:19.876Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-yIs6UO",
+        "viewport": "desktop",
+        "uuid": "6029be40-75b9-4c07-912f-9718b6c5c747",
+        "side": "player",
+        "initAvatar": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i14"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "09d5c01007028df6e5d491a725741d425eaa099761c5f6a727dac161b1d26792"
+        },
+        "loaded": {
+          "gameId": "rvpm7d",
+          "card": "",
+          "avatar": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:24:36.482Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 9,
+        "energyAfterWholeWorkflow": 10,
+        "target": "i14",
+        "cancelled": null,
+        "played": [],
+        "liveEventKinds": [
+          "blockersDesignated",
+          "cardDrawn",
+          "cardPlayed",
+          "challengersDesignated",
+          "energyChanged",
+          "materialized",
+          "phaseChanged",
+          "promptAutoAnswered",
+          "resolved",
+          "sparkGained",
+          "triggerQueued",
+          "triggerResolved",
+          "turnStarted"
+        ],
+        "executionLogCount": 2,
+        "executionLogGameIds": [
+          "rvpm7d"
+        ]
+      },
+      {
+        "invocation": "run-yIs6UO",
+        "viewport": "desktop",
+        "uuid": "6029be40-75b9-4c07-912f-9718b6c5c747",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i19"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "dc34601d4d88d82541a53ee21d21c42fac93746bc222ba2726875d23448da74b"
+        },
+        "loaded": {
+          "gameId": "a6b93n",
+          "card": "",
+          "avatar": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:24:58.244Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-yIs6UO",
+        "viewport": "mobile",
+        "uuid": "6029be40-75b9-4c07-912f-9718b6c5c747",
+        "side": "player",
+        "initAvatar": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 606.109375,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i14"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "09d5c01007028df6e5d491a725741d425eaa099761c5f6a727dac161b1d26792"
+        },
+        "loaded": {
+          "gameId": "a7m2ne",
+          "card": "",
+          "avatar": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:25:17.530Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 9,
+        "energyAfterWholeWorkflow": 10,
+        "target": "i14",
+        "cancelled": null,
+        "played": [],
+        "liveEventKinds": [
+          "blockersDesignated",
+          "cardDrawn",
+          "cardPlayed",
+          "challengersDesignated",
+          "energyChanged",
+          "materialized",
+          "phaseChanged",
+          "promptAutoAnswered",
+          "resolved",
+          "sparkGained",
+          "triggerQueued",
+          "triggerResolved",
+          "turnStarted"
+        ],
+        "executionLogCount": 2,
+        "executionLogGameIds": [
+          "a7m2ne"
+        ]
+      },
+      {
+        "invocation": "run-yIs6UO",
+        "viewport": "mobile",
+        "uuid": "6029be40-75b9-4c07-912f-9718b6c5c747",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 104.578125,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i19"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "dc34601d4d88d82541a53ee21d21c42fac93746bc222ba2726875d23448da74b"
+        },
+        "loaded": {
+          "gameId": "kac8sm",
+          "card": "",
+          "avatar": "6029be40-75b9-4c07-912f-9718b6c5c747",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:25:38.006Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-zaIps1",
+        "viewport": "desktop",
+        "uuid": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+        "side": "player",
+        "initAvatar": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i6"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "5d4ae80441ad1197ccb4a3e87799de6473664610150b4f6f09bf6a66eb1bdc4c"
+        },
+        "loaded": {
+          "gameId": "i9x39p",
+          "card": "",
+          "avatar": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:21:19.663Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 10,
+        "energyAfterWholeWorkflow": 8,
+        "target": null,
+        "cancelled": {
+          "pendingId": "4:4:0",
+          "preservesCostsAndHand": true
+        },
+        "played": [],
+        "liveEventKinds": [
+          "abilityActivated",
+          "abilityResolved",
+          "avatarExhaustionChanged",
+          "cardCreated",
+          "discarded",
+          "energyChanged",
+          "enteredVoid",
+          "materialized"
+        ],
+        "executionLogCount": 1,
+        "executionLogGameIds": [
+          "i9x39p"
+        ]
+      },
+      {
+        "invocation": "run-zaIps1",
+        "viewport": "desktop",
+        "uuid": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i23"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "3f97a09a9845aebcf4c70b8453e50e455cb7a0d177c3619bf945ce534f7da7ad"
+        },
+        "loaded": {
+          "gameId": "r3xupk",
+          "card": "",
+          "avatar": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:21:27.894Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      },
+      {
+        "invocation": "run-zaIps1",
+        "viewport": "mobile",
+        "uuid": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+        "side": "player",
+        "initAvatar": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [
+          {
+            "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "disabled": "true"
+          }
+        ],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 606.109375,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i6"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          },
+          "batchSHA256": "5d4ae80441ad1197ccb4a3e87799de6473664610150b4f6f09bf6a66eb1bdc4c"
+        },
+        "loaded": {
+          "gameId": "s6gq6a",
+          "card": "",
+          "avatar": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:21:46.866Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "energyBeforeAbility": 10,
+        "energyAfterWholeWorkflow": 8,
+        "target": null,
+        "cancelled": {
+          "pendingId": "4:4:0",
+          "preservesCostsAndHand": true
+        },
+        "played": [],
+        "liveEventKinds": [
+          "abilityActivated",
+          "abilityResolved",
+          "avatarExhaustionChanged",
+          "cardCreated",
+          "discarded",
+          "energyChanged",
+          "enteredVoid",
+          "materialized"
+        ],
+        "executionLogCount": 1,
+        "executionLogGameIds": [
+          "s6gq6a"
+        ]
+      },
+      {
+        "invocation": "run-zaIps1",
+        "viewport": "mobile",
+        "uuid": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+        "side": "enemy",
+        "initAvatar": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "currentAvatarAtObservation": {
+          "id": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "exhausted": false
+        },
+        "oppositeAvatar": null,
+        "oppositeProfiles": [],
+        "oppositeActivatable": false,
+        "geometry": {
+          "x": 173,
+          "y": 104.578125,
+          "width": 44,
+          "height": 44
+        },
+        "hit": true,
+        "constructor": {
+          "loadSeq": 1,
+          "count": 18,
+          "indices": [
+            0,
+            17
+          ],
+          "first": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i23"
+          },
+          "final": {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          },
+          "batchSHA256": "3f97a09a9845aebcf4c70b8453e50e455cb7a0d177c3619bf945ce534f7da7ad"
+        },
+        "loaded": {
+          "gameId": "qqnfy8",
+          "card": "",
+          "avatar": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "avatar",
+          "cardStatus": "authored",
+          "cardType": "Avatar",
+          "timestamp": "2026-10-12T21:21:54.044Z",
+          "event": "debug_card_lab_loaded",
+          "seq": 21
+        },
+        "reload": {
+          "preserved": true,
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "historicalConstructorAbsent": true
+        },
+        "qualification": "Initialization/presentation only; any enemy actions are policy-selected. Seat-symmetric ability semantics are proved by deterministic engine contracts and scenarios."
+      }
+    ],
+    "livePlayerWorkflowCases": 10,
+    "enemyPresentationCases": 10,
+    "constructorQualification": "The actual final-init LOAD_STATE batch has seq 1 and event indices 0–17 in each original scene. Live player activations/triggers have separate intent provenance. Reload does not synthesize constructor observations. All raw event batches and action/log details remain in invocation reports.",
+    "energyQualification": "energyAfterWholeWorkflow includes ordinary plays/refreshes: Kaleth first pays 1 to play its target; Kasane also pays two 2-energy Contemplations; Korrax crosses Ending and refreshes. The Avatar-specific payment was asserted immediately at resolution.",
+    "providerObservations": [
+      {
+        "at": "2026-10-12T21:24:59.843816+00:00",
+        "owner": {
+          "token": "809085c1-6513-479b-af2b-0b5dd3e017fc",
+          "pid": 11226,
+          "bead": "hv-umm2.224",
+          "label": "avatar-live",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T21:24:33.769Z",
+          "providerState": "active",
+          "mcpSessionId": "2fdb9ae4-0b76-4de9-88fb-1f3c90b9bcee",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "server": {
+          "token": "5d942a05-66ed-44cb-ae3e-f9ea342e90b4",
+          "runner": {
+            "pid": 11226,
+            "group": 11226,
+            "started": "Mon Oct 12 14:24:31 2026",
+            "state": "Ss",
+            "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs --bead hv-umm2.224 --viewports desktop,mobile --arg index=3 --timeout 240"
+          },
+          "server": {
+            "pid": 11257,
+            "group": 11257,
+            "started": "Mon Oct 12 14:24:32 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 5d942a05-66ed-44cb-ae3e-f9ea342e90b4 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+          "port": 5274
+        }
+      },
+      {
+        "at": "2026-10-12T21:27:12.026939+00:00",
+        "owner": {
+          "token": "dc210d95-5edc-42d9-8150-662477f4cd95",
+          "pid": 58284,
+          "bead": "hv-umm2.224",
+          "label": "avatar-live",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T21:26:20.454Z",
+          "providerState": "active",
+          "mcpSessionId": "dac8175e-afa4-4a7e-97bc-a19dc37dc72d",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "server": {
+          "token": "53e6d8da-423e-42a2-a42b-e38b3b0fd188",
+          "runner": {
+            "pid": 58284,
+            "group": 58284,
+            "started": "Mon Oct 12 14:26:18 2026",
+            "state": "Ss",
+            "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs --bead hv-umm2.224 --viewports desktop,mobile --arg index=4 --timeout 240"
+          },
+          "server": {
+            "pid": 58793,
+            "group": 58793,
+            "started": "Mon Oct 12 14:26:18 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 53e6d8da-423e-42a2-a42b-e38b3b0fd188 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+          "port": 5274
+        }
+      },
+      {
+        "at": "2026-10-12T21:31:18.157154+00:00",
+        "owner": {
+          "token": "8bae35c2-b0bc-46d8-bc21-4c0b8e3bb271",
+          "pid": 15468,
+          "bead": "hv-umm2.224",
+          "label": "avatar-live",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+          "slot": 0,
+          "port": 5174,
+          "startedAt": "2026-10-12T21:30:17.583Z",
+          "providerState": "active",
+          "mcpSessionId": "bfd82517-ce24-439d-b674-ef01634731a0",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "server": {
+          "token": "c5812808-f1b1-4bad-b699-2fd807de0223",
+          "runner": {
+            "pid": 15468,
+            "group": 15468,
+            "started": "Mon Oct 12 14:30:07 2026",
+            "state": "Ss",
+            "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.224/avatar-live.mjs --bead hv-umm2.224 --viewports desktop,mobile --arg index=4 --timeout 240"
+          },
+          "server": {
+            "pid": 18670,
+            "group": 18670,
+            "started": "Mon Oct 12 14:30:15 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json c5812808-f1b1-4bad-b699-2fd807de0223 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-synergies224-sol",
+          "port": 5174
+        }
+      }
+    ],
+    "providerQualification": "Observed MCP session identities are retained for Korrax and both Kasane attempts. Earlier runner invocations/server groups/ports and successful teardown reports are retained; their removed owner records were not sampled for MCP session IDs. Provider records are live-time snapshots; the resourceSettlement field describes the terminal cleanup."
+  },
+  "D21": {
+    "sample": [
+      {
+        "uuid": "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+        "sha256FirstByte": 193,
+        "sampled": false
+      },
+      {
+        "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "sha256FirstByte": 154,
+        "sampled": false
+      },
+      {
+        "uuid": "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+        "sha256FirstByte": 155,
+        "sampled": false
+      },
+      {
+        "uuid": "6029be40-75b9-4c07-912f-9718b6c5c747",
+        "sha256FirstByte": 120,
+        "sampled": false
+      },
+      {
+        "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "sha256FirstByte": 223,
+        "sampled": false
+      }
+    ],
+    "newPromptStatusVisualForms": 0,
+    "judgedQuota": 0,
+    "judgedVerdicts": 0,
+    "qualification": "All forms are existing engine/presentation forms. Supplemental live workflows and representative capture inspection are distinct from D21 sampling."
+  },
+  "screens": {
+    "representative": [
+      {
+        "filename": "avatar-discard-cancel-desktop.png",
+        "invocation": "run-zaIps1",
+        "dimensions": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "filename": "avatar-copy-armed-desktop.png",
+        "invocation": "run-oihiJd",
+        "dimensions": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "filename": "avatar-copy-armed-mobile.png",
+        "invocation": "run-oihiJd",
+        "dimensions": [
+          780,
+          1688
+        ]
+      }
+    ],
+    "originalDimensionsVerified": true,
+    "viewed": true,
+    "observation": "Discard selection, Cancel, Avatar energy, waiting-copy and exhausted badges are visible; both final Kasane viewports are readable. Hand cards meet the viewport bottom crop in the existing battle layout. Captures remain ignored primary-checkout artifacts."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "rulesBasis": "Current rules cover Avatar exhaust, Fast Night/Dusk timing, ordered atomic costs, controller targets, permanent spark, D15 copies and Ending duration. No genuine ambiguity or missing primitive was found.",
+  "reviewRequirement": "Composition bead has no core-review label or new engine/prompt form. Parent audited exact source scope and verification; independent review is not required by Phase 5 for this leaf composition. No Claude or Sol CLI review was dispatched.",
+  "resourceSettlement": {
+    "recordedProcessesStopped": true,
+    "ownBrowserOwnerRecordsAbsent": true,
+    "allNativeRunsReportedOwnedServerCleanupAndFreePort": true,
+    "scope": "Only own recorded PIDs/groups/owner records; shared service and peers untouched."
+  },
+  "hostLoadSamples": {
+    "browser-edran": {
+      "start": [
+        9.15576171875,
+        13.22705078125,
+        13.34130859375
+      ],
+      "end": [
+        7.88720703125,
+        12.333984375,
+        13.0078125
+      ]
+    },
+    "knip": {
+      "start": [
+        8.3447265625,
+        11.9287109375,
+        12.71337890625
+      ],
+      "end": [
+        8.23681640625,
+        11.8466796875,
+        12.6796875
+      ]
+    },
+    "browser-kaleth": {
+      "start": [
+        7.88720703125,
+        12.333984375,
+        13.0078125
+      ],
+      "end": [
+        7.51953125,
+        11.4462890625,
+        12.62890625
+      ]
+    },
+    "review": {
+      "start": [
+        10.9326171875,
+        12.92236328125,
+        13.087890625
+      ],
+      "end": [
+        11.28515625,
+        12.85791015625,
+        13.0625
+      ]
+    },
+    "side-witness": {
+      "start": [
+        8.5576171875,
+        12.1162109375,
+        12.96923828125
+      ],
+      "end": [
+        8.53857421875,
+        11.99658203125,
+        12.91650390625
+      ]
+    },
+    "mechanics": {
+      "start": [
+        12.5166015625,
+        13.16455078125,
+        13.17236328125
+      ],
+      "end": [
+        12.5166015625,
+        13.16455078125,
+        13.17236328125
+      ]
+    },
+    "review-corrected": {
+      "start": [
+        9.5966796875,
+        12.40673828125,
+        12.8974609375
+      ],
+      "end": [
+        11.80712890625,
+        12.35107421875,
+        12.83349609375
+      ]
+    },
+    "preflight": {
+      "start": [
+        16.7275390625,
+        13.71875,
+        13.3212890625
+      ],
+      "end": [
+        16.7275390625,
+        13.71875,
+        13.3212890625
+      ]
+    },
+    "browser-kasane": {
+      "start": [
+        16.6796875,
+        13.16357421875,
+        13.13134765625
+      ],
+      "end": [
+        17.2109375,
+        14.728515625,
+        13.76904296875
+      ]
+    },
+    "browser-kasane-corrected": {
+      "start": [
+        11.07958984375,
+        13.75927734375,
+        13.5849609375
+      ],
+      "end": [
+        10.37646484375,
+        12.95361328125,
+        13.2958984375
+      ]
+    },
+    "sweep": {
+      "start": [
+        18.97509765625,
+        14.50244140625,
+        13.6162109375
+      ],
+      "end": [
+        20.14501953125,
+        15.66259765625,
+        14.1015625
+      ]
+    },
+    "browser-korrax": {
+      "start": [
+        7.51953125,
+        11.4462890625,
+        12.62890625
+      ],
+      "end": [
+        16.6796875,
+        13.16357421875,
+        13.13134765625
+      ]
+    },
+    "browser-kael": {
+      "start": [
+        16.5087890625,
+        15.130859375,
+        13.947265625
+      ],
+      "end": [
+        12.642578125,
+        14.22216796875,
+        13.68408203125
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful corrected review process start, actual os.getloadavg 1-minute value."
+      },
+      "testDelta": {
+        "files": "Test entrypoints: +0; one automatically discovered plain scenario module added.",
+        "lines": "Plain scenario test code: +90.",
+        "jsdomFiles": 0
+      }
+    }
+  },
+  "limitations": [
+    "Weighted-300 CLI target counts aggregate controllers; first-ten-seed supplemental observation has Kasane enemy exercise 0. Actual deterministic real-content Kasane scenarios exercise both controllers; no unrecorded per-seat weighted-300 counts are claimed.",
+    "Sweep and preflight prove initialization, not every ability activation; separate native player workflows and deterministic both-seat contracts prove execution.",
+    "Exact lock acquisition and heavy boundary load were not captured. Outer/CLI timings remain qualified."
+  ],
+  "nothingUndoneWithinHelperScope": true
+}

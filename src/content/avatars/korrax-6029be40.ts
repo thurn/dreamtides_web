@@ -1,3 +1,6 @@
+import { characterYouControl, target } from "../../engine/dsl/builders";
+import { onNight, triggered } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -57,5 +60,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [triggered(onNight(), gainSpark(target(characterYouControl()), 1))],
+  verifiedText: "l5s76290mk",
 });

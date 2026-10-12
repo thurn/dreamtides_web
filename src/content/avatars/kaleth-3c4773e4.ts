@@ -1,3 +1,5 @@
+import { activated, characterYouControl, energy, exhaustSelf, target } from "../../engine/dsl/builders";
+import { awaken } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -57,5 +59,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf()], awaken(target(characterYouControl())))],
+  verifiedText: "8iycs5x5fm",
 });

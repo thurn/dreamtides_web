@@ -1,3 +1,7 @@
+import { activated, energy, exhaustSelf } from "../../engine/dsl/builders";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import outsider from "../figments/outsider-bf9ccca0";
 import { avatar } from "../define";
 
 export default avatar({
@@ -39,5 +43,6 @@ export default avatar({
     "4f29a241-9265-4669-a189-5a2a91923e12",
     "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
   ],
-  pending: true,
+  abilities: () => [activated([energy(4), exhaustSelf()], materializeFigments(parseFigmentId(outsider.id), 1, { spark: 1 }), { speed: "fast" })],
+  verifiedText: "zxjyqwbasb",
 });

@@ -1,3 +1,7 @@
+import { activated, discardCost, energy, exhaustSelf } from "../../engine/dsl/builders";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import survivor from "../figments/survivor-5256888f";
 import { avatar } from "../define";
 
 export default avatar({
@@ -42,5 +46,6 @@ export default avatar({
     "831bc7cf-e8c9-4943-8156-91b7397ef849",
     "3e802ecd-a83b-491b-9528-a4672d0e986f",
   ],
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf(), discardCost()], materializeFigments(parseFigmentId(survivor.id), 1, { spark: 1 }))],
+  verifiedText: "29w3qi8lkbq",
 });
