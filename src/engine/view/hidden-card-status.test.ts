@@ -266,6 +266,32 @@ it("samples serialized observed printing and variant data independently of objec
     .some((problem) => problem.includes("floating effect e2"))).toBe(true);
 });
 
+it("rewrites a visible card's observed record exactly when its serialized observation changes", () => {
+  const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", enemy: { back: [veiled.id] } });
+  const target = ids.enemy.back[0]!;
+  const record = () => state.rememberedCards!.player.find((entry) => entry.instance === target)!;
+  const live = () => JSON.stringify({ printing: state.instances[target].printing, variant: state.instances[target].variant, status: state.instances[target].status });
+  const remembered = () => JSON.stringify({ printing: record().printing, variant: record().variant, status: record().status });
+  rememberKnownCards(state);
+  const first = record();
+  expect(remembered()).toBe(live());
+  // A key JSON omits is the same observation.
+  state.instances[target].status = { ...state.instances[target].status, gainedAbilities: undefined };
+  rememberKnownCards(state);
+  expect(record()).toBe(first);
+  // The same values in another key order are a different serialized observation.
+  state.instances[target].status = Object.fromEntries(Object.entries(state.instances[target].status).reverse()) as typeof first.status;
+  rememberKnownCards(state);
+  expect(record()).not.toBe(first);
+  expect(remembered()).toBe(live());
+  const reordered = record();
+  state.instances[target].status.gainedSpark += 3;
+  rememberKnownCards(state);
+  expect(record()).not.toBe(reordered);
+  expect(record().status.gainedSpark).toBe(state.instances[target].status.gainedSpark);
+  expect(remembered()).toBe(live());
+});
+
 it("a remembered source does not authorize a newly private fixed effect on an independently observed target", () => {
   const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", enemy: { back: [veiled.id, SYNTHETIC.vanilla1.id] } });
   const [target, source] = ids.enemy.back as InstanceId[];

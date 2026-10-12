@@ -1,0 +1,11 @@
+{
+  "bead": "hv-umm2.526",
+  "phase": 5,
+  "implementMin": 55,
+  "localValidationS": { "profile": 40, "focused": 6, "review": 41, "knip": 3, "reviewFull": 72, "perfAbFuzz": 180, "perfAbFuzz7": 300, "perfAbFuzz200": 600, "fuzz": 90 },
+  "hostLoad": 11.9,
+  "testDelta": { "files": 0, "lines": 26, "jsdomFiles": 0 },
+  "friction": [
+    { "tag": "host-load-noise", "minutes": 15, "note": "load swung 5 to 21 between interleaved rounds; a 3-round 200-game perf:ab with B at load 12.5 against A at 5.2 showed -2.8% CPU while standalone 200-game runs showed -15 to -19%, so a further 7-round 50-game run was needed to settle the per-step change (-12.0% CPU at load 11.9 / 13.4)" }
+  ]
+}

@@ -35,7 +35,7 @@
 import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { SIDES } from "../state/ids";
 import { copyJson } from "../state/clone";
-import type { BattleState, CardInstance, FixedCardChange, FloatingEffect, RememberedEffect } from "../state/types";
+import type { BattleState, CardInstance, FixedCardChange, FloatingEffect, Printing, RememberedCard, RememberedEffect } from "../state/types";
 
 /**
  * Refresh only records the viewer can identify now. First-observation order is
@@ -44,29 +44,139 @@ import type { BattleState, CardInstance, FixedCardChange, FloatingEffect, Rememb
  */
 export function rememberKnownCards(state: BattleState): void {
   const records = state.rememberedCards ??= { player: [], enemy: [] };
+  // Each card's fixed permanent effects, in floating order, from one pass over the floating effects.
+  const fixed = new Map<InstanceId, RememberedEffect[]>();
+  for (const effect of state.floating) {
+    if (!isFixedEffect(effect) || effect.change.instance === null) continue;
+    const list = fixed.get(effect.change.instance);
+    if (list === undefined) fixed.set(effect.change.instance, [effect]);
+    else list.push(effect);
+  }
+  const instances = Object.values(state.instances);
   for (const viewer of SIDES) {
     if (records[viewer].some((record) => state.instances[record.instance] === undefined)) {
       records[viewer] = records[viewer].filter((record) => state.instances[record.instance] !== undefined);
     }
     const positions = new Map(records[viewer].map((record, index) => [record.instance, index]));
-    for (const instance of Object.values(state.instances)) {
+    for (const instance of instances) {
       if (!knows(state, instance, viewer)) continue;
       const index = positions.get(instance.id);
       const previous = index === undefined ? undefined : records[viewer][index];
-      const effects = state.floating.flatMap((effect) => {
-        if (!isFixedEffect(effect) || effect.change.instance !== instance.id) return [];
+      const effects = fixed.get(instance.id)?.flatMap((effect) => {
         if (seesSource(state, effect.source, viewer)) return [effect];
         // Source departure cannot erase a fixed change already observed.
         return previous?.effects.filter((known) => known.id === effect.id) ?? [];
-      });
-      const record = { instance: instance.id, owner: instance.owner, printing: instance.printing,
-        variant: instance.variant, status: instance.status, effects };
-      if (JSON.stringify(previous) === JSON.stringify(record)) continue;
-      const snapshot = copyJson(record);
+      }) ?? NO_EFFECTS;
+      if (previous !== undefined && sameObservation(previous, instance, effects)) continue;
+      const snapshot = copyJson(observation(instance, effects));
       if (index === undefined) records[viewer].push(snapshot);
       else records[viewer][index] = snapshot;
     }
   }
+}
+
+const NO_EFFECTS: readonly RememberedEffect[] = [];
+
+/** What a viewer that identifies `instance` observes of it, with the fixed effects it has seen on it. */
+function observation(instance: CardInstance, effects: readonly RememberedEffect[]): RememberedCard {
+  return { instance: instance.id, owner: instance.owner, printing: instance.printing,
+    variant: instance.variant, status: instance.status, effects };
+}
+
+/** A remembered record's fields, in the order `observation` writes them. */
+const RECORD_FIELDS = ["instance", "owner", "printing", "variant", "status", "effects"] as const;
+/** Each printing kind's fields, in the order the engine writes them. */
+const PRINTING_FIELDS: Readonly<Record<Printing["kind"], readonly string[]>> = {
+  card: ["kind", "cardId"],
+  figment: ["kind", "figment", "spark"],
+  figmentCopy: ["kind", "cardId", "spark"],
+};
+/** A plain variant's one field. */
+const VARIANT_FIELDS = ["amplified"] as const;
+/** A card status's fields, in the order battle creation and cloning write them. */
+const STATUS_FIELDS = ["exhausted", "gainedSpark", "counters", "created", "reclaimed", "playedViaReclaim", "offering", "ephemeral", "x"] as const;
+const GAINED_STATUS_FIELDS = [...STATUS_FIELDS, "gainedAbilities"] as const;
+
+/**
+ * Whether `previous` serializes to the same JSON text as `observation(instance,
+ * effects)` (`sameJson`), without building that observation or listing the
+ * keys of objects that have their usual fields in their usual order.
+ */
+function sameObservation(previous: RememberedCard, instance: CardInstance, effects: readonly RememberedEffect[]): boolean {
+  if (!inOrder(previous, RECORD_FIELDS)) return sameJson(previous, observation(instance, effects));
+  return previous.instance === instance.id && previous.owner === instance.owner &&
+    sameFields(previous.printing, instance.printing, PRINTING_FIELDS[previous.printing.kind] ?? []) &&
+    sameFields(previous.variant, instance.variant, VARIANT_FIELDS) &&
+    sameFields(previous.status, instance.status, "gainedAbilities" in previous.status ? GAINED_STATUS_FIELDS : STATUS_FIELDS) &&
+    sameJson(previous.effects, effects);
+}
+
+/** `sameJson(left, right)`, comparing field by field when both have exactly `fields` in order. */
+function sameFields(left: object, right: object, fields: readonly string[]): boolean {
+  if (!inOrder(left, fields) || !inOrder(right, fields)) return sameJson(left, right);
+  for (const field of fields) {
+    if (!sameJson((left as Record<string, unknown>)[field], (right as Record<string, unknown>)[field])) return false;
+  }
+  return true;
+}
+
+/** Whether `value`'s enumerable keys are exactly `fields`, in order. */
+function inOrder(value: object, fields: readonly string[]): boolean {
+  let index = 0;
+  for (const key in value) {
+    if (key !== fields[index]) return false;
+    index++;
+  }
+  return index === fields.length;
+}
+
+/**
+ * Whether `left` and `right` serialize to the same JSON text, key order
+ * included, without building either text: `JSON.stringify(left) ===
+ * JSON.stringify(right)` for the plain data a battle state holds.
+ */
+function sameJson(left: unknown, right: unknown): boolean {
+  const a = jsonValue(left);
+  const b = jsonValue(right);
+  if (a === b) return true;
+  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
+  if (Array.isArray(a) || Array.isArray(b)) {
+    if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+    for (let index = 0; index < a.length; index++) {
+      if (!sameJson(jsonValue(a[index]) ?? null, jsonValue(b[index]) ?? null)) return false;
+    }
+    return true;
+  }
+  const aFields = Object.keys(a);
+  const bFields = Object.keys(b);
+  // Usually both have the same keys in the same order; only then may the omitted keys be skipped unfiltered.
+  if (sameFieldOrder(aFields, bFields)) return sameEntries(a, b, aFields);
+  const written = writtenFields(a, aFields);
+  return sameFieldOrder(written, writtenFields(b, bFields)) && sameEntries(a, b, written);
+}
+
+function sameFieldOrder(a: readonly string[], b: readonly string[]): boolean {
+  if (a.length !== b.length) return false;
+  for (let index = 0; index < a.length; index++) if (a[index] !== b[index]) return false;
+  return true;
+}
+
+function sameEntries(a: object, b: object, fields: readonly string[]): boolean {
+  for (const key of fields) {
+    if (!sameJson((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key])) return false;
+  }
+  return true;
+}
+
+/** A value as JSON writes it: a non-finite number as `null`, and `undefined` for what it omits. */
+function jsonValue(value: unknown): unknown {
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  return typeof value === "function" || typeof value === "symbol" ? undefined : value;
+}
+
+/** The keys JSON writes for an object, in order, from all of its own `fields`. */
+function writtenFields(value: object, fields: readonly string[]): string[] {
+  return fields.filter((key) => jsonValue((value as Record<string, unknown>)[key]) !== undefined);
 }
 
 /**
