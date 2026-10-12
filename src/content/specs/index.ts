@@ -19,5 +19,6 @@ import primWhenErodeTrigger from "./prim-when-erode-trigger.scenarios";
 import primWhenPlayFromVoidTrigger from "./prim-when-play-from-void-trigger.scenarios";
 import primWhenPutIntoVoidTrigger from "./prim-when-put-into-void-trigger.scenarios";
 import primWhenReclaimTrigger from "./prim-when-reclaim-trigger.scenarios";
+import primWhenReturnTrigger from "./prim-when-return-trigger.scenarios";
 
-export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, cards09, cards18, cards23, primChooseSubtype, primCreateCard, primDrawMatching, primLosePoints, primPlayFromZone, primReturnFromVoid, primSelectorChallenger, primWhenErodeTrigger, primWhenPlayFromVoidTrigger, primWhenPutIntoVoidTrigger, primWhenReclaimTrigger];
+export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, cards09, cards18, cards23, primChooseSubtype, primCreateCard, primDrawMatching, primLosePoints, primPlayFromZone, primReturnFromVoid, primSelectorChallenger, primWhenErodeTrigger, primWhenPlayFromVoidTrigger, primWhenPutIntoVoidTrigger, primWhenReclaimTrigger, primWhenReturnTrigger];

@@ -1215,7 +1215,7 @@ const FLOATING_CHANGE_VALIDATORS: {
     isCardFilter(value.filter) &&
     isFiniteNumber(value.amount) &&
     isBoolean(value.next),
-  cardCost: (value) => isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase") && isIndex(value.amount),
+  cardCost: (value) => isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase" || value.mode === "reduce") && isIndex(value.amount),
   trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once) && optional(arrayOf(isInstanceId))(value.captured),
   disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),

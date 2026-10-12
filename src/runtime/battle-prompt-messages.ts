@@ -569,7 +569,7 @@ export type EngineStatusCopy =
       readonly next: boolean;
       readonly expiry: Expiry;
     }
-  /** One card's own cost: set to `amount` energy, or `amount` energy more. */
+  /** One card's own cost: set to `amount` energy, `amount` energy more, or `amount` energy less. */
   | { readonly kind: "cardCost"; readonly mode: CardCostMode; readonly amount: number; readonly expiry: Expiry }
   /** A waiting delayed (`once`) or repeating floating triggered ability, and the moment it fires when it can be named. */
   | {
@@ -618,6 +618,13 @@ function momentPhrase(moment: TriggerMoment, once: boolean, human: Side): string
   }
 }
 
+/** One card's own cost change, by its mode. */
+const CARD_COST_PHRASES: { readonly [M in CardCostMode]: (amount: number) => string } = {
+  set: (amount) => `Costs ${String(amount)} energy`,
+  increase: (amount) => `Costs ${String(amount)} energy more`,
+  reduce: (amount) => `Costs ${String(amount)} energy less`,
+};
+
 /** The accessible name of a status indicator: the status and its duration, from `human`'s side. */
 export function engineStatusLabel(status: EngineStatusCopy, human: Side): string {
   switch (status.kind) {
@@ -662,7 +669,7 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
       return `${subject} ${change}${expiryPhrase(status.expiry, human)}`;
     }
     case "cardCost":
-      return `${status.mode === "set" ? `Costs ${String(status.amount)} energy` : `Costs ${String(status.amount)} energy more`}${expiryPhrase(status.expiry, human)}`;
+      return `${CARD_COST_PHRASES[status.mode](status.amount)}${expiryPhrase(status.expiry, human)}`;
     case "delayedTrigger":
       return `${status.sourceName == null ? "" : `${status.sourceName}: `}${
         status.moment == null

@@ -10,8 +10,8 @@
  *   granted Reclaim and Offering select their own base in its place.
  * - X (0 by Offering) and additional mandatory, optional and alternative
  *   energy add to the selected base.
- * - Every own-card increase and every increase and reduction naming the
- *   playing player then applies, increases before reductions, and the total
+ * - Every own-card increase and reduction, and every increase and reduction
+ *   naming the playing player, then applies, increases before reductions, and the total
  *   floors at 0● once. A change naming the other player does not apply.
  * - A "next card" change naming the player is used up by the play.
  * - A ⍟ cost is never changed.
@@ -91,6 +91,14 @@ const MODES: { readonly [M in Mode]: readonly [ModeCase, ...ModeCase[]] } = {
     { name: "own +2", steps: [step("cardCost.increase", 2)] },
     { name: "opponent's +2", steps: [step("cardCost.increase", 2, "opponent")] },
     { name: "+2 then set 0", steps: [step("cardCost.increase", 2, "opponent"), step("cardCost.set", 0)] },
+  ],
+  "cardCost.reduce": [
+    { name: "own -2", steps: [step("cardCost.reduce", 2)] },
+    { name: "opponent's -2", steps: [step("cardCost.reduce", 2, "opponent")] },
+    { name: "-2 and -1 stack", steps: [step("cardCost.reduce", 2), step("cardCost.reduce", 1, "opponent")] },
+    { name: "-9 to the floor", steps: [step("cardCost.reduce", 9)] },
+    { name: "-2 then set 4, own +1 and +1", steps: [step("cardCost.reduce", 2), step("cardCost.set", 4), step("cardCost.increase", 1), step("cost.increase", 1)] },
+    { name: "-2 with -1 naming the opponent", steps: [step("cardCost.reduce", 2, "opponent"), step("cost.reduction", 1, "opponent")] },
   ],
   "cost.increase": [
     { name: "own +1", steps: [step("cost.increase", 1)] },
@@ -220,6 +228,7 @@ class RowAnswers implements AnswerSource {
   }
 }
 
+const CARD_COST_MODES: { readonly [M in CardCostMode as `cardCost.${M}`]: M } = { "cardCost.set": "set", "cardCost.increase": "increase", "cardCost.reduce": "reduce" };
 const NEXT_MODES: readonly Mode[] = ["cost.nextIncrease", "cost.nextReduction"];
 const INCREASES: readonly Mode[] = ["cost.increase", "cost.nextIncrease"];
 
@@ -243,7 +252,7 @@ function arranged(route: RouteVariant, extra: Extra, steps: readonly Step[], ava
     ...steps.map((s) => ({
       by: s.by ?? s.who,
       change: s.mode.startsWith("cardCost.")
-        ? ({ kind: "cardCost", instance: id, mode: s.mode === "cardCost.set" ? "set" : "increase", amount: s.amount } as const)
+        ? ({ kind: "cardCost", instance: id, mode: CARD_COST_MODES[s.mode as `cardCost.${CardCostMode}`], amount: s.amount } as const)
         : ({ kind: "cost", player: side(s.who), filter: {}, amount: INCREASES.includes(s.mode) ? s.amount : -s.amount, next: NEXT_MODES.includes(s.mode) } as const),
     })),
   ];
@@ -260,9 +269,9 @@ function ruledEnergy(steps: readonly Step[], route: RouteVariant, added: number,
   const sets = steps.filter((s) => s.mode === "cardCost.set");
   const normal = sets.length > 0 ? sets[sets.length - 1].amount : PRINTED;
   const base = route.replacement ?? normal;
-  const applies = (s: Step) => s.mode === "cardCost.increase" || s.who === "self";
+  const applies = (s: Step) => s.mode === "cardCost.increase" || s.mode === "cardCost.reduce" || s.who === "self";
   const increases = steps.filter((s) => applies(s) && (s.mode === "cardCost.increase" || INCREASES.includes(s.mode))).reduce((sum, s) => sum + s.amount, 0);
-  const reductions = steps.filter((s) => applies(s) && (s.mode === "cost.reduction" || s.mode === "cost.nextReduction")).reduce((sum, s) => sum + s.amount, 0);
+  const reductions = steps.filter((s) => applies(s) && (s.mode === "cardCost.reduce" || s.mode === "cost.reduction" || s.mode === "cost.nextReduction")).reduce((sum, s) => sum + s.amount, 0);
   return Math.max(0, base + (route.x ? x : 0) + added + increases - reductions);
 }
 
@@ -381,6 +390,8 @@ describe("cost composition anchors from the rulings", () => {
       ruling: "RD-hv-umm2.422-1: the same changes pay 9● by Reclaim 5●",
       route: route("reclaim", 1), extra: "none", steps: FULL_STACK.steps, energy: 9,
     },
+    { ruling: "RD-hv-umm2.102-2: an own -2● reduces printed Reclaim 5● to 3●", route: route("reclaim", 1), extra: "none", steps: [step("cardCost.reduce", 2)], energy: 3 },
+    { ruling: "RD-hv-umm2.102-2: own -2● after a 1● tax on a 3● hand play pays 2●", route: route("hand"), extra: "none", steps: [step("cardCost.reduce", 2), step("cost.increase", 1)], energy: 2 },
   ];
   it.each(anchors)("$ruling", ({ route: anchor, extra, steps, energy }) => {
     expect(ruledEnergy(steps, anchor, EXTRAS[extra].paid, 0)).toBe(energy);

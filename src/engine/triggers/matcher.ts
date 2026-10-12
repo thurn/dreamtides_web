@@ -16,7 +16,9 @@
  * the card on the stack, where "When you reclaim this character" sees it
  * (RD-hv-umm2.91-1), and "When you play a card from your void" abilities a
  * `cardPlayed` whose card left its owner's void for the stack, by Reclaim or a
- * play permission (RD-hv-umm2.93-1).
+ * play permission (RD-hv-umm2.93-1), and "When you return a character to
+ * hand" abilities a `leftPlay` for a hand, as the character last was in play
+ * (RD-hv-umm2.102-1).
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
@@ -60,6 +62,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   reclaim: ["cardPlayed"],
   abandon: ["abandoned"],
   leavesPlay: ["leftPlay"],
+  returnToHand: ["leftPlay"],
   dissolve: ["dissolved"],
   gainsSpark: ["sparkGained"],
   scores: ["laneResolved"],
@@ -314,6 +317,14 @@ function matchKind(
         : null;
     case "leavesPlay":
       return event.kind === "leftPlay" && subjectMatches(state, catalog, trigger.subject, event.instance, listener)
+        ? { subject: event.instance }
+        : null;
+    case "returnToHand":
+      // A return announces its character while it is still in play, so the ability sees it as it last was there (RD-hv-umm2.102-1).
+      return event.kind === "leftPlay" &&
+        event.to === "hand" &&
+        (trigger.toYourHand !== true || state.instances[event.instance]?.owner === you) &&
+        matchesCharacter(state, catalog, trigger.subject, event.instance, you, listener.source)
         ? { subject: event.instance }
         : null;
     case "gainsSpark":

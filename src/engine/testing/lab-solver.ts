@@ -315,6 +315,7 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * cards in the counted zone as an upper ✦ or cost bound by a zone count
  * needs (`countNeeds`): matching void cards, or cards in a hand beside the
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
+ * and its targets among `side`'s own characters a matching character of `side`'s,
  * and a choice from the opponent's hand gets a matching card in that hand
  * (`opponentHandChoices`); a card discovered by its filter alone gets a
  * matching card in `side`'s deck beside its 8 (`discoveries`); a character abandoned as the effect resolves gets
@@ -355,6 +356,11 @@ export function labBoard(
   const abilities = definition.abilities(variant);
   const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
   for (const spec of materialized.flatMap(everyTarget)) {
+    // A ▸Materialized character target of your own gets a character of yours ahead of the card, so the card is not its only choice.
+    if (spec.kind === "target" && spec.selector.controller === "you") {
+      for (let index = 0; index < (spec.count ?? 1); index++) back[side].push(characterFor(engine, spec.selector, pool, xRange));
+      continue;
+    }
     if (spec.kind !== "inZone") continue;
     const voidSide = spec.player === "you" ? side : opponent(side);
     for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, spec.filter, pool));

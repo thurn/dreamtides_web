@@ -162,6 +162,20 @@ export function whenDissolved(
   return { on: "dissolve", subject, ...(options.figment === undefined ? {} : { figment: options.figment }) };
 }
 
+/**
+ * "When you return a character you control to hand" (`subject`, by default
+ * a character you control, the ability's own included), or with
+ * `toYourHand` "When you return another character to your hand": each
+ * matching character that leaves play for a hand, seen as it was just before
+ * it left. "It" names the returned card.
+ */
+export function whenReturn(
+  subject: CharacterSelector = { controller: "you" },
+  options: { readonly toYourHand?: boolean } = {},
+): Trigger {
+  return { on: "returnToHand", subject, ...(options.toYourHand === true ? { toYourHand: true } : {}) };
+}
+
 export function whenLeavesPlay(subject: TriggerSubject = "self"): Trigger {
   return { on: "leavesPlay", subject };
 }

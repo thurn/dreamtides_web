@@ -46,7 +46,8 @@ export function costModifier(
       // Changes come in layer order, so the latest set applies.
       if (change.mode === "set") {
         if (options.applyOwnSet !== false) set = change.amount;
-      } else increase += change.amount;
+      } else if (change.mode === "reduce") reduction += change.amount;
+      else increase += change.amount;
       continue;
     }
     if (change.kind !== "cost" || change.player !== player || !matchesFilter(played, change.filter)) continue;

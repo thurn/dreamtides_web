@@ -19,6 +19,7 @@ import {
   banishPrimitive,
   banishCardsPrimitive,
   banishUntilPrimitive,
+  changeCardCostPrimitive,
   chooseOnePrimitive,
   choosePlayerPrimitive,
   chooseSubtypePrimitive,
@@ -107,6 +108,9 @@ const DEFINITIONS = {
   },
   get banishUntil() {
     return banishUntilPrimitive;
+  },
+  get changeCardCost() {
+    return changeCardCostPrimitive;
   },
   get chooseOne() {
     return chooseOnePrimitive;

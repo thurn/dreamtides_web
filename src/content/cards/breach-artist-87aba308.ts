@@ -1,3 +1,5 @@
+import { triggered, triggeringCard, whenReturn } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 491,
   art: { x: 0.126, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [p.phasing(), triggered(whenReturn(), p.changeCardCost(triggeringCard(), { reduce: 2 }))],
+  verifiedText: "25j3trp3zw8",
 });

@@ -1,3 +1,6 @@
+import { characterYouControl, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered, triggeringCard, whenReturn } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 445,
   art: { x: -0.285, y: 0.608, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onMaterialized(), p.returnToHand(target(characterYouControl()))),
+    triggered(whenReturn(characterYouControl({ another: true }), { toYourHand: true }), p.changeCardCost(triggeringCard(), { reduce: 1 })),
+  ],
+  verifiedText: "1smg5nr2zhj",
 });

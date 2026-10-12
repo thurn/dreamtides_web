@@ -800,7 +800,10 @@ costs 2● more" or "Draw a ≤2● cost card. It costs 0●," change that card'
 energy cost whoever plays it. "It" is the card that instruction put into a
 hand; when the instruction put no card there, because it had no target, the
 deck was empty or held no match, or a created card ceased to exist instead,
-nothing changes. "It costs N●" sets the card's normal ● base in place of its
+nothing changes. "Reduce its cost by N●" makes the card a triggered ability
+names cost N● less, whoever plays it, as in "When you return a character you
+control to hand, reduce its cost by 2●": "its" is that card wherever it is as
+the ability resolves, since a card keeps its identity across zones. "It costs N●" sets the card's normal ● base in place of its
 copiable ● cost. Hand plays, play permissions and plain Reclaim use that base;
 explicit printed or granted Reclaim and Offering replace it with their own
 route costs. X and additional mandatory, optional or alternative-choice costs
@@ -809,7 +812,9 @@ is distinct from choosing a full replacement play route. The route chosen for
 the play determines both affordability and payment. If several changes set the
 same card's normal base, the latest applies. Then every increase applies, then every
 reduction, as for any cost change: a normal play of a card set to 0● costs 1●
-while "Characters cost 1● more" applies to it. Like any effect, the change lasts until its
+while "Characters cost 1● more" applies to it. A card's own reductions add up,
+and like its own increases they apply by every route of play, so a card with
+"Reclaim 5●" whose cost was reduced by 2● is reclaimed for 3●. Like any effect, the change lasts until its
 duration ends, wherever the card is, and with no stated duration it is
 permanent: a card returned to hand costing 2● more still costs 2● more if it is
 played and later returns to a hand again. The card's cost for conditions is
@@ -1595,6 +1600,24 @@ an earlier ability returned it to play or to your hand, the ability does
 nothing, and with the back rank full the card stays in your void (see
 [Battlefield Capacity](#battlefield-capacity)). "When the opponent plays a
 card from their void" works the same way with the opponent's plays.
+
+**When you return a character to hand:** An ability such as "When you return
+a character you control to hand, reduce its cost by 2●" triggers once for each
+character you control that leaves play for a hand, whatever effect or cost
+moved it, the opponent's included. It sees that character as it was just
+before it left play: who controlled it and its types. "A character you
+control" includes the character with the ability, which sees its own return;
+"another character" does not. "To your hand" adds that the card goes to your
+hand, so a character you control that the opponent owns, which goes to their
+hand, does not trigger it. A character that leaves play for anywhere else does
+not trigger it, nor does a card returned to a hand from a void, nor a
+character a replacement sends elsewhere instead (see [Zone
+Changes](#zone-changes)): a created character that ceases to exist and a
+reclaimed character that is banished are not returned. When several
+characters leave play one after another, as with "Return each character you
+control to hand," the ability sees those that leave while it still works. "It"
+is the returned card, wherever it is as the ability resolves (see [A card's own
+cost](#costs-requirements-and-x)).
 
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it

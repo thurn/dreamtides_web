@@ -1006,9 +1006,11 @@ analog:
    It costs 2● more", "Draw a ≤2● cost card. It costs 0●"), names one card
    and applies whoever plays it: the latest `"set"` replaces the card's
    copiable cost, joined to the increases or reductions as the difference,
-   and each `"increase"` adds to them (RD-hv-umm2.101-1). `modifyCardCost`
+   each `"increase"` adds to the increases, and each `"reduce"` to the
+   reductions (RD-hv-umm2.101-1, RD-hv-umm2.102-2). `modifyCardCost`
    runs its nested instruction and changes the cards it put into a hand
-   (RD-hv-umm2.101-2). The view and the `effectStarted` event hide the
+   (RD-hv-umm2.101-2); `changeCardCost` ("reduce its cost by 2●") changes
+   the card a trigger names, wherever it is. The view and the `effectStarted` event hide the
    change, like any floating change naming a card, from a side that cannot
    identify that card, such as the opponent of a side that drew it.
    Play permissions (`playFrom`, `continuous/permissions.ts`) share the
@@ -1459,7 +1461,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenPlayFromVoid(player, filter)` (a play from the void by Reclaim or a permission, by the stack item's `playedFromVoid` record), `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenErode(player, filter)`, `whenErodeSelf()` (works from the void), `whenReclaim(player, filter)`, `whenReclaimSelf()` (works from the stack), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenPlayFromVoid(player, filter)` (a play from the void by Reclaim or a permission, by the stack item's `playedFromVoid` record), `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenErode(player, filter)`, `whenErodeSelf()` (works from the void), `whenReclaim(player, filter)`, `whenReclaimSelf()` (works from the stack), `whenAbandon`, `whenLeavesPlay`, `whenReturn(selector, { toYourHand? })` (a `leftPlay` for a hand, as the character last was in play), `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
 
 Discover accepts an exact copiable-cost value expression or a strict lower
 bound (`costGreaterThan`) alongside its card filter, or a free

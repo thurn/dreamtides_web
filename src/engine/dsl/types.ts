@@ -536,6 +536,17 @@ export type Trigger =
   | { readonly on: "abandon"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "leavesPlay"; readonly subject: TriggerSubject }
   /**
+   * "When you return a character you control to hand": each character
+   * matching `subject`, as it was just before it left play, that leaves play
+   * for a hand, by any effect or cost, matched as it leaves (rules § Ability
+   * Types → When you return a character to hand; RD-hv-umm2.102-1). A
+   * character a replacement sends elsewhere instead, banished as reclaimed or
+   * ceasing to exist as a created card, is not returned. With `toYourHand`,
+   * "… to your hand": only a card the ability's controller owns, which goes
+   * to that player's hand.
+   */
+  | { readonly on: "returnToHand"; readonly subject: CharacterSelector; readonly toYourHand?: true }
+  /**
    * "When a … is dissolved": each dissolve, abandons included, of a character
    * matching `subject` as it last was in play, the ability's own card
    * included unless the selector says `another`. `figment` limits it to

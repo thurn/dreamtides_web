@@ -1,8 +1,9 @@
 import { startContinuous } from "../../continuous/resolve";
-import type { Duration } from "../../dsl/types";
+import type { Duration, SubjectSpec } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
 import type { CardCostMode } from "../../state/types";
 import type { StepContext } from "../../steps/types";
+import { resolveCards } from "../interpreter";
 import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 
 /**
@@ -11,7 +12,8 @@ import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
  * Costs, Requirements, and X → Cost changes): `effect` resolves first, and
  * each card it put into a hand gets a floating layer-6 `cardCost` change,
  * announced by `effectStarted`. `"set"` gives the card `amount`● in place of
- * its ● cost; `"increase"` makes it cost `amount`● more. When the effect put
+ * its ● cost; `"increase"` makes it cost `amount`● more, `"reduce"`
+ * `amount`● less. When the effect put
  * no card into a hand (no target, an empty deck, no match, a created card
  * that ceased to exist), nothing changes (RD-hv-umm2.101-2). `duration`
  * `null` takes the enclosing `forDuration`'s, else the change is permanent
@@ -50,18 +52,66 @@ function movedIntoHand(ctx: StepContext, effect: EffectNode, env: EffectEnv): In
     .map((instance) => instance.id);
 }
 
+/** A card cost change as printed: "It costs N●", "It costs N● more", or "reduce its cost by N●". */
+type CardCostChange = { readonly set: number } | { readonly increase: number } | { readonly reduce: number };
+
+function costChange(cost: CardCostChange): [CardCostMode, number] {
+  const [mode, amount]: [CardCostMode, number] = "set" in cost ? ["set", cost.set] : "increase" in cost ? ["increase", cost.increase] : ["reduce", cost.reduce];
+  if (!Number.isInteger(amount) || amount < 0) throw new Error("a card cost change takes a non-negative whole energy amount");
+  return [mode, amount];
+}
+
 /**
- * "<effect>. It costs N●" (`{ set: N }`) or "It costs N● more" (`{
- * increase: N }`), for `duration` (or the enclosing `forDuration`'s, else
- * permanently). `effect` moves the card into a hand: a return to hand or a
- * draw.
+ * "<effect>. It costs N●" (`{ set: N }`), "It costs N● more" (`{ increase:
+ * N }`) or "… costs N● less" (`{ reduce: N }`), for `duration` (or the
+ * enclosing `forDuration`'s, else permanently). `effect` moves the card into
+ * a hand: a return to hand or a draw.
  */
 export function modifyCardCost(
   effect: EffectNode,
-  cost: { readonly set: number } | { readonly increase: number },
+  cost: CardCostChange,
   options: { readonly duration?: Duration } = {},
 ): ModifyCardCostNode {
-  const [mode, amount]: [CardCostMode, number] = "set" in cost ? ["set", cost.set] : ["increase", cost.increase];
-  if (!Number.isInteger(amount) || amount < 0) throw new Error("modifyCardCost takes a non-negative whole energy amount");
+  const [mode, amount] = costChange(cost);
   return { op: "modifyCardCost", effect, mode, amount, duration: options.duration ?? null };
+}
+
+/**
+ * "Reduce its cost by N●" (rules § Costs, Requirements, and X → A card's own
+ * cost; RD-hv-umm2.102-2): a floating layer-6 `cardCost` change, announced
+ * by `effectStarted`, on the card the triggering event concerns, wherever it
+ * is as the ability resolves, since a card keeps its identity across zones.
+ * With no such card, nothing changes. `duration` `null` takes the enclosing
+ * `forDuration`'s, else the change is permanent and travels with the card.
+ */
+export interface ChangeCardCostNode {
+  readonly op: "changeCardCost";
+  readonly card: SubjectSpec;
+  readonly mode: CardCostMode;
+  readonly amount: number;
+  readonly duration: Duration | null;
+}
+
+export const changeCardCostPrimitive = definePrimitive<ChangeCardCostNode>({
+  op: "changeCardCost",
+  resolve(ctx, node, env) {
+    const ids = resolveCards(ctx, node.card, env);
+    startContinuous(
+      ctx,
+      env,
+      node.duration,
+      ids,
+      ids.map((instance) => ({ kind: "cardCost", instance, mode: node.mode, amount: node.amount })),
+    );
+  },
+});
+
+/** "Reduce its cost by N●" (`{ reduce: N }`), or "it costs N●" or "N● more", of `card`. */
+export function changeCardCost(
+  card: SubjectSpec,
+  cost: CardCostChange,
+  options: { readonly duration?: Duration } = {},
+): ChangeCardCostNode {
+  const [mode, amount] = costChange(cost);
+  return { op: "changeCardCost", card, mode, amount, duration: options.duration ?? null };
 }
