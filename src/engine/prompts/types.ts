@@ -79,6 +79,8 @@ export type PromptRole =
   | "youMay"
   /** Whether the prevented card's controller pays to stop the prevention. */
   | "preventUnlessPays"
+  /** Whether the source controller's opponent pays to suppress its unpaid effect during resolution. */
+  | "opponentUnlessPays"
   /** Whether the prevented card's controller abandons a character to stop the prevention; the character is chosen next, with role `abandon`. */
   | "preventUnlessAbandons";
 

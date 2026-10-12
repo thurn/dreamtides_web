@@ -235,6 +235,7 @@ const ROLE_STRATEGIES = {
   youMay: { cards: "hostile", number: "largest", chain: "loopable" },
   // "Unless" costs: declining lets the opposing prevent take the chooser's card.
   preventUnlessPays: { cards: "hostile", number: "largest", chain: "finite" },
+  opponentUnlessPays: { cards: "hostile", number: "largest", chain: "finite" },
   preventUnlessAbandons: { cards: "hostile", number: "largest", chain: "finite" },
 } as const satisfies Record<
   PromptRole,

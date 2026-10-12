@@ -94,6 +94,8 @@ export const LAB = {
   },
   /** A complete optional resolving energy and discard payment before drawing. */
   resolvingPayment: labEvent(0x43800, 0, p.payTo({ energy: 2, discard: 1 }, p.draw(2))),
+  /** The opposing payer chooses during resolution; an unpaid draw belongs to the source controller. */
+  opponentPayment: labEvent(0xa9d00, 0, p.unlessPays(1, p.draw(1))),
   /** Grant a full extra turn using the ordinary queue. */
   extraTurn: labEvent(0x11200, 0, p.takeExtraTurn()),
   /** An explicit zero-energy Reclaim route with an optional one-energy payment. */
@@ -307,6 +309,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.chooseSubtype.id]: { name: "Lab Calling", text: "Choose a character type. Discover a character of that type and put it on top of your deck." },
   [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
   [LAB.resolvingPayment.id]: { name: "Lab Bargain", text: "You may pay 2● and discard a card. If you do, draw 2 cards." },
+  [LAB.opponentPayment.id]: { name: "Lab Toll", text: "Draw a card unless the opponent pays 1●." },
   [LAB.routeCharacter.id]: { name: "Lab Wayfarer", text: "As an additional cost to play this character, you may pay 1●. Reclaim 0●" },
   [LAB.routeSetter.id]: { name: "Lab Summons", text: "Draw a ≤2● cost character from your deck. It costs 0●." },
   [LAB.routeDiscarder.id]: { name: "Lab Sacrifice", text: "To play this card, discard a character. Gain 1⍟." },
@@ -564,6 +567,12 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     description: "A resolving payment with insufficient energy",
     setup: { active: "player", phase: "day", player: { hand: [LAB.resolvingPayment.id, vanillas[0], vanillas[1]], energy: 1, deck: deck(6) }, enemy: { deck: deck(6) } },
     script: [play("player", (ids) => first(ids.player.hand))],
+  },
+  {
+    name: "opponent-payment", description: "Pay to suppress an opposing resolving effect, or let its controller draw",
+    setup: { active: "enemy", phase: "day", player: { energy: 1, deck: deck(6) }, enemy: { hand: [LAB.opponentPayment.id], deck: deck(6) } },
+    script: [play("enemy", (ids) => first(ids.enemy.hand))],
+    presents: [{ side: "player", answer: () => false }],
   },
   {
     name: "resolving-payment-hand-short",

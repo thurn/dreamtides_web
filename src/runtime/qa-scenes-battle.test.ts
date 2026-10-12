@@ -225,7 +225,7 @@ describe("the battle layer QA scenes", () => {
   const displayLayers = [1, 2, 3, 4, 5, 6, 7];
 
   const battleScenes = QA_SCENES.filter(
-    (scene) => qaSceneLoadsBattle(scene.id) && scene.promptLab === undefined,
+    (scene) => qaSceneLoadsBattle(scene.id) && scene.promptLab === undefined && scene.karevPayment === undefined,
   );
   const labScenes = QA_SCENES.filter((scene) => scene.promptLab !== undefined);
 

@@ -62,7 +62,7 @@ describe("QA scenes", () => {
     );
   });
 
-  for (const scene of QA_SCENES) {
+  for (const scene of QA_SCENES.filter(candidate => candidate.karevPayment === undefined)) {
     it(`${scene.id} loads into a state the fold invariants accept`, () => {
       const content = invariantSceneContent();
       const journey = buildQaScene(scene.id, content, SCENE_OPTIONS);

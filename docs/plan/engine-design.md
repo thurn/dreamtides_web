@@ -1371,6 +1371,18 @@ resolution. Decline runs no child. This bounded form supports one unfiltered
 fixed discard demand, including a resolving source in hand, and retains the
 enclosing ability's source, controller, X and optional-cost bindings.
 
+**Opposing resolving payments** use `p.unlessPays(energy, effect)`, with a
+fixed nonnegative safe integer. The `opponentUnlessPays` pay-or-decline
+prompt belongs to the source controller's opponent and retains the original
+ability's UUID provenance. Acceptance emits an ordinary energy payment for
+that payer and skips the child. Decline, including an automatically forced
+decline when unaffordable, resolves the deferred child through
+`resolveChosenEffect` with the original environment. Child modes and targets
+are prepared only on that branch, preserving inherited choices, X, source,
+trigger subject and optional-cost bindings. The existing step clone, answer
+fingerprint, published-prefix and recovery protocols govern suspension and
+replay; the wrapper adds no saved state or payment receipt.
+
 **Cost choices are play-time prompts** before `commitPoint()`: which
 alternative to pay, whether to pay the optional cost, which cards to discard,
 abandon, reveal, or banish. Payment happens after the commit point, all of it

@@ -868,6 +868,15 @@ the effect resolves, not as the card is played. The player can choose to pay X
 only if they can pay all of it, and Y happens only if X is paid. A player who
 cannot pay X is not offered the choice, and nothing happens.
 
+**Opposing resolving payments:** "Do Y unless the opponent pays N●" asks
+the opponent of the ability's controller as that instruction resolves. They
+may pay the full fixed energy amount to stop Y, or decline. A player who
+cannot pay the whole amount declines automatically. Only that opponent's
+energy pays the amount. If it is unpaid, Y resolves for the original ability's
+controller and source; any modes or targets Y needs are chosen then. Paying
+or declining does not restore a once-per-turn trigger already used by its
+matching event.
+
 For an optional energy payment to return named cards from a void to hand, the
 choice is offered only if at least one of those cards is still in a void as
 that part resolves. If none remains there, including a source that has ceased

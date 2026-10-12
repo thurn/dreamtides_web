@@ -59,6 +59,8 @@ import { parseDeckEntryId } from "../types/identifiers";
 import { parseQaSceneId, type QaSceneId } from "../types/identifiers";
 import type { JourneySeed } from "../types/journey-seed";
 import { DECK_VIEWER_SCENE_ID, POOL_VIEWER_SCENE_ID } from "./runtime-config";
+import { opponent, type Side } from "../engine/state/ids";
+import { SYNTHETIC } from "../engine/testing/synthetic-cards";
 
 export interface QaSceneBuildOptions {
   /** Exact authored encounter source-card UUID for Exploration QA scenes. */
@@ -116,6 +118,8 @@ export interface QaScene {
    * synthetic battle replaces the loaded battle's engine battle.
    */
   promptLab?: PromptLabFixture;
+  /** A declared exact Karev challenge fixture; enemy availability follows the native journey layer. */
+  karevPayment?: { readonly controller: Side; readonly payerEnergy: 0 | 1 };
   /** The card-lab request's URL tokens, resolved against the content when the scene loads. */
   cardLab?: CardLabTokens;
   /**
@@ -713,6 +717,34 @@ function withLabBattle(battle: JourneyBattleFoldState, lab: { init: EngineBattle
   };
   rememberInitialProbeEvents(loaded.init, published);
   return loaded;
+}
+
+/** Exact companion workflow, constructed before play and retaining the native layer's enemy ability boundary. */
+function withKarevPayment(battle: JourneyBattleFoldState, request: NonNullable<QaScene["karevPayment"]>, journeyContent: JourneyContent, engine: Engine): JourneyBattleFoldState {
+  const avatarId = parseAvatarId("9e4862fd-e18c-463e-9d5f-e5d73c29a66f");
+  const avatar = journeyContent.avatars.find(candidate => candidate.id === avatarId);
+  if (avatar === undefined) throw new Error("Karev payment fixture requires its exact Avatar UUID");
+  engine.catalog.avatar(avatarId);
+  const payer = opponent(request.controller);
+  const active = request.controller === "player" || battle.init.opponentAbilityActive;
+  const deck = Array.from({ length: 12 }, () => SYNTHETIC.vanilla5.id);
+  const fixture: PromptLabFixture = {
+    name: `karev-payment-${request.controller}-${request.payerEnergy}-${battle.init.completionLevelAtStart}`,
+    description: "An exact Avatar responds to ordinary positive character challenge scoring",
+    setup: { active: payer, phase: "day", scoreToWin: 100,
+      [payer]: { front: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], energy: request.payerEnergy, deck },
+      [request.controller]: { ...(active ? { avatar: avatarId } : {}), energy: 4, deck } },
+    script: [],
+  };
+  const published: EngineEvent[] = [];
+  const lab = promptLabBattle(engine, fixture, events => published.push(...events));
+  const presented = {
+    ...battle,
+    init: request.controller === "player"
+      ? { ...battle.init, avatarSummary: avatar, opponentAbilityActive: false }
+      : { ...battle.init, avatarSummary: null, enemyDescriptor: { ...battle.init.enemyDescriptor, avatarId: avatar.id, name: avatar.name, subtitle: avatar.title, imageNumber: avatar.imageNumber, abilityText: avatar.renderedText } },
+  };
+  return withLabBattle(presented, lab, published);
 }
 
 /**
@@ -1477,6 +1509,22 @@ export const QA_SCENES: readonly QaScene[] = [
   battleLayerScene(5),
   battleLayerScene(6),
   battleLayerScene(7),
+  {
+    id: parseQaSceneId("karev-payment"), label: "Karev Payment", description: "An active opposing Karev offers its scoring payment",
+    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 1 }, build: battleLayerSceneState(2),
+  },
+  {
+    id: parseQaSceneId("karev-unaffordable"), label: "Karev Unaffordable Payment", description: "An active opposing Karev draws when the scoring player has no energy",
+    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 0 }, build: battleLayerSceneState(2),
+  },
+  {
+    id: parseQaSceneId("karev-controller-player"), label: "Karev Player Ability", description: "The player's Karev responds to the opposing scoring player",
+    loadsBattle: true, karevPayment: { controller: "player", payerEnergy: 1 }, build: battleLayerSceneState(2),
+  },
+  {
+    id: parseQaSceneId("karev-inactive"), label: "Karev Inactive Ability", description: "The native opening layer holds Karev's opposing ability inactive",
+    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 1 }, build: battleLayerSceneState(1),
+  },
   DREAMSCAPE_SCENE,
   DREAMSCAPE_WITH_ESSENCE_SCENE,
   REWARD_SCENE,
@@ -1586,6 +1634,7 @@ export function buildQaSceneBattle(
   takeEngineLogRecords(QA_SCENE_BATTLE_SEQ);
   const scene = findQaScene(id);
   if (battle === null || scene === null) return battle;
+  if (scene.karevPayment !== undefined) return withKarevPayment(battle, scene.karevPayment, journeyContent, provider.engine);
   if (scene.promptLab !== undefined) {
     const published: EngineEvent[] = [];
     const lab = promptLabBattle(provider.engine, scene.promptLab, (events) => published.push(...events));

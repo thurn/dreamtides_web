@@ -1,0 +1,4 @@
+# Pre-existing observations for hv-aq9d
+
+- The inventory predicts `payOrDecline:preventUnlessPays` for Avatar UUID 9e4862fd-e18c-463e-9d5f-e5d73c29a66f and reports no new primitive requirement. The actual existing Prevent form requires a chosen stack card, while this clause has an arbitrary unpaid draw. The source-authoritative implementation uses the generic opposing resolving-payment role. Inventory generation remains outside this bead's scope; the parent retained the capability audit and the original five-Avatar bead.
+- The first focused check's isolated asset preparation reported missing image paths in its disposable local-assets snapshot. It restored local asset materializations after the check. These warnings are retained in the validation stderr; image files are outside the committed artifact.

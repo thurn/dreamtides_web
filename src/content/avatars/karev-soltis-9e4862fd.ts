@@ -1,4 +1,6 @@
 import { avatar } from "../define";
+import { triggered, whenOpponentScores } from "../../engine/dsl/triggers";
+import { draw, unlessPays } from "../../engine/effects/primitives";
 
 export default avatar({
   name: "Karev Soltis",
@@ -58,5 +60,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [triggered(whenOpponentScores(), unlessPays(1, draw(1)), { oncePerTurn: true })],
+  verifiedText: "1bw0uwl4acx",
 });

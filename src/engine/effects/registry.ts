@@ -70,6 +70,7 @@ import {
   movePrimitive,
   optionalPrimitive,
   payToPrimitive,
+  unlessPaysPrimitive,
   phasePrimitive,
   playFromZonePrimitive,
   playImmediatelyPrimitive,
@@ -267,6 +268,9 @@ const DEFINITIONS = {
   },
   get payTo() {
     return payToPrimitive;
+  },
+  get unlessPays() {
+    return unlessPaysPrimitive;
   },
   get optional() {
     return optionalPrimitive;

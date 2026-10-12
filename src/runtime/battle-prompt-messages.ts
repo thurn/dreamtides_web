@@ -139,6 +139,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Do you want to do this?";
       case "preventUnlessPays":
         return "Pay to save your card?";
+      case "opponentUnlessPays":
+        return "Pay to stop this effect?";
       case "preventUnlessAbandons":
         return "Abandon to save your card?";
     }
@@ -439,6 +441,7 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
     case "youMay":
     case "optionalPayment":
     case "preventUnlessPays":
+    case "opponentUnlessPays":
     case "preventUnlessAbandons":
       return "answer you could give";
   }
