@@ -1,13 +1,18 @@
 // What the battle screen model shows the human: hidden cards only as
 // positions, status badges on the cards the viewer sees, and the result.
 import { describe, expect, it, vi } from "vitest";
-import { type InstanceId } from "../../engine";
+import { createEngine, type InstanceId } from "../../engine";
 import { DSL } from "../../engine/testing/dsl-cards";
-import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
 import { ZONE } from "../../engine/testing/zone-cards";
 import { act, engine as reclaimEngine, fromVoid, KEEP, placed, playOn, reclaim } from "../../engine/effects/primitives/contracts/reclaim-not-banished-support";
 import { parseBattleCardId } from "../../types/identifiers";
 import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
+import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "../../engine/testing/chosen-hand-banish-cards";
+import { boardState } from "../../engine/testing/board";
+import { SIDES } from "../../engine/state/ids";
+import type { EngineCardDefinition } from "../../engine/catalog";
+import { banish, moveToHand } from "../../engine/rules/zones";
 import {
   enginePrintedKeywords,
   engineStatuses,
@@ -15,6 +20,44 @@ import {
 import { board, cards, deck, engine, screenOf } from "./engine-battle-view-model.fixtures";
 
 describe("buildEngineBattleScreenModel", () => {
+  it("maps a public hand-return duration to its physical card and owner's status, with a log entry", () => {
+    const local = createEngine(testCatalog(CHOSEN_HAND_BANISH_CARDS));
+    const { state, ids } = boardState(local.catalog, { active: "player", phase: "day",
+      player: { hand: [HAND_BANISH.freeCard.id] }, enemy: { hand: [SYNTHETIC.event0.id, SYNTHETIC.event0.id] } });
+    const result = local.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, { answer: () => [ids.enemy.hand[1]] });
+    for (const viewer of SIDES) {
+      const statuses = engineStatuses(local.view(result.state, viewer), viewer, enginePrintedKeywords(local.catalog));
+      expect(statuses.cards.get(ids.enemy.hand[1])?.map((badge) => badge.kind)).toEqual(["returns"]);
+      expect(statuses.cards.has(ids.enemy.hand[0])).toBe(false);
+      expect(statuses.sides.enemy.map((badge) => badge.kind)).toEqual(["returns"]);
+      expect(statuses.sides.player).toEqual([]);
+      const event = result.events.find((event) => event.kind === "effectStarted")!;
+      const identified: (InstanceId | null)[] = [];
+      const line = engineBattleLogText(event, { human: viewer, card: (id) => { identified.push(id); return null; }, dreamwell: () => null });
+      expect(line).toBeTypeOf("string");
+      expect(identified).toContain(ids.enemy.hand[1]);
+    }
+  });
+  it.each([false, true])("does not promise an old return after a public hand move or rebanishment (%s)", (rebanish) => {
+    const mover: EngineCardDefinition = { ...HAND_BANISH.bounce, id: syntheticId(0x473b0), abilities: () => [],
+      synthetic: { resolve(ctx) {
+        const id = ctx.state.sides.enemy.banished[0];
+        if (id === undefined) throw new Error("missing banished card");
+        if (moveToHand(ctx, id, "enemy") === "hand") ctx.emit({ kind: "returnedToHand", instance: id, side: "enemy" });
+        if (rebanish) banish(ctx, id);
+      } } };
+    const local = createEngine(testCatalog([...CHOSEN_HAND_BANISH_CARDS, mover]));
+    const { state, ids } = boardState(local.catalog, { active: "player", phase: "day",
+      player: { hand: [HAND_BANISH.freeCard.id, mover.id] }, enemy: { hand: [SYNTHETIC.event0.id, SYNTHETIC.event0.id] } });
+    const chosen = local.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, { answer: () => [ids.enemy.hand[1]] });
+    const moved = local.apply(chosen.state, "player", { kind: "play", card: ids.player.hand[1], from: "hand" }, { answer: () => { throw new Error("unexpected prompt"); } });
+    expect(moved.state.instances[ids.enemy.hand[1]].zone).toBe(rebanish ? "banished" : "hand");
+    for (const viewer of SIDES) {
+      const statuses = engineStatuses(local.view(moved.state, viewer), viewer, enginePrintedKeywords(local.catalog));
+      expect(statuses.cards.has(ids.enemy.hand[1])).toBe(false);
+      expect(statuses.sides.enemy).toEqual([]);
+    }
+  });
   it("suppresses covered Reclaim badges in play and on the stack, and shows uncovered and banished cards by instance", () => {
     const { state, ids } = placed({ back: [KEEP.keeper.id], void: [KEEP.revenant.id], hand: [KEEP.dissolveOne.id, KEEP.dissolveOne.id], energy: 3 });
     const keeper = ids.player.back[0]!;

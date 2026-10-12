@@ -1042,6 +1042,17 @@ card goes to its owner's Banished zone. It is not a discard, so it fires no
 "When you discard a card" abilities. If the hand has no matching card, that
 part of the effect does nothing.
 
+A card banished from a hand with a duration returns to its owner's hand when
+that duration ends, whether it is an event or a character and whoever held it
+before it was banished. This return is a return to hand, not a materialize.
+It returns only if it has remained in the Banished zone since that banishment;
+moving it out and banishing it again does not restore the earlier return.
+A created card ceases to exist instead of being banished and does not return.
+For "until this character leaves play", the source must be in play when the
+effect would begin, before the private choice; otherwise nothing happens.
+Its departure ends every return registered during that stay in play. If it
+returns to play, a new trigger can register a fresh banishment independently.
+
 **Return to hand** — Move a character from play to its owner's hand. "Return a
 character to hand" and "Return a character to its controller's hand" are the
 same effect: a character you control that the opponent owns (see [Gain

@@ -491,15 +491,20 @@ export function gainControl(ctx: StepContext, id: InstanceId, side: Side): boole
  * What happens as a floating effect ends, beyond its changes ending: a card
  * banished until then returns to play under the side recorded, as a
  * materialize (F3; it stays banished when that back rank is full), and a
- * temporary created character ceases to exist (C5). Nothing happens when
+ * hand-banished card returns to its owner's hand from its recorded zone
+ * entry, and a temporary created character ceases to exist (C5). Nothing happens when
  * the card has since moved or ceased to exist.
  */
 export function floatingEnded(ctx: StepContext, effect: FloatingEffect): void {
   const { change } = effect;
-  if (change.kind !== "banishedUntil" && change.kind !== "temporary") return;
+  if (change.kind !== "banishedUntil" && change.kind !== "banishedToHandUntil" && change.kind !== "temporary") return;
   const instance = ctx.state.instances[change.instance];
   if (change.kind === "banishedUntil" && instance?.zone === "banished") {
     materialize(ctx, change.instance, change.side);
+  } else if (change.kind === "banishedToHandUntil" && instance?.zone === "banished" && instance.enteredZoneAt === change.banishedAt) {
+    if (moveInstance(ctx, change.instance, "hand", "bottom") === "hand") {
+      ctx.emit({ kind: "returnedToHand", instance: change.instance, side: instance.owner });
+    }
   } else if (change.kind === "temporary" && instance?.zone === "play") {
     ceaseToExist(ctx, change.instance);
   }

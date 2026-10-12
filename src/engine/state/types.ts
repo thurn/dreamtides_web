@@ -441,6 +441,8 @@ export type FloatingChange =
   | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition }
   /** "Banish … until …": as the effect ends, the banished card returns to play under `side` (F3). */
   | { readonly kind: "banishedUntil"; readonly instance: InstanceId; readonly side: Side }
+  /** A hand card returns to its owner's hand only from this exact Banished-zone entry. */
+  | { readonly kind: "banishedToHandUntil"; readonly instance: InstanceId; readonly banishedAt: number }
   /** "… until end of turn" on a created character: as the effect ends, it ceases to exist (C5). */
   | { readonly kind: "temporary"; readonly instance: InstanceId };
 

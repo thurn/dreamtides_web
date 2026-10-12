@@ -152,6 +152,14 @@ export function carriesLegality(change: FloatingChange): boolean {
   }
 }
 
+/**
+ * Legality data and recorded hand returns remain obligations with a redacted
+ * source. Their changed card and expiry identities must still be visible.
+ */
+export function keptWithoutSource(change: FloatingChange): boolean {
+  return carriesLegality(change) || change.kind === "banishedToHandUntil";
+}
+
 /** Ends the floating effects that change `id`, when it ceases to exist. */
 export function endChangesTo(ctx: StepContext, id: InstanceId): void {
   endFloating(ctx, (effect) => changedInstance(effect.change) === id);

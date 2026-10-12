@@ -14,15 +14,15 @@
  *   and the affected cards it cannot identify; a trigger's captured cards
  *   the side cannot identify match by owner, printing, and variant, and records name
  *   the same such card exactly where the real ones do.
- *   Costs, play permissions and restrictions are kept whatever their source
- *   (`carriesLegality`), provided their changed card and expiry identities
+ *   Legality data and recorded hand returns (`keptWithoutSource`) are kept
+ *   whatever their source, provided their changed card and expiry identities
  *   are visible (view/determinize.ts).
  *
  * A failure names instance IDs, effect IDs, and printed UUIDs, never names.
  */
 import type { Engine } from "../engine";
 import type { Action } from "../rules/actions";
-import { carriesLegality, changedInstance } from "../rules/floating";
+import { changedInstance, keptWithoutSource } from "../rules/floating";
 import { PolicyRandom } from "../policy/random";
 import type { AbilitySource, BattleSeed, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, SIDES } from "../state/ids";
@@ -106,7 +106,7 @@ function owedFloating(state: BattleState, effect: FloatingEffect, side: Side): b
   const changed = changedInstance(effect.change);
   if (changed !== null && !identifies(state, changed, side)) return false;
   if (effect.expiry.at === "sourceLeavesPlay" && !identifies(state, effect.expiry.source, side)) return false;
-  return carriesLegality(effect.change) || seesSource(state, effect.source, side) || observedFixedEffect(state, side, effect.id) !== undefined;
+  return keptWithoutSource(effect.change) || seesSource(state, effect.source, side) || observedFixedEffect(state, side, effect.id) !== undefined;
 }
 
 /**

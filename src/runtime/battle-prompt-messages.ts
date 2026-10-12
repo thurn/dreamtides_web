@@ -583,6 +583,7 @@ export type EngineStatusCopy =
   | { readonly kind: "temporary"; readonly expiry: Expiry }
   | { readonly kind: "payable"; readonly payer: Side; readonly cost: number }
   | { readonly kind: "returns"; readonly expiry: Expiry }
+  | { readonly kind: "returnsToHand"; readonly expiry: Expiry }
   | {
       readonly kind: "cost";
       readonly amount: number;
@@ -683,6 +684,10 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
         : `Affected until your opponent pays ${String(status.cost)} energy`;
     case "returns":
       return `A banished card returns to play${status.expiry.at === "never" ? "" : expiryPhrase(status.expiry, human).replace(/^ until/u, " at")}`;
+    case "returnsToHand":
+      return `A banished card returns to its owner's hand${status.expiry.at === "sourceLeavesPlay"
+        ? " when its source leaves play"
+        : expiryPhrase(status.expiry, human).replace(/^ until/u, " at")}`;
     case "cost": {
       const cards = status.cardType === null ? "card" : status.cardType;
       const subject = status.next ? `The next ${cards} played` : `${sentence(cards)}s played`;
@@ -948,6 +953,8 @@ function effectStartedText(
       return line(card(change.instance), { kind: "temporary", expiry });
     case "banishedUntil":
       return `${card(change.instance)} will return to play${expiry.at === "never" ? "" : expiryPhrase(expiry, human).replace(/^ until/u, " at")}.`;
+    case "banishedToHandUntil":
+      return line(card(change.instance), { kind: "returnsToHand", expiry });
     case "cost":
       return `${engineStatusLabel(
         { kind: "cost", amount: change.amount, cardType: change.filter.cardType ?? null, next: change.next, expiry },

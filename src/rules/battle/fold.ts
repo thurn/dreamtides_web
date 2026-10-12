@@ -1222,6 +1222,7 @@ const FLOATING_CHANGE_VALIDATORS: {
   trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once) && optional(arrayOf(isInstanceId))(value.captured),
   disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
+  banishedToHandUntil: (value) => isInstanceId(value.instance) && isIndex(value.banishedAt) && value.banishedAt > 0,
   playFrom: (value) =>
     isSide(value.player) &&
     value.zone === "void" &&

@@ -481,6 +481,14 @@ export function engineStatuses(
       case "banishedUntil":
         sides[view.instances[change.instance]?.owner ?? change.side].push(badge("returns", { kind: "returns", expiry }));
         break;
+      case "banishedToHandUntil": {
+        const card = view.instances[change.instance];
+        if (card?.zone !== "banished" || card.enteredZoneAt !== change.banishedAt) break;
+        const returns = badge("returns", { kind: "returnsToHand", expiry });
+        mark(change.instance, returns);
+        sides[card.owner].push(returns);
+        break;
+      }
       case "cost":
         sides[change.player].push(
           badge("costModifier", {

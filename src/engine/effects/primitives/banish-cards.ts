@@ -1,10 +1,13 @@
 import { cardMatchesFilter } from "../../continuous/characteristics";
 import type { CardFilter, ZoneCardSpec } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
+import { startDuration } from "../../rules/durations";
+import { addFloating } from "../../rules/floating";
 import { banish } from "../../rules/zones";
 import { opponent } from "../../state/ids";
 import { resolveCards } from "../interpreter";
 import { cardTarget, definePrimitive, type CapturedCardsSpec } from "../types";
+import type { BanishUntilNode } from "./banish-until";
 
 /**
  * "Banish your hand and void", "Banish up to two cards from the opponent's
@@ -36,6 +39,8 @@ export interface BanishChosenCardNode {
   readonly op: "banishCards";
   readonly from: "opponentHand";
   readonly filter: CardFilter;
+  /** A bounded banishment returns the same card to its owner's hand. */
+  readonly duration?: BanishUntilNode["duration"];
 }
 
 export type BanishCardsNode = BanishNamedCardsNode | BanishChosenCardNode;
@@ -49,6 +54,8 @@ export const banishCardsPrimitive = definePrimitive<BanishCardsNode>({
       for (const id of named) banish(ctx, id);
       return;
     }
+    const expiry = node.duration === undefined ? undefined : startDuration(ctx, node.duration, env.controller, env.source, []);
+    if (expiry === null) return;
     const holder = opponent(env.controller);
     const candidates = ctx.state.sides[holder].hand.filter((id) => cardMatchesFilter(ctx.state, ctx.catalog, id, node.filter));
     if (candidates.length === 0) return;
@@ -63,6 +70,11 @@ export const banishCardsPrimitive = definePrimitive<BanishCardsNode>({
     });
     if (chosen === undefined) throw new Error("banishChosen answered with no card");
     banish(ctx, chosen);
+    const instance = ctx.state.instances[chosen];
+    if (expiry !== undefined && instance?.zone === "banished") {
+      addFloating(ctx, { controller: env.controller, source: env.source, expiry,
+        change: { kind: "banishedToHandUntil", instance: chosen, banishedAt: instance.enteredZoneAt } });
+    }
   },
 });
 
@@ -77,6 +89,6 @@ export function banishCards(cards: readonly (ZoneCardSpec | CapturedCardsSpec)[]
 }
 
 /** "Banish a chosen <filter> from the opponent's hand", chosen privately by the controller as it resolves. */
-export function banishChosen(filter: CardFilter = {}): BanishChosenCardNode {
-  return { op: "banishCards", from: "opponentHand", filter };
+export function banishChosen(filter: CardFilter = {}, duration?: BanishChosenCardNode["duration"]): BanishChosenCardNode {
+  return { op: "banishCards", from: "opponentHand", filter, ...(duration === undefined ? {} : { duration }) };
 }

@@ -9,6 +9,7 @@ import type { InstanceId } from "../state/ids";
 import { invariantViolations } from "./invariants";
 import { labBoard } from "./lab-solver";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
+import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "./chosen-hand-banish-cards";
 
 const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(1900), subtype: "Mage" };
 const warrior = SYNTHETIC.vanilla1;
@@ -25,6 +26,24 @@ function source(index: number, costs: readonly AdditionalCost[], targeting = fal
 
 for (const side of ["player", "enemy"] as const) {
   describe(`additional-cost lab staging as ${side}`, () => {
+    it.each([HAND_BANISH.freeCard, HAND_BANISH.paidCharacter])("stages a matching chosen-hand duration candidate for $id", (source) => {
+      const engine = createEngine(testCatalog(CHOSEN_HAND_BANISH_CARDS));
+      const { state } = labBoard(engine, source.id, [SYNTHETIC.event0, SYNTHETIC.vanilla1], side);
+      const played = engine.apply(state, side, { kind: "play", card: state.sides[side].hand[0], from: "hand" }, {
+        answer(prompt) {
+          if (prompt.kind !== "chooseCards") throw new Error(`Unexpected ${prompt.kind}`);
+          return [prompt.candidates[0]];
+        },
+      });
+      const banished = played.events.find((event) => event.kind === "banished");
+      expect(banished?.kind).toBe("banished");
+      if (banished?.kind !== "banished") throw new Error("missing chosen banishment");
+      expect(played.state.floating).toContainEqual(expect.objectContaining({
+        source: state.sides[side].hand[0], expiry: { at: "sourceLeavesPlay", source: state.sides[side].hand[0] },
+        change: { kind: "banishedToHandUntil", instance: banished.instance, banishedAt: played.state.instances[banished.instance].enteredZoneAt },
+      }));
+      expect(invariantViolations(played.state, engine.catalog)).toEqual([]);
+    });
     it.each([2, 3])("stages and pays a variable discard's declared minimum %i", (min) => {
       const card = source(4690 + min, [discardCostFilter({ cardType: "character", subtype: "Mage" }, { count: "x", min })]);
       const engine = createEngine(testCatalog([mage, card]));

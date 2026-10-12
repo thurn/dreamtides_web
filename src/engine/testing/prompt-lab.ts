@@ -38,6 +38,7 @@ import { AVATAR, DREAMSIGN, STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stac
 import { SYNTHETIC, SYNTHETIC_CARDS, syntheticId } from "./synthetic-cards";
 import { TRIGGER, TRIGGER_CARDS } from "./trigger-cards";
 import { ZONE, ZONE_CARDS, ZONE_FIGMENTS } from "./zone-cards";
+import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "./chosen-hand-banish-cards";
 
 function labEvent(index: number, cost: number, effect: Parameters<typeof event>[0]): EngineCardDefinition {
   return {
@@ -223,6 +224,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
     ...TRIGGER_CARDS,
     ...CONTINUOUS_CARDS,
     ...ZONE_CARDS,
+    ...CHOSEN_HAND_BANISH_CARDS,
     ...Object.values(LAB),
   ],
   emblems: SYNTHETIC_EMBLEMS,
@@ -231,6 +233,14 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [HAND_BANISH.freeCard.id]: { name: "Lab Hand Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play." },
+  [HAND_BANISH.paidCard.id]: { name: "Lab Paid Hand Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play." },
+  [HAND_BANISH.freeCharacter.id]: { name: "Lab Character Keeper", text: "▸Materialized: Banish a chosen character from the opponent's hand until this character leaves play." },
+  [HAND_BANISH.paidCharacter.id]: { name: "Lab Paid Character Keeper", text: "▸Materialized: Banish a chosen character from the opponent's hand until this character leaves play." },
+  [HAND_BANISH.bounce.id]: { name: "Lab Hand Return", text: "Return a character to hand." },
+  [HAND_BANISH.candidate.id]: { name: "Lab Return Witness", text: "▸Materialized: Gain 3 points." },
+  [HAND_BANISH.absent.id]: { name: "Lab Departing Keeper", text: "▸Materialized: Return this character to hand, then banish a chosen card from the opponent's hand until this character leaves play." },
+  [HAND_BANISH.timedCard.id]: { name: "Lab Ending Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until end of turn." },
   [LAB.extraTurn.id]: { name: "Lab Moment", text: "Take an extra turn after this one." },
   [LAB.abandon.id]: { name: "Lab Farewell", text: "Abandon a character." },
   [LAB.voidPermit.id]: { name: "Lab Gatekeeper", text: "You may play characters from your void." },
@@ -365,6 +375,38 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "chosen-hand-banish-duration",
+    description: "A paid chosen-hand banishment, a public duration and a return to the owner's hand",
+    setup: { active: "player", phase: "day",
+      player: { hand: [HAND_BANISH.paidCharacter.id, HAND_BANISH.bounce.id], back: [SYNTHETIC.vanilla1.id], energy: 1, deck: deck(6) },
+      enemy: { hand: [HAND_BANISH.candidate.id, HAND_BANISH.candidate.id, SYNTHETIC.event0.id], deck: deck(6) } },
+    script: [],
+    presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.enemy.hand, 1)] },
+      playHand(1), target((ids) => at(ids.player.hand, 0))],
+  },
+  ...SIDES.flatMap((side): PromptLabFixture[] => ["event", "character"].flatMap((kind) => [false, true].map((paid): PromptLabFixture => {
+    const source = kind === "character"
+      ? paid ? HAND_BANISH.paidCharacter.id : HAND_BANISH.freeCharacter.id
+      : paid ? HAND_BANISH.paidCard.id : HAND_BANISH.freeCard.id;
+    const candidate = kind === "character" ? HAND_BANISH.candidate.id : SYNTHETIC.event0.id;
+    return {
+      name: `chosen-hand-${side}-${kind}-${paid ? "paid" : "free"}`,
+      description: "Chosen-hand banishment with matching physical twins and a source departure",
+      setup: {
+        active: side, phase: "day",
+        player: side === "player"
+          ? { back: [source], hand: [source, HAND_BANISH.bounce.id], energy: paid ? 1 : 0, deck: deck(6) }
+          : { hand: [candidate, candidate, HAND_BANISH.bounce.id, HAND_BANISH.bounce.id], deck: deck(6) },
+        enemy: side === "enemy"
+          ? { back: [source], hand: [source], energy: paid ? 1 : 0, deck: deck(6) }
+          : { hand: kind === "character" ? [candidate, candidate, SYNTHETIC.event0.id] : [candidate, candidate], deck: deck(6) },
+      },
+      // The enemy prelude is a public play intent; its private choice and
+      // resolution continue through the battle's normal AI prompt host.
+      script: side === "enemy" ? [play("enemy", (ids) => first(ids.enemy.hand))] : [],
+    };
+  }))),
   {
     name: "resolving-payment-energy-short",
     description: "A resolving payment with insufficient energy",

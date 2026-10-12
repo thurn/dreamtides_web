@@ -30,7 +30,7 @@ import type { Layers } from "../continuous/layers";
 import { fixedEnergy } from "../dsl/energy";
 import type { Keyword, Variant } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
-import { carriesLegality, changedInstance } from "../rules/floating";
+import { changedInstance, keptWithoutSource } from "../rules/floating";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
 import { materializedThisTurn } from "../rules/turn-log";
@@ -388,8 +388,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   });
   const floatingVisible = (effect: FloatingEffect): boolean => {
     const changed = changedInstance(effect.change);
-    // Costs, permissions and restrictions carry their complete legality data without source identity.
-    const sourceIndependent = carriesLegality(effect.change);
+    // Legality data and recorded hand returns remain obligations without source identity.
+    const sourceIndependent = keptWithoutSource(effect.change);
     const sourceSeen = visibleSource(effect.source);
     const expirySeen = effect.expiry.at !== "sourceLeavesPlay" || visible(effect.expiry.source);
     return (sourceSeen || sourceIndependent || observedFixedEffect(state, viewer, effect.id) !== undefined) && expirySeen && (changed === null || visible(changed));

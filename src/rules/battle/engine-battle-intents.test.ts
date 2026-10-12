@@ -239,6 +239,29 @@ describe("LOAD_STATE", () => {
       .toEqual({ directAccepted: false, roundtripAccepted: false });
   });
 
+  it("roundtrips the bounded hand-return record and rejects malformed physical identity or zone entry", () => {
+    const state = begun();
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const instance = firstCard(state);
+    const change = { kind: "banishedToHandUntil", instance, banishedAt: 1 };
+    const payload = (record: unknown) => ({ ...battle, engine: { ...battle.engine,
+      slice: { ...battle.engine.slice, committed: { ...battle.engine.slice.committed,
+        floating: [{ id: "e1", controller: "player", source: instance, timestamp: 1,
+          expiry: { at: "sourceLeavesPlay", source: instance }, change: record }],
+      } } } });
+    const load = (record: unknown) => validateLoadedState(state, { snapshot: state.journey, battle: payload(record) });
+    const valid = payload(change);
+    expect(load(change)?.battle).toEqual(valid);
+    expect(validateLoadedState(state, JSON.parse(JSON.stringify({ snapshot: state.journey, battle: valid })) as Record<string, unknown>)?.battle).toEqual(valid);
+    for (const banishedAt of [undefined, null, "1", 0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, {}, []]) {
+      expect(load({ ...change, banishedAt }), JSON.stringify(banishedAt)).toBeNull();
+    }
+    for (const instance of [undefined, null, 1, "e1", "not-a-physical-card", {}, []]) {
+      expect(load({ ...change, instance }), JSON.stringify(instance)).toBeNull();
+    }
+  });
+
   it("keeps a journey battle's init, engine battle and valid score snapshots, and refuses malformed metadata or mode", () => {
     const state = begun();
     const battle = journeyBattleOf(state.battle);
