@@ -1132,7 +1132,13 @@ or delayed trigger it creates, acts on each of them that is in play as it
 resolves, whoever controls it then. Card identity persists across zones (see
 [Zone Changes](#zone-changes)), so one that left play and has entered play
 again is affected, while one in another zone is not. If none entered play, or
-none is in play then, that part does nothing.
+none is in play then, that part does nothing. "Materialize two figments.
+Abandon them at end of turn" likewise names exactly the new figments that
+entered play, including each new figment that received the group's combined
+spark at capacity. It does not name a figment already in play. The delayed
+ability keeps the controller who created it, even if its source changes
+control, and abandons only members that controller still controls in play,
+one at a time in their materialization order (see [Abandon](#keywords-and-effects)).
 
 "Return this character to play with awakened," and likewise "Materialize this
 character from your void with awakened," puts the character into play as an
@@ -1333,7 +1339,11 @@ matching character, that part does nothing and the rest of the effect still
 happens. Abandon cannot be prevented, and it fires the character's ▸Dissolved
 trigger and "When you abandon" abilities, its own included (see [Ability
 Types](#ability-types)). It is frequently used as a cost. A figment that is abandoned ceases
-to exist after firing its dissolved triggers.
+to exist after firing its dissolved triggers. An instruction naming specific
+characters, such as "Abandon them", makes no choice: it abandons each named
+character the instructed player controls in play as that instruction resolves,
+skipping a character in another zone, one that ceased to exist, or one that
+player does not control. Each abandonment fires its own departure triggers.
 
 **Foresee N** — Look at the top N cards of your deck, reorder them in any order,
 and optionally send any of them to the void. Only you see the cards you look

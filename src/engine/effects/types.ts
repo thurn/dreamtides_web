@@ -30,7 +30,8 @@ export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec | Zo
  * and Effects → Materialize, RD-hv-umm2.392-1). Card identity persists across
  * zones, so a member that left play and entered it again is named again. A
  * floating or delayed trigger created inside the binding keeps the binding's
- * cards for its own later resolution. Only `banishCards` accepts it.
+ * cards for its own later resolution. `banishCards` and `abandonCards` accept
+ * it; abandon acts only on members its effect's controller still controls.
  */
 export interface CapturedCardsSpec {
   readonly kind: "captured";

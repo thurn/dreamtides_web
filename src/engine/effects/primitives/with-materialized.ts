@@ -3,22 +3,25 @@ import type { BattleState } from "../../state/types";
 import { resolveNode } from "../interpreter";
 import { definePrimitive, type CapturedCardsSpec, type EffectEnv, type EffectNode } from "../types";
 import type { MaterializeNode } from "./materialize";
+import type { MaterializeFigmentsNode } from "./materialize-figments";
 
 /**
  * "Materialize each ≤X● cost character in your void. Banish them at end of
- * turn": resolves `materialize`, then `effect` with the characters it put
+ * turn", or "Materialize figments. Abandon them at end of turn": resolves
+ * `materialize`, then `effect` with the characters it put
  * into play bound as the captured cards (`capturedCards()`, rules § Keywords
  * and Effects → Materialize, RD-hv-umm2.392-1). The binding holds exactly the
  * cards that entered play while `materialize` resolved, in the order they
  * entered: never a card that stayed in its zone (a full back rank, a
  * reclaimed card), a card already in play, or a card another node put into
- * play. A floating or delayed trigger created inside `effect` keeps the
+ * play. For a figment group at capacity, these are the new figments that
+ * fit, with the group's spark distributed among them. A floating or delayed trigger created inside `effect` keeps the
  * binding with its controller, so its effect names the same cards when it
  * resolves later; the nearest enclosing binding applies.
  */
 export interface WithMaterializedNode {
   readonly op: "withMaterialized";
-  readonly materialize: MaterializeNode;
+  readonly materialize: MaterializeNode | MaterializeFigmentsNode;
   readonly effect: EffectNode;
 }
 
@@ -48,7 +51,7 @@ export const withMaterializedPrimitive = definePrimitive<WithMaterializedNode>({
 });
 
 /** Resolves `materialize`, then `effect` with the characters it materialized as `capturedCards()`. */
-export function withMaterialized(materialize: MaterializeNode, effect: EffectNode): WithMaterializedNode {
+export function withMaterialized(materialize: MaterializeNode | MaterializeFigmentsNode, effect: EffectNode): WithMaterializedNode {
   return { op: "withMaterialized", materialize, effect };
 }
 

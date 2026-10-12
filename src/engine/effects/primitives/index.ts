@@ -1,6 +1,7 @@
 // The primitive catalog: one line per primitive. Each module exports its node
 // type, its PrimitiveDefinition, and its builder; ../registry.ts collects them.
 export * from "./abandon";
+export * from "./abandon-cards";
 export * from "./awaken";
 export * from "./banish";
 export * from "./banish-cards";

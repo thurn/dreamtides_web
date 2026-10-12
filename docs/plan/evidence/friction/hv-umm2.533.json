@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.533",
+  "phase": 5,
+  "implementMin": 28.27739131666667,
+  "localValidationS": {
+    "focused": 39.441371834000165,
+    "review": 105.38382500100852,
+    "knip": 4.180422416000511,
+    "fuzz": 145.18659070799913,
+    "qa": 99.55703999999969,
+    "artifactAudit": 0.5927035000010445,
+    "schema": 0.058594750000338536
+  },
+  "hostLoad": 5.27783203125,
+  "testDelta": {
+    "files": 1,
+    "lines": 211,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.003524720150017,
+      "note": "Two full-capacity fixture attempts used Fast rather than the legal enemy Interrupt response; review caught missing explicit AnswerSource and unsafe JSON assignment. Actual failed invocation costs only; edit time unmeasured."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.9631784152833764,
+      "note": "Initial geometry raced the second materialization; intermediate passes preceded departure/points presentation. Preserved original and two intermediate script definitions, then waited public DOM removal and data-points=4. Actual superseded invocation costs only."
+    }
+  ]
+}

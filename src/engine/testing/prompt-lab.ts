@@ -32,6 +32,7 @@ import type { BattleInit, BattleState, DeckEntry } from "../state/types";
 import type { EngineEvent } from "../events";
 import { boardState, type BoardSetup } from "./board";
 import { CONDITIONAL, CONDITIONAL_STATIC_CARDS } from "./conditional-static-cards";
+import { CAPTURE, CAPTURE_CARDS, CAPTURE_FIGMENT } from "./captured-figment-cards";
 import { CONTINUOUS, CONTINUOUS_CARDS } from "./continuous-cards";
 import { DSL, DSL_CARDS } from "./dsl-cards";
 import { LOOP, LOOP_CARDS } from "./loop-cards";
@@ -239,16 +240,19 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
     ...TRIGGER_CARDS,
     ...CONTINUOUS_CARDS,
     ...CONDITIONAL_STATIC_CARDS,
+    ...CAPTURE_CARDS,
     ...ZONE_CARDS,
     ...CHOSEN_HAND_BANISH_CARDS,
     ...Object.values(LAB),
   ],
   emblems: SYNTHETIC_EMBLEMS,
-  figments: ZONE_FIGMENTS,
+  figments: [...ZONE_FIGMENTS, CAPTURE_FIGMENT],
 };
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [CAPTURE.caller.id]: { name: "Lab Ember Keeper", text: "☾: Materialize two awakened Ember figments. Abandon them at end of turn." },
+  [CAPTURE.watcher.id]: { name: "Lab Departure Witness", text: "When you abandon a character, gain 1⍟." },
   [HAND_BANISH.freeCard.id]: { name: "Lab Hand Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play." },
   [HAND_BANISH.paidCard.id]: { name: "Lab Paid Hand Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play." },
   [HAND_BANISH.freeCharacter.id]: { name: "Lab Character Keeper", text: "▸Materialized: Banish a chosen character from the opponent's hand until this character leaves play." },
@@ -408,6 +412,14 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "captured-figment-abandon",
+    description: "A normal activation materializes two awakened figments and abandons their captured cohort at end of turn",
+    setup: { active: "player", phase: "day", player: {
+      back: [CAPTURE.caller.id, CAPTURE.watcher.id], deck: deck(6),
+    }, enemy: { deck: deck(6) } },
+    script: [],
+  },
   {
     name: "conditional-static-permission",
     description: "A conditional void permission whose allowance survives its hand-count condition toggling",

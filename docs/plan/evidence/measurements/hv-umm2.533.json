@@ -1,0 +1,732 @@
+{
+  "bead": "hv-umm2.533",
+  "base": "c19477570294f83b191bc54bafbd6fba5da6f032",
+  "dispatchUtc": "2026-10-12T11:33:32.882940+00:00",
+  "implementWindow": {
+    "dispatchUtc": "2026-10-12T11:33:32.882940+00:00",
+    "preCommitObservedUtc": "2026-10-12T12:01:49.526419+00:00",
+    "dispatchToObservationMin": 28.27739131666667
+  },
+  "scope": {
+    "productionEntities": [],
+    "consumerUUID": "5a27e236-86d7-442f-81d2-fb29a2b7f12a",
+    "consumerBead": "hv-umm2.167",
+    "rulesDecision": "RD-hv-umm2.533-1",
+    "sourcePaths": [
+      "src/engine/effects/primitives/abandon-cards.ts",
+      "src/engine/effects/primitives/with-materialized.ts",
+      "src/engine/effects/types.ts",
+      "src/engine/effects/registry.ts",
+      "src/engine/effects/primitives/index.ts",
+      "src/engine/testing/captured-figment-cards.ts",
+      "src/engine/testing/prompt-lab.ts",
+      "src/engine/effects/primitives/contracts/abandon-cards.contracts.ts"
+    ],
+    "sourceHashes": {
+      "src/engine/effects/primitives/abandon-cards.ts": "c5c1856e5dcfecc1755d1d58667905e5af35438e166862d711146e8cf4e00502",
+      "src/engine/effects/primitives/with-materialized.ts": "03b4aa2256146a721937faadf2531de39b4c13562b51638f580ef53a8e073390",
+      "src/engine/effects/types.ts": "675ade6733106cd0ee4ee9a8d1a92c3001e5f280021458afa04310d3290344bc",
+      "src/engine/effects/registry.ts": "3242330ce31f70f7f2567485d1bc003b1b45c6724952f703b7f7f2c36a9d280d",
+      "src/engine/effects/primitives/index.ts": "eac95d9fbdf11d3a0c1c5664e37dd77ab7121e862e62db024a1e2e91aea8a4c5",
+      "src/engine/testing/captured-figment-cards.ts": "4fd0428a3ed8ddbacabdd8da500714c25928c96618e041a9e58d258290544bc0",
+      "src/engine/testing/prompt-lab.ts": "23585901f101ded8e842a61f1a025e78774ea57859a65f4c385a40c31426ad50",
+      "src/engine/effects/primitives/contracts/abandon-cards.contracts.ts": "c2b418c86484689f6b8559ed12839d4b699b617a601cb395c0c6efca53dca3b5"
+    },
+    "fallout": [],
+    "stateSchemaEventPromptKindsAdded": []
+  },
+  "validation": {
+    "attempts": [
+      {
+        "label": "focused",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/focused.receipt.json",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts"
+        ],
+        "pid": 43373,
+        "pgid": 43373,
+        "startUtc": "2026-10-12T11:41:32.289416+00:00",
+        "endUtc": "2026-10-12T11:41:39.393835+00:00",
+        "wallSeconds": 7.104228917,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "focused-corrected",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/focused-corrected.receipt.json",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts"
+        ],
+        "pid": 44577,
+        "pgid": 44577,
+        "startUtc": "2026-10-12T11:42:11.597327+00:00",
+        "endUtc": "2026-10-12T11:42:19.748764+00:00",
+        "wallSeconds": 8.151012374997663,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "focused-valid",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/focused-valid.receipt.json",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts"
+        ],
+        "pid": 62754,
+        "pgid": 62754,
+        "startUtc": "2026-10-12T11:43:09.392004+00:00",
+        "endUtc": "2026-10-12T11:43:15.678526+00:00",
+        "wallSeconds": 6.28633720799553,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "negative-capture",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/negative-capture.receipt.json",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "abandonCards"
+        ],
+        "pid": 64378,
+        "pgid": 64378,
+        "startUtc": "2026-10-12T11:44:26.362606+00:00",
+        "endUtc": "2026-10-12T11:44:29.734747+00:00",
+        "wallSeconds": 3.3719988750017365,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "negative-control",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/negative-control.receipt.json",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "spares a captured figment"
+        ],
+        "pid": 64996,
+        "pgid": 64996,
+        "startUtc": "2026-10-12T11:44:46.932851+00:00",
+        "endUtc": "2026-10-12T11:44:50.802600+00:00",
+        "wallSeconds": 3.869586333996267,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "focused-final",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/focused-final.receipt.json",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts"
+        ],
+        "pid": 65179,
+        "pgid": 65179,
+        "startUtc": "2026-10-12T11:44:50.829249+00:00",
+        "endUtc": "2026-10-12T11:44:57.406466+00:00",
+        "wallSeconds": 6.577030500004184,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "loader-focused",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/loader-focused.receipt.json",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "commits no partial abandons"
+        ],
+        "pid": 79773,
+        "pgid": 79773,
+        "startUtc": "2026-10-12T11:45:32.421292+00:00",
+        "endUtc": "2026-10-12T11:45:36.502635+00:00",
+        "wallSeconds": 4.081177625004784,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "review",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/review.receipt.json",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 80785,
+        "pgid": 80785,
+        "startUtc": "2026-10-12T11:45:50.716704+00:00",
+        "endUtc": "2026-10-12T11:46:35.673617+00:00",
+        "wallSeconds": 44.956241917003354,
+        "exit": 2,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "review-final",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/review-final.receipt.json",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 8106,
+        "pgid": 8106,
+        "startUtc": "2026-10-12T11:47:21.134771+00:00",
+        "endUtc": "2026-10-12T11:48:21.563194+00:00",
+        "wallSeconds": 60.427583084005164,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "knip",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/knip.receipt.json",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 58378,
+        "pgid": 58378,
+        "startUtc": "2026-10-12T11:48:49.684344+00:00",
+        "endUtc": "2026-10-12T11:48:53.864936+00:00",
+        "wallSeconds": 4.180422416000511,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "weighted-outer",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/weighted-outer.receipt.json",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/run.py",
+          "weighted-inner",
+          "npm",
+          "exec",
+          "--",
+          "tsx",
+          "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/weighted-fuzz.ts"
+        ],
+        "pid": 8252,
+        "pgid": 8252,
+        "startUtc": "2026-10-12T11:47:22.279545+00:00",
+        "endUtc": "2026-10-12T11:49:47.468136+00:00",
+        "wallSeconds": 145.18659070799913,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "qa-desktop",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/qa-desktop.receipt.json",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "captured-figment-abandon",
+          "--bead",
+          "hv-umm2.533",
+          "--viewports",
+          "desktop"
+        ],
+        "pid": 60707,
+        "pgid": 60707,
+        "startUtc": "2026-10-12T11:49:21.628023+00:00",
+        "endUtc": "2026-10-12T11:49:31.402438+00:00",
+        "wallSeconds": 9.774181834000046,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "qa-desktop-corrected",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/qa-desktop-corrected.receipt.json",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "captured-figment-abandon",
+          "--bead",
+          "hv-umm2.533",
+          "--viewports",
+          "desktop"
+        ],
+        "pid": 64998,
+        "pgid": 64998,
+        "startUtc": "2026-10-12T11:50:18.950022+00:00",
+        "endUtc": "2026-10-12T11:50:40.046961+00:00",
+        "wallSeconds": 21.096565874999214,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "qa-final",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/qa-final.receipt.json",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "captured-figment-abandon",
+          "--bead",
+          "hv-umm2.533",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "pid": 98995,
+        "pgid": 98995,
+        "startUtc": "2026-10-12T11:51:35.997074+00:00",
+        "endUtc": "2026-10-12T11:52:02.917517+00:00",
+        "wallSeconds": 26.919957208003325,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "qa-settled",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/qa-settled.receipt.json",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "captured-figment-abandon",
+          "--bead",
+          "hv-umm2.533",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "pid": 7360,
+        "pgid": 7360,
+        "startUtc": "2026-10-12T11:53:09.417154+00:00",
+        "endUtc": "2026-10-12T11:53:51.183892+00:00",
+        "wallSeconds": 41.7663350829971,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "schema",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/schema.receipt.json",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 12732,
+        "pgid": 12732,
+        "startUtc": "2026-10-12T11:56:10.637668+00:00",
+        "endUtc": "2026-10-12T11:56:10.696369+00:00",
+        "wallSeconds": 0.058594750000338536,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      {
+        "label": "freeze",
+        "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/freeze.receipt.json",
+        "argv": [
+          "python3",
+          "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/freeze.py"
+        ],
+        "pid": 15507,
+        "pgid": 15507,
+        "startUtc": "2026-10-12T11:57:54.270607+00:00",
+        "endUtc": "2026-10-12T11:57:54.508402+00:00",
+        "wallSeconds": 0.23770762500498677,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      }
+    ],
+    "countedCostsSeconds": {
+      "focused": 39.441371834000165,
+      "review": 105.38382500100852,
+      "knip": 4.180422416000511,
+      "fuzz": 145.18659070799913,
+      "qa": 99.55703999999969,
+      "artifactAudit": 0.5927035000010445,
+      "schema": 0.058594750000338536
+    },
+    "totalCountedSeconds": 394.4005482090094,
+    "setup": {
+      "install": {
+        "argv": [
+          "npm",
+          "install"
+        ],
+        "pid": 47737,
+        "pgid": 47737,
+        "startUtc": "2026-10-12T11:35:20.674696+00:00",
+        "endUtc": "2026-10-12T11:35:23.569421+00:00",
+        "wallSeconds": 2.8945749160047853,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+      },
+      "unavailablePythonLaunch": {
+        "exit": 127,
+        "npmStarted": false,
+        "provenance": "Tool output command-not-found python; no subprocess receipt, PID or duration claim."
+      }
+    },
+    "finalRelatedTests": {
+      "files": 268,
+      "tests": 4106,
+      "exit": 0
+    },
+    "focusedSharedContracts": {
+      "tests": 1549,
+      "exit": 0
+    },
+    "loaderCase": {
+      "tests": 1,
+      "exit": 0,
+      "publicAPI": "parseJourneyBattleFoldState then cold fold pending/answer/replay"
+    },
+    "full": {
+      "run": false,
+      "reason": "Bounded primitive and additive hubs; no state/schema, test infrastructure or cross-cutting architecture changes."
+    },
+    "schema": {
+      "exit": 0,
+      "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/schema.receipt.json"
+    }
+  },
+  "negativeWitnesses": {
+    "capture": {
+      "mutation": "captured: []",
+      "exit": 1,
+      "failed": 8,
+      "passed": 2,
+      "skipped": 1539,
+      "claim": "Direct empty-cohort failures plus downstream fixture-answer failures; not eight independent causal assertions.",
+      "restoration": {
+        "before": "03b4aa2256146a721937faadf2531de39b4c13562b51638f580ef53a8e073390",
+        "after": "03b4aa2256146a721937faadf2531de39b4c13562b51638f580ef53a8e073390",
+        "exit": 1
+      }
+    },
+    "control": {
+      "mutation": "remove current controller condition",
+      "exit": 1,
+      "claim": "Existing abandonCharacter rejects player abandoning i20 controlled by enemy; proves skip filter needed to avoid failing the step.",
+      "restoration": {
+        "before": "c5c1856e5dcfecc1755d1d58667905e5af35438e166862d711146e8cf4e00502",
+        "after": "c5c1856e5dcfecc1755d1d58667905e5af35438e166862d711146e8cf4e00502",
+        "exit": 1
+      }
+    }
+  },
+  "fuzz": {
+    "summary": {
+      "gamesRequested": 300,
+      "gamesCompleted": 300,
+      "steps": 136288,
+      "prompts": 2658,
+      "reruns": 271,
+      "interactiveGames": 30,
+      "bounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "failures": 0,
+      "recordedCohorts": 2234,
+      "nonemptyCohorts": 1946,
+      "capturedAbandons": 3229,
+      "targets": [
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000053301"
+          },
+          "included": 860,
+          "exercised": 456
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000053302"
+          },
+          "included": 866,
+          "exercised": 419
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000053303"
+          },
+          "included": 869,
+          "exercised": 423
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000053304"
+          },
+          "included": 872,
+          "exercised": 432
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000053305"
+          },
+          "included": 847,
+          "exercised": 410
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000053306"
+          },
+          "included": 881,
+          "exercised": 416
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000005330a"
+          },
+          "included": 875,
+          "exercised": 477
+        }
+      ],
+      "innerWallSeconds": 143.463670959,
+      "observations": "Original public apply events only, excluding replay. Cohort counts cover floating captured trigger writes. Abandons count custom-figment UUID in pre-action committed state, so can omit same-action creations; counts are not per-clause causality. Each inline game final hash replays; 30 interactive games check prompt/event/hash replay. JSONL is separately serialized raw records, not an independently serialized-log replay."
+    },
+    "outerReceipt": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/run.py",
+        "weighted-inner",
+        "npm",
+        "exec",
+        "--",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/weighted-fuzz.ts"
+      ],
+      "pid": 8252,
+      "pgid": 8252,
+      "startUtc": "2026-10-12T11:47:22.279545+00:00",
+      "endUtc": "2026-10-12T11:49:47.468136+00:00",
+      "wallSeconds": 145.18659070799913,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+    },
+    "innerReceipt": {
+      "argv": [
+        "npm",
+        "exec",
+        "--",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/weighted-fuzz.ts"
+      ],
+      "pid": 8255,
+      "pgid": 8255,
+      "startUtc": "2026-10-12T11:47:22.311969+00:00",
+      "endUtc": "2026-10-12T11:49:47.464030+00:00",
+      "wallSeconds": 145.15000537499873,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-figment-abandon"
+    },
+    "outerCountsOnce": true,
+    "outerStartToInnerStartSeconds": 0.032424,
+    "waitClaim": "Includes process launch and lock admission; not a pure queue-wait measurement.",
+    "helperArtifactAudit": {
+      "file": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-evidence/fuzz-artifact-audit.json",
+      "toolReportedWallSeconds": 0.172891375,
+      "actualExit": 0,
+      "pidAndUtc": "not instrumented; no fabricated receipt"
+    },
+    "parentIndependentAudit": {
+      "startUtc": "2026-10-12T11:52:34.724962+00:00",
+      "endUtc": "2026-10-12T11:52:34.907175+00:00",
+      "wallSeconds": 0.1821044999960577,
+      "exit": 0,
+      "files": 300,
+      "rows": 83605,
+      "actionRows": 41726,
+      "engineErrorRows": 0,
+      "keys": [
+        "event",
+        "version",
+        "init",
+        "policies",
+        "gameId",
+        "timestamp"
+      ],
+      "claim": "Valid JSON objects only; not an independent serialized-log replay."
+    },
+    "serializedLogsClaim": "300 valid JSONL exports. 300 inline final-hash replays and 30 interactive replays; no independent serialized-log replay asserted."
+  },
+  "qa": {
+    "entities": [],
+    "sweep": "No production entity authored; capability uses supported synthetic fixture.",
+    "rows": [
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000053301",
+        "entityKind": "synthetic-card",
+        "variant": "base",
+        "mode": "judged",
+        "bead": "hv-umm2.533",
+        "commit": "c19477570294f83b191bc54bafbd6fba5da6f032",
+        "viewport": "desktop",
+        "verdict": "fail",
+        "effective": false,
+        "invocation": "invocations/run-ZnAj39",
+        "rawReport": "captured-figment-abandon.result.json",
+        "screens": [],
+        "gameLog": "captured-figment-abandon-desktop.jsonl",
+        "gameLogRows": 26,
+        "caps": [],
+        "notes": "External geometry queried second member before its presentation produced a DOM card; no capture. Source unchanged."
+      },
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000053301",
+        "entityKind": "synthetic-card",
+        "variant": "base",
+        "mode": "judged",
+        "bead": "hv-umm2.533",
+        "commit": "c19477570294f83b191bc54bafbd6fba5da6f032",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "effective": false,
+        "invocation": "invocations/run-gl70U3",
+        "rawReport": "captured-figment-abandon.result.json",
+        "screens": [
+          "captured-materialized-desktop.png",
+          "captured-abandoned-desktop.png"
+        ],
+        "gameLog": "captured-figment-abandon-desktop.jsonl",
+        "gameLogRows": 52,
+        "caps": [],
+        "notes": "Workflow passed; early visual inspection shows departure/points presentation pending. Intermediate desktop evidence."
+      },
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000053301",
+        "entityKind": "synthetic-card",
+        "variant": "base",
+        "mode": "judged",
+        "bead": "hv-umm2.533",
+        "commit": "c19477570294f83b191bc54bafbd6fba5da6f032",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "effective": false,
+        "invocation": "invocations/run-X7UOnJ",
+        "rawReport": "captured-figment-abandon.result.json",
+        "screens": [
+          "captured-materialized-desktop.png",
+          "captured-abandoned-desktop.png"
+        ],
+        "gameLog": "captured-figment-abandon-desktop.jsonl",
+        "gameLogRows": 51,
+        "caps": [],
+        "notes": "Workflow and member DOM removal passed; points presentation pending in intermediate images."
+      },
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000053301",
+        "entityKind": "synthetic-card",
+        "variant": "base",
+        "mode": "judged",
+        "bead": "hv-umm2.533",
+        "commit": "c19477570294f83b191bc54bafbd6fba5da6f032",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "effective": false,
+        "invocation": "invocations/run-X7UOnJ",
+        "rawReport": "captured-figment-abandon.result.json",
+        "screens": [
+          "captured-materialized-mobile.png",
+          "captured-abandoned-mobile.png"
+        ],
+        "gameLog": "captured-figment-abandon-mobile.jsonl",
+        "gameLogRows": 52,
+        "caps": [],
+        "notes": "Workflow and member DOM removal passed; points presentation pending in intermediate images."
+      },
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000053301",
+        "entityKind": "synthetic-card",
+        "variant": "base",
+        "mode": "judged",
+        "bead": "hv-umm2.533",
+        "commit": "c19477570294f83b191bc54bafbd6fba5da6f032",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "effective": true,
+        "invocation": "invocations/run-xGOLAE",
+        "rawReport": "captured-figment-abandon.result.json",
+        "screens": [
+          "captured-materialized-desktop.png",
+          "captured-abandoned-desktop.png"
+        ],
+        "gameLog": "captured-figment-abandon-desktop.jsonl",
+        "gameLogRows": 52,
+        "caps": [],
+        "notes": "Normal activation and end turn; exact cohort/order/departure triggers, contained hit geometry, member DOM removal and public displayed points=4. Turn-transition announcement is visible in final capture."
+      },
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000053301",
+        "entityKind": "synthetic-card",
+        "variant": "base",
+        "mode": "judged",
+        "bead": "hv-umm2.533",
+        "commit": "c19477570294f83b191bc54bafbd6fba5da6f032",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "effective": true,
+        "invocation": "invocations/run-xGOLAE",
+        "rawReport": "captured-figment-abandon.result.json",
+        "screens": [
+          "captured-materialized-mobile.png",
+          "captured-abandoned-mobile.png"
+        ],
+        "gameLog": "captured-figment-abandon-mobile.jsonl",
+        "gameLogRows": 52,
+        "caps": [],
+        "notes": "Normal activation and end turn; exact cohort/order/departure triggers, contained hit geometry, member DOM removal and public displayed points=4. Turn-transition announcement is visible in final capture."
+      }
+    ],
+    "effectivePasses": 2,
+    "retainedFailures": 1,
+    "intermediatePasses": 3,
+    "scenarioFiles": [
+      "captured-figment-abandon-original.mjs",
+      "captured-figment-abandon-render-wait.mjs",
+      "captured-figment-abandon-dom-gone.mjs",
+      "captured-figment-abandon.mjs"
+    ],
+    "finalInvocation": "run-xGOLAE",
+    "finalPixels": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "pixelScale": 1,
+    "visualReview": "Helper viewed both early desktop captures, intermediate departure desktop/mobile, and all four final captures. Final captures show absent cohort, displayed4 points and normal turn transition. No idle-frame claim.",
+    "provenance": "Initial supported fixture/probe supplies UUID/physical identities. Public ordered materialized/abandoned events are distinct from persisted engine.action and engine.trigger joins. LOAD_STATE scene token is not a full initial snapshot.",
+    "parentIndependentProof": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/533-parent-judged-proof.json"
+  },
+  "runtime": "All tracked validation and native QA commands terminal. Native cleanup confirmed own server groups stopped and port free; freeze runtime audit records scoped process/owner state. No reviewers started by helper.",
+  "testDelta": {
+    "files": 1,
+    "lines": 211,
+    "jsdomFiles": 0
+  },
+  "pending": "Parent cold other-family review, commit ACK and native Tollgate delivery remain; helper has no delivery authority."
+}

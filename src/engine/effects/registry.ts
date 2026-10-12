@@ -15,6 +15,7 @@
 import type * as primitives from "./primitives";
 import {
   abandonPrimitive,
+  abandonCardsPrimitive,
   awakenPrimitive,
   banishPrimitive,
   banishCardsPrimitive,
@@ -99,6 +100,9 @@ export type Effect = {
 const DEFINITIONS = {
   get abandon() {
     return abandonPrimitive;
+  },
+  get abandonCards() {
+    return abandonCardsPrimitive;
   },
   get awaken() {
     return awakenPrimitive;
