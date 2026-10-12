@@ -1633,6 +1633,7 @@ export function createBattleDriver(qa) {
     const point = await qa.read((target) => {
       const element = document.querySelector(target);
       if (element === null) return null;
+      element.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
       const box = element.getBoundingClientRect();
       for (const fy of [0.5, 0.3, 0.7, 0.15]) {
         for (let x = Math.max(1, box.left + 4); x < Math.min(innerWidth - 1, box.right); x += 4) {
@@ -1679,7 +1680,14 @@ export function createBattleDriver(qa) {
           `[data-battle-card-id="${candidate}"]`,
           `[data-battle-slot-id="${candidate}"]`,
         ]) {
-          if (selector.startsWith("[data-testid") && !(await enabledControl(selector))) continue;
+          if (selector.startsWith("[data-testid")) {
+            const enabled = await qa.read((target) => {
+              const element = document.querySelector(target);
+              return element === null ? null : element.getAttribute("aria-disabled") !== "true" && !element.hasAttribute("disabled");
+            }, selector);
+            if (enabled === false) break;
+            if (enabled === null) continue;
+          }
           if (await tap(selector)) {
             tapped = true;
             break;

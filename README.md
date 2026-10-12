@@ -333,6 +333,9 @@ The helpers:
   does not count.
 - A `target` is a CSS selector or `{ text: "<regex source>" }`, the deepest
   elements whose text matches.
+  Dismiss dialogs through their rendered close control and wait for the
+  underlying control to become visible before acting; a keyboard Escape
+  press does not establish that the dialog closed.
 - `qa.capture(name, { fullPage?, clip?, element?, pad?, minOpacity? })`
   writes `artifacts/qa/<bead-id>/<name>.png` at CSS scale: the viewport, the
   full page, a viewport rectangle `clip: { x, y, width, height }`, or the box
@@ -421,7 +424,8 @@ battle uses it rather than its own pass loop:
   then the picker's submit (or Skip). `qa.battle.pass()` presses the phase
   button, a main-phase pass or a pass in a respond window, and reports
   whether the battle moved on. `qa.battle.tap(selector)` clicks the first
-  point that hits an element, as on a card in a fanned hand.
+  point that hits an element, as on a card in a fanned hand, scrolling it
+  into view within its scroll containers first.
 - `qa.battle.playUntil(predicate, { timeout?, stallMs?, pollMs?, label?,
   before?, passWhen? })` reads the battle until `predicate(state, run)`
   holds; meanwhile it answers each owed prompt, else passes (when
@@ -494,6 +498,11 @@ battle uses it rather than its own pass loop:
   const target = await qa.battle.promptOrAutoAnswer({ role: "target", since });
   if (target.outcome === "rendered") await qa.battle.answer(target.state);
   ```
+
+  A forced single-target choice follows this auto-answer path too. Take the
+  event cursor before playing and wait with `promptOrAutoAnswer` instead of
+  requiring a target picker to appear.
+
 - `qa.battle.enterFirstBattle({ seed?, query?, atFrontDoor? })` opens a
   fresh game (`/?seed=<seed>&<query>`, seed 1) and walks the front door to
   the first battle: Avatar selection, every Layer 1 site, and Battle Start,
@@ -593,6 +602,9 @@ not offer a play of the source card, and preserve the declared human hand and
 energy when `as=enemy`. The helper verifies the immutable initial history
 board and returns `{ battleId, player, enemy }` with physical IDs by zone,
 so duplicate UUIDs remain distinct even if the live AI has already moved.
+To exercise an amplified source, retain the solver's hand with
+`{ variant: "amplified" }` and play that source through its normal hand control;
+declared rank entries stage base printings even with that variant option.
 
 `enemyScript` selects live legal enemy Day actions through the normal intent
 driver. References name an **initial enemy physical slot**, retained across
@@ -735,7 +747,9 @@ scene on every load.
   you-may, and an X cost), `up-to-one-target` (one optional target, or Skip),
   `arrange` (a cancellable arrangement among the top, the bottom, and the
   hand), `foresee`, `draw-discard` (present, then ask), `offering` (play route
-  and offering cost), `void-cost` (the gallery card picker), `reclaim`
+  and offering cost), `take-two-from-among` (Erode, then an optional exact
+  two-card choice among the eroded cards), `void-cost` (the gallery card
+  picker), `reclaim`
   (Reclaim from the void, Avatar and Dreamsign abilities from the status
   display), `capacity` (a full back rank), `ai-discard` (the human discards
   during the AI's turn), `ai-foresee` (the AI's private prompt), `respond` (a

@@ -94,3 +94,85 @@ describe("inline activated target observation", () => {
     }
   });
 });
+
+describe("battle pointer taps", () => {
+  it("answers an off-screen gallery candidate and refuses its disabled nested fallback", async () => {
+    for (const disabled of [false, true]) {
+      let top = 900;
+      let selected = false;
+      const attributes = { "data-testid": "battle-card-picker-candidate-i1", "aria-disabled": String(disabled) };
+      const candidate = {
+        getAttribute: (/** @type {string} */ key) => /** @type {Record<string, string>} */ (attributes)[key] ?? null,
+        hasAttribute: () => false,
+        scrollIntoView: () => { top = 100; },
+        getBoundingClientRect: () => ({ left: 20, right: 100, top, height: 80 }),
+        contains: (/** @type {unknown} */ hit) => hit === candidate,
+      };
+      const gallery = { getAttribute: () => null };
+      const lookup = (/** @type {string} */ selector) =>
+        selector.includes("candidate-i1") || (disabled && selector.includes('"i1"')) ? candidate :
+          selector === "[data-battle-card-picker-gallery]" && !selected ? gallery : null;
+      const context = { innerWidth: 390, innerHeight: 844,
+        window: { __qa: { rendered: (/** @type {{selector: string}} */ { selector }) => {
+          const element = lookup(selector);
+          return element === candidate && top >= 844 ? null : element;
+        } } },
+        document: { querySelector: lookup,
+          querySelectorAll: (/** @type {string} */ selector) => selector.includes("gallery]") && !selected ? [candidate] : [],
+          elementFromPoint: () => top < 844 ? candidate : null },
+      };
+      const qa = /** @type {import("./prelude.mjs").Qa} */ (/** @type {unknown} */ ({
+        page: { mouse: { click: () => { selected = true; } } },
+        sleep: async () => {}, rest: async () => {}, assertCaps: async () => {},
+        read: (/** @type {(arg: unknown) => unknown} */ fn, /** @type {unknown} */ arg) =>
+          Promise.resolve(/** @type {unknown} */ (runInNewContext(`(${String(fn)})(${JSON.stringify(arg)})`, context))),
+      }));
+      const driver = createBattleDriver(qa);
+      expect(await driver.answer()).toBe(!disabled);
+      expect(selected).toBe(!disabled);
+      expect((await driver.state()).prompt === null).toBe(!disabled);
+    }
+  });
+
+  it("brings a clipped candidate into view and clicks only its uncovered area", async () => {
+    let scrollTop = 0;
+    let covered = false;
+    /** @type {{ x: number, y: number }[]} */
+    const clicks = [];
+    const child = {};
+    const overlay = {};
+    const element = {
+      // A candidate inside a scroll container starts below the viewport.
+      scrollIntoView: () => { scrollTop = 600; },
+      getBoundingClientRect: () => ({ left: 20, right: 100, top: 900 - scrollTop, height: 80 }),
+      contains: (/** @type {unknown} */ hit) => hit === child,
+    };
+    const context = {
+      innerWidth: 390, innerHeight: 844,
+      document: {
+        querySelector: (/** @type {string} */ selector) => selector === "[data-candidate]" ? element : null,
+        elementFromPoint: (/** @type {number} */ x, /** @type {number} */ y) => {
+          const box = element.getBoundingClientRect();
+          // Its centre is covered, as in a fanned hand; the left edge is free.
+          return !covered && x < 32 && y >= box.top && y <= box.top + box.height && y < 844 ? child : overlay;
+        },
+      },
+    };
+    const qa = /** @type {import("./prelude.mjs").Qa} */ (/** @type {unknown} */ ({
+      page: { mouse: { click: (/** @type {number} */ x, /** @type {number} */ y) => { clicks.push({ x, y }); } } },
+      rest: async () => {},
+      read: (/** @type {(arg: unknown) => unknown} */ fn, /** @type {unknown} */ arg) =>
+        Promise.resolve(/** @type {unknown} */ (runInNewContext(`(${String(fn)})(${JSON.stringify(arg)})`, context))),
+    }));
+    const driver = createBattleDriver(qa);
+    expect(await driver.tap("[data-candidate]")).toBe(true);
+    expect(scrollTop).toBeGreaterThan(0);
+    expect(clicks).toHaveLength(1);
+    expect(clicks[0]?.x).toBeLessThan(32);
+    expect(clicks[0]?.y).toBeGreaterThanOrEqual(element.getBoundingClientRect().top);
+    covered = true;
+    expect(await driver.tap("[data-candidate]")).toBe(false);
+    expect(await driver.tap("[data-missing]")).toBe(false);
+    expect(clicks).toHaveLength(1);
+  });
+});

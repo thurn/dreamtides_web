@@ -1,0 +1,135 @@
+{
+  "bead": "hv-umm2.518",
+  "base": "7d539fb176d2c64390b514bd06a54002c8fc2979",
+  "measurementWindow": {
+    "dispatchUtc": "2026-10-12T07:01:00+00:00",
+    "dispatchProvenance": "Parent-recorded helper dispatch approximately07:01UTC; owned branch reflog06:59:38UTC. Includes research, coordination, verification and waits.",
+    "completionUtc": "2026-10-12T07:15:06.298816+00:00",
+    "completionProvenance": "Precommit sample; actual single-commit timestamp is definitive."
+  },
+  "validation": {
+    "focused": {
+      "files": 1,
+      "cases": 5,
+      "result": "pass",
+      "wallS": 1.305,
+      "scope": "Prepare start07:05:07.985 through restore finish07:05:09.290; Vitest87ms"
+    },
+    "review": {
+      "files": 9,
+      "cases": 108,
+      "result": "pass",
+      "wallS": 16.212,
+      "scope": "07:11:35.815 through07:11:52.027; related14.7s"
+    },
+    "knip": {
+      "result": "exit0",
+      "wallS": 2.505,
+      "scope": "Prepare/Knip/restore07:12:04.325 through07:12:06.830"
+    },
+    "reviewFull": {
+      "files": 345,
+      "cases": 4806,
+      "result": "pass",
+      "wallS": 88.802,
+      "scope": "Heavy-slot review prepare07:12:16.438 through restore07:13:45.240; Vitest61.87s/test step62.3s, lint22.5s, bundle2.7s",
+      "heavySlot": true
+    },
+    "evidenceSchema": {
+      "result": "checked after own evidence written"
+    }
+  },
+  "browserQa": {
+    "representative": "invocations/run-VLy0uX/gallery-scroll.result.json",
+    "final": "invocations/run-V9ceWp/gallery-scroll.result.json",
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "serve": 1655,
+      "scenario": 21106,
+      "total": 22797
+    },
+    "viewport": "390x844",
+    "screens": [
+      "gallery-initial-mobile.png",
+      "gallery-scrolled-mobile.png",
+      "gallery-paid-mobile.png"
+    ],
+    "initialOffscreen": [
+      "i16",
+      "i17"
+    ],
+    "paidPhysicalIds": [
+      "i16",
+      "i15",
+      "i14",
+      "i13",
+      "i12",
+      "i11",
+      "i10"
+    ],
+    "promptAnswer": {
+      "gameId": "ipie48",
+      "version": 0,
+      "promptId": "0:1:0",
+      "side": "player",
+      "fingerprint": "6l0zsebj9k",
+      "value": [
+        "i10",
+        "i11",
+        "i12",
+        "i13",
+        "i14",
+        "i15",
+        "i16"
+      ],
+      "timestamp": "2026-10-12T07:11:18.041Z",
+      "event": "engine.promptAnswered",
+      "seq": 43
+    },
+    "sourceUuid": "3e802ecd-a83b-491b-9528-a4672d0e986f",
+    "payerUuid": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+    "result": "Normal answer driver selected and committed seven cards including initially offscreen i16; scroll/hit geometry observed; source reaches play, currentEnergy2; UUIDs verified; caps empty.",
+    "visualReview": "Parent inspected initial representative, scrolled gallery and final capture. Initial/scrolled mobile geometry proves below-fold selection. Final screenshot includes the play travel interval; engine committed state is authoritative, no settled animation/layout claim."
+  },
+  "scratchFailures": [
+    {
+      "invocation": "run-ie92Qg",
+      "reason": "Wrong scratch energy expectation3to0; source ordinary cost1 produces3to2; physical selection succeeded."
+    },
+    {
+      "invocation": "run-UjJd6B",
+      "reason": "Persisted prompt selection IDs compared to banished zone ordering; corrected to physical membership/count. No ordering contract."
+    }
+  ],
+  "runtime": {
+    "representativeServerPid": 44517,
+    "failedServerPids": [
+      45642,
+      55872
+    ],
+    "finalRunnerPid": 69349,
+    "finalServerPid": 69387,
+    "port": 5175,
+    "state": "Every runner/provider normal close/server group cleanup settled; final port free and recorded PIDs absent",
+    "helper": "/root/qa_tap_scroll hit capacity after launching final run; parent finished remaining checks/evidence/commit; no helper writers remain"
+  },
+  "scopeClarification": "Adjacent candidate-enabled gate admits offscreen enabled elements to tap and refuses disabled candidates without fallback bypass; submit/skip visibility unchanged. Native parent authorization recorded before edit.",
+  "reviewPolicy": "Non-test code9added/1deleted plus README16added/2deleted; below100line threshold and not core-review; no independent review required.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Local review start"
+      },
+      "implementMin": {
+        "measuredFor": "Approximate helper dispatch through precommit; branch creation precedes dispatch"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "focused": 4.32373046875,
+    "review": 6.49560546875,
+    "knip": 14.66455078125,
+    "reviewFull": 15.0048828125,
+    "browser": 5.58837890625
+  }
+}
