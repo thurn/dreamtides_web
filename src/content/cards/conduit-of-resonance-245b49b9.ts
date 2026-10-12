@@ -1,3 +1,6 @@
+import { all, characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { triggerAbility } from "../../engine/effects/primitives/trigger-ability";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 258,
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "character" }), triggerAbility(all(characterYouControl({ another: true })), "dawn"))],
+  verifiedText: "21fb2ws9quw",
 });

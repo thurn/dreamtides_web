@@ -1,3 +1,5 @@
+import { triggered, triggeringCard, whenMaterialize } from "../../engine/dsl/triggers";
+import { triggerAbility } from "../../engine/effects/primitives/trigger-ability";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 164,
   art: { x: 0.122, y: 0.398, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenMaterialize(), triggerAbility(triggeringCard(), "dawn"))],
+  verifiedText: "xtgga5ex93",
 });

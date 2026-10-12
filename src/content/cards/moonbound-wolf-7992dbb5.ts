@@ -1,3 +1,5 @@
+import { activated, characterYouControl, exhaustSelf, keyword, ofSubtype, returnCost, target } from "../../engine/dsl/builders";
+import { triggerAbility } from "../../engine/effects/primitives/trigger-ability";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,9 @@ export default card({
   artOwned: false,
   cardNumber: 106,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    keyword("awakened"),
+    activated([exhaustSelf(), returnCost()], triggerAbility(target(characterYouControl(ofSubtype("Spirit Animal"))), "dawn")),
+  ],
+  verifiedText: "23zegs54krw",
 });
