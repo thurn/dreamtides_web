@@ -1,0 +1,252 @@
+{
+  "bead": "hv-umm2.570",
+  "base": "f80b08365b887f966209d207b02ef379186092b7",
+  "status": "LOCALLY VALIDATED; parent exact-source core review/certified delivery owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T18:35:51+00:00",
+    "startProvenance": "Actual parent claim ACK used as conservative whole-ownership proxy including parent install/preparation, helper read/design, baseline/implementation/correction/checks and lock wait. Exact dispatch unknown.",
+    "parentPredispatchUtc": "2026-10-12T18:36:08Z",
+    "parentPredispatchResolution": "one-second observation",
+    "parentPostdispatchUtc": "2026-10-12T18:36:51.662626Z",
+    "helperFirstObservedUtc": "2026-10-12T18:36:50Z",
+    "endUtc": "2026-10-12T18:50:10.347117+00:00",
+    "endProvenance": "Actual post-check/resource-settlement precommit evidence cutoff; final standalone schema/commit tail excluded and qualified, actual Git commit time retained."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "First preparation load observation in required review; host load is not CPU utilization."
+      }
+    }
+  },
+  "scope": {
+    "sourcePaths": [
+      "src/runtime/qa-scenes.ts",
+      "src/runtime/qa-scenes-battle.test.ts"
+    ],
+    "productionChangedLines": 5,
+    "testDelta": {
+      "added": 12,
+      "deleted": 8,
+      "net": 4,
+      "newCases": 0,
+      "entrypoints": 0,
+      "jsdomFiles": 0,
+      "owningModuleLines": 356
+    },
+    "exportedApiChanges": [],
+    "privateFallout": "resolveCardLab optional Engine argument: withCardLab supplies actual catalog; scene.build keeps syntax-only call. No other consumer changes.",
+    "unchanged": "Generic constructor unplayable catch, engine/card-lab APIs, content, rules, UI, saved schemas, runner/config and all valid/default stages.",
+    "runtimeClassification": "Unknown declared Dreamwell hand CardId is checked inside existing invalidStage boundary against actual engine catalog including development synthetic cards. No exception-message matching or broad catch reclassification."
+  },
+  "sourceSHA256": {
+    "src/runtime/qa-scenes.ts": "906b4d4d293450784e0d56fcd61995858ad35e549272bc854eb897b8ffbc780a",
+    "src/runtime/qa-scenes-battle.test.ts": "3444e14e1812f79351ad42189d61ad752576a89173de738686ef960b581da722"
+  },
+  "validation": [
+    {
+      "name": "baseline",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/runtime/qa-scenes-battle.test.ts"
+      ],
+      "pid": 28456,
+      "observerPid": 28444,
+      "startUtc": "2026-10-12T18:39:43.774455+00:00",
+      "endUtc": "2026-10-12T18:39:50.811103+00:00",
+      "wallS": 7.037,
+      "exit": 1,
+      "log": "/tmp/hv-570-baseline.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "baseline-clean",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "-t",
+        "accepts an empty hand|loads a card-lab battle"
+      ],
+      "pid": 32027,
+      "observerPid": 32012,
+      "startUtc": "2026-10-12T18:40:30.227731+00:00",
+      "endUtc": "2026-10-12T18:40:35.268042+00:00",
+      "wallS": 5.04,
+      "exit": 1,
+      "log": "/tmp/hv-570-baseline-clean.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/engine/testing/tooling-card-lab-script.test.ts"
+      ],
+      "pid": 96717,
+      "observerPid": 96461,
+      "startUtc": "2026-10-12T18:41:29.494032+00:00",
+      "endUtc": "2026-10-12T18:41:35.209095+00:00",
+      "wallS": 5.715,
+      "exit": 0,
+      "log": "/tmp/hv-570-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 43808,
+      "observerPid": 43797,
+      "startUtc": "2026-10-12T18:42:24.496753+00:00",
+      "endUtc": "2026-10-12T18:42:37.760335+00:00",
+      "wallS": 13.263,
+      "exit": 0,
+      "log": "/tmp/hv-570-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 48225,
+      "observerPid": 48215,
+      "startUtc": "2026-10-12T18:43:18.996820+00:00",
+      "endUtc": "2026-10-12T18:43:23.500229+00:00",
+      "wallS": 4.503,
+      "exit": 0,
+      "log": "/tmp/hv-570-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/hv-570-heavy-body.py"
+      ],
+      "pid": 51257,
+      "observerPid": 51247,
+      "startUtc": "2026-10-12T18:44:03.033940+00:00",
+      "endUtc": "2026-10-12T18:48:26.082521+00:00",
+      "wallS": 263.047,
+      "exit": 0,
+      "log": "/tmp/hv-570-full.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "fullBody": {
+    "bodyPid": 14598,
+    "npmPid": 14604,
+    "startUtc": "2026-10-12T18:46:49.091257+00:00",
+    "endUtc": "2026-10-12T18:48:26.078984+00:00",
+    "wallS": 96.98715862499375,
+    "exit": 0
+  },
+  "heavySlot": {
+    "waitObservation": {
+      "observedUtc": "2026-10-12T18:45:06.619021+00:00",
+      "fullStartUtc": "2026-10-12T18:44:03.033940+00:00",
+      "acquiredMarkerPresent": false,
+      "note": "Empty body log proves no acquired-body execution observed yet; shared holder untouched."
+    },
+    "acquiredUtc": "2026-10-12T18:46:49.091257+00:00",
+    "startToAcquiredS": 166.057317,
+    "qualification": "Measured wrapper-start to acquired-body interval includes queue and process launch overhead. Total263.047s is not execution/CPU time; body duration is separate command wall time."
+  },
+  "baseline": {
+    "first": "Actual configured Vitest source unchanged: both unknown staged hand declarations report unplayable; two expected soft reason failures plus distinct error-count fixture failure. No partial lab history. Ordinary event0 front-slot constructor control already reports unplayable as intended.",
+    "clean": "After correcting only expected error count, targeted unchanged-source counterfactual fails only unknown-reason assertions; both controllers raw metadata show unplayable. Ordinary unrelated constructor control passes.",
+    "repair": "Narrow actual-catalog check maps unknown hands into invalidStage; focused38cases pass. Existing both-side valid SYNTHETIC/JSON LOAD_STATE controls prove development card membership is accepted.",
+    "correctionWindow": {
+      "startUtc": "2026-10-12T18:39:43.774455Z",
+      "endUtc": "2026-10-12T18:40:35.268042Z",
+      "seconds": 51.493587,
+      "endpoint": "Bookkeeping repair complete; deliberately expected product-negative remains in the clean counterfactual."
+    }
+  },
+  "parentInputs": {
+    "install": {
+      "receipt": "/tmp/dreamtides-executor-01a12e91/570-install.json",
+      "pid": 8672,
+      "observerPid": 8662,
+      "startUtc": "2026-10-12T18:36:05.601196Z",
+      "endUtc": "2026-10-12T18:36:08.931533Z",
+      "wallS": 3.330366,
+      "exit": 0,
+      "notRepeated": true
+    },
+    "entryFriction": {
+      "receipt": "/tmp/dreamtides-executor-01a12e91/570-entry-triggers.json",
+      "pid": 67757,
+      "observerPid": 67745,
+      "startUtc": "2026-10-12T18:37:30.594683Z",
+      "endUtc": "2026-10-12T18:37:30.835673Z",
+      "wallS": 0.241,
+      "exit": 0
+    },
+    "review569": "Parent completed one outer fresh configured Sol review206.666s before this ownership; nested CLI probes failed before a model, not a second completed review. Exact569 source finding filed570.",
+    "failedNodeProbe": "/tmp/dreamtides-executor-01a12e91/569-finding-witness.json; import.meta.env.DEV failed outside Vite before fixture. Not an actual unknown-reason witness. Exact timings/PIDs remain parent receipt, not invented here."
+  },
+  "coreFailurePaths": {
+    "midStepError": "This change is read-only pre-construction lookup/rejection metadata, not a resolving step. New actual ordinary event0 front-slot constructor failure remains unplayable. Existing Dreamwell-bonus rollback public contract is unchanged and covered by full.",
+    "reloadRestart": "Existing both-controller runtime SYNTHETIC hands/JSON LOAD_STATE and tooling saved prefix/undo replay contracts pass; this patch adds no state marker or persisted field.",
+    "partialWrite": "Strengthened malformed/unsupported/unknown hand declarations return plain fallback with no partial lab history, status rejected/reason invalidStage. Existing queued Dreamwell partial-write load checks pass in full.",
+    "invalidStaleInput": "Unknown valid UUID and malformed inputs both controllers have exact reason assertions; valid/default/{} controls remain ready. Existing tooling foreign/stale/illegal answer protocols unchanged.",
+    "concurrentActors": "Catalog lookup mutates no state and publishes no new intent; existing public duplicate-answer/once-publication tooling contracts pass in focused/full. No new concurrency seam requires a new test."
+  },
+  "qa": {
+    "newBrowserRuns": 0,
+    "newScreenshots": 0,
+    "required": false,
+    "reason": "Explicit nonvisual rejection metadata-only classification scope; no gameplay or display change.",
+    "priorContext": "569 actual valid-stage functional QA and known outside-Areas drawn-card highlight fail566 remain unchanged; they are prior evidence, not newly claimed570 QA. Original213 still needs parent reclaim/update/exact-scene acceptance."
+  },
+  "resources": {
+    "observedUtc": "2026-10-12T18:50:10.347117+00:00",
+    "pids": {
+      "8662": "absent",
+      "8672": "absent",
+      "14598": "absent",
+      "14604": "absent",
+      "28444": "absent",
+      "28456": "absent",
+      "32012": "absent",
+      "32027": "absent",
+      "43797": "absent",
+      "43808": "absent",
+      "48215": "absent",
+      "48225": "absent",
+      "51247": "absent",
+      "51257": "absent",
+      "67745": "absent",
+      "67757": "absent",
+      "96461": "absent",
+      "96717": "absent"
+    },
+    "serversBrowsersProvidersPorts": "None owned/started for570; full suite uses its existing contained synthetic tooling tests. No shared provider/config/peer records touched.",
+    "writers": "Only finite evidence write now; standalone schema and commit tail follow, then no further writes."
+  },
+  "retainedAuthorError": "Initial full-check tool launch used mistyped dreamwell_web working directory. Tool rejected process creation before any command/PID/source effect. Corrected launch18:44:03.033940; exact rejected-attempt timestamp/duration not separately captured, elapsed correction included whole-ownership proxy.",
+  "classification": "Required focused/review/Knip/full completed, no browser or generic fuzz. Parent fresh readonly gpt-5.6-sol exact-source core review under human override through2026-10-14T01:00Z remains owed."
+}

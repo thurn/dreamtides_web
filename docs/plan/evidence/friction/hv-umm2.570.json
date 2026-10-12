@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.570",
+  "phase": 5,
+  "implementMin": 14.322452,
+  "implementWindow": {
+    "start": "2026-10-12T18:35:51+00:00",
+    "end": "2026-10-12T18:50:10.347117+00:00"
+  },
+  "localValidationS": {
+    "baseline": 7.037,
+    "baseline-clean": 5.04,
+    "focus": 5.715,
+    "review": 13.263,
+    "knip": 4.503,
+    "full": 263.047
+  },
+  "hostLoad": 19.2021484375,
+  "testDelta": {
+    "files": 0,
+    "lines": 4,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.85822645,
+      "note": "Conservative complete test-bookkeeping repair18:39:43.774455\u201318:40:35.268042. First baseline omitted adjusting existing error-count3 for the added fourth ordinary constructor negative. Correct count4, then targeted baseline proves ordinary unplayable control passes while ONLY intended unknown-stage reason negatives remain. Failed7.037s command is not the repair duration."
+    }
+  ]
+}

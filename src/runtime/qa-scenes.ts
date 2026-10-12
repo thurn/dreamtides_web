@@ -478,7 +478,7 @@ type CardLabResolution =
     };
 
 /** Resolves a card-lab request against the content: the card, its eligible variants, and its deck entry. */
-function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens): CardLabResolution {
+function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens, engine?: Engine): CardLabResolution {
   const cardId = isCardId(tokens.card) ? parseCardId(tokens.card) : null;
   const card = [...journeyContent.cardDatabase.values()].find((candidate) => candidate.id === cardId);
   if (card === undefined) {
@@ -491,6 +491,7 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens): 
     if (variant !== "base") return { kind: "rejected", reason: "ineligibleVariant", eligible };
     try {
       const stage = tokens.stage === undefined ? undefined : dreamwellLabStageFromUnknown(JSON.parse(tokens.stage));
+      if (engine !== undefined) for (const card of [...(stage?.player?.hand ?? []), ...(stage?.enemy?.hand ?? [])]) engine.catalog.card(card);
       return { kind: "ok", entityKind: "dreamwell", request: { cardId: dreamwellId, side: tokens.side, ...(stage === undefined ? {} : { stage }) }, eligible };
     } catch (error) {
       return { kind: "rejected", reason: "invalidStage", eligible, detail: error instanceof Error ? error.message : String(error) };
@@ -586,7 +587,7 @@ function cardLabContentStatus(cardId: CardId): string | null {
 
 /** `battle` with its engine battle replaced by the card-lab battle, or unchanged and reported when it cannot be built. */
 function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, journeyContent: JourneyContent, engine: Engine): JourneyBattleFoldState {
-  let resolved = resolveCardLab(journeyContent, tokens);
+  let resolved = resolveCardLab(journeyContent, tokens, engine);
   let lab: ReturnType<typeof cardLabBattle> | null = null;
   const published: EngineEvent[] = [];
   if (resolved.kind === "ok") {
