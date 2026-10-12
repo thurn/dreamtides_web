@@ -1,3 +1,6 @@
+import { fromVoid } from "../../engine/dsl/builders";
+import { onDissolved, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 122,
   art: { x: 0, y: 0, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), p.erode(variant.amplified ? 4 : 3)),
+    triggered(onDissolved(), p.returnFromVoid(fromVoid({ cardType: "character" }))),
+  ],
+  verifiedText: "124czwb6pfb",
 });

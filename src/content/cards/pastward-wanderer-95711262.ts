@@ -1,3 +1,7 @@
+import { energy, fromVoid } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { thisCharacterSpark } from "../../engine/dsl/values";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,8 @@ export default card({
   cardNumber: 107,
   art: { x: 0, y: -0.197, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onDawn(), p.grantReclaim(fromVoid({ cardType: "event" }, { costAtMost: thisCharacterSpark() }), { costs: [energy(0)] })),
+  ],
+  verifiedText: "26e3c4zgrxr",
 });

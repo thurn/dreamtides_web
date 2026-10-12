@@ -1,3 +1,6 @@
+import { fromVoid } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 87,
   art: { x: 0.084, y: -0.028, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), p.grantReclaim(fromVoid({ cardType: "event" })))],
+  verifiedText: "1pk20812plq",
 });

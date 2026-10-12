@@ -1,3 +1,6 @@
+import { energy, event, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDiscardSelf } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,9 @@ export default card({
   artOwned: false,
   cardNumber: 88,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(p.takeFromAmong(p.movedBy(p.erode(4)), { count: 2, optional: true })),
+    triggered(whenDiscardSelf(), p.grantReclaim(thisCardIn("void"), { costs: [energy(2)] }), { zone: "void" }),
+  ],
+  verifiedText: "1kflgovnc0m",
 });
