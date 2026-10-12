@@ -1,3 +1,11 @@
+import {
+  characterYouControl,
+  controls,
+  ofSubtype,
+} from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +21,12 @@ export default dreamsign({
     "833ba3dd-498a-42ce-9a03-32f6636acea1",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(onDawn(), draw(1), {
+      condition: controls(characterYouControl(ofSubtype("Warrior")), 3),
+    }),
+  ],
+  verifiedText: expectedVerifiedText(
+    "▸Dawn: If you control 3 or more warriors, draw a card.",
+  ),
 });

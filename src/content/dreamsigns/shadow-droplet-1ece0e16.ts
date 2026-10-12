@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { cardsIn, grantCardKeyword } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,10 @@ export default dreamsign({
     "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [
+    staticAbility(
+      grantCardKeyword(cardsIn("void", { subtype: "Survivor" }), "reclaim"),
+    ),
+  ],
+  verifiedText: expectedVerifiedText("Survivors in your void have reclaim."),
 });

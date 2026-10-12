@@ -1,3 +1,7 @@
+import { randomIn } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +19,15 @@ export default dreamsign({
     "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [
+    triggered(
+      onDawn(),
+      returnFromVoid(randomIn("void", 1, { subtype: "Survivor" }), {
+        toYourHand: true,
+      }),
+    ),
+  ],
+  verifiedText: expectedVerifiedText(
+    "▸Dawn: Return a random survivor from your void to your hand.",
+  ),
 });

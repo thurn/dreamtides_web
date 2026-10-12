@@ -1,3 +1,11 @@
+import {
+  all,
+  characterYouControl,
+  ofSubtype,
+  staticAbility,
+} from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +21,10 @@ export default dreamsign({
     "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5",
   ],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    staticAbility(
+      sparkModifier(all(characterYouControl(ofSubtype("Spirit Animal"))), 1),
+    ),
+  ],
+  verifiedText: expectedVerifiedText("Spirit animals you control have +1✦."),
 });

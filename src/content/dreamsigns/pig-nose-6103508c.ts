@@ -1,3 +1,11 @@
+import {
+  all,
+  characterYouControl,
+  ofSubtype,
+  staticAbility,
+} from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -12,5 +20,10 @@ export default dreamsign({
     "14f8ed05-e684-407c-be32-1dc970d69f36",
   ],
   tags: ["J11", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    staticAbility(
+      sparkModifier(all(characterYouControl(ofSubtype("Survivor"))), 2),
+    ),
+  ],
+  verifiedText: expectedVerifiedText("Survivors you control have +2✦."),
 });

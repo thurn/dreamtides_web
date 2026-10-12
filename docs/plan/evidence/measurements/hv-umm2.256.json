@@ -1,0 +1,1099 @@
+{
+  "bead": "hv-umm2.256",
+  "base": "e926449abd74f5d8c85beb62ebac2f58eb2d3ad6",
+  "source": {
+    "productionLeaves": 6,
+    "addedLines": 75,
+    "deletedLines": 6,
+    "nonTestChangedLines": 81,
+    "newPrimitives": [],
+    "newForms": [],
+    "newEvents": [],
+    "newPrompts": [],
+    "newStatuses": [],
+    "exportedSignatureChanges": [],
+    "directLeafImporters": [
+      "src/content/dreamsigns/index.ts"
+    ],
+    "fallout": [],
+    "canonicalMetadataPreserved": true,
+    "journeyTextPresent": false,
+    "pendingCleared": 6,
+    "D20": "Six independent existing primitive compositions; no scenario module or added test entrypoint. External behavioral diagnostics use the actual production emblems with synthetic fixtures."
+  },
+  "dispatchObservation": {
+    "at": "2026-10-12T22:53:14.736455+00:00",
+    "precision": "Parent post-dispatch tool observation, not an internal spawn timestamp."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Required review starting one-minute host load from actual command receipt."
+      }
+    }
+  },
+  "validation": {
+    "production-proof": {
+      "start": "2026-10-12T22:57:32.097661+00:00",
+      "end": "2026-10-12T22:57:34.701409+00:00",
+      "wallS": 2.6036717499955557,
+      "CPU_S": 3.010085,
+      "exit": 0,
+      "pid": 13478,
+      "pgid": 13478,
+      "startLoad": [
+        7.7666015625,
+        7.6611328125,
+        7.58056640625
+      ]
+    },
+    "focused": {
+      "start": "2026-10-12T22:57:39.708098+00:00",
+      "end": "2026-10-12T22:57:48.063218+00:00",
+      "wallS": 8.355046124997898,
+      "CPU_S": 12.328911999999999,
+      "exit": 0,
+      "pid": 13633,
+      "pgid": 13633,
+      "startLoad": [
+        7.78515625,
+        7.66650390625,
+        7.5830078125
+      ]
+    },
+    "review": {
+      "start": "2026-10-12T22:59:02.960125+00:00",
+      "end": "2026-10-12T22:59:50.324491+00:00",
+      "wallS": 47.36403229199641,
+      "CPU_S": 154.98102,
+      "exit": 0,
+      "pid": 15631,
+      "pgid": 15631,
+      "startLoad": [
+        5.67822265625,
+        6.9765625,
+        7.3232421875
+      ]
+    },
+    "knip": {
+      "start": "2026-10-12T23:00:10.598188+00:00",
+      "end": "2026-10-12T23:00:14.339517+00:00",
+      "wallS": 3.7412328339996748,
+      "CPU_S": 4.185385999999999,
+      "exit": 0,
+      "pid": 17352,
+      "pgid": 17352,
+      "startLoad": [
+        9.001953125,
+        7.92529296875,
+        7.6640625
+      ]
+    },
+    "coverage": {
+      "start": "2026-10-12T23:01:46.684127+00:00",
+      "end": "2026-10-12T23:01:52.134099+00:00",
+      "wallS": 5.449789709004108,
+      "CPU_S": 6.6819,
+      "exit": 0,
+      "pid": 20728,
+      "pgid": 20728,
+      "startLoad": [
+        15.09912109375,
+        9.19970703125,
+        8.12353515625
+      ]
+    },
+    "preflight": {
+      "start": "2026-10-12T22:58:05.835050+00:00",
+      "end": "2026-10-12T22:58:06.782303+00:00",
+      "wallS": 0.9471992920007324,
+      "CPU_S": 1.2027379999999999,
+      "exit": 0,
+      "pid": 14302,
+      "pgid": 14302,
+      "startLoad": [
+        6.7177734375,
+        7.42431640625,
+        7.498046875
+      ]
+    },
+    "fuzz-inner": {
+      "start": "2026-10-12T22:58:04.709785+00:00",
+      "end": "2026-10-12T23:01:39.169095+00:00",
+      "wallS": 214.45803966700623,
+      "CPU_S": 228.292363,
+      "exit": 0,
+      "pid": 14265,
+      "pgid": 14265,
+      "startLoad": [
+        6.7802734375,
+        7.44873046875,
+        7.50732421875
+      ]
+    },
+    "fuzz-locked": {
+      "start": "2026-10-12T22:58:04.688595+00:00",
+      "end": "2026-10-12T23:01:39.173419+00:00",
+      "wallS": 214.48354304199165,
+      "CPU_S": 228.31551199999998,
+      "exit": 0,
+      "pid": 14263,
+      "pgid": 14263,
+      "startLoad": [
+        6.7802734375,
+        7.44873046875,
+        7.50732421875
+      ]
+    },
+    "schema-preqa": {
+      "start": "2026-10-12T23:01:52.165638+00:00",
+      "end": "2026-10-12T23:01:52.311476+00:00",
+      "wallS": 0.14572233300714288,
+      "CPU_S": 0.10023699999999999,
+      "exit": 0,
+      "pid": 26364,
+      "pgid": 26364,
+      "startLoad": [
+        17.5732421875,
+        9.810546875,
+        8.34521484375
+      ]
+    }
+  },
+  "focusedActual": {
+    "files": 2,
+    "tests": 2331,
+    "absentRequestedPath": "src/content/content.test.ts",
+    "qualification": "Selection mistake retained; absent path is not an executed test or gate."
+  },
+  "requiredReviewActual": {
+    "files": 229,
+    "tests": 4471,
+    "fullLocal": "Not applicable: leaf composition/evidence only; no test infrastructure, configuration or cross-cutting architecture change."
+  },
+  "coverageActual": {
+    "files": 1,
+    "tests": 20
+  },
+  "productionProof": {
+    "scriptSHA256": "fda00d9b7713f9c7b57b070745a9d954752a347d10547cec8be7ed1f5efa6c97",
+    "resultSHA256": "3073a239b937d8221cb9c5206874d7e3f9aacebfcc45afd4ff38431c8999bc06",
+    "cases": 18,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "queueRecheck": "Exactly three Warriors at queue become zero after earlier private synthetic Avatar Dawn dissolution; production Claw resolves applied=false. Separate two/three threshold cases verify no queue versus one extra draw.",
+    "staticScope": "Current own/opposite/hand subtype, plain Reclaim route and payments, gainedSpark=0. Actual dynamic control-change/departure of static spark is inherited from primitive contracts, not claimed by this script."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 131905,
+    "prompts": 6743,
+    "interactiveReruns": 688,
+    "failures": 0,
+    "nodeWallS": 212.7,
+    "nodeCPUS": 227.1,
+    "commandExecutionWallS": 214.45803966700623,
+    "commandCPUS": 228.292363,
+    "heavyAdmissionIntervalS": 0.02119,
+    "admissionQualification": "Includes lock admission and child launcher overhead; separate from actual weighted execution.",
+    "targetCoverage": [
+      {
+        "uuid": "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+        "included": 600,
+        "triggerExerciseEvents": 760
+      },
+      {
+        "uuid": "246ac924-74dd-4387-9fd6-5bc8e563907a",
+        "included": 600,
+        "triggerExerciseEvents": 0
+      },
+      {
+        "uuid": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+        "included": 600,
+        "triggerExerciseEvents": 0
+      },
+      {
+        "uuid": "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
+        "included": 600,
+        "triggerExerciseEvents": 4611
+      },
+      {
+        "uuid": "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+        "included": 600,
+        "triggerExerciseEvents": 0
+      },
+      {
+        "uuid": "6103508c-4991-4b80-9dc1-f30122957296",
+        "included": 600,
+        "triggerExerciseEvents": 0
+      }
+    ],
+    "exerciseQualification": "Static compositions are included in actual games and expose no trigger/ability-resolved event; explicit runtime characteristic/route/payment proof supplements them."
+  },
+  "QA": {
+    "preflight": {
+      "pass": 12,
+      "fail": 0,
+      "variants": [
+        "base"
+      ],
+      "controllers": [
+        "player",
+        "enemy"
+      ],
+      "qualification": "Initialization/normal first-Day progression. Rope empty-pool trigger resolution is distinct from actual return."
+    },
+    "originalAggregate": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-PDEXo4",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.256/invocations/sweep-PDEXo4",
+      "counts": {
+        "pass": 6,
+        "fail": 6
+      },
+      "attemptCounts": {
+        "pass": 6,
+        "fail": 7
+      },
+      "hostLoad": 19.8330078125,
+      "sessions": 3,
+      "leaseYields": 2,
+      "wallMs": {
+        "browserLeaseWait": 29632,
+        "serve": 5647,
+        "scenario": 156843.22845799997,
+        "cleanup": 2530.251749999996,
+        "execution": 165358.43266700002,
+        "total": 194990.43266700002
+      },
+      "wrapperExit": 1,
+      "rawSHA256": "d3b91d1113622fbd01ce3f8da55fb6bd560a1f72a328452c624a9883f7e24119",
+      "qualification": "Original effective6pass/6fail and raw6pass/7fail remain. Unknown stale navigation and transport errors are retained, not converted or declared fixed."
+    },
+    "freshPairedDiagnosticSweeps": [
+      {
+        "tag": "diag-claw",
+        "summary": "invocations/sweep-fgXTLs/summary.json",
+        "rawSHA256": "f6ba907edf5315638c9a6b43f781948ddf5208be75573f3c6496321fdfeb89eb",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1979,
+          "scenario": 6243.545249999999,
+          "cleanup": 543.8835839999992,
+          "execution": 8875.161167,
+          "total": 8883.161167
+        },
+        "wrapperWallS": 9.103146207999089
+      },
+      {
+        "tag": "diag-shadow",
+        "summary": "invocations/sweep-WqMQU8/summary.json",
+        "rawSHA256": "0450d7adc291d98e7d785aaca11cebe01978989df755bc585b532e42a22eaf23",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1974,
+          "scenario": 6299.490334000001,
+          "cleanup": 537.0593340000014,
+          "execution": 8871.05275,
+          "total": 8877.05275
+        },
+        "wrapperWallS": 9.098506458001793
+      },
+      {
+        "tag": "diag-rope",
+        "summary": "invocations/sweep-VKA97i/summary.json",
+        "rawSHA256": "9d5319dbc5be465139fe3ca779822a2a0d953e85a3044ed43eec20fa6aba7ddb",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1359,
+          "scenario": 6219.972375,
+          "cleanup": 589.3679169999996,
+          "execution": 8226.962875,
+          "total": 8231.962875
+        },
+        "wrapperWallS": 8.35631449999346
+      },
+      {
+        "tag": "diag-notes",
+        "summary": "invocations/sweep-kNjRVu/summary.json",
+        "rawSHA256": "566b2b634c63cd1f9d18ed51e6070941dca1535b8c26efa8d4798cc4a892ee17",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1358,
+          "scenario": 6279.537916000001,
+          "cleanup": 576.5106250000008,
+          "execution": 8271.358292,
+          "total": 8276.358292
+        },
+        "wrapperWallS": 8.396891124997637
+      },
+      {
+        "tag": "diag-pig-enemy",
+        "summary": "invocations/sweep-XHbt48/summary.json",
+        "rawSHA256": "66b2f610404b0926d120002753b369eb2c1e90d0e603b962d2ae7ec02db764c9",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1356,
+          "scenario": 6290.0662919999995,
+          "cleanup": 529.383832999999,
+          "execution": 8236.220749999999,
+          "total": 8241.220749999999
+        },
+        "wrapperWallS": 8.372736584002269
+      },
+      {
+        "tag": "diag-pig-player",
+        "summary": "invocations/sweep-aWy0mF/summary.json",
+        "rawSHA256": "20bf870fd62a607f883870ec3a21a005e710b3f1e54997af67955c7c0697b112",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1356,
+          "scenario": 6515.448082999999,
+          "cleanup": 541.8525000000009,
+          "execution": 8475.845959,
+          "total": 8481.845959
+        },
+        "wrapperWallS": 8.602534625009866
+      }
+    ],
+    "exactInitializationPassingWitnesses": [
+      {
+        "uuid": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+        "side": "enemy",
+        "rawReport": "invocations/sweep-WqMQU8/run-ce8akh/sweep-1ece0e16-08de-4c99-8552-2d1d3a2bd517-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+        "side": "player",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-1ece0e16-08de-4c99-8552-2d1d3a2bd517-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+        "side": "enemy",
+        "rawReport": "invocations/sweep-fgXTLs/run-g6RDmV/sweep-21ae8473-afa7-4384-b7d4-afbf1d84e691-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+        "side": "player",
+        "rawReport": "invocations/sweep-PDEXo4/run-nZvscU/sweep-21ae8473-afa7-4384-b7d4-afbf1d84e691-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "246ac924-74dd-4387-9fd6-5bc8e563907a",
+        "side": "enemy",
+        "rawReport": "invocations/sweep-XHbt48/run-kzITfz/sweep-246ac924-74dd-4387-9fd6-5bc8e563907a-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "246ac924-74dd-4387-9fd6-5bc8e563907a",
+        "side": "player",
+        "rawReport": "invocations/sweep-aWy0mF/run-bi6l5q/sweep-246ac924-74dd-4387-9fd6-5bc8e563907a-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+        "side": "enemy",
+        "rawReport": "invocations/sweep-kNjRVu/run-hcDUWT/sweep-4f5bdcac-64cb-4a45-8121-e37f5e4d3074-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+        "side": "player",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-4f5bdcac-64cb-4a45-8121-e37f5e4d3074-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "6103508c-4991-4b80-9dc1-f30122957296",
+        "side": "enemy",
+        "rawReport": "invocations/sweep-XHbt48/run-kzITfz/sweep-6103508c-4991-4b80-9dc1-f30122957296-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "6103508c-4991-4b80-9dc1-f30122957296",
+        "side": "player",
+        "rawReport": "invocations/sweep-aWy0mF/run-bi6l5q/sweep-6103508c-4991-4b80-9dc1-f30122957296-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
+        "side": "enemy",
+        "rawReport": "invocations/sweep-VKA97i/run-QyzbsA/sweep-a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
+        "side": "player",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a-base-player-attempt-1.result.json"
+      }
+    ],
+    "passingWitnessQualification": "All twelve exact UUID/base/controller cells have actual passing native standard sweep witnesses across source-pinned original and paired invocations. Each affected cell is paired with healthy same-controller Curved Blade in a fresh session; historical original verdicts remain.",
+    "D21": {
+      "sampleFirstBytes": [
+        61,
+        100,
+        91,
+        166,
+        67,
+        138
+      ],
+      "sampledEntities": 0,
+      "newSurfaces": 0,
+      "requiredJudged": 0,
+      "voluntaryMechanismPasses": 7,
+      "voluntaryObserverFailures": 1
+    },
+    "productionMechanisms": [
+      {
+        "tag": "ability-claw",
+        "uuid": "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-JT74Kb/abilities.result.json",
+        "rawSHA256": "7c9b1ff16be05809338e73c05f2a98bffd4171cf729bf835adc09e83f7341820",
+        "executableObserverSHA256": "38ace4dca9bb4da98c55d27b9cf926662ca0329e79ffdcf9f11f09fa9481f9be",
+        "recipe": [
+          {
+            "zone": "play",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i51"
+          },
+          {
+            "zone": "play",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i52"
+          },
+          {
+            "zone": "play",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i53"
+          },
+          {
+            "zone": "play",
+            "side": "enemy",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i54"
+          }
+        ],
+        "gameId": "urdzr4",
+        "journalRowsAtObservation": 55,
+        "liveEvents": 29,
+        "sourceJournalRows": 1,
+        "sparks": null,
+        "geometry": [],
+        "badge": null,
+        "captures": [],
+        "wallS": 23.072269124997547
+      },
+      {
+        "tag": "ability-curved",
+        "uuid": "246ac924-74dd-4387-9fd6-5bc8e563907a",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-AVCvVE/abilities.result.json",
+        "rawSHA256": "87941b49fa388b4d504355d9ef55be93dae064d0612afbf9c65d9b32c8719318",
+        "executableObserverSHA256": "38ace4dca9bb4da98c55d27b9cf926662ca0329e79ffdcf9f11f09fa9481f9be",
+        "recipe": [
+          {
+            "zone": "hand",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i51"
+          },
+          {
+            "zone": "hand",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i52"
+          },
+          {
+            "zone": "hand",
+            "side": "enemy",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i53"
+          }
+        ],
+        "gameId": "wukz9b",
+        "journalRowsAtObservation": 34,
+        "liveEvents": 4,
+        "sourceJournalRows": 1,
+        "sparks": null,
+        "geometry": [],
+        "badge": null,
+        "captures": [],
+        "wallS": 35.810248499998124
+      },
+      {
+        "tag": "ability-shadow-browser",
+        "uuid": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-fHT37T/abilities.result.json",
+        "rawSHA256": "151ad099257ba79f7be497bf7811791c403796cbd3fa333bbf2935c6120e5f8a",
+        "executableObserverSHA256": "53fbb71b1e7d30ca5c73e3294f4545344c557a1872f0cefe426c0149b8a4bba4",
+        "recipe": [
+          {
+            "zone": "void",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i51"
+          },
+          {
+            "zone": "void",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i52"
+          },
+          {
+            "zone": "void",
+            "side": "enemy",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i53"
+          },
+          {
+            "zone": "hand",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i54"
+          }
+        ],
+        "gameId": "nffrcm",
+        "journalRowsAtObservation": 36,
+        "liveEvents": 5,
+        "sourceJournalRows": 1,
+        "sparks": null,
+        "geometry": [],
+        "badge": {
+          "text": "",
+          "target": "i52",
+          "decoy": "i51",
+          "x": 264,
+          "y": 414.046875,
+          "width": 176,
+          "height": 246.390625,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "badgeRect": {
+            "x": 271.03125,
+            "y": 443.9375,
+            "width": 28,
+            "height": 28
+          },
+          "playableRole": "button",
+          "ring": "rgb(34, 197, 94) 0px 0px 0px 3px, rgb(34, 197, 94) 0px 0px 12px 0px, rgba(0, 0, 0, 0.55) 0px 4px 14px 0px",
+          "decoyRing": "rgba(0, 0, 0, 0.55) 0px 4px 14px 0px",
+          "hit": {
+            "x": 352,
+            "y": 537.2421875,
+            "covered": null
+          },
+          "opposing": {
+            "id": "i53",
+            "keyword": null,
+            "actionable": false
+          }
+        },
+        "captures": [
+          "shadow-droplet-static-reclaim-desktop.png"
+        ],
+        "wallS": 48.39450762499473
+      },
+      {
+        "tag": "ability-rope",
+        "uuid": "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-h62VrZ/abilities.result.json",
+        "rawSHA256": "8f83ef12bea9cc8e69ae41386fd8fb7df92e06c9813f0c64bbca71a5f8de87b6",
+        "executableObserverSHA256": "53fbb71b1e7d30ca5c73e3294f4545344c557a1872f0cefe426c0149b8a4bba4",
+        "recipe": [
+          {
+            "zone": "void",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i51"
+          },
+          {
+            "zone": "void",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i52"
+          },
+          {
+            "zone": "void",
+            "side": "enemy",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i53"
+          }
+        ],
+        "gameId": "8jaixg",
+        "journalRowsAtObservation": 63,
+        "liveEvents": 38,
+        "sourceJournalRows": 1,
+        "sparks": null,
+        "geometry": [],
+        "badge": null,
+        "captures": [],
+        "wallS": 29.02452112500032
+      },
+      {
+        "tag": "ability-notes",
+        "uuid": "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-yk75qe/abilities.result.json",
+        "rawSHA256": "29d63de0ba101e5d9ab9c927f58da2f5dfe67d63da9116648dcde82ed4f299cb",
+        "executableObserverSHA256": "53fbb71b1e7d30ca5c73e3294f4545344c557a1872f0cefe426c0149b8a4bba4",
+        "recipe": [
+          {
+            "zone": "play",
+            "side": "player",
+            "uuid": "edb479be-68a5-45bc-bd19-2602156edb57",
+            "instance": "i51"
+          },
+          {
+            "zone": "play",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i52"
+          },
+          {
+            "zone": "play",
+            "side": "enemy",
+            "uuid": "edb479be-68a5-45bc-bd19-2602156edb57",
+            "instance": "i53"
+          },
+          {
+            "zone": "hand",
+            "side": "player",
+            "uuid": "edb479be-68a5-45bc-bd19-2602156edb57",
+            "instance": "i54"
+          }
+        ],
+        "gameId": "68opv9",
+        "journalRowsAtObservation": 32,
+        "liveEvents": 0,
+        "sourceJournalRows": 0,
+        "sparks": [
+          3,
+          3,
+          2
+        ],
+        "geometry": [
+          {
+            "id": "i51",
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": "Spark3"
+          },
+          {
+            "id": "i52",
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": "Spark3"
+          },
+          {
+            "id": "i53",
+            "x": 254.5,
+            "y": 183,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": "Spark2"
+          }
+        ],
+        "badge": null,
+        "captures": [],
+        "wallS": 9.280985916993814
+      },
+      {
+        "tag": "ability-pig",
+        "uuid": "6103508c-4991-4b80-9dc1-f30122957296",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-ahkRSe/abilities.result.json",
+        "rawSHA256": "b65f0b1e50d40ffc49213e3487edcad150beb27f1b215cd55f6c677e8b98a78c",
+        "executableObserverSHA256": "53fbb71b1e7d30ca5c73e3294f4545344c557a1872f0cefe426c0149b8a4bba4",
+        "recipe": [
+          {
+            "zone": "play",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i51"
+          },
+          {
+            "zone": "play",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i52"
+          },
+          {
+            "zone": "play",
+            "side": "enemy",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i53"
+          },
+          {
+            "zone": "hand",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i54"
+          }
+        ],
+        "gameId": "zqkeyj",
+        "journalRowsAtObservation": 32,
+        "liveEvents": 0,
+        "sourceJournalRows": 0,
+        "sparks": [
+          3,
+          3,
+          1
+        ],
+        "geometry": [
+          {
+            "id": "i51",
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": "Spark3"
+          },
+          {
+            "id": "i52",
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": "Spark3"
+          },
+          {
+            "id": "i53",
+            "x": 254.5,
+            "y": 183,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": "Spark1"
+          }
+        ],
+        "badge": null,
+        "captures": [],
+        "wallS": 9.06615470800898
+      },
+      {
+        "tag": "shadow-mobile",
+        "uuid": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+        "viewport": "mobile",
+        "rawReport": "invocations/run-TlPBdY/shadow-mobile.result.json",
+        "rawSHA256": "dcf16481866829abc2f73bc19d87540d5153dbbee48c30c368e3afa9c9b82b08",
+        "executableObserverSHA256": "fae3f0cae85014f31cdff7522adaaaf7e7c6e814cea729c109c6825cac7ccddb",
+        "recipe": [
+          {
+            "zone": "void",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i51"
+          },
+          {
+            "zone": "void",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i52"
+          },
+          {
+            "zone": "void",
+            "side": "enemy",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i53"
+          },
+          {
+            "zone": "hand",
+            "side": "player",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000000000f",
+            "instance": "i54"
+          }
+        ],
+        "gameId": "g65bqz",
+        "journalRowsAtObservation": 36,
+        "liveEvents": 5,
+        "sourceJournalRows": 1,
+        "sparks": null,
+        "geometry": [],
+        "badge": {
+          "text": "",
+          "target": "i52",
+          "decoy": "i51",
+          "x": 9,
+          "y": 142.5,
+          "width": 90,
+          "height": 126,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "badgeRect": {
+            "x": 12.59375,
+            "y": 158.75,
+            "width": 23.390625,
+            "height": 23.390625
+          },
+          "playableRole": "button",
+          "ring": "rgb(34, 197, 94) 0px 0px 0px 3px, rgb(34, 197, 94) 0px 0px 12px 0px, rgba(0, 0, 0, 0.55) 0px 4px 14px 0px",
+          "decoyRing": "rgba(0, 0, 0, 0.55) 0px 4px 14px 0px",
+          "hit": {
+            "x": 54,
+            "y": 205.5,
+            "covered": null
+          },
+          "opposing": {
+            "id": "i53",
+            "keyword": null,
+            "actionable": false
+          }
+        },
+        "captures": [
+          "shadow-droplet-static-reclaim-mobile.png"
+        ],
+        "wallS": 11.819666334005888
+      }
+    ],
+    "failureDispositions": [
+      {
+        "uuid": "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+        "as": "enemy",
+        "rawReport": "invocations/sweep-PDEXo4/run-nZvscU/sweep-21ae8473-afa7-4384-b7d4-afbf1d84e691-base-enemy-attempt-1.result.json",
+        "failureKinds": [
+          "timeout"
+        ],
+        "verdict": "fail",
+        "effective": false,
+        "disposition": "Additional fresh paired native sweep witnesses preserve original navigation errors and their causal uncertainty.",
+        "rawSHA256": "a62752e6c03996a028adaf5e480a870de7395117c32ad42020c60b05bd8e46c9"
+      },
+      {
+        "uuid": "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+        "as": "enemy",
+        "rawReport": "invocations/sweep-PDEXo4/run-nZvscU/sweep-21ae8473-afa7-4384-b7d4-afbf1d84e691-base-enemy-attempt-2.result.json",
+        "failureKinds": [
+          "unknown"
+        ],
+        "verdict": "fail",
+        "effective": true,
+        "disposition": "Additional fresh paired native sweep witnesses preserve original navigation errors and their causal uncertainty.",
+        "rawSHA256": "b3eb238df556a054c89ef9f70c5eaf3d04d0f0f98f6ab1b0e0bc6b6d33588ebe"
+      },
+      {
+        "uuid": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+        "as": "enemy",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-1ece0e16-08de-4c99-8552-2d1d3a2bd517-base-enemy-attempt-1.result.json",
+        "failureKinds": [
+          "unknown"
+        ],
+        "verdict": "fail",
+        "effective": true,
+        "disposition": "Additional fresh paired native sweep witnesses preserve original navigation errors and their causal uncertainty.",
+        "rawSHA256": "d0ea3279db34e9d136ccc11fd72ab30f0217030edb10ae3e21f6409d711649dd"
+      },
+      {
+        "uuid": "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
+        "as": "enemy",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a-base-enemy-attempt-1.result.json",
+        "failureKinds": [
+          "unknown"
+        ],
+        "verdict": "fail",
+        "effective": true,
+        "disposition": "Additional fresh paired native sweep witnesses preserve original navigation errors and their causal uncertainty.",
+        "rawSHA256": "c48b7afc43dfd33bf71bdd806c0a05f93ff7eab6f865110a60c246b7d031c333"
+      },
+      {
+        "uuid": "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+        "as": "enemy",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-4f5bdcac-64cb-4a45-8121-e37f5e4d3074-base-enemy-attempt-1.result.json",
+        "failureKinds": [
+          "unknown"
+        ],
+        "verdict": "fail",
+        "effective": true,
+        "disposition": "Additional fresh paired native sweep witnesses preserve original navigation errors and their causal uncertainty.",
+        "rawSHA256": "b1d1da5247bb3ca5849f1d5457e84a5892124a8de586f6819d1a9b89c817af71"
+      },
+      {
+        "uuid": "6103508c-4991-4b80-9dc1-f30122957296",
+        "as": "player",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-6103508c-4991-4b80-9dc1-f30122957296-base-player-attempt-1.result.json",
+        "failureKinds": [
+          "unknown"
+        ],
+        "verdict": "fail",
+        "effective": true,
+        "disposition": "Additional fresh paired native sweep witnesses preserve original navigation errors and their causal uncertainty.",
+        "rawSHA256": "265babc118dd772682a2dc7922c3fb8a391ace321052e8510b67b54175b1fd4c"
+      },
+      {
+        "uuid": "6103508c-4991-4b80-9dc1-f30122957296",
+        "as": "enemy",
+        "rawReport": "invocations/sweep-PDEXo4/run-gev6iU/sweep-6103508c-4991-4b80-9dc1-f30122957296-base-enemy-attempt-1.result.json",
+        "failureKinds": [
+          "unknown"
+        ],
+        "verdict": "fail",
+        "effective": true,
+        "disposition": "Additional fresh paired native sweep witnesses preserve original navigation errors and their causal uncertainty.",
+        "rawSHA256": "a0113932d7da6b51dd167016314de9fb4e6310a76c2069f482f7eb688a0ae0bd"
+      },
+      {
+        "uuid": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+        "as": "player",
+        "rawReport": "invocations/run-j9Ci8M/abilities.result.json",
+        "failureKinds": [],
+        "verdict": "fail",
+        "effective": true,
+        "disposition": "Concrete external observer corrected from unsupported CardPile badge/top-order premise to normal void chooser/browser; subsequent desktop and mobile production plays pass.",
+        "rawSHA256": "ba40c22beb364f4be9cbde518368aaea08c633924621974d87f96ae8f20fd387"
+      }
+    ],
+    "ledgerRows": 33,
+    "ledgerTotals": {
+      "sweep": {
+        "pass": 18,
+        "fail": 7,
+        "rows": 25
+      },
+      "voluntaryJudged": {
+        "pass": 7,
+        "fail": 1,
+        "rows": 8
+      }
+    },
+    "screens": [
+      {
+        "filename": "shadow-droplet-static-reclaim-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "filename": "shadow-droplet-static-reclaim-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ]
+      }
+    ],
+    "visualQualification": "Existing void-browser surface: synthetic black placeholder Survivor has green ring and an existing plus glyph keyword badge; no literal visible Reclaim word or wider visual matrix claimed. Both captures independently cold-viewed by parent."
+  },
+  "resources": {
+    "observedGroups": 97,
+    "currentMembers": [],
+    "exactOwnedTokensPresent": false,
+    "observedMCPSessions": 17,
+    "frozenMismatch": [],
+    "authority": "Actual observed process lineage, native per-call close/owner-token removal and full final audit. Reused peer paths/ports are not cleanup targets.",
+    "externalAuditSHA256": "61511ec1ffcad727d96d703bcf605865f84114ad7dce2588f343c2e825ceceb4",
+    "observationalCorrections": [
+      {
+        "issue": "Initial external observer retained latest same-slot record",
+        "disposition": "Earlier actual initial token/MCP retained separately; all exact group lineage and each closure remain intact. Subsequent observer keys by path+token."
+      },
+      {
+        "issue": "Literal (ps) process-listing commands previously marked false",
+        "disposition": "Earlier raw annotations retained; final audit marks literal (ps) and ps command rows as diagnostic listings."
+      },
+      {
+        "issue": "Unobserved observer60161/runner60165 sent in a status shorthand",
+        "disposition": "Not resource authority. Actual live manifest60163/60166/server60207 immediately corrected; exact observed lineage governs every closure."
+      },
+      {
+        "issue": "Production diagnostics described as20 cases",
+        "disposition": "Actual raw18 cases retained; final evidence18; no rerun."
+      },
+      {
+        "issue": "Requested absent src/content/content.test.ts path",
+        "disposition": "Selected actual contracts and triggers2files/2331tests; absent path is not an executed test or gate."
+      }
+    ],
+    "groupsAtFinalSchema": 98,
+    "finalSchemaReceipt": "External schema-final.receipt.json: 661 records / 41 historical unknowns; exit 0."
+  },
+  "fiveFailurePaths": [
+    {
+      "path": "error mid-step",
+      "applicability": "No new state transition; static getters store nothing and existing grantCardKeyword negative resolution contract demonstrates committed-step isolation. Existing resolving draw/return contracts own atomic effect handling."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "applicability": "Existing static grant contract serializes state and suspends/replays a playRoute prompt. Supplemental real workflows preserve saved init/source/recipe/actions/physical printing and journal across reload."
+    },
+    {
+      "path": "partial write",
+      "applicability": "Leaf callbacks only construct existing nodes; no new IO/storage writer or step. Existing fold publishes committed steps and pure static evaluation stores no floating gain."
+    },
+    {
+      "path": "invalid or stale input",
+      "applicability": "No new prompt or target. Existing keyword/play-route and trigger fold contracts cover illegal/foreign/stale answers; random selection is nontargeted and empty pool is a no-op."
+    },
+    {
+      "path": "concurrent actors",
+      "applicability": "No new actor or bypass. Normal player/AI intents and the existing decision/prompt protocol serialize writes; existing foreign-actor rejection applies."
+    }
+  ],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "reviewCadence": "Composition; native core-review=false;81 changed non-test lines and no new DSL form. Parent owns independent review decision under D18."
+}

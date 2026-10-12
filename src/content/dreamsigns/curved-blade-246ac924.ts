@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { costModifier } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,8 @@ export default dreamsign({
     "4b01b6c1-ccca-4e19-848a-d799d46088b2",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    staticAbility(costModifier("you", { subtype: "Warrior" }, -1)),
+  ],
+  verifiedText: expectedVerifiedText("Warriors you control cost 1● less."),
 });
