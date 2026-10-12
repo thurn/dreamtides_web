@@ -307,6 +307,10 @@ export class EventRedaction {
             if (id !== null && (event.kind === "shuffledIntoDeck" || event.to !== "void")) decks[event.side].add(id);
           }
           break;
+        case "prevented":
+          leaveDecks(event.instance);
+          if (event.to === "deck" && event.zoneOf !== null) decks[event.zoneOf].add(event.instance);
+          break;
         case "cardCreated":
           if (event.zone === "deck") decks[event.side].add(event.instance);
           break;

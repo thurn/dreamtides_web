@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { abandonSelfCost, activated, everyIn, event, fromVoid } from "../../../dsl/builders";
+import { abandonSelfCost, activated, everyIn, event, fromVoid, stackItem } from "../../../dsl/builders";
 import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -29,6 +29,8 @@ import { lookAtTop } from "../look-at-top";
 import { putInDeck } from "../put-in-deck";
 import { reveal } from "../reveal";
 import { sequence } from "../sequence";
+import { prevent } from "../prevent";
+import { eachPlayer } from "../each-player";
 import { shuffleInto } from "../shuffle-into";
 import { opponentHand, takeFromAmong } from "../take-from-among";
 import { deck, noDiscoverCosts, v } from "./cards-support";
@@ -78,9 +80,19 @@ const repeatedPlacement = eventCard(12, sequence(putInDeck([everyIn("void")], "t
 const entryBetweenShuffles = eventCard(13, sequence(shuffleInto(), putInDeck([everyIn("void")], "top"), shuffleInto()));
 const exitBeforeShuffle = eventCard(14, sequence(draw(1), shuffleInto(), shuffleInto([everyIn("hand")])));
 
+const preventThenShuffle: EngineCardDefinition = {
+  ...eventCard(15, sequence(prevent(stackItem({ cardType: "character" }), { destination: "deckTop" }), eachPlayer(sequence(shuffleInto(), putInDeck([everyIn("deck")], "bottom"))))),
+  speed: "interrupt",
+};
+const preventThenOwnerShuffle: EngineCardDefinition = {
+  ...eventCard(17, sequence(prevent(stackItem({ cardType: "character" }), { destination: "deckTop" }), shuffleInto(), putInDeck([everyIn("deck")], "bottom"))),
+  speed: "interrupt",
+};
+const takeOnly = eventCard(16, takeFromAmong(opponentHand()));
+
 const engine = createEngine(testCatalog([
   ...DSL_CARDS, voidShuffle, handShuffle, lookThenShuffle, handAndVoid, copyThenShuffle, takeThenShuffle, abandonShuffler, shuffleThenFail,
-  erodeThenShuffle, revealThenShuffle, repeatedPlacement, entryBetweenShuffles, exitBeforeShuffle,
+  erodeThenShuffle, revealThenShuffle, repeatedPlacement, entryBetweenShuffles, exitBeforeShuffle, preventThenShuffle, preventThenOwnerShuffle, takeOnly,
 ]));
 
 /** Answers each prompt from `answer`, keeping every prompt and the state it was asked in. */
@@ -118,6 +130,36 @@ const applied = (outcome: IntentOutcome): BattleSlice => {
 };
 
 describe("shuffleInto", () => {
+  it.each([false, true])("rejects a prevented-to-deck identity leak after its owner's bare shuffle (cross-owned: %s)", (crossOwned) => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player", phase: "day",
+      player: { hand: [crossOwned ? takeOnly.id : v.vanilla2.id], energy: 3, deck: [] },
+      enemy: { hand: [crossOwned ? preventThenOwnerShuffle.id : preventThenShuffle.id, ...(crossOwned ? [v.vanilla2.id] : [])], energy: 3, deck: [] },
+    });
+    const card = crossOwned ? ids.enemy.hand[1] : ids.player.hand[0];
+    const held = crossOwned
+      ? engine.apply(state, "player", playFromHand(ids, "player").action, new Answers(() => [card])).state
+      : state;
+    const owner = crossOwned ? "enemy" : "player";
+    expect(held.instances[card]).toMatchObject({ zone: "hand", controller: "player", owner });
+    const before = engine.apply(held, "player", { kind: "play", card, from: "hand" }, firstCards(0)).state;
+    const result = engine.apply(before, "enemy", { kind: "play", card: ids.enemy.hand[0], from: "hand" }, firstCards(1));
+    expect(before.instances[card].zone).toBe("stack");
+    expect(result.events).toContainEqual({ kind: "prevented", instance: card, side: "player", to: "deck", zoneOf: owner });
+    expect(shuffles(result.events).map((entry) => [entry.side, entry.cards])).toEqual(crossOwned ? [["enemy", []]] : [["player", []], ["enemy", []]]);
+    const placement = result.events.find((entry) => entry.kind === "cardsPlaced" && entry.cards.includes(card));
+    expect(result.state.sides[owner].deck).toEqual([card]);
+    expect(eventRedactionViolations(result.events, before, result.state)).toEqual([]);
+    if (placement?.kind !== "cardsPlaced") throw new Error("missing hidden deck placement");
+    expect(placement.side).toBe(owner);
+    expect(placement.from).toEqual(["deck"]);
+    expect(placement.seenBy).toEqual([[]]);
+    const corrupted = { ...placement, seenBy: [["player", "enemy"]] } as const;
+    expect(eventRedactionViolations(result.events.map((entry) => entry === placement ? corrupted : entry), before, result.state)).toEqual([
+      expect.stringMatching(/^player sees a cardsPlaced event/), expect.stringMatching(/^enemy sees a cardsPlaced event/),
+    ]);
+  });
+
   it("rejects an intermediate deck identity leak before a drawn card is shuffled back", () => {
     const result = play(setup(repeatedPlacement.id, { deck: [], void: [v.vanilla2.id] }), firstCards(0));
     const id = result.ids.player.void[0];

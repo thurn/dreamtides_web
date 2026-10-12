@@ -1,0 +1,198 @@
+{
+  "bead": "hv-umm2.483",
+  "base": "665e3f2851906e4698d02bc7a25bc5ca3ab2d623",
+  "scope": {
+    "checkerLinesAdded": 4,
+    "existingContractLinesNet": 42,
+    "newCases": 2,
+    "testEntrypoints": 0,
+    "runtimeAPIChanges": 0,
+    "browserQA": "Not applicable: checker-only change; no runtime or presentation output changes.",
+    "contractLinesAdded": 44,
+    "contractLinesDeleted": 2
+  },
+  "window": {
+    "claim": "2026-10-12T03:37:46Z",
+    "endpoint": "2026-10-12T03:51:23.991155+00:00",
+    "includes": "Research, fixture correction, parent coordination, queue waits and validation.",
+    "endpointScope": "Immediately before final own schema and actual Git commit; actual Git timestamps are separate delivery receipt."
+  },
+  "negativeProof": {
+    "original": "red-final-fixtures.runtime.json: actual exit 1, both valid real engine cases reject [] instead of expected two hidden-payload violations. The cross-owned card is taken with takeFromAmong, played by its holder, prevented into its owner deck and shuffled only there.",
+    "setupFailure": "red-original.runtime.json: retained actual exit 1 from illegal actions in incomplete fixture setup; not defect evidence.",
+    "earlierValid": "red-original-valid.runtime.json: actual exit 1 from same rejection defect in both cases; eachPlayer timing does not prove wrong-owner sensitivity.",
+    "mutation": "red-wrong-owner.runtime.json: actual exit 1, normal case passes and cross-owned case fails; mutation uses controller side rather than zoneOf. Restored byte exact; wrong-owner-proof.json."
+  },
+  "movementAudit": {
+    "deckArrivals": [
+      "cardsPlaced: put-in-deck and discover report destination owner in side",
+      "shuffledIntoDeck: shuffle-into reports entered cards per owner in side",
+      "cardCreated: zones createInstance reports owner in side",
+      "prevented: stack.preventCard deckTop reports owner in zoneOf and prior controller in side"
+    ],
+    "deckExits": [
+      "cardDrawn: resources.drawCard",
+      "cardTaken: put-in-deck and take-from-among",
+      "cardDiscovered: discover hand destination",
+      "returnedToHand: zones returnToHand",
+      "enteredVoid: zones relocate via void",
+      "banished: zones and reclaimed routes",
+      "cardPlayed: play step",
+      "materialized: zones enter/createInPlay/rematerialize",
+      "ceasedToExist: zones created-card departure"
+    ],
+    "nonMembership": [
+      "foresee reorders same deck membership",
+      "discover internal shuffle uses existing discover/canonical boundary semantics; no new membership route",
+      "initial setup, determinization and debug arrangement are outside published step movement batches"
+    ],
+    "retainedContracts": "Before-or-after identification, shownDuring, lastHeld/created fallback, raw membership independence from seenBy, and payload-before-shuffle invalidation remain unchanged."
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "test": "commits no move, shuffle, or draw, and keeps no knowledge of shuffled cards, when the step fails after its shuffle",
+      "file": "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts",
+      "disposition": "Existing real engine rollback contract; checker repair mutates only local sets, never battle state."
+    },
+    {
+      "path": "reload or restart",
+      "test": "matches Discover's deck order, shuffle stream and knowledge reset through serialized replay",
+      "file": "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts",
+      "disposition": "Existing serialized state replay contract. New membership is recomputed from before plus raw batch on each check, with no persisted state."
+    },
+    {
+      "path": "partial write",
+      "test": "commits nothing while the hand choice is suspended, reloads to the same prompt, bounces foreign, stale, concurrent, and illegal input, and resolves once",
+      "file": "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts",
+      "disposition": "Existing committed-state hash and atomic publication contract. Checker has no external writes or checkpoint."
+    },
+    {
+      "path": "invalid or stale input",
+      "test": "rejects a prevented-to-deck identity leak after its owner's bare shuffle (cross-owned: false)",
+      "file": "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts",
+      "disposition": "Forged seenBy payload on the actual emitted hidden placement fails on the unchanged checker in both parameter cases. The normal false case passes the wrong-owner mutation; the true cross-owned case provides that mutation sensitivity. Invalid/stale intent coverage remains in the suspended-hand contract."
+    },
+    {
+      "path": "concurrent actors",
+      "test": "rejects a prevented-to-deck identity leak after its owner's bare shuffle (cross-owned: true)",
+      "file": "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts",
+      "disposition": "Actual enemy-owned card is taken and played by player, prevented by enemy and shuffled into enemy deck. Wrong-owner mutation fails. No shared checker-set access: each check owns local membership."
+    }
+  ],
+  "rawEvidence": {
+    "manifest": "raw-manifest.json",
+    "sha256": "6de889f83306406795ae471f26be515bd7e0c4a01d451d043f8f59209d02bb15",
+    "entries": 42,
+    "location": "Primary ignored artifacts/qa/hv-umm2.483. This frozen manifest excludes later delivery receipts."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual review test-related step start 2026-10-12T03:44:33.274 UTC, os.loadavg one-minute value 15.1435546875."
+      }
+    }
+  },
+  "commands": [
+    {
+      "name": "green-focused",
+      "receipt": "green-focused.runtime.json",
+      "exit": 0,
+      "seconds": 4.240200333002576
+    },
+    {
+      "name": "red-original-valid",
+      "receipt": "red-original-valid.runtime.json",
+      "exit": 1,
+      "seconds": 5.001552333000291
+    },
+    {
+      "name": "install",
+      "receipt": "install.runtime.json",
+      "exit": 0,
+      "seconds": 2.6542356249992736
+    },
+    {
+      "name": "fuzz",
+      "receipt": "fuzz.runtime.json",
+      "exit": 0,
+      "seconds": 111.39133475000199
+    },
+    {
+      "name": "schema",
+      "receipt": "schema.runtime.json",
+      "exit": 0,
+      "seconds": 0.5398631659991224
+    },
+    {
+      "name": "red-final-fixtures",
+      "receipt": "red-final-fixtures.runtime.json",
+      "exit": 1,
+      "seconds": 4.52608916600002
+    },
+    {
+      "name": "trigger",
+      "receipt": "trigger.runtime.json",
+      "exit": 1,
+      "seconds": 0.5291667499986943
+    },
+    {
+      "name": "review",
+      "receipt": "review.runtime.json",
+      "exit": 0,
+      "seconds": 40.473724125000444
+    },
+    {
+      "name": "red-wrong-owner",
+      "receipt": "red-wrong-owner.runtime.json",
+      "exit": 1,
+      "seconds": 4.61331833299846
+    },
+    {
+      "name": "red-original",
+      "receipt": "red-original.runtime.json",
+      "exit": 1,
+      "seconds": 4.552662709000288
+    },
+    {
+      "name": "full",
+      "receipt": "full.runtime.json",
+      "exit": 0,
+      "seconds": 106.16256733300179
+    },
+    {
+      "name": "knip",
+      "receipt": "knip.runtime.json",
+      "exit": 0,
+      "seconds": 4.254715084000054
+    }
+  ],
+  "validation": {
+    "focused": "40 passed, 1 existing entrypoint; 1,254 unrelated cases skipped.",
+    "relatedReview": "2,366 passed in 100 files; both typechecks, lint, import cycles and friction schema pass.",
+    "fullReview": "4,595 passed in 342 files, full lint/Knip/bundle/schema pass; test step 67.8 s at start load 31.95849609375. Wrapper 106.162567333 s.",
+    "fuzz": "fuzz:engine 200 games, 100953 steps, 110.4 s wall, 118.1 s CPU (1.8 games/s wall, 1.7 games/s CPU); prompts 2368; interactive re-runs 257 (1.457 ms each); feasibility bounded {\"legality\":0,\"prompts\":1}; results {\"player\":95,\"enemy\":105,\"draw\":0}; failures 0",
+    "trigger": "One actual invocation exits 1 for the existing fuzz-only-invariant undispositioned trigger; canonical hv-umm2.481 owns disposition, no shared ledger edit.",
+    "performance": "No speed or low-load budget claim; command scopes and loads differ."
+  },
+  "runtime": {
+    "at": "2026-10-12T03:49:11.160786+00:00",
+    "groups": [
+      3539,
+      4176,
+      11661,
+      37580,
+      45248,
+      47594,
+      57230,
+      58436,
+      60647,
+      65125,
+      75614,
+      76300
+    ],
+    "remaining": [],
+    "observedDescendants": "Full/fuzz wrappers sample descendants every 0.5 s; all observed groups are absent. Earlier short commands tracked exact primary groups. No browser/server/provider started by helper.",
+    "servers": "Infrastructure full review uses synthetic temporary server/provider fixtures; current process inventory has no other process with this owned worktree path."
+  }
+}
