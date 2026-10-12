@@ -1,8 +1,9 @@
 // The battle screen model's prompt surfaces and their answers, and the
 // opponent's prompts and responses as the human sees them.
 import { describe, expect, it } from "vitest";
+import { parseCardName } from "../../types/card-identity";
 import { createEngine, type Action, type BattleState } from "../../engine";
-import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
+import { createFoldAdapter, type BattleSlice, type PendingPrompt } from "../../engine/fold/slice";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { LAB } from "../../engine/testing/prompt-lab";
 import { SYNTHETIC, syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
@@ -16,10 +17,10 @@ import { promptFingerprint } from "../../engine/prompts/fingerprint";
 import { isWellFormedPrompt } from "../../engine/prompts/structure";
 import { narrowPrompt } from "../../engine/prompts/narrow";
 import { promptView } from "../../engine/view/view";
-import { parsePromptId } from "../../types/identifiers";
-import { type EngineBattleScreenModel } from "./engine-battle-view-model";
+import { parseBattleId, parsePromptId } from "../../types/identifiers";
+import { buildEngineBattleScreenModel, enginePrintedKeywords, type EngineBattleScreenModel } from "./engine-battle-view-model";
 import { type PendingEnginePrompt, type PromptSurface } from "./prompt-host-view-model";
-import { adapter, board, engine, id, labScreen, labSlice, screenOf, selections } from "./engine-battle-view-model.fixtures";
+import { adapter, board, cards, engine, id, labScreen, labSlice, screenOf, selections } from "./engine-battle-view-model.fixtures";
 
 /** Takes `action` through the fold and returns the screen at the prompt it suspends on. */
 function screenAtPrompt(state: BattleState, action: Action, presented = true) {
@@ -391,5 +392,60 @@ describe("cost-choice prompt data", () => {
       expect(right[0]).not.toBe(left[0]);
       expect(right[1]).toBe(left[1]);
     }
+  });
+});
+
+/** The public pending projection forwarded to the screen, without shared-fixture API changes. */
+function discardScreen(pending: PendingPrompt, drawnForDiscard = pending.drawnForDiscard, presented = true, human: "player" | "enemy" = "player") {
+  return buildEngineBattleScreenModel({
+    battleId: parseBattleId("battle-discard-hint"), human, view: engine.view(pending.display, human), legal: [],
+    prompt: pending.prompt, drawnForDiscard, playing: null, decision: null, presented, notice: null,
+    cards: Object.assign((instance: Parameters<typeof cards>[0]) => {
+      const model = cards(instance);
+      return { ...model, displaySnapshot: { ...model.displaySnapshot, name: parseCardName("Synthetic duplicate") } };
+    }, { nameOf: (identity: Parameters<typeof cards.nameOf>[0]) => cards.nameOf(identity) }), catalog: engine.catalog, printedKeywords: enginePrintedKeywords(engine.catalog),
+    avatars: { player: { avatar: null }, enemy: { avatar: null } }, opponentName: "", essenceReward: 0, resultDismissed: false,
+  });
+}
+function drawnDiscard() {
+  const { state, ids } = board({ player: { hand: [LAB.drawTwoThenDiscard.id, SYNTHETIC.vanilla1.id],
+    deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], energy: 2 } });
+  const result = adapter.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 },
+    { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
+  if (result.kind !== "applied" || result.error !== null) throw new Error("Expected discard prompt");
+  const pending = adapter.pending(result.slice);
+  if (pending === null || pending.prompt.kind !== "chooseCards") throw new Error("Missing public discard prompt");
+  return { pending: { ...pending, prompt: pending.prompt }, ids };
+}
+
+describe("drawn discard picker emphasis", () => {
+  it("selectively rings drawn physical candidates while all old and drawn cards remain selectable", () => {
+    const { pending, ids } = drawnDiscard();
+    const model = discardScreen(pending);
+    const picker = model.view.cardPicker;
+    expect(picker?.ringCandidates).toBe(false);
+    expect(picker?.candidates.filter(c => c.highlighted).map(c => c.instanceId)).toEqual(ids.player.deck.map(id));
+    expect(picker?.candidateIds).toEqual([id(ids.player.hand[1]), ...ids.player.deck.map(id)]);
+    expect(new Set(picker?.candidates.map(c => c.cardUuid)).size).toBe(2);
+    const surface = surfaceOf(model, "picker");
+    for (const candidate of [ids.player.hand[1], ...ids.player.deck]) expect(surface.answer([id(candidate)])).toEqual([candidate]);
+    expect(discardScreen(pending, pending.drawnForDiscard, false).view.cardPicker).toBeNull();
+    expect(discardScreen(pending, pending.drawnForDiscard, true, "enemy").view.cardPicker).toBeNull();
+  });
+
+  it("retains ordinary and other-role rings, and ignores foreign or invisible hint IDs", () => {
+    const { pending, ids } = drawnDiscard();
+    for (const hint of [[], ids.enemy.deck]) {
+      const picker = discardScreen(pending, hint).view.cardPicker;
+      expect(picker?.ringCandidates).toBe(true);
+      expect(picker?.candidates.every(c => !c.highlighted)).toBe(true);
+    }
+    const ordinary = { ...pending, drawnForDiscard: undefined };
+    expect(discardScreen(ordinary).view.cardPicker?.ringCandidates).toBe(true);
+    const restricted = { ...pending, prompt: { ...pending.prompt, allowed: [[ids.player.hand[1]]] } };
+    expect(discardScreen(restricted).view.cardPicker?.candidates.every(c => !c.highlighted)).toBe(true);
+    const other = { ...pending, prompt: { ...pending.prompt, purpose: { ...pending.prompt.purpose, role: "discardCost" as const } } };
+    expect(discardScreen(other).view.cardPicker?.ringCandidates).toBe(true);
+    expect(discardScreen(other).view.cardPicker?.candidates.every(c => !c.highlighted)).toBe(true);
   });
 });

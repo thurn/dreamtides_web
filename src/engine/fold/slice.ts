@@ -5,16 +5,20 @@
  * (`src/rules/battle/engine-battle.ts`).
  */
 import type { Engine } from "../engine";
+import { instanceCard } from "../catalog";
+import { eventAbilities } from "../effects/abilities";
+import { purposeOf } from "../effects/interpreter";
+import { instanceOrigin } from "../rules/activation";
 import { eventVisibleTo, type EngineEvent } from "../events";
 import { eventLogRecords, legalityLogRecords, promptOpenedRecord, stepLogRecords, type EngineLogRecord } from "../log";
 import { isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
 import type { DebugOp } from "../debug/debug-actions";
-import type { Answer, Prompt, PromptId } from "../prompts/types";
+import type { Answer, Prompt, PromptId, PromptPurpose } from "../prompts/types";
 import { allowedBy, type Action, type Decision } from "../rules/actions";
 import { parsePromptId } from "../../types/identifiers";
 import { initialState } from "../state/create";
-import { SIDES, type Side } from "../state/ids";
+import { SIDES, type InstanceId, type Side } from "../state/ids";
 import { stateHash } from "../state/hash";
 import type { BattleInit, BattleState } from "../state/types";
 import { capturePublicKnowledge, keepDisclosures, keepPublishedKnowledge, type PublishedKnowledge } from "../view/knowledge";
@@ -24,6 +28,15 @@ import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { INTERACTIVE } from "../steps/sources";
 import type { EventObserver, RecordedAnswer, StepResult } from "../steps/types";
+
+/** Compare structured physical/emblem UUID identities, including a dreamsign's position. */
+function samePurpose(left: PromptPurpose, right: PromptPurpose): boolean {
+  if (left.cardId !== right.cardId || left.ability !== right.ability || left.role !== right.role) return false;
+  const a = left.source, b = right.source;
+  if (a === null || b === null || typeof a === "string" || typeof b === "string") return a === b;
+  return a.kind === b.kind && a.side === b.side && a.id === b.id &&
+    (a.kind !== "dreamsign" || (b.kind === "dreamsign" && a.index === b.index));
+}
 
 export interface InFlight {
   readonly step: Step;
@@ -111,6 +124,8 @@ export interface PendingPrompt {
   readonly prompt: Prompt & { readonly id: PromptId };
   /** The intermediate state while the step is suspended. */
   readonly display: BattleState;
+  /** Current-body draws eligible for this discard. Undefined means provenance is ambiguous; empty means none. */
+  readonly drawnForDiscard?: readonly InstanceId[];
 }
 
 /**
@@ -457,6 +472,37 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     }
   }
 
+  /** A single authoritative resolving body supplies the current discard's descriptive draw context. */
+  function discardDraws(committed: BattleState, inFlight: InFlight, result: Extract<StepResult, { kind: "suspended" }>): readonly InstanceId[] | undefined {
+    const { prompt } = result;
+    if (prompt.kind !== "chooseCards" || prompt.purpose.role !== "discard") return undefined;
+    let purpose: PromptPurpose | undefined;
+    if (inFlight.step.kind === "resolveTrigger") {
+      const trigger = committed.triggerQueue[0];
+      if (trigger !== undefined) purpose = purposeOf(trigger.source, trigger.origin, trigger.ability, "discard");
+    } else if (inFlight.step.kind === "resolveTop") {
+      const item = committed.stack[committed.stack.length - 1];
+      if (item?.kind === "ability") purpose = purposeOf(item.source, item.origin, item.ability, "discard");
+      else if (item?.kind === "card") {
+        const instance = committed.instances[item.instance];
+        if (instance === undefined) return undefined;
+        const definition = instanceCard(engine.catalog, instance);
+        const bodies = eventAbilities(definition, instance.variant);
+        // Events don't attribute draws inside custom hooks or between multiple bodies.
+        if (definition.synthetic?.resolve !== undefined || bodies.length !== 1) return undefined;
+        purpose = purposeOf(item.instance, instanceOrigin(instance), bodies[0].ability, "discard");
+      }
+    }
+    if (purpose === undefined || !samePurpose(purpose, prompt.purpose)) return undefined;
+    const drawn = new Set<InstanceId>();
+    for (const event of result.events) {
+      if (event.kind === "discarded" && event.side === prompt.side) drawn.clear();
+      if (event.kind === "cardDrawn" && event.side === prompt.side && event.instance !== null) drawn.add(event.instance);
+    }
+    const hand = result.display.sides[prompt.side].hand;
+    return [...drawn].filter(id => prompt.candidates.includes(id) && hand.includes(id));
+  }
+
   /** Replays a recorded in-flight step to the prompt it is suspended on. */
   function replay(slice: BattleSlice, inFlight: InFlight): Replay {
     const evaluation = evaluate(slice.committed, inFlight, null);
@@ -473,11 +519,13 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
         },
       };
     }
+    const drawnForDiscard = discardDraws(slice.committed, inFlight, result);
     return {
       kind: "pending",
       pending: {
         prompt: { ...result.prompt, id: promptIdOf(slice, result.answers.length) },
         display: result.display,
+        ...(drawnForDiscard === undefined ? {} : { drawnForDiscard }),
       },
       shown: result,
     };

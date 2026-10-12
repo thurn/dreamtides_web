@@ -1,0 +1,34 @@
+{
+  "bead": "hv-umm2.566",
+  "phase": 5,
+  "implementMin": 31.715565533333333,
+  "implementWindow": {
+    "start": "2026-10-12T19:15:18+00:00",
+    "end": "2026-10-12T19:47:00.933932+00:00"
+  },
+  "localValidationS": {
+    "baseline": 1.7145308750041295,
+    "contract-baseline": 5.576397541997721,
+    "contract-baseline-corrected": 4.369398708004155,
+    "contract-fixed": 4.939093332999619,
+    "focus": 4.157917958000326,
+    "types": 11.591585540998494,
+    "types-corrected": 3.909721250005532,
+    "types-final": 9.106122292010696,
+    "counterfactual": 5.380920833005803,
+    "affected": 9.946546584003954,
+    "review": 33.963110083001084,
+    "lint-corrected": 2.9022332500026096,
+    "review-final": 30.428268374991603,
+    "knip": 3.2724126249959227,
+    "judged": 13.834005625001737,
+    "judged-corrected": 24.31111195900303
+  },
+  "hostLoad": 8.5029296875,
+  "testDelta": {
+    "files": 0,
+    "lines": 236,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

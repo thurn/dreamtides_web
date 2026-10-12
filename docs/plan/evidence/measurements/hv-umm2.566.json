@@ -1,0 +1,683 @@
+{
+  "bead": "hv-umm2.566",
+  "base": "59ce7afe9147b5083e09e89ccebc7ac84f4d931c",
+  "status": "LOCALLY VALIDATED; parent exact-source cold Sol review/certified delivery owed",
+  "measurementWindow": {
+    "start": "2026-10-12T19:15:18+00:00",
+    "end": "2026-10-12T19:47:00.933932+00:00",
+    "provenance": "Conservative whole-claim ownership proxy includes parent install/setup, helper read/design/coordination/waits, all corrections and validation. Not CPU or exact dispatch. Precommit cutoff; schema/commit tail excluded and qualified by receipts/Git final clock.",
+    "dispatch": {
+      "parentPredispatchObservedUtc": "2026-10-12T19:15:59.015053+00:00",
+      "exactDispatchKnown": false,
+      "parentPostdispatchObservedUtc": "2026-10-12T19:17:45.369184+00:00"
+    },
+    "helperFirstObservedUtc": "2026-10-12T19:17:17Z",
+    "exactDispatch": "unknown"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": {
+        "measuredFor": "Whole claim to actual precommit cutoff; qualified final schema/commit tail."
+      },
+      "hostLoad": {
+        "measuredFor": "Final review body start19:39:57.585Z 1-minute load, not CPU utilization."
+      }
+    }
+  },
+  "scope": {
+    "sourcePaths": [
+      "src/engine/fold/slice.ts",
+      "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+      "src/screens/cumulus_adapters/engine-battle-view-model.ts",
+      "src/battle/components/EngineBattleScreen.tsx",
+      "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts",
+      "src/engine/effects/primitives/contracts/drawn-discard-hints.contracts.ts"
+    ],
+    "nonTestChangedLines": 69,
+    "testDelta": {
+      "plainContractLines": 180,
+      "existingTestNetLines": 56,
+      "netAllTestLines": 236,
+      "newEntryPoints": 0,
+      "newJsdomFiles": 0,
+      "newCases": 19
+    },
+    "fallout": "Optional PendingPrompt/EngineBattleViewInput/PromptHostInput readonly InstanceId[] fields. Existing policy/journey wrappers and other adapters omit/ignore; only admitted screen forwarding changed. No function export/event/prompt/answer/save/fingerprint/flow schema changes. Importer audit retained566-importers.txt.",
+    "bounds": "Only provable single resolving body: queued trigger/Dreamwell, captured activated ability, single-event card without synthetic.resolve. Ambiguous bodies omit (undefined). Proven no eligible draws yields[] and default rings. Same-side discarded resets; intervening non-discard choices retain draws. Visible own-hand legal candidate intersection; no automatic selection.",
+    "verificationClassification": "Derived presentation data only. NativeACK no localfull/fuzz; required types/cycles/affectedtests/review/Knip/nativebrowser/schema plus parent core cold Sol. No new Cumulus style/kind/status; D21 Astral existing sample rejudged."
+  },
+  "sourceManifest": {
+    "time": "2026-10-12T19:41:18.845818+00:00",
+    "head": "59ce7afe9147b5083e09e89ccebc7ac84f4d931c",
+    "dirtyWorkingTree": true,
+    "paths": {
+      "src/engine/fold/slice.ts": "52b1eb4f0b8eef4a4585d0070d6eb585afcb85da646a9f5fedcbe4a1a7161b77",
+      "src/screens/cumulus_adapters/prompt-host-view-model.ts": "839609eac6aa3d1aa11b90793d7ed390b709066651ef149187cc004180fdd801",
+      "src/screens/cumulus_adapters/engine-battle-view-model.ts": "5545444cd8b0fb18b8077e97ab93c1829aa185ee53ac9f73e5fdcbc18dbcc1a8",
+      "src/battle/components/EngineBattleScreen.tsx": "e9cfedfeadc89c95e60e30224d8914579f78438c70d228d17bbee584c0be9622",
+      "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts": "6eaf99ec6233cff3ab21186babf1835f6cacb0b307b9850e46517b4e80d0fac9",
+      "src/engine/effects/primitives/contracts/drawn-discard-hints.contracts.ts": "a23faa9aa8c2bf17794f24ee3b9b1aa43186ea4123cccde663152e7a9df4935f"
+    },
+    "scenarioSha256": "ca64a3cb18fc22e05f7985bcbb0ae90de59fd2b588f8b38ae791dbe79afb63ec"
+  },
+  "commands": {
+    "baseline": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a12e91/566-baseline.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/drawn-discard-emphasis-566",
+      "pid": 40142,
+      "start": "2026-10-12T19:25:18.852446+00:00",
+      "end": "2026-10-12T19:25:20.567009+00:00",
+      "seconds": 1.7145308750041295,
+      "exit": 0,
+      "log": "/tmp/dreamtides-executor-01a12e91/566-baseline.log"
+    },
+    "contract-baseline": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawn discard hints"
+      ],
+      "pid": 87551,
+      "start": "2026-10-12T19:31:33.053161+00:00",
+      "end": "2026-10-12T19:31:38.629754+00:00",
+      "seconds": 5.576397541997721,
+      "exit": 1
+    },
+    "contract-baseline-corrected": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawn discard hints"
+      ],
+      "pid": 15329,
+      "start": "2026-10-12T19:32:01.969992+00:00",
+      "end": "2026-10-12T19:32:06.339435+00:00",
+      "seconds": 4.369398708004155,
+      "exit": 1
+    },
+    "contract-fixed": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawn discard hints"
+      ],
+      "pid": 29709,
+      "start": "2026-10-12T19:33:05.147189+00:00",
+      "end": "2026-10-12T19:33:10.086342+00:00",
+      "seconds": 4.939093332999619,
+      "exit": 1
+    },
+    "focus": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts",
+        "-t",
+        "drawn discard"
+      ],
+      "pid": 52372,
+      "start": "2026-10-12T19:34:17.841355+00:00",
+      "end": "2026-10-12T19:34:21.999311+00:00",
+      "seconds": 4.157917958000326,
+      "exit": 0
+    },
+    "types": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 15720,
+      "start": "2026-10-12T19:35:13.762787+00:00",
+      "end": "2026-10-12T19:35:25.354545+00:00",
+      "seconds": 11.591585540998494,
+      "exit": 2
+    },
+    "types-corrected": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 26158,
+      "start": "2026-10-12T19:35:54.974162+00:00",
+      "end": "2026-10-12T19:35:58.883920+00:00",
+      "seconds": 3.909721250005532,
+      "exit": 2
+    },
+    "types-final": {
+      "command": [
+        "./node_modules/.bin/tsc",
+        "--noEmit"
+      ],
+      "pid": 53545,
+      "start": "2026-10-12T19:36:38.387980+00:00",
+      "end": "2026-10-12T19:36:47.494224+00:00",
+      "seconds": 9.106122292010696,
+      "exit": 0
+    },
+    "counterfactual": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts",
+        "-t",
+        "selectively rings drawn physical"
+      ],
+      "pid": 87322,
+      "start": "2026-10-12T19:36:59.636680+00:00",
+      "end": "2026-10-12T19:37:05.017660+00:00",
+      "seconds": 5.380920833005803,
+      "exit": 1,
+      "restored": true,
+      "restoredSha256": "c24da709d9f438bd1b65ad9f3ba482acf851efcd459ed48db40895e94a431097"
+    },
+    "affected": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/fold/fold-prompts.test.ts"
+      ],
+      "pid": 8086,
+      "start": "2026-10-12T19:37:24.127160+00:00",
+      "end": "2026-10-12T19:37:34.073839+00:00",
+      "seconds": 9.946546584003954,
+      "exit": 0
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 25317,
+      "start": "2026-10-12T19:38:08.352465+00:00",
+      "end": "2026-10-12T19:38:42.316134+00:00",
+      "seconds": 33.963110083001084,
+      "exit": 1
+    },
+    "lint-corrected": {
+      "command": [
+        "./node_modules/.bin/eslint",
+        "src/engine/fold/slice.ts",
+        "src/engine/effects/primitives/contracts/drawn-discard-hints.contracts.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+      ],
+      "pid": 44865,
+      "start": "2026-10-12T19:39:15.145690+00:00",
+      "end": "2026-10-12T19:39:18.047938+00:00",
+      "seconds": 2.9022332500026096,
+      "exit": 0
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 67139,
+      "start": "2026-10-12T19:39:56.578129+00:00",
+      "end": "2026-10-12T19:40:27.006904+00:00",
+      "seconds": 30.428268374991603,
+      "exit": 0
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 77491,
+      "start": "2026-10-12T19:40:52.040933+00:00",
+      "end": "2026-10-12T19:40:55.313379+00:00",
+      "seconds": 3.2724126249959227,
+      "exit": 0
+    },
+    "judged": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.566",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 78715,
+      "observerPid": 78707,
+      "start": "2026-10-12T19:41:32.434037+00:00",
+      "end": "2026-10-12T19:41:46.268258+00:00",
+      "seconds": 13.834005625001737,
+      "exit": 1
+    },
+    "judged-corrected": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.566",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 81060,
+      "observerPid": 81051,
+      "start": "2026-10-12T19:43:24.984855+00:00",
+      "end": "2026-10-12T19:43:49.296071+00:00",
+      "seconds": 24.31111195900303,
+      "exit": 0,
+      "ownedProvider": [
+        {
+          "observedAt": "2026-10-12T19:43:26.663519+00:00",
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "record": {
+            "token": "954d1aa6-aced-413e-bccc-b000c0a149c9",
+            "pid": 81060,
+            "bead": "hv-umm2.566",
+            "label": "judged",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/drawn-discard-emphasis-566",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T19:43:26.518Z",
+            "providerState": "active",
+            "mcpSessionId": "f941a595-68b6-48ab-a7e5-73acf989f5c8",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ]
+    },
+    "parent-install": {
+      "name": "566-install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "observerPid": 61168,
+      "pid": 61226,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/drawn-discard-emphasis-566",
+      "startUtc": "2026-10-12T19:15:34.538432+00:00",
+      "endUtc": "2026-10-12T19:15:37.322578+00:00",
+      "wallS": 2.784140749994549,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/566-install.log"
+    },
+    "parent-dispatch-timing": {
+      "parentPredispatchObservedUtc": "2026-10-12T19:15:59.015053+00:00",
+      "exactDispatchKnown": false,
+      "parentPostdispatchObservedUtc": "2026-10-12T19:17:45.369184+00:00"
+    }
+  },
+  "correctionWindows": [
+    {
+      "cause": "baseline-fixture-id",
+      "start": "2026-10-12T19:31:33.053161+00:00",
+      "end": "2026-10-12T19:32:06.339435+00:00",
+      "seconds": 33.286274,
+      "minutes": 0.5547712333333333,
+      "note": "Malformed stale prompt id corrected; final baseline still intentionally fails16 hint assertions, one control passes."
+    },
+    {
+      "cause": "trigger-fixture-boundary",
+      "start": "2026-10-12T19:33:05.147189+00:00",
+      "end": "2026-10-12T19:34:21.999311+00:00",
+      "seconds": 76.852122,
+      "minutes": 1.2808686999999999,
+      "note": "Dawn normal draw precedes queued body; expected draw uses public committed-versus-display hand delta, not first deck position."
+    },
+    {
+      "cause": "typed-fixture-correction",
+      "start": "2026-10-12T19:35:13.762787+00:00",
+      "end": "2026-10-12T19:36:47.494224+00:00",
+      "seconds": 93.731437,
+      "minutes": 1.5621906166666666,
+      "note": "Synthetic card-model callable needs nameOf, narrowed chooseCards type and branded display CardName. Two isolated failed typechecks preserved."
+    },
+    {
+      "cause": "review-lint-correction",
+      "start": "2026-10-12T19:38:08.352465+00:00",
+      "end": "2026-10-12T19:40:27.006904+00:00",
+      "seconds": 138.654439,
+      "minutes": 2.3109073166666665,
+      "note": "First full quick-review failed3 lint checks while3372 relatedtests/type/cycles passed; concrete fixture/checked-index corrections, isolated lint then green requiredreview."
+    },
+    {
+      "cause": "judged-dom-correction",
+      "start": "2026-10-12T19:41:32.434037+00:00",
+      "end": "2026-10-12T19:43:49.296071+00:00",
+      "seconds": 136.862034,
+      "minutes": 2.2810338999999997,
+      "note": "First native script expected literal false attribute; renderer omits false. Exact script preserved; corrected null/true DOM contract passed both viewports. Includes preparation/coordination and both runs, not failed command duration alone."
+    }
+  ],
+  "readCorrections": "Finite read-only guessed context.ts/events.ts/slice.test.ts/contracts/contracts.test.ts and missing prior scratch path corrected to actual files; nested native dependency output was overlarge; one zsh scripts/check* nomatch read corrected. These are inside whole ownership proxy; exact subprocess PID/durations not sampled, no source effects. No invented timing.",
+  "baseline": "Public scratch PID40142 confirms legaloldi2/drawni3+i4 sameprinting allunhighlighted/ringall. Corrected test-only unchanged-source16 intended failures/1control; initial stale-ID fixture error distinct. Removed-hint counterfactual fails selective-ring control; restoration exact SHA recorded; later checked-index/type/lint corrections retain same runtime semantics.",
+  "coreFailurePaths": {
+    "midstepError": "New corrupt-prefix public case: pendingnull; intent engine_error clearsinFlight. Existing fold-prompts malformed errors and pay-to-recovery failing child rollback covered affected owninghub. Hint only generated after successful suspended replay.",
+    "reloadRestart": "New JSON prefix restart uses freshfold identical pending/display/hint and samefinalstate; no persistedhint.",
+    "partialWrite": "N/A new persistentwrite. Hint and models are recomputed temporary plain data from existing atomic replay; existing pay-to-recovery atomic rollback owninghub passes.",
+    "invalidStaleInput": "Newwrongside/stale/illegalanswer/cancel-resolution bounces preserve slice/hint; existing fold-intents cancellation+newattempt/corruptrecord covers cancellable preparation (new preparation hasundefinedhint).",
+    "concurrentActors": "New competing battleaction bounces stepInFlight; wrongsideanswer rejected; duplicate completedanswer noPendingPrompt. Completion drops hint with pendingnull."
+  },
+  "qa": {
+    "currentPasses": [
+      {
+        "bead": "hv-umm2.566",
+        "uuid": "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+        "variant": "base",
+        "as": "player",
+        "viewport": "desktop",
+        "mode": "judged",
+        "verdict": "pass",
+        "functional": "pass",
+        "failureKinds": [],
+        "commit": "59ce7afe9147b5083e09e89ccebc7ac84f4d931c",
+        "dirtyWorkingTree": true,
+        "sourceManifest": "/tmp/dreamtides-executor-01a12e91/566-source-manifest.json",
+        "screens": [
+          "astral-desktop-offer.png",
+          "astral-desktop-selected.png"
+        ],
+        "rawReport": "invocations/run-deitJJ/judged.result.json",
+        "evidenceDir": "invocations/run-deitJJ",
+        "fixesHistorical": [
+          "hv-umm2.213/invocations/run-nR1Ecn/judged.result.json",
+          "hv-umm2.569/invocations/run-7gNZ56/judged.result.json"
+        ],
+        "notes": "Distinct current drawn-card purple emphasis; prior-card manual selection orange, both legal candidates retained, physical discard/event order/geometry/DPR2/Caps passed."
+      },
+      {
+        "bead": "hv-umm2.566",
+        "uuid": "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+        "variant": "base",
+        "as": "player",
+        "viewport": "mobile",
+        "mode": "judged",
+        "verdict": "pass",
+        "functional": "pass",
+        "failureKinds": [],
+        "commit": "59ce7afe9147b5083e09e89ccebc7ac84f4d931c",
+        "dirtyWorkingTree": true,
+        "sourceManifest": "/tmp/dreamtides-executor-01a12e91/566-source-manifest.json",
+        "screens": [
+          "astral-mobile-offer.png",
+          "astral-mobile-selected.png"
+        ],
+        "rawReport": "invocations/run-deitJJ/judged.result.json",
+        "evidenceDir": "invocations/run-deitJJ",
+        "fixesHistorical": [
+          "hv-umm2.213/invocations/run-nR1Ecn/judged.result.json",
+          "hv-umm2.569/invocations/run-7gNZ56/judged.result.json"
+        ],
+        "notes": "Distinct current drawn-card purple emphasis; prior-card manual selection orange, both legal candidates retained, physical discard/event order/geometry/DPR2/Caps passed."
+      }
+    ],
+    "history": "Historical213/569presentationfails preserved untouched. Ownfirst nativeattempt fixture assertion failed withCaps[] beforecaptures; run-Lvi9GJ rawreport and 566-judged-attempt1.mjs preserved, superseded by actual2viewportpass.",
+    "attempt1Receipt": "/tmp/dreamtides-executor-01a12e91/566-judged.json",
+    "finalReceipt": "/tmp/dreamtides-executor-01a12e91/566-judged-corrected.json",
+    "firstCleanup": {
+      "at": "2026-10-12T19:42:38.284810+00:00",
+      "processes": {
+        "78715": "absent",
+        "78707": "absent",
+        "78749": "absent"
+      },
+      "ownPort5174Connect": 61
+    },
+    "finalAuditAndCleanup": {
+      "at": "2026-10-12T19:44:30.927330+00:00",
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.566/invocations/run-deitJJ/judged.result.json",
+      "ok": true,
+      "error": null,
+      "caps": [],
+      "cells": {
+        "desktop": {
+          "old": "i1",
+          "drawn": "i2",
+          "candidates": [
+            "i1",
+            "i2"
+          ],
+          "geometry": [
+            {
+              "id": "i1",
+              "highlighted": null,
+              "selected": null,
+              "rect": {
+                "x": 626.599365234375,
+                "y": 731.552978515625,
+                "width": 141.18115234375,
+                "height": 189.02117919921875
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "id": "i2",
+              "highlighted": "true",
+              "selected": null,
+              "rect": {
+                "x": 772.094482421875,
+                "y": 731.552978515625,
+                "width": 141.18115234375,
+                "height": 189.02117919921875
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "draw": {
+            "seq": 2,
+            "index": 9,
+            "kind": "cardDrawn",
+            "instance": "i2",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i2"
+            },
+            "cards": {
+              "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          },
+          "discard": {
+            "seq": 3,
+            "index": 1,
+            "kind": "discarded",
+            "instance": "i1",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i1"
+            },
+            "cards": {
+              "i1": "5e5e5e5e-0000-4000-8000-000000000004"
+            }
+          },
+          "screens": {
+            "astral-desktop-offer.png": {
+              "dimensions": [
+                2880,
+                1800
+              ],
+              "sha256": "1230dcb7c91ffb76e4b9e4759d65dc1c75ef2b4bec1047268e6485b48176af8b"
+            },
+            "astral-desktop-selected.png": {
+              "dimensions": [
+                2880,
+                1800
+              ],
+              "sha256": "0d8b92ebcd18811e9434d2be60b9e179684c39c42d7ad50b9930cda0880ca28a"
+            }
+          }
+        },
+        "mobile": {
+          "old": "i1",
+          "drawn": "i2",
+          "candidates": [
+            "i1",
+            "i2"
+          ],
+          "geometry": [
+            {
+              "id": "i1",
+              "highlighted": null,
+              "selected": null,
+              "rect": {
+                "x": 63.52015686035156,
+                "y": 666.8659057617188,
+                "width": 170.82589721679688,
+                "height": 224.12811279296875
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "id": "i2",
+              "highlighted": "true",
+              "selected": null,
+              "rect": {
+                "x": 155.63832092285156,
+                "y": 666.8659057617188,
+                "width": 170.82591247558594,
+                "height": 224.12811279296875
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "draw": {
+            "seq": 2,
+            "index": 9,
+            "kind": "cardDrawn",
+            "instance": "i2",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i2"
+            },
+            "cards": {
+              "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          },
+          "discard": {
+            "seq": 3,
+            "index": 1,
+            "kind": "discarded",
+            "instance": "i1",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i1"
+            },
+            "cards": {
+              "i1": "5e5e5e5e-0000-4000-8000-000000000004"
+            }
+          },
+          "screens": {
+            "astral-mobile-offer.png": {
+              "dimensions": [
+                780,
+                1688
+              ],
+              "sha256": "ed869d823dea9c68822ebf37601de29fe4faec11bde05fac018e3db1ed07e0b0"
+            },
+            "astral-mobile-selected.png": {
+              "dimensions": [
+                780,
+                1688
+              ],
+              "sha256": "3831757bd16dd605000c4354044cd5bf8dcce1963eea82642b601b773d9db008"
+            }
+          }
+        }
+      },
+      "ownedProvider": [
+        {
+          "observedAt": "2026-10-12T19:43:26.663519+00:00",
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "record": {
+            "token": "954d1aa6-aced-413e-bccc-b000c0a149c9",
+            "pid": 81060,
+            "bead": "hv-umm2.566",
+            "label": "judged",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/drawn-discard-emphasis-566",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T19:43:26.518Z",
+            "providerState": "active",
+            "mcpSessionId": "f941a595-68b6-48ab-a7e5-73acf989f5c8",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "sameOwnerTokenRemains": false,
+      "currentOwnerIsPeer": true,
+      "recordedProcesses": {
+        "40142": "absent",
+        "87551": "absent",
+        "15329": "absent",
+        "29709": "absent",
+        "52372": "absent",
+        "15720": "absent",
+        "26158": "absent",
+        "53545": "absent",
+        "87322": "absent",
+        "8086": "absent",
+        "25317": "absent",
+        "44865": "absent",
+        "67139": "absent",
+        "77491": "absent",
+        "78715": "absent",
+        "78707": "absent",
+        "78749": "absent",
+        "81060": "absent",
+        "81051": "absent",
+        "81099": "absent",
+        "61226": "absent",
+        "61168": "absent",
+        "91901": "absent",
+        "91899": "absent"
+      },
+      "ownPort5274Connect": 0,
+      "cleanupBasis": "Supported runner terminal0 after ordinary browser-close/RPC/client/owner/server/lease cleanup; terminal log confirms own5274free. Token observation corroborates record retirement; peer records untouched."
+    },
+    "capturesInspected": "All four original PNGs viewed; clear selective purple draw ring and orange manualselectedold ring. Existing hand-edge cropping remains readable. Actual desktop2880x1800/mobile780x1688 DPR2. Filenames only inledger; images ignored, never committed.",
+    "sourceDuringServing": "Six source/test hashes frozen for both runs; QA base HEAD was dirty59ce, bound by actual manifest. No code/test/evidence edits during ownservers.",
+    "lease": "First automatic slot0/5174 ended normally. Corrected automatic slot1/5274/providerf941... ended normally. At final audit slot1/current5274 are peer-reused with differenttoken; only own lifetime proven, sharedrecords/listener untouched."
+  },
+  "resources": "All24 recorded finite PID identities absent at19:44:30.927330. No owned writer/job/server/provider/client/lease remains; no shared recovery or quarantine. Parent alone cold Sol/promotion owed."
+}

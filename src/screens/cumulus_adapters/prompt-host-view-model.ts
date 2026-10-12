@@ -70,6 +70,8 @@ export interface PromptHostInput {
   /** Every instance of `view` by the battle card id the screen names it with. */
   readonly instances: ReadonlyMap<BattleCardId, InstanceView>;
   readonly prompt: PendingEnginePrompt | null;
+  /** Current replay draws, used only for visible own-hand discard emphasis. */
+  readonly drawnForDiscard?: readonly InstanceId[];
   /** The committed state's top-level decision, when no step is in flight. */
   readonly decision: Decision | null;
   /** The presentation has finished every event before the prompt. */
@@ -332,6 +334,8 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
           sourceCard,
         };
       }
+      const drawn = new Set(prompt.kind === "chooseCards" && prompt.purpose.role === "discard" && prompt.side === human
+        ? input.drawnForDiscard ?? [] : []);
       const pickerCandidates = candidates.map(
         (instance): MobileBattleCardPickerCandidateView => ({
           instanceId: parseBattleCardId(instance.id),
@@ -339,7 +343,8 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
           owner: instance.controller,
           zone: candidateZone(instance, view),
           card: cardView(instance),
-          highlighted: false,
+          highlighted: instance.controller === human && instance.zone === "hand" && drawn.has(instance.id) &&
+            (prompt.allowed === undefined || prompt.allowed.some(answer => answer.includes(instance.id))),
         }),
       );
       const onBoard = pickerCandidates.every(
@@ -367,9 +372,8 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
             optional: min === 0,
             canResolve: true,
             presentation: onBoard ? "board" : "gallery",
-            // Every candidate is legal: ring each as the targets surface
-            // rings its targetable characters.
-            ringCandidates: true,
+            // A current draw has selective emphasis; otherwise every legal candidate is ringed.
+            ringCandidates: !pickerCandidates.some(candidate => candidate.highlighted),
             cancellable: prompt.cancellable && min > 0,
           },
           answer: cardsAnswer,

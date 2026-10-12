@@ -118,6 +118,8 @@ export interface EngineBattleViewInput {
   readonly legal: readonly Action[];
   /** The prompt the in-flight step is suspended on, as the human may see it. */
   readonly prompt: PendingEnginePrompt | null;
+  /** Current replay draws, used only for visible own-hand discard emphasis. */
+  readonly drawnForDiscard?: readonly InstanceId[];
   /** The card the human's in-flight play plays, shown awaiting its prompts. */
   readonly playing: InstanceId | null;
   /** The committed state's top-level decision, when no step is in flight. */
@@ -709,6 +711,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
     view,
     instances,
     prompt: input.prompt,
+    drawnForDiscard: input.drawnForDiscard,
     decision: input.decision,
     presented: input.presented,
     notice: input.notice,

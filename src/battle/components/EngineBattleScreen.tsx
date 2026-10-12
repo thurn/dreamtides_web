@@ -210,6 +210,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     return {
       view,
       prompt,
+      drawnForDiscard: owed.kind === "prompt" ? pending?.drawnForDiscard : undefined,
       playing,
       decision: owed.kind === "topLevel" || owed.kind === "waiting" ? owed.decision : null,
       legal: owed.kind === "topLevel" ? owed.legal : [],
@@ -323,6 +324,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         view: derived.view,
         legal: derived.legal,
         prompt: derived.prompt,
+        drawnForDiscard: derived.drawnForDiscard,
         playing: derived.playing,
         decision: derived.decision,
         presented: promptPresentable(head, presentation.notice),
