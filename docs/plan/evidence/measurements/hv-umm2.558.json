@@ -1,0 +1,298 @@
+{
+  "bead": "hv-umm2.558",
+  "baseOid": "176a138dd495e31df901fbd091069241b423de3e",
+  "scope": "One additive reason disposition and own evidence only; source, content, behavior, rendering, signatures, tests and historical records unchanged.",
+  "finding": "These three observations have distinct delivered remedies; no additional common defect is established by this bounded audit.",
+  "trigger": {
+    "tag": "missing-primitive",
+    "phase": 5,
+    "inputs": [
+      "hv-umm2.119",
+      "hv-umm2.178",
+      "hv-umm2.188"
+    ],
+    "beforeReport": "Parent native dispatch report /tmp/546-next-friction.txt",
+    "beforeDisposition": "UNDISPOSITIONED",
+    "ledgerBaseSHA256": "e67f8488401a48d4cf1bae86f7301e1a377b9e51ac3bd1d65aeac00d7134a45f",
+    "disposition": {
+      "kind": "reason",
+      "text": "Audit hv-umm2.558: the three observations have distinct delivered remedies: hv-umm2.119 historical Reclaim provenance is supplied by hv-umm2.373 with accepted re-entry coverage in hv-umm2.375; hv-umm2.178 supplies ready figment entry before its Materialized announcement; hv-umm2.188 uses the owner-deck-bottom Prevent destination supplied by hv-umm2.551. Current source and synthetic contracts confirm these bounded remedies, and native records confirm certified delivery and required review dispositions. The inventory is a planning projection; the Phase 5 manual clause audit and small-extension/prerequisite procedure govern semantic gaps. No additional common defect is established by this audit. See measurements/hv-umm2.558.json."
+    },
+    "afterExit": 0,
+    "afterReportLine": "  phase 5  missing-primitive (3 beads) -> Audit hv-umm2.558: the three observations have distinct delivered remedies: hv-umm2.119 historical Reclaim provenance is supplied by hv-umm2.373 with accepted re-entry coverage in hv-umm2.375; hv-umm2.178 supplies ready figment entry before its Materialized announcement; hv-umm2.188 uses the owner-deck-bottom Prevent destination supplied by hv-umm2.551. Current source and synthetic contracts confirm these bounded remedies, and native records confirm certified delivery and required review dispositions. The inventory is a planning projection; the Phase 5 manual clause audit and small-extension/prerequisite procedure govern semantic gaps. No additional common defect is established by this audit. See measurements/hv-umm2.558.json."
+  },
+  "audit": [
+    {
+      "bead": "hv-umm2.119",
+      "observation": {
+        "minutes": 24.35,
+        "scope": "Missing historical Reclaim condition; checkpoint and separate prerequisite work/delivery included, not content coding. Historical friction record has no implementWindow."
+      },
+      "remedy": {
+        "bead": "hv-umm2.373",
+        "sourceOid": "91586f166b3fb7f4eaca006a6388d91f0acd770a",
+        "testedOid": "f4c9a05d9856c68f4520bcbb7d7b5730ca59ef06",
+        "candidate": "01a12b1a-8991-7963-9ed8-9d491633beca"
+      },
+      "review": "Final cold Claude Opus 5.5 exact-range review completed exit 0. Production validated; broader relocate-reset coverage premise rejected using existing contract. Narrower actual Reclaim character condition after effect re-entry accepted as hv-umm2.375, closed/completed. First partial advisory review did not satisfy the final obligation.",
+      "followUp": {
+        "bead": "hv-umm2.375",
+        "testedOid": "55ff5c40f8be0dc22a5b30c4da413b7400196c1f",
+        "candidate": "01a12b39-79e2-7c93-897c-cc4ce97409cc",
+        "evidence": "Native completed notes and commit body report both reset-on-return and flipped-reader mutations fail; no standalone measurement file or new timing receipt inferred."
+      },
+      "currentContract": [
+        "src/engine/steps/kinds/play.ts:91 assigns provenance at actual committed play",
+        "src/engine/dsl/conditions.ts:38 reads historical playedViaReclaim independently of mutable reclaimed",
+        "src/engine/state/create.ts:13; clone.ts:69; hash.ts:281 preserve initialized/cloned/hashed field",
+        "src/engine/effects/primitives/contracts/source-was-reclaimed.contracts.ts:117 real Reclaim character, banishUntil return without cardPlayed, Materialized true branch; remaining contracts cover both controllers, normal/Offering reset, copy/missing source, suspension/reload and rollback"
+      ],
+      "composition": {
+        "sourceOid": "791c0a8f687704ab9819a8087acc413bc0ce28f4",
+        "testedOid": "53ae567ac74254abb47f392b26d267ff47af2eaa",
+        "candidate": "01a12b49-32d3-75a0-b609-6a21a77b58cb",
+        "currentConsumer": "src/content/cards/secrets-of-the-deep-6f0b709d.ts:27"
+      },
+      "separateIssues": "Its lab additional-cost staging repair, canonical worker duplicate repair hv-4a0x, and initialization diagnostic have distinct evidence and are outside this missing-primitive observation."
+    },
+    {
+      "bead": "hv-umm2.178",
+      "observation": {
+        "minutes": 11.2,
+        "scope": "First helper observation 14:15:03 through native admission 14:26:15 UTC; conservative observation-to-admission interval, exact historical dispatch unknown. Preserve raw friction start at claim 14:11:16 without correcting it."
+      },
+      "remedy": {
+        "bead": "hv-umm2.178",
+        "sourceOid": "ef7ff10960581affac6cff1dac57e619d778c5be",
+        "testedOid": "68827050aba85b4f1d12e7af28ace711726856ff",
+        "candidate": "01a130a3-8ced-7503-aa7f-f6c1a8ab50f9",
+        "certificate": "01a130a5-1300-7681-bd0f-d7a858db7fef"
+      },
+      "currentContract": [
+        "src/engine/effects/primitives/materialize-figments.ts:20 optional awakened:true, omitted by default; builder and resolution forward it",
+        "src/engine/rules/figments.ts:36 createFigments trailing awakened=false forwards to creation",
+        "src/engine/rules/zones.ts:387 createInPlay initializes ready status before Materialized emission",
+        "src/engine/effects/primitives/contracts/materialize-figments-awakened.contracts.ts:31 both controllers, actual entry watchers, default/catalog Awakened, no persistent keyword, partial/full capacity and existing figment preservation"
+      ],
+      "currentConsumer": "src/content/cards/legion-lieutenant-4b4cc613.ts:29",
+      "review": {
+        "model": "gpt-5.6-sol",
+        "routing": "Fresh read-only Codex CLI exact base4b2a913db80476fe17cbfb52e75fd50e7c02a7cd/sourceef7ff10960581affac6cff1dac57e619d778c5be under temporary human same-family override.",
+        "result": "Exit 0, no actionable findings, no debt; provider and snapshot cleanup recorded natively.",
+        "finishedUtc": "2026-10-12T15:12:51.648402Z",
+        "wallS": 541.253
+      }
+    },
+    {
+      "bead": "hv-umm2.188",
+      "observation": {
+        "minutes": 53.7144666667,
+        "scope": "Original dispatch15:25:55.453Z to resume16:19:38.321Z includes source-free checkpoint plus separate prerequisite551 implementation39.8907min, review and delivery; not productive card coding."
+      },
+      "remedy": {
+        "bead": "hv-umm2.551",
+        "sourceOid": "23e578404c900215939c07808a6d7d9616893157",
+        "testedOid": "5af32ccb2c91d57c38fd43484605a5b6fb4ceaf7",
+        "candidate": "01a130e4-2178-7e51-801d-1d692632bad0",
+        "certificate": "01a130e5-5e5a-7751-840f-4f0f7de82041"
+      },
+      "currentContract": [
+        "src/engine/rules/stack.ts:11 PreventDestination contains deckBottom; :51 uses existing owner moveInstance bottom route after created/Reclaim replacement handling",
+        "src/engine/effects/primitives/prevent.ts:94 typed existing destination option",
+        "src/engine/effects/primitives/contracts/prevent-deck-bottom.contracts.ts:72 owner/controller matrix, top-v-bottom, public target position/hidden deck knowledge and determinization; :123 replacement precedence; :172 stale/foreign/cancel/saved prompt; final rollback contract"
+      ],
+      "review": {
+        "model": "gpt-5.6-sol",
+        "routing": "Fresh read-only Codex CLI exact based82b1404246632762c0619150b56f1f997d08c57/source23e578404c900215939c07808a6d7d9616893157 under temporary human same-family override.",
+        "result": "Exit 0, no actionable findings, no debt; provider and snapshot cleanup recorded natively.",
+        "startUtc": "2026-10-12T16:11:44.581303Z",
+        "endUtc": "2026-10-12T16:12:54.214600Z",
+        "wallS": 69.6333
+      },
+      "composition": {
+        "sourceOid": "9c6efc99e4b08c2a69ec35f1661a87e428fffc39",
+        "testedOid": "aa091c92679b9f79bfb4be6139e0a8d0f0964404",
+        "candidate": "01a130ff-90a8-7922-a2ca-cbcf4bdbc6ec",
+        "currentConsumer": "src/content/cards/ripple-through-reality-d1b7d5c6.ts:24"
+      },
+      "additionalReview": "Native composition scope22non-testlines/0newform had no additional review trigger;551 required core review is complete."
+    }
+  ],
+  "nativeEvidence": {
+    "scope": "Parent-exported native snapshots558brief/119/178/188/prerequisites, plus373comments[], read without native calls. All six beads closed/completed, certified promotion and worktree/branch cleanup recorded. Native authority remains parent-owned.",
+    "snapshots": {
+      "558-brief.json": "81a2cdea6aaa0a5f2c20509cd789656acad611289df33c0bac8013e0a3c5524f",
+      "558-hv-umm2.119.json": "548c1634ab446f4c5e175d8938a0c85c250170dfd14a070633a2752886c034d0",
+      "558-hv-umm2.178.json": "ed6e45bb6455f412e3443e5e3f5ea9677d0ed6ac1110a7ea6e06b0ca7db49e43",
+      "558-hv-umm2.188.json": "7bd8756d51eee1d2f6550348dce568bc746aeef9b93b90d0cf0873d2fed08295",
+      "558-prerequisites.json": "896d290ac83a22bb35a90795a3a6942a42d47e12424f4593ad90f753bdc703ea",
+      "558-373-comments.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    }
+  },
+  "planningAuthority": {
+    "source": "docs/plan/phase-5-content.md:27 native Entities/Areas/graph govern; :114 small existing primitive extension requires native widening, other semantic gaps become prerequisites; recipe step1 manual printed-clause audit; workflow dispatch and prerequisite procedure remain binding.",
+    "limitation": "Inventory regex requirements are a planning projection, not exhaustive semantic certification: scripts/content-inventory.ts tags Reclaim/figments/Prevent plus generic destination availability. Current three subject records list requiredPrimitives.new=[]; current source implements the actual clauses. This does not prove arbitrary future clauses complete and does not justify speculative generator or broad engine changes.",
+    "threeEntityUUIDs": [
+      "6f0b709d-0f57-46de-bfba-6a8b4df2b991",
+      "4b4cc613-2e28-4851-975f-14146286a062",
+      "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad"
+    ]
+  },
+  "readOnlySHA256": {
+    "docs/plan/workflow.md": "e25c1988382e33a3e4c3b477eee98d84bfa5e343fbba9572cbbfa8923f3ceb12",
+    "docs/plan/phase-5-content.md": "c77163c272737f8f2992bf3b92e2fb801e3a133e000f6ef72092b02b7c55a0d5",
+    "scripts/content-inventory.ts": "22909c72a728d4b9efd415b99f23791fd8ad476d85af5759919f18b99834c5db",
+    "docs/plan/evidence/content-inventory.json": "35b6d01b6b4a1ec694b43b1c205bf1997f565028e432c03850b5fb804e21d076",
+    "docs/plan/evidence/friction/hv-umm2.119.json": "69a352caa3423def482282d4faae77d4f4001fcc171eb571d676607cbdd58689",
+    "docs/plan/evidence/friction/hv-umm2.178.json": "f3b610b2e173dec00c825bca0aa6c39ed375aa13471316f01ca5dcb451764847",
+    "docs/plan/evidence/friction/hv-umm2.188.json": "1b5701e952397ba793a95cff0704bf4462b63913e45b907b93103c83f404030e",
+    "src/engine/dsl/conditions.ts": "0f94ef7b9893cc84c777bd07c023cdd664c0d8b0705a5a162b50487b46bcc39e",
+    "src/engine/steps/kinds/play.ts": "9e12d1882670e1aaa4fe7512d70d4212d56d26d83d697ba33178539ffaab4f09",
+    "src/engine/effects/primitives/materialize-figments.ts": "4a02034bb87c04396edb77086a513221c615958a923e914ee9fea4787b5bbee7",
+    "src/engine/rules/figments.ts": "494c4ac6a91517e4d6565d5fced6305b4637aee7adb8b24d7b09b23415b738b7",
+    "src/engine/rules/zones.ts": "8b11b0695358ccc158bc924e7fb3b77465c2b57d902436fc71858e3c5de0a79e",
+    "src/engine/rules/stack.ts": "1a8ff31ec56b3bb379dcb9838074114a86d05adf371756a5e80ddc002131a0b4",
+    "src/engine/effects/primitives/contracts/source-was-reclaimed.contracts.ts": "6c5884dcc7d3fa00ab93cc3a6bc937c14389f752320988dd3973a089d229bd91",
+    "src/engine/effects/primitives/contracts/materialize-figments-awakened.contracts.ts": "fc4ec5f49ec652b2b9db92ae851b845801b7500b471ef1b45c96e27b41cc5050",
+    "src/engine/effects/primitives/contracts/prevent-deck-bottom.contracts.ts": "0c28fcaca89d363d5c405a6444dd9c941b677a6b0c73b39fb59fce32082c517b"
+  },
+  "measurementWindow": {
+    "start": "2026-10-12T16:57:07.821Z",
+    "source": "Parent ownjournal spawn_agent call_9bb97f8ded394b19b3e5f6029c7910f8, /tmp/558-dispatch-exact.json; claim/install/model-start are not this start.",
+    "end": "2026-10-12T17:04:53.607781+00:00",
+    "commitTailQualification": "Endpoint observed immediately before final schema, stage and commit; actual committer timestamp and observation-to-commit delta retained in /tmp/hv-umm2.558-commit-receipt.json. Entire research, coordination, review and Knip elapsed window included."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "fallout": {
+    "signatures": [],
+    "consumersChanged": [],
+    "testOrRuntimeBehaviorChanged": false
+  },
+  "validation": [
+    {
+      "name": "focused-evidence",
+      "scope": "Own JSON parse, one append/unique reason, unchanged historical/source hashes, six tested OID ancestry, exactly four admitted paths and whitespace; no runtime tests.",
+      "startUtc": "2026-10-12T17:02:03.875730+00:00",
+      "endUtc": "2026-10-12T17:02:03.974950+00:00",
+      "wallS": 0.09913520800182596,
+      "exit": 0
+    },
+    {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-12T17:02:04.027901+00:00",
+      "endUtc": "2026-10-12T17:02:04.142691+00:00",
+      "wallS": 0.1146635420009261,
+      "exit": 0
+    },
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-12T17:02:20.153868+00:00",
+      "endUtc": "2026-10-12T17:02:20.537255+00:00",
+      "wallS": 0.3798636660067132,
+      "exit": 0,
+      "rawLog": "/tmp/hv-umm2.558-review.log",
+      "scope": "Diff-aware documentation/evidence review, friction-record schema; no static runtime or test suite selection."
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-12T17:02:38.832283+00:00",
+      "endUtc": "2026-10-12T17:02:44.333884+00:00",
+      "wallS": 5.498255790997064,
+      "exit": 0,
+      "rawLog": "/tmp/hv-umm2.558-knip.log",
+      "scope": "Unused-code check and existing isolated asset prepare/restore; no new runtime/browser. Intermediate isolated-workspace asset warnings are existing preparation; final restoration outcome retained."
+    },
+    {
+      "name": "trigger-after",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "startUtc": "2026-10-12T17:03:20.917645+00:00",
+      "endUtc": "2026-10-12T17:03:21.106288+00:00",
+      "wallS": 0.18826412499765866,
+      "exit": 0,
+      "rawLog": "/tmp/hv-umm2.558-triggers-after.log",
+      "scope": "Full trigger report; missing-primitive phase5 has exactly one reason disposition; existing historical unknowns retained."
+    }
+  ],
+  "hostLoadSamples": {
+    "reviewStart": [
+      9.42,
+      13.25,
+      13.56
+    ],
+    "knipStart": [
+      8.69,
+      12.89,
+      13.43
+    ]
+  },
+  "failurePaths": {
+    "scope": "Documentation-only additive disposition. No runtime state/input/transaction/persistence failure seam changes; product stale input, rollback, restart and instance control behavior not modified. Historical remedies have their cited synthetic contracts and native required reviews.",
+    "evidenceFailure": "Malformed JSON, duplicate trigger disposition, unrelated mutation or a non-ancestor tested OID fails the focused evidence checks; review runs friction-record schema only for this scope."
+  },
+  "corrections": [
+    "Read-only glob used nonexistent docs/plan/phases; corrected to exact phase5 page.",
+    "Combined initial native/measurement output was too large; subsequent reads bounded by fields.",
+    "Historical measurement119/373 use Markdown,375 has no standalone measurement; read actual files and native375 proof, no receipt inferred.",
+    "Scratch summarizer attempted object access on a string receipt and stopped; later extracted only typed relevant fields.",
+    "A speculative Ripple display slug lookup failed; rg UUID located the actual module. No source mutation or new test probe."
+  ],
+  "runtime": {
+    "servers": [],
+    "browsers": [],
+    "ports": [],
+    "providers": [],
+    "heavyChecks": [],
+    "ownedLongLivedProcesses": [],
+    "sourceWriters": "Sole helper; all commands terminal. Parent owns delivery/review.",
+    "resourceCleanup": "Required review and Knip terminal exit0; Knip restore-local-assets terminal0/564of564 cards and all other catalog assets restored. No server/browser/provider or long-lived helper process created."
+  },
+  "reviewRequirement": "Documentation-only disposition has no core-review or phase-gate trigger; parent may review evidence. No new review provider launched by helper.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review command start",
+        "observedUtc": "2026-10-12T17:02:20.153868+00:00"
+      }
+    }
+  },
+  "reviewSelection": {
+    "changedFiles": 4,
+    "selected": "friction-records",
+    "records": 607,
+    "historicalUnknownMeasurements": 41,
+    "testsSelected": 0,
+    "staticRuntimeChecksSelected": false
+  },
+  "finalEvidenceCheck": {
+    "result": "Passed unchanged readonly hashes, exact four paths, one additive unique reason and unchanged base immediately before commit.",
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "schema": "Required schema validation repeats after endpoint metadata refresh before commit."
+  }
+}
