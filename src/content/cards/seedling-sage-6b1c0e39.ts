@@ -1,3 +1,6 @@
+import { activated, countersCost } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 438,
   art: { x: -0.34, y: 1, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(whenYouPlay({ cardType: "character" }), p.storeCounters(variant.amplified ? 2 : 1)),
+    activated([countersCost(2)], p.gainEnergy(1)),
+  ],
+  verifiedText: "g0ggaykyos",
 });

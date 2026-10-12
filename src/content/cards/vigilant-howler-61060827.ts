@@ -1,3 +1,6 @@
+import { activated, characterYouControl, countersCost } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 113,
   art: { x: 0, y: 0.432, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(whenMaterialize(characterYouControl({ subtype: "Spirit Animal" })), p.storeCounters(variant.amplified ? 2 : 1)),
+    activated([countersCost(3)], p.gainEnergy(3)),
+  ],
+  verifiedText: "172h8too47w",
 });

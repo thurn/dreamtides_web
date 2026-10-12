@@ -1,3 +1,6 @@
+import { activated, characterYouControl, countersCost, fromVoid } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 271,
   art: { x: 0, y: 1, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(whenMaterialize(characterYouControl({ figment: false })), p.storeCounters(variant.amplified ? 2 : 1)),
+    activated([countersCost(3)], p.returnFromVoid(fromVoid({ cardType: "character" }), { toYourHand: true })),
+  ],
+  verifiedText: "192ownbpvkv",
 });

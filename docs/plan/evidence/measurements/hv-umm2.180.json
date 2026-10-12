@@ -1,7 +1,7 @@
 {
   "bead": "hv-umm2.180",
   "base": "26b12691f491514bd692809f464d100ff53cb3c4",
-  "implementStartProvenance": "First timestamp captured by implementer after parent dispatch: 2026-10-12T14:15:12Z. Parent supplied approximate14:14Z but directed using observed timestamp. Research, coordination, verification and waits stay inside the measured window.",
+  "implementStartProvenance": "Exact parent native rollout timestamp for post-claim implementation-helper dispatch; research, coordination, validation and queue waits are included through the actual Git committer end.",
   "entities": [
     "89c0d03c-2199-415a-bc66-89e451034328",
     "7ecc1da1-dc39-4596-9a1d-262a261ffeea",
@@ -209,8 +209,23 @@
   },
   "commitBoundary": "2026-10-12T14:26:23Z",
   "implementWindow": {
-    "start": "2026-10-12T14:15:12Z",
+    "start": "2026-10-12T14:13:55.521Z",
     "end": "2026-10-12T14:26:23Z"
   },
-  "implementMin": 11.183333333333334
+  "implementMin": 12.457983333333335,
+  "dispatchStart": "2026-10-12T14:13:55.521Z",
+  "dispatchReceipt": {
+    "originThread": "01a1305a-56c7-7f63-bcb4-bfed10880d6d",
+    "event": "collaboration.spawn_agent",
+    "callId": "call_4495aeba8ce9451583ce4f9f53e8b2eb",
+    "timestamp": "2026-10-12T14:13:55.521Z",
+    "committerEnd": "2026-10-12T14:26:23Z",
+    "frictionSourceSHA256": "81a925445a43439fb4d182cffc0e98214eee33a39bb2e8904166a0bb4a5b3745",
+    "priorWindow": {
+      "start": "2026-10-12T14:15:12Z",
+      "end": "2026-10-12T14:26:23Z"
+    },
+    "priorImplementMin": 11.183333333333334,
+    "correctedIn": "hv-umm2.185"
+  }
 }

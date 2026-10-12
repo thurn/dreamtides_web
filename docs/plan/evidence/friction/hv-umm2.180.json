@@ -1,9 +1,9 @@
 {
   "bead": "hv-umm2.180",
   "phase": 5,
-  "implementMin": 11.183333333333334,
+  "implementMin": 12.457983333333335,
   "implementWindow": {
-    "start": "2026-10-12T14:15:12Z",
+    "start": "2026-10-12T14:13:55.521Z",
     "end": "2026-10-12T14:26:23Z"
   },
   "localValidationS": {

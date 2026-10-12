@@ -1,0 +1,343 @@
+{
+  "bead": "hv-umm2.185",
+  "base": "a844849d25219a366777a16b0bccd0d26774c76e",
+  "dispatchStart": "2026-10-12T15:03:11.932Z",
+  "dispatchReceipt": {
+    "event": "collaboration.spawn_agent",
+    "callId": "call_9lnL1AqS0L0DJCicARp8ccI3",
+    "timestamp": "2026-10-12T15:03:11.932Z",
+    "committerEnd": "2026-10-12T15:14:04+00:00"
+  },
+  "implementStartProvenance": "Exact parent native rollout timestamp for post-claim implementation-helper dispatch. The window includes research, coordination, queue waits and verification through the Git committer timestamp.",
+  "entities": [
+    "61060827-8bed-4b63-b63d-6c3b0536e941",
+    "6b1c0e39-0e70-4061-b037-0e10026cfabb",
+    "8d35aec1-29ad-432c-9c23-25a52804cbae",
+    "920ef495-5560-4fa6-9a95-b9584ef6a4cf"
+  ],
+  "scope": {
+    "newPrimitives": 0,
+    "engineBehaviorChanged": false,
+    "nonTestAddedDeleted": 36,
+    "scenarioCases": 0,
+    "scenarioLines": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "d20": "Ordinary store-trigger/counter-payment compositions are covered by existing synthetic primitive contracts, content gates, weighted fuzz and card-lab sweep. No unusual additional inter-ability interaction requires a scenario module. Parent acknowledged this disposition before source writes.",
+    "immutableCatalogFieldsVerified": "Byte-for-byte equality to base after stripping authored abilities/status and imports."
+  },
+  "rules": {
+    "newDecisions": [],
+    "newCardIssues": [],
+    "normativeSections": [
+      "Counters",
+      "Triggered abilities",
+      "When you materialize a character",
+      "Durations"
+    ],
+    "clauseAudit": {
+      "61060827-8bed-4b63-b63d-6c3b0536e941": "Materialization of your Spirit Animals, including the source, stores 1 counter (amplified 2); spend 3 source counters to gain 3 current energy.",
+      "6b1c0e39-0e70-4061-b037-0e10026cfabb": "Playing your character stores 1 counter (amplified 2); spend 2 source counters to gain 1 current energy.",
+      "8d35aec1-29ad-432c-9c23-25a52804cbae": "Playing your event stores 1 counter (amplified 2); spend 3 source counters to gain 5 permanent spark on the source.",
+      "920ef495-5560-4fa6-9a95-b9584ef6a4cf": "Materialization of your non-figment character, including the source, stores 1 counter (amplified 2); spend 3 source counters to return one targeted character from your void explicitly to your hand."
+    }
+  },
+  "d21": {
+    "firstBytes": [
+      101,
+      139,
+      54,
+      71
+    ],
+    "sampled": [],
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "judgedRequired": 0,
+    "judgedPerformed": 0,
+    "rationale": "Counter badge, permanent spark gain, and chooseCards:chooseInZone controls are existing forms. Every UUID sample is false."
+  },
+  "preflight": {
+    "event": "labPreflightSummary",
+    "cards": [
+      "61060827-8bed-4b63-b63d-6c3b0536e941",
+      "6b1c0e39-0e70-4061-b037-0e10026cfabb",
+      "8d35aec1-29ad-432c-9c23-25a52804cbae",
+      "920ef495-5560-4fa6-9a95-b9584ef6a4cf"
+    ],
+    "variants": [
+      "base",
+      "amplified",
+      "empowered",
+      "kindled",
+      "resonant",
+      "inspired",
+      "enduring",
+      "hastened",
+      "attuned",
+      "perfected"
+    ],
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "counts": {
+      "pass": 40,
+      "pending": 0,
+      "skip": 40,
+      "fail": 0
+    },
+    "elapsedMs": 34.82233300000007,
+    "hostLoad": 18.4658203125,
+    "enemyMode": "scripted-lab-play-first-legal-prompts"
+  },
+  "commands": {
+    "focused": {
+      "start": "2026-10-12T15:06:13.598356+00:00",
+      "wallS": 8.487107250002737,
+      "hostLoad": 23.05,
+      "exit": 0,
+      "artifact": "focused.log",
+      "testsPassed": 1823
+    },
+    "fuzz": {
+      "start": "2026-10-12T15:06:35.277088+00:00",
+      "wallS": 155.42324570799974,
+      "hostLoad": 22.71,
+      "exit": 0,
+      "artifact": "fuzz.log"
+    },
+    "preflight": {
+      "start": "2026-10-12T15:06:57.456234+00:00",
+      "wallS": 1.9316253750002943,
+      "hostLoad": 18.47,
+      "exit": 0,
+      "artifact": "preflight.log"
+    },
+    "sweep": {
+      "start": "2026-10-12T15:07:13.197765+00:00",
+      "wallS": 270.10669733300165,
+      "hostLoad": 16.88,
+      "exit": 0,
+      "artifact": "sweep.log"
+    },
+    "review": {
+      "start": "2026-10-12T15:12:25.593654+00:00",
+      "wallS": 39.646953499999654,
+      "hostLoad": 5.36,
+      "exit": 0,
+      "artifact": "review.log",
+      "filesPassed": 223,
+      "testsPassed": 3774
+    },
+    "knip": {
+      "start": "2026-10-12T15:13:05.245316+00:00",
+      "wallS": 2.960354707996885,
+      "hostLoad": 6.23,
+      "exit": 0,
+      "artifact": "knip.log"
+    },
+    "contentCoverage": {
+      "start": "2026-10-12T15:13:08.209384+00:00",
+      "wallS": 3.337129332998302,
+      "hostLoad": 6.13,
+      "exit": 0,
+      "artifact": "contentCoverage.log",
+      "testsPassed": 13
+    }
+  },
+  "runtime": {
+    "fuzz": {
+      "pid": 67928,
+      "group": 67769,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/counter-cards73-root",
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "cleanup": "Exited 0 after all 300 games. No owned long-lived fuzz process remains."
+    },
+    "sweep": {
+      "runnerPid": 76825,
+      "serverPid": 76876,
+      "group": 76876,
+      "port": 5274,
+      "browserSlot": 1,
+      "invocation": "invocations/sweep-fYh3Bo/run-LxNJcp",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/counter-cards73-root",
+      "cleanup": "Runner closed its isolated MCP context/client and server process group 76876. Independent ps check found no owned PIDs; lsof found no port 5274 listener."
+    },
+    "verifiedAt": "2026-10-12T15:12:12.577571+00:00",
+    "remaining": []
+  },
+  "parentCorrections": {
+    "beads": [
+      "hv-umm2.174",
+      "hv-umm2.180"
+    ],
+    "reason": "Exact native dispatch receipts correct elapsed implementation windows in the same session next bead under workflow Friction ledger. Parent edited the four correction files and this helper reviewed them read-only.",
+    "sourceDiffChecked": true,
+    "sourceHashesVerified": true,
+    "elapsedArithmeticVerified": true
+  },
+  "artifactsRoot": "Primary gitignored artifacts/qa/hv-umm2.185; committed image references use filenames only.",
+  "fuzz": {
+    "games": 300,
+    "steps": 152143,
+    "wallS": 154.1,
+    "cpuS": 167.1,
+    "prompts": 3480,
+    "interactiveReruns": 354,
+    "failures": 0,
+    "included": [
+      612,
+      612,
+      618,
+      616
+    ],
+    "exercised": [
+      268,
+      277,
+      278,
+      243
+    ],
+    "timingScope": "Fuzzer summary wall and CPU exclude external lockf acquisition; wrapper wall includes lock wait, startup and teardown."
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-fYh3Bo",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.185/invocations/sweep-fYh3Bo",
+    "counts": {
+      "pass": 40,
+      "skip": 40
+    },
+    "attemptCounts": {
+      "pass": 40,
+      "skip": 40
+    },
+    "hostLoad": 16.8837890625,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 7,
+      "serve": 2890,
+      "scenario": 264356.723416,
+      "cleanup": 2566.004249999998,
+      "execution": 269878.374459,
+      "total": 269885.374459
+    }
+  },
+  "sweepEvidence": {
+    "rawReports": 40,
+    "capsErrors": 0,
+    "reportErrors": 0,
+    "captureCount": 40,
+    "captureDimensions": [
+      [
+        1440,
+        900
+      ]
+    ],
+    "representativeInspected": "sweep-61060827-base-player-attempt-1.png",
+    "screens": [
+      "sweep-61060827-kindled-player-attempt-1.png",
+      "sweep-6b1c0e39-amplified-player-attempt-1.png",
+      "sweep-6b1c0e39-amplified-enemy-attempt-1.png",
+      "sweep-920ef495-empowered-player-attempt-1.png",
+      "sweep-8d35aec1-kindled-player-attempt-1.png",
+      "sweep-61060827-perfected-enemy-attempt-1.png",
+      "sweep-6b1c0e39-perfected-player-attempt-1.png",
+      "sweep-920ef495-amplified-enemy-attempt-1.png",
+      "sweep-8d35aec1-perfected-enemy-attempt-1.png",
+      "sweep-8d35aec1-empowered-player-attempt-1.png",
+      "sweep-61060827-base-player-attempt-1.png",
+      "sweep-61060827-empowered-enemy-attempt-1.png",
+      "sweep-8d35aec1-amplified-player-attempt-1.png",
+      "sweep-8d35aec1-empowered-enemy-attempt-1.png",
+      "sweep-920ef495-amplified-player-attempt-1.png",
+      "sweep-920ef495-perfected-player-attempt-1.png",
+      "sweep-920ef495-base-player-attempt-1.png",
+      "sweep-6b1c0e39-empowered-player-attempt-1.png",
+      "sweep-8d35aec1-kindled-enemy-attempt-1.png",
+      "sweep-8d35aec1-base-enemy-attempt-1.png",
+      "sweep-8d35aec1-perfected-player-attempt-1.png",
+      "sweep-6b1c0e39-kindled-enemy-attempt-1.png",
+      "sweep-920ef495-kindled-enemy-attempt-1.png",
+      "sweep-6b1c0e39-perfected-enemy-attempt-1.png",
+      "sweep-61060827-perfected-player-attempt-1.png",
+      "sweep-920ef495-perfected-enemy-attempt-1.png",
+      "sweep-61060827-amplified-player-attempt-1.png",
+      "sweep-61060827-amplified-enemy-attempt-1.png",
+      "sweep-8d35aec1-amplified-enemy-attempt-1.png",
+      "sweep-61060827-kindled-enemy-attempt-1.png",
+      "sweep-920ef495-kindled-player-attempt-1.png",
+      "sweep-920ef495-base-enemy-attempt-1.png",
+      "sweep-920ef495-empowered-enemy-attempt-1.png",
+      "sweep-61060827-empowered-player-attempt-1.png",
+      "sweep-61060827-base-enemy-attempt-1.png",
+      "sweep-6b1c0e39-base-player-attempt-1.png",
+      "sweep-6b1c0e39-empowered-enemy-attempt-1.png",
+      "sweep-8d35aec1-base-player-attempt-1.png",
+      "sweep-6b1c0e39-kindled-player-attempt-1.png",
+      "sweep-6b1c0e39-base-enemy-attempt-1.png"
+    ]
+  },
+  "hostLoadSamples": [
+    {
+      "command": "focused",
+      "start": "2026-10-12T15:06:13.598356+00:00",
+      "oneMinute": 23.05
+    },
+    {
+      "command": "fuzz",
+      "start": "2026-10-12T15:06:35.277088+00:00",
+      "oneMinute": 22.71
+    },
+    {
+      "command": "preflight",
+      "start": "2026-10-12T15:06:57.456234+00:00",
+      "oneMinute": 18.47
+    },
+    {
+      "command": "sweep",
+      "start": "2026-10-12T15:07:13.197765+00:00",
+      "oneMinute": 16.88
+    },
+    {
+      "command": "review",
+      "start": "2026-10-12T15:12:25.593654+00:00",
+      "oneMinute": 5.36
+    },
+    {
+      "command": "knip",
+      "start": "2026-10-12T15:13:05.245316+00:00",
+      "oneMinute": 6.23
+    },
+    {
+      "command": "contentCoverage",
+      "start": "2026-10-12T15:13:08.209384+00:00",
+      "oneMinute": 6.13
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Required review wrapper invocation, from sysctl immediately before npm run review."
+      }
+    }
+  },
+  "reviewDisposition": "Composition scope unchanged, not core-review; 36 changed non-test source lines, with no engine or prompt change. Parent read-only scope/source review found no concern; no independent CLI review trigger.",
+  "preExistingIssues": [],
+  "implementWindow": {
+    "start": "2026-10-12T15:03:11.932Z",
+    "end": "2026-10-12T15:14:04+00:00"
+  },
+  "implementMin": 10.867799999999999,
+  "commitBoundary": "2026-10-12T15:14:04+00:00",
+  "finalSchema": {
+    "start": "2026-10-12T15:14:04+00:00",
+    "wallS": 0.07136816699494375,
+    "exit": 0,
+    "records": 588
+  }
+}

@@ -95,7 +95,7 @@
     "scenarioCases": 2,
     "scenarioLines": 45
   },
-  "dispatchStart": "2026-10-12T13:43:00Z parent-dispatch timestamp approximation, matching helper research start",
+  "dispatchStart": "2026-10-12T13:45:02.801Z",
   "hostLoadSamples": [
     {
       "step": "review initial",
@@ -197,5 +197,25 @@
       41778
     ],
     "result": "No listed owned process remains"
+  },
+  "implementWindow": {
+    "start": "2026-10-12T13:45:02.801Z",
+    "end": "2026-10-12T14:08:43+00:00"
+  },
+  "implementMin": 23.669983333333334,
+  "implementStartProvenance": "Exact parent native rollout timestamp for post-claim implementation-helper dispatch; research, coordination, validation and queue waits are included through the actual Git committer end.",
+  "dispatchReceipt": {
+    "originThread": "01a1305a-56c7-7f63-bcb4-bfed10880d6d",
+    "event": "collaboration.spawn_agent",
+    "callId": "call_e294261a683344eeb536a35d13c7602c",
+    "timestamp": "2026-10-12T13:45:02.801Z",
+    "committerEnd": "2026-10-12T14:08:43+00:00",
+    "frictionSourceSHA256": "8b623f0e5166e245055038af8c5fda963f00818ab56c8ffb92a93105415bb717",
+    "priorWindow": {
+      "start": "2026-10-12T13:43:00+00:00",
+      "end": "2026-10-12T14:08:43+00:00"
+    },
+    "priorImplementMin": 25.716666666666665,
+    "correctedIn": "hv-umm2.185"
   }
 }
