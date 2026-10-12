@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.515",
+  "phase": 5,
+  "implementMin": 120.08008126666667,
+  "implementWindow": {
+    "start": "2026-10-12T14:15:35.910000+00:00",
+    "end": "2026-10-12T16:15:40.714876+00:00"
+  },
+  "localValidationS": {
+    "focusedTest": 9.3,
+    "contractsTest": 6.0,
+    "reviewTest": 61.4,
+    "knip": 2.0,
+    "fullTest": 63.9,
+    "fullExecutionApprox": 92.429,
+    "fuzzGameWall": 191.9,
+    "baselineBrowserScenario": 8.277,
+    "featureBrowserScenario": 51.044
+  },
+  "hostLoad": 30.27783203125,
+  "testDelta": {
+    "files": 0,
+    "lines": 554,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "notes": "Window begins at original parent helper dispatch. Includes read-only discovery, source-free checkpoint/prerequisite547 wait, parent181 independent work interval, fresh v2 setup, implementation, capacity waits and validation; elapsed assignment time, not editing time. Endpoint observed immediately before commit; immutable Git committer time and its delta are retained in the primary validation commit receipt. Native test entrypoint files delta0; lines include91 entrypoint +463 plain contract/support. Detailed timings, failed local receipts, asset-race repair and stable QA are retained in measurements."
+}

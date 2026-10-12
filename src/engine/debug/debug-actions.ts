@@ -10,6 +10,7 @@
  * (`BattleSlice.history`): the base slice, then every recorded intent and
  * debug action before the chosen entry, each re-validated as it applies.
  */
+import type { EngineEvent } from "../events";
 import type { Engine } from "../engine";
 import { createFoldAdapter, type BattleSlice, type HistoryEntry } from "../fold/slice";
 import { leftmostOpenBackSlot, setOccupant } from "../rules/zones";
@@ -53,7 +54,7 @@ export type DebugRejection =
   | "invariants";
 
 export type DebugOutcome =
-  | { readonly kind: "applied"; readonly slice: BattleSlice }
+  | { readonly kind: "applied"; readonly slice: BattleSlice; readonly published: readonly EngineEvent[] }
   | { readonly kind: "rejected"; readonly reason: DebugRejection; readonly detail?: string };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -112,12 +113,12 @@ function mint(state: BattleState, side: Side, card: CardId, zone: Zone): Instanc
   return id;
 }
 
-type Change = { readonly state: BattleState } | { readonly reason: DebugRejection; readonly detail?: string };
+type Change = { readonly state: BattleState; readonly published: readonly EngineEvent[] } | { readonly reason: DebugRejection; readonly detail?: string };
 
 /** Applies one non-undo action to a copy of `committed`. */
 function change(engine: Engine, committed: BattleState, op: Exclude<DebugOp, { kind: "undo" }>): Change {
   const state = cloneState(committed);
-  if (op.kind === "mark") return { state: committed };
+  if (op.kind === "mark") return { state: committed, published: [] };
   const side = state.sides[op.side];
   switch (op.kind) {
     case "setEnergy":
@@ -156,10 +157,13 @@ function change(engine: Engine, committed: BattleState, op: Exclude<DebugOp, { k
       break;
     }
   }
-  checkVictory(new Context(state, engine.catalog, NO_PROMPTS), []);
+  const ctx = new Context(state, engine.catalog, NO_PROMPTS);
+  ctx.refreshDeckTopReveals();
+  const published = [...ctx.events];
+  checkVictory(ctx, []);
   state.version += 1;
   const problems = invariantViolations(state, engine.catalog);
-  return problems.length === 0 ? { state } : { reason: "invariants", detail: problems.join("; ") };
+  return problems.length === 0 ? { state, published } : { reason: "invariants", detail: problems.join("; ") };
 }
 
 /** A non-undo action applied to `slice`, without recording it in the history. */
@@ -168,7 +172,7 @@ function applyChange(engine: Engine, slice: BattleSlice, op: Exclude<DebugOp, { 
   if (slice.inFlight !== null) return { kind: "rejected", reason: "stepInFlight" };
   const changed = change(engine, slice.committed, op);
   if ("reason" in changed) return { kind: "rejected", ...changed };
-  return { kind: "applied", slice: { ...slice, committed: changed.state, publishedEvents: 0 } };
+  return { kind: "applied", slice: { ...slice, committed: changed.state, publishedEvents: 0 }, published: changed.published };
 }
 
 /** `slice` without its history, as a base or a replayed slice. */
@@ -217,13 +221,14 @@ export function applyDebugOp(engine: Engine, slice: BattleSlice, op: DebugOp): D
     const attempt = slice.attempt + 1;
     return {
       kind: "applied",
+      published: [],
       slice: { ...replayed, attempt, history: { base: history.base, entries: [...kept, { attempt }] } },
     };
   }
   const outcome = applyChange(engine, slice, op);
   if (outcome.kind === "rejected") return outcome;
   const history = slice.history ?? { base: withoutHistory(slice), entries: [] };
-  return { kind: "applied", slice: { ...outcome.slice, history: { ...history, entries: [...history.entries, { debug: op }] } } };
+  return { kind: "applied", published: outcome.published, slice: { ...outcome.slice, history: { ...history, entries: [...history.entries, { debug: op }] } } };
 }
 
 /** Starts a slice's history at itself, as the lab scenes do, so their whole battle can be undone. */

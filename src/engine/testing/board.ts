@@ -1,3 +1,6 @@
+import type { EngineEvent } from "../events";
+import { Context } from "../steps/context";
+import { NO_PROMPTS } from "../steps/sources";
 import type { EngineCatalog } from "../catalog";
 import { BASE_VARIANT, type Variant } from "../dsl/types";
 import { freshStatus, initialState, variantOf } from "../state/create";
@@ -56,7 +59,7 @@ export interface BoardSetup {
 export function boardState(
   catalog: EngineCatalog,
   setup: BoardSetup,
-): { state: BattleState; ids: Record<Side, { front: (InstanceId | null)[]; back: (InstanceId | null)[]; hand: InstanceId[]; deck: InstanceId[]; void: InstanceId[] }> } {
+): { state: BattleState; events: readonly EngineEvent[]; ids: Record<Side, { front: (InstanceId | null)[]; back: (InstanceId | null)[]; hand: InstanceId[]; deck: InstanceId[]; void: InstanceId[] }> } {
   const state = initialState(
     {
       seed: battleSeed("board"),
@@ -142,5 +145,7 @@ export function boardState(
       ids[side].void.push(id);
     }
   }
-  return { state, ids };
+  const ctx = new Context(state, catalog, NO_PROMPTS);
+  ctx.refreshDeckTopReveals();
+  return { state, ids, events: ctx.events };
 }

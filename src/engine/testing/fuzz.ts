@@ -37,6 +37,7 @@ import { STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stack-cards";
 import { TRIGGER_CARDS, TRIGGER_EMBLEMS } from "./trigger-cards";
 import { CONTINUOUS_CARDS, CONTINUOUS_EMBLEMS } from "./continuous-cards";
 import { ZONE_CARDS, ZONE_FIGMENTS } from "./zone-cards";
+import { DECK_TOP_CARDS } from "./deck-top-cards";
 import { LOOP_CARDS } from "./loop-cards";
 import { parseCardId, type CardId } from "../../types/card-identity";
 import { parseAvatarId, parseDreamsignId, parseDreamwellCardId, parseSemanticEntityId, type AvatarId, type DreamsignId, type DreamwellCardId } from "../../types/identifiers";
@@ -117,7 +118,7 @@ const FIDELITY_CARDS: readonly EngineCardDefinition[] = [
  * continuous-effect, zone and special-mechanic, optional-loop, and
  * determinization-fidelity fixtures.
  */
-const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS, ...LOOP_CARDS, ...FIDELITY_CARDS];
+const FUZZ_SYNTHETIC = [...SYNTHETIC_CARDS, ...PROMPTING_CARDS, ...DSL_CARDS, ...STACK_CARDS, ...TRIGGER_CARDS, ...CONTINUOUS_CARDS, ...ZONE_CARDS, ...LOOP_CARDS, ...FIDELITY_CARDS, ...DECK_TOP_CARDS];
 
 const FUZZ_EMBLEMS: EmblemDefinitions = {
   avatars: [...(SYNTHETIC_EMBLEMS.avatars ?? []), ...(TRIGGER_EMBLEMS.avatars ?? []), ...(CONTINUOUS_EMBLEMS.avatars ?? [])],

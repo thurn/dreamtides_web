@@ -40,6 +40,7 @@ import { AVATAR, DREAMSIGN, STACK, STACK_CARDS, SYNTHETIC_EMBLEMS } from "./stac
 import { SYNTHETIC, SYNTHETIC_CARDS, syntheticId } from "./synthetic-cards";
 import { TRIGGER, TRIGGER_CARDS } from "./trigger-cards";
 import { ZONE, ZONE_CARDS, ZONE_FIGMENTS } from "./zone-cards";
+import { DECK_TOP, DECK_TOP_CARDS } from "./deck-top-cards";
 import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "./chosen-hand-banish-cards";
 
 function labEvent(index: number, cost: number, effect: Parameters<typeof event>[0]): EngineCardDefinition {
@@ -243,6 +244,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
     ...CAPTURE_CARDS,
     ...ZONE_CARDS,
     ...CHOSEN_HAND_BANISH_CARDS,
+    ...DECK_TOP_CARDS,
     ...Object.values(LAB),
   ],
   emblems: SYNTHETIC_EMBLEMS,
@@ -251,6 +253,12 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [DECK_TOP.keeper.id]: { name: "Lab Petal Keeper", text: "If you control 3 or more characters, reveal the top card of your deck. You may play characters from the top of your deck. 0●: Return another character to hand. 0●: Foresee 1." },
+  [DECK_TOP.revealer.id]: { name: "Lab Open Book", text: "Reveal the top card of your deck." },
+  [DECK_TOP.permit.id]: { name: "Lab Hidden Permission", text: "You may play characters from the top of your deck. 0●: Foresee 2." },
+  [DECK_TOP.payable.id]: { name: "Lab Petal Arrival", text: "To play this character, discard a card." },
+  [DECK_TOP.draw.id]: { name: "Lab Two Draws", text: "Draw two cards." },
+  [DECK_TOP.erode.id]: { name: "Lab Two Erosions", text: "Erode 2." },
   [CAPTURE.caller.id]: { name: "Lab Ember Keeper", text: "☾: Materialize two awakened Ember figments. Abandon them at end of turn." },
   [CAPTURE.watcher.id]: { name: "Lab Departure Witness", text: "When you abandon a character, gain 1⍟." },
   [HAND_BANISH.freeCard.id]: { name: "Lab Hand Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play." },
@@ -413,6 +421,24 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "deck-top-play", description: "An identified playable top, cancellable payment, and hidden deeper deck layers",
+    setup: { active: "player", phase: "day", player: { back: [DECK_TOP.keeper.id, ...vanillas.slice(0, 2)],
+      hand: [vanillas[0], vanillas[1]], energy: 5, deck: [DECK_TOP.payable.id, ...deck(8)] }, enemy: { deck: deck(8) } },
+    script: [], presents: [{ side: "player", action: (ids) => ({ kind: "play", from: "deck", card: at(ids.player.deck, 0) }) }],
+  },
+  {
+    name: "deck-top-hidden", description: "An unconditional permission grants no inspection when its reveal condition is off",
+    setup: { active: "player", phase: "day", player: { back: [DECK_TOP.keeper.id],
+      hand: [vanillas[0], vanillas[1]], energy: 5, deck: [DECK_TOP.payable.id, ...deck(8)] }, enemy: { deck: deck(8) } },
+    script: [],
+  },
+  {
+    name: "deck-top-opponent", description: "The opponent's deck play grows from its deck at reading size",
+    setup: { active: "enemy", phase: "day", player: { deck: deck(8) }, enemy: { back: [DECK_TOP.keeper.id, ...vanillas.slice(0, 2)],
+      hand: [vanillas[1], vanillas[2]], energy: 1, deck: [DECK_TOP.payable.id, ...deck(8)] } },
+    script: [], presents: [{ side: "enemy", action: (ids) => ({ kind: "play", from: "deck", card: at(ids.enemy.deck, 0) }) }],
+  },
   {
     name: "captured-figment-abandon",
     description: "A normal activation materializes two awakened figments and abandons their captured cohort at end of turn",
@@ -1297,7 +1323,8 @@ function labDeck(setup: BoardSetup, side: Side): DeckEntry[] {
  * An optional observer receives each successful script step's published events.
  */
 export function promptLabBattle(engine: Engine, fixture: PromptLabFixture, published?: (events: readonly EngineEvent[]) => void): { init: BattleInit; slice: BattleSlice } {
-  const { state, ids } = boardState(engine.catalog, fixture.setup);
+  const { state, ids, events } = boardState(engine.catalog, fixture.setup);
+  published?.(events);
   const avatars: Partial<Record<Side, AvatarId>> = {};
   const dreamsigns: Partial<Record<Side, readonly DreamsignId[]>> = {};
   for (const side of SIDES) {

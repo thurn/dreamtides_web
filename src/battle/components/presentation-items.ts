@@ -121,7 +121,7 @@ export type PresentationVisual =
    * travels there; `after` is the state its batch arrived with, where the
    * card is public.
    */
-  | { readonly kind: "reveal"; readonly instance: InstanceId; readonly from: "hand" | "void"; readonly after: BattleState }
+  | { readonly kind: "reveal"; readonly instance: InstanceId; readonly from: "hand" | "void" | "deck"; readonly after: BattleState }
   /** The card-score announcement on a challenger that scored. */
   | { readonly kind: "score"; readonly instance: InstanceId; readonly points: number }
   /** A side's Dreamwell card beside its status display. */
@@ -460,7 +460,7 @@ export function presentationItems(
           : item("reveal", BATTLE.presentation.opponentPlayRevealDwellMs, {
               kind: "reveal",
               instance: event.instance,
-              from: before.instances[event.instance]?.zone === "void" ? "void" : "hand",
+              from: before.instances[event.instance]?.zone === "deck" ? "deck" : before.instances[event.instance]?.zone === "void" ? "void" : "hand",
               after: batch.state,
             });
       case "laneResolved":

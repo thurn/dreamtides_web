@@ -19,6 +19,7 @@
  * Every new cost change mode or play route joins these tables
  * (phase-5-content.md recipe step 3).
  */
+import { revealToBoth } from "../../../view/knowledge";
 import { describe, expect, it } from "vitest";
 import { draw } from "../draw";
 import { payTo } from "../pay-to";
@@ -153,6 +154,7 @@ const ROUTES: { readonly [R in PlayRoute]: readonly [RouteVariant, ...RouteVaria
   offering: [variant("Offering chosen over hand", "offering", "hand", { choose: 1, replacement: 0, x: false })],
   permission: [
     variant("permission", "plain", "void", { permission: true }),
+    variant("known top permission", "plain", "deck", { permission: true }),
     variant("permission chosen over Reclaim 5●", "printedReclaim", "void", { permission: true, choose: 0 }),
   ],
   reclaim: [
@@ -240,15 +242,16 @@ function arranged(route: RouteVariant, extra: Extra, steps: readonly Step[], ava
   const hand = extra === "discardMin" ? [v.vanilla1.id, v.vanilla2.id] : [v.vanilla1.id];
   const { state, ids } = boardState(engine.catalog, {
     active: PLAYER, phase: "day",
-    [PLAYER]: { hand: route.from === "hand" ? [card.id, ...hand] : hand, void: route.from === "void" ? [card.id] : [], back: [v.vanilla1.id], energy: available, score: SCORE, deck },
+    [PLAYER]: { hand: route.from === "hand" ? [card.id, ...hand] : hand, void: route.from === "void" ? [card.id] : [], back: [v.vanilla1.id], energy: available, score: SCORE, deck: route.from === "deck" ? [card.id, ...deck] : deck },
     [opponent(PLAYER)]: { back: [v.vanilla1.id], score: SCORE, deck },
   });
   if (extra === "abandonCount") for (const index of [0, 1]) placeFigment(state, PLAYER, { rank: "front", index }, { kind: "figmentCopy", cardId: v.vanilla1.id, spark: null });
-  const id = route.from === "hand" ? ids[PLAYER].hand[0] : ids[PLAYER].void[0];
+  const id = route.from === "hand" ? ids[PLAYER].hand[0] : route.from === "deck" ? ids[PLAYER].deck[0] : ids[PLAYER].void[0];
+  if (route.from === "deck") revealToBoth(state, [id]);
   const sources: Record<Who, InstanceId> = { self: ids[PLAYER].back[0]!, opponent: ids[opponent(PLAYER)].back[0]! };
   const side = (who: Who): Side => (who === "self" ? PLAYER : opponent(PLAYER));
   const changes: { readonly by: Who; readonly change: FloatingEffect["change"] }[] = [
-    ...(route.permission ? [{ by: "self" as const, change: { kind: "playFrom", player: PLAYER, zone: "void", instance: id, filter: {}, next: false } as const }] : []),
+    ...(route.permission ? [{ by: "self" as const, change: { kind: "playFrom", player: PLAYER, zone: route.from === "deck" ? "deck" : "void", instance: route.from === "deck" ? null : id, filter: {}, next: false } as const }] : []),
     ...(route.granted
       ? [{ by: "self" as const, change: { kind: "keyword", instance: id, keyword: "reclaim", gains: true, reclaimCosts: withX(GRANTED, extra) } as const }]
       : []),
@@ -299,7 +302,7 @@ function observed(route: RouteVariant, extra: Extra, steps: readonly Step[]): Ou
     const discarded = result.events.flatMap((event) => event.kind === "discarded" ? [event.instance] : []);
     expect([...discarded].sort()).toEqual(state.sides[PLAYER].hand.filter((card) => card !== id).sort());
     for (const card of discarded) expect(result.state.instances[card].zone).toBe("void");
-    expect(result.state.sides[PLAYER].deck).toHaveLength(state.sides[PLAYER].deck.length - X);
+    expect(result.state.sides[PLAYER].deck).toHaveLength(state.sides[PLAYER].deck.length - X - (route.from === "deck" ? 1 : 0));
   }
   return {
     extra,

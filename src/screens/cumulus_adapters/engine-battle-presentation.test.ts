@@ -21,7 +21,7 @@ import { EVENT_DEFINITIONS, eventSeenBy } from "../../engine/events";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
 import { fuzzEngineCatalog, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
-import { PROMPT_LAB_FIXTURES } from "../../engine/testing/prompt-lab";
+import { PROMPT_LAB_FIXTURES, promptLabFixture } from "../../engine/testing/prompt-lab";
 import { battleSeed, SIDES, type InstanceId } from "../../engine/state/ids";
 import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
 import {
@@ -85,6 +85,26 @@ describe("presentation over seeded synthetic fuzz games", () => {
     expect(batches).toBeGreaterThan(12);
     expect(repeated.events.filter(presentedAsItem).length).toBeGreaterThan(maxObservedEventStates);
     expect(problems).toEqual([]);
+  });
+});
+
+describe("deck top play presentation", () => {
+  it("preserves the actual deck origin and existing reading dwell for an opponent play", () => {
+    const lab = promptLabFixture("deck-top-opponent");
+    if (lab === null) throw new Error("missing deck fixture");
+    const fixture = observedBoard(lab.setup);
+    fixture.apply({ kind: "battleAction", side: "enemy", action: { kind: "play", from: "deck", card: fixture.ids.enemy.deck[0] } });
+    const pending = fixture.adapter.pending(fixture.slice());
+    if (pending === null) throw new Error("missing deck payment");
+    const answered = fixture.apply({ kind: "answer", side: "enemy", promptId: pending.prompt.id, value: [fixture.ids.enemy.hand[0]] });
+    const revealed = answered.items.filter((item) => item.visual?.kind === "reveal");
+    expect(revealed).toHaveLength(1);
+    const item = revealed[0];
+    if (item?.visual?.kind !== "reveal") throw new Error("missing deck play reveal");
+    expect(item.visual.from).toBe("deck");
+    expect(item.dwellMs).toBe(BATTLE.presentation.opponentPlayRevealDwellMs);
+    expect(item.batch.state.sides.enemy.deck[0]).toBe(item.visual.instance);
+    expect(item.visual.after.instances[item.visual.instance]?.zone).toBe("play");
   });
 });
 

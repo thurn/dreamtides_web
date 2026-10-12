@@ -555,6 +555,7 @@ export type EngineStatusCopy =
    */
   | {
       readonly kind: "playFrom";
+      readonly zone?: "void" | "deck";
       readonly named: boolean;
       readonly filter: CardFilter;
       readonly next: boolean;
@@ -654,8 +655,9 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
       }${expiryPhrase(status.expiry, human)}`;
     case "playFrom": {
       const qualified = Object.values(permissionFilterFields(status.filter, false)).some((field) => field.qualified);
-      const named = `Can be played from the void${qualified ? ` (${permittedCardKind(status.filter, false)})` : ""}`;
-      return `${status.named ? named : `May play ${permittedCards(status)} from the void`}${expiryPhrase(status.expiry, human)}`;
+      const zone = status.zone === "deck" ? "the top of the deck" : "the void";
+      const named = `Can be played from ${zone}${qualified ? ` (${permittedCardKind(status.filter, false)})` : ""}`;
+      return `${status.named ? named : `May play ${permittedCards(status)} from ${zone}`}${expiryPhrase(status.expiry, human)}`;
     }
     case "cannotPlay":
       return `${status.named ? "Cannot be played" : `Cannot play ${permittedCardKind(status.filter, true)}`}${expiryPhrase(status.expiry, human)}`;
@@ -826,7 +828,7 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${card(event.instance)} returned to ${whose(event.side)} hand.`;
     case "revealed":
       // `side` is whose hand the cards were revealed from, which is not always who revealed them (an opponent's effect may reveal it).
-      return `Revealed from ${whose(event.side)} hand: ${event.instances.map(named).join(", ")}.`;
+      return `Revealed from ${event.zone === "deck" ? "the top of " : ""}${whose(event.side)} ${event.zone ?? "hand"}: ${event.instances.map(named).join(", ")}.`;
     case "shuffledIntoDeck": {
       const deck = `${whose(event.side)} deck`;
       if (event.cards.length === 0) return `${sentence(deck)} was shuffled.`;
@@ -920,10 +922,10 @@ function effectStartedText(
     case "trigger":
       return `${engineStatusLabel({ kind: "delayedTrigger", once: change.once, expiry, sourceName: typeof event.source === "string" ? sourceName(event.source) : null }, human)}.`;
     case "playFrom": {
-      const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry };
+      const status: EngineStatusCopy = { kind: "playFrom", ...(change.zone === "deck" ? { zone: "deck" as const } : {}), named: change.instance !== null, filter: change.filter, next: change.next, expiry };
       if (change.instance !== null) return line(card(change.instance), status);
       const mine = change.player === human;
-      return `${mine ? "You" : "Your opponent"} may play ${permittedCards(status)} from ${mine ? "your" : "their"} void${expiryPhrase(expiry, human)}.`;
+      return `${mine ? "You" : "Your opponent"} may play ${permittedCards(status)} from ${change.zone === "deck" ? "the top of " : ""}${mine ? "your" : "their"} ${change.zone}${expiryPhrase(expiry, human)}.`;
     }
     case "cannotPlay": {
       const status: EngineStatusCopy = { kind: "cannotPlay", named: change.instance !== null, filter: change.filter, expiry };
@@ -933,6 +935,7 @@ function effectStartedText(
     }
     case "playLimit":
       return `${change.player === human ? "You" : "Your opponent"} may play only ${plural(change.count, "card", "cards")} each turn${expiryPhrase(expiry, human)}.`;
+    case "revealDeckTop":
     case "reclaimNotBanished":
       // Only a static ability makes this change, so no effect starts with it.
       return null;

@@ -1,0 +1,794 @@
+{
+  "bead": "hv-umm2.515",
+  "phase": 5,
+  "base": "60ecedf564e05245d771bab38c79fa6da27c46b6",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/revealed-deck-top-515-sol-v2",
+  "dispatchUtc": "2026-10-12T14:15:35.910Z",
+  "sourceWriteObservedUtc": "2026-10-12T15:23:11Z",
+  "windowProvenance": "Original post-claim helper dispatch. Includes source-free discovery/checkpoint, prerequisite547 serialization wait, parent181 independent work interval, fresh v2 setup, implementation, queue waits and validation; elapsed assignment time, not productive editing time.",
+  "checks": {
+    "focused": {
+      "receipt": "515-focused-final.txt",
+      "exit": 0,
+      "files": 7,
+      "tests": 1973,
+      "testStageS": 9.3,
+      "vitestS": 8.76,
+      "scope": "Focused public contracts, UI view model/presentation, mobile, host replay; precedes three final contract rows."
+    },
+    "contractsLatest": {
+      "receipt": "515-contract-latest.txt",
+      "exit": 0,
+      "files": 1,
+      "tests": 1928,
+      "testStageS": 6.0,
+      "vitestS": 5.56,
+      "entry": "src/engine/effects/primitives/contracts.test.ts"
+    },
+    "presentationOrigin": {
+      "receipt": "515-presentation-origin-corrected.txt",
+      "exit": 0,
+      "tests": 1,
+      "skipped": 7,
+      "vitestS": 1.51,
+      "finalEditUtc": "2026-10-12T16:02:42Z",
+      "scope": "Actual observed deck-play payment answer; typed deck origin, configured opponent dwell, before deck and after play."
+    },
+    "review": {
+      "receipt": "515-review-pass.txt",
+      "exit": 0,
+      "files": 270,
+      "tests": 4582,
+      "testStageS": 61.4,
+      "vitestS": 52.19,
+      "startUtc": "2026-10-12T15:54:53.168Z",
+      "restoreStartUtc": "2026-10-12T15:55:55.617Z",
+      "restoreStageS": 0.7,
+      "scope": "Final engine/UI source plus contracts; final presentation-only row added afterward and included in full."
+    },
+    "knip": {
+      "receipt": "515-knip.txt",
+      "exit": 0,
+      "stageS": 2.0,
+      "startUtc": "2026-10-12T15:56:40.151Z",
+      "restoreStartUtc": "2026-10-12T15:56:42.164Z",
+      "restoreStageS": 0.9
+    },
+    "weighted300": {
+      "receipt": "515-weighted-final.txt",
+      "exit": 0,
+      "games": 300,
+      "steps": 152112,
+      "prompts": 5119,
+      "interactiveReruns": 463,
+      "gameWallS": 191.9,
+      "cpuS": 205.1,
+      "failures": 0,
+      "seed": "515-deck-top",
+      "interactiveEvery": 10,
+      "results": {
+        "player": 140,
+        "enemy": 160,
+        "draw": 0
+      },
+      "bounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "targets": [
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000051501",
+          "included": 647,
+          "exercised": 343
+        },
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000051502",
+          "included": 658,
+          "exercised": 379
+        },
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000051503",
+          "included": 661,
+          "exercised": 389
+        },
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000051504",
+          "included": 670,
+          "exercised": 331
+        },
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000051505",
+          "included": 658,
+          "exercised": 292
+        },
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000051506",
+          "included": 646,
+          "exercised": 342
+        }
+      ],
+      "sampling": "Public withFuzzCardWeights with content plus shared DECK_TOP_CARDS. Engine catalog uses production pool plus existing FUZZ_SYNTHETIC registration exactly once. Existing playFuzzGame/fuzzInit, final-hash replay for every game, every tenth interactive replay. Ignored Node validation harness; no browser harness or scripts/fuzz-engine.ts edit.",
+      "harness": "weighted.ts",
+      "harnessSha256": "2f043fdb6fedd98e94022f217b618da93fb70b2804f8c2c14ff272a30bde90c1",
+      "failureRepro": "Harness writes failed game UUID logs/reproduction commands; no failures produced."
+    },
+    "full": {
+      "receipt": "515-full.txt",
+      "session": 33585,
+      "lockPid": 77973,
+      "wrapperStartUtc": "2026-10-12T16:00:27Z",
+      "acquiredObservedUtc": "2026-10-12T16:03:56.285Z",
+      "queueApproxS": 209.285,
+      "workers": 2,
+      "testStartUtc": "2026-10-12T16:04:21.314Z",
+      "status": "passed",
+      "exit": 0,
+      "files": 350,
+      "tests": 5567,
+      "testStageS": 63.9,
+      "vitestS": 63.4,
+      "bundleStageS": 2.9,
+      "restoreStartUtc": "2026-10-12T16:05:28.114Z",
+      "restoreStageS": 0.6,
+      "executionApproxS": 92.429,
+      "wrapperApproxS": 301.714
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review validation stages emitted at 2026-10-12T15:54:54.200Z (import-cycles/lint), reported load30.27783203125; wrapper prepare at15:54:53.168Z reports the same load."
+      },
+      "testDelta": {
+        "entryFiles": 0,
+        "entryLines": 91,
+        "jsdomEntryFiles": 0,
+        "plainContractAndSupportFilesAdded": 4,
+        "plainContractAndSupportLines": 463,
+        "contractEntrypoint": "src/engine/effects/primitives/contracts.test.ts",
+        "totalTestLines": 554
+      },
+      "localValidationS": {
+        "scope": "Named test/Knip/game/browser scenario stages are actual receipt durations; full execution approximate excludes the separately recorded heavy queue; command wrapper durations are separate in checks."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "review",
+      "at": "2026-10-12T15:54:54.200Z",
+      "load1": 30.27783203125,
+      "scope": "Final review validation-stage reported host load"
+    },
+    {
+      "step": "knip",
+      "at": "2026-10-12T15:56:38.950Z",
+      "load1": 24.287109375
+    },
+    {
+      "step": "full",
+      "at": "2026-10-12T16:03:56.285Z",
+      "load1": 4.58544921875
+    }
+  ],
+  "failedLocalReceipts": [
+    {
+      "receipt": "515-weighted.txt",
+      "reason": "Scratch preflight target UUID prefix incorrect; no games run; corrected to branded fixture UUIDs."
+    },
+    {
+      "receipt": "515-weighted-correct.txt",
+      "reason": "Scratch preflight registered shared fixtures twice; no games run; catalog and sampling pool corrected without engine change."
+    },
+    {
+      "receipt": "515-review-final.txt",
+      "reason": "Four existing void status-copy structural contracts rejected explicit optional zone:void; existing omitted void default restored and deck-only zone included."
+    },
+    {
+      "receipt": "515-presentation-origin.txt",
+      "reason": "New test initially observed pending payment, before cardPlayed; corrected to answer payment through actual fold."
+    },
+    {
+      "receipt": "515-contract-first.txt",
+      "reason": "Two initial synthetic fixture failures: mutable view memoization assumption and zero-energy fixture; corrected cloned view observations/fixture energy without production memo workaround."
+    },
+    {
+      "receipt": "515-contract-third.txt",
+      "reason": "Deck cost-composition expectations initially retained the played deck card; adjusted expected deck lengths by actual committed departure."
+    },
+    {
+      "receipt": "515-focused4.txt",
+      "reason": "Two threshold fixture failures from observing cached mutable views; contract clones current snapshots."
+    },
+    {
+      "receipt": "515-focused-full.txt",
+      "reason": "Three old lazy malformed play-permission rejection contracts failed during initial board normalization. Added parent-admitted selective static reveal accessor; preserves existing lazy errors."
+    },
+    {
+      "receipt": "515-review.txt",
+      "reason": "Two raw-string event kind lint errors in synthetic test observations; replaced string with existing closed EngineEvent kind union."
+    },
+    {
+      "receipt": "515-tsc4.txt",
+      "reason": "Test Array.at exceeded configured library target; indexed last event using supported array access."
+    },
+    {
+      "receipt": "515-tsc.txt /515-tsc2.txt /515-tsc3.txt",
+      "reason": "Intermediate compile diagnostics retained; final typechecks/full passed."
+    }
+  ],
+  "qa": {
+    "baselineBeforeInvocation": "run-hxh3R0",
+    "baselineRaceInvocation": "run-uALn4S",
+    "baselineRace": {
+      "desktopRows": 23,
+      "mobileRows": 24,
+      "caps": [],
+      "desktopCaptureUtc": "2026-10-12T15:46:09Z",
+      "mobileCaptureUtc": "2026-10-12T15:46:14Z",
+      "testAssetPrepareUtc": "2026-10-12T15:46:11.335Z",
+      "testAssetRestoreCompletedApproxUtc": "2026-10-12T15:46:18.7Z",
+      "disposition": "Mobile art fallback capture retained. Own contract wrapper overlapped live mobile browser asset load; repeat baseline after all prepare/restore wrappers complete. No renderer change."
+    },
+    "finalStatus": "passed",
+    "baselineStable": {
+      "invocation": "run-I9O2ty",
+      "exit": 0,
+      "caps": [],
+      "desktopRows": 24,
+      "mobileRows": 24,
+      "dimensions": {
+        "desktop": [
+          1440,
+          900
+        ],
+        "mobile": [
+          390,
+          844
+        ]
+      },
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1054,
+        "scenario": 8277,
+        "total": 9390
+      },
+      "serverPid": 15977,
+      "port": 5274,
+      "slot": 1,
+      "runtime": "server process group stopped, port free; runner62368 terminal0",
+      "visualInspection": "Both captures inspected: original card art and avatar portraits restored, baseline appearance matches before. CSS-scale native capture dimensions."
+    },
+    "startupRefusal": {
+      "receipt": "515-baseline-stable.txt",
+      "exit": 2,
+      "scope": "Before any owned server/browser started. Two retained peer owner records refused startup; slot1 subsequently reconciled externally, fresh inventory showed changed state, normal retry succeeded. No peer cleanup from helper."
+    },
+    "feature": {
+      "invocation": "run-Xpbq8J",
+      "exit": 0,
+      "wallMs": {
+        "browserLeaseWait": 52681,
+        "serve": 1970,
+        "scenario": 51044,
+        "total": 105754
+      },
+      "caps": [],
+      "desktopRows": 35,
+      "mobileRows": 35,
+      "serverPid": 26803,
+      "port": 5274,
+      "slot": 1,
+      "runtime": "runner42035 terminal0; server process group stopped, port free",
+      "captures": [
+        {
+          "filename": "desktop-deck-top-ready.png",
+          "width": 1440,
+          "height": 900,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "desktop-deck-top-payment.png",
+          "width": 1440,
+          "height": 900,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "desktop-deck-top-played.png",
+          "width": 1440,
+          "height": 900,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "desktop-deck-top-hidden.png",
+          "width": 1440,
+          "height": 900,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "desktop-deck-top-learned-condition-off.png",
+          "width": 1440,
+          "height": 900,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "desktop-deck-top-unknown-next.png",
+          "width": 1440,
+          "height": 900,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "desktop-opponent-deck-reveal.png",
+          "width": 1440,
+          "height": 900,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "mobile-deck-top-ready.png",
+          "width": 390,
+          "height": 844,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "mobile-deck-top-payment.png",
+          "width": 390,
+          "height": 844,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "mobile-deck-top-played.png",
+          "width": 390,
+          "height": 844,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "mobile-deck-top-hidden.png",
+          "width": 390,
+          "height": 844,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "mobile-deck-top-learned-condition-off.png",
+          "width": 390,
+          "height": 844,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "mobile-deck-top-unknown-next.png",
+          "width": 390,
+          "height": 844,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "mobile-opponent-deck-reveal.png",
+          "width": 390,
+          "height": 844,
+          "visuallyInspected": true
+        }
+      ],
+      "stateGeometry": {
+        "desktop": {
+          "viewport": "desktop",
+          "ready": {
+            "top": "i6",
+            "count": 9,
+            "energy": 5,
+            "version": 0,
+            "ring": "playable",
+            "faces": [
+              "up",
+              "down",
+              "down"
+            ],
+            "renderedTop": "i6",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 474,
+              "y": 606.1383666992188,
+              "width": 94.421875,
+              "height": 67.4375,
+              "right": 568.421875,
+              "bottom": 673.5758666992188
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "played": {
+            "top": "i7",
+            "count": 8,
+            "energy": 4,
+            "version": 2,
+            "ring": "playable",
+            "faces": [
+              "up",
+              "down",
+              "down"
+            ],
+            "renderedTop": "i7",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 474,
+              "y": 606.1383666992188,
+              "width": 94.421875,
+              "height": 67.4375,
+              "right": 568.421875,
+              "bottom": 673.5758666992188
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "hidden": {
+            "top": "i4",
+            "count": 9,
+            "energy": 5,
+            "version": 0,
+            "ring": null,
+            "faces": [
+              "down",
+              "down",
+              "down"
+            ],
+            "renderedTop": "player-deck-0",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 474,
+              "y": 606.1383666992188,
+              "width": 94.421875,
+              "height": 67.4375,
+              "right": 568.421875,
+              "bottom": 673.5758666992188
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "learned": {
+            "top": "i4",
+            "count": 9,
+            "energy": 5,
+            "version": 2,
+            "ring": "playable",
+            "faces": [
+              "up",
+              "down",
+              "down"
+            ],
+            "renderedTop": "i4",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 474,
+              "y": 606.1383666992188,
+              "width": 94.421875,
+              "height": 67.4375,
+              "right": 568.421875,
+              "bottom": 673.5758666992188
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "unknown": {
+            "top": "i5",
+            "count": 8,
+            "energy": 4,
+            "version": 4,
+            "ring": null,
+            "faces": [
+              "down",
+              "down",
+              "down"
+            ],
+            "renderedTop": "player-deck-0",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 474,
+              "y": 606.1383666992188,
+              "width": 94.421875,
+              "height": 67.4375,
+              "right": 568.421875,
+              "bottom": 673.5758666992188
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "enemy": {
+            "from": "deck",
+            "id": "i14",
+            "box": {
+              "x": 600,
+              "y": 282,
+              "width": 240,
+              "height": 336
+            }
+          }
+        },
+        "mobile": {
+          "viewport": "mobile",
+          "ready": {
+            "top": "i6",
+            "count": 9,
+            "energy": 5,
+            "version": 0,
+            "ring": "playable",
+            "faces": [
+              "up",
+              "down",
+              "down"
+            ],
+            "renderedTop": "i6",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 8,
+              "y": 599.75,
+              "width": 79.421875,
+              "height": 56.71875,
+              "right": 87.421875,
+              "bottom": 656.46875
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "played": {
+            "top": "i7",
+            "count": 8,
+            "energy": 4,
+            "version": 2,
+            "ring": "playable",
+            "faces": [
+              "up",
+              "down",
+              "down"
+            ],
+            "renderedTop": "i7",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 8,
+              "y": 599.75,
+              "width": 79.421875,
+              "height": 56.71875,
+              "right": 87.421875,
+              "bottom": 656.46875
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "hidden": {
+            "top": "i4",
+            "count": 9,
+            "energy": 5,
+            "version": 0,
+            "ring": null,
+            "faces": [
+              "down",
+              "down",
+              "down"
+            ],
+            "renderedTop": "player-deck-0",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 8,
+              "y": 599.75,
+              "width": 79.421875,
+              "height": 56.71875,
+              "right": 87.421875,
+              "bottom": 656.46875
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "learned": {
+            "top": "i4",
+            "count": 9,
+            "energy": 5,
+            "version": 2,
+            "ring": "playable",
+            "faces": [
+              "up",
+              "down",
+              "down"
+            ],
+            "renderedTop": "i4",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 8,
+              "y": 599.75,
+              "width": 79.421875,
+              "height": 56.71875,
+              "right": 87.421875,
+              "bottom": 656.46875
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "unknown": {
+            "top": "i5",
+            "count": 8,
+            "energy": 4,
+            "version": 4,
+            "ring": null,
+            "faces": [
+              "down",
+              "down",
+              "down"
+            ],
+            "renderedTop": "player-deck-0",
+            "source": "i1",
+            "pending": null,
+            "inFlight": false,
+            "geometry": {
+              "x": 8,
+              "y": 599.75,
+              "width": 79.421875,
+              "height": 56.71875,
+              "right": 87.421875,
+              "bottom": 656.46875
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "enemy": {
+            "from": "deck",
+            "id": "i14",
+            "box": {
+              "x": 107.25,
+              "y": 299.15625,
+              "width": 175.5,
+              "height": 245.6875
+            }
+          }
+        }
+      },
+      "durableOwnerActions": [
+        [
+          {
+            "gameId": "kosb9t",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i6",
+              "from": "deck"
+            },
+            "answers": [
+              {
+                "fingerprint": "18y0bxel8em",
+                "value": [
+                  "i4"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-12T16:07:41.751Z",
+            "event": "engine.action",
+            "seq": 17
+          }
+        ],
+        [
+          {
+            "gameId": "mwcyop",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i6",
+              "from": "deck"
+            },
+            "answers": [
+              {
+                "fingerprint": "18y0bxel8em",
+                "value": [
+                  "i4"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-12T16:08:07.359Z",
+            "event": "engine.action",
+            "seq": 17
+          }
+        ]
+      ],
+      "contracts": "Setup reveals exact top; typed deck intent once; reload exact pending prompt; cancel no payment; normal payment/card materialization; causal play before replacement reveal; hidden press inert; proper Foresee1 permits learned current top while condition off; unknown next unplayable; all deeper layers face down; actual opponent from deck preserves reading size and finishes reveal; Caps[] and bounded deck geometry on both viewports."
+    },
+    "sourceState": {
+      "kind": "uncommitted-working-tree",
+      "baseAnchor": "60ecedf564e05245d771bab38c79fa6da27c46b6",
+      "runtimeSourceMap": "validation/source-sha256.json",
+      "runtimeSourceMapSha256": "fd2c8701eafcb723b33ee29b398a1cc075ba3073cfe0115b1f116c3f776ec8a2",
+      "scope": "Final full, stable baseline run-I9O2ty and feature run-Xpbq8J use the final frozen working-tree source. The base anchor is the starting Git commit and does not contain this feature. Earlier race capture has no per-file snapshot and is not final-source acceptance."
+    }
+  },
+  "failureContracts": {
+    "errorMidstep": "rolls back an error after a published draw/reveal prompt without retaining an invalid deck position",
+    "reload": "cancels payment atomically, survives saved reload, and rejects stale, invalid, and concurrent inputs",
+    "partialWrite": "rejects a partial saved operation and recovers its committed state without spending twice",
+    "invalidStaleConcurrent": "cancels payment atomically, survives saved reload, and rejects stale, invalid, and concurrent inputs",
+    "dryRun": "keeps a dry-run's state, payments and next-top knowledge private",
+    "hostReplayUndo": "src/rules/battle/engine-battle-replay.test.ts uses applyEngineDebug, collected UUID logs, replayEngineBattle derivation and undo marks",
+    "causalObserverPrivacy": "matches every causal trigger sibling before a newly active reveal, preserving hidden subjects",
+    "departingSource": "does not disclose a top when a departing source regains its lost abilities before detach"
+  },
+  "sourceSha256": {
+    "scripts/content-inventory.ts": "22909c72a728d4b9efd415b99f23791fd8ad476d85af5759919f18b99834c5db",
+    "src/battle/components/EngineBattleScreen.tsx": "dbba76cae920570a625d8660c6fca8a842c653d423713fb90b5b497e234ba840",
+    "src/battle/components/presentation-items.ts": "4b0da25877805554dda010310be94175089c4e45fa89dd75c7384764bc544887",
+    "src/cumulus/screens/MobileBattleScreen.test.tsx": "faa32a6ea5452e8948a996fd8dc5e9bfe7c4d7a94dd5d660393dd46fdce00d97",
+    "src/cumulus/screens/MobileBattleScreen.tsx": "03b3230283bf29697f3ccdd6228e3b9b73941208437c2235720c1f72243e6cf4",
+    "src/engine/continuous/layers.ts": "bf70886203e9a1d2e8f84a6b6898556e73311da826388cffe9d3b4a817e46003",
+    "src/engine/continuous/permissions.ts": "d08f6aa5b1c69c8dbe1c38a25568a1609a30d99a4feb0ed1179c444096b94a08",
+    "src/engine/debug/debug-actions.ts": "130daab41122dedcc4fe93ec45ddfff946fcadcdc62e969a3fc3c4db8fced1c6",
+    "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "5b56e8166de2dbbe2bfb2f0ffac658f4b5006118d6c4a02f9d417c3598a8fb17",
+    "src/engine/effects/primitives/index.ts": "ff783396d821dce557e6da1bc5440e0f274c607194d5c7f5cc36faf505ffa3b4",
+    "src/engine/effects/primitives/play-from-zone.ts": "e04d8b76a764f2ac03f542ae8c71ea3ead5139205de754ccdad41b5e77e415ac",
+    "src/engine/effects/registry.ts": "ec096e3d148388eff666f14f7e048d181d54147ea2c1d3d35dc22d8f2ec2eea8",
+    "src/engine/events/kinds/revealed.ts": "1da0e021bdf69072e3c1dc367e5ded8a72cbea9171c6b344e94ec5b2271d5361",
+    "src/engine/log.ts": "11f84d1ef541b19ae2df59b0853bddf9246cc1811f2366677263772695372c82",
+    "src/engine/rules/actions.ts": "1a6afc86472362512255620112dd1759c4f7eadd632366209815101909dd612d",
+    "src/engine/rules/floating.ts": "656cd0b4edad267098c272a51ffd5f9c94af8b28f54268f94e61cea1a8579792",
+    "src/engine/rules/legality.ts": "2926424a552da342d84a37b743e21c801d9dedd6276ee26e8e4205518a15cba5",
+    "src/engine/rules/timing.ts": "e118e1d9d0ad77923bb3fe873b0a253605c33f4b3f6981cc2b8732ff179d959e",
+    "src/engine/state/types.ts": "ddbbf1af2cd61f285c2229f7b6b818f091428b231f3140f1cf7e3aff08459fa9",
+    "src/engine/steps/context.ts": "ea96ffb7d0d88191e24a0be6918ff69235bf0542d190f72976ed836eb4a6192e",
+    "src/engine/steps/feasibility.ts": "22b8c599e9553d21d1959bf0b9666597c2c7768085359bb5b118250d1320f79e",
+    "src/engine/steps/runner.ts": "c12111b9372969b9c73bb05a9b2b2c28acf2dc482e8cc30a9815947977f2f47d",
+    "src/engine/testing/board.ts": "8ab478503d468dfe510138fd7dc86c497f779042fc00eed241b4d59ae46ac246",
+    "src/engine/testing/fuzz.ts": "4332898dde70d6e89e73ed29abc705a84bb521d9f1f0694a533e921de7e8d7c4",
+    "src/engine/testing/prompt-lab.ts": "d53003f939fd27cb6825dfd55d651f6f80668f49d693c4c7a09e95f3f854e2d3",
+    "src/engine/view/view.ts": "895df18d5b73404e9d88f1764e54aa95ca3da32826c13af33732217f1dea4605",
+    "src/rules/battle/engine-battle-replay.test.ts": "d3e17a7bc04a547455ded1358ce58d71e630e2322fc62df7665bbc66607a1e89",
+    "src/rules/battle/engine-battle.ts": "0cc12e26dc4f1a968e2474f9a12acbdfe0d6201adf36fa8dfaa3cb10f95977d9",
+    "src/rules/battle/fold.ts": "4c3c536183054b91722f35e1ab08fcbbfdd8501bc964219021af27d7869843a9",
+    "src/rules/reducer.ts": "116a75a96243dfb9aa18afad0328941c45c35a4d0ab1f41d03c8c9d9df9483a8",
+    "src/runtime/battle-prompt-messages.ts": "7d24b07220e6b0126fb028176dd2019c03b55e3b68b44c6622d21e976b029bd1",
+    "src/screens/cumulus_adapters/engine-battle-presentation.test.ts": "79ff8ad8a87dd671753cf73f57a5698513406b27c703c307aa292ee187d89f2d",
+    "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "ed4a7a24180ec2a9c4deab10978ebec5f190c539aa007a09dd88c6ca2fb732e6",
+    "src/screens/cumulus_adapters/engine-battle-view-model.ts": "3565c183270a90e23626edfa99f457884b7aa32469a0371f157810ebb1bf6088",
+    "src/engine/effects/primitives/contracts/deck-top-support.ts": "f7e57afcb9b2ab9d22203a9fa93ab61cb6e93b65bdb27c0eeffa8e6cbcb65e5d",
+    "src/engine/effects/primitives/contracts/play-from-deck-recovery.contracts.ts": "e209bfcb3353e05bbab2e9a8916450b67f740d3d6ee15b592b7c23ebf723cb4b",
+    "src/engine/effects/primitives/contracts/play-from-deck.contracts.ts": "b593b573440114b8d00e1a5ebdbf9e6b90e48ece6fdcb2e7864a14673eaf2577",
+    "src/engine/effects/primitives/contracts/reveal-deck-top.contracts.ts": "923e94c3e7b5c5549b75d1bf797e62025648dc22d7d89b23a403fc689efe00f4",
+    "src/engine/effects/primitives/reveal-deck-top.ts": "12aeef196135405b6ae8dfaacc2b804154a470bedbcec626681ae2fee0a59aa3",
+    "src/engine/testing/deck-top-cards.ts": "9cd6cf72156c96805cde1d13d8239c23da47856228e6a7b774e6ef6ef19b7d49"
+  },
+  "preExistingIssues": "Debug=1 mobile opener overlaps right edge of Cancel; existing fixed debug opener and prompt layout untouched, Cancel interaction passes. Own pre-existing evidence retains bounded observation.",
+  "implementWindow": {
+    "startUtc": "2026-10-12T14:15:35.910000+00:00",
+    "preCommitObservedUtc": "2026-10-12T16:15:40.714876+00:00",
+    "dispatchToObservationMin": 120.08008126666667,
+    "actualCommitReceipt": "Primary ignored artifacts/qa/hv-umm2.515/validation/commit-receipt.json records immutable Git committer endpoint and its delta from the pre-commit observation."
+  }
+}

@@ -421,14 +421,15 @@ export type ContinuousChange =
   | { readonly kind: "cardCost"; readonly instance: InstanceId; readonly mode: CardCostMode; readonly amount: number }
   /**
    * Layer 6, a play permission: `player` may play the cards in the void it
-   * owns that match `filter`, and are `instance` when it names one, for their
+   * owns that match `filter`, or its identified current deck top. A named
+   * void permission covers only `instance`, for its
    * normal costs (continuous/permissions.ts). A `next` permission allows one
    * play: it ends as that card is played.
    */
   | {
       readonly kind: "playFrom";
       readonly player: Side;
-      readonly zone: "void";
+      readonly zone: "void" | "deck";
       readonly instance: InstanceId | null;
       readonly filter: CardFilter;
       readonly next: boolean;
@@ -453,6 +454,8 @@ export type ContinuousChange =
    * (the turn log).
    */
   | { readonly kind: "playLimit"; readonly player: Side; readonly count: number }
+  /** Static-only public visibility of the current top card. */
+  | { readonly kind: "revealDeckTop"; readonly player: Side }
   /**
    * Layer 6, made only by a static ability (`reclaimNotBanished`): a
    * reclaimed card `player` owns is not banished instead of leaving play or

@@ -100,6 +100,7 @@ export type EngineLogRecord =
   | (RecordBase & { readonly event: "engine.abilitiesLost"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.banishReturnStarted"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.effectEnded"; readonly detail: EventOf<"effectEnded"> })
+  | (RecordBase & { readonly event: "engine.revealed"; readonly detail: EventOf<"revealed"> })
   | (RecordBase & { readonly event: "engine.returnedToHand"; readonly detail: EventOf<"returnedToHand"> })
   | (RecordBase & { readonly event: "engine.battleEnded"; readonly result: BattleResult })
   | (RecordBase & {
@@ -137,6 +138,8 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
       return event.change.kind === "abilities" ? { event: "engine.abilitiesGained", version, detail: event } : null;
     case "effectEnded":
       return { event: "engine.effectEnded", version, detail: event };
+    case "revealed":
+      return { event: "engine.revealed", version, detail: event };
     case "returnedToHand":
       return { event: "engine.returnedToHand", version, detail: event };
     case "battleEnded":

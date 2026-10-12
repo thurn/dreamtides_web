@@ -25,6 +25,25 @@ const labEngine = createEngine(
   createCatalog(PROMPT_LAB_DEFINITIONS.cards, [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments),
 );
 
+describe("deck-top battle affordances", () => {
+  it("separates known owner top plays from hand/void plays, with no deeper or enemy affordance", () => {
+    const fixture = PROMPT_LAB_FIXTURES.find((row) => row.name === "deck-top-play")!;
+    const { slice } = promptLabBattle(labEngine, fixture);
+    const model = screenOf(slice.committed, null, slice.committed, true, labEngine);
+    const top = model.view.player.knownDeckTop!;
+    expect(top).not.toBeNull();
+    expect(top.showPlayableOutline).toBe(true);
+    expect(model.affordances.deckPlays.get(top.id)).toMatchObject({ kind: "play", from: "deck" });
+    expect(model.affordances.plays.has(top.id)).toBe(false);
+    expect(model.affordances.voidPlays.has(top.id)).toBe(false);
+    expect(model.affordances.deckPlays.size).toBe(1);
+    const hidden = promptLabBattle(labEngine, PROMPT_LAB_FIXTURES.find((row) => row.name === "deck-top-hidden")!).slice;
+    const masked = screenOf(hidden.committed, null, hidden.committed, true, labEngine);
+    expect(masked.view.player.knownDeckTop).toBeNull();
+    expect(masked.affordances.deckPlays.size).toBe(0);
+  });
+});
+
 describe("prompt surfaces over the prompt lab", () => {
   const labAdapter = createFoldAdapter(labEngine);
   /** The human's screen at a lab slice, at its pending prompt or decision. */
@@ -67,6 +86,7 @@ describe("prompt surfaces over the prompt lab", () => {
     ...(affordances.pass === null ? [] : [affordances.pass]),
     ...affordances.plays.values(),
     ...affordances.voidPlays.values(),
+    ...affordances.deckPlays.values(),
     ...[...affordances.activations.values()].flat(),
     ...affordances.emblemActivations,
     ...[...affordances.repositions.values()].flat().map((move) => move.action),

@@ -259,6 +259,7 @@ export function isMatchingEngineAnswer(
 function reduceEngineDebug(
   state: FoldState,
   payload: Record<string, unknown>,
+  ctx: EventContext,
 ): FoldState | null {
   const engine = battleEngine();
   const battle = journeyBattleOf(state.battle);
@@ -266,7 +267,7 @@ function reduceEngineDebug(
     return null;
   }
   const fold = battle.engine;
-  const applied = applyEngineDebug(engine, fold.slice, payload);
+  const applied = applyEngineDebug(engine, fold.slice, payload, ctx.seq);
   return applied === null
     ? null
     : { ...state, battle: { ...battle, engine: { ...fold, slice: applied.slice } } };
@@ -663,7 +664,7 @@ export function routeDomain(
       );
 
     case "BATTLE_DEBUG":
-      return foldCase(state, reduceEngineDebug(state, payload));
+      return foldCase(state, reduceEngineDebug(state, payload, ctx));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":

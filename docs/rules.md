@@ -769,6 +769,28 @@ a copy, which is not played. Activating an ability is not playing a card.
   including cards played before the ability began to apply and the card with
   the ability itself.
 
+**Playing from the top of a deck.** A permission to play matching cards from
+the top of your deck covers only the current top card you own. You must be
+able to identify that card to announce it. The permission grants no look or
+reveal, and covers no deeper card. Normal timing, capacity, restrictions,
+energy and additional costs apply. Offering applies from hand; Reclaim
+applies from the void.
+
+**Continuously revealing a deck top.** While an applicable ability instructs
+you to reveal the top card, both players identify the current top, and each
+replacement top is revealed after its causal movement is announced. An empty
+deck reveals nothing. A conditional reveal and a separately stated play
+permission apply independently. A player keeps identifying a learned card
+while its position remains tracked, even when the condition stops applying.
+A new unknown top requires a proper look or reveal before it can be played.
+
+While a card is being played or an ability activated, changes to the top and
+to a reveal condition are disclosed after that operation completes, before
+the next decision. Other effects reveal each changed top before their next
+prompt or instruction that removes another card. Opening setup reveals the
+remaining top after shuffling and dealing. Cancelling before commitment pays
+nothing; published knowledge follows the ordinary position-tracking rules.
+
 ## Costs, Requirements, and X
 
 **Additional costs** are extra costs required to play a card, written as "To play

@@ -159,6 +159,7 @@ export function changedInstance(change: FloatingChange): InstanceId | null {
     case "trigger":
     case "cost":
     case "playLimit":
+    case "revealDeckTop":
     case "reclaimNotBanished":
       return null;
     default:

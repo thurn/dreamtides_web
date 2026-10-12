@@ -1,3 +1,4 @@
+import { identifies } from "../view/knowledge";
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics, characteristicsOf, filterSubjectOf, matchesFilter } from "../continuous/characteristics";
 import { costModifier, type CostModifier } from "../continuous/costs";
@@ -14,7 +15,7 @@ import { playedThisTurn } from "./turn-log";
 import { instanceOf, openBackSlots } from "./zones";
 
 /** Where a played card comes from: the hand of the side holding it, or its owner's void by a play permission or Reclaim. */
-export type PlayZone = "hand" | "void";
+export type PlayZone = "hand" | "void" | "deck";
 
 /**
  * How a card is played: from hand for its costs; from hand by Offering, for
@@ -100,6 +101,7 @@ export function routePayable(state: BattleState, catalog: EngineCatalog, side: S
  */
 export function playRoutes(state: BattleState, catalog: EngineCatalog, id: InstanceId, from: PlayZone): PlayRoute[] {
   const instance = instanceOf(state, id);
+  if (from === "deck") return playPermission(state, catalog, id, instance.owner) === null ? [] : ["permission"];
   if (from === "void") {
     const permitted = playPermission(state, catalog, id, instance.owner) !== null;
     const reclaimable =
@@ -200,6 +202,7 @@ export function canPlay(
   if (instance.zone !== from || instance.controller !== side) {
     return false;
   }
+  if (from === "deck" && (instance.owner !== side || state.sides[side].deck[0] !== id || !identifies(state, id, side))) return false;
   const definition = instanceCard(catalog, instance);
   if (!timingAllows(state, side, definition.speed) || playRestricted(state, catalog, side, id)) {
     return false;

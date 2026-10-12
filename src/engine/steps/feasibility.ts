@@ -106,6 +106,7 @@ class PathSearch {
     const ctx: Context = new Context(cloneState(this.start), this.catalog, source, {
       prefix: this.replay,
       dryRun: true,
+      deferDeckTopReveals: this.step.kind === "play" || this.step.kind === "activate",
       canceller: this.canceller,
     });
     try {

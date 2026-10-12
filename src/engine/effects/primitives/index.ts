@@ -61,6 +61,7 @@ export * from "./return-from-void";
 export * from "./return-all-but-one";
 export * from "./return-to-hand";
 export * from "./reveal";
+export * from "./reveal-deck-top";
 export * from "./sequence";
 export * from "./set-base-spark";
 export * from "./shuffle-into";

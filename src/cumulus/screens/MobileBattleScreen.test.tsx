@@ -38,6 +38,21 @@ afterEach(() => {
 });
 
 describe("MobileBattleScreen", () => {
+  it("renders only the identified top face, reuses the pile play ring, and clears it for a stale snapshot", () => {
+    const view = makeView();
+    const top = { ...makeCard(31, view.player.deckCardIds[0]), showPlayableOutline: true };
+    const player = { ...view.player, knownDeckTop: top };
+    const onZoneOpen = vi.fn();
+    const container = mount({ ...view, player, near: player }, { onZoneOpen });
+    const pile = query(container, '[data-testid="player-battle-deck"]');
+    expect(pile.dataset.pileSelection).toBe("playable");
+    expect([...pile.querySelectorAll('[data-card-pile-layer]')].map((layer) => layer.getAttribute("data-card-face"))).toEqual(["up", "down"]);
+    act(() => pile.click());
+    expect(onZoneOpen).toHaveBeenCalledWith({ owner: "player", zone: "deck" });
+    const stale = { ...player, deckCardIds: [...player.deckCardIds].reverse() };
+    rerender(container, { ...view, player: stale, near: stale });
+    expect(query(container, '[data-testid="player-battle-deck"]').dataset.pileSelection).toBeUndefined();
+  });
   it("renders both battlefields, hands, and piles, outlining only the playable cards", () => {
     const view = makeView();
     const playable = view.playerHand[1];

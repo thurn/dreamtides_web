@@ -13,7 +13,7 @@ export type Action =
    * Reclaim. A UI drop may name the open back-rank `slot` a character
    * enters; legal actions never carry one.
    */
-  | { readonly kind: "play"; readonly card: InstanceId; readonly from: "hand" | "void"; readonly slot?: Slot }
+  | { readonly kind: "play"; readonly card: InstanceId; readonly from: "hand" | "void" | "deck"; readonly slot?: Slot }
   | { readonly kind: "activate"; readonly source: AbilitySource; readonly ability: number }
   | { readonly kind: "reposition"; readonly card: InstanceId; readonly to: Slot }
   /** Pass priority, or end the current Day, Dusk, or Night. */

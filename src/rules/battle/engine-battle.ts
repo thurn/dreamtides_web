@@ -19,6 +19,7 @@
 // the adapter's memoized runs, so it runs no step again, and it takes the
 // batch's states, observed ones included, with `batchStates`.
 
+import { eventLogRecords } from "../../engine/log";
 import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
 import type { BattleInit as EngineBattleInit } from "../../engine";
 import type { DebugOp } from "../../engine/debug/debug-actions";
@@ -291,13 +292,16 @@ export function applyEngineDebug(
   engine: Engine,
   slice: BattleSlice,
   payload: Record<string, unknown>,
-): { readonly slice: BattleSlice; readonly op: DebugOp } | null {
+  seq?: number,
+): { readonly slice: BattleSlice; readonly op: DebugOp; readonly published: readonly EngineEvent[] } | null {
   const debug = engineDebugActions();
   if (debug === null) return null;
   const op = debug.debugOpFromUnknown(payload.op);
   if (op === null) return null;
   const outcome = debug.applyDebugOp(engine, slice, op);
-  return outcome.kind === "rejected" ? null : { slice: outcome.slice, op };
+  if (outcome.kind === "rejected") return null;
+  if (seq !== undefined && outcome.published.length > 0) keepLog(seq, eventLogRecords(outcome.published, slice.committed.version));
+  return { slice: outcome.slice, op, published: outcome.published };
 }
 
 // ---------------------------------------------------------------------------
@@ -446,13 +450,16 @@ function foldRest<T>(
         folded += 1;
         const applied = applyEngineDebug(engine, slice, payload);
         if (applied === null) continue;
+        const before = slice.committed;
+        const count = items.length;
         slice = applied.slice;
+        if (applied.published.length > 0) items.push(...derive({ seq: committed.seq, events: applied.published, state: slice.committed, before }));
         if (applied.op.kind === "undo" && marks !== null) {
           const keptMarks = marks.slice(0, applied.op.keep + 1);
           items = items.slice(0, keptMarks[keptMarks.length - 1] ?? 0);
           marks = keptMarks;
         }
-        marks = alignMarks(marks, slice, items.length, items.length);
+        marks = alignMarks(marks, slice, count, items.length);
       }
     }
   } catch {

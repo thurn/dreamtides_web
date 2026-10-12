@@ -71,9 +71,9 @@ function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side, se
     if (outcome.exhausted) bounded.push(step);
     return outcome.feasible;
   };
-  const zones: readonly PlayZone[] = ["hand", "void"];
+  const zones: readonly PlayZone[] = ["hand", "void", "deck"];
   const plays = zones.flatMap((from) =>
-    state.sides[side][from]
+    (from === "deck" ? state.sides[side].deck.slice(0, 1) : state.sides[side][from])
       .filter((card) => canPlay(state, catalog, side, card, from) && feasible({ kind: "play", card, from }))
       .map((card) => ({ card, from })),
   );

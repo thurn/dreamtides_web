@@ -24,13 +24,14 @@ export type PermittedCards = SubjectSpec | SelfSpec | ZoneCardSpec;
  * (`playSelfFromZone`), which covers that card only while it is there.
  * `duration` `null` takes the enclosing `forDuration`'s,
  * else lasts permanently (a `next` one then lasts until it is used). It names
- * void cards only, which are public, so its `effectStarted` event names no
+ * named void cards only, or the current identified matching deck top by
+ * filter. Permission grants no inspection. Its `effectStarted` event names no
  * hidden card.
  */
 export interface PlayFromZoneNode {
   readonly op: "playFromZone";
   readonly player: PlayerRef;
-  readonly zone: "void";
+  readonly zone: "void" | "deck";
   readonly cards: PermittedCards | null;
   readonly filter: CardFilter;
   readonly next: boolean;
@@ -43,6 +44,7 @@ export const playFromZonePrimitive = definePrimitive<PlayFromZoneNode>({
   op: "playFromZone",
   targets: (node) => (node.cards === null ? [] : cardTarget(node.cards)),
   resolve(ctx, node, env) {
+    if (node.zone === "deck" && node.cards !== null) throw new Error("A deck permission names only the current top by filter");
     if (node.oncePerTurn === true) throw new Error("A once-per-turn play permission belongs to a static ability");
     const player = resolvePlayer(env.controller, node.player);
     const permission = { kind: "playFrom", player, zone: node.zone, filter: node.filter, next: node.next } as const;
@@ -57,6 +59,7 @@ export const playFromZonePrimitive = definePrimitive<PlayFromZoneNode>({
   continuous: {
     layer: 6,
     changes(node, env) {
+      if (node.zone === "deck" && node.cards !== null) throw new Error("A deck permission names only the current top by filter");
       if (node.oncePerTurn === true && (node.cards !== null || node.next)) throw new Error("A once-per-turn static permission names cards by filter and is not next");
       const self = sourceInstance(env.source);
       const sourceZone = self === null ? undefined : env.state.instances[self]?.zone;
@@ -84,11 +87,12 @@ function isSelfInZone(cards: PermittedCards): cards is ZoneSelfSpec {
  * holding a fresh allowance. Static sources in a hand or deck are unsupported.
  */
 export function playFromZone(
-  zone: "void",
+  zone: "void" | "deck",
   filter: CardFilter = {},
   options: { readonly cards?: PermittedCards; readonly next?: boolean; readonly oncePerTurn?: boolean; readonly duration?: Duration; readonly player?: PlayerRef } = {},
 ): PlayFromZoneNode {
   const { cards } = options;
+  if (zone === "deck" && cards !== undefined) throw new Error("A deck permission names only the current top by filter");
   if (cards?.kind === "inZone" && cards.zone !== "void") throw new Error("playFromZone names cards in a void only");
   if (options.oncePerTurn === true && (cards !== undefined || options.next === true)) throw new Error("A once-per-turn static permission names cards by filter and is not next");
   return { op: "playFromZone", player: options.player ?? "you", zone, cards: cards ?? null, filter, next: options.next === true, duration: options.duration ?? null, ...(options.oncePerTurn === true ? { oncePerTurn: true } : {}) };

@@ -88,6 +88,8 @@ export interface EngineBattleAffordances {
   readonly plays: ReadonlyMap<BattleCardId, PlayAction>;
   /** Void cards with a legal Reclaim play. */
   readonly voidPlays: ReadonlyMap<BattleCardId, PlayAction>;
+  /** The human’s identified current deck top with a legal play. */
+  readonly deckPlays: ReadonlyMap<BattleCardId, PlayAction>;
   /** Characters in play, and void cards whose abilities work there, with legal activated abilities. */
   readonly activations: ReadonlyMap<BattleCardId, readonly ActivateAction[]>;
   /** The legal activated abilities of the human's avatar and dreamsigns. */
@@ -158,6 +160,7 @@ const NO_AFFORDANCES: EngineBattleAffordances = {
   pass: null,
   plays: new Map(),
   voidPlays: new Map(),
+  deckPlays: new Map(),
   activations: new Map(),
   emblemActivations: [],
   repositions: new Map(),
@@ -226,6 +229,7 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
   if (legal.length === 0) return NO_AFFORDANCES;
   const plays = new Map<BattleCardId, PlayAction>();
   const voidPlays = new Map<BattleCardId, PlayAction>();
+  const deckPlays = new Map<BattleCardId, PlayAction>();
   const activations = new Map<BattleCardId, ActivateAction[]>();
   const emblemActivations: ActivateAction[] = [];
   const repositions = new Map<BattleCardId, EngineReposition[]>();
@@ -241,7 +245,7 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
         pass = action;
         break;
       case "play":
-        (action.from === "hand" ? plays : voidPlays).set(parseBattleCardId(action.card), action);
+        (action.from === "hand" ? plays : action.from === "deck" ? deckPlays : voidPlays).set(parseBattleCardId(action.card), action);
         break;
       case "activate":
         if (typeof action.source === "string") {
@@ -287,6 +291,7 @@ function affordancesOf(view: BattleView, human: Side, legal: readonly Action[]):
     pass,
     plays,
     voidPlays,
+    deckPlays,
     activations,
     emblemActivations,
     repositions,
@@ -446,7 +451,7 @@ export function engineStatuses(
     if (view.instances[instance] !== undefined) cards.set(instance, [...(cards.get(instance) ?? []), entry]);
   };
   const playFromBadge = (change: Extract<FloatingChange, { readonly kind: "playFrom" }>, expiry: Expiry) => {
-    const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry };
+    const status: EngineStatusCopy = { kind: "playFrom", ...(change.zone === "deck" ? { zone: "deck" as const } : {}), named: change.instance !== null, filter: change.filter, next: change.next, expiry };
     if (change.instance === null) sides[change.player].push(badge("duration", status));
     else mark(change.instance, badge("duration", status));
   };
@@ -666,6 +671,11 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       owner: side,
       position: side === human ? "near" : "far",
       deckCardIds: hiddenZoneIds(view, side, "deck"),
+      knownDeckTop: (() => {
+        const top = state.deck.known.find(({ index }) => index === 0);
+        const instance = top === undefined || top.id === held ? undefined : view.instances[top.id];
+        return instance === undefined ? null : cardView(instance, side === human && affordances.deckPlays.has(parseBattleCardId(instance.id)));
+      })(),
       banishedCardCount: state.banished.length,
       // Only the human's own void plays and void activations mark its void; the opponent's void stays unmarked.
       voidCards: cardsOf(

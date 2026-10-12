@@ -78,6 +78,7 @@ import {
   returnFromVoidPrimitive,
   returnToHandPrimitive,
   revealPrimitive,
+  revealDeckTopPrimitive,
   sequencePrimitive,
   setBaseSparkPrimitive,
   shuffleIntoPrimitive,
@@ -286,6 +287,7 @@ const DEFINITIONS = {
   get returnToHand() {
     return returnToHandPrimitive;
   },
+  get revealDeckTop() { return revealDeckTopPrimitive; },
   get reveal() {
     return revealPrimitive;
   },

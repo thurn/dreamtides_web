@@ -59,6 +59,7 @@ export function runStep(
   const definition = stepDefinition(step.kind);
   const ctx = new Context(work, catalog, source, {
     observeEvent: options.observeEvent,
+    deferDeckTopReveals: step.kind === "play" || step.kind === "activate" || step.kind === "beginBattle",
     prefix: options.prefix,
     dryRun: options.dryRun,
     replay: options.replay,
@@ -81,6 +82,7 @@ export function runStep(
     }
     throw error;
   }
+  ctx.completeDeckTopReveals();
   checkVictory(ctx, ctx.events);
   // A run of automatic steps nobody can stop ends in a draw when it repeats a
   // state exactly or passes the cap (rules § Mandatory Loops). A step whose

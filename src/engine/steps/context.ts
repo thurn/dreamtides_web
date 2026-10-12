@@ -9,7 +9,9 @@ import { drawRandom } from "../state/rng";
 import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
-import { rememberKnownCards, showPrivately } from "../view/knowledge";
+import { continuouslyRevealedTops } from "../continuous/permissions";
+import { SIDES } from "../state/ids";
+import { identifies, rememberKnownCards, revealToBoth, showPrivately } from "../view/knowledge";
 import { promptView, purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
 import type { AnswerSource, ArmedTriggers, Disclosure, EventObserver, RecordedAnswer, StepContext, TriggerUses } from "./types";
@@ -29,6 +31,8 @@ export interface ContextOptions {
   readonly loopActor?: Side | null;
   /** Narrows each prompt raised before the commit point to the answers with a feasible continuation. */
   readonly guard?: PromptGuard;
+  /** A play, activation, or opening setup reveals its changed top only on completion. */
+  readonly deferDeckTopReveals?: boolean;
 }
 
 /**
@@ -67,13 +71,18 @@ export class Context implements StepContext {
   committed = false;
   /** The knowledge settlers of the `settlingKnowledge` calls running now, outermost first. */
   private readonly settlers: (() => void)[] = [];
+  private emitting = 0;
+  /** Departures announce look-back while their old play object still exists. */
+  private readonly leavingPlay = new Map<InstanceId, number>();
+  private refreshingDeckTops = false;
+  private deckTopRevealsDeferred: boolean;
 
   constructor(
     readonly state: BattleState,
     readonly catalog: EngineCatalog,
     private readonly source: AnswerSource,
     private readonly options: ContextOptions = {},
-  ) {}
+  ) { this.deckTopRevealsDeferred = options.deferDeckTopReveals === true; }
 
   get observeEvent(): EventObserver | undefined {
     return this.options.observeEvent;
@@ -81,6 +90,7 @@ export class Context implements StepContext {
 
   choose<P extends Prompt>(spec: PromptSpec<P>, proof?: { readonly allAnswersPayable: true }): AnswerFor<P> {
     this.settleKnowledge();
+    this.refreshDeckTopReveals();
     rememberKnownCards(this.state);
     const cancellable =
       !this.committed && this.options.canceller != null && spec.side === this.options.canceller;
@@ -118,7 +128,7 @@ export class Context implements StepContext {
       }
       this.record({ ...recorded, fingerprint }, rawFingerprint, prompt.side, fullyVisible);
       if (recorded.auto === true) this.autoAnswered(prompt);
-      return recorded.value as AnswerFor<P>;
+      return this.acceptedAnswer<P>(raw, recorded.value as AnswerFor<P>);
     }
     if (this.options.replay === true) {
       throw new UnrecordedPrompt(prompt);
@@ -130,14 +140,22 @@ export class Context implements StepContext {
       }
       this.record({ fingerprint, value: forced, auto: true }, rawFingerprint, prompt.side, fullyVisible);
       this.autoAnswered(prompt);
-      return forced as AnswerFor<P>;
+      return this.acceptedAnswer<P>(raw, forced as AnswerFor<P>);
     }
     const value = this.source.answer(prompt, this.state);
     if (!isLegalAnswer(prompt, value)) {
       throw new IllegalAnswer(prompt);
     }
     this.record({ fingerprint, value }, rawFingerprint, prompt.side, fullyVisible);
-    return value as AnswerFor<P>;
+    return this.acceptedAnswer<P>(raw, value as AnswerFor<P>);
+  }
+
+  /** A private arrangement's answer may reorder positions before its next event. */
+  private acceptedAnswer<P extends Prompt>(prompt: Prompt, answer: AnswerFor<P>): AnswerFor<P> {
+    if (prompt.kind === "arrange" && prompt.privateTo !== undefined) {
+      showPrivately(this.state, prompt.privateTo, promptCards(prompt));
+    }
+    return answer;
   }
 
   /**
@@ -182,7 +200,13 @@ export class Context implements StepContext {
   }
 
   disclose(side: Side, cards: readonly InstanceId[]): void {
+    const publicTops = continuouslyRevealedTops(this.state, this.catalog)
+      .filter(({ card }) => SIDES.every((viewer) => identifies(this.state, card, viewer)))
+      .map(({ card }) => card);
     showPrivately(this.state, side, cards);
+    // A private prompt cannot conceal the already public current top.
+    revealToBoth(this.state, publicTops);
+    this.refreshDeckTopReveals();
     this.disclosed.push({ side, cards: [...cards] });
   }
 
@@ -215,17 +239,55 @@ export class Context implements StepContext {
   /** Records an event and matches it against triggered abilities, which queue (D14), once knowledge is settled (`settlingKnowledge`). */
   emit(event: EngineEvent): void {
     eventDefinition(event.kind);
+    if (event.kind === "leftPlay") {
+      const instance = this.state.instances[event.instance];
+      if (instance !== undefined) this.leavingPlay.set(instance.id, instance.enteredZoneAt);
+    }
     this.settleKnowledge();
     rememberKnownCards(this.state);
-    this.events.push(event);
-    if (this.observeEvent !== undefined) {
-      try {
-        this.observeEvent(event, () => cloneState(this.state));
-      } catch {
-        // Observation is disposable; rules still match and resolve the event.
+    this.emitting += 1;
+    try {
+      this.events.push(event);
+      if (this.observeEvent !== undefined) {
+        try {
+          this.observeEvent(event, () => cloneState(this.state));
+        } catch {
+          // Observation is disposable; rules still match and resolve the event.
+        }
       }
+      matchEvent(this, event);
+    } finally {
+      this.emitting -= 1;
     }
-    matchEvent(this, event);
+    // Movement bookkeeping precedes its substantive announcement. All causal
+    // trigger siblings capture visibility before any new top is disclosed.
+    if (!(["leftPlay", "leftVoid", "enteredVoid", "triggerQueued"] as readonly EngineEvent["kind"][]).includes(event.kind)) {
+      this.refreshDeckTopReveals();
+    }
+  }
+
+  /** Settle active static revelations at a stable prompt/event/setup boundary. */
+  refreshDeckTopReveals(): void {
+    if (this.deckTopRevealsDeferred || this.refreshingDeckTops || this.emitting > 0) return;
+    for (const [id, timestamp] of this.leavingPlay) {
+      const instance = this.state.instances[id];
+      if (instance?.zone === "play" && instance.enteredZoneAt === timestamp) return;
+      this.leavingPlay.delete(id);
+    }
+    this.refreshingDeckTops = true;
+    try {
+      for (const { side, card } of continuouslyRevealedTops(this.state, this.catalog)) {
+        if (SIDES.every((viewer) => identifies(this.state, card, viewer))) continue;
+        revealToBoth(this.state, [card]);
+        this.emit({ kind: "revealed", side, zone: "deck", instances: [card] });
+      }
+    } finally { this.refreshingDeckTops = false; }
+  }
+
+  /** Only a successfully completed operation lifts deferred top revelation. */
+  completeDeckTopReveals(): void {
+    this.deckTopRevealsDeferred = false;
+    this.refreshDeckTopReveals();
   }
 
   random(stream: string): number {

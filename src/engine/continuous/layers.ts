@@ -76,6 +76,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   cost: 6,
   cardCost: 6,
   playFrom: 6,
+  revealDeckTop: 6,
   cannotPlay: 6,
   playLimit: 6,
   reclaimNotBanished: 6,
@@ -262,6 +263,7 @@ function changed(change: ContinuousChange): InstanceId | null {
   switch (change.kind) {
     case "cost":
     case "playFrom":
+    case "revealDeckTop":
     case "cannotPlay":
     case "playLimit":
     case "reclaimNotBanished":
@@ -292,6 +294,13 @@ export class Layers {
   /** A card's effective characteristics. */
   of(id: InstanceId): Characteristics {
     return this.through(id, 5);
+  }
+
+  /** Static top-reveal instructions only; unrelated layer-6 readers remain lazy. */
+  revealedDeckTopPlayers(): readonly Side[] {
+    return this.statics.flatMap((entry) => entry.node.op === "revealDeckTop"
+      ? this.expand(entry).flatMap((change) => change.kind === "revealDeckTop" ? [change.player] : [])
+      : []);
   }
 
   /** Every change of `layer`, in the order it applies. */

@@ -1240,9 +1240,10 @@ const FLOATING_CHANGE_VALIDATORS: {
   disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
   banishedToHandUntil: (value) => isInstanceId(value.instance) && isIndex(value.banishedAt) && value.banishedAt > 0,
+  revealDeckTop: () => false, // A static instruction never enters saved floating effects.
   playFrom: (value) =>
     isSide(value.player) &&
-    value.zone === "void" &&
+    (value.zone === "void" || (value.zone === "deck" && value.instance === null)) &&
     nullable(isInstanceId)(value.instance) &&
     isCardFilter(value.filter) &&
     isBoolean(value.next),
@@ -1536,7 +1537,7 @@ export function actionFromUnknown(value: unknown): Action | null {
     case "play": {
       const card = instanceFromUnknown(value.card);
       const slot = value.slot === undefined ? undefined : slotFromUnknown(value.slot);
-      if (card === null || (value.from !== "hand" && value.from !== "void") || slot === null) return null;
+      if (card === null || (value.from !== "hand" && value.from !== "void" && value.from !== "deck") || slot === null) return null;
       return { kind: "play", card, from: value.from, ...(slot === undefined ? {} : { slot }) };
     }
     case "activate": {

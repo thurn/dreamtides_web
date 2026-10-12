@@ -592,7 +592,11 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     },
     onZoneDrop: () => setDrag(null),
     onZoneOpen: ({ owner, zone }) => {
-      if (owner === HUMAN && zone === "void" && affordances.voidPlays.size > 0) setAbilityChooser({ kind: "void" });
+      if (owner === HUMAN && zone === "deck") {
+        const top = model.view[HUMAN].knownDeckTop;
+        const action = top == null ? undefined : affordances.deckPlays.get(top.id);
+        if (action !== undefined) submitAction(action, "deck-top");
+      } else if (owner === HUMAN && zone === "void" && affordances.voidPlays.size > 0) setAbilityChooser({ kind: "void" });
       else if (zone !== "deck") setBrowsed({ side: owner, zone });
     },
     onNextPhase: () => {

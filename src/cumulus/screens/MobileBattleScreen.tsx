@@ -165,6 +165,8 @@ export interface MobileBattleSideView {
   readonly owner: MobileBattleOwner;
   readonly position: BattleBoardPosition;
   readonly deckCardIds: readonly BattleCardId[];
+  /** Identified current deck top only; deeper cards render face down. */
+  readonly knownDeckTop?: MobileBattleCardView | null;
   readonly banishedCardCount: number;
   readonly voidCards: readonly MobileBattleCardView[];
   readonly backRank: readonly MobileBattleSlotView[];
@@ -247,7 +249,7 @@ export interface MobileBattleView {
 export interface MobileBattlePlayRevealView {
   readonly card: MobileBattleCardView;
   /** The zone it was played from, where its reveal starts. */
-  readonly from: "hand" | "void";
+  readonly from: "hand" | "void" | "deck";
 }
 
 export type MobileBattlePromptCopy = string;
@@ -1190,8 +1192,11 @@ const FarHand = memo(function FarHand({
 
 function toDeckPile(
   cardIds: readonly BattleCardId[],
+  top?: MobileBattleCardView | null,
 ): readonly BattlePileCard[] {
-  return cardIds.map((id) => ({ face: "down", id }));
+  return cardIds.map((id, index) => index === 0 && top?.id === id
+    ? { face: "up", id, model: top.model, layoutMotion: top.layoutMotion, figment: top.figment }
+    : { face: "down", id });
 }
 
 function toVoidPile(
@@ -1228,7 +1233,7 @@ const SideZones = memo(function SideZones({
   readonly zoneLabels: "none" | "voids";
   readonly interactions?: MobileBattleInteractions;
 }) {
-  const deck = toDeckPile(side.deckCardIds);
+  const deck = toDeckPile(side.deckCardIds, side.knownDeckTop);
   const voidPile = toVoidPile(side.voidCards);
   const statusDisplay = (
     <BattleStatusDisplay
@@ -1330,6 +1335,7 @@ const SideZones = memo(function SideZones({
         >
           <CardPile
             cards={deck}
+            selection={side.knownDeckTop?.showPlayableOutline === true ? "playable" : undefined}
             label={((position === "near" ? "viewer" : "opponent") === "viewer" ? "Your deck" : "Opponent’s deck")}
             onPress={
               interactions?.onZoneOpen === undefined
@@ -2396,8 +2402,8 @@ function BattlePlayReveal({
   const reduceMotion = useReducedMotion();
   const [origin] = useState(() => {
     const selector =
-      reveal.from === "void"
-        ? `[data-battle-zone="${farOwner}-void"]`
+      reveal.from === "void" || reveal.from === "deck"
+        ? `[data-battle-zone="${farOwner}-${reveal.from}"]`
         : `[data-battle-mobile-row="far-hand"]`;
     const rect = document.querySelector(selector)?.getBoundingClientRect();
     return rect === undefined || rect.width === 0

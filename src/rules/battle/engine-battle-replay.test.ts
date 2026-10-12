@@ -6,6 +6,11 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { createLocalLog, type LocalLog } from "../../eventlog/local-log";
 import type { GameEvent } from "../../eventlog/types";
+import { createEngine } from "../../engine";
+import { boardState } from "../../engine/testing/board";
+import { DECK_TOP, DECK_TOP_CARDS } from "../../engine/testing/deck-top-cards";
+import { SYNTHETIC, testCatalog } from "../../engine/testing/synthetic-cards";
+import { getBattleInitProvider, registerBattleInitProvider } from "./journey-battle";
 import { createFoldAdapter, type BattleIntent } from "../../engine/fold/slice";
 import { stateHash } from "../../engine/state/hash";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
@@ -22,6 +27,7 @@ import {
 } from "../replay/fixture-providers";
 import {
   pendingEnginePrompt,
+  takeEngineLogRecords,
   replayEngineBattle,
   type EngineBattleReplay,
   type EngineIntentBatch,
@@ -190,6 +196,36 @@ describe("replay from the event log", () => {
     expect(published.length).toBe(marked + 4);
     expect(replayed(log).items).toEqual(kept);
     expect(replayed(reopened(log, () => undefined)).items).toEqual(kept);
+  });
+
+  it("logs and replays debug top-reveal batches once through a reload and removes their items on undo", () => {
+    const { log, append, debug } = game();
+    const local = createEngine(testCatalog(DECK_TOP_CARDS));
+    const provider = getBattleInitProvider()!;
+    registerBattleInitProvider({ ...provider, engine: local });
+    const { state } = boardState(local.catalog, { active: "player", phase: "day", player: { deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] } });
+    const battle = battleOf(log);
+    const slice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    append("LOAD_STATE", { snapshot: log.state().journey, battle: { ...battle, engine: { ...battle.engine, slice } } });
+    const seq = log.head() + 1;
+    debug({ kind: "addCard", side: "player", card: DECK_TOP.revealer.id, zone: "play" });
+    expect(takeEngineLogRecords(seq)).toEqual([{ event: "engine.revealed", version: state.version,
+      detail: { kind: "revealed", side: "player", zone: "deck", instances: [state.sides.player.deck[0]] } }]);
+    expect(takeEngineLogRecords(seq)).toEqual([]);
+    const replay = (input: LocalLog<FoldState>) => {
+      const result = replayEngineBattle(local, battleOf(input), input.events(), derive);
+      if (result.kind !== "done") throw new Error(`debug reveal replay ${result.kind}`);
+      return result.replay.items;
+    };
+    const items = replay(log);
+    expect(items).toHaveLength(1);
+    expect(items[0].kinds).toEqual(["revealed"]);
+    expect(replay(reopened(log, () => undefined))).toEqual(items);
+    debug({ kind: "setEnergy", side: "player", energy: 2 });
+    expect(replay(log)).toEqual(items);
+    debug({ kind: "undo", keep: 0 });
+    expect(replay(log)).toEqual([]);
+    expect(engineOf(log.state()).slice.committed).toEqual(state);
   });
 
   it("starts a battle a LOAD_STATE loaded from its slice, and undoes to that slice's own history", () => {

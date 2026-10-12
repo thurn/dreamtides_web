@@ -300,7 +300,7 @@ export interface BattleView {
    */
   readonly floating: readonly FloatingEffectView[];
   /**
-   * Currently applicable static void-play permissions, derived from layer 6
+   * Currently applicable static void/deck-top play permissions, derived from layer 6
    * for presentation, only from sources the viewer can identify. Sources are
    * not identified in this list; a permission naming a card
    * the viewer cannot identify is omitted. Absent in older presentation views.
