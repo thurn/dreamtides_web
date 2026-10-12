@@ -67,7 +67,7 @@ export const play: StepDefinition<PlayStep> = {
     }
     const costs = routeCosts(state, catalog, step.card, route);
     const modifier = routeCostModifier(state, catalog, side, step.card, route);
-    const permission = route === "permission" ? (playPermission(state, catalog, step.card, side)?.consumes ?? null) : null;
+    const permission = route === "permission" ? playPermission(state, catalog, step.card, side) : null;
     let x: number | null;
     let choices: readonly EffectChoices[];
     if (definition.synthetic?.play !== undefined) {
@@ -84,7 +84,8 @@ export const play: StepDefinition<PlayStep> = {
     const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0 });
     ctx.commitPoint();
     payCosts(ctx, side, step.card, plan);
-    endFloating(ctx, (effect) => modifier.consumes.includes(effect.id) || effect.id === permission);
+    endFloating(ctx, (effect) => modifier.consumes.includes(effect.id) || effect.id === permission?.consumes);
+    if (permission?.oncePerTurn !== undefined) state.oncePerTurn.push(permission.oncePerTurn);
     moveToStack(ctx, step.card, side, { choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
     if (route === "reclaim") instance.status.reclaimed = true;
     instance.status.playedViaReclaim = route === "reclaim";

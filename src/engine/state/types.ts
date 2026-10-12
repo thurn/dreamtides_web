@@ -399,6 +399,8 @@ export type ContinuousChange =
       readonly instance: InstanceId | null;
       readonly filter: CardFilter;
       readonly next: boolean;
+      /** Only static, filter-based permissions use a turn allowance. */
+      readonly oncePerTurn?: boolean;
     }
   /**
    * Layer 6, a play restriction (rules § Playing Cards and the Stack → Play

@@ -676,7 +676,13 @@ card's copiable cost.
 
 - A static ability, such as "You may play ≤2● cost characters from your
   void," covers every matching card while its source is in play, any number
-  of times.
+  of times unless it says "once per turn". A once-per-turn permission allows
+  one matching card to be played each turn, shared across all matching cards.
+  It is used as the play commits, even if the card is prevented or later
+  returns to the void. It renews at the start of the next turn, and covers
+  nothing while its source is outside the zone where the ability works.
+  Each copy of the ability has its own allowance. A source that leaves its
+  zone and returns is a new object with a fresh allowance.
 - A card's own ability, as in "You may play this character from your void,"
   works while that card is in your void and covers that card only, any number
   of times: played that way, it pays its normal costs, additional costs
@@ -692,8 +698,15 @@ card's copiable cost.
   effect: it covers one matching card and ends as that card is played. With
   no stated duration it lasts until it is used (see
   [Durations](#durations)).
-- A play uses a lasting permission when one covers the card, and otherwise
-  the earliest permission for one play that does.
+- A play uses an unlimited permission when one covers the card, and otherwise
+  the earliest unused once-per-turn static permission that does, and then
+  the earliest permission for one play that does. Earliest means the order
+  continuous effects apply: when a static source entered its applicable zone
+  or gained the ability, whichever is later, or when a resolving effect made
+  its permission, with static abilities first on ties, in source and ability
+  order, followed by resolving permissions in creation order. A permission is
+  chosen before costs are paid; abandoning its source as a cost does not undo the
+  announced play. Cancelling or failing a play spends no allowance.
 - A void card that a permission covers and that has Reclaim can be played
   either way: the player chooses as they play it between its normal costs and
   Reclaim, which makes it reclaimed. Playing it by Reclaim uses up no

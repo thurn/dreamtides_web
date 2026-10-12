@@ -39,8 +39,8 @@ export function sourceKey(source: AbilitySource): SourceKey {
   return source.kind === "avatar" ? `avatar:${source.side}` : `dreamsign:${source.side}:${source.index}`;
 }
 
-/** Names one ability of one source for once-per-turn tracking: `<source key>#<ability index>`. */
-export type OncePerTurnKey = `${SourceKey}#${number}`;
+/** Names one ability of one source: `<source key>#<ability index>`, with an optional `@<zone timestamp>` for static play permissions. */
+export type OncePerTurnKey = `${SourceKey}#${number}` | `${SourceKey}#${number}@${number}`;
 
 /** The instance an ability source names, or `null` for an emblem. */
 export function sourceInstance(source: AbilitySource): InstanceId | null {

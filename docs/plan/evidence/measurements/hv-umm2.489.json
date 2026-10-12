@@ -1,0 +1,187 @@
+{
+  "bead": "hv-umm2.489",
+  "base": "fceb661b4472684de042ec982e87555c0ed08121",
+  "measurementWindow": {
+    "dispatchUtc": "2026-10-12T05:26:40+00:00",
+    "dispatchProvenance": "Parent-reported dispatch at approximately 05:26:40 UTC; minute measurement includes research, coordination, validation and waits.",
+    "recordedUtc": "2026-10-12T05:39:47.951608+00:00",
+    "completionUtc": "2026-10-12T05:43:49.785494+00:00",
+    "completionProvenance": "UTC sample immediately before evidence schema check and the single git commit; commit timestamp is the definitive completion reference."
+  },
+  "validation": {
+    "focused": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts",
+      "wallS": 6.86,
+      "cases": 1357,
+      "result": "pass; final review covers all 1359 current primitive contracts including the two hidden-source guard cases"
+    },
+    "review": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "wallS": 73.23,
+      "testFiles": 268,
+      "cases": 3874,
+      "result": "pass on final implementation, guard, contracts and evidence schema"
+    },
+    "knip": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "wallS": 6.05,
+      "result": "pass"
+    },
+    "fuzz": {
+      "command": "JOURNEY_TEST_WORKERS=2 lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids fa036c27-2234-4f76-8857-c242530627ce,cd3d8e4a-618e-4c2f-be60-0363b81887f1,6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+      "wallS": 202.03,
+      "workloadWallS": 201.0,
+      "workloadCpuS": 210.5,
+      "games": 300,
+      "steps": 153358,
+      "interactiveReruns": 345,
+      "failures": 0,
+      "included": [
+        612,
+        615,
+        618
+      ],
+      "exercised": [
+        206,
+        247,
+        264
+      ],
+      "result": "pass",
+      "scope": "Entities:none; existing authored unlimited, next and named permissions weight provenance regressions; new once form has synthetic real-engine contracts."
+    },
+    "priorReview": {
+      "wallS": 84.15,
+      "testFiles": 268,
+      "cases": 3872,
+      "result": "pass before hidden-source guard fixtures were corrected"
+    },
+    "typecheckAfterDeckFixture": {
+      "command": "npx tsc --noEmit --pretty false -p tsconfig.json",
+      "wallS": 12.83,
+      "result": "pass"
+    },
+    "failedAttempts": [
+      {
+        "stage": "focused",
+        "tests": 1356,
+        "failed": 3,
+        "reason": "Fixture setup needed opposing response for priority assertion, explicit determinization decklists and a fault fixture instead of swallowed observer exceptions."
+      },
+      {
+        "stage": "focused",
+        "tests": 1357,
+        "failed": 1,
+        "reason": "Observer receives a snapshot thunk; invoking it correctly observes the allowance before the injected final priority failure."
+      },
+      {
+        "stage": "review",
+        "wallS": 87.6,
+        "result": "failed typecheck",
+        "reason": "Nullable fixture back-rank slots; helper now checks missing sources and explicit picks use asserted present fixture slots."
+      },
+      {
+        "stage": "review",
+        "wallS": 54.47,
+        "result": "failed typecheck; own obsolete process tree stopped",
+        "reason": "A deck functional-zone fixture must use the supported any zone rather than a deck enum member."
+      }
+    ]
+  },
+  "hostLoadSamples": [
+    {
+      "step": "focused",
+      "sampleUtc": "2026-10-12T05:34:18.283Z",
+      "oneMinute": 15.58203125
+    },
+    {
+      "step": "successfulReview",
+      "sampleUtc": "2026-10-12T05:36:18.388Z",
+      "oneMinute": 24.1748046875
+    },
+    {
+      "step": "finalReview",
+      "sampleUtc": "2026-10-12T05:41:05.339Z",
+      "oneMinute": 19.42822265625
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final successful review command typecheck/lint/related checks at 2026-10-12T05:41:05.339Z"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 238,
+    "jsdomFiles": 0,
+    "cases": 11,
+    "scope": "Existing engine contract module; no new test runner or jsdom module."
+  },
+  "qa": {
+    "browser": "No new entity, screen, prompt kind, status display, UI route or presentation change; synthetic real-engine workflows, fold/reload, response-window and Prevent contracts provide proportionate QA for the entity-free permission primitive. No browser server, context, capture or sweep started.",
+    "captures": []
+  },
+  "failurePaths": {
+    "errorMidStep": "rolls back errors before and after the allowance write, leaving the original state and permission intact",
+    "reloadOrRestart": "cancels without spending, reloads a route choice, rejects concurrent and stale inputs, and replays to the same hash",
+    "partialWrite": "rolls back errors before and after the allowance write, leaving the original state and permission intact: synthetic hook makes final priority assignment fail; event observation verifies the real allowance write occurred in private work state before failure. Original state hash and permission are intact.",
+    "invalidOrStaleInput": "cancels without spending, reloads a route choice, rejects concurrent and stale inputs, and replays to the same hash",
+    "concurrentActors": "Same fold test: second action while prompt in flight, wrong-side answer, duplicate answer after commit and stale action after resolution are bounced.",
+    "interrupt": "keeps its allowance spent when a real opposing interrupt prevents the permitted card",
+    "sourcePaidAsCost": "commits an announced permission play even when its additional cost abandons the permission source"
+  },
+  "runtimeLedger": {
+    "servers": [],
+    "browserContexts": [],
+    "persistentProcesses": [],
+    "completedValidationSessions": [
+      11107,
+      39644,
+      2931,
+      20606,
+      24147,
+      75619,
+      25001,
+      17628,
+      98167
+    ],
+    "supersededReview": {
+      "session": 86822,
+      "rootPid": 36551,
+      "status": "Stopped own process tree after failed fixture-nullability typecheck; replacement review passed."
+    },
+    "fuzz": {
+      "pid": 21652,
+      "port": null,
+      "status": "exited successfully"
+    },
+    "supersededHiddenFixtureReview": {
+      "session": 31871,
+      "rootPid": 14465,
+      "status": "Stopped own process tree after fixture typecheck failure; corrected fixture and final review passed."
+    },
+    "finalReview": {
+      "session": 98167,
+      "rootPid": 38126,
+      "status": "exited successfully; no validation child remains"
+    }
+  },
+  "fallout": [
+    {
+      "path": "src/engine/state/ids.ts",
+      "area": "OncePerTurnKey / engine hubs",
+      "change": "Allow source-zone timestamp suffix while preserving existing activation-key shape."
+    },
+    {
+      "path": "src/engine/state/types.ts",
+      "area": "ContinuousChange",
+      "change": "Optional oncePerTurn flag on static playFrom changes; existing floating shape is unchanged."
+    }
+  ],
+  "rulesDecisions": [
+    "RD-hv-umm2.489-1"
+  ],
+  "cardIssues": [],
+  "preExistingIssues": []
+}

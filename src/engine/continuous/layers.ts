@@ -91,12 +91,15 @@ export interface OrderedChange {
   readonly effect: EffectId | null;
   /** The originating static ability's source; `null` for a floating effect. Internal provenance for visibility checks. */
   readonly staticSource: AbilitySource | null;
+  /** Original ability-list index, including non-static and gained abilities. */
+  readonly staticAbility: number | null;
   /** Source order for a static ability, creation order for a floating effect. */
   readonly order: number;
 }
 
 /** A static ability that applies now, with its ordering keys. */
 interface StaticEntry {
+  readonly ability: number;
   readonly source: AbilitySource;
   readonly controller: Side;
   readonly node: EffectNode;
@@ -109,9 +112,18 @@ function instanceNumber(id: InstanceId): number {
   return Number(id.slice(1));
 }
 
+interface IndexedStatic {
+  readonly ability: StaticAbility;
+  readonly index: number;
+}
+
+function indexedStatics(abilities: readonly Ability[], offset = 0): IndexedStatic[] {
+  return abilities.flatMap((ability, index) => ability.kind === "static" ? [{ ability, index: offset + index }] : []);
+}
+
 /** A card's static abilities. */
 interface CardStatics {
-  readonly abilities: readonly StaticAbility[];
+  readonly abilities: readonly IndexedStatic[];
 }
 
 /**
@@ -127,7 +139,7 @@ function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatic
   const { printing, variant } = instance;
   if (instance.status.gainedAbilities !== undefined) {
     // Gained abilities belong to this instance, not to its printing and variant.
-    return { abilities: originAbilities(catalog, instanceOrigin(instance)).filter((ability): ability is StaticAbility => ability.kind === "static") };
+    return { abilities: indexedStatics(originAbilities(catalog, instanceOrigin(instance))) };
   }
   const printed = printing.kind === "figment" ? `figment:${printing.figment}` : printing.cardId;
   let byVariant = catalog.statics.get(printed);
@@ -138,7 +150,7 @@ function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatic
   const key = plainVariant(instance) ? (variant.amplified ? 1 : 0) : JSON.stringify(variant);
   let statics = byVariant.get(key);
   if (statics === undefined) {
-    const abilities = originAbilities(catalog, instanceOrigin(instance)).filter((ability): ability is StaticAbility => ability.kind === "static");
+    const abilities = indexedStatics(originAbilities(catalog, instanceOrigin(instance)));
     statics = { abilities };
     byVariant.set(key, statics);
   }
@@ -156,23 +168,23 @@ function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatic
  */
 function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry[] {
   const entries: StaticEntry[] = [];
-  const add = (source: AbilitySource, controller: Side, abilities: readonly Ability[], timestamp: number, zone: Zone | null): void => {
-    for (const ability of abilities) {
-      if (ability.kind !== "static" || (zone !== null && !worksInZone(ability.zone, zone))) continue;
+  const add = (source: AbilitySource, controller: Side, abilities: readonly IndexedStatic[], timestamp: number, zone: Zone | null): void => {
+    for (const { ability, index } of abilities) {
+      if (zone !== null && !worksInZone(ability.zone, zone)) continue;
       const continuous = primitiveDefinition(ability.effect.op).continuous;
       if (continuous === undefined) throw new Error(`A static ability holds ${ability.effect.op}, which is not continuous`);
-      entries.push({ source, controller, node: ability.effect, layer: continuous.layer, timestamp, order: entries.length });
+      entries.push({ ability: index, source, controller, node: ability.effect, layer: continuous.layer, timestamp, order: entries.length });
     }
   };
   for (const side of SIDES) {
     const { avatar, dreamsigns } = state.sides[side];
-    if (avatar !== null) add({ kind: "avatar", side }, side, originAbilities(catalog, { kind: "avatar", id: avatar.id }), 0, null);
+    if (avatar !== null) add({ kind: "avatar", side }, side, indexedStatics(originAbilities(catalog, { kind: "avatar", id: avatar.id })), 0, null);
     dreamsigns.forEach((dreamsign, index) => {
-      add({ kind: "dreamsign", side, index }, side, originAbilities(catalog, { kind: "dreamsign", id: dreamsign.id }), 0, null);
+      add({ kind: "dreamsign", side, index }, side, indexedStatics(originAbilities(catalog, { kind: "dreamsign", id: dreamsign.id })), 0, null);
     });
   }
   // Only cards with static abilities can add entries, so only they are ordered.
-  const cards: { readonly instance: CardInstance; readonly abilities: readonly StaticAbility[] }[] = [];
+  const cards: { readonly instance: CardInstance; readonly abilities: readonly IndexedStatic[] }[] = [];
   for (const side of SIDES) {
     for (const id of charactersInPlay(state, side)) {
       const instance = state.instances[id];
@@ -185,7 +197,7 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
   for (const instance of Object.values(state.instances)) {
     if (instance.zone === "play" || (printedOnlyInPlay && plainVariant(instance))) continue;
     const { abilities } = cardStatics(catalog, instance);
-    if (abilities.some((ability) => worksInZone(ability.zone, instance.zone))) cards.push({ instance, abilities });
+    if (abilities.some(({ ability }) => worksInZone(ability.zone, instance.zone))) cards.push({ instance, abilities });
   }
   cards.sort((a, b) => instanceNumber(a.instance.id) - instanceNumber(b.instance.id));
   for (const { instance, abilities } of cards) {
@@ -195,10 +207,14 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
       continue;
     }
     // A gained static ability is as new as its gain when that began after its character entered its zone.
-    add(instance.id, instance.controller, catalog.card(printing.cardId).abilities(instance.variant), instance.enteredZoneAt, instance.zone);
+    const own = catalog.card(printing.cardId).abilities(instance.variant);
+    add(instance.id, instance.controller, indexedStatics(own), instance.enteredZoneAt, instance.zone);
+    let offset = own.length;
     for (const { change, timestamp } of state.floating) {
       if (change.kind !== "abilities" || change.instance !== instance.id) continue;
-      add(instance.id, instance.controller, catalog.card(change.cardId).abilities(change.variant), Math.max(instance.enteredZoneAt, timestamp), instance.zone);
+      const gained = catalog.card(change.cardId).abilities(change.variant);
+      add(instance.id, instance.controller, indexedStatics(gained, offset), Math.max(instance.enteredZoneAt, timestamp), instance.zone);
+      offset += gained.length;
     }
   }
   return entries;
@@ -262,7 +278,7 @@ export class Layers {
       if (entry.layer !== layer) continue;
       for (const change of this.expand(entry)) {
         if (layer === 4 || layer === 5) this.assertInPlay(change);
-        ordered.push({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, order: entry.order });
+        ordered.push({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, staticAbility: entry.ability, order: entry.order });
       }
     }
     ordered.sort(byTimestamp);
@@ -313,7 +329,7 @@ export class Layers {
     this.state.floating.forEach((effect, index) => {
       const change = effect.change;
       if (!isContinuousChange(change) || LAYER[change.kind] !== layer || (only !== null && changed(change) !== only)) return;
-      ordered.push({ change, timestamp: effect.timestamp, effect: effect.id, staticSource: null, order: index });
+      ordered.push({ change, timestamp: effect.timestamp, effect: effect.id, staticSource: null, staticAbility: null, order: index });
     });
     return ordered.sort(byTimestamp);
   }

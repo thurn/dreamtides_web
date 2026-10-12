@@ -91,9 +91,9 @@ export function activatedAbilityAt(
   return ability?.kind === "activated" ? ability : null;
 }
 
-/** The once-per-turn key of an ability. */
-export function oncePerTurnKey(source: AbilitySource, index: number): OncePerTurnKey {
-  return `${sourceKey(source)}#${index}`;
+/** The once-per-turn key of an ability; static play permissions also name their source zone object. */
+export function oncePerTurnKey(source: AbilitySource, index: number, enteredZoneAt?: number): OncePerTurnKey {
+  return enteredZoneAt === undefined ? `${sourceKey(source)}#${index}` : `${sourceKey(source)}#${index}@${enteredZoneAt}`;
 }
 
 /**
