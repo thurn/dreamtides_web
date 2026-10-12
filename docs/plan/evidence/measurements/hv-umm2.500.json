@@ -1,0 +1,331 @@
+{
+  "bead": "hv-umm2.500",
+  "phase": 5,
+  "base": "f594afbcdbf9fb692d7d8ce5af72f7972996c049",
+  "claimToPrecommit": {
+    "start": "2026-10-12T04:56:59Z",
+    "endpoint": "2026-10-12T05:11:28.392308+00:00",
+    "provenance": "Whole claim interval includes coordination and validation; final endpoint is stamped after parent ACK immediately before schema and Git."
+  },
+  "scope": {
+    "source": [
+      "scripts/setup-assets.ts"
+    ],
+    "tests": [
+      "scripts/setup-assets.test.ts"
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 134,
+      "jsdomFiles": 0
+    },
+    "fallout": [],
+    "publicAPIChanged": false,
+    "runtimeUIChanged": false
+  },
+  "semantics": {
+    "publication": "Same stable catalog/library/path actors; per-file atomic publication with fresh-pass recovery. Managed directory identity, desired symlink targets and Exploration priority are preserved.",
+    "foreignEntries": "Unreferenced non-links remain intact; foreign-containing directories retain identity while obsolete generated symlinks prune. Desired art destinations with non-links report a conflict.",
+    "staging": "Each pass uses sibling repository .generated/art-links/pass-* on the public directory filesystem, validated by stat device equality. It is ignored and outside served public. Finally deletes only the owned pass; hard-kill residue remains harmless and a fresh pass succeeds.",
+    "actorContainment": "Parent watchdog, scoped finally and afterEach terminate owned actors and await close before fixture deletion. Blocking child barriers have a deadline and detect parent PID changes. No performance threshold is asserted."
+  },
+  "checks": {
+    "focused-actor-audit": {
+      "exit": 0,
+      "wallSeconds": 5.0086471249996976,
+      "receipt": "focused-actor-audit.runtime.json"
+    },
+    "mutant-deadline": {
+      "exit": 1,
+      "wallSeconds": 10.504975749998266,
+      "receipt": "mutant-deadline.runtime.json"
+    },
+    "mutant-stale": {
+      "exit": 1,
+      "wallSeconds": 1.443970291998994,
+      "receipt": "mutant-stale.runtime.json"
+    },
+    "mutant-containment": {
+      "exit": 1,
+      "wallSeconds": 8.744464040999446,
+      "receipt": "mutant-containment.runtime.json"
+    },
+    "staging-ignore": {
+      "exit": 0,
+      "wallSeconds": 0.007453124999301508,
+      "receipt": "staging-ignore.runtime.json"
+    },
+    "install": {
+      "exit": 0,
+      "wallSeconds": 2.5171925840004405,
+      "receipt": "install.runtime.json"
+    },
+    "friction-report": {
+      "exit": 0,
+      "wallSeconds": 0.1596504580011242,
+      "receipt": "friction-report.runtime.json"
+    },
+    "negative-foreign-kill": {
+      "exit": 1,
+      "wallSeconds": 6.088819624997996,
+      "receipt": "negative-foreign-kill.runtime.json"
+    },
+    "focused-recovery": {
+      "exit": 0,
+      "wallSeconds": 4.915945125001599,
+      "receipt": "focused-recovery.runtime.json"
+    },
+    "focused-visible-receipts": {
+      "exit": 0,
+      "wallSeconds": 3.9700005419981608,
+      "receipt": "focused-visible-receipts.runtime.json"
+    },
+    "review": {
+      "exit": 0,
+      "wallSeconds": 14.197110083001462,
+      "receipt": "review.runtime.json"
+    },
+    "full": {
+      "exit": 0,
+      "wallSeconds": 223.41232854199916,
+      "receipt": "full.runtime.json"
+    },
+    "knip": {
+      "exit": 0,
+      "wallSeconds": 3.2862194170011207,
+      "receipt": "knip.runtime.json"
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "review",
+      "step": "prepare",
+      "at": "2026-10-12T05:03:02.617Z",
+      "load": 7.72265625
+    },
+    {
+      "command": "review",
+      "step": "typecheck",
+      "at": "2026-10-12T05:03:03.427Z",
+      "load": 7.72265625
+    },
+    {
+      "command": "review",
+      "step": "typecheck-node",
+      "at": "2026-10-12T05:03:03.428Z",
+      "load": 7.72265625
+    },
+    {
+      "command": "review",
+      "step": "import-cycles",
+      "at": "2026-10-12T05:03:03.429Z",
+      "load": 7.72265625
+    },
+    {
+      "command": "review",
+      "step": "lint",
+      "at": "2026-10-12T05:03:03.429Z",
+      "load": 7.72265625
+    },
+    {
+      "command": "review",
+      "step": "test-related",
+      "at": "2026-10-12T05:03:03.430Z",
+      "load": 7.72265625
+    },
+    {
+      "command": "review",
+      "step": "friction-records",
+      "at": "2026-10-12T05:03:03.430Z",
+      "load": 7.72265625
+    },
+    {
+      "command": "review",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T05:03:16.077Z",
+      "load": 8.62744140625
+    },
+    {
+      "command": "full",
+      "step": "prepare",
+      "at": "2026-10-12T05:05:57.055Z",
+      "load": 17.75830078125
+    },
+    {
+      "command": "full",
+      "step": "lint",
+      "at": "2026-10-12T05:05:57.892Z",
+      "load": 17.75830078125
+    },
+    {
+      "command": "full",
+      "step": "typecheck",
+      "at": "2026-10-12T05:05:57.894Z",
+      "load": 17.75830078125
+    },
+    {
+      "command": "full",
+      "step": "typecheck-node",
+      "at": "2026-10-12T05:05:57.894Z",
+      "load": 17.75830078125
+    },
+    {
+      "command": "full",
+      "step": "import-cycles",
+      "at": "2026-10-12T05:05:57.895Z",
+      "load": 17.75830078125
+    },
+    {
+      "command": "full",
+      "step": "knip",
+      "at": "2026-10-12T05:05:57.896Z",
+      "load": 17.75830078125
+    },
+    {
+      "command": "full",
+      "step": "friction-records",
+      "at": "2026-10-12T05:05:57.897Z",
+      "load": 17.75830078125
+    },
+    {
+      "command": "full",
+      "step": "test",
+      "at": "2026-10-12T05:06:30.869Z",
+      "load": 16.42724609375
+    },
+    {
+      "command": "full",
+      "step": "bundle",
+      "at": "2026-10-12T05:07:42.914Z",
+      "load": 26.921875
+    },
+    {
+      "command": "full",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T05:07:46.187Z",
+      "load": 28.12890625
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review test-related actual command-step start"
+      }
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "tests": [
+        "preserves a desired-path regular file on conflict and recovers on the next pass",
+        "contains a paused actor when its owner fails before release"
+      ]
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "tests": [
+        "preserves published assets and recovers across kill interleaving"
+      ]
+    },
+    {
+      "path": "partial write",
+      "tests": [
+        "preserves published assets and recovers across metadata interleaving",
+        "preserves published assets and recovers across kill interleaving"
+      ]
+    },
+    {
+      "path": "invalid or stale input",
+      "tests": [
+        "refreshes stale links, prunes missing art, and preserves Exploration priority",
+        "preserves harmless foreign files and foreign-containing directories during refresh"
+      ]
+    },
+    {
+      "path": "concurrent actors",
+      "tests": [
+        "preserves published assets and recovers across stale interleaving",
+        "preserves published assets and recovers across prune interleaving"
+      ]
+    }
+  ],
+  "negativeProof": {
+    "unchangedSourceSHA256": "0774e2a1dec23983af1ee14195250fd8d5f39843f1629c2a5d50aa1915fecd8a",
+    "originalRun": "negative-foreign-kill.runtime.json",
+    "originalCounts": {
+      "tests": 13,
+      "failed": 2,
+      "passed": 11
+    },
+    "observations": [
+      "Foreign .DS_Store makes refresh fail.",
+      "Owned actor actually closes on SIGKILL; incomplete staging is left under served public."
+    ],
+    "mutants": [
+      {
+        "mode": "containment",
+        "originalSHA256": "0497c51f0ad7040b66fd3d353698979bb150ed73791237c459c1b47d477d7a34",
+        "mutantSHA256": "c0484f321e8e96d37f14b620082159793f0d01e1736dd6da05fb54f93f708ba2",
+        "exit": 1,
+        "restoredSHA256": "0497c51f0ad7040b66fd3d353698979bb150ed73791237c459c1b47d477d7a34"
+      },
+      {
+        "mode": "stale",
+        "originalSHA256": "74b04e7ede893f9ecfad44a80b25d9969caeec3f16110c5333ec5c6e37a94f10",
+        "mutantSHA256": "2f78cd56d0bb560491279674f41b6fe6a6dc56ab1f9501ddb810e0a3c3d7d99c",
+        "exit": 1,
+        "restoredSHA256": "74b04e7ede893f9ecfad44a80b25d9969caeec3f16110c5333ec5c6e37a94f10"
+      },
+      {
+        "mode": "deadline",
+        "originalSHA256": "0497c51f0ad7040b66fd3d353698979bb150ed73791237c459c1b47d477d7a34",
+        "mutantSHA256": "e2d020e2d352aa380f2cb0db2fd334b13e5dc235895d036a9cd3ea52ff40e320",
+        "exit": 1,
+        "restoredSHA256": "0497c51f0ad7040b66fd3d353698979bb150ed73791237c459c1b47d477d7a34"
+      }
+    ]
+  },
+  "qa": {
+    "browser": "Not applicable to bounded filesystem tooling; served URL and art targets are unchanged.",
+    "engineFuzz": "Not applicable; no engine/recipe/fuzzer change.",
+    "rawEvidence": "Immutable raw command/actor/fixture receipts and final hash manifest under artifacts/qa/hv-umm2.500; filenames only."
+  },
+  "resources": {
+    "servers": [],
+    "browserContexts": [],
+    "actorIsolation": "spawn without detached: actor process groups are inherited from the captured validation command group.",
+    "cleanup": "Every actor close and temporary fixture removal is logged. Final scoped process/fixture verification is retained in resource-check.json."
+  },
+  "heavyReview": {
+    "workers": 2,
+    "lock": "primary artifacts/heavy.lock",
+    "wrapperToPrepareSeconds": 113.609817,
+    "boundMeaning": "Queue plus startup upper bound, not pure lock wait.",
+    "counts": {
+      "files": 343,
+      "tests": 4665
+    },
+    "actualTestStepSeconds": 72.0,
+    "performanceClaim": "None; observed loaded checks are not a matched low-load comparison."
+  },
+  "receiptVisibility": {
+    "attempts": [
+      "focused-actor-audit.runtime.json",
+      "focused-visible-receipts.runtime.json"
+    ],
+    "finding": "The default reporter still honors repository passed-only console filtering. The final focused audit explicitly uses --silent=false to retain all 14 actor closes and 12 fixture removals. This receipt audit changes no source or aggregate check."
+  },
+  "rawManifest": {
+    "filename": "raw-manifest.json",
+    "sha256": "80da26fb5a18a32aef0d0ae3f10529a8b1d75fef3e4bdeaffb7eaf2c6275fb01",
+    "entries": 51
+  },
+  "resourceSummary": {
+    "commandGroups": 13,
+    "observedActorPIDs": 18,
+    "removedFixtureRoots": 17,
+    "outstandingProcesses": [],
+    "outstandingFixtures": [],
+    "receipt": "resource-check.json"
+  }
+}

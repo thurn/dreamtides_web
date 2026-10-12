@@ -22,6 +22,7 @@ import {
   rmdirSync,
   rmSync,
   symlinkSync,
+  statSync,
   unlinkSync,
   writeFileSync,
 } from "node:fs";
@@ -235,9 +236,13 @@ function pruneGenerated(refresh: ArtRefresh, dir: string): void {
         unlinkSync(path);
       } else if (entry.isDirectory()) {
         pruneGenerated(refresh, path);
-        rmdirSync(path);
-      } else {
-        throw new Error(`Generated art directory contains an unrelated file: ${path}`);
+        try {
+          rmdirSync(path);
+        } catch (error) {
+          // Foreign files keep their directory; another pass may also have
+          // populated it after traversal.
+          if (!hasCode(error, "ENOTEMPTY") && !hasCode(error, "EEXIST")) throw error;
+        }
       }
     } catch (error) {
       // Another same-catalog pass may have pruned the same obsolete entry.
@@ -511,14 +516,20 @@ function linkAtlasArt(
 /** Links every referenced art file into `paths.publicDir`. */
 export function linkArt(catalog: ArtCatalog, paths: ArtPaths): void {
   mkdirSync(paths.publicDir, { recursive: true });
+  const stagingRoot = join(paths.publicDir, "..", ".generated", "art-links");
+  mkdirSync(stagingRoot, { recursive: true });
+  if (statSync(stagingRoot).dev !== statSync(paths.publicDir).dev) {
+    throw new Error("Art staging and public assets must share a filesystem");
+  }
   const refresh: ArtRefresh = {
     directories: new Set(),
     entries: new Set(),
-    stagingDir: mkdtempSync(join(paths.publicDir, ".art-links-")),
+    stagingDir: mkdtempSync(join(stagingRoot, "pass-")),
     nextLink: 0,
   };
-  // Staging is outside every managed directory, so concurrent pruning cannot
-  // erase another pass's publication files. Each pass cleans only its own.
+  // Disposable staging is ignored and outside public, on the same filesystem
+  // for atomic rename. Each pass cleans only its own, including after errors;
+  // a hard-killed pass leaves harmless residue without exposing partial art.
   try {
     linkCardImages(catalog, paths, refresh);
     linkAvatarArt(catalog, paths, refresh);
