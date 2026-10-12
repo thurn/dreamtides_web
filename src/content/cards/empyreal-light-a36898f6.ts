@@ -1,3 +1,5 @@
+import { activated, characterYouControl, exhaustSelf, target, upTo } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 325,
   art: { x: -0.42, y: 0.839, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([exhaustSelf()], p.awaken(variant.amplified ? upTo(characterYouControl(), 2) : target(characterYouControl())))],
+  verifiedText: "2ezfwvsqihl",
 });

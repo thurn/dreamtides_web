@@ -1,3 +1,6 @@
+import { activated, characterYouControl, energy, exhaustSelf, target } from "../../engine/dsl/builders";
+import { triggered, triggeringCard, whenGainsSpark } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 168,
   art: { x: 0.714, y: 0.31, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenGainsSpark(characterYouControl()), p.gainAdditionalSpark(triggeringCard(), 1)),
+    activated([energy(2), exhaustSelf()], p.gainSpark(target(characterYouControl()), 1)),
+  ],
+  verifiedText: "1nycl9n9zws",
 });

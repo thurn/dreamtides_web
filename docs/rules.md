@@ -1756,6 +1756,14 @@ control to hand," the ability sees those that leave while it still works. "It"
 is the returned card, wherever it is as the ability resolves (see [A card's own
 cost](#costs-requirements-and-x)).
 
+**When you materialize a character:** An ability such as "When you
+materialize a character, awaken each other character you control" triggers
+for each character you materialize, once it is in play. "A character"
+includes the character with the ability, which sees its own materialization;
+"another character" does not. "Each other character you control" is every
+character you control except the one with the ability, so the character that
+just materialized is one of them.
+
 **Counting materializations:** An ability such as "When you materialize your
 second spirit animal in a turn, draw a spirit animal" counts the matching
 characters you have materialized this turn, including the one just

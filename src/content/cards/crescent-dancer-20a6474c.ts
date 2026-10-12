@@ -1,3 +1,6 @@
+import { all, characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 257,
   art: { x: 0, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenMaterialize(), p.awaken(all(characterYouControl({ another: true }))))],
+  verifiedText: "1ltsibykvf7",
 });
