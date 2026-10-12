@@ -30,7 +30,8 @@ async function fixture() {
   const reports = async () => /** @type {Array<{ expectedUrl: string, operation: number, deadline: number | null,
     outcome: string, failedPhase: string | null, error: string | null, contextDestroyed: boolean,
     listenerCleanup: string, droppedEvents: number, droppedObservationErrors: number,
-    observationErrors: string[], events: Array<{ phase: string, order: number, activeOperations: number[], document?: { id: string, caps: unknown } }> }>} */
+    observationErrors: string[], events: Array<{ phase: string, order: number, scope: string, initiatingOperation: number | null,
+    observedUrl: string | null, requestUrl?: string, activeOperations: number[], document?: { id: string, caps: unknown } }> }>} */
     ((await qa.finish(null, null)).log.filter(({ label }) => label === "qa.navigation").map(({ data }) => data));
   return { qa, events, state, evaluate, goto, off, page, reports };
 }
@@ -46,33 +47,46 @@ describe("navigation lifecycle evidence", () => {
     expect(diagnostic?.events.map(({ phase }) => phase)).toEqual([
       "started", "caps-before", "goto-started", "request", "framenavigated", "domcontentloaded", "goto-settled", "document-after", "succeeded", "listener-cleanup",
     ]);
+    expect(diagnostic?.events.map(({ scope, initiatingOperation }) => [scope, initiatingOperation])).toEqual([
+      ["operation", 1], ["operation", 1], ["operation", 1],
+      ["page", null], ["page", null], ["page", null],
+      ["operation", 1], ["operation", 1], ["operation", 1], ["operation", 1],
+    ]);
     expect(events.eventNames()).toEqual([]);
   });
 
-  it("distinguishes overlapping operations and an actual aborted request without changing the original error or retrying", async () => {
+  it.each([["/first", "/second"], ["/same", "/same"]])(
+    "marks an overlapping %s aborted request as shared and unattributed in the successful %s operation", async (firstRoute, secondRoute) => {
     const { qa, goto, events, reports, state } = await fixture();
     const original = new Error("net::ERR_ABORTED");
     let rejectFirst = (/** @type {unknown} */ _error) => {};
     let entered = () => {};
     const started = new Promise((resolve) => { entered = () => resolve(null); });
     goto.mockImplementationOnce(() => { entered(); return new Promise((_, reject) => { rejectFirst = reject; }); });
-    const first = qa.goto("/first", { timeout: 5_000 });
+    const first = qa.goto(firstRoute, { timeout: 5_000 });
     const failure = first.catch((/** @type {unknown} */ error) => error);
     await started;
     goto.mockImplementationOnce(() => {
       const frame = { parentFrame: () => null };
       events.emit("requestfailed", { isNavigationRequest: () => true, frame: () => frame,
-        url: () => "http://localhost:5174/first", failure: () => ({ errorText: "net::ERR_ABORTED" }) });
+        url: () => `http://localhost:5174${firstRoute}`, failure: () => ({ errorText: "net::ERR_ABORTED" }) });
       rejectFirst(original);
-      state.href = "http://localhost:5174/second";
+      state.href = `http://localhost:5174${secondRoute}`;
       return Promise.resolve();
     });
-    await qa.goto("/second", { timeout: 5_000 });
+    expect(await qa.goto(secondRoute, { timeout: 5_000 })).toEqual({ href: `http://localhost:5174${secondRoute}`, width: 1440, height: 900 });
     expect(await failure).toBe(original);
     const [aborted, succeeded] = await reports();
     expect(aborted).toMatchObject({ outcome: "failed", failedPhase: "goto", listenerCleanup: "removed" });
     expect(succeeded?.outcome).toBe("succeeded");
-    expect(aborted?.events.find(({ phase }) => phase === "requestfailed")?.activeOperations).toEqual([1, 2]);
+    for (const diagnostic of [aborted, succeeded]) {
+      expect(diagnostic?.events.find(({ phase }) => phase === "requestfailed")).toMatchObject({
+        scope: "page", initiatingOperation: null, activeOperations: [1, 2],
+        requestUrl: `http://localhost:5174${firstRoute}`, observedUrl: "http://localhost:5174/old",
+      });
+      expect(diagnostic?.events.filter(({ scope }) => scope === "operation").every(({ initiatingOperation }) => initiatingOperation === diagnostic.operation)).toBe(true);
+    }
+    expect(succeeded).toMatchObject({ expectedUrl: `http://localhost:5174${secondRoute}`, error: null, failedPhase: null });
     const orders = [aborted, succeeded].flatMap((diagnostic) => diagnostic?.events.map(({ order }) => order) ?? []);
     expect(new Set(orders).size).toBe(orders.length);
     expect(goto).toHaveBeenCalledTimes(2);
@@ -88,6 +102,10 @@ describe("navigation lifecycle evidence", () => {
     const [diagnostic] = await reports();
     expect(diagnostic?.events.map(({ phase }) => phase)).toContain("crash");
     expect(diagnostic?.events.map(({ phase }) => phase)).toContain("close");
+    expect(diagnostic?.events.filter(({ phase }) => phase === "crash" || phase === "close")
+      .map(({ scope, initiatingOperation }) => ({ scope, initiatingOperation }))).toEqual([
+      { scope: "page", initiatingOperation: null }, { scope: "page", initiatingOperation: null },
+    ]);
     expect(diagnostic?.events.find(({ phase }) => phase === "caps-before")?.document?.caps).toEqual(state.caps);
     expect(await qa.caps()).toEqual(state.caps);
     expect(events.eventNames()).toEqual([]);

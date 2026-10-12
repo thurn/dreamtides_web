@@ -1,0 +1,506 @@
+{
+  "bead": "hv-umm2.552",
+  "base": "e0902fce2171a9993fd7b25db88e9f830c35f3db",
+  "dispatch": {
+    "start": "2026-10-12T15:32:47.140Z",
+    "provenance": "Exact parent native dispatch retained 552-validation/dispatch.json."
+  },
+  "negativeControl": {
+    "externalEvidence": "/tmp/dreamtides-executor-01a1304d/552-validation/unchanged-controls.json",
+    "source": "unchanged worktree base",
+    "observed": "Healthy public return, original ERR_ABORTED object and successful second result are preserved. Both overlapping diagnostics retain the first failed page request without explicit provenance; listeners are removed."
+  },
+  "validation": {
+    "focused": {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/prelude-navigation.test.mjs",
+        "scripts/qa/prelude.test.mjs",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs"
+      ],
+      "start": "2026-10-12T15:35:31.166069+00:00",
+      "end": "2026-10-12T15:35:49.925523+00:00",
+      "wallS": 18.75914037500479,
+      "hostLoad": "{ 13.65 16.06 15.65 }",
+      "exit": 0,
+      "pid": 37348,
+      "pgid": 37348
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T15:36:17.754882+00:00",
+      "end": "2026-10-12T15:36:50.703447+00:00",
+      "wallS": 32.948115707993566,
+      "hostLoad": "{ 16.66 16.77 15.95 }",
+      "exit": 1,
+      "pid": 3480,
+      "pgid": 3480
+    },
+    "review-final": {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T15:36:50.773843+00:00",
+      "end": "2026-10-12T15:37:20.263196+00:00",
+      "wallS": 29.48860404199513,
+      "hostLoad": "{ 12.81 15.84 15.64 }",
+      "exit": 0,
+      "pid": 33588,
+      "pgid": 33588
+    },
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T15:37:37.853409+00:00",
+      "end": "2026-10-12T15:37:41.275508+00:00",
+      "wallS": 3.4219634590044734,
+      "hostLoad": "{ 9.31 14.46 15.14 }",
+      "exit": 0,
+      "pid": 61867,
+      "pgid": 61867
+    },
+    "full-wall": {
+      "name": "full-wall",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/552-validation/run-validation.py",
+        "full-execution",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T15:37:45.895264+00:00",
+      "end": "2026-10-12T15:39:15.723069+00:00",
+      "wallS": 89.82673274999979,
+      "hostLoad": "{ 8.88 14.28 15.08 }",
+      "exit": 0,
+      "pid": 62535,
+      "pgid": 62535
+    },
+    "full-execution": {
+      "name": "full-execution",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T15:37:45.919358+00:00",
+      "end": "2026-10-12T15:39:15.713319+00:00",
+      "wallS": 89.79288724999788,
+      "hostLoad": "{ 8.88 14.28 15.08 }",
+      "exit": 0,
+      "pid": 62539,
+      "pgid": 62539
+    },
+    "native": {
+      "name": "native",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.552",
+        "--cards",
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+        "--variants",
+        "base",
+        "--as",
+        "enemy",
+        "--timeout",
+        "90"
+      ],
+      "start": "2026-10-12T15:39:48.770187+00:00",
+      "end": "2026-10-12T15:39:58.105452+00:00",
+      "wallS": 9.33504941600404,
+      "hostLoad": "{ 4.79 11.09 13.71 }",
+      "exit": 0,
+      "pid": 96657,
+      "pgid": 96657
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "start": "Exact parent dispatch2026-10-12T15:32:47.140Z retained552-validation/dispatch.json.",
+        "end": "Actual own precommit clock 2026-10-12T15:42:37.717328+00:00; measured before final schema/stage/commit, not substituted for Git commit time."
+      },
+      "hostLoad": {
+        "measuredFor": "Successful final review prepare start 2026-10-12T15:36:51.051Z, exact one-minute os.loadavg value 12.81201171875; own sysctl rounded wrapper sample separately retained."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "focused",
+      "sample": "{ 13.65 16.06 15.65 }",
+      "measuredFor": "Own sysctl observation at wrapper command start; full-wall includes admission/startup."
+    },
+    {
+      "step": "review",
+      "sample": "{ 16.66 16.77 15.95 }",
+      "measuredFor": "Own sysctl observation at wrapper command start; full-wall includes admission/startup."
+    },
+    {
+      "step": "review-final",
+      "sample": "{ 12.81 15.84 15.64 }",
+      "measuredFor": "Own sysctl observation at wrapper command start; full-wall includes admission/startup."
+    },
+    {
+      "step": "knip",
+      "sample": "{ 9.31 14.46 15.14 }",
+      "measuredFor": "Own sysctl observation at wrapper command start; full-wall includes admission/startup."
+    },
+    {
+      "step": "full-wall",
+      "sample": "{ 8.88 14.28 15.08 }",
+      "measuredFor": "Own sysctl observation at wrapper command start; full-wall includes admission/startup."
+    },
+    {
+      "step": "full-execution",
+      "sample": "{ 8.88 14.28 15.08 }",
+      "measuredFor": "Own sysctl observation at wrapper command start; full-wall includes admission/startup."
+    },
+    {
+      "step": "native",
+      "sample": "{ 4.79 11.09 13.71 }",
+      "measuredFor": "Own sysctl observation at wrapper command start; full-wall includes admission/startup."
+    },
+    {
+      "step": "review-final-prepare",
+      "at": "2026-10-12T15:36:51.051Z",
+      "value": 12.81201171875,
+      "measuredFor": "Successful final review prepare-step starting one-minute host load via node os.loadavg, provenance review-final.log. Wrapper sysctl rounded observation retained separately."
+    }
+  ],
+  "limitations": [
+    "Shared page events do not identify their initiating navigation even with matching URLs.",
+    "The historical unknown navigation cause is retained; no browser defect repair is claimed."
+  ],
+  "sourceFreeze": {
+    "frozenAt": "2026-10-12T15:39:47.602568+00:00",
+    "base": "e0902fce2171a9993fd7b25db88e9f830c35f3db",
+    "sha256": {
+      "scripts/qa/prelude.mjs": "740af4a5574add388fbdeaf2bc8c5c991a454401ebeccf18ac279cc7f26e32fd",
+      "scripts/qa/prelude-navigation.test.mjs": "6f66389ce80304d6b01360c1a31f4a45ce744878a6ecaf9405a0a03c39e1015e",
+      "README.md": "6f77bee549b645a4c2ba02fc7aa9788afda6b6324fcc627ca7838cfec621523d",
+      "scripts/qa/card-sweep.mjs": "f876a862e2e288ac0b1b96a8851f097a3ef63a173b79af8b20c9f301b5e4b228",
+      "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+      "scripts/qa/scenarios/card-lab-play.mjs": "c2e64aaa5099c13553ed348b212cf382e0497e4085c90c7017da35feca89995e",
+      "scripts/qa/browser-owner-record.mjs": "9261762e7b28204630cd9fdf004b557df3b9a992b51260d54de1341133cfcede",
+      "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703"
+    }
+  },
+  "native": {
+    "checkedAt": "2026-10-12T15:41:13.303727+00:00",
+    "sourceHashOutcome": "All eight frozen source/test/README hashes match after native smoke.",
+    "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.552/invocations/sweep-RtSBVx/run-Hdi4zF/sweep-fc0c6f10-8864-4660-904a-8e90d261c6ef-base-enemy-attempt-1.result.json",
+    "rawReportSHA256": "3767bbe2d2f2e290f545423b5c16737a0b8d4621ce20a28c914a591205ebe794",
+    "ledgerSHA256": "c313107bd80ffb8a0a8f1a00c5e6f60a626d0d497f13383fd28ac0ee009fa4b9",
+    "rawLedgerNavigationEqual": true,
+    "pageEvents": [
+      {
+        "order": 4,
+        "at": 1791819590722,
+        "phase": "request",
+        "observedUrl": "about:blank",
+        "scope": "page",
+        "initiatingOperation": null,
+        "activeOperations": [
+          1
+        ],
+        "requestUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1"
+      },
+      {
+        "order": 5,
+        "at": 1791819590747,
+        "phase": "framenavigated",
+        "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+        "scope": "page",
+        "initiatingOperation": null,
+        "activeOperations": [
+          1
+        ],
+        "frameUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1"
+      },
+      {
+        "order": 6,
+        "at": 1791819591247,
+        "phase": "domcontentloaded",
+        "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+        "scope": "page",
+        "initiatingOperation": null,
+        "activeOperations": [
+          1
+        ]
+      },
+      {
+        "order": 8,
+        "at": 1791819591253,
+        "phase": "load",
+        "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+        "scope": "page",
+        "initiatingOperation": null,
+        "activeOperations": [
+          1
+        ]
+      }
+    ],
+    "verdict": "pass",
+    "caps": [],
+    "error": null,
+    "ownedRecords": [
+      {
+        "at": "2026-10-12T15:39:48.926754+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "kind": "server",
+        "value": {
+          "token": "6b943dbc-a848-46fc-9688-4d546efa6b4c",
+          "runner": {
+            "pid": 96657,
+            "group": 96657,
+            "started": "Mon Oct 12 08:39:48 2026",
+            "state": "Ss",
+            "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.552 --cards fc0c6f10-8864-4660-904a-8e90d261c6ef --variants base --as enemy --timeout 90"
+          },
+          "server": {
+            "pid": 96687,
+            "group": 96687,
+            "started": "Mon Oct 12 08:39:48 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 6b943dbc-a848-46fc-9688-4d546efa6b4c /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552",
+          "port": 5274
+        }
+      },
+      {
+        "at": "2026-10-12T15:39:50.267839+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "kind": "owner",
+        "value": {
+          "token": "89e82664-5435-45b0-b011-354203eeca6f",
+          "pid": 96657,
+          "bead": "hv-umm2.552",
+          "label": "card-sweep",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T15:39:50.256Z",
+          "providerState": "startup-unconfirmed"
+        }
+      },
+      {
+        "at": "2026-10-12T15:39:50.283166+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "kind": "owner",
+        "value": {
+          "token": "89e82664-5435-45b0-b011-354203eeca6f",
+          "pid": 96657,
+          "bead": "hv-umm2.552",
+          "label": "card-sweep",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T15:39:50.256Z",
+          "providerState": "active",
+          "mcpSessionId": "9a9c803b-89be-4ae3-b091-06236bcb50b9",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        }
+      },
+      {
+        "at": "2026-10-12T15:39:57.732878+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "kind": "server",
+        "value": {
+          "token": "6b943dbc-a848-46fc-9688-4d546efa6b4c",
+          "runner": {
+            "pid": 96657,
+            "group": 96657,
+            "started": "Mon Oct 12 08:39:48 2026",
+            "state": "Ss",
+            "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.552 --cards fc0c6f10-8864-4660-904a-8e90d261c6ef --variants base --as enemy --timeout 90"
+          },
+          "server": {
+            "pid": 96687,
+            "group": 96687,
+            "started": "Mon Oct 12 08:39:48 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 6b943dbc-a848-46fc-9688-4d546efa6b4c /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552",
+          "port": 5274,
+          "members": [
+            {
+              "pid": 96687,
+              "group": 96687,
+              "started": "Mon Oct 12 08:39:48 2026",
+              "state": "Ss",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 6b943dbc-a848-46fc-9688-4d546efa6b4c /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 96703,
+              "group": 96687,
+              "started": "Mon Oct 12 08:39:48 2026",
+              "state": "S",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 96715,
+              "group": 96687,
+              "started": "Mon Oct 12 08:39:49 2026",
+              "state": "S",
+              "command": "node /Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552/node_modules/.bin/vite --port 5274 --strictPort"
+            },
+            {
+              "pid": 96732,
+              "group": 96687,
+              "started": "Mon Oct 12 08:39:49 2026",
+              "state": "S",
+              "command": "/Users/dthurn/dreamtides_web/.worktrees/shared-navigation-attribution552/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+            }
+          ]
+        }
+      }
+    ],
+    "recordStatesAfter": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "exists": true,
+        "currentBead": "hv-umm2.186",
+        "owned": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "exists": true,
+        "currentBead": null,
+        "owned": false
+      }
+    ],
+    "ownedGroups": [
+      3480,
+      33588,
+      37348,
+      61867,
+      62535,
+      62539,
+      96614,
+      96657,
+      96687
+    ],
+    "liveOwnedMembersAfter": [],
+    "portListenersAfter": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    98191 dthurn   16u  IPv4 0xf1d0bca024251cad      0t0  TCP 127.0.0.1:5274 (LISTEN)\n",
+    "observerIdentity": [
+      "96614 96614 Mon Oct 12 08:39:47 2026     Ss   /opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-executor-01a1304d/552-validation/native-observer.py"
+    ],
+    "providerCompletion": "Native exit0 with certain normal cleanup, exact owner/server record clearance and no owned group members. The transient execution-completed record was not captured; no fabricated receipt.",
+    "portReuseObservation": {
+      "at": "2026-10-12T15:42:37.711909+00:00",
+      "bead": "hv-umm2.186",
+      "ours": false,
+      "listenerIdentity": "",
+      "interpretation": "Own runner reported port free at cleanup, exited0, and its exact server group is absent. A later peer owns port5274; no peer process or record was modified."
+    },
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-RtSBVx",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.552/invocations/sweep-RtSBVx",
+      "counts": {
+        "pass": 1
+      },
+      "attemptCounts": {
+        "pass": 1
+      },
+      "hostLoad": 4.78759765625,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 8,
+        "serve": 1344,
+        "scenario": 7253.789167000001,
+        "cleanup": 561.4222499999996,
+        "execution": 9210.644167,
+        "total": 9218.644167
+      }
+    },
+    "summaryFilename": "invocations/sweep-RtSBVx/summary.json",
+    "summarySHA256": "5003d287c21c948fb1f7e50a4ac3c835eec3d88548a92ba7814cecdf844c6f45"
+  },
+  "validationInterpretation": {
+    "focused": "114cases/6files; final review and full also exercise these public contracts after the fixture lint correction.",
+    "review": "Initial lint rejected unsafe Array.fill expected-array typing. Literal expected tuples corrected that fixture; successful final review and full retain all assertions.",
+    "full": {
+      "files": 351,
+      "cases": 5522,
+      "vitestS": 62.92,
+      "admissionAndStartupS": 0.024094,
+      "innerExecutionS": 89.79288724999788,
+      "scope": "Outer lock wrapper includes admission/startup; gap is not claimed pure lock contention. Inner wall excludes that gap and includes command prepare/lint/typecheck/tests/bundle/restore."
+    },
+    "native": "One source-frozen healthy UUID base/enemy cell, one attempt, no retry. Serialization verified exactly between raw report and ledger; Caps[]; historical unknown navigation cause remains retained.",
+    "evidenceIteration": "Initial raw verification interpreted the ledger relative rawReport path as worktree-relative; corrected verification resolves against the bead capture root. No source or runtime rerun."
+  },
+  "coreFailurePaths": [
+    {
+      "path": "error mid-step",
+      "test": "marks an overlapping /first aborted request as shared and unattributed in the successful /second operation",
+      "coverage": "Original Error identity and original first-fail/second-success outcomes remain exact; first failed request retained in both with explicit page/null provenance."
+    },
+    {
+      "path": "reload/restart mid-operation",
+      "test": "retains document-context failure and its existing deadline cause while removing owned listeners",
+      "coverage": "Context-destroyed error remains the existing deadline cause. No recovery or restart mechanism is added."
+    },
+    {
+      "path": "partial write",
+      "test": "does not make diagnostic snapshot formatting a new healthy navigation failure",
+      "coverage": "Diagnostic formatting failures retain healthy success. The new fields are properties of the existing in-memory event literal; this bead adds no persistence or partial-write mechanism. Existing bounded overflow/observer-cleanup contract is also retained."
+    },
+    {
+      "path": "invalid/stale input",
+      "test": "marks an overlapping /same aborted request as shared and unattributed in the successful /same operation",
+      "coverage": "Matching URLs do not attribute page events. The bead adds no input API, retained-state reader or stale-data recovery. Page initiator stays null regardless of request URL."
+    },
+    {
+      "path": "concurrent actors",
+      "test": "marks an overlapping /first aborted request as shared and unattributed in the successful /second operation; marks an overlapping /same aborted request as shared and unattributed in the successful /same operation",
+      "coverage": "Both active diagnostics retain all shared failures and [1,2] active operations; operation phases identify their own operation, global order remains unique, owned listeners removed, exactly two goto calls."
+    }
+  ],
+  "testDeltaProvenance": {
+    "command": "git diff --numstat -- scripts/qa/prelude-navigation.test.mjs",
+    "added": 25,
+    "deleted": 7,
+    "netLines": 18,
+    "testEntrypointsAdded": 0,
+    "testEntrypointsDeleted": 0,
+    "jsdomFilesAdded": 0,
+    "jsdomFilesDeleted": 0,
+    "environment": "Existing coherent node Vitest module, 163 lines; parameterized existing concurrent contract adds one case."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "fallout": [],
+  "reviewRouting": "Parent performs fresh cold read-only gpt-5.6-sol Codex CLI review of immutable commit under user temporary same-family override through2026-10-14T01:00Z; implementation helper runs no independent review.",
+  "finalPrecommitAt": "2026-10-12T15:42:37.717328+00:00"
+}

@@ -880,7 +880,11 @@ report log and copied into each sweep ledger attempt's `navigation` field.
 They identify the requested URL, observed URL and document IDs when readable,
 cell UUID/variant/controller, ordered main-frame requests and page lifecycle
 observations, overlapping helper operations, deadlines, and the actual failed
-phase. Event storage is bounded with explicit overflow counts; terminal
+phase. Event storage is bounded with explicit overflow counts. Helper
+operation phases carry `scope: "operation"` and their `initiatingOperation`.
+Page lifecycle events carry `scope: "page"` and `initiatingOperation: null`:
+they are shared observations retained in every active diagnostic, and URL
+equality does not establish which operation initiated a request. Terminal
 outcome and diagnostic listener cleanup remain separate. Missing observations
 and failed observer cleanup retain uncertainty. These diagnostics preserve
 original errors, Caps, verdicts and the timeout-only retry policy. A manual

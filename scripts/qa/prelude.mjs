@@ -807,6 +807,7 @@ export async function createQa(page, config) {
       let observedUrl = null;
       try { observedUrl = page.url(); } catch (error) { observationError(error); }
       events.push({ order: ++navigationOrder, at: Date.now(), phase, observedUrl,
+        scope: "operation", initiatingOperation: operation,
         activeOperations: [...activeNavigations], ...data });
     };
     const observeDocument = (/** @type {string} */ phase, /** @type {Awaited<ReturnType<typeof readState>> | undefined} */ state) => {
@@ -821,7 +822,9 @@ export async function createQa(page, config) {
     const listen = (name, readEvent) => {
       const listener = (/** @type {T} */ event) => {
         if (settled) return;
-        try { const data = readEvent(event); if (data !== null) observe(name, data); }
+        // Page events describe shared observations, even when a request URL
+        // matches this operation's expected URL; its initiator is unknown.
+        try { const data = readEvent(event); if (data !== null) observe(name, { ...data, scope: "page", initiatingOperation: null }); }
         catch (error) { observationError(error); }
       };
       listeners.push({ name, listener });
