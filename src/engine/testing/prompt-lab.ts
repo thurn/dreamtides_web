@@ -21,6 +21,8 @@ import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
 import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
+import { onDusk, triggered } from "../dsl/triggers";
+import { keyword } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -72,6 +74,13 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** A selective-disabling witness with independently observable ability kinds. */
+  disableBearer: {
+    id: syntheticId(0x56240), cardType: "character", costs: [energy(0)], spark: 2, subtype: "Warrior", speed: "standard", status: "authored",
+    abilities: () => [keyword("vengeful"), activated([energy(1)], p.gainPoints(1)), triggered(onDusk(), p.gainPoints(2)), staticAbility(p.sparkModifier(self(), 1))],
+  },
+  /** Combined suppression in the existing status and effect presentation surface. */
+  disableAbilities: labEvent(0x56241, 0, p.disableTriggers(characterTarget(enemyCharacter()), "untilEndOfTurn", null, "triggeredAndActivated")),
   /** A complete optional resolving energy and discard payment before drawing. */
   resolvingPayment: labEvent(0x43800, 0, p.payTo({ energy: 2, discard: 1 }, p.draw(2))),
   /** Grant a full extra turn using the ordinary queue. */
@@ -253,6 +262,8 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.disableBearer.id]: { name: "Lab Ability Bearer", text: "Vengeful. 1●: Gain 1⍟. ▸Dusk: Gain 2⍟. This character has +1✦." },
+  [LAB.disableAbilities.id]: { name: "Lab Combined Silence", text: "Disable an enemy’s triggered and activated abilities this turn." },
   [DSL.conditionalRemoval.id]: { name: "Lab Conditional Removal", text: "If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy." },
   [DSL.conditionalDawn.id]: { name: "Lab Conditional Dawn", text: "▸Dawn: Give a warrior you control +1✦. If you control no warriors, gain 2⍟ instead." },
   [DECK_TOP.keeper.id]: { name: "Lab Petal Keeper", text: "If you control 3 or more characters, reveal the top card of your deck. You may play characters from the top of your deck. 0●: Return another character to hand. 0●: Foresee 1." },
@@ -1173,6 +1184,13 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       playHand(6),
       playHand(7),
     ],
+  },
+  {
+    name: "present-disable-abilities",
+    description: "Presentation: selectively disabled triggered and activated abilities",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.disableAbilities.id], deck: deck(8) }, enemy: { back: [LAB.disableBearer.id], deck: deck(8) } },
+    script: [],
+    presents: [playHand(0)],
   },
   {
     name: "present-status",

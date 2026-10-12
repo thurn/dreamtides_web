@@ -1973,6 +1973,13 @@ timing, and Interrupt abilities follow Interrupt timing. An activated ability
 on the stack is independent of its source: it resolves even if its source has
 left play, using the ability as it was when activated.
 
+**Disabled abilities:** An effect disabling triggered abilities prevents new
+triggers. When it also disables activated abilities, the affected character
+cannot begin an activation. An ability already triggered or activated still
+resolves. Keywords and static abilities remain active. A disabling effect
+lasting while its source is in play ends when that source leaves play;
+returning the source does not restore that effect.
+
 **Where activated abilities work:** A card's activated ability works while its
 card is in play. An ability that moves its own card out of your void, such as
 "Abandon a character: Materialize this character from your void," works while

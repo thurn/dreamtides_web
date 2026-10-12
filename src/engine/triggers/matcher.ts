@@ -37,6 +37,7 @@ import type { LeftPlayEvent } from "../events/kinds/left-play";
 import type { MaterializedEvent } from "../events/kinds/materialized";
 import { conditionHolds, everyNode } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
+import { abilitiesDisabled } from "../rules/ability-disabling";
 import { abilityOrigin, instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
 import { materializedThisTurn, recordMaterialized } from "../rules/turn-log";
@@ -409,22 +410,11 @@ function matchKind(
   }
 }
 
-/** Whether a floating effect disables the triggered abilities of `id` now. */
-function triggersDisabled(state: BattleState, catalog: EngineCatalog, id: InstanceId): boolean {
-  return state.floating.some(
-    (effect) =>
-      effect.change.kind === "disableTriggers" &&
-      effect.change.instance === id &&
-      (effect.change.while === undefined ||
-        conditionHolds(state, catalog, effect.change.while, { controller: effect.controller, source: effect.source, optionalPaid: [] })),
-  );
-}
-
 /** What blocks ability `index` of `source` from triggering now. */
 function triggerBlocks(state: BattleState, catalog: EngineCatalog, source: AbilitySource, index: number): TriggerBlocks {
   const self = sourceInstance(source);
   return {
-    disabled: self !== null && triggersDisabled(state, catalog, self),
+    disabled: self !== null && abilitiesDisabled(state, catalog, self, "triggered"),
     used: state.oncePerTurn.includes(oncePerTurnKey(source, index)),
   };
 }

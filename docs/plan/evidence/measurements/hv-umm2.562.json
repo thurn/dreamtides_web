@@ -1,0 +1,882 @@
+{
+  "bead": "hv-umm2.562",
+  "base": "2217aa6ba44f2ad843f7a92703267108f9ffacdd",
+  "dispatchProvenance": {
+    "actualParentDispatch": "2026-10-12T17:26:43.297Z",
+    "actualModelStart": "unknown",
+    "latePostDispatchObservation": "2026-10-12T17:33:20.625546Z",
+    "implementationAck": "2026-10-12T17:35:04.081433Z",
+    "includesInitialProposalBoundaryWait": true
+  },
+  "validation": [
+    {
+      "label": "preflight",
+      "observerPid": 31141,
+      "observerPgid": 31141,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:47:15.821170Z",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "ce09ddfa-c349-4b32-b524-fb74444cddcb",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "hostLoad": 3.96484375,
+      "pid": 31153,
+      "pgid": 31153,
+      "end": "2026-10-12T17:47:17.464144Z",
+      "exit": 0,
+      "wallS": 1.6426814169972204,
+      "cpuS": 1.142707
+    },
+    {
+      "label": "judged-2",
+      "observerPid": 55498,
+      "observerPgid": 55498,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:54:07.749470Z",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.562",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "hostLoad": 14.76171875,
+      "pid": 55510,
+      "pgid": 55510,
+      "end": "2026-10-12T17:54:39.411913Z",
+      "exit": 1,
+      "wallS": 31.66201570800331,
+      "cpuS": 6.598856
+    },
+    {
+      "label": "judged-5",
+      "observerPid": 22356,
+      "observerPgid": 22356,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:58:02.757909Z",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.562",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "hostLoad": 11.83251953125,
+      "pid": 22376,
+      "pgid": 22376,
+      "end": "2026-10-12T18:00:13.259983Z",
+      "exit": 0,
+      "wallS": 130.50036270900455,
+      "cpuS": 8.350725
+    },
+    {
+      "label": "fuzz-wrapper",
+      "observerPid": 30348,
+      "observerPgid": 30348,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:46:37.457263Z",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-disable-activations-562/observe.py",
+        "fuzz-execution",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "ce09ddfa-c349-4b32-b524-fb74444cddcb"
+      ],
+      "hostLoad": 4.30126953125,
+      "pid": 30358,
+      "pgid": 30358,
+      "end": "2026-10-12T17:48:56.063117Z",
+      "exit": 0,
+      "wallS": 138.60418812499847,
+      "cpuS": 151.290369
+    },
+    {
+      "label": "judged-4",
+      "observerPid": 16710,
+      "observerPgid": 16710,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:56:42.197536Z",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.562",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "hostLoad": 17.439453125,
+      "pid": 16726,
+      "pgid": 16726,
+      "end": "2026-10-12T17:57:17.798071Z",
+      "exit": 1,
+      "wallS": 35.60000437499548,
+      "cpuS": 7.708935
+    },
+    {
+      "label": "judged-3",
+      "observerPid": 76777,
+      "observerPgid": 76777,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:55:51.465838Z",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.562",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "hostLoad": 20.66015625,
+      "pid": 76909,
+      "pgid": 76909,
+      "end": "2026-10-12T17:56:14.497849Z",
+      "exit": 1,
+      "wallS": 23.03168483299669,
+      "cpuS": 7.595826
+    },
+    {
+      "label": "knip",
+      "observerPid": 98212,
+      "observerPgid": 98212,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:44:38.937630Z",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "hostLoad": 9.818359375,
+      "pid": 98237,
+      "pgid": 98237,
+      "end": "2026-10-12T17:44:42.208163Z",
+      "exit": 0,
+      "wallS": 3.2703992079914315,
+      "cpuS": 4.1398589999999995
+    },
+    {
+      "label": "full-wrapper",
+      "observerPid": 97316,
+      "observerPgid": 97316,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:44:38.541015Z",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-disable-activations-562/observe.py",
+        "full-execution",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "hostLoad": 9.818359375,
+      "pid": 98121,
+      "pgid": 98121,
+      "end": "2026-10-12T17:46:08.413780Z",
+      "exit": 0,
+      "wallS": 89.8716459999996,
+      "cpuS": 225.90436200000002
+    },
+    {
+      "label": "full-execution",
+      "observerPid": 98122,
+      "observerPgid": 98121,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:44:38.562428Z",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "hostLoad": 9.818359375,
+      "heavyLockAcquired": "2026-10-12T17:44:38.562529Z",
+      "pid": 98126,
+      "pgid": 98121,
+      "end": "2026-10-12T17:46:08.410071Z",
+      "exit": 0,
+      "wallS": 89.84655491699232,
+      "cpuS": 225.881033
+    },
+    {
+      "label": "review",
+      "observerPid": 90423,
+      "observerPgid": 90423,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:42:41.726238Z",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoad": 13.8466796875,
+      "pid": 90437,
+      "pgid": 90437,
+      "end": "2026-10-12T17:43:39.424980Z",
+      "exit": 1,
+      "wallS": 57.69800062500872,
+      "cpuS": 180.228424
+    },
+    {
+      "label": "review-final",
+      "observerPid": 92430,
+      "observerPgid": 92430,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:43:16.186227Z",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoad": 12.1298828125,
+      "pid": 92652,
+      "pgid": 92652,
+      "end": "2026-10-12T17:44:07.639999Z",
+      "exit": 0,
+      "wallS": 51.45311100000981,
+      "cpuS": 149.803578
+    },
+    {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "observerPid": 42558,
+      "observerPgid": 42558,
+      "startUtc": "2026-10-12T17:17:10.149796+00:00",
+      "pid": 42561,
+      "pgid": 42561,
+      "exit": 0,
+      "endUtc": "2026-10-12T17:17:12.917576+00:00",
+      "elapsedS": 2.7677870000043185
+    },
+    {
+      "label": "judged-1",
+      "observerPid": 49134,
+      "observerPgid": 49134,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:53:04.390847Z",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.562",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "hostLoad": 22.7080078125,
+      "pid": 49148,
+      "pgid": 49148,
+      "end": "2026-10-12T17:53:22.901794Z",
+      "exit": 1,
+      "wallS": 18.51066850000643,
+      "cpuS": 7.141437
+    },
+    {
+      "label": "fuzz-execution",
+      "observerPid": 30359,
+      "observerPgid": 30358,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:46:37.478834Z",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "ce09ddfa-c349-4b32-b524-fb74444cddcb"
+      ],
+      "hostLoad": 4.30126953125,
+      "heavyLockAcquired": "2026-10-12T17:46:37.478975Z",
+      "pid": 30360,
+      "pgid": 30358,
+      "end": "2026-10-12T17:48:56.059992Z",
+      "exit": 0,
+      "wallS": 138.5794635420025,
+      "cpuS": 151.266784
+    },
+    {
+      "label": "sweep",
+      "observerPid": 35473,
+      "observerPgid": 35473,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-562-disable-activations",
+      "start": "2026-10-12T17:50:13.505813Z",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.562",
+        "--cards",
+        "ce09ddfa-c349-4b32-b524-fb74444cddcb",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "hostLoad": 5.52197265625,
+      "pid": 35496,
+      "pgid": 35496,
+      "end": "2026-10-12T17:52:47.054745Z",
+      "exit": 0,
+      "wallS": 153.54800929200428,
+      "cpuS": 11.361721
+    }
+  ],
+  "failurePaths": {
+    "errorMidStep": "Synthetic resolving effect starts disabling and throws; fold keeps committed state and emits no partial publication.",
+    "reload": "JSON save/load of combined mode and suspended default-only activation; same completed state hash and payment.",
+    "partialWrite": "Saved floating change missing physical instance or carrying invalid mode is rejected; runStep private copy provides atomic step writes.",
+    "invalidStale": "Forged activation with combined mode rejects before target prompt and energy/exhaust changes; cancelled prompt ID rejects a later activation attempt.",
+    "concurrentActors": "Fold rejects another actor intent while activation is inFlight and a wrong-side prompt answer. External multiplayer is outside this local-first game.",
+    "conditional": "Synthetic controller-energy condition toggles activation and permits a later target trigger when false."
+  },
+  "scenarioDisposition": "Pallid is ordinary target + source-bound primitive composition; D20 adds no separate catalog scenario.",
+  "reviewRouting": "Parent runs cold read-only Codex CLI gpt-5.6-sol under temporary user override.",
+  "initialFailures": [
+    "focused-first/second fixture assumptions and validator lookup misuse corrected; all reports retained in scratch.",
+    "judged1: immediate lazy QA probe read after reload; fixed wait for public probe.",
+    "judged2: assumed a chooser for one ability; actual UI directly activates; corrected observer.",
+    "judged3: engine expiry preceded rendered badge update; observer now awaits badge removal.",
+    "judged4: restored tap preceded presentation readiness; observer waits visible enabled main Day control."
+  ],
+  "resourceLedger": {
+    "observed": "2026-10-12T18:01:32.964672+00:00",
+    "groups": [
+      16726,
+      16764,
+      22376,
+      22414,
+      30358,
+      31153,
+      35496,
+      35547,
+      42561,
+      49148,
+      49191,
+      55510,
+      55545,
+      76909,
+      77332,
+      90437,
+      92652,
+      98121,
+      98237
+    ],
+    "liveOwnedProcesses": [],
+    "slotOwner": {
+      "exists": true,
+      "record": {
+        "token": "8f407c57-596d-41ad-8bc7-fb6a5db1a376",
+        "pid": 28156,
+        "bead": "hv-umm2.207",
+        "label": "card-sweep",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/unique-cards95-root-v2",
+        "slot": 1,
+        "port": 5275,
+        "startedAt": "2026-10-12T18:00:24.303Z",
+        "providerState": "active",
+        "mcpSessionId": "3c4d0670-dba9-47b6-b1e0-249e36369792",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      }
+    },
+    "port5274Listener": "",
+    "ownNativeCleanup": "Each invocation reported its own server cleanup and port free before observer completion; final native run success.",
+    "fullSuiteTemporaryFixtures": "Synthetic server/provider ownership cases ran in temporary primary fixtures; full command group98121 settled. Numeric fake server traces are test data, not native card QA resources."
+  },
+  "mutationEvidence": [
+    {
+      "name": "activation-gate",
+      "path": "src/engine/rules/activation.ts",
+      "start": "2026-10-12T17:44:28.329111+00:00",
+      "pid": 97328,
+      "exit": 1,
+      "wallS": 2.5236504589993274,
+      "caught": true
+    },
+    {
+      "name": "mode-reader",
+      "path": "src/engine/rules/ability-disabling.ts",
+      "start": "2026-10-12T17:44:30.853178+00:00",
+      "pid": 97490,
+      "exit": 1,
+      "wallS": 2.53834679198917,
+      "caught": true
+    },
+    {
+      "name": "condition-reader",
+      "path": "src/engine/rules/ability-disabling.ts",
+      "start": "2026-10-12T17:44:33.391806+00:00",
+      "pid": 97708,
+      "exit": 1,
+      "wallS": 2.568048916000407,
+      "caught": true
+    },
+    {
+      "name": "saved-mode",
+      "path": "src/rules/battle/fold.ts",
+      "start": "2026-10-12T17:44:35.960195+00:00",
+      "pid": 97919,
+      "exit": 1,
+      "wallS": 2.5578107919864124,
+      "caught": true
+    }
+  ],
+  "ordinaryReviewOverlap": {
+    "initialLintFailureWindow": "17:42:41.726238\u201317:43:39.424980Z",
+    "finalReviewWindow": "17:43:16.186227\u201317:44:07.639999Z",
+    "overlap": "17:43:16\u201317:43:39",
+    "certifyingSourceAggregate": "later heavy full-execution; no source changes during full or native QA"
+  },
+  "judged": [
+    {
+      "variant": "base",
+      "viewport": "desktop",
+      "source": "i11",
+      "target": "i1",
+      "oldEffect": "e1",
+      "newEffect": "e2",
+      "sourceVariantAmplified": false,
+      "activationIndex": 1,
+      "activationCost": 1,
+      "geometry": {
+        "target": {
+          "x": 348,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "source": {
+          "x": 254.5,
+          "y": 183,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "slot": "B1",
+        "badges": [
+          {
+            "kind": "triggersDisabled",
+            "label": "Triggered abilities do not trigger while its source is in play",
+            "box": {
+              "x": 351.578125,
+              "y": 487.078125,
+              "width": 23.265625,
+              "height": 23.265625
+            }
+          }
+        ]
+      },
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "screens": [
+        {
+          "filename": "base-desktop-disabled-2x.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "1a35aec65aaffb5b5eaf7e6d46a92c96a2307a5c58e4154e4accbfdb4fd5753e"
+        },
+        {
+          "filename": "base-desktop-base-available-resolved-2x.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "8bd3d9d9c234f7536f2408acf964d9d4aabe8ddea882226c1505cc54cdc601ef"
+        },
+        {
+          "filename": "base-desktop-base-restored-resolved-2x.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "7a32767efcfaba98378c60691f394156a92a0a2b99f828413ef636661a31aeb2"
+        },
+        {
+          "filename": "base-desktop-restored-2x.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "7a32767efcfaba98378c60691f394156a92a0a2b99f828413ef636661a31aeb2"
+        }
+      ]
+    },
+    {
+      "variant": "amplified",
+      "viewport": "desktop",
+      "source": "i11",
+      "target": "i1",
+      "oldEffect": "e1",
+      "newEffect": "e2",
+      "sourceVariantAmplified": true,
+      "activationIndex": 1,
+      "activationCost": 1,
+      "geometry": {
+        "target": {
+          "x": 348,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "source": {
+          "x": 254.5,
+          "y": 183,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "slot": "B1",
+        "badges": [
+          {
+            "kind": "triggersDisabled",
+            "label": "Triggered abilities do not trigger; activated abilities cannot be activated while its source is in play",
+            "box": {
+              "x": 351.578125,
+              "y": 487.078125,
+              "width": 23.265625,
+              "height": 23.265625
+            }
+          }
+        ]
+      },
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "screens": [
+        {
+          "filename": "amplified-desktop-disabled-2x.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "6f1bb3669f51d3fc69a871030c7126ef4501a37382abba9cbbed96ad82eaba18"
+        },
+        {
+          "filename": "amplified-desktop-amplified-restored-resolved-2x.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "73f17aa9aaf808db952a92e4b292d2abd5865d0287069c2abb616f5cd8c48253"
+        },
+        {
+          "filename": "amplified-desktop-restored-2x.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "73f17aa9aaf808db952a92e4b292d2abd5865d0287069c2abb616f5cd8c48253"
+        }
+      ]
+    },
+    {
+      "variant": "base",
+      "viewport": "mobile",
+      "source": "i11",
+      "target": "i1",
+      "oldEffect": "e1",
+      "newEffect": "e2",
+      "sourceVariantAmplified": false,
+      "activationIndex": 1,
+      "activationCost": 1,
+      "geometry": {
+        "target": {
+          "x": 81.265625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "source": {
+          "x": 23.40625,
+          "y": 222.3125,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "slot": "B1",
+        "badges": [
+          {
+            "kind": "triggersDisabled",
+            "label": "Triggered abilities do not trigger while its source is in play",
+            "box": {
+              "x": 83.40625,
+              "y": 418.03125,
+              "width": 14,
+              "height": 14
+            }
+          }
+        ]
+      },
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "screens": [
+        {
+          "filename": "base-mobile-disabled-2x.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "81f8f5d52550c1dc1d620d254dfd74e500c5ce840b951fcdc1ea126d2759d18d"
+        },
+        {
+          "filename": "base-mobile-base-available-resolved-2x.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "bb6538b7699fa4c480890a472bef300014e14e9de07545f68c08295e3d517718"
+        },
+        {
+          "filename": "base-mobile-base-restored-resolved-2x.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "538274976479964e4a34a156822ca4efbd828e4e587d9a9b7cf80fab7840ad39"
+        },
+        {
+          "filename": "base-mobile-restored-2x.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "538274976479964e4a34a156822ca4efbd828e4e587d9a9b7cf80fab7840ad39"
+        }
+      ]
+    },
+    {
+      "variant": "amplified",
+      "viewport": "mobile",
+      "source": "i11",
+      "target": "i1",
+      "oldEffect": "e1",
+      "newEffect": "e2",
+      "sourceVariantAmplified": true,
+      "activationIndex": 1,
+      "activationCost": 1,
+      "geometry": {
+        "target": {
+          "x": 81.265625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "source": {
+          "x": 23.40625,
+          "y": 222.3125,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "slot": "B1",
+        "badges": [
+          {
+            "kind": "triggersDisabled",
+            "label": "Triggered abilities do not trigger; activated abilities cannot be activated while its source is in play",
+            "box": {
+              "x": 83.40625,
+              "y": 418.03125,
+              "width": 14,
+              "height": 14
+            }
+          }
+        ]
+      },
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "screens": [
+        {
+          "filename": "amplified-mobile-disabled-2x.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "42172951a2038828fc742176a5883db002d161a871bdd4088ea1faf869100baf"
+        },
+        {
+          "filename": "amplified-mobile-amplified-restored-resolved-2x.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "71b1f7bff34cf5ba2296c127960ccd9b61d52a6949b2f4c67682fb3615c3d4f8"
+        },
+        {
+          "filename": "amplified-mobile-restored-2x.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "71b1f7bff34cf5ba2296c127960ccd9b61d52a6949b2f4c67682fb3615c3d4f8"
+        }
+      ]
+    }
+  ],
+  "printedAudit": {
+    "immutablePrefixUnchanged": true,
+    "verifiedText": "1g148wyr3j5"
+  },
+  "hostLoadSamples": [
+    {
+      "command": "preflight",
+      "start": "2026-10-12T17:47:15.821170Z",
+      "oneMinute": 3.96484375
+    },
+    {
+      "command": "judged-2",
+      "start": "2026-10-12T17:54:07.749470Z",
+      "oneMinute": 14.76171875
+    },
+    {
+      "command": "judged-5",
+      "start": "2026-10-12T17:58:02.757909Z",
+      "oneMinute": 11.83251953125
+    },
+    {
+      "command": "fuzz-wrapper",
+      "start": "2026-10-12T17:46:37.457263Z",
+      "oneMinute": 4.30126953125
+    },
+    {
+      "command": "judged-4",
+      "start": "2026-10-12T17:56:42.197536Z",
+      "oneMinute": 17.439453125
+    },
+    {
+      "command": "judged-3",
+      "start": "2026-10-12T17:55:51.465838Z",
+      "oneMinute": 20.66015625
+    },
+    {
+      "command": "knip",
+      "start": "2026-10-12T17:44:38.937630Z",
+      "oneMinute": 9.818359375
+    },
+    {
+      "command": "full-wrapper",
+      "start": "2026-10-12T17:44:38.541015Z",
+      "oneMinute": 9.818359375
+    },
+    {
+      "command": "full-execution",
+      "start": "2026-10-12T17:44:38.562428Z",
+      "oneMinute": 9.818359375
+    },
+    {
+      "command": "review",
+      "start": "2026-10-12T17:42:41.726238Z",
+      "oneMinute": 13.8466796875
+    },
+    {
+      "command": "review-final",
+      "start": "2026-10-12T17:43:16.186227Z",
+      "oneMinute": 12.1298828125
+    },
+    {
+      "command": "judged-1",
+      "start": "2026-10-12T17:53:04.390847Z",
+      "oneMinute": 22.7080078125
+    },
+    {
+      "command": "fuzz-execution",
+      "start": "2026-10-12T17:46:37.478834Z",
+      "oneMinute": 4.30126953125
+    },
+    {
+      "command": "sweep",
+      "start": "2026-10-12T17:50:13.505813Z",
+      "oneMinute": 5.52197265625
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 274,
+    "jsdomFiles": 0
+  },
+  "sourceFreeze": "No source changes during heavy full validation, fuzz or native QA. Later writes are own evidence and endpoint metadata.",
+  "commitEndpoint": {
+    "status": "fresh parent metadata ACK received",
+    "parentAck": "2026-10-12T18:04:17.569463Z",
+    "authorDate": "2026-10-12T18:04:17.569463Z",
+    "committerDate": "2026-10-12T18:04:17.569463Z",
+    "implementWindowEnd": "2026-10-12T18:04:17.569463Z",
+    "actualGitExecutionReceipt": "/tmp/dreamtides-disable-activations-562/commit-process.json",
+    "dateScope": "Logical Git metadata endpoint uses parent ACK; actual Git process UTC/PID/duration is observed separately."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final own evidence-schema and staged source/evidence freeze",
+        "source": "sysctl -n vm.loadavg",
+        "observed": "2026-10-12T18:02:16.242297+00:00",
+        "raw": "{ 6.00 9.83 11.63 }"
+      }
+    }
+  },
+  "failedNativeAttempts": [
+    {
+      "attempt": 1,
+      "script": "judged-attempt-1.mjs",
+      "rawReport": "invocations/run-Q7u1pt/judged.result.json",
+      "classification": "observer-sequencing",
+      "sourceChanged": false
+    },
+    {
+      "attempt": 2,
+      "script": "judged-attempt-2.mjs",
+      "rawReport": "invocations/run-iMzarR/judged.result.json",
+      "classification": "observer-sequencing",
+      "sourceChanged": false
+    },
+    {
+      "attempt": 3,
+      "script": "judged-attempt-3.mjs",
+      "rawReport": "invocations/run-t76cOA/judged.result.json",
+      "classification": "observer-sequencing",
+      "sourceChanged": false
+    },
+    {
+      "attempt": 4,
+      "script": "judged-attempt-4.mjs",
+      "rawReport": "invocations/run-ofOkQl/judged.result.json",
+      "classification": "observer-sequencing",
+      "sourceChanged": false
+    }
+  ]
+}

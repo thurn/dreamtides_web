@@ -483,7 +483,10 @@ export function engineStatuses(
         );
         break;
       case "disableTriggers":
-        mark(change.instance, badge("triggersDisabled", { kind: "triggersDisabled", expiry }));
+        mark(change.instance, badge("triggersDisabled", { kind: "triggersDisabled", expiry,
+          ...(change.mode === "triggeredAndActivated" ? { activationsDisabled: true } : {}),
+          ...(change.while === undefined ? {} : { conditional: true }),
+        }));
         break;
       case "temporary":
         mark(change.instance, badge("duration", { kind: "temporary", expiry }));

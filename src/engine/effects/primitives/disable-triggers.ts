@@ -1,4 +1,5 @@
 import type { CharacterRef, Condition, Duration } from "../../dsl/types";
+import type { AbilityDisablingMode } from "../../state/types";
 import { startDuration } from "../../rules/durations";
 import { addFloating } from "../../rules/floating";
 import { resolveCharacters } from "../interpreter";
@@ -6,13 +7,15 @@ import { characterTarget, definePrimitive } from "../types";
 
 /**
  * "This character's triggered abilities don't trigger" for `duration`, and
- * only while `while` holds when given: matching skips them.
+ * only while `while` holds when given. Combined mode also prevents new
+ * activations; ability lists and already queued abilities stay intact.
  */
 export interface DisableTriggersNode {
   readonly op: "disableTriggers";
   readonly subject: CharacterRef;
   readonly duration: Duration;
   readonly while: Condition | null;
+  readonly mode?: AbilityDisablingMode;
 }
 
 export const disableTriggersPrimitive = definePrimitive<DisableTriggersNode>({
@@ -24,14 +27,15 @@ export const disableTriggersPrimitive = definePrimitive<DisableTriggersNode>({
     const expiry = startDuration(ctx, node.duration, env.controller, env.source, ids);
     if (expiry === null) return;
     for (const instance of ids) {
-      const change = node.while === null
-        ? { kind: "disableTriggers" as const, instance }
-        : { kind: "disableTriggers" as const, instance, while: node.while };
+      const change = { kind: "disableTriggers" as const, instance,
+        ...(node.while === null ? {} : { while: node.while }),
+        ...(node.mode === undefined ? {} : { mode: node.mode }),
+      };
       addFloating(ctx, { controller: env.controller, source: env.source, expiry, change });
     }
   },
 });
 
-export function disableTriggers(subject: CharacterRef, duration: Duration, condition: Condition | null = null): DisableTriggersNode {
-  return { op: "disableTriggers", subject, duration, while: condition };
+export function disableTriggers(subject: CharacterRef, duration: Duration, condition: Condition | null = null, mode: AbilityDisablingMode = "triggered"): DisableTriggersNode {
+  return { op: "disableTriggers", subject, duration, while: condition, ...(mode === "triggered" ? {} : { mode }) };
 }

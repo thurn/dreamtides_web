@@ -23,7 +23,7 @@ import { LOOP } from "../../engine/testing/loop-cards";
 import { fuzzEngineCatalog, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
 import { PROMPT_LAB_FIXTURES, promptLabFixture } from "../../engine/testing/prompt-lab";
 import { battleSeed, SIDES, type InstanceId } from "../../engine/state/ids";
-import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
+import { engineBattleLogText, engineStatusLabel } from "../../runtime/battle-prompt-messages";
 import {
   parseDreamwellCardId,
   parsePresentationId as pid,
@@ -263,5 +263,21 @@ describe("presentation queue", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+});
+
+
+describe("selective disabling presentation", () => {
+  it("uses the existing block badge with mode-aware accessible and log copy", () => {
+    const step = steps("present-disable-abilities")[0];
+    const effect = step.published.find((event) => event.kind === "effectStarted");
+    if (effect?.kind !== "effectStarted" || effect.change.kind !== "disableTriggers") throw new Error("missing selective-disabling event");
+    const status = { kind: "triggersDisabled", expiry: effect.expiry, activationsDisabled: true } as const;
+    const label = engineStatusLabel(status, "player");
+    const seen = labEngine.view(step.after, "player");
+    expect(engineStatuses(seen, "player", () => []).cards.get(effect.change.instance)).toContainEqual({ kind: "triggersDisabled", label });
+    expect(label).not.toBe(engineStatusLabel({ kind: "triggersDisabled", expiry: effect.expiry }, "player"));
+    expect(engineBattleLogText(effect, { human: "player", card: () => null, dreamwell: () => null })).toContain(label);
+    expect(engineStatusLabel({ ...status, conditional: true }, "player")).not.toBe(label);
   });
 });

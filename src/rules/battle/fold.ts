@@ -1237,7 +1237,8 @@ const FLOATING_CHANGE_VALIDATORS: {
   cardCost: (value) => isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase" || value.mode === "reduce") && isIndex(value.amount),
   trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once) && optional(arrayOf(isInstanceId))(value.captured) &&
     optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark),
-  disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while),
+  disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while) &&
+    optional(oneOf({ triggered: true, triggeredAndActivated: true }))(value.mode),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
   banishedToHandUntil: (value) => isInstanceId(value.instance) && isIndex(value.banishedAt) && value.banishedAt > 0,
   revealDeckTop: () => false, // A static instruction never enters saved floating effects.

@@ -1,3 +1,6 @@
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered, whileSourceInPlay } from "../../engine/dsl/triggers";
+import { disableTriggers } from "../../engine/effects/primitives/disable-triggers";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,8 @@ export default card({
   artOwned: true,
   cardNumber: 389,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onMaterialized(), disableTriggers(
+    target(enemyCharacter()), whileSourceInPlay(), null, variant.amplified ? "triggeredAndActivated" : "triggered",
+  ))],
+  verifiedText: "1g148wyr3j5",
 });

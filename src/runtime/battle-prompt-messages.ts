@@ -527,7 +527,7 @@ export type EngineStatusCopy =
   | { readonly kind: "reclaimed" }
   | { readonly kind: "ephemeral" }
   | { readonly kind: "created" }
-  | { readonly kind: "triggersDisabled"; readonly expiry: Expiry }
+  | { readonly kind: "triggersDisabled"; readonly expiry: Expiry; readonly activationsDisabled?: boolean; readonly conditional?: boolean }
   | { readonly kind: "temporary"; readonly expiry: Expiry }
   | { readonly kind: "payable"; readonly payer: Side; readonly cost: number }
   | { readonly kind: "returns"; readonly expiry: Expiry }
@@ -626,7 +626,7 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
     case "created":
       return "Created by an effect: ceases to exist instead of going to a deck, hand, void, or banishment";
     case "triggersDisabled":
-      return `Triggered abilities do not trigger${expiryPhrase(status.expiry, human)}`;
+      return `${status.activationsDisabled === true ? "Triggered abilities do not trigger; activated abilities cannot be activated" : "Triggered abilities do not trigger"}${status.conditional === true ? " while its condition holds" : ""}${expiryPhrase(status.expiry, human)}`;
     case "temporary":
       return `Ceases to exist${status.expiry.at === "never" ? " when its effect ends" : ` at the end of its effect${expiryPhrase(status.expiry, human)}`}`;
     case "payable":
@@ -905,7 +905,10 @@ function effectStartedText(
         ...(change.reclaimCosts === undefined ? {} : { reclaimCosts: change.reclaimCosts }),
       });
     case "disableTriggers":
-      return line(card(change.instance), { kind: "triggersDisabled", expiry });
+      return line(card(change.instance), { kind: "triggersDisabled", expiry,
+        ...(change.mode === "triggeredAndActivated" ? { activationsDisabled: true } : {}),
+        ...(change.while === undefined ? {} : { conditional: true }),
+      });
     case "temporary":
       return line(card(change.instance), { kind: "temporary", expiry });
     case "banishedUntil":

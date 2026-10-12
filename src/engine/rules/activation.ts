@@ -9,6 +9,7 @@ import { BASE_VARIANT } from "../dsl/types";
 import type { AbilitySource, CardId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { instanceNumber, sourceKey } from "../state/ids";
 import type { AbilityOrigin, BattleState, CardInstance, GainedAbilities } from "../state/types";
+import { abilitiesDisabled } from "./ability-disabling";
 import { costsPayable } from "./costs";
 import { effectEntersPlay } from "../effects/interpreter";
 import { freeBackSlotsAfterStack, timingAllows } from "./timing";
@@ -183,6 +184,7 @@ export function canActivate(
   index: number,
 ): boolean {
   if (sourceController(state, source) !== side) return false;
+  if (typeof source === "string" && abilitiesDisabled(state, catalog, source, "activated")) return false;
   const ability = activatedAbilityAt(state, catalog, source, index);
   if (ability === null) return false;
   if (typeof source === "string" && !activatesFrom(ability, state.instances[source].zone)) return false;

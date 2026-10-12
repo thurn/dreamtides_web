@@ -23,6 +23,7 @@
  * | an `effectStarted` event whose character gains another card's abilities | `engine.abilitiesGained` |
  * | an `effectStarted` event whose character loses all its abilities | `engine.abilitiesLost`, with its card, source, and expiry |
  * | a bounded chosen-hand banishment's `effectStarted` event | `engine.banishReturnStarted`, with its physical source, card, entry and expiry |
+ * | a selective-disabling `effectStarted` event | `engine.abilitiesDisabled`, with its physical source, target, mode and expiry |
  * | an `effectEnded` event | `engine.effectEnded`, correlated with its start by effect id |
  * | a `returnedToHand` event | `engine.returnedToHand`, correlated by physical instance |
  * | a `battleEnded` event | `engine.battleEnded` |
@@ -97,6 +98,7 @@ export type EngineLogRecord =
   | (RecordBase & { readonly event: "engine.winCondition"; readonly detail: EventOf<"winConditionMet"> })
   /** The character, the card whose abilities it gained (by UUID and variant), its source, and when the gain ends. */
   | (RecordBase & { readonly event: "engine.abilitiesGained"; readonly detail: EventOf<"effectStarted"> })
+  | (RecordBase & { readonly event: "engine.abilitiesDisabled"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.abilitiesLost"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.banishReturnStarted"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.effectEnded"; readonly detail: EventOf<"effectEnded"> })
@@ -133,6 +135,7 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
     case "winConditionMet":
       return { event: "engine.winCondition", version, detail: event };
     case "effectStarted":
+      if (event.change.kind === "disableTriggers") return { event: "engine.abilitiesDisabled", version, detail: event };
       if (event.change.kind === "banishedToHandUntil") return { event: "engine.banishReturnStarted", version, detail: event };
       if (event.change.kind === "loseAbilities") return { event: "engine.abilitiesLost", version, detail: event };
       return event.change.kind === "abilities" ? { event: "engine.abilitiesGained", version, detail: event } : null;

@@ -463,6 +463,9 @@ export type ContinuousChange =
    */
   | { readonly kind: "reclaimNotBanished"; readonly player: Side };
 
+/** Selective suppression: triggered abilities, optionally also new activations. */
+export type AbilityDisablingMode = "triggered" | "triggeredAndActivated";
+
 /** What a floating effect changes while it lasts. */
 export type FloatingChange =
   | ContinuousChange
@@ -473,8 +476,8 @@ export type FloatingChange =
    * entered play, for its effect's captured-card references.
    */
   | { readonly kind: "trigger"; readonly ref: EffectRef; readonly once: boolean; readonly captured?: readonly InstanceId[]; readonly lastKnownSourceSpark?: number }
-  /** The instance's triggered abilities do not trigger, while `while` holds if given. */
-  | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition }
+  /** Selectively disables new abilities, while `while` holds; absent mode means triggered-only. */
+  | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition; readonly mode?: AbilityDisablingMode }
   /** "Banish … until …": as the effect ends, the banished card returns to play under `side` (F3). */
   | { readonly kind: "banishedUntil"; readonly instance: InstanceId; readonly side: Side }
   /** A hand card returns to its owner's hand only from this exact Banished-zone entry. */
