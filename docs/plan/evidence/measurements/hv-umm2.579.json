@@ -1,0 +1,320 @@
+{
+  "bead": "hv-umm2.579",
+  "base": "f3e6402f52c88f9fcd95c54c790fca58b1643e5e",
+  "scope": "Evidence-only bounded audit and one additive phase5 rules-ambiguity reason disposition. No product, rule, source, test or historical record changes.",
+  "boundary": {
+    "report": "/tmp/579-boundary-friction.txt",
+    "exitCode": 1,
+    "meaning": "Three valid phase5 records fired an undispositioned trigger; not a malformed-record or CI failure."
+  },
+  "records": {
+    "hv-umm2.89": {
+      "path": "docs/plan/evidence/friction/hv-umm2.89.json",
+      "sha256": "b496a8c8ae2dea01a7a9bb5a1547785f94bae691bedda790f54a86a400b80bbd",
+      "rulesAmbiguity": {
+        "tag": "rules-ambiguity",
+        "minutes": 13.87,
+        "note": "Setup15:09:15Z\u2192primitive creation15:23:07Z bounds briefing and D10 research/knowledge design together; approximate14-minute interval, not isolated active research time. Printed typed draw supplies no selection/shuffle/no-match rule, Rust resolver has todo, and hidden selection index requires viewer-evidence proof. Recorded ladder5 RD and local bounded proof."
+      },
+      "overallImplementMin": 38.45
+    },
+    "hv-umm2.553": {
+      "path": "docs/plan/evidence/friction/hv-umm2.553.json",
+      "sha256": "b25be42a45fb68024ecbf9a424cccbfe51ee2789d2f5cab40c567891b2ea03ed",
+      "rulesAmbiguity": {
+        "tag": "rules-ambiguity",
+        "minutes": 13.53,
+        "note": "Observed late-dispatch proxy16:00:15 to initial baseline16:13:46: typed normal-target semantics, D10 research, shared sibling scope design/admission and baseline preparation. Earlier research uninstrumented; this compound elapsed window is not productive-time attribution."
+      },
+      "overallImplementMin": 71.89989999999999
+    },
+    "hv-umm2.260": {
+      "path": "docs/plan/evidence/friction/hv-umm2.260.json",
+      "sha256": "a304ba48009454b62d26f790ee8e97b6a8b7a0514b5dde38fcac633d514af12f",
+      "rulesAmbiguity": {
+        "tag": "rules-ambiguity",
+        "minutes": 15.8,
+        "note": "Printed site term/lifetime/duplicate semantics required bounded D10 research and parent scope/ruling admission during original dispatch19:24:34.566Z\u2192nativeWRITEACK19:40:22.473142Z; elapsed coordination window, not productive editing."
+      },
+      "overallImplementMin": 147.92768338333332
+    }
+  },
+  "normativeResolutions": [
+    {
+      "bead": "hv-umm2.89",
+      "uuids": [
+        "017a7b4b-3ccf-4635-9956-28a72b22274e",
+        "8896c178-757e-4775-b117-a4357ebfe30f"
+      ],
+      "rd": "docs/plan/evidence/rules-decisions/RD-hv-umm2.89-1.md",
+      "section": "Keywords and Effects / Draw a matching card",
+      "ladder": "5 after checking steps1-4; ordinary draw/Fatigue and knowledge consequences retain existing authority.",
+      "result": "Automatic first eligible card in deck order, no skipped-card inspection/chooser/shuffle; nonempty no-match does nothing, empty deck Fatigue; public criterion evidence governs private position tracking.",
+      "timing": "13.87-minute setup/node_modules proxy15:09:15Z to primitive creation15:23:07Z includes briefing, research and knowledge design; approximate compound interval, not isolated active research. Overall record predates implementWindow and retains its timingBasis."
+    },
+    {
+      "bead": "hv-umm2.553",
+      "uuids": [
+        "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
+        "f7084ba7-8c85-4847-80df-b0c98ec77d78"
+      ],
+      "rd": "docs/plan/evidence/rules-decisions/RD-hv-umm2.553-1.md",
+      "sections": [
+        "Targeting / Conditional restrictions",
+        "Playing Cards and the Stack / Conditional alternatives"
+      ],
+      "ladder": "Earlier RD-hv-umm2.69-1 and live target restrictions supply existing authority; steps1-3 supply no applicable implemented precedent; step4 adapted ordering, step5 single physical target.",
+      "result": "Choose one physical target using normal condition before costs; retain its identity and recheck condition/restriction live. Resolve conditional branches at their instruction after preceding effects, with no inactive-branch choices.",
+      "timing": "13.53-minute late-dispatch proxy16:00:15Z to baseline16:13:46Z combines typed target semantics, D10 research, shared sibling scope design/admission and baseline preparation; earlier research uninstrumented. Retrospective573 corrects the separate overall implementWindow to exact dispatch15:58:41.006Z and final Git committer17:10:35Z; it does not convert the friction proxy into exact productive research time."
+    },
+    {
+      "bead": "hv-umm2.260",
+      "uuids": [
+        "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+        "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59"
+      ],
+      "rd": "docs/plan/evidence/rules-decisions/RD-hv-umm2.260-1.md",
+      "section": "Journey Site Effects",
+      "ladder": "5; steps1-2 current design/timing constraints without clause-specific implementation; step3 recorded read-only exact UUID/text search without an unchanged implemented rule; no applicable step4 Magic procedural-journey analog.",
+      "result": "Per-source/per-dreamscape historical enhancement entitlements for eligible unopened unvisited guide sites, and per-source/per-site Exploration reroll consumption retained across loss/reacquisition/reload. Rerolls require a different fully prepared catalog-valid encounter; ordinary choice costs/prerequisites still apply.",
+      "timing": "15.8-minute original dispatch19:24:34.566Z to native Areas/ruling acknowledgement19:40:22.473142Z combines research and parent coordination/admission, not productive editing. Separate preview serialization recovery is not a D10 workflow defect."
+    }
+  ],
+  "decision": {
+    "kind": "reason",
+    "sharedActionableDefectEstablished": false,
+    "rationale": "Audit hv-umm2.579: hv-umm2.89 resolves first-match deck order and private position evidence; hv-umm2.553 resolves one retained conditional target and live instruction branches; hv-umm2.260 resolves per-dreamscape enhancement entitlements and per-site Exploration rerolls. Their UUID-specific RDs and current normative rules encode distinct semantic decisions under binding D10. The reported 13.87, 13.53 and 15.8 minutes are compound setup/research/design/admission windows, not isolated productive research or comparable speed measurements. Earlier RD precedents are part of the current ambiguity protocol. This bounded audit establishes no common actionable workflow defect; required rule decisions remain within D10. Historical bytes and timing qualifications are preserved in measurements/hv-umm2.579.json.",
+    "comparison": "No isolated productive-time measurements or controlled before/after speed comparison. Three different semantic choices do not establish an avoidable shared cause. Binding D10 requires ladder research, normative current rules and UUID RD evidence; the current protocol explicitly reads earlier RD anchors."
+  },
+  "sourceHashes": {
+    "docs/rules.md": "87da9674fee710b54fb4301f51a688b55175836e4c7c890d404763bd864c1f1b",
+    "docs/plan/decisions.md": "171b27b1cf63e98ca7fbc3d010d352ba1c265e68a89ac7ab349b3974fd68478b",
+    "docs/plan/workflow.md": "e25c1988382e33a3e4c3b477eee98d84bfa5e343fbba9572cbbfa8923f3ceb12",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.89-1.md": "fb42efa3d495a38221937ce592b85a94a08f3acf8e8a712b3f0bf1bf10bd3198",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.553-1.md": "16a0602c1f15ffc07817b1afb46ebfc30e840b4a1e1e802944b920ad1c8b876a",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.260-1.md": "ae2c6051035c4dc37111db96ea106cf947a9a2d35631ec906bebb78a573d18ee",
+    "docs/plan/evidence/measurements/hv-umm2.553.json": "3ae7c0919fa280753b726462c9441a25a13caa86ec49935f804639d1ac3cdb7b",
+    "src/engine/effects/primitives/draw-matching.ts": "42814ff38bf5e6e3f59e5be7cced24cbe02373816db38a33a5c1ccbdd87dd43b",
+    "src/engine/dsl/builders.ts": "4ec9420d2c899729640c4f2d02338a09dad7ab43f907674296d9981dd073cf34",
+    "src/engine/effects/primitives/if-then.ts": "cc0a55d3a5ac513c667597544ab350af7aec84a495fe32ebb8ce30e37157f4ae",
+    "src/rules/journey/journey-sites.ts": "d79936089a261017c9fffd5fa617e7b26837a561097d23ad6fe9a0215bcfe9d9"
+  },
+  "preservation": {
+    "ledgerPriorBytes": 16626,
+    "ledgerPriorSHA256": "60e513d36b7d14438b45d5ba37134e46ab921c221cfec77fd59e4cb8a53faf97",
+    "ledgerAddedLines": 1,
+    "historicalRecords": "All three original friction records and cited source bytes remain unchanged; exact SHA256 checks precede commit."
+  },
+  "implementationTiming": {
+    "start": "2026-10-12T22:03:07Z",
+    "claimAckObserved": "2026-10-12T22:03:07.302455+00:00",
+    "end": "2026-10-12T22:08:18.252794+00:00",
+    "endpoint": "Actual final premetadata observation after parent acknowledgement; excludes this final metadata write and commit invocation. Native claim start retained; actual Git commit timestamp and invocation bracket recorded outside the commit.",
+    "scope": "Native claim to final premetadata observation, explicitly authorized acceptance scope. Includes setup before helper, research, checks and coordination; elapsed wall time, not productive editing.",
+    "helperDispatch": null,
+    "modelStart": null,
+    "dispatchProxy": {
+      "parentBeforeHelperDispatchUTC": "2026-10-12T22:03:28.935436+00:00",
+      "meaning": "observed parent timestamp immediately before collaboration spawn; dispatch event and model start unobserved unless native receipt supplies them",
+      "parentAfterHelperDispatchUTC": "2026-10-12T22:03:58.732277+00:00",
+      "note": "After marker includes subsequent parent binding read/native coordination; not exact dispatch or active model time"
+    },
+    "previousProvisionalEndpoint": "2026-10-12T22:07:23.121172+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "measuredFor": "Authorized native claim-to-final premetadata window; exact helper dispatch/model start unobserved; commit clock recorded separately."
+      },
+      "hostLoad": {
+        "measuredFor": "Actual npm run review friction-records step start2026-10-12T22:06:45.247Z load3.2578125, as recorded by the review runner. Outer wrapper samples retained separately."
+      },
+      "testDelta": {
+        "measuredFor": "Zero test entrypoints/support modules/lines or jsdom files authored; evidence validation is an outside-worktree check, not a tracked test."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "source-preparation",
+      "at": "2026-10-12T22:06:35.651174+00:00",
+      "raw": "{ 3.48 7.16 11.63 }"
+    },
+    {
+      "step": "knip",
+      "at": "2026-10-12T22:06:49.595038+00:00",
+      "raw": "{ 3.24 6.93 11.47 }",
+      "hostLoad1m": 3.24
+    },
+    {
+      "step": "focused",
+      "at": "2026-10-12T22:06:44.631292+00:00",
+      "raw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26
+    },
+    {
+      "step": "review",
+      "at": "2026-10-12T22:06:45.074306+00:00",
+      "raw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26
+    },
+    {
+      "step": "schema",
+      "at": "2026-10-12T22:06:44.757289+00:00",
+      "raw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26
+    },
+    {
+      "step": "triggers",
+      "at": "2026-10-12T22:06:44.886042+00:00",
+      "raw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26
+    },
+    {
+      "step": "focused-final",
+      "at": "2026-10-12T22:07:23.249721+00:00",
+      "raw": "{ 4.37 6.84 11.25 }",
+      "hostLoad1m": 4.37
+    },
+    {
+      "step": "schema-final",
+      "at": "2026-10-12T22:07:23.382518+00:00",
+      "raw": "{ 4.37 6.84 11.25 }",
+      "hostLoad1m": 4.37
+    }
+  ],
+  "commands": {
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rules-ambiguity579-sol",
+      "start": "2026-10-12T22:06:49.595038+00:00",
+      "end": "2026-10-12T22:06:54.451360+00:00",
+      "wrapperWallS": 4.853341708992957,
+      "hostLoadRaw": "{ 3.24 6.93 11.47 }",
+      "hostLoad1m": 3.24,
+      "exitCode": 0,
+      "log": "/tmp/579-helper/knip.txt"
+    },
+    "focused": {
+      "argv": [
+        "python3",
+        "/tmp/579-helper/check.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rules-ambiguity579-sol",
+      "start": "2026-10-12T22:06:44.631292+00:00",
+      "end": "2026-10-12T22:06:44.693774+00:00",
+      "wrapperWallS": 0.06000800000037998,
+      "hostLoadRaw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26,
+      "exitCode": 0,
+      "log": "/tmp/579-helper/focused.txt"
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rules-ambiguity579-sol",
+      "start": "2026-10-12T22:06:45.074306+00:00",
+      "end": "2026-10-12T22:06:45.314805+00:00",
+      "wrapperWallS": 0.23836295799992513,
+      "hostLoadRaw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26,
+      "exitCode": 0,
+      "log": "/tmp/579-helper/review.txt"
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rules-ambiguity579-sol",
+      "start": "2026-10-12T22:06:44.757289+00:00",
+      "end": "2026-10-12T22:06:44.821129+00:00",
+      "wrapperWallS": 0.061769709005602635,
+      "hostLoadRaw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26,
+      "exitCode": 0,
+      "log": "/tmp/579-helper/schema.txt"
+    },
+    "triggers": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rules-ambiguity579-sol",
+      "start": "2026-10-12T22:06:44.886042+00:00",
+      "end": "2026-10-12T22:06:45.033721+00:00",
+      "wrapperWallS": 0.1456446250085719,
+      "hostLoadRaw": "{ 3.26 6.99 11.52 }",
+      "hostLoad1m": 3.26,
+      "exitCode": 0,
+      "log": "/tmp/579-helper/triggers.txt"
+    },
+    "focused-final": {
+      "argv": [
+        "python3",
+        "/tmp/579-helper/check.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rules-ambiguity579-sol",
+      "start": "2026-10-12T22:07:23.249721+00:00",
+      "end": "2026-10-12T22:07:23.314426+00:00",
+      "wrapperWallS": 0.06138837500475347,
+      "hostLoadRaw": "{ 4.37 6.84 11.25 }",
+      "hostLoad1m": 4.37,
+      "exitCode": 0,
+      "log": "/tmp/579-helper/focused-final.txt"
+    },
+    "schema-final": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rules-ambiguity579-sol",
+      "start": "2026-10-12T22:07:23.382518+00:00",
+      "end": "2026-10-12T22:07:23.489326+00:00",
+      "wrapperWallS": 0.10421591698832344,
+      "hostLoadRaw": "{ 4.37 6.84 11.25 }",
+      "hostLoad1m": 4.37,
+      "exitCode": 0,
+      "log": "/tmp/579-helper/schema-final.txt"
+    }
+  },
+  "validationScope": "Focused JSON/ledger/preservation and friction schema/trigger checks, npm run review and npm run knip. Documentation-only scope needs no browser, full suite, heavy lock, fuzz or runtime resources.",
+  "failures": [],
+  "runtimeResources": {
+    "browser": 0,
+    "server": 0,
+    "provider": 0,
+    "heavyLock": 0
+  },
+  "nativeFilingProvenance": "Parent reports prefiling full admitted/intended native snapshots found zero matching duty records; standalone key query before creation was omitted. Postcreation exact duty query22:04:18.723192Z found only579. No exact standalone precreation query claimed.",
+  "validationOutcomes": {
+    "focused": "Historical friction/source hashes and original ledger byte prefix preserved, exactly one rules-ambiguity phase5 line, compact eight-field own friction JSON, zero test delta and exactly admitted3paths.",
+    "schema": "657 records valid,41 qualified historical unknown measurements.",
+    "triggers": "All fired triggers dispositioned; exit0. Original boundary exit1 retained.",
+    "review": "Documentation-scoped review ran friction-record schema only; exit0, no test/typecheck/lint invocation claimed.",
+    "knip": "Exit0 including preparation and local asset restoration. Expected isolated scratch asset warnings retained in full raw log; final restore linked all workspace assets. No knip findings.",
+    "broader": "No browser/full suite/heavy/fuzz requested or run for evidence-only scope."
+  },
+  "parentEndpointAcknowledgement": {
+    "observedUTC": "2026-10-12T22:07:52.878378+00:00",
+    "paths": [
+      "docs/plan/evidence/friction/hv-umm2.579.json",
+      "docs/plan/evidence/introspection.jsonl",
+      "docs/plan/evidence/measurements/hv-umm2.579.json"
+    ],
+    "checks": "seven terminal0 receipts, historical/source hashes and ledger prefix unchanged",
+    "reviewRequired": false,
+    "reviewReason": "pure evidence documents and one supported additive reason disposition; no implementation/test change"
+  },
+  "finalVerification": "Metadata-only final amendment followed by preservation/schema/diff checks; raw final receipts remain /tmp/579-helper and are returned to the parent. Aggregate review and Knip are not repeated for unchanged evidence scope."
+}
