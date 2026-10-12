@@ -1,3 +1,5 @@
+import { onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { erode, gainEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 382,
   art: { x: -0.294, y: 0.424, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), erode(variant.amplified ? 3 : 2)),
+    triggered(onDawn(), gainEnergy(1)),
+  ],
+  verifiedText: "2bp5cpec59i",
 });

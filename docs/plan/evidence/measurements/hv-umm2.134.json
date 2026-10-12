@@ -1,0 +1,403 @@
+{
+  "bead": "hv-umm2.134",
+  "phase": 5,
+  "base": "d67df4698c4304847a01fbc20d093e3d1f107268",
+  "measurementWindow": {
+    "start": "2026-10-12T01:46:20Z",
+    "startKind": "native dispatched-helper note proxy; actual helper spawn slightly earlier",
+    "end": "2026-10-12T02:09:55.455218+00:00",
+    "endKind": "final evidence freeze immediately before schema check and commit",
+    "claimAt": "2026-10-12T01:34:20Z",
+    "claimToFreezeMin": 35.5909203
+  },
+  "entities": [
+    "76766584-a8fb-41cc-8c4b-09655f478703",
+    "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
+    "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+    "7c9f3a38-1434-4db4-a856-24fe744e8322",
+    "be72bd04-21a6-4035-a117-2b7213ad1a34"
+  ],
+  "authoring": {
+    "entities": 5,
+    "variants": "base and amplified",
+    "newPrimitives": 0,
+    "newScenarios": 0,
+    "newTestEntrypoints": 0,
+    "clauses": {
+      "76766584-a8fb-41cc-8c4b-09655f478703": {
+        "materializedErode": [
+          2,
+          3
+        ],
+        "dawnEnergy": [
+          1,
+          1
+        ]
+      },
+      "b8ecc46d-bd92-4826-a416-7ce177e69cbf": {
+        "materializedForesee": [
+          1,
+          2
+        ],
+        "dawnEnergy": [
+          1,
+          1
+        ]
+      },
+      "1658d9a0-c3b0-4eb7-babc-4933acf362c4": {
+        "energy": [
+          3,
+          4
+        ]
+      },
+      "7c9f3a38-1434-4db4-a856-24fe744e8322": {
+        "energy": [
+          2,
+          3
+        ]
+      },
+      "be72bd04-21a6-4035-a117-2b7213ad1a34": {
+        "energy": [
+          4,
+          5
+        ]
+      }
+    }
+  },
+  "d20": {
+    "classification": "Existing primitive composition with independent normal triggers; no unusual targeting, internal ability interaction, functional zones, counters or replacements."
+  },
+  "d21": {
+    "sampleRule": "first SHA-256 UUID byte < 26",
+    "firstBytes": {
+      "76766584-a8fb-41cc-8c4b-09655f478703": 183,
+      "b8ecc46d-bd92-4826-a416-7ce177e69cbf": 230,
+      "1658d9a0-c3b0-4eb7-babc-4933acf362c4": 229,
+      "7c9f3a38-1434-4db4-a856-24fe744e8322": 26,
+      "be72bd04-21a6-4035-a117-2b7213ad1a34": 76
+    },
+    "judgedEntities": [],
+    "newPromptKinds": [],
+    "newStatusIndicators": [],
+    "newVisualKinds": [],
+    "classification": "Existing Foresee role, energy and Erode presentation; full default sweep required.",
+    "ledgerClassification": "No judged sample rows: zero entities meet new-surface or strict first-byte sample rule. Full scripted sweep rows retained for every variant/side."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "preExistingIssues": [],
+  "runtimeOwnership": {
+    "observers": {
+      "focused": 56995,
+      "preflight": "synchronous terminal",
+      "fuzz": 17892,
+      "review": 87722,
+      "knip": 33862,
+      "fullSweep": 5378,
+      "focusedSweep": 81275
+    },
+    "observerState": "All terminal; full sweep exit1 retained, all other checks terminal0",
+    "ownedServerProcessGroups": [
+      25368,
+      72459,
+      8198,
+      24152,
+      53478,
+      57930
+    ],
+    "serverPort": 5191,
+    "cleanup": "Each runner reported browser/provider close and server group stopped, port free; process audit found all owned process IDs absent; owner record absent after final run.",
+    "browserLease": "Native lease released; no owned ticket/provider remains",
+    "heavyLease": "Fuzz terminal; heavy slot released"
+  },
+  "validation": {
+    "focused": {
+      "command": "npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts",
+      "start": "2026-10-12T01:47:19.452160+00:00",
+      "elapsedS": 5.175837125001635,
+      "exitCode": 0,
+      "hostLoad": "{ 4.50 12.49 16.84 }",
+      "log": "/tmp/hv134-energy-receipts/focused.log",
+      "files": 2,
+      "cases": 1159
+    },
+    "preflight": {
+      "command": "npm run lab:preflight -- --cards 76766584-a8fb-41cc-8c4b-09655f478703,b8ecc46d-bd92-4826-a416-7ce177e69cbf,1658d9a0-c3b0-4eb7-babc-4933acf362c4,7c9f3a38-1434-4db4-a856-24fe744e8322,be72bd04-21a6-4035-a117-2b7213ad1a34",
+      "start": "2026-10-12T01:47:20.591920+00:00",
+      "elapsedS": 0.8052630839993071,
+      "exitCode": 0,
+      "hostLoad": "{ 4.38 12.33 16.76 }",
+      "log": "/tmp/hv134-energy-receipts/preflight.log",
+      "counts": {
+        "pass": 64,
+        "skip": 36,
+        "fail": 0,
+        "pending": 0
+      }
+    },
+    "review": {
+      "command": "npm run review",
+      "start": "2026-10-12T01:48:20.522623+00:00",
+      "elapsedS": 43.87691854200057,
+      "exitCode": 0,
+      "hostLoad": "{ 5.56 11.30 16.10 }",
+      "log": "/tmp/hv134-energy-receipts/review.log",
+      "files": 221,
+      "cases": 2943,
+      "relatedTestStepS": 42.8
+    },
+    "knip": {
+      "command": "npm run knip",
+      "start": "2026-10-12T01:48:21.695531+00:00",
+      "elapsedS": 3.1343880830008857,
+      "exitCode": 0,
+      "hostLoad": "{ 5.59 11.21 16.04 }",
+      "log": "/tmp/hv134-energy-receipts/knip.log",
+      "checkStepS": 1.9
+    },
+    "fuzz": {
+      "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock env JOURNEY_TEST_WORKERS=2 npm run fuzz:engine -- --games 300 --seed hv134-energy --weight-uuids 76766584-a8fb-41cc-8c4b-09655f478703,b8ecc46d-bd92-4826-a416-7ce177e69cbf,1658d9a0-c3b0-4eb7-babc-4933acf362c4,7c9f3a38-1434-4db4-a856-24fe744e8322,be72bd04-21a6-4035-a117-2b7213ad1a34",
+      "start": "2026-10-12T01:47:21.444721+00:00",
+      "elapsedS": 128.76114466599938,
+      "exitCode": 0,
+      "hostLoad": "{ 4.38 12.33 16.76 }",
+      "log": "/tmp/hv134-energy-receipts/fuzz.log",
+      "games": 300,
+      "seed": "hv134-energy",
+      "steps": 149571,
+      "prompts": 3101,
+      "interactiveReruns": 311,
+      "engineWallS": 128.2,
+      "cpuS": 138.5,
+      "failures": 0,
+      "targetCoverage": [
+        {
+          "kind": "card",
+          "uuid": "76766584-a8fb-41cc-8c4b-09655f478703",
+          "included": 612,
+          "exercised": 281
+        },
+        {
+          "kind": "card",
+          "uuid": "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
+          "included": 621,
+          "exercised": 285
+        },
+        {
+          "kind": "card",
+          "uuid": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+          "included": 615,
+          "exercised": 326
+        },
+        {
+          "kind": "card",
+          "uuid": "7c9f3a38-1434-4db4-a856-24fe744e8322",
+          "included": 612,
+          "exercised": 295
+        },
+        {
+          "kind": "card",
+          "uuid": "be72bd04-21a6-4035-a117-2b7213ad1a34",
+          "included": 612,
+          "exercised": 284
+        }
+      ]
+    },
+    "sweep": {
+      "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.134 --cards 76766584-a8fb-41cc-8c4b-09655f478703,b8ecc46d-bd92-4826-a416-7ce177e69cbf,1658d9a0-c3b0-4eb7-babc-4933acf362c4,7c9f3a38-1434-4db4-a856-24fe744e8322,be72bd04-21a6-4035-a117-2b7213ad1a34 --port 5191",
+      "start": "2026-10-12T01:47:34.601166+00:00",
+      "elapsedS": 1065.333861833,
+      "exitCode": 1,
+      "hostLoad": "{ 4.08 12.01 16.59 }",
+      "log": "/tmp/hv134-energy-receipts/sweep.log"
+    },
+    "preflight-focused": {
+      "command": "npm run lab:preflight -- --cards 76766584-a8fb-41cc-8c4b-09655f478703 --variants resonant,perfected --as player",
+      "start": "2026-10-12T02:05:27.555582+00:00",
+      "elapsedS": 0.5593732500001352,
+      "exitCode": 0,
+      "hostLoad": "{ 7.74 7.60 11.67 }",
+      "log": "/tmp/hv134-energy-receipts/preflight-focused.log",
+      "counts": {
+        "pass": 3,
+        "skip": 0,
+        "fail": 0,
+        "pending": 0
+      },
+      "variantNormalization": "CLI prepends base to requested resonant,perfected; browser wrapper runs exactly the two requested cells."
+    },
+    "sweep-focused": {
+      "command": "node scripts/qa/run-scenario.mjs ebonwing-reverification --bead hv-umm2.134 --port 5191 --timeout 300",
+      "start": "2026-10-12T02:06:25.904463+00:00",
+      "elapsedS": 42.330923541998345,
+      "exitCode": 0,
+      "hostLoad": "{ 15.03 9.14 11.96 }",
+      "log": "/tmp/hv134-energy-receipts/sweep-focused.log"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review typecheck/lint/test-related start 2026-10-12T01:48:21.164Z"
+      }
+    }
+  },
+  "browserQa": {
+    "fullSweep": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 62,
+        "fail": 2,
+        "skip": 36
+      },
+      "attemptCounts": {
+        "pass": 62,
+        "fail": 3,
+        "skip": 36
+      },
+      "hostLoad": 4.078125,
+      "sessions": 5,
+      "leaseYields": 4,
+      "wallMs": {
+        "browserLeaseWait": 535677,
+        "serve": 6240,
+        "scenario": 517028.54291500023,
+        "cleanup": 1253.3181680000562,
+        "execution": 524588.5887500001,
+        "total": 1060265.58875
+      }
+    },
+    "focusedReverification": {
+      "report": "ebonwing-reverification.result.json",
+      "wallMs": {
+        "browserLeaseWait": 52,
+        "serve": 1557,
+        "scenario": 35283,
+        "total": 36937
+      },
+      "cells": [
+        {
+          "uuid": "76766584-a8fb-41cc-8c4b-09655f478703",
+          "variant": "resonant",
+          "as": "player",
+          "verdict": "pass",
+          "zone": "play",
+          "events": [
+            "energyChanged",
+            "cardPlayed",
+            "resolved",
+            "materialized",
+            "triggerQueued",
+            "triggerResolved",
+            "enteredVoid",
+            "eroded"
+          ]
+        },
+        {
+          "uuid": "76766584-a8fb-41cc-8c4b-09655f478703",
+          "variant": "perfected",
+          "as": "player",
+          "verdict": "pass",
+          "zone": "play",
+          "events": [
+            "energyChanged",
+            "cardPlayed",
+            "resolved",
+            "materialized",
+            "triggerQueued",
+            "triggerResolved",
+            "enteredVoid",
+            "eroded"
+          ]
+        }
+      ]
+    },
+    "finalEffectiveCells": {
+      "distinctKeys": 100,
+      "pass": 64,
+      "skip": 36,
+      "fail": 0
+    },
+    "rawAttempts": {
+      "pass": 64,
+      "skip": 36,
+      "fail": 3
+    },
+    "combinedBrowserLeaseWaitS": 535.729,
+    "failureDisposition": {
+      "EbonwingResonantPlayer": {
+        "firstRawReport": "sweep-eqHHKW/sweep-76766584-a8fb-41cc-8c4b-09655f478703-resonant-player-attempt-1.result.json",
+        "firstReportWrittenAt": "2026-10-12T01:49:23.564164Z",
+        "failure": "engine probe disappeared after initial source-hand observation",
+        "caps": [],
+        "reverified": "pass; fresh exact two-cell wrapper"
+      },
+      "EbonwingPerfectedPlayer": {
+        "firstRawReport": "sweep-eqHHKW/sweep-76766584-a8fb-41cc-8c4b-09655f478703-perfected-player-attempt-1.result.json",
+        "firstReportWrittenAt": "2026-10-12T01:49:24.356965Z",
+        "failure": "page.goto ERR_ABORTED before lab observation",
+        "caps": [],
+        "reverified": "pass; fresh exact two-cell wrapper"
+      },
+      "setupHypothesis": {
+        "status": "correlated resource condition; direct cause unproved",
+        "reviewRestoreStart": "2026-10-12T01:49:03.959Z",
+        "reviewRestoreDurationS": 0.4,
+        "condition": "Review restore relinked public art while own Vite sweep was live. Focused session ran with no concurrent prepare/restore; catalog code remained identical.",
+        "limitations": "Raw failed reports contain no navigation trace. No runtime or content source repair was established or made."
+      },
+      "CanopyInspiredEnemy": {
+        "firstRawReport": "sweep-eqHHKW/sweep-7c9f3a38-1434-4db4-a856-24fe744e8322-inspired-enemy-attempt-1.result.json",
+        "retryRawReport": "sweep-eqHHKW/sweep-7c9f3a38-1434-4db4-a856-24fe744e8322-inspired-enemy-attempt-2.result.json",
+        "failure": "Timeout waiting for lab report before any start/probe observation",
+        "caps": [],
+        "retryPolicy": "One automatic timeout-only retry; first row effective false, second pass true",
+        "resolvedEvidence": "Scripted source on stack; human response/pass; resolved event; final void; empty Caps",
+        "cause": "Unproved; no asset-restore attribution"
+      }
+    },
+    "logs": {
+      "path": "ebonwing-reverification-mobile.jsonl",
+      "gameId": "sxheta",
+      "rows": 30,
+      "selectedBy": "url",
+      "scope": "Final perfected focused case; initial resonant game was replaced before runner export. Full-sweep raw reports retain actual event-kind evidence; Node preflight retains physical-source events."
+    },
+    "caps": "All retained pass/fail raw reports and focused result have empty caps arrays",
+    "captures": []
+  },
+  "preDispatchRecovery": {
+    "windowStart": "2026-10-12T01:34:20Z",
+    "windowEnd": "2026-10-12T01:46:20Z",
+    "elapsedUpperBoundMin": 12,
+    "recoveryOnlyDurationMin": null,
+    "cause": "Scope-routing assumption recovery plus other dispatch coordination",
+    "provenance": "Parent-reported native claim and dispatch-note timestamps",
+    "attribution": "Upper bound only; does not establish recovery alone exceeded friction threshold."
+  },
+  "sourceHashesSha256": {
+    "src/content/cards/arc-gate-opening-be72bd04.ts": "637d686e7b9affa1f1078d0d635834ad8bed288918d9ab208eb0ef3e1ece339d",
+    "src/content/cards/canopy-of-stars-7c9f3a38.ts": "7178c8818696182442f998148b202a6d903088cce82e9d4987d267ddc9f53b55",
+    "src/content/cards/ebonwing-76766584.ts": "4ec0180d580ecf7943edb00e6e79c3c80b2c4dae944e2320d147ad54b51952f3",
+    "src/content/cards/glimpse-of-infinity-1658d9a0.ts": "7cd6d778ccfa55f29b8ca7e00383871f642da714e5bc2fc5615652518bc51914",
+    "src/content/cards/looming-oracle-b8ecc46d.ts": "5c4e5a8b8b69bb51c76b81f84423012b49422286fde4b04aea0534cf341f3e0c"
+  },
+  "sourceHashVerification": "Matches independent parent SHA-256 map; five catalog source files unchanged through all validation and browser attempts.",
+  "frictionAttribution": {
+    "browserLeaseWait": {
+      "observedMin": 8.928816666666666,
+      "exceedsApprox10Min": false
+    },
+    "preDispatchRecovery": "Duration unknown within twelve-minute total dispatch interval; no >10min entry inferred."
+  },
+  "retainedReceipts": {
+    "root": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.134",
+    "manifest": "artifact-manifest.json",
+    "manifestSha256": "0e164ec1a4da49908e45c09a55868261143a544e0bfa42a051b2b02a3f204936",
+    "rawReportCount": 65,
+    "outsideDisposableWorktree": true
+  }
+}
