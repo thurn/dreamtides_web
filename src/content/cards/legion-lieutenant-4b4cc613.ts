@@ -1,3 +1,7 @@
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import legionnaire from "../figments/legionnaire-e757b306";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +24,9 @@ export default card({
   cardNumber: 218,
   art: { x: 0.083, y: 1, scale: 1.16 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // With awakened is ready at entry, without a persistent keyword grant (RD93-2).
+    triggered(onMaterialized(), materializeFigments(parseFigmentId(legionnaire.id), 1, { awakened: variant.amplified })),
+  ],
+  verifiedText: "15lr0l75uv5",
 });

@@ -383,11 +383,11 @@ export function createInstance(
   return instance;
 }
 
-/** Creates a character directly in play under `side` at the open `slot`, as a materialize. */
-export function createInPlay(ctx: StepContext, printing: Printing, side: Side, variant: Variant, slot: Slot): InstanceId {
+/** Creates a character directly in play under `side` at the open `slot`, ready when `awakened`, as a materialize. */
+export function createInPlay(ctx: StepContext, printing: Printing, side: Side, variant: Variant, slot: Slot, awakened = false): InstanceId {
   const instance = createInstance(ctx, printing, side, variant, "play");
   setOccupant(ctx.state, side, slot, instance.id);
-  instance.status.exhausted = !hasKeyword(ctx.state, ctx.catalog, instance.id, "awakened");
+  instance.status.exhausted = !awakened && !hasKeyword(ctx.state, ctx.catalog, instance.id, "awakened");
   ctx.emit({ kind: "materialized", instance: instance.id, side, slot });
   return instance.id;
 }

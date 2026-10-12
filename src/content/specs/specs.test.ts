@@ -16,6 +16,7 @@ import {
 } from "../../engine/content-catalog";
 import { createEngine } from "../../engine/engine";
 import { SYNTHETIC_CARDS } from "../../engine/testing/synthetic-cards";
+import { SYNTHETIC_ABANDONER } from "./abandonment-fixture";
 import { SCENARIO_MODULES } from "./index";
 import { runNamedScenario, scenarioRegistryProblems } from "./runner";
 
@@ -23,7 +24,7 @@ const MODULE_SUFFIX = ".scenarios.ts";
 
 const engine = createEngine(
   createCatalog(
-    [...SYNTHETIC_CARDS, ...contentCardDefinitions()],
+    [...SYNTHETIC_CARDS, SYNTHETIC_ABANDONER, ...contentCardDefinitions()],
     contentDreamwellDefinitions(),
     { avatars: contentAvatarDefinitions(), dreamsigns: contentDreamsignDefinitions() },
     contentFigmentDefinitions(),

@@ -31,9 +31,9 @@ function withSpark(printing: Printing, spark: number): Printing {
  * otherwise the group's total spark is divided as evenly as possible among
  * those that fit, the remainder going left to right. Figments already in play
  * are never merged into. With no open position, none is created. Returns the
- * created figments.
+ * created figments. `awakened` makes those figments ready as they enter.
  */
-export function createFigments(ctx: StepContext, side: Side, printing: Printing, variant: Variant, count: number): InstanceId[] {
+export function createFigments(ctx: StepContext, side: Side, printing: Printing, variant: Variant, count: number, awakened = false): InstanceId[] {
   if (count <= 0) return [];
   const fit = Math.min(count, openBackSlots(ctx.state, side));
   if (fit < count) ctx.emit({ kind: "capacityReached", side, instance: null, missing: count - fit });
@@ -43,7 +43,7 @@ export function createFigments(ctx: StepContext, side: Side, printing: Printing,
     const slot = leftmostOpenBackSlot(ctx.state, side);
     if (slot === null) break;
     const share = fit === count ? null : Math.floor(total / fit) + (index < total % fit ? 1 : 0);
-    created.push(createInPlay(ctx, share === null ? printing : withSpark(printing, share), side, variant, slot));
+    created.push(createInPlay(ctx, share === null ? printing : withSpark(printing, share), side, variant, slot, awakened));
   }
   return created;
 }

@@ -1,3 +1,6 @@
+import { keyword, self } from "../../engine/dsl/builders";
+import { onChallenge, triggered } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 193,
   art: { x: 0.903, y: 0.212, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    keyword("awakened"),
+    triggered(onChallenge(), gainSpark(self(), variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "29c91cm6ckg",
 });

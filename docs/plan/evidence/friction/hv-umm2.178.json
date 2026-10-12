@@ -1,0 +1,48 @@
+{
+  "bead": "hv-umm2.178",
+  "phase": 5,
+  "implementMin": 50.442,
+  "implementWindow": {
+    "start": "2026-10-12T14:11:16+00:00",
+    "end": "2026-10-12T15:01:42.495984+00:00"
+  },
+  "localValidationS": {
+    "ready-baseline": 5.037,
+    "ready-baseline-corrected": 6.336,
+    "ready-focus": 4.548,
+    "ready-focus-pending": 5.781,
+    "ready-focus-funded": 4.12,
+    "preflight": 0.823,
+    "owning": 7.228,
+    "scenarios-focus": 3.094,
+    "final-focus": 5.278,
+    "review": 52.217,
+    "full": 178.301,
+    "knip": 3.39,
+    "sweep": 346.35,
+    "fuzz": 127.492,
+    "final-focus-derived": 4.269,
+    "review-final": 45.93,
+    "full-final": 82.843,
+    "schema": 0.115,
+    "schema-own": 0.102
+  },
+  "hostLoad": 6.2509765625,
+  "testDelta": {
+    "files": 0,
+    "lines": 192,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "missing-primitive",
+      "minutes": 11.2,
+      "note": "Read-only ready-entry diagnosis and native scope recovery14:15:03 first helper observation through14:26:15 admission; conservative observation-to-admission scope, exact dispatch unknown. Phase5 small-extension authority supplies bounded flag, all acceptance retained."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 5.060604,
+      "note": "Actual full first capacity-fixture failure start through corrected10-case green end14:29:09.162934\u201314:34:12.799180Z, including rank-size/pending-output/Interrupt-funding corrections. Intended negative product witnesses classified separately. Whole implementMin includes this interval."
+    }
+  ]
+}

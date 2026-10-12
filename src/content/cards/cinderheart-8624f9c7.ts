@@ -1,3 +1,7 @@
+import { self } from "../../engine/dsl/builders";
+import { onDissolved, triggered, whenAbandon } from "../../engine/dsl/triggers";
+import { thisCharacterSpark } from "../../engine/dsl/values";
+import { gainPoints, gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +25,10 @@ export default card({
   cardNumber: 294,
   art: { x: 0, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(whenAbandon(), gainSpark(self(), variant.amplified ? 2 : 1)),
+    // Departure retains effective spark, including gains, for this reward (RD460-1).
+    triggered(onDissolved(), gainPoints(thisCharacterSpark())),
+  ],
+  verifiedText: "22u10kerrps",
 });

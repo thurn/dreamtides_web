@@ -1,0 +1,1234 @@
+{
+  "bead": "hv-umm2.178",
+  "base": "4b2a913db80476fe17cbfb52e75fd50e7c02a7cd",
+  "status": "LOCALLY VALIDATED; parent exact cold core review/certified promotion owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T14:11:16+00:00",
+    "startProvenance": "Parent claim ACK, explicitly authorized conservative ownership proxy including parent install/preparation and all helper research/diagnostics/native admission/implementation/coordination/waits/checks. Exact helper dispatch boundary unknown.",
+    "parentPredispatchUtc": "2026-10-12T14:13:36Z",
+    "parentPostdispatchUtc": "2026-10-12T14:15:04.155978Z",
+    "helperFirstObservedUtc": "2026-10-12T14:15:03Z",
+    "implementationAckUtc": "2026-10-12T14:26:15Z",
+    "syntheticFixtureAckUtc": "2026-10-12T14:40:59Z",
+    "endUtc": "2026-10-12T15:01:42.495984+00:00",
+    "endProvenance": "Actual final precommit cutoff after ordinary checks/QA cleanup and evidence repair; final standalone schema and commit tail excluded, qualified. Git records the actual commit timestamp."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review:full prepare/lint/typechecks startup14:53:13.443\u201314:53:14.207Z"
+      }
+    }
+  },
+  "scope": {
+    "sourcePaths": [
+      "src/content/cards/inferno-s-herald-01a8482b.ts",
+      "src/content/cards/legion-lieutenant-4b4cc613.ts",
+      "src/content/cards/cinderheart-8624f9c7.ts",
+      "src/content/cards/cloudback-courier-b4df0b25.ts",
+      "src/engine/effects/primitives/materialize-figments.ts",
+      "src/engine/rules/figments.ts",
+      "src/engine/rules/zones.ts",
+      "src/engine/effects/primitives/contracts/materialize-figments-awakened.contracts.ts",
+      "src/content/specs/cards-66.scenarios.ts",
+      "src/content/specs/abandonment-fixture.ts",
+      "src/content/specs/specs.test.ts"
+    ],
+    "productionChangedLines": 66,
+    "testDelta": {
+      "newScenarioLines": 82,
+      "newContractLines": 97,
+      "newSyntheticFixtureLines": 12,
+      "existingSpecsCatalogNet": 1,
+      "net": 192,
+      "entrypoints": 0,
+      "jsdomFiles": 0,
+      "newBehaviorCases": 18
+    },
+    "extension": "materializeFigments optional awakened flag omitted unless true; createFigments/createInPlay trailing defaultfalse arguments. Ready initialized before materialized emits, no lasting keyword; old callers/copies/default catalog keywords and group capacity preserved.",
+    "newPrimitiveOps": [],
+    "newKindsStatusesVisuals": [],
+    "rulesDecisionsUsed": [
+      "RD-hv-umm2.460-1",
+      "RD-hv-umm2.342-1",
+      "RD-hv-umm2.93-2"
+    ],
+    "newRulesDecisions": [],
+    "cardIssues": [],
+    "printedFields": "All four immutable catalog prefixes checked byte-identical against base. Only pending replaced by abilities/verifiedText plus imports.",
+    "verifiedText": [
+      {
+        "id": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+        "hash": "1rchgr2njfr"
+      },
+      {
+        "id": "8624f9c7-dc92-4f4a-9c79-319b9c121b19",
+        "hash": "22u10kerrps"
+      },
+      {
+        "id": "b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+        "hash": "29c91cm6ckg"
+      },
+      {
+        "id": "4b4cc613-2e28-4851-975f-14146286a062",
+        "hash": "15lr0l75uv5"
+      }
+    ],
+    "D20": "Eight subject scenarios use local synthetic abandonment driver, derive ancillary costs/base spark and rewards from public captured departure spark. Existing owning LKI contracts cover temporary/Support expiry; no production helper dependency."
+  },
+  "fallout": {
+    "inventory": "/tmp/dreamtides-executor-01a12e91/178-ready-entry-fallout.txt",
+    "exports": [
+      "MaterializeFigmentsNode",
+      "materializeFigments",
+      "createFigments",
+      "createInPlay"
+    ],
+    "consumers": "Optional/defaulted parameters preserve consumers; Lieutenant opts in. No registry/other consumer bodies. Test-only SYNTHETIC_ABANDONER is imported by the scenario and existing spec catalog only."
+  },
+  "sourceSHA256": {
+    "src/content/cards/inferno-s-herald-01a8482b.ts": "053956fc87d3d39c63a3e6c0ef6ac6bf9d6b1c9946ac589606f074a498ae54a9",
+    "src/content/cards/legion-lieutenant-4b4cc613.ts": "83d54bb5b2950b9bd3a8f09211af6a0f4a1a2493e6a5f5691d784905fa090049",
+    "src/content/cards/cinderheart-8624f9c7.ts": "ebf54deaba48b56703592f2a2e85b457be95be84263d2791bd2e1e1289ae1eb4",
+    "src/content/cards/cloudback-courier-b4df0b25.ts": "10553751f9afd5c03b7e54b945142292da412bc99e0784601dba23e47f61edc4",
+    "src/engine/effects/primitives/materialize-figments.ts": "4a02034bb87c04396edb77086a513221c615958a923e914ee9fea4787b5bbee7",
+    "src/engine/rules/figments.ts": "494c4ac6a91517e4d6565d5fced6305b4637aee7adb8b24d7b09b23415b738b7",
+    "src/engine/rules/zones.ts": "8b11b0695358ccc158bc924e7fb3b77465c2b57d902436fc71858e3c5de0a79e",
+    "src/engine/effects/primitives/contracts/materialize-figments-awakened.contracts.ts": "fc4ec5f49ec652b2b9db92ae851b845801b7500b471ef1b45c96e27b41cc5050",
+    "src/content/specs/cards-66.scenarios.ts": "7662fd8d40108b74dc13afcc87da5fe6dbbf0fd71ae2b7a39dc267fb61db6a79",
+    "src/content/specs/abandonment-fixture.ts": "4f12bd090888743309953ffe3fa3cee7d069c616afa465d949eaeb24de39aefa",
+    "src/content/specs/specs.test.ts": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3"
+  },
+  "validation": [
+    {
+      "name": "ready-baseline",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize figments with awakened"
+      ],
+      "pid": 65714,
+      "startUtc": "2026-10-12T14:29:09.162934+00:00",
+      "endUtc": "2026-10-12T14:29:14.200322+00:00",
+      "wallS": 5.037,
+      "exit": 1,
+      "log": "/tmp/hv-178-ready-baseline.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "ready-baseline-corrected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize figments with awakened"
+      ],
+      "pid": 85197,
+      "startUtc": "2026-10-12T14:29:43.951436+00:00",
+      "endUtc": "2026-10-12T14:29:50.287285+00:00",
+      "wallS": 6.336,
+      "exit": 1,
+      "log": "/tmp/hv-178-ready-baseline-corrected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "ready-focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize figments with awakened"
+      ],
+      "pid": 73390,
+      "startUtc": "2026-10-12T14:31:38.598710+00:00",
+      "endUtc": "2026-10-12T14:31:43.146904+00:00",
+      "wallS": 4.548,
+      "exit": 1,
+      "log": "/tmp/hv-178-ready-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "ready-focus-pending",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize figments with awakened"
+      ],
+      "pid": 47464,
+      "startUtc": "2026-10-12T14:33:41.615445+00:00",
+      "endUtc": "2026-10-12T14:33:47.396823+00:00",
+      "wallS": 5.781,
+      "exit": 1,
+      "log": "/tmp/hv-178-ready-focus-pending.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "ready-focus-funded",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize figments with awakened"
+      ],
+      "pid": 72413,
+      "startUtc": "2026-10-12T14:34:08.678952+00:00",
+      "endUtc": "2026-10-12T14:34:12.799180+00:00",
+      "wallS": 4.12,
+      "exit": 0,
+      "log": "/tmp/hv-178-ready-focus-funded.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "01a8482b-5b4f-4c49-8791-2702cb5dfd3d,4b4cc613-2e28-4851-975f-14146286a062,8624f9c7-dc92-4f4a-9c79-319b9c121b19,b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 76702,
+      "startUtc": "2026-10-12T14:34:51.950816+00:00",
+      "endUtc": "2026-10-12T14:34:52.773571+00:00",
+      "wallS": 0.823,
+      "exit": 0,
+      "log": "/tmp/hv-178-preflight.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "owning",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "src/engine/rules/zones.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/fold/fold-prompts.test.ts"
+      ],
+      "pid": 3247,
+      "startUtc": "2026-10-12T14:35:32.764593+00:00",
+      "endUtc": "2026-10-12T14:35:39.992281+00:00",
+      "wallS": 7.228,
+      "exit": 0,
+      "log": "/tmp/hv-178-owning.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "scenarios-focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-66"
+      ],
+      "pid": 53019,
+      "startUtc": "2026-10-12T14:38:53.602827+00:00",
+      "endUtc": "2026-10-12T14:38:56.696904+00:00",
+      "wallS": 3.094,
+      "exit": 0,
+      "log": "/tmp/hv-178-scenarios-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "cards-66|materialize figments with awakened|scenario registry"
+      ],
+      "pid": 37502,
+      "observerPid": 37491,
+      "startUtc": "2026-10-12T14:42:20.370555+00:00",
+      "endUtc": "2026-10-12T14:42:25.648983+00:00",
+      "wallS": 5.278,
+      "exit": 0,
+      "log": "/tmp/hv-178-final-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 5007,
+      "observerPid": 4851,
+      "startUtc": "2026-10-12T14:43:15.932505+00:00",
+      "endUtc": "2026-10-12T14:44:08.160034+00:00",
+      "wallS": 52.217,
+      "exit": 0,
+      "log": "/tmp/hv-178-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 16835,
+      "observerPid": 16822,
+      "startUtc": "2026-10-12T14:44:36.939287+00:00",
+      "endUtc": "2026-10-12T14:47:35.243217+00:00",
+      "wallS": 178.301,
+      "exit": 0,
+      "log": "/tmp/hv-178-full.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 16934,
+      "observerPid": 16920,
+      "startUtc": "2026-10-12T14:44:38.092594+00:00",
+      "endUtc": "2026-10-12T14:44:41.482494+00:00",
+      "wallS": 3.39,
+      "exit": 0,
+      "log": "/tmp/hv-178-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.178",
+        "--cards",
+        "01a8482b-5b4f-4c49-8791-2702cb5dfd3d,4b4cc613-2e28-4851-975f-14146286a062,8624f9c7-dc92-4f4a-9c79-319b9c121b19,b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 28455,
+      "observerPid": 28443,
+      "startUtc": "2026-10-12T14:46:25.931468+00:00",
+      "endUtc": "2026-10-12T14:52:12.286112+00:00",
+      "wallS": 346.35,
+      "exit": 0,
+      "log": "/tmp/hv-178-sweep.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "01a8482b-5b4f-4c49-8791-2702cb5dfd3d,4b4cc613-2e28-4851-975f-14146286a062,8624f9c7-dc92-4f4a-9c79-319b9c121b19,b4df0b25-0c46-4faa-8db6-84f5f3c3444b"
+      ],
+      "pid": 39740,
+      "observerPid": 39730,
+      "startUtc": "2026-10-12T14:48:04.949379+00:00",
+      "endUtc": "2026-10-12T14:50:12.443840+00:00",
+      "wallS": 127.492,
+      "exit": 0,
+      "log": "/tmp/hv-178-fuzz.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-focus-derived",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "cards-66|materialize figments with awakened|scenario registry"
+      ],
+      "pid": 16486,
+      "observerPid": 16472,
+      "startUtc": "2026-10-12T14:49:49.602473+00:00",
+      "endUtc": "2026-10-12T14:49:53.871850+00:00",
+      "wallS": 4.269,
+      "exit": 0,
+      "log": "/tmp/hv-178-final-focus-derived.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 51586,
+      "observerPid": 51577,
+      "startUtc": "2026-10-12T14:51:44.576357+00:00",
+      "endUtc": "2026-10-12T14:52:30.507458+00:00",
+      "wallS": 45.93,
+      "exit": 0,
+      "log": "/tmp/hv-178-review-final.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "full-final",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 53728,
+      "observerPid": 53716,
+      "startUtc": "2026-10-12T14:53:13.251013+00:00",
+      "endUtc": "2026-10-12T14:54:36.094767+00:00",
+      "wallS": 82.843,
+      "exit": 0,
+      "log": "/tmp/hv-178-full-final.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 32250,
+      "observerPid": 32236,
+      "startUtc": "2026-10-12T14:57:42.232071+00:00",
+      "endUtc": "2026-10-12T14:57:42.346745+00:00",
+      "wallS": 0.115,
+      "exit": 0,
+      "log": "/tmp/hv-178-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "schema-own",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 33674,
+      "observerPid": 33660,
+      "startUtc": "2026-10-12T15:00:14.196149+00:00",
+      "endUtc": "2026-10-12T15:00:14.297845+00:00",
+      "wallS": 0.102,
+      "exit": 0,
+      "log": "/tmp/hv-178-schema-own.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "parentInstall": {
+    "command": [
+      "npm",
+      "install"
+    ],
+    "pid": 74109,
+    "start": "2026-10-12T14:11:58.451281+00:00",
+    "end": "2026-10-12T14:12:01.472836+00:00",
+    "wallS": 3.021555,
+    "exit": 0,
+    "log": "/tmp/dreamtides-executor-01a12e91/178-install.log",
+    "terminal": true
+  },
+  "diagnostics": [
+    {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.mts"
+      ],
+      "pid": 70857,
+      "startUtc": "2026-10-12T14:19:07.614608+00:00",
+      "endUtc": "2026-10-12T14:19:08.835642+00:00",
+      "wallS": 1.2209184169987566,
+      "exit": 1,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.log"
+    },
+    {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.mts"
+      ],
+      "pid": 71708,
+      "startUtc": "2026-10-12T14:19:39.226940+00:00",
+      "endUtc": "2026-10-12T14:19:40.520192+00:00",
+      "wallS": 1.2931626249992405,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.log"
+    }
+  ],
+  "corrections": {
+    "diagnosticReference": {
+      "startUtc": "2026-10-12T14:19:07.614608+00:00",
+      "endUtc": "2026-10-12T14:19:40.520192+00:00",
+      "wallS": 32.905584,
+      "cause": "Own initial fixture passed CapturedCardsSpec to CharacterRef awaken. Corrected after-entry approximation uses all own figments with no prior figments; both receipts retained."
+    },
+    "capacityFixtures": {
+      "startUtc": "2026-10-12T14:29:09.162934+00:00",
+      "endUtc": "2026-10-12T14:34:12.799180+00:00",
+      "wallS": 303.636246,
+      "minutes": 5.060604100000001
+    },
+    "baselineClassification": {
+      "ready-baseline": "2 intended missing-entry failures +4 rank-size fixture errors",
+      "ready-baseline-corrected": "4 intended missing-entry/partial-output failures +2 full-board announcement fixture errors",
+      "ready-focus": "8pass +2 full-board announcement fixture errors after production repair",
+      "ready-focus-pending": "8pass +2 unfunded Interrupt fixture errors",
+      "ready-focus-funded": "10pass"
+    },
+    "syntheticDriver": {
+      "startProxyUtc": "2026-10-12T14:37:20Z",
+      "endUtc": "2026-10-12T14:42:25.648983+00:00",
+      "windowS": 305.648983,
+      "provenance": "Conservative timestamped decision/draft checkpoint through corrected synthetic19-focus green; exact initial edit boundary unknown. Intermediate Pyreling8-focus is not final acceptance."
+    },
+    "testQuality": {
+      "fullAffectedWindowStartUtc": "2026-10-12T14:42:20.370555+00:00",
+      "endUtc": "2026-10-12T14:54:36.094767+00:00",
+      "windowS": 735.724212,
+      "qualification": "Conservative affected validation/correction scope from first intermediate19-focus through finalfull. Includes intermediate quick/full plus final ancillary-data correction/revalidation, not an exact productive-edit duration. Parent finding receipt boundary unknown; full claim includes it."
+    },
+    "qaAudit": {
+      "initialReceipt": "/tmp/hv-178-qa-final-audit-attempt1.json",
+      "firstObservedUtc": "2026-10-12T14:53:14.481852+00:00",
+      "correctedEndUtc": "2026-10-12T14:54:00.624553+00:00",
+      "observationBoundS": 46.142701,
+      "qualification": "Initial audit command start unknown; observation-to-success interval excludes that prefix, whole claim includes it.",
+      "cause": "Own extraction guessed lab.uuid/controller, giving44false identity mismatches; corrected actual lab.card/side after payload inspection. Final44pass raw reports have zero issues, no QA/product defect."
+    },
+    "evidenceBuilder": {
+      "firstFailureObservedUtc": "2026-10-12T14:57:42.232071+00:00",
+      "qualification": "Schema-command start immediately after failed builder is an upper-bound observation, not exact builder start. Initial command/tool wall0.060458s; subprocess PID/start not captured. Whole claim includes builder/coordination/correction.",
+      "cause": "Own broad JSON glob included a list-valued hash file; sorting attempted .get before dict filtering. Failed before own evidence writes. Fixed filter before sort. First schema0/.115s validated existing records only, not the absent own record.",
+      "correctedOwnSchema": {
+        "name": "schema-own",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 33674,
+        "observerPid": 33660,
+        "startUtc": "2026-10-12T15:00:14.196149+00:00",
+        "endUtc": "2026-10-12T15:00:14.297845+00:00",
+        "wallS": 0.102,
+        "exit": 0,
+        "log": "/tmp/hv-178-schema-own.log",
+        "terminal": true,
+        "ports": []
+      },
+      "observationToSuccessfulSchemaS": 152.065774,
+      "fullEvidenceDraftRepairWindow": {
+        "startProxyUtc": "2026-10-12T14:54:41Z",
+        "endUtc": "2026-10-12T15:00:14.297845+00:00",
+        "minutes": 5.554964083333333,
+        "qualification": "Conservative actual finalfull observation before first evidence drafting through successful corrected-own-schema end, includes all draft/failure/coordination/rewrite. Exact first failed subprocess boundary unknown; observation-only subwindow is not presented as full repair."
+      }
+    },
+    "readOnlyLookupErrors": "Some guessed paths/unmatched globs failed during research; corrected via discovery. Exact read subprocess PIDs/durations unknown, not fabricated; full claim includes research."
+  },
+  "qa": {
+    "preflight": {
+      "pass": 44,
+      "skip": 36,
+      "pending": 0,
+      "fail": 0,
+      "variants": "all",
+      "as": "both"
+    },
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-sjxs1C",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.178/invocations/sweep-sjxs1C",
+      "counts": {
+        "pass": 44,
+        "skip": 36
+      },
+      "attemptCounts": {
+        "pass": 44,
+        "skip": 36
+      },
+      "hostLoad": 6.392578125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1359,
+        "scenario": 344208.159209,
+        "cleanup": 599.039208000002,
+        "execution": 346226.649291,
+        "total": 346231.649291
+      }
+    },
+    "rawAudit": "/tmp/hv-178-qa-final-audit.json",
+    "rawPassReports": 44,
+    "rawErrors": 0,
+    "rawCaps": 0,
+    "rawFailureKinds": 0,
+    "cellIdentityMatches": true,
+    "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.178.jsonl",
+    "captures": [],
+    "judged": {
+      "count": 0,
+      "reason": "D21 bytes115/99/139/107 unsampled; ready entry uses existing exhaustion indicator, no new kind/status/visual."
+    },
+    "recordedCommit": "4b2a913db80476fe17cbfb52e75fd50e7c02a7cd",
+    "provenance": "Dirty owned WT before final commit; recorded HEAD is base, not a committed-source claim. All7 production hashes unchanged through final test-only correction. Final sourceSHA256 binds app and finaltests; QA-time scenario hash differs only by documented test-only ancillary-value correction.",
+    "qaTimeScenarioSHA256": "9ad46be483fc60dc95b357dcecc5e12783d466f7b222865635d6f9251d90a157",
+    "contract": "Prescribed card-play/resolution sweep. Dawn/abandonment interactions D20; Challenge owning trigger/gain contracts and weighted fuzz. No blanket all-ability browser claim."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 137979,
+    "failures": 0,
+    "engineWallS": 125.9,
+    "cpuS": 138.3,
+    "commandWallS": 127.492,
+    "heavyWaitS": null,
+    "waitProvenance": "No separately instrumented acquisition instant. Entire command wall includes queue/startup/shutdown.",
+    "targets": [
+      {
+        "uuid": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+        "included": 620,
+        "exercised": 236
+      },
+      {
+        "uuid": "4b4cc613-2e28-4851-975f-14146286a062",
+        "included": 611,
+        "exercised": 196
+      },
+      {
+        "uuid": "8624f9c7-dc92-4f4a-9c79-319b9c121b19",
+        "included": 612,
+        "exercised": 219
+      },
+      {
+        "uuid": "b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+        "included": 614,
+        "exercised": 272
+      }
+    ]
+  },
+  "heavyChecks": {
+    "initialFull": {
+      "wallS": 178.301,
+      "firstPrepareUtc": "2026-10-12T14:45:59.566Z",
+      "waitPlusStartupUpperBoundS": 82.626713,
+      "provenance": "Actual own lockf wait observed14:45:54 with peer16115 holder untouched. First prepare bounds wait+startup, not exact acquisition/compute. Parent later WAIT instruction was a stale observation after terminal; no signals sent."
+    },
+    "finalFull": {
+      "wallS": 82.843,
+      "tests": 5313,
+      "files": 349,
+      "build": "pass",
+      "reason": "Required because existing test-catalog input changed. Meaningful D20-only quality correction requires final rerun.",
+      "heavyWaitS": null
+    }
+  },
+  "review": {
+    "quickFinal": {
+      "wallS": 45.93,
+      "tests": 4322,
+      "lint": "pass",
+      "typechecks": "pass",
+      "cycles": "pass"
+    },
+    "knip": "Standalone outsideheavy3.390s green; subsequent numeric spec-only correction changes no imports/export graph. Finalfull also checks Knip.",
+    "independent": "Required core-review; parent fresh read-only gpt-5.6-sol CodexCLI exact final range under human override until2026-10-14T01:00Z. No helper provider or Claude attempt."
+  },
+  "failurePaths": {
+    "midStepError": {
+      "tests": [
+        "src/engine/effects/primitives/contracts/materialize-nth-trigger.contracts.ts:262",
+        "src/engine/effects/primitives/contracts/materialize.contracts.ts:253"
+      ],
+      "basis": "Actual figment creation then thrown resolution rolls back committed state, published changes, counts and triggers. New boolean initializes existing status before the existing creation event inside the same cloned step transaction."
+    },
+    "partialWrite": {
+      "tests": [
+        "src/engine/effects/primitives/contracts/materialize-nth-trigger.contracts.ts:262",
+        "src/engine/fold/fold.test.ts:46"
+      ],
+      "basis": "Existing error/prefix-divergence contracts preserve committed state. No new store or asynchronous write seam."
+    },
+    "reloadRestart": {
+      "tests": [
+        "src/engine/effects/primitives/contracts/materialize.contracts.ts:215",
+        "src/engine/effects/primitives/contracts/last-known-source-spark.contracts.ts"
+      ],
+      "basis": "Existing JSON prefix/fresh fold reload resolves once and preserves departure information. Initialized exhausted status already serializes; no new persisted protocol/loader. Default flag omitted from nodes."
+    },
+    "invalidStaleInput": {
+      "tests": [
+        "src/engine/effects/primitives/contracts/materialize.contracts.ts:215",
+        "src/engine/fold/fold-intents.test.ts:31",
+        "src/engine/fold/fold-intents.test.ts:76"
+      ],
+      "basis": "Existing action/prompt boundaries reject illegal/foreign/stale input. Authored ready-entry flag creates no player input or prompt."
+    },
+    "concurrentActors": {
+      "tests": [
+        "src/engine/effects/primitives/contracts/materialize.contracts.ts:215",
+        "src/engine/fold/fold-intents.test.ts"
+      ],
+      "basis": "Existing fold rejects competing actions during an in-flight step. New contracts also exercise a real Interrupt filling capacity before pending summon resolution."
+    },
+    "newOption": {
+      "tests": [
+        "src/engine/effects/primitives/contracts/materialize-figments-awakened.contracts.ts"
+      ],
+      "basis": "Both controllers/default/ready/catalog keyword; entry matcher, no subsequent exhaustion event or lasting grant; partial distribution and existing/no-space preservation. No new UI/status/event kind."
+    }
+  },
+  "runtime": {
+    "commands": [
+      {
+        "name": "ready-baseline",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "materialize figments with awakened"
+        ],
+        "pid": 65714,
+        "startUtc": "2026-10-12T14:29:09.162934+00:00",
+        "endUtc": "2026-10-12T14:29:14.200322+00:00",
+        "wallS": 5.037,
+        "exit": 1,
+        "log": "/tmp/hv-178-ready-baseline.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "ready-baseline-corrected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "materialize figments with awakened"
+        ],
+        "pid": 85197,
+        "startUtc": "2026-10-12T14:29:43.951436+00:00",
+        "endUtc": "2026-10-12T14:29:50.287285+00:00",
+        "wallS": 6.336,
+        "exit": 1,
+        "log": "/tmp/hv-178-ready-baseline-corrected.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "ready-focus",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "materialize figments with awakened"
+        ],
+        "pid": 73390,
+        "startUtc": "2026-10-12T14:31:38.598710+00:00",
+        "endUtc": "2026-10-12T14:31:43.146904+00:00",
+        "wallS": 4.548,
+        "exit": 1,
+        "log": "/tmp/hv-178-ready-focus.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "ready-focus-pending",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "materialize figments with awakened"
+        ],
+        "pid": 47464,
+        "startUtc": "2026-10-12T14:33:41.615445+00:00",
+        "endUtc": "2026-10-12T14:33:47.396823+00:00",
+        "wallS": 5.781,
+        "exit": 1,
+        "log": "/tmp/hv-178-ready-focus-pending.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "ready-focus-funded",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "materialize figments with awakened"
+        ],
+        "pid": 72413,
+        "startUtc": "2026-10-12T14:34:08.678952+00:00",
+        "endUtc": "2026-10-12T14:34:12.799180+00:00",
+        "wallS": 4.12,
+        "exit": 0,
+        "log": "/tmp/hv-178-ready-focus-funded.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "preflight",
+        "command": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "01a8482b-5b4f-4c49-8791-2702cb5dfd3d,4b4cc613-2e28-4851-975f-14146286a062,8624f9c7-dc92-4f4a-9c79-319b9c121b19,b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "pid": 76702,
+        "startUtc": "2026-10-12T14:34:51.950816+00:00",
+        "endUtc": "2026-10-12T14:34:52.773571+00:00",
+        "wallS": 0.823,
+        "exit": 0,
+        "log": "/tmp/hv-178-preflight.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "owning",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/rules/figments.test.ts",
+          "src/engine/rules/zones.test.ts",
+          "src/engine/content-gates.test.ts",
+          "src/engine/fold/fold.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/fold/fold-prompts.test.ts"
+        ],
+        "pid": 3247,
+        "startUtc": "2026-10-12T14:35:32.764593+00:00",
+        "endUtc": "2026-10-12T14:35:39.992281+00:00",
+        "wallS": 7.228,
+        "exit": 0,
+        "log": "/tmp/hv-178-owning.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "scenarios-focus",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-66"
+        ],
+        "pid": 53019,
+        "startUtc": "2026-10-12T14:38:53.602827+00:00",
+        "endUtc": "2026-10-12T14:38:56.696904+00:00",
+        "wallS": 3.094,
+        "exit": 0,
+        "log": "/tmp/hv-178-scenarios-focus.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "final-focus",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "cards-66|materialize figments with awakened|scenario registry"
+        ],
+        "pid": 37502,
+        "observerPid": 37491,
+        "startUtc": "2026-10-12T14:42:20.370555+00:00",
+        "endUtc": "2026-10-12T14:42:25.648983+00:00",
+        "wallS": 5.278,
+        "exit": 0,
+        "log": "/tmp/hv-178-final-focus.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 5007,
+        "observerPid": 4851,
+        "startUtc": "2026-10-12T14:43:15.932505+00:00",
+        "endUtc": "2026-10-12T14:44:08.160034+00:00",
+        "wallS": 52.217,
+        "exit": 0,
+        "log": "/tmp/hv-178-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "full",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 16835,
+        "observerPid": 16822,
+        "startUtc": "2026-10-12T14:44:36.939287+00:00",
+        "endUtc": "2026-10-12T14:47:35.243217+00:00",
+        "wallS": 178.301,
+        "exit": 0,
+        "log": "/tmp/hv-178-full.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 16934,
+        "observerPid": 16920,
+        "startUtc": "2026-10-12T14:44:38.092594+00:00",
+        "endUtc": "2026-10-12T14:44:41.482494+00:00",
+        "wallS": 3.39,
+        "exit": 0,
+        "log": "/tmp/hv-178-knip.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "sweep",
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.178",
+          "--cards",
+          "01a8482b-5b4f-4c49-8791-2702cb5dfd3d,4b4cc613-2e28-4851-975f-14146286a062,8624f9c7-dc92-4f4a-9c79-319b9c121b19,b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "pid": 28455,
+        "observerPid": 28443,
+        "startUtc": "2026-10-12T14:46:25.931468+00:00",
+        "endUtc": "2026-10-12T14:52:12.286112+00:00",
+        "wallS": 346.35,
+        "exit": 0,
+        "log": "/tmp/hv-178-sweep.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "fuzz",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "01a8482b-5b4f-4c49-8791-2702cb5dfd3d,4b4cc613-2e28-4851-975f-14146286a062,8624f9c7-dc92-4f4a-9c79-319b9c121b19,b4df0b25-0c46-4faa-8db6-84f5f3c3444b"
+        ],
+        "pid": 39740,
+        "observerPid": 39730,
+        "startUtc": "2026-10-12T14:48:04.949379+00:00",
+        "endUtc": "2026-10-12T14:50:12.443840+00:00",
+        "wallS": 127.492,
+        "exit": 0,
+        "log": "/tmp/hv-178-fuzz.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "final-focus-derived",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "cards-66|materialize figments with awakened|scenario registry"
+        ],
+        "pid": 16486,
+        "observerPid": 16472,
+        "startUtc": "2026-10-12T14:49:49.602473+00:00",
+        "endUtc": "2026-10-12T14:49:53.871850+00:00",
+        "wallS": 4.269,
+        "exit": 0,
+        "log": "/tmp/hv-178-final-focus-derived.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review-final",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 51586,
+        "observerPid": 51577,
+        "startUtc": "2026-10-12T14:51:44.576357+00:00",
+        "endUtc": "2026-10-12T14:52:30.507458+00:00",
+        "wallS": 45.93,
+        "exit": 0,
+        "log": "/tmp/hv-178-review-final.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "full-final",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 53728,
+        "observerPid": 53716,
+        "startUtc": "2026-10-12T14:53:13.251013+00:00",
+        "endUtc": "2026-10-12T14:54:36.094767+00:00",
+        "wallS": 82.843,
+        "exit": 0,
+        "log": "/tmp/hv-178-full-final.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 32250,
+        "observerPid": 32236,
+        "startUtc": "2026-10-12T14:57:42.232071+00:00",
+        "endUtc": "2026-10-12T14:57:42.346745+00:00",
+        "wallS": 0.115,
+        "exit": 0,
+        "log": "/tmp/hv-178-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "schema-own",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 33674,
+        "observerPid": 33660,
+        "startUtc": "2026-10-12T15:00:14.196149+00:00",
+        "endUtc": "2026-10-12T15:00:14.297845+00:00",
+        "wallS": 0.102,
+        "exit": 0,
+        "log": "/tmp/hv-178-schema-own.log",
+        "terminal": true,
+        "ports": []
+      }
+    ],
+    "diagnostics": [
+      {
+        "command": [
+          "npx",
+          "tsx",
+          "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.mts"
+        ],
+        "pid": 70857,
+        "startUtc": "2026-10-12T14:19:07.614608+00:00",
+        "endUtc": "2026-10-12T14:19:08.835642+00:00",
+        "wallS": 1.2209184169987566,
+        "exit": 1,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.log"
+      },
+      {
+        "command": [
+          "npx",
+          "tsx",
+          "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.mts"
+        ],
+        "pid": 71708,
+        "startUtc": "2026-10-12T14:19:39.226940+00:00",
+        "endUtc": "2026-10-12T14:19:40.520192+00:00",
+        "wallS": 1.2931626249992405,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/178-awakened-figment-witness.log"
+      }
+    ],
+    "parentInstall": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "pid": 74109,
+      "start": "2026-10-12T14:11:58.451281+00:00",
+      "end": "2026-10-12T14:12:01.472836+00:00",
+      "wallS": 3.021555,
+      "exit": 0,
+      "log": "/tmp/dreamtides-executor-01a12e91/178-install.log",
+      "terminal": true
+    },
+    "qa": {
+      "runner": 28455,
+      "observer": 28443,
+      "serverPidAndGroup": 28856,
+      "slot": 1,
+      "port": 5274,
+      "mcp": "http://localhost:8931/mcp",
+      "sessionId": "ab4c5feb-dff9-4bd1-a451-29e89b8537a3",
+      "protocol": "2025-11-25",
+      "ownerSnapshot": "/tmp/hv-178-qa-owner-snapshot.json",
+      "terminal": true,
+      "cleanupMs": 599.039208000002,
+      "browserLeaseWaitMs": 5,
+      "proof": "Terminal0 guarded runner closure plus actual14:54:00 audit: own runner/server group and exact owner/server records absent. Own isolated browser/RPC/client/lease lifetime settled, shared service/peer resources untouched."
+    },
+    "remainingOwnedProviders": [],
+    "remainingOwnedBrowsers": [],
+    "remainingOwnedLeases": [],
+    "remainingOwnedServers": [],
+    "uncaptured": "Finite inspection/hash/evidence wrapper PIDs not sampled are unknown; captured child/observer PIDs only. No invented descendant IDs or zero lock waits.",
+    "writers": "Sole helper code/tests frozen after finalD20 derivation. Only own evidence finalization; ordinary runtime jobs terminal before final schema/commit.",
+    "finalSchemaTailReceipt": "/tmp/hv-178-schema-final.json",
+    "precommitResourceObservation": {
+      "observedUtc": "2026-10-12T15:01:42.495984+00:00",
+      "capturedPidIdentitiesChecked": [
+        3247,
+        4851,
+        5007,
+        16472,
+        16486,
+        16822,
+        16835,
+        16920,
+        16934,
+        28443,
+        28455,
+        28856,
+        32236,
+        32250,
+        33660,
+        33674,
+        37491,
+        37502,
+        39730,
+        39740,
+        41869,
+        47464,
+        51577,
+        51586,
+        53019,
+        53716,
+        53728,
+        65714,
+        70857,
+        71708,
+        72413,
+        73390,
+        74109,
+        76702,
+        85197
+      ],
+      "liveMatches": [],
+      "interpretation": "Actual command terminal receipts and QA guarded cleanup establish completion; PID snapshot checks same owned identities only, never authorizes killing any reused peer lifetime."
+    }
+  }
+}
