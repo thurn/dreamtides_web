@@ -375,8 +375,11 @@ answers with a feasible continuation ([Legality by search](#legality-by-search))
 1. **Recorded answers.** `options.prefix` holds the answers recorded by
    earlier runs of this step, replayed in order. For each one, the context
    checks that the replayed prompt's **fingerprint** matches the recorded
-   one, and throws `ReplayDivergence` if not; a recorded answer the prompt
-   does not allow throws `IllegalAnswer`. In a loop replay
+   one using the exact or cost-choice compatibility rules below, and throws
+   `ReplayDivergence` if not; a recorded answer the prompt does not allow
+   throws `IllegalAnswer`. After both checks pass, the context records the
+   answer with the current fingerprint, upgrading an accepted legacy cost
+   record for subsequent saves and replay. In a loop replay
    (`options.replay`), a prompt beyond the recording throws
    `UnrecordedPrompt`.
 2. **Forced answers.** When `config.autoAnswerForcedPrompts` is on (P9) and
@@ -400,10 +403,22 @@ The sources (`steps/sources.ts`):
 
 **The fingerprint** (`prompts/fingerprint.ts`) is a hash of the prompt's
 identifying fields: kind, side, purpose (which names the source), `privateTo`,
-sorted candidates or cards, bounds, mode options, arrangement destinations
-with their counts, and an "unless" cost with whether it is payable. It is the
-safety net for the whole approach: nondeterministic rules code fails loudly on
-the first replay instead of silently corrupting a game.
+sorted candidates or cards, bounds, slot side and positions, mode options
+with any character types and payment alternatives they name, arrangement
+destinations with their counts, an "unless" cost with whether it is payable,
+and the canonical allowed answers of a narrowed prompt. Mode and payment
+order are significant; payment amounts and filter data are included.
+
+A metadata-bearing `chooseCost` prompt uses `cost-choice-v1:<hash>`, where
+`<hash>` is the base-36 hash of those fields. A current versioned recording
+must match exactly, including its payment metadata; unknown version tags
+reject. Only this kind of prompt also accepts an unversioned legacy hash
+that exactly matches either its full fields or its decision surface with
+payment metadata omitted. Other prompts, including metadata-free cost
+choices, compare their established hashes exactly. Fingerprint validation
+and live answer legality both apply before an accepted recording is upgraded.
+This makes prompt replay fail loudly on a changed current decision while
+supporting the two legacy cost-choice representations.
 
 ### Fold integration
 

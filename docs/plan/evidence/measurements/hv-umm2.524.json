@@ -1,0 +1,135 @@
+{
+  "bead": "hv-umm2.524",
+  "base": "918cc26aff8f4ee703e531bd4e6b61829d2668bd",
+  "implementationWindow": {
+    "start": "2026-10-12T09:11:28Z",
+    "end": "2026-10-12T09:19:30.787617+00:00",
+    "scope": "Lower bound on dispatch timestamp used as pre-dispatch proxy through final evidence refresh. Elapsed proxy includes the unmeasured dispatch gap; first inspection provides an elapsed lower bound. Git committer timestamp has one-second granularity and records the short evidence/commit tail.",
+    "elapsedProxyS": 482.787617,
+    "elapsedLowerBoundS": 436.787617
+  },
+  "commands": {
+    "focused": {
+      "wallS": 6.084197707998101,
+      "exit": 0,
+      "wrapperPid": 569,
+      "npmPid": 625,
+      "startedAt": "2026-10-12T09:13:47.764841+00:00",
+      "endedAt": "2026-10-12T09:13:53.849085+00:00",
+      "terminal": true
+    },
+    "focusedFinal": {
+      "wallS": 4.793650584004354,
+      "exit": 0,
+      "wrapperPid": 32065,
+      "npmPid": 32074,
+      "startedAt": "2026-10-12T09:16:45.616534+00:00",
+      "endedAt": "2026-10-12T09:16:50.410223+00:00",
+      "terminal": true
+    },
+    "reviewInitial": {
+      "wallS": 10.993613916994946,
+      "exit": 0,
+      "wrapperPid": 6009,
+      "npmPid": 6031,
+      "startedAt": "2026-10-12T09:14:46.823804+00:00",
+      "endedAt": "2026-10-12T09:14:57.817489+00:00",
+      "terminal": true
+    },
+    "knip": {
+      "wallS": 2.952761874999851,
+      "exit": 0,
+      "wrapperPid": 7840,
+      "npmPid": 7855,
+      "startedAt": "2026-10-12T09:15:12.602920+00:00",
+      "endedAt": "2026-10-12T09:15:15.555705+00:00",
+      "terminal": true
+    },
+    "reviewFinal": {
+      "wallS": 12.760219333998975,
+      "exit": 0,
+      "wrapperPid": 51617,
+      "npmPid": 51633,
+      "startedAt": "2026-10-12T09:17:40.318133+00:00",
+      "endedAt": "2026-10-12T09:17:53.078439+00:00",
+      "terminal": true
+    },
+    "schema": {
+      "wallS": 0.09745629199460382,
+      "exit": 0,
+      "wrapperPid": 60242,
+      "nodePid": 60244,
+      "startedAt": "2026-10-12T09:19:30.788248+00:00",
+      "endedAt": "2026-10-12T09:19:30.885718+00:00",
+      "terminal": true
+    }
+  },
+  "receipts": {
+    "focused": "/tmp/hv-524-focused.log",
+    "focusedFinal": "/tmp/hv-524-focused-final.log",
+    "reviewInitial": "/tmp/hv-524-review.log",
+    "knip": "/tmp/hv-524-knip.log",
+    "reviewFinal": "/tmp/hv-524-review-final.log",
+    "schema": "/tmp/hv-524-schema.log"
+  },
+  "hostLoadSamples": {
+    "beforeReview": 12.53,
+    "finalReviewStart": 26.09619140625
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final required review prepare-stage start 2026-10-12T09:17:40.568Z; exact console receipt retained"
+      },
+      "testDelta.files": {
+        "definition": "Existing Vitest runner entrypoint delta"
+      },
+      "testDelta.lines": {
+        "definition": "32 added plain synthetic contract lines"
+      }
+    }
+  },
+  "testDelta": {
+    "cases": 4,
+    "lines": 32,
+    "runnerFiles": 0,
+    "jsdomFiles": 0
+  },
+  "coverage": [
+    "raw full-metadata legacy acceptance plus independently transcribed pre472/full metadata hash distinction",
+    "raw full-metadata legacy amount/order/filter changes produce ReplayDivergence in the real step runner with unchanged starting-state hash and no energyChanged/pointsScored/discarded payment events"
+  ],
+  "runtime": {
+    "longLived": [],
+    "ports": [],
+    "status": "All finite focused/review/Knip commands terminal exit0. PIDs and start/end timestamps are retained per command. No long-lived process, server, port or browser context started.",
+    "terminalExecSessions": [
+      31594,
+      91296,
+      11746,
+      63982,
+      37784
+    ]
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "mechanicalFallout": [],
+  "verificationScope": "Tests and current protocol documentation only; required review/Knip, no browser/fuzz/local full or additional cold review.",
+  "dispatchBounds": {
+    "before": "2026-10-12T09:11:28Z",
+    "after": "2026-10-12T09:12:36Z",
+    "firstInspectionCompleted": "2026-10-12T09:12:14Z",
+    "provenance": "Parent native dispatch/helper note updated_at values; actual dispatch precedes first inspection completion."
+  },
+  "validationCorrection": "Parent inspection narrowed the no-payment assertion from every observed event to payment-relevant events, preserving trace flexibility. Initial focused/review passes retained; focused and required review repeated for the modified assertion.",
+  "failedCommands": [],
+  "reviewFinal": {
+    "files": 1,
+    "cases": 1458,
+    "vitestS": 3.43,
+    "testStageS": 10.6,
+    "scope": "Existing plain contract hub; required lint/typechecks/cycles/friction checks also passed."
+  },
+  "knipRepeatDisposition": "Initial Knip pass retained after final change narrowed only an existing test assertion; exports/imports unchanged."
+}

@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
 import type { EngineCardDefinition } from "../../../catalog";
 import { activated, additionalCost, choiceCost, discardCost, energy, event, optionalCost, pointsCost } from "../../../dsl/builders";
+import type { PaymentCost } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
+import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { Answer, ChooseModePrompt, Prompt, PromptFingerprint } from "../../../prompts/types";
 import { promptFingerprint } from "../../../prompts/fingerprint";
@@ -13,6 +15,7 @@ import { MalformedPrompt } from "../../../prompts/structure";
 import { cloneState } from "../../../state/clone";
 import { hashString, stateHash } from "../../../state/hash";
 import { ScriptedSource } from "../../../steps/sources";
+import { runStep } from "../../../steps/runner";
 import { boardState } from "../../../testing/board";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { gainPoints } from "../gain-points";
@@ -168,6 +171,35 @@ describe("cost choice compatibility safety", () => {
       expect(() => replay(changed, ctx.answers[0].fingerprint)).toThrow(ReplayDivergence);
     }
   });
+  it("accepts raw full-metadata legacy hashes and distinguishes their independent decision-surface fixtures", () => {
+    const { prompt } = suspended();
+    const full = historical(prompt, "472");
+    expect(full).not.toBe(historical(prompt, "pre472"));
+    expect(replay(prompt, full).answers).toEqual([{ fingerprint: promptFingerprint(prompt), value: 1 }]);
+  });
+  const rawMetadataChanges: readonly [string, readonly (readonly PaymentCost[])[]][] = [
+    ["amount", [[discardCost()], [pointsCost(4)]]],
+    ["alternative order", [[pointsCost(3)], [discardCost()]]],
+    ["discard filter", [[{ cost: "discard", count: 1, filter: { cardType: "character" } }], [pointsCost(3)]]],
+  ];
+  for (const [detail, options] of rawMetadataChanges) {
+    it(`rejects a raw full-metadata legacy record after its ${detail} changes without payment or commitment`, () => {
+      const { prompt, waiting } = suspended();
+      if (waiting.inFlight === null) throw new Error("missing recorded step");
+      const changed: EngineCardDefinition = { ...card, abilities: () => [
+        additionalCost(choiceCost(...options)), additionalCost(optionalCost(pointsCost(1))), event(gainPoints(1)),
+      ] };
+      const step = waiting.inFlight.step;
+      const observed: EngineEvent[] = [];
+      const before = stateHash(waiting.committed);
+      expect(() => runStep(waiting.committed, step, new ScriptedSource([false]), testCatalog([changed]), {
+        prefix: [{ fingerprint: historical(prompt, "472"), value: 1 }],
+        observeEvent: (entry) => observed.push(entry),
+      })).toThrow(ReplayDivergence);
+      expect(stateHash(waiting.committed)).toBe(before);
+      expect(observed.filter((entry) => entry.kind === "energyChanged" || entry.kind === "pointsScored" || entry.kind === "discarded")).toEqual([]);
+    });
+  }
   it("rejects current records when amounts, original payment order, same-arity data, or legality differ", () => {
     const { prompt } = suspended();
     const current = promptFingerprint(prompt);
