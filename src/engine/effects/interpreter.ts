@@ -143,6 +143,7 @@ export function purposeOf(source: AbilitySource, origin: AbilityOrigin, ability:
 
 function promptSource(source: AbilitySource, origin: AbilityOrigin): PromptSource {
   if (typeof source === "string") return source;
+  if (source.kind === "dreamwell" && origin.kind === "dreamwell" && source.id === origin.id) return source;
   if (source.kind === "avatar" && origin.kind === "avatar") return { kind: "avatar", side: source.side, id: origin.id };
   if (source.kind === "dreamsign" && origin.kind === "dreamsign") {
     return { kind: "dreamsign", side: source.side, index: source.index, id: origin.id };

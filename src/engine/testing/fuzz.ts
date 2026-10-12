@@ -487,7 +487,7 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, o
             if ((target.kind === "avatar" || target.kind === "dreamsign") &&
                 (event.kind === "abilityActivated" || (event.kind === "triggerResolved" && event.applied))) {
               const source = event.source;
-              if (source !== null && typeof source !== "string") {
+              if (source !== null && typeof source !== "string" && source.kind !== "dreamwell") {
                 const id = source.kind === "avatar" ? init.avatars?.[source.side] : init.dreamsigns?.[source.side]?.[source.index];
                 if (source.kind === target.kind && id === target.uuid) coverage.exercised += 1;
               }

@@ -2,6 +2,7 @@
 import { chooseOnResolution, conditionHolds, purposeOf, resolveEffect } from "../effects/interpreter";
 import type { QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { originAbilities } from "../rules/activation";
 import { triggerBody } from "./body";
 
 /**
@@ -18,7 +19,9 @@ export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): 
 
 function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   const { source, controller, origin, ability, node, subject, gain, scored, captured, lastKnownSourceSpark, linkedSource } = trigger;
-  const body = triggerBody(ctx.catalog, origin, ability, node);
+  const body = trigger.kind === "dreamwellBonus"
+    ? dreamwellBody(ctx, trigger)
+    : triggerBody(ctx.catalog, origin, ability, node);
   const applied =
     body.condition === null ||
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });
@@ -42,4 +45,15 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     optionalPaid: [],
     choices,
   });
+}
+
+function dreamwellBody(ctx: StepContext, bonus: QueuedTrigger) {
+  const { source, origin, controller } = bonus;
+  if (origin.kind !== "dreamwell" || typeof source === "string" || source.kind !== "dreamwell" ||
+      source.id !== origin.id || source.side !== controller || bonus.node !== null || bonus.subject !== null) {
+    throw new Error("Invalid Dreamwell bonus source");
+  }
+  const ability = originAbilities(ctx.catalog, origin)[bonus.ability];
+  if (ability?.kind !== "event") throw new Error("Dreamwell bonus must be an event ability");
+  return { effect: ability.effect, root: ability.effect, condition: null };
 }

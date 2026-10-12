@@ -23,6 +23,7 @@ export function instanceNumber(id: InstanceId): number {
 }
 
 export type { CardId } from "../../types/card-identity";
+import type { DreamwellCardId } from "../../types/identifiers";
 export type { AvatarId, DreamsignId, DreamwellCardId } from "../../types/identifiers";
 
 /**
@@ -34,13 +35,20 @@ export type EmblemRef =
   | { readonly kind: "dreamsign"; readonly side: Side; readonly index: number };
 
 /** What an ability belongs to: a card instance or an emblem. */
-export type AbilitySource = InstanceId | EmblemRef;
+export interface DreamwellSource {
+  readonly kind: "dreamwell";
+  readonly side: Side;
+  readonly id: DreamwellCardId;
+}
+
+export type AbilitySource = InstanceId | EmblemRef | DreamwellSource;
 
 /** A stable key for an ability source: `i12`, `avatar:player`, `dreamsign:enemy:0`. */
-export type SourceKey = InstanceId | `avatar:${Side}` | `dreamsign:${Side}:${number}`;
+export type SourceKey = InstanceId | `avatar:${Side}` | `dreamsign:${Side}:${number}` | `dreamwell:${Side}:${DreamwellCardId}`;
 
 export function sourceKey(source: AbilitySource): SourceKey {
   if (typeof source === "string") return source;
+  if (source.kind === "dreamwell") return `dreamwell:${source.side}:${source.id}`;
   return source.kind === "avatar" ? `avatar:${source.side}` : `dreamsign:${source.side}:${source.index}`;
 }
 

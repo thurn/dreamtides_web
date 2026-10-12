@@ -1,4 +1,5 @@
 import type { EngineCatalog } from "../catalog";
+import { BASE_VARIANT } from "../dsl/types";
 import type { DreamwellCardId, Side } from "../state/ids";
 import { shuffleInPlace } from "../state/rng";
 import type { BattleState } from "../state/types";
@@ -43,7 +44,8 @@ export function buildDreamwellDeck(
 /**
  * Draws the next Dreamwell card for `side`: its `energyAdded` permanently
  * raises maximum ●, and current ● updates to the new maximum. A Dreamwell
- * card with an unimplemented bonus has only its energy effect.
+ * card with an unimplemented bonus has only its energy effect. Authored
+ * event bonuses join the resolution FIFO after the energy refill.
  */
 export function drawDreamwell(ctx: StepContext, side: Side): void {
   const { state } = ctx;
@@ -62,4 +64,12 @@ export function drawDreamwell(ctx: StepContext, side: Side): void {
   }
   const max = state.sides[side].maxEnergy + definition.energyAdded;
   setEnergy(ctx, side, max, max);
+  if (definition.status !== "authored") return;
+  const source = { kind: "dreamwell", side, id: card } as const;
+  definition.abilities(BASE_VARIANT).forEach((ability, index) => {
+    if (ability.kind !== "event") return;
+    state.triggerQueue.push({ kind: "dreamwellBonus", source, controller: side,
+      origin: { kind: "dreamwell", id: card }, ability: index, node: null, subject: null });
+    ctx.emit({ kind: "triggerQueued", source, controller: side, ability: index, node: null, subject: null });
+  });
 }

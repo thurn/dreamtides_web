@@ -164,7 +164,9 @@ is a keyword; losing it is a permanent floating keyword change.
 
 Emblems (an avatar or a dreamsign) are not instances: an `EmblemRef` names
 one by side (and dreamsign index), and an `AbilitySource` is an `InstanceId`
-or an `EmblemRef`.
+or an `EmblemRef`, or a public Dreamwell source with its drawing side and
+branded catalog UUID. A Dreamwell source pins the drawn card independently
+of later draws from the shared deck.
 
 **Engine code reads every tunable from `BattleState.config`**, never from a
 content module. `BattleConfig` holds the battle rules limits (score to win,
@@ -1670,8 +1672,13 @@ cost-payment history, resolving-only source-spark reads, and hidden-printing
 filters. Omitting `while` makes the static ability unconditional.
 
 Dreamsigns and avatars use the same DSL as emblem abilities (P4). Dreamwell
-cards use event-like abilities; a drawn Dreamwell card applies only its
-`energyAdded` until Phase 5 authors its bonus. Figments are catalog entries.
+cards carry event abilities in their engine definitions. Drawing one raises
+maximum energy and refills current energy, then appends each authored event
+ability to the resolution FIFO as a `dreamwellBonus` record. The existing
+`resolveTrigger` step chooses its modes and targets on resolution and runs
+its effect through the interpreter. An additional draw refills immediately;
+its bonus waits until the current effect finishes. Pending and vanilla
+definitions apply their energy effect. Figments are catalog entries.
 
 ## Transfigurations
 

@@ -240,6 +240,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     if (import.meta.env.DEV) probeHistory?.append({ events, seq });
     const view = engine.view(batch.state, HUMAN);
     const items = presentationItems(events, HUMAN, batch, before, (source) => {
+      if (source !== null && typeof source !== "string" && source.kind === "dreamwell") return dreamwell(source.id)?.name ?? null;
       const instance = typeof source === "string" ? view.instances[source] : undefined;
       return instance === undefined ? null : cards(instance).displaySnapshot.name;
     }, eventStates);
@@ -354,8 +355,8 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   );
   // An ability chooser the human opened is the prompt surface while it offers anything.
   const model = useMemo(
-    () => withChooser(board, abilityChooser, cards, emblemName, engine.catalog),
-    [abilityChooser, board, cards, emblemName, engine],
+    () => withChooser(board, abilityChooser, cards, emblemName, engine.catalog, (id) => dreamwell(id)?.name ?? null),
+    [abilityChooser, board, cards, dreamwell, emblemName, engine],
   );
   const { affordances } = model;
   const { surface } = model.prompt;

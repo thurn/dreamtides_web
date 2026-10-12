@@ -17,6 +17,8 @@ import { SYNTHETIC_DREAMWELL, syntheticId } from "../testing/synthetic-cards";
 import { LAB } from "../testing/prompt-lab";
 import { AVATAR, DREAMSIGN } from "../testing/stack-cards";
 import { parseAvatarId, parseDreamsignId } from "../../types/identifiers";
+import { event } from "../dsl/builders";
+import { gainPoints } from "../effects/primitives/gain-points";
 import { catalogManifest, manifestCatalog, type CatalogManifest } from "./catalog-manifest";
 import { entries, weak } from "./policy.fixtures";
 
@@ -53,6 +55,18 @@ function everythingInit(): BattleInit {
 }
 
 describe("the policy worker's catalog", () => {
+  it("clones a synthetic authored Dreamwell manifest and rebuilds an unknown UUID text-less", () => {
+    const well = { ...SYNTHETIC_DREAMWELL[0], status: "authored" as const, abilities: () => [event(gainPoints(3))] };
+    const source = createCatalog([weak], [well]);
+    const init: BattleInit = { seed: battleSeed("dreamwell-manifest"), scoreToWin: 25,
+      decks: { player: [], enemy: [] }, dreamwell: [well.id] };
+    const manifest = structuredClone(catalogManifest(source, init));
+    expect(manifest.dreamwell).toEqual([{ id: well.id, order: well.order, energyAdded: well.energyAdded, status: "authored" }]);
+    const rebuilt = manifestCatalog(manifest).dreamwellCard(well.id);
+    expect(rebuilt.abilities(BASE_VARIANT)).toEqual([]);
+    expect(rebuilt).toMatchObject(manifest.dreamwell[0]);
+    expect(source.dreamwellCard(well.id).abilities(BASE_VARIANT)).toHaveLength(1);
+  });
   it("rebuilds the content module's or lab's definition, once, for every entity a manifest names that either defines", () => {
     const source = sourceCatalog();
     const init = everythingInit();
@@ -97,7 +111,10 @@ describe("the policy worker's catalog", () => {
     const { abilities, ...rebuiltCard } = rebuilt.card(card.id);
     expect(rebuiltCard).toEqual(plainCard);
     expect(abilities(BASE_VARIANT)).toEqual([]);
-    expect(rebuilt.dreamwellCard(dreamwell.id)).toEqual(dreamwell);
+    const { abilities: wellAbilities, ...rebuiltWell } = rebuilt.dreamwellCard(dreamwell.id);
+    const { abilities: _syntheticAbilities, ...plainWell } = dreamwell;
+    expect(rebuiltWell).toEqual(plainWell);
+    expect(wellAbilities(BASE_VARIANT)).toEqual([]);
     expect(rebuilt.avatar(avatar)).toMatchObject({ status: "pending" });
     expect(rebuilt.avatar(avatar).abilities(BASE_VARIANT)).toEqual([]);
     expect(rebuilt.dreamsign(dreamsign).abilities(BASE_VARIANT)).toEqual([]);

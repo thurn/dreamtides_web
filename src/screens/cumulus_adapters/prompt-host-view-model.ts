@@ -55,7 +55,7 @@ import {
   engineResponseWindowHeading,
   type EnginePromptOptionCopy,
 } from "../../runtime/battle-prompt-messages";
-import { parseBattleCardId, type BattleCardId, type PromptId } from "../../types/identifiers";
+import { parseBattleCardId, type BattleCardId, type DreamwellCardId, type PromptId } from "../../types/identifiers";
 
 /** A prompt the fold has pending, with its id, as the human may see it. */
 export type PendingEnginePrompt = Prompt & { readonly id: PromptId };
@@ -77,6 +77,8 @@ export interface PromptHostInput {
   /** The loop on offer to the human, with the most repetitions one request may ask for. */
   readonly loopOffer: { readonly maxCount: number } | null;
   readonly cardView: EngineCardViewBuilder;
+  /** Resolves the pinned public source UUID immediately before its prompt is shown. */
+  readonly dreamwellName?: (id: DreamwellCardId) => string | null;
 }
 
 /** What one choice button of the control row does when chosen. */
@@ -253,6 +255,10 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
   }
   const source = sourceInstance(prompt, view);
   const sourceCard = source === null ? null : cardView(source);
+  const origin = prompt.purpose.source;
+  const sourceName = origin !== null && typeof origin !== "string" && origin.kind === "dreamwell"
+    ? input.dreamwellName?.(origin.id) ?? null
+    : sourceCard?.model.displaySnapshot.name ?? null;
   if (prompt.side !== human) {
     // The opponent answers; a private prompt's cards never reach this view,
     // and the human learns only that the opponent is choosing.
@@ -280,7 +286,7 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         role: prompt.purpose.role,
         min,
         max,
-        sourceName: sourceCard?.model.displaySnapshot.name ?? null,
+        sourceName,
       }),
       cancellable: prompt.cancellable,
       loopOffer: null,
@@ -375,7 +381,7 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         role: prompt.purpose.role,
         min,
         max,
-        sourceName: sourceCard?.model.displaySnapshot.name ?? null,
+        sourceName,
       });
       const arrange = arrangeView(prompt, view, cardView, heading);
       return {
@@ -406,7 +412,7 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
           copy: { kind: "position", rank: slot.rank, index: slot.index },
           answer: index,
         })),
-        host({ heading: engineMovementPromptHeading(prompt.fieldSide, human, sourceCard?.model.displaySnapshot.name ?? null) }),
+        host({ heading: engineMovementPromptHeading(prompt.fieldSide, human, sourceName) }),
         sourceCard,
       );
     case "chooseMode": {

@@ -1130,6 +1130,8 @@ function isAbilityOrigin(value: unknown): boolean {
       return parses(parseAvatarId)(value.id);
     case "dreamsign":
       return parses(parseDreamsignId)(value.id);
+    case "dreamwell":
+      return parses(parseDreamwellCardId)(value.id);
     default:
       return false;
   }
@@ -1301,6 +1303,15 @@ function isLinkedBanishedCards(value: unknown): boolean {
 }
 
 function isQueuedTrigger(value: unknown): boolean {
+  if (!isPlainRecord(value)) return false;
+  if (value.kind !== undefined && value.kind !== "dreamwellBonus") return false;
+  if (isPlainRecord(value.origin) && value.origin.kind === "dreamwell" && value.node === null && value.kind !== "dreamwellBonus") return false;
+  if (value.kind === "dreamwellBonus" && (
+    !isPlainRecord(value.source) || value.source.kind !== "dreamwell" ||
+    !isPlainRecord(value.origin) || value.origin.kind !== "dreamwell" ||
+    value.source.id !== value.origin.id || value.source.side !== value.controller ||
+    value.node !== null || value.subject !== null
+  )) return false;
   return (
     isPlainRecord(value) &&
     isAbilitySource(value.source) &&
@@ -1558,6 +1569,9 @@ function abilitySourceFromUnknown(value: unknown): AbilitySource | null {
   const side = sideFromUnknown(value.side);
   if (side === null) return null;
   if (value.kind === "avatar") return { kind: "avatar", side };
+  if (value.kind === "dreamwell" && parses(parseDreamwellCardId)(value.id)) {
+    return { kind: "dreamwell", side, id: parseDreamwellCardId(String(value.id)) };
+  }
   return value.kind === "dreamsign" && isIndex(value.index) ? { kind: "dreamsign", side, index: value.index } : null;
 }
 

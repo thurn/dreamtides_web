@@ -189,6 +189,7 @@ export interface FloatingEffectView {
  * (`seesSubject`).
  */
 export interface QueuedTriggerView {
+  readonly kind?: "dreamwellBonus";
   readonly linkedSource?: LinkedSourceContext;
   readonly controller: Side;
   readonly source: AbilitySource | null;
@@ -438,6 +439,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         ? { rememberedSource: anonymousSource(record.source) } : {}) };
   });
   const triggerQueue = state.triggerQueue.map((trigger): QueuedTriggerView => ({
+    ...(trigger.kind === "dreamwellBonus" ? { kind: trigger.kind } : {}),
     ...(trigger.linkedSource === undefined || !visibleSource(trigger.source) ? {} : { linkedSource: copy(trigger.linkedSource) }),
     controller: trigger.controller,
     source: visibleSource(trigger.source) ? copy(trigger.source) : null,

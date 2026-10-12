@@ -673,7 +673,7 @@ export interface EngineBattleLogWords {
   /** A card's name, or `null` when the player cannot identify it. */
   readonly card: (instance: InstanceId | null) => string | null;
   /** A Dreamwell card's name, or `null`. */
-  readonly dreamwell: (event: Extract<EngineEvent, { kind: "dreamwellDrawn" }>) => string | null;
+  readonly dreamwell: (event: Pick<Extract<EngineEvent, { kind: "dreamwellDrawn" }>, "side" | "card">) => string | null;
 }
 
 /**
@@ -693,7 +693,9 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       ? "An ability"
       : typeof ability === "string"
         ? card(ability)
-        : sentence(`${whose(ability.side)} ${ability.kind === "avatar" ? "Avatar" : "Dreamsign"}`);
+        : ability.kind === "dreamwell"
+          ? words.dreamwell({ side: ability.side, card: ability.id }) ?? "A Dreamwell card"
+          : sentence(`${whose(ability.side)} ${ability.kind === "avatar" ? "Avatar" : "Dreamsign"}`);
   switch (event.kind) {
     case "abandoned":
       return `${who(event.side)} abandoned ${named(event.instance)}.`;
@@ -835,6 +837,9 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     case "subtypeChosen":
       return `${source(event.source)}: ${event.side === human ? "you" : "your opponent"} chose the character type ${event.subtype}.`;
     case "triggerResolved":
+      if (event.source !== null && typeof event.source !== "string" && event.source.kind === "dreamwell") {
+        return event.applied ? `${source(event.source)}'s bonus resolved.` : null;
+      }
       return event.applied && event.source !== null ? `${source(event.source)}'s triggered ability resolved.` : null;
     case "extraTurnGranted":
       return `${who(event.side)} gained an extra turn after this one.`;

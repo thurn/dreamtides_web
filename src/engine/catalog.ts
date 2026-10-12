@@ -68,6 +68,7 @@ export interface EngineDreamwellDefinition {
   readonly order: number;
   readonly energyAdded: number;
   readonly status: ContentState;
+  readonly abilities: AbilityList;
 }
 
 /**

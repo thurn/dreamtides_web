@@ -1,0 +1,807 @@
+{
+  "bead": "hv-umm2.541",
+  "status": "Local acceptance complete; parent precommit acknowledgement pending",
+  "dispatchObservation": {
+    "at": "2026-10-12T13:00:45.912086+00:00",
+    "scope": "Parent post-dispatch observation; helper actual start was not instrumented"
+  },
+  "failurePaths": {
+    "midStepError": "rolls back a failed bonus step after a preceding effect while retaining the committed draw",
+    "reload": "replays a private multi-effect prompt after reload and publishes the bonus once",
+    "partialWrite": "rejects malformed or partially written queued Dreamwell records at the public load boundary",
+    "staleInput": "bounces invalid, foreign and stale answers without consuming the bonus",
+    "concurrentActors": "commits one of concurrent duplicate answers and replays independent replicas identically"
+  },
+  "newContracts": {
+    "plainModule": "src/engine/effects/primitives/contracts/dreamwell-bonus.contracts.ts",
+    "newCases": 15,
+    "newTestEntrypoints": 0,
+    "newJsdomEntrypoints": 0
+  },
+  "commands": [
+    {
+      "receipt": "browser-producer.receipt.json",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/dreamwell-runtime.mjs",
+        "--bead",
+        "hv-umm2.541",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:35:43.008255+00:00",
+      "end": "2026-10-12T13:36:34.659223+00:00",
+      "exit": 0,
+      "pid": 16985,
+      "pgid": 16985,
+      "hostLoad": [
+        14.85546875,
+        16.2109375,
+        12.87451171875
+      ],
+      "wallSeconds": 51.65068404199701
+    },
+    {
+      "receipt": "focused-first.receipt.json",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Dreamwell bonus execution"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:09:48.291524+00:00",
+      "end": "2026-10-12T13:09:54.959119+00:00",
+      "exit": 0,
+      "pid": 49309,
+      "pgid": 49309,
+      "hostLoad": [
+        23.22021484375,
+        15.04833984375,
+        13.64013671875
+      ],
+      "wallSeconds": 6.667294083003071
+    },
+    {
+      "receipt": "knip.receipt.json",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:21:16.427858+00:00",
+      "end": "2026-10-12T13:21:19.979375+00:00",
+      "exit": 0,
+      "pid": 20889,
+      "pgid": 20889,
+      "hostLoad": [
+        7.357421875,
+        8.15771484375,
+        10.658203125
+      ],
+      "wallSeconds": 3.5513079579977784
+    },
+    {
+      "receipt": "review-first.receipt.json",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:16:09.147567+00:00",
+      "end": "2026-10-12T13:16:58.389549+00:00",
+      "exit": 2,
+      "pid": 12656,
+      "pgid": 12656,
+      "hostLoad": [
+        5.759765625,
+        11.400390625,
+        12.59423828125
+      ],
+      "wallSeconds": 49.24135949999618
+    },
+    {
+      "receipt": "fuzz-lock.receipt.json",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker541/run.py",
+        "fuzz-inner",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:25:59.862277+00:00",
+      "end": "2026-10-12T13:30:01.476517+00:00",
+      "exit": 0,
+      "pid": 45575,
+      "pgid": 45575,
+      "hostLoad": [
+        8.98681640625,
+        7.98486328125,
+        9.81201171875
+      ],
+      "wallSeconds": 241.62823854199814
+    },
+    {
+      "receipt": "negative-baseline.receipt.json",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Dreamwell bonus execution"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:07:43.730541+00:00",
+      "end": "2026-10-12T13:07:50.269354+00:00",
+      "exit": 1,
+      "pid": 31297,
+      "pgid": 31297,
+      "hostLoad": [
+        17.533203125,
+        12.24853515625,
+        12.67626953125
+      ],
+      "wallSeconds": 6.538599290994171
+    },
+    {
+      "receipt": "browser-corrected.receipt.json",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/dreamwell-runtime.mjs",
+        "--bead",
+        "hv-umm2.541",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:31:26.230428+00:00",
+      "end": "2026-10-12T13:33:23.902212+00:00",
+      "exit": 1,
+      "pid": 67558,
+      "pgid": 67558,
+      "hostLoad": [
+        17.94482421875,
+        9.62451171875,
+        9.66162109375
+      ],
+      "wallSeconds": 117.67128312499699
+    },
+    {
+      "receipt": "review-corrected.receipt.json",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:19:40.995105+00:00",
+      "end": "2026-10-12T13:20:30.307156+00:00",
+      "exit": 0,
+      "pid": 18251,
+      "pgid": 18251,
+      "hostLoad": [
+        4.81298828125,
+        8.27294921875,
+        10.9951171875
+      ],
+      "wallSeconds": 49.311408624998876
+    },
+    {
+      "receipt": "focused-contracts.receipt.json",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "-t",
+        "Dreamwell|policy worker"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:14:10.481322+00:00",
+      "end": "2026-10-12T13:14:14.362793+00:00",
+      "exit": 1,
+      "pid": 9202,
+      "pgid": 9202,
+      "hostLoad": [
+        17.4873046875,
+        15.21435546875,
+        13.9541015625
+      ],
+      "wallSeconds": 3.8813475419956376
+    },
+    {
+      "receipt": "focused-corrected.receipt.json",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "-t",
+        "Dreamwell|policy worker"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:15:06.992257+00:00",
+      "end": "2026-10-12T13:15:10.548751+00:00",
+      "exit": 0,
+      "pid": 10826,
+      "pgid": 10826,
+      "hostLoad": [
+        8.4931640625,
+        13.080078125,
+        13.2373046875
+      ],
+      "wallSeconds": 3.5563504169986118
+    },
+    {
+      "receipt": "full-inner.receipt.json",
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:22:24.629804+00:00",
+      "end": "2026-10-12T13:23:55.948537+00:00",
+      "exit": 0,
+      "pid": 23295,
+      "pgid": 23295,
+      "hostLoad": [
+        6.892578125,
+        7.7919921875,
+        10.3173828125
+      ],
+      "wallSeconds": 91.3176642499966
+    },
+    {
+      "receipt": "full-lock.receipt.json",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker541/run.py",
+        "full-inner",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:22:24.603644+00:00",
+      "end": "2026-10-12T13:23:55.952583+00:00",
+      "exit": 0,
+      "pid": 23293,
+      "pgid": 23293,
+      "hostLoad": [
+        6.892578125,
+        7.7919921875,
+        10.3173828125
+      ],
+      "wallSeconds": 91.34786245899886
+    },
+    {
+      "receipt": "qa-preflight.receipt.json",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "artifacts/qa/hv-umm2.541/preflight.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:27:42.092985+00:00",
+      "end": "2026-10-12T13:27:42.699898+00:00",
+      "exit": 0,
+      "pid": 48330,
+      "pgid": 48330,
+      "hostLoad": [
+        6.0439453125,
+        7.36767578125,
+        9.37451171875
+      ],
+      "wallSeconds": 0.6067979169965838
+    },
+    {
+      "receipt": "browser-density.receipt.json",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/dreamwell-captures.mjs",
+        "--bead",
+        "hv-umm2.541",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:37:56.694180+00:00",
+      "end": "2026-10-12T13:38:19.420818+00:00",
+      "exit": 0,
+      "pid": 11985,
+      "pgid": 11985,
+      "hostLoad": [
+        15.96875,
+        16.71533203125,
+        13.58740234375
+      ],
+      "wallSeconds": 22.726414708005905
+    },
+    {
+      "receipt": "counterfactual-execution.receipt.json",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "applies an authored bonus after"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:18:54.263142+00:00",
+      "end": "2026-10-12T13:18:58.047116+00:00",
+      "exit": 1,
+      "pid": 17000,
+      "pgid": 17000,
+      "hostLoad": [
+        5.16943359375,
+        8.91015625,
+        11.35888671875
+      ],
+      "wallSeconds": 3.783807125000749
+    },
+    {
+      "receipt": "fuzz-inner.receipt.json",
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:28:29.802665+00:00",
+      "end": "2026-10-12T13:30:01.472468+00:00",
+      "exit": 0,
+      "pid": 49703,
+      "pgid": 49703,
+      "hostLoad": [
+        5.5966796875,
+        7.04736328125,
+        9.13916015625
+      ],
+      "wallSeconds": 91.68537945800199
+    },
+    {
+      "receipt": "counterfactual-transport.receipt.json",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "transports an authored content definition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:18:49.411991+00:00",
+      "end": "2026-10-12T13:18:54.238097+00:00",
+      "exit": 1,
+      "pid": 16828,
+      "pgid": 16828,
+      "hostLoad": [
+        5.1845703125,
+        8.9765625,
+        11.396484375
+      ],
+      "wallSeconds": 4.82589791600185
+    },
+    {
+      "receipt": "types-first.receipt.json",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:10:37.473145+00:00",
+      "end": "2026-10-12T13:10:49.837196+00:00",
+      "exit": 2,
+      "pid": 52636,
+      "pgid": 52636,
+      "hostLoad": [
+        16.45361328125,
+        14.40185546875,
+        13.47314453125
+      ],
+      "wallSeconds": 12.363774041994475
+    },
+    {
+      "receipt": "browser-first.receipt.json",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/dreamwell-runtime.mjs",
+        "--bead",
+        "hv-umm2.541",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:30:49.089190+00:00",
+      "end": "2026-10-12T13:30:53.271580+00:00",
+      "exit": 1,
+      "pid": 53923,
+      "pgid": 53923,
+      "hostLoad": [
+        6.57470703125,
+        6.861328125,
+        8.7353515625
+      ],
+      "wallSeconds": 4.18227158299851
+    },
+    {
+      "receipt": "counterfactual-batch.receipt.json",
+      "argv": [
+        "python3",
+        "/tmp/worker541/mutants.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-541-dreamwell-bonuses",
+      "start": "2026-10-12T13:18:49.365824+00:00",
+      "end": "2026-10-12T13:18:58.055105+00:00",
+      "exit": 0,
+      "pid": 16826,
+      "pgid": 16826,
+      "hostLoad": [
+        5.1845703125,
+        8.9765625,
+        11.396484375
+      ],
+      "wallSeconds": 8.689074792004249
+    }
+  ],
+  "base": "cdb024b65724d3c5793c93ff41a665158f7d2bbe",
+  "sourceFrozenAcrossQa": true,
+  "counts": {
+    "files": 28,
+    "sourceAdds": 108,
+    "sourceDeletes": 23,
+    "sourceChanged": 131,
+    "testDelta": {
+      "files": 0,
+      "lines": 276,
+      "jsdomFiles": 0
+    },
+    "plainContractLines": 259,
+    "newContractCases": 15,
+    "newManifestCases": 1,
+    "falloutFiles": [
+      "src/engine/core.test.ts",
+      "src/engine/testing/synthetic-cards.ts",
+      "src/engine/testing/fuzz.ts",
+      "src/session/providers/battle-init-provider.ts"
+    ]
+  },
+  "rawEvidence": {
+    "manifest": "raw-manifest.json",
+    "sha256": "a8662f1f42030530dff9897f695cbdb4c1bd27b37b774b993e055164c00437f8",
+    "fileCount": 122,
+    "retainsFailedAttempts": true
+  },
+  "negativeProofs": [
+    {
+      "name": "transport",
+      "file": "src/engine/content-catalog.ts",
+      "originalSHA256": "d5e47a622e26bdac254d5649a81d9a57a44938ad778e53b54338e17f34899d08",
+      "mutantSHA256": "58397826c6880388bb98684200a0effecabbf4ec5abc7c73158d09bdabd3e589",
+      "restoredSHA256": "d5e47a622e26bdac254d5649a81d9a57a44938ad778e53b54338e17f34899d08",
+      "exit": 1
+    },
+    {
+      "name": "execution",
+      "file": "src/engine/rules/dreamwell.ts",
+      "originalSHA256": "304e2fa393d026922dcc5daa0c6bcc3e3a0c7fe5beb197a72a51f8e97829deaa",
+      "mutantSHA256": "d16c77d4aa24968d8b63d57f3fa13f97e1cc1e9291767258348c693b77b7e3ee",
+      "restoredSHA256": "304e2fa393d026922dcc5daa0c6bcc3e3a0c7fe5beb197a72a51f8e97829deaa",
+      "exit": 1
+    }
+  ],
+  "construction": {
+    "base": "cdb024b65724d3c5793c93ff41a665158f7d2bbe",
+    "scope": "appendCycle and buildDreamwellDeck bytes",
+    "equal": true,
+    "sha256": "b887213623d8e91ac39a7f1cd857b48ea8da2db8ef7e65544d4701461a8f42f9",
+    "contentModulesChanged": []
+  },
+  "full": {
+    "workers": 2,
+    "files": 347,
+    "cases": 5202,
+    "vitestDisplayedDurationS": 58.8,
+    "wholeTestStepS": 59.4,
+    "testStepStartingHostLoad": 8.1220703125,
+    "innerWallS": 91.3176642499966,
+    "wrapperWallS": 91.34786245899886,
+    "queueAndStartupUpperBoundS": 0.02616
+  },
+  "fuzz": {
+    "games": 200,
+    "steps": 99926,
+    "prompts": 2627,
+    "interactiveReruns": 241,
+    "failures": 0,
+    "innerWallS": 91.68537945800199,
+    "displayedWallS": 90.7,
+    "displayedCpuS": 99.9,
+    "wrapperWallS": 241.62823854199814,
+    "queueAndStartupUpperBoundS": 149.940388,
+    "scope": "Generic regression smoke; synthetic authored bonus coverage comes from contracts and runtime QA",
+    "performanceClaim": null
+  },
+  "qa": {
+    "fixtureSources": "fixture-sources",
+    "functionalReport": "invocations/run-aEXD4s/dreamwell-runtime.result.json",
+    "cases": [
+      {
+        "viewport": "desktop",
+        "controller": "player",
+        "sourceUuid": "00000000-0000-4000-8000-0000000541a0",
+        "gameId": "qa-541-player-e4fe2ab3-d35a-4b76-a1d9-cbfd90a6b704",
+        "actualAnswerIntentSeq": 2,
+        "producerSnapshot": "LocalLogRecord.stateAfter at committed intent notification",
+        "producerVersion": 16,
+        "producerEnergy": 5,
+        "producerMaxEnergy": 3,
+        "producerScore": 3,
+        "publishedMarkers": 1,
+        "persistedLogRows": 16,
+        "persistedIntents": 2,
+        "geometry": {
+          "href": "http://localhost:5274/artifacts/qa/hv-umm2.541/fixture.html?side=player",
+          "width": 1440,
+          "height": 900,
+          "banner": {
+            "x": 512,
+            "y": 4,
+            "width": 416,
+            "height": 75.5
+          },
+          "controls": {
+            "x": 199.5,
+            "y": 597,
+            "width": 1041,
+            "height": 42
+          },
+          "submit": {
+            "x": 1151,
+            "y": 597,
+            "width": 89.5,
+            "height": 42
+          }
+        },
+        "latestStateKeptSeparately": true
+      },
+      {
+        "viewport": "desktop",
+        "controller": "enemy",
+        "sourceUuid": "00000000-0000-4000-8000-0000000541e0",
+        "gameId": "qa-541-enemy-1e4b79db-5e9b-45c4-9f3e-8192dd8f67cf",
+        "actualAnswerIntentSeq": 2,
+        "producerSnapshot": "LocalLogRecord.stateAfter at committed intent notification",
+        "producerVersion": 16,
+        "producerEnergy": 5,
+        "producerMaxEnergy": 3,
+        "producerScore": 3,
+        "publishedMarkers": 1,
+        "persistedLogRows": 23,
+        "persistedIntents": 4,
+        "geometry": {
+          "href": "http://localhost:5274/artifacts/qa/hv-umm2.541/fixture.html?side=enemy",
+          "width": 1440,
+          "height": 900,
+          "banner": {
+            "x": 512,
+            "y": 4,
+            "width": 416,
+            "height": 75.5
+          },
+          "controls": {
+            "x": 199.5,
+            "y": 597,
+            "width": 1041,
+            "height": 42
+          },
+          "submit": {
+            "x": 1151,
+            "y": 597,
+            "width": 89.5,
+            "height": 42
+          }
+        },
+        "latestStateKeptSeparately": true
+      },
+      {
+        "viewport": "mobile",
+        "controller": "player",
+        "sourceUuid": "00000000-0000-4000-8000-0000000541a0",
+        "gameId": "qa-541-player-ab8f7d9e-3b51-4100-a872-9974815817f5",
+        "actualAnswerIntentSeq": 2,
+        "producerSnapshot": "LocalLogRecord.stateAfter at committed intent notification",
+        "producerVersion": 16,
+        "producerEnergy": 5,
+        "producerMaxEnergy": 3,
+        "producerScore": 3,
+        "publishedMarkers": 1,
+        "persistedLogRows": 16,
+        "persistedIntents": 2,
+        "geometry": {
+          "href": "http://localhost:5274/artifacts/qa/hv-umm2.541/fixture.html?side=player",
+          "width": 390,
+          "height": 844,
+          "banner": {
+            "x": 19.5,
+            "y": 4,
+            "width": 351,
+            "height": 75.5
+          },
+          "controls": {
+            "x": 8,
+            "y": 522.828125,
+            "width": 374,
+            "height": 42
+          },
+          "submit": {
+            "x": 292.5,
+            "y": 522.828125,
+            "width": 89.5,
+            "height": 42
+          }
+        },
+        "latestStateKeptSeparately": true
+      },
+      {
+        "viewport": "mobile",
+        "controller": "enemy",
+        "sourceUuid": "00000000-0000-4000-8000-0000000541e0",
+        "gameId": "qa-541-enemy-bd79607c-ee50-4d71-b438-6cda86dc5182",
+        "actualAnswerIntentSeq": 2,
+        "producerSnapshot": "LocalLogRecord.stateAfter at committed intent notification",
+        "producerVersion": 16,
+        "producerEnergy": 5,
+        "producerMaxEnergy": 3,
+        "producerScore": 3,
+        "publishedMarkers": 1,
+        "persistedLogRows": 23,
+        "persistedIntents": 4,
+        "geometry": {
+          "href": "http://localhost:5274/artifacts/qa/hv-umm2.541/fixture.html?side=enemy",
+          "width": 390,
+          "height": 844,
+          "banner": {
+            "x": 19.5,
+            "y": 4,
+            "width": 351,
+            "height": 75.5
+          },
+          "controls": {
+            "x": 8,
+            "y": 522.828125,
+            "width": 374,
+            "height": 42
+          },
+          "submit": {
+            "x": 292.5,
+            "y": 522.828125,
+            "width": 89.5,
+            "height": 42
+          }
+        },
+        "latestStateKeptSeparately": true
+      }
+    ],
+    "caps": [],
+    "sourceLabels": "Existing Cumulus prompt and notice surfaces resolve pinned Dreamwell UUID",
+    "captures": [
+      "dreamwell-desktop-prompt-2x.png",
+      "dreamwell-mobile-prompt-2x.png",
+      "dreamwell-desktop-resolved-2x.png"
+    ],
+    "captureOnlyReport": "invocations/run-wpLDOj/dreamwell-captures.result.json",
+    "density": 2,
+    "imageDimensions": {
+      "desktop": [
+        2880,
+        1800
+      ],
+      "mobile": [
+        780,
+        1688
+      ]
+    },
+    "parentColdVisualReview": "Parent inspected all final 2x captures; source banner, hand choice and Submit are readable, resolved prompt clears, no changed-surface finding",
+    "productionEntityCoverageClaim": false,
+    "firstFailure": "Ignored fixture import linked parseCardName from identifiers; corrected to card-identity",
+    "secondFailure": "Latest enemy state included a valid subsequent AI card play; energy assertion uses public committed answer producer snapshot",
+    "producerProvenance": "LocalGame with real GAME_ENGINE_CONFIG reducer and persisted game events. Only genesisState supplies independent synthetic initial fold; UI actions use the regular action facade and reducer. Controller enemy uses opponent discard, human player chooses. StateAfter notifications are observations only."
+  },
+  "resources": {
+    "ledger": "raw/resource-ledger.json",
+    "remainingOwnedProcessGroups": [],
+    "servers": [
+      {
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/invocations/run-TFNXuq/dreamwell-runtime.result.json",
+        "pid": 53961,
+        "port": 5274,
+        "slot": 1,
+        "invocation": "run-TFNXuq",
+        "ok": false
+      },
+      {
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/invocations/run-aEXD4s/dreamwell-runtime.result.json",
+        "pid": 17839,
+        "port": 5274,
+        "slot": 1,
+        "invocation": "run-aEXD4s",
+        "ok": true
+      },
+      {
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/invocations/run-wpLDOj/dreamwell-captures.result.json",
+        "pid": 12022,
+        "port": 5274,
+        "slot": 1,
+        "invocation": "run-wpLDOj",
+        "ok": true
+      },
+      {
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.541/invocations/run-KUSsLN/dreamwell-runtime.result.json",
+        "pid": 15488,
+        "port": 5274,
+        "slot": 1,
+        "invocation": "run-KUSsLN",
+        "ok": false
+      }
+    ],
+    "ownNativeSlotRecordsRemaining": [],
+    "sharedMcpService": "8931, left running"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Corrected npm run review wrapper and parallel check starts at 2026-10-12T13:19:41.921Z; actual load 4.81298828125"
+      },
+      "implementWindow": {
+        "start": "Post-dispatch observation proxy; actual helper-start not instrumented",
+        "end": "Final precommit evidence endpoint; actual Git receipt is delivered separately"
+      },
+      "testDelta": {
+        "lines": 276,
+        "basis": "259 lines in the new plain contract module plus 17 net lines in existing test entrypoints",
+        "frozenRawCounts": 17,
+        "correction": "The frozen raw manifest retains the initial entrypoint-only count; final evidence counts all test lines."
+      }
+    }
+  },
+  "nativeClaimAt": "2026-10-12T12:59:04Z",
+  "coordinationWindow": {
+    "start": "2026-10-12T12:59:04Z",
+    "end": "2026-10-12T14:06:23.641151+00:00",
+    "scope": "Native claim to precommit evidence endpoint; distinct from implementer post-dispatch observation window"
+  }
+}

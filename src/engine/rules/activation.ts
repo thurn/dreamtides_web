@@ -22,6 +22,7 @@ export function sourceController(state: BattleState, source: AbilitySource): Sid
   if (typeof source === "string") {
     return state.instances[source]?.controller ?? null;
   }
+  if (source.kind === "dreamwell") return source.side;
   const side = state.sides[source.side];
   const present = source.kind === "avatar" ? side.avatar !== null : source.index < side.dreamsigns.length;
   return present ? source.side : null;
@@ -51,6 +52,7 @@ export function abilityOrigin(state: BattleState, source: AbilitySource): Abilit
     const instance = state.instances[source];
     return instance === undefined ? null : instanceOrigin(instance);
   }
+  if (source.kind === "dreamwell") return { kind: "dreamwell", id: source.id };
   const side = state.sides[source.side];
   if (source.kind === "avatar") {
     return side.avatar === null ? null : { kind: "avatar", id: side.avatar.id };
@@ -105,6 +107,8 @@ export function originAbilities(catalog: EngineCatalog, origin: AbilityOrigin): 
       return catalog.avatar(origin.id).abilities(BASE_VARIANT);
     case "dreamsign":
       return catalog.dreamsign(origin.id).abilities(BASE_VARIANT);
+    case "dreamwell":
+      return catalog.dreamwellCard(origin.id).abilities(BASE_VARIANT);
   }
 }
 

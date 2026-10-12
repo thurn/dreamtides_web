@@ -279,7 +279,8 @@ export type AbilityOrigin =
   /** A figment type's abilities; with `lost`, it has lost them. */
   | { readonly kind: "figment"; readonly id: FigmentId; readonly lost?: true }
   | { readonly kind: "avatar"; readonly id: AvatarId }
-  | { readonly kind: "dreamsign"; readonly id: DreamsignId };
+  | { readonly kind: "dreamsign"; readonly id: DreamsignId }
+  | { readonly kind: "dreamwell"; readonly id: DreamwellCardId };
 
 /** An activated ability on the stack. */
 export interface AbilityStackItem extends StackItemBase {
@@ -509,7 +510,7 @@ export interface LinkedBanishedCards extends LinkedSourceContext {
   readonly cards: readonly { readonly instance: InstanceId; readonly enteredBanishedAt: number }[];
 }
 
-export interface QueuedTrigger {
+interface QueuedAbility {
   readonly linkedSource?: LinkedSourceContext;
   /** Effective spark just before the source last left play, while this trigger waited. */
   readonly lastKnownSourceSpark?: number;
@@ -536,6 +537,12 @@ export interface QueuedTrigger {
   /** The cards its floating or delayed trigger kept from a `withMaterialized` binding; absent otherwise. */
   readonly captured?: readonly InstanceId[];
 }
+
+/** An event bonus waits in the same FIFO as triggers, with its drawn source pinned. */
+export type QueuedTrigger = QueuedAbility & (
+  | { readonly kind?: undefined }
+  | { readonly kind: "dreamwellBonus" }
+);
 
 /**
  * One "gains +N✦" event as a trigger sees it: the amount and the expiry the

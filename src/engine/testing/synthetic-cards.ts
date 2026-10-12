@@ -92,6 +92,7 @@ function dreamwell(index: number, order: number, energyAdded: number, status: Co
     order,
     energyAdded,
     status,
+    abilities: () => [],
   };
 }
 

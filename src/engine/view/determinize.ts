@@ -319,6 +319,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     trigger.source === null || trigger.origin === null
       ? []
       : [{
+          ...(trigger.kind === "dreamwellBonus" ? { kind: trigger.kind } : {}),
           ...(trigger.linkedSource === undefined ? {} : { linkedSource: copy(trigger.linkedSource) }),
           source: copy(trigger.source),
           controller: trigger.controller,

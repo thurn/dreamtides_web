@@ -74,6 +74,7 @@ export function engineDreamwellFromContent(
     order: card.order,
     energyAdded: card.energyAdded,
     status: contentState(card),
+    abilities: card.abilities ?? NO_ABILITIES,
   };
 }
 

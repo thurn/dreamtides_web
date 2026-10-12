@@ -5,7 +5,7 @@ import { seesSubject } from "../../view/knowledge";
 import { redactSource, sourcePrivacy } from "../sources";
 import type { EventDefinition } from "../types";
 
-/** A triggered ability matched an event and joined the end of the trigger queue (D14). */
+/** A triggered ability or drawn Dreamwell event bonus joined the resolution FIFO (D14). */
 export interface TriggerQueuedEvent {
   readonly linkedSource?: LinkedSourceContext;
   readonly kind: "triggerQueued";

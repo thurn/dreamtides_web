@@ -1,6 +1,6 @@
 import type { PaymentCost } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
-import type { AvatarId, CardId, DreamsignId, InstanceId, Side, Slot } from "../state/ids";
+import type { AvatarId, CardId, DreamsignId, DreamwellSource, InstanceId, Side, Slot } from "../state/ids";
 
 /**
  * The stable key of a prompt's choice, which the UI copy module renders. The
@@ -92,7 +92,7 @@ export type PromptEmblem =
   | { readonly kind: "dreamsign"; readonly side: Side; readonly index: number; readonly id: DreamsignId };
 
 /** What raised a prompt: a card instance's ability or an emblem's. */
-export type PromptSource = InstanceId | PromptEmblem;
+export type PromptSource = InstanceId | PromptEmblem | DreamwellSource;
 
 /**
  * Why a prompt was raised: its source and the role of the choice. Never

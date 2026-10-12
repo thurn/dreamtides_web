@@ -101,7 +101,7 @@ describe("mixed entity fuzz targets", () => {
     abilities: () => [triggered(atStartOfFirstTurn(), gainPoints(1))],
   };
   const dreamwell = Array.from({ length: DREAMWELL_RULES.cardsPerRecurringOrder + 1 }, (_, index) => ({
-    id: parseDreamwellCardId(id(0xf320 + index)), order: DREAMWELL_RULES.recurringOrders[0], energyAdded: 1, status: "vanilla" as const,
+    id: parseDreamwellCardId(id(0xf320 + index)), order: DREAMWELL_RULES.recurringOrders[0], energyAdded: 1, status: "vanilla" as const, abilities: () => [],
   }));
   const figments = Array.from({ length: BACK_RANK_SIZE + 1 }, (_, index) => ({ ...ZONE_FIGMENT.warrior, id: parseFigmentId(id(0xf400 + index)) }));
   const mixed: FuzzPool = { ...pool, emblems: { avatars, dreamsigns: [sign] }, dreamwell, figments };

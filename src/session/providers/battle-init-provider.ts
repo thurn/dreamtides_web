@@ -203,6 +203,7 @@ export function journeyContentEngine(content: JourneyContent): Engine {
           order: card.order,
           energyAdded: card.energyAdded,
           status: "pending",
+          abilities: () => [],
         }),
       ),
       {

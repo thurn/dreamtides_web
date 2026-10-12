@@ -41,7 +41,7 @@ export interface CatalogManifest {
   /** The entire source catalog's public cost ceiling, including cards absent from this battle. */
   readonly maximumFixedCost: number;
   readonly cards: readonly ManifestCard[];
-  readonly dreamwell: readonly EngineDreamwellDefinition[];
+  readonly dreamwell: readonly Omit<EngineDreamwellDefinition, "abilities">[];
   readonly avatars: readonly ManifestEmblem<AvatarId>[];
   readonly dreamsigns: readonly ManifestEmblem<DreamsignId>[];
 }
@@ -66,7 +66,10 @@ export function catalogManifest(catalog: EngineCatalog, init: BattleInit): Catal
       return structuredClone(plain);
     }),
     maximumFixedCost: catalog.maximumFixedCost,
-    dreamwell: unique(init.dreamwell).map((id) => ({ ...catalog.dreamwellCard(id) })),
+    dreamwell: unique(init.dreamwell).map((id) => {
+      const { abilities: _abilities, ...plain } = catalog.dreamwellCard(id);
+      return plain;
+    }),
     avatars: avatarIds.map((id) => ({ id, status: catalog.avatar(id).status })),
     dreamsigns: dreamsignIds.map((id) => ({ id, status: catalog.dreamsign(id).status })),
   };
@@ -91,7 +94,7 @@ export function manifestCatalog(manifest: CatalogManifest): EngineCatalog {
   const lab = developmentLabDefinitions();
   return createCatalog(
     withManifest([...contentCardDefinitions(), ...lab.cards], manifest.cards, (card) => ({ ...card, abilities: NO_ABILITIES })),
-    withManifest(contentDreamwellDefinitions(), manifest.dreamwell, (card) => card),
+    withManifest(contentDreamwellDefinitions(), manifest.dreamwell, (card) => ({ ...card, abilities: NO_ABILITIES })),
     {
       avatars: withManifest([...contentAvatarDefinitions(), ...(lab.emblems.avatars ?? [])], manifest.avatars, textlessEmblem),
       dreamsigns: withManifest([...contentDreamsignDefinitions(), ...(lab.emblems.dreamsigns ?? [])], manifest.dreamsigns, textlessEmblem),

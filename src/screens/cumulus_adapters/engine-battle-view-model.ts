@@ -701,6 +701,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
     notice: input.notice,
     loopOffer: affordances.loop === null ? null : { maxCount: affordances.loop.maxCount },
     cardView: (instance) => cardView(instance),
+    dreamwellName: (id) => input.dreamwellCard?.(id)?.displaySnapshot.name ?? null,
   });
   const revealed = visual?.kind === "reveal" ? (input.revealedCard ?? undefined) : undefined;
   const dreamwell = visual?.kind === "dreamwell" ? (input.dreamwellCard?.(visual.card) ?? null) : null;
@@ -902,8 +903,9 @@ export function withChooser(
   cards: EngineCardModels,
   emblemName: EngineEmblemNamer,
   catalog: EngineCatalog,
+  dreamwellName?: (id: DreamwellCardId) => string | null,
 ): EngineBattleScreenModel {
-  const options = chooserOptions(chooser, model.affordances, model.engine, cards, emblemName, catalog, model.instances);
+  const options = chooserOptions(chooser, model.affordances, model.engine, cards, emblemName, catalog, model.instances, dreamwellName);
   if (options.length === 0) return model;
   const prompt: PromptHostModel = {
     ...model.prompt,
@@ -921,6 +923,7 @@ function chooserOptions(
   emblemName: EngineEmblemNamer,
   catalog: EngineCatalog,
   instances: EngineBattleScreenModel["instances"],
+  dreamwellName?: (id: DreamwellCardId) => string | null,
 ): PromptChoiceOption[] {
   if (chooser === null) return [];
   const option = (copy: EngineAbilityOption, select: PromptChoiceOption["select"]): PromptChoiceOption => ({
@@ -936,6 +939,8 @@ function chooserOptions(
     if (typeof source === "string") {
       const instance = view.instances[source];
       name = instance === undefined ? null : cards(instance).displaySnapshot.name;
+    } else if (source?.kind === "dreamwell") {
+      name = dreamwellName?.(source.id) ?? null;
     } else if (source !== null) {
       const side = view.sides[source.side];
       const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
@@ -971,7 +976,7 @@ function chooserOptions(
     case "emblems": {
       const emblems = affordances.emblemActivations.flatMap((action, _index, all) => {
         const source = action.source;
-        if (typeof source === "string") return [];
+        if (typeof source === "string" || source.kind === "dreamwell") return [];
         const siblings = all.filter((other) => sourceKey(other.source) === sourceKey(source));
         const side = view.sides[source.side];
         const id = source.kind === "avatar" ? side.avatar?.id : side.dreamsigns[source.index]?.id;
