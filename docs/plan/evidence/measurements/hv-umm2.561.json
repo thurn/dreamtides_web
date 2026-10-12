@@ -1,0 +1,1775 @@
+{
+  "bead": "hv-umm2.561",
+  "phase": 5,
+  "duty": "retrospective=phase-5/since-hv-umm2.548",
+  "base": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+  "freezeUtc": "2026-10-12T17:08:02.235Z",
+  "coverage": [
+    {
+      "bead": "hv-roz5",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-roz5",
+          "path": "docs/plan/evidence/friction/hv-roz5.json",
+          "sha256": "dce2b6513220b771a7189140011b304621157662942b224c78ee7a19fdcb4b4a"
+        },
+        {
+          "id": "hv-roz5",
+          "path": "docs/plan/evidence/measurements/hv-roz5.json",
+          "sha256": "d7c89db560c161fc30aecb2be0523dae9c810ed3a1d67f171221f040174dc4e1"
+        }
+      ]
+    },
+    {
+      "bead": "hv-sob5",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-sob5",
+          "path": "docs/plan/evidence/friction/hv-sob5.json",
+          "sha256": "c1a95b9fa1f751c21169a8d941eff934f5a360c311a3ee3bb301ad1049f9dd15"
+        },
+        {
+          "id": "hv-sob5",
+          "path": "docs/plan/evidence/measurements/hv-sob5.json",
+          "sha256": "3bceaf478389c18f92d69d28d4b346c950205a3a5b25d282a3e2ba6b9f369724"
+        },
+        {
+          "id": "hv-sob5",
+          "path": "docs/plan/evidence/measurements/hv-sob5.md",
+          "sha256": "a23858f030c101cc5f5834b0fe301d104bca298808e32514e570fd3c845091d6"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.177",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.177",
+          "path": "docs/plan/evidence/friction/hv-umm2.177.json",
+          "sha256": "9201a3479c5bd6eed8fceb6e6542f941695be8feb131cd90b3f330b312ec40a5"
+        },
+        {
+          "id": "hv-umm2.177",
+          "path": "docs/plan/evidence/measurements/hv-umm2.177.json",
+          "sha256": "3b84ef4d627d87aefc9a0aaf9989b7506b4e37d4c958c7c804dc2ee9de309ecf"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.178",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.178",
+          "path": "docs/plan/evidence/friction/hv-umm2.178.json",
+          "sha256": "f3b610b2e173dec00c825bca0aa6c39ed375aa13471316f01ca5dcb451764847"
+        },
+        {
+          "id": "hv-umm2.178",
+          "path": "docs/plan/evidence/measurements/hv-umm2.178.json",
+          "sha256": "1a5f3390a18d37c30a81fc41c58dcbfdb7d181f263bebd36890b061c3ec35143"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.181",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.181",
+          "path": "docs/plan/evidence/friction/hv-umm2.181.json",
+          "sha256": "a0c414a1a252f876e5b1b23d97c1f2ba3bb249bc26f5a045eccb393f558b3d18"
+        },
+        {
+          "id": "hv-umm2.181",
+          "path": "docs/plan/evidence/measurements/hv-umm2.181.json",
+          "sha256": "fe0cf2d67418172656b0c40bef05745fc9c94a7543df75f82cd40d15845167c4"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.185",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.185",
+          "path": "docs/plan/evidence/friction/hv-umm2.185.json",
+          "sha256": "5c63e924a7d7e165b21f05bdeab6e5cc4aa2940d3053163124b4ff4d38237b04"
+        },
+        {
+          "id": "hv-umm2.185",
+          "path": "docs/plan/evidence/measurements/hv-umm2.185.json",
+          "sha256": "12fca8dec2134dd8c71ba770ee1a342abe2928e4971efef9b29a0951aed9de21"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.186",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.186",
+          "path": "docs/plan/evidence/friction/hv-umm2.186.json",
+          "sha256": "ef8ced05dd9eb145e5c65d0a20fcb87cf9df56a1a3fc0052905f5017888abd1d"
+        },
+        {
+          "id": "hv-umm2.186",
+          "path": "docs/plan/evidence/measurements/hv-umm2.186.json",
+          "sha256": "1a1f8eff0184da3eae97c0b731db4e3440276c98abd52ac3dd82623c63572923"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.187",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.187",
+          "path": "docs/plan/evidence/friction/hv-umm2.187.json",
+          "sha256": "a3605aa71cf7d5de8f9ec6c3f6955e0588934c804d143869cd9168fa5f7593e1"
+        },
+        {
+          "id": "hv-umm2.187",
+          "path": "docs/plan/evidence/measurements/hv-umm2.187.json",
+          "sha256": "740006b844d2d117b8fe2ac62ff3e92c864ca883f070d00c27dbb281f2c826bf"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.188",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.188",
+          "path": "docs/plan/evidence/friction/hv-umm2.188.json",
+          "sha256": "1b5701e952397ba793a95cff0704bf4462b63913e45b907b93103c83f404030e"
+        },
+        {
+          "id": "hv-umm2.188",
+          "path": "docs/plan/evidence/measurements/hv-umm2.188.json",
+          "sha256": "ae275d6b580af655e47735f05d29e5d4facd772f2a2a6a32fc79dec2e5ef12be"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.189",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.189",
+          "path": "docs/plan/evidence/friction/hv-umm2.189.json",
+          "sha256": "85cf292d89329e19fe7b36e9ae1ff732c103075c924b45918f57aef1edf40647"
+        },
+        {
+          "id": "hv-umm2.189",
+          "path": "docs/plan/evidence/measurements/hv-umm2.189.json",
+          "sha256": "a79cfaf2a1c83bb57d2c1945be28548c4847b3fb8cfb14792957a125632b2d52"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.195",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.195",
+          "path": "docs/plan/evidence/friction/hv-umm2.195.json",
+          "sha256": "c4a5bfdbb86fc28abab554414f3acc87728fc07aad721c4c3d95f69993219ccb"
+        },
+        {
+          "id": "hv-umm2.195",
+          "path": "docs/plan/evidence/measurements/hv-umm2.195.json",
+          "sha256": "264cabd439752fd4fe23b1a33a579aefc975081f10c9085d2bd80eb6ae711084"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.198",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.198",
+          "path": "docs/plan/evidence/friction/hv-umm2.198.json",
+          "sha256": "abb3d00e733d1700d0508a4dccd3ca32bbd3a59abe760961281bd19ed1753a2c"
+        },
+        {
+          "id": "hv-umm2.198",
+          "path": "docs/plan/evidence/measurements/hv-umm2.198.json",
+          "sha256": "637baaae72af2fa40e5b27c2814e54231510dc14bef16b3bdb386aac6b6d789d"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.199",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.199",
+          "path": "docs/plan/evidence/friction/hv-umm2.199.json",
+          "sha256": "292cbf530f10ddb75cd3fcc3534fb2edb9b37c32f8832c218b939c88a07ebf73"
+        },
+        {
+          "id": "hv-umm2.199",
+          "path": "docs/plan/evidence/measurements/hv-umm2.199.json",
+          "sha256": "e48114c750cd0e2dedf3a68c7952801fd3d84852da466c34c53f9bda751e983e"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.200",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.200",
+          "path": "docs/plan/evidence/friction/hv-umm2.200.json",
+          "sha256": "a7b9b360c529bf5247dab74faeb0914332bf0526d253e7f7256aa6d9bca306d0"
+        },
+        {
+          "id": "hv-umm2.200",
+          "path": "docs/plan/evidence/measurements/hv-umm2.200.json",
+          "sha256": "c051c309f22cb6fce4ce2a8a29a0c69cee162f774ed4670f47cc99199ba43eb2"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.205",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.205",
+          "path": "docs/plan/evidence/friction/hv-umm2.205.json",
+          "sha256": "a75f4bc4bcc023d47e9b7afec8c728eead96093855135536a2e891a1c1a48498"
+        },
+        {
+          "id": "hv-umm2.205",
+          "path": "docs/plan/evidence/measurements/hv-umm2.205.json",
+          "sha256": "22e18df2e7117aa647315ee289a4bb9bd3695ff0864060346e0d9696f6f0a5dd"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.515",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.515",
+          "path": "docs/plan/evidence/friction/hv-umm2.515.json",
+          "sha256": "261b6ba91a7687cf59e10a5597d1490a89b7a2cf76048bff7112eeef9fae234e"
+        },
+        {
+          "id": "hv-umm2.515",
+          "path": "docs/plan/evidence/measurements/hv-umm2.515.json",
+          "sha256": "187949544fbb3d8a58fd8812616e85366e69f99d8cdad54584dd1b8590ede2e9"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.545",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.545",
+          "path": "docs/plan/evidence/friction/hv-umm2.545.json",
+          "sha256": "8c51dc19f8cabc6cb28c3153d55e2fc4b0f5ff4e9b4185e3f4406aeed630136d"
+        },
+        {
+          "id": "hv-umm2.545",
+          "path": "docs/plan/evidence/measurements/hv-umm2.545.json",
+          "sha256": "48f670a272ab0547d988667db9891b51f99d357bd4cc7309f9be856b0a57fbb4"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.546",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.546",
+          "path": "docs/plan/evidence/friction/hv-umm2.546.json",
+          "sha256": "babb6a96694d556b529432f35aa600a0ad00bf54d492d948f4a1cc5a817ef1bf"
+        },
+        {
+          "id": "hv-umm2.546",
+          "path": "docs/plan/evidence/measurements/hv-umm2.546.json",
+          "sha256": "4dfe867e7bfb91d217181559ec81322e401b72e47cdcba4c986b3ef7a6e048d5"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.547",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.547",
+          "path": "docs/plan/evidence/friction/hv-umm2.547.json",
+          "sha256": "8251952721af156b064ce2a282eae59c1a1e850bf3d6d10e84ead0c700d06374"
+        },
+        {
+          "id": "hv-umm2.547",
+          "path": "docs/plan/evidence/measurements/hv-umm2.547.json",
+          "sha256": "a3d44de015e3279e52204557ede8104811124f2da86a05c22e8157a789abd003"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.548",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.548",
+          "path": "docs/plan/evidence/friction/hv-umm2.548.json",
+          "sha256": "03b890af116365ddb583eb05fb1f0de96ae58b8195f255c9f00f2b7b206b6f98"
+        },
+        {
+          "id": "hv-umm2.548",
+          "path": "docs/plan/evidence/measurements/hv-umm2.548.json",
+          "sha256": "b1c27f19f5892d9486cf4ca68303b13ce71b32de46d398713cc9b9dae083566c"
+        },
+        {
+          "id": "hv-umm2.548",
+          "path": "docs/plan/evidence/measurements/hv-umm2.548.md",
+          "sha256": "7a816f346a1bd7b83cbe5268b678c9a91cef8651362d8ed5f9dc572b0ea4d80e"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.550",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.550",
+          "path": "docs/plan/evidence/friction/hv-umm2.550.json",
+          "sha256": "698a21ea86dd930681882200394ad14c572c7f5265a05eafb79f913dbed3dde6"
+        },
+        {
+          "id": "hv-umm2.550",
+          "path": "docs/plan/evidence/measurements/hv-umm2.550.json",
+          "sha256": "acf5a3e1ae32b7df37ec162c5c861dae2e8ff477e4d1c6401e73b086d22fb31c"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.551",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.551",
+          "path": "docs/plan/evidence/friction/hv-umm2.551.json",
+          "sha256": "f82ddef9463ba01b4fee7d1773d5c111a2638a951f076522f406ccd6df394a9e"
+        },
+        {
+          "id": "hv-umm2.551",
+          "path": "docs/plan/evidence/measurements/hv-umm2.551.json",
+          "sha256": "01a961811ae43157a2e0bcbfd4c7168a6d321ac44ac38b823337875e779fe12b"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.552",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.552",
+          "path": "docs/plan/evidence/friction/hv-umm2.552.json",
+          "sha256": "dac2ac0ddd8ffe7e79fafdf96c775874c1ec88e5a1de786458be7e1ee4abd01e"
+        },
+        {
+          "id": "hv-umm2.552",
+          "path": "docs/plan/evidence/measurements/hv-umm2.552.json",
+          "sha256": "7ca16bc5557be27e205a50f7c2d38795a3e6b8840873e0714e540b4ed3988ce3"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.555",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.555",
+          "path": "docs/plan/evidence/friction/hv-umm2.555.json",
+          "sha256": "a7cba9562fd349d2112d00610fab65bcbd62b7491021ff9eafc6fbb14b634c35"
+        },
+        {
+          "id": "hv-umm2.555",
+          "path": "docs/plan/evidence/measurements/hv-umm2.555.json",
+          "sha256": "fcb541445b4b664d5fb14bf709da3cac6bf79b50d5bc0f2c6b29e68dcadf98f9"
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.558",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-umm2.558",
+          "path": "docs/plan/evidence/friction/hv-umm2.558.json",
+          "sha256": "6725e8bdad2904a4b0e5b9dfae59622a0b9c105ac00c9b0436599215dc234e3e"
+        },
+        {
+          "id": "hv-umm2.558",
+          "path": "docs/plan/evidence/measurements/hv-umm2.558.json",
+          "sha256": "46814e2ef45001f73842666063f26aded3647418e323cc0faf31ab364315bdc8"
+        }
+      ]
+    },
+    {
+      "bead": "hv-vnue",
+      "nativeStatus": "closed",
+      "nativeResolution": "completed",
+      "files": [
+        {
+          "id": "hv-vnue",
+          "path": "docs/plan/evidence/friction/hv-vnue.json",
+          "sha256": "caefea2999f11bb1e5a16942b3959ff4051075cb590996e0d90fe2258aadf645"
+        },
+        {
+          "id": "hv-vnue",
+          "path": "docs/plan/evidence/measurements/hv-vnue.json",
+          "sha256": "6fb7cbbc4021a7e6e71e7093b5c180849c834a8e0023525e42d590a2924b578b"
+        }
+      ]
+    }
+  ],
+  "hashAudit": {
+    "files": 54,
+    "mismatches": 0
+  },
+  "gateMatching": "Exact native item.source_oid and immutable commit Bead trailer; final buildset only. ll78 duplicate merge-conflict has no buildset and is excluded.",
+  "gates": [
+    {
+      "bead": "hv-roz5",
+      "candidate": "01a130a1-3e06-7fd3-928b-26a3288d2cde",
+      "source": "4a946997c8bc00dfe89de0fc617a855ec4b7bde3",
+      "tested": {
+        "bytes": "60ecedf564e05245d771bab38c79fa6da27c46b6",
+        "format": "sha1"
+      },
+      "buildset": "01a130a1-8468-7782-a458-12207e1111b8",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 5052
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 99898
+        }
+      ]
+    },
+    {
+      "bead": "hv-sob5",
+      "candidate": "01a1309d-9937-7232-bca9-1eb42adc005a",
+      "source": "72315e74c20f93d8e01926c0358740a7a9151605",
+      "tested": {
+        "bytes": "1ae08887c27f4038a1d3ad9963e25f1711421324",
+        "format": "sha1"
+      },
+      "buildset": "01a1309d-9d8c-77f3-9ad3-32277ff379d4",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4737
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 71234
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.177",
+      "candidate": "01a130bf-2d55-7de3-98a4-cdb79becc998",
+      "source": "4cd796ac0572667c3a4e43f898e78455a91816a9",
+      "tested": {
+        "bytes": "d0e645c8b17b4d0148c5952cf91ab27351a329e1",
+        "format": "sha1"
+      },
+      "buildset": "01a130bf-3330-7731-9f22-a7e71541619f",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 5196
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 82679
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.178",
+      "candidate": "01a130a3-8ced-7503-aa7f-f6c1a8ab50f9",
+      "source": "ef7ff10960581affac6cff1dac57e619d778c5be",
+      "tested": {
+        "bytes": "68827050aba85b4f1d12e7af28ace711726856ff",
+        "format": "sha1"
+      },
+      "buildset": "01a130a3-9293-7963-956e-0dea8172eb7b",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 5137
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 92882
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.181",
+      "candidate": "01a130ad-b412-7d93-88e2-17b770453dd5",
+      "source": "c0289187f8a3b46daffd7d2c6d55f43a22f16723",
+      "tested": {
+        "bytes": "0fa7f7a2626d4b6ea651ae1c6e029abbdeacfbe0",
+        "format": "sha1"
+      },
+      "buildset": "01a130ad-ba42-7813-a8fd-8c92cbd71fa0",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4638
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 79785
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.185",
+      "candidate": "01a130ae-890a-7fc0-bf67-6e5ffdff392b",
+      "source": "6c8a0f0639821edd598659f7a5b0c56c49cd77f3",
+      "tested": {
+        "bytes": "6e60d3f4e22a3fbf147126ac864d7a2eeabeb268",
+        "format": "sha1"
+      },
+      "buildset": "01a130ae-8eb6-7e43-ab94-8b985fb072fe",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 6372
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 93635
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.186",
+      "candidate": "01a130cc-6621-7823-9ddc-ad927012141c",
+      "source": "1977e695278a44c8ae7c7939e61da31780df3a0b",
+      "tested": {
+        "bytes": "c6bd114b76709c26200e24908d671a69c12688e5",
+        "format": "sha1"
+      },
+      "buildset": "01a130cc-6a3f-7ce1-b925-f41ec4fa9e44",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 5007
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 93846
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.187",
+      "candidate": "01a130bc-6ecc-7630-9b6e-1d159b1ff102",
+      "source": "28b33cac534d7910374607c32bae066a9c059cd1",
+      "tested": {
+        "bytes": "e0902fce2171a9993fd7b25db88e9f830c35f3db",
+        "format": "sha1"
+      },
+      "buildset": "01a130bc-7406-7080-a689-bcdd7336a127",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 5332
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 85594
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.188",
+      "candidate": "01a130ff-90a8-7922-a2ca-cbcf4bdbc6ec",
+      "source": "9c6efc99e4b08c2a69ec35f1661a87e428fffc39",
+      "tested": {
+        "bytes": "aa091c92679b9f79bfb4be6139e0a8d0f0964404",
+        "format": "sha1"
+      },
+      "buildset": "01a130ff-95ce-7d93-b180-f8b16549b6f2",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4569
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 74763
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.189",
+      "candidate": "01a13104-5a12-73a0-92b5-033f8b100060",
+      "source": "b3de2cf630b6eb2d55409940beb238969efdb22c",
+      "tested": {
+        "bytes": "8ddd74667d98ba9404da98599422a910f32442fd",
+        "format": "sha1"
+      },
+      "buildset": "01a13104-5e57-7351-8ee9-92f80bfef5bd",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4299
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 74143
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.195",
+      "candidate": "01a130e8-b496-7052-8e92-338e35be3c12",
+      "source": "476ee2b50cddc2297dfea74b8c20daad18fe7742",
+      "tested": {
+        "bytes": "a3416d8201ef23eaf4fe1dca11666b455251da80",
+        "format": "sha1"
+      },
+      "buildset": "01a130e8-b920-77b3-9d01-9c595738c750",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4797
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 91357
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.198",
+      "candidate": "01a130d2-52ec-7562-8230-b0e84ff08979",
+      "source": "e99b2cb975f870c769482b5dd7d826cec379c9a8",
+      "tested": {
+        "bytes": "37ae08c56dc078e218aeb2fe607db9727c16e0f5",
+        "format": "sha1"
+      },
+      "buildset": "01a130d2-589d-7602-b997-206538d7bbbb",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4548
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 97317
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.199",
+      "candidate": "01a130f2-b966-7220-ae3b-40752b6b8cf1",
+      "source": "190ad60cf57ffc5787435b5e4d720e33f507e5c4",
+      "tested": {
+        "bytes": "4f43c7891e75e13f832c4ec7bbaedcbf3892bc03",
+        "format": "sha1"
+      },
+      "buildset": "01a130f2-be41-7202-9498-d1b56c2b8a34",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4737
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 82705
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.200",
+      "candidate": "01a13106-a409-79d3-8dce-99f598243886",
+      "source": "f9f00ce0dce80486efea066e50a475b6419e6013",
+      "tested": {
+        "bytes": "176a138dd495e31df901fbd091069241b423de3e",
+        "format": "sha1"
+      },
+      "buildset": "01a13106-a9bf-77f2-b0eb-31159f5fa588",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 5346
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 90479
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.205",
+      "candidate": "01a13112-afa4-7450-bc5f-5cd6d9068f73",
+      "source": "bee4b7ba6e8721c74b387d721695808137009d45",
+      "tested": {
+        "bytes": "2dfecb25b6114c4efeda8a028c9103ad50c5cace",
+        "format": "sha1"
+      },
+      "buildset": "01a13112-b55a-7130-8c36-7ae550a02251",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4623
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 75998
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.515",
+      "candidate": "01a130e6-b175-7ad1-b7b0-3f62496eafaf",
+      "source": "7649716ee756e7e5d3532c4b673e5a156a2708fb",
+      "tested": {
+        "bytes": "2cb081b69f605c7d68c37c2dcecf75f5b2d1257e",
+        "format": "sha1"
+      },
+      "buildset": "01a130e6-b773-7843-ae8f-5833c3300cdc",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4905
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 99134
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.545",
+      "candidate": "01a1309e-76c6-7d33-979b-b2b7022c95b5",
+      "source": "33ad90b03c790b7256d668f0cfa16aa3343d0a09",
+      "tested": {
+        "bytes": "a844849d25219a366777a16b0bccd0d26774c76e",
+        "format": "sha1"
+      },
+      "buildset": "01a1309e-7cdc-7292-a07f-faa044e98d7c",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 7320
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 42264
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.546",
+      "candidate": "01a13105-a17b-7fb0-b423-f4fe02a88863",
+      "source": "e50b3915fc83c0e4a465debb92d4f44d4d493b2b",
+      "tested": {
+        "bytes": "733e4085118fa83aa29b45048d1518ea5e3dbaac",
+        "format": "sha1"
+      },
+      "buildset": "01a13105-a601-7c51-b22f-4528f30e9ef9",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 6535
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 20470
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.547",
+      "candidate": "01a13094-8aa2-7233-b2d8-b324ca2ff2fc",
+      "source": "7f8f958fe37436fdc60b2f8ad72dc57feb873fc0",
+      "tested": {
+        "bytes": "cb5d75d482b29c88b77c806c9a5ac76584741b0f",
+        "format": "sha1"
+      },
+      "buildset": "01a13094-9693-7071-b40c-d4b7cd298dac",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 5765
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 77141
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.548",
+      "candidate": "01a130a1-4816-7823-8290-11bcdd605b17",
+      "source": "3c6e2a5c0dba6dec53deacd05e2e591693c49321",
+      "tested": {
+        "bytes": "c1a82688b826679a36bb1b215d29ca9d97be8dc2",
+        "format": "sha1"
+      },
+      "buildset": "01a130a1-81d9-7700-89da-f300b87f31df",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4743
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 14419
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.550",
+      "candidate": "01a130b8-d696-7e52-b87d-4ceea97f1d5f",
+      "source": "06cf558841a5f6e7138d053c8235cda707a6ebea",
+      "tested": {
+        "bytes": "d82b1404246632762c0619150b56f1f997d08c57",
+        "format": "sha1"
+      },
+      "buildset": "01a130b8-dbb4-7c91-849f-75c0b018f581",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4618
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 43650
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.551",
+      "candidate": "01a130e4-2178-7e51-801d-1d692632bad0",
+      "source": "23e578404c900215939c07808a6d7d9616893157",
+      "tested": {
+        "bytes": "5af32ccb2c91d57c38fd43484605a5b6fb4ceaf7",
+        "format": "sha1"
+      },
+      "buildset": "01a130e4-26db-7693-9e73-903d86d2e8c6",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4455
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 75029
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.552",
+      "candidate": "01a130c9-77bc-7620-ab30-7d35ffe381ec",
+      "source": "492be78b7ea92c34d158765a2f5ea44913537aab",
+      "tested": {
+        "bytes": "0018a0b80c1a06d585ca92ea0a59c088a7085661",
+        "format": "sha1"
+      },
+      "buildset": "01a130c9-7c12-7663-9a0c-f86ba0a06c9a",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4692
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 34510
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.555",
+      "candidate": "01a1310c-3150-7a32-81f2-3298a1cd3479",
+      "source": "5f79d9c37f2fd136b477f958697c6ee33ab4b75c",
+      "tested": {
+        "bytes": "3e94e6d3bc0bbf8f94481fd70452fc912b9507b1",
+        "format": "sha1"
+      },
+      "buildset": "01a1310c-35b2-7fc2-803e-6212531021ce",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4618
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 78803
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.558",
+      "candidate": "01a13113-4eb1-7871-8511-4edf829bc604",
+      "source": "c32708b6279ee2f627091f07a04dbc170fbef53b",
+      "tested": {
+        "bytes": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+        "format": "sha1"
+      },
+      "buildset": "01a13113-5554-7ff0-8cee-17d91186909c",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 6216
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 14366
+        }
+      ]
+    },
+    {
+      "bead": "hv-vnue",
+      "candidate": "01a1308e-bc93-7990-8091-07dfc857f10d",
+      "source": "42f51142898fee17907c6cb1a917ba97f3c24c50",
+      "tested": {
+        "bytes": "778222e2399f526ed126c48b8cbccaf6b6b8ff09",
+        "format": "sha1"
+      },
+      "buildset": "01a1308e-c0e0-7d10-9c30-b9d30a08e679",
+      "steps": [
+        {
+          "name": "dependencies",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 4762
+        },
+        {
+          "name": "review-gate",
+          "resultClass": "success",
+          "exitCode": 0,
+          "elapsedMs": 77640
+        }
+      ]
+    }
+  ],
+  "gateSummary": {
+    "medianStepSumS": 83.1635,
+    "rangeS": [
+      19.162,
+      104.95
+    ],
+    "medianReviewS": 78.2215,
+    "above60S": 20,
+    "above90S": 9
+  },
+  "releaseAtFreeze": {
+    "state": "pending",
+    "lag": {
+      "commits": 2,
+      "since": [
+        2026,
+        285,
+        17,
+        5,
+        54,
+        655907000,
+        0,
+        0,
+        0
+      ]
+    },
+    "holds": [],
+    "pause": null,
+    "counts": {
+      "passed": 21,
+      "superseded": 3,
+      "running": 1,
+      "queued": 1
+    },
+    "passedMedianStepSumS": 207.735,
+    "rangeS": [
+      188.955,
+      234.699
+    ],
+    "medianReviewFullS": 104.141,
+    "medianFuzzS": 98.545,
+    "publication": "Not established for frozen staging tip",
+    "successfulRuns": [
+      {
+        "id": "01a1310d-8fb7-7da0-9161-e1644b159d52",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4291
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 99372
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 104072
+          }
+        ]
+      },
+      {
+        "id": "01a13108-3a76-79a3-a6c6-1003776a2cb2",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5074
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 96873
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 95429
+          }
+        ]
+      },
+      {
+        "id": "01a13105-a6c5-7991-bec2-7add072478e6",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 6604
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 117242
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 101154
+          }
+        ]
+      },
+      {
+        "id": "01a13100-dfef-7640-a68d-3e6232b20c02",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4089
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 94804
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 98367
+          }
+        ]
+      },
+      {
+        "id": "01a130f4-26df-7042-be66-09d03654b81e",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4373
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 102339
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 100851
+          }
+        ]
+      },
+      {
+        "id": "01a130ea-5667-7010-8f81-a6eca0424078",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5444
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 100630
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 96478
+          }
+        ]
+      },
+      {
+        "id": "01a130e8-6506-7c50-a00f-762f7a60b484",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5260
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 111633
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 98371
+          }
+        ]
+      },
+      {
+        "id": "01a130e5-7093-7c72-85bd-fb0332c5c035",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4305
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 102620
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 113739
+          }
+        ]
+      },
+      {
+        "id": "01a130d3-f4f3-7d20-81c2-f8ba411caf0b",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4365
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 108627
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 92688
+          }
+        ]
+      },
+      {
+        "id": "01a130cd-fce0-7d20-acd0-1599535ade59",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4620
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 109442
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 101783
+          }
+        ]
+      },
+      {
+        "id": "01a130ca-265f-7393-be5c-a2875ee262d0",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4380
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 104112
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 108167
+          }
+        ]
+      },
+      {
+        "id": "01a130c0-99c2-7b42-9f80-32c8f2960039",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4286
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 102795
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 92298
+          }
+        ]
+      },
+      {
+        "id": "01a130bd-ea65-7c71-920c-bc34b73698e2",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5152
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 102641
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 94296
+          }
+        ]
+      },
+      {
+        "id": "01a130b9-ab12-70f3-9478-a2ea1a2b2fcf",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5713
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 111067
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 100349
+          }
+        ]
+      },
+      {
+        "id": "01a130b0-c0fd-7431-836f-684c88126183",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5131
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 105387
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 93732
+          }
+        ]
+      },
+      {
+        "id": "01a130af-16df-76c1-bfbd-f5ab6b03d0c7",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 6290
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 115846
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 100853
+          }
+        ]
+      },
+      {
+        "id": "01a130a5-2328-7f60-a0f0-cf2ed2c050f4",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 4834
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 109004
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 101913
+          }
+        ]
+      },
+      {
+        "id": "01a130a1-df13-7300-a85c-54147fa3fb94",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 6403
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 129751
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 98545
+          }
+        ]
+      },
+      {
+        "id": "01a1309e-de67-7c41-9ed8-e7686f12f14a",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 7339
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 104141
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 109247
+          }
+        ]
+      },
+      {
+        "id": "01a13095-f81d-7a03-8e7c-8e025324cbe1",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5298
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 95039
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 88618
+          }
+        ]
+      },
+      {
+        "id": "01a13090-1e2c-74f2-89c8-07aa42b74a76",
+        "state": "check-passed",
+        "steps": [
+          {
+            "name": "dependencies",
+            "result_class": "success",
+            "elapsed_ms": 5406
+          },
+          {
+            "name": "review-full",
+            "result_class": "success",
+            "elapsed_ms": 106612
+          },
+          {
+            "name": "fuzz",
+            "result_class": "success",
+            "elapsed_ms": 87388
+          }
+        ]
+      }
+    ]
+  },
+  "history": {
+    "events": 500,
+    "sequenceRange": [
+      20985,
+      21484
+    ],
+    "fromUtc": "2026-10-12T15:03:35.691290Z",
+    "throughUtc": "2026-10-12T17:08:19.964082Z",
+    "scope": "Recent partial returned window; not full run"
+  },
+  "reportedWindows": {
+    "sumMinutes": 846.8687271166666,
+    "medianMinutes": 23.760378566666667,
+    "medianHostLoad": 13.349853515625,
+    "hostLoadRange": [
+      4.65,
+      30.27783203125
+    ],
+    "scope": "Heterogeneous overlapping ownership/proxy windows including waits and corrections, not CPU/active editing"
+  },
+  "localChecks": {
+    "review": {
+      "n": 25,
+      "medianS": 41.182,
+      "rangeS": [
+        0.301,
+        62.44
+      ]
+    },
+    "focused": {
+      "n": 19,
+      "medianS": 5.783,
+      "rangeS": [
+        2.25,
+        23.243
+      ]
+    },
+    "knip": {
+      "n": 26,
+      "medianS": 3.564,
+      "rangeS": [
+        2,
+        5.498
+      ]
+    }
+  },
+  "footprint": {
+    "trackedEntrypoints": 351,
+    "trackedJsdom": 82,
+    "reportedDeltas": {
+      "files": 6,
+      "lines": 2664,
+      "jsdom": 0
+    },
+    "over500": 7,
+    "scope": "Counts informational; reported deltas have heterogeneous scopes, not chronological growth. Six >500 tutorial files and 510-line friction-triggers.test.mjs; exception status not established by this bounded audit."
+  },
+  "existingRemedies": [
+    "hv-umm2.558",
+    "hv-umm2.545",
+    "hv-umm2.550",
+    "hv-umm2.552",
+    "hv-umm2.551",
+    "hv-umm2.557",
+    "hv-umm2.526"
+  ],
+  "newImprovements": [],
+  "budgetRevision": null,
+  "reviewChains": [
+    "541\u2192546/547",
+    "535\u2192542\u2192545",
+    "550\u2192552",
+    "vnue/roz5/sob5 settled exact-source reviews"
+  ],
+  "helper": {
+    "identity": "/root/selection_order",
+    "role": "read-only sage; not independent code review",
+    "firstObservedUtc": "2026-10-12T17:08:40Z",
+    "parentPreDispatchUtc": "2026-10-12T17:08:11.125500Z",
+    "parentPostDispatchUtc": "2026-10-12T17:08:34.605809Z",
+    "exactDispatchUtc": null,
+    "terminal": true,
+    "summarizerCorrection": {
+      "failedWallS": 0.038172,
+      "correctedWallS": 0.153371,
+      "subprocessIdentities": "unknown",
+      "cause": "ll78 null buildset omitted from successful gates"
+    }
+  },
+  "author": {
+    "claimUtc": "2026-10-12T17:07:15Z",
+    "measurementCutoffUtc": "2026-10-12T17:21:09.797466+00:00",
+    "windowBasis": "Whole claim\u2192precommit evidence cutoff ownership proxy; includes parent/helper reads, coordination and waits; actual commit tail separate",
+    "install": {
+      "name": "561-install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "observerPid": 98872,
+      "pid": 98955,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective-since548",
+      "startUtc": "2026-10-12T17:07:39.247977+00:00",
+      "endUtc": "2026-10-12T17:07:42.134463+00:00",
+      "wallS": 2.8865186249895487,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/561-install.log"
+    },
+    "negativeAttempts": [
+      "Preclaim nonexistent npm friction script and unsupported friction --ref; premature unclaimed213 title/WT, exactcleanWT/ref removed before561claim; no source/install/helper/claim for213",
+      "Own unsupported history --limit500 rejected afterclaim, corrected supported default history; failed output retained",
+      "Helper null-buildset summarizer corrected; no runtime mutation or acceptance failure",
+      "Evidence builder assumed buildset.steps then item.tested_oid; each failed before repository writes. Corrected actual step_results and buildset.tested_oid; successful four-path write17:19:36.192416Z. Exact failed command starts are unknown; the complete correction interval is included in whole claim ownership. No narrower correction-minute estimate claimed.",
+      "First561-review(.208454s) ran before evidence existed because parent did not gate subsequent actions on builder failure; it is not final evidence validation. Knip5.141219s passed on same unchanged source/import graph; renewed review/schema required after actual writes."
+    ],
+    "priorSourceFree206": {
+      "claim": "2026-10-12T16:43:58Z",
+      "release": "2026-10-12T17:04:56Z",
+      "minutes": 20.966666666666665,
+      "included": "install, audit, parent delay, diagnostic, canonical560 filing/serialization, cleanup; distinct from561"
+    },
+    "resources": "Install finite terminal; no runtime/browser/server/lease/reviewer/candidate yet",
+    "validationScope": "Final staged4path review passed friction schema610records/41historicalunknowns; Knip passed same unchanged source/import graph. Metadata-only timing refresh follows; final schema beforecommit.",
+    "postCutoffTail": "Final metadata schema, diff inspection, commit and submission happen after this cutoff; actual receipt/native note separately qualifies tail."
+  },
+  "coreFailurePaths": "Evidence-only additive ledger/own measurements; error/restart/partial-write/stale/concurrent gameplay paths inapplicable. Existing runtime evidence is audited; no runtime behavior or acceptance waived.",
+  "ownChecks": [
+    {
+      "name": "561-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 59945,
+      "pid": 60003,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective-since548",
+      "startUtc": "2026-10-12T17:19:24.621868+00:00",
+      "endUtc": "2026-10-12T17:19:24.830290+00:00",
+      "wallS": 0.20845391700277105,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/561-review.log"
+    },
+    {
+      "name": "561-review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 92145,
+      "pid": 92154,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective-since548",
+      "startUtc": "2026-10-12T17:20:01.518899+00:00",
+      "endUtc": "2026-10-12T17:20:01.800639+00:00",
+      "wallS": 0.2817707079957472,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/561-review-final.log"
+    },
+    {
+      "name": "561-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 60641,
+      "pid": 60723,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective-since548",
+      "startUtc": "2026-10-12T17:19:24.878160+00:00",
+      "endUtc": "2026-10-12T17:19:30.019405+00:00",
+      "wallS": 5.141219000011915,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/561-knip.log"
+    },
+    {
+      "name": "561-review-staged",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 93562,
+      "pid": 93576,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective-since548",
+      "startUtc": "2026-10-12T17:20:26.842601+00:00",
+      "endUtc": "2026-10-12T17:20:27.136478+00:00",
+      "wallS": 0.2939133750041947,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/561-review-staged.log"
+    }
+  ]
+}
