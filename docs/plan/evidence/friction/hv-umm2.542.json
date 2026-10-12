@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.542",
+  "phase": 5,
+  "implementWindow": {
+    "start": "2026-10-12T13:31:44.576323+00:00",
+    "end": "2026-10-12T14:03:14.594817+00:00"
+  },
+  "implementMin": 31.50030823333333,
+  "localValidationS": {
+    "focused": 22.49370658299449,
+    "review": 31.41177612500178,
+    "knip": 3.298757625001599,
+    "full": 99.7670652500019,
+    "browser": 3.7948416250001173
+  },
+  "hostLoad": 22.171875,
+  "testDelta": {
+    "files": 0,
+    "lines": 127,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 14.178173166666665,
+      "note": "Observed lower-bound elapsed fixture/error-formatting correction, coordination, heavy wait and repeated validation; not productive editing or active CPU. Exact original detection clock unknown; receipts and intermediate stages retained in own measurements."
+    }
+  ]
+}

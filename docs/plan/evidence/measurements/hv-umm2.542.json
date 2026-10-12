@@ -1,0 +1,979 @@
+{
+  "bead": "hv-umm2.542",
+  "assignedBase": "fc15e846af294d373f6743343ceb6d32eb5257eb",
+  "scope": "Observed failure propagation through existing ordered owned QA cleanup stages",
+  "implementationWindow": {
+    "start": "2026-10-12T13:31:44.576323+00:00",
+    "startKind": "parent post-dispatch proxy; actual helper/model start unknown",
+    "end": "2026-10-12T14:03:14.594817+00:00",
+    "endKind": "parent-approved commit metadata clock; actual Git subprocess execution recorded separately",
+    "elapsedProxyMinutes": 31.50030823333333,
+    "actualHelperStartKnown": false,
+    "limit": "actual npm installation began before the parent post-dispatch proxy; command clocks are observed independently and do not establish model start"
+  },
+  "install": {
+    "command": [
+      "npm",
+      "install"
+    ],
+    "start": "2026-10-12T13:31:19.671439+00:00",
+    "pid": 56005,
+    "pgid": 56005,
+    "end": "2026-10-12T13:31:22.662102+00:00",
+    "elapsedSec": 2.990543207997689,
+    "exitCode": 0
+  },
+  "validationReceipts": {
+    "heavy-acquired": {
+      "observed": "2026-10-12T13:57:43.022049+00:00",
+      "pid": 35234,
+      "pgid": 35233,
+      "hostLoad": [
+        18.18701171875,
+        15.91748046875,
+        14.376953125
+      ]
+    },
+    "review-terminal-pidproof": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T13:44:04.914235+00:00",
+      "hostLoadStart": [
+        16.18994140625,
+        16.3564453125,
+        14.29833984375
+      ],
+      "observerPid": 29893,
+      "observerPgid": 29893,
+      "pid": 29910,
+      "pgid": 29910,
+      "end": "2026-10-12T13:44:34.551818+00:00",
+      "elapsedSec": 29.637511791996076,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        14.271484375,
+        15.92529296875,
+        14.2158203125
+      ]
+    },
+    "heavy-wrapper-terminal": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-qa-cleanup-errors/heavy-acquired.py"
+      ],
+      "start": "2026-10-12T13:57:42.998661+00:00",
+      "hostLoadStart": [
+        18.18701171875,
+        15.91748046875,
+        14.376953125
+      ],
+      "observerPid": 35223,
+      "observerPgid": 35223,
+      "pid": 35233,
+      "pgid": 35233,
+      "end": "2026-10-12T13:59:22.820310+00:00",
+      "elapsedSec": 99.82133941600478,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        10.61962890625,
+        14.0068359375,
+        13.80615234375
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T13:38:08.487373+00:00",
+      "hostLoadStart": [
+        14.01904296875,
+        16.2529296875,
+        13.47705078125
+      ],
+      "observerPid": 12758,
+      "observerPgid": 12758,
+      "pid": 12768,
+      "pgid": 12768,
+      "end": "2026-10-12T13:38:12.033740+00:00",
+      "elapsedSec": 3.5463919170069858,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        14.01904296875,
+        16.2529296875,
+        13.47705078125
+      ]
+    },
+    "focused-terminal-pidproof": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs",
+        "scripts/qa/browser-lease.test.mjs"
+      ],
+      "start": "2026-10-12T13:43:34.388159+00:00",
+      "hostLoadStart": [
+        19.47900390625,
+        16.892578125,
+        14.40673828125
+      ],
+      "observerPid": 4327,
+      "observerPgid": 4327,
+      "pid": 4344,
+      "pgid": 4344,
+      "end": "2026-10-12T13:43:58.895994+00:00",
+      "elapsedSec": 24.50782679200347,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        16.9033203125,
+        16.49755859375,
+        14.3359375
+      ]
+    },
+    "focused-terminal-identityproof": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs",
+        "scripts/qa/browser-lease.test.mjs"
+      ],
+      "start": "2026-10-12T13:51:38.984086+00:00",
+      "hostLoadStart": [
+        8.0087890625,
+        11.60888671875,
+        12.99267578125
+      ],
+      "observerPid": 43696,
+      "observerPgid": 43696,
+      "pid": 43704,
+      "pgid": 43704,
+      "end": "2026-10-12T13:52:06.891166+00:00",
+      "elapsedSec": 27.90704079200077,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        10.13916015625,
+        11.85498046875,
+        13.04345703125
+      ]
+    },
+    "full-initial": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T13:38:28.688632+00:00",
+      "hostLoadStart": [
+        12.54833984375,
+        15.767578125,
+        13.3662109375
+      ],
+      "observerPid": 14213,
+      "observerPgid": 14208,
+      "pid": 14217,
+      "pgid": 14208,
+      "end": "2026-10-12T13:40:04.735246+00:00",
+      "elapsedSec": 96.04630145899864,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        8.4560546875,
+        13.603515625,
+        12.78564453125
+      ]
+    },
+    "full-pidproof": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T13:48:57.439896+00:00",
+      "hostLoadStart": [
+        10.4765625,
+        14.39697265625,
+        14.091796875
+      ],
+      "observerPid": 13625,
+      "observerPgid": 56864,
+      "pid": 13629,
+      "pgid": 56864,
+      "end": "2026-10-12T13:50:34.762906+00:00",
+      "elapsedSec": 97.32269766699756,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        7.4501953125,
+        12.46142578125,
+        13.38525390625
+      ]
+    },
+    "knip-terminal": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T13:57:15.068882+00:00",
+      "hostLoadStart": [
+        19.54248046875,
+        15.90478515625,
+        14.32470703125
+      ],
+      "observerPid": 22898,
+      "observerPgid": 22898,
+      "pid": 22957,
+      "pgid": 22957,
+      "end": "2026-10-12T13:57:18.367598+00:00",
+      "elapsedSec": 3.298757625001599,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        19.54248046875,
+        15.90478515625,
+        14.32470703125
+      ]
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs"
+      ],
+      "start": "2026-10-12T13:36:41.310577+00:00",
+      "hostLoadStart": [
+        19.1728515625,
+        16.9404296875,
+        13.35546875
+      ],
+      "observerPid": 33095,
+      "observerPgid": 33095,
+      "pid": 33203,
+      "pgid": 33203,
+      "end": "2026-10-12T13:37:05.874400+00:00",
+      "elapsedSec": 24.563791375003348,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        20.48974609375,
+        17.38818359375,
+        13.61767578125
+      ]
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs"
+      ],
+      "start": "2026-10-12T13:41:50.551201+00:00",
+      "hostLoadStart": [
+        14.560546875,
+        15.11376953125,
+        13.52001953125
+      ],
+      "observerPid": 93009,
+      "observerPgid": 93009,
+      "pid": 93029,
+      "pgid": 93029,
+      "end": "2026-10-12T13:42:13.590748+00:00",
+      "elapsedSec": 23.039511000002676,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        17.50048828125,
+        15.7353515625,
+        13.78759765625
+      ]
+    },
+    "native": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-qa-cleanup-errors/native-smoke.mjs"
+      ],
+      "start": "2026-10-12T14:00:08.735897+00:00",
+      "hostLoadStart": [
+        7.810546875,
+        12.74853515625,
+        13.3515625
+      ],
+      "observerPid": 70363,
+      "observerPgid": 70363,
+      "pid": 70371,
+      "pgid": 70371,
+      "end": "2026-10-12T14:00:12.530718+00:00",
+      "elapsedSec": 3.7948416250001173,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        7.810546875,
+        12.74853515625,
+        13.3515625
+      ]
+    },
+    "heavy-acquired-initial": {
+      "observed": "2026-10-12T13:38:28.666499+00:00",
+      "pid": 14209,
+      "pgid": 14208,
+      "hostLoad": [
+        12.54833984375,
+        15.767578125,
+        13.3662109375
+      ]
+    },
+    "focused-terminal": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs",
+        "scripts/qa/browser-lease.test.mjs"
+      ],
+      "start": "2026-10-12T13:55:29.700356+00:00",
+      "hostLoadStart": [
+        26.1220703125,
+        14.9541015625,
+        13.83447265625
+      ],
+      "observerPid": 33642,
+      "observerPgid": 33642,
+      "pid": 33748,
+      "pgid": 33748,
+      "end": "2026-10-12T13:55:52.194110+00:00",
+      "elapsedSec": 22.49370658299449,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        23.5947265625,
+        15.07568359375,
+        13.90185546875
+      ]
+    },
+    "full": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T13:57:43.044703+00:00",
+      "hostLoadStart": [
+        18.18701171875,
+        15.91748046875,
+        14.376953125
+      ],
+      "observerPid": 35236,
+      "observerPgid": 35233,
+      "pid": 35238,
+      "pgid": 35233,
+      "end": "2026-10-12T13:59:22.812079+00:00",
+      "elapsedSec": 99.7670652500019,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        10.61962890625,
+        14.0068359375,
+        13.80615234375
+      ]
+    },
+    "heavy-acquired-pidproof": {
+      "observed": "2026-10-12T13:48:57.417979+00:00",
+      "pid": 13621,
+      "pgid": 56864,
+      "hostLoad": [
+        10.4765625,
+        14.39697265625,
+        14.091796875
+      ]
+    },
+    "native-result": {
+      "owner": {
+        "token": "f0e5d931-ee17-4ebc-b725-f82278dc6027",
+        "pid": 70371,
+        "bead": "hv-umm2.542",
+        "label": "terminal-cleanup-smoke",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-542-cleanup-errors",
+        "slot": 0,
+        "port": 5174,
+        "startedAt": "2026-10-12T14:00:10.235Z",
+        "providerState": "active",
+        "mcpSessionId": "5b3c0b1b-e602-49d8-a3e1-2df44fcfef02",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "recordedSessionConfirmedByToolsList": true,
+      "qa": {
+        "result": {
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "error": null,
+        "log": [],
+        "captures": [],
+        "caps": [],
+        "traces": []
+      },
+      "serverPid": 70404,
+      "slotPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 10,
+        "serve": 1363
+      },
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.542/invocations/run-2NzoMr",
+      "completionReceipt": {
+        "token": "f0e5d931-ee17-4ebc-b725-f82278dc6027",
+        "pid": 70371,
+        "bead": "hv-umm2.542",
+        "label": "terminal-cleanup-smoke",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-542-cleanup-errors",
+        "slot": 0,
+        "port": 5174,
+        "startedAt": "2026-10-12T14:00:10.235Z",
+        "providerState": "execution-completed",
+        "mcpSessionId": "5b3c0b1b-e602-49d8-a3e1-2df44fcfef02",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25",
+        "mcpExecutionCompleted": true
+      },
+      "flushes": [
+        {
+          "stage": "complete-file-fsynced",
+          "at": "2026-10-12T14:00:11.998Z"
+        },
+        {
+          "stage": "published-directory-fsynced",
+          "at": "2026-10-12T14:00:12.003Z"
+        }
+      ],
+      "cleanup": {
+        "providerClosed": true,
+        "ownerRecordAbsent": true,
+        "serverRecordAbsent": true,
+        "serverPidAbsent": true,
+        "portFree": true,
+        "kernelLockReleased": true
+      }
+    },
+    "review-terminal": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T13:56:39.446468+00:00",
+      "hostLoadStart": [
+        22.171875,
+        15.72021484375,
+        14.1884765625
+      ],
+      "observerPid": 67964,
+      "observerPgid": 67964,
+      "pid": 67982,
+      "pgid": 67982,
+      "end": "2026-10-12T13:57:10.858309+00:00",
+      "elapsedSec": 31.41177612500178,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        20.54736328125,
+        16.03857421875,
+        14.3623046875
+      ]
+    },
+    "heavy-wrapper-initial": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-qa-cleanup-errors/heavy-acquired.py"
+      ],
+      "start": "2026-10-12T13:38:28.643925+00:00",
+      "hostLoadStart": [
+        12.54833984375,
+        15.767578125,
+        13.3662109375
+      ],
+      "observerPid": 14196,
+      "observerPgid": 14196,
+      "pid": 14208,
+      "pgid": 14208,
+      "end": "2026-10-12T13:40:04.742169+00:00",
+      "elapsedSec": 96.09793362500204,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        8.4560546875,
+        13.603515625,
+        12.78564453125
+      ]
+    },
+    "knip-terminal-pidproof": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T13:45:08.555741+00:00",
+      "hostLoadStart": [
+        12.18310546875,
+        15.18212890625,
+        14.0107421875
+      ],
+      "observerPid": 55738,
+      "observerPgid": 55738,
+      "pid": 55748,
+      "pgid": 55748,
+      "end": "2026-10-12T13:45:11.323074+00:00",
+      "elapsedSec": 2.767363375001878,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        12.18310546875,
+        15.18212890625,
+        14.0107421875
+      ]
+    },
+    "heavy-wrapper-terminal-pidproof": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-qa-cleanup-errors/heavy-acquired.py"
+      ],
+      "start": "2026-10-12T13:45:23.517808+00:00",
+      "hostLoadStart": [
+        11.1015625,
+        14.79638671875,
+        13.89306640625
+      ],
+      "observerPid": 56854,
+      "observerPgid": 56854,
+      "pid": 56864,
+      "pgid": 56864,
+      "end": "2026-10-12T13:50:34.770148+00:00",
+      "elapsedSec": 311.2512851249994,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        7.4501953125,
+        12.46142578125,
+        13.38525390625
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T13:37:22.223390+00:00",
+      "hostLoadStart": [
+        20.197265625,
+        17.50732421875,
+        13.72705078125
+      ],
+      "observerPid": 86849,
+      "observerPgid": 86849,
+      "pid": 86866,
+      "pgid": 86866,
+      "end": "2026-10-12T13:37:50.649640+00:00",
+      "elapsedSec": 28.426205208001193,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        16.4013671875,
+        16.81201171875,
+        13.60302734375
+      ]
+    },
+    "review-terminal-identityproof": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T13:52:41.958856+00:00",
+      "hostLoadStart": [
+        9.2490234375,
+        11.46728515625,
+        12.85498046875
+      ],
+      "observerPid": 66882,
+      "observerPgid": 66882,
+      "pid": 66890,
+      "pgid": 66890,
+      "end": "2026-10-12T13:53:07.940652+00:00",
+      "elapsedSec": 25.98175320900191,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        9.1572265625,
+        11.28076171875,
+        12.7470703125
+      ]
+    },
+    "knip-terminal-identityproof": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T13:53:16.871859+00:00",
+      "hostLoadStart": [
+        8.732421875,
+        11.1220703125,
+        12.673828125
+      ],
+      "observerPid": 88810,
+      "observerPgid": 88810,
+      "pid": 88818,
+      "pgid": 88818,
+      "end": "2026-10-12T13:53:19.574854+00:00",
+      "elapsedSec": 2.7030391660009627,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        9.95458984375,
+        11.33544921875,
+        12.73974609375
+      ]
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T14:01:10.109885+00:00",
+      "hostLoadStart": [
+        6.57080078125,
+        11.50341796875,
+        12.84228515625
+      ],
+      "observerPid": 72436,
+      "observerPgid": 72436,
+      "pid": 72444,
+      "pgid": 72444,
+      "end": "2026-10-12T14:01:10.176543+00:00",
+      "elapsedSec": 0.06669041699933587,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        6.57080078125,
+        11.50341796875,
+        12.84228515625
+      ]
+    },
+    "schema-final": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T14:04:01.998499+00:00",
+      "hostLoadStart": [
+        25.009765625,
+        16.20263671875,
+        14.43310546875
+      ],
+      "observerPid": 53499,
+      "observerPgid": 53499,
+      "pid": 53565,
+      "pgid": 53565,
+      "end": "2026-10-12T14:04:02.126011+00:00",
+      "elapsedSec": 0.12756454200280132,
+      "exitCode": 0,
+      "hostLoadEnd": [
+        25.009765625,
+        16.20263671875,
+        14.43310546875
+      ]
+    }
+  },
+  "validationCounts": {
+    "focused": {
+      "files": 6,
+      "cases": 92
+    },
+    "review": {
+      "files": 6,
+      "cases": 87
+    },
+    "full": {
+      "files": 349,
+      "cases": 5226
+    }
+  },
+  "heavyLeaseTiming": {
+    "wrapperToAcquisitionSeconds": 0.023388,
+    "limit": "wrapper-to-acquisition includes process startup and observed kernel wait; it is not an isolated queue or kernel wait measurement",
+    "workers": 2
+  },
+  "negativeWitness": {
+    "receipt": {
+      "start": "2026-10-12T13:33:00.694686+00:00",
+      "end": "2026-10-12T13:33:02.654066+00:00",
+      "elapsedSec": 1.959448749999865,
+      "pid": 16214,
+      "pgid": 16214,
+      "exitCode": 1,
+      "classification": "expected public-contract failure on unchanged source"
+    },
+    "classification": "expected unchanged-source public contract failure, not passing validation",
+    "source": "unchanged assigned base",
+    "observed": "provider and owner-persistence errors reach diagnostics; later actual server-stop boundary error is the sole propagated cause; private prior owner bytes are retained and all private resources settled",
+    "files": {
+      "run.log": "e43e208e7f5ff06d3cee0d45c3a4d9a1206c5a4262efb904c2773a22e3bede77",
+      "negative.test.mjs": "bcb6aee6c6fc77c299f41305864c77ed21e6804205b216cbb08da0e2f203450a",
+      "vitest.config.mjs": "d8fc3adfb88f41a6bb659389b73623cc7d5f0b8f7255ba1bbd742e883ddaac20",
+      "run.json": "5bd4f552a5eca90743860f2e039d622331754d950a9440cf84ada573aba53da8"
+    }
+  },
+  "initialValidationDisposition": {
+    "receipts": [
+      "focused",
+      "review",
+      "knip",
+      "full-initial",
+      "heavy-wrapper-initial",
+      "heavy-acquired-initial"
+    ],
+    "commandsPassed": true,
+    "acceptance": "resource incomplete: new protected-server fixture case exposed force-killed launcher leaving its ordinary contained server child alive; final checks renewed after explicit teardown proof",
+    "intermediate": "focused-final passed after SIGTERM repair; first focused/review/Knip/full pidproof ladder passed with descendant PID absence proof, retained separately; final ladder strengthens native PID/PPID/command/start identity proof"
+  },
+  "fixtureRepair": {
+    "detectedAt": null,
+    "detectedAtKind": "exact pre-native audit command clock was not captured; detection preceded recorded own descendant settlement",
+    "observedCleanup": {
+      "observed": "2026-10-12T13:41:12.263379+00:00",
+      "owned": [
+        {
+          "pid": 74692,
+          "group": 33203,
+          "verifiedCommand": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "signal": "SIGTERM",
+          "sentAt": "2026-10-12T13:41:12.246151+00:00"
+        },
+        {
+          "pid": 6042,
+          "group": 86866,
+          "verifiedCommand": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "signal": "SIGTERM",
+          "sentAt": "2026-10-12T13:41:12.249639+00:00"
+        },
+        {
+          "pid": 33486,
+          "group": 14208,
+          "verifiedCommand": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "signal": "SIGTERM",
+          "sentAt": "2026-10-12T13:41:12.252822+00:00"
+        }
+      ],
+      "allAbsent": true
+    },
+    "attribution": "new protected-server test exposed fixture SIGKILL bypass of contained launcher signal forwarding",
+    "scope": "scripts/qa/qa-session-fixture.mjs owned child cleanup only",
+    "repair": "SIGTERM; await existing actual launcher close; launcher forwards to and joins contained ordinary server child",
+    "initialValidationDisposition": "passing commands retained as history; final resource acceptance failed; all focused/review/Knip/full renewed before native smoke",
+    "noRealProviderFault": true,
+    "recordedAt": "2026-10-12T13:42:12.648894+00:00"
+  },
+  "formatterCorrection": {
+    "observedAfterSourceWrite": "2026-10-12T13:55:22.936541+00:00",
+    "cause": "error coercion can reject before browser failure collection or during final aggregate message construction",
+    "repair": "bounded local diagnostic formatting fallback; original cause objects preserved",
+    "publicContract": "combined original provider/persistence/server/release failures with throwing toString still surface all actual causes and settle remaining real owned stages"
+  },
+  "observedCorrectionInterval": {
+    "start": "2026-10-12T13:41:12.246151+00:00",
+    "startKind": "first verified own synthetic descendant SIGTERM settlement action; original failure detection clock unknown",
+    "end": "2026-10-12T13:55:22.936541+00:00",
+    "endKind": "post-source-write formatter correction observation",
+    "limit": "elapsed lower-bound coordination, correction, heavy wait and repeated validation; not CPU or productive editing; prior 213.900171 seconds wrapper-to-acquisition interval recorded separately"
+  },
+  "sourceFreeze": {
+    "observed": "2026-10-12T13:57:02.791234+00:00",
+    "sourceSHA256": {
+      "scripts/qa/run-scenario.mjs": "21c5141ac2bab5cebdacaab86aae807dc83250407152c1b1e94771707cb979c2",
+      "scripts/qa/run-scenario-ownership.test.mjs": "3c17966e59b26b3ab8d4c728c08315a661f4a98b82cc2930d3f2ab73c9a722d2",
+      "scripts/qa/qa-session-fixture.mjs": "45f0b5a5e24e210caf6ba6c330fcce051f0e5ff682e55450b7969830f037bb39"
+    }
+  },
+  "preNativeAudit": {
+    "observed": "2026-10-12T14:00:03.881745+00:00",
+    "groups": [
+      4327,
+      4344,
+      12758,
+      12768,
+      14196,
+      14208,
+      16214,
+      22898,
+      22957,
+      29893,
+      29910,
+      33095,
+      33203,
+      33642,
+      33748,
+      35223,
+      35233,
+      43696,
+      43704,
+      55738,
+      55748,
+      56005,
+      56854,
+      56864,
+      66882,
+      66890,
+      67964,
+      67982,
+      86849,
+      86866,
+      88810,
+      88818,
+      93009,
+      93029
+    ],
+    "remaining": [],
+    "sourceSHA256": {
+      "scripts/qa/run-scenario.mjs": "21c5141ac2bab5cebdacaab86aae807dc83250407152c1b1e94771707cb979c2",
+      "scripts/qa/run-scenario-ownership.test.mjs": "3c17966e59b26b3ab8d4c728c08315a661f4a98b82cc2930d3f2ab73c9a722d2",
+      "scripts/qa/qa-session-fixture.mjs": "45f0b5a5e24e210caf6ba6c330fcce051f0e5ff682e55450b7969830f037bb39"
+    },
+    "sourceFreezeChanged": []
+  },
+  "runtimeCleanup": {
+    "observed": "2026-10-12T14:04:06.362217+00:00",
+    "groups": [
+      4327,
+      4344,
+      12758,
+      12768,
+      14196,
+      14208,
+      16214,
+      22898,
+      22957,
+      29893,
+      29910,
+      33095,
+      33203,
+      33642,
+      33748,
+      35223,
+      35233,
+      43696,
+      43704,
+      53499,
+      53565,
+      55738,
+      55748,
+      56005,
+      56854,
+      56864,
+      66882,
+      66890,
+      67964,
+      67982,
+      70363,
+      70371,
+      70404,
+      72436,
+      72444,
+      86849,
+      86866,
+      88810,
+      88818,
+      93009,
+      93029
+    ],
+    "remaining": [],
+    "sourceSHA256": {
+      "scripts/qa/run-scenario.mjs": "21c5141ac2bab5cebdacaab86aae807dc83250407152c1b1e94771707cb979c2",
+      "scripts/qa/run-scenario-ownership.test.mjs": "3c17966e59b26b3ab8d4c728c08315a661f4a98b82cc2930d3f2ab73c9a722d2",
+      "scripts/qa/qa-session-fixture.mjs": "45f0b5a5e24e210caf6ba6c330fcce051f0e5ff682e55450b7969830f037bb39"
+    },
+    "sourceFreezeChanged": []
+  },
+  "testAccounting": {
+    "addedTestLines": 128,
+    "deletedTestLines": 1,
+    "netTestLines": 127,
+    "testFiles": 0,
+    "jsdomFiles": 0,
+    "coherentFixtureAddedLines": 18,
+    "coherentFixtureDeletedLines": 2,
+    "coherentFixtureNetLines": 16,
+    "ownershipModuleLines": 430,
+    "fixtureModuleLines": 129,
+    "preserved": "existing assertions and real hoisted owning-test module registration; pure factory boundaries; native actual group observations"
+  },
+  "failurePaths": {
+    "midStep": "provider close plus ownership rename failure followed by actual owned server-stop boundary rejection and browser lease release rejection; remaining evidence release and handler removal are observed",
+    "partialAndStale": "changed private server record remains byte-identical and protected; provider owner prior bytes remain parseable without a completion marker; failed browser release keeps the kernel lock held until exact private test cleanup",
+    "concurrentAndRestart": "repeated close returns the same pending/rejected promise, and native stop/release/provider effects occur once; existing interruption startup and active-call settlement contracts remain in final focused/full verification",
+    "singleFailure": "late evidence-release rejection preserves the original error identity after real provider/server cleanup and native locks settle",
+    "diagnosticFailure": "provider cause remains observable when reconciliation output rejects; later server and lock cleanup still occurs",
+    "teardown": "actual direct descendant PID, PPID, exact command and start identity captured before own fixture launcher SIGTERM must be settled after awaited actual launcher close; a reused PID with a different start is settled; existing actual containment/closed assertions are retained",
+    "existingAuthority": "metadata admission/local disconnect, certain RPC completion receipt, clear-phase errors, exact record byte guard and server/provider retention contracts preserved"
+  },
+  "coreReview": {
+    "required": true,
+    "owner": "parent",
+    "state": "pending fresh exact source commit review",
+    "routing": "user-authorized temporary fresh read-only Codex CLI gpt-5.6-sol until 2026-10-14T01:00:00Z; no Claude attempts"
+  },
+  "actualGitReceipt": "/tmp/dreamtides-qa-cleanup-errors/receipts/commit.json",
+  "remaining": "one helper commit; parent exact source core review and native candidate delivery",
+  "rawSourceChanges": [
+    {
+      "path": "scripts/qa/run-scenario.mjs",
+      "added": 37,
+      "deleted": 28
+    },
+    {
+      "path": "scripts/qa/run-scenario-ownership.test.mjs",
+      "added": 128,
+      "deleted": 1
+    },
+    {
+      "path": "scripts/qa/qa-session-fixture.mjs",
+      "added": 18,
+      "deleted": 2
+    }
+  ],
+  "stagingImplementationWindow": {
+    "start": "2026-10-12T13:31:44.576323+00:00",
+    "startKind": "parent post-dispatch proxy; actual helper/model start unknown",
+    "end": "2026-10-12T14:00:57.484717+00:00",
+    "endKind": "evidence-staging proxy; fresh parent-approved commit metadata endpoint pending",
+    "elapsedProxyMinutes": 29.2151399,
+    "actualHelperStartKnown": false,
+    "limit": "actual npm installation began before the parent post-dispatch proxy; command clocks are observed independently and do not establish model start"
+  },
+  "parentClockAck": "/tmp/dreamtides-qa-cleanup-errors/metadata-ack-native.json"
+}

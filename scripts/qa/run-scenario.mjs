@@ -552,6 +552,16 @@ export async function openQaSession(options) {
       // closing its browser and releasing the repository lease.
       await startup.catch(() => {});
       let closeUnconfirmed = false;
+      const failures = /** @type {Array<{ stage: string, error: unknown }>} */ ([]);
+      const describeFailure = (/** @type {unknown} */ error) => {
+        try { return String(error); } catch { return "unprintable cleanup cause"; }
+      };
+      /** Attempt every owned cleanup stage; rejection does not replace earlier causes.
+       * @param {string} stage @param {() => unknown | Promise<unknown>} operation
+       */
+      const attempt = async (stage, operation) => {
+        try { await operation(); } catch (error) { failures.push({ stage, error }); }
+      };
       try {
         try {
           // Closing the page interrupts pending unsafe execution. Join its
@@ -585,38 +595,37 @@ export async function openQaSession(options) {
             retainOwner(mcp !== null && !browserAdmitted ? startupUnconfirmed :
               uncertainCall ? (closeUnconfirmed ? "call-and-close-unconfirmed" : "call-unconfirmed") : "close-unconfirmed");
           } catch (retentionError) {
-            failure = new AggregateError([error, retentionError], `browser cleanup and ownership persistence failed: ${String(error)}; ${String(retentionError)}`);
+            failure = new AggregateError([error, retentionError], `browser cleanup and ownership persistence failed: ${describeFailure(error)}; ${describeFailure(retentionError)}`);
           }
         }
-        say(error instanceof BrowserOwnerClearError
-          ? `browser owner clear ${error.phase} failed at ${ownerPath}; ${error.unlinked ? "record unlinked, deletion durability unconfirmed" : "this cleanup did not unlink"}; no republication: ${String(failure)}`
-          : `browser provider completion or ownership persistence requires reconciliation at ${ownerPath}: ${String(failure)}`);
-        throw failure;
-      } finally {
-        try {
-          try { await stopProcessTree(builder); } finally { await ownedServer?.stop(); }
-        } finally {
-          try {
-            try {
-              if (logFd !== null) { closeSync(logFd); logFd = null; }
-            } finally {
-              try {
-                if (outDir !== null) { rmSync(outDir, { recursive: true, force: true }); outDir = null; }
-              } finally {
-                if (server !== null) {
-                  const free = await isPortFree(port);
-                  say(`runtime: server process group ${String(server.pid)} on port ${String(port)} cleanup attempted; port ${free ? "free" : "STILL IN USE"}`);
-                }
-              }
-            }
-          } finally {
-            for (const [name, handler] of handlers) process.removeListener(name, handler);
-            try {
-              try { await starting?.release(); } finally { await lease?.release(); }
-            } finally { await evidence?.release(); }
-          }
-        }
+        failures.push({ stage: "browser completion and ownership", error: failure });
+        await attempt("browser reconciliation diagnostic", () => say(error instanceof BrowserOwnerClearError
+          ? `browser owner clear ${error.phase} failed at ${ownerPath}; ${error.unlinked ? "record unlinked, deletion durability unconfirmed" : "this cleanup did not unlink"}; no republication: ${describeFailure(failure)}`
+          : `browser provider completion or ownership persistence requires reconciliation at ${ownerPath}: ${describeFailure(failure)}`));
       }
+      await attempt("builder cleanup", () => stopProcessTree(builder));
+      await attempt("owned server cleanup", () => ownedServer?.stop());
+      await attempt("server log descriptor", () => {
+        if (logFd !== null) { closeSync(logFd); logFd = null; }
+      });
+      await attempt("build directory cleanup", () => {
+        if (outDir !== null) { rmSync(outDir, { recursive: true, force: true }); outDir = null; }
+      });
+      await attempt("server port diagnostic", async () => {
+        if (server !== null) {
+          const free = await isPortFree(port);
+          say(`runtime: server process group ${String(server.pid)} on port ${String(port)} cleanup attempted; port ${free ? "free" : "STILL IN USE"}`);
+        }
+      });
+      for (const [name, handler] of handlers) {
+        await attempt(`${name} handler removal`, () => process.removeListener(name, handler));
+      }
+      await attempt("server startup lock release", () => starting?.release());
+      await attempt("browser lease release", () => lease?.release());
+      await attempt("evidence lock release", () => evidence?.release());
+      if (failures.length === 1) throw failures[0]?.error;
+      if (failures.length > 1) throw new AggregateError(failures.map(({ error }) => error),
+        `QA cleanup failed for ${captureDir}; owner ${ownerPath}: ${failures.map(({ stage, error }) => `${stage}: ${describeFailure(error)}`).join("; ")}`);
     })();
     return cleanup;
   };

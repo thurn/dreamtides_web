@@ -54,15 +54,31 @@ export function createQaSessionFixture(fixtureIo) {
   afterEach(async () => {
     await Promise.all(ownedSessions.splice(0).map((session) => session.close().catch(() => {})));
     await Promise.all(ownedLeases.splice(0).map((lease) => lease.release()));
+    const actual = /** @type {typeof import("node:child_process")} */ (await vi.importActual("node:child_process"));
+    const identities = () => actual.execFileSync("ps", ["-axo", "pid=,ppid=,lstart=,command="], { encoding: "utf8" })
+      .trim().split("\n").map((line) => {
+        const fields = /^\s*(\d+)\s+(\d+)\s+((?:\S+\s+){4}\S+)\s+(.*)$/u.exec(line);
+        if (fields === null) throw new Error(`unreadable actual fixture process identity: ${line}`);
+        return { pid: Number(fields[1]), parent: Number(fields[2]), started: fields[3]?.replace(/\s+/gu, " "), command: fields[4] };
+      });
     for (const child of fixtureIo.children.splice(0)) {
       if (child.exitCode !== null || child.signalCode !== null) continue;
+      // Retain actual native descendant lifetime and command before signaling.
+      // A closed launcher alone does not prove its ordinary server child exited.
+      const descendants = identities().filter(({ parent }) => parent === child.pid);
       const exited = once(child, "close");
       child.stdin?.end();
-      child.kill("SIGKILL");
+      // The contained launcher forwards SIGTERM to its ordinary server child
+      // and stays alive until that child exits, including protected records.
+      child.kill("SIGTERM");
       await exited;
+      const remaining = identities();
+      for (const identity of descendants) {
+        expect(remaining.some(({ pid, started }) => pid === identity.pid && started === identity.started),
+          `owned fixture descendant remains alive: ${JSON.stringify(identity)}`).toBe(false);
+      }
     }
     await fixtures.cleanup();
-    const actual = /** @type {typeof import("node:child_process")} */ (await vi.importActual("node:child_process"));
     const parentGroup = processGroup(actual, process.pid);
     expect(fixtureIo.groups.every((entry) => entry.group === null || entry.group === parentGroup)).toBe(true);
     expect(fixtureIo.groups.every((entry) => entry.closed)).toBe(true);
