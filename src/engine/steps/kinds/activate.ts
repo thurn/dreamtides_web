@@ -42,7 +42,11 @@ function targetsNeedX(effect: EffectNode, seen = new Set<EffectNode>()): boolean
   seen.add(effect);
   const definition = primitiveDefinition(effect.op);
   return (definition.targets?.(effect) ?? []).some(spec => {
-    if (spec.kind === "target") return selectorNeedsX(spec.selector);
+    if (spec.kind === "target") {
+      const alternate = spec.when;
+      return selectorNeedsX(spec.selector) || (alternate !== undefined &&
+        (selectorNeedsX(alternate.otherwise) || (alternate.condition.cond === "controls" && selectorNeedsX(alternate.condition.selector))));
+    }
     return spec.kind === "inZone" && boundNeedsX(spec.costAtMost);
   }) || (definition.children?.(effect) ?? []).some(child => targetsNeedX(child, seen));
 }

@@ -1,0 +1,482 @@
+{
+  "bead": "hv-umm2.564",
+  "base": "5f83560a65f77396f7b1582211222f8ff2ee6c8f",
+  "dispatch": {
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/10/rollout-2026-10-10T20-08-54-01a128ef-4fc7-7a52-8a19-816921410323.jsonl",
+    "matches": [
+      {
+        "timestamp": "2026-10-12T17:26:44.280Z",
+        "name": "spawn_agent",
+        "call_id": "call_f1df6d939b5947e1884f903f940abb48",
+        "argumentMatches": true
+      }
+    ]
+  },
+  "clockScope": "Current implementWindow starts at exact parent post-claim spawn tool call. Actual model/helper start unknown. End is a precommit endpoint refreshed within one minute of actual commit; actual Git interval is retained separately. Includes research, coordination, waits and verification; no productive-time/quota inference.",
+  "originatingDispatchCorrections": {
+    "proof": {
+      "journal": "/Users/dthurn/.codex/sessions/2026/10/10/rollout-2026-10-10T20-08-54-01a128ef-4fc7-7a52-8a19-816921410323.jsonl",
+      "actualOwnSpawnCalls": [
+        {
+          "task_name": "dreamwell_flow_215",
+          "timestamp": "2026-10-12T06:00:17.305Z",
+          "call_id": "call_b81473939f044a9ab28cf921aa83daeb"
+        },
+        {
+          "task_name": "subtype_synergies_197",
+          "timestamp": "2026-10-12T15:47:04.402Z",
+          "call_id": "call_5fa046ed1feb4e958a82224b680707fc"
+        },
+        {
+          "task_name": "conditional_targets_553",
+          "timestamp": "2026-10-12T15:58:41.006Z",
+          "call_id": "call_gmy7y7C5b8KMyKGNPImjIQfS"
+        },
+        {
+          "task_name": "conditional_capture_564",
+          "timestamp": "2026-10-12T17:26:44.280Z",
+          "call_id": "call_f1df6d939b5947e1884f903f940abb48"
+        }
+      ],
+      "scope": "Exact native parent spawn tool-call timestamps; model/helper execution start still unknown. Frozen original measured proxies/inputs retained; future originating evidence records correction separately."
+    },
+    "reportedClosed553": {
+      "proxyStart": "2026-10-12T16:00:15+00:00",
+      "reportedImplementMin": 70.19498571666666,
+      "reportedEnd": "2026-10-12T17:10:26.699143+00:00"
+    },
+    "actual553Spawn": "2026-10-12T15:58:41.006Z",
+    "corrected553NativeWindow": {
+      "nativeStart": "2026-10-12T15:58:41.006000+00:00",
+      "precommitEndpoint": "2026-10-12T17:10:26.699143+00:00",
+      "frozenReportedMin": 70.19498571666666,
+      "correctedNativeWindowMin": 71.76155238333334,
+      "deltaMin": 1.5665666666666738
+    },
+    "correction553Seconds": 93.994,
+    "reported197Proxy": "2026-10-12T15:47:18.394095+00:00",
+    "actual197Spawn": "2026-10-12T15:47:04.402Z",
+    "actual215OriginalSpawn": "2026-10-12T06:00:17.305Z",
+    "scope": "Distinct factual originating dispatch provenance; frozen original 553 source/evidence/reported metrics and 197/215 checkpoints remain unchanged. Actual model execution starts and earlier uninstrumented research remain unknown."
+  },
+  "commands": {
+    "baseline.receipt.json": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "artifacts/qa/hv-umm2.564/probe.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:28:22.342691+00:00",
+      "end": "2026-10-12T17:28:23.538459+00:00",
+      "elapsedS": 1.1956812080024974,
+      "exit": 1,
+      "pid": 27329,
+      "pgid": 27329,
+      "groupGone": true,
+      "hostLoadStart": [
+        3.8193359375,
+        10.78466796875,
+        13.08349609375
+      ]
+    },
+    "contracts-baseline.receipt.json": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional captured X"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:30:37.546518+00:00",
+      "end": "2026-10-12T17:30:42.924129+00:00",
+      "elapsedS": 5.37745637500484,
+      "exit": 1,
+      "pid": 81401,
+      "pgid": 81401,
+      "groupGone": true,
+      "hostLoadStart": [
+        15.25244140625,
+        11.32275390625,
+        12.8515625
+      ]
+    },
+    "focused-final.receipt.json": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/activation.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/rules/costs-discard-x-min.test.ts",
+        "src/engine/rules/costs-play-x.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:34:29.384639+00:00",
+      "end": "2026-10-12T17:34:38.372141+00:00",
+      "elapsedS": 8.987297165993368,
+      "exit": 0,
+      "pid": 50580,
+      "pgid": 50580,
+      "groupGone": true,
+      "hostLoadStart": [
+        9.38525390625,
+        11.11669921875,
+        12.50146484375
+      ]
+    },
+    "focused.receipt.json": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/activation.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/rules/costs-discard-x-min.test.ts",
+        "src/engine/rules/costs-play-x.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:32:02.446010+00:00",
+      "end": "2026-10-12T17:32:10.753266+00:00",
+      "elapsedS": 8.307071208997513,
+      "exit": 0,
+      "pid": 18697,
+      "pgid": 18697,
+      "groupGone": true,
+      "hostLoadStart": [
+        18.3740234375,
+        13.0341796875,
+        13.337890625
+      ]
+    },
+    "guard-removal.receipt.json": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional captured X"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:31:41.301351+00:00",
+      "end": "2026-10-12T17:31:45.842007+00:00",
+      "elapsedS": 4.540496374989743,
+      "exit": 1,
+      "pid": 86597,
+      "pgid": 86597,
+      "groupGone": true,
+      "hostLoadStart": [
+        18.515625,
+        12.6630859375,
+        13.216796875
+      ]
+    },
+    "knip.receipt.json": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:35:27.230879+00:00",
+      "end": "2026-10-12T17:35:31.131985+00:00",
+      "elapsedS": 3.900985541011323,
+      "exit": 0,
+      "pid": 6970,
+      "pgid": 6970,
+      "groupGone": true,
+      "hostLoadStart": [
+        17.66162109375,
+        13.7900390625,
+        13.44287109375
+      ]
+    },
+    "repaired-focused.receipt.json": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional captured X"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:30:54.601372+00:00",
+      "end": "2026-10-12T17:30:58.976758+00:00",
+      "elapsedS": 4.375187665995327,
+      "exit": 1,
+      "pid": 82963,
+      "pgid": 82963,
+      "groupGone": true,
+      "hostLoadStart": [
+        15.2109375,
+        11.47705078125,
+        12.87744140625
+      ]
+    },
+    "repaired-focused2.receipt.json": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional captured X"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:31:17.672542+00:00",
+      "end": "2026-10-12T17:31:22.449940+00:00",
+      "elapsedS": 4.777216542002861,
+      "exit": 0,
+      "pid": 85060,
+      "pgid": 85060,
+      "groupGone": true,
+      "hostLoadStart": [
+        12.38525390625,
+        11.115234375,
+        12.70556640625
+      ]
+    },
+    "repaired-probe.receipt.json": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "artifacts/qa/hv-umm2.564/probe.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:31:55.780242+00:00",
+      "end": "2026-10-12T17:31:56.726184+00:00",
+      "elapsedS": 0.9458594580064528,
+      "exit": 0,
+      "pid": 3774,
+      "pgid": 3774,
+      "groupGone": true,
+      "hostLoadStart": [
+        18.2724609375,
+        12.818359375,
+        13.26611328125
+      ]
+    },
+    "review-corrected.receipt.json": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:34:52.245625+00:00",
+      "end": "2026-10-12T17:35:23.611639+00:00",
+      "elapsedS": 31.36556587499217,
+      "exit": 0,
+      "pid": 80709,
+      "pgid": 80709,
+      "groupGone": true,
+      "hostLoadStart": [
+        22.435546875,
+        14.0078125,
+        13.50048828125
+      ]
+    },
+    "review.receipt.json": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:33:20.037421+00:00",
+      "end": "2026-10-12T17:33:51.214016+00:00",
+      "elapsedS": 31.176150333994883,
+      "exit": 2,
+      "pid": 45047,
+      "pgid": 45047,
+      "groupGone": true,
+      "hostLoadStart": [
+        10.169921875,
+        11.79150390625,
+        12.845703125
+      ]
+    },
+    "schema.receipt.json": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:35:41.177951+00:00",
+      "end": "2026-10-12T17:35:41.240056+00:00",
+      "elapsedS": 0.06201508399681188,
+      "exit": 0,
+      "pid": 8096,
+      "pgid": 8096,
+      "groupGone": true,
+      "hostLoadStart": [
+        16.17578125,
+        13.59912109375,
+        13.37890625
+      ]
+    },
+    "types-corrected.receipt.json": {
+      "command": [
+        "./node_modules/.bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-564-conditional-capture-x",
+      "start": "2026-10-12T17:34:00.273046+00:00",
+      "end": "2026-10-12T17:34:08.658700+00:00",
+      "elapsedS": 8.385471125002368,
+      "exit": 0,
+      "pid": 47761,
+      "pgid": 47761,
+      "groupGone": true,
+      "hostLoadStart": [
+        8.6728515625,
+        11.25390625,
+        12.6025390625
+      ]
+    }
+  },
+  "earlyUninstrumentedProbe": {
+    "log": "/tmp/worker564/probe-first.log",
+    "exit": 1,
+    "toolWallSeconds": 1.659724666,
+    "pgid": null,
+    "note": "First assertion stopped on player/abandon/alternate; later baseline accumulated all eight rows. Process group and inner runtime were not instrumented."
+  },
+  "scope": {
+    "production": "Only private targetsNeedX TargetSpec conditional scan: primary selector, alternate selector and controls condition selector. selectorNeedsX ordinary four-bound semantics, children and void scan preserved.",
+    "actualXReaders": {
+      "primary": "sparkAtLeast/sparkAtMost/costAtLeast/costAtMost BoundValue x",
+      "otherwise": "same CharacterSelector bounds",
+      "condition": "controls.selector same bounds; all other current normal Condition variants fixed numbers/zones/filters and no recursive combinators"
+    },
+    "exportsAdded": [],
+    "importerChanges": [],
+    "fallout": [],
+    "testDelta": {
+      "files": 0,
+      "lines": 189,
+      "jsdomFiles": 0
+    },
+    "plainContractLines": 189,
+    "newPublicCases": 32,
+    "entrypointsAdded": 0,
+    "jsdomAdded": 0
+  },
+  "failurePaths": {
+    "midStepError": "keeps committed state intact on target preparation errors and divergent replay: public AnswerSource throws at the physical target prompt after capture; the caller state hash is unchanged.",
+    "reloadRestart": "reloads every prefix, cancels and rejects competing or stale input: cold catalog/engine/fold JSON roundtrip at each capture/target/payment prefix matches pending prompts and final direct engine state hash.",
+    "partialWrite": "binds the payment amount independently of actually played source X: every pending target display retains all payment cards and energy; no debit/move events publish before final answers. Reload rows assert exact final payment-card and energy event counts. No new state writes/commit protocol are introduced; existing cost-captured-X atomic-payment contract exercises rollback after payCosts commitment.",
+    "invalidStaleInput": "reloads every prefix, cancels and rejects competing or stale input: wrong-side spark3 instance/number99, old prompt ids, cancellation/reopening and consumed answers bounce. Divergent target fingerprints raise ReplayDivergence without modifying caller state.",
+    "concurrentActors": "reloads every prefix, cancels and rejects competing or stale input: other controller answers, a second battle action while in-flight, and duplicate competing answers are rejected."
+  },
+  "negativeEvidence": {
+    "baseline": "Eight actual public engine/fold observations chooseTargets before capture using stored X3; baseline actual exit1. New contracts current source30 failures/2 unaffected-control passes.",
+    "firstRepairedFailure": "30 passes/2 fixture failures: source is a valid abandonment card for X1 and alternate fixed1 target; corrected illegal-input fixture uses actual opponent spark3 instance. Failed output retained.",
+    "counterfactual": "Entire scanner repair removed, same contracts30 failures/2 unaffected-control passes; restored source exact SHA256 matches repaired backup.",
+    "firstAggregateFailure": "Review exit2 only fixture type errors: overloaded selector union and unused placement-shaped setup answer. Corrected typed local selector and single X play answer with assertExhausted; focused TSC passed before corrected review. Raw failed review retained.",
+    "restoration": {
+      "restore-hashes-before.txt": "ff87c4deac2076e60e24f32ded9a73856eba22049b7f96dba20b7d36fb21fb62  /tmp/worker564/activate-before.ts\n39a58ba8e78df3d35c6c4f40f885609f148e410dfaee86d6c901a35f42cb55d5  /tmp/worker564/activate-repaired.ts\n",
+      "restore-hashes-after.txt": "39a58ba8e78df3d35c6c4f40f885609f148e410dfaee86d6c901a35f42cb55d5  src/engine/steps/kinds/activate.ts\n"
+    }
+  },
+  "qa": {
+    "method": "Public synthetic engine/fold workflow",
+    "approval": "Parent ACK: existing prompt kinds/renderers/adapters unchanged; source search finds no authored production targetWhen entity using conditional-X shape. Scanner seam covered by actual public prompts/state/events. No native fixture/browser admitted or required for this repair.",
+    "coverage": "abandon/discard copiable cost and discard count, both controllers, source X0 and X3 via actual plays, X2 capture, alternative-only and controls-only dependencies, untouched ordinary/targetless protocols, payment exclusion, post-cost live condition revalidation, all five failure paths.",
+    "screens": [],
+    "fullFuzzRationale": "Six-line bounded private dependency reader; no architecture/type/registry/fold/policy/UI/catalog changes. Focused coupled contracts plus activation/cost tests and required review/Knip; full/fuzz adds no unique seam witness."
+  },
+  "hostLoadSamples": {
+    "baseline.receipt.json": [
+      3.8193359375,
+      10.78466796875,
+      13.08349609375
+    ],
+    "contracts-baseline.receipt.json": [
+      15.25244140625,
+      11.32275390625,
+      12.8515625
+    ],
+    "focused-final.receipt.json": [
+      9.38525390625,
+      11.11669921875,
+      12.50146484375
+    ],
+    "focused.receipt.json": [
+      18.3740234375,
+      13.0341796875,
+      13.337890625
+    ],
+    "guard-removal.receipt.json": [
+      18.515625,
+      12.6630859375,
+      13.216796875
+    ],
+    "knip.receipt.json": [
+      17.66162109375,
+      13.7900390625,
+      13.44287109375
+    ],
+    "repaired-focused.receipt.json": [
+      15.2109375,
+      11.47705078125,
+      12.87744140625
+    ],
+    "repaired-focused2.receipt.json": [
+      12.38525390625,
+      11.115234375,
+      12.70556640625
+    ],
+    "repaired-probe.receipt.json": [
+      18.2724609375,
+      12.818359375,
+      13.26611328125
+    ],
+    "review-corrected.receipt.json": [
+      22.435546875,
+      14.0078125,
+      13.50048828125
+    ],
+    "review.receipt.json": [
+      10.169921875,
+      11.79150390625,
+      12.845703125
+    ],
+    "schema.receipt.json": [
+      16.17578125,
+      13.59912109375,
+      13.37890625
+    ],
+    "types-corrected.receipt.json": [
+      8.6728515625,
+      11.25390625,
+      12.6025390625
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting os.getloadavg()[0], equivalent Darwin 1-minute vm.loadavg; fallback focused until review receipt available"
+      },
+      "implementMin": {
+        "measuredFor": "exact dispatch to precommit endpoint, refreshed immediately before commit"
+      }
+    }
+  },
+  "unknowns": [
+    "Actual helper/model execution start",
+    "first probe process group",
+    "Tollgate gate/release runtime and integration evidence are parent-owned",
+    "No low-load budget or speed-comparison claim"
+  ],
+  "resources": "All supervised commands new own session/process group; each receipt records actual exit and group disappearance. No browser/server/provider/heavy lease started."
+}
