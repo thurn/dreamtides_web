@@ -987,6 +987,12 @@ card goes to its owner's Banished zone. It is not a discard, so it fires no
 "When you discard a card" abilities. If the hand has no matching card, that
 part of the effect does nothing.
 
+**Return to hand** — Move a character from play to its owner's hand. "Return a
+character to hand" and "Return a character to its controller's hand" are the
+same effect: a character you control that the opponent owns (see [Gain
+control](#keywords-and-effects)) goes to the opponent's hand. Only an
+instruction that names "your hand" puts the card into yours.
+
 **Materialize** — Put a character into play. This covers a character entering
 play from hand (played normally), from the void, from the deck, as a created
 figment, or returned "to play" by an effect. A materialized character enters the
