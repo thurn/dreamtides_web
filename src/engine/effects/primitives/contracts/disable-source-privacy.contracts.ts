@@ -1,6 +1,6 @@
 /** Hidden producer contracts compare public views and ordinary future play. */
 import { describe, expect, it } from "vitest";
-import { activated, all, anyCharacter, energy, event, everyIn } from "../../../dsl/builders";
+import { activated, all, anyCharacter, characterYouControl, energy, event, everyIn } from "../../../dsl/builders";
 import { triggered, whenDraw } from "../../../dsl/triggers";
 import type { Condition } from "../../../dsl/types";
 import type { EngineCardDefinition } from "../../../catalog";
@@ -8,7 +8,7 @@ import { createEngine } from "../../../engine";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { instanceOrigin } from "../../../rules/activation";
-import { battleSeed, type InstanceId, type Side } from "../../../state/ids";
+import { battleSeed, SIDES, type InstanceId, type Side } from "../../../state/ids";
 import { stateHash } from "../../../state/hash";
 import type { BattleState } from "../../../state/types";
 import { NO_PROMPTS } from "../../../steps/sources";
@@ -21,34 +21,76 @@ import { resolveEffect } from "../../interpreter";
 import * as p from "../index";
 
 const conditions: readonly (Condition | null)[] = [null, { cond: "sourceIn", zone: "hand" }];
-function fixture(condition: Condition | null) {
+function fixture(condition: Condition | null, publicProducer = false, side: Side = "player") {
+  const other: Side = side === "player" ? "enemy" : "player";
   const disable = p.disableTriggers(all(anyCharacter()), "permanent", condition, "triggeredAndActivated");
   const hand = (index: number, nth?: number): EngineCardDefinition => ({ ...v.vanilla1, id: syntheticId(0x77b10 + index), costs: [energy(0)],
     abilities: () => [triggered(whenDraw("opponent", nth), disable, { zone: "hand" })] });
   const [twice, first, second] = [hand(0), hand(1, 1), hand(2, 2)];
-  const starter: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x77b20), cardType: "event", spark: null, subtype: "", costs: [energy(0)], abilities: () => [event(p.draw(2))] };
+  const starter: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x77b20), cardType: "event", spark: null, subtype: "", costs: [energy(0)], abilities: () => [event(publicProducer ? disable : p.draw(2))] };
   const target: EngineCardDefinition = { ...v.vanilla2, id: syntheticId(0x77b21), abilities: () => [activated([energy(0)], p.gainPoints(1))] };
   const observer: EngineCardDefinition = { ...starter, id: syntheticId(0x77b22), synthetic: { resolve(ctx, item) {
-    resolveEffect(ctx, p.sequence(p.reveal("opponent"), p.shuffleInto([everyIn("hand", {}, { player: "opponent" })]), p.discard(1)), {
+    resolveEffect(ctx, p.sequence(p.draw(2), p.reveal("opponent"), p.shuffleInto([everyIn("hand", {}, { player: "opponent" })]), p.discard(1)), {
       controller: item.controller, source: item.instance, origin: instanceOrigin(ctx.state.instances[item.instance]), ability: 0, x: null,
       optionalPaid: [], choices: { modes: [], targets: [] },
     });
     throw new Error("Synthetic failure after publishing attribution");
   } } };
-  const engine = createEngine(testCatalog([twice, first, second, starter, target, observer]));
-  function world(shared: boolean) {
-    const initial = boardState(engine.catalog, { active: "player", phase: "day", player: {
-      back: [target.id], hand: [starter.id, observer.id], deck: [v.vanilla3.id, v.vanilla5.id], energy: 8,
-    }, enemy: { hand: shared ? [twice.id, v.vanilla1.id, v.interruptEvent.id] : [first.id, second.id, v.interruptEvent.id], deck: shared ? [first.id, second.id] : [twice.id, v.vanilla1.id], energy: 8 } });
+  const revealer: EngineCardDefinition = { ...starter, id: syntheticId(0x77b23), abilities: () => [event(p.reveal("opponent"))] };
+  const engine = createEngine(testCatalog([twice, first, second, starter, target, observer, revealer]));
+  function world(shared: boolean, known = false) {
+    const initial = boardState(engine.catalog, { active: side, phase: "day", [side]: {
+      back: publicProducer ? [target.id, target.id] : [target.id], hand: [starter.id, observer.id, ...(known ? [revealer.id] : [])], deck: [v.vanilla3.id, v.vanilla5.id], energy: 8,
+    }, [other]: { hand: publicProducer ? [v.vanilla1.id, v.interruptEvent.id] : shared ? [twice.id, v.vanilla1.id, v.interruptEvent.id] : [first.id, second.id, v.interruptEvent.id], deck: shared ? [first.id, second.id] : [twice.id, v.vanilla1.id], energy: 8 } });
     const entries = (side: Side) => Object.values(initial.state.instances).filter((instance) => instance.owner === side)
       .sort((a, b) => JSON.stringify(a.printing).localeCompare(JSON.stringify(b.printing)))
       .flatMap((instance) => instance.printing.kind === "card" ? [{ cardId: instance.printing.cardId }] : []);
     const lists = { player: entries("player"), enemy: entries("enemy") };
-    const cast = engine.apply(initial.state, "player", { kind: "play", card: initial.ids.player.hand[0], from: "hand" }, NO_PROMPTS);
+    const before = known ? passUntil(engine, engine.apply(initial.state, side, { kind: "play", card: initial.ids[side].hand[2], from: "hand" }, NO_PROMPTS).state, (state) => state.stack.length === 0).state : initial.state;
+    const cast = engine.apply(before, side, { kind: "play", card: initial.ids[side].hand[0], from: "hand" }, NO_PROMPTS);
     const done = passUntil(engine, cast.state, (state) => state.stack.length === 0 && state.triggerQueue.length === 0);
-    return { ...initial, state: done.state, lists, view: engine.view(done.state, "player"), events: [...cast.events, ...done.events] };
+    return { ...initial, state: done.state, lists, view: engine.view(done.state, side), events: [...cast.events, ...done.events] };
   }
   return { engine, world };
+}
+function aliasWorld(shared: boolean) {
+  const targets = [1, 2].map((cost): EngineCardDefinition => ({ ...v.vanilla1, id: syntheticId(0x77b40 + cost), costs: [energy(cost)], abilities: () => [activated([energy(0)], p.gainPoints(1))] }));
+  const hand: EngineCardDefinition = { ...v.event0, id: syntheticId(0x77b43), abilities: () => [event(p.sequence()), triggered(whenDraw("you"), p.sequence(
+    p.disableTriggers(all(anyCharacter(shared ? {} : { costAtMost: 1 })), "permanent", { cond: "sourceIn", zone: "hand" }, "triggeredAndActivated"),
+    p.putInDeck([everyIn("hand", { cardType: "character" })], "bottom"),
+  ), { zone: "hand" })] };
+  const deck: EngineCardDefinition = { ...v.event0, id: syntheticId(0x77b44), abilities: () => [event(p.sequence()), triggered(whenDraw("you"), p.sequence(
+    p.putInDeck([everyIn("hand", { cardType: "event", costAtLeast: 1 })], "bottom"),
+    p.disableTriggers(all(anyCharacter({ costAtLeast: 2 })), "permanent", { cond: "sourceIn", zone: "deck" }, "triggeredAndActivated"),
+  ), { zone: "hand" })], costs: [energy(1)] };
+  const reveal: EngineCardDefinition = { ...v.event0, id: syntheticId(0x77b45), abilities: () => [event(p.reveal("opponent"))] };
+  const engine = createEngine(testCatalog([...targets, hand, deck, reveal]));
+  const initial = boardState(engine.catalog, { active: "enemy", phase: "day", player: { hand: shared ? [hand.id] : [hand.id, deck.id], deck: [v.vanilla5.id], energy: 8 }, enemy: { hand: [reveal.id], back: targets.map((target) => target.id), energy: 8 } });
+  const cast = engine.apply(initial.state, "enemy", { kind: "play", card: initial.ids.enemy.hand[0], from: "hand" }, NO_PROMPTS);
+  const shown = passUntil(engine, cast.state, (state) => state.stack.length === 0 && state.triggerQueue.length === 0).state;
+  const state = passUntil(engine, shown, (next) => at(engine, "player", "day")(next) && next.triggerQueue.length === 0 && next.stack.length === 0).state;
+  const lists = { player: [hand.id, ...(shared ? [] : [deck.id]), v.vanilla5.id].map((cardId) => ({ cardId })), enemy: [reveal.id, ...targets.map((target) => target.id)].map((cardId) => ({ cardId })) };
+  return { engine, state, lists, view: engine.view(state, "enemy"), targets: initial.ids.enemy.back };
+}
+function ceasedWorld(visibleTargets: number) {
+  const target: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x77b30), abilities: () => [activated([energy(0)], p.gainPoints(1))] };
+  const source: EngineCardDefinition = { ...v.event0, id: syntheticId(0x77b31), abilities: () => [event(p.disableTriggers(all(anyCharacter()), "permanent", null, "triggeredAndActivated"))] };
+  const copy: EngineCardDefinition = { ...v.event0, id: syntheticId(0x77b32), abilities: () => [event(p.createCopyInHand(everyIn("void")))] };
+  const conceal: EngineCardDefinition = { ...v.event0, id: syntheticId(0x77b33), abilities: () => [event(p.sequence(p.returnToHand(all(characterYouControl())), p.shuffleInto([everyIn("hand")])))] };
+  const engine = createEngine(testCatalog([target, source, copy, conceal]));
+  const initial = boardState(engine.catalog, { active: "player", phase: "day", player: {
+    back: [target.id], hand: [copy.id, conceal.id], void: [source.id], energy: 8,
+  }, enemy: { back: Array.from({ length: visibleTargets }, () => target.id), energy: 8 } });
+  const cast = (state: BattleState, card: InstanceId) => passUntil(engine,
+    engine.apply(state, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS).state,
+    (next) => next.stack.length === 0 && next.triggerQueue.length === 0).state;
+  const copied = cast(initial.state, initial.ids.player.hand[0]);
+  const created = copied.sides.player.hand.find((id) => copied.instances[id].status.created);
+  if (created === undefined) throw new Error("Missing public created source");
+  const observed = cast(copied, created), state = cast(observed, initial.ids.player.hand[1]);
+  const lists = { player: [target.id, source.id, copy.id, conceal.id].map((cardId) => ({ cardId })),
+    enemy: Array.from({ length: visibleTargets }, () => ({ cardId: target.id })) };
+  return { engine, state, observed, created, lists, view: engine.view(state, "enemy") };
 }
 const sliceOf = (committed: BattleState): BattleSlice => ({ committed, inFlight: null, publishedEvents: 0, attempt: 0 });
 function applied(outcome: IntentOutcome): BattleSlice {
@@ -96,57 +138,65 @@ describe("combined disabling private source attribution", () => {
     }
   });
 
-  it("permits both private aliases with the same view and keeps future source conditions dynamic", () => {
-    const { engine, world } = fixture(conditions[1]), original = world(true);
-    for (const shared of [true, false]) {
-      let calls = 0;
-      const random = () => shared ? 0.4 : calls++ % 2 === 0 ? 0.4 : 0.6;
-      const sample = engine.determinize(original.view, original.lists, random), [first, second] = sources(sample);
-      expect(first === second).toBe(shared);
-      expect(sample.instances[first].zone).toBe("hand"); expect(sample.instances[second].zone).toBe("hand");
-      expect(engine.view(sample, "player").disabledActivations).toEqual(original.view.disabledActivations);
-      const ready = passUntil(engine, sample, at(engine, "enemy", "day")).state;
-      const cast = engine.apply(ready, "enemy", { kind: "play", card: first, from: "hand" }, NO_PROMPTS);
-      const done = passUntil(engine, cast.state, (state) => state.stack.length === 0 && state.triggerQueue.length === 0).state;
-      expect(engine.view(done, "player").disabledActivations).toEqual(shared ? [] : original.view.disabledActivations);
-    }
+  it.each([true, false])("retains a constrained private alias and its executed future ($shared)", (shared) => {
+    const { engine, state, lists, view, targets } = aliasWorld(shared);
+    const firstTarget = targets[0];
+    if (firstTarget == null) throw new Error("Missing physical target");
+    expect(view.floating).toHaveLength(2);
+    expect(view.disabledActivations).toEqual(targets);
+    expect(view.floating.every((effect) => effect.source === null)).toBe(true);
+    const sample = engine.determinize(view, lists, () => 0.4), ids = sources(sample);
+    expect(ids[0] === ids[1]).toBe(shared);
+    const source = ids[0];
+    expect(sample.instances[source].zone).toBe("hand");
+    expect(sample.instances[source].controller).toBe("player");
+    expect(engine.legalActions(sample, "player")).toContainEqual({ kind: "play", card: source, from: "hand" });
+    const played = engine.apply(sample, "player", { kind: "play", card: source, from: "hand" }, NO_PROMPTS);
+    const done = passUntil(engine, played.state, (next) => next.stack.length === 0 && next.triggerQueue.length === 0);
+    expect(done.state.instances[source].zone).toBe("void");
+    expect(engine.view(done.state, "enemy").disabledActivations).toEqual(shared ? [] : [targets[1]]);
+    const ready = passUntil(engine, done.state, at(engine, "enemy", "day")).state;
+    expect(engine.legalActions(ready, "enemy")).toContainEqual({ kind: "activate", source: firstTarget, ability: 0 });
+    const activated = engine.apply(ready, "enemy", { kind: "activate", source: firstTarget, ability: 0 }, NO_PROMPTS);
+    const resolved = passUntil(engine, activated.state, (next) => next.stack.length === 0 && next.triggerQueue.length === 0).state;
+    expect(resolved.sides.enemy.score).toBe(ready.sides.enemy.score + 1);
+    expect(state.floating).toHaveLength(2);
   });
 
-  it("samples an unknown source across both owners, known hidden cards and a nonexistent alternative", () => {
-    const { engine, world } = fixture(null), original = world(true);
-    // Visible history may identify a card without identifying a subsequent private producer.
-    const marked = structuredClone(original.state);
-    const id = marked.sides.enemy.hand[1];
-    marked.knownTo.player.push(id);
-    const seen = engine.view(marked, "player");
-    const candidateSets: BattleState[] = [engine.determinize(original.view, original.lists, () => 0.99), engine.determinize(seen, original.lists, () => 0.6)];
-    expect(candidateSets[0].instances[sources(candidateSets[0])[0]]).toBeUndefined();
-    expect(sources(candidateSets[1]).some((source) => candidateSets[1].instances[source]?.printing.kind === "card")).toBe(true);
-    const ownHidden = structuredClone(original.state);
-    ownHidden.knownTo.player = ownHidden.knownTo.player.filter((entry) => !ownHidden.sides.player.hand.includes(entry));
-    // A deck is hidden from its owner too; a private draw producer can bind there.
-    const card = ownHidden.sides.player.hand.pop()!;
-    ownHidden.sides.player.deck.push(card); ownHidden.instances[card] = { ...ownHidden.instances[card], zone: "deck" };
-    const ownSeen = engine.view(ownHidden, "player");
-    const sampled = engine.determinize(ownSeen, original.lists, () => 0);
-    expect(sources(sampled).some((source) => sampled.instances[source]?.owner === "player")).toBe(true);
-    expect(comparableView(engine.view(sampled, "player"))).toEqual(comparableView(ownSeen));
+  it.each(SIDES.flatMap((side) => conditions.map((condition) => ({ side, condition }))))("keeps a real previously revealed producer opaque and fixed for $side/$condition", ({ side, condition }) => {
+    const other: Side = side === "player" ? "enemy" : "player";
+    const { engine, world } = fixture(condition, false, side), original = world(true, true);
+    const producer = original.ids[other].hand[0], seen = original.view;
+    expect(original.state.floating.every((effect) => effect.source === producer)).toBe(true);
+    expect(seen.instances[producer]).toMatchObject(original.state.instances[producer]);
+    expect(seen.sides[other].hand.known[0]).toEqual({ index: 0, id: producer });
+    const started = original.events.filter((event) => event.kind === "effectStarted");
+    expect(started).toHaveLength(2);
+    expect(started.map((event) => eventSeenBy(event, side, original.state))).toEqual(started.map((event) => ({ ...event, source: null })));
+    expect(seen.floating.every((effect) => effect.source === null && effect.rememberedSource != null && "obligation" in effect.rememberedSource)).toBe(true);
+    const sample = engine.determinize(seen, original.lists, () => 0.4);
+    expect(sample.instances[producer]).toEqual(original.state.instances[producer]);
+    expect(sample.sides[other].hand.indexOf(producer)).toBe(original.state.sides[other].hand.indexOf(producer));
+    expect(comparableView(engine.view(sample, side))).toEqual(comparableView(seen));
+    expect(engine.legalActions(sample, side)).toEqual(engine.legalActions(original.state, side));
+    // An actual later engine step learns physical cards without publishing past causes.
+    const next = passUntil(engine, sample, at(engine, other, "day")).state;
+    expect(next.floating.every((effect) => effect.sourceObservedBy?.includes(side) === false)).toBe(true);
   });
 
-  it("persists observed attribution, treats missing legacy flags conservatively and validates strict modes", () => {
+  it("keeps later physical revelation separate from causal attribution and validates strict modes", () => {
     const { engine, world } = fixture(null), original = world(true);
     const observed = structuredClone(original.state);
     const fold = createFoldAdapter(engine);
-    // An ordinary reveal exposes the already published effect's source attribution.
+    // The ordinary reveal identifies cards while the original private relationship stays opaque.
     const cast = applied(fold.reduce(sliceOf(observed), { kind: "battleAction", side: "player", action: { kind: "play", card: original.ids.player.hand[1], from: "hand" } }));
     const suspended = applied(fold.reduce(cast, { kind: "battleAction", side: "enemy", action: { kind: "pass" } }));
     const pending = fold.pending(suspended)!;
-    expect(pending.display.floating.every((effect) => effect.sourceObservedBy?.includes("player"))).toBe(true);
+    expect(pending.display.floating.every((effect) => effect.sourceObservedBy?.includes("player") === false)).toBe(true);
     const parsed = parseJourneyBattleFoldState(saved({ ...suspended, committed: pending.display }))!;
     expect(stateHash(parsed.engine.slice.committed)).toBe(stateHash(pending.display));
     const seen = engine.view(parsed.engine.slice.committed, "player");
-    expect(seen.floating[0].rememberedSource).toEqual(seen.floating[1].rememberedSource);
-    expect(seen.floating[0].rememberedSource).toHaveProperty("member");
+    expect(seen.floating.map((effect) => effect.rememberedSource)).toEqual(seen.floating.map((effect) => ({ obligation: effect.id })));
     const legacy = structuredClone(parsed.engine.slice.committed);
     legacy.floating = legacy.floating.map(({ sourceObservedBy: _observed, ...effect }) => effect);
     expect(parseJourneyBattleFoldState(saved(sliceOf(legacy)))).not.toBeNull();
@@ -165,8 +215,55 @@ describe("combined disabling private source attribution", () => {
     }
   });
 
+  it("retains legacy public sources while explicit empty observations stay opaque", () => {
+    const { engine, world } = fixture(null, true), original = world(true);
+    const source = original.ids.player.hand[0];
+    const legacy = structuredClone(original.state);
+    legacy.floating = legacy.floating.map(({ sourceObservedBy: _flags, ...effect }) => effect);
+    const legacyView = engine.view(legacy, "player");
+    expect(legacyView.floating.map((effect) => effect.source)).toEqual([source, source]);
+    const started = original.events.filter((event) => event.kind === "effectStarted");
+    expect(started.map((event) => eventSeenBy(event, "player", legacy))).toEqual(started);
+    expect(parseJourneyBattleFoldState(saved(sliceOf(legacy)))).not.toBeNull();
+    const opaque = structuredClone(legacy);
+    opaque.floating = opaque.floating.map((effect) => ({ ...effect, sourceObservedBy: [] }));
+    expect(engine.view(opaque, "player").floating.every((effect) => effect.source === null)).toBe(true);
+    expect(started.map((event) => eventSeenBy(event, "player", opaque))).toEqual(started.map((event) => ({ ...event, source: null })));
+  });
+
+  it.each([1, 2])("anchors only the %i visible observed ceased effects", (count) => {
+    const { engine, state, created, lists, view } = ceasedWorld(count);
+    expect(state.instances[created]).toBeUndefined();
+    expect(state.floating).toHaveLength(count + 1);
+    expect(view.floating).toHaveLength(count);
+    expect(view.floating.map((effect) => effect.rememberedSource)).toEqual(count === 1 ? [null] : view.floating.map(() => ({ ceased: view.floating[0].id })));
+    const sample = engine.determinize(view, lists, () => 0.4);
+    expect(new Set(sources(sample)).size).toBe(1);
+    expect(sources(sample).every((id) => sample.instances[id] === undefined)).toBe(true);
+    expect(comparableView(engine.view(sample, "enemy"))).toEqual(comparableView(view));
+  });
+
+  it("rejects malformed or contradictory ceased anchors without mutating its public input", () => {
+    const { engine, lists, view } = ceasedWorld(2);
+    const [first, second] = view.floating;
+    if (second.change.kind !== "disableTriggers") throw new Error("Missing combined target");
+    const target = second.change.instance;
+    const invalid = [
+      { ...view, floating: view.floating.map((effect) => ({ ...effect, rememberedSource: { ceased: second.id } })) },
+      { ...view, floating: [{ ...first, rememberedSource: { ceased: first.id } }] },
+      { ...view, floating: [first, { ...second, source: target }] },
+      { ...view, floating: view.floating.map((effect) => ({ ...effect, rememberedSource: { ceased: first.id, member: 0 } })) },
+      { ...view, floating: [first, { ...second, change: { kind: "disableTriggers" as const, instance: target, mode: "triggered" as const } }] },
+    ];
+    for (const seen of invalid) {
+      const before = structuredClone(seen);
+      expect(() => engine.determinize(seen, lists, () => 0.4)).toThrow(/invalid ceased source anchor/);
+      expect(seen).toEqual(before);
+    }
+  });
+
   it("reloads published observation, rejects invalid concurrent and stale input, and retains attribution on error", () => {
-    const { engine, world } = fixture(null), original = world(true), fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const { engine, world } = fixture(null, true), original = world(true), fold = createFoldAdapter(engine, { checkEventPrefix: true });
     const cast = applied(fold.reduce(sliceOf(original.state), { kind: "battleAction", side: "player", action: { kind: "play", card: original.ids.player.hand[1], from: "hand" } }));
     const pendingSlice = applied(fold.reduce(cast, { kind: "battleAction", side: "enemy", action: { kind: "pass" } }));
     const loaded = parseJourneyBattleFoldState(saved(pendingSlice))!.engine.slice, pending = fold.pending(loaded)!;

@@ -1,0 +1,40 @@
+{
+  "bead": "hv-wp4u",
+  "phase": 5,
+  "implementMin": 70.0201832667,
+  "implementWindow": {
+    "start": "2026-10-12T20:11:12+00:00",
+    "end": "2026-10-12T21:21:13.210996+00:00"
+  },
+  "localValidationS": {
+    "review": 51.7590797090088,
+    "knip": 3.6201441660086857,
+    "focused": 7.028125083990744,
+    "full": 108.84127529199759,
+    "fuzz": 117.94843737500196,
+    "qa": 91.57867833400087
+  },
+  "hostLoad": 9.64990234375,
+  "testDelta": {
+    "files": 0,
+    "lines": 98,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 11.234384683333333,
+      "note": "Two complete fixture/type correction windows, including investigation, coordination and renewed checks. Standalone failed-command durations retained separately."
+    },
+    {
+      "tag": "heavy-lock-wait",
+      "minutes": 3.5549864500000004,
+      "note": "Measured queue plus launcher intervals; execution separately recorded. No host load or CPU inference."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 12.849645366666666,
+      "note": "Three failures, rendered-control/optional-field/accepted-intent corrections and final actual badge capture. QA4 functional pass precedes final capture pass; first geometry cause unknown."
+    }
+  ]
+}

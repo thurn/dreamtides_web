@@ -1,0 +1,153 @@
+{
+  "bead": "hv-wp4u",
+  "base": "02a93167dbd091e35feb5da7ab0db4233ea47ffc",
+  "status": "ordinary source validation and native QA complete; endpoint authorized, final schema/commit receipts emitted afterward",
+  "implementationWindow": {
+    "start": "2026-10-12T20:11:12Z",
+    "end": "2026-10-12T21:21:13.210996+00:00",
+    "minutes": 70.0201832667,
+    "basis": "Conservative whole claim-to-parent-endpoint-ACK ownership proxy, including parent setup, source-free research, native coordination, expected negatives, author corrections and waits. Exact dispatch unknown; not CPU or editing-only time.",
+    "firstHelperObservation": "2026-10-12T20:12:58Z",
+    "parentDispatchPre": "2026-10-12T20:12:22.255815Z",
+    "parentDispatchPost": "2026-10-12T20:12:55.723110Z",
+    "writeACK": "2026-10-12T20:34:20.310810Z",
+    "endpointACK": "/tmp/dreamtides-executor-01a12e91/wp4u-endpoint-ack.json",
+    "tail": "Endpoint metadata/schema/stage/hash/resources/commit after this cutoff are qualified finalization. Actual Git tail is emitted to wp4u-commit.json after commit and returned in final handoff; no guessed commit timestamp is embedded."
+  },
+  "sourceManifest": "/tmp/dreamtides-executor-01a12e91/wp4u-source-manifest.json",
+  "footprint": {
+    "productionChangedLines": 123,
+    "documentationChangedLines": 11,
+    "owningTestNetLines": 98,
+    "owningModules": [
+      287,
+      499
+    ],
+    "newCases": 8,
+    "newEntrypoints": 0,
+    "jsdom": 0,
+    "developmentFixtureNetLines": 16
+  },
+  "sourceFallout": {
+    "combinedSourceObservers": "(state:BattleState,source:AbilitySource,target:InstanceId):readonlySide[]; imports rules/floating, view/view, events/kinds/effect-started, testing/determinization-fidelity. Latter3 share same predicate only for missing legacy flags; defaults/general seesSource unchanged.",
+    "FloatingEffectView.rememberedSource": "existing member|obligation|null union plus {ceased:EffectId}; view-only. Engine index reexport/determinize and fidelity structural view users need no additional changes.",
+    "unchangedSignatures": [
+      "rememberKnownCards",
+      "addFloating",
+      "Engine.view",
+      "Engine.determinize",
+      "effectStarted.redact"
+    ],
+    "schema": "No persisted state/event/prompt/answer/type schema or general privacy change."
+  },
+  "fiveFailurePaths": {
+    "midStepError": "disable-source-privacy.contracts.ts:265 genuine public-source creation then contained synthetic resolving error; loaded/direct state hashes and published observations agree. Existing disable-triggers rollback contract covers newly appended effects.",
+    "reloadRestart": "Public JSON parse + fold replay pending prefix and native normal reload retain observations, physical records, opacity and outcomes. Saved fields unchanged; ceased anchors are view-only.",
+    "partialWrite": "Malformed/contradictory ceased anchor and bounded aggregate errors reject without modifying input; determinize owns its reconstruction. Existing atomic creation rollback reused.",
+    "invalidStaleInput": "Existing strict saved flag/mode checks; wrong actor, illegal answer, cancel refusal and stale answered prefix retained in owning public contracts. New strict anchor cases include wrong first anchor, singleton, public source contradiction and mixed member tag.",
+    "concurrentActors": "Competing battleAction during suspended automatic prefix bounces stepInFlight; old answered prefix after restart bounces stalePrompt. No shared sampling state or new game-flow protocol."
+  },
+  "commands": {
+    "focus1": "/tmp/dreamtides-executor-01a12e91/wp4u-focus1.json",
+    "focus2": "/tmp/dreamtides-executor-01a12e91/wp4u-focus2.json",
+    "focus3": "/tmp/dreamtides-executor-01a12e91/wp4u-focus3.json",
+    "focus4": "/tmp/dreamtides-executor-01a12e91/wp4u-focus4.json",
+    "focus5": "/tmp/dreamtides-executor-01a12e91/wp4u-focus5.json",
+    "focus6": "/tmp/dreamtides-executor-01a12e91/wp4u-focus6.json",
+    "type1": "/tmp/dreamtides-executor-01a12e91/wp4u-type1.json",
+    "type2": "/tmp/dreamtides-executor-01a12e91/wp4u-type2.json",
+    "tooling": "/tmp/dreamtides-executor-01a12e91/wp4u-tooling.json",
+    "counterfactual": "/tmp/dreamtides-executor-01a12e91/wp4u-counterfactual.json",
+    "hub": "/tmp/dreamtides-executor-01a12e91/wp4u-hub.json",
+    "review": "/tmp/dreamtides-executor-01a12e91/wp4u-review.json",
+    "review2": "/tmp/dreamtides-executor-01a12e91/wp4u-review2.json",
+    "knip": "/tmp/dreamtides-executor-01a12e91/wp4u-knip.json",
+    "full-launch": "/tmp/dreamtides-executor-01a12e91/wp4u-full-launch.json",
+    "full-execution": "/tmp/dreamtides-executor-01a12e91/wp4u-full-execution.json",
+    "fuzz-launch": "/tmp/dreamtides-executor-01a12e91/wp4u-fuzz-launch.json",
+    "fuzz-execution": "/tmp/dreamtides-executor-01a12e91/wp4u-fuzz-execution.json",
+    "qa": "/tmp/dreamtides-executor-01a12e91/wp4u-qa.json",
+    "qa2": "/tmp/dreamtides-executor-01a12e91/wp4u-qa2.json",
+    "qa3": "/tmp/dreamtides-executor-01a12e91/wp4u-qa3.json",
+    "qa4": "/tmp/dreamtides-executor-01a12e91/wp4u-qa4.json",
+    "qa5": "/tmp/dreamtides-executor-01a12e91/wp4u-qa5.json"
+  },
+  "stage1": {
+    "baseline": "/tmp/dreamtides-executor-01a12e91/wp4u-stage1/probe.json",
+    "baselineOutcome": "Three intended public product failures; no fixture error. Projection used only for the original second scratch negative; owning post-fix tests use actual Engine.view.",
+    "postfix": "/tmp/dreamtides-executor-01a12e91/wp4u-stage1/postfix.json",
+    "postfixOutcome": "Three passed public probes",
+    "counterfactual": "Seven intended failures/one preserved singleton control; six production files temporarily restored to base then all repaired bytes restored in finally. Owning current real public view used.",
+    "restoration": "/tmp/dreamtides-executor-01a12e91/wp4u-stage1/counterfactual-restoration.json"
+  },
+  "failedAndCorrected": {
+    "owningFocus": "focus1 fivefailures; focus2 two; focus3/4 one; focus5 two; focus6 firstgreen85. Fixture view/raw record mismatch corrected to matching physical fields, genuine public recovery needs meaningful discard/response choices, old fixed RNG-index assertions replaced with constrained real-flow shared/distinct cases and executed movement/activation. Full first repair window20:41:13.687632\u219220:49:11.248423Z; final hub2231 green20:50:56.777295Z.",
+    "review": "Initial aggregate47.717525s failed target nullability and omitted lab display metadata; isolated type2/tooling green then final51.759080s required review4997 green. Full repair window20:51:20.318807\u219220:54:36.821097Z includes coordination and renewed commands.",
+    "qa": "Three historical failed observations, all Caps[]. First combined geometry subcondition unrecorded; unchanged condition later passes rendered boundary. Second optional absent aggregate field after expiry; third raw Day preceded presented Day so tap submitted no intent. Actual rendered Day and accepted engine.action checks pass QA4 complete workflow. Its concealed images preceded rendered badge; only those captures supplemented with visible badge wait in QA5. Full21:04:03.439985\u219221:16:54.418707Z correction window12.849645min; original scripts/receipts/raw reports preserved.",
+    "finiteReadCorrections": "Several guessed filenames were absent during bounded source/QA reads (prompt-lab/battle helpers/debug/screen/QA-ledger extension). They invoked no mutations or extra model/provider. Tool read/edit command PIDs were not separately captured; actual tool walls remain in transcript and whole ownership proxy includes their investigation/coordination. No fabricated durations or host-load diagnosis."
+  },
+  "heavyTiming": {
+    "workers": 2,
+    "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "full": {
+      "queuePlusLauncherS": 59.780864,
+      "acquiredExecutionS": 108.84127529199759,
+      "outerTotalS": 168.61519941699225
+    },
+    "general200": {
+      "queuePlusLauncherS": 153.518323,
+      "acquiredExecutionS": 117.94843737500196,
+      "outerTotalS": 271.4694058749883,
+      "games": 200,
+      "steps": 94270,
+      "prompts": 4135,
+      "interactiveReruns": 412,
+      "failures": 0,
+      "reportedWallS": 116.6,
+      "reportedCpuS": 127.8,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 2
+      }
+    },
+    "noBrowserLockOverlap": true
+  },
+  "hostLoad": {
+    "frictionSample": 9.64990234375,
+    "provenance": "First final-review checks at20:53:46.302Z; per-check loads retained in command logs, QA loads in raw reports. Heterogeneous observations, not CPU utilization."
+  },
+  "qa": {
+    "functional": "run-AhgYSm/privacy.result.json; both sides of workflow desktop/mobile full functional PASS",
+    "correctedConcealed": "run-6ZZUDE/concealed.result.json; rendered badge visual PASS bothviewports",
+    "finalImages": [
+      "run-6ZZUDE/private-producer-concealed-desktop.png",
+      "run-AhgYSm/private-producer-restored-desktop.png",
+      "run-6ZZUDE/private-producer-concealed-mobile.png",
+      "run-AhgYSm/private-producer-restored-mobile.png"
+    ],
+    "ledger": "docs/plan/evidence/qa-ledger/hv-wp4u.jsonl",
+    "rawRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-wp4u",
+    "totalRows": 7,
+    "latestEffective": {
+      "pass": 2,
+      "fail": 0
+    },
+    "historicalFailures": 3
+  },
+  "resources": {
+    "ownFinalProof": "/tmp/dreamtides-executor-01a12e91/wp4u-final-resources.json",
+    "parentEndpointProof": "/tmp/dreamtides-executor-01a12e91/wp4u-endpoint-ack.json",
+    "finalCaptureProof": "QA5 runner/server57058/57046/57097 absent; owngroupempty; slot1 now belongs to another bead and remains untouched. QA4 exact admitted ownprovider identity/session/protocol in wp4u-qa4-owner.json; all normal runtime closures, no archival/quarantine/recovery required.",
+    "qa4LiveOwnGroup": "/tmp/dreamtides-executor-01a12e91/wp4u-qa4-processes.txt",
+    "noWriters": "Production/tests/support unchanged after frozen manifest; no active source writer, test, fuzz, browser/context/RPC/client/server/job remains."
+  },
+  "compatibility": "Supplied saved observation flags are authoritative facts, explicit empty flags stay opaque, missing legacy flags retain current genuinely public source visibility without inferred ceased aliases. No saved schema/game-flow migration.",
+  "checks": {
+    "focused": "2231primitivehub plus18tooling",
+    "review": "270files4997tests+types/lint/cycles",
+    "full": "352files6002tests+allheavychecks/bundle/devOnly",
+    "knip": "passed",
+    "nativeQA": "QA4 complete functional desktop/mobile plus QA5 rendered concealed badge captures; corrected2latestPASS"
+  },
+  "validationScope": "No production entities, weighted300, repeated catalog sweep, extra test entrypoint/jsdom, private browser dispatch/state patch, renderer or shared config change. Parent owns exact cold Sol core review/certified candidate."
+}

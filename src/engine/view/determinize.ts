@@ -337,6 +337,23 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       rememberedSource(effect.rememberedSource, true);
     }
   }
+  const physicallyHidden = SIDES.flatMap(holder => [...sides[holder].deck, ...sides[holder].hand]);
+  const ceased = new Map<EffectId, InstanceId>();
+  const ceasedSource = (anchor: EffectId): InstanceId => {
+    const root = view.floating.find(effect => effect.id === anchor);
+    const group = view.floating.filter(effect => effect.rememberedSource != null && "ceased" in effect.rememberedSource && effect.rememberedSource.ceased === anchor);
+    if (root?.source !== null || root.change.kind !== "disableTriggers" || root.change.mode !== "triggeredAndActivated" ||
+        root.rememberedSource == null || !("ceased" in root.rememberedSource) || root.rememberedSource.ceased !== anchor ||
+        group.length < 2 || group[0].id !== anchor || group.some(effect => effect.rememberedSource == null || "member" in effect.rememberedSource || "obligation" in effect.rememberedSource || effect.source !== null ||
+          effect.change.kind !== "disableTriggers" || effect.change.mode !== "triggeredAndActivated")) {
+      throw new Error("Cannot determinize invalid ceased source anchor");
+    }
+    const previous = ceased.get(anchor);
+    if (previous !== undefined) return previous;
+    const source: InstanceId = `i${next++}`;
+    ceased.set(anchor, source);
+    return source;
+  };
   const opaque = new Map<EffectId, InstanceId>();
   const opaqueSource = (effect: FloatingEffectView): InstanceId => {
     const provenance = effect.rememberedSource;
@@ -346,7 +363,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     // No private alias or existence relationship is in the input: producers
     // may be the same hidden card, distinct cards, or an unattributed ceased card.
     const absent: InstanceId = `i${next++}`;
-    const pool = [...hidden, absent];
+    const pool = [...physicallyHidden, absent];
     const source = pool[Math.floor(random() * pool.length)];
     opaque.set(effect.id, source);
     return source;
@@ -398,6 +415,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       const { rememberedSource: provenance, ...record } = copy(effect);
       return { ...record,
         source: provenance != null && "obligation" in provenance ? opaqueSource(effect)
+          : provenance != null && "ceased" in provenance ? ceasedSource(provenance.ceased)
           : provenance !== undefined ? rememberedSource(provenance, effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated")
             : effect.source === null && effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated" ? rememberedSource(null)
               : effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
@@ -706,7 +724,7 @@ function reconcileDisabling(state: BattleState, view: BattleView, catalog: Engin
     if (index < 0) throw new Error("Cannot determinize invalid source obligation");
     const source = combined[index].source;
     const absent: InstanceId = typeof source === "string" && !(source in state.instances) ? source : `i${state.nextInstance++}`;
-    return [...new Set([source, ...hidden, absent])];
+    return [...new Set([source, ...SIDES.flatMap(side => [...state.sides[side].deck, ...state.sides[side].hand]), absent])];
   });
   const bind = (index: number): boolean => {
     if (++work > state.config.resolutionCap) throw new Error("Cannot determinize aggregate activation suppression within the battle work cap");

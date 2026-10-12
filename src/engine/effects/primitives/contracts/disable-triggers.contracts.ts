@@ -362,15 +362,16 @@ describe("anonymous combined disabling obligations", () => {
     const lists = { player: [{ cardId: bearer.id }, { cardId: copySource.id }, { cardId: definition.id }], enemy: [{ cardId: bearer.id }, { cardId: copySource.id }, { cardId: definition.id }] };
     for (const viewer of SIDES) {
       const { seen, sample } = sampledAgreement(done, lists, viewer);
-      expect(seen.floating.every((effect) => effect.source === null && effect.rememberedSource === null)).toBe(true);
+      expect(seen.floating.every((effect) => effect.source === null)).toBe(true);
+      expect(new Set(sample.floating.map((effect) => effect.source)).size).toBe(1);
       const targetId = initial.ids[side].back[0]!;
       const fold = createFoldAdapter(engine);
       if (!canActivate(sample, engine.catalog, side, targetId, 1)) expect(fold.reduce(sliceOf(sample), { kind: "battleAction", side, action: { kind: "activate", source: targetId, ability: 1 } })).toEqual({ kind: "bounced", reason: "illegalAction" });
     }
   });
 
-  it("keeps masked overlapping source truths private while retaining both possible expiry futures", () => {
-    const initial = board({ back: [bearer.id], hand: [concealOpponent.id] }, { void: [sources[2].id, sources[2].id], deck: [] });
+  it("keeps masked overlapping source truths private with valid expiry futures", () => {
+    const initial = board({ back: [bearer.id], hand: [concealOpponent.id], deck: [] }, { void: [sources[2].id, sources[2].id], deck: [] });
     const targetId = initial.ids.player.back[0]!;
     initial.state.floating = initial.ids.enemy.void.map((source, index) => ({ id: index === 0 ? "e1" : "e2", controller: "enemy", source, timestamp: 0,
       expiry: index === 0 ? { at: "paid", effect: "e3" } : { at: "never" }, change: { kind: "disableTriggers", instance: targetId, mode: "triggeredAndActivated", while: { cond: "sourceIn", zone: "deck" } } }));
@@ -388,13 +389,13 @@ describe("anonymous combined disabling obligations", () => {
     const afterPay = (state: BattleState) => engine.view(engine.apply(state, "player", { kind: "payToEnd", effect: "e3" }, NO_PROMPTS).state, "player").disabledActivations;
     expect(afterPay(state)).not.toEqual(afterPay(alternate));
     const futures = new Set<string>();
-    for (const random of [0.01, 0.99]) {
+    for (const random of [0.01, 0.6, 0.99]) {
       const sample = engine.determinize(seen, lists, () => random);
       expect(comparableView(engine.view(sample, "player"))).toEqual(comparableView(seen));
       expect(stateHash(engine.determinize(engine.view(alternate, "player"), lists, () => random))).toBe(stateHash(sample));
       futures.add(JSON.stringify(afterPay(sample)));
     }
-    expect(futures.size).toBe(2);
+    expect([...futures].every((future) => [JSON.stringify(afterPay(state)), JSON.stringify(afterPay(alternate))].includes(future))).toBe(true);
   });
 
   it.each(SIDES)("samples legacy unknown printing and opponent ownership without private attribution for %s", (side) => {

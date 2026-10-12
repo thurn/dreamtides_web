@@ -9,6 +9,7 @@
  * and ends, so its ability list reads from the instance alone.
  */
 import type { EffectId, InstanceId, Side } from "../state/ids";
+import { combinedSourceObservers } from "../view/knowledge";
 import { oncePerTurnParts } from "../state/ids";
 import type { BattleState, Expiry, FloatingChange, FloatingEffect, GainedAbilities } from "../state/types";
 import type { StepContext } from "../steps/types";
@@ -27,7 +28,10 @@ export function addFloating(
   effect: Omit<FloatingEffect, "id" | "timestamp">,
 ): EffectId {
   const id = mintEffectId(ctx.state);
-  ctx.state.floating.push({ ...effect, id, timestamp: ctx.state.clock });
+  // Every new combined effect acquires its own publication facts, independent of supplied metadata.
+  const observed = effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated"
+    ? { sourceObservedBy: combinedSourceObservers(ctx.state, effect.source, effect.change.instance) } : {};
+  ctx.state.floating.push({ ...effect, ...observed, id, timestamp: ctx.state.clock });
   if (effect.change.kind === "abilities" || effect.change.kind === "loseAbilities") mirrorAbilities(ctx.state, effect.change.instance);
   ctx.emit({
     kind: "effectStarted",

@@ -969,8 +969,15 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   activation-legality obligation when their source is hidden or ceased. Views
   keep the effect, target, duration, and original condition with anonymous
   source provenance, and expose aggregate activation suppression per visible
-  target. Observed attribution retains public source and cohort relations. A
-  never-observed producer has an opaque obligation keyed by effect identity,
+  target. Physical card identification does not establish causal attribution.
+  New combined effects record observers at their creation/publication boundary;
+  later physical reveals and sampled placements retain those existing facts.
+  Observed attribution retains public source and cohort relations. Shared ceased
+  sources use the first viewer-visible effect as their anchor, counting no hidden
+  sibling. Existing observation flags are authoritative published facts; legacy
+  records without flags retain current genuinely public source visibility without
+  inferring anonymous past aliases. Opaque source choices include known hidden
+  cards with their records and positions fixed. A never-observed producer has an opaque obligation keyed by effect identity,
   permitting shared, distinct, or ceased sources without disclosing that
   private relation. Attribution observations persist through save/replay and
   published knowledge recovery; views omit their private history. Individual

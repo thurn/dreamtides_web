@@ -37,7 +37,7 @@ import { abilitiesDisabled } from "../rules/ability-disabling";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
 import { materializedThisTurn } from "../rules/turn-log";
-import { knows, observedFixedEffect, seesSubject } from "./knowledge";
+import { combinedSourceObservers, knows, observedFixedEffect, seesSubject } from "./knowledge";
 
 /**
  * A card's effective characteristics, after every continuous effect (the
@@ -179,8 +179,8 @@ export interface FloatingEffectView {
   readonly timestamp: number;
   readonly expiry: Expiry;
   readonly change: FloatingChangeView;
-  /** Observed anonymous card provenance, or a public effect obligation with private producer identity; null retains unattributed or publicly ceased provenance. */
-  readonly rememberedSource?: { readonly member: number } | { readonly obligation: EffectId } | null;
+  /** Observed anonymous card provenance, or a public effect obligation with private producer identity; a ceased anchor shares only viewer-visible observed obligations; null retains singleton or legacy ceased provenance. */
+  readonly rememberedSource?: { readonly member: number } | { readonly obligation: EffectId } | { readonly ceased: EffectId } | null;
 }
 
 /**
@@ -431,17 +431,33 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       ...(sourceSeen && lastKnownSourceSpark !== undefined ? { lastKnownSourceSpark } : {}),
     };
   };
+  // Shared ceased provenance counts only effects this viewer actually sees.
+  const visibleEffects = state.floating.filter(floatingVisible);
+  const ceasedGroups = new Map<InstanceId, EffectId[]>();
+  for (const effect of visibleEffects) {
+    if (effect.change.kind !== "disableTriggers" || effect.change.mode !== "triggeredAndActivated" ||
+        effect.sourceObservedBy?.includes(viewer) !== true || typeof effect.source !== "string" || state.instances[effect.source] !== undefined) continue;
+    const group = ceasedGroups.get(effect.source) ?? [];
+    group.push(effect.id);
+    ceasedGroups.set(effect.source, group);
+  }
   // Hidden captured members are numbered in the order the floating effects, then the queued triggers, show them.
-  const floating = state.floating.filter(floatingVisible).map((effect): FloatingEffectView => {
+  const floating = visibleEffects.map((effect): FloatingEffectView => {
     const observed = observedFixedEffect(state, viewer, effect.id);
     const record = observed ?? effect;
-    const sourceSeen = visibleSource(record.source);
+    const combined = record.change.kind === "disableTriggers" && record.change.mode === "triggeredAndActivated";
+    const observers = combined && record.change.kind === "disableTriggers"
+      ? record.sourceObservedBy ?? combinedSourceObservers(state, record.source, record.change.instance) : [];
+    const sourceSeen = visibleSource(record.source) && (!combined || observers.includes(viewer));
+    const ceasedGroup = typeof record.source === "string" ? ceasedGroups.get(record.source) : undefined;
     const { sourceObservedBy: _sourceObservedBy, ...shown } = copy(record);
     return { ...shown, source: sourceSeen ? copy(record.source) : null,
       change: changeView(record.change, sourceSeen),
       ...(!sourceSeen && typeof record.source === "string" && record.change.kind === "disableTriggers" && record.change.mode === "triggeredAndActivated"
         ? { rememberedSource: record.sourceObservedBy?.includes(viewer) === true
-          ? state.instances[record.source] === undefined ? null : { member: memberFor(record.source) }
+          ? state.instances[record.source] === undefined
+            ? ceasedGroup !== undefined && ceasedGroup.length > 1 ? { ceased: ceasedGroup[0] } : null
+            : { member: memberFor(record.source) }
           : { obligation: record.id } }
         : observed !== undefined && !sourceSeen && typeof record.source === "string"
           ? { rememberedSource: anonymousSource(record.source) } : {}) };

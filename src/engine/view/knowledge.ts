@@ -44,15 +44,6 @@ import type { BattleState, CardInstance, FixedCardChange, FloatingEffect, Printi
  */
 export function rememberKnownCards(state: BattleState): void {
   const records = state.rememberedCards ??= { player: [], enemy: [] };
-  // A remembered printing alone does not identify a later private producer.
-  // Record only attribution this side can actually see at this boundary.
-  state.floating = state.floating.map((effect) => {
-    const { change } = effect;
-    if (change.kind !== "disableTriggers" || change.mode !== "triggeredAndActivated") return effect;
-    const observed = SIDES.filter((side) => effect.sourceObservedBy?.includes(side) === true ||
-      (identifies(state, change.instance, side) && seesSource(state, effect.source, side)));
-    return observed.length === (effect.sourceObservedBy?.length ?? 0) ? effect : { ...effect, sourceObservedBy: observed };
-  });
   // Each card's fixed permanent effects, in floating order, from one pass over the floating effects.
   const fixed = new Map<InstanceId, RememberedEffect[]>();
   for (const effect of state.floating) {
@@ -272,6 +263,16 @@ export function seesSubject(
  */
 export function seesSource(state: BattleState, source: AbilitySource, viewer: Side): boolean {
   return typeof source !== "string" || identifies(state, source, viewer);
+}
+
+/** Sides that observe a new combined effect's causal source at its publication boundary. */
+export function combinedSourceObservers(state: BattleState, source: AbilitySource, target: InstanceId): readonly Side[] {
+  return SIDES.filter(side => {
+    if (!identifies(state, target, side) || !seesSource(state, source, side)) return false;
+    if (typeof source !== "string") return true;
+    const instance = state.instances[source];
+    return instance !== undefined && ((instance.zone !== "hand" && instance.zone !== "deck") || instance.controller === side);
+  });
 }
 
 /** Whether `side` sees `instance` without a `knownTo` entry: it is in a public zone or in `side`'s hand. */

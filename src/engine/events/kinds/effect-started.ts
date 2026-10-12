@@ -1,7 +1,7 @@
 import { changedInstance, keptWithoutSource } from "../../rules/floating";
 import type { AbilitySource, EffectId, InstanceId, Side } from "../../state/ids";
 import type { BattleState, Expiry, FloatingChange } from "../../state/types";
-import { identifies, seesSource } from "../../view/knowledge";
+import { combinedSourceObservers, identifies, seesSource } from "../../view/knowledge";
 import { sourcePrivacy } from "../sources";
 import type { EventDefinition } from "../types";
 
@@ -12,7 +12,7 @@ export interface EffectStartedEvent {
   readonly controller: Side;
   /**
    * The effect's source; `null` in the projection for a viewer that cannot
-   * identify it but sees the effect begin (`effectStarted.redact`).
+   * identify its causal relationship but sees the effect begin (`effectStarted.redact`).
    */
   readonly source: AbilitySource | null;
   readonly expiry: Expiry;
@@ -44,7 +44,10 @@ function keptPublicCard(event: EffectStartedEvent, state: BattleState): Instance
  * (`keptPublicCard`) is the exception: every side that identifies that card
  * sees it begin, with the source `null` when it cannot identify the source,
  * such as a created card that has ceased to exist. A trigger's captured cards
- * list only those the side can identify.
+ * list only those the side can identify. Combined disabling uses its recorded
+ * creation-time causal observers; physical revelation alone does not expose
+ * that relationship. Missing legacy flags retain current public-source
+ * visibility, while explicit flags govern recorded observations.
  */
 export const effectStarted: EventDefinition<EffectStartedEvent> = {
   kind: "effectStarted",
@@ -52,7 +55,11 @@ export const effectStarted: EventDefinition<EffectStartedEvent> = {
   redact: (event, viewer, state) => {
     const changed = changedInstance(event.change);
     if (changed !== null && !identifies(state, changed, viewer)) return null;
-    if (event.source === null || !seesSource(state, event.source, viewer)) {
+    const combined = event.change.kind === "disableTriggers" && event.change.mode === "triggeredAndActivated";
+    const flags = state.floating.find(effect => effect.id === event.effect)?.sourceObservedBy;
+    const observed = !combined || event.source !== null && event.change.kind === "disableTriggers" &&
+      (flags ?? combinedSourceObservers(state, event.source, event.change.instance)).includes(viewer);
+    if (!observed || event.source === null || !seesSource(state, event.source, viewer)) {
       return keptPublicCard(event, state) === null ? null : { ...event, source: null };
     }
     const { change } = event;

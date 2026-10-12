@@ -20,8 +20,8 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
-import { onDusk, triggered } from "../dsl/triggers";
+import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
+import { onDusk, triggered, whenDraw } from "../dsl/triggers";
 import { keyword } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
@@ -84,6 +84,14 @@ export const LAB = {
   /** Public source attribution can become anonymous while a combined turn obligation lasts. */
   hiddenDisable: labEvent(0x77a40, 0, p.disableTriggers(characterTarget(characterYouControl()), "untilEndOfTurn", null, "triggeredAndActivated")),
   hiddenDisableShuffle: labEvent(0x77a41, 0, p.shuffleInto([everyIn("void")])),
+  /** Physical revelation precedes a private causal trigger, followed by an ordered hidden relocation. */
+  privateKnownDisable: {
+    ...SYNTHETIC.vanilla1, id: syntheticId(0x77f410), status: "authored",
+    abilities: () => [triggered(whenDraw("opponent"), p.sequence(
+      p.disableTriggers(all(enemyCharacter()), "untilEndOfTurn", null, "triggeredAndActivated"),
+      p.putInDeck([thisCardIn("hand")], "bottom"),
+    ), { zone: "hand" })],
+  },
   /** A complete optional resolving energy and discard payment before drawing. */
   resolvingPayment: labEvent(0x43800, 0, p.payTo({ energy: 2, discard: 1 }, p.draw(2))),
   /** Grant a full extra turn using the ordinary queue. */
@@ -268,6 +276,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.disableBearer.id]: { name: "Lab Ability Bearer", text: "Vengeful. 1●: Gain 1⍟. ▸Dusk: Gain 2⍟. This character has +1✦." },
   [LAB.disableAbilities.id]: { name: "Lab Combined Silence", text: "Disable an enemy’s triggered and activated abilities this turn." },
   [LAB.hiddenDisable.id]: { name: "Lab Hidden Silence", text: "Disable a character you control’s triggered and activated abilities this turn." },
+  [LAB.privateKnownDisable.id]: { name: "Lab Private Producer", text: "When the opponent draws a card, disable their characters’ triggered and activated abilities this turn, then put this card on the bottom of its owner’s deck." },
   [LAB.hiddenDisableShuffle.id]: { name: "Lab Source Concealment", text: "Shuffle your void into your deck." },
   [DSL.conditionalRemoval.id]: { name: "Lab Conditional Removal", text: "If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy." },
   [DSL.conditionalDawn.id]: { name: "Lab Conditional Dawn", text: "▸Dawn: Give a warrior you control +1✦. If you control no warriors, gain 2⍟ instead." },
@@ -1204,6 +1213,13 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     setup: { active: "player", phase: "day", player: { back: [LAB.disableBearer.id], hand: [LAB.hiddenDisable.id, LAB.hiddenDisableShuffle.id], energy: 8, deck: deck(8) }, enemy: { deck: deck(8) } },
     script: [],
     presents: [playHand(0), playHand(1)],
+  },
+  {
+    name: "present-private-known-disable",
+    description: "Presentation: a known hidden card's private causal relationship stays concealed while a public turn obligation expires",
+    setup: { active: "player", phase: "day", player: { back: [LAB.disableBearer.id], hand: [LAB.spyglass.id], energy: 8, deck: deck(8) }, enemy: { hand: [LAB.privateKnownDisable.id], deck: deck(8) } },
+    script: [],
+    presents: [playHand(0)],
   },
   {
     name: "present-status",

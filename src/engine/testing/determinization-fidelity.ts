@@ -28,7 +28,7 @@ import type { AbilitySource, BattleSeed, InstanceId, Side, Zone } from "../state
 import { battleSeed, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, FloatingEffect, PayableEffect, RememberedEffect } from "../state/types";
 import type { Decklists } from "../view/determinize";
-import { identifies, isFixedEffect, observedFixedEffect } from "../view/knowledge";
+import { combinedSourceObservers, identifies, isFixedEffect, observedFixedEffect } from "../view/knowledge";
 import { canonicalHash } from "../state/hash";
 import { cloneState } from "../state/clone";
 import type { BattleView } from "../view/view";
@@ -101,6 +101,13 @@ function seesSource(state: BattleState, source: AbilitySource, side: Side): bool
   return typeof source !== "string" || identifies(state, source, side);
 }
 
+/** Combined causal visibility requires publication facts as well as physical identification. */
+function effectSourceSeen(state: BattleState, effect: FloatingEffect | PayableEffect, side: Side): boolean {
+  return seesSource(state, effect.source, side) && (!("change" in effect) || effect.change.kind !== "disableTriggers" ||
+    effect.change.mode !== "triggeredAndActivated" ||
+    (effect.sourceObservedBy ?? combinedSourceObservers(state, effect.source, effect.change.instance)).includes(side));
+}
+
 /** Whether `side` is owed `effect` in a determinization of its view. */
 function owedFloating(state: BattleState, effect: FloatingEffect, side: Side): boolean {
   const changed = changedInstance(effect.change);
@@ -159,7 +166,7 @@ function effectRecord(state: BattleState, effect: FloatingEffect | PayableEffect
   const change = "change" in effect && effect.change.kind === "trigger" && effect.change.captured !== undefined
     ? { change: { ...effect.change, captured: capturedRecord(scope.state, effect.change.captured, side, scope.members) } }
     : {};
-  return JSON.stringify({ ...rest, ...affects, ...change, source: seesSource(state, source, side) ? source : null });
+  return JSON.stringify({ ...rest, ...affects, ...change, source: effectSourceSeen(state, effect, side) ? source : null });
 }
 
 function effectDivergences(
@@ -183,7 +190,7 @@ function effectDivergences(
       const remembered = observedFixedEffect(state, side, effect.id) !== undefined;
       const sameSource = remembered ? canonicalHash(copy.source) === canonicalHash(effect.source)
         : JSON.stringify(copy.source) === JSON.stringify(effect.source);
-      const sourced = seesSource(state, effect.source, side) && !sameSource;
+      const sourced = effectSourceSeen(state, effect, side) && !sameSource;
       const same = canonicalHash(JSON.parse(record) as unknown) === canonicalHash(JSON.parse(copied) as unknown);
       if (!same || sourced) problems.push(`${kind} effect ${effect.id} ${JSON.stringify(copy)} for ${record}`);
     }
