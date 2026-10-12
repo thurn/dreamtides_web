@@ -287,6 +287,11 @@ export function target(selector: CharacterSelector, count = 1): TargetSpec {
   return { kind: "target", selector, count };
 }
 
+/** One physical target whose restriction follows a live normal condition. */
+export function targetWhen(condition: Exclude<Condition, { readonly cond: "costPaid" }>, then: CharacterSelector, otherwise: CharacterSelector, count = 1): TargetSpec {
+  return { kind: "target", selector: then, count, when: { condition, otherwise } };
+}
+
 export function upTo(selector: CharacterSelector, count: number): TargetSpec {
   return { kind: "target", selector, count, upTo: true };
 }

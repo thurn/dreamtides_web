@@ -1,5 +1,5 @@
 import type { Condition } from "../../dsl/types";
-import { checkCondition } from "../interpreter";
+import { checkCondition, resolveChosenEffect } from "../interpreter";
 import { definePrimitive, type EffectNode } from "../types";
 
 /** "If …, …; otherwise …", checked when the effect resolves. */
@@ -12,13 +12,13 @@ export interface IfThenNode {
 
 export const ifThenPrimitive = definePrimitive<IfThenNode>({
   op: "ifThen",
+  deferConditionalChoices: true,
   children: (node) => (node.otherwise === null ? [node.then] : [node.then, node.otherwise]),
   resolve(ctx, node, env) {
-    if (checkCondition(ctx, node.condition, env)) {
-      env.run(node.then);
-    } else if (node.otherwise !== null) {
-      env.run(node.otherwise);
-    }
+    const branch = checkCondition(ctx, node.condition, env) ? node.then : node.otherwise;
+    if (branch === null) return;
+    if (env.resolutionChoiceScope === undefined) env.run(branch);
+    else resolveChosenEffect(ctx, branch, env, true);
   },
 });
 

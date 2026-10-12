@@ -253,6 +253,8 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [DSL.conditionalRemoval.id]: { name: "Lab Conditional Removal", text: "If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy." },
+  [DSL.conditionalDawn.id]: { name: "Lab Conditional Dawn", text: "▸Dawn: Give a warrior you control +1✦. If you control no warriors, gain 2⍟ instead." },
   [DECK_TOP.keeper.id]: { name: "Lab Petal Keeper", text: "If you control 3 or more characters, reveal the top card of your deck. You may play characters from the top of your deck. 0●: Return another character to hand. 0●: Foresee 1." },
   [DECK_TOP.revealer.id]: { name: "Lab Open Book", text: "Reveal the top card of your deck." },
   [DECK_TOP.permit.id]: { name: "Lab Hidden Permission", text: "You may play characters from the top of your deck. 0●: Foresee 2." },
@@ -422,6 +424,19 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  ...[false, true].map((met): PromptLabFixture => ({
+    name: `conditional-target-${met ? "met" : "unmet"}`,
+    description: "One physical enemy target whose normal board condition controls its live restriction",
+    setup: { active: "player", phase: "day", player: { hand: [DSL.conditionalRemoval.id],
+      back: met ? [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id] : [], energy: 3, deck: deck(6) },
+      enemy: { back: [SYNTHETIC.vanilla5.id, SYNTHETIC.vanilla2.id], deck: deck(6) } }, script: [],
+  })),
+  ...[false, true].map((met): PromptLabFixture => ({
+    name: `conditional-dawn-${met ? "met" : "unmet"}`,
+    description: "A live Dawn branch either asks for its Warrior target or awards points without an inactive target notice",
+    setup: { active: "player", phase: "night", player: { deck: deck(6) }, enemy: {
+      back: [DSL.conditionalDawn.id, ...(met ? [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id] : [])], deck: deck(6) } }, script: [],
+  })),
   {
     name: "self-cost-reduction", description: "A physical source costs two energy while another Warrior remains unaffordable",
     setup: { active: "player", phase: "day", player: { hand: [DSL.selfCostWarrior.id, SYNTHETIC.vanilla3.id], back: [vanillas[0], vanillas[0], vanillas[0]], energy: 2, deck: deck(6) }, enemy: { deck: deck(6) } },

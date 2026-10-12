@@ -1,0 +1,3 @@
+# Pre-existing observation for hv-umm2.553
+
+- `src/battle/components/EngineDebugPanel.tsx:130`: the development `debug=1` opener overlaps the target prompt Cancel button on a390×844 viewport. Actual rectangles overlap19.5×31.25CSS pixels; the upper-right inset point hits `engine-debug-open`, while the center click succeeds. Native geometry report `conditional-geometry.result.json` and `conditional-cancel-debug1-mobile-2x.png` retain the measurement. The same native fixture with `debug=0` has no debug opener, zero overlap and all five measured Cancel points unobstructed (`conditional-cancel-debug0-mobile-2x.png`). This bead changes no UI/chrome body; the parent owns any follow-up.

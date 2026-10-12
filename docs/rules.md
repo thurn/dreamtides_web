@@ -639,6 +639,11 @@ discard two cards if their hand has at least 5 cards at that point, and one
 card otherwise. A discard effect with fewer cards available discards the
 whole hand; with an empty hand it does nothing.
 
+An ordinary conditional instruction checks its condition when that instruction
+is reached, after preceding instructions have resolved. Only its selected
+branch makes choices during resolution. A mode or target already chosen for
+that same reference stays chosen; changing the condition does not replace it.
+
 **Choosing a player:** "Choose a player. That player …" lets the effect's
 controller choose either player as that instruction resolves. It is not a
 modal choice or a target. The chosen player performs the instructions that
@@ -1037,6 +1042,15 @@ the effect resolves. A chosen enemy whose ✦ is then above the number, because
 the void lost cards or the enemy gained ✦, is no longer a legal target. A
 bound by [this character's ✦](#spark) is read the same way, from the spark
 that value names when it is checked.
+
+**Conditional restrictions.** When mutually exclusive normal conditions
+change the restriction on one target, choose one physical card using the
+restriction that holds before costs are paid. Check the condition and its
+restriction again as that effect resolves. The originally chosen card is
+retained; if it is then illegal, that part does nothing. For example,
+"If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a
+≤2✦ enemy" chooses one enemy, and rechecks the Warrior count and spark limit
+on resolution.
 
 Each [figment](#figments) is an independent character and is targeted
 individually.

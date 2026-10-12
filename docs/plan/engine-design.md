@@ -1452,6 +1452,16 @@ enclosing bindings. Inherited targets use the ordinary resolution-time
 legality checks; an invalid target reports `noLegalTarget` for its effect
 part, and trailing effects continue.
 
+`targetWhen(condition, thenSelector, otherwiseSelector)` describes one
+character target whose normal-condition restriction is read live when offered
+and again when its chosen UUID is checked. Its condition excludes optional
+payments. Ordinary play-time and copy choices walk the full selected-mode
+tree. Resolution preparation reaches conditional children when their
+instruction selects a branch, after preceding effects. Transient lexical
+maps retain conditional siblings' shared node/spec bindings, with original
+prepared bindings first; ordinary chosen subtrees get their own scope and
+read enclosing bindings. Replay rebuilds these maps from answers.
+
 **Untargetable cards** (C17) have the `cannotBeTargeted` keyword, printed
 or granted through layer 3 (`grant(…, "cannotBeTargeted", duration)`).
 Targeted references alone read it, in `effects/interpreter.ts`:

@@ -72,8 +72,16 @@ export interface MovedCards {
   costs(node: EffectNode): readonly number[];
 }
 
+/** Object bindings remembered by conditional siblings in one transient lexical resolution. */
+export interface ResolutionChoiceScope {
+  readonly modes: Map<EffectNode, number>;
+  readonly targets: Map<PlayTimeTarget, readonly InstanceId[]>;
+}
+
 /** What a primitive sees while it resolves. */
 export interface EffectEnv {
+  /** Transient conditional bindings in this lexical resolution; rebuilt from answers on replay. */
+  readonly resolutionChoiceScope?: ResolutionChoiceScope;
   readonly linkedSource: LinkedSourceContext | null;
   /** The pending ability's retained departure spark; live in-play spark takes precedence. */
   readonly lastKnownSourceSpark: number | null;
@@ -127,6 +135,8 @@ export interface EffectEnv {
  */
 export interface PrimitiveDefinition<N extends EffectNode> {
   readonly op: N["op"];
+  /** A conditional's branch choices are prepared when its instruction is reached during resolution. */
+  readonly deferConditionalChoices?: true;
   /** Every nested effect resolved with this node, in order; validation walks them all. */
   children?(node: N): readonly EffectNode[];
   /**

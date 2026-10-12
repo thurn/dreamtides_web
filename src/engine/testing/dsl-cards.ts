@@ -7,6 +7,7 @@ import type { EngineCardDefinition } from "../catalog";
 import {
   anyCharacter,
   characterYouControl,
+  controls,
   count,
   enemyCharacter,
   energy,
@@ -18,13 +19,14 @@ import {
   noCardsIn,
   staticAbility,
   target,
+  targetWhen,
   thisCardIn,
   topOfDeck,
   upTo,
   winCondition,
   x,
 } from "../dsl/builders";
-import { onMaterialized, onDissolved, triggered } from "../dsl/triggers";
+import { onMaterialized, onDissolved, onDawn, triggered } from "../dsl/triggers";
 import type { Ability, CardCost } from "../dsl/types";
 import * as p from "../effects/primitives";
 import { syntheticId } from "./synthetic-cards";
@@ -131,6 +133,14 @@ export const DSL = {
   linkedBanish: authored(47, "character", 0, () => [triggered(onMaterialized(), p.lookAtTopBanish(4)), triggered(onDissolved(), p.putLinkedBanishedInHand())]),
   /** A live reduction bound to this physical Warrior, in every zone. */
   selfCostWarrior: authored(48, "character", 5, () => [staticAbility(p.selfCostReduction(count(characterYouControl({ subtype: "Warrior" }))), { zone: "any" })]),
+  /** One enemy target; Warriors widen its live spark restriction. */
+  conditionalRemoval: authored(49, "event", 1, (variant) => [event(p.dissolve(targetWhen(
+    controls(characterYouControl({ subtype: "Warrior" }), variant.amplified ? 2 : 3), enemyCharacter(), enemyCharacter({ sparkAtMost: 2 }),
+  )))], { speed: "interrupt" }),
+  /** The Dawn instruction asks for a Warrior only when its selected branch needs one. */
+  conditionalDawn: authored(50, "character", 0, (variant) => [triggered(onDawn(), p.ifThen(
+    controls(characterYouControl({ subtype: "Warrior" })), p.gainSpark(target(characterYouControl({ subtype: "Warrior" })), variant.amplified ? 2 : 1), p.gainPoints(2),
+  ))], { subtype: "Visitor" }),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

@@ -1,0 +1,1208 @@
+{
+  "bead": "hv-umm2.553",
+  "base": "37ae08c56dc078e218aeb2fe607db9727c16e0f5",
+  "dispatchObservation": {
+    "at": "2026-10-12T16:00:15+00:00",
+    "scope": "Parent late post-dispatch proxy. Actual initial helper/dispatch start uninstrumented; research predates this proxy. The numeric implementWindow uses this explicit proxy, not invented exact timing."
+  },
+  "commands": {
+    "full-wrapper.receipt.json": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker553/run.py",
+        "full",
+        "[\"npm\", \"run\", \"review:full\"]"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:28:56.312974+00:00",
+      "end": "2026-10-12T16:32:11.369837+00:00",
+      "seconds": 195.05396420801117,
+      "exit": 0,
+      "pid": 22008,
+      "pgid": 22008,
+      "load": "{ 7.70 11.49 13.00 }",
+      "remainingGroupRows": []
+    },
+    "first-positive.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:16:11.151295+00:00",
+      "end": "2026-10-12T16:16:15.317819+00:00",
+      "seconds": 4.16635933300131,
+      "exit": 0,
+      "pid": 28904,
+      "pgid": 28904,
+      "load": "{ 19.53 12.13 10.82 }",
+      "remainingGroupRows": []
+    },
+    "full.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:30:29.991806+00:00",
+      "end": "2026-10-12T16:32:11.318365+00:00",
+      "seconds": 101.3250262500078,
+      "exit": 0,
+      "pid": 20017,
+      "pgid": 20017,
+      "load": "{ 19.16 14.01 13.78 }",
+      "remainingGroupRows": []
+    },
+    "knip.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:28:38.017012+00:00",
+      "end": "2026-10-12T16:28:41.212908+00:00",
+      "seconds": 3.1957743749953806,
+      "exit": 0,
+      "pid": 16905,
+      "pgid": 16905,
+      "load": "{ 7.53 11.75 13.13 }",
+      "remainingGroupRows": []
+    },
+    "expanded.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:20:09.335797+00:00",
+      "end": "2026-10-12T16:20:15.211588+00:00",
+      "seconds": 5.875657707991195,
+      "exit": 1,
+      "pid": 37148,
+      "pgid": 37148,
+      "load": "{ 29.32 21.12 15.10 }",
+      "remainingGroupRows": []
+    },
+    "review.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:27:44.252927+00:00",
+      "end": "2026-10-12T16:28:29.963189+00:00",
+      "seconds": 45.709420457991655,
+      "exit": 0,
+      "pid": 6714,
+      "pgid": 6714,
+      "load": "{ 7.43 12.53 13.48 }",
+      "remainingGroupRows": []
+    },
+    "focus.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/fold/slice.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:23:27.237814+00:00",
+      "end": "2026-10-12T16:23:35.674945+00:00",
+      "seconds": 8.436908207993838,
+      "exit": 0,
+      "pid": 62075,
+      "pgid": 62075,
+      "load": "{ 19.17 19.36 15.53 }",
+      "remainingGroupRows": []
+    },
+    "matrix.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:21:42.487380+00:00",
+      "end": "2026-10-12T16:21:48.108773+00:00",
+      "seconds": 5.621182333998149,
+      "exit": 1,
+      "pid": 83893,
+      "pgid": 83893,
+      "load": "{ 15.10 19.14 14.99 }",
+      "remainingGroupRows": []
+    },
+    "browser-settled.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.553/conditional-settled.mjs",
+        "--bead",
+        "hv-umm2.553",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "500"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:41:20.047736+00:00",
+      "end": "2026-10-12T16:42:13.119906+00:00",
+      "seconds": 53.071863624994876,
+      "exit": 0,
+      "pid": 89935,
+      "pgid": 89935,
+      "load": "{ 4.92 7.21 10.50 }",
+      "remainingGroupRows": []
+    },
+    "review-initial.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:25:18.909550+00:00",
+      "end": "2026-10-12T16:26:06.902446+00:00",
+      "seconds": 47.99212183400232,
+      "exit": 2,
+      "pid": 84046,
+      "pgid": 84046,
+      "load": "{ 8.73 15.65 14.56 }",
+      "remainingGroupRows": []
+    },
+    "browser.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.553/conditional.mjs",
+        "--bead",
+        "hv-umm2.553",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "500"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:34:58.330415+00:00",
+      "end": "2026-10-12T16:38:27.532365+00:00",
+      "seconds": 209.21646833300474,
+      "exit": 0,
+      "pid": 47485,
+      "pgid": 47485,
+      "load": "{ 8.56 13.23 13.73 }",
+      "remainingGroupRows": []
+    },
+    "fuzz-wrapper.receipt.json": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker553/run.py",
+        "fuzz",
+        "[\"node_modules/.bin/tsx\", \"artifacts/qa/hv-umm2.553/synthetic-fuzz.ts\"]"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:32:49.396894+00:00",
+      "end": "2026-10-12T16:34:40.702758+00:00",
+      "seconds": 111.30393824999919,
+      "exit": 0,
+      "pid": 26317,
+      "pgid": 26317,
+      "load": "{ 16.26 15.65 14.52 }",
+      "remainingGroupRows": []
+    },
+    "baseline.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:13:46.724102+00:00",
+      "end": "2026-10-12T16:13:53.295145+00:00",
+      "seconds": 6.570863500004634,
+      "exit": 1,
+      "pid": 91460,
+      "pgid": 91460,
+      "load": "{ 6.60 5.94 8.71 }",
+      "remainingGroupRows": []
+    },
+    "browser-geometry.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.553/conditional-geometry.mjs",
+        "--bead",
+        "hv-umm2.553",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:44:53.804154+00:00",
+      "end": "2026-10-12T16:45:49.101269+00:00",
+      "seconds": 55.29678866699396,
+      "exit": 0,
+      "pid": 54162,
+      "pgid": 54162,
+      "load": "{ 11.66 9.19 10.59 }",
+      "remainingGroupRows": []
+    },
+    "fuzz.receipt.json": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "artifacts/qa/hv-umm2.553/synthetic-fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:32:49.425046+00:00",
+      "end": "2026-10-12T16:34:40.654729+00:00",
+      "seconds": 111.22799966701132,
+      "exit": 0,
+      "pid": 26321,
+      "pgid": 26321,
+      "load": "{ 16.26 15.65 14.52 }",
+      "remainingGroupRows": []
+    },
+    "expanded-corrected.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:20:45.106357+00:00",
+      "end": "2026-10-12T16:20:49.812135+00:00",
+      "seconds": 4.705605125011061,
+      "exit": 1,
+      "pid": 68367,
+      "pgid": 68367,
+      "load": "{ 27.53 21.67 15.55 }",
+      "remainingGroupRows": []
+    },
+    "matrix-corrected.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:22:55.148284+00:00",
+      "end": "2026-10-12T16:23:00.164756+00:00",
+      "seconds": 5.016256834001979,
+      "exit": 1,
+      "pid": 6917,
+      "pgid": 6917,
+      "load": "{ 25.70 20.42 15.76 }",
+      "remainingGroupRows": []
+    },
+    "counter-selector.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:24:50.394811+00:00",
+      "end": "2026-10-12T16:24:54.281871+00:00",
+      "seconds": 3.886909792010556,
+      "exit": 1,
+      "pid": 79209,
+      "pgid": 79209,
+      "load": "{ 10.90 16.71 14.88 }",
+      "remainingGroupRows": []
+    },
+    "baseline-corrected.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:14:04.100322+00:00",
+      "end": "2026-10-12T16:14:08.116203+00:00",
+      "seconds": 4.015733457999886,
+      "exit": 1,
+      "pid": 6443,
+      "pgid": 6443,
+      "load": "{ 11.63 7.13 9.07 }",
+      "remainingGroupRows": []
+    },
+    "focused-final.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:27:02.263471+00:00",
+      "end": "2026-10-12T16:27:10.155123+00:00",
+      "seconds": 7.891447791000246,
+      "exit": 0,
+      "pid": 201,
+      "pgid": 201,
+      "load": "{ 7.21 13.37 13.81 }",
+      "remainingGroupRows": []
+    },
+    "counter-deferral.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional target choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:24:54.350006+00:00",
+      "end": "2026-10-12T16:24:58.592357+00:00",
+      "seconds": 4.24218133300019,
+      "exit": 1,
+      "pid": 79555,
+      "pgid": 79555,
+      "load": "{ 11.07 16.65 14.87 }",
+      "remainingGroupRows": []
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final combined-source review test-related step start2026-10-12T17:08:00.344Z, load25.2802734375. Earlier samples retained; loaded observation, no speed/low-load claim."
+      },
+      "implementWindow": {
+        "measuredFor": "Original explicitly late parent dispatch proxy to final replacement precommit endpoint, including both integration recoveries and parent timing repair. Original/recovery windows and actual commits separately retained."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "reviewCommandStart": "{ 7.43 12.53 13.48 }",
+    "reviewStepStart": 7.4306640625,
+    "fullTestStepStart": 16.31884765625,
+    "secondIntegrationReviewTestStart": 25.2802734375
+  },
+  "validationScopes": {
+    "focused": {
+      "tests": 1923,
+      "files": 5,
+      "includes": "Existing fold.test.ts and fold-intents.test.ts plus eager contracts/copies/triggers"
+    },
+    "review": {
+      "tests": 4539,
+      "files": 268
+    },
+    "full": {
+      "tests": 5554,
+      "files": 351,
+      "vitestDurationS": 72.0,
+      "wholeTestStepS": 72.6,
+      "D19": "Loaded test-start observation; low-load60s certification is unverified, no performance or budget-compliance claim."
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 147137,
+      "prompts": 3505,
+      "reruns": 309,
+      "coverage": [
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-0000000553a0",
+          "included": 1058,
+          "exercised": 643
+        },
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-0000000553a1",
+          "included": 1082,
+          "exercised": 557
+        }
+      ],
+      "failures": [],
+      "executionSeconds": 109.838156583,
+      "scope": "Synthetic conditional definitions cloned to unique UUIDs; target coverage counts actual public plays, not individual conditional branches. Dedicated contracts and native lab QA cover branch outcomes."
+    }
+  },
+  "heavyAccounting": {
+    "full": {
+      "wrapperS": 195.05396420801117,
+      "innerS": 101.3250262500078,
+      "queueAndStartupUpperBoundS": 93.72893795800337
+    },
+    "fuzz": {
+      "wrapperS": 111.30393824999919,
+      "innerS": 111.22799966701132,
+      "queueAndStartupUpperBoundS": 0.07593858298787382
+    }
+  },
+  "baselineAndCorrections": {
+    "initial": "PG91460: two genuine eligibility failures plus two fixture notYourDecision failures. Fixture phase ending corrected to public Night pass.",
+    "corrected": "PG6443: four genuine observable failures, both controllers; production unchanged.",
+    "iteration": "Retained phase/binding-invalidation spark predicate, response event-batch, unsupported rank DeckEntry and answer-field fixture failures. Corrected with actual stable cost predicate, actual response batch and public play/passes.",
+    "reviewFailure": "PG84046 actual2: only own fixture nullable IDs/unknown Answer type;4539related tests passed; no production/fallout failure. Corrected public Answer typing and placed-ID assertions.",
+    "focusedPathMiss": "Earlier PG62075 passed1907/3files; nonexistent fold/slice.test.ts was not exercised and is excluded from acceptance. Final focused names existing paths and passes1923/5."
+  },
+  "counterfactual": {
+    "outcomes": [
+      {
+        "guard": "live conditional selector",
+        "exit": 1
+      },
+      {
+        "guard": "resolution-only conditional deferral",
+        "exit": 1
+      }
+    ],
+    "restoration": [
+      {
+        "path": "src/engine/effects/interpreter.ts",
+        "before": "158df689d80296356d1713d3db8b4e44c67769df12f22ee4464914ed4195bad3",
+        "after": "158df689d80296356d1713d3db8b4e44c67769df12f22ee4464914ed4195bad3",
+        "equal": true
+      },
+      {
+        "path": "src/engine/effects/primitives/if-then.ts",
+        "before": "cc0a55d3a5ac513c667597544ab350af7aec84a495fe32ebb8ce30e37157f4ae",
+        "after": "cc0a55d3a5ac513c667597544ab350af7aec84a495fe32ebb8ce30e37157f4ae",
+        "equal": true
+      }
+    ]
+  },
+  "qa": {
+    "initial": {
+      "invocation": "run-hj7QDD",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.553/invocations/run-hj7QDD",
+      "slot": 1,
+      "port": 5274,
+      "serverPid": 69910,
+      "wallMs": {
+        "browserLeaseWait": 163478,
+        "serve": 2278,
+        "scenario": 42571,
+        "total": 208398
+      },
+      "ok": true,
+      "caps": [],
+      "functionalCases": 8,
+      "scope": "Actual committed state/events/persisted intents passed; immediate changed-state image still showed outgoing animation. Retained immutable."
+    },
+    "settled": {
+      "invocation": "run-I1FjtD",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.553/invocations/run-I1FjtD",
+      "slot": 0,
+      "port": 5174,
+      "serverPid": 89981,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1348,
+        "scenario": 50980,
+        "total": 52392
+      },
+      "ok": true,
+      "caps": [],
+      "functionalCases": 8,
+      "scope": "Same real workflows with outgoing battlefield node absent before capture; corrected DOM interaction state, no fixed waiting threshold."
+    },
+    "geometry": {
+      "invocation": "run-uLtjBf",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.553/invocations/run-uLtjBf",
+      "slot": 1,
+      "port": 5274,
+      "serverPid": 54210,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1667,
+        "scenario": 52677,
+        "total": 54402
+      },
+      "ok": true,
+      "caps": [],
+      "functionalCases": 4,
+      "scope": "Same native player target/Cancel in debug1 and normal debug0; source/probe/state/DOM unchanged. Center and four inset points measured; normal flow unobstructed."
+    }
+  },
+  "geometry": {
+    "desktop": [
+      {
+        "debug": 1,
+        "measured": {
+          "cancel": {
+            "x": 826.625,
+            "y": 20.75,
+            "width": 88.375,
+            "height": 42
+          },
+          "debug": {
+            "x": 1388,
+            "y": 12,
+            "width": 40,
+            "height": 40
+          },
+          "overlap": {
+            "width": 0,
+            "height": 31.25
+          },
+          "hits": [
+            {
+              "x": 870.8125,
+              "y": 41.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 836.625,
+              "y": 30.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 905,
+              "y": 30.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 905,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 836.625,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            }
+          ],
+          "targets": [
+            "i11",
+            "i12",
+            "i1",
+            "i2",
+            "i3"
+          ]
+        }
+      },
+      {
+        "debug": 0,
+        "measured": {
+          "cancel": {
+            "x": 826.625,
+            "y": 20.75,
+            "width": 88.375,
+            "height": 42
+          },
+          "debug": null,
+          "overlap": {
+            "width": 0,
+            "height": 0
+          },
+          "hits": [
+            {
+              "x": 870.8125,
+              "y": 41.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 836.625,
+              "y": 30.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 905,
+              "y": 30.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 905,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 836.625,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            }
+          ],
+          "targets": [
+            "i11",
+            "i12",
+            "i1",
+            "i2",
+            "i3"
+          ]
+        }
+      }
+    ],
+    "mobile": [
+      {
+        "debug": 1,
+        "measured": {
+          "cancel": {
+            "x": 269.125,
+            "y": 20.75,
+            "width": 88.375,
+            "height": 42
+          },
+          "debug": {
+            "x": 338,
+            "y": 12,
+            "width": 40,
+            "height": 40
+          },
+          "overlap": {
+            "width": 19.5,
+            "height": 31.25
+          },
+          "hits": [
+            {
+              "x": 313.3125,
+              "y": 41.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 279.125,
+              "y": 30.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 347.5,
+              "y": 30.75,
+              "unobstructed": false,
+              "coveringTestId": "engine-debug-open"
+            },
+            {
+              "x": 347.5,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 279.125,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            }
+          ],
+          "targets": [
+            "i11",
+            "i12",
+            "i1",
+            "i2",
+            "i3"
+          ]
+        }
+      },
+      {
+        "debug": 0,
+        "measured": {
+          "cancel": {
+            "x": 269.125,
+            "y": 20.75,
+            "width": 88.375,
+            "height": 42
+          },
+          "debug": null,
+          "overlap": {
+            "width": 0,
+            "height": 0
+          },
+          "hits": [
+            {
+              "x": 313.3125,
+              "y": 41.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 279.125,
+              "y": 30.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 347.5,
+              "y": 30.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 347.5,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            },
+            {
+              "x": 279.125,
+              "y": 52.75,
+              "unobstructed": true,
+              "coveringTestId": "battle-prompt-cancel"
+            }
+          ],
+          "targets": [
+            "i11",
+            "i12",
+            "i1",
+            "i2",
+            "i3"
+          ]
+        }
+      }
+    ]
+  },
+  "coreFailurePaths": {
+    "errorMidStep": {
+      "contract": "rolls back a selected branch error and its partial state writes, keeping the committed trigger queued",
+      "observable": "Definition error after gainPoints rolls back branch score and emitted point event; committed queued trigger remains."
+    },
+    "reloadRestart": {
+      "contract": "%s keeps shared sibling mode and target bindings through reload",
+      "observable": "Actual JSON pending-target reload after mode0, fresh fold same final hash, same physical target and one choice per shared object."
+    },
+    "partialWrite": {
+      "contract": "rolls back a selected branch error and its partial state writes, keeping the committed trigger queued",
+      "observable": "Input state hash remains unchanged; failed branch partial score writes do not commit/publish. No new saved field or cross-file write exists."
+    },
+    "invalidStaleInput": {
+      "contract": "cancels pre-cost choices and rejects stale, foreign, malformed and duplicate competing answers",
+      "observable": "Public fold rejects wrong-side/noncandidate answer and cancelled attempt; before-cost cancellation leaves committed state intact."
+    },
+    "concurrentActors": {
+      "contract": "cancels pre-cost choices and rejects stale, foreign, malformed and duplicate competing answers",
+      "observable": "Sequential competing answers to the same prompt: first commits one play, later competing answer bounces. Host/event-log concurrency machinery is unchanged."
+    }
+  },
+  "counts": {
+    "production": [
+      {
+        "path": "src/engine/dsl/builders.ts",
+        "added": 5,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/dsl/types.ts",
+        "added": 2,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/effects/interpreter.ts",
+        "added": 47,
+        "deleted": 20
+      },
+      {
+        "path": "src/engine/effects/primitives/if-then.ts",
+        "added": 6,
+        "deleted": 6
+      },
+      {
+        "path": "src/engine/effects/types.ts",
+        "added": 10,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/triggers/resolve.ts",
+        "added": 1,
+        "deleted": 0
+      }
+    ],
+    "productionChurn": 97,
+    "newPlainContractModules": 1,
+    "newCases": 20,
+    "testDelta": {
+      "files": 0,
+      "lines": 270,
+      "jsdomFiles": 0
+    },
+    "contractModuleLines": 270,
+    "fallout": []
+  },
+  "sourceHashObservation": {
+    "observedAt": "2026-10-12T16:35:25.673399+00:00",
+    "scope": "Hash observation after launching runner, while its last observed runtime phase was waiting for a browser slot and no server startup was logged. Production/test unchanged since green review; normal-condition docs narrowed before launch. This is not an invented pre-launch timestamp.",
+    "files": {
+      "docs/plan/engine-design.md": "a34e6c317d8f8675cfa347ea771a4878acf309727c640cfdad9ab52063de5742",
+      "docs/rules.md": "bb471d379a231040a7d49b246d9c0d020c89a631227db58e8c4e84f979ff42dd",
+      "src/engine/dsl/builders.ts": "cdb25c9d93c5a0acffb2221d4961d5e77c952e7f13997d3adae46dc8c3135e87",
+      "src/engine/dsl/types.ts": "26ac8473d152e430e50c8460c60656cd4eb1c6bdf45a833581f270b5a5555bae",
+      "src/engine/effects/interpreter.ts": "158df689d80296356d1713d3db8b4e44c67769df12f22ee4464914ed4195bad3",
+      "src/engine/effects/primitives/if-then.ts": "cc0a55d3a5ac513c667597544ab350af7aec84a495fe32ebb8ce30e37157f4ae",
+      "src/engine/effects/types.ts": "d1eeb8e8ce0aff9b6f8d0a92639f70b3f66589d41379aa6ee3050ed5c2994f71",
+      "src/engine/testing/dsl-cards.ts": "72ba693671a9cc24250d2da4fed0d45328007d300ea1a67d02a6bc1dee16905d",
+      "src/engine/testing/prompt-lab.ts": "584edd5ac5147d85b35372399593b2dd0292432c01b42ab96a3028eccfb756d4",
+      "src/engine/triggers/resolve.ts": "f317e51bd30e32c4e9f2c8a8e4f4d0560c0532a6023b14e2ae514910d6b893d8",
+      "src/engine/effects/primitives/contracts/conditional-targets.contracts.ts": "07a91c62a5f8b13b1d0de51cd23f6f952aa4299fc9273ef23033e06edecb3c74",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.553-1.md": "16a0602c1f15ffc07817b1afb46ebfc30e840b4a1e1e802944b920ad1c8b876a"
+    }
+  },
+  "rawManifest": {
+    "filename": "raw-manifest.json",
+    "sha256": "bcebfff7ace6b3d49a837bf3572266ae2f9a90b3af2878232d64076429063ab0",
+    "entries": 109
+  },
+  "logging": "Existing UUID/source prompt answers, engine.action and engine.trigger plus deterministic fold reconstruct live restrictions and conditional branches; no names or new log/save schema.",
+  "coldVisual": "Parent verified settled desktop/mobile removal and debug0 mobile Cancel; synthetic blank art is intentional.",
+  "precommitEndpoint": {
+    "at": "2026-10-12T16:52:12.370067+00:00",
+    "scope": "Observed immediately before final schema/staging/Git; actual Git command interval retained outside this one commit. Dispatch timestamp is a disclosed late parent proxy."
+  },
+  "schemaPrecommit": {
+    "argv": [
+      "node",
+      "scripts/friction-triggers.mjs",
+      "--validate-records"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+    "start": "2026-10-12T16:49:26.450499+00:00",
+    "end": "2026-10-12T16:49:26.551674+00:00",
+    "seconds": 0.1010842919931747,
+    "exit": 0,
+    "pid": 65172,
+    "pgid": 65172,
+    "load": "{ 14.31 11.00 11.09 }",
+    "remainingGroupRows": []
+  },
+  "supplementalManifest": {
+    "filename": "corrected-manifest.json",
+    "sha256": "ef934cd325bc9ecaba93ceaeab47ea9396156bb817f63a1f7411d68e6c4882fd",
+    "entries": 37
+  },
+  "resourceNormalization": {
+    "directReceiptGroups": "Instrumented actual child PID/PG/start/end/exit receipts",
+    "nativeServerGroups": [
+      69910,
+      89981,
+      54210
+    ],
+    "fullTestPrintedNumbers": "Server group numbers printed by full synthetic tests; checked absent but not every start independently instrumented. Do not treat their count as newly started helper processes."
+  },
+  "deliveryRecovery": {
+    "originalCommit": "5716f91fb28f27f550a44be35148c1fea88b6c0e",
+    "originalBase": "37ae08c56dc078e218aeb2fe607db9727c16e0f5",
+    "failedCandidate": "01a13108-895d-7983-999a-cbedb1f29709",
+    "incident": "Actual delivery merge conflict only in prompt-lab.ts; parent native update initially exit5 rolled back, then temporary checkpoint enabled clean exit0 update.",
+    "resumeObservation": "2026-10-12T16:54:54.822899+00:00",
+    "resumeScope": "First helper resume clock observation; actual followup dispatch not independently instrumented. Original implementWindow preserved; recovery separate.",
+    "temporaryCheckpoint": "bb85754c8eaa6f070d14095d5b0a38b279f57fdd",
+    "checkpointCommand": {
+      "argv": [
+        "git",
+        "commit",
+        "--amend",
+        "-F",
+        "/tmp/worker553/checkpoint-message.txt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+      "start": "2026-10-12T16:55:21.970304+00:00",
+      "end": "2026-10-12T16:55:22.000822+00:00",
+      "seconds": 0.030385083009605296,
+      "exit": 0,
+      "pid": 55021,
+      "pgid": 55021,
+      "load": "{ 16.59 18.03 14.71 }",
+      "remainingGroupRows": []
+    },
+    "integrationBase": "176a138dd495e31df901fbd091069241b423de3e",
+    "updatedTemporaryHead": "43ec45650e36f55e551434125f3b3908285de4e7",
+    "parentUpdate": {
+      "exit": 0,
+      "seconds": 2.074472,
+      "pgid": 56409,
+      "remainingGroupRows": [],
+      "provenance": "Parent native receipt; helper read /tmp/root553/conflict/update-proof.json."
+    },
+    "mergeProof": {
+      "updatedHead": "43ec45650e36f55e551434125f3b3908285de4e7",
+      "base": "176a138dd495e31df901fbd091069241b423de3e",
+      "peerPromptSHA256": "e1633468935b8be1ec067cc9c8ae58780651b440da3790bfff064ddcf6cd829c",
+      "mergedPromptSHA256": "8d1d520e9cf9d0511e258293e00f770568ce6d512ed631e6f346914f419b639c",
+      "ownAdditions": 15,
+      "allPeerBytesRetained": true,
+      "removeOwnBlocksEqualsExactPeer": true,
+      "ownBlocksIdenticalOriginal": true,
+      "sourceBehaviorChange": "None: exact original two own additive blocks inserted ahead of untouched peer blocks; resolver callbacks/imports/definitions preserved."
+    },
+    "commands": {
+      "integration-focused": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/testing/tooling.test.ts",
+          "src/runtime/qa-scenes-battle.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:00:27.475818+00:00",
+        "end": "2026-10-12T17:00:36.573338+00:00",
+        "seconds": 9.097371500000008,
+        "exit": 0,
+        "pid": 94799,
+        "pgid": 94799,
+        "load": "{ 14.65 15.40 14.28 }",
+        "remainingGroupRows": []
+      },
+      "integration-review": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:00:50.076815+00:00",
+        "end": "2026-10-12T17:01:41.565251+00:00",
+        "seconds": 51.488147375013796,
+        "exit": 0,
+        "pid": 6012,
+        "pgid": 6012,
+        "load": "{ 12.02 14.73 14.06 }",
+        "remainingGroupRows": []
+      },
+      "integration-knip": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:01:45.821033+00:00",
+        "end": "2026-10-12T17:01:48.922718+00:00",
+        "seconds": 3.1014062500034925,
+        "exit": 0,
+        "pid": 35099,
+        "pgid": 35099,
+        "load": "{ 10.88 13.96 13.82 }",
+        "remainingGroupRows": []
+      }
+    },
+    "counts": {
+      "focused": {
+        "tests": 2024,
+        "files": 5
+      },
+      "review": {
+        "tests": 4678,
+        "files": 268
+      }
+    },
+    "unchangedEvidence": "Original negative/counterfactual, full, synthetic300 and native browser evidence remains tied to original source/commit; all original raw/corrected/delivery manifests remain immutable. Strictly additive fixture integration justified proportionate focused/review/Knip checks without full/fuzz/browser repeats.",
+    "observerScope": "Actual child groups instrumented by recorder; wrapper Python observer PID/start was not instrumented. No recovery server/browser/lease created.",
+    "implementWindow": "Original disclosed late dispatch proxy and precommit endpoint unchanged; this separate recovery window is elapsed observation, not productive-time attribution.",
+    "precommitObservation": "2026-10-12T17:02:30.467134+00:00"
+  },
+  "finalTimingCorrection": {
+    "at": "2026-10-12T17:04:43.408313+00:00",
+    "previousFrictionWindow": {
+      "implementWindow": {
+        "start": "2026-10-12T16:00:15+00:00",
+        "end": "2026-10-12T16:52:12.370067+00:00"
+      },
+      "implementMin": 51.95616778333333
+    },
+    "measuredFor": "Final replacement precommit endpoint; same explicitly late original dispatch proxy. Includes coordination/native conflict refresh/combined checks, not productive-time attribution. Actual parent timing-only amend receipt retained outside source.",
+    "reason": "Workflow Friction ledger requires the current implementer window to end at the final commit; parent preserved original window too narrowly. Original frozen files and manifests remain immutable; original source/helper and recovery windows retain their provenance.",
+    "sourceBeforeTimingOnlyAmend": "1342b92c560d51fcee422ae74febfce8b1265a3e"
+  },
+  "rootSecondIntegration": {
+    "base": "2dfecb25b6114c4efeda8a028c9103ad50c5cace",
+    "mergeProof": {
+      "base": "2dfecb25b6114c4efeda8a028c9103ad50c5cace",
+      "updatedCheckpoint": "93d34b18d704a9dfe0383e61b7c367855919e37a",
+      "laterStaging": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+      "globalStagingAdvancedAfterNativeUpdate": true,
+      "doctorHealthyNoPendingUpdate": true,
+      "peerSHA256": "90403bc71058ec29c19e4d7ef46351b1ecd25a981ee6e7f66d3218c73a91f3bb",
+      "mergedSHA256": "fa5a74e66804aef964ac728f80c523d6d5d4a5215a0158d9cdbd2f1c7816d41f",
+      "allPeerBytesRetained": true,
+      "removeOwnBlocksEqualsPeer": true,
+      "ownDefinitionOnlyChange": "Synthetic index48 collided with peer555 selfCostWarrior48; own conditionalRemoval48\u219249, conditionalDawn49\u219250. Own abilities/types/copy and engine bodies unchanged.",
+      "originalOwnBlock": "  /** One enemy target; Warriors widen its live spark restriction. */\n  conditionalRemoval: authored(48, \"event\", 1, (variant) => [event(p.dissolve(targetWhen(\n    controls(characterYouControl({ subtype: \"Warrior\" }), variant.amplified ? 2 : 3), enemyCharacter(), enemyCharacter({ sparkAtMost: 2 }),\n  )))], { speed: \"interrupt\" }),\n  /** The Dawn instruction asks for a Warrior only when its selected branch needs one. */\n  conditionalDawn: authored(49, \"character\", 0, (variant) => [triggered(onDawn(), p.ifThen(\n    controls(characterYouControl({ subtype: \"Warrior\" })), p.gainSpark(target(characterYouControl({ subtype: \"Warrior\" })), variant.amplified ? 2 : 1), p.gainPoints(2),\n  ))], { subtype: \"Visitor\" }),\n",
+      "mergedOwnBlock": "  /** One enemy target; Warriors widen its live spark restriction. */\n  conditionalRemoval: authored(49, \"event\", 1, (variant) => [event(p.dissolve(targetWhen(\n    controls(characterYouControl({ subtype: \"Warrior\" }), variant.amplified ? 2 : 3), enemyCharacter(), enemyCharacter({ sparkAtMost: 2 }),\n  )))], { speed: \"interrupt\" }),\n  /** The Dawn instruction asks for a Warrior only when its selected branch needs one. */\n  conditionalDawn: authored(50, \"character\", 0, (variant) => [triggered(onDawn(), p.ifThen(\n    controls(characterYouControl({ subtype: \"Warrior\" })), p.gainSpark(target(characterYouControl({ subtype: \"Warrior\" })), variant.amplified ? 2 : 1), p.gainPoints(2),\n  ))], { subtype: \"Visitor\" }),\n"
+    },
+    "commands": {
+      "update-2": {
+        "argv": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "update"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:05:22.896530+00:00",
+        "end": "2026-10-12T17:05:23.576937+00:00",
+        "exit": 5,
+        "wallSeconds": 0.6803280410094885,
+        "pid": 23982,
+        "pgid": 23982,
+        "load": "{ 14.63 12.13 12.89 }",
+        "groupRemainingAtExit": []
+      },
+      "checkpoint-2": {
+        "argv": [
+          "git",
+          "commit",
+          "--amend",
+          "--no-edit"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:06:17.290423+00:00",
+        "end": "2026-10-12T17:06:17.324265+00:00",
+        "exit": 0,
+        "wallSeconds": 0.03371550000156276,
+        "pid": 29636,
+        "pgid": 29636,
+        "load": "{ 20.27 13.92 13.50 }",
+        "groupRemainingAtExit": []
+      },
+      "update-checkpoint-2": {
+        "argv": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "update"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:06:17.447562+00:00",
+        "end": "2026-10-12T17:06:18.107584+00:00",
+        "exit": 0,
+        "wallSeconds": 0.6598835420008982,
+        "pid": 29654,
+        "pgid": 29654,
+        "load": "{ 20.27 13.92 13.50 }",
+        "groupRemainingAtExit": []
+      },
+      "integration2-focused": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/testing/tooling.test.ts",
+          "src/qa/scenes/qa-scenes-battle.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:06:41.864454+00:00",
+        "end": "2026-10-12T17:06:46.459114+00:00",
+        "exit": 1,
+        "wallSeconds": 4.59452479200263,
+        "pid": 49965,
+        "pgid": 49965,
+        "load": "{ 26.30 15.90 14.23 }",
+        "groupRemainingAtExit": []
+      },
+      "integration2-focused-corrected": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/testing/tooling.test.ts",
+          "src/runtime/qa-scenes-battle.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:07:40.197076+00:00",
+        "end": "2026-10-12T17:07:50.431607+00:00",
+        "exit": 0,
+        "wallSeconds": 10.234325834011543,
+        "pid": 99841,
+        "pgid": 99841,
+        "load": "{ 22.75 16.77 14.67 }",
+        "groupRemainingAtExit": []
+      },
+      "integration2-review": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:07:59.439454+00:00",
+        "end": "2026-10-12T17:08:54.178345+00:00",
+        "exit": 0,
+        "wallSeconds": 54.73837245898903,
+        "pid": 6477,
+        "pgid": 6477,
+        "load": "{ 24.78 17.51 14.97 }",
+        "groupRemainingAtExit": []
+      },
+      "integration2-knip": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-553-conditional-targets",
+        "start": "2026-10-12T17:09:27.381862+00:00",
+        "end": "2026-10-12T17:09:30.796159+00:00",
+        "exit": 0,
+        "wallSeconds": 3.414202625004691,
+        "pid": 14386,
+        "pgid": 14386,
+        "load": "{ 12.86 15.85 14.61 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    "focusedTests": 2058,
+    "focusedFiles": 5,
+    "reviewTests": 4721,
+    "reviewFiles": 268,
+    "failedTemporaryProbe": "Parent prerequisite assertion caught later global staging advancement, but a dependent test was started against the incomplete temporary checkpoint and referenced nonexistent QA path. Actual1/4.594525s retained; not acceptance. Corrected existing path/restored source actual0.",
+    "frozenEvidence": "Original helper109+37+19 and firstintegration43 manifests byte-exact, prior full/fuzz/nativeQA tied5716f...; no newfull/fuzz/browser claim. Changed fixture IDs49/50 avoid peer55548; all own ability functions/engine bodies unchanged, public consumer contracts validate new IDs.",
+    "elapsedEndpoint": "2026-10-12T17:10:26.699143+00:00",
+    "previousWindow": {
+      "start": "2026-10-12T16:00:15+00:00",
+      "end": "2026-10-12T17:04:43.408313+00:00"
+    },
+    "noNewRuntime": "No browser/server/MCP client/provider/lease created during either integration recovery; helpers terminal. All recorded children/groups absent atactual exit.",
+    "sourceChanges": "Only own DSL fixture imports/two definitions and own timing/measurement records; all landedpeerDSLbytes retained.",
+    "heavyRerun": "None: own rule/effect bodies unchanged; strict additive registry resolution with collision-free synthetic identity only."
+  }
+}

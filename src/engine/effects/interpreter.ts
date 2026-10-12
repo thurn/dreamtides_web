@@ -17,7 +17,7 @@ import { evaluateValue } from "../dsl/values";
 import { conditionHoldsWith, type ConditionScope } from "../dsl/conditions";
 import { cardMatchesFilter, characteristics, characteristicsOf, copiableCostOf } from "../continuous/characteristics";
 import { supportedBy } from "../continuous/support";
-import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
+import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, TargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
@@ -29,7 +29,7 @@ import { effectiveSpark } from "../rules/spark";
 import type { BanishCardsNode, BanishNamedCardsNode } from "./primitives/banish-cards";
 import type { MaterializeNode } from "./primitives/materialize";
 import { primitiveDefinition } from "./registry";
-import type { CapturedCardsSpec, CardRef, EffectEnv, EffectNode, MovedCards } from "./types";
+import type { CapturedCardsSpec, CardRef, EffectEnv, EffectNode, MovedCards, ResolutionChoiceScope } from "./types";
 
 /** The mode chosen at play time for each modal node of an effect. */
 export type ChosenModes = ReadonlyMap<EffectNode, number>;
@@ -43,6 +43,7 @@ function walkPlayTime(
   effect: EffectNode,
   modeOf: (node: EffectNode, modes: readonly EffectNode[]) => number,
   visit: (node: EffectNode) => void,
+  deferConditionals = false,
 ): void {
   const seen = new Set<EffectNode>();
   const walk = (node: EffectNode): void => {
@@ -50,6 +51,7 @@ function walkPlayTime(
     seen.add(node);
     const definition = primitiveDefinition(node.op);
     visit(node);
+    if (deferConditionals && definition.deferConditionalChoices === true) return;
     const modes = definition.modes?.(node);
     if (modes === undefined) {
       for (const child of definition.children?.(node) ?? []) walk(child);
@@ -91,7 +93,7 @@ function addTargets(specs: PlayTimeTarget[], node: EffectNode): void {
  * order. A spec object used in several places is one target ("that
  * character"), listed once.
  */
-export function collectTargets(effect: EffectNode, chosen: ChosenModes): PlayTimeTarget[] {
+export function collectTargets(effect: EffectNode, chosen: ChosenModes, deferConditionals = false): PlayTimeTarget[] {
   const specs: PlayTimeTarget[] = [];
   walkPlayTime(
     effect,
@@ -101,6 +103,7 @@ export function collectTargets(effect: EffectNode, chosen: ChosenModes): PlayTim
       return mode;
     },
     (node) => addTargets(specs, node),
+    deferConditionals,
   );
   return specs;
 }
@@ -116,7 +119,7 @@ export function everyTarget(effect: EffectNode): PlayTimeTarget[] {
  * Pairs the modes chosen at play time, in walk order, with an effect's modal
  * nodes. Throws when the list is too short or names a mode the node lacks.
  */
-export function chosenModes(effect: EffectNode, modes: readonly number[]): Map<EffectNode, number> {
+export function chosenModes(effect: EffectNode, modes: readonly number[], deferConditionals = false): Map<EffectNode, number> {
   const chosen = new Map<EffectNode, number>();
   walkPlayTime(
     effect,
@@ -129,6 +132,7 @@ export function chosenModes(effect: EffectNode, modes: readonly number[]): Map<E
       return mode;
     },
     () => undefined,
+    deferConditionals,
   );
   return chosen;
 }
@@ -241,8 +245,16 @@ export function targetCandidates(
     case "inZone":
       return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source, selectorX, sourceSpark));
     case "target":
-      return targetable(state, catalog, matchingCharacters(state, catalog, spec.selector, controller, source, selectorX, sourceSpark));
+      return targetable(state, catalog, matchingCharacters(state, catalog, targetSelector(state, catalog, spec, controller, source, selectorX, sourceSpark), controller, source, selectorX, sourceSpark));
   }
+}
+
+/** A target's live predicate; payment-dependent targeting has a separate choice protocol. */
+function targetSelector(state: BattleState, catalog: EngineCatalog, spec: TargetSpec, controller: Side, source: AbilitySource, x?: number, sourceSpark?: SourceSparkReader) {
+  const alternate = spec.when;
+  return alternate === undefined || conditionHoldsWith(state, catalog, (id) => characteristics(state, catalog).of(id), alternate.condition,
+    { controller, source, optionalPaid: [], ...(x === undefined ? {} : { x }), ...(sourceSpark === undefined ? {} : { sourceSpark }) })
+    ? spec.selector : alternate.otherwise;
 }
 
 /**
@@ -289,6 +301,7 @@ function modeLegal(
   selectorX: number | undefined,
   sourceSpark: SourceSparkReader,
   inherited?: ChoiceBindings,
+  deferConditionals = false,
 ): boolean {
   const definition = primitiveDefinition(node.op);
   const targetsAvailable = (definition.targets?.(node) ?? []).every(
@@ -299,14 +312,15 @@ function modeLegal(
     },
   );
   if (!targetsAvailable) return false;
+  if (deferConditionals && definition.deferConditionalChoices === true) return true;
   const modes = definition.modes?.(node);
   if (modes === undefined) {
-    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited));
+    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited, deferConditionals));
   }
   const bound = inherited?.modeOf(node) ?? null;
-  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited));
+  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited, deferConditionals));
   const chosen = modes[bound];
-  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited);
+  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited, deferConditionals);
 }
 
 /**
@@ -470,7 +484,7 @@ export function chooseOnResolution(
         modes.push(bound);
         return bound;
       }
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited));
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited, true));
       if (blocked || !legal.includes(true)) {
         blocked = true;
         return 0;
@@ -480,12 +494,13 @@ export function chooseOnResolution(
       return mode;
     },
     () => undefined,
+    true,
   );
   if (blocked) {
     ctx.emit({ kind: "noLegalTarget", source });
     return null;
   }
-  const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
+  const targets = collectTargets(effect, chosenModes(effect, modes, true), true).map((spec) => {
     const bound = inherited?.targetsOf(spec) ?? null;
     if (bound !== null) return [...bound];
     const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark);
@@ -632,7 +647,7 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
       const legal = targetable(
         ctx.state,
         ctx.catalog,
-        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, ref.selector, id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env))),
+        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, targetSelector(ctx.state, ctx.catalog, ref, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)), id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env))),
       );
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
@@ -743,6 +758,8 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 }
 
 export interface ResolveOptions {
+  /** Choices prepared during this resolution, with conditional subtrees reached at their instructions. Transient, never saved. */
+  readonly resolutionChoices?: true;
   readonly linkedSource?: LinkedSourceContext;
   /** Effective spark retained when this pending ability's source left play. */
   readonly lastKnownSourceSpark?: number;
@@ -932,9 +949,12 @@ function picksAtRandomFromDeck(node: EffectNode): boolean {
 
 /** Resolves an effect tree with plain synchronous rules code, under the modes chosen at play time. */
 export function resolveEffect(ctx: StepContext, effect: EffectNode, options: ResolveOptions): void {
-  const chosen = chosenModes(effect, options.choices.modes);
-  const specs = collectTargets(effect, chosen);
+  const deferred = options.resolutionChoices === true;
+  const chosen = chosenModes(effect, options.choices.modes, deferred);
+  const specs = collectTargets(effect, chosen, deferred);
+  const scope: ResolutionChoiceScope | undefined = deferred ? { modes: new Map(), targets: new Map() } : undefined;
   const env: EffectEnv = {
+    ...(scope === undefined ? {} : { resolutionChoiceScope: scope }),
     linkedSource: options.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish") ? linkedSourceContext(ctx, options.source, options.origin, options.ability) : null),
     source: options.source,
     lastKnownSourceSpark: options.lastKnownSourceSpark ?? null,
@@ -953,11 +973,11 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     moved: movedCardRecord(ctx, options.root ?? effect),
     captured: options.captured ?? null,
     modeOf(node) {
-      return chosen.get(node) ?? null;
+      return chosen.get(node) ?? scope?.modes.get(node) ?? null;
     },
     targetsOf(spec) {
       const index = specs.indexOf(spec);
-      return index < 0 ? null : (options.choices.targets[index] ?? null);
+      return (index < 0 ? null : options.choices.targets[index]) ?? scope?.targets.get(spec) ?? null;
     },
     run(node) {
       resolveNode(ctx, node, env);
@@ -975,19 +995,26 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
  * context and enclosing shared duration persist; nested subtrees read their
  * nearest enclosing choices.
  */
-export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv): void {
+export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv, retainConditionalBindings = false): void {
   const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined);
   if (choices === null) return;
-  const chosen = chosenModes(effect, choices.modes);
-  const specs = collectTargets(effect, chosen);
+  const chosen = chosenModes(effect, choices.modes, true);
+  const specs = collectTargets(effect, chosen, true);
+  const scope = retainConditionalBindings && env.resolutionChoiceScope !== undefined
+    ? env.resolutionChoiceScope : { modes: new Map<EffectNode, number>(), targets: new Map<PlayTimeTarget, readonly InstanceId[]>() };
+  if (retainConditionalBindings) {
+    for (const [node, mode] of chosen) if (env.modeOf(node) === null) scope.modes.set(node, mode);
+    for (const [index, spec] of specs.entries()) if (env.targetsOf(spec) === null) scope.targets.set(spec, [...(choices.targets[index] ?? [])]);
+  }
   const inner: EffectEnv = {
     ...env,
+    resolutionChoiceScope: scope,
     modeOf(node) {
-      return chosen.get(node) ?? env.modeOf(node);
+      return chosen.get(node) ?? scope.modes.get(node) ?? env.modeOf(node);
     },
     targetsOf(spec) {
       const index = specs.indexOf(spec);
-      return index < 0 ? env.targetsOf(spec) : (choices.targets[index] ?? env.targetsOf(spec));
+      return (index < 0 ? null : choices.targets[index]) ?? scope.targets.get(spec) ?? env.targetsOf(spec);
     },
     run(node) {
       resolveNode(ctx, node, inner);

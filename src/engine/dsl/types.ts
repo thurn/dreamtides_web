@@ -149,6 +149,8 @@ export interface StackTargetSpec {
 export interface TargetSpec {
   readonly kind: "target";
   readonly selector: CharacterSelector;
+  /** Normal-condition alternative, read live when chosen and again on resolution. Optional costs use their separate play-time protocol. */
+  readonly when?: { readonly condition: Exclude<Condition, { readonly cond: "costPaid" }>; readonly otherwise: CharacterSelector };
   /** How many targets; defaults to 1. */
   readonly count?: number;
   /** "Up to N": fewer targets, including none, are allowed. */

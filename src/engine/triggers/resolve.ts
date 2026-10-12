@@ -44,6 +44,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     x: null,
     optionalPaid: [],
     choices,
+    resolutionChoices: true,
   });
 }
 
